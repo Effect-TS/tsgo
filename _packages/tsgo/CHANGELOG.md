@@ -1,5 +1,19 @@
 # @effect/tsgo
 
+## 0.44.0
+
+### Minor Changes
+
+- a64e17d: Add `obsoleteMatchImport` diagnostic (`TS377127`) to warn when importing `@effect/match` in projects targeting Effect v4. In Effect v4, pattern matching is built directly into `effect` (`import { Match } from "effect"` or `import * as Match from "effect/Match"`).
+- 63331b6: Add `obsoleteSchemaImport` diagnostic (`TS377128`) to warn when importing `@effect/schema` or `@effect/schema/*` in projects targeting Effect v4. In Effect v4, Schema is built directly into `effect` (`import { Schema } from "effect"` or `import * as Schema from "effect/Schema"`).
+- 29733f1: Add the `timeoutCatchTagToTimeoutOrElse` diagnostic and quick fixes for Effect v4. Suggest `Effect.timeoutOrElse` for `Effect.timeout` followed by `Effect.catchTag("TimeoutError", ...)`, and `Effect.timeoutOption` for the corresponding Some/None pattern. Only suggest a rewrite when the input error channel excludes `TimeoutError` and the handler does not use the caught error.
+
+### Patch Changes
+
+- a05d76b: Reuse the normalized piping-flow shape and sequence matchers across existing diagnostics.
+- d990b0a: Fix `cryptoRandomUUID` and `cryptoRandomUUIDInEffect` diagnostic messages and rule descriptions in Effect v4 to recommend the Effect `Crypto` module instead of `Random`. In Effect v4, `Random` does not provide `randomUUID` and uses non-cryptographic `Math.random`, whereas cryptographic UUID generation is provided by `Crypto.Crypto` (such as `yield* crypto.randomUUIDv4`).
+- 7993db9: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260908.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/1f70213d4922b434345f639b441681e470c7cfc1) commit `1f70213d4922b434345f639b441681e470c7cfc1`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.43.0
 
 ### Minor Changes
