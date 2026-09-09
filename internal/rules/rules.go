@@ -110,6 +110,7 @@ var All = []rule.Rule{
 	SyncToSucceed,
 	ExtendsNativeError,
 	NodeBuiltinImport,
+	ObsoleteMatchImport,
 	ObsoleteSchemaImport,
 	NewPromise,
 	OutdatedApi,

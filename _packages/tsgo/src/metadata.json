@@ -368,6 +368,29 @@
       }
     },
     {
+      "name": "obsoleteMatchImport",
+      "group": "correctness",
+      "description": "Warns when importing @effect/match in projects targeting Effect v4, where Match is included directly in the effect package",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377129
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n// @ts-expect-error - @effect/match is obsolete in v4\nimport * as Match from \"@effect/match\"\n\nexport const preview = Effect.sync(() =\u003e Match)\n",
+        "diagnostics": [
+          {
+            "start": 109,
+            "end": 124,
+            "text": "This module reference imports `@effect/match`, which is obsolete in Effect v4. In Effect v4, pattern matching is provided directly by `Match` from `effect` (or `effect/Match`). effect(obsoleteMatchImport)"
+          }
+        ]
+      }
+    },
+    {
       "name": "obsoleteSchemaImport",
       "group": "correctness",
       "description": "Warns when importing @effect/schema in projects targeting Effect v4, where Schema is included directly in the effect package",
