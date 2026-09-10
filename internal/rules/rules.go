@@ -19,6 +19,7 @@ var All = []rule.Rule{
 	TimeoutCatchTagToTimeoutOrElse,
 	CatchAllToMapError,
 	CatchAllTagDispatchToCatchTag,
+	CatchIfTagToCatchTag,
 	CatchConditionalRefailToCatchIf,
 	CatchTagToCatchReason,
 	CatchToOrElseSucceed,
