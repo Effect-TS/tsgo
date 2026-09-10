@@ -250,6 +250,37 @@ func TestParseResultDispatchTagHints(t *testing.T) {
 	}
 }
 
+func TestParseTagMatch(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name       string
+		expression string
+		subject    string
+		value      string
+	}{
+		{name: "strict equality", expression: `error._tag === "NotFound"`, subject: "error", value: `"NotFound"`},
+		{name: "reversed loose equality", expression: `("Timeout" as string) == error._tag`, subject: "error", value: `"Timeout"`},
+		{name: "nested subject", expression: `error.reason._tag === "Invalid"`, subject: "error.reason", value: `"Invalid"`},
+		{name: "inequality", expression: `error._tag !== "NotFound"`},
+		{name: "different property", expression: `error.kind === "NotFound"`},
+		{name: "compound expression", expression: `error._tag === "NotFound" && ready`},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			sf, function := parseReturningDispatchTestFunction(t, `(error: any) => `+tt.expression)
+			subject, value := ParseTagMatch(GetFunctionLikeBody(function))
+			if got := returningDispatchNodeText(sf, subject); got != tt.subject {
+				t.Fatalf("tag subject = %q, want %q", got, tt.subject)
+			}
+			if got := returningDispatchNodeText(sf, value); got != tt.value {
+				t.Fatalf("tag value = %q, want %q", got, tt.value)
+			}
+		})
+	}
+}
+
 func TestResultDispatchCommonTagSubject(t *testing.T) {
 	t.Parallel()
 	_, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `
