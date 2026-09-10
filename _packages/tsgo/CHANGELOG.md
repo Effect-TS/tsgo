@@ -1,5 +1,15 @@
 # @effect/tsgo
 
+## 0.45.0
+
+### Minor Changes
+
+- 066c4b0: Add the opt-in `schemaSync` diagnostic to prefer Effect-based Schema decoding and encoding over `decodeSync`, `decodeUnknownSync`, `encodeSync`, and `encodeUnknownSync` in any context. It recommends the corresponding Effect v3 or v4 method and is enabled by the `effect-native` preset.
+
+### Patch Changes
+
+- bc87c9f: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260909.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/f3b04fe05642d53b4ff126a4af05fe2587b43748) commit `f3b04fe05642d53b4ff126a4af05fe2587b43748`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.44.0
 
 ### Minor Changes
