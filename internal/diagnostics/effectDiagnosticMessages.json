@@ -1,4 +1,8 @@
 {
+	"Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)": {
+		"category": "Suggestion",
+		"code": 377131
+	},
     "@effect-diagnostics directive has no effect.": {
         "category": "Warning",
         "code": 377000

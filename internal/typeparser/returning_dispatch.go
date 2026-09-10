@@ -328,31 +328,38 @@ func newDispatchCondition(kind DispatchConditionKind, source *ast.Node, subject 
 }
 
 func dispatchConditionTagNodes(condition DispatchCondition) (tagSubject *ast.Node, tagValue *ast.Node) {
-	var left *ast.Node
-	var right *ast.Node
 	switch condition.Kind {
 	case DispatchConditionPredicate:
-		predicate := unwrapResultDispatchExpression(condition.Subject)
-		if predicate == nil || predicate.Kind != ast.KindBinaryExpression {
-			return nil, nil
-		}
-		binary := predicate.AsBinaryExpression()
-		if binary == nil || binary.Left == nil || binary.Right == nil || binary.OperatorToken == nil ||
-			(binary.OperatorToken.Kind != ast.KindEqualsEqualsToken && binary.OperatorToken.Kind != ast.KindEqualsEqualsEqualsToken) {
-			return nil, nil
-		}
-		left, right = binary.Left, binary.Right
+		return ParseTagMatch(condition.Subject)
 	case DispatchConditionSwitchCase:
-		left, right = condition.Subject, condition.Value
+		if subject, ok := dispatchTagSubject(condition.Subject); ok {
+			return subject, condition.Value
+		}
+		return nil, nil
 	default:
 		return nil, nil
 	}
+}
 
-	if subject, ok := dispatchTagSubject(left); ok {
-		return subject, right
+// ParseTagMatch decodes a positive equality comparison whose one operand is a
+// `_tag` property access. It returns the value owning `_tag` and the expression
+// compared with it, independent of operand order.
+func ParseTagMatch(node *ast.Node) (tagSubject *ast.Node, tagValue *ast.Node) {
+	predicate := unwrapResultDispatchExpression(node)
+	if predicate == nil || predicate.Kind != ast.KindBinaryExpression {
+		return nil, nil
 	}
-	if subject, ok := dispatchTagSubject(right); ok {
-		return subject, left
+	binary := predicate.AsBinaryExpression()
+	if binary == nil || binary.Left == nil || binary.Right == nil || binary.OperatorToken == nil ||
+		(binary.OperatorToken.Kind != ast.KindEqualsEqualsToken && binary.OperatorToken.Kind != ast.KindEqualsEqualsEqualsToken) {
+		return nil, nil
+	}
+
+	if subject, ok := dispatchTagSubject(binary.Left); ok {
+		return subject, unwrapResultDispatchExpression(binary.Right)
+	}
+	if subject, ok := dispatchTagSubject(binary.Right); ok {
+		return subject, unwrapResultDispatchExpression(binary.Left)
 	}
 	return nil, nil
 }

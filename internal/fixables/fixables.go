@@ -18,6 +18,7 @@ var All = []fixable.Fixable{
 	TimeoutCatchTagToTimeoutOrElseFix,
 	CatchAllToMapErrorFix,
 	CatchAllTagDispatchToCatchTagFix,
+	CatchIfTagToCatchTagFix,
 	CatchTagToCatchReasonFix,
 	AllOfMapToForEachFix,
 	FlatMapToMapFix,

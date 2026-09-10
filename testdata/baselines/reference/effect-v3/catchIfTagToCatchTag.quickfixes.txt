@@ -1,0 +1,36 @@
+=== Quick Fix Inventory ===
+
+[D1] (16:3-16:17) TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
+  Fix 0: "Disable catchIfTagToCatchTag for this line"
+  Fix 1: "Disable catchIfTagToCatchTag for entire file"
+  Fix 2: "Replace with Effect.catchTag"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchIfTagToCatchTag for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchIfTagToCatchTag for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.catchTag" ===
+
+--- file:///.src/catchIfTagToCatchTag.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics catchIfTagToCatchTag:suggestion
+import { Effect } from "effect"
+
+class NotFoundError {
+  readonly _tag = "NotFoundError"
+}
+
+class TimeoutError {
+  readonly _tag = "TimeoutError"
+}
+
+declare const program: Effect.Effect<string, NotFoundError | TimeoutError>
+
+export const recovered = program.pipe(
+  Effect.catchTag("NotFoundError", () => Effect.succeed("missing"))
+)
+

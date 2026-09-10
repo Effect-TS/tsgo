@@ -1,0 +1,25 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/catchIfTagToCatchTag_preview.ts(11,3): suggestion TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
+
+
+==== /.src/catchIfTagToCatchTag_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics catchIfTagToCatchTag:suggestion
+    import { Data, Effect } from "effect"
+    
+    class NotFound extends Data.TaggedError("NotFound")<{}> {}
+    class Timeout extends Data.TaggedError("Timeout")<{}> {}
+    
+    declare const program: Effect.Effect<string, NotFound | Timeout>
+    
+    export const recovered = program.pipe(
+      Effect.catchIf(
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
+        (error) => error._tag === "NotFound",
+        () => Effect.succeed("guest")
+      )
+    )
+    
