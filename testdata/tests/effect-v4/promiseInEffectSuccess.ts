@@ -74,6 +74,8 @@ Effect.as<Promise<number>>(promiseValue)
 Effect.map<number, Promise<number>>(promiseCallback)
 base.pipe(Effect.as<Promise<number>>(promiseValue), Effect.as(promiseValue))
 base.pipe(Effect.as(promiseValue), Effect.as<Promise<number>>(promiseValue))
+Effect.succeed<Promise<number>>(promiseValue).pipe(Effect.map((x) => x))
+base.pipe((Effect.as<Promise<number>>(promiseValue)))
 Effect.succeed(promiseValue) as Effect.Effect<Promise<number>>
 Effect.succeed(promiseValue) satisfies Effect.Effect<Promise<number>>
 

@@ -1,0 +1,295 @@
+==== /.src/provideLayerSucceedToProvideService.ts (21 flows) ====
+
+=== Piping Flow ===
+Location: 3:22 - 3:88
+Node: Context.Service<Service, { readonly value: number }>()("Service")
+Node Kind: KindCallExpression
+
+Subject: "Service"
+Subject Type: "Service"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Service<Service, { readonly value: number }>()
+      args: (constant)
+      outType: ServiceClass<Service, "Service", { readonly value: number; }>
+
+=== Piping Flow ===
+Location: 6:20 - 6:51
+Node: Effect.succeed(implementation)
+Node Kind: KindCallExpression
+
+Subject: implementation
+Subject Type: { value: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ value: number; }, never, never>
+
+=== Piping Flow ===
+Location: 7:16 - 7:72
+Node: Service.use((service) => Effect.succeed(service.value))
+Node Kind: KindCallExpression
+
+Subject: (service) => Effect.succeed(service.value)
+Subject Type: (service: { readonly value: number; }) => Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Service.use
+      args: (constant)
+      outType: Effect<number, never, Service>
+
+=== Piping Flow ===
+Location: 7:41 - 7:71
+Node: Effect.succeed(service.value)
+Node Kind: KindCallExpression
+
+Subject: service.value
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 11:29 - 11:91
+Node: program.pipe(provide(Layer.succeed(Service, implementation)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, never, Service>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: provide
+      args: [Layer.succeed(Service, implementation)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 11:51 - 11:89
+Node: Layer.succeed(Service, implementation)
+Node Kind: KindCallExpression
+
+Subject: implementation
+Subject Type: { value: number; }
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.succeed
+      args: [Service]
+      outType: Layer<Service, never, never>
+
+=== Piping Flow ===
+Location: 14:31 - 14:100
+Node: program.pipe(Effect.provide(Layer.succeed(Service, implementation)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, never, Service>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.succeed(Service, implementation)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 14:60 - 14:98
+Node: Layer.succeed(Service, implementation)
+Node Kind: KindCallExpression
+
+Subject: implementation
+Subject Type: { value: number; }
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.succeed
+      args: [Service]
+      outType: Layer<Service, never, never>
+
+=== Piping Flow ===
+Location: 15:34 - 15:100
+Node: pipe(program, Effect.provide(Layer.effect(Service, acquisition)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, never, Service>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.provide
+      args: [Layer.effect(Service, acquisition)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 15:64 - 15:98
+Node: Layer.effect(Service, acquisition)
+Node Kind: KindCallExpression
+
+Subject: acquisition
+Subject Type: Effect<{ value: number; }, never, never>
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.effect
+      args: [Service]
+      outType: Layer<Service, never, never>
+
+=== Piping Flow ===
+Location: 16:32 - 16:96
+Node: Effect.provide(program, Layer.succeed(Service)(implementation))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, never, Service>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.provide
+      args: [Layer.succeed(Service)(implementation)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 16:56 - 16:79
+Node: Layer.succeed(Service)
+Node Kind: KindCallExpression
+
+Subject: Service
+Subject Type: typeof Service
+
+Transformations (1):
+  [0] kind: call
+      callee: Layer.succeed
+      args: (constant)
+      outType: (resource: { readonly value: number; }) => Layer<Service, never, never>
+
+=== Piping Flow ===
+Location: 17:29 - 17:89
+Node: Effect.provide(Layer.effect(Service)(acquisition))(program)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, never, Service>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.provide
+      args: [Layer.effect(Service)(acquisition)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 17:45 - 17:79
+Node: Layer.effect(Service)(acquisition)
+Node Kind: KindCallExpression
+
+Subject: acquisition
+Subject Type: Effect<{ value: number; }, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Layer.effect
+      args: [Service]
+      outType: Layer<Service, never, never>
+
+=== Piping Flow ===
+Location: 20:25 - 27:2
+Node: program.pipe(\n  Effect.provide(Layer.succeed(\n    Service,\n    {\n      value: 2\n    }\n  ))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, never, Service>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.succeed(\n    Service,\n    {\n      value: 2\n    }\n  )]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 21:18 - 26:4
+Node: Layer.succeed(\n    Service,\n    {\n      value: 2\n    }\n  )
+Node Kind: KindCallExpression
+
+Subject: {\n      value: 2\n    }
+Subject Type: { value: number; }
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.succeed
+      args: [Service]
+      outType: Layer<Service, never, never>
+
+=== Piping Flow ===
+Location: 30:20 - 30:59
+Node: Layer.succeed(Service, implementation)
+Node Kind: KindCallExpression
+
+Subject: implementation
+Subject Type: { value: number; }
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.succeed
+      args: [Service]
+      outType: Layer<Service, never, never>
+
+=== Piping Flow ===
+Location: 31:26 - 31:68
+Node: program.pipe(Effect.provide(sharedLayer))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, never, Service>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [sharedLayer]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 34:30 - 34:102
+Node: Layer.empty.pipe(Layer.provide(Layer.succeed(Service, implementation)))
+Node Kind: KindCallExpression
+
+Subject: Layer.empty
+Subject Type: Layer<never, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Layer.provide
+      args: [Layer.succeed(Service, implementation)]
+      outType: Layer<never, never, never>
+
+=== Piping Flow ===
+Location: 34:62 - 34:100
+Node: Layer.succeed(Service, implementation)
+Node Kind: KindCallExpression
+
+Subject: implementation
+Subject Type: { value: number; }
+
+Transformations (1):
+  [0] kind: dataLast
+      callee: Layer.succeed
+      args: [Service]
+      outType: Layer<Service, never, never>
+
+=== Piping Flow ===
+Location: 41:29 - 41:91
+Node: unrelated.provide(unrelated.succeed(Service, implementation))
+Node Kind: KindCallExpression
+
+Subject: unrelated.succeed(Service, implementation)
+Subject Type: readonly unknown[]
+
+Transformations (1):
+  [0] kind: call
+      callee: unrelated.provide
+      args: (constant)
+      outType: unknown

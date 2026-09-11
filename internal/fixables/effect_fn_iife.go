@@ -2,11 +2,11 @@ package fixables
 
 import (
 	"github.com/effect-ts/tsgo/internal/fixable"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var EffectFnIifeFix = fixable.Fixable{
@@ -52,16 +52,8 @@ func runEffectFnIifeFix(ctx *fixable.Context) []ls.CodeAction {
 			// Deep-clone the generator function to produce a synthesized copy
 			clonedGenFn := tracker.DeepCloneNode(genFn.AsNode())
 
-			// Clone the Effect module identifier (or create a fallback)
-			var effectModuleId *ast.Node
-			if result.EffectModule != nil && result.EffectModule.Kind == ast.KindIdentifier {
-				effectModuleId = tracker.DeepCloneNode(result.EffectModule)
-			} else {
-				effectModuleId = tracker.NewIdentifier("Effect")
-			}
-
-			// Build Effect.gen property access
-			effectGenAccess := tracker.NewPropertyAccessExpression(effectModuleId, nil, tracker.NewIdentifier("gen"), ast.NodeFlagsNone)
+			// Build Effect.gen, preserving a direct receiver or finding the imported module.
+			effectGenAccess := effectModuleMethod(tracker, sf, result.EffectModule, "gen")
 
 			// Build Effect.gen(genFn) call expression
 			genCallNode := tracker.NewCallExpression(effectGenAccess, nil, nil, tracker.NewNodeList([]*ast.Node{clonedGenFn}), ast.NodeFlagsNone)

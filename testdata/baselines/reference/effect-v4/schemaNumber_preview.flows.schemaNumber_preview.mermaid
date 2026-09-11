@@ -1,6 +1,20 @@
 flowchart TB
-  0[/"type: #123; age: Number; score: NumberFromString; #125;<br/>node: #123;#92;n  age: Schema.Number,#92;n  score: Schema.NumberFromString#92;n#125;"/]
-  1["type: Struct#lt;#123; readonly age: Number; readonly score: NumberFromString; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
-  2[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
-  0 -->|"kind: pipe"| 1
-  2 -->|"kind: transformCallee"| 1
+  0[/"type: #123; age: Number; score: NumberFromString; integer: Number; pipedFinite: Number; #125;<br/>node: #123;#92;n  age: Schema.Number,#92;n  score: Schema.NumberFromString,#92;n  integer: Schema.Number.check#40;Schema.isInt#40;#41;#41;,#92;n  pipedFinite: Schema.Number.pipe#40;Schema.check#40;Schema.isFinite#40;#41;#41;#41;#92;n#125;"/]
+  1[/"type: Filter#lt;number#gt;<br/>node: Schema.isInt#40;#41;"/]
+  2["type: Number<br/>callee: Schema.Number.check<br/>args: #91;#93;"]
+  3[/"type: #40;checks_0: Check#lt;number#gt;, ...checks: Check#lt;number#gt;#91;#93;#41; =#gt; Number<br/>node: Schema.Number.check"/]
+  4[/"type: Number<br/>node: Schema.Number"/]
+  5["type: Number<br/>callee: Schema.check<br/>args: #91;Schema.isFinite#40;#41;#93;"]
+  6[/"type: #lt;S extends Top#gt;#40;checks_0: Check#lt;S#91;#quot;Type#quot;#93;#gt;, ...checks: Check#lt;S#91;#quot;Type#quot;#93;#gt;#91;#93;#41; =#gt; #40;self: S#41; =#gt; S#91;#quot;Rebuild#quot;#93;<br/>node: Schema.check"/]
+  7[/"type: Filter#lt;number#gt;<br/>node: Schema.isFinite#40;#41;"/]
+  8["type: Struct#lt;#123; readonly age: Number; readonly score: NumberFromString; readonly integer: Number; readonly pipedFinite: Number; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  9[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: usedBy"| 0
+  6 -->|"kind: transformCallee"| 5
+  7 -->|"kind: transformArg"| 5
+  4 -->|"kind: pipe"| 5
+  5 -->|"kind: usedBy"| 0
+  0 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8

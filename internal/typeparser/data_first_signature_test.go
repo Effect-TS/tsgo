@@ -1,6 +1,7 @@
 package typeparser
 
 import (
+	"slices"
 	"strings"
 	"testing"
 
@@ -115,6 +116,132 @@ export const live = Layer.succeed(MyService, make)
 	}
 }
 
+func TestPipingFlows_TypeArguments(t *testing.T) {
+	t.Parallel()
+
+	source := `
+import { pipe } from "effect"
+
+declare function transform<A, B>(self: A, f: (value: A) => B): B
+declare function transform<A, B>(f: (value: A) => B): (self: A) => B
+declare function identity<A>(value: A): A
+
+export const piped = pipe("value", transform<string, number>((value) => value.length))
+export const dataFirst = transform<string, number>("value", (value) => value.length)
+export const curried = transform<string, number>((value) => value.length)("value")
+export const called = identity<string>("value")
+`
+
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, source)
+	defer done()
+
+	for _, test := range []struct {
+		name string
+		want []string
+	}{
+		{name: "piped", want: []string{"string", "number"}},
+		{name: "dataFirst", want: []string{"string", "number"}},
+		{name: "curried", want: []string{"string", "number"}},
+		{name: "called", want: []string{"string"}},
+	} {
+		call := findVariableInitializerCallByName(t, sf, test.name)
+		flow := findFlowByNode(t, sf, tp.PipingFlows(sf, false), call.AsNode())
+		if len(flow.Transformations) == 0 {
+			t.Fatalf("%s transformation count = 0, want at least 1", test.name)
+		}
+		transformation := flow.Transformations[len(flow.Transformations)-1]
+		if transformation.TypeArguments == nil {
+			t.Fatalf("%s type arguments are nil", test.name)
+		}
+		got := make([]string, 0, len(transformation.TypeArguments.Nodes))
+		for _, typeArgument := range transformation.TypeArguments.Nodes {
+			got = append(got, strings.TrimSpace(nodeText(sf, typeArgument)))
+		}
+		if !slices.Equal(got, test.want) {
+			t.Fatalf("%s type arguments = %v, want %v", test.name, got, test.want)
+		}
+	}
+}
+
+func TestPipingFlows_DecomposesOnlyCurriedPipeableOverloads(t *testing.T) {
+	t.Parallel()
+
+	source := `
+import { Effect } from "effect"
+
+declare const program: Effect.Effect<number, string>
+
+export const caught = Effect.catch(() => Effect.succeed(0))(program)
+export const named = Effect.fn("named")(function*() {
+  return 1
+})
+`
+
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, source)
+	defer done()
+
+	caughtCall := findVariableInitializerCallByName(t, sf, "caught")
+	caughtFlow := tp.LongestPipingFlowAt(caughtCall.AsNode(), false)
+	if caughtFlow == nil {
+		t.Fatal("expected curried catch flow")
+	}
+	if got := strings.TrimSpace(nodeText(sf, caughtFlow.Subject.Node)); got != "program" {
+		t.Fatalf("caught subject = %q, want program", got)
+	}
+	assertSingleTransformation(t, sf, caughtFlow, TransformationKindCall, "Effect.catch", []string{"() => Effect.succeed(0)"})
+
+	namedCall := findVariableInitializerCallByName(t, sf, "named")
+	namedFlow := tp.LongestPipingFlowAt(namedCall.AsNode(), false)
+	if namedFlow == nil {
+		t.Fatal("expected named Effect.fn call flow")
+	}
+	assertSingleTransformation(t, sf, namedFlow, TransformationKindCall, `Effect.fn("named")`, nil)
+}
+
+func TestPipingFlows_TransformationOccurrencesAreUnique(t *testing.T) {
+	t.Parallel()
+
+	source := `
+import { Effect, pipe } from "effect"
+
+declare const base: Effect.Effect<number, string>
+
+export const piped = pipe(
+  base,
+  Effect.map((value) => value + 1),
+  Effect.flatMap((value) => Effect.succeed(value * 2))
+)
+
+export const nested = Effect.map(Effect.succeed(1), (value) => value + 1)
+
+export const effectFn = Effect.fn(
+  function*() {
+    return 1
+  },
+  Effect.map((value) => value + 1),
+  Effect.catch(() => Effect.succeed(0))
+)
+`
+
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, source)
+	defer done()
+
+	seen := make(map[*ast.Node]int)
+	for flowIndex, flow := range tp.PipingFlows(sf, true) {
+		for _, transformation := range flow.Transformations {
+			if previousFlowIndex, duplicate := seen[transformation.Callee]; duplicate {
+				t.Fatalf(
+					"transformation %q occurs in flows %d and %d",
+					nodeText(sf, transformation.Callee),
+					previousFlowIndex,
+					flowIndex,
+				)
+			}
+			seen[transformation.Callee] = flowIndex
+		}
+	}
+}
+
 func TestPipingFlows_SkipsParentheses(t *testing.T) {
 	t.Parallel()
 
@@ -149,6 +276,102 @@ export const none = Effect.succeed(((Option.none())))
 		t.Fatalf("none subject = %q, want %q", got, "Option.none()")
 	}
 	assertSingleTransformation(t, sf, noneFlow, TransformationKindCall, "Effect.succeed", nil)
+}
+
+func TestLongestPipingFlowAt_ReturnsLongestNestedFlow(t *testing.T) {
+	t.Parallel()
+
+	source := `
+import { Effect } from "effect"
+
+declare const work: Effect.Effect<string>
+
+export const dataFirst = Effect.raceFirst(
+  Effect.flatMap(Effect.sleep("1 second"), () => Effect.fail("timeout")),
+  work
+)
+
+export const pipeable = Effect.raceFirst(
+  work,
+  ((Effect.sleep("2 seconds").pipe(
+    Effect.andThen(Effect.succeed("fallback"))
+  )))
+)
+`
+
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, source)
+	defer done()
+
+	dataFirstRace := findVariableInitializerCallByName(t, sf, "dataFirst")
+	if parsed := tp.DataFirstOrLastCall(dataFirstRace.AsNode()); parsed == nil || parsed.SubjectIndex != 0 {
+		t.Fatal("expected data-first Effect.raceFirst with omitted options to normalize around self")
+	}
+	dataFirstTimer := dataFirstRace.Arguments.Nodes[0]
+	dataFirstFlow := tp.LongestPipingFlowAt(dataFirstTimer, false)
+	if dataFirstFlow == nil {
+		t.Fatal("expected data-first timer sub-flow")
+	}
+	if dataFirstFlow.Node != dataFirstTimer {
+		t.Fatal("data-first sub-flow should be rooted at the requested node")
+	}
+	if got := transformationCallees(sf, dataFirstFlow); !slices.Equal(got, []string{"Effect.sleep", "Effect.flatMap"}) {
+		t.Fatalf("data-first transformations = %v", got)
+	}
+
+	pipeableRace := findVariableInitializerCallByName(t, sf, "pipeable")
+	pipeableTimer := pipeableRace.Arguments.Nodes[1]
+	pipeableFlow := tp.LongestPipingFlowAt(pipeableTimer, false)
+	if pipeableFlow == nil {
+		t.Fatal("expected parenthesized pipeable timer sub-flow")
+	}
+	if got := transformationCallees(sf, pipeableFlow); !slices.Equal(got, []string{"Effect.sleep", "Effect.andThen"}) {
+		t.Fatalf("pipeable transformations = %v", got)
+	}
+
+	outerFlow := tp.LongestPipingFlowAt(dataFirstRace.AsNode(), false)
+	if outerFlow == nil {
+		t.Fatal("expected complete outer flow")
+	}
+	if got := transformationCallees(sf, outerFlow); !slices.Equal(got, []string{"Effect.sleep", "Effect.flatMap", "Effect.raceFirst"}) {
+		t.Fatalf("outer transformations = %v", got)
+	}
+
+	prefix := outerFlow.CopyPrefix(2)
+	if prefix == nil {
+		t.Fatal("expected a two-transformation prefix")
+	}
+	if prefix.Subject != outerFlow.Subject {
+		t.Fatal("prefix should preserve the flow subject")
+	}
+	if len(prefix.Transformations) != 2 {
+		t.Fatalf("prefix transformation count = %d, want 2", len(prefix.Transformations))
+	}
+	if got := strings.TrimSpace(nodeText(sf, prefix.Transformations[1].Callee)); got != "Effect.flatMap" {
+		t.Fatalf("last prefix transformation = %q, want Effect.flatMap", got)
+	}
+	originalKind := outerFlow.Transformations[0].Kind
+	prefix.Transformations[0].Kind = TransformationKind("test")
+	if outerFlow.Transformations[0].Kind != originalKind {
+		t.Fatal("prefix transformations should have an independent backing slice")
+	}
+	if empty := outerFlow.CopyPrefix(0); empty == nil || len(empty.Transformations) != 0 {
+		t.Fatal("expected an empty prefix rooted at the flow subject")
+	}
+	if outerFlow.CopyPrefix(-1) != nil || outerFlow.CopyPrefix(len(outerFlow.Transformations)+1) != nil {
+		t.Fatal("out-of-bounds prefixes should return nil")
+	}
+	var nilFlow *PipingFlow
+	if nilFlow.CopyPrefix(0) != nil {
+		t.Fatal("a nil complete flow should return a nil prefix")
+	}
+}
+
+func transformationCallees(sf *ast.SourceFile, flow *PipingFlow) []string {
+	result := make([]string, 0, len(flow.Transformations))
+	for i := range flow.Transformations {
+		result = append(result, strings.TrimSpace(nodeText(sf, flow.Transformations[i].Callee)))
+	}
+	return result
 }
 
 func TestDataFirstOrLastCall_OptionMatchV4(t *testing.T) {

@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:23-8:47) TS377130: `Schema.decodeUnknownSync` executes synchronously. Use `Schema.decodeUnknown` to compose this operation through Effect without throwing. effect(schemaSync)
+  Fix 0: "Disable schemaSync for this line"
+  Fix 1: "Disable schemaSync for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable schemaSync for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable schemaSync for entire file" ===
+skipped by default

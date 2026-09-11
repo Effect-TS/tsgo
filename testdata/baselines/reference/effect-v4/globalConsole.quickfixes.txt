@@ -15,11 +15,15 @@
   Fix 0: "Disable globalConsole for this line"
   Fix 1: "Disable globalConsole for entire file"
 
-[D5] (28:20-28:43) TS377064: This code uses `console.error`, the corresponding Effect logging API is `Effect.logError or Logger`. effect(globalConsole)
+[D5] (18:1-18:29) TS377064: This code uses `console.log`, the corresponding Effect logging API is `Effect.log or Logger`. effect(globalConsole)
   Fix 0: "Disable globalConsole for this line"
   Fix 1: "Disable globalConsole for entire file"
 
-[D6] (33:7-33:23) TS6133: '_shadowedConsole' is declared but its value is never read.
+[D6] (32:20-32:43) TS377064: This code uses `console.error`, the corresponding Effect logging API is `Effect.logError or Logger`. effect(globalConsole)
+  Fix 0: "Disable globalConsole for this line"
+  Fix 1: "Disable globalConsole for entire file"
+
+[D7] (37:7-37:23) TS6133: '_shadowedConsole' is declared but its value is never read.
   (no quick fixes)
 
 === Quick Fix Application Results ===
@@ -46,4 +50,10 @@ skipped by default
 skipped by default
 
 === [D5] Fix 1: "Disable globalConsole for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable globalConsole for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable globalConsole for entire file" ===
 skipped by default

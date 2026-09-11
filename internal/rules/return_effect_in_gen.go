@@ -89,7 +89,7 @@ func checkReturnEffectInGenScope(tp *typeparser.TypeParser, _ *checker.Checker, 
 		return false
 	}
 
-	if !tp.StrictIsEffectType(t, returnStmt.Expression) {
+	if !tp.StrictIsEffectType(t) {
 		return false
 	}
 

@@ -255,7 +255,7 @@ func extractNodeInfo(tp *typeparser.TypeParser, c *checker.Checker, node *ast.No
 	}
 
 	// Parse as Layer type.
-	layer := tp.LayerType(t, node)
+	layer := tp.LayerType(t)
 	if layer == nil {
 		return info
 	}

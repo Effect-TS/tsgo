@@ -125,7 +125,7 @@ func (tp *TypeParser) parseEffectFnOpportunityInner(node *ast.Node) *EffectFnOpp
 		return nil
 	}
 	for _, member := range unionMembers {
-		if tp.StrictEffectType(member, node) == nil {
+		if tp.StrictEffectType(member) == nil {
 			return nil
 		}
 	}
@@ -723,7 +723,7 @@ func (tp *TypeParser) tryMatchOfInference(objectLiteral *ast.Node) string {
 	if serviceTagType == nil {
 		return ""
 	}
-	if !tp.IsContextTag(serviceTagType, serviceTagExpression) && !tp.IsServiceType(serviceTagType, serviceTagExpression) {
+	if !tp.IsContextTag(serviceTagType) && !tp.IsServiceType(serviceTagType) {
 		return ""
 	}
 	return layerServiceNameFromExpression(serviceTagExpression)

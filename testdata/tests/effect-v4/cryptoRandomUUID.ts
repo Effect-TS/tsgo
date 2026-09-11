@@ -11,6 +11,10 @@ export const regularUuid = () => crypto.randomUUID()
 const globalCrypto = crypto
 export const aliasedUuid = globalCrypto.randomUUID()
 
+// Should trigger - aliased crypto.randomUUID method
+const randomUUID = crypto.randomUUID
+export const aliasedMethodUuid = randomUUID()
+
 // Should NOT trigger - crypto.randomUUID() inside Effect.gen
 export const uuidInGen = Effect.gen(function*() {
   return crypto.randomUUID()

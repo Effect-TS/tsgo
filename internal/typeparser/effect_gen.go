@@ -8,7 +8,7 @@ import (
 // EffectGenCallResult represents a parsed Effect.gen(...) call.
 type EffectGenCallResult struct {
 	Call              *ast.CallExpression
-	EffectModule      *ast.Expression
+	EffectModule      *ast.Expression // Namespace receiver for Effect.gen; nil for named imports and local aliases.
 	OptionsNode       *ast.Node
 	GeneratorFunction *ast.FunctionExpression
 	Body              *ast.BlockOrExpression
@@ -35,22 +35,18 @@ func (tp *TypeParser) EffectGenCall(node *ast.Node) *EffectGenCallResult {
 		genFn := bodyArg.AsFunctionExpression()
 
 		expr := call.Expression
-		if expr == nil || expr.Kind != ast.KindPropertyAccessExpression {
+		if expr == nil || !tp.IsNodeReferenceToEffectModuleApi(expr, "gen") {
 			return nil
 		}
 
-		propertyAccess := expr.AsPropertyAccessExpression()
-		if propertyAccess == nil {
-			return nil
-		}
-
-		if !tp.IsNodeReferenceToEffectModuleApi(expr, "gen") {
-			return nil
+		var effectModule *ast.Node
+		if expr.Kind == ast.KindPropertyAccessExpression {
+			effectModule = expr.AsPropertyAccessExpression().Expression
 		}
 
 		return &EffectGenCallResult{
 			Call:              call,
-			EffectModule:      propertyAccess.Expression,
+			EffectModule:      effectModule,
 			OptionsNode:       optionsNode,
 			GeneratorFunction: genFn,
 			Body:              genFn.Body,

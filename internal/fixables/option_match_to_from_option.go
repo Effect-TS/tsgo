@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -24,17 +25,32 @@ func runOptionMatchToFromOptionFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		if !match.CanFix || match.EffectModuleNode == nil || match.ReplacementNode == nil || !match.Pipeable && match.OptionNode == nil {
-			return nil
+		if !match.CanFix ||
+			match.Transformation == nil && (match.ReplacementNode == nil || match.OptionNode == nil) {
+			continue
 		}
+		effectModuleName := typeparser.FindEffectModuleIdentifier(ctx.SourceFile)
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.fromOption",
 			Run: func(tracker *rewriter.Tracker) {
-				replacement := buildFromOptionReplacement(tracker, match)
-				if replacement == nil {
+				callee, arguments := buildFromOptionReplacement(tracker, match, effectModuleName)
+				if callee == nil {
 					return
 				}
+				if match.Transformation != nil {
+					tracker.ReplacePipingFlowTransformation(ctx.SourceFile, match.Transformation, rewriter.PipingFlowTransformationReplacement{
+						Callee:    callee,
+						Arguments: arguments,
+					})
+					return
+				}
+
+				directArguments := []*ast.Node{tracker.DeepCloneNode(match.OptionNode)}
+				if arguments != nil {
+					directArguments = append(directArguments, arguments.Nodes...)
+				}
+				replacement := tracker.NewCallExpression(callee, nil, nil, tracker.NewNodeList(directArguments), ast.NodeFlagsNone)
 				ast.SetParentInChildren(replacement)
 				tracker.ReplaceNode(ctx.SourceFile, match.ReplacementNode, replacement, nil)
 			},
@@ -45,24 +61,26 @@ func runOptionMatchToFromOptionFix(ctx *fixable.Context) []ls.CodeAction {
 	return nil
 }
 
-func buildFromOptionReplacement(tracker *rewriter.Tracker, match rules.OptionMatchToFromOptionMatch) *ast.Node {
+func buildFromOptionReplacement(tracker *rewriter.Tracker, match rules.OptionMatchToFromOptionMatch, effectModuleName string) (*ast.Node, *ast.NodeList) {
+	moduleNode := match.EffectModuleNode
+	if moduleNode == nil {
+		moduleNode = tracker.NewIdentifier(effectModuleName)
+	} else {
+		moduleNode = tracker.DeepCloneNode(moduleNode)
+	}
 	fromOption := tracker.NewPropertyAccessExpression(
-		tracker.DeepCloneNode(match.EffectModuleNode),
+		moduleNode,
 		nil,
 		tracker.NewIdentifier("fromOption"),
 		ast.NodeFlagsNone,
 	)
 
-	if match.Pipeable && match.DefaultFailure {
-		return fromOption
+	if match.DefaultFailure {
+		return fromOption, nil
 	}
 
-	var arguments []*ast.Node
-	if !match.Pipeable {
-		arguments = append(arguments, tracker.DeepCloneNode(match.OptionNode))
-	}
-	if !match.DefaultFailure {
-		arguments = append(arguments, tracker.NewArrowFunction(
+	return fromOption, tracker.NewNodeList([]*ast.Node{
+		tracker.NewArrowFunction(
 			nil,
 			nil,
 			tracker.NewNodeList(nil),
@@ -70,8 +88,6 @@ func buildFromOptionReplacement(tracker *rewriter.Tracker, match rules.OptionMat
 			nil,
 			tracker.NewToken(ast.KindEqualsGreaterThanToken),
 			tracker.DeepCloneNode(match.FailureNode),
-		))
-	}
-
-	return tracker.NewCallExpression(fromOption, nil, nil, tracker.NewNodeList(arguments), ast.NodeFlagsNone)
+		),
+	})
 }

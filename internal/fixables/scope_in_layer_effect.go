@@ -2,10 +2,12 @@ package fixables
 
 import (
 	"github.com/effect-ts/tsgo/internal/fixable"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var ScopeInLayerEffectScopedFix = fixable.Fixable{
@@ -25,8 +27,8 @@ func runScopeInLayerEffectScopedFix(ctx *fixable.Context) []ls.CodeAction {
 			continue
 		}
 
-		// Class declaration matches don't have a method identifier to replace
-		if match.MethodIdentifier == nil {
+		// Class declaration matches don't have a constructor callee to replace.
+		if match.Callee == nil {
 			continue
 		}
 
@@ -35,7 +37,13 @@ func runScopeInLayerEffectScopedFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Use scoped for Layer creation",
 			Run: func(tracker *rewriter.Tracker) {
-				tracker.ReplaceNode(sf, match.MethodIdentifier, tracker.NewIdentifier("scoped"), nil)
+				if match.MethodIdentifier != nil {
+					tracker.ReplaceNode(sf, match.MethodIdentifier, tracker.NewIdentifier("scoped"), nil)
+				} else {
+					layerModule := tracker.NewIdentifier(typeparser.FindModuleIdentifier(sf, "Layer"))
+					scoped := tracker.NewPropertyAccessExpression(layerModule, nil, tracker.NewIdentifier("scoped"), ast.NodeFlagsNone)
+					tracker.ReplaceNode(sf, match.Callee, scoped, nil)
+				}
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}

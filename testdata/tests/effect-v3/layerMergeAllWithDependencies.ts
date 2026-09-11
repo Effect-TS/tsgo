@@ -16,6 +16,13 @@ export class UserRepository extends Effect.Service<UserRepository>()("UserReposi
 
 const cachePassthrough = Layer.effect(Cache, Cache)
 
+const mergeAll = Layer.mergeAll
+
+export const shouldWarnConstantAlias = mergeAll(
+  FileSystem.Default,
+  Cache.Default
+)
+
 export const shouldNotWarn = Layer.mergeAll(
   DbConnection.Default,
   FileSystem.Default

@@ -136,8 +136,8 @@ Subject Type: Effect<number, Error, never>
 
 Transformations (1):
   [0] kind: call
-      callee: Effect.catch(Effect.die)
-      args: (constant)
+      callee: Effect.catch
+      args: [Effect.die]
       outType: Effect<number, never, never>
 
 === Piping Flow ===

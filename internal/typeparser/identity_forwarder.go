@@ -21,17 +21,7 @@ func (tp *TypeParser) UnwrapIdentityForwarder(node *ast.Node) (target *ast.Node,
 	if tp == nil || tp.checker == nil {
 		return node, nil, nil
 	}
-	if ast.GetCombinedModifierFlags(node)&ast.ModifierFlagsAsync != 0 {
-		return node, nil, nil
-	}
-	if node.Kind == ast.KindFunctionExpression {
-		function := node.AsFunctionExpression()
-		if function != nil && function.AsteriskToken != nil {
-			return node, nil, nil
-		}
-	}
-
-	lazy := ParseLazyExpression(node, false)
+	lazy := ParseLazyExpression(node, LazyExpressionNone)
 	if lazy == nil || len(lazy.Params) != 1 || lazy.Expression == nil {
 		return node, nil, nil
 	}

@@ -1,0 +1,23 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/raceFirstWithSleepToTimeout_preview.ts(8,23): warning TS377121: This Effect first-completion race has exactly one sleep- or delay-based timer arm. `Effect.timeoutOrElse` expresses the timeout and fallback directly. effect(raceFirstWithSleepToTimeout)
+
+
+==== /.src/raceFirstWithSleepToTimeout_preview.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics *:off
+    // @effect-diagnostics raceFirstWithSleepToTimeout:warning
+    import { Effect } from "effect"
+    
+    declare const request: Effect.Effect<string, Error>
+    
+    export const result = Effect.raceFirst(
+                          ~~~~~~~~~~~~~~~~
+!!! warning TS377121: This Effect first-completion race has exactly one sleep- or delay-based timer arm. `Effect.timeoutOrElse` expresses the timeout and fallback directly. effect(raceFirstWithSleepToTimeout)
+      request,
+      Effect.sleep("5 seconds").pipe(
+        Effect.andThen(Effect.fail(new Error("request timed out")))
+      )
+    )
+    

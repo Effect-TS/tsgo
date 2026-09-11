@@ -27,7 +27,6 @@
       "description": "Enable all Effect-native diagnostics at warning level.",
       "diagnosticSeverity": {
         "abortControllerInEffect": "warning",
-        "acquireReleaseDisposable": "warning",
         "asyncFunction": "warning",
         "cryptoRandomUUID": "warning",
         "cryptoRandomUUIDInEffect": "warning",
@@ -48,7 +47,7 @@
         "preferSchemaOverJson": "warning",
         "processEnv": "warning",
         "processEnvInEffect": "warning",
-        "unsafeEffectTypeAssertion": "warning"
+        "schemaSync": "warning"
       }
     }
   ],
@@ -370,6 +369,52 @@
       }
     },
     {
+      "name": "obsoleteMatchImport",
+      "group": "correctness",
+      "description": "Warns when importing @effect/match in projects targeting Effect v4, where Match is included directly in the effect package",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377129
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n// @ts-expect-error - @effect/match is obsolete in v4\nimport * as Match from \"@effect/match\"\n\nexport const preview = Effect.sync(() =\u003e Match)\n",
+        "diagnostics": [
+          {
+            "start": 109,
+            "end": 124,
+            "text": "This module reference imports `@effect/match`, which is obsolete in Effect v4. In Effect v4, pattern matching is provided directly by `Match` from `effect` (or `effect/Match`). effect(obsoleteMatchImport)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "obsoleteSchemaImport",
+      "group": "correctness",
+      "description": "Warns when importing @effect/schema in projects targeting Effect v4, where Schema is included directly in the effect package",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377128
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n// @ts-expect-error - @effect/schema is obsolete in v4\nimport * as S from \"@effect/schema/Schema\"\n\nexport const preview = Effect.sync(() =\u003e S)\n",
+        "diagnostics": [
+          {
+            "start": 106,
+            "end": 129,
+            "text": "This module reference imports `@effect/schema/Schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)"
+          }
+        ]
+      }
+    },
+    {
       "name": "outdatedApi",
       "group": "correctness",
       "description": "Detects usage of APIs that have been removed or renamed in Effect v4",
@@ -493,6 +538,30 @@
             "start": 141,
             "end": 146,
             "text": "Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unsafeEffectTypeAssertion",
+      "group": "correctness",
+      "description": "Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels",
+      "defaultSeverity": "off",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377075
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cstring, \"boom\", \"service\"\u003e\n\nexport const preview = program as Effect.Effect\u003cstring, never, never\u003e\n",
+        "diagnostics": [
+          {
+            "start": 121,
+            "end": 167,
+            "text": "This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)"
           }
         ]
       }
@@ -1005,29 +1074,6 @@
       }
     },
     {
-      "name": "acquireReleaseDisposable",
-      "group": "effectNative",
-      "description": "Suggests Effect.acquireDisposable when Effect.acquireRelease only invokes the acquired resource's disposal protocol",
-      "defaultSeverity": "suggestion",
-      "fixable": true,
-      "supportedEffect": [
-        "v4"
-      ],
-      "codes": [
-        377119
-      ],
-      "preview": {
-        "sourceText": "/// \u003creference lib=\"esnext.disposable\" /\u003e\nimport { Effect } from \"effect\"\n\ndeclare const acquire: Effect.Effect\u003cAsyncDisposable\u003e\n\nexport const resource = Effect.acquireRelease(\n  acquire,\n  (resource) =\u003e Effect.promise(() =\u003e resource[Symbol.asyncDispose]())\n)\n",
-        "diagnostics": [
-          {
-            "start": 154,
-            "end": 175,
-            "text": "`Effect.acquireDisposable` expresses this disposable resource acquisition more directly than `Effect.acquireRelease` with a manual disposal finalizer. effect(acquireReleaseDisposable)"
-          }
-        ]
-      }
-    },
-    {
       "name": "asyncFunction",
       "group": "effectNative",
       "description": "Warns when declaring async functions and suggests using Effect values and Effect.gen for async control flow",
@@ -1054,7 +1100,7 @@
     {
       "name": "cryptoRandomUUID",
       "group": "effectNative",
-      "description": "Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes",
+      "description": "Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Crypto module",
       "defaultSeverity": "off",
       "fixable": false,
       "supportedEffect": [
@@ -1069,7 +1115,7 @@
           {
             "start": 24,
             "end": 43,
-            "text": "This code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUID)"
+            "text": "This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)"
           }
         ]
       }
@@ -1077,7 +1123,7 @@
     {
       "name": "cryptoRandomUUIDInEffect",
       "group": "effectNative",
-      "description": "Warns when using crypto.randomUUID() inside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes",
+      "description": "Warns when using crypto.randomUUID() inside Effect generators instead of the Effect Crypto module",
       "defaultSeverity": "off",
       "fixable": false,
       "supportedEffect": [
@@ -1092,7 +1138,7 @@
           {
             "start": 90,
             "end": 109,
-            "text": "This Effect code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUIDInEffect)"
+            "text": "This Effect code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUIDInEffect)"
           }
         ]
       }
@@ -1377,11 +1423,11 @@
         377042
       ],
       "preview": {
-        "sourceText": "import { Schema } from \"effect\"\n\nclass User extends Schema.Class\u003cUser\u003e(\"User\")({ name: Schema.String }) {}\ndeclare const value: unknown\nexport const preview = value instanceof User\n",
+        "sourceText": "import { Schema as S } from \"effect\"\n\nclass User extends S.Class\u003cUser\u003e(\"User\")({ name: S.String }) {}\ndeclare const value: unknown\nexport const preview = value instanceof User\n",
         "diagnostics": [
           {
-            "start": 159,
-            "end": 180,
+            "start": 154,
+            "end": 175,
             "text": "This code uses `instanceof` with an Effect Schema type. `Schema.is` is the schema-aware runtime check for this case. effect(instanceOfSchema)"
           }
         ]
@@ -1425,12 +1471,17 @@
         377057
       ],
       "preview": {
-        "sourceText": "import fs from \"node:fs\"\n\nexport const preview = fs.readFileSync\n",
+        "sourceText": "import { Effect } from \"effect\"\nimport { randomUUID } from \"node:crypto\"\nimport fs from \"node:fs\"\n\nexport const preview = Effect.sync(() =\u003e ({\n  id: randomUUID(),\n  contents: fs.readFileSync(\"config.json\", \"utf8\")\n}))\n",
         "diagnostics": [
           {
-            "start": 15,
-            "end": 24,
-            "text": "This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `@effect/platform`. effect(nodeBuiltinImport)"
+            "start": 59,
+            "end": 72,
+            "text": "This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)"
+          },
+          {
+            "start": 88,
+            "end": 97,
+            "text": "This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)"
           }
         ]
       }
@@ -1508,25 +1559,48 @@
       }
     },
     {
-      "name": "unsafeEffectTypeAssertion",
+      "name": "schemaSync",
       "group": "effectNative",
-      "description": "Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels",
+      "description": "Suggests Effect-based Schema decoding and encoding instead of synchronous methods",
       "defaultSeverity": "off",
-      "fixable": true,
+      "fixable": false,
       "supportedEffect": [
         "v3",
         "v4"
       ],
       "codes": [
-        377075
+        377130
       ],
       "preview": {
-        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cstring, \"boom\", \"service\"\u003e\n\nexport const preview = program as Effect.Effect\u003cstring, never, never\u003e\n",
+        "sourceText": "import * as Schema from \"effect/Schema\"\n\nconst Person = Schema.Struct({ name: Schema.String })\n\nexport const person = Schema.decodeUnknownSync(Person)({ name: \"Ada\" })\n",
         "diagnostics": [
           {
-            "start": 121,
-            "end": 167,
-            "text": "This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)"
+            "start": 118,
+            "end": 142,
+            "text": "`Schema.decodeUnknownSync` executes synchronously. Use `Schema.decodeUnknownEffect` to compose this operation through Effect without throwing. effect(schemaSync)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "acquireReleaseDisposable",
+      "group": "style",
+      "description": "Suggests Effect.acquireDisposable when Effect.acquireRelease only invokes the acquired resource's disposal protocol",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377119
+      ],
+      "preview": {
+        "sourceText": "/// \u003creference lib=\"esnext.disposable\" /\u003e\nimport { Effect } from \"effect\"\n\ndeclare const acquire: Effect.Effect\u003cAsyncDisposable\u003e\n\nexport const resource = Effect.acquireRelease(\n  acquire,\n  (resource) =\u003e Effect.promise(() =\u003e resource[Symbol.asyncDispose]())\n)\n",
+        "diagnostics": [
+          {
+            "start": 154,
+            "end": 175,
+            "text": "`Effect.acquireDisposable` expresses this disposable resource acquisition more directly than `Effect.acquireRelease` with a manual disposal finalizer. effect(acquireReleaseDisposable)"
           }
         ]
       }
@@ -1551,6 +1625,30 @@
             "start": 101,
             "end": 111,
             "text": "`Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "catchAllTagDispatchToCatchTag",
+      "group": "style",
+      "description": "Suggests Effect.catchTag or Effect.catchTags for catch-all handlers that re-fail unmatched tagged errors",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377122
+      ],
+      "preview": {
+        "sourceText": "import { Data, Effect } from \"effect\"\n\nclass NotFound extends Data.TaggedError(\"NotFound\")\u003c{}\u003e {}\nclass Timeout extends Data.TaggedError(\"Timeout\")\u003c{}\u003e {}\nclass Unauthorized extends Data.TaggedError(\"Unauthorized\")\u003c{}\u003e {}\n\ndeclare const program: Effect.Effect\u003cstring, NotFound | Timeout | Unauthorized\u003e\n\nexport const recovered = program.pipe(\n  Effect.catch((error) =\u003e {\n    switch (error._tag) {\n      case \"NotFound\":\n        return Effect.succeed(\"guest\")\n      case \"Timeout\":\n        return Effect.succeed(\"retrying\")\n      default:\n        return Effect.fail(error)\n    }\n  })\n)\n",
+        "diagnostics": [
+          {
+            "start": 345,
+            "end": 357,
+            "text": "Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)"
           }
         ]
       }
@@ -1615,12 +1713,12 @@
         377116
       ],
       "preview": {
-        "sourceText": "import { Data, Effect } from \"effect\"\n\nclass NotFound extends Data.TaggedError(\"NotFound\")\u003c{}\u003e {}\nclass DatabaseError extends Data.TaggedError(\"DatabaseError\")\u003c{}\u003e {}\n\ndeclare const program: Effect.Effect\u003cstring, NotFound | DatabaseError\u003e\n\nexport const recovered = program.pipe(\n  Effect.catch((error) =\u003e\n    error._tag === \"NotFound\" ? Effect.succeed(\"guest\") : Effect.fail(error)\n  )\n)\n",
+        "sourceText": "import { Data, Effect } from \"effect\"\n\nclass NotFound extends Data.TaggedError(\"NotFound\")\u003c{}\u003e {}\nclass DatabaseError extends Data.TaggedError(\"DatabaseError\")\u003c{}\u003e {}\n\ndeclare const program: Effect.Effect\u003cstring, NotFound | DatabaseError\u003e\n\nexport const recovered = program.pipe(\n  Effect.catch((error) =\u003e\n    error instanceof NotFound ? Effect.succeed(\"guest\") : Effect.fail(error)\n  )\n)\n",
         "diagnostics": [
           {
             "start": 281,
             "end": 293,
-            "text": "`Effect.catchTag` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)"
+            "text": "`Effect.catchIf` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)"
           }
         ]
       }
@@ -1650,6 +1748,30 @@
       }
     },
     {
+      "name": "catchIfTagToCatchTag",
+      "group": "style",
+      "description": "Suggests Effect.catchTag instead of Effect.catchIf with a direct _tag equality predicate",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377131
+      ],
+      "preview": {
+        "sourceText": "import { Data, Effect } from \"effect\"\n\nclass NotFound extends Data.TaggedError(\"NotFound\")\u003c{}\u003e {}\nclass Timeout extends Data.TaggedError(\"Timeout\")\u003c{}\u003e {}\n\ndeclare const program: Effect.Effect\u003cstring, NotFound | Timeout\u003e\n\nexport const recovered = program.pipe(\n  Effect.catchIf(\n    (error) =\u003e error._tag === \"NotFound\",\n    () =\u003e Effect.succeed(\"guest\")\n  )\n)\n",
+        "diagnostics": [
+          {
+            "start": 263,
+            "end": 277,
+            "text": "Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)"
+          }
+        ]
+      }
+    },
+    {
       "name": "catchTagToCatchReason",
       "group": "style",
       "description": "Suggests Effect.catchReason or Effect.catchReasons for handlers that re-fail unmatched reason._tag branches",
@@ -1666,7 +1788,7 @@
         "diagnostics": [
           {
             "start": 348,
-            "end": 499,
+            "end": 363,
             "text": "Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)"
           }
         ]
@@ -1888,6 +2010,30 @@
       }
     },
     {
+      "name": "flatMapIgnoredParamToAndThen",
+      "group": "style",
+      "description": "Suggests using Effect.andThen instead of Effect.flatMap when a zero-parameter callback returns an existing Effect value",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377132
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nconst first = Effect.succeed(1)\nconst second = Effect.succeed(\"second\")\n\nexport const program = first.pipe(Effect.flatMap(() =\u003e second))\n",
+        "diagnostics": [
+          {
+            "start": 140,
+            "end": 154,
+            "text": "`Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)"
+          }
+        ]
+      }
+    },
+    {
       "name": "flatMapToMap",
       "group": "style",
       "description": "Suggests using Effect.map instead of Effect.flatMap when the callback only wraps its result with Effect.succeed",
@@ -1941,6 +2087,54 @@
             "start": 271,
             "end": 281,
             "text": "`Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "matchEffectToMapBoth",
+      "group": "style",
+      "description": "Suggests Effect.mapBoth when Effect.matchEffect only transforms the failure and success channels",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377126
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cnumber, string\u003e\n\nprogram.pipe(Effect.matchEffect({\n  onFailure: (error) =\u003e Effect.fail(error.length),\n  onSuccess: (value) =\u003e Effect.succeed(value + 1)\n}))\n",
+        "diagnostics": [
+          {
+            "start": 100,
+            "end": 118,
+            "text": "`Effect.mapBoth` expresses these failure and success transformations more directly than `Effect.matchEffect`. effect(matchEffectToMapBoth)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "matchEffectToMatch",
+      "group": "style",
+      "description": "Suggests Effect.match or Effect.matchCause when both Effect.matchEffect handlers only return Effect.succeed",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377125
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cnumber, string\u003e\n\nprogram.pipe(Effect.matchEffect({\n  onFailure: (error) =\u003e Effect.succeed(error.length),\n  onSuccess: (value) =\u003e Effect.succeed(value + 1)\n}))\n",
+        "diagnostics": [
+          {
+            "start": 100,
+            "end": 118,
+            "text": "`Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)"
           }
         ]
       }
@@ -2187,6 +2381,52 @@
       }
     },
     {
+      "name": "provideLayerSucceedToProvideService",
+      "group": "style",
+      "description": "Suggests providing inline Layer.succeed and Layer.effect services directly",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377124
+      ],
+      "preview": {
+        "sourceText": "import { Context, Effect, Layer } from \"effect\"\n\nclass Service extends Context.Service\u003cService, { readonly value: number }\u003e()(\"Service\") {}\n\nconst program = Service.use((service) =\u003e Effect.succeed(service.value)).pipe(\n  Effect.provide(Layer.succeed(Service, { value: 1 }))\n)\n",
+        "diagnostics": [
+          {
+            "start": 221,
+            "end": 235,
+            "text": "`Effect.provideService` provides this inline single-service layer directly. effect(provideLayerSucceedToProvideService)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "raceFirstWithSleepToTimeout",
+      "group": "style",
+      "description": "Suggests Effect.timeoutOrElse when Effect.raceFirst has exactly one sleep- or delay-based timer arm",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377121
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const request: Effect.Effect\u003cstring, Error\u003e\n\nexport const result = Effect.raceFirst(\n  request,\n  Effect.sleep(\"5 seconds\").pipe(\n    Effect.andThen(Effect.fail(new Error(\"request timed out\")))\n  )\n)\n",
+        "diagnostics": [
+          {
+            "start": 108,
+            "end": 124,
+            "text": "This Effect first-completion race has exactly one sleep- or delay-based timer arm. `Effect.timeoutOrElse` expresses the timeout and fallback directly. effect(raceFirstWithSleepToTimeout)"
+          }
+        ]
+      }
+    },
+    {
       "name": "redundantMapError",
       "group": "style",
       "description": "Suggests hoisting a repeated trailing Effect.mapError from every yield in an Effect generator",
@@ -2261,6 +2501,30 @@
       }
     },
     {
+      "name": "runOfExitToRunExit",
+      "group": "style",
+      "description": "Suggests using Effect.runPromiseExit instead of passing Effect.exit to Effect.runPromise",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377123
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const program: Effect.Effect\u003cnumber, Error\u003e\n\nexport const exit = Effect.runPromise(Effect.exit(program))\n",
+        "diagnostics": [
+          {
+            "start": 106,
+            "end": 123,
+            "text": "`Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)"
+          }
+        ]
+      }
+    },
+    {
       "name": "schemaNumber",
       "group": "style",
       "description": "Suggests Schema.Finite and Schema.FiniteFromString instead of Schema.Number APIs when describing domain numbers",
@@ -2273,7 +2537,7 @@
         377098
       ],
       "preview": {
-        "sourceText": "\nimport { Schema } from \"effect\"\n\nexport const User = Schema.Struct({\n  age: Schema.Number,\n  score: Schema.NumberFromString\n})\n",
+        "sourceText": "\nimport { Schema } from \"effect\"\n\nexport const User = Schema.Struct({\n  age: Schema.Number,\n  score: Schema.NumberFromString,\n  integer: Schema.Number.check(Schema.isInt()),\n  pipedFinite: Schema.Number.pipe(Schema.check(Schema.isFinite()))\n})\n",
         "diagnostics": [
           {
             "start": 84,
@@ -2407,6 +2671,34 @@
             "start": 56,
             "end": 67,
             "text": "`Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "timeoutCatchTagToTimeoutOrElse",
+      "group": "style",
+      "description": "Suggests dedicated timeout combinators instead of catching TimeoutError immediately after Effect.timeout",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377127
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const fetchQuote: Effect.Effect\u003cstring\u003e\n\nexport const quote = fetchQuote.pipe(\n  Effect.timeout(\"5 seconds\"),\n  Effect.catchTag(\"TimeoutError\", () =\u003e Effect.succeed(\"cached quote\"))\n)\n\nexport const maybeQuote = fetchQuote.pipe(\n  Effect.timeout(\"5 seconds\"),\n  Effect.asSome,\n  Effect.catchTag(\"TimeoutError\", () =\u003e Effect.succeedNone)\n)\n",
+        "diagnostics": [
+          {
+            "start": 153,
+            "end": 168,
+            "text": "Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)"
+          },
+          {
+            "start": 319,
+            "end": 334,
+            "text": "Use `Effect.timeoutOption` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)"
           }
         ]
       }

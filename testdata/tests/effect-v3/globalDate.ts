@@ -14,6 +14,10 @@ const _regularNewDate = () => {
 const MyDate = Date
 const _aliasedDateNow = MyDate.now()
 
+// Should trigger - aliased Date.now method
+const dateNow = Date.now
+const _aliasedDateNowMethod = dateNow()
+
 // Should NOT trigger - Date.now() inside Effect.gen
 export const dateNowInGen = Effect.gen(function*() {
   const now = Date.now()

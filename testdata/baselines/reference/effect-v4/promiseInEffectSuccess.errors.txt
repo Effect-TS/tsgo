@@ -64,21 +64,22 @@ Effect version: 4.0.0
 /.src/promiseInEffectSuccess.ts(70,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 /.src/promiseInEffectSuccess.ts(72,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 /.src/promiseInEffectSuccess.ts(75,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
-/.src/promiseInEffectSuccess.ts(75,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
 /.src/promiseInEffectSuccess.ts(76,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 /.src/promiseInEffectSuccess.ts(77,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
-/.src/promiseInEffectSuccess.ts(78,30): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
-/.src/promiseInEffectSuccess.ts(86,17): suggestion TS377091: Exported declaration 'intentionallyReturned' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
-/.src/promiseInEffectSuccess.ts(89,14): suggestion TS377091: Exported declaration 'intentionallyArrow' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
-/.src/promiseInEffectSuccess.ts(90,14): suggestion TS377091: Exported declaration 'intentionallyContextual' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
-/.src/promiseInEffectSuccess.ts(91,14): suggestion TS377091: Exported declaration 'intentionallyReturnedWithUnrelated' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
-/.src/promiseInEffectSuccess.ts(92,3): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
-/.src/promiseInEffectSuccess.ts(92,3): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
-/.src/promiseInEffectSuccess.ts(96,14): suggestion TS377091: Exported declaration 'inferredReturn' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
-/.src/promiseInEffectSuccess.ts(96,37): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(78,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(79,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(80,30): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(88,17): suggestion TS377091: Exported declaration 'intentionallyReturned' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/promiseInEffectSuccess.ts(91,14): suggestion TS377091: Exported declaration 'intentionallyArrow' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/promiseInEffectSuccess.ts(92,14): suggestion TS377091: Exported declaration 'intentionallyContextual' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/promiseInEffectSuccess.ts(93,14): suggestion TS377091: Exported declaration 'intentionallyReturnedWithUnrelated' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/promiseInEffectSuccess.ts(94,3): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(94,3): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(98,14): suggestion TS377091: Exported declaration 'inferredReturn' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+/.src/promiseInEffectSuccess.ts(98,37): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
 
 
-==== /.src/promiseInEffectSuccess.ts (75 errors) ====
+==== /.src/promiseInEffectSuccess.ts (76 errors) ====
     // @effect-diagnostics promiseInEffectSuccess:warning
     
     import { Effect } from "effect"
@@ -298,10 +299,14 @@ Effect version: 4.0.0
     base.pipe(Effect.as<Promise<number>>(promiseValue), Effect.as(promiseValue))
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
     base.pipe(Effect.as(promiseValue), Effect.as<Promise<number>>(promiseValue))
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    Effect.succeed<Promise<number>>(promiseValue).pipe(Effect.map((x) => x))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    base.pipe((Effect.as<Promise<number>>(promiseValue)))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     Effect.succeed(promiseValue) as Effect.Effect<Promise<number>>
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

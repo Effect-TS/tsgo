@@ -7,12 +7,10 @@ Effect version: 4.0.0
 /.src/catchConditionalRefailToCatchIf.ts(37,3): suggestion TS377116: `Effect.catchIf` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
 /.src/catchConditionalRefailToCatchIf.ts(45,3): suggestion TS377116: `Effect.catchIf` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
 /.src/catchConditionalRefailToCatchIf.ts(51,26): suggestion TS377116: `Effect.catchIf` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
-/.src/catchConditionalRefailToCatchIf.ts(58,3): suggestion TS377116: `Effect.catchTag` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
-/.src/catchConditionalRefailToCatchIf.ts(63,3): suggestion TS377116: `Effect.catchTag` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
 /.src/catchConditionalRefailToCatchIf.ts(77,3): suggestion TS377116: `Effect.catchCauseIf` expresses selective recovery more directly than `Effect.catchCause` with a conditional `Effect.failCause` passthrough. effect(catchConditionalRefailToCatchIf)
 
 
-==== /.src/catchConditionalRefailToCatchIf.ts (9 errors) ====
+==== /.src/catchConditionalRefailToCatchIf.ts (7 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics catchConditionalRefailToCatchIf:suggestion
     import { Cause, Data, Effect } from "effect"
@@ -80,18 +78,14 @@ Effect version: 4.0.0
       (error) => typeof error === "object" ? Effect.succeed("guest") : Effect.fail(error)
     )
     
-    // Direct tag recovery maps to catchTag.
+    // Should NOT trigger: direct tag recovery belongs to catchAllTagDispatchToCatchTag.
     export const directTag = program.pipe(
       Effect.catch((error) => error._tag === "NotFound" ? Effect.succeed("guest") : Effect.fail(error))
-      ~~~~~~~~~~~~
-!!! suggestion TS377116: `Effect.catchTag` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
     )
     
-    // The tagged-dispatch parser also recognizes a one-case switch.
+    // Should NOT trigger: a one-case tag switch belongs to catchAllTagDispatchToCatchTag.
     export const tagSwitch = program.pipe(
       Effect.catch((error) => {
-      ~~~~~~~~~~~~
-!!! suggestion TS377116: `Effect.catchTag` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
         switch (error._tag) {
           case "NotFound":
             return Effect.succeed("guest")

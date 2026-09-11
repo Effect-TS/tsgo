@@ -1,0 +1,8 @@
+flowchart TB
+  0[/"type: Promise#lt;Exit#lt;number, Error#gt;#gt;<br/>node: Effect.runPromise#40;Effect.exit#40;program#41;#41;"/]
+  1[/"type: Effect#lt;number, Error, never#gt;<br/>node: program"/]
+  2["type: Effect#lt;Exit#lt;number, Error#gt;, never, never#gt;<br/>callee: Effect.exit<br/>args: #91;#93;"]
+  3[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;Exit#lt;A, E#gt;, never, R#gt;<br/>node: Effect.exit"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: usedBy"| 0

@@ -576,7 +576,7 @@ func (g *StructuralSchemaGen) ScanExistingSchemas(scope *ast.Node) {
 		if t == nil {
 			continue
 		}
-		schemaTypes := g.TypeParser.EffectSchemaTypes(t, scope)
+		schemaTypes := g.TypeParser.EffectSchemaTypes(t)
 		if schemaTypes == nil {
 			continue
 		}

@@ -34,65 +34,42 @@ Effect version: 4.0.0
     
     export const parameterUse = program.pipe(
       Effect.catchTag("OuterError", (error) => {
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        switch (error.reason._tag) {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          case "ReasonA":
-    ~~~~~~~~~~~~~~~~~~~~~
-            return Effect.succeed(`${_}: ${error.context}: ${error.reason.detail}`)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          default:
-    ~~~~~~~~~~~~~~
-            return Effect.fail(error)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
-      })
-    ~~~~
+      ~~~~~~~~~~~~~~~
 !!! suggestion TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+        switch (error.reason._tag) {
+          case "ReasonA":
+            return Effect.succeed(`${_}: ${error.context}: ${error.reason.detail}`)
+          default:
+            return Effect.fail(error)
+        }
+      })
     )
     
     export const reassignedParameter = program.pipe(
       Effect.catchTag("OuterError", (error) => {
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        switch (error.reason._tag) {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          case "ReasonA":
-    ~~~~~~~~~~~~~~~~~~~~~
-            return (error = otherError, Effect.succeed(1))
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          default:
-    ~~~~~~~~~~~~~~
-            return Effect.fail(error)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
-      })
-    ~~~~
+      ~~~~~~~~~~~~~~~
 !!! suggestion TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+        switch (error.reason._tag) {
+          case "ReasonA":
+            return (error = otherError, Effect.succeed(1))
+          default:
+            return Effect.fail(error)
+        }
+      })
     )
     
     export const multipleBranches = program.pipe(
       Effect.catchTag("OuterError", (error) => {
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        switch (error.reason._tag) {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          case "ReasonA":
-    ~~~~~~~~~~~~~~~~~~~~~
-            return Effect.succeed(error.reason.detail)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          case "ReasonB":
-    ~~~~~~~~~~~~~~~~~~~~~
-            return Effect.succeed("reason b")
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          default:
-    ~~~~~~~~~~~~~~
-            return Effect.fail(error)
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
-      })
-    ~~~~
+      ~~~~~~~~~~~~~~~
 !!! suggestion TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+        switch (error.reason._tag) {
+          case "ReasonA":
+            return Effect.succeed(error.reason.detail)
+          case "ReasonB":
+            return Effect.succeed("reason b")
+          default:
+            return Effect.fail(error)
+        }
+      })
     )
     

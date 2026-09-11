@@ -1,0 +1,169 @@
+==== /.src/catchIfTagToCatchTag.ts (12 flows) ====
+
+=== Piping Flow ===
+Location: 19:26 - 21:2
+Node: program.pipe(\n  Fx.catchIf((error) => error._tag === "NotFoundError", handler)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Fx.catchIf
+      args: [(error) => error._tag === "NotFoundError", handler]
+      outType: Effect<string, TimeoutError, never>
+
+=== Piping Flow ===
+Location: 24:28 - 27:2
+Node: pipe(\n  program,\n  Fx.catchIf((error) => "TimeoutError" == error._tag, () => Fx.succeed("timeout"))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Fx.catchIf
+      args: [(error) => "TimeoutError" == error._tag, () => Fx.succeed("timeout")]
+      outType: Effect<string, NotFoundError, never>
+
+=== Piping Flow ===
+Location: 26:60 - 26:82
+Node: Fx.succeed("timeout")
+Node Kind: KindCallExpression
+
+Subject: "timeout"
+Subject Type: "timeout"
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 30:25 - 38:2
+Node: Fx.catchIf(\n  program,\n  (error) => {\n    return error._tag === "NotFoundError"\n  },\n  (error) => {\n    return Fx.succeed(error.id)\n  }\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Fx.catchIf
+      args: [(error) => {\n    return error._tag === "NotFoundError"\n  }, (error) => {\n    return Fx.succeed(error.id)\n  }]
+      outType: Effect<string, TimeoutError, never>
+
+=== Piping Flow ===
+Location: 36:11 - 36:32
+Node: Fx.succeed(error.id)
+Node Kind: KindCallExpression
+
+Subject: error.id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 41:24 - 43:2
+Node: program.pipe(\n  Fx.catchIf((error) => error._tag !== "NotFoundError", broadHandler)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Fx.catchIf
+      args: [(error) => error._tag !== "NotFoundError", broadHandler]
+      outType: Effect<string, NotFoundError, never>
+
+=== Piping Flow ===
+Location: 46:24 - 48:2
+Node: program.pipe(\n  Fx.catchIf((error) => error._tag === "NotFoundError" && error.id === "special", broadHandler)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Fx.catchIf
+      args: [(error) => error._tag === "NotFoundError" && error.id === "special", broadHandler]
+      outType: Effect<string, NotFoundError | TimeoutError, never>
+
+=== Piping Flow ===
+Location: 51:26 - 53:2
+Node: program.pipe(\n  Fx.catchIf((error) => error._tag === ("OtherError" as string), broadHandler)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Fx.catchIf
+      args: [(error) => error._tag === ("OtherError" as string), broadHandler]
+      outType: Effect<string, NotFoundError | TimeoutError, never>
+
+=== Piping Flow ===
+Location: 61:25 - 63:2
+Node: nested.pipe(\n  Fx.catchIf((error) => error.reason._tag === "NotFoundError", () => Fx.succeed("missing"))\n)
+Node Kind: KindCallExpression
+
+Subject: nested
+Subject Type: Effect<string, { readonly _tag: "OuterError"; readonly reason: NotFoundError | TimeoutError; }, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Fx.catchIf
+      args: [(error) => error.reason._tag === "NotFoundError", () => Fx.succeed("missing")]
+      outType: Effect<string, { readonly _tag: "OuterError"; readonly reason: NotFoundError | TimeoutError; }, never>
+
+=== Piping Flow ===
+Location: 62:69 - 62:91
+Node: Fx.succeed("missing")
+Node Kind: KindCallExpression
+
+Subject: "missing"
+Subject Type: "missing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 72:25 - 74:2
+Node: program.pipe(\n  fake.catchIf((error) => error._tag === "NotFoundError", broadHandler)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: fake.catchIf
+      args: [(error) => error._tag === "NotFoundError", broadHandler]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 78:30 - 80:2
+Node: program.pipe(\n  catchIfAlias((error) => error._tag === "NotFoundError", handler)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: catchIfAlias
+      args: [(error) => error._tag === "NotFoundError", handler]
+      outType: Effect<string, TimeoutError, never>

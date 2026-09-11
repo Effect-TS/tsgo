@@ -9,6 +9,6 @@ declare const program: Effect.Effect<string, NotFound | DatabaseError>
 
 export const recovered = program.pipe(
   Effect.catch((error) =>
-    error._tag === "NotFound" ? Effect.succeed("guest") : Effect.fail(error)
+    error instanceof NotFound ? Effect.succeed("guest") : Effect.fail(error)
   )
 )

@@ -1,0 +1,40 @@
+// @effect-diagnostics matchEffectToMapBoth:suggestion
+// @effect-diagnostics-in-tsgo false
+import { Effect, pipe } from "effect"
+
+declare const effect: Effect.Effect<number, string>
+const matchEffect = Effect.matchEffect
+
+export const constantAlias = effect.pipe(matchEffect({
+  onFailure: (error) => Effect.fail(error.length),
+  onSuccess: (value) => Effect.succeed(value + 1)
+}))
+
+export const dataFirst = Effect.matchEffect(effect, {
+  onFailure: (error) => Effect.fail(error.length),
+  onSuccess: (value) => Effect.succeed(value + 1)
+})
+
+export const pipeable = effect.pipe(Effect.matchEffect({
+  "onFailure": (error) => pipe(error.length, Effect.fail),
+  "onSuccess": (value) => pipe(value + 1, Effect.succeed)
+}))
+
+export const cause = effect.pipe(Effect.matchCauseEffect({
+  onFailure: (cause) => Effect.fail(cause),
+  onSuccess: (value) => Effect.succeed(value + 1)
+}))
+
+export const extraLogic = effect.pipe(Effect.matchEffect({
+  onFailure: (error) => {
+    console.log(error)
+    return Effect.fail(error.length)
+  },
+  onSuccess: (value) => Effect.succeed(value + 1)
+}))
+
+const unrelated = { fail: <E>(error: E) => Effect.fail(error) }
+export const unrelatedFail = effect.pipe(Effect.matchEffect({
+  onFailure: (error) => unrelated.fail(error.length),
+  onSuccess: (value) => Effect.succeed(value + 1)
+}))

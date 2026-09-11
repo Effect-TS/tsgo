@@ -45,7 +45,7 @@ export const dataLast = Effect.flatMap(
 
 const flatMapAlias = Effect.flatMap
 
-// Should trigger through API-reference symbol identity (without a quick fix).
+// Should trigger with a fallback quick fix through API-reference symbol identity.
 export const aliasedFlatMap = source.pipe(
   flatMapAlias((value) => value > 0 ? Effect.succeed(value) : Effect.fail(new InvalidValue({ value })))
 )

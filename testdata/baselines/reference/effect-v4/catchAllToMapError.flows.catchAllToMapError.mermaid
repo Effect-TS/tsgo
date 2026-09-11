@@ -85,6 +85,16 @@ flowchart TB
   83[/"type: StringConstructor<br/>node: String"/]
   84["type: Effect#lt;never, AnotherError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
   85[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  86[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  87[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
+  88["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  89[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  90["type: Effect#lt;never, MyErrorTagged, never#gt;<br/>callee: catchAlias<br/>args: #91;#40;cause#41; =#gt; Effect.fail#40;new MyErrorTagged#40;cause#41;#41;#93;"]
+  91[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: catchAlias"/]
+  92[["type: #40;cause: string#41; =#gt; Effect#lt;never, MyErrorTagged, never#gt;<br/>node: #40;cause#41; =#gt; Effect.fail#40;new MyErrorTagged#40;cause#41;#41;"]]
+  93[/"type: MyErrorTagged<br/>node: new MyErrorTagged#40;cause#41;"/]
+  94["type: Effect#lt;never, MyErrorTagged, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  95[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
   4 -->|"kind: pipe"| 5
   6 -->|"kind: transformCallee"| 5
   8 -->|"kind: transformCallee"| 7
@@ -162,3 +172,11 @@ flowchart TB
   84 -->|"kind: potentialReturn"| 79
   79 -->|"kind: transformArg"| 77
   75 -->|"kind: pipe"| 77
+  87 -->|"kind: pipe"| 88
+  89 -->|"kind: transformCallee"| 88
+  91 -->|"kind: transformCallee"| 90
+  93 -->|"kind: pipe"| 94
+  95 -->|"kind: transformCallee"| 94
+  94 -->|"kind: potentialReturn"| 92
+  92 -->|"kind: transformArg"| 90
+  88 -->|"kind: pipe"| 90

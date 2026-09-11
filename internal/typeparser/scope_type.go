@@ -14,7 +14,7 @@ const ScopeTypeId = "~effect/Scope"
 // For v4, this checks for the "~effect/Scope" computed property.
 // For v3/unknown, this checks that the type is "pipeable" (has a callable pipe property)
 // and that any required non-optional property's symbol name contains "ScopeTypeId".
-func (tp *TypeParser) IsScopeType(t *checker.Type, atLocation *ast.Node) bool {
+func (tp *TypeParser) IsScopeType(t *checker.Type) bool {
 	if tp == nil || tp.checker == nil || t == nil {
 		return false
 	}
@@ -25,11 +25,10 @@ func (tp *TypeParser) IsScopeType(t *checker.Type, atLocation *ast.Node) bool {
 		}
 
 		// v3 / unknown: check that the type is "pipeable"
-		pipeSymbol := tp.checker.GetPropertyOfType(t, "pipe")
-		if pipeSymbol == nil {
+		pipeType := tp.GetTypeOfPropertyByName(t, "pipe")
+		if pipeType == nil {
 			return false
 		}
-		pipeType := tp.checker.GetTypeOfSymbolAtLocation(pipeSymbol, atLocation)
 		signatures := tp.checker.GetSignaturesOfType(pipeType, checker.SignatureKindCall)
 		if len(signatures) == 0 {
 			return false

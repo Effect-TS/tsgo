@@ -73,14 +73,14 @@ var EffectInFailure = rule.Rule{
 				continue
 			}
 
-			effect := ctx.TypeParser.StrictEffectType(nodeType, node)
+			effect := ctx.TypeParser.StrictEffectType(nodeType)
 			if effect == nil {
 				continue
 			}
 
 			// Check if any union member of the failure channel (E) is a strict Effect type
 			failureMembers := ctx.TypeParser.UnrollUnionMembers(effect.E)
-			memberWithEffect := findFirstStrictEffect(ctx.TypeParser, ctx.Checker, failureMembers, node)
+			memberWithEffect := findFirstStrictEffect(ctx.TypeParser, ctx.Checker, failureMembers)
 			if memberWithEffect == nil {
 				continue
 			}

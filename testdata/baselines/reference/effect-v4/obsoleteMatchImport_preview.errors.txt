@@ -1,0 +1,17 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/obsoleteMatchImport_preview.ts(5,24): warning TS377129: This module reference imports `@effect/match`, which is obsolete in Effect v4. In Effect v4, pattern matching is provided directly by `Match` from `effect` (or `effect/Match`). effect(obsoleteMatchImport)
+
+
+==== /.src/obsoleteMatchImport_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics obsoleteMatchImport:warning
+    import { Effect } from "effect"
+    // @ts-expect-error - @effect/match is obsolete in v4
+    import * as Match from "@effect/match"
+                           ~~~~~~~~~~~~~~~
+!!! warning TS377129: This module reference imports `@effect/match`, which is obsolete in Effect v4. In Effect v4, pattern matching is provided directly by `Match` from `effect` (or `effect/Match`). effect(obsoleteMatchImport)
+    
+    export const preview = Effect.sync(() => Match)
+    

@@ -28,7 +28,9 @@ import { Schema } from "effect"
 
 export const User = Schema.Struct({
   age: Schema.Finite,
-  score: Schema.NumberFromString
+  score: Schema.NumberFromString,
+  integer: Schema.Number.check(Schema.isInt()),
+  pipedFinite: Schema.Number.pipe(Schema.check(Schema.isFinite()))
 })
 
 
@@ -48,6 +50,8 @@ import { Schema } from "effect"
 
 export const User = Schema.Struct({
   age: Schema.Number,
-  score: Schema.FiniteFromString
+  score: Schema.FiniteFromString,
+  integer: Schema.Number.check(Schema.isInt()),
+  pipedFinite: Schema.Number.pipe(Schema.check(Schema.isFinite()))
 })
 

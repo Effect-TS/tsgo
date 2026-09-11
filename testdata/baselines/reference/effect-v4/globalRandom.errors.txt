@@ -4,10 +4,11 @@ Effect version: 4.0.0
 /.src/globalRandom.ts(5,23): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
 /.src/globalRandom.ts(8,30): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
 /.src/globalRandom.ts(12,24): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
-/.src/globalRandom.ts(21,20): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
+/.src/globalRandom.ts(16,30): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
+/.src/globalRandom.ts(25,20): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
 
 
-==== /.src/globalRandom.ts (4 errors) ====
+==== /.src/globalRandom.ts (5 errors) ====
     // @effect-diagnostics globalRandom:warning
     import { Effect } from "effect"
     
@@ -25,6 +26,12 @@ Effect version: 4.0.0
     const MyMath = Math
     const _aliasedRandom = MyMath.random()
                            ~~~~~~~~~~~~~~~
+!!! warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
+    
+    // Should trigger - aliased Math.random method
+    const random = Math.random
+    const _aliasedRandomMethod = random()
+                                 ~~~~~~~~
 !!! warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
     
     // Should NOT trigger - Math.random() inside Effect.gen

@@ -42,7 +42,7 @@ type CatchTagToCatchReasonBranch struct {
 type CatchTagToCatchReasonMatch struct {
 	SourceFile      *ast.SourceFile
 	Location        core.TextRange
-	CallNode        *ast.Node
+	Transformation  *typeparser.PipingFlowTransformation
 	Callee          *ast.Node
 	OuterTag        *ast.Node
 	ParameterName   string
@@ -65,28 +65,21 @@ func AnalyzeCatchTagToCatchReason(tp *typeparser.TypeParser, c *checker.Checker,
 	}
 
 	var matches []CatchTagToCatchReasonMatch
-	seen := make(map[*ast.Node]struct{})
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for i := range flow.Transformations {
 			transformation := &flow.Transformations[i]
-			if transformation.Node == nil || transformation.Callee == nil {
+			if transformation.Callee == nil {
 				continue
 			}
-			if _, ok := seen[transformation.Node]; ok {
-				continue
-			}
-
 			switch {
 			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "catchTag"):
 				match, ok := analyzeCatchTagTransformation(tp, c, sf, transformation)
 				if ok {
-					seen[transformation.Node] = struct{}{}
 					matches = append(matches, match)
 				}
 			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "catchTags"):
 				match, ok := analyzeCatchTagsTransformation(tp, c, sf, transformation)
 				if ok {
-					seen[transformation.Node] = struct{}{}
 					matches = append(matches, match)
 				}
 			}
@@ -112,21 +105,20 @@ func analyzeCatchTagTransformation(
 	}
 
 	handler, ok := analyzeCatchTagToCatchReasonHandler(tp, c, transformation.Args[1])
-	if !ok || !hasCatchReasonApi(tp, c, transformation.Callee, len(handler.branches)) {
+	if !ok {
 		return CatchTagToCatchReasonMatch{}, false
 	}
 
-	canFix := handler.canFix && transformationCallHasExactArgs(transformation)
 	return CatchTagToCatchReasonMatch{
 		SourceFile:      sf,
-		Location:        scanner.GetErrorRangeForNode(sf, transformation.Node),
-		CallNode:        transformation.Node,
+		Location:        scanner.GetErrorRangeForNode(sf, transformation.Callee),
+		Transformation:  transformation,
 		Callee:          transformation.Callee,
 		OuterTag:        outerTag,
 		ParameterName:   handler.parameterName,
 		CatchMethodName: "catchTag",
 		Branches:        handler.branches,
-		CanFix:          canFix,
+		CanFix:          handler.canFix,
 	}, true
 }
 
@@ -163,7 +155,7 @@ func analyzeCatchTagsTransformation(
 		}
 
 		handler, ok := analyzeCatchTagToCatchReasonHandler(tp, c, property.Initializer)
-		if !ok || !hasCatchReasonApi(tp, c, transformation.Callee, len(handler.branches)) {
+		if !ok {
 			continue
 		}
 		candidate = &handler
@@ -175,8 +167,8 @@ func analyzeCatchTagsTransformation(
 
 	return CatchTagToCatchReasonMatch{
 		SourceFile:      sf,
-		Location:        scanner.GetErrorRangeForNode(sf, transformation.Node),
-		CallNode:        transformation.Node,
+		Location:        scanner.GetErrorRangeForNode(sf, transformation.Callee),
+		Transformation:  transformation,
 		Callee:          transformation.Callee,
 		ParameterName:   candidate.parameterName,
 		CatchMethodName: "catchTags",
@@ -393,43 +385,7 @@ func uniqueCatchReasonParameterName(c *checker.Checker, location *ast.Node) stri
 }
 
 func isEffectExpression(tp *typeparser.TypeParser, expression *ast.Node) bool {
-	return expression != nil && tp.EffectType(tp.GetTypeAtLocation(expression), expression) != nil
-}
-
-func hasCatchReasonApi(tp *typeparser.TypeParser, c *checker.Checker, callee *ast.Node, branchCount int) bool {
-	callee = unwrapTransparentExpression(callee)
-	if callee == nil || callee.Kind != ast.KindPropertyAccessExpression {
-		return false
-	}
-	access := callee.AsPropertyAccessExpression()
-	if access == nil || access.Expression == nil {
-		return false
-	}
-	receiverType := tp.GetTypeAtLocation(access.Expression)
-	if receiverType == nil {
-		return false
-	}
-	apiName := "catchReason"
-	if branchCount > 1 {
-		apiName = "catchReasons"
-	}
-	return c.GetPropertyOfType(receiverType, apiName) != nil
-}
-
-func transformationCallHasExactArgs(transformation *typeparser.PipingFlowTransformation) bool {
-	if transformation == nil || transformation.Node == nil || transformation.Node.Kind != ast.KindCallExpression {
-		return false
-	}
-	call := transformation.Node.AsCallExpression()
-	if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) != len(transformation.Args) {
-		return false
-	}
-	for i, argument := range call.Arguments.Nodes {
-		if argument != transformation.Args[i] {
-			return false
-		}
-	}
-	return true
+	return expression != nil && tp.EffectType(tp.GetTypeAtLocation(expression)) != nil
 }
 
 func catchTagsPropertyName(name *ast.Node) (string, bool) {

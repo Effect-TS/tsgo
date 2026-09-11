@@ -35,6 +35,7 @@ var CatchToOrElseSucceed = rule.Rule{
 type CatchToOrElseSucceedMatch struct {
 	SourceFile            *ast.SourceFile
 	Location              core.TextRange
+	Callee                *ast.Node
 	CalleeNameNode        *ast.Node
 	CatchMethodName       string
 	SucceedCallExpression *ast.Node
@@ -58,7 +59,7 @@ func AnalyzeCatchToOrElseSucceed(tp *typeparser.TypeParser, _ *checker.Checker, 
 				continue
 			}
 
-			lazy := typeparser.ParseLazyExpression(transformation.Args[0], true)
+			lazy := typeparser.ParseLazyExpression(transformation.Args[0], typeparser.LazyExpressionThunk)
 			if lazy == nil {
 				continue
 			}
@@ -93,6 +94,7 @@ func AnalyzeCatchToOrElseSucceed(tp *typeparser.TypeParser, _ *checker.Checker, 
 			matches = append(matches, CatchToOrElseSucceedMatch{
 				SourceFile:            sf,
 				Location:              scanner.GetErrorRangeForNode(sf, transformation.Callee),
+				Callee:                transformation.Callee,
 				CalleeNameNode:        calleeNameNode,
 				CatchMethodName:       catchMethodName,
 				SucceedCallExpression: expr,

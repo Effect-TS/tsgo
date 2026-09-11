@@ -98,7 +98,7 @@ func checkServiceDependencies(ctx *rule.Context, node *ast.Node) []*ast.Diagnost
 	}
 
 	// Parse as Layer type to get RIn
-	layer := ctx.TypeParser.LayerType(defaultType, node)
+	layer := ctx.TypeParser.LayerType(defaultType)
 	if layer == nil {
 		return nil
 	}
@@ -133,7 +133,7 @@ func checkServiceDependencies(ctx *rule.Context, node *ast.Node) []*ast.Diagnost
 						depTypes := ctx.TypeParser.UnrollUnionMembers(numberIndexType)
 						for _, depType := range depTypes {
 							// Parse each dependency as Layer type
-							depLayer := ctx.TypeParser.LayerType(depType, options)
+							depLayer := ctx.TypeParser.LayerType(depType)
 							if depLayer != nil {
 								// Add the ROut of this dependency to provided services
 								providedResult := ctx.TypeParser.AppendToUniqueTypesMap(servicesMemory, depLayer.ROut, excludeNever)

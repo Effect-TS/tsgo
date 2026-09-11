@@ -1,0 +1,22 @@
+flowchart TB
+  0[/"type: Effect#lt;string, Error, never#gt;<br/>node: request"/]
+  1["type: Effect#lt;string, Error, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  2[/"type: #123; #lt;A2, E2, R2#gt;#40;that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, that: Effect#lt;A2, E2, R2#gt;, options?: #123; readonly onWinner?: #40;#40;options: #123; readonly fiber: Fiber#lt;any, any#gt;; readonly index: number; readonly parentFiber: Fiber#lt;any, any#gt;; #125;#41; =#gt; void#41; #124; undefined; #125; #124; undefined#41;: Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.raceFirst"/]
+  3[/"type: #quot;5 seconds#quot;<br/>node: #quot;5 seconds#quot;"/]
+  4["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sleep<br/>args: #91;#93;"]
+  5[/"type: #40;duration: Input#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.sleep"/]
+  6["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;new Error#40;#quot;request timed out#quot;#41;#41;#93;"]
+  7[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  8[/"type: Error<br/>node: new Error#40;#quot;request timed out#quot;#41;"/]
+  9["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  10[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 0
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  7 -->|"kind: transformCallee"| 6
+  8 -->|"kind: pipe"| 9
+  10 -->|"kind: transformCallee"| 9
+  9 -->|"kind: transformArg"| 6
+  4 -->|"kind: pipe"| 6
+  6 -->|"kind: transformArg"| 0

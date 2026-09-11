@@ -2312,6 +2312,11 @@
           "default": "off",
           "description": "Warns when declaring async functions and suggests using Effect values and Effect.gen for async control flow"
         },
+        "catchAllTagDispatchToCatchTag": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.catchTag or Effect.catchTags for catch-all handlers that re-fail unmatched tagged errors"
+        },
         "catchAllToMapError": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
@@ -2331,6 +2336,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests using Effect.orDie instead of Effect.catch or Effect.catchAll with an identity-forwarding Effect.die handler"
+        },
+        "catchIfTagToCatchTag": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.catchTag instead of Effect.catchIf with a direct _tag equality predicate"
         },
         "catchTagToCatchReason": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -2360,12 +2370,12 @@
         "cryptoRandomUUID": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
-          "description": "Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes"
+          "description": "Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Crypto module"
         },
         "cryptoRandomUUIDInEffect": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
-          "description": "Warns when using crypto.randomUUID() inside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes"
+          "description": "Warns when using crypto.randomUUID() inside Effect generators instead of the Effect Crypto module"
         },
         "deterministicKeys": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -2436,6 +2446,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests Effect.filterOrFail or Effect.filterOrElse when Effect.flatMap conditionally passes its input through with Effect.succeed"
+        },
+        "flatMapIgnoredParamToAndThen": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.andThen instead of Effect.flatMap when a zero-parameter callback returns an existing Effect value"
         },
         "flatMapToMap": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -2547,6 +2562,16 @@
           "default": "suggestion",
           "description": "Suggests using Effect.asSome instead of Effect.map when the mapper only wraps the success value with Option.some"
         },
+        "matchEffectToMapBoth": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.mapBoth when Effect.matchEffect only transforms the failure and success channels"
+        },
+        "matchEffectToMatch": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.match or Effect.matchCause when both Effect.matchEffect handlers only return Effect.succeed"
+        },
         "missedPipeableOpportunity": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
@@ -2622,6 +2647,16 @@
           "default": "error",
           "description": "Ensures Effect.Service types are objects, not primitives"
         },
+        "obsoleteMatchImport": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Warns when importing @effect/match in projects targeting Effect v4, where Match is included directly in the effect package"
+        },
+        "obsoleteSchemaImport": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Warns when importing @effect/schema in projects targeting Effect v4, where Schema is included directly in the effect package"
+        },
         "optionMatchToFromOption": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
@@ -2677,6 +2712,16 @@
           "default": "warning",
           "description": "Detects Promise types in Effect success channels where they are not awaited"
         },
+        "provideLayerSucceedToProvideService": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests providing inline Layer.succeed and Layer.effect services directly"
+        },
+        "raceFirstWithSleepToTimeout": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.timeoutOrElse when Effect.raceFirst has exactly one sleep- or delay-based timer arm"
+        },
         "redundantMapError": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
@@ -2702,6 +2747,11 @@
           "default": "suggestion",
           "description": "Suggests using Runtime or Effect.run*With methods instead of Effect.run* inside Effect contexts"
         },
+        "runOfExitToRunExit": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.runPromiseExit instead of passing Effect.exit to Effect.runPromise"
+        },
         "schemaLiteralNonFinite": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "error",
@@ -2721,6 +2771,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests using Schema.TaggedStruct instead of Schema.Struct with _tag field"
+        },
+        "schemaSync": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests Effect-based Schema decoding and encoding instead of synchronous methods"
         },
         "schemaSyncInEffect": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -2756,6 +2811,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests using Effect.succeed instead of Effect.sync when the thunk returns a constant value"
+        },
+        "timeoutCatchTagToTimeoutOrElse": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests dedicated timeout combinators instead of catching TimeoutError immediately after Effect.timeout"
         },
         "tryCatchInEffectGen": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -3123,8 +3183,8 @@
     "extendsDefinition": {
       "properties": {
         "extends": {
-          "description": "Path to base configuration file to inherit from. Requires TypeScript version 2.1 or later.\n\n---\n\nThe value of `extends` is a string which contains a path to another configuration file to inherit from.\nThe path may use Node.js style resolution.\n\nThe configuration from the base file are loaded first, then overridden by those in the inheriting config file. All relative paths found in the configuration file will be resolved relative to the configuration file they originated in.\n\nIt's worth noting that [`files`](https://typescriptlang.org/tsconfig/#files), [`include`](https://typescriptlang.org/tsconfig/#include), and [`exclude`](https://typescriptlang.org/tsconfig/#exclude) from the inheriting config file _overwrite_ those from the\nbase config file, and that circularity between configuration files is not allowed.\n\nCurrently, the only top-level property that is excluded from inheritance is [`references`](https://typescriptlang.org/tsconfig/#references).\n\n##### Example\n\n`configs/base.json`:\n\n```json tsconfig\n{\n  \"compilerOptions\": {\n    \"noImplicitAny\": true,\n    \"strictNullChecks\": true\n  }\n}\n```\n\n`tsconfig.json`:\n\n```json tsconfig\n{\n  \"extends\": \"./configs/base\",\n  \"files\": [\"main.ts\", \"supplemental.ts\"]\n}\n```\n\n`tsconfig.nostrictnull.json`:\n\n```json tsconfig\n{\n  \"extends\": \"./tsconfig\",\n  \"compilerOptions\": {\n    \"strictNullChecks\": false\n  }\n}\n```\n\nProperties with relative paths found in the configuration file, which aren't excluded from inheritance, will be resolved relative to the configuration file they originated in.",
-          "markdownDescription": "Path to base configuration file to inherit from. Requires TypeScript version 2.1 or later.\n\n---\n\nThe value of `extends` is a string which contains a path to another configuration file to inherit from.\nThe path may use Node.js style resolution.\n\nThe configuration from the base file are loaded first, then overridden by those in the inheriting config file. All relative paths found in the configuration file will be resolved relative to the configuration file they originated in.\n\nIt's worth noting that [`files`](https://typescriptlang.org/tsconfig/#files), [`include`](https://typescriptlang.org/tsconfig/#include), and [`exclude`](https://typescriptlang.org/tsconfig/#exclude) from the inheriting config file _overwrite_ those from the\nbase config file, and that circularity between configuration files is not allowed.\n\nCurrently, the only top-level property that is excluded from inheritance is [`references`](https://typescriptlang.org/tsconfig/#references).\n\n##### Example\n\n`configs/base.json`:\n\n```json tsconfig\n{\n  \"compilerOptions\": {\n    \"noImplicitAny\": true,\n    \"strictNullChecks\": true\n  }\n}\n```\n\n`tsconfig.json`:\n\n```json tsconfig\n{\n  \"extends\": \"./configs/base\",\n  \"files\": [\"main.ts\", \"supplemental.ts\"]\n}\n```\n\n`tsconfig.nostrictnull.json`:\n\n```json tsconfig\n{\n  \"extends\": \"./tsconfig\",\n  \"compilerOptions\": {\n    \"strictNullChecks\": false\n  }\n}\n```\n\nProperties with relative paths found in the configuration file, which aren't excluded from inheritance, will be resolved relative to the configuration file they originated in.",
+          "description": "Path to base configuration file to inherit from. Requires TypeScript version 2.1 or later.\n\n---\n\nThe value of `extends` is a string which contains a path to another configuration file to inherit from.\nThe path may use Node.js style resolution.\n\nThe configuration from the base file are loaded first, then overridden by those in the inheriting config file. All relative paths found in the configuration file will be resolved relative to the configuration file they originated in.\n\nIt's worth noting that [`files`](https://typescriptlang.org/tsconfig/#files), [`include`](https://typescriptlang.org/tsconfig/#include), and [`exclude`](https://typescriptlang.org/tsconfig/#exclude) from the inheriting config file _overwrite_ those from the\nbase config file, and that circularity between configuration files is not allowed.\n\nCurrently, the only top-level property that is excluded from inheritance is [`references`](https://typescriptlang.org/tsconfig/#references).\n\n#### Example\n\n`configs/base.json`:\n\n```json tsconfig\n{\n  \"compilerOptions\": {\n    \"noImplicitAny\": true,\n    \"strictNullChecks\": true\n  }\n}\n```\n\n`tsconfig.json`:\n\n```json tsconfig\n{\n  \"extends\": \"./configs/base\",\n  \"files\": [\"main.ts\", \"supplemental.ts\"]\n}\n```\n\n`tsconfig.nostrictnull.json`:\n\n```json tsconfig\n{\n  \"extends\": \"./tsconfig\",\n  \"compilerOptions\": {\n    \"strictNullChecks\": false\n  }\n}\n```\n\nProperties with relative paths found in the configuration file, which aren't excluded from inheritance, will be resolved relative to the configuration file they originated in.",
+          "markdownDescription": "Path to base configuration file to inherit from. Requires TypeScript version 2.1 or later.\n\n---\n\nThe value of `extends` is a string which contains a path to another configuration file to inherit from.\nThe path may use Node.js style resolution.\n\nThe configuration from the base file are loaded first, then overridden by those in the inheriting config file. All relative paths found in the configuration file will be resolved relative to the configuration file they originated in.\n\nIt's worth noting that [`files`](https://typescriptlang.org/tsconfig/#files), [`include`](https://typescriptlang.org/tsconfig/#include), and [`exclude`](https://typescriptlang.org/tsconfig/#exclude) from the inheriting config file _overwrite_ those from the\nbase config file, and that circularity between configuration files is not allowed.\n\nCurrently, the only top-level property that is excluded from inheritance is [`references`](https://typescriptlang.org/tsconfig/#references).\n\n#### Example\n\n`configs/base.json`:\n\n```json tsconfig\n{\n  \"compilerOptions\": {\n    \"noImplicitAny\": true,\n    \"strictNullChecks\": true\n  }\n}\n```\n\n`tsconfig.json`:\n\n```json tsconfig\n{\n  \"extends\": \"./configs/base\",\n  \"files\": [\"main.ts\", \"supplemental.ts\"]\n}\n```\n\n`tsconfig.nostrictnull.json`:\n\n```json tsconfig\n{\n  \"extends\": \"./tsconfig\",\n  \"compilerOptions\": {\n    \"strictNullChecks\": false\n  }\n}\n```\n\nProperties with relative paths found in the configuration file, which aren't excluded from inheritance, will be resolved relative to the configuration file they originated in.",
           "oneOf": [
             {
               "default": "",
@@ -3138,7 +3198,7 @@
               "type": "array"
             }
           ],
-          "x-intellij-html-description": "\u003cp\u003ePath to base configuration file to inherit from. Requires TypeScript version 2.1 or later.\u003c/p\u003e\n\u003chr\u003e\n\u003cp\u003eThe value of \u003ccode\u003eextends\u003c/code\u003e is a string which contains a path to another configuration file to inherit from.\nThe path may use Node.js style resolution.\u003c/p\u003e\n\u003cp\u003eThe configuration from the base file are loaded first, then overridden by those in the inheriting config file. All relative paths found in the configuration file will be resolved relative to the configuration file they originated in.\u003c/p\u003e\n\u003cp\u003eIt\u0026#39;s worth noting that \u003ca href=\"https://typescriptlang.org/tsconfig/#files\"\u003e\u003ccode\u003efiles\u003c/code\u003e\u003c/a\u003e, \u003ca href=\"https://typescriptlang.org/tsconfig/#include\"\u003e\u003ccode\u003einclude\u003c/code\u003e\u003c/a\u003e, and \u003ca href=\"https://typescriptlang.org/tsconfig/#exclude\"\u003e\u003ccode\u003eexclude\u003c/code\u003e\u003c/a\u003e from the inheriting config file \u003cem\u003eoverwrite\u003c/em\u003e those from the\nbase config file, and that circularity between configuration files is not allowed.\u003c/p\u003e\n\u003cp\u003eCurrently, the only top-level property that is excluded from inheritance is \u003ca href=\"https://typescriptlang.org/tsconfig/#references\"\u003e\u003ccode\u003ereferences\u003c/code\u003e\u003c/a\u003e.\u003c/p\u003e\n\u003ch5\u003eExample\u003c/h5\u003e\n\u003cp\u003e\u003ccode\u003econfigs/base.json\u003c/code\u003e:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-json\"\u003e{\n  \u0026quot;compilerOptions\u0026quot;: {\n    \u0026quot;noImplicitAny\u0026quot;: true,\n    \u0026quot;strictNullChecks\u0026quot;: true\n  }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003ccode\u003etsconfig.json\u003c/code\u003e:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-json\"\u003e{\n  \u0026quot;extends\u0026quot;: \u0026quot;./configs/base\u0026quot;,\n  \u0026quot;files\u0026quot;: [\u0026quot;main.ts\u0026quot;, \u0026quot;supplemental.ts\u0026quot;]\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003ccode\u003etsconfig.nostrictnull.json\u003c/code\u003e:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-json\"\u003e{\n  \u0026quot;extends\u0026quot;: \u0026quot;./tsconfig\u0026quot;,\n  \u0026quot;compilerOptions\u0026quot;: {\n    \u0026quot;strictNullChecks\u0026quot;: false\n  }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eProperties with relative paths found in the configuration file, which aren\u0026#39;t excluded from inheritance, will be resolved relative to the configuration file they originated in.\u003c/p\u003e\n"
+          "x-intellij-html-description": "\u003cp\u003ePath to base configuration file to inherit from. Requires TypeScript version 2.1 or later.\u003c/p\u003e\n\u003chr\u003e\n\u003cp\u003eThe value of \u003ccode\u003eextends\u003c/code\u003e is a string which contains a path to another configuration file to inherit from.\nThe path may use Node.js style resolution.\u003c/p\u003e\n\u003cp\u003eThe configuration from the base file are loaded first, then overridden by those in the inheriting config file. All relative paths found in the configuration file will be resolved relative to the configuration file they originated in.\u003c/p\u003e\n\u003cp\u003eIt\u0026#39;s worth noting that \u003ca href=\"https://typescriptlang.org/tsconfig/#files\"\u003e\u003ccode\u003efiles\u003c/code\u003e\u003c/a\u003e, \u003ca href=\"https://typescriptlang.org/tsconfig/#include\"\u003e\u003ccode\u003einclude\u003c/code\u003e\u003c/a\u003e, and \u003ca href=\"https://typescriptlang.org/tsconfig/#exclude\"\u003e\u003ccode\u003eexclude\u003c/code\u003e\u003c/a\u003e from the inheriting config file \u003cem\u003eoverwrite\u003c/em\u003e those from the\nbase config file, and that circularity between configuration files is not allowed.\u003c/p\u003e\n\u003cp\u003eCurrently, the only top-level property that is excluded from inheritance is \u003ca href=\"https://typescriptlang.org/tsconfig/#references\"\u003e\u003ccode\u003ereferences\u003c/code\u003e\u003c/a\u003e.\u003c/p\u003e\n\u003ch4\u003eExample\u003c/h4\u003e\n\u003cp\u003e\u003ccode\u003econfigs/base.json\u003c/code\u003e:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-json\"\u003e{\n  \u0026quot;compilerOptions\u0026quot;: {\n    \u0026quot;noImplicitAny\u0026quot;: true,\n    \u0026quot;strictNullChecks\u0026quot;: true\n  }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003ccode\u003etsconfig.json\u003c/code\u003e:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-json\"\u003e{\n  \u0026quot;extends\u0026quot;: \u0026quot;./configs/base\u0026quot;,\n  \u0026quot;files\u0026quot;: [\u0026quot;main.ts\u0026quot;, \u0026quot;supplemental.ts\u0026quot;]\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003e\u003ccode\u003etsconfig.nostrictnull.json\u003c/code\u003e:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-json\"\u003e{\n  \u0026quot;extends\u0026quot;: \u0026quot;./tsconfig\u0026quot;,\n  \u0026quot;compilerOptions\u0026quot;: {\n    \u0026quot;strictNullChecks\u0026quot;: false\n  }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eProperties with relative paths found in the configuration file, which aren\u0026#39;t excluded from inheritance, will be resolved relative to the configuration file they originated in.\u003c/p\u003e\n"
         }
       },
       "type": "object"

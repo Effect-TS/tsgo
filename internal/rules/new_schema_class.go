@@ -90,7 +90,7 @@ func isV4SchemaClassExpression(tp *typeparser.TypeParser, c *checker.Checker, ex
 	}
 
 	t := tp.GetTypeAtLocation(expr)
-	if t == nil || !tp.IsSchemaType(t, expr) {
+	if t == nil || !tp.IsSchemaType(t) {
 		return false
 	}
 

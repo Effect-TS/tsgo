@@ -9,6 +9,14 @@ class MissingValue {
 
 declare const option: Option.Option<number>
 declare const otherSome: Option.Some<number>
+const fail = Effect.fail
+const succeed = Effect.succeed
+
+// Should trigger and fix the call site without changing the handler aliases.
+export const handlerAliases = Option.match(option, {
+  onNone: () => fail(new MissingValue("aliases")),
+  onSome: succeed
+})
 
 // Should trigger: data-first Option.match with a point-free success handler.
 export const dataFirst = Option.match(option, {

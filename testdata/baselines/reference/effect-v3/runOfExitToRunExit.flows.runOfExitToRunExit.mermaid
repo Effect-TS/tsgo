@@ -1,0 +1,66 @@
+flowchart TB
+  0[/"type: Promise#lt;Exit#lt;number, Error#gt;#gt;<br/>node: Effect.runPromise#40;Effect.exit#40;program#41;, #123; signal #125;#41;"/]
+  1[/"type: Effect#lt;number, Error, never#gt;<br/>node: program"/]
+  2["type: Effect#lt;Exit#lt;number, Error#gt;, never, never#gt;<br/>callee: Effect.exit<br/>args: #91;#93;"]
+  3[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;Exit#lt;A, E#gt;, never, R#gt;<br/>node: Effect.exit"/]
+  4[/"type: Promise#lt;Exit#lt;number, Error#gt;#gt;<br/>node: Effect.runPromise#40;program.pipe#40;Effect.exit#41;#41;"/]
+  5[/"type: Effect#lt;number, Error, never#gt;<br/>node: program"/]
+  6["type: Effect#lt;Exit#lt;number, Error#gt;, never, never#gt;<br/>callee: Effect.exit<br/>args: #91;#93;"]
+  7[/"type: Promise#lt;Exit#lt;number, Error#gt;#gt;<br/>node: Effect.runPromise#40;pipe#40;program, Effect.exit#41;#41;"/]
+  8[/"type: Effect#lt;number, Error, never#gt;<br/>node: program"/]
+  9["type: Effect#lt;Exit#lt;number, Error#gt;, never, never#gt;<br/>callee: Effect.exit<br/>args: #91;#93;"]
+  10[/"type: Effect#lt;number, Error, never#gt;<br/>node: program"/]
+  11["type: Effect#lt;Exit#lt;number, Error#gt;, never, never#gt;<br/>callee: Effect.exit<br/>args: #91;#93;"]
+  12["type: Promise#lt;Exit#lt;number, Error#gt;#gt;<br/>callee: Effect.runPromise<br/>args: #91;#93;"]
+  13[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;, options?: #123; readonly signal?: AbortSignal #124; undefined; #125; #124; undefined#41; =#gt; Promise#lt;A#gt;<br/>node: Effect.runPromise"/]
+  14[/"type: Promise#lt;Exit#lt;number, Error#gt;#gt;<br/>node: runPromise#40;Effect.exit#40;program#41;#41;"/]
+  15[/"type: Effect#lt;number, Error, never#gt;<br/>node: program"/]
+  16["type: Effect#lt;Exit#lt;number, Error#gt;, never, never#gt;<br/>callee: Effect.exit<br/>args: #91;#93;"]
+  17[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;Exit#lt;A, E#gt;, never, R#gt;<br/>node: Effect.exit"/]
+  18[/"type: Promise#lt;Exit#lt;number, Error#gt;#gt;<br/>node: Effect.runPromise#40;#92;n  program.pipe#40;Effect.exit, Effect.map#40;#40;exit#41; =#gt; exit#41;#41;#92;n#41;"/]
+  19[/"type: Effect#lt;number, Error, never#gt;<br/>node: program"/]
+  20["type: Effect#lt;Exit#lt;number, Error#gt;, never, never#gt;<br/>callee: Effect.exit<br/>args: #91;#93;"]
+  21["type: Effect#lt;Exit#lt;number, Error#gt;, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;exit#41; =#gt; exit#93;"]
+  22[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  23[["type: #40;exit: Exit#lt;number, Error#gt;#41; =#gt; Exit#lt;number, Error#gt;<br/>node: #40;exit#41; =#gt; exit"]]
+  24[/"type: Exit#lt;number, Error#gt;<br/>node: exit"/]
+  25[/"type: Effect#lt;number, Error, never#gt;<br/>node: program"/]
+  26["type: Effect#lt;Exit#lt;number, Error#gt;, never, never#gt;<br/>callee: Effect.exit<br/>args: #91;#93;"]
+  27[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;Exit#lt;A, E#gt;, never, R#gt;<br/>node: Effect.exit"/]
+  28[/"type: Promise#lt;Exit#lt;number, Error#gt;#gt;<br/>node: Effect.runPromise#40;computedExit#41;"/]
+  29[/"type: Effect#lt;number, Error, never#gt;<br/>node: program"/]
+  30["type: Effect#lt;Exit#lt;number, Error#gt;, never, never#gt;<br/>callee: Effect.exit<br/>args: #91;#93;"]
+  31[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;Exit#lt;A, E#gt;, never, R#gt;<br/>node: Effect.exit"/]
+  32["type: Exit#lt;number, Error#gt;<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  33[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  34[/"type: Effect#lt;number, Error, never#gt;<br/>node: program"/]
+  35["type: Effect#lt;Exit#lt;number, Error#gt;, never, never#gt;<br/>callee: Effect.exit<br/>args: #91;#93;"]
+  36["type: Exit#lt;number, Error#gt;<br/>callee: Effect.runSync<br/>args: #91;#93;"]
+  37[/"type: #lt;A, E#gt;#40;effect: Effect#lt;A, E, never#gt;#41; =#gt; A<br/>node: Effect.runSync"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: usedBy"| 0
+  5 -->|"kind: pipe"| 6
+  6 -->|"kind: usedBy"| 4
+  8 -->|"kind: pipe"| 9
+  9 -->|"kind: usedBy"| 7
+  10 -->|"kind: pipe"| 11
+  11 -->|"kind: pipe"| 12
+  15 -->|"kind: pipe"| 16
+  17 -->|"kind: transformCallee"| 16
+  16 -->|"kind: usedBy"| 14
+  19 -->|"kind: pipe"| 20
+  22 -->|"kind: transformCallee"| 21
+  24 -->|"kind: potentialReturn"| 23
+  23 -->|"kind: transformArg"| 21
+  20 -->|"kind: pipe"| 21
+  21 -->|"kind: usedBy"| 18
+  25 -->|"kind: pipe"| 26
+  27 -->|"kind: transformCallee"| 26
+  29 -->|"kind: pipe"| 30
+  31 -->|"kind: transformCallee"| 30
+  30 -->|"kind: pipe"| 32
+  33 -->|"kind: transformCallee"| 32
+  34 -->|"kind: pipe"| 35
+  35 -->|"kind: pipe"| 36
+  37 -->|"kind: transformCallee"| 36

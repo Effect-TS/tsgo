@@ -1,4 +1,4 @@
-==== /.src/effectSucceedWithVoid.ts (9 flows) ====
+==== /.src/effectSucceedWithVoid.ts (10 flows) ====
 
 === Piping Flow ===
 Location: 5:38 - 5:64
@@ -71,7 +71,21 @@ Transformations (1):
       outType: Effect<undefined, never, never>
 
 === Piping Flow ===
-Location: 20:38 - 20:56
+Location: 21:43 - 21:67
+Node: succeedAlias(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: succeedAlias
+      args: (constant)
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 24:38 - 24:56
 Node: Effect.succeed(1)
 Node Kind: KindCallExpression
 
@@ -85,7 +99,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 23:38 - 23:62
+Location: 27:38 - 27:62
 Node: Effect.succeed("hello")
 Node Kind: KindCallExpression
 
@@ -99,7 +113,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 26:36 - 26:57
+Location: 30:36 - 30:57
 Node: Effect.succeed(null)
 Node Kind: KindCallExpression
 
@@ -113,7 +127,7 @@ Transformations (1):
       outType: Effect<null, never, never>
 
 === Piping Flow ===
-Location: 29:38 - 29:69
+Location: 33:38 - 33:69
 Node: Effect.succeed({ foo: "bar" })
 Node Kind: KindCallExpression
 

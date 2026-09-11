@@ -6,9 +6,10 @@ Effect version: 3.19.19
 /.src/effectSucceedWithVoid.ts(11,52): suggestion TS377016: `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)
 /.src/effectSucceedWithVoid.ts(14,48): suggestion TS377016: `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)
 /.src/effectSucceedWithVoid.ts(17,58): suggestion TS377016: `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)
+/.src/effectSucceedWithVoid.ts(21,44): suggestion TS377016: `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)
 
 
-==== /.src/effectSucceedWithVoid.ts (5 errors) ====
+==== /.src/effectSucceedWithVoid.ts (6 errors) ====
     // @effect-v3
     import { Effect } from "effect"
     
@@ -35,6 +36,12 @@ Effect version: 3.19.19
     // Should trigger: Effect.succeed(((undefined))) - double parenthesized
     export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377016: `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)
+    
+    // Should trigger with a fallback fix: the API reference is hidden behind a const alias.
+    const succeedAlias = Effect.succeed
+    export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+                                               ~~~~~~~~~~~~~~~~~~~~~~~
 !!! suggestion TS377016: `Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)
     
     // Should NOT trigger: Effect.succeed with actual value

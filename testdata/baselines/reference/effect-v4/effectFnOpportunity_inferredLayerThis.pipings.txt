@@ -70,8 +70,8 @@ Subject Type: { log: (what: string) => Effect<void, never, never>; }
 
 Transformations (1):
   [0] kind: call
-      callee: Layer.succeed(this)
-      args: (constant)
+      callee: Layer.succeed
+      args: [this]
       outType: Layer<MyService, never, never>
 
 === Piping Flow ===
@@ -98,8 +98,8 @@ Subject Type: () => { log: (what: string) => Effect<void, never, never>; }
 
 Transformations (1):
   [0] kind: call
-      callee: Layer.sync(this)
-      args: (constant)
+      callee: Layer.sync
+      args: [this]
       outType: Layer<MyService, never, never>
 
 === Piping Flow ===

@@ -25,6 +25,11 @@
   Fix 1: "Disable catchAllToMapError for entire file"
   Fix 2: "Replace with Effect.mapError"
 
+[D6] (71:3-71:13) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+  Fix 0: "Disable catchAllToMapError for this line"
+  Fix 1: "Disable catchAllToMapError for entire file"
+  Fix 2: "Replace with Effect.mapError"
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable catchAllToMapError for this line" ===
@@ -101,6 +106,12 @@ export const shouldNotTriggerChained = Effect.fail("error").pipe(
 // Should trigger: simple error wrapping
 export const shouldTriggerSimple = Effect.fail("original").pipe(
   Effect.catchAll((e) => Effect.fail(new AnotherError(String(e))))
+)
+
+// Should trigger with a fallback fix: the catch API is hidden behind a const alias.
+const catchAlias = Effect.catchAll
+export const shouldTriggerAliasedCatch = Effect.fail("error").pipe(
+  catchAlias((cause) => Effect.fail(new MyErrorTagged(cause)))
 )
 
 
@@ -180,6 +191,12 @@ export const shouldTriggerSimple = Effect.fail("original").pipe(
   Effect.catchAll((e) => Effect.fail(new AnotherError(String(e))))
 )
 
+// Should trigger with a fallback fix: the catch API is hidden behind a const alias.
+const catchAlias = Effect.catchAll
+export const shouldTriggerAliasedCatch = Effect.fail("error").pipe(
+  catchAlias((cause) => Effect.fail(new MyErrorTagged(cause)))
+)
+
 
 === [D3] Fix 0: "Disable catchAllToMapError for this line" ===
 skipped by default
@@ -255,6 +272,12 @@ export const shouldNotTriggerChained = Effect.fail("error").pipe(
 // Should trigger: simple error wrapping
 export const shouldTriggerSimple = Effect.fail("original").pipe(
   Effect.catchAll((e) => Effect.fail(new AnotherError(String(e))))
+)
+
+// Should trigger with a fallback fix: the catch API is hidden behind a const alias.
+const catchAlias = Effect.catchAll
+export const shouldTriggerAliasedCatch = Effect.fail("error").pipe(
+  catchAlias((cause) => Effect.fail(new MyErrorTagged(cause)))
 )
 
 
@@ -334,6 +357,12 @@ export const shouldTriggerSimple = Effect.fail("original").pipe(
   Effect.catchAll((e) => Effect.fail(new AnotherError(String(e))))
 )
 
+// Should trigger with a fallback fix: the catch API is hidden behind a const alias.
+const catchAlias = Effect.catchAll
+export const shouldTriggerAliasedCatch = Effect.fail("error").pipe(
+  catchAlias((cause) => Effect.fail(new MyErrorTagged(cause)))
+)
+
 
 === [D5] Fix 0: "Disable catchAllToMapError for this line" ===
 skipped by default
@@ -409,5 +438,94 @@ export const shouldNotTriggerChained = Effect.fail("error").pipe(
 // Should trigger: simple error wrapping
 export const shouldTriggerSimple = Effect.fail("original").pipe(
   Effect.mapError((e) =>new AnotherError(String(e)))
+)
+
+// Should trigger with a fallback fix: the catch API is hidden behind a const alias.
+const catchAlias = Effect.catchAll
+export const shouldTriggerAliasedCatch = Effect.fail("error").pipe(
+  catchAlias((cause) => Effect.fail(new MyErrorTagged(cause)))
+)
+
+
+=== [D6] Fix 0: "Disable catchAllToMapError for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable catchAllToMapError for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.mapError" ===
+
+--- file:///.src/catchAllToMapError.ts ---
+// @effect-v3
+// @effect-diagnostics catchToOrElseSucceed:off
+import * as Effect from "effect/Effect"
+import { pipe } from "effect/Function"
+
+class MyErrorTagged {
+  readonly _tag = "MyErrorTagged"
+  constructor(readonly cause: unknown) {}
+}
+
+class AnotherError {
+  readonly _tag = "AnotherError"
+  constructor(readonly message: string) {}
+}
+
+// Should trigger: catchAll with arrow function returning Effect.fail
+export const shouldTriggerArrow = Effect.fail("error").pipe(
+  Effect.catchAll((cause) => Effect.fail(new MyErrorTagged(cause)))
+)
+
+// Should trigger: catchAll with arrow function returning Effect.fail (block body)
+export const shouldTriggerArrowBlock = Effect.fail("error").pipe(
+  Effect.catchAll((cause) => {
+    return Effect.fail(new MyErrorTagged(cause))
+  })
+)
+
+// Should trigger: pipe style
+export const shouldTriggerPipe = pipe(
+  Effect.fail("error"),
+  Effect.catchAll((cause) => Effect.fail(new MyErrorTagged(cause)))
+)
+
+// Should trigger: with function expression
+export const shouldTriggerFunctionExpr = Effect.fail("error").pipe(
+  Effect.catchAll(function(cause) {
+    return Effect.fail(new MyErrorTagged(cause))
+  })
+)
+
+// Should NOT trigger: catchAll with logic other than just Effect.fail
+export const shouldNotTriggerWithLogic = Effect.fail("error").pipe(
+  Effect.catchAll((cause) => {
+    console.log(cause)
+    return Effect.fail(new MyErrorTagged(cause))
+  })
+)
+
+// Should NOT trigger: catchAll returning Effect.succeed
+export const shouldNotTriggerSucceed = Effect.fail("error").pipe(
+  Effect.catchAll(() => Effect.succeed(42))
+)
+
+// Should NOT trigger: catchAll with Effect.flatMap or other operations
+export const shouldNotTriggerChained = Effect.fail("error").pipe(
+  Effect.catchAll((cause) =>
+    Effect.fail(new MyErrorTagged(cause)).pipe(
+      Effect.tap(() => Effect.void)
+    )
+  )
+)
+
+// Should trigger: simple error wrapping
+export const shouldTriggerSimple = Effect.fail("original").pipe(
+  Effect.catchAll((e) => Effect.fail(new AnotherError(String(e))))
+)
+
+// Should trigger with a fallback fix: the catch API is hidden behind a const alias.
+const catchAlias = Effect.catchAll
+export const shouldTriggerAliasedCatch = Effect.fail("error").pipe(
+  Effect.mapError((cause) =>new MyErrorTagged(cause))
 )
 

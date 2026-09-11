@@ -1,9 +1,6 @@
 package typeparser
 
-import (
-	"github.com/microsoft/TypeScript/tsc/shim/ast"
-	"github.com/microsoft/TypeScript/tsc/shim/checker"
-)
+import "github.com/microsoft/TypeScript/tsc/shim/checker"
 
 // EffectYieldableType resolves both plain Effect types and yieldable wrappers
 // that implement the asEffect() protocol.
@@ -11,7 +8,7 @@ import (
 // For v4: tries EffectType first; if that fails, looks for an asEffect property,
 // checks if it's callable, and tries EffectType on the return type of each call signature.
 // Returns nil if the type is not an Effect and not yieldable.
-func (tp *TypeParser) EffectYieldableType(t *checker.Type, atLocation *ast.Node) *Effect {
+func (tp *TypeParser) EffectYieldableType(t *checker.Type) *Effect {
 	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
@@ -21,11 +18,11 @@ func (tp *TypeParser) EffectYieldableType(t *checker.Type, atLocation *ast.Node)
 		// For v3, yieldable types are modeled through Effect subtyping,
 		// so EffectType alone is sufficient.
 		if version != EffectMajorV4 {
-			return tp.EffectType(t, atLocation)
+			return tp.EffectType(t)
 		}
 
 		// v4: first try plain Effect type
-		if result := tp.EffectType(t, atLocation); result != nil {
+		if result := tp.EffectType(t); result != nil {
 			return result
 		}
 
@@ -41,7 +38,7 @@ func (tp *TypeParser) EffectYieldableType(t *checker.Type, atLocation *ast.Node)
 			if returnType == nil {
 				continue
 			}
-			if result := tp.EffectType(returnType, atLocation); result != nil {
+			if result := tp.EffectType(returnType); result != nil {
 				return result
 			}
 		}

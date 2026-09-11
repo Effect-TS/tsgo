@@ -2,11 +2,11 @@ package refactors
 
 import (
 	"github.com/effect-ts/tsgo/internal/refactor"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/astnav"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 )
 
@@ -45,7 +45,7 @@ func runWrapWithEffectGen(ctx *refactor.Context) []ls.CodeAction {
 		if nodeType == nil {
 			continue
 		}
-		if !ctx.TypeParser.StrictIsEffectType(nodeType, node) {
+		if !ctx.TypeParser.StrictIsEffectType(nodeType) {
 			continue
 		}
 		if ctx.TypeParser.EffectGenCall(node) != nil {

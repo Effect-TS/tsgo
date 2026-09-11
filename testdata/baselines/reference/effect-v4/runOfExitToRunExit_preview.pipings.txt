@@ -1,0 +1,19 @@
+==== /.src/runOfExitToRunExit_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 8:20 - 8:60
+Node: Effect.runPromise(Effect.exit(program))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, Error, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.exit
+      args: (constant)
+      outType: Effect<Exit<number, Error>, never, never>
+  [1] kind: call
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<Exit<number, Error>>

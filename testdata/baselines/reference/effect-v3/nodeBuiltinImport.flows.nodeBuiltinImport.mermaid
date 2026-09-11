@@ -2,5 +2,30 @@ flowchart TB
   0[/"type: #quot;node:fs#quot;<br/>node: #quot;node:fs#quot;"/]
   1["type: any<br/>callee: require<br/>args: #91;#93;"]
   2[/"type: Require<br/>node: require"/]
+  3[/"type: #quot;console#quot;<br/>node: #quot;console#quot;"/]
+  4["type: any<br/>callee: require<br/>args: #91;#93;"]
+  5[/"type: Require<br/>node: require"/]
+  6[/"type: #quot;node:timers/promises#quot;<br/>node: #quot;node:timers/promises#quot;"/]
+  7["type: any<br/>callee: require<br/>args: #91;#93;"]
+  8[/"type: Require<br/>node: require"/]
+  9[/"type: #quot;stream/web#quot;<br/>node: #quot;stream/web#quot;"/]
+  10["type: any<br/>callee: require<br/>args: #91;#93;"]
+  11[/"type: Require<br/>node: require"/]
+  12[/"type: #quot;node:crypto#quot;<br/>node: #quot;node:crypto#quot;"/]
+  13["type: any<br/>callee: require<br/>args: #91;#93;"]
+  14[/"type: Require<br/>node: require"/]
+  15[/"type: #quot;timers/promises/extra#quot;<br/>node: #quot;timers/promises/extra#quot;"/]
+  16["type: any<br/>callee: require<br/>args: #91;#93;"]
+  17[/"type: Require<br/>node: require"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  12 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 13
+  15 -->|"kind: pipe"| 16
+  17 -->|"kind: transformCallee"| 16

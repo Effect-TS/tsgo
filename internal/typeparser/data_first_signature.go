@@ -40,7 +40,8 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 	if resolved == nil {
 		return nil
 	}
-	if len(resolved.Parameters()) != len(call.Arguments.Nodes) {
+	if len(call.Arguments.Nodes) < resolved.MinArgumentCount() ||
+		(len(call.Arguments.Nodes) > len(resolved.Parameters()) && !resolved.HasRestParameter()) {
 		return nil
 	}
 
@@ -104,6 +105,9 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 			}
 
 			if matched != nil && matched.SubjectIndex != subjectIndex {
+				if matched.SubjectIndex < len(resolved.Parameters()) && isLikelySelfParameter(resolved.Parameters()[matched.SubjectIndex]) {
+					return matched
+				}
 				return nil
 			}
 			matched = &ParsedDataFirstOrLastCall{

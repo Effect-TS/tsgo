@@ -136,7 +136,7 @@ func checkEffectTrySimple(tp *typeparser.TypeParser, _ *checker.Checker, node *a
 	}
 
 	// Parse the first argument as a lazy expression (thunk=false, like the TS reference)
-	lazyExpr := typeparser.ParseLazyExpression(call.Arguments.Nodes[0], false)
+	lazyExpr := typeparser.ParseLazyExpression(call.Arguments.Nodes[0], typeparser.LazyExpressionNone)
 	if lazyExpr == nil {
 		return nil
 	}
@@ -193,7 +193,7 @@ func checkEffectTryObject(tp *typeparser.TypeParser, _ *checker.Checker, node *a
 	}
 
 	// Parse the try property initializer as a lazy expression
-	lazyExpr := typeparser.ParseLazyExpression(tryInitializer, false)
+	lazyExpr := typeparser.ParseLazyExpression(tryInitializer, typeparser.LazyExpressionNone)
 	if lazyExpr == nil {
 		return nil
 	}

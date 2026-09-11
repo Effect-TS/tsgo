@@ -24,9 +24,15 @@ flowchart TB
   22[/"type: DataTaggedError<br/>node: err"/]
   23["type: void<br/>callee: console.log<br/>args: #91;#93;"]
   24[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  25[/"type: DataTaggedError<br/>node: new DataTaggedError#40;#41;"/]
-  26["type: Effect#lt;never, DataTaggedError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  27[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  25[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  26((("type: Effect#lt;number, DataTaggedError, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  yield* fail#40;new DataTaggedError#40;#41;#41;#92;n  return 1#92;n#125;#41;")))
+  27[/"type: 1<br/>node: 1"/]
+  28[/"type: DataTaggedError<br/>node: new DataTaggedError#40;#41;"/]
+  29["type: Effect#lt;never, DataTaggedError, never#gt;<br/>callee: fail<br/>args: #91;#93;"]
+  30[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: fail"/]
+  31[/"type: DataTaggedError<br/>node: new DataTaggedError#40;#41;"/]
+  32["type: Effect#lt;never, DataTaggedError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  33[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
   2 -->|"kind: pipe"| 3
   4 -->|"kind: transformCallee"| 3
   6 -->|"kind: pipe"| 7
@@ -47,5 +53,10 @@ flowchart TB
   22 -->|"kind: pipe"| 23
   24 -->|"kind: transformCallee"| 23
   23 -->|"kind: usedBy"| 12
-  25 -->|"kind: pipe"| 26
-  27 -->|"kind: transformCallee"| 26
+  27 -->|"kind: potentialReturn"| 26
+  28 -->|"kind: pipe"| 29
+  30 -->|"kind: transformCallee"| 29
+  29 -->|"kind: yieldable"| 26
+  27 -->|"kind: usedBy"| 26
+  31 -->|"kind: pipe"| 32
+  33 -->|"kind: transformCallee"| 32

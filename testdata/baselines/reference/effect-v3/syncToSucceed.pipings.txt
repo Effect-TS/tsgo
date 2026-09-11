@@ -1,4 +1,4 @@
-==== /.src/syncToSucceed.ts (18 flows) ====
+==== /.src/syncToSucceed.ts (19 flows) ====
 
 === Piping Flow ===
 Location: 8:29 - 8:56
@@ -113,7 +113,21 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 22:30 - 22:60
+Location: 22:29 - 22:55
+Node: syncAlias(() => constant)
+Node Kind: KindCallExpression
+
+Subject: () => constant
+Subject Type: () => string
+
+Transformations (1):
+  [0] kind: call
+      callee: syncAlias
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 25:30 - 25:60
 Node: Effect.sync(() => Date.now())
 Node Kind: KindCallExpression
 
@@ -127,7 +141,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 23:29 - 23:72
+Location: 26:29 - 26:72
 Node: Effect.sync(() => ({ value: "constant" }))
 Node Kind: KindCallExpression
 
@@ -141,7 +155,7 @@ Transformations (1):
       outType: Effect<{ value: string; }, never, never>
 
 === Piping Flow ===
-Location: 24:28 - 24:58
+Location: 27:28 - 27:58
 Node: Effect.sync(() => [constant])
 Node Kind: KindCallExpression
 
@@ -155,7 +169,7 @@ Transformations (1):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 25:28 - 25:68
+Location: 28:28 - 28:68
 Node: Effect.sync(() => objectConstant.value)
 Node Kind: KindCallExpression
 
@@ -169,7 +183,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 27:26 - 27:59
+Location: 30:26 - 30:59
 Node: Effect.sync(async () => "value")
 Node Kind: KindCallExpression
 
@@ -183,7 +197,7 @@ Transformations (1):
       outType: Effect<Promise<string>, never, never>
 
 === Piping Flow ===
-Location: 28:30 - 30:3
+Location: 31:30 - 33:3
 Node: Effect.sync(function*() {\n  return "value"\n})
 Node Kind: KindCallExpression
 
@@ -197,7 +211,7 @@ Transformations (1):
       outType: Effect<Generator<never, string, unknown>, never, never>
 
 === Piping Flow ===
-Location: 33:33 - 33:60
+Location: 36:33 - 36:60
 Node: Effect.sync(() => mutable)
 Node Kind: KindCallExpression
 
@@ -211,7 +225,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 34:29 - 34:54
+Location: 37:29 - 37:54
 Node: Effect.sync(() => later)
 Node Kind: KindCallExpression
 
@@ -225,7 +239,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 43:13 - 43:45
+Location: 46:13 - 46:45
 Node: Effect.sync(() => caseConstant)
 Node Kind: KindCallExpression
 
@@ -239,7 +253,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 49:29 - 49:59
+Location: 52:29 - 52:59
 Node: unrelated.sync(() => "value")
 Node Kind: KindCallExpression
 

@@ -1,0 +1,178 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:3-12:18) TS377127: Use `Effect.timeoutOption` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOption"
+
+[D2] (17:3-17:18) TS377127: Use `Effect.timeoutOption` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOption"
+
+[D3] (22:3-22:18) TS377127: Use `Effect.timeoutOption` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOption"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.timeoutOption" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse_handlers.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Effect, Option, pipe } from "effect"
+
+declare const task: Effect.Effect<string>
+
+// Should trigger: the complete returned flow constructs a successful None.
+export const functionPipe = task.pipe(Effect.timeoutOption(1))
+export const methodPipe = task.pipe(
+  Effect.timeout(1),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => Option.none().pipe(Effect.succeed))
+)
+export const parenthesizedBlock = task.pipe(
+  Effect.timeout(1),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => {
+    return (pipe((Option.none()), Effect.succeed))
+  })
+)
+
+// Must not change: additional transformations could have observable effects.
+export const transformedSucceedNone = task.pipe(
+  Effect.timeout(1),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => Effect.succeedNone.pipe(Effect.delay(1)))
+)
+export const transformedSucceed = task.pipe(
+  Effect.timeout(1),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => pipe(Option.none(), Effect.succeed, Effect.delay(1)))
+)
+export const transformedInput = task.pipe(
+  Effect.timeout(1),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => pipe(Option.none(), Option.orElse(() => Option.some("fallback")), Effect.succeed))
+)
+export const someInput = task.pipe(
+  Effect.timeout(1),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => pipe(Option.some("fallback"), Effect.succeed))
+)
+
+
+=== [D2] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.timeoutOption" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse_handlers.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Effect, Option, pipe } from "effect"
+
+declare const task: Effect.Effect<string>
+
+// Should trigger: the complete returned flow constructs a successful None.
+export const functionPipe = task.pipe(
+  Effect.timeout(1),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => pipe(Option.none(), Effect.succeed))
+)
+export const methodPipe = task.pipe(Effect.timeoutOption(1))
+export const parenthesizedBlock = task.pipe(
+  Effect.timeout(1),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => {
+    return (pipe((Option.none()), Effect.succeed))
+  })
+)
+
+// Must not change: additional transformations could have observable effects.
+export const transformedSucceedNone = task.pipe(
+  Effect.timeout(1),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => Effect.succeedNone.pipe(Effect.delay(1)))
+)
+export const transformedSucceed = task.pipe(
+  Effect.timeout(1),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => pipe(Option.none(), Effect.succeed, Effect.delay(1)))
+)
+export const transformedInput = task.pipe(
+  Effect.timeout(1),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => pipe(Option.none(), Option.orElse(() => Option.some("fallback")), Effect.succeed))
+)
+export const someInput = task.pipe(
+  Effect.timeout(1),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => pipe(Option.some("fallback"), Effect.succeed))
+)
+
+
+=== [D3] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.timeoutOption" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse_handlers.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Effect, Option, pipe } from "effect"
+
+declare const task: Effect.Effect<string>
+
+// Should trigger: the complete returned flow constructs a successful None.
+export const functionPipe = task.pipe(
+  Effect.timeout(1),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => pipe(Option.none(), Effect.succeed))
+)
+export const methodPipe = task.pipe(
+  Effect.timeout(1),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => Option.none().pipe(Effect.succeed))
+)
+export const parenthesizedBlock = task.pipe(Effect.timeoutOption(1))
+
+// Must not change: additional transformations could have observable effects.
+export const transformedSucceedNone = task.pipe(
+  Effect.timeout(1),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => Effect.succeedNone.pipe(Effect.delay(1)))
+)
+export const transformedSucceed = task.pipe(
+  Effect.timeout(1),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => pipe(Option.none(), Effect.succeed, Effect.delay(1)))
+)
+export const transformedInput = task.pipe(
+  Effect.timeout(1),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => pipe(Option.none(), Option.orElse(() => Option.some("fallback")), Effect.succeed))
+)
+export const someInput = task.pipe(
+  Effect.timeout(1),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => pipe(Option.some("fallback"), Effect.succeed))
+)
+
