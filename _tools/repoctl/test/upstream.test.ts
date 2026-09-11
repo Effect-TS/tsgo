@@ -5,9 +5,11 @@ import { mkdirSync, mkdtempSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import test from "node:test"
+import { buildOxlintTestMatrix } from "../src/matrix.ts"
 import {
   buildUpstream,
   decodeLatestNpmVersion,
+  decodeRecentNpmVersions,
   decodeUpstream,
   findTypeScriptVersion,
   formatGitHubOutputs,
@@ -254,6 +256,17 @@ test("selects the latest npm version matching a dependency spec regardless of re
   )
 })
 
+test("retains the three newest stable npm versions through the latest tag", async() => {
+  const decode = (versions: Array<string>, latest: string) => Effect.runPromise(decodeRecentNpmVersions(
+    JSON.stringify({ versions, "dist-tags.latest": latest }), "oxlint"
+  ))
+  assert.deepEqual(await decode([
+    "1.8.0", "1.10.0", "1.9.0", "1.7.0", "2.0.0-beta.1", "2.0.0", "1.10.0"
+  ], "1.10.0"), ["1.10.0", "1.9.0", "1.8.0"])
+  assert.deepEqual(await decode(["0.2.0", "0.1.0"], "0.2.0"), ["0.2.0", "0.1.0"])
+  await assert.rejects(decode([], "1.0.0"), /No stable latest version found/)
+})
+
 test("builds deterministic normalized metadata and deduplicates components", () => {
   const upstream = buildUpstream({
     next: { npmVersion: "7.1.0", gitHead: secondRevision, provider: "typescript" },
@@ -263,6 +276,13 @@ test("builds deterministic normalized metadata and deduplicates components", () 
       tsgolint: { npmVersion: "7.0.2001", gitHead: secondRevision },
       ts: { npmVersion: "7.0.0", gitHead: revision, provider: "typescript-go" }
     },
+    retainedRuntimes: ["1.72.0", "1.73.0", "1.74.0", "1.75.0", "1.76.0", "1.77.0"].map((npmVersion) => ({
+      name: `oxlint@${npmVersion}`,
+      description: `Oxlint ${npmVersion} compatibility runtime`,
+      oxlint: { npmVersion, gitHead: thirdRevision },
+      tsgolint: { npmVersion: npmVersion < "1.76.0" ? "7.0.2000" : "7.0.2001", gitHead: secondRevision },
+      ts: { npmVersion: npmVersion < "1.76.0" ? "6.0.0" : "7.0.0", gitHead: revision, provider: "typescript-go" }
+    })),
     vitePlus: {
       vitePlusVersion: "0.2.8",
       oxlint: { npmVersion: "1.76.0", gitHead: secondRevision },
@@ -271,15 +291,20 @@ test("builds deterministic normalized metadata and deduplicates components", () 
     }
   })
 
-  assert.deepEqual(Object.keys(upstream.components.typescript), ["7.0.0", "7.1.0"])
-  assert.deepEqual(Object.keys(upstream.components["oxlint-tsgolint"]), ["7.0.2001"])
-  assert.deepEqual(Object.keys(upstream.components.oxlint), ["1.76.0", "1.77.0"])
+  assert.deepEqual(Object.keys(upstream.components.typescript), ["6.0.0", "7.0.0", "7.1.0"])
+  assert.deepEqual(Object.keys(upstream.components["oxlint-tsgolint"]), ["7.0.2000", "7.0.2001"])
+  assert.deepEqual(Object.keys(upstream.components.oxlint), ["1.72.0", "1.73.0", "1.74.0", "1.75.0", "1.76.0", "1.77.0"])
+  assert.deepEqual(upstream.components["oxlint-tsgolint"]["7.0.2000"]!.dependencies, { typescript: "6.0.0" })
   assert.deepEqual(upstream.tags, {
     typescript: { latest: "7.0.0", next: "7.1.0" },
     oxlint: { latest: "1.77.0" },
     "oxlint-tsgolint": { latest: "7.0.2001" }
   })
-  assert.deepEqual(upstream.profiles, [
+  assert.equal(buildOxlintTestMatrix(upstream).include.length, 6)
+  assert.deepEqual(upstream.profiles.slice(1).map((profile) => profile.dependencies.oxlint), [
+    "1.72.0", "1.73.0", "1.74.0", "1.75.0", "1.76.0", "1.77.0"
+  ])
+  assert.deepEqual(upstream.profiles.slice(0, 1), [
     {
       name: "vite-plus",
       description: "Vite+ 0.2.8 compatibility runtime",
