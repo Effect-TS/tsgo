@@ -6,9 +6,10 @@ Effect version: 4.0.0
 /.src/catchAllToMapError.ts(29,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
 /.src/catchAllToMapError.ts(34,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
 /.src/catchAllToMapError.ts(63,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+/.src/catchAllToMapError.ts(69,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
 
 
-==== /.src/catchAllToMapError.ts (5 errors) ====
+==== /.src/catchAllToMapError.ts (6 errors) ====
     // @effect-diagnostics catchToOrElseSucceed:off
     import { Effect, pipe } from "effect"
     
@@ -81,6 +82,14 @@ Effect version: 4.0.0
     export const shouldTriggerSimple = Effect.fail("original").pipe(
       Effect.catch((e) => Effect.fail(new AnotherError(String(e))))
       ~~~~~~~~~~~~
+!!! suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+    )
+    
+    // Should trigger with a fallback fix: the catch API is hidden behind a const alias.
+    const catchAlias = Effect.catch
+    export const shouldTriggerAliasedCatch = Effect.fail("error").pipe(
+      catchAlias((cause) => Effect.fail(new MyErrorTagged(cause)))
+      ~~~~~~~~~~
 !!! suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
     )
     

@@ -1423,11 +1423,11 @@
         377042
       ],
       "preview": {
-        "sourceText": "import { Schema } from \"effect\"\n\nclass User extends Schema.Class\u003cUser\u003e(\"User\")({ name: Schema.String }) {}\ndeclare const value: unknown\nexport const preview = value instanceof User\n",
+        "sourceText": "import { Schema as S } from \"effect\"\n\nclass User extends S.Class\u003cUser\u003e(\"User\")({ name: S.String }) {}\ndeclare const value: unknown\nexport const preview = value instanceof User\n",
         "diagnostics": [
           {
-            "start": 159,
-            "end": 180,
+            "start": 154,
+            "end": 175,
             "text": "This code uses `instanceof` with an Effect Schema type. `Schema.is` is the schema-aware runtime check for this case. effect(instanceOfSchema)"
           }
         ]
@@ -2005,6 +2005,30 @@
             "start": 95,
             "end": 109,
             "text": "`Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "flatMapIgnoredParamToAndThen",
+      "group": "style",
+      "description": "Suggests using Effect.andThen instead of Effect.flatMap when a zero-parameter callback returns an existing Effect value",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377132
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nconst first = Effect.succeed(1)\nconst second = Effect.succeed(\"second\")\n\nexport const program = first.pipe(Effect.flatMap(() =\u003e second))\n",
+        "diagnostics": [
+          {
+            "start": 140,
+            "end": 154,
+            "text": "`Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)"
           }
         ]
       }

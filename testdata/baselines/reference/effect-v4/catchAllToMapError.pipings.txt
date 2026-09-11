@@ -1,4 +1,4 @@
-==== /.src/catchAllToMapError.ts (18 flows) ====
+==== /.src/catchAllToMapError.ts (20 flows) ====
 
 === Piping Flow ===
 Location: 15:34 - 17:2
@@ -287,3 +287,35 @@ Transformations (1):
       callee: String
       args: (constant)
       outType: string
+
+=== Piping Flow ===
+Location: 68:41 - 70:2
+Node: Effect.fail("error").pipe(\n  catchAlias((cause) => Effect.fail(new MyErrorTagged(cause)))\n)
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+  [1] kind: pipeable
+      callee: catchAlias
+      args: [(cause) => Effect.fail(new MyErrorTagged(cause))]
+      outType: Effect<never, MyErrorTagged, never>
+
+=== Piping Flow ===
+Location: 69:24 - 69:62
+Node: Effect.fail(new MyErrorTagged(cause))
+Node Kind: KindCallExpression
+
+Subject: new MyErrorTagged(cause)
+Subject Type: MyErrorTagged
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, MyErrorTagged, never>

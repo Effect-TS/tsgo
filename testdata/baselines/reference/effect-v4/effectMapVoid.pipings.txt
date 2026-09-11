@@ -1,4 +1,4 @@
-==== /.src/effectMapVoid.ts (13 flows) ====
+==== /.src/effectMapVoid.ts (14 flows) ====
 
 === Piping Flow ===
 Location: 4:34 - 6:2
@@ -217,7 +217,25 @@ Transformations (2):
       outType: Effect<undefined, never, never>
 
 === Piping Flow ===
-Location: 60:50 - 60:94
+Location: 61:39 - 61:89
+Node: Effect.succeed(1).pipe(mapAlias(() => undefined))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: mapAlias
+      args: [() => undefined]
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 64:50 - 64:94
 Node: Effect.map(Effect.succeed(1), (n) => n * 2)
 Node Kind: KindCallExpression
 

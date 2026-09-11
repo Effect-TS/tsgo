@@ -95,19 +95,22 @@ func AnalyzeEffectMapVoid(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 		for index := range flow.Transformations {
 			transformation := &flow.Transformations[index]
 			if len(transformation.Args) != 1 ||
-				transformation.Callee == nil || transformation.Callee.Kind != ast.KindPropertyAccessExpression ||
+				transformation.Callee == nil ||
 				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "map") {
 				continue
 			}
 			if !isVoidCallback(transformation.Args[0]) {
 				continue
 			}
-			propAccess := transformation.Callee.AsPropertyAccessExpression()
+			var effectModule *ast.Node
+			if transformation.Callee.Kind == ast.KindPropertyAccessExpression {
+				effectModule = transformation.Callee.AsPropertyAccessExpression().Expression
+			}
 			matches = append(matches, EffectMapVoidMatch{
 				SourceFile:       sf,
 				Location:         scanner.GetErrorRangeForNode(sf, transformation.Callee),
 				Transformation:   transformation,
-				EffectModuleNode: propAccess.Expression,
+				EffectModuleNode: effectModule,
 			})
 		}
 	}

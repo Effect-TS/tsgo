@@ -8,6 +8,9 @@ export const methodPipe = Effect.runPromise(program.pipe(Effect.exit))
 export const functionPipe = Effect.runPromise(pipe(program, Effect.exit))
 export const sameFunctionPipe = pipe(program, Effect.exit, Effect.runPromise)
 
+const runPromise = Effect.runPromise
+export const aliasedRunner = runPromise(Effect.exit(program))
+
 export const transformedExit = Effect.runPromise(
   program.pipe(Effect.exit, Effect.map((exit) => exit))
 )

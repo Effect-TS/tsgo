@@ -1,0 +1,239 @@
+==== /.src/flatMapIgnoredParamToAndThen.ts (17 flows) ====
+
+=== Piping Flow ===
+Location: 4:14 - 4:32
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 5:15 - 5:40
+Node: Effect.succeed("second")
+Node Kind: KindCallExpression
+
+Subject: "second"
+Subject Type: "second"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 10:24 - 10:65
+Node: first.pipe(Effect.flatMap(() => second))
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [() => second]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 13:21 - 13:63
+Node: pipe(first, Effect.flatMap(() => second))
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.flatMap
+      args: [() => second]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 16:25 - 16:61
+Node: Effect.flatMap(first, () => second)
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [() => second]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 19:24 - 19:60
+Node: Effect.flatMap(() => second)(first)
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.flatMap
+      args: [() => second]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 23:23 - 23:57
+Node: first.pipe(flatMap(() => second))
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: flatMap
+      args: [() => second]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 26:25 - 26:72
+Node: first.pipe(Effect.flatMap((_value) => second))
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(_value) => second]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 30:20 - 30:76
+Node: first.pipe(Effect.flatMap(() => Effect.succeed("new")))
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [() => Effect.succeed("new")]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 30:52 - 30:74
+Node: Effect.succeed("new")
+Node Kind: KindCallExpression
+
+Subject: "new"
+Subject Type: "new"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 31:30 - 31:78
+Node: first.pipe(Effect.flatMap(() => holder.second))
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [() => holder.second]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 34:30 - 34:72
+Node: first.pipe(Effect.flatMap(() => mutable))
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [() => mutable]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 35:28 - 35:68
+Node: first.pipe(Effect.flatMap(() => later))
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [() => later]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 36:14 - 36:38
+Node: Effect.succeed("later")
+Node Kind: KindCallExpression
+
+Subject: "later"
+Subject Type: "later"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 39:25 - 41:4
+Node: first.pipe(Effect.flatMap(() => {\n  return second\n}))
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [() => {\n  return second\n}]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 45:9 - 45:50
+Node: first.pipe(Effect.flatMap(() => second))
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [() => second]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 50:25 - 50:74
+Node: first.pipe(Effect.flatMap(() => value as never))
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [() => value as never]
+      outType: Effect<unknown, unknown, unknown>

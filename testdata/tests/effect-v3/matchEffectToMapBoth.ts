@@ -3,6 +3,12 @@
 import { Effect } from "effect"
 
 declare const effect: Effect.Effect<number, string>
+const matchEffect = Effect.matchEffect
+
+export const constantAlias = effect.pipe(matchEffect({
+  onFailure: (error) => Effect.fail(error.length),
+  onSuccess: (value) => Effect.succeed(value + 1)
+}))
 
 export const pipeable = effect.pipe(Effect.matchEffect({
   onFailure: (error) => Effect.fail(error.length),

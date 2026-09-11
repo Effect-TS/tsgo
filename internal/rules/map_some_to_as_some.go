@@ -53,7 +53,7 @@ func AnalyzeMapSomeToAsSome(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 		for index := range flow.Transformations {
 			transformation := &flow.Transformations[index]
 			if len(transformation.Args) != 1 ||
-				transformation.Callee == nil || transformation.Callee.Kind != ast.KindPropertyAccessExpression ||
+				transformation.Callee == nil ||
 				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "map") {
 				continue
 			}
@@ -62,12 +62,15 @@ func AnalyzeMapSomeToAsSome(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 				!isOptionSomeMapper(tp, transformation.Args[0]) {
 				continue
 			}
-			propertyAccess := transformation.Callee.AsPropertyAccessExpression()
+			var effectModuleNode *ast.Node
+			if transformation.Callee.Kind == ast.KindPropertyAccessExpression {
+				effectModuleNode = transformation.Callee.AsPropertyAccessExpression().Expression
+			}
 			matches = append(matches, MapSomeToAsSomeMatch{
 				SourceFile:       sf,
 				Location:         scanner.GetErrorRangeForNode(sf, transformation.Callee),
 				Transformation:   transformation,
-				EffectModuleNode: propertyAccess.Expression,
+				EffectModuleNode: effectModuleNode,
 			})
 		}
 	}

@@ -30,6 +30,10 @@ export const shouldTriggerBlock = undefinedEffect.pipe(
 // Should trigger: data-first style
 export const shouldTriggerDataFirst = Effect.catch(voidEffect, () => Effect.void)
 
+// Should trigger with a fallback fix: the API reference is hidden behind a const alias.
+const catchAlias = Effect.catch
+export const shouldTriggerAliasedCatch = voidEffect.pipe(catchAlias(() => Effect.void))
+
 // Should NOT trigger: Effect.ignore would discard the number success value
 export const shouldNotTriggerValueSuccess = numberEffect.pipe(
   Effect.catch(() => Effect.void)

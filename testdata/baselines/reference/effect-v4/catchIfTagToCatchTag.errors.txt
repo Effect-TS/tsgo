@@ -4,9 +4,10 @@ Effect version: 4.0.0
 /.src/catchIfTagToCatchTag.ts(20,3): suggestion TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
 /.src/catchIfTagToCatchTag.ts(26,3): suggestion TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
 /.src/catchIfTagToCatchTag.ts(30,26): suggestion TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
+/.src/catchIfTagToCatchTag.ts(79,3): suggestion TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
 
 
-==== /.src/catchIfTagToCatchTag.ts (3 errors) ====
+==== /.src/catchIfTagToCatchTag.ts (4 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics catchIfTagToCatchTag:suggestion
     import { Effect as Fx, pipe } from "effect"
@@ -86,5 +87,13 @@ Effect version: 4.0.0
     }
     export const lookalike = program.pipe(
       fake.catchIf((error) => error._tag === "NotFoundError", broadHandler)
+    )
+    
+    // Should trigger with a fallback fix: catchIf is hidden behind a const alias.
+    const catchIfAlias = Fx.catchIf
+    export const aliasedCatchIf = program.pipe(
+      catchIfAlias((error) => error._tag === "NotFoundError", handler)
+      ~~~~~~~~~~~~
+!!! suggestion TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
     )
     

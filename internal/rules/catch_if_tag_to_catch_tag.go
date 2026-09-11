@@ -36,6 +36,7 @@ type CatchIfTagToCatchTagMatch struct {
 	Transformation *typeparser.PipingFlowTransformation
 	Tag            string
 	Handler        *ast.Node
+	CanFix         bool
 }
 
 func AnalyzeCatchIfTagToCatchTag(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []CatchIfTagToCatchTagMatch {
@@ -58,6 +59,7 @@ func AnalyzeCatchIfTagToCatchTag(tp *typeparser.TypeParser, c *checker.Checker, 
 				SourceFile: sf, Location: scanner.GetErrorRangeForNode(sf, transformation.Callee),
 				Transformation: transformation,
 				Tag:            tag, Handler: transformation.Args[1],
+				CanFix: true,
 			})
 		}
 	}

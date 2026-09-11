@@ -4,10 +4,11 @@ Effect version: 4.0.0
 /.src/cryptoRandomUUID.ts(5,27): warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
 /.src/cryptoRandomUUID.ts(8,34): warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
 /.src/cryptoRandomUUID.ts(12,28): warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
-/.src/cryptoRandomUUID.ts(21,20): warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
+/.src/cryptoRandomUUID.ts(16,34): warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
+/.src/cryptoRandomUUID.ts(25,20): warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
 
 
-==== /.src/cryptoRandomUUID.ts (4 errors) ====
+==== /.src/cryptoRandomUUID.ts (5 errors) ====
     // @effect-diagnostics cryptoRandomUUID:warning
     import { Effect } from "effect"
     
@@ -25,6 +26,12 @@ Effect version: 4.0.0
     const globalCrypto = crypto
     export const aliasedUuid = globalCrypto.randomUUID()
                                ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
+    
+    // Should trigger - aliased crypto.randomUUID method
+    const randomUUID = crypto.randomUUID
+    export const aliasedMethodUuid = randomUUID()
+                                     ~~~~~~~~~~~~
 !!! warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
     
     // Should NOT trigger - crypto.randomUUID() inside Effect.gen

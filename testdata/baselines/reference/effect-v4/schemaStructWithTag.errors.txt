@@ -2,9 +2,10 @@
 Effect version: 4.0.0
 
 /.src/schemaStructWithTag.ts(4,21): suggestion TS377036: This `Schema.Struct` includes a `_tag` field. `Schema.TaggedStruct` is the tagged-struct form for this pattern and makes the tag optional in the constructor. effect(schemaStructWithTag)
+/.src/schemaStructWithTag.ts(23,24): suggestion TS377036: This `Schema.Struct` includes a `_tag` field. `Schema.TaggedStruct` is the tagged-struct form for this pattern and makes the tag optional in the constructor. effect(schemaStructWithTag)
 
 
-==== /.src/schemaStructWithTag.ts (1 errors) ====
+==== /.src/schemaStructWithTag.ts (2 errors) ====
     import * as Schema from "effect/Schema"
     
     // this should trigger because this is a Schema.Struct with a _tag field
@@ -30,4 +31,16 @@ Effect version: 4.0.0
       name: Schema.String,
       age: Schema.Finite
     })
+    
+    const Struct = Schema.Struct
+    const Literal = Schema.Literal
+    export const Aliased = Struct({
+                           ~~~~~~~~
+      _tag: Literal("Aliased"),
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      value: Schema.String
+    ~~~~~~~~~~~~~~~~~~~~~~
+    })
+    ~~
+!!! suggestion TS377036: This `Schema.Struct` includes a `_tag` field. `Schema.TaggedStruct` is the tagged-struct form for this pattern and makes the tag optional in the constructor. effect(schemaStructWithTag)
     

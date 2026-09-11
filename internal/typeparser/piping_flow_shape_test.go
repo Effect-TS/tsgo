@@ -1,6 +1,11 @@
 package typeparser
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/effect-ts/tsgo/internal/bundledeffect"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+)
 
 func TestPipingFlowMatchesShape(t *testing.T) {
 	t.Parallel()
@@ -59,5 +64,38 @@ func TestPipingFlowMatchesShapeNil(t *testing.T) {
 	var complete *PipingFlow
 	if partial.MatchesPrefix(subject) || partial.MatchesExactly(subject) || complete.MatchesPrefix(subject) || complete.MatchesExactly(subject) {
 		t.Fatal("nil flows must not match")
+	}
+}
+
+func TestParsePipeCall_ConstantAlias(t *testing.T) {
+	t.Parallel()
+
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectVersionInternal(t, bundledeffect.EffectV4, `
+import { pipe } from "effect"
+
+const p = pipe
+export const value = p(1)
+`)
+	defer done()
+
+	var parsed *ParsedPipeCallResult
+	var visit func(*ast.Node)
+	visit = func(node *ast.Node) {
+		if node == nil || parsed != nil {
+			return
+		}
+		if result := tp.ParsePipeCall(node); result != nil {
+			parsed = result
+			return
+		}
+		node.ForEachChild(func(child *ast.Node) bool {
+			visit(child)
+			return false
+		})
+	}
+	visit(sf.AsNode())
+
+	if parsed == nil || parsed.Kind != TransformationKindPipe || len(parsed.Args) != 0 {
+		t.Fatal("expected a constant alias of pipe to parse as a standalone pipe call")
 	}
 }

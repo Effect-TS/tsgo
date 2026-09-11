@@ -1,6 +1,11 @@
 import { Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
 import { none as optionNone, some as optionSome } from "effect/Option"
 
+const succeed = Effect.succeed
+
+// Should trigger and fix the call site without changing the constant alias.
+export const shouldTriggerConstantAlias = succeed(Option.some(1))
+
 // Should trigger: direct None constructor
 export const shouldTriggerNone = Effect.succeed(Option.none())
 

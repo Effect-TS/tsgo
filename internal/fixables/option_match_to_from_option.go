@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -24,15 +25,16 @@ func runOptionMatchToFromOptionFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		if !match.CanFix || match.EffectModuleNode == nil ||
+		if !match.CanFix ||
 			match.Transformation == nil && (match.ReplacementNode == nil || match.OptionNode == nil) {
-			return nil
+			continue
 		}
+		effectModuleName := typeparser.FindEffectModuleIdentifier(ctx.SourceFile)
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.fromOption",
 			Run: func(tracker *rewriter.Tracker) {
-				callee, arguments := buildFromOptionReplacement(tracker, match)
+				callee, arguments := buildFromOptionReplacement(tracker, match, effectModuleName)
 				if callee == nil {
 					return
 				}
@@ -59,9 +61,15 @@ func runOptionMatchToFromOptionFix(ctx *fixable.Context) []ls.CodeAction {
 	return nil
 }
 
-func buildFromOptionReplacement(tracker *rewriter.Tracker, match rules.OptionMatchToFromOptionMatch) (*ast.Node, *ast.NodeList) {
+func buildFromOptionReplacement(tracker *rewriter.Tracker, match rules.OptionMatchToFromOptionMatch, effectModuleName string) (*ast.Node, *ast.NodeList) {
+	moduleNode := match.EffectModuleNode
+	if moduleNode == nil {
+		moduleNode = tracker.NewIdentifier(effectModuleName)
+	} else {
+		moduleNode = tracker.DeepCloneNode(moduleNode)
+	}
 	fromOption := tracker.NewPropertyAccessExpression(
-		tracker.DeepCloneNode(match.EffectModuleNode),
+		moduleNode,
 		nil,
 		tracker.NewIdentifier("fromOption"),
 		ast.NodeFlagsNone,

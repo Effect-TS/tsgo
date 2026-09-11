@@ -4,7 +4,6 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
-	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
 )
@@ -24,19 +23,14 @@ func runCatchDieToOrDieFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		if match.Transformation == nil || match.EffectModule == nil || match.HasTypeArguments {
-			return nil
+		if match.Transformation == nil || match.HasTypeArguments {
+			continue
 		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.orDie",
 			Run: func(tracker *rewriter.Tracker) {
-				orDie := tracker.NewPropertyAccessExpression(
-					tracker.DeepCloneNode(match.EffectModule),
-					nil,
-					tracker.NewIdentifier("orDie"),
-					ast.NodeFlagsNone,
-				)
+				orDie := effectModuleMethod(tracker, ctx.SourceFile, match.EffectModule, "orDie")
 				tracker.ReplacePipingFlowTransformation(ctx.SourceFile, match.Transformation, rewriter.PipingFlowTransformationReplacement{
 					Callee: orDie,
 				})
@@ -44,7 +38,7 @@ func runCatchDieToOrDieFix(ctx *fixable.Context) []ls.CodeAction {
 		}); action != nil {
 			return []ls.CodeAction{*action}
 		}
-		return nil
+		continue
 	}
 	return nil
 }

@@ -7,12 +7,14 @@ Effect version: 4.0.0
 /.src/runOfExitToRunExit.ts(16,37): suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
 /.src/runOfExitToRunExit.ts(23,57): suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
 /.src/runOfExitToRunExit.ts(24,60): suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
-/.src/runOfExitToRunExit.ts(27,28): suggestion TS377123: `Effect.runPromiseWith` of `Effect.exit` re-implements `Effect.runPromiseExitWith`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
-/.src/runOfExitToRunExit.ts(28,58): suggestion TS377123: `Effect.runPromiseWith` of `Effect.exit` re-implements `Effect.runPromiseExitWith`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
-/.src/runOfExitToRunExit.ts(31,22): suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+/.src/runOfExitToRunExit.ts(27,30): suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+/.src/runOfExitToRunExit.ts(30,28): suggestion TS377123: `Effect.runPromiseWith` of `Effect.exit` re-implements `Effect.runPromiseExitWith`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+/.src/runOfExitToRunExit.ts(31,58): suggestion TS377123: `Effect.runPromiseWith` of `Effect.exit` re-implements `Effect.runPromiseExitWith`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+/.src/runOfExitToRunExit.ts(33,35): suggestion TS377123: `Effect.runPromiseWith` of `Effect.exit` re-implements `Effect.runPromiseExitWith`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+/.src/runOfExitToRunExit.ts(36,22): suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
 
 
-==== /.src/runOfExitToRunExit.ts (9 errors) ====
+==== /.src/runOfExitToRunExit.ts (11 errors) ====
     import { Context, Effect, Effect as Fx, pipe } from "effect"
     
     declare const program: Effect.Effect<number, Error>
@@ -50,12 +52,21 @@ Effect version: 4.0.0
                                                                ~~~~~~~~~~~~~~~~~
 !!! suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
     
+    const runPromise = Effect.runPromise
+    export const aliasedRunner = runPromise(Effect.exit(program))
+                                 ~~~~~~~~~~
+!!! suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+    
     // Effect v4 context-bound runners have the same fusion.
     export const promiseWith = Effect.runPromiseWith(context)(Effect.exit(program), { signal })
                                ~~~~~~~~~~~~~~~~~~~~~
 !!! suggestion TS377123: `Effect.runPromiseWith` of `Effect.exit` re-implements `Effect.runPromiseExitWith`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
     export const promiseWithPipe = program.pipe(Effect.exit, Effect.runPromiseWith(context))
                                                              ~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377123: `Effect.runPromiseWith` of `Effect.exit` re-implements `Effect.runPromiseExitWith`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+    const runPromiseWith = Effect.runPromiseWith
+    export const aliasedPromiseWith = runPromiseWith(context)(Effect.exit(program), { signal })
+                                      ~~~~~~~~~~~~~~~~~~~~~~~
 !!! suggestion TS377123: `Effect.runPromiseWith` of `Effect.exit` re-implements `Effect.runPromiseExitWith`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
     
     // Namespace aliases remain fixable.

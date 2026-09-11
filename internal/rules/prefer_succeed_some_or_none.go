@@ -67,7 +67,7 @@ func AnalyzePreferSucceedSomeOrNone(tp *typeparser.TypeParser, _ *checker.Checke
 	var matches []PreferSucceedSomeOrNoneMatch
 	for _, flow := range tp.PipingFlows(sf, true) {
 		isSucceed := func(transformation *typeparser.PipingFlowTransformation) bool {
-			return transformation.Callee != nil && transformation.Callee.Kind == ast.KindPropertyAccessExpression &&
+			return transformation.Callee != nil &&
 				len(transformation.Args) == 0 &&
 				(transformation.TypeArguments == nil || len(transformation.TypeArguments.Nodes) == 0) &&
 				tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "succeed")
@@ -100,10 +100,14 @@ func AnalyzePreferSucceedSomeOrNone(tp *typeparser.TypeParser, _ *checker.Checke
 
 func preferSucceedSomeOrNoneMatch(sf *ast.SourceFile, flow *typeparser.PipingFlow, succeedIndex int, optionInput *normalizedOptionInput) PreferSucceedSomeOrNoneMatch {
 	transformation := &flow.Transformations[succeedIndex]
+	var effectModuleNode *ast.Node
+	if transformation.Callee.Kind == ast.KindPropertyAccessExpression {
+		effectModuleNode = transformation.Callee.AsPropertyAccessExpression().Expression
+	}
 	match := PreferSucceedSomeOrNoneMatch{
 		SourceFile:         sf,
 		Location:           scanner.GetErrorRangeForNode(sf, transformation.Callee),
-		EffectModuleNode:   transformation.Callee.AsPropertyAccessExpression().Expression,
+		EffectModuleNode:   effectModuleNode,
 		ReplacementName:    optionInput.ReplacementName,
 		ValueNode:          optionInput.ValueNode,
 		ValueTypeArguments: optionInput.ValueTypeArguments,

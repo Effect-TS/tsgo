@@ -56,20 +56,18 @@ func AnalyzeUnnecessaryFailYieldableError(tp *typeparser.TypeParser, _ *checker.
 			// Must be yield* (not plain yield)
 			if yield.AsteriskToken != nil && yield.Expression != nil && yield.Expression.Kind == ast.KindCallExpression {
 				call := yield.Expression.AsCallExpression()
-				if call.Expression != nil && call.Expression.Kind == ast.KindPropertyAccessExpression {
-					if tp.IsNodeReferenceToEffectModuleApi(call.Expression, "fail") {
-						if call.Arguments != nil && len(call.Arguments.Nodes) >= 1 {
-							arg := call.Arguments.Nodes[0]
-							argType := tp.GetTypeAtLocation(arg)
-							if argType != nil && tp.IsYieldableErrorType(argType) {
-								matches = append(matches, UnnecessaryFailYieldableErrorMatch{
-									SourceFile:   sf,
-									Location:     scanner.GetErrorRangeForNode(sf, n),
-									YieldNode:    n,
-									CallNode:     yield.Expression,
-									FailArgument: arg,
-								})
-							}
+				if call.Expression != nil && tp.IsNodeReferenceToEffectModuleApi(call.Expression, "fail") {
+					if call.Arguments != nil && len(call.Arguments.Nodes) >= 1 {
+						arg := call.Arguments.Nodes[0]
+						argType := tp.GetTypeAtLocation(arg)
+						if argType != nil && tp.IsYieldableErrorType(argType) {
+							matches = append(matches, UnnecessaryFailYieldableErrorMatch{
+								SourceFile:   sf,
+								Location:     scanner.GetErrorRangeForNode(sf, n),
+								YieldNode:    n,
+								CallNode:     yield.Expression,
+								FailArgument: arg,
+							})
 						}
 					}
 				}
