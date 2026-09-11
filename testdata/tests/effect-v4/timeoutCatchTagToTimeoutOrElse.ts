@@ -23,6 +23,9 @@ export const otherError = tagged.pipe(E.timeout(1), E.catchTag("TimeoutError", (
 export const effectFn = Effect.fn(function*() { return yield* task }, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
 export const block = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => { const value = "fallback"; return Effect.succeed(value) }))
 
+const catchTag = Effect.catchTag
+export const aliasedCatchTag = task.pipe(Effect.timeout(1), catchTag("TimeoutError", () => Effect.succeed("fallback")))
+
 // Must not change: these handlers also catch failures from the input.
 export const collision = innerTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))
 export const structuralCollision = customTimeout.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")))

@@ -3,9 +3,10 @@ Effect version: 4.0.0
 
 /.src/unnecessaryFailYieldableError.ts(22,3): suggestion TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
 /.src/unnecessaryFailYieldableError.ts(23,3): suggestion TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
+/.src/unnecessaryFailYieldableError.ts(28,3): suggestion TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
 
 
-==== /.src/unnecessaryFailYieldableError.ts (2 errors) ====
+==== /.src/unnecessaryFailYieldableError.ts (3 errors) ====
     /** @effect-diagnostics missingReturnYieldStar:skip-file */
     import * as Data from "effect/Data"
     import * as Effect from "effect/Effect"
@@ -33,6 +34,14 @@ Effect version: 4.0.0
       yield* Effect.fail(new SchemaError({}))
       ~~~~~
 !!! suggestion TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
+    })
+    
+    const fail = Effect.fail
+    export const aliasedFail = Effect.gen(function*() {
+      yield* fail(new DataTaggedError())
+      ~~~~~
+!!! suggestion TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
+      return 1
     })
     
     // should not report

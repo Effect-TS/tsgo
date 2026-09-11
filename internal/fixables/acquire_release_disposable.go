@@ -24,19 +24,14 @@ func runAcquireReleaseDisposableFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		if match.EffectModule == nil || match.HasTypeArguments {
-			return nil
+		if match.HasTypeArguments {
+			continue
 		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.acquireDisposable",
 			Run: func(tracker *rewriter.Tracker) {
-				callee := tracker.NewPropertyAccessExpression(
-					tracker.DeepCloneNode(match.EffectModule),
-					nil,
-					tracker.NewIdentifier("acquireDisposable"),
-					ast.NodeFlagsNone,
-				)
+				callee := effectModuleMethod(tracker, ctx.SourceFile, match.EffectModule, "acquireDisposable")
 				replacement := tracker.NewCallExpression(
 					callee,
 					nil,
@@ -50,7 +45,7 @@ func runAcquireReleaseDisposableFix(ctx *fixable.Context) []ls.CodeAction {
 		}); action != nil {
 			return []ls.CodeAction{*action}
 		}
-		return nil
+		continue
 	}
 	return nil
 }

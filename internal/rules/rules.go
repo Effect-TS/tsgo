@@ -105,6 +105,7 @@ var All = []rule.Rule{
 	AllOfMapToForEach,
 	MapSomeToAsSome,
 	FlatMapToMap,
+	FlatMapIgnoredParamToAndThen,
 	MatchEffectToMatch,
 	MatchEffectToMapBoth,
 	FlatMapConditionalToFilterOrFail,

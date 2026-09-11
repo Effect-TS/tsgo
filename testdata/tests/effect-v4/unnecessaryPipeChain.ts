@@ -7,6 +7,9 @@ export const asPipeable = Effect.succeed(1).pipe(Effect.map((x) => x + 2)).pipe(
 // Should trigger: nested pipe() calls
 export const asPipe = pipe(pipe(Effect.succeed(1), Effect.map((x) => x + 2)), Effect.map((x) => x + 3))
 
+const p = pipe
+export const aliasedPipe = p(p(Effect.succeed(1), Effect.map((x) => x + 2)), Effect.map((x) => x + 3))
+
 // Should NOT trigger: single pipe with multiple args
 export const singlePipe = pipe(Effect.succeed(1), Effect.map((x) => x + 2), Effect.map((x) => x + 3))
 

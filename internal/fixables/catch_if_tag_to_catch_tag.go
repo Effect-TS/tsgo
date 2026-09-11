@@ -17,15 +17,18 @@ var CatchIfTagToCatchTagFix = fixable.Fixable{
 
 func runCatchIfTagToCatchTagFix(ctx *fixable.Context) []ls.CodeAction {
 	for _, match := range rules.AnalyzeCatchIfTagToCatchTag(ctx.TypeParser, ctx.Checker, ctx.SourceFile) {
+		if !match.CanFix {
+			continue
+		}
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
 		action := ctx.NewFixAction(fixable.FixAction{Description: "Replace with Effect.catchTag", Run: func(tracker *rewriter.Tracker) {
-			access := match.Transformation.Callee.AsPropertyAccessExpression()
-			if access == nil || access.Expression == nil {
-				return
+			var receiver *ast.Node
+			if match.Transformation.Callee.Kind == ast.KindPropertyAccessExpression {
+				receiver = match.Transformation.Callee.AsPropertyAccessExpression().Expression
 			}
-			callee := tracker.NewPropertyAccessExpression(tracker.DeepCloneNode(access.Expression), nil, tracker.NewIdentifier("catchTag"), ast.NodeFlagsNone)
+			callee := effectModuleMethod(tracker, ctx.SourceFile, receiver, "catchTag")
 			arguments := tracker.NewNodeList([]*ast.Node{tracker.NewStringLiteral(match.Tag, 0), tracker.DeepCloneNode(match.Handler)})
 			tracker.ReplacePipingFlowTransformation(ctx.SourceFile, match.Transformation, rewriter.PipingFlowTransformationReplacement{Callee: callee, Arguments: arguments})
 		}})

@@ -1,4 +1,4 @@
-==== /.src/unnecessaryFailYieldableError.ts (8 flows) ====
+==== /.src/unnecessaryFailYieldableError.ts (10 flows) ====
 
 === Piping Flow ===
 Location: 11:30 - 11:66
@@ -99,7 +99,35 @@ Transformations (1):
       outType: Effect<never, SchemaError, never>
 
 === Piping Flow ===
-Location: 26:31 - 26:66
+Location: 26:27 - 29:3
+Node: Effect.gen(function*() {\n  yield* fail(new DataTaggedError())\n  return 1\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* fail(new DataTaggedError())\n  return 1\n}
+Subject Type: () => Generator<YieldWrap<Effect<never, DataTaggedError, never>>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, DataTaggedError, never>
+
+=== Piping Flow ===
+Location: 27:9 - 27:37
+Node: fail(new DataTaggedError())
+Node Kind: KindCallExpression
+
+Subject: new DataTaggedError()
+Subject Type: DataTaggedError
+
+Transformations (1):
+  [0] kind: call
+      callee: fail
+      args: (constant)
+      outType: Effect<never, DataTaggedError, never>
+
+=== Piping Flow ===
+Location: 32:31 - 32:66
 Node: Effect.fail(new DataTaggedError())
 Node Kind: KindCallExpression
 

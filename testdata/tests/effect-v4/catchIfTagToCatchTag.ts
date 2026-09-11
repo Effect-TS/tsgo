@@ -72,3 +72,9 @@ declare const fake: {
 export const lookalike = program.pipe(
   fake.catchIf((error) => error._tag === "NotFoundError", broadHandler)
 )
+
+// Should trigger with a fallback fix: catchIf is hidden behind a const alias.
+const catchIfAlias = Fx.catchIf
+export const aliasedCatchIf = program.pipe(
+  catchIfAlias((error) => error._tag === "NotFoundError", handler)
+)

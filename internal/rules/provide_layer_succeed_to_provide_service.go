@@ -55,7 +55,7 @@ func AnalyzeProvideLayerSucceedToProvideService(tp *typeparser.TypeParser, _ *ch
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for index := range flow.Transformations {
 			provide := &flow.Transformations[index]
-			if provide.Callee == nil || provide.Callee.Kind != ast.KindPropertyAccessExpression ||
+			if provide.Callee == nil ||
 				!tp.IsNodeReferenceToEffectModuleApi(provide.Callee, "provide") || len(provide.Args) != 1 {
 				continue
 			}
@@ -69,11 +69,15 @@ func AnalyzeProvideLayerSucceedToProvideService(tp *typeparser.TypeParser, _ *ch
 				continue
 			}
 
+			var effectModuleNode *ast.Node
+			if provide.Callee.Kind == ast.KindPropertyAccessExpression {
+				effectModuleNode = provide.Callee.AsPropertyAccessExpression().Expression
+			}
 			matches = append(matches, ProvideLayerSucceedToProvideServiceMatch{
 				SourceFile:            sf,
 				Location:              scanner.GetErrorRangeForNode(sf, provide.Callee),
 				ProvideTransformation: provide,
-				EffectModuleNode:      provide.Callee.AsPropertyAccessExpression().Expression,
+				EffectModuleNode:      effectModuleNode,
 				ServiceNode:           service,
 				ImplementationNode:    implementation,
 				ReplacementMethodName: replacement,

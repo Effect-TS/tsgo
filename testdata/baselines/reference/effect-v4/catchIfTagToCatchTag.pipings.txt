@@ -1,4 +1,4 @@
-==== /.src/catchIfTagToCatchTag.ts (11 flows) ====
+==== /.src/catchIfTagToCatchTag.ts (12 flows) ====
 
 === Piping Flow ===
 Location: 19:26 - 21:2
@@ -153,3 +153,17 @@ Transformations (1):
       callee: fake.catchIf
       args: [(error) => error._tag === "NotFoundError", broadHandler]
       outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 78:30 - 80:2
+Node: program.pipe(\n  catchIfAlias((error) => error._tag === "NotFoundError", handler)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: catchIfAlias
+      args: [(error) => error._tag === "NotFoundError", handler]
+      outType: Effect<string, TimeoutError, never>

@@ -7,6 +7,10 @@ declare const effectful: (value: number, index: number) => Effect.Effect<string>
 // Should trigger without options.
 export const direct = Effect.all(values.map(effectful))
 
+// Should trigger with a fallback fix when Effect.all is hidden behind a const alias.
+const allAlias = Effect.all
+export const aliasedAll = allAlias(values.map(effectful))
+
 // Should trigger and carry compatible options through to Effect.forEach.
 export const withOptions = Effect.all(
   values.map((value, index) => Effect.succeed(`${index}:${value}`)),

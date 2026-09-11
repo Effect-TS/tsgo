@@ -88,26 +88,20 @@ func AnalyzeCatchToIgnore(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 }
 
 func catchToIgnoreMethods(tp *typeparser.TypeParser, callee *ast.Node) (catchMethodName string, ignoreMethodName string, effectModuleNode *ast.Node, ok bool) {
-	if callee == nil || callee.Kind != ast.KindPropertyAccessExpression {
+	if callee == nil {
 		return "", "", nil, false
 	}
-	prop := callee.AsPropertyAccessExpression()
-	if prop == nil || prop.Name() == nil {
-		return "", "", nil, false
+	if callee.Kind == ast.KindPropertyAccessExpression {
+		prop := callee.AsPropertyAccessExpression()
+		if prop != nil {
+			effectModuleNode = prop.Expression
+		}
 	}
-
-	name := prop.Name().Text()
-	switch name {
-	case "catch":
-		if !tp.IsNodeReferenceToEffectModuleApi(callee, "catch") {
-			return "", "", nil, false
-		}
-		return name, "ignore", prop.Expression, true
-	case "catchCause":
-		if !tp.IsNodeReferenceToEffectModuleApi(callee, "catchCause") {
-			return "", "", nil, false
-		}
-		return name, "ignoreCause", prop.Expression, true
+	switch {
+	case tp.IsNodeReferenceToEffectModuleApi(callee, "catch"):
+		return "catch", "ignore", effectModuleNode, true
+	case tp.IsNodeReferenceToEffectModuleApi(callee, "catchCause"):
+		return "catchCause", "ignoreCause", effectModuleNode, true
 	default:
 		return "", "", nil, false
 	}

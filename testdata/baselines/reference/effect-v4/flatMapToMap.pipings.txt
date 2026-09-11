@@ -1,4 +1,4 @@
-==== /.src/flatMapToMap.ts (17 flows) ====
+==== /.src/flatMapToMap.ts (19 flows) ====
 
 === Piping Flow ===
 Location: 4:37 - 6:2
@@ -161,7 +161,39 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 28:38 - 30:2
+Location: 29:43 - 31:2
+Node: Effect.succeed(1).pipe(\n  flatMapAlias((n) => Effect.succeed(n + 1))\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: flatMapAlias
+      args: [(n) => Effect.succeed(n + 1)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 30:22 - 30:44
+Node: Effect.succeed(n + 1)
+Node Kind: KindCallExpression
+
+Subject: n + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 34:38 - 36:2
 Node: Effect.succeed(1).pipe(\n  Effect.flatMap((n) => Effect.log(n))\n)
 Node Kind: KindCallExpression
 
@@ -179,7 +211,7 @@ Transformations (2):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 29:24 - 29:38
+Location: 35:24 - 35:38
 Node: Effect.log(n)
 Node Kind: KindCallExpression
 
@@ -193,7 +225,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 33:37 - 38:2
+Location: 39:37 - 44:2
 Node: Effect.succeed(1).pipe(\n  Effect.flatMap((n) => {\n    console.log(n)\n    return Effect.succeed(n + 1)\n  })\n)
 Node Kind: KindCallExpression
 
@@ -211,7 +243,7 @@ Transformations (2):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 34:26 - 35:19
+Location: 40:26 - 41:19
 Node: console.log(n)
 Node Kind: KindCallExpression
 
@@ -225,7 +257,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 36:11 - 36:33
+Location: 42:11 - 42:33
 Node: Effect.succeed(n + 1)
 Node Kind: KindCallExpression
 
@@ -239,7 +271,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 42:54 - 42:63
+Location: 48:54 - 48:63
 Node: f(value)
 Node Kind: KindCallExpression
 
@@ -253,7 +285,7 @@ Transformations (1):
       outType: B
 
 === Piping Flow ===
-Location: 45:69 - 45:94
+Location: 51:69 - 51:94
 Node: unrelated.succeed(n + 1)
 Node Kind: KindCallExpression
 

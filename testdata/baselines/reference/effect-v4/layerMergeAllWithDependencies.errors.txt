@@ -1,13 +1,14 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/layerMergeAllWithDependencies.ts(38,3): warning TS377035: This layer provides FileSystem which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
-/.src/layerMergeAllWithDependencies.ts(43,3): warning TS377035: This layer provides DbConnection which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
-/.src/layerMergeAllWithDependencies.ts(44,3): warning TS377035: This layer provides FileSystem which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
-/.src/layerMergeAllWithDependencies.ts(45,3): warning TS377035: This layer provides Cache which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
+/.src/layerMergeAllWithDependencies.ts(29,3): warning TS377035: This layer provides FileSystem which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
+/.src/layerMergeAllWithDependencies.ts(45,3): warning TS377035: This layer provides FileSystem which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
+/.src/layerMergeAllWithDependencies.ts(50,3): warning TS377035: This layer provides DbConnection which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
+/.src/layerMergeAllWithDependencies.ts(51,3): warning TS377035: This layer provides FileSystem which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
+/.src/layerMergeAllWithDependencies.ts(52,3): warning TS377035: This layer provides Cache which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
 
 
-==== /.src/layerMergeAllWithDependencies.ts (4 errors) ====
+==== /.src/layerMergeAllWithDependencies.ts (5 errors) ====
     import { Effect, Layer, Context } from "effect"
     
     export class DbConnection extends Context.Service<DbConnection>()("DbConnection", {
@@ -32,6 +33,15 @@ Effect version: 4.0.0
     }
     
     const cachePassthrough = Layer.effect(Cache, Cache)
+    
+    const mergeAll = Layer.mergeAll
+    
+    export const shouldWarnConstantAlias = mergeAll(
+      FileSystem.Default,
+      ~~~~~~~~~~~~~~~~~~
+!!! warning TS377035: This layer provides FileSystem which is required by another layer in the same Layer.mergeAll call. Layer.mergeAll creates layers in parallel, so dependencies between layers will not be satisfied. Consider moving this layer into a Layer.provideMerge after the Layer.mergeAll. effect(layerMergeAllWithDependencies)
+      Cache.Default
+    )
     
     export const shouldNotWarn = Layer.mergeAll(
       DbConnection.Default,

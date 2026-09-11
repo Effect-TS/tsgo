@@ -110,3 +110,9 @@ export const mixedUnion = untagged.pipe(
       : Fx.fail(error)
   )
 )
+
+// Should trigger with a fallback fix: catch is hidden behind a const alias.
+const catchAlias = Fx.catch
+export const aliasedCatch = program.pipe(
+  catchAlias((error) => error._tag === "NotFoundError" ? Fx.succeed("missing") : Fx.fail(error))
+)

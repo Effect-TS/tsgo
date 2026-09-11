@@ -19,10 +19,13 @@ func runMatchEffectToMatchFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
+		if match.CalleeNode == nil {
+			continue
+		}
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect." + match.ReplacementName,
 			Run: func(tracker *rewriter.Tracker) {
-				tracker.ReplaceNode(match.SourceFile, match.CalleeNameNode, tracker.NewIdentifier(match.ReplacementName), nil)
+				replaceEffectMethodCallee(tracker, match.SourceFile, match.CalleeNode, match.CalleeNameNode, match.ReplacementName)
 				for i := range match.HandlerResults {
 					tracker.ReplaceNode(match.SourceFile, match.HandlerResults[i], match.SucceedArguments[i], nil)
 				}

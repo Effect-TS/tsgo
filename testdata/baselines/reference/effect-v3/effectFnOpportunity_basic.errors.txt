@@ -1,10 +1,11 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/effectFnOpportunity_basic.ts(10,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_basic.ts(17,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_basic.ts(23,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
-/.src/effectFnOpportunity_basic.ts(30,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_basic.ts(12,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_basic.ts(19,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_basic.ts(26,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_basic.ts(32,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_basic.ts(39,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -20,9 +21,11 @@ Effect version: 3.19.19
     }
     
 
-==== /.src/effectFnOpportunity_basic.ts (4 errors) ====
+==== /.src/effectFnOpportunity_basic.ts (5 errors) ====
     // @effect-v3
     import * as Effect from "effect/Effect"
+    
+    const genAlias = Effect.gen
     
     // These cases can be converted to Effect.fnUntraced because:
     // - There are no pipe arguments
@@ -43,6 +46,15 @@ Effect version: 3.19.19
                  ~~~~~~~~~~~~~~~~~~
 !!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
       Effect.gen(function*() {
+        yield* Effect.succeed(1)
+        return 42
+      })
+    
+    // Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
+    export const arrowAliasedGen = () =>
+                 ~~~~~~~~~~~~~~~
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*() { ... })`. effect(effectFnOpportunity)
+      genAlias(function*() {
         yield* Effect.succeed(1)
         return 42
       })

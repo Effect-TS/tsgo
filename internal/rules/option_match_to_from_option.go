@@ -88,7 +88,7 @@ func analyzeOptionMatchCalls(tp *typeparser.TypeParser, sf *ast.SourceFile) []Op
 				EffectModuleNode: effectModule,
 				FailureNode:      failure,
 				DefaultFailure:   isDefaultNoSuchElementError(tp, failure),
-				CanFix:           canFix && effectModule != nil,
+				CanFix:           canFix,
 			}
 
 			switch transformation.Kind {
@@ -285,7 +285,7 @@ func analyzeOptionConditional(tp *typeparser.TypeParser, c *checker.Checker, sf 
 		OptionNode:       optionNode,
 		FailureNode:      failure,
 		DefaultFailure:   isDefaultNoSuchElementError(tp, failure),
-		CanFix:           effectModule != nil,
+		CanFix:           true,
 	}, true
 }
 

@@ -1,4 +1,4 @@
-==== /.src/catchToOrElseSucceed.ts (15 flows) ====
+==== /.src/catchToOrElseSucceed.ts (17 flows) ====
 
 === Piping Flow ===
 Location: 4:34 - 6:2
@@ -226,6 +226,38 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 42:11 - 42:30
+Node: Effect.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 48:41 - 50:2
+Node: Effect.fail("error").pipe(\n  catchAlias(() => Effect.succeed(42))\n)
+Node Kind: KindCallExpression
+
+Subject: "error"
+Subject Type: "error"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+  [1] kind: pipeable
+      callee: catchAlias
+      args: [() => Effect.succeed(42)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 49:19 - 49:38
 Node: Effect.succeed(42)
 Node Kind: KindCallExpression
 

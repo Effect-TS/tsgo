@@ -17,3 +17,10 @@ export const OtherWithoutTag = Schema.Struct({
   name: Schema.String,
   age: Schema.Finite
 })
+
+const Struct = Schema.Struct
+const Literal = Schema.Literal
+export const Aliased = Struct({
+  _tag: Literal("Aliased"),
+  value: Schema.String
+})

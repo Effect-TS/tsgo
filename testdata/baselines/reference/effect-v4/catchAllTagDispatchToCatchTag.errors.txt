@@ -5,9 +5,10 @@ Effect version: 4.0.0
 /.src/catchAllTagDispatchToCatchTag.ts(36,31): suggestion TS377122: Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
 /.src/catchAllTagDispatchToCatchTag.ts(50,3): suggestion TS377122: Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
 /.src/catchAllTagDispatchToCatchTag.ts(59,3): suggestion TS377122: Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
+/.src/catchAllTagDispatchToCatchTag.ts(117,3): suggestion TS377122: Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
 
 
-==== /.src/catchAllTagDispatchToCatchTag.ts (4 errors) ====
+==== /.src/catchAllTagDispatchToCatchTag.ts (5 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics catchAllTagDispatchToCatchTag:suggestion
     import { Effect as Fx, pipe } from "effect"
@@ -127,5 +128,13 @@ Effect version: 4.0.0
           ? Fx.succeed("missing")
           : Fx.fail(error)
       )
+    )
+    
+    // Should trigger with a fallback fix: catch is hidden behind a const alias.
+    const catchAlias = Fx.catch
+    export const aliasedCatch = program.pipe(
+      catchAlias((error) => error._tag === "NotFoundError" ? Fx.succeed("missing") : Fx.fail(error))
+      ~~~~~~~~~~
+!!! suggestion TS377122: Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
     )
     

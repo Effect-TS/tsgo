@@ -1,36 +1,41 @@
 === Quick Fix Inventory ===
 
-[D1] (15:3-15:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D1] (15:61-15:70) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
 
-[D2] (20:3-20:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D2] (19:3-19:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
 
-[D3] (24:39-24:49) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D3] (24:3-24:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
 
-[D4] (29:3-29:9) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D4] (28:39-28:49) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
 
-[D5] (34:3-34:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D5] (33:3-33:9) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
 
-[D6] (79:3-79:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D6] (38:3-38:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
 
-[D7] (86:3-86:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+[D7] (83:3-83:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
+  Fix 0: "Disable mapSomeToAsSome for this line"
+  Fix 1: "Disable mapSomeToAsSome for entire file"
+  Fix 2: "Replace with Effect.asSome"
+
+[D8] (90:3-90:13) TS377114: `Effect.asSome` expresses wrapping the success value in `Option.some` directly. effect(mapSomeToAsSome)
   Fix 0: "Disable mapSomeToAsSome for this line"
   Fix 1: "Disable mapSomeToAsSome for entire file"
   Fix 2: "Replace with Effect.asSome"
@@ -57,10 +62,14 @@ import {
 import { some as optionSome } from "effect/Option"
 
 const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+const effectMap = Effect.map
+
+// Should trigger and fix the call site without changing the constant alias.
+export const shouldTriggerConstantAlias = numberEffect.pipe(Effect.asSome)
 
 // Should trigger: point-free mapper in a pipeable flow
 export const shouldTriggerPointFree = numberEffect.pipe(
-  Effect.asSome
+  Effect.map(Option.some)
 )
 
 // Should trigger: exact eta-expansion
@@ -157,15 +166,19 @@ import {
 import { some as optionSome } from "effect/Option"
 
 const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+const effectMap = Effect.map
+
+// Should trigger and fix the call site without changing the constant alias.
+export const shouldTriggerConstantAlias = numberEffect.pipe(effectMap(Option.some))
 
 // Should trigger: point-free mapper in a pipeable flow
 export const shouldTriggerPointFree = numberEffect.pipe(
-  Effect.map(Option.some)
+  Effect.asSome
 )
 
 // Should trigger: exact eta-expansion
 export const shouldTriggerEtaExpanded = numberEffect.pipe(
-  Effect.asSome
+  Effect.map((value) => Option.some(value))
 )
 
 // Should trigger: data-first form
@@ -257,6 +270,10 @@ import {
 import { some as optionSome } from "effect/Option"
 
 const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+const effectMap = Effect.map
+
+// Should trigger and fix the call site without changing the constant alias.
+export const shouldTriggerConstantAlias = numberEffect.pipe(effectMap(Option.some))
 
 // Should trigger: point-free mapper in a pipeable flow
 export const shouldTriggerPointFree = numberEffect.pipe(
@@ -265,11 +282,11 @@ export const shouldTriggerPointFree = numberEffect.pipe(
 
 // Should trigger: exact eta-expansion
 export const shouldTriggerEtaExpanded = numberEffect.pipe(
-  Effect.map((value) => Option.some(value))
+  Effect.asSome
 )
 
 // Should trigger: data-first form
-export const shouldTriggerDataFirst = Effect.asSome(numberEffect)
+export const shouldTriggerDataFirst = Effect.map(numberEffect, Option.some)
 
 // Should trigger: function pipe form and aliased modules
 export const shouldTriggerAliases = pipe(
@@ -357,6 +374,10 @@ import {
 import { some as optionSome } from "effect/Option"
 
 const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+const effectMap = Effect.map
+
+// Should trigger and fix the call site without changing the constant alias.
+export const shouldTriggerConstantAlias = numberEffect.pipe(effectMap(Option.some))
 
 // Should trigger: point-free mapper in a pipeable flow
 export const shouldTriggerPointFree = numberEffect.pipe(
@@ -369,12 +390,12 @@ export const shouldTriggerEtaExpanded = numberEffect.pipe(
 )
 
 // Should trigger: data-first form
-export const shouldTriggerDataFirst = Effect.map(numberEffect, Option.some)
+export const shouldTriggerDataFirst = Effect.asSome(numberEffect)
 
 // Should trigger: function pipe form and aliased modules
 export const shouldTriggerAliases = pipe(
   numberEffect,
-  Fx.asSome
+  Fx.map(O.some)
 )
 
 // Should trigger: named Option.some import
@@ -457,6 +478,114 @@ import {
 import { some as optionSome } from "effect/Option"
 
 const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+const effectMap = Effect.map
+
+// Should trigger and fix the call site without changing the constant alias.
+export const shouldTriggerConstantAlias = numberEffect.pipe(effectMap(Option.some))
+
+// Should trigger: point-free mapper in a pipeable flow
+export const shouldTriggerPointFree = numberEffect.pipe(
+  Effect.map(Option.some)
+)
+
+// Should trigger: exact eta-expansion
+export const shouldTriggerEtaExpanded = numberEffect.pipe(
+  Effect.map((value) => Option.some(value))
+)
+
+// Should trigger: data-first form
+export const shouldTriggerDataFirst = Effect.map(numberEffect, Option.some)
+
+// Should trigger: function pipe form and aliased modules
+export const shouldTriggerAliases = pipe(
+  numberEffect,
+  Fx.asSome
+)
+
+// Should trigger: named Option.some import
+export const shouldTriggerNamedImport = numberEffect.pipe(
+  Effect.map(optionSome)
+)
+
+// Should NOT trigger: already using asSome
+export const shouldNotTriggerAsSome = numberEffect.pipe(Effect.asSome)
+
+// Should NOT trigger: Stream.map is a different API
+export const shouldNotTriggerStream = Stream.make(1).pipe(
+  Stream.map(Option.some)
+)
+
+// Should NOT trigger: Option.map is a different API
+export const shouldNotTriggerOption = Option.some(1).pipe(
+  Option.map(Option.some)
+)
+
+const localSome = <A>(value: A): Option.Option<A> => Option.some(value)
+
+// Should NOT trigger: mapper does not resolve to Effect's Option.some
+export const shouldNotTriggerLocalSome = numberEffect.pipe(
+  Effect.map(localSome)
+)
+
+// Should NOT trigger: argument is transformed
+export const shouldNotTriggerTransformed = numberEffect.pipe(
+  Effect.map((value) => Option.some(value + 1))
+)
+
+// Should NOT trigger: property access is not the untouched parameter
+export const shouldNotTriggerPropertyAccess = Effect.succeed({ value: 1 }).pipe(
+  Effect.map((input) => Option.some(input.value))
+)
+
+// Should NOT trigger: destructured parameter
+export const shouldNotTriggerDestructuring = Effect.succeed({ value: 1 }).pipe(
+  Effect.map(({ value }) => Option.some(value))
+)
+
+// Should NOT trigger: an annotation can intentionally widen the output type
+export const shouldNotTriggerAnnotated = Effect.succeed(1 as const).pipe(
+  Effect.map((value: number) => Option.some(value))
+)
+
+// Should trigger: ParseLazyExpression normalizes a single-return block body
+export const shouldTriggerBlockBody = numberEffect.pipe(
+  Effect.map((value) => {
+    return Option.some(value)
+  })
+)
+
+// Should trigger: function expressions forward the value unchanged too
+export const shouldTriggerFunctionExpression = numberEffect.pipe(
+  Effect.map(function (value) {
+    return Option.some(value)
+  })
+)
+
+
+=== [D6] Fix 0: "Disable mapSomeToAsSome for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable mapSomeToAsSome for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.asSome" ===
+
+--- file:///.src/mapSomeToAsSome.ts ---
+import {
+  Effect,
+  Effect as Fx,
+  Option,
+  Option as O,
+  Stream,
+  pipe
+} from "effect"
+import { some as optionSome } from "effect/Option"
+
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+const effectMap = Effect.map
+
+// Should trigger and fix the call site without changing the constant alias.
+export const shouldTriggerConstantAlias = numberEffect.pipe(effectMap(Option.some))
 
 // Should trigger: point-free mapper in a pipeable flow
 export const shouldTriggerPointFree = numberEffect.pipe(
@@ -537,13 +666,13 @@ export const shouldTriggerFunctionExpression = numberEffect.pipe(
 )
 
 
-=== [D6] Fix 0: "Disable mapSomeToAsSome for this line" ===
+=== [D7] Fix 0: "Disable mapSomeToAsSome for this line" ===
 skipped by default
 
-=== [D6] Fix 1: "Disable mapSomeToAsSome for entire file" ===
+=== [D7] Fix 1: "Disable mapSomeToAsSome for entire file" ===
 skipped by default
 
-=== [D6] Fix 2: "Replace with Effect.asSome" ===
+=== [D7] Fix 2: "Replace with Effect.asSome" ===
 
 --- file:///.src/mapSomeToAsSome.ts ---
 import {
@@ -557,6 +686,10 @@ import {
 import { some as optionSome } from "effect/Option"
 
 const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+const effectMap = Effect.map
+
+// Should trigger and fix the call site without changing the constant alias.
+export const shouldTriggerConstantAlias = numberEffect.pipe(effectMap(Option.some))
 
 // Should trigger: point-free mapper in a pipeable flow
 export const shouldTriggerPointFree = numberEffect.pipe(
@@ -635,13 +768,13 @@ export const shouldTriggerFunctionExpression = numberEffect.pipe(
 )
 
 
-=== [D7] Fix 0: "Disable mapSomeToAsSome for this line" ===
+=== [D8] Fix 0: "Disable mapSomeToAsSome for this line" ===
 skipped by default
 
-=== [D7] Fix 1: "Disable mapSomeToAsSome for entire file" ===
+=== [D8] Fix 1: "Disable mapSomeToAsSome for entire file" ===
 skipped by default
 
-=== [D7] Fix 2: "Replace with Effect.asSome" ===
+=== [D8] Fix 2: "Replace with Effect.asSome" ===
 
 --- file:///.src/mapSomeToAsSome.ts ---
 import {
@@ -655,6 +788,10 @@ import {
 import { some as optionSome } from "effect/Option"
 
 const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+const effectMap = Effect.map
+
+// Should trigger and fix the call site without changing the constant alias.
+export const shouldTriggerConstantAlias = numberEffect.pipe(effectMap(Option.some))
 
 // Should trigger: point-free mapper in a pipeable flow
 export const shouldTriggerPointFree = numberEffect.pipe(

@@ -23,7 +23,7 @@ func runCatchAllTagDispatchToCatchTagFix(ctx *fixable.Context) []ls.CodeAction {
 			continue
 		}
 		action := ctx.NewFixAction(fixable.FixAction{Description: "Replace with Effect.catchTag or Effect.catchTags", Run: func(tracker *rewriter.Tracker) {
-			callee, arguments := buildCatchAllTagDispatchReplacement(tracker, match)
+			callee, arguments := buildCatchAllTagDispatchReplacement(tracker, ctx.SourceFile, match)
 			if callee != nil && arguments != nil {
 				tracker.ReplacePipingFlowTransformation(ctx.SourceFile, match.Transformation, rewriter.PipingFlowTransformationReplacement{Callee: callee, Arguments: arguments})
 			}
@@ -35,19 +35,19 @@ func runCatchAllTagDispatchToCatchTagFix(ctx *fixable.Context) []ls.CodeAction {
 	return nil
 }
 
-func buildCatchAllTagDispatchReplacement(tracker *rewriter.Tracker, match rules.CatchAllTagDispatchMatch) (*ast.Node, *ast.NodeList) {
-	if tracker == nil || match.Callee == nil || match.Callee.Kind != ast.KindPropertyAccessExpression || len(match.Branches) == 0 {
+func buildCatchAllTagDispatchReplacement(tracker *rewriter.Tracker, sf *ast.SourceFile, match rules.CatchAllTagDispatchMatch) (*ast.Node, *ast.NodeList) {
+	if tracker == nil || match.Callee == nil || len(match.Branches) == 0 {
 		return nil, nil
 	}
-	access := match.Callee.AsPropertyAccessExpression()
-	if access == nil || access.Expression == nil {
-		return nil, nil
+	var receiver *ast.Node
+	if match.Callee.Kind == ast.KindPropertyAccessExpression {
+		receiver = match.Callee.AsPropertyAccessExpression().Expression
 	}
 	methodName := "catchTag"
 	if len(match.Branches) > 1 {
 		methodName = "catchTags"
 	}
-	callee := tracker.NewPropertyAccessExpression(tracker.DeepCloneNode(access.Expression), nil, tracker.NewIdentifier(methodName), ast.NodeFlagsNone)
+	callee := effectModuleMethod(tracker, sf, receiver, methodName)
 	if len(match.Branches) == 1 {
 		branch := match.Branches[0]
 		return callee, tracker.NewNodeList([]*ast.Node{tracker.NewStringLiteral(branch.Tag, 0), newCatchTagHandler(tracker, match.ParameterName, branch)})

@@ -18,6 +18,9 @@ export const blockBody = Effect.sync(function() {
   return constant
 })
 
+const syncAlias = Effect.sync
+export const constantAlias = syncAlias(() => constant)
+
 // Should NOT trigger: these expressions are evaluated or allocated per execution
 export const callExpression = Effect.sync(() => Date.now())
 export const objectLiteral = Effect.sync(() => ({ value: "constant" }))

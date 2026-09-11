@@ -13,4 +13,7 @@ export const shouldNotReport2 = Effect.succeed("Hello").pipe(
 
 export const shouldReport = pipe(32)
 
+const p = pipe
+export const shouldReportAlias = p(32)
+
 export const shouldReportNoArgs = Effect.succeed(32).pipe()

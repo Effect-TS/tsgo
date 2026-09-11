@@ -1,16 +1,21 @@
 === Quick Fix Inventory ===
 
-[D1] (8:26-8:44) TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+[D1] (9:42-9:53) TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
   Fix 0: "Disable matchEffectToMatch for this line"
   Fix 1: "Disable matchEffectToMatch for entire file"
   Fix 2: "Replace with Effect.match"
 
-[D2] (13:37-13:60) TS377125: `Effect.matchCause` expresses this non-effectful fold more directly than `Effect.matchCauseEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+[D2] (14:26-14:44) TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+  Fix 0: "Disable matchEffectToMatch for this line"
+  Fix 1: "Disable matchEffectToMatch for entire file"
+  Fix 2: "Replace with Effect.match"
+
+[D3] (19:37-19:60) TS377125: `Effect.matchCause` expresses this non-effectful fold more directly than `Effect.matchCauseEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
   Fix 0: "Disable matchEffectToMatch for this line"
   Fix 1: "Disable matchEffectToMatch for entire file"
   Fix 2: "Replace with Effect.matchCause"
 
-[D3] (18:45-18:63) TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
+[D4] (24:45-24:63) TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
   Fix 0: "Disable matchEffectToMatch for this line"
   Fix 1: "Disable matchEffectToMatch for entire file"
   Fix 2: "Replace with Effect.match"
@@ -32,10 +37,16 @@ skipped by default
 import { Effect, pipe } from "effect"
 
 declare const effect: Effect.Effect<number, string>
+const matchEffect = Effect.matchEffect
 
-export const dataFirst = Effect.match(effect, {
+export const constantAlias = effect.pipe(Effect.match({
   onFailure: (error) => error.length,
   onSuccess: (value) => value + 1
+}))
+
+export const dataFirst = Effect.matchEffect(effect, {
+  onFailure: (error) => Effect.succeed(error.length),
+  onSuccess: (value) => Effect.succeed(value + 1)
 })
 
 export const pipeable = effect.pipe(Effect.matchCauseEffect({
@@ -74,7 +85,7 @@ skipped by default
 === [D2] Fix 1: "Disable matchEffectToMatch for entire file" ===
 skipped by default
 
-=== [D2] Fix 2: "Replace with Effect.matchCause" ===
+=== [D2] Fix 2: "Replace with Effect.match" ===
 
 --- file:///.src/matchEffectToMatch.ts ---
 // @effect-diagnostics matchEffectToMatch:suggestion
@@ -83,6 +94,69 @@ skipped by default
 import { Effect, pipe } from "effect"
 
 declare const effect: Effect.Effect<number, string>
+const matchEffect = Effect.matchEffect
+
+export const constantAlias = effect.pipe(matchEffect({
+  onFailure: (error) => Effect.succeed(error.length),
+  onSuccess: (value) => Effect.succeed(value + 1)
+}))
+
+export const dataFirst = Effect.match(effect, {
+  onFailure: (error) => error.length,
+  onSuccess: (value) => value + 1
+})
+
+export const pipeable = effect.pipe(Effect.matchCauseEffect({
+  onFailure: (cause) => Effect.succeed(String(cause)),
+  onSuccess: (value) => pipe(value + 1, Effect.succeed)
+}))
+
+export const quotedProperties = effect.pipe(Effect.matchEffect({
+  "onFailure": (error) => Effect.succeed(error.length),
+  "onSuccess": (value) => Effect.succeed(value + 1)
+}))
+
+export const effectful = effect.pipe(Effect.matchEffect({
+  onFailure: (error) => Effect.fail(error),
+  onSuccess: (value) => Effect.succeed(value + 1)
+}))
+
+export const extraLogic = effect.pipe(Effect.matchEffect({
+  onFailure: (error) => {
+    console.log(error)
+    return Effect.succeed(error.length)
+  },
+  onSuccess: (value) => Effect.succeed(value + 1)
+}))
+
+const unrelated = { succeed: <A>(value: A) => Effect.succeed(value) }
+export const unrelatedSucceed = effect.pipe(Effect.matchEffect({
+  onFailure: (error) => unrelated.succeed(error.length),
+  onSuccess: (value) => unrelated.succeed(value + 1)
+}))
+
+
+=== [D3] Fix 0: "Disable matchEffectToMatch for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable matchEffectToMatch for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.matchCause" ===
+
+--- file:///.src/matchEffectToMatch.ts ---
+// @effect-diagnostics matchEffectToMatch:suggestion
+// @effect-diagnostics matchEffectToMapBoth:off
+// @effect-diagnostics-in-tsgo false
+import { Effect, pipe } from "effect"
+
+declare const effect: Effect.Effect<number, string>
+const matchEffect = Effect.matchEffect
+
+export const constantAlias = effect.pipe(matchEffect({
+  onFailure: (error) => Effect.succeed(error.length),
+  onSuccess: (value) => Effect.succeed(value + 1)
+}))
 
 export const dataFirst = Effect.matchEffect(effect, {
   onFailure: (error) => Effect.succeed(error.length),
@@ -119,13 +193,13 @@ export const unrelatedSucceed = effect.pipe(Effect.matchEffect({
 }))
 
 
-=== [D3] Fix 0: "Disable matchEffectToMatch for this line" ===
+=== [D4] Fix 0: "Disable matchEffectToMatch for this line" ===
 skipped by default
 
-=== [D3] Fix 1: "Disable matchEffectToMatch for entire file" ===
+=== [D4] Fix 1: "Disable matchEffectToMatch for entire file" ===
 skipped by default
 
-=== [D3] Fix 2: "Replace with Effect.match" ===
+=== [D4] Fix 2: "Replace with Effect.match" ===
 
 --- file:///.src/matchEffectToMatch.ts ---
 // @effect-diagnostics matchEffectToMatch:suggestion
@@ -134,6 +208,12 @@ skipped by default
 import { Effect, pipe } from "effect"
 
 declare const effect: Effect.Effect<number, string>
+const matchEffect = Effect.matchEffect
+
+export const constantAlias = effect.pipe(matchEffect({
+  onFailure: (error) => Effect.succeed(error.length),
+  onSuccess: (value) => Effect.succeed(value + 1)
+}))
 
 export const dataFirst = Effect.matchEffect(effect, {
   onFailure: (error) => Effect.succeed(error.length),

@@ -25,6 +25,12 @@ export const shouldTriggerDataFirst = Effect.flatMap(Effect.succeed(1), (n) => E
 // Should trigger: data-last style
 export const shouldTriggerDataLast = Effect.flatMap((n: number) => Effect.succeed(n + 1))(Effect.succeed(1))
 
+// Should trigger with a fallback fix: the API reference is hidden behind a const alias.
+const flatMapAlias = Effect.flatMap
+export const shouldTriggerAliasedFlatMap = Effect.succeed(1).pipe(
+  flatMapAlias((n) => Effect.succeed(n + 1))
+)
+
 // Should NOT trigger: callback returns another Effect operation
 export const shouldNotTriggerEffect = Effect.succeed(1).pipe(
   Effect.flatMap((n) => Effect.log(n))

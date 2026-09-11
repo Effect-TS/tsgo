@@ -4,6 +4,12 @@
 import { Effect, pipe } from "effect"
 
 declare const effect: Effect.Effect<number, string>
+const matchEffect = Effect.matchEffect
+
+export const constantAlias = effect.pipe(matchEffect({
+  onFailure: (error) => Effect.succeed(error.length),
+  onSuccess: (value) => Effect.succeed(value + 1)
+}))
 
 export const dataFirst = Effect.matchEffect(effect, {
   onFailure: (error) => Effect.succeed(error.length),

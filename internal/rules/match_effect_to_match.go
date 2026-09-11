@@ -37,6 +37,7 @@ var MatchEffectToMatch = rule.Rule{
 type MatchEffectToMatchMatch struct {
 	SourceFile       *ast.SourceFile
 	Location         core.TextRange
+	CalleeNode       *ast.Node
 	CalleeNameNode   *ast.Node
 	MatchEffectName  string
 	ReplacementName  string
@@ -52,7 +53,7 @@ func AnalyzeMatchEffectToMatch(tp *typeparser.TypeParser, _ *checker.Checker, sf
 	for _, flow := range tp.PipingFlows(sf, true) {
 		for index := range flow.Transformations {
 			transformation := &flow.Transformations[index]
-			if len(transformation.Args) != 1 || transformation.Callee == nil || transformation.Callee.Kind != ast.KindPropertyAccessExpression {
+			if len(transformation.Args) != 1 || transformation.Callee == nil {
 				continue
 			}
 			matchEffectName, replacementName := "", ""
@@ -78,13 +79,13 @@ func AnalyzeMatchEffectToMatch(tp *typeparser.TypeParser, _ *checker.Checker, sf
 			if !ok {
 				continue
 			}
-			calleeName := transformation.Callee.AsPropertyAccessExpression().Name()
-			if calleeName == nil {
-				continue
+			var calleeName *ast.Node
+			if transformation.Callee.Kind == ast.KindPropertyAccessExpression {
+				calleeName = transformation.Callee.AsPropertyAccessExpression().Name()
 			}
 			matches = append(matches, MatchEffectToMatchMatch{
 				SourceFile: sf, Location: scanner.GetErrorRangeForNode(sf, transformation.Callee),
-				CalleeNameNode: calleeName, MatchEffectName: matchEffectName, ReplacementName: replacementName,
+				CalleeNode: transformation.Callee, CalleeNameNode: calleeName, MatchEffectName: matchEffectName, ReplacementName: replacementName,
 				HandlerResults: [2]*ast.Node{failureResult, successResult}, SucceedArguments: [2]*ast.Node{failureArgument, successArgument},
 			})
 		}

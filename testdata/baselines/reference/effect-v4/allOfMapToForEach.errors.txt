@@ -2,13 +2,14 @@
 Effect version: 4.0.0
 
 /.src/allOfMapToForEach.ts(8,23): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
-/.src/allOfMapToForEach.ts(11,28): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
-/.src/allOfMapToForEach.ts(26,35): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
-/.src/allOfMapToForEach.ts(48,57): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
-/.src/allOfMapToForEach.ts(49,63): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+/.src/allOfMapToForEach.ts(12,27): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+/.src/allOfMapToForEach.ts(15,28): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+/.src/allOfMapToForEach.ts(30,35): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+/.src/allOfMapToForEach.ts(52,57): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+/.src/allOfMapToForEach.ts(53,63): suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
 
 
-==== /.src/allOfMapToForEach.ts (5 errors) ====
+==== /.src/allOfMapToForEach.ts (6 errors) ====
     // @effect-v4
     import { Effect, pipe } from "effect"
     
@@ -18,6 +19,12 @@ Effect version: 4.0.0
     // Should trigger without options.
     export const direct = Effect.all(values.map(effectful))
                           ~~~~~~~~~~
+!!! suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
+    
+    // Should trigger with a fallback fix when Effect.all is hidden behind a const alias.
+    const allAlias = Effect.all
+    export const aliasedAll = allAlias(values.map(effectful))
+                              ~~~~~~~~
 !!! suggestion TS377113: `Effect.forEach` expresses this effectful array mapping more directly than `Effect.all` over `Array#map`. effect(allOfMapToForEach)
     
     // Should trigger and carry compatible options through to Effect.forEach.

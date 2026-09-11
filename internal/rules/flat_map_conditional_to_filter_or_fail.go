@@ -125,7 +125,7 @@ func AnalyzeFlatMapConditionalToFilterOrFail(tp *typeparser.TypeParser, c *check
 				FallbackNode:        fallbackNode,
 				PreferredMethodName: preferredMethod,
 				NegatePredicate:     negatePredicate,
-				CanFix:              effectModule != nil,
+				CanFix:              true,
 			}
 
 			matches = append(matches, match)

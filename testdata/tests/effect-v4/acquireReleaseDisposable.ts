@@ -29,7 +29,7 @@ export const aliasedModule = Fx.acquireRelease(
   (resource) => Fx.sync(() => resource[Symbol.dispose]())
 )
 
-// Should diagnose a named import, but the quick fix cannot safely rewrite its import.
+// Should diagnose a named import and fix its usage through the Effect module.
 export const namedImport = acquireRelease(
   acquireAsync,
   (resource) => Effect.promise(async () => resource[Symbol.asyncDispose]())

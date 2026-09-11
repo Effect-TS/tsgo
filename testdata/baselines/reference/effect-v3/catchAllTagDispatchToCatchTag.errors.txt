@@ -2,9 +2,10 @@
 Effect version: 3.19.19
 
 /.src/catchAllTagDispatchToCatchTag.ts(17,3): suggestion TS377122: Branching on `error._tag` inside `Effect.catchAll` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
+/.src/catchAllTagDispatchToCatchTag.ts(27,3): suggestion TS377122: Branching on `error._tag` inside `Effect.catchAll` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
 
 
-==== /.src/catchAllTagDispatchToCatchTag.ts (1 errors) ====
+==== /.src/catchAllTagDispatchToCatchTag.ts (2 errors) ====
     // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics catchAllTagDispatchToCatchTag:suggestion
@@ -28,5 +29,13 @@ Effect version: 3.19.19
           ? Effect.succeed("missing")
           : Effect.fail(error)
       )
+    )
+    
+    // Should trigger with a fallback fix: catchAll is hidden behind a const alias.
+    const catchAlias = Effect.catchAll
+    export const aliasedResult = program.pipe(
+      catchAlias((error) => error._tag === "NotFoundError" ? Effect.succeed("missing") : Effect.fail(error))
+      ~~~~~~~~~~
+!!! suggestion TS377122: Branching on `error._tag` inside `Effect.catchAll` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
     )
     

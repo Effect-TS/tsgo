@@ -1,14 +1,15 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/multipleEffectProvide.ts(22,3): warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
-/.src/multipleEffectProvide.ts(27,3): warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
-/.src/multipleEffectProvide.ts(30,3): warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
-/.src/multipleEffectProvide.ts(35,3): warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
-/.src/multipleEffectProvide.ts(47,3): warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
+/.src/multipleEffectProvide.ts(24,3): warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
+/.src/multipleEffectProvide.ts(29,3): warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
+/.src/multipleEffectProvide.ts(34,3): warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
+/.src/multipleEffectProvide.ts(37,3): warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
+/.src/multipleEffectProvide.ts(42,3): warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
+/.src/multipleEffectProvide.ts(54,3): warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
 
 
-==== /.src/multipleEffectProvide.ts (5 errors) ====
+==== /.src/multipleEffectProvide.ts (6 errors) ====
     import { Context, Effect, Layer } from "effect"
     
     class MyService1 extends Context.Service<MyService1>()("MyService1", {
@@ -28,6 +29,15 @@ Effect version: 4.0.0
     }) {
       static Default = Layer.effect(this, this.make)
     }
+    
+    const provide = Effect.provide
+    
+    export const shouldReportConstantAlias = Effect.void.pipe(
+      provide(MyService1.Default),
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
+      provide(MyService2.Default)
+    )
     
     export const shouldReport = Effect.void.pipe(
       Effect.provide(MyService1.Default),

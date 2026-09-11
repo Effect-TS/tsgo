@@ -53,30 +53,25 @@ func runGlobalDate(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 		}
 		inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagInEffect != 0
 		if inEffect == checkInEffect {
-			var objectNode *ast.Node
+			matched := false
 			message := tsdiag.This_code_uses_Date_now_time_access_is_represented_through_Clock_from_Effect_effect_globalDate
 
 			switch node.Kind {
 			case ast.KindCallExpression:
 				call := node.AsCallExpression()
-				if call.Expression.Kind == ast.KindPropertyAccessExpression {
-					prop := call.Expression.AsPropertyAccessExpression()
-					if prop.Name().Text() == "now" {
-						objectNode = prop.Expression
-						if checkInEffect {
-							message = tsdiag.This_Effect_code_uses_Date_now_time_access_in_Effect_code_is_represented_through_Clock_from_Effect_effect_globalDateInEffect
-						}
-					}
+				matched = ctx.TypeParser.IsNodeReferenceToGlobalMember(call.Expression, "Date", "now")
+				if matched && checkInEffect {
+					message = tsdiag.This_Effect_code_uses_Date_now_time_access_in_Effect_code_is_represented_through_Clock_from_Effect_effect_globalDateInEffect
 				}
 			case ast.KindNewExpression:
-				objectNode = node.AsNewExpression().Expression
+				matched = ctx.TypeParser.ResolveToGlobalSymbol(ctx.TypeParser.GetSymbolAtLocation(node.AsNewExpression().Expression)) == dateSymbol
 				message = tsdiag.This_code_constructs_new_Date_date_values_are_represented_through_DateTime_from_Effect_effect_globalDate
 				if checkInEffect {
 					message = tsdiag.This_Effect_code_constructs_new_Date_date_values_in_Effect_code_are_represented_through_DateTime_from_Effect_effect_globalDateInEffect
 				}
 			}
 
-			if objectNode != nil && ctx.TypeParser.ResolveToGlobalSymbol(ctx.TypeParser.GetSymbolAtLocation(objectNode)) == dateSymbol {
+			if matched {
 				diags = append(diags, ctx.NewDiagnostic(
 					ctx.SourceFile,
 					scanner.GetErrorRangeForNode(ctx.SourceFile, node),

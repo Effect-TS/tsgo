@@ -38,6 +38,11 @@
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
 
+[D9] (56:28-58:5) TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern. effect(effectFnIife)
+  Fix 0: "Disable effectFnIife for this line"
+  Fix 1: "Disable effectFnIife for entire file"
+  Fix 2: "Convert to Effect.gen"
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable effectFnIife for this line" ===
@@ -102,6 +107,12 @@ export const gen = Effect.gen(function*() {
 export const regularFn = (n: number) => Effect.succeed(n)
 export const result = regularFn(1)
 
+// Should trigger with a fallback fix: Effect.fn is hidden behind a const alias.
+const fnAlias = Effect.fn
+export const aliasedIife = fnAlias(function*() {
+  yield* Effect.succeed(1)
+})()
+
 
 === [D2] Fix 0: "Disable effectFnIife for this line" ===
 skipped by default
@@ -165,6 +176,12 @@ export const gen = Effect.gen(function*() {
 export const regularFn = (n: number) => Effect.succeed(n)
 export const result = regularFn(1)
 
+// Should trigger with a fallback fix: Effect.fn is hidden behind a const alias.
+const fnAlias = Effect.fn
+export const aliasedIife = fnAlias(function*() {
+  yield* Effect.succeed(1)
+})()
+
 
 === [D3] Fix 0: "Disable effectFnIife for this line" ===
 skipped by default
@@ -227,6 +244,12 @@ export const gen = Effect.gen(function*() {
 // Should NOT trigger - regular function call
 export const regularFn = (n: number) => Effect.succeed(n)
 export const result = regularFn(1)
+
+// Should trigger with a fallback fix: Effect.fn is hidden behind a const alias.
+const fnAlias = Effect.fn
+export const aliasedIife = fnAlias(function*() {
+  yield* Effect.succeed(1)
+})()
 
 
 === [D4] Fix 0: "Disable effectFnIife for this line" ===
@@ -303,6 +326,12 @@ export const gen = Effect.gen(function*() {
 export const regularFn = (n: number) => Effect.succeed(n)
 export const result = regularFn(1)
 
+// Should trigger with a fallback fix: Effect.fn is hidden behind a const alias.
+const fnAlias = Effect.fn
+export const aliasedIife = fnAlias(function*() {
+  yield* Effect.succeed(1)
+})()
+
 
 === [D7] Fix 0: "Disable effectFnIife for this line" ===
 skipped by default
@@ -366,6 +395,12 @@ export const gen = Effect.gen(function*() {
 export const regularFn = (n: number) => Effect.succeed(n)
 export const result = regularFn(1)
 
+// Should trigger with a fallback fix: Effect.fn is hidden behind a const alias.
+const fnAlias = Effect.fn
+export const aliasedIife = fnAlias(function*() {
+  yield* Effect.succeed(1)
+})()
+
 
 === [D8] Fix 0: "Disable unnecessaryEffectGen for this line" ===
 skipped by default
@@ -426,4 +461,79 @@ export const gen = Effect.asVoid(Effect.succeed(1))
 // Should NOT trigger - regular function call
 export const regularFn = (n: number) => Effect.succeed(n)
 export const result = regularFn(1)
+
+// Should trigger with a fallback fix: Effect.fn is hidden behind a const alias.
+const fnAlias = Effect.fn
+export const aliasedIife = fnAlias(function*() {
+  yield* Effect.succeed(1)
+})()
+
+
+=== [D9] Fix 0: "Disable effectFnIife for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable effectFnIife for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Convert to Effect.gen" ===
+
+--- file:///.src/effectFnIife.ts ---
+import * as Effect from "effect/Effect"
+
+// Should trigger (with fix) - curried generator IIFE
+export const iife1 = Effect.fn("test")(function*() {
+  yield* Effect.succeed(1)
+})()
+
+// Should trigger (with fix) - curried generator IIFE with return
+export const iife2 = Effect.fn("named")(function*() {
+  yield* Effect.succeed(1)
+  return 42
+})()
+
+// Should trigger (with fix) - fnUntraced generator IIFE
+export const iife3 = Effect.fnUntraced(function*() {
+  yield* Effect.succeed(1)
+})()
+
+// Should trigger (WITHOUT fix) - arrow function (non-generator)
+export const iife4 = Effect.fn("arrow")(() => Effect.succeed(1))()
+
+// Should trigger (WITHOUT fix) - function expression (non-generator)
+export const iife5 = Effect.fn("func")(function() {
+  return Effect.succeed(1)
+})()
+
+// Should trigger (with fix) - generator with pipe arguments
+export const iife6 = Effect.fn("piped")(function*() {
+  return yield* Effect.succeed(1)
+}, Effect.map((n) => n + 1))()
+
+// Should trigger (with fix) - fnUntraced generator with pipe arguments
+export const iife7 = Effect.fnUntraced(function*() {
+  return yield* Effect.succeed(1)
+}, Effect.map((n) => n + 1))()
+
+// Should NOT trigger - stored for reuse (generator)
+export const myFn = Effect.fn("myFn")(function*() {
+  yield* Effect.succeed(1)
+})
+
+// Should NOT trigger - stored for reuse (regular function)
+export const myFn2 = Effect.fn("myFn2")(() => Effect.succeed(1))
+
+// Should NOT trigger - Effect.gen (not Effect.fn)
+export const gen = Effect.gen(function*() {
+  yield* Effect.succeed(1)
+})
+
+// Should NOT trigger - regular function call
+export const regularFn = (n: number) => Effect.succeed(n)
+export const result = regularFn(1)
+
+// Should trigger with a fallback fix: Effect.fn is hidden behind a const alias.
+const fnAlias = Effect.fn
+export const aliasedIife = Effect.gen(function* () {
+    yield* Effect.succeed(1);
+})
 

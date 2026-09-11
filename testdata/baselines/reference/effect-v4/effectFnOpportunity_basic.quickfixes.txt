@@ -1,27 +1,34 @@
 === Quick Fix Inventory ===
 
-[D1] (9:14-9:27) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+[D1] (11:14-11:27) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
   Fix 3: "Convert to Effect.fn (no span)"
   Fix 4: "Convert to Effect.fn(\"arrowBlockGen\")"
 
-[D2] (16:14-16:32) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+[D2] (18:14-18:32) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
   Fix 3: "Convert to Effect.fn (no span)"
   Fix 4: "Convert to Effect.fn(\"arrowExpressionGen\")"
 
-[D3] (22:14-22:35) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+[D3] (25:14-25:29) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"arrowAliasedGen\")"
+
+[D4] (31:14-31:35) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
   Fix 3: "Convert to Effect.fn (no span)"
   Fix 4: "Convert to Effect.fn(\"functionExpressionGen\")"
 
-[D4] (29:17-29:39) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+[D5] (38:17-38:39) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fnUntraced"
@@ -41,6 +48,8 @@ skipped by default
 --- file:///.src/effectFnOpportunity_basic.ts ---
 import * as Effect from "effect/Effect"
 
+const genAlias = Effect.gen
+
 // These cases can be converted to Effect.fnUntraced because:
 // - There are no pipe arguments
 // - There is no withSpan for tracing
@@ -54,6 +63,13 @@ export const arrowBlockGen = Effect.fnUntraced(function* (n: number) {
 
 export const arrowExpressionGen = (n: number) =>
   Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+
+// Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
+export const arrowAliasedGen = (n: number) =>
+  genAlias(function*() {
     yield* Effect.succeed(1)
     return n
   })
@@ -78,6 +94,8 @@ export function functionDeclarationGen(n: number) {
 --- file:///.src/effectFnOpportunity_basic.ts ---
 import * as Effect from "effect/Effect"
 
+const genAlias = Effect.gen
+
 // These cases can be converted to Effect.fnUntraced because:
 // - There are no pipe arguments
 // - There is no withSpan for tracing
@@ -91,6 +109,13 @@ export const arrowBlockGen = Effect.fn(function* (n: number) {
 
 export const arrowExpressionGen = (n: number) =>
   Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+
+// Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
+export const arrowAliasedGen = (n: number) =>
+  genAlias(function*() {
     yield* Effect.succeed(1)
     return n
   })
@@ -115,6 +140,8 @@ export function functionDeclarationGen(n: number) {
 --- file:///.src/effectFnOpportunity_basic.ts ---
 import * as Effect from "effect/Effect"
 
+const genAlias = Effect.gen
+
 // These cases can be converted to Effect.fnUntraced because:
 // - There are no pipe arguments
 // - There is no withSpan for tracing
@@ -128,6 +155,13 @@ export const arrowBlockGen = Effect.fn("arrowBlockGen")(function* (n: number) {
 
 export const arrowExpressionGen = (n: number) =>
   Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+
+// Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
+export const arrowAliasedGen = (n: number) =>
+  genAlias(function*() {
     yield* Effect.succeed(1)
     return n
   })
@@ -158,6 +192,8 @@ skipped by default
 --- file:///.src/effectFnOpportunity_basic.ts ---
 import * as Effect from "effect/Effect"
 
+const genAlias = Effect.gen
+
 // These cases can be converted to Effect.fnUntraced because:
 // - There are no pipe arguments
 // - There is no withSpan for tracing
@@ -175,6 +211,13 @@ export const arrowExpressionGen = Effect.fnUntraced(function* (n: number) {
     yield* Effect.succeed(1);
     return n;
 });
+
+// Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
+export const arrowAliasedGen = (n: number) =>
+  genAlias(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
 
 export const functionExpressionGen = function(n: number) {
   return Effect.gen(function*() {
@@ -196,6 +239,8 @@ export function functionDeclarationGen(n: number) {
 --- file:///.src/effectFnOpportunity_basic.ts ---
 import * as Effect from "effect/Effect"
 
+const genAlias = Effect.gen
+
 // These cases can be converted to Effect.fnUntraced because:
 // - There are no pipe arguments
 // - There is no withSpan for tracing
@@ -213,6 +258,13 @@ export const arrowExpressionGen = Effect.fn(function* (n: number) {
     yield* Effect.succeed(1);
     return n;
 });
+
+// Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
+export const arrowAliasedGen = (n: number) =>
+  genAlias(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
 
 export const functionExpressionGen = function(n: number) {
   return Effect.gen(function*() {
@@ -234,6 +286,8 @@ export function functionDeclarationGen(n: number) {
 --- file:///.src/effectFnOpportunity_basic.ts ---
 import * as Effect from "effect/Effect"
 
+const genAlias = Effect.gen
+
 // These cases can be converted to Effect.fnUntraced because:
 // - There are no pipe arguments
 // - There is no withSpan for tracing
@@ -251,6 +305,13 @@ export const arrowExpressionGen = Effect.fn("arrowExpressionGen")(function* (n: 
     yield* Effect.succeed(1);
     return n;
 });
+
+// Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
+export const arrowAliasedGen = (n: number) =>
+  genAlias(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
 
 export const functionExpressionGen = function(n: number) {
   return Effect.gen(function*() {
@@ -278,6 +339,8 @@ skipped by default
 --- file:///.src/effectFnOpportunity_basic.ts ---
 import * as Effect from "effect/Effect"
 
+const genAlias = Effect.gen
+
 // These cases can be converted to Effect.fnUntraced because:
 // - There are no pipe arguments
 // - There is no withSpan for tracing
@@ -297,10 +360,18 @@ export const arrowExpressionGen = (n: number) =>
     return n
   })
 
-export const functionExpressionGen = Effect.fnUntraced(function* (n: number) {
+// Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
+export const arrowAliasedGen = Effect.fnUntraced(function* (n: number) {
     yield* Effect.succeed(1);
     return n;
 });
+
+export const functionExpressionGen = function(n: number) {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+}
 
 export function functionDeclarationGen(n: number) {
   return Effect.gen(function*() {
@@ -315,6 +386,8 @@ export function functionDeclarationGen(n: number) {
 --- file:///.src/effectFnOpportunity_basic.ts ---
 import * as Effect from "effect/Effect"
 
+const genAlias = Effect.gen
+
 // These cases can be converted to Effect.fnUntraced because:
 // - There are no pipe arguments
 // - There is no withSpan for tracing
@@ -334,10 +407,18 @@ export const arrowExpressionGen = (n: number) =>
     return n
   })
 
-export const functionExpressionGen = Effect.fn(function* (n: number) {
+// Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
+export const arrowAliasedGen = Effect.fn(function* (n: number) {
     yield* Effect.succeed(1);
     return n;
 });
+
+export const functionExpressionGen = function(n: number) {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+}
 
 export function functionDeclarationGen(n: number) {
   return Effect.gen(function*() {
@@ -347,10 +428,12 @@ export function functionDeclarationGen(n: number) {
 }
 
 
-=== [D3] Fix 4: "Convert to Effect.fn(\"functionExpressionGen\")" ===
+=== [D3] Fix 4: "Convert to Effect.fn(\"arrowAliasedGen\")" ===
 
 --- file:///.src/effectFnOpportunity_basic.ts ---
 import * as Effect from "effect/Effect"
+
+const genAlias = Effect.gen
 
 // These cases can be converted to Effect.fnUntraced because:
 // - There are no pipe arguments
@@ -371,10 +454,18 @@ export const arrowExpressionGen = (n: number) =>
     return n
   })
 
-export const functionExpressionGen = Effect.fn("functionExpressionGen")(function* (n: number) {
+// Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
+export const arrowAliasedGen = Effect.fn("arrowAliasedGen")(function* (n: number) {
     yield* Effect.succeed(1);
     return n;
 });
+
+export const functionExpressionGen = function(n: number) {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+}
 
 export function functionDeclarationGen(n: number) {
   return Effect.gen(function*() {
@@ -395,6 +486,8 @@ skipped by default
 --- file:///.src/effectFnOpportunity_basic.ts ---
 import * as Effect from "effect/Effect"
 
+const genAlias = Effect.gen
+
 // These cases can be converted to Effect.fnUntraced because:
 // - There are no pipe arguments
 // - There is no withSpan for tracing
@@ -410,6 +503,157 @@ export const arrowBlockGen = (n: number) => {
 
 export const arrowExpressionGen = (n: number) =>
   Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+
+// Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
+export const arrowAliasedGen = (n: number) =>
+  genAlias(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+
+export const functionExpressionGen = Effect.fnUntraced(function* (n: number) {
+    yield* Effect.succeed(1);
+    return n;
+});
+
+export function functionDeclarationGen(n: number) {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+}
+
+
+=== [D4] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_basic.ts ---
+import * as Effect from "effect/Effect"
+
+const genAlias = Effect.gen
+
+// These cases can be converted to Effect.fnUntraced because:
+// - There are no pipe arguments
+// - There is no withSpan for tracing
+// Converting to Effect.fnUntraced improves performance by not
+// reallocating the generator function on every call.
+
+export const arrowBlockGen = (n: number) => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+}
+
+export const arrowExpressionGen = (n: number) =>
+  Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+
+// Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
+export const arrowAliasedGen = (n: number) =>
+  genAlias(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+
+export const functionExpressionGen = Effect.fn(function* (n: number) {
+    yield* Effect.succeed(1);
+    return n;
+});
+
+export function functionDeclarationGen(n: number) {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+}
+
+
+=== [D4] Fix 4: "Convert to Effect.fn(\"functionExpressionGen\")" ===
+
+--- file:///.src/effectFnOpportunity_basic.ts ---
+import * as Effect from "effect/Effect"
+
+const genAlias = Effect.gen
+
+// These cases can be converted to Effect.fnUntraced because:
+// - There are no pipe arguments
+// - There is no withSpan for tracing
+// Converting to Effect.fnUntraced improves performance by not
+// reallocating the generator function on every call.
+
+export const arrowBlockGen = (n: number) => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+}
+
+export const arrowExpressionGen = (n: number) =>
+  Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+
+// Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
+export const arrowAliasedGen = (n: number) =>
+  genAlias(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+
+export const functionExpressionGen = Effect.fn("functionExpressionGen")(function* (n: number) {
+    yield* Effect.succeed(1);
+    return n;
+});
+
+export function functionDeclarationGen(n: number) {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+}
+
+
+=== [D5] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_basic.ts ---
+import * as Effect from "effect/Effect"
+
+const genAlias = Effect.gen
+
+// These cases can be converted to Effect.fnUntraced because:
+// - There are no pipe arguments
+// - There is no withSpan for tracing
+// Converting to Effect.fnUntraced improves performance by not
+// reallocating the generator function on every call.
+
+export const arrowBlockGen = (n: number) => {
+  return Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+}
+
+export const arrowExpressionGen = (n: number) =>
+  Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+
+// Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
+export const arrowAliasedGen = (n: number) =>
+  genAlias(function*() {
     yield* Effect.succeed(1)
     return n
   })
@@ -427,10 +671,12 @@ export const functionDeclarationGen = Effect.fnUntraced(function* (n: number) {
 });
 
 
-=== [D4] Fix 3: "Convert to Effect.fn (no span)" ===
+=== [D5] Fix 3: "Convert to Effect.fn (no span)" ===
 
 --- file:///.src/effectFnOpportunity_basic.ts ---
 import * as Effect from "effect/Effect"
+
+const genAlias = Effect.gen
 
 // These cases can be converted to Effect.fnUntraced because:
 // - There are no pipe arguments
@@ -447,6 +693,13 @@ export const arrowBlockGen = (n: number) => {
 
 export const arrowExpressionGen = (n: number) =>
   Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+
+// Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
+export const arrowAliasedGen = (n: number) =>
+  genAlias(function*() {
     yield* Effect.succeed(1)
     return n
   })
@@ -464,10 +717,12 @@ export const functionDeclarationGen = Effect.fn(function* (n: number) {
 });
 
 
-=== [D4] Fix 4: "Convert to Effect.fn(\"functionDeclarationGen\")" ===
+=== [D5] Fix 4: "Convert to Effect.fn(\"functionDeclarationGen\")" ===
 
 --- file:///.src/effectFnOpportunity_basic.ts ---
 import * as Effect from "effect/Effect"
+
+const genAlias = Effect.gen
 
 // These cases can be converted to Effect.fnUntraced because:
 // - There are no pipe arguments
@@ -484,6 +739,13 @@ export const arrowBlockGen = (n: number) => {
 
 export const arrowExpressionGen = (n: number) =>
   Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return n
+  })
+
+// Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
+export const arrowAliasedGen = (n: number) =>
+  genAlias(function*() {
     yield* Effect.succeed(1)
     return n
   })

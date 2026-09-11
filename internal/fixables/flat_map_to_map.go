@@ -26,11 +26,10 @@ func runFlatMapToMapFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.map",
 			Run: func(tracker *rewriter.Tracker) {
-				tracker.ReplaceNode(sf, match.CalleeNameNode, tracker.NewIdentifier("map"), nil)
+				replaceEffectMethodCallee(tracker, sf, match.Callee, match.CalleeNameNode, "map")
 				tracker.ReplaceNode(sf, match.SucceedCallExpression, match.SucceedArgument, nil)
 			},
 		}); action != nil {

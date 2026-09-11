@@ -23,9 +23,14 @@ export const functionPipeArgument = Effect.runPromise(pipe(
 export const sameMethodPipe = program.pipe(Effect.exit, Effect.runPromise)
 export const sameFunctionPipe = pipe(program, Effect.exit, Effect.runPromise)
 
+const runPromise = Effect.runPromise
+export const aliasedRunner = runPromise(Effect.exit(program))
+
 // Effect v4 context-bound runners have the same fusion.
 export const promiseWith = Effect.runPromiseWith(context)(Effect.exit(program), { signal })
 export const promiseWithPipe = program.pipe(Effect.exit, Effect.runPromiseWith(context))
+const runPromiseWith = Effect.runPromiseWith
+export const aliasedPromiseWith = runPromiseWith(context)(Effect.exit(program), { signal })
 
 // Namespace aliases remain fixable.
 export const alias = Fx.runPromise((Fx.exit(program)))

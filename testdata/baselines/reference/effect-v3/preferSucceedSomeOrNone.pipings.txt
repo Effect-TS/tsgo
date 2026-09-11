@@ -1,7 +1,25 @@
-==== /.src/preferSucceedSomeOrNone.ts (29 flows) ====
+==== /.src/preferSucceedSomeOrNone.ts (30 flows) ====
 
 === Piping Flow ===
-Location: 5:33 - 5:63
+Location: 7:42 - 7:66
+Node: succeed(Option.some(1))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: call
+      callee: succeed
+      args: (constant)
+      outType: Effect<Option<number>, never, never>
+
+=== Piping Flow ===
+Location: 10:33 - 10:63
 Node: Effect.succeed(Option.none())
 Node Kind: KindCallExpression
 
@@ -15,7 +33,7 @@ Transformations (1):
       outType: Effect<Option<never>, never, never>
 
 === Piping Flow ===
-Location: 8:33 - 8:64
+Location: 13:33 - 13:64
 Node: Effect.succeed(Option.some(1))
 Node Kind: KindCallExpression
 
@@ -33,7 +51,7 @@ Transformations (2):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 11:36 - 11:64
+Location: 16:36 - 16:64
 Node: Fx.succeed(O.some("value"))
 Node Kind: KindCallExpression
 
@@ -51,7 +69,7 @@ Transformations (2):
       outType: Effect<Option<string>, never, never>
 
 === Piping Flow ===
-Location: 14:38 - 14:67
+Location: 19:38 - 19:67
 Node: Effect.succeed(optionNone())
 Node Kind: KindCallExpression
 
@@ -65,7 +83,7 @@ Transformations (1):
       outType: Effect<Option<never>, never, never>
 
 === Piping Flow ===
-Location: 15:38 - 15:68
+Location: 20:38 - 20:68
 Node: Effect.succeed(optionSome(1))
 Node Kind: KindCallExpression
 
@@ -83,7 +101,7 @@ Transformations (2):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 18:42 - 18:75
+Location: 23:42 - 23:75
 Node: Effect.succeed((Option.some(1)))
 Node Kind: KindCallExpression
 
@@ -101,7 +119,7 @@ Transformations (2):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 21:45 - 21:84
+Location: 26:45 - 26:84
 Node: Effect.succeed(Option.some<number>(1))
 Node Kind: KindCallExpression
 
@@ -119,7 +137,7 @@ Transformations (2):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 24:37 - 24:72
+Location: 29:37 - 29:72
 Node: Option.none().pipe(Effect.succeed)
 Node Kind: KindCallExpression
 
@@ -133,7 +151,7 @@ Transformations (1):
       outType: Effect<Option<never>, never, never>
 
 === Piping Flow ===
-Location: 25:37 - 25:73
+Location: 30:37 - 30:73
 Node: Option.some(1).pipe(Effect.succeed)
 Node Kind: KindCallExpression
 
@@ -151,7 +169,7 @@ Transformations (2):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 28:45 - 28:81
+Location: 33:45 - 33:81
 Node: pipe(Option.none(), Effect.succeed)
 Node Kind: KindCallExpression
 
@@ -165,7 +183,7 @@ Transformations (1):
       outType: Effect<Option<never>, never, never>
 
 === Piping Flow ===
-Location: 29:45 - 29:82
+Location: 34:45 - 34:82
 Node: pipe(Option.some(1), Effect.succeed)
 Node Kind: KindCallExpression
 
@@ -183,7 +201,7 @@ Transformations (2):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 32:47 - 32:84
+Location: 37:47 - 37:84
 Node: pipe(1, Option.some, Effect.succeed)
 Node Kind: KindCallExpression
 
@@ -201,7 +219,7 @@ Transformations (2):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 35:51 - 35:103
+Location: 40:51 - 40:103
 Node: pipe(1, Option.some, Effect.succeed, Effect.asVoid)
 Node Kind: KindCallExpression
 
@@ -223,7 +241,7 @@ Transformations (3):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 36:51 - 36:102
+Location: 41:51 - 41:102
 Node: pipe(Option.none(), Effect.succeed, Effect.asVoid)
 Node Kind: KindCallExpression
 
@@ -241,7 +259,7 @@ Transformations (2):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 37:49 - 37:100
+Location: 42:49 - 42:100
 Node: Option.some(1).pipe(Effect.succeed, Effect.asVoid)
 Node Kind: KindCallExpression
 
@@ -263,7 +281,7 @@ Transformations (3):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 38:49 - 38:99
+Location: 43:49 - 43:99
 Node: Option.none().pipe(Effect.succeed, Effect.asVoid)
 Node Kind: KindCallExpression
 
@@ -281,7 +299,7 @@ Transformations (2):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 41:51 - 41:108
+Location: 46:51 - 46:108
 Node: pipe(Option.some(1), Effect.succeed).pipe(Effect.asVoid)
 Node Kind: KindCallExpression
 
@@ -303,7 +321,7 @@ Transformations (3):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 42:51 - 42:108
+Location: 47:51 - 47:108
 Node: pipe(Option.some(1).pipe(Effect.succeed), Effect.asVoid)
 Node Kind: KindCallExpression
 
@@ -325,7 +343,7 @@ Transformations (3):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 43:57 - 43:114
+Location: 48:57 - 48:114
 Node: pipe(1, Option.some).pipe(Effect.succeed, Effect.asVoid)
 Node Kind: KindCallExpression
 
@@ -347,7 +365,7 @@ Transformations (3):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 46:48 - 46:86
+Location: 51:48 - 51:86
 Node: Effect.succeed(Option.none<number>())
 Node Kind: KindCallExpression
 
@@ -361,7 +379,7 @@ Transformations (1):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 49:49 - 49:102
+Location: 54:49 - 54:102
 Node: Effect.succeed<Option.Option<number>>(Option.none())
 Node Kind: KindCallExpression
 
@@ -375,7 +393,7 @@ Transformations (1):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 53:43 - 53:65
+Location: 58:43 - 58:65
 Node: Effect.succeedSome(1)
 Node Kind: KindCallExpression
 
@@ -389,7 +407,7 @@ Transformations (1):
       outType: Effect<Option<number>, never, never>
 
 === Piping Flow ===
-Location: 56:44 - 56:72
+Location: 61:44 - 61:72
 Node: Effect.succeed(Option.none)
 Node Kind: KindCallExpression
 
@@ -403,7 +421,7 @@ Transformations (1):
       outType: Effect<<A = never>() => Option<A>, never, never>
 
 === Piping Flow ===
-Location: 57:44 - 57:72
+Location: 62:44 - 62:72
 Node: Effect.succeed(Option.some)
 Node Kind: KindCallExpression
 
@@ -417,7 +435,7 @@ Transformations (1):
       outType: Effect<<A>(value: A) => Option<A>, never, never>
 
 === Piping Flow ===
-Location: 60:28 - 60:50
+Location: 65:28 - 65:50
 Node: Effect.succeed(value)
 Node Kind: KindCallExpression
 
@@ -431,7 +449,7 @@ Transformations (1):
       outType: Effect<A, never, never>
 
 === Piping Flow ===
-Location: 64:25 - 64:44
+Location: 69:25 - 69:44
 Node: Option.some(value)
 Node Kind: KindCallExpression
 
@@ -445,7 +463,7 @@ Transformations (1):
       outType: Option<A>
 
 === Piping Flow ===
-Location: 68:43 - 68:78
+Location: 73:43 - 73:78
 Node: LocalEffect.succeed(Option.none())
 Node Kind: KindCallExpression
 
@@ -459,7 +477,7 @@ Transformations (1):
       outType: Effect<Option<never>, never, never>
 
 === Piping Flow ===
-Location: 69:47 - 69:82
+Location: 74:47 - 74:82
 Node: Effect.succeed(LocalOption.none())
 Node Kind: KindCallExpression
 
@@ -473,7 +491,7 @@ Transformations (1):
       outType: Effect<Option<never>, never, never>
 
 === Piping Flow ===
-Location: 70:47 - 70:83
+Location: 75:47 - 75:83
 Node: Effect.succeed(LocalOption.some(1))
 Node Kind: KindCallExpression
 

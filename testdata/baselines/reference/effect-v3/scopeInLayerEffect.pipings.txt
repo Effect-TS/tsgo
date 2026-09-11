@@ -1,4 +1,4 @@
-==== /.src/scopeInLayerEffect.ts (17 flows) ====
+==== /.src/scopeInLayerEffect.ts (20 flows) ====
 
 === Piping Flow ===
 Location: 6:24 - 6:49
@@ -238,6 +238,52 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 49:37 - 49:61
+Node: Effect.log("finalizer")
+Node Kind: KindCallExpression
+
+Subject: "finalizer"
+Subject Type: "finalizer"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 55:28 - 61:2
+Node: layerEffect(\n  MyService,\n  Effect.gen(function*() {\n    yield* Effect.addFinalizer(() => Effect.log("finalizer"))\n    return { a: 1 }\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    yield* Effect.addFinalizer(() => Effect.log("finalizer"))\n    return { a: 1 }\n  }
+Subject Type: () => Generator<YieldWrap<Effect<void, never, Scope>>, { a: number; }, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<{ a: number; }, never, Scope>
+  [1] kind: dataLast
+      callee: layerEffect
+      args: [MyService]
+      outType: Layer<MyService, never, Scope>
+
+=== Piping Flow ===
+Location: 58:11 - 58:62
+Node: Effect.addFinalizer(() => Effect.log("finalizer"))
+Node Kind: KindCallExpression
+
+Subject: () => Effect.log("finalizer")
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.addFinalizer
+      args: (constant)
+      outType: Effect<void, never, Scope>
+
+=== Piping Flow ===
+Location: 58:37 - 58:61
 Node: Effect.log("finalizer")
 Node Kind: KindCallExpression
 

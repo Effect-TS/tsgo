@@ -51,6 +51,27 @@ func assertEffectFnFunctionReturnType(t *testing.T, version bundledeffect.Effect
 	}
 }
 
+func TestEffectFnCall_ConstantAlias(t *testing.T) {
+	t.Parallel()
+
+	for _, version := range []bundledeffect.EffectVersion{bundledeffect.EffectV3, bundledeffect.EffectV4} {
+		tp, sf, done := compileEffectFnTest(t, version, `
+import { Effect } from "effect"
+
+const fn = Effect.fn
+export const make = fn(function*() {
+  return 1
+})
+`)
+		parsed := findFirstEffectFnCall(t, tp, sf)
+		if parsed.EffectModule != nil {
+			done()
+			t.Fatal("expected a constant fn alias to have no directly replaceable Effect module receiver")
+		}
+		done()
+	}
+}
+
 func TestEffectFnCall_FunctionReturnType_NoPipe(t *testing.T) {
 	t.Parallel()
 

@@ -105,7 +105,7 @@ func analyzeCatchTagTransformation(
 	}
 
 	handler, ok := analyzeCatchTagToCatchReasonHandler(tp, c, transformation.Args[1])
-	if !ok || !hasCatchReasonApi(tp, c, transformation.Callee, len(handler.branches)) {
+	if !ok {
 		return CatchTagToCatchReasonMatch{}, false
 	}
 
@@ -155,7 +155,7 @@ func analyzeCatchTagsTransformation(
 		}
 
 		handler, ok := analyzeCatchTagToCatchReasonHandler(tp, c, property.Initializer)
-		if !ok || !hasCatchReasonApi(tp, c, transformation.Callee, len(handler.branches)) {
+		if !ok {
 			continue
 		}
 		candidate = &handler
@@ -386,26 +386,6 @@ func uniqueCatchReasonParameterName(c *checker.Checker, location *ast.Node) stri
 
 func isEffectExpression(tp *typeparser.TypeParser, expression *ast.Node) bool {
 	return expression != nil && tp.EffectType(tp.GetTypeAtLocation(expression)) != nil
-}
-
-func hasCatchReasonApi(tp *typeparser.TypeParser, c *checker.Checker, callee *ast.Node, branchCount int) bool {
-	callee = unwrapTransparentExpression(callee)
-	if callee == nil || callee.Kind != ast.KindPropertyAccessExpression {
-		return false
-	}
-	access := callee.AsPropertyAccessExpression()
-	if access == nil || access.Expression == nil {
-		return false
-	}
-	receiverType := tp.GetTypeAtLocation(access.Expression)
-	if receiverType == nil {
-		return false
-	}
-	apiName := "catchReason"
-	if branchCount > 1 {
-		apiName = "catchReasons"
-	}
-	return c.GetPropertyOfType(receiverType, apiName) != nil
 }
 
 func catchTagsPropertyName(name *ast.Node) (string, bool) {

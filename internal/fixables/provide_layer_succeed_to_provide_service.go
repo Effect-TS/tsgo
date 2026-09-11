@@ -24,18 +24,13 @@ func runProvideLayerSucceedToProvideServiceFix(ctx *fixable.Context) []ls.CodeAc
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		if match.ProvideTransformation == nil || match.EffectModuleNode == nil {
-			return nil
+		if match.ProvideTransformation == nil {
+			continue
 		}
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect." + match.ReplacementMethodName,
 			Run: func(tracker *rewriter.Tracker) {
-				callee := tracker.NewPropertyAccessExpression(
-					tracker.DeepCloneNode(match.EffectModuleNode),
-					nil,
-					tracker.NewIdentifier(match.ReplacementMethodName),
-					ast.NodeFlagsNone,
-				)
+				callee := effectModuleMethod(tracker, ctx.SourceFile, match.EffectModuleNode, match.ReplacementMethodName)
 				arguments := tracker.NewNodeList([]*ast.Node{
 					tracker.DeepCloneNode(match.ServiceNode),
 					tracker.DeepCloneNode(match.ImplementationNode),

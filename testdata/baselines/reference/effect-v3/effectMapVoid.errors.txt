@@ -9,9 +9,10 @@ Effect version: 3.19.19
 /.src/effectMapVoid.ts(33,3): suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
 /.src/effectMapVoid.ts(57,49): suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
 /.src/effectMapVoid.ts(60,44): suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+/.src/effectMapVoid.ts(64,63): suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
 
 
-==== /.src/effectMapVoid.ts (8 errors) ====
+==== /.src/effectMapVoid.ts (9 errors) ====
     // @effect-v3
     import { Effect } from "effect"
     
@@ -87,6 +88,12 @@ Effect version: 3.19.19
     // Should trigger: data-first Effect.map(self, () => void 0)
     export const shouldTriggerDataFirstVoid0 = Effect.map(Effect.succeed(1), () => void 0)
                                                ~~~~~~~~~~
+!!! suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+    
+    // Should trigger with a fallback fix: the API reference is hidden behind a const alias.
+    const mapAlias = Effect.map
+    export const shouldTriggerAliasedMap = Effect.succeed(1).pipe(mapAlias(() => undefined))
+                                                                  ~~~~~~~~
 !!! suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
     
     // Should NOT trigger: data-first Effect.map with a real transformation
