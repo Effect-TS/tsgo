@@ -5,6 +5,10 @@ class Service extends Context.Service<Service, { readonly value: number }>()("Se
 const implementation = { value: 1 }
 const acquisition = Effect.succeed(implementation)
 const program = Service.use((service) => Effect.succeed(service.value))
+const provide = Effect.provide
+
+// Should trigger and fix the call site without changing the constant alias.
+export const constantAlias = program.pipe(provide(Layer.succeed(Service, implementation)))
 
 // Should trigger: pipeable, function-pipe, data-first, and curried layer constructors.
 export const pipeableSucceed = program.pipe(Effect.provide(Layer.succeed(Service, implementation)))

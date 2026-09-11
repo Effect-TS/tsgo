@@ -64,3 +64,9 @@ export const shouldNotTriggerChained = Effect.fail("error").pipe(
 export const shouldTriggerSimple = Effect.fail("original").pipe(
   Effect.catchAll((e) => Effect.fail(new AnotherError(String(e))))
 )
+
+// Should trigger with a fallback fix: the catch API is hidden behind a const alias.
+const catchAlias = Effect.catchAll
+export const shouldTriggerAliasedCatch = Effect.fail("error").pipe(
+  catchAlias((cause) => Effect.fail(new MyErrorTagged(cause)))
+)

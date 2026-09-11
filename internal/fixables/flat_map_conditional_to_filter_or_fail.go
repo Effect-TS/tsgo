@@ -24,15 +24,15 @@ func runFlatMapConditionalToFilterOrFailFix(ctx *fixable.Context) []ls.CodeActio
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		if !match.CanFix || match.Transformation == nil || match.EffectModuleNode == nil ||
+		if !match.CanFix || match.Transformation == nil ||
 			match.ParameterNode == nil || match.PredicateNode == nil || match.FallbackNode == nil {
-			return nil
+			continue
 		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect." + match.PreferredMethodName,
 			Run: func(tracker *rewriter.Tracker) {
-				callee, arguments := buildFlatMapConditionalFilterReplacement(tracker, match)
+				callee, arguments := buildFlatMapConditionalFilterReplacement(tracker, ctx.SourceFile, match)
 				if callee == nil || arguments == nil {
 					return
 				}
@@ -52,13 +52,8 @@ func runFlatMapConditionalToFilterOrFailFix(ctx *fixable.Context) []ls.CodeActio
 	return nil
 }
 
-func buildFlatMapConditionalFilterReplacement(tracker *rewriter.Tracker, match rules.FlatMapConditionalToFilterOrFailMatch) (*ast.Node, *ast.NodeList) {
-	callee := tracker.NewPropertyAccessExpression(
-		tracker.DeepCloneNode(match.EffectModuleNode),
-		nil,
-		tracker.NewIdentifier(match.PreferredMethodName),
-		ast.NodeFlagsNone,
-	)
+func buildFlatMapConditionalFilterReplacement(tracker *rewriter.Tracker, sf *ast.SourceFile, match rules.FlatMapConditionalToFilterOrFailMatch) (*ast.Node, *ast.NodeList) {
+	callee := effectModuleMethod(tracker, sf, match.EffectModuleNode, match.PreferredMethodName)
 	predicateBody := tracker.DeepCloneNode(match.PredicateNode)
 	if match.NegatePredicate {
 		predicateBody = tracker.NewPrefixUnaryExpression(ast.KindExclamationToken, predicateBody)

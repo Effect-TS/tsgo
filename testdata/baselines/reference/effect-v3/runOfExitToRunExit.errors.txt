@@ -5,9 +5,10 @@ Effect version: 3.19.19
 /.src/runOfExitToRunExit.ts(7,27): suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
 /.src/runOfExitToRunExit.ts(8,29): suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
 /.src/runOfExitToRunExit.ts(9,60): suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+/.src/runOfExitToRunExit.ts(12,30): suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
 
 
-==== /.src/runOfExitToRunExit.ts (4 errors) ====
+==== /.src/runOfExitToRunExit.ts (5 errors) ====
     import { Effect, pipe } from "effect"
     
     declare const program: Effect.Effect<number, Error>
@@ -24,6 +25,11 @@ Effect version: 3.19.19
 !!! suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
     export const sameFunctionPipe = pipe(program, Effect.exit, Effect.runPromise)
                                                                ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+    
+    const runPromise = Effect.runPromise
+    export const aliasedRunner = runPromise(Effect.exit(program))
+                                 ~~~~~~~~~~
 !!! suggestion TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
     
     export const transformedExit = Effect.runPromise(

@@ -27,11 +27,8 @@ func runRunOfExitToRunExitFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		// A property access lets us preserve the existing Effect namespace alias.
-		// Named imports still receive the diagnostic, but need import management
-		// that this local rewrite deliberately does not attempt.
-		if match.RunnerNameNode == nil || match.ExitTransformation == nil {
-			return nil
+		if match.RunnerCallee == nil || match.ExitTransformation == nil {
+			continue
 		}
 
 		description := "Replace with Effect." + match.ReplacementName
@@ -41,12 +38,12 @@ func runRunOfExitToRunExitFix(ctx *fixable.Context) []ls.CodeAction {
 				if !removeExitTransformation(tracker, ctx.SourceFile, match.ExitTransformation) {
 					return
 				}
-				tracker.ReplaceNode(ctx.SourceFile, match.RunnerNameNode, tracker.NewIdentifier(match.ReplacementName), nil)
+				replaceEffectMethodCallee(tracker, ctx.SourceFile, match.RunnerCallee, match.RunnerNameNode, match.ReplacementName)
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}
 		}
-		return nil
+		continue
 	}
 
 	return nil

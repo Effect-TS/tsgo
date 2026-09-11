@@ -1,4 +1,4 @@
-==== /.src/catchToIgnore.ts (8 flows) ====
+==== /.src/catchToIgnore.ts (9 flows) ====
 
 === Piping Flow ===
 Location: 8:34 - 10:2
@@ -75,7 +75,21 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 34:44 - 36:2
+Location: 35:41 - 35:88
+Node: voidEffect.pipe(catchAlias(() => Effect.void))
+Node Kind: KindCallExpression
+
+Subject: voidEffect
+Subject Type: Effect<void, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: catchAlias
+      args: [() => Effect.void]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 38:44 - 40:2
 Node: numberEffect.pipe(\n  Effect.catch(() => Effect.void)\n)
 Node Kind: KindCallExpression
 
@@ -89,7 +103,7 @@ Transformations (1):
       outType: Effect<void | number, never, never>
 
 === Piping Flow ===
-Location: 39:45 - 41:2
+Location: 43:45 - 45:2
 Node: voidEffect.pipe(\n  Effect.catch(() => Effect.sync(() => undefined))\n)
 Node Kind: KindCallExpression
 
@@ -103,7 +117,7 @@ Transformations (1):
       outType: Effect<void | undefined, never, never>
 
 === Piping Flow ===
-Location: 40:21 - 40:50
+Location: 44:21 - 44:50
 Node: Effect.sync(() => undefined)
 Node Kind: KindCallExpression
 

@@ -20,3 +20,9 @@ export const result = program.pipe(
       : Effect.fail(error)
   )
 )
+
+// Should trigger with a fallback fix: catchAll is hidden behind a const alias.
+const catchAlias = Effect.catchAll
+export const aliasedResult = program.pipe(
+  catchAlias((error) => error._tag === "NotFoundError" ? Effect.succeed("missing") : Effect.fail(error))
+)

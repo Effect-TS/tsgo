@@ -1,4 +1,4 @@
-==== /.src/multipleEffectProvide.ts (11 flows) ====
+==== /.src/multipleEffectProvide.ts (12 flows) ====
 
 === Piping Flow ===
 Location: 4:8 - 4:37
@@ -85,7 +85,25 @@ Transformations (1):
       outType: Layer<MyService3, never, never>
 
 === Piping Flow ===
-Location: 21:28 - 24:2
+Location: 23:41 - 26:2
+Node: Effect.void.pipe(\n  provide(MyService1.Default),\n  provide(MyService2.Default)\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: provide
+      args: [MyService1.Default]
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: provide
+      args: [MyService2.Default]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 28:28 - 31:2
 Node: Effect.void.pipe(\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default)\n)
 Node Kind: KindCallExpression
 
@@ -103,7 +121,7 @@ Transformations (2):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 26:38 - 32:2
+Location: 33:38 - 39:2
 Node: Effect.void.pipe(\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default),\n  Effect.ignore,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default)\n)
 Node Kind: KindCallExpression
 
@@ -133,7 +151,7 @@ Transformations (5):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 34:34 - 38:2
+Location: 41:34 - 45:2
 Node: Effect.void.pipe(\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default),\n  Effect.provide(MyService3.Default)\n)
 Node Kind: KindCallExpression
 
@@ -155,7 +173,7 @@ Transformations (3):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 40:43 - 43:2
+Location: 47:43 - 50:2
 Node: Effect.void.pipe(\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default, { local: true })\n)
 Node Kind: KindCallExpression
 
@@ -173,7 +191,7 @@ Transformations (2):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 45:45 - 49:2
+Location: 52:45 - 56:2
 Node: Effect.void.pipe(\n  Effect.provide(MyService1.Default, { local: true }),\n  Effect.provide(MyService2.Default),\n  Effect.provide(MyService3.Default)\n)
 Node Kind: KindCallExpression
 

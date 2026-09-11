@@ -4,7 +4,6 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
-	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
 )
@@ -24,19 +23,14 @@ func runMapSomeToAsSomeFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		if match.Transformation == nil || match.EffectModuleNode == nil {
-			return nil
+		if match.Transformation == nil {
+			continue
 		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.asSome",
 			Run: func(tracker *rewriter.Tracker) {
-				asSome := tracker.NewPropertyAccessExpression(
-					tracker.DeepCloneNode(match.EffectModuleNode),
-					nil,
-					tracker.NewIdentifier("asSome"),
-					ast.NodeFlagsNone,
-				)
+				asSome := effectModuleMethod(tracker, ctx.SourceFile, match.EffectModuleNode, "asSome")
 				tracker.ReplacePipingFlowTransformation(ctx.SourceFile, match.Transformation, rewriter.PipingFlowTransformationReplacement{
 					Callee: asSome,
 				})

@@ -50,3 +50,9 @@ export const gen = Effect.gen(function*() {
 // Should NOT trigger - regular function call
 export const regularFn = (n: number) => Effect.succeed(n)
 export const result = regularFn(1)
+
+// Should trigger with a fallback fix: Effect.fn is hidden behind a const alias.
+const fnAlias = Effect.fn
+export const aliasedIife = fnAlias(function*() {
+  yield* Effect.succeed(1)
+})()

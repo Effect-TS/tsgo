@@ -2447,6 +2447,11 @@
           "default": "suggestion",
           "description": "Suggests Effect.filterOrFail or Effect.filterOrElse when Effect.flatMap conditionally passes its input through with Effect.succeed"
         },
+        "flatMapIgnoredParamToAndThen": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.andThen instead of Effect.flatMap when a zero-parameter callback returns an existing Effect value"
+        },
         "flatMapToMap": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

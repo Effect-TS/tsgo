@@ -41,7 +41,8 @@ var SyncToSucceed = rule.Rule{
 type SyncToSucceedMatch struct {
 	SourceFile    *ast.SourceFile
 	Location      core.TextRange
-	CalleeName    *ast.Node
+	Callee        *ast.Node
+	CalleeName    *ast.Node // Replaceable property name; nil for named imports and local aliases.
 	Thunk         *ast.Node
 	ConstantValue *ast.Node
 }
@@ -58,20 +59,22 @@ func AnalyzeSyncToSucceed(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 
 		if node.Kind == ast.KindCallExpression {
 			call := node.AsCallExpression()
-			if call != nil && call.Expression != nil && call.Expression.Kind == ast.KindPropertyAccessExpression &&
+			if call != nil && call.Expression != nil &&
 				tp.IsNodeReferenceToEffectModuleApi(call.Expression, "sync") && call.Arguments != nil && len(call.Arguments.Nodes) == 1 {
 				lazy := typeparser.ParseLazyExpression(call.Arguments.Nodes[0], typeparser.LazyExpressionThunk)
 				if lazy != nil && tp.IsExpressionValueStableAtLocation(lazy.Expression, node) {
-					calleeName := call.Expression.AsPropertyAccessExpression().Name()
-					if calleeName != nil {
-						matches = append(matches, SyncToSucceedMatch{
-							SourceFile:    sf,
-							Location:      scanner.GetErrorRangeForNode(sf, call.Expression),
-							CalleeName:    calleeName,
-							Thunk:         lazy.Node,
-							ConstantValue: lazy.Expression,
-						})
+					var calleeName *ast.Node
+					if call.Expression.Kind == ast.KindPropertyAccessExpression {
+						calleeName = call.Expression.AsPropertyAccessExpression().Name()
 					}
+					matches = append(matches, SyncToSucceedMatch{
+						SourceFile:    sf,
+						Location:      scanner.GetErrorRangeForNode(sf, call.Expression),
+						Callee:        call.Expression,
+						CalleeName:    calleeName,
+						Thunk:         lazy.Node,
+						ConstantValue: lazy.Expression,
+					})
 				}
 			}
 		}

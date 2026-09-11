@@ -27,13 +27,13 @@ func runCatchToIgnoreFix(ctx *fixable.Context) []ls.CodeAction {
 			continue
 		}
 		if match.Transformation == nil {
-			return nil
+			continue
 		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect." + match.IgnoreMethodName,
 			Run: func(tracker *rewriter.Tracker) {
-				ignoreAccess := catchToIgnoreReplacementAccess(tracker, match)
+				ignoreAccess := catchToIgnoreReplacementAccess(tracker, sf, match)
 				tracker.ReplacePipingFlowTransformation(sf, match.Transformation, rewriter.PipingFlowTransformationReplacement{
 					Callee: ignoreAccess,
 				})
@@ -46,14 +46,8 @@ func runCatchToIgnoreFix(ctx *fixable.Context) []ls.CodeAction {
 	return nil
 }
 
-func catchToIgnoreReplacementAccess(tracker *rewriter.Tracker, match rules.CatchToIgnoreMatch) *ast.Node {
-	var effectModule *ast.Node
-	if match.EffectModuleNode != nil {
-		effectModule = tracker.DeepCloneNode(match.EffectModuleNode)
-	} else {
-		effectModule = tracker.NewIdentifier("Effect")
-	}
-	replacement := tracker.NewPropertyAccessExpression(effectModule, nil, tracker.NewIdentifier(match.IgnoreMethodName), ast.NodeFlagsNone)
+func catchToIgnoreReplacementAccess(tracker *rewriter.Tracker, sf *ast.SourceFile, match rules.CatchToIgnoreMatch) *ast.Node {
+	replacement := effectModuleMethod(tracker, sf, match.EffectModuleNode, match.IgnoreMethodName)
 	ast.SetParentInChildren(replacement)
 	return replacement
 }

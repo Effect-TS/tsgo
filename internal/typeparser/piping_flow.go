@@ -328,11 +328,6 @@ func (tp *TypeParser) ParsePipeCall(node *ast.Node) *ParsedPipeCallResult {
 
 		// Case 2: Identifier — bare pipe(subject, f1, f2, ...)
 		if call.Expression.Kind == ast.KindIdentifier {
-			nameText := scanner.GetTextOfNode(call.Expression)
-			if nameText != "pipe" {
-				return nil
-			}
-
 			if !tp.IsNodeReferenceToEffectPackageExport(call.Expression, "pipe") {
 				return nil
 			}

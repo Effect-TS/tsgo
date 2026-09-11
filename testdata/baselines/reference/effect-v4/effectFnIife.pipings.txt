@@ -1,4 +1,4 @@
-==== /.src/effectFnIife.ts (22 flows) ====
+==== /.src/effectFnIife.ts (24 flows) ====
 
 === Piping Flow ===
 Location: 4:21 - 6:3
@@ -305,5 +305,33 @@ Subject Type: 1
 Transformations (1):
   [0] kind: call
       callee: regularFn
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 56:27 - 58:3
+Node: fnAlias(function*() {\n  yield* Effect.succeed(1)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.succeed(1)\n}
+Subject Type: () => Generator<Effect<number, never, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: fnAlias
+      args: (constant)
+      outType: () => Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 57:9 - 57:27
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
       args: (constant)
       outType: Effect<number, never, never>

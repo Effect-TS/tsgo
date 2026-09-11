@@ -12,11 +12,12 @@ Effect version: 4.0.0
 /.src/timeoutCatchTagToTimeoutOrElse.ts(22,53): warning TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
 /.src/timeoutCatchTagToTimeoutOrElse.ts(23,90): warning TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
 /.src/timeoutCatchTagToTimeoutOrElse.ts(24,51): warning TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
-/.src/timeoutCatchTagToTimeoutOrElse.ts(43,61): warning TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
-/.src/timeoutCatchTagToTimeoutOrElse.ts(44,82): warning TS377127: Use `Effect.timeoutOption` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+/.src/timeoutCatchTagToTimeoutOrElse.ts(27,61): warning TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+/.src/timeoutCatchTagToTimeoutOrElse.ts(46,61): warning TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+/.src/timeoutCatchTagToTimeoutOrElse.ts(47,82): warning TS377127: Use `Effect.timeoutOption` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
 
 
-==== /.src/timeoutCatchTagToTimeoutOrElse.ts (13 errors) ====
+==== /.src/timeoutCatchTagToTimeoutOrElse.ts (14 errors) ====
     // @effect-v4
     // @effect-diagnostics *:off
     // @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
@@ -62,6 +63,11 @@ Effect version: 4.0.0
 !!! warning TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
     export const block = task.pipe(Effect.timeout(1), Effect.catchTag("TimeoutError", () => { const value = "fallback"; return Effect.succeed(value) }))
                                                       ~~~~~~~~~~~~~~~
+!!! warning TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+    
+    const catchTag = Effect.catchTag
+    export const aliasedCatchTag = task.pipe(Effect.timeout(1), catchTag("TimeoutError", () => Effect.succeed("fallback")))
+                                                                ~~~~~~~~
 !!! warning TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
     
     // Must not change: these handlers also catch failures from the input.

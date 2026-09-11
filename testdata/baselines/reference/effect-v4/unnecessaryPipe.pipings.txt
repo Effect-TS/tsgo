@@ -1,4 +1,4 @@
-==== /.src/unnecessaryPipe.ts (4 flows) ====
+==== /.src/unnecessaryPipe.ts (5 flows) ====
 
 === Piping Flow ===
 Location: 4:31 - 7:2
@@ -47,7 +47,17 @@ Subject Type: 32
 Transformations (0):
 
 === Piping Flow ===
-Location: 15:34 - 15:60
+Location: 16:33 - 16:39
+Node: p(32)
+Node Kind: KindCallExpression
+
+Subject: 32
+Subject Type: 32
+
+Transformations (0):
+
+=== Piping Flow ===
+Location: 18:34 - 18:60
 Node: Effect.succeed(32).pipe()
 Node Kind: KindCallExpression
 

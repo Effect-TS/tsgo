@@ -111,3 +111,24 @@ export const make = <A>(self: { readonly value: A }) => Effect.gen(self, functio
 	assertEffectGenFunctionReturnType(t, bundledeffect.EffectV4, sourceV4, "Effect<A, never, never>")
 	assertEffectGenFunctionReturnType(t, bundledeffect.EffectV3, sourceV3, "Effect<A, never, never>")
 }
+
+func TestEffectGenCall_ConstantAlias(t *testing.T) {
+	t.Parallel()
+
+	for _, version := range []bundledeffect.EffectVersion{bundledeffect.EffectV3, bundledeffect.EffectV4} {
+		_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectVersionInternal(t, version, `
+import { Effect } from "effect"
+
+const gen = Effect.gen
+export const make = gen(function*() {
+  return 1
+})
+`)
+		parsed := findFirstEffectGenCall(t, tp, sf)
+		if parsed.EffectModule != nil {
+			done()
+			t.Fatal("expected a constant gen alias to have no directly replaceable Effect module receiver")
+		}
+		done()
+	}
+}

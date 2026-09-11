@@ -23,6 +23,13 @@ export class UserRepository extends Context.Service<UserRepository>()("UserRepos
 
 const cachePassthrough = Layer.effect(Cache, Cache)
 
+const mergeAll = Layer.mergeAll
+
+export const shouldWarnConstantAlias = mergeAll(
+  FileSystem.Default,
+  Cache.Default
+)
+
 export const shouldNotWarn = Layer.mergeAll(
   DbConnection.Default,
   FileSystem.Default

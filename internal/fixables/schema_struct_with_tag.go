@@ -2,12 +2,12 @@ package fixables
 
 import (
 	"github.com/effect-ts/tsgo/internal/fixable"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
-	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 var SchemaStructWithTagFix = fixable.Fixable{
@@ -29,24 +29,24 @@ func runSchemaStructWithTagFix(ctx *fixable.Context) []ls.CodeAction {
 			continue
 		}
 
-		// Resolve the Schema module name, preserving import aliases
-		schemaModuleName := "Schema"
-		if match.SchemaExpr != nil && match.SchemaExpr.Kind == ast.KindIdentifier {
-			schemaModuleName = scanner.GetTextOfNode(match.SchemaExpr)
-		}
-
 		// Capture loop variables for the closure
 		tagValue := match.TagValue
 		otherProperties := match.OtherProperties
 		callNode := match.CallNode
+		schemaExpr := match.SchemaExpr
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Rewrite as Schema.TaggedStruct",
 			Run: func(tracker *rewriter.Tracker) {
-				// Build Schema.TaggedStruct property access
-				schemaId := tracker.NewIdentifier(schemaModuleName)
+				var schemaModule *ast.Node
+				if schemaExpr != nil {
+					schemaModule = tracker.DeepCloneNode(schemaExpr)
+				} else {
+					schemaModule = tracker.NewIdentifier(typeparser.FindModuleIdentifier(sf, "Schema"))
+				}
+				// Build Schema.TaggedStruct property access, preserving the receiver.
 				taggedStructAccess := tracker.NewPropertyAccessExpression(
-					schemaId, nil, tracker.NewIdentifier("TaggedStruct"), ast.NodeFlagsNone,
+					schemaModule, nil, tracker.NewIdentifier("TaggedStruct"), ast.NodeFlagsNone,
 				)
 
 				// Build the tag value string literal argument

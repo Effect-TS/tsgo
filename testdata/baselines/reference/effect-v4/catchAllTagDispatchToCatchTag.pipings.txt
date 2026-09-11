@@ -1,4 +1,4 @@
-==== /.src/catchAllTagDispatchToCatchTag.ts (27 flows) ====
+==== /.src/catchAllTagDispatchToCatchTag.ts (30 flows) ====
 
 === Piping Flow ===
 Location: 27:23 - 33:2
@@ -381,3 +381,45 @@ Transformations (1):
       callee: Fx.fail
       args: (constant)
       outType: Effect<never, Error | NotFoundError, never>
+
+=== Piping Flow ===
+Location: 116:28 - 118:2
+Node: program.pipe(\n  catchAlias((error) => error._tag === "NotFoundError" ? Fx.succeed("missing") : Fx.fail(error))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, AuthError | NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: catchAlias
+      args: [(error) => error._tag === "NotFoundError" ? Fx.succeed("missing") : Fx.fail(error)]
+      outType: Effect<string, AuthError | TimeoutError, never>
+
+=== Piping Flow ===
+Location: 117:57 - 117:79
+Node: Fx.succeed("missing")
+Node Kind: KindCallExpression
+
+Subject: "missing"
+Subject Type: "missing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 117:81 - 117:96
+Node: Fx.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AuthError | TimeoutError
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.fail
+      args: (constant)
+      outType: Effect<never, AuthError | TimeoutError, never>

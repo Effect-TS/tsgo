@@ -10,6 +10,11 @@
   Fix 1: "Disable unnecessaryFailYieldableError for entire file"
   Fix 2: "Replace yield* Effect.fail with yield*"
 
+[D3] (28:3-28:8) TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
+  Fix 0: "Disable unnecessaryFailYieldableError for this line"
+  Fix 1: "Disable unnecessaryFailYieldableError for entire file"
+  Fix 2: "Replace yield* Effect.fail with yield*"
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable unnecessaryFailYieldableError for this line" ===
@@ -44,6 +49,12 @@ export const unnecessaryFailYieldableError = Effect.gen(function*() {
   // should report
   yield*new DataTaggedError()
   yield* Effect.fail(new SchemaError({}))
+})
+
+const fail = Effect.fail
+export const aliasedFail = Effect.gen(function*() {
+  yield* fail(new DataTaggedError())
+  return 1
 })
 
 // should not report
@@ -82,6 +93,56 @@ export const unnecessaryFailYieldableError = Effect.gen(function*() {
   // should report
   yield* Effect.fail(new DataTaggedError())
   yield*new SchemaError({})
+})
+
+const fail = Effect.fail
+export const aliasedFail = Effect.gen(function*() {
+  yield* fail(new DataTaggedError())
+  return 1
+})
+
+// should not report
+export const shouldNotReport = Effect.fail(new DataTaggedError())
+
+
+=== [D3] Fix 0: "Disable unnecessaryFailYieldableError for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable unnecessaryFailYieldableError for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace yield* Effect.fail with yield*" ===
+
+--- file:///.src/unnecessaryFailYieldableError.ts ---
+/** @effect-diagnostics missingReturnYieldStar:skip-file */
+import * as Data from "effect/Data"
+import * as Effect from "effect/Effect"
+import * as Schema from "effect/Schema"
+
+class NonYieldable extends Error {
+  readonly _tag = "NonYieldable"
+}
+
+class DataTaggedError extends Data.TaggedError("DataTaggedError")<{}> {}
+
+class SchemaError extends Schema.Error<SchemaError>("SchemaError")({
+  _tag: Schema.tag("SchemaError")
+}) {}
+
+export const unnecessaryFailYieldableError = Effect.gen(function*() {
+  // should not report
+  yield* Effect.fail(new NonYieldable("non-yieldable error"))
+  const err = new DataTaggedError()
+  console.log(err)
+  // should report
+  yield* Effect.fail(new DataTaggedError())
+  yield* Effect.fail(new SchemaError({}))
+})
+
+const fail = Effect.fail
+export const aliasedFail = Effect.gen(function*() {
+  yield*new DataTaggedError()
+  return 1
 })
 
 // should not report

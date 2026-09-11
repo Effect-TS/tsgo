@@ -47,6 +47,7 @@ type RunOfExitToRunExitMatch struct {
 	SourceFile         *ast.SourceFile
 	Location           core.TextRange
 	ExitTransformation *typeparser.PipingFlowTransformation
+	RunnerCallee       *ast.Node
 	RunnerNameNode     *ast.Node
 	RunnerName         string
 	ReplacementName    string
@@ -68,19 +69,20 @@ func AnalyzeRunOfExitToRunExit(tp *typeparser.TypeParser, _ *checker.Checker, sf
 					tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "exit")
 			},
 			func(transformation *typeparser.PipingFlowTransformation) bool {
-				_, runnerName, _ := runOfExitRunner(tp, transformation.Callee)
+				_, _, runnerName, _ := runOfExitRunner(tp, transformation.Callee)
 				return runnerName != ""
 			},
 		)
 		for _, sequence := range sequences {
 			exitTransformation := &flow.Transformations[sequence.Start]
 			runnerTransformation := &flow.Transformations[sequence.Start+1]
-			runnerNameNode, runnerName, replacementName := runOfExitRunner(tp, runnerTransformation.Callee)
+			runnerCallee, runnerNameNode, runnerName, replacementName := runOfExitRunner(tp, runnerTransformation.Callee)
 
 			matches = appendRunOfExitMatch(matches, RunOfExitToRunExitMatch{
 				SourceFile:         sf,
 				Location:           runOfExitLocation(sf, runnerTransformation.Callee, runnerNameNode),
 				ExitTransformation: exitTransformation,
+				RunnerCallee:       runnerCallee,
 				RunnerNameNode:     runnerNameNode,
 				RunnerName:         runnerName,
 				ReplacementName:    replacementName,
@@ -100,7 +102,7 @@ func AnalyzeRunOfExitToRunExit(tp *typeparser.TypeParser, _ *checker.Checker, sf
 		if node.Kind == ast.KindCallExpression {
 			call := node.AsCallExpression()
 			if call != nil && call.Expression != nil && call.Arguments != nil && len(call.Arguments.Nodes) > 0 {
-				runnerNameNode, runnerName, replacementName := runOfExitRunner(tp, call.Expression)
+				runnerCallee, runnerNameNode, runnerName, replacementName := runOfExitRunner(tp, call.Expression)
 				if runnerName != "" {
 					argumentFlow := tp.LongestPipingFlowAt(call.Arguments.Nodes[0], false)
 					if argumentFlow != nil && len(argumentFlow.Transformations) > 0 {
@@ -111,6 +113,7 @@ func AnalyzeRunOfExitToRunExit(tp *typeparser.TypeParser, _ *checker.Checker, sf
 								SourceFile:         sf,
 								Location:           runOfExitLocation(sf, call.Expression, runnerNameNode),
 								ExitTransformation: exitTransformation,
+								RunnerCallee:       runnerCallee,
 								RunnerNameNode:     runnerNameNode,
 								RunnerName:         runnerName,
 								ReplacementName:    replacementName,
@@ -150,16 +153,16 @@ func runOfExitLocation(sf *ast.SourceFile, callee, nameNode *ast.Node) core.Text
 	return scanner.GetErrorRangeForNode(sf, locationNode)
 }
 
-func runOfExitRunner(tp *typeparser.TypeParser, callee *ast.Node) (nameNode *ast.Node, runnerName string, replacementName string) {
+func runOfExitRunner(tp *typeparser.TypeParser, callee *ast.Node) (targetNode *ast.Node, nameNode *ast.Node, runnerName string, replacementName string) {
 	if callee == nil {
-		return nil, "", ""
+		return nil, nil, "", ""
 	}
 
 	target := callee
 	if callee.Kind == ast.KindCallExpression {
 		call := callee.AsCallExpression()
 		if call == nil || call.Expression == nil {
-			return nil, "", ""
+			return nil, nil, "", ""
 		}
 		target = call.Expression
 	}
@@ -177,8 +180,8 @@ func runOfExitRunner(tp *typeparser.TypeParser, callee *ast.Node) (nameNode *ast
 		if target.Kind == ast.KindPropertyAccessExpression {
 			nameNode = target.AsPropertyAccessExpression().Name()
 		}
-		return nameNode, candidate.runner, candidate.replacement
+		return target, nameNode, candidate.runner, candidate.replacement
 	}
 
-	return nil, "", ""
+	return nil, nil, "", ""
 }

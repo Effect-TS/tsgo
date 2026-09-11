@@ -25,14 +25,14 @@ func runCatchTagToCatchReasonFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.CanFix || (!match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location)) {
 			continue
 		}
-		if match.Transformation == nil {
-			return nil
+		if match.Transformation == nil || match.Callee == nil {
+			continue
 		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.catchReason or Effect.catchReasons",
 			Run: func(tracker *rewriter.Tracker) {
-				callee, arguments := buildCatchTagToCatchReasonReplacement(tracker, match)
+				callee, arguments := buildCatchTagToCatchReasonReplacement(tracker, ctx.SourceFile, match)
 				if callee == nil || arguments == nil {
 					return
 				}
@@ -49,25 +49,20 @@ func runCatchTagToCatchReasonFix(ctx *fixable.Context) []ls.CodeAction {
 	return nil
 }
 
-func buildCatchTagToCatchReasonReplacement(tracker *rewriter.Tracker, match rules.CatchTagToCatchReasonMatch) (*ast.Node, *ast.NodeList) {
-	if tracker == nil || match.Callee == nil || match.Callee.Kind != ast.KindPropertyAccessExpression || match.OuterTag == nil || len(match.Branches) == 0 {
+func buildCatchTagToCatchReasonReplacement(tracker *rewriter.Tracker, sf *ast.SourceFile, match rules.CatchTagToCatchReasonMatch) (*ast.Node, *ast.NodeList) {
+	if tracker == nil || match.Callee == nil || match.OuterTag == nil || len(match.Branches) == 0 {
 		return nil, nil
 	}
-	callee := match.Callee.AsPropertyAccessExpression()
-	if callee == nil || callee.Expression == nil {
-		return nil, nil
+	var receiver *ast.Node
+	if match.Callee.Kind == ast.KindPropertyAccessExpression {
+		receiver = match.Callee.AsPropertyAccessExpression().Expression
 	}
 
 	methodName := "catchReason"
 	if len(match.Branches) > 1 {
 		methodName = "catchReasons"
 	}
-	method := tracker.NewPropertyAccessExpression(
-		tracker.DeepCloneNode(callee.Expression),
-		nil,
-		tracker.NewIdentifier(methodName),
-		ast.NodeFlagsNone,
-	)
+	method := effectModuleMethod(tracker, sf, receiver, methodName)
 	arguments := []*ast.Node{tracker.DeepCloneNode(match.OuterTag)}
 	if len(match.Branches) == 1 {
 		branch := match.Branches[0]

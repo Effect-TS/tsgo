@@ -2,7 +2,6 @@ package rules
 
 import (
 	"slices"
-	"strings"
 
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
@@ -38,7 +37,8 @@ var ScopeInLayerEffect = rule.Rule{
 type ScopeInLayerEffectMatch struct {
 	SourceFile       *ast.SourceFile
 	Location         core.TextRange // The pre-computed error range for this match
-	MethodIdentifier *ast.Node      // The property name identifier node (e.g., "effect" in Layer.effect); nil for class declaration matches
+	Callee           *ast.Node      // The Layer constructor callee; nil for class declaration matches
+	MethodIdentifier *ast.Node      // The replaceable property name (e.g., "effect" in Layer.effect); nil for classes, named imports, and local aliases
 }
 
 // AnalyzeScopeInLayerEffect finds all Layer.effect*() calls and class declarations
@@ -92,23 +92,21 @@ func matchLayerEffectCall(tp *typeparser.TypeParser, sf *ast.SourceFile, node *a
 		return nil
 	}
 	call := node.AsCallExpression()
-	if call.Expression == nil || call.Expression.Kind != ast.KindPropertyAccessExpression {
+	if call.Expression == nil {
 		return nil
 	}
 
-	propAccess := call.Expression.AsPropertyAccessExpression()
-	if propAccess.Name() == nil {
-		return nil
+	// Verify this references one of the Layer.effect* constructors from the
+	// "effect" package. Symbol resolution also recognizes named imports and
+	// stable local aliases whose source spelling does not reveal the API name.
+	methodName := ""
+	for _, candidate := range []string{"effect", "effectDiscard", "effectContext"} {
+		if tp.IsNodeReferenceToEffectLayerModuleApi(call.Expression, candidate) {
+			methodName = candidate
+			break
+		}
 	}
-
-	// Check the method name starts with "effect" (case-insensitive)
-	methodName := scanner.GetTextOfNode(propAccess.Name())
-	if !strings.HasPrefix(strings.ToLower(methodName), "effect") {
-		return nil
-	}
-
-	// Verify this references the Layer module from the "effect" package
-	if !tp.IsNodeReferenceToEffectLayerModuleApi(call.Expression, methodName) {
+	if methodName == "" {
 		return nil
 	}
 
@@ -129,10 +127,15 @@ func matchLayerEffectCall(tp *typeparser.TypeParser, sf *ast.SourceFile, node *a
 		return nil
 	}
 
+	var methodIdentifier *ast.Node
+	if call.Expression.Kind == ast.KindPropertyAccessExpression {
+		methodIdentifier = call.Expression.AsPropertyAccessExpression().Name()
+	}
 	return &ScopeInLayerEffectMatch{
 		SourceFile:       sf,
 		Location:         scanner.GetErrorRangeForNode(sf, node),
-		MethodIdentifier: propAccess.Name(),
+		Callee:           call.Expression,
+		MethodIdentifier: methodIdentifier,
 	}
 }
 

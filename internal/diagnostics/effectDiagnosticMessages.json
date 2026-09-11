@@ -518,5 +518,9 @@
     "`{0}` executes synchronously. Use `Schema.{1}` to compose this operation through Effect without throwing. effect(schemaSync)": {
         "category": "Suggestion",
         "code": 377130
+    },
+    "`Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)": {
+        "category": "Suggestion",
+        "code": 377132
     }
 }

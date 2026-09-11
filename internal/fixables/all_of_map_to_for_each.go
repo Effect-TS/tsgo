@@ -28,21 +28,15 @@ func runAllOfMapToForEachFix(ctx *fixable.Context) []ls.CodeAction {
 			continue
 		}
 		// The generic parameter lists of Array#map, Effect.all, and Effect.forEach
-		// differ, so an explicit type argument cannot be moved safely. A bare
-		// imported `all` also cannot be renamed without changing its import.
-		if match.HasTypeArguments || match.EffectModule == nil {
-			return nil
+		// differ, so an explicit type argument cannot be moved safely.
+		if match.HasTypeArguments {
+			continue
 		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.forEach",
 			Run: func(tracker *rewriter.Tracker) {
-				callee := tracker.NewPropertyAccessExpression(
-					tracker.DeepCloneNode(match.EffectModule),
-					nil,
-					tracker.NewIdentifier("forEach"),
-					ast.NodeFlagsNone,
-				)
+				callee := effectModuleMethod(tracker, ctx.SourceFile, match.EffectModule, "forEach")
 				arguments := []*ast.Node{
 					tracker.DeepCloneNode(match.Receiver),
 					tracker.DeepCloneNode(match.Callback),
@@ -57,7 +51,7 @@ func runAllOfMapToForEachFix(ctx *fixable.Context) []ls.CodeAction {
 		}); action != nil {
 			return []ls.CodeAction{*action}
 		}
-		return nil
+		continue
 	}
 	return nil
 }

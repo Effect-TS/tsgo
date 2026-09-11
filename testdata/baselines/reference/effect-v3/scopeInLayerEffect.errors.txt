@@ -5,9 +5,10 @@ Effect version: 3.19.19
 /.src/scopeInLayerEffect.ts(21,14): warning TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
 /.src/scopeInLayerEffect.ts(37,24): warning TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
 /.src/scopeInLayerEffect.ts(45,25): warning TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
+/.src/scopeInLayerEffect.ts(55,29): warning TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
 
 
-==== /.src/scopeInLayerEffect.ts (4 errors) ====
+==== /.src/scopeInLayerEffect.ts (5 errors) ====
     // @effect-v3
     import * as Context from "effect/Context"
     import * as Effect from "effect/Effect"
@@ -72,6 +73,23 @@ Effect version: 3.19.19
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
         const _otherService = yield* OtherService
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        yield* Effect.addFinalizer(() => Effect.log("finalizer"))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        return { a: 1 }
+    ~~~~~~~~~~~~~~~~~~~
+      })
+    ~~~~
+    )
+    ~
+!!! warning TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
+    
+    const layerEffect = Layer.effect
+    export const aliasedLayer = layerEffect(
+                                ~~~~~~~~~~~~
+      MyService,
+    ~~~~~~~~~~~~
+      Effect.gen(function*() {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
         yield* Effect.addFinalizer(() => Effect.log("finalizer"))
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         return { a: 1 }

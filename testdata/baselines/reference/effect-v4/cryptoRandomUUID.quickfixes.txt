@@ -12,7 +12,11 @@
   Fix 0: "Disable cryptoRandomUUID for this line"
   Fix 1: "Disable cryptoRandomUUID for entire file"
 
-[D4] (21:20-21:39) TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
+[D4] (16:34-16:46) TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
+  Fix 0: "Disable cryptoRandomUUID for this line"
+  Fix 1: "Disable cryptoRandomUUID for entire file"
+
+[D5] (25:20-25:39) TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
   Fix 0: "Disable cryptoRandomUUID for this line"
   Fix 1: "Disable cryptoRandomUUID for entire file"
 
@@ -40,4 +44,10 @@ skipped by default
 skipped by default
 
 === [D4] Fix 1: "Disable cryptoRandomUUID for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable cryptoRandomUUID for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable cryptoRandomUUID for entire file" ===
 skipped by default

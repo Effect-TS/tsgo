@@ -2263,6 +2263,9 @@
         "effecttsgo/catch-die-to-or-die": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/catch-if-tag-to-catch-tag": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/catch-tag-to-catch-reason": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -2324,6 +2327,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/flat-map-conditional-to-filter-or-fail": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/flat-map-ignored-param-to-and-then": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/flat-map-to-map": {

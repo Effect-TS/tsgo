@@ -41,13 +41,11 @@ func (tp *TypeParser) IsExpressionValueStableAtLocation(expression *ast.Node, lo
 			return false
 		}
 
-		declarationContainer := ast.FindAncestor(declarationNode, ast.IsFunctionOrSourceFile)
-		locationContainer := ast.FindAncestor(location, ast.IsFunctionOrSourceFile)
-		declarationStatement := ast.FindAncestor(declarationNode, ast.IsStatement)
-		locationStatement := ast.FindAncestor(location, ast.IsStatement)
-		return declarationContainer != nil && declarationContainer == locationContainer &&
-			declarationStatement != nil && locationStatement != nil && declarationStatement.Parent == locationStatement.Parent &&
-			declaration.Initializer.End() <= location.Pos()
+		// Symbol resolution already proves the declaration is visible here. A
+		// const's value is stable across nested lexical scopes as long as its
+		// initializer occurs before the use; the same-container restriction would
+		// incorrectly reject module constants referenced inside a function.
+		return declaration.Initializer.End() <= location.Pos()
 	}
 
 	return false
