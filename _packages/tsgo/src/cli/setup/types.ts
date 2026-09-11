@@ -16,7 +16,7 @@ export interface FileInput {
   readonly text: string
 }
 
-export type Editor = "vscode" | "nvim" | "emacs"
+export type Editor = "vscode" | "zed" | "nvim" | "emacs"
 export type Integration = "typescript" | "oxlint"
 
 export interface PackageDependency {
@@ -34,6 +34,7 @@ export namespace Assessment {
     readonly tsconfig: FileInput
     readonly oxlintConfig: Option.Option<FileInput>
     readonly vscodeSettings: Option.Option<FileInput>
+    readonly zedSettings: Option.Option<FileInput>
   }
 
   export interface PackageJson {
@@ -71,6 +72,8 @@ export namespace Assessment {
     readonly text: string
   }
 
+  export type ZedSettings = VSCodeSettings
+
   export interface OxlintConfig {
     readonly path: string
     readonly sourceFile: ts.JsonSourceFile
@@ -84,6 +87,7 @@ export namespace Assessment {
     readonly tsconfig: TsConfig
     readonly oxlintConfig: Option.Option<OxlintConfig>
     readonly vscodeSettings: Option.Option<VSCodeSettings>
+    readonly zedSettings: Option.Option<ZedSettings>
   }
 }
 
@@ -108,11 +112,16 @@ export namespace Target {
     readonly settings: Record<string, unknown>
   }
 
+  export interface ZedSettings {
+    readonly settings: Record<string, unknown>
+  }
+
   export interface State {
     readonly packageJson: PackageJson
     readonly tsconfig: TsConfig
     readonly oxlintrcSchemaPath: Option.Option<string>
     readonly vscodeSettings: Option.Option<VSCodeSettings>
+    readonly zedSettings: Option.Option<ZedSettings>
     readonly editors: ReadonlyArray<Editor>
   }
 }

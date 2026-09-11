@@ -13,7 +13,8 @@ function createTestAssessmentInput(
   packageJson: Record<string, unknown>,
   tsconfig: Record<string, unknown>,
   vscodeSettings?: Record<string, unknown>,
-  oxlintConfig?: Record<string, unknown>
+  oxlintConfig?: Record<string, unknown>,
+  zedSettings?: Record<string, unknown>
 ): Assessment.Input {
   return {
     packageJson: {
@@ -34,6 +35,12 @@ function createTestAssessmentInput(
       ? Option.some({
         fileName: ".vscode/settings.json",
         text: JSON.stringify(vscodeSettings, null, 2)
+      })
+      : Option.none(),
+    zedSettings: zedSettings !== undefined
+      ? Option.some({
+        fileName: ".zed/settings.json",
+        text: JSON.stringify(zedSettings, null, 2)
       })
       : Option.none()
   }
@@ -77,6 +84,7 @@ function expectSetupChanges(
     }
     readonly oxlintrcSchemaPath?: Option.Option<string>
     readonly vscodeSettings: Option.Option<Target.VSCodeSettings>
+    readonly zedSettings?: Option.Option<Target.ZedSettings>
     readonly editors: ReadonlyArray<string>
   }
 ) {
@@ -91,8 +99,9 @@ function expectSetupChanges(
       managePrepareScript: targetState.packageJson.managePrepareScript ?? true,
       integrations
     },
+    zedSettings: targetState.zedSettings ?? Option.none(),
     editors: targetState.editors.filter((editor): editor is Editor =>
-      editor === "vscode" || editor === "nvim" || editor === "emacs"
+      editor === "vscode" || editor === "zed" || editor === "nvim" || editor === "emacs"
     ),
     tsconfig: {
       ...targetState.tsconfig,
@@ -161,24 +170,29 @@ function expectSetupChanges(
     expect(result.messages).toMatchSnapshot("messages")
   }
 
-  // 5. Snapshot of final .vscode/settings.json and validate it's valid JSON
-  const vscodeSettingsFileChange = result.codeActions
-    .flatMap((action) => action.changes)
-    .find((fc) => fc.fileName.endsWith("settings.json"))
-  if (vscodeSettingsFileChange) {
-    if (vscodeSettingsFileChange.isNewFile) {
-      const content = vscodeSettingsFileChange.textChanges[0]?.newText
-      expect(content).toMatchSnapshot(".vscode/settings.json")
+  // 5. Snapshot editor settings independently and validate each as JSON
+  const fileChanges = result.codeActions.flatMap((action) => action.changes)
+  const snapshotEditorSettings = (
+    fileName: ".vscode/settings.json" | ".zed/settings.json",
+    input: Assessment.Input["vscodeSettings"]
+  ) => {
+    const fileChange = fileChanges.find((change) => change.fileName.replaceAll("\\", "/") === fileName)
+    if (!fileChange) {
+      return
+    }
+    if (fileChange.isNewFile) {
+      const content = fileChange.textChanges[0]?.newText
+      expect(content).toMatchSnapshot(fileName)
       expect(() => JSON.parse(content!)).not.toThrow()
-    } else if (Option.isSome(assessmentInput.vscodeSettings)) {
-      const finalVscodeSettings = applyTextChanges(
-        assessmentInput.vscodeSettings.value.text,
-        vscodeSettingsFileChange.textChanges
-      )
-      expect(finalVscodeSettings).toMatchSnapshot(".vscode/settings.json")
-      expect(() => JSON.parse(finalVscodeSettings)).not.toThrow()
+    } else if (Option.isSome(input)) {
+      const finalSettings = applyTextChanges(input.value.text, fileChange.textChanges)
+      expect(finalSettings).toMatchSnapshot(fileName)
+      expect(() => JSON.parse(finalSettings)).not.toThrow()
     }
   }
+
+  snapshotEditorSettings(".vscode/settings.json", assessmentInput.vscodeSettings)
+  snapshotEditorSettings(".zed/settings.json", assessmentInput.zedSettings)
 }
 
 const VSCODE_SETTINGS: Target.VSCodeSettings = {
@@ -187,6 +201,28 @@ const VSCODE_SETTINGS: Target.VSCodeSettings = {
     "js/ts.tsdk.path": "./node_modules/typescript/bin",
     "js/ts.tsdk.promptToUseWorkspaceVersion": true,
     "js/ts.tsdk.additionalLocations": ["./node_modules/typescript/bin"]
+  }
+}
+
+const ZED_SETTINGS: Target.ZedSettings = {
+  settings: {
+    lsp: {
+      "typescript-ls": {
+        binary: {
+          path:
+            `./node_modules/@typescript/typescript-${process.platform}-${process.arch}/lib/${process.platform === "win32" ? "tsc.exe" : "tsc"}`,
+          arguments: ["--lsp", "--stdio"]
+        }
+      }
+    },
+    languages: {
+      TypeScript: {
+        language_servers: ["typescript-ls", "!typescript-language-server", "!vtsls", "..."]
+      },
+      TSX: {
+        language_servers: ["typescript-ls", "!typescript-language-server", "!vtsls", "..."]
+      }
+    }
   }
 }
 
@@ -665,6 +701,57 @@ describe("Setup CLI", () => {
       tsconfig: { diagnosticSeverities: Option.none() },
       vscodeSettings: Option.some(VSCODE_SETTINGS),
       editors: ["vscode"]
+    }
+
+    expectSetupChanges(assessmentInput, targetState)
+  })
+
+  it("preserves independent VS Code and Zed settings when both editors are selected", () => {
+    const assessmentInput = createTestAssessmentInput(
+      {
+        name: "test-project",
+        version: "1.0.0",
+        dependencies: {}
+      },
+      {
+        compilerOptions: {
+          strict: true,
+          target: "ES2022"
+        }
+      },
+      {
+        "editor.formatOnSave": true
+      },
+      undefined,
+      {
+        lsp: {
+          oxlint: {
+            binary: { path: "oxlint" }
+          }
+        },
+        languages: {
+          TypeScript: {
+            formatter: "oxfmt",
+            language_servers: ["oxlint", "..."]
+          }
+        }
+      }
+    )
+
+    const targetState = {
+      packageJson: {
+        lspVersion: Option.some({ dependencyType: "devDependencies" as const, version: "^0.0.5" }),
+        typescriptVersion: Option.some({
+          dependencyType: "devDependencies" as const,
+          version: TEST_TYPESCRIPT_VERSION,
+          packageName: "typescript"
+        }),
+        prepareScript: false
+      },
+      tsconfig: { diagnosticSeverities: Option.none() },
+      vscodeSettings: Option.some(VSCODE_SETTINGS),
+      zedSettings: Option.some(ZED_SETTINGS),
+      editors: ["vscode", "zed"]
     }
 
     expectSetupChanges(assessmentInput, targetState)

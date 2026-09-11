@@ -58,6 +58,10 @@ function makeAssessmentState(opts?: {
     path: string
     text: string
   }
+  zedSettings?: {
+    path: string
+    text: string
+  }
 }): Assessment.State {
   const pkgJsonText = JSON.stringify({ name: "test", version: "1.0.0" }, null, 2)
   const tsconfigText = JSON.stringify({ compilerOptions: {} }, null, 2)
@@ -73,6 +77,18 @@ function makeAssessmentState(opts?: {
       text: opts.vscodeSettings.text
     })
     : Option.none<Assessment.VSCodeSettings>()
+
+  const zedSettings = opts?.zedSettings
+    ? Option.some({
+      path: opts.zedSettings.path,
+      sourceFile: ts.parseJsonText(opts.zedSettings.path, opts.zedSettings.text) as ts.JsonSourceFile,
+      parsed: ts.convertToObject(
+        ts.parseJsonText(opts.zedSettings.path, opts.zedSettings.text),
+        []
+      ) as Record<string, unknown>,
+      text: opts.zedSettings.text
+    })
+    : Option.none<Assessment.ZedSettings>()
 
   return {
     packageJson: {
@@ -98,7 +114,8 @@ function makeAssessmentState(opts?: {
       currentDiagnosticSeverities: Option.none()
     },
     oxlintConfig: Option.none(),
-    vscodeSettings
+    vscodeSettings,
+    zedSettings
   }
 }
 
@@ -247,6 +264,48 @@ describe("renderCodeActions", () => {
     const allOutput = output.join("\n")
     expect(allOutput).toContain("oxlint-schema.json")
     expect(allOutput).not.toContain("(file will be modified)")
+  })
+
+  it("renders .zed/settings.json modifications from the assessed JSONC source", () => {
+    const existingText = `{
+  "lsp": {
+    "typescript-language-server": {
+      "binary": {
+        // Keep this comment in the rendered source.
+        "path": "/usr/local/bin/typescript-language-server"
+      }
+    }
+  }
+}
+`
+    const path = "/test/.zed/settings.json"
+    const state = makeAssessmentState({
+      zedSettings: { path, text: existingText }
+    })
+    const oldPath = '"/usr/local/bin/typescript-language-server"'
+    const result: ComputeChangesResult = {
+      codeActions: [{
+        description: "Update lsp.typescript-language-server.binary.path setting",
+        changes: [{
+          fileName: path,
+          isNewFile: false,
+          textChanges: [{
+            span: {
+              start: existingText.indexOf(oldPath),
+              length: oldPath.length
+            },
+            newText: '"./node_modules/.bin/tsc"'
+          }]
+        }]
+      }],
+      messages: []
+    }
+
+    const output = runAndCapture(result, state).join("\n")
+    expect(output).toContain("/usr/local/bin/typescript-language-server")
+    expect(output).toContain("./node_modules/.bin/tsc")
+    expect(output).toContain("Keep this comment in the rendered source.")
+    expect(output).not.toContain("(file will be modified)")
   })
 
   it("should render no changes message when codeActions is empty", () => {

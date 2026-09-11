@@ -1,5 +1,103 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Setup CLI > preserves independent VS Code and Zed settings when both editors are selected > .vscode/settings.json 1`] = `
+"{
+  "editor.formatOnSave": true,
+  "js/ts.tsdk.additionalLocations": ["./node_modules/typescript/bin"],
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+  "js/ts.tsdk.path": "./node_modules/typescript/bin",
+  "js/ts.experimental.useTsgo": true
+}"
+`;
+
+exports[`Setup CLI > preserves independent VS Code and Zed settings when both editors are selected > .zed/settings.json 1`] = `
+"{
+  "lsp": {
+    "oxlint": {
+      "binary": {
+        "path": "oxlint"
+      }
+    },
+    "typescript-ls": {
+      "binary": {
+        "path": "./node_modules/@typescript/typescript-darwin-arm64/lib/tsc",
+        "arguments": ["--lsp", "--stdio"]
+      }
+    }
+  },
+  "languages": {
+    "TypeScript": {
+      "formatter": "oxfmt",
+      "language_servers": ["typescript-ls", "!typescript-language-server", "!vtsls", "oxlint", "..."]
+    },
+    "TSX": {
+      "language_servers": ["typescript-ls", "!typescript-language-server", "!vtsls", "..."]
+    }
+  }
+}"
+`;
+
+exports[`Setup CLI > preserves independent VS Code and Zed settings when both editors are selected > change summary 1`] = `
+[
+  {
+    "description": "Add @effect/tsgo@^0.0.5 to devDependencies",
+    "file": "package.json",
+  },
+  {
+    "description": "Add $schema to tsconfig; Add plugins array with @effect/language-service plugin",
+    "file": "tsconfig.json",
+  },
+  {
+    "description": "Add js/ts.experimental.useTsgo setting; Add js/ts.tsdk.path setting; Add js/ts.tsdk.promptToUseWorkspaceVersion setting; Add js/ts.tsdk.additionalLocations setting",
+    "file": ".vscode/settings.json",
+  },
+  {
+    "description": "Add lsp.typescript-ls setting; Update languages.TypeScript.language_servers setting; Add languages.TSX setting",
+    "file": ".zed/settings.json",
+  },
+]
+`;
+
+exports[`Setup CLI > preserves independent VS Code and Zed settings when both editors are selected > messages 1`] = `
+[
+  "\`package.json\` changed. Run your package manager's install command (for example, \`pnpm install\`, \`npm install\`, \`yarn install\`, or \`bun install\`).",
+  "Run \`effect-tsgo patch --typescript --no-oxlint\` to complete the installation.",
+  "",
+  "VS Code / Cursor / VS Code-based editors:",
+  "  1. Install the TypeScript 7 extension",
+  "  2. Open a TypeScript file and ensure the native TS server is active",
+  "  3. The language service plugin will be loaded automatically",
+  "",
+  "Zed:",
+  "  Restart Zed to activate the TypeScript language server.",
+  "",
+]
+`;
+
+exports[`Setup CLI > preserves independent VS Code and Zed settings when both editors are selected > package.json 1`] = `
+"{
+  "name": "test-project",
+  "version": "1.0.0",
+  "dependencies": {},
+  "devDependencies": { "@effect/tsgo": "^0.0.5", "typescript": "7.1.0-dev.test" }
+}"
+`;
+
+exports[`Setup CLI > preserves independent VS Code and Zed settings when both editors are selected > tsconfig.json 1`] = `
+"{
+  "$schema": "./node_modules/@effect/tsgo/schema.json",
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2022",
+    "plugins": [
+      {
+        "name": "@effect/language-service"
+      }
+    ]
+  }
+}"
+`;
+
 exports[`Setup CLI > should add LSP plugin alongside existing plugins > change summary 1`] = `
 [
   {

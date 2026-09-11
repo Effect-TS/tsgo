@@ -1,12 +1,35 @@
 import { describe, it, expect } from "vitest"
 import * as Option from "effect/Option"
-import { computeChanges } from "../../src/cli/setup/changes.js"
+import * as ts from "typescript"
+import { computeChanges, type ComputeChangesResult } from "../../src/cli/setup/changes.js"
 import { assess } from "../../src/cli/setup/assessment.js"
-import type { Assessment } from "../../src/cli/setup/types.js"
+import type { Assessment, Editor } from "../../src/cli/setup/types.js"
 
 const TEST_TYPESCRIPT_VERSION = "7.1.0-dev.test"
 const TEST_SCHEMA_PATH = "./node_modules/@effect/tsgo/schema.json"
 const TEST_OXLINT_SCHEMA_PATH = "./node_modules/@effect/tsgo/oxlint-schema.json"
+
+const ZED_BINARY_PATH =
+  `./node_modules/@typescript/typescript-${process.platform}-${process.arch}/lib/${process.platform === "win32" ? "tsc.exe" : "tsc"}`
+
+const ZED_TARGET_SETTINGS: Record<string, unknown> = {
+  lsp: {
+    "typescript-ls": {
+      binary: {
+        path: ZED_BINARY_PATH,
+        arguments: ["--lsp", "--stdio"]
+      }
+    }
+  },
+  languages: {
+    TypeScript: {
+      language_servers: ["typescript-ls", "!typescript-language-server", "!vtsls", "..."]
+    },
+    TSX: {
+      language_servers: ["typescript-ls", "!typescript-language-server", "!vtsls", "..."]
+    }
+  }
+}
 
 const applyTextChanges = (
   text: string,
@@ -19,6 +42,21 @@ const applyTextChanges = (
     text
   )
 
+const parseJsonc = (text: string): Record<string, unknown> => {
+  const sourceFile = ts.parseJsonText("/test/.zed/settings.json", text)
+  expect((sourceFile as ts.JsonSourceFile & { readonly parseDiagnostics: ReadonlyArray<ts.Diagnostic> }).parseDiagnostics)
+    .toEqual([])
+  const errors: Array<ts.Diagnostic> = []
+  const parsed = ts.convertToObject(sourceFile, errors) as Record<string, unknown>
+  expect(errors).toEqual([])
+  return parsed
+}
+
+const getZedSettingsChange = (result: ComputeChangesResult) =>
+  result.codeActions
+    .flatMap((action) => action.changes)
+    .find((change) => change.fileName === "/test/.zed/settings.json")
+
 /**
  * Helper to create an Assessment.Input and run assess() + computeChanges()
  */
@@ -27,7 +65,8 @@ function runComputeChanges(opts: {
   tsconfigText?: string
   oxlintConfigText?: string | null
   vscodeSettingsText?: string | null
-  editors?: ReadonlyArray<"vscode" | "nvim" | "emacs">
+  zedSettingsText?: string | null
+  editors?: ReadonlyArray<Editor>
   lspVersion?: { dependencyType: "dependencies" | "devDependencies"; version: string } | null
   typescriptVersion?: { dependencyType: "dependencies" | "devDependencies"; version: string; packageName?: string } | null
   oxlintVersion?: { dependencyType: "dependencies" | "devDependencies"; version: string } | null
@@ -35,6 +74,7 @@ function runComputeChanges(opts: {
   integrations?: ReadonlyArray<"typescript" | "oxlint">
   prepareScript?: boolean
   vscodeTargetSettings?: Record<string, unknown> | null
+  zedTargetSettings?: Record<string, unknown> | null
   diagnosticSeverities?: Record<string, "off" | "suggestion" | "message" | "warning" | "error"> | null
 }) {
   const packageJsonText = opts.packageJsonText ?? JSON.stringify({
@@ -59,6 +99,9 @@ function runComputeChanges(opts: {
       : Option.none(),
     vscodeSettings: opts.vscodeSettingsText != null
       ? Option.some({ fileName: "/test/.vscode/settings.json", text: opts.vscodeSettingsText })
+      : Option.none(),
+    zedSettings: opts.zedSettingsText != null
+      ? Option.some({ fileName: "/test/.zed/settings.json", text: opts.zedSettingsText })
       : Option.none()
   }
 
@@ -82,6 +125,10 @@ function runComputeChanges(opts: {
   const vscodeTargetSettings = opts.vscodeTargetSettings !== undefined
     ? (opts.vscodeTargetSettings === null ? Option.none() : Option.some({ settings: opts.vscodeTargetSettings }))
     : Option.some({ settings: { "typescript.tsserver.experimental.enableProjectDiagnostics": true } })
+
+  const zedTargetSettings = opts.zedTargetSettings !== undefined
+    ? (opts.zedTargetSettings === null ? Option.none() : Option.some({ settings: opts.zedTargetSettings }))
+    : Option.some({ settings: ZED_TARGET_SETTINGS })
 
   const target = {
     packageJson: {
@@ -113,6 +160,7 @@ function runComputeChanges(opts: {
       ? Option.some(TEST_OXLINT_SCHEMA_PATH)
       : Option.none(),
     vscodeSettings: vscodeTargetSettings,
+    zedSettings: zedTargetSettings,
     editors: opts.editors ?? ["vscode"]
   }
 
@@ -195,7 +243,8 @@ describe("computeChanges", () => {
       packageJson: { fileName: "/test/package.json", text: packageJsonText },
       tsconfig: { fileName: "/test/tsconfig.json", text: "{}" },
       oxlintConfig: Option.none(),
-      vscodeSettings: Option.none()
+      vscodeSettings: Option.none(),
+      zedSettings: Option.none()
     }
 
     const assessment = assess(input)
@@ -221,7 +270,8 @@ describe("computeChanges", () => {
       packageJson: { fileName: "/test/package.json", text: packageJsonText },
       tsconfig: { fileName: "/test/tsconfig.json", text: "{}" },
       oxlintConfig: Option.none(),
-      vscodeSettings: Option.none()
+      vscodeSettings: Option.none(),
+      zedSettings: Option.none()
     }
 
     const assessment = assess(input)
@@ -244,7 +294,8 @@ describe("computeChanges", () => {
       },
       tsconfig: { fileName: "/test/tsconfig.json", text: "{}" },
       oxlintConfig: Option.none(),
-      vscodeSettings: Option.none()
+      vscodeSettings: Option.none(),
+      zedSettings: Option.none()
     })
 
     expect(assessment.packageJson.oxlintVersion).toEqual(Option.some({
@@ -267,7 +318,8 @@ describe("computeChanges", () => {
         },
         tsconfig: { fileName: "/test/tsconfig.json", text: "{}" },
         oxlintConfig: Option.none(),
-        vscodeSettings: Option.none()
+        vscodeSettings: Option.none(),
+        zedSettings: Option.none()
       })
 
       expect(assessment.packageJson.vitePlusVersion).toEqual(Option.some({
@@ -496,7 +548,8 @@ describe("computeChanges", () => {
       packageJson: { fileName: "/test/package.json", text: packageJsonText },
       tsconfig: { fileName: "/test/tsconfig.json", text: "{}" },
       oxlintConfig: Option.none(),
-      vscodeSettings: Option.none()
+      vscodeSettings: Option.none(),
+      zedSettings: Option.none()
     }
 
     const assessment = assess(input)
@@ -765,6 +818,237 @@ describe("computeChanges", () => {
 
       const expectedContent = JSON.stringify(targetSettings, null, 2) + "\n"
       expect(vscodeAction.changes[0].textChanges[0].newText).toBe(expectedContent)
+    })
+  })
+
+  describe("Zed settings", () => {
+    it("merges JSONC without clobbering siblings or comments, normalizes servers, and is idempotent", () => {
+      const zedSettingsText = `{
+  // Keep project-wide settings.
+  "theme": "Ayu",
+  "lsp": {
+    "eslint": {
+      "settings": {
+        "workingDirectories": [{ "mode": "auto" }]
+      }
+    },
+    // Keep server-specific initialization.
+    "typescript-language-server": {
+      "initialization_options": {
+        "preferences": {
+          "includeInlayParameterNameHints": "all"
+        }
+      },
+      "binary": {
+        "path": "/opt/typescript-language-server",
+        "arguments": ["--stdio"]
+      }
+    }
+  },
+  "languages": {
+    "TypeScript": {
+      // Keep formatter and code actions.
+      "formatter": {
+        "external": {
+          "command": "prettier",
+          "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+      },
+      "code_actions_on_format": {
+        "source.fixAll.eslint": true
+      },
+      "language_servers": [
+        "!typescript-language-server",
+        "eslint",
+        "!eslint",
+        "eslint",
+        "...",
+        "!vtsls"
+      ]
+    },
+    "TSX": {
+      "formatter": "language_server",
+      "language_servers": ["biome", "...", "biome"]
+    },
+    "JavaScript": {
+      "language_servers": ["eslint", "..."]
+    }
+  }
+}
+`
+      const firstResult = runComputeChanges({
+        zedSettingsText,
+        editors: ["zed"],
+        vscodeTargetSettings: null
+      })
+      const firstChange = getZedSettingsChange(firstResult)
+      if (firstChange === undefined) {
+        throw new Error("Expected an existing .zed/settings.json change")
+      }
+      const mergedText = applyTextChanges(zedSettingsText, firstChange.textChanges)
+
+      expect(firstResult.messages.slice(-3)).toEqual([
+        "Zed:",
+        "  Restart Zed to activate the TypeScript language server.",
+        ""
+      ])
+
+      expect(parseJsonc(mergedText)).toEqual({
+        theme: "Ayu",
+        lsp: {
+          eslint: {
+            settings: {
+              workingDirectories: [{ mode: "auto" }]
+            }
+          },
+          "typescript-language-server": {
+            initialization_options: {
+              preferences: {
+                includeInlayParameterNameHints: "all"
+              }
+            },
+            binary: {
+              path: "/opt/typescript-language-server",
+              arguments: ["--stdio"]
+            }
+          },
+          "typescript-ls": {
+            binary: {
+              path: ZED_BINARY_PATH,
+              arguments: ["--lsp", "--stdio"]
+            }
+          }
+        },
+        languages: {
+          TypeScript: {
+            formatter: {
+              external: {
+                command: "prettier",
+                arguments: ["--stdin-filepath", "{buffer_path}"]
+              }
+            },
+            code_actions_on_format: {
+              "source.fixAll.eslint": true
+            },
+            language_servers: ["typescript-ls", "!typescript-language-server", "!vtsls", "eslint", "!eslint", "..."]
+          },
+          TSX: {
+            formatter: "language_server",
+            language_servers: ["typescript-ls", "!typescript-language-server", "!vtsls", "biome", "..."]
+          },
+          JavaScript: {
+            language_servers: ["eslint", "..."]
+          }
+        }
+      })
+      expect(mergedText).toContain("// Keep project-wide settings.")
+      expect(mergedText).toContain("// Keep server-specific initialization.")
+      expect(mergedText).toContain("// Keep formatter and code actions.")
+
+      const secondResult = runComputeChanges({
+        zedSettingsText: mergedText,
+        editors: ["zed"],
+        vscodeTargetSettings: null
+      })
+      expect(getZedSettingsChange(secondResult)).toBeUndefined()
+    })
+
+    it("does not opt explicit language server lists back into Zed defaults", () => {
+      const zedSettingsText = JSON.stringify({
+        lsp: {
+          "typescript-language-server": {
+            binary: {
+              path: "./node_modules/.bin/tsc",
+              arguments: ["--lsp", "--stdio"]
+            }
+          }
+        },
+        languages: {
+          TypeScript: {
+            language_servers: ["eslint", "!typescript-language-server"]
+          },
+          TSX: {
+            language_servers: ["biome", "typescript-language-server", "typescript-language-server", "!vtsls"]
+          }
+        }
+      }, null, 2)
+      const result = runComputeChanges({
+        zedSettingsText,
+        editors: ["zed"],
+        vscodeTargetSettings: null
+      })
+      const change = getZedSettingsChange(result)
+      if (change === undefined) {
+        throw new Error("Expected explicit Zed language server lists to be normalized")
+      }
+      const mergedText = applyTextChanges(zedSettingsText, change.textChanges)
+
+      expect(parseJsonc(mergedText)).toEqual({
+        lsp: {
+          "typescript-language-server": {
+            binary: {
+              path: "./node_modules/.bin/tsc",
+              arguments: ["--lsp", "--stdio"]
+            }
+          },
+          "typescript-ls": {
+            binary: {
+              path: ZED_BINARY_PATH,
+              arguments: ["--lsp", "--stdio"]
+            }
+          }
+        },
+        languages: {
+          TypeScript: {
+            language_servers: ["typescript-ls", "!typescript-language-server", "!vtsls", "eslint"]
+          },
+          TSX: {
+            language_servers: ["typescript-ls", "!typescript-language-server", "!vtsls", "biome"]
+          }
+        }
+      })
+    })
+
+    it("aborts the entire Zed edit without restart guidance when a required container has an incompatible shape", () => {
+      const zedSettingsText = `{
+  // User-owned values with incompatible shapes must not be replaced.
+  "lsp": [],
+  "languages": {
+    "TypeScript": "custom-language-config",
+    "JavaScript": {
+      "language_servers": ["eslint", "..."]
+    }
+  }
+}
+`
+      const result = runComputeChanges({
+        zedSettingsText,
+        editors: ["zed"],
+        vscodeTargetSettings: null
+      })
+
+      expect(getZedSettingsChange(result)).toBeUndefined()
+      expect(result.messages).toEqual([
+        "`package.json` changed. Run your package manager's install command (for example, `pnpm install`, `npm install`, `yarn install`, or `bun install`).",
+        "Unable to update .zed/settings.json: lsp must be an object.",
+        "Run `effect-tsgo patch --typescript --no-oxlint` to complete the installation.",
+        ""
+      ])
+      expect(result.messages).not.toContain("  Restart Zed to activate the TypeScript language server.")
+    })
+
+    it.each([
+      ["Zed is not selected", [] as ReadonlyArray<Editor>, undefined, null],
+      ["the TypeScript LSP is disabled", ["zed"] as ReadonlyArray<Editor>, null, "{}"]
+    ] as const)("does not touch .zed/settings.json when %s", (_, editors, lspVersion, zedSettingsText) => {
+      const result = runComputeChanges({
+        zedSettingsText,
+        editors,
+        lspVersion,
+        vscodeTargetSettings: null
+      })
+
+      expect(getZedSettingsChange(result)).toBeUndefined()
     })
   })
 

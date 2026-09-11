@@ -1013,6 +1013,211 @@ const computeVSCodeSettingsChanges = (
   }
 }
 
+const createStringArray = (values: ReadonlyArray<string>): ts.ArrayLiteralExpression =>
+  ts.factory.createArrayLiteralExpression(values.map((value) => ts.factory.createStringLiteral(value)), false)
+
+const createObjectProperty = (name: string, value: ts.Expression): ts.PropertyAssignment =>
+  ts.factory.createPropertyAssignment(ts.factory.createStringLiteral(name), value)
+
+const createObject = (properties: ReadonlyArray<ts.PropertyAssignment>): ts.ObjectLiteralExpression =>
+  ts.factory.createObjectLiteralExpression(properties, true)
+
+const zedServerEntries = new Set([
+  "typescript-ls",
+  "!typescript-ls",
+  "typescript-language-server",
+  "!typescript-language-server",
+  "vtsls",
+  "!vtsls",
+  "..."
+])
+
+const normalizeZedLanguageServers = (
+  elements: ReadonlyArray<ts.Expression>,
+  includeDefaults = elements.some((element) => ts.isStringLiteral(element) && element.text === "...")
+): ReadonlyArray<ts.Expression> => {
+  const unrelated: Array<ts.Expression> = []
+  const seen = new Set<string>()
+  for (const element of elements) {
+    if (!ts.isStringLiteral(element) || zedServerEntries.has(element.text) || seen.has(element.text)) continue
+    seen.add(element.text)
+    unrelated.push(element)
+  }
+  return [
+    ts.factory.createStringLiteral("typescript-ls"),
+    ts.factory.createStringLiteral("!typescript-language-server"),
+    ts.factory.createStringLiteral("!vtsls"),
+    ...unrelated,
+    ...(includeDefaults ? [ts.factory.createStringLiteral("...")] : [])
+  ]
+}
+
+const computeZedSettingsChanges = (
+  current: Assessment.ZedSettings,
+  target: Target.ZedSettings
+): ComputeFileChangesResult => {
+  const root = getRootObject(current.sourceFile)
+  if (!root) return emptyFileChangesResult()
+
+  const targetSettings = target.settings as {
+    readonly lsp?: {
+      readonly "typescript-ls"?: {
+        readonly binary?: {
+          readonly path?: unknown
+          readonly arguments?: unknown
+        }
+      }
+    }
+  }
+  const targetBinary = targetSettings.lsp?.["typescript-ls"]?.binary
+  if (
+    typeof targetBinary?.path !== "string" ||
+    !Array.isArray(targetBinary.arguments) ||
+    !targetBinary.arguments.every((argument): argument is string => typeof argument === "string")
+  ) return emptyFileChangesResult()
+  const desiredPath = targetBinary.path
+  const desiredArguments: ReadonlyArray<string> = targetBinary.arguments
+
+  const objectAt = (
+    object: ts.ObjectLiteralExpression,
+    name: string,
+    path: string
+  ): { readonly property?: ts.PropertyAssignment; readonly object?: ts.ObjectLiteralExpression; readonly conflict?: string } => {
+    const property = findPropertyInObject(object, name)
+    if (!property) return {}
+    return ts.isObjectLiteralExpression(property.initializer)
+      ? { property, object: property.initializer }
+      : { property, conflict: path }
+  }
+  const lsp = objectAt(root, "lsp", "lsp")
+  const server = lsp.object ? objectAt(lsp.object, "typescript-ls", "lsp.typescript-ls") : {}
+  const binary = server.object ? objectAt(server.object, "binary", "lsp.typescript-ls.binary") : {}
+  const languages = objectAt(root, "languages", "languages")
+  const typeScript = languages.object ? objectAt(languages.object, "TypeScript", "languages.TypeScript") : {}
+  const tsx = languages.object ? objectAt(languages.object, "TSX", "languages.TSX") : {}
+  const conflict = lsp.conflict ?? server.conflict ?? binary.conflict ?? languages.conflict ??
+    typeScript.conflict ?? tsx.conflict
+  if (conflict) {
+    return {
+      codeActions: [],
+      messages: [`Unable to update .zed/settings.json: ${conflict} must be an object.`]
+    }
+  }
+
+  const descriptions: Array<string> = []
+  const ctx = createTrackerContext(current.sourceFile)
+  const fileChanges = tsInternal.textChanges.ChangeTracker.with(ctx, (tracker: any) => {
+    const add = (object: ts.ObjectLiteralExpression, path: string, name: string, value: ts.Expression) => {
+      descriptions.push(`Add ${path} setting`)
+      insertNodeAtEndOfList(tracker, current.sourceFile, object.properties, createObjectProperty(name, value))
+    }
+    const replaceLeaf = (
+      object: ts.ObjectLiteralExpression,
+      path: string,
+      name: string,
+      desired: ts.Expression,
+      matches: (value: ts.Expression) => boolean
+    ) => {
+      const property = findPropertyInObject(object, name)
+      if (!property) return add(object, path, name, desired)
+      if (!matches(property.initializer)) {
+        descriptions.push(`Update ${path} setting`)
+        tracker.replaceNode(current.sourceFile, property.initializer, desired)
+      }
+    }
+    const desiredBinary = () => createObject([
+      createObjectProperty("path", ts.factory.createStringLiteral(desiredPath)),
+      createObjectProperty("arguments", createStringArray(desiredArguments))
+    ])
+    if (!lsp.property) {
+      add(root, "lsp", "lsp", createObject([
+        createObjectProperty("typescript-ls", createObject([createObjectProperty("binary", desiredBinary())]))
+      ]))
+    } else if (!server.property) {
+      add(lsp.object!, "lsp.typescript-ls", "typescript-ls", createObject([
+        createObjectProperty("binary", desiredBinary())
+      ]))
+    } else if (!binary.property) {
+      add(server.object!, "lsp.typescript-ls.binary", "binary", desiredBinary())
+    } else {
+      replaceLeaf(
+        binary.object!,
+        "lsp.typescript-ls.binary.path",
+        "path",
+        ts.factory.createStringLiteral(desiredPath),
+        (value) => ts.isStringLiteral(value) && value.text === desiredPath
+      )
+      replaceLeaf(
+        binary.object!,
+        "lsp.typescript-ls.binary.arguments",
+        "arguments",
+        createStringArray(desiredArguments),
+        (value) => ts.isArrayLiteralExpression(value) &&
+          value.elements.length === desiredArguments.length &&
+          value.elements.every((element, index) =>
+            ts.isStringLiteral(element) && element.text === desiredArguments[index])
+      )
+    }
+
+    const desiredLanguage = () => createObject([
+      createObjectProperty("language_servers", createStringArray([
+        "typescript-ls",
+        "!typescript-language-server",
+        "!vtsls",
+        "..."
+      ]))
+    ])
+    if (!languages.property) {
+      add(root, "languages", "languages", createObject([
+        createObjectProperty("TypeScript", desiredLanguage()),
+        createObjectProperty("TSX", desiredLanguage())
+      ]))
+    } else {
+      for (const [name, language] of [["TypeScript", typeScript], ["TSX", tsx]] as const) {
+        if (!language.property) {
+          add(languages.object!, `languages.${name}`, name, desiredLanguage())
+          continue
+        }
+        const property = findPropertyInObject(language.object!, "language_servers")
+        if (!property) {
+          add(language.object!, `languages.${name}.language_servers`, "language_servers",
+            createStringArray(["typescript-ls", "!typescript-language-server", "!vtsls", "..."]))
+          continue
+        }
+        const existing = property.initializer
+        const elements = ts.isArrayLiteralExpression(existing) && existing.elements.every(ts.isStringLiteral)
+          ? [...existing.elements]
+          : []
+        const normalized = normalizeZedLanguageServers(
+          elements,
+          ts.isArrayLiteralExpression(existing)
+            ? elements.some((element) => element.text === "...")
+            : true
+        )
+        const matches = ts.isArrayLiteralExpression(existing) &&
+          existing.elements.length === normalized.length &&
+          existing.elements.every((element, index) =>
+            ts.isStringLiteral(element) && ts.isStringLiteral(normalized[index]) &&
+            element.text === normalized[index].text)
+        if (!matches) {
+          descriptions.push(`Update languages.${name}.language_servers setting`)
+          tracker.replaceNode(current.sourceFile, existing, ts.factory.createArrayLiteralExpression(normalized, false))
+        }
+      }
+    }
+  })
+
+  const fileChange = fileChanges.find((change: ts.FileTextChanges) => change.fileName === current.path)
+  if (!fileChange || fileChange.textChanges.length === 0) return emptyFileChangesResult()
+  return {
+    codeActions: [{
+      description: descriptions.join("; "),
+      changes: [{ fileName: current.path, textChanges: fileChange.textChanges, isNewFile: false }]
+    }],
+    messages: []
+  }
+}
+
 /**
  * Compute the set of changes needed to go from assessment state to target state
  */
@@ -1080,6 +1285,33 @@ export const computeChanges = (
       }
     }
   }
+  let hasZedCodeAction = false
+
+  if (
+    target.editors.includes("zed") &&
+    Option.isSome(target.packageJson.lspVersion) &&
+    Option.isSome(target.zedSettings)
+  ) {
+    const zedTarget = target.zedSettings.value
+    if (Option.isSome(assessment.zedSettings)) {
+      const zedResult = computeZedSettingsChanges(assessment.zedSettings.value, zedTarget)
+      codeActions = [...codeActions, ...zedResult.codeActions]
+      messages = [...messages, ...zedResult.messages]
+      hasZedCodeAction = zedResult.codeActions.length > 0
+    } else {
+      const dir = nodePath.dirname(assessment.packageJson.path)
+      const zedSettingsPath = nodePath.join(dir, ".zed", "settings.json")
+      codeActions = [...codeActions, {
+        description: "Create .zed/settings.json",
+        changes: [{
+          fileName: zedSettingsPath,
+          textChanges: [{ span: { start: 0, length: 0 }, newText: JSON.stringify(zedTarget.settings, null, 2) + "\n" }],
+          isNewFile: true
+        }]
+      }]
+      hasZedCodeAction = true
+    }
+  }
 
   // Add post-apply next-step messages
   if (Option.isSome(target.packageJson.lspVersion) && codeActions.length > 0) {
@@ -1111,6 +1343,15 @@ export const computeChanges = (
         "  1. Install the TypeScript 7 extension",
         "  2. Open a TypeScript file and ensure the native TS server is active",
         "  3. The language service plugin will be loaded automatically",
+        ""
+      ]
+    }
+
+    if (hasZedCodeAction) {
+      messages = [
+        ...messages,
+        "Zed:",
+        "  Restart Zed to activate the TypeScript language server.",
         ""
       ]
     }

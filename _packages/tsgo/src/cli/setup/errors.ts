@@ -24,3 +24,12 @@ export class FileReadError extends Data.TaggedError("FileReadError")<{
     return `Unable to read file at ${this.path}`
   }
 }
+
+export class EditorSettingsParseError extends Data.TaggedError("EditorSettingsParseError")<{
+  readonly path: string
+  readonly diagnostics: ReadonlyArray<unknown>
+}> {
+  get message() {
+    return `Invalid editor settings at ${this.path}.`
+  }
+}
