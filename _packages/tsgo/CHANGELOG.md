@@ -1,5 +1,19 @@
 # @effect/tsgo
 
+## 0.46.0
+
+### Minor Changes
+
+- 6db6fa6: Add the `catchIfTagToCatchTag` diagnostic and quick fix for replacing direct `_tag` equality predicates in `Effect.catchIf` with `Effect.catchTag`.
+- 437b17e: Retain the latest three stable Oxlint releases and the Oxlint runtimes required by the latest three stable Vite+ releases, including their compiler dependencies. Add versioned compatibility profiles so CI tests every distinct retained runtime pair.
+  
+  The refreshed upstream metadata supports Oxlint 1.77.0, 1.79.0, 1.80.0, 1.81.0, and 1.82.0, covering Vite+ 0.2.9, 0.3.0, and 0.3.1, and advances TypeScript next to 7.1.0-dev.20260911.1.
+- 223f9fa: Add the `flatMapIgnoredParamToAndThen` diagnostic and quick fix for replacing zero-parameter `Effect.flatMap` callbacks that return an existing constant Effect value with `Effect.andThen`. Existing diagnostics now also recognize Effect APIs referenced through constant aliases, and their quick fixes rebuild the replacement API from the source file's imported module name without modifying the shared alias.
+
+### Patch Changes
+
+- 7c0ddbc: Update TypeScript next to 7.1.0-dev.20260910.1, adapt the auto-import patches to upstream checker handling, and refresh the tsconfig schema and Nix inputs.
+
 ## 0.45.0
 
 ### Minor Changes
