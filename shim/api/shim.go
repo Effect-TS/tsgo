@@ -6,6 +6,7 @@ package api
 import "github.com/microsoft/TypeScript/tsc/internal/api"
 import "github.com/microsoft/TypeScript/tsc/internal/ast"
 import "github.com/microsoft/TypeScript/tsc/internal/checker"
+import "github.com/microsoft/TypeScript/tsc/internal/module"
 import "github.com/microsoft/TypeScript/tsc/internal/project"
 import "github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 import "io"
@@ -55,7 +56,11 @@ type GetProjectDiagnosticsParams = api.GetProjectDiagnosticsParams
 type GetPropertyOfTypeParams = api.GetPropertyOfTypeParams
 type GetReferencedSymbolsForNodeParams = api.GetReferencedSymbolsForNodeParams
 type GetReferencesToSymbolInFileParams = api.GetReferencesToSymbolInFileParams
+type GetResolvedModuleFromModuleSpecifierParams = api.GetResolvedModuleFromModuleSpecifierParams
+type GetResolvedModuleParams = api.GetResolvedModuleParams
 type GetResolvedSignatureParams = api.GetResolvedSignatureParams
+type GetResolvedTypeReferenceDirectiveFromReferenceParams = api.GetResolvedTypeReferenceDirectiveFromReferenceParams
+type GetResolvedTypeReferenceDirectiveParams = api.GetResolvedTypeReferenceDirectiveParams
 type GetSignaturePropertyParams = api.GetSignaturePropertyParams
 type GetSignatureUsagesParams = api.GetSignatureUsagesParams
 type GetSignaturesOfTypeParams = api.GetSignaturesOfTypeParams
@@ -167,7 +172,11 @@ const MethodGetReducedType = api.MethodGetReducedType
 const MethodGetReferencedSymbolsForNode = api.MethodGetReferencedSymbolsForNode
 const MethodGetReferencesToSymbolInFile = api.MethodGetReferencesToSymbolInFile
 const MethodGetRegularTypeOfType = api.MethodGetRegularTypeOfType
+const MethodGetResolvedModule = api.MethodGetResolvedModule
+const MethodGetResolvedModuleFromModuleSpecifier = api.MethodGetResolvedModuleFromModuleSpecifier
 const MethodGetResolvedSignature = api.MethodGetResolvedSignature
+const MethodGetResolvedTypeReferenceDirective = api.MethodGetResolvedTypeReferenceDirective
+const MethodGetResolvedTypeReferenceDirectiveFromReference = api.MethodGetResolvedTypeReferenceDirectiveFromReference
 const MethodGetRestTypeOfSignature = api.MethodGetRestTypeOfSignature
 const MethodGetReturnTypeOfSignature = api.MethodGetReturnTypeOfSignature
 const MethodGetSemanticDiagnostics = api.MethodGetSemanticDiagnostics
@@ -249,6 +258,8 @@ func NewDiagnosticResponses(diags []*ast.Diagnostic) []*api.DiagnosticResponse
 func NewLSPSession(projectSession *project.Session, options *api.SessionOptions) *api.Session
 //go:linkname NewMessagePackProtocol github.com/microsoft/TypeScript/tsc/internal/api.NewMessagePackProtocol
 func NewMessagePackProtocol(rw io.ReadWriter) *api.MessagePackProtocol
+//go:linkname NewPackageId github.com/microsoft/TypeScript/tsc/internal/api.NewPackageId
+func NewPackageId(packageID module.PackageId) *api.PackageId
 //go:linkname NewProjectResponse github.com/microsoft/TypeScript/tsc/internal/api.NewProjectResponse
 func NewProjectResponse(p *project.Project) *api.ProjectResponse
 //go:linkname NewStandaloneSession github.com/microsoft/TypeScript/tsc/internal/api.NewStandaloneSession
@@ -256,6 +267,7 @@ func NewStandaloneSession(init *project.SessionInit, options *api.SessionOptions
 //go:linkname NewStdioServer github.com/microsoft/TypeScript/tsc/internal/api.NewStdioServer
 func NewStdioServer(options *api.StdioServerOptions) *api.StdioServer
 type NodeHandle = api.NodeHandle
+type PackageId = api.PackageId
 type ParseCommandLineParams = api.ParseCommandLineParams
 type ParseConfigFileParams = api.ParseConfigFileParams
 type ParseJsonConfigFileContentParams = api.ParseJsonConfigFileContentParams
@@ -273,6 +285,8 @@ type ReadConfigFileResponse = api.ReadConfigFileResponse
 type ReferencedSymbolEntry = api.ReferencedSymbolEntry
 type ReleaseParams = api.ReleaseParams
 type ResolveNameParams = api.ResolveNameParams
+type ResolvedModule = api.ResolvedModule
+type ResolvedTypeReferenceDirective = api.ResolvedTypeReferenceDirective
 type SelectedFilesEmitParams = api.SelectedFilesEmitParams
 type Session = api.Session
 type SessionOptions = api.SessionOptions
