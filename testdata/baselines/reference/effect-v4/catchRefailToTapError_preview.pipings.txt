@@ -1,0 +1,43 @@
+==== /.src/catchRefailToTapError_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 9:23 - 11:2
+Node: save.pipe(\n  Effect.catch(error => rollback.pipe(Effect.andThen(Effect.fail(error))))\n)
+Node Kind: KindCallExpression
+
+Subject: save
+Subject Type: Effect<void, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catch
+      args: [error => rollback.pipe(Effect.andThen(Effect.fail(error)))]
+      outType: Effect<void, Error, never>
+
+=== Piping Flow ===
+Location: 10:24 - 10:74
+Node: rollback.pipe(Effect.andThen(Effect.fail(error)))
+Node Kind: KindCallExpression
+
+Subject: rollback
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.andThen
+      args: [Effect.fail(error)]
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 10:54 - 10:72
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
