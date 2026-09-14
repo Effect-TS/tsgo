@@ -1772,6 +1772,29 @@
       }
     },
     {
+      "name": "catchRefailToTapError",
+      "group": "style",
+      "description": "Suggests Effect.tapError for catch handlers that sequence an effect and then re-fail the original error",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377133
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const save: Effect.Effect\u003cvoid, Error\u003e\ndeclare const rollback: Effect.Effect\u003cvoid\u003e\n\nexport const program = save.pipe(\n  Effect.catch(error =\u003e rollback.pipe(Effect.andThen(Effect.fail(error))))\n)\n",
+        "diagnostics": [
+          {
+            "start": 161,
+            "end": 173,
+            "text": "Use Effect.tapError to observe the error and preserve the original failure without having to re-fail it. effect(catchRefailToTapError)"
+          }
+        ]
+      }
+    },
+    {
       "name": "catchTagToCatchReason",
       "group": "style",
       "description": "Suggests Effect.catchReason or Effect.catchReasons for handlers that re-fail unmatched reason._tag branches",

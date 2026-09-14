@@ -2266,6 +2266,9 @@
         "effecttsgo/catch-if-tag-to-catch-tag": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/catch-refail-to-tap-error": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/catch-tag-to-catch-reason": {
           "$ref": "#/definitions/RuleNoConfig"
         },
