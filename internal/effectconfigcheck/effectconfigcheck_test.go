@@ -4,8 +4,6 @@ import (
 	"testing"
 	"testing/fstest"
 
-	"github.com/effect-ts/tsgo/internal/effectconfigcheck"
-	"github.com/effect-ts/tsgo/internal/effectconfigraw"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
@@ -15,6 +13,11 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 	"github.com/microsoft/TypeScript/tsc/shim/vfs"
 	"github.com/microsoft/TypeScript/tsc/shim/vfs/vfstest"
+
+	// etscheckerhooks registers the config-validation callbacks in its init, which
+	// is the same path the compiler uses. Registering from the tests themselves
+	// would race, because every test here runs in parallel.
+	_ "github.com/effect-ts/tsgo/etscheckerhooks"
 )
 
 const currentDirectory = "/.src"
@@ -35,8 +38,6 @@ func (h *parseConfigHost) GetCurrentDirectory() string { return currentDirectory
 // diagnostics the config parse produced.
 func configDiagnostics(t *testing.T, files map[string]string, configName string) []*ast.Diagnostic {
 	t.Helper()
-	effectconfigraw.Register()
-	effectconfigcheck.Register()
 
 	testfs := make(map[string]any, len(files))
 	for name, content := range files {
@@ -235,4 +236,66 @@ func TestDiagnosticsDisabledSuppressesTheCheck(t *testing.T) {
 	if len(diags) != 0 {
 		t.Fatalf("expected no diagnostics, got %v", codesOf(diags))
 	}
+}
+
+func TestInheritedSuppressionAcrossExtends(t *testing.T) {
+	t.Parallel()
+
+	t.Run("unknownRuleName off in a base silences a name declared in a child", func(t *testing.T) {
+		t.Parallel()
+		diags := configDiagnostics(t, map[string]string{
+			"tsconfig.base.json": pluginConfig(`"diagnosticSeverity": { "unknownRuleName": "off" }`),
+			"tsconfig.json": `{ "extends": "./tsconfig.base.json", "compilerOptions": { "plugins": [
+			  { "name": "@effect/language-service", "diagnosticSeverity": { "importFromBarrel": "error" } }
+			] } }`,
+		}, "tsconfig.json")
+		if len(diags) != 0 {
+			t.Fatalf("expected no diagnostics, got %v", codesOf(diags))
+		}
+	})
+
+	t.Run("diagnostics false in a base silences a name declared in a child", func(t *testing.T) {
+		t.Parallel()
+		diags := configDiagnostics(t, map[string]string{
+			"tsconfig.base.json": pluginConfig(`"diagnostics": false`),
+			"tsconfig.json": `{ "extends": "./tsconfig.base.json", "compilerOptions": { "plugins": [
+			  { "name": "@effect/language-service", "diagnosticSeverity": { "importFromBarrel": "error" } }
+			] } }`,
+		}, "tsconfig.json")
+		if len(diags) != 0 {
+			t.Fatalf("expected no diagnostics, got %v", codesOf(diags))
+		}
+	})
+
+	t.Run("a child silences a name declared in a base it does not own", func(t *testing.T) {
+		t.Parallel()
+		diags := configDiagnostics(t, map[string]string{
+			"tsconfig.base.json": pluginConfig(`"diagnosticSeverity": { "importFromBarrel": "error" }`),
+			"tsconfig.json": `{ "extends": "./tsconfig.base.json", "compilerOptions": { "plugins": [
+			  { "name": "@effect/language-service", "diagnosticSeverity": { "unknownRuleName": "off" } }
+			] } }`,
+		}, "tsconfig.json")
+		if len(diags) != 0 {
+			t.Fatalf("expected no diagnostics, got %v", codesOf(diags))
+		}
+	})
+
+	t.Run("a child raises the severity of a name declared in a base", func(t *testing.T) {
+		t.Parallel()
+		diags := configDiagnostics(t, map[string]string{
+			"tsconfig.base.json": pluginConfig(`"diagnosticSeverity": { "importFromBarrel": "error" }`),
+			"tsconfig.json": `{ "extends": "./tsconfig.base.json", "compilerOptions": { "plugins": [
+			  { "name": "@effect/language-service", "diagnosticSeverity": { "unknownRuleName": "error" } }
+			] } }`,
+		}, "tsconfig.json")
+		if len(diags) != 1 {
+			t.Fatalf("expected 1 diagnostic, got %v", codesOf(diags))
+		}
+		if got := diags[0].Category(); got != tsdiag.CategoryError {
+			t.Errorf("category = %v, want error", got)
+		}
+		if file := diags[0].File(); file == nil || tspath.GetBaseFileName(file.FileName()) != "tsconfig.base.json" {
+			t.Error("diagnostic should stay anchored on the config that declares the name")
+		}
+	})
 }

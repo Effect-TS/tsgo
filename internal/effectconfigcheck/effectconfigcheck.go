@@ -1,6 +1,13 @@
 // Package effectconfigcheck validates the @effect/language-service plugin block of
 // a tsconfig file and reports configuration diagnostics anchored on the offending
 // node inside that file.
+//
+// Validation runs in two phases because the two things it needs become available at
+// different points. The offending node exists only while the config file that
+// declares it is being parsed, before any extends hop is merged; whether the
+// diagnostic is enabled, and at which severity, is a property of the fully merged
+// configuration. ValidatePluginsNode therefore reports every unresolved name it
+// finds, and FinalizeDiagnostics drops or recategorizes them once the merge is done.
 package effectconfigcheck
 
 import (
@@ -25,6 +32,7 @@ var (
 // Register wires tsconfig plugin-option validation into TypeScript-Go.
 func Register() {
 	tsoptions.RegisterValidateEffectPluginOptionsCallback(ValidatePluginsNode)
+	tsoptions.RegisterFinalizeEffectPluginDiagnosticsCallback(FinalizeDiagnostics)
 }
 
 // ConfigurableNames returns every name diagnosticSeverity accepts: the rules in the
@@ -41,20 +49,11 @@ var ConfigurableNames = sync.OnceValue(func() []string {
 
 // ValidatePluginsNode reports a diagnostic for every diagnosticSeverity key in the
 // @effect/language-service plugin entry that this build does not provide, covering
-// both the top-level map and the map inside each overrides entry.
-func ValidatePluginsNode(sourceFile *ast.SourceFile, pluginsNode *ast.Node, options *core.CompilerOptions) []*ast.Diagnostic {
-	if sourceFile == nil || pluginsNode == nil || options == nil || options.Effect == nil {
-		return nil
-	}
-	if !options.Effect.Diagnostics {
-		return nil
-	}
-
-	severity, configured := options.Effect.DiagnosticSeverity[rule.UnknownRuleNameName]
-	if !configured {
-		severity = etscore.SeverityWarning
-	}
-	if severity.IsOff() {
+// both the top-level map and the map inside each overrides entry. It reports
+// unconditionally: the config file being parsed does not yet know what it inherits,
+// so FinalizeDiagnostics owns the decision to keep, drop or recategorize.
+func ValidatePluginsNode(sourceFile *ast.SourceFile, pluginsNode *ast.Node) []*ast.Diagnostic {
+	if sourceFile == nil || pluginsNode == nil {
 		return nil
 	}
 
@@ -65,18 +64,84 @@ func ValidatePluginsNode(sourceFile *ast.SourceFile, pluginsNode *ast.Node, opti
 
 	known := ConfigurableNames()
 	var diags []*ast.Diagnostic
-	diags = appendUnknownNames(diags, sourceFile, severity, known, propertyValue(pluginEntry, "diagnosticSeverity"))
+	diags = appendUnknownNames(diags, sourceFile, known, propertyValue(pluginEntry, "diagnosticSeverity"))
 	for _, override := range arrayElements(propertyValue(pluginEntry, "overrides")) {
 		overrideOptions := propertyValue(override, "options")
-		diags = appendUnknownNames(diags, sourceFile, severity, known, propertyValue(overrideOptions, "diagnosticSeverity"))
+		diags = appendUnknownNames(diags, sourceFile, known, propertyValue(overrideOptions, "diagnosticSeverity"))
 	}
 	return diags
+}
+
+// FinalizeDiagnostics applies the merged configuration to the diagnostics
+// ValidatePluginsNode contributed. Diagnostics from any other source pass through
+// untouched. This is what makes `diagnostics: false` and
+// `diagnosticSeverity.unknownRuleName` work when they are inherited through
+// extends rather than declared in the file that carries the offending name.
+func FinalizeDiagnostics(diags []*ast.Diagnostic, options *core.CompilerOptions) []*ast.Diagnostic {
+	if !slices.ContainsFunc(diags, isUnknownRuleNameDiagnostic) {
+		return diags
+	}
+
+	severity, enabled := resolveSeverity(options)
+	category := directives.ToCategory(severity)
+
+	result := make([]*ast.Diagnostic, 0, len(diags))
+	for _, diag := range diags {
+		if !isUnknownRuleNameDiagnostic(diag) {
+			result = append(result, diag)
+			continue
+		}
+		if !enabled {
+			continue
+		}
+		result = append(result, withCategory(diag, category))
+	}
+	return result
+}
+
+// resolveSeverity reads the severity of the unknown-rule-name diagnostic from the
+// merged configuration, and reports whether it should be surfaced at all.
+func resolveSeverity(options *core.CompilerOptions) (etscore.Severity, bool) {
+	if options == nil || options.Effect == nil || !options.Effect.Diagnostics {
+		return etscore.SeverityOff, false
+	}
+	severity, configured := options.Effect.DiagnosticSeverity[rule.UnknownRuleNameName]
+	if !configured {
+		severity = etscore.SeverityWarning
+	}
+	return severity, !severity.IsOff()
+}
+
+func isUnknownRuleNameDiagnostic(diag *ast.Diagnostic) bool {
+	if diag == nil {
+		return false
+	}
+	code := diag.Code()
+	return code == unknownRuleNameMessage.Code() || code == didYouMeanMessage.Code()
+}
+
+func withCategory(diag *ast.Diagnostic, category tsdiag.Category) *ast.Diagnostic {
+	if diag.Category() == category {
+		return diag
+	}
+	return ast.NewDiagnosticFromSerialized(
+		diag.File(),
+		core.NewTextRange(diag.Pos(), diag.End()),
+		diag.Code(),
+		category,
+		diag.MessageKey(),
+		diag.MessageArgs(),
+		diag.MessageChain(),
+		diag.RelatedInformation(),
+		diag.ReportsUnnecessary(),
+		diag.ReportsDeprecated(),
+		diag.SkippedOnNoEmit(),
+	)
 }
 
 func appendUnknownNames(
 	diags []*ast.Diagnostic,
 	sourceFile *ast.SourceFile,
-	severity etscore.Severity,
 	known []string,
 	diagnosticSeverity *ast.Node,
 ) []*ast.Diagnostic {
@@ -95,42 +160,16 @@ func appendUnknownNames(
 		if text == "" || slices.Contains(known, text) {
 			continue
 		}
-		diags = append(diags, unknownNameDiagnostic(sourceFile, name, text, severity, known))
+		diags = append(diags, unknownNameDiagnostic(sourceFile, name, text, known))
 	}
 	return diags
 }
 
-func unknownNameDiagnostic(
-	sourceFile *ast.SourceFile,
-	name *ast.Node,
-	text string,
-	severity etscore.Severity,
-	known []string,
-) *ast.Diagnostic {
-	var diagnostic *ast.Diagnostic
+func unknownNameDiagnostic(sourceFile *ast.SourceFile, name *ast.Node, text string, known []string) *ast.Diagnostic {
 	if suggestion := core.GetSpellingSuggestionForStrings(text, slices.Values(known)); suggestion != "" {
-		diagnostic = tsoptions.CreateDiagnosticForNodeInSourceFile(sourceFile, name, didYouMeanMessage, text, suggestion)
-	} else {
-		diagnostic = tsoptions.CreateDiagnosticForNodeInSourceFile(sourceFile, name, unknownRuleNameMessage, text)
+		return tsoptions.CreateDiagnosticForNodeInSourceFile(sourceFile, name, didYouMeanMessage, text, suggestion)
 	}
-
-	category := directives.ToCategory(severity)
-	if diagnostic.Category() == category {
-		return diagnostic
-	}
-	return ast.NewDiagnosticFromSerialized(
-		diagnostic.File(),
-		core.NewTextRange(diagnostic.Pos(), diagnostic.End()),
-		diagnostic.Code(),
-		category,
-		diagnostic.MessageKey(),
-		diagnostic.MessageArgs(),
-		diagnostic.MessageChain(),
-		diagnostic.RelatedInformation(),
-		diagnostic.ReportsUnnecessary(),
-		diagnostic.ReportsDeprecated(),
-		diagnostic.SkippedOnNoEmit(),
-	)
+	return tsoptions.CreateDiagnosticForNodeInSourceFile(sourceFile, name, unknownRuleNameMessage, text)
 }
 
 // findEffectPluginEntry returns the object literal in the plugins array whose name
