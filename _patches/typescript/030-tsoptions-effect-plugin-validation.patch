@@ -1,0 +1,34 @@
+diff --git a/tsc/internal/tsoptions/parsinghelpers.go b/tsc/internal/tsoptions/parsinghelpers.go
+--- a/tsc/internal/tsoptions/parsinghelpers.go
++++ b/tsc/internal/tsoptions/parsinghelpers.go
+@@ -24,6 +24,17 @@
+ 	MergeCompilerOptionsCallback = cb
+ }
+ 
++// ValidateEffectPluginOptionsCallback is invoked after compilerOptions.plugins is
++// parsed from a tsconfig file, allowing external integrations to report
++// configuration diagnostics anchored on nodes inside that config file.
++var ValidateEffectPluginOptionsCallback func(sourceFile *ast.SourceFile, pluginsNode *ast.Node, options *core.CompilerOptions) []*ast.Diagnostic
++
++// RegisterValidateEffectPluginOptionsCallback registers a callback invoked after
++// compilerOptions.plugins is parsed from a tsconfig file.
++func RegisterValidateEffectPluginOptionsCallback(cb func(sourceFile *ast.SourceFile, pluginsNode *ast.Node, options *core.CompilerOptions) []*ast.Diagnostic) {
++	ValidateEffectPluginOptionsCallback = cb
++}
++
+ func ParseTristate(value any) core.Tristate {
+ 	if value == nil {
+ 		return core.TSUnknown
+diff --git a/tsc/internal/tsoptions/tsconfigparsing.go b/tsc/internal/tsoptions/tsconfigparsing.go
+--- a/tsc/internal/tsoptions/tsconfigparsing.go
++++ b/tsc/internal/tsoptions/tsconfigparsing.go
+@@ -204,6 +204,9 @@
+ 				switch parentOption.Name {
+ 				case "compilerOptions":
+ 					parseDiagnostics = ParseCompilerOptions(option.Name, value, compilerOptions)
++					if option.Name == "plugins" && ValidateEffectPluginOptionsCallback != nil {
++						parseDiagnostics = append(parseDiagnostics, ValidateEffectPluginOptionsCallback(sourceFile, propertyAssignment.Initializer, compilerOptions)...)
++					}
+ 				case "typeAcquisition":
+ 					parseDiagnostics = ParseTypeAcquisition(option.Name, value, typeAcquisition)
+ 				}

@@ -311,6 +311,11 @@ func RunEffectTest(t *testing.T, version bundledeffect.EffectVersion, testFile s
 	// Get diagnostics
 	ctx := context.Background()
 	var diagnostics []*ast.Diagnostic
+	if parsedConfig != nil {
+		// Config-file diagnostics are reported against the tsconfig rather than a
+		// source file, so they never reach the per-file collections below.
+		diagnostics = append(diagnostics, parsedConfig.Errors...)
+	}
 	diagnostics = append(diagnostics, program.GetProgramDiagnostics()...)
 	diagnostics = append(diagnostics, program.GetSyntacticDiagnostics(ctx, nil)...)
 	diagnostics = append(diagnostics, program.GetSemanticDiagnostics(ctx, nil)...)

@@ -1,0 +1,37 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/tsconfig.json(11,17): warning TS377135: Unknown Effect diagnostic rule `floatingEfect` in `diagnosticSeverity`. Did you mean `floatingEffect`? effect(unknownRuleName)
+
+
+==== /.src/tsconfig.json (1 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "overrides": [
+              {
+                "include": ["**/*.ts"],
+                "options": {
+                  "diagnosticSeverity": {
+                    "floatingEfect": "error"
+                    ~~~~~~~~~~~~~~~
+!!! warning TS377135: Unknown Effect diagnostic rule `floatingEfect` in `diagnosticSeverity`. Did you mean `floatingEffect`? effect(unknownRuleName)
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/test.ts (0 errors) ====
+    import { Effect } from "effect"
+    
+    // diagnosticSeverity inside an overrides entry is checked the same way, and a
+    // near miss carries the intended name.
+    export const program = Effect.succeed(1)
+    
