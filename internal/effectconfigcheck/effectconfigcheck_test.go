@@ -34,9 +34,9 @@ func (h *parseConfigHost) FS() vfs.FS { return h.fs }
 
 func (h *parseConfigHost) GetCurrentDirectory() string { return currentDirectory }
 
-// configDiagnostics parses the named tsconfig out of files and returns the
-// diagnostics the config parse produced.
-func configDiagnostics(t *testing.T, files map[string]string, configName string) []*ast.Diagnostic {
+// allConfigDiagnostics parses the named tsconfig out of files and returns every
+// diagnostic the config parse produced, unfiltered.
+func allConfigDiagnostics(t *testing.T, files map[string]string, configName string) []*ast.Diagnostic {
 	t.Helper()
 
 	testfs := make(map[string]any, len(files))
@@ -62,10 +62,17 @@ func configDiagnostics(t *testing.T, files map[string]string, configName string)
 		nil,
 		nil,
 	)
-	// TS18003 (no inputs found) is inherent to a config fixture that ships no
-	// source files and is not what these tests are about.
+	return parsed.Errors
+}
+
+// configDiagnostics returns only the Effect diagnostics. TS18003 (no inputs found)
+// is inherent to a config fixture that ships no source files and is not what most
+// of these tests are about. Anything asserting on what FinalizeDiagnostics must
+// leave alone has to use allConfigDiagnostics instead.
+func configDiagnostics(t *testing.T, files map[string]string, configName string) []*ast.Diagnostic {
+	t.Helper()
 	var effectDiags []*ast.Diagnostic
-	for _, diag := range parsed.Errors {
+	for _, diag := range allConfigDiagnostics(t, files, configName) {
 		if rule.IsEffectCode(diag.Code()) {
 			effectDiags = append(effectDiags, diag)
 		}
@@ -298,4 +305,44 @@ func TestInheritedSuppressionAcrossExtends(t *testing.T) {
 			t.Error("diagnostic should stay anchored on the config that declares the name")
 		}
 	})
+}
+
+// FinalizeDiagnostics is handed the whole config-error slice and returns a
+// replacement, so it holds drop authority over diagnostics it does not own. This
+// asserts on the unfiltered slice, because the Effect-only filter used elsewhere
+// would hide exactly the regression this guards: a lost ownership predicate
+// silently dropping every other config error in the file.
+func TestFinalizeLeavesForeignDiagnosticsAlone(t *testing.T) {
+	t.Parallel()
+
+	files := map[string]string{
+		"tsconfig.json": `{
+  "compilerOptions": {
+    "bogusOption": true,
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "diagnosticSeverity": { "importFromBarrel": "error", "unknownRuleName": "off" }
+      }
+    ]
+  }
+}`,
+	}
+
+	// "off" takes FinalizeDiagnostics down its drop arm, which is the arm that
+	// rebuilds the slice and so the only one that can lose a foreign diagnostic.
+	diags := allConfigDiagnostics(t, files, "tsconfig.json")
+
+	var foundUnknownOption bool
+	for _, diag := range diags {
+		if rule.IsEffectCode(diag.Code()) {
+			t.Errorf("expected every Effect diagnostic to be dropped, got %d", diag.Code())
+		}
+		if diag.Code() == 5023 {
+			foundUnknownOption = true
+		}
+	}
+	if !foundUnknownOption {
+		t.Fatalf("TS5023 was dropped by FinalizeDiagnostics; got %v", codesOf(diags))
+	}
 }
