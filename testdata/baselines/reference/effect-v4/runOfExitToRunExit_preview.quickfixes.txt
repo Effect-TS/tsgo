@@ -1,0 +1,27 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:21-8:38) TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+  Fix 0: "Disable runOfExitToRunExit for this line"
+  Fix 1: "Disable runOfExitToRunExit for entire file"
+  Fix 2: "Replace with Effect.runPromiseExit"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable runOfExitToRunExit for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable runOfExitToRunExit for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.runPromiseExit" ===
+
+--- file:///.src/runOfExitToRunExit_preview.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics runOfExitToRunExit:warning
+import { Effect } from "effect"
+
+declare const program: Effect.Effect<number, Error>
+
+export const exit = Effect.runPromiseExit(program)
+

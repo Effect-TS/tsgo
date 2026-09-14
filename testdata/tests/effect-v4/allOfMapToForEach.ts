@@ -1,11 +1,15 @@
 // @effect-v4
-import { Effect } from "effect"
+import { Effect, pipe } from "effect"
 
 declare const values: ReadonlyArray<number>
 declare const effectful: (value: number, index: number) => Effect.Effect<string>
 
 // Should trigger without options.
 export const direct = Effect.all(values.map(effectful))
+
+// Should trigger with a fallback fix when Effect.all is hidden behind a const alias.
+const allAlias = Effect.all
+export const aliasedAll = allAlias(values.map(effectful))
 
 // Should trigger and carry compatible options through to Effect.forEach.
 export const withOptions = Effect.all(
@@ -42,6 +46,11 @@ export const record = Effect.all(recordMapper.map((value) => Effect.succeed(valu
 // Should not trigger when the callback does not return an Effect.
 // @ts-expect-error Effect.all requires Effect values
 export const plainValues = Effect.all(values.map((value) => value + 1))
+
+// Should trigger for data-last Effect.all references in piping flows, but the
+// diagnostic alone cannot offer the data-first quick fix.
+export const pipeDataLast = pipe(values.map(effectful), Effect.all)
+export const pipeDataLastAsVoid = pipe(values.map(effectful), Effect.all, Effect.asVoid)
 
 // Should not trigger for legitimate Effect.all inputs.
 export const tuple = Effect.all([Effect.succeed(1), Effect.succeed("two")] as const)

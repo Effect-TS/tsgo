@@ -291,19 +291,19 @@ func TestEffectType_NilInputs(t *testing.T) {
 	t.Parallel()
 
 	source := `const x: number = 42`
-	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, _, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
 
 	// nil type must not panic
-	if result := tp.EffectType(nil, sf.AsNode()); result != nil {
+	if result := tp.EffectType(nil); result != nil {
 		t.Error("expected nil for nil type")
 	}
 	// nil checker must not panic
-	if result := (*typeparser.TypeParser)(nil).EffectType(nil, sf.AsNode()); result != nil {
+	if result := (*typeparser.TypeParser)(nil).EffectType(nil); result != nil {
 		t.Error("expected nil for nil checker")
 	}
 	// HasEffectTypeId with nil type must not panic
-	if tp.HasEffectTypeId(nil, sf.AsNode()) {
+	if tp.HasEffectTypeId(nil) {
 		t.Error("expected false for nil type")
 	}
 }
@@ -312,13 +312,13 @@ func TestLayerType_NilInputs(t *testing.T) {
 	t.Parallel()
 
 	source := `const x: number = 42`
-	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, _, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
 
-	if result := tp.LayerType(nil, sf.AsNode()); result != nil {
+	if result := tp.LayerType(nil); result != nil {
 		t.Error("expected nil for nil type")
 	}
-	if result := (*typeparser.TypeParser)(nil).LayerType(nil, sf.AsNode()); result != nil {
+	if result := (*typeparser.TypeParser)(nil).LayerType(nil); result != nil {
 		t.Error("expected nil for nil checker")
 	}
 }
@@ -327,13 +327,13 @@ func TestContextTag_NilInputs(t *testing.T) {
 	t.Parallel()
 
 	source := `const x: number = 42`
-	_, tp, sf, done := compileAndGetCheckerAndSourceFile(t, source)
+	_, tp, _, done := compileAndGetCheckerAndSourceFile(t, source)
 	defer done()
 
-	if result := tp.ContextTag(nil, sf.AsNode()); result != nil {
+	if result := tp.ContextTag(nil); result != nil {
 		t.Error("expected nil for nil type")
 	}
-	if result := (*typeparser.TypeParser)(nil).ContextTag(nil, sf.AsNode()); result != nil {
+	if result := (*typeparser.TypeParser)(nil).ContextTag(nil); result != nil {
 		t.Error("expected nil for nil checker")
 	}
 }

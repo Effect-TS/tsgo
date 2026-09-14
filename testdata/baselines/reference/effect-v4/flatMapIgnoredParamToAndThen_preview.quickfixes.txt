@@ -1,0 +1,25 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:35-6:49) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+  Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
+  Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
+  Fix 2: "Replace with Effect.andThen"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.andThen" ===
+
+--- file:///.src/flatMapIgnoredParamToAndThen_preview.ts ---
+import { Effect } from "effect"
+
+const first = Effect.succeed(1)
+const second = Effect.succeed("second")
+
+export const program = first.pipe(Effect.andThen(second))
+

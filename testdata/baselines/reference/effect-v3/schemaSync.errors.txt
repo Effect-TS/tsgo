@@ -1,0 +1,112 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/schemaSync.ts(13,32): warning TS377130: `Schema.decodeSync` executes synchronously. Use `Schema.decode` to compose this operation through Effect without throwing. effect(schemaSync)
+/.src/schemaSync.ts(14,39): warning TS377130: `Schema.decodeUnknownSync` executes synchronously. Use `Schema.decodeUnknown` to compose this operation through Effect without throwing. effect(schemaSync)
+/.src/schemaSync.ts(15,32): warning TS377130: `Schema.encodeSync` executes synchronously. Use `Schema.encode` to compose this operation through Effect without throwing. effect(schemaSync)
+/.src/schemaSync.ts(16,39): warning TS377130: `Schema.encodeUnknownSync` executes synchronously. Use `Schema.encodeUnknown` to compose this operation through Effect without throwing. effect(schemaSync)
+/.src/schemaSync.ts(19,31): warning TS377130: `S.decodeSync` executes synchronously. Use `Schema.decode` to compose this operation through Effect without throwing. effect(schemaSync)
+/.src/schemaSync.ts(20,27): warning TS377130: `decode` executes synchronously. Use `Schema.decodeUnknown` to compose this operation through Effect without throwing. effect(schemaSync)
+/.src/schemaSync.ts(22,30): warning TS377130: `decodeAlias` executes synchronously. Use `Schema.decodeUnknown` to compose this operation through Effect without throwing. effect(schemaSync)
+/.src/schemaSync.ts(23,30): warning TS377130: `Schema["encodeSync"]` executes synchronously. Use `Schema.encode` to compose this operation through Effect without throwing. effect(schemaSync)
+/.src/schemaSync.ts(24,24): warning TS377130: `Schema.decodeSync` executes synchronously. Use `Schema.decode` to compose this operation through Effect without throwing. effect(schemaSync)
+/.src/schemaSync.ts(25,38): warning TS377130: `Schema.encodeSync` executes synchronously. Use `Schema.encode` to compose this operation through Effect without throwing. effect(schemaSync)
+/.src/schemaSync.ts(27,10): warning TS377130: `Schema.decodeSync` executes synchronously. Use `Schema.decode` to compose this operation through Effect without throwing. effect(schemaSync)
+/.src/schemaSync.ts(31,33): warning TS377130: `Parser.decodeSync` executes synchronously. Use `Schema.decode` to compose this operation through Effect without throwing. effect(schemaSync)
+/.src/schemaSync.ts(32,40): warning TS377130: `Parser.decodeUnknownSync` executes synchronously. Use `Schema.decodeUnknown` to compose this operation through Effect without throwing. effect(schemaSync)
+/.src/schemaSync.ts(33,33): warning TS377130: `Parser.encodeSync` executes synchronously. Use `Schema.encode` to compose this operation through Effect without throwing. effect(schemaSync)
+/.src/schemaSync.ts(34,40): warning TS377130: `Parser.encodeUnknownSync` executes synchronously. Use `Schema.encodeUnknown` to compose this operation through Effect without throwing. effect(schemaSync)
+
+
+==== /.src/schemaSync.ts (15 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics schemaSync:warning
+    import { Effect, Schema } from "effect"
+    import * as S from "effect/Schema"
+    import { decodeUnknownSync as decode } from "effect/Schema"
+    import * as Parser from "effect/ParseResult"
+    
+    const Person = Schema.Struct({ name: Schema.String })
+    const input = { name: "Ada" }
+    
+    // All four synchronous methods are flagged outside Effect contexts.
+    export const decodeSyncValue = Schema.decodeSync(Person)(input)
+                                   ~~~~~~~~~~~~~~~~~
+!!! warning TS377130: `Schema.decodeSync` executes synchronously. Use `Schema.decode` to compose this operation through Effect without throwing. effect(schemaSync)
+    export const decodeUnknownSyncValue = Schema.decodeUnknownSync(Person)(input)
+                                          ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377130: `Schema.decodeUnknownSync` executes synchronously. Use `Schema.decodeUnknown` to compose this operation through Effect without throwing. effect(schemaSync)
+    export const encodeSyncValue = Schema.encodeSync(Person)(input)
+                                   ~~~~~~~~~~~~~~~~~
+!!! warning TS377130: `Schema.encodeSync` executes synchronously. Use `Schema.encode` to compose this operation through Effect without throwing. effect(schemaSync)
+    export const encodeUnknownSyncValue = Schema.encodeUnknownSync(Person)(input)
+                                          ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377130: `Schema.encodeUnknownSync` executes synchronously. Use `Schema.encodeUnknown` to compose this operation through Effect without throwing. effect(schemaSync)
+    
+    // Namespace aliases, named import aliases, and decoder factories are covered.
+    export const namespaceAlias = S.decodeSync(Person)(input)
+                                  ~~~~~~~~~~~~
+!!! warning TS377130: `S.decodeSync` executes synchronously. Use `Schema.decode` to compose this operation through Effect without throwing. effect(schemaSync)
+    export const namedAlias = decode(Person)(input)
+                              ~~~~~~
+!!! warning TS377130: `decode` executes synchronously. Use `Schema.decodeUnknown` to compose this operation through Effect without throwing. effect(schemaSync)
+    const decodeAlias = Schema.decodeUnknownSync
+    export const constantAlias = decodeAlias(Person)(input)
+                                 ~~~~~~~~~~~
+!!! warning TS377130: `decodeAlias` executes synchronously. Use `Schema.decodeUnknown` to compose this operation through Effect without throwing. effect(schemaSync)
+    export const elementAccess = Schema["encodeSync"](Person)(input)
+                                 ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377130: `Schema["encodeSync"]` executes synchronously. Use `Schema.encode` to compose this operation through Effect without throwing. effect(schemaSync)
+    export const decoder = Schema.decodeSync(Person)
+                           ~~~~~~~~~~~~~~~~~
+!!! warning TS377130: `Schema.decodeSync` executes synchronously. Use `Schema.decode` to compose this operation through Effect without throwing. effect(schemaSync)
+    export const regularFunction = () => Schema.encodeSync(Person)(input)
+                                         ~~~~~~~~~~~~~~~~~
+!!! warning TS377130: `Schema.encodeSync` executes synchronously. Use `Schema.encode` to compose this operation through Effect without throwing. effect(schemaSync)
+    export const generator = Effect.gen(function*() {
+      return Schema.decodeSync(Person)(input)
+             ~~~~~~~~~~~~~~~~~
+!!! warning TS377130: `Schema.decodeSync` executes synchronously. Use `Schema.decode` to compose this operation through Effect without throwing. effect(schemaSync)
+    })
+    
+    // The underlying parser APIs are covered too.
+    export const parserdecodeSync = Parser.decodeSync(Person)(input)
+                                    ~~~~~~~~~~~~~~~~~
+!!! warning TS377130: `Parser.decodeSync` executes synchronously. Use `Schema.decode` to compose this operation through Effect without throwing. effect(schemaSync)
+    export const parserdecodeUnknownSync = Parser.decodeUnknownSync(Person)(input)
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377130: `Parser.decodeUnknownSync` executes synchronously. Use `Schema.decodeUnknown` to compose this operation through Effect without throwing. effect(schemaSync)
+    export const parserencodeSync = Parser.encodeSync(Person)(input)
+                                    ~~~~~~~~~~~~~~~~~
+!!! warning TS377130: `Parser.encodeSync` executes synchronously. Use `Schema.encode` to compose this operation through Effect without throwing. effect(schemaSync)
+    export const parserencodeUnknownSync = Parser.encodeUnknownSync(Person)(input)
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377130: `Parser.encodeUnknownSync` executes synchronously. Use `Schema.encodeUnknown` to compose this operation through Effect without throwing. effect(schemaSync)
+    
+    // Effect and other non-throwing adapters remain allowed.
+    export const alloweddecode = Schema.decode(Person)(input)
+    export const alloweddecodeOption = Schema.decodeOption(Person)(input)
+    export const alloweddecodeEither = Schema.decodeEither(Person)(input)
+    export const alloweddecodeUnknown = Schema.decodeUnknown(Person)(input)
+    export const alloweddecodeUnknownOption = Schema.decodeUnknownOption(Person)(input)
+    export const alloweddecodeUnknownEither = Schema.decodeUnknownEither(Person)(input)
+    export const allowedencode = Schema.encode(Person)(input)
+    export const allowedencodeOption = Schema.encodeOption(Person)(input)
+    export const allowedencodeEither = Schema.encodeEither(Person)(input)
+    export const allowedencodeUnknown = Schema.encodeUnknown(Person)(input)
+    export const allowedencodeUnknownOption = Schema.encodeUnknownOption(Person)(input)
+    export const allowedencodeUnknownEither = Schema.encodeUnknownEither(Person)(input)
+    
+    // Unrelated APIs with the same names are not Schema methods.
+    const unrelated = {
+      decodeSync: (value: string) => value,
+      decodeUnknownSync: (value: unknown) => value,
+      encodeSync: (value: string) => value,
+      encodeUnknownSync: (value: unknown) => value
+    }
+    export const otherDecode = unrelated.decodeSync("hello")
+    export const otherDecodeUnknown = unrelated.decodeUnknownSync(input)
+    export const otherEncode = unrelated.encodeSync("hello")
+    export const otherEncodeUnknown = unrelated.encodeUnknownSync(input)
+    

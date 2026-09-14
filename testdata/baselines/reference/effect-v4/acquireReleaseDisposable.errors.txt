@@ -46,7 +46,7 @@ Effect version: 4.0.0
       (resource) => Fx.sync(() => resource[Symbol.dispose]())
     )
     
-    // Should diagnose a named import, but the quick fix cannot safely rewrite its import.
+    // Should diagnose a named import and fix its usage through the Effect module.
     export const namedImport = acquireRelease(
                                ~~~~~~~~~~~~~~
 !!! suggestion TS377119: `Effect.acquireDisposable` expresses this disposable resource acquisition more directly than `Effect.acquireRelease` with a manual disposal finalizer. effect(acquireReleaseDisposable)

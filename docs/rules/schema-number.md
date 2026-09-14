@@ -24,10 +24,12 @@ export const User = Schema.Struct({
 /**
               ^^^^^^ effecttsgo(schema-number): This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line.
 */
-  score: Schema.NumberFromString
+  score: Schema.NumberFromString,
 /**
                 ^^^^^^^^^^^^^^^^ effecttsgo(schema-number): This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line.
 */
+  integer: Schema.Number.check(Schema.isInt()),
+  pipedFinite: Schema.Number.pipe(Schema.check(Schema.isFinite()))
 })
 ```
 

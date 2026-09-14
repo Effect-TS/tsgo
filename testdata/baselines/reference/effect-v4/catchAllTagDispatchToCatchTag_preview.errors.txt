@@ -1,0 +1,32 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/catchAllTagDispatchToCatchTag_preview.ts(12,3): suggestion TS377122: Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
+
+
+==== /.src/catchAllTagDispatchToCatchTag_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics catchAllTagDispatchToCatchTag:suggestion
+    import { Data, Effect } from "effect"
+    
+    class NotFound extends Data.TaggedError("NotFound")<{}> {}
+    class Timeout extends Data.TaggedError("Timeout")<{}> {}
+    class Unauthorized extends Data.TaggedError("Unauthorized")<{}> {}
+    
+    declare const program: Effect.Effect<string, NotFound | Timeout | Unauthorized>
+    
+    export const recovered = program.pipe(
+      Effect.catch((error) => {
+      ~~~~~~~~~~~~
+!!! suggestion TS377122: Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
+        switch (error._tag) {
+          case "NotFound":
+            return Effect.succeed("guest")
+          case "Timeout":
+            return Effect.succeed("retrying")
+          default:
+            return Effect.fail(error)
+        }
+      })
+    )
+    

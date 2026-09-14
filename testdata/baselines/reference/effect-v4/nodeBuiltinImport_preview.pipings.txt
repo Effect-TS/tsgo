@@ -1,1 +1,15 @@
-==== /.src/nodeBuiltinImport_preview.ts (0 flows) ====
+==== /.src/nodeBuiltinImport_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 7:23 - 10:4
+Node: Effect.sync(() => ({\n  id: randomUUID(),\n  contents: fs.readFileSync("config.json", "utf8")\n}))
+Node Kind: KindCallExpression
+
+Subject: () => ({\n  id: randomUUID(),\n  contents: fs.readFileSync("config.json", "utf8")\n})
+Subject Type: () => { id: any; contents: any; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<{ id: any; contents: any; }, never, never>

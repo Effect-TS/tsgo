@@ -13,6 +13,10 @@ const _regularFn = () => {
 const myConsole = console
 myConsole.info("info")
 
+// Should trigger - aliased console method
+const consoleLog = console.log
+consoleLog("aliased method")
+
 // Should NOT trigger - console.log inside Effect.gen
 export const consoleLogInGen = Effect.gen(function*() {
   console.log("hello")

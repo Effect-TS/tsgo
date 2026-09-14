@@ -4,10 +4,11 @@ Effect version: 3.19.19
 /.src/globalRandom.ts(6,23): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
 /.src/globalRandom.ts(9,30): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
 /.src/globalRandom.ts(13,24): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
-/.src/globalRandom.ts(22,20): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
+/.src/globalRandom.ts(17,30): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
+/.src/globalRandom.ts(26,20): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
 
 
-==== /.src/globalRandom.ts (4 errors) ====
+==== /.src/globalRandom.ts (5 errors) ====
     // @effect-v3
     // @effect-diagnostics globalRandom:warning
     import { Effect } from "effect"
@@ -28,6 +29,12 @@ Effect version: 3.19.19
                            ~~~~~~~~~~~~~~~
 !!! warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
     
+    // Should trigger - aliased Math.random method
+    const random = Math.random
+    const _aliasedRandomMethod = random()
+                                 ~~~~~~~~
+!!! warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
+    
     // Should NOT trigger - Math.random() inside Effect.gen
     export const mathRandomInGen = Effect.gen(function*() {
       return Math.random()
@@ -46,3 +53,4 @@ Effect version: 3.19.19
       const Math = { random: () => 0.5 }
       return Math.random()
     }
+    

@@ -1,0 +1,16 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/flatMapIgnoredParamToAndThen_preview.ts(6,35): suggestion TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+
+
+==== /.src/flatMapIgnoredParamToAndThen_preview.ts (1 errors) ====
+    import { Effect } from "effect"
+    
+    const first = Effect.succeed(1)
+    const second = Effect.succeed("second")
+    
+    export const program = first.pipe(Effect.flatMap(() => second))
+                                      ~~~~~~~~~~~~~~
+!!! suggestion TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+    

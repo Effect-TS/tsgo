@@ -6,9 +6,10 @@ Effect version: 4.0.0
 /.src/flatMapToMap.ts(17,71): suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
 /.src/flatMapToMap.ts(22,39): suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
 /.src/flatMapToMap.ts(25,38): suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+/.src/flatMapToMap.ts(30,3): suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
 
 
-==== /.src/flatMapToMap.ts (5 errors) ====
+==== /.src/flatMapToMap.ts (6 errors) ====
     import { Effect, pipe } from "effect"
     
     // Should trigger: pipeable style
@@ -44,6 +45,14 @@ Effect version: 4.0.0
     export const shouldTriggerDataLast = Effect.flatMap((n: number) => Effect.succeed(n + 1))(Effect.succeed(1))
                                          ~~~~~~~~~~~~~~
 !!! suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+    
+    // Should trigger with a fallback fix: the API reference is hidden behind a const alias.
+    const flatMapAlias = Effect.flatMap
+    export const shouldTriggerAliasedFlatMap = Effect.succeed(1).pipe(
+      flatMapAlias((n) => Effect.succeed(n + 1))
+      ~~~~~~~~~~~~
+!!! suggestion TS377100: `Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)
+    )
     
     // Should NOT trigger: callback returns another Effect operation
     export const shouldNotTriggerEffect = Effect.succeed(1).pipe(

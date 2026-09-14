@@ -34,11 +34,6 @@ var GlobalRandomInEffect = rule.Rule{
 }
 
 func runGlobalRandom(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
-	mathSymbol := ctx.Checker.ResolveName("Math", nil, ast.SymbolFlagsValue, false)
-	if mathSymbol == nil {
-		return nil
-	}
-
 	message := tsdiag.This_code_uses_Math_random_randomness_is_represented_through_the_Effect_Random_service_effect_globalRandom
 	if checkInEffect {
 		message = tsdiag.This_Effect_code_uses_Math_random_randomness_is_represented_through_the_Effect_Random_service_effect_globalRandomInEffect
@@ -50,18 +45,15 @@ func runGlobalRandom(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 		if node == nil {
 			return false
 		}
-		if node.Kind == ast.KindCallExpression && node.AsCallExpression().Expression.Kind == ast.KindPropertyAccessExpression {
+		if node.Kind == ast.KindCallExpression {
 			inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagInEffect != 0
-			if inEffect == checkInEffect {
-				prop := node.AsCallExpression().Expression.AsPropertyAccessExpression()
-				if prop.Name().Text() == "random" && ctx.TypeParser.ResolveToGlobalSymbol(ctx.TypeParser.GetSymbolAtLocation(prop.Expression)) == mathSymbol {
-					diags = append(diags, ctx.NewDiagnostic(
-						ctx.SourceFile,
-						scanner.GetErrorRangeForNode(ctx.SourceFile, node),
-						message,
-						nil,
-					))
-				}
+			if inEffect == checkInEffect && ctx.TypeParser.IsNodeReferenceToGlobalMember(node.AsCallExpression().Expression, "Math", "random") {
+				diags = append(diags, ctx.NewDiagnostic(
+					ctx.SourceFile,
+					scanner.GetErrorRangeForNode(ctx.SourceFile, node),
+					message,
+					nil,
+				))
 			}
 		}
 

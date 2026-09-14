@@ -2,12 +2,12 @@ package fixables
 
 import (
 	"github.com/effect-ts/tsgo/internal/fixable"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var UnnecessaryEffectGenFix = fixable.Fixable{
@@ -42,23 +42,14 @@ func runUnnecessaryEffectGenFix(ctx *fixable.Context) []ls.CodeAction {
 			}); action != nil {
 				return []ls.CodeAction{*action}
 			}
-			return nil
+			continue
 		}
 
 		// No return + non-void success: wrap with Effect.asVoid(...)
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Remove the Effect.gen, and keep the body",
 			Run: func(tracker *rewriter.Tracker) {
-				// Clone the Effect module identifier (or create a fallback)
-				var effectModuleId *ast.Node
-				if match.EffectModuleNode != nil && match.EffectModuleNode.Kind == ast.KindIdentifier {
-					effectModuleId = tracker.DeepCloneNode(match.EffectModuleNode)
-				} else {
-					effectModuleId = tracker.NewIdentifier("Effect")
-				}
-
-				// Build Effect.asVoid property access
-				asVoidAccess := tracker.NewPropertyAccessExpression(effectModuleId, nil, tracker.NewIdentifier("asVoid"), ast.NodeFlagsNone)
+				asVoidAccess := effectModuleMethod(tracker, sf, match.EffectModuleNode, "asVoid")
 
 				// Clone the yielded expression
 				clonedExpr := tracker.DeepCloneNode(match.YieldedExpression)
@@ -72,7 +63,7 @@ func runUnnecessaryEffectGenFix(ctx *fixable.Context) []ls.CodeAction {
 		}); action != nil {
 			return []ls.CodeAction{*action}
 		}
-		return nil
+		continue
 	}
 
 	return nil

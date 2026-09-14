@@ -1,0 +1,63 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:25-5:40) TS377129: This module reference imports `@effect/match`, which is obsolete in Effect v4. In Effect v4, pattern matching is provided directly by `Match` from `effect` (or `effect/Match`). effect(obsoleteMatchImport)
+  Fix 0: "Disable obsoleteMatchImport for this line"
+  Fix 1: "Disable obsoleteMatchImport for entire file"
+
+[D2] (7:38-7:53) TS377129: This module reference imports `@effect/match`, which is obsolete in Effect v4. In Effect v4, pattern matching is provided directly by `Match` from `effect` (or `effect/Match`). effect(obsoleteMatchImport)
+  Fix 0: "Disable obsoleteMatchImport for this line"
+  Fix 1: "Disable obsoleteMatchImport for entire file"
+
+[D3] (9:27-9:50) TS377129: This module reference imports `@effect/match/Matcher`, which is obsolete in Effect v4. In Effect v4, pattern matching is provided directly by `Match` from `effect` (or `effect/Match`). effect(obsoleteMatchImport)
+  Fix 0: "Disable obsoleteMatchImport for this line"
+  Fix 1: "Disable obsoleteMatchImport for entire file"
+
+[D4] (11:8-11:23) TS377129: This module reference imports `@effect/match`, which is obsolete in Effect v4. In Effect v4, pattern matching is provided directly by `Match` from `effect` (or `effect/Match`). effect(obsoleteMatchImport)
+  Fix 0: "Disable obsoleteMatchImport for this line"
+  Fix 1: "Disable obsoleteMatchImport for entire file"
+
+[D5] (14:36-14:51) TS377129: This module reference imports `@effect/match`, which is obsolete in Effect v4. In Effect v4, pattern matching is provided directly by `Match` from `effect` (or `effect/Match`). effect(obsoleteMatchImport)
+  Fix 0: "Disable obsoleteMatchImport for this line"
+  Fix 1: "Disable obsoleteMatchImport for entire file"
+
+[D6] (18:15-18:30) TS377129: This module reference imports `@effect/match`, which is obsolete in Effect v4. In Effect v4, pattern matching is provided directly by `Match` from `effect` (or `effect/Match`). effect(obsoleteMatchImport)
+  Fix 0: "Disable obsoleteMatchImport for this line"
+  Fix 1: "Disable obsoleteMatchImport for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable obsoleteMatchImport for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable obsoleteMatchImport for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable obsoleteMatchImport for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable obsoleteMatchImport for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable obsoleteMatchImport for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable obsoleteMatchImport for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable obsoleteMatchImport for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable obsoleteMatchImport for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable obsoleteMatchImport for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable obsoleteMatchImport for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable obsoleteMatchImport for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable obsoleteMatchImport for entire file" ===
+skipped by default

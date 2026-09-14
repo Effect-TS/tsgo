@@ -22,5 +22,11 @@ export const unnecessaryFailYieldableError = Effect.gen(function*() {
   yield* Effect.fail(new SchemaError("schema error"))
 })
 
+const fail = Effect.fail
+export const aliasedFail = Effect.gen(function*() {
+  yield* fail(new DataTaggedError())
+  return 1
+})
+
 // should not report
 export const shouldNotReport = Effect.fail(new DataTaggedError())

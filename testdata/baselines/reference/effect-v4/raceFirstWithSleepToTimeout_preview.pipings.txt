@@ -1,0 +1,47 @@
+==== /.src/raceFirstWithSleepToTimeout_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 8:22 - 13:2
+Node: Effect.raceFirst(\n  request,\n  Effect.sleep("5 seconds").pipe(\n    Effect.andThen(Effect.fail(new Error("request timed out")))\n  )\n)
+Node Kind: KindCallExpression
+
+Subject: request
+Subject Type: Effect<string, Error, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.raceFirst
+      args: [Effect.sleep("5 seconds").pipe(\n    Effect.andThen(Effect.fail(new Error("request timed out")))\n  )]
+      outType: Effect<string, Error, never>
+
+=== Piping Flow ===
+Location: 9:11 - 10:28
+Node: Effect.sleep("5 seconds")
+Node Kind: KindCallExpression
+
+Subject: "5 seconds"
+Subject Type: "5 seconds"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 10:34 - 11:64
+Node: Effect.andThen(Effect.fail(new Error("request timed out")))
+Node Kind: KindCallExpression
+
+Subject: new Error("request timed out")
+Subject Type: Error
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, Error, never>
+  [1] kind: call
+      callee: Effect.andThen
+      args: (constant)
+      outType: <A, E, R>(self: Effect<A, E, R>) => Effect<never, E | Error, R>

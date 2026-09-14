@@ -19,3 +19,8 @@ export const shouldNotRaiseForNestedYield = Effect.gen(function*() {
 export const shouldRaiseForSingle = Effect.gen(function*() {
   return yield* Effect.succeed(42)
 })
+
+const gen = Effect.gen
+export const aliasedGen = gen(function*() {
+  yield* Effect.succeed(42)
+})

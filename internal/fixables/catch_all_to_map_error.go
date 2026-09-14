@@ -2,11 +2,11 @@ package fixables
 
 import (
 	"github.com/effect-ts/tsgo/internal/fixable"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var CatchAllToMapErrorFix = fixable.Fixable{
@@ -29,14 +29,11 @@ func runCatchAllToMapErrorFix(ctx *fixable.Context) []ls.CodeAction {
 		if !diagRange.Intersects(ctx.Span) && !ctx.Span.ContainedBy(diagRange) {
 			continue
 		}
-
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.mapError",
 			Run: func(tracker *rewriter.Tracker) {
 				// Edit 1: Replace "catch" with "mapError" in the callee
-				if match.CalleeNameNode != nil {
-					tracker.ReplaceNode(sf, match.CalleeNameNode, tracker.NewIdentifier("mapError"), nil)
-				}
+				replaceEffectMethodCallee(tracker, sf, match.Callee, match.CalleeNameNode, "mapError")
 
 				// Edit 2: Unwrap "Effect.fail(arg)" to "arg" by deleting prefix and suffix
 				tracker.DeleteRange(sf, core.NewTextRange(match.FailCallExpression.Pos(), match.FailArgument.Pos()))

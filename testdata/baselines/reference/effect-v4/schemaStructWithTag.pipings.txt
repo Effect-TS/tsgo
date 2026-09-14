@@ -1,4 +1,4 @@
-==== /.src/schemaStructWithTag.ts (3 flows) ====
+==== /.src/schemaStructWithTag.ts (5 flows) ====
 
 === Piping Flow ===
 Location: 4:20 - 8:3
@@ -41,3 +41,31 @@ Transformations (1):
       callee: Schema.Struct
       args: (constant)
       outType: Struct<{ readonly name: String; readonly age: Finite; }>
+
+=== Piping Flow ===
+Location: 23:23 - 26:3
+Node: Struct({\n  _tag: Literal("Aliased"),\n  value: Schema.String\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  _tag: Literal("Aliased"),\n  value: Schema.String\n}
+Subject Type: { _tag: Literal<"Aliased">; value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Struct
+      args: (constant)
+      outType: Struct<{ readonly _tag: Literal<"Aliased">; readonly value: String; }>
+
+=== Piping Flow ===
+Location: 24:8 - 24:27
+Node: Literal("Aliased")
+Node Kind: KindCallExpression
+
+Subject: "Aliased"
+Subject Type: "Aliased"
+
+Transformations (1):
+  [0] kind: call
+      callee: Literal
+      args: (constant)
+      outType: Literal<"Aliased">

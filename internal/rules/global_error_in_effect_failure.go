@@ -63,7 +63,7 @@ func checkGlobalErrorInEffectFailure(ctx *rule.Context, node *ast.Node) *ast.Dia
 			return ast.FindAncestorFalse
 		}
 
-		effectType := ctx.TypeParser.EffectType(currentType, current)
+		effectType := ctx.TypeParser.EffectType(currentType)
 		if effectType == nil {
 			return ast.FindAncestorFalse
 		}

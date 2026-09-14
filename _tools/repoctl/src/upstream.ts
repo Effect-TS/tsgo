@@ -6,7 +6,7 @@ import * as Schema from "effect/Schema"
 import { appendFile, mkdtemp, rm } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
-import { maxSatisfying } from "semver"
+import { maxSatisfying, rcompare, satisfies } from "semver"
 import { runCommand, runCommandString } from "./process.ts"
 
 export type ComponentName = "typescript" | "oxlint-tsgolint" | "oxlint"
@@ -345,6 +345,33 @@ export const decodeLatestNpmVersion = (output: string, packageSpec: string, vers
     }))
   )
 
+export const decodeRecentNpmVersions = (output: string, packageName: string) =>
+  Schema.decodeUnknownEffect(Schema.fromJsonString(Schema.Struct({
+    versions: Schema.Array(NonEmptyString),
+    "dist-tags.latest": NonEmptyString
+  })))(output).pipe(
+    Effect.flatMap((metadata) => {
+      const latest = metadata["dist-tags.latest"]
+      const versions = [...new Set(metadata.versions)]
+        .filter((version) => satisfies(version, `<=${latest}`))
+        .sort(rcompare)
+        .slice(0, 3)
+      return versions[0] === latest
+        ? Effect.succeed(versions)
+        : Effect.fail(new UpstreamManifestError({ reason: `No stable latest version found for ${packageName}` }))
+    }),
+    Effect.mapError((error) => new UpstreamManifestError({
+      reason: `Unable to resolve recent ${packageName} versions: ${error.message}`
+    }))
+  )
+
+const fetchRecentNpmVersions = Effect.fnUntraced(function*(repositoryRoot: string, packageName: string) {
+  const output = yield* runCommandString("npm", repositoryRoot, [
+    "view", packageName, "versions", "dist-tags.latest", "--json"
+  ])
+  return yield* decodeRecentNpmVersions(output, packageName)
+})
+
 const resolveLatestMatchingVersion = Effect.fnUntraced(function*(
   repositoryRoot: string,
   packageName: string,
@@ -364,6 +391,7 @@ interface ResolvedRuntime {
 interface BuildUpstreamOptions {
   readonly next: TypeScriptMetadata
   readonly latest: TypeScriptMetadata
+  readonly retainedRuntimes?: ReadonlyArray<ResolvedRuntime & { readonly name: string; readonly description: string }>
   readonly oxlint: ResolvedRuntime
   readonly vitePlus: ResolvedRuntime & { readonly vitePlusVersion: string }
 }
@@ -371,7 +399,9 @@ interface BuildUpstreamOptions {
 const sortedRecord = <A>(entries: ReadonlyArray<readonly [string, A]>): Record<string, A> =>
   Object.fromEntries([...entries].sort(([left], [right]) => Buffer.compare(Buffer.from(left), Buffer.from(right))))
 
-export const buildUpstream = ({ latest, next, oxlint, vitePlus }: BuildUpstreamOptions): typeof Upstream.Type => {
+export const buildUpstream = ({
+  latest, next, oxlint, vitePlus, retainedRuntimes = []
+}: BuildUpstreamOptions): typeof Upstream.Type => {
   const typescript = new Map<string, { readonly gitHead: string; readonly provider: TypeScriptProvider }>()
   const tsgolint = new Map<string, {
     readonly gitHead: string
@@ -379,10 +409,11 @@ export const buildUpstream = ({ latest, next, oxlint, vitePlus }: BuildUpstreamO
   }>()
   const oxlintComponents = new Map<string, { readonly gitHead: string }>()
 
-  for (const metadata of [latest, next, oxlint.ts, vitePlus.ts]) {
+  const runtimes = [...retainedRuntimes, oxlint, vitePlus]
+  for (const metadata of [latest, next, ...runtimes.map((runtime) => runtime.ts)]) {
     typescript.set(metadata.npmVersion, { gitHead: metadata.gitHead, provider: metadata.provider })
   }
-  for (const runtime of [oxlint, vitePlus]) {
+  for (const runtime of runtimes) {
     tsgolint.set(runtime.tsgolint.npmVersion, {
       gitHead: runtime.tsgolint.gitHead,
       dependencies: { typescript: runtime.ts.npmVersion }
@@ -413,7 +444,15 @@ export const buildUpstream = ({ latest, next, oxlint, vitePlus }: BuildUpstreamO
           oxlint: vitePlus.oxlint.npmVersion,
           "oxlint-tsgolint": vitePlus.tsgolint.npmVersion
         }
-      }
+      },
+      ...retainedRuntimes.map((runtime) => ({
+        name: runtime.name,
+        description: runtime.description,
+        dependencies: {
+          oxlint: runtime.oxlint.npmVersion,
+          "oxlint-tsgolint": runtime.tsgolint.npmVersion
+        }
+      }))
     ]
   }
 }
@@ -687,10 +726,10 @@ const readRemoteTypeScriptGitlink = Effect.fnUntraced(function*(repository: stri
   return preferred
 })
 
-const fetchLatestOxlintSelection = Effect.fnUntraced(function*(repositoryRoot: string) {
+const fetchOxlintSelection = Effect.fnUntraced(function*(repositoryRoot: string, version: string) {
   const oxlintOutput = yield* runCommandString("npm", repositoryRoot, [
     "view",
-    "oxlint@latest",
+    `oxlint@${version}`,
     "version",
     "peerDependencies",
     "--json"
@@ -699,7 +738,7 @@ const fetchLatestOxlintSelection = Effect.fnUntraced(function*(repositoryRoot: s
     version: NonEmptyString,
     peerDependencies: Schema.Struct({ "oxlint-tsgolint": NonEmptyString })
   })))(oxlintOutput).pipe(
-    Effect.mapError((error) => new UpstreamManifestError({ reason: `Unable to resolve oxlint@latest: ${error.message}` }))
+    Effect.mapError((error) => new UpstreamManifestError({ reason: `Unable to resolve oxlint@${version}: ${error.message}` }))
   )
   return {
     oxlintVersion: oxlintPackage.version,
@@ -711,10 +750,10 @@ const fetchLatestOxlintSelection = Effect.fnUntraced(function*(repositoryRoot: s
   }
 })
 
-const fetchVitePlusSelection = Effect.fnUntraced(function*(repositoryRoot: string) {
+const fetchVitePlusSelection = Effect.fnUntraced(function*(repositoryRoot: string, version: string) {
   const output = yield* runCommandString("npm", repositoryRoot, [
     "view",
-    "vite-plus@latest",
+    `vite-plus@${version}`,
     "version",
     "dependencies",
     "--json"
@@ -727,7 +766,7 @@ const fetchVitePlusSelection = Effect.fnUntraced(function*(repositoryRoot: strin
     })
   })))(output).pipe(
     Effect.mapError((error) => new UpstreamManifestError({
-      reason: `Unable to resolve vite-plus@latest: ${error.message}`
+      reason: `Unable to resolve vite-plus@${version}: ${error.message}`
     }))
   )
   const [oxlintVersion, tsgolintVersion] = yield* Effect.all([
@@ -805,11 +844,19 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
     npmVersion: upstream.tags.typescript.latest,
     ...upstream.components.typescript[upstream.tags.typescript.latest]!
   }
-  const [next, latest, oxlintSelection, vitePlusSelection, remoteSchema, packument] = yield* Effect.all([
+  const [next, latest, oxlintSelections, vitePlusSelections, remoteSchema, packument] = yield* Effect.all([
     fetchTypeScriptMetadata(repositoryRoot, "typescript@next"),
     fetchTypeScriptMetadata(repositoryRoot, "typescript@latest"),
-    fetchLatestOxlintSelection(repositoryRoot),
-    fetchVitePlusSelection(repositoryRoot),
+    fetchRecentNpmVersions(repositoryRoot, "oxlint").pipe(
+      Effect.flatMap((versions) => Effect.forEach(versions, (version) => fetchOxlintSelection(repositoryRoot, version), {
+        concurrency: "unbounded"
+      }))
+    ),
+    fetchRecentNpmVersions(repositoryRoot, "vite-plus").pipe(
+      Effect.flatMap((versions) => Effect.forEach(versions, (version) => fetchVitePlusSelection(repositoryRoot, version), {
+        concurrency: "unbounded"
+      }))
+    ),
     fetchJson("https://json.schemastore.org/tsconfig"),
     fetchJson("https://registry.npmjs.org/typescript")
   ], { concurrency: "unbounded" })
@@ -817,14 +864,22 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
     typeof packument.versions !== "object" || packument.versions === null) {
     return yield* new UpstreamManifestError({ reason: "TypeScript npm metadata does not contain versions" })
   }
-  const oxlintVersions = Array.from(new Set([
-    oxlintSelection.oxlintVersion,
-    vitePlusSelection.oxlintVersion
-  ])).sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)))
-  const tsgolintVersions = Array.from(new Set([
-    oxlintSelection.tsgolintVersion,
-    vitePlusSelection.tsgolintVersion
-  ])).sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)))
+  const selections = [
+    ...oxlintSelections.map((selection) => ({
+      ...selection,
+      name: `oxlint@${selection.oxlintVersion}`,
+      description: `Oxlint ${selection.oxlintVersion} compatibility runtime`
+    })),
+    ...vitePlusSelections.map((selection) => ({
+      ...selection,
+      name: `vite-plus@${selection.vitePlusVersion}`,
+      description: `Vite+ ${selection.vitePlusVersion} compatibility runtime`
+    }))
+  ]
+  const oxlintVersions = Array.from(new Set(selections.map((selection) => selection.oxlintVersion)))
+    .sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)))
+  const tsgolintVersions = Array.from(new Set(selections.map((selection) => selection.tsgolintVersion)))
+    .sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)))
   const [resolvedOxlint, resolvedTsgolint] = yield* Effect.all([
     Effect.forEach(oxlintVersions, (version) => resolveOxlintComponent(repositoryRoot, version), {
       concurrency: "unbounded"
@@ -837,10 +892,14 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
   ], { concurrency: "unbounded" })
   const oxlintByVersion = new Map(resolvedOxlint.map((component) => [component.npmVersion, component]))
   const tsgolintByVersion = new Map(resolvedTsgolint.map((component) => [component.npmVersion, component]))
-  const oxlint = yield* resolveRuntime(oxlintSelection, oxlintByVersion, tsgolintByVersion)
+  const retainedRuntimes = yield* Effect.forEach(selections, (selection) =>
+    resolveRuntime(selection, oxlintByVersion, tsgolintByVersion).pipe(
+      Effect.map((runtime) => ({ ...runtime, name: selection.name, description: selection.description }))
+    ))
+  const oxlint = yield* resolveRuntime(oxlintSelections[0]!, oxlintByVersion, tsgolintByVersion)
   const vitePlus = {
-    ...(yield* resolveRuntime(vitePlusSelection, oxlintByVersion, tsgolintByVersion)),
-    vitePlusVersion: vitePlusSelection.vitePlusVersion
+    ...(yield* resolveRuntime(vitePlusSelections[0]!, oxlintByVersion, tsgolintByVersion)),
+    vitePlusVersion: vitePlusSelections[0]!.vitePlusVersion
   }
   const schema = formatTSConfigSchema(remoteSchema)
   if (schema === undefined) {
@@ -855,7 +914,7 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
       reason: `The oxlint@${oxlint.oxlint.npmVersion} configuration schema is invalid`
     })
   }
-  const updated = buildUpstream({ next, latest, oxlint, vitePlus })
+  const updated = buildUpstream({ next, latest, oxlint, vitePlus, retainedRuntimes })
   const metadataChanged = JSON.stringify(updated) !== JSON.stringify(upstream)
   const schemaPath = path.join(repositoryRoot, "_tools", "tsconfig-base-schema.json")
   const currentSchema = yield* fs.readFileString(schemaPath).pipe(

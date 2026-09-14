@@ -15,6 +15,10 @@ export const shouldTriggerParenthesizedVoid0 = Effect.succeed((void 0))
 // Should trigger: Effect.succeed(((undefined))) - double parenthesized
 export const shouldTriggerDoubleParenthesizedUndefined = Effect.succeed(((undefined)))
 
+// Should trigger with a fallback fix: the API reference is hidden behind a const alias.
+const succeedAlias = Effect.succeed
+export const shouldTriggerAliasedSucceed = succeedAlias(undefined)
+
 // Should NOT trigger: Effect.succeed with actual value
 export const shouldNotTriggerNumber = Effect.succeed(1)
 

@@ -4,10 +4,11 @@ Effect version: 3.19.19
 /.src/globalDate.ts(6,25): warning TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
 /.src/globalDate.ts(10,10): warning TS377068: This code constructs `new Date()`, date values are represented through `DateTime` from Effect. effect(globalDate)
 /.src/globalDate.ts(15,25): warning TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
-/.src/globalDate.ts(30,20): warning TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
+/.src/globalDate.ts(19,31): warning TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
+/.src/globalDate.ts(34,20): warning TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
 
 
-==== /.src/globalDate.ts (4 errors) ====
+==== /.src/globalDate.ts (5 errors) ====
     // @effect-v3
     // @effect-diagnostics globalDate:warning
     import { Effect } from "effect"
@@ -30,6 +31,12 @@ Effect version: 3.19.19
                             ~~~~~~~~~~~~
 !!! warning TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
     
+    // Should trigger - aliased Date.now method
+    const dateNow = Date.now
+    const _aliasedDateNowMethod = dateNow()
+                                  ~~~~~~~~~
+!!! warning TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
+    
     // Should NOT trigger - Date.now() inside Effect.gen
     export const dateNowInGen = Effect.gen(function*() {
       const now = Date.now()
@@ -48,3 +55,4 @@ Effect version: 3.19.19
 !!! warning TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
       return fn
     })
+    

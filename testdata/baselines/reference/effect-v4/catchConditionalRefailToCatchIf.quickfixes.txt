@@ -24,15 +24,7 @@
   Fix 0: "Disable catchConditionalRefailToCatchIf for this line"
   Fix 1: "Disable catchConditionalRefailToCatchIf for entire file"
 
-[D7] (58:3-58:15) TS377116: `Effect.catchTag` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
-  Fix 0: "Disable catchConditionalRefailToCatchIf for this line"
-  Fix 1: "Disable catchConditionalRefailToCatchIf for entire file"
-
-[D8] (63:3-63:15) TS377116: `Effect.catchTag` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
-  Fix 0: "Disable catchConditionalRefailToCatchIf for this line"
-  Fix 1: "Disable catchConditionalRefailToCatchIf for entire file"
-
-[D9] (77:3-77:20) TS377116: `Effect.catchCauseIf` expresses selective recovery more directly than `Effect.catchCause` with a conditional `Effect.failCause` passthrough. effect(catchConditionalRefailToCatchIf)
+[D7] (77:3-77:20) TS377116: `Effect.catchCauseIf` expresses selective recovery more directly than `Effect.catchCause` with a conditional `Effect.failCause` passthrough. effect(catchConditionalRefailToCatchIf)
   Fix 0: "Disable catchConditionalRefailToCatchIf for this line"
   Fix 1: "Disable catchConditionalRefailToCatchIf for entire file"
 
@@ -78,16 +70,4 @@ skipped by default
 skipped by default
 
 === [D7] Fix 1: "Disable catchConditionalRefailToCatchIf for entire file" ===
-skipped by default
-
-=== [D8] Fix 0: "Disable catchConditionalRefailToCatchIf for this line" ===
-skipped by default
-
-=== [D8] Fix 1: "Disable catchConditionalRefailToCatchIf for entire file" ===
-skipped by default
-
-=== [D9] Fix 0: "Disable catchConditionalRefailToCatchIf for this line" ===
-skipped by default
-
-=== [D9] Fix 1: "Disable catchConditionalRefailToCatchIf for entire file" ===
 skipped by default

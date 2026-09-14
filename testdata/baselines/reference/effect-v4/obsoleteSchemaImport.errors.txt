@@ -1,0 +1,83 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/obsoleteSchemaImport.ts(5,21): warning TS377128: This module reference imports `@effect/schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+/.src/obsoleteSchemaImport.ts(7,21): warning TS377128: This module reference imports `@effect/schema/Schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+/.src/obsoleteSchemaImport.ts(9,22): warning TS377128: This module reference imports `@effect/schema/AST`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+/.src/obsoleteSchemaImport.ts(11,38): warning TS377128: This module reference imports `@effect/schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+/.src/obsoleteSchemaImport.ts(13,8): warning TS377128: This module reference imports `@effect/schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+/.src/obsoleteSchemaImport.ts(16,37): warning TS377128: This module reference imports `@effect/schema/Schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+/.src/obsoleteSchemaImport.ts(20,15): warning TS377128: This module reference imports `@effect/schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "types": ["node"],
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "ignoreEffectErrorsInTscExitCode": true,
+            "skipDisabledOptimization": true
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/obsoleteSchemaImport.ts (7 errors) ====
+    import { Effect } from "effect"
+    
+    // Flagged: obsolete @effect/schema imports in Effect v4
+    // @ts-expect-error - @effect/schema not installed in v4 fixture
+    import * as S1 from "@effect/schema"
+                        ~~~~~~~~~~~~~~~~
+!!! warning TS377128: This module reference imports `@effect/schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+    // @ts-expect-error - @effect/schema not installed in v4 fixture
+    import * as S2 from "@effect/schema/Schema"
+                        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377128: This module reference imports `@effect/schema/Schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+    // @ts-expect-error - @effect/schema not installed in v4 fixture
+    import * as AST from "@effect/schema/AST"
+                         ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377128: This module reference imports `@effect/schema/AST`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+    // @ts-expect-error - @effect/schema not installed in v4 fixture
+    import { type Schema as SType } from "@effect/schema"
+                                         ~~~~~~~~~~~~~~~~
+!!! warning TS377128: This module reference imports `@effect/schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+    // @ts-expect-error - @effect/schema not installed in v4 fixture
+    import "@effect/schema"
+           ~~~~~~~~~~~~~~~~
+!!! warning TS377128: This module reference imports `@effect/schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+    
+    // Flagged: top-level require
+    export const schemaModule = require("@effect/schema/Schema")
+                                        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377128: This module reference imports `@effect/schema/Schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+    
+    // Flagged: export from @effect/schema
+    // @ts-expect-error - @effect/schema not installed in v4 fixture
+    export * from "@effect/schema"
+                  ~~~~~~~~~~~~~~~~
+!!! warning TS377128: This module reference imports `@effect/schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
+    
+    // Not flagged: modern v4 Schema imports from effect
+    import { Schema } from "effect"
+    import * as SchemaFromEffect from "effect/Schema"
+    import * as SchemaAST from "effect/SchemaAST"
+    
+    // Not flagged: unrelated packages
+    // @ts-expect-error - third-party package
+    import * as Other from "@other/schema"
+    
+    export const program = Effect.sync(() => ({
+      val: Schema.Struct({ a: Schema.String }),
+      s1: S1,
+      s2: S2,
+      ast: AST,
+      fromEffect: SchemaFromEffect,
+      schemaAst: SchemaAST,
+      other: Other
+    }))
+    export type S = SType
+    

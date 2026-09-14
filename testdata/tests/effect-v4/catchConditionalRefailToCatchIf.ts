@@ -53,12 +53,12 @@ export const dataFirst = Effect.catch(
   (error) => typeof error === "object" ? Effect.succeed("guest") : Effect.fail(error)
 )
 
-// Direct tag recovery maps to catchTag.
+// Should NOT trigger: direct tag recovery belongs to catchAllTagDispatchToCatchTag.
 export const directTag = program.pipe(
   Effect.catch((error) => error._tag === "NotFound" ? Effect.succeed("guest") : Effect.fail(error))
 )
 
-// The tagged-dispatch parser also recognizes a one-case switch.
+// Should NOT trigger: a one-case tag switch belongs to catchAllTagDispatchToCatchTag.
 export const tagSwitch = program.pipe(
   Effect.catch((error) => {
     switch (error._tag) {

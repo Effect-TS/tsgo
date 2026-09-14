@@ -4,10 +4,11 @@ Effect version: 3.19.19
 /.src/globalConsole.ts(5,1): warning TS377064: This code uses `console.log`, the corresponding Effect logging API is `Effect.log or Logger`. effect(globalConsole)
 /.src/globalConsole.ts(9,3): warning TS377064: This code uses `console.warn`, the corresponding Effect logging API is `Effect.logWarning or Logger`. effect(globalConsole)
 /.src/globalConsole.ts(14,1): warning TS377064: This code uses `console.info`, the corresponding Effect logging API is `Effect.logInfo or Logger`. effect(globalConsole)
-/.src/globalConsole.ts(28,20): warning TS377064: This code uses `console.error`, the corresponding Effect logging API is `Effect.logError or Logger`. effect(globalConsole)
+/.src/globalConsole.ts(18,1): warning TS377064: This code uses `console.log`, the corresponding Effect logging API is `Effect.log or Logger`. effect(globalConsole)
+/.src/globalConsole.ts(32,20): warning TS377064: This code uses `console.error`, the corresponding Effect logging API is `Effect.logError or Logger`. effect(globalConsole)
 
 
-==== /.src/globalConsole.ts (4 errors) ====
+==== /.src/globalConsole.ts (5 errors) ====
     // @effect-diagnostics globalConsole:warning
     import { Effect } from "effect"
     
@@ -28,6 +29,12 @@ Effect version: 3.19.19
     myConsole.info("info")
     ~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377064: This code uses `console.info`, the corresponding Effect logging API is `Effect.logInfo or Logger`. effect(globalConsole)
+    
+    // Should trigger - aliased console method
+    const consoleLog = console.log
+    consoleLog("aliased method")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377064: This code uses `console.log`, the corresponding Effect logging API is `Effect.log or Logger`. effect(globalConsole)
     
     // Should NOT trigger - console.log inside Effect.gen
     export const consoleLogInGen = Effect.gen(function*() {

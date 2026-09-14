@@ -1,4 +1,4 @@
-==== /.src/unnecessaryPipeChain.ts (12 flows) ====
+==== /.src/unnecessaryPipeChain.ts (13 flows) ====
 
 === Piping Flow ===
 Location: 5:26 - 5:106
@@ -45,7 +45,29 @@ Transformations (3):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 11:26 - 11:102
+Location: 11:27 - 11:103
+Node: p(p(Effect.succeed(1), Effect.map((x) => x + 2)), Effect.map((x) => x + 3))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipe
+      callee: Effect.map
+      args: [(x) => x + 2]
+      outType: Effect<number, never, never>
+  [2] kind: pipe
+      callee: Effect.map
+      args: [(x) => x + 3]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 14:26 - 14:102
 Node: pipe(Effect.succeed(1), Effect.map((x) => x + 2), Effect.map((x) => x + 3))
 Node Kind: KindCallExpression
 
@@ -67,7 +89,7 @@ Transformations (3):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 14:30 - 14:105
+Location: 17:30 - 17:105
 Node: Effect.succeed(1).pipe(Effect.map((x) => x + 2), Effect.map((x) => x + 3))
 Node Kind: KindCallExpression
 
@@ -89,7 +111,7 @@ Transformations (3):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 17:30 - 17:80
+Location: 20:30 - 20:80
 Node: pipe(Effect.succeed(1), Effect.map((x) => x + 2))
 Node Kind: KindCallExpression
 
@@ -107,7 +129,7 @@ Transformations (2):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 19:13 - 19:46
+Location: 22:13 - 22:46
 Node: Effect.map((x: number) => x + 1)
 Node Kind: KindCallExpression
 
@@ -121,7 +143,7 @@ Transformations (1):
       outType: <E, R>(self: Effect<number, E, R>) => Effect<number, E, R>
 
 === Piping Flow ===
-Location: 22:37 - 27:13
+Location: 25:37 - 30:13
 Node: Effect.succeed(0).pipe(\n  bump, bump, bump, bump, bump,\n  bump, bump, bump, bump, bump,\n  bump, bump, bump, bump, bump,\n  bump, bump, bump, bump\n).pipe(bump)
 Node Kind: KindCallExpression
 
@@ -215,7 +237,7 @@ Transformations (21):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 30:39 - 35:13
+Location: 33:39 - 38:13
 Node: Effect.succeed(0).pipe(\n  bump, bump, bump, bump, bump,\n  bump, bump, bump, bump, bump,\n  bump, bump, bump, bump, bump,\n  bump, bump, bump, bump, bump\n).pipe(bump)
 Node Kind: KindCallExpression
 
@@ -313,7 +335,7 @@ Transformations (22):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 38:39 - 46:2
+Location: 41:39 - 49:2
 Node: pipe(\n  pipe(\n    Effect.succeed(0),\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump\n  ),\n  bump, bump, bump, bump, bump,\n  bump, bump, bump, bump, bump\n)
 Node Kind: KindCallExpression
 
@@ -403,7 +425,7 @@ Transformations (20):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 49:41 - 57:2
+Location: 52:41 - 60:2
 Node: pipe(\n  pipe(\n    Effect.succeed(0),\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump, bump\n  ),\n  bump, bump, bump, bump, bump,\n  bump, bump, bump, bump, bump\n)
 Node Kind: KindCallExpression
 
@@ -497,7 +519,7 @@ Transformations (21):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 60:34 - 67:13
+Location: 63:34 - 70:13
 Node: Effect.succeed(0).pipe(\n  ...([\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump, bump\n  ] as const)\n).pipe(bump)
 Node Kind: KindCallExpression
 
@@ -519,7 +541,7 @@ Transformations (3):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 70:40 - 78:4
+Location: 73:40 - 81:4
 Node: Effect.succeed(0)\n  .pipe(bump)\n  .pipe(bump)\n  .pipe(\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump, bump,\n    bump, bump, bump, bump, bump\n  )
 Node Kind: KindCallExpression
 

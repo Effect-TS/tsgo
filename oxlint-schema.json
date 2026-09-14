@@ -2248,6 +2248,9 @@
         "effecttsgo/async-function": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/catch-all-tag-dispatch-to-catch-tag": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/catch-all-to-map-error": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -2258,6 +2261,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/catch-die-to-or-die": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/catch-if-tag-to-catch-tag": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/catch-tag-to-catch-reason": {
@@ -2318,6 +2324,12 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/extends-native-error": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/flat-map-conditional-to-filter-or-fail": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/flat-map-ignored-param-to-and-then": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/flat-map-to-map": {
@@ -2386,6 +2398,12 @@
         "effecttsgo/map-some-to-as-some": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/match-effect-to-map-both": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/match-effect-to-match": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/missed-pipeable-opportunity": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -2431,6 +2449,12 @@
         "effecttsgo/non-object-effect-service-type": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/obsolete-match-import": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/obsolete-schema-import": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/option-match-to-from-option": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -2464,6 +2488,12 @@
         "effecttsgo/promise-in-effect-success": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/provide-layer-succeed-to-provide-service": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/race-first-with-sleep-to-timeout": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/redundant-map-error": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -2479,6 +2509,9 @@
         "effecttsgo/run-effect-inside-effect": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/run-of-exit-to-run-exit": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/schema-literal-non-finite": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -2489,6 +2522,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/schema-struct-with-tag": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/schema-sync": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/schema-sync-in-effect": {
@@ -2510,6 +2546,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/sync-to-succeed": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/timeout-catch-tag-to-timeout-or-else": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/try-catch-in-effect-gen": {
@@ -5591,7 +5630,24 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "no-unmodified-loop-condition": {
-          "$ref": "#/definitions/RuleNoConfig"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/RuleNoConfig"
+            },
+            {
+              "items": [
+                {
+                  "$ref": "#/definitions/AllowWarnDeny"
+                },
+                {
+                  "$ref": "#/definitions/NoUnmodifiedLoopCondition"
+                }
+              ],
+              "maxItems": 2,
+              "minItems": 2,
+              "type": "array"
+            }
+          ]
         },
         "no-unneeded-ternary": {
           "anyOf": [
@@ -16030,6 +16086,18 @@
       },
       "type": "object"
     },
+    "NoUnmodifiedLoopCondition": {
+      "additionalProperties": false,
+      "properties": {
+        "checkConditionalExpressions": {
+          "default": false,
+          "description": "Whether references in each branch of a conditional expression should be checked\nindependently instead of checking the result of the entire expression.",
+          "markdownDescription": "Whether references in each branch of a conditional expression should be checked\nindependently instead of checking the result of the entire expression.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "NoUnnecessaryBooleanLiteralCompareConfig": {
       "additionalProperties": false,
       "properties": {
@@ -16663,33 +16731,6 @@
         }
       ]
     },
-    "NumericBaseConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "groupLength": {
-          "default": 0,
-          "description": "The number of digits per group when inserting numeric separators.\nFor example, a `groupLength` of 3 formats `1234567` as `1_234_567`.",
-          "format": "uint32",
-          "markdownDescription": "The number of digits per group when inserting numeric separators.\nFor example, a `groupLength` of 3 formats `1234567` as `1_234_567`.",
-          "minimum": 0,
-          "type": "integer"
-        },
-        "minimumDigits": {
-          "default": 0,
-          "description": "The minimum number of digits required before grouping is applied.\nValues with fewer digits than this threshold will not be grouped.",
-          "format": "uint32",
-          "markdownDescription": "The minimum number of digits required before grouping is applied.\nValues with fewer digits than this threshold will not be grouped.",
-          "minimum": 0,
-          "type": "integer"
-        },
-        "onlyIfContainsSeparator": {
-          "description": "Only enforce the rule when the numeric literal already contains a separator (`_`).\n\nWhen `true`, numbers without separators are left as-is; when `false` (default),\ngrouping will be enforced for eligible numbers even if they don't include separators yet.",
-          "markdownDescription": "Only enforce the rule when the numeric literal already contains a separator (`_`).\n\nWhen `true`, numbers without separators are left as-is; when `false` (default),\ngrouping will be enforced for eligible numbers even if they don't include separators yet.",
-          "type": "boolean"
-        }
-      },
-      "type": "object"
-    },
     "NumericNumberConfig": {
       "additionalProperties": false,
       "properties": {
@@ -16702,7 +16743,7 @@
           "type": "integer"
         },
         "groupLength": {
-          "default": 0,
+          "default": 3,
           "description": "The number of digits per group when inserting numeric separators.\nFor example, a `groupLength` of 3 formats `1234567` as `1_234_567`.",
           "format": "uint32",
           "markdownDescription": "The number of digits per group when inserting numeric separators.\nFor example, a `groupLength` of 3 formats `1234567` as `1_234_567`.",
@@ -16710,7 +16751,7 @@
           "type": "integer"
         },
         "minimumDigits": {
-          "default": 0,
+          "default": 5,
           "description": "The minimum number of digits required before grouping is applied.\nValues with fewer digits than this threshold will not be grouped.",
           "format": "uint32",
           "markdownDescription": "The minimum number of digits required before grouping is applied.\nValues with fewer digits than this threshold will not be grouped.",
@@ -16729,30 +16770,70 @@
       "additionalProperties": false,
       "properties": {
         "binary": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/NumericBaseConfig"
-            }
-          ],
+          "additionalProperties": false,
           "default": {
             "groupLength": 4,
             "minimumDigits": 0
           },
           "description": "Configuration for binary literals (e.g. `0b1010_0001` and bigint variants).\nControls how digits are grouped and when separators are applied.",
-          "markdownDescription": "Configuration for binary literals (e.g. `0b1010_0001` and bigint variants).\nControls how digits are grouped and when separators are applied."
+          "markdownDescription": "Configuration for binary literals (e.g. `0b1010_0001` and bigint variants).\nControls how digits are grouped and when separators are applied.",
+          "properties": {
+            "groupLength": {
+              "default": 4,
+              "description": "The number of digits per group when inserting numeric separators.\nFor example, a `groupLength` of 3 formats `1234567` as `1_234_567`.",
+              "format": "uint32",
+              "markdownDescription": "The number of digits per group when inserting numeric separators.\nFor example, a `groupLength` of 3 formats `1234567` as `1_234_567`.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "minimumDigits": {
+              "default": 0,
+              "description": "The minimum number of digits required before grouping is applied.\nValues with fewer digits than this threshold will not be grouped.",
+              "format": "uint32",
+              "markdownDescription": "The minimum number of digits required before grouping is applied.\nValues with fewer digits than this threshold will not be grouped.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "onlyIfContainsSeparator": {
+              "description": "Only enforce the rule when the numeric literal already contains a separator (`_`).\n\nWhen `true`, numbers without separators are left as-is; when `false` (default),\ngrouping will be enforced for eligible numbers even if they don't include separators yet.",
+              "markdownDescription": "Only enforce the rule when the numeric literal already contains a separator (`_`).\n\nWhen `true`, numbers without separators are left as-is; when `false` (default),\ngrouping will be enforced for eligible numbers even if they don't include separators yet.",
+              "type": "boolean"
+            }
+          },
+          "type": "object"
         },
         "hexadecimal": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/NumericBaseConfig"
-            }
-          ],
+          "additionalProperties": false,
           "default": {
             "groupLength": 2,
             "minimumDigits": 0
           },
           "description": "Configuration for hexadecimal literals (e.g. `0xAB_CD`, `0Xab_cd`, and bigint variants).\nControls how digits are grouped and when separators are applied.",
-          "markdownDescription": "Configuration for hexadecimal literals (e.g. `0xAB_CD`, `0Xab_cd`, and bigint variants).\nControls how digits are grouped and when separators are applied."
+          "markdownDescription": "Configuration for hexadecimal literals (e.g. `0xAB_CD`, `0Xab_cd`, and bigint variants).\nControls how digits are grouped and when separators are applied.",
+          "properties": {
+            "groupLength": {
+              "default": 2,
+              "description": "The number of digits per group when inserting numeric separators.\nFor example, a `groupLength` of 3 formats `1234567` as `1_234_567`.",
+              "format": "uint32",
+              "markdownDescription": "The number of digits per group when inserting numeric separators.\nFor example, a `groupLength` of 3 formats `1234567` as `1_234_567`.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "minimumDigits": {
+              "default": 0,
+              "description": "The minimum number of digits required before grouping is applied.\nValues with fewer digits than this threshold will not be grouped.",
+              "format": "uint32",
+              "markdownDescription": "The minimum number of digits required before grouping is applied.\nValues with fewer digits than this threshold will not be grouped.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "onlyIfContainsSeparator": {
+              "description": "Only enforce the rule when the numeric literal already contains a separator (`_`).\n\nWhen `true`, numbers without separators are left as-is; when `false` (default),\ngrouping will be enforced for eligible numbers even if they don't include separators yet.",
+              "markdownDescription": "Only enforce the rule when the numeric literal already contains a separator (`_`).\n\nWhen `true`, numbers without separators are left as-is; when `false` (default),\ngrouping will be enforced for eligible numbers even if they don't include separators yet.",
+              "type": "boolean"
+            }
+          },
+          "type": "object"
         },
         "number": {
           "allOf": [
@@ -16764,17 +16845,37 @@
           "markdownDescription": "Configuration for decimal numbers (integers, fraction parts, and exponents).\nControls how digits are grouped and when separators are applied."
         },
         "octal": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/NumericBaseConfig"
-            }
-          ],
+          "additionalProperties": false,
           "default": {
             "groupLength": 4,
             "minimumDigits": 0
           },
           "description": "Configuration for octal literals (e.g. `0o1234_5670` and bigint variants).\nControls how digits are grouped and when separators are applied.",
-          "markdownDescription": "Configuration for octal literals (e.g. `0o1234_5670` and bigint variants).\nControls how digits are grouped and when separators are applied."
+          "markdownDescription": "Configuration for octal literals (e.g. `0o1234_5670` and bigint variants).\nControls how digits are grouped and when separators are applied.",
+          "properties": {
+            "groupLength": {
+              "default": 4,
+              "description": "The number of digits per group when inserting numeric separators.\nFor example, a `groupLength` of 3 formats `1234567` as `1_234_567`.",
+              "format": "uint32",
+              "markdownDescription": "The number of digits per group when inserting numeric separators.\nFor example, a `groupLength` of 3 formats `1234567` as `1_234_567`.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "minimumDigits": {
+              "default": 0,
+              "description": "The minimum number of digits required before grouping is applied.\nValues with fewer digits than this threshold will not be grouped.",
+              "format": "uint32",
+              "markdownDescription": "The minimum number of digits required before grouping is applied.\nValues with fewer digits than this threshold will not be grouped.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "onlyIfContainsSeparator": {
+              "description": "Only enforce the rule when the numeric literal already contains a separator (`_`).\n\nWhen `true`, numbers without separators are left as-is; when `false` (default),\ngrouping will be enforced for eligible numbers even if they don't include separators yet.",
+              "markdownDescription": "Only enforce the rule when the numeric literal already contains a separator (`_`).\n\nWhen `true`, numbers without separators are left as-is; when `false` (default),\ngrouping will be enforced for eligible numbers even if they don't include separators yet.",
+              "type": "boolean"
+            }
+          },
+          "type": "object"
         },
         "onlyIfContainsSeparator": {
           "default": false,
@@ -19402,8 +19503,8 @@
           "type": "boolean"
         },
         "defaultCaseCommentPattern": {
-          "description": "Regular expression pattern that when matched in a default case comment,\nwill suppress the exhaustiveness check.\nExample: `\"@skip-exhaustive-check\"` to allow `default: // @skip-exhaustive-check`",
-          "markdownDescription": "Regular expression pattern that when matched in a default case comment,\nwill suppress the exhaustiveness check.\nExample: `\"@skip-exhaustive-check\"` to allow `default: // @skip-exhaustive-check`",
+          "description": "Regular expression pattern for a comment that acts as an omitted `default` case.\nThe comment must appear after the final case and the switch must not have a `default` case.\nFor union types, it suppresses the exhaustiveness check only when\n`considerDefaultExhaustiveForUnions` is enabled.\nExample: `\"^skip default$\"` to allow a switch ending in `// skip default`.",
+          "markdownDescription": "Regular expression pattern for a comment that acts as an omitted `default` case.\nThe comment must appear after the final case and the switch must not have a `default` case.\nFor union types, it suppresses the exhaustiveness check only when\n`considerDefaultExhaustiveForUnions` is enabled.\nExample: `\"^skip default$\"` to allow a switch ending in `// skip default`.",
           "type": "string"
         },
         "requireDefaultForNonUnion": {

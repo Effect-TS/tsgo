@@ -220,8 +220,8 @@ Subject Type: Effect<number, never, never>
 
 Transformations (1):
   [0] kind: call
-      callee: Effect.flatMap(\n  (value: number) => value > 0 ? Effect.succeed(value) : Effect.fail(new InvalidValue({ value }))\n)
-      args: (constant)
+      callee: Effect.flatMap
+      args: [(value: number) => value > 0 ? Effect.succeed(value) : Effect.fail(new InvalidValue({ value }))]
       outType: Effect<number, InvalidValue, never>
 
 === Piping Flow ===

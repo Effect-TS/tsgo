@@ -9,6 +9,10 @@ import {
 import { some as optionSome } from "effect/Option"
 
 const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+const effectMap = Effect.map
+
+// Should trigger and fix the call site without changing the constant alias.
+export const shouldTriggerConstantAlias = numberEffect.pipe(effectMap(Option.some))
 
 // Should trigger: point-free mapper in a pipeable flow
 export const shouldTriggerPointFree = numberEffect.pipe(

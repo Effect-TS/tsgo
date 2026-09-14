@@ -21,11 +21,18 @@
   Fix 0: "Disable globalRandom for this line"
   Fix 1: "Disable globalRandom for entire file"
 
-[D7] (22:20-22:33) TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
+[D7] (17:7-17:27) TS6133: '_aliasedRandomMethod' is declared but its value is never read.
+  (no quick fixes)
+
+[D8] (17:30-17:38) TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
   Fix 0: "Disable globalRandom for this line"
   Fix 1: "Disable globalRandom for entire file"
 
-[D8] (27:7-27:20) TS6133: '_shadowedMath' is declared but its value is never read.
+[D9] (26:20-26:33) TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
+  Fix 0: "Disable globalRandom for this line"
+  Fix 1: "Disable globalRandom for entire file"
+
+[D10] (31:7-31:20) TS6133: '_shadowedMath' is declared but its value is never read.
   (no quick fixes)
 
 === Quick Fix Application Results ===
@@ -48,8 +55,14 @@ skipped by default
 === [D6] Fix 1: "Disable globalRandom for entire file" ===
 skipped by default
 
-=== [D7] Fix 0: "Disable globalRandom for this line" ===
+=== [D8] Fix 0: "Disable globalRandom for this line" ===
 skipped by default
 
-=== [D7] Fix 1: "Disable globalRandom for entire file" ===
+=== [D8] Fix 1: "Disable globalRandom for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable globalRandom for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable globalRandom for entire file" ===
 skipped by default

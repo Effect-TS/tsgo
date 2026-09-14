@@ -30,7 +30,7 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 10:25 - 14:2
-Node: program.pipe(\n  Effect.catch((error) =>\n    error._tag === "NotFound" ? Effect.succeed("guest") : Effect.fail(error)\n  )\n)
+Node: program.pipe(\n  Effect.catch((error) =>\n    error instanceof NotFound ? Effect.succeed("guest") : Effect.fail(error)\n  )\n)
 Node Kind: KindCallExpression
 
 Subject: program
@@ -39,7 +39,7 @@ Subject Type: Effect<string, DatabaseError | NotFound, never>
 Transformations (1):
   [0] kind: pipeable
       callee: Effect.catch
-      args: [(error) =>\n    error._tag === "NotFound" ? Effect.succeed("guest") : Effect.fail(error)]
+      args: [(error) =>\n    error instanceof NotFound ? Effect.succeed("guest") : Effect.fail(error)]
       outType: Effect<string, DatabaseError, never>
 
 === Piping Flow ===

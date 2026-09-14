@@ -2,12 +2,13 @@ package fixables
 
 import (
 	"github.com/effect-ts/tsgo/internal/fixable"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var LayerMergeAllWithDependenciesFix = fixable.Fixable{
@@ -28,6 +29,14 @@ func runLayerMergeAllWithDependenciesFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
+		if match.CallNode == nil || match.CallNode.Kind != ast.KindCallExpression {
+			continue
+		}
+		call := match.CallNode.AsCallExpression()
+		var layerModuleNode *ast.Node
+		if call.Expression != nil && call.Expression.Kind == ast.KindPropertyAccessExpression {
+			layerModuleNode = call.Expression.AsPropertyAccessExpression().Expression
+		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Move layer to Layer.provideMerge",
@@ -41,19 +50,14 @@ func runLayerMergeAllWithDependenciesFix(ctx *fixable.Context) []ls.CodeAction {
 					tracker.DeleteRange(sf, core.NewTextRange(match.AllArgs[match.ProviderIndex-1].End(), match.ProviderArg.End()))
 				}
 
-				// Derive the Layer module node from the call expression
-				if match.CallNode.Kind != ast.KindCallExpression {
-					return
-				}
-				call := match.CallNode.AsCallExpression()
-				if call.Expression.Kind != ast.KindPropertyAccessExpression {
-					return
-				}
-				layerModuleNode := call.Expression.AsPropertyAccessExpression().Expression
-
 				// Step B: Build Layer.provideMerge(providerArg) call expression
 				clonedProviderArg := tracker.DeepCloneNode(match.ProviderArg)
-				clonedLayerModule := tracker.DeepCloneNode(layerModuleNode)
+				clonedLayerModule := layerModuleNode
+				if clonedLayerModule == nil {
+					clonedLayerModule = tracker.NewIdentifier(typeparser.FindModuleIdentifier(sf, "Layer"))
+				} else {
+					clonedLayerModule = tracker.DeepCloneNode(clonedLayerModule)
+				}
 
 				provideMergeAccess := tracker.NewPropertyAccessExpression(
 					clonedLayerModule,
@@ -83,7 +87,6 @@ func runLayerMergeAllWithDependenciesFix(ctx *fixable.Context) []ls.CodeAction {
 		}); action != nil {
 			return []ls.CodeAction{*action}
 		}
-		return nil
 	}
 
 	return nil

@@ -27,7 +27,7 @@ type Effect struct {
 // Returns nil if the type is not an Effect.
 // The detection strategy is chosen based on the detected Effect version:
 // v4 uses direct symbol lookup, v3/unknown uses property iteration.
-func (tp *TypeParser) EffectType(t *checker.Type, atLocation *ast.Node) *Effect {
+func (tp *TypeParser) EffectType(t *checker.Type) *Effect {
 	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
@@ -80,7 +80,7 @@ func (tp *TypeParser) EffectType(t *checker.Type, atLocation *ast.Node) *Effect 
 
 		// Try each candidate as a variance struct
 		for _, prop := range candidates {
-			propType := tp.checker.GetTypeOfSymbolAtLocation(prop, atLocation)
+			propType := tp.checker.GetTypeOfSymbolAtLocation(prop, nil)
 			if result := tp.parseVarianceStruct(propType); result != nil {
 				return result
 			}
@@ -111,14 +111,14 @@ func (tp *TypeParser) parseVarianceStruct(t *checker.Type) *Effect {
 }
 
 // IsEffectType returns true if the type has the Effect variance struct.
-func (tp *TypeParser) IsEffectType(t *checker.Type, atLocation *ast.Node) bool {
-	return tp.EffectType(t, atLocation) != nil
+func (tp *TypeParser) IsEffectType(t *checker.Type) bool {
+	return tp.EffectType(t) != nil
 }
 
 // StrictEffectType returns the parsed Effect type only if the type's symbol name
 // is "Effect". This filters out types like Stream, Layer, HttpApp.Default that
 // carry the variance struct but are not Effect itself.
-func (tp *TypeParser) StrictEffectType(t *checker.Type, atLocation *ast.Node) *Effect {
+func (tp *TypeParser) StrictEffectType(t *checker.Type) *Effect {
 	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
@@ -127,20 +127,20 @@ func (tp *TypeParser) StrictEffectType(t *checker.Type, atLocation *ast.Node) *E
 		if sym == nil || sym.Name != "Effect" {
 			return nil
 		}
-		return tp.EffectType(t, atLocation)
+		return tp.EffectType(t)
 	})
 }
 
 // StrictIsEffectType returns true if the type has the Effect variance struct
 // AND the type's symbol name is "Effect". This filters out types like Stream,
 // Layer, HttpApp.Default that carry the variance struct but are not Effect itself.
-func (tp *TypeParser) StrictIsEffectType(t *checker.Type, atLocation *ast.Node) bool {
-	return tp.StrictEffectType(t, atLocation) != nil
+func (tp *TypeParser) StrictIsEffectType(t *checker.Type) bool {
+	return tp.StrictEffectType(t) != nil
 }
 
 // EffectSubtype detects types that have the Effect variance struct AND a "_tag" or "get"
 // marker property (e.g., Exit, Option, Either, Pool). Returns nil if not an Effect subtype.
-func (tp *TypeParser) EffectSubtype(t *checker.Type, atLocation *ast.Node) *Effect {
+func (tp *TypeParser) EffectSubtype(t *checker.Type) *Effect {
 	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
@@ -152,18 +152,18 @@ func (tp *TypeParser) EffectSubtype(t *checker.Type, atLocation *ast.Node) *Effe
 			return nil
 		}
 		// Must also be an Effect type
-		return tp.EffectType(t, atLocation)
+		return tp.EffectType(t)
 	})
 }
 
 // IsEffectSubtype returns true if the type is an Effect subtype (has variance struct + "_tag" or "get").
-func (tp *TypeParser) IsEffectSubtype(t *checker.Type, atLocation *ast.Node) bool {
-	return tp.EffectSubtype(t, atLocation) != nil
+func (tp *TypeParser) IsEffectSubtype(t *checker.Type) bool {
+	return tp.EffectSubtype(t) != nil
 }
 
 // FiberType detects types that have the Effect variance struct AND both "await" and "poll"
 // properties. Returns nil if the type is not a Fiber.
-func (tp *TypeParser) FiberType(t *checker.Type, atLocation *ast.Node) *Effect {
+func (tp *TypeParser) FiberType(t *checker.Type) *Effect {
 	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
@@ -175,19 +175,19 @@ func (tp *TypeParser) FiberType(t *checker.Type, atLocation *ast.Node) *Effect {
 			return nil
 		}
 		// Must also be an Effect type
-		return tp.EffectType(t, atLocation)
+		return tp.EffectType(t)
 	})
 }
 
 // IsFiberType returns true if the type is a Fiber type (has variance struct + "await" and "poll").
-func (tp *TypeParser) IsFiberType(t *checker.Type, atLocation *ast.Node) bool {
-	return tp.FiberType(t, atLocation) != nil
+func (tp *TypeParser) IsFiberType(t *checker.Type) bool {
+	return tp.FiberType(t) != nil
 }
 
 // HasEffectTypeId returns true if the type has the Effect type identifier.
 // For v4, this is a quick check for the "~effect/Effect" property.
 // For v3/unknown, this defers to IsEffectType since there is no single property shortcut.
-func (tp *TypeParser) HasEffectTypeId(t *checker.Type, atLocation *ast.Node) bool {
+func (tp *TypeParser) HasEffectTypeId(t *checker.Type) bool {
 	if tp == nil || tp.checker == nil || t == nil {
 		return false
 	}
@@ -197,7 +197,7 @@ func (tp *TypeParser) HasEffectTypeId(t *checker.Type, atLocation *ast.Node) boo
 			return tp.GetTypeOfPropertyByName(t, EffectTypeId) != nil
 		}
 		// For v3/unknown, the quick check is not available; defer to full detection.
-		return tp.IsEffectType(t, atLocation)
+		return tp.IsEffectType(t)
 	})
 }
 
@@ -221,7 +221,7 @@ func isEffectTypeSourceFile(tp *TypeParser, c *checker.Checker, sf *ast.SourceFi
 		return false
 	}
 
-	return tp.EffectType(effectType, sf.AsNode()) != nil
+	return tp.EffectType(effectType) != nil
 }
 
 // IsExpressionEffectModule reports whether node resolves to the Effect module namespace

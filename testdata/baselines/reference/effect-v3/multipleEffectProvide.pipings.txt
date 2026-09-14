@@ -1,7 +1,25 @@
-==== /.src/multipleEffectProvide.ts (3 flows) ====
+==== /.src/multipleEffectProvide.ts (4 flows) ====
 
 === Piping Flow ===
-Location: 17:28 - 20:2
+Location: 19:41 - 22:2
+Node: Effect.void.pipe(\n  provide(MyService1.Default),\n  provide(MyService2.Default)\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: provide
+      args: [MyService1.Default]
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: provide
+      args: [MyService2.Default]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 24:28 - 27:2
 Node: Effect.void.pipe(\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default)\n)
 Node Kind: KindCallExpression
 
@@ -19,7 +37,7 @@ Transformations (2):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 22:38 - 28:2
+Location: 29:38 - 35:2
 Node: Effect.void.pipe(\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default),\n  Effect.ignoreLogged,\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default)\n)
 Node Kind: KindCallExpression
 
@@ -49,7 +67,7 @@ Transformations (5):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 30:34 - 34:2
+Location: 37:34 - 41:2
 Node: Effect.void.pipe(\n  Effect.provide(MyService1.Default),\n  Effect.provide(MyService2.Default),\n  Effect.provide(MyService3.Default)\n)
 Node Kind: KindCallExpression
 

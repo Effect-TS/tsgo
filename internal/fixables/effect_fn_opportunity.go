@@ -3,12 +3,12 @@ package fixables
 import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/fixable"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var EffectFnOpportunityFix = fixable.Fixable{
@@ -46,7 +46,6 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 	if result == nil {
 		return nil
 	}
-
 	isFuncDecl := result.TargetNode.Kind == ast.KindFunctionDeclaration
 
 	var actions []ls.CodeAction
@@ -135,14 +134,6 @@ func effectFnBuildReplacement(
 	pipeArgs []*ast.Node,
 	isFuncDecl bool,
 ) {
-	// Build Effect module identifier
-	var effectModuleId *ast.Node
-	if result.EffectModule != nil && result.EffectModule.Kind == ast.KindIdentifier {
-		effectModuleId = tracker.DeepCloneNode(result.EffectModule)
-	} else {
-		effectModuleId = tracker.NewIdentifier("Effect")
-	}
-
 	// Build inner body function
 	var bodyFn *ast.Node
 	if result.HasGenBody && result.GeneratorFunction != nil {
@@ -155,7 +146,7 @@ func effectFnBuildReplacement(
 	}
 
 	// Build Effect.fn/fnUntraced property access
-	fnAccess := tracker.NewPropertyAccessExpression(effectModuleId, nil, tracker.NewIdentifier(variant), ast.NodeFlagsNone)
+	fnAccess := effectModuleMethod(tracker, sf, result.EffectModule, variant)
 
 	// Collect inner args: body function + deep-cloned pipe args
 	innerArgs := make([]*ast.Node, 0, 1+len(pipeArgs))

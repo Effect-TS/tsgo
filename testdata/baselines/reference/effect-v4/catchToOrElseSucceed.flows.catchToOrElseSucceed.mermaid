@@ -66,6 +66,16 @@ flowchart TB
   64[/"type: #quot;recovering#quot;<br/>node: #quot;recovering#quot;"/]
   65["type: void<br/>callee: console.log<br/>args: #91;#93;"]
   66[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  67[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  68[/"type: #quot;error#quot;<br/>node: #quot;error#quot;"/]
+  69["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  70[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  71["type: Effect#lt;number, never, never#gt;<br/>callee: catchAlias<br/>args: #91;#40;#41; =#gt; Effect.succeed#40;42#41;#93;"]
+  72[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: catchAlias"/]
+  73[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;42#41;"]]
+  74[/"type: 42<br/>node: 42"/]
+  75["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  76[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   4 -->|"kind: transformCallee"| 3
@@ -129,3 +139,11 @@ flowchart TB
   62 -->|"kind: usedBy"| 60
   60 -->|"kind: transformArg"| 58
   56 -->|"kind: pipe"| 58
+  68 -->|"kind: pipe"| 69
+  70 -->|"kind: transformCallee"| 69
+  72 -->|"kind: transformCallee"| 71
+  74 -->|"kind: pipe"| 75
+  76 -->|"kind: transformCallee"| 75
+  75 -->|"kind: potentialReturn"| 73
+  73 -->|"kind: transformArg"| 71
+  69 -->|"kind: pipe"| 71

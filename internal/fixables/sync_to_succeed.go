@@ -23,11 +23,14 @@ func runSyncToSucceedFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
+		if match.Callee == nil {
+			continue
+		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.succeed",
 			Run: func(tracker *rewriter.Tracker) {
-				tracker.ReplaceNode(ctx.SourceFile, match.CalleeName, tracker.NewIdentifier("succeed"), nil)
+				replaceEffectMethodCallee(tracker, ctx.SourceFile, match.Callee, match.CalleeName, "succeed")
 				tracker.ReplaceNode(ctx.SourceFile, match.Thunk, match.ConstantValue, nil)
 			},
 		}); action != nil {

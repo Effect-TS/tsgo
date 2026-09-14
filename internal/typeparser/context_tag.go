@@ -10,7 +10,7 @@ import (
 
 // ContextTag parses a v3 Context.Tag type and extracts Identifier, Shape parameters.
 // Returns nil if the type is not a v3 Context.Tag.
-func (tp *TypeParser) ContextTag(t *checker.Type, atLocation *ast.Node) *Service {
+func (tp *TypeParser) ContextTag(t *checker.Type) *Service {
 	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
@@ -18,7 +18,7 @@ func (tp *TypeParser) ContextTag(t *checker.Type, atLocation *ast.Node) *Service
 		if tp.DetectEffectVersion() != EffectMajorV3 {
 			return nil
 		}
-		if !tp.IsPipeableType(t, atLocation) {
+		if !tp.IsPipeableType(t) {
 			return nil
 		}
 
@@ -56,7 +56,7 @@ func (tp *TypeParser) ContextTag(t *checker.Type, atLocation *ast.Node) *Service
 		})
 
 		for _, prop := range candidates {
-			propType := tp.checker.GetTypeOfSymbolAtLocation(prop, atLocation)
+			propType := tp.checker.GetTypeOfSymbolAtLocation(prop, nil)
 			if result := tp.parseServiceVarianceStruct(propType); result != nil {
 				return result
 			}
@@ -67,6 +67,6 @@ func (tp *TypeParser) ContextTag(t *checker.Type, atLocation *ast.Node) *Service
 }
 
 // IsContextTag returns true if the type has the Context.Tag variance struct.
-func (tp *TypeParser) IsContextTag(t *checker.Type, atLocation *ast.Node) bool {
-	return tp.ContextTag(t, atLocation) != nil
+func (tp *TypeParser) IsContextTag(t *checker.Type) bool {
+	return tp.ContextTag(t) != nil
 }

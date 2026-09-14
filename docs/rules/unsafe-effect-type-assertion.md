@@ -6,7 +6,7 @@ Detects unsafe type assertions that narrow Effect, Stream, or Layer error or req
 
 | Property | Value |
 | --- | --- |
-| Category | Effect-native |
+| Category | Correctness |
 | Default severity | `off` |
 | Fixable | Yes |
 | Effect versions | v3, v4 |

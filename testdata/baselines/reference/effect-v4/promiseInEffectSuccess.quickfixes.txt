@@ -252,51 +252,55 @@
   Fix 0: "Disable floatingEffect for this line"
   Fix 1: "Disable floatingEffect for entire file"
 
-[D64] (75:1-75:77) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+[D64] (76:1-76:77) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D65] (77:1-77:73) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D66] (78:1-78:54) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D67] (79:1-79:63) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D68] (80:30-80:39) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D69] (88:17-88:38) TS377091: Exported declaration 'intentionallyReturned' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D70] (91:14-91:32) TS377091: Exported declaration 'intentionallyArrow' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D71] (92:14-92:37) TS377091: Exported declaration 'intentionallyContextual' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D72] (93:14-93:48) TS377091: Exported declaration 'intentionallyReturnedWithUnrelated' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D73] (94:3-94:22) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+  Fix 0: "Disable floatingEffect for this line"
+  Fix 1: "Disable floatingEffect for entire file"
+
+[D74] (94:3-94:22) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
   Fix 0: "Disable promiseInEffectSuccess for this line"
   Fix 1: "Disable promiseInEffectSuccess for entire file"
 
-[D65] (76:1-76:77) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
-  Fix 0: "Disable floatingEffect for this line"
-  Fix 1: "Disable floatingEffect for entire file"
-
-[D66] (77:1-77:63) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
-  Fix 0: "Disable floatingEffect for this line"
-  Fix 1: "Disable floatingEffect for entire file"
-
-[D67] (78:30-78:39) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
-  Fix 0: "Disable floatingEffect for this line"
-  Fix 1: "Disable floatingEffect for entire file"
-
-[D68] (86:17-86:38) TS377091: Exported declaration 'intentionallyReturned' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+[D75] (98:14-98:28) TS377091: Exported declaration 'inferredReturn' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
   Fix 0: "Disable lazyEffect for this line"
   Fix 1: "Disable lazyEffect for entire file"
 
-[D69] (89:14-89:32) TS377091: Exported declaration 'intentionallyArrow' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
-  Fix 0: "Disable lazyEffect for this line"
-  Fix 1: "Disable lazyEffect for entire file"
-
-[D70] (90:14-90:37) TS377091: Exported declaration 'intentionallyContextual' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
-  Fix 0: "Disable lazyEffect for this line"
-  Fix 1: "Disable lazyEffect for entire file"
-
-[D71] (91:14-91:48) TS377091: Exported declaration 'intentionallyReturnedWithUnrelated' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
-  Fix 0: "Disable lazyEffect for this line"
-  Fix 1: "Disable lazyEffect for entire file"
-
-[D72] (92:3-92:22) TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
-  Fix 0: "Disable floatingEffect for this line"
-  Fix 1: "Disable floatingEffect for entire file"
-
-[D73] (92:3-92:22) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
-  Fix 0: "Disable promiseInEffectSuccess for this line"
-  Fix 1: "Disable promiseInEffectSuccess for entire file"
-
-[D74] (96:14-96:28) TS377091: Exported declaration 'inferredReturn' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
-  Fix 0: "Disable lazyEffect for this line"
-  Fix 1: "Disable lazyEffect for entire file"
-
-[D75] (96:37-96:65) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+[D76] (98:37-98:65) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
   Fix 0: "Disable promiseInEffectSuccess for this line"
   Fix 1: "Disable promiseInEffectSuccess for entire file"
 
@@ -680,10 +684,10 @@ skipped by default
 === [D63] Fix 1: "Disable floatingEffect for entire file" ===
 skipped by default
 
-=== [D64] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+=== [D64] Fix 0: "Disable floatingEffect for this line" ===
 skipped by default
 
-=== [D64] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+=== [D64] Fix 1: "Disable floatingEffect for entire file" ===
 skipped by default
 
 === [D65] Fix 0: "Disable floatingEffect for this line" ===
@@ -704,10 +708,10 @@ skipped by default
 === [D67] Fix 1: "Disable floatingEffect for entire file" ===
 skipped by default
 
-=== [D68] Fix 0: "Disable lazyEffect for this line" ===
+=== [D68] Fix 0: "Disable floatingEffect for this line" ===
 skipped by default
 
-=== [D68] Fix 1: "Disable lazyEffect for entire file" ===
+=== [D68] Fix 1: "Disable floatingEffect for entire file" ===
 skipped by default
 
 === [D69] Fix 0: "Disable lazyEffect for this line" ===
@@ -728,26 +732,32 @@ skipped by default
 === [D71] Fix 1: "Disable lazyEffect for entire file" ===
 skipped by default
 
-=== [D72] Fix 0: "Disable floatingEffect for this line" ===
+=== [D72] Fix 0: "Disable lazyEffect for this line" ===
 skipped by default
 
-=== [D72] Fix 1: "Disable floatingEffect for entire file" ===
+=== [D72] Fix 1: "Disable lazyEffect for entire file" ===
 skipped by default
 
-=== [D73] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+=== [D73] Fix 0: "Disable floatingEffect for this line" ===
 skipped by default
 
-=== [D73] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+=== [D73] Fix 1: "Disable floatingEffect for entire file" ===
 skipped by default
 
-=== [D74] Fix 0: "Disable lazyEffect for this line" ===
+=== [D74] Fix 0: "Disable promiseInEffectSuccess for this line" ===
 skipped by default
 
-=== [D74] Fix 1: "Disable lazyEffect for entire file" ===
+=== [D74] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
 skipped by default
 
-=== [D75] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+=== [D75] Fix 0: "Disable lazyEffect for this line" ===
 skipped by default
 
-=== [D75] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+=== [D75] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D76] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D76] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
 skipped by default

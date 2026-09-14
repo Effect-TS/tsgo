@@ -31,7 +31,7 @@ func runFloatingEffectYieldFix(ctx *fixable.Context) []ls.CodeAction {
 			return nil
 		}
 		exprType := ctx.TypeParser.GetTypeAtLocation(match.Expression)
-		if ctx.TypeParser.EffectYieldableType(exprType, match.Expression) == nil {
+		if ctx.TypeParser.EffectYieldableType(exprType) == nil {
 			return nil
 		}
 

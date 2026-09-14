@@ -14,6 +14,13 @@ class MyService3 extends Effect.Service<MyService3>()("MyService3", {
   succeed: { value: 3 }
 }) {}
 
+const provide = Effect.provide
+
+export const shouldReportConstantAlias = Effect.void.pipe(
+  provide(MyService1.Default),
+  provide(MyService2.Default)
+)
+
 export const shouldReport = Effect.void.pipe(
   Effect.provide(MyService1.Default),
   Effect.provide(MyService2.Default)

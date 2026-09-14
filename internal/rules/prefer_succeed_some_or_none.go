@@ -40,13 +40,14 @@ var PreferSucceedSomeOrNone = rule.Rule{
 
 // PreferSucceedSomeOrNoneMatch holds the nodes needed by the diagnostic and quick fix.
 type PreferSucceedSomeOrNoneMatch struct {
-	SourceFile         *ast.SourceFile
-	Location           core.TextRange
-	ReplacementTarget  *ast.Node
-	EffectModuleNode   *ast.Node
-	ReplacementName    string
-	ValueNode          *ast.Node
-	ValueTypeArguments *ast.NodeList
+	SourceFile          *ast.SourceFile
+	Location            core.TextRange
+	Flow                *typeparser.PipingFlow
+	TransformationCount int
+	EffectModuleNode    *ast.Node
+	ReplacementName     string
+	ValueNode           *ast.Node
+	ValueTypeArguments  *ast.NodeList
 }
 
 type normalizedOptionInput struct {
@@ -64,90 +65,68 @@ func AnalyzePreferSucceedSomeOrNone(tp *typeparser.TypeParser, _ *checker.Checke
 	}
 
 	var matches []PreferSucceedSomeOrNoneMatch
-	seen := make(map[*ast.Node]struct{})
 	for _, flow := range tp.PipingFlows(sf, true) {
-		for index := range flow.Transformations {
-			transformation := &flow.Transformations[index]
-			if transformation.Callee == nil || transformation.Callee.Kind != ast.KindPropertyAccessExpression ||
-				len(transformation.Args) != 0 ||
-				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "succeed") {
-				continue
-			}
-			if _, ok := seen[transformation.Node]; ok {
-				continue
-			}
+		isSucceed := func(transformation *typeparser.PipingFlowTransformation) bool {
+			return transformation.Callee != nil &&
+				len(transformation.Args) == 0 &&
+				(transformation.TypeArguments == nil || len(transformation.TypeArguments.Nodes) == 0) &&
+				tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "succeed")
+		}
+		if flow.MatchesPrefix(
+			func(subject *typeparser.PipingFlowSubject) bool { return isOptionNoneCall(tp, subject.Node) },
+			isSucceed,
+		) {
+			matches = append(matches, preferSucceedSomeOrNoneMatch(sf, flow, 0, &normalizedOptionInput{ReplacementName: "succeedNone"}))
+		}
 
-			if transformation.Node != nil && transformation.Node.Kind == ast.KindCallExpression {
-				call := transformation.Node.AsCallExpression()
-				if call != nil &&
-					call.TypeArguments != nil && len(call.TypeArguments.Nodes) > 0 {
-					continue
-				}
-			}
-
-			optionInput := matchNormalizedOptionInput(tp, flow, index)
-			if optionInput == nil {
-				continue
-			}
-
-			match := PreferSucceedSomeOrNoneMatch{
-				SourceFile:         sf,
-				Location:           scanner.GetErrorRangeForNode(sf, transformation.Callee),
-				EffectModuleNode:   transformation.Callee.AsPropertyAccessExpression().Expression,
-				ReplacementName:    optionInput.ReplacementName,
-				ValueNode:          optionInput.ValueNode,
-				ValueTypeArguments: optionInput.ValueTypeArguments,
-			}
-
-			// A direct Effect.succeed(...) call can be replaced in place even when
-			// more transformations follow. A pipe spelling is safely auto-fixable
-			// when the matched Option -> succeed pair is the complete flow.
-			if transformation.Node != nil && transformation.Node.Kind == ast.KindCallExpression {
-				match.ReplacementTarget = transformation.Node
-			} else if index == len(flow.Transformations)-1 &&
-				(match.ReplacementName == "succeedNone" && index == 0 ||
-					match.ReplacementName == "succeedSome" && index == 1) {
-				match.ReplacementTarget = flow.Node
-			}
-
-			seen[transformation.Node] = struct{}{}
-			matches = append(matches, match)
+		sequences := flow.FindTransformationSequences(
+			func(transformation *typeparser.PipingFlowTransformation) bool {
+				return transformation.Callee != nil && len(transformation.Args) == 0 &&
+					tp.IsNodeReferenceToEffectOptionModuleApi(transformation.Callee, "some")
+			},
+			isSucceed,
+		)
+		for _, sequence := range sequences {
+			optionIndex := sequence.Start
+			matches = append(matches, preferSucceedSomeOrNoneMatch(sf, flow, optionIndex+1, &normalizedOptionInput{
+				ReplacementName:    "succeedSome",
+				ValueNode:          flow.TransformationInputNode(optionIndex),
+				ValueTypeArguments: flow.Transformations[optionIndex].TypeArguments,
+			}))
 		}
 	}
 	return matches
 }
 
-func matchNormalizedOptionInput(tp *typeparser.TypeParser, flow *typeparser.PipingFlow, succeedIndex int) *normalizedOptionInput {
-	if succeedIndex == 0 {
-		subject := flow.Subject.Node
-		if subject == nil || subject.Kind != ast.KindCallExpression {
-			return nil
-		}
-		call := subject.AsCallExpression()
-		if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) != 0 ||
-			call.TypeArguments != nil && len(call.TypeArguments.Nodes) > 0 ||
-			!tp.IsNodeReferenceToEffectOptionModuleApi(call.Expression, "none") {
-			return nil
-		}
-		return &normalizedOptionInput{ReplacementName: "succeedNone"}
+func preferSucceedSomeOrNoneMatch(sf *ast.SourceFile, flow *typeparser.PipingFlow, succeedIndex int, optionInput *normalizedOptionInput) PreferSucceedSomeOrNoneMatch {
+	transformation := &flow.Transformations[succeedIndex]
+	var effectModuleNode *ast.Node
+	if transformation.Callee.Kind == ast.KindPropertyAccessExpression {
+		effectModuleNode = transformation.Callee.AsPropertyAccessExpression().Expression
 	}
+	match := PreferSucceedSomeOrNoneMatch{
+		SourceFile:         sf,
+		Location:           scanner.GetErrorRangeForNode(sf, transformation.Callee),
+		EffectModuleNode:   effectModuleNode,
+		ReplacementName:    optionInput.ReplacementName,
+		ValueNode:          optionInput.ValueNode,
+		ValueTypeArguments: optionInput.ValueTypeArguments,
+	}
+	if transformation.Kind == typeparser.TransformationKindCall ||
+		transformation.Kind == typeparser.TransformationKindPipe ||
+		transformation.Kind == typeparser.TransformationKindPipeable {
+		match.Flow = flow
+		match.TransformationCount = succeedIndex + 1
+	}
+	return match
+}
 
-	previous := &flow.Transformations[succeedIndex-1]
-	if previous.Callee == nil || len(previous.Args) != 0 ||
-		!tp.IsNodeReferenceToEffectOptionModuleApi(previous.Callee, "some") {
-		return nil
+func isOptionNoneCall(tp *typeparser.TypeParser, node *ast.Node) bool {
+	if node == nil || node.Kind != ast.KindCallExpression {
+		return false
 	}
-
-	input := &normalizedOptionInput{ReplacementName: "succeedSome"}
-	if previous.Node != nil && previous.Node.Kind == ast.KindCallExpression {
-		call := previous.Node.AsCallExpression()
-		if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) != 1 {
-			return nil
-		}
-		input.ValueNode = call.Arguments.Nodes[0]
-		input.ValueTypeArguments = call.TypeArguments
-	} else if succeedIndex == 1 {
-		input.ValueNode = flow.Subject.Node
-	}
-	return input
+	call := node.AsCallExpression()
+	return call != nil && call.Arguments != nil && len(call.Arguments.Nodes) == 0 &&
+		(call.TypeArguments == nil || len(call.TypeArguments.Nodes) == 0) &&
+		tp.IsNodeReferenceToEffectOptionModuleApi(call.Expression, "none")
 }

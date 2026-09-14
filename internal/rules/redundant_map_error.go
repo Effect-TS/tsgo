@@ -92,7 +92,7 @@ func analyzeRedundantMapErrorFlowCandidate(tp *typeparser.TypeParser, sf *ast.So
 	}
 
 	lastTransform := flow.Transformations[len(flow.Transformations)-1]
-	if lastTransform.Node == nil || lastTransform.Callee == nil || len(lastTransform.Args) == 0 {
+	if lastTransform.Callee == nil || len(lastTransform.Args) == 0 {
 		return redundantMapErrorCandidate{}, nil, nil, false
 	}
 	if !tp.IsNodeReferenceToEffectModuleApi(lastTransform.Callee, "mapError") {
@@ -125,7 +125,7 @@ func analyzeRedundantMapErrorFlowCandidate(tp *typeparser.TypeParser, sf *ast.So
 
 	return redundantMapErrorCandidate{
 		yieldExpression: yieldExpr.AsNode(),
-		mapErrorNode:    lastTransform.Node,
+		mapErrorNode:    lastTransform.Callee,
 		mapperNode:      mapperNode,
 		mapperText:      mapperText,
 	}, genFn, genCallNode, true

@@ -98,11 +98,6 @@ func analyzeLayerMergeAllCall(tp *typeparser.TypeParser, c *checker.Checker, sf 
 		return nil
 	}
 
-	// Verify this is a property access expression (X.mergeAll shape)
-	if call.Expression.Kind != ast.KindPropertyAccessExpression {
-		return nil
-	}
-
 	// Parse all layer arguments
 	var layerInfos []layerInfo
 	// Map of actually provided types -> argument node that provides them
@@ -114,7 +109,7 @@ func analyzeLayerMergeAllCall(tp *typeparser.TypeParser, c *checker.Checker, sf 
 			continue
 		}
 
-		layer := tp.LayerType(argType, arg)
+		layer := tp.LayerType(argType)
 		if layer == nil {
 			continue
 		}

@@ -1,0 +1,57 @@
+==== /.src/catchIfTagToCatchTag.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 15:25 - 20:2
+Node: program.pipe(\n  Effect.catchIf(\n    (error) => error._tag === "NotFoundError",\n    () => Effect.succeed("missing")\n  )\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchIf
+      args: [(error) => error._tag === "NotFoundError", () => Effect.succeed("missing")]
+      outType: Effect<string, TimeoutError, never>
+
+=== Piping Flow ===
+Location: 18:10 - 18:36
+Node: Effect.succeed("missing")
+Node Kind: KindCallExpression
+
+Subject: "missing"
+Subject Type: "missing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 24:30 - 26:2
+Node: program.pipe(\n  catchIfAlias((error) => error._tag === "NotFoundError", () => Effect.succeed("missing"))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: catchIfAlias
+      args: [(error) => error._tag === "NotFoundError", () => Effect.succeed("missing")]
+      outType: Effect<string, TimeoutError, never>
+
+=== Piping Flow ===
+Location: 25:64 - 25:90
+Node: Effect.succeed("missing")
+Node Kind: KindCallExpression
+
+Subject: "missing"
+Subject Type: "missing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>

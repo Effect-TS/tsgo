@@ -1,0 +1,38 @@
+flowchart TB
+  0[/"type: #quot;NotFoundError#quot;<br/>node: #quot;NotFoundError#quot;"/]
+  1[/"type: #quot;TimeoutError#quot;<br/>node: #quot;TimeoutError#quot;"/]
+  2[/"type: Effect#lt;string, NotFoundError #124; TimeoutError, never#gt;<br/>node: program"/]
+  3["type: Effect#lt;string, TimeoutError, never#gt;<br/>callee: Effect.catchIf<br/>args: #91;#40;error#41; =#gt; error._tag === #quot;NotFoundError#quot;, #40;#41; =#gt; Effect.succeed#40;#quot;missing#quot;#41;#93;"]
+  4[/"type: #123; #lt;E, EB extends E, A2, E2, R2#gt;#40;refinement: Refinement#lt;NoInfer#lt;E#gt;, EB#gt;, f: #40;e: EB#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2 #124; Exclude#lt;E, EB#gt;, R #124; R2#gt;; #lt;E, A2, E2, R2#gt;#40;predicate: Predicate#lt;NoInfer#lt;E#gt;#gt;, f: #40;e: NoInfer#lt;E#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, EB extends E, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, refinement: Refinement#lt;E, EB#gt;, f: #40;e: EB#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2 #124; Exclude#lt;E, EB#gt;, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, predicate: Predicate#lt;E#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.catchIf"/]
+  5[["type: #40;error: NotFoundError #124; TimeoutError#41; =#gt; error is NotFoundError<br/>node: #40;error#41; =#gt; error._tag === #quot;NotFoundError#quot;"]]
+  6[/"type: boolean<br/>node: error._tag === #quot;NotFoundError#quot;"/]
+  7[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;missing#quot;#41;"]]
+  8[/"type: #quot;missing#quot;<br/>node: #quot;missing#quot;"/]
+  9["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  10[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  11[/"type: #123; #lt;E, EB extends E, A2, E2, R2#gt;#40;refinement: Refinement#lt;NoInfer#lt;E#gt;, EB#gt;, f: #40;e: EB#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2 #124; Exclude#lt;E, EB#gt;, R #124; R2#gt;; #lt;E, A2, E2, R2#gt;#40;predicate: Predicate#lt;NoInfer#lt;E#gt;#gt;, f: #40;e: NoInfer#lt;E#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, EB extends E, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, refinement: Refinement#lt;E, EB#gt;, f: #40;e: EB#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2 #124; Exclude#lt;E, EB#gt;, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, predicate: Predicate#lt;E#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.catchIf"/]
+  12[/"type: Effect#lt;string, NotFoundError #124; TimeoutError, never#gt;<br/>node: program"/]
+  13["type: Effect#lt;string, TimeoutError, never#gt;<br/>callee: catchIfAlias<br/>args: #91;#40;error#41; =#gt; error._tag === #quot;NotFoundError#quot;, #40;#41; =#gt; Effect.succeed#40;#quot;missing#quot;#41;#93;"]
+  14[/"type: #123; #lt;E, EB extends E, A2, E2, R2#gt;#40;refinement: Refinement#lt;NoInfer#lt;E#gt;, EB#gt;, f: #40;e: EB#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2 #124; Exclude#lt;E, EB#gt;, R #124; R2#gt;; #lt;E, A2, E2, R2#gt;#40;predicate: Predicate#lt;NoInfer#lt;E#gt;#gt;, f: #40;e: NoInfer#lt;E#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, EB extends E, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, refinement: Refinement#lt;E, EB#gt;, f: #40;e: EB#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2 #124; Exclude#lt;E, EB#gt;, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, predicate: Predicate#lt;E#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: catchIfAlias"/]
+  15[["type: #40;error: NotFoundError #124; TimeoutError#41; =#gt; error is NotFoundError<br/>node: #40;error#41; =#gt; error._tag === #quot;NotFoundError#quot;"]]
+  16[/"type: boolean<br/>node: error._tag === #quot;NotFoundError#quot;"/]
+  17[["type: #40;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#41; =#gt; Effect.succeed#40;#quot;missing#quot;#41;"]]
+  18[/"type: #quot;missing#quot;<br/>node: #quot;missing#quot;"/]
+  19["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  20[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  4 -->|"kind: transformCallee"| 3
+  6 -->|"kind: potentialReturn"| 5
+  5 -->|"kind: transformArg"| 3
+  8 -->|"kind: pipe"| 9
+  10 -->|"kind: transformCallee"| 9
+  9 -->|"kind: potentialReturn"| 7
+  7 -->|"kind: transformArg"| 3
+  2 -->|"kind: pipe"| 3
+  14 -->|"kind: transformCallee"| 13
+  16 -->|"kind: potentialReturn"| 15
+  15 -->|"kind: transformArg"| 13
+  18 -->|"kind: pipe"| 19
+  20 -->|"kind: transformCallee"| 19
+  19 -->|"kind: potentialReturn"| 17
+  17 -->|"kind: transformArg"| 13
+  12 -->|"kind: pipe"| 13

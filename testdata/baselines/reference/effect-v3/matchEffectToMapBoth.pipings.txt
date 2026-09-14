@@ -1,0 +1,85 @@
+==== /.src/matchEffectToMapBoth.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 8:29 - 11:4
+Node: effect.pipe(matchEffect({\n  onFailure: (error) => Effect.fail(error.length),\n  onSuccess: (value) => Effect.succeed(value + 1)\n}))
+Node Kind: KindCallExpression
+
+Subject: effect
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: matchEffect
+      args: [{\n  onFailure: (error) => Effect.fail(error.length),\n  onSuccess: (value) => Effect.succeed(value + 1)\n}]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 9:24 - 9:50
+Node: Effect.fail(error.length)
+Node Kind: KindCallExpression
+
+Subject: error.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, number, never>
+
+=== Piping Flow ===
+Location: 10:24 - 10:50
+Node: Effect.succeed(value + 1)
+Node Kind: KindCallExpression
+
+Subject: value + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 13:24 - 16:4
+Node: effect.pipe(Effect.matchEffect({\n  onFailure: (error) => Effect.fail(error.length),\n  onSuccess: (value) => Effect.succeed(value + 1)\n}))
+Node Kind: KindCallExpression
+
+Subject: effect
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.matchEffect
+      args: [{\n  onFailure: (error) => Effect.fail(error.length),\n  onSuccess: (value) => Effect.succeed(value + 1)\n}]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 14:24 - 14:50
+Node: Effect.fail(error.length)
+Node Kind: KindCallExpression
+
+Subject: error.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, number, never>
+
+=== Piping Flow ===
+Location: 15:24 - 15:50
+Node: Effect.succeed(value + 1)
+Node Kind: KindCallExpression
+
+Subject: value + 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

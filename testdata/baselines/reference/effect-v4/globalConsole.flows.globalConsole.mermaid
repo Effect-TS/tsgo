@@ -10,27 +10,31 @@ flowchart TB
   8[/"type: #quot;info#quot;<br/>node: #quot;info#quot;"/]
   9["type: void<br/>callee: myConsole.info<br/>args: #91;#93;"]
   10[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: myConsole.info"/]
-  11((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;#41;")))
-  12[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
-  13["type: void<br/>callee: console.log<br/>args: #91;#93;"]
-  14[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  15((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;")))
-  16[/"type: #quot;warning#quot;<br/>node: #quot;warning#quot;"/]
-  17["type: void<br/>callee: console.warn<br/>args: #91;#93;"]
-  18[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.warn"/]
-  19[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fn#40;#quot;consoleWarnInFn#quot;#41;#40;function*#40;#41; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;#41;"]]
-  20((("type: Effect#lt;#40;#41; =#gt; void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; console.error#40;#quot;nested#quot;#41;#92;n  return fn#92;n#125;#41;")))
-  21[/"type: #40;#41; =#gt; void<br/>node: fn"/]
-  22[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; console.error#40;#quot;nested#quot;#41;"]]
-  23[/"type: #quot;nested#quot;<br/>node: #quot;nested#quot;"/]
-  24["type: void<br/>callee: console.error<br/>args: #91;#93;"]
-  25[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.error"/]
-  26[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#92;n  const console = #123; log: #40;..._args: Array#lt;unknown#gt;#41; =#gt; undefined #125;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;"]]
-  27[["type: #40;..._args: unknown#91;#93;#41; =#gt; undefined<br/>node: #40;..._args: Array#lt;unknown#gt;#41; =#gt; undefined"]]
-  28[/"type: undefined<br/>node: undefined"/]
-  29[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
-  30["type: undefined<br/>callee: console.log<br/>args: #91;#93;"]
-  31[/"type: #40;..._args: unknown#91;#93;#41; =#gt; undefined<br/>node: console.log"/]
+  11[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  12[/"type: #quot;aliased method#quot;<br/>node: #quot;aliased method#quot;"/]
+  13["type: void<br/>callee: consoleLog<br/>args: #91;#93;"]
+  14[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: consoleLog"/]
+  15((("type: Effect#lt;void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;#41;")))
+  16[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
+  17["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  18[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  19((("type: Effect#lt;void, never, never#gt;<br/>node: function*#40;#41; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;")))
+  20[/"type: #quot;warning#quot;<br/>node: #quot;warning#quot;"/]
+  21["type: void<br/>callee: console.warn<br/>args: #91;#93;"]
+  22[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.warn"/]
+  23[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.fn#40;#quot;consoleWarnInFn#quot;#41;#40;function*#40;#41; #123;#92;n  console.warn#40;#quot;warning#quot;#41;#92;n#125;#41;"]]
+  24((("type: Effect#lt;#40;#41; =#gt; void, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; console.error#40;#quot;nested#quot;#41;#92;n  return fn#92;n#125;#41;")))
+  25[/"type: #40;#41; =#gt; void<br/>node: fn"/]
+  26[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; console.error#40;#quot;nested#quot;#41;"]]
+  27[/"type: #quot;nested#quot;<br/>node: #quot;nested#quot;"/]
+  28["type: void<br/>callee: console.error<br/>args: #91;#93;"]
+  29[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.error"/]
+  30[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#92;n  const console = #123; log: #40;..._args: Array#lt;unknown#gt;#41; =#gt; undefined #125;#92;n  console.log#40;#quot;hello#quot;#41;#92;n#125;"]]
+  31[["type: #40;..._args: unknown#91;#93;#41; =#gt; undefined<br/>node: #40;..._args: Array#lt;unknown#gt;#41; =#gt; undefined"]]
+  32[/"type: undefined<br/>node: undefined"/]
+  33[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
+  34["type: undefined<br/>callee: console.log<br/>args: #91;#93;"]
+  35[/"type: #40;..._args: unknown#91;#93;#41; =#gt; undefined<br/>node: console.log"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   4 -->|"kind: pipe"| 5
@@ -40,19 +44,21 @@ flowchart TB
   10 -->|"kind: transformCallee"| 9
   12 -->|"kind: pipe"| 13
   14 -->|"kind: transformCallee"| 13
-  13 -->|"kind: usedBy"| 11
   16 -->|"kind: pipe"| 17
   18 -->|"kind: transformCallee"| 17
   17 -->|"kind: usedBy"| 15
-  15 -->|"kind: potentialReturn"| 19
-  21 -->|"kind: potentialReturn"| 20
-  23 -->|"kind: pipe"| 24
-  25 -->|"kind: transformCallee"| 24
-  24 -->|"kind: potentialReturn"| 22
-  22 -->|"kind: usedBy"| 20
-  21 -->|"kind: usedBy"| 20
-  28 -->|"kind: potentialReturn"| 27
-  27 -->|"kind: usedBy"| 26
-  29 -->|"kind: pipe"| 30
-  31 -->|"kind: transformCallee"| 30
-  30 -->|"kind: usedBy"| 26
+  20 -->|"kind: pipe"| 21
+  22 -->|"kind: transformCallee"| 21
+  21 -->|"kind: usedBy"| 19
+  19 -->|"kind: potentialReturn"| 23
+  25 -->|"kind: potentialReturn"| 24
+  27 -->|"kind: pipe"| 28
+  29 -->|"kind: transformCallee"| 28
+  28 -->|"kind: potentialReturn"| 26
+  26 -->|"kind: usedBy"| 24
+  25 -->|"kind: usedBy"| 24
+  32 -->|"kind: potentialReturn"| 31
+  31 -->|"kind: usedBy"| 30
+  33 -->|"kind: pipe"| 34
+  35 -->|"kind: transformCallee"| 34
+  34 -->|"kind: usedBy"| 30

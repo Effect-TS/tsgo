@@ -50,19 +50,18 @@ func AnalyzeEffectMapFlatten(tp *typeparser.TypeParser, _ *checker.Checker, sf *
 
 	flows := tp.PipingFlows(sf, false)
 	for _, flow := range flows {
-		for i := range len(flow.Transformations) - 1 {
-			mapTransformation := flow.Transformations[i]
-			flattenTransformation := flow.Transformations[i+1]
-
-			if len(mapTransformation.Args) == 0 || len(flattenTransformation.Args) != 0 {
-				continue
-			}
-
+		sequences := flow.FindTransformationSequences(
+			func(transformation *typeparser.PipingFlowTransformation) bool {
+				return len(transformation.Args) > 0 && tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "map")
+			},
+			func(transformation *typeparser.PipingFlowTransformation) bool {
+				return len(transformation.Args) == 0 && tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "flatten")
+			},
+		)
+		for _, sequence := range sequences {
+			mapTransformation := &flow.Transformations[sequence.Start]
+			flattenTransformation := &flow.Transformations[sequence.Start+1]
 			if (mapTransformation.Kind != typeparser.TransformationKindPipe && mapTransformation.Kind != typeparser.TransformationKindPipeable) || flattenTransformation.Kind != mapTransformation.Kind {
-				continue
-			}
-
-			if !tp.IsNodeReferenceToEffectModuleApi(mapTransformation.Callee, "map") || !tp.IsNodeReferenceToEffectModuleApi(flattenTransformation.Callee, "flatten") {
 				continue
 			}
 

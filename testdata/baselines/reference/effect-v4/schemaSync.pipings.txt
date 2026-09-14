@@ -1,0 +1,519 @@
+==== /.src/schemaSync.ts (37 flows) ====
+
+=== Piping Flow ===
+Location: 9:15 - 9:54
+Node: Schema.Struct({ name: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { name: Schema.String }
+Subject Type: { name: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly name: String; }>
+
+=== Piping Flow ===
+Location: 13:31 - 13:64
+Node: Schema.decodeSync(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeSync(Person)
+      args: (constant)
+      outType: { readonly name: string; }
+
+=== Piping Flow ===
+Location: 14:38 - 14:78
+Node: Schema.decodeUnknownSync(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownSync(Person)
+      args: (constant)
+      outType: { readonly name: string; }
+
+=== Piping Flow ===
+Location: 15:31 - 15:64
+Node: Schema.encodeSync(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.encodeSync(Person)
+      args: (constant)
+      outType: { readonly name: string; }
+
+=== Piping Flow ===
+Location: 16:38 - 16:78
+Node: Schema.encodeUnknownSync(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.encodeUnknownSync(Person)
+      args: (constant)
+      outType: { readonly name: string; }
+
+=== Piping Flow ===
+Location: 19:30 - 19:58
+Node: S.decodeSync(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: S.decodeSync(Person)
+      args: (constant)
+      outType: { readonly name: string; }
+
+=== Piping Flow ===
+Location: 20:26 - 20:48
+Node: decode(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: decode(Person)
+      args: (constant)
+      outType: { readonly name: string; }
+
+=== Piping Flow ===
+Location: 22:29 - 22:56
+Node: decodeAlias(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: decodeAlias(Person)
+      args: (constant)
+      outType: { readonly name: string; }
+
+=== Piping Flow ===
+Location: 23:29 - 23:65
+Node: Schema["encodeSync"](Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema["encodeSync"](Person)
+      args: (constant)
+      outType: { readonly name: string; }
+
+=== Piping Flow ===
+Location: 24:23 - 24:49
+Node: Schema.decodeSync(Person)
+Node Kind: KindCallExpression
+
+Subject: Person
+Subject Type: Struct<{ readonly name: String; }>
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeSync
+      args: (constant)
+      outType: (input: { readonly name: string; }, options?: ParseOptions | undefined) => { readonly name: string; }
+
+=== Piping Flow ===
+Location: 25:37 - 25:70
+Node: Schema.encodeSync(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.encodeSync(Person)
+      args: (constant)
+      outType: { readonly name: string; }
+
+=== Piping Flow ===
+Location: 26:25 - 28:3
+Node: Effect.gen(function*() {\n  return Schema.decodeSync(Person)(input)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return Schema.decodeSync(Person)(input)\n}
+Subject Type: () => Generator<never, { readonly name: string; }, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<{ readonly name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 27:9 - 27:42
+Node: Schema.decodeSync(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeSync(Person)
+      args: (constant)
+      outType: { readonly name: string; }
+
+=== Piping Flow ===
+Location: 31:32 - 31:65
+Node: Parser.decodeSync(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Parser.decodeSync(Person)
+      args: (constant)
+      outType: { readonly name: string; }
+
+=== Piping Flow ===
+Location: 32:39 - 32:79
+Node: Parser.decodeUnknownSync(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Parser.decodeUnknownSync(Person)
+      args: (constant)
+      outType: { readonly name: string; }
+
+=== Piping Flow ===
+Location: 33:32 - 33:65
+Node: Parser.encodeSync(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Parser.encodeSync(Person)
+      args: (constant)
+      outType: { readonly name: string; }
+
+=== Piping Flow ===
+Location: 34:39 - 34:79
+Node: Parser.encodeUnknownSync(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Parser.encodeUnknownSync(Person)
+      args: (constant)
+      outType: { readonly name: string; }
+
+=== Piping Flow ===
+Location: 37:35 - 37:70
+Node: Schema.decodeEffect(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeEffect(Person)
+      args: (constant)
+      outType: Effect<{ readonly name: string; }, SchemaError, never>
+
+=== Piping Flow ===
+Location: 38:35 - 38:70
+Node: Schema.decodeOption(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeOption(Person)
+      args: (constant)
+      outType: Option<{ readonly name: string; }>
+
+=== Piping Flow ===
+Location: 39:35 - 39:70
+Node: Schema.decodeResult(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeResult(Person)
+      args: (constant)
+      outType: Result<{ readonly name: string; }, SchemaError>
+
+=== Piping Flow ===
+Location: 40:33 - 40:66
+Node: Schema.decodeExit(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeExit(Person)
+      args: (constant)
+      outType: Exit<{ readonly name: string; }, SchemaError>
+
+=== Piping Flow ===
+Location: 41:42 - 41:84
+Node: Schema.decodeUnknownEffect(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownEffect(Person)
+      args: (constant)
+      outType: Effect<{ readonly name: string; }, SchemaError, never>
+
+=== Piping Flow ===
+Location: 42:42 - 42:84
+Node: Schema.decodeUnknownOption(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownOption(Person)
+      args: (constant)
+      outType: Option<{ readonly name: string; }>
+
+=== Piping Flow ===
+Location: 43:42 - 43:84
+Node: Schema.decodeUnknownResult(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownResult(Person)
+      args: (constant)
+      outType: Result<{ readonly name: string; }, SchemaError>
+
+=== Piping Flow ===
+Location: 44:40 - 44:80
+Node: Schema.decodeUnknownExit(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownExit(Person)
+      args: (constant)
+      outType: Exit<{ readonly name: string; }, SchemaError>
+
+=== Piping Flow ===
+Location: 45:35 - 45:70
+Node: Schema.encodeEffect(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.encodeEffect(Person)
+      args: (constant)
+      outType: Effect<{ readonly name: string; }, SchemaError, never>
+
+=== Piping Flow ===
+Location: 46:35 - 46:70
+Node: Schema.encodeOption(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.encodeOption(Person)
+      args: (constant)
+      outType: Option<{ readonly name: string; }>
+
+=== Piping Flow ===
+Location: 47:35 - 47:70
+Node: Schema.encodeResult(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.encodeResult(Person)
+      args: (constant)
+      outType: Result<{ readonly name: string; }, SchemaError>
+
+=== Piping Flow ===
+Location: 48:33 - 48:66
+Node: Schema.encodeExit(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.encodeExit(Person)
+      args: (constant)
+      outType: Exit<{ readonly name: string; }, SchemaError>
+
+=== Piping Flow ===
+Location: 49:42 - 49:84
+Node: Schema.encodeUnknownEffect(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.encodeUnknownEffect(Person)
+      args: (constant)
+      outType: Effect<{ readonly name: string; }, SchemaError, never>
+
+=== Piping Flow ===
+Location: 50:42 - 50:84
+Node: Schema.encodeUnknownOption(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.encodeUnknownOption(Person)
+      args: (constant)
+      outType: Option<{ readonly name: string; }>
+
+=== Piping Flow ===
+Location: 51:42 - 51:84
+Node: Schema.encodeUnknownResult(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.encodeUnknownResult(Person)
+      args: (constant)
+      outType: Result<{ readonly name: string; }, SchemaError>
+
+=== Piping Flow ===
+Location: 52:40 - 52:80
+Node: Schema.encodeUnknownExit(Person)(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.encodeUnknownExit(Person)
+      args: (constant)
+      outType: Exit<{ readonly name: string; }, SchemaError>
+
+=== Piping Flow ===
+Location: 61:27 - 61:57
+Node: unrelated.decodeSync("hello")
+Node Kind: KindCallExpression
+
+Subject: "hello"
+Subject Type: "hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: unrelated.decodeSync
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 62:34 - 62:69
+Node: unrelated.decodeUnknownSync(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: unrelated.decodeUnknownSync
+      args: (constant)
+      outType: unknown
+
+=== Piping Flow ===
+Location: 63:27 - 63:57
+Node: unrelated.encodeSync("hello")
+Node Kind: KindCallExpression
+
+Subject: "hello"
+Subject Type: "hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: unrelated.encodeSync
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 64:34 - 64:69
+Node: unrelated.encodeUnknownSync(input)
+Node Kind: KindCallExpression
+
+Subject: input
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: unrelated.encodeUnknownSync
+      args: (constant)
+      outType: unknown

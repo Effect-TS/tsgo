@@ -11,6 +11,10 @@ const _regularRandom = () => Math.random()
 const MyMath = Math
 const _aliasedRandom = MyMath.random()
 
+// Should trigger - aliased Math.random method
+const random = Math.random
+const _aliasedRandomMethod = random()
+
 // Should NOT trigger - Math.random() inside Effect.gen
 export const mathRandomInGen = Effect.gen(function*() {
   return Math.random()

@@ -4,24 +4,26 @@ flowchart TB
   2[/"type: number<br/>node: Math.random#40;#41;"/]
   3[/"type: Math<br/>node: Math"/]
   4[/"type: number<br/>node: MyMath.random#40;#41;"/]
-  5((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return Math.random#40;#41;#92;n#125;#41;")))
-  6[/"type: number<br/>node: Math.random#40;#41;"/]
-  7((("type: Effect#lt;#40;#41; =#gt; number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; Math.random#40;#41;#92;n  return fn#92;n#125;#41;")))
-  8[/"type: #40;#41; =#gt; number<br/>node: fn"/]
-  9[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; Math.random#40;#41;"]]
-  10[/"type: number<br/>node: Math.random#40;#41;"/]
-  11[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; #123;#92;n  const Math = #123; random: #40;#41; =#gt; 0.5 #125;#92;n  return Math.random#40;#41;#92;n#125;"]]
+  5[/"type: #40;#41; =#gt; number<br/>node: Math.random"/]
+  6[/"type: number<br/>node: random#40;#41;"/]
+  7((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return Math.random#40;#41;#92;n#125;#41;")))
+  8[/"type: number<br/>node: Math.random#40;#41;"/]
+  9((("type: Effect#lt;#40;#41; =#gt; number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;#41; =#gt; Math.random#40;#41;#92;n  return fn#92;n#125;#41;")))
+  10[/"type: #40;#41; =#gt; number<br/>node: fn"/]
+  11[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; Math.random#40;#41;"]]
   12[/"type: number<br/>node: Math.random#40;#41;"/]
-  13[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; 0.5"]]
-  14[/"type: 0.5<br/>node: 0.5"/]
+  13[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; #123;#92;n  const Math = #123; random: #40;#41; =#gt; 0.5 #125;#92;n  return Math.random#40;#41;#92;n#125;"]]
+  14[/"type: number<br/>node: Math.random#40;#41;"/]
+  15[["type: #40;#41; =#gt; number<br/>node: #40;#41; =#gt; 0.5"]]
+  16[/"type: 0.5<br/>node: 0.5"/]
   2 -->|"kind: potentialReturn"| 1
-  6 -->|"kind: potentialReturn"| 5
-  6 -->|"kind: usedBy"| 5
   8 -->|"kind: potentialReturn"| 7
-  10 -->|"kind: potentialReturn"| 9
-  9 -->|"kind: usedBy"| 7
   8 -->|"kind: usedBy"| 7
+  10 -->|"kind: potentialReturn"| 9
   12 -->|"kind: potentialReturn"| 11
+  11 -->|"kind: usedBy"| 9
+  10 -->|"kind: usedBy"| 9
   14 -->|"kind: potentialReturn"| 13
-  13 -->|"kind: usedBy"| 11
-  12 -->|"kind: usedBy"| 11
+  16 -->|"kind: potentialReturn"| 15
+  15 -->|"kind: usedBy"| 13
+  14 -->|"kind: usedBy"| 13

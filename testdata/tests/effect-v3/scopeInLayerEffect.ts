@@ -50,3 +50,12 @@ export const myLayer2 = Layer.effect(
     return { a: 1 }
   })
 )
+
+const layerEffect = Layer.effect
+export const aliasedLayer = layerEffect(
+  MyService,
+  Effect.gen(function*() {
+    yield* Effect.addFinalizer(() => Effect.log("finalizer"))
+    return { a: 1 }
+  })
+)

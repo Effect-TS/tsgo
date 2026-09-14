@@ -112,7 +112,7 @@ func AnalyzeMultipleEffectProvide(tp *typeparser.TypeParser, _ *checker.Checker,
 				continue
 			}
 
-			if tp.LayerType(argType, arg) == nil {
+			if tp.LayerType(argType) == nil {
 				// provide call but not with a Layer argument — breaks the chain
 				finalizeChunk()
 				continue

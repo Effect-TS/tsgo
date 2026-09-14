@@ -202,7 +202,7 @@ func afterQuickInfo(program checker.Program, c *checker.Checker, sf *ast.SourceF
 			if tp.GetEffectContextFlags(yieldNode)&typeparser.EffectContextFlagCanYieldEffect != 0 {
 				t := tp.GetTypeAtLocation(yield.Expression)
 				if t != nil {
-					effect := tp.EffectYieldableType(t, yield.Expression)
+					effect := tp.EffectYieldableType(t)
 					if effect != nil {
 						typeStr := c.TypeToStringEx(t, nil, checker.TypeFormatFlagsNoTruncation, nil)
 						quickInfo = "(yield*) " + typeStr
@@ -224,12 +224,12 @@ func afterQuickInfo(program checker.Program, c *checker.Checker, sf *ast.SourceF
 	// Layer extends Effect in V4, so this check must come before the Effect check.
 	// Only activate layer hover enrichment when the cursor is on the name of the declaration,
 	// not on arbitrary nodes within the initializer expression.
-	if tp.IsLayerType(t, node) && isDeclarationName(node) {
+	if tp.IsLayerType(t) && isDeclarationName(node) {
 		documentation = formatLayerHover(tp, c, sf, node, t, documentation, isMarkdown, effectConfig)
 		return quickInfo, documentation, nil
 	}
 
-	effect := tp.EffectType(t, node)
+	effect := tp.EffectType(t)
 	if effect == nil {
 		return quickInfo, documentation, nil
 	}

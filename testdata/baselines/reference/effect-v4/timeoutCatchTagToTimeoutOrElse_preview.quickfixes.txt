@@ -1,0 +1,65 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:3-10:18) TS377127: Use `Effect.timeoutOrElse` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOrElse"
+
+[D2] (16:3-16:18) TS377127: Use `Effect.timeoutOption` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
+  Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line"
+  Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file"
+  Fix 2: "Replace with Effect.timeoutOption"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.timeoutOrElse" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse_preview.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Effect } from "effect"
+
+declare const fetchQuote: Effect.Effect<string>
+
+export const quote = fetchQuote.pipe(Effect.timeoutOrElse({
+    duration: "5 seconds",
+    orElse: () => Effect.succeed("cached quote")
+}))
+
+export const maybeQuote = fetchQuote.pipe(
+  Effect.timeout("5 seconds"),
+  Effect.asSome,
+  Effect.catchTag("TimeoutError", () => Effect.succeedNone)
+)
+
+
+=== [D2] Fix 0: "Disable timeoutCatchTagToTimeoutOrElse for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable timeoutCatchTagToTimeoutOrElse for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.timeoutOption" ===
+
+--- file:///.src/timeoutCatchTagToTimeoutOrElse_preview.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics timeoutCatchTagToTimeoutOrElse:warning
+import { Effect } from "effect"
+
+declare const fetchQuote: Effect.Effect<string>
+
+export const quote = fetchQuote.pipe(
+  Effect.timeout("5 seconds"),
+  Effect.catchTag("TimeoutError", () => Effect.succeed("cached quote"))
+)
+
+export const maybeQuote = fetchQuote.pipe(Effect.timeoutOption("5 seconds"))
+

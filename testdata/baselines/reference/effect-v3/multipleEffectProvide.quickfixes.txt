@@ -3,22 +3,27 @@
 [D1] (3:13-3:18) TS6133: 'Layer' is declared but its value is never read.
   (no quick fixes)
 
-[D2] (18:3-18:37) TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
+[D2] (20:3-20:30) TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
   Fix 0: "Disable multipleEffectProvide for this line"
   Fix 1: "Disable multipleEffectProvide for entire file"
   Fix 2: "Combine into a single provide"
 
-[D3] (23:3-23:37) TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
+[D3] (25:3-25:37) TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
   Fix 0: "Disable multipleEffectProvide for this line"
   Fix 1: "Disable multipleEffectProvide for entire file"
   Fix 2: "Combine into a single provide"
 
-[D4] (26:3-26:37) TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
+[D4] (30:3-30:37) TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
   Fix 0: "Disable multipleEffectProvide for this line"
   Fix 1: "Disable multipleEffectProvide for entire file"
   Fix 2: "Combine into a single provide"
 
-[D5] (31:3-31:37) TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
+[D5] (33:3-33:37) TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
+  Fix 0: "Disable multipleEffectProvide for this line"
+  Fix 1: "Disable multipleEffectProvide for entire file"
+  Fix 2: "Combine into a single provide"
+
+[D6] (38:3-38:37) TS377033: This expression chains multiple `Effect.provide` calls. Providing Layers in multiple calls in a chain can break service lifecycle behavior compared with a single combined provide with merged layers. effect(multipleEffectProvide)
   Fix 0: "Disable multipleEffectProvide for this line"
   Fix 1: "Disable multipleEffectProvide for entire file"
   Fix 2: "Combine into a single provide"
@@ -50,8 +55,15 @@ class MyService3 extends Effect.Service<MyService3>()("MyService3", {
   succeed: { value: 3 }
 }) {}
 
-export const shouldReport = Effect.void.pipe(
+const provide = Effect.provide
+
+export const shouldReportConstantAlias = Effect.void.pipe(
   Effect.provide(Layer.mergeAll(MyService1.Default, MyService2.Default))
+)
+
+export const shouldReport = Effect.void.pipe(
+  Effect.provide(MyService1.Default),
+  Effect.provide(MyService2.Default)
 )
 
 export const shouldReportSeparately = Effect.void.pipe(
@@ -94,13 +106,20 @@ class MyService3 extends Effect.Service<MyService3>()("MyService3", {
   succeed: { value: 3 }
 }) {}
 
+const provide = Effect.provide
+
+export const shouldReportConstantAlias = Effect.void.pipe(
+  provide(MyService1.Default),
+  provide(MyService2.Default)
+)
+
 export const shouldReport = Effect.void.pipe(
-  Effect.provide(MyService1.Default),
-  Effect.provide(MyService2.Default)
+  Effect.provide(Layer.mergeAll(MyService1.Default, MyService2.Default))
 )
 
 export const shouldReportSeparately = Effect.void.pipe(
-  Effect.provide(Layer.mergeAll(MyService1.Default, MyService2.Default)),
+  Effect.provide(MyService1.Default),
+  Effect.provide(MyService2.Default),
   Effect.ignoreLogged,
   Effect.provide(MyService1.Default),
   Effect.provide(MyService2.Default)
@@ -138,16 +157,23 @@ class MyService3 extends Effect.Service<MyService3>()("MyService3", {
   succeed: { value: 3 }
 }) {}
 
+const provide = Effect.provide
+
+export const shouldReportConstantAlias = Effect.void.pipe(
+  provide(MyService1.Default),
+  provide(MyService2.Default)
+)
+
 export const shouldReport = Effect.void.pipe(
   Effect.provide(MyService1.Default),
   Effect.provide(MyService2.Default)
 )
 
 export const shouldReportSeparately = Effect.void.pipe(
-  Effect.provide(MyService1.Default),
-  Effect.provide(MyService2.Default),
+  Effect.provide(Layer.mergeAll(MyService1.Default, MyService2.Default)),
   Effect.ignoreLogged,
-  Effect.provide(Layer.mergeAll(MyService1.Default, MyService2.Default))
+  Effect.provide(MyService1.Default),
+  Effect.provide(MyService2.Default)
 )
 
 export const shouldReportSingle = Effect.void.pipe(
@@ -181,6 +207,64 @@ class MyService2 extends Effect.Service<MyService2>()("MyService2", {
 class MyService3 extends Effect.Service<MyService3>()("MyService3", {
   succeed: { value: 3 }
 }) {}
+
+const provide = Effect.provide
+
+export const shouldReportConstantAlias = Effect.void.pipe(
+  provide(MyService1.Default),
+  provide(MyService2.Default)
+)
+
+export const shouldReport = Effect.void.pipe(
+  Effect.provide(MyService1.Default),
+  Effect.provide(MyService2.Default)
+)
+
+export const shouldReportSeparately = Effect.void.pipe(
+  Effect.provide(MyService1.Default),
+  Effect.provide(MyService2.Default),
+  Effect.ignoreLogged,
+  Effect.provide(Layer.mergeAll(MyService1.Default, MyService2.Default))
+)
+
+export const shouldReportSingle = Effect.void.pipe(
+  Effect.provide(MyService1.Default),
+  Effect.provide(MyService2.Default),
+  Effect.provide(MyService3.Default)
+)
+
+
+=== [D6] Fix 0: "Disable multipleEffectProvide for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable multipleEffectProvide for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Combine into a single provide" ===
+
+--- file:///.src/multipleEffectProvide.ts ---
+// @effect-v3
+import * as Effect from "effect/Effect"
+import * as Layer from "effect/Layer"
+
+class MyService1 extends Effect.Service<MyService1>()("MyService1", {
+  succeed: { value: 1 }
+}) {}
+
+class MyService2 extends Effect.Service<MyService2>()("MyService2", {
+  succeed: { value: 2 }
+}) {}
+
+class MyService3 extends Effect.Service<MyService3>()("MyService3", {
+  succeed: { value: 3 }
+}) {}
+
+const provide = Effect.provide
+
+export const shouldReportConstantAlias = Effect.void.pipe(
+  provide(MyService1.Default),
+  provide(MyService2.Default)
+)
 
 export const shouldReport = Effect.void.pipe(
   Effect.provide(MyService1.Default),

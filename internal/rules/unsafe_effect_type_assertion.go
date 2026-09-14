@@ -13,7 +13,7 @@ import (
 
 var UnsafeEffectTypeAssertion = rule.Rule{
 	Name:            "unsafeEffectTypeAssertion",
-	Group:           "effectNative",
+	Group:           "correctness",
 	Description:     "Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels",
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
@@ -54,14 +54,14 @@ func AnalyzeUnsafeEffectTypeAssertion(tp *typeparser.TypeParser, c *checker.Chec
 	}
 
 	var matches []UnsafeEffectTypeAssertionMatch
-	parseEffectStreamOrLayer := func(t *checker.Type, atLocation *ast.Node) (e *checker.Type, r *checker.Type, ok bool) {
-		if effect := tp.EffectType(t, atLocation); effect != nil {
+	parseEffectStreamOrLayer := func(t *checker.Type) (e *checker.Type, r *checker.Type, ok bool) {
+		if effect := tp.EffectType(t); effect != nil {
 			return effect.E, effect.R, true
 		}
-		if stream := tp.StreamType(t, atLocation); stream != nil {
+		if stream := tp.StreamType(t); stream != nil {
 			return stream.E, stream.R, true
 		}
-		if layer := tp.LayerType(t, atLocation); layer != nil {
+		if layer := tp.LayerType(t); layer != nil {
 			return layer.E, layer.RIn, true
 		}
 		return nil, nil, false
@@ -93,12 +93,12 @@ func AnalyzeUnsafeEffectTypeAssertion(tp *typeparser.TypeParser, c *checker.Chec
 			continue
 		}
 
-		originalE, originalR, ok := parseEffectStreamOrLayer(originalType, expr)
+		originalE, originalR, ok := parseEffectStreamOrLayer(originalType)
 		if !ok {
 			continue
 		}
 
-		assertedE, assertedR, ok := parseEffectStreamOrLayer(assertedType, node)
+		assertedE, assertedR, ok := parseEffectStreamOrLayer(assertedType)
 		if !ok {
 			continue
 		}

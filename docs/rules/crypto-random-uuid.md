@@ -2,7 +2,7 @@
 
 # `cryptoRandomUUID`
 
-Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Random module, which uses Effect-injected randomness rather than the crypto module behind the scenes
+Warns when using crypto.randomUUID() outside Effect generators instead of the Effect Crypto module
 
 | Property | Value |
 | --- | --- |
@@ -19,7 +19,7 @@ Warns when using crypto.randomUUID() outside Effect generators instead of the Ef
 ```ts
 export const preview = crypto.randomUUID()
 /**
-                       ^^^^^^^^^^^^^^^^^^^ effecttsgo(crypto-random-uuid): This code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes.
+                       ^^^^^^^^^^^^^^^^^^^ effecttsgo(crypto-random-uuid): This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead.
 */
 ```
 

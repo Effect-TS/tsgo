@@ -207,7 +207,7 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 			expressionToCheck = expr
 		}
 
-		if expressionToCheck == nil || expressionToCheck.Kind != ast.KindPropertyAccessExpression {
+		if expressionToCheck == nil {
 			return nil
 		}
 
@@ -228,15 +228,18 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 			return nil
 		}
 
-		propertyAccess := expressionToCheck.AsPropertyAccessExpression()
-		if propertyAccess == nil {
-			return nil
+		var effectModule *ast.Node
+		if expressionToCheck.Kind == ast.KindPropertyAccessExpression {
+			propertyAccess := expressionToCheck.AsPropertyAccessExpression()
+			if propertyAccess != nil {
+				effectModule = propertyAccess.Expression
+			}
 		}
 
 		return &EffectFnCallResult{
 			Call:               call,
 			Variant:            variant,
-			EffectModule:       propertyAccess.Expression,
+			EffectModule:       effectModule,
 			OptionsNode:        optionsNode,
 			FunctionNode:       bodyArg,
 			FunctionReturnType: tp.buildEffectFnFunctionReturnType(call, trailingStartIndex, pipeArgs),

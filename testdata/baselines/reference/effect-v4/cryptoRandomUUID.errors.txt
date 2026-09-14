@@ -1,31 +1,38 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/cryptoRandomUUID.ts(5,27): warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUID)
-/.src/cryptoRandomUUID.ts(8,34): warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUID)
-/.src/cryptoRandomUUID.ts(12,28): warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUID)
-/.src/cryptoRandomUUID.ts(21,20): warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUID)
+/.src/cryptoRandomUUID.ts(5,27): warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
+/.src/cryptoRandomUUID.ts(8,34): warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
+/.src/cryptoRandomUUID.ts(12,28): warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
+/.src/cryptoRandomUUID.ts(16,34): warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
+/.src/cryptoRandomUUID.ts(25,20): warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
 
 
-==== /.src/cryptoRandomUUID.ts (4 errors) ====
+==== /.src/cryptoRandomUUID.ts (5 errors) ====
     // @effect-diagnostics cryptoRandomUUID:warning
     import { Effect } from "effect"
     
     // Should trigger - crypto.randomUUID() at module level
     export const moduleUuid = crypto.randomUUID()
                               ~~~~~~~~~~~~~~~~~~~
-!!! warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUID)
+!!! warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
     
     // Should trigger - crypto.randomUUID() in regular function
     export const regularUuid = () => crypto.randomUUID()
                                      ~~~~~~~~~~~~~~~~~~~
-!!! warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUID)
+!!! warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
     
     // Should trigger - aliased crypto at module level
     const globalCrypto = crypto
     export const aliasedUuid = globalCrypto.randomUUID()
                                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUID)
+!!! warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
+    
+    // Should trigger - aliased crypto.randomUUID method
+    const randomUUID = crypto.randomUUID
+    export const aliasedMethodUuid = randomUUID()
+                                     ~~~~~~~~~~~~
+!!! warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
     
     // Should NOT trigger - crypto.randomUUID() inside Effect.gen
     export const uuidInGen = Effect.gen(function*() {
@@ -36,7 +43,7 @@ Effect version: 4.0.0
     export const nestedArrowInGen = Effect.gen(function*() {
       const fn = () => crypto.randomUUID()
                        ~~~~~~~~~~~~~~~~~~~
-!!! warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUID)
+!!! warning TS377078: This code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUID)
       return fn
     })
     

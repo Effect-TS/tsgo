@@ -44,3 +44,9 @@ export const shouldNotTriggerWithLogic = Effect.fail("error").pipe(
     return Effect.succeed(42)
   })
 )
+
+// Should trigger with a fallback fix: the catch API is hidden behind a const alias.
+const catchAlias = Effect.catchAll
+export const shouldTriggerAliasedCatch = Effect.fail("error").pipe(
+  catchAlias(() => Effect.succeed(42))
+)

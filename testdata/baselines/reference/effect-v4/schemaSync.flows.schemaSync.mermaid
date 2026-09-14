@@ -1,0 +1,81 @@
+flowchart TB
+  0[/"type: #123; name: String; #125;<br/>node: #123; name: Schema.String #125;"/]
+  1["type: Struct#lt;#123; readonly name: String; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  2[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  3[/"type: #123; name: string; #125;<br/>node: #123; name: #quot;Ada#quot; #125;"/]
+  4[/"type: #123; readonly name: string; #125;<br/>node: Schema.decodeSync#40;Person#41;#40;input#41;"/]
+  5[/"type: #123; readonly name: string; #125;<br/>node: Schema.decodeUnknownSync#40;Person#41;#40;input#41;"/]
+  6[/"type: #123; readonly name: string; #125;<br/>node: Schema.encodeSync#40;Person#41;#40;input#41;"/]
+  7[/"type: #123; readonly name: string; #125;<br/>node: Schema.encodeUnknownSync#40;Person#41;#40;input#41;"/]
+  8[/"type: #123; readonly name: string; #125;<br/>node: S.decodeSync#40;Person#41;#40;input#41;"/]
+  9[/"type: #123; readonly name: string; #125;<br/>node: decode#40;Person#41;#40;input#41;"/]
+  10[/"type: #lt;S extends ConstraintDecoder#lt;unknown#gt;#gt;#40;schema: S, options?: ParseOptions #124; undefined#41; =#gt; #40;input: unknown, options?: ParseOptions #124; undefined#41; =#gt; S#91;#quot;Type#quot;#93;<br/>node: Schema.decodeUnknownSync"/]
+  11[/"type: #123; readonly name: string; #125;<br/>node: decodeAlias#40;Person#41;#40;input#41;"/]
+  12[/"type: #123; readonly name: string; #125;<br/>node: Schema#91;#quot;encodeSync#quot;#93;#40;Person#41;#40;input#41;"/]
+  13[/"type: #40;input: #123; readonly name: string; #125;, options?: ParseOptions #124; undefined#41; =#gt; #123; readonly name: string; #125;<br/>node: Schema.decodeSync#40;Person#41;"/]
+  14[["type: #40;#41; =#gt; #123; readonly name: string; #125;<br/>node: #40;#41; =#gt; Schema.encodeSync#40;Person#41;#40;input#41;"]]
+  15[/"type: #123; readonly name: string; #125;<br/>node: Schema.encodeSync#40;Person#41;#40;input#41;"/]
+  16((("type: Effect#lt;#123; readonly name: string; #125;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return Schema.decodeSync#40;Person#41;#40;input#41;#92;n#125;#41;")))
+  17[/"type: #123; readonly name: string; #125;<br/>node: Schema.decodeSync#40;Person#41;#40;input#41;"/]
+  18[/"type: #123; readonly name: string; #125;<br/>node: Parser.decodeSync#40;Person#41;#40;input#41;"/]
+  19[/"type: #123; readonly name: string; #125;<br/>node: Parser.decodeUnknownSync#40;Person#41;#40;input#41;"/]
+  20[/"type: #123; readonly name: string; #125;<br/>node: Parser.encodeSync#40;Person#41;#40;input#41;"/]
+  21[/"type: #123; readonly name: string; #125;<br/>node: Parser.encodeUnknownSync#40;Person#41;#40;input#41;"/]
+  22[/"type: Effect#lt;#123; readonly name: string; #125;, SchemaError, never#gt;<br/>node: Schema.decodeEffect#40;Person#41;#40;input#41;"/]
+  23[/"type: Option#lt;#123; readonly name: string; #125;#gt;<br/>node: Schema.decodeOption#40;Person#41;#40;input#41;"/]
+  24[/"type: Result#lt;#123; readonly name: string; #125;, SchemaError#gt;<br/>node: Schema.decodeResult#40;Person#41;#40;input#41;"/]
+  25[/"type: Exit#lt;#123; readonly name: string; #125;, SchemaError#gt;<br/>node: Schema.decodeExit#40;Person#41;#40;input#41;"/]
+  26[/"type: Effect#lt;#123; readonly name: string; #125;, SchemaError, never#gt;<br/>node: Schema.decodeUnknownEffect#40;Person#41;#40;input#41;"/]
+  27[/"type: Option#lt;#123; readonly name: string; #125;#gt;<br/>node: Schema.decodeUnknownOption#40;Person#41;#40;input#41;"/]
+  28[/"type: Result#lt;#123; readonly name: string; #125;, SchemaError#gt;<br/>node: Schema.decodeUnknownResult#40;Person#41;#40;input#41;"/]
+  29[/"type: Exit#lt;#123; readonly name: string; #125;, SchemaError#gt;<br/>node: Schema.decodeUnknownExit#40;Person#41;#40;input#41;"/]
+  30[/"type: Effect#lt;#123; readonly name: string; #125;, SchemaError, never#gt;<br/>node: Schema.encodeEffect#40;Person#41;#40;input#41;"/]
+  31[/"type: Option#lt;#123; readonly name: string; #125;#gt;<br/>node: Schema.encodeOption#40;Person#41;#40;input#41;"/]
+  32[/"type: Result#lt;#123; readonly name: string; #125;, SchemaError#gt;<br/>node: Schema.encodeResult#40;Person#41;#40;input#41;"/]
+  33[/"type: Exit#lt;#123; readonly name: string; #125;, SchemaError#gt;<br/>node: Schema.encodeExit#40;Person#41;#40;input#41;"/]
+  34[/"type: Effect#lt;#123; readonly name: string; #125;, SchemaError, never#gt;<br/>node: Schema.encodeUnknownEffect#40;Person#41;#40;input#41;"/]
+  35[/"type: Option#lt;#123; readonly name: string; #125;#gt;<br/>node: Schema.encodeUnknownOption#40;Person#41;#40;input#41;"/]
+  36[/"type: Result#lt;#123; readonly name: string; #125;, SchemaError#gt;<br/>node: Schema.encodeUnknownResult#40;Person#41;#40;input#41;"/]
+  37[/"type: Exit#lt;#123; readonly name: string; #125;, SchemaError#gt;<br/>node: Schema.encodeUnknownExit#40;Person#41;#40;input#41;"/]
+  38[/"type: #123; decodeSync: #40;value: string#41; =#gt; string; decodeUnknownSync: #40;value: unknown#41; =#gt; unknown; encodeSync: #40;value: string#41; =#gt; string; encodeUnknownSync: #40;value: unknown#41; =#gt; unknown; #125;<br/>node: #123;#92;n  decodeSync: #40;value: string#41; =#gt; value,#92;n  decodeUnknownSync: #40;value: unknown#41; =#gt; value,#92;n  encodeSync: #40;value: string#41; =#gt; value,#92;n  encodeUnknownSync: #40;value: unknown#41; =#gt; value#92;n#125;"/]
+  39[["type: #40;value: string#41; =#gt; string<br/>node: #40;value: string#41; =#gt; value"]]
+  40[/"type: string<br/>node: value"/]
+  41[["type: #40;value: unknown#41; =#gt; unknown<br/>node: #40;value: unknown#41; =#gt; value"]]
+  42[/"type: unknown<br/>node: value"/]
+  43[["type: #40;value: string#41; =#gt; string<br/>node: #40;value: string#41; =#gt; value"]]
+  44[/"type: string<br/>node: value"/]
+  45[["type: #40;value: unknown#41; =#gt; unknown<br/>node: #40;value: unknown#41; =#gt; value"]]
+  46[/"type: unknown<br/>node: value"/]
+  47[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
+  48["type: string<br/>callee: unrelated.decodeSync<br/>args: #91;#93;"]
+  49[/"type: #40;value: string#41; =#gt; string<br/>node: unrelated.decodeSync"/]
+  50[/"type: #123; name: string; #125;<br/>node: input"/]
+  51["type: unknown<br/>callee: unrelated.decodeUnknownSync<br/>args: #91;#93;"]
+  52[/"type: #40;value: unknown#41; =#gt; unknown<br/>node: unrelated.decodeUnknownSync"/]
+  53[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
+  54["type: string<br/>callee: unrelated.encodeSync<br/>args: #91;#93;"]
+  55[/"type: #40;value: string#41; =#gt; string<br/>node: unrelated.encodeSync"/]
+  56[/"type: #123; name: string; #125;<br/>node: input"/]
+  57["type: unknown<br/>callee: unrelated.encodeUnknownSync<br/>args: #91;#93;"]
+  58[/"type: #40;value: unknown#41; =#gt; unknown<br/>node: unrelated.encodeUnknownSync"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  15 -->|"kind: potentialReturn"| 14
+  17 -->|"kind: potentialReturn"| 16
+  17 -->|"kind: usedBy"| 16
+  40 -->|"kind: potentialReturn"| 39
+  39 -->|"kind: usedBy"| 38
+  42 -->|"kind: potentialReturn"| 41
+  41 -->|"kind: usedBy"| 38
+  44 -->|"kind: potentialReturn"| 43
+  43 -->|"kind: usedBy"| 38
+  46 -->|"kind: potentialReturn"| 45
+  45 -->|"kind: usedBy"| 38
+  47 -->|"kind: pipe"| 48
+  49 -->|"kind: transformCallee"| 48
+  50 -->|"kind: pipe"| 51
+  52 -->|"kind: transformCallee"| 51
+  53 -->|"kind: pipe"| 54
+  55 -->|"kind: transformCallee"| 54
+  56 -->|"kind: pipe"| 57
+  58 -->|"kind: transformCallee"| 57

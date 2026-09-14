@@ -1,0 +1,1 @@
+/.src/schemaSync_preview.ts -> schemaSync_preview.flows.schemaSync_preview.mermaid

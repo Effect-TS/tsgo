@@ -59,7 +59,7 @@ func checkLazyEffectInterface(ctx *rule.Context, stmt *ast.Node) []*ast.Diagnost
 		}
 
 		memberType := ctx.TypeParser.GetTypeAtLocation(member.Name())
-		lazyTypeName, ok := lazyEffectLikeTypeName(ctx.Checker, ctx.TypeParser, memberType, member.Name())
+		lazyTypeName, ok := lazyEffectLikeTypeName(ctx.Checker, ctx.TypeParser, memberType)
 		if !ok {
 			continue
 		}
@@ -111,7 +111,7 @@ func checkLazyEffectExport(ctx *rule.Context, stmt *ast.Node) []*ast.Diagnostic 
 
 func lazyEffectDiagnosticForExportedDeclaration(ctx *rule.Context, name *ast.Node) []*ast.Diagnostic {
 	declType := ctx.TypeParser.GetTypeAtLocation(name)
-	lazyTypeName, ok := lazyEffectLikeTypeName(ctx.Checker, ctx.TypeParser, declType, name)
+	lazyTypeName, ok := lazyEffectLikeTypeName(ctx.Checker, ctx.TypeParser, declType)
 	if !ok {
 		return nil
 	}
@@ -144,7 +144,7 @@ func checkLazyEffectService(ctx *rule.Context, stmt *ast.Node) []*ast.Diagnostic
 		return nil
 	}
 
-	service := ctx.TypeParser.ServiceType(classType, stmt.Name())
+	service := ctx.TypeParser.ServiceType(classType)
 	if service == nil || service.Shape == nil {
 		return nil
 	}
@@ -157,7 +157,7 @@ func checkLazyEffectService(ctx *rule.Context, stmt *ast.Node) []*ast.Diagnostic
 		}
 
 		memberType := ctx.Checker.GetTypeOfSymbolAtLocation(member, stmt.Name())
-		lazyTypeName, ok := lazyEffectLikeTypeName(ctx.Checker, ctx.TypeParser, memberType, stmt.Name())
+		lazyTypeName, ok := lazyEffectLikeTypeName(ctx.Checker, ctx.TypeParser, memberType)
 		if !ok {
 			continue
 		}
@@ -176,7 +176,7 @@ func checkLazyEffectService(ctx *rule.Context, stmt *ast.Node) []*ast.Diagnostic
 	return diags
 }
 
-func lazyEffectLikeTypeName(c *checker.Checker, tp *typeparser.TypeParser, t *checker.Type, atLocation *ast.Node) (string, bool) {
+func lazyEffectLikeTypeName(c *checker.Checker, tp *typeparser.TypeParser, t *checker.Type) (string, bool) {
 	if c == nil || tp == nil || t == nil {
 		return "", false
 	}
@@ -199,13 +199,13 @@ func lazyEffectLikeTypeName(c *checker.Checker, tp *typeparser.TypeParser, t *ch
 		return "", false
 	}
 
-	if tp.StrictIsEffectType(returnType, atLocation) {
+	if tp.StrictIsEffectType(returnType) {
 		return "Effect", true
 	}
-	if tp.LayerType(returnType, atLocation) != nil {
+	if tp.LayerType(returnType) != nil {
 		return "Layer", true
 	}
-	if tp.StreamType(returnType, atLocation) != nil {
+	if tp.StreamType(returnType) != nil {
 		return "Stream", true
 	}
 

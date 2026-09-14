@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/runOfExitToRunExit_preview.ts(8,21): warning TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+
+
+==== /.src/runOfExitToRunExit_preview.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics *:off
+    // @effect-diagnostics runOfExitToRunExit:warning
+    import { Effect } from "effect"
+    
+    declare const program: Effect.Effect<number, Error>
+    
+    export const exit = Effect.runPromise(Effect.exit(program))
+                        ~~~~~~~~~~~~~~~~~
+!!! warning TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
+    

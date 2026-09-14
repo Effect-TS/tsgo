@@ -6,10 +6,11 @@ Effect version: 4.0.0
 /.src/catchToIgnore.ts(20,3): suggestion TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
 /.src/catchToIgnore.ts(25,3): suggestion TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
 /.src/catchToIgnore.ts(31,39): suggestion TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
-/.src/catchToIgnore.ts(40,22): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/catchToIgnore.ts(35,58): suggestion TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
+/.src/catchToIgnore.ts(44,22): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
 
 
-==== /.src/catchToIgnore.ts (6 errors) ====
+==== /.src/catchToIgnore.ts (7 errors) ====
     import { Effect, pipe } from "effect"
     
     declare const voidEffect: Effect.Effect<void, string, never>
@@ -50,6 +51,12 @@ Effect version: 4.0.0
     // Should trigger: data-first style
     export const shouldTriggerDataFirst = Effect.catch(voidEffect, () => Effect.void)
                                           ~~~~~~~~~~~~
+!!! suggestion TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
+    
+    // Should trigger with a fallback fix: the API reference is hidden behind a const alias.
+    const catchAlias = Effect.catch
+    export const shouldTriggerAliasedCatch = voidEffect.pipe(catchAlias(() => Effect.void))
+                                                             ~~~~~~~~~~
 !!! suggestion TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
     
     // Should NOT trigger: Effect.ignore would discard the number success value

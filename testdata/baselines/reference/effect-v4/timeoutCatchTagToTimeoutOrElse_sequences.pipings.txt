@@ -1,0 +1,107 @@
+==== /.src/timeoutCatchTagToTimeoutOrElse_sequences.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 10:24 - 15:2
+Node: task.pipe(\n  Effect.timeout(1),\n  Effect.catchTag("TimeoutError", () => Effect.succeed("first")),\n  Effect.timeout(2),\n  Effect.catchTag("TimeoutError", () => Effect.succeed("second"))\n)
+Node Kind: KindCallExpression
+
+Subject: task
+Subject Type: Effect<string, never, never>
+
+Transformations (4):
+  [0] kind: pipeable
+      callee: Effect.timeout
+      args: [1]
+      outType: Effect<string, TimeoutError, never>
+  [1] kind: pipeable
+      callee: Effect.catchTag
+      args: ["TimeoutError", () => Effect.succeed("first")]
+      outType: Effect<string, never, never>
+  [2] kind: pipeable
+      callee: Effect.timeout
+      args: [2]
+      outType: Effect<string, TimeoutError, never>
+  [3] kind: pipeable
+      callee: Effect.catchTag
+      args: ["TimeoutError", () => Effect.succeed("second")]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 12:40 - 12:64
+Node: Effect.succeed("first")
+Node Kind: KindCallExpression
+
+Subject: "first"
+Subject Type: "first"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 14:40 - 14:65
+Node: Effect.succeed("second")
+Node Kind: KindCallExpression
+
+Subject: "second"
+Subject Type: "second"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 19:33 - 27:2
+Node: innerTimeout.pipe(\n  Effect.timeout(1),\n  Effect.catchTag("TimeoutError", () => Effect.succeed("inner fallback")),\n  Effect.timeout(2),\n  Effect.asSome,\n  Effect.catchTag("TimeoutError", () => Effect.succeedNone),\n  Effect.timeout(3),\n  Effect.catchTag("TimeoutError", () => Effect.succeedNone)\n)
+Node Kind: KindCallExpression
+
+Subject: innerTimeout
+Subject Type: Effect<string, TimeoutError, never>
+
+Transformations (7):
+  [0] kind: pipeable
+      callee: Effect.timeout
+      args: [1]
+      outType: Effect<string, TimeoutError, never>
+  [1] kind: pipeable
+      callee: Effect.catchTag
+      args: ["TimeoutError", () => Effect.succeed("inner fallback")]
+      outType: Effect<string, never, never>
+  [2] kind: pipeable
+      callee: Effect.timeout
+      args: [2]
+      outType: Effect<string, TimeoutError, never>
+  [3] kind: pipeable
+      callee: Effect.asSome
+      args: (constant)
+      outType: Effect<Option<string>, TimeoutError, never>
+  [4] kind: pipeable
+      callee: Effect.catchTag
+      args: ["TimeoutError", () => Effect.succeedNone]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, never, never>
+  [5] kind: pipeable
+      callee: Effect.timeout
+      args: [3]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, TimeoutError, never>
+  [6] kind: pipeable
+      callee: Effect.catchTag
+      args: ["TimeoutError", () => Effect.succeedNone]
+      outType: Effect<import("/node_modules/effect/dist/Option").Option<string> | import("/node_modules/effect/dist/Option").Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 21:40 - 21:73
+Node: Effect.succeed("inner fallback")
+Node Kind: KindCallExpression
+
+Subject: "inner fallback"
+Subject Type: "inner fallback"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>

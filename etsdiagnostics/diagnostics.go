@@ -305,7 +305,7 @@ func collect(ctx context.Context, req request, override *etscore.EffectPluginOpt
 func updateSession(ctx context.Context, session *project.Session, request *project.APISnapshotRequest) error {
 	snapshot, err := session.APIUpdate(ctx, project.FileChangeSummary{}, request)
 	if snapshot != nil {
-		snapshot.Deref(session)
+		project.DerefSnapshot(snapshot, session)
 	}
 	return err
 }

@@ -1,10 +1,10 @@
 === Metadata ===
 Effect version: 4.0.0
 
-/.src/cryptoRandomUUIDInEffect_thunks.ts(6,45): warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUIDInEffect)
-/.src/cryptoRandomUUIDInEffect_thunks.ts(9,14): warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUIDInEffect)
-/.src/cryptoRandomUUIDInEffect_thunks.ts(13,63): warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUIDInEffect)
-/.src/cryptoRandomUUIDInEffect_thunks.ts(16,20): warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUIDInEffect)
+/.src/cryptoRandomUUIDInEffect_thunks.ts(6,45): warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUIDInEffect)
+/.src/cryptoRandomUUIDInEffect_thunks.ts(9,14): warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUIDInEffect)
+/.src/cryptoRandomUUIDInEffect_thunks.ts(13,63): warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUIDInEffect)
+/.src/cryptoRandomUUIDInEffect_thunks.ts(16,20): warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUIDInEffect)
 
 
 ==== /.src/cryptoRandomUUIDInEffect_thunks.ts (4 errors) ====
@@ -15,23 +15,23 @@ Effect version: 4.0.0
     
     export const uuidInSync = Effect.sync(() => crypto.randomUUID())
                                                 ~~~~~~~~~~~~~~~~~~~
-!!! warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUIDInEffect)
+!!! warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUIDInEffect)
     
     export const uuidInTryObject = Effect.try({
       try: () => crypto.randomUUID(),
                  ~~~~~~~~~~~~~~~~~~~
-!!! warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUIDInEffect)
+!!! warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUIDInEffect)
       catch: () => new ExampleError()
     })
     
     export const uuidInTryPromise = Effect.tryPromise(async () => crypto.randomUUID())
                                                                   ~~~~~~~~~~~~~~~~~~~
-!!! warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUIDInEffect)
+!!! warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUIDInEffect)
     
     export const uuidInTryPromiseObject = Effect.tryPromise({
       try: async () => crypto.randomUUID(),
                        ~~~~~~~~~~~~~~~~~~~
-!!! warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Random` module instead because it uses Effect-injected randomness rather than the `crypto` module behind the scenes. effect(cryptoRandomUUIDInEffect)
+!!! warning TS377079: This Effect code uses `crypto.randomUUID()`, prefer the Effect `Crypto` module instead. effect(cryptoRandomUUIDInEffect)
       catch: () => new ExampleError()
     })
     

@@ -1,16 +1,16 @@
 diff --git a/tsc/internal/ls/autoimport/view.go b/tsc/internal/ls/autoimport/view.go
-index 0e8704dd..abe289e2 100644
+index dd9572fa..3ecfd388 100644
 --- a/tsc/internal/ls/autoimport/view.go
 +++ b/tsc/internal/ls/autoimport/view.go
-@@ -24,6 +24,7 @@ type View struct {
- 	importingFilePath tspath.Path
+@@ -25,6 +25,7 @@ type View struct {
  	program           *compiler.Program
+ 	checker           *checker.Checker
  	preferences       modulespecifiers.UserPreferences
 +	fixTransformer    FixTransformer
  	projectKey        tspath.Path
  
  	allowedEndings                   []modulespecifiers.ModuleSpecifierEnding
-@@ -38,7 +39,7 @@ func NewView(registry *Registry, importingFile *ast.SourceFile, projectKey tspat
+@@ -39,7 +40,7 @@ func NewView(registry *Registry, importingFile *ast.SourceFile, projectKey tspat
  	if canonical := importingFile.CanonicalSourceFile(); canonical != nil {
  		importingFilePath = canonical.Path()
  	}
@@ -19,7 +19,7 @@ index 0e8704dd..abe289e2 100644
  		registry:          registry,
  		importingFile:     importingFile,
  		importingFilePath: importingFilePath,
-@@ -51,6 +52,10 @@ func NewView(registry *Registry, importingFile *ast.SourceFile, projectKey tspat
+@@ -53,6 +54,10 @@ func NewView(registry *Registry, importingFile *ast.SourceFile, projectKey tspat
  		),
  		shouldUseUriStyleNodeCoreModules: lsutil.ShouldUseUriStyleNodeCoreModules(importingFile, program),
  	}

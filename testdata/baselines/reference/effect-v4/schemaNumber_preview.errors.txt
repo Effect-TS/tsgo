@@ -15,8 +15,10 @@ Effect version: 4.0.0
       age: Schema.Number,
                   ~~~~~~
 !!! warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
-      score: Schema.NumberFromString
+      score: Schema.NumberFromString,
                     ~~~~~~~~~~~~~~~~
 !!! warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+      integer: Schema.Number.check(Schema.isInt()),
+      pipedFinite: Schema.Number.pipe(Schema.check(Schema.isFinite()))
     })
     

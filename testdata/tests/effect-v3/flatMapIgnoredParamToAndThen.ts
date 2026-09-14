@@ -1,0 +1,56 @@
+import * as Fx from "effect/Effect"
+import { Effect, pipe } from "effect"
+
+const first = Effect.succeed(1)
+const second = Effect.succeed("second")
+const holder = { second }
+let mutable = second
+
+// Should trigger: pipeable style
+export const pipeable = first.pipe(Effect.flatMap(() => second))
+
+// Should trigger: pipe style
+export const piped = pipe(first, Effect.flatMap(() => second))
+
+// Should trigger: data-first style
+export const dataFirst = Effect.flatMap(first, () => second)
+
+// Should trigger: data-last style
+export const dataLast = Effect.flatMap(() => second)(first)
+
+// Should trigger and fix the call site without changing the shared alias
+const flatMap = Fx.flatMap
+export const aliased = first.pipe(flatMap(() => second))
+
+// Should NOT trigger: the callback consumes or declares an upstream value
+export const parameter = first.pipe(Effect.flatMap((_value) => second))
+
+// Should NOT trigger: moving these evaluations would change laziness
+// @effect-diagnostics-next-line flatMapToMap:off
+export const call = first.pipe(Effect.flatMap(() => Effect.succeed("new")))
+export const propertyAccess = first.pipe(Effect.flatMap(() => holder.second))
+
+// Should NOT trigger: the returned binding is mutable or declared later
+export const mutableBinding = first.pipe(Effect.flatMap(() => mutable))
+export const laterBinding = first.pipe(Effect.flatMap(() => later))
+const later = Effect.succeed("later")
+
+// Should trigger: the lazy-expression parser unwraps a single-return block
+export const blockBody = first.pipe(Effect.flatMap(() => {
+  return second
+}))
+
+// Should trigger: const values remain stable when referenced from a nested scope
+export function nestedScope() {
+  return first.pipe(Effect.flatMap(() => second))
+}
+
+// Should NOT trigger: the stable value is not an Effect
+const value = "value"
+export const nonEffect = first.pipe(Effect.flatMap(() => value as never))
+
+// Should NOT trigger: unrelated flatMap API
+const unrelated = { flatMap: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedCall = unrelated.flatMap(1, () => second)
+
+void mutable

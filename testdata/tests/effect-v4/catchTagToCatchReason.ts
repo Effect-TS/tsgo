@@ -42,6 +42,15 @@ export const switchSingle = program.pipe(
   })
 )
 
+// Should trigger with a fallback fix: catchTag is hidden behind a const alias.
+const catchTagAlias = Fx.catchTag
+export const aliasedCatchTag = program.pipe(
+  catchTagAlias("OuterError", (error) => {
+    if (error.reason._tag === "ReasonA") return Fx.succeed(1)
+    return Fx.fail(error)
+  })
+)
+
 // Should trigger and offer catchReasons: sequential ifs in pipe(...) style.
 export const ifMultiple = pipe(
   program,

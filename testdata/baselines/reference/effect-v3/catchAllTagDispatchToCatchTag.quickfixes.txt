@@ -1,0 +1,87 @@
+=== Quick Fix Inventory ===
+
+[D1] (17:3-17:18) TS377122: Branching on `error._tag` inside `Effect.catchAll` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
+  Fix 0: "Disable catchAllTagDispatchToCatchTag for this line"
+  Fix 1: "Disable catchAllTagDispatchToCatchTag for entire file"
+  Fix 2: "Replace with Effect.catchTag or Effect.catchTags"
+
+[D2] (27:3-27:13) TS377122: Branching on `error._tag` inside `Effect.catchAll` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
+  Fix 0: "Disable catchAllTagDispatchToCatchTag for this line"
+  Fix 1: "Disable catchAllTagDispatchToCatchTag for entire file"
+  Fix 2: "Replace with Effect.catchTag or Effect.catchTags"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchAllTagDispatchToCatchTag for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchAllTagDispatchToCatchTag for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.catchTag or Effect.catchTags" ===
+
+--- file:///.src/catchAllTagDispatchToCatchTag.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllTagDispatchToCatchTag:suggestion
+import { Effect } from "effect"
+
+class NotFoundError {
+  readonly _tag = "NotFoundError"
+}
+
+class TimeoutError {
+  readonly _tag = "TimeoutError"
+}
+
+declare const program: Effect.Effect<string, NotFoundError | TimeoutError>
+
+export const result = program.pipe(
+  Effect.catchTag("NotFoundError", () => Effect.succeed("missing"))
+)
+
+// Should trigger with a fallback fix: catchAll is hidden behind a const alias.
+const catchAlias = Effect.catchAll
+export const aliasedResult = program.pipe(
+  catchAlias((error) => error._tag === "NotFoundError" ? Effect.succeed("missing") : Effect.fail(error))
+)
+
+
+=== [D2] Fix 0: "Disable catchAllTagDispatchToCatchTag for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable catchAllTagDispatchToCatchTag for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.catchTag or Effect.catchTags" ===
+
+--- file:///.src/catchAllTagDispatchToCatchTag.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllTagDispatchToCatchTag:suggestion
+import { Effect } from "effect"
+
+class NotFoundError {
+  readonly _tag = "NotFoundError"
+}
+
+class TimeoutError {
+  readonly _tag = "TimeoutError"
+}
+
+declare const program: Effect.Effect<string, NotFoundError | TimeoutError>
+
+export const result = program.pipe(
+  Effect.catchAll((error) =>
+    error._tag === "NotFoundError"
+      ? Effect.succeed("missing")
+      : Effect.fail(error)
+  )
+)
+
+// Should trigger with a fallback fix: catchAll is hidden behind a const alias.
+const catchAlias = Effect.catchAll
+export const aliasedResult = program.pipe(
+  Effect.catchTag("NotFoundError", () => Effect.succeed("missing"))
+)
+

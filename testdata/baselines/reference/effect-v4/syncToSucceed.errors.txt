@@ -9,9 +9,11 @@ Effect version: 4.0.0
 /.src/syncToSucceed.ts(13,32): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
 /.src/syncToSucceed.ts(16,32): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
 /.src/syncToSucceed.ts(17,26): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/syncToSucceed.ts(22,30): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/syncToSucceed.ts(46,14): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
 
 
-==== /.src/syncToSucceed.ts (8 errors) ====
+==== /.src/syncToSucceed.ts (10 errors) ====
     import { Effect } from "effect"
     
     const constant = "constant"
@@ -48,6 +50,11 @@ Effect version: 4.0.0
       return constant
     })
     
+    const syncAlias = Effect.sync
+    export const constantAlias = syncAlias(() => constant)
+                                 ~~~~~~~~~
+!!! suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+    
     // Should NOT trigger: these expressions are evaluated or allocated per execution
     export const callExpression = Effect.sync(() => Date.now())
     export const objectLiteral = Effect.sync(() => ({ value: "constant" }))
@@ -71,6 +78,8 @@ Effect version: 4.0.0
           return caseConstant
         default:
           return Effect.sync(() => caseConstant)
+                 ~~~~~~~~~~~
+!!! suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
       }
     }
     

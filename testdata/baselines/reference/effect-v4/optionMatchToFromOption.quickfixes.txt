@@ -1,45 +1,50 @@
 === Quick Fix Inventory ===
 
-[D1] (14:26-14:38) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+[D1] (16:31-16:43) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
   Fix 0: "Disable optionMatchToFromOption for this line"
   Fix 1: "Disable optionMatchToFromOption for entire file"
   Fix 2: "Replace with Effect.fromOption"
 
-[D2] (20:30-20:37) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+[D2] (22:26-22:38) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
   Fix 0: "Disable optionMatchToFromOption for this line"
   Fix 1: "Disable optionMatchToFromOption for entire file"
   Fix 2: "Replace with Effect.fromOption"
 
-[D3] (27:31-27:43) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
-  Fix 0: "Disable optionMatchToFromOption for this line"
-  Fix 1: "Disable optionMatchToFromOption for entire file"
-
-[D4] (36:3-36:15) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+[D3] (28:30-28:37) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
   Fix 0: "Disable optionMatchToFromOption for this line"
   Fix 1: "Disable optionMatchToFromOption for entire file"
   Fix 2: "Replace with Effect.fromOption"
 
-[D5] (45:3-45:15) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+[D4] (35:31-35:43) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+  Fix 0: "Disable optionMatchToFromOption for this line"
+  Fix 1: "Disable optionMatchToFromOption for entire file"
+
+[D5] (44:3-44:15) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
   Fix 0: "Disable optionMatchToFromOption for this line"
   Fix 1: "Disable optionMatchToFromOption for entire file"
   Fix 2: "Replace with Effect.fromOption"
 
-[D6] (52:25-52:37) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+[D6] (53:3-53:15) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
   Fix 0: "Disable optionMatchToFromOption for this line"
   Fix 1: "Disable optionMatchToFromOption for entire file"
   Fix 2: "Replace with Effect.fromOption"
 
-[D7] (58:31-58:43) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+[D7] (60:25-60:37) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
   Fix 0: "Disable optionMatchToFromOption for this line"
   Fix 1: "Disable optionMatchToFromOption for entire file"
   Fix 2: "Replace with Effect.fromOption"
 
-[D8] (64:30-64:43) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+[D8] (66:31-66:43) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
   Fix 0: "Disable optionMatchToFromOption for this line"
   Fix 1: "Disable optionMatchToFromOption for entire file"
   Fix 2: "Replace with Effect.fromOption"
 
-[D9] (69:30-69:38) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+[D9] (72:30-72:43) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
+  Fix 0: "Disable optionMatchToFromOption for this line"
+  Fix 1: "Disable optionMatchToFromOption for entire file"
+  Fix 2: "Replace with Effect.fromOption"
+
+[D10] (77:30-77:38) TS377118: `Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)
   Fix 0: "Disable optionMatchToFromOption for this line"
   Fix 1: "Disable optionMatchToFromOption for entire file"
   Fix 2: "Replace with Effect.fromOption"
@@ -66,9 +71,17 @@ class MissingValue {
 
 declare const option: Option.Option<number>
 declare const otherSome: Option.Some<number>
+const fail = Effect.fail
+const succeed = Effect.succeed
+
+// Should trigger and fix the call site without changing the handler aliases.
+export const handlerAliases = Effect.fromOption(option, () => new MissingValue("aliases"))
 
 // Should trigger: data-first Option.match with a point-free success handler.
-export const dataFirst = Effect.fromOption(option, () => new MissingValue("data-first"))
+export const dataFirst = Option.match(option, {
+  onNone: () => Effect.fail(new MissingValue("data-first")),
+  onSome: Effect.succeed
+})
 
 // Should trigger: handler order is irrelevant and an exact identity arrow is accepted.
 export const identityArrow = O.match(option, {
@@ -185,6 +198,141 @@ class MissingValue {
 
 declare const option: Option.Option<number>
 declare const otherSome: Option.Some<number>
+const fail = Effect.fail
+const succeed = Effect.succeed
+
+// Should trigger and fix the call site without changing the handler aliases.
+export const handlerAliases = Option.match(option, {
+  onNone: () => fail(new MissingValue("aliases")),
+  onSome: succeed
+})
+
+// Should trigger: data-first Option.match with a point-free success handler.
+export const dataFirst = Effect.fromOption(option, () => new MissingValue("data-first"))
+
+// Should trigger: handler order is irrelevant and an exact identity arrow is accepted.
+export const identityArrow = O.match(option, {
+  onSome: (value) => Fx.succeed(value),
+  onNone: () => Fx.fail(new MissingValue("identity"))
+})
+
+// Should trigger without a fix: replacing a function expression with an arrow
+// could change the meaning of arguments or this inside the failure expression.
+export const functionOnNone = Option.match(option, {
+  onNone: function() {
+    return Effect.fail(new MissingValue(String(arguments.length)))
+  },
+  onSome: Effect.succeed
+})
+
+// Should trigger: pipeable Option.match rewrites to pipeable Effect.fromOption.
+export const pipeable = option.pipe(
+  Option.match({
+    onNone: () => Effect.fail(new MissingValue("pipeable")),
+    onSome: Effect.succeed
+  })
+)
+
+// Should trigger: the function-pipe form is normalized the same way.
+export const functionPipe = pipe(
+  option,
+  Option.match({
+    onNone: () => Effect.fail(new MissingValue("pipe")),
+    onSome: Effect.succeed
+  })
+)
+
+// Should trigger: direct data-last application is also supported.
+export const dataLast = Option.match({
+  onNone: () => Effect.fail(new MissingValue("data-last")),
+  onSome: Effect.succeed
+})(option)
+
+// Should trigger and use the one-argument Effect.fromOption form.
+export const defaultFailure = Option.match(option, {
+  onNone: () => Effect.fail(new Cause.NoSuchElementError()),
+  onSome: Effect.succeed
+})
+
+// Should trigger: isSome puts the success branch first.
+export const isSomeTernary = Option.isSome(option)
+  ? Effect.succeed(option.value)
+  : Effect.fail(new MissingValue("isSome"))
+
+// Should trigger: isNone reverses the two branch roles.
+export const isNoneTernary = O.isNone(option)
+  ? Fx.fail(new Cause.NoSuchElementError())
+  : Fx.succeed(option.value)
+
+// Should NOT trigger: onSome transforms the value.
+export const transformedSome = Option.match(option, {
+  onNone: () => Effect.fail(new MissingValue("transformed")),
+  onSome: (value) => Effect.succeed(value + 1)
+})
+
+// Should NOT trigger: onNone is not Effect.fail.
+export const diesOnNone = Option.match(option, {
+  onNone: () => Effect.die("missing"),
+  onSome: Effect.succeed
+})
+
+// Should NOT trigger: a default success is a legitimate Option.match use.
+export const defaultSuccess = Option.match(option, {
+  onNone: () => Effect.succeed(0),
+  onSome: Effect.succeed
+})
+
+// Should NOT trigger: the succeed branch reads a different option.
+export const mismatchedOption = Option.isSome(option)
+  ? Effect.succeed(otherSome.value)
+  : Effect.fail(new MissingValue("mismatch"))
+
+// Should NOT trigger: the succeed branch transforms the unwrapped value.
+export const transformedTernary = Option.isSome(option)
+  ? Effect.succeed(option.value + 1)
+  : Effect.fail(new MissingValue("transformed"))
+
+const local = {
+  isSome: Option.isSome,
+  match: <A, B, C>(value: A, handlers: { onNone: () => B; onSome: (value: A) => C }): B | C =>
+    handlers.onSome(value)
+}
+
+// Should NOT trigger: an unrelated function with the same surface shape.
+export const unrelated = local.match(1, {
+  onNone: () => Effect.fail(new MissingValue("unrelated")),
+  onSome: Effect.succeed
+})
+
+
+=== [D3] Fix 0: "Disable optionMatchToFromOption for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable optionMatchToFromOption for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.fromOption" ===
+
+--- file:///.src/optionMatchToFromOption.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics optionMatchToFromOption:suggestion
+import { Cause, Effect, Effect as Fx, Option, Option as O, pipe } from "effect"
+
+class MissingValue {
+  readonly _tag = "MissingValue"
+  constructor(readonly message: string) {}
+}
+
+declare const option: Option.Option<number>
+declare const otherSome: Option.Some<number>
+const fail = Effect.fail
+const succeed = Effect.succeed
+
+// Should trigger and fix the call site without changing the handler aliases.
+export const handlerAliases = Option.match(option, {
+  onNone: () => fail(new MissingValue("aliases")),
+  onSome: succeed
+})
 
 // Should trigger: data-first Option.match with a point-free success handler.
 export const dataFirst = Option.match(option, {
@@ -284,19 +432,19 @@ export const unrelated = local.match(1, {
 })
 
 
-=== [D3] Fix 0: "Disable optionMatchToFromOption for this line" ===
-skipped by default
-
-=== [D3] Fix 1: "Disable optionMatchToFromOption for entire file" ===
-skipped by default
-
 === [D4] Fix 0: "Disable optionMatchToFromOption for this line" ===
 skipped by default
 
 === [D4] Fix 1: "Disable optionMatchToFromOption for entire file" ===
 skipped by default
 
-=== [D4] Fix 2: "Replace with Effect.fromOption" ===
+=== [D5] Fix 0: "Disable optionMatchToFromOption for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable optionMatchToFromOption for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.fromOption" ===
 
 --- file:///.src/optionMatchToFromOption.ts ---
 // @effect-diagnostics *:off
@@ -310,6 +458,14 @@ class MissingValue {
 
 declare const option: Option.Option<number>
 declare const otherSome: Option.Some<number>
+const fail = Effect.fail
+const succeed = Effect.succeed
+
+// Should trigger and fix the call site without changing the handler aliases.
+export const handlerAliases = Option.match(option, {
+  onNone: () => fail(new MissingValue("aliases")),
+  onSome: succeed
+})
 
 // Should trigger: data-first Option.match with a point-free success handler.
 export const dataFirst = Option.match(option, {
@@ -409,13 +565,13 @@ export const unrelated = local.match(1, {
 })
 
 
-=== [D5] Fix 0: "Disable optionMatchToFromOption for this line" ===
+=== [D6] Fix 0: "Disable optionMatchToFromOption for this line" ===
 skipped by default
 
-=== [D5] Fix 1: "Disable optionMatchToFromOption for entire file" ===
+=== [D6] Fix 1: "Disable optionMatchToFromOption for entire file" ===
 skipped by default
 
-=== [D5] Fix 2: "Replace with Effect.fromOption" ===
+=== [D6] Fix 2: "Replace with Effect.fromOption" ===
 
 --- file:///.src/optionMatchToFromOption.ts ---
 // @effect-diagnostics *:off
@@ -429,6 +585,14 @@ class MissingValue {
 
 declare const option: Option.Option<number>
 declare const otherSome: Option.Some<number>
+const fail = Effect.fail
+const succeed = Effect.succeed
+
+// Should trigger and fix the call site without changing the handler aliases.
+export const handlerAliases = Option.match(option, {
+  onNone: () => fail(new MissingValue("aliases")),
+  onSome: succeed
+})
 
 // Should trigger: data-first Option.match with a point-free success handler.
 export const dataFirst = Option.match(option, {
@@ -528,13 +692,13 @@ export const unrelated = local.match(1, {
 })
 
 
-=== [D6] Fix 0: "Disable optionMatchToFromOption for this line" ===
+=== [D7] Fix 0: "Disable optionMatchToFromOption for this line" ===
 skipped by default
 
-=== [D6] Fix 1: "Disable optionMatchToFromOption for entire file" ===
+=== [D7] Fix 1: "Disable optionMatchToFromOption for entire file" ===
 skipped by default
 
-=== [D6] Fix 2: "Replace with Effect.fromOption" ===
+=== [D7] Fix 2: "Replace with Effect.fromOption" ===
 
 --- file:///.src/optionMatchToFromOption.ts ---
 // @effect-diagnostics *:off
@@ -548,6 +712,14 @@ class MissingValue {
 
 declare const option: Option.Option<number>
 declare const otherSome: Option.Some<number>
+const fail = Effect.fail
+const succeed = Effect.succeed
+
+// Should trigger and fix the call site without changing the handler aliases.
+export const handlerAliases = Option.match(option, {
+  onNone: () => fail(new MissingValue("aliases")),
+  onSome: succeed
+})
 
 // Should trigger: data-first Option.match with a point-free success handler.
 export const dataFirst = Option.match(option, {
@@ -588,7 +760,7 @@ export const functionPipe = pipe(
 )
 
 // Should trigger: direct data-last application is also supported.
-export const dataLast = Effect.fromOption(option, () => new MissingValue("data-last"))
+export const dataLast = Effect.fromOption(() => new MissingValue("data-last"))(option)
 
 // Should trigger and use the one-argument Effect.fromOption form.
 export const defaultFailure = Option.match(option, {
@@ -647,13 +819,13 @@ export const unrelated = local.match(1, {
 })
 
 
-=== [D7] Fix 0: "Disable optionMatchToFromOption for this line" ===
+=== [D8] Fix 0: "Disable optionMatchToFromOption for this line" ===
 skipped by default
 
-=== [D7] Fix 1: "Disable optionMatchToFromOption for entire file" ===
+=== [D8] Fix 1: "Disable optionMatchToFromOption for entire file" ===
 skipped by default
 
-=== [D7] Fix 2: "Replace with Effect.fromOption" ===
+=== [D8] Fix 2: "Replace with Effect.fromOption" ===
 
 --- file:///.src/optionMatchToFromOption.ts ---
 // @effect-diagnostics *:off
@@ -667,6 +839,14 @@ class MissingValue {
 
 declare const option: Option.Option<number>
 declare const otherSome: Option.Some<number>
+const fail = Effect.fail
+const succeed = Effect.succeed
+
+// Should trigger and fix the call site without changing the handler aliases.
+export const handlerAliases = Option.match(option, {
+  onNone: () => fail(new MissingValue("aliases")),
+  onSome: succeed
+})
 
 // Should trigger: data-first Option.match with a point-free success handler.
 export const dataFirst = Option.match(option, {
@@ -766,13 +946,13 @@ export const unrelated = local.match(1, {
 })
 
 
-=== [D8] Fix 0: "Disable optionMatchToFromOption for this line" ===
+=== [D9] Fix 0: "Disable optionMatchToFromOption for this line" ===
 skipped by default
 
-=== [D8] Fix 1: "Disable optionMatchToFromOption for entire file" ===
+=== [D9] Fix 1: "Disable optionMatchToFromOption for entire file" ===
 skipped by default
 
-=== [D8] Fix 2: "Replace with Effect.fromOption" ===
+=== [D9] Fix 2: "Replace with Effect.fromOption" ===
 
 --- file:///.src/optionMatchToFromOption.ts ---
 // @effect-diagnostics *:off
@@ -786,6 +966,14 @@ class MissingValue {
 
 declare const option: Option.Option<number>
 declare const otherSome: Option.Some<number>
+const fail = Effect.fail
+const succeed = Effect.succeed
+
+// Should trigger and fix the call site without changing the handler aliases.
+export const handlerAliases = Option.match(option, {
+  onNone: () => fail(new MissingValue("aliases")),
+  onSome: succeed
+})
 
 // Should trigger: data-first Option.match with a point-free success handler.
 export const dataFirst = Option.match(option, {
@@ -886,13 +1074,13 @@ export const unrelated = local.match(1, {
 })
 
 
-=== [D9] Fix 0: "Disable optionMatchToFromOption for this line" ===
+=== [D10] Fix 0: "Disable optionMatchToFromOption for this line" ===
 skipped by default
 
-=== [D9] Fix 1: "Disable optionMatchToFromOption for entire file" ===
+=== [D10] Fix 1: "Disable optionMatchToFromOption for entire file" ===
 skipped by default
 
-=== [D9] Fix 2: "Replace with Effect.fromOption" ===
+=== [D10] Fix 2: "Replace with Effect.fromOption" ===
 
 --- file:///.src/optionMatchToFromOption.ts ---
 // @effect-diagnostics *:off
@@ -906,6 +1094,14 @@ class MissingValue {
 
 declare const option: Option.Option<number>
 declare const otherSome: Option.Some<number>
+const fail = Effect.fail
+const succeed = Effect.succeed
+
+// Should trigger and fix the call site without changing the handler aliases.
+export const handlerAliases = Option.match(option, {
+  onNone: () => fail(new MissingValue("aliases")),
+  onSome: succeed
+})
 
 // Should trigger: data-first Option.match with a point-free success handler.
 export const dataFirst = Option.match(option, {

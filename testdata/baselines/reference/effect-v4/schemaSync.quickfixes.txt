@@ -1,0 +1,153 @@
+=== Quick Fix Inventory ===
+
+[D1] (13:32-13:49) TS377130: `Schema.decodeSync` executes synchronously. Use `Schema.decodeEffect` to compose this operation through Effect without throwing. effect(schemaSync)
+  Fix 0: "Disable schemaSync for this line"
+  Fix 1: "Disable schemaSync for entire file"
+
+[D2] (14:39-14:63) TS377130: `Schema.decodeUnknownSync` executes synchronously. Use `Schema.decodeUnknownEffect` to compose this operation through Effect without throwing. effect(schemaSync)
+  Fix 0: "Disable schemaSync for this line"
+  Fix 1: "Disable schemaSync for entire file"
+
+[D3] (15:32-15:49) TS377130: `Schema.encodeSync` executes synchronously. Use `Schema.encodeEffect` to compose this operation through Effect without throwing. effect(schemaSync)
+  Fix 0: "Disable schemaSync for this line"
+  Fix 1: "Disable schemaSync for entire file"
+
+[D4] (16:39-16:63) TS377130: `Schema.encodeUnknownSync` executes synchronously. Use `Schema.encodeUnknownEffect` to compose this operation through Effect without throwing. effect(schemaSync)
+  Fix 0: "Disable schemaSync for this line"
+  Fix 1: "Disable schemaSync for entire file"
+
+[D5] (19:31-19:43) TS377130: `S.decodeSync` executes synchronously. Use `Schema.decodeEffect` to compose this operation through Effect without throwing. effect(schemaSync)
+  Fix 0: "Disable schemaSync for this line"
+  Fix 1: "Disable schemaSync for entire file"
+
+[D6] (20:27-20:33) TS377130: `decode` executes synchronously. Use `Schema.decodeUnknownEffect` to compose this operation through Effect without throwing. effect(schemaSync)
+  Fix 0: "Disable schemaSync for this line"
+  Fix 1: "Disable schemaSync for entire file"
+
+[D7] (22:30-22:41) TS377130: `decodeAlias` executes synchronously. Use `Schema.decodeUnknownEffect` to compose this operation through Effect without throwing. effect(schemaSync)
+  Fix 0: "Disable schemaSync for this line"
+  Fix 1: "Disable schemaSync for entire file"
+
+[D8] (23:30-23:50) TS377130: `Schema["encodeSync"]` executes synchronously. Use `Schema.encodeEffect` to compose this operation through Effect without throwing. effect(schemaSync)
+  Fix 0: "Disable schemaSync for this line"
+  Fix 1: "Disable schemaSync for entire file"
+
+[D9] (24:24-24:41) TS377130: `Schema.decodeSync` executes synchronously. Use `Schema.decodeEffect` to compose this operation through Effect without throwing. effect(schemaSync)
+  Fix 0: "Disable schemaSync for this line"
+  Fix 1: "Disable schemaSync for entire file"
+
+[D10] (25:38-25:55) TS377130: `Schema.encodeSync` executes synchronously. Use `Schema.encodeEffect` to compose this operation through Effect without throwing. effect(schemaSync)
+  Fix 0: "Disable schemaSync for this line"
+  Fix 1: "Disable schemaSync for entire file"
+
+[D11] (27:10-27:27) TS377130: `Schema.decodeSync` executes synchronously. Use `Schema.decodeEffect` to compose this operation through Effect without throwing. effect(schemaSync)
+  Fix 0: "Disable schemaSync for this line"
+  Fix 1: "Disable schemaSync for entire file"
+
+[D12] (31:33-31:50) TS377130: `Parser.decodeSync` executes synchronously. Use `Schema.decodeEffect` to compose this operation through Effect without throwing. effect(schemaSync)
+  Fix 0: "Disable schemaSync for this line"
+  Fix 1: "Disable schemaSync for entire file"
+
+[D13] (32:40-32:64) TS377130: `Parser.decodeUnknownSync` executes synchronously. Use `Schema.decodeUnknownEffect` to compose this operation through Effect without throwing. effect(schemaSync)
+  Fix 0: "Disable schemaSync for this line"
+  Fix 1: "Disable schemaSync for entire file"
+
+[D14] (33:33-33:50) TS377130: `Parser.encodeSync` executes synchronously. Use `Schema.encodeEffect` to compose this operation through Effect without throwing. effect(schemaSync)
+  Fix 0: "Disable schemaSync for this line"
+  Fix 1: "Disable schemaSync for entire file"
+
+[D15] (34:40-34:64) TS377130: `Parser.encodeUnknownSync` executes synchronously. Use `Schema.encodeUnknownEffect` to compose this operation through Effect without throwing. effect(schemaSync)
+  Fix 0: "Disable schemaSync for this line"
+  Fix 1: "Disable schemaSync for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable schemaSync for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable schemaSync for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable schemaSync for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable schemaSync for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable schemaSync for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable schemaSync for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable schemaSync for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable schemaSync for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable schemaSync for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable schemaSync for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable schemaSync for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable schemaSync for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable schemaSync for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable schemaSync for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable schemaSync for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable schemaSync for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable schemaSync for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable schemaSync for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable schemaSync for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable schemaSync for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable schemaSync for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable schemaSync for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable schemaSync for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable schemaSync for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable schemaSync for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable schemaSync for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable schemaSync for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable schemaSync for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable schemaSync for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable schemaSync for entire file" ===
+skipped by default

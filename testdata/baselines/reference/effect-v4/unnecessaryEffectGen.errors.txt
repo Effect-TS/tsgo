@@ -2,9 +2,10 @@
 Effect version: 4.0.0
 
 /.src/unnecessaryEffectGen.ts(19,37): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/unnecessaryEffectGen.ts(24,27): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 
 
-==== /.src/unnecessaryEffectGen.ts (1 errors) ====
+==== /.src/unnecessaryEffectGen.ts (2 errors) ====
     import * as Effect from "effect/Effect"
     
     export const shouldNotRant = Effect.gen(function*() {
@@ -27,6 +28,15 @@ Effect version: 4.0.0
                                         ~~~~~~~~~~~~~~~~~~~~~~~~
       return yield* Effect.succeed(42)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    })
+    ~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    
+    const gen = Effect.gen
+    export const aliasedGen = gen(function*() {
+                              ~~~~~~~~~~~~~~~~~
+      yield* Effect.succeed(42)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
     })
     ~~
 !!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)

@@ -14,6 +14,8 @@
 // @effect-v3
 import * as Effect from "effect/Effect"
 
+const genAlias = Effect.gen
+
 // These cases can be converted to Effect.fnUntraced because:
 // - There are no pipe arguments
 // - There is no withSpan for tracing
@@ -29,6 +31,13 @@ export const arrowBlockGen = () => {
 
 export const arrowExpressionGen = () =>
   Effect.gen(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
+
+// Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
+export const arrowAliasedGen = () =>
+  genAlias(function*() {
     yield* Effect.succeed(1)
     return 42
   })

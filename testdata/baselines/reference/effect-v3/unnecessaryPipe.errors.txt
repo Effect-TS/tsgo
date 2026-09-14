@@ -2,10 +2,11 @@
 Effect version: 3.19.19
 
 /.src/unnecessaryPipe.ts(14,29): suggestion TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
-/.src/unnecessaryPipe.ts(16,35): suggestion TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+/.src/unnecessaryPipe.ts(17,34): suggestion TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+/.src/unnecessaryPipe.ts(19,35): suggestion TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
 
 
-==== /.src/unnecessaryPipe.ts (2 errors) ====
+==== /.src/unnecessaryPipe.ts (3 errors) ====
     // @effect-v3
     import * as Effect from "effect/Effect"
     import { pipe } from "effect/Function"
@@ -21,6 +22,11 @@ Effect version: 3.19.19
     
     export const shouldReport = pipe(32)
                                 ~~~~~~~~
+!!! suggestion TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
+    
+    const p = pipe
+    export const shouldReportAlias = p(32)
+                                     ~~~~~
 !!! suggestion TS377013: This pipe call contains no arguments. effect(unnecessaryPipe)
     
     export const shouldReportNoArgs = Effect.succeed(32).pipe()

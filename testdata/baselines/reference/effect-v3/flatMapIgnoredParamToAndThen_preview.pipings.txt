@@ -1,0 +1,43 @@
+==== /.src/flatMapIgnoredParamToAndThen_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 3:14 - 3:32
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 4:15 - 4:40
+Node: Effect.succeed("second")
+Node Kind: KindCallExpression
+
+Subject: "second"
+Subject Type: "second"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 6:23 - 6:64
+Node: first.pipe(Effect.flatMap(() => second))
+Node Kind: KindCallExpression
+
+Subject: first
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [() => second]
+      outType: Effect<string, never, never>

@@ -60,7 +60,7 @@ func AnalyzeCatchAllToMapError(tp *typeparser.TypeParser, _ *checker.Checker, sf
 			}
 			callback := transformation.Args[0]
 
-			lazy := typeparser.ParseLazyExpression(callback, false)
+			lazy := typeparser.ParseLazyExpression(callback, typeparser.LazyExpressionNone)
 			if lazy == nil {
 				continue
 			}

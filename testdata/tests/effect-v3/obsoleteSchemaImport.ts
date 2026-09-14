@@ -1,0 +1,23 @@
+// @filename: tsconfig.json
+{
+  "compilerOptions": {
+    "types": ["node"],
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "ignoreEffectErrorsInTscExitCode": true,
+        "skipDisabledOptimization": true
+      }
+    ]
+  }
+}
+
+// @filename: obsoleteSchemaImport.ts
+// @effect-v3
+import { Effect } from "effect"
+
+// Not flagged in v3: @effect/schema is valid in Effect v3
+// @ts-expect-error - @effect/schema not installed in v3 fixture
+import * as S from "@effect/schema/Schema"
+
+export const program = Effect.sync(() => S)

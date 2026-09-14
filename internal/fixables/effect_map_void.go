@@ -4,7 +4,6 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
-	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
 )
@@ -26,35 +25,23 @@ func runEffectMapVoidFix(ctx *fixable.Context) []ls.CodeAction {
 		if !diagRange.Intersects(ctx.Span) && !ctx.Span.ContainedBy(diagRange) {
 			continue
 		}
+		if match.Transformation == nil {
+			continue
+		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.asVoid",
 			Run: func(tracker *rewriter.Tracker) {
 				// Build Effect.asVoid, preserving the original module reference (and any alias).
-				asVoid := tracker.NewPropertyAccessExpression(
-					tracker.DeepCloneNode(match.EffectModuleNode),
-					nil,
-					tracker.NewIdentifier("asVoid"),
-					ast.NodeFlagsNone,
-				)
-				// Data-last/pipeable forms drop to a bare Effect.asVoid reference; the
-				// data-first form must keep its subject as Effect.asVoid(self).
-				var replacement = asVoid
-				if match.SubjectNode != nil {
-					replacement = tracker.NewCallExpression(
-						asVoid,
-						nil,
-						nil,
-						tracker.NewNodeList([]*ast.Node{tracker.DeepCloneNode(match.SubjectNode)}),
-						ast.NodeFlagsNone,
-					)
-				}
-				tracker.ReplaceNode(sf, match.CallNode, replacement, nil)
+				asVoid := effectModuleMethod(tracker, sf, match.EffectModuleNode, "asVoid")
+				tracker.ReplacePipingFlowTransformation(sf, match.Transformation, rewriter.PipingFlowTransformationReplacement{
+					Callee: asVoid,
+				})
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}
 		}
-		return nil
+		continue
 	}
 
 	return nil

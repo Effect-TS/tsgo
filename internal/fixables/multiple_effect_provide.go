@@ -2,13 +2,13 @@ package fixables
 
 import (
 	"github.com/effect-ts/tsgo/internal/fixable"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
@@ -32,9 +32,8 @@ func runMultipleEffectProvideFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-
 		// Resolve the Effect module name, preserving import aliases
-		effectModuleName := "Effect"
+		effectModuleName := typeparser.FindEffectModuleIdentifier(sf)
 		if match.EffectModuleNode != nil && match.EffectModuleNode.Kind == ast.KindIdentifier {
 			effectModuleName = scanner.GetTextOfNode(match.EffectModuleNode)
 		}

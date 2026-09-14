@@ -1,5 +1,86 @@
 # @effect/tsgo
 
+## 0.45.0
+
+### Minor Changes
+
+- 066c4b0: Add the opt-in `schemaSync` diagnostic to prefer Effect-based Schema decoding and encoding over `decodeSync`, `decodeUnknownSync`, `encodeSync`, and `encodeUnknownSync` in any context. It recommends the corresponding Effect v3 or v4 method and is enabled by the `effect-native` preset.
+
+### Patch Changes
+
+- bc87c9f: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260909.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/f3b04fe05642d53b4ff126a4af05fe2587b43748) commit `f3b04fe05642d53b4ff126a4af05fe2587b43748`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
+## 0.44.0
+
+### Minor Changes
+
+- a64e17d: Add `obsoleteMatchImport` diagnostic (`TS377127`) to warn when importing `@effect/match` in projects targeting Effect v4. In Effect v4, pattern matching is built directly into `effect` (`import { Match } from "effect"` or `import * as Match from "effect/Match"`).
+- 63331b6: Add `obsoleteSchemaImport` diagnostic (`TS377128`) to warn when importing `@effect/schema` or `@effect/schema/*` in projects targeting Effect v4. In Effect v4, Schema is built directly into `effect` (`import { Schema } from "effect"` or `import * as Schema from "effect/Schema"`).
+- 29733f1: Add the `timeoutCatchTagToTimeoutOrElse` diagnostic and quick fixes for Effect v4. Suggest `Effect.timeoutOrElse` for `Effect.timeout` followed by `Effect.catchTag("TimeoutError", ...)`, and `Effect.timeoutOption` for the corresponding Some/None pattern. Only suggest a rewrite when the input error channel excludes `TimeoutError` and the handler does not use the caught error.
+
+### Patch Changes
+
+- a05d76b: Reuse the normalized piping-flow shape and sequence matchers across existing diagnostics.
+- d990b0a: Fix `cryptoRandomUUID` and `cryptoRandomUUIDInEffect` diagnostic messages and rule descriptions in Effect v4 to recommend the Effect `Crypto` module instead of `Random`. In Effect v4, `Random` does not provide `randomUUID` and uses non-cryptographic `Math.random`, whereas cryptographic UUID generation is provided by `Crypto.Crypto` (such as `yield* crypto.randomUUIDv4`).
+- 7993db9: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260908.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/1f70213d4922b434345f639b441681e470c7cfc1) commit `1f70213d4922b434345f639b441681e470c7cfc1`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
+## 0.43.0
+
+### Minor Changes
+
+- 956b8d6: Extend `nodeBuiltinImport` to recommend Effect-native alternatives for `console`, `timers`, `timers/promises`, `stream`, `stream/promises`, and `stream/web`, including their `node:` forms.
+  
+  For Effect v4, also flag `crypto` and `node:crypto` imports and recommend `Crypto` from `effect`. For example, `import { randomUUID } from "node:crypto"` is now diagnosed; use the `Crypto` service's `randomUUIDv4` effect instead. Effect v3 crypto imports remain allowed because that version has no corresponding Crypto service.
+  
+  Correct the Effect v4 `child_process` recommendation to point to `effect/unstable/process`. The rule remains disabled by default; configure `nodeBuiltinImport` with error severity to prohibit covered imports.
+
+## 0.42.0
+
+### Minor Changes
+
+- 7565750: Add the `matchEffectToMapBoth` style diagnostic and quick fix for replacing `Effect.matchEffect` handlers that return `Effect.fail` and `Effect.succeed` with `Effect.mapBoth`.
+- a09feae: Add the `catchAllTagDispatchToCatchTag` style diagnostic and quick fix for replacing manual tagged-error dispatch with `Effect.catchTag` or `Effect.catchTags`.
+- 2d501a2: Add the `provideLayerSucceedToProvideService` diagnostic and quick fix for replacing inline `Layer.succeed` and `Layer.effect` provision with direct service provision.
+- 46c6e68: Add the `matchEffectToMatch` style diagnostic and quick fix for replacing `Effect.matchEffect` or `Effect.matchCauseEffect` whose handlers only return `Effect.succeed` with their non-effectful counterparts.
+  
+  Make lazy-expression parsing synchronous and non-generator by default, with flags for callers that explicitly accept thunks, async functions, or generators.
+- 59c5fff: Adopt the piping flow parser in more diagnostics.
+  
+  - `promiseInEffectSuccess`: an explicit promise-success annotation (type arguments on `Effect.succeed`/`as`/`map`/`zipWith`) now suppresses the diagnostic from any position in the surrounding pipe, not only the last argument. `base.pipe(Effect.as<Promise<number>>(promiseValue), Effect.as(promiseValue))` no longer reports, matching the reversed order that was already accepted.
+  - `allOfMapToForEach`: now also detects the data-last form expressed through piping flows, e.g. `pipe(values.map(effectful), Effect.all)` and `pipe(values.map(effectful), Effect.all, Effect.asVoid)`, which were previously invisible to the call-expression walk. These matches are diagnostic-only: the existing quick fix remains limited to the standalone `Effect.all(xs.map(f), options?)` call it can safely rewrite.
+  - The piping flow parser now keeps the type arguments of parenthesized pipe arguments, e.g. `pipe(x, (Effect.as<...>(v)))`.
+  - The piping flow parser now normalizes curried pipeable applications, so `Effect.catch(handler)(effect)` has `effect` as its subject, `Effect.catch` as its callee, and `handler` as its transformation argument. The normalization is limited to calls whose signatures verify that they are the pipeable counterpart of a data-first overload of the same combinator, leaving unrelated curried APIs such as `Effect.fn("name")(body)` unchanged.
+- db28a74: Add the `runOfExitToRunExit` diagnostic, which replaces `Effect.runPromise` applied to `Effect.exit` with the dedicated `Effect.runPromiseExit` runner.
+
+### Patch Changes
+
+- 348021d: Update TypeScript next to 7.1.0-dev.20260906.1 and adapt diagnostics snapshot cleanup to its new API while preserving compatibility with stable TypeScript.
+- 928506b: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260907.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/1f70213d4922b434345f639b441681e470c7cfc1) commit `1f70213d4922b434345f639b441681e470c7cfc1`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2). Refresh the Oxlint configuration schema from the selected package.
+
+## 0.41.0
+
+### Minor Changes
+
+- d095234: Normalize piping-flow transformations around their callee, arguments, and explicit type arguments without exposing a representation-dependent transformation node. Add shared rewriter operations for replacing transformations and flow prefixes while preserving data-first, data-last, `pipe(...)`, and `.pipe(...)` source forms.
+- d3efa70: Remove the AST location parameter from type-only `TypeParser` operations. Effect, Layer, Stream, Schema, service, Context.Tag, Scope, and related type predicates now derive instantiated property types directly from the supplied checker type.
+
+### Patch Changes
+
+- 1d0dfb8: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260903.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/cf7b9361a33fa0c8e1afa3cf45fde29c9ab23ec0) commit `cf7b9361a33fa0c8e1afa3cf45fde29c9ab23ec0`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
+## 0.40.0
+
+### Minor Changes
+
+- 815273c: Add the Effect v4 `raceFirstWithSleepToTimeout` style diagnostic, which suggests `Effect.timeoutOrElse` when a first-completion race has exactly one `Effect.sleep`- or `Effect.delay`-based timer arm.
+  
+  Reclassify `acquireReleaseDisposable` as style and `unsafeEffectTypeAssertion` as correctness.
+
+### Patch Changes
+
+- c1ac8e5: Avoid reporting the `schemaNumber` diagnostic when `Schema.Number` is refined with the built-in `isFinite` or `isInt` checks, including pipe-style refinements.
+- 0fba9d1: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260902.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/43a90f4c105bc9db7cb7aa299beddafbabe1d23e) commit `43a90f4c105bc9db7cb7aa299beddafbabe1d23e`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.39.1
 
 ### Patch Changes

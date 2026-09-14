@@ -1,0 +1,14 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/schemaSync_defaultOff.ts(4,29): suggestion TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+
+
+==== /.src/schemaSync_defaultOff.ts (1 errors) ====
+    // @effect-v4
+    import * as Schema from "effect/Schema"
+    
+    export const value = Schema.decodeUnknownSync(Schema.String)("hello")
+                                ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377112: This input is already assignable to the schema's Encoded type. Use `decodeSync` to preserve compile-time type checking instead of discarding the input type through `decodeUnknownSync`. effect(preferTypedSchemaDecoder)
+    

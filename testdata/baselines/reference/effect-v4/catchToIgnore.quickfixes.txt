@@ -25,7 +25,12 @@
   Fix 1: "Disable catchToIgnore for entire file"
   Fix 2: "Replace with Effect.ignore"
 
-[D6] (40:22-40:33) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+[D6] (35:58-35:68) TS377099: `Effect.ignore` expresses ignored failure more directly than `Effect.catch` returning `Effect.void`. effect(catchToIgnore)
+  Fix 0: "Disable catchToIgnore for this line"
+  Fix 1: "Disable catchToIgnore for entire file"
+  Fix 2: "Replace with Effect.ignore"
+
+[D7] (44:22-44:33) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
   Fix 0: "Disable syncToSucceed for this line"
   Fix 1: "Disable syncToSucceed for entire file"
   Fix 2: "Replace with Effect.succeed"
@@ -72,6 +77,10 @@ export const shouldTriggerBlock = undefinedEffect.pipe(
 
 // Should trigger: data-first style
 export const shouldTriggerDataFirst = Effect.catch(voidEffect, () => Effect.void)
+
+// Should trigger with a fallback fix: the API reference is hidden behind a const alias.
+const catchAlias = Effect.catch
+export const shouldTriggerAliasedCatch = voidEffect.pipe(catchAlias(() => Effect.void))
 
 // Should NOT trigger: Effect.ignore would discard the number success value
 export const shouldNotTriggerValueSuccess = numberEffect.pipe(
@@ -125,6 +134,10 @@ export const shouldTriggerBlock = undefinedEffect.pipe(
 // Should trigger: data-first style
 export const shouldTriggerDataFirst = Effect.catch(voidEffect, () => Effect.void)
 
+// Should trigger with a fallback fix: the API reference is hidden behind a const alias.
+const catchAlias = Effect.catch
+export const shouldTriggerAliasedCatch = voidEffect.pipe(catchAlias(() => Effect.void))
+
 // Should NOT trigger: Effect.ignore would discard the number success value
 export const shouldNotTriggerValueSuccess = numberEffect.pipe(
   Effect.catch(() => Effect.void)
@@ -177,6 +190,10 @@ export const shouldTriggerBlock = undefinedEffect.pipe(
 // Should trigger: data-first style
 export const shouldTriggerDataFirst = Effect.catch(voidEffect, () => Effect.void)
 
+// Should trigger with a fallback fix: the API reference is hidden behind a const alias.
+const catchAlias = Effect.catch
+export const shouldTriggerAliasedCatch = voidEffect.pipe(catchAlias(() => Effect.void))
+
 // Should NOT trigger: Effect.ignore would discard the number success value
 export const shouldNotTriggerValueSuccess = numberEffect.pipe(
   Effect.catch(() => Effect.void)
@@ -226,6 +243,10 @@ export const shouldTriggerBlock = undefinedEffect.pipe(
 
 // Should trigger: data-first style
 export const shouldTriggerDataFirst = Effect.catch(voidEffect, () => Effect.void)
+
+// Should trigger with a fallback fix: the API reference is hidden behind a const alias.
+const catchAlias = Effect.catch
+export const shouldTriggerAliasedCatch = voidEffect.pipe(catchAlias(() => Effect.void))
 
 // Should NOT trigger: Effect.ignore would discard the number success value
 export const shouldNotTriggerValueSuccess = numberEffect.pipe(
@@ -279,6 +300,10 @@ export const shouldTriggerBlock = undefinedEffect.pipe(
 // Should trigger: data-first style
 export const shouldTriggerDataFirst = Effect.ignore(voidEffect)
 
+// Should trigger with a fallback fix: the API reference is hidden behind a const alias.
+const catchAlias = Effect.catch
+export const shouldTriggerAliasedCatch = voidEffect.pipe(catchAlias(() => Effect.void))
+
 // Should NOT trigger: Effect.ignore would discard the number success value
 export const shouldNotTriggerValueSuccess = numberEffect.pipe(
   Effect.catch(() => Effect.void)
@@ -290,13 +315,13 @@ export const shouldNotTriggerOtherFallback = voidEffect.pipe(
 )
 
 
-=== [D6] Fix 0: "Disable syncToSucceed for this line" ===
+=== [D6] Fix 0: "Disable catchToIgnore for this line" ===
 skipped by default
 
-=== [D6] Fix 1: "Disable syncToSucceed for entire file" ===
+=== [D6] Fix 1: "Disable catchToIgnore for entire file" ===
 skipped by default
 
-=== [D6] Fix 2: "Replace with Effect.succeed" ===
+=== [D6] Fix 2: "Replace with Effect.ignore" ===
 
 --- file:///.src/catchToIgnore.ts ---
 import { Effect, pipe } from "effect"
@@ -330,6 +355,66 @@ export const shouldTriggerBlock = undefinedEffect.pipe(
 
 // Should trigger: data-first style
 export const shouldTriggerDataFirst = Effect.catch(voidEffect, () => Effect.void)
+
+// Should trigger with a fallback fix: the API reference is hidden behind a const alias.
+const catchAlias = Effect.catch
+export const shouldTriggerAliasedCatch = voidEffect.pipe(Effect.ignore)
+
+// Should NOT trigger: Effect.ignore would discard the number success value
+export const shouldNotTriggerValueSuccess = numberEffect.pipe(
+  Effect.catch(() => Effect.void)
+)
+
+// Should NOT trigger: fallback is not exactly Effect.void
+export const shouldNotTriggerOtherFallback = voidEffect.pipe(
+  Effect.catch(() => Effect.sync(() => undefined))
+)
+
+
+=== [D7] Fix 0: "Disable syncToSucceed for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable syncToSucceed for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.succeed" ===
+
+--- file:///.src/catchToIgnore.ts ---
+import { Effect, pipe } from "effect"
+
+declare const voidEffect: Effect.Effect<void, string, never>
+declare const undefinedEffect: Effect.Effect<undefined, string, never>
+declare const numberEffect: Effect.Effect<number, string, never>
+
+// Should trigger: catch returning Effect.void on a void success channel
+export const shouldTriggerCatch = voidEffect.pipe(
+  Effect.catch(() => Effect.void)
+)
+
+// Should trigger: catchCause returning Effect.void on a void success channel
+export const shouldTriggerCatchCause = voidEffect.pipe(
+  Effect.catchCause((_cause) => Effect.void)
+)
+
+// Should trigger: pipe style
+export const shouldTriggerPipe = pipe(
+  Effect.fail("error"),
+  Effect.catch(() => Effect.void)
+)
+
+// Should trigger: block body
+export const shouldTriggerBlock = undefinedEffect.pipe(
+  Effect.catch(() => {
+    return Effect.void
+  })
+)
+
+// Should trigger: data-first style
+export const shouldTriggerDataFirst = Effect.catch(voidEffect, () => Effect.void)
+
+// Should trigger with a fallback fix: the API reference is hidden behind a const alias.
+const catchAlias = Effect.catch
+export const shouldTriggerAliasedCatch = voidEffect.pipe(catchAlias(() => Effect.void))
 
 // Should NOT trigger: Effect.ignore would discard the number success value
 export const shouldNotTriggerValueSuccess = numberEffect.pipe(

@@ -1,9 +1,10 @@
 === Metadata ===
 Effect version: 3.19.19
 
+/.src/catchTagToCatchReason.ts(23,3): suggestion TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
 
 
-==== /.src/catchTagToCatchReason.ts (0 errors) ====
+==== /.src/catchTagToCatchReason.ts (1 errors) ====
     // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics catchTagToCatchReason:suggestion
@@ -27,6 +28,8 @@ Effect version: 3.19.19
     // Should NOT trigger: Effect v3 does not expose catchReason/catchReasons.
     export const preCatchReason = program.pipe(
       Effect.catchTag("OuterError", (error) => {
+      ~~~~~~~~~~~~~~~
+!!! suggestion TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
         if (error.reason._tag === "ReasonA") return Effect.succeed(1)
         return Effect.fail(error)
       })

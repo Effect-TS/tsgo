@@ -43,11 +43,6 @@ var GlobalConsoleInEffect = rule.Rule{
 }
 
 func runGlobalConsole(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
-	consoleSymbol := ctx.Checker.ResolveName("console", nil, ast.SymbolFlagsValue, false)
-	if consoleSymbol == nil {
-		return nil
-	}
-
 	message := tsdiag.This_code_uses_console_1_the_corresponding_Effect_logging_API_is_0_effect_globalConsole
 	if checkInEffect {
 		message = tsdiag.This_Effect_code_uses_console_1_logging_in_Effect_code_is_represented_through_0_effect_globalConsoleInEffect
@@ -59,13 +54,13 @@ func runGlobalConsole(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 		if node == nil {
 			return false
 		}
-		if node.Kind == ast.KindCallExpression && node.AsCallExpression().Expression.Kind == ast.KindPropertyAccessExpression {
+		if node.Kind == ast.KindCallExpression {
 			inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagInEffect != 0
 			if inEffect == checkInEffect {
-				prop := node.AsCallExpression().Expression.AsPropertyAccessExpression()
-				method := prop.Name().Text()
-				alternative := globalConsoleMethodAlternatives[method]
-				if alternative != "" && ctx.TypeParser.ResolveToGlobalSymbol(ctx.TypeParser.GetSymbolAtLocation(prop.Expression)) == consoleSymbol {
+				for method, alternative := range globalConsoleMethodAlternatives {
+					if !ctx.TypeParser.IsNodeReferenceToGlobalMember(node.AsCallExpression().Expression, "console", method) {
+						continue
+					}
 					diags = append(diags, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						scanner.GetErrorRangeForNode(ctx.SourceFile, node),
@@ -74,6 +69,7 @@ func runGlobalConsole(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 						alternative,
 						method,
 					))
+					break
 				}
 			}
 		}

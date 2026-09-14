@@ -6,7 +6,7 @@ Suggests Effect.acquireDisposable when Effect.acquireRelease only invokes the ac
 
 | Property | Value |
 | --- | --- |
-| Category | Effect-native |
+| Category | Style |
 | Default severity | `suggestion` |
 | Fixable | Yes |
 | Effect versions | v4 |

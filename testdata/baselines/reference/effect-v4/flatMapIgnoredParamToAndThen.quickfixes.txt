@@ -1,0 +1,515 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:36-10:50) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+  Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
+  Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
+  Fix 2: "Replace with Effect.andThen"
+
+[D2] (13:34-13:48) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+  Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
+  Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
+  Fix 2: "Replace with Effect.andThen"
+
+[D3] (16:26-16:40) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+  Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
+  Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
+  Fix 2: "Replace with Effect.andThen"
+
+[D4] (19:25-19:39) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+  Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
+  Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
+  Fix 2: "Replace with Effect.andThen"
+
+[D5] (23:35-23:42) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+  Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
+  Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
+  Fix 2: "Replace with Effect.andThen"
+
+[D6] (39:37-39:51) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+  Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
+  Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
+  Fix 2: "Replace with Effect.andThen"
+
+[D7] (44:17-44:28) TS377091: Exported declaration 'nestedScope' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D8] (45:21-45:35) TS377132: `Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)
+  Fix 0: "Disable flatMapIgnoredParamToAndThen for this line"
+  Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file"
+  Fix 2: "Replace with Effect.andThen"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.andThen" ===
+
+--- file:///.src/flatMapIgnoredParamToAndThen.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, pipe } from "effect"
+
+const first = Effect.succeed(1)
+const second = Effect.succeed("second")
+const holder = { second }
+let mutable = second
+
+// Should trigger: pipeable style
+export const pipeable = first.pipe(Effect.andThen(second))
+
+// Should trigger: pipe style
+export const piped = pipe(first, Effect.flatMap(() => second))
+
+// Should trigger: data-first style
+export const dataFirst = Effect.flatMap(first, () => second)
+
+// Should trigger: data-last style
+export const dataLast = Effect.flatMap(() => second)(first)
+
+// Should trigger and fix the call site without changing the shared alias
+const flatMap = Fx.flatMap
+export const aliased = first.pipe(flatMap(() => second))
+
+// Should NOT trigger: the callback consumes or declares an upstream value
+export const parameter = first.pipe(Effect.flatMap((_value) => second))
+
+// Should NOT trigger: moving these evaluations would change laziness
+// @effect-diagnostics-next-line flatMapToMap:off
+export const call = first.pipe(Effect.flatMap(() => Effect.succeed("new")))
+export const propertyAccess = first.pipe(Effect.flatMap(() => holder.second))
+
+// Should NOT trigger: the returned binding is mutable or declared later
+export const mutableBinding = first.pipe(Effect.flatMap(() => mutable))
+export const laterBinding = first.pipe(Effect.flatMap(() => later))
+const later = Effect.succeed("later")
+
+// Should trigger: the lazy-expression parser unwraps a single-return block
+export const blockBody = first.pipe(Effect.flatMap(() => {
+  return second
+}))
+
+// Should trigger: const values remain stable when referenced from a nested scope
+export function nestedScope() {
+  return first.pipe(Effect.flatMap(() => second))
+}
+
+// Should NOT trigger: the stable value is not an Effect
+const value = "value"
+export const nonEffect = first.pipe(Effect.flatMap(() => value as never))
+
+// Should NOT trigger: unrelated flatMap API
+const unrelated = { flatMap: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedCall = unrelated.flatMap(1, () => second)
+
+void mutable
+
+
+=== [D2] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.andThen" ===
+
+--- file:///.src/flatMapIgnoredParamToAndThen.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, pipe } from "effect"
+
+const first = Effect.succeed(1)
+const second = Effect.succeed("second")
+const holder = { second }
+let mutable = second
+
+// Should trigger: pipeable style
+export const pipeable = first.pipe(Effect.flatMap(() => second))
+
+// Should trigger: pipe style
+export const piped = pipe(first, Effect.andThen(second))
+
+// Should trigger: data-first style
+export const dataFirst = Effect.flatMap(first, () => second)
+
+// Should trigger: data-last style
+export const dataLast = Effect.flatMap(() => second)(first)
+
+// Should trigger and fix the call site without changing the shared alias
+const flatMap = Fx.flatMap
+export const aliased = first.pipe(flatMap(() => second))
+
+// Should NOT trigger: the callback consumes or declares an upstream value
+export const parameter = first.pipe(Effect.flatMap((_value) => second))
+
+// Should NOT trigger: moving these evaluations would change laziness
+// @effect-diagnostics-next-line flatMapToMap:off
+export const call = first.pipe(Effect.flatMap(() => Effect.succeed("new")))
+export const propertyAccess = first.pipe(Effect.flatMap(() => holder.second))
+
+// Should NOT trigger: the returned binding is mutable or declared later
+export const mutableBinding = first.pipe(Effect.flatMap(() => mutable))
+export const laterBinding = first.pipe(Effect.flatMap(() => later))
+const later = Effect.succeed("later")
+
+// Should trigger: the lazy-expression parser unwraps a single-return block
+export const blockBody = first.pipe(Effect.flatMap(() => {
+  return second
+}))
+
+// Should trigger: const values remain stable when referenced from a nested scope
+export function nestedScope() {
+  return first.pipe(Effect.flatMap(() => second))
+}
+
+// Should NOT trigger: the stable value is not an Effect
+const value = "value"
+export const nonEffect = first.pipe(Effect.flatMap(() => value as never))
+
+// Should NOT trigger: unrelated flatMap API
+const unrelated = { flatMap: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedCall = unrelated.flatMap(1, () => second)
+
+void mutable
+
+
+=== [D3] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.andThen" ===
+
+--- file:///.src/flatMapIgnoredParamToAndThen.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, pipe } from "effect"
+
+const first = Effect.succeed(1)
+const second = Effect.succeed("second")
+const holder = { second }
+let mutable = second
+
+// Should trigger: pipeable style
+export const pipeable = first.pipe(Effect.flatMap(() => second))
+
+// Should trigger: pipe style
+export const piped = pipe(first, Effect.flatMap(() => second))
+
+// Should trigger: data-first style
+export const dataFirst = Effect.andThen(first, second)
+
+// Should trigger: data-last style
+export const dataLast = Effect.flatMap(() => second)(first)
+
+// Should trigger and fix the call site without changing the shared alias
+const flatMap = Fx.flatMap
+export const aliased = first.pipe(flatMap(() => second))
+
+// Should NOT trigger: the callback consumes or declares an upstream value
+export const parameter = first.pipe(Effect.flatMap((_value) => second))
+
+// Should NOT trigger: moving these evaluations would change laziness
+// @effect-diagnostics-next-line flatMapToMap:off
+export const call = first.pipe(Effect.flatMap(() => Effect.succeed("new")))
+export const propertyAccess = first.pipe(Effect.flatMap(() => holder.second))
+
+// Should NOT trigger: the returned binding is mutable or declared later
+export const mutableBinding = first.pipe(Effect.flatMap(() => mutable))
+export const laterBinding = first.pipe(Effect.flatMap(() => later))
+const later = Effect.succeed("later")
+
+// Should trigger: the lazy-expression parser unwraps a single-return block
+export const blockBody = first.pipe(Effect.flatMap(() => {
+  return second
+}))
+
+// Should trigger: const values remain stable when referenced from a nested scope
+export function nestedScope() {
+  return first.pipe(Effect.flatMap(() => second))
+}
+
+// Should NOT trigger: the stable value is not an Effect
+const value = "value"
+export const nonEffect = first.pipe(Effect.flatMap(() => value as never))
+
+// Should NOT trigger: unrelated flatMap API
+const unrelated = { flatMap: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedCall = unrelated.flatMap(1, () => second)
+
+void mutable
+
+
+=== [D4] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.andThen" ===
+
+--- file:///.src/flatMapIgnoredParamToAndThen.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, pipe } from "effect"
+
+const first = Effect.succeed(1)
+const second = Effect.succeed("second")
+const holder = { second }
+let mutable = second
+
+// Should trigger: pipeable style
+export const pipeable = first.pipe(Effect.flatMap(() => second))
+
+// Should trigger: pipe style
+export const piped = pipe(first, Effect.flatMap(() => second))
+
+// Should trigger: data-first style
+export const dataFirst = Effect.flatMap(first, () => second)
+
+// Should trigger: data-last style
+export const dataLast = Effect.andThen(second)(first)
+
+// Should trigger and fix the call site without changing the shared alias
+const flatMap = Fx.flatMap
+export const aliased = first.pipe(flatMap(() => second))
+
+// Should NOT trigger: the callback consumes or declares an upstream value
+export const parameter = first.pipe(Effect.flatMap((_value) => second))
+
+// Should NOT trigger: moving these evaluations would change laziness
+// @effect-diagnostics-next-line flatMapToMap:off
+export const call = first.pipe(Effect.flatMap(() => Effect.succeed("new")))
+export const propertyAccess = first.pipe(Effect.flatMap(() => holder.second))
+
+// Should NOT trigger: the returned binding is mutable or declared later
+export const mutableBinding = first.pipe(Effect.flatMap(() => mutable))
+export const laterBinding = first.pipe(Effect.flatMap(() => later))
+const later = Effect.succeed("later")
+
+// Should trigger: the lazy-expression parser unwraps a single-return block
+export const blockBody = first.pipe(Effect.flatMap(() => {
+  return second
+}))
+
+// Should trigger: const values remain stable when referenced from a nested scope
+export function nestedScope() {
+  return first.pipe(Effect.flatMap(() => second))
+}
+
+// Should NOT trigger: the stable value is not an Effect
+const value = "value"
+export const nonEffect = first.pipe(Effect.flatMap(() => value as never))
+
+// Should NOT trigger: unrelated flatMap API
+const unrelated = { flatMap: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedCall = unrelated.flatMap(1, () => second)
+
+void mutable
+
+
+=== [D5] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.andThen" ===
+
+--- file:///.src/flatMapIgnoredParamToAndThen.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, pipe } from "effect"
+
+const first = Effect.succeed(1)
+const second = Effect.succeed("second")
+const holder = { second }
+let mutable = second
+
+// Should trigger: pipeable style
+export const pipeable = first.pipe(Effect.flatMap(() => second))
+
+// Should trigger: pipe style
+export const piped = pipe(first, Effect.flatMap(() => second))
+
+// Should trigger: data-first style
+export const dataFirst = Effect.flatMap(first, () => second)
+
+// Should trigger: data-last style
+export const dataLast = Effect.flatMap(() => second)(first)
+
+// Should trigger and fix the call site without changing the shared alias
+const flatMap = Fx.flatMap
+export const aliased = first.pipe(Fx.andThen(second))
+
+// Should NOT trigger: the callback consumes or declares an upstream value
+export const parameter = first.pipe(Effect.flatMap((_value) => second))
+
+// Should NOT trigger: moving these evaluations would change laziness
+// @effect-diagnostics-next-line flatMapToMap:off
+export const call = first.pipe(Effect.flatMap(() => Effect.succeed("new")))
+export const propertyAccess = first.pipe(Effect.flatMap(() => holder.second))
+
+// Should NOT trigger: the returned binding is mutable or declared later
+export const mutableBinding = first.pipe(Effect.flatMap(() => mutable))
+export const laterBinding = first.pipe(Effect.flatMap(() => later))
+const later = Effect.succeed("later")
+
+// Should trigger: the lazy-expression parser unwraps a single-return block
+export const blockBody = first.pipe(Effect.flatMap(() => {
+  return second
+}))
+
+// Should trigger: const values remain stable when referenced from a nested scope
+export function nestedScope() {
+  return first.pipe(Effect.flatMap(() => second))
+}
+
+// Should NOT trigger: the stable value is not an Effect
+const value = "value"
+export const nonEffect = first.pipe(Effect.flatMap(() => value as never))
+
+// Should NOT trigger: unrelated flatMap API
+const unrelated = { flatMap: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedCall = unrelated.flatMap(1, () => second)
+
+void mutable
+
+
+=== [D6] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.andThen" ===
+
+--- file:///.src/flatMapIgnoredParamToAndThen.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, pipe } from "effect"
+
+const first = Effect.succeed(1)
+const second = Effect.succeed("second")
+const holder = { second }
+let mutable = second
+
+// Should trigger: pipeable style
+export const pipeable = first.pipe(Effect.flatMap(() => second))
+
+// Should trigger: pipe style
+export const piped = pipe(first, Effect.flatMap(() => second))
+
+// Should trigger: data-first style
+export const dataFirst = Effect.flatMap(first, () => second)
+
+// Should trigger: data-last style
+export const dataLast = Effect.flatMap(() => second)(first)
+
+// Should trigger and fix the call site without changing the shared alias
+const flatMap = Fx.flatMap
+export const aliased = first.pipe(flatMap(() => second))
+
+// Should NOT trigger: the callback consumes or declares an upstream value
+export const parameter = first.pipe(Effect.flatMap((_value) => second))
+
+// Should NOT trigger: moving these evaluations would change laziness
+// @effect-diagnostics-next-line flatMapToMap:off
+export const call = first.pipe(Effect.flatMap(() => Effect.succeed("new")))
+export const propertyAccess = first.pipe(Effect.flatMap(() => holder.second))
+
+// Should NOT trigger: the returned binding is mutable or declared later
+export const mutableBinding = first.pipe(Effect.flatMap(() => mutable))
+export const laterBinding = first.pipe(Effect.flatMap(() => later))
+const later = Effect.succeed("later")
+
+// Should trigger: the lazy-expression parser unwraps a single-return block
+export const blockBody = first.pipe(Effect.andThen(second))
+
+// Should trigger: const values remain stable when referenced from a nested scope
+export function nestedScope() {
+  return first.pipe(Effect.flatMap(() => second))
+}
+
+// Should NOT trigger: the stable value is not an Effect
+const value = "value"
+export const nonEffect = first.pipe(Effect.flatMap(() => value as never))
+
+// Should NOT trigger: unrelated flatMap API
+const unrelated = { flatMap: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedCall = unrelated.flatMap(1, () => second)
+
+void mutable
+
+
+=== [D7] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable flatMapIgnoredParamToAndThen for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable flatMapIgnoredParamToAndThen for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Effect.andThen" ===
+
+--- file:///.src/flatMapIgnoredParamToAndThen.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, pipe } from "effect"
+
+const first = Effect.succeed(1)
+const second = Effect.succeed("second")
+const holder = { second }
+let mutable = second
+
+// Should trigger: pipeable style
+export const pipeable = first.pipe(Effect.flatMap(() => second))
+
+// Should trigger: pipe style
+export const piped = pipe(first, Effect.flatMap(() => second))
+
+// Should trigger: data-first style
+export const dataFirst = Effect.flatMap(first, () => second)
+
+// Should trigger: data-last style
+export const dataLast = Effect.flatMap(() => second)(first)
+
+// Should trigger and fix the call site without changing the shared alias
+const flatMap = Fx.flatMap
+export const aliased = first.pipe(flatMap(() => second))
+
+// Should NOT trigger: the callback consumes or declares an upstream value
+export const parameter = first.pipe(Effect.flatMap((_value) => second))
+
+// Should NOT trigger: moving these evaluations would change laziness
+// @effect-diagnostics-next-line flatMapToMap:off
+export const call = first.pipe(Effect.flatMap(() => Effect.succeed("new")))
+export const propertyAccess = first.pipe(Effect.flatMap(() => holder.second))
+
+// Should NOT trigger: the returned binding is mutable or declared later
+export const mutableBinding = first.pipe(Effect.flatMap(() => mutable))
+export const laterBinding = first.pipe(Effect.flatMap(() => later))
+const later = Effect.succeed("later")
+
+// Should trigger: the lazy-expression parser unwraps a single-return block
+export const blockBody = first.pipe(Effect.flatMap(() => {
+  return second
+}))
+
+// Should trigger: const values remain stable when referenced from a nested scope
+export function nestedScope() {
+  return first.pipe(Effect.andThen(second))
+}
+
+// Should NOT trigger: the stable value is not an Effect
+const value = "value"
+export const nonEffect = first.pipe(Effect.flatMap(() => value as never))
+
+// Should NOT trigger: unrelated flatMap API
+const unrelated = { flatMap: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedCall = unrelated.flatMap(1, () => second)
+
+void mutable
+

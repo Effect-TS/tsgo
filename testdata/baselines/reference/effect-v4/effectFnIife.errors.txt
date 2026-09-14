@@ -9,9 +9,10 @@ Effect version: 4.0.0
 /.src/effectFnIife.ts(28,22): warning TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("piped") piped in the end to maintain tracing spans. effect(effectFnIife)
 /.src/effectFnIife.ts(33,22): warning TS377011: `Effect.fnUntraced` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern. effect(effectFnIife)
 /.src/effectFnIife.ts(46,20): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/effectFnIife.ts(56,28): warning TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern. effect(effectFnIife)
 
 
-==== /.src/effectFnIife.ts (8 errors) ====
+==== /.src/effectFnIife.ts (9 errors) ====
     import * as Effect from "effect/Effect"
     
     // Should trigger (with fix) - curried generator IIFE
@@ -95,4 +96,14 @@ Effect version: 4.0.0
     // Should NOT trigger - regular function call
     export const regularFn = (n: number) => Effect.succeed(n)
     export const result = regularFn(1)
+    
+    // Should trigger with a fallback fix: Effect.fn is hidden behind a const alias.
+    const fnAlias = Effect.fn
+    export const aliasedIife = fnAlias(function*() {
+                               ~~~~~~~~~~~~~~~~~~~~~
+      yield* Effect.succeed(1)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    })()
+    ~~~~
+!!! warning TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern. effect(effectFnIife)
     
