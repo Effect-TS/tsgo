@@ -37,6 +37,21 @@ type Rule struct {
 	Run func(ctx *Context) []*ast.Diagnostic
 }
 
+// UnusedDirectiveName configures the diagnostic reported for an
+// @effect-diagnostics directive that suppresses nothing. It is a diagnosticSeverity
+// key but not a per-file rule, so it is absent from the rule registry.
+const UnusedDirectiveName = "unusedDirective"
+
+// UnknownRuleNameName configures the diagnostic reported for a diagnosticSeverity
+// entry naming a rule this build does not provide. Like UnusedDirectiveName it is a
+// diagnosticSeverity key but not a per-file rule.
+const UnknownRuleNameName = "unknownRuleName"
+
+// NonRuleConfigurableNames lists every diagnosticSeverity key that configures a
+// diagnostic which is not a rule in the registry. Validation of configured names
+// must accept these in addition to the registry.
+var NonRuleConfigurableNames = []string{UnusedDirectiveName, UnknownRuleNameName}
+
 // ByName finds a rule by name in a slice. Returns nil if not found.
 func ByName(rules []Rule, name string) *Rule {
 	for i := range rules {

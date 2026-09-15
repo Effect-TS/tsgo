@@ -1,0 +1,35 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/tsconfig.json(8,11): warning TS377134: Unknown Effect diagnostic rule `importFromBarrel` in `diagnosticSeverity`. This version of @effect/tsgo does not provide it, so this entry has no effect. effect(unknownRuleName)
+/.src/tsconfig.json(9,11): warning TS377134: Unknown Effect diagnostic rule `outdatedEffectCodegen` in `diagnosticSeverity`. This version of @effect/tsgo does not provide it, so this entry has no effect. effect(unknownRuleName)
+
+
+==== /.src/tsconfig.json (2 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "diagnosticSeverity": {
+              "floatingEffect": "error",
+              "importFromBarrel": "error",
+              ~~~~~~~~~~~~~~~~~~
+!!! warning TS377134: Unknown Effect diagnostic rule `importFromBarrel` in `diagnosticSeverity`. This version of @effect/tsgo does not provide it, so this entry has no effect. effect(unknownRuleName)
+              "outdatedEffectCodegen": "error"
+              ~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377134: Unknown Effect diagnostic rule `outdatedEffectCodegen` in `diagnosticSeverity`. This version of @effect/tsgo does not provide it, so this entry has no effect. effect(unknownRuleName)
+            }
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/test.ts (0 errors) ====
+    import { Effect } from "effect"
+    
+    // The rule names above that this build does not provide are reported on the
+    // tsconfig; floatingEffect is provided, so it is not.
+    export const program = Effect.succeed(1)
+    

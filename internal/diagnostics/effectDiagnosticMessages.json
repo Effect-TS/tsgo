@@ -526,5 +526,13 @@
     "`Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)": {
         "category": "Suggestion",
         "code": 377132
+    },
+    "Unknown Effect diagnostic rule `{0}` in `diagnosticSeverity`. This version of @effect/tsgo does not provide it, so this entry has no effect. effect(unknownRuleName)": {
+        "category": "Warning",
+        "code": 377134
+    },
+    "Unknown Effect diagnostic rule `{0}` in `diagnosticSeverity`. Did you mean `{1}`? effect(unknownRuleName)": {
+        "category": "Warning",
+        "code": 377135
     }
 }

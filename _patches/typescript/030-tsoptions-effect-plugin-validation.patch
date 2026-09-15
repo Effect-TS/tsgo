@@ -1,0 +1,59 @@
+diff --git a/tsc/internal/tsoptions/parsinghelpers.go b/tsc/internal/tsoptions/parsinghelpers.go
+--- a/tsc/internal/tsoptions/parsinghelpers.go
++++ b/tsc/internal/tsoptions/parsinghelpers.go
+@@ -22,6 +22,32 @@
+ // standard compiler option merging.
+ func RegisterMergeCompilerOptionsCallback(cb func(targetOptions, sourceOptions *core.CompilerOptions, rawSource any, sourceConfigPath string, basePath string)) {
+ 	MergeCompilerOptionsCallback = cb
++}
++
++// ValidateEffectPluginOptionsCallback lets the Effect integration report
++// configuration diagnostics for its own plugin block, anchored on nodes inside the
++// config file that declares it. It is invoked while compilerOptions.plugins is
++// parsed, which is the only point at which those nodes exist, and therefore runs
++// before any extends hop is merged: it must not decide whether a diagnostic is
++// enabled, because the setting that governs that may be inherited. That decision
++// belongs to FinalizeEffectPluginDiagnosticsCallback.
++var ValidateEffectPluginOptionsCallback func(sourceFile *ast.SourceFile, pluginsNode *ast.Node) []*ast.Diagnostic
++
++// RegisterValidateEffectPluginOptionsCallback registers a callback invoked when
++// compilerOptions.plugins is parsed from a tsconfig file.
++func RegisterValidateEffectPluginOptionsCallback(cb func(sourceFile *ast.SourceFile, pluginsNode *ast.Node) []*ast.Diagnostic) {
++	ValidateEffectPluginOptionsCallback = cb
++}
++
++// FinalizeEffectPluginDiagnosticsCallback lets the Effect integration drop or
++// recategorize the diagnostics it contributed earlier, now that the whole extends
++// chain has been merged and the config's final compiler options are known.
++var FinalizeEffectPluginDiagnosticsCallback func(diagnostics []*ast.Diagnostic, options *core.CompilerOptions) []*ast.Diagnostic
++
++// RegisterFinalizeEffectPluginDiagnosticsCallback registers a callback invoked
++// after the whole extends chain has been merged.
++func RegisterFinalizeEffectPluginDiagnosticsCallback(cb func(diagnostics []*ast.Diagnostic, options *core.CompilerOptions) []*ast.Diagnostic) {
++	FinalizeEffectPluginDiagnosticsCallback = cb
+ }
+ 
+ func ParseTristate(value any) core.Tristate {
+diff --git a/tsc/internal/tsoptions/tsconfigparsing.go b/tsc/internal/tsoptions/tsconfigparsing.go
+--- a/tsc/internal/tsoptions/tsconfigparsing.go
++++ b/tsc/internal/tsoptions/tsconfigparsing.go
+@@ -204,6 +204,9 @@
+ 				switch parentOption.Name {
+ 				case "compilerOptions":
+ 					parseDiagnostics = ParseCompilerOptions(option.Name, value, compilerOptions)
++					if option.Name == "plugins" && ValidateEffectPluginOptionsCallback != nil {
++						parseDiagnostics = append(parseDiagnostics, ValidateEffectPluginOptionsCallback(sourceFile, propertyAssignment.Initializer)...)
++					}
+ 				case "typeAcquisition":
+ 					parseDiagnostics = ParseTypeAcquisition(option.Name, value, typeAcquisition)
+ 				}
+@@ -1261,6 +1264,9 @@
+ 	parsedConfig, errors := parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStack, extendedConfigCache)
+ 	mergeCompilerOptions(parsedConfig.options, existingOptions, existingOptionsRaw, configFileName, basePath)
+ 	handleOptionConfigDirTemplateSubstitution(parsedConfig.options, basePathForFileNames)
++	if FinalizeEffectPluginDiagnosticsCallback != nil {
++		errors = FinalizeEffectPluginDiagnosticsCallback(errors, parsedConfig.options)
++	}
+ 	rawConfig := parseJsonToStringKey(parsedConfig.raw)
+ 	if configFileName != "" && parsedConfig.options != nil {
+ 		parsedConfig.options.ConfigFilePath = tspath.NormalizeSlashes(configFileName)

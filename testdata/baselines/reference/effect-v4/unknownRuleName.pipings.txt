@@ -1,0 +1,15 @@
+==== /.src/test.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:23 - 5:41
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

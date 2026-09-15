@@ -49,6 +49,7 @@ func CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile *ast.Sou
 type DidYouMeanOptionsDiagnostics = tsoptions.DidYouMeanOptionsDiagnostics
 type ExtendedConfigCache = tsoptions.ExtendedConfigCache
 type ExtendedConfigCacheEntry = tsoptions.ExtendedConfigCacheEntry
+var FinalizeEffectPluginDiagnosticsCallback = tsoptions.FinalizeEffectPluginDiagnosticsCallback
 //go:linkname ForEachCompilerOptionValue github.com/microsoft/TypeScript/tsc/internal/tsoptions.ForEachCompilerOptionValue
 func ForEachCompilerOptionValue(options *core.CompilerOptions, declFilter func(*tsoptions.CommandLineOption) bool, fn func(option *tsoptions.CommandLineOption, value reflect.Value, i int) bool) bool
 //go:linkname GetCallbackForFindingPropertyAssignmentByValue github.com/microsoft/TypeScript/tsc/internal/tsoptions.GetCallbackForFindingPropertyAssignmentByValue
@@ -116,12 +117,17 @@ func ParseWatchOptions(key string, value any, allOptions *core.WatchOptions) []*
 type ParsedBuildCommandLine = tsoptions.ParsedBuildCommandLine
 type ParsedCommandLine = tsoptions.ParsedCommandLine
 type ParsedOptions = tsoptions.ParsedOptions
+//go:linkname RegisterFinalizeEffectPluginDiagnosticsCallback github.com/microsoft/TypeScript/tsc/internal/tsoptions.RegisterFinalizeEffectPluginDiagnosticsCallback
+func RegisterFinalizeEffectPluginDiagnosticsCallback(cb func(diagnostics []*ast.Diagnostic, options *core.CompilerOptions) []*ast.Diagnostic)
 //go:linkname RegisterMergeCompilerOptionsCallback github.com/microsoft/TypeScript/tsc/internal/tsoptions.RegisterMergeCompilerOptionsCallback
 func RegisterMergeCompilerOptionsCallback(cb func(targetOptions *core.CompilerOptions, sourceOptions *core.CompilerOptions, rawSource any, sourceConfigPath string, basePath string))
+//go:linkname RegisterValidateEffectPluginOptionsCallback github.com/microsoft/TypeScript/tsc/internal/tsoptions.RegisterValidateEffectPluginOptionsCallback
+func RegisterValidateEffectPluginOptionsCallback(cb func(sourceFile *ast.SourceFile, pluginsNode *ast.Node) []*ast.Diagnostic)
 type SourceOutputAndProjectReference = tsoptions.SourceOutputAndProjectReference
 type TSConfig = tsoptions.TSConfig
 //go:linkname TargetToLibMap github.com/microsoft/TypeScript/tsc/internal/tsoptions.TargetToLibMap
 func TargetToLibMap() map[core.ScriptTarget]string
 type TsConfigSourceFile = tsoptions.TsConfigSourceFile
 var TscBuildOption = tsoptions.TscBuildOption
+var ValidateEffectPluginOptionsCallback = tsoptions.ValidateEffectPluginOptionsCallback
 var WatchNameMap = tsoptions.WatchNameMap
