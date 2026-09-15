@@ -1,0 +1,692 @@
+flowchart TB
+  0[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  1["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; observe.pipe#40;Effect.andThen#40;Effect.fail#40;error#41;#41;#41;#93;"]
+  2[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  3[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; observe.pipe#40;Effect.andThen#40;Effect.fail#40;error#41;#41;#41;"]]
+  4[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  5["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;error#41;#93;"]
+  6[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  7[/"type: Error<br/>node: error"/]
+  8["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  9[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  10[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  11["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; observe.pipe#40;Effect.andThen#40;#40;#41; =#gt; Effect.fail#40;error#41;#41;#41;#93;"]
+  12[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  13[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; observe.pipe#40;Effect.andThen#40;#40;#41; =#gt; Effect.fail#40;error#41;#41;#41;"]]
+  14[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  15["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.andThen<br/>args: #91;#40;#41; =#gt; Effect.fail#40;error#41;#93;"]
+  16[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  17[["type: #40;#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;error#41;"]]
+  18[/"type: Error<br/>node: error"/]
+  19["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  20[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  21[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  22["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; observe.pipe#40;Effect.flatMap#40;#40;#41; =#gt; Effect.fail#40;error#41;#41;#41;#93;"]
+  23[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  24[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; observe.pipe#40;Effect.flatMap#40;#40;#41; =#gt; Effect.fail#40;error#41;#41;#41;"]]
+  25[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  26["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;#41; =#gt; Effect.fail#40;error#41;#93;"]
+  27[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  28[["type: #40;#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;error#41;"]]
+  29[/"type: Error<br/>node: error"/]
+  30["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  31[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  32[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  33["type: Effect#lt;number, Error, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  34[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  35[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; Effect.andThen#40;observe, Effect.fail#40;error#41;#41;"]]
+  36[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  37["type: Effect#lt;never, Error, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  38[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  39[/"type: Error<br/>node: error"/]
+  40["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  41[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  42[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  43["type: Effect#lt;number, Error, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  44[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  45[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; Effect.flatMap#40;observe, #40;#41; =#gt; Effect.fail#40;error#41;#41;"]]
+  46[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  47["type: Effect#lt;never, Error, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  48[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  49[["type: #40;#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;error#41;"]]
+  50[/"type: Error<br/>node: error"/]
+  51["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  52[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  53[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  54["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; pipe#40;observe, Effect.andThen#40;pipe#40;error, Effect.fail#41;#41;#41;#93;"]
+  55[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  56[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; pipe#40;observe, Effect.andThen#40;pipe#40;error, Effect.fail#41;#41;#41;"]]
+  57[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  58["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.andThen<br/>args: #91;pipe#40;error, Effect.fail#41;#93;"]
+  59[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  60[/"type: Error<br/>node: error"/]
+  61["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  62[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  63["type: Effect#lt;number, unknown, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; Effect.andThen#40;Effect.fail#40;error#41;#41;#40;observe#41;#93;"]
+  64[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  65[["type: #40;error: unknown#41; =#gt; Effect#lt;never, unknown, never#gt;<br/>node: error =#gt; Effect.andThen#40;Effect.fail#40;error#41;#41;#40;observe#41;"]]
+  66[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  67["type: Effect#lt;never, unknown, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;error#41;#93;"]
+  68[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  69[/"type: unknown<br/>node: error"/]
+  70["type: Effect#lt;never, unknown, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  71[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  72[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  73["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;function#40;error#41; #123;#92;n  return observe.pipe#40;Effect.flatMap#40;function#40;#41; #123; return Effect.fail#40;#40;error#41;#41; #125;#41;#41;#92;n#125;#93;"]
+  74[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  75[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: function#40;error#41; #123;#92;n  return observe.pipe#40;Effect.flatMap#40;function#40;#41; #123; return Effect.fail#40;#40;error#41;#41; #125;#41;#41;#92;n#125;"]]
+  76[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  77["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;function#40;#41; #123; return Effect.fail#40;#40;error#41;#41; #125;#93;"]
+  78[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  79[["type: #40;#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: function#40;#41; #123; return Effect.fail#40;#40;error#41;#41; #125;"]]
+  80[/"type: Error<br/>node: #40;error#41;"/]
+  81["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  82[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  83[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  84["type: Effect#lt;number, Error, never#gt;<br/>callee: recover<br/>args: #91;error =#gt; sequence#40;refail#40;error#41;#41;#40;observe#41;#93;"]
+  85[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: recover"/]
+  86[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; sequence#40;refail#40;error#41;#41;#40;observe#41;"]]
+  87[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  88["type: Effect#lt;never, Error, never#gt;<br/>callee: sequence<br/>args: #91;refail#40;error#41;#93;"]
+  89[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: sequence"/]
+  90[/"type: Error<br/>node: error"/]
+  91["type: Effect#lt;never, Error, never#gt;<br/>callee: refail<br/>args: #91;#93;"]
+  92[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: refail"/]
+  93[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  94["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; observe.pipe#40;#92;n  Effect.andThen#40;observe#41;,#92;n  Effect.andThen#40;Effect.fail#40;error#41;#41;#92;n#41;#93;"]
+  95[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  96[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; observe.pipe#40;#92;n  Effect.andThen#40;observe#41;,#92;n  Effect.andThen#40;Effect.fail#40;error#41;#41;#92;n#41;"]]
+  97[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  98["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.andThen<br/>args: #91;observe#93;"]
+  99[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  100[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  101["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;error#41;#93;"]
+  102[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  103[/"type: Error<br/>node: error"/]
+  104["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  105[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  106[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  107["type: Effect#lt;number, string #124; Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; fallibleObserve.pipe#40;Effect.andThen#40;Effect.fail#40;error#41;#41;#41;#93;"]
+  108[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  109[["type: #40;error: Error#41; =#gt; Effect#lt;never, string #124; Error, never#gt;<br/>node: error =#gt; fallibleObserve.pipe#40;Effect.andThen#40;Effect.fail#40;error#41;#41;#41;"]]
+  110[/"type: Effect#lt;void, string, never#gt;<br/>node: fallibleObserve"/]
+  111["type: Effect#lt;never, string #124; Error, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;error#41;#93;"]
+  112[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  113[/"type: Error<br/>node: error"/]
+  114["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  115[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  116[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  117["type: Effect#lt;number, string #124; Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; #40;condition ? observe : fallibleObserve#41;.pipe#40;#92;n  Effect.andThen#40;Effect.fail#40;error#41;#41;#92;n#41;#93;"]
+  118[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  119[["type: #40;error: Error#41; =#gt; Effect#lt;never, string #124; Error, never#gt;<br/>node: error =#gt; #40;condition ? observe : fallibleObserve#41;.pipe#40;#92;n  Effect.andThen#40;Effect.fail#40;error#41;#41;#92;n#41;"]]
+  120[/"type: Effect#lt;void, string, never#gt;<br/>node: #40;condition ? observe : fallibleObserve#41;"/]
+  121["type: Effect#lt;never, string #124; Error, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;error#41;#93;"]
+  122[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  123[/"type: Error<br/>node: error"/]
+  124["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  125[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  126[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  127["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; Effect.fail#40;error#41;#93;"]
+  128[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  129[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; Effect.fail#40;error#41;"]]
+  130[/"type: Error<br/>node: error"/]
+  131["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  132[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  133[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  134["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; observe.pipe#40;Effect.andThen#40;Effect.fail#40;new Error#40;error.message#41;#41;#41;#41;#93;"]
+  135[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  136[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; observe.pipe#40;Effect.andThen#40;Effect.fail#40;new Error#40;error.message#41;#41;#41;#41;"]]
+  137[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  138["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;new Error#40;error.message#41;#41;#93;"]
+  139[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  140[/"type: Error<br/>node: new Error#40;error.message#41;"/]
+  141["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  142[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  143[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  144["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; observe.pipe#40;Effect.andThen#40;Effect.fail#40;otherError#41;#41;#41;#93;"]
+  145[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  146[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; observe.pipe#40;Effect.andThen#40;Effect.fail#40;otherError#41;#41;#41;"]]
+  147[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  148["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;otherError#41;#93;"]
+  149[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  150[/"type: Error<br/>node: otherError"/]
+  151["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  152[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  153[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  154["type: Effect#lt;number, string, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; observe.pipe#40;Effect.andThen#40;Effect.fail#40;error.message#41;#41;#41;#93;"]
+  155[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  156[["type: #40;error: Error#41; =#gt; Effect#lt;never, string, never#gt;<br/>node: error =#gt; observe.pipe#40;Effect.andThen#40;Effect.fail#40;error.message#41;#41;#41;"]]
+  157[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  158["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;error.message#41;#93;"]
+  159[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  160[/"type: string<br/>node: error.message"/]
+  161["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  162[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  163[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  164["type: Effect#lt;void #124; number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; observe.pipe#40;#92;n  Effect.flatMap#40;#40;#41; =#gt; condition ? Effect.fail#40;error#41; : Effect.void#41;#92;n#41;#93;"]
+  165[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  166[["type: #40;error: Error#41; =#gt; Effect#lt;void, Error, never#gt;<br/>node: error =#gt; observe.pipe#40;#92;n  Effect.flatMap#40;#40;#41; =#gt; condition ? Effect.fail#40;error#41; : Effect.void#41;#92;n#41;"]]
+  167[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  168["type: Effect#lt;void, Error, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;#41; =#gt; condition ? Effect.fail#40;error#41; : Effect.void#93;"]
+  169[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  170[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt; #124; Effect#lt;never, Error, never#gt;<br/>node: #40;#41; =#gt; condition ? Effect.fail#40;error#41; : Effect.void"]]
+  171[/"type: Effect#lt;void, never, never#gt; #124; Effect#lt;never, Error, never#gt;<br/>node: condition ? Effect.fail#40;error#41; : Effect.void"/]
+  172[/"type: Error<br/>node: error"/]
+  173["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  174[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  175[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  176["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; observe.pipe#40;#92;n  Effect.andThen#40;Effect.fail#40;error#41;#41;,#92;n  Effect.catch#40;#40;#41; =#gt; Effect.void#41;#92;n#41;#93;"]
+  177[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  178[["type: #40;error: Error#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: error =#gt; observe.pipe#40;#92;n  Effect.andThen#40;Effect.fail#40;error#41;#41;,#92;n  Effect.catch#40;#40;#41; =#gt; Effect.void#41;#92;n#41;"]]
+  179[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  180["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;error#41;#93;"]
+  181[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  182[/"type: Error<br/>node: error"/]
+  183["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  184[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  185["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
+  186[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  187[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  188[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  189[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  190["type: Effect#lt;void #124; number, never, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; observe.pipe#40;#92;n  Effect.andThen#40;Effect.fail#40;error#41;.pipe#40;Effect.catch#40;#40;#41; =#gt; Effect.void#41;#41;#41;#92;n#41;#93;"]
+  191[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  192[["type: #40;error: Error#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: error =#gt; observe.pipe#40;#92;n  Effect.andThen#40;Effect.fail#40;error#41;.pipe#40;Effect.catch#40;#40;#41; =#gt; Effect.void#41;#41;#41;#92;n#41;"]]
+  193[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  194["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;error#41;.pipe#40;Effect.catch#40;#40;#41; =#gt; Effect.void#41;#41;#93;"]
+  195[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  196[/"type: Error<br/>node: error"/]
+  197["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  198[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  199["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;#41; =#gt; Effect.void#93;"]
+  200[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  201[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; Effect.void"]]
+  202[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  203[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  204["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; observe.pipe#40;#92;n  Effect.flatMap#40;_value =#gt; Effect.fail#40;error#41;#41;#92;n#41;#93;"]
+  205[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  206[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; observe.pipe#40;#92;n  Effect.flatMap#40;_value =#gt; Effect.fail#40;error#41;#41;#92;n#41;"]]
+  207[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  208["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;_value =#gt; Effect.fail#40;error#41;#93;"]
+  209[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  210[["type: #40;_value: void#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: _value =#gt; Effect.fail#40;error#41;"]]
+  211[/"type: Error<br/>node: error"/]
+  212["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  213[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  214[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  215["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; observe.pipe#40;#92;n  Effect.andThen#40;_value =#gt; Effect.fail#40;error#41;#41;#92;n#41;#93;"]
+  216[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  217[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; observe.pipe#40;#92;n  Effect.andThen#40;_value =#gt; Effect.fail#40;error#41;#41;#92;n#41;"]]
+  218[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  219["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.andThen<br/>args: #91;_value =#gt; Effect.fail#40;error#41;#93;"]
+  220[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  221[["type: #40;_value: void#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: _value =#gt; Effect.fail#40;error#41;"]]
+  222[/"type: Error<br/>node: error"/]
+  223["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  224[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  225[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  226["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; Effect.succeed#40;otherError#41;.pipe#40;#92;n  Effect.flatMap#40;error =#gt; Effect.fail#40;error#41;#41;#92;n#41;#93;"]
+  227[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  228[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; Effect.succeed#40;otherError#41;.pipe#40;#92;n  Effect.flatMap#40;error =#gt; Effect.fail#40;error#41;#41;#92;n#41;"]]
+  229[/"type: Error<br/>node: otherError"/]
+  230["type: Effect#lt;Error, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  231[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  232["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;error =#gt; Effect.fail#40;error#41;#93;"]
+  233[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  234[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; Effect.fail#40;error#41;"]]
+  235[/"type: Error<br/>node: error"/]
+  236["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  237[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  238[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  239["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; Effect.sync#40;#40;#41; =#gt; #123;#92;n  error = otherError#92;n#125;#41;.pipe#40;Effect.flatMap#40;#40;#41; =#gt; Effect.fail#40;error#41;#41;#41;#93;"]
+  240[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  241[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; Effect.sync#40;#40;#41; =#gt; #123;#92;n  error = otherError#92;n#125;#41;.pipe#40;Effect.flatMap#40;#40;#41; =#gt; Effect.fail#40;error#41;#41;#41;"]]
+  242[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123;#92;n  error = otherError#92;n#125;"]]
+  243["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.sync<br/>args: #91;#93;"]
+  244[/"type: #lt;A#gt;#40;thunk: LazyArg#lt;A#gt;#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.sync"/]
+  245["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;#41; =#gt; Effect.fail#40;error#41;#93;"]
+  246[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  247[["type: #40;#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: #40;#41; =#gt; Effect.fail#40;error#41;"]]
+  248[/"type: Error<br/>node: error"/]
+  249["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  250[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  251[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  252["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;error = otherError#41; =#gt; observe.pipe#40;Effect.andThen#40;Effect.fail#40;error#41;#41;#41;#93;"]
+  253[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  254[["type: #40;error?: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: #40;error = otherError#41; =#gt; observe.pipe#40;Effect.andThen#40;Effect.fail#40;error#41;#41;#41;"]]
+  255[/"type: Error<br/>node: otherError"/]
+  256[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  257["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;error#41;#93;"]
+  258[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  259[/"type: Error<br/>node: error"/]
+  260["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  261[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  262[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  263["type: Effect#lt;number, string, never#gt;<br/>callee: Effect.catch<br/>args: #91;#40;#123; message #125;#41; =#gt; observe.pipe#40;Effect.andThen#40;Effect.fail#40;message#41;#41;#41;#93;"]
+  264[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  265[["type: #40;#123; message #125;: Error#41; =#gt; Effect#lt;never, string, never#gt;<br/>node: #40;#123; message #125;#41; =#gt; observe.pipe#40;Effect.andThen#40;Effect.fail#40;message#41;#41;#41;"]]
+  266[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  267["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;message#41;#93;"]
+  268[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  269[/"type: string<br/>node: message"/]
+  270["type: Effect#lt;never, string, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  271[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  272[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  273["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; #123;#92;n  const side = observe#92;n  return side.pipe#40;Effect.andThen#40;Effect.fail#40;error#41;#41;#41;#92;n#125;#93;"]
+  274[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  275[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; #123;#92;n  const side = observe#92;n  return side.pipe#40;Effect.andThen#40;Effect.fail#40;error#41;#41;#41;#92;n#125;"]]
+  276[/"type: Effect#lt;void, never, never#gt;<br/>node: side"/]
+  277["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;error#41;#93;"]
+  278[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  279[/"type: Error<br/>node: error"/]
+  280["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  281[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  282[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  283["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; Effect.gen#40;function*#40;#41; #123;#92;n  yield* observe#92;n  return yield* Effect.fail#40;error#41;#92;n#125;#41;#93;"]
+  284[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  285[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; Effect.gen#40;function*#40;#41; #123;#92;n  yield* observe#92;n  return yield* Effect.fail#40;error#41;#92;n#125;#41;"]]
+  286((("type: Effect#lt;never, Error, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  yield* observe#92;n  return yield* Effect.fail#40;error#41;#92;n#125;#41;")))
+  287[/"type: never<br/>node: yield* Effect.fail#40;error#41;"/]
+  288[/"type: Error<br/>node: error"/]
+  289["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  290[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  291[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  292[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  293["type: Effect#lt;number #124; Effect#lt;never, Error, never#gt;, never, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; observe.pipe#40;Effect.as#40;Effect.fail#40;error#41;#41;#41;#93;"]
+  294[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  295[["type: #40;error: Error#41; =#gt; Effect#lt;Effect#lt;never, Error, never#gt;, never, never#gt;<br/>node: error =#gt; observe.pipe#40;Effect.as#40;Effect.fail#40;error#41;#41;#41;"]]
+  296[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  297["type: Effect#lt;Effect#lt;never, Error, never#gt;, never, never#gt;<br/>callee: Effect.as<br/>args: #91;Effect.fail#40;error#41;#93;"]
+  298[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  299[/"type: Error<br/>node: error"/]
+  300["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  301[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  302[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  303["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; observe.pipe#40;#92;n  Effect.andThen#40;pipe#40;error, e =#gt; new Error#40;e.message#41;, Effect.fail#41;#41;#92;n#41;#93;"]
+  304[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  305[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; observe.pipe#40;#92;n  Effect.andThen#40;pipe#40;error, e =#gt; new Error#40;e.message#41;, Effect.fail#41;#41;#92;n#41;"]]
+  306[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  307["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.andThen<br/>args: #91;pipe#40;error, e =#gt; new Error#40;e.message#41;, Effect.fail#41;#93;"]
+  308[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  309[/"type: Error<br/>node: error"/]
+  310["type: Error<br/>callee: e =#gt; new Error#40;e.message#41;<br/>args: #91;#93;"]
+  311["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  312[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  313["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; observe.pipe#40;Effect.andThen#40;Effect.fail#40;error#41;#41;#41;#93;"]
+  314[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  315[["type: #40;error: never#41; =#gt; Effect#lt;never, never, never#gt;<br/>node: error =#gt; observe.pipe#40;Effect.andThen#40;Effect.fail#40;error#41;#41;#41;"]]
+  316[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  317["type: Effect#lt;never, never, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;error#41;#93;"]
+  318[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  319[/"type: never<br/>node: error"/]
+  320["type: Effect#lt;never, never, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  321[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  322[/"type: Effect#lt;number, #123; readonly _tag: #quot;Oops#quot;; readonly message: string; #125;, never#gt;<br/>node: tagged"/]
+  323["type: Effect#lt;number, #123; readonly _tag: #quot;Oops#quot;; readonly message: string; #125;, never#gt;<br/>callee: Effect.catchTag<br/>args: #91;#quot;Oops#quot;, error =#gt; observe.pipe#40;Effect.andThen#40;Effect.fail#40;error#41;#41;#41;#93;"]
+  324[/"type: #123; #lt;const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, E, A1, E1, R1, A2 = unassigned, E2 = never, R2 = never#gt;#40;k: K, f: #40;e: ExtractTag#lt;NoInfer#lt;E#gt;, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #lt;A, E, R, const K extends Tags#lt;E#gt; #124; Arr.NonEmptyReadonlyArray#lt;Tags#lt;E#gt;#gt;, R1, E1, A1, A2 = unassigned, E2 = never, R2 = never#gt;#40;self: Effect#lt;A, E, R#gt;, k: K, f: #40;e: ExtractTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A1, E1, R1#gt;, orElse?: #40;#40;e: ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt;#41; =#gt; Effect#lt;A2, E2, R2#gt;#41; #124; undefined#41;: Effect#lt;A #124; A1 #124; Exclude#lt;A2, unassigned#gt;, E1 #124; E2 #124; #40;A2 extends unassigned ? ExcludeTag#lt;E, K extends readonly #91;string, ...string#91;#93;#93; ? K#91;number#93; : K#gt; : never#41;, R #124; R1 #124; R2#gt;; #125;<br/>node: Effect.catchTag"/]
+  325[/"type: #quot;Oops#quot;<br/>node: #quot;Oops#quot;"/]
+  326[["type: #40;error: #123; readonly _tag: #quot;Oops#quot;; readonly message: string; #125;#41; =#gt; Effect#lt;never, #123; readonly _tag: #quot;Oops#quot;; readonly message: string; #125;, never#gt;<br/>node: error =#gt; observe.pipe#40;Effect.andThen#40;Effect.fail#40;error#41;#41;#41;"]]
+  327[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  328["type: Effect#lt;never, #123; readonly _tag: #quot;Oops#quot;; readonly message: string; #125;, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;error#41;#93;"]
+  329[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  330[/"type: #123; readonly _tag: #quot;Oops#quot;; readonly message: string; #125;<br/>node: error"/]
+  331["type: Effect#lt;never, #123; readonly _tag: #quot;Oops#quot;; readonly message: string; #125;, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  332[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  333[/"type: #123; andThen: #40;next: Effect#lt;never, Error, never#gt;#41; =#gt; #40;_self: Effect#lt;void, never, never#gt;#41; =#gt; Effect#lt;never, Error, never#gt;; fail: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;; #125;<br/>node: #123;#92;n  andThen: #40;next: Effect.Effect#lt;never, Error#gt;#41; =#gt; #40;_self: Effect.Effect#lt;void#gt;#41; =#gt; next,#92;n  fail: #40;error: Error#41; =#gt; Effect.fail#40;error#41;#92;n#125;"/]
+  334[["type: #40;next: Effect#lt;never, Error, never#gt;#41; =#gt; #40;_self: Effect#lt;void, never, never#gt;#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: #40;next: Effect.Effect#lt;never, Error#gt;#41; =#gt; #40;_self: Effect.Effect#lt;void#gt;#41; =#gt; next"]]
+  335[["type: #40;_self: Effect#lt;void, never, never#gt;#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: #40;_self: Effect.Effect#lt;void#gt;#41; =#gt; next"]]
+  336[/"type: Effect#lt;never, Error, never#gt;<br/>node: next"/]
+  337[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: #40;error: Error#41; =#gt; Effect.fail#40;error#41;"]]
+  338[/"type: Error<br/>node: error"/]
+  339["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  340[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  341[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  342["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; custom.andThen#40;Effect.fail#40;error#41;#41;#40;observe#41;#93;"]
+  343[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  344[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; custom.andThen#40;Effect.fail#40;error#41;#41;#40;observe#41;"]]
+  345[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  346["type: Effect#lt;never, Error, never#gt;<br/>callee: custom.andThen<br/>args: #91;Effect.fail#40;error#41;#93;"]
+  347[/"type: #40;next: Effect#lt;never, Error, never#gt;#41; =#gt; #40;_self: Effect#lt;void, never, never#gt;#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: custom.andThen"/]
+  348[/"type: Error<br/>node: error"/]
+  349["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  350[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  351[/"type: Effect#lt;number, Error, never#gt;<br/>node: task"/]
+  352["type: Effect#lt;number, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; observe.pipe#40;Effect.andThen#40;custom.fail#40;error#41;#41;#41;#93;"]
+  353[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  354[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; observe.pipe#40;Effect.andThen#40;custom.fail#40;error#41;#41;#41;"]]
+  355[/"type: Effect#lt;void, never, never#gt;<br/>node: observe"/]
+  356["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.andThen<br/>args: #91;custom.fail#40;error#41;#93;"]
+  357[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  358[/"type: Error<br/>node: error"/]
+  359["type: Effect#lt;never, Error, never#gt;<br/>callee: custom.fail<br/>args: #91;#93;"]
+  360[/"type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: custom.fail"/]
+  2 -->|"kind: transformCallee"| 1
+  6 -->|"kind: transformCallee"| 5
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
+  8 -->|"kind: transformArg"| 5
+  4 -->|"kind: pipe"| 5
+  5 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: transformArg"| 1
+  0 -->|"kind: pipe"| 1
+  12 -->|"kind: transformCallee"| 11
+  16 -->|"kind: transformCallee"| 15
+  18 -->|"kind: pipe"| 19
+  20 -->|"kind: transformCallee"| 19
+  19 -->|"kind: potentialReturn"| 17
+  17 -->|"kind: transformArg"| 15
+  14 -->|"kind: pipe"| 15
+  15 -->|"kind: potentialReturn"| 13
+  13 -->|"kind: transformArg"| 11
+  10 -->|"kind: pipe"| 11
+  23 -->|"kind: transformCallee"| 22
+  27 -->|"kind: transformCallee"| 26
+  29 -->|"kind: pipe"| 30
+  31 -->|"kind: transformCallee"| 30
+  30 -->|"kind: potentialReturn"| 28
+  28 -->|"kind: transformArg"| 26
+  25 -->|"kind: pipe"| 26
+  26 -->|"kind: potentialReturn"| 24
+  24 -->|"kind: transformArg"| 22
+  21 -->|"kind: pipe"| 22
+  32 -->|"kind: pipe"| 33
+  34 -->|"kind: transformCallee"| 32
+  36 -->|"kind: pipe"| 37
+  38 -->|"kind: transformCallee"| 36
+  39 -->|"kind: pipe"| 40
+  41 -->|"kind: transformCallee"| 40
+  40 -->|"kind: transformArg"| 36
+  37 -->|"kind: potentialReturn"| 35
+  35 -->|"kind: transformArg"| 32
+  42 -->|"kind: pipe"| 43
+  44 -->|"kind: transformCallee"| 42
+  46 -->|"kind: pipe"| 47
+  48 -->|"kind: transformCallee"| 46
+  50 -->|"kind: pipe"| 51
+  52 -->|"kind: transformCallee"| 51
+  51 -->|"kind: potentialReturn"| 49
+  49 -->|"kind: transformArg"| 46
+  47 -->|"kind: potentialReturn"| 45
+  45 -->|"kind: transformArg"| 42
+  55 -->|"kind: transformCallee"| 54
+  59 -->|"kind: transformCallee"| 58
+  60 -->|"kind: pipe"| 61
+  61 -->|"kind: transformArg"| 58
+  57 -->|"kind: pipe"| 58
+  58 -->|"kind: potentialReturn"| 56
+  56 -->|"kind: transformArg"| 54
+  53 -->|"kind: pipe"| 54
+  62 -->|"kind: pipe"| 63
+  64 -->|"kind: transformCallee"| 63
+  66 -->|"kind: pipe"| 67
+  68 -->|"kind: transformCallee"| 67
+  69 -->|"kind: pipe"| 70
+  71 -->|"kind: transformCallee"| 70
+  70 -->|"kind: transformArg"| 67
+  67 -->|"kind: potentialReturn"| 65
+  65 -->|"kind: transformArg"| 63
+  74 -->|"kind: transformCallee"| 73
+  78 -->|"kind: transformCallee"| 77
+  80 -->|"kind: pipe"| 81
+  82 -->|"kind: transformCallee"| 81
+  81 -->|"kind: potentialReturn"| 79
+  81 -->|"kind: usedBy"| 79
+  79 -->|"kind: transformArg"| 77
+  76 -->|"kind: pipe"| 77
+  77 -->|"kind: potentialReturn"| 75
+  77 -->|"kind: usedBy"| 75
+  75 -->|"kind: transformArg"| 73
+  72 -->|"kind: pipe"| 73
+  85 -->|"kind: transformCallee"| 84
+  87 -->|"kind: pipe"| 88
+  89 -->|"kind: transformCallee"| 88
+  90 -->|"kind: pipe"| 91
+  92 -->|"kind: transformCallee"| 91
+  91 -->|"kind: transformArg"| 88
+  88 -->|"kind: potentialReturn"| 86
+  86 -->|"kind: transformArg"| 84
+  83 -->|"kind: pipe"| 84
+  95 -->|"kind: transformCallee"| 94
+  99 -->|"kind: transformCallee"| 98
+  100 -->|"kind: transformArg"| 98
+  97 -->|"kind: pipe"| 98
+  102 -->|"kind: transformCallee"| 101
+  103 -->|"kind: pipe"| 104
+  105 -->|"kind: transformCallee"| 104
+  104 -->|"kind: transformArg"| 101
+  98 -->|"kind: pipe"| 101
+  101 -->|"kind: potentialReturn"| 96
+  96 -->|"kind: transformArg"| 94
+  93 -->|"kind: pipe"| 94
+  108 -->|"kind: transformCallee"| 107
+  112 -->|"kind: transformCallee"| 111
+  113 -->|"kind: pipe"| 114
+  115 -->|"kind: transformCallee"| 114
+  114 -->|"kind: transformArg"| 111
+  110 -->|"kind: pipe"| 111
+  111 -->|"kind: potentialReturn"| 109
+  109 -->|"kind: transformArg"| 107
+  106 -->|"kind: pipe"| 107
+  118 -->|"kind: transformCallee"| 117
+  122 -->|"kind: transformCallee"| 121
+  123 -->|"kind: pipe"| 124
+  125 -->|"kind: transformCallee"| 124
+  124 -->|"kind: transformArg"| 121
+  120 -->|"kind: pipe"| 121
+  121 -->|"kind: potentialReturn"| 119
+  119 -->|"kind: transformArg"| 117
+  116 -->|"kind: pipe"| 117
+  128 -->|"kind: transformCallee"| 127
+  130 -->|"kind: pipe"| 131
+  132 -->|"kind: transformCallee"| 131
+  131 -->|"kind: potentialReturn"| 129
+  129 -->|"kind: transformArg"| 127
+  126 -->|"kind: pipe"| 127
+  135 -->|"kind: transformCallee"| 134
+  139 -->|"kind: transformCallee"| 138
+  140 -->|"kind: pipe"| 141
+  142 -->|"kind: transformCallee"| 141
+  141 -->|"kind: transformArg"| 138
+  137 -->|"kind: pipe"| 138
+  138 -->|"kind: potentialReturn"| 136
+  136 -->|"kind: transformArg"| 134
+  133 -->|"kind: pipe"| 134
+  145 -->|"kind: transformCallee"| 144
+  149 -->|"kind: transformCallee"| 148
+  150 -->|"kind: pipe"| 151
+  152 -->|"kind: transformCallee"| 151
+  151 -->|"kind: transformArg"| 148
+  147 -->|"kind: pipe"| 148
+  148 -->|"kind: potentialReturn"| 146
+  146 -->|"kind: transformArg"| 144
+  143 -->|"kind: pipe"| 144
+  155 -->|"kind: transformCallee"| 154
+  159 -->|"kind: transformCallee"| 158
+  160 -->|"kind: pipe"| 161
+  162 -->|"kind: transformCallee"| 161
+  161 -->|"kind: transformArg"| 158
+  157 -->|"kind: pipe"| 158
+  158 -->|"kind: potentialReturn"| 156
+  156 -->|"kind: transformArg"| 154
+  153 -->|"kind: pipe"| 154
+  165 -->|"kind: transformCallee"| 164
+  169 -->|"kind: transformCallee"| 168
+  172 -->|"kind: pipe"| 173
+  174 -->|"kind: transformCallee"| 173
+  173 -->|"kind: usedBy"| 171
+  171 -->|"kind: potentialReturn"| 170
+  170 -->|"kind: transformArg"| 168
+  167 -->|"kind: pipe"| 168
+  168 -->|"kind: potentialReturn"| 166
+  166 -->|"kind: transformArg"| 164
+  163 -->|"kind: pipe"| 164
+  177 -->|"kind: transformCallee"| 176
+  181 -->|"kind: transformCallee"| 180
+  182 -->|"kind: pipe"| 183
+  184 -->|"kind: transformCallee"| 183
+  183 -->|"kind: transformArg"| 180
+  179 -->|"kind: pipe"| 180
+  186 -->|"kind: transformCallee"| 185
+  188 -->|"kind: potentialReturn"| 187
+  187 -->|"kind: transformArg"| 185
+  180 -->|"kind: pipe"| 185
+  185 -->|"kind: potentialReturn"| 178
+  178 -->|"kind: transformArg"| 176
+  175 -->|"kind: pipe"| 176
+  191 -->|"kind: transformCallee"| 190
+  195 -->|"kind: transformCallee"| 194
+  196 -->|"kind: pipe"| 197
+  198 -->|"kind: transformCallee"| 197
+  200 -->|"kind: transformCallee"| 199
+  202 -->|"kind: potentialReturn"| 201
+  201 -->|"kind: transformArg"| 199
+  197 -->|"kind: pipe"| 199
+  199 -->|"kind: transformArg"| 194
+  193 -->|"kind: pipe"| 194
+  194 -->|"kind: potentialReturn"| 192
+  192 -->|"kind: transformArg"| 190
+  189 -->|"kind: pipe"| 190
+  205 -->|"kind: transformCallee"| 204
+  209 -->|"kind: transformCallee"| 208
+  211 -->|"kind: pipe"| 212
+  213 -->|"kind: transformCallee"| 212
+  212 -->|"kind: potentialReturn"| 210
+  210 -->|"kind: transformArg"| 208
+  207 -->|"kind: pipe"| 208
+  208 -->|"kind: potentialReturn"| 206
+  206 -->|"kind: transformArg"| 204
+  203 -->|"kind: pipe"| 204
+  216 -->|"kind: transformCallee"| 215
+  220 -->|"kind: transformCallee"| 219
+  222 -->|"kind: pipe"| 223
+  224 -->|"kind: transformCallee"| 223
+  223 -->|"kind: potentialReturn"| 221
+  221 -->|"kind: transformArg"| 219
+  218 -->|"kind: pipe"| 219
+  219 -->|"kind: potentialReturn"| 217
+  217 -->|"kind: transformArg"| 215
+  214 -->|"kind: pipe"| 215
+  227 -->|"kind: transformCallee"| 226
+  229 -->|"kind: pipe"| 230
+  231 -->|"kind: transformCallee"| 230
+  233 -->|"kind: transformCallee"| 232
+  235 -->|"kind: pipe"| 236
+  237 -->|"kind: transformCallee"| 236
+  236 -->|"kind: potentialReturn"| 234
+  234 -->|"kind: transformArg"| 232
+  230 -->|"kind: pipe"| 232
+  232 -->|"kind: potentialReturn"| 228
+  228 -->|"kind: transformArg"| 226
+  225 -->|"kind: pipe"| 226
+  240 -->|"kind: transformCallee"| 239
+  242 -->|"kind: pipe"| 243
+  244 -->|"kind: transformCallee"| 243
+  246 -->|"kind: transformCallee"| 245
+  248 -->|"kind: pipe"| 249
+  250 -->|"kind: transformCallee"| 249
+  249 -->|"kind: potentialReturn"| 247
+  247 -->|"kind: transformArg"| 245
+  243 -->|"kind: pipe"| 245
+  245 -->|"kind: potentialReturn"| 241
+  241 -->|"kind: transformArg"| 239
+  238 -->|"kind: pipe"| 239
+  253 -->|"kind: transformCallee"| 252
+  258 -->|"kind: transformCallee"| 257
+  259 -->|"kind: pipe"| 260
+  261 -->|"kind: transformCallee"| 260
+  260 -->|"kind: transformArg"| 257
+  256 -->|"kind: pipe"| 257
+  257 -->|"kind: potentialReturn"| 254
+  254 -->|"kind: transformArg"| 252
+  251 -->|"kind: pipe"| 252
+  264 -->|"kind: transformCallee"| 263
+  268 -->|"kind: transformCallee"| 267
+  269 -->|"kind: pipe"| 270
+  271 -->|"kind: transformCallee"| 270
+  270 -->|"kind: transformArg"| 267
+  266 -->|"kind: pipe"| 267
+  267 -->|"kind: potentialReturn"| 265
+  265 -->|"kind: transformArg"| 263
+  262 -->|"kind: pipe"| 263
+  274 -->|"kind: transformCallee"| 273
+  278 -->|"kind: transformCallee"| 277
+  279 -->|"kind: pipe"| 280
+  281 -->|"kind: transformCallee"| 280
+  280 -->|"kind: transformArg"| 277
+  276 -->|"kind: pipe"| 277
+  277 -->|"kind: potentialReturn"| 275
+  277 -->|"kind: usedBy"| 275
+  275 -->|"kind: transformArg"| 273
+  272 -->|"kind: pipe"| 273
+  284 -->|"kind: transformCallee"| 283
+  288 -->|"kind: pipe"| 289
+  290 -->|"kind: transformCallee"| 289
+  289 -->|"kind: usedBy"| 287
+  287 -->|"kind: potentialReturn"| 286
+  291 -->|"kind: yieldable"| 286
+  289 -->|"kind: yieldable"| 286
+  286 -->|"kind: potentialReturn"| 285
+  285 -->|"kind: transformArg"| 283
+  282 -->|"kind: pipe"| 283
+  294 -->|"kind: transformCallee"| 293
+  298 -->|"kind: transformCallee"| 297
+  299 -->|"kind: pipe"| 300
+  301 -->|"kind: transformCallee"| 300
+  300 -->|"kind: transformArg"| 297
+  296 -->|"kind: pipe"| 297
+  297 -->|"kind: potentialReturn"| 295
+  295 -->|"kind: transformArg"| 293
+  292 -->|"kind: pipe"| 293
+  304 -->|"kind: transformCallee"| 303
+  308 -->|"kind: transformCallee"| 307
+  309 -->|"kind: pipe"| 310
+  310 -->|"kind: pipe"| 311
+  311 -->|"kind: transformArg"| 307
+  306 -->|"kind: pipe"| 307
+  307 -->|"kind: potentialReturn"| 305
+  305 -->|"kind: transformArg"| 303
+  302 -->|"kind: pipe"| 303
+  314 -->|"kind: transformCallee"| 313
+  318 -->|"kind: transformCallee"| 317
+  319 -->|"kind: pipe"| 320
+  321 -->|"kind: transformCallee"| 320
+  320 -->|"kind: transformArg"| 317
+  316 -->|"kind: pipe"| 317
+  317 -->|"kind: potentialReturn"| 315
+  315 -->|"kind: transformArg"| 313
+  312 -->|"kind: pipe"| 313
+  324 -->|"kind: transformCallee"| 323
+  325 -->|"kind: transformArg"| 323
+  329 -->|"kind: transformCallee"| 328
+  330 -->|"kind: pipe"| 331
+  332 -->|"kind: transformCallee"| 331
+  331 -->|"kind: transformArg"| 328
+  327 -->|"kind: pipe"| 328
+  328 -->|"kind: potentialReturn"| 326
+  326 -->|"kind: transformArg"| 323
+  322 -->|"kind: pipe"| 323
+  336 -->|"kind: potentialReturn"| 335
+  335 -->|"kind: potentialReturn"| 334
+  334 -->|"kind: usedBy"| 333
+  338 -->|"kind: pipe"| 339
+  340 -->|"kind: transformCallee"| 339
+  339 -->|"kind: potentialReturn"| 337
+  337 -->|"kind: usedBy"| 333
+  343 -->|"kind: transformCallee"| 342
+  345 -->|"kind: pipe"| 346
+  347 -->|"kind: transformCallee"| 346
+  348 -->|"kind: pipe"| 349
+  350 -->|"kind: transformCallee"| 349
+  349 -->|"kind: transformArg"| 346
+  346 -->|"kind: potentialReturn"| 344
+  344 -->|"kind: transformArg"| 342
+  341 -->|"kind: pipe"| 342
+  353 -->|"kind: transformCallee"| 352
+  357 -->|"kind: transformCallee"| 356
+  358 -->|"kind: pipe"| 359
+  360 -->|"kind: transformCallee"| 359
+  359 -->|"kind: transformArg"| 356
+  355 -->|"kind: pipe"| 356
+  356 -->|"kind: potentialReturn"| 354
+  354 -->|"kind: transformArg"| 352
+  351 -->|"kind: pipe"| 352

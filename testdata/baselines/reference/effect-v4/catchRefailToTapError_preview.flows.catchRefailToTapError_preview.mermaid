@@ -1,0 +1,20 @@
+flowchart TB
+  0[/"type: Effect#lt;void, Error, never#gt;<br/>node: save"/]
+  1["type: Effect#lt;void, Error, never#gt;<br/>callee: Effect.catch<br/>args: #91;error =#gt; rollback.pipe#40;Effect.andThen#40;Effect.fail#40;error#41;#41;#41;#93;"]
+  2[/"type: #123; #lt;E, A2, E2, R2#gt;#40;f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;A2, E2, R2#gt;#41;: Effect#lt;A #124; A2, E2, R #124; R2#gt;; #125;<br/>node: Effect.catch"/]
+  3[["type: #40;error: Error#41; =#gt; Effect#lt;never, Error, never#gt;<br/>node: error =#gt; rollback.pipe#40;Effect.andThen#40;Effect.fail#40;error#41;#41;#41;"]]
+  4[/"type: Effect#lt;void, never, never#gt;<br/>node: rollback"/]
+  5["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.andThen<br/>args: #91;Effect.fail#40;error#41;#93;"]
+  6[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  7[/"type: Error<br/>node: error"/]
+  8["type: Effect#lt;never, Error, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  9[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  2 -->|"kind: transformCallee"| 1
+  6 -->|"kind: transformCallee"| 5
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
+  8 -->|"kind: transformArg"| 5
+  4 -->|"kind: pipe"| 5
+  5 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: transformArg"| 1
+  0 -->|"kind: pipe"| 1
