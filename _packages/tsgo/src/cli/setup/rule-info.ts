@@ -39,7 +39,7 @@ export function getAllGroups(): ReadonlyArray<GroupInfo> {
 }
 
 export function getAllPresets(): ReadonlyArray<DiagnosticPresetInfo> {
-  return (metadataJson as { presets?: ReadonlyArray<DiagnosticPresetInfo> }).presets ?? []
+  return (metadataJson as unknown as { presets?: ReadonlyArray<DiagnosticPresetInfo> }).presets ?? []
 }
 
 export function cycleSeverity(

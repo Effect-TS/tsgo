@@ -112,35 +112,16 @@ type oxlintPresetOptions struct {
 }
 
 func generateOxlintPresets() (map[string][]byte, error) {
-	groups := rules.MetadataGroups()
-	generated := make(map[string][]byte, len(groups)+1)
+	diagnosticPresets := rules.MetadataPresets()
+	generated := make(map[string][]byte, len(diagnosticPresets))
 
-	recommendedSeverities := make(map[string]string)
-	for _, current := range rules.All {
-		if severity := oxlintSeverity(current.DefaultSeverity); severity != "off" {
-			recommendedSeverities[oxlintRuleName(current.Name)] = severity
+	for _, preset := range diagnosticPresets {
+		name := oxlintRuleName(preset.Name) + ".json"
+		severities := make(map[string]string, len(preset.DiagnosticSeverity))
+		for ruleName, severity := range preset.DiagnosticSeverity {
+			severities[oxlintRuleName(ruleName)] = oxlintSeverity(severity)
 		}
-	}
-	for _, preset := range rules.MetadataPresets() {
-		for name, severity := range preset.DiagnosticSeverity {
-			oxlintName := oxlintRuleName(name)
-			if current, next := recommendedSeverities[oxlintName], oxlintSeverity(severity); current != "error" && next != "off" {
-				recommendedSeverities[oxlintName] = next
-			}
-		}
-	}
-	if err := addOxlintPreset(generated, "recommended.json", recommendedSeverities); err != nil {
-		return nil, err
-	}
-
-	for _, group := range groups {
-		severities := make(map[string]string)
-		for _, current := range rules.All {
-			if current.Group == group.ID {
-				severities[oxlintRuleName(current.Name)] = "warn"
-			}
-		}
-		if err := addOxlintPreset(generated, oxlintRuleName(group.ID)+".json", severities); err != nil {
+		if err := addOxlintPreset(generated, name, severities); err != nil {
 			return nil, err
 		}
 	}
