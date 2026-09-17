@@ -99,8 +99,6 @@ func ParseConfigFileTextToJson(fileName string, path tspath.Path, jsonText strin
 type ParseConfigHost = tsoptions.ParseConfigHost
 //go:linkname ParseExtendedConfig github.com/microsoft/TypeScript/tsc/internal/tsoptions.ParseExtendedConfig
 func ParseExtendedConfig(fileName string, path tspath.Path, resolutionStack []tspath.Path, host tsoptions.ParseConfigHost, extendedConfigCache tsoptions.ExtendedConfigCache) *tsoptions.ExtendedConfigCacheEntry
-//go:linkname ParseJsonConfigFileContent github.com/microsoft/TypeScript/tsc/internal/tsoptions.ParseJsonConfigFileContent
-func ParseJsonConfigFileContent(json any, host tsoptions.ParseConfigHost, basePath string, existingOptions *core.CompilerOptions, configFileName string, resolutionStack []tspath.Path, extendedConfigCache tsoptions.ExtendedConfigCache) *tsoptions.ParsedCommandLine
 //go:linkname ParseListTypeOption github.com/microsoft/TypeScript/tsc/internal/tsoptions.ParseListTypeOption
 func ParseListTypeOption(opt *tsoptions.CommandLineOption, value string) ([]any, []*ast.Diagnostic)
 //go:linkname ParseString github.com/microsoft/TypeScript/tsc/internal/tsoptions.ParseString
@@ -118,10 +116,13 @@ type ParsedCommandLine = tsoptions.ParsedCommandLine
 type ParsedOptions = tsoptions.ParsedOptions
 //go:linkname RegisterMergeCompilerOptionsCallback github.com/microsoft/TypeScript/tsc/internal/tsoptions.RegisterMergeCompilerOptionsCallback
 func RegisterMergeCompilerOptionsCallback(cb func(targetOptions *core.CompilerOptions, sourceOptions *core.CompilerOptions, rawSource any, sourceConfigPath string, basePath string))
+//go:linkname RegisterValidateCompilerOptionsCallback github.com/microsoft/TypeScript/tsc/internal/tsoptions.RegisterValidateCompilerOptionsCallback
+func RegisterValidateCompilerOptionsCallback(cb func(*core.CompilerOptions, *ast.SourceFile) []*ast.Diagnostic)
 type SourceOutputAndProjectReference = tsoptions.SourceOutputAndProjectReference
 type TSConfig = tsoptions.TSConfig
 //go:linkname TargetToLibMap github.com/microsoft/TypeScript/tsc/internal/tsoptions.TargetToLibMap
 func TargetToLibMap() map[core.ScriptTarget]string
 type TsConfigSourceFile = tsoptions.TsConfigSourceFile
 var TscBuildOption = tsoptions.TscBuildOption
+var ValidateCompilerOptionsCallback = tsoptions.ValidateCompilerOptionsCallback
 var WatchNameMap = tsoptions.WatchNameMap

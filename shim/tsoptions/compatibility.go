@@ -7,6 +7,27 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
+func ParseJsonConfigFileContent(
+	json any,
+	host tsoptions.ParseConfigHost,
+	basePath string,
+	existingOptions *core.CompilerOptions,
+	configFileName string,
+	resolutionStack []tspath.Path,
+	_ any,
+	extendedConfigCache tsoptions.ExtendedConfigCache,
+) *tsoptions.ParsedCommandLine {
+	return tsoptions.ParseJsonConfigFileContent(
+		json,
+		host,
+		basePath,
+		existingOptions,
+		configFileName,
+		resolutionStack,
+		extendedConfigCache,
+	)
+}
+
 func ParseJsonSourceFileConfigFileContent(
 	sourceFile *tsoptions.TsConfigSourceFile,
 	host tsoptions.ParseConfigHost,
