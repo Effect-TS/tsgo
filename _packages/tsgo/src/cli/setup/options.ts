@@ -59,6 +59,10 @@ export const setupFlags = {
     Flag.optional,
     Flag.withDescription("Configure VS Code-based editors")
   ),
+  zed: Flag.boolean("zed").pipe(
+    Flag.optional,
+    Flag.withDescription("Configure Zed")
+  ),
   nvim: Flag.boolean("nvim").pipe(
     Flag.optional,
     Flag.withDescription("Show Neovim setup instructions")
@@ -92,6 +96,7 @@ export const hasNonInteractiveTargetFlags = (flags: SetupFlags): boolean =>
   flags.noPresets ||
   flags.diagnostic.length > 0 ||
   Option.isSome(flags.vscode) ||
+  Option.isSome(flags.zed) ||
   Option.isSome(flags.nvim) ||
   Option.isSome(flags.emacs)
 
@@ -172,6 +177,7 @@ export const resolveTargetOptions = (
     const hasTypescriptOnlyOverrides = flags.preset.length > 0 ||
       flags.diagnostic.length > 0 ||
       Option.getOrElse(flags.vscode, () => false) ||
+      Option.getOrElse(flags.zed, () => false) ||
       Option.getOrElse(flags.nvim, () => false) ||
       Option.getOrElse(flags.emacs, () => false)
     if (!useTypescript && hasTypescriptOnlyOverrides) {
@@ -197,6 +203,7 @@ export const resolveTargetOptions = (
     const diagnosticSeverities = yield* applyDiagnosticOverrides(presetSeverities, flags.diagnostic)
     const editorSelections: ReadonlyArray<readonly [Option.Option<boolean>, Editor, boolean]> = [
       [flags.vscode, "vscode", Option.isSome(assessment.vscodeSettings)],
+      [flags.zed, "zed", Option.isSome(assessment.zedSettings)],
       [flags.nvim, "nvim", false],
       [flags.emacs, "emacs", false]
     ]
