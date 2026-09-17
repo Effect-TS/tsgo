@@ -118,10 +118,13 @@ type ParsedCommandLine = tsoptions.ParsedCommandLine
 type ParsedOptions = tsoptions.ParsedOptions
 //go:linkname RegisterMergeCompilerOptionsCallback github.com/microsoft/TypeScript/tsc/internal/tsoptions.RegisterMergeCompilerOptionsCallback
 func RegisterMergeCompilerOptionsCallback(cb func(targetOptions *core.CompilerOptions, sourceOptions *core.CompilerOptions, rawSource any, sourceConfigPath string, basePath string))
+//go:linkname RegisterValidateCompilerOptionsCallback github.com/microsoft/TypeScript/tsc/internal/tsoptions.RegisterValidateCompilerOptionsCallback
+func RegisterValidateCompilerOptionsCallback(cb func(*core.CompilerOptions, *ast.SourceFile) []*ast.Diagnostic)
 type SourceOutputAndProjectReference = tsoptions.SourceOutputAndProjectReference
 type TSConfig = tsoptions.TSConfig
 //go:linkname TargetToLibMap github.com/microsoft/TypeScript/tsc/internal/tsoptions.TargetToLibMap
 func TargetToLibMap() map[core.ScriptTarget]string
 type TsConfigSourceFile = tsoptions.TsConfigSourceFile
 var TscBuildOption = tsoptions.TscBuildOption
+var ValidateCompilerOptionsCallback = tsoptions.ValidateCompilerOptionsCallback
 var WatchNameMap = tsoptions.WatchNameMap
