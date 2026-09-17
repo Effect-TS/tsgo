@@ -18,6 +18,7 @@ var All = []rule.Rule{
 	CatchDieToOrDie,
 	TimeoutCatchTagToTimeoutOrElse,
 	CatchAllToMapError,
+	CatchRefailToTapError,
 	CatchAllTagDispatchToCatchTag,
 	CatchIfTagToCatchTag,
 	CatchConditionalRefailToCatchIf,

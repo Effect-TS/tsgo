@@ -2342,6 +2342,11 @@
           "default": "suggestion",
           "description": "Suggests Effect.catchTag instead of Effect.catchIf with a direct _tag equality predicate"
         },
+        "catchRefailToTapError": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.tapError for catch handlers that sequence an effect and then re-fail the original error"
+        },
         "catchTagToCatchReason": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

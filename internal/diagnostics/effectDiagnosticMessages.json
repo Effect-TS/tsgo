@@ -519,8 +519,16 @@
         "category": "Suggestion",
         "code": 377130
     },
+    "Use Effect.tapError to observe the error and preserve the original failure without having to re-fail it. effect(catchRefailToTapError)": {
+        "category": "Suggestion",
+        "code": 377133
+    },
     "`Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)": {
         "category": "Suggestion",
         "code": 377132
+    },
+    "Unknown Effect diagnostic rule `{0}` in `diagnosticSeverity`. effect(unknownRuleName)": {
+        "category": "Warning",
+        "code": 377134
     }
 }
