@@ -1,7 +1,6 @@
 package effectconfigcheck_test
 
 import (
-	"encoding/json"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -160,11 +159,12 @@ func TestInheritedOverridesUseLocalSyntaxOnly(t *testing.T) {
 
 func TestUnknownRuleNamesJSONAPI(t *testing.T) {
 	t.Parallel()
-	var raw any
-	if err := json.Unmarshal([]byte(config(`"diagnosticSeverity":{"floatingEfect":"error"}`, "")), &raw); err != nil {
-		t.Fatal(err)
+	// Use the compiler's JSON representation, which both providers accept.
+	raw, errors := tsoptions.ParseConfigFileTextToJson("/tsconfig.json", "/tsconfig.json", config(`"diagnosticSeverity":{"floatingEfect":"error"}`, ""))
+	if len(errors) != 0 {
+		t.Fatalf("invalid config fixture: %v", errors)
 	}
-	parsed := tsoptions.ParseJsonConfigFileContent(raw, newHost(nil), "/", nil, "/tsconfig.json", nil, nil)
+	parsed := tsoptions.ParseJsonConfigFileContent(raw, newHost(nil), "/", nil, "/tsconfig.json", nil, nil, nil)
 	got := unknownDiagnostics(parsed)
 	if len(got) != 1 || got[0].File() != nil {
 		t.Fatalf("expected one locationless warning: %v", got)
