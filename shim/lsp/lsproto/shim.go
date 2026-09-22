@@ -176,7 +176,6 @@ type Color = lsproto.Color
 type ColorInformation = lsproto.ColorInformation
 type ColorPresentation = lsproto.ColorPresentation
 type ColorPresentationParams = lsproto.ColorPresentationParams
-type ColorPresentationRegistrationOptions = lsproto.ColorPresentationRegistrationOptions
 type ColorPresentationResponse = lsproto.ColorPresentationResponse
 type Command = lsproto.Command
 type CommandOrCodeAction = lsproto.CommandOrCodeAction

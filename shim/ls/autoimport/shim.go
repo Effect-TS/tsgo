@@ -45,7 +45,8 @@ func NewImportAdder(ctx context.Context, program *compiler.Program, checker *che
 //go:linkname NewRegistry github.com/microsoft/TypeScript/tsc/internal/ls/autoimport.NewRegistry
 func NewRegistry(toPath func(fileName string) tspath.Path, preferences lsutil.UserPreferences) *autoimport.Registry
 //go:linkname NewView github.com/microsoft/TypeScript/tsc/internal/ls/autoimport.NewView
-func NewView(registry *autoimport.Registry, importingFile *ast.SourceFile, projectKey tspath.Path, program *compiler.Program, typeChecker *checker.Checker, preferences modulespecifiers.UserPreferences) *autoimport.View
+func NewView(registry *autoimport.Registry, importingFile *ast.SourceFile, projectID autoimport.ProjectID, program *compiler.Program, typeChecker *checker.Checker, preferences modulespecifiers.UserPreferences) *autoimport.View
+type ProjectID = autoimport.ProjectID
 type QueryKind = autoimport.QueryKind
 const QueryKindCaseInsensitiveMatch = autoimport.QueryKindCaseInsensitiveMatch
 const QueryKindExactMatch = autoimport.QueryKindExactMatch

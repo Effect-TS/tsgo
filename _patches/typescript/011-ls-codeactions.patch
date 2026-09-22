@@ -60,7 +60,7 @@ index 9a7443f5..2e3aef7f 100644
  
 +	// Run refactor providers when the request includes refactor.* kinds or no filter
 +	if shouldRunRefactors(params) {
-+		for _, mapped := range lsconv.FromLSPRangeForSourceFile(l.converters, file, params.Range, spanmap.FeatureCodeActions) {
++		for _, mapped := range l.converters.FromLSPRangeForSourceFile(file, params.Range, spanmap.FeatureCodeActions) {
 +			for _, provider := range externalRefactorProviders {
 +				refactorActions, err := provider.GetRefactorActions(ctx, mapped.Script, mapped.Span, program, l)
 +				if err != nil {

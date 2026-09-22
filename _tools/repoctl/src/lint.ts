@@ -7,7 +7,7 @@ import * as ChildProcessSpawner from "effect/unstable/process/ChildProcessSpawne
 import { CommandError, runCommand, runCommandCaptureSplit } from "./process.ts"
 import { getComponent, readUpstream } from "./upstream.ts"
 
-const deadcodeVersion = "v0.48.0"
+const deadcodeVersion = "v0.50.0"
 
 export class DeadCodeError extends Data.TaggedError("DeadCodeError")<{
   readonly findings: ReadonlyArray<string>
