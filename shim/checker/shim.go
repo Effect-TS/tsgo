@@ -357,6 +357,7 @@ type extra_Checker struct {
   typeResolutions []checker.TypeResolution
   resolutionStart int
   varianceStack []checker.VarianceStackEntry
+  callResolutionStack []*ast.Node
   apparentArgumentCount *int
   lastGetCombinedNodeFlagsNode *ast.Node
   lastGetCombinedNodeFlagsResult ast.NodeFlags
@@ -651,6 +652,7 @@ type InferenceContext = checker.InferenceContext
 type InferenceContextInfo = checker.InferenceContextInfo
 type InferenceFlags = checker.InferenceFlags
 const InferenceFlagsAnyDefault = checker.InferenceFlagsAnyDefault
+const InferenceFlagsNoConstraintChecks = checker.InferenceFlagsNoConstraintChecks
 const InferenceFlagsNoDefault = checker.InferenceFlagsNoDefault
 const InferenceFlagsNone = checker.InferenceFlagsNone
 const InferenceFlagsSkippedGenericFunction = checker.InferenceFlagsSkippedGenericFunction
@@ -696,6 +698,8 @@ const IntrinsicTypeKindNoInfer = checker.IntrinsicTypeKindNoInfer
 const IntrinsicTypeKindUncapitalize = checker.IntrinsicTypeKindUncapitalize
 const IntrinsicTypeKindUnknown = checker.IntrinsicTypeKindUnknown
 const IntrinsicTypeKindUppercase = checker.IntrinsicTypeKindUppercase
+//go:linkname IsDistributedTypeParameter github.com/microsoft/TypeScript/tsc/internal/checker.IsDistributedTypeParameter
+func IsDistributedTypeParameter(t *checker.Type) bool
 //go:linkname IsExternalModuleSymbol github.com/microsoft/TypeScript/tsc/internal/checker.IsExternalModuleSymbol
 func IsExternalModuleSymbol(moduleSymbol *ast.Symbol) bool
 //go:linkname IsInTypeQuery github.com/microsoft/TypeScript/tsc/internal/checker.IsInTypeQuery

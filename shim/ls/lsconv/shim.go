@@ -8,7 +8,6 @@ import "github.com/microsoft/TypeScript/tsc/internal/ast"
 import "github.com/microsoft/TypeScript/tsc/internal/core"
 import "github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 import "github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
-import "github.com/microsoft/TypeScript/tsc/internal/spanmap"
 import _ "unsafe"
 
 //go:linkname ComputeLSPLineStarts github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.ComputeLSPLineStarts
@@ -20,14 +19,6 @@ func DiagnosticToLSPPull(ctx context.Context, converters *lsconv.Converters, dia
 func DiagnosticToLSPPush(ctx context.Context, converters *lsconv.Converters, diagnostic *ast.Diagnostic) *lsproto.Diagnostic
 //go:linkname FileNameToDocumentURI github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.FileNameToDocumentURI
 func FileNameToDocumentURI(fileName string) lsproto.DocumentUri
-//go:linkname FromLSPPositionForSourceFile github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.FromLSPPositionForSourceFile
-func FromLSPPositionForSourceFile(c *lsconv.Converters, file *ast.SourceFile, position lsproto.Position, feature spanmap.Feature) []lsconv.MappedPosition[*ast.SourceFile]
-//go:linkname FromLSPRangeForSourceFile github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.FromLSPRangeForSourceFile
-func FromLSPRangeForSourceFile(c *lsconv.Converters, file *ast.SourceFile, textRange lsproto.Range, feature spanmap.Feature) []lsconv.MappedSpan[*ast.SourceFile]
-//go:linkname FromLSPRangeIntersectingForSourceFile github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.FromLSPRangeIntersectingForSourceFile
-func FromLSPRangeIntersectingForSourceFile(c *lsconv.Converters, file *ast.SourceFile, textRange lsproto.Range, feature spanmap.Feature) []lsconv.MappedSpan[*ast.SourceFile]
-//go:linkname FromLSPRangeToOriginal github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.FromLSPRangeToOriginal
-func FromLSPRangeToOriginal(c *lsconv.Converters, script lsconv.Script, textRange lsproto.Range) core.TextRange
 type LSPLineMap = lsconv.LSPLineMap
 type LSPLineStarts = lsconv.LSPLineStarts
 //go:linkname LanguageKindToScriptKind github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.LanguageKindToScriptKind

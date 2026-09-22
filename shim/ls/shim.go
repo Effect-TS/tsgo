@@ -10,11 +10,11 @@ import "github.com/microsoft/TypeScript/tsc/internal/collections"
 import "github.com/microsoft/TypeScript/tsc/internal/compiler"
 import "github.com/microsoft/TypeScript/tsc/internal/core"
 import "github.com/microsoft/TypeScript/tsc/internal/ls"
+import "github.com/microsoft/TypeScript/tsc/internal/ls/autoimport"
 import "github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 import "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 import "github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 import "github.com/microsoft/TypeScript/tsc/internal/sourcemap"
-import "github.com/microsoft/TypeScript/tsc/internal/tspath"
 import "unsafe"
 
 var AfterCompletionCallback = ls.AfterCompletionCallback
@@ -95,7 +95,7 @@ type LanguageService = ls.LanguageService
 //go:linkname LanguageService_getQuickInfoAndDocumentationForSymbol github.com/microsoft/TypeScript/tsc/internal/ls.(*LanguageService).getQuickInfoAndDocumentationForSymbol
 func LanguageService_getQuickInfoAndDocumentationForSymbol(recv *ls.LanguageService, c *checker.Checker, symbol *ast.Symbol, node *ast.Node, contentFormat lsproto.MarkupKind, vc *checker.VerbosityContext, vsCapability bool) (string, string, string, []*lsproto.VSClassifiedTextRun)
 type extra_LanguageService struct {
-  projectPath tspath.Path
+  projectID autoimport.ProjectID
   host ls.Host
   activeConfig lsutil.UserPreferences
   program *compiler.Program
@@ -112,7 +112,7 @@ const ModuleReferenceKindImplicit = ls.ModuleReferenceKindImplicit
 const ModuleReferenceKindImport = ls.ModuleReferenceKindImport
 const ModuleReferenceKindReference = ls.ModuleReferenceKindReference
 //go:linkname NewLanguageService github.com/microsoft/TypeScript/tsc/internal/ls.NewLanguageService
-func NewLanguageService(projectPath tspath.Path, program *compiler.Program, host ls.Host, activeFile string) *ls.LanguageService
+func NewLanguageService(projectID autoimport.ProjectID, program *compiler.Program, host ls.Host, activeFile string) *ls.LanguageService
 //go:linkname NewSymbolAndEntries github.com/microsoft/TypeScript/tsc/internal/ls.NewSymbolAndEntries
 func NewSymbolAndEntries(kind ls.DefinitionKind, node *ast.Node, symbol *ast.Symbol, references []*ls.ReferenceEntry) *ls.SymbolAndEntries
 //go:linkname ObjectLiteralPropertySortText github.com/microsoft/TypeScript/tsc/internal/ls.ObjectLiteralPropertySortText

@@ -2,4 +2,4 @@
 "@effect/tsgo": patch
 ---
 
-Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260916.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/d2b20b35034bd902bdda5974f522ff00352895e9) commit `d2b20b35034bd902bdda5974f522ff00352895e9`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260920.1), which ships [`TypeScript`](https://github.com/microsoft/TypeScript/commit/f29aeb9f825d96feea27841f3f7342dbf0df68a8) commit `f29aeb9f825d96feea27841f3f7342dbf0df68a8`, and update the repository toolchain to Go 1.27.
