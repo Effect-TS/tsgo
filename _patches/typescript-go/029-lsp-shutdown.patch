@@ -1,0 +1,281 @@
+diff --git a/internal/lsp/server.go b/internal/lsp/server.go
+index 8a0b7214c..2d5fdcad4 100644
+--- a/internal/lsp/server.go
++++ b/internal/lsp/server.go
+@@ -79,7 +79,8 @@ func NewServer(opts *ServerOptions) *Server {
+ }
+ 
+ var (
+-	fileRenameFilters = []*lsproto.FileOperationFilter{
++	errExitWithoutShutdown = errors.New("exit received before shutdown")
++	fileRenameFilters      = []*lsproto.FileOperationFilter{
+ 		{
+ 			Scheme: new("file"),
+ 			Pattern: &lsproto.FileOperationPattern{
+@@ -204,6 +205,9 @@ type Server struct {
+ 	// Used by tests to wait for full initialization.
+ 	initComplete chan struct{}
+ 
++	// Accessed only by the synchronous shutdown and exit handlers.
++	shutdownReceived bool
++
+ 	// !!! temporary; remove when we have `handleDidChangeConfiguration`/implicit project config support
+ 	compilerOptionsForInferredProjects *core.CompilerOptions
+ 	// parseCache can be passed in so separate tests can share ASTs
+@@ -535,7 +539,8 @@ func (s *Server) dispatchLoop(ctx context.Context) error {
+ 	for {
+ 		req, err := s.requestQueue.Get(ctx)
+ 		if err != nil {
+-			return err
++			// Preserve the exit or failure that stopped dispatch.
++			return context.Cause(ctx)
+ 		}
+ 
+ 		s.lastRequestTimeMs.Store(time.Now().UnixMilli())
+@@ -556,8 +561,8 @@ func (s *Server) dispatchLoop(ctx context.Context) error {
+ 				if err := s.sendError(req.ID, lsproto.ErrorCodeRequestCancelled); err != nil {
+ 					lspExit(err)
+ 				}
+-			} else if errors.Is(err, io.EOF) {
+-				lspExit(nil)
++			} else if errors.Is(err, io.EOF) || errors.Is(err, errExitWithoutShutdown) {
++				lspExit(err)
+ 			} else {
+ 				if err := s.sendError(req.ID, err); err != nil {
+ 					lspExit(err)
+@@ -1305,10 +1310,14 @@ func (s *Server) handleShutdown(ctx context.Context, _ lsproto.NoParams, _ *lspr
+ 		s.builtinWatcher.Close()
+ 	}
+ 	s.session.Close()
++	s.shutdownReceived = true
+ 	return lsproto.ShutdownResponse{}, nil
+ }
+ 
+ func (s *Server) handleExit(ctx context.Context, _ lsproto.NoParams) error {
++	if !s.shutdownReceived {
++		return errExitWithoutShutdown
++	}
+ 	return io.EOF
+ }
+ 
+diff --git a/internal/lsp/server_exit_test.go b/internal/lsp/server_exit_test.go
+new file mode 100644
+index 000000000..9885592c9
+--- /dev/null
++++ b/internal/lsp/server_exit_test.go
+@@ -0,0 +1,215 @@
++package lsp
++
++import (
++	"context"
++	"errors"
++	"io"
++	"testing"
++	"time"
++
++	"github.com/microsoft/typescript-go/internal/json"
++	"github.com/microsoft/typescript-go/internal/jsonrpc"
++	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
++	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
++)
++
++type exitTestReader func() (*lsproto.Message, error)
++
++func (r exitTestReader) Read() (*lsproto.Message, error) { return r() }
++
++type exitTestWriter func(*lsproto.Message) error
++
++func (w exitTestWriter) Write(msg *lsproto.Message) error { return w(msg) }
++
++type exitTestClient struct {
++	t      *testing.T
++	ctx    context.Context
++	cancel context.CancelFunc
++	input  chan *lsproto.Message
++	output chan *lsproto.Message
++	done   chan struct{}
++	err    error
++}
++
++func newExitTestClient(t *testing.T, writeErr error) *exitTestClient {
++	t.Helper()
++	ctx, cancel := context.WithTimeout(t.Context(), 10*time.Second)
++	client := &exitTestClient{
++		t: t, ctx: ctx, cancel: cancel,
++		input:  make(chan *lsproto.Message),
++		output: make(chan *lsproto.Message, 16),
++		done:   make(chan struct{}),
++	}
++	server := NewServer(&ServerOptions{
++		In: exitTestReader(func() (*lsproto.Message, error) {
++			msg, ok := <-client.input
++			if !ok {
++				return nil, io.EOF
++			}
++			// Match the wire representation expected by UnmarshalParams.
++			data, err := json.Marshal(msg)
++			if err != nil {
++				return nil, err
++			}
++			var decoded lsproto.Message
++			if err := json.Unmarshal(data, &decoded); err != nil {
++				return nil, err
++			}
++			return &decoded, nil
++		}),
++		Out: exitTestWriter(func(msg *lsproto.Message) error {
++			if writeErr != nil {
++				return writeErr
++			}
++			if msg.Kind == jsonrpc.MessageKindRequest {
++				// Acknowledge the server's configuration-watcher registration.
++				select {
++				case client.input <- (&lsproto.ResponseMessage{
++					ID: msg.AsRequest().ID, Result: lsproto.Null{},
++				}).Message():
++					return nil
++				case <-ctx.Done():
++					return ctx.Err()
++				}
++			}
++			select {
++			case client.output <- msg:
++				return nil
++			case <-ctx.Done():
++				return ctx.Err()
++			}
++		}),
++		Err: io.Discard,
++		Cwd: "/test",
++		FS:  vfstest.FromMap(map[string]string{}, false),
++	})
++	go func() {
++		client.err = server.Run(ctx)
++		close(client.done)
++	}()
++	t.Cleanup(func() {
++		cancel()
++		select {
++		case <-client.done:
++			// Run has stopped the writer; now release the detached reader.
++			close(client.input)
++		case <-time.After(10 * time.Second):
++			t.Error("server did not stop during cleanup")
++		}
++	})
++	return client
++}
++
++func (c *exitTestClient) send(msg *lsproto.Message) {
++	c.t.Helper()
++	select {
++	case c.input <- msg:
++	case <-c.done:
++		c.t.Fatalf("server stopped before receiving message: %v", c.err)
++	case <-c.ctx.Done():
++		c.t.Fatal("timed out sending message")
++	}
++}
++
++func (c *exitTestClient) request(msg *lsproto.Message) {
++	c.t.Helper()
++	c.send(msg)
++	for {
++		select {
++		case reply := <-c.output:
++			if reply.Kind == jsonrpc.MessageKindResponse && reply.AsResponse().ID != nil &&
++				*reply.AsResponse().ID == *msg.AsRequest().ID {
++				if reply.AsResponse().Error != nil {
++					c.t.Fatalf("request failed: %v", reply.AsResponse().Error)
++				}
++				return
++			}
++		case <-c.done:
++			c.t.Fatalf("server stopped before responding: %v", c.err)
++		case <-c.ctx.Done():
++			c.t.Fatal("timed out waiting for response")
++		}
++	}
++}
++
++func (c *exitTestClient) wait() error {
++	c.t.Helper()
++	select {
++	case <-c.done:
++		return c.err
++	case <-c.ctx.Done():
++		c.t.Fatal("server did not exit while input remained open")
++		return nil
++	}
++}
++
++func (c *exitTestClient) initialize() {
++	c.t.Helper()
++	c.request(lsproto.InitializeInfo.NewRequestMessage(jsonrpc.NewIDInt(1), &lsproto.InitializeParams{
++		Capabilities: &lsproto.ClientCapabilities{},
++	}).Message())
++	c.send(lsproto.InitializedInfo.NewNotificationMessage(&lsproto.InitializedParams{}).Message())
++}
++
++func TestServerShutdownExitWithInputOpen(t *testing.T) {
++	t.Parallel()
++	client := newExitTestClient(t, nil)
++	client.initialize()
++	client.request((&lsproto.RequestMessage{ID: jsonrpc.NewIDInt(2), Method: lsproto.MethodShutdown}).Message())
++	client.send((&lsproto.RequestMessage{Method: lsproto.MethodExit}).Message())
++	if err := client.wait(); err != nil {
++		t.Fatalf("orderly exit returned an error: %v", err)
++	}
++}
++
++func TestServerExitWithoutShutdown(t *testing.T) {
++	t.Parallel()
++	client := newExitTestClient(t, nil)
++	client.initialize()
++	client.send((&lsproto.RequestMessage{Method: lsproto.MethodExit}).Message())
++	if err := client.wait(); !errors.Is(err, errExitWithoutShutdown) {
++		t.Fatalf("expected an explicit protocol error, got %v", err)
++	}
++}
++
++func TestServerRunParentCancellation(t *testing.T) {
++	t.Parallel()
++	client := newExitTestClient(t, nil)
++	client.initialize()
++	client.cancel()
++	// The test client's context has been cancelled too, so wait independently.
++	select {
++	case <-client.done:
++		if !errors.Is(client.err, context.Canceled) {
++			t.Fatalf("expected cancellation, got %v", client.err)
++		}
++	case <-time.After(10 * time.Second):
++		t.Fatal("server did not stop after cancellation")
++	}
++}
++
++func TestServerRunReadFailure(t *testing.T) {
++	t.Parallel()
++	want := errors.New("test read failure")
++	server := NewServer(&ServerOptions{
++		In:  exitTestReader(func() (*lsproto.Message, error) { return nil, want }),
++		Out: shutdownTestWriter{},
++		Err: io.Discard,
++		Cwd: "/test",
++	})
++	if err := server.Run(t.Context()); !errors.Is(err, want) {
++		t.Fatalf("expected read failure, got %v", err)
++	}
++}
++
++func TestServerRunWriteFailure(t *testing.T) {
++	t.Parallel()
++	want := errors.New("test write failure")
++	client := newExitTestClient(t, want)
++	client.send(lsproto.InitializeInfo.NewRequestMessage(jsonrpc.NewIDInt(1), &lsproto.InitializeParams{
++		Capabilities: &lsproto.ClientCapabilities{},
++	}).Message())
++	if err := client.wait(); !errors.Is(err, want) {
++		t.Fatalf("expected write failure, got %v", err)
++	}
++}
