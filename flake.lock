@@ -42,17 +42,17 @@
     "typescript-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1790035378,
-        "narHash": "sha256-3R54IdB9MhdQteWN23SGn59oDA+yTZy2G9aUh3p8abQ=",
+        "lastModified": 1789827226,
+        "narHash": "sha256-w4kB6wcoWeG8o/JXS0OijDvMWFPHWBri+C9KCzIvhZ8=",
         "owner": "microsoft",
         "repo": "TypeScript",
-        "rev": "5f6db9c9148635b4cbf72f1193b821b9c6b42dcc",
+        "rev": "f29aeb9f825d96feea27841f3f7342dbf0df68a8",
         "type": "github"
       },
       "original": {
         "owner": "microsoft",
         "repo": "TypeScript",
-        "rev": "5f6db9c9148635b4cbf72f1193b821b9c6b42dcc",
+        "rev": "f29aeb9f825d96feea27841f3f7342dbf0df68a8",
         "type": "github"
       }
     }
