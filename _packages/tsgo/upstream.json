@@ -3,7 +3,7 @@
   "tags": {
     "typescript": {
       "latest": "7.0.2",
-      "next": "7.1.0-dev.20260922.1"
+      "next": "7.1.0-dev.20260923.1"
     },
     "oxlint": {
       "latest": "1.85.0"
@@ -18,8 +18,8 @@
         "gitHead": "2bd066d87f5bafd315be9f40889d0a60b9e58e0b",
         "provider": "typescript-go"
       },
-      "7.1.0-dev.20260922.1": {
-        "gitHead": "5f6db9c9148635b4cbf72f1193b821b9c6b42dcc",
+      "7.1.0-dev.20260923.1": {
+        "gitHead": "79062fd59025f31757f039e46866535d2c56caff",
         "provider": "typescript"
       }
     },
