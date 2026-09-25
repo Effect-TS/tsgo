@@ -277,7 +277,10 @@ export const generateSubmoduleArtifacts = Effect.fnUntraced(function*(
     "-loc",
     "./loc_generated.go",
     "-locdir",
-    "./loc"
+    "./loc",
+    ...(compiler.provider === "typescript"
+      ? ["-locproject", "../../../tools/LocProject.json", "-locsource", "./diagnosticMessages.generated.json"]
+      : [])
   ], false, { GOWORK: "off" })
   yield* Console.log("Generating shims")
   yield* runCommand("go", path.join(repositoryRoot, "_tools", "gen_shims"), [

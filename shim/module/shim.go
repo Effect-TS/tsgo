@@ -12,6 +12,7 @@ import _ "unsafe"
 
 //go:linkname ComparePatternKeys github.com/microsoft/TypeScript/tsc/internal/module.ComparePatternKeys
 func ComparePatternKeys(a string, b string) int
+type DefaultResolver = module.DefaultResolver
 type DiagAndArgs = module.DiagAndArgs
 type Ending = module.Ending
 const EndingChangeable = module.EndingChangeable
@@ -39,9 +40,11 @@ func MatchPatternOrExact(patterns *module.ParsedPatterns, candidate string) core
 type ModeAwareCache[T any] = module.ModeAwareCache[T]
 type ModeAwareCacheKey = module.ModeAwareCacheKey
 //go:linkname NewResolver github.com/microsoft/TypeScript/tsc/internal/module.NewResolver
-func NewResolver(host module.ResolutionHost, options *core.CompilerOptions, typingsLocation string, projectName string, extraExtensions []string) *module.Resolver
-//go:linkname NewResolverWithOptions github.com/microsoft/TypeScript/tsc/internal/module.NewResolverWithOptions
-func NewResolverWithOptions(host module.ResolutionHost, compilerOptions *core.CompilerOptions, typingsLocation string, projectName string, opts module.ResolverOptions) *module.Resolver
+func NewResolver(opts module.ResolverOptions) *module.DefaultResolver
+//go:linkname NewStaticResolutions github.com/microsoft/TypeScript/tsc/internal/module.NewStaticResolutions
+func NewStaticResolutions(entries []module.StaticResolutionEntry, fallbackToResolver bool, currentDirectory string, useCaseSensitiveFileNames bool) (*module.StaticResolutions, error)
+//go:linkname NewStaticResolver github.com/microsoft/TypeScript/tsc/internal/module.NewStaticResolver
+func NewStaticResolver(fallback module.Resolver, resolutions *module.StaticResolutions) *module.StaticResolver
 type NodeResolutionFeatures = module.NodeResolutionFeatures
 const NodeResolutionFeaturesAll = module.NodeResolutionFeaturesAll
 const NodeResolutionFeaturesBundlerDefault = module.NodeResolutionFeaturesBundlerDefault
@@ -68,6 +71,9 @@ type ResolvedProjectReference = module.ResolvedProjectReference
 type ResolvedTypeReferenceDirective = module.ResolvedTypeReferenceDirective
 type Resolver = module.Resolver
 type ResolverOptions = module.ResolverOptions
+type StaticResolutionEntry = module.StaticResolutionEntry
+type StaticResolutions = module.StaticResolutions
+type StaticResolver = module.StaticResolver
 //go:linkname TryGetJSExtensionForFile github.com/microsoft/TypeScript/tsc/internal/module.TryGetJSExtensionForFile
 func TryGetJSExtensionForFile(fileName string, options *core.CompilerOptions) string
 //go:linkname TryParsePatterns github.com/microsoft/TypeScript/tsc/internal/module.TryParsePatterns
