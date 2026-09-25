@@ -6,7 +6,7 @@
     nixpkgsUnstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     /* Source of truth: the next profile in `_packages/tsgo/upstream.json`. */
     typescript-src = {
-      url = "github:microsoft/TypeScript/f29aeb9f825d96feea27841f3f7342dbf0df68a8";
+      url = "github:microsoft/TypeScript/df1a31e6d5c4aa4485f276fdfb4218a7bfcdf348";
       flake = false;
     };
   };
@@ -113,7 +113,8 @@
               (
                 cd typescript/tsc/internal/diagnostics
                 export GOWORK=off
-                go run generate.go -diagnostics ./diagnostics_generated.go -loc ./loc_generated.go -locdir ./loc
+                go run generate.go -diagnostics ./diagnostics_generated.go -loc ./loc_generated.go -locdir ./loc \
+                  -locproject ../../../tools/LocProject.json -locsource ./diagnosticMessages.generated.json
               )
               export GOFLAGS="$_saved_goflags"
             '';

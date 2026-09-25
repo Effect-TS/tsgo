@@ -108,6 +108,7 @@ var NodeCoreModules = core.NodeCoreModules
 func NonRelativeModuleNameForTypingCache(moduleName string) string
 type PagedLinkStore[V any] = core.PagedLinkStore[V]
 type Pattern = core.Pattern
+type PluginImport = core.PluginImport
 type PollingKind = core.PollingKind
 const PollingKindDynamicPriority = core.PollingKindDynamicPriority
 const PollingKindFixedChunkSize = core.PollingKindFixedChunkSize

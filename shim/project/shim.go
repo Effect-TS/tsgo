@@ -52,6 +52,7 @@ const KindConfigured = project.KindConfigured
 const KindInferred = project.KindInferred
 const KindSynthetic = project.KindSynthetic
 type LayeredFileSystem = project.LayeredFileSystem
+type ModuleResolverFactory = project.ModuleResolverFactory
 //go:linkname NewCachedFileHandle github.com/microsoft/TypeScript/tsc/internal/project.NewCachedFileHandle
 func NewCachedFileHandle(fileName string, content string) project.FileHandle
 //go:linkname NewConfiguredProject github.com/microsoft/TypeScript/tsc/internal/project.NewConfiguredProject

@@ -193,10 +193,8 @@ func collect(ctx context.Context, req request, override *etscore.EffectPluginOpt
 
 	if req.File != "" {
 		fileName := tspath.GetNormalizedAbsolutePath(req.File, req.CWD)
-		uri := lsconv.FileNameToDocumentURI(fileName)
-		openFiles := &collections.Set[lsproto.DocumentUri]{}
-		openFiles.Add(uri)
-		if err := updateSession(ctx, session, &project.APISnapshotRequest{OpenFiles: openFiles}); err != nil {
+		request := project.NewOpenFileSnapshotRequest(fileName, req.CWD, fs.UseCaseSensitiveFileNames())
+		if err := updateSession(ctx, session, request); err != nil {
 			return nil, nil, summary{}, err
 		}
 		addTarget(fileName)
