@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -141,6 +142,71 @@ func TestRunJSON(t *testing.T) {
 			}
 			if output.Files != nil {
 				t.Fatalf("expected no files list without listFiles: %#v", output.Files)
+			}
+		})
+	}
+}
+
+func TestRunReportsFilesWithoutPlugin(t *testing.T) {
+	t.Parallel()
+
+	cwd, err := filepath.Abs("testdata/without-plugin")
+	if err != nil {
+		t.Fatal(err)
+	}
+	request, err := json.Marshal(request{CWD: cwd, Project: "tsconfig.json", Format: "text"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	if status := Run(context.Background(), []string{string(request)}, &stdout, &stderr); status != 0 {
+		t.Fatalf("unexpected status %d; stderr:\n%s", status, stderr.String())
+	}
+	want := "Checked 0 files out of 1 files. \n" +
+		"Skipped 1 files because their tsconfig does not enable the @effect/language-service plugin.\n" +
+		"0 errors, 0 warnings and 0 messages.\n"
+	if stdout.String() != want {
+		t.Fatalf("unexpected output:\n%s", stdout.String())
+	}
+}
+
+func TestRunJSONFilesWithoutPlugin(t *testing.T) {
+	t.Parallel()
+
+	disabled := `{"diagnosticSeverity":null}`
+	for name, tc := range map[string]struct {
+		dir  string
+		lsp  *string
+		want int
+	}{
+		"tsconfig without plugin":   {dir: "testdata/without-plugin", want: 1},
+		"lspconfig disables plugin": {dir: "testdata/native-diagnostics", lsp: &disabled, want: 0},
+	} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			cwd, err := filepath.Abs(tc.dir)
+			if err != nil {
+				t.Fatal(err)
+			}
+			request, err := json.Marshal(request{CWD: cwd, Project: "tsconfig.json", Format: "json", LSPConfig: tc.lsp})
+			if err != nil {
+				t.Fatal(err)
+			}
+			var stdout bytes.Buffer
+			var stderr bytes.Buffer
+			if status := Run(context.Background(), []string{string(request)}, &stdout, &stderr); status != 0 {
+				t.Fatalf("unexpected status %d; stderr:\n%s", status, stderr.String())
+			}
+			var output jsonOutput
+			if err := json.Unmarshal(stdout.Bytes(), &output); err != nil {
+				t.Fatalf("invalid JSON output: %v\n%s", err, stdout.String())
+			}
+			if output.Summary.FilesChecked != 0 || output.Summary.FilesWithoutPlugin != tc.want {
+				t.Fatalf("unexpected summary: %#v", output.Summary)
+			}
+			if !strings.Contains(stdout.String(), fmt.Sprintf(`"filesWithoutPlugin": %d`, tc.want)) {
+				t.Fatalf("output missing filesWithoutPlugin:\n%s", stdout.String())
 			}
 		})
 	}
