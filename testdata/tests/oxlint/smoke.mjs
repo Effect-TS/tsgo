@@ -61,6 +61,21 @@ const relatedLabel = missingStarDiagnostic.labels.find(
 assert.ok(relatedLabel, "related diagnostic was not converted to a labeled range")
 assert.deepEqual(relatedLabel.span, { offset: 67, length: 8, line: 3, column: 35 })
 
+const strictBoolean = run("--type-aware", "--format", "json", "--config", ".oxlintrc.json", "strict-boolean-expressions-duplicates.ts")
+assert.equal(strictBoolean.status, 1, strictBoolean.stderr)
+const strictBooleanDiagnostics = JSON.parse(strictBoolean.stdout).diagnostics.filter(
+  (item) => item.code === "effecttsgo(strict-boolean-expressions)"
+)
+assert.equal(strictBooleanDiagnostics.length, 2, "one diagnostic per distinct non-boolean type")
+assert.deepEqual(
+  strictBooleanDiagnostics.map((item) => item.message).sort(),
+  [
+    "Unexpected `undefined` type in condition, expected strictly a boolean instead.",
+    "Unexpected `{ id: string; }` type in condition, expected strictly a boolean instead."
+  ].sort()
+)
+assert.deepEqual(strictBooleanDiagnostics[0].labels[0].span, strictBooleanDiagnostics[1].labels[0].span)
+
 const disabled = run("--type-aware", "--config", ".oxlintrc.json", "disabled.ts")
 assert.equal(disabled.status, 0, disabled.stderr)
 assert.doesNotMatch(`${disabled.stdout}\n${disabled.stderr}`, /effecttsgo\(floating-effect\)/)
