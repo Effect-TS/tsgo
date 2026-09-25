@@ -3,13 +3,13 @@
   "tags": {
     "typescript": {
       "latest": "7.0.2",
-      "next": "7.1.0-dev.20260920.1"
+      "next": "7.1.0-dev.20260924.1"
     },
     "oxlint": {
-      "latest": "1.83.0"
+      "latest": "1.85.0"
     },
     "oxlint-tsgolint": {
-      "latest": "7.0.2002"
+      "latest": "7.0.2003"
     }
   },
   "components": {
@@ -18,8 +18,8 @@
         "gitHead": "2bd066d87f5bafd315be9f40889d0a60b9e58e0b",
         "provider": "typescript-go"
       },
-      "7.1.0-dev.20260920.1": {
-        "gitHead": "f29aeb9f825d96feea27841f3f7342dbf0df68a8",
+      "7.1.0-dev.20260924.1": {
+        "gitHead": "df1a31e6d5c4aa4485f276fdfb4218a7bfcdf348",
         "provider": "typescript"
       }
     },
@@ -35,27 +35,52 @@
         "dependencies": {
           "typescript": "7.0.2"
         }
+      },
+      "7.0.2003": {
+        "gitHead": "eb9339115edde6811ca94c3433adf69ea9852880",
+        "dependencies": {
+          "typescript": "7.0.2"
+        }
       }
     },
     "oxlint": {
-      "1.81.0": {
-        "gitHead": "0b4e2e67f4193e7ebfcc64982275eb583ae82c83"
-      },
       "1.82.0": {
         "gitHead": "b4da00b621ec2f6f67ed218f5366c45ed325331b"
       },
       "1.83.0": {
         "gitHead": "7bf68f70c20f5329251f19be95076f6eab4fe396"
+      },
+      "1.84.0": {
+        "gitHead": "f02a64a517a69a4eaa4ef83b722a3f10cf633f10"
+      },
+      "1.85.0": {
+        "gitHead": "288d8cc77984b0a3851c58c423ffe9e6edc79f2e"
       }
     }
   },
   "profiles": [
     {
       "name": "vite-plus",
-      "description": "Vite+ 0.3.3 compatibility runtime",
+      "description": "Vite+ 1.0.0-rc.0 compatibility runtime",
       "dependencies": {
-        "oxlint": "1.83.0",
-        "oxlint-tsgolint": "7.0.2001"
+        "oxlint": "1.85.0",
+        "oxlint-tsgolint": "7.0.2002"
+      }
+    },
+    {
+      "name": "oxlint@1.85.0",
+      "description": "Oxlint 1.85.0 compatibility runtime",
+      "dependencies": {
+        "oxlint": "1.85.0",
+        "oxlint-tsgolint": "7.0.2003"
+      }
+    },
+    {
+      "name": "oxlint@1.84.0",
+      "description": "Oxlint 1.84.0 compatibility runtime",
+      "dependencies": {
+        "oxlint": "1.84.0",
+        "oxlint-tsgolint": "7.0.2003"
       }
     },
     {
@@ -63,22 +88,14 @@
       "description": "Oxlint 1.83.0 compatibility runtime",
       "dependencies": {
         "oxlint": "1.83.0",
-        "oxlint-tsgolint": "7.0.2002"
+        "oxlint-tsgolint": "7.0.2003"
       }
     },
     {
-      "name": "oxlint@1.82.0",
-      "description": "Oxlint 1.82.0 compatibility runtime",
+      "name": "vite-plus@1.0.0-rc.0",
+      "description": "Vite+ 1.0.0-rc.0 compatibility runtime",
       "dependencies": {
-        "oxlint": "1.82.0",
-        "oxlint-tsgolint": "7.0.2002"
-      }
-    },
-    {
-      "name": "oxlint@1.81.0",
-      "description": "Oxlint 1.81.0 compatibility runtime",
-      "dependencies": {
-        "oxlint": "1.81.0",
+        "oxlint": "1.85.0",
         "oxlint-tsgolint": "7.0.2002"
       }
     },
@@ -95,14 +112,6 @@
       "description": "Vite+ 0.3.2 compatibility runtime",
       "dependencies": {
         "oxlint": "1.82.0",
-        "oxlint-tsgolint": "7.0.2001"
-      }
-    },
-    {
-      "name": "vite-plus@0.3.1",
-      "description": "Vite+ 0.3.1 compatibility runtime",
-      "dependencies": {
-        "oxlint": "1.81.0",
         "oxlint-tsgolint": "7.0.2001"
       }
     }
