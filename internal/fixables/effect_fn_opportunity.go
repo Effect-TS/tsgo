@@ -14,6 +14,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
+	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
@@ -67,7 +68,7 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 			Description: "Convert to Effect.fn (with span from withSpan)",
 			Run: func(tracker *rewriter.Tracker) {
 				trace := scanner.GetTextOfNode(result.ExplicitTraceExpression)
-				effectFnBuildReplacement(tracker, sf, result, "fn", trace, pipeArgs, isFuncDecl)
+				effectFnBuildReplacement(ctx, tracker, sf, result, "fn", trace, pipeArgs, isFuncDecl)
 			},
 		}); action != nil {
 			actions = append(actions, *action)
@@ -79,7 +80,7 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Convert to Effect.fnUntraced",
 			Run: func(tracker *rewriter.Tracker) {
-				effectFnBuildReplacement(tracker, sf, result, "fnUntraced", "", result.PipeArguments, isFuncDecl)
+				effectFnBuildReplacement(ctx, tracker, sf, result, "fnUntraced", "", result.PipeArguments, isFuncDecl)
 			},
 		}); action != nil {
 			actions = append(actions, *action)
@@ -91,7 +92,7 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Convert to Effect.fn (no span)",
 			Run: func(tracker *rewriter.Tracker) {
-				effectFnBuildReplacement(tracker, sf, result, "fn", "", result.PipeArguments, isFuncDecl)
+				effectFnBuildReplacement(ctx, tracker, sf, result, "fn", "", result.PipeArguments, isFuncDecl)
 			},
 		}); action != nil {
 			actions = append(actions, *action)
@@ -104,7 +105,7 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 			Description: "Convert to Effect.fn(\"" + result.InferredTraceName + "\")",
 			Run: func(tracker *rewriter.Tracker) {
 				trace := strconv.Quote(result.InferredTraceName)
-				effectFnBuildReplacement(tracker, sf, result, "fn", trace, result.PipeArguments, isFuncDecl)
+				effectFnBuildReplacement(ctx, tracker, sf, result, "fn", trace, result.PipeArguments, isFuncDecl)
 			},
 		}); action != nil {
 			actions = append(actions, *action)
@@ -119,7 +120,7 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 			Description: "Convert to Effect.fn(\"" + result.SuggestedTraceName + "\")",
 			Run: func(tracker *rewriter.Tracker) {
 				trace := strconv.Quote(result.SuggestedTraceName)
-				effectFnBuildReplacement(tracker, sf, result, "fn", trace, result.PipeArguments, isFuncDecl)
+				effectFnBuildReplacement(ctx, tracker, sf, result, "fn", trace, result.PipeArguments, isFuncDecl)
 			},
 		}); action != nil {
 			actions = append(actions, *action)
@@ -133,6 +134,7 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 // cloned AST. The body and all surrounding declarations/properties retain their
 // comments, literal spelling, whitespace, and semicolon style.
 func effectFnBuildReplacement(
+	ctx *fixable.Context,
 	tracker *rewriter.Tracker,
 	sf *ast.SourceFile,
 	result *typeparser.EffectFnOpportunityResult,
@@ -225,8 +227,14 @@ func effectFnBuildReplacement(
 		suffix.WriteString(";")
 	}
 
-	tracker.ReplaceTextRangeWithText(sf, core.NewTextRange(start, bodyStart), prefix)
-	tracker.ReplaceTextRangeWithText(sf, core.NewTextRange(body.End(), target.End()), suffix.String())
+	tracker.ReplaceRangeWithText(sf, lsproto.Range{
+		Start: ctx.BytePosToLSPPosition(start),
+		End:   ctx.BytePosToLSPPosition(bodyStart),
+	}, prefix)
+	tracker.ReplaceRangeWithText(sf, lsproto.Range{
+		Start: ctx.BytePosToLSPPosition(body.End()),
+		End:   ctx.BytePosToLSPPosition(target.End()),
+	}, suffix.String())
 }
 
 // effectFnPipeArgumentText prevents Effect.fn's additional function arguments
