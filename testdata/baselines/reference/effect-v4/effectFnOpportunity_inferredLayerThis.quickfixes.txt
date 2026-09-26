@@ -39,11 +39,7 @@ export class MyService extends Context.Service<MyService, {
 }>()("MyService") {
     static layer = Layer.effect(this, Effect.gen(function*() {
         yield* Effect.log("log")
-        return {
-    log: Effect.fn(function (what: string) {
-        return Effect.log(what);
-    })
-};
+        return { log: Effect.fn(function(what: string) { return Effect.log(what) }) }
     }))
 
     static layerSucceed = Layer.succeed(this)({
@@ -66,11 +62,7 @@ export class MyService extends Context.Service<MyService, {
 }>()("MyService") {
     static layer = Layer.effect(this, Effect.gen(function*() {
         yield* Effect.log("log")
-        return {
-    log: Effect.fn("MyService.log")(function (what: string) {
-        return Effect.log(what);
-    })
-};
+        return { log: Effect.fn("MyService.log")(function(what: string) { return Effect.log(what) }) }
     }))
 
     static layerSucceed = Layer.succeed(this)({
@@ -93,11 +85,7 @@ export class MyService extends Context.Service<MyService, {
 }>()("MyService") {
     static layer = Layer.effect(this, Effect.gen(function*() {
         yield* Effect.log("log")
-        return {
-    log: Effect.fn("log")(function (what: string) {
-        return Effect.log(what);
-    })
-};
+        return { log: Effect.fn("log")(function(what: string) { return Effect.log(what) }) }
     }))
 
     static layerSucceed = Layer.succeed(this)({
@@ -130,9 +118,7 @@ export class MyService extends Context.Service<MyService, {
     }))
 
     static layerSucceed = Layer.succeed(this)({
-        log: Effect.fn(function (what: string) {
-    return Effect.log(what);
-})
+        log: Effect.fn(function(what: string) { return Effect.log(what) })
     })
 
     static layerSync = Layer.sync(this)(() => {
@@ -155,9 +141,7 @@ export class MyService extends Context.Service<MyService, {
     }))
 
     static layerSucceed = Layer.succeed(this)({
-        log: Effect.fn("MyService.log")(function (what: string) {
-    return Effect.log(what);
-})
+        log: Effect.fn("MyService.log")(function(what: string) { return Effect.log(what) })
     })
 
     static layerSync = Layer.sync(this)(() => {
@@ -180,9 +164,7 @@ export class MyService extends Context.Service<MyService, {
     }))
 
     static layerSucceed = Layer.succeed(this)({
-        log: Effect.fn("log")(function (what: string) {
-    return Effect.log(what);
-})
+        log: Effect.fn("log")(function(what: string) { return Effect.log(what) })
     })
 
     static layerSync = Layer.sync(this)(() => {
@@ -215,11 +197,7 @@ export class MyService extends Context.Service<MyService, {
     })
 
     static layerSync = Layer.sync(this)(() => {
-        return {
-    log: Effect.fn(function (what: string) {
-        return Effect.log(what);
-    })
-};
+        return { log: Effect.fn(function(what: string) { return Effect.log(what) }) }
     })
 }
 
@@ -242,11 +220,7 @@ export class MyService extends Context.Service<MyService, {
     })
 
     static layerSync = Layer.sync(this)(() => {
-        return {
-    log: Effect.fn("MyService.log")(function (what: string) {
-        return Effect.log(what);
-    })
-};
+        return { log: Effect.fn("MyService.log")(function(what: string) { return Effect.log(what) }) }
     })
 }
 
@@ -269,11 +243,7 @@ export class MyService extends Context.Service<MyService, {
     })
 
     static layerSync = Layer.sync(this)(() => {
-        return {
-    log: Effect.fn("log")(function (what: string) {
-        return Effect.log(what);
-    })
-};
+        return { log: Effect.fn("log")(function(what: string) { return Effect.log(what) }) }
     })
 }
 

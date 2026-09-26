@@ -39,9 +39,9 @@ import * as Effect from "effect/Effect"
 // is config-enabled for them.
 
 // SHOULD get diagnostic: pipe ends with Effect.withSpan
-export const withSpanFunction = Effect.fn("withSpanFunction")(function* (n: number) {
-    return yield* Effect.succeed(n);
-});
+export const withSpanFunction = Effect.fn("withSpanFunction")(function*(n: number) {
+    return yield* Effect.succeed(n)
+  })
 
 // Should NOT get diagnostic: no pipe, no withSpan
 export const basicGen = (n: number) =>

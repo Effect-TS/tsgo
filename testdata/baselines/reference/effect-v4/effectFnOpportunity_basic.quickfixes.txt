@@ -56,10 +56,10 @@ const genAlias = Effect.gen
 // Converting to Effect.fnUntraced improves performance by not
 // reallocating the generator function on every call.
 
-export const arrowBlockGen = Effect.fnUntraced(function* (n: number) {
-    yield* Effect.succeed(1);
-    return n;
-});
+export const arrowBlockGen = Effect.fnUntraced(function*(n: number) {
+    yield* Effect.succeed(1)
+    return n
+  })
 
 export const arrowExpressionGen = (n: number) =>
   Effect.gen(function*() {
@@ -102,10 +102,10 @@ const genAlias = Effect.gen
 // Converting to Effect.fnUntraced improves performance by not
 // reallocating the generator function on every call.
 
-export const arrowBlockGen = Effect.fn(function* (n: number) {
-    yield* Effect.succeed(1);
-    return n;
-});
+export const arrowBlockGen = Effect.fn(function*(n: number) {
+    yield* Effect.succeed(1)
+    return n
+  })
 
 export const arrowExpressionGen = (n: number) =>
   Effect.gen(function*() {
@@ -148,10 +148,10 @@ const genAlias = Effect.gen
 // Converting to Effect.fnUntraced improves performance by not
 // reallocating the generator function on every call.
 
-export const arrowBlockGen = Effect.fn("arrowBlockGen")(function* (n: number) {
-    yield* Effect.succeed(1);
-    return n;
-});
+export const arrowBlockGen = Effect.fn("arrowBlockGen")(function*(n: number) {
+    yield* Effect.succeed(1)
+    return n
+  })
 
 export const arrowExpressionGen = (n: number) =>
   Effect.gen(function*() {
@@ -207,10 +207,10 @@ export const arrowBlockGen = (n: number) => {
   })
 }
 
-export const arrowExpressionGen = Effect.fnUntraced(function* (n: number) {
-    yield* Effect.succeed(1);
-    return n;
-});
+export const arrowExpressionGen = Effect.fnUntraced(function*(n: number) {
+    yield* Effect.succeed(1)
+    return n
+  })
 
 // Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
 export const arrowAliasedGen = (n: number) =>
@@ -254,10 +254,10 @@ export const arrowBlockGen = (n: number) => {
   })
 }
 
-export const arrowExpressionGen = Effect.fn(function* (n: number) {
-    yield* Effect.succeed(1);
-    return n;
-});
+export const arrowExpressionGen = Effect.fn(function*(n: number) {
+    yield* Effect.succeed(1)
+    return n
+  })
 
 // Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
 export const arrowAliasedGen = (n: number) =>
@@ -301,10 +301,10 @@ export const arrowBlockGen = (n: number) => {
   })
 }
 
-export const arrowExpressionGen = Effect.fn("arrowExpressionGen")(function* (n: number) {
-    yield* Effect.succeed(1);
-    return n;
-});
+export const arrowExpressionGen = Effect.fn("arrowExpressionGen")(function*(n: number) {
+    yield* Effect.succeed(1)
+    return n
+  })
 
 // Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
 export const arrowAliasedGen = (n: number) =>
@@ -361,10 +361,10 @@ export const arrowExpressionGen = (n: number) =>
   })
 
 // Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
-export const arrowAliasedGen = Effect.fnUntraced(function* (n: number) {
-    yield* Effect.succeed(1);
-    return n;
-});
+export const arrowAliasedGen = Effect.fnUntraced(function*(n: number) {
+    yield* Effect.succeed(1)
+    return n
+  })
 
 export const functionExpressionGen = function(n: number) {
   return Effect.gen(function*() {
@@ -408,10 +408,10 @@ export const arrowExpressionGen = (n: number) =>
   })
 
 // Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
-export const arrowAliasedGen = Effect.fn(function* (n: number) {
-    yield* Effect.succeed(1);
-    return n;
-});
+export const arrowAliasedGen = Effect.fn(function*(n: number) {
+    yield* Effect.succeed(1)
+    return n
+  })
 
 export const functionExpressionGen = function(n: number) {
   return Effect.gen(function*() {
@@ -455,10 +455,10 @@ export const arrowExpressionGen = (n: number) =>
   })
 
 // Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
-export const arrowAliasedGen = Effect.fn("arrowAliasedGen")(function* (n: number) {
-    yield* Effect.succeed(1);
-    return n;
-});
+export const arrowAliasedGen = Effect.fn("arrowAliasedGen")(function*(n: number) {
+    yield* Effect.succeed(1)
+    return n
+  })
 
 export const functionExpressionGen = function(n: number) {
   return Effect.gen(function*() {
@@ -514,10 +514,10 @@ export const arrowAliasedGen = (n: number) =>
     return n
   })
 
-export const functionExpressionGen = Effect.fnUntraced(function* (n: number) {
-    yield* Effect.succeed(1);
-    return n;
-});
+export const functionExpressionGen = Effect.fnUntraced(function*(n: number) {
+    yield* Effect.succeed(1)
+    return n
+  })
 
 export function functionDeclarationGen(n: number) {
   return Effect.gen(function*() {
@@ -560,10 +560,10 @@ export const arrowAliasedGen = (n: number) =>
     return n
   })
 
-export const functionExpressionGen = Effect.fn(function* (n: number) {
-    yield* Effect.succeed(1);
-    return n;
-});
+export const functionExpressionGen = Effect.fn(function*(n: number) {
+    yield* Effect.succeed(1)
+    return n
+  })
 
 export function functionDeclarationGen(n: number) {
   return Effect.gen(function*() {
@@ -606,10 +606,10 @@ export const arrowAliasedGen = (n: number) =>
     return n
   })
 
-export const functionExpressionGen = Effect.fn("functionExpressionGen")(function* (n: number) {
-    yield* Effect.succeed(1);
-    return n;
-});
+export const functionExpressionGen = Effect.fn("functionExpressionGen")(function*(n: number) {
+    yield* Effect.succeed(1)
+    return n
+  })
 
 export function functionDeclarationGen(n: number) {
   return Effect.gen(function*() {
@@ -665,10 +665,10 @@ export const functionExpressionGen = function(n: number) {
   })
 }
 
-export const functionDeclarationGen = Effect.fnUntraced(function* (n: number) {
-    yield* Effect.succeed(1);
-    return n;
-});
+export const functionDeclarationGen = Effect.fnUntraced(function*(n: number) {
+    yield* Effect.succeed(1)
+    return n
+  });
 
 
 === [D5] Fix 3: "Convert to Effect.fn (no span)" ===
@@ -711,10 +711,10 @@ export const functionExpressionGen = function(n: number) {
   })
 }
 
-export const functionDeclarationGen = Effect.fn(function* (n: number) {
-    yield* Effect.succeed(1);
-    return n;
-});
+export const functionDeclarationGen = Effect.fn(function*(n: number) {
+    yield* Effect.succeed(1)
+    return n
+  });
 
 
 === [D5] Fix 4: "Convert to Effect.fn(\"functionDeclarationGen\")" ===
@@ -757,8 +757,8 @@ export const functionExpressionGen = function(n: number) {
   })
 }
 
-export const functionDeclarationGen = Effect.fn("functionDeclarationGen")(function* (n: number) {
-    yield* Effect.succeed(1);
-    return n;
-});
+export const functionDeclarationGen = Effect.fn("functionDeclarationGen")(function*(n: number) {
+    yield* Effect.succeed(1)
+    return n
+  });
 
