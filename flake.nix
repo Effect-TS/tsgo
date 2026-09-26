@@ -6,7 +6,7 @@
     nixpkgsUnstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     /* Source of truth: the next profile in `_packages/tsgo/upstream.json`. */
     typescript-src = {
-      url = "github:microsoft/TypeScript/879f9867ac455404e75759dd1739281cf6aa7f85";
+      url = "github:microsoft/TypeScript/df1a31e6d5c4aa4485f276fdfb4218a7bfcdf348";
       flake = false;
     };
   };
@@ -38,7 +38,7 @@
        Refresh: pnpm exec repoctl flake update
        Manual:  set to lib.fakeHash, build, copy the reported hash.
       */
-      vendorHash = "sha256-GRzp/Zaixn8UirDxrcPvOiWbgMy4E3DMlApIiKBpCS8=";
+      vendorHash = "sha256-2Uj8bkfazW5ydzg6yFtkBW/7BneU45RGsQ1D/s4UjcE=";
       forAllSystems =
         f: lib.genAttrs supportedSystems (system: f system (import nixpkgs { inherit system; }));
     in
@@ -91,7 +91,7 @@
             chmod -R a-w $out
           '';
 
-          buildGoModule = pkgsUnstable.buildGoModule.override { go = pkgsUnstable.go_1_26; };
+          buildGoModule = pkgsUnstable.buildGoModule.override { go = pkgsUnstable.go_1_27; };
 
           tsgo = buildGoModule {
             pname = "effect-tsgo";
@@ -113,7 +113,8 @@
               (
                 cd typescript/tsc/internal/diagnostics
                 export GOWORK=off
-                go run generate.go -diagnostics ./diagnostics_generated.go -loc ./loc_generated.go -locdir ./loc
+                go run generate.go -diagnostics ./diagnostics_generated.go -loc ./loc_generated.go -locdir ./loc \
+                  -locproject ../../../tools/LocProject.json -locsource ./diagnosticMessages.generated.json
               )
               export GOFLAGS="$_saved_goflags"
             '';

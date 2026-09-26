@@ -38,13 +38,13 @@ When running in dedicated diagnostics mode, the Effect diagnostics can be emitte
 <!-- supported-components:start -->
 ## Supported Package Versions
 
-The following target package versions are supported by `@effect/tsgo@0.45.0`:
+The following target package versions are supported by `@effect/tsgo@0.46.1`:
 
 | Component | Supported versions |
 |---|---|
-| TypeScript | `7.0.2`, `7.1.0-dev.20260909.1` |
-| Oxlint | `1.81.0`, `1.82.0` |
-| oxlint-tsgolint | `7.0.2001` |
+| TypeScript | `7.0.2`, `7.1.0-dev.20260924.1` |
+| Oxlint | `1.82.0`, `1.83.0`, `1.84.0`, `1.85.0` |
+| oxlint-tsgolint | `7.0.2001`, `7.0.2002`, `7.0.2003` |
 <!-- supported-components:end -->
 
 ## Diagnostic Status
@@ -132,6 +132,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-conditional-refail-to-catch-if.md"><code>catchConditionalRefailToCatchIf</code></a></td><td>Suggests Effect.catchIf, Effect.catchCauseIf, or Effect.catchTag for conditional catch handlers that re-fail their untouched input</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-die-to-or-die.md"><code>catchDieToOrDie</code></a></td><td>Suggests using Effect.orDie instead of Effect.catch or Effect.catchAll with an identity-forwarding Effect.die handler</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-if-tag-to-catch-tag.md"><code>catchIfTagToCatchTag</code></a></td><td>Suggests Effect.catchTag instead of Effect.catchIf with a direct _tag equality predicate</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-refail-to-tap-error.md"><code>catchRefailToTapError</code></a></td><td>Suggests Effect.tapError for catch handlers that sequence an effect and then re-fail the original error</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-tag-to-catch-reason.md"><code>catchTagToCatchReason</code></a></td><td>Suggests Effect.catchReason or Effect.catchReasons for handlers that re-fail unmatched reason._tag branches</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-to-ignore.md"><code>catchToIgnore</code></a></td><td>Suggests using Effect.ignore or Effect.ignoreCause instead of Effect.catch/catchCause returning Effect.void</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-to-or-else-succeed.md"><code>catchToOrElseSucceed</code></a></td><td>Suggests using Effect.orElseSucceed instead of Effect.catch + Effect.succeed</td></tr>
