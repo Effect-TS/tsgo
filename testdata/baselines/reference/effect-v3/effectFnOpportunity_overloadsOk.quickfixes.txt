@@ -88,9 +88,9 @@ interface OverloadedArrow {
   (a: number): Effect.Effect<number>
   (a: string): Effect.Effect<string>
 }
-export const overloadedArrow: OverloadedArrow = Effect.fnUntraced(function* (a: number | string) {
-    return yield* Effect.succeed(a as any);
-});
+export const overloadedArrow: OverloadedArrow = Effect.fnUntraced(function*(a: number | string) {
+    return yield* Effect.succeed(a as any)
+  })
 
 interface OverloadedFunctionExpression {
   (a: number): Effect.Effect<number>
@@ -143,9 +143,9 @@ interface OverloadedArrow {
   (a: number): Effect.Effect<number>
   (a: string): Effect.Effect<string>
 }
-export const overloadedArrow: OverloadedArrow = Effect.fn(function* (a: number | string) {
-    return yield* Effect.succeed(a as any);
-});
+export const overloadedArrow: OverloadedArrow = Effect.fn(function*(a: number | string) {
+    return yield* Effect.succeed(a as any)
+  })
 
 interface OverloadedFunctionExpression {
   (a: number): Effect.Effect<number>
@@ -198,9 +198,9 @@ interface OverloadedArrow {
   (a: number): Effect.Effect<number>
   (a: string): Effect.Effect<string>
 }
-export const overloadedArrow: OverloadedArrow = Effect.fn("overloadedArrow")(function* (a: number | string) {
-    return yield* Effect.succeed(a as any);
-});
+export const overloadedArrow: OverloadedArrow = Effect.fn("overloadedArrow")(function*(a: number | string) {
+    return yield* Effect.succeed(a as any)
+  })
 
 interface OverloadedFunctionExpression {
   (a: number): Effect.Effect<number>
@@ -330,9 +330,9 @@ interface OverloadedFunctionExpression {
   (a: number): Effect.Effect<number>
   (a: string): Effect.Effect<string>
 }
-export const overloadedFunctionExpression: OverloadedFunctionExpression = Effect.fnUntraced(function* (a: number | string) {
-    return yield* Effect.succeed(a as any);
-});
+export const overloadedFunctionExpression: OverloadedFunctionExpression = Effect.fnUntraced(function*(a: number | string) {
+    return yield* Effect.succeed(a as any)
+  })
 
 interface OverloadedArrowNoGen {
   (a: number): Effect.Effect<number>
@@ -385,9 +385,9 @@ interface OverloadedFunctionExpression {
   (a: number): Effect.Effect<number>
   (a: string): Effect.Effect<string>
 }
-export const overloadedFunctionExpression: OverloadedFunctionExpression = Effect.fn(function* (a: number | string) {
-    return yield* Effect.succeed(a as any);
-});
+export const overloadedFunctionExpression: OverloadedFunctionExpression = Effect.fn(function*(a: number | string) {
+    return yield* Effect.succeed(a as any)
+  })
 
 interface OverloadedArrowNoGen {
   (a: number): Effect.Effect<number>
@@ -440,9 +440,9 @@ interface OverloadedFunctionExpression {
   (a: number): Effect.Effect<number>
   (a: string): Effect.Effect<string>
 }
-export const overloadedFunctionExpression: OverloadedFunctionExpression = Effect.fn("overloadedFunctionExpression")(function* (a: number | string) {
-    return yield* Effect.succeed(a as any);
-});
+export const overloadedFunctionExpression: OverloadedFunctionExpression = Effect.fn("overloadedFunctionExpression")(function*(a: number | string) {
+    return yield* Effect.succeed(a as any)
+  })
 
 interface OverloadedArrowNoGen {
   (a: number): Effect.Effect<number>
@@ -572,14 +572,14 @@ interface OverloadedArrowNoGen {
   (a: number): Effect.Effect<number>
   (a: string): Effect.Effect<string>
 }
-export const overloadedArrowNoGen: OverloadedArrowNoGen = Effect.fn(function (a: number | string) {
-    const _a = 1;
-    const _b = 2;
-    const _c = 3;
-    const _d = 4;
-    const _e = 5;
-    return Effect.succeed(a as any);
-});
+export const overloadedArrowNoGen: OverloadedArrowNoGen = Effect.fn(function(a: number | string) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+})
 
 interface OverloadedFunctionExpressionNoGen {
   (a: number): Effect.Effect<number>
@@ -629,14 +629,14 @@ interface OverloadedArrowNoGen {
   (a: number): Effect.Effect<number>
   (a: string): Effect.Effect<string>
 }
-export const overloadedArrowNoGen: OverloadedArrowNoGen = Effect.fn("overloadedArrowNoGen")(function (a: number | string) {
-    const _a = 1;
-    const _b = 2;
-    const _c = 3;
-    const _d = 4;
-    const _e = 5;
-    return Effect.succeed(a as any);
-});
+export const overloadedArrowNoGen: OverloadedArrowNoGen = Effect.fn("overloadedArrowNoGen")(function(a: number | string) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+})
 
 interface OverloadedFunctionExpressionNoGen {
   (a: number): Effect.Effect<number>
@@ -705,14 +705,14 @@ interface OverloadedFunctionExpressionNoGen {
   (a: number): Effect.Effect<number>
   (a: string): Effect.Effect<string>
 }
-export const overloadedFunctionExpressionNoGen: OverloadedFunctionExpressionNoGen = Effect.fn(function (a: number | string) {
-    const _a = 1;
-    const _b = 2;
-    const _c = 3;
-    const _d = 4;
-    const _e = 5;
-    return Effect.succeed(a as any);
-});
+export const overloadedFunctionExpressionNoGen: OverloadedFunctionExpressionNoGen = Effect.fn(function(a: number | string) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+})
 
 
 === [D11] Fix 3: "Convert to Effect.fn(\"overloadedFunctionExpressionNoGen\")" ===
@@ -762,12 +762,12 @@ interface OverloadedFunctionExpressionNoGen {
   (a: number): Effect.Effect<number>
   (a: string): Effect.Effect<string>
 }
-export const overloadedFunctionExpressionNoGen: OverloadedFunctionExpressionNoGen = Effect.fn("overloadedFunctionExpressionNoGen")(function (a: number | string) {
-    const _a = 1;
-    const _b = 2;
-    const _c = 3;
-    const _d = 4;
-    const _e = 5;
-    return Effect.succeed(a as any);
-});
+export const overloadedFunctionExpressionNoGen: OverloadedFunctionExpressionNoGen = Effect.fn("overloadedFunctionExpressionNoGen")(function(a: number | string) {
+  const _a = 1
+  const _b = 2
+  const _c = 3
+  const _d = 4
+  const _e = 5
+  return Effect.succeed(a as any)
+})
 

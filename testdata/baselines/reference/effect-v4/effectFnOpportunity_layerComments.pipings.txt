@@ -1,0 +1,61 @@
+==== /.src/effectFnOpportunity_layerComments.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 3:20 - 6:14
+Node: Context.Service<Store, {\n  readonly size: number\n  readonly get: (key: string) => Effect.Effect<string>\n}>()("Store")
+Node Kind: KindCallExpression
+
+Subject: "Store"
+Subject Type: "Store"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Service<Store, {\n  readonly size: number\n  readonly get: (key: string) => Effect.Effect<string>\n}>()
+      args: (constant)
+      outType: ServiceClass<Store, "Store", { readonly size: number; readonly get: (key: string) => Effect<string, never, never>; }>
+
+=== Piping Flow ===
+Location: 8:21 - 22:2
+Node: Layer.effect(\n  Store,\n  Effect.gen(function* () {\n    const prefix = yield* Effect.succeed("k:")\n    return {\n      // how many entries the store holds\n      size: 1_000,\n      get: (key: string) =>\n        Effect.gen(function* () {\n          // look the key up\n          return prefix + key\n        }),\n    }\n  }),\n)
+Node Kind: KindCallExpression
+
+Subject: function* () {\n    const prefix = yield* Effect.succeed("k:")\n    return {\n      // how many entries the store holds\n      size: 1_000,\n      get: (key: string) =>\n        Effect.gen(function* () {\n          // look the key up\n          return prefix + key\n        }),\n    }\n  }
+Subject Type: () => Generator<Effect<string, never, never>, { size: number; get: (key: string) => Effect<string, never, never>; }, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<{ size: number; get: (key: string) => Effect<string, never, never>; }, never, never>
+  [1] kind: dataLast
+      callee: Layer.effect
+      args: [Store]
+      outType: Layer<Store, never, never>
+
+=== Piping Flow ===
+Location: 11:26 - 11:47
+Node: Effect.succeed("k:")
+Node Kind: KindCallExpression
+
+Subject: "k:"
+Subject Type: "k:"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 15:28 - 19:11
+Node: Effect.gen(function* () {\n          // look the key up\n          return prefix + key\n        })
+Node Kind: KindCallExpression
+
+Subject: function* () {\n          // look the key up\n          return prefix + key\n        }
+Subject Type: () => Generator<never, string, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>

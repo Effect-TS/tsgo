@@ -1,0 +1,36 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/effectFnOpportunity_layerComments.ts(15,7): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(key) { ... })`. effect(effectFnOpportunity)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {"compilerOptions":{"plugins":[{"name":"@effect/language-service","effectFn":["span","untraced","no-span","inferred-span","suggested-span"]}]}}
+    
+
+==== /.src/effectFnOpportunity_layerComments.ts (1 errors) ====
+    import { Context, Effect, Layer } from "effect"
+    
+    class Store extends Context.Service<Store, {
+      readonly size: number
+      readonly get: (key: string) => Effect.Effect<string>
+    }>()("Store") {}
+    
+    export const layer = Layer.effect(
+      Store,
+      Effect.gen(function* () {
+        const prefix = yield* Effect.succeed("k:")
+        return {
+          // how many entries the store holds
+          size: 1_000,
+          get: (key: string) =>
+          ~~~
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(key) { ... })`. effect(effectFnOpportunity)
+            Effect.gen(function* () {
+              // look the key up
+              return prefix + key
+            }),
+        }
+      }),
+    )
+    

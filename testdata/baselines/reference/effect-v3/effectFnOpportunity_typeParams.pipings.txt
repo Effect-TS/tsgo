@@ -1,7 +1,7 @@
 ==== /.src/effectFnOpportunity_typeParams.ts (9 flows) ====
 
 === Piping Flow ===
-Location: 13:9 - 15:5
+Location: 9:9 - 11:5
 Node: Effect.gen(function*() {\n    return yield* Effect.succeed(value)\n  })
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<T, never, never>
 
 === Piping Flow ===
-Location: 14:18 - 14:40
+Location: 10:18 - 10:40
 Node: Effect.succeed(value)
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<T, never, never>
 
 === Piping Flow ===
-Location: 19:9 - 21:5
+Location: 15:9 - 17:5
 Node: Effect.gen(function*() {\n    return yield* Effect.succeed(value)\n  })
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: Effect<T, never, never>
 
 === Piping Flow ===
-Location: 20:18 - 20:40
+Location: 16:18 - 16:40
 Node: Effect.succeed(value)
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Effect<T, never, never>
 
 === Piping Flow ===
-Location: 25:9 - 27:5
+Location: 21:9 - 23:5
 Node: Effect.gen(function*() {\n    return yield* Effect.succeed(value)\n  })
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: Effect<T, never, never>
 
 === Piping Flow ===
-Location: 26:18 - 26:40
+Location: 22:18 - 22:40
 Node: Effect.succeed(value)
 Node Kind: KindCallExpression
 
@@ -85,7 +85,7 @@ Transformations (1):
       outType: Effect<T, never, never>
 
 === Piping Flow ===
-Location: 39:9 - 39:31
+Location: 35:9 - 35:31
 Node: Effect.succeed(value)
 Node Kind: KindCallExpression
 
@@ -99,7 +99,7 @@ Transformations (1):
       outType: Effect<T, never, never>
 
 === Piping Flow ===
-Location: 48:9 - 48:31
+Location: 44:9 - 44:31
 Node: Effect.succeed(value)
 Node Kind: KindCallExpression
 
@@ -113,7 +113,7 @@ Transformations (1):
       outType: Effect<T, never, never>
 
 === Piping Flow ===
-Location: 57:9 - 57:31
+Location: 53:9 - 53:31
 Node: Effect.succeed(value)
 Node Kind: KindCallExpression
 

@@ -57,9 +57,9 @@ import * as Effect from "effect/Effect"
 // calls (each has a single-statement body). The Go test harness runs all rules,
 // unlike upstream which runs only the rule matching the file name prefix.
 
-export const arrowWithPipe = Effect.fnUntraced(function* () {
-    return yield* Effect.succeed(42);
-}, Effect.ignoreLogged);
+export const arrowWithPipe = Effect.fnUntraced(function*() {
+    return yield* Effect.succeed(42)
+  },_ => Effect.ignoreLogged(_))
 
 export const functionExpressionWithPipe = function() {
   return Effect.gen(function*() {
@@ -87,9 +87,9 @@ import * as Effect from "effect/Effect"
 // calls (each has a single-statement body). The Go test harness runs all rules,
 // unlike upstream which runs only the rule matching the file name prefix.
 
-export const arrowWithPipe = Effect.fn(function* () {
-    return yield* Effect.succeed(42);
-}, Effect.ignoreLogged);
+export const arrowWithPipe = Effect.fn(function*() {
+    return yield* Effect.succeed(42)
+  },_ => Effect.ignoreLogged(_))
 
 export const functionExpressionWithPipe = function() {
   return Effect.gen(function*() {
@@ -117,9 +117,9 @@ import * as Effect from "effect/Effect"
 // calls (each has a single-statement body). The Go test harness runs all rules,
 // unlike upstream which runs only the rule matching the file name prefix.
 
-export const arrowWithPipe = Effect.fn("arrowWithPipe")(function* () {
-    return yield* Effect.succeed(42);
-}, Effect.ignoreLogged);
+export const arrowWithPipe = Effect.fn("arrowWithPipe")(function*() {
+    return yield* Effect.succeed(42)
+  },_ => Effect.ignoreLogged(_))
 
 export const functionExpressionWithPipe = function() {
   return Effect.gen(function*() {
@@ -192,9 +192,9 @@ export const arrowWithPipe = () =>
     return yield* Effect.succeed(42)
   }).pipe(Effect.ignoreLogged)
 
-export const functionExpressionWithPipe = Effect.fnUntraced(function* () {
-    return yield* Effect.succeed(42);
-}, Effect.withSpan("functionExpressionWithPipe"), Effect.ignoreLogged);
+export const functionExpressionWithPipe = Effect.fnUntraced(function*() {
+    return yield* Effect.succeed(42)
+  },Effect.withSpan("functionExpressionWithPipe"), _ => Effect.ignoreLogged(_))
 
 export function functionDeclarationWithPipe() {
   return Effect.gen(function*() {
@@ -221,9 +221,9 @@ export const arrowWithPipe = () =>
     return yield* Effect.succeed(42)
   }).pipe(Effect.ignoreLogged)
 
-export const functionExpressionWithPipe = Effect.fn(function* () {
-    return yield* Effect.succeed(42);
-}, Effect.withSpan("functionExpressionWithPipe"), Effect.ignoreLogged);
+export const functionExpressionWithPipe = Effect.fn(function*() {
+    return yield* Effect.succeed(42)
+  },Effect.withSpan("functionExpressionWithPipe"), _ => Effect.ignoreLogged(_))
 
 export function functionDeclarationWithPipe() {
   return Effect.gen(function*() {
@@ -250,9 +250,9 @@ export const arrowWithPipe = () =>
     return yield* Effect.succeed(42)
   }).pipe(Effect.ignoreLogged)
 
-export const functionExpressionWithPipe = Effect.fn("functionExpressionWithPipe")(function* () {
-    return yield* Effect.succeed(42);
-}, Effect.withSpan("functionExpressionWithPipe"), Effect.ignoreLogged);
+export const functionExpressionWithPipe = Effect.fn("functionExpressionWithPipe")(function*() {
+    return yield* Effect.succeed(42)
+  },Effect.withSpan("functionExpressionWithPipe"), _ => Effect.ignoreLogged(_))
 
 export function functionDeclarationWithPipe() {
   return Effect.gen(function*() {
@@ -326,9 +326,9 @@ export const functionExpressionWithPipe = function() {
   }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignoreLogged)
 }
 
-export const functionDeclarationWithPipe = Effect.fnUntraced(function* () {
-    return yield* Effect.succeed(42);
-}, Effect.map(x => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignoreLogged);
+export const functionDeclarationWithPipe = Effect.fnUntraced(function*() {
+    return yield* Effect.succeed(42)
+  },Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), _ => Effect.ignoreLogged(_));
 
 
 === [D5] Fix 3: "Convert to Effect.fn (no span)" ===
@@ -355,9 +355,9 @@ export const functionExpressionWithPipe = function() {
   }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignoreLogged)
 }
 
-export const functionDeclarationWithPipe = Effect.fn(function* () {
-    return yield* Effect.succeed(42);
-}, Effect.map(x => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignoreLogged);
+export const functionDeclarationWithPipe = Effect.fn(function*() {
+    return yield* Effect.succeed(42)
+  },Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), _ => Effect.ignoreLogged(_));
 
 
 === [D5] Fix 4: "Convert to Effect.fn(\"functionDeclarationWithPipe\")" ===
@@ -384,9 +384,9 @@ export const functionExpressionWithPipe = function() {
   }).pipe(Effect.withSpan("functionExpressionWithPipe"), Effect.ignoreLogged)
 }
 
-export const functionDeclarationWithPipe = Effect.fn("functionDeclarationWithPipe")(function* () {
-    return yield* Effect.succeed(42);
-}, Effect.map(x => x + 1), Effect.withSpan("functionDeclarationWithPipe"), Effect.ignoreLogged);
+export const functionDeclarationWithPipe = Effect.fn("functionDeclarationWithPipe")(function*() {
+    return yield* Effect.succeed(42)
+  },Effect.map((x) => x + 1), Effect.withSpan("functionDeclarationWithPipe"), _ => Effect.ignoreLogged(_));
 
 
 === [D6] Fix 0: "Disable unnecessaryEffectGen for this line" ===
