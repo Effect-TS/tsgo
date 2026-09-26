@@ -19,10 +19,6 @@ import * as Effect from "effect/Effect"
 //    tracing by adding spans. Recommended for app code.
 // 2. Effect.fn (without name) - won't add tracing spans.
 //
-// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
-// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
-// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
-// - Trailing semicolons on replacement statements (`});` vs `})`)
 
 export const arrowPlainMany = () => {
   const a = 1

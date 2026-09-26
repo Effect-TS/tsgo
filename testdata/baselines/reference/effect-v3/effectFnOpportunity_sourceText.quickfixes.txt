@@ -1,0 +1,864 @@
+=== Quick Fix Inventory ===
+
+[D1] (3:14-3:23) TS377047: This expression can be rewritten in the reusable function form `Effect.fn('custom-span')(function*<T>(value, n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (with span from withSpan)"
+  Fix 3: "Convert to Effect.fnUntraced"
+  Fix 4: "Convert to Effect.fn (no span)"
+
+[D2] (21:17-21:28) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"declaration\")"
+
+[D3] (28:14-28:21) TS377047: This expression can be rewritten in the reusable function form `Effect.fn((n) => { ... })`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (no span)"
+  Fix 3: "Convert to Effect.fn(\"regular\")"
+
+[D4] (38:14-38:18) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"bare\")"
+
+[D5] (44:14-44:20) TS377047: This expression can be rewritten in the reusable function form `Effect.fn(// span expression
+    `span-${"name" /* inside span */}-${/[/][*]/.source}`)(function*(n) { ... })`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (with span from withSpan)"
+  Fix 3: "Convert to Effect.fnUntraced"
+  Fix 4: "Convert to Effect.fn (no span)"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to Effect.fn (with span from withSpan)" ===
+
+--- file:///.src/effectFnOpportunity_sourceText.ts ---
+import { Effect } from "effect"
+
+export const signature = Effect.fn('custom-span')(function*<T /* generic */>(
+  value: T,
+  // default parameter
+  n = 1_000 /* units */,
+)
+  // before return
+  {
+    // keep the body verbatim
+    yield* Effect.log(value)
+    return n + 0xff
+  },
+    // before map
+    Effect.map((n) => n + 2_000) /* after map */
+  // after return
+)
+
+export function declaration(n: number) {
+  return Effect.gen(function*() {
+    // declaration body
+    return (yield* Effect.succeed(n)) + 1_000
+  })
+}
+
+export const regular = (n: number) => {
+  // ordinary function body
+  const a = 1_000
+  const b = 0xff
+  const c = 'single quotes'
+  const d = /a\/\/b/
+  const e = `template ${c}`
+  return Effect.succeed({ n, a, b, c, d, e })
+}
+
+export const bare: (n: number) => Effect.Effect<number> = n => Effect.gen(function*() {
+  // unparenthesized parameter
+  const result = yield* Effect.succeed(n)
+  return result
+})
+
+export const traced = (n: number) => Effect.gen(function*() {
+  yield* Effect.log("traced", n)
+  return 1_000
+}).pipe(
+  Effect.withSpan(
+    // span expression
+    `span-${"name" /* inside span */}-${/[/][*]/.source}`,
+    { attributes: { pattern: /[/][/]/.source } },
+  ),
+)
+
+
+=== [D1] Fix 3: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_sourceText.ts ---
+import { Effect } from "effect"
+
+export const signature = Effect.fnUntraced(function*<T /* generic */>(
+  value: T,
+  // default parameter
+  n = 1_000 /* units */,
+)
+  // before return
+  {
+    // keep the body verbatim
+    yield* Effect.log(value)
+    return n + 0xff
+  },
+    // before map
+    Effect.map((n) => n + 2_000) /* after map */,
+    Effect.withSpan('custom-span')
+  // after return
+)
+
+export function declaration(n: number) {
+  return Effect.gen(function*() {
+    // declaration body
+    return (yield* Effect.succeed(n)) + 1_000
+  })
+}
+
+export const regular = (n: number) => {
+  // ordinary function body
+  const a = 1_000
+  const b = 0xff
+  const c = 'single quotes'
+  const d = /a\/\/b/
+  const e = `template ${c}`
+  return Effect.succeed({ n, a, b, c, d, e })
+}
+
+export const bare: (n: number) => Effect.Effect<number> = n => Effect.gen(function*() {
+  // unparenthesized parameter
+  const result = yield* Effect.succeed(n)
+  return result
+})
+
+export const traced = (n: number) => Effect.gen(function*() {
+  yield* Effect.log("traced", n)
+  return 1_000
+}).pipe(
+  Effect.withSpan(
+    // span expression
+    `span-${"name" /* inside span */}-${/[/][*]/.source}`,
+    { attributes: { pattern: /[/][/]/.source } },
+  ),
+)
+
+
+=== [D1] Fix 4: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_sourceText.ts ---
+import { Effect } from "effect"
+
+export const signature = Effect.fn(function*<T /* generic */>(
+  value: T,
+  // default parameter
+  n = 1_000 /* units */,
+)
+  // before return
+  {
+    // keep the body verbatim
+    yield* Effect.log(value)
+    return n + 0xff
+  },
+    // before map
+    Effect.map((n) => n + 2_000) /* after map */,
+    Effect.withSpan('custom-span')
+  // after return
+)
+
+export function declaration(n: number) {
+  return Effect.gen(function*() {
+    // declaration body
+    return (yield* Effect.succeed(n)) + 1_000
+  })
+}
+
+export const regular = (n: number) => {
+  // ordinary function body
+  const a = 1_000
+  const b = 0xff
+  const c = 'single quotes'
+  const d = /a\/\/b/
+  const e = `template ${c}`
+  return Effect.succeed({ n, a, b, c, d, e })
+}
+
+export const bare: (n: number) => Effect.Effect<number> = n => Effect.gen(function*() {
+  // unparenthesized parameter
+  const result = yield* Effect.succeed(n)
+  return result
+})
+
+export const traced = (n: number) => Effect.gen(function*() {
+  yield* Effect.log("traced", n)
+  return 1_000
+}).pipe(
+  Effect.withSpan(
+    // span expression
+    `span-${"name" /* inside span */}-${/[/][*]/.source}`,
+    { attributes: { pattern: /[/][/]/.source } },
+  ),
+)
+
+
+=== [D2] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_sourceText.ts ---
+import { Effect } from "effect"
+
+export const signature = <T /* generic */>(
+  value: T,
+  // default parameter
+  n = 1_000 /* units */,
+) => {
+  // before return
+  return Effect.gen(function*() {
+    // keep the body verbatim
+    yield* Effect.log(value)
+    return n + 0xff
+  }).pipe(
+    // before map
+    Effect.map((n) => n + 2_000) /* after map */,
+    Effect.withSpan('custom-span'),
+  )
+  // after return
+}
+
+export const declaration = Effect.fnUntraced(function*(n: number) {
+    // declaration body
+    return (yield* Effect.succeed(n)) + 1_000
+  });
+
+export const regular = (n: number) => {
+  // ordinary function body
+  const a = 1_000
+  const b = 0xff
+  const c = 'single quotes'
+  const d = /a\/\/b/
+  const e = `template ${c}`
+  return Effect.succeed({ n, a, b, c, d, e })
+}
+
+export const bare: (n: number) => Effect.Effect<number> = n => Effect.gen(function*() {
+  // unparenthesized parameter
+  const result = yield* Effect.succeed(n)
+  return result
+})
+
+export const traced = (n: number) => Effect.gen(function*() {
+  yield* Effect.log("traced", n)
+  return 1_000
+}).pipe(
+  Effect.withSpan(
+    // span expression
+    `span-${"name" /* inside span */}-${/[/][*]/.source}`,
+    { attributes: { pattern: /[/][/]/.source } },
+  ),
+)
+
+
+=== [D2] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_sourceText.ts ---
+import { Effect } from "effect"
+
+export const signature = <T /* generic */>(
+  value: T,
+  // default parameter
+  n = 1_000 /* units */,
+) => {
+  // before return
+  return Effect.gen(function*() {
+    // keep the body verbatim
+    yield* Effect.log(value)
+    return n + 0xff
+  }).pipe(
+    // before map
+    Effect.map((n) => n + 2_000) /* after map */,
+    Effect.withSpan('custom-span'),
+  )
+  // after return
+}
+
+export const declaration = Effect.fn(function*(n: number) {
+    // declaration body
+    return (yield* Effect.succeed(n)) + 1_000
+  });
+
+export const regular = (n: number) => {
+  // ordinary function body
+  const a = 1_000
+  const b = 0xff
+  const c = 'single quotes'
+  const d = /a\/\/b/
+  const e = `template ${c}`
+  return Effect.succeed({ n, a, b, c, d, e })
+}
+
+export const bare: (n: number) => Effect.Effect<number> = n => Effect.gen(function*() {
+  // unparenthesized parameter
+  const result = yield* Effect.succeed(n)
+  return result
+})
+
+export const traced = (n: number) => Effect.gen(function*() {
+  yield* Effect.log("traced", n)
+  return 1_000
+}).pipe(
+  Effect.withSpan(
+    // span expression
+    `span-${"name" /* inside span */}-${/[/][*]/.source}`,
+    { attributes: { pattern: /[/][/]/.source } },
+  ),
+)
+
+
+=== [D2] Fix 4: "Convert to Effect.fn(\"declaration\")" ===
+
+--- file:///.src/effectFnOpportunity_sourceText.ts ---
+import { Effect } from "effect"
+
+export const signature = <T /* generic */>(
+  value: T,
+  // default parameter
+  n = 1_000 /* units */,
+) => {
+  // before return
+  return Effect.gen(function*() {
+    // keep the body verbatim
+    yield* Effect.log(value)
+    return n + 0xff
+  }).pipe(
+    // before map
+    Effect.map((n) => n + 2_000) /* after map */,
+    Effect.withSpan('custom-span'),
+  )
+  // after return
+}
+
+export const declaration = Effect.fn("declaration")(function*(n: number) {
+    // declaration body
+    return (yield* Effect.succeed(n)) + 1_000
+  });
+
+export const regular = (n: number) => {
+  // ordinary function body
+  const a = 1_000
+  const b = 0xff
+  const c = 'single quotes'
+  const d = /a\/\/b/
+  const e = `template ${c}`
+  return Effect.succeed({ n, a, b, c, d, e })
+}
+
+export const bare: (n: number) => Effect.Effect<number> = n => Effect.gen(function*() {
+  // unparenthesized parameter
+  const result = yield* Effect.succeed(n)
+  return result
+})
+
+export const traced = (n: number) => Effect.gen(function*() {
+  yield* Effect.log("traced", n)
+  return 1_000
+}).pipe(
+  Effect.withSpan(
+    // span expression
+    `span-${"name" /* inside span */}-${/[/][*]/.source}`,
+    { attributes: { pattern: /[/][/]/.source } },
+  ),
+)
+
+
+=== [D3] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_sourceText.ts ---
+import { Effect } from "effect"
+
+export const signature = <T /* generic */>(
+  value: T,
+  // default parameter
+  n = 1_000 /* units */,
+) => {
+  // before return
+  return Effect.gen(function*() {
+    // keep the body verbatim
+    yield* Effect.log(value)
+    return n + 0xff
+  }).pipe(
+    // before map
+    Effect.map((n) => n + 2_000) /* after map */,
+    Effect.withSpan('custom-span'),
+  )
+  // after return
+}
+
+export function declaration(n: number) {
+  return Effect.gen(function*() {
+    // declaration body
+    return (yield* Effect.succeed(n)) + 1_000
+  })
+}
+
+export const regular = Effect.fn(function(n: number) {
+  // ordinary function body
+  const a = 1_000
+  const b = 0xff
+  const c = 'single quotes'
+  const d = /a\/\/b/
+  const e = `template ${c}`
+  return Effect.succeed({ n, a, b, c, d, e })
+})
+
+export const bare: (n: number) => Effect.Effect<number> = n => Effect.gen(function*() {
+  // unparenthesized parameter
+  const result = yield* Effect.succeed(n)
+  return result
+})
+
+export const traced = (n: number) => Effect.gen(function*() {
+  yield* Effect.log("traced", n)
+  return 1_000
+}).pipe(
+  Effect.withSpan(
+    // span expression
+    `span-${"name" /* inside span */}-${/[/][*]/.source}`,
+    { attributes: { pattern: /[/][/]/.source } },
+  ),
+)
+
+
+=== [D3] Fix 3: "Convert to Effect.fn(\"regular\")" ===
+
+--- file:///.src/effectFnOpportunity_sourceText.ts ---
+import { Effect } from "effect"
+
+export const signature = <T /* generic */>(
+  value: T,
+  // default parameter
+  n = 1_000 /* units */,
+) => {
+  // before return
+  return Effect.gen(function*() {
+    // keep the body verbatim
+    yield* Effect.log(value)
+    return n + 0xff
+  }).pipe(
+    // before map
+    Effect.map((n) => n + 2_000) /* after map */,
+    Effect.withSpan('custom-span'),
+  )
+  // after return
+}
+
+export function declaration(n: number) {
+  return Effect.gen(function*() {
+    // declaration body
+    return (yield* Effect.succeed(n)) + 1_000
+  })
+}
+
+export const regular = Effect.fn("regular")(function(n: number) {
+  // ordinary function body
+  const a = 1_000
+  const b = 0xff
+  const c = 'single quotes'
+  const d = /a\/\/b/
+  const e = `template ${c}`
+  return Effect.succeed({ n, a, b, c, d, e })
+})
+
+export const bare: (n: number) => Effect.Effect<number> = n => Effect.gen(function*() {
+  // unparenthesized parameter
+  const result = yield* Effect.succeed(n)
+  return result
+})
+
+export const traced = (n: number) => Effect.gen(function*() {
+  yield* Effect.log("traced", n)
+  return 1_000
+}).pipe(
+  Effect.withSpan(
+    // span expression
+    `span-${"name" /* inside span */}-${/[/][*]/.source}`,
+    { attributes: { pattern: /[/][/]/.source } },
+  ),
+)
+
+
+=== [D4] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_sourceText.ts ---
+import { Effect } from "effect"
+
+export const signature = <T /* generic */>(
+  value: T,
+  // default parameter
+  n = 1_000 /* units */,
+) => {
+  // before return
+  return Effect.gen(function*() {
+    // keep the body verbatim
+    yield* Effect.log(value)
+    return n + 0xff
+  }).pipe(
+    // before map
+    Effect.map((n) => n + 2_000) /* after map */,
+    Effect.withSpan('custom-span'),
+  )
+  // after return
+}
+
+export function declaration(n: number) {
+  return Effect.gen(function*() {
+    // declaration body
+    return (yield* Effect.succeed(n)) + 1_000
+  })
+}
+
+export const regular = (n: number) => {
+  // ordinary function body
+  const a = 1_000
+  const b = 0xff
+  const c = 'single quotes'
+  const d = /a\/\/b/
+  const e = `template ${c}`
+  return Effect.succeed({ n, a, b, c, d, e })
+}
+
+export const bare: (n: number) => Effect.Effect<number> = Effect.fnUntraced(function*(n) {
+  // unparenthesized parameter
+  const result = yield* Effect.succeed(n)
+  return result
+})
+
+export const traced = (n: number) => Effect.gen(function*() {
+  yield* Effect.log("traced", n)
+  return 1_000
+}).pipe(
+  Effect.withSpan(
+    // span expression
+    `span-${"name" /* inside span */}-${/[/][*]/.source}`,
+    { attributes: { pattern: /[/][/]/.source } },
+  ),
+)
+
+
+=== [D4] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_sourceText.ts ---
+import { Effect } from "effect"
+
+export const signature = <T /* generic */>(
+  value: T,
+  // default parameter
+  n = 1_000 /* units */,
+) => {
+  // before return
+  return Effect.gen(function*() {
+    // keep the body verbatim
+    yield* Effect.log(value)
+    return n + 0xff
+  }).pipe(
+    // before map
+    Effect.map((n) => n + 2_000) /* after map */,
+    Effect.withSpan('custom-span'),
+  )
+  // after return
+}
+
+export function declaration(n: number) {
+  return Effect.gen(function*() {
+    // declaration body
+    return (yield* Effect.succeed(n)) + 1_000
+  })
+}
+
+export const regular = (n: number) => {
+  // ordinary function body
+  const a = 1_000
+  const b = 0xff
+  const c = 'single quotes'
+  const d = /a\/\/b/
+  const e = `template ${c}`
+  return Effect.succeed({ n, a, b, c, d, e })
+}
+
+export const bare: (n: number) => Effect.Effect<number> = Effect.fn(function*(n) {
+  // unparenthesized parameter
+  const result = yield* Effect.succeed(n)
+  return result
+})
+
+export const traced = (n: number) => Effect.gen(function*() {
+  yield* Effect.log("traced", n)
+  return 1_000
+}).pipe(
+  Effect.withSpan(
+    // span expression
+    `span-${"name" /* inside span */}-${/[/][*]/.source}`,
+    { attributes: { pattern: /[/][/]/.source } },
+  ),
+)
+
+
+=== [D4] Fix 4: "Convert to Effect.fn(\"bare\")" ===
+
+--- file:///.src/effectFnOpportunity_sourceText.ts ---
+import { Effect } from "effect"
+
+export const signature = <T /* generic */>(
+  value: T,
+  // default parameter
+  n = 1_000 /* units */,
+) => {
+  // before return
+  return Effect.gen(function*() {
+    // keep the body verbatim
+    yield* Effect.log(value)
+    return n + 0xff
+  }).pipe(
+    // before map
+    Effect.map((n) => n + 2_000) /* after map */,
+    Effect.withSpan('custom-span'),
+  )
+  // after return
+}
+
+export function declaration(n: number) {
+  return Effect.gen(function*() {
+    // declaration body
+    return (yield* Effect.succeed(n)) + 1_000
+  })
+}
+
+export const regular = (n: number) => {
+  // ordinary function body
+  const a = 1_000
+  const b = 0xff
+  const c = 'single quotes'
+  const d = /a\/\/b/
+  const e = `template ${c}`
+  return Effect.succeed({ n, a, b, c, d, e })
+}
+
+export const bare: (n: number) => Effect.Effect<number> = Effect.fn("bare")(function*(n) {
+  // unparenthesized parameter
+  const result = yield* Effect.succeed(n)
+  return result
+})
+
+export const traced = (n: number) => Effect.gen(function*() {
+  yield* Effect.log("traced", n)
+  return 1_000
+}).pipe(
+  Effect.withSpan(
+    // span expression
+    `span-${"name" /* inside span */}-${/[/][*]/.source}`,
+    { attributes: { pattern: /[/][/]/.source } },
+  ),
+)
+
+
+=== [D5] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Convert to Effect.fn (with span from withSpan)" ===
+
+--- file:///.src/effectFnOpportunity_sourceText.ts ---
+import { Effect } from "effect"
+
+export const signature = <T /* generic */>(
+  value: T,
+  // default parameter
+  n = 1_000 /* units */,
+) => {
+  // before return
+  return Effect.gen(function*() {
+    // keep the body verbatim
+    yield* Effect.log(value)
+    return n + 0xff
+  }).pipe(
+    // before map
+    Effect.map((n) => n + 2_000) /* after map */,
+    Effect.withSpan('custom-span'),
+  )
+  // after return
+}
+
+export function declaration(n: number) {
+  return Effect.gen(function*() {
+    // declaration body
+    return (yield* Effect.succeed(n)) + 1_000
+  })
+}
+
+export const regular = (n: number) => {
+  // ordinary function body
+  const a = 1_000
+  const b = 0xff
+  const c = 'single quotes'
+  const d = /a\/\/b/
+  const e = `template ${c}`
+  return Effect.succeed({ n, a, b, c, d, e })
+}
+
+export const bare: (n: number) => Effect.Effect<number> = n => Effect.gen(function*() {
+  // unparenthesized parameter
+  const result = yield* Effect.succeed(n)
+  return result
+})
+
+export const traced = Effect.fn(`span-${"name" /* inside span */}-${/[/][*]/.source}`)(function*(n: number) {
+  yield* Effect.log("traced", n)
+  return 1_000
+}
+    // span expression
+    )
+
+
+=== [D5] Fix 3: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_sourceText.ts ---
+import { Effect } from "effect"
+
+export const signature = <T /* generic */>(
+  value: T,
+  // default parameter
+  n = 1_000 /* units */,
+) => {
+  // before return
+  return Effect.gen(function*() {
+    // keep the body verbatim
+    yield* Effect.log(value)
+    return n + 0xff
+  }).pipe(
+    // before map
+    Effect.map((n) => n + 2_000) /* after map */,
+    Effect.withSpan('custom-span'),
+  )
+  // after return
+}
+
+export function declaration(n: number) {
+  return Effect.gen(function*() {
+    // declaration body
+    return (yield* Effect.succeed(n)) + 1_000
+  })
+}
+
+export const regular = (n: number) => {
+  // ordinary function body
+  const a = 1_000
+  const b = 0xff
+  const c = 'single quotes'
+  const d = /a\/\/b/
+  const e = `template ${c}`
+  return Effect.succeed({ n, a, b, c, d, e })
+}
+
+export const bare: (n: number) => Effect.Effect<number> = n => Effect.gen(function*() {
+  // unparenthesized parameter
+  const result = yield* Effect.succeed(n)
+  return result
+})
+
+export const traced = Effect.fnUntraced(function*(n: number) {
+  yield* Effect.log("traced", n)
+  return 1_000
+},
+  Effect.withSpan(
+    // span expression
+    `span-${"name" /* inside span */}-${/[/][*]/.source}`,
+    { attributes: { pattern: /[/][/]/.source } },
+  ))
+
+
+=== [D5] Fix 4: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_sourceText.ts ---
+import { Effect } from "effect"
+
+export const signature = <T /* generic */>(
+  value: T,
+  // default parameter
+  n = 1_000 /* units */,
+) => {
+  // before return
+  return Effect.gen(function*() {
+    // keep the body verbatim
+    yield* Effect.log(value)
+    return n + 0xff
+  }).pipe(
+    // before map
+    Effect.map((n) => n + 2_000) /* after map */,
+    Effect.withSpan('custom-span'),
+  )
+  // after return
+}
+
+export function declaration(n: number) {
+  return Effect.gen(function*() {
+    // declaration body
+    return (yield* Effect.succeed(n)) + 1_000
+  })
+}
+
+export const regular = (n: number) => {
+  // ordinary function body
+  const a = 1_000
+  const b = 0xff
+  const c = 'single quotes'
+  const d = /a\/\/b/
+  const e = `template ${c}`
+  return Effect.succeed({ n, a, b, c, d, e })
+}
+
+export const bare: (n: number) => Effect.Effect<number> = n => Effect.gen(function*() {
+  // unparenthesized parameter
+  const result = yield* Effect.succeed(n)
+  return result
+})
+
+export const traced = Effect.fn(function*(n: number) {
+  yield* Effect.log("traced", n)
+  return 1_000
+},
+  Effect.withSpan(
+    // span expression
+    `span-${"name" /* inside span */}-${/[/][*]/.source}`,
+    { attributes: { pattern: /[/][/]/.source } },
+  ))
+

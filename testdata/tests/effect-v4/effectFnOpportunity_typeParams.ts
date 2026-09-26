@@ -13,10 +13,6 @@
 // @filename: effectFnOpportunity_typeParams.ts
 import * as Effect from "effect/Effect"
 
-// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
-// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
-// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
-// - Trailing semicolons on replacement statements (`});` vs `})`)
 
 // The diagnostic should trigger for these cases. We should check that
 // the quick fixes have kept the generic type arguments.
