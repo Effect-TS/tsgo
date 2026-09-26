@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/effectconfigraw"
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/fixables"
 	"github.com/effect-ts/tsgo/internal/pluginoptions"
@@ -19,6 +20,11 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 )
+
+func init() {
+	// Oxlint loads this runner without the automatic checker diagnostics hooks.
+	effectconfigraw.Register()
+}
 
 // ReportedDiagnostic is a runner-neutral diagnostic ready for an external integration.
 type ReportedDiagnostic struct {
