@@ -1,5 +1,22 @@
 # @effect/tsgo
 
+## 0.46.1
+
+### Patch Changes
+
+- 09644ee: `effect-tsgo diagnostics` now reports files it skipped because their tsconfig does not enable the `@effect/language-service` plugin, instead of only printing `Checked 0 files out of N files.` The JSON summary gains a matching `filesWithoutPlugin` count.
+  
+  ```
+  Checked 0 files out of 8 files.
+  Skipped 8 files because their tsconfig does not enable the @effect/language-service plugin.
+  0 errors, 0 warnings and 0 messages.
+  ```
+- dfa24e8: Fix `effectFnOpportunity` conversions to preserve enclosing expressions, sibling declarations, comments, literal spelling, and source formatting. Avoid suggesting conversions for function declarations referenced before their declaration.
+  
+  Wrap non-call pipe arguments in unary callbacks so they do not receive the converted function's arguments. For example, `.pipe(Effect.ignore)` becomes an `Effect.fn` pipeable `_ => Effect.ignore(_)`, while factory calls such as `Effect.map(f)` are retained.
+- 8d89b43: Deduplicate strictBooleanExpressions diagnostics when multiple union members display the same type name.
+- 7611be0: Preserve Effect plugin options in the Oxlint integration when `tsconfig.json` uses `extends`, whether the options are inherited or declared locally. For example, `effectFn: ["span", "inferred-span", "suggested-span"]` now enables the same `effect-fn-opportunity` reports as an inline configuration without `extends`.
+
 ## 0.46.0
 
 ### Minor Changes

@@ -164,6 +164,12 @@ func (tp *TypeParser) parseEffectFnOpportunityInner(node *ast.Node) *EffectFnOpp
 	// Detect whether the target function is a property value inside a Layer service definition
 	isLayerMember := inferredTraceName != "" && inferredTraceName != suggestedTraceName
 
+	// Converting a hoisted declaration to a const must not invalidate earlier uses.
+	// Keep this in the shared parser so neither the diagnostic nor the fix is offered.
+	if node.Kind == ast.KindFunctionDeclaration && tp.isFunctionReferencedBeforeDeclaration(node) {
+		return nil
+	}
+
 	// Step 9: Try gen opportunity first
 	if result := tp.tryParseGenOpportunity(node); result != nil {
 		// Safety check: reject if function parameters are referenced in pipe arguments
@@ -197,6 +203,47 @@ func (tp *TypeParser) parseEffectFnOpportunityInner(node *ast.Node) *EffectFnOpp
 	}
 
 	return nil
+}
+
+// isFunctionReferencedBeforeDeclaration checks the preceding syntax in the
+// declaration's scope. Earlier closures are conservatively included: they may
+// be invoked before the replacement const is initialized.
+func (tp *TypeParser) isFunctionReferencedBeforeDeclaration(node *ast.Node) bool {
+	name := node.Name()
+	if name == nil || node.Parent == nil {
+		return false
+	}
+	symbol := tp.GetSymbolAtLocation(name)
+	if symbol == nil {
+		return false
+	}
+
+	scope := node.Parent
+	// Switch clauses share the enclosing case block's lexical scope.
+	if scope.Kind == ast.KindCaseClause || scope.Kind == ast.KindDefaultClause {
+		scope = scope.Parent
+	}
+	if scope == nil {
+		return false
+	}
+
+	var visit ast.Visitor
+	visit = func(current *ast.Node) bool {
+		if current.Pos() >= node.Pos() || ast.IsTypeNode(current) || current.Kind == ast.KindExportDeclaration {
+			return false
+		}
+		if current.Kind == ast.KindShorthandPropertyAssignment && current.Name().Text() == name.Text() {
+			if sameSymbolReference(tp.checker, tp.checker.GetShorthandAssignmentValueSymbol(current), symbol) {
+				return true
+			}
+		}
+		if current.Kind == ast.KindIdentifier && current.Text() == name.Text() &&
+			sameSymbolReference(tp.checker, tp.GetSymbolAtLocation(current), symbol) {
+			return true
+		}
+		return current.ForEachChild(visit)
+	}
+	return scope.ForEachChild(visit)
 }
 
 // hasReturnTypeAnnotation checks if a function node has an explicit return type annotation.
@@ -261,6 +308,13 @@ func (tp *TypeParser) tryParseGenOpportunity(fnNode *ast.Node) *genOpportunityRe
 	}
 	pipeArgs := append([]*ast.Node{}, genResult.PipeArguments...)
 	pipeArgs = append(pipeArgs, outerPipeArgs...)
+	for _, arg := range pipeArgs {
+		// A spread can contain bare pipeables, but cannot itself be wrapped as
+		// a unary callback. Keep the original pipe call in this case.
+		if arg.Kind == ast.KindSpreadElement {
+			return nil
+		}
+	}
 
 	// Check if the last pipe argument is Effect.withSpan
 	var explicitTraceExpression *ast.Node

@@ -81,39 +81,51 @@ const JsonPlaceholderLive = Layer.effect(JsonPlaceholder)(
     )
 
     return {
-    getTodo: Effect.fn("JsonPlaceholder.getTodo")(function (id: number) {
-        const path = `/todos/${id}`;
-        const url = new URL(path, config.baseUrl).toString();
-        return client.get(path).pipe(Effect.flatMap(HttpClientResponse.schemaBodyJson(Todo)), Effect.mapError(cause => {
+      getTodo: Effect.fn("JsonPlaceholder.getTodo")(function(id: number) {
+        const path = `/todos/${id}`
+        const url = new URL(path, config.baseUrl).toString()
+
+        return client.get(path).pipe(
+          Effect.flatMap(HttpClientResponse.schemaBodyJson(Todo)),
+          Effect.mapError((cause) => {
             if (cause._tag === "HttpClientError") {
-                if (cause.reason._tag === "StatusCodeError") {
-                    return new InvalidStatusError({
-                        url,
-                        status: cause.reason.response.status
-                    });
-                }
-                return new RequestError({ url, cause });
+              if (cause.reason._tag === "StatusCodeError") {
+                return new InvalidStatusError({
+                  url,
+                  status: cause.reason.response.status
+                })
+              }
+
+              return new RequestError({ url, cause })
             }
-            return new DecodeError({ url, cause });
-        }));
-    }),
-    getUser: (id: number) => {
-        const path = `/users/${id}`;
-        const url = new URL(path, config.baseUrl).toString();
-        return client.get(path).pipe(Effect.flatMap(HttpClientResponse.schemaBodyJson(User)), Effect.mapError(cause => {
+
+            return new DecodeError({ url, cause })
+          })
+        )
+      }),
+      getUser: (id: number) => {
+        const path = `/users/${id}`
+        const url = new URL(path, config.baseUrl).toString()
+
+        return client.get(path).pipe(
+          Effect.flatMap(HttpClientResponse.schemaBodyJson(User)),
+          Effect.mapError((cause) => {
             if (cause._tag === "HttpClientError") {
-                if (cause.reason._tag === "StatusCodeError") {
-                    return new InvalidStatusError({
-                        url,
-                        status: cause.reason.response.status
-                    });
-                }
-                return new RequestError({ url, cause });
+              if (cause.reason._tag === "StatusCodeError") {
+                return new InvalidStatusError({
+                  url,
+                  status: cause.reason.response.status
+                })
+              }
+
+              return new RequestError({ url, cause })
             }
-            return new DecodeError({ url, cause });
-        }));
+
+            return new DecodeError({ url, cause })
+          })
+        )
+      }
     }
-};
   })
 ).pipe(Layer.provide(Layer.mergeAll(ApiConfigLive, FetchHttpClient.layer)))
 
@@ -208,39 +220,51 @@ const JsonPlaceholderLive = Layer.effect(JsonPlaceholder)(
     )
 
     return {
-    getTodo: (id: number) => {
-        const path = `/todos/${id}`;
-        const url = new URL(path, config.baseUrl).toString();
-        return client.get(path).pipe(Effect.flatMap(HttpClientResponse.schemaBodyJson(Todo)), Effect.mapError(cause => {
+      getTodo: (id: number) => {
+        const path = `/todos/${id}`
+        const url = new URL(path, config.baseUrl).toString()
+
+        return client.get(path).pipe(
+          Effect.flatMap(HttpClientResponse.schemaBodyJson(Todo)),
+          Effect.mapError((cause) => {
             if (cause._tag === "HttpClientError") {
-                if (cause.reason._tag === "StatusCodeError") {
-                    return new InvalidStatusError({
-                        url,
-                        status: cause.reason.response.status
-                    });
-                }
-                return new RequestError({ url, cause });
+              if (cause.reason._tag === "StatusCodeError") {
+                return new InvalidStatusError({
+                  url,
+                  status: cause.reason.response.status
+                })
+              }
+
+              return new RequestError({ url, cause })
             }
-            return new DecodeError({ url, cause });
-        }));
-    },
-    getUser: Effect.fn("JsonPlaceholder.getUser")(function (id: number) {
-        const path = `/users/${id}`;
-        const url = new URL(path, config.baseUrl).toString();
-        return client.get(path).pipe(Effect.flatMap(HttpClientResponse.schemaBodyJson(User)), Effect.mapError(cause => {
+
+            return new DecodeError({ url, cause })
+          })
+        )
+      },
+      getUser: Effect.fn("JsonPlaceholder.getUser")(function(id: number) {
+        const path = `/users/${id}`
+        const url = new URL(path, config.baseUrl).toString()
+
+        return client.get(path).pipe(
+          Effect.flatMap(HttpClientResponse.schemaBodyJson(User)),
+          Effect.mapError((cause) => {
             if (cause._tag === "HttpClientError") {
-                if (cause.reason._tag === "StatusCodeError") {
-                    return new InvalidStatusError({
-                        url,
-                        status: cause.reason.response.status
-                    });
-                }
-                return new RequestError({ url, cause });
+              if (cause.reason._tag === "StatusCodeError") {
+                return new InvalidStatusError({
+                  url,
+                  status: cause.reason.response.status
+                })
+              }
+
+              return new RequestError({ url, cause })
             }
-            return new DecodeError({ url, cause });
-        }));
-    })
-};
+
+            return new DecodeError({ url, cause })
+          })
+        )
+      })
+    }
   })
 ).pipe(Layer.provide(Layer.mergeAll(ApiConfigLive, FetchHttpClient.layer)))
 

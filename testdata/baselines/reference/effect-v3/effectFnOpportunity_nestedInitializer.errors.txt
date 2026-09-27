@@ -1,0 +1,53 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/effectFnOpportunity_nestedInitializer.ts(10,3): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(value) { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_nestedInitializer.ts(22,3): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(path) { ... })`. effect(effectFnOpportunity)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "effectFn": ["span", "suggested-span", "inferred-span", "no-span", "untraced"]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/effectFnOpportunity_nestedInitializer.ts (2 errors) ====
+    import { Effect } from "effect"
+    
+    declare const define: <A>(options: {
+      readonly name: string
+      readonly decode: (value: string) => Effect.Effect<A>
+    }) => A
+    
+    export const configuration = define({
+      name: "workspace",
+      decode: (value) =>
+      ~~~~~~
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(value) { ... })`. effect(effectFnOpportunity)
+        Effect.gen(function*() {
+          const text = yield* Effect.succeed(value)
+          return text.length
+        }),
+    })
+    
+    interface Definition<A> {
+      readonly read: (path: string) => Effect.Effect<A>
+    }
+    
+    export const make = <A>(value: A): Definition<A> => ({
+      read: (path) =>
+      ~~~~
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(path) { ... })`. effect(effectFnOpportunity)
+        Effect.gen(function*() {
+          yield* Effect.log(path)
+          return value
+        }),
+    })
+    

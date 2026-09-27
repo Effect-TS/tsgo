@@ -1,0 +1,81 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/effectFnOpportunity_sourceText.ts(3,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn('custom-span')(function*<T>(value, n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_sourceText.ts(21,17): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_sourceText.ts(28,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn((n) => { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_sourceText.ts(38,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+/.src/effectFnOpportunity_sourceText.ts(44,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn(// span expression
+    `span-${"name" /* inside span */}-${/[/][*]/.source}`)(function*(n) { ... })`. effect(effectFnOpportunity)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {"compilerOptions":{"plugins":[{"name":"@effect/language-service","effectFn":["span","untraced","no-span","inferred-span","suggested-span"]}]}}
+    
+
+==== /.src/effectFnOpportunity_sourceText.ts (5 errors) ====
+    import { Effect } from "effect"
+    
+    export const signature = <T /* generic */>(
+                 ~~~~~~~~~
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn('custom-span')(function*<T>(value, n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+      value: T,
+      // default parameter
+      n = 1_000 /* units */,
+    ) => {
+      // before return
+      return Effect.gen(function*() {
+        // keep the body verbatim
+        yield* Effect.log(value)
+        return n + 0xff
+      }).pipe(
+        // before map
+        Effect.map((n) => n + 2_000) /* after map */,
+        Effect.withSpan('custom-span'),
+      )
+      // after return
+    }
+    
+    export function declaration(n: number) {
+                    ~~~~~~~~~~~
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+      return Effect.gen(function*() {
+        // declaration body
+        return (yield* Effect.succeed(n)) + 1_000
+      })
+    }
+    
+    export const regular = (n: number) => {
+                 ~~~~~~~
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn((n) => { ... })`. effect(effectFnOpportunity)
+      // ordinary function body
+      const a = 1_000
+      const b = 0xff
+      const c = 'single quotes'
+      const d = /a\/\/b/
+      const e = `template ${c}`
+      return Effect.succeed({ n, a, b, c, d, e })
+    }
+    
+    export const bare: (n: number) => Effect.Effect<number> = n => Effect.gen(function*() {
+                 ~~~~
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+      // unparenthesized parameter
+      const result = yield* Effect.succeed(n)
+      return result
+    })
+    
+    export const traced = (n: number) => Effect.gen(function*() {
+                 ~~~~~~
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn(// span expression
+    `span-${"name" /* inside span */}-${/[/][*]/.source}`)(function*(n) { ... })`. effect(effectFnOpportunity)
+      yield* Effect.log("traced", n)
+      return 1_000
+    }).pipe(
+      Effect.withSpan(
+        // span expression
+        `span-${"name" /* inside span */}-${/[/][*]/.source}`,
+        { attributes: { pattern: /[/][/]/.source } },
+      ),
+    )
+    

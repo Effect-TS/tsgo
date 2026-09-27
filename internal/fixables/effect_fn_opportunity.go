@@ -1,14 +1,21 @@
 package fixables
 
 import (
+	"strconv"
+	"strings"
+
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/astnav"
+	"github.com/microsoft/TypeScript/tsc/shim/core"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
+	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 var EffectFnOpportunityFix = fixable.Fixable{
@@ -60,8 +67,8 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Convert to Effect.fn (with span from withSpan)",
 			Run: func(tracker *rewriter.Tracker) {
-				traceNode := tracker.DeepCloneNode(result.ExplicitTraceExpression)
-				effectFnBuildReplacement(tracker, sf, result, "fn", traceNode, pipeArgs, isFuncDecl)
+				trace := scanner.GetTextOfNode(result.ExplicitTraceExpression)
+				effectFnBuildReplacement(ctx, tracker, sf, result, "fn", trace, pipeArgs, isFuncDecl)
 			},
 		}); action != nil {
 			actions = append(actions, *action)
@@ -73,7 +80,7 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Convert to Effect.fnUntraced",
 			Run: func(tracker *rewriter.Tracker) {
-				effectFnBuildReplacement(tracker, sf, result, "fnUntraced", nil, result.PipeArguments, isFuncDecl)
+				effectFnBuildReplacement(ctx, tracker, sf, result, "fnUntraced", "", result.PipeArguments, isFuncDecl)
 			},
 		}); action != nil {
 			actions = append(actions, *action)
@@ -85,7 +92,7 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Convert to Effect.fn (no span)",
 			Run: func(tracker *rewriter.Tracker) {
-				effectFnBuildReplacement(tracker, sf, result, "fn", nil, result.PipeArguments, isFuncDecl)
+				effectFnBuildReplacement(ctx, tracker, sf, result, "fn", "", result.PipeArguments, isFuncDecl)
 			},
 		}); action != nil {
 			actions = append(actions, *action)
@@ -97,8 +104,8 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Convert to Effect.fn(\"" + result.InferredTraceName + "\")",
 			Run: func(tracker *rewriter.Tracker) {
-				traceNode := tracker.NewStringLiteral(result.InferredTraceName, 0)
-				effectFnBuildReplacement(tracker, sf, result, "fn", traceNode, result.PipeArguments, isFuncDecl)
+				trace := strconv.Quote(result.InferredTraceName)
+				effectFnBuildReplacement(ctx, tracker, sf, result, "fn", trace, result.PipeArguments, isFuncDecl)
 			},
 		}); action != nil {
 			actions = append(actions, *action)
@@ -112,8 +119,8 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Convert to Effect.fn(\"" + result.SuggestedTraceName + "\")",
 			Run: func(tracker *rewriter.Tracker) {
-				traceNode := tracker.NewStringLiteral(result.SuggestedTraceName, 0)
-				effectFnBuildReplacement(tracker, sf, result, "fn", traceNode, result.PipeArguments, isFuncDecl)
+				trace := strconv.Quote(result.SuggestedTraceName)
+				effectFnBuildReplacement(ctx, tracker, sf, result, "fn", trace, result.PipeArguments, isFuncDecl)
 			},
 		}); action != nil {
 			actions = append(actions, *action)
@@ -123,349 +130,209 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 	return actions
 }
 
-// effectFnBuildReplacement builds the complete Effect.fn/fnUntraced replacement AST node
-// and applies it via tracker.ReplaceNode.
+// effectFnBuildReplacement edits around the original body rather than printing a
+// cloned AST. The body and all surrounding declarations/properties retain their
+// comments, literal spelling, whitespace, and semicolon style.
 func effectFnBuildReplacement(
+	ctx *fixable.Context,
 	tracker *rewriter.Tracker,
 	sf *ast.SourceFile,
 	result *typeparser.EffectFnOpportunityResult,
 	variant string,
-	traceNode *ast.Node,
+	trace string,
 	pipeArgs []*ast.Node,
 	isFuncDecl bool,
 ) {
-	// Build inner body function
-	var bodyFn *ast.Node
+	target := result.TargetNode
+	body := typeparser.GetFunctionLikeBody(target)
 	if result.HasGenBody && result.GeneratorFunction != nil {
-		bodyFn = effectFnBuildGenBody(tracker, result)
-	} else {
-		bodyFn = effectFnBuildRegularBody(tracker, result)
+		body = result.GeneratorFunction.Body
 	}
-	if bodyFn == nil {
+	if body == nil {
 		return
 	}
 
-	// Build Effect.fn/fnUntraced property access
-	fnAccess := effectModuleMethod(tracker, sf, result.EffectModule, variant)
-
-	// Collect inner args: body function + deep-cloned pipe args
-	innerArgs := make([]*ast.Node, 0, 1+len(pipeArgs))
-	innerArgs = append(innerArgs, bodyFn)
-	for _, arg := range pipeArgs {
-		innerArgs = append(innerArgs, tracker.DeepCloneNode(arg))
+	text := sf.Text()
+	start := scanner.GetTokenPosOfNode(target, sf, false)
+	bodyStart := scanner.GetTokenPosOfNode(body, sf, false)
+	module := typeparser.FindEffectModuleIdentifier(sf)
+	if result.EffectModule != nil {
+		module = scanner.GetTextOfNode(result.EffectModule)
 	}
+	prefix := module + "." + variant
+	if trace != "" {
+		prefix += "(" + trace + ")"
+	}
+	prefix += "("
+	var suffix strings.Builder
 
-	var callExpr *ast.Node
-	if traceNode != nil {
-		// Curried form: Effect.fn(traceNode)(bodyFn, ...pipeArgs)
-		outerCall := tracker.NewCallExpression(fnAccess, nil, nil, tracker.NewNodeList([]*ast.Node{traceNode}), ast.NodeFlagsNone)
-		callExpr = tracker.NewCallExpression(outerCall, nil, nil, tracker.NewNodeList(innerArgs), ast.NodeFlagsNone)
+	if !result.HasGenBody && target.Kind == ast.KindFunctionExpression {
+		// Keep the original function expression's signature verbatim.
+		prefix += text[start:bodyStart]
 	} else {
-		// Direct form: Effect.fn(bodyFn, ...pipeArgs) or Effect.fnUntraced(bodyFn, ...pipeArgs)
-		callExpr = tracker.NewCallExpression(fnAccess, nil, nil, tracker.NewNodeList(innerArgs), ast.NodeFlagsNone)
+		prefix += "function"
+		if result.HasGenBody {
+			prefix += "*"
+		}
+		signature := effectFnSignatureRange(sf, target)
+		signatureText := text[signature.Pos():signature.End()]
+		if signatureText[0] != '(' && signatureText[0] != '<' {
+			signatureText = "(" + signatureText + ")"
+		}
+		commentStart := start
+		if isFuncDecl && target.Modifiers() != nil {
+			commentStart = target.Modifiers().End()
+		}
+		prefix += effectFnComments(sf, commentStart, signature.Pos(), nil) + signatureText
+		if comments := effectFnComments(sf, signature.End(), bodyStart, nil); comments != "" {
+			prefix += comments
+		} else {
+			prefix += " "
+		}
+		if body.Kind != ast.KindBlock {
+			prefix += "{ return "
+			suffix.WriteString(" }")
+		}
 	}
 
-	// Determine replacement node and target node to replace.
-	// For function declarations, replace the declaration with a variable statement.
-	// For Layer member functions, replace only the property value (TargetNode), not the
-	// enclosing variable statement, to preserve the surrounding Layer construction.
-	// For other expressions (arrow functions, function expressions), replace the enclosing
-	// variable statement if one exists. This ensures the replacement is always a
-	// statement-level node, which avoids a formatter panic in the TypeScript-Go
-	// format.processChildNode assertion when the replacement tree contains embedded
-	// statements (e.g., if-then branches) and is formatted as a non-statement node.
-	var replacementNode *ast.Node
-	var replaceTarget *ast.Node
 	if isFuncDecl {
-		replacementNode = effectFnBuildVarStatement(tracker, result.TargetNode, callExpr)
-		replaceTarget = result.TargetNode
-	} else if result.IsLayerMember {
-		// Layer member: replace the enclosing `return { ... }` statement instead of
-		// just the property value. Formatting the larger statement-level replacement
-		// avoids formatter assertions on synthetic embedded statements in function bodies.
-		if returnStmt := effectFnFindEnclosingReturnedObject(result.TargetNode); returnStmt != nil {
-			replacementNode = effectFnBuildLayerMemberReturnStatement(tracker, returnStmt, result.TargetNode, callExpr)
-			replaceTarget = returnStmt
-		} else {
-			replacementNode = callExpr
-			replaceTarget = result.TargetNode
+		decl := target.AsFunctionDeclaration()
+		declarationPrefix := ""
+		if modifiers := decl.Modifiers(); modifiers != nil {
+			declarationPrefix = text[start:modifiers.End()] + " "
 		}
-	} else if varStmt := effectFnFindEnclosingVarStatement(result.TargetNode); varStmt != nil {
-		replacementNode = effectFnBuildVarStatementFromEnclosing(tracker, varStmt, result.TargetNode, callExpr)
-		replaceTarget = varStmt
+		prefix = declarationPrefix + "const " + scanner.GetTextOfNode(decl.Name()) + " = " + prefix
+	}
+
+	cursor := body.End()
+	for _, arg := range pipeArgs {
+		// Include both leading and trailing trivia, including line comments before
+		// the next comma/closing parenthesis. Never reprint the argument itself.
+		end := scanner.SkipTrivia(text, arg.End())
+		start := scanner.GetTokenPosOfNode(arg, sf, false)
+		suffix.WriteString(",")
+		suffix.WriteString(effectFnComments(sf, cursor, arg.Pos(), nil))
+		suffix.WriteString(text[arg.Pos():start])
+		suffix.WriteString(effectFnPipeArgumentText(arg, text[start:arg.End()]))
+		suffix.WriteString(text[arg.End():end])
+		cursor = end
+	}
+	var movedTrace *ast.Node
+	if trace != "" {
+		movedTrace = result.ExplicitTraceExpression
+	}
+	suffix.WriteString(effectFnComments(sf, cursor, target.End(), movedTrace))
+	suffix.WriteString(")")
+	if isFuncDecl {
+		suffix.WriteString(";")
+	}
+
+	tracker.ReplaceRangeWithText(sf, lsproto.Range{
+		Start: ctx.BytePosToLSPPosition(start),
+		End:   ctx.BytePosToLSPPosition(bodyStart),
+	}, prefix)
+	tracker.ReplaceRangeWithText(sf, lsproto.Range{
+		Start: ctx.BytePosToLSPPosition(body.End()),
+		End:   ctx.BytePosToLSPPosition(target.End()),
+	}, suffix.String())
+}
+
+// effectFnPipeArgumentText prevents Effect.fn's additional function arguments
+// from reaching a bare pipeable's optional parameters. Factory calls already
+// produce data-last pipeables and can be retained as written.
+func effectFnPipeArgumentText(arg *ast.Node, text string) string {
+	if ast.SkipParentheses(arg).Kind == ast.KindCallExpression {
+		return text
+	}
+
+	// Avoid capturing references such as _.ignore in the new arrow's scope.
+	identifiers := make(map[string]bool)
+	var visit ast.Visitor
+	visit = func(node *ast.Node) bool {
+		if node.Kind == ast.KindIdentifier {
+			identifiers[node.Text()] = true
+		}
+		node.ForEachChild(visit)
+		return false
+	}
+	visit(arg)
+	parameter := "_"
+	for suffix := 1; identifiers[parameter]; suffix++ {
+		parameter = "_" + strconv.Itoa(suffix)
+	}
+
+	switch arg.Kind {
+	case ast.KindIdentifier, ast.KindPropertyAccessExpression, ast.KindElementAccessExpression, ast.KindParenthesizedExpression:
+		// These expressions can be used directly as a callee.
+	default:
+		text = "(" + text + ")"
+	}
+	return parameter + " => " + text + "(" + parameter + ")"
+}
+
+// effectFnSignatureRange locates the complete parameter/type-parameter spelling,
+// including comments and defaults. Bare arrow parameters need parentheses when
+// moved to a function expression.
+func effectFnSignatureRange(sf *ast.SourceFile, target *ast.Node) core.TextRange {
+	text := sf.Text()
+	params := typeparser.GetFunctionLikeParameters(target)
+	start, end := params.Pos(), params.End()
+	if start > 0 && text[start-1] == '(' {
+		start--
+		end = scanner.SkipTrivia(text, end) + 1 // closing parenthesis
 	} else {
-		replacementNode = callExpr
-		replaceTarget = result.TargetNode
+		return core.NewTextRange(scanner.SkipTrivia(text, start), end)
 	}
-
-	ast.SetParentInChildren(replacementNode)
-	tracker.ReplaceNode(sf, replaceTarget, replacementNode, nil)
+	if typeParams := typeparser.GetFunctionLikeTypeParameters(target); typeParams != nil {
+		start = typeParams.Pos() - 1 // opening angle bracket
+	}
+	return core.NewTextRange(start, end)
 }
 
-// effectFnBuildGenBody builds a generator function expression for a gen opportunity:
-// function*<TypeParams>(params) { ...generatorBody... }
-func effectFnBuildGenBody(tracker *rewriter.Tracker, result *typeparser.EffectFnOpportunityResult) *ast.Node {
-	genFn := result.GeneratorFunction
-	if genFn == nil || genFn.Body == nil {
-		return nil
-	}
-
-	typeParams := effectFnCloneNodeList(tracker, typeparser.GetFunctionLikeTypeParameters(result.TargetNode))
-	params := effectFnCloneNodeList(tracker, typeparser.GetFunctionLikeParameters(result.TargetNode))
-	body := tracker.DeepCloneNode(genFn.Body)
-
-	return tracker.NewFunctionExpression(
-		nil,                                     // modifiers
-		tracker.NewToken(ast.KindAsteriskToken), // asteriskToken
-		nil,                                     // name (anonymous)
-		typeParams,                              // typeParameters
-		params,                                  // parameters
-		nil,                                     // returnType
-		nil,                                     // fullSignature
-		body,                                    // body
-	)
-}
-
-// effectFnBuildRegularBody builds the body function for a regular (non-gen) opportunity.
-// For function declarations and arrow functions, creates an anonymous function expression.
-// For function expressions, deep-clones the entire node.
-func effectFnBuildRegularBody(tracker *rewriter.Tracker, result *typeparser.EffectFnOpportunityResult) *ast.Node {
-	if result.TargetNode.Kind == ast.KindFunctionDeclaration {
-		fd := result.TargetNode.AsFunctionDeclaration()
-		if fd == nil || fd.Body == nil {
-			return nil
-		}
-
-		typeParams := effectFnCloneNodeList(tracker, fd.TypeParameters)
-		params := effectFnCloneNodeList(tracker, fd.Parameters)
-		body := tracker.DeepCloneNode(fd.Body)
-
-		return tracker.NewFunctionExpression(
-			nil,        // modifiers
-			nil,        // asteriskToken (no generator)
-			nil,        // name (anonymous)
-			typeParams, // typeParameters
-			params,     // parameters
-			nil,        // returnType
-			nil,        // fullSignature
-			body,       // body
-		)
-	}
-
-	// For arrow functions, convert to an anonymous function expression to match upstream behavior.
-	if result.TargetNode.Kind == ast.KindArrowFunction {
-		af := result.TargetNode.AsArrowFunction()
-		if af == nil || af.Body == nil {
-			return nil
-		}
-
-		typeParams := effectFnCloneNodeList(tracker, af.TypeParameters)
-		params := effectFnCloneNodeList(tracker, af.Parameters)
-
-		// If the arrow has an expression body, wrap it in a block with a return statement.
-		var body *ast.Node
-		if af.Body.Kind == ast.KindBlock {
-			body = tracker.DeepCloneNode(af.Body)
-		} else {
-			returnStmt := tracker.NewReturnStatement(tracker.DeepCloneNode(af.Body))
-			body = tracker.NewBlock(tracker.NewNodeList([]*ast.Node{returnStmt}), true)
-		}
-
-		return tracker.NewFunctionExpression(
-			nil,        // modifiers
-			nil,        // asteriskToken (no generator)
-			nil,        // name (anonymous)
-			typeParams, // typeParameters
-			params,     // parameters
-			nil,        // returnType
-			nil,        // fullSignature
-			body,       // body
-		)
-	}
-
-	// For function expressions, deep-clone the entire target node
-	return tracker.DeepCloneNode(result.TargetNode)
-}
-
-// effectFnBuildVarStatement wraps a call expression in a variable statement:
-// [export] const name = callExpr
-func effectFnBuildVarStatement(tracker *rewriter.Tracker, fnNode *ast.Node, callExpr *ast.Node) *ast.Node {
-	fd := fnNode.AsFunctionDeclaration()
-	if fd == nil {
-		return callExpr
-	}
-
-	name := fd.Name()
-	if name == nil {
-		return callExpr
-	}
-
-	// Build variable declaration: const name = callExpr
-	varDecl := tracker.NewVariableDeclaration(tracker.DeepCloneNode(name), nil, nil, callExpr)
-	varDeclList := tracker.NewVariableDeclarationList(tracker.NewNodeList([]*ast.Node{varDecl}), ast.NodeFlagsConst)
-
-	// Build modifier list (export etc.), excluding async
-	var modifierList *ast.ModifierList
-	if modifiers := fd.Modifiers(); modifiers != nil {
-		var modNodes []*ast.Node
-		for _, mod := range modifiers.Nodes {
-			if mod.Kind == ast.KindAsyncKeyword {
-				continue
+// effectFnComments retains comments from discarded wrapper syntax, such as the
+// outer return statement. Arguments and the function body are copied separately.
+func effectFnComments(sf *ast.SourceFile, start, end int, moved *ast.Node) string {
+	text := sf.Text()[start:end]
+	s := scanner.NewScanner()
+	s.SetSkipTrivia(false)
+	s.SetText(text)
+	var comments strings.Builder
+	triviaStart := 0
+	hasComment := false
+	for token := s.Scan(); token != ast.KindEndOfFile; token = s.Scan() {
+		if moved != nil && start+s.TokenStart() >= scanner.GetTokenPosOfNode(moved, sf, false) && start+s.TokenStart() < moved.End() {
+			if hasComment {
+				comments.WriteString(text[triviaStart:s.TokenStart()])
 			}
-			modNodes = append(modNodes, tracker.NewModifier(mod.Kind))
-		}
-		if len(modNodes) > 0 {
-			modifierList = tracker.NewModifierList(modNodes)
-		}
-	}
-
-	return tracker.NewVariableStatement(modifierList, varDeclList)
-}
-
-// effectFnCloneNodeList deep-clones all nodes in a NodeList, returning a new synthesized NodeList.
-func effectFnCloneNodeList(tracker *rewriter.Tracker, list *ast.NodeList) *ast.NodeList {
-	if list == nil || len(list.Nodes) == 0 {
-		return nil
-	}
-	cloned := make([]*ast.Node, len(list.Nodes))
-	for i, node := range list.Nodes {
-		cloned[i] = tracker.DeepCloneNode(node)
-	}
-	return tracker.NewNodeList(cloned)
-}
-
-// effectFnFindEnclosingVarStatement navigates up from a target node (which should be
-// the initializer of a VariableDeclaration) to find the enclosing VariableStatement.
-// Returns nil if the expected parent chain is not found.
-func effectFnFindEnclosingVarStatement(node *ast.Node) *ast.Node {
-	return ast.FindAncestorKind(node, ast.KindVariableStatement)
-}
-
-// effectFnFindEnclosingReturnedObject returns the enclosing ReturnStatement when
-// the target node is the initializer of a PropertyAssignment inside a returned
-// object literal, such as a Layer service member.
-func effectFnFindEnclosingReturnedObject(node *ast.Node) *ast.Node {
-	propAssign := ast.FindAncestorKind(node, ast.KindPropertyAssignment)
-	if propAssign == nil {
-		return nil
-	}
-
-	objLiteral := propAssign.Parent
-	if objLiteral == nil || objLiteral.Kind != ast.KindObjectLiteralExpression {
-		return nil
-	}
-
-	returnStmt := ast.FindAncestorKind(objLiteral, ast.KindReturnStatement)
-	if returnStmt == nil {
-		return nil
-	}
-
-	rs := returnStmt.AsReturnStatement()
-	if rs == nil || rs.Expression != objLiteral {
-		return nil
-	}
-
-	return returnStmt
-}
-
-// effectFnBuildLayerMemberReturnStatement rebuilds a `return { ... }` statement,
-// replacing the target property's initializer with the synthesized Effect.fn call.
-func effectFnBuildLayerMemberReturnStatement(tracker *rewriter.Tracker, returnStmt *ast.Node, targetNode *ast.Node, callExpr *ast.Node) *ast.Node {
-	rs := returnStmt.AsReturnStatement()
-	if rs == nil || rs.Expression == nil || rs.Expression.Kind != ast.KindObjectLiteralExpression {
-		return callExpr
-	}
-
-	targetProp := ast.FindAncestorKind(targetNode, ast.KindPropertyAssignment)
-	if targetProp == nil {
-		return callExpr
-	}
-
-	objLiteral := rs.Expression.AsObjectLiteralExpression()
-	if objLiteral == nil || objLiteral.Properties == nil {
-		return callExpr
-	}
-
-	properties := make([]*ast.Node, len(objLiteral.Properties.Nodes))
-	for i, prop := range objLiteral.Properties.Nodes {
-		if prop != targetProp {
-			properties[i] = tracker.DeepCloneNode(prop)
+			triviaStart = min(moved.End(), end) - start
+			s.ResetPos(triviaStart)
+			hasComment = false
 			continue
 		}
-
-		pa := prop.AsPropertyAssignment()
-		if pa == nil {
-			properties[i] = tracker.DeepCloneNode(prop)
-			continue
-		}
-
-		var typeNode *ast.Node
-		if pa.Type != nil {
-			typeNode = tracker.DeepCloneNode(pa.Type)
-		}
-
-		properties[i] = tracker.NewPropertyAssignment(
-			nil,
-			tracker.DeepCloneNode(pa.Name()),
-			nil,
-			typeNode,
-			callExpr,
-		)
-	}
-
-	newObjLiteral := tracker.NewObjectLiteralExpression(tracker.NewNodeList(properties), true)
-	return tracker.NewReturnStatement(newObjLiteral)
-}
-
-// effectFnBuildVarStatementFromEnclosing builds a replacement VariableStatement from an
-// existing one, replacing the target node's initializer with callExpr.
-// This preserves the variable name, type annotation, modifiers, and const/let/var flag.
-func effectFnBuildVarStatementFromEnclosing(tracker *rewriter.Tracker, varStmt *ast.Node, targetNode *ast.Node, callExpr *ast.Node) *ast.Node {
-	vs := varStmt.AsVariableStatement()
-	if vs == nil {
-		return callExpr
-	}
-	declList := vs.DeclarationList.AsVariableDeclarationList()
-	if declList == nil || declList.Declarations == nil || len(declList.Declarations.Nodes) == 0 {
-		return callExpr
-	}
-
-	// Get the variable declaration containing the target
-	varDeclNode := ast.FindAncestorKind(targetNode, ast.KindVariableDeclaration)
-	if varDeclNode == nil {
-		return callExpr
-	}
-	varDecl := varDeclNode.AsVariableDeclaration()
-	if varDecl == nil {
-		return callExpr
-	}
-	name := varDecl.Name()
-	if name == nil {
-		return callExpr
-	}
-
-	// Build new variable declaration: preserve name and type, use callExpr as initializer
-	var typeNode *ast.Node
-	if varDecl.Type != nil {
-		typeNode = tracker.DeepCloneNode(varDecl.Type)
-	}
-	newDecl := tracker.NewVariableDeclaration(tracker.DeepCloneNode(name), nil, typeNode, callExpr)
-
-	// Preserve const/let/var flags from the original declaration list node
-	flags := vs.DeclarationList.Flags & (ast.NodeFlagsConst | ast.NodeFlagsLet | ast.NodeFlagsUsing | ast.NodeFlagsAwaitUsing)
-	newDeclList := tracker.NewVariableDeclarationList(tracker.NewNodeList([]*ast.Node{newDecl}), flags)
-
-	// Build modifier list (export, declare, etc.)
-	var modifierList *ast.ModifierList
-	if modifiers := vs.Modifiers(); modifiers != nil {
-		var modNodes []*ast.Node
-		for _, mod := range modifiers.Nodes {
-			modNodes = append(modNodes, tracker.NewModifier(mod.Kind))
-		}
-		if len(modNodes) > 0 {
-			modifierList = tracker.NewModifierList(modNodes)
+		switch token {
+		case ast.KindSingleLineCommentTrivia, ast.KindMultiLineCommentTrivia:
+			comments.WriteString(text[triviaStart:s.TokenEnd()])
+			triviaStart = s.TokenEnd()
+			hasComment = true
+		case ast.KindWhitespaceTrivia, ast.KindNewLineTrivia:
+			// Whitespace is retained with the adjacent comment.
+		default:
+			if hasComment {
+				comments.WriteString(text[triviaStart:s.TokenStart()])
+			}
+			// Use the parsed token's extent for contextual tokens (regexes and
+			// template tails), so comment-like text inside literals is not moved.
+			original := astnav.GetTokenAtPosition(sf, start+s.TokenStart())
+			triviaStart = s.TokenEnd()
+			if original.End() > start+triviaStart {
+				triviaStart = min(original.End(), end) - start
+				s.ResetPos(triviaStart)
+			}
+			hasComment = false
 		}
 	}
-
-	return tracker.NewVariableStatement(modifierList, newDeclList)
+	if hasComment {
+		comments.WriteString(text[triviaStart:])
+	}
+	return comments.String()
 }

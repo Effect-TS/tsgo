@@ -1,0 +1,29 @@
+==== /.src/effectFnOpportunity_comments.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 3:32 - 9:5
+Node: Effect.gen(function* () {\n    // explains the next line\n    const x = yield* Effect.succeed(n) // trailing note\n    /* block note */\n    return x + 1_000\n  })
+Node Kind: KindCallExpression
+
+Subject: function* () {\n    // explains the next line\n    const x = yield* Effect.succeed(n) // trailing note\n    /* block note */\n    return x + 1_000\n  }
+Subject Type: () => Generator<Effect<number, never, never>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 6:21 - 6:39
+Node: Effect.succeed(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>

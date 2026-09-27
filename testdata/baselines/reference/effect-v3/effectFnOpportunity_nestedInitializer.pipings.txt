@@ -1,0 +1,71 @@
+==== /.src/effectFnOpportunity_nestedInitializer.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 8:29 - 15:3
+Node: define({\n  name: "workspace",\n  decode: (value) =>\n    Effect.gen(function*() {\n      const text = yield* Effect.succeed(value)\n      return text.length\n    }),\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  name: "workspace",\n  decode: (value) =>\n    Effect.gen(function*() {\n      const text = yield* Effect.succeed(value)\n      return text.length\n    }),\n}
+Subject Type: { name: string; decode: (value: string) => Effect<number, never, never>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: define
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 10:21 - 14:7
+Node: Effect.gen(function*() {\n      const text = yield* Effect.succeed(value)\n      return text.length\n    })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n      const text = yield* Effect.succeed(value)\n      return text.length\n    }
+Subject Type: () => Generator<YieldWrap<Effect<string, never, never>>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 12:26 - 12:48
+Node: Effect.succeed(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 22:18 - 26:7
+Node: Effect.gen(function*() {\n      yield* Effect.log(path)\n      return value\n    })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n      yield* Effect.log(path)\n      return value\n    }
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>>, A, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<A, never, never>
+
+=== Piping Flow ===
+Location: 24:13 - 24:30
+Node: Effect.log(path)
+Node Kind: KindCallExpression
+
+Subject: path
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>

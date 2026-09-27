@@ -1,0 +1,121 @@
+=== Quick Fix Inventory ===
+
+[D1] (15:7-15:10) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(key) { ... })`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"Store.get\")"
+  Fix 5: "Convert to Effect.fn(\"get\")"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_layerComments.ts ---
+import { Context, Effect, Layer } from "effect"
+
+class Store extends Context.Service<Store, {
+  readonly size: number
+  readonly get: (key: string) => Effect.Effect<string>
+}>()("Store") {}
+
+export const layer = Layer.effect(
+  Store,
+  Effect.gen(function* () {
+    const prefix = yield* Effect.succeed("k:")
+    return {
+      // how many entries the store holds
+      size: 1_000,
+      get: Effect.fnUntraced(function*(key: string) {
+          // look the key up
+          return prefix + key
+        }),
+    }
+  }),
+)
+
+
+=== [D1] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_layerComments.ts ---
+import { Context, Effect, Layer } from "effect"
+
+class Store extends Context.Service<Store, {
+  readonly size: number
+  readonly get: (key: string) => Effect.Effect<string>
+}>()("Store") {}
+
+export const layer = Layer.effect(
+  Store,
+  Effect.gen(function* () {
+    const prefix = yield* Effect.succeed("k:")
+    return {
+      // how many entries the store holds
+      size: 1_000,
+      get: Effect.fn(function*(key: string) {
+          // look the key up
+          return prefix + key
+        }),
+    }
+  }),
+)
+
+
+=== [D1] Fix 4: "Convert to Effect.fn(\"Store.get\")" ===
+
+--- file:///.src/effectFnOpportunity_layerComments.ts ---
+import { Context, Effect, Layer } from "effect"
+
+class Store extends Context.Service<Store, {
+  readonly size: number
+  readonly get: (key: string) => Effect.Effect<string>
+}>()("Store") {}
+
+export const layer = Layer.effect(
+  Store,
+  Effect.gen(function* () {
+    const prefix = yield* Effect.succeed("k:")
+    return {
+      // how many entries the store holds
+      size: 1_000,
+      get: Effect.fn("Store.get")(function*(key: string) {
+          // look the key up
+          return prefix + key
+        }),
+    }
+  }),
+)
+
+
+=== [D1] Fix 5: "Convert to Effect.fn(\"get\")" ===
+
+--- file:///.src/effectFnOpportunity_layerComments.ts ---
+import { Context, Effect, Layer } from "effect"
+
+class Store extends Context.Service<Store, {
+  readonly size: number
+  readonly get: (key: string) => Effect.Effect<string>
+}>()("Store") {}
+
+export const layer = Layer.effect(
+  Store,
+  Effect.gen(function* () {
+    const prefix = yield* Effect.succeed("k:")
+    return {
+      // how many entries the store holds
+      size: 1_000,
+      get: Effect.fn("get")(function*(key: string) {
+          // look the key up
+          return prefix + key
+        }),
+    }
+  }),
+)
+
