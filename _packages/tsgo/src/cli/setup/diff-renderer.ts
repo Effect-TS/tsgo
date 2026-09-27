@@ -244,6 +244,9 @@ export const renderCodeActions = (
     if (Option.isSome(assessmentState.vscodeSettings)) {
       sourceFiles.push(assessmentState.vscodeSettings.value.sourceFile)
     }
+    if (Option.isSome(assessmentState.zedSettings)) {
+      sourceFiles.push(assessmentState.zedSettings.value.sourceFile)
+    }
 
     // Render each code action with diffs
     for (const codeAction of result.codeActions) {

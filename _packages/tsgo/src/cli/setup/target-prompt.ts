@@ -111,8 +111,9 @@ export const gatherTargetOptions = (
       : initialSeverities
 
     // Editor Selection - Using multi-select
-    // Pre-select VSCode if .vscode/settings.json exists
+    // Pre-select editors with existing settings files.
     const hasVscodeSettings = Option.isSome(assessment.vscodeSettings)
+    const hasZedSettings = Option.isSome(assessment.zedSettings)
 
     const editors = useTypescript ? yield* Prompt.multiSelect({
       message: "Which editors do you use?",
@@ -121,6 +122,11 @@ export const gatherTargetOptions = (
           title: "VS Code / Cursor / VS Code-based editors",
           value: "vscode" as Editor,
           selected: hasVscodeSettings
+        },
+        {
+          title: "Zed",
+          value: "zed" as Editor,
+          selected: hasZedSettings
         },
         {
           title: "Neovim",

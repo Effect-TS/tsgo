@@ -37,6 +37,10 @@ const createAssessment = (): Assessment.State =>
     vscodeSettings: Option.some({
       fileName: "/project/.vscode/settings.json",
       text: "{}"
+    }),
+    zedSettings: Option.some({
+      fileName: "/project/.zed/settings.json",
+      text: "{}"
     })
   })
 
@@ -68,6 +72,7 @@ describe("non-interactive setup options", () => {
       "--diagnostic",
       "floatingEffect=error",
       "--vscode",
+      "--zed",
       "--nvim",
       "--no-emacs"
     ])
@@ -82,6 +87,7 @@ describe("non-interactive setup options", () => {
       preset: ["effect-native"],
       diagnostic: ["floatingEffect=error"],
       vscode: Option.some(true),
+      zed: Option.some(true),
       nvim: Option.some(true),
       emacs: Option.some(false)
     })
@@ -93,8 +99,19 @@ describe("non-interactive setup options", () => {
 
     expect(options.integrations).toEqual(["typescript", "oxlint"])
     expect(options.dependencyType).toBe("devDependencies")
-    expect(options.editors).toEqual(["vscode"])
+    expect(options.editors).toEqual(["vscode", "zed"])
     expect(options.diagnosticSeverities.floatingEffect).toBe("warning")
+  })
+
+  it("lets --no-zed override the accepted Zed recommendation", async () => {
+    const flags = await parseSetupFlags([
+      "--non-interactive",
+      "--accept-defaults",
+      "--no-zed"
+    ])
+    const options = await Effect.runPromise(resolveTargetOptions(createAssessment(), flags!))
+
+    expect(options.editors).toEqual(["vscode"])
   })
 
   it("requires unresolved choices when defaults are not accepted", async () => {
@@ -127,6 +144,7 @@ describe("non-interactive setup options", () => {
       "--diagnostic",
       "floatingEffect=error",
       "--no-vscode",
+      "--no-zed",
       "--nvim"
     ])
     const options = await Effect.runPromise(resolveTargetOptions(createAssessment(), flags!))
@@ -171,17 +189,20 @@ describe("non-interactive setup options", () => {
     expect(options.editors).toEqual([])
   })
 
-  it("rejects TypeScript-only overrides when TypeScript is disabled", async () => {
-    const flags = await parseSetupFlags([
-      "--non-interactive",
-      "--no-typescript",
-      "--oxlint",
-      "--dependency-type",
-      "devDependencies",
-      "--vscode"
-    ])
+  it.each(["--vscode", "--zed"])(
+    "rejects the TypeScript-only %s override when TypeScript is disabled",
+    async (editorFlag) => {
+      const flags = await parseSetupFlags([
+        "--non-interactive",
+        "--no-typescript",
+        "--oxlint",
+        "--dependency-type",
+        "devDependencies",
+        editorFlag
+      ])
 
-    await expect(Effect.runPromise(resolveTargetOptions(createAssessment(), flags!)))
-      .rejects.toThrow("editor choices require --typescript")
-  })
+      await expect(Effect.runPromise(resolveTargetOptions(createAssessment(), flags!)))
+        .rejects.toThrow("editor choices require --typescript")
+    }
+  )
 })

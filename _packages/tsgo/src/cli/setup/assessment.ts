@@ -4,7 +4,7 @@ import * as Option from "effect/Option"
 import * as Path from "effect/Path"
 import type * as PlatformError from "effect/PlatformError"
 import * as ts from "typescript"
-import { FileReadError, PackageJsonNotFoundError } from "./errors.js"
+import { EditorSettingsParseError, FileReadError, PackageJsonNotFoundError } from "./errors.js"
 import type { Assessment, FileInput, PackageDependency } from "./types.js"
 import {
   defaultTypescriptPackageNames,
@@ -79,11 +79,27 @@ export const createAssessmentInput = (
       })
     }
 
+    // Read .zed/settings.json (optional)
+    const zedSettingsPath = path.join(currentDir, ".zed", "settings.json")
+    const zedSettingsExists = yield* fs.exists(zedSettingsPath)
+
+    let zedSettingsInput = Option.none<FileInput>()
+    if (zedSettingsExists) {
+      const zedSettingsText = yield* fs.readFileString(zedSettingsPath).pipe(
+        Effect.mapError((cause) => new FileReadError({ path: zedSettingsPath, cause }))
+      )
+      zedSettingsInput = Option.some({
+        fileName: zedSettingsPath,
+        text: zedSettingsText
+      })
+    }
+
     return {
       packageJson: packageJsonInput,
       tsconfig: tsconfigInput,
       oxlintConfig: oxlintConfigInput,
-      vscodeSettings: vscodeSettingsInput
+      vscodeSettings: vscodeSettingsInput,
+      zedSettings: zedSettingsInput
     }
   })
 
@@ -218,14 +234,21 @@ function getCurrentDiagnosticSeverities(
 }
 
 /**
- * Assess VSCode settings from input
+ * Assess editor settings from input
  */
-const assessVSCodeSettings = (
+const assessEditorSettings = (
   input: FileInput
 ): Assessment.VSCodeSettings => {
   const sourceFile = ts.parseJsonText(input.fileName, input.text)
   const errors: Array<ts.Diagnostic> = []
   const parsed = ts.convertToObject(sourceFile, errors) as Record<string, unknown>
+  const parseDiagnostics = (sourceFile as ts.JsonSourceFile & {
+    readonly parseDiagnostics: ReadonlyArray<ts.Diagnostic>
+  }).parseDiagnostics
+  const diagnostics = [...parseDiagnostics, ...errors]
+  if (diagnostics.length > 0) {
+    throw new EditorSettingsParseError({ path: input.fileName, diagnostics })
+  }
 
   return {
     path: input.fileName,
@@ -265,13 +288,18 @@ export const assess = (
     : Option.none<Assessment.OxlintConfig>()
 
   const vscodeSettings = Option.isSome(input.vscodeSettings)
-    ? Option.some(assessVSCodeSettings(input.vscodeSettings.value))
+    ? Option.some(assessEditorSettings(input.vscodeSettings.value))
     : Option.none<Assessment.VSCodeSettings>()
+
+  const zedSettings = Option.isSome(input.zedSettings)
+    ? Option.some(assessEditorSettings(input.zedSettings.value))
+    : Option.none<Assessment.ZedSettings>()
 
   return {
     packageJson,
     tsconfig,
     oxlintConfig,
-    vscodeSettings
+    vscodeSettings,
+    zedSettings
   }
 }
