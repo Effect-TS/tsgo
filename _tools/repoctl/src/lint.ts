@@ -3,7 +3,7 @@ import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
-import * as ChildProcessSpawner from "effect/unstable/process/ChildProcessSpawner"
+import { ChildProcessSpawner } from "effect/process"
 import { CommandError, runCommand, runCommandCaptureSplit } from "./process.ts"
 import { getComponent, readUpstream } from "./upstream.ts"
 

@@ -29,7 +29,7 @@ func TestEffectHoverYieldStar(t *testing.T) {
 // @Filename: /test.ts
 import { Config, Effect } from "effect"
 const program = Effect.gen(function*() {
-  const token = /*yield*/yield/*asterisk*/*/*space*/ Config.redacted("WEBHOOK_TOKEN")
+  const token = /*yield*/yield/*asterisk*/*/*space*/ Config.Redacted("WEBHOOK_TOKEN")
 })`
 
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)

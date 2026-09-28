@@ -12,7 +12,7 @@
 
 // @filename: effect_fn_opportunity_panic.ts
 import { Data, Effect, flow, Layer, Schema, Context } from "effect"
-import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "effect/unstable/http"
+import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "effect/http"
 
 class Todo extends Schema.Class<Todo>("Todo")({
   userId: Schema.Finite,

@@ -11,10 +11,10 @@ Effect version: 4.0.0
 /.src/nodeBuiltinImport.ts(12,31): warning TS377057: This module reference uses the `path` module, the corresponding Effect API is `Path` from `effect`. effect(nodeBuiltinImport)
 /.src/nodeBuiltinImport.ts(13,31): warning TS377057: This module reference uses the `path` module, the corresponding Effect API is `Path` from `effect`. effect(nodeBuiltinImport)
 /.src/nodeBuiltinImport.ts(14,31): warning TS377057: This module reference uses the `path` module, the corresponding Effect API is `Path` from `effect`. effect(nodeBuiltinImport)
-/.src/nodeBuiltinImport.ts(15,22): warning TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `ChildProcess` from `effect/unstable/process`. effect(nodeBuiltinImport)
-/.src/nodeBuiltinImport.ts(16,23): warning TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `ChildProcess` from `effect/unstable/process`. effect(nodeBuiltinImport)
-/.src/nodeBuiltinImport.ts(17,18): warning TS377057: This module reference uses the `http` module, the corresponding Effect API is `HttpClient` from `effect/unstable/http`. effect(nodeBuiltinImport)
-/.src/nodeBuiltinImport.ts(18,19): warning TS377057: This module reference uses the `https` module, the corresponding Effect API is `HttpClient` from `effect/unstable/http`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(15,22): warning TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `ChildProcess` from `effect/process`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(16,23): warning TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `ChildProcess` from `effect/process`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(17,18): warning TS377057: This module reference uses the `http` module, the corresponding Effect API is `HttpClient` from `effect/http`. effect(nodeBuiltinImport)
+/.src/nodeBuiltinImport.ts(18,19): warning TS377057: This module reference uses the `https` module, the corresponding Effect API is `HttpClient` from `effect/http`. effect(nodeBuiltinImport)
 /.src/nodeBuiltinImport.ts(19,25): warning TS377057: This module reference uses the `console` module, the corresponding Effect API is `Console` from `effect`. effect(nodeBuiltinImport)
 /.src/nodeBuiltinImport.ts(20,40): warning TS377057: This module reference uses the `console` module, the corresponding Effect API is `Console` from `effect`. effect(nodeBuiltinImport)
 /.src/nodeBuiltinImport.ts(21,28): warning TS377057: This module reference uses the `timers` module, the corresponding Effect API is `Effect` from `effect`. effect(nodeBuiltinImport)
@@ -89,16 +89,16 @@ Effect version: 4.0.0
 !!! warning TS377057: This module reference uses the `path` module, the corresponding Effect API is `Path` from `effect`. effect(nodeBuiltinImport)
     import { exec } from "child_process"
                          ~~~~~~~~~~~~~~~
-!!! warning TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `ChildProcess` from `effect/unstable/process`. effect(nodeBuiltinImport)
+!!! warning TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `ChildProcess` from `effect/process`. effect(nodeBuiltinImport)
     import { spawn } from "node:child_process"
                           ~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `ChildProcess` from `effect/unstable/process`. effect(nodeBuiltinImport)
+!!! warning TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `ChildProcess` from `effect/process`. effect(nodeBuiltinImport)
     import http from "http"
                      ~~~~~~
-!!! warning TS377057: This module reference uses the `http` module, the corresponding Effect API is `HttpClient` from `effect/unstable/http`. effect(nodeBuiltinImport)
+!!! warning TS377057: This module reference uses the `http` module, the corresponding Effect API is `HttpClient` from `effect/http`. effect(nodeBuiltinImport)
     import https from "node:https"
                       ~~~~~~~~~~~~
-!!! warning TS377057: This module reference uses the `https` module, the corresponding Effect API is `HttpClient` from `effect/unstable/http`. effect(nodeBuiltinImport)
+!!! warning TS377057: This module reference uses the `https` module, the corresponding Effect API is `HttpClient` from `effect/http`. effect(nodeBuiltinImport)
     import { Console } from "console"
                             ~~~~~~~~~
 !!! warning TS377057: This module reference uses the `console` module, the corresponding Effect API is `Console` from `effect`. effect(nodeBuiltinImport)
