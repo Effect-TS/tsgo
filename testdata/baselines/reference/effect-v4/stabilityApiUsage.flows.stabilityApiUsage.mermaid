@@ -1,0 +1,19 @@
+flowchart TB
+  0[/"type: 1<br/>node: 1"/]
+  1[/"type: 2<br/>node: 2"/]
+  2[/"type: 3<br/>node: 3"/]
+  3[/"type: 1<br/>node: unstableValue"/]
+  4[/"type: 2<br/>node: experimentalValue"/]
+  5[/"type: 3<br/>node: stableValue"/]
+  6[/"type: 1<br/>node: unstableValue"/]
+  7[/"type: 1<br/>node: alias"/]
+  8[/"type: #123; member: number; #125;<br/>node: #123;#92;n  /** @stability experimental */#92;n  member: 1#92;n#125;"/]
+  9[/"type: number<br/>node: object.member"/]
+  10[["type: #123; #40;value: string#41;: string; #40;value: number#41;: number; #125;<br/>node: export function overloaded#40;value: string#41;: string"]]
+  11[["type: #123; #40;value: string#41;: string; #40;value: number#41;: number; #125;<br/>node: export function overloaded#40;value: number#41;: number"]]
+  12[["type: #123; #40;value: string#41;: string; #40;value: number#41;: number; #125;<br/>node: export function overloaded#40;value: string #124; number#41;: string #124; number #123;#92;n  return value#92;n#125;"]]
+  13[/"type: string #124; number<br/>node: value"/]
+  14[/"type: string<br/>node: overloaded#40;#quot;hello#quot;#41;"/]
+  15[/"type: number<br/>node: overloaded#40;1#41;"/]
+  13 -->|"kind: potentialReturn"| 12
+  13 -->|"kind: usedBy"| 12

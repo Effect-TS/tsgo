@@ -110,7 +110,8 @@ func parseTestUnits(content string, defaultFileName string) []*testUnit {
 }
 
 // DefaultTsConfig is the default tsconfig content injected when a test does not provide one.
-// It enables the Effect language service plugin with default diagnostic severities.
+// It enables the Effect language service plugin while keeping stability rules
+// off in unrelated fixtures. Dedicated fixtures enable them explicitly.
 const DefaultTsConfig = `{
   "compilerOptions": {
     "skipLibCheck": true,
@@ -118,7 +119,11 @@ const DefaultTsConfig = `{
       {
         "name": "@effect/language-service",
         "ignoreEffectErrorsInTscExitCode": true,
-        "skipDisabledOptimization": true
+        "skipDisabledOptimization": true,
+        "diagnosticSeverity": {
+          "experimentalApiUsage": "off",
+          "unstableApiUsage": "off"
+        }
       }
     ]
   }
