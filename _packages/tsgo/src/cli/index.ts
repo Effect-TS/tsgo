@@ -47,7 +47,7 @@ const discoverSelected = (
   components: ReadonlySet<Component>,
   preferredTypescriptPackage?: string
 ) => Effect.gen(function*() {
-  const discovered = yield* discoverBinaries(process.cwd(), preferredTypescriptPackage)
+  const discovered = yield* discoverBinaries(process.cwd(), preferredTypescriptPackage, components)
   const selected = selectComponents(discovered, components)
   return yield* requireComponents(selected, components)
 })

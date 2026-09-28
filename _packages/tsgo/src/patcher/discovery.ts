@@ -167,14 +167,32 @@ const discoverVitePlusOxlint: (
     return yield* discoverOxlint(nodeModule.createRequire(vitePlus.packageJsonPath))
   })
 
-export const discoverBinaries = (cwd: string, preferredTypescriptPackage?: string) => Effect.gen(function*() {
+const allComponents: ReadonlySet<Component> = new Set(["typescript", "oxlint", "oxlint-dts", "oxlint-tsgolint"])
+
+const includesOxlintComponent = (components: ReadonlySet<Component>) =>
+  components.has("oxlint") || components.has("oxlint-dts") || components.has("oxlint-tsgolint")
+
+/**
+ * Discovers installed binaries for the requested components only. Components
+ * that were not requested are never probed, so an unsupported Oxlint platform
+ * (for example Linux musl) cannot fail a TypeScript-only lookup.
+ */
+export const discoverBinaries = (
+  cwd: string,
+  preferredTypescriptPackage?: string,
+  components: ReadonlySet<Component> = allComponents
+) => Effect.gen(function*() {
   const path = yield* Path.Path
   const cwdRequire = nodeModule.createRequire(path.join(cwd, "noop.js"))
-  const typescript = yield* discoverTypeScript(cwdRequire, preferredTypescriptPackage)
-  const oxlint = yield* discoverOxlint(cwdRequire)
-  const vitePlusOxlint = yield* discoverVitePlusOxlint(cwdRequire)
+  const typescript = components.has("typescript")
+    ? yield* discoverTypeScript(cwdRequire, preferredTypescriptPackage)
+    : []
+  const oxlint = includesOxlintComponent(components) ? yield* discoverOxlint(cwdRequire) : []
+  const vitePlusOxlint = includesOxlintComponent(components) ? yield* discoverVitePlusOxlint(cwdRequire) : []
   const discovered = [...new Map(
-    [...typescript, ...oxlint, ...vitePlusOxlint].map((binary) => [binary.binaryPath, binary])
+    [...typescript, ...oxlint, ...vitePlusOxlint]
+      .filter((binary) => components.has(binary.component))
+      .map((binary) => [binary.binaryPath, binary])
   ).values()]
   return yield* Effect.forEach(discovered, (binary) => hashFile(binary.binaryPath).pipe(
     Effect.map((fileHash) => ({ ...binary, fileHash })),

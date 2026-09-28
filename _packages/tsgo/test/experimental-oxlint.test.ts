@@ -115,6 +115,34 @@ describe("experimental Oxlint discovery", () => {
     })
   })
 
+  it("does not probe Oxlint when only TypeScript is requested", async () => {
+    const directory = await makeTemporaryDirectory()
+    await writePackage(directory, "typescript", { version: "7.0.0" })
+    const platformPackage = `@typescript/typescript-${process.platform}-${process.arch}`
+    const platformDirectory = await writePackage(directory, platformPackage, { version: "7.0.1" })
+    const binaryPath = join(platformDirectory, "lib", process.platform === "win32" ? "tsc.exe" : "tsc")
+    await writeBinary(binaryPath, "typescript")
+    // Oxlint is installed without a usable platform binding, which is what an
+    // unsupported Oxlint platform such as Linux musl looks like to discovery.
+    await writePackage(directory, "oxlint", { version: "1.0.0" })
+
+    const allComponents = await Effect.runPromise(
+      discoverBinaries(directory).pipe(Effect.flip, Effect.provide(NodeServices.layer))
+    )
+    expect(allComponents.reason).toMatch(/^Unable to resolve @oxlint\/binding-/)
+
+    const typescriptOnly = await Effect.runPromise(
+      discoverBinaries(directory, undefined, new Set(["typescript"])).pipe(Effect.provide(NodeServices.layer))
+    )
+    expect(typescriptOnly).toEqual([{
+      component: "typescript",
+      packageName: platformPackage,
+      packageVersion: "7.0.1",
+      binaryPath,
+      fileHash: hash("typescript")
+    }])
+  })
+
   it("discovers Oxlint binaries installed as dependencies of vite-plus", async () => {
     const directory = await makeTemporaryDirectory()
     const platform = experimentalOxlintTarget(process.platform, process.arch, true)

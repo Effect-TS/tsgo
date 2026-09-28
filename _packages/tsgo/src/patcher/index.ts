@@ -395,9 +395,9 @@ const discoverSelected = (
   components: ReadonlySet<Component>,
   preferredTypescriptPackage?: string
 ) => Effect.gen(function*() {
-  const discovered = yield* discoverBinaries(cwd, preferredTypescriptPackage)
   const selectedComponents = new Set(components)
   if (selectedComponents.has("oxlint")) selectedComponents.add("oxlint-dts")
+  const discovered = yield* discoverBinaries(cwd, preferredTypescriptPackage, selectedComponents)
   return yield* requireComponents(selectComponents(discovered, selectedComponents), selectedComponents)
 })
 
