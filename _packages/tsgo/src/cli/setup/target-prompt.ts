@@ -1,7 +1,7 @@
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import type * as Terminal from "effect/Terminal"
-import * as Prompt from "effect/unstable/cli/Prompt"
+import { Prompt } from "effect/cli"
 import { applyPresetDiagnosticSeverities, type DiagnosticPresetName, isPresetEnabled } from "../presets.js"
 import * as Target from "./target.js"
 import type { Assessment, Editor, Integration } from "./types.js"
@@ -20,7 +20,7 @@ export const gatherTargetOptions = (
   assessment: Assessment.State
 ): Effect.Effect<Target.Options, Terminal.QuitError, Prompt.Environment> =>
   Effect.gen(function*() {
-    const integrations = yield* Prompt.multiSelect({
+    const integrations = yield* Prompt.MultiSelect({
       message: "Which integrations would you like to configure?",
       choices: [
         {
@@ -57,7 +57,7 @@ export const gatherTargetOptions = (
     })
 
     // Ask where to install the CLI used by either integration.
-    const lspDependencyType = yield* Prompt.select({
+    const lspDependencyType = yield* Prompt.Select({
       message: "@effect/tsgo installation:",
       choices: [
         {
@@ -80,7 +80,7 @@ export const gatherTargetOptions = (
       onSome: (diagnosticSeverities) => diagnosticSeverities
     })
 
-    const selectedDiagnosticModes = useTypescript ? yield* Prompt.multiSelect({
+    const selectedDiagnosticModes = useTypescript ? yield* Prompt.MultiSelect({
       message: "Which diagnostic presets would you like to use?",
       choices: [
         {
@@ -114,7 +114,7 @@ export const gatherTargetOptions = (
     // Pre-select VSCode if .vscode/settings.json exists
     const hasVscodeSettings = Option.isSome(assessment.vscodeSettings)
 
-    const editors = useTypescript ? yield* Prompt.multiSelect({
+    const editors = useTypescript ? yield* Prompt.MultiSelect({
       message: "Which editors do you use?",
       choices: [
         {

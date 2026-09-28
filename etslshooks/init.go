@@ -77,7 +77,7 @@ func init() {
 				}
 			}
 			return "", modulespecifiers.ResultKindNone
-		})
+		}, importingFile)
 	})
 }
 

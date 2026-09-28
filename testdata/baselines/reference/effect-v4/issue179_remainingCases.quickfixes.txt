@@ -6,5 +6,168 @@
 [D2] (5:5-5:10) TS6133: 'label' is declared but its value is never read.
   (no quick fixes)
 
+[D3] (8:5-8:11) TS2322: Type 'Effect<T, UnknownError, never>' is not assignable to type 'Effect<T, never, never>'.
+  Type 'UnknownError' is not assignable to type 'never'.
+  (no quick fixes)
+
+[D4] (8:5-8:11) TS377003: Missing errors UnknownError in the expected Effect type. effect(missingEffectError)
+  Fix 0: "Disable missingEffectError for this line"
+  Fix 1: "Disable missingEffectError for entire file"
+  Fix 2: "Catch all errors with Effect.catch"
+  Fix 3: "Catch unexpected errors with Effect.catchTag"
+
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D4] Fix 0: "Disable missingEffectError for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable missingEffectError for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Catch all errors with Effect.catch" ===
+
+--- file:///.src/issue179_remainingCases.ts ---
+import { Effect } from "effect"
+
+function runMcpRequest<T>(
+    name: string,
+    label: string,
+    request: () => PromiseLike<T>
+): Effect.Effect<T> {
+    return Effect.catch(Effect.tryPromise(request), () => Effect.dieMessage("TODO: catch not implemented"))
+}
+
+export class Repro {
+    readonly #value = 42
+
+    #innerEffect(a: number, b: number): Effect.Effect<number> {
+        return Effect.succeed(a + b)
+    }
+
+    #innerSync(a: number, b: number): number {
+        return a + b
+    }
+
+    #innerOne(a: number): Effect.Effect<number> {
+        return Effect.succeed(a)
+    }
+
+    #getWrapper(key: string): (effect: Effect.Effect<void>) => Effect.Effect<void> {
+        return (effect) => effect.pipe(Effect.annotateLogs("key", key))
+    }
+
+    calleeExpression(): Effect.Effect<number> {
+        return Effect.gen({ self: this }, function* () {
+            return yield* this.#innerEffect(1, 2)
+        })
+    }
+
+    tryPromiseCallback(): Effect.Effect<number, unknown> {
+        return Effect.gen({ self: this }, function* () {
+            return yield* Effect.tryPromise(() => Promise.resolve(this.#value))
+        })
+    }
+
+    syncCallbackMultiArg(): Effect.Effect<number> {
+        return Effect.gen({ self: this }, function* () {
+            return yield* Effect.sync(() => this.#innerSync(1, 2))
+        })
+    }
+
+    calleeWithPipe(): Effect.Effect<number> {
+        return Effect.gen({ self: this }, function* () {
+            return yield* this.#innerOne(1).pipe(Effect.map((n) => n + 1))
+        })
+    }
+
+    curriedWrapper(key: string): Effect.Effect<void> {
+        return this.#getWrapper(key)(
+            Effect.gen({ self: this }, function* () {
+                return
+            })
+        )
+    }
+
+    nestedGenericCallback(server: { readonly name: string }): Effect.Effect<void> {
+        return Effect.gen({ self: this }, function* () {
+            return yield* Effect.gen({ self: this }, function* () {
+                yield* runMcpRequest(server.name, "connect", () => Promise.resolve(42))
+            })
+        })
+    }
+}
+
+
+=== [D4] Fix 3: "Catch unexpected errors with Effect.catchTag" ===
+
+--- file:///.src/issue179_remainingCases.ts ---
+import { Effect } from "effect"
+
+function runMcpRequest<T>(
+    name: string,
+    label: string,
+    request: () => PromiseLike<T>
+): Effect.Effect<T> {
+    return Effect.catchTags(Effect.tryPromise(request), { "UnknownError": () => Effect.dieMessage("TODO: catchTags() not implemented for UnknownError") })
+}
+
+export class Repro {
+    readonly #value = 42
+
+    #innerEffect(a: number, b: number): Effect.Effect<number> {
+        return Effect.succeed(a + b)
+    }
+
+    #innerSync(a: number, b: number): number {
+        return a + b
+    }
+
+    #innerOne(a: number): Effect.Effect<number> {
+        return Effect.succeed(a)
+    }
+
+    #getWrapper(key: string): (effect: Effect.Effect<void>) => Effect.Effect<void> {
+        return (effect) => effect.pipe(Effect.annotateLogs("key", key))
+    }
+
+    calleeExpression(): Effect.Effect<number> {
+        return Effect.gen({ self: this }, function* () {
+            return yield* this.#innerEffect(1, 2)
+        })
+    }
+
+    tryPromiseCallback(): Effect.Effect<number, unknown> {
+        return Effect.gen({ self: this }, function* () {
+            return yield* Effect.tryPromise(() => Promise.resolve(this.#value))
+        })
+    }
+
+    syncCallbackMultiArg(): Effect.Effect<number> {
+        return Effect.gen({ self: this }, function* () {
+            return yield* Effect.sync(() => this.#innerSync(1, 2))
+        })
+    }
+
+    calleeWithPipe(): Effect.Effect<number> {
+        return Effect.gen({ self: this }, function* () {
+            return yield* this.#innerOne(1).pipe(Effect.map((n) => n + 1))
+        })
+    }
+
+    curriedWrapper(key: string): Effect.Effect<void> {
+        return this.#getWrapper(key)(
+            Effect.gen({ self: this }, function* () {
+                return
+            })
+        )
+    }
+
+    nestedGenericCallback(server: { readonly name: string }): Effect.Effect<void> {
+        return Effect.gen({ self: this }, function* () {
+            return yield* Effect.gen({ self: this }, function* () {
+                yield* runMcpRequest(server.name, "connect", () => Promise.resolve(42))
+            })
+        })
+    }
+}
+

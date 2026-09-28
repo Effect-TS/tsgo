@@ -131,17 +131,17 @@ succeed/*fix*/(1);
 		IncludeCompletionsForImportStatements: core.TSTrue,
 	}
 	f.GoToMarker(t, "fix")
-	// Barrel imports use the top-level effect package while preserving the
-	// namespace-qualified call shape from the direct module imports.
+	// Barrel imports preserve the namespace-qualified call shape and use the
+	// public group barrel for nested modules.
 	verifyImportFixContentsUnordered(t, f, "fix", "succeed(1);\n", []string{
 		"import { Channel } from \"effect\";\n\nChannel.succeed(1);\n",
 		"import { Config } from \"effect\";\n\nConfig.succeed(1);\n",
 		"import { Deferred } from \"effect\";\n\nDeferred.succeed(1);\n",
-		"import { DurableDeferred } from \"effect\";\n\nDurableDeferred.succeed(1);\n",
+		"import { DurableDeferred } from \"effect/workflow\";\n\nDurableDeferred.succeed(1);\n",
 		"import { Effect } from \"effect\";\n\nEffect.succeed(1);\n",
 		"import { Exit } from \"effect\";\n\nExit.succeed(1);\n",
 		"import { Layer } from \"effect\";\n\nLayer.succeed(1);\n",
-		"import { Prompt } from \"effect\";\n\nPrompt.succeed(1);\n",
+		"import { Prompt } from \"effect/cli\";\n\nPrompt.succeed(1);\n",
 		"import { Request } from \"effect\";\n\nRequest.succeed(1);\n",
 		"import { Result } from \"effect\";\n\nResult.succeed(1);\n",
 		"import { SchemaGetter } from \"effect\";\n\nSchemaGetter.succeed(1);\n",
@@ -312,8 +312,8 @@ succeed/*fix*/(1);
 		"import * as Sink from \"effect/Sink\";\n\nSink.succeed(1);\n",
 		"import * as Stream from \"effect/Stream\";\n\nStream.succeed(1);\n",
 		"import * as TxDeferred from \"effect/TxDeferred\";\n\nTxDeferred.succeed(1);\n",
-		"import * as Prompt from \"effect/unstable/cli/Prompt\";\n\nPrompt.succeed(1);\n",
-		"import * as DurableDeferred from \"effect/unstable/workflow/DurableDeferred\";\n\nDurableDeferred.succeed(1);\n",
+		"import { Prompt } from \"effect/cli\";\n\nPrompt.succeed(1);\n",
+		"import { DurableDeferred } from \"effect/workflow\";\n\nDurableDeferred.succeed(1);\n",
 	}, preferences)
 }
 
@@ -386,16 +386,16 @@ testClockWith/*fix*/(() => undefined as any);
 
 	f.VerifyApplyCodeActionFromCompletion(t, &completion, &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "testClockWith",
-		Source:      "effect/testing/TestClock",
-		Description: "Add import from \"effect/testing/TestClock\"",
-		NewFileContent: new(`import * as TestClock from "effect/testing/TestClock";
+		Source:      "effect/testing",
+		Description: "Add import from \"effect/testing\"",
+		NewFileContent: new(`import { TestClock } from "effect/testing";
 
 TestClock.testClockWith(() => undefined as any);`),
 		UserPreferences: preferences,
 	})
 
 	f.GoToMarker(t, "fix")
-	f.VerifyImportFixAtPosition(t, []string{`import * as TestClock from "effect/testing/TestClock";
+	f.VerifyImportFixAtPosition(t, []string{`import { TestClock } from "effect/testing";
 
 TestClock.testClockWith(() => undefined as any);
 `}, preferences)
@@ -416,9 +416,9 @@ func TestAutoImportEffectStyleConsistency_testClockWithNamespaceAlongsideNamedIm
 }
 // @effect-v4
 // @Filename: /mainFix.ts
-import { adjust } from "effect/testing/TestClock"
+import { TestClock } from "effect/testing"
 
-void adjust
+void TestClock.adjust
 testClockWith/*fix*/(() => undefined as any);
 `
 
@@ -431,10 +431,9 @@ testClockWith/*fix*/(() => undefined as any);
 	}
 
 	f.GoToMarker(t, "fix")
-	f.VerifyImportFixAtPosition(t, []string{`import * as TestClock from "effect/testing/TestClock";
-import { adjust } from "effect/testing/TestClock"
+	f.VerifyImportFixAtPosition(t, []string{`import { TestClock } from "effect/testing"
 
-void adjust
+void TestClock.adjust
 TestClock.testClockWith(() => undefined as any);
 `}, preferences)
 }
@@ -454,7 +453,7 @@ func TestAutoImportEffectStyleConsistency_testClockWithUsesExistingNamespaceImpo
 }
 // @effect-v4
 // @Filename: /mainFix.ts
-import * as TestClock from "effect/testing/TestClock";
+import { TestClock } from "effect/testing";
 
 void TestClock.adjust
 testClockWith/*fix*/(() => undefined as any);
@@ -469,7 +468,7 @@ testClockWith/*fix*/(() => undefined as any);
 	}
 
 	f.GoToMarker(t, "fix")
-	f.VerifyImportFixAtPosition(t, []string{`import * as TestClock from "effect/testing/TestClock";
+	f.VerifyImportFixAtPosition(t, []string{`import { TestClock } from "effect/testing";
 
 void TestClock.adjust
 TestClock.testClockWith(() => undefined as any);

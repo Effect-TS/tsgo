@@ -4,7 +4,9 @@ Effect version: 4.0.0
 /.src/floatingEffectInVitest.ts(10,20): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
 /.src/floatingEffectInVitest.ts(11,23): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
 /.src/floatingEffectInVitest.ts(12,23): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+/.src/floatingEffectInVitest.ts(13,34): error TS2322: Type 'Effect<void, never, never>' is not assignable to type 'Awaitable<void>'.
 /.src/floatingEffectInVitest.ts(13,34): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+/.src/floatingEffectInVitest.ts(14,32): error TS2322: Type 'Effect<void, never, never>' is not assignable to type 'Awaitable<void>'.
 /.src/floatingEffectInVitest.ts(14,32): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
 /.src/floatingEffectInVitest.ts(15,34): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
 /.src/floatingEffectInVitest.ts(16,31): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
@@ -23,9 +25,12 @@ Effect version: 4.0.0
 /.src/floatingEffectInVitest.ts(33,16): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
 /.src/floatingEffectInVitest.ts(34,17): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
 /.src/floatingEffectInVitest.ts(35,21): error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+/.src/floatingEffectInVitest.ts(47,27): error TS2769: No overload matches this call.
+/.src/floatingEffectInVitest.ts(48,30): error TS2769: No overload matches this call.
+/.src/floatingEffectInVitest.ts(49,39): error TS2769: No overload matches this call.
 
 
-==== /.src/floatingEffectInVitest.ts (22 errors) ====
+==== /.src/floatingEffectInVitest.ts (27 errors) ====
     import { afterAll, afterEach, beforeAll, beforeEach, describe, it, suite, test } from "@effect/vitest"
     import { Effect } from "effect"
     import { it as importedIt } from "vitest"
@@ -46,8 +51,14 @@ Effect version: 4.0.0
 !!! error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
     it.each([1, 2])("each %s", () => Effect.void)
                                      ~~~~~~~~~~~
+!!! error TS2322: Type 'Effect<void, never, never>' is not assignable to type 'Awaitable<void>'.
+!!! related TS6502 /node_modules/vitest/dist/chunks/config.d.CU_b-wJj.d.ts(2613,32): The expected type comes from the return type of this signature.
+                                     ~~~~~~~~~~~
 !!! error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
     it.for([1, 2])("for %s", () => Effect.void)
+                                   ~~~~~~~~~~~
+!!! error TS2322: Type 'Effect<void, never, never>' is not assignable to type 'Awaitable<void>'.
+!!! related TS6502 /node_modules/vitest/dist/chunks/config.d.CU_b-wJj.d.ts(2626,32): The expected type comes from the return type of this signature.
                                    ~~~~~~~~~~~
 !!! error TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
     it.skipIf(false)("skipIf", () => Effect.void)
@@ -117,6 +128,15 @@ Effect version: 4.0.0
     it("void", () => undefined)
     
     describe("suite omitted", () => Effect.void)
+                              ~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! related TS2771 /node_modules/vitest/dist/chunks/config.d.CU_b-wJj.d.ts(3130,2): The last overload is declared here.
     suite("suite alias omitted", () => Effect.void)
+                                 ~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! related TS2771 /node_modules/vitest/dist/chunks/config.d.CU_b-wJj.d.ts(3130,2): The last overload is declared here.
     it.describe("attached suite omitted", () => Effect.void)
+                                          ~~~~~~~~~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! related TS2771 /node_modules/vitest/dist/chunks/config.d.CU_b-wJj.d.ts(3130,2): The last overload is declared here.
     

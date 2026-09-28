@@ -5,8 +5,8 @@ import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Option from "effect/Option"
-import * as Command from "effect/unstable/cli/Command"
-import * as Flag from "effect/unstable/cli/Flag"
+import { Command } from "effect/cli"
+import { Flag } from "effect/cli"
 import {
   type Component,
   defaultTypescriptPackageNames,
@@ -56,17 +56,17 @@ const renderSkipped = (skipped: ReadonlyArray<{ readonly message: string }>) =>
   Effect.forEach(skipped, ({ message }) => Console.error(message), { discard: true })
 
 const typescriptPackageFlag = Flag.optional(
-  Flag.string("typescript-package").pipe(
+  Flag.String("typescript-package").pipe(
     Flag.withDescription("Native TypeScript package name to try before the default package names")
   )
 )
 
 const patchCommand = Command.make("patch", {
   ...integrationFlags,
-  force: Flag.boolean("force").pipe(
+  force: Flag.Boolean("force").pipe(
     Flag.withDescription("Deprecated compatibility flag; replacements are selected by package version")
   ),
-  skipMissing: Flag.boolean("skip-missing").pipe(
+  skipMissing: Flag.Boolean("skip-missing").pipe(
     Flag.withDefault(false),
     Flag.withDescription("Skip selected integrations without a matching packaged replacement")
   ),
@@ -142,15 +142,15 @@ const getExePathCommand = Command.make("get-exe-path").pipe(
 )
 
 const diagnosticsCommand = Command.make("diagnostics", {
-  file: Flag.file("file").pipe(
+  file: Flag.File("file").pipe(
     Flag.optional,
     Flag.withDescription("The full path of the file to check for diagnostics")
   ),
-  project: Flag.file("project").pipe(
+  project: Flag.File("project").pipe(
     Flag.optional,
     Flag.withDescription("The full path of the project tsconfig.json file to check for diagnostics")
   ),
-  format: Flag.choice(
+  format: Flag.Literals(
     "format",
     ["json", "pretty", "text", "github-actions"] as ReadonlyArray<DiagnosticsOutputFormat>
   ).pipe(
@@ -159,23 +159,23 @@ const diagnosticsCommand = Command.make("diagnostics", {
       "Output format: json (machine-readable), pretty (colored with context), text (plain text), github-actions (workflow commands)"
     )
   ),
-  strict: Flag.boolean("strict").pipe(
+  strict: Flag.Boolean("strict").pipe(
     Flag.withDefault(false),
     Flag.withDescription("Treat warnings as errors (affects exit code)")
   ),
-  severity: Flag.string("severity").pipe(
+  severity: Flag.String("severity").pipe(
     Flag.optional,
     Flag.withDescription("Filter by severity levels (comma-separated: error,warning,message)")
   ),
-  progress: Flag.boolean("progress").pipe(
+  progress: Flag.Boolean("progress").pipe(
     Flag.withDefault(false),
     Flag.withDescription("Show progress as files are checked (outputs to stderr)")
   ),
-  lspconfig: Flag.string("lspconfig").pipe(
+  lspconfig: Flag.String("lspconfig").pipe(
     Flag.optional,
     Flag.withDescription("An optional inline JSON lsp config that replaces the current project lsp config")
   ),
-  listFiles: Flag.boolean("list-files").pipe(
+  listFiles: Flag.Boolean("list-files").pipe(
     Flag.withDefault(false),
     Flag.withDescription(
       "Also emit, per checked file, the detected and supported Effect major versions"
