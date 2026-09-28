@@ -110,7 +110,6 @@ type Snapshot = project.Snapshot
 type SnapshotChange = project.SnapshotChange
 type SnapshotFS = project.SnapshotFS
 type SnapshotHost = project.SnapshotHost
-type SourceFileLease = project.SourceFileLease
 type SyntheticProjectID = project.SyntheticProjectID
 type TestConfigEntry = project.TestConfigEntry
 type TestConfigFileNamesEntry = project.TestConfigFileNamesEntry
