@@ -51,6 +51,7 @@
         "effectMapFlatten": "suggestion",
         "effectMapVoid": "suggestion",
         "effectSucceedWithVoid": "suggestion",
+        "experimentalApiUsage": "warning",
         "flatMapConditionalToFilterOrFail": "suggestion",
         "flatMapIgnoredParamToAndThen": "suggestion",
         "flatMapToMap": "suggestion",
@@ -105,7 +106,8 @@
         "unnecessaryFailYieldableError": "suggestion",
         "unnecessaryPipe": "suggestion",
         "unnecessaryPipeChain": "suggestion",
-        "unnecessaryTypeofType": "suggestion"
+        "unnecessaryTypeofType": "suggestion",
+        "unstableApiUsage": "warning"
       }
     },
     {
@@ -137,6 +139,7 @@
         "effectMapFlatten": "error",
         "effectMapVoid": "error",
         "effectSucceedWithVoid": "error",
+        "experimentalApiUsage": "error",
         "flatMapConditionalToFilterOrFail": "error",
         "flatMapIgnoredParamToAndThen": "error",
         "flatMapToMap": "error",
@@ -191,7 +194,8 @@
         "unnecessaryFailYieldableError": "error",
         "unnecessaryPipe": "error",
         "unnecessaryPipeChain": "error",
-        "unnecessaryTypeofType": "error"
+        "unnecessaryTypeofType": "error",
+        "unstableApiUsage": "error"
       }
     },
     {
@@ -202,6 +206,7 @@
         "classSelfMismatch": "warning",
         "duplicatePackage": "warning",
         "effectFnImplicitAny": "warning",
+        "experimentalApiUsage": "warning",
         "floatingEffect": "warning",
         "floatingEffectInVitest": "warning",
         "genericEffectServices": "warning",
@@ -218,7 +223,8 @@
         "promiseInEffectSuccess": "warning",
         "schemaLiteralNonFinite": "warning",
         "schemaOpaqueInstanceMember": "warning",
-        "unsafeEffectTypeAssertion": "warning"
+        "unsafeEffectTypeAssertion": "warning",
+        "unstableApiUsage": "warning"
       }
     },
     {
@@ -432,6 +438,29 @@
             "start": 78,
             "end": 83,
             "text": "Parameter `input` implicitly has type `any` in `Effect.fn`, `Effect.fnUntraced`, or `Effect.fnUntracedEager`. No parameter type is available from an explicit annotation or contextual function type. effect(effectFnImplicitAny)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "experimentalApiUsage",
+      "group": "correctness",
+      "description": "Warns when using an API marked @stability experimental",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377135
+      ],
+      "preview": {
+        "sourceText": "\n/** @stability experimental */\nexport const previewApi = () =\u003e 1\n\npreviewApi()\n",
+        "diagnostics": [
+          {
+            "start": 67,
+            "end": 77,
+            "text": "`previewApi` is an experimental API. effect(experimentalApiUsage)"
           }
         ]
       }
@@ -846,6 +875,29 @@
             "start": 121,
             "end": 167,
             "text": "This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unstableApiUsage",
+      "group": "correctness",
+      "description": "Warns when using an API marked @stability unstable",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377136
+      ],
+      "preview": {
+        "sourceText": "\n/** @stability unstable */\nexport const previewApi = () =\u003e 1\n\npreviewApi()\n",
+        "diagnostics": [
+          {
+            "start": 63,
+            "end": 73,
+            "text": "`previewApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)"
           }
         ]
       }
