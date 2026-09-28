@@ -4,7 +4,11 @@
     "plugins": [
       {
         "name": "@effect/language-service",
-        "effectFn": ["inferred-span"]
+        "effectFn": ["inferred-span"],
+        "diagnosticSeverity": {
+          "experimentalApiUsage": "off",
+          "unstableApiUsage": "off"
+        }
       }
     ]
   }
