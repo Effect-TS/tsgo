@@ -8,7 +8,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/shim/modulespecifiers"
-	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 // stylePolicy applies auto-import style rewrites based on configured preferences.
@@ -18,7 +17,6 @@ type stylePolicy struct {
 	aliases           map[string]string
 	followReexports   bool
 	resolveTarget     func(export *autoimport.Export) (string, modulespecifiers.ResultKind)
-	importingFile     *ast.SourceFile
 }
 
 // NewFixTransformer creates a FixTransformer from the given resolved Effect options.
@@ -26,11 +24,9 @@ type stylePolicy struct {
 func NewFixTransformer(
 	resolved *etscore.ResolvedEffectPluginOptions,
 	resolveTarget func(export *autoimport.Export) (string, modulespecifiers.ResultKind),
-	importingFile *ast.SourceFile,
 ) autoimport.FixTransformer {
 	sp := newStylePolicy(resolved)
 	sp.resolveTarget = resolveTarget
-	sp.importingFile = importingFile
 	if sp.isEmpty() {
 		return nil
 	}
@@ -49,7 +45,7 @@ func NewFixTransformer(
 		if len(hasUseNamespace) != 0 {
 			filtered := rewritten[:0]
 			for _, fix := range rewritten {
-				if fix.Kind == lsproto.AutoImportFixKindAddNew && hasUseNamespace[namespaceFixKey(fix)] {
+				if fix.Kind == lsproto.AutoImportFixKindAddNew && fix.ImportKind == lsproto.ImportKindNamespace && hasUseNamespace[namespaceFixKey(fix)] {
 					continue
 				}
 				filtered = append(filtered, fix)
@@ -146,22 +142,6 @@ func (sp *stylePolicy) applyNamespaceRewrite(export *autoimport.Export, fix *aut
 	if fix.UsagePosition == nil {
 		return fix
 	}
-	if export.PackageName == "effect" {
-		if barrel := effectNestedBarrel(fix.ModuleSpecifier); barrel != "" {
-			if namespace := existingNamedImport(sp.importingFile, barrel, inferNamespaceName(fix.ModuleSpecifier)); namespace != "" {
-				return &autoimport.Fix{AutoImportFix: &lsproto.AutoImportFix{
-					Kind:            lsproto.AutoImportFixKindUseNamespace,
-					ImportKind:      lsproto.ImportKindNamed,
-					ModuleSpecifier: barrel,
-					Name:            fix.Name,
-					UsagePosition:   fix.UsagePosition,
-					NamespacePrefix: namespace,
-				}}
-			}
-			return sp.applyBarrelRewriteFrom(export, fix, barrel)
-		}
-	}
-
 	if isNamespaceReexport(export) {
 		if sp.resolveTarget == nil {
 			return fix
@@ -243,8 +223,7 @@ func (sp *stylePolicy) applyBarrelRewrite(export *autoimport.Export, fix *autoim
 }
 
 // effectNestedBarrel maps a nested Effect module to its public barrel.
-// Effect v4 exports effect/cli and effect/schema, but not effect/cli/Prompt
-// or effect/schema/Model.
+// Effect v4 exports both the group barrel and its public nested modules.
 func effectNestedBarrel(specifier string) string {
 	rest, ok := strings.CutPrefix(specifier, "effect/")
 	if !ok {
@@ -255,40 +234,6 @@ func effectNestedBarrel(specifier string) string {
 		return ""
 	}
 	return "effect/" + group
-}
-
-func existingNamedImport(file *ast.SourceFile, moduleSpecifier string, name string) string {
-	if file == nil {
-		return ""
-	}
-	for _, statement := range file.Statements.Nodes {
-		if statement.Kind != ast.KindImportDeclaration {
-			continue
-		}
-		declaration := statement.AsImportDeclaration()
-		if declaration.ModuleSpecifier == nil || declaration.ImportClause == nil {
-			continue
-		}
-		moduleText := strings.Trim(scanner.GetTextOfNode(declaration.ModuleSpecifier), "\"'")
-		if moduleText != moduleSpecifier {
-			continue
-		}
-		bindings := declaration.ImportClause.AsImportClause().NamedBindings
-		if bindings == nil || bindings.Kind != ast.KindNamedImports {
-			continue
-		}
-		for _, element := range bindings.AsNamedImports().Elements.Nodes {
-			specifier := element.AsImportSpecifier()
-			imported := specifier.Name().Text()
-			if specifier.PropertyName != nil {
-				imported = specifier.PropertyName.Text()
-			}
-			if imported == name {
-				return specifier.Name().Text()
-			}
-		}
-	}
-	return ""
 }
 
 func (sp *stylePolicy) applyBarrelRewriteFrom(export *autoimport.Export, fix *autoimport.Fix, barrelSpecifier string) *autoimport.Fix {

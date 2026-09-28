@@ -312,8 +312,8 @@ succeed/*fix*/(1);
 		"import * as Sink from \"effect/Sink\";\n\nSink.succeed(1);\n",
 		"import * as Stream from \"effect/Stream\";\n\nStream.succeed(1);\n",
 		"import * as TxDeferred from \"effect/TxDeferred\";\n\nTxDeferred.succeed(1);\n",
-		"import { Prompt } from \"effect/cli\";\n\nPrompt.succeed(1);\n",
-		"import { DurableDeferred } from \"effect/workflow\";\n\nDurableDeferred.succeed(1);\n",
+		"import * as Prompt from \"effect/cli/Prompt\";\n\nPrompt.succeed(1);\n",
+		"import * as DurableDeferred from \"effect/workflow/DurableDeferred\";\n\nDurableDeferred.succeed(1);\n",
 	}, preferences)
 }
 
@@ -386,16 +386,16 @@ testClockWith/*fix*/(() => undefined as any);
 
 	f.VerifyApplyCodeActionFromCompletion(t, &completion, &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "testClockWith",
-		Source:      "effect/testing",
-		Description: "Add import from \"effect/testing\"",
-		NewFileContent: new(`import { TestClock } from "effect/testing";
+		Source:      "effect/testing/TestClock",
+		Description: "Add import from \"effect/testing/TestClock\"",
+		NewFileContent: new(`import * as TestClock from "effect/testing/TestClock";
 
 TestClock.testClockWith(() => undefined as any);`),
 		UserPreferences: preferences,
 	})
 
 	f.GoToMarker(t, "fix")
-	f.VerifyImportFixAtPosition(t, []string{`import { TestClock } from "effect/testing";
+	f.VerifyImportFixAtPosition(t, []string{`import * as TestClock from "effect/testing/TestClock";
 
 TestClock.testClockWith(() => undefined as any);
 `}, preferences)
@@ -416,9 +416,9 @@ func TestAutoImportEffectStyleConsistency_testClockWithNamespaceAlongsideNamedIm
 }
 // @effect-v4
 // @Filename: /mainFix.ts
-import { TestClock } from "effect/testing"
+import { adjust } from "effect/testing/TestClock"
 
-void TestClock.adjust
+void adjust
 testClockWith/*fix*/(() => undefined as any);
 `
 
@@ -431,9 +431,10 @@ testClockWith/*fix*/(() => undefined as any);
 	}
 
 	f.GoToMarker(t, "fix")
-	f.VerifyImportFixAtPosition(t, []string{`import { TestClock } from "effect/testing"
+	f.VerifyImportFixAtPosition(t, []string{`import * as TestClock from "effect/testing/TestClock";
+import { adjust } from "effect/testing/TestClock"
 
-void TestClock.adjust
+void adjust
 TestClock.testClockWith(() => undefined as any);
 `}, preferences)
 }
@@ -453,7 +454,7 @@ func TestAutoImportEffectStyleConsistency_testClockWithUsesExistingNamespaceImpo
 }
 // @effect-v4
 // @Filename: /mainFix.ts
-import { TestClock } from "effect/testing";
+import * as TestClock from "effect/testing/TestClock";
 
 void TestClock.adjust
 testClockWith/*fix*/(() => undefined as any);
@@ -468,7 +469,7 @@ testClockWith/*fix*/(() => undefined as any);
 	}
 
 	f.GoToMarker(t, "fix")
-	f.VerifyImportFixAtPosition(t, []string{`import { TestClock } from "effect/testing";
+	f.VerifyImportFixAtPosition(t, []string{`import * as TestClock from "effect/testing/TestClock";
 
 void TestClock.adjust
 TestClock.testClockWith(() => undefined as any);
