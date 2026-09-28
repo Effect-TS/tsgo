@@ -1,6 +1,8 @@
 === Metadata ===
 Effect version: 4.0.0
 
+/.src/issue179_remainingCases.ts(8,5): error TS2322: Type 'Effect<T, UnknownError, never>' is not assignable to type 'Effect<T, never, never>'.
+/.src/issue179_remainingCases.ts(8,5): error TS377003: Missing errors UnknownError in the expected Effect type. effect(missingEffectError)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -16,7 +18,7 @@ Effect version: 4.0.0
     }
     
 
-==== /.src/issue179_remainingCases.ts (0 errors) ====
+==== /.src/issue179_remainingCases.ts (2 errors) ====
     import { Effect } from "effect"
     
     function runMcpRequest<T>(
@@ -25,6 +27,10 @@ Effect version: 4.0.0
         request: () => PromiseLike<T>
     ): Effect.Effect<T> {
         return Effect.tryPromise(request)
+        ~~~~~~
+!!! error TS2322: Type 'Effect<T, UnknownError, never>' is not assignable to type 'Effect<T, never, never>'.
+        ~~~~~~
+!!! error TS377003: Missing errors UnknownError in the expected Effect type. effect(missingEffectError)
     }
     
     export class Repro {

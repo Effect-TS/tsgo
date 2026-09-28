@@ -12,81 +12,102 @@
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D4] (13:34-13:45) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D4] (13:34-13:45) TS2322: Type 'Effect<void, never, never>' is not assignable to type 'Awaitable<void>'.
+  (no quick fixes)
+
+[D5] (13:34-13:45) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D5] (14:32-14:43) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D6] (14:32-14:43) TS2322: Type 'Effect<void, never, never>' is not assignable to type 'Awaitable<void>'.
+  (no quick fixes)
+
+[D7] (14:32-14:43) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D6] (15:34-15:45) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D8] (15:34-15:45) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D7] (16:31-16:42) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D9] (16:31-16:42) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D8] (17:41-17:52) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D10] (17:41-17:52) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D9] (18:40-18:51) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D11] (18:40-18:51) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D10] (19:22-19:36) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D12] (19:22-19:36) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D11] (21:10-21:21) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D13] (21:10-21:21) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D12] (23:35-23:82) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D14] (23:35-23:82) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D13] (24:31-24:59) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D15] (24:31-24:59) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D14] (26:26-26:37) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D16] (26:26-26:37) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D15] (27:34-27:45) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D17] (27:34-27:45) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D16] (28:37-28:48) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D18] (28:37-28:48) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D17] (29:46-29:57) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D19] (29:46-29:57) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D18] (31:17-31:28) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D20] (31:17-31:28) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D19] (32:18-32:29) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D21] (32:18-32:29) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D20] (33:16-33:27) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D22] (33:16-33:27) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D21] (34:17-34:28) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D23] (34:17-34:28) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
 
-[D22] (35:21-35:32) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
+[D24] (35:21-35:32) TS377105: This Vitest callback returns an Effect that Vitest does not run. Use an Effect-aware test API or run the Effect with Effect.runPromise. effect(floatingEffectInVitest)
   Fix 0: "Disable floatingEffectInVitest for this line"
   Fix 1: "Disable floatingEffectInVitest for entire file"
+
+[D25] (47:27-47:44) TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '() => Effect<void, never, never>' has no properties in common with type 'SuiteOptions'.
+  (no quick fixes)
+
+[D26] (48:30-48:47) TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '() => Effect<void, never, never>' has no properties in common with type 'SuiteOptions'.
+  (no quick fixes)
+
+[D27] (49:39-49:56) TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '() => Effect<void, never, never>' has no properties in common with type 'SuiteOptions'.
+  (no quick fixes)
 
 === Quick Fix Application Results ===
 
@@ -108,22 +129,10 @@ skipped by default
 === [D3] Fix 1: "Disable floatingEffectInVitest for entire file" ===
 skipped by default
 
-=== [D4] Fix 0: "Disable floatingEffectInVitest for this line" ===
-skipped by default
-
-=== [D4] Fix 1: "Disable floatingEffectInVitest for entire file" ===
-skipped by default
-
 === [D5] Fix 0: "Disable floatingEffectInVitest for this line" ===
 skipped by default
 
 === [D5] Fix 1: "Disable floatingEffectInVitest for entire file" ===
-skipped by default
-
-=== [D6] Fix 0: "Disable floatingEffectInVitest for this line" ===
-skipped by default
-
-=== [D6] Fix 1: "Disable floatingEffectInVitest for entire file" ===
 skipped by default
 
 === [D7] Fix 0: "Disable floatingEffectInVitest for this line" ===
@@ -220,4 +229,16 @@ skipped by default
 skipped by default
 
 === [D22] Fix 1: "Disable floatingEffectInVitest for entire file" ===
+skipped by default
+
+=== [D23] Fix 0: "Disable floatingEffectInVitest for this line" ===
+skipped by default
+
+=== [D23] Fix 1: "Disable floatingEffectInVitest for entire file" ===
+skipped by default
+
+=== [D24] Fix 0: "Disable floatingEffectInVitest for this line" ===
+skipped by default
+
+=== [D24] Fix 1: "Disable floatingEffectInVitest for entire file" ===
 skipped by default

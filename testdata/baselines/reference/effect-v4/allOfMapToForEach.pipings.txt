@@ -1,4 +1,4 @@
-==== /.src/allOfMapToForEach.ts (19 flows) ====
+==== /.src/allOfMapToForEach.ts (17 flows) ====
 
 === Piping Flow ===
 Location: 8:22 - 8:56
@@ -63,34 +63,6 @@ Transformations (1):
       callee: Effect.succeed
       args: (constant)
       outType: Effect<string, never, never>
-
-=== Piping Flow ===
-Location: 22:30 - 22:64
-Node: Effect.forEach(values, effectful)
-Node Kind: KindCallExpression
-
-Subject: values
-Subject Type: readonly number[]
-
-Transformations (1):
-  [0] kind: dataFirst
-      callee: Effect.forEach
-      args: [effectful]
-      outType: Effect<string[], never, never>
-
-=== Piping Flow ===
-Location: 23:35 - 27:2
-Node: Effect.forEach(\n  values,\n  (value, index) => Effect.succeed(`${index}:${value}`),\n  { concurrency: 2, discard: true }\n)
-Node Kind: KindCallExpression
-
-Subject: values
-Subject Type: readonly number[]
-
-Transformations (1):
-  [0] kind: dataFirst
-      callee: Effect.forEach
-      args: [(value, index) => Effect.succeed(`${index}:${value}`), { concurrency: 2, discard: true }]
-      outType: Effect<void, never, never>
 
 === Piping Flow ===
 Location: 25:20 - 25:56

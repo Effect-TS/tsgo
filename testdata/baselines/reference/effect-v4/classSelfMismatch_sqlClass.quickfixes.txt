@@ -16,7 +16,7 @@ skipped by default
 === [D1] Fix 2: "Replace 'ValidModelClass' with 'InvalidModelClass'" ===
 
 --- file:///.src/classSelfMismatch_sqlClass.ts ---
-import { Model } from "effect/unstable/schema"
+import { Model } from "effect/schema"
 import {Schema} from "effect"
 
 // valid usage

@@ -114,7 +114,7 @@ func (sp *stylePolicy) Apply(export *autoimport.Export, fix *autoimport.Fix) *au
 	}
 	if pkgName == "effect" &&
 		(sp.namespacePackages[pkgName] || sp.barrelPackages[pkgName]) &&
-		strings.HasPrefix(fix.ModuleSpecifier, "effect/internal/") {
+		(strings.HasPrefix(fix.ModuleSpecifier, "effect/internal/") || strings.Contains(fix.ModuleSpecifier, "/internal/")) {
 		return nil
 	}
 
@@ -142,7 +142,6 @@ func (sp *stylePolicy) applyNamespaceRewrite(export *autoimport.Export, fix *aut
 	if fix.UsagePosition == nil {
 		return fix
 	}
-
 	if isNamespaceReexport(export) {
 		if sp.resolveTarget == nil {
 			return fix
@@ -215,13 +214,35 @@ func isNamespaceReexport(export *autoimport.Export) bool {
 
 // applyBarrelRewrite rewrites a fix to a named import from the barrel package.
 func (sp *stylePolicy) applyBarrelRewrite(export *autoimport.Export, fix *autoimport.Fix) *autoimport.Fix {
+	if export.PackageName == "effect" {
+		if barrel := effectNestedBarrel(fix.ModuleSpecifier); barrel != "" {
+			return sp.applyBarrelRewriteFrom(export, fix, barrel)
+		}
+	}
+	return sp.applyBarrelRewriteFrom(export, fix, export.PackageName)
+}
+
+// effectNestedBarrel maps a nested Effect module to its public barrel.
+// Effect v4 exports both the group barrel and its public nested modules.
+func effectNestedBarrel(specifier string) string {
+	rest, ok := strings.CutPrefix(specifier, "effect/")
+	if !ok {
+		return ""
+	}
+	group, _, nested := strings.Cut(rest, "/")
+	if !nested || group == "" || group == "internal" {
+		return ""
+	}
+	return "effect/" + group
+}
+
+func (sp *stylePolicy) applyBarrelRewriteFrom(export *autoimport.Export, fix *autoimport.Fix, barrelSpecifier string) *autoimport.Fix {
 	// Barrel rewrites require usage qualification (e.g. `request` -> `HttpClient.request`).
 	// If no usage site is available, keep the original named-import fix.
 	if fix.UsagePosition == nil {
 		return fix
 	}
 
-	barrelSpecifier := export.PackageName
 	if barrelSpecifier == "" {
 		return fix
 	}

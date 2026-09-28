@@ -16,21 +16,21 @@ func parseSource(source string) *ast.SourceFile {
 
 func TestFindModuleIdentifierForPackage_NamespaceImport(t *testing.T) {
 	t.Parallel()
-	source := `import * as Model from "effect/unstable/schema"`
+	source := `import * as SchemaModules from "effect/schema"`
 	sf := parseSource(source)
 
-	got := FindModuleIdentifierForPackage(sf, "effect/unstable", "schema")
-	if got != "Model" {
-		t.Errorf("FindModuleIdentifierForPackage = %q, want %q", got, "Model")
+	got := FindModuleIdentifierForPackage(sf, "effect", "schema")
+	if got != "SchemaModules" {
+		t.Errorf("FindModuleIdentifierForPackage = %q, want %q", got, "SchemaModules")
 	}
 }
 
 func TestFindModuleIdentifierForPackage_NamedImportWithAlias(t *testing.T) {
 	t.Parallel()
-	source := `import { Model as M } from "effect/unstable"`
+	source := `import { Model as M } from "effect/schema"`
 	sf := parseSource(source)
 
-	got := FindModuleIdentifierForPackage(sf, "effect/unstable", "Model")
+	got := FindModuleIdentifierForPackage(sf, "effect/schema", "Model")
 	if got != "M" {
 		t.Errorf("FindModuleIdentifierForPackage = %q, want %q", got, "M")
 	}
@@ -38,10 +38,10 @@ func TestFindModuleIdentifierForPackage_NamedImportWithAlias(t *testing.T) {
 
 func TestFindModuleIdentifierForPackage_NamedImportNoAlias(t *testing.T) {
 	t.Parallel()
-	source := `import { Model } from "effect/unstable"`
+	source := `import { Model } from "effect/schema"`
 	sf := parseSource(source)
 
-	got := FindModuleIdentifierForPackage(sf, "effect/unstable", "Model")
+	got := FindModuleIdentifierForPackage(sf, "effect/schema", "Model")
 	if got != "Model" {
 		t.Errorf("FindModuleIdentifierForPackage = %q, want %q", got, "Model")
 	}
@@ -52,7 +52,7 @@ func TestFindModuleIdentifierForPackage_NoMatchingImport(t *testing.T) {
 	source := `import { Schema } from "effect"`
 	sf := parseSource(source)
 
-	got := FindModuleIdentifierForPackage(sf, "effect/unstable", "Model")
+	got := FindModuleIdentifierForPackage(sf, "effect/schema", "Model")
 	if got != "Model" {
 		t.Errorf("FindModuleIdentifierForPackage = %q, want fallback %q", got, "Model")
 	}
@@ -60,7 +60,7 @@ func TestFindModuleIdentifierForPackage_NoMatchingImport(t *testing.T) {
 
 func TestFindModuleIdentifierForPackage_NilSourceFile(t *testing.T) {
 	t.Parallel()
-	got := FindModuleIdentifierForPackage(nil, "effect/unstable", "Model")
+	got := FindModuleIdentifierForPackage(nil, "effect/schema", "Model")
 	if got != "Model" {
 		t.Errorf("FindModuleIdentifierForPackage = %q, want fallback %q", got, "Model")
 	}
