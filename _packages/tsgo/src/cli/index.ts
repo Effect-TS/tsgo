@@ -64,6 +64,7 @@ const typescriptPackageFlag = Flag.optional(
 const patchCommand = Command.make("patch", {
   ...integrationFlags,
   force: Flag.Boolean("force").pipe(
+    Flag.withDefault(false),
     Flag.withDescription("Deprecated compatibility flag; replacements are selected by package version")
   ),
   skipMissing: Flag.Boolean("skip-missing").pipe(
