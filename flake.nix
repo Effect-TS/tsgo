@@ -6,7 +6,7 @@
     nixpkgsUnstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     /* Source of truth: the next profile in `_packages/tsgo/upstream.json`. */
     typescript-src = {
-      url = "github:microsoft/TypeScript/df1a31e6d5c4aa4485f276fdfb4218a7bfcdf348";
+      url = "github:microsoft/TypeScript/4f5ddae224b9529a69b571f631fe3a2cb283162f";
       flake = false;
     };
   };

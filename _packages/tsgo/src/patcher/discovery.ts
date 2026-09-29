@@ -54,7 +54,7 @@ const optionally = <A, R>(effect: Effect.Effect<A, DiscoveryError, R>) =>
   effect.pipe(Effect.catchTag("DiscoveryError", (error) =>
     error.reason.startsWith("Unable to resolve ") ? Effect.succeed(undefined) : Effect.fail(error)))
 
-const isGlibc = () => {
+export const isGlibc = () => {
   if (process.platform !== "linux") return false
   const report = process.report?.getReport()
   const header = (report as { readonly header?: { readonly glibcVersionRuntime?: unknown } } | undefined)?.header
@@ -65,14 +65,11 @@ export const experimentalOxlintTarget = (platform: NodeJS.Platform, arch: string
   if (arch !== "x64" && arch !== "arm64") {
     throw new DiscoveryError({ reason: `Unsupported architecture ${arch}.` })
   }
-  if (platform === "linux" && !glibc) {
-    throw new DiscoveryError({ reason: "Linux musl is not supported by the packaged Oxlint integration." })
-  }
   if (platform !== "linux" && platform !== "darwin" && platform !== "win32") {
     throw new DiscoveryError({ reason: `Unsupported platform ${platform}.` })
   }
   const packageTarget = `${platform}-${arch}`
-  const codeTarget = platform === "linux" ? `${packageTarget}-gnu` : packageTarget
+  const codeTarget = platform === "linux" ? `${packageTarget}-${glibc ? "gnu" : "musl"}` : packageTarget
   const oxlintTarget = platform === "win32" ? `${codeTarget}-msvc` : codeTarget
   return {
     codeTarget,
