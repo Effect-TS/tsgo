@@ -9,7 +9,7 @@ import * as Scope from "effect/Scope"
 import * as pkgJson from "../../package.json" with { type: "json" }
 import metadataJson from "../metadata.json" with { type: "json" }
 import upstreamJson from "../../upstream.json" with { type: "json" }
-import { discoverBinaries, requireComponents, selectComponents } from "./discovery.js"
+import { discoverBinaries, isGlibc, requireComponents, selectComponents } from "./discovery.js"
 import { hashBytes, hashFile } from "./fileHash.js"
 import type {
   Component,
@@ -164,6 +164,12 @@ const resolvePlatformPackage = (target: DiscoveredBinary) => Effect.gen(function
 export const resolveReplacement: ReplacementResolver = (target) => Effect.gen(function*() {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
+  if (target.component !== "typescript" && process.platform === "linux" && !isGlibc()) {
+    return yield* new ReplacementUnavailableError({
+      target,
+      reason: "Linux musl is not supported by the packaged Oxlint integration."
+    })
+  }
   if (target.component === "oxlint-dts") return yield* resolveOxlintDeclarations(target)
   const platform = yield* resolvePlatformPackage(target)
   const replacementPath = path.join(
