@@ -1,5 +1,19 @@
 # @effect/tsgo
 
+## 0.47.0
+
+### Minor Changes
+
+- b67ef81: Update the Effect v4 integration to `4.0.0-rc.118` and use its public module paths. Namespace auto-imports for nested modules now resolve to paths such as `effect/cli/Prompt`.
+- 66668e2: Add the `experimentalApiUsage` and `unstableApiUsage` diagnostics for APIs marked with `@stability experimental` or `@stability unstable`. Both rules warn by default. For example, a reference to an unstable API now reports that breaking changes may happen between versions.
+
+### Patch Changes
+
+- 8067475: Fix `getExePath` rejecting the schema version shipped by platform packages.
+  
+  Discover installed Oxlint musl bindings without rejecting them before component selection, so TypeScript-only commands work when Oxlint is installed on Alpine Linux. Report unsupported Oxlint replacements during patch preparation instead, allowing `--skip-missing` and restoring original binaries with `unpatch`.
+- 2e215ce: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260928.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/4f5ddae224b9529a69b571f631fe3a2cb283162f) commit `4f5ddae224b9529a69b571f631fe3a2cb283162f`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2). Refresh the Oxlint configuration schema from the selected package.
+
 ## 0.46.1
 
 ### Patch Changes
