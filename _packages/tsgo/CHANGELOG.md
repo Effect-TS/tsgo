@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.47.1
+
+### Patch Changes
+
+- d4f19b3: Allow `effect-tsgo patch` to run without the deprecated `--force` flag.
+
 ## 0.47.0
 
 ### Minor Changes
