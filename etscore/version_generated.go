@@ -2,4 +2,4 @@
 
 package etscore
 
-const EffectVersion = "0.47.1"
+const EffectVersion = "0.47.2"
