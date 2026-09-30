@@ -157,7 +157,7 @@ type extra_Checker struct {
   SignatureCount uint32
   TotalInstantiationCount uint32
   instantiationCount uint32
-  instantiationDepth uint32
+  instantiationStack []*checker.Type
   conditionalConstraintDepth uint32
   inlineLevel int
   serializationLevel int
@@ -879,7 +879,6 @@ const ObjectFlagsRequiresWidening = checker.ObjectFlagsRequiresWidening
 const ObjectFlagsReverseMapped = checker.ObjectFlagsReverseMapped
 const ObjectFlagsSingleSignatureType = checker.ObjectFlagsSingleSignatureType
 const ObjectFlagsTuple = checker.ObjectFlagsTuple
-const ObjectFlagsUnresolvedMembers = checker.ObjectFlagsUnresolvedMembers
 type ObjectLiteralDiscriminator = checker.ObjectLiteralDiscriminator
 type ObjectType = checker.ObjectType
 type ParseFlags = checker.ParseFlags
