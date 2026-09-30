@@ -1,0 +1,44 @@
+==== /.src/api.ts (0 flows) ====
+==== /.src/consumer.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 6:23 - 6:39
+Node: import("jszip")
+Node Kind: KindCallExpression
+
+Subject: "jszip"
+Subject Type: "jszip"
+
+Transformations (1):
+  [0] kind: call
+      callee: import
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 7:33 - 7:49
+Node: import("jszip")
+Node Kind: KindCallExpression
+
+Subject: "jszip"
+Subject Type: "jszip"
+
+Transformations (1):
+  [0] kind: call
+      callee: import
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 8:23 - 8:57
+Node: import("simple-icons/icons.json")
+Node Kind: KindCallExpression
+
+Subject: "simple-icons/icons.json"
+Subject Type: "simple-icons/icons.json"
+
+Transformations (1):
+  [0] kind: call
+      callee: import
+      args: (constant)
+      outType: any

@@ -56,6 +56,11 @@ func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
 			if symbol.Flags&ast.SymbolFlagsAlias == 0 {
 				break
 			}
+			// The checker synthesizes a declaration-less `default` alias for `export =`
+			// and JSON modules and panics when asked for its immediate target.
+			if !slices.ContainsFunc(symbol.Declarations, ast.IsAliasSymbolDeclaration) {
+				break
+			}
 			next := ctx.Checker.GetImmediateAliasedSymbol(symbol)
 			if next == symbol {
 				break
