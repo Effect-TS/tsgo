@@ -21,6 +21,7 @@
   "preferUnplugged": true,
   "files": [
     "artifacts/",
+    "lib/lib*.d.ts",
     "lib/tsc",
     "README.md",
     "lib/upstream.json"
