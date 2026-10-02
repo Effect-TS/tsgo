@@ -22,7 +22,7 @@ export const previewApi = () => 1
 
 previewApi()
 /**
-^^^^^^^^^^ effecttsgo(unstable-api-usage): `previewApi` is an unstable API. Breaking changes may happen between versions.
+^^^^^^^^^^ effecttsgo(unstable-api-usage): `effect-v4-tests/preview#previewApi` is an unstable API. Breaking changes may happen between versions.
 */
 ```
 

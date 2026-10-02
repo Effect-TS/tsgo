@@ -1,0 +1,8 @@
+==== /.src/barrel.ts (0 layer exports) ====
+==== /.src/consumer.ts (0 layer exports) ====
+==== /.src/module.ts (0 layer exports) ====
+==== /.src/exportAlias.ts (0 layer exports) ====
+==== /.src/experimentalOnly.ts (0 layer exports) ====
+==== /.src/realWorldMembers.ts (0 layer exports) ====
+==== /.src/realWorldModules.ts (0 layer exports) ====
+==== /.src/realWorldSubtree.ts (0 layer exports) ====

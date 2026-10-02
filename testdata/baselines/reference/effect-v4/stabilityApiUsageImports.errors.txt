@@ -1,8 +1,8 @@
 === Metadata ===
 Effect version: unknown
 
-/.src/consumer.ts(6,25): warning TS377136: `renamed` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
-/.src/consumer.ts(7,33): warning TS377136: `unstableApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/consumer.ts(6,25): warning TS377136: `effect-v4-tests/api#unstableApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/consumer.ts(7,33): warning TS377136: `effect-v4-tests/api#unstableApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
 
 
 ==== /.src/api.ts (0 errors) ====
@@ -18,8 +18,8 @@ Effect version: unknown
     
     export const namedUse = renamed
                             ~~~~~~~
-!!! warning TS377136: `renamed` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+!!! warning TS377136: `effect-v4-tests/api#unstableApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
     export const namespaceUse = api.unstableApi
                                     ~~~~~~~~~~~
-!!! warning TS377136: `unstableApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+!!! warning TS377136: `effect-v4-tests/api#unstableApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
     

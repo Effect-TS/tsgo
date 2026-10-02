@@ -1,0 +1,209 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/consumer.ts(17,1): warning TS377136: `allowed/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/consumer.ts(18,1): warning TS377136: `allowed/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/consumer.ts(19,1): warning TS377136: `allowed/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/consumer.ts(28,1): warning TS377135: `allowed/http/HttpClient#otherExperimental` is an experimental API. effect(experimentalApiUsage)
+/.src/consumer.ts(29,1): warning TS377135: `allowed/http/HttpClient#otherExperimental` is an experimental API. effect(experimentalApiUsage)
+/.src/consumer.ts(31,1): warning TS377135: `allowed/experimental-extra/Client#make` is an experimental API. effect(experimentalApiUsage)
+/.src/consumer.ts(33,1): warning TS377136: `allowed/rpc-extra/Client#make` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/experimentalOnly.ts(5,1): warning TS377136: `allowed/http/HttpClient#get` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/experimentalOnly.ts(6,1): warning TS377136: `allowed/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/experimentalOnly.ts(9,35): warning TS377136: `effect/http/HttpClient#get` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/exportAlias.ts(6,1): warning TS377136: `allowed/http/HttpClient#get` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/exportAlias.ts(8,1): warning TS377135: `allowed/http/HttpClient#experimental` is an experimental API. effect(experimentalApiUsage)
+/.src/exportAlias.ts(9,1): warning TS377135: `allowed/http/HttpClient#experimental` is an experimental API. effect(experimentalApiUsage)
+/.src/realWorldMembers.ts(15,35): warning TS377136: `effect/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/realWorldMembers.ts(16,37): warning TS377136: `effect/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/realWorldModules.ts(7,42): warning TS377136: `effect/http/HttpClientRequest#get` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/realWorldSubtree.ts(10,28): warning TS377136: `effect/http-api/HttpApi#make` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [{
+          "name": "@effect/language-service",
+          "allowedUnstableApis": ["allowed/http/HttpClient#get", "allowed/rpc", "effect/http/HttpClient#get"],
+          "allowedExperimentalApis": ["allowed/http/HttpClient#preview", "allowed/http/HttpClient#experimentalFetch", "allowed/experimental"],
+          "overrides": [{
+            "include": ["module.ts"],
+            "options": {
+              "allowedUnstableApis": ["allowed/http/HttpClient"],
+              "allowedExperimentalApis": ["allowed/http/HttpClient"]
+            }
+          }, {
+            "include": ["exportAlias.ts"],
+            "options": {
+              "allowedUnstableApis": ["allowed/http/HttpClient#send"],
+              "allowedExperimentalApis": []
+            }
+          }, {
+            "include": ["experimentalOnly.ts"],
+            "options": {
+              "allowedUnstableApis": [],
+              "allowedExperimentalApis": ["allowed/http/HttpClient", "effect/http"]
+            }
+          }, {
+            "include": ["realWorldModules.ts"],
+            "options": { "allowedUnstableApis": ["effect/http/HttpClient"] }
+          }, {
+            "include": ["realWorldSubtree.ts"],
+            "options": { "allowedUnstableApis": ["effect/http"] }
+          }]
+        }]
+      }
+    }
+    
+
+==== /.src/barrel.ts (0 errors) ====
+    export { get as fetch, post } from "allowed/dist/http/HttpClient"
+    
+
+==== /.src/consumer.ts (7 errors) ====
+    // @effect-v4
+    // @effect-diagnostics unstableApiUsage:warning experimentalApiUsage:warning
+    import { get as renamed, post, send, experimental, preview, otherExperimental, experimentalGet as experimentalAlias } from "allowed/dist/http/HttpClient"
+    import * as Client from "allowed/dist/http/HttpClient"
+    import { fetch } from "./barrel"
+    import { make } from "allowed/dist/rpc/Client"
+    import { make as other } from "allowed/dist/rpc-extra/Client"
+    import { make as experimentalMake } from "allowed/dist/experimental/Client"
+    import { make as otherExperimentalMake } from "allowed/dist/experimental-extra/Client"
+    
+    renamed("hello")
+    renamed(1)
+    Client.get("hello")
+    export const result1 = fetch("hello")
+    const alias = renamed
+    alias("hello")
+    post()
+    ~~~~
+!!! warning TS377136: `allowed/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    post()
+    ~~~~
+!!! warning TS377136: `allowed/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    send()
+    ~~~~
+!!! warning TS377136: `allowed/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    experimental()
+    preview()
+    experimental()
+    Client.experimental()
+    const previewAlias = preview
+    previewAlias()
+    experimentalAlias("hello")
+    experimentalAlias(1)
+    otherExperimental()
+    ~~~~~~~~~~~~~~~~~
+!!! warning TS377135: `allowed/http/HttpClient#otherExperimental` is an experimental API. effect(experimentalApiUsage)
+    otherExperimental()
+    ~~~~~~~~~~~~~~~~~
+!!! warning TS377135: `allowed/http/HttpClient#otherExperimental` is an experimental API. effect(experimentalApiUsage)
+    experimentalMake()
+    otherExperimentalMake()
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377135: `allowed/experimental-extra/Client#make` is an experimental API. effect(experimentalApiUsage)
+    make()
+    other()
+    ~~~~~
+!!! warning TS377136: `allowed/rpc-extra/Client#make` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    
+
+==== /.src/module.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics unstableApiUsage:warning experimentalApiUsage:warning
+    import { get, post, experimental, otherExperimental } from "allowed/dist/http/HttpClient"
+    get("hello")
+    post()
+    experimental()
+    otherExperimental()
+    
+
+==== /.src/exportAlias.ts (3 errors) ====
+    // @effect-v4
+    // @effect-diagnostics unstableApiUsage:warning experimentalApiUsage:warning
+    import { post, send, get, experimental } from "allowed/dist/http/HttpClient"
+    post()
+    send()
+    get("still unstable")
+    ~~~
+!!! warning TS377136: `allowed/http/HttpClient#get` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    get(1)
+    experimental()
+    ~~~~~~~~~~~~
+!!! warning TS377135: `allowed/http/HttpClient#experimental` is an experimental API. effect(experimentalApiUsage)
+    experimental()
+    ~~~~~~~~~~~~
+!!! warning TS377135: `allowed/http/HttpClient#experimental` is an experimental API. effect(experimentalApiUsage)
+    
+
+==== /.src/experimentalOnly.ts (3 errors) ====
+    // @effect-v4
+    // @effect-diagnostics unstableApiUsage:warning experimentalApiUsage:warning
+    import { get, post, experimental, otherExperimental } from "allowed/dist/http/HttpClient"
+    import { HttpClient } from "effect/http"
+    get("still unstable")
+    ~~~
+!!! warning TS377136: `allowed/http/HttpClient#get` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    post()
+    ~~~~
+!!! warning TS377136: `allowed/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    experimental()
+    otherExperimental()
+    export const result1 = HttpClient.get("https://example.com")
+                                      ~~~
+!!! warning TS377136: `effect/http/HttpClient#get` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    
+
+==== /.src/realWorldMembers.ts (2 errors) ====
+    // @effect-v4
+    // @effect-diagnostics unstableApiUsage:warning experimentalApiUsage:warning
+    import { Effect } from "effect"
+    import { HttpClient } from "effect/http"
+    import * as DirectClient from "effect/http/HttpClient"
+    import { get as fetch } from "effect/http/HttpClient"
+    
+    // All get references resolve to effect/http/HttpClient#get.
+    export const result1 = HttpClient.get("https://example.com")
+    export const result2 = DirectClient.get("https://example.com")
+    export const result3 = fetch("https://example.com")
+    const fetchAlias = fetch
+    export const result4 = fetchAlias("https://example.com")
+    // Unlisted exports still warn, including repeated references.
+    export const result5 = HttpClient.post("https://example.com")
+                                      ~~~~
+!!! warning TS377136: `effect/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export const result6 = DirectClient.post("https://example.com")
+                                        ~~~~
+!!! warning TS377136: `effect/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export const result7 = Effect.succeed(1)
+    
+
+==== /.src/realWorldModules.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics unstableApiUsage:warning
+    import { HttpClient, HttpClientRequest } from "effect/http"
+    export const result1 = HttpClient.get("https://example.com")
+    export const result2 = HttpClient.post("https://example.com")
+    // Allowing HttpClient does not allow a sibling module.
+    export const result3 = HttpClientRequest.get("https://example.com")
+                                             ~~~
+!!! warning TS377136: `effect/http/HttpClientRequest#get` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    
+
+==== /.src/realWorldSubtree.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics unstableApiUsage:warning
+    import { HttpClient, HttpClientRequest } from "effect/http"
+    import { HttpApi } from "effect/http-api"
+    // The http subtree includes both declaration modules.
+    export const result1 = HttpClient.get("https://example.com")
+    export const result2 = HttpClient.post("https://example.com")
+    export const result3 = HttpClientRequest.get("https://example.com")
+    // A path-segment match must not allow the separate http-api subtree.
+    export const api = HttpApi.make("example")
+                               ~~~~
+!!! warning TS377136: `effect/http-api/HttpApi#make` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    

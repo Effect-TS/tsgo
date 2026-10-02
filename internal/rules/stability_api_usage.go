@@ -7,7 +7,9 @@ import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 )
 
 var ExperimentalApiUsage = rule.Rule{
@@ -34,22 +36,27 @@ var UnstableApiUsage = rule.Rule{
 	},
 }
 
+type declarationStabilityInfo struct {
+	stability   string
+	declaration *ast.Node
+}
+
 func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
 	// Most references to a given API share its symbol. Cache declaration lookups so
 	// lazy JSDoc parsing happens only once per declaration in this source file.
-	declarationStability := make(map[*ast.Node]string)
-	readDeclaration := func(declaration *ast.Node) string {
+	declarationStability := make(map[*ast.Node]declarationStabilityInfo)
+	readDeclaration := func(declaration *ast.Node) declarationStabilityInfo {
 		if stability, ok := declarationStability[declaration]; ok {
 			return stability
 		}
-		stability := stabilityOfDeclaration(declaration)
+		stability := declarationStabilityInfo{stabilityOfDeclaration(declaration), declaration}
 		declarationStability[declaration] = stability
 		return stability
 	}
-	readSymbol := func(symbol *ast.Symbol) string {
+	readSymbol := func(symbol *ast.Symbol) declarationStabilityInfo {
 		for depth := 0; symbol != nil && depth < 32; depth++ {
 			for _, declaration := range symbol.Declarations {
-				if stability := readDeclaration(declaration); stability != "" {
+				if stability := readDeclaration(declaration); stability.stability != "" {
 					return stability
 				}
 			}
@@ -67,9 +74,10 @@ func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
 			}
 			symbol = next
 		}
-		return ""
+		return declarationStabilityInfo{}
 	}
 
+	allow := newStabilityApiAllowlist(ctx, wanted)
 	var diagnostics []*ast.Diagnostic
 	var walk ast.Visitor
 	walk = func(node *ast.Node) bool {
@@ -79,7 +87,7 @@ func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
 		if node.Kind == ast.KindIdentifier && !ast.IsDeclarationNameOrImportPropertyName(node) {
 			// The selected overload is authoritative for calls. A tagged overload
 			// may differ from other declarations of the same symbol.
-			stability := ""
+			stability := declarationStabilityInfo{}
 			selectedDeclaration := (*ast.Node)(nil)
 			callee := node
 			if parent := node.Parent; parent != nil && parent.Kind == ast.KindPropertyAccessExpression && parent.AsPropertyAccessExpression().Name() == node {
@@ -94,18 +102,26 @@ func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
 			symbol := ctx.Checker.GetSymbolAtLocation(node)
 			resolvedSymbol := ctx.TypeParser.ReferenceSymbolAtNode(node)
 			useSymbol := selectedDeclaration == nil || !symbolHasDeclaration(symbol, selectedDeclaration) && !symbolHasDeclaration(resolvedSymbol, selectedDeclaration)
-			if stability == "" && useSymbol {
+			if stability.stability == "" && useSymbol {
 				stability = readSymbol(symbol)
 			}
-			if stability == "" && useSymbol {
+			if stability.stability == "" && useSymbol {
 				stability = readSymbol(resolvedSymbol)
 			}
-			if stability == wanted {
+			if stability.stability == wanted {
+				name := node.Text()
+				allowed, apiName := allow(stability.declaration)
+				if allowed {
+					return false
+				}
+				if apiName != "" {
+					name = apiName
+				}
 				message := tsdiag.X_0_is_an_unstable_API_Breaking_changes_may_happen_between_versions_effect_unstableApiUsage
 				if wanted == "experimental" {
 					message = tsdiag.X_0_is_an_experimental_API_effect_experimentalApiUsage
 				}
-				diagnostics = append(diagnostics, ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(node), message, nil, node.Text()))
+				diagnostics = append(diagnostics, ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(node), message, nil, name))
 			}
 		}
 		node.ForEachChild(walk)
@@ -154,4 +170,125 @@ func stabilityOfDeclaration(declaration *ast.Node) string {
 		}
 	}
 	return ""
+}
+
+// Decisions belong to one rule invocation: per-file overrides can change the
+// allow-list, and the tagged declaration distinguishes overloads and reexports.
+func newStabilityApiAllowlist(ctx *rule.Context, wanted string) func(*ast.Node) (bool, string) {
+	type decision struct {
+		allowed bool
+		name    string
+	}
+	decisions := make(map[*ast.Node]decision)
+	modules := make(map[*ast.SourceFile]string)
+	var entries []string
+	if ctx.Options != nil {
+		entries = ctx.Options.AllowedUnstableApis
+		if wanted == "experimental" {
+			entries = ctx.Options.AllowedExperimentalApis
+		}
+	}
+	return func(declaration *ast.Node) (bool, string) {
+		if cached, ok := decisions[declaration]; ok {
+			return cached.allowed, cached.name
+		}
+		result := decision{}
+		defer func() { decisions[declaration] = result }()
+		if declaration == nil {
+			return false, ""
+		}
+		sf := ast.GetSourceFileOfNode(declaration)
+		if sf == nil {
+			return false, ""
+		}
+		moduleName, ok := modules[sf]
+		if !ok {
+			pkg := ctx.TypeParser.PackageJsonForSourceFile(sf)
+			if pkg != nil {
+				if packageName, ok := pkg.Name.GetValue(); ok && packageName != "" {
+					directory := getPackageJsonDirectory(ctx.Program, ctx.Checker, sf)
+					moduleName = stabilityApiModuleName(packageName, directory, sf.FileName())
+				}
+			}
+			modules[sf] = moduleName
+		}
+		if moduleName == "" {
+			return false, ""
+		}
+		moduleSymbol := checker.Checker_getSymbolOfDeclaration(ctx.Checker, sf.AsNode())
+		symbol := checker.Checker_getSymbolOfDeclaration(ctx.Checker, declaration)
+		if symbol != nil && symbol.ExportSymbol != nil {
+			symbol = symbol.ExportSymbol
+		}
+		result.name = moduleName
+		if moduleSymbol != nil && symbol != nil {
+			exported := ctx.Checker.TryGetMemberInModuleExportsAndProperties(symbol.Name, moduleSymbol)
+			if exported == symbol {
+				result.name += "#" + symbol.Name
+			}
+		}
+		for _, entry := range entries {
+			module, member, hasMember := strings.Cut(entry, "#")
+			if !hasMember {
+				if module != "" && (moduleName == module || strings.HasPrefix(moduleName, module+"/")) {
+					result.allowed = true
+					break
+				}
+			} else if module == moduleName && member != "" && moduleSymbol != nil && symbol != nil {
+				exported := ctx.Checker.TryGetMemberInModuleExportsAndProperties(member, moduleSymbol)
+				if exported != nil && (exported == symbol || checker.Checker_getSymbolIfSameReference(ctx.Checker, resolveStabilityAlias(ctx.Checker, exported), resolveStabilityAlias(ctx.Checker, symbol)) != nil) {
+					result.allowed = true
+					break
+				}
+			}
+		}
+		return result.allowed, result.name
+	}
+}
+
+// This is a declaration path, not a reconstructed public import specifier.
+func stabilityApiModuleName(packageName, directory, fileName string) string {
+	if directory == "" {
+		return ""
+	}
+	directory = strings.TrimSuffix(tspath.NormalizePath(directory), "/") + "/"
+	fileName = tspath.NormalizePath(fileName)
+	if !strings.HasPrefix(fileName, directory) {
+		return ""
+	}
+	relative := strings.TrimPrefix(fileName, directory)
+	for _, prefix := range []string{"dist/dts/", "dist/esm/", "dist/cjs/", "src/", "dist/"} {
+		if rest, ok := strings.CutPrefix(relative, prefix); ok {
+			relative = rest
+			break
+		}
+	}
+	for _, extension := range []string{".d.ts", ".d.mts", ".d.cts", ".ts", ".mts", ".cts", ".tsx", ".js", ".mjs", ".cjs", ".jsx"} {
+		if rest, ok := strings.CutSuffix(relative, extension); ok {
+			relative = rest
+			break
+		}
+	}
+	if tspath.GetBaseFileName(relative) == "index" {
+		relative = strings.TrimSuffix(strings.TrimSuffix(relative, "index"), "/")
+	}
+	if relative == "" {
+		return packageName
+	}
+	return packageName + "/" + relative
+}
+
+// Synthetic default aliases have no alias declaration and cannot be resolved.
+func resolveStabilityAlias(c *checker.Checker, symbol *ast.Symbol) *ast.Symbol {
+	for depth := 0; symbol != nil && symbol.Flags&ast.SymbolFlagsAlias != 0 && depth < 32; depth++ {
+		if !slices.ContainsFunc(symbol.Declarations, ast.IsAliasSymbolDeclaration) {
+			return nil
+		}
+		next := c.GetImmediateAliasedSymbol(symbol)
+		if next == symbol {
+			break
+		}
+		symbol = next
+	}
+	return symbol
 }

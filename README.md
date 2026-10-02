@@ -314,6 +314,10 @@ The npm compiler binaries load their TypeScript standard libraries from `lib.*.d
         "extendedKeyDetection": false,
         // Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity. (default: 2)
         "pipeableMinArgCount": 2,
+        // Unstable APIs allowed by package/module subtree or package/module#export name. (default: [])
+        "allowedUnstableApis": [],
+        // Experimental APIs allowed by package/module subtree or package/module#export name. (default: [])
+        "allowedExperimentalApis": [],
         // Package names allowed to have multiple versions without triggering duplicatePackage. (default: [])
         "allowedDuplicatedPackages": [],
         // Controls which effectFnOpportunity quickfix variants are offered. (default: ["span"])
@@ -341,3 +345,32 @@ The npm compiler binaries load their TypeScript standard libraries from `lib.*.d
 }
 ```
 <!-- example-config:end -->
+
+The `allowedUnstableApis` and `allowedExperimentalApis` options selectively permit
+APIs marked `@stability unstable` and `@stability experimental`, respectively:
+
+```json
+{
+  "allowedUnstableApis": [
+    "effect/http",
+    "effect/rpc/RpcClient#make"
+  ],
+  "allowedExperimentalApis": ["my-package/Preview#make"]
+}
+```
+
+A module entry permits that module and its descendants; an entry ending in
+`#exportName` permits only that module's exported API, including renamed imports
+and aliases. For example, `effect/http/HttpClient` permits the entire module,
+while `effect/http/HttpClient#get` permits only its exported `get` API.
+Matching is case-sensitive and respects path segments: `effect/http` does not
+permit `effect/http-api`. Per-file `overrides` replace the base list.
+
+Names describe the declaration carrying the stability tag, rather than the
+import used by the consumer. They combine the nearest package name with the
+package-relative declaration path, removing a leading `src/`, `dist/`,
+`dist/dts/`, `dist/esm/`, or `dist/cjs/`, the file extension, and a trailing
+`/index`. Other layouts retain their package-relative path. Both diagnostics
+display this name when package metadata is available. APIs without package
+metadata continue to warn. Each list affects only its corresponding diagnostic; allowing an unstable API
+does not suppress experimental API warnings, and vice versa.
