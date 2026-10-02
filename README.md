@@ -237,6 +237,8 @@ Effect-tsgo is a **superset** of the official [TypeScript-Go](https://github.com
 
 Each release of `effect-tsgo` is built against the versioned components recorded in `_packages/tsgo/upstream.json`. The Nix flake consumes the TypeScript `next` tag directly. When upstream `tsgo` releases new features or fixes, `effect-tsgo` will adopt them in a subsequent release after validating compatibility with the Effect diagnostics layer.
 
+The npm compiler binaries load their TypeScript standard libraries from `lib.*.d.ts` files beside the executable. These files are included beside every versioned artifact and the latest `lib/tsc` alias. If you relocate the executable returned by `effect-tsgo get-exe-path`, copy its library files into the same destination directory.
+
 ### When to Upgrade
 
 - Upgrade `effect-tsgo` when a new release includes upstream `tsgo` fixes you need or new Effect diagnostics you want.
