@@ -23,6 +23,237 @@
   ],
   "presets": [
     {
+      "name": "recommended",
+      "description": "Enable diagnostics at their default severities.",
+      "diagnosticSeverity": {
+        "abortControllerInEffect": "suggestion",
+        "acquireReleaseDisposable": "suggestion",
+        "allOfMapToForEach": "suggestion",
+        "catchAllTagDispatchToCatchTag": "suggestion",
+        "catchAllToMapError": "suggestion",
+        "catchChainToFirstSuccessOf": "suggestion",
+        "catchConditionalRefailToCatchIf": "suggestion",
+        "catchDieToOrDie": "suggestion",
+        "catchIfTagToCatchTag": "suggestion",
+        "catchRefailToTapError": "suggestion",
+        "catchTagToCatchReason": "suggestion",
+        "catchToIgnore": "suggestion",
+        "catchToOrElseSucceed": "suggestion",
+        "catchUnfailableEffect": "suggestion",
+        "classSelfMismatch": "error",
+        "duplicatePackage": "warning",
+        "effectFnIife": "warning",
+        "effectFnImplicitAny": "error",
+        "effectFnOpportunity": "suggestion",
+        "effectGenUsesAdapter": "warning",
+        "effectInFailure": "warning",
+        "effectInVoidSuccess": "warning",
+        "effectMapFlatten": "suggestion",
+        "effectMapVoid": "suggestion",
+        "effectSucceedWithVoid": "suggestion",
+        "experimentalApiUsage": "warning",
+        "flatMapConditionalToFilterOrFail": "suggestion",
+        "flatMapIgnoredParamToAndThen": "suggestion",
+        "flatMapToMap": "suggestion",
+        "floatingEffect": "error",
+        "floatingEffectInVitest": "error",
+        "genericEffectServices": "warning",
+        "globalErrorInEffectCatch": "warning",
+        "globalErrorInEffectFailure": "warning",
+        "layerMergeAllWithDependencies": "warning",
+        "lazyEffect": "suggestion",
+        "lazyPromiseInEffectSync": "warning",
+        "leakingRequirements": "suggestion",
+        "mapSomeToAsSome": "suggestion",
+        "matchEffectToMapBoth": "suggestion",
+        "matchEffectToMatch": "suggestion",
+        "missingEffectContext": "error",
+        "missingEffectError": "error",
+        "missingLayerContext": "error",
+        "missingReturnYieldStar": "error",
+        "missingStarInYieldEffectGen": "error",
+        "multipleCatchTag": "suggestion",
+        "multipleEffectProvide": "warning",
+        "nonObjectEffectServiceType": "error",
+        "obsoleteMatchImport": "warning",
+        "obsoleteSchemaImport": "warning",
+        "optionMatchToFromOption": "suggestion",
+        "outdatedApi": "warning",
+        "overriddenSchemaConstructor": "error",
+        "preferSucceedSomeOrNone": "suggestion",
+        "preferTypedSchemaDecoder": "suggestion",
+        "preferUnsafeConstructor": "suggestion",
+        "promiseInEffectSuccess": "warning",
+        "provideLayerSucceedToProvideService": "suggestion",
+        "raceFirstWithSleepToTimeout": "suggestion",
+        "redundantMapError": "suggestion",
+        "redundantOrDie": "suggestion",
+        "redundantSchemaTagIdentifier": "suggestion",
+        "returnEffectInGen": "suggestion",
+        "runEffectInsideEffect": "suggestion",
+        "runOfExitToRunExit": "suggestion",
+        "schemaLiteralNonFinite": "error",
+        "schemaNumber": "suggestion",
+        "schemaOpaqueInstanceMember": "error",
+        "schemaStructWithTag": "suggestion",
+        "schemaSyncInEffect": "suggestion",
+        "scopeInLayerEffect": "warning",
+        "syncToSucceed": "suggestion",
+        "timeoutCatchTagToTimeoutOrElse": "suggestion",
+        "tryCatchInEffectGen": "suggestion",
+        "unknownInEffectCatch": "warning",
+        "unnecessaryEffectGen": "suggestion",
+        "unnecessaryFailYieldableError": "suggestion",
+        "unnecessaryPipe": "suggestion",
+        "unnecessaryPipeChain": "suggestion",
+        "unnecessaryTypeofType": "suggestion",
+        "unstableApiUsage": "warning"
+      }
+    },
+    {
+      "name": "strict",
+      "description": "Treat every diagnostic enabled by default as an error.",
+      "diagnosticSeverity": {
+        "abortControllerInEffect": "error",
+        "acquireReleaseDisposable": "error",
+        "allOfMapToForEach": "error",
+        "catchAllTagDispatchToCatchTag": "error",
+        "catchAllToMapError": "error",
+        "catchChainToFirstSuccessOf": "error",
+        "catchConditionalRefailToCatchIf": "error",
+        "catchDieToOrDie": "error",
+        "catchIfTagToCatchTag": "error",
+        "catchRefailToTapError": "error",
+        "catchTagToCatchReason": "error",
+        "catchToIgnore": "error",
+        "catchToOrElseSucceed": "error",
+        "catchUnfailableEffect": "error",
+        "classSelfMismatch": "error",
+        "duplicatePackage": "error",
+        "effectFnIife": "error",
+        "effectFnImplicitAny": "error",
+        "effectFnOpportunity": "error",
+        "effectGenUsesAdapter": "error",
+        "effectInFailure": "error",
+        "effectInVoidSuccess": "error",
+        "effectMapFlatten": "error",
+        "effectMapVoid": "error",
+        "effectSucceedWithVoid": "error",
+        "experimentalApiUsage": "error",
+        "flatMapConditionalToFilterOrFail": "error",
+        "flatMapIgnoredParamToAndThen": "error",
+        "flatMapToMap": "error",
+        "floatingEffect": "error",
+        "floatingEffectInVitest": "error",
+        "genericEffectServices": "error",
+        "globalErrorInEffectCatch": "error",
+        "globalErrorInEffectFailure": "error",
+        "layerMergeAllWithDependencies": "error",
+        "lazyEffect": "error",
+        "lazyPromiseInEffectSync": "error",
+        "leakingRequirements": "error",
+        "mapSomeToAsSome": "error",
+        "matchEffectToMapBoth": "error",
+        "matchEffectToMatch": "error",
+        "missingEffectContext": "error",
+        "missingEffectError": "error",
+        "missingLayerContext": "error",
+        "missingReturnYieldStar": "error",
+        "missingStarInYieldEffectGen": "error",
+        "multipleCatchTag": "error",
+        "multipleEffectProvide": "error",
+        "nonObjectEffectServiceType": "error",
+        "obsoleteMatchImport": "error",
+        "obsoleteSchemaImport": "error",
+        "optionMatchToFromOption": "error",
+        "outdatedApi": "error",
+        "overriddenSchemaConstructor": "error",
+        "preferSucceedSomeOrNone": "error",
+        "preferTypedSchemaDecoder": "error",
+        "preferUnsafeConstructor": "error",
+        "promiseInEffectSuccess": "error",
+        "provideLayerSucceedToProvideService": "error",
+        "raceFirstWithSleepToTimeout": "error",
+        "redundantMapError": "error",
+        "redundantOrDie": "error",
+        "redundantSchemaTagIdentifier": "error",
+        "returnEffectInGen": "error",
+        "runEffectInsideEffect": "error",
+        "runOfExitToRunExit": "error",
+        "schemaLiteralNonFinite": "error",
+        "schemaNumber": "error",
+        "schemaOpaqueInstanceMember": "error",
+        "schemaStructWithTag": "error",
+        "schemaSyncInEffect": "error",
+        "scopeInLayerEffect": "error",
+        "syncToSucceed": "error",
+        "timeoutCatchTagToTimeoutOrElse": "error",
+        "tryCatchInEffectGen": "error",
+        "unknownInEffectCatch": "error",
+        "unnecessaryEffectGen": "error",
+        "unnecessaryFailYieldableError": "error",
+        "unnecessaryPipe": "error",
+        "unnecessaryPipeChain": "error",
+        "unnecessaryTypeofType": "error",
+        "unstableApiUsage": "error"
+      }
+    },
+    {
+      "name": "correctness",
+      "description": "Enable all correctness diagnostics at warning level.",
+      "diagnosticSeverity": {
+        "anyUnknownInErrorContext": "warning",
+        "classSelfMismatch": "warning",
+        "duplicatePackage": "warning",
+        "effectFnImplicitAny": "warning",
+        "experimentalApiUsage": "warning",
+        "floatingEffect": "warning",
+        "floatingEffectInVitest": "warning",
+        "genericEffectServices": "warning",
+        "missingEffectContext": "warning",
+        "missingEffectError": "warning",
+        "missingLayerContext": "warning",
+        "missingReturnYieldStar": "warning",
+        "missingStarInYieldEffectGen": "warning",
+        "nonObjectEffectServiceType": "warning",
+        "obsoleteMatchImport": "warning",
+        "obsoleteSchemaImport": "warning",
+        "outdatedApi": "warning",
+        "overriddenSchemaConstructor": "warning",
+        "promiseInEffectSuccess": "warning",
+        "schemaLiteralNonFinite": "warning",
+        "schemaOpaqueInstanceMember": "warning",
+        "unsafeEffectTypeAssertion": "warning",
+        "unstableApiUsage": "warning"
+      }
+    },
+    {
+      "name": "antipattern",
+      "description": "Enable all anti-pattern diagnostics at warning level.",
+      "diagnosticSeverity": {
+        "catchUnfailableEffect": "warning",
+        "effectFnIife": "warning",
+        "effectGenUsesAdapter": "warning",
+        "effectInFailure": "warning",
+        "effectInVoidSuccess": "warning",
+        "globalErrorInEffectCatch": "warning",
+        "globalErrorInEffectFailure": "warning",
+        "layerMergeAllWithDependencies": "warning",
+        "lazyEffect": "warning",
+        "lazyPromiseInEffectSync": "warning",
+        "leakingRequirements": "warning",
+        "multipleEffectProvide": "warning",
+        "preferUnsafeConstructor": "warning",
+        "returnEffectInGen": "warning",
+        "runEffectInsideEffect": "warning",
+        "schemaSyncInEffect": "warning",
+        "scopeInLayerEffect": "warning",
+        "strictEffectProvide": "warning",
+        "tryCatchInEffectGen": "warning",
+        "unknownInEffectCatch": "warning"
+      }
+    },
+    {
       "name": "effect-native",
       "description": "Enable all Effect-native diagnostics at warning level.",
       "diagnosticSeverity": {
@@ -48,6 +279,65 @@
         "processEnv": "warning",
         "processEnvInEffect": "warning",
         "schemaSync": "warning"
+      }
+    },
+    {
+      "name": "style",
+      "description": "Enable all style diagnostics at warning level.",
+      "diagnosticSeverity": {
+        "acquireReleaseDisposable": "warning",
+        "allOfMapToForEach": "warning",
+        "catchAllTagDispatchToCatchTag": "warning",
+        "catchAllToMapError": "warning",
+        "catchChainToFirstSuccessOf": "warning",
+        "catchConditionalRefailToCatchIf": "warning",
+        "catchDieToOrDie": "warning",
+        "catchIfTagToCatchTag": "warning",
+        "catchRefailToTapError": "warning",
+        "catchTagToCatchReason": "warning",
+        "catchToIgnore": "warning",
+        "catchToOrElseSucceed": "warning",
+        "deterministicKeys": "warning",
+        "effectDoNotation": "warning",
+        "effectFnOpportunity": "warning",
+        "effectMapFlatten": "warning",
+        "effectMapVoid": "warning",
+        "effectSucceedWithVoid": "warning",
+        "flatMapConditionalToFilterOrFail": "warning",
+        "flatMapIgnoredParamToAndThen": "warning",
+        "flatMapToMap": "warning",
+        "mapSomeToAsSome": "warning",
+        "matchEffectToMapBoth": "warning",
+        "matchEffectToMatch": "warning",
+        "missedPipeableOpportunity": "warning",
+        "missingEffectServiceDependency": "warning",
+        "missingPipeableSignature": "warning",
+        "multipleCatchTag": "warning",
+        "nestedEffectGenYield": "warning",
+        "newSchemaClass": "warning",
+        "optionMatchToFromOption": "warning",
+        "preferSchemaTypeProperty": "warning",
+        "preferSucceedSomeOrNone": "warning",
+        "preferTypedSchemaDecoder": "warning",
+        "provideLayerSucceedToProvideService": "warning",
+        "raceFirstWithSleepToTimeout": "warning",
+        "redundantMapError": "warning",
+        "redundantOrDie": "warning",
+        "redundantSchemaTagIdentifier": "warning",
+        "runOfExitToRunExit": "warning",
+        "schemaNumber": "warning",
+        "schemaStructWithTag": "warning",
+        "schemaUnionOfLiterals": "warning",
+        "serviceNotAsClass": "warning",
+        "strictBooleanExpressions": "warning",
+        "syncToSucceed": "warning",
+        "timeoutCatchTagToTimeoutOrElse": "warning",
+        "unnecessaryArrowBlock": "warning",
+        "unnecessaryEffectGen": "warning",
+        "unnecessaryFailYieldableError": "warning",
+        "unnecessaryPipe": "warning",
+        "unnecessaryPipeChain": "warning",
+        "unnecessaryTypeofType": "warning"
       }
     }
   ],
@@ -148,6 +438,29 @@
             "start": 78,
             "end": 83,
             "text": "Parameter `input` implicitly has type `any` in `Effect.fn`, `Effect.fnUntraced`, or `Effect.fnUntracedEager`. No parameter type is available from an explicit annotation or contextual function type. effect(effectFnImplicitAny)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "experimentalApiUsage",
+      "group": "correctness",
+      "description": "Warns when using an API marked @stability experimental",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377135
+      ],
+      "preview": {
+        "sourceText": "\n/** @stability experimental */\nexport const previewApi = () =\u003e 1\n\npreviewApi()\n",
+        "diagnostics": [
+          {
+            "start": 67,
+            "end": 77,
+            "text": "`effect-v4-tests/preview#previewApi` is an experimental API. effect(experimentalApiUsage)"
           }
         ]
       }
@@ -562,6 +875,29 @@
             "start": 121,
             "end": 167,
             "text": "This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unstableApiUsage",
+      "group": "correctness",
+      "description": "Warns when using an API marked @stability unstable",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377136
+      ],
+      "preview": {
+        "sourceText": "\n/** @stability unstable */\nexport const previewApi = () =\u003e 1\n\npreviewApi()\n",
+        "diagnostics": [
+          {
+            "start": 63,
+            "end": 73,
+            "text": "`effect-v4-tests/preview#previewApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)"
           }
         ]
       }
@@ -1308,7 +1644,7 @@
           {
             "start": 118,
             "end": 123,
-            "text": "This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`. effect(globalFetchInEffect)"
+            "text": "This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/http`. effect(globalFetchInEffect)"
           }
         ]
       }
@@ -1767,6 +2103,29 @@
             "start": 263,
             "end": 277,
             "text": "Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "catchRefailToTapError",
+      "group": "style",
+      "description": "Suggests Effect.tapError for catch handlers that sequence an effect and then re-fail the original error",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377133
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const save: Effect.Effect\u003cvoid, Error\u003e\ndeclare const rollback: Effect.Effect\u003cvoid\u003e\n\nexport const program = save.pipe(\n  Effect.catch(error =\u003e rollback.pipe(Effect.andThen(Effect.fail(error))))\n)\n",
+        "diagnostics": [
+          {
+            "start": 161,
+            "end": 173,
+            "text": "Use Effect.tapError to observe the error and preserve the original failure without having to re-fail it. effect(catchRefailToTapError)"
           }
         ]
       }

@@ -102,40 +102,47 @@ func TestWriteFilesBlock(t *testing.T) {
 	}
 }
 
-func TestRunProjectJSON(t *testing.T) {
+func TestRunJSON(t *testing.T) {
 	t.Parallel()
 
 	cwd, err := filepath.Abs("testdata/native-diagnostics")
 	if err != nil {
 		t.Fatal(err)
 	}
-	request, err := json.Marshal(request{
-		CWD: cwd, Project: "tsconfig.json", Format: "json",
-	})
-	if err != nil {
-		t.Fatal(err)
-	}
-	var stdout bytes.Buffer
-	var stderr bytes.Buffer
-	if status := Run(context.Background(), []string{string(request)}, &stdout, &stderr); status != 1 {
-		t.Fatalf("unexpected status %d; stderr:\n%s", status, stderr.String())
-	}
-	var output jsonOutput
-	if err := json.Unmarshal(stdout.Bytes(), &output); err != nil {
-		t.Fatalf("invalid JSON output: %v\n%s", err, stdout.String())
-	}
-	if len(output.Diagnostics) != 1 {
-		t.Fatalf("expected one diagnostic, got %d", len(output.Diagnostics))
-	}
-	diagnostic := output.Diagnostics[0]
-	if diagnostic.Name != "asyncFunction" || diagnostic.Code != 377081 || diagnostic.Severity != severityError {
-		t.Fatalf("unexpected diagnostic: %#v", diagnostic)
-	}
-	if strings.Contains(diagnostic.Message, "effect(asyncFunction)") {
-		t.Fatalf("message includes redundant rule name: %q", diagnostic.Message)
-	}
-	if output.Files != nil {
-		t.Fatalf("expected no files list without listFiles: %#v", output.Files)
+	for name, req := range map[string]request{
+		"project": {Project: "tsconfig.json", Format: "json"},
+		"file":    {File: "main.ts", Format: "json"},
+	} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			req.CWD = cwd
+			request, err := json.Marshal(req)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var stdout bytes.Buffer
+			var stderr bytes.Buffer
+			if status := Run(context.Background(), []string{string(request)}, &stdout, &stderr); status != 1 {
+				t.Fatalf("unexpected status %d; stderr:\n%s", status, stderr.String())
+			}
+			var output jsonOutput
+			if err := json.Unmarshal(stdout.Bytes(), &output); err != nil {
+				t.Fatalf("invalid JSON output: %v\n%s", err, stdout.String())
+			}
+			if len(output.Diagnostics) != 1 {
+				t.Fatalf("expected one diagnostic, got %d", len(output.Diagnostics))
+			}
+			diagnostic := output.Diagnostics[0]
+			if diagnostic.Name != "asyncFunction" || diagnostic.Code != 377081 || diagnostic.Severity != severityError {
+				t.Fatalf("unexpected diagnostic: %#v", diagnostic)
+			}
+			if strings.Contains(diagnostic.Message, "effect(asyncFunction)") {
+				t.Fatalf("message includes redundant rule name: %q", diagnostic.Message)
+			}
+			if output.Files != nil {
+				t.Fatalf("expected no files list without listFiles: %#v", output.Files)
+			}
+		})
 	}
 }
 

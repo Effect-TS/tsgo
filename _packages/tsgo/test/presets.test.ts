@@ -8,6 +8,31 @@ import {
 } from "../src/cli/presets.js"
 
 describe("diagnostic presets", () => {
+  it("exposes the complete preset catalog", () => {
+    expect(presets.map((preset) => preset.name)).toEqual([
+      "recommended",
+      "strict",
+      "correctness",
+      "antipattern",
+      "effect-native",
+      "style"
+    ])
+  })
+
+  it("makes every diagnostic enabled by default an error in strict mode", () => {
+    const strict = presets.find((preset) => preset.name === "strict")!
+
+    expect(strict.diagnosticSeverity).not.toEqual({})
+    expect(Object.values(strict.diagnosticSeverity).every((severity) => severity === "error")).toBe(true)
+  })
+
+  it("uses only default-enabled diagnostics in the recommended preset", () => {
+    const recommended = presets.find((preset) => preset.name === "recommended")!
+
+    expect(recommended.diagnosticSeverity.floatingEffect).toBe("error")
+    expect(recommended.diagnosticSeverity.globalDate).toBeUndefined()
+  })
+
   it("merges the selected preset severities", () => {
     expect(mergePresetDiagnosticSeverities(["effect-native"])).toEqual(
       presets.find((preset) => preset.name === "effect-native")!.diagnosticSeverity

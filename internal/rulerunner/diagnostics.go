@@ -229,7 +229,7 @@ func createTransformedDiagnostic(original *ast.Diagnostic, newCategory tsdiag.Ca
 }
 
 func unusedDirectiveDiagnostics(sf *ast.SourceFile, allDirectives []directives.Directive, directiveSet *directives.DirectiveSet, resolvedSeverity map[string]etscore.Severity) []*ast.Diagnostic {
-	severity, ok := severityFromMap(resolvedSeverity, "unusedDirective")
+	severity, ok := severityFromMap(resolvedSeverity, rule.UnusedDirectiveName)
 	if !ok {
 		severity = etscore.SeverityWarning
 	}

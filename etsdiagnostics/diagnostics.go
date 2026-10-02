@@ -64,11 +64,12 @@ type formattedDiagnostic struct {
 }
 
 type summary struct {
-	FilesChecked int `json:"filesChecked"`
-	TotalFiles   int `json:"totalFiles"`
-	Errors       int `json:"errors"`
-	Warnings     int `json:"warnings"`
-	Messages     int `json:"messages"`
+	FilesChecked       int `json:"filesChecked"`
+	FilesWithoutPlugin int `json:"filesWithoutPlugin"`
+	TotalFiles         int `json:"totalFiles"`
+	Errors             int `json:"errors"`
+	Warnings           int `json:"warnings"`
+	Messages           int `json:"messages"`
 }
 
 type fileEffectVersion struct {
@@ -193,10 +194,8 @@ func collect(ctx context.Context, req request, override *etscore.EffectPluginOpt
 
 	if req.File != "" {
 		fileName := tspath.GetNormalizedAbsolutePath(req.File, req.CWD)
-		uri := lsconv.FileNameToDocumentURI(fileName)
-		openFiles := &collections.Set[lsproto.DocumentUri]{}
-		openFiles.Add(uri)
-		if err := updateSession(ctx, session, &project.APISnapshotRequest{OpenFiles: openFiles}); err != nil {
+		request := project.NewOpenFileSnapshotRequest(fileName, req.CWD, fs.UseCaseSensitiveFileNames())
+		if err := updateSession(ctx, session, request); err != nil {
 			return nil, nil, summary{}, err
 		}
 		addTarget(fileName)
@@ -244,6 +243,9 @@ func collect(ctx context.Context, req request, override *etscore.EffectPluginOpt
 				program.Options().Effect = override
 			}
 			if program.Options().Effect == nil {
+				if !overrideProvided {
+					resultSummary.FilesWithoutPlugin++
+				}
 				continue
 			}
 
@@ -409,8 +411,13 @@ func writeOutput(output io.Writer, format string, diagnostics []formattedDiagnos
 			fmt.Fprintf(output, "  %s: detected=%s, supported=%s\n", file.File, file.DetectedEffect, file.SupportedEffect)
 		}
 	}
-	_, err := fmt.Fprintf(output, "Checked %d files out of %d files. \n%d errors, %d warnings and %d messages.\n",
-		resultSummary.FilesChecked, resultSummary.TotalFiles, resultSummary.Errors, resultSummary.Warnings, resultSummary.Messages)
+	fmt.Fprintf(output, "Checked %d files out of %d files. \n", resultSummary.FilesChecked, resultSummary.TotalFiles)
+	if resultSummary.FilesWithoutPlugin > 0 {
+		fmt.Fprintf(output, "Skipped %d files because their tsconfig does not enable the %s plugin.\n",
+			resultSummary.FilesWithoutPlugin, etscore.EffectPluginName)
+	}
+	_, err := fmt.Fprintf(output, "%d errors, %d warnings and %d messages.\n",
+		resultSummary.Errors, resultSummary.Warnings, resultSummary.Messages)
 	return err
 }
 

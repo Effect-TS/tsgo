@@ -1,6 +1,6 @@
 module github.com/effect-ts/tsgo/_tools/gen_shims
 
-go 1.26
+go 1.27.0
 
 require (
 	golang.org/x/mod v0.37.0

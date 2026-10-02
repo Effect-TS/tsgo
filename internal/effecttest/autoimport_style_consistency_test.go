@@ -131,17 +131,17 @@ succeed/*fix*/(1);
 		IncludeCompletionsForImportStatements: core.TSTrue,
 	}
 	f.GoToMarker(t, "fix")
-	// Barrel imports use the top-level effect package while preserving the
-	// namespace-qualified call shape from the direct module imports.
+	// Barrel imports preserve the namespace-qualified call shape and use the
+	// public group barrel for nested modules.
 	verifyImportFixContentsUnordered(t, f, "fix", "succeed(1);\n", []string{
 		"import { Channel } from \"effect\";\n\nChannel.succeed(1);\n",
 		"import { Config } from \"effect\";\n\nConfig.succeed(1);\n",
 		"import { Deferred } from \"effect\";\n\nDeferred.succeed(1);\n",
-		"import { DurableDeferred } from \"effect\";\n\nDurableDeferred.succeed(1);\n",
+		"import { DurableDeferred } from \"effect/workflow\";\n\nDurableDeferred.succeed(1);\n",
 		"import { Effect } from \"effect\";\n\nEffect.succeed(1);\n",
 		"import { Exit } from \"effect\";\n\nExit.succeed(1);\n",
 		"import { Layer } from \"effect\";\n\nLayer.succeed(1);\n",
-		"import { Prompt } from \"effect\";\n\nPrompt.succeed(1);\n",
+		"import { Prompt } from \"effect/cli\";\n\nPrompt.succeed(1);\n",
 		"import { Request } from \"effect\";\n\nRequest.succeed(1);\n",
 		"import { Result } from \"effect\";\n\nResult.succeed(1);\n",
 		"import { SchemaGetter } from \"effect\";\n\nSchemaGetter.succeed(1);\n",
@@ -312,8 +312,8 @@ succeed/*fix*/(1);
 		"import * as Sink from \"effect/Sink\";\n\nSink.succeed(1);\n",
 		"import * as Stream from \"effect/Stream\";\n\nStream.succeed(1);\n",
 		"import * as TxDeferred from \"effect/TxDeferred\";\n\nTxDeferred.succeed(1);\n",
-		"import * as Prompt from \"effect/unstable/cli/Prompt\";\n\nPrompt.succeed(1);\n",
-		"import * as DurableDeferred from \"effect/unstable/workflow/DurableDeferred\";\n\nDurableDeferred.succeed(1);\n",
+		"import * as Prompt from \"effect/cli/Prompt\";\n\nPrompt.succeed(1);\n",
+		"import * as DurableDeferred from \"effect/workflow/DurableDeferred\";\n\nDurableDeferred.succeed(1);\n",
 	}, preferences)
 }
 

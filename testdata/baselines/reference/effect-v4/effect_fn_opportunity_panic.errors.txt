@@ -11,7 +11,11 @@ Effect version: 4.0.0
         "plugins": [
           {
             "name": "@effect/language-service",
-            "effectFn": ["inferred-span"]
+            "effectFn": ["inferred-span"],
+            "diagnosticSeverity": {
+              "experimentalApiUsage": "off",
+              "unstableApiUsage": "off"
+            }
           }
         ]
       }
@@ -20,7 +24,7 @@ Effect version: 4.0.0
 
 ==== /.src/effect_fn_opportunity_panic.ts (2 errors) ====
     import { Data, Effect, flow, Layer, Schema, Context } from "effect"
-    import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "effect/unstable/http"
+    import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "effect/http"
     
     class Todo extends Schema.Class<Todo>("Todo")({
       userId: Schema.Finite,

@@ -1,0 +1,29 @@
+==== /.src/stabilityApiUsage.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 32:36 - 32:56
+Node: overloaded("hello")
+Node Kind: KindCallExpression
+
+Subject: "hello"
+Subject Type: "hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: overloaded
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 33:30 - 33:44
+Node: overloaded(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: overloaded
+      args: (constant)
+      outType: number

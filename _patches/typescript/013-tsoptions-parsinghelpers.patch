@@ -27,16 +27,15 @@ index fa7491b1..c02dbdca 100644
  func ParseTristate(value any) core.Tristate {
  	if value == nil {
  		return core.TSUnknown
-@@ -548,6 +559,9 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
- 		allOptions.Quiet = ParseTristate(value)
- 	case "checkers":
- 		allOptions.Checkers = parseNumber(value)
-+	case "plugins":
+@@ -449,6 +460,8 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
+ 	case "paths":
+ 		allOptions.Paths = parseStringMap(value)
+ 	case "plugins":
 +		// Parse @effect/language-service plugin configuration.
 +		allOptions.Effect = etscore.ParseFromPlugins(value)
- 	case "runExternalCode":
- 		allOptions.RunExternalCode = ParseTristate(value)
- 	default:
+ 		// Native TypeScript does not load plugins; retain them only so tools can report the incompatibility.
+ 		if plugins, ok := value.([]any); ok {
+ 			allOptions.Plugins = core.Map(plugins, func(plugin any) core.PluginImport {
 @@ -645,7 +659,7 @@ func ParseBuildOptions(key string, value any, allOptions *core.BuildOptions) []*
  // with optional awareness of explicitly set null values in the raw JSON.
  // Fields in the source options will overwrite the corresponding fields in the target options,

@@ -96,6 +96,12 @@ func applyOverride(target *etscore.ResolvedEffectPluginOptions, override etscore
 	if override.Options.ExtendedKeyDetection != nil {
 		target.ExtendedKeyDetection = *override.Options.ExtendedKeyDetection
 	}
+	if override.Options.AllowedUnstableApis != nil {
+		target.AllowedUnstableApis = append([]string(nil), (*override.Options.AllowedUnstableApis)...)
+	}
+	if override.Options.AllowedExperimentalApis != nil {
+		target.AllowedExperimentalApis = append([]string(nil), (*override.Options.AllowedExperimentalApis)...)
+	}
 	if override.Options.AllowedDuplicatedPackages != nil {
 		target.AllowedDuplicatedPackages = append([]string(nil), (*override.Options.AllowedDuplicatedPackages)...)
 	}
@@ -117,6 +123,8 @@ func cloneOptions(config *etscore.EffectPluginOptions) *etscore.ResolvedEffectPl
 		KeyPatterns:               cloneKeyPatterns(config.KeyPatterns),
 		ExtendedKeyDetection:      config.ExtendedKeyDetection,
 		PipeableMinArgCount:       config.PipeableMinArgCount,
+		AllowedUnstableApis:       append([]string(nil), config.AllowedUnstableApis...),
+		AllowedExperimentalApis:   append([]string(nil), config.AllowedExperimentalApis...),
 		AllowedDuplicatedPackages: append([]string(nil), config.AllowedDuplicatedPackages...),
 		EffectFn:                  append([]string(nil), config.EffectFn...),
 	}

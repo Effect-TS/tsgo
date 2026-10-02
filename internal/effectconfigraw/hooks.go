@@ -118,6 +118,12 @@ func mergeEffectOptions(target, source *etscore.EffectPluginOptions, sourcePlugi
 	if sourcePluginRaw.Has("pipeableMinArgCount") {
 		merged.PipeableMinArgCount = source.PipeableMinArgCount
 	}
+	if sourcePluginRaw.Has("allowedUnstableApis") {
+		merged.AllowedUnstableApis = append([]string(nil), source.AllowedUnstableApis...)
+	}
+	if sourcePluginRaw.Has("allowedExperimentalApis") {
+		merged.AllowedExperimentalApis = append([]string(nil), source.AllowedExperimentalApis...)
+	}
 	if sourcePluginRaw.Has("allowedDuplicatedPackages") {
 		merged.AllowedDuplicatedPackages = append([]string(nil), source.AllowedDuplicatedPackages...)
 	}
@@ -205,6 +211,8 @@ func cloneEffectOptions(source *etscore.EffectPluginOptions) *etscore.EffectPlug
 	}
 	cloned := *source
 	cloned.KeyPatterns = cloneKeyPatterns(source.KeyPatterns)
+	cloned.AllowedUnstableApis = append([]string(nil), source.AllowedUnstableApis...)
+	cloned.AllowedExperimentalApis = append([]string(nil), source.AllowedExperimentalApis...)
 	cloned.AllowedDuplicatedPackages = append([]string(nil), source.AllowedDuplicatedPackages...)
 	cloned.EffectFn = append([]string(nil), source.EffectFn...)
 	cloned.DiagnosticSeverity = mergeSeverityMaps(nil, source.DiagnosticSeverity)
@@ -229,6 +237,8 @@ func cloneOverrides(source []etscore.Override) []etscore.Override {
 				PipeableMinArgCount:       cloneIntPtr(override.Options.PipeableMinArgCount),
 				KeyPatterns:               cloneKeyPatternsPtr(override.Options.KeyPatterns),
 				ExtendedKeyDetection:      cloneBoolPtr(override.Options.ExtendedKeyDetection),
+				AllowedUnstableApis:       cloneStringSlicePtr(override.Options.AllowedUnstableApis),
+				AllowedExperimentalApis:   cloneStringSlicePtr(override.Options.AllowedExperimentalApis),
 				AllowedDuplicatedPackages: cloneStringSlicePtr(override.Options.AllowedDuplicatedPackages),
 				EffectFn:                  cloneStringSlicePtr(override.Options.EffectFn),
 			},

@@ -1,0 +1,14 @@
+=== Metadata ===
+Effect version: unknown
+
+
+
+==== /.src/unstableApiUsage_preview.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics *:off
+    
+    /** @stability unstable */
+    export const previewApi = () => 1
+    
+    previewApi()
+    

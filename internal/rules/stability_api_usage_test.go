@@ -1,0 +1,56 @@
+package rules
+
+import (
+	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/core"
+	"github.com/microsoft/TypeScript/tsc/shim/parser"
+)
+
+func TestStabilityOfDeclaration(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name   string
+		source string
+		want   string
+	}{
+		{"unstable variable", "/** @stability unstable */\nexport const api = 1", "unstable"},
+		{"experimental variable", "/** @stability experimental */\nexport const api = 1", "experimental"},
+		{"stable variable", "/** @stability stable */\nexport const api = 1", ""},
+		{"other tag", "/** @deprecated */\nexport const api = 1", ""},
+		{"plain variable", "export const api = 1", ""},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			sf := parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: "/test.ts"}, test.source, core.ScriptKindTS)
+			statement := sf.Statements.Nodes[0]
+			declaration := statement.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
+			if got := stabilityOfDeclaration(declaration); got != test.want {
+				t.Errorf("stabilityOfDeclaration = %q, want %q", got, test.want)
+			}
+		})
+	}
+}
+
+func TestStabilityApiModuleName(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct{ file, want string }{
+		{"/pkg/src/http/HttpClient.ts", "effect/http/HttpClient"},
+		{"/pkg/dist/http/HttpClient.d.ts", "effect/http/HttpClient"},
+		{"/pkg/dist/dts/http/HttpClient.d.mts", "effect/http/HttpClient"},
+		{"/pkg/dist/cjs/http/HttpClient.d.cts", "effect/http/HttpClient"},
+		{"/pkg/dist/http/index.d.ts", "effect/http"},
+		{"/pkg/index.ts", "effect"},
+		{"/pkg/types/client.d.ts", "effect/types/client"},
+		{"/pkg-other/client.ts", ""},
+	} {
+		t.Run(test.file, func(t *testing.T) {
+			t.Parallel()
+			if got := stabilityApiModuleName("effect", "/pkg", test.file); got != test.want {
+				t.Fatalf("got %q, want %q", got, test.want)
+			}
+		})
+	}
+}

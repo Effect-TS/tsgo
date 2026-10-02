@@ -7,10 +7,10 @@ index dd9572fa..3ecfd388 100644
  	checker           *checker.Checker
  	preferences       modulespecifiers.UserPreferences
 +	fixTransformer    FixTransformer
- 	projectKey        tspath.Path
+ 	projectID         ProjectID
  
  	allowedEndings                   []modulespecifiers.ModuleSpecifierEnding
-@@ -39,7 +40,7 @@ func NewView(registry *Registry, importingFile *ast.SourceFile, projectKey tspat
+@@ -39,7 +40,7 @@ func NewView(registry *Registry, importingFile *ast.SourceFile, projectID Projec
  	if canonical := importingFile.CanonicalSourceFile(); canonical != nil {
  		importingFilePath = canonical.Path()
  	}
@@ -19,7 +19,7 @@ index dd9572fa..3ecfd388 100644
  		registry:          registry,
  		importingFile:     importingFile,
  		importingFilePath: importingFilePath,
-@@ -53,6 +54,10 @@ func NewView(registry *Registry, importingFile *ast.SourceFile, projectKey tspat
+@@ -53,6 +54,10 @@ func NewView(registry *Registry, importingFile *ast.SourceFile, projectID Projec
  		),
  		shouldUseUriStyleNodeCoreModules: lsutil.ShouldUseUriStyleNodeCoreModules(importingFile, program),
  	}

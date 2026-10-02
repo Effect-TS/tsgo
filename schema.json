@@ -1513,6 +1513,22 @@
                                 },
                                 "type": "array"
                               },
+                              "allowedExperimentalApis": {
+                                "default": [],
+                                "description": "Experimental APIs allowed by package/module subtree or package/module#export name.",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "allowedUnstableApis": {
+                                "default": [],
+                                "description": "Unstable APIs allowed by package/module subtree or package/module#export name.",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
                               "barrelImportPackages": {
                                 "default": [],
                                 "description": "Package names that should prefer barrel named imports.",
@@ -2342,6 +2358,11 @@
           "default": "suggestion",
           "description": "Suggests Effect.catchTag instead of Effect.catchIf with a direct _tag equality predicate"
         },
+        "catchRefailToTapError": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.tapError for catch handlers that sequence an effect and then re-fail the original error"
+        },
         "catchTagToCatchReason": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
@@ -2436,6 +2457,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests using Effect.void instead of Effect.succeed(undefined) or Effect.succeed(void 0)"
+        },
+        "experimentalApiUsage": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Warns when using an API marked @stability experimental"
         },
         "extendsNativeError": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -2861,6 +2887,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
           "description": "Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels"
+        },
+        "unstableApiUsage": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Warns when using an API marked @stability unstable"
         }
       },
       "type": "object"
@@ -2907,6 +2938,22 @@
         "allowedDuplicatedPackages": {
           "default": [],
           "description": "Package names allowed to have multiple versions without triggering duplicatePackage.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "allowedExperimentalApis": {
+          "default": [],
+          "description": "Experimental APIs allowed by package/module subtree or package/module#export name.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "allowedUnstableApis": {
+          "default": [],
+          "description": "Unstable APIs allowed by package/module subtree or package/module#export name.",
           "items": {
             "type": "string"
           },
@@ -3122,6 +3169,12 @@
       "properties": {
         "allowedDuplicatedPackages": {
           "description": "Scoped allow-list for duplicatePackage."
+        },
+        "allowedExperimentalApis": {
+          "description": "Scoped allow-list for experimentalApiUsage."
+        },
+        "allowedUnstableApis": {
+          "description": "Scoped allow-list for unstableApiUsage."
         },
         "diagnosticSeverity": {
           "$ref": "#/definitions/effectLanguageServicePluginDiagnosticSeverityDefinition",

@@ -3,9 +3,9 @@
 import * as NodeRuntime from "@effect/platform-node/NodeRuntime"
 import * as NodeServices from "@effect/platform-node/NodeServices"
 import * as Effect from "effect/Effect"
-import * as Argument from "effect/unstable/cli/Argument"
-import * as Command from "effect/unstable/cli/Command"
-import * as Flag from "effect/unstable/cli/Flag"
+import { Argument } from "effect/cli"
+import { Command } from "effect/cli"
+import { Flag } from "effect/cli"
 import * as Option from "effect/Option"
 import { fileURLToPath } from "node:url"
 import { buildArtifact, buildCli, buildLocal, verifyReleaseArtifacts } from "./build.ts"
@@ -37,11 +37,11 @@ import { printUpstreamInfo } from "./upstreamResolve.ts"
 const repositoryRoot = fileURLToPath(new URL("../../..", import.meta.url))
 
 const setup = Command.make("setup", {
-  component: Flag.choice("component", ["typescript", "oxlint-tsgolint", "oxlint"]).pipe(
+  component: Flag.Literals("component", ["typescript", "oxlint-tsgolint", "oxlint"]).pipe(
     Flag.withDefault("typescript"),
     Flag.withDescription("Upstream component to set up")
   ),
-  version: Flag.string("version").pipe(
+  version: Flag.String("version").pipe(
     Flag.optional,
     Flag.withDescription("Component version; TypeScript defaults to the configured next tag")
   )
@@ -113,9 +113,9 @@ const buildCliCommand = Command.make("cli", {}, () => buildCli(repositoryRoot)).
 )
 
 const buildArtifactCommand = Command.make("artifact", {
-  component: Flag.choice("component", ["typescript", "oxlint-tsgolint", "oxlint"]),
-  version: Flag.string("version"),
-  target: Flag.choice("target", [
+  component: Flag.Literals("component", ["typescript", "oxlint-tsgolint", "oxlint"]),
+  version: Flag.String("version"),
+  target: Flag.Literals("target", [
     "darwin-arm64",
     "darwin-x64",
     "win32-x64",
@@ -146,10 +146,10 @@ const changesetPublish = Command.make("publish", {}, () => publishChangeset(repo
 )
 
 const changesetAdd = Command.make("add", {
-  description: Argument.string("description"),
-  id: Flag.string("id"),
-  packageName: Flag.string("package").pipe(Flag.withDefault("@effect/tsgo")),
-  bump: Flag.choice("bump", ["patch", "minor", "major"]).pipe(Flag.withDefault("patch"))
+  description: Argument.String("description"),
+  id: Flag.String("id"),
+  packageName: Flag.String("package").pipe(Flag.withDefault("@effect/tsgo")),
+  bump: Flag.Literals("bump", ["patch", "minor", "major"]).pipe(Flag.withDefault("patch"))
 }, ({ bump, description, id, packageName }) =>
   addChangeset(repositoryRoot, id, packageName, bump, description)).pipe(
     Command.withDescription("Write a changeset file")
@@ -161,13 +161,13 @@ const changeset = Command.make("changeset").pipe(
 )
 
 const openPrIfChanged = Command.make("open-pr-if-changed", {
-  base: Flag.string("base"),
-  head: Flag.string("head").pipe(Flag.optional),
-  headPrefix: Flag.string("head-prefix").pipe(Flag.optional),
-  title: Flag.string("title"),
-  body: Flag.string("body"),
-  commitMessage: Flag.string("commit-message"),
-  checks: Flag.keyValuePair("check").pipe(Flag.optional)
+  base: Flag.String("base"),
+  head: Flag.String("head").pipe(Flag.optional),
+  headPrefix: Flag.String("head-prefix").pipe(Flag.optional),
+  title: Flag.String("title"),
+  body: Flag.String("body"),
+  commitMessage: Flag.String("commit-message"),
+  checks: Flag.KeyValuePair("check").pipe(Flag.optional)
 }, ({ base, body, checks, commitMessage, head, headPrefix, title }) =>
   openPullRequestIfChanged(repositoryRoot, {
     base,
@@ -182,11 +182,11 @@ const openPrIfChanged = Command.make("open-pr-if-changed", {
   )
 
 const completeGithubCheck = Command.make("complete-check", {
-  checkId: Flag.string("check-id").pipe(Flag.withDefault("")),
-  result: Flag.choice("result", ["success", "failure", "cancelled"]),
-  successMessage: Flag.string("success-message"),
-  failureMessage: Flag.string("failure-message"),
-  summary: Flag.string("summary")
+  checkId: Flag.String("check-id").pipe(Flag.withDefault("")),
+  result: Flag.Literals("result", ["success", "failure", "cancelled"]),
+  successMessage: Flag.String("success-message"),
+  failureMessage: Flag.String("failure-message"),
+  summary: Flag.String("summary")
 }, ({ checkId, failureMessage, result, successMessage, summary }) =>
   completeCheck(repositoryRoot, {
     checkId,
@@ -208,11 +208,11 @@ const updateUpstreamCommand = Command.make("update", {}, () => updateUpstream(re
 )
 
 const resolveUpstreamCommand = Command.make("resolve", {
-  component: Flag.choice("component", ["typescript", "oxlint-tsgolint", "oxlint"]).pipe(
+  component: Flag.Literals("component", ["typescript", "oxlint-tsgolint", "oxlint"]).pipe(
     Flag.withDefault("typescript")
   ),
-  version: Flag.string("version").pipe(Flag.optional),
-  target: Flag.choice("target", [
+  version: Flag.String("version").pipe(Flag.optional),
+  target: Flag.Literals("target", [
     "darwin-arm64",
     "darwin-x64",
     "win32-x64",
@@ -245,16 +245,16 @@ const flake = Command.make("flake").pipe(
 )
 
 const perfCompare = Command.make("compare", {
-  target: Argument.string("target"),
-  version: Flag.string("version").pipe(Flag.optional),
-  latest: Flag.boolean("latest"),
-  output: Flag.string("output").pipe(Flag.optional),
-  runId: Flag.string("run-id").pipe(Flag.optional),
-  patchedBin: Flag.string("patched-bin").pipe(Flag.optional),
-  stockBin: Flag.string("stock-bin").pipe(Flag.optional),
-  config: Flag.string("config").pipe(Flag.withDefault("tsconfig.json")),
-  runs: Flag.integer("runs").pipe(Flag.withDefault(1)),
-  diagnosticsFlag: Flag.string("diagnostics-flag").pipe(Flag.withDefault("--diagnostics"))
+  target: Argument.String("target"),
+  version: Flag.String("version").pipe(Flag.optional),
+  latest: Flag.Boolean("latest"),
+  output: Flag.String("output").pipe(Flag.optional),
+  runId: Flag.String("run-id").pipe(Flag.optional),
+  patchedBin: Flag.String("patched-bin").pipe(Flag.optional),
+  stockBin: Flag.String("stock-bin").pipe(Flag.optional),
+  config: Flag.String("config").pipe(Flag.withDefault("tsconfig.json")),
+  runs: Flag.Int("runs").pipe(Flag.withDefault(1)),
+  diagnosticsFlag: Flag.String("diagnostics-flag").pipe(Flag.withDefault("--diagnostics"))
 }, ({ config, diagnosticsFlag, latest, output, patchedBin, runId, runs, stockBin, target, version }) =>
   comparePerformance(repositoryRoot, {
     config,
@@ -285,7 +285,7 @@ const preparePackages = Command.make("prepare", {}, () => preparePlatformPackage
 )
 
 const assemblePackages = Command.make("assemble", {
-  artifacts: Flag.string("artifacts").pipe(Flag.withDefault("_release-artifacts"))
+  artifacts: Flag.String("artifacts").pipe(Flag.withDefault("_release-artifacts"))
 }, ({ artifacts }) => assembleReleaseArtifacts(repositoryRoot, artifacts)).pipe(
   Command.withDescription("Assemble downloaded release artifacts into platform packages")
 )

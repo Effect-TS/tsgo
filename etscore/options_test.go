@@ -73,6 +73,8 @@ func TestParseFromPlugins_Overrides(t *testing.T) {
 					"pipeableMinArgCount", float64(3),
 					"extendedKeyDetection", true,
 					"allowedDuplicatedPackages", []any{"effect"},
+					"allowedUnstableApis", []any{"effect/http"},
+					"allowedExperimentalApis", []any{"effect/schema/SchemaJITCompiler"},
 				),
 			),
 		},
@@ -100,6 +102,12 @@ func TestParseFromPlugins_Overrides(t *testing.T) {
 	}
 	if override.Options.ExtendedKeyDetection == nil || !*override.Options.ExtendedKeyDetection {
 		t.Fatalf("ExtendedKeyDetection = %v, want true", override.Options.ExtendedKeyDetection)
+	}
+	if override.Options.AllowedUnstableApis == nil || !reflect.DeepEqual(*override.Options.AllowedUnstableApis, []string{"effect/http"}) {
+		t.Fatalf("AllowedUnstableApis = %v, want [effect/http]", override.Options.AllowedUnstableApis)
+	}
+	if override.Options.AllowedExperimentalApis == nil || !reflect.DeepEqual(*override.Options.AllowedExperimentalApis, []string{"effect/schema/SchemaJITCompiler"}) {
+		t.Fatalf("AllowedExperimentalApis = %v, want [effect/schema/SchemaJITCompiler]", override.Options.AllowedExperimentalApis)
 	}
 	if override.Options.AllowedDuplicatedPackages == nil || !reflect.DeepEqual(*override.Options.AllowedDuplicatedPackages, []string{"effect"}) {
 		t.Fatalf("AllowedDuplicatedPackages = %v, want [effect]", override.Options.AllowedDuplicatedPackages)
@@ -681,5 +689,27 @@ func TestParseFromPlugins_AutoImportStyleNormalizationDropsEmptyEntries(t *testi
 	}
 	if got, want := opts.GetImportAliases(), map[string]string{"effect": "E"}; !reflect.DeepEqual(got, want) {
 		t.Errorf("GetImportAliases() = %v, want %v", got, want)
+	}
+}
+
+func TestParseFromPlugins_AllowedUnstableApis(t *testing.T) {
+	plugins := makePlugins(makePluginMap(
+		"name", etscore.EffectPluginName,
+		"allowedUnstableApis", []any{"effect/http", "effect/rpc/Client#make"},
+	))
+	opts := etscore.ParseFromPlugins(plugins)
+	if opts == nil || !reflect.DeepEqual(opts.AllowedUnstableApis, []string{"effect/http", "effect/rpc/Client#make"}) {
+		t.Fatalf("unexpected options: %+v", opts)
+	}
+}
+
+func TestParseFromPlugins_AllowedExperimentalApis(t *testing.T) {
+	plugins := makePlugins(makePluginMap(
+		"name", etscore.EffectPluginName,
+		"allowedExperimentalApis", []any{"effect/http", "effect/rpc/Client#make"},
+	))
+	opts := etscore.ParseFromPlugins(plugins)
+	if opts == nil || !reflect.DeepEqual(opts.AllowedExperimentalApis, []string{"effect/http", "effect/rpc/Client#make"}) {
+		t.Fatalf("unexpected options: %+v", opts)
 	}
 }

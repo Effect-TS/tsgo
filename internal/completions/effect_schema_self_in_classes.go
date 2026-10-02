@@ -115,11 +115,7 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 
 	// Model.Class (v4 only)
 	if version == typeparser.EffectMajorV4 {
-		modelIdentifier := typeparser.FindModuleIdentifierForPackage(ctx.SourceFile, "effect/unstable", "schema")
-		if modelIdentifier == "schema" {
-			// Fallback: try effect/unstable barrel
-			modelIdentifier = typeparser.FindModuleIdentifierForPackage(ctx.SourceFile, "effect/unstable", "Model")
-		}
+		modelIdentifier := typeparser.FindModuleIdentifierForPackage(ctx.SourceFile, "effect/schema", "Model")
 
 		isModelFullyQualified := modelIdentifier == accessedText
 

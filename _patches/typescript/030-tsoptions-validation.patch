@@ -1,0 +1,29 @@
+diff --git a/tsc/internal/tsoptions/tsconfigparsing.go b/tsc/internal/tsoptions/tsconfigparsing.go
+--- a/tsc/internal/tsoptions/tsconfigparsing.go
++++ b/tsc/internal/tsoptions/tsconfigparsing.go
+@@ -22,6 +22,14 @@
+ 	"github.com/microsoft/TypeScript/tsc/internal/vfs"
+ 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
+ )
++
++// ValidateCompilerOptionsCallback validates the final options after configuration
++// inheritance and existing options have been merged.
++var ValidateCompilerOptionsCallback func(*core.CompilerOptions, *ast.SourceFile) []*ast.Diagnostic
++
++func RegisterValidateCompilerOptionsCallback(cb func(*core.CompilerOptions, *ast.SourceFile) []*ast.Diagnostic) {
++	ValidateCompilerOptionsCallback = cb
++}
+ 
+ type extendsResult struct {
+ 	options             *core.CompilerOptions
+@@ -1508,6 +1516,10 @@
+ 		return projectReferences
+ 	}
+ 
++	if ValidateCompilerOptionsCallback != nil {
++		errors = append(errors, ValidateCompilerOptionsCallback(parsedConfig.options, tsconfigToSourceFile(sourceFile))...)
++	}
++
+ 	fileNames, literalFileNamesLen := getFileNames(basePathForFileNames)
+ 	compileOnSave := new(false)
+ 	if raw, ok := parsedConfig.raw.(*collections.OrderedMap[string, any]); ok {

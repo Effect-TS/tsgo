@@ -5,7 +5,7 @@ Effect version: 4.0.0
 
 
 ==== /.src/classSelfMismatch_sqlClass.ts (1 errors) ====
-    import { Model } from "effect/unstable/schema"
+    import { Model } from "effect/schema"
     import {Schema} from "effect"
     
     // valid usage

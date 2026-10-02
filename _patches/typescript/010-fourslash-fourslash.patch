@@ -71,7 +71,7 @@ index d1087aabdf..803535aedc 100644
 +			Uri: fileURI,
 +		},
 +	}
-+	diagResult := sendRequest(t, f, lsproto.TextDocumentDiagnosticInfo, diagParams)
++	diagResult := f.sendRequest(t, lsproto.TextDocumentDiagnosticInfo, diagParams)
 +
 +	var diagnostics []*lsproto.Diagnostic
 +	if diagResult.FullDocumentDiagnosticReport != nil && diagResult.FullDocumentDiagnosticReport.Items != nil {
@@ -113,7 +113,7 @@ index d1087aabdf..803535aedc 100644
 +				Only:        &[]lsproto.CodeActionKind{lsproto.CodeActionKindQuickFix},
 +			},
 +		}
-+		codeActions := sendRequest(t, f, lsproto.TextDocumentCodeActionInfo, params)
++		codeActions := f.sendRequest(t, lsproto.TextDocumentCodeActionInfo, params)
 +
 +		var titles []string
 +		if codeActions.CommandOrCodeActionArray != nil {
@@ -150,7 +150,7 @@ index d1087aabdf..803535aedc 100644
 +			Only:        &[]lsproto.CodeActionKind{lsproto.CodeActionKindQuickFix},
 +		},
 +	}
-+	codeActions := sendRequest(t, f, lsproto.TextDocumentCodeActionInfo, params)
++	codeActions := f.sendRequest(t, lsproto.TextDocumentCodeActionInfo, params)
 +
 +	// Filter to quick fixes only
 +	var quickFixes []*lsproto.CodeAction
@@ -282,7 +282,7 @@ index d1087aabdf..803535aedc 100644
 +			Only: &[]lsproto.CodeActionKind{lsproto.CodeActionKindRefactor},
 +		},
 +	}
-+	codeActions := sendRequest(t, f, lsproto.TextDocumentCodeActionInfo, params)
++	codeActions := f.sendRequest(t, lsproto.TextDocumentCodeActionInfo, params)
 +
 +	var result []RefactorActionInfo
 +	if codeActions.CommandOrCodeActionArray != nil {
@@ -313,7 +313,7 @@ index d1087aabdf..803535aedc 100644
 +			Only: &[]lsproto.CodeActionKind{lsproto.CodeActionKindRefactor},
 +		},
 +	}
-+	codeActions := sendRequest(t, f, lsproto.TextDocumentCodeActionInfo, params)
++	codeActions := f.sendRequest(t, lsproto.TextDocumentCodeActionInfo, params)
 +
 +	// Filter to refactor actions
 +	var refactorActions []*lsproto.CodeAction

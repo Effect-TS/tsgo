@@ -210,6 +210,17 @@ func ParseFromPlugins(value any) *EffectPluginOptions {
 			}
 		}
 
+		if val, exists := getPluginValue("allowedUnstableApis"); exists {
+			if apis, ok := parseStringArrayStrict(val); ok {
+				result.AllowedUnstableApis = apis
+			}
+		}
+		if val, exists := getPluginValue("allowedExperimentalApis"); exists {
+			if apis, ok := parseStringArrayStrict(val); ok {
+				result.AllowedExperimentalApis = apis
+			}
+		}
+
 		// Parse allowedDuplicatedPackages (default: nil)
 		if val, exists := getPluginValue("allowedDuplicatedPackages"); exists {
 			if arr, ok := val.([]any); ok {
@@ -363,6 +374,16 @@ func parseOverrideOptions(value any) OverrideOptions {
 	if value, exists := optionsMap("extendedKeyDetection"); exists {
 		if b, ok := value.(bool); ok {
 			result.ExtendedKeyDetection = &b
+		}
+	}
+	if value, exists := optionsMap("allowedUnstableApis"); exists {
+		if apis, ok := parseStringArrayStrict(value); ok {
+			result.AllowedUnstableApis = &apis
+		}
+	}
+	if value, exists := optionsMap("allowedExperimentalApis"); exists {
+		if apis, ok := parseStringArrayStrict(value); ok {
+			result.AllowedExperimentalApis = &apis
 		}
 	}
 	if value, exists := optionsMap("allowedDuplicatedPackages"); exists {

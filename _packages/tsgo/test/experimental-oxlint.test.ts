@@ -4,8 +4,16 @@ import { createHash } from "node:crypto"
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { dirname, join } from "node:path"
-import { afterEach, describe, expect, it } from "vitest"
-import { discoverBinaries, experimentalOxlintTarget } from "../src/patcher/index.js"
+import { afterEach, describe, expect, it, vi } from "vitest"
+import {
+  discoverBinaries,
+  experimentalOxlintTarget,
+  preparePatch,
+  ReplacementUnavailableError,
+  resolveReplacement,
+  selectComponents,
+  unpatch
+} from "../src/patcher/index.js"
 
 const temporaryDirectories: Array<string> = []
 
@@ -30,6 +38,7 @@ const writeBinary = async (filePath: string, contents: string) => {
 }
 
 afterEach(async () => {
+  vi.restoreAllMocks()
   await Promise.all(temporaryDirectories.splice(0).map((directory) => rm(directory, { recursive: true, force: true })))
 })
 
@@ -47,9 +56,76 @@ describe("experimental Oxlint discovery", () => {
       tsgolintPackage: "@oxlint-tsgolint/win32-arm64",
       tsgolintExecutable: "tsgolint.exe"
     })
-    expect(() => experimentalOxlintTarget("linux", "x64", false)).toThrow(/musl/)
+    expect(experimentalOxlintTarget("linux", "x64", false)).toEqual({
+      codeTarget: "linux-x64-musl",
+      oxlintPackage: "@oxlint/binding-linux-x64-musl",
+      tsgolintPackage: "@oxlint-tsgolint/linux-x64",
+      tsgolintExecutable: "tsgolint"
+    })
     expect(() => experimentalOxlintTarget("linux", "arm", true)).toThrow(/Unsupported/)
   })
+
+  it.skipIf(process.platform !== "linux").each([false, true])(
+    "discovers musl binaries and rejects only their replacements (vite-plus: %s)",
+    async (nested) => {
+      vi.spyOn(process.report, "getReport").mockReturnValue({ header: {} } as ReturnType<typeof process.report.getReport>)
+      const directory = await makeTemporaryDirectory()
+      await writePackage(directory, "typescript", { version: "7.0.0" })
+      const typescriptDirectory = await writePackage(directory, `@typescript/typescript-linux-${process.arch}`, {
+        version: "7.0.0"
+      })
+      const typescriptPath = join(typescriptDirectory, "lib", "tsc")
+      await writeBinary(typescriptPath, "typescript")
+
+      const oxlintRoot = nested ? await writePackage(directory, "vite-plus", { version: "1.0.0" }) : directory
+      const oxlintDirectory = await writePackage(oxlintRoot, "oxlint", { version: "1.0.0" })
+      await writePackage(oxlintRoot, "oxlint-tsgolint", { version: "2.0.0" })
+      const bindingDirectory = await writePackage(oxlintRoot, `@oxlint/binding-linux-${process.arch}-musl`, {
+        version: "1.0.0",
+        main: "oxlint.node"
+      })
+      const tsgolintDirectory = await writePackage(oxlintRoot, `@oxlint-tsgolint/linux-${process.arch}`, {
+        version: "2.0.0"
+      })
+      await Promise.all([
+        writeBinary(join(bindingDirectory, "oxlint.node"), "oxlint"),
+        writeBinary(join(oxlintDirectory, "dist", "index.d.ts"), "declarations"),
+        writeBinary(join(tsgolintDirectory, "tsgolint"), "tsgolint")
+      ])
+
+      const discovered = await Effect.runPromise(discoverBinaries(directory).pipe(Effect.provide(NodeServices.layer)))
+      const typescript = selectComponents(discovered, new Set(["typescript"]))
+      expect(typescript).toHaveLength(1)
+      expect(typescript[0]?.binaryPath).toBe(typescriptPath)
+      const oxlint = selectComponents(discovered, new Set(["oxlint", "oxlint-dts", "oxlint-tsgolint"]))
+      expect(oxlint).toHaveLength(3)
+      expect(oxlint[0]?.packageName).toBe(`@oxlint/binding-linux-${process.arch}-musl`)
+      for (const target of oxlint) {
+        await expect(Effect.runPromise(
+          Effect.scoped(resolveReplacement(target)).pipe(Effect.provide(NodeServices.layer))
+        )).rejects.toMatchObject({
+          _tag: "ReplacementUnavailableError",
+          reason: "Linux musl is not supported by the packaged Oxlint integration."
+        })
+      }
+      await expect(Effect.runPromise(
+        Effect.scoped(preparePatch(oxlint, { skipMissing: false })).pipe(Effect.provide(NodeServices.layer))
+      )).rejects.toBeInstanceOf(ReplacementUnavailableError)
+      const skipped = await Effect.runPromise(
+        Effect.scoped(preparePatch(oxlint, { skipMissing: true })).pipe(Effect.provide(NodeServices.layer))
+      )
+      expect(skipped.operations).toEqual([])
+      expect(skipped.skipped).toHaveLength(3)
+
+      await Promise.all(oxlint.map((target) => writeBinary(`${target.binaryPath}.original`, "original")))
+      const restored = await Effect.runPromise(unpatch({
+        cwd: directory,
+        components: new Set(["oxlint", "oxlint-tsgolint"])
+      }).pipe(Effect.provide(NodeServices.layer)))
+      expect(restored.changed).toHaveLength(3)
+      expect(restored.skipped).toEqual([])
+    }
+  )
 
   it("returns normalized binaries without resolving Effect artifacts", async () => {
     const directory = await makeTemporaryDirectory()

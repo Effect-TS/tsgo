@@ -1,0 +1,25 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/consumer.ts(6,25): warning TS377136: `effect-v4-tests/api#unstableApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/consumer.ts(7,33): warning TS377136: `effect-v4-tests/api#unstableApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+
+
+==== /.src/api.ts (0 errors) ====
+    /** @stability unstable */
+    export const unstableApi = 1
+    
+
+==== /.src/consumer.ts (2 errors) ====
+    // @effect-v4
+    // @effect-diagnostics unstableApiUsage:warning
+    import { unstableApi as renamed } from "./api"
+    import * as api from "./api"
+    
+    export const namedUse = renamed
+                            ~~~~~~~
+!!! warning TS377136: `effect-v4-tests/api#unstableApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export const namespaceUse = api.unstableApi
+                                    ~~~~~~~~~~~
+!!! warning TS377136: `effect-v4-tests/api#unstableApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    

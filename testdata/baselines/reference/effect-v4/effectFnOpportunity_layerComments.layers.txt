@@ -1,0 +1,30 @@
+==== /.src/effectFnOpportunity_layerComments.ts (1 layer exports) ====
+
+=== layer ===
+
+--- output ---
+flowchart TD
+  0["Layer.effect#40;<br/>  Store,<br/>  Effect.gen#40;function* #40;#41; #123;<br/>    const prefix = yield* Effect.succeed#40;#quot;k:#quot;#41;<br/>    return #123;<br/>      // how many entries the store holds<br/>      size: 1_000,<br/>      get: #40;key: string#41; =#gt;<br/>        Effect.gen#40;function* #40;#41; #123;<br/>          // look the key up<br/>          return prefix + key<br/>        #125;#41;,<br/>    #125;<br/>  #125;#41;,<br/>#41;<br/>provides: Store<br/>requires: "]
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`layer<br/><small>_ln 8 col 13_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_provides [Provides]
+        0_provides_0["Store"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+
+--- outline ---
+flowchart TD
+  0["layer"]
+
+--- quickinfo ---
+/**
+ * - Store provided at ln 8 col 13 by `layer`
+ */

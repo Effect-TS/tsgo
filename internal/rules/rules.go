@@ -8,6 +8,8 @@ import (
 // All is the list of all diagnostic rules.
 // Add new rules here explicitly - no init() magic.
 var All = []rule.Rule{
+	ExperimentalApiUsage,
+	UnstableApiUsage,
 	FloatingEffect,
 	FloatingEffectInVitest,
 	MissingEffectError,
@@ -18,6 +20,7 @@ var All = []rule.Rule{
 	CatchDieToOrDie,
 	TimeoutCatchTagToTimeoutOrElse,
 	CatchAllToMapError,
+	CatchRefailToTapError,
 	CatchAllTagDispatchToCatchTag,
 	CatchIfTagToCatchTag,
 	CatchConditionalRefailToCatchIf,

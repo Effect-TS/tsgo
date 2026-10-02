@@ -57,9 +57,9 @@ import * as Effect from "effect/Effect"
 // Using Effect.fn is an improvement because the stack traces will include
 // the call site of that function, not just the span in the traces.
 
-export const arrowWithPipe = Effect.fn("arrowWithPipe")(function* (n: number) {
-    return yield* Effect.succeed(n);
-});
+export const arrowWithPipe = Effect.fn("arrowWithPipe")(function*(n: number) {
+    return yield* Effect.succeed(n)
+  })
 
 export const functionExpressionWithPipe = function(n: number) {
   return Effect.gen(function*() {
@@ -87,9 +87,9 @@ import * as Effect from "effect/Effect"
 // Using Effect.fn is an improvement because the stack traces will include
 // the call site of that function, not just the span in the traces.
 
-export const arrowWithPipe = Effect.fnUntraced(function* (n: number) {
-    return yield* Effect.succeed(n);
-}, Effect.withSpan("arrowWithPipe"));
+export const arrowWithPipe = Effect.fnUntraced(function*(n: number) {
+    return yield* Effect.succeed(n)
+  },Effect.withSpan("arrowWithPipe"))
 
 export const functionExpressionWithPipe = function(n: number) {
   return Effect.gen(function*() {
@@ -117,9 +117,9 @@ import * as Effect from "effect/Effect"
 // Using Effect.fn is an improvement because the stack traces will include
 // the call site of that function, not just the span in the traces.
 
-export const arrowWithPipe = Effect.fn(function* (n: number) {
-    return yield* Effect.succeed(n);
-}, Effect.withSpan("arrowWithPipe"));
+export const arrowWithPipe = Effect.fn(function*(n: number) {
+    return yield* Effect.succeed(n)
+  },Effect.withSpan("arrowWithPipe"))
 
 export const functionExpressionWithPipe = function(n: number) {
   return Effect.gen(function*() {
@@ -192,9 +192,9 @@ export const arrowWithPipe = (n: number) =>
     return yield* Effect.succeed(n)
   }).pipe(Effect.withSpan("arrowWithPipe"))
 
-export const functionExpressionWithPipe = Effect.fn("functionExpressionWithPipe")(function* (n: number) {
-    return yield* Effect.succeed(n);
-}, Effect.map(x => x + 1));
+export const functionExpressionWithPipe = Effect.fn("functionExpressionWithPipe")(function*(n: number) {
+    return yield* Effect.succeed(n)
+  },Effect.map((x) => x + 1))
 
 export function functionDeclarationWithPipe(n: number) {
   return Effect.gen(function*() {
@@ -221,9 +221,9 @@ export const arrowWithPipe = (n: number) =>
     return yield* Effect.succeed(n)
   }).pipe(Effect.withSpan("arrowWithPipe"))
 
-export const functionExpressionWithPipe = Effect.fnUntraced(function* (n: number) {
-    return yield* Effect.succeed(n);
-}, Effect.map(x => x + 1), Effect.withSpan("functionExpressionWithPipe"));
+export const functionExpressionWithPipe = Effect.fnUntraced(function*(n: number) {
+    return yield* Effect.succeed(n)
+  },Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
 
 export function functionDeclarationWithPipe(n: number) {
   return Effect.gen(function*() {
@@ -250,9 +250,9 @@ export const arrowWithPipe = (n: number) =>
     return yield* Effect.succeed(n)
   }).pipe(Effect.withSpan("arrowWithPipe"))
 
-export const functionExpressionWithPipe = Effect.fn(function* (n: number) {
-    return yield* Effect.succeed(n);
-}, Effect.map(x => x + 1), Effect.withSpan("functionExpressionWithPipe"));
+export const functionExpressionWithPipe = Effect.fn(function*(n: number) {
+    return yield* Effect.succeed(n)
+  },Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
 
 export function functionDeclarationWithPipe(n: number) {
   return Effect.gen(function*() {
@@ -326,9 +326,9 @@ export const functionExpressionWithPipe = function(n: number) {
   }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
 }
 
-export const functionDeclarationWithPipe = Effect.fn("functionDeclarationWithPipe")(function* (n: number) {
-    return yield* Effect.succeed(n);
-}, Effect.map(x => x + 1), Effect.ignore);
+export const functionDeclarationWithPipe = Effect.fn("functionDeclarationWithPipe")(function*(n: number) {
+    return yield* Effect.succeed(n)
+  },Effect.map((x) => x + 1), _ => Effect.ignore(_));
 
 
 === [D5] Fix 3: "Convert to Effect.fnUntraced" ===
@@ -355,9 +355,9 @@ export const functionExpressionWithPipe = function(n: number) {
   }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
 }
 
-export const functionDeclarationWithPipe = Effect.fnUntraced(function* (n: number) {
-    return yield* Effect.succeed(n);
-}, Effect.map(x => x + 1), Effect.ignore, Effect.withSpan("functionDeclarationWithPipe"));
+export const functionDeclarationWithPipe = Effect.fnUntraced(function*(n: number) {
+    return yield* Effect.succeed(n)
+  },Effect.map((x) => x + 1), _ => Effect.ignore(_), Effect.withSpan("functionDeclarationWithPipe"));
 
 
 === [D5] Fix 4: "Convert to Effect.fn (no span)" ===
@@ -384,9 +384,9 @@ export const functionExpressionWithPipe = function(n: number) {
   }).pipe(Effect.map((x) => x + 1), Effect.withSpan("functionExpressionWithPipe"))
 }
 
-export const functionDeclarationWithPipe = Effect.fn(function* (n: number) {
-    return yield* Effect.succeed(n);
-}, Effect.map(x => x + 1), Effect.ignore, Effect.withSpan("functionDeclarationWithPipe"));
+export const functionDeclarationWithPipe = Effect.fn(function*(n: number) {
+    return yield* Effect.succeed(n)
+  },Effect.map((x) => x + 1), _ => Effect.ignore(_), Effect.withSpan("functionDeclarationWithPipe"));
 
 
 === [D6] Fix 0: "Disable unnecessaryEffectGen for this line" ===

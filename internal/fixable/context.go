@@ -105,7 +105,7 @@ func (c *Context) BytePosToLSPPosition(pos int) lsproto.Position {
 
 // LSPRangeToTextRange converts a tracker edit range back to source byte offsets.
 func (c *Context) LSPRangeToTextRange(r lsproto.Range) core.TextRange {
-	return c.converters.FromLSPRange(c.SourceFile, r)
+	return lsconv.FromLSPRangeToOriginal(c.converters, c.SourceFile, r)
 }
 
 // FixAction describes a single code action that a fixable wants to produce.

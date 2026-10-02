@@ -41,7 +41,7 @@ Run pnpm install to install the dependencies and run the prepare script to patch
 pnpm install
 ```
 
-Effect rules require Oxlint's type-aware mode and the `effecttsgo` plugin. The recommended preset enables both and configures the recommended Effect rules. Use the schema shipped with `@effect/tsgo` for validation and completions:
+Effect rules require Oxlint's type-aware mode and the `effecttsgo` plugin. The recommended preset enables both and configures every default-enabled Effect rule. Use the schema shipped with `@effect/tsgo` for validation and completions:
 
 ```json
 {
@@ -52,7 +52,7 @@ Effect rules require Oxlint's type-aware mode and the `effecttsgo` plugin. The r
 }
 ```
 
-The package also provides presets for each diagnostic category: `correctness`, `antipattern`, `effect-native`, and `style`. Extended configurations are applied in order, and rules in the project configuration take precedence, so categories can be combined and individual rules can be adjusted:
+The package also provides presets for each diagnostic category: `correctness`, `antipattern`, `effect-native`, and `style`. The `strict` preset promotes every diagnostic enabled by default to an error. Extended configurations are applied in order, and rules in the project configuration take precedence, so presets can be combined and individual rules can be adjusted:
 
 ```json
 {

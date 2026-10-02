@@ -38,13 +38,13 @@ When running in dedicated diagnostics mode, the Effect diagnostics can be emitte
 <!-- supported-components:start -->
 ## Supported Package Versions
 
-The following target package versions are supported by `@effect/tsgo@0.45.0`:
+The following target package versions are supported by `@effect/tsgo@0.48.0`:
 
 | Component | Supported versions |
 |---|---|
-| TypeScript | `7.0.2`, `7.1.0-dev.20260909.1` |
-| Oxlint | `1.81.0`, `1.82.0` |
-| oxlint-tsgolint | `7.0.2001` |
+| TypeScript | `7.0.2`, `7.1.0-dev.20260929.1` |
+| Oxlint | `1.82.0`, `1.83.0`, `1.84.0`, `1.85.0`, `1.86.0` |
+| oxlint-tsgolint | `7.0.2001`, `7.0.2003` |
 <!-- supported-components:end -->
 
 ## Diagnostic Status
@@ -62,6 +62,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/class-self-mismatch.md"><code>classSelfMismatch</code></a></td><td>Ensures Self type parameter matches the class name in Context/Service/Tag/Schema classes</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/duplicate-package.md"><code>duplicatePackage</code></a></td><td>Warns when multiple versions of an Effect-related package are detected in the program</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/effect-fn-implicit-any.md"><code>effectFnImplicitAny</code></a></td><td>Mirrors noImplicitAny for unannotated Effect.fn, Effect.fnUntraced, and Effect.fnUntracedEager callback parameters when no outer contextual function type exists. Requires TS&#39;s noImplicitAny: true</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/experimental-api-usage.md"><code>experimentalApiUsage</code></a></td><td>Warns when using an API marked @stability experimental</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/floating-effect.md"><code>floatingEffect</code></a></td><td>Detects Effect values that are neither yielded nor assigned</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/floating-effect-in-vitest.md"><code>floatingEffectInVitest</code></a></td><td>Detects Effects returned from non-Effect-aware Vitest callbacks</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/generic-effect-services.md"><code>genericEffectServices</code></a></td><td>Prevents services with type parameters that cannot be discriminated at runtime</td></tr>
@@ -79,6 +80,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/schema-literal-non-finite.md"><code>schemaLiteralNonFinite</code></a></td><td>Reports statically known non-finite numbers passed to Schema literal constructors</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/schema-opaque-instance-member.md"><code>schemaOpaqueInstanceMember</code></a></td><td>Disallows instance members in classes extending Schema.Opaque</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unsafe-effect-type-assertion.md"><code>unsafeEffectTypeAssertion</code></a></td><td>Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unstable-api-usage.md"><code>unstableApiUsage</code></a></td><td>Warns when using an API marked @stability unstable</td></tr>
     <tr><td colspan="2"><strong>Anti-pattern</strong> <em>Discouraged patterns that often lead to bugs or confusing behavior.</em></td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-unfailable-effect.md"><code>catchUnfailableEffect</code></a></td><td>Warns when using error handling on Effects that never fail</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/effect-fn-iife.md"><code>effectFnIife</code></a></td><td>Effect.fn or Effect.fnUntraced is called as an IIFE; use Effect.gen instead</td></tr>
@@ -132,6 +134,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-conditional-refail-to-catch-if.md"><code>catchConditionalRefailToCatchIf</code></a></td><td>Suggests Effect.catchIf, Effect.catchCauseIf, or Effect.catchTag for conditional catch handlers that re-fail their untouched input</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-die-to-or-die.md"><code>catchDieToOrDie</code></a></td><td>Suggests using Effect.orDie instead of Effect.catch or Effect.catchAll with an identity-forwarding Effect.die handler</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-if-tag-to-catch-tag.md"><code>catchIfTagToCatchTag</code></a></td><td>Suggests Effect.catchTag instead of Effect.catchIf with a direct _tag equality predicate</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-refail-to-tap-error.md"><code>catchRefailToTapError</code></a></td><td>Suggests Effect.tapError for catch handlers that sequence an effect and then re-fail the original error</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-tag-to-catch-reason.md"><code>catchTagToCatchReason</code></a></td><td>Suggests Effect.catchReason or Effect.catchReasons for handlers that re-fail unmatched reason._tag branches</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-to-ignore.md"><code>catchToIgnore</code></a></td><td>Suggests using Effect.ignore or Effect.ignoreCause instead of Effect.catch/catchCause returning Effect.void</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-to-or-else-succeed.md"><code>catchToOrElseSucceed</code></a></td><td>Suggests using Effect.orElseSucceed instead of Effect.catch + Effect.succeed</td></tr>
@@ -234,6 +237,8 @@ Effect-tsgo is a **superset** of the official [TypeScript-Go](https://github.com
 
 Each release of `effect-tsgo` is built against the versioned components recorded in `_packages/tsgo/upstream.json`. The Nix flake consumes the TypeScript `next` tag directly. When upstream `tsgo` releases new features or fixes, `effect-tsgo` will adopt them in a subsequent release after validating compatibility with the Effect diagnostics layer.
 
+The npm compiler binaries load their TypeScript standard libraries from `lib.*.d.ts` files beside the executable. These files are included beside every versioned artifact and the latest `lib/tsc` alias. If you relocate the executable returned by `effect-tsgo get-exe-path`, copy its library files into the same destination directory.
+
 ### When to Upgrade
 
 - Upgrade `effect-tsgo` when a new release includes upstream `tsgo` fixes you need or new Effect diagnostics you want.
@@ -309,6 +314,10 @@ Each release of `effect-tsgo` is built against the versioned components recorded
         "extendedKeyDetection": false,
         // Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity. (default: 2)
         "pipeableMinArgCount": 2,
+        // Unstable APIs allowed by package/module subtree or package/module#export name. (default: [])
+        "allowedUnstableApis": [],
+        // Experimental APIs allowed by package/module subtree or package/module#export name. (default: [])
+        "allowedExperimentalApis": [],
         // Package names allowed to have multiple versions without triggering duplicatePackage. (default: [])
         "allowedDuplicatedPackages": [],
         // Controls which effectFnOpportunity quickfix variants are offered. (default: ["span"])
@@ -336,3 +345,32 @@ Each release of `effect-tsgo` is built against the versioned components recorded
 }
 ```
 <!-- example-config:end -->
+
+The `allowedUnstableApis` and `allowedExperimentalApis` options selectively permit
+APIs marked `@stability unstable` and `@stability experimental`, respectively:
+
+```json
+{
+  "allowedUnstableApis": [
+    "effect/http",
+    "effect/rpc/RpcClient#make"
+  ],
+  "allowedExperimentalApis": ["my-package/Preview#make"]
+}
+```
+
+A module entry permits that module and its descendants; an entry ending in
+`#exportName` permits only that module's exported API, including renamed imports
+and aliases. For example, `effect/http/HttpClient` permits the entire module,
+while `effect/http/HttpClient#get` permits only its exported `get` API.
+Matching is case-sensitive and respects path segments: `effect/http` does not
+permit `effect/http-api`. Per-file `overrides` replace the base list.
+
+Names describe the declaration carrying the stability tag, rather than the
+import used by the consumer. They combine the nearest package name with the
+package-relative declaration path, removing a leading `src/`, `dist/`,
+`dist/dts/`, `dist/esm/`, or `dist/cjs/`, the file extension, and a trailing
+`/index`. Other layouts retain their package-relative path. Both diagnostics
+display this name when package metadata is available. APIs without package
+metadata continue to warn. Each list affects only its corresponding diagnostic; allowing an unstable API
+does not suppress experimental API warnings, and vice versa.

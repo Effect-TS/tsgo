@@ -1,0 +1,291 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:3-4:4) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"f\")"
+
+[D2] (10:14-10:19) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"first\")"
+
+[D3] (19:3-19:9) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"middle\")"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_siblingDeclarators.ts ---
+import { Effect } from "effect"
+
+export const limit = 10,
+  f = Effect.fnUntraced(function*(n: number) {
+      return (yield* Effect.succeed(n)) + limit
+    })
+
+// Preserve a sibling after the target, including its comment and literal spelling.
+export const first = (n: number) =>
+  Effect.gen(function* () {
+    return (yield* Effect.succeed(n)) + trailing
+  }),
+  // trailing sibling
+  trailing = 1_000
+
+// Preserve both sides of a target in the middle of a declaration list.
+export let leading = 0xff,
+  middle = function(n: number) {
+    return Effect.gen(function* () {
+      return (yield* Effect.succeed(n)) + leading + last
+    })
+  },
+  last = 2_000
+
+
+=== [D1] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_siblingDeclarators.ts ---
+import { Effect } from "effect"
+
+export const limit = 10,
+  f = Effect.fn(function*(n: number) {
+      return (yield* Effect.succeed(n)) + limit
+    })
+
+// Preserve a sibling after the target, including its comment and literal spelling.
+export const first = (n: number) =>
+  Effect.gen(function* () {
+    return (yield* Effect.succeed(n)) + trailing
+  }),
+  // trailing sibling
+  trailing = 1_000
+
+// Preserve both sides of a target in the middle of a declaration list.
+export let leading = 0xff,
+  middle = function(n: number) {
+    return Effect.gen(function* () {
+      return (yield* Effect.succeed(n)) + leading + last
+    })
+  },
+  last = 2_000
+
+
+=== [D1] Fix 4: "Convert to Effect.fn(\"f\")" ===
+
+--- file:///.src/effectFnOpportunity_siblingDeclarators.ts ---
+import { Effect } from "effect"
+
+export const limit = 10,
+  f = Effect.fn("f")(function*(n: number) {
+      return (yield* Effect.succeed(n)) + limit
+    })
+
+// Preserve a sibling after the target, including its comment and literal spelling.
+export const first = (n: number) =>
+  Effect.gen(function* () {
+    return (yield* Effect.succeed(n)) + trailing
+  }),
+  // trailing sibling
+  trailing = 1_000
+
+// Preserve both sides of a target in the middle of a declaration list.
+export let leading = 0xff,
+  middle = function(n: number) {
+    return Effect.gen(function* () {
+      return (yield* Effect.succeed(n)) + leading + last
+    })
+  },
+  last = 2_000
+
+
+=== [D2] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_siblingDeclarators.ts ---
+import { Effect } from "effect"
+
+export const limit = 10,
+  f = (n: number) =>
+    Effect.gen(function* () {
+      return (yield* Effect.succeed(n)) + limit
+    })
+
+// Preserve a sibling after the target, including its comment and literal spelling.
+export const first = Effect.fnUntraced(function*(n: number) {
+    return (yield* Effect.succeed(n)) + trailing
+  }),
+  // trailing sibling
+  trailing = 1_000
+
+// Preserve both sides of a target in the middle of a declaration list.
+export let leading = 0xff,
+  middle = function(n: number) {
+    return Effect.gen(function* () {
+      return (yield* Effect.succeed(n)) + leading + last
+    })
+  },
+  last = 2_000
+
+
+=== [D2] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_siblingDeclarators.ts ---
+import { Effect } from "effect"
+
+export const limit = 10,
+  f = (n: number) =>
+    Effect.gen(function* () {
+      return (yield* Effect.succeed(n)) + limit
+    })
+
+// Preserve a sibling after the target, including its comment and literal spelling.
+export const first = Effect.fn(function*(n: number) {
+    return (yield* Effect.succeed(n)) + trailing
+  }),
+  // trailing sibling
+  trailing = 1_000
+
+// Preserve both sides of a target in the middle of a declaration list.
+export let leading = 0xff,
+  middle = function(n: number) {
+    return Effect.gen(function* () {
+      return (yield* Effect.succeed(n)) + leading + last
+    })
+  },
+  last = 2_000
+
+
+=== [D2] Fix 4: "Convert to Effect.fn(\"first\")" ===
+
+--- file:///.src/effectFnOpportunity_siblingDeclarators.ts ---
+import { Effect } from "effect"
+
+export const limit = 10,
+  f = (n: number) =>
+    Effect.gen(function* () {
+      return (yield* Effect.succeed(n)) + limit
+    })
+
+// Preserve a sibling after the target, including its comment and literal spelling.
+export const first = Effect.fn("first")(function*(n: number) {
+    return (yield* Effect.succeed(n)) + trailing
+  }),
+  // trailing sibling
+  trailing = 1_000
+
+// Preserve both sides of a target in the middle of a declaration list.
+export let leading = 0xff,
+  middle = function(n: number) {
+    return Effect.gen(function* () {
+      return (yield* Effect.succeed(n)) + leading + last
+    })
+  },
+  last = 2_000
+
+
+=== [D3] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_siblingDeclarators.ts ---
+import { Effect } from "effect"
+
+export const limit = 10,
+  f = (n: number) =>
+    Effect.gen(function* () {
+      return (yield* Effect.succeed(n)) + limit
+    })
+
+// Preserve a sibling after the target, including its comment and literal spelling.
+export const first = (n: number) =>
+  Effect.gen(function* () {
+    return (yield* Effect.succeed(n)) + trailing
+  }),
+  // trailing sibling
+  trailing = 1_000
+
+// Preserve both sides of a target in the middle of a declaration list.
+export let leading = 0xff,
+  middle = Effect.fnUntraced(function*(n: number) {
+      return (yield* Effect.succeed(n)) + leading + last
+    }),
+  last = 2_000
+
+
+=== [D3] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_siblingDeclarators.ts ---
+import { Effect } from "effect"
+
+export const limit = 10,
+  f = (n: number) =>
+    Effect.gen(function* () {
+      return (yield* Effect.succeed(n)) + limit
+    })
+
+// Preserve a sibling after the target, including its comment and literal spelling.
+export const first = (n: number) =>
+  Effect.gen(function* () {
+    return (yield* Effect.succeed(n)) + trailing
+  }),
+  // trailing sibling
+  trailing = 1_000
+
+// Preserve both sides of a target in the middle of a declaration list.
+export let leading = 0xff,
+  middle = Effect.fn(function*(n: number) {
+      return (yield* Effect.succeed(n)) + leading + last
+    }),
+  last = 2_000
+
+
+=== [D3] Fix 4: "Convert to Effect.fn(\"middle\")" ===
+
+--- file:///.src/effectFnOpportunity_siblingDeclarators.ts ---
+import { Effect } from "effect"
+
+export const limit = 10,
+  f = (n: number) =>
+    Effect.gen(function* () {
+      return (yield* Effect.succeed(n)) + limit
+    })
+
+// Preserve a sibling after the target, including its comment and literal spelling.
+export const first = (n: number) =>
+  Effect.gen(function* () {
+    return (yield* Effect.succeed(n)) + trailing
+  }),
+  // trailing sibling
+  trailing = 1_000
+
+// Preserve both sides of a target in the middle of a declaration list.
+export let leading = 0xff,
+  middle = Effect.fn("middle")(function*(n: number) {
+      return (yield* Effect.succeed(n)) + leading + last
+    }),
+  last = 2_000
+

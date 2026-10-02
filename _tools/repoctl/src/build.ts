@@ -5,7 +5,7 @@ import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import { constants } from "node:fs"
 import { access, appendFile, readFile } from "node:fs/promises"
-import { join } from "node:path"
+import { dirname, join } from "node:path"
 import { ensureEffectFixtures } from "./fixtures.ts"
 import { runCommand, runCommandString } from "./process.ts"
 import {
@@ -132,6 +132,20 @@ const validateExecutableArtifact = Effect.fnUntraced(function*(artifact: string)
     try: () => access(artifact, constants.X_OK),
     catch: () => new BuildError({ reason: `Artifact is not executable: ${artifact}` })
   })
+})
+
+export const copyTypeScriptLibraries = Effect.fnUntraced(function*(source: string, destination: string) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const libraries = (yield* fs.readDirectory(source)).filter((name) => /^lib(?:\..+)?\.d\.ts$/.test(name))
+  if (!libraries.includes("lib.d.ts")) {
+    return yield* new BuildError({ reason: `Missing TypeScript libraries in ${source}` })
+  }
+  yield* fs.makeDirectory(destination, { recursive: true })
+  for (const library of libraries) {
+    yield* validateArtifact(path.join(source, library))
+    yield* fs.copyFile(path.join(source, library), path.join(destination, library))
+  }
 })
 
 export const buildCli = Effect.fnUntraced(function*(repositoryRoot: string) {
@@ -307,6 +321,7 @@ const buildTsc = Effect.fnUntraced(function*(
   yield* Console.log(`Building TypeScript ${version} for ${targetName} -> ${artifact.path}`)
   yield* runCommand("go", repositoryRoot, [
     "build",
+    "-tags=noembed",
     "-ldflags=-s -w",
     "-o",
     artifact.path,
@@ -318,11 +333,15 @@ const buildTsc = Effect.fnUntraced(function*(
     GOARM: "goarm" in target ? target.goarm : ""
   })
   yield* validateArtifact(artifact.path)
+  yield* copyTypeScriptLibraries(
+    path.join(repositoryRoot, compiler.checkoutDir, compiler.moduleDir, "internal", "bundled", "libs"),
+    path.dirname(artifact.path)
+  )
 
   if (process.env.GITHUB_OUTPUT !== undefined) {
     yield* Effect.tryPromise(() => appendFile(
       process.env.GITHUB_OUTPUT!,
-      `component=typescript\nnpm_version=${version}\nartifact_path=${artifact.path}\n`
+      `component=typescript\nnpm_version=${version}\nartifact_path=${path.dirname(artifact.path)}\n`
     ))
   }
   return artifact
@@ -354,7 +373,14 @@ export const verifyReleaseArtifacts = Effect.fnUntraced(function*(repositoryRoot
   const sourceUpstream = yield* fs.readFileString(path.join(repositoryRoot, "_packages", "tsgo", "upstream.json"))
   for (const version of Object.keys(upstream.components.typescript)) {
     for (const target of Object.keys(buildTargets) as Array<BuildTarget>) {
-      yield* validateArtifact(componentArtifact(repositoryRoot, target, "typescript", version, "tsc").path)
+      const binary = componentArtifact(repositoryRoot, target, "typescript", version, "tsc").path
+      yield* validateArtifact(binary)
+      yield* validateArtifact(join(dirname(binary), "lib.d.ts"))
+      const libraries = (yield* fs.readDirectory(dirname(binary))).filter((name) =>
+        /^lib(?:\..+)?\.d\.ts$/.test(name))
+      for (const library of libraries) {
+        yield* validateArtifact(join(dirname(binary), library))
+      }
     }
   }
   for (const target of Object.keys(buildTargets) as Array<BuildTarget>) {
@@ -387,6 +413,16 @@ export const verifyReleaseArtifacts = Effect.fnUntraced(function*(repositoryRoot
     yield* validateArtifact(alias)
     if (!Buffer.from(yield* Effect.promise(() => readFile(latest))).equals(Buffer.from(yield* Effect.promise(() => readFile(alias))))) {
       return yield* new BuildError({ reason: `Latest TypeScript alias does not match ${latest}` })
+    }
+    const libraries = (yield* fs.readDirectory(dirname(latest))).filter((name) =>
+      /^lib(?:\..+)?\.d\.ts$/.test(name))
+    for (const library of libraries) {
+      const source = join(dirname(latest), library)
+      const destination = join(dirname(alias), library)
+      yield* validateArtifact(destination)
+      if (!Buffer.from(yield* Effect.promise(() => readFile(source))).equals(Buffer.from(yield* Effect.promise(() => readFile(destination))))) {
+        return yield* new BuildError({ reason: `Latest TypeScript library alias does not match ${source}` })
+      }
     }
   }
   yield* Console.log("Verified release artifacts for all components and targets")

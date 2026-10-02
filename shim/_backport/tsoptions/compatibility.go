@@ -7,6 +7,32 @@ import (
 	"github.com/microsoft/typescript-go/shim/tspath"
 )
 
+func ParseJsonConfigFileContent(
+	json any,
+	host tsoptions.ParseConfigHost,
+	basePath string,
+	existingOptions *core.CompilerOptions,
+	configFileName string,
+	resolutionStack []tspath.Path,
+	extraFileExtensions any,
+	extendedConfigCache tsoptions.ExtendedConfigCache,
+) *tsoptions.ParsedCommandLine {
+	var extensions []tsoptions.FileExtensionInfo
+	if extraFileExtensions != nil {
+		extensions = extraFileExtensions.([]tsoptions.FileExtensionInfo)
+	}
+	return tsoptions.ParseJsonConfigFileContent(
+		json,
+		host,
+		basePath,
+		existingOptions,
+		configFileName,
+		resolutionStack,
+		extensions,
+		extendedConfigCache,
+	)
+}
+
 func ParseJsonSourceFileConfigFileContent(
 	sourceFile *tsoptions.TsConfigSourceFile,
 	host tsoptions.ParseConfigHost,
