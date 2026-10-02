@@ -3,7 +3,7 @@ import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
-import { buildTargets, componentArtifact, oxlintBuildTargets } from "./build.ts"
+import { buildTargets, componentArtifact, copyTypeScriptLibraries, oxlintBuildTargets } from "./build.ts"
 import { buildReleasePlan } from "./releasePlan.ts"
 import { readUpstream } from "./upstream.ts"
 
@@ -57,17 +57,28 @@ export const assembleReleaseArtifacts = Effect.fnUntraced(function*(
   for (const artifact of plan) {
     const directory = path.join(sourceRoot, artifact.artifactName)
     const files = (yield* fs.readDirectory(directory)).sort()
-    if (files.length !== 1 || files[0] !== artifact.fileName) {
+    const libraries = artifact.component === "typescript"
+      ? files.filter((name) => /^lib(?:\..+)?\.d\.ts$/.test(name))
+      : []
+    const expectedFiles = new Set([artifact.fileName, ...libraries])
+    if (!files.includes(artifact.fileName) || files.some((name) => !expectedFiles.has(name))) {
       return yield* new PackagePreparationError({
-        reason: `${artifact.artifactName} must contain only ${artifact.fileName}, found ${files.join(", ") || "nothing"}`
+        reason: `${artifact.artifactName} must contain ${artifact.fileName}${
+          artifact.component === "typescript" ? " and TypeScript libraries" : ""
+        } only, found ${files.join(", ") || "nothing"}`
       })
     }
-    const source = path.join(directory, artifact.fileName)
-    const info = yield* fs.stat(source)
-    if (info.type !== "File" || info.size === 0n) {
-      return yield* new PackagePreparationError({ reason: `Invalid release artifact: ${source}` })
+    if (artifact.component === "typescript" && !libraries.includes("lib.d.ts")) {
+      return yield* new PackagePreparationError({ reason: `Missing TypeScript libraries in ${artifact.artifactName}` })
     }
-    copies.push({ source, destination: path.join(repositoryRoot, artifact.destination) })
+    for (const file of files) {
+      const source = path.join(directory, file)
+      const info = yield* fs.stat(source)
+      if (info.type !== "File" || info.size === 0n) {
+        return yield* new PackagePreparationError({ reason: `Invalid release artifact: ${source}` })
+      }
+      copies.push({ source, destination: path.join(repositoryRoot, path.dirname(artifact.destination), file) })
+    }
   }
 
   for (const copy of copies) {
@@ -90,6 +101,7 @@ export const preparePlatformPackages = Effect.fnUntraced(function*(repositoryRoo
     const alias = path.join(packageRoot, "lib", windows ? "tsc.exe" : "tsc")
     yield* fs.makeDirectory(path.dirname(alias), { recursive: true })
     yield* fs.copyFile(latest, alias)
+    yield* copyTypeScriptLibraries(path.dirname(latest), path.dirname(alias))
     if (!windows) yield* fs.chmod(alias, 0o755)
     yield* fs.copyFile(sourceUpstream, path.join(packageRoot, "lib", "upstream.json"))
     yield* fs.remove(path.join(packageRoot, "lib", windows ? "tsc-next.exe" : "tsc-next"), { force: true })
@@ -124,6 +136,7 @@ export const preparePlatformPackages = Effect.fnUntraced(function*(repositoryRoo
       : {}
     yield* fs.writeFileString(packageJsonPath, `${JSON.stringify({
       ...packageJson,
+      files: [...new Set([...(Array.isArray(packageJson.files) ? packageJson.files : []), "lib/lib*.d.ts"])],
       publishConfig: { ...publishConfig, executableFiles }
     }, null, 2)}\n`)
   }
