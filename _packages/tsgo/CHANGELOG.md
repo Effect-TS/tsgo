@@ -1,5 +1,15 @@
 # @effect/tsgo
 
+## 0.48.0
+
+### Minor Changes
+
+- a954eb5: Add `allowedUnstableApis` and `allowedExperimentalApis` to selectively allow unstable or experimental declaration modules or exported APIs. For example, `effect/http/HttpClient` allows the entire module, while `effect/http/HttpClient#get` allows only its exported `get` API. Both options support per-file overrides, and both diagnostics display the declaration-based name.
+
+### Patch Changes
+
+- 0900778: Build packaged TypeScript compilers without embedded standard libraries so editor go-to-definition opens real library files. Ship matching `lib.*.d.ts` files beside each versioned compiler and the latest `lib/tsc` alias, keeping `diagnostics` and `get-exe-path` working when running the packaged executable directly.
+
 ## 0.47.2
 
 ### Patch Changes
