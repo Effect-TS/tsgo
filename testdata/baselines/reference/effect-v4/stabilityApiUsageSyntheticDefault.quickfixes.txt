@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (9:42-9:53) TS377136: `unstableApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+[D1] (9:42-9:53) TS377136: `effect-v4-tests/api#unstableApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
   Fix 0: "Disable unstableApiUsage for this line"
   Fix 1: "Disable unstableApiUsage for entire file"
 

@@ -22,7 +22,7 @@ export const previewApi = () => 1
 
 previewApi()
 /**
-^^^^^^^^^^ effecttsgo(experimental-api-usage): `previewApi` is an experimental API.
+^^^^^^^^^^ effecttsgo(experimental-api-usage): `effect-v4-tests/preview#previewApi` is an experimental API.
 */
 ```
 

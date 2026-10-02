@@ -1,0 +1,8 @@
+/.src/barrel.ts -> stabilityApiUsageAllowed.flows.barrel.mermaid
+/.src/consumer.ts -> stabilityApiUsageAllowed.flows.consumer.mermaid
+/.src/module.ts -> stabilityApiUsageAllowed.flows.module.mermaid
+/.src/exportAlias.ts -> stabilityApiUsageAllowed.flows.exportAlias.mermaid
+/.src/experimentalOnly.ts -> stabilityApiUsageAllowed.flows.experimentalOnly.mermaid
+/.src/realWorldMembers.ts -> stabilityApiUsageAllowed.flows.realWorldMembers.mermaid
+/.src/realWorldModules.ts -> stabilityApiUsageAllowed.flows.realWorldModules.mermaid
+/.src/realWorldSubtree.ts -> stabilityApiUsageAllowed.flows.realWorldSubtree.mermaid

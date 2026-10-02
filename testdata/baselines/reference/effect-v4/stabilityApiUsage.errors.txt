@@ -1,12 +1,12 @@
 === Metadata ===
 Effect version: unknown
 
-/.src/stabilityApiUsage.ts(13,28): warning TS377136: `unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
-/.src/stabilityApiUsage.ts(14,32): warning TS377135: `experimentalValue` is an experimental API. effect(experimentalApiUsage)
-/.src/stabilityApiUsage.ts(16,15): warning TS377136: `unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
-/.src/stabilityApiUsage.ts(17,27): warning TS377136: `alias` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
-/.src/stabilityApiUsage.ts(23,33): warning TS377135: `member` is an experimental API. effect(experimentalApiUsage)
-/.src/stabilityApiUsage.ts(32,37): warning TS377135: `overloaded` is an experimental API. effect(experimentalApiUsage)
+/.src/stabilityApiUsage.ts(13,28): warning TS377136: `effect-v4-tests/stabilityApiUsage#unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/stabilityApiUsage.ts(14,32): warning TS377135: `effect-v4-tests/stabilityApiUsage#experimentalValue` is an experimental API. effect(experimentalApiUsage)
+/.src/stabilityApiUsage.ts(16,15): warning TS377136: `effect-v4-tests/stabilityApiUsage#unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/stabilityApiUsage.ts(17,27): warning TS377136: `effect-v4-tests/stabilityApiUsage#unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/stabilityApiUsage.ts(23,33): warning TS377135: `effect-v4-tests/stabilityApiUsage` is an experimental API. effect(experimentalApiUsage)
+/.src/stabilityApiUsage.ts(32,37): warning TS377135: `effect-v4-tests/stabilityApiUsage#overloaded` is an experimental API. effect(experimentalApiUsage)
 
 
 ==== /.src/stabilityApiUsage.ts (6 errors) ====
@@ -24,17 +24,17 @@ Effect version: unknown
     
     export const unstableUse = unstableValue
                                ~~~~~~~~~~~~~
-!!! warning TS377136: `unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+!!! warning TS377136: `effect-v4-tests/stabilityApiUsage#unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
     export const experimentalUse = experimentalValue
                                    ~~~~~~~~~~~~~~~~~
-!!! warning TS377135: `experimentalValue` is an experimental API. effect(experimentalApiUsage)
+!!! warning TS377135: `effect-v4-tests/stabilityApiUsage#experimentalValue` is an experimental API. effect(experimentalApiUsage)
     export const stableUse = stableValue
     const alias = unstableValue
                   ~~~~~~~~~~~~~
-!!! warning TS377136: `unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+!!! warning TS377136: `effect-v4-tests/stabilityApiUsage#unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
     export const aliasedUse = alias
                               ~~~~~
-!!! warning TS377136: `alias` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+!!! warning TS377136: `effect-v4-tests/stabilityApiUsage#unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
     
     const object = {
       /** @stability experimental */
@@ -42,7 +42,7 @@ Effect version: unknown
     }
     export const memberUse = object.member
                                     ~~~~~~
-!!! warning TS377135: `member` is an experimental API. effect(experimentalApiUsage)
+!!! warning TS377135: `effect-v4-tests/stabilityApiUsage` is an experimental API. effect(experimentalApiUsage)
     
     /** @stability experimental */
     export function overloaded(value: string): string
@@ -53,6 +53,6 @@ Effect version: unknown
     
     export const experimentalOverload = overloaded("hello")
                                         ~~~~~~~~~~
-!!! warning TS377135: `overloaded` is an experimental API. effect(experimentalApiUsage)
+!!! warning TS377135: `effect-v4-tests/stabilityApiUsage#overloaded` is an experimental API. effect(experimentalApiUsage)
     export const stableOverload = overloaded(1)
     

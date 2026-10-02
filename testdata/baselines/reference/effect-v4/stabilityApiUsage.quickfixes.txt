@@ -1,26 +1,26 @@
 === Quick Fix Inventory ===
 
-[D1] (13:28-13:41) TS377136: `unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+[D1] (13:28-13:41) TS377136: `effect-v4-tests/stabilityApiUsage#unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
   Fix 0: "Disable unstableApiUsage for this line"
   Fix 1: "Disable unstableApiUsage for entire file"
 
-[D2] (14:32-14:49) TS377135: `experimentalValue` is an experimental API. effect(experimentalApiUsage)
+[D2] (14:32-14:49) TS377135: `effect-v4-tests/stabilityApiUsage#experimentalValue` is an experimental API. effect(experimentalApiUsage)
   Fix 0: "Disable experimentalApiUsage for this line"
   Fix 1: "Disable experimentalApiUsage for entire file"
 
-[D3] (16:15-16:28) TS377136: `unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+[D3] (16:15-16:28) TS377136: `effect-v4-tests/stabilityApiUsage#unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
   Fix 0: "Disable unstableApiUsage for this line"
   Fix 1: "Disable unstableApiUsage for entire file"
 
-[D4] (17:27-17:32) TS377136: `alias` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+[D4] (17:27-17:32) TS377136: `effect-v4-tests/stabilityApiUsage#unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
   Fix 0: "Disable unstableApiUsage for this line"
   Fix 1: "Disable unstableApiUsage for entire file"
 
-[D5] (23:33-23:39) TS377135: `member` is an experimental API. effect(experimentalApiUsage)
+[D5] (23:33-23:39) TS377135: `effect-v4-tests/stabilityApiUsage` is an experimental API. effect(experimentalApiUsage)
   Fix 0: "Disable experimentalApiUsage for this line"
   Fix 1: "Disable experimentalApiUsage for entire file"
 
-[D6] (32:37-32:47) TS377135: `overloaded` is an experimental API. effect(experimentalApiUsage)
+[D6] (32:37-32:47) TS377135: `effect-v4-tests/stabilityApiUsage#overloaded` is an experimental API. effect(experimentalApiUsage)
   Fix 0: "Disable experimentalApiUsage for this line"
   Fix 1: "Disable experimentalApiUsage for entire file"
 

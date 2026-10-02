@@ -31,6 +31,7 @@
     "effecttsgo/effect-map-flatten": "warn",
     "effecttsgo/effect-map-void": "warn",
     "effecttsgo/effect-succeed-with-void": "warn",
+    "effecttsgo/experimental-api-usage": "warn",
     "effecttsgo/flat-map-conditional-to-filter-or-fail": "warn",
     "effecttsgo/flat-map-ignored-param-to-and-then": "warn",
     "effecttsgo/flat-map-to-map": "warn",
@@ -85,6 +86,7 @@
     "effecttsgo/unnecessary-fail-yieldable-error": "warn",
     "effecttsgo/unnecessary-pipe": "warn",
     "effecttsgo/unnecessary-pipe-chain": "warn",
-    "effecttsgo/unnecessary-typeof-type": "warn"
+    "effecttsgo/unnecessary-typeof-type": "warn",
+    "effecttsgo/unstable-api-usage": "warn"
   }
 }

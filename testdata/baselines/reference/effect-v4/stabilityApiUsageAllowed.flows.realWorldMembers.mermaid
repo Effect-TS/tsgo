@@ -1,0 +1,13 @@
+flowchart TB
+  0[/"type: Effect#lt;HttpClientResponse, HttpClientError, HttpClient#gt;<br/>node: HttpClient.get#40;#quot;https://example.com#quot;#41;"/]
+  1[/"type: Effect#lt;HttpClientResponse, HttpClientError, HttpClient#gt;<br/>node: DirectClient.get#40;#quot;https://example.com#quot;#41;"/]
+  2[/"type: Effect#lt;HttpClientResponse, HttpClientError, HttpClient#gt;<br/>node: fetch#40;#quot;https://example.com#quot;#41;"/]
+  3[/"type: #40;url: string #124; URL, options?: NoUrl #124; undefined#41; =#gt; Effect#lt;HttpClientResponse, HttpClientError, HttpClient#gt;<br/>node: fetch"/]
+  4[/"type: Effect#lt;HttpClientResponse, HttpClientError, HttpClient#gt;<br/>node: fetchAlias#40;#quot;https://example.com#quot;#41;"/]
+  5[/"type: Effect#lt;HttpClientResponse, HttpClientError, HttpClient#gt;<br/>node: HttpClient.post#40;#quot;https://example.com#quot;#41;"/]
+  6[/"type: Effect#lt;HttpClientResponse, HttpClientError, HttpClient#gt;<br/>node: DirectClient.post#40;#quot;https://example.com#quot;#41;"/]
+  7[/"type: 1<br/>node: 1"/]
+  8["type: Effect#lt;number, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  9[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
