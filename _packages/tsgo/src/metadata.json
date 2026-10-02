@@ -460,7 +460,7 @@
           {
             "start": 67,
             "end": 77,
-            "text": "`previewApi` is an experimental API. effect(experimentalApiUsage)"
+            "text": "`effect-v4-tests/preview#previewApi` is an experimental API. effect(experimentalApiUsage)"
           }
         ]
       }
@@ -897,7 +897,7 @@
           {
             "start": 63,
             "end": 73,
-            "text": "`previewApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)"
+            "text": "`effect-v4-tests/preview#previewApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)"
           }
         ]
       }

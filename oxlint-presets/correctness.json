@@ -10,6 +10,7 @@
     "effecttsgo/class-self-mismatch": "warn",
     "effecttsgo/duplicate-package": "warn",
     "effecttsgo/effect-fn-implicit-any": "warn",
+    "effecttsgo/experimental-api-usage": "warn",
     "effecttsgo/floating-effect": "warn",
     "effecttsgo/floating-effect-in-vitest": "warn",
     "effecttsgo/generic-effect-services": "warn",
@@ -26,6 +27,7 @@
     "effecttsgo/promise-in-effect-success": "warn",
     "effecttsgo/schema-literal-non-finite": "warn",
     "effecttsgo/schema-opaque-instance-member": "warn",
-    "effecttsgo/unsafe-effect-type-assertion": "warn"
+    "effecttsgo/unsafe-effect-type-assertion": "warn",
+    "effecttsgo/unstable-api-usage": "warn"
   }
 }

@@ -1,8 +1,8 @@
 === Metadata ===
 Effect version: unknown
 
-/.src/stabilityApiUsageDefault.ts(7,28): warning TS377136: `unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
-/.src/stabilityApiUsageDefault.ts(8,32): warning TS377135: `experimentalValue` is an experimental API. effect(experimentalApiUsage)
+/.src/stabilityApiUsageDefault.ts(7,28): warning TS377136: `effect-v4-tests/stabilityApiUsageDefault#unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/stabilityApiUsageDefault.ts(8,32): warning TS377135: `effect-v4-tests/stabilityApiUsageDefault#experimentalValue` is an experimental API. effect(experimentalApiUsage)
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -22,8 +22,8 @@ Effect version: unknown
     
     export const unstableUse = unstableValue
                                ~~~~~~~~~~~~~
-!!! warning TS377136: `unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+!!! warning TS377136: `effect-v4-tests/stabilityApiUsageDefault#unstableValue` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
     export const experimentalUse = experimentalValue
                                    ~~~~~~~~~~~~~~~~~
-!!! warning TS377135: `experimentalValue` is an experimental API. effect(experimentalApiUsage)
+!!! warning TS377135: `effect-v4-tests/stabilityApiUsageDefault#experimentalValue` is an experimental API. effect(experimentalApiUsage)
     
