@@ -38,7 +38,7 @@ When running in dedicated diagnostics mode, the Effect diagnostics can be emitte
 <!-- supported-components:start -->
 ## Supported Package Versions
 
-The following target package versions are supported by `@effect/tsgo@0.47.2`:
+The following target package versions are supported by `@effect/tsgo@0.48.0`:
 
 | Component | Supported versions |
 |---|---|
@@ -237,6 +237,8 @@ Effect-tsgo is a **superset** of the official [TypeScript-Go](https://github.com
 
 Each release of `effect-tsgo` is built against the versioned components recorded in `_packages/tsgo/upstream.json`. The Nix flake consumes the TypeScript `next` tag directly. When upstream `tsgo` releases new features or fixes, `effect-tsgo` will adopt them in a subsequent release after validating compatibility with the Effect diagnostics layer.
 
+The npm compiler binaries load their TypeScript standard libraries from `lib.*.d.ts` files beside the executable. These files are included beside every versioned artifact and the latest `lib/tsc` alias. If you relocate the executable returned by `effect-tsgo get-exe-path`, copy its library files into the same destination directory.
+
 ### When to Upgrade
 
 - Upgrade `effect-tsgo` when a new release includes upstream `tsgo` fixes you need or new Effect diagnostics you want.
@@ -312,6 +314,10 @@ Each release of `effect-tsgo` is built against the versioned components recorded
         "extendedKeyDetection": false,
         // Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity. (default: 2)
         "pipeableMinArgCount": 2,
+        // Unstable APIs allowed by package/module subtree or package/module#export name. (default: [])
+        "allowedUnstableApis": [],
+        // Experimental APIs allowed by package/module subtree or package/module#export name. (default: [])
+        "allowedExperimentalApis": [],
         // Package names allowed to have multiple versions without triggering duplicatePackage. (default: [])
         "allowedDuplicatedPackages": [],
         // Controls which effectFnOpportunity quickfix variants are offered. (default: ["span"])
@@ -339,3 +345,32 @@ Each release of `effect-tsgo` is built against the versioned components recorded
 }
 ```
 <!-- example-config:end -->
+
+The `allowedUnstableApis` and `allowedExperimentalApis` options selectively permit
+APIs marked `@stability unstable` and `@stability experimental`, respectively:
+
+```json
+{
+  "allowedUnstableApis": [
+    "effect/http",
+    "effect/rpc/RpcClient#make"
+  ],
+  "allowedExperimentalApis": ["my-package/Preview#make"]
+}
+```
+
+A module entry permits that module and its descendants; an entry ending in
+`#exportName` permits only that module's exported API, including renamed imports
+and aliases. For example, `effect/http/HttpClient` permits the entire module,
+while `effect/http/HttpClient#get` permits only its exported `get` API.
+Matching is case-sensitive and respects path segments: `effect/http` does not
+permit `effect/http-api`. Per-file `overrides` replace the base list.
+
+Names describe the declaration carrying the stability tag, rather than the
+import used by the consumer. They combine the nearest package name with the
+package-relative declaration path, removing a leading `src/`, `dist/`,
+`dist/dts/`, `dist/esm/`, or `dist/cjs/`, the file extension, and a trailing
+`/index`. Other layouts retain their package-relative path. Both diagnostics
+display this name when package metadata is available. APIs without package
+metadata continue to warn. Each list affects only its corresponding diagnostic; allowing an unstable API
+does not suppress experimental API warnings, and vice versa.

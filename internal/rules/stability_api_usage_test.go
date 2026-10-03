@@ -33,3 +33,24 @@ func TestStabilityOfDeclaration(t *testing.T) {
 		})
 	}
 }
+
+func TestStabilityApiModuleName(t *testing.T) {
+	t.Parallel()
+	for _, test := range []struct{ file, want string }{
+		{"/pkg/src/http/HttpClient.ts", "effect/http/HttpClient"},
+		{"/pkg/dist/http/HttpClient.d.ts", "effect/http/HttpClient"},
+		{"/pkg/dist/dts/http/HttpClient.d.mts", "effect/http/HttpClient"},
+		{"/pkg/dist/cjs/http/HttpClient.d.cts", "effect/http/HttpClient"},
+		{"/pkg/dist/http/index.d.ts", "effect/http"},
+		{"/pkg/index.ts", "effect"},
+		{"/pkg/types/client.d.ts", "effect/types/client"},
+		{"/pkg-other/client.ts", ""},
+	} {
+		t.Run(test.file, func(t *testing.T) {
+			t.Parallel()
+			if got := stabilityApiModuleName("effect", "/pkg", test.file); got != test.want {
+				t.Fatalf("got %q, want %q", got, test.want)
+			}
+		})
+	}
+}

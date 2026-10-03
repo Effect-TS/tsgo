@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: unknown
 
-/.src/consumer.ts(9,42): warning TS377136: `unstableApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/consumer.ts(9,42): warning TS377136: `effect-v4-tests/api#unstableApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
 
 
 ==== /.src/api.ts (0 errors) ====
@@ -20,6 +20,6 @@ Effect version: unknown
       const icons = (await import("simple-icons/icons.json")).default
       return [new JSZip(), new Zip(), icons, unstableApi]
                                              ~~~~~~~~~~~
-!!! warning TS377136: `unstableApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+!!! warning TS377136: `effect-v4-tests/api#unstableApi` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
     }
     

@@ -1,0 +1,372 @@
+==== /.src/barrel.ts (0 flows) ====
+==== /.src/consumer.ts (7 flows) ====
+
+=== Piping Flow ===
+Location: 9:87 - 11:17
+Node: renamed("hello")
+Node Kind: KindCallExpression
+
+Subject: "hello"
+Subject Type: "hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: renamed
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 11:17 - 12:11
+Node: renamed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: renamed
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 12:11 - 13:20
+Node: Client.get("hello")
+Node Kind: KindCallExpression
+
+Subject: "hello"
+Subject Type: "hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: Client.get
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 14:23 - 14:38
+Node: fetch("hello")
+Node Kind: KindCallExpression
+
+Subject: "hello"
+Subject Type: "hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 15:22 - 16:15
+Node: alias("hello")
+Node Kind: KindCallExpression
+
+Subject: "hello"
+Subject Type: "hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: alias
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 25:15 - 26:27
+Node: experimentalAlias("hello")
+Node Kind: KindCallExpression
+
+Subject: "hello"
+Subject Type: "hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: experimentalAlias
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 26:27 - 27:21
+Node: experimentalAlias(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: experimentalAlias
+      args: (constant)
+      outType: number
+==== /.src/module.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 3:90 - 4:13
+Node: get("hello")
+Node Kind: KindCallExpression
+
+Subject: "hello"
+Subject Type: "hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: get
+      args: (constant)
+      outType: string
+==== /.src/exportAlias.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:7 - 6:22
+Node: get("still unstable")
+Node Kind: KindCallExpression
+
+Subject: "still unstable"
+Subject Type: "still unstable"
+
+Transformations (1):
+  [0] kind: call
+      callee: get
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 6:22 - 7:7
+Node: get(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: get
+      args: (constant)
+      outType: number
+==== /.src/experimentalOnly.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 4:41 - 5:22
+Node: get("still unstable")
+Node Kind: KindCallExpression
+
+Subject: "still unstable"
+Subject Type: "still unstable"
+
+Transformations (1):
+  [0] kind: call
+      callee: get
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 9:23 - 9:61
+Node: HttpClient.get("https://example.com")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com"
+Subject Type: "https://example.com"
+
+Transformations (1):
+  [0] kind: call
+      callee: HttpClient.get
+      args: (constant)
+      outType: Effect<HttpClientResponse, HttpClientError, HttpClient>
+==== /.src/realWorldMembers.ts (7 flows) ====
+
+=== Piping Flow ===
+Location: 9:23 - 9:61
+Node: HttpClient.get("https://example.com")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com"
+Subject Type: "https://example.com"
+
+Transformations (1):
+  [0] kind: call
+      callee: HttpClient.get
+      args: (constant)
+      outType: Effect<HttpClientResponse, HttpClientError, HttpClient>
+
+=== Piping Flow ===
+Location: 10:23 - 10:63
+Node: DirectClient.get("https://example.com")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com"
+Subject Type: "https://example.com"
+
+Transformations (1):
+  [0] kind: call
+      callee: DirectClient.get
+      args: (constant)
+      outType: Effect<HttpClientResponse, HttpClientError, HttpClient>
+
+=== Piping Flow ===
+Location: 11:23 - 11:52
+Node: fetch("https://example.com")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com"
+Subject Type: "https://example.com"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetch
+      args: (constant)
+      outType: Effect<HttpClientResponse, HttpClientError, HttpClient>
+
+=== Piping Flow ===
+Location: 13:23 - 13:57
+Node: fetchAlias("https://example.com")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com"
+Subject Type: "https://example.com"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchAlias
+      args: (constant)
+      outType: Effect<HttpClientResponse, HttpClientError, HttpClient>
+
+=== Piping Flow ===
+Location: 15:23 - 15:62
+Node: HttpClient.post("https://example.com")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com"
+Subject Type: "https://example.com"
+
+Transformations (1):
+  [0] kind: call
+      callee: HttpClient.post
+      args: (constant)
+      outType: Effect<HttpClientResponse, HttpClientError, HttpClient>
+
+=== Piping Flow ===
+Location: 16:23 - 16:64
+Node: DirectClient.post("https://example.com")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com"
+Subject Type: "https://example.com"
+
+Transformations (1):
+  [0] kind: call
+      callee: DirectClient.post
+      args: (constant)
+      outType: Effect<HttpClientResponse, HttpClientError, HttpClient>
+
+=== Piping Flow ===
+Location: 17:23 - 17:41
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+==== /.src/realWorldModules.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 4:23 - 4:61
+Node: HttpClient.get("https://example.com")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com"
+Subject Type: "https://example.com"
+
+Transformations (1):
+  [0] kind: call
+      callee: HttpClient.get
+      args: (constant)
+      outType: Effect<HttpClientResponse, HttpClientError, HttpClient>
+
+=== Piping Flow ===
+Location: 5:23 - 5:62
+Node: HttpClient.post("https://example.com")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com"
+Subject Type: "https://example.com"
+
+Transformations (1):
+  [0] kind: call
+      callee: HttpClient.post
+      args: (constant)
+      outType: Effect<HttpClientResponse, HttpClientError, HttpClient>
+
+=== Piping Flow ===
+Location: 7:23 - 7:68
+Node: HttpClientRequest.get("https://example.com")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com"
+Subject Type: "https://example.com"
+
+Transformations (1):
+  [0] kind: call
+      callee: HttpClientRequest.get
+      args: (constant)
+      outType: HttpClientRequest
+==== /.src/realWorldSubtree.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 6:23 - 6:61
+Node: HttpClient.get("https://example.com")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com"
+Subject Type: "https://example.com"
+
+Transformations (1):
+  [0] kind: call
+      callee: HttpClient.get
+      args: (constant)
+      outType: Effect<HttpClientResponse, HttpClientError, HttpClient>
+
+=== Piping Flow ===
+Location: 7:23 - 7:62
+Node: HttpClient.post("https://example.com")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com"
+Subject Type: "https://example.com"
+
+Transformations (1):
+  [0] kind: call
+      callee: HttpClient.post
+      args: (constant)
+      outType: Effect<HttpClientResponse, HttpClientError, HttpClient>
+
+=== Piping Flow ===
+Location: 8:23 - 8:68
+Node: HttpClientRequest.get("https://example.com")
+Node Kind: KindCallExpression
+
+Subject: "https://example.com"
+Subject Type: "https://example.com"
+
+Transformations (1):
+  [0] kind: call
+      callee: HttpClientRequest.get
+      args: (constant)
+      outType: HttpClientRequest
+
+=== Piping Flow ===
+Location: 10:19 - 10:43
+Node: HttpApi.make("example")
+Node Kind: KindCallExpression
+
+Subject: "example"
+Subject Type: "example"
+
+Transformations (1):
+  [0] kind: call
+      callee: HttpApi.make
+      args: (constant)
+      outType: HttpApi<"example", never>

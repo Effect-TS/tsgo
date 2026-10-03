@@ -105,6 +105,10 @@ test("prepares versioned platform artifacts and executable manifests", async() =
       const directory = join(artifactsDirectory, artifact.artifactName)
       mkdirSync(directory, { recursive: true })
       writeFileSync(join(directory, artifact.fileName), artifact.version)
+      if (artifact.component === "typescript") {
+        writeFileSync(join(directory, "lib.d.ts"), `lib ${artifact.version}`)
+        writeFileSync(join(directory, "lib.es5.d.ts"), `es5 ${artifact.version}`)
+      }
     }
 
     const unexpected = join(artifactsDirectory, "unexpected")
@@ -117,6 +121,17 @@ test("prepares versioned platform artifacts and executable manifests", async() =
     )
     rmSync(unexpected, { recursive: true })
 
+    const compilerArtifact = buildReleasePlan(decodedUpstream).find((artifact) => artifact.component === "typescript")!
+    const libraryPath = join(artifactsDirectory, compilerArtifact.artifactName, "lib.d.ts")
+    rmSync(libraryPath)
+    await assert.rejects(
+      Effect.runPromise(
+        assembleReleaseArtifacts(repository, artifactsDirectory).pipe(Effect.provide(NodeServices.layer))
+      ),
+      /Missing TypeScript libraries/
+    )
+    writeFileSync(libraryPath, `lib ${compilerArtifact.version}`)
+
     await Effect.runPromise(
       assembleReleaseArtifacts(repository, artifactsDirectory).pipe(Effect.provide(NodeServices.layer))
     )
@@ -127,7 +142,16 @@ test("prepares versioned platform artifacts and executable manifests", async() =
       const extension = target.startsWith("win32-") ? ".exe" : ""
       assert.equal(readFileSync(join(packageRoot, "lib", `tsc${extension}`), "utf8"), "7.0.0")
       const packageJson = JSON.parse(readFileSync(join(packageRoot, "package.json"), "utf8"))
-      assert.deepEqual(packageJson.files, ["artifacts/", `lib/tsc${extension}`, "README.md", "lib/upstream.json"])
+      assert.deepEqual(packageJson.files, [
+        "artifacts/", `lib/tsc${extension}`, "README.md", "lib/upstream.json", "lib/lib*.d.ts"
+      ])
+      assert.equal(readFileSync(join(packageRoot, "lib", "lib.d.ts"), "utf8"), "lib 7.0.0")
+      assert.equal(readFileSync(join(packageRoot, "lib", "lib.es5.d.ts"), "utf8"), "es5 7.0.0")
+      for (const version of ["7.0.0", "7.1.0"]) {
+        const directory = join(packageRoot, "artifacts", "typescript", version)
+        assert.equal(readFileSync(join(directory, "lib.d.ts"), "utf8"), `lib ${version}`)
+        assert.equal(readFileSync(join(directory, "lib.es5.d.ts"), "utf8"), `es5 ${version}`)
+      }
       assert(packageJson.publishConfig.executableFiles.includes(
         `./artifacts/typescript/7.1.0/tsc${extension}`
       ))
