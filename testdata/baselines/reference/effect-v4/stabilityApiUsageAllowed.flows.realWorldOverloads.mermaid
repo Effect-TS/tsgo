@@ -1,0 +1,18 @@
+flowchart TB
+  0[/"type: HttpClientRequest<br/>node: HttpClientRequest.post#40;#quot;http://x#quot;#41;"/]
+  1["type: HttpClientRequest<br/>callee: HttpClientRequest.setHeader<br/>args: #91;#quot;a#quot;, #quot;b#quot;#93;"]
+  2[/"type: #123; #40;key: string, value: string#41;: #40;self: HttpClientRequest#41; =#gt; HttpClientRequest; #40;self: HttpClientRequest, key: string, value: string#41;: HttpClientRequest; #125;<br/>node: HttpClientRequest.setHeader"/]
+  3[/"type: #quot;a#quot;<br/>node: #quot;a#quot;"/]
+  4[/"type: #quot;b#quot;<br/>node: #quot;b#quot;"/]
+  5["type: HttpClientRequest<br/>callee: HttpClientRequest.bodyText<br/>args: #91;#quot;#123;#125;#quot;, #quot;application/json#quot;#93;"]
+  6[/"type: #123; #40;body: string, contentType?: string #124; undefined#41;: #40;self: HttpClientRequest#41; =#gt; HttpClientRequest; #40;self: HttpClientRequest, body: string, contentType?: string #124; undefined#41;: HttpClientRequest; #125;<br/>node: HttpClientRequest.bodyText"/]
+  7[/"type: #quot;#123;#125;#quot;<br/>node: #quot;#123;#125;#quot;"/]
+  8[/"type: #quot;application/json#quot;<br/>node: #quot;application/json#quot;"/]
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: transformArg"| 1
+  4 -->|"kind: transformArg"| 1
+  0 -->|"kind: pipe"| 1
+  6 -->|"kind: transformCallee"| 5
+  7 -->|"kind: transformArg"| 5
+  8 -->|"kind: transformArg"| 5
+  1 -->|"kind: pipe"| 5

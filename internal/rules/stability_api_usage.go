@@ -138,6 +138,36 @@ func symbolHasDeclaration(symbol *ast.Symbol, declaration *ast.Node) bool {
 	return slices.Contains(symbol.Declarations, declaration)
 }
 
+// stabilitySymbolIsModuleExport reports whether symbol is exported from the
+// module under its own name.
+func stabilitySymbolIsModuleExport(c *checker.Checker, symbol *ast.Symbol, moduleSymbol *ast.Symbol) bool {
+	if symbol == nil || moduleSymbol == nil {
+		return false
+	}
+	return c.TryGetMemberInModuleExportsAndProperties(symbol.Name, moduleSymbol) == symbol
+}
+
+// stabilityOwningExportSymbol walks out from a selected declaration to the
+// nearest enclosing declaration that is exported from the module. A call or
+// construct signature of a dual export has its own `__call` symbol, so the
+// export it belongs to can only be found by climbing to the annotated
+// declaration (for example the variable the object type is assigned to).
+func stabilityOwningExportSymbol(c *checker.Checker, declaration *ast.Node, moduleSymbol *ast.Symbol) *ast.Symbol {
+	for node := declaration.Parent; node != nil; node = node.Parent {
+		symbol := checker.Checker_getSymbolOfDeclaration(c, node)
+		if symbol == nil {
+			continue
+		}
+		if symbol.ExportSymbol != nil {
+			symbol = symbol.ExportSymbol
+		}
+		if stabilitySymbolIsModuleExport(c, symbol, moduleSymbol) {
+			return symbol
+		}
+	}
+	return nil
+}
+
 func stabilityOfDeclaration(declaration *ast.Node) string {
 	if declaration == nil {
 		return ""
@@ -219,6 +249,15 @@ func newStabilityApiAllowlist(ctx *rule.Context, wanted string) func(*ast.Node) 
 		symbol := checker.Checker_getSymbolOfDeclaration(ctx.Checker, declaration)
 		if symbol != nil && symbol.ExportSymbol != nil {
 			symbol = symbol.ExportSymbol
+		}
+		// A selected overload (for example a call signature of a dual export)
+		// carries its own `__call` symbol rather than the export's, so it is not
+		// a module export. Resolve the enclosing exported declaration instead so
+		// the name and the per-export allow-list match stay export-scoped.
+		if moduleSymbol != nil && !stabilitySymbolIsModuleExport(ctx.Checker, symbol, moduleSymbol) {
+			if owner := stabilityOwningExportSymbol(ctx.Checker, declaration, moduleSymbol); owner != nil {
+				symbol = owner
+			}
 		}
 		result.name = moduleName
 		if moduleSymbol != nil && symbol != nil {

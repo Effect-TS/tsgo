@@ -28,43 +28,47 @@
   Fix 0: "Disable unstableApiUsage for this line"
   Fix 1: "Disable unstableApiUsage for entire file"
 
-[D8] (6:1-6:4) TS377136: `allowed/http/HttpClient#get` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+[D8] (9:1-9:13) TS377136: `allowed/http/HttpClient#dualUnlisted` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
   Fix 0: "Disable unstableApiUsage for this line"
   Fix 1: "Disable unstableApiUsage for entire file"
 
-[D9] (8:1-8:13) TS377135: `allowed/http/HttpClient#experimental` is an experimental API. effect(experimentalApiUsage)
+[D9] (6:1-6:4) TS377136: `allowed/http/HttpClient#get` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+  Fix 0: "Disable unstableApiUsage for this line"
+  Fix 1: "Disable unstableApiUsage for entire file"
+
+[D10] (8:1-8:13) TS377135: `allowed/http/HttpClient#experimental` is an experimental API. effect(experimentalApiUsage)
   Fix 0: "Disable experimentalApiUsage for this line"
   Fix 1: "Disable experimentalApiUsage for entire file"
 
-[D10] (9:1-9:13) TS377135: `allowed/http/HttpClient#experimental` is an experimental API. effect(experimentalApiUsage)
+[D11] (9:1-9:13) TS377135: `allowed/http/HttpClient#experimental` is an experimental API. effect(experimentalApiUsage)
   Fix 0: "Disable experimentalApiUsage for this line"
   Fix 1: "Disable experimentalApiUsage for entire file"
 
-[D11] (5:1-5:4) TS377136: `allowed/http/HttpClient#get` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+[D12] (5:1-5:4) TS377136: `allowed/http/HttpClient#get` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
   Fix 0: "Disable unstableApiUsage for this line"
   Fix 1: "Disable unstableApiUsage for entire file"
 
-[D12] (6:1-6:5) TS377136: `allowed/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+[D13] (6:1-6:5) TS377136: `allowed/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
   Fix 0: "Disable unstableApiUsage for this line"
   Fix 1: "Disable unstableApiUsage for entire file"
 
-[D13] (9:35-9:38) TS377136: `effect/http/HttpClient#get` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+[D14] (9:35-9:38) TS377136: `effect/http/HttpClient#get` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
   Fix 0: "Disable unstableApiUsage for this line"
   Fix 1: "Disable unstableApiUsage for entire file"
 
-[D14] (15:35-15:39) TS377136: `effect/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+[D15] (15:35-15:39) TS377136: `effect/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
   Fix 0: "Disable unstableApiUsage for this line"
   Fix 1: "Disable unstableApiUsage for entire file"
 
-[D15] (16:37-16:41) TS377136: `effect/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+[D16] (16:37-16:41) TS377136: `effect/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
   Fix 0: "Disable unstableApiUsage for this line"
   Fix 1: "Disable unstableApiUsage for entire file"
 
-[D16] (7:42-7:45) TS377136: `effect/http/HttpClientRequest#get` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+[D17] (7:42-7:45) TS377136: `effect/http/HttpClientRequest#get` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
   Fix 0: "Disable unstableApiUsage for this line"
   Fix 1: "Disable unstableApiUsage for entire file"
 
-[D17] (10:28-10:32) TS377136: `effect/http-api/HttpApi#make` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+[D18] (10:28-10:32) TS377136: `effect/http-api/HttpApi#make` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
   Fix 0: "Disable unstableApiUsage for this line"
   Fix 1: "Disable unstableApiUsage for entire file"
 
@@ -118,10 +122,10 @@ skipped by default
 === [D8] Fix 1: "Disable unstableApiUsage for entire file" ===
 skipped by default
 
-=== [D9] Fix 0: "Disable experimentalApiUsage for this line" ===
+=== [D9] Fix 0: "Disable unstableApiUsage for this line" ===
 skipped by default
 
-=== [D9] Fix 1: "Disable experimentalApiUsage for entire file" ===
+=== [D9] Fix 1: "Disable unstableApiUsage for entire file" ===
 skipped by default
 
 === [D10] Fix 0: "Disable experimentalApiUsage for this line" ===
@@ -130,10 +134,10 @@ skipped by default
 === [D10] Fix 1: "Disable experimentalApiUsage for entire file" ===
 skipped by default
 
-=== [D11] Fix 0: "Disable unstableApiUsage for this line" ===
+=== [D11] Fix 0: "Disable experimentalApiUsage for this line" ===
 skipped by default
 
-=== [D11] Fix 1: "Disable unstableApiUsage for entire file" ===
+=== [D11] Fix 1: "Disable experimentalApiUsage for entire file" ===
 skipped by default
 
 === [D12] Fix 0: "Disable unstableApiUsage for this line" ===
@@ -170,4 +174,10 @@ skipped by default
 skipped by default
 
 === [D17] Fix 1: "Disable unstableApiUsage for entire file" ===
+skipped by default
+
+=== [D18] Fix 0: "Disable unstableApiUsage for this line" ===
+skipped by default
+
+=== [D18] Fix 1: "Disable unstableApiUsage for entire file" ===
 skipped by default
