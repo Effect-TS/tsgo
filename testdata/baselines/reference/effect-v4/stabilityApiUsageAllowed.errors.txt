@@ -14,6 +14,7 @@ Effect version: 4.0.0
 /.src/exportAlias.ts(6,1): warning TS377136: `allowed/http/HttpClient#get` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
 /.src/exportAlias.ts(8,1): warning TS377135: `allowed/http/HttpClient#experimental` is an experimental API. effect(experimentalApiUsage)
 /.src/exportAlias.ts(9,1): warning TS377135: `allowed/http/HttpClient#experimental` is an experimental API. effect(experimentalApiUsage)
+/.src/overload.ts(9,1): warning TS377136: `allowed/http/HttpClient#dualUnlisted` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
 /.src/realWorldMembers.ts(15,35): warning TS377136: `effect/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
 /.src/realWorldMembers.ts(16,37): warning TS377136: `effect/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
 /.src/realWorldModules.ts(7,42): warning TS377136: `effect/http/HttpClientRequest#get` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
@@ -25,7 +26,7 @@ Effect version: 4.0.0
       "compilerOptions": {
         "plugins": [{
           "name": "@effect/language-service",
-          "allowedUnstableApis": ["allowed/http/HttpClient#get", "allowed/rpc", "effect/http/HttpClient#get"],
+          "allowedUnstableApis": ["allowed/http/HttpClient#get", "allowed/http/HttpClient#dual", "allowed/rpc", "effect/http/HttpClient#get"],
           "allowedExperimentalApis": ["allowed/http/HttpClient#preview", "allowed/http/HttpClient#experimentalFetch", "allowed/experimental"],
           "overrides": [{
             "include": ["module.ts"],
@@ -51,6 +52,9 @@ Effect version: 4.0.0
           }, {
             "include": ["realWorldSubtree.ts"],
             "options": { "allowedUnstableApis": ["effect/http"] }
+          }, {
+            "include": ["realWorldOverloads.ts"],
+            "options": { "allowedUnstableApis": ["effect/http/HttpClientRequest#post", "effect/http/HttpClientRequest#setHeader", "effect/http/HttpClientRequest#bodyText"] }
           }]
         }]
       }
@@ -109,6 +113,20 @@ Effect version: 4.0.0
     other()
     ~~~~~
 !!! warning TS377136: `allowed/rpc-extra/Client#make` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    
+
+==== /.src/overload.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics unstableApiUsage:warning
+    // A dual export whose call signatures carry their own @stability tag must be
+    // named after the export, so the per-export allow-list entry matches.
+    import { dual, dualUnlisted } from "allowed/dist/http/HttpClient"
+    dual("hello")
+    dual(1)
+    // An unlisted dual export warns under its export name, not the bare module.
+    dualUnlisted("hello")
+    ~~~~~~~~~~~~
+!!! warning TS377136: `allowed/http/HttpClient#dualUnlisted` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
     
 
 ==== /.src/module.ts (0 errors) ====
@@ -206,4 +224,16 @@ Effect version: 4.0.0
     export const api = HttpApi.make("example")
                                ~~~~
 !!! warning TS377136: `effect/http-api/HttpApi#make` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    
+
+==== /.src/realWorldOverloads.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics unstableApiUsage:warning
+    import { HttpClientRequest } from "effect/http"
+    // Each use is allowed by its own export name. `setHeader` and `bodyText` are
+    // dual exports whose call signatures carry the @stability tag.
+    export const request = HttpClientRequest.post("http://x").pipe(
+      HttpClientRequest.setHeader("a", "b"),
+      HttpClientRequest.bodyText("{}", "application/json"),
+    )
     

@@ -1,0 +1,8 @@
+flowchart TB
+  0[/"type: string<br/>node: dual#40;#quot;hello#quot;#41;"/]
+  1[/"type: number<br/>node: dual#40;1#41;"/]
+  2[/"type: #quot;hello#quot;<br/>node: #quot;hello#quot;"/]
+  3["type: string<br/>callee: dualUnlisted<br/>args: #91;#93;"]
+  4[/"type: #40;value: string#41; =#gt; string<br/>node: dualUnlisted"/]
+  2 -->|"kind: pipe"| 3
+  4 -->|"kind: transformCallee"| 3

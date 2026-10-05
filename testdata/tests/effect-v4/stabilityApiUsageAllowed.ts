@@ -3,7 +3,7 @@
   "compilerOptions": {
     "plugins": [{
       "name": "@effect/language-service",
-      "allowedUnstableApis": ["allowed/http/HttpClient#get", "allowed/rpc", "effect/http/HttpClient#get"],
+      "allowedUnstableApis": ["allowed/http/HttpClient#get", "allowed/http/HttpClient#dual", "allowed/rpc", "effect/http/HttpClient#get"],
       "allowedExperimentalApis": ["allowed/http/HttpClient#preview", "allowed/http/HttpClient#experimentalFetch", "allowed/experimental"],
       "overrides": [{
         "include": ["module.ts"],
@@ -29,6 +29,9 @@
       }, {
         "include": ["realWorldSubtree.ts"],
         "options": { "allowedUnstableApis": ["effect/http"] }
+      }, {
+        "include": ["realWorldOverloads.ts"],
+        "options": { "allowedUnstableApis": ["effect/http/HttpClientRequest#post", "effect/http/HttpClientRequest#setHeader", "effect/http/HttpClientRequest#bodyText"] }
       }]
     }]
   }
@@ -51,6 +54,18 @@ export declare const otherExperimental: () => void
 export declare function experimentalGet(value: string): string
 export declare function experimentalGet(value: number): number
 export { post as send, experimental as preview, experimentalGet as experimentalFetch }
+/** @stability unstable */
+export declare const dual: {
+    /** @stability unstable */
+    (value: string): string;
+    /** @stability unstable */
+    (value: number): number;
+}
+/** @stability unstable */
+export declare const dualUnlisted: {
+    /** @stability unstable */
+    (value: string): string;
+}
 
 // @filename: /node_modules/allowed/dist/rpc/Client.d.ts
 /** @stability unstable */
@@ -105,6 +120,17 @@ experimentalMake()
 otherExperimentalMake()
 make()
 other()
+
+// @filename: overload.ts
+// @effect-v4
+// @effect-diagnostics unstableApiUsage:warning
+// A dual export whose call signatures carry their own @stability tag must be
+// named after the export, so the per-export allow-list entry matches.
+import { dual, dualUnlisted } from "allowed/dist/http/HttpClient"
+dual("hello")
+dual(1)
+// An unlisted dual export warns under its export name, not the bare module.
+dualUnlisted("hello")
 
 // @filename: module.ts
 // @effect-v4
@@ -176,3 +202,14 @@ export const result2 = HttpClient.post("https://example.com")
 export const result3 = HttpClientRequest.get("https://example.com")
 // A path-segment match must not allow the separate http-api subtree.
 export const api = HttpApi.make("example")
+
+// @filename: realWorldOverloads.ts
+// @effect-v4
+// @effect-diagnostics unstableApiUsage:warning
+import { HttpClientRequest } from "effect/http"
+// Each use is allowed by its own export name. `setHeader` and `bodyText` are
+// dual exports whose call signatures carry the @stability tag.
+export const request = HttpClientRequest.post("http://x").pipe(
+  HttpClientRequest.setHeader("a", "b"),
+  HttpClientRequest.bodyText("{}", "application/json"),
+)
