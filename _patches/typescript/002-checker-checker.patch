@@ -44,13 +44,13 @@ index 2e1622418..66059cab4 100644
  
  type CheckMode uint32
 @@ -559,6 +593,7 @@ type Program interface {
- 	GetImportHelpersImportSpecifier(path tspath.Path) *ast.Node
+ 	GetImportHelpersImportSpecifier(path tspath.PathKey) *ast.Node
  	SourceFileMayBeEmitted(sourceFile *ast.SourceFile, forceDtsEmit bool) bool
- 	IsSourceFileDefaultLibrary(path tspath.Path) bool
+ 	IsSourceFileDefaultLibrary(path tspath.PathKey) bool
 +	IsSourceFileFromExternalLibrary(file *ast.SourceFile) bool
- 	GetProjectReferenceFromOutputDts(path tspath.Path) *tsoptions.SourceOutputAndProjectReference
+ 	GetProjectReferenceFromOutputDts(path tspath.PathKey) *tsoptions.SourceOutputAndProjectReference
  	GetRedirectForResolution(file ast.HasFileName) *tsoptions.ParsedCommandLine
- 	CommonSourceDirectory() string
+ 	CommonSourceDirectory() tspath.RootedDirectoryPath
 @@ -2186,6 +2220,8 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
  		if tr := c.tracer; tr != nil {
  			defer tr.Push(tracing.PhaseCheck, "checkSourceFile", map[string]any{"path": sourceFile.FileName()}, true)()

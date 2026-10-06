@@ -8,6 +8,7 @@ import "github.com/microsoft/TypeScript/tsc/internal/ast"
 import "github.com/microsoft/TypeScript/tsc/internal/core"
 import "github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 import "github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+import "github.com/microsoft/TypeScript/tsc/internal/tspath"
 import _ "unsafe"
 
 //go:linkname ComputeLSPLineStarts github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.ComputeLSPLineStarts
@@ -18,7 +19,7 @@ func DiagnosticToLSPPull(ctx context.Context, converters *lsconv.Converters, dia
 //go:linkname DiagnosticToLSPPush github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.DiagnosticToLSPPush
 func DiagnosticToLSPPush(ctx context.Context, converters *lsconv.Converters, diagnostic *ast.Diagnostic) *lsproto.Diagnostic
 //go:linkname FileNameToDocumentURI github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.FileNameToDocumentURI
-func FileNameToDocumentURI(fileName string) lsproto.DocumentUri
+func FileNameToDocumentURI(fileName tspath.RootedFilePath) lsproto.DocumentUri
 type LSPLineMap = lsconv.LSPLineMap
 type LSPLineStarts = lsconv.LSPLineStarts
 //go:linkname LanguageKindToScriptKind github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.LanguageKindToScriptKind
@@ -26,5 +27,7 @@ func LanguageKindToScriptKind(languageID lsproto.LanguageKind) core.ScriptKind
 type MappedPosition[T lsconv.Script] = lsconv.MappedPosition[T]
 type MappedSpan[T lsconv.Script] = lsconv.MappedSpan[T]
 //go:linkname NewConverters github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.NewConverters
-func NewConverters(positionEncoding lsproto.PositionEncodingKind, getLineMap func(fileName string) *lsconv.LSPLineMap) *lsconv.Converters
+func NewConverters(positionEncoding lsproto.PositionEncodingKind, getLineMap func(fileName tspath.RootedFilePath) *lsconv.LSPLineMap) *lsconv.Converters
+//go:linkname PathToDocumentURI github.com/microsoft/TypeScript/tsc/internal/ls/lsconv.PathToDocumentURI
+func PathToDocumentURI(rootedPath tspath.RootedPath) lsproto.DocumentUri
 type Script = lsconv.Script

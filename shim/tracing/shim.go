@@ -4,6 +4,7 @@
 package tracing
 
 import "github.com/microsoft/TypeScript/tsc/internal/tracing"
+import "github.com/microsoft/TypeScript/tsc/internal/tspath"
 import "github.com/microsoft/TypeScript/tsc/internal/vfs"
 import _ "unsafe"
 
@@ -18,7 +19,7 @@ const PhaseParse = tracing.PhaseParse
 const PhaseProgram = tracing.PhaseProgram
 const PhaseSession = tracing.PhaseSession
 //go:linkname StartTracing github.com/microsoft/TypeScript/tsc/internal/tracing.StartTracing
-func StartTracing(fs vfs.FS, traceDir string, configFilePath string, deterministic bool) (*tracing.Tracing, error)
+func StartTracing(fs vfs.FS, traceDir tspath.RootedDirectoryPath, configFilePath string, deterministic bool) (*tracing.Tracing, error)
 type TraceRecord = tracing.TraceRecord
 type TracedType = tracing.TracedType
 type Tracer = tracing.Tracer

@@ -1,6 +1,7 @@
 package effecttest_test
 
 import (
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 	"os"
 	"path/filepath"
 	"strings"
@@ -41,7 +42,7 @@ func TestEffectFnOpportunityUnaryPipeablesCompile(t *testing.T) {
 	defer done()
 	f.VerifyNonSuggestionDiagnostics(t, nil)
 
-	uri := lsconv.FileNameToDocumentURI("/repro.ts")
+	uri := lsconv.FileNameToDocumentURI(tspath.RootedFilePath("/repro.ts"))
 	checked := 0
 	for _, diagnostic := range f.GetQuickFixesForDiagnostics(t, uri) {
 		for index, title := range diagnostic.FixTitles {

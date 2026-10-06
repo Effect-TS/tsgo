@@ -7,6 +7,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"go/ast"
 	"go/format"
 	"go/parser"
 	"go/token"
@@ -746,7 +747,128 @@ func rewriteImportPrefix(source []byte, fromPrefix, toPrefix string) ([]byte, er
 	return output.Bytes(), nil
 }
 
-func generateBackport(providerRoot, backportRoot, providerInternalPrefix, providerShimPrefix string) error {
+// Compatibility helpers belong only to the canonical facade. Provider shims
+// must retain the API of the compiler they expose to consumers such as tsgolint.
+func splitShimHelpers(helpers map[string][]byte) (provider, adapters map[string][]byte) {
+	provider = make(map[string][]byte)
+	adapters = make(map[string][]byte)
+	for relative, source := range helpers {
+		if filepath.Base(relative) == "compatibility.go" {
+			adapters[relative] = source
+		} else {
+			provider[relative] = source
+		}
+	}
+	return
+}
+
+func exportedShimNames(source []byte) (map[string]bool, error) {
+	file, err := parser.ParseFile(token.NewFileSet(), "compatibility.go", source, 0)
+	if err != nil {
+		return nil, err
+	}
+	names := make(map[string]bool)
+	for _, declaration := range file.Decls {
+		switch declaration := declaration.(type) {
+		case *ast.FuncDecl:
+			if declaration.Recv == nil && declaration.Name.IsExported() {
+				names[declaration.Name.Name] = true
+			}
+		case *ast.GenDecl:
+			for _, spec := range declaration.Specs {
+				switch spec := spec.(type) {
+				case *ast.TypeSpec:
+					if spec.Name.IsExported() {
+						names[spec.Name.Name] = true
+					}
+				case *ast.ValueSpec:
+					for _, name := range spec.Names {
+						if name.IsExported() {
+							names[name.Name] = true
+						}
+					}
+				}
+			}
+		}
+	}
+	return names, nil
+}
+
+// Remove provider exports replaced by canonical adapters, including their
+// linkname directives and imports used only by the removed declarations.
+func omitAdaptedExports(source []byte, names map[string]bool) ([]byte, error) {
+	if len(names) == 0 {
+		return source, nil
+	}
+	fileSet := token.NewFileSet()
+	file, err := parser.ParseFile(fileSet, "shim.go", source, parser.ParseComments)
+	if err != nil {
+		return nil, err
+	}
+	comments := ast.NewCommentMap(fileSet, file, file.Comments)
+	file.Decls = slices.DeleteFunc(file.Decls, func(declaration ast.Decl) bool {
+		switch declaration := declaration.(type) {
+		case *ast.FuncDecl:
+			return declaration.Recv == nil && names[declaration.Name.Name]
+		case *ast.GenDecl:
+			declaration.Specs = slices.DeleteFunc(declaration.Specs, func(spec ast.Spec) bool {
+				switch spec := spec.(type) {
+				case *ast.TypeSpec:
+					return names[spec.Name.Name]
+				case *ast.ValueSpec:
+					// Generated shim exports have one name per declaration.
+					return len(spec.Names) == 1 && names[spec.Names[0].Name]
+				}
+				return false
+			})
+			return len(declaration.Specs) == 0
+		}
+		return false
+	})
+	usedPackages := make(map[string]bool)
+	ast.Inspect(file, func(node ast.Node) bool {
+		if selector, ok := node.(*ast.SelectorExpr); ok {
+			if name, ok := selector.X.(*ast.Ident); ok {
+				usedPackages[name.Name] = true
+			}
+		}
+		return true
+	})
+	for _, declaration := range file.Decls {
+		if group, ok := declaration.(*ast.GenDecl); ok && group.Tok == token.IMPORT {
+			group.Specs = slices.DeleteFunc(group.Specs, func(spec ast.Spec) bool {
+				importSpec := spec.(*ast.ImportSpec)
+				path, _ := strconv.Unquote(importSpec.Path.Value)
+				name := filepath.Base(path)
+				if importSpec.Name != nil {
+					name = importSpec.Name.Name
+				}
+				return name != "_" && name != "." && !usedPackages[name]
+			})
+		}
+	}
+	file.Decls = slices.DeleteFunc(file.Decls, func(declaration ast.Decl) bool {
+		group, ok := declaration.(*ast.GenDecl)
+		return ok && len(group.Specs) == 0
+	})
+	file.Comments = comments.Filter(file).Comments()
+	var output bytes.Buffer
+	if err := format.Node(&output, fileSet, file); err != nil {
+		return nil, err
+	}
+	return output.Bytes(), nil
+}
+
+func generateBackport(providerRoot, backportRoot, providerInternalPrefix, providerShimPrefix string, adapters map[string][]byte) error {
+	adaptedExports := make(map[string]map[string]bool)
+	for relative, source := range adapters {
+		names, err := exportedShimNames(source)
+		if err != nil {
+			return err
+		}
+		adaptedExports[filepath.Dir(relative)] = names
+	}
+
 	if err := filepath.WalkDir(providerRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
 			return walkErr
@@ -765,6 +887,10 @@ func generateBackport(providerRoot, backportRoot, providerInternalPrefix, provid
 		if err != nil {
 			return err
 		}
+		source, err = omitAdaptedExports(source, adaptedExports[filepath.Dir(relative)])
+		if err != nil {
+			return err
+		}
 		normalized, err := rewriteImportPrefix(source, providerInternalPrefix, providerShimPrefix+"/")
 		if err != nil {
 			return fmt.Errorf("normalize facade imports in %s: %w", relative, err)
@@ -775,6 +901,15 @@ func generateBackport(providerRoot, backportRoot, providerInternalPrefix, provid
 		return nil
 	}); err != nil {
 		return err
+	}
+	for relative, source := range adapters {
+		normalized, err := rewriteImportPrefix(source, providerInternalPrefix, providerShimPrefix+"/")
+		if err != nil {
+			return fmt.Errorf("normalize compatibility adapter %s: %w", relative, err)
+		}
+		if err := writeFile(filepath.Join(backportRoot, relative), normalized, 0o644); err != nil {
+			return err
+		}
 	}
 	for _, modulePath := range modulePaths() {
 		goMod := fmt.Sprintf(
@@ -934,6 +1069,22 @@ func run() error {
 			return fmt.Errorf("normalize provider helper %s: %w", relative, err)
 		}
 		providerHelpers[relative] = normalized
+	}
+	var compatibilityHelpers map[string][]byte
+	if providerShimPrefix != canonicalShimModulePrefix {
+		providerHelpers, compatibilityHelpers = splitShimHelpers(providerHelpers)
+		for relative, source := range compatibilityHelpers {
+			names, err := exportedShimNames(source)
+			if err != nil {
+				return err
+			}
+			packagePath := filepath.ToSlash(filepath.Dir(relative))
+			extra := inputs.extra[packagePath]
+			// Overlays may omit APIs unused by their own consumers. Canonical
+			// adapters still need the original provider functions to call.
+			extra.IgnoreFunctions = slices.DeleteFunc(extra.IgnoreFunctions, func(name string) bool { return names[name] })
+			inputs.extra[packagePath] = extra
+		}
 	}
 	if err := writeShimHelpers(providerPath, providerHelpers); err != nil {
 		return err
@@ -1349,7 +1500,7 @@ func run() error {
 		}
 	}
 	if providerShimPrefix != canonicalShimModulePrefix {
-		if err := generateBackport(providerPath, backportPath, tsgoInternalPrefix, providerShimPrefix); err != nil {
+		if err := generateBackport(providerPath, backportPath, tsgoInternalPrefix, providerShimPrefix, compatibilityHelpers); err != nil {
 			return fmt.Errorf("generate backport shim facade: %w", err)
 		}
 	}

@@ -21,25 +21,22 @@ import (
 
 type parseHost struct{ fs vfs.FS }
 
-func (h *parseHost) FS() vfs.FS                  { return h.fs }
-func (h *parseHost) GetCurrentDirectory() string { return "/" }
-
 func newHost(files map[string]string) *parseHost {
 	entries := map[string]any{"/main.ts": &fstest.MapFile{Data: []byte("export {}")}}
 	for name, text := range files {
 		entries[name] = &fstest.MapFile{Data: []byte(text)}
 	}
-	return &parseHost{fs: bundled.WrapFS(vfstest.FromMap(entries, true))}
+	return &parseHost{fs: bundled.WrapFS(vfstest.FromMap(entries, tspath.CaseSensitive))}
 }
 
 func parse(t *testing.T, host *parseHost, path string, cache tsoptions.ExtendedConfigCache) *tsoptions.ParsedCommandLine {
 	t.Helper()
-	text, ok := host.fs.ReadFile(path)
+	text, ok := host.fs.ReadFile(tspath.RootedFilePath(path))
 	if !ok {
 		t.Fatalf("missing config %s", path)
 	}
-	source := tsoptions.NewTsconfigSourceFileFromFilePath(path, tspath.Path(path), text)
-	return tsoptions.ParseJsonSourceFileConfigFileContent(source, host, tspath.GetDirectoryPath(path), nil, nil, path, nil, nil, cache)
+	source := tsoptions.NewTsconfigSourceFileFromFilePath(tspath.RootedFilePath(path), tspath.PathKey(path), text)
+	return tsoptions.ParseJsonSourceFileConfigFileContent(source, host.fs, tspath.RootedDirectoryPath(tspath.GetDirectoryPath(path)), nil, nil, nil, cache)
 }
 
 func config(options string, extra string) string {
@@ -164,7 +161,7 @@ func TestUnknownRuleNamesJSONAPI(t *testing.T) {
 	if len(errors) != 0 {
 		t.Fatalf("invalid config fixture: %v", errors)
 	}
-	parsed := tsoptions.ParseJsonConfigFileContent(raw, newHost(nil), "/", nil, "/tsconfig.json", nil, nil, nil)
+	parsed := tsoptions.ParseJsonConfigFileContent(raw, newHost(nil).fs, tspath.RootedDirectoryPath("/"), nil, tspath.RootedFilePath("/tsconfig.json"), nil, nil)
 	got := unknownDiagnostics(parsed)
 	if len(got) != 1 || got[0].File() != nil {
 		t.Fatalf("expected one locationless warning: %v", got)
@@ -184,7 +181,7 @@ func TestProjectReferencesAndSharedExtends(t *testing.T) {
 	root := parse(t, host, "/tsconfig.json", cache)
 	program := compiler.NewProgram(compiler.ProgramOptions{
 		Config:         root,
-		Host:           compiler.NewCompilerHost("/", host.fs, bundled.LibPath(), cache, nil),
+		Host:           compiler.NewCompilerHost(host.fs, bundled.LibPath(), cache, nil, nil),
 		SingleThreaded: core.TSTrue,
 	})
 	if got := unknownDiagnostics(root); len(got) != 0 {
@@ -231,10 +228,10 @@ func TestMultipleExtendsAndExistingOptions(t *testing.T) {
 	if len(got) != 1 || got[0].Category() != diagnostics.CategoryError {
 		t.Fatalf("multiple extends failed: %v", got)
 	}
-	text, _ := host.fs.ReadFile("/tsconfig.json")
-	source := tsoptions.NewTsconfigSourceFileFromFilePath("/tsconfig.json", "/tsconfig.json", text)
+	text, _ := host.fs.ReadFile(tspath.RootedFilePath("/tsconfig.json"))
+	source := tsoptions.NewTsconfigSourceFileFromFilePath(tspath.RootedFilePath("/tsconfig.json"), "/tsconfig.json", text)
 	existing := &core.CompilerOptions{Effect: &etscore.EffectPluginOptions{Diagnostics: true, DiagnosticSeverity: map[string]etscore.Severity{"existingTypo": etscore.SeverityError}}}
-	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(source, host, "/", existing, nil, "/tsconfig.json", nil, nil, nil)
+	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(source, host.fs, tspath.RootedDirectoryPath("/"), existing, nil, nil, nil)
 	got = unknownDiagnostics(parsed)
 	if len(got) != 1 || !strings.Contains(strings.Join(got[0].MessageArgs(), " "), "existingTypo") {
 		t.Fatalf("existing options were not validated after merging: %v", got)

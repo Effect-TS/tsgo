@@ -2,6 +2,7 @@ package typeparser_test
 
 import (
 	"context"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 	"testing"
 	"testing/fstest"
 
@@ -26,7 +27,7 @@ func compileAndGetCheckerAndSourceFile(t *testing.T, source string) (*checker.Ch
 		},
 	}
 
-	fs := vfstest.FromMap(testfs, true)
+	fs := vfstest.FromMap(testfs, tspath.CaseSensitive)
 	fs = bundled.WrapFS(fs)
 
 	compilerOptions := &core.CompilerOptions{
@@ -39,21 +40,16 @@ func compileAndGetCheckerAndSourceFile(t *testing.T, source string) (*checker.Ch
 		Strict:              core.TSTrue,
 	}
 
-	host := compiler.NewCompilerHost("/.src", fs, bundled.LibPath(), nil, nil)
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
 	program := compiler.NewProgram(compiler.ProgramOptions{
-		Config: &tsoptions.ParsedCommandLine{
-			ParsedConfig: &core.ParsedOptions{
-				CompilerOptions: compilerOptions,
-				FileNames:       []string{"/.src/test.ts"},
-			},
-		},
+		Config:         tsoptions.NewParsedCommandLine(compilerOptions, []tspath.RootedFilePath{"/.src/test.ts"}, nil, "/", tspath.CaseSensitive),
 		Host:           host,
 		SingleThreaded: core.TSTrue,
 	})
 
 	ctx := context.Background()
 	c, done := program.GetTypeChecker(ctx)
-	sf := program.GetSourceFile("/.src/test.ts")
+	sf := program.GetSourceFile(tspath.RootedFilePath("/.src/test.ts"))
 	if sf == nil {
 		done()
 		t.Fatal("Failed to get source file")

@@ -3,8 +3,8 @@
 
 package vfs
 
+import "github.com/microsoft/TypeScript/tsc/internal/tspath"
 import "github.com/microsoft/TypeScript/tsc/internal/vfs"
-import "io/fs"
 import _ "unsafe"
 
 type DirEntry = vfs.DirEntry
@@ -16,5 +16,8 @@ var ErrNotExist = vfs.ErrNotExist
 var ErrPermission = vfs.ErrPermission
 type FS = vfs.FS
 type FileInfo = vfs.FileInfo
+var SkipAll = vfs.SkipAll
+var SkipDir = vfs.SkipDir
 //go:linkname WalkDir github.com/microsoft/TypeScript/tsc/internal/vfs.WalkDir
-func WalkDir(fileSystem vfs.FS, root string, walkFn fs.WalkDirFunc) error
+func WalkDir(fileSystem vfs.FS, root tspath.RootedPath, walkFn vfs.WalkDirFunc) error
+type WalkDirFunc = vfs.WalkDirFunc

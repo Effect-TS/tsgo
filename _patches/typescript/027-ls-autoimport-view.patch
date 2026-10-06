@@ -12,7 +12,7 @@ index dd9572fa..3ecfd388 100644
  	allowedEndings                   []modulespecifiers.ModuleSpecifierEnding
 @@ -39,7 +40,7 @@ func NewView(registry *Registry, importingFile *ast.SourceFile, projectID Projec
  	if canonical := importingFile.CanonicalSourceFile(); canonical != nil {
- 		importingFilePath = canonical.Path()
+ 		importingFilePath = canonical.PathKey()
  	}
 -	return &View{
 +	view := &View{

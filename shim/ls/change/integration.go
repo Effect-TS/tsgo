@@ -5,9 +5,10 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/internal/ls/change"
 	"github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
 
-func GetChanges(tracker *change.Tracker) map[string][]*lsproto.TextEdit {
+func CollectChanges(tracker *change.Tracker) map[tspath.RootedFilePath][]*lsproto.TextEdit {
 	changes, _ := tracker.GetChanges()
 	return changes
 }

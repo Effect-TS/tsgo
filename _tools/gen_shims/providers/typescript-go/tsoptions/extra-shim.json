@@ -1,3 +1,0 @@
-{
-  "IgnoreFunctions": ["ParseJsonSourceFileConfigFileContent", "ParseJsonConfigFileContent"]
-}

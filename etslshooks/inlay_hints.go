@@ -56,7 +56,7 @@ func shouldOmitHint(
 	}
 
 	// Convert LSP position back to raw text offset
-	offset := int(converters.LineAndCharacterToPosition(sf, hint.Position))
+	offset := lsconv.FromLSPRangeToOriginal(converters, sf, lsproto.Range{Start: hint.Position, End: hint.Position}).Pos()
 
 	// Find the token at offset-1 (matching the TS reference: findNodeAtPositionIncludingTrivia(sf, position - 1))
 	node := astnav.GetTokenAtPosition(sf, offset-1)

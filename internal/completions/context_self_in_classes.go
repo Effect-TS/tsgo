@@ -117,11 +117,11 @@ func computeServiceTagKey(program checker.Program, tp *typeparser.TypeParser, ch
 		effectConfig,
 		sf.FileName(),
 		program.Options().ConfigFilePath,
-		program.UseCaseSensitiveFileNames(),
+		tspath.UseCaseSensitiveFileNames(program),
 	)
 	keyPatterns := resolvedOptions.GetKeyPatterns()
 
-	key := keybuilder.CreateString(sf.FileName(), packageName, packageDirectory, className, "service", keyPatterns)
+	key := keybuilder.CreateString(string(sf.FileName()), packageName, packageDirectory, className, "service", keyPatterns)
 	if key == "" {
 		return className
 	}
@@ -131,7 +131,7 @@ func computeServiceTagKey(program checker.Program, tp *typeparser.TypeParser, ch
 // getCompletionPackageJsonDirectory gets the package.json directory for a source file.
 func getCompletionPackageJsonDirectory(program checker.Program, _ *checker.Checker, sf *ast.SourceFile) string {
 	type metaProvider interface {
-		GetSourceFileMetaData(path tspath.Path) ast.SourceFileMetaData
+		GetSourceFileMetaData(path tspath.PathKey) ast.SourceFileMetaData
 	}
 
 	prog, ok := program.(metaProvider)
@@ -139,6 +139,6 @@ func getCompletionPackageJsonDirectory(program checker.Program, _ *checker.Check
 		return ""
 	}
 
-	meta := prog.GetSourceFileMetaData(sf.Path())
-	return meta.PackageJsonDirectory
+	meta := prog.GetSourceFileMetaData(ast.SourceFilePath(sf))
+	return string(meta.PackageJsonDirectory)
 }

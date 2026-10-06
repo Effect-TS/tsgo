@@ -1,6 +1,6 @@
 module github.com/effect-ts/tsgo
 
-go 1.26
+go 1.27
 
 require (
 	github.com/effect-ts/tsgo/etscore v0.0.0

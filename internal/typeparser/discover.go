@@ -1,5 +1,7 @@
 package typeparser
 
+import "github.com/microsoft/TypeScript/tsc/shim/ast"
+
 // DiscoveredPackage represents a package found in the program's source files.
 type DiscoveredPackage struct {
 	Name             string
@@ -207,8 +209,8 @@ func (tp *TypeParser) discoverPackagesUncached() []DiscoveredPackage {
 
 		var pkgDir string
 		if hasPjProg {
-			meta := pjProg.GetSourceFileMetaData(sf.Path())
-			pkgDir = meta.PackageJsonDirectory
+			meta := pjProg.GetSourceFileMetaData(ast.SourceFilePath(sf))
+			pkgDir = string(meta.PackageJsonDirectory)
 		}
 
 		result = append(result, DiscoveredPackage{

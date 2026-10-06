@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 	"strings"
 
 	"github.com/effect-ts/tsgo/etscore"
@@ -117,7 +118,7 @@ func RunRuleAndReport(
 		&normalized,
 		sf.FileName(),
 		program.Options().ConfigFilePath,
-		program.UseCaseSensitiveFileNames(),
+		tspath.UseCaseSensitiveFileNames(program),
 	)
 	reportDiagnostics(ctx, diagnostics, ruleName, program, c, sf, resolvedOptions, adapter)
 	return nil
@@ -205,7 +206,7 @@ func reportedRelatedInformation(diagnostic *ast.Diagnostic, ruleName string, ada
 			continue
 		}
 		relatedInformation = append(relatedInformation, ReportedRelatedInformation{
-			FileName:    related.File().FileName(),
+			FileName:    string(related.File().FileName()),
 			Range:       related.Loc(),
 			Description: diagnosticDescription(related, ruleName, adapter),
 		})

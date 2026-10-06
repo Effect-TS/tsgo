@@ -5,6 +5,7 @@ package core
 
 import "context"
 import "github.com/microsoft/TypeScript/tsc/internal/core"
+import "github.com/microsoft/TypeScript/tsc/internal/tspath"
 import "iter"
 import _ "unsafe"
 
@@ -35,7 +36,7 @@ func ComputeECMALineStartsSeq(text string) iter.Seq[core.TextPos]
 type ECMALineStarts = core.ECMALineStarts
 var EmptyCompilerOptions = core.EmptyCompilerOptions
 //go:linkname EnsureScriptKindFromFileName github.com/microsoft/TypeScript/tsc/internal/core.EnsureScriptKindFromFileName
-func EnsureScriptKindFromFileName(fileName string) core.ScriptKind
+func EnsureScriptKindFromFileName(fileName tspath.RootedFilePath) core.ScriptKind
 var ExclusivelyPrefixedNodeCoreModules = core.ExclusivelyPrefixedNodeCoreModules
 //go:linkname GetCheckerLifetime github.com/microsoft/TypeScript/tsc/internal/core.GetCheckerLifetime
 func GetCheckerLifetime(ctx context.Context) core.CheckerLifetime
@@ -46,7 +47,7 @@ func GetNewLineKind(s string) core.NewLineKind
 //go:linkname GetRequestID github.com/microsoft/TypeScript/tsc/internal/core.GetRequestID
 func GetRequestID(ctx context.Context) string
 //go:linkname GetScriptKindFromFileName github.com/microsoft/TypeScript/tsc/internal/core.GetScriptKindFromFileName
-func GetScriptKindFromFileName(fileName string) core.ScriptKind
+func GetScriptKindFromFileName(fileName tspath.RootedFilePath) core.ScriptKind
 //go:linkname GetSpellingSuggestionForStrings github.com/microsoft/TypeScript/tsc/internal/core.GetSpellingSuggestionForStrings
 func GetSpellingSuggestionForStrings(name string, candidates iter.Seq[string]) string
 //go:linkname IndexAfter github.com/microsoft/TypeScript/tsc/internal/core.IndexAfter
@@ -109,12 +110,6 @@ func NonRelativeModuleNameForTypingCache(moduleName string) string
 type PagedLinkStore[V any] = core.PagedLinkStore[V]
 type Pattern = core.Pattern
 type PluginImport = core.PluginImport
-type PollingKind = core.PollingKind
-const PollingKindDynamicPriority = core.PollingKindDynamicPriority
-const PollingKindFixedChunkSize = core.PollingKindFixedChunkSize
-const PollingKindFixedInterval = core.PollingKindFixedInterval
-const PollingKindNone = core.PollingKindNone
-const PollingKindPriorityInterval = core.PollingKindPriorityInterval
 //go:linkname PositionToLineAndByteOffset github.com/microsoft/TypeScript/tsc/internal/core.PositionToLineAndByteOffset
 func PositionToLineAndByteOffset(position int, lineStarts []core.TextPos) (line int, byteOffset int)
 type ProjectReference = core.ProjectReference
@@ -123,9 +118,9 @@ const ResolutionModeCommonJS = core.ResolutionModeCommonJS
 const ResolutionModeESM = core.ResolutionModeESM
 const ResolutionModeNone = core.ResolutionModeNone
 //go:linkname ResolveConfigFileNameOfProjectReference github.com/microsoft/TypeScript/tsc/internal/core.ResolveConfigFileNameOfProjectReference
-func ResolveConfigFileNameOfProjectReference(path string) string
+func ResolveConfigFileNameOfProjectReference(path tspath.RootedPath) tspath.RootedFilePath
 //go:linkname ResolveProjectReferencePath github.com/microsoft/TypeScript/tsc/internal/core.ResolveProjectReferencePath
-func ResolveProjectReferencePath(ref *core.ProjectReference) string
+func ResolveProjectReferencePath(ref *core.ProjectReference) tspath.RootedFilePath
 type ScriptKind = core.ScriptKind
 const ScriptKindJS = core.ScriptKindJS
 const ScriptKindJSON = core.ScriptKindJSON
@@ -182,21 +177,6 @@ var UnprefixedNodeCoreModules = core.UnprefixedNodeCoreModules
 func Version() string
 //go:linkname VersionMajorMinor github.com/microsoft/TypeScript/tsc/internal/core.VersionMajorMinor
 func VersionMajorMinor() string
-type WatchDirectoryKind = core.WatchDirectoryKind
-const WatchDirectoryKindDynamicPriorityPolling = core.WatchDirectoryKindDynamicPriorityPolling
-const WatchDirectoryKindFixedChunkSizePolling = core.WatchDirectoryKindFixedChunkSizePolling
-const WatchDirectoryKindFixedPollingInterval = core.WatchDirectoryKindFixedPollingInterval
-const WatchDirectoryKindNone = core.WatchDirectoryKindNone
-const WatchDirectoryKindUseFsEvents = core.WatchDirectoryKindUseFsEvents
-type WatchFileKind = core.WatchFileKind
-const WatchFileKindDynamicPriorityPolling = core.WatchFileKindDynamicPriorityPolling
-const WatchFileKindFixedChunkSizePolling = core.WatchFileKindFixedChunkSizePolling
-const WatchFileKindFixedPollingInterval = core.WatchFileKindFixedPollingInterval
-const WatchFileKindNone = core.WatchFileKindNone
-const WatchFileKindPriorityPollingInterval = core.WatchFileKindPriorityPollingInterval
-const WatchFileKindUseFsEvents = core.WatchFileKindUseFsEvents
-const WatchFileKindUseFsEventsOnParentDirectory = core.WatchFileKindUseFsEventsOnParentDirectory
-type WatchOptions = core.WatchOptions
 //go:linkname WithCheckerLifetime github.com/microsoft/TypeScript/tsc/internal/core.WithCheckerLifetime
 func WithCheckerLifetime(ctx context.Context, lifetime core.CheckerLifetime) context.Context
 //go:linkname WithRequestID github.com/microsoft/TypeScript/tsc/internal/core.WithRequestID

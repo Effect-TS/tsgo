@@ -1,30 +1,31 @@
 diff --git a/tsc/internal/tsoptions/tsconfigparsing.go b/tsc/internal/tsoptions/tsconfigparsing.go
-index b2d3d4093a..e1ba3214c4 100644
+index af1e72ac7..af61a371f 100644
 --- a/tsc/internal/tsoptions/tsconfigparsing.go
 +++ b/tsc/internal/tsoptions/tsconfigparsing.go
-@@ -1171,7 +1171,7 @@ func parseConfig(
+@@ -1056,7 +1056,7 @@ func parseConfig(
  					result.compileOnSave = compileOnSave
  				}
  			}
--			mergeCompilerOptions(result.options, extendedConfig.options, extendsRaw)
-+			mergeCompilerOptions(result.options, extendedConfig.options, extendsRaw, extendedConfigPath, basePath)
+-			mergeParsedCompilerOptions(result.options, extendedConfig.options, extendsRaw)
++			mergeParsedCompilerOptions(result.options, extendedConfig.options, extendsRaw, extendedConfigPath.AsString(), basePath.AsString())
  		}
  	}
  
-@@ -1205,4 +1205,7 @@ func parseConfig(
+@@ -1092,7 +1092,7 @@ func parseConfig(
  				sourceFile.ExtendedSourceFiles = core.InsertSorted(sourceFile.ExtendedSourceFiles, extendedSourceFile, cmp.Compare)
  			}
  		}
-+		mergeCompilerOptions := func(targetOptions, sourceOptions *core.CompilerOptions, rawSource any) *core.CompilerOptions {
-+			return mergeCompilerOptions(targetOptions, sourceOptions, rawSource, configFileName, basePath)
-+		}
- 		ownConfig.options = mergeCompilerOptions(result.options, ownConfig.options, ownConfig.raw)
-@@ -1251,7 +1251,7 @@ func parseJsonConfigFileContentWorker(
+-		ownConfig.options = mergeParsedCompilerOptions(result.options, ownConfig.options, ownConfig.raw)
++		ownConfig.options = mergeParsedCompilerOptions(result.options, ownConfig.options, ownConfig.raw, configFileName.AsString(), basePath.AsString())
+ 	}
+ 	return ownConfig, errors
+ }
+@@ -1138,7 +1138,7 @@ func parseJsonConfigFileContentWorker(
  
  	var errors []*ast.Diagnostic
- 	parsedConfig, errors := parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStack, extendedConfigCache)
--	mergeCompilerOptions(parsedConfig.options, existingOptions, existingOptionsRaw)
-+	mergeCompilerOptions(parsedConfig.options, existingOptions, existingOptionsRaw, configFileName, basePath)
+ 	parsedConfig, errors := parseConfig(json, sourceFile, fs, baseDirectory, configFileName, resolutionStack, extendedConfigCache)
+-	mergeParsedCompilerOptions(parsedConfig.options, &parsedCompilerOptions{CompilerOptions: existingOptions}, existingOptionsRaw)
++	mergeParsedCompilerOptions(parsedConfig.options, &parsedCompilerOptions{CompilerOptions: existingOptions}, existingOptionsRaw, configFileName.AsString(), baseDirectory.AsString())
  	handleOptionConfigDirTemplateSubstitution(parsedConfig.options, basePathForFileNames)
  	rawConfig := parseJsonToStringKey(parsedConfig.raw)
  	if configFileName != "" && parsedConfig.options != nil {

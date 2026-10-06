@@ -144,11 +144,7 @@ func rewriteEffectOptionsOverrides(effect *etscore.EffectPluginOptions, sourceCo
 	if effect == nil || len(effect.Overrides) == 0 || sourceConfigPath == "" {
 		return
 	}
-	t := tspath.ComparePathsOptions{
-		UseCaseSensitiveFileNames: true,
-		CurrentDirectory:          basePath,
-	}
-	relativeDifference := tspath.ConvertToRelativePath(tspath.GetDirectoryPath(sourceConfigPath), t)
+	relativeDifference := tspath.ConvertToRelativePath(tspath.GetDirectoryPath(sourceConfigPath), tspath.RootedDirectoryPath(basePath), tspath.CaseSensitive)
 	if relativeDifference == "" {
 		return
 	}

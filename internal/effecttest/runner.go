@@ -17,7 +17,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/testutil/harnessutil"
 	"github.com/microsoft/TypeScript/tsc/shim/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/shim/tspath"
-	"github.com/microsoft/TypeScript/tsc/shim/vfs"
 	"github.com/microsoft/TypeScript/tsc/shim/vfs/vfstest"
 
 	"github.com/effect-ts/tsgo/internal/bundledeffect"
@@ -167,7 +166,7 @@ func RunEffectTest(t *testing.T, version bundledeffect.EffectVersion, testFile s
 	tsconfigInjected := false
 
 	for _, unit := range units {
-		unitName := tspath.GetNormalizedAbsolutePath(unit.name, currentDirectory)
+		unitName := tspath.GetNormalizedAbsolutePath(unit.name, tspath.RootedDirectoryPath(currentDirectory))
 		testfs[unitName] = &fstest.MapFile{
 			Data: []byte(unit.content),
 		}
@@ -183,11 +182,8 @@ func RunEffectTest(t *testing.T, version bundledeffect.EffectVersion, testFile s
 		// Check if this is a tsconfig.json file
 		if harnessutil.GetConfigNameFromFileName(unit.name) != "" {
 			// Parse tsconfig
-			path := tspath.ToPath(unitName, currentDirectory, true)
-			configJson := parser.ParseSourceFile(ast.SourceFileParseOptions{
-				FileName: unitName,
-				Path:     path,
-			}, unit.content, core.ScriptKindJSON)
+			path := tspath.PathKeyForFile(tspath.ToRootedFilePath(unitName, tspath.RootedDirectoryPath(currentDirectory)), true)
+			configJson := parser.ParseSourceFile(ast.NewSourceFileParseOptions(tspath.RootedFilePath(unitName), path), unit.content, core.ScriptKindJSON)
 			tsConfigFile = &tsoptions.TsConfigSourceFile{
 				SourceFile: configJson,
 			}
@@ -207,22 +203,19 @@ func RunEffectTest(t *testing.T, version bundledeffect.EffectVersion, testFile s
 			name:    "tsconfig.json",
 			content: DefaultTsConfig,
 		}
-		unitName := tspath.GetNormalizedAbsolutePath(tsConfigUnit.name, currentDirectory)
+		unitName := tspath.GetNormalizedAbsolutePath(tsConfigUnit.name, tspath.RootedDirectoryPath(currentDirectory))
 		testfs[unitName] = &fstest.MapFile{
 			Data: []byte(tsConfigUnit.content),
 		}
-		path := tspath.ToPath(unitName, currentDirectory, true)
-		configJson := parser.ParseSourceFile(ast.SourceFileParseOptions{
-			FileName: unitName,
-			Path:     path,
-		}, tsConfigUnit.content, core.ScriptKindJSON)
+		path := tspath.PathKeyForFile(tspath.ToRootedFilePath(unitName, tspath.RootedDirectoryPath(currentDirectory)), true)
+		configJson := parser.ParseSourceFile(ast.NewSourceFileParseOptions(tspath.RootedFilePath(unitName), path), tsConfigUnit.content, core.ScriptKindJSON)
 		tsConfigFile = &tsoptions.TsConfigSourceFile{
 			SourceFile: configJson,
 		}
 	}
 
 	// Create VFS
-	fs := vfstest.FromMap(testfs, true /*useCaseSensitiveFileNames*/)
+	fs := vfstest.FromMap(testfs, tspath.CaseSensitive)
 	fs = bundled.WrapFS(fs)
 	fs = harnessutil.NewOutputRecorderFS(fs)
 
@@ -245,25 +238,9 @@ func RunEffectTest(t *testing.T, version bundledeffect.EffectVersion, testFile s
 	// Parse tsconfig if present
 	if tsConfigFile != nil {
 		configDir := tspath.GetDirectoryPath(tsConfigUnit.name)
-		configDir = tspath.GetNormalizedAbsolutePath(configDir, currentDirectory)
+		configDir = tspath.GetNormalizedAbsolutePath(configDir, tspath.RootedDirectoryPath(currentDirectory))
 
-		// Create a simple parse host using our VFS
-		parseHost := &vfsParseConfigHost{
-			fs:               fs,
-			currentDirectory: currentDirectory,
-		}
-
-		parsedConfig = tsoptions.ParseJsonSourceFileConfigFileContent(
-			tsConfigFile,
-			parseHost,
-			configDir,
-			nil, // existingOptions
-			nil, // existingOptionsRaw
-			tsConfigFile.SourceFile.FileName(),
-			nil, // resolutionStack
-			nil, // extraFileExtensions
-			nil, // extendedConfigCache
-		)
+		parsedConfig = tsoptions.ParseJsonSourceFileConfigFileContent(tsConfigFile, fs, tspath.RootedDirectoryPath(configDir), nil, nil, nil, nil)
 		// Use parsed compiler options
 		if parsedConfig.CompilerOptions() != nil {
 			// Merge with our defaults
@@ -285,14 +262,14 @@ func RunEffectTest(t *testing.T, version bundledeffect.EffectVersion, testFile s
 	}
 
 	// Get file names for compilation
-	var programFileNames []string
+	var programFileNames []tspath.RootedFilePath
 	for _, file := range inputFiles {
-		programFileNames = append(programFileNames, file.UnitName)
+		programFileNames = append(programFileNames, tspath.RootedFilePath(file.UnitName))
 	}
 
 	// Create compiler host with AST caching for package files
 	host := &cachingCompilerHost{
-		CompilerHost: compiler.NewCompilerHost(currentDirectory, fs, bundled.LibPath(), nil, nil),
+		CompilerHost: compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
 		version:      version,
 	}
 
@@ -301,14 +278,10 @@ func RunEffectTest(t *testing.T, version bundledeffect.EffectVersion, testFile s
 	if parsedConfig != nil {
 		configFile = parsedConfig.ConfigFile
 	}
+	programConfig := tsoptions.NewParsedCommandLine(compilerOptions, programFileNames, nil, tspath.RootedDirectoryPath(currentDirectory), tspath.CaseSensitive)
+	programConfig.ConfigFile = configFile
 	program := compiler.NewProgram(compiler.ProgramOptions{
-		Config: &tsoptions.ParsedCommandLine{
-			ParsedConfig: &core.ParsedOptions{
-				CompilerOptions: compilerOptions,
-				FileNames:       programFileNames,
-			},
-			ConfigFile: configFile,
-		},
+		Config:         programConfig,
 		Host:           host,
 		SingleThreaded: core.TSTrue,
 	})
@@ -325,7 +298,7 @@ func RunEffectTest(t *testing.T, version bundledeffect.EffectVersion, testFile s
 	var allFiles []*harnessutil.TestFile
 	if tsConfigUnit != nil && !tsconfigInjected {
 		allFiles = append(allFiles, &harnessutil.TestFile{
-			UnitName: tspath.GetNormalizedAbsolutePath(tsConfigUnit.name, currentDirectory),
+			UnitName: tspath.GetNormalizedAbsolutePath(tsConfigUnit.name, tspath.RootedDirectoryPath(currentDirectory)),
 			Content:  tsConfigUnit.content,
 		})
 	}
@@ -360,7 +333,7 @@ func RunEffectTest(t *testing.T, version bundledeffect.EffectVersion, testFile s
 			c,
 			inputFiles,
 			func(fileName string) *ast.SourceFile {
-				return program.GetSourceFile(fileName)
+				return program.GetSourceFile(tspath.RootedFilePath(fileName))
 			},
 			baselineSubfolder,
 		)
@@ -376,7 +349,7 @@ func RunEffectTest(t *testing.T, version bundledeffect.EffectVersion, testFile s
 			c,
 			inputFiles,
 			func(fileName string) *ast.SourceFile {
-				return program.GetSourceFile(fileName)
+				return program.GetSourceFile(tspath.RootedFilePath(fileName))
 			},
 			baselineSubfolder,
 		)
@@ -392,23 +365,9 @@ func RunEffectTest(t *testing.T, version bundledeffect.EffectVersion, testFile s
 			c,
 			inputFiles,
 			func(fileName string) *ast.SourceFile {
-				return program.GetSourceFile(fileName)
+				return program.GetSourceFile(tspath.RootedFilePath(fileName))
 			},
 			baselineSubfolder,
 		)
 	})
-}
-
-// vfsParseConfigHost implements tsoptions.ParseConfigHost for VFS.
-type vfsParseConfigHost struct {
-	fs               vfs.FS
-	currentDirectory string
-}
-
-func (h *vfsParseConfigHost) FS() vfs.FS {
-	return h.fs
-}
-
-func (h *vfsParseConfigHost) GetCurrentDirectory() string {
-	return h.currentDirectory
 }

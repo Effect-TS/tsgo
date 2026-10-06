@@ -4,6 +4,7 @@
 package packagejson
 
 import "github.com/microsoft/TypeScript/tsc/internal/packagejson"
+import "github.com/microsoft/TypeScript/tsc/internal/tspath"
 import _ "unsafe"
 
 type ContentMapperFields = packagejson.ContentMapperFields
@@ -24,7 +25,10 @@ const JSONValueTypeNumber = packagejson.JSONValueTypeNumber
 const JSONValueTypeObject = packagejson.JSONValueTypeObject
 const JSONValueTypeString = packagejson.JSONValueTypeString
 //go:linkname NewInfoCache github.com/microsoft/TypeScript/tsc/internal/packagejson.NewInfoCache
-func NewInfoCache(currentDirectory string, useCaseSensitiveFileNames bool) *packagejson.InfoCache
+func NewInfoCache(caseSensitivity tspath.CaseSensitivity) *packagejson.InfoCache
+//go:linkname NewPackageDirectory github.com/microsoft/TypeScript/tsc/internal/packagejson.NewPackageDirectory
+func NewPackageDirectory(directory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) packagejson.PackageDirectory
+type PackageDirectory = packagejson.PackageDirectory
 type PackageJson = packagejson.PackageJson
 //go:linkname Parse github.com/microsoft/TypeScript/tsc/internal/packagejson.Parse
 func Parse(data []byte) (packagejson.Fields, error)

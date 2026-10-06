@@ -2,6 +2,7 @@ package etsgoapi
 
 import (
 	"context"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/schemagen"
@@ -21,7 +22,7 @@ func (tp *TypeParser) RenderStructuralSchemaStatements(sourceFile *ast.SourceFil
 		return nil
 	}
 
-	converters := lsconv.NewConverters(lsproto.PositionEncodingKindUTF8, func(fileName string) *lsconv.LSPLineMap {
+	converters := lsconv.NewConverters(lsproto.PositionEncodingKindUTF8, func(fileName tspath.RootedFilePath) *lsconv.LSPLineMap {
 		if fileName == sourceFile.FileName() {
 			return lsconv.ComputeLSPLineStarts(sourceFile.Text())
 		}

@@ -10,6 +10,7 @@ import "github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 import "github.com/microsoft/TypeScript/tsc/internal/core"
 import "github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 import "github.com/microsoft/TypeScript/tsc/internal/tsoptions"
+import "github.com/microsoft/TypeScript/tsc/internal/tspath"
 import "github.com/microsoft/TypeScript/tsc/internal/vfs"
 import _ "unsafe"
 
@@ -36,10 +37,15 @@ func GetDiagnosticsOfAnyProgram(ctx context.Context, program compiler.ProgramLik
 func HandleNoEmitOptions(ctx context.Context, program compiler.ProgramLike, files []*ast.SourceFile, emitBuildInfo func() *compiler.EmitResult) *compiler.EmitResult
 type LibFile = compiler.LibFile
 //go:linkname NewCachedFSCompilerHost github.com/microsoft/TypeScript/tsc/internal/compiler.NewCachedFSCompilerHost
-func NewCachedFSCompilerHost(currentDirectory string, fs vfs.FS, defaultLibraryPath string, extendedConfigCache tsoptions.ExtendedConfigCache, trace func(msg *diagnostics.Message, args ...any), contentMapperProject contentmapper.Project) compiler.CompilerHost
+func NewCachedFSCompilerHost(fs vfs.FS, defaultLibraryPath tspath.RootedDirectoryPath, extendedConfigCache tsoptions.ExtendedConfigCache, trace func(msg *diagnostics.Message, args ...any), contentMapperProject contentmapper.Project) compiler.CompilerHost
+//go:linkname NewCompilerHost github.com/microsoft/TypeScript/tsc/internal/compiler.NewCompilerHost
+func NewCompilerHost(fs vfs.FS, defaultLibraryPath tspath.RootedDirectoryPath, extendedConfigCache tsoptions.ExtendedConfigCache, trace func(msg *diagnostics.Message, args ...any), contentMapperProject contentmapper.Project) compiler.CompilerHost
 //go:linkname NewProgram github.com/microsoft/TypeScript/tsc/internal/compiler.NewProgram
 func NewProgram(opts compiler.ProgramOptions) *compiler.Program
 type Program = compiler.Program
+type ProgramConfig = compiler.ProgramConfig
+type ProgramFactories = compiler.ProgramFactories
+type ProgramHosts = compiler.ProgramHosts
 type ProgramLike = compiler.ProgramLike
 type ProgramOptions = compiler.ProgramOptions
 //go:linkname RegisterFilterDiagnosticsForNoEmitOnErrorCallback github.com/microsoft/TypeScript/tsc/internal/compiler.RegisterFilterDiagnosticsForNoEmitOnErrorCallback

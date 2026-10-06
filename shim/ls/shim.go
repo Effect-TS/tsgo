@@ -15,6 +15,7 @@ import "github.com/microsoft/TypeScript/tsc/internal/ls/lsconv"
 import "github.com/microsoft/TypeScript/tsc/internal/ls/lsutil"
 import "github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
 import "github.com/microsoft/TypeScript/tsc/internal/sourcemap"
+import "github.com/microsoft/TypeScript/tsc/internal/tspath"
 import "unsafe"
 
 var AfterCompletionCallback = ls.AfterCompletionCallback
@@ -100,7 +101,7 @@ type extra_LanguageService struct {
   activeConfig lsutil.UserPreferences
   program *compiler.Program
   converters *lsconv.Converters
-  documentPositionMappers map[string]*sourcemap.DocumentPositionMapper
+  documentPositionMappers map[tspath.PathKey]*sourcemap.DocumentPositionMapper
 }
 func LanguageService_converters(v *ls.LanguageService) *lsconv.Converters {
   return ((*extra_LanguageService)(unsafe.Pointer(v))).converters

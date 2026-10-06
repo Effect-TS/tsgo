@@ -2,7 +2,7 @@ diff --git a/tsc/internal/ls/autoimport/aliasresolver.go b/tsc/internal/ls/autoi
 index 52955e92..ae555e23 100644
 --- a/tsc/internal/ls/autoimport/aliasresolver.go
 +++ b/tsc/internal/ls/autoimport/aliasresolver.go
-@@ -224,6 +224,11 @@ func (r *aliasResolver) IsSourceFileDefaultLibrary(path tspath.Path) bool {
+@@ -224,6 +224,11 @@ func (r *aliasResolver) IsSourceFileDefaultLibrary(path tspath.PathKey) bool {
  	return false
  }
  
@@ -12,7 +12,7 @@ index 52955e92..ae555e23 100644
 +}
 +
  // IsSourceFromProjectReference implements checker.Program.
- func (r *aliasResolver) IsSourceFromProjectReference(path tspath.Path) bool {
+ func (r *aliasResolver) IsSourceFromProjectReference(path tspath.PathKey) bool {
  	panic("unimplemented")
 diff --git a/tsc/internal/ls/autoimport/fix.go b/tsc/internal/ls/autoimport/fix.go
 index 46423f35..230e6f01 100644

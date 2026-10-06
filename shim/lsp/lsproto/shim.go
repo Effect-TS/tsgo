@@ -6,6 +6,7 @@ package lsproto
 import "context"
 import "github.com/microsoft/TypeScript/tsc/internal/jsonrpc"
 import "github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto"
+import "github.com/microsoft/TypeScript/tsc/internal/tspath"
 import "io"
 import _ "unsafe"
 
@@ -365,6 +366,8 @@ type DocumentSymbolRegistrationOptions = lsproto.DocumentSymbolRegistrationOptio
 type DocumentSymbolResponse = lsproto.DocumentSymbolResponse
 type DocumentUri = lsproto.DocumentUri
 type DocumentUriOrNull = lsproto.DocumentUriOrNull
+//go:linkname DynamicFileNameToDocumentUri github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto.DynamicFileNameToDocumentUri
+func DynamicFileNameToDocumentUri(fileName tspath.RootedPath) lsproto.DocumentUri
 type EditRangeWithInsertReplace = lsproto.EditRangeWithInsertReplace
 type ErrorCode = lsproto.ErrorCode
 const ErrorCodeContentModified = lsproto.ErrorCodeContentModified
@@ -1146,6 +1149,8 @@ type TraceValue = lsproto.TraceValue
 const TraceValueMessages = lsproto.TraceValueMessages
 const TraceValueOff = lsproto.TraceValueOff
 const TraceValueVerbose = lsproto.TraceValueVerbose
+//go:linkname TryDynamicFileNameToDocumentUri github.com/microsoft/TypeScript/tsc/internal/lsp/lsproto.TryDynamicFileNameToDocumentUri
+func TryDynamicFileNameToDocumentUri(fileName tspath.RootedPath) (lsproto.DocumentUri, bool)
 type TypeDefinitionClientCapabilities = lsproto.TypeDefinitionClientCapabilities
 type TypeDefinitionOptions = lsproto.TypeDefinitionOptions
 type TypeDefinitionParams = lsproto.TypeDefinitionParams

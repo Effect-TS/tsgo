@@ -8,6 +8,8 @@ import "github.com/microsoft/TypeScript/tsc/internal/collections"
 import "github.com/microsoft/TypeScript/tsc/internal/core"
 import "github.com/microsoft/TypeScript/tsc/internal/diagnostics"
 import "github.com/microsoft/TypeScript/tsc/internal/module"
+import "github.com/microsoft/TypeScript/tsc/internal/tspath"
+import "github.com/microsoft/TypeScript/tsc/internal/vfs"
 import _ "unsafe"
 
 //go:linkname ComparePatternKeys github.com/microsoft/TypeScript/tsc/internal/module.ComparePatternKeys
@@ -19,7 +21,7 @@ const EndingChangeable = module.EndingChangeable
 const EndingExtensionChangeable = module.EndingExtensionChangeable
 const EndingFixed = module.EndingFixed
 //go:linkname GetAutomaticTypeDirectiveNames github.com/microsoft/TypeScript/tsc/internal/module.GetAutomaticTypeDirectiveNames
-func GetAutomaticTypeDirectiveNames(options *core.CompilerOptions, host module.ResolutionHost) []string
+func GetAutomaticTypeDirectiveNames(options *core.CompilerOptions, baseDirectory tspath.RootedDirectoryPath, fs vfs.FS) []string
 //go:linkname GetCompilerOptionsWithRedirect github.com/microsoft/TypeScript/tsc/internal/module.GetCompilerOptionsWithRedirect
 func GetCompilerOptionsWithRedirect(compilerOptions *core.CompilerOptions, redirectedReference module.ResolvedProjectReference) *core.CompilerOptions
 //go:linkname GetConditions github.com/microsoft/TypeScript/tsc/internal/module.GetConditions
@@ -41,10 +43,16 @@ type ModeAwareCache[T any] = module.ModeAwareCache[T]
 type ModeAwareCacheKey = module.ModeAwareCacheKey
 //go:linkname NewResolver github.com/microsoft/TypeScript/tsc/internal/module.NewResolver
 func NewResolver(opts module.ResolverOptions) *module.DefaultResolver
+//go:linkname NewResolverWithOptions github.com/microsoft/TypeScript/tsc/internal/module.NewResolverWithOptions
+func NewResolverWithOptions(host module.ResolutionHost, compilerOptions *core.CompilerOptions, typingsLocation tspath.RootedDirectoryPath, projectName string, opts module.ResolverOptions) *module.DefaultResolver
 //go:linkname NewStaticResolutions github.com/microsoft/TypeScript/tsc/internal/module.NewStaticResolutions
-func NewStaticResolutions(entries []module.StaticResolutionEntry, fallbackToResolver bool, currentDirectory string, useCaseSensitiveFileNames bool) (*module.StaticResolutions, error)
+func NewStaticResolutions(entries []module.StaticResolutionEntry, fallbackToResolver bool, currentDirectory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) (*module.StaticResolutions, error)
 //go:linkname NewStaticResolver github.com/microsoft/TypeScript/tsc/internal/module.NewStaticResolver
 func NewStaticResolver(fallback module.Resolver, resolutions *module.StaticResolutions) *module.StaticResolver
+//go:linkname NodeModulePackageRootForDirectory github.com/microsoft/TypeScript/tsc/internal/module.NodeModulePackageRootForDirectory
+func NodeModulePackageRootForDirectory(resolved tspath.RootedDirectoryPath) tspath.RootedDirectoryPath
+//go:linkname NodeModulePackageRootForFile github.com/microsoft/TypeScript/tsc/internal/module.NodeModulePackageRootForFile
+func NodeModulePackageRootForFile(resolved tspath.RootedFilePath) tspath.RootedDirectoryPath
 type NodeResolutionFeatures = module.NodeResolutionFeatures
 const NodeResolutionFeaturesAll = module.NodeResolutionFeaturesAll
 const NodeResolutionFeaturesBundlerDefault = module.NodeResolutionFeaturesBundlerDefault
@@ -57,14 +65,13 @@ const NodeResolutionFeaturesNodeNextDefault = module.NodeResolutionFeaturesNodeN
 const NodeResolutionFeaturesNone = module.NodeResolutionFeaturesNone
 const NodeResolutionFeaturesSelfName = module.NodeResolutionFeaturesSelfName
 type PackageId = module.PackageId
-//go:linkname ParseNodeModuleFromPath github.com/microsoft/TypeScript/tsc/internal/module.ParseNodeModuleFromPath
-func ParseNodeModuleFromPath(resolved string, isFolder bool) string
 //go:linkname ParsePackageName github.com/microsoft/TypeScript/tsc/internal/module.ParsePackageName
 func ParsePackageName(moduleName string) (packageName string, rest string)
 type ParsedPatterns = module.ParsedPatterns
+type ResolutionData = module.ResolutionData
 type ResolutionHost = module.ResolutionHost
 //go:linkname ResolveConfig github.com/microsoft/TypeScript/tsc/internal/module.ResolveConfig
-func ResolveConfig(moduleName string, containingFile string, host module.ResolutionHost) *module.ResolvedModule
+func ResolveConfig(moduleName string, containingFile tspath.RootedFilePath, fs vfs.FS) *module.ResolvedModule
 type ResolvedEntrypoint = module.ResolvedEntrypoint
 type ResolvedModule = module.ResolvedModule
 type ResolvedProjectReference = module.ResolvedProjectReference
@@ -76,6 +83,8 @@ type StaticResolutions = module.StaticResolutions
 type StaticResolver = module.StaticResolver
 //go:linkname TryGetJSExtensionForFile github.com/microsoft/TypeScript/tsc/internal/module.TryGetJSExtensionForFile
 func TryGetJSExtensionForFile(fileName string, options *core.CompilerOptions) string
+//go:linkname TryGetJSExtensionForFileName github.com/microsoft/TypeScript/tsc/internal/module.TryGetJSExtensionForFileName
+func TryGetJSExtensionForFileName(fileName tspath.RootedFilePath, options *core.CompilerOptions) string
 //go:linkname TryParsePatterns github.com/microsoft/TypeScript/tsc/internal/module.TryParsePatterns
 func TryParsePatterns(pathMappings *collections.OrderedMap[string, []string]) *module.ParsedPatterns
 //go:linkname UnmangleScopedPackageName github.com/microsoft/TypeScript/tsc/internal/module.UnmangleScopedPackageName
