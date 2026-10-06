@@ -301,6 +301,13 @@ type Node = ast.Node
 func CanHaveDecorators(node *ast.Node) bool
 `))
 
+	writeTestFile(t, filepath.Join(providerRoot, "ast", "compatibility.go"), []byte(`package ast
+
+import "github.com/microsoft/typescript-go/internal/ast"
+
+func NewNode(name string) *ast.Node { return ast.NewNode(name, false) }
+`))
+
 	if err := generateBackport(
 		providerRoot,
 		backportRoot,
@@ -320,6 +327,14 @@ func CanHaveDecorators(node *ast.Node) bool
 	if !strings.Contains(text, "//go:linkname CanHaveDecorators github.com/microsoft/typescript-go/internal/ast.CanHaveDecorators") {
 		t.Fatalf("backport changed the linkname target:\n%s", text)
 	}
+	compatibility, err := os.ReadFile(filepath.Join(backportRoot, "ast", "compatibility.go"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(compatibility), "var NewNode = provider.NewNode") {
+		t.Fatalf("backport must forward compatibility adapters instead of copying their bodies:\n%s", compatibility)
+	}
+
 	goMod, err := os.ReadFile(filepath.Join(backportRoot, "ast", "go.mod"))
 	if err != nil {
 		t.Fatal(err)
@@ -488,5 +503,59 @@ func writeTestFile(t *testing.T, path string, data []byte) {
 	}
 	if err := os.WriteFile(path, data, 0o644); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestCompatibilityFacadePreservesAdaptedAPIAndTypeIdentity(t *testing.T) {
+	source := []byte(`package paths
+
+import raw "example.com/facade/internal/paths"
+
+type Sensitivity uint8
+const CaseSensitive Sensitivity = 1
+
+type privateHost struct{}
+func (privateHost) Method() {}
+
+func NewPath(directory string, sensitivity Sensitivity) string {
+    return raw.NewPath(directory, sensitivity == CaseSensitive)
+}
+`)
+	facade, err := generateCompatibilityFacade(source, "example.com/facade/provider")
+	if err != nil {
+		t.Fatal(err)
+	}
+	root := t.TempDir()
+	writeTestFile(t, filepath.Join(root, "go.mod"), []byte("module example.com/facade\n\ngo 1.26\n"))
+	writeTestFile(t, filepath.Join(root, "provider", "paths.go"), []byte(`package paths
+
+type Sensitivity uint8
+const CaseSensitive Sensitivity = 1
+func (s Sensitivity) IsSensitive() bool { return s == CaseSensitive }
+func NewPath(directory string, sensitivity Sensitivity) string {
+    if sensitivity.IsSensitive() { return directory + ":sensitive" }
+    return directory
+}
+`))
+	writeTestFile(t, filepath.Join(root, "facade", "compatibility.go"), facade)
+	writeTestFile(t, filepath.Join(root, "facade", "compatibility_test.go"), []byte(`package paths
+
+import (
+    "testing"
+    provider "example.com/facade/provider"
+)
+
+func TestAdaptedAPI(t *testing.T) {
+    var sensitivity Sensitivity = provider.CaseSensitive
+    if !sensitivity.IsSensitive() || NewPath("/project", sensitivity) != "/project:sensitive" {
+        t.Fatal("facade must forward the adapted API and preserve provider type identity")
+    }
+}
+`))
+	command := exec.Command("go", "test", "./...")
+	command.Dir = root
+	command.Env = append(os.Environ(), "GOWORK=off")
+	if output, err := command.CombinedOutput(); err != nil {
+		t.Fatalf("compile and exercise compatibility facade: %v\n%s\nGenerated facade:\n%s", err, output, facade)
 	}
 }

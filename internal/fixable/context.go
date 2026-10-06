@@ -2,6 +2,7 @@ package fixable
 
 import (
 	"context"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rewriter"
@@ -90,7 +91,7 @@ func NewStandaloneContext(
 }
 
 func newStandaloneConverters(sourceFile *ast.SourceFile) *lsconv.Converters {
-	return lsconv.NewConverters(lsproto.PositionEncodingKindUTF16, func(fileName string) *lsconv.LSPLineMap {
+	return lsconv.NewConverters(lsproto.PositionEncodingKindUTF16, func(fileName tspath.RootedFilePath) *lsconv.LSPLineMap {
 		if fileName == sourceFile.FileName() {
 			return lsconv.ComputeLSPLineStarts(sourceFile.Text())
 		}
@@ -100,7 +101,8 @@ func newStandaloneConverters(sourceFile *ast.SourceFile) *lsconv.Converters {
 
 // BytePosToLSPPosition converts a byte offset using the context's LSP encoding.
 func (c *Context) BytePosToLSPPosition(pos int) lsproto.Position {
-	return c.converters.PositionToLineAndCharacter(c.SourceFile, core.TextPos(pos))
+	position, _ := lsconv.ToLSPPosition(c.converters, c.SourceFile, core.TextPos(pos))
+	return position
 }
 
 // LSPRangeToTextRange converts a tracker edit range back to source byte offsets.

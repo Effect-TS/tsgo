@@ -3,12 +3,13 @@
 
 package iovfs
 
+import "github.com/microsoft/TypeScript/tsc/internal/tspath"
 import "github.com/microsoft/TypeScript/tsc/internal/vfs/iovfs"
 import "io/fs"
 import _ "unsafe"
 
 //go:linkname From github.com/microsoft/TypeScript/tsc/internal/vfs/iovfs.From
-func From(fsys fs.FS, useCaseSensitiveFileNames bool) iovfs.FsWithSys
+func From(fsys fs.FS, caseSensitivity tspath.CaseSensitivity) iovfs.FsWithSys
 type FsWithSys = iovfs.FsWithSys
 type RealpathFS = iovfs.RealpathFS
 type WritableFS = iovfs.WritableFS

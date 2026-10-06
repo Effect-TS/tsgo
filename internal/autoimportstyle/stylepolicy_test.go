@@ -52,15 +52,13 @@ func TestStylePolicyIsEmpty(t *testing.T) {
 	}
 }
 
-func makeExport(packageName string, moduleID autoimport.ModuleID, targetModuleID autoimport.ModuleID) *autoimport.Export {
+func makeExport(packageName string, moduleID string, targetModuleID string) *autoimport.Export {
 	return &autoimport.Export{
-		ExportID: autoimport.ExportID{
-			ModuleID:   moduleID,
-			ExportName: "succeed",
-		},
+		ModuleID:    autoimport.NewAmbientModuleID(moduleID),
+		ExportName:  "succeed",
 		PackageName: packageName,
 		Target: autoimport.ExportID{
-			ModuleID: targetModuleID,
+			ModuleID: autoimport.NewAmbientModuleID(targetModuleID),
 		},
 	}
 }
@@ -181,7 +179,7 @@ func TestApplyNamespaceReexport(t *testing.T) {
 		NamespaceImportPackages: []string{"effect"},
 	})
 	sp.resolveTarget = func(export *autoimport.Export) (string, modulespecifiers.ResultKind) {
-		if export.Target.ModuleID != "effect/Effect" {
+		if autoimport.ModuleIDString(export.Target.ModuleID) != "effect/Effect" {
 			t.Fatalf("unexpected target module: %q", export.Target.ModuleID)
 		}
 		return "effect/Effect", modulespecifiers.ResultKindNodeModules

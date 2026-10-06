@@ -18,6 +18,7 @@ type CodeLensUserPreferences = lsutil.CodeLensUserPreferences
 func CompareImportsOrRequireStatements(s1 *ast.Statement, s2 *ast.Statement, comparer func(a string, b string) int) int
 //go:linkname CompareModuleSpecifiers github.com/microsoft/TypeScript/tsc/internal/ls/lsutil.CompareModuleSpecifiers
 func CompareModuleSpecifiers(m1 *ast.Expression, m2 *ast.Expression, comparer func(a string, b string) int) int
+type CompletionPreferences = lsutil.CompletionPreferences
 //go:linkname DetectModuleSpecifierCaseBySort github.com/microsoft/TypeScript/tsc/internal/ls/lsutil.DetectModuleSpecifierCaseBySort
 func DetectModuleSpecifierCaseBySort(importDeclsByGroup [][]*ast.Statement, comparersToTest []func(a string, b string) int) (comparer func(a string, b string) int, isSorted bool)
 //go:linkname DetectNamedImportOrganizationBySort github.com/microsoft/TypeScript/tsc/internal/ls/lsutil.DetectNamedImportOrganizationBySort
@@ -86,7 +87,7 @@ func NewDefaultUserPreferences() lsutil.UserPreferences
 //go:linkname NodeIsASICandidate github.com/microsoft/TypeScript/tsc/internal/ls/lsutil.NodeIsASICandidate
 func NodeIsASICandidate(node *ast.Node, file *ast.SourceFile) bool
 type OrganizeImportsCaseFirst = lsutil.OrganizeImportsCaseFirst
-const OrganizeImportsCaseFirstFalse = lsutil.OrganizeImportsCaseFirstFalse
+const OrganizeImportsCaseFirstDefault = lsutil.OrganizeImportsCaseFirstDefault
 const OrganizeImportsCaseFirstLower = lsutil.OrganizeImportsCaseFirstLower
 const OrganizeImportsCaseFirstUpper = lsutil.OrganizeImportsCaseFirstUpper
 type OrganizeImportsCollation = lsutil.OrganizeImportsCollation

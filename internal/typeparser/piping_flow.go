@@ -558,13 +558,11 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 						transformations, subjectType := tp.buildEffectFnTransformations(efnResult)
 						flow := &PipingFlow{
 							Node: node,
-							PartialPipingFlow: PartialPipingFlow{
-								Subject: PipingFlowSubject{
-									Node:    node,
-									OutType: subjectType,
-								},
-								Transformations: transformations,
+							Subject: PipingFlowSubject{
+								Node:    node,
+								OutType: subjectType,
 							},
+							Transformations: transformations,
 						}
 						result = append(result, flow)
 
@@ -604,10 +602,8 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 					} else {
 						// Start a new flow
 						newFlow := &PipingFlow{
-							Node: flowNode,
-							PartialPipingFlow: PartialPipingFlow{
-								Transformations: transformations,
-							},
+							Node:            flowNode,
+							Transformations: transformations,
 						}
 						queue = append(queue, workItem{node: pipeResult.Subject, parentFlow: newFlow})
 					}
@@ -644,10 +640,8 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 						queue = append(queue, workItem{node: dataFirstResult.Subject, parentFlow: item.parentFlow})
 					} else {
 						newFlow := &PipingFlow{
-							Node: node,
-							PartialPipingFlow: PartialPipingFlow{
-								Transformations: []PipingFlowTransformation{transformation},
-							},
+							Node:            node,
+							Transformations: []PipingFlowTransformation{transformation},
 						}
 						queue = append(queue, workItem{node: dataFirstResult.Subject, parentFlow: newFlow})
 					}
@@ -686,10 +680,8 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 					} else {
 						// Start a new flow
 						newFlow := &PipingFlow{
-							Node: node,
-							PartialPipingFlow: PartialPipingFlow{
-								Transformations: []PipingFlowTransformation{transformation},
-							},
+							Node:            node,
+							Transformations: []PipingFlowTransformation{transformation},
 						}
 						queue = append(queue, workItem{node: singleResult.subject, parentFlow: newFlow})
 					}
@@ -748,13 +740,11 @@ func (tp *TypeParser) LongestPipingFlowAt(node *ast.Node, includeEffectFn bool) 
 			transformations, subjectType := tp.buildEffectFnTransformations(result)
 			return &PipingFlow{
 				Node: node,
-				PartialPipingFlow: PartialPipingFlow{
-					Subject: PipingFlowSubject{
-						Node:    node,
-						OutType: subjectType,
-					},
-					Transformations: transformations,
+				Subject: PipingFlowSubject{
+					Node:    node,
+					OutType: subjectType,
 				},
+				Transformations: transformations,
 			}
 		}
 	}
@@ -802,11 +792,9 @@ func (tp *TypeParser) LongestPipingFlowAt(node *ast.Node, includeEffectFn bool) 
 
 	return &PipingFlow{
 		Node: node,
-		PartialPipingFlow: PartialPipingFlow{
-			Subject: PipingFlowSubject{
-				Node:    node,
-				OutType: tp.GetTypeAtLocation(node),
-			},
+		Subject: PipingFlowSubject{
+			Node:    node,
+			OutType: tp.GetTypeAtLocation(node),
 		},
 	}
 }
@@ -817,11 +805,9 @@ func (tp *TypeParser) pipingFlowSubjectAt(node *ast.Node, includeEffectFn bool) 
 	}
 	return &PipingFlow{
 		Node: node,
-		PartialPipingFlow: PartialPipingFlow{
-			Subject: PipingFlowSubject{
-				Node:    node,
-				OutType: tp.GetTypeAtLocation(node),
-			},
+		Subject: PipingFlowSubject{
+			Node:    node,
+			OutType: tp.GetTypeAtLocation(node),
 		},
 	}
 }

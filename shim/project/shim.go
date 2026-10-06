@@ -22,6 +22,8 @@ type CheckerPoolOptions = project.CheckerPoolOptions
 type Client = project.Client
 type ConfigFileRegistry = project.ConfigFileRegistry
 type ConfiguredProjectID = project.ConfiguredProjectID
+//go:linkname ConfiguredProjectIDFromPathKey github.com/microsoft/TypeScript/tsc/internal/project.ConfiguredProjectIDFromPathKey
+func ConfiguredProjectIDFromPathKey(value tspath.PathKey) project.ConfiguredProjectID
 type ContentMappedParseCache = project.ContentMappedParseCache
 type ContentMappedParseCacheKey = project.ContentMappedParseCacheKey
 type ContentMapperContributions = project.ContentMapperContributions
@@ -54,21 +56,21 @@ const KindSynthetic = project.KindSynthetic
 type LayeredFileSystem = project.LayeredFileSystem
 type ModuleResolverFactory = project.ModuleResolverFactory
 //go:linkname NewCachedFileHandle github.com/microsoft/TypeScript/tsc/internal/project.NewCachedFileHandle
-func NewCachedFileHandle(fileName string, content string) project.FileHandle
+func NewCachedFileHandle(fileName tspath.RootedFilePath, content string) project.FileHandle
 //go:linkname NewConfiguredProject github.com/microsoft/TypeScript/tsc/internal/project.NewConfiguredProject
-func NewConfiguredProject(configFileName string, configFilePath tspath.Path, builder *project.ProjectCollectionBuilder, logger *logging.LogTree) *project.Project
+func NewConfiguredProject(configFileName tspath.RootedFilePath, configFilePath tspath.PathKey, builder *project.ProjectCollectionBuilder, logger *logging.LogTree) *project.Project
 //go:linkname NewContentMappedParseCache github.com/microsoft/TypeScript/tsc/internal/project.NewContentMappedParseCache
 func NewContentMappedParseCache(options project.RefCountCacheOptions) *project.ContentMappedParseCache
 //go:linkname NewExtendedConfigCache github.com/microsoft/TypeScript/tsc/internal/project.NewExtendedConfigCache
 func NewExtendedConfigCache() *project.ExtendedConfigCache
 //go:linkname NewInferredProject github.com/microsoft/TypeScript/tsc/internal/project.NewInferredProject
-func NewInferredProject(currentDirectory string, compilerOptions *core.CompilerOptions, rootFileNames []string, projectReferences []*core.ProjectReference, contentMappers []*contentmapper.Mapper, builder *project.ProjectCollectionBuilder, logger *logging.LogTree) *project.Project
+func NewInferredProject(projectDirectory tspath.RootedDirectoryPath, compilerOptions *core.CompilerOptions, rootFileNames []tspath.RootedFilePath, projectReferences []*core.ProjectReference, contentMappers []*contentmapper.Mapper, builder *project.ProjectCollectionBuilder, logger *logging.LogTree) *project.Project
 //go:linkname NewParseCache github.com/microsoft/TypeScript/tsc/internal/project.NewParseCache
 func NewParseCache(options project.RefCountCacheOptions) *project.ParseCache
 //go:linkname NewParseCacheKey github.com/microsoft/TypeScript/tsc/internal/project.NewParseCacheKey
 func NewParseCacheKey(options ast.SourceFileParseOptions, hash xxh3.Uint128, scriptKind core.ScriptKind) project.ParseCacheKey
 //go:linkname NewProject github.com/microsoft/TypeScript/tsc/internal/project.NewProject
-func NewProject(id project.ID, kind project.Kind, currentDirectory string, builder *project.ProjectCollectionBuilder, logger *logging.LogTree) *project.Project
+func NewProject(id project.ID, kind project.Kind, projectDirectory tspath.RootedDirectoryPath, builder *project.ProjectCollectionBuilder, logger *logging.LogTree) *project.Project
 //go:linkname NewSession github.com/microsoft/TypeScript/tsc/internal/project.NewSession
 func NewSession(init *project.SessionInit) *project.Session
 //go:linkname NewSnapshotHost github.com/microsoft/TypeScript/tsc/internal/project.NewSnapshotHost
@@ -76,13 +78,13 @@ func NewSnapshotHost(init *project.SessionInit) *project.SnapshotHost
 //go:linkname NewSyntheticProjectID github.com/microsoft/TypeScript/tsc/internal/project.NewSyntheticProjectID
 func NewSyntheticProjectID(id int) project.SyntheticProjectID
 //go:linkname NewWatchedFilesForPaths github.com/microsoft/TypeScript/tsc/internal/project.NewWatchedFilesForPaths
-func NewWatchedFilesForPaths(name string, watchKind lsproto.WatchKind, hasRelativePatternCapability bool, workspaceDirectory string, currentDirectory string, useCaseSensitiveFileNames bool) *project.WatchedFiles[[]string]
+func NewWatchedFilesForPaths(name string, watchKind lsproto.WatchKind, hasRelativePatternCapability bool, workspaceDirectory tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) *project.WatchedFiles[[]tspath.RootedFilePath]
 type Overlay = project.Overlay
 type OwnerCache[K comparable, V, LoadArgs any] = project.OwnerCache[K,V,LoadArgs]
 type ParseCache = project.ParseCache
 type ParseCacheKey = project.ParseCacheKey
 //go:linkname ParseConfiguredProjectID github.com/microsoft/TypeScript/tsc/internal/project.ParseConfiguredProjectID
-func ParseConfiguredProjectID(value tspath.Path) (project.ConfiguredProjectID, bool)
+func ParseConfiguredProjectID(value tspath.PathKey) (project.ConfiguredProjectID, bool)
 //go:linkname ParseSyntheticProjectID github.com/microsoft/TypeScript/tsc/internal/project.ParseSyntheticProjectID
 func ParseSyntheticProjectID(value string) (project.SyntheticProjectID, bool)
 type PatternsAndIgnored = project.PatternsAndIgnored

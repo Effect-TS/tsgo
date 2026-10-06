@@ -232,6 +232,7 @@ type extra_Checker struct {
   signatureArena core.Arena[checker.Signature]
   indexInfoArena core.Arena[checker.IndexInfo]
   mergedSymbols map[*ast.Symbol]*ast.Symbol
+  mergedExportsChecked collections.Set[*ast.Symbol]
   factory ast.NodeFactory
   nodeLinks core.LinkStore[*ast.Node, checker.NodeLinks]
   signatureLinks core.LinkStore[*ast.Node, checker.SignatureLinks]
@@ -411,6 +412,7 @@ type extra_Checker struct {
   getGlobalPromiseType func() *checker.Type
   getGlobalPromiseTypeChecked func() *checker.Type
   getGlobalPromiseLikeType func() *checker.Type
+  getGlobalAbstractModuleSourceType func() *checker.Type
   getGlobalPromiseConstructorSymbol func() *ast.Symbol
   getGlobalPromiseConstructorSymbolOrNil func() *ast.Symbol
   getGlobalOmitSymbol func() *ast.Symbol

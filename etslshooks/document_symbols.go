@@ -2,6 +2,7 @@ package etslshooks
 
 import (
 	"context"
+	"github.com/microsoft/TypeScript/tsc/shim/ls/lsconv"
 	"slices"
 	"strconv"
 	"strings"
@@ -268,8 +269,8 @@ func newNamedDocumentSymbol(
 	converters := ls.LanguageService_converters(langService)
 	startPos := scanner.SkipTrivia(sf.Text(), node.Pos())
 	endPos := max(startPos, node.End())
-	start := converters.PositionToLineAndCharacter(sf, core.TextPos(startPos))
-	end := converters.PositionToLineAndCharacter(sf, core.TextPos(endPos))
+	start, _ := lsconv.ToLSPPosition(converters, sf, core.TextPos(startPos))
+	end, _ := lsconv.ToLSPPosition(converters, sf, core.TextPos(endPos))
 
 	return &lsproto.DocumentSymbol{
 		Name:   name,

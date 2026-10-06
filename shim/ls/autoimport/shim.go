@@ -43,7 +43,7 @@ type Named = autoimport.Named
 //go:linkname NewImportAdder github.com/microsoft/TypeScript/tsc/internal/ls/autoimport.NewImportAdder
 func NewImportAdder(ctx context.Context, program *compiler.Program, checker *checker.Checker, file *ast.SourceFile, view *autoimport.View, formatOptions lsutil.FormatCodeSettings, converters *lsconv.Converters, preferences lsutil.UserPreferences) autoimport.ImportAdder
 //go:linkname NewRegistry github.com/microsoft/TypeScript/tsc/internal/ls/autoimport.NewRegistry
-func NewRegistry(toPath func(fileName string) tspath.Path, preferences lsutil.UserPreferences) *autoimport.Registry
+func NewRegistry(caseSensitivity tspath.CaseSensitivity, preferences lsutil.UserPreferences) *autoimport.Registry
 //go:linkname NewView github.com/microsoft/TypeScript/tsc/internal/ls/autoimport.NewView
 func NewView(registry *autoimport.Registry, importingFile *ast.SourceFile, projectID autoimport.ProjectID, program *compiler.Program, typeChecker *checker.Checker, preferences modulespecifiers.UserPreferences) *autoimport.View
 type ProjectID = autoimport.ProjectID

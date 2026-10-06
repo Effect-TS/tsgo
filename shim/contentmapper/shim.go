@@ -7,10 +7,11 @@ import "context"
 import "github.com/microsoft/TypeScript/tsc/internal/ast"
 import "github.com/microsoft/TypeScript/tsc/internal/contentmapper"
 import "github.com/microsoft/TypeScript/tsc/internal/locale"
+import "github.com/microsoft/TypeScript/tsc/internal/tspath"
 import _ "unsafe"
 
 //go:linkname CheckSupplementalFileNameCollisions github.com/microsoft/TypeScript/tsc/internal/contentmapper.CheckSupplementalFileNameCollisions
-func CheckSupplementalFileNameCollisions(files contentmapper.SourceFiles, fileExists func(string) bool) error
+func CheckSupplementalFileNameCollisions(files contentmapper.SourceFiles, fileExists func(tspath.RootedFilePath) bool) error
 type CloseProjectParams = contentmapper.CloseProjectParams
 type Definition = contentmapper.Definition
 type Diagnostic = contentmapper.Diagnostic

@@ -71,8 +71,8 @@ linters:
       - comments
       - std-error-handling
     rules:
-      # Keep Effect-owned modules source-compatible with their declared Go 1.26
-      # minimum even though the workspace and CI toolchain use Go 1.27.
+      # Keep etscore source-compatible with its declared Go 1.26 minimum
+      # even though the main module and CI toolchain use Go 1.27.
       - text: '^(slicesbackward|stringscut):'
         linters:
           - modernize

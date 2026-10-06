@@ -72,7 +72,7 @@ func generateErrorBaseline(effectVersion string, inputFiles []*harnessutil.TestF
 	// packages) that are not relevant to Effect diagnostic test baselines.
 	var filtered []*ast.Diagnostic
 	for _, diag := range diagnostics {
-		if diag.File() != nil && strings.Contains(diag.File().FileName(), "/node_modules/") {
+		if diag.File() != nil && strings.Contains(string(diag.File().FileName()), "/node_modules/") {
 			continue
 		}
 		filtered = append(filtered, diag)
@@ -85,10 +85,10 @@ func generateErrorBaseline(effectVersion string, inputFiles []*harnessutil.TestF
 		if sortedDiags[i].File() != sortedDiags[j].File() {
 			fi, fj := "", ""
 			if sortedDiags[i].File() != nil {
-				fi = sortedDiags[i].File().FileName()
+				fi = string(sortedDiags[i].File().FileName())
 			}
 			if sortedDiags[j].File() != nil {
-				fj = sortedDiags[j].File().FileName()
+				fj = string(sortedDiags[j].File().FileName())
 			}
 			return fi < fj
 		}
@@ -99,7 +99,7 @@ func generateErrorBaseline(effectVersion string, inputFiles []*harnessutil.TestF
 	for _, diag := range sortedDiags {
 		fileName := "<global>"
 		if diag.File() != nil {
-			fileName = diag.File().FileName()
+			fileName = string(diag.File().FileName())
 		}
 		line := 0
 		var char core.UTF16Offset
@@ -118,7 +118,7 @@ func generateErrorBaseline(effectVersion string, inputFiles []*harnessutil.TestF
 		// Filter diagnostics for this file
 		var fileErrors []*ast.Diagnostic
 		for _, diag := range sortedDiags {
-			if diag.File() != nil && diag.File().FileName() == file.UnitName {
+			if diag.File() != nil && string(diag.File().FileName()) == file.UnitName {
 				fileErrors = append(fileErrors, diag)
 			}
 		}
@@ -360,7 +360,7 @@ func generateExecutionFlowBaseline(
 		if flow == nil {
 			continue
 		}
-		fileName := nextExecutionFlowMermaidFileName(baselineName, sf.FileName(), usedNames)
+		fileName := nextExecutionFlowMermaidFileName(baselineName, string(sf.FileName()), usedNames)
 		mermaidFiles = append(mermaidFiles, executionFlowMermaidBaseline{
 			fileName: fileName,
 			content: flow.ToMermaid(graph.MermaidOptions[typeparser.ExecutionNode, typeparser.ExecutionLink]{
@@ -383,7 +383,7 @@ func generateExecutionFlowBaseline(
 				},
 			}),
 		})
-		index.WriteString(sf.FileName())
+		index.WriteString(string(sf.FileName()))
 		index.WriteString(" -> ")
 		index.WriteString(fileName)
 		index.WriteString("\n")

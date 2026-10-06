@@ -34,7 +34,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/parser"
 	"github.com/microsoft/TypeScript/tsc/shim/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/shim/tspath"
-	"github.com/microsoft/TypeScript/tsc/shim/vfs"
 	"github.com/microsoft/TypeScript/tsc/shim/vfs/vfstest"
 
 	// Import etscheckerhooks to register Effect diagnostic callbacks
@@ -419,17 +418,17 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 	currentDirectory := "/.src"
 
 	// Add test files to VFS
-	var programFileNames []string
+	var programFileNames []tspath.RootedFilePath
 
 	for _, unit := range units {
-		unitName := tspath.GetNormalizedAbsolutePath(unit.name, currentDirectory)
+		unitName := tspath.GetNormalizedAbsolutePath(unit.name, tspath.RootedDirectoryPath(currentDirectory))
 		testfs[unitName] = &fstest.MapFile{
 			Data: []byte(unit.content),
 		}
 		if strings.HasPrefix(unitName, "/node_modules/") {
 			continue
 		}
-		programFileNames = append(programFileNames, unitName)
+		programFileNames = append(programFileNames, tspath.RootedFilePath(unitName))
 	}
 
 	// Inject tsconfig with optional @test-config overrides
@@ -440,21 +439,18 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 	} else {
 		tsConfigContent = effecttest.DefaultTsConfig
 	}
-	tsConfigName := tspath.GetNormalizedAbsolutePath("tsconfig.json", currentDirectory)
+	tsConfigName := tspath.GetNormalizedAbsolutePath("tsconfig.json", tspath.RootedDirectoryPath(currentDirectory))
 	testfs[tsConfigName] = &fstest.MapFile{
 		Data: []byte(tsConfigContent),
 	}
-	tsConfigPath := tspath.ToPath(tsConfigName, currentDirectory, true)
-	configJSON := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: tsConfigName,
-		Path:     tsConfigPath,
-	}, tsConfigContent, core.ScriptKindJSON)
+	tsConfigPath := tspath.PathKeyForFile(tspath.ToRootedFilePath(tsConfigName, tspath.RootedDirectoryPath(currentDirectory)), true)
+	configJSON := parser.ParseSourceFile(ast.NewSourceFileParseOptions(tspath.RootedFilePath(tsConfigName), tsConfigPath), tsConfigContent, core.ScriptKindJSON)
 	tsConfigFile := &tsoptions.TsConfigSourceFile{
 		SourceFile: configJSON,
 	}
 
 	// Create VFS
-	fs := vfstest.FromMap(testfs, true)
+	fs := vfstest.FromMap(testfs, tspath.CaseSensitive)
 	fs = bundled.WrapFS(fs)
 
 	// Setup compiler options
@@ -471,19 +467,8 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 
 	// Parse tsconfig
 	configDir := tspath.GetDirectoryPath("tsconfig.json")
-	configDir = tspath.GetNormalizedAbsolutePath(configDir, currentDirectory)
-	parseHost := &previewParseConfigHost{
-		fs:               fs,
-		currentDirectory: currentDirectory,
-	}
-	parsedConfig := tsoptions.ParseJsonSourceFileConfigFileContent(
-		tsConfigFile,
-		parseHost,
-		configDir,
-		nil, nil,
-		tsConfigFile.SourceFile.FileName(),
-		nil, nil, nil,
-	)
+	configDir = tspath.GetNormalizedAbsolutePath(configDir, tspath.RootedDirectoryPath(currentDirectory))
+	parsedConfig := tsoptions.ParseJsonSourceFileConfigFileContent(tsConfigFile, fs, tspath.RootedDirectoryPath(configDir), nil, nil, nil, nil)
 	if parsedConfig.CompilerOptions() != nil {
 		parsedConfig.CompilerOptions().NewLine = core.NewLineKindLF
 		parsedConfig.CompilerOptions().SkipDefaultLibCheck = core.TSTrue
@@ -501,17 +486,13 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 	}
 
 	// Create compiler host
-	host := compiler.NewCompilerHost(currentDirectory, fs, bundled.LibPath(), nil, nil)
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
 
 	// Create program
+	programConfig := tsoptions.NewParsedCommandLine(compilerOptions, programFileNames, nil, "/", tspath.CaseSensitive)
+	programConfig.ConfigFile = parsedConfig.ConfigFile
 	program := compiler.NewProgram(compiler.ProgramOptions{
-		Config: &tsoptions.ParsedCommandLine{
-			ParsedConfig: &core.ParsedOptions{
-				CompilerOptions: compilerOptions,
-				FileNames:       programFileNames,
-			},
-			ConfigFile: parsedConfig.ConfigFile,
-		},
+		Config:         programConfig,
 		Host:           host,
 		SingleThreaded: core.TSTrue,
 	})
@@ -539,7 +520,7 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 				parsedEffectConfig,
 				sf.FileName(),
 				program.Options().ConfigFilePath,
-				program.UseCaseSensitiveFileNames(),
+				tspath.UseCaseSensitiveFileNames(program),
 			)
 		}
 		ruleCtx := rule.NewContext(context.Background(), program, c, typeparser.NewTypeParser(program, c), sf, options, r.DefaultSeverity)
@@ -585,20 +566,6 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 		SourceText:  trimmedSource,
 		Diagnostics: prevDiags,
 	}
-}
-
-// previewParseConfigHost implements tsoptions.ParseConfigHost for preview VFS.
-type previewParseConfigHost struct {
-	fs               vfs.FS
-	currentDirectory string
-}
-
-func (h *previewParseConfigHost) FS() vfs.FS {
-	return h.fs
-}
-
-func (h *previewParseConfigHost) GetCurrentDirectory() string {
-	return h.currentDirectory
 }
 
 // parsePreviewUnits parses a preview file into test units.

@@ -17,7 +17,7 @@ type DocumentPositionMapper = sourcemap.DocumentPositionMapper
 type ECMALineInfo = sourcemap.ECMALineInfo
 type Generator = sourcemap.Generator
 //go:linkname GetDocumentPositionMapper github.com/microsoft/TypeScript/tsc/internal/sourcemap.GetDocumentPositionMapper
-func GetDocumentPositionMapper(host sourcemap.Host, generatedFileName string) *sourcemap.DocumentPositionMapper
+func GetDocumentPositionMapper(host sourcemap.Host, generatedFileName tspath.RootedFilePath) *sourcemap.DocumentPositionMapper
 type Host = sourcemap.Host
 type MappedPosition = sourcemap.MappedPosition
 type Mapping = sourcemap.Mapping
@@ -28,7 +28,7 @@ const MissingSource = sourcemap.MissingSource
 const MissingUTF16Column = sourcemap.MissingUTF16Column
 type NameIndex = sourcemap.NameIndex
 //go:linkname NewGenerator github.com/microsoft/TypeScript/tsc/internal/sourcemap.NewGenerator
-func NewGenerator(file string, sourceRoot string, sourcesDirectoryPath string, options tspath.ComparePathsOptions) *sourcemap.Generator
+func NewGenerator(file string, sourceRoot string, sourcesDirectoryPath tspath.RootedDirectoryPath, caseSensitivity tspath.CaseSensitivity) *sourcemap.Generator
 type RawSourceMap = sourcemap.RawSourceMap
 type Source = sourcemap.Source
 type SourceIndex = sourcemap.SourceIndex
