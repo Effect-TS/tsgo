@@ -98,6 +98,49 @@ Transformations (1):
       callee: experimentalAlias
       args: (constant)
       outType: number
+==== /.src/overload.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 5:66 - 6:14
+Node: dual("hello")
+Node Kind: KindCallExpression
+
+Subject: "hello"
+Subject Type: "hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: dual
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 6:14 - 7:8
+Node: dual(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: dual
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 7:8 - 9:22
+Node: dualUnlisted("hello")
+Node Kind: KindCallExpression
+
+Subject: "hello"
+Subject Type: "hello"
+
+Transformations (1):
+  [0] kind: call
+      callee: dualUnlisted
+      args: (constant)
+      outType: string
 ==== /.src/module.ts (1 flows) ====
 
 === Piping Flow ===
@@ -370,3 +413,26 @@ Transformations (1):
       callee: HttpApi.make
       args: (constant)
       outType: HttpApi<"example", never>
+==== /.src/realWorldOverloads.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 6:23 - 9:2
+Node: HttpClientRequest.post("http://x").pipe(\n  HttpClientRequest.setHeader("a", "b"),\n  HttpClientRequest.bodyText("{}", "application/json"),\n)
+Node Kind: KindCallExpression
+
+Subject: "http://x"
+Subject Type: "http://x"
+
+Transformations (3):
+  [0] kind: call
+      callee: HttpClientRequest.post
+      args: (constant)
+      outType: HttpClientRequest
+  [1] kind: pipeable
+      callee: HttpClientRequest.setHeader
+      args: ["a", "b"]
+      outType: HttpClientRequest
+  [2] kind: pipeable
+      callee: HttpClientRequest.bodyText
+      args: ["{}", "application/json"]
+      outType: HttpClientRequest
