@@ -6,6 +6,7 @@ import (
 
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
@@ -42,39 +43,22 @@ type declarationStabilityInfo struct {
 }
 
 func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
-	// Most references to a given API share its symbol. Cache declaration lookups so
-	// lazy JSDoc parsing happens only once per declaration in this source file.
-	declarationStability := make(map[*ast.Node]declarationStabilityInfo)
-	readDeclaration := func(declaration *ast.Node) declarationStabilityInfo {
-		if stability, ok := declarationStability[declaration]; ok {
-			return stability
-		}
-		stability := declarationStabilityInfo{stabilityOfDeclaration(declaration), declaration}
-		declarationStability[declaration] = stability
-		return stability
-	}
+	// Declared stability is cached per checker in TypeParser, so references to the
+	// same symbol or selected overload reuse one lookup across source files. The
+	// selected overload's own tag always wins over the symbol-level tag.
 	readSymbol := func(symbol *ast.Symbol) declarationStabilityInfo {
-		for depth := 0; symbol != nil && depth < 32; depth++ {
-			for _, declaration := range symbol.Declarations {
-				if stability := readDeclaration(declaration); stability.stability != "" {
-					return stability
-				}
-			}
-			if symbol.Flags&ast.SymbolFlagsAlias == 0 {
-				break
-			}
-			// The checker synthesizes a declaration-less `default` alias for `export =`
-			// and JSON modules and panics when asked for its immediate target.
-			if !slices.ContainsFunc(symbol.Declarations, ast.IsAliasSymbolDeclaration) {
-				break
-			}
-			next := ctx.Checker.GetImmediateAliasedSymbol(symbol)
-			if next == symbol {
-				break
-			}
-			symbol = next
+		if symbol == nil {
+			return declarationStabilityInfo{}
 		}
-		return declarationStabilityInfo{}
+		info := ctx.TypeParser.DeclaredApiStabilityOfSymbol(symbol)
+		return declarationStabilityInfo{stability: typeparser.ApiStabilityLevelTag(info.Level), declaration: info.Declaration}
+	}
+	readSignature := func(signature *checker.Signature) declarationStabilityInfo {
+		if signature == nil {
+			return declarationStabilityInfo{}
+		}
+		info := ctx.TypeParser.DeclaredApiStabilityOfSignature(signature)
+		return declarationStabilityInfo{stability: typeparser.ApiStabilityLevelTag(info.Level), declaration: info.Declaration}
 	}
 
 	allow := newStabilityApiAllowlist(ctx, wanted)
@@ -96,7 +80,12 @@ func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
 			if parent := callee.Parent; parent != nil && (parent.Kind == ast.KindCallExpression || parent.Kind == ast.KindNewExpression) && parent.Expression() == callee {
 				if signature := ctx.Checker.GetResolvedSignature(parent); signature != nil && signature.Declaration() != nil {
 					selectedDeclaration = signature.Declaration()
-					stability = readDeclaration(selectedDeclaration)
+					stability = readSignature(signature)
+					if stability.stability == "" {
+						// A signature with no own tag still carries the selected
+						// declaration so the symbol fallback can be suppressed for it.
+						stability = declarationStabilityInfo{declaration: selectedDeclaration}
+					}
 				}
 			}
 			symbol := ctx.Checker.GetSymbolAtLocation(node)
@@ -166,40 +155,6 @@ func stabilityOwningExportSymbol(c *checker.Checker, declaration *ast.Node, modu
 		}
 	}
 	return nil
-}
-
-func stabilityOfDeclaration(declaration *ast.Node) string {
-	if declaration == nil {
-		return ""
-	}
-	// A variable's JSDoc is usually attached to its VariableStatement.
-	nodes := []*ast.Node{declaration}
-	if declaration.Parent != nil && declaration.Parent.Kind == ast.KindVariableDeclarationList && declaration.Parent.Parent != nil && declaration.Parent.Parent.Kind == ast.KindVariableStatement {
-		nodes = append(nodes, declaration.Parent.Parent)
-	}
-	for _, node := range nodes {
-		if node.Flags&ast.NodeFlagsPossiblyContainsStabilityTag == 0 {
-			continue
-		}
-		for _, doc := range node.JSDoc(nil) {
-			if doc.AsJSDoc().Tags == nil {
-				continue
-			}
-			for _, tag := range doc.AsJSDoc().Tags.Nodes {
-				if tag.Kind != ast.KindJSDocUnknownTag || tag.TagName().Text() != "stability" {
-					continue
-				}
-				comment := tag.AsJSDocUnknownTag().Comment
-				if comment != nil && len(comment.Nodes) > 0 && comment.Nodes[0].Kind == ast.KindJSDocText {
-					value := strings.TrimSpace(comment.Nodes[0].Text())
-					if value == "unstable" || value == "experimental" {
-						return value
-					}
-				}
-			}
-		}
-	}
-	return ""
 }
 
 // Decisions belong to one rule invocation: per-file overrides can change the
@@ -319,11 +274,16 @@ func stabilityApiModuleName(packageName, directory, fileName string) string {
 
 // Synthetic default aliases have no alias declaration and cannot be resolved.
 func resolveStabilityAlias(c *checker.Checker, symbol *ast.Symbol) *ast.Symbol {
-	for depth := 0; symbol != nil && symbol.Flags&ast.SymbolFlagsAlias != 0 && depth < 32; depth++ {
+	seen := make(map[*ast.Symbol]bool)
+	for symbol != nil && symbol.Flags&ast.SymbolFlagsAlias != 0 {
+		if seen[symbol] {
+			return nil
+		}
+		seen[symbol] = true
 		if !slices.ContainsFunc(symbol.Declarations, ast.IsAliasSymbolDeclaration) {
 			return nil
 		}
-		next := c.GetImmediateAliasedSymbol(symbol)
+		next := typeparser.ApiStabilityImmediateAliasedSymbol(c, symbol)
 		if next == symbol {
 			break
 		}

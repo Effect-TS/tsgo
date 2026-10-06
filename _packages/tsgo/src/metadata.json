@@ -19,6 +19,11 @@
       "id": "style",
       "name": "Style",
       "description": "Cleanup, consistency, and idiomatic Effect code."
+    },
+    {
+      "id": "maintainers",
+      "name": "Maintainers",
+      "description": "Guard the public API surface and release hygiene of a package."
     }
   ],
   "presets": [
@@ -338,6 +343,13 @@
         "unnecessaryPipe": "warning",
         "unnecessaryPipeChain": "warning",
         "unnecessaryTypeofType": "warning"
+      }
+    },
+    {
+      "name": "maintainers",
+      "description": "Enable all maintainer diagnostics at warning level.",
+      "diagnosticSeverity": {
+        "apiStabilityLeak": "warning"
       }
     }
   ],
@@ -3202,6 +3214,29 @@
             "start": 184,
             "end": 210,
             "text": "This `typeof ... .Type` query can be replaced with `UsersRepo.User`. effect(unnecessaryTypeofType)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "apiStabilityLeak",
+      "group": "maintainers",
+      "description": "Reports exported APIs whose public surface exposes a less stable type",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377137
+      ],
+      "preview": {
+        "sourceText": "\n/** @stability experimental */\nexport interface PreviewExperimental {\n  value: string\n}\n\nexport interface PreviewStable {\n  leaked: PreviewExperimental\n}\n",
+        "diagnostics": [
+          {
+            "start": 107,
+            "end": 120,
+            "text": "`effect-v4-tests/preview#PreviewStable` exposes `PreviewExperimental`, an experimental API. effect(apiStabilityLeak)"
           }
         ]
       }

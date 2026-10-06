@@ -3,6 +3,7 @@
   "compilerOptions": {
     "plugins": [{
       "name": "@effect/language-service",
+      "diagnosticSeverity": { "apiStabilityLeak": "off" },
       "allowedUnstableApis": ["allowed/http/HttpClient#get", "allowed/http/HttpClient#dual", "allowed/rpc", "effect/http/HttpClient#get"],
       "allowedExperimentalApis": ["allowed/http/HttpClient#preview", "allowed/http/HttpClient#experimentalFetch", "allowed/experimental"],
       "overrides": [{

@@ -55,7 +55,7 @@ func TestMetadataPresetCatalog(t *testing.T) {
 	for index, preset := range presets {
 		names[index] = preset.Name
 	}
-	want := []string{"recommended", "strict", "correctness", "antipattern", "effect-native", "style"}
+	want := []string{"recommended", "strict", "correctness", "antipattern", "effect-native", "style", "maintainers"}
 	if !slices.Equal(names, want) {
 		t.Fatalf("preset names = %v, want %v", names, want)
 	}
@@ -65,6 +65,7 @@ func TestMetadataPresetCatalog(t *testing.T) {
 		"antipattern":   "antipattern",
 		"effect-native": "effectNative",
 		"style":         "style",
+		"maintainers":   "maintainers",
 	}
 	for presetName, group := range groups {
 		preset := metadataPresetByName(t, presetName)

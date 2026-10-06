@@ -38,6 +38,24 @@ type EffectLinks struct {
 	ReferenceSymbol        core.LinkStore[*ast.Node, *ast.Symbol]
 	ModuleExportReference  core.LinkStore[moduleExportReferenceCacheKey, bool]
 	PipeableSignatureShape core.LinkStore[pipeableSignatureShapeCacheKey, bool]
+	// API-stability caches. Declared lookups persist per checker: the declared
+	// stability of a symbol, of a raw signature overload and of one
+	// declaration, shared with the unstableApiUsage/experimentalApiUsage rules.
+	// Declared lookups never trigger computed analysis. A computed stability
+	// surface lives in an analysis-local ApiStabilitySession, and every
+	// complete, settled, context-free concrete type or signature surface is
+	// additionally published here as an immutable snapshot so a later export,
+	// file or TypeParser over the same checker composes it instead of
+	// recomputing. The snapshot excludes the component's own declared tag,
+	// which stays in the declared caches and is re-added by each consumer; a
+	// substitution-context or incomplete/blocked result is never published and
+	// stays analysis-local. Ceilings, locations and diagnostics are never
+	// cached.
+	ApiStabilityDeclaredSymbol      core.LinkStore[*ast.Symbol, ApiStabilityDeclaration]
+	ApiStabilityDeclaredSignature   core.LinkStore[*checker.Signature, ApiStabilityDeclaration]
+	ApiStabilityDeclaredDeclaration core.LinkStore[*ast.Node, ApiStabilityDeclaration]
+	ApiStabilitySurfaceType         core.LinkStore[apiStabilitySurfaceTypeKey, apiStabilitySharedSurface]
+	ApiStabilitySurfaceSignature    core.LinkStore[*checker.Signature, apiStabilitySharedSurface]
 
 	ExtendsContextTag          core.LinkStore[*ast.Node, *ContextTagResult]
 	ExtendsDataTaggedError     core.LinkStore[*ast.Node, *DataTaggedErrorResult]

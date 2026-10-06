@@ -15,8 +15,21 @@ describe("diagnostic presets", () => {
       "correctness",
       "antipattern",
       "effect-native",
-      "style"
+      "style",
+      "maintainers"
     ])
+  })
+
+  it("keeps opt-in maintainer diagnostics out of the default presets", () => {
+    const recommended = presets.find((preset) => preset.name === "recommended")!
+    const strict = presets.find((preset) => preset.name === "strict")!
+    const correctness = presets.find((preset) => preset.name === "correctness")!
+    const maintainers = presets.find((preset) => preset.name === "maintainers")!
+
+    expect(recommended.diagnosticSeverity.apiStabilityLeak).toBeUndefined()
+    expect(strict.diagnosticSeverity.apiStabilityLeak).toBeUndefined()
+    expect(correctness.diagnosticSeverity.apiStabilityLeak).toBeUndefined()
+    expect(maintainers.diagnosticSeverity.apiStabilityLeak).toBe("warning")
   })
 
   it("makes every diagnostic enabled by default an error in strict mode", () => {
