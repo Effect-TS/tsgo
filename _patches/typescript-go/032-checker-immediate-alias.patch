@@ -1,0 +1,15 @@
+diff --git a/internal/checker/checker.go b/internal/checker/checker.go
+--- a/internal/checker/checker.go
++++ b/internal/checker/checker.go
+@@ -2177,6 +2177,11 @@
+ func (c *Checker) getImmediateAliasedSymbol(symbol *ast.Symbol) *ast.Symbol {
+ 	debug.Assert(symbol.Flags&ast.SymbolFlagsAlias != 0, "Should only get Alias here.")
+ 	links := c.aliasSymbolLinks.Get(symbol)
++	// A failed alias has already reported its diagnostic during resolution.
++	// Do not resolve its declaration again for stability metadata reads.
++	if links.aliasTarget == c.unknownSymbol {
++		return nil
++	}
+ 	if links.immediateTarget == nil {
+ 		node := c.getDeclarationOfAliasSymbol(symbol)
+ 		if node == nil {

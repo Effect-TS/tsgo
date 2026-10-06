@@ -13,6 +13,13 @@ compiler packages. Integration files are untracked in the checkout, so a
 `git reset --hard`/`git clean -fdx` from setup removes them and the next setup
 restores them from here.
 
+Provider-specific checker accessors belong in both
+`_integrations/typescript/tsc/internal/checker/integration.go` and
+`_integrations/typescript-go/internal/checker/integration.go` when Effect code
+uses them through the canonical TypeScript shim. Keep their behavior aligned;
+the legacy checkout may need small compatibility accessors where its compiler
+types do not expose the equivalent API.
+
 Use an integration file for additive provider-owned code that cannot be shimmed
 from a separate overlay package (for example accessors on a compiler type that
 the Effect code reaches through a shim type alias). Prefer the matching

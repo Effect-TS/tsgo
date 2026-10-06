@@ -379,35 +379,3 @@ type does not hide it from public signatures: a public export that exposes an
 `@internal` type is still reported when that type is less stable. The skip is
 export-level only: an ordinary `@internal` property, overload or dependency type
 does not exempt the export that exposes it.
-
-### API stability semantics
-
-`apiStabilityLeak` compares what an exported API exposes on its public surface
-with the stability declared for the export itself. A stable export may not
-expose unstable or experimental components, an unstable export may not expose
-experimental ones, and an experimental export imposes no restriction. The
-export's own `@stability` tag describes the export rather than its surface, so
-it is never reported as a leak of its own API; the same component is still
-audited when it is exported in its own right.
-
-A component that carries an explicit `@stability` tag is a trusted boundary: its
-declared level contributes to the parent surface and its internals are not
-inspected on the parent's behalf. A component without a tag exposes its surface
-within the ordinary walk boundaries, so untagged children keep being inspected
-until a tagged component or a shallow named reference stops the walk. An
-explicit `@stability stable` tag is a real tag, distinct from an untagged
-default-stable declaration: it acts as the same boundary and, when written on a
-re-export declaration, takes precedence over the forwarded declaration's own
-stability.
-
-The generic arguments a tagged component represents stay part of the parent
-surface. An export using a tagged `Box<E>` still exposes `E`, and an interface
-extending a tagged `Base<E>` still exposes `E`, even though the tagged component
-itself is not expanded. When a required argument of a tagged component cannot be
-established, the analysis treats that export as not fully analyzed instead of
-assuming stable, and the check retries on a later run.
-
-The `allowedUnstableApis` and `allowedExperimentalApis` allow lists apply to the
-`unstableApiUsage` and `experimentalApiUsage` diagnostics only. They do not
-suppress `apiStabilityLeak` findings, so a package that allow-lists all usage of
-an unstable API still reports exports that expose it.

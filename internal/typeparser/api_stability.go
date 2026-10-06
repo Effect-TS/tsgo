@@ -4732,7 +4732,7 @@ func (a *apiStabilityAnalysis) shouldInspectSymbol(symbol *ast.Symbol) bool {
 	}
 	for _, declaration := range symbol.Declarations {
 		sourceFile := ast.GetSourceFileOfNode(declaration)
-		if sourceFile == nil || !a.tp.program.IsSourceFileDefaultLibrary(sourceFile.PathKey()) {
+		if sourceFile == nil || !a.tp.program.IsSourceFileDefaultLibrary(ast.SourceFilePath(sourceFile)) {
 			return true
 		}
 	}
