@@ -9,7 +9,7 @@ import (
 )
 
 // ResolveEffectPluginOptionsForSourceFile resolves ordered path-scoped diagnostic overrides for a file.
-func ResolveEffectPluginOptionsForSourceFile(config *etscore.EffectPluginOptions, fileName string, configFilePath string, useCaseSensitiveFileNames bool) *etscore.ResolvedEffectPluginOptions {
+func ResolveEffectPluginOptionsForSourceFile(config *etscore.EffectPluginOptions, fileName tspath.RootedFilePath, configFilePath tspath.RootedFilePath, useCaseSensitiveFileNames bool) *etscore.ResolvedEffectPluginOptions {
 	if config == nil {
 		return nil
 	}
@@ -17,11 +17,11 @@ func ResolveEffectPluginOptionsForSourceFile(config *etscore.EffectPluginOptions
 		return cloneOptions(config)
 	}
 
-	basePath := tspath.GetDirectoryPath(configFilePath)
+	basePath := tspath.GetDirectoryPath(string(configFilePath))
 	var effective *etscore.ResolvedEffectPluginOptions
 
 	for _, override := range config.Overrides {
-		if !matchesOverride(override, fileName, basePath, useCaseSensitiveFileNames) {
+		if !matchesOverride(override, string(fileName), basePath, useCaseSensitiveFileNames) {
 			continue
 		}
 		if effective == nil {
@@ -37,7 +37,7 @@ func ResolveEffectPluginOptionsForSourceFile(config *etscore.EffectPluginOptions
 }
 
 // ResolveDiagnosticSeverityForFile resolves ordered diagnostic severity overrides for a file.
-func ResolveDiagnosticSeverityForFile(config *etscore.EffectPluginOptions, fileName string, configFilePath string, useCaseSensitiveFileNames bool) map[string]etscore.Severity {
+func ResolveDiagnosticSeverityForFile(config *etscore.EffectPluginOptions, fileName tspath.RootedFilePath, configFilePath tspath.RootedFilePath, useCaseSensitiveFileNames bool) map[string]etscore.Severity {
 	if config == nil {
 		return nil
 	}
@@ -45,14 +45,14 @@ func ResolveDiagnosticSeverityForFile(config *etscore.EffectPluginOptions, fileN
 		return config.DiagnosticSeverity
 	}
 
-	basePath := tspath.GetDirectoryPath(configFilePath)
+	basePath := tspath.GetDirectoryPath(string(configFilePath))
 	resolved := cloneDiagnosticSeverity(config.DiagnosticSeverity)
 	if resolved == nil {
 		resolved = map[string]etscore.Severity{}
 	}
 
 	for _, override := range config.Overrides {
-		if !matchesOverride(override, fileName, basePath, useCaseSensitiveFileNames) {
+		if !matchesOverride(override, string(fileName), basePath, useCaseSensitiveFileNames) {
 			continue
 		}
 		if len(override.Options.DiagnosticSeverity) == 0 {
@@ -65,15 +65,20 @@ func ResolveDiagnosticSeverityForFile(config *etscore.EffectPluginOptions, fileN
 }
 
 func matchesOverride(override etscore.Override, fileName string, basePath string, useCaseSensitiveFileNames bool) bool {
+	sensitivity := tspath.CaseInsensitive
+	if useCaseSensitiveFileNames {
+		sensitivity = tspath.CaseSensitive
+	}
+	rootedBasePath := tspath.RootedDirectoryPathFromAbsolute(basePath)
 	if len(override.Include) > 0 {
-		matcher := vfsmatch.NewSpecMatcher(override.Include, basePath, vfsmatch.UsageFiles, useCaseSensitiveFileNames)
+		matcher := vfsmatch.NewSpecMatcher(override.Include, rootedBasePath, vfsmatch.UsageFiles, sensitivity)
 		if matcher == nil || !matcher.MatchString(fileName) {
 			return false
 		}
 	}
 
 	if len(override.Exclude) > 0 {
-		matcher := vfsmatch.NewSpecMatcher(override.Exclude, basePath, vfsmatch.UsageExclude, useCaseSensitiveFileNames)
+		matcher := vfsmatch.NewSpecMatcher(override.Exclude, rootedBasePath, vfsmatch.UsageExclude, sensitivity)
 		if matcher != nil && matcher.MatchString(fileName) {
 			return false
 		}

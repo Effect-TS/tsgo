@@ -70,7 +70,7 @@ func RunEffectDocumentSymbolsTest(t *testing.T, version bundledeffect.EffectVers
 	configDirectory := currentDirectory
 
 	for _, unit := range units {
-		unitName := tspath.GetNormalizedAbsolutePath(unit.name, currentDirectory)
+		unitName := tspath.GetNormalizedAbsolutePath(unit.name, tspath.RootedDirectoryPath(currentDirectory))
 		testfs[unitName] = &fstest.MapFile{Data: []byte(unit.content)}
 
 		lowerName := strings.ToLower(unitName)
@@ -92,13 +92,13 @@ func RunEffectDocumentSymbolsTest(t *testing.T, version bundledeffect.EffectVers
 		testfs[unitName] = &fstest.MapFile{Data: []byte(DefaultTsConfig)}
 	}
 
-	fs := vfstest.FromMap(testfs, true /*useCaseSensitiveFileNames*/)
+	fs := vfstest.FromMap(testfs, tspath.CaseSensitive)
 	fs = bundled.WrapFS(fs)
 
 	session := project.NewSession(&project.SessionInit{
 		BackgroundCtx: context.Background(),
 		Options: &project.SessionOptions{
-			CurrentDirectory:   currentDirectory,
+			CurrentDirectory:   tspath.RootedDirectoryPath(currentDirectory),
 			DefaultLibraryPath: bundled.LibPath(),
 			TypingsLocation:    "/home/src/Library/Caches/typescript",
 			PositionEncoding:   lsproto.PositionEncodingKindUTF8,
@@ -116,7 +116,7 @@ func RunEffectDocumentSymbolsTest(t *testing.T, version bundledeffect.EffectVers
 		if !ok {
 			t.Fatalf("missing file content for %s", fileName)
 		}
-		session.DidOpenFile(context.Background(), lsconv.FileNameToDocumentURI(fileName), 1, content, lsproto.LanguageKindTypeScript)
+		session.DidOpenFile(context.Background(), lsconv.FileNameToDocumentURI(tspath.RootedFilePath(fileName)), 1, content, lsproto.LanguageKindTypeScript)
 	}
 
 	fileResults := make([]DocumentSymbolsFileResult, 0, len(sourceFileNames))
@@ -131,7 +131,7 @@ func RunEffectDocumentSymbolsTest(t *testing.T, version bundledeffect.EffectVers
 func collectDocumentSymbolsForFile(t *testing.T, session *project.Session, fileName string) DocumentSymbolsFileResult {
 	t.Helper()
 
-	uri := lsconv.FileNameToDocumentURI(fileName)
+	uri := lsconv.FileNameToDocumentURI(tspath.RootedFilePath(fileName))
 	langService, err := session.GetLanguageService(context.Background(), uri)
 	if err != nil {
 		t.Fatalf("failed to get language service for %s: %v", fileName, err)

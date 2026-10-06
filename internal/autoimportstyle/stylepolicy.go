@@ -161,12 +161,12 @@ func (sp *stylePolicy) applyNamespaceRewrite(export *autoimport.Export, fix *aut
 				UsagePosition:   fix.UsagePosition,
 			},
 			ModuleSpecifierKind: moduleSpecifierKind,
-			ModuleFileName:      string(export.Target.ModuleID),
+			ModuleFileName:      autoimport.ModuleIDFileName(export.Target.ModuleID),
 		}
 	}
 
 	// Check if this is a top-level named reexport
-	isReexport := export.Target.ModuleID != "" && export.Target.ModuleID != export.ModuleID
+	isReexport := autoimport.ModuleIDString(export.Target.ModuleID) != "" && export.Target.ModuleID != export.ModuleID
 	if isReexport && !sp.followReexports {
 		// When topLevelNamedReexports is "ignore", skip rewriting top-level reexports
 		return fix
@@ -208,7 +208,7 @@ func isNamespaceReexport(export *autoimport.Export) bool {
 	return export != nil &&
 		export.Syntax == autoimport.ExportSyntaxModifier &&
 		export.Flags&ast.SymbolFlagsModule != 0 &&
-		export.Target.ModuleID != "" &&
+		autoimport.ModuleIDString(export.Target.ModuleID) != "" &&
 		export.Target.ModuleID != export.ModuleID
 }
 

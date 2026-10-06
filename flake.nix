@@ -6,7 +6,7 @@
     nixpkgsUnstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     /* Source of truth: the next profile in `_packages/tsgo/upstream.json`. */
     typescript-src = {
-      url = "github:microsoft/TypeScript/0681ef7fa3a2378ccf49645b6d5b7463bdca74bb";
+      url = "github:microsoft/TypeScript/50d70a3f5f453a79a4323b263165da51f656a4e3";
       flake = false;
     };
   };
@@ -80,6 +80,16 @@
             name = "patched-typescript-source";
             src = typescript-src;
             patches = builtins.map (name: ./. + "/_patches/typescript/${name}") sortedPatchFiles;
+            nativeBuildInputs = [ pkgs.git ];
+            # The options generator contains NUL bytes, so its patch uses Git's
+            # binary format, which the default patch command cannot apply.
+            patchPhase = ''
+              runHook prePatch
+              for patch in $patches; do
+                git apply --binary "$patch"
+              done
+              runHook postPatch
+            '';
           };
           src = pkgs.runCommandNoCC "effect-tsgo-source" { } ''
             mkdir source

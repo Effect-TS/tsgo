@@ -301,11 +301,19 @@ type Node = ast.Node
 func CanHaveDecorators(node *ast.Node) bool
 `))
 
+	adapters := map[string][]byte{"ast/compatibility.go": []byte(`package ast
+
+import "github.com/microsoft/typescript-go/internal/ast"
+
+func NewNode(name string) *ast.Node { return ast.NewNode(name, false) }
+`)}
+
 	if err := generateBackport(
 		providerRoot,
 		backportRoot,
 		"github.com/microsoft/typescript-go/internal/",
 		"github.com/microsoft/typescript-go/shim",
+		adapters,
 	); err != nil {
 		t.Fatal(err)
 	}
@@ -320,6 +328,14 @@ func CanHaveDecorators(node *ast.Node) bool
 	if !strings.Contains(text, "//go:linkname CanHaveDecorators github.com/microsoft/typescript-go/internal/ast.CanHaveDecorators") {
 		t.Fatalf("backport changed the linkname target:\n%s", text)
 	}
+	compatibility, err := os.ReadFile(filepath.Join(backportRoot, "ast", "compatibility.go"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(compatibility), "ast.NewNode(name, false)") {
+		t.Fatalf("backport must adapt calls to the original provider API:\n%s", compatibility)
+	}
+
 	goMod, err := os.ReadFile(filepath.Join(backportRoot, "ast", "go.mod"))
 	if err != nil {
 		t.Fatal(err)
@@ -488,5 +504,76 @@ func writeTestFile(t *testing.T, path string, data []byte) {
 	}
 	if err := os.WriteFile(path, data, 0o644); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestBackportAdaptsCanonicalAPIWithoutChangingProviderAPI(t *testing.T) {
+	root := t.TempDir()
+	providerRoot := filepath.Join(root, "provider")
+	backportRoot := filepath.Join(root, "facade")
+	writeTestFile(t, filepath.Join(root, "go.mod"), []byte("module example.com/facade\n\ngo 1.26\n"))
+	writeTestFile(t, filepath.Join(root, "internal", "paths", "paths.go"), []byte(`package paths
+
+type Options struct { Sensitive bool }
+func NewPath(directory string, options Options) string {
+    if options.Sensitive { return directory + ":sensitive" }
+    return directory
+}
+func IsSensitive(options Options) bool { return options.Sensitive }
+`))
+	writeTestFile(t, filepath.Join(providerRoot, "paths", "shim.go"), []byte(`package paths
+
+import raw "example.com/facade/internal/paths"
+import _ "unsafe"
+
+type Options = raw.Options
+//go:linkname NewPath example.com/facade/internal/paths.NewPath
+func NewPath(directory string, options raw.Options) string
+//go:linkname IsSensitive example.com/facade/internal/paths.IsSensitive
+func IsSensitive(options raw.Options) bool
+`))
+	providerHelpers, adapters := splitShimHelpers(map[string][]byte{
+		"paths/compatibility.go": []byte(`package paths
+
+import raw "example.com/facade/internal/paths"
+
+type Sensitivity uint8
+const CaseSensitive Sensitivity = 1
+func NewPath(directory string, sensitivity Sensitivity) string {
+    return raw.NewPath(directory, raw.Options{Sensitive: sensitivity == CaseSensitive})
+}
+`),
+	})
+	if err := writeShimHelpers(providerRoot, providerHelpers); err != nil {
+		t.Fatal(err)
+	}
+	if err := generateBackport(providerRoot, backportRoot, "example.com/facade/internal/", "example.com/facade/provider", adapters); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := os.Stat(filepath.Join(providerRoot, "paths", "compatibility.go")); !os.IsNotExist(err) {
+		t.Fatalf("compatibility adapters must not be installed into provider shims: %v", err)
+	}
+	writeTestFile(t, filepath.Join(backportRoot, "paths", "compatibility_test.go"), []byte(`package paths
+
+import (
+    "testing"
+    provider "example.com/facade/provider/paths"
+)
+
+func TestProviderAndCanonicalAPIs(t *testing.T) {
+    var options Options = provider.Options{Sensitive: true}
+    if provider.NewPath("/project", options) != "/project:sensitive" {
+        t.Fatal("provider must preserve its original API")
+    }
+    if NewPath("/project", CaseSensitive) != "/project:sensitive" || !IsSensitive(options) {
+        t.Fatal("canonical facade must adapt the API and preserve provider type identity")
+    }
+}
+`))
+	command := exec.Command("go", "test", "./...")
+	command.Dir = root
+	command.Env = append(os.Environ(), "GOWORK=off")
+	if output, err := command.CombinedOutput(); err != nil {
+		t.Fatalf("compile and exercise provider and canonical APIs: %v\n%s", err, output)
 	}
 }

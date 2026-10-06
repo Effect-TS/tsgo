@@ -137,7 +137,7 @@ func RunEffectRefactorTest(t *testing.T, version bundledeffect.EffectVersion, te
 	// Check if a tsconfig is provided
 	hasTsConfig := false
 	for _, unit := range units {
-		unitName := tspath.GetNormalizedAbsolutePath(unit.name, currentDirectory)
+		unitName := tspath.GetNormalizedAbsolutePath(unit.name, tspath.RootedDirectoryPath(currentDirectory))
 		if strings.HasSuffix(strings.ToLower(unitName), "tsconfig.json") || strings.HasSuffix(strings.ToLower(unitName), "jsconfig.json") {
 			hasTsConfig = true
 			break
@@ -147,7 +147,7 @@ func RunEffectRefactorTest(t *testing.T, version bundledeffect.EffectVersion, te
 	// Inject default tsconfig if none was provided
 	if !hasTsConfig {
 		sb.WriteString("// @filename: ")
-		sb.WriteString(tspath.GetNormalizedAbsolutePath("tsconfig.json", currentDirectory))
+		sb.WriteString(tspath.GetNormalizedAbsolutePath("tsconfig.json", tspath.RootedDirectoryPath(currentDirectory)))
 		sb.WriteString("\n")
 		sb.WriteString(DefaultTsConfig)
 		sb.WriteString("\n")
@@ -158,7 +158,7 @@ func RunEffectRefactorTest(t *testing.T, version bundledeffect.EffectVersion, te
 
 	// Add all test units as fourslash files
 	for _, unit := range units {
-		unitName := tspath.GetNormalizedAbsolutePath(unit.name, currentDirectory)
+		unitName := tspath.GetNormalizedAbsolutePath(unit.name, tspath.RootedDirectoryPath(currentDirectory))
 		sb.WriteString("// @filename: ")
 		sb.WriteString(unitName)
 		sb.WriteString("\n")
@@ -182,7 +182,7 @@ func RunEffectRefactorTest(t *testing.T, version bundledeffect.EffectVersion, te
 
 	// If a "// refactor:" comment was found, test with each parsed selection range
 	if rc.found && len(testFileNames) > 0 {
-		fileURI := lsconv.FileNameToDocumentURI(testFileNames[0])
+		fileURI := lsconv.FileNameToDocumentURI(tspath.RootedFilePath(testFileNames[0]))
 
 		for _, selRange := range rc.ranges {
 			rangeCounter++
@@ -229,7 +229,7 @@ func RunEffectRefactorTest(t *testing.T, version bundledeffect.EffectVersion, te
 
 	// Also test that an empty selection (zero-width range) produces no refactors
 	if len(testFileNames) > 0 {
-		fileURI := lsconv.FileNameToDocumentURI(testFileNames[0])
+		fileURI := lsconv.FileNameToDocumentURI(tspath.RootedFilePath(testFileNames[0]))
 		emptyRange := fourslash.RangeMarker{}
 		emptyActions := f.GetRefactorActionsForRange(t, fileURI, emptyRange.LSRange)
 

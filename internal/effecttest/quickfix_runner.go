@@ -43,7 +43,7 @@ func RunEffectQuickFixTest(t *testing.T, version bundledeffect.EffectVersion, te
 	// Check if a tsconfig is provided
 	hasTsConfig := false
 	for _, unit := range units {
-		unitName := tspath.GetNormalizedAbsolutePath(unit.name, currentDirectory)
+		unitName := tspath.GetNormalizedAbsolutePath(unit.name, tspath.RootedDirectoryPath(currentDirectory))
 		if strings.HasSuffix(strings.ToLower(unitName), "tsconfig.json") || strings.HasSuffix(strings.ToLower(unitName), "jsconfig.json") {
 			hasTsConfig = true
 			break
@@ -53,7 +53,7 @@ func RunEffectQuickFixTest(t *testing.T, version bundledeffect.EffectVersion, te
 	// Inject default tsconfig if none was provided
 	if !hasTsConfig {
 		sb.WriteString("// @filename: ")
-		sb.WriteString(tspath.GetNormalizedAbsolutePath("tsconfig.json", currentDirectory))
+		sb.WriteString(tspath.GetNormalizedAbsolutePath("tsconfig.json", tspath.RootedDirectoryPath(currentDirectory)))
 		sb.WriteString("\n")
 		sb.WriteString(DefaultTsConfig)
 		sb.WriteString("\n")
@@ -64,7 +64,7 @@ func RunEffectQuickFixTest(t *testing.T, version bundledeffect.EffectVersion, te
 
 	// Add all test units as fourslash files
 	for _, unit := range units {
-		unitName := tspath.GetNormalizedAbsolutePath(unit.name, currentDirectory)
+		unitName := tspath.GetNormalizedAbsolutePath(unit.name, tspath.RootedDirectoryPath(currentDirectory))
 		sb.WriteString("// @filename: ")
 		sb.WriteString(unitName)
 		sb.WriteString("\n")
@@ -87,7 +87,7 @@ func RunEffectQuickFixTest(t *testing.T, version bundledeffect.EffectVersion, te
 	diagCounter := 0
 
 	for _, fileName := range testFileNames {
-		fileURI := lsconv.FileNameToDocumentURI(fileName)
+		fileURI := lsconv.FileNameToDocumentURI(tspath.RootedFilePath(fileName))
 
 		// Get quick-fix inventory for this file
 		fixes := f.GetQuickFixesForDiagnostics(t, fileURI)

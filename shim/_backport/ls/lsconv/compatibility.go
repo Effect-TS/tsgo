@@ -9,3 +9,7 @@ import (
 func FromLSPRangeToOriginal(c *lsconv.Converters, script lsconv.Script, textRange lsproto.Range) core.TextRange {
 	return c.FromLSPRange(script, textRange)
 }
+
+func ToLSPPosition(c *lsconv.Converters, script lsconv.Script, position core.TextPos) (lsproto.Position, bool) {
+	return c.PositionToLineAndCharacter(script, position), true
+}

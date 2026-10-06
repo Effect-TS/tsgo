@@ -1,6 +1,7 @@
 package etsoxlintrunner_test
 
 import (
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 	"slices"
 	"testing"
 
@@ -11,9 +12,6 @@ import (
 )
 
 type configHost struct{ fs vfs.FS }
-
-func (h *configHost) FS() vfs.FS                  { return h.fs }
-func (h *configHost) GetCurrentDirectory() string { return "/" }
 
 func TestEffectFnOptionsWithExtends(t *testing.T) {
 	t.Parallel()
@@ -31,9 +29,9 @@ func TestEffectFnOptionsWithExtends(t *testing.T) {
 				"/main.ts":       "export {}",
 				"/base.json":     tt.base,
 				"/tsconfig.json": tt.config,
-			}, true)}
-			source := tsoptions.NewTsconfigSourceFileFromFilePath("/tsconfig.json", "/tsconfig.json", tt.config)
-			parsed := tsoptions.ParseJsonSourceFileConfigFileContent(source, host, "/", nil, nil, "/tsconfig.json", nil, nil, nil)
+			}, tspath.CaseSensitive)}
+			source := tsoptions.NewTsconfigSourceFileFromFilePath(tspath.RootedFilePath("/tsconfig.json"), "/tsconfig.json", tt.config)
+			parsed := tsoptions.ParseJsonSourceFileConfigFileContent(source, host.fs, tspath.RootedDirectoryPath("/"), nil, nil, nil, nil)
 			if len(parsed.Errors) != 0 {
 				t.Fatalf("unexpected config errors: %v", parsed.Errors)
 			}

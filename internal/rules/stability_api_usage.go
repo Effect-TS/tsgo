@@ -237,7 +237,7 @@ func newStabilityApiAllowlist(ctx *rule.Context, wanted string) func(*ast.Node) 
 			if pkg != nil {
 				if packageName, ok := pkg.Name.GetValue(); ok && packageName != "" {
 					directory := getPackageJsonDirectory(ctx.Program, ctx.Checker, sf)
-					moduleName = stabilityApiModuleName(packageName, directory, sf.FileName())
+					moduleName = stabilityApiModuleName(packageName, directory, string(sf.FileName()))
 				}
 			}
 			modules[sf] = moduleName
