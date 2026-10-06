@@ -80,7 +80,7 @@ export interface X {
 
 	x := apiStabilityTestExport(t, c, files["/.src/test.ts"], "X")
 	before := c.TotalInstantiationCount
-	infos := c.GetDeclaredIndexInfosOfSymbol(x)
+	infos := checker.GetDeclaredIndexInfosOfSymbol(c, x)
 	if delta := c.TotalInstantiationCount - before; delta != 0 {
 		t.Fatalf("declared index accessor instantiated %d types, want 0", delta)
 	}
@@ -1095,7 +1095,7 @@ export class ColdClass { plain: number; static [Symbol.iterator](): E }
 	for _, name := range []string{"WellKnownOnly", "ColdClass"} {
 		symbol := apiStabilityTestExport(t, c, files["/.src/test.ts"], name)
 		declared := c.GetDeclaredTypeOfSymbol(symbol)
-		if _, resolved := c.GetResolvedMembersOfTypeIfMaterialized(declared); resolved {
+		if _, resolved := checker.GetResolvedMembersOfTypeIfMaterialized(c, declared); resolved {
 			t.Fatalf("%s: expected an unmaterialized member table for the early-table path", name)
 		}
 		session := tp.NewApiStabilitySession()
@@ -1111,7 +1111,7 @@ export class ColdClass { plain: number; static [Symbol.iterator](): E }
 	for _, name := range []string{"WellKnownOnly", "ColdClass"} {
 		symbol := apiStabilityTestExport(t, c, files["/.src/test.ts"], name)
 		declared := c.GetDeclaredTypeOfSymbol(symbol)
-		if _, resolved := c.GetResolvedMembersOfTypeIfMaterialized(declared); !resolved {
+		if _, resolved := checker.GetResolvedMembersOfTypeIfMaterialized(c, declared); !resolved {
 			t.Fatalf("%s: expected the member table to be materialized after checking", name)
 		}
 		session := tp.NewApiStabilitySession()
@@ -1187,10 +1187,10 @@ function fn() { return object.a.value.length }`,
 	if len(signatures) != 1 {
 		t.Fatal("signature missing")
 	}
-	if c.GetResolvedReturnTypeOfSignatureIfMaterialized(signatures[0]) != nil {
+	if checker.GetResolvedReturnTypeOfSignatureIfMaterialized(c, signatures[0]) != nil {
 		t.Fatal("expected cold inferred return")
 	}
-	if c.GetResolvedTypeOfSymbolIfMaterialized(value) != nil {
+	if checker.GetResolvedTypeOfSymbolIfMaterialized(c, value) != nil {
 		t.Fatal("expected cold a member")
 	}
 	ran := false
@@ -1202,7 +1202,7 @@ function fn() { return object.a.value.length }`,
 		analysis := newApiStabilityAnalysis(tp)
 		analysis.safetyWork = apiStabilitySafetyMaxWork + 1
 		analysis.symbolSurface(sym)
-		if c.GetResolvedTypeOfSymbolIfMaterialized(value) == nil {
+		if checker.GetResolvedTypeOfSymbolIfMaterialized(c, value) == nil {
 			t.Error("later ordinary read should have materialized the refused member")
 		}
 		analysis.settle()
@@ -1261,10 +1261,10 @@ function fn() { return object.a.value.length }`,
 	if len(signatures) != 1 {
 		t.Fatal("signature missing")
 	}
-	if c.GetResolvedReturnTypeOfSignatureIfMaterialized(signatures[0]) != nil {
+	if checker.GetResolvedReturnTypeOfSignatureIfMaterialized(c, signatures[0]) != nil {
 		t.Fatal("expected cold inferred return")
 	}
-	if c.GetResolvedTypeOfSymbolIfMaterialized(value) != nil {
+	if checker.GetResolvedTypeOfSymbolIfMaterialized(c, value) != nil {
 		t.Fatal("expected cold a member")
 	}
 	ran := false
@@ -1338,8 +1338,8 @@ function fn() { return root.a.value.length }`,
 	}
 	fnType := c.GetTypeOfSymbol(fnSymbol)
 	signature := c.GetSignaturesOfType(fnType, checker.SignatureKindCall)[0]
-	if c.GetResolvedReturnTypeOfSignatureIfMaterialized(signature) != nil ||
-		c.GetResolvedTypeOfSymbolIfMaterialized(value) != nil {
+	if checker.GetResolvedReturnTypeOfSignatureIfMaterialized(c, signature) != nil ||
+		checker.GetResolvedTypeOfSymbolIfMaterialized(c, value) != nil {
 		t.Fatal("expected cold member and inferred return")
 	}
 
@@ -1357,7 +1357,7 @@ function fn() { return root.a.value.length }`,
 		// analysis; settlement must reconcile it into its visit order.
 		analysis.sessionSignatures[apiStabilitySignatureKey{signature: signature}] = cycleCutSurface()
 		analysis.symbolSurface(sym)
-		if c.GetResolvedTypeOfSymbolIfMaterialized(value) != nil {
+		if checker.GetResolvedTypeOfSymbolIfMaterialized(c, value) != nil {
 			t.Fatal("member was materialized before settlement")
 		}
 		analysis.settle()

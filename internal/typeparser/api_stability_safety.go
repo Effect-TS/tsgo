@@ -167,7 +167,7 @@ func (a *apiStabilityAnalysis) symbolTypeResolutionIsSafe(symbol *ast.Symbol) bo
 		return false
 	}
 	subst := apiStabilitySubstitution{}
-	if mapper := a.tp.checker.GetInstantiatedSymbolMapper(symbol); mapper != nil {
+	if mapper := checker.GetInstantiatedSymbolMapper(a.tp.checker, symbol); mapper != nil {
 		subst = a.extendMapperSubstitution(apiStabilitySubstitution{}, nil, mapper)
 	}
 	key := apiStabilitySafetyVerdictKey{operation: apiStabilitySafetyOperationSymbolType, symbol: symbol, carrier: subst.carrier()}
@@ -281,7 +281,7 @@ func (a *apiStabilityAnalysis) declaredTypeResolutionIsSafe(symbol *ast.Symbol) 
 	}
 	if symbol.Flags&ast.SymbolFlagsAlias != 0 {
 		if hasAliasDeclaration(symbol) {
-			target := a.tp.checker.GetImmediateAliasedSymbol(symbol)
+			target := ApiStabilityImmediateAliasedSymbol(a.tp.checker, symbol)
 			if target != nil && target != symbol {
 				return a.declaredTypeResolutionIsSafe(target)
 			}
@@ -356,10 +356,10 @@ func (a *apiStabilityAnalysis) inferredComponentResolutionIsSafe(declaration *as
 	if declaration == nil {
 		return false
 	}
-	if a.tp.checker.IsSourceFileTypeChecked(ast.GetSourceFileOfNode(declaration)) {
+	if checker.IsSourceFileTypeChecked(a.tp.checker, ast.GetSourceFileOfNode(declaration)) {
 		return true
 	}
-	return a.tp.checker.IsCheckingSourceFile()
+	return checker.IsCheckingSourceFile(a.tp.checker)
 }
 
 // baseTypesResolutionIsSafe reports whether materializing an unmaterialized
@@ -615,7 +615,7 @@ func (s *apiStabilitySafetyScan) typeReference(node *ast.Node, subst apiStabilit
 		return s.typeParameterReference(symbol, subst, bindings, project)
 	case symbol.Flags&ast.SymbolFlagsAlias != 0:
 		if hasAliasDeclaration(symbol) {
-			target := s.a.tp.checker.GetImmediateAliasedSymbol(symbol)
+			target := ApiStabilityImmediateAliasedSymbol(s.a.tp.checker, symbol)
 			if target != nil && target != symbol {
 				return s.referenceToSymbol(target, reference.TypeArguments, subst, bindings, project)
 			}
@@ -930,7 +930,7 @@ func (s *apiStabilitySafetyScan) materializeArgument(argument apiStabilitySafety
 	if argument.node == nil {
 		return nil
 	}
-	if represented := s.a.tp.checker.GetResolvedTypeFromTypeNode(argument.node); represented != nil {
+	if represented := checker.GetResolvedTypeFromTypeNode(s.a.tp.checker, argument.node); represented != nil {
 		if mapped, replaced := s.mappedParameterValue(represented, argument.subst, argument.bindings); replaced {
 			return mapped
 		}
@@ -1014,7 +1014,7 @@ func apiStabilityIntrinsicTypeOfNode(c *checker.Checker, node *ast.Node) *checke
 	case ast.KindSymbolKeyword:
 		return c.GetESSymbolType()
 	case ast.KindObjectKeyword:
-		return c.GetNonPrimitiveType()
+		return checker.GetNonPrimitiveType(c)
 	}
 	return nil
 }
@@ -1045,7 +1045,7 @@ func (s *apiStabilitySafetyScan) objectValue(t *checker.Type, subst apiStability
 	}
 	if flags&checker.ObjectFlagsReference != 0 && t.Target() != nil && t.Target() != t {
 		target := t.Target()
-		arguments := s.a.tp.checker.GetResolvedTypeArguments(t)
+		arguments := checker.GetResolvedTypeArguments(s.a.tp.checker, t)
 		verdict := apiStabilitySafetySafe
 		for _, argument := range arguments {
 			verdict = combineSafety(verdict, s.typeValue(argument, subst, bindings, project))
@@ -1075,9 +1075,9 @@ func (s *apiStabilitySafetyScan) mappedValue(t *checker.Type, subst apiStability
 	if mapped == nil {
 		return apiStabilitySafetySafe
 	}
-	verdict := s.typeValue(mapped.ConstraintType(), subst, bindings, project)
-	verdict = combineSafety(verdict, s.typeValue(mapped.NameType(), subst, bindings, project))
-	return combineSafety(verdict, s.typeValue(mapped.TemplateType(), subst, bindings, project))
+	verdict := s.typeValue(checker.GetMappedTypeConstraintType(mapped), subst, bindings, project)
+	verdict = combineSafety(verdict, s.typeValue(checker.GetMappedTypeNameType(mapped), subst, bindings, project))
+	return combineSafety(verdict, s.typeValue(checker.GetMappedTypeTemplateType(mapped), subst, bindings, project))
 }
 
 // conditionalValue scans a represented conditional type. A deferred
@@ -1119,10 +1119,10 @@ func (s *apiStabilitySafetyScan) conditionalValue(t *checker.Type, subst apiStab
 // materialized branch is preferred; otherwise the declared branch annotation is
 // scanned with the conditional's own mapper bindings.
 func (s *apiStabilitySafetyScan) conditionalBranchValue(t *checker.Type, trueBranch bool, subst apiStabilitySubstitution, bindings *apiStabilitySafetyBinding, project bool) apiStabilitySafety {
-	if represented := s.a.tp.checker.GetResolvedConditionalTypeBranch(t, trueBranch); represented != nil {
+	if represented := checker.GetResolvedConditionalTypeBranch(s.a.tp.checker, t, trueBranch); represented != nil {
 		return s.typeValue(represented, subst, bindings, project)
 	}
-	node := s.a.tp.checker.GetConditionalTypeBranchNode(t, trueBranch)
+	node := checker.GetConditionalTypeBranchNode(s.a.tp.checker, t, trueBranch)
 	if node == nil {
 		return apiStabilitySafetyUnknown
 	}
@@ -1256,7 +1256,7 @@ func (s *apiStabilitySafetyScan) operandType(node *ast.Node, subst apiStabilityS
 	if node == nil {
 		return nil
 	}
-	represented := s.a.tp.checker.GetResolvedTypeFromTypeNode(node)
+	represented := checker.GetResolvedTypeFromTypeNode(s.a.tp.checker, node)
 	if represented == nil {
 		s.a.noteMaterializingNodeRead(node)
 		represented = s.a.tp.checker.GetTypeFromTypeNode(node)
@@ -1305,7 +1305,7 @@ func (s *apiStabilitySafetyScan) containsUnboundParameter(t *checker.Type, subst
 			}
 		}
 	case flags&checker.TypeFlagsObject != 0 && t.ObjectFlags()&checker.ObjectFlagsReference != 0:
-		for _, argument := range s.a.tp.checker.GetResolvedTypeArguments(t) {
+		for _, argument := range checker.GetResolvedTypeArguments(s.a.tp.checker, t) {
 			if s.containsUnboundParameter(argument, subst, bindings, active) {
 				return true
 			}
@@ -1370,7 +1370,7 @@ func (s *apiStabilitySafetyScan) containsReplacedParameter(t *checker.Type, subs
 		}
 	case flags&checker.TypeFlagsObject != 0:
 		if t.ObjectFlags()&checker.ObjectFlagsReference != 0 {
-			for _, argument := range s.a.tp.checker.GetResolvedTypeArguments(t) {
+			for _, argument := range checker.GetResolvedTypeArguments(s.a.tp.checker, t) {
 				if s.containsReplacedParameter(argument, subst, bindings, active) {
 					return true
 				}
@@ -1994,7 +1994,7 @@ func (s *apiStabilitySafetyScan) memberAnnotation(member *ast.Node, subst apiSta
 			// initializer or an implicit `any`), which the guard refuses to
 			// force unless the checker already materialized the component.
 			if symbol := s.memberSymbolOfDeclaration(member); symbol != nil {
-				if materialized := s.a.tp.checker.GetResolvedTypeOfSymbolIfMaterialized(symbol); materialized != nil {
+				if materialized := checker.GetResolvedTypeOfSymbolIfMaterialized(s.a.tp.checker, symbol); materialized != nil {
 					return s.typeValue(materialized, subst, bindings, true)
 				}
 			}
@@ -2396,7 +2396,7 @@ func (s *apiStabilitySafetyScan) memberTable(t *checker.Type, subst apiStability
 		}
 		if t.ObjectFlags()&checker.ObjectFlagsReference != 0 && t.Target() != nil && t.Target() != t {
 			verdict := apiStabilitySafetySafe
-			for _, argument := range s.a.tp.checker.GetResolvedTypeArguments(t) {
+			for _, argument := range checker.GetResolvedTypeArguments(s.a.tp.checker, t) {
 				verdict = combineSafety(verdict, s.typeValue(argument, subst, bindings, false))
 			}
 			return combineSafety(verdict, s.declarationStructure(t.Target().Symbol(), subst, bindings, false))
@@ -2420,7 +2420,7 @@ func (s *apiStabilitySafetyScan) typeQuery(node *ast.Node, subst apiStabilitySub
 	if symbol == nil {
 		return apiStabilitySafetyUnknown
 	}
-	if materialized := s.a.tp.checker.GetResolvedTypeOfSymbolIfMaterialized(symbol); materialized != nil {
+	if materialized := checker.GetResolvedTypeOfSymbolIfMaterialized(s.a.tp.checker, symbol); materialized != nil {
 		return s.typeValue(materialized, subst, bindings, project)
 	}
 	for _, declaration := range symbol.Declarations {

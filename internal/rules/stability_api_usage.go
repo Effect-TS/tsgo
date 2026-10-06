@@ -283,7 +283,7 @@ func resolveStabilityAlias(c *checker.Checker, symbol *ast.Symbol) *ast.Symbol {
 		if !slices.ContainsFunc(symbol.Declarations, ast.IsAliasSymbolDeclaration) {
 			return nil
 		}
-		next := c.GetImmediateAliasedSymbol(symbol)
+		next := typeparser.ApiStabilityImmediateAliasedSymbol(c, symbol)
 		if next == symbol {
 			break
 		}

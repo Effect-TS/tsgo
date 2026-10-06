@@ -518,7 +518,7 @@ func gitInputDigest(inputs []gitInput) (string, error) {
 
 func shimInputDigest(repositoryRoot, sourceRoot, modulePrefix, providerShimPrefix string, inputs shimInputs) (string, error) {
 	gitDigest, err := gitInputDigest([]gitInput{
-		{root: repositoryRoot, paths: []string{"_tools/gen_shims", "_integrations"}},
+		{root: repositoryRoot, paths: []string{"_tools/gen_shims"}},
 		{root: sourceRoot, paths: []string{"."}, extensions: []string{".go", ".mod", ".sum"}},
 	})
 	if err != nil {

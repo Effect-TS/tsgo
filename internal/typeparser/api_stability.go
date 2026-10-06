@@ -591,7 +591,7 @@ func declaredStabilityOfSymbolChain(c *checker.Checker, symbol *ast.Symbol) ApiS
 		if !hasAliasDeclaration(symbol) {
 			break
 		}
-		next := c.GetImmediateAliasedSymbol(symbol)
+		next := ApiStabilityImmediateAliasedSymbol(c, symbol)
 		if next == symbol {
 			break
 		}
@@ -602,6 +602,21 @@ func declaredStabilityOfSymbolChain(c *checker.Checker, symbol *ast.Symbol) ApiS
 
 func hasAliasDeclaration(symbol *ast.Symbol) bool {
 	return slices.ContainsFunc(symbol.Declarations, ast.IsAliasSymbolDeclaration)
+}
+
+// ApiStabilityImmediateAliasedSymbol follows one valid import/export alias hop.
+// Immediate target lookup can repeat diagnostics for failed resolutions on
+// the legacy compiler. Skip those cached failures without resolving the alias,
+// then keep the immediate hop so forwarding declarations retain their tags.
+// Neither operation resolves or instantiates types.
+func ApiStabilityImmediateAliasedSymbol(c *checker.Checker, symbol *ast.Symbol) *ast.Symbol {
+	if symbol == nil || symbol.Flags&ast.SymbolFlagsAlias == 0 || !hasAliasDeclaration(symbol) {
+		return nil
+	}
+	if checker.IsAliasResolutionFailed(c, symbol) {
+		return nil
+	}
+	return c.GetImmediateAliasedSymbol(symbol)
 }
 
 // ApiStabilitySession is the analysis-local memo for the computed stability of
@@ -1841,7 +1856,7 @@ func (a *apiStabilityAnalysis) typeOfSymbolSafely(symbol *ast.Symbol) *checker.T
 	if symbol == nil {
 		return nil
 	}
-	if cached := a.tp.checker.GetResolvedTypeOfSymbolIfMaterialized(symbol); cached != nil {
+	if cached := checker.GetResolvedTypeOfSymbolIfMaterialized(a.tp.checker, symbol); cached != nil {
 		return cached
 	}
 	if !a.symbolTypeResolutionIsSafe(symbol) {
@@ -1858,7 +1873,7 @@ func (a *apiStabilityAnalysis) typeFromNodeSafely(node *ast.Node, subst apiStabi
 	if node == nil {
 		return nil
 	}
-	if cached := a.tp.checker.GetResolvedTypeFromTypeNode(node); cached != nil {
+	if cached := checker.GetResolvedTypeFromTypeNode(a.tp.checker, node); cached != nil {
 		return cached
 	}
 	if !a.annotationResolutionIsSafe(node, subst) {
@@ -1876,7 +1891,7 @@ func (a *apiStabilityAnalysis) declaredTypeSafely(symbol *ast.Symbol) *checker.T
 	if symbol == nil {
 		return nil
 	}
-	if cached := a.tp.checker.GetResolvedDeclaredTypeOfSymbolIfMaterialized(symbol); cached != nil {
+	if cached := checker.GetResolvedDeclaredTypeOfSymbolIfMaterialized(a.tp.checker, symbol); cached != nil {
 		return cached
 	}
 	if !a.declaredTypeResolutionIsSafe(symbol) {
@@ -1896,7 +1911,7 @@ func (a *apiStabilityAnalysis) returnTypeSafely(signature *checker.Signature, su
 	if signature == nil {
 		return nil
 	}
-	if cached := a.tp.checker.GetResolvedReturnTypeOfSignatureIfMaterialized(signature); cached != nil {
+	if cached := checker.GetResolvedReturnTypeOfSignatureIfMaterialized(a.tp.checker, signature); cached != nil {
 		return cached
 	}
 	if !a.signatureReturnResolutionIsSafe(signature, subst) {
@@ -1914,7 +1929,7 @@ func (a *apiStabilityAnalysis) baseTypesSafely(declaration *checker.Type, subst 
 	if declaration == nil {
 		return nil, false
 	}
-	if bases, resolved := a.tp.checker.GetResolvedBaseTypesOfTypeIfMaterialized(declaration); resolved {
+	if bases, resolved := checker.GetResolvedBaseTypesOfTypeIfMaterialized(a.tp.checker, declaration); resolved {
 		return bases, true
 	}
 	if !a.baseTypesResolutionIsSafe(declaration, subst) {
@@ -2192,7 +2207,7 @@ func (a *apiStabilityAnalysis) collectTypeSurface(t *checker.Type, inspect apiSt
 // unavailable, leaves the surface incomplete.
 func (a *apiStabilityAnalysis) collectTypeParameterComponents(surface *apiStabilitySurface, t *checker.Type, subst apiStabilitySubstitution) {
 	c := a.tp.checker
-	constraint := c.GetResolvedConstraintOfTypeParameterIfMaterialized(t)
+	constraint := checker.GetResolvedConstraintOfTypeParameterIfMaterialized(c, t)
 	if constraint == nil {
 		constraint = a.representedTypeFromNode(typeParameterAnnotationNode(t, true), subst)
 	}
@@ -2201,7 +2216,7 @@ func (a *apiStabilityAnalysis) collectTypeParameterComponents(surface *apiStabil
 	} else if typeParameterAnnotationNode(t, true) != nil {
 		surface.block()
 	}
-	defaultType := c.GetResolvedDefaultFromTypeParameterIfMaterialized(t)
+	defaultType := checker.GetResolvedDefaultFromTypeParameterIfMaterialized(c, t)
 	if defaultType == nil {
 		defaultType = a.representedTypeFromNode(typeParameterAnnotationNode(t, false), subst)
 	}
@@ -2281,7 +2296,7 @@ func (a *apiStabilityAnalysis) containsSubstitutedParameter(subst apiStabilitySu
 			}
 		}
 	case t.Flags()&checker.TypeFlagsObject != 0 && t.ObjectFlags()&checker.ObjectFlagsReference != 0:
-		for _, argument := range a.tp.checker.GetResolvedTypeArguments(t) {
+		for _, argument := range checker.GetResolvedTypeArguments(a.tp.checker, t) {
 			if a.containsSubstitutedParameter(subst, argument, active) {
 				return true
 			}
@@ -2331,7 +2346,7 @@ func (a *apiStabilityAnalysis) representedContainsTypeParameter(t *checker.Type,
 			}
 		}
 	case t.Flags()&checker.TypeFlagsObject != 0 && t.ObjectFlags()&checker.ObjectFlagsReference != 0:
-		for _, argument := range a.tp.checker.GetResolvedTypeArguments(t) {
+		for _, argument := range checker.GetResolvedTypeArguments(a.tp.checker, t) {
 			if a.representedContainsTypeParameter(argument, active) {
 				return true
 			}
@@ -2375,12 +2390,12 @@ func (a *apiStabilityAnalysis) representedContainsTypeParameter(t *checker.Type,
 // surface incomplete.
 func (a *apiStabilityAnalysis) collectConditionalBranchSurface(surface *apiStabilitySurface, t *checker.Type, trueBranch bool, subst apiStabilitySubstitution) {
 	c := a.tp.checker
-	node := c.GetConditionalTypeBranchNode(t, trueBranch)
+	node := checker.GetConditionalTypeBranchNode(c, t, trueBranch)
 	if node == nil {
 		surface.block()
 		return
 	}
-	represented := c.GetResolvedConditionalTypeBranch(t, trueBranch)
+	represented := checker.GetResolvedConditionalTypeBranch(c, t, trueBranch)
 	if represented == nil {
 		represented = a.representedTypeFromNode(node, subst)
 	}
@@ -2518,7 +2533,7 @@ func (a *apiStabilityAnalysis) collectConcreteReferenceSurface(surface *apiStabi
 	if target != nil && target != reference && target.ObjectFlags()&checker.ObjectFlagsClassOrInterface != 0 {
 		referenceSubst = a.extendParametersSubstitution(empty, reference, a.referenceTypeParameters(target), a.referenceArguments(reference, target))
 	}
-	if members, resolved := c.GetResolvedMembersOfTypeIfMaterialized(reference); resolved {
+	if members, resolved := checker.GetResolvedMembersOfTypeIfMaterialized(c, reference); resolved {
 		a.collectResolvedMemberTable(surface, members, owner, empty)
 	} else {
 		structuredSafe := a.memberTableResolutionIsSafe(reference, referenceSubst)
@@ -2550,7 +2565,7 @@ func (a *apiStabilityAnalysis) collectConcreteReferenceSurface(surface *apiStabi
 	// arguments even though their members stay bounded.
 	a.collectTaggedHeritageArguments(surface, target, referenceSubst, make(map[*checker.Type]bool))
 	for _, kind := range []checker.SignatureKind{checker.SignatureKindCall, checker.SignatureKindConstruct} {
-		if signatures, ok := c.GetResolvedSignaturesOfTypeIfMaterialized(reference, kind); ok {
+		if signatures, ok := checker.GetResolvedSignaturesOfTypeIfMaterialized(c, reference, kind); ok {
 			for _, signature := range signatures {
 				if a.childSignatureBoundary(surface, signature, owner) {
 					continue
@@ -2571,7 +2586,7 @@ func (a *apiStabilityAnalysis) collectConcreteReferenceSurface(surface *apiStabi
 			surface.merge(a.signatureSurface(signature, empty))
 		}
 	}
-	if infos, ok := c.GetResolvedIndexInfosOfTypeIfMaterialized(reference); ok {
+	if infos, ok := checker.GetResolvedIndexInfosOfTypeIfMaterialized(c, reference); ok {
 		for _, info := range infos {
 			if info == nil {
 				continue
@@ -2626,20 +2641,20 @@ func (a *apiStabilityAnalysis) collectResolvedMemberTable(surface *apiStabilityS
 // default.
 func (a *apiStabilityAnalysis) referenceArguments(reference, target *checker.Type) []*checker.Type {
 	if target == nil || target.Flags()&checker.TypeFlagsObject == 0 || target.ObjectFlags()&checker.ObjectFlagsClassOrInterface == 0 {
-		return a.tp.checker.GetResolvedTypeArguments(reference)
+		return checker.GetResolvedTypeArguments(a.tp.checker, reference)
 	}
 	parameters := a.referenceTypeParameters(target)
 	if len(parameters) == 0 {
 		return nil
 	}
-	resolved := a.tp.checker.GetResolvedTypeArguments(reference)
+	resolved := checker.GetResolvedTypeArguments(a.tp.checker, reference)
 	arguments := make([]*checker.Type, len(parameters))
 	for index, parameter := range parameters {
 		if index < len(resolved) && resolved[index] != nil {
 			arguments[index] = resolved[index]
 			continue
 		}
-		if defaultType := a.tp.checker.GetResolvedDefaultFromTypeParameterIfMaterialized(parameter); defaultType != nil {
+		if defaultType := checker.GetResolvedDefaultFromTypeParameterIfMaterialized(a.tp.checker, parameter); defaultType != nil {
 			arguments[index] = defaultType
 		}
 	}
@@ -2819,7 +2834,7 @@ func (a *apiStabilityAnalysis) collectDeclarationSignatures(surface *apiStabilit
 // own declarations, so warm and cold runs agree on that boundary.
 func (a *apiStabilityAnalysis) collectIndexInfosOfDeclaration(surface *apiStabilitySurface, declaration *checker.Type, symbol *ast.Symbol, subst apiStabilitySubstitution) {
 	c := a.tp.checker
-	if infos, ok := c.GetResolvedIndexInfosOfTypeIfMaterialized(declaration); ok {
+	if infos, ok := checker.GetResolvedIndexInfosOfTypeIfMaterialized(c, declaration); ok {
 		for _, info := range infos {
 			if info == nil {
 				continue
@@ -2828,7 +2843,7 @@ func (a *apiStabilityAnalysis) collectIndexInfosOfDeclaration(surface *apiStabil
 		}
 		return
 	}
-	infos := c.GetDeclaredIndexInfosOfSymbol(symbol)
+	infos := checker.GetDeclaredIndexInfosOfSymbol(c, symbol)
 	for _, info := range infos {
 		if info == nil || info.Declaration() == nil {
 			continue
@@ -2924,7 +2939,7 @@ func (a *apiStabilityAnalysis) collectIndexSignatureSurface(surface *apiStabilit
 // heritage is materialized through the ordinary lazy accessor. The clauses are
 // never resolved from syntax.
 func (a *apiStabilityAnalysis) collectHeritage(surface *apiStabilitySurface, declaration *checker.Type, inspect apiStabilityInspection, subst apiStabilitySubstitution) {
-	bases, resolved := a.tp.checker.GetResolvedBaseTypesOfTypeIfMaterialized(declaration)
+	bases, resolved := checker.GetResolvedBaseTypesOfTypeIfMaterialized(a.tp.checker, declaration)
 	if !resolved {
 		if !apiStabilitySymbolDeclaresHeritage(declaration.Symbol()) {
 			return
@@ -2981,7 +2996,7 @@ func (a *apiStabilityAnalysis) collectClassStaticSurface(surface *apiStabilitySu
 		// of its own surface. A nested `typeof C` keeps the shallow boundary:
 		// its declared symbol and directly exposed call and construct
 		// signatures are inspected, but its static members are not expanded.
-		if members, ok := c.GetResolvedMembersOfTypeIfMaterialized(t); ok {
+		if members, ok := checker.GetResolvedMembersOfTypeIfMaterialized(c, t); ok {
 			for _, name := range sortedSymbolTableKeys(members) {
 				if name == "prototype" {
 					continue
@@ -3027,7 +3042,7 @@ func (a *apiStabilityAnalysis) collectClassStaticSurface(surface *apiStabilitySu
 	}
 	a.collectDeclarationSignatures(surface, symbol, subst, true)
 	for _, kind := range []checker.SignatureKind{checker.SignatureKindCall, checker.SignatureKindConstruct} {
-		if signatures, ok := c.GetResolvedSignaturesOfTypeIfMaterialized(t, kind); ok {
+		if signatures, ok := checker.GetResolvedSignaturesOfTypeIfMaterialized(c, t, kind); ok {
 			for _, signature := range signatures {
 				if a.childSignatureBoundary(surface, signature, symbol) {
 					continue
@@ -3114,7 +3129,7 @@ func (a *apiStabilityAnalysis) collectAnonymousSurface(surface *apiStabilitySurf
 // collectResolvedMemberTableIfMaterialized merges the checker's already
 // resolved member table when one exists.
 func (a *apiStabilityAnalysis) collectResolvedMemberTableIfMaterialized(surface *apiStabilitySurface, t *checker.Type, owner *ast.Symbol, subst apiStabilitySubstitution) bool {
-	if members, ok := a.tp.checker.GetResolvedMembersOfTypeIfMaterialized(t); ok {
+	if members, ok := checker.GetResolvedMembersOfTypeIfMaterialized(a.tp.checker, t); ok {
 		a.collectResolvedMemberTable(surface, members, owner, subst)
 		return true
 	}
@@ -3131,7 +3146,7 @@ func (a *apiStabilityAnalysis) collectAnonymousIndexInfos(surface *apiStabilityS
 	if source != nil {
 		owner = source.Symbol()
 	}
-	if infos, ok := c.GetResolvedIndexInfosOfTypeIfMaterialized(t); ok {
+	if infos, ok := checker.GetResolvedIndexInfosOfTypeIfMaterialized(c, t); ok {
 		resolvedSubst := subst
 		if source != t {
 			resolvedSubst = apiStabilitySubstitution{}
@@ -3162,7 +3177,7 @@ func (a *apiStabilityAnalysis) collectIndexInfosOfSymbol(surface *apiStabilitySu
 	if symbol == nil {
 		return
 	}
-	for _, info := range a.tp.checker.GetDeclaredIndexInfosOfSymbol(symbol) {
+	for _, info := range checker.GetDeclaredIndexInfosOfSymbol(a.tp.checker, symbol) {
 		if info == nil || info.Declaration() == nil {
 			continue
 		}
@@ -3183,7 +3198,7 @@ func (a *apiStabilityAnalysis) collectFunctionSignatures(surface *apiStabilitySu
 		owner = source.Symbol()
 	}
 	for _, kind := range []checker.SignatureKind{checker.SignatureKindCall, checker.SignatureKindConstruct} {
-		if signatures, ok := c.GetResolvedSignaturesOfTypeIfMaterialized(t, kind); ok {
+		if signatures, ok := checker.GetResolvedSignaturesOfTypeIfMaterialized(c, t, kind); ok {
 			for _, signature := range signatures {
 				if a.childSignatureBoundary(surface, signature, owner) {
 					continue
@@ -3264,7 +3279,7 @@ func (a *apiStabilityAnalysis) collectMappedSurface(surface *apiStabilitySurface
 			break
 		}
 	}
-	constraint := mapped.ConstraintType()
+	constraint := checker.GetMappedTypeConstraintType(mapped)
 	if constraint == nil {
 		constraint = a.typeFromNodeSafely(constraintNode, current)
 	}
@@ -3273,7 +3288,7 @@ func (a *apiStabilityAnalysis) collectMappedSurface(surface *apiStabilitySurface
 	} else {
 		surface.block()
 	}
-	name := mapped.NameType()
+	name := checker.GetMappedTypeNameType(mapped)
 	if name == nil {
 		name = a.typeFromNodeSafely(nameNode, current)
 	}
@@ -3282,7 +3297,7 @@ func (a *apiStabilityAnalysis) collectMappedSurface(surface *apiStabilitySurface
 	} else if nameNode != nil || apiStabilityMappedDeclarationHasName(source) {
 		surface.block()
 	}
-	template := mapped.TemplateType()
+	template := checker.GetMappedTypeTemplateType(mapped)
 	if template == nil {
 		template = a.typeFromNodeSafely(templateNode, current)
 	}
@@ -3503,7 +3518,7 @@ func (a *apiStabilityAnalysis) returnRepresentedType(signature *checker.Signatur
 	if node == nil {
 		return nil, false
 	}
-	if represented := a.tp.checker.GetResolvedTypeFromTypeNode(node); represented != nil {
+	if represented := checker.GetResolvedTypeFromTypeNode(a.tp.checker, node); represented != nil {
 		return represented, true
 	}
 	if apiStabilityPrimitiveTypeNode(node) {
@@ -3532,7 +3547,7 @@ func (a *apiStabilityAnalysis) parameterRepresentedType(parameter *ast.Symbol) (
 	if parameter == nil {
 		return nil, false
 	}
-	if materialized := a.tp.checker.GetResolvedTypeOfSymbolIfMaterialized(parameter); materialized != nil {
+	if materialized := checker.GetResolvedTypeOfSymbolIfMaterialized(a.tp.checker, parameter); materialized != nil {
 		return materialized, true
 	}
 	if resolved := a.typeOfSymbolSafely(parameter); resolved != nil {
@@ -3546,7 +3561,7 @@ func (a *apiStabilityAnalysis) parameterRepresentedType(parameter *ast.Symbol) (
 		if annotation == nil {
 			continue
 		}
-		if represented := a.tp.checker.GetResolvedTypeFromTypeNode(annotation); represented != nil {
+		if represented := checker.GetResolvedTypeFromTypeNode(a.tp.checker, annotation); represented != nil {
 			return represented, true
 		}
 		if apiStabilityPrimitiveTypeNode(annotation) {
@@ -3696,11 +3711,11 @@ func (a *apiStabilityAnalysis) computeSignatureParameterMap(raw *checker.Signatu
 		if rawType == nil || rawType.Flags()&checker.TypeFlagsTypeParameter == 0 {
 			return
 		}
-		concreteType := c.GetResolvedTypeOfSymbolIfMaterialized(concreteParameter)
+		concreteType := checker.GetResolvedTypeOfSymbolIfMaterialized(c, concreteParameter)
 		if concreteType == nil {
 			// Prefer the instantiated symbol's own mapper: it maps the binder
 			// forward without instantiating a compound annotation.
-			if mapper := c.GetInstantiatedSymbolMapper(concreteParameter); mapper != nil {
+			if mapper := checker.GetInstantiatedSymbolMapper(c, concreteParameter); mapper != nil {
 				concreteType = mapper.Map(rawType)
 			}
 		}
@@ -3717,7 +3732,7 @@ func (a *apiStabilityAnalysis) computeSignatureParameterMap(raw *checker.Signatu
 	bind(raw.ThisParameter(), concrete.ThisParameter())
 	rawReturn := a.parameterReturnType(raw, apiStabilitySubstitution{})
 	if rawReturn != nil && rawReturn.Flags()&checker.TypeFlagsTypeParameter != 0 {
-		concreteReturn := c.GetResolvedReturnTypeOfSignatureIfMaterialized(concrete)
+		concreteReturn := checker.GetResolvedReturnTypeOfSignatureIfMaterialized(c, concrete)
 		if concreteReturn != nil && concreteReturn != rawReturn {
 			bound[rawReturn] = concreteReturn
 		}
@@ -3804,13 +3819,13 @@ func (a *apiStabilityAnalysis) collectSignatureProvenance(surface *apiStabilityS
 			a.collectTypeNodeProvenance(
 				surface,
 				typeParameterDeclaration.Constraint,
-				c.GetResolvedConstraintOfTypeParameterIfMaterialized(rawTypeParameters[index]),
+				checker.GetResolvedConstraintOfTypeParameterIfMaterialized(c, rawTypeParameters[index]),
 				signatureSubst,
 			)
 			a.collectTypeNodeProvenance(
 				surface,
 				typeParameterDeclaration.DefaultType,
-				c.GetResolvedDefaultFromTypeParameterIfMaterialized(rawTypeParameters[index]),
+				checker.GetResolvedDefaultFromTypeParameterIfMaterialized(c, rawTypeParameters[index]),
 				signatureSubst,
 			)
 		}
@@ -3921,9 +3936,9 @@ func (a *apiStabilityAnalysis) collectTypeNodeProvenance(surface *apiStabilitySu
 		var constraint, nameType, templateType *checker.Type
 		if represented != nil && represented.ObjectFlags()&checker.ObjectFlagsMapped != 0 {
 			mappedType := represented.AsMappedType()
-			constraint = mappedType.ConstraintType()
-			nameType = mappedType.NameType()
-			templateType = mappedType.TemplateType()
+			constraint = checker.GetMappedTypeConstraintType(mappedType)
+			nameType = checker.GetMappedTypeNameType(mappedType)
+			templateType = checker.GetMappedTypeTemplateType(mappedType)
 		}
 		if mapped.TypeParameter != nil {
 			if typeParameterDeclaration := mapped.TypeParameter.AsTypeParameterDeclaration(); typeParameterDeclaration != nil {
@@ -4059,7 +4074,7 @@ func (a *apiStabilityAnalysis) collectFunctionTypeProvenance(surface *apiStabili
 	}
 	var raw *checker.Signature
 	if represented != nil {
-		if signatures, ok := c.GetResolvedSignaturesOfTypeIfMaterialized(represented, kind); ok && len(signatures) != 0 {
+		if signatures, ok := checker.GetResolvedSignaturesOfTypeIfMaterialized(c, represented, kind); ok && len(signatures) != 0 {
 			raw = rawSignature(signatures[0])
 		}
 	}
@@ -4076,8 +4091,8 @@ func (a *apiStabilityAnalysis) collectFunctionTypeProvenance(surface *apiStabili
 			if typeParameterDeclaration == nil {
 				continue
 			}
-			a.collectTypeNodeProvenance(surface, typeParameterDeclaration.Constraint, c.GetResolvedConstraintOfTypeParameterIfMaterialized(rawTypeParameters[index]), subst)
-			a.collectTypeNodeProvenance(surface, typeParameterDeclaration.DefaultType, c.GetResolvedDefaultFromTypeParameterIfMaterialized(rawTypeParameters[index]), subst)
+			a.collectTypeNodeProvenance(surface, typeParameterDeclaration.Constraint, checker.GetResolvedConstraintOfTypeParameterIfMaterialized(c, rawTypeParameters[index]), subst)
+			a.collectTypeNodeProvenance(surface, typeParameterDeclaration.DefaultType, checker.GetResolvedDefaultFromTypeParameterIfMaterialized(c, rawTypeParameters[index]), subst)
 		}
 	}
 	rawParameters := raw.Parameters()
@@ -4132,7 +4147,7 @@ func apiStabilityMemberSymbolForDeclaration(members ast.SymbolTable, member *ast
 // the computed name.
 func (a *apiStabilityAnalysis) collectTypeLiteralProvenance(surface *apiStabilitySurface, node *ast.Node, represented *checker.Type, subst apiStabilitySubstitution) {
 	c := a.tp.checker
-	members, ok := c.GetResolvedMembersOfTypeIfMaterialized(represented)
+	members, ok := checker.GetResolvedMembersOfTypeIfMaterialized(c, represented)
 	if !ok && represented != nil && represented.Symbol() != nil {
 		members = a.materializedMembersOfSymbol(c, represented.Symbol())
 		ok = members != nil
@@ -4163,7 +4178,7 @@ func (a *apiStabilityAnalysis) collectTypeLiteralProvenance(surface *apiStabilit
 				continue
 			}
 			if propertyType := a.typeOfSymbolSafely(property); propertyType != nil {
-				if signatures, ok := c.GetResolvedSignaturesOfTypeIfMaterialized(propertyType, checker.SignatureKindCall); ok && len(signatures) != 0 {
+				if signatures, ok := checker.GetResolvedSignaturesOfTypeIfMaterialized(c, propertyType, checker.SignatureKindCall); ok && len(signatures) != 0 {
 					a.collectFunctionSignatureProvenance(surface, member, rawSignature(signatures[0]), subst)
 					continue
 				}
@@ -4183,11 +4198,11 @@ func (a *apiStabilityAnalysis) collectTypeLiteralProvenance(surface *apiStabilit
 			if member.Kind == ast.KindConstructSignature {
 				kind = checker.SignatureKindConstruct
 			}
-			if signatures, ok := c.GetResolvedSignaturesOfTypeIfMaterialized(represented, kind); ok && len(signatures) != 0 {
+			if signatures, ok := checker.GetResolvedSignaturesOfTypeIfMaterialized(c, represented, kind); ok && len(signatures) != 0 {
 				a.collectFunctionSignatureProvenance(surface, member, rawSignature(signatures[0]), subst)
 			}
 		case ast.KindIndexSignature:
-			if infos, ok := c.GetResolvedIndexInfosOfTypeIfMaterialized(represented); ok {
+			if infos, ok := checker.GetResolvedIndexInfosOfTypeIfMaterialized(c, represented); ok {
 				for _, info := range infos {
 					if info != nil && info.Declaration() == member {
 						a.collectTypeNodeProvenance(surface, member.AsIndexSignatureDeclaration().Type, info.ValueType(), subst)
@@ -4235,7 +4250,7 @@ func (a *apiStabilityAnalysis) collectFunctionSignatureProvenance(surface *apiSt
 // reference. A deferred reference whose arguments the checker has not
 // materialized returns nil; nothing is resolved here.
 func (a *apiStabilityAnalysis) representedTypeArguments(t *checker.Type) []*checker.Type {
-	return a.tp.checker.GetResolvedTypeArguments(t)
+	return checker.GetResolvedTypeArguments(a.tp.checker, t)
 }
 
 // representedElementType returns the represented element type of an array or
@@ -4378,7 +4393,7 @@ func (a *apiStabilityAnalysis) collectTaggedHeritageArguments(surface *apiStabil
 		return
 	}
 	visited[declaration] = true
-	bases, resolved := a.tp.checker.GetResolvedBaseTypesOfTypeIfMaterialized(declaration)
+	bases, resolved := checker.GetResolvedBaseTypesOfTypeIfMaterialized(a.tp.checker, declaration)
 	if !resolved {
 		return
 	}
@@ -4589,7 +4604,7 @@ func (a *apiStabilityAnalysis) declarationRepresentedType(symbol *ast.Symbol, de
 		}
 		return a.representedTypeFromNode(declaration.Type(), apiStabilitySubstitution{})
 	}
-	if materialized := c.GetResolvedTypeOfSymbolIfMaterialized(symbol); materialized != nil {
+	if materialized := checker.GetResolvedTypeOfSymbolIfMaterialized(c, symbol); materialized != nil {
 		return materialized
 	}
 	switch declaration.Kind {

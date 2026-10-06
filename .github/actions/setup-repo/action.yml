@@ -119,21 +119,21 @@ runs:
       uses: actions/cache@v6
       with:
         path: ${{ steps.go-cache.outputs.modules }}/cache/download
-        key: go-modules-1.26-${{ steps.upstream-component.outputs.go-cache-component }}-${{ steps.upstream-component.outputs.go-cache-version }}-${{ runner.os }}-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch', '_integrations/**') }}
+        key: go-modules-1.26-${{ steps.upstream-component.outputs.go-cache-component }}-${{ steps.upstream-component.outputs.go-cache-version }}-${{ runner.os }}-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}
 
     - name: Restore Go modules
       if: steps.upstream-component.outputs.go-cache-component != '' && (inputs.materialize != 'true' || steps.upstream-component.outputs.go-cache-save != 'true' || github.ref != 'refs/heads/main')
       uses: actions/cache/restore@v6
       with:
         path: ${{ steps.go-cache.outputs.modules }}/cache/download
-        key: go-modules-1.26-${{ steps.upstream-component.outputs.go-cache-component }}-${{ steps.upstream-component.outputs.go-cache-version }}-${{ runner.os }}-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch', '_integrations/**') }}
+        key: go-modules-1.26-${{ steps.upstream-component.outputs.go-cache-component }}-${{ steps.upstream-component.outputs.go-cache-version }}-${{ runner.os }}-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}
 
     - name: Cache Go build
       if: runner.os == 'Linux' && inputs.materialize == 'true' && steps.upstream-component.outputs.go-cache-save == 'true' && github.ref == 'refs/heads/main'
       uses: actions/cache@v6
       with:
         path: ${{ steps.go-cache.outputs.build }}
-        key: go-build-${{ steps.upstream-component.outputs.go-cache-component }}-${{ steps.upstream-component.outputs.go-cache-version }}-Linux-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch', '_integrations/**') }}
+        key: go-build-${{ steps.upstream-component.outputs.go-cache-component }}-${{ steps.upstream-component.outputs.go-cache-version }}-Linux-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}
         restore-keys: |
           go-build-${{ steps.upstream-component.outputs.go-cache-component }}-${{ steps.upstream-component.outputs.go-cache-version }}-Linux-
 
@@ -142,7 +142,7 @@ runs:
       uses: actions/cache/restore@v6
       with:
         path: ${{ steps.go-cache.outputs.build }}
-        key: go-build-${{ steps.upstream-component.outputs.go-cache-component }}-${{ steps.upstream-component.outputs.go-cache-version }}-Linux-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch', '_integrations/**') }}
+        key: go-build-${{ steps.upstream-component.outputs.go-cache-component }}-${{ steps.upstream-component.outputs.go-cache-version }}-Linux-${{ hashFiles('**/go.mod', '**/go.sum', '_packages/tsgo/upstream.json', '_patches/**/*.patch') }}
         restore-keys: |
           go-build-${{ steps.upstream-component.outputs.go-cache-component }}-${{ steps.upstream-component.outputs.go-cache-version }}-Linux-
 
@@ -155,7 +155,7 @@ runs:
       uses: actions/cache@v6
       with:
         path: ${{ runner.temp }}/gen-shims-cache
-        key: generated-shims-v1-${{ steps.go.outputs.go-version }}-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-${{ hashFiles('_tools/gen_shims/**', '_tools/repoctl/src/**', '_packages/tsgo/upstream.json', '_patches/typescript-go/**', '_patches/typescript/**', '_patches/tsgolint/**', '_integrations/**') }}
+        key: generated-shims-v1-${{ steps.go.outputs.go-version }}-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-${{ hashFiles('_tools/gen_shims/**', '_tools/repoctl/src/**', '_packages/tsgo/upstream.json', '_patches/typescript-go/**', '_patches/typescript/**', '_patches/tsgolint/**') }}
         enableCrossOsArchive: true
 
     - name: Restore generated shim cache
@@ -163,7 +163,7 @@ runs:
       uses: actions/cache/restore@v6
       with:
         path: ${{ runner.temp }}/gen-shims-cache
-        key: generated-shims-v1-${{ steps.go.outputs.go-version }}-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-${{ hashFiles('_tools/gen_shims/**', '_tools/repoctl/src/**', '_packages/tsgo/upstream.json', '_patches/typescript-go/**', '_patches/typescript/**', '_patches/tsgolint/**', '_integrations/**') }}
+        key: generated-shims-v1-${{ steps.go.outputs.go-version }}-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-${{ hashFiles('_tools/gen_shims/**', '_tools/repoctl/src/**', '_packages/tsgo/upstream.json', '_patches/typescript-go/**', '_patches/typescript/**', '_patches/tsgolint/**') }}
         enableCrossOsArchive: true
 
     - name: Materialize upstream component

@@ -552,7 +552,7 @@ func apiStabilityImportTargetIsInternal(ctx *rule.Context, declaration *ast.Node
 	if targetModule == nil {
 		return false
 	}
-	target := ctx.Checker.GetImmediateAliasedSymbol(symbol)
+	target := typeparser.ApiStabilityImmediateAliasedSymbol(ctx.Checker, symbol)
 	if target == nil || target == symbol {
 		return false
 	}
@@ -597,7 +597,7 @@ func apiStabilityImportEqualsTargetIsInternal(ctx *rule.Context, symbol *ast.Sym
 		return false
 	}
 	reference := importEquals.ModuleReference
-	target := ctx.Checker.GetImmediateAliasedSymbol(symbol)
+	target := typeparser.ApiStabilityImmediateAliasedSymbol(ctx.Checker, symbol)
 	if target == nil {
 		if name := apiStabilityImportEqualsTargetName(reference); name != "" {
 			if qualifier := apiStabilityModuleOfEntity(ctx, apiStabilityImportEqualsQualifier(reference)); qualifier != nil {
@@ -723,7 +723,7 @@ func apiStabilityAliasedTargetIsInternal(ctx *rule.Context, module *ast.Symbol, 
 	if !slices.ContainsFunc(symbol.Declarations, ast.IsAliasSymbolDeclaration) {
 		return false
 	}
-	target := ctx.Checker.GetImmediateAliasedSymbol(symbol)
+	target := typeparser.ApiStabilityImmediateAliasedSymbol(ctx.Checker, symbol)
 	if target == nil || target == symbol {
 		return false
 	}

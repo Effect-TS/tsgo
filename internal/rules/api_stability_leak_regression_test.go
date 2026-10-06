@@ -1297,10 +1297,10 @@ export type C<T> = T extends number ? ` + branch + ` : boolean`
 				t.Fatal("declared type is not a conditional")
 			}
 			before := ruleCtx.Checker.TotalInstantiationCount
-			if resolved := ruleCtx.Checker.GetResolvedConditionalTypeBranch(conditional, true); resolved != nil {
+			if resolved := checker.GetResolvedConditionalTypeBranch(ruleCtx.Checker, conditional, true); resolved != nil {
 				t.Fatal("cold conditional branch should not be resolved")
 			}
-			_ = ruleCtx.Checker.GetConditionalTypeBranchType(conditional, true)
+			_ = checker.GetConditionalTypeBranchType(ruleCtx.Checker, conditional, true)
 			if delta := ruleCtx.Checker.TotalInstantiationCount - before; delta != 0 {
 				t.Errorf("branch accessor instantiated %d types, want 0", delta)
 			}
@@ -1323,7 +1323,7 @@ export interface I<T> {[key:string]:Deep<string>}`
 		}
 		before := ruleCtx.Checker.TotalInstantiationCount
 		_ = checker.Checker_getMembersOfSymbol(ruleCtx.Checker, exports[0])
-		infos := ruleCtx.Checker.GetDeclaredIndexInfosOfSymbol(exports[0])
+		infos := checker.GetDeclaredIndexInfosOfSymbol(ruleCtx.Checker, exports[0])
 		if delta := ruleCtx.Checker.TotalInstantiationCount - before; delta != 0 {
 			t.Errorf("index accessor instantiated %d types, want 0", delta)
 		}
@@ -1350,10 +1350,10 @@ export declare const x: S`
 			t.Fatalf("got %d exports, want 1", len(exports))
 		}
 		before := ruleCtx.Checker.TotalInstantiationCount
-		if materialized := ruleCtx.Checker.GetResolvedTypeOfSymbolIfMaterialized(exports[0]); materialized != nil {
+		if materialized := checker.GetResolvedTypeOfSymbolIfMaterialized(ruleCtx.Checker, exports[0]); materialized != nil {
 			t.Fatalf("cold export value type should not be materialized")
 		}
-		_ = ruleCtx.Checker.GetResolvedDeclaredTypeOfSymbolIfMaterialized(exports[0])
+		_ = checker.GetResolvedDeclaredTypeOfSymbolIfMaterialized(ruleCtx.Checker, exports[0])
 		if delta := ruleCtx.Checker.TotalInstantiationCount - before; delta != 0 {
 			t.Errorf("symbol accessor instantiated %d types, want 0", delta)
 		}

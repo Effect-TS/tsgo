@@ -247,30 +247,6 @@ export const patchSubmodules = Effect.fnUntraced(function*(repositoryRoot: strin
   }
 })
 
-// Integration sources are additive compiler files that belong to this
-// repository rather than the upstream patch stack. They are copied into the
-// selected compiler checkout with their checkout-relative path preserved, so
-// `_integrations/typescript/tsc/internal/checker/integration.go` lands in
-// `typescript/tsc/internal/checker/integration.go`. The copy runs before the
-// diagnostics and shim generators load the compiler packages, and it is
-// idempotent because it overwrites the previous copy.
-export const installIntegrationSources = Effect.fnUntraced(function*(
-  repositoryRoot: string,
-  compiler: TypeScriptSource
-) {
-  const fs = yield* FileSystem.FileSystem
-  const path = yield* Path.Path
-  const source = path.join(repositoryRoot, "_integrations", compiler.checkoutDir)
-  const checkout = path.join(repositoryRoot, compiler.checkoutDir)
-  if (!(yield* fs.exists(source)) || !(yield* fs.exists(path.join(checkout, ".git")))) {
-    return
-  }
-  yield* Console.log(
-    `Installing ${path.relative(repositoryRoot, source)} sources into ${compiler.checkoutDir}`
-  )
-  yield* fs.copy(source, checkout, { overwrite: true })
-})
-
 export const generateSubmoduleArtifacts = Effect.fnUntraced(function*(
   repositoryRoot: string,
   compiler: TypeScriptSource,
@@ -280,7 +256,6 @@ export const generateSubmoduleArtifacts = Effect.fnUntraced(function*(
   const checkout = path.join(repositoryRoot, compiler.checkoutDir)
   const moduleRoot = path.join(checkout, compiler.moduleDir)
   const providerShimOverlay = path.join(repositoryRoot, compiler.shimOverlayDir)
-  yield* installIntegrationSources(repositoryRoot, compiler)
   if (compiler.provider === "typescript-go") {
     yield* runGit(checkout, ["submodule", "sync", "--recursive"])
     yield* runGit(checkout, [

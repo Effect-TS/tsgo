@@ -3,6 +3,8 @@ package typeparser
 import (
 	"context"
 	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
 // apiStabilityRecursiveAlias is the self-expanding alias the safety probes
@@ -201,7 +203,7 @@ func TestApiStabilitySafetyComputedNameDisplayAndSort(t *testing.T) {
 	x := apiStabilityTestExport(t, c, files["/.src/test.ts"], "x")
 	typ := c.GetTypeOfSymbol(x)
 	_ = c.GetPropertiesOfType(typ)
-	members, ok := c.GetResolvedMembersOfTypeIfMaterialized(typ)
+	members, ok := checker.GetResolvedMembersOfTypeIfMaterialized(c, typ)
 	if !ok {
 		t.Fatal("member table should be materialized")
 	}
@@ -270,7 +272,7 @@ func TestApiStabilitySafetyMaterializedReferenceSkipsGuard(t *testing.T) {
 	symbol := apiStabilityTestExport(t, c, files["/.src/test.ts"], "box")
 	typ := c.GetTypeOfSymbol(symbol)
 	_ = c.GetPropertiesOfType(typ)
-	if _, ok := c.GetResolvedMembersOfTypeIfMaterialized(typ); !ok {
+	if _, ok := checker.GetResolvedMembersOfTypeIfMaterialized(c, typ); !ok {
 		t.Fatal("member table should be materialized")
 	}
 	analysis := newApiStabilityAnalysis(tp)

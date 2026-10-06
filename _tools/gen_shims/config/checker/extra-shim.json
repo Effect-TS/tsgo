@@ -1,7 +1,7 @@
 {
   "ExtraFunctions": ["forEachYieldExpression", "getMappedTypeModifiers"],
   "ExtraMethods": {
-    "Checker": ["isTypeAssignableTo", "isArrayType", "isReadonlyArrayType", "getIndexInfosOfType", "getTypeArguments", "getLiteralTypeFromProperty", "getSymbolIfSameReference", "getSymbolOfDeclaration", "getSignaturesOfSymbol", "getMembersOfSymbol", "isReferenceToType", "newFunctionType", "newCallSignature", "isSymbolAssigned", "isPastLastAssignment", "evaluateEntity", "isConstantVariable", "isBlockScopedNameDeclaredBeforeUse", "checkExpressionWithContextualType", "isNoInferType", "isReadonlySymbol", "getTypeParameterModifiers", "getTypeParameterFromMappedType", "getConstraintTypeFromMappedType", "getNameTypeFromMappedType", "getTemplateTypeFromMappedType"]
+    "Checker": ["isTypeAssignableTo", "isArrayType", "isReadonlyArrayType", "getIndexInfosOfType", "getTypeArguments", "getLiteralTypeFromProperty", "getSymbolIfSameReference", "getSymbolOfDeclaration", "getSignaturesOfSymbol", "getMembersOfSymbol", "isReferenceToType", "newFunctionType", "newCallSignature", "isSymbolAssigned", "isPastLastAssignment", "evaluateEntity", "isConstantVariable", "isBlockScopedNameDeclaredBeforeUse", "checkExpressionWithContextualType", "isNoInferType", "isReadonlySymbol", "getTypeParameterModifiers", "getTypeParameterFromMappedType", "getConstraintTypeFromMappedType", "getNameTypeFromMappedType", "getTemplateTypeFromMappedType", "newIndexInfo"]
   },
   "ExtraFields": {
     "Checker": [
@@ -12,16 +12,32 @@
       "moduleSymbolLinks",
       "typeAliasLinks",
       "declaredTypeLinks",
-      "typeNodeLinks"
+      "typeNodeLinks",
+      "sourceFileLinks",
+      "unknownSymbol",
+      "noConstraintType",
+      "circularConstraintType",
+      "resolvingDefaultType",
+      "ctx",
+      "nonPrimitiveType"
     ],
     "IndexInfo": ["keyType", "valueType"],
     "SymbolReferenceLinks": ["referenceKinds"],
-    "ValueSymbolLinks": ["resolvedType", "writeType"],
+    "ValueSymbolLinks": ["resolvedType", "writeType", "mapper"],
     "AliasSymbolLinks": ["immediateTarget", "aliasTarget", "referenced"],
     "ModuleSymbolLinks": ["resolvedExports", "exportsChecked"],
     "TypeAliasLinks": ["declaredType"],
     "DeclaredTypeLinks": ["declaredType"],
     "SymbolNodeLinks": ["resolvedSymbol"],
-    "TypeNodeLinks": ["resolvedType"]
+    "TypeNodeLinks": ["resolvedType"],
+    "MappedType": ["constraintType", "nameType", "templateType"],
+    "ConditionalType": ["resolvedTrueType", "resolvedFalseType", "root"],
+    "ConditionalRoot": ["node"],
+    "TypeReference": ["resolvedTypeArguments"],
+    "Signature": ["resolvedReturnType"],
+    "TypeParameter": ["constraint", "resolvedDefaultType"],
+    "InterfaceType": ["baseTypesResolved", "resolvedBaseTypes"],
+    "StructuredType": ["members", "indexInfos"],
+    "SourceFileLinks": ["typeChecked"]
   }
 }

@@ -448,7 +448,7 @@ func TestGitInputDigestTracksRelevantRepositoryState(t *testing.T) {
 	}
 }
 
-func TestShimInputDigestIncludesIntegrationSources(t *testing.T) {
+func TestShimInputDigestIncludesProviderOverlays(t *testing.T) {
 	repositoryRoot := t.TempDir()
 	runGitTest(t, repositoryRoot, "init")
 	runGitTest(t, repositoryRoot, "config", "user.email", "test@example.com")
@@ -456,7 +456,7 @@ func TestShimInputDigestIncludesIntegrationSources(t *testing.T) {
 	writeTestFile(t, filepath.Join(repositoryRoot, "_tools", "gen_shims", "main.go"), []byte("package main\n"))
 	writeTestFile(
 		t,
-		filepath.Join(repositoryRoot, "_integrations", "typescript", "tsc", "internal", "checker", "integration.go"),
+		filepath.Join(repositoryRoot, "_tools", "gen_shims", "providers", "typescript", "checker", "integration.go"),
 		[]byte("package checker\n"),
 	)
 	runGitTest(t, repositoryRoot, "add", ".")
@@ -482,22 +482,12 @@ func TestShimInputDigestIncludesIntegrationSources(t *testing.T) {
 	initial := digest()
 	writeTestFile(
 		t,
-		filepath.Join(repositoryRoot, "_integrations", "typescript", "tsc", "internal", "checker", "integration.go"),
+		filepath.Join(repositoryRoot, "_tools", "gen_shims", "providers", "typescript", "checker", "integration.go"),
 		[]byte("package checker\n\nconst changed = true\n"),
 	)
 	durableChange := digest()
 	if durableChange == initial {
-		t.Fatal("durable integration source change did not alter digest")
-	}
-
-	writeTestFile(
-		t,
-		filepath.Join(sourceRoot, "internal", "checker", "integration.go"),
-		[]byte("package checker\n\nconst installed = true\n"),
-	)
-	installedChange := digest()
-	if installedChange == durableChange {
-		t.Fatal("installed integration source change did not alter digest")
+		t.Fatal("provider overlay change did not alter digest")
 	}
 }
 
