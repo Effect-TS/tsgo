@@ -6,3 +6,6 @@ applies `*.patch` files in bytewise filename order.
 
 `001-effect-rules.patch` registers the generated Effect rule adapters and links
 tsgolint to this repository's public Effect runner.
+
+`002-rooted-path-shim.patch` updates diagnostic path formatting to the
+case-sensitivity signature exposed by the legacy provider's compatibility shim.

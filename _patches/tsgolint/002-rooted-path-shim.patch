@@ -1,0 +1,15 @@
+diff --git a/cmd/tsgolint/main.go b/cmd/tsgolint/main.go
+--- a/cmd/tsgolint/main.go
++++ b/cmd/tsgolint/main.go
+@@ -264,6 +264,10 @@ func printDiagnostic(d rule.RuleDiagnostic, w *bufio.Writer, comparePathOptions tspath.ComparePathsOptions) {
+ 	}
+ 	w.WriteString("\n  \x1b[2m╭─┴──────────(\x1b[0m \x1b[3m\x1b[38;5;117m")
+-	w.WriteString(tspath.ConvertToRelativePath(d.SourceFile.FileName(), comparePathOptions))
++	sensitivity := tspath.CaseInsensitive
++	if comparePathOptions.UseCaseSensitiveFileNames {
++		sensitivity = tspath.CaseSensitive
++	}
++	w.WriteString(tspath.ConvertToRelativePath(d.SourceFile.FileName(), comparePathOptions.CurrentDirectory, sensitivity))
+ 	w.WriteByte(':')
+ 	w.WriteString(strconv.Itoa(diagnosticStartLine + 1))
+ 	w.WriteByte(':')
