@@ -97,6 +97,9 @@
             chmod -R u+w source
             cp -R ${patchedTypeScript} source/typescript
             chmod -R u+w source/typescript
+            if [ -d ${rootSrc}/_integrations/typescript ]; then
+              cp -R ${rootSrc}/_integrations/typescript/. source/typescript/
+            fi
             cp -R source $out
             chmod -R a-w $out
           '';

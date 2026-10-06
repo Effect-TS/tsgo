@@ -107,8 +107,12 @@ func Checker_isReadonlySymbol(recv *checker.Checker, symbol *ast.Symbol) bool
 func Checker_getSymbolIfSameReference(recv *checker.Checker, s1 *ast.Symbol, s2 *ast.Symbol) *ast.Symbol
 //go:linkname Checker_getSymbolOfDeclaration github.com/microsoft/TypeScript/tsc/internal/checker.(*Checker).getSymbolOfDeclaration
 func Checker_getSymbolOfDeclaration(recv *checker.Checker, node *ast.Node) *ast.Symbol
+//go:linkname Checker_getMembersOfSymbol github.com/microsoft/TypeScript/tsc/internal/checker.(*Checker).getMembersOfSymbol
+func Checker_getMembersOfSymbol(recv *checker.Checker, symbol *ast.Symbol) ast.SymbolTable
 //go:linkname Checker_getIndexInfosOfType github.com/microsoft/TypeScript/tsc/internal/checker.(*Checker).getIndexInfosOfType
 func Checker_getIndexInfosOfType(recv *checker.Checker, t *checker.Type) []*checker.IndexInfo
+//go:linkname Checker_getSignaturesOfSymbol github.com/microsoft/TypeScript/tsc/internal/checker.(*Checker).getSignaturesOfSymbol
+func Checker_getSignaturesOfSymbol(recv *checker.Checker, symbol *ast.Symbol) []*checker.Signature
 //go:linkname Checker_getTypeArguments github.com/microsoft/TypeScript/tsc/internal/checker.(*Checker).getTypeArguments
 func Checker_getTypeArguments(recv *checker.Checker, t *checker.Type) []*checker.Type
 //go:linkname Checker_getTypeParameterFromMappedType github.com/microsoft/TypeScript/tsc/internal/checker.(*Checker).getTypeParameterFromMappedType

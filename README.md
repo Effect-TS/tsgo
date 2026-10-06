@@ -179,6 +179,8 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unnecessary-pipe.md"><code>unnecessaryPipe</code></a></td><td>Removes pipe calls with no arguments</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unnecessary-pipe-chain.md"><code>unnecessaryPipeChain</code></a></td><td>Simplifies chained pipe calls into a single pipe call</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unnecessary-typeof-type.md"><code>unnecessaryTypeofType</code></a></td><td>Suggests replacing typeof Schema.Type style annotations with the matching named type when available</td></tr>
+    <tr><td colspan="2"><strong>Maintainers</strong> <em>Guard the public API surface and release hygiene of a package.</em></td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/api-stability-leak.md"><code>apiStabilityLeak</code></a></td><td>Reports exported APIs whose public surface exposes a less stable type</td></tr>
   </tbody>
 </table>
 <!-- diagnostics-table:end -->
@@ -366,11 +368,46 @@ while `effect/http/HttpClient#get` permits only its exported `get` API.
 Matching is case-sensitive and respects path segments: `effect/http` does not
 permit `effect/http-api`. Per-file `overrides` replace the base list.
 
-Names describe the declaration carrying the stability tag, rather than the
-import used by the consumer. They combine the nearest package name with the
-package-relative declaration path, removing a leading `src/`, `dist/`,
-`dist/dts/`, `dist/esm/`, or `dist/cjs/`, the file extension, and a trailing
-`/index`. Other layouts retain their package-relative path. Both diagnostics
-display this name when package metadata is available. APIs without package
-metadata continue to warn. Each list affects only its corresponding diagnostic; allowing an unstable API
-does not suppress experimental API warnings, and vice versa.
+`apiStabilityLeak` ignores exports marked `@internal`. The tag is the compiler's
+`stripInternal` declaration-emit marker, and it is honoured wherever it is
+written: on an exported declaration, on a named, star or namespace forwarding
+declaration, or on a namespace member. An untagged re-export of an internal
+target is ignored as well, because the forwarded target is not public API. A
+declaration that is not tagged keeps the export checked, so a public overload is
+still reported when only its implementation is marked `@internal`. Tagging a
+type does not hide it from public signatures: a public export that exposes an
+`@internal` type is still reported when that type is less stable. The skip is
+export-level only: an ordinary `@internal` property, overload or dependency type
+does not exempt the export that exposes it.
+
+### API stability semantics
+
+`apiStabilityLeak` compares what an exported API exposes on its public surface
+with the stability declared for the export itself. A stable export may not
+expose unstable or experimental components, an unstable export may not expose
+experimental ones, and an experimental export imposes no restriction. The
+export's own `@stability` tag describes the export rather than its surface, so
+it is never reported as a leak of its own API; the same component is still
+audited when it is exported in its own right.
+
+A component that carries an explicit `@stability` tag is a trusted boundary: its
+declared level contributes to the parent surface and its internals are not
+inspected on the parent's behalf. A component without a tag exposes its surface
+within the ordinary walk boundaries, so untagged children keep being inspected
+until a tagged component or a shallow named reference stops the walk. An
+explicit `@stability stable` tag is a real tag, distinct from an untagged
+default-stable declaration: it acts as the same boundary and, when written on a
+re-export declaration, takes precedence over the forwarded declaration's own
+stability.
+
+The generic arguments a tagged component represents stay part of the parent
+surface. An export using a tagged `Box<E>` still exposes `E`, and an interface
+extending a tagged `Base<E>` still exposes `E`, even though the tagged component
+itself is not expanded. When a required argument of a tagged component cannot be
+established, the analysis treats that export as not fully analyzed instead of
+assuming stable, and the check retries on a later run.
+
+The `allowedUnstableApis` and `allowedExperimentalApis` allow lists apply to the
+`unstableApiUsage` and `experimentalApiUsage` diagnostics only. They do not
+suppress `apiStabilityLeak` findings, so a package that allow-lists all usage of
+an unstable API still reports exports that expose it.

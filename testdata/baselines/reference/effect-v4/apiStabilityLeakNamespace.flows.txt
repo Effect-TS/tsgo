@@ -1,0 +1,2 @@
+/.src/nsdep.ts -> apiStabilityLeakNamespace.flows.nsdep.mermaid
+/.src/namespace.ts -> apiStabilityLeakNamespace.flows.namespace.mermaid

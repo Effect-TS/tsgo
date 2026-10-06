@@ -177,7 +177,8 @@ const oxlintCategoryByEffectGroup = new Map([
   ["correctness", "correctness"],
   ["antipattern", "suspicious"],
   ["effectNative", "restriction"],
-  ["style", "style"]
+  ["style", "style"],
+  ["maintainers", "restriction"]
 ])
 
 export const renderOxlintEffectRules = (metadata: Metadata): OxlintEffectRulesSource => {

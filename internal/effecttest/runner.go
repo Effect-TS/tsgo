@@ -121,7 +121,8 @@ const DefaultTsConfig = `{
         "skipDisabledOptimization": true,
         "diagnosticSeverity": {
           "experimentalApiUsage": "off",
-          "unstableApiUsage": "off"
+          "unstableApiUsage": "off",
+          "apiStabilityLeak": "off"
         }
       }
     ]

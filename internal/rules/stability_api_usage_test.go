@@ -3,6 +3,7 @@ package rules
 import (
 	"testing"
 
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	"github.com/microsoft/TypeScript/tsc/shim/parser"
@@ -17,7 +18,7 @@ func TestStabilityOfDeclaration(t *testing.T) {
 	}{
 		{"unstable variable", "/** @stability unstable */\nexport const api = 1", "unstable"},
 		{"experimental variable", "/** @stability experimental */\nexport const api = 1", "experimental"},
-		{"stable variable", "/** @stability stable */\nexport const api = 1", ""},
+		{"stable variable", "/** @stability stable */\nexport const api = 1", "stable"},
 		{"other tag", "/** @deprecated */\nexport const api = 1", ""},
 		{"plain variable", "export const api = 1", ""},
 	}
@@ -27,8 +28,8 @@ func TestStabilityOfDeclaration(t *testing.T) {
 			sf := parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: "/test.ts"}, test.source, core.ScriptKindTS)
 			statement := sf.Statements.Nodes[0]
 			declaration := statement.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes[0]
-			if got := stabilityOfDeclaration(declaration); got != test.want {
-				t.Errorf("stabilityOfDeclaration = %q, want %q", got, test.want)
+			if got := typeparser.StabilityTagOfDeclaration(declaration); got != test.want {
+				t.Errorf("StabilityTagOfDeclaration = %q, want %q", got, test.want)
 			}
 		})
 	}

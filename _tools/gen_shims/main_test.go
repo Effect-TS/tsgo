@@ -448,6 +448,59 @@ func TestGitInputDigestTracksRelevantRepositoryState(t *testing.T) {
 	}
 }
 
+func TestShimInputDigestIncludesIntegrationSources(t *testing.T) {
+	repositoryRoot := t.TempDir()
+	runGitTest(t, repositoryRoot, "init")
+	runGitTest(t, repositoryRoot, "config", "user.email", "test@example.com")
+	runGitTest(t, repositoryRoot, "config", "user.name", "Test")
+	writeTestFile(t, filepath.Join(repositoryRoot, "_tools", "gen_shims", "main.go"), []byte("package main\n"))
+	writeTestFile(
+		t,
+		filepath.Join(repositoryRoot, "_integrations", "typescript", "tsc", "internal", "checker", "integration.go"),
+		[]byte("package checker\n"),
+	)
+	runGitTest(t, repositoryRoot, "add", ".")
+	runGitTest(t, repositoryRoot, "commit", "-m", "initial")
+
+	sourceRoot := t.TempDir()
+	runGitTest(t, sourceRoot, "init")
+	runGitTest(t, sourceRoot, "config", "user.email", "test@example.com")
+	runGitTest(t, sourceRoot, "config", "user.name", "Test")
+	writeTestFile(t, filepath.Join(sourceRoot, "go.mod"), []byte("module example\n"))
+	runGitTest(t, sourceRoot, "add", ".")
+	runGitTest(t, sourceRoot, "commit", "-m", "initial")
+
+	digest := func() string {
+		t.Helper()
+		value, err := shimInputDigest(repositoryRoot, sourceRoot, "example", "example/shim", shimInputs{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return value
+	}
+
+	initial := digest()
+	writeTestFile(
+		t,
+		filepath.Join(repositoryRoot, "_integrations", "typescript", "tsc", "internal", "checker", "integration.go"),
+		[]byte("package checker\n\nconst changed = true\n"),
+	)
+	durableChange := digest()
+	if durableChange == initial {
+		t.Fatal("durable integration source change did not alter digest")
+	}
+
+	writeTestFile(
+		t,
+		filepath.Join(sourceRoot, "internal", "checker", "integration.go"),
+		[]byte("package checker\n\nconst installed = true\n"),
+	)
+	installedChange := digest()
+	if installedChange == durableChange {
+		t.Fatal("installed integration source change did not alter digest")
+	}
+}
+
 func TestShimCacheStoresAndRestoresCompleteOutput(t *testing.T) {
 	cacheRoot := filepath.Join(t.TempDir(), "cache")
 	outputRoot := filepath.Join(t.TempDir(), "shim")
