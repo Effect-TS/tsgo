@@ -538,5 +538,9 @@
     "Unknown Effect diagnostic rule `{0}` in `diagnosticSeverity`. effect(unknownRuleName)": {
         "category": "Warning",
         "code": 377134
+    },
+    "`{0}` exposes `{1}`, an {2} API. effect(apiStabilityLeak)": {
+        "category": "Warning",
+        "code": 377137
     }
 }

@@ -52,7 +52,7 @@ Effect rules require Oxlint's type-aware mode and the `effecttsgo` plugin. The r
 }
 ```
 
-The package also provides presets for each diagnostic category: `correctness`, `antipattern`, `effect-native`, and `style`. The `strict` preset promotes every diagnostic enabled by default to an error. Extended configurations are applied in order, and rules in the project configuration take precedence, so presets can be combined and individual rules can be adjusted:
+The package also provides presets for each diagnostic category: `correctness`, `antipattern`, `effect-native`, `style`, and `maintainers`. The `strict` preset promotes every diagnostic enabled by default to an error. Maintainer diagnostics are opt-in: they are disabled by default and excluded from the `recommended` and `strict` presets, so enable the `maintainers` preset to run them. Extended configurations are applied in order, and rules in the project configuration take precedence, so presets can be combined and individual rules can be adjusted:
 
 ```json
 {

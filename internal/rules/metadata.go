@@ -12,6 +12,7 @@ var metadataGroups = []rule.MetadataGroup{
 	{ID: "antipattern", Name: "Anti-pattern", Description: "Discouraged patterns that often lead to bugs or confusing behavior."},
 	{ID: "effectNative", Name: "Effect-native", Description: "Prefer Effect-native APIs and abstractions when available."},
 	{ID: "style", Name: "Style", Description: "Cleanup, consistency, and idiomatic Effect code."},
+	{ID: "maintainers", Name: "Maintainers", Description: "Guard the public API surface and release hygiene of a package."},
 }
 
 func MetadataGroups() []rule.MetadataGroup {
@@ -49,6 +50,11 @@ func MetadataPresets() []rule.MetadataPreset {
 			Name:               "style",
 			Description:        "Enable all style diagnostics at warning level.",
 			DiagnosticSeverity: buildGroupPreset("style", etscore.SeverityWarning),
+		},
+		{
+			Name:               "maintainers",
+			Description:        "Enable all maintainer diagnostics at warning level.",
+			DiagnosticSeverity: buildGroupPreset("maintainers", etscore.SeverityWarning),
 		},
 	}
 }

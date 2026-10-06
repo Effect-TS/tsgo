@@ -38,7 +38,7 @@ When running in dedicated diagnostics mode, the Effect diagnostics can be emitte
 <!-- supported-components:start -->
 ## Supported Package Versions
 
-The following target package versions are supported by `@effect/tsgo@0.49.0`:
+The following target package versions are supported by `@effect/tsgo@0.50.0`:
 
 | Component | Supported versions |
 |---|---|
@@ -179,6 +179,8 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unnecessary-pipe.md"><code>unnecessaryPipe</code></a></td><td>Removes pipe calls with no arguments</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unnecessary-pipe-chain.md"><code>unnecessaryPipeChain</code></a></td><td>Simplifies chained pipe calls into a single pipe call</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unnecessary-typeof-type.md"><code>unnecessaryTypeofType</code></a></td><td>Suggests replacing typeof Schema.Type style annotations with the matching named type when available</td></tr>
+    <tr><td colspan="2"><strong>Maintainers</strong> <em>Guard the public API surface and release hygiene of a package.</em></td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/api-stability-leak.md"><code>apiStabilityLeak</code></a></td><td>Reports exported APIs whose public surface exposes a less stable type</td></tr>
   </tbody>
 </table>
 <!-- diagnostics-table:end -->
@@ -366,11 +368,14 @@ while `effect/http/HttpClient#get` permits only its exported `get` API.
 Matching is case-sensitive and respects path segments: `effect/http` does not
 permit `effect/http-api`. Per-file `overrides` replace the base list.
 
-Names describe the declaration carrying the stability tag, rather than the
-import used by the consumer. They combine the nearest package name with the
-package-relative declaration path, removing a leading `src/`, `dist/`,
-`dist/dts/`, `dist/esm/`, or `dist/cjs/`, the file extension, and a trailing
-`/index`. Other layouts retain their package-relative path. Both diagnostics
-display this name when package metadata is available. APIs without package
-metadata continue to warn. Each list affects only its corresponding diagnostic; allowing an unstable API
-does not suppress experimental API warnings, and vice versa.
+`apiStabilityLeak` ignores exports marked `@internal`. The tag is the compiler's
+`stripInternal` declaration-emit marker, and it is honoured wherever it is
+written: on an exported declaration, on a named, star or namespace forwarding
+declaration, or on a namespace member. An untagged re-export of an internal
+target is ignored as well, because the forwarded target is not public API. A
+declaration that is not tagged keeps the export checked, so a public overload is
+still reported when only its implementation is marked `@internal`. Tagging a
+type does not hide it from public signatures: a public export that exposes an
+`@internal` type is still reported when that type is less stable. The skip is
+export-level only: an ordinary `@internal` property, overload or dependency type
+does not exempt the export that exposes it.

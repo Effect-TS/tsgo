@@ -2323,6 +2323,11 @@
           "default": "off",
           "description": "Detects 'any' or 'unknown' types in Effect error or requirements channels"
         },
+        "apiStabilityLeak": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Reports exported APIs whose public surface exposes a less stable type"
+        },
         "asyncFunction": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",

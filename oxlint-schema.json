@@ -2245,6 +2245,9 @@
         "effecttsgo/any-unknown-in-error-context": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/api-stability-leak": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/async-function": {
           "$ref": "#/definitions/RuleNoConfig"
         },

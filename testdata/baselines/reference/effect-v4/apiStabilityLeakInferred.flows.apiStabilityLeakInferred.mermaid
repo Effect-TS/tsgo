@@ -1,0 +1,37 @@
+flowchart TB
+  0[["type: #40;x: InferredExperimental#41; =#gt; InferredExperimental<br/>node: #40;x: InferredExperimental#41;: InferredExperimental =#gt; x"]]
+  1[/"type: InferredExperimental<br/>node: x"/]
+  2[["type: #40;x: InferredExperimental#41; =#gt; InferredExperimental<br/>node: #40;x: InferredExperimental#41; =#gt; x"]]
+  3[/"type: InferredExperimental<br/>node: x"/]
+  4[["type: #40;x: InferredExperimental#41; =#gt; InferredExperimental<br/>node: function #40;x: InferredExperimental#41;: InferredExperimental #123;#92;n  return x#92;n#125;"]]
+  5[/"type: InferredExperimental<br/>node: x"/]
+  6[/"type: InferredCallable<br/>node: inferredCallable"/]
+  7[/"type: #123; value: InferredExperimental; #125;<br/>node: #123; value: inferredValue #125;"/]
+  8[/"type: #123; nested: #123; value: InferredExperimental; #125;; #125;<br/>node: #123; nested: #123; value: inferredValue #125; #125;"/]
+  9[["type: #40;#41; =#gt; #123; value: InferredExperimental; #125;<br/>node: export function inferredReturnObject#40;#41; #123;#92;n  return #123; value: inferredValue #125;#92;n#125;"]]
+  10[/"type: #123; value: InferredExperimental; #125;<br/>node: #123; value: inferredValue #125;"/]
+  11[/"type: #123; value: InferredExperimental; #125;<br/>node: #123; value: inferredValue #125;"/]
+  12[["type: InferredExperimental<br/>node: get accessor#40;#41; #123;#92;n    return inferredValue#92;n  #125;"]]
+  13[/"type: InferredExperimental<br/>node: inferredValue"/]
+  14[["type: #40;x: InferredExperimental#41; =#gt; InferredExperimental<br/>node: #40;x: InferredExperimental#41;: InferredExperimental =#gt; x"]]
+  15[/"type: InferredExperimental<br/>node: x"/]
+  16[/"type: typeof classExpression<br/>node: class #123;#92;n  value: InferredExperimental = inferredValue#92;n#125;"/]
+  17[["type: #40;x?: InferredExperimental#41; =#gt; void<br/>node: export function inferredParameter#40;x = inferredValue#41;: void #123;#125;"]]
+  18[/"type: InferredExperimental<br/>node: inferredValue"/]
+  19[["type: any<br/>node: constructor#40;x = inferredValue#41; #123;#125;"]]
+  20[/"type: InferredExperimental<br/>node: inferredValue"/]
+  21[["type: #lt;T#gt;#40;x: InferredExperimental#41; =#gt; T<br/>node: declare function genericFunction#lt;T#gt;#40;x: InferredExperimental#41;: T"]]
+  22[/"type: #lt;T#gt;#40;x: InferredExperimental#41; =#gt; T<br/>node: genericFunction"/]
+  23[["type: #40;x: InferredExperimental#41; =#gt; InferredExperimental<br/>node: #40;x: InferredExperimental#41;: InferredExperimental =#gt; x"]]
+  24[/"type: InferredExperimental<br/>node: x"/]
+  25[/"type: #40;x: InferredExperimental#41; =#gt; InferredExperimental<br/>node: inferredArrowValue"/]
+  1 -->|"kind: potentialReturn"| 0
+  3 -->|"kind: potentialReturn"| 2
+  5 -->|"kind: potentialReturn"| 4
+  5 -->|"kind: usedBy"| 4
+  10 -->|"kind: potentialReturn"| 9
+  10 -->|"kind: usedBy"| 9
+  13 -->|"kind: potentialReturn"| 12
+  13 -->|"kind: usedBy"| 12
+  15 -->|"kind: potentialReturn"| 14
+  24 -->|"kind: potentialReturn"| 23

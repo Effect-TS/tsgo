@@ -1,0 +1,26 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/namespace.ts(5,13): warning TS377137: `effect-v4-tests/namespace#api` exposes `NsExperimental`, an experimental API. effect(apiStabilityLeak)
+
+
+==== /.src/nsdep.ts (0 errors) ====
+    /** @stability experimental */
+    export interface NsExperimental {
+      value: string
+    }
+    
+    export interface NsLeaky {
+      value: NsExperimental
+    }
+    
+
+==== /.src/namespace.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    // A namespace re-export must enumerate the dependency's exported symbols and
+    // report the offending member at the namespace export in this file.
+    export * as api from "./nsdep"
+                ~~~
+!!! warning TS377137: `effect-v4-tests/namespace#api` exposes `NsExperimental`, an experimental API. effect(apiStabilityLeak)
+    
