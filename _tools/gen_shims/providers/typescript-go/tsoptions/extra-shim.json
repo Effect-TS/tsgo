@@ -1,7 +1,0 @@
-{
-  "IgnoreFunctions": [
-    "ParseJsonSourceFileConfigFileContent",
-    "ParseJsonConfigFileContent",
-    "NewParsedCommandLine"
-  ]
-}

@@ -1,6 +1,0 @@
-{
-  "IgnoreFunctions": [
-    "NewCompilerHost",
-    "NewProgram"
-  ]
-}
