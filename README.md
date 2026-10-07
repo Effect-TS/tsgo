@@ -38,7 +38,7 @@ When running in dedicated diagnostics mode, the Effect diagnostics can be emitte
 <!-- supported-components:start -->
 ## Supported Package Versions
 
-The following target package versions are supported by `@effect/tsgo@0.50.0`:
+The following target package versions are supported by `@effect/tsgo@0.51.0`:
 
 | Component | Supported versions |
 |---|---|
