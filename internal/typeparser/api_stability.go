@@ -1085,6 +1085,9 @@ type apiStabilityAnalysis struct {
 	// on type bindings; no resolved type is ever cached here.
 	typeNameSymbols map[*ast.Node]*ast.Symbol
 
+	// Optional tagged base eligibility depends only on declaration metadata.
+	optionalTaggedSymbols map[*ast.Symbol]bool
+
 	work       int
 	safetyWork int
 
@@ -2004,7 +2007,7 @@ func (a *apiStabilityAnalysis) collectDeclaredTagSurface(surface *apiStabilitySu
 		a.collectDeclaredTagSurface(surface, node.AsParenthesizedTypeNode().Type)
 	case ast.KindTypeLiteral:
 		for _, member := range node.Members() {
-			if member == nil {
+			if member == nil || apiStabilityPropertyDeclarationIsInternal(member) {
 				continue
 			}
 			if member.FunctionLikeData() != nil {
@@ -2544,6 +2547,9 @@ func (a *apiStabilityAnalysis) collectConcreteReferenceSurface(surface *apiStabi
 				if member == nil || member.Flags&ast.SymbolFlagsTypeParameter != 0 || apiStabilitySymbolIsNonPublic(member) {
 					continue
 				}
+				if a.optionalTaggedInheritedMember(member, owner) {
+					continue
+				}
 				if boundary := a.inheritedChildBoundarySymbol(member, owner); boundary != nil {
 					a.recordSymbol(surface, boundary)
 					continue
@@ -2624,6 +2630,9 @@ func (a *apiStabilityAnalysis) collectResolvedMemberTable(surface *apiStabilityS
 			continue
 		}
 		if !apiStabilityMemberTableNameIsVisible(name, member) {
+			continue
+		}
+		if a.optionalTaggedInheritedMember(member, owner) {
 			continue
 		}
 		if boundary := a.inheritedChildBoundarySymbol(member, owner); boundary != nil {
@@ -2952,28 +2961,41 @@ func (a *apiStabilityAnalysis) collectHeritage(surface *apiStabilitySurface, dec
 		bases = lazyBases
 	}
 	for _, base := range bases {
-		if base == nil {
-			continue
-		}
-		target := base
-		if base.ObjectFlags()&checker.ObjectFlagsReference != 0 && base.Target() != nil {
-			target = base.Target()
-		}
-		if target == nil || target.ObjectFlags()&checker.ObjectFlagsClassOrInterface == 0 {
-			surface.merge(a.typeSurface(base, apiStabilityShallow, subst))
-			continue
-		}
-		if boundary := a.heritageChildBoundarySymbol(base, target); boundary != nil {
-			// An explicitly tagged base is a child boundary: its declared level
-			// contributes and its internals are not expanded, while its
-			// independently represented type arguments stay exposed.
-			a.recordSymbol(surface, boundary)
-			a.collectChildTypeArguments(surface, base, subst)
-			continue
-		}
-		baseSubst := a.extendParametersSubstitution(subst, base, a.referenceTypeParameters(target), a.referenceArguments(base, target))
-		a.collectDeclarationSurface(surface, target, inspect, baseSubst)
+		a.collectInheritedBase(surface, base, inspect, subst)
 	}
+}
+
+// collectInheritedBase preserves inheritance semantics through the intersection
+// return types of superclass factories. Direct references still use typeSurface.
+func (a *apiStabilityAnalysis) collectInheritedBase(surface *apiStabilitySurface, base *checker.Type, inspect apiStabilityInspection, subst apiStabilitySubstitution) {
+	if base == nil {
+		return
+	}
+	if base.Flags()&checker.TypeFlagsIntersection != 0 && a.heritageChildBoundarySymbol(base, base) == nil {
+		a.collectChildTypeArguments(surface, base, subst)
+		for _, constituent := range base.Types() {
+			a.collectInheritedBase(surface, constituent, inspect, subst)
+		}
+		return
+	}
+	target := base
+	if base.ObjectFlags()&checker.ObjectFlagsReference != 0 && base.Target() != nil {
+		target = base.Target()
+	}
+	if target == nil || target.ObjectFlags()&checker.ObjectFlagsClassOrInterface == 0 {
+		surface.merge(a.typeSurface(base, apiStabilityShallow, subst))
+		return
+	}
+	if a.optionalTaggedBase(target.Symbol()) {
+		return
+	}
+	if boundary := a.heritageChildBoundarySymbol(base, target); boundary != nil {
+		a.recordSymbol(surface, boundary)
+		a.collectChildTypeArguments(surface, base, subst)
+		return
+	}
+	baseSubst := a.extendParametersSubstitution(subst, base, a.referenceTypeParameters(target), a.referenceArguments(base, target))
+	a.collectDeclarationSurface(surface, target, inspect, baseSubst)
 }
 
 // collectClassStaticSurface inspects the class static side. Its members are
@@ -3008,6 +3030,9 @@ func (a *apiStabilityAnalysis) collectClassStaticSurface(surface *apiStabilitySu
 				if !apiStabilityMemberTableNameIsVisible(name, member) {
 					continue
 				}
+				if a.optionalTaggedInheritedMember(member, symbol) {
+					continue
+				}
 				if boundary := a.inheritedChildBoundarySymbol(member, symbol); boundary != nil {
 					a.recordSymbol(surface, boundary)
 					continue
@@ -3024,6 +3049,9 @@ func (a *apiStabilityAnalysis) collectClassStaticSurface(surface *apiStabilitySu
 					continue
 				}
 				if !apiStabilityMemberTableNameIsVisible(name, member) {
+					continue
+				}
+				if a.optionalTaggedInheritedMember(member, symbol) {
 					continue
 				}
 				if boundary := a.inheritedChildBoundarySymbol(member, symbol); boundary != nil {
@@ -3756,7 +3784,7 @@ func (a *apiStabilityAnalysis) parameterReturnType(signature *checker.Signature,
 // descends into conditional branches, so a symbol that survives only in a
 // discarded branch is not reported.
 func (a *apiStabilityAnalysis) collectDeclarationProvenance(surface *apiStabilitySurface, declaration *ast.Node, represented *checker.Type, subst apiStabilitySubstitution) {
-	if declaration == nil || represented == nil {
+	if declaration == nil || represented == nil || apiStabilityPropertyDeclarationIsInternal(declaration) {
 		return
 	}
 	if functionLike := declaration.FunctionLikeData(); functionLike != nil {
@@ -4156,7 +4184,7 @@ func (a *apiStabilityAnalysis) collectTypeLiteralProvenance(surface *apiStabilit
 		return
 	}
 	for _, member := range node.Members() {
-		if member == nil {
+		if member == nil || apiStabilityPropertyDeclarationIsInternal(member) {
 			continue
 		}
 		switch member.Kind {
@@ -4406,6 +4434,9 @@ func (a *apiStabilityAnalysis) collectTaggedHeritageArguments(surface *apiStabil
 			target = base.Target()
 		}
 		if target == nil || target.ObjectFlags()&checker.ObjectFlagsClassOrInterface == 0 {
+			continue
+		}
+		if a.optionalTaggedBase(target.Symbol()) {
 			continue
 		}
 		if boundary := a.heritageChildBoundarySymbol(base, target); boundary != nil {
@@ -4936,17 +4967,45 @@ func apiStabilityMemberTableNameIsVisible(name string, member *ast.Symbol) bool 
 }
 
 // apiStabilitySymbolIsNonPublic classifies a member symbol by its declaration
-// accessibility. Private identifiers and private/protected members are excluded;
-// a leading `__` name is not treated as private.
+// accessibility. Private identifiers, private/protected members and members
+// whose declarations are all internal are excluded; a leading `__` name is
+// not treated as private.
 func apiStabilitySymbolIsNonPublic(symbol *ast.Symbol) bool {
 	if symbol == nil {
 		return true
 	}
-	if checker.IsPrivateIdentifierSymbol(symbol) {
+	if checker.IsPrivateIdentifierSymbol(symbol) || apiStabilitySymbolHasOnlyInternalDeclarations(symbol) {
 		return true
 	}
 	flags := checker.GetDeclarationModifierFlagsFromSymbol(symbol)
 	return flags&(ast.ModifierFlagsPrivate|ast.ModifierFlagsProtected) != 0
+}
+
+// A public declaration keeps a merged property visible even when another
+// declaration marks that property internal. Declaration-less synthetic members
+// also stay visible rather than inheriting the visibility of a referenced type.
+func apiStabilitySymbolHasOnlyInternalDeclarations(symbol *ast.Symbol) bool {
+	if symbol == nil || len(symbol.Declarations) == 0 {
+		return false
+	}
+	for _, declaration := range symbol.Declarations {
+		if !apiStabilityPropertyDeclarationIsInternal(declaration) {
+			return false
+		}
+	}
+	return true
+}
+
+func apiStabilityPropertyDeclarationIsInternal(declaration *ast.Node) bool {
+	if declaration == nil {
+		return false
+	}
+	switch declaration.Kind {
+	case ast.KindPropertySignature, ast.KindPropertyDeclaration, ast.KindMethodSignature, ast.KindMethodDeclaration,
+		ast.KindGetAccessor, ast.KindSetAccessor, ast.KindParameter:
+		return InternalTagOfDeclaration(declaration)
+	}
+	return false
 }
 
 // apiStabilitySignatureIsNonPublic filters construct and method signatures whose
