@@ -38,12 +38,12 @@ When running in dedicated diagnostics mode, the Effect diagnostics can be emitte
 <!-- supported-components:start -->
 ## Supported Package Versions
 
-The following target package versions are supported by `@effect/tsgo@0.51.0`:
+The following target package versions are supported by `@effect/tsgo@0.51.1`:
 
 | Component | Supported versions |
 |---|---|
-| TypeScript | `7.0.2`, `7.1.0-dev.20261005.1` |
-| Oxlint | `1.82.0`, `1.83.0`, `1.85.0`, `1.86.0`, `1.87.0` |
+| TypeScript | `7.0.2`, `7.1.0-dev.20261006.1` |
+| Oxlint | `1.83.0`, `1.85.0`, `1.86.0`, `1.87.0` |
 | oxlint-tsgolint | `7.0.2001`, `7.0.2003` |
 <!-- supported-components:end -->
 
