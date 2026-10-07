@@ -38,7 +38,7 @@ When running in dedicated diagnostics mode, the Effect diagnostics can be emitte
 <!-- supported-components:start -->
 ## Supported Package Versions
 
-The following target package versions are supported by `@effect/tsgo@0.50.0`:
+The following target package versions are supported by `@effect/tsgo@0.51.0`:
 
 | Component | Supported versions |
 |---|---|
@@ -376,6 +376,18 @@ target is ignored as well, because the forwarded target is not public API. A
 declaration that is not tagged keeps the export checked, so a public overload is
 still reported when only its implementation is marked `@internal`. Tagging a
 type does not hide it from public signatures: a public export that exposes an
-`@internal` type is still reported when that type is less stable. The skip is
-export-level only: an ordinary `@internal` property, overload or dependency type
-does not exempt the export that exposes it.
+`@internal` type is still reported when that type is less stable. Properties
+and methods whose declarations are all marked `@internal` are excluded from
+the public surface, including in interfaces, classes, and augmentations. A
+merged property with any public declaration remains checked. An internal
+property does not exempt other public members of its containing export.
+
+Inherited bases do not contribute to `apiStabilityLeak` when all their public
+members, including inherited members, are
+optional properties or methods with an explicit `@stability stable`,
+`@stability unstable`, or `@stability experimental` tag. This permits optional,
+explicitly tagged extensions of existing APIs such as `Error`. Required or
+untagged members and call, construct, or index signatures keep the base checked.
+Internal members are excluded when deciding whether a base qualifies. A derived
+type's own members remain checked independently. Direct references such as a
+property or parameter typed as the base still expose its declared stability.

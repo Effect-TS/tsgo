@@ -1,5 +1,15 @@
 # @effect/tsgo
 
+## 0.51.0
+
+### Minor Changes
+
+- 9ca6ea2: Add related declaration locations to `apiStabilityLeak` diagnostics. For example, when a stable export exposes an experimental type, the diagnostic on the export now includes a child pointing to the experimental type's declaration, including declarations in other files.
+
+### Patch Changes
+
+- caee22f: Fix `apiStabilityLeak` to ignore inherited bases whose public members are all optional and explicitly stability-tagged, including bases reached through augmentations and superclass factories. Direct properties and parameters typed as those bases remain checked. Exclude `@internal` properties and methods from the public surface throughout the leak check.
+
 ## 0.50.0
 
 ### Minor Changes
