@@ -56,20 +56,24 @@ Effect version: unknown
     export interface StableExposesUnstable {
                      ~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#StableExposesUnstable` exposes `UnstableType`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(5,18): `UnstableType` is declared unstable here. effect(apiStabilityLeak)
       member: UnstableType
     }
     
     export interface StableExposesExperimental {
                      ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#StableExposesExperimental` exposes `ExperimentalType`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(10,18): `ExperimentalType` is declared experimental here. effect(apiStabilityLeak)
       member: ExperimentalType
     }
     
     export function stableFunction(input: ExperimentalType): UnstableType {
                     ~~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#stableFunction` exposes `ExperimentalType`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(10,18): `ExperimentalType` is declared experimental here. effect(apiStabilityLeak)
                     ~~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#stableFunction` exposes `UnstableType`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(5,18): `UnstableType` is declared unstable here. effect(apiStabilityLeak)
       return input as unknown as UnstableType
     }
     
@@ -77,8 +81,10 @@ Effect version: unknown
     export interface StableMethods {
                      ~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#StableMethods` exposes `ExperimentalType`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(10,18): `ExperimentalType` is declared experimental here. effect(apiStabilityLeak)
                      ~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#StableMethods` exposes `UnstableType`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(5,18): `UnstableType` is declared unstable here. effect(apiStabilityLeak)
       method(input: ExperimentalType): UnstableType
       new (value: ExperimentalType): StableMethods
     }
@@ -91,22 +97,27 @@ Effect version: unknown
     export type StableWithUnstableArgument = Container<UnstableType>
                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#StableWithUnstableArgument` exposes `UnstableType`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(5,18): `UnstableType` is declared unstable here. effect(apiStabilityLeak)
     export type StableWithExperimentalArgument = Container<ExperimentalType>
                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#StableWithExperimentalArgument` exposes `ExperimentalType`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(10,18): `ExperimentalType` is declared experimental here. effect(apiStabilityLeak)
     
     // Union and intersection constituents are directly represented.
     export type StableUnion = UnstableType | string
                 ~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#StableUnion` exposes `UnstableType`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(5,18): `UnstableType` is declared unstable here. effect(apiStabilityLeak)
     export type StableIntersection = { tag: string } & ExperimentalType
                 ~~~~~~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#StableIntersection` exposes `ExperimentalType`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(10,18): `ExperimentalType` is declared experimental here. effect(apiStabilityLeak)
     
     // Only public class members participate; private and protected members do not.
     export class StableClass {
                  ~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#StableClass` exposes `UnstableType`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(5,18): `UnstableType` is declared unstable here. effect(apiStabilityLeak)
       private secret: ExperimentalType | undefined
       protected guarded: UnstableType | undefined
       public exposed: UnstableType | undefined
@@ -117,6 +128,7 @@ Effect version: unknown
     export interface UnstableExposesExperimental {
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#UnstableExposesExperimental` exposes `ExperimentalType`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(10,18): `ExperimentalType` is declared experimental here. effect(apiStabilityLeak)
       member: ExperimentalType
     }
     
@@ -130,6 +142,7 @@ Effect version: unknown
     export type UnstableWithExperimentalArgument = Container<ExperimentalType>
                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#UnstableWithExperimentalArgument` exposes `ExperimentalType`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(10,18): `ExperimentalType` is declared experimental here. effect(apiStabilityLeak)
     
     // An experimental export imposes no restriction.
     /** @stability experimental */
@@ -142,17 +155,21 @@ Effect version: unknown
     export declare function inlineParameter(x: { value: ExperimentalType }): void
                             ~~~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#inlineParameter` exposes `ExperimentalType`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(10,18): `ExperimentalType` is declared experimental here. effect(apiStabilityLeak)
     export declare function inlineResult(): { value: UnstableType }
                             ~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#inlineResult` exposes `UnstableType`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(5,18): `UnstableType` is declared unstable here. effect(apiStabilityLeak)
     export interface InlineNested {
                      ~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#InlineNested` exposes `ExperimentalType`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(10,18): `ExperimentalType` is declared experimental here. effect(apiStabilityLeak)
       nested: { value: ExperimentalType }
     }
     export type InlineCombined = { value: UnstableType } & { other: string }
                 ~~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#InlineCombined` exposes `UnstableType`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(5,18): `UnstableType` is declared unstable here. effect(apiStabilityLeak)
     
     // An erased alias keeps its tagged symbol even when the checker exposes string.
     /** @stability experimental */
@@ -160,25 +177,31 @@ Effect version: unknown
     export declare function erasedAlias(x: ExperimentalText): ExperimentalText
                             ~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#erasedAlias` exposes `ExperimentalText`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(90,13): `ExperimentalText` is declared experimental here. effect(apiStabilityLeak)
     
     // Type parameter constraints and defaults are directly represented.
     export declare function constrained<T extends UnstableType>(x: T): T
                             ~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#constrained` exposes `UnstableType`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(5,18): `UnstableType` is declared unstable here. effect(apiStabilityLeak)
     export declare function defaulted<T = ExperimentalType>(): T
                             ~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#defaulted` exposes `ExperimentalType`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(10,18): `ExperimentalType` is declared experimental here. effect(apiStabilityLeak)
     export interface GenericConstrained<T extends ExperimentalType> {
                      ~~~~~~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#GenericConstrained` exposes `ExperimentalType`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(10,18): `ExperimentalType` is declared experimental here. effect(apiStabilityLeak)
       value: T
     }
     export type IndexedAccess<K extends keyof UnstableType> = UnstableType[K]
                 ~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#IndexedAccess` exposes `UnstableType`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(5,18): `UnstableType` is declared unstable here. effect(apiStabilityLeak)
     export type ConditionalType<T> = T extends ExperimentalType ? ExperimentalType : string
                 ~~~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#ConditionalType` exposes `ExperimentalType`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(10,18): `ExperimentalType` is declared experimental here. effect(apiStabilityLeak)
     
     // Traversal follows the declaration graph, not a fixed depth or member count.
     interface Box<T> {
@@ -187,11 +210,14 @@ Effect version: unknown
     export declare const deepGeneric: Box<Box<Box<Box<Box<ExperimentalType>>>>>
                          ~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#deepGeneric` exposes `ExperimentalType`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(10,18): `ExperimentalType` is declared experimental here. effect(apiStabilityLeak)
     export interface OrderSensitive {
                      ~~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#OrderSensitive` exposes `ExperimentalType`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(10,18): `ExperimentalType` is declared experimental here. effect(apiStabilityLeak)
                      ~~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#OrderSensitive` exposes `UnstableType`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(5,18): `UnstableType` is declared unstable here. effect(apiStabilityLeak)
       deep: Box<Box<Box<Box<UnstableType>>>>
       direct: Box<ExperimentalType>
     }
@@ -201,6 +227,7 @@ Effect version: unknown
     export interface PublicDoubleUnderscore {
                      ~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#PublicDoubleUnderscore` exposes `ExperimentalType`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(10,18): `ExperimentalType` is declared experimental here. effect(apiStabilityLeak)
       __public: ExperimentalType
     }
     export class PrivateIdentifierHidden {
@@ -217,11 +244,13 @@ Effect version: unknown
     export interface CallableOwner {
                      ~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#CallableOwner` exposes `ExperimentalType`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(10,18): `ExperimentalType` is declared experimental here. effect(apiStabilityLeak)
       value: Callable
     }
     export interface InlineCallable {
                      ~~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/apiStabilityLeak#InlineCallable` exposes `UnstableType`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeak.ts(5,18): `UnstableType` is declared unstable here. effect(apiStabilityLeak)
       value: (value: UnstableType) => void
     }
     

@@ -679,6 +679,82 @@ func apiStabilityExport(t *testing.T, c *checker.Checker, sf *ast.SourceFile, na
 	return nil
 }
 
+func TestApiStabilityLeakRelatedDeclaration(t *testing.T) {
+	t.Parallel()
+	for _, tc := range []struct {
+		name       string
+		files      map[string]string
+		file       string
+		identifier string
+	}{
+		{
+			name: "local type",
+			files: map[string]string{"test.ts": `
+/** @stability experimental */
+interface Experimental { value: string }
+export interface Public { value: Experimental }
+`},
+			file: "test.ts", identifier: "Experimental",
+		},
+		{
+			name: "cross-file re-export",
+			files: map[string]string{
+				"dep.ts": `
+/** @stability unstable */
+export interface Unstable { value: string }
+export interface Public { value: Unstable }
+`,
+				"test.ts": `export { Public } from "./dep.js"`,
+			},
+			file: "dep.ts", identifier: "Unstable",
+		},
+		{
+			name: "tagged overload",
+			files: map[string]string{"test.ts": `
+interface Callable {
+  /** @stability experimental */
+  (value: string): string;
+  (value: number): number;
+}
+export interface Public { call: Callable }
+`},
+			file: "test.ts", identifier: "(value: string): string;",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			program, c, done := apiStabilityProgram(t, tc.files, true)
+			defer done()
+			sf := program.GetSourceFile("/.src/test.ts")
+			var leaks []*ast.Diagnostic
+			for _, diagnostic := range c.GetDiagnostics(context.Background(), sf) {
+				if diagnostic.Code() == 377137 {
+					leaks = append(leaks, diagnostic)
+				}
+			}
+			if len(leaks) != 1 {
+				t.Fatalf("expected one leak, got %d", len(leaks))
+			}
+			if leaks[0].File() != sf || tc.files["test.ts"][leaks[0].Pos():leaks[0].End()] != "Public" {
+				t.Fatal("primary diagnostic must point to the Public export")
+			}
+			related := leaks[0].RelatedInformation()
+			if len(related) != 1 {
+				t.Fatalf("expected one related declaration, got %d", len(related))
+			}
+			if related[0].File() != program.GetSourceFile(tspath.RootedFilePath("/.src/"+tc.file)) {
+				t.Fatal("related diagnostic points to the wrong source file")
+			}
+			if got := tc.files[tc.file][related[0].Pos():related[0].End()]; got != tc.identifier {
+				t.Fatalf("related location = %q, want %q", got, tc.identifier)
+			}
+			if !strings.Contains(related[0].String(), "is declared") {
+				t.Fatalf("unexpected related message: %s", related[0].String())
+			}
+		})
+	}
+}
+
 // apiStabilityDiagnostics collects the checker diagnostics for one file
 // plus the global diagnostics, excluding the rule's own reports so a control
 // run can be compared exactly with an enabled run.

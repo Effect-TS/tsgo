@@ -30,6 +30,7 @@ Effect version: unknown
     export { DepLeaky } from "./dep"
              ~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/named#DepLeaky` exposes `DepExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/dep.ts(2,18): `DepExperimental` is declared experimental here. effect(apiStabilityLeak)
     // Re-exporting the unstable type directly inherits its stability, so the export
     // is treated as unstable and does not itself leak.
     export { DepUnstable } from "./dep"
@@ -43,6 +44,7 @@ Effect version: unknown
     export * from "./dep"
     ~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377137: `effect-v4-tests/star#DepLeaky` exposes `DepExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/dep.ts(2,18): `DepExperimental` is declared experimental here. effect(apiStabilityLeak)
     
 
 ==== /.src/tagged.ts (0 errors) ====
@@ -66,6 +68,7 @@ Effect version: unknown
     export * as api from "./barrel"
                 ~~~
 !!! warning TS377137: `effect-v4-tests/aliased#api` exposes `DepExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/dep.ts(2,18): `DepExperimental` is declared experimental here. effect(apiStabilityLeak)
     
 
 ==== /.src/taggedNamespace.ts (0 errors) ====

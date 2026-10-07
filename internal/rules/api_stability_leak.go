@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
+	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 // ApiStabilityLeak reports exported APIs whose public surface exposes a type
@@ -23,6 +24,7 @@ var ApiStabilityLeak = rule.Rule{
 	SupportedEffect: []string{"v4"},
 	Codes: []int32{
 		tsdiag.X_0_exposes_1_an_2_API_effect_apiStabilityLeak.Code(),
+		tsdiag.X_0_is_declared_1_here_effect_apiStabilityLeak.Code(),
 	},
 	Run: checkApiStabilityLeaks,
 }
@@ -256,11 +258,24 @@ func (w *apiStabilityWalker) report(dependency typeparser.ApiStabilityDependency
 		return
 	}
 	w.offenders[key] = true
+	var relatedInformation []*ast.Diagnostic
+	if declaration := dependency.Declaration; declaration != nil {
+		if sourceFile := ast.GetSourceFileOfNode(declaration); sourceFile != nil {
+			relatedInformation = []*ast.Diagnostic{w.ctx.NewDiagnostic(
+				sourceFile,
+				scanner.GetErrorRangeForNode(sourceFile, declaration),
+				tsdiag.X_0_is_declared_1_here_effect_apiStabilityLeak,
+				nil,
+				typeparser.ApiStabilityDependencyName(dependency),
+				apiStabilityLevelName(dependency.Level),
+			)}
+		}
+	}
 	w.diagnostics = append(w.diagnostics, w.ctx.NewDiagnostic(
 		w.ctx.SourceFile,
 		w.ctx.GetErrorRange(w.location),
 		tsdiag.X_0_exposes_1_an_2_API_effect_apiStabilityLeak,
-		nil,
+		relatedInformation,
 		apiStabilityExportDisplayName(w.ctx, w.exportSymbol),
 		typeparser.ApiStabilityDependencyName(dependency),
 		apiStabilityLevelName(dependency.Level),
