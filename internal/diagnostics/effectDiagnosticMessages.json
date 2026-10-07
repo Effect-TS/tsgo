@@ -542,5 +542,9 @@
     "`{0}` exposes `{1}`, an {2} API. effect(apiStabilityLeak)": {
         "category": "Warning",
         "code": 377137
+    },
+    "`{0}` is declared {1} here. effect(apiStabilityLeak)": {
+        "category": "Message",
+        "code": 377138
     }
 }

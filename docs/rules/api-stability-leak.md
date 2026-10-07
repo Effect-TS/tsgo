@@ -10,7 +10,7 @@ Reports exported APIs whose public surface exposes a less stable type
 | Default severity | `off` |
 | Fixable | No |
 | Effect versions | v4 |
-| Diagnostic codes | `TS377137` |
+| Diagnostic codes | `TS377137`, `TS377138` |
 | Language Service name | `apiStabilityLeak` |
 | Oxlint name | `effecttsgo/api-stability-leak` |
 
