@@ -3,7 +3,7 @@
   "tags": {
     "typescript": {
       "latest": "7.0.2",
-      "next": "7.1.0-dev.20261005.1"
+      "next": "7.1.0-dev.20261006.1"
     },
     "oxlint": {
       "latest": "1.87.0"
@@ -18,8 +18,8 @@
         "gitHead": "2bd066d87f5bafd315be9f40889d0a60b9e58e0b",
         "provider": "typescript-go"
       },
-      "7.1.0-dev.20261005.1": {
-        "gitHead": "50d70a3f5f453a79a4323b263165da51f656a4e3",
+      "7.1.0-dev.20261006.1": {
+        "gitHead": "a1ef42b9ea7032fa60df127d42b4c86fd2a110ee",
         "provider": "typescript"
       }
     },
@@ -38,9 +38,6 @@
       }
     },
     "oxlint": {
-      "1.82.0": {
-        "gitHead": "b4da00b621ec2f6f67ed218f5366c45ed325331b"
-      },
       "1.83.0": {
         "gitHead": "7bf68f70c20f5329251f19be95076f6eab4fe396"
       },
@@ -58,9 +55,9 @@
   "profiles": [
     {
       "name": "vite-plus",
-      "description": "Vite+ 1.0.0 compatibility runtime",
+      "description": "Vite+ 1.1.0 compatibility runtime",
       "dependencies": {
-        "oxlint": "1.85.0",
+        "oxlint": "1.87.0",
         "oxlint-tsgolint": "7.0.2003"
       }
     },
@@ -89,6 +86,14 @@
       }
     },
     {
+      "name": "vite-plus@1.1.0",
+      "description": "Vite+ 1.1.0 compatibility runtime",
+      "dependencies": {
+        "oxlint": "1.87.0",
+        "oxlint-tsgolint": "7.0.2003"
+      }
+    },
+    {
       "name": "vite-plus@1.0.0",
       "description": "Vite+ 1.0.0 compatibility runtime",
       "dependencies": {
@@ -101,14 +106,6 @@
       "description": "Vite+ 0.3.3 compatibility runtime",
       "dependencies": {
         "oxlint": "1.83.0",
-        "oxlint-tsgolint": "7.0.2001"
-      }
-    },
-    {
-      "name": "vite-plus@0.3.2",
-      "description": "Vite+ 0.3.2 compatibility runtime",
-      "dependencies": {
-        "oxlint": "1.82.0",
         "oxlint-tsgolint": "7.0.2001"
       }
     }
