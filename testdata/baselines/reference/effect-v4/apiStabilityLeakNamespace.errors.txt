@@ -23,4 +23,5 @@ Effect version: unknown
     export * as api from "./nsdep"
                 ~~~
 !!! warning TS377137: `effect-v4-tests/namespace#api` exposes `NsExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/nsdep.ts(2,18): `NsExperimental` is declared experimental here. effect(apiStabilityLeak)
     

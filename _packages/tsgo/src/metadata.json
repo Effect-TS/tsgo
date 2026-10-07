@@ -3228,7 +3228,8 @@
         "v4"
       ],
       "codes": [
-        377137
+        377137,
+        377138
       ],
       "preview": {
         "sourceText": "\n/** @stability experimental */\nexport interface PreviewExperimental {\n  value: string\n}\n\nexport interface PreviewStable {\n  leaked: PreviewExperimental\n}\n",
