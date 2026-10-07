@@ -66,7 +66,16 @@ func (a *apiStabilityAnalysis) optionalTaggedBase(symbol *ast.Symbol) bool {
 				continue
 			}
 			for _, node := range ast.GetExtendsHeritageClauseElements(declaration) {
-				base := a.symbolAtTypeNameNode(node.AsTypeReferenceNode().TypeName)
+				var name *ast.Node
+				switch node.Kind {
+				case ast.KindTypeReference:
+					name = node.AsTypeReferenceNode().TypeName
+				case ast.KindExpressionWithTypeArguments:
+					name = node.AsExpressionWithTypeArguments().Expression
+				default:
+					return false
+				}
+				base := a.symbolAtTypeNameNode(name)
 				aliases := map[*ast.Symbol]bool{}
 				for base != nil && base.Flags&ast.SymbolFlagsAlias != 0 && !aliases[base] {
 					aliases[base] = true
