@@ -126,7 +126,7 @@ func analyzeConditionalRefailHandler(
 	handlerNode *ast.Node,
 	methods conditionalRefailCatchMethods,
 ) (string, bool) {
-	dispatch := typeparser.ParseReturningDispatch(handlerNode)
+	dispatch := tp.ParseReturningDispatch(handlerNode)
 	if dispatch == nil || len(dispatch.Params) != 1 || dispatch.Dispatch == nil ||
 		len(dispatch.Dispatch.Branches) != 1 || dispatch.Dispatch.Fallback == nil {
 		return "", false

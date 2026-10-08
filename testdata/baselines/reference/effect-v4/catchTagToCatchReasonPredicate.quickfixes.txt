@@ -1,0 +1,205 @@
+=== Quick Fix Inventory ===
+
+[D1] (23:3-23:14) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+  Fix 0: "Disable catchTagToCatchReason for this line"
+  Fix 1: "Disable catchTagToCatchReason for entire file"
+  Fix 2: "Replace with Effect.catchReason or Effect.catchReasons"
+
+[D2] (29:3-29:14) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+  Fix 0: "Disable catchTagToCatchReason for this line"
+  Fix 1: "Disable catchTagToCatchReason for entire file"
+  Fix 2: "Replace with Effect.catchReason or Effect.catchReasons"
+
+[D3] (35:3-35:14) TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
+  Fix 0: "Disable catchTagToCatchReason for this line"
+  Fix 1: "Disable catchTagToCatchReason for entire file"
+  Fix 2: "Replace with Effect.catchReason or Effect.catchReasons"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchTagToCatchReason for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchTagToCatchReason for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.catchReason or Effect.catchReasons" ===
+
+--- file:///.src/catchTagToCatchReasonPredicate.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics catchTagToCatchReason:suggestion
+import { Effect as Fx, Predicate } from "effect"
+
+class ReasonA {
+  readonly _tag = "ReasonA"
+}
+class ReasonB {
+  readonly _tag = "ReasonB"
+  constructor(readonly detail: string) {}
+}
+class OuterError {
+  readonly _tag = "OuterError"
+  constructor(readonly reason: ReasonA | ReasonB) {}
+}
+class OtherError {
+  readonly _tag = "OtherError"
+}
+
+declare const program: Fx.Effect<number, OuterError | OtherError>
+
+export const direct = program.pipe(
+  Fx.catchReason("OuterError", "ReasonA", () => Fx.succeed(1))
+)
+
+export const curriedWithReasonUse = program.pipe(
+  Fx.catchTag("OuterError", (error) => Predicate.isTagged("ReasonB")(error.reason)
+    ? Fx.succeed(error.reason.detail.length)
+    : Fx.fail(error))
+)
+
+export const mixed = program.pipe(
+  Fx.catchTag("OuterError", (error) => {
+    if (Predicate.isTagged(error.reason, "ReasonA")) return Fx.succeed(1)
+    if (error.reason._tag === "ReasonB") return Fx.succeed(error.reason.detail.length)
+    return Fx.fail(error)
+  })
+)
+
+const fake = { isTagged: (_value: unknown, _tag: string) => false }
+export const lookalike = program.pipe(
+  Fx.catchTag("OuterError", (error) => fake.isTagged(error.reason, "ReasonA")
+    ? Fx.succeed(1)
+    : Fx.fail(error))
+)
+
+declare const expectedTag: "ReasonA" | "ReasonB"
+export const dynamicTag = program.pipe(
+  Fx.catchTag("OuterError", (error) => Predicate.isTagged(expectedTag)(error.reason)
+    ? Fx.succeed(1)
+    : Fx.fail(error))
+)
+
+
+=== [D2] Fix 0: "Disable catchTagToCatchReason for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable catchTagToCatchReason for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.catchReason or Effect.catchReasons" ===
+
+--- file:///.src/catchTagToCatchReasonPredicate.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics catchTagToCatchReason:suggestion
+import { Effect as Fx, Predicate } from "effect"
+
+class ReasonA {
+  readonly _tag = "ReasonA"
+}
+class ReasonB {
+  readonly _tag = "ReasonB"
+  constructor(readonly detail: string) {}
+}
+class OuterError {
+  readonly _tag = "OuterError"
+  constructor(readonly reason: ReasonA | ReasonB) {}
+}
+class OtherError {
+  readonly _tag = "OtherError"
+}
+
+declare const program: Fx.Effect<number, OuterError | OtherError>
+
+export const direct = program.pipe(
+  Fx.catchTag("OuterError", (error) => Predicate.isTagged(error.reason, "ReasonA")
+    ? Fx.succeed(1)
+    : Fx.fail(error))
+)
+
+export const curriedWithReasonUse = program.pipe(
+  Fx.catchReason("OuterError", "ReasonB", (_, error) => Fx.succeed(error.reason.detail.length))
+)
+
+export const mixed = program.pipe(
+  Fx.catchTag("OuterError", (error) => {
+    if (Predicate.isTagged(error.reason, "ReasonA")) return Fx.succeed(1)
+    if (error.reason._tag === "ReasonB") return Fx.succeed(error.reason.detail.length)
+    return Fx.fail(error)
+  })
+)
+
+const fake = { isTagged: (_value: unknown, _tag: string) => false }
+export const lookalike = program.pipe(
+  Fx.catchTag("OuterError", (error) => fake.isTagged(error.reason, "ReasonA")
+    ? Fx.succeed(1)
+    : Fx.fail(error))
+)
+
+declare const expectedTag: "ReasonA" | "ReasonB"
+export const dynamicTag = program.pipe(
+  Fx.catchTag("OuterError", (error) => Predicate.isTagged(expectedTag)(error.reason)
+    ? Fx.succeed(1)
+    : Fx.fail(error))
+)
+
+
+=== [D3] Fix 0: "Disable catchTagToCatchReason for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable catchTagToCatchReason for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.catchReason or Effect.catchReasons" ===
+
+--- file:///.src/catchTagToCatchReasonPredicate.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics catchTagToCatchReason:suggestion
+import { Effect as Fx, Predicate } from "effect"
+
+class ReasonA {
+  readonly _tag = "ReasonA"
+}
+class ReasonB {
+  readonly _tag = "ReasonB"
+  constructor(readonly detail: string) {}
+}
+class OuterError {
+  readonly _tag = "OuterError"
+  constructor(readonly reason: ReasonA | ReasonB) {}
+}
+class OtherError {
+  readonly _tag = "OtherError"
+}
+
+declare const program: Fx.Effect<number, OuterError | OtherError>
+
+export const direct = program.pipe(
+  Fx.catchTag("OuterError", (error) => Predicate.isTagged(error.reason, "ReasonA")
+    ? Fx.succeed(1)
+    : Fx.fail(error))
+)
+
+export const curriedWithReasonUse = program.pipe(
+  Fx.catchTag("OuterError", (error) => Predicate.isTagged("ReasonB")(error.reason)
+    ? Fx.succeed(error.reason.detail.length)
+    : Fx.fail(error))
+)
+
+export const mixed = program.pipe(
+  Fx.catchReasons("OuterError", { "ReasonA": () => Fx.succeed(1), "ReasonB": (_, error) => Fx.succeed(error.reason.detail.length) })
+)
+
+const fake = { isTagged: (_value: unknown, _tag: string) => false }
+export const lookalike = program.pipe(
+  Fx.catchTag("OuterError", (error) => fake.isTagged(error.reason, "ReasonA")
+    ? Fx.succeed(1)
+    : Fx.fail(error))
+)
+
+declare const expectedTag: "ReasonA" | "ReasonB"
+export const dynamicTag = program.pipe(
+  Fx.catchTag("OuterError", (error) => Predicate.isTagged(expectedTag)(error.reason)
+    ? Fx.succeed(1)
+    : Fx.fail(error))
+)
+
