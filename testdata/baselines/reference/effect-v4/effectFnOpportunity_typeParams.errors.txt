@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/effectFnOpportunity_typeParams.ts(7,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*<T>(value) { ... })`. effect(effectFnOpportunity)
 /.src/effectFnOpportunity_typeParams.ts(8,10): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)

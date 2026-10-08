@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/apiStabilityLeakInheritance.ts(24,18): warning TS377137: `effect-v4-tests/apiStabilityLeakInheritance#TaggedErrorProperty` exposes `Reportable`, an unstable API. effect(apiStabilityLeak)
 /.src/apiStabilityLeakInheritance.ts(28,25): warning TS377137: `effect-v4-tests/apiStabilityLeakInheritance#direct` exposes `Reportable`, an unstable API. effect(apiStabilityLeak)

@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/missingStarInYieldEffectGen.ts(6,24): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 /.src/missingStarInYieldEffectGen.ts(19,3): error TS377008: This uses `yield` for an `Effect` value. `yield*` is the Effect-aware form in this context. effect(missingStarInYieldEffectGen)

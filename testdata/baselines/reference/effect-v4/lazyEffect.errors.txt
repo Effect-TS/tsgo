@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/lazyEffect.ts(9,14): warning TS377091: Exported declaration 'lazyEffect' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
 /.src/lazyEffect.ts(12,14): warning TS377091: Exported declaration 'lazyStream' returns a lazy Stream. Stream is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)

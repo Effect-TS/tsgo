@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/schemaSync_preview.ts(8,23): warning TS377130: `Schema.decodeUnknownSync` executes synchronously. Use `Schema.decodeUnknownEffect` to compose this operation through Effect without throwing. effect(schemaSync)
 

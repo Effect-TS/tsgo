@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/schemaLiteralNonFinite.ts(6,16): error TS377106: Schema literal values must be finite numbers; `Infinity` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)
 /.src/schemaLiteralNonFinite.ts(7,16): error TS377106: Schema literal values must be finite numbers; `-Infinity` throws during schema construction. Use a finite literal or model non-finite values with a refined Schema.Number. effect(schemaLiteralNonFinite)

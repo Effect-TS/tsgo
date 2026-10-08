@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/flatMapConditionalToFilterOrFail_preview.ts(5,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 /.src/flatMapConditionalToFilterOrFail_preview.ts(6,3): suggestion TS377120: `Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)

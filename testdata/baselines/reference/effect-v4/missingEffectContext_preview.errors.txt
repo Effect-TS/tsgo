@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/missingEffectContext_preview.ts(8,14): warning TS377004: This Effect requires a service that is missing from the expected Effect context: `Db`. effect(missingEffectContext)
 

@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/schemaSyncInEffect.ts(11,18): suggestion TS377037: `Schema.decodeSync` is used inside an Effect generator. `Schema.decodeEffect` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
 /.src/schemaSyncInEffect.ts(19,18): suggestion TS377037: `Schema.decodeUnknownSync` is used inside an Effect generator. `Schema.decodeUnknownEffect` preserves the typed Effect error channel for this operation without throwing. effect(schemaSyncInEffect)
