@@ -38,6 +38,8 @@ type EffectLinks struct {
 	ReferenceSymbol        core.LinkStore[*ast.Node, *ast.Symbol]
 	ModuleExportReference  core.LinkStore[moduleExportReferenceCacheKey, bool]
 	PipeableSignatureShape core.LinkStore[pipeableSignatureShapeCacheKey, bool]
+	nativeArrayRegistry    *nativeArrayRegistry
+	nativeArrayMember      core.LinkStore[*ast.Symbol, nativeArrayMember]
 	// API-stability caches. Declared lookups persist per checker: the declared
 	// stability of a symbol, of a raw signature overload and of one
 	// declaration, shared with the unstableApiUsage/experimentalApiUsage rules.

@@ -1,0 +1,30 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/preferEffectArray_augmentation.ts(16,9): warning TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+/.src/preferEffectArray_augmentation.ts(17,10): warning TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+
+
+==== /.src/preferEffectArray_augmentation.ts (2 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferEffectArray:warning
+    export {}
+    declare global {
+      interface Array<T> {
+        map(callbackfn: (value: T) => string): string[]
+      }
+      interface ReadonlyArray<T> {
+        map(callbackfn: (value: T) => string): string[]
+      }
+    }
+    const mutable = [1, 2]
+    const readonly: readonly number[] = mutable
+    mutable.map(n => n + 1)
+    readonly.map(n => n + 1)
+    mutable.filter(n => n > 1)
+            ~~~~~~
+!!! warning TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+    readonly.filter(n => n > 1)
+             ~~~~~~
+!!! warning TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+    

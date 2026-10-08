@@ -2698,6 +2698,11 @@
           "default": "error",
           "description": "Prevents overriding constructors in Schema classes which breaks decoding behavior"
         },
+        "preferEffectArray": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests Effect Array APIs for native array member references, with semantic caveats"
+        },
         "preferSchemaOverJson": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",

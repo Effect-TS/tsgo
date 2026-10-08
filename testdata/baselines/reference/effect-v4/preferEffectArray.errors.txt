@@ -1,0 +1,337 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/imported.ts(4,13): warning TS377139: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+/.src/preferEffectArray.ts(9,4): warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(10,23): warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(11,4): warning TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+/.src/preferEffectArray.ts(12,26): warning TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+/.src/preferEffectArray.ts(13,4): warning TS377139: Consider effect/Array.every instead of native Array.every. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(14,25): warning TS377139: Consider effect/Array.every instead of native Array.every. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(15,4): warning TS377139: Consider effect/Array.some instead of native Array.some. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(16,24): warning TS377139: Consider effect/Array.some instead of native Array.some. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(17,4): warning TS377139: Consider effect/Array.forEach instead of native Array.forEach. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(18,27): warning TS377139: Consider effect/Array.forEach instead of native Array.forEach. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(19,4): warning TS377139: Consider effect/Array.flatMap instead of native Array.flatMap. Callbacks must return arrays; the callback type accepts (value, index), with no array parameter or thisArg, and sparse-array holes are visited. effect(preferEffectArray)
+/.src/preferEffectArray.ts(20,27): warning TS377139: Consider effect/Array.flatMap instead of native Array.flatMap. Callbacks must return arrays; the callback type accepts (value, index), with no array parameter or thisArg, and sparse-array holes are visited. effect(preferEffectArray)
+/.src/preferEffectArray.ts(21,4): warning TS377139: Consider effect/Array.reduce instead of native Array.reduce. An initial value is required before the callback; the callback type omits the array parameter. effect(preferEffectArray)
+/.src/preferEffectArray.ts(22,26): warning TS377139: Consider effect/Array.reduce instead of native Array.reduce. An initial value is required before the callback; the callback type omits the array parameter. effect(preferEffectArray)
+/.src/preferEffectArray.ts(23,4): warning TS377139: Consider effect/Array.reduceRight instead of native Array.reduceRight. An initial value is required before the callback; the callback type omits the array parameter. effect(preferEffectArray)
+/.src/preferEffectArray.ts(24,31): warning TS377139: Consider effect/Array.reduceRight instead of native Array.reduceRight. An initial value is required before the callback; the callback type omits the array parameter. effect(preferEffectArray)
+/.src/preferEffectArray.ts(25,4): warning TS377139: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(26,24): warning TS377139: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(27,4): warning TS377139: Consider effect/Array.findLast instead of native Array.findLast. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(28,28): warning TS377139: Consider effect/Array.findLast instead of native Array.findLast. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(29,4): warning TS377139: Consider effect/Array.findFirstIndex instead of native Array.findIndex. Returns Option<number>, with None replacing -1; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(30,29): warning TS377139: Consider effect/Array.findFirstIndex instead of native Array.findIndex. Returns Option<number>, with None replacing -1; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(31,4): warning TS377139: Consider effect/Array.findLastIndex instead of native Array.findLastIndex. Returns Option<number>, with None replacing -1; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(32,33): warning TS377139: Consider effect/Array.findLastIndex instead of native Array.findLastIndex. Returns Option<number>, with None replacing -1; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(33,9): warning TS377139: Consider effect/Array.join instead of native Array.join. Accepts strings and requires an explicit separator. effect(preferEffectArray)
+/.src/preferEffectArray.ts(34,29): warning TS377139: Consider effect/Array.join instead of native Array.join. Accepts strings and requires an explicit separator. effect(preferEffectArray)
+/.src/preferEffectArray.ts(35,4): warning TS377139: Consider effect/Array.reverse instead of native Array.toReversed. Returns a new array, like native toReversed. effect(preferEffectArray)
+/.src/preferEffectArray.ts(36,30): warning TS377139: Consider effect/Array.reverse instead of native Array.toReversed. Returns a new array, like native toReversed. effect(preferEffectArray)
+/.src/preferEffectArray.ts(37,4): warning TS377139: Consider effect/Array.sort instead of native Array.toSorted. Requires an explicit Order instead of native default ordering or a numeric comparator. effect(preferEffectArray)
+/.src/preferEffectArray.ts(38,28): warning TS377139: Consider effect/Array.sort instead of native Array.toSorted. Requires an explicit Order instead of native default ordering or a numeric comparator. effect(preferEffectArray)
+/.src/preferEffectArray.ts(39,7): warning TS377139: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+/.src/preferEffectArray.ts(40,30): warning TS377139: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+/.src/preferEffectArray.ts(45,10): warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(46,7): warning TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+/.src/preferEffectArray.ts(47,15): warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(49,10): warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(50,17): warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(53,7): warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(55,11): warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(56,12): warning TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+/.src/preferEffectArray.ts(57,4): warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(58,4): warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(59,20): warning TS377139: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(60,15): warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(61,7): warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(62,17): warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(64,13): warning TS377139: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+/.src/preferEffectArray.ts(65,7): warning TS377139: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+/.src/preferEffectArray.ts(66,18): warning TS377139: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+/.src/preferEffectArray.ts(68,17): warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(69,18): warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(74,13): warning TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+
+
+==== /.src/preferEffectArray.ts (52 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferEffectArray:warning
+    import * as A from "effect/Array"
+    import * as Order from "effect/Order"
+    import { Array as EffectArray, Effect } from "effect"
+    
+    const xs = [1, 2, 3]
+    const strings = ["a", "b"]
+    xs.map(n => n + 1)
+       ~~~
+!!! warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    const native_map = xs.map
+                          ~~~
+!!! warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    xs.filter(n => n > 1)
+       ~~~~~~
+!!! warning TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+    const native_filter = xs.filter
+                             ~~~~~~
+!!! warning TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+    xs.every(n => n > 1)
+       ~~~~~
+!!! warning TS377139: Consider effect/Array.every instead of native Array.every. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    const native_every = xs.every
+                            ~~~~~
+!!! warning TS377139: Consider effect/Array.every instead of native Array.every. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    xs.some(n => n > 1)
+       ~~~~
+!!! warning TS377139: Consider effect/Array.some instead of native Array.some. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    const native_some = xs.some
+                           ~~~~
+!!! warning TS377139: Consider effect/Array.some instead of native Array.some. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    xs.forEach(n => { void n })
+       ~~~~~~~
+!!! warning TS377139: Consider effect/Array.forEach instead of native Array.forEach. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    const native_forEach = xs.forEach
+                              ~~~~~~~
+!!! warning TS377139: Consider effect/Array.forEach instead of native Array.forEach. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    xs.flatMap(n => [n, n])
+       ~~~~~~~
+!!! warning TS377139: Consider effect/Array.flatMap instead of native Array.flatMap. Callbacks must return arrays; the callback type accepts (value, index), with no array parameter or thisArg, and sparse-array holes are visited. effect(preferEffectArray)
+    const native_flatMap = xs.flatMap
+                              ~~~~~~~
+!!! warning TS377139: Consider effect/Array.flatMap instead of native Array.flatMap. Callbacks must return arrays; the callback type accepts (value, index), with no array parameter or thisArg, and sparse-array holes are visited. effect(preferEffectArray)
+    xs.reduce((acc, n) => acc + n, 0)
+       ~~~~~~
+!!! warning TS377139: Consider effect/Array.reduce instead of native Array.reduce. An initial value is required before the callback; the callback type omits the array parameter. effect(preferEffectArray)
+    const native_reduce = xs.reduce
+                             ~~~~~~
+!!! warning TS377139: Consider effect/Array.reduce instead of native Array.reduce. An initial value is required before the callback; the callback type omits the array parameter. effect(preferEffectArray)
+    xs.reduceRight((acc, n) => acc + n, 0)
+       ~~~~~~~~~~~
+!!! warning TS377139: Consider effect/Array.reduceRight instead of native Array.reduceRight. An initial value is required before the callback; the callback type omits the array parameter. effect(preferEffectArray)
+    const native_reduceRight = xs.reduceRight
+                                  ~~~~~~~~~~~
+!!! warning TS377139: Consider effect/Array.reduceRight instead of native Array.reduceRight. An initial value is required before the callback; the callback type omits the array parameter. effect(preferEffectArray)
+    xs.find(n => n > 1)
+       ~~~~
+!!! warning TS377139: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    const native_find = xs.find
+                           ~~~~
+!!! warning TS377139: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    xs.findLast(n => n > 1)
+       ~~~~~~~~
+!!! warning TS377139: Consider effect/Array.findLast instead of native Array.findLast. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    const native_findLast = xs.findLast
+                               ~~~~~~~~
+!!! warning TS377139: Consider effect/Array.findLast instead of native Array.findLast. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    xs.findIndex(n => n > 1)
+       ~~~~~~~~~
+!!! warning TS377139: Consider effect/Array.findFirstIndex instead of native Array.findIndex. Returns Option<number>, with None replacing -1; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    const native_findIndex = xs.findIndex
+                                ~~~~~~~~~
+!!! warning TS377139: Consider effect/Array.findFirstIndex instead of native Array.findIndex. Returns Option<number>, with None replacing -1; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    xs.findLastIndex(n => n > 1)
+       ~~~~~~~~~~~~~
+!!! warning TS377139: Consider effect/Array.findLastIndex instead of native Array.findLastIndex. Returns Option<number>, with None replacing -1; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    const native_findLastIndex = xs.findLastIndex
+                                    ~~~~~~~~~~~~~
+!!! warning TS377139: Consider effect/Array.findLastIndex instead of native Array.findLastIndex. Returns Option<number>, with None replacing -1; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    strings.join(",")
+            ~~~~
+!!! warning TS377139: Consider effect/Array.join instead of native Array.join. Accepts strings and requires an explicit separator. effect(preferEffectArray)
+    const native_join = strings.join
+                                ~~~~
+!!! warning TS377139: Consider effect/Array.join instead of native Array.join. Accepts strings and requires an explicit separator. effect(preferEffectArray)
+    xs.toReversed()
+       ~~~~~~~~~~
+!!! warning TS377139: Consider effect/Array.reverse instead of native Array.toReversed. Returns a new array, like native toReversed. effect(preferEffectArray)
+    const native_toReversed = xs.toReversed
+                                 ~~~~~~~~~~
+!!! warning TS377139: Consider effect/Array.reverse instead of native Array.toReversed. Returns a new array, like native toReversed. effect(preferEffectArray)
+    xs.toSorted((a, b) => a - b)
+       ~~~~~~~~
+!!! warning TS377139: Consider effect/Array.sort instead of native Array.toSorted. Requires an explicit Order instead of native default ordering or a numeric comparator. effect(preferEffectArray)
+    const native_toSorted = xs.toSorted
+                               ~~~~~~~~
+!!! warning TS377139: Consider effect/Array.sort instead of native Array.toSorted. Requires an explicit Order instead of native default ordering or a numeric comparator. effect(preferEffectArray)
+    Array.isArray(xs)
+          ~~~~~~~
+!!! warning TS377139: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+    const native_isArray = Array.isArray
+                                 ~~~~~~~
+!!! warning TS377139: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+    
+    const readonly: ReadonlyArray<number> = xs
+    const tuple: [number, string] = [1, "a"]
+    const readonlyTuple: readonly [number, string] = tuple
+    readonly.map(n => n + 1)
+             ~~~
+!!! warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    tuple.filter(value => typeof value === "number")
+          ~~~~~~
+!!! warning TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+    readonlyTuple.map(value => String(value))
+                  ~~~
+!!! warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    function constrained<T extends readonly number[]>(values: T) {
+      values["map"](n => n + 1)
+             ~~~~~
+!!! warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+      return values.map(n => n + 1)
+                    ~~~
+!!! warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    }
+    declare const union: number[] | readonly string[]
+    union.map(value => String(value))
+          ~~~
+!!! warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    declare const optional: readonly number[] | undefined
+    optional?.map(n => n + 1)
+              ~~~
+!!! warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    optional?.["filter"](n => n > 1)
+               ~~~~~~~~
+!!! warning TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+    xs.map?.(n => n + 1)
+       ~~~
+!!! warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    xs["map"](n => n + 1)
+       ~~~~~
+!!! warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    const bracket = xs["find"]
+                       ~~~~~~
+!!! warning TS377139: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    readonlyTuple["map"](value => String(value))
+                  ~~~~~
+!!! warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    ;(xs).map(n => n + 1)
+          ~~~
+!!! warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    Array.prototype.map.call(xs, n => n)
+                    ~~~
+!!! warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    const NativeArray = Array
+    NativeArray.isArray(xs)
+                ~~~~~~~
+!!! warning TS377139: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+    Array["isArray"](xs)
+          ~~~~~~~~~
+!!! warning TS377139: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+    globalThis.Array.isArray(xs)
+                     ~~~~~~~
+!!! warning TS377139: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+    class Inherited extends Array<number> {}
+    new Inherited().map(n => n + 1)
+                    ~~~
+!!! warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    const alias = xs.map
+                     ~~~
+!!! warning TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    alias.call(xs, n => n + 1)
+    const { map: destructured } = xs
+    destructured.call(xs, n => n + 1)
+    export const insideEffect = Effect.gen(function*() {
+      return xs.filter(n => n > 1)
+                ~~~~~~
+!!! warning TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+    })
+    
+    A.map(xs, n => n + 1)
+    A.filter(xs, n => n > 1)
+    A.every(xs, n => n > 1)
+    A.some(xs, n => n > 1)
+    A.forEach(xs, n => { void n })
+    A.flatMap(xs, n => [n, n])
+    A.reduce(xs, 0, (acc, n) => acc + n)
+    A.reduceRight(xs, 0, (acc, n) => acc + n)
+    A.findFirst(xs, n => n > 1)
+    A.findLast(xs, n => n > 1)
+    A.findFirstIndex(xs, n => n > 1)
+    A.findLastIndex(xs, n => n > 1)
+    A.join(strings, ",")
+    A.reverse(xs)
+    A.sort(xs, Order.Number)
+    A.isArray(xs)
+    EffectArray.map(xs, n => n + 1)
+    const EffectAlias = A
+    EffectAlias.filter(xs, n => n > 1)
+    
+    const custom = { map: (f: (n: number) => number) => f(1), filter: () => true }
+    custom.map(n => n + 1)
+    custom.filter()
+    new Uint8Array([1, 2]).map(n => n + 1)
+    new Float64Array([1, 2]).filter(n => n > 1)
+    class Override extends Array<number> {
+      map<U>(f: (n: number, i: number, a: number[]) => U): U[] { return [] }
+      callSuper() { return super.map(n => n + 1) }
+    }
+    new Override().map(n => n + 1)
+    declare const mixed: number[] | { map: (f: (n: number) => number) => number[] }
+    mixed.map(n => n + 1)
+    declare const intersection: number[] & { map: (f: (n: number) => number) => number[] }
+    intersection.map(n => n + 1)
+    function shadowedGlobals() {
+      const Array = { isArray: (value: unknown) => true }
+      Array.isArray(xs)
+    }
+    namespace ShadowedTypes {
+      export interface Array<T> { map: (f: (value: T) => T) => T[] }
+      export interface ReadonlyArray<T> { filter: (f: (value: T) => boolean) => T[] }
+      declare const customArray: Array<number>
+      declare const customReadonly: ReadonlyArray<number>
+      customArray.map(n => n + 1)
+      customReadonly.filter(n => n > 1)
+    }
+    xs.map = native_map
+    xs["filter"] = native_filter
+    ;({ value: xs.map } = { value: native_map })
+    type MapType = typeof xs.map
+    type BracketType = typeof xs["filter"]
+    function typePosition<T extends typeof xs.map>() {}
+    
+    void xs.at
+    void xs.concat
+    void xs.copyWithin
+    void xs.entries
+    void xs.fill
+    void xs.flat
+    void xs.includes
+    void xs.indexOf
+    void xs.keys
+    void xs.lastIndexOf
+    void xs.pop
+    void xs.push
+    void xs.reverse
+    void xs.shift
+    void xs.slice
+    void xs.sort
+    void xs.splice
+    void xs.toLocaleString
+    void xs.toSpliced
+    void xs.toString
+    void xs.unshift
+    void xs.values
+    void xs.with
+    void xs[Symbol.iterator]
+    void Array.from
+    void Array.of
+    void Array.fromAsync
+    declare const dynamicName: keyof number[]
+    void xs[dynamicName]
+    void xs.length
+    void Array.prototype
+    
+
+==== /.src/aliases.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    export const Constructor = Array
+
+==== /.src/imported.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferEffectArray:warning
+    import { Constructor } from "./aliases.js"
+    Constructor.isArray([])
+                ~~~~~~~
+!!! warning TS377139: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+    

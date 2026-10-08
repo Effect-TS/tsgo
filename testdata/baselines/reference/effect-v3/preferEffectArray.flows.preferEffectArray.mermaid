@@ -1,0 +1,481 @@
+flowchart TB
+  0[/"type: number#91;#93;<br/>node: #91;1, 2, 3#93;"/]
+  1[/"type: string#91;#93;<br/>node: #91;#quot;a#quot;, #quot;b#quot;#93;"/]
+  2[/"type: number#91;#93;<br/>node: xs.map#40;n =#gt; n + 1#41;"/]
+  3[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  4[/"type: number<br/>node: n + 1"/]
+  5[/"type: #lt;U#gt;#40;callbackfn: #40;value: number, index: number, array: number#91;#93;#41; =#gt; U, thisArg?: any#41; =#gt; U#91;#93;<br/>node: xs.map"/]
+  6[/"type: number#91;#93;<br/>node: xs.filter#40;n =#gt; n #gt; 1#41;"/]
+  7[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  8[/"type: boolean<br/>node: n #gt; 1"/]
+  9[/"type: #123; #lt;S extends number#gt;#40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; value is S, thisArg?: any#41;: S#91;#93;; #40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; unknown, thisArg?: any#41;: number#91;#93;; #125;<br/>node: xs.filter"/]
+  10[/"type: boolean<br/>node: xs.every#40;n =#gt; n #gt; 1#41;"/]
+  11[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  12[/"type: boolean<br/>node: n #gt; 1"/]
+  13[/"type: #123; #lt;S extends number#gt;#40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; value is S, thisArg?: any#41;: this is S#91;#93;; #40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; unknown, thisArg?: any#41;: boolean; #125;<br/>node: xs.every"/]
+  14[/"type: boolean<br/>node: xs.some#40;n =#gt; n #gt; 1#41;"/]
+  15[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  16[/"type: boolean<br/>node: n #gt; 1"/]
+  17[/"type: #40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; unknown, thisArg?: any#41; =#gt; boolean<br/>node: xs.some"/]
+  18[/"type: void<br/>node: xs.forEach#40;n =#gt; #123; void n #125;#41;"/]
+  19[["type: #40;n: number#41; =#gt; void<br/>node: n =#gt; #123; void n #125;"]]
+  20[/"type: #40;callbackfn: #40;value: number, index: number, array: number#91;#93;#41; =#gt; void, thisArg?: any#41; =#gt; void<br/>node: xs.forEach"/]
+  21[/"type: number#91;#93;<br/>node: xs.flatMap#40;n =#gt; #91;n, n#93;#41;"/]
+  22[["type: #40;this: undefined, n: number#41; =#gt; number#91;#93;<br/>node: n =#gt; #91;n, n#93;"]]
+  23[/"type: number#91;#93;<br/>node: #91;n, n#93;"/]
+  24[/"type: #lt;U, This = undefined#gt;#40;callback: #40;this: This, value: number, index: number, array: number#91;#93;#41; =#gt; U #124; readonly U#91;#93;, thisArg?: This #124; undefined#41; =#gt; U#91;#93;<br/>node: xs.flatMap"/]
+  25[/"type: number<br/>node: xs.reduce#40;#40;acc, n#41; =#gt; acc + n, 0#41;"/]
+  26[["type: #40;acc: number, n: number#41; =#gt; number<br/>node: #40;acc, n#41; =#gt; acc + n"]]
+  27[/"type: number<br/>node: acc + n"/]
+  28[/"type: #123; #40;callbackfn: #40;previousValue: number, currentValue: number, currentIndex: number, array: number#91;#93;#41; =#gt; number#41;: number; #40;callbackfn: #40;previousValue: number, currentValue: number, currentIndex: number, array: number#91;#93;#41; =#gt; number, initialValue: number#41;: number; #lt;U#gt;#40;callbackfn: #40;previousValue: U, currentValue: number, currentIndex: number, array: number#91;#93;#41; =#gt; U, initialValue: U#41;: U; #125;<br/>node: xs.reduce"/]
+  29[/"type: number<br/>node: xs.reduceRight#40;#40;acc, n#41; =#gt; acc + n, 0#41;"/]
+  30[["type: #40;acc: number, n: number#41; =#gt; number<br/>node: #40;acc, n#41; =#gt; acc + n"]]
+  31[/"type: number<br/>node: acc + n"/]
+  32[/"type: #123; #40;callbackfn: #40;previousValue: number, currentValue: number, currentIndex: number, array: number#91;#93;#41; =#gt; number#41;: number; #40;callbackfn: #40;previousValue: number, currentValue: number, currentIndex: number, array: number#91;#93;#41; =#gt; number, initialValue: number#41;: number; #lt;U#gt;#40;callbackfn: #40;previousValue: U, currentValue: number, currentIndex: number, array: number#91;#93;#41; =#gt; U, initialValue: U#41;: U; #125;<br/>node: xs.reduceRight"/]
+  33[/"type: number #124; undefined<br/>node: xs.find#40;n =#gt; n #gt; 1#41;"/]
+  34[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  35[/"type: boolean<br/>node: n #gt; 1"/]
+  36[/"type: #123; #lt;S extends number#gt;#40;predicate: #40;value: number, index: number, obj: number#91;#93;#41; =#gt; value is S, thisArg?: any#41;: S #124; undefined; #40;predicate: #40;value: number, index: number, obj: number#91;#93;#41; =#gt; unknown, thisArg?: any#41;: number #124; undefined; #125;<br/>node: xs.find"/]
+  37[/"type: number #124; undefined<br/>node: xs.findLast#40;n =#gt; n #gt; 1#41;"/]
+  38[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  39[/"type: boolean<br/>node: n #gt; 1"/]
+  40[/"type: #123; #lt;S extends number#gt;#40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; value is S, thisArg?: any#41;: S #124; undefined; #40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; unknown, thisArg?: any#41;: number #124; undefined; #125;<br/>node: xs.findLast"/]
+  41[/"type: number<br/>node: xs.findIndex#40;n =#gt; n #gt; 1#41;"/]
+  42[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  43[/"type: boolean<br/>node: n #gt; 1"/]
+  44[/"type: #40;predicate: #40;value: number, index: number, obj: number#91;#93;#41; =#gt; unknown, thisArg?: any#41; =#gt; number<br/>node: xs.findIndex"/]
+  45[/"type: number<br/>node: xs.findLastIndex#40;n =#gt; n #gt; 1#41;"/]
+  46[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  47[/"type: boolean<br/>node: n #gt; 1"/]
+  48[/"type: #40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; unknown, thisArg?: any#41; =#gt; number<br/>node: xs.findLastIndex"/]
+  49[/"type: #quot;,#quot;<br/>node: #quot;,#quot;"/]
+  50["type: string<br/>callee: strings.join<br/>args: #91;#93;"]
+  51[/"type: #40;separator?: string #124; undefined#41; =#gt; string<br/>node: strings.join"/]
+  52[/"type: #40;separator?: string #124; undefined#41; =#gt; string<br/>node: strings.join"/]
+  53[/"type: number#91;#93;<br/>node: xs.toReversed#40;#41;"/]
+  54[/"type: #40;#41; =#gt; number#91;#93;<br/>node: xs.toReversed"/]
+  55[["type: #40;a: number, b: number#41; =#gt; number<br/>node: #40;a, b#41; =#gt; a - b"]]
+  56[/"type: number<br/>node: a - b"/]
+  57["type: number#91;#93;<br/>callee: xs.toSorted<br/>args: #91;#93;"]
+  58[/"type: #40;compareFn?: #40;#40;a: number, b: number#41; =#gt; number#41; #124; undefined#41; =#gt; number#91;#93;<br/>node: xs.toSorted"/]
+  59[/"type: #40;compareFn?: #40;#40;a: number, b: number#41; =#gt; number#41; #124; undefined#41; =#gt; number#91;#93;<br/>node: xs.toSorted"/]
+  60[/"type: number#91;#93;<br/>node: xs"/]
+  61["type: boolean<br/>callee: Array.isArray<br/>args: #91;#93;"]
+  62[/"type: #40;arg: any#41; =#gt; arg is any#91;#93;<br/>node: Array.isArray"/]
+  63[/"type: #40;arg: any#41; =#gt; arg is any#91;#93;<br/>node: Array.isArray"/]
+  64[/"type: number#91;#93;<br/>node: xs"/]
+  65[/"type: #91;number, string#93;<br/>node: #91;1, #quot;a#quot;#93;"/]
+  66[/"type: #91;number, string#93;<br/>node: tuple"/]
+  67[/"type: number#91;#93;<br/>node: readonly.map#40;n =#gt; n + 1#41;"/]
+  68[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  69[/"type: number<br/>node: n + 1"/]
+  70[/"type: number#91;#93;<br/>node: tuple.filter#40;value =#gt; typeof value === #quot;number#quot;#41;"/]
+  71[["type: #40;value: string #124; number#41; =#gt; value is number<br/>node: value =#gt; typeof value === #quot;number#quot;"]]
+  72[/"type: boolean<br/>node: typeof value === #quot;number#quot;"/]
+  73[/"type: string#91;#93;<br/>node: readonlyTuple.map#40;value =#gt; String#40;value#41;#41;"/]
+  74[["type: #40;value: string #124; number#41; =#gt; string<br/>node: value =#gt; String#40;value#41;"]]
+  75[/"type: string #124; number<br/>node: value"/]
+  76["type: string<br/>callee: String<br/>args: #91;#93;"]
+  77[/"type: StringConstructor<br/>node: String"/]
+  78[["type: #lt;T extends readonly number#91;#93;#gt;#40;values: T#41; =#gt; number#91;#93;<br/>node: function constrained#lt;T extends readonly number#91;#93;#gt;#40;values: T#41; #123;#92;n  values#91;#quot;map#quot;#93;#40;n =#gt; n + 1#41;#92;n  return values.map#40;n =#gt; n + 1#41;#92;n#125;"]]
+  79[/"type: number#91;#93;<br/>node: values.map#40;n =#gt; n + 1#41;"/]
+  80[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  81[/"type: number<br/>node: n + 1"/]
+  82[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  83[/"type: number<br/>node: n + 1"/]
+  84[/"type: string#91;#93;<br/>node: union.map#40;value =#gt; String#40;value#41;#41;"/]
+  85[["type: #40;value: string #124; number#41; =#gt; string<br/>node: value =#gt; String#40;value#41;"]]
+  86[/"type: string #124; number<br/>node: value"/]
+  87["type: string<br/>callee: String<br/>args: #91;#93;"]
+  88[/"type: StringConstructor<br/>node: String"/]
+  89[/"type: number#91;#93; #124; undefined<br/>node: optional?.map#40;n =#gt; n + 1#41;"/]
+  90[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  91[/"type: number<br/>node: n + 1"/]
+  92[/"type: number#91;#93; #124; undefined<br/>node: optional?.#91;#quot;filter#quot;#93;#40;n =#gt; n #gt; 1#41;"/]
+  93[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  94[/"type: boolean<br/>node: n #gt; 1"/]
+  95[/"type: number#91;#93;<br/>node: xs.map?.#40;n =#gt; n + 1#41;"/]
+  96[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  97[/"type: number<br/>node: n + 1"/]
+  98[/"type: number#91;#93;<br/>node: xs#91;#quot;map#quot;#93;#40;n =#gt; n + 1#41;"/]
+  99[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  100[/"type: number<br/>node: n + 1"/]
+  101[/"type: #123; #lt;S extends number#gt;#40;predicate: #40;value: number, index: number, obj: number#91;#93;#41; =#gt; value is S, thisArg?: any#41;: S #124; undefined; #40;predicate: #40;value: number, index: number, obj: number#91;#93;#41; =#gt; unknown, thisArg?: any#41;: number #124; undefined; #125;<br/>node: xs#91;#quot;find#quot;#93;"/]
+  102[/"type: string#91;#93;<br/>node: readonlyTuple#91;#quot;map#quot;#93;#40;value =#gt; String#40;value#41;#41;"/]
+  103[["type: #40;value: string #124; number#41; =#gt; string<br/>node: value =#gt; String#40;value#41;"]]
+  104[/"type: string #124; number<br/>node: value"/]
+  105["type: string<br/>callee: String<br/>args: #91;#93;"]
+  106[/"type: StringConstructor<br/>node: String"/]
+  107[/"type: number#91;#93;<br/>node: #40;xs#41;.map#40;n =#gt; n + 1#41;"/]
+  108[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  109[/"type: number<br/>node: n + 1"/]
+  110[/"type: unknown#91;#93;<br/>node: Array.prototype.map.call#40;xs, n =#gt; n#41;"/]
+  111[["type: #40;n: any#41; =#gt; any<br/>node: n =#gt; n"]]
+  112[/"type: any<br/>node: n"/]
+  113[/"type: ArrayConstructor<br/>node: Array"/]
+  114[/"type: number#91;#93;<br/>node: xs"/]
+  115["type: boolean<br/>callee: NativeArray.isArray<br/>args: #91;#93;"]
+  116[/"type: #40;arg: any#41; =#gt; arg is any#91;#93;<br/>node: NativeArray.isArray"/]
+  117[/"type: number#91;#93;<br/>node: xs"/]
+  118["type: boolean<br/>callee: Array#91;#quot;isArray#quot;#93;<br/>args: #91;#93;"]
+  119[/"type: #40;arg: any#41; =#gt; arg is any#91;#93;<br/>node: Array#91;#quot;isArray#quot;#93;"/]
+  120[/"type: number#91;#93;<br/>node: xs"/]
+  121["type: boolean<br/>callee: globalThis.Array.isArray<br/>args: #91;#93;"]
+  122[/"type: #40;arg: any#41; =#gt; arg is any#91;#93;<br/>node: globalThis.Array.isArray"/]
+  123[/"type: ArrayConstructor<br/>node: Array"/]
+  124[/"type: number#91;#93;<br/>node: new Inherited#40;#41;.map#40;n =#gt; n + 1#41;"/]
+  125[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  126[/"type: number<br/>node: n + 1"/]
+  127[/"type: #lt;U#gt;#40;callbackfn: #40;value: number, index: number, array: number#91;#93;#41; =#gt; U, thisArg?: any#41; =#gt; U#91;#93;<br/>node: xs.map"/]
+  128[/"type: unknown#91;#93;<br/>node: alias.call#40;xs, n =#gt; n + 1#41;"/]
+  129[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  130[/"type: number<br/>node: n + 1"/]
+  131[/"type: number#91;#93;<br/>node: xs"/]
+  132[/"type: unknown#91;#93;<br/>node: destructured.call#40;xs, n =#gt; n + 1#41;"/]
+  133[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  134[/"type: number<br/>node: n + 1"/]
+  135((("type: Effect#lt;number#91;#93;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return xs.filter#40;n =#gt; n #gt; 1#41;#92;n#125;#41;")))
+  136[/"type: number#91;#93;<br/>node: xs.filter#40;n =#gt; n #gt; 1#41;"/]
+  137[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  138[/"type: boolean<br/>node: n #gt; 1"/]
+  139[/"type: number#91;#93;<br/>node: xs"/]
+  140["type: number#91;#93;<br/>callee: <br/>args: #91;#93;"]
+  141[/"type: #123; #lt;S extends ReadonlyArray#lt;any#gt;, B#gt;#40;f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; B#41;: #40;self: S#41; =#gt; With#lt;S, B#gt;; #lt;S extends ReadonlyArray#lt;any#gt;, B#gt;#40;self: S, f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; B#41;: With#lt;S, B#gt;; #125;<br/>node: A.map"/]
+  142[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  143[/"type: number<br/>node: n + 1"/]
+  144[/"type: number#91;#93;<br/>node: xs"/]
+  145["type: number#91;#93;<br/>callee: <br/>args: #91;#93;"]
+  146[/"type: #123; #lt;A, B extends A#gt;#40;refinement: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; a is B#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; B#91;#93;; #lt;A#gt;#40;predicate: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; boolean#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; A#91;#93;; #lt;A, B extends A#gt;#40;self: Iterable#lt;A#gt;, refinement: #40;a: A, i: number#41; =#gt; a is B#41;: B#91;#93;; #lt;A#gt;#40;self: Iterable#lt;A#gt;, predicate: #40;a: A, i: number#41; =#gt; boolean#41;: A#91;#93;; #125;<br/>node: A.filter"/]
+  147[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  148[/"type: boolean<br/>node: n #gt; 1"/]
+  149[/"type: number#91;#93;<br/>node: xs"/]
+  150["type: boolean<br/>callee: <br/>args: #91;#93;"]
+  151[/"type: #123; #lt;A, B extends A#gt;#40;refinement: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; a is B#41;: #40;self: readonly A#91;#93;#41; =#gt; self is readonly B#91;#93;; #lt;A#gt;#40;predicate: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; boolean#41;: #40;self: readonly A#91;#93;#41; =#gt; boolean; #lt;A, B extends A#gt;#40;self: readonly A#91;#93;, refinement: #40;a: A, i: number#41; =#gt; a is B#41;: self is readonly B#91;#93;; #lt;A#gt;#40;self: readonly A#91;#93;, predicate: #40;a: A, i: number#41; =#gt; boolean#41;: boolean; #125;<br/>node: A.every"/]
+  152[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  153[/"type: boolean<br/>node: n #gt; 1"/]
+  154[/"type: number#91;#93;<br/>node: xs"/]
+  155["type: boolean<br/>callee: <br/>args: #91;#93;"]
+  156[/"type: #123; #lt;A#gt;#40;predicate: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; boolean#41;: #40;self: readonly A#91;#93;#41; =#gt; self is readonly #91;A, ...A#91;#93;#93;; #lt;A#gt;#40;self: readonly A#91;#93;, predicate: #40;a: A, i: number#41; =#gt; boolean#41;: self is readonly #91;A, ...A#91;#93;#93;; #125;<br/>node: A.some"/]
+  157[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  158[/"type: boolean<br/>node: n #gt; 1"/]
+  159[/"type: number#91;#93;<br/>node: xs"/]
+  160["type: void<br/>callee: <br/>args: #91;#93;"]
+  161[/"type: #123; #lt;A#gt;#40;f: #40;a: A, i: number#41; =#gt; void#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; void; #lt;A#gt;#40;self: Iterable#lt;A#gt;, f: #40;a: A, i: number#41; =#gt; void#41;: void; #125;<br/>node: A.forEach"/]
+  162[["type: #40;n: number#41; =#gt; void<br/>node: n =#gt; #123; void n #125;"]]
+  163[/"type: number#91;#93;<br/>node: A.flatMap#40;xs, n =#gt; #91;n, n#93;#41;"/]
+  164[["type: #40;n: number#41; =#gt; number#91;#93;<br/>node: n =#gt; #91;n, n#93;"]]
+  165[/"type: number#91;#93;<br/>node: #91;n, n#93;"/]
+  166[/"type: number#91;#93;<br/>node: xs"/]
+  167["type: number<br/>callee: <br/>args: #91;#93;"]
+  168[/"type: #123; #lt;B, A#gt;#40;b: B, f: #40;b: B, a: A, i: number#41; =#gt; B#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; B; #lt;A, B#gt;#40;self: Iterable#lt;A#gt;, b: B, f: #40;b: B, a: A, i: number#41; =#gt; B#41;: B; #125;<br/>node: A.reduce"/]
+  169[/"type: 0<br/>node: 0"/]
+  170[["type: #40;acc: number, n: number#41; =#gt; number<br/>node: #40;acc, n#41; =#gt; acc + n"]]
+  171[/"type: number<br/>node: acc + n"/]
+  172[/"type: number#91;#93;<br/>node: xs"/]
+  173["type: number<br/>callee: <br/>args: #91;#93;"]
+  174[/"type: #123; #lt;B, A#gt;#40;b: B, f: #40;b: B, a: A, i: number#41; =#gt; B#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; B; #lt;A, B#gt;#40;self: Iterable#lt;A#gt;, b: B, f: #40;b: B, a: A, i: number#41; =#gt; B#41;: B; #125;<br/>node: A.reduceRight"/]
+  175[/"type: 0<br/>node: 0"/]
+  176[["type: #40;acc: number, n: number#41; =#gt; number<br/>node: #40;acc, n#41; =#gt; acc + n"]]
+  177[/"type: number<br/>node: acc + n"/]
+  178[/"type: number#91;#93;<br/>node: xs"/]
+  179["type: Option#lt;number#gt;<br/>callee: <br/>args: #91;#93;"]
+  180[/"type: #123; #lt;A, B#gt;#40;f: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; Option#lt;B#gt;#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; Option#lt;B#gt;; #lt;A, B extends A#gt;#40;refinement: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; a is B#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; Option#lt;B#gt;; #lt;A#gt;#40;predicate: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; boolean#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; Option#lt;A#gt;; #lt;A, B#gt;#40;self: Iterable#lt;A#gt;, f: #40;a: A, i: number#41; =#gt; Option#lt;B#gt;#41;: Option#lt;B#gt;; #lt;A, B extends A#gt;#40;self: Iterable#lt;A#gt;, refinement: #40;a: A, i: number#41; =#gt; a is B#41;: Option#lt;B#gt;; #lt;A#gt;#40;self: Iterable#lt;A#gt;, predicate: #40;a: A, i: number#41; =#gt; boolean#41;: Option#lt;A#gt;; #125;<br/>node: A.findFirst"/]
+  181[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  182[/"type: boolean<br/>node: n #gt; 1"/]
+  183[/"type: number#91;#93;<br/>node: xs"/]
+  184["type: Option#lt;number#gt;<br/>callee: <br/>args: #91;#93;"]
+  185[/"type: #123; #lt;A, B#gt;#40;f: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; Option#lt;B#gt;#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; Option#lt;B#gt;; #lt;A, B extends A#gt;#40;refinement: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; a is B#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; Option#lt;B#gt;; #lt;A#gt;#40;predicate: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; boolean#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; Option#lt;A#gt;; #lt;A, B#gt;#40;self: Iterable#lt;A#gt;, f: #40;a: A, i: number#41; =#gt; Option#lt;B#gt;#41;: Option#lt;B#gt;; #lt;A, B extends A#gt;#40;self: Iterable#lt;A#gt;, refinement: #40;a: A, i: number#41; =#gt; a is B#41;: Option#lt;B#gt;; #lt;A#gt;#40;self: Iterable#lt;A#gt;, predicate: #40;a: A, i: number#41; =#gt; boolean#41;: Option#lt;A#gt;; #125;<br/>node: A.findLast"/]
+  186[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  187[/"type: boolean<br/>node: n #gt; 1"/]
+  188[/"type: number#91;#93;<br/>node: xs"/]
+  189["type: Option#lt;number#gt;<br/>callee: <br/>args: #91;#93;"]
+  190[/"type: #123; #lt;A#gt;#40;predicate: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; boolean#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; Option#lt;number#gt;; #lt;A#gt;#40;self: Iterable#lt;A#gt;, predicate: #40;a: A, i: number#41; =#gt; boolean#41;: Option#lt;number#gt;; #125;<br/>node: A.findFirstIndex"/]
+  191[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  192[/"type: boolean<br/>node: n #gt; 1"/]
+  193[/"type: number#91;#93;<br/>node: xs"/]
+  194["type: Option#lt;number#gt;<br/>callee: <br/>args: #91;#93;"]
+  195[/"type: #123; #lt;A#gt;#40;predicate: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; boolean#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; Option#lt;number#gt;; #lt;A#gt;#40;self: Iterable#lt;A#gt;, predicate: #40;a: A, i: number#41; =#gt; boolean#41;: Option#lt;number#gt;; #125;<br/>node: A.findLastIndex"/]
+  196[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  197[/"type: boolean<br/>node: n #gt; 1"/]
+  198[/"type: string#91;#93;<br/>node: strings"/]
+  199["type: string<br/>callee: <br/>args: #91;#93;"]
+  200[/"type: #123; #40;sep: string#41;: #40;self: Iterable#lt;string#gt;#41; =#gt; string; #40;self: Iterable#lt;string#gt;, sep: string#41;: string; #125;<br/>node: A.join"/]
+  201[/"type: #quot;,#quot;<br/>node: #quot;,#quot;"/]
+  202[/"type: number#91;#93;<br/>node: xs"/]
+  203["type: number#91;#93;<br/>callee: A.reverse<br/>args: #91;#93;"]
+  204[/"type: #lt;S extends Iterable#lt;any#gt;#gt;#40;self: S#41; =#gt; S extends readonly #91;infer A, ...#40;infer A#41;#91;#93;#93; ? #91;A, ...A#91;#93;#93; : S extends Iterable#lt;infer A#gt; ? A#91;#93; : never<br/>node: A.reverse"/]
+  205[/"type: number#91;#93;<br/>node: A.sort#40;xs, Order.number#41;"/]
+  206[/"type: boolean<br/>node: A.isArray#40;xs#41;"/]
+  207[/"type: number#91;#93;<br/>node: xs"/]
+  208["type: number#91;#93;<br/>callee: <br/>args: #91;#93;"]
+  209[/"type: #123; #lt;S extends ReadonlyArray#lt;any#gt;, B#gt;#40;f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; B#41;: #40;self: S#41; =#gt; With#lt;S, B#gt;; #lt;S extends ReadonlyArray#lt;any#gt;, B#gt;#40;self: S, f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; B#41;: With#lt;S, B#gt;; #125;<br/>node: EffectArray.map"/]
+  210[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  211[/"type: number<br/>node: n + 1"/]
+  212[/"type: typeof import#40;#quot;/node_modules/effect/dist/dts/Array#quot;#41;<br/>node: A"/]
+  213[/"type: number#91;#93;<br/>node: xs"/]
+  214["type: number#91;#93;<br/>callee: <br/>args: #91;#93;"]
+  215[/"type: #123; #lt;A, B extends A#gt;#40;refinement: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; a is B#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; B#91;#93;; #lt;A#gt;#40;predicate: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; boolean#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; A#91;#93;; #lt;A, B extends A#gt;#40;self: Iterable#lt;A#gt;, refinement: #40;a: A, i: number#41; =#gt; a is B#41;: B#91;#93;; #lt;A#gt;#40;self: Iterable#lt;A#gt;, predicate: #40;a: A, i: number#41; =#gt; boolean#41;: A#91;#93;; #125;<br/>node: EffectAlias.filter"/]
+  216[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  217[/"type: boolean<br/>node: n #gt; 1"/]
+  218[/"type: #123; map: #40;f: #40;n: number#41; =#gt; number#41; =#gt; number; filter: #40;#41; =#gt; boolean; #125;<br/>node: #123; map: #40;f: #40;n: number#41; =#gt; number#41; =#gt; f#40;1#41;, filter: #40;#41; =#gt; true #125;"/]
+  219[["type: #40;f: #40;n: number#41; =#gt; number#41; =#gt; number<br/>node: #40;f: #40;n: number#41; =#gt; number#41; =#gt; f#40;1#41;"]]
+  220[/"type: 1<br/>node: 1"/]
+  221["type: number<br/>callee: f<br/>args: #91;#93;"]
+  222[/"type: #40;n: number#41; =#gt; number<br/>node: f"/]
+  223[["type: #40;#41; =#gt; boolean<br/>node: #40;#41; =#gt; true"]]
+  224[/"type: true<br/>node: true"/]
+  225[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  226[/"type: number<br/>node: n + 1"/]
+  227["type: number<br/>callee: custom.map<br/>args: #91;#93;"]
+  228[/"type: #40;f: #40;n: number#41; =#gt; number#41; =#gt; number<br/>node: custom.map"/]
+  229[/"type: boolean<br/>node: custom.filter#40;#41;"/]
+  230[/"type: Uint8Array#lt;ArrayBuffer#gt;<br/>node: new Uint8Array#40;#91;1, 2#93;#41;.map#40;n =#gt; n + 1#41;"/]
+  231[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  232[/"type: number<br/>node: n + 1"/]
+  233[/"type: Float64Array#lt;ArrayBuffer#gt;<br/>node: new Float64Array#40;#91;1, 2#93;#41;.filter#40;n =#gt; n #gt; 1#41;"/]
+  234[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  235[/"type: boolean<br/>node: n #gt; 1"/]
+  236[/"type: ArrayConstructor<br/>node: Array"/]
+  237[["type: #lt;U#gt;#40;f: #40;n: number, i: number, a: number#91;#93;#41; =#gt; U#41; =#gt; U#91;#93;<br/>node: map#lt;U#gt;#40;f: #40;n: number, i: number, a: number#91;#93;#41; =#gt; U#41;: U#91;#93; #123; return #91;#93; #125;"]]
+  238[/"type: never#91;#93;<br/>node: #91;#93;"/]
+  239[["type: #40;#41; =#gt; number#91;#93;<br/>node: callSuper#40;#41; #123; return super.map#40;n =#gt; n + 1#41; #125;"]]
+  240[/"type: number#91;#93;<br/>node: super.map#40;n =#gt; n + 1#41;"/]
+  241[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  242[/"type: number<br/>node: n + 1"/]
+  243[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  244[/"type: number<br/>node: n + 1"/]
+  245["type: number#91;#93;<br/>callee: new Override#40;#41;.map<br/>args: #91;#93;"]
+  246[/"type: #lt;U#gt;#40;f: #40;n: number, i: number, a: number#91;#93;#41; =#gt; U#41; =#gt; U#91;#93;<br/>node: new Override#40;#41;.map"/]
+  247[/"type: number#91;#93;<br/>node: mixed.map#40;n =#gt; n + 1#41;"/]
+  248[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  249[/"type: number<br/>node: n + 1"/]
+  250[/"type: number#91;#93;<br/>node: intersection.map#40;n =#gt; n + 1#41;"/]
+  251[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  252[/"type: number<br/>node: n + 1"/]
+  253[["type: #40;#41; =#gt; void<br/>node: function shadowedGlobals#40;#41; #123;#92;n  const Array = #123; isArray: #40;value: unknown#41; =#gt; true #125;#92;n  Array.isArray#40;xs#41;#92;n#125;"]]
+  254[["type: #40;value: unknown#41; =#gt; boolean<br/>node: #40;value: unknown#41; =#gt; true"]]
+  255[/"type: true<br/>node: true"/]
+  256[/"type: number#91;#93;<br/>node: xs"/]
+  257["type: boolean<br/>callee: Array.isArray<br/>args: #91;#93;"]
+  258[/"type: #40;value: unknown#41; =#gt; boolean<br/>node: Array.isArray"/]
+  259[["type: #40;n: number#41; =#gt; number<br/>node: n =#gt; n + 1"]]
+  260[/"type: number<br/>node: n + 1"/]
+  261["type: number#91;#93;<br/>callee: customArray.map<br/>args: #91;#93;"]
+  262[/"type: #40;f: #40;value: number#41; =#gt; number#41; =#gt; number#91;#93;<br/>node: customArray.map"/]
+  263[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  264[/"type: boolean<br/>node: n #gt; 1"/]
+  265["type: number#91;#93;<br/>callee: customReadonly.filter<br/>args: #91;#93;"]
+  266[/"type: #40;f: #40;value: number#41; =#gt; boolean#41; =#gt; number#91;#93;<br/>node: customReadonly.filter"/]
+  267[/"type: #lt;U#gt;#40;callbackfn: #40;value: number, index: number, array: number#91;#93;#41; =#gt; U, thisArg?: any#41; =#gt; U#91;#93;<br/>node: xs.map = native_map"/]
+  268[/"type: #123; #lt;S extends number#gt;#40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; value is S, thisArg?: any#41;: S#91;#93;; #40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; unknown, thisArg?: any#41;: number#91;#93;; #125;<br/>node: xs#91;#quot;filter#quot;#93; = native_filter"/]
+  269[/"type: #123; value: #lt;U#gt;#40;callbackfn: #40;value: number, index: number, array: number#91;#93;#41; =#gt; U, thisArg?: any#41; =#gt; U#91;#93;; #125;<br/>node: #40;#123; value: xs.map #125; = #123; value: native_map #125;#41;"/]
+  270[/"type: <br/>node: xs.map"/]
+  271[/"type: number#91;#93;<br/>node: xs"/]
+  272[["type: #lt;T extends typeof xs.map#gt;#40;#41; =#gt; void<br/>node: function typePosition#lt;T extends typeof xs.map#gt;#40;#41; #123;#125;"]]
+  273[/"type: undefined<br/>node: void xs.at"/]
+  274[/"type: undefined<br/>node: void xs.concat"/]
+  275[/"type: undefined<br/>node: void xs.copyWithin"/]
+  276[/"type: undefined<br/>node: void xs.entries"/]
+  277[/"type: undefined<br/>node: void xs.fill"/]
+  278[/"type: undefined<br/>node: void xs.flat"/]
+  279[/"type: undefined<br/>node: void xs.includes"/]
+  280[/"type: undefined<br/>node: void xs.indexOf"/]
+  281[/"type: undefined<br/>node: void xs.keys"/]
+  282[/"type: undefined<br/>node: void xs.lastIndexOf"/]
+  283[/"type: undefined<br/>node: void xs.pop"/]
+  284[/"type: undefined<br/>node: void xs.push"/]
+  285[/"type: undefined<br/>node: void xs.reverse"/]
+  286[/"type: undefined<br/>node: void xs.shift"/]
+  287[/"type: undefined<br/>node: void xs.slice"/]
+  288[/"type: undefined<br/>node: void xs.sort"/]
+  289[/"type: undefined<br/>node: void xs.splice"/]
+  290[/"type: undefined<br/>node: void xs.toLocaleString"/]
+  291[/"type: undefined<br/>node: void xs.toSpliced"/]
+  292[/"type: undefined<br/>node: void xs.toString"/]
+  293[/"type: undefined<br/>node: void xs.unshift"/]
+  294[/"type: undefined<br/>node: void xs.values"/]
+  295[/"type: undefined<br/>node: void xs.with"/]
+  296[/"type: undefined<br/>node: void xs#91;Symbol.iterator#93;"/]
+  297[/"type: undefined<br/>node: void Array.from"/]
+  298[/"type: undefined<br/>node: void Array.of"/]
+  299[/"type: undefined<br/>node: void Array.fromAsync"/]
+  300[/"type: undefined<br/>node: void xs#91;dynamicName#93;"/]
+  301[/"type: undefined<br/>node: void xs.length"/]
+  302[/"type: undefined<br/>node: void Array.prototype"/]
+  4 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: usedBy"| 2
+  8 -->|"kind: potentialReturn"| 7
+  7 -->|"kind: usedBy"| 6
+  12 -->|"kind: potentialReturn"| 11
+  11 -->|"kind: usedBy"| 10
+  16 -->|"kind: potentialReturn"| 15
+  15 -->|"kind: usedBy"| 14
+  19 -->|"kind: usedBy"| 18
+  23 -->|"kind: potentialReturn"| 22
+  22 -->|"kind: usedBy"| 21
+  27 -->|"kind: potentialReturn"| 26
+  26 -->|"kind: usedBy"| 25
+  31 -->|"kind: potentialReturn"| 30
+  30 -->|"kind: usedBy"| 29
+  35 -->|"kind: potentialReturn"| 34
+  34 -->|"kind: usedBy"| 33
+  39 -->|"kind: potentialReturn"| 38
+  38 -->|"kind: usedBy"| 37
+  43 -->|"kind: potentialReturn"| 42
+  42 -->|"kind: usedBy"| 41
+  47 -->|"kind: potentialReturn"| 46
+  46 -->|"kind: usedBy"| 45
+  49 -->|"kind: pipe"| 50
+  51 -->|"kind: transformCallee"| 50
+  56 -->|"kind: potentialReturn"| 55
+  55 -->|"kind: pipe"| 57
+  58 -->|"kind: transformCallee"| 57
+  60 -->|"kind: pipe"| 61
+  62 -->|"kind: transformCallee"| 61
+  69 -->|"kind: potentialReturn"| 68
+  68 -->|"kind: usedBy"| 67
+  72 -->|"kind: potentialReturn"| 71
+  71 -->|"kind: usedBy"| 70
+  75 -->|"kind: pipe"| 76
+  77 -->|"kind: transformCallee"| 76
+  76 -->|"kind: potentialReturn"| 74
+  74 -->|"kind: usedBy"| 73
+  81 -->|"kind: potentialReturn"| 80
+  80 -->|"kind: usedBy"| 79
+  79 -->|"kind: potentialReturn"| 78
+  83 -->|"kind: potentialReturn"| 82
+  82 -->|"kind: usedBy"| 78
+  79 -->|"kind: usedBy"| 78
+  86 -->|"kind: pipe"| 87
+  88 -->|"kind: transformCallee"| 87
+  87 -->|"kind: potentialReturn"| 85
+  85 -->|"kind: usedBy"| 84
+  91 -->|"kind: potentialReturn"| 90
+  90 -->|"kind: usedBy"| 89
+  94 -->|"kind: potentialReturn"| 93
+  93 -->|"kind: usedBy"| 92
+  97 -->|"kind: potentialReturn"| 96
+  96 -->|"kind: usedBy"| 95
+  100 -->|"kind: potentialReturn"| 99
+  99 -->|"kind: usedBy"| 98
+  104 -->|"kind: pipe"| 105
+  106 -->|"kind: transformCallee"| 105
+  105 -->|"kind: potentialReturn"| 103
+  103 -->|"kind: usedBy"| 102
+  109 -->|"kind: potentialReturn"| 108
+  108 -->|"kind: usedBy"| 107
+  112 -->|"kind: potentialReturn"| 111
+  111 -->|"kind: usedBy"| 110
+  114 -->|"kind: pipe"| 115
+  116 -->|"kind: transformCallee"| 115
+  117 -->|"kind: pipe"| 118
+  119 -->|"kind: transformCallee"| 118
+  120 -->|"kind: pipe"| 121
+  122 -->|"kind: transformCallee"| 121
+  126 -->|"kind: potentialReturn"| 125
+  125 -->|"kind: usedBy"| 124
+  130 -->|"kind: potentialReturn"| 129
+  129 -->|"kind: usedBy"| 128
+  134 -->|"kind: potentialReturn"| 133
+  133 -->|"kind: usedBy"| 132
+  138 -->|"kind: potentialReturn"| 137
+  137 -->|"kind: usedBy"| 136
+  136 -->|"kind: potentialReturn"| 135
+  136 -->|"kind: usedBy"| 135
+  139 -->|"kind: pipe"| 140
+  141 -->|"kind: transformCallee"| 139
+  143 -->|"kind: potentialReturn"| 142
+  142 -->|"kind: transformArg"| 139
+  144 -->|"kind: pipe"| 145
+  146 -->|"kind: transformCallee"| 144
+  148 -->|"kind: potentialReturn"| 147
+  147 -->|"kind: transformArg"| 144
+  149 -->|"kind: pipe"| 150
+  151 -->|"kind: transformCallee"| 149
+  153 -->|"kind: potentialReturn"| 152
+  152 -->|"kind: transformArg"| 149
+  154 -->|"kind: pipe"| 155
+  156 -->|"kind: transformCallee"| 154
+  158 -->|"kind: potentialReturn"| 157
+  157 -->|"kind: transformArg"| 154
+  159 -->|"kind: pipe"| 160
+  161 -->|"kind: transformCallee"| 159
+  162 -->|"kind: transformArg"| 159
+  165 -->|"kind: potentialReturn"| 164
+  164 -->|"kind: usedBy"| 163
+  166 -->|"kind: pipe"| 167
+  168 -->|"kind: transformCallee"| 166
+  169 -->|"kind: transformArg"| 166
+  171 -->|"kind: potentialReturn"| 170
+  170 -->|"kind: transformArg"| 166
+  172 -->|"kind: pipe"| 173
+  174 -->|"kind: transformCallee"| 172
+  175 -->|"kind: transformArg"| 172
+  177 -->|"kind: potentialReturn"| 176
+  176 -->|"kind: transformArg"| 172
+  178 -->|"kind: pipe"| 179
+  180 -->|"kind: transformCallee"| 178
+  182 -->|"kind: potentialReturn"| 181
+  181 -->|"kind: transformArg"| 178
+  183 -->|"kind: pipe"| 184
+  185 -->|"kind: transformCallee"| 183
+  187 -->|"kind: potentialReturn"| 186
+  186 -->|"kind: transformArg"| 183
+  188 -->|"kind: pipe"| 189
+  190 -->|"kind: transformCallee"| 188
+  192 -->|"kind: potentialReturn"| 191
+  191 -->|"kind: transformArg"| 188
+  193 -->|"kind: pipe"| 194
+  195 -->|"kind: transformCallee"| 193
+  197 -->|"kind: potentialReturn"| 196
+  196 -->|"kind: transformArg"| 193
+  198 -->|"kind: pipe"| 199
+  200 -->|"kind: transformCallee"| 198
+  201 -->|"kind: transformArg"| 198
+  202 -->|"kind: pipe"| 203
+  204 -->|"kind: transformCallee"| 203
+  207 -->|"kind: pipe"| 208
+  209 -->|"kind: transformCallee"| 207
+  211 -->|"kind: potentialReturn"| 210
+  210 -->|"kind: transformArg"| 207
+  213 -->|"kind: pipe"| 214
+  215 -->|"kind: transformCallee"| 213
+  217 -->|"kind: potentialReturn"| 216
+  216 -->|"kind: transformArg"| 213
+  220 -->|"kind: pipe"| 221
+  222 -->|"kind: transformCallee"| 221
+  221 -->|"kind: potentialReturn"| 219
+  219 -->|"kind: usedBy"| 218
+  224 -->|"kind: potentialReturn"| 223
+  223 -->|"kind: usedBy"| 218
+  226 -->|"kind: potentialReturn"| 225
+  225 -->|"kind: pipe"| 227
+  228 -->|"kind: transformCallee"| 227
+  232 -->|"kind: potentialReturn"| 231
+  231 -->|"kind: usedBy"| 230
+  235 -->|"kind: potentialReturn"| 234
+  234 -->|"kind: usedBy"| 233
+  238 -->|"kind: potentialReturn"| 237
+  238 -->|"kind: usedBy"| 237
+  242 -->|"kind: potentialReturn"| 241
+  241 -->|"kind: usedBy"| 240
+  240 -->|"kind: potentialReturn"| 239
+  240 -->|"kind: usedBy"| 239
+  244 -->|"kind: potentialReturn"| 243
+  243 -->|"kind: pipe"| 245
+  246 -->|"kind: transformCallee"| 245
+  249 -->|"kind: potentialReturn"| 248
+  248 -->|"kind: usedBy"| 247
+  252 -->|"kind: potentialReturn"| 251
+  251 -->|"kind: usedBy"| 250
+  255 -->|"kind: potentialReturn"| 254
+  254 -->|"kind: usedBy"| 253
+  256 -->|"kind: pipe"| 257
+  258 -->|"kind: transformCallee"| 257
+  257 -->|"kind: usedBy"| 253
+  260 -->|"kind: potentialReturn"| 259
+  259 -->|"kind: pipe"| 261
+  262 -->|"kind: transformCallee"| 261
+  264 -->|"kind: potentialReturn"| 263
+  263 -->|"kind: pipe"| 265
+  266 -->|"kind: transformCallee"| 265

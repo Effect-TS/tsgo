@@ -58,6 +58,7 @@ var All = []rule.Rule{
 	GlobalDateInEffect,
 	GlobalRandom,
 	GlobalRandomInEffect,
+	PreferEffectArray,
 	GlobalTimers,
 	GlobalTimersInEffect,
 	RunEffectInsideEffect,
