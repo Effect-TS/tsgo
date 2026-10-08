@@ -2473,6 +2473,9 @@
         "effecttsgo/overridden-schema-constructor": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/prefer-effect-array": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/prefer-schema-over-json": {
           "$ref": "#/definitions/RuleNoConfig"
         },

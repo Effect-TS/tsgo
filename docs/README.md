@@ -68,6 +68,8 @@ The package also provides presets for each diagnostic category: `correctness`, `
 }
 ```
 
+The [Native Array method inventory](./native-array-inventory.md) lists the methods covered by `preferEffectArray`, their semantic caveats, and matching limits.
+
 With `oxlint.config.ts`, import the same configurations from the package:
 
 ```ts

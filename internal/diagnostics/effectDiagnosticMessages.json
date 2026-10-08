@@ -1,4 +1,8 @@
 {
+	"Consider effect/Array.{0} instead of native Array.{1}. {2} effect(preferEffectArray)": {
+		"category": "Warning",
+		"code": 377140
+	},
 	"Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)": {
 		"category": "Suggestion",
 		"code": 377131
