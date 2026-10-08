@@ -457,8 +457,7 @@ type extra_Checker struct {
   isStringIndexSignatureOnlyType func(*checker.Type) bool
   markNodeAssignments func(*ast.Node) bool
   compareTypesAssignable checker.TypeComparer
-  emitResolver *checker.EmitResolver
-  emitResolverOnce sync.Once
+  emitResolverLinks checker.EmitResolverLinks
   _jsxNamespace string
   _jsxFactoryEntity *ast.Node
   skipDirectInferenceNodes collections.Set[*ast.Node]
@@ -621,6 +620,7 @@ const ElementFlagsRest = checker.ElementFlagsRest
 const ElementFlagsVariable = checker.ElementFlagsVariable
 const ElementFlagsVariadic = checker.ElementFlagsVariadic
 type EmitResolver = checker.EmitResolver
+type EmitResolverLinks = checker.EmitResolverLinks
 type EnumLiteralKey = checker.EnumLiteralKey
 type EnumMemberLinks = checker.EnumMemberLinks
 type EnumRelationKey = checker.EnumRelationKey

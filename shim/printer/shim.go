@@ -69,8 +69,6 @@ const GeneratedIdentifierFlagsReservedInNestedScopes = printer.GeneratedIdentifi
 const GeneratedIdentifierFlagsUnique = printer.GeneratedIdentifierFlagsUnique
 //go:linkname GetDefaultIndentSize github.com/microsoft/TypeScript/tsc/internal/printer.GetDefaultIndentSize
 func GetDefaultIndentSize() int
-//go:linkname GetEmitContext github.com/microsoft/TypeScript/tsc/internal/printer.GetEmitContext
-func GetEmitContext() (*printer.EmitContext, func())
 //go:linkname GetLinesBetweenPositions github.com/microsoft/TypeScript/tsc/internal/printer.GetLinesBetweenPositions
 func GetLinesBetweenPositions(sourceFile *ast.SourceFile, pos1 int, pos2 int) int
 //go:linkname GetSingleLineStringWriter github.com/microsoft/TypeScript/tsc/internal/printer.GetSingleLineStringWriter
