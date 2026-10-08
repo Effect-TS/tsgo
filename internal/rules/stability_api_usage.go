@@ -63,10 +63,58 @@ func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
 
 	allow := newStabilityApiAllowlist(ctx, wanted)
 	var diagnostics []*ast.Diagnostic
+	report := func(node *ast.Node, name string, stability declarationStabilityInfo) bool {
+		if stability.stability != wanted {
+			return false
+		}
+		allowed, apiName := allow(stability.declaration)
+		if allowed {
+			return false
+		}
+		if apiName != "" {
+			name = apiName
+		}
+		message := tsdiag.X_0_is_an_unstable_API_Breaking_changes_may_happen_between_versions_effect_unstableApiUsage
+		if wanted == "experimental" {
+			message = tsdiag.X_0_is_an_experimental_API_effect_experimentalApiUsage
+		}
+		diagnostics = append(diagnostics, ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(node), message, nil, name))
+		return true
+	}
 	var walk ast.Visitor
 	walk = func(node *ast.Node) bool {
 		if node == nil {
 			return false
+		}
+		// Object literal keys declare local properties, but also use the matching
+		// properties of their contextual type. Resolve those declarations before
+		// the ordinary reference path excludes declaration names.
+		if ast.IsObjectLiteralElement(node) && node.Name() != nil && node.Parent != nil && node.Parent.Kind == ast.KindObjectLiteralExpression {
+			if name := ast.GetTextOfPropertyName(node.Name()); name != "" {
+				if contextualType := ctx.Checker.GetContextualType(node.Parent, checker.ContextFlagsNone); contextualType != nil {
+					// Keep the original symbols and let the checker filter union
+					// branches by discriminants before reading their own tags.
+					properties := ctx.Checker.GetPropertySymbolsFromContextualType(node, contextualType, false)
+					// Generic inference can point back to the literal's own
+					// property. Use the constraint instead, as go-to-definition
+					// does, so its stability tag is not lost to inference.
+					if slices.ContainsFunc(properties, func(symbol *ast.Symbol) bool { return symbol.ValueDeclaration == node }) {
+						if constraintType := ctx.Checker.GetContextualType(node.Parent, checker.ContextFlagsIgnoreNodeInferences); constraintType != nil {
+							if constraintProperties := ctx.Checker.GetPropertySymbolsFromContextualType(node, constraintType, false); len(constraintProperties) > 0 {
+								properties = constraintProperties
+							}
+						}
+					}
+					for _, symbol := range properties {
+						if symbol.ValueDeclaration == node {
+							continue
+						}
+						if report(node.Name(), name, readSymbol(symbol)) {
+							break
+						}
+					}
+				}
+			}
 		}
 		if node.Kind == ast.KindIdentifier && !ast.IsDeclarationNameOrImportPropertyName(node) {
 			// The selected overload is authoritative for calls. A tagged overload
@@ -97,21 +145,7 @@ func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
 			if stability.stability == "" && useSymbol {
 				stability = readSymbol(resolvedSymbol)
 			}
-			if stability.stability == wanted {
-				name := node.Text()
-				allowed, apiName := allow(stability.declaration)
-				if allowed {
-					return false
-				}
-				if apiName != "" {
-					name = apiName
-				}
-				message := tsdiag.X_0_is_an_unstable_API_Breaking_changes_may_happen_between_versions_effect_unstableApiUsage
-				if wanted == "experimental" {
-					message = tsdiag.X_0_is_an_experimental_API_effect_experimentalApiUsage
-				}
-				diagnostics = append(diagnostics, ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(node), message, nil, name))
-			}
+			report(node, node.Text(), stability)
 		}
 		node.ForEachChild(walk)
 		return false
