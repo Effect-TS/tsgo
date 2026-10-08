@@ -65,7 +65,7 @@ func TestParseReturningDispatchAcceptedShapes(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			sf, function := parseReturningDispatchTestFunction(t, tt.function)
-			dispatch := ParseReturningDispatch(function)
+			dispatch := (*TypeParser)(nil).ParseReturningDispatch(function)
 			if dispatch == nil {
 				t.Fatal("expected returning dispatch")
 			}
@@ -148,7 +148,7 @@ func TestParseResultDispatchInputContract(t *testing.T) {
 			t.Parallel()
 			sf, function := parseReturningDispatchTestFunction(t, `() => `+tt.expression)
 			body := GetFunctionLikeBody(function)
-			dispatch := ParseResultDispatch(body)
+			dispatch := (*TypeParser)(nil).ParseResultDispatch(body)
 			if !tt.accepted {
 				if dispatch != nil {
 					t.Fatalf("expected parse rejection, got %+v", dispatch)
@@ -231,7 +231,7 @@ func TestParseResultDispatchTagHints(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			sf, function := parseReturningDispatchTestFunction(t, tt.function)
-			parsed := ParseReturningDispatch(function)
+			parsed := (*TypeParser)(nil).ParseReturningDispatch(function)
 			if parsed == nil || parsed.Dispatch == nil {
 				t.Fatal("expected returning dispatch")
 			}
@@ -270,7 +270,7 @@ func TestParseTagMatch(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			sf, function := parseReturningDispatchTestFunction(t, `(error: any) => `+tt.expression)
-			subject, value := ParseTagMatch(GetFunctionLikeBody(function))
+			subject, value := (*TypeParser)(nil).ParseTagMatch(GetFunctionLikeBody(function))
 			if got := returningDispatchNodeText(sf, subject); got != tt.subject {
 				t.Fatalf("tag subject = %q, want %q", got, tt.subject)
 			}
@@ -344,7 +344,7 @@ func TestResultDispatchCommonTagSubject(t *testing.T) {
 	}
 	for _, tt := range tests {
 		function := findReturningDispatchTestFunction(t, sf, tt.name)
-		parsed := ParseReturningDispatch(function)
+		parsed := tp.ParseReturningDispatch(function)
 		if parsed == nil || parsed.Dispatch == nil {
 			t.Fatalf("%s: expected returning dispatch", tt.name)
 		}
@@ -398,7 +398,7 @@ func TestParseReturningDispatchInputContract(t *testing.T) {
 		if node == nil {
 			t.Fatalf("%s fixture was not found", name)
 		}
-		if dispatch := ParseReturningDispatch(node); dispatch != nil {
+		if dispatch := (*TypeParser)(nil).ParseReturningDispatch(node); dispatch != nil {
 			t.Fatalf("%s: expected parse rejection, got %+v", name, dispatch)
 		}
 	}

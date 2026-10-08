@@ -230,7 +230,7 @@ func analyzeOptionConditionals(tp *typeparser.TypeParser, c *checker.Checker, sf
 }
 
 func analyzeOptionConditional(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, node *ast.Node) (OptionMatchToFromOptionMatch, bool) {
-	dispatch := typeparser.ParseResultDispatch(node)
+	dispatch := tp.ParseResultDispatch(node)
 	if dispatch == nil || len(dispatch.Branches) != 1 || dispatch.Fallback == nil {
 		return OptionMatchToFromOptionMatch{}, false
 	}
