@@ -170,7 +170,7 @@ func analyzeAllOfMapToForEachReceiver(
 	}
 
 	receiverType := tp.GetTypeAtLocation(mapAccess.Expression)
-	isArrayReceiver := receiverType != nil && (checker.Checker_isArrayType(c, receiverType) || checker.Checker_isReadonlyArrayType(c, receiverType))
+	isArrayReceiver := tp.IsArrayType(receiverType)
 	if !isArrayReceiver {
 		return AllOfMapToForEachMatch{}, false
 	}

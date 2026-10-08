@@ -24,6 +24,7 @@
     "effecttsgo/instance-of-schema": "warn",
     "effecttsgo/new-promise": "warn",
     "effecttsgo/node-builtin-import": "warn",
+    "effecttsgo/prefer-effect-array": "warn",
     "effecttsgo/prefer-schema-over-json": "warn",
     "effecttsgo/process-env": "warn",
     "effecttsgo/process-env-in-effect": "warn",

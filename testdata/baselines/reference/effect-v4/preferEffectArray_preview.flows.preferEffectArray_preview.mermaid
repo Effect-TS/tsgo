@@ -1,0 +1,16 @@
+flowchart TB
+  0[/"type: number#91;#93;<br/>node: #91;1, 2, 3#93;"/]
+  1[/"type: number #124; undefined<br/>node: values.find#40;n =#gt; n #gt; 1#41;"/]
+  2[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  3[/"type: boolean<br/>node: n #gt; 1"/]
+  4[/"type: number#91;#93;<br/>node: values"/]
+  5["type: Option#lt;number#gt;<br/>callee: <br/>args: #91;#93;"]
+  6[/"type: #123; #lt;A, B#gt;#40;f: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; Option#lt;B#gt;#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; Option#lt;B#gt;; #lt;A, B extends A#gt;#40;refinement: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; a is B#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; Option#lt;B#gt;; #lt;A#gt;#40;predicate: #40;a: NoInfer#lt;A#gt;, i: number#41; =#gt; boolean#41;: #40;self: Iterable#lt;A#gt;#41; =#gt; Option#lt;A#gt;; #lt;A, B#gt;#40;self: Iterable#lt;A#gt;, f: #40;a: A, i: number#41; =#gt; Option#lt;B#gt;#41;: Option#lt;B#gt;; #lt;A, B extends A#gt;#40;self: Iterable#lt;A#gt;, refinement: #40;a: A, i: number#41; =#gt; a is B#41;: Option#lt;B#gt;; #lt;A#gt;#40;self: Iterable#lt;A#gt;, predicate: #40;a: A, i: number#41; =#gt; boolean#41;: Option#lt;A#gt;; #125;<br/>node: A.findFirst"/]
+  7[["type: #40;n: number#41; =#gt; boolean<br/>node: n =#gt; n #gt; 1"]]
+  8[/"type: boolean<br/>node: n #gt; 1"/]
+  3 -->|"kind: potentialReturn"| 2
+  2 -->|"kind: usedBy"| 1
+  4 -->|"kind: pipe"| 5
+  6 -->|"kind: transformCallee"| 4
+  8 -->|"kind: potentialReturn"| 7
+  7 -->|"kind: transformArg"| 4

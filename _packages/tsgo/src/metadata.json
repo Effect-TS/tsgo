@@ -280,6 +280,7 @@
         "instanceOfSchema": "warning",
         "newPromise": "warning",
         "nodeBuiltinImport": "warning",
+        "preferEffectArray": "warning",
         "preferSchemaOverJson": "warning",
         "processEnv": "warning",
         "processEnvInEffect": "warning",
@@ -1831,6 +1832,30 @@
             "start": 88,
             "end": 97,
             "text": "This module reference uses the `fs` module, the corresponding Effect API is `FileSystem` from `effect`. effect(nodeBuiltinImport)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "preferEffectArray",
+      "group": "effectNative",
+      "description": "Suggests Effect Array APIs for native array member references, with semantic caveats",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377140
+      ],
+      "preview": {
+        "sourceText": "import * as A from \"effect/Array\"\n\nconst values = [1, 2, 3]\nexport const native = values.find(n =\u003e n \u003e 1)\nexport const preferred = A.findFirst(values, n =\u003e n \u003e 1)\n",
+        "diagnostics": [
+          {
+            "start": 89,
+            "end": 93,
+            "text": "Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)"
           }
         ]
       }
