@@ -97,6 +97,7 @@
         "returnEffectInGen": "suggestion",
         "runEffectInsideEffect": "suggestion",
         "runOfExitToRunExit": "suggestion",
+        "schemaClassMissingBrand": "suggestion",
         "schemaLiteralNonFinite": "error",
         "schemaNumber": "suggestion",
         "schemaOpaqueInstanceMember": "error",
@@ -185,6 +186,7 @@
         "returnEffectInGen": "error",
         "runEffectInsideEffect": "error",
         "runOfExitToRunExit": "error",
+        "schemaClassMissingBrand": "error",
         "schemaLiteralNonFinite": "error",
         "schemaNumber": "error",
         "schemaOpaqueInstanceMember": "error",
@@ -226,6 +228,7 @@
         "outdatedApi": "warning",
         "overriddenSchemaConstructor": "warning",
         "promiseInEffectSuccess": "warning",
+        "schemaClassMissingBrand": "warning",
         "schemaLiteralNonFinite": "warning",
         "schemaOpaqueInstanceMember": "warning",
         "unsafeEffectTypeAssertion": "warning",
@@ -814,6 +817,29 @@
             "start": 111,
             "end": 151,
             "text": "The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "schemaClassMissingBrand",
+      "group": "correctness",
+      "description": "Warns when Schema classes, errors, or Opaque classes omit the brand type argument",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377141
+      ],
+      "preview": {
+        "sourceText": "import { Schema } from \"effect\"\n\nexport class User extends Schema.Class\u003cUser\u003e(\"User\")({ name: Schema.String }) {}\n\nexport class StructuralUser extends Schema.Class\u003cStructuralUser, {}\u003e(\"StructuralUser\")({ name: Schema.String }) {}\n",
+        "diagnostics": [
+          {
+            "start": 72,
+            "end": 76,
+            "text": "Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)"
           }
         ]
       }

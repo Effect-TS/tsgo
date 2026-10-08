@@ -2356,7 +2356,7 @@
         "catchIfTagToCatchTag": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
-          "description": "Suggests Effect.catchTag instead of Effect.catchIf with a direct _tag equality predicate"
+          "description": "Suggests Effect.catchTag instead of Effect.catchIf with a _tag equality or Predicate.isTagged predicate"
         },
         "catchRefailToTapError": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -2708,6 +2708,11 @@
           "default": "off",
           "description": "Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify"
         },
+        "preferSchemaTaggedError": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests using Schema.TaggedError instead of Data.TaggedError"
+        },
         "preferSchemaTypeProperty": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
@@ -2782,6 +2787,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests using Effect.runPromiseExit instead of passing Effect.exit to Effect.runPromise"
+        },
+        "schemaClassMissingBrand": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Warns when Schema classes, errors, or Opaque classes omit the brand type argument"
         },
         "schemaLiteralNonFinite": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

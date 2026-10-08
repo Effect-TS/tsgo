@@ -554,5 +554,9 @@
     "Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)": {
         "category": "Suggestion",
         "code": 377139
+    },
+    "Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)": {
+        "category": "Suggestion",
+        "code": 377141
     }
 }

@@ -1,6 +1,18 @@
 === Quick Fix Inventory ===
 
-[D1] (29:3-29:14) TS377044: This Schema subclass defines its own constructor. For Schema classes, constructor overrides break decoding behavior for the class shape. Custom construction can be expressed through a static `new` method instead. effect(overriddenSchemaConstructor)
+[D1] (3:41-3:46) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D2] (7:42-7:48) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D3] (24:24-24:51) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D4] (29:3-29:14) TS377044: This Schema subclass defines its own constructor. For Schema classes, constructor overrides break decoding behavior for the class shape. Custom construction can be expressed through a static `new` method instead. effect(overriddenSchemaConstructor)
   Fix 0: "Disable overriddenSchemaConstructor for this line"
   Fix 1: "Disable overriddenSchemaConstructor for entire file"
   Fix 2: "Rewrite using the static 'new' pattern"
@@ -8,13 +20,31 @@
 
 === Quick Fix Application Results ===
 
-=== [D1] Fix 0: "Disable overriddenSchemaConstructor for this line" ===
+=== [D1] Fix 0: "Disable schemaClassMissingBrand for this line" ===
 skipped by default
 
-=== [D1] Fix 1: "Disable overriddenSchemaConstructor for entire file" ===
+=== [D1] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
 skipped by default
 
-=== [D1] Fix 2: "Rewrite using the static 'new' pattern" ===
+=== [D2] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable overriddenSchemaConstructor for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable overriddenSchemaConstructor for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Rewrite using the static 'new' pattern" ===
 
 --- file:///.src/overriddenSchemaConstructor.ts ---
 import * as Schema from "effect/Schema"
@@ -52,7 +82,7 @@ export class InvalidBecauseOfConstructor
 }
 
 
-=== [D1] Fix 3: "Remove the constructor override" ===
+=== [D4] Fix 3: "Remove the constructor override" ===
 
 --- file:///.src/overriddenSchemaConstructor.ts ---
 import * as Schema from "effect/Schema"

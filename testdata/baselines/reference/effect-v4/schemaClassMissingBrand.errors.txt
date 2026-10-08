@@ -1,0 +1,167 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/schemaClassMissingBrand.ts(9,50): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(10,42): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(11,45): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(13,62): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(14,54): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(15,57): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(17,50): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(18,42): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(19,45): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(21,62): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(22,54): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(23,57): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(25,52): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(26,44): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(27,47): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(47,70): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(48,88): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(49,70): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(50,88): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(51,73): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(53,60): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(57,51): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(59,63): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(65,55): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+
+
+==== /.src/schemaClassMissingBrand.ts (24 errors) ====
+    import { Context, Schema } from "effect"
+    import { Model } from "effect/schema"
+    import * as S from "effect/Schema"
+    import { Class as MakeClass, TaggedClass as MakeTaggedClass, Error as MakeError,
+      TaggedError as MakeTaggedError, Opaque as MakeOpaque } from "effect/Schema"
+    
+    type BrandAlias = { readonly brand: unique symbol }
+    
+    export class ClassNamespace extends Schema.Class<ClassNamespace>("ClassNamespace")({ value: Schema.String }) {}
+                                                     ~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    export class ClassModule extends S.Class<ClassModule>("ClassModule")({ value: Schema.String }) {}
+                                             ~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    export class ClassRenamed extends MakeClass<ClassRenamed>("ClassRenamed")({ value: Schema.String }) {}
+                                                ~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    
+    export class TaggedClassNamespace extends Schema.TaggedClass<TaggedClassNamespace>()("TaggedClassNamespace", { value: Schema.String }) {}
+                                                                 ~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    export class TaggedClassModule extends S.TaggedClass<TaggedClassModule>()("TaggedClassModule", { value: Schema.String }) {}
+                                                         ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    export class TaggedClassRenamed extends MakeTaggedClass<TaggedClassRenamed>()("TaggedClassRenamed", { value: Schema.String }) {}
+                                                            ~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    
+    export class ErrorNamespace extends Schema.Error<ErrorNamespace>("ErrorNamespace")({ value: Schema.String }) {}
+                                                     ~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    export class ErrorModule extends S.Error<ErrorModule>("ErrorModule")({ value: Schema.String }) {}
+                                             ~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    export class ErrorRenamed extends MakeError<ErrorRenamed>("ErrorRenamed")({ value: Schema.String }) {}
+                                                ~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    
+    export class TaggedErrorNamespace extends Schema.TaggedError<TaggedErrorNamespace>()("TaggedErrorNamespace", { value: Schema.String }) {}
+                                                                 ~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    export class TaggedErrorModule extends S.TaggedError<TaggedErrorModule>()("TaggedErrorModule", { value: Schema.String }) {}
+                                                         ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    export class TaggedErrorRenamed extends MakeTaggedError<TaggedErrorRenamed>()("TaggedErrorRenamed", { value: Schema.String }) {}
+                                                            ~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    
+    export class OpaqueNamespace extends Schema.Opaque<OpaqueNamespace>()(Schema.Struct({ value: Schema.String })) {}
+                                                       ~~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    export class OpaqueModule extends S.Opaque<OpaqueModule>()(Schema.Struct({ value: Schema.String })) {}
+                                               ~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    export class OpaqueRenamed extends MakeOpaque<OpaqueRenamed>()(Schema.Struct({ value: Schema.String })) {}
+                                                  ~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    
+    export class ClassBranded extends Schema.Class<ClassBranded, { readonly brand: unique symbol }>("ClassBranded")({ value: Schema.String }) {}
+    export class TaggedClassBranded extends Schema.TaggedClass<TaggedClassBranded, { readonly brand: unique symbol }>()("TaggedClassBranded", { value: Schema.String }) {}
+    export class ErrorBranded extends Schema.Error<ErrorBranded, { readonly brand: unique symbol }>("ErrorBranded")({ value: Schema.String }) {}
+    export class TaggedErrorBranded extends Schema.TaggedError<TaggedErrorBranded, { readonly brand: unique symbol }>()("TaggedErrorBranded", { value: Schema.String }) {}
+    export class OpaqueBranded extends Schema.Opaque<OpaqueBranded, { readonly brand: unique symbol }>()(Schema.Struct({ value: Schema.String })) {}
+    
+    export class ClassAlias extends Schema.Class<ClassAlias, BrandAlias>("ClassAlias")({ value: Schema.String }) {}
+    export class TaggedClassAlias extends Schema.TaggedClass<TaggedClassAlias, BrandAlias>()("TaggedClassAlias", { value: Schema.String }) {}
+    export class ErrorAlias extends Schema.Error<ErrorAlias, BrandAlias>("ErrorAlias")({ value: Schema.String }) {}
+    export class TaggedErrorAlias extends Schema.TaggedError<TaggedErrorAlias, BrandAlias>()("TaggedErrorAlias", { value: Schema.String }) {}
+    export class OpaqueAlias extends Schema.Opaque<OpaqueAlias, BrandAlias>()(Schema.Struct({ value: Schema.String })) {}
+    
+    export class ClassStructural extends Schema.Class<ClassStructural, {}>("ClassStructural")({ value: Schema.String }) {}
+    export class TaggedClassStructural extends Schema.TaggedClass<TaggedClassStructural, {}>()("TaggedClassStructural", { value: Schema.String }) {}
+    export class ErrorStructural extends Schema.Error<ErrorStructural, {}>("ErrorStructural")({ value: Schema.String }) {}
+    export class TaggedErrorStructural extends Schema.TaggedError<TaggedErrorStructural, {}>()("TaggedErrorStructural", { value: Schema.String }) {}
+    export class OpaqueStructural extends Schema.Opaque<OpaqueStructural, {}>()(Schema.Struct({ value: Schema.String })) {}
+    
+    export const ClassValue = class ClassExpression extends Schema.Class<ClassExpression>("ClassExpression")({ value: Schema.String }) {}
+                                                                         ~~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    export const TaggedClassValue = class TaggedClassExpression extends Schema.TaggedClass<TaggedClassExpression>()("TaggedClassExpression", { value: Schema.String }) {}
+                                                                                           ~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    export const ErrorValue = class ErrorExpression extends Schema.Error<ErrorExpression>("ErrorExpression")({ value: Schema.String }) {}
+                                                                         ~~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    export const TaggedErrorValue = class TaggedErrorExpression extends Schema.TaggedError<TaggedErrorExpression>()("TaggedErrorExpression", { value: Schema.String }) {}
+                                                                                           ~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    export const OpaqueValue = class OpaqueExpression extends Schema.Opaque<OpaqueExpression>()(Schema.Struct({ value: Schema.String })) {}
+                                                                            ~~~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    
+    export const AnonymousOpaque = class extends Schema.Opaque<OpaqueNamespace>()(Schema.Struct({ value: Schema.String })) {}
+                                                               ~~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+    
+    export const AnonymousClass = class extends Schema.Class<ClassNamespace>("AnonymousClass")({ value: Schema.String }) {}
+    
+    export class UnbrandedParent extends Schema.Class<UnbrandedParent>("UnbrandedParent")({}) {
+                                                      ~~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+      static nested() {
+        return class NestedInUnbranded extends Schema.TaggedClass<NestedInUnbranded>()("NestedInUnbranded", {}) {}
+                                                                  ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+      }
+    }
+    
+    export class BrandedParent extends Schema.Class<BrandedParent, BrandAlias>("BrandedParent")({}) {
+      static nested() {
+        return class NestedInBranded extends Schema.Error<NestedInBranded>("NestedInBranded")({}) {}
+                                                          ~~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+      }
+    }
+    
+    export class OrdinaryBase {}
+    export class OrdinarySubclass extends OrdinaryBase {}
+    export class IndirectSchemaSubclass extends ClassStructural {}
+    export class ExtendedSchemaClass extends ClassStructural.extend<ExtendedSchemaClass>("ExtendedSchemaClass")({ extra: Schema.String }) {}
+    export class Service extends Context.Service<Service, { readonly value: string }>()("Service") {}
+    export class ModelClass extends Model.Class<ModelClass>("ModelClass")({ value: Schema.String }) {}
+    
+    namespace Local {
+      export declare function Class<Self>(...args: unknown[]): (...fields: unknown[]) => typeof OrdinaryBase
+      export declare function TaggedClass<Self>(...args: unknown[]): (...fields: unknown[]) => typeof OrdinaryBase
+      export declare function Error<Self>(...args: unknown[]): (...fields: unknown[]) => typeof OrdinaryBase
+      export declare function TaggedError<Self>(...args: unknown[]): (...fields: unknown[]) => typeof OrdinaryBase
+      export declare function Opaque<Self>(...args: unknown[]): (...fields: unknown[]) => typeof OrdinaryBase
+    }
+    
+    export class ClassLookalike extends Local.Class<ClassLookalike>("ClassLookalike")({ value: Schema.String }) {}
+    export class TaggedClassLookalike extends Local.TaggedClass<TaggedClassLookalike>()("TaggedClassLookalike", { value: Schema.String }) {}
+    export class ErrorLookalike extends Local.Error<ErrorLookalike>("ErrorLookalike")({ value: Schema.String }) {}
+    export class TaggedErrorLookalike extends Local.TaggedError<TaggedErrorLookalike>()("TaggedErrorLookalike", { value: Schema.String }) {}
+    export class OpaqueLookalike extends Local.Opaque<OpaqueLookalike>()(Schema.Struct({ value: Schema.String })) {}
+    

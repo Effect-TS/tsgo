@@ -1,0 +1,29 @@
+==== /.src/schemaClassMissingBrand.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 6:26 - 6:78
+Node: Schema.Class<User>("User")({ name: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { name: Schema.String }
+Subject Type: { name: typeof String$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<User>("User")
+      args: (constant)
+      outType: Class<User, { name: typeof String$; }, Encoded<{ name: typeof String$; }>, never, { readonly name: string; }, {}, {}>
+
+=== Piping Flow ===
+Location: 14:29 - 14:52
+Node: Context.Tag("Service")
+Node Kind: KindCallExpression
+
+Subject: "Service"
+Subject Type: "Service"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "Service", Shape>

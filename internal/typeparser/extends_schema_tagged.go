@@ -8,6 +8,7 @@ import (
 type SchemaTaggedResult struct {
 	ClassName        *ast.Node // The class name identifier
 	SelfTypeNode     *ast.Node // The Self type argument node (first type arg of the inner call)
+	BrandTypeNode    *ast.Node
 	KeyStringLiteral *ast.Node // The identifier arg from the inner call (first arg), or nil
 	TagStringLiteral *ast.Node // The tag arg from the outer call (first arg), or nil
 }
@@ -72,6 +73,10 @@ func (tp *TypeParser) extendsSchemaTagged(classNode *ast.Node, memberName string
 		if innerCall.TypeArguments == nil || len(innerCall.TypeArguments.Nodes) == 0 {
 			continue
 		}
+		var brandTypeNode *ast.Node
+		if (memberName == "TaggedClass" || memberName == "TaggedError") && len(innerCall.TypeArguments.Nodes) > 1 {
+			brandTypeNode = innerCall.TypeArguments.Nodes[1]
+		}
 
 		// Check if the inner call's expression resolves to Schema.<memberName>
 		if innerCall.Expression == nil {
@@ -102,6 +107,7 @@ func (tp *TypeParser) extendsSchemaTagged(classNode *ast.Node, memberName string
 		return &SchemaTaggedResult{
 			ClassName:        classNode.Name(),
 			SelfTypeNode:     innerCall.TypeArguments.Nodes[0],
+			BrandTypeNode:    brandTypeNode,
 			KeyStringLiteral: keyStringLiteral,
 			TagStringLiteral: tagStringLiteral,
 		}

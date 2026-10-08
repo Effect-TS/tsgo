@@ -1,17 +1,24 @@
 === Metadata ===
 Effect version: 4.0.2
 
+/.src/overriddenSchemaConstructor.ts(3,41): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/overriddenSchemaConstructor.ts(7,42): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/overriddenSchemaConstructor.ts(24,24): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
 /.src/overriddenSchemaConstructor.ts(29,3): error TS377044: This Schema subclass defines its own constructor. For Schema classes, constructor overrides break decoding behavior for the class shape. Custom construction can be expressed through a static `new` method instead. effect(overriddenSchemaConstructor)
 
 
-==== /.src/overriddenSchemaConstructor.ts (1 errors) ====
+==== /.src/overriddenSchemaConstructor.ts (4 errors) ====
     import * as Schema from "effect/Schema"
     
     export class Valid extends Schema.Class<Valid>("Valid")({
+                                            ~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       a: Schema.Finite
     }) {}
     
     export class Valid2 extends Schema.Class<Valid2>("Valid")({
+                                             ~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       a: Schema.Finite
     }) {
       otherMethod() {
@@ -29,6 +36,8 @@ Effect version: 4.0.2
     // this is invalid because if the class extends a Schema, there should be no constructor override
     export class InvalidBecauseOfConstructor
       extends Schema.Class<InvalidBecauseOfConstructor>("InvalidBecauseOfConstructor")({
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
         a: Schema.Finite
       })
     {

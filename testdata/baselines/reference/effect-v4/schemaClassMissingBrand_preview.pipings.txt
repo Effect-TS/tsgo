@@ -1,0 +1,29 @@
+==== /.src/schemaClassMissingBrand_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:26 - 5:78
+Node: Schema.Class<User>("User")({ name: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { name: Schema.String }
+Subject Type: { name: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<User>("User")
+      args: (constant)
+      outType: Class<User, Struct<{ readonly name: String; }>, {}>
+
+=== Piping Flow ===
+Location: 7:36 - 7:112
+Node: Schema.Class<StructuralUser, {}>("StructuralUser")({ name: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { name: Schema.String }
+Subject Type: { name: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<StructuralUser, {}>("StructuralUser")
+      args: (constant)
+      outType: Class<StructuralUser, Struct<{ readonly name: String; }>, {}>

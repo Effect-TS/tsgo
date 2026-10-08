@@ -25,6 +25,7 @@
     "effecttsgo/outdated-api": "warn",
     "effecttsgo/overridden-schema-constructor": "warn",
     "effecttsgo/promise-in-effect-success": "warn",
+    "effecttsgo/schema-class-missing-brand": "warn",
     "effecttsgo/schema-literal-non-finite": "warn",
     "effecttsgo/schema-opaque-instance-member": "warn",
     "effecttsgo/unsafe-effect-type-assertion": "warn",
