@@ -1542,11 +1542,6 @@
                                 "description": "Controls Effect completions.",
                                 "type": "boolean"
                               },
-                              "debug": {
-                                "default": false,
-                                "description": "Enables additional debug-only Effect language service output.",
-                                "type": "boolean"
-                              },
                               "diagnosticSeverity": {
                                 "$ref": "#/definitions/effectLanguageServicePluginDiagnosticSeverityDefinition",
                                 "default": {},
@@ -2975,11 +2970,6 @@
         "completions": {
           "default": true,
           "description": "Controls Effect completions.",
-          "type": "boolean"
-        },
-        "debug": {
-          "default": false,
-          "description": "Enables additional debug-only Effect language service output.",
           "type": "boolean"
         },
         "diagnosticSeverity": {
