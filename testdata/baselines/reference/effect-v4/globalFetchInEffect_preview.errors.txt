@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/globalFetchInEffect_preview.ts(6,38): warning TS377063: This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/http`. effect(globalFetchInEffect)
 

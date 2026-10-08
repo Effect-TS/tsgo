@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/runOfExitToRunExit_preview.ts(8,21): warning TS377123: `Effect.runPromise` of `Effect.exit` re-implements `Effect.runPromiseExit`. Use the dedicated Exit runner directly. effect(runOfExitToRunExit)
 

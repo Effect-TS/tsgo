@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/globalTimers.ts(5,18): warning TS377072: This code uses `setTimeout`, the corresponding Effect timer API is `Effect.sleep or Schedule` from Effect. effect(globalTimers)
 /.src/globalTimers.ts(8,25): warning TS377072: This code uses `setInterval`, the corresponding Effect timer API is `Schedule or Effect.repeat` from Effect. effect(globalTimers)

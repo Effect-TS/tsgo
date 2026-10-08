@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/preferSucceedSomeOrNone.ts(7,43): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
 /.src/preferSucceedSomeOrNone.ts(10,34): suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)

@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/preferSchemaTaggedError.ts(8,7): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
 /.src/preferSchemaTaggedError.ts(9,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)

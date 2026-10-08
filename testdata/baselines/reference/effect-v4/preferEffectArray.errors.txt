@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/imported.ts(4,13): warning TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
 /.src/preferEffectArray.ts(9,4): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)

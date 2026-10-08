@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/obsoleteMatchImport_preview.ts(5,24): warning TS377129: This module reference imports `@effect/match`, which is obsolete in Effect v4. In Effect v4, pattern matching is provided directly by `Match` from `effect` (or `effect/Match`). effect(obsoleteMatchImport)
 

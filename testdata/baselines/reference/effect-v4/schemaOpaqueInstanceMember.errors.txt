@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/schemaOpaqueInstanceMember.ts(11,3): error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
 /.src/schemaOpaqueInstanceMember.ts(12,3): error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)

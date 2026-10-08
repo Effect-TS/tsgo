@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/newSchemaClass_preview.ts(7,28): suggestion TS377094: This Schema class is constructed with `new`. `User.make(...)` can be used to construct the Schema class instance. effect(newSchemaClass)
 

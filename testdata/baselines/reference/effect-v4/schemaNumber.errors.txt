@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/schemaNumber.ts(8,15): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
 /.src/schemaNumber.ts(9,17): warning TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.FiniteFromString` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)

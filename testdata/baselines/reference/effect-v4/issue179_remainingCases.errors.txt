@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/issue179_remainingCases.ts(8,5): error TS2322: Type 'Effect<T, UnknownError, never>' is not assignable to type 'Effect<T, never, never>'.
 /.src/issue179_remainingCases.ts(8,5): error TS377003: Missing errors UnknownError in the expected Effect type. effect(missingEffectError)

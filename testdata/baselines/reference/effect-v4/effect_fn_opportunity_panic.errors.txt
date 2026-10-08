@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/effect_fn_opportunity_panic.ts(61,7): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("JsonPlaceholder.getTodo")((id) => { ... })`. effect(effectFnOpportunity)
 /.src/effect_fn_opportunity_panic.ts(83,7): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("JsonPlaceholder.getUser")((id) => { ... })`. effect(effectFnOpportunity)

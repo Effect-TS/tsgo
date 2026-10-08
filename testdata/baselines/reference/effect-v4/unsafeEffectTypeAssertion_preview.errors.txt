@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/unsafeEffectTypeAssertion_preview.ts(7,24): warning TS377075: This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)
 

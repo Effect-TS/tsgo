@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/classSelfMismatch_sqlClass.ts(10,52): error TS377046: The `Self` type parameter for this class should be `InvalidModelClass`. effect(classSelfMismatch)
 

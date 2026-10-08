@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/catchToOrElseSucceed.ts(5,3): suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catch` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
 /.src/catchToOrElseSucceed.ts(10,3): suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catch` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
