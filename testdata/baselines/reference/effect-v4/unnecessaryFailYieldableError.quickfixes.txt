@@ -1,29 +1,39 @@
 === Quick Fix Inventory ===
 
-[D1] (22:3-22:8) TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
+[D1] (12:40-12:51) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D2] (22:3-22:8) TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
   Fix 0: "Disable unnecessaryFailYieldableError for this line"
   Fix 1: "Disable unnecessaryFailYieldableError for entire file"
   Fix 2: "Replace yield* Effect.fail with yield*"
 
-[D2] (23:3-23:8) TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
+[D3] (23:3-23:8) TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
   Fix 0: "Disable unnecessaryFailYieldableError for this line"
   Fix 1: "Disable unnecessaryFailYieldableError for entire file"
   Fix 2: "Replace yield* Effect.fail with yield*"
 
-[D3] (28:3-28:8) TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
+[D4] (28:3-28:8) TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
   Fix 0: "Disable unnecessaryFailYieldableError for this line"
   Fix 1: "Disable unnecessaryFailYieldableError for entire file"
   Fix 2: "Replace yield* Effect.fail with yield*"
 
 === Quick Fix Application Results ===
 
-=== [D1] Fix 0: "Disable unnecessaryFailYieldableError for this line" ===
+=== [D1] Fix 0: "Disable schemaClassMissingBrand for this line" ===
 skipped by default
 
-=== [D1] Fix 1: "Disable unnecessaryFailYieldableError for entire file" ===
+=== [D1] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
 skipped by default
 
-=== [D1] Fix 2: "Replace yield* Effect.fail with yield*" ===
+=== [D2] Fix 0: "Disable unnecessaryFailYieldableError for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unnecessaryFailYieldableError for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace yield* Effect.fail with yield*" ===
 
 --- file:///.src/unnecessaryFailYieldableError.ts ---
 /** @effect-diagnostics missingReturnYieldStar:skip-file */
@@ -61,13 +71,13 @@ export const aliasedFail = Effect.gen(function*() {
 export const shouldNotReport = Effect.fail(new DataTaggedError())
 
 
-=== [D2] Fix 0: "Disable unnecessaryFailYieldableError for this line" ===
+=== [D3] Fix 0: "Disable unnecessaryFailYieldableError for this line" ===
 skipped by default
 
-=== [D2] Fix 1: "Disable unnecessaryFailYieldableError for entire file" ===
+=== [D3] Fix 1: "Disable unnecessaryFailYieldableError for entire file" ===
 skipped by default
 
-=== [D2] Fix 2: "Replace yield* Effect.fail with yield*" ===
+=== [D3] Fix 2: "Replace yield* Effect.fail with yield*" ===
 
 --- file:///.src/unnecessaryFailYieldableError.ts ---
 /** @effect-diagnostics missingReturnYieldStar:skip-file */
@@ -105,13 +115,13 @@ export const aliasedFail = Effect.gen(function*() {
 export const shouldNotReport = Effect.fail(new DataTaggedError())
 
 
-=== [D3] Fix 0: "Disable unnecessaryFailYieldableError for this line" ===
+=== [D4] Fix 0: "Disable unnecessaryFailYieldableError for this line" ===
 skipped by default
 
-=== [D3] Fix 1: "Disable unnecessaryFailYieldableError for entire file" ===
+=== [D4] Fix 1: "Disable unnecessaryFailYieldableError for entire file" ===
 skipped by default
 
-=== [D3] Fix 2: "Replace yield* Effect.fail with yield*" ===
+=== [D4] Fix 2: "Replace yield* Effect.fail with yield*" ===
 
 --- file:///.src/unnecessaryFailYieldableError.ts ---
 /** @effect-diagnostics missingReturnYieldStar:skip-file */

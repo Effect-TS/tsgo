@@ -1,0 +1,285 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:50-9:64) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D2] (10:42-10:53) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D3] (11:45-11:57) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D4] (13:62-13:82) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D5] (14:54-14:71) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D6] (15:57-15:75) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D7] (17:50-17:64) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D8] (18:42-18:53) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D9] (19:45-19:57) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D10] (21:62-21:82) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D11] (22:54-22:71) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D12] (23:57-23:75) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D13] (25:52-25:67) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D14] (26:44-26:56) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D15] (27:47-27:60) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D16] (47:40-47:127) TS2509: Base constructor return type '{ readonly value: string; } & "Brand"' is not an object type or intersection of object types with statically known members.
+  (no quick fixes)
+
+[D17] (48:46-48:153) TS2509: Base constructor return type '{ readonly _tag: "TaggedClassLiteralBrand"; readonly value: string; } & "Brand"' is not an object type or intersection of object types with statically known members.
+  (no quick fixes)
+
+[D18] (49:40-49:127) TS2509: Base constructor return type '{ readonly value: string; } & YieldableError & "Brand"' is not an object type or intersection of object types with statically known members.
+  (no quick fixes)
+
+[D19] (50:46-50:153) TS2509: Base constructor return type '{ readonly _tag: "TaggedErrorLiteralBrand"; readonly value: string; } & YieldableError & "Brand"' is not an object type or intersection of object types with statically known members.
+  (no quick fixes)
+
+[D20] (51:41-51:126) TS2509: Base constructor return type '{ readonly value: string; } & "Brand"' is not an object type or intersection of object types with statically known members.
+  (no quick fixes)
+
+[D21] (53:70-53:85) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D22] (54:88-54:109) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D23] (55:70-55:85) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D24] (56:88-56:109) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D25] (57:73-57:89) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D26] (59:60-59:75) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D27] (63:51-63:66) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D28] (65:63-65:80) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D29] (71:55-71:70) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D30] (96:39-96:97) TS2507: Type '"Missing `Self` generic - use `class Self extends Schema.Class<Self>(...)`"' is not a constructor function type.
+  (no quick fixes)
+
+[D31] (97:45-97:117) TS2507: Type '"Missing `Self` generic - use `class Self extends Schema.TaggedClass<Self>(...)`"' is not a constructor function type.
+  (no quick fixes)
+
+[D32] (98:39-98:97) TS2507: Type '"Missing `Self` generic - use `class Self extends Schema.Error<Self>(...)`"' is not a constructor function type.
+  (no quick fixes)
+
+[D33] (99:45-99:117) TS2507: Type '"Missing `Self` generic - use `class Self extends Schema.TaggedError<Self>(...)`"' is not a constructor function type.
+  (no quick fixes)
+
+[D34] (102:38-102:86) TS2507: Type '{ <const Fields extends Struct.Fields>(fields: Fields, annotations?: Declaration<ClassSingleCall, readonly [Struct<Fields>]> | undefined): Class<ClassSingleCall, Struct<...>, ...>; <S extends Struct<Struct.Fields>>(schema: S, annotations?: Declaration<...> | undefined): Class<...>; }' is not a constructor function type.
+  (no quick fixes)
+
+[D35] (103:44-103:87) TS2507: Type '{ <Tag extends string, const Fields extends Struct.Fields>(tag: Tag, fields: Fields, annotations?: Declaration<TaggedClassSingleCall, readonly [TaggedStruct<Tag, Fields>]> | undefined): Class<...>; <Tag extends string, S extends Struct<Struct.Fields>>(tag: Tag, schema: S, annotations?: Declaration<...> | undefined):...' is not a constructor function type.
+  (no quick fixes)
+
+[D36] (104:38-104:86) TS2507: Type '{ <const Fields extends Struct.Fields>(fields: Fields, annotations?: Declaration<ErrorSingleCall, readonly [Struct<Fields>]> | undefined): Class<ErrorSingleCall, Struct<...>, YieldableError>; <S extends Struct<Struct.Fields>>(schema: S, annotations?: Declaration<...> | undefined): Class<...>; }' is not a constructor function type.
+  (no quick fixes)
+
+[D37] (105:44-105:87) TS2507: Type '{ <Tag extends string, const Fields extends Struct.Fields>(tag: Tag, fields: Fields, annotations?: Declaration<TaggedErrorSingleCall, readonly [TaggedStruct<Tag, Fields>]> | undefined): Class<...>; <Tag extends string, S extends Struct<Struct.Fields>>(tag: Tag, schema: S, annotations?: Declaration<...> | undefined):...' is not a constructor function type.
+  (no quick fixes)
+
+[D38] (106:39-106:72) TS2507: Type '<S extends Top>(schema: S) => Opaque<OpaqueSingleCall, S, {}> & Omit<S, keyof Top>' is not a constructor function type.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D21] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D21] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D22] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D22] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D23] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D23] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D24] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D24] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D25] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D25] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D26] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D26] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D27] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D27] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D28] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D28] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D29] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D29] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default

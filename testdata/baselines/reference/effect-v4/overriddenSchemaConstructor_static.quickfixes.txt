@@ -1,6 +1,10 @@
 === Quick Fix Inventory ===
 
-[D1] (10:3-10:14) TS377044: This Schema subclass defines its own constructor. For Schema classes, constructor overrides break decoding behavior for the class shape. Custom construction can be expressed through a static `new` method instead. effect(overriddenSchemaConstructor)
+[D1] (4:24-4:51) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D2] (10:3-10:14) TS377044: This Schema subclass defines its own constructor. For Schema classes, constructor overrides break decoding behavior for the class shape. Custom construction can be expressed through a static `new` method instead. effect(overriddenSchemaConstructor)
   Fix 0: "Disable overriddenSchemaConstructor for this line"
   Fix 1: "Disable overriddenSchemaConstructor for entire file"
   Fix 2: "Rewrite using the static 'new' pattern"
@@ -8,13 +12,19 @@
 
 === Quick Fix Application Results ===
 
-=== [D1] Fix 0: "Disable overriddenSchemaConstructor for this line" ===
+=== [D1] Fix 0: "Disable schemaClassMissingBrand for this line" ===
 skipped by default
 
-=== [D1] Fix 1: "Disable overriddenSchemaConstructor for entire file" ===
+=== [D1] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
 skipped by default
 
-=== [D1] Fix 2: "Rewrite using the static 'new' pattern" ===
+=== [D2] Fix 0: "Disable overriddenSchemaConstructor for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable overriddenSchemaConstructor for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Rewrite using the static 'new' pattern" ===
 
 --- file:///.src/overriddenSchemaConstructor_static.ts ---
 import * as Schema from "effect/Schema"
@@ -34,7 +44,7 @@ export class InvalidBecauseOfConstructor
 }
 
 
-=== [D1] Fix 3: "Remove the constructor override" ===
+=== [D2] Fix 3: "Remove the constructor override" ===
 
 --- file:///.src/overriddenSchemaConstructor_static.ts ---
 import * as Schema from "effect/Schema"

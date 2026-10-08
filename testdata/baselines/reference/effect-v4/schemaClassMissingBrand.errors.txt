@@ -1,0 +1,227 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/schemaClassMissingBrand.ts(9,50): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(10,42): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(11,45): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(13,62): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(14,54): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(15,57): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(17,50): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(18,42): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(19,45): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(21,62): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(22,54): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(23,57): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(25,52): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(26,44): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(27,47): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(47,40): error TS2509: Base constructor return type '{ readonly value: string; } & "Brand"' is not an object type or intersection of object types with statically known members.
+/.src/schemaClassMissingBrand.ts(48,46): error TS2509: Base constructor return type '{ readonly _tag: "TaggedClassLiteralBrand"; readonly value: string; } & "Brand"' is not an object type or intersection of object types with statically known members.
+/.src/schemaClassMissingBrand.ts(49,40): error TS2509: Base constructor return type '{ readonly value: string; } & YieldableError & "Brand"' is not an object type or intersection of object types with statically known members.
+/.src/schemaClassMissingBrand.ts(50,46): error TS2509: Base constructor return type '{ readonly _tag: "TaggedErrorLiteralBrand"; readonly value: string; } & YieldableError & "Brand"' is not an object type or intersection of object types with statically known members.
+/.src/schemaClassMissingBrand.ts(51,41): error TS2509: Base constructor return type '{ readonly value: string; } & "Brand"' is not an object type or intersection of object types with statically known members.
+/.src/schemaClassMissingBrand.ts(53,70): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(54,88): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(55,70): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(56,88): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(57,73): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(59,60): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(63,51): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(65,63): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(71,55): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaClassMissingBrand.ts(96,39): error TS2507: Type '"Missing `Self` generic - use `class Self extends Schema.Class<Self>(...)`"' is not a constructor function type.
+/.src/schemaClassMissingBrand.ts(97,45): error TS2507: Type '"Missing `Self` generic - use `class Self extends Schema.TaggedClass<Self>(...)`"' is not a constructor function type.
+/.src/schemaClassMissingBrand.ts(98,39): error TS2507: Type '"Missing `Self` generic - use `class Self extends Schema.Error<Self>(...)`"' is not a constructor function type.
+/.src/schemaClassMissingBrand.ts(99,45): error TS2507: Type '"Missing `Self` generic - use `class Self extends Schema.TaggedError<Self>(...)`"' is not a constructor function type.
+/.src/schemaClassMissingBrand.ts(102,38): error TS2507: Type '{ <const Fields extends Struct.Fields>(fields: Fields, annotations?: Declaration<ClassSingleCall, readonly [Struct<Fields>]> | undefined): Class<ClassSingleCall, Struct<Fields>, {}>; <S extends Struct<Struct.Fields>>(schema: S, annotations?: Declaration<ClassSingleCall, readonly [S]> | undefined): Class<ClassSingleCall, S, {}>; }' is not a constructor function type.
+/.src/schemaClassMissingBrand.ts(103,44): error TS2507: Type '{ <Tag extends string, const Fields extends Struct.Fields>(tag: Tag, fields: Fields, annotations?: Declaration<TaggedClassSingleCall, readonly [TaggedStruct<Tag, Fields>]> | undefined): Class<TaggedClassSingleCall, TaggedStruct<Tag, Fields>, {}>; <Tag extends string, S extends Struct<Struct.Fields>>(tag: Tag, schema: S, annotations?: Declaration<TaggedClassSingleCall, readonly [Struct<{ [K in keyof ({ readonly _tag: tag<Tag>; } & S["fields"])]: ({ readonly _tag: tag<Tag>; } & S["fields"])[K]; }>]> | undefined): Class<TaggedClassSingleCall, Struct<{ [K in keyof ({ readonly _tag: tag<Tag>; } & S["fields"])]: ({ readonly _tag: tag<Tag>; } & S["fields"])[K]; }>, {}>; }' is not a constructor function type.
+/.src/schemaClassMissingBrand.ts(104,38): error TS2507: Type '{ <const Fields extends Struct.Fields>(fields: Fields, annotations?: Declaration<ErrorSingleCall, readonly [Struct<Fields>]> | undefined): Class<ErrorSingleCall, Struct<Fields>, YieldableError>; <S extends Struct<Struct.Fields>>(schema: S, annotations?: Declaration<ErrorSingleCall, readonly [S]> | undefined): Class<ErrorSingleCall, S, YieldableError>; }' is not a constructor function type.
+/.src/schemaClassMissingBrand.ts(105,44): error TS2507: Type '{ <Tag extends string, const Fields extends Struct.Fields>(tag: Tag, fields: Fields, annotations?: Declaration<TaggedErrorSingleCall, readonly [TaggedStruct<Tag, Fields>]> | undefined): Class<TaggedErrorSingleCall, TaggedStruct<Tag, Fields>, YieldableError>; <Tag extends string, S extends Struct<Struct.Fields>>(tag: Tag, schema: S, annotations?: Declaration<TaggedErrorSingleCall, readonly [Struct<{ [K in keyof ({ readonly _tag: tag<Tag>; } & S["fields"])]: ({ readonly _tag: tag<Tag>; } & S["fields"])[K]; }>]> | undefined): Class<TaggedErrorSingleCall, Struct<{ [K in keyof ({ readonly _tag: tag<Tag>; } & S["fields"])]: ({ readonly _tag: tag<Tag>; } & S["fields"])[K]; }>, YieldableError>; }' is not a constructor function type.
+/.src/schemaClassMissingBrand.ts(106,39): error TS2507: Type '<S extends Top>(schema: S) => Opaque<OpaqueSingleCall, S, {}> & Omit<S, keyof Top>' is not a constructor function type.
+
+
+==== /.src/schemaClassMissingBrand.ts (38 errors) ====
+    import { Context, Schema } from "effect"
+    import { Model } from "effect/schema"
+    import * as S from "effect/Schema"
+    import { Class as MakeClass, TaggedClass as MakeTaggedClass, Error as MakeError,
+      TaggedError as MakeTaggedError, Opaque as MakeOpaque } from "effect/Schema"
+    
+    type BrandAlias = { readonly brand: unique symbol }
+    
+    export class ClassNamespace extends Schema.Class<ClassNamespace>("ClassNamespace")({ value: Schema.String }) {}
+                                                     ~~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    export class ClassModule extends S.Class<ClassModule>("ClassModule")({ value: Schema.String }) {}
+                                             ~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    export class ClassRenamed extends MakeClass<ClassRenamed>("ClassRenamed")({ value: Schema.String }) {}
+                                                ~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    
+    export class TaggedClassNamespace extends Schema.TaggedClass<TaggedClassNamespace>()("TaggedClassNamespace", { value: Schema.String }) {}
+                                                                 ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    export class TaggedClassModule extends S.TaggedClass<TaggedClassModule>()("TaggedClassModule", { value: Schema.String }) {}
+                                                         ~~~~~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    export class TaggedClassRenamed extends MakeTaggedClass<TaggedClassRenamed>()("TaggedClassRenamed", { value: Schema.String }) {}
+                                                            ~~~~~~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    
+    export class ErrorNamespace extends Schema.Error<ErrorNamespace>("ErrorNamespace")({ value: Schema.String }) {}
+                                                     ~~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    export class ErrorModule extends S.Error<ErrorModule>("ErrorModule")({ value: Schema.String }) {}
+                                             ~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    export class ErrorRenamed extends MakeError<ErrorRenamed>("ErrorRenamed")({ value: Schema.String }) {}
+                                                ~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    
+    export class TaggedErrorNamespace extends Schema.TaggedError<TaggedErrorNamespace>()("TaggedErrorNamespace", { value: Schema.String }) {}
+                                                                 ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    export class TaggedErrorModule extends S.TaggedError<TaggedErrorModule>()("TaggedErrorModule", { value: Schema.String }) {}
+                                                         ~~~~~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    export class TaggedErrorRenamed extends MakeTaggedError<TaggedErrorRenamed>()("TaggedErrorRenamed", { value: Schema.String }) {}
+                                                            ~~~~~~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    
+    export class OpaqueNamespace extends Schema.Opaque<OpaqueNamespace>()(Schema.Struct({ value: Schema.String })) {}
+                                                       ~~~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    export class OpaqueModule extends S.Opaque<OpaqueModule>()(Schema.Struct({ value: Schema.String })) {}
+                                               ~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    export class OpaqueRenamed extends MakeOpaque<OpaqueRenamed>()(Schema.Struct({ value: Schema.String })) {}
+                                                  ~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    
+    export class ClassBranded extends Schema.Class<ClassBranded, { readonly brand: unique symbol }>("ClassBranded")({ value: Schema.String }) {}
+    export class TaggedClassBranded extends Schema.TaggedClass<TaggedClassBranded, { readonly brand: unique symbol }>()("TaggedClassBranded", { value: Schema.String }) {}
+    export class ErrorBranded extends Schema.Error<ErrorBranded, { readonly brand: unique symbol }>("ErrorBranded")({ value: Schema.String }) {}
+    export class TaggedErrorBranded extends Schema.TaggedError<TaggedErrorBranded, { readonly brand: unique symbol }>()("TaggedErrorBranded", { value: Schema.String }) {}
+    export class OpaqueBranded extends Schema.Opaque<OpaqueBranded, { readonly brand: unique symbol }>()(Schema.Struct({ value: Schema.String })) {}
+    
+    export class ClassAlias extends Schema.Class<ClassAlias, BrandAlias>("ClassAlias")({ value: Schema.String }) {}
+    export class TaggedClassAlias extends Schema.TaggedClass<TaggedClassAlias, BrandAlias>()("TaggedClassAlias", { value: Schema.String }) {}
+    export class ErrorAlias extends Schema.Error<ErrorAlias, BrandAlias>("ErrorAlias")({ value: Schema.String }) {}
+    export class TaggedErrorAlias extends Schema.TaggedError<TaggedErrorAlias, BrandAlias>()("TaggedErrorAlias", { value: Schema.String }) {}
+    export class OpaqueAlias extends Schema.Opaque<OpaqueAlias, BrandAlias>()(Schema.Struct({ value: Schema.String })) {}
+    
+    export class ClassStructural extends Schema.Class<ClassStructural, {}>("ClassStructural")({ value: Schema.String }) {}
+    export class TaggedClassStructural extends Schema.TaggedClass<TaggedClassStructural, {}>()("TaggedClassStructural", { value: Schema.String }) {}
+    export class ErrorStructural extends Schema.Error<ErrorStructural, {}>("ErrorStructural")({ value: Schema.String }) {}
+    export class TaggedErrorStructural extends Schema.TaggedError<TaggedErrorStructural, {}>()("TaggedErrorStructural", { value: Schema.String }) {}
+    export class OpaqueStructural extends Schema.Opaque<OpaqueStructural, {}>()(Schema.Struct({ value: Schema.String })) {}
+    
+    export class ClassLiteralBrand extends Schema.Class<ClassLiteralBrand, "Brand">("ClassLiteralBrand")({ value: Schema.String }) {}
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2509: Base constructor return type '{ readonly value: string; } & "Brand"' is not an object type or intersection of object types with statically known members.
+    export class TaggedClassLiteralBrand extends Schema.TaggedClass<TaggedClassLiteralBrand, "Brand">()("TaggedClassLiteralBrand", { value: Schema.String }) {}
+                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2509: Base constructor return type '{ readonly _tag: "TaggedClassLiteralBrand"; readonly value: string; } & "Brand"' is not an object type or intersection of object types with statically known members.
+    export class ErrorLiteralBrand extends Schema.Error<ErrorLiteralBrand, "Brand">("ErrorLiteralBrand")({ value: Schema.String }) {}
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2509: Base constructor return type '{ readonly value: string; } & YieldableError & "Brand"' is not an object type or intersection of object types with statically known members.
+    export class TaggedErrorLiteralBrand extends Schema.TaggedError<TaggedErrorLiteralBrand, "Brand">()("TaggedErrorLiteralBrand", { value: Schema.String }) {}
+                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2509: Base constructor return type '{ readonly _tag: "TaggedErrorLiteralBrand"; readonly value: string; } & YieldableError & "Brand"' is not an object type or intersection of object types with statically known members.
+    export class OpaqueLiteralBrand extends Schema.Opaque<OpaqueLiteralBrand, "Brand">()(Schema.Struct({ value: Schema.String })) {}
+                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2509: Base constructor return type '{ readonly value: string; } & "Brand"' is not an object type or intersection of object types with statically known members.
+    
+    export const ClassValue = class ClassExpression extends Schema.Class<ClassExpression>("ClassExpression")({ value: Schema.String }) {}
+                                                                         ~~~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    export const TaggedClassValue = class TaggedClassExpression extends Schema.TaggedClass<TaggedClassExpression>()("TaggedClassExpression", { value: Schema.String }) {}
+                                                                                           ~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    export const ErrorValue = class ErrorExpression extends Schema.Error<ErrorExpression>("ErrorExpression")({ value: Schema.String }) {}
+                                                                         ~~~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    export const TaggedErrorValue = class TaggedErrorExpression extends Schema.TaggedError<TaggedErrorExpression>()("TaggedErrorExpression", { value: Schema.String }) {}
+                                                                                           ~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    export const OpaqueValue = class OpaqueExpression extends Schema.Opaque<OpaqueExpression>()(Schema.Struct({ value: Schema.String })) {}
+                                                                            ~~~~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    
+    export const AnonymousOpaque = class extends Schema.Opaque<OpaqueNamespace>()(Schema.Struct({ value: Schema.String })) {}
+                                                               ~~~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+    
+    export const AnonymousClass = class extends Schema.Class<ClassNamespace>("AnonymousClass")({ value: Schema.String }) {}
+    
+    export class UnbrandedParent extends Schema.Class<UnbrandedParent>("UnbrandedParent")({}) {
+                                                      ~~~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+      static nested() {
+        return class NestedInUnbranded extends Schema.TaggedClass<NestedInUnbranded>()("NestedInUnbranded", {}) {}
+                                                                  ~~~~~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+      }
+    }
+    
+    export class BrandedParent extends Schema.Class<BrandedParent, BrandAlias>("BrandedParent")({}) {
+      static nested() {
+        return class NestedInBranded extends Schema.Error<NestedInBranded>("NestedInBranded")({}) {}
+                                                          ~~~~~~~~~~~~~~~
+!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+      }
+    }
+    
+    export class OrdinaryBase {}
+    export class OrdinarySubclass extends OrdinaryBase {}
+    export class IndirectSchemaSubclass extends ClassStructural {}
+    export class ExtendedSchemaClass extends ClassStructural.extend<ExtendedSchemaClass>("ExtendedSchemaClass")({ extra: Schema.String }) {}
+    export class Service extends Context.Service<Service, { readonly value: string }>()("Service") {}
+    export class ModelClass extends Model.Class<ModelClass>("ModelClass")({ value: Schema.String }) {}
+    
+    namespace Local {
+      export declare function Class<Self>(...args: unknown[]): (...fields: unknown[]) => typeof OrdinaryBase
+      export declare function TaggedClass<Self>(...args: unknown[]): (...fields: unknown[]) => typeof OrdinaryBase
+      export declare function Error<Self>(...args: unknown[]): (...fields: unknown[]) => typeof OrdinaryBase
+      export declare function TaggedError<Self>(...args: unknown[]): (...fields: unknown[]) => typeof OrdinaryBase
+      export declare function Opaque<Self>(...args: unknown[]): (...fields: unknown[]) => typeof OrdinaryBase
+    }
+    
+    export class ClassLookalike extends Local.Class<ClassLookalike>("ClassLookalike")({ value: Schema.String }) {}
+    export class TaggedClassLookalike extends Local.TaggedClass<TaggedClassLookalike>()("TaggedClassLookalike", { value: Schema.String }) {}
+    export class ErrorLookalike extends Local.Error<ErrorLookalike>("ErrorLookalike")({ value: Schema.String }) {}
+    export class TaggedErrorLookalike extends Local.TaggedError<TaggedErrorLookalike>()("TaggedErrorLookalike", { value: Schema.String }) {}
+    export class OpaqueLookalike extends Local.Opaque<OpaqueLookalike>()(Schema.Struct({ value: Schema.String })) {}
+    
+    export class ClassMissingSelf extends Schema.Class("ClassMissingSelf")({ value: Schema.String }) {}
+                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2507: Type '"Missing `Self` generic - use `class Self extends Schema.Class<Self>(...)`"' is not a constructor function type.
+    export class TaggedClassMissingSelf extends Schema.TaggedClass()("TaggedClassMissingSelf", { value: Schema.String }) {}
+                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2507: Type '"Missing `Self` generic - use `class Self extends Schema.TaggedClass<Self>(...)`"' is not a constructor function type.
+    export class ErrorMissingSelf extends Schema.Error("ErrorMissingSelf")({ value: Schema.String }) {}
+                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2507: Type '"Missing `Self` generic - use `class Self extends Schema.Error<Self>(...)`"' is not a constructor function type.
+    export class TaggedErrorMissingSelf extends Schema.TaggedError()("TaggedErrorMissingSelf", { value: Schema.String }) {}
+                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2507: Type '"Missing `Self` generic - use `class Self extends Schema.TaggedError<Self>(...)`"' is not a constructor function type.
+    export class OpaqueMissingSelf extends Schema.Opaque()(Schema.Struct({ value: Schema.String })) {}
+    
+    export class ClassSingleCall extends Schema.Class<ClassSingleCall>("ClassSingleCall") {}
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2507: Type '{ <const Fields extends Struct.Fields>(fields: Fields, annotations?: Declaration<ClassSingleCall, readonly [Struct<Fields>]> | undefined): Class<ClassSingleCall, Struct<Fields>, {}>; <S extends Struct<Struct.Fields>>(schema: S, annotations?: Declaration<ClassSingleCall, readonly [S]> | undefined): Class<ClassSingleCall, S, {}>; }' is not a constructor function type.
+    export class TaggedClassSingleCall extends Schema.TaggedClass<TaggedClassSingleCall>() {}
+                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2507: Type '{ <Tag extends string, const Fields extends Struct.Fields>(tag: Tag, fields: Fields, annotations?: Declaration<TaggedClassSingleCall, readonly [TaggedStruct<Tag, Fields>]> | undefined): Class<TaggedClassSingleCall, TaggedStruct<Tag, Fields>, {}>; <Tag extends string, S extends Struct<Struct.Fields>>(tag: Tag, schema: S, annotations?: Declaration<TaggedClassSingleCall, readonly [Struct<{ [K in keyof ({ readonly _tag: tag<Tag>; } & S["fields"])]: ({ readonly _tag: tag<Tag>; } & S["fields"])[K]; }>]> | undefined): Class<TaggedClassSingleCall, Struct<{ [K in keyof ({ readonly _tag: tag<Tag>; } & S["fields"])]: ({ readonly _tag: tag<Tag>; } & S["fields"])[K]; }>, {}>; }' is not a constructor function type.
+    export class ErrorSingleCall extends Schema.Error<ErrorSingleCall>("ErrorSingleCall") {}
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2507: Type '{ <const Fields extends Struct.Fields>(fields: Fields, annotations?: Declaration<ErrorSingleCall, readonly [Struct<Fields>]> | undefined): Class<ErrorSingleCall, Struct<Fields>, YieldableError>; <S extends Struct<Struct.Fields>>(schema: S, annotations?: Declaration<ErrorSingleCall, readonly [S]> | undefined): Class<ErrorSingleCall, S, YieldableError>; }' is not a constructor function type.
+    export class TaggedErrorSingleCall extends Schema.TaggedError<TaggedErrorSingleCall>() {}
+                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2507: Type '{ <Tag extends string, const Fields extends Struct.Fields>(tag: Tag, fields: Fields, annotations?: Declaration<TaggedErrorSingleCall, readonly [TaggedStruct<Tag, Fields>]> | undefined): Class<TaggedErrorSingleCall, TaggedStruct<Tag, Fields>, YieldableError>; <Tag extends string, S extends Struct<Struct.Fields>>(tag: Tag, schema: S, annotations?: Declaration<TaggedErrorSingleCall, readonly [Struct<{ [K in keyof ({ readonly _tag: tag<Tag>; } & S["fields"])]: ({ readonly _tag: tag<Tag>; } & S["fields"])[K]; }>]> | undefined): Class<TaggedErrorSingleCall, Struct<{ [K in keyof ({ readonly _tag: tag<Tag>; } & S["fields"])]: ({ readonly _tag: tag<Tag>; } & S["fields"])[K]; }>, YieldableError>; }' is not a constructor function type.
+    export class OpaqueSingleCall extends Schema.Opaque<OpaqueSingleCall>() {}
+                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2507: Type '<S extends Top>(schema: S) => Opaque<OpaqueSingleCall, S, {}> & Omit<S, keyof Top>' is not a constructor function type.
+    

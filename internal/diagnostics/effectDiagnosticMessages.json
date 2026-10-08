@@ -554,5 +554,9 @@
     "Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)": {
         "category": "Suggestion",
         "code": 377139
+    },
+    "This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)": {
+        "category": "Warning",
+        "code": 377141
     }
 }

@@ -1,0 +1,605 @@
+==== /.src/schemaClassMissingBrand.ts (40 flows) ====
+
+=== Piping Flow ===
+Location: 9:36 - 9:109
+Node: Schema.Class<ClassNamespace>("ClassNamespace")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<ClassNamespace>("ClassNamespace")
+      args: (constant)
+      outType: Class<ClassNamespace, Struct<{ readonly value: String; }>, {}>
+
+=== Piping Flow ===
+Location: 10:33 - 10:95
+Node: S.Class<ClassModule>("ClassModule")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: S.Class<ClassModule>("ClassModule")
+      args: (constant)
+      outType: Class<ClassModule, Struct<{ readonly value: String; }>, {}>
+
+=== Piping Flow ===
+Location: 11:34 - 11:100
+Node: MakeClass<ClassRenamed>("ClassRenamed")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: MakeClass<ClassRenamed>("ClassRenamed")
+      args: (constant)
+      outType: Class<ClassRenamed, Struct<{ readonly value: String; }>, {}>
+
+=== Piping Flow ===
+Location: 17:36 - 17:109
+Node: Schema.Error<ErrorNamespace>("ErrorNamespace")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Error<ErrorNamespace>("ErrorNamespace")
+      args: (constant)
+      outType: Class<ErrorNamespace, Struct<{ readonly value: String; }>, YieldableError>
+
+=== Piping Flow ===
+Location: 18:33 - 18:95
+Node: S.Error<ErrorModule>("ErrorModule")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: S.Error<ErrorModule>("ErrorModule")
+      args: (constant)
+      outType: Class<ErrorModule, Struct<{ readonly value: String; }>, YieldableError>
+
+=== Piping Flow ===
+Location: 19:34 - 19:100
+Node: MakeError<ErrorRenamed>("ErrorRenamed")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: MakeError<ErrorRenamed>("ErrorRenamed")
+      args: (constant)
+      outType: Class<ErrorRenamed, Struct<{ readonly value: String; }>, YieldableError>
+
+=== Piping Flow ===
+Location: 25:37 - 25:111
+Node: Schema.Opaque<OpaqueNamespace>()(Schema.Struct({ value: Schema.String }))
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly value: String; }>
+  [1] kind: call
+      callee: Schema.Opaque<OpaqueNamespace>()
+      args: (constant)
+      outType: Opaque<OpaqueNamespace, Struct<{ readonly value: String; }>, {}> & Omit<Struct<{ readonly value: String; }>, keyof Top>
+
+=== Piping Flow ===
+Location: 26:34 - 26:100
+Node: S.Opaque<OpaqueModule>()(Schema.Struct({ value: Schema.String }))
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly value: String; }>
+  [1] kind: call
+      callee: S.Opaque<OpaqueModule>()
+      args: (constant)
+      outType: Opaque<OpaqueModule, Struct<{ readonly value: String; }>, {}> & Omit<Struct<{ readonly value: String; }>, keyof Top>
+
+=== Piping Flow ===
+Location: 27:35 - 27:104
+Node: MakeOpaque<OpaqueRenamed>()(Schema.Struct({ value: Schema.String }))
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly value: String; }>
+  [1] kind: call
+      callee: MakeOpaque<OpaqueRenamed>()
+      args: (constant)
+      outType: Opaque<OpaqueRenamed, Struct<{ readonly value: String; }>, {}> & Omit<Struct<{ readonly value: String; }>, keyof Top>
+
+=== Piping Flow ===
+Location: 29:34 - 29:138
+Node: Schema.Class<ClassBranded, { readonly brand: unique symbol }>("ClassBranded")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<ClassBranded, { readonly brand: unique symbol }>("ClassBranded")
+      args: (constant)
+      outType: Class<ClassBranded, Struct<{ readonly value: String; }>, { readonly brand: unique symbol; }>
+
+=== Piping Flow ===
+Location: 31:34 - 31:138
+Node: Schema.Error<ErrorBranded, { readonly brand: unique symbol }>("ErrorBranded")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Error<ErrorBranded, { readonly brand: unique symbol }>("ErrorBranded")
+      args: (constant)
+      outType: Class<ErrorBranded, Struct<{ readonly value: String; }>, YieldableError & { readonly brand: unique symbol; }>
+
+=== Piping Flow ===
+Location: 33:35 - 33:142
+Node: Schema.Opaque<OpaqueBranded, { readonly brand: unique symbol }>()(Schema.Struct({ value: Schema.String }))
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly value: String; }>
+  [1] kind: call
+      callee: Schema.Opaque<OpaqueBranded, { readonly brand: unique symbol }>()
+      args: (constant)
+      outType: Opaque<OpaqueBranded, Struct<{ readonly value: String; }>, { readonly brand: unique symbol; }> & Omit<Struct<{ readonly value: String; }>, keyof Top>
+
+=== Piping Flow ===
+Location: 35:32 - 35:109
+Node: Schema.Class<ClassAlias, BrandAlias>("ClassAlias")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<ClassAlias, BrandAlias>("ClassAlias")
+      args: (constant)
+      outType: Class<ClassAlias, Struct<{ readonly value: String; }>, BrandAlias>
+
+=== Piping Flow ===
+Location: 37:32 - 37:109
+Node: Schema.Error<ErrorAlias, BrandAlias>("ErrorAlias")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Error<ErrorAlias, BrandAlias>("ErrorAlias")
+      args: (constant)
+      outType: Class<ErrorAlias, Struct<{ readonly value: String; }>, YieldableError & BrandAlias>
+
+=== Piping Flow ===
+Location: 39:33 - 39:115
+Node: Schema.Opaque<OpaqueAlias, BrandAlias>()(Schema.Struct({ value: Schema.String }))
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly value: String; }>
+  [1] kind: call
+      callee: Schema.Opaque<OpaqueAlias, BrandAlias>()
+      args: (constant)
+      outType: Opaque<OpaqueAlias, Struct<{ readonly value: String; }>, BrandAlias> & Omit<Struct<{ readonly value: String; }>, keyof Top>
+
+=== Piping Flow ===
+Location: 41:37 - 41:116
+Node: Schema.Class<ClassStructural, {}>("ClassStructural")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<ClassStructural, {}>("ClassStructural")
+      args: (constant)
+      outType: Class<ClassStructural, Struct<{ readonly value: String; }>, {}>
+
+=== Piping Flow ===
+Location: 43:37 - 43:116
+Node: Schema.Error<ErrorStructural, {}>("ErrorStructural")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Error<ErrorStructural, {}>("ErrorStructural")
+      args: (constant)
+      outType: Class<ErrorStructural, Struct<{ readonly value: String; }>, YieldableError>
+
+=== Piping Flow ===
+Location: 45:38 - 45:117
+Node: Schema.Opaque<OpaqueStructural, {}>()(Schema.Struct({ value: Schema.String }))
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly value: String; }>
+  [1] kind: call
+      callee: Schema.Opaque<OpaqueStructural, {}>()
+      args: (constant)
+      outType: Opaque<OpaqueStructural, Struct<{ readonly value: String; }>, {}> & Omit<Struct<{ readonly value: String; }>, keyof Top>
+
+=== Piping Flow ===
+Location: 47:39 - 47:127
+Node: Schema.Class<ClassLiteralBrand, "Brand">("ClassLiteralBrand")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<ClassLiteralBrand, "Brand">("ClassLiteralBrand")
+      args: (constant)
+      outType: Class<ClassLiteralBrand, Struct<{ readonly value: String; }>, "Brand">
+
+=== Piping Flow ===
+Location: 49:39 - 49:127
+Node: Schema.Error<ErrorLiteralBrand, "Brand">("ErrorLiteralBrand")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Error<ErrorLiteralBrand, "Brand">("ErrorLiteralBrand")
+      args: (constant)
+      outType: Class<ErrorLiteralBrand, Struct<{ readonly value: String; }>, YieldableError & "Brand">
+
+=== Piping Flow ===
+Location: 51:40 - 51:126
+Node: Schema.Opaque<OpaqueLiteralBrand, "Brand">()(Schema.Struct({ value: Schema.String }))
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly value: String; }>
+  [1] kind: call
+      callee: Schema.Opaque<OpaqueLiteralBrand, "Brand">()
+      args: (constant)
+      outType: Opaque<OpaqueLiteralBrand, Struct<{ readonly value: String; }>, "Brand"> & Omit<Struct<{ readonly value: String; }>, keyof Top>
+
+=== Piping Flow ===
+Location: 53:56 - 53:131
+Node: Schema.Class<ClassExpression>("ClassExpression")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<ClassExpression>("ClassExpression")
+      args: (constant)
+      outType: Class<ClassExpression, Struct<{ readonly value: String; }>, {}>
+
+=== Piping Flow ===
+Location: 55:56 - 55:131
+Node: Schema.Error<ErrorExpression>("ErrorExpression")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Error<ErrorExpression>("ErrorExpression")
+      args: (constant)
+      outType: Class<ErrorExpression, Struct<{ readonly value: String; }>, YieldableError>
+
+=== Piping Flow ===
+Location: 57:58 - 57:133
+Node: Schema.Opaque<OpaqueExpression>()(Schema.Struct({ value: Schema.String }))
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly value: String; }>
+  [1] kind: call
+      callee: Schema.Opaque<OpaqueExpression>()
+      args: (constant)
+      outType: Opaque<OpaqueExpression, Struct<{ readonly value: String; }>, {}> & Omit<Struct<{ readonly value: String; }>, keyof Top>
+
+=== Piping Flow ===
+Location: 59:45 - 59:119
+Node: Schema.Opaque<OpaqueNamespace>()(Schema.Struct({ value: Schema.String }))
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly value: String; }>
+  [1] kind: call
+      callee: Schema.Opaque<OpaqueNamespace>()
+      args: (constant)
+      outType: Opaque<OpaqueNamespace, Struct<{ readonly value: String; }>, {}> & Omit<Struct<{ readonly value: String; }>, keyof Top>
+
+=== Piping Flow ===
+Location: 61:44 - 61:117
+Node: Schema.Class<ClassNamespace>("AnonymousClass")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<ClassNamespace>("AnonymousClass")
+      args: (constant)
+      outType: Class<ClassNamespace, Struct<{ readonly value: String; }>, {}>
+
+=== Piping Flow ===
+Location: 63:37 - 63:90
+Node: Schema.Class<UnbrandedParent>("UnbrandedParent")({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<UnbrandedParent>("UnbrandedParent")
+      args: (constant)
+      outType: Class<UnbrandedParent, Struct<{}>, {}>
+
+=== Piping Flow ===
+Location: 69:35 - 69:96
+Node: Schema.Class<BrandedParent, BrandAlias>("BrandedParent")({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<BrandedParent, BrandAlias>("BrandedParent")
+      args: (constant)
+      outType: Class<BrandedParent, Struct<{}>, BrandAlias>
+
+=== Piping Flow ===
+Location: 71:41 - 71:94
+Node: Schema.Error<NestedInBranded>("NestedInBranded")({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Error<NestedInBranded>("NestedInBranded")
+      args: (constant)
+      outType: Class<NestedInBranded, Struct<{}>, YieldableError>
+
+=== Piping Flow ===
+Location: 78:41 - 78:134
+Node: ClassStructural.extend<ExtendedSchemaClass>("ExtendedSchemaClass")({ extra: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { extra: Schema.String }
+Subject Type: { extra: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: ClassStructural.extend<ExtendedSchemaClass>("ExtendedSchemaClass")
+      args: (constant)
+      outType: InheritStaticMembers<Class<ExtendedSchemaClass, Struct<{ readonly value: String; extra: String; }>, ClassStructural>, {}>
+
+=== Piping Flow ===
+Location: 79:29 - 79:95
+Node: Context.Service<Service, { readonly value: string }>()("Service")
+Node Kind: KindCallExpression
+
+Subject: "Service"
+Subject Type: "Service"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Service<Service, { readonly value: string }>()
+      args: (constant)
+      outType: ServiceClass<Service, "Service", { readonly value: string; }>
+
+=== Piping Flow ===
+Location: 80:32 - 80:96
+Node: Model.Class<ModelClass>("ModelClass")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Model.Class<ModelClass>("ModelClass")
+      args: (constant)
+      outType: Class<ModelClass, { readonly value: String; }, Struct<ExtractFields<"select", { readonly value: String; }, true>>> & { readonly insert: Struct<{ readonly value: String; }>; readonly json: Struct<{ readonly value: String; }>; readonly jsonCreate: Struct<{ readonly value: String; }>; readonly jsonUpdate: Struct<{ readonly value: String; }>; readonly select: Struct<{ readonly value: String; }>; readonly update: Struct<{ readonly value: String; }>; }
+
+=== Piping Flow ===
+Location: 90:36 - 90:108
+Node: Local.Class<ClassLookalike>("ClassLookalike")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Local.Class<ClassLookalike>("ClassLookalike")
+      args: (constant)
+      outType: typeof OrdinaryBase
+
+=== Piping Flow ===
+Location: 92:36 - 92:108
+Node: Local.Error<ErrorLookalike>("ErrorLookalike")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Local.Error<ErrorLookalike>("ErrorLookalike")
+      args: (constant)
+      outType: typeof OrdinaryBase
+
+=== Piping Flow ===
+Location: 94:37 - 94:110
+Node: Local.Opaque<OpaqueLookalike>()(Schema.Struct({ value: Schema.String }))
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly value: String; }>
+  [1] kind: call
+      callee: Local.Opaque<OpaqueLookalike>()
+      args: (constant)
+      outType: typeof OrdinaryBase
+
+=== Piping Flow ===
+Location: 96:38 - 96:97
+Node: Schema.Class("ClassMissingSelf")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class("ClassMissingSelf")
+      args: (constant)
+      outType: "Missing `Self` generic - use `class Self extends Schema.Class<Self>(...)`"
+
+=== Piping Flow ===
+Location: 98:38 - 98:97
+Node: Schema.Error("ErrorMissingSelf")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Error("ErrorMissingSelf")
+      args: (constant)
+      outType: "Missing `Self` generic - use `class Self extends Schema.Error<Self>(...)`"
+
+=== Piping Flow ===
+Location: 100:39 - 100:96
+Node: Schema.Opaque()(Schema.Struct({ value: Schema.String }))
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly value: String; }>
+  [1] kind: call
+      callee: Schema.Opaque()
+      args: (constant)
+      outType: Opaque<unknown, Struct<{ readonly value: String; }>, {}> & Omit<Struct<{ readonly value: String; }>, keyof Top>
+
+=== Piping Flow ===
+Location: 102:37 - 102:86
+Node: Schema.Class<ClassSingleCall>("ClassSingleCall")
+Node Kind: KindCallExpression
+
+Subject: "ClassSingleCall"
+Subject Type: "ClassSingleCall"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class
+      args: (constant)
+      outType: { <const Fields extends Struct.Fields>(fields: Fields, annotations?: Declaration<ClassSingleCall, readonly [Struct<Fields>]> | undefined): Class<ClassSingleCall, Struct<Fields>, {}>; <S extends Struct<Struct.Fields>>(schema: S, annotations?: Declaration<ClassSingleCall, readonly [S]> | undefined): Class<ClassSingleCall, S, {}>; }
+
+=== Piping Flow ===
+Location: 104:37 - 104:86
+Node: Schema.Error<ErrorSingleCall>("ErrorSingleCall")
+Node Kind: KindCallExpression
+
+Subject: "ErrorSingleCall"
+Subject Type: "ErrorSingleCall"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Error
+      args: (constant)
+      outType: { <const Fields extends Struct.Fields>(fields: Fields, annotations?: Declaration<ErrorSingleCall, readonly [Struct<Fields>]> | undefined): Class<ErrorSingleCall, Struct<Fields>, YieldableError>; <S extends Struct<Struct.Fields>>(schema: S, annotations?: Declaration<ErrorSingleCall, readonly [S]> | undefined): Class<ErrorSingleCall, S, YieldableError>; }

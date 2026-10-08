@@ -72,6 +72,7 @@
     "effecttsgo/return-effect-in-gen": "warn",
     "effecttsgo/run-effect-inside-effect": "warn",
     "effecttsgo/run-of-exit-to-run-exit": "warn",
+    "effecttsgo/schema-class-missing-brand": "warn",
     "effecttsgo/schema-literal-non-finite": "error",
     "effecttsgo/schema-number": "warn",
     "effecttsgo/schema-opaque-instance-member": "error",
