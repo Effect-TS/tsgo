@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.2
 
-/.src/overriddenSchemaConstructor_valid.ts(3,41): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/overriddenSchemaConstructor_valid.ts(3,41): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
 
 
 ==== /.src/overriddenSchemaConstructor_valid.ts (1 errors) ====
@@ -9,7 +9,7 @@ Effect version: 4.0.2
     
     export class Valid extends Schema.Class<Valid>("Valid")({
                                             ~~~~~
-!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       a: Schema.Finite
     }) {
       protected constructor(a: Valid, options: Schema.MakeOptions) {

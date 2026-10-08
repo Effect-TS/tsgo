@@ -1,8 +1,8 @@
 === Metadata ===
 Effect version: 4.0.2
 
-/.src/effect_fn_opportunity_panic.ts(4,33): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
-/.src/effect_fn_opportunity_panic.ts(11,33): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/effect_fn_opportunity_panic.ts(4,33): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/effect_fn_opportunity_panic.ts(11,33): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
 /.src/effect_fn_opportunity_panic.ts(61,7): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("JsonPlaceholder.getTodo")((id) => { ... })`. effect(effectFnOpportunity)
 /.src/effect_fn_opportunity_panic.ts(83,7): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fn("JsonPlaceholder.getUser")((id) => { ... })`. effect(effectFnOpportunity)
 
@@ -30,7 +30,7 @@ Effect version: 4.0.2
     
     class Todo extends Schema.Class<Todo>("Todo")({
                                     ~~~~
-!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       userId: Schema.Finite,
       id: Schema.Finite,
       title: Schema.String,
@@ -39,7 +39,7 @@ Effect version: 4.0.2
     
     class User extends Schema.Class<User>("User")({
                                     ~~~~
-!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       id: Schema.Finite,
       name: Schema.String,
       email: Schema.String

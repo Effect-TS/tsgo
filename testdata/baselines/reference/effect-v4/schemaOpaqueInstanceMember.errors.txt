@@ -1,17 +1,17 @@
 === Metadata ===
 Effect version: 4.0.2
 
-/.src/schemaOpaqueInstanceMember.ts(5,30): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
-/.src/schemaOpaqueInstanceMember.ts(10,37): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaOpaqueInstanceMember.ts(5,30): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/schemaOpaqueInstanceMember.ts(10,37): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
 /.src/schemaOpaqueInstanceMember.ts(11,3): error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
 /.src/schemaOpaqueInstanceMember.ts(12,3): error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
 /.src/schemaOpaqueInstanceMember.ts(13,7): error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
 /.src/schemaOpaqueInstanceMember.ts(16,7): error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
-/.src/schemaOpaqueInstanceMember.ts(21,36): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaOpaqueInstanceMember.ts(21,36): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
 /.src/schemaOpaqueInstanceMember.ts(22,3): error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
-/.src/schemaOpaqueInstanceMember.ts(25,43): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaOpaqueInstanceMember.ts(25,43): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
 /.src/schemaOpaqueInstanceMember.ts(26,3): error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
-/.src/schemaOpaqueInstanceMember.ts(34,34): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/schemaOpaqueInstanceMember.ts(34,34): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
 
 
 ==== /.src/schemaOpaqueInstanceMember.ts (11 errors) ====
@@ -21,14 +21,14 @@ Effect version: 4.0.2
     
     class Valid extends S.Opaque<Valid>()(S.Struct({ value: S.String })) {
                                  ~~~~~
-!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       static value = "static"
       static method() {}
     }
     
     class Invalid extends Schema.Opaque<Invalid>()(Schema.Struct({ value: Schema.String })) {
                                         ~~~~~~~
-!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       value = "instance"
       ~~~~~
 !!! error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
@@ -49,7 +49,7 @@ Effect version: 4.0.2
     
     class Aliased extends SchemaOpaque<Aliased>()(Schema.Struct({})) {
                                        ~~~~~~~
-!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       field = true
       ~~~~~
 !!! error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
@@ -57,7 +57,7 @@ Effect version: 4.0.2
     
     const Expression = class extends S.Opaque<Invalid>()(S.Struct({})) {
                                               ~~~~~~~
-!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       expressionField = true
       ~~~~~~~~~~~~~~~
 !!! error TS377102: Classes extending `Schema.Opaque` must not declare instance members. effect(schemaOpaqueInstanceMember)
@@ -70,7 +70,7 @@ Effect version: 4.0.2
     
     class WrongShape extends S.Class<WrongShape>("WrongShape")({}) {
                                      ~~~~~~~~~~
-!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       allowed = true
     }
     

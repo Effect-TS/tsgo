@@ -7,7 +7,7 @@ Warns when Schema classes, errors, or Opaque classes omit the brand type argumen
 | Property | Value |
 | --- | --- |
 | Category | Correctness |
-| Default severity | `warning` |
+| Default severity | `suggestion` |
 | Fixable | No |
 | Effect versions | v4 |
 | Diagnostic codes | `TS377141` |
@@ -21,7 +21,7 @@ import { Schema } from "effect"
 
 export class User extends Schema.Class<User>("User")({ name: Schema.String }) {}
 /**
-                                       ^^^^ effecttsgo(schema-class-missing-brand): This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural.
+                                       ^^^^ effecttsgo(schema-class-missing-brand): Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected.
 */
 
 export class StructuralUser extends Schema.Class<StructuralUser, {}>("StructuralUser")({ name: Schema.String }) {}

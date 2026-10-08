@@ -1,62 +1,62 @@
 === Quick Fix Inventory ===
 
-[D1] (9:50-9:64) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D1] (9:50-9:64) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D2] (10:42-10:53) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D2] (10:42-10:53) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D3] (11:45-11:57) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D3] (11:45-11:57) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D4] (13:62-13:82) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D4] (13:62-13:82) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D5] (14:54-14:71) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D5] (14:54-14:71) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D6] (15:57-15:75) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D6] (15:57-15:75) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D7] (17:50-17:64) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D7] (17:50-17:64) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D8] (18:42-18:53) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D8] (18:42-18:53) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D9] (19:45-19:57) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D9] (19:45-19:57) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D10] (21:62-21:82) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D10] (21:62-21:82) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D11] (22:54-22:71) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D11] (22:54-22:71) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D12] (23:57-23:75) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D12] (23:57-23:75) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D13] (25:52-25:67) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D13] (25:52-25:67) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D14] (26:44-26:56) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D14] (26:44-26:56) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D15] (27:47-27:60) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D15] (27:47-27:60) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
@@ -75,39 +75,39 @@
 [D20] (51:41-51:126) TS2509: Base constructor return type '{ readonly value: string; } & "Brand"' is not an object type or intersection of object types with statically known members.
   (no quick fixes)
 
-[D21] (53:70-53:85) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D21] (53:70-53:85) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D22] (54:88-54:109) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D22] (54:88-54:109) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D23] (55:70-55:85) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D23] (55:70-55:85) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D24] (56:88-56:109) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D24] (56:88-56:109) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D25] (57:73-57:89) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D25] (57:73-57:89) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D26] (59:60-59:75) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D26] (59:60-59:75) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D27] (63:51-63:66) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D27] (63:51-63:66) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D28] (65:63-65:80) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D28] (65:63-65:80) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 
-[D29] (71:55-71:70) TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+[D29] (71:55-71:70) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
   Fix 0: "Disable schemaClassMissingBrand for this line"
   Fix 1: "Disable schemaClassMissingBrand for entire file"
 

@@ -97,7 +97,7 @@
         "returnEffectInGen": "suggestion",
         "runEffectInsideEffect": "suggestion",
         "runOfExitToRunExit": "suggestion",
-        "schemaClassMissingBrand": "warning",
+        "schemaClassMissingBrand": "suggestion",
         "schemaLiteralNonFinite": "error",
         "schemaNumber": "suggestion",
         "schemaOpaqueInstanceMember": "error",
@@ -825,7 +825,7 @@
       "name": "schemaClassMissingBrand",
       "group": "correctness",
       "description": "Warns when Schema classes, errors, or Opaque classes omit the brand type argument",
-      "defaultSeverity": "warning",
+      "defaultSeverity": "suggestion",
       "fixable": false,
       "supportedEffect": [
         "v4"
@@ -839,7 +839,7 @@
           {
             "start": 72,
             "end": 76,
-            "text": "This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)"
+            "text": "Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)"
           }
         ]
       }

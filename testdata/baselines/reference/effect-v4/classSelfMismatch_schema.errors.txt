@@ -1,12 +1,12 @@
 === Metadata ===
 Effect version: 4.0.2
 
-/.src/classSelfMismatch_schema.ts(4,52): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/classSelfMismatch_schema.ts(4,52): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
 /.src/classSelfMismatch_schema.ts(9,54): error TS377046: The `Self` type parameter for this class should be `InvalidSchemaClass`. effect(classSelfMismatch)
-/.src/classSelfMismatch_schema.ts(9,54): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
-/.src/classSelfMismatch_schema.ts(14,57): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/classSelfMismatch_schema.ts(9,54): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+/.src/classSelfMismatch_schema.ts(14,57): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
 /.src/classSelfMismatch_schema.ts(19,59): error TS377046: The `Self` type parameter for this class should be `InvalidErrorSchemaClass`. effect(classSelfMismatch)
-/.src/classSelfMismatch_schema.ts(19,59): warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+/.src/classSelfMismatch_schema.ts(19,59): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
 /.src/classSelfMismatch_schema.ts(24,18): error TS2339: Property 'RequestClass' does not exist on type 'typeof import("/node_modules/effect/dist/Schema")'.
 /.src/classSelfMismatch_schema.ts(33,18): error TS2339: Property 'RequestClass' does not exist on type 'typeof import("/node_modules/effect/dist/Schema")'.
 
@@ -17,7 +17,7 @@ Effect version: 4.0.2
     // valid usage
     export class ValidSchemaClass extends Schema.Class<ValidSchemaClass>("ValidSchemaClass")({
                                                        ~~~~~~~~~~~~~~~~
-!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       prop: Schema.String
     }) {}
     
@@ -26,14 +26,14 @@ Effect version: 4.0.2
                                                          ~~~~~~~~~~~~~~~~
 !!! error TS377046: The `Self` type parameter for this class should be `InvalidSchemaClass`. effect(classSelfMismatch)
                                                          ~~~~~~~~~~~~~~~~
-!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       prop: Schema.String
     }) {}
     
     // valid usage
     export class ValidErrorSchemaClass extends Schema.Class<ValidErrorSchemaClass>("ValidErrorSchemaClass")({
                                                             ~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       prop: Schema.String
     }) {}
     
@@ -42,7 +42,7 @@ Effect version: 4.0.2
                                                               ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS377046: The `Self` type parameter for this class should be `InvalidErrorSchemaClass`. effect(classSelfMismatch)
                                                               ~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377141: This Schema class is missing a brand type argument. Add `{ readonly brand: unique symbol }` as the second type argument to distinguish it from structurally compatible values, or pass `{}` to keep it structural. effect(schemaClassMissingBrand)
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       prop: Schema.String
     }) {}
     

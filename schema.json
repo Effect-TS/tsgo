@@ -2790,7 +2790,7 @@
         },
         "schemaClassMissingBrand": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
-          "default": "warning",
+          "default": "suggestion",
           "description": "Warns when Schema classes, errors, or Opaque classes omit the brand type argument"
         },
         "schemaLiteralNonFinite": {
