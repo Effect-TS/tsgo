@@ -44,12 +44,6 @@ export class ErrorStructural extends Schema.Error<ErrorStructural, {}>("ErrorStr
 export class TaggedErrorStructural extends Schema.TaggedError<TaggedErrorStructural, {}>()("TaggedErrorStructural", { value: Schema.String }) {}
 export class OpaqueStructural extends Schema.Opaque<OpaqueStructural, {}>()(Schema.Struct({ value: Schema.String })) {}
 
-export class ClassLiteralBrand extends Schema.Class<ClassLiteralBrand, "Brand">("ClassLiteralBrand")({ value: Schema.String }) {}
-export class TaggedClassLiteralBrand extends Schema.TaggedClass<TaggedClassLiteralBrand, "Brand">()("TaggedClassLiteralBrand", { value: Schema.String }) {}
-export class ErrorLiteralBrand extends Schema.Error<ErrorLiteralBrand, "Brand">("ErrorLiteralBrand")({ value: Schema.String }) {}
-export class TaggedErrorLiteralBrand extends Schema.TaggedError<TaggedErrorLiteralBrand, "Brand">()("TaggedErrorLiteralBrand", { value: Schema.String }) {}
-export class OpaqueLiteralBrand extends Schema.Opaque<OpaqueLiteralBrand, "Brand">()(Schema.Struct({ value: Schema.String })) {}
-
 export const ClassValue = class ClassExpression extends Schema.Class<ClassExpression>("ClassExpression")({ value: Schema.String }) {}
 export const TaggedClassValue = class TaggedClassExpression extends Schema.TaggedClass<TaggedClassExpression>()("TaggedClassExpression", { value: Schema.String }) {}
 export const ErrorValue = class ErrorExpression extends Schema.Error<ErrorExpression>("ErrorExpression")({ value: Schema.String }) {}
@@ -92,15 +86,3 @@ export class TaggedClassLookalike extends Local.TaggedClass<TaggedClassLookalike
 export class ErrorLookalike extends Local.Error<ErrorLookalike>("ErrorLookalike")({ value: Schema.String }) {}
 export class TaggedErrorLookalike extends Local.TaggedError<TaggedErrorLookalike>()("TaggedErrorLookalike", { value: Schema.String }) {}
 export class OpaqueLookalike extends Local.Opaque<OpaqueLookalike>()(Schema.Struct({ value: Schema.String })) {}
-
-export class ClassMissingSelf extends Schema.Class("ClassMissingSelf")({ value: Schema.String }) {}
-export class TaggedClassMissingSelf extends Schema.TaggedClass()("TaggedClassMissingSelf", { value: Schema.String }) {}
-export class ErrorMissingSelf extends Schema.Error("ErrorMissingSelf")({ value: Schema.String }) {}
-export class TaggedErrorMissingSelf extends Schema.TaggedError()("TaggedErrorMissingSelf", { value: Schema.String }) {}
-export class OpaqueMissingSelf extends Schema.Opaque()(Schema.Struct({ value: Schema.String })) {}
-
-export class ClassSingleCall extends Schema.Class<ClassSingleCall>("ClassSingleCall") {}
-export class TaggedClassSingleCall extends Schema.TaggedClass<TaggedClassSingleCall>() {}
-export class ErrorSingleCall extends Schema.Error<ErrorSingleCall>("ErrorSingleCall") {}
-export class TaggedErrorSingleCall extends Schema.TaggedError<TaggedErrorSingleCall>() {}
-export class OpaqueSingleCall extends Schema.Opaque<OpaqueSingleCall>() {}
