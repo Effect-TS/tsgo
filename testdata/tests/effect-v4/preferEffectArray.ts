@@ -154,7 +154,6 @@ void xs.with
 void xs[Symbol.iterator]
 void Array.from
 void Array.of
-void Array.fromAsync
 declare const dynamicName: keyof number[]
 void xs[dynamicName]
 void xs.length
