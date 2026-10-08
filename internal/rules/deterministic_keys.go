@@ -88,7 +88,7 @@ type deterministicKeyMatch struct {
 
 func checkDeterministicKeyMatch(tp *typeparser.TypeParser, program checker.Program, c *checker.Checker, sf *ast.SourceFile, classNode *ast.Node, keyPatterns []etscore.KeyPattern, extendedKeyDetection bool) *DeterministicKeyMatch {
 	match := matchClassPattern(tp, c, sf, classNode, extendedKeyDetection)
-	if match == nil || match.keyStringLiteral == nil {
+	if match == nil || match.keyStringLiteral == nil || match.className == nil {
 		return nil
 	}
 

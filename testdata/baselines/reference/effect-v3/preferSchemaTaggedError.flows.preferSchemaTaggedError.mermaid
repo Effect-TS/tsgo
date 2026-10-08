@@ -1,0 +1,152 @@
+flowchart TB
+  0[/"type: #quot;WithoutFields#quot;<br/>node: #quot;WithoutFields#quot;"/]
+  1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;WithoutFields#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  2[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  3[/"type: #quot;WithFields#quot;<br/>node: #quot;WithFields#quot;"/]
+  4["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;WithFields#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  5[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  6[/"type: #quot;AliasedDataError#quot;<br/>node: #quot;AliasedDataError#quot;"/]
+  7["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;AliasedDataError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: AliasedData.TaggedError<br/>args: #91;#93;"]
+  8[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: AliasedData.TaggedError"/]
+  9[/"type: #quot;NamespaceDataError#quot;<br/>node: #quot;NamespaceDataError#quot;"/]
+  10["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;NamespaceDataError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: NamespacedData.TaggedError<br/>args: #91;#93;"]
+  11[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: NamespacedData.TaggedError"/]
+  12[/"type: #quot;NamedFactoryError#quot;<br/>node: #quot;NamedFactoryError#quot;"/]
+  13["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;NamedFactoryError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: TaggedError<br/>args: #91;#93;"]
+  14[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: TaggedError"/]
+  15[/"type: #quot;EffectNamespaceError#quot;<br/>node: #quot;EffectNamespaceError#quot;"/]
+  16["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;EffectNamespaceError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: EffectNamespace.Data.TaggedError<br/>args: #91;#93;"]
+  17[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: EffectNamespace.Data.TaggedError"/]
+  18[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  19[/"type: #quot;ConstantFactoryError#quot;<br/>node: #quot;ConstantFactoryError#quot;"/]
+  20["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;ConstantFactoryError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: ConstantFactory<br/>args: #91;#93;"]
+  21[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: ConstantFactory"/]
+  22[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: #40;ConstantFactory#41;"/]
+  23[/"type: #quot;ChainedFactoryError#quot;<br/>node: #quot;ChainedFactoryError#quot;"/]
+  24["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;ChainedFactoryError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: ChainedFactory<br/>args: #91;#93;"]
+  25[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: ChainedFactory"/]
+  26[/"type: #quot;ExportedError#quot;<br/>node: #quot;ExportedError#quot;"/]
+  27["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;ExportedError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  28[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  29[["type: #40;#41; =#gt; typeof NestedInMatchedClass<br/>node: static nested#40;#41; #123;#92;n    class NestedInMatchedClass extends Data.TaggedError#40;#quot;NestedInMatchedClass#quot;#41; #123;#125;#92;n    return NestedInMatchedClass#92;n  #125;"]]
+  30[/"type: typeof NestedInMatchedClass<br/>node: NestedInMatchedClass"/]
+  31[/"type: #quot;NestedInMatchedClass#quot;<br/>node: #quot;NestedInMatchedClass#quot;"/]
+  32["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;NestedInMatchedClass#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  33[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  34[["type: #40;#41; =#gt; typeof NestedInFunction<br/>node: export function nestedDeclaration#40;#41; #123;#92;n  class NestedInFunction extends Data.TaggedError#40;#quot;NestedInFunction#quot;#41; #123;#125;#92;n  return NestedInFunction#92;n#125;"]]
+  35[/"type: typeof NestedInFunction<br/>node: NestedInFunction"/]
+  36[/"type: #quot;NestedInFunction#quot;<br/>node: #quot;NestedInFunction#quot;"/]
+  37["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;NestedInFunction#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  38[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  39[/"type: #quot;NestedInNamespace#quot;<br/>node: #quot;NestedInNamespace#quot;"/]
+  40["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;NestedInNamespace#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  41[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  42[/"type: string<br/>node: dynamicTag"/]
+  43["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: string; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  44[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  45[/"type: #quot;CallbackPayloadError#quot;<br/>node: #quot;CallbackPayloadError#quot;"/]
+  46["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;CallbackPayloadError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  47[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  48[/"type: #quot;SuppressedError#quot;<br/>node: #quot;SuppressedError#quot;"/]
+  49["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;SuppressedError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  50[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  51[/"type: #123; TaggedError: #40;tag: string#41; =#gt; typeof #40;Anonymous class#41;; #125;<br/>node: #123;#92;n  TaggedError: #40;tag: string#41; =#gt; class #123; readonly _tag = tag #125;#92;n#125;"/]
+  52[["type: #40;tag: string#41; =#gt; typeof #40;Anonymous class#41;<br/>node: #40;tag: string#41; =#gt; class #123; readonly _tag = tag #125;"]]
+  53[/"type: typeof #40;Anonymous class#41;<br/>node: class #123; readonly _tag = tag #125;"/]
+  54[/"type: #quot;UnrelatedError#quot;<br/>node: #quot;UnrelatedError#quot;"/]
+  55["type: typeof #40;Anonymous class#41;<br/>callee: UnrelatedData.TaggedError<br/>args: #91;#93;"]
+  56[/"type: #40;tag: string#41; =#gt; typeof #40;Anonymous class#41;<br/>node: UnrelatedData.TaggedError"/]
+  57[["type: #40;#41; =#gt; typeof ShadowedDataError<br/>node: export function shadowedData#40;#41; #123;#92;n  const Data = UnrelatedData#92;n  class ShadowedDataError extends Data.TaggedError#40;#quot;ShadowedDataError#quot;#41; #123;#125;#92;n  return ShadowedDataError#92;n#125;"]]
+  58[/"type: typeof ShadowedDataError<br/>node: ShadowedDataError"/]
+  59[/"type: #quot;ShadowedDataError#quot;<br/>node: #quot;ShadowedDataError#quot;"/]
+  60["type: typeof #40;Anonymous class#41;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  61[/"type: #40;tag: string#41; =#gt; typeof #40;Anonymous class#41;<br/>node: Data.TaggedError"/]
+  62[["type: #40;#41; =#gt; typeof ShadowedFactoryError<br/>node: export function shadowedFactory#40;#41; #123;#92;n  const TaggedError = UnrelatedData.TaggedError#92;n  class ShadowedFactoryError extends TaggedError#40;#quot;ShadowedFactoryError#quot;#41; #123;#125;#92;n  return ShadowedFactoryError#92;n#125;"]]
+  63[/"type: typeof ShadowedFactoryError<br/>node: ShadowedFactoryError"/]
+  64[/"type: #quot;ShadowedFactoryError#quot;<br/>node: #quot;ShadowedFactoryError#quot;"/]
+  65["type: typeof #40;Anonymous class#41;<br/>callee: TaggedError<br/>args: #91;#93;"]
+  66[/"type: #40;tag: string#41; =#gt; typeof #40;Anonymous class#41;<br/>node: TaggedError"/]
+  67[/"type: TaggedErrorClass#lt;SchemaError, #quot;SchemaError#quot;, #123; readonly _tag: tag#lt;#quot;SchemaError#quot;#gt;; #125; #amp; #123; message: typeof String$; #125;#gt;<br/>node: Schema.TaggedError#lt;SchemaError#gt;#40;#41;#40;#quot;SchemaError#quot;, #123;#92;n  message: Schema.String#92;n#125;#41;"/]
+  68[/"type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; Readonly#lt;A#gt;<br/>node: Data.Error"/]
+  69[/"type: typeof WithoutFields<br/>node: WithoutFields"/]
+  70[/"type: #quot;SavedBase#quot;<br/>node: #quot;SavedBase#quot;"/]
+  71["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;SavedBase#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  72[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  73[/"type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;SavedBase#quot;; #125; #amp; Readonly#lt;A#gt;<br/>node: SavedBase"/]
+  74[/"type: typeof NamedClassExpression<br/>node: class NamedClassExpression extends Data.TaggedError#40;#quot;NamedExpression#quot;#41; #123;#125;"/]
+  75[/"type: #quot;NamedExpression#quot;<br/>node: #quot;NamedExpression#quot;"/]
+  76["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;NamedExpression#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  77[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  78[/"type: typeof AnonymousExpression<br/>node: class extends Data.TaggedError#40;#quot;AnonymousExpression#quot;#41; #123;#125;"/]
+  79[/"type: #quot;AnonymousExpression#quot;<br/>node: #quot;AnonymousExpression#quot;"/]
+  80["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;AnonymousExpression#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  81[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  82[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  83[/"type: #quot;MutableFactoryError#quot;<br/>node: #quot;MutableFactoryError#quot;"/]
+  84["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;MutableFactoryError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: MutableFactory<br/>args: #91;#93;"]
+  85[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: MutableFactory"/]
+  86[/"type: #quot;AnonymousDefaultDeclaration#quot;<br/>node: #quot;AnonymousDefaultDeclaration#quot;"/]
+  87["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;AnonymousDefaultDeclaration#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  88[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  12 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 13
+  15 -->|"kind: pipe"| 16
+  17 -->|"kind: transformCallee"| 16
+  19 -->|"kind: pipe"| 20
+  21 -->|"kind: transformCallee"| 20
+  23 -->|"kind: pipe"| 24
+  25 -->|"kind: transformCallee"| 24
+  26 -->|"kind: pipe"| 27
+  28 -->|"kind: transformCallee"| 27
+  30 -->|"kind: potentialReturn"| 29
+  31 -->|"kind: pipe"| 32
+  33 -->|"kind: transformCallee"| 32
+  32 -->|"kind: usedBy"| 29
+  30 -->|"kind: usedBy"| 29
+  35 -->|"kind: potentialReturn"| 34
+  36 -->|"kind: pipe"| 37
+  38 -->|"kind: transformCallee"| 37
+  37 -->|"kind: usedBy"| 34
+  35 -->|"kind: usedBy"| 34
+  39 -->|"kind: pipe"| 40
+  41 -->|"kind: transformCallee"| 40
+  42 -->|"kind: pipe"| 43
+  44 -->|"kind: transformCallee"| 43
+  45 -->|"kind: pipe"| 46
+  47 -->|"kind: transformCallee"| 46
+  48 -->|"kind: pipe"| 49
+  50 -->|"kind: transformCallee"| 49
+  53 -->|"kind: potentialReturn"| 52
+  52 -->|"kind: usedBy"| 51
+  54 -->|"kind: pipe"| 55
+  56 -->|"kind: transformCallee"| 55
+  58 -->|"kind: potentialReturn"| 57
+  59 -->|"kind: pipe"| 60
+  61 -->|"kind: transformCallee"| 60
+  60 -->|"kind: usedBy"| 57
+  58 -->|"kind: usedBy"| 57
+  63 -->|"kind: potentialReturn"| 62
+  64 -->|"kind: pipe"| 65
+  66 -->|"kind: transformCallee"| 65
+  65 -->|"kind: usedBy"| 62
+  63 -->|"kind: usedBy"| 62
+  70 -->|"kind: pipe"| 71
+  72 -->|"kind: transformCallee"| 71
+  75 -->|"kind: pipe"| 76
+  77 -->|"kind: transformCallee"| 76
+  76 -->|"kind: usedBy"| 74
+  79 -->|"kind: pipe"| 80
+  81 -->|"kind: transformCallee"| 80
+  80 -->|"kind: usedBy"| 78
+  83 -->|"kind: pipe"| 84
+  85 -->|"kind: transformCallee"| 84
+  86 -->|"kind: pipe"| 87
+  88 -->|"kind: transformCallee"| 87
