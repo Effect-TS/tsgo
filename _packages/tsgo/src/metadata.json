@@ -1847,7 +1847,7 @@
         "v4"
       ],
       "codes": [
-        377139
+        377140
       ],
       "preview": {
         "sourceText": "import * as A from \"effect/Array\"\n\nconst values = [1, 2, 3]\nexport const native = values.find(n =\u003e n \u003e 1)\nexport const preferred = A.findFirst(values, n =\u003e n \u003e 1)\n",

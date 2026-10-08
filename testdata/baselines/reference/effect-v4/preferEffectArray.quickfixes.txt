@@ -1,258 +1,258 @@
 === Quick Fix Inventory ===
 
-[D1] (9:4-9:7) TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D1] (9:4-9:7) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D2] (10:23-10:26) TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D2] (10:23-10:26) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D3] (11:4-11:10) TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+[D3] (11:4-11:10) TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D4] (12:26-12:32) TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+[D4] (12:26-12:32) TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D5] (13:4-13:9) TS377139: Consider effect/Array.every instead of native Array.every. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D5] (13:4-13:9) TS377140: Consider effect/Array.every instead of native Array.every. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
 [D6] (14:7-14:19) TS6133: 'native_every' is declared but its value is never read.
   (no quick fixes)
 
-[D7] (14:25-14:30) TS377139: Consider effect/Array.every instead of native Array.every. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D7] (14:25-14:30) TS377140: Consider effect/Array.every instead of native Array.every. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D8] (15:4-15:8) TS377139: Consider effect/Array.some instead of native Array.some. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D8] (15:4-15:8) TS377140: Consider effect/Array.some instead of native Array.some. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
 [D9] (16:7-16:18) TS6133: 'native_some' is declared but its value is never read.
   (no quick fixes)
 
-[D10] (16:24-16:28) TS377139: Consider effect/Array.some instead of native Array.some. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D10] (16:24-16:28) TS377140: Consider effect/Array.some instead of native Array.some. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D11] (17:4-17:11) TS377139: Consider effect/Array.forEach instead of native Array.forEach. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D11] (17:4-17:11) TS377140: Consider effect/Array.forEach instead of native Array.forEach. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
 [D12] (18:7-18:21) TS6133: 'native_forEach' is declared but its value is never read.
   (no quick fixes)
 
-[D13] (18:27-18:34) TS377139: Consider effect/Array.forEach instead of native Array.forEach. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D13] (18:27-18:34) TS377140: Consider effect/Array.forEach instead of native Array.forEach. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D14] (19:4-19:11) TS377139: Consider effect/Array.flatMap instead of native Array.flatMap. Callbacks must return arrays; the callback type accepts (value, index), with no array parameter or thisArg, and sparse-array holes are visited. effect(preferEffectArray)
+[D14] (19:4-19:11) TS377140: Consider effect/Array.flatMap instead of native Array.flatMap. Callbacks must return arrays; the callback type accepts (value, index), with no array parameter or thisArg, and sparse-array holes are visited. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
 [D15] (20:7-20:21) TS6133: 'native_flatMap' is declared but its value is never read.
   (no quick fixes)
 
-[D16] (20:27-20:34) TS377139: Consider effect/Array.flatMap instead of native Array.flatMap. Callbacks must return arrays; the callback type accepts (value, index), with no array parameter or thisArg, and sparse-array holes are visited. effect(preferEffectArray)
+[D16] (20:27-20:34) TS377140: Consider effect/Array.flatMap instead of native Array.flatMap. Callbacks must return arrays; the callback type accepts (value, index), with no array parameter or thisArg, and sparse-array holes are visited. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D17] (21:4-21:10) TS377139: Consider effect/Array.reduce instead of native Array.reduce. An initial value is required before the callback; the callback type omits the array parameter. effect(preferEffectArray)
+[D17] (21:4-21:10) TS377140: Consider effect/Array.reduce instead of native Array.reduce. An initial value is required before the callback; the callback type omits the array parameter. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
 [D18] (22:7-22:20) TS6133: 'native_reduce' is declared but its value is never read.
   (no quick fixes)
 
-[D19] (22:26-22:32) TS377139: Consider effect/Array.reduce instead of native Array.reduce. An initial value is required before the callback; the callback type omits the array parameter. effect(preferEffectArray)
+[D19] (22:26-22:32) TS377140: Consider effect/Array.reduce instead of native Array.reduce. An initial value is required before the callback; the callback type omits the array parameter. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D20] (23:4-23:15) TS377139: Consider effect/Array.reduceRight instead of native Array.reduceRight. An initial value is required before the callback; the callback type omits the array parameter. effect(preferEffectArray)
+[D20] (23:4-23:15) TS377140: Consider effect/Array.reduceRight instead of native Array.reduceRight. An initial value is required before the callback; the callback type omits the array parameter. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
 [D21] (24:7-24:25) TS6133: 'native_reduceRight' is declared but its value is never read.
   (no quick fixes)
 
-[D22] (24:31-24:42) TS377139: Consider effect/Array.reduceRight instead of native Array.reduceRight. An initial value is required before the callback; the callback type omits the array parameter. effect(preferEffectArray)
+[D22] (24:31-24:42) TS377140: Consider effect/Array.reduceRight instead of native Array.reduceRight. An initial value is required before the callback; the callback type omits the array parameter. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D23] (25:4-25:8) TS377139: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D23] (25:4-25:8) TS377140: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
 [D24] (26:7-26:18) TS6133: 'native_find' is declared but its value is never read.
   (no quick fixes)
 
-[D25] (26:24-26:28) TS377139: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D25] (26:24-26:28) TS377140: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D26] (27:4-27:12) TS377139: Consider effect/Array.findLast instead of native Array.findLast. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D26] (27:4-27:12) TS377140: Consider effect/Array.findLast instead of native Array.findLast. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
 [D27] (28:7-28:22) TS6133: 'native_findLast' is declared but its value is never read.
   (no quick fixes)
 
-[D28] (28:28-28:36) TS377139: Consider effect/Array.findLast instead of native Array.findLast. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D28] (28:28-28:36) TS377140: Consider effect/Array.findLast instead of native Array.findLast. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D29] (29:4-29:13) TS377139: Consider effect/Array.findFirstIndex instead of native Array.findIndex. Returns Option<number>, with None replacing -1; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D29] (29:4-29:13) TS377140: Consider effect/Array.findFirstIndex instead of native Array.findIndex. Returns Option<number>, with None replacing -1; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
 [D30] (30:7-30:23) TS6133: 'native_findIndex' is declared but its value is never read.
   (no quick fixes)
 
-[D31] (30:29-30:38) TS377139: Consider effect/Array.findFirstIndex instead of native Array.findIndex. Returns Option<number>, with None replacing -1; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D31] (30:29-30:38) TS377140: Consider effect/Array.findFirstIndex instead of native Array.findIndex. Returns Option<number>, with None replacing -1; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D32] (31:4-31:17) TS377139: Consider effect/Array.findLastIndex instead of native Array.findLastIndex. Returns Option<number>, with None replacing -1; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D32] (31:4-31:17) TS377140: Consider effect/Array.findLastIndex instead of native Array.findLastIndex. Returns Option<number>, with None replacing -1; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
 [D33] (32:7-32:27) TS6133: 'native_findLastIndex' is declared but its value is never read.
   (no quick fixes)
 
-[D34] (32:33-32:46) TS377139: Consider effect/Array.findLastIndex instead of native Array.findLastIndex. Returns Option<number>, with None replacing -1; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D34] (32:33-32:46) TS377140: Consider effect/Array.findLastIndex instead of native Array.findLastIndex. Returns Option<number>, with None replacing -1; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D35] (33:9-33:13) TS377139: Consider effect/Array.join instead of native Array.join. Accepts strings and requires an explicit separator. effect(preferEffectArray)
+[D35] (33:9-33:13) TS377140: Consider effect/Array.join instead of native Array.join. Accepts strings and requires an explicit separator. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
 [D36] (34:7-34:18) TS6133: 'native_join' is declared but its value is never read.
   (no quick fixes)
 
-[D37] (34:29-34:33) TS377139: Consider effect/Array.join instead of native Array.join. Accepts strings and requires an explicit separator. effect(preferEffectArray)
+[D37] (34:29-34:33) TS377140: Consider effect/Array.join instead of native Array.join. Accepts strings and requires an explicit separator. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D38] (35:4-35:14) TS377139: Consider effect/Array.reverse instead of native Array.toReversed. Returns a new array, like native toReversed. effect(preferEffectArray)
+[D38] (35:4-35:14) TS377140: Consider effect/Array.reverse instead of native Array.toReversed. Returns a new array, like native toReversed. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
 [D39] (36:7-36:24) TS6133: 'native_toReversed' is declared but its value is never read.
   (no quick fixes)
 
-[D40] (36:30-36:40) TS377139: Consider effect/Array.reverse instead of native Array.toReversed. Returns a new array, like native toReversed. effect(preferEffectArray)
+[D40] (36:30-36:40) TS377140: Consider effect/Array.reverse instead of native Array.toReversed. Returns a new array, like native toReversed. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D41] (37:4-37:12) TS377139: Consider effect/Array.sort instead of native Array.toSorted. Requires an explicit Order instead of native default ordering or a numeric comparator. effect(preferEffectArray)
+[D41] (37:4-37:12) TS377140: Consider effect/Array.sort instead of native Array.toSorted. Requires an explicit Order instead of native default ordering or a numeric comparator. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
 [D42] (38:7-38:22) TS6133: 'native_toSorted' is declared but its value is never read.
   (no quick fixes)
 
-[D43] (38:28-38:36) TS377139: Consider effect/Array.sort instead of native Array.toSorted. Requires an explicit Order instead of native default ordering or a numeric comparator. effect(preferEffectArray)
+[D43] (38:28-38:36) TS377140: Consider effect/Array.sort instead of native Array.toSorted. Requires an explicit Order instead of native default ordering or a numeric comparator. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D44] (39:7-39:14) TS377139: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+[D44] (39:7-39:14) TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
 [D45] (40:7-40:21) TS6133: 'native_isArray' is declared but its value is never read.
   (no quick fixes)
 
-[D46] (40:30-40:37) TS377139: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+[D46] (40:30-40:37) TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D47] (45:10-45:13) TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D47] (45:10-45:13) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D48] (46:7-46:13) TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+[D48] (46:7-46:13) TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D49] (47:15-47:18) TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D49] (47:15-47:18) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
 [D50] (48:10-48:21) TS6133: 'constrained' is declared but its value is never read.
   (no quick fixes)
 
-[D51] (49:10-49:15) TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D51] (49:10-49:15) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D52] (50:17-50:20) TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D52] (50:17-50:20) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D53] (53:7-53:10) TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D53] (53:7-53:10) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D54] (55:11-55:14) TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D54] (55:11-55:14) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D55] (56:12-56:20) TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+[D55] (56:12-56:20) TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D56] (57:4-57:7) TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D56] (57:4-57:7) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D57] (58:4-58:9) TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D57] (58:4-58:9) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
 [D58] (59:7-59:14) TS6133: 'bracket' is declared but its value is never read.
   (no quick fixes)
 
-[D59] (59:20-59:26) TS377139: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D59] (59:20-59:26) TS377140: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D60] (60:15-60:20) TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D60] (60:15-60:20) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D61] (61:7-61:10) TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D61] (61:7-61:10) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D62] (62:17-62:20) TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D62] (62:17-62:20) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D63] (64:13-64:20) TS377139: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+[D63] (64:13-64:20) TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D64] (65:7-65:16) TS377139: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+[D64] (65:7-65:16) TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D65] (66:18-66:25) TS377139: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+[D65] (66:18-66:25) TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D66] (68:17-68:20) TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D66] (68:17-68:20) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D67] (69:18-69:21) TS377139: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+[D67] (69:18-69:21) TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
-[D68] (74:13-74:19) TS377139: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+[D68] (74:13-74:19) TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 
@@ -280,7 +280,7 @@
 [D76] (128:23-128:46) TS6196: 'T' is declared but never used.
   (no quick fixes)
 
-[D77] (4:13-4:20) TS377139: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+[D77] (4:13-4:20) TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
   Fix 0: "Disable preferEffectArray for this line"
   Fix 1: "Disable preferEffectArray for entire file"
 

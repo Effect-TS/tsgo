@@ -29,25 +29,25 @@ func TestPreferEffectArrayLifecycle(t *testing.T) {
 		want     []string
 	}{
 		{name: "default off", source: source},
-		{name: "warning", source: source, severity: etscore.SeverityWarning, want: []string{"377139:0:19:22:" + message}},
-		{name: "error", source: source, severity: etscore.SeverityError, want: []string{"377139:1:19:22:" + message}},
-		{name: "dot reference", source: "const xs = [1]; const alias = xs.map; alias.call(xs, n => n);", severity: etscore.SeverityWarning, want: []string{"377139:0:33:36:" + message}},
-		{name: "bracket invocation", source: "const xs = [1]; xs[\"map\"](n => n);", severity: etscore.SeverityWarning, want: []string{"377139:0:19:24:" + message}},
-		{name: "bracket reference", source: "const xs = [1]; const alias = xs[\"map\"]; alias.call(xs, n => n);", severity: etscore.SeverityWarning, want: []string{"377139:0:33:38:" + message}},
-		{name: "constructor dot", source: "Array.isArray([]);", severity: etscore.SeverityWarning, want: []string{"377139:0:6:13:" + isArrayMessage}},
-		{name: "constructor bracket", source: "Array[\"isArray\"]([]);", severity: etscore.SeverityWarning, want: []string{"377139:0:6:15:" + isArrayMessage}},
-		{name: "optional bracket", source: "declare const xs: number[] | undefined; xs?.[\"map\"](n => n);", severity: etscore.SeverityWarning, want: []string{"377139:0:45:50:" + message}},
-		{name: "generic bracket invocation", source: "function constrained<T extends readonly number[]>(values: T) { values[\"map\"](n => n); }", severity: etscore.SeverityWarning, want: []string{"377139:0:70:75:" + message}},
-		{name: "generic bracket reference", source: "function constrained<T extends readonly number[]>(values: T) { return values[\"map\"]; }", severity: etscore.SeverityWarning, want: []string{"377139:0:77:82:" + message}},
+		{name: "warning", source: source, severity: etscore.SeverityWarning, want: []string{"377140:0:19:22:" + message}},
+		{name: "error", source: source, severity: etscore.SeverityError, want: []string{"377140:1:19:22:" + message}},
+		{name: "dot reference", source: "const xs = [1]; const alias = xs.map; alias.call(xs, n => n);", severity: etscore.SeverityWarning, want: []string{"377140:0:33:36:" + message}},
+		{name: "bracket invocation", source: "const xs = [1]; xs[\"map\"](n => n);", severity: etscore.SeverityWarning, want: []string{"377140:0:19:24:" + message}},
+		{name: "bracket reference", source: "const xs = [1]; const alias = xs[\"map\"]; alias.call(xs, n => n);", severity: etscore.SeverityWarning, want: []string{"377140:0:33:38:" + message}},
+		{name: "constructor dot", source: "Array.isArray([]);", severity: etscore.SeverityWarning, want: []string{"377140:0:6:13:" + isArrayMessage}},
+		{name: "constructor bracket", source: "Array[\"isArray\"]([]);", severity: etscore.SeverityWarning, want: []string{"377140:0:6:15:" + isArrayMessage}},
+		{name: "optional bracket", source: "declare const xs: number[] | undefined; xs?.[\"map\"](n => n);", severity: etscore.SeverityWarning, want: []string{"377140:0:45:50:" + message}},
+		{name: "generic bracket invocation", source: "function constrained<T extends readonly number[]>(values: T) { values[\"map\"](n => n); }", severity: etscore.SeverityWarning, want: []string{"377140:0:70:75:" + message}},
+		{name: "generic bracket reference", source: "function constrained<T extends readonly number[]>(values: T) { return values[\"map\"]; }", severity: etscore.SeverityWarning, want: []string{"377140:0:77:82:" + message}},
 		{name: "custom and mixed generic brackets", source: `function custom<T extends { map: (f: (n: number) => number) => number[] }>(values: T) { values["map"]; }
 function mixed<T extends readonly number[] | { map: (f: (n: number) => number) => number[] }>(values: T) { values["map"]; }
-const xs = [1]; xs.map(n => n);`, severity: etscore.SeverityWarning, want: []string{"377139:0:248:251:" + message}},
-		{name: "escaped and template names", source: "const xs = [1]; xs.m\\u0061p(n => n); xs[\"m\\u0061p\"](n => n); xs[`map`](n => n);", severity: etscore.SeverityWarning, want: []string{"377139:0:19:27:" + message, "377139:0:40:50:" + message, "377139:0:64:69:" + message}},
-		{name: "parenthesized delete target", source: "declare const xs: Partial<Pick<number[], \"map\">>; delete (xs.map); xs.map;", severity: etscore.SeverityWarning, want: []string{"377139:0:70:73:" + message}},
-		{name: "directive enables default off", source: "// @effect-diagnostics preferEffectArray:warning\n" + source, want: []string{"377139:0:68:71:" + message}},
+const xs = [1]; xs.map(n => n);`, severity: etscore.SeverityWarning, want: []string{"377140:0:248:251:" + message}},
+		{name: "escaped and template names", source: "const xs = [1]; xs.m\\u0061p(n => n); xs[\"m\\u0061p\"](n => n); xs[`map`](n => n);", severity: etscore.SeverityWarning, want: []string{"377140:0:19:27:" + message, "377140:0:40:50:" + message, "377140:0:64:69:" + message}},
+		{name: "parenthesized delete target", source: "declare const xs: Partial<Pick<number[], \"map\">>; delete (xs.map); xs.map;", severity: etscore.SeverityWarning, want: []string{"377140:0:70:73:" + message}},
+		{name: "directive enables default off", source: "// @effect-diagnostics preferEffectArray:warning\n" + source, want: []string{"377140:0:68:71:" + message}},
 		{name: "directive disables warning", source: "// @effect-diagnostics preferEffectArray:off\n" + source, severity: etscore.SeverityWarning},
-		{name: "next line disables one reference", source: "// @effect-diagnostics-next-line preferEffectArray:off\n" + source + "\nxs.map(n => n);", severity: etscore.SeverityWarning, want: []string{"377139:0:90:93:" + message}},
-		{name: "next line enables default off", source: "// @effect-diagnostics-next-line preferEffectArray:error\n" + source + "\nxs.map(n => n);", want: []string{"377139:1:76:79:" + message}},
+		{name: "next line disables one reference", source: "// @effect-diagnostics-next-line preferEffectArray:off\n" + source + "\nxs.map(n => n);", severity: etscore.SeverityWarning, want: []string{"377140:0:90:93:" + message}},
+		{name: "next line enables default off", source: "// @effect-diagnostics-next-line preferEffectArray:error\n" + source + "\nxs.map(n => n);", want: []string{"377140:1:76:79:" + message}},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {

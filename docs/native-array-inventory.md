@@ -1,6 +1,6 @@
 # Native Array method inventory
 
-`preferEffectArray` covers 16 native methods in Effect 3.19.19 and 4.0.0-rc.118. The rule is disabled by default, belongs to `effectNative`, and emits diagnostic 377139 without conversion fixes. Each recommendation names `effect/Array.<API>` and states the migration caveat.
+`preferEffectArray` covers 16 native methods in Effect 3.19.19 and 4.0.0-rc.118. The rule is disabled by default, belongs to `effectNative`, and emits diagnostic 377140 without conversion fixes. Each recommendation names `effect/Array.<API>` and states the migration caveat.
 
 The `effect-native` preset enables `preferEffectArray` at warning severity. The `recommended` and `strict` presets leave it off. `Effect.all(xs.map(f))` can also trigger `allOfMapToForEach`.
 

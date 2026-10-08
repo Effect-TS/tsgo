@@ -10,7 +10,7 @@ Suggests Effect Array APIs for native array member references, with semantic cav
 | Default severity | `off` |
 | Fixable | No |
 | Effect versions | v3, v4 |
-| Diagnostic codes | `TS377139` |
+| Diagnostic codes | `TS377140` |
 | Language Service name | `preferEffectArray` |
 | Oxlint name | `effecttsgo/prefer-effect-array` |
 
