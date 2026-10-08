@@ -1,16 +1,19 @@
 === Metadata ===
 Effect version: 4.0.2
 
+/.src/newSchemaClass.ts(4,33): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
 /.src/newSchemaClass.ts(12,28): suggestion TS377094: This Schema class is constructed with `new`. `User.make(...)` can be used to construct the Schema class instance. effect(newSchemaClass)
 /.src/newSchemaClass.ts(15,14): suggestion TS377094: This Schema class is constructed with `new`. `User.make(...)` can be used to construct the Schema class instance. effect(newSchemaClass)
 /.src/newSchemaClass.ts(19,30): suggestion TS377094: This Schema class is constructed with `new`. `User.make(...)` can be used to construct the Schema class instance. effect(newSchemaClass)
 
 
-==== /.src/newSchemaClass.ts (3 errors) ====
+==== /.src/newSchemaClass.ts (4 errors) ====
     // @effect-diagnostics newSchemaClass:suggestion
     import { Effect, Schema } from "effect"
     
     class User extends Schema.Class<User>("User")({
+                                    ~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       name: Schema.String
     }) {}
     

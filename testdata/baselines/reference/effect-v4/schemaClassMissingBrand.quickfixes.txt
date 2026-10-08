@@ -1,0 +1,243 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:50-9:64) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D2] (10:42-10:53) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D3] (11:45-11:57) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D4] (13:62-13:82) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D5] (14:54-14:71) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D6] (15:57-15:75) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D7] (17:50-17:64) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D8] (18:42-18:53) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D9] (19:45-19:57) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D10] (21:62-21:82) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D11] (22:54-22:71) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D12] (23:57-23:75) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D13] (25:52-25:67) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D14] (26:44-26:56) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D15] (27:47-27:60) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D16] (47:70-47:85) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D17] (48:88-48:109) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D18] (49:70-49:85) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D19] (50:88-50:109) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D20] (51:73-51:89) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D21] (53:60-53:75) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D22] (57:51-57:66) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D23] (59:63-59:80) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+[D24] (65:55-65:70) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D16] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D17] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D18] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D18] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D19] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D19] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D20] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D20] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D21] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D21] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D22] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D22] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D23] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D23] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
+
+=== [D24] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D24] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default
