@@ -5,14 +5,17 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 	"testing/fstest"
 
 	"github.com/effect-ts/tsgo/internal/bundledeffect"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/bundled"
 	"github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/locale"
+	"github.com/microsoft/TypeScript/tsc/shim/ls"
 	"github.com/microsoft/TypeScript/tsc/shim/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/shim/project"
@@ -139,6 +142,28 @@ func collectDocumentSymbolsForFile(t *testing.T, session *project.Session, fileN
 
 	hierarchical := collectHierarchicalDocumentSymbols(t, langService, uri)
 	flat := collectFlatDocumentSymbols(t, langService, uri)
+
+	// Native import symbols differ between compiler providers.
+	sourceFile := langService.GetProgram().GetSourceFile(tspath.RootedFilePath(fileName))
+	converters := ls.LanguageService_converters(langService)
+	isImportRange := func(r lsproto.Range) bool {
+		span := lsconv.FromLSPRangeToOriginal(converters, sourceFile, r)
+		if span.Pos() >= span.End() {
+			return false
+		}
+		for _, statement := range sourceFile.Statements.Nodes {
+			if statement.Kind == ast.KindImportDeclaration && statement.Pos() <= span.Pos() && span.End() <= statement.End() {
+				return true
+			}
+		}
+		return false
+	}
+	hierarchical = slices.DeleteFunc(hierarchical, func(symbol *lsproto.DocumentSymbol) bool {
+		return isImportRange(symbol.Range)
+	})
+	flat = slices.DeleteFunc(flat, func(symbol *lsproto.SymbolInformation) bool {
+		return (symbol.ContainerName == nil || *symbol.ContainerName == "") && isImportRange(symbol.Location.Range)
+	})
 
 	return DocumentSymbolsFileResult{
 		FileName:      fileName,
