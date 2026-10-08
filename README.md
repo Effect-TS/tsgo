@@ -265,8 +265,6 @@ The npm compiler binaries load their TypeScript standard libraries from `lib.*.d
         "quickinfo": true,
         // Controls Effect completions. (default: true)
         "completions": true,
-        // Enables additional debug-only Effect language service output. (default: false)
-        "debug": false,
         // Controls Effect goto references support. (default: true)
         "goto": true,
         // Controls Effect rename helpers. (default: true)
