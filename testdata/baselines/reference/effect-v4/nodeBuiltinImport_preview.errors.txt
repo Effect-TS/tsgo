@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/nodeBuiltinImport_preview.ts(4,28): error TS2591: Cannot find name 'node:crypto'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
 /.src/nodeBuiltinImport_preview.ts(4,28): warning TS377057: This module reference uses the `crypto` module, the corresponding Effect API is `Crypto` from `effect`. effect(nodeBuiltinImport)

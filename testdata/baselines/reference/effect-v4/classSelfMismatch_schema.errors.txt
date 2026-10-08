@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/classSelfMismatch_schema.ts(9,54): error TS377046: The `Self` type parameter for this class should be `InvalidSchemaClass`. effect(classSelfMismatch)
 /.src/classSelfMismatch_schema.ts(19,59): error TS377046: The `Self` type parameter for this class should be `InvalidErrorSchemaClass`. effect(classSelfMismatch)

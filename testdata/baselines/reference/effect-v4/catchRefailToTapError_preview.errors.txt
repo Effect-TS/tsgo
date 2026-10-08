@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/catchRefailToTapError_preview.ts(10,3): warning TS377133: Use Effect.tapError to observe the error and preserve the original failure without having to re-fail it. effect(catchRefailToTapError)
 

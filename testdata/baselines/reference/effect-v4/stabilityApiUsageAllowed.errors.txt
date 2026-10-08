@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/consumer.ts(17,1): warning TS377136: `allowed/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
 /.src/consumer.ts(18,1): warning TS377136: `allowed/http/HttpClient#post` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)

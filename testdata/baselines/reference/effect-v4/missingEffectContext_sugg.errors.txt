@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/missingEffectContext_sugg.ts(42,5): error TS2345: Argument of type '<A, E>(effect: Effect<A, E, never>, options?: RunOptions | undefined) => Promise<A>' is not assignable to parameter of type '(_: Effect<{}, never, DbConnection | FileSystem>) => Promise<{}>'.
 /.src/missingEffectContext_sugg.ts(42,5): error TS377004: This Effect requires a service that is missing from the expected Effect context: `DbConnection | FileSystem`. effect(missingEffectContext)

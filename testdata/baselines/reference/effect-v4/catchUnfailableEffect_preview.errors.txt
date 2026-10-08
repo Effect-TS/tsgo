@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/catchUnfailableEffect_preview.ts(6,3): warning TS377009: The previous Effect does not fail, so this error-handling branch will never run. effect(catchUnfailableEffect)
 

@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/redundantMapError_preview.ts(12,35): warning TS377088: This generator applies the same inline `Effect.mapError(...)` to every yielded effect. Keep that `Effect.mapError(...)` inline and hoist it once to the generator result: `Effect.gen(...).pipe(Effect.mapError(...))`, or `Effect.fn(function*(){ ... }, Effect.mapError(...))`. effect(redundantMapError)
 
