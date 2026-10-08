@@ -322,6 +322,7 @@
         "nestedEffectGenYield": "warning",
         "newSchemaClass": "warning",
         "optionMatchToFromOption": "warning",
+        "preferSchemaTaggedError": "warning",
         "preferSchemaTypeProperty": "warning",
         "preferSucceedSomeOrNone": "warning",
         "preferTypedSchemaDecoder": "warning",
@@ -2123,7 +2124,7 @@
     {
       "name": "catchIfTagToCatchTag",
       "group": "style",
-      "description": "Suggests Effect.catchTag instead of Effect.catchIf with a direct _tag equality predicate",
+      "description": "Suggests Effect.catchTag instead of Effect.catchIf with a _tag equality or Predicate.isTagged predicate",
       "defaultSeverity": "suggestion",
       "fixable": true,
       "supportedEffect": [
@@ -2696,6 +2697,30 @@
             "start": 261,
             "end": 273,
             "text": "`Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "preferSchemaTaggedError",
+      "group": "style",
+      "description": "Suggests using Schema.TaggedError instead of Data.TaggedError",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377139
+      ],
+      "preview": {
+        "sourceText": "import { Data } from \"effect\"\n\nexport class NotFound extends Data.TaggedError(\"NotFound\")\u003c{\n  id: string\n}\u003e {}\n",
+        "diagnostics": [
+          {
+            "start": 44,
+            "end": 52,
+            "text": "Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)"
           }
         ]
       }

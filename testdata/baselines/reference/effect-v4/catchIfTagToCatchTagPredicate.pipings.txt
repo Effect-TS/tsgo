@@ -1,0 +1,239 @@
+==== /.src/catchIfTagToCatchTagPredicate.ts (17 flows) ====
+
+=== Piping Flow ===
+Location: 16:22 - 19:2
+Node: program.pipe(\n  Fx.catchIf((error) => Predicate.isTagged(error, "NotFoundError"),\n    (error) => Fx.succeed(error.id))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Fx.catchIf
+      args: [(error) => Predicate.isTagged(error, "NotFoundError"), (error) => Fx.succeed(error.id)]
+      outType: Effect<string, TimeoutError, never>
+
+=== Piping Flow ===
+Location: 17:24 - 17:67
+Node: Predicate.isTagged(error, "NotFoundError")
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: NotFoundError | TimeoutError
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: ["NotFoundError"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 18:15 - 18:36
+Node: Fx.succeed(error.id)
+Node Kind: KindCallExpression
+
+Subject: error.id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 21:23 - 25:2
+Node: Fx.catchIf(\n  program,\n  (error) => tagged("TimeoutError")(error),\n  () => Fx.succeed("timeout")\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Fx.catchIf
+      args: [(error) => tagged("TimeoutError")(error), () => Fx.succeed("timeout")]
+      outType: Effect<string, NotFoundError, never>
+
+=== Piping Flow ===
+Location: 23:13 - 23:43
+Node: tagged("TimeoutError")(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: NotFoundError | TimeoutError
+
+Transformations (1):
+  [0] kind: call
+      callee: tagged
+      args: ["TimeoutError"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 24:8 - 24:30
+Node: Fx.succeed("timeout")
+Node Kind: KindCallExpression
+
+Subject: "timeout"
+Subject Type: "timeout"
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 28:23 - 30:2
+Node: program.pipe(\n  Fx.catchIf((error) => tagAlias(error, "NotFoundError"), () => Fx.succeed("missing"))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Fx.catchIf
+      args: [(error) => tagAlias(error, "NotFoundError"), () => Fx.succeed("missing")]
+      outType: Effect<string, TimeoutError, never>
+
+=== Piping Flow ===
+Location: 29:24 - 29:57
+Node: tagAlias(error, "NotFoundError")
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: NotFoundError | TimeoutError
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: tagAlias
+      args: ["NotFoundError"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 29:64 - 29:86
+Node: Fx.succeed("missing")
+Node Kind: KindCallExpression
+
+Subject: "missing"
+Subject Type: "missing"
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 33:25 - 35:2
+Node: program.pipe(\n  Fx.catchIf((error) => fake.isTagged(error, "NotFoundError"), () => Fx.succeed("fake"))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Fx.catchIf
+      args: [(error) => fake.isTagged(error, "NotFoundError"), () => Fx.succeed("fake")]
+      outType: Effect<string, NotFoundError | TimeoutError, never>
+
+=== Piping Flow ===
+Location: 34:69 - 34:88
+Node: Fx.succeed("fake")
+Node Kind: KindCallExpression
+
+Subject: "fake"
+Subject Type: "fake"
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 38:26 - 40:2
+Node: program.pipe(\n  Fx.catchIf((error) => Predicate.isTagged(error, expectedTag), () => Fx.succeed("dynamic"))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Fx.catchIf
+      args: [(error) => Predicate.isTagged(error, expectedTag), () => Fx.succeed("dynamic")]
+      outType: Effect<string, NotFoundError | TimeoutError, never>
+
+=== Piping Flow ===
+Location: 39:24 - 39:63
+Node: Predicate.isTagged(error, expectedTag)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: NotFoundError | TimeoutError
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: [expectedTag]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 39:70 - 39:92
+Node: Fx.succeed("dynamic")
+Node Kind: KindCallExpression
+
+Subject: "dynamic"
+Subject Type: "dynamic"
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 46:29 - 48:2
+Node: nested.pipe(\n  Fx.catchIf((error) => tagged("NotFoundError")(error.reason), () => Fx.succeed("nested"))\n)
+Node Kind: KindCallExpression
+
+Subject: nested
+Subject Type: Effect<string, { readonly _tag: "OuterError"; readonly reason: NotFoundError | TimeoutError; }, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Fx.catchIf
+      args: [(error) => tagged("NotFoundError")(error.reason), () => Fx.succeed("nested")]
+      outType: Effect<string, { readonly _tag: "OuterError"; readonly reason: NotFoundError | TimeoutError; }, never>
+
+=== Piping Flow ===
+Location: 47:24 - 47:62
+Node: tagged("NotFoundError")(error.reason)
+Node Kind: KindCallExpression
+
+Subject: error.reason
+Subject Type: NotFoundError | TimeoutError
+
+Transformations (1):
+  [0] kind: call
+      callee: tagged
+      args: ["NotFoundError"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 47:69 - 47:90
+Node: Fx.succeed("nested")
+Node Kind: KindCallExpression
+
+Subject: "nested"
+Subject Type: "nested"
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<string, never, never>

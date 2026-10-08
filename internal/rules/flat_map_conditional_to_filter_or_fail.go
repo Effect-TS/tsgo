@@ -70,7 +70,7 @@ func AnalyzeFlatMapConditionalToFilterOrFail(tp *typeparser.TypeParser, c *check
 			if callee == nil || len(args) != 1 || !tp.IsNodeReferenceToEffectModuleApi(callee, "flatMap") {
 				continue
 			}
-			parsed := typeparser.ParseReturningDispatch(args[0])
+			parsed := tp.ParseReturningDispatch(args[0])
 			if parsed == nil || parsed.Dispatch == nil || len(parsed.Params) != 1 ||
 				len(parsed.Dispatch.Branches) != 1 || parsed.Dispatch.Fallback == nil ||
 				parsed.Dispatch.Branches[0].Condition.Kind != typeparser.DispatchConditionPredicate ||

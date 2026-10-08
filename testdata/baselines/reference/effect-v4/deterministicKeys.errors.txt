@@ -39,3 +39,5 @@ Effect version: 4.0.0
                                                  ~~~~~~~~
 !!! error TS377049: This key does not match the deterministic key for this declaration. The expected key is `@effect/test-app/test/ErrorA`. effect(deterministicKeys)
     
+    export default class extends Data.TaggedError("AnonymousDefaultError")<{}> {}
+    

@@ -178,7 +178,7 @@ func analyzeCatchTagsTransformation(
 }
 
 func analyzeCatchTagToCatchReasonHandler(tp *typeparser.TypeParser, c *checker.Checker, handlerNode *ast.Node) (catchTagToCatchReasonHandler, bool) {
-	returning := typeparser.ParseReturningDispatch(handlerNode)
+	returning := tp.ParseReturningDispatch(handlerNode)
 	if returning == nil || len(returning.Params) != 1 {
 		return catchTagToCatchReasonHandler{}, false
 	}

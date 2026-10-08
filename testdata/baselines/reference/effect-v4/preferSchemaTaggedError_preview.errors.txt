@@ -1,0 +1,17 @@
+=== Metadata ===
+Effect version: 4.0.0
+
+/.src/preferSchemaTaggedError_preview.ts(5,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+
+
+==== /.src/preferSchemaTaggedError_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferSchemaTaggedError:warning
+    import { Data } from "effect"
+    
+    export class NotFound extends Data.TaggedError("NotFound")<{
+                 ~~~~~~~~
+!!! warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+      id: string
+    }> {}
+    
