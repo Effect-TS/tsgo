@@ -1,0 +1,30 @@
+==== /.src/anonymousDefault.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 6:29 - 6:58
+Node: Data.TaggedError(dynamicTag)
+Node Kind: KindCallExpression
+
+Subject: dynamicTag
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: string; } & Readonly<A>
+==== /.src/namedDefault.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:47 - 5:85
+Node: Data.TaggedError("NamedDefaultError")
+Node Kind: KindCallExpression
+
+Subject: "NamedDefaultError"
+Subject Type: "NamedDefaultError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "NamedDefaultError"; } & Readonly<A>

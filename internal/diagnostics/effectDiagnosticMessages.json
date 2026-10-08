@@ -546,5 +546,9 @@
     "`{0}` is declared {1} here. effect(apiStabilityLeak)": {
         "category": "Message",
         "code": 377138
+    },
+    "Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)": {
+        "category": "Suggestion",
+        "code": 377139
     }
 }

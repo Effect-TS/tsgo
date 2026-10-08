@@ -1,0 +1,323 @@
+==== /.src/preferSchemaTaggedError.ts (23 flows) ====
+
+=== Piping Flow ===
+Location: 8:28 - 8:62
+Node: Data.TaggedError("WithoutFields")
+Node Kind: KindCallExpression
+
+Subject: "WithoutFields"
+Subject Type: "WithoutFields"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "WithoutFields"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 9:32 - 9:63
+Node: Data.TaggedError("WithFields")
+Node Kind: KindCallExpression
+
+Subject: "WithFields"
+Subject Type: "WithFields"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "WithFields"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 10:38 - 10:82
+Node: AliasedData.TaggedError("AliasedDataError")
+Node Kind: KindCallExpression
+
+Subject: "AliasedDataError"
+Subject Type: "AliasedDataError"
+
+Transformations (1):
+  [0] kind: call
+      callee: AliasedData.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "AliasedDataError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 11:40 - 11:89
+Node: NamespacedData.TaggedError("NamespaceDataError")
+Node Kind: KindCallExpression
+
+Subject: "NamespaceDataError"
+Subject Type: "NamespaceDataError"
+
+Transformations (1):
+  [0] kind: call
+      callee: NamespacedData.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "NamespaceDataError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 12:39 - 12:72
+Node: TaggedError("NamedFactoryError")
+Node Kind: KindCallExpression
+
+Subject: "NamedFactoryError"
+Subject Type: "NamedFactoryError"
+
+Transformations (1):
+  [0] kind: call
+      callee: TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "NamedFactoryError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 13:42 - 13:99
+Node: EffectNamespace.Data.TaggedError("EffectNamespaceError")
+Node Kind: KindCallExpression
+
+Subject: "EffectNamespaceError"
+Subject Type: "EffectNamespaceError"
+
+Transformations (1):
+  [0] kind: call
+      callee: EffectNamespace.Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "EffectNamespaceError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 16:42 - 16:82
+Node: ConstantFactory("ConstantFactoryError")
+Node Kind: KindCallExpression
+
+Subject: "ConstantFactoryError"
+Subject Type: "ConstantFactoryError"
+
+Transformations (1):
+  [0] kind: call
+      callee: ConstantFactory
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "ConstantFactoryError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 19:41 - 19:79
+Node: ChainedFactory("ChainedFactoryError")
+Node Kind: KindCallExpression
+
+Subject: "ChainedFactoryError"
+Subject Type: "ChainedFactoryError"
+
+Transformations (1):
+  [0] kind: call
+      callee: ChainedFactory
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "ChainedFactoryError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 21:35 - 21:69
+Node: Data.TaggedError("ExportedError")
+Node Kind: KindCallExpression
+
+Subject: "ExportedError"
+Subject Type: "ExportedError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "ExportedError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 23:39 - 23:80
+Node: Data.TaggedError("NestedInMatchedClass")
+Node Kind: KindCallExpression
+
+Subject: "NestedInMatchedClass"
+Subject Type: "NestedInMatchedClass"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "NestedInMatchedClass"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 29:33 - 29:70
+Node: Data.TaggedError("NestedInFunction")
+Node Kind: KindCallExpression
+
+Subject: "NestedInFunction"
+Subject Type: "NestedInFunction"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "NestedInFunction"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 34:41 - 34:79
+Node: Data.TaggedError("NestedInNamespace")
+Node Kind: KindCallExpression
+
+Subject: "NestedInNamespace"
+Subject Type: "NestedInNamespace"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "NestedInNamespace"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 38:37 - 38:66
+Node: Data.TaggedError(dynamicTag)
+Node Kind: KindCallExpression
+
+Subject: dynamicTag
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: string; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 39:42 - 39:83
+Node: Data.TaggedError("CallbackPayloadError")
+Node Kind: KindCallExpression
+
+Subject: "CallbackPayloadError"
+Subject Type: "CallbackPayloadError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "CallbackPayloadError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 44:37 - 44:73
+Node: Data.TaggedError("SuppressedError")
+Node Kind: KindCallExpression
+
+Subject: "SuppressedError"
+Subject Type: "SuppressedError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "SuppressedError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 49:36 - 49:80
+Node: UnrelatedData.TaggedError("UnrelatedError")
+Node Kind: KindCallExpression
+
+Subject: "UnrelatedError"
+Subject Type: "UnrelatedError"
+
+Transformations (1):
+  [0] kind: call
+      callee: UnrelatedData.TaggedError
+      args: (constant)
+      outType: typeof (Anonymous class)
+
+=== Piping Flow ===
+Location: 53:34 - 53:72
+Node: Data.TaggedError("ShadowedDataError")
+Node Kind: KindCallExpression
+
+Subject: "ShadowedDataError"
+Subject Type: "ShadowedDataError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: typeof (Anonymous class)
+
+=== Piping Flow ===
+Location: 59:37 - 59:73
+Node: TaggedError("ShadowedFactoryError")
+Node Kind: KindCallExpression
+
+Subject: "ShadowedFactoryError"
+Subject Type: "ShadowedFactoryError"
+
+Transformations (1):
+  [0] kind: call
+      callee: TaggedError
+      args: (constant)
+      outType: typeof (Anonymous class)
+
+=== Piping Flow ===
+Location: 69:18 - 69:48
+Node: Data.TaggedError("SavedBase")
+Node Kind: KindCallExpression
+
+Subject: "SavedBase"
+Subject Type: "SavedBase"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "SavedBase"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 72:66 - 72:102
+Node: Data.TaggedError("NamedExpression")
+Node Kind: KindCallExpression
+
+Subject: "NamedExpression"
+Subject Type: "NamedExpression"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "NamedExpression"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 73:49 - 73:89
+Node: Data.TaggedError("AnonymousExpression")
+Node Kind: KindCallExpression
+
+Subject: "AnonymousExpression"
+Subject Type: "AnonymousExpression"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "AnonymousExpression"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 76:41 - 76:79
+Node: MutableFactory("MutableFactoryError")
+Node Kind: KindCallExpression
+
+Subject: "MutableFactoryError"
+Subject Type: "MutableFactoryError"
+
+Transformations (1):
+  [0] kind: call
+      callee: MutableFactory
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "MutableFactoryError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 78:29 - 78:77
+Node: Data.TaggedError("AnonymousDefaultDeclaration")
+Node Kind: KindCallExpression
+
+Subject: "AnonymousDefaultDeclaration"
+Subject Type: "AnonymousDefaultDeclaration"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "AnonymousDefaultDeclaration"; } & Readonly<A>
