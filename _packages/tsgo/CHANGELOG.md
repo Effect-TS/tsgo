@@ -1,5 +1,42 @@
 # @effect/tsgo
 
+## 0.52.0
+
+### Minor Changes
+
+- 0269634: Add `effectSleepZeroToYieldNow`, a style suggestion with a quick fix for zero-duration `Effect.sleep` calls.
+  
+  For example, `Effect.sleep(0)` becomes `Effect.yieldNow()` in Effect v3 and `Effect.yieldNow` in Effect v4. The rule also recognizes safe zero-duration strings, tuples, and Duration constructors. The replacement yields through the fiber scheduler instead of the Clock service.
+- f178ff2: Add the opt-in `preferEffectArray` diagnostic in `effectNative` for native Array method calls and references. It suggests 16 corresponding Effect Array APIs and explains migration differences, such as `values.find(predicate)` becoming `Array.findFirst(values, predicate)` with an `Option` result.
+  
+  The rule is disabled by default and enabled as a warning by the `effect-native` preset. It supports readonly arrays, tuples, aliases, and literal bracket access. Native Array recognition uses a lazy cache shared per checker. Conversion autofixes are not included.
+- f59b4b8: Add the opt-in `preferEffectRecord` diagnostic in `effectNative` for native Object calls and references. It suggests `Record.keys`, `Record.values`, `Record.toEntries`, `Record.fromEntries`, and `Record.has`, including native `hasOwnProperty` references.
+  
+  Each suggestion explains input typing or runtime differences. For example, `Object.entries(data)` suggests `Record.toEntries(data)` with typed keys and a caveat about getter or proxy mutations. `data.hasOwnProperty(key)` suggests passing the receiver explicitly to `Record.has(data, key)`.
+  
+  The rule defaults to off and the `effect-native` preset enables it as a warning. Both Effect v3 and v4 are supported. Only suppression quick fixes are available.
+- 2672190: Add the opt-in `preferSchemaTaggedError` diagnostic for Effect v3 and v4. It suggests `Schema.TaggedError` for class declarations that extend `Data.TaggedError`, including anonymous default exports. For example, `class NotFound extends Data.TaggedError("NotFound")<{ id: string }> {}` reports a warning when the rule is enabled.
+- c4aa628: Include `{ readonly brand: unique symbol }` in Effect v4 Schema class completions for `Class`, `TaggedClass`, `Error`, and `TaggedError`. Add a branded completion for `Schema.Opaque`.
+  
+  For example, the `Class<Person>` completion inserts `Schema.Class<Person, { readonly brand: unique symbol }>("Person")`. Effect v3 and `Model.Class` completions keep their existing type arguments.
+- 22f6106: Add `schemaClassMissingBrand`, a correctness suggestion enabled by default for Effect v4 schema classes, errors, and opaque classes.
+  
+  The diagnostic suggests adding a brand when the second brand type argument is omitted. For example, `Schema.Class<Person>("Person")` triggers a suggestion, while `Schema.Class<Person, { readonly brand: unique symbol }>("Person")` supplies a nominal brand. An explicit `{}` keeps structural typing and suppresses the suggestion. Effect v3 is excluded.
+- d565ab8: Recognize `Predicate.isTagged(value, "Foo")` and `Predicate.isTagged("Foo")(value)` as tag comparisons in dispatch analysis. Existing catch-tag diagnostics and quick fixes now handle both forms in Effect v3 and v4.
+
+### Patch Changes
+
+- 9696634: Report experimental and unstable properties supplied in contextually typed object literals, including shorthand properties. For example, `x({ test: 42 })` and `x({ test })` now warn when the parameter type marks `test` with `@stability experimental`, even if the function and interface are stable.
+- 6107975: Update the shim generator's Go tools dependency to support Go 1.27.2 export data and restore compiler setup.
+  
+  Preserve pointers to unexported structs in generated shim mirrors so fields that follow them retain their offsets and accessors return the correct values.
+- 7450a52: Remove the `debug` plugin option and the debug-only `Flows` group from the document outline.
+- 1c7cbf9: Update Effect v4 dependencies and test fixtures from `4.0.0-rc.118` to stable `4.0.2`. Align `@effect/platform-node`, `@effect/platform-node-shared`, and `@effect/vitest` with the same release.
+- fea53cc: Use the configured `keyPatterns` for `Data.TaggedError` and `Schema.TaggedError` completions, so the inserted tag already matches the key expected by `deterministicKeys`.
+  
+  For example, with `{ "target": "error", "pattern": "package-identifier" }` in `keyPatterns`, completing `class NotFound extends Data.` in `src/errors.ts` of package `@app/core` now inserts `Data.TaggedError("@app/core/errors/NotFound")<{}>{}` instead of `Data.TaggedError("NotFound")<{}>{}`. Without an `error` key pattern the completion still uses the class name.
+- 7450a52: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261007.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/d61a7d235906e78be9b111de0ba060e28e67ecfa) commit `d61a7d235906e78be9b111de0ba060e28e67ecfa`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.51.1
 
 ### Patch Changes
