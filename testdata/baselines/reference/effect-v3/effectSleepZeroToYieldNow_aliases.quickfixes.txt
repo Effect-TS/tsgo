@@ -1,0 +1,486 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:30-8:37) TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+  Fix 0: "Disable effectSleepZeroToYieldNow for this line"
+  Fix 1: "Disable effectSleepZeroToYieldNow for entire file"
+  Fix 2: "Replace with Effect.yieldNow"
+
+[D2] (9:32-9:39) TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+  Fix 0: "Disable effectSleepZeroToYieldNow for this line"
+  Fix 1: "Disable effectSleepZeroToYieldNow for entire file"
+  Fix 2: "Replace with Effect.yieldNow"
+
+[D3] (10:35-10:42) TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+  Fix 0: "Disable effectSleepZeroToYieldNow for this line"
+  Fix 1: "Disable effectSleepZeroToYieldNow for entire file"
+  Fix 2: "Replace with Effect.yieldNow"
+
+[D4] (11:32-11:53) TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+  Fix 0: "Disable effectSleepZeroToYieldNow for this line"
+  Fix 1: "Disable effectSleepZeroToYieldNow for entire file"
+  Fix 2: "Replace with Effect.yieldNow"
+
+[D5] (12:34-12:55) TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+  Fix 0: "Disable effectSleepZeroToYieldNow for this line"
+  Fix 1: "Disable effectSleepZeroToYieldNow for entire file"
+  Fix 2: "Replace with Effect.yieldNow"
+
+[D6] (13:33-13:53) TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+  Fix 0: "Disable effectSleepZeroToYieldNow for this line"
+  Fix 1: "Disable effectSleepZeroToYieldNow for entire file"
+  Fix 2: "Replace with Effect.yieldNow"
+
+[D7] (14:38-14:47) TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+  Fix 0: "Disable effectSleepZeroToYieldNow for this line"
+  Fix 1: "Disable effectSleepZeroToYieldNow for entire file"
+  Fix 2: "Replace with Effect.yieldNow"
+
+[D8] (15:33-15:54) TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+  Fix 0: "Disable effectSleepZeroToYieldNow for this line"
+  Fix 1: "Disable effectSleepZeroToYieldNow for entire file"
+  Fix 2: "Replace with Effect.yieldNow"
+
+[D9] (16:36-16:45) TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+  Fix 0: "Disable effectSleepZeroToYieldNow for this line"
+  Fix 1: "Disable effectSleepZeroToYieldNow for entire file"
+  Fix 2: "Replace with Effect.yieldNow"
+
+[D10] (17:28-17:38) TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+  Fix 0: "Disable effectSleepZeroToYieldNow for this line"
+  Fix 1: "Disable effectSleepZeroToYieldNow for entire file"
+
+[D11] (19:30-19:40) TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+  Fix 0: "Disable effectSleepZeroToYieldNow for this line"
+  Fix 1: "Disable effectSleepZeroToYieldNow for entire file"
+
+[D12] (21:33-21:50) TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+  Fix 0: "Disable effectSleepZeroToYieldNow for this line"
+  Fix 1: "Disable effectSleepZeroToYieldNow for entire file"
+
+[D13] (23:36-23:53) TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+  Fix 0: "Disable effectSleepZeroToYieldNow for this line"
+  Fix 1: "Disable effectSleepZeroToYieldNow for entire file"
+
+[D14] (25:31-25:56) TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+  Fix 0: "Disable effectSleepZeroToYieldNow for this line"
+  Fix 1: "Disable effectSleepZeroToYieldNow for entire file"
+
+[D15] (27:31-27:48) TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+  Fix 0: "Disable effectSleepZeroToYieldNow for this line"
+  Fix 1: "Disable effectSleepZeroToYieldNow for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectSleepZeroToYieldNow for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectSleepZeroToYieldNow for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.yieldNow" ===
+
+--- file:///.src/effectSleepZeroToYieldNow_aliases.ts ---
+// @effect-v3
+import { Effect as E, Duration as D } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as DurationNamespace from "effect/Duration"
+import * as Package from "effect"
+import { sleep as namedSleep } from "effect/Effect"
+
+export const renamedEffect = E.yieldNow()
+export const renamedDuration = E.sleep(D.zero)
+export const renamedConstructor = E.sleep(D.seconds(0))
+export const effectNamespace = EffectNamespace.sleep(0)
+export const durationNamespace = EffectNamespace.sleep(DurationNamespace.zero)
+export const packageNamespace = Package.Effect.sleep(Package.Duration.seconds(0))
+export const parenthesizedReceiver = (E).sleep(0)
+export const assertedReceiver = (E as typeof E).sleep(0)
+export const parenthesizedCallee = (E.sleep)(0)
+export const namedImport = namedSleep(0)
+const sleepAlias = E.sleep
+export const constantAlias = sleepAlias(0)
+const renamedSleepAlias = namedSleep
+export const namedImportAlias = renamedSleepAlias(0)
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.sleep(0)
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.sleep(0)
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().sleep(0)
+const durationGetter = { get module() { console.log("evaluated"); return D } }
+export const getterDurationReceiver = E.sleep(durationGetter.module.zero)
+const getDuration = () => { console.log("evaluated"); return D }
+export const calledDurationReceiver = E.sleep(getDuration().seconds(0))
+
+
+=== [D2] Fix 0: "Disable effectSleepZeroToYieldNow for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectSleepZeroToYieldNow for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.yieldNow" ===
+
+--- file:///.src/effectSleepZeroToYieldNow_aliases.ts ---
+// @effect-v3
+import { Effect as E, Duration as D } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as DurationNamespace from "effect/Duration"
+import * as Package from "effect"
+import { sleep as namedSleep } from "effect/Effect"
+
+export const renamedEffect = E.sleep(0)
+export const renamedDuration = E.yieldNow()
+export const renamedConstructor = E.sleep(D.seconds(0))
+export const effectNamespace = EffectNamespace.sleep(0)
+export const durationNamespace = EffectNamespace.sleep(DurationNamespace.zero)
+export const packageNamespace = Package.Effect.sleep(Package.Duration.seconds(0))
+export const parenthesizedReceiver = (E).sleep(0)
+export const assertedReceiver = (E as typeof E).sleep(0)
+export const parenthesizedCallee = (E.sleep)(0)
+export const namedImport = namedSleep(0)
+const sleepAlias = E.sleep
+export const constantAlias = sleepAlias(0)
+const renamedSleepAlias = namedSleep
+export const namedImportAlias = renamedSleepAlias(0)
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.sleep(0)
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.sleep(0)
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().sleep(0)
+const durationGetter = { get module() { console.log("evaluated"); return D } }
+export const getterDurationReceiver = E.sleep(durationGetter.module.zero)
+const getDuration = () => { console.log("evaluated"); return D }
+export const calledDurationReceiver = E.sleep(getDuration().seconds(0))
+
+
+=== [D3] Fix 0: "Disable effectSleepZeroToYieldNow for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectSleepZeroToYieldNow for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.yieldNow" ===
+
+--- file:///.src/effectSleepZeroToYieldNow_aliases.ts ---
+// @effect-v3
+import { Effect as E, Duration as D } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as DurationNamespace from "effect/Duration"
+import * as Package from "effect"
+import { sleep as namedSleep } from "effect/Effect"
+
+export const renamedEffect = E.sleep(0)
+export const renamedDuration = E.sleep(D.zero)
+export const renamedConstructor = E.yieldNow()
+export const effectNamespace = EffectNamespace.sleep(0)
+export const durationNamespace = EffectNamespace.sleep(DurationNamespace.zero)
+export const packageNamespace = Package.Effect.sleep(Package.Duration.seconds(0))
+export const parenthesizedReceiver = (E).sleep(0)
+export const assertedReceiver = (E as typeof E).sleep(0)
+export const parenthesizedCallee = (E.sleep)(0)
+export const namedImport = namedSleep(0)
+const sleepAlias = E.sleep
+export const constantAlias = sleepAlias(0)
+const renamedSleepAlias = namedSleep
+export const namedImportAlias = renamedSleepAlias(0)
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.sleep(0)
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.sleep(0)
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().sleep(0)
+const durationGetter = { get module() { console.log("evaluated"); return D } }
+export const getterDurationReceiver = E.sleep(durationGetter.module.zero)
+const getDuration = () => { console.log("evaluated"); return D }
+export const calledDurationReceiver = E.sleep(getDuration().seconds(0))
+
+
+=== [D4] Fix 0: "Disable effectSleepZeroToYieldNow for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable effectSleepZeroToYieldNow for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.yieldNow" ===
+
+--- file:///.src/effectSleepZeroToYieldNow_aliases.ts ---
+// @effect-v3
+import { Effect as E, Duration as D } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as DurationNamespace from "effect/Duration"
+import * as Package from "effect"
+import { sleep as namedSleep } from "effect/Effect"
+
+export const renamedEffect = E.sleep(0)
+export const renamedDuration = E.sleep(D.zero)
+export const renamedConstructor = E.sleep(D.seconds(0))
+export const effectNamespace = EffectNamespace.yieldNow()
+export const durationNamespace = EffectNamespace.sleep(DurationNamespace.zero)
+export const packageNamespace = Package.Effect.sleep(Package.Duration.seconds(0))
+export const parenthesizedReceiver = (E).sleep(0)
+export const assertedReceiver = (E as typeof E).sleep(0)
+export const parenthesizedCallee = (E.sleep)(0)
+export const namedImport = namedSleep(0)
+const sleepAlias = E.sleep
+export const constantAlias = sleepAlias(0)
+const renamedSleepAlias = namedSleep
+export const namedImportAlias = renamedSleepAlias(0)
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.sleep(0)
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.sleep(0)
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().sleep(0)
+const durationGetter = { get module() { console.log("evaluated"); return D } }
+export const getterDurationReceiver = E.sleep(durationGetter.module.zero)
+const getDuration = () => { console.log("evaluated"); return D }
+export const calledDurationReceiver = E.sleep(getDuration().seconds(0))
+
+
+=== [D5] Fix 0: "Disable effectSleepZeroToYieldNow for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable effectSleepZeroToYieldNow for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.yieldNow" ===
+
+--- file:///.src/effectSleepZeroToYieldNow_aliases.ts ---
+// @effect-v3
+import { Effect as E, Duration as D } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as DurationNamespace from "effect/Duration"
+import * as Package from "effect"
+import { sleep as namedSleep } from "effect/Effect"
+
+export const renamedEffect = E.sleep(0)
+export const renamedDuration = E.sleep(D.zero)
+export const renamedConstructor = E.sleep(D.seconds(0))
+export const effectNamespace = EffectNamespace.sleep(0)
+export const durationNamespace = EffectNamespace.yieldNow()
+export const packageNamespace = Package.Effect.sleep(Package.Duration.seconds(0))
+export const parenthesizedReceiver = (E).sleep(0)
+export const assertedReceiver = (E as typeof E).sleep(0)
+export const parenthesizedCallee = (E.sleep)(0)
+export const namedImport = namedSleep(0)
+const sleepAlias = E.sleep
+export const constantAlias = sleepAlias(0)
+const renamedSleepAlias = namedSleep
+export const namedImportAlias = renamedSleepAlias(0)
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.sleep(0)
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.sleep(0)
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().sleep(0)
+const durationGetter = { get module() { console.log("evaluated"); return D } }
+export const getterDurationReceiver = E.sleep(durationGetter.module.zero)
+const getDuration = () => { console.log("evaluated"); return D }
+export const calledDurationReceiver = E.sleep(getDuration().seconds(0))
+
+
+=== [D6] Fix 0: "Disable effectSleepZeroToYieldNow for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable effectSleepZeroToYieldNow for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.yieldNow" ===
+
+--- file:///.src/effectSleepZeroToYieldNow_aliases.ts ---
+// @effect-v3
+import { Effect as E, Duration as D } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as DurationNamespace from "effect/Duration"
+import * as Package from "effect"
+import { sleep as namedSleep } from "effect/Effect"
+
+export const renamedEffect = E.sleep(0)
+export const renamedDuration = E.sleep(D.zero)
+export const renamedConstructor = E.sleep(D.seconds(0))
+export const effectNamespace = EffectNamespace.sleep(0)
+export const durationNamespace = EffectNamespace.sleep(DurationNamespace.zero)
+export const packageNamespace = Package.Effect.yieldNow()
+export const parenthesizedReceiver = (E).sleep(0)
+export const assertedReceiver = (E as typeof E).sleep(0)
+export const parenthesizedCallee = (E.sleep)(0)
+export const namedImport = namedSleep(0)
+const sleepAlias = E.sleep
+export const constantAlias = sleepAlias(0)
+const renamedSleepAlias = namedSleep
+export const namedImportAlias = renamedSleepAlias(0)
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.sleep(0)
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.sleep(0)
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().sleep(0)
+const durationGetter = { get module() { console.log("evaluated"); return D } }
+export const getterDurationReceiver = E.sleep(durationGetter.module.zero)
+const getDuration = () => { console.log("evaluated"); return D }
+export const calledDurationReceiver = E.sleep(getDuration().seconds(0))
+
+
+=== [D7] Fix 0: "Disable effectSleepZeroToYieldNow for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable effectSleepZeroToYieldNow for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.yieldNow" ===
+
+--- file:///.src/effectSleepZeroToYieldNow_aliases.ts ---
+// @effect-v3
+import { Effect as E, Duration as D } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as DurationNamespace from "effect/Duration"
+import * as Package from "effect"
+import { sleep as namedSleep } from "effect/Effect"
+
+export const renamedEffect = E.sleep(0)
+export const renamedDuration = E.sleep(D.zero)
+export const renamedConstructor = E.sleep(D.seconds(0))
+export const effectNamespace = EffectNamespace.sleep(0)
+export const durationNamespace = EffectNamespace.sleep(DurationNamespace.zero)
+export const packageNamespace = Package.Effect.sleep(Package.Duration.seconds(0))
+export const parenthesizedReceiver = (E).yieldNow()
+export const assertedReceiver = (E as typeof E).sleep(0)
+export const parenthesizedCallee = (E.sleep)(0)
+export const namedImport = namedSleep(0)
+const sleepAlias = E.sleep
+export const constantAlias = sleepAlias(0)
+const renamedSleepAlias = namedSleep
+export const namedImportAlias = renamedSleepAlias(0)
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.sleep(0)
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.sleep(0)
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().sleep(0)
+const durationGetter = { get module() { console.log("evaluated"); return D } }
+export const getterDurationReceiver = E.sleep(durationGetter.module.zero)
+const getDuration = () => { console.log("evaluated"); return D }
+export const calledDurationReceiver = E.sleep(getDuration().seconds(0))
+
+
+=== [D8] Fix 0: "Disable effectSleepZeroToYieldNow for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable effectSleepZeroToYieldNow for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Effect.yieldNow" ===
+
+--- file:///.src/effectSleepZeroToYieldNow_aliases.ts ---
+// @effect-v3
+import { Effect as E, Duration as D } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as DurationNamespace from "effect/Duration"
+import * as Package from "effect"
+import { sleep as namedSleep } from "effect/Effect"
+
+export const renamedEffect = E.sleep(0)
+export const renamedDuration = E.sleep(D.zero)
+export const renamedConstructor = E.sleep(D.seconds(0))
+export const effectNamespace = EffectNamespace.sleep(0)
+export const durationNamespace = EffectNamespace.sleep(DurationNamespace.zero)
+export const packageNamespace = Package.Effect.sleep(Package.Duration.seconds(0))
+export const parenthesizedReceiver = (E).sleep(0)
+export const assertedReceiver = (E as typeof E).yieldNow()
+export const parenthesizedCallee = (E.sleep)(0)
+export const namedImport = namedSleep(0)
+const sleepAlias = E.sleep
+export const constantAlias = sleepAlias(0)
+const renamedSleepAlias = namedSleep
+export const namedImportAlias = renamedSleepAlias(0)
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.sleep(0)
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.sleep(0)
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().sleep(0)
+const durationGetter = { get module() { console.log("evaluated"); return D } }
+export const getterDurationReceiver = E.sleep(durationGetter.module.zero)
+const getDuration = () => { console.log("evaluated"); return D }
+export const calledDurationReceiver = E.sleep(getDuration().seconds(0))
+
+
+=== [D9] Fix 0: "Disable effectSleepZeroToYieldNow for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable effectSleepZeroToYieldNow for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Replace with Effect.yieldNow" ===
+
+--- file:///.src/effectSleepZeroToYieldNow_aliases.ts ---
+// @effect-v3
+import { Effect as E, Duration as D } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as DurationNamespace from "effect/Duration"
+import * as Package from "effect"
+import { sleep as namedSleep } from "effect/Effect"
+
+export const renamedEffect = E.sleep(0)
+export const renamedDuration = E.sleep(D.zero)
+export const renamedConstructor = E.sleep(D.seconds(0))
+export const effectNamespace = EffectNamespace.sleep(0)
+export const durationNamespace = EffectNamespace.sleep(DurationNamespace.zero)
+export const packageNamespace = Package.Effect.sleep(Package.Duration.seconds(0))
+export const parenthesizedReceiver = (E).sleep(0)
+export const assertedReceiver = (E as typeof E).sleep(0)
+export const parenthesizedCallee = E.yieldNow()
+export const namedImport = namedSleep(0)
+const sleepAlias = E.sleep
+export const constantAlias = sleepAlias(0)
+const renamedSleepAlias = namedSleep
+export const namedImportAlias = renamedSleepAlias(0)
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.sleep(0)
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.sleep(0)
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().sleep(0)
+const durationGetter = { get module() { console.log("evaluated"); return D } }
+export const getterDurationReceiver = E.sleep(durationGetter.module.zero)
+const getDuration = () => { console.log("evaluated"); return D }
+export const calledDurationReceiver = E.sleep(getDuration().seconds(0))
+
+
+=== [D10] Fix 0: "Disable effectSleepZeroToYieldNow for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable effectSleepZeroToYieldNow for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable effectSleepZeroToYieldNow for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable effectSleepZeroToYieldNow for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable effectSleepZeroToYieldNow for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable effectSleepZeroToYieldNow for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable effectSleepZeroToYieldNow for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable effectSleepZeroToYieldNow for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable effectSleepZeroToYieldNow for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable effectSleepZeroToYieldNow for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable effectSleepZeroToYieldNow for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable effectSleepZeroToYieldNow for entire file" ===
+skipped by default

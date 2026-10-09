@@ -2453,6 +2453,11 @@
           "default": "suggestion",
           "description": "Suggests using Effect.asVoid instead of Effect.map(() =\u003e void 0), Effect.map(() =\u003e undefined), or Effect.map(() =\u003e {})"
         },
+        "effectSleepZeroToYieldNow": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.yieldNow for cooperative yielding instead of sleeping for zero duration"
+        },
         "effectSucceedWithVoid": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
