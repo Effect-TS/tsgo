@@ -32,6 +32,10 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 	tp := ctx.TypeParser
 
 	version := tp.SupportedEffectVersion()
+	schemaTypeArgs := className
+	if version == typeparser.EffectMajorV4 {
+		schemaTypeArgs += ", { readonly brand: unique symbol }"
+	}
 
 	// Build replacement range from byte offsets
 	replacementRange := byteSpanToRange(ctx, data.ReplacementStart, data.ReplacementLength)
@@ -43,9 +47,9 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 	if isFullyQualified || tp.IsNodeReferenceToEffectSchemaModuleApi(data.AccessedObject, "Class") {
 		var insertText string
 		if isFullyQualified {
-			insertText = fmt.Sprintf(`%s.Class<%s>("%s")({${0}}){}`, schemaIdentifier, className, className)
+			insertText = fmt.Sprintf(`%s.Class<%s>("%s")({${0}}){}`, schemaIdentifier, schemaTypeArgs, className)
 		} else {
-			insertText = fmt.Sprintf(`Class<%s>("%s")({${0}}){}`, className, className)
+			insertText = fmt.Sprintf(`Class<%s>("%s")({${0}}){}`, schemaTypeArgs, className)
 		}
 		items = append(items, makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf("Class<%s>", className),
@@ -57,9 +61,9 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 	if isFullyQualified || tp.IsNodeReferenceToEffectSchemaModuleApi(data.AccessedObject, "TaggedError") {
 		var insertText string
 		if isFullyQualified {
-			insertText = fmt.Sprintf(`%s.TaggedError<%s>()("%s", {${0}}){}`, schemaIdentifier, className, className)
+			insertText = fmt.Sprintf(`%s.TaggedError<%s>()("%s", {${0}}){}`, schemaIdentifier, schemaTypeArgs, className)
 		} else {
-			insertText = fmt.Sprintf(`TaggedError<%s>()("%s", {${0}}){}`, className, className)
+			insertText = fmt.Sprintf(`TaggedError<%s>()("%s", {${0}}){}`, schemaTypeArgs, className)
 		}
 		items = append(items, makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf("TaggedError<%s>", className),
@@ -71,9 +75,9 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 	if isFullyQualified || tp.IsNodeReferenceToEffectSchemaModuleApi(data.AccessedObject, "TaggedClass") {
 		var insertText string
 		if isFullyQualified {
-			insertText = fmt.Sprintf(`%s.TaggedClass<%s>()("%s", {${0}}){}`, schemaIdentifier, className, className)
+			insertText = fmt.Sprintf(`%s.TaggedClass<%s>()("%s", {${0}}){}`, schemaIdentifier, schemaTypeArgs, className)
 		} else {
-			insertText = fmt.Sprintf(`TaggedClass<%s>()("%s", {${0}}){}`, className, className)
+			insertText = fmt.Sprintf(`TaggedClass<%s>()("%s", {${0}}){}`, schemaTypeArgs, className)
 		}
 		items = append(items, makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf("TaggedClass<%s>", className),
@@ -102,12 +106,24 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 		if isFullyQualified || tp.IsNodeReferenceToEffectSchemaModuleApi(data.AccessedObject, "Error") {
 			var insertText string
 			if isFullyQualified {
-				insertText = fmt.Sprintf(`%s.Error<%s>("%s")({${0}}){}`, schemaIdentifier, className, className)
+				insertText = fmt.Sprintf(`%s.Error<%s>("%s")({${0}}){}`, schemaIdentifier, schemaTypeArgs, className)
 			} else {
-				insertText = fmt.Sprintf(`Error<%s>("%s")({${0}}){}`, className, className)
+				insertText = fmt.Sprintf(`Error<%s>("%s")({${0}}){}`, schemaTypeArgs, className)
 			}
 			items = append(items, makeExtendsCompletionItem(accessedText,
 				fmt.Sprintf("Error<%s>", className),
+				insertText, sortText, replacementRange,
+			))
+		}
+		if isFullyQualified || tp.IsNodeReferenceToEffectSchemaModuleApi(data.AccessedObject, "Opaque") {
+			var insertText string
+			if isFullyQualified {
+				insertText = fmt.Sprintf(`%s.Opaque<%s>()(${0}){}`, schemaIdentifier, schemaTypeArgs)
+			} else {
+				insertText = fmt.Sprintf(`Opaque<%s>()(${0}){}`, schemaTypeArgs)
+			}
+			items = append(items, makeExtendsCompletionItem(accessedText,
+				fmt.Sprintf("Opaque<%s>", className),
 				insertText, sortText, replacementRange,
 			))
 		}
