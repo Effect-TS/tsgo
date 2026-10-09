@@ -1,0 +1,15 @@
+==== /.src/effectSleepZeroToYieldNow_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 4:32 - 4:48
+Node: Effect.sleep(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>

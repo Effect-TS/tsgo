@@ -118,6 +118,7 @@ var All = []rule.Rule{
 	FlatMapConditionalToFilterOrFail,
 	OptionMatchToFromOption,
 	SyncToSucceed,
+	EffectSleepZeroToYieldNow,
 	ExtendsNativeError,
 	NodeBuiltinImport,
 	ObsoleteMatchImport,
