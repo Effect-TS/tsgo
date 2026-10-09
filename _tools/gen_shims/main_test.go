@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"errors"
+	"flag"
 	"fmt"
 	"os"
 	"os/exec"
@@ -14,6 +15,88 @@ import (
 
 	"golang.org/x/mod/modfile"
 )
+
+func TestGeneratedExtraStructPreservesPointerLayout(t *testing.T) {
+	savedPackages, savedDependencies := packagesToShim, modernProviderDependencies
+	savedInternalPrefix, savedShimPrefix := tsgoInternalPrefix, providerShimModulePrefix
+	savedFlags, savedArgs := flag.CommandLine, os.Args
+	t.Cleanup(func() {
+		packagesToShim, modernProviderDependencies = savedPackages, savedDependencies
+		tsgoInternalPrefix, providerShimModulePrefix = savedInternalPrefix, savedShimPrefix
+		flag.CommandLine, os.Args = savedFlags, savedArgs
+	})
+	packagesToShim = []string{"fixture"}
+	modernProviderDependencies = nil
+	flag.CommandLine = flag.NewFlagSet(t.Name(), flag.ContinueOnError)
+
+	root := t.TempDir()
+	sourceRoot := filepath.Join(root, "typescript", "tsc")
+	writeTestFile(t, filepath.Join(root, "go.work"), []byte("go 1.26\n"))
+	writeTestFile(t, filepath.Join(sourceRoot, "go.mod"), []byte("module github.com/microsoft/TypeScript/tsc\n\ngo 1.26\n"))
+	writeTestFile(t, filepath.Join(sourceRoot, "go.sum"), nil)
+	writeTestFile(t, filepath.Join(sourceRoot, "internal", "fixture", "fixture.go"), []byte(`package fixture
+
+type hidden struct { words [2]uint64 }
+type Fixture struct {
+	dependency *hidden
+	value int64
+	trailing [2]uint64
+}
+var Sample = Fixture{dependency: &hidden{}, value: 42}
+`))
+	writeTestFile(t, filepath.Join(root, "_tools", "gen_shims", "config", "fixture", "extra-shim.json"), []byte(`{"ExtraFields":{"Fixture":["value"]}}`))
+	os.Args = []string{
+		t.Name(),
+		"-repository-root", root,
+		"-source-root", sourceRoot,
+		"-module-prefix", "github.com/microsoft/TypeScript/tsc",
+		"-provider-shim-prefix", canonicalShimModulePrefix,
+		"-no-cache",
+	}
+	if err := run(); err != nil {
+		t.Fatalf("generate fixture shim: %v", err)
+	}
+
+	shimRoot := filepath.Join(root, "shim", "fixture")
+	writeTestFile(t, filepath.Join(shimRoot, "layout_test.go"), []byte(`package fixture
+
+import (
+	"reflect"
+	"testing"
+)
+
+func TestPointerFieldLayout(t *testing.T) {
+	mirror := reflect.TypeOf(extra_Fixture{})
+	dependency, ok := mirror.FieldByName("dependency")
+	if !ok {
+		t.Fatal("generated mirror is missing dependency")
+	}
+	if got := dependency.Type.Kind(); got != reflect.Pointer {
+		t.Errorf("dependency kind = %v, want ptr", got)
+	}
+	originalValue, ok := reflect.TypeOf(Sample).FieldByName("value")
+	if !ok {
+		t.Fatal("fixture is missing value")
+	}
+	mirroredValue, ok := mirror.FieldByName("value")
+	if !ok {
+		t.Fatal("generated mirror is missing value")
+	}
+	if got, want := mirroredValue.Offset, originalValue.Offset; got != want {
+		t.Errorf("value offset = %d, want %d", got, want)
+	}
+	if got := Fixture_value(&Sample); got != 42 {
+		t.Errorf("Fixture_value() = %d, want 42", got)
+	}
+}
+`))
+	command := exec.Command("go", "test", "-count=1", "-v", ".")
+	command.Dir = shimRoot
+	command.Env = append(os.Environ(), "GOWORK="+filepath.Join(root, "go.work"))
+	if output, err := command.CombinedOutput(); err != nil {
+		t.Fatalf("compile and exercise generated pointer layout: %v\n%s", err, output)
+	}
+}
 
 func TestMergeExtraShimDeterministic(t *testing.T) {
 	base := ExtraShim{
