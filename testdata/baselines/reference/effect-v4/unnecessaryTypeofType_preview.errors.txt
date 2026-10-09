@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/unnecessaryTypeofType_preview.ts(10,23): warning TS377090: This `typeof ... .Type` query can be replaced with `UsersRepo.User`. effect(unnecessaryTypeofType)
 

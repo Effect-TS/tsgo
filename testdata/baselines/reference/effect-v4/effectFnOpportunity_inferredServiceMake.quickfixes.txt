@@ -29,10 +29,10 @@ import { Effect, Layer, Context } from "effect"
 export class UserService extends Context.Service<UserService>()("UserService", {
     make: Effect.gen(function*() {
         return {
-    getUser: Effect.fn("UserService.getUser")(function* (id: string) {
-        yield* Effect.log(`Looking up user ${id}`);
-    })
-};
+            getUser: Effect.fn("UserService.getUser")(function*(id: string) {
+                    yield* Effect.log(`Looking up user ${id}`)
+                })
+        }
     })
 }) {}
 

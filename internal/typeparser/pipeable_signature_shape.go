@@ -159,6 +159,8 @@ func symbolIsOptional(symbol *ast.Symbol) bool {
 }
 
 func (m *signatureTypeMatcher) compareType(left *checker.Type, right *checker.Type, depth int) bool {
+	left = checker.GetNonDistributedTypeParameter(m.checker, left)
+	right = checker.GetNonDistributedTypeParameter(m.checker, right)
 	if left == right {
 		return left != nil
 	}

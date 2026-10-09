@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/floatingEffect_stream.ts(4,3): error TS377058: This Effect-able `Stream<number, never, never>` value is neither yielded nor assigned to a variable. effect(floatingEffect)
 

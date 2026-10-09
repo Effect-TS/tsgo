@@ -1,4 +1,8 @@
 {
+	"Consider effect/Array.{0} instead of native Array.{1}. {2} effect(preferEffectArray)": {
+		"category": "Warning",
+		"code": 377140
+	},
 	"Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)": {
 		"category": "Suggestion",
 		"code": 377131
@@ -519,8 +523,48 @@
         "category": "Suggestion",
         "code": 377130
     },
+    "Use Effect.tapError to observe the error and preserve the original failure without having to re-fail it. effect(catchRefailToTapError)": {
+        "category": "Suggestion",
+        "code": 377133
+    },
     "`Effect.andThen` expresses this sequencing more directly than `Effect.flatMap` with a zero-parameter callback. effect(flatMapIgnoredParamToAndThen)": {
         "category": "Suggestion",
         "code": 377132
+    },
+    "`{0}` is an experimental API. effect(experimentalApiUsage)": {
+        "category": "Warning",
+        "code": 377135
+    },
+    "`{0}` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)": {
+        "category": "Warning",
+        "code": 377136
+    },
+    "Unknown Effect diagnostic rule `{0}` in `diagnosticSeverity`. effect(unknownRuleName)": {
+        "category": "Warning",
+        "code": 377134
+    },
+    "`{0}` exposes `{1}`, an {2} API. effect(apiStabilityLeak)": {
+        "category": "Warning",
+        "code": 377137
+    },
+    "`{0}` is declared {1} here. effect(apiStabilityLeak)": {
+        "category": "Message",
+        "code": 377138
+    },
+    "Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)": {
+        "category": "Suggestion",
+        "code": 377139
+    },
+    "Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)": {
+        "category": "Suggestion",
+        "code": 377141
+    },
+    "Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)": {
+        "category": "Suggestion",
+        "code": 377142
+    },
+    "Consider effect/Record.{0} instead of native {1}. {2} effect(preferEffectRecord)": {
+        "category": "Warning",
+        "code": 377143
     }
 }

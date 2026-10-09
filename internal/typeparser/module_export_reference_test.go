@@ -74,7 +74,7 @@ func sourceFileNameMatcher(suffix string, calls *int) func(*TypeParser, *checker
 		if calls != nil {
 			(*calls)++
 		}
-		return strings.HasSuffix(sf.FileName(), suffix)
+		return strings.HasSuffix(string(sf.FileName()), suffix)
 	}
 }
 

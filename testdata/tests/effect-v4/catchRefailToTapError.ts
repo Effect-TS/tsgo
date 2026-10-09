@@ -1,0 +1,86 @@
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics catchRefailToTapError:warning
+import { Effect, pipe } from "effect"
+import { catch as recover, andThen as sequence, fail as refail } from "effect/Effect"
+
+declare const task: Effect.Effect<number, Error>
+declare const observe: Effect.Effect<void>
+declare const fallibleObserve: Effect.Effect<void, string>
+declare const otherError: Error
+declare const condition: boolean
+
+// Supported: direct effects and zero-argument continuations, across call forms.
+export const direct = task.pipe(Effect.catch(error => observe.pipe(Effect.andThen(Effect.fail(error)))))
+export const andThenThunk = task.pipe(Effect.catch(error => observe.pipe(Effect.andThen(() => Effect.fail(error)))))
+export const flatMapThunk = task.pipe(Effect.catch(error => observe.pipe(Effect.flatMap(() => Effect.fail(error)))))
+export const dataFirst = Effect.catch(task, error => Effect.andThen(observe, Effect.fail(error)))
+export const dataFirstFlatMap = Effect.catch(task, error => Effect.flatMap(observe, () => Effect.fail(error)))
+export const standalonePipe = pipe(task, Effect.catch(error => pipe(observe, Effect.andThen(pipe(error, Effect.fail)))))
+export const curried = Effect.catch(error => Effect.andThen(Effect.fail(error))(observe))(task)
+export const blocks = task.pipe(Effect.catch(function(error) {
+  return observe.pipe(Effect.flatMap(function() { return Effect.fail((error)) }))
+}))
+export const aliases = pipe(task, recover(error => sequence(refail(error))(observe)))
+export const earlierSteps = task.pipe(Effect.catch(error => observe.pipe(
+  Effect.andThen(observe),
+  Effect.andThen(Effect.fail(error))
+)))
+export const sideCanFail = task.pipe(Effect.catch(error => fallibleObserve.pipe(Effect.andThen(Effect.fail(error)))))
+export const conditionalSide = task.pipe(Effect.catch(error => (condition ? observe : fallibleObserve).pipe(
+  Effect.andThen(Effect.fail(error))
+)))
+
+// Unsupported or unsafe: the original error must be re-failed unconditionally.
+export const justRefail = task.pipe(Effect.catch(error => Effect.fail(error)))
+export const mappedError = task.pipe(Effect.catch(error => observe.pipe(Effect.andThen(Effect.fail(new Error(error.message))))))
+export const otherBinding = task.pipe(Effect.catch(error => observe.pipe(Effect.andThen(Effect.fail(otherError)))))
+export const property = task.pipe(Effect.catch(error => observe.pipe(Effect.andThen(Effect.fail(error.message)))))
+export const conditionalRefail = task.pipe(Effect.catch(error => observe.pipe(
+  Effect.flatMap(() => condition ? Effect.fail(error) : Effect.void)
+)))
+export const afterRefail = task.pipe(Effect.catch(error => observe.pipe(
+  Effect.andThen(Effect.fail(error)),
+  Effect.catch(() => Effect.void)
+)))
+export const innerRecovery = task.pipe(Effect.catch(error => observe.pipe(
+  Effect.andThen(Effect.fail(error).pipe(Effect.catch(() => Effect.void)))
+)))
+export const parameterizedFlatMap = task.pipe(Effect.catch(error => observe.pipe(
+  Effect.flatMap(_value => Effect.fail(error))
+)))
+export const parameterizedAndThen = task.pipe(Effect.catch(error => observe.pipe(
+  Effect.andThen(_value => Effect.fail(error))
+)))
+export const shadowedError = task.pipe(Effect.catch(error => Effect.succeed(otherError).pipe(
+  Effect.flatMap(error => Effect.fail(error))
+)))
+export const assignedError = task.pipe(Effect.catch(error => Effect.sync(() => {
+  error = otherError
+}).pipe(Effect.flatMap(() => Effect.fail(error)))))
+export const defaultParameter = task.pipe(Effect.catch((error = otherError) => observe.pipe(Effect.andThen(Effect.fail(error)))))
+export const destructured = task.pipe(Effect.catch(({ message }) => observe.pipe(Effect.andThen(Effect.fail(message)))))
+export const statements = task.pipe(Effect.catch(error => {
+  const side = observe
+  return side.pipe(Effect.andThen(Effect.fail(error)))
+}))
+export const generator = task.pipe(Effect.catch(error => Effect.gen(function*() {
+  yield* observe
+  return yield* Effect.fail(error)
+})))
+export const differentCombinator = task.pipe(Effect.catch(error => observe.pipe(Effect.as(Effect.fail(error)))))
+export const failMappedSubject = task.pipe(Effect.catch(error => observe.pipe(
+  Effect.andThen(pipe(error, e => new Error(e.message), Effect.fail))
+)))
+export const unfailable = Effect.void.pipe(Effect.catch(error => observe.pipe(Effect.andThen(Effect.fail(error)))))
+
+declare const tagged: Effect.Effect<number, { readonly _tag: "Oops"; readonly message: string }>
+export const selective = tagged.pipe(Effect.catchTag("Oops", error => observe.pipe(Effect.andThen(Effect.fail(error)))))
+
+// A same-named local API must not be mistaken for the Effect module.
+const custom = {
+  andThen: (next: Effect.Effect<never, Error>) => (_self: Effect.Effect<void>) => next,
+  fail: (error: Error) => Effect.fail(error)
+}
+export const customAndThen = task.pipe(Effect.catch(error => custom.andThen(Effect.fail(error))(observe)))
+export const customFail = task.pipe(Effect.catch(error => observe.pipe(Effect.andThen(custom.fail(error)))))

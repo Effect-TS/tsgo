@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/obsoleteSchemaImport_preview.ts(5,20): warning TS377128: This module reference imports `@effect/schema/Schema`, which is obsolete in Effect v4. In Effect v4, Schema is provided directly by `Schema` from `effect` (or `effect/Schema`). effect(obsoleteSchemaImport)
 

@@ -14,7 +14,7 @@ import (
 var CatchIfTagToCatchTag = rule.Rule{
 	Name:            "catchIfTagToCatchTag",
 	Group:           "style",
-	Description:     "Suggests Effect.catchTag instead of Effect.catchIf with a direct _tag equality predicate",
+	Description:     "Suggests Effect.catchTag instead of Effect.catchIf with a _tag equality or Predicate.isTagged predicate",
 	DefaultSeverity: etscore.SeveritySuggestion,
 	SupportedEffect: []string{"v3", "v4"},
 	Codes: []int32{
@@ -80,7 +80,7 @@ func catchIfTagPredicate(tp *typeparser.TypeParser, c *checker.Checker, predicat
 		return "", false
 	}
 
-	tagSubject, tagValue := typeparser.ParseTagMatch(lazy.Expression)
+	tagSubject, tagValue := tp.ParseTagMatch(lazy.Expression)
 	if tagSubject == nil || tagValue == nil || !ast.IsStringLiteral(tagValue) || !isBareParameterTagReference(tp, c, tagSubject, parameterSymbol) {
 		return "", false
 	}

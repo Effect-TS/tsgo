@@ -3,11 +3,11 @@ import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
-import * as ChildProcessSpawner from "effect/unstable/process/ChildProcessSpawner"
+import { ChildProcessSpawner } from "effect/process"
 import { CommandError, runCommand, runCommandCaptureSplit } from "./process.ts"
 import { getComponent, readUpstream } from "./upstream.ts"
 
-const deadcodeVersion = "v0.48.0"
+const deadcodeVersion = "v0.50.0"
 
 export class DeadCodeError extends Data.TaggedError("DeadCodeError")<{
   readonly findings: ReadonlyArray<string>

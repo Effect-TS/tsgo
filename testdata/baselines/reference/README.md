@@ -217,8 +217,6 @@ Each release of `effect-tsgo` is built against the versioned components recorded
         "quickinfo": true,
         // Controls Effect completions. (default: true)
         "completions": true,
-        // Enables additional debug-only Effect language service output. (default: false)
-        "debug": false,
         // Controls Effect goto references support. (default: true)
         "goto": true,
         // Controls Effect rename helpers. (default: true)

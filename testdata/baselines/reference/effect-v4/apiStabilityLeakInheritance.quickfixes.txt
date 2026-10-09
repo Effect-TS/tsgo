@@ -1,0 +1,63 @@
+=== Quick Fix Inventory ===
+
+[D1] (24:18-24:37) TS377137: `effect-v4-tests/apiStabilityLeakInheritance#TaggedErrorProperty` exposes `Reportable`, an unstable API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D2] (28:25-28:31) TS377137: `effect-v4-tests/apiStabilityLeakInheritance#direct` exposes `Reportable`, an unstable API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D3] (29:13-29:31) TS377137: `effect-v4-tests/apiStabilityLeakInheritance#DirectIntersection` exposes `Reportable`, an unstable API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D4] (45:18-45:37) TS377137: `effect-v4-tests/apiStabilityLeakInheritance#RequiredInheritance` exposes `RequiredReportable`, an unstable API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D5] (53:18-53:37) TS377137: `effect-v4-tests/apiStabilityLeakInheritance#UntaggedInheritance` exposes `UntaggedReportable`, an unstable API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D6] (56:18-56:25) TS377137: `effect-v4-tests/apiStabilityLeakInheritance#OwnLeak` exposes `ExperimentalEncoding`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default

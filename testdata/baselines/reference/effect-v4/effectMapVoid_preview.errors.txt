@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/effectMapVoid_preview.ts(6,3): warning TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
 

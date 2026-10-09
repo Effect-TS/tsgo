@@ -5,9 +5,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 	"strings"
 
 	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/effectconfigraw"
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/fixables"
 	"github.com/effect-ts/tsgo/internal/pluginoptions"
@@ -19,6 +21,11 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 )
+
+func init() {
+	// Oxlint loads this runner without the automatic checker diagnostics hooks.
+	effectconfigraw.Register()
+}
 
 // ReportedDiagnostic is a runner-neutral diagnostic ready for an external integration.
 type ReportedDiagnostic struct {
@@ -111,7 +118,7 @@ func RunRuleAndReport(
 		&normalized,
 		sf.FileName(),
 		program.Options().ConfigFilePath,
-		program.UseCaseSensitiveFileNames(),
+		tspath.UseCaseSensitiveFileNames(program),
 	)
 	reportDiagnostics(ctx, diagnostics, ruleName, program, c, sf, resolvedOptions, adapter)
 	return nil
@@ -199,7 +206,7 @@ func reportedRelatedInformation(diagnostic *ast.Diagnostic, ruleName string, ada
 			continue
 		}
 		relatedInformation = append(relatedInformation, ReportedRelatedInformation{
-			FileName:    related.File().FileName(),
+			FileName:    string(related.File().FileName()),
 			Range:       related.Loc(),
 			Description: diagnosticDescription(related, ruleName, adapter),
 		})

@@ -1,0 +1,130 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/preferSchemaTaggedError.ts(8,7): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(9,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(10,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(11,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(12,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(13,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(16,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(19,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(21,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(23,11): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(29,9): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(34,16): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(38,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(39,14): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/preferSchemaTaggedError.ts(78,30): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+
+
+==== /.src/preferSchemaTaggedError.ts (15 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferSchemaTaggedError:warning
+    import { Data, Data as AliasedData, Schema } from "effect"
+    import * as EffectNamespace from "effect"
+    import * as NamespacedData from "effect/Data"
+    import { TaggedError } from "effect/Data"
+    
+    class WithoutFields extends Data.TaggedError("WithoutFields") {}
+          ~~~~~~~~~~~~~
+!!! warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+    export class WithFields extends Data.TaggedError("WithFields")<{ message: string }> {}
+                 ~~~~~~~~~~
+!!! warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+    export class AliasedDataError extends AliasedData.TaggedError("AliasedDataError") {}
+                 ~~~~~~~~~~~~~~~~
+!!! warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+    export class NamespaceDataError extends NamespacedData.TaggedError("NamespaceDataError") {}
+                 ~~~~~~~~~~~~~~~~~~
+!!! warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+    export class NamedFactoryError extends TaggedError("NamedFactoryError") {}
+                 ~~~~~~~~~~~~~~~~~
+!!! warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+    export class EffectNamespaceError extends EffectNamespace.Data.TaggedError("EffectNamespaceError") {}
+                 ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+    
+    const ConstantFactory = Data.TaggedError
+    export class ConstantFactoryError extends ConstantFactory("ConstantFactoryError") {}
+                 ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+    
+    const ChainedFactory = (ConstantFactory)
+    export class ChainedFactoryError extends ChainedFactory("ChainedFactoryError") {}
+                 ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+    
+    export class ExportedError extends Data.TaggedError("ExportedError") {
+                 ~~~~~~~~~~~~~
+!!! warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+      static nested() {
+        class NestedInMatchedClass extends Data.TaggedError("NestedInMatchedClass") {}
+              ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+        return NestedInMatchedClass
+      }
+    }
+    
+    export function nestedDeclaration() {
+      class NestedInFunction extends Data.TaggedError("NestedInFunction") {}
+            ~~~~~~~~~~~~~~~~
+!!! warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+      return NestedInFunction
+    }
+    
+    export namespace NestedDeclarations {
+      export class NestedInNamespace extends Data.TaggedError("NestedInNamespace") {}
+                   ~~~~~~~~~~~~~~~~~
+!!! warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+    }
+    
+    declare const dynamicTag: string
+    export class DynamicTagError extends Data.TaggedError(dynamicTag) {}
+                 ~~~~~~~~~~~~~~~
+!!! warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+    export class CallbackPayloadError extends Data.TaggedError("CallbackPayloadError")<{
+                 ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+      callback: () => void
+    }> {}
+    
+    // @effect-diagnostics-next-line preferSchemaTaggedError:off
+    export class SuppressedError extends Data.TaggedError("SuppressedError") {}
+    
+    const UnrelatedData = {
+      TaggedError: (tag: string) => class { readonly _tag = tag }
+    }
+    export class UnrelatedError extends UnrelatedData.TaggedError("UnrelatedError") {}
+    
+    export function shadowedData() {
+      const Data = UnrelatedData
+      class ShadowedDataError extends Data.TaggedError("ShadowedDataError") {}
+      return ShadowedDataError
+    }
+    
+    export function shadowedFactory() {
+      const TaggedError = UnrelatedData.TaggedError
+      class ShadowedFactoryError extends TaggedError("ShadowedFactoryError") {}
+      return ShadowedFactoryError
+    }
+    
+    export class SchemaError extends Schema.TaggedError<SchemaError>()("SchemaError", {
+      message: Schema.String
+    }) {}
+    export class UntaggedDataError extends Data.Error<{ message: string }> {}
+    export class IndirectError extends WithoutFields {}
+    
+    const SavedBase = Data.TaggedError("SavedBase")
+    export class SavedFactoryResultError extends SavedBase<{ message: string }> {}
+    
+    export const NamedExpression = class NamedClassExpression extends Data.TaggedError("NamedExpression") {}
+    export const AnonymousExpression = class extends Data.TaggedError("AnonymousExpression") {}
+    
+    let MutableFactory = Data.TaggedError
+    export class MutableFactoryError extends MutableFactory("MutableFactoryError") {}
+    
+    export default class extends Data.TaggedError("AnonymousDefaultDeclaration") {}
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+    

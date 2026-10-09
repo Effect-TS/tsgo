@@ -1,0 +1,55 @@
+=== Quick Fix Inventory ===
+
+[D1] (3:14-3:15) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"f\")"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_comments.ts ---
+import { Effect } from "effect"
+
+export const f = Effect.fnUntraced(function*(n: number) {
+    // explains the next line
+    const x = yield* Effect.succeed(n) // trailing note
+    /* block note */
+    return x + 1_000
+  })
+
+
+=== [D1] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_comments.ts ---
+import { Effect } from "effect"
+
+export const f = Effect.fn(function*(n: number) {
+    // explains the next line
+    const x = yield* Effect.succeed(n) // trailing note
+    /* block note */
+    return x + 1_000
+  })
+
+
+=== [D1] Fix 4: "Convert to Effect.fn(\"f\")" ===
+
+--- file:///.src/effectFnOpportunity_comments.ts ---
+import { Effect } from "effect"
+
+export const f = Effect.fn("f")(function*(n: number) {
+    // explains the next line
+    const x = yield* Effect.succeed(n) // trailing note
+    /* block note */
+    return x + 1_000
+  })
+

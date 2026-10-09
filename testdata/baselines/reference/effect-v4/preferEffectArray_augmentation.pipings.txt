@@ -1,0 +1,57 @@
+==== /.src/preferEffectArray_augmentation.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 13:44 - 14:24
+Node: mutable.map(n => n + 1)
+Node Kind: KindCallExpression
+
+Subject: n => n + 1
+Subject Type: (n: number) => number
+
+Transformations (1):
+  [0] kind: call
+      callee: mutable.map
+      args: (constant)
+      outType: number[]
+
+=== Piping Flow ===
+Location: 14:24 - 15:25
+Node: readonly.map(n => n + 1)
+Node Kind: KindCallExpression
+
+Subject: n => n + 1
+Subject Type: (n: number) => number
+
+Transformations (1):
+  [0] kind: call
+      callee: readonly.map
+      args: (constant)
+      outType: number[]
+
+=== Piping Flow ===
+Location: 15:25 - 16:27
+Node: mutable.filter(n => n > 1)
+Node Kind: KindCallExpression
+
+Subject: n => n > 1
+Subject Type: (n: number) => boolean
+
+Transformations (1):
+  [0] kind: call
+      callee: mutable.filter
+      args: (constant)
+      outType: number[]
+
+=== Piping Flow ===
+Location: 16:27 - 17:28
+Node: readonly.filter(n => n > 1)
+Node Kind: KindCallExpression
+
+Subject: n => n > 1
+Subject Type: (n: number) => boolean
+
+Transformations (1):
+  [0] kind: call
+      callee: readonly.filter
+      args: (constant)
+      outType: number[]

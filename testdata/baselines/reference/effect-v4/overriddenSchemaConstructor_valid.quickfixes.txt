@@ -1,5 +1,13 @@
 === Quick Fix Inventory ===
-(no diagnostics)
+
+[D1] (3:41-3:46) TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
+  Fix 0: "Disable schemaClassMissingBrand for this line"
+  Fix 1: "Disable schemaClassMissingBrand for entire file"
 
 === Quick Fix Application Results ===
-(no quick fixes to apply)
+
+=== [D1] Fix 0: "Disable schemaClassMissingBrand for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable schemaClassMissingBrand for entire file" ===
+skipped by default

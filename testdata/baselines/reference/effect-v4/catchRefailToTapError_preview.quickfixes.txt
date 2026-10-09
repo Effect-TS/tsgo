@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:3-10:15) TS377133: Use Effect.tapError to observe the error and preserve the original failure without having to re-fail it. effect(catchRefailToTapError)
+  Fix 0: "Disable catchRefailToTapError for this line"
+  Fix 1: "Disable catchRefailToTapError for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchRefailToTapError for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchRefailToTapError for entire file" ===
+skipped by default

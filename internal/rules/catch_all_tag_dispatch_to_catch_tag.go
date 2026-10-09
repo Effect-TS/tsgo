@@ -86,7 +86,7 @@ func catchAllTagDispatchMethod(tp *typeparser.TypeParser, callee *ast.Node) (str
 }
 
 func analyzeCatchAllTagDispatchHandler(tp *typeparser.TypeParser, c *checker.Checker, handlerNode *ast.Node) (string, []CatchAllTagDispatchBranch, bool, bool) {
-	returning := typeparser.ParseReturningDispatch(handlerNode)
+	returning := tp.ParseReturningDispatch(handlerNode)
 	if returning == nil || len(returning.Params) != 1 || returning.Dispatch == nil || len(returning.Dispatch.Branches) == 0 || returning.Dispatch.Fallback == nil {
 		return "", nil, false, false
 	}

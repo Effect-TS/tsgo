@@ -27,9 +27,12 @@ const run = (...args) => spawnSync(process.execPath, [oxlint, ...args], {
 const packagePreset = spawnSync(process.execPath, [
   "--input-type=module",
   "--eval",
-  `import { recommended } from "@effect/tsgo/oxlint-presets";
+  `import { recommended, strict } from "@effect/tsgo/oxlint-presets";
    import recommendedJson from "@effect/tsgo/oxlint-presets/recommended.json" with { type: "json" };
-   if (recommended.rules["effecttsgo/global-date"] !== "warn" || recommendedJson.rules["effecttsgo/global-date"] !== "warn") process.exit(1);`
+   import strictJson from "@effect/tsgo/oxlint-presets/strict.json" with { type: "json" };
+   if (recommended.rules["effecttsgo/floating-effect"] !== "error" || recommendedJson.rules["effecttsgo/floating-effect"] !== "error") process.exit(1);
+   if (recommended.rules["effecttsgo/global-date"] !== undefined || recommendedJson.rules["effecttsgo/global-date"] !== undefined) process.exit(1);
+   if (strict.rules["effecttsgo/catch-unfailable-effect"] !== "error" || strictJson.rules["effecttsgo/catch-unfailable-effect"] !== "error") process.exit(1);`
 ], {
   cwd: packageDirectory,
   encoding: "utf8"
@@ -58,16 +61,31 @@ const relatedLabel = missingStarDiagnostic.labels.find(
 assert.ok(relatedLabel, "related diagnostic was not converted to a labeled range")
 assert.deepEqual(relatedLabel.span, { offset: 67, length: 8, line: 3, column: 35 })
 
+const strictBoolean = run("--type-aware", "--format", "json", "--config", ".oxlintrc.json", "strict-boolean-expressions-duplicates.ts")
+assert.equal(strictBoolean.status, 1, strictBoolean.stderr)
+const strictBooleanDiagnostics = JSON.parse(strictBoolean.stdout).diagnostics.filter(
+  (item) => item.code === "effecttsgo(strict-boolean-expressions)"
+)
+assert.equal(strictBooleanDiagnostics.length, 2, "one diagnostic per distinct non-boolean type")
+assert.deepEqual(
+  strictBooleanDiagnostics.map((item) => item.message).sort(),
+  [
+    "Unexpected `undefined` type in condition, expected strictly a boolean instead.",
+    "Unexpected `{ id: string; }` type in condition, expected strictly a boolean instead."
+  ].sort()
+)
+assert.deepEqual(strictBooleanDiagnostics[0].labels[0].span, strictBooleanDiagnostics[1].labels[0].span)
+
 const disabled = run("--type-aware", "--config", ".oxlintrc.json", "disabled.ts")
 assert.equal(disabled.status, 0, disabled.stderr)
 assert.doesNotMatch(`${disabled.stdout}\n${disabled.stderr}`, /effecttsgo\(floating-effect\)/)
 
-const recommended = run("--config", ".oxlintrc-recommended.json", "global-date.ts")
-assert.equal(recommended.status, 0, recommended.stderr)
-assert.match(`${recommended.stdout}\n${recommended.stderr}`, /effecttsgo\(global-date\)/)
+const recommended = run("--config", ".oxlintrc-recommended.json", "diagnostic.ts")
+assert.equal(recommended.status, 1, recommended.stderr)
+assert.match(`${recommended.stdout}\n${recommended.stderr}`, /effecttsgo\(floating-effect\)/)
 
-const recommendedOverride = run("--config", ".oxlintrc-recommended-override.json", "global-date.ts")
+const recommendedOverride = run("--config", ".oxlintrc-recommended-override.json", "diagnostic.ts")
 assert.equal(recommendedOverride.status, 0, recommendedOverride.stderr)
-assert.doesNotMatch(`${recommendedOverride.stdout}\n${recommendedOverride.stderr}`, /effecttsgo\(global-date\)/)
+assert.doesNotMatch(`${recommendedOverride.stdout}\n${recommendedOverride.stderr}`, /effecttsgo\(floating-effect\)/)
 
 console.log("Oxlint profile smoke test passed")

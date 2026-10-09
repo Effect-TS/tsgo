@@ -1,0 +1,35 @@
+flowchart TB
+  0[/"type: #123; name: string; decode: #40;value: string#41; =#gt; Effect#lt;number, never, never#gt;; #125;<br/>node: #123;#92;n  name: #quot;workspace#quot;,#92;n  decode: #40;value#41; =#gt;#92;n    Effect.gen#40;function*#40;#41; #123;#92;n      const text = yield* Effect.succeed#40;value#41;#92;n      return text.length#92;n    #125;#41;,#92;n#125;"/]
+  1[["type: #40;value: string#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;value#41; =#gt;#92;n    Effect.gen#40;function*#40;#41; #123;#92;n      const text = yield* Effect.succeed#40;value#41;#92;n      return text.length#92;n    #125;#41;"]]
+  2((("type: Effect#lt;number, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n      const text = yield* Effect.succeed#40;value#41;#92;n      return text.length#92;n    #125;#41;")))
+  3[/"type: number<br/>node: text.length"/]
+  4[/"type: string<br/>node: value"/]
+  5["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  6[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  7["type: number<br/>callee: define<br/>args: #91;#93;"]
+  8[/"type: #lt;A#gt;#40;options: #123; readonly name: string; readonly decode: #40;value: string#41; =#gt; Effect#lt;A, never, never#gt;; #125;#41; =#gt; A<br/>node: define"/]
+  9[["type: #lt;A#gt;#40;value: A#41; =#gt; Definition#lt;A#gt;<br/>node: #lt;A#gt;#40;value: A#41;: Definition#lt;A#gt; =#gt; #40;#123;#92;n  read: #40;path#41; =#gt;#92;n    Effect.gen#40;function*#40;#41; #123;#92;n      yield* Effect.log#40;path#41;#92;n      return value#92;n    #125;#41;,#92;n#125;#41;"]]
+  10[/"type: #123; read: #40;path: string#41; =#gt; Effect#lt;A, never, never#gt;; #125;<br/>node: #40;#123;#92;n  read: #40;path#41; =#gt;#92;n    Effect.gen#40;function*#40;#41; #123;#92;n      yield* Effect.log#40;path#41;#92;n      return value#92;n    #125;#41;,#92;n#125;#41;"/]
+  11[["type: #40;path: string#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: #40;path#41; =#gt;#92;n    Effect.gen#40;function*#40;#41; #123;#92;n      yield* Effect.log#40;path#41;#92;n      return value#92;n    #125;#41;"]]
+  12((("type: Effect#lt;A, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n      yield* Effect.log#40;path#41;#92;n      return value#92;n    #125;#41;")))
+  13[/"type: A<br/>node: value"/]
+  14[/"type: string<br/>node: path"/]
+  15["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  16[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  3 -->|"kind: potentialReturn"| 2
+  4 -->|"kind: pipe"| 5
+  6 -->|"kind: transformCallee"| 5
+  5 -->|"kind: yieldable"| 2
+  3 -->|"kind: usedBy"| 2
+  2 -->|"kind: potentialReturn"| 1
+  1 -->|"kind: usedBy"| 0
+  0 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7
+  13 -->|"kind: potentialReturn"| 12
+  14 -->|"kind: pipe"| 15
+  16 -->|"kind: transformCallee"| 15
+  15 -->|"kind: yieldable"| 12
+  13 -->|"kind: usedBy"| 12
+  12 -->|"kind: potentialReturn"| 11
+  11 -->|"kind: usedBy"| 10
+  10 -->|"kind: potentialReturn"| 9

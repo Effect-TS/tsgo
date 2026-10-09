@@ -2245,6 +2245,9 @@
         "effecttsgo/any-unknown-in-error-context": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/api-stability-leak": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/async-function": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -2264,6 +2267,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/catch-if-tag-to-catch-tag": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/catch-refail-to-tap-error": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/catch-tag-to-catch-reason": {
@@ -2320,7 +2326,13 @@
         "effecttsgo/effect-map-void": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/effect-sleep-zero-to-yield-now": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/effect-succeed-with-void": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/experimental-api-usage": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/extends-native-error": {
@@ -2464,7 +2476,16 @@
         "effecttsgo/overridden-schema-constructor": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/prefer-effect-array": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/prefer-effect-record": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/prefer-schema-over-json": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/prefer-schema-tagged-error": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/prefer-schema-type-property": {
@@ -2510,6 +2531,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/run-of-exit-to-run-exit": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/schema-class-missing-brand": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/schema-literal-non-finite": {
@@ -2576,6 +2600,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/unsafe-effect-type-assertion": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/unstable-api-usage": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "eqeqeq": {
@@ -8236,6 +8263,9 @@
           ]
         },
         "typescript/no-for-in-array": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "typescript/no-generated-empty-object-type": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "typescript/no-implied-eval": {
@@ -17111,6 +17141,12 @@
     "OnlyExportComponentsConfig": {
       "additionalProperties": false,
       "properties": {
+        "allowCompoundComponents": {
+          "default": false,
+          "description": "Allow an exported object when every property is a React component.\nThis matches Vite's compound component support. The object must be non-empty,\ncontain no nested objects, spreads, or accessors, and anonymous functions\nmust use a component name as a static property key.\n\n```jsx\n// Allowed when allowCompoundComponents: true\nconst Root = () =\u003e \u003cdiv /\u003e;\nconst Label = () =\u003e \u003cspan /\u003e;\nexport const Tag = { Root, Label };\n```",
+          "markdownDescription": "Allow an exported object when every property is a React component.\nThis matches Vite's compound component support. The object must be non-empty,\ncontain no nested objects, spreads, or accessors, and anonymous functions\nmust use a component name as a static property key.\n\n```jsx\n// Allowed when allowCompoundComponents: true\nconst Root = () =\u003e \u003cdiv /\u003e;\nconst Label = () =\u003e \u003cspan /\u003e;\nexport const Tag = { Root, Label };\n```",
+          "type": "boolean"
+        },
         "allowConstantExport": {
           "default": false,
           "description": "Allow exporting primitive constants (string/number/boolean/template literal)\nalongside component exports without triggering a violation. Recommended when your\nbundler’s Fast Refresh integration supports this (enabled by the plugin’s `vite`\npreset).\n\n```jsx\n// Allowed when allowConstantExport: true\nexport const VERSION = \"3\";\nexport const Foo = () =\u003e null;\n```",

@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/globalDate.ts(5,25): warning TS377066: This code uses `Date.now()`, time access is represented through `Clock` from Effect. effect(globalDate)
 /.src/globalDate.ts(9,10): warning TS377068: This code constructs `new Date()`, date values are represented through `DateTime` from Effect. effect(globalDate)

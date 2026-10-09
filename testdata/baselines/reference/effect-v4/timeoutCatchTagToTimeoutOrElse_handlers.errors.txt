@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/timeoutCatchTagToTimeoutOrElse_handlers.ts(12,3): warning TS377127: Use `Effect.timeoutOption` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)
 /.src/timeoutCatchTagToTimeoutOrElse_handlers.ts(17,3): warning TS377127: Use `Effect.timeoutOption` to handle this timeout directly. effect(timeoutCatchTagToTimeoutOrElse)

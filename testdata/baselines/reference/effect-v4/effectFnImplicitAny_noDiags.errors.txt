@@ -1,12 +1,12 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 
 
 ==== /.src/effectFnImplicitAny_noDiags.ts (0 errors) ====
     // @effect-diagnostics effectFnImplicitAny:error
     import * as Effect from "effect/Effect"
-    import { HttpRouter, HttpServerResponse } from "effect/unstable/http"
+    import { HttpRouter, HttpServerResponse } from "effect/http"
     
     export const Route = HttpRouter.use(
       Effect.fnUntraced(function*(router) {

@@ -1,0 +1,123 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/apiStabilityLeakInferred.ts(12,14): warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#arrowExplicit` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakInferred.ts(13,14): warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#arrowInferred` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakInferred.ts(14,14): warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#functionExpression` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakInferred.ts(22,14): warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#callableReference` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakInferred.ts(25,14): warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#inferredObject` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakInferred.ts(26,14): warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#nestedObject` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakInferred.ts(27,17): warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#inferredReturnObject` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakInferred.ts(32,14): warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#InferredClass` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakInferred.ts(39,14): warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#classExpression` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakInferred.ts(44,17): warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#inferredParameter` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakInferred.ts(45,14): warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#InferredFactory` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakInferred.ts(51,13): warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#GenericFunctionType` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakInferred.ts(53,13): warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#InferredArrowType` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakInferred.ts(60,22): warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#genericCallable` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+
+
+==== /.src/apiStabilityLeakInferred.ts (14 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    
+    /** @stability experimental */
+    interface InferredExperimental {
+      value: string
+    }
+    declare const inferredValue: InferredExperimental
+    
+    // Exported callable values keep their public signatures, whether annotated or
+    // inferred.
+    export const arrowExplicit = (x: InferredExperimental): InferredExperimental => x
+                 ~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#arrowExplicit` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakInferred.ts(5,11): `InferredExperimental` is declared experimental here. effect(apiStabilityLeak)
+    export const arrowInferred = (x: InferredExperimental) => x
+                 ~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#arrowInferred` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakInferred.ts(5,11): `InferredExperimental` is declared experimental here. effect(apiStabilityLeak)
+    export const functionExpression = function (x: InferredExperimental): InferredExperimental {
+                 ~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#functionExpression` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakInferred.ts(5,11): `InferredExperimental` is declared experimental here. effect(apiStabilityLeak)
+      return x
+    }
+    
+    interface InferredCallable {
+      (x: InferredExperimental): InferredExperimental
+    }
+    declare const inferredCallable: InferredCallable
+    export const callableReference = inferredCallable
+                 ~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#callableReference` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakInferred.ts(5,11): `InferredExperimental` is declared experimental here. effect(apiStabilityLeak)
+    
+    // Directly represented inferred object surfaces.
+    export const inferredObject = { value: inferredValue }
+                 ~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#inferredObject` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakInferred.ts(5,11): `InferredExperimental` is declared experimental here. effect(apiStabilityLeak)
+    export const nestedObject = { nested: { value: inferredValue } }
+                 ~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#nestedObject` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakInferred.ts(5,11): `InferredExperimental` is declared experimental here. effect(apiStabilityLeak)
+    export function inferredReturnObject() {
+                    ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#inferredReturnObject` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakInferred.ts(5,11): `InferredExperimental` is declared experimental here. effect(apiStabilityLeak)
+      return { value: inferredValue }
+    }
+    
+    // Class surfaces: inferred properties, accessors and expressions.
+    export class InferredClass {
+                 ~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#InferredClass` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakInferred.ts(5,11): `InferredExperimental` is declared experimental here. effect(apiStabilityLeak)
+      property = { value: inferredValue }
+      get accessor() {
+        return inferredValue
+      }
+      arrow = (x: InferredExperimental): InferredExperimental => x
+    }
+    export const classExpression = class {
+                 ~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#classExpression` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakInferred.ts(5,11): `InferredExperimental` is declared experimental here. effect(apiStabilityLeak)
+      value: InferredExperimental = inferredValue
+    }
+    
+    // Inferred parameters, including constructors.
+    export function inferredParameter(x = inferredValue): void {}
+                    ~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#inferredParameter` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakInferred.ts(5,11): `InferredExperimental` is declared experimental here. effect(apiStabilityLeak)
+    export class InferredFactory {
+                 ~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#InferredFactory` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakInferred.ts(5,11): `InferredExperimental` is declared experimental here. effect(apiStabilityLeak)
+      constructor(x = inferredValue) {}
+    }
+    
+    // Type queries over generic and inferred values.
+    declare function genericFunction<T>(x: InferredExperimental): T
+    export type GenericFunctionType = typeof genericFunction
+                ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#GenericFunctionType` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakInferred.ts(5,11): `InferredExperimental` is declared experimental here. effect(apiStabilityLeak)
+    const inferredArrowValue = (x: InferredExperimental): InferredExperimental => x
+    export type InferredArrowType = typeof inferredArrowValue
+                ~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#InferredArrowType` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakInferred.ts(5,11): `InferredExperimental` is declared experimental here. effect(apiStabilityLeak)
+    
+    // Generic callable surfaces are read from their raw signatures without
+    // instantiating them.
+    interface GenericCallable<T> {
+      (x: InferredExperimental): T
+    }
+    export declare const genericCallable: GenericCallable<string>
+                         ~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakInferred#genericCallable` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakInferred.ts(5,11): `InferredExperimental` is declared experimental here. effect(apiStabilityLeak)
+    

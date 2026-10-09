@@ -71,6 +71,16 @@ linters:
       - comments
       - std-error-handling
     rules:
+      # Keep etscore source-compatible with its declared Go 1.26 minimum
+      # even though the main module and CI toolchain use Go 1.27.
+      - text: '^(slicesbackward|stringscut):'
+        linters:
+          - modernize
+      # Compatibility fixtures intentionally construct raw upstream compiler
+      # options instead of passing through TypeScript's option parser.
+      - text: 'CompilerOptions\)\.(ESModuleInterop|AllowSyntheticDefaultImports) is deprecated:'
+        linters:
+          - staticcheck
       - path: '(.+)_test\.go$'
         linters:
           - forbidigo

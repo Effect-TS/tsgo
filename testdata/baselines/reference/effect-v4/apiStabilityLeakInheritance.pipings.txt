@@ -1,0 +1,15 @@
+==== /.src/apiStabilityLeakInheritance.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 65:40 - 65:79
+Node: Data.TaggedError("TaggedErrorFactory")
+Node Kind: KindCallExpression
+
+Subject: "TaggedErrorFactory"
+Subject Type: "TaggedErrorFactory"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "TaggedErrorFactory"; } & Readonly<A>

@@ -38,13 +38,13 @@ When running in dedicated diagnostics mode, the Effect diagnostics can be emitte
 <!-- supported-components:start -->
 ## Supported Package Versions
 
-The following target package versions are supported by `@effect/tsgo@0.45.0`:
+The following target package versions are supported by `@effect/tsgo@0.51.1`:
 
 | Component | Supported versions |
 |---|---|
-| TypeScript | `7.0.2`, `7.1.0-dev.20260909.1` |
-| Oxlint | `1.81.0`, `1.82.0` |
-| oxlint-tsgolint | `7.0.2001` |
+| TypeScript | `7.0.2`, `7.1.0-dev.20261006.1` |
+| Oxlint | `1.83.0`, `1.85.0`, `1.86.0`, `1.87.0` |
+| oxlint-tsgolint | `7.0.2001`, `7.0.2003` |
 <!-- supported-components:end -->
 
 ## Diagnostic Status
@@ -62,6 +62,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/class-self-mismatch.md"><code>classSelfMismatch</code></a></td><td>Ensures Self type parameter matches the class name in Context/Service/Tag/Schema classes</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/duplicate-package.md"><code>duplicatePackage</code></a></td><td>Warns when multiple versions of an Effect-related package are detected in the program</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/effect-fn-implicit-any.md"><code>effectFnImplicitAny</code></a></td><td>Mirrors noImplicitAny for unannotated Effect.fn, Effect.fnUntraced, and Effect.fnUntracedEager callback parameters when no outer contextual function type exists. Requires TS&#39;s noImplicitAny: true</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/experimental-api-usage.md"><code>experimentalApiUsage</code></a></td><td>Warns when using an API marked @stability experimental</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/floating-effect.md"><code>floatingEffect</code></a></td><td>Detects Effect values that are neither yielded nor assigned</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/floating-effect-in-vitest.md"><code>floatingEffectInVitest</code></a></td><td>Detects Effects returned from non-Effect-aware Vitest callbacks</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/generic-effect-services.md"><code>genericEffectServices</code></a></td><td>Prevents services with type parameters that cannot be discriminated at runtime</td></tr>
@@ -76,9 +77,11 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/outdated-api.md"><code>outdatedApi</code></a></td><td>Detects usage of APIs that have been removed or renamed in Effect v4</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/overridden-schema-constructor.md"><code>overriddenSchemaConstructor</code></a></td><td>Prevents overriding constructors in Schema classes which breaks decoding behavior</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/promise-in-effect-success.md"><code>promiseInEffectSuccess</code></a></td><td>Detects Promise types in Effect success channels where they are not awaited</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/schema-class-missing-brand.md"><code>schemaClassMissingBrand</code></a></td><td>Warns when Schema classes, errors, or Opaque classes omit the brand type argument</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/schema-literal-non-finite.md"><code>schemaLiteralNonFinite</code></a></td><td>Reports statically known non-finite numbers passed to Schema literal constructors</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/schema-opaque-instance-member.md"><code>schemaOpaqueInstanceMember</code></a></td><td>Disallows instance members in classes extending Schema.Opaque</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unsafe-effect-type-assertion.md"><code>unsafeEffectTypeAssertion</code></a></td><td>Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unstable-api-usage.md"><code>unstableApiUsage</code></a></td><td>Warns when using an API marked @stability unstable</td></tr>
     <tr><td colspan="2"><strong>Anti-pattern</strong> <em>Discouraged patterns that often lead to bugs or confusing behavior.</em></td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-unfailable-effect.md"><code>catchUnfailableEffect</code></a></td><td>Warns when using error handling on Effects that never fail</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/effect-fn-iife.md"><code>effectFnIife</code></a></td><td>Effect.fn or Effect.fnUntraced is called as an IIFE; use Effect.gen instead</td></tr>
@@ -119,6 +122,8 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/instance-of-schema.md"><code>instanceOfSchema</code></a></td><td>Suggests using Schema.is instead of instanceof for Effect Schema types</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/new-promise.md"><code>newPromise</code></a></td><td>Warns when constructing promises with new Promise instead of using Effect APIs</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/node-builtin-import.md"><code>nodeBuiltinImport</code></a></td><td>Warns when importing Node.js built-in modules that have Effect-native counterparts</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-effect-array.md"><code>preferEffectArray</code></a></td><td>Suggests Effect Array APIs for native array member references, with semantic caveats</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-effect-record.md"><code>preferEffectRecord</code></a></td><td>Suggests Effect Record APIs for native Object member references, with semantic caveats</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-schema-over-json.md"><code>preferSchemaOverJson</code></a></td><td>Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/process-env.md"><code>processEnv</code></a></td><td>Warns when reading process.env outside Effect generators instead of using Effect Config</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/process-env-in-effect.md"><code>processEnvInEffect</code></a></td><td>Warns when reading process.env inside Effect generators instead of using Effect Config</td></tr>
@@ -131,7 +136,8 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-chain-to-first-success-of.md"><code>catchChainToFirstSuccessOf</code></a></td><td>Suggests Effect.firstSuccessOf for consecutive error-independent Effect.catch fallbacks when the error type is preserved</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-conditional-refail-to-catch-if.md"><code>catchConditionalRefailToCatchIf</code></a></td><td>Suggests Effect.catchIf, Effect.catchCauseIf, or Effect.catchTag for conditional catch handlers that re-fail their untouched input</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-die-to-or-die.md"><code>catchDieToOrDie</code></a></td><td>Suggests using Effect.orDie instead of Effect.catch or Effect.catchAll with an identity-forwarding Effect.die handler</td></tr>
-    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-if-tag-to-catch-tag.md"><code>catchIfTagToCatchTag</code></a></td><td>Suggests Effect.catchTag instead of Effect.catchIf with a direct _tag equality predicate</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-if-tag-to-catch-tag.md"><code>catchIfTagToCatchTag</code></a></td><td>Suggests Effect.catchTag instead of Effect.catchIf with a _tag equality or Predicate.isTagged predicate</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-refail-to-tap-error.md"><code>catchRefailToTapError</code></a></td><td>Suggests Effect.tapError for catch handlers that sequence an effect and then re-fail the original error</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-tag-to-catch-reason.md"><code>catchTagToCatchReason</code></a></td><td>Suggests Effect.catchReason or Effect.catchReasons for handlers that re-fail unmatched reason._tag branches</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-to-ignore.md"><code>catchToIgnore</code></a></td><td>Suggests using Effect.ignore or Effect.ignoreCause instead of Effect.catch/catchCause returning Effect.void</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/catch-to-or-else-succeed.md"><code>catchToOrElseSucceed</code></a></td><td>Suggests using Effect.orElseSucceed instead of Effect.catch + Effect.succeed</td></tr>
@@ -140,6 +146,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/effect-fn-opportunity.md"><code>effectFnOpportunity</code></a></td><td>Suggests using Effect.fn for functions that return an Effect</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/effect-map-flatten.md"><code>effectMapFlatten</code></a></td><td>Suggests using Effect.flatMap instead of Effect.map followed by Effect.flatten in piping flows</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/effect-map-void.md"><code>effectMapVoid</code></a></td><td>Suggests using Effect.asVoid instead of Effect.map(() =&gt; void 0), Effect.map(() =&gt; undefined), or Effect.map(() =&gt; {})</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/effect-sleep-zero-to-yield-now.md"><code>effectSleepZeroToYieldNow</code></a></td><td>Suggests Effect.yieldNow for cooperative yielding instead of sleeping for zero duration</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/effect-succeed-with-void.md"><code>effectSucceedWithVoid</code></a></td><td>Suggests using Effect.void instead of Effect.succeed(undefined) or Effect.succeed(void 0)</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/flat-map-conditional-to-filter-or-fail.md"><code>flatMapConditionalToFilterOrFail</code></a></td><td>Suggests Effect.filterOrFail or Effect.filterOrElse when Effect.flatMap conditionally passes its input through with Effect.succeed</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/flat-map-ignored-param-to-and-then.md"><code>flatMapIgnoredParamToAndThen</code></a></td><td>Suggests using Effect.andThen instead of Effect.flatMap when a zero-parameter callback returns an existing Effect value</td></tr>
@@ -154,6 +161,7 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/nested-effect-gen-yield.md"><code>nestedEffectGenYield</code></a></td><td>Warns when yielding a nested bare Effect.gen inside an existing Effect generator context</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/new-schema-class.md"><code>newSchemaClass</code></a></td><td>Suggests using Schema make instead of new for Schema classes</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/option-match-to-from-option.md"><code>optionMatchToFromOption</code></a></td><td>Suggests Effect.fromOption when Option.match or an Option tag conditional only converts Some to Effect.succeed and None to Effect.fail</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-schema-tagged-error.md"><code>preferSchemaTaggedError</code></a></td><td>Suggests using Schema.TaggedError instead of Data.TaggedError</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-schema-type-property.md"><code>preferSchemaTypeProperty</code></a></td><td>Disallows Schema.Schema.Type&lt;typeof X&gt; in favor of typeof X.Type</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-succeed-some-or-none.md"><code>preferSucceedSomeOrNone</code></a></td><td>Suggests using Effect.succeedNone or Effect.succeedSome instead of wrapping Option.none or Option.some with Effect.succeed</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-typed-schema-decoder.md"><code>preferTypedSchemaDecoder</code></a></td><td>Suggests typed Schema decoders when the input is assignable to the schema&#39;s Encoded type</td></tr>
@@ -176,6 +184,8 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unnecessary-pipe.md"><code>unnecessaryPipe</code></a></td><td>Removes pipe calls with no arguments</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unnecessary-pipe-chain.md"><code>unnecessaryPipeChain</code></a></td><td>Simplifies chained pipe calls into a single pipe call</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/unnecessary-typeof-type.md"><code>unnecessaryTypeofType</code></a></td><td>Suggests replacing typeof Schema.Type style annotations with the matching named type when available</td></tr>
+    <tr><td colspan="2"><strong>Maintainers</strong> <em>Guard the public API surface and release hygiene of a package.</em></td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/api-stability-leak.md"><code>apiStabilityLeak</code></a></td><td>Reports exported APIs whose public surface exposes a less stable type</td></tr>
   </tbody>
 </table>
 <!-- diagnostics-table:end -->
@@ -234,6 +244,8 @@ Effect-tsgo is a **superset** of the official [TypeScript-Go](https://github.com
 
 Each release of `effect-tsgo` is built against the versioned components recorded in `_packages/tsgo/upstream.json`. The Nix flake consumes the TypeScript `next` tag directly. When upstream `tsgo` releases new features or fixes, `effect-tsgo` will adopt them in a subsequent release after validating compatibility with the Effect diagnostics layer.
 
+The npm compiler binaries load their TypeScript standard libraries from `lib.*.d.ts` files beside the executable. These files are included beside every versioned artifact and the latest `lib/tsc` alias. If you relocate the executable returned by `effect-tsgo get-exe-path`, copy its library files into the same destination directory.
+
 ### When to Upgrade
 
 - Upgrade `effect-tsgo` when a new release includes upstream `tsgo` fixes you need or new Effect diagnostics you want.
@@ -258,8 +270,6 @@ Each release of `effect-tsgo` is built against the versioned components recorded
         "quickinfo": true,
         // Controls Effect completions. (default: true)
         "completions": true,
-        // Enables additional debug-only Effect language service output. (default: false)
-        "debug": false,
         // Controls Effect goto references support. (default: true)
         "goto": true,
         // Controls Effect rename helpers. (default: true)
@@ -309,6 +319,10 @@ Each release of `effect-tsgo` is built against the versioned components recorded
         "extendedKeyDetection": false,
         // Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity. (default: 2)
         "pipeableMinArgCount": 2,
+        // Unstable APIs allowed by package/module subtree or package/module#export name. (default: [])
+        "allowedUnstableApis": [],
+        // Experimental APIs allowed by package/module subtree or package/module#export name. (default: [])
+        "allowedExperimentalApis": [],
         // Package names allowed to have multiple versions without triggering duplicatePackage. (default: [])
         "allowedDuplicatedPackages": [],
         // Controls which effectFnOpportunity quickfix variants are offered. (default: ["span"])
@@ -336,3 +350,47 @@ Each release of `effect-tsgo` is built against the versioned components recorded
 }
 ```
 <!-- example-config:end -->
+
+The `allowedUnstableApis` and `allowedExperimentalApis` options selectively permit
+APIs marked `@stability unstable` and `@stability experimental`, respectively:
+
+```json
+{
+  "allowedUnstableApis": [
+    "effect/http",
+    "effect/rpc/RpcClient#make"
+  ],
+  "allowedExperimentalApis": ["my-package/Preview#make"]
+}
+```
+
+A module entry permits that module and its descendants; an entry ending in
+`#exportName` permits only that module's exported API, including renamed imports
+and aliases. For example, `effect/http/HttpClient` permits the entire module,
+while `effect/http/HttpClient#get` permits only its exported `get` API.
+Matching is case-sensitive and respects path segments: `effect/http` does not
+permit `effect/http-api`. Per-file `overrides` replace the base list.
+
+`apiStabilityLeak` ignores exports marked `@internal`. The tag is the compiler's
+`stripInternal` declaration-emit marker, and it is honoured wherever it is
+written: on an exported declaration, on a named, star or namespace forwarding
+declaration, or on a namespace member. An untagged re-export of an internal
+target is ignored as well, because the forwarded target is not public API. A
+declaration that is not tagged keeps the export checked, so a public overload is
+still reported when only its implementation is marked `@internal`. Tagging a
+type does not hide it from public signatures: a public export that exposes an
+`@internal` type is still reported when that type is less stable. Properties
+and methods whose declarations are all marked `@internal` are excluded from
+the public surface, including in interfaces, classes, and augmentations. A
+merged property with any public declaration remains checked. An internal
+property does not exempt other public members of its containing export.
+
+Inherited bases do not contribute to `apiStabilityLeak` when all their public
+members, including inherited members, are
+optional properties or methods with an explicit `@stability stable`,
+`@stability unstable`, or `@stability experimental` tag. This permits optional,
+explicitly tagged extensions of existing APIs such as `Error`. Required or
+untagged members and call, construct, or index signatures keep the base checked.
+Internal members are excluded when deciding whether a base qualifies. A derived
+type's own members remain checked independently. Direct references such as a
+property or parameter typed as the base still expose its declared stability.

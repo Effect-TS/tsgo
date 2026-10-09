@@ -1,5 +1,156 @@
 # @effect/tsgo
 
+## 0.51.1
+
+### Patch Changes
+
+- a5bd7f1: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261006.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/a1ef42b9ea7032fa60df127d42b4c86fd2a110ee) commit `a1ef42b9ea7032fa60df127d42b4c86fd2a110ee`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
+## 0.51.0
+
+### Minor Changes
+
+- 9ca6ea2: Add related declaration locations to `apiStabilityLeak` diagnostics. For example, when a stable export exposes an experimental type, the diagnostic on the export now includes a child pointing to the experimental type's declaration, including declarations in other files.
+
+### Patch Changes
+
+- caee22f: Fix `apiStabilityLeak` to ignore inherited bases whose public members are all optional and explicitly stability-tagged, including bases reached through augmentations and superclass factories. Direct properties and parameters typed as those bases remain checked. Exclude `@internal` properties and methods from the public surface throughout the leak check.
+
+## 0.50.0
+
+### Minor Changes
+
+- 69c8ce5: Add the opt-in `apiStabilityLeak` diagnostic for Effect v4 package maintainers.
+  It reports exports whose public types, parameters, or return values expose a
+  less stable API: stable exports must not expose unstable or experimental types,
+  and unstable exports must not expose experimental types. Untagged exports are
+  treated as stable; experimental exports impose no restriction.
+  
+  For example, `export interface StableApi { value: ExperimentalType }` reports
+  a leak when `ExperimentalType` has an `@stability experimental` tag. Public
+  members, generic arguments, inferred types, and re-exports are checked without
+  recursively instantiating types.
+  
+  The rule is off by default and excluded from the recommended, strict, and
+  correctness presets. Enable the new `maintainers` preset to report it as a
+  warning, or configure `apiStabilityLeak` directly. Declared stability lookups are
+  shared with the existing unstable and experimental API usage diagnostics.
+
+## 0.49.0
+
+### Minor Changes
+
+- 75e6ca5: Migrate compiler integrations to the current TypeScript path and configuration APIs, and refresh the TypeScript patch stack for the new upstream snapshot. Keep TypeScript 7.0.2 supported through adapters for the legacy typescript-go provider.
+  
+  For example, plugin option and diagnostic severity resolution now accept rooted source and config file paths directly, while the legacy shims adapt those calls to TypeScript 7.0.2. Preserve Effect options through upstream option cloning and comparison, and fix include patterns for files in filesystem roots.
+  
+  Keep the Nix compiler source pin, lock file, and vendor hash synchronized with the updated snapshot, and apply Git binary compiler patches during Nix builds. Preserve the original TypeScript 7.0.2 provider shim APIs for tsgolint, with modern API adapters confined to the canonical shim facade.
+
+## 0.48.1
+
+### Patch Changes
+
+- c964cca: Fix `unstableApiUsage` and `experimentalApiUsage` naming overloaded (dual) exports by module, which prevented `allowedUnstableApis` / `allowedExperimentalApis` from allowing them per export.
+  
+  A dual export whose call signatures carry their own `@stability` tag — for example `effect/http/HttpClientRequest#bodyText` — was reported under the bare module name (`effect/http/HttpClientRequest`) because the selected call signature is not the module export. An allow-list entry for `effect/http/HttpClientRequest#bodyText` therefore never matched, and the only way to allow the use was a whole-module entry.
+  
+  The reported name now resolves to the export that owns the selected overload signature, matching the README's `package/module#exportName` form:
+  
+  ```ts
+  import { HttpClientRequest } from "effect/http"
+  
+  export const request = HttpClientRequest.post("http://x").pipe(
+    HttpClientRequest.setHeader("a", "b"),
+    HttpClientRequest.bodyText("{}", "application/json")
+  )
+  ```
+  
+  With:
+  
+  ```json
+  "allowedUnstableApis": [
+    "effect/http/HttpClientRequest#post",
+    "effect/http/HttpClientRequest#setHeader",
+    "effect/http/HttpClientRequest#bodyText"
+  ]
+  ```
+  
+  all three uses are allowed, and any unlisted dual export still warns under `package/module#exportName`.
+
+## 0.48.0
+
+### Minor Changes
+
+- a954eb5: Add `allowedUnstableApis` and `allowedExperimentalApis` to selectively allow unstable or experimental declaration modules or exported APIs. For example, `effect/http/HttpClient` allows the entire module, while `effect/http/HttpClient#get` allows only its exported `get` API. Both options support per-file overrides, and both diagnostics display the declaration-based name.
+
+### Patch Changes
+
+- 0900778: Build packaged TypeScript compilers without embedded standard libraries so editor go-to-definition opens real library files. Ship matching `lib.*.d.ts` files beside each versioned compiler and the latest `lib/tsc` alias, keeping `diagnostics` and `get-exe-path` working when running the packaged executable directly.
+
+## 0.47.2
+
+### Patch Changes
+
+- 536f83a: Fix a panic in `unstableApiUsage` and `experimentalApiUsage` on the `default` of a dynamically imported `export =` or JSON module.
+- bddb623: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260929.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/0681ef7fa3a2378ccf49645b6d5b7463bdca74bb) commit `0681ef7fa3a2378ccf49645b6d5b7463bdca74bb`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
+## 0.47.1
+
+### Patch Changes
+
+- d4f19b3: Allow `effect-tsgo patch` to run without the deprecated `--force` flag.
+
+## 0.47.0
+
+### Minor Changes
+
+- b67ef81: Update the Effect v4 integration to `4.0.0-rc.118` and use its public module paths. Namespace auto-imports for nested modules now resolve to paths such as `effect/cli/Prompt`.
+- 66668e2: Add the `experimentalApiUsage` and `unstableApiUsage` diagnostics for APIs marked with `@stability experimental` or `@stability unstable`. Both rules warn by default. For example, a reference to an unstable API now reports that breaking changes may happen between versions.
+
+### Patch Changes
+
+- 8067475: Fix `getExePath` rejecting the schema version shipped by platform packages.
+  
+  Discover installed Oxlint musl bindings without rejecting them before component selection, so TypeScript-only commands work when Oxlint is installed on Alpine Linux. Report unsupported Oxlint replacements during patch preparation instead, allowing `--skip-missing` and restoring original binaries with `unpatch`.
+- 2e215ce: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260928.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/4f5ddae224b9529a69b571f631fe3a2cb283162f) commit `4f5ddae224b9529a69b571f631fe3a2cb283162f`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2). Refresh the Oxlint configuration schema from the selected package.
+
+## 0.46.1
+
+### Patch Changes
+
+- 09644ee: `effect-tsgo diagnostics` now reports files it skipped because their tsconfig does not enable the `@effect/language-service` plugin, instead of only printing `Checked 0 files out of N files.` The JSON summary gains a matching `filesWithoutPlugin` count.
+  
+  ```
+  Checked 0 files out of 8 files.
+  Skipped 8 files because their tsconfig does not enable the @effect/language-service plugin.
+  0 errors, 0 warnings and 0 messages.
+  ```
+- dfa24e8: Fix `effectFnOpportunity` conversions to preserve enclosing expressions, sibling declarations, comments, literal spelling, and source formatting. Avoid suggesting conversions for function declarations referenced before their declaration.
+  
+  Wrap non-call pipe arguments in unary callbacks so they do not receive the converted function's arguments. For example, `.pipe(Effect.ignore)` becomes an `Effect.fn` pipeable `_ => Effect.ignore(_)`, while factory calls such as `Effect.map(f)` are retained.
+- 8d89b43: Deduplicate strictBooleanExpressions diagnostics when multiple union members display the same type name.
+- 7611be0: Preserve Effect plugin options in the Oxlint integration when `tsconfig.json` uses `extends`, whether the options are inherited or declared locally. For example, `effectFn: ["span", "inferred-span", "suggested-span"]` now enables the same `effect-fn-opportunity` reports as an inline configuration without `extends`.
+
+## 0.46.0
+
+### Minor Changes
+
+- 6db6fa6: Add the `catchIfTagToCatchTag` diagnostic and quick fix for replacing direct `_tag` equality predicates in `Effect.catchIf` with `Effect.catchTag`.
+- ae1ed02: Add the v4-only `catchRefailToTapError` diagnostic. It suggests `Effect.tapError` when an `Effect.catch` handler sequences an effect with `Effect.andThen` or a zero-argument `Effect.flatMap` callback and then fails with the original, unmodified error. Generator handlers and selective catches are excluded.
+- 437b17e: Retain the latest three stable Oxlint releases and the Oxlint runtimes required by the latest three stable Vite+ releases, including their compiler dependencies. Add versioned compatibility profiles so CI tests every distinct retained runtime pair.
+  
+  The refreshed upstream metadata supports Oxlint 1.77.0, 1.79.0, 1.80.0, 1.81.0, and 1.82.0, covering Vite+ 0.2.9, 0.3.0, and 0.3.1, and advances TypeScript next to 7.1.0-dev.20260911.1.
+- 223f9fa: Add the `flatMapIgnoredParamToAndThen` diagnostic and quick fix for replacing zero-parameter `Effect.flatMap` callbacks that return an existing constant Effect value with `Effect.andThen`. Existing diagnostics now also recognize Effect APIs referenced through constant aliases, and their quick fixes rebuild the replacement API from the source file's imported module name without modifying the shared alias.
+- 7173762: Add a `strict` diagnostic preset that promotes every default-enabled diagnostic to an error. Expose the complete preset catalog consistently through TypeScript setup and the generated Oxlint presets.
+- 9652243: Warn when `diagnosticSeverity` contains an unknown Effect rule name, including in overrides and inherited configurations. For example, `"floatingEfect": "error"` now reports `effect(unknownRuleName)` instead of being silently ignored.
+  
+  The check uses the fully merged configuration. Set `"unknownRuleName": "off"` to disable it or `"unknownRuleName": "error"` to raise its severity. Local keys are underlined in tsconfig; inherited keys without local syntax produce a diagnostic without a source location.
+
+### Patch Changes
+
+- f110e11: Restore compatibility with TypeScript 7.1.0-dev.20260924.1 by updating diagnostic generation and plugin parsing patches, adapting single-file diagnostic requests to the upstream snapshot API, and regenerating compiler shims and Nix inputs.
+- 7c0ddbc: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20260920.1), which ships [`TypeScript`](https://github.com/microsoft/TypeScript/commit/f29aeb9f825d96feea27841f3f7342dbf0df68a8) commit `f29aeb9f825d96feea27841f3f7342dbf0df68a8`, and update the repository toolchain to Go 1.27.
+
 ## 0.45.0
 
 ### Minor Changes

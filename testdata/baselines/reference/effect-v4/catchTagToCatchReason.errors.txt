@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/catchTagToCatchReason.ts(35,3): suggestion TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)
 /.src/catchTagToCatchReason.ts(48,3): suggestion TS377110: Branching on `error.reason._tag` inside `Effect.catchTag` hand-rolls reason dispatch; use `Effect.catchReason` or `Effect.catchReasons`, which re-fail unmatched reasons automatically. effect(catchTagToCatchReason)

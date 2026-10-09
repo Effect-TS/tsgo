@@ -88,7 +88,7 @@ type deterministicKeyMatch struct {
 
 func checkDeterministicKeyMatch(tp *typeparser.TypeParser, program checker.Program, c *checker.Checker, sf *ast.SourceFile, classNode *ast.Node, keyPatterns []etscore.KeyPattern, extendedKeyDetection bool) *DeterministicKeyMatch {
 	match := matchClassPattern(tp, c, sf, classNode, extendedKeyDetection)
-	if match == nil || match.keyStringLiteral == nil {
+	if match == nil || match.keyStringLiteral == nil || match.className == nil {
 		return nil
 	}
 
@@ -112,7 +112,7 @@ func checkDeterministicKeyMatch(tp *typeparser.TypeParser, program checker.Progr
 	}
 
 	// Get source file name
-	sourceFileName := sf.FileName()
+	sourceFileName := string(sf.FileName())
 
 	// Compute expected key
 	expectedKey := keybuilder.CreateString(sourceFileName, packageName, packageDirectory, classNameText, match.target, keyPatterns)
@@ -251,7 +251,7 @@ func matchCustomPattern(c *checker.Checker, _ *ast.SourceFile, classNode *ast.No
 // getPackageJsonDirectory gets the package.json directory for a source file from its metadata.
 func getPackageJsonDirectory(program checker.Program, _ *checker.Checker, sf *ast.SourceFile) string {
 	type metaProvider interface {
-		GetSourceFileMetaData(path tspath.Path) ast.SourceFileMetaData
+		GetSourceFileMetaData(path tspath.PathKey) ast.SourceFileMetaData
 	}
 
 	prog, ok := program.(metaProvider)
@@ -259,6 +259,6 @@ func getPackageJsonDirectory(program checker.Program, _ *checker.Checker, sf *as
 		return ""
 	}
 
-	meta := prog.GetSourceFileMetaData(sf.Path())
-	return meta.PackageJsonDirectory
+	meta := prog.GetSourceFileMetaData(ast.SourceFilePath(sf))
+	return string(meta.PackageJsonDirectory)
 }

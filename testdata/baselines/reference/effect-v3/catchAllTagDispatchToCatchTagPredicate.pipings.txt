@@ -1,0 +1,191 @@
+==== /.src/catchAllTagDispatchToCatchTagPredicate.ts (13 flows) ====
+
+=== Piping Flow ===
+Location: 21:22 - 25:2
+Node: program.pipe(\n  Fx.catchAll((error) => Predicate.isTagged(error, "NotFoundError")\n    ? Fx.succeed(error.id)\n    : Fx.fail(error))\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, AuthError | NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Fx.catchAll
+      args: [(error) => Predicate.isTagged(error, "NotFoundError")\n    ? Fx.succeed(error.id)\n    : Fx.fail(error)]
+      outType: Effect<string, AuthError | TimeoutError, never>
+
+=== Piping Flow ===
+Location: 22:25 - 22:68
+Node: Predicate.isTagged(error, "NotFoundError")
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AuthError | NotFoundError | TimeoutError
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Predicate.isTagged
+      args: ["NotFoundError"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 23:6 - 23:27
+Node: Fx.succeed(error.id)
+Node Kind: KindCallExpression
+
+Subject: error.id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 24:6 - 24:21
+Node: Fx.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AuthError | TimeoutError
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.fail
+      args: (constant)
+      outType: Effect<never, AuthError | TimeoutError, never>
+
+=== Piping Flow ===
+Location: 27:23 - 31:2
+Node: Fx.catchAll(program, (error) =>\n  Predicate.isTagged("TimeoutError")(error)\n    ? Fx.succeed(String(error.ms))\n    : Fx.fail(error)\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, AuthError | NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Fx.catchAll
+      args: [(error) =>\n  Predicate.isTagged("TimeoutError")(error)\n    ? Fx.succeed(String(error.ms))\n    : Fx.fail(error)]
+      outType: Effect<string, AuthError | NotFoundError, never>
+
+=== Piping Flow ===
+Location: 27:55 - 28:44
+Node: Predicate.isTagged("TimeoutError")(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AuthError | NotFoundError | TimeoutError
+
+Transformations (1):
+  [0] kind: call
+      callee: Predicate.isTagged
+      args: ["TimeoutError"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 29:6 - 29:35
+Node: Fx.succeed(String(error.ms))
+Node Kind: KindCallExpression
+
+Subject: error.ms
+Subject Type: number
+
+Transformations (2):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string
+  [1] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 30:6 - 30:21
+Node: Fx.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AuthError | NotFoundError
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.fail
+      args: (constant)
+      outType: Effect<never, AuthError | NotFoundError, never>
+
+=== Piping Flow ===
+Location: 33:21 - 39:2
+Node: program.pipe(\n  Fx.catchAll((error) => {\n    if (error._tag === "NotFoundError") return Fx.succeed(error.id)\n    if (Predicate.isTagged("TimeoutError")(error)) return Fx.succeed(String(error.ms))\n    return Fx.fail(error)\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<string, AuthError | NotFoundError | TimeoutError, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Fx.catchAll
+      args: [(error) => {\n    if (error._tag === "NotFoundError") return Fx.succeed(error.id)\n    if (Predicate.isTagged("TimeoutError")(error)) return Fx.succeed(String(error.ms))\n    return Fx.fail(error)\n  }]
+      outType: Effect<string, AuthError, never>
+
+=== Piping Flow ===
+Location: 35:47 - 35:68
+Node: Fx.succeed(error.id)
+Node Kind: KindCallExpression
+
+Subject: error.id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 36:9 - 36:50
+Node: Predicate.isTagged("TimeoutError")(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AuthError | TimeoutError
+
+Transformations (1):
+  [0] kind: call
+      callee: Predicate.isTagged
+      args: ["TimeoutError"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 36:58 - 36:87
+Node: Fx.succeed(String(error.ms))
+Node Kind: KindCallExpression
+
+Subject: error.ms
+Subject Type: number
+
+Transformations (2):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string
+  [1] kind: call
+      callee: Fx.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 37:11 - 37:26
+Node: Fx.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AuthError
+
+Transformations (1):
+  [0] kind: call
+      callee: Fx.fail
+      args: (constant)
+      outType: Effect<never, AuthError, never>

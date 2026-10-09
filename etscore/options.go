@@ -34,9 +34,6 @@ type EffectPluginOptions struct {
 	// Completions enables Effect completions in the language service.
 	Completions bool `json:"completions,omitzero" schema_description:"Controls Effect completions." schema_default:"true"`
 
-	// Debug enables extra debugging-oriented language service output.
-	Debug bool `json:"debug,omitzero" schema_description:"Enables additional debug-only Effect language service output." schema_default:"false"`
-
 	// Goto enables Effect goto/definition helpers in the language service.
 	Goto bool `json:"goto,omitzero" schema_description:"Controls Effect goto references support." schema_default:"true"`
 
@@ -103,8 +100,13 @@ type EffectPluginOptions struct {
 	// required to trigger the missedPipeableOpportunity diagnostic. Default: 2.
 	PipeableMinArgCount int `json:"pipeableMinArgCount,omitzero" schema_description:"Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity." schema_default:"2" schema_minimum:"1"`
 
-	// AllowedDuplicatedPackages is a list of package names that are allowed to
-	// have multiple versions without triggering the duplicatePackage diagnostic.
+	// AllowedUnstableApis allows unstable declaration modules, subtrees, or exports.
+	AllowedUnstableApis []string `json:"allowedUnstableApis,omitzero" schema_description:"Unstable APIs allowed by package/module subtree or package/module#export name." schema_default:"[]" schema_items_type:"string"`
+
+	// AllowedExperimentalApis allows experimental declaration modules, subtrees, or exports.
+	AllowedExperimentalApis []string `json:"allowedExperimentalApis,omitzero" schema_description:"Experimental APIs allowed by package/module subtree or package/module#export name." schema_default:"[]" schema_items_type:"string"`
+
+	// AllowedDuplicatedPackages permits multiple versions of these packages.
 	AllowedDuplicatedPackages []string `json:"allowedDuplicatedPackages,omitzero" schema_description:"Package names allowed to have multiple versions without triggering duplicatePackage." schema_default:"[]" schema_items_type:"string"`
 
 	// EffectFn controls which effectFnOpportunity quickfix variants are offered.
@@ -132,6 +134,8 @@ type ResolvedEffectPluginOptions struct {
 	ExtendedKeyDetection      bool
 	PipeableMinArgCount       int
 	AllowedDuplicatedPackages []string
+	AllowedUnstableApis       []string
+	AllowedExperimentalApis   []string
 	EffectFn                  []string
 }
 
@@ -152,6 +156,8 @@ type OverrideOptions struct {
 	PipeableMinArgCount       *int                `json:"pipeableMinArgCount,omitzero" schema_description:"Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity." schema_minimum:"1"`
 	KeyPatterns               *[]KeyPattern       `json:"keyPatterns,omitzero" schema_description:"Scoped key pattern configuration for deterministicKeys."`
 	ExtendedKeyDetection      *bool               `json:"extendedKeyDetection,omitzero" schema_description:"Scoped override for extended deterministic key detection."`
+	AllowedUnstableApis       *[]string           `json:"allowedUnstableApis,omitzero" schema_description:"Scoped allow-list for unstableApiUsage." schema_items_type:"string"`
+	AllowedExperimentalApis   *[]string           `json:"allowedExperimentalApis,omitzero" schema_description:"Scoped allow-list for experimentalApiUsage." schema_items_type:"string"`
 	AllowedDuplicatedPackages *[]string           `json:"allowedDuplicatedPackages,omitzero" schema_description:"Scoped allow-list for duplicatePackage." schema_items_type:"string"`
 	EffectFn                  *[]string           `json:"effectFn,omitzero" schema_description:"Scoped override for effectFn quickfix variants." schema_items_type:"string" schema_items_enum:"[\"span\",\"untraced\",\"no-span\",\"inferred-span\",\"suggested-span\"]" schema_unique_items:"true"`
 }
@@ -219,13 +225,6 @@ func (e *EffectPluginOptions) GetCompletionsEnabled() bool {
 		return true
 	}
 	return e.Completions
-}
-
-func (e *EffectPluginOptions) GetDebugEnabled() bool {
-	if e == nil {
-		return false
-	}
-	return e.Debug
 }
 
 // GetIncludeSuggestionsInTsc returns whether suggestion diagnostics should appear in tsc output.

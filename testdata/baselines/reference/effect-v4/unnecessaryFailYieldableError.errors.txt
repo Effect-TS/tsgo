@@ -1,12 +1,13 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
+/.src/unnecessaryFailYieldableError.ts(12,40): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
 /.src/unnecessaryFailYieldableError.ts(22,3): suggestion TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
 /.src/unnecessaryFailYieldableError.ts(23,3): suggestion TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
 /.src/unnecessaryFailYieldableError.ts(28,3): suggestion TS377019: This `yield* Effect.fail(...)` passes a yieldable error value. `yield*` represents that value directly without wrapping it in `Effect.fail`. effect(unnecessaryFailYieldableError)
 
 
-==== /.src/unnecessaryFailYieldableError.ts (3 errors) ====
+==== /.src/unnecessaryFailYieldableError.ts (4 errors) ====
     /** @effect-diagnostics missingReturnYieldStar:skip-file */
     import * as Data from "effect/Data"
     import * as Effect from "effect/Effect"
@@ -19,6 +20,8 @@ Effect version: 4.0.0
     class DataTaggedError extends Data.TaggedError("DataTaggedError")<{}> {}
     
     class SchemaError extends Schema.Error<SchemaError>("SchemaError")({
+                                           ~~~~~~~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       _tag: Schema.tag("SchemaError")
     }) {}
     

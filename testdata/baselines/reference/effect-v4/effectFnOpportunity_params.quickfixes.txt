@@ -37,10 +37,10 @@ import * as Effect from "effect/Effect"
 // These cases are okay and should trigger the diagnostic.
 // Functions with parameters can be converted to Effect.fn.
 
-export const arrowWithParams = Effect.fnUntraced(function* (a: number, b: string) {
-    yield* Effect.succeed(a);
-    return b;
-});
+export const arrowWithParams = Effect.fnUntraced(function*(a: number, b: string) {
+    yield* Effect.succeed(a)
+    return b
+  })
 
 export const functionExpressionWithParams = function(a: number, b: string) {
   return Effect.gen(function*() {
@@ -65,10 +65,10 @@ import * as Effect from "effect/Effect"
 // These cases are okay and should trigger the diagnostic.
 // Functions with parameters can be converted to Effect.fn.
 
-export const arrowWithParams = Effect.fn(function* (a: number, b: string) {
-    yield* Effect.succeed(a);
-    return b;
-});
+export const arrowWithParams = Effect.fn(function*(a: number, b: string) {
+    yield* Effect.succeed(a)
+    return b
+  })
 
 export const functionExpressionWithParams = function(a: number, b: string) {
   return Effect.gen(function*() {
@@ -93,10 +93,10 @@ import * as Effect from "effect/Effect"
 // These cases are okay and should trigger the diagnostic.
 // Functions with parameters can be converted to Effect.fn.
 
-export const arrowWithParams = Effect.fn("arrowWithParams")(function* (a: number, b: string) {
-    yield* Effect.succeed(a);
-    return b;
-});
+export const arrowWithParams = Effect.fn("arrowWithParams")(function*(a: number, b: string) {
+    yield* Effect.succeed(a)
+    return b
+  })
 
 export const functionExpressionWithParams = function(a: number, b: string) {
   return Effect.gen(function*() {
@@ -134,10 +134,10 @@ export const arrowWithParams = (a: number, b: string) => {
   })
 }
 
-export const functionExpressionWithParams = Effect.fnUntraced(function* (a: number, b: string) {
-    yield* Effect.succeed(a);
-    return b;
-});
+export const functionExpressionWithParams = Effect.fnUntraced(function*(a: number, b: string) {
+    yield* Effect.succeed(a)
+    return b
+  })
 
 export function functionDeclarationWithParams(a: number, b: string) {
   return Effect.gen(function*() {
@@ -162,10 +162,10 @@ export const arrowWithParams = (a: number, b: string) => {
   })
 }
 
-export const functionExpressionWithParams = Effect.fn(function* (a: number, b: string) {
-    yield* Effect.succeed(a);
-    return b;
-});
+export const functionExpressionWithParams = Effect.fn(function*(a: number, b: string) {
+    yield* Effect.succeed(a)
+    return b
+  })
 
 export function functionDeclarationWithParams(a: number, b: string) {
   return Effect.gen(function*() {
@@ -190,10 +190,10 @@ export const arrowWithParams = (a: number, b: string) => {
   })
 }
 
-export const functionExpressionWithParams = Effect.fn("functionExpressionWithParams")(function* (a: number, b: string) {
-    yield* Effect.succeed(a);
-    return b;
-});
+export const functionExpressionWithParams = Effect.fn("functionExpressionWithParams")(function*(a: number, b: string) {
+    yield* Effect.succeed(a)
+    return b
+  })
 
 export function functionDeclarationWithParams(a: number, b: string) {
   return Effect.gen(function*() {
@@ -231,10 +231,10 @@ export const functionExpressionWithParams = function(a: number, b: string) {
   })
 }
 
-export const functionDeclarationWithParams = Effect.fnUntraced(function* (a: number, b: string) {
-    yield* Effect.succeed(a);
-    return b;
-});
+export const functionDeclarationWithParams = Effect.fnUntraced(function*(a: number, b: string) {
+    yield* Effect.succeed(a)
+    return b
+  });
 
 
 === [D3] Fix 3: "Convert to Effect.fn (no span)" ===
@@ -259,10 +259,10 @@ export const functionExpressionWithParams = function(a: number, b: string) {
   })
 }
 
-export const functionDeclarationWithParams = Effect.fn(function* (a: number, b: string) {
-    yield* Effect.succeed(a);
-    return b;
-});
+export const functionDeclarationWithParams = Effect.fn(function*(a: number, b: string) {
+    yield* Effect.succeed(a)
+    return b
+  });
 
 
 === [D3] Fix 4: "Convert to Effect.fn(\"functionDeclarationWithParams\")" ===
@@ -287,8 +287,8 @@ export const functionExpressionWithParams = function(a: number, b: string) {
   })
 }
 
-export const functionDeclarationWithParams = Effect.fn("functionDeclarationWithParams")(function* (a: number, b: string) {
-    yield* Effect.succeed(a);
-    return b;
-});
+export const functionDeclarationWithParams = Effect.fn("functionDeclarationWithParams")(function*(a: number, b: string) {
+    yield* Effect.succeed(a)
+    return b
+  });
 

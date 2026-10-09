@@ -18,7 +18,7 @@ interface MetadataDocument {
   readonly presets: ReadonlyArray<DiagnosticPreset>
 }
 
-const metadata = metadataJson as MetadataDocument
+const metadata = metadataJson as unknown as MetadataDocument
 
 const severityRank: Record<RuleSeverity, number> = {
   off: 0,

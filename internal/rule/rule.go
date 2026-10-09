@@ -37,6 +37,12 @@ type Rule struct {
 	Run func(ctx *Context) []*ast.Diagnostic
 }
 
+// Configurable diagnostics that run outside the source-file rule registry.
+const (
+	UnusedDirectiveName = "unusedDirective"
+	UnknownRuleNameName = "unknownRuleName"
+)
+
 // ByName finds a rule by name in a slice. Returns nil if not found.
 func ByName(rules []Rule, name string) *Rule {
 	for i := range rules {

@@ -1,12 +1,15 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
+
+/.src/overriddenSchemaConstructor_valid.ts(3,41): suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
 
 
-
-==== /.src/overriddenSchemaConstructor_valid.ts (0 errors) ====
+==== /.src/overriddenSchemaConstructor_valid.ts (1 errors) ====
     import * as Schema from "effect/Schema"
     
     export class Valid extends Schema.Class<Valid>("Valid")({
+                                            ~~~~~
+!!! suggestion TS377141: Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)
       a: Schema.Finite
     }) {
       protected constructor(a: Valid, options: Schema.MakeOptions) {

@@ -7,6 +7,7 @@ import (
 	"context"
 
 	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/effectconfigcheck"
 	"github.com/effect-ts/tsgo/internal/effectconfigraw"
 	"github.com/effect-ts/tsgo/internal/rulerunner"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
@@ -19,6 +20,7 @@ func init() {
 	// Set the version suffix so that core.Version() includes the Effect version
 	core.SetVersionSuffix("+effect-tsgo." + etscore.EffectVersion)
 	effectconfigraw.Register()
+	effectconfigcheck.Register()
 	// Register the after check source file callback
 	checker.RegisterAfterCheckSourceFileCallback(afterCheckSourceFile)
 }

@@ -107,8 +107,12 @@ func Checker_isReadonlySymbol(recv *checker.Checker, symbol *ast.Symbol) bool
 func Checker_getSymbolIfSameReference(recv *checker.Checker, s1 *ast.Symbol, s2 *ast.Symbol) *ast.Symbol
 //go:linkname Checker_getSymbolOfDeclaration github.com/microsoft/typescript-go/internal/checker.(*Checker).getSymbolOfDeclaration
 func Checker_getSymbolOfDeclaration(recv *checker.Checker, node *ast.Node) *ast.Symbol
+//go:linkname Checker_getMembersOfSymbol github.com/microsoft/typescript-go/internal/checker.(*Checker).getMembersOfSymbol
+func Checker_getMembersOfSymbol(recv *checker.Checker, symbol *ast.Symbol) ast.SymbolTable
 //go:linkname Checker_getIndexInfosOfType github.com/microsoft/typescript-go/internal/checker.(*Checker).getIndexInfosOfType
 func Checker_getIndexInfosOfType(recv *checker.Checker, t *checker.Type) []*checker.IndexInfo
+//go:linkname Checker_getSignaturesOfSymbol github.com/microsoft/typescript-go/internal/checker.(*Checker).getSignaturesOfSymbol
+func Checker_getSignaturesOfSymbol(recv *checker.Checker, symbol *ast.Symbol) []*checker.Signature
 //go:linkname Checker_getTypeArguments github.com/microsoft/typescript-go/internal/checker.(*Checker).getTypeArguments
 func Checker_getTypeArguments(recv *checker.Checker, t *checker.Type) []*checker.Type
 //go:linkname Checker_getTypeParameterFromMappedType github.com/microsoft/typescript-go/internal/checker.(*Checker).getTypeParameterFromMappedType
@@ -125,6 +129,8 @@ func Checker_isArrayType(recv *checker.Checker, t *checker.Type) bool
 func Checker_isReadonlyArrayType(recv *checker.Checker, t *checker.Type) bool
 //go:linkname Checker_evaluateEntity github.com/microsoft/typescript-go/internal/checker.(*Checker).evaluateEntity
 func Checker_evaluateEntity(recv *checker.Checker, expr *ast.Node, location *ast.Node) evaluator.Result
+//go:linkname Checker_newIndexInfo github.com/microsoft/typescript-go/internal/checker.(*Checker).newIndexInfo
+func Checker_newIndexInfo(recv *checker.Checker, keyType *checker.Type, valueType *checker.Type, isReadonly bool, declaration *ast.Node, components []*ast.Node) *checker.IndexInfo
 //go:linkname Checker_getLiteralTypeFromProperty github.com/microsoft/typescript-go/internal/checker.(*Checker).getLiteralTypeFromProperty
 func Checker_getLiteralTypeFromProperty(recv *checker.Checker, prop *ast.Symbol, include checker.TypeFlags, includeNonPublic bool) *checker.Type
 //go:linkname Checker_isNoInferType github.com/microsoft/typescript-go/internal/checker.(*Checker).isNoInferType
@@ -488,6 +494,27 @@ func Checker_declaredTypeLinks(v *checker.Checker) core.LinkStore[*ast.Symbol, c
 func Checker_typeNodeLinks(v *checker.Checker) core.LinkStore[*ast.Node, checker.TypeNodeLinks] {
   return ((*extra_Checker)(unsafe.Pointer(v))).typeNodeLinks
 }
+func Checker_sourceFileLinks(v *checker.Checker) core.LinkStore[*ast.SourceFile, checker.SourceFileLinks] {
+  return ((*extra_Checker)(unsafe.Pointer(v))).sourceFileLinks
+}
+func Checker_unknownSymbol(v *checker.Checker) *ast.Symbol {
+  return ((*extra_Checker)(unsafe.Pointer(v))).unknownSymbol
+}
+func Checker_noConstraintType(v *checker.Checker) *checker.Type {
+  return ((*extra_Checker)(unsafe.Pointer(v))).noConstraintType
+}
+func Checker_circularConstraintType(v *checker.Checker) *checker.Type {
+  return ((*extra_Checker)(unsafe.Pointer(v))).circularConstraintType
+}
+func Checker_resolvingDefaultType(v *checker.Checker) *checker.Type {
+  return ((*extra_Checker)(unsafe.Pointer(v))).resolvingDefaultType
+}
+func Checker_ctx(v *checker.Checker) context.Context {
+  return ((*extra_Checker)(unsafe.Pointer(v))).ctx
+}
+func Checker_nonPrimitiveType(v *checker.Checker) *checker.Type {
+  return ((*extra_Checker)(unsafe.Pointer(v))).nonPrimitiveType
+}
 //go:linkname CompareTypes github.com/microsoft/typescript-go/internal/checker.CompareTypes
 func CompareTypes(t1 *checker.Type, t2 *checker.Type) int
 type CompositeSignature = checker.CompositeSignature
@@ -495,7 +522,42 @@ type CompositeSymbolIdentity = checker.CompositeSymbolIdentity
 type CompositeTypeCacheIdentity = checker.CompositeTypeCacheIdentity
 type CompositeTypeMapper = checker.CompositeTypeMapper
 type ConditionalRoot = checker.ConditionalRoot
+type extra_ConditionalRoot struct {
+  node *ast.ConditionalTypeNode
+  checkType *checker.Type
+  extendsType *checker.Type
+  isDistributive bool
+  inferTypeParameters []*checker.Type
+  outerTypeParameters []*checker.Type
+  instantiations map[checker.CacheHashKey]*checker.Type
+  alias *checker.TypeAlias
+}
+func ConditionalRoot_node(v *checker.ConditionalRoot) *ast.ConditionalTypeNode {
+  return ((*extra_ConditionalRoot)(unsafe.Pointer(v))).node
+}
 type ConditionalType = checker.ConditionalType
+type extra_ConditionalType struct {
+  checker.ConstrainedType
+  root *checker.ConditionalRoot
+  checkType *checker.Type
+  extendsType *checker.Type
+  resolvedTrueType *checker.Type
+  resolvedFalseType *checker.Type
+  resolvedInferredTrueType *checker.Type
+  resolvedDefaultConstraint *checker.Type
+  resolvedConstraintOfDistributive *checker.Type
+  mapper *checker.TypeMapper
+  combinedMapper *checker.TypeMapper
+}
+func ConditionalType_resolvedTrueType(v *checker.ConditionalType) *checker.Type {
+  return ((*extra_ConditionalType)(unsafe.Pointer(v))).resolvedTrueType
+}
+func ConditionalType_resolvedFalseType(v *checker.ConditionalType) *checker.Type {
+  return ((*extra_ConditionalType)(unsafe.Pointer(v))).resolvedFalseType
+}
+func ConditionalType_root(v *checker.ConditionalType) *checker.ConditionalRoot {
+  return ((*extra_ConditionalType)(unsafe.Pointer(v))).root
+}
 type ConstrainedType = checker.ConstrainedType
 type ContainingSymbolLinks = checker.ContainingSymbolLinks
 type ContextFlags = checker.ContextFlags
@@ -671,6 +733,26 @@ type InheritanceInfo = checker.InheritanceInfo
 type InstantiationExpressionKey = checker.InstantiationExpressionKey
 type InstantiationExpressionType = checker.InstantiationExpressionType
 type InterfaceType = checker.InterfaceType
+type extra_InterfaceType struct {
+  checker.TypeReference
+  allTypeParameters []*checker.Type
+  outerTypeParameterCount int
+  thisType *checker.Type
+  baseTypesResolved bool
+  declaredMembersResolved bool
+  resolvedBaseConstructorType *checker.Type
+  resolvedBaseTypes []*checker.Type
+  declaredMembers ast.SymbolTable
+  declaredCallSignatures []*checker.Signature
+  declaredConstructSignatures []*checker.Signature
+  declaredIndexInfos []*checker.IndexInfo
+}
+func InterfaceType_baseTypesResolved(v *checker.InterfaceType) bool {
+  return ((*extra_InterfaceType)(unsafe.Pointer(v))).baseTypesResolved
+}
+func InterfaceType_resolvedBaseTypes(v *checker.InterfaceType) []*checker.Type {
+  return ((*extra_InterfaceType)(unsafe.Pointer(v))).resolvedBaseTypes
+}
 type IntersectionFlags = checker.IntersectionFlags
 const IntersectionFlagsNoConstraintReduction = checker.IntersectionFlagsNoConstraintReduction
 const IntersectionFlagsNoSupertypeReduction = checker.IntersectionFlagsNoSupertypeReduction
@@ -749,6 +831,26 @@ type LiteralType = checker.LiteralType
 const MAX_REVERSE_MAPPED_NESTING_INSPECTION_DEPTH = checker.MAX_REVERSE_MAPPED_NESTING_INSPECTION_DEPTH
 type MappedSymbolLinks = checker.MappedSymbolLinks
 type MappedType = checker.MappedType
+type extra_MappedType struct {
+  checker.ObjectType
+  declaration *ast.MappedTypeNode
+  typeParameter *checker.Type
+  constraintType *checker.Type
+  nameType *checker.Type
+  templateType *checker.Type
+  modifiersType *checker.Type
+  resolvedApparentType *checker.Type
+  containsError bool
+}
+func MappedType_constraintType(v *checker.MappedType) *checker.Type {
+  return ((*extra_MappedType)(unsafe.Pointer(v))).constraintType
+}
+func MappedType_nameType(v *checker.MappedType) *checker.Type {
+  return ((*extra_MappedType)(unsafe.Pointer(v))).nameType
+}
+func MappedType_templateType(v *checker.MappedType) *checker.Type {
+  return ((*extra_MappedType)(unsafe.Pointer(v))).templateType
+}
 type MappedTypeModifiers = checker.MappedTypeModifiers
 const MappedTypeModifiersExcludeOptional = checker.MappedTypeModifiersExcludeOptional
 const MappedTypeModifiersExcludeReadonly = checker.MappedTypeModifiersExcludeReadonly
@@ -914,6 +1016,25 @@ type ReverseMappedTypeKey = checker.ReverseMappedTypeKey
 type SerializedTypeEntry = checker.SerializedTypeEntry
 type SharedFlow = checker.SharedFlow
 type Signature = checker.Signature
+type extra_Signature struct {
+  id checker.SignatureId
+  flags checker.SignatureFlags
+  minArgumentCount int32
+  resolvedMinArgumentCount int32
+  declaration *ast.Node
+  typeParameters []*checker.Type
+  parameters []*ast.Symbol
+  thisParameter *ast.Symbol
+  resolvedReturnType *checker.Type
+  resolvedTypePredicate *checker.TypePredicate
+  target *checker.Signature
+  mapper *checker.TypeMapper
+  isolatedSignatureType *checker.Type
+  composite *checker.CompositeSignature
+}
+func Signature_resolvedReturnType(v *checker.Signature) *checker.Type {
+  return ((*extra_Signature)(unsafe.Pointer(v))).resolvedReturnType
+}
 type SignatureCheckMode = checker.SignatureCheckMode
 const SignatureCheckModeBivariantCallback = checker.SignatureCheckModeBivariantCallback
 const SignatureCheckModeCallback = checker.SignatureCheckModeCallback
@@ -950,11 +1071,43 @@ type SimpleTypeMapper = checker.SimpleTypeMapper
 //go:linkname SkipAlias github.com/microsoft/typescript-go/internal/checker.SkipAlias
 func SkipAlias(symbol *ast.Symbol, checker *checker.Checker) *ast.Symbol
 type SourceFileLinks = checker.SourceFileLinks
+type extra_SourceFileLinks struct {
+  typeChecked bool
+  unusedChecked bool
+  externalHelpersModule *ast.Symbol
+  requestedExternalEmitHelpers checker.ExternalEmitHelpers
+  deferredNodes collections.OrderedSet[*ast.Node]
+  identifierCheckNodes []*ast.Node
+  localJsxNamespace string
+  localJsxFragmentNamespace string
+  localJsxFactory *ast.EntityName
+  localJsxFragmentFactory *ast.EntityName
+  jsxFragmentType *checker.Type
+  relationErrors []*checker.RelationError
+}
+func SourceFileLinks_typeChecked(v *checker.SourceFileLinks) bool {
+  return ((*extra_SourceFileLinks)(unsafe.Pointer(v))).typeChecked
+}
 type SpreadLinks = checker.SpreadLinks
 type StringLiteralType = checker.StringLiteralType
 type StringMappingKey = checker.StringMappingKey
 type StringMappingType = checker.StringMappingType
 type StructuredType = checker.StructuredType
+type extra_StructuredType struct {
+  checker.ConstrainedType
+  members ast.SymbolTable
+  properties []*ast.Symbol
+  signatures []*checker.Signature
+  callSignatureCount int
+  indexInfos []*checker.IndexInfo
+  objectTypeWithoutAbstractConstructSignatures *checker.Type
+}
+func StructuredType_members(v *checker.StructuredType) ast.SymbolTable {
+  return ((*extra_StructuredType)(unsafe.Pointer(v))).members
+}
+func StructuredType_indexInfos(v *checker.StructuredType) []*checker.IndexInfo {
+  return ((*extra_StructuredType)(unsafe.Pointer(v))).indexInfos
+}
 type SubstitutionType = checker.SubstitutionType
 type SubstitutionTypeKey = checker.SubstitutionTypeKey
 type SwitchStatementLinks = checker.SwitchStatementLinks
@@ -1206,6 +1359,20 @@ func TypeNodeLinks_resolvedType(v *checker.TypeNodeLinks) *checker.Type {
   return ((*extra_TypeNodeLinks)(unsafe.Pointer(v))).resolvedType
 }
 type TypeParameter = checker.TypeParameter
+type extra_TypeParameter struct {
+  checker.ConstrainedType
+  constraint *checker.Type
+  target *checker.Type
+  mapper *checker.TypeMapper
+  isThisType bool
+  resolvedDefaultType *checker.Type
+}
+func TypeParameter_constraint(v *checker.TypeParameter) *checker.Type {
+  return ((*extra_TypeParameter)(unsafe.Pointer(v))).constraint
+}
+func TypeParameter_resolvedDefaultType(v *checker.TypeParameter) *checker.Type {
+  return ((*extra_TypeParameter)(unsafe.Pointer(v))).resolvedDefaultType
+}
 type TypePredicate = checker.TypePredicate
 type TypePredicateKind = checker.TypePredicateKind
 const TypePredicateKindAssertsIdentifier = checker.TypePredicateKindAssertsIdentifier
@@ -1213,6 +1380,14 @@ const TypePredicateKindAssertsThis = checker.TypePredicateKindAssertsThis
 const TypePredicateKindIdentifier = checker.TypePredicateKindIdentifier
 const TypePredicateKindThis = checker.TypePredicateKindThis
 type TypeReference = checker.TypeReference
+type extra_TypeReference struct {
+  checker.ObjectType
+  node *ast.Node
+  resolvedTypeArguments []*checker.Type
+}
+func TypeReference_resolvedTypeArguments(v *checker.TypeReference) []*checker.Type {
+  return ((*extra_TypeReference)(unsafe.Pointer(v))).resolvedTypeArguments
+}
 type TypeResolution = checker.TypeResolution
 type TypeSystemEntity = checker.TypeSystemEntity
 type TypeSystemPropertyName = checker.TypeSystemPropertyName
@@ -1252,6 +1427,9 @@ func ValueSymbolLinks_resolvedType(v *checker.ValueSymbolLinks) *checker.Type {
 }
 func ValueSymbolLinks_writeType(v *checker.ValueSymbolLinks) *checker.Type {
   return ((*extra_ValueSymbolLinks)(unsafe.Pointer(v))).writeType
+}
+func ValueSymbolLinks_mapper(v *checker.ValueSymbolLinks) *checker.TypeMapper {
+  return ((*extra_ValueSymbolLinks)(unsafe.Pointer(v))).mapper
 }
 //go:linkname ValueToString github.com/microsoft/typescript-go/internal/checker.ValueToString
 func ValueToString(value any) string

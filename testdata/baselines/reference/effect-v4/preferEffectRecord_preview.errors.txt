@@ -1,0 +1,17 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/preferEffectRecord_preview.ts(6,30): warning TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+
+
+==== /.src/preferEffectRecord_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferEffectRecord:warning
+    import * as Record from "effect/Record"
+    
+    const scores = { alice: 1, bob: 2 }
+    export const native = Object.entries(scores)
+                                 ~~~~~~~
+!!! warning TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+    export const preferred = Record.toEntries(scores)
+    

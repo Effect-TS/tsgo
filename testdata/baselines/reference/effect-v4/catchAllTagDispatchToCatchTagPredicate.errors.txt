@@ -1,0 +1,54 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/catchAllTagDispatchToCatchTagPredicate.ts(21,3): suggestion TS377122: Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
+/.src/catchAllTagDispatchToCatchTagPredicate.ts(26,24): suggestion TS377122: Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
+/.src/catchAllTagDispatchToCatchTagPredicate.ts(33,3): suggestion TS377122: Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
+
+
+==== /.src/catchAllTagDispatchToCatchTagPredicate.ts (3 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics catchAllTagDispatchToCatchTag:suggestion
+    // @effect-diagnostics catchConditionalRefailToCatchIf:suggestion
+    import { Effect as Fx, Predicate } from "effect"
+    
+    class NotFoundError {
+      readonly _tag = "NotFoundError"
+      constructor(readonly id: string) {}
+    }
+    class TimeoutError {
+      readonly _tag = "TimeoutError"
+      constructor(readonly ms: number) {}
+    }
+    class AuthError {
+      readonly _tag = "AuthError"
+    }
+    
+    declare const program: Fx.Effect<string, NotFoundError | TimeoutError | AuthError>
+    
+    export const direct = program.pipe(
+      Fx.catch((error) => Predicate.isTagged(error, "NotFoundError")
+      ~~~~~~~~
+!!! suggestion TS377122: Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
+        ? Fx.succeed(error.id)
+        : Fx.fail(error))
+    )
+    
+    export const curried = Fx.catch(program, (error) =>
+                           ~~~~~~~~
+!!! suggestion TS377122: Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
+      Predicate.isTagged("TimeoutError")(error)
+        ? Fx.succeed(String(error.ms))
+        : Fx.fail(error)
+    )
+    
+    export const mixed = program.pipe(
+      Fx.catch((error) => {
+      ~~~~~~~~
+!!! suggestion TS377122: Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
+        if (error._tag === "NotFoundError") return Fx.succeed(error.id)
+        if (Predicate.isTagged("TimeoutError")(error)) return Fx.succeed(String(error.ms))
+        return Fx.fail(error)
+      })
+    )
+    

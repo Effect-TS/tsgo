@@ -1,6 +1,7 @@
 package effecttest_test
 
 import (
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 	"os"
 	"path/filepath"
 	"slices"
@@ -37,7 +38,7 @@ func verifyLocalBaselineInlayHints(t *testing.T, f *fourslash.FourslashTest, tes
 	}
 
 	params := &lsproto.InlayHintParams{
-		TextDocument: lsproto.TextDocumentIdentifier{Uri: lsconv.FileNameToDocumentURI(fileName)},
+		TextDocument: lsproto.TextDocumentIdentifier{Uri: lsconv.FileNameToDocumentURI(tspath.RootedFilePath(fileName))},
 		Range: lsproto.Range{
 			Start: lsproto.Position{Line: 0, Character: 0},
 			End:   end,
@@ -70,7 +71,7 @@ func mustFindFourslashFileContent(t *testing.T, testContent string, fileName str
 
 	parsed := fourslash.ParseTestData(t, testContent, localInlayBaselineFileName(t)+".ts")
 	for _, file := range parsed.Files {
-		if file.FileName() == fileName {
+		if string(file.FileName()) == fileName {
 			return file.Content
 		}
 	}
@@ -90,7 +91,7 @@ func formatInlayHintBaseline(t *testing.T, fileContent string, result lsproto.In
 		for _, hint := range *result.InlayHints {
 			if hint.Label.InlayHintLabelParts != nil {
 				for _, part := range *hint.Label.InlayHintLabelParts {
-					if part.Location != nil && isLibFile(part.Location.Uri.FileName()) {
+					if part.Location != nil && isLibFile(string(part.Location.Uri.FileName())) {
 						part.Location.Range.Start = lsproto.Position{Line: 0, Character: 0}
 						part.Location.Range.End = lsproto.Position{Line: 0, Character: 0}
 					}
