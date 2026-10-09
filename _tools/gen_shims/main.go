@@ -1346,7 +1346,7 @@ func run() error {
 											string
 											*types.Struct
 										}{n, strct})
-										shimBuilder.WriteString("extra_")
+										shimBuilder.WriteString("*extra_")
 										shimBuilder.WriteString(n)
 										continue
 									}

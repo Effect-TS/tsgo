@@ -266,6 +266,7 @@ type extra_Checker struct {
   ReverseMappedSymbolLinks core.LinkStore[*ast.Symbol, checker.ReverseMappedSymbolLinks]
   markedAssignmentSymbolLinks core.LinkStore[*ast.Symbol, checker.MarkedAssignmentSymbolLinks]
   symbolContainerLinks core.LinkStore[*ast.Symbol, checker.ContainingSymbolLinks]
+  externalModuleContainers *extra_externalModuleContainerIndex
   sourceFileLinks core.LinkStore[*ast.SourceFile, checker.SourceFileLinks]
   regExpScanner *scanner.Scanner
   patternForType map[*checker.Type]*ast.Node
@@ -474,6 +475,11 @@ type extra_Checker struct {
   typeToStringNodebuilder *checker.NodeBuilder
   mu sync.Mutex
   tracer *checker.Tracer
+}
+type extra_externalModuleContainerIndex struct {
+  complete bool
+  containersByTarget map[*ast.Symbol][]*ast.Symbol
+  moduleOrder map[*ast.Symbol]int
 }
 func Checker_getGlobalPromiseTypeChecked(v *checker.Checker) func() *checker.Type {
   return ((*extra_Checker)(unsafe.Pointer(v))).getGlobalPromiseTypeChecked
