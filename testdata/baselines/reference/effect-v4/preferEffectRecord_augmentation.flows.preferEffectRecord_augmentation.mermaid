@@ -1,0 +1,20 @@
+flowchart TB
+  0[/"type: #123; a: number; #125;<br/>node: #123; a: 1 #125;"/]
+  1[/"type: #quot;a#quot;#91;#93;<br/>node: Object.keys#40;data#41;"/]
+  2[/"type: #quot;a#quot;#91;#93;<br/>node: Object#91;#quot;keys#quot;#93;#40;data#41;"/]
+  3[/"type: boolean<br/>node: data.hasOwnProperty#40;#quot;a#quot;#41;"/]
+  4[/"type: boolean<br/>node: Object.prototype.hasOwnProperty.call#40;data, #quot;a#quot;#41;"/]
+  5[/"type: number#91;#93;<br/>node: Object.values#40;data#41;"/]
+  6[/"type: boolean<br/>node: Object.hasOwn#40;data, #quot;a#quot;#41;"/]
+  7[/"type: #123; a: number; #125;<br/>node: data"/]
+  8["type: number#91;#93;<br/>callee: R.values<br/>args: #91;#93;"]
+  9[/"type: #lt;K extends string, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; A#91;#93;<br/>node: R.values"/]
+  10[/"type: #123; a: number; #125;<br/>node: data"/]
+  11["type: boolean<br/>callee: <br/>args: #91;#93;"]
+  12[/"type: #123; #lt;K extends string #124; symbol#gt;#40;key: NoInfer#lt;K#gt;#41;: #lt;A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; boolean; #lt;K extends string #124; symbol, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;, key: NoInfer#lt;K#gt;#41;: boolean; #125;<br/>node: R.has"/]
+  13[/"type: #quot;a#quot;<br/>node: #quot;a#quot;"/]
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 8
+  10 -->|"kind: pipe"| 11
+  12 -->|"kind: transformCallee"| 10
+  13 -->|"kind: transformArg"| 10

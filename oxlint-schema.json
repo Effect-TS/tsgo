@@ -2479,6 +2479,9 @@
         "effecttsgo/prefer-effect-array": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/prefer-effect-record": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/prefer-schema-over-json": {
           "$ref": "#/definitions/RuleNoConfig"
         },
