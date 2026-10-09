@@ -562,5 +562,9 @@
     "Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)": {
         "category": "Suggestion",
         "code": 377142
+    },
+    "Consider effect/Record.{0} instead of native {1}. {2} effect(preferEffectRecord)": {
+        "category": "Warning",
+        "code": 377143
     }
 }

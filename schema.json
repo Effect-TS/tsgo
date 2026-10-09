@@ -2708,6 +2708,11 @@
           "default": "off",
           "description": "Suggests Effect Array APIs for native array member references, with semantic caveats"
         },
+        "preferEffectRecord": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests Effect Record APIs for native Object member references, with semantic caveats"
+        },
         "preferSchemaOverJson": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",

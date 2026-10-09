@@ -1,0 +1,8 @@
+flowchart TB
+  0[/"type: #123; alice: number; bob: number; #125;<br/>node: #123; alice: 1, bob: 2 #125;"/]
+  1[/"type: #91;string, number#93;#91;#93;<br/>node: Object.entries#40;scores#41;"/]
+  2[/"type: #123; alice: number; bob: number; #125;<br/>node: scores"/]
+  3["type: #91;#quot;alice#quot; #124; #quot;bob#quot;, number#93;#91;#93;<br/>callee: Record.toEntries<br/>args: #91;#93;"]
+  4[/"type: #lt;K extends string, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; #91;K, A#93;#91;#93;<br/>node: Record.toEntries"/]
+  2 -->|"kind: pipe"| 3
+  4 -->|"kind: transformCallee"| 3

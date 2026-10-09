@@ -23,6 +23,7 @@
     "effecttsgo/effect-fn-opportunity": "warn",
     "effecttsgo/effect-map-flatten": "warn",
     "effecttsgo/effect-map-void": "warn",
+    "effecttsgo/effect-sleep-zero-to-yield-now": "warn",
     "effecttsgo/effect-succeed-with-void": "warn",
     "effecttsgo/flat-map-conditional-to-filter-or-fail": "warn",
     "effecttsgo/flat-map-ignored-param-to-and-then": "warn",
