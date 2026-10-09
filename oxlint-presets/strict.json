@@ -30,6 +30,7 @@
     "effecttsgo/effect-in-void-success": "error",
     "effecttsgo/effect-map-flatten": "error",
     "effecttsgo/effect-map-void": "error",
+    "effecttsgo/effect-sleep-zero-to-yield-now": "error",
     "effecttsgo/effect-succeed-with-void": "error",
     "effecttsgo/experimental-api-usage": "error",
     "effecttsgo/flat-map-conditional-to-filter-or-fail": "error",

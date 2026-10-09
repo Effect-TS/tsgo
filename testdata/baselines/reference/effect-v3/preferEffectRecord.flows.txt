@@ -1,0 +1,2 @@
+/.src/preferEffectRecord.ts -> preferEffectRecord.flows.preferEffectRecord.mermaid
+/.src/aliases.ts -> preferEffectRecord.flows.aliases.mermaid

@@ -30,6 +30,7 @@
     "effecttsgo/effect-in-void-success": "warn",
     "effecttsgo/effect-map-flatten": "warn",
     "effecttsgo/effect-map-void": "warn",
+    "effecttsgo/effect-sleep-zero-to-yield-now": "warn",
     "effecttsgo/effect-succeed-with-void": "warn",
     "effecttsgo/experimental-api-usage": "warn",
     "effecttsgo/flat-map-conditional-to-filter-or-fail": "warn",

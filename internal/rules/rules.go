@@ -59,6 +59,7 @@ var All = []rule.Rule{
 	GlobalRandom,
 	GlobalRandomInEffect,
 	PreferEffectArray,
+	PreferEffectRecord,
 	GlobalTimers,
 	GlobalTimersInEffect,
 	RunEffectInsideEffect,
