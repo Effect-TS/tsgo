@@ -59,11 +59,12 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 
 	// Schema.TaggedError (both v3 and v4)
 	if isFullyQualified || tp.IsNodeReferenceToEffectSchemaModuleApi(data.AccessedObject, "TaggedError") {
+		errorKey := computeDeterministicKey(ctx.Program, tp, ctx.Checker, ctx.SourceFile, className, "error")
 		var insertText string
 		if isFullyQualified {
-			insertText = fmt.Sprintf(`%s.TaggedError<%s>()("%s", {${0}}){}`, schemaIdentifier, schemaTypeArgs, className)
+			insertText = fmt.Sprintf(`%s.TaggedError<%s>()("%s", {${0}}){}`, schemaIdentifier, schemaTypeArgs, errorKey)
 		} else {
-			insertText = fmt.Sprintf(`TaggedError<%s>()("%s", {${0}}){}`, schemaTypeArgs, className)
+			insertText = fmt.Sprintf(`TaggedError<%s>()("%s", {${0}}){}`, schemaTypeArgs, errorKey)
 		}
 		items = append(items, makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf("TaggedError<%s>", className),
