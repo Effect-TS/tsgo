@@ -2326,6 +2326,9 @@
         "effecttsgo/effect-map-void": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/effect-sleep-zero-to-yield-now": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/effect-succeed-with-void": {
           "$ref": "#/definitions/RuleNoConfig"
         },

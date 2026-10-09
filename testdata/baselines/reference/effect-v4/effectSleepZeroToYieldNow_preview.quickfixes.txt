@@ -1,0 +1,22 @@
+=== Quick Fix Inventory ===
+
+[D1] (3:33-3:45) TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+  Fix 0: "Disable effectSleepZeroToYieldNow for this line"
+  Fix 1: "Disable effectSleepZeroToYieldNow for entire file"
+  Fix 2: "Replace with Effect.yieldNow"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectSleepZeroToYieldNow for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectSleepZeroToYieldNow for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.yieldNow" ===
+
+--- file:///.src/effectSleepZeroToYieldNow_preview.ts ---
+import { Effect } from "effect"
+
+export const cooperativeYield = Effect.yieldNow
+

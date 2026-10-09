@@ -558,5 +558,9 @@
     "Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)": {
         "category": "Suggestion",
         "code": 377141
+    },
+    "Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)": {
+        "category": "Suggestion",
+        "code": 377142
     }
 }
