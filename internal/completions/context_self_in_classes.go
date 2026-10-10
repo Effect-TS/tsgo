@@ -33,7 +33,7 @@ func runContextSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem 
 	className := data.ClassNameText()
 	replacementRange := byteSpanToRange(ctx, data.ReplacementStart, data.ReplacementLength)
 	sortText := "11"
-	tagKey := computeServiceTagKey(ctx.Program, tp, ch, ctx.SourceFile, className)
+	tagKey := computeDeterministicKey(ctx.Program, tp, ch, ctx.SourceFile, className, "service")
 
 	contextIdentifier := typeparser.FindModuleIdentifier(ctx.SourceFile, "Context")
 	accessedText := data.AccessedObjectText()
@@ -92,9 +92,10 @@ func runContextSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem 
 	return items
 }
 
-// computeServiceTagKey computes the deterministic tag key for a service class.
+// computeDeterministicKey computes the key the deterministicKeys rule expects for a class
+// of the given target ("service" or "error").
 // Falls back to the class name if keybuilder returns empty.
-func computeServiceTagKey(program checker.Program, tp *typeparser.TypeParser, ch *checker.Checker, sf *ast.SourceFile, className string) string {
+func computeDeterministicKey(program checker.Program, tp *typeparser.TypeParser, ch *checker.Checker, sf *ast.SourceFile, className string, target string) string {
 	pkgJson := tp.PackageJsonForSourceFile(sf)
 	if pkgJson == nil {
 		return className
@@ -121,7 +122,7 @@ func computeServiceTagKey(program checker.Program, tp *typeparser.TypeParser, ch
 	)
 	keyPatterns := resolvedOptions.GetKeyPatterns()
 
-	key := keybuilder.CreateString(string(sf.FileName()), packageName, packageDirectory, className, "service", keyPatterns)
+	key := keybuilder.CreateString(string(sf.FileName()), packageName, packageDirectory, className, target, keyPatterns)
 	if key == "" {
 		return className
 	}

@@ -38,7 +38,7 @@ func runEffectSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 	className := data.ClassNameText()
 
 	// Compute deterministic tag key
-	tagKey := computeServiceTagKey(ctx.Program, tp, ch, ctx.SourceFile, className)
+	tagKey := computeDeterministicKey(ctx.Program, tp, ch, ctx.SourceFile, className, "service")
 
 	// Build replacement range from byte offsets
 	replacementRange := byteSpanToRange(ctx, data.ReplacementStart, data.ReplacementLength)
