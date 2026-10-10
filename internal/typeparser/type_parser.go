@@ -91,6 +91,7 @@ type EffectLinks struct {
 	PackageJsonForSourceFile    core.LinkStore[*ast.SourceFile, *packagejson.PackageJson]
 	EffectContextAnalyzed       core.LinkStore[*ast.SourceFile, bool]
 	ExpectedAndRealTypes        core.LinkStore[*ast.SourceFile, []ExpectedAndRealType]
+	ApiStabilityUsages          core.LinkStore[*ast.SourceFile, []ApiStabilityUsage]
 	PipingFlowsWithEffectFn     core.LinkStore[*ast.SourceFile, []*PipingFlow]
 	PipingFlowsWithoutEffectFn  core.LinkStore[*ast.SourceFile, []*PipingFlow]
 }

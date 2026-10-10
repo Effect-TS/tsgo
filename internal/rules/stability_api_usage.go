@@ -37,137 +37,31 @@ var UnstableApiUsage = rule.Rule{
 	},
 }
 
-type declarationStabilityInfo struct {
-	stability   string
-	declaration *ast.Node
-}
-
 func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
-	constraintTypes := make(map[*ast.Node]*checker.Type)
-
-	// Declared stability is cached per checker in TypeParser, so references to the
-	// same symbol or selected overload reuse one lookup across source files. The
-	// selected overload's own tag always wins over the symbol-level tag.
-	readSymbol := func(symbol *ast.Symbol) declarationStabilityInfo {
-		if symbol == nil {
-			return declarationStabilityInfo{}
-		}
-		info := ctx.TypeParser.DeclaredApiStabilityOfSymbol(symbol)
-		return declarationStabilityInfo{stability: typeparser.ApiStabilityLevelTag(info.Level), declaration: info.Declaration}
-	}
-	readSignature := func(signature *checker.Signature) declarationStabilityInfo {
-		if signature == nil {
-			return declarationStabilityInfo{}
-		}
-		info := ctx.TypeParser.DeclaredApiStabilityOfSignature(signature)
-		return declarationStabilityInfo{stability: typeparser.ApiStabilityLevelTag(info.Level), declaration: info.Declaration}
-	}
-
 	allow := newStabilityApiAllowlist(ctx, wanted)
+	message := tsdiag.X_0_is_an_unstable_API_Breaking_changes_may_happen_between_versions_effect_unstableApiUsage
+	if wanted == "experimental" {
+		message = tsdiag.X_0_is_an_experimental_API_effect_experimentalApiUsage
+	}
 	var diagnostics []*ast.Diagnostic
-	report := func(node *ast.Node, name string, stability declarationStabilityInfo) bool {
-		if stability.stability != wanted {
-			return false
+	for _, usage := range ctx.TypeParser.ApiStabilityUsages(ctx.SourceFile) {
+		for _, stability := range usage.Declarations {
+			if typeparser.ApiStabilityLevelTag(stability.Level) != wanted {
+				continue
+			}
+			allowed, apiName := allow(stability.Declaration)
+			if allowed {
+				continue
+			}
+			name := usage.Name
+			if apiName != "" {
+				name = apiName
+			}
+			diagnostics = append(diagnostics, ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(usage.Node), message, nil, name))
+			break
 		}
-		allowed, apiName := allow(stability.declaration)
-		if allowed {
-			return false
-		}
-		if apiName != "" {
-			name = apiName
-		}
-		message := tsdiag.X_0_is_an_unstable_API_Breaking_changes_may_happen_between_versions_effect_unstableApiUsage
-		if wanted == "experimental" {
-			message = tsdiag.X_0_is_an_experimental_API_effect_experimentalApiUsage
-		}
-		diagnostics = append(diagnostics, ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(node), message, nil, name))
-		return true
 	}
-	var walk ast.Visitor
-	walk = func(node *ast.Node) bool {
-		if node == nil {
-			return false
-		}
-		// Object literal keys declare local properties, but also use the matching
-		// properties of their contextual type. Resolve those declarations before
-		// the ordinary reference path excludes declaration names.
-		if ast.IsObjectLiteralElement(node) && node.Name() != nil && node.Parent != nil && node.Parent.Kind == ast.KindObjectLiteralExpression {
-			if name := ast.GetTextOfPropertyName(node.Name()); name != "" {
-				if contextualType := ctx.Checker.GetContextualType(node.Parent, checker.ContextFlagsNone); contextualType != nil {
-					// Keep the original symbols and let the checker filter union
-					// branches by discriminants before reading their own tags.
-					properties := ctx.Checker.GetPropertySymbolsFromContextualType(node, contextualType, false)
-					// Generic inference can point back to the literal's own
-					// property. Use the constraint instead, as go-to-definition
-					// does, so its stability tag is not lost to inference.
-					if slices.ContainsFunc(properties, func(symbol *ast.Symbol) bool { return symbol.ValueDeclaration == node }) {
-						constraintType, cached := constraintTypes[node.Parent]
-						if !cached {
-							constraintType = ctx.Checker.GetContextualType(node.Parent, checker.ContextFlagsIgnoreNodeInferences)
-							if len(node.Parent.AsObjectLiteralExpression().Properties.Nodes) > 1 {
-								constraintTypes[node.Parent] = constraintType
-							}
-						}
-						if constraintType != nil {
-							if constraintProperties := ctx.Checker.GetPropertySymbolsFromContextualType(node, constraintType, false); len(constraintProperties) > 0 {
-								properties = constraintProperties
-							}
-						}
-					}
-					for _, symbol := range properties {
-						if symbol.ValueDeclaration == node {
-							continue
-						}
-						if report(node.Name(), name, readSymbol(symbol)) {
-							break
-						}
-					}
-				}
-			}
-		}
-		if node.Kind == ast.KindIdentifier && !ast.IsDeclarationNameOrImportPropertyName(node) {
-			// The selected overload is authoritative for calls. A tagged overload
-			// may differ from other declarations of the same symbol.
-			stability := declarationStabilityInfo{}
-			selectedDeclaration := (*ast.Node)(nil)
-			callee := node
-			if parent := node.Parent; parent != nil && parent.Kind == ast.KindPropertyAccessExpression && parent.AsPropertyAccessExpression().Name() == node {
-				callee = parent
-			}
-			if parent := callee.Parent; parent != nil && (parent.Kind == ast.KindCallExpression || parent.Kind == ast.KindNewExpression) && parent.Expression() == callee {
-				if signature := ctx.Checker.GetResolvedSignature(parent); signature != nil && signature.Declaration() != nil {
-					selectedDeclaration = signature.Declaration()
-					stability = readSignature(signature)
-					if stability.stability == "" {
-						// A signature with no own tag still carries the selected
-						// declaration so the symbol fallback can be suppressed for it.
-						stability = declarationStabilityInfo{declaration: selectedDeclaration}
-					}
-				}
-			}
-			symbol := ctx.Checker.GetSymbolAtLocation(node)
-			resolvedSymbol := ctx.TypeParser.ReferenceSymbolAtNode(node)
-			useSymbol := selectedDeclaration == nil || !symbolHasDeclaration(symbol, selectedDeclaration) && !symbolHasDeclaration(resolvedSymbol, selectedDeclaration)
-			if stability.stability == "" && useSymbol {
-				stability = readSymbol(symbol)
-			}
-			if stability.stability == "" && useSymbol {
-				stability = readSymbol(resolvedSymbol)
-			}
-			report(node, node.Text(), stability)
-		}
-		node.ForEachChild(walk)
-		return false
-	}
-	walk(ctx.SourceFile.AsNode())
 	return diagnostics
-}
-
-func symbolHasDeclaration(symbol *ast.Symbol, declaration *ast.Node) bool {
-	if symbol == nil || declaration == nil {
-		return false
-	}
-	return slices.Contains(symbol.Declarations, declaration)
 }
 
 // stabilitySymbolIsModuleExport reports whether symbol is exported from the
