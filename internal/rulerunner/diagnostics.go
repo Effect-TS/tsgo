@@ -77,6 +77,9 @@ func Run(ctx context.Context, program checker.Program, c *checker.Checker, sf *a
 	}
 
 	tp := typeparser.NewTypeParser(program, c)
+	if etscore.IsCommandLineMode() {
+		defer tp.BeginTransientAnalysis()()
+	}
 	sourceText := sf.Text()
 	effectDirectives := directives.CollectEffectDirectives(sourceText)
 	directiveSet := directives.BuildDirectiveSet(effectDirectives)

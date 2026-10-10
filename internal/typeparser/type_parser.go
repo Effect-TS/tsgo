@@ -18,6 +18,7 @@ type TypeParser struct {
 // EffectLinks holds per-checker cached type-parser results.
 // One instance is lazily created per Checker and cached on TypeParser.
 type EffectLinks struct {
+	transientAnalysisDepth int
 	TypeAtLocation         core.LinkStore[*ast.Node, *checker.Type]
 	EffectType             core.LinkStore[*checker.Type, *Effect]
 	StreamType             core.LinkStore[*checker.Type, *Effect]
@@ -94,6 +95,34 @@ type EffectLinks struct {
 	ApiStabilityUsages          core.LinkStore[*ast.SourceFile, []ApiStabilityUsage]
 	PipingFlowsWithEffectFn     core.LinkStore[*ast.SourceFile, []*PipingFlow]
 	PipingFlowsWithoutEffectFn  core.LinkStore[*ast.SourceFile, []*PipingFlow]
+}
+
+// BeginTransientAnalysis retains file-analysis caches until the outermost
+// analysis completes. CLI diagnostics do not need these results afterwards;
+// symbol/type metadata and package discovery remain shared across files.
+func (tp *TypeParser) BeginTransientAnalysis() func() {
+	links := tp.links
+	links.transientAnalysisDepth++
+	return func() {
+		links.transientAnalysisDepth--
+		if links.transientAnalysisDepth != 0 {
+			return
+		}
+		links.TypeAtLocation = core.LinkStore[*ast.Node, *checker.Type]{}
+		links.ReferenceSymbol = core.LinkStore[*ast.Node, *ast.Symbol]{}
+		links.EffectGenCall = core.LinkStore[*ast.Node, *EffectGenCallResult]{}
+		links.EffectFnCall = core.LinkStore[*ast.Node, *EffectFnCallResult]{}
+		links.ParseEffectFnOpportunity = core.LinkStore[*ast.Node, *EffectFnOpportunityResult]{}
+		links.ParsePipeCall = core.LinkStore[*ast.Node, *ParsedPipeCallResult]{}
+		links.ExecutionFlow = core.LinkStore[*ast.SourceFile, *ExecutionFlow]{}
+		links.EffectContextFlags = core.LinkStore[*ast.Node, EffectContextFlags]{}
+		links.EffectYieldGeneratorFunction = core.LinkStore[*ast.Node, *ast.FunctionExpression]{}
+		links.EffectContextAnalyzed = core.LinkStore[*ast.SourceFile, bool]{}
+		links.ExpectedAndRealTypes = core.LinkStore[*ast.SourceFile, []ExpectedAndRealType]{}
+		links.ApiStabilityUsages = core.LinkStore[*ast.SourceFile, []ApiStabilityUsage]{}
+		links.PipingFlowsWithEffectFn = core.LinkStore[*ast.SourceFile, []*PipingFlow]{}
+		links.PipingFlowsWithoutEffectFn = core.LinkStore[*ast.SourceFile, []*PipingFlow]{}
+	}
 }
 
 // Cached checks the store for an existing value. On miss, it calls compute,
