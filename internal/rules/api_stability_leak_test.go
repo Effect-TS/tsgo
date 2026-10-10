@@ -21,7 +21,14 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/vfs/vfstest"
 )
 
-func compileApiStabilitySource(t *testing.T, source string) (*rule.Context, *ast.SourceFile, func()) {
+func compileApiStabilitySource(t testing.TB, source string) (*rule.Context, *ast.SourceFile, func()) {
+	t.Helper()
+	return compileApiStabilitySourcePrimed(t, source, true)
+}
+
+// compileApiStabilitySourcePrimed optionally skips the full type-check, so the
+// rules run against a cold checker.
+func compileApiStabilitySourcePrimed(t testing.TB, source string, prime bool) (*rule.Context, *ast.SourceFile, func()) {
 	t.Helper()
 
 	testfs := map[string]any{
@@ -48,7 +55,9 @@ func compileApiStabilitySource(t *testing.T, source string) (*rule.Context, *ast
 	})
 
 	ctx := context.Background()
-	_ = program.GetSemanticDiagnostics(ctx, nil)
+	if prime {
+		_ = program.GetSemanticDiagnostics(ctx, nil)
+	}
 	c, done := program.GetTypeChecker(ctx)
 	sf := program.GetSourceFile("/.src/test.ts")
 	if sf == nil {
