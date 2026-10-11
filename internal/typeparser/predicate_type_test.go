@@ -186,18 +186,18 @@ func TestParseResultDispatchPredicateHints(t *testing.T) {
 				if returning == nil {
 					t.Fatalf("%s: expected returning dispatch", tt.name)
 				}
-				for _, dispatch := range []*ResultDispatch{returning.Dispatch, tp.ParseResultDispatch(GetFunctionLikeBody(function))} {
+				for _, dispatch := range []*ResultDispatch{returning.dispatch, tp.ParseResultDispatch(GetFunctionLikeBody(function))} {
 					if got := returningDispatchNodeText(sf, dispatch.CommonTagSubject(tp)); got != tt.subject {
 						t.Errorf("%s: common subject = %q, want %q", tt.name, got, tt.subject)
 					}
-					for _, branch := range dispatch.Branches {
-						condition := branch.Condition
-						if condition.Source != condition.Subject || condition.Value != nil ||
-							!predicateNodeDescendsFrom(condition.Source, GetFunctionLikeBody(function)) {
+					for _, branch := range dispatch.branches {
+						condition := branch.condition
+						if condition.source != condition.subject || condition.value != nil ||
+							!predicateNodeDescendsFrom(condition.source, GetFunctionLikeBody(function)) {
 							t.Errorf("%s: predicate source evidence changed", tt.name)
 						}
-						if condition.TagSubject != nil &&
-							(!predicateNodeDescendsFrom(condition.TagSubject, condition.Source) || !predicateNodeDescendsFrom(condition.TagValue, condition.Source)) {
+						if condition.tagSubject != nil &&
+							(!predicateNodeDescendsFrom(condition.tagSubject, condition.source) || !predicateNodeDescendsFrom(condition.tagValue, condition.source)) {
 							t.Errorf("%s: tag evidence is not from the original condition", tt.name)
 						}
 					}
@@ -206,11 +206,11 @@ func TestParseResultDispatchPredicateHints(t *testing.T) {
 			for _, name := range []string{"mixed", "wrapped"} {
 				function := findReturningDispatchTestFunction(t, sf, name)
 				original := GetFunctionLikeBody(function).AsConditionalExpression().Condition
-				condition := tp.ParseReturningDispatch(function).Dispatch.Branches[0].Condition
+				condition := tp.ParseReturningDispatch(function).dispatch.branches[0].condition
 				call := unwrapResultDispatchExpression(original).AsCallExpression()
-				if condition.Source != original || condition.Subject != original ||
-					condition.TagSubject != unwrapResultDispatchExpression(call.Arguments.Nodes[0]) ||
-					condition.TagValue != unwrapResultDispatchExpression(call.Arguments.Nodes[1]) {
+				if condition.source != original || condition.subject != original ||
+					condition.tagSubject != unwrapResultDispatchExpression(call.Arguments.Nodes[0]) ||
+					condition.tagValue != unwrapResultDispatchExpression(call.Arguments.Nodes[1]) {
 					t.Errorf("%s: Predicate call must preserve the exact condition and unwrapped argument nodes", name)
 				}
 			}

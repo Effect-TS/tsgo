@@ -3,13 +3,16 @@ package typeparser
 import (
 	"fmt"
 
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
 // UniqueTypesResult holds the result of AppendToUniqueTypesMap.
 type UniqueTypesResult struct {
-	AllIndexes []string // All type indexes encountered (both new and existing)
+	allIndexes []string // All type indexes encountered (both new and existing)
 }
+
+func (r UniqueTypesResult) AllIndexes() readonly.Slice[string] { return readonly.New(r.allIndexes) }
 
 // AppendToUniqueTypesMap deduplicates types using bidirectional assignability checks.
 // It unrolls union types, skips excluded types (via shouldExclude), and for each
@@ -62,5 +65,5 @@ func (tp *TypeParser) AppendToUniqueTypesMap(memory map[string]*checker.Type, in
 		}
 	}
 
-	return UniqueTypesResult{AllIndexes: allIndexes}
+	return UniqueTypesResult{allIndexes: allIndexes}
 }

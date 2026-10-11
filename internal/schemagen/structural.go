@@ -580,7 +580,7 @@ func (g *StructuralSchemaGen) ScanExistingSchemas(scope *ast.Node) {
 		if schemaTypes == nil {
 			continue
 		}
-		aType := schemaTypes.A
+		aType := schemaTypes.A()
 		capturedName := name
 		g.hoistedSchemas[aType.Id()] = hoistedEntry{
 			t: aType,

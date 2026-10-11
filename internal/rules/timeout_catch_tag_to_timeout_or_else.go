@@ -43,29 +43,29 @@ func AnalyzeTimeoutCatchTagToTimeoutOrElse(tp *typeparser.TypeParser, c *checker
 	var matches []TimeoutCatchTagToTimeoutOrElseMatch
 	// Check both alternatives in one pass: collecting and sorting matches per
 	// pattern adds work and allocations to this frequently run analysis.
-	for _, flow := range tp.PipingFlows(sf, true) {
-		for i := 0; i+1 < len(flow.Transformations); i++ {
-			timeout := &flow.Transformations[i]
-			if len(timeout.Args) != 1 || !tp.IsNodeReferenceToEffectModuleApi(timeout.Callee, "timeout") {
+	for _, flow := range tp.PipingFlows(sf, true).All() {
+		for i := 0; i+1 < flow.Transformations().Len(); i++ {
+			timeout := flow.Transformations().At(i)
+			if timeout.Args().Len() != 1 || !tp.IsNodeReferenceToEffectModuleApi(timeout.Callee(), "timeout") {
 				continue
 			}
 			end := i + 1
-			option := timeoutAsSome(tp, &flow.Transformations[end])
+			option := timeoutAsSome(tp, new(flow.Transformations().At(end)))
 			if option {
 				end++
 			}
-			if end >= len(flow.Transformations) {
+			if end >= flow.Transformations().Len() {
 				continue
 			}
-			catch := &flow.Transformations[end]
-			if len(catch.Args) != 2 || !tp.IsNodeReferenceToEffectModuleApi(catch.Callee, "catchTag") {
+			catch := flow.Transformations().At(end)
+			if catch.Args().Len() != 2 || !tp.IsNodeReferenceToEffectModuleApi(catch.Callee(), "catchTag") {
 				continue
 			}
-			tag := ast.SkipParentheses(catch.Args[0])
+			tag := ast.SkipParentheses(catch.Args().At(0))
 			if tag.Kind != ast.KindStringLiteral || tag.AsStringLiteral().Text != "TimeoutError" {
 				continue
 			}
-			handler := ast.SkipParentheses(catch.Args[1])
+			handler := ast.SkipParentheses(catch.Args().At(1))
 			if !timeoutIgnoresError(tp, c, handler) {
 				continue
 			}
@@ -73,12 +73,12 @@ func AnalyzeTimeoutCatchTagToTimeoutOrElse(tp *typeparser.TypeParser, c *checker
 				continue
 			}
 			input := tp.StrictEffectType(flow.TransformationInputType(i))
-			if input == nil || !timeoutErrorExcluded(tp, c, input.E) {
+			if input == nil || !timeoutErrorExcluded(tp, c, input.E()) {
 				continue
 			}
 			hasTypeArgs := false
 			for j := i; j <= end; j++ {
-				hasTypeArgs = hasTypeArgs || catchDieHasTypeArguments(&flow.Transformations[j])
+				hasTypeArgs = hasTypeArgs || catchDieHasTypeArguments(new(flow.Transformations().At(j)))
 			}
 			if hasTypeArgs {
 				continue
@@ -88,17 +88,17 @@ func AnalyzeTimeoutCatchTagToTimeoutOrElse(tp *typeparser.TypeParser, c *checker
 				name = "timeoutOption"
 			}
 			var module *ast.Node
-			if catch.Callee.Kind == ast.KindPropertyAccessExpression {
-				module = catch.Callee.AsPropertyAccessExpression().Expression
+			if catch.Callee().Kind == ast.KindPropertyAccessExpression {
+				module = catch.Callee().AsPropertyAccessExpression().Expression
 			}
-			matches = append(matches, TimeoutCatchTagToTimeoutOrElseMatch{Flow: flow, Start: i, End: end, Location: scanner.GetErrorRangeForNode(sf, catch.Callee), ReplacementName: name, EffectModule: module, Duration: timeout.Args[0], Handler: catch.Args[1]})
+			matches = append(matches, TimeoutCatchTagToTimeoutOrElseMatch{Flow: flow, Start: i, End: end, Location: scanner.GetErrorRangeForNode(sf, catch.Callee()), ReplacementName: name, EffectModule: module, Duration: timeout.Args().At(0), Handler: catch.Args().At(1)})
 		}
 	}
 	return matches
 }
 func timeoutAsSome(tp *typeparser.TypeParser, step *typeparser.PipingFlowTransformation) bool {
-	return len(step.Args) == 0 && tp.IsNodeReferenceToEffectModuleApi(step.Callee, "asSome") ||
-		len(step.Args) == 1 && tp.IsNodeReferenceToEffectModuleApi(step.Callee, "map") && tp.IsNodeReferenceToEffectOptionModuleApi(step.Args[0], "some")
+	return step.Args().Len() == 0 && tp.IsNodeReferenceToEffectModuleApi(step.Callee(), "asSome") ||
+		step.Args().Len() == 1 && tp.IsNodeReferenceToEffectModuleApi(step.Callee(), "map") && tp.IsNodeReferenceToEffectOptionModuleApi(step.Args().At(0), "some")
 }
 
 func timeoutReturnsNone(tp *typeparser.TypeParser, handler *ast.Node) bool {
@@ -106,16 +106,16 @@ func timeoutReturnsNone(tp *typeparser.TypeParser, handler *ast.Node) bool {
 	if lazy == nil {
 		return false
 	}
-	flow := tp.LongestPipingFlowAt(lazy.Expression, false)
-	return flow.MatchesExactly(func(subject *typeparser.PipingFlowSubject) bool {
-		return tp.IsNodeReferenceToEffectModuleApi(subject.Node, "succeedNone")
+	flow := tp.LongestPipingFlowAt(lazy.Expression(), false)
+	return flow.MatchesExactly(func(subject typeparser.PipingFlowSubject) bool {
+		return tp.IsNodeReferenceToEffectModuleApi(subject.Node(), "succeedNone")
 	}) || flow.MatchesExactly(
-		func(subject *typeparser.PipingFlowSubject) bool {
-			return isOptionNoneCall(tp, subject.Node)
+		func(subject typeparser.PipingFlowSubject) bool {
+			return isOptionNoneCall(tp, subject.Node())
 		},
-		func(step *typeparser.PipingFlowTransformation) bool {
-			return len(step.Args) == 0 && (step.TypeArguments == nil || len(step.TypeArguments.Nodes) == 0) &&
-				tp.IsNodeReferenceToEffectModuleApi(step.Callee, "succeed")
+		func(step typeparser.PipingFlowTransformation) bool {
+			return step.Args().Len() == 0 && (step.TypeArguments() == nil || len(step.TypeArguments().Nodes) == 0) &&
+				tp.IsNodeReferenceToEffectModuleApi(step.Callee(), "succeed")
 		},
 	)
 }

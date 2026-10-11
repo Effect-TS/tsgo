@@ -8,7 +8,7 @@ import (
 func TestTransformationInputType(t *testing.T) {
 	t.Parallel()
 	subject, intermediate, output := &checker.Type{}, &checker.Type{}, &checker.Type{}
-	flow := &PartialPipingFlow{Subject: PipingFlowSubject{OutType: subject}, Transformations: []PipingFlowTransformation{{OutType: intermediate}, {OutType: output}}}
+	flow := &PartialPipingFlow{subject: PipingFlowSubject{outType: subject}, transformations: []PipingFlowTransformation{{outType: intermediate}, {outType: output}}}
 	if flow.TransformationInputType(0) != subject {
 		t.Fatal("first step must consume the subject type")
 	}
@@ -20,7 +20,7 @@ func TestTransformationInputType(t *testing.T) {
 			t.Fatal("out-of-range step must have no input type")
 		}
 	}
-	flow.Transformations[0].OutType = nil
+	flow.transformations[0].outType = nil
 	if flow.TransformationInputType(1) != nil {
 		t.Fatal("missing output type must remain unknown")
 	}

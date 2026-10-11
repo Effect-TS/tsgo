@@ -99,7 +99,7 @@ func shouldOmitHint(
 // the generator function and body for the first match.
 func matchEffectGenCall(tp *typeparser.TypeParser, node *ast.Node) (*ast.FunctionExpression, *ast.BlockOrExpression) {
 	if result := tp.EffectGenCall(node); result != nil {
-		return result.GeneratorFunction, result.Body
+		return result.GeneratorFunction(), result.Body()
 	}
 	if result := tp.EffectFnCall(node); result != nil && result.IsGenerator() {
 		return result.GeneratorFunction(), result.Body()

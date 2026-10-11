@@ -25,13 +25,13 @@ effect
 	if parsed == nil {
 		t.Fatal("expected instantiated v3 Effect type to parse without a location")
 	}
-	if got := c.TypeToString(parsed.A); got != "string" {
+	if got := c.TypeToString(parsed.a); got != "string" {
 		t.Fatalf("expected success type string, got %s", got)
 	}
-	if got := c.TypeToString(parsed.E); got != "Error" {
+	if got := c.TypeToString(parsed.e); got != "Error" {
 		t.Fatalf("expected error type Error, got %s", got)
 	}
-	if got := c.TypeToString(parsed.R); got != "number" {
+	if got := c.TypeToString(parsed.r); got != "number" {
 		t.Fatalf("expected requirements type number, got %s", got)
 	}
 }
@@ -55,13 +55,13 @@ layer
 	if parsed == nil {
 		t.Fatal("expected instantiated v3 Layer type to parse without a location")
 	}
-	if got := c.TypeToString(parsed.ROut); got != "string" {
+	if got := c.TypeToString(parsed.rOut); got != "string" {
 		t.Fatalf("expected output requirements type string, got %s", got)
 	}
-	if got := c.TypeToString(parsed.E); got != "Error" {
+	if got := c.TypeToString(parsed.e); got != "Error" {
 		t.Fatalf("expected error type Error, got %s", got)
 	}
-	if got := c.TypeToString(parsed.RIn); got != "number" {
+	if got := c.TypeToString(parsed.rIn); got != "number" {
 		t.Fatalf("expected input requirements type number, got %s", got)
 	}
 }
@@ -85,10 +85,10 @@ schema
 	if parsed == nil {
 		t.Fatal("expected instantiated v3 Schema type to parse without a location")
 	}
-	if got := c.TypeToString(parsed.A); got != "string" {
+	if got := c.TypeToString(parsed.a); got != "string" {
 		t.Fatalf("expected decoded type string, got %s", got)
 	}
-	if got := c.TypeToString(parsed.E); got != "number" {
+	if got := c.TypeToString(parsed.e); got != "number" {
 		t.Fatalf("expected encoded type number, got %s", got)
 	}
 }
@@ -112,13 +112,13 @@ stream
 	if parsed == nil {
 		t.Fatal("expected instantiated v3 Stream type to parse without a location")
 	}
-	if got := c.TypeToString(parsed.A); got != "string" {
+	if got := c.TypeToString(parsed.a); got != "string" {
 		t.Fatalf("expected element type string, got %s", got)
 	}
-	if got := c.TypeToString(parsed.E); got != "Error" {
+	if got := c.TypeToString(parsed.e); got != "Error" {
 		t.Fatalf("expected error type Error, got %s", got)
 	}
-	if got := c.TypeToString(parsed.R); got != "number" {
+	if got := c.TypeToString(parsed.r); got != "number" {
 		t.Fatalf("expected requirements type number, got %s", got)
 	}
 }

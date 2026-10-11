@@ -6,10 +6,16 @@ import (
 
 // SchemaClassResult holds the parsed result of a class extending Schema.Class, Schema.Error or Schema.RequestClass.
 type SchemaClassResult struct {
-	ClassName     *ast.Node // The class name identifier
-	SelfTypeNode  *ast.Node // The Self type argument node (first type arg of the inner call)
-	BrandTypeNode *ast.Node
+	className     *ast.Node // The class name identifier
+	selfTypeNode  *ast.Node // The Self type argument node (first type arg of the inner call)
+	brandTypeNode *ast.Node
 }
+
+func (r SchemaClassResult) ClassName() *ast.Node { return r.className }
+
+func (r SchemaClassResult) SelfTypeNode() *ast.Node { return r.selfTypeNode }
+
+func (r SchemaClassResult) BrandTypeNode() *ast.Node { return r.brandTypeNode }
 
 // ExtendsSchemaClass checks if a class declaration extends Schema.Class<Self>("name")({}).
 // It detects the double-call pattern:
@@ -119,9 +125,9 @@ func (tp *TypeParser) extendsSchemaClassLike(classNode *ast.Node, memberName str
 		}
 
 		return &SchemaClassResult{
-			ClassName:     classNode.Name(),
-			SelfTypeNode:  innerCall.TypeArguments.Nodes[0],
-			BrandTypeNode: brandTypeNode,
+			className:     classNode.Name(),
+			selfTypeNode:  innerCall.TypeArguments.Nodes[0],
+			brandTypeNode: brandTypeNode,
 		}
 	}
 

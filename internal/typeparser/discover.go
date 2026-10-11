@@ -1,14 +1,29 @@
 package typeparser
 
+import "github.com/effect-ts/tsgo/internal/readonly"
+
 import "github.com/microsoft/TypeScript/tsc/shim/ast"
 
 // DiscoveredPackage represents a package found in the program's source files.
 type DiscoveredPackage struct {
-	Name             string
-	Version          *string
-	DependsOnEffect  bool
-	PackageDirectory string
+	name             string
+	version          *string
+	dependsOnEffect  bool
+	packageDirectory string
 }
+
+func (r DiscoveredPackage) Name() string { return r.name }
+
+func (r DiscoveredPackage) Version() (string, bool) {
+	if r.version == nil {
+		return "", false
+	}
+	return *r.version, true
+}
+
+func (r DiscoveredPackage) DependsOnEffect() bool { return r.dependsOnEffect }
+
+func (r DiscoveredPackage) PackageDirectory() string { return r.packageDirectory }
 
 // packageKey is used for deduplication of discovered packages.
 type packageKey struct {
@@ -61,17 +76,17 @@ func (tp *TypeParser) detectEffectVersionUncached() EffectMajorVersion {
 	var detected EffectMajorVersion
 	found := false
 
-	for _, pkg := range packages {
-		if pkg.Name != "effect" {
+	for _, pkg := range packages.All() {
+		if pkg.name != "effect" {
 			continue
 		}
 
 		var major EffectMajorVersion
 		switch {
-		case pkg.Version == nil:
+		case pkg.version == nil:
 			major = EffectMajorUnknown
-		case len(*pkg.Version) > 0:
-			switch (*pkg.Version)[0] {
+		case len(*pkg.version) > 0:
+			switch (*pkg.version)[0] {
 			case '3':
 				major = EffectMajorV3
 			case '4':
@@ -123,15 +138,15 @@ func (tp *TypeParser) DetectEffectVersionString() string {
 	var detected string
 	found := false
 
-	for _, pkg := range packages {
-		if pkg.Name != "effect" || pkg.Version == nil {
+	for _, pkg := range packages.All() {
+		if pkg.name != "effect" || pkg.version == nil {
 			continue
 		}
 
 		if !found {
-			detected = *pkg.Version
+			detected = *pkg.version
 			found = true
-		} else if detected != *pkg.Version {
+		} else if detected != *pkg.version {
 			return "unknown"
 		}
 	}
@@ -147,19 +162,19 @@ func (tp *TypeParser) DetectEffectVersionString() string {
 // Results are cached per checker so repeated calls within the same check cycle
 // (from DetectEffectVersion, DetectEffectVersionString, duplicatePackage rule, etc.)
 // do not re-scan all source files.
-func (tp *TypeParser) DiscoverPackages() []DiscoveredPackage {
+func (tp *TypeParser) DiscoverPackages() readonly.Slice[DiscoveredPackage] {
 	if tp == nil || tp.checker == nil {
-		return nil
+		return readonly.Slice[DiscoveredPackage]{}
 	}
 
 	if tp.links.discoverPackagesComputed {
-		return tp.links.discoverPackagesValue
+		return readonly.New(tp.links.discoverPackagesValue)
 	}
 
 	result := tp.discoverPackagesUncached()
 	tp.links.discoverPackagesValue = result
 	tp.links.discoverPackagesComputed = true
-	return result
+	return readonly.New(result)
 }
 
 // discoverPackagesUncached performs the actual source file scan.
@@ -214,10 +229,10 @@ func (tp *TypeParser) discoverPackagesUncached() []DiscoveredPackage {
 		}
 
 		result = append(result, DiscoveredPackage{
-			Name:             name,
-			Version:          verPtr,
-			DependsOnEffect:  dependsOnEffect,
-			PackageDirectory: pkgDir,
+			name:             name,
+			version:          verPtr,
+			dependsOnEffect:  dependsOnEffect,
+			packageDirectory: pkgDir,
 		})
 	}
 

@@ -6,9 +6,13 @@ import (
 
 // SqlModelClassResult holds the parsed result of a class extending Model.Class.
 type SqlModelClassResult struct {
-	ClassName    *ast.Node // The class name identifier
-	SelfTypeNode *ast.Node // The Self type argument node (first type arg of the inner call)
+	className    *ast.Node // The class name identifier
+	selfTypeNode *ast.Node // The Self type argument node (first type arg of the inner call)
 }
+
+func (r SqlModelClassResult) ClassName() *ast.Node { return r.className }
+
+func (r SqlModelClassResult) SelfTypeNode() *ast.Node { return r.selfTypeNode }
 
 // ExtendsEffectSqlModelClass checks if a class declaration extends Model.Class<Self>(...)({...}).
 // It detects the double-call pattern:
@@ -74,8 +78,8 @@ func (tp *TypeParser) ExtendsEffectSqlModelClass(classNode *ast.Node) *SqlModelC
 			}
 
 			return &SqlModelClassResult{
-				ClassName:    classNode.Name(),
-				SelfTypeNode: innerCall.TypeArguments.Nodes[0],
+				className:    classNode.Name(),
+				selfTypeNode: innerCall.TypeArguments.Nodes[0],
 			}
 		}
 

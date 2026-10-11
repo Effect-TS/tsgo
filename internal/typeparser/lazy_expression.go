@@ -1,17 +1,26 @@
 package typeparser
 
 import (
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 )
 
 // ParsedLazyExpression represents a parsed arrow function or function expression
 // with its inner expression extracted.
 type ParsedLazyExpression struct {
-	Node       *ast.Node   // The original ArrowFunction or FunctionExpression node
-	Params     []*ast.Node // Parameter declarations (empty when parsed with thunk=true)
-	Body       *ast.Node   // The function body as written (Expression or Block)
-	Expression *ast.Node   // The inner expression (return value)
+	node       *ast.Node   // The original ArrowFunction or FunctionExpression node
+	params     []*ast.Node // Parameter declarations (empty when parsed with thunk=true)
+	body       *ast.Node   // The function body as written (Expression or Block)
+	expression *ast.Node   // The inner expression (return value)
 }
+
+func (r ParsedLazyExpression) Node() *ast.Node { return r.node }
+
+func (r ParsedLazyExpression) Params() readonly.Slice[*ast.Node] { return readonly.New(r.params) }
+
+func (r ParsedLazyExpression) Body() *ast.Node { return r.body }
+
+func (r ParsedLazyExpression) Expression() *ast.Node { return r.expression }
 
 // LazyExpressionFlags controls which function shapes ParseLazyExpression accepts.
 type LazyExpressionFlags uint8
@@ -102,9 +111,9 @@ func ParseLazyExpression(node *ast.Node, flags LazyExpressionFlags) *ParsedLazyE
 	}
 
 	return &ParsedLazyExpression{
-		Node:       node,
-		Params:     paramNodes,
-		Body:       body,
-		Expression: expr,
+		node:       node,
+		params:     paramNodes,
+		body:       body,
+		expression: expr,
 	}
 }

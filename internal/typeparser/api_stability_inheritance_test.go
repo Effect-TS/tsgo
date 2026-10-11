@@ -43,8 +43,8 @@ export function direct(e: Reportable) {}
 					if name == "direct" {
 						want = ApiStabilityUnstable
 					}
-					if used.Minimum != want || (warm && used.Incomplete) {
-						t.Errorf("%s minimum=%v incomplete=%v deps=%v, want %v", name, used.Minimum, used.Incomplete, apiStabilityDependencyNames(used), want)
+					if used.minimum != want || (warm && used.incomplete) {
+						t.Errorf("%s minimum=%v incomplete=%v deps=%v, want %v", name, used.minimum, used.incomplete, apiStabilityDependencyNames(used), want)
 					}
 					if name == "Expanded" {
 						// Also inspect its represented type after the compiler has
@@ -52,8 +52,8 @@ export function direct(e: Reportable) {}
 						typ := c.GetDeclaredTypeOfSymbol(symbol)
 						c.GetPropertiesOfType(typ)
 						used = tp.ApiStabilityUsedByType(typ)
-						if used.Incomplete || used.Minimum != ApiStabilityStable {
-							t.Errorf("expanded type minimum=%v incomplete=%v deps=%v", used.Minimum, used.Incomplete, apiStabilityDependencyNames(used))
+						if used.incomplete || used.minimum != ApiStabilityStable {
+							t.Errorf("expanded type minimum=%v incomplete=%v deps=%v", used.minimum, used.incomplete, apiStabilityDependencyNames(used))
 						}
 					}
 				}

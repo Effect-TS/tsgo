@@ -58,7 +58,7 @@ func AnalyzeRedundantGeneratorOrDie(tp *typeparser.TypeParser, c *checker.Checke
 	generatorCalls := make(map[*ast.FunctionExpression]*ast.Node)
 	candidatesByGenerator := make(map[*ast.FunctionExpression]map[*ast.Node]redundantOrDieCandidate)
 
-	for _, flow := range tp.PipingFlows(sf, true) {
+	for _, flow := range tp.PipingFlows(sf, true).All() {
 		candidate, genFn, genCallNode, ok := analyzeRedundantOrDieFlowCandidate(tp, sf, flow)
 		if !ok {
 			continue
@@ -84,20 +84,20 @@ func AnalyzeRedundantGeneratorOrDie(tp *typeparser.TypeParser, c *checker.Checke
 }
 
 func analyzeRedundantOrDieFlowCandidate(tp *typeparser.TypeParser, sf *ast.SourceFile, flow *typeparser.PipingFlow) (redundantOrDieCandidate, *ast.FunctionExpression, *ast.Node, bool) {
-	if tp == nil || sf == nil || flow == nil || flow.Node == nil || len(flow.Transformations) == 0 {
+	if tp == nil || sf == nil || flow == nil || flow.Node() == nil || flow.Transformations().Len() == 0 {
 		return redundantOrDieCandidate{}, nil, nil, false
 	}
 
-	lastTransform := flow.Transformations[len(flow.Transformations)-1]
-	if lastTransform.Callee == nil {
+	lastTransform := flow.Transformations().At(flow.Transformations().Len() - 1)
+	if lastTransform.Callee() == nil {
 		return redundantOrDieCandidate{}, nil, nil, false
 	}
-	if !tp.IsNodeReferenceToEffectModuleApi(lastTransform.Callee, "orDie") {
+	if !tp.IsNodeReferenceToEffectModuleApi(lastTransform.Callee(), "orDie") {
 		return redundantOrDieCandidate{}, nil, nil, false
 	}
 
-	yieldExpr := enclosingYieldExpression(flow.Node)
-	if yieldExpr == nil || yieldExpr.Expression == nil || yieldExpr.Expression != flow.Node || yieldExpr.AsteriskToken == nil {
+	yieldExpr := enclosingYieldExpression(flow.Node())
+	if yieldExpr == nil || yieldExpr.Expression == nil || yieldExpr.Expression != flow.Node() || yieldExpr.AsteriskToken == nil {
 		return redundantOrDieCandidate{}, nil, nil, false
 	}
 	if tp.GetEffectContextFlags(yieldExpr.AsNode())&typeparser.EffectContextFlagCanYieldEffect == 0 {
@@ -116,7 +116,7 @@ func analyzeRedundantOrDieFlowCandidate(tp *typeparser.TypeParser, sf *ast.Sourc
 
 	return redundantOrDieCandidate{
 		yieldExpression: yieldExpr.AsNode(),
-		orDieNode:       lastTransform.Callee,
+		orDieNode:       lastTransform.Callee(),
 	}, genFn, genCallNode, true
 }
 

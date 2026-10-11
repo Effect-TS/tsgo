@@ -17,29 +17,49 @@ type TypeParser struct {
 
 // Effect represents parsed Effect<A, E, R> type parameters.
 type Effect struct {
-	A *checker.Type
-	E *checker.Type
-	R *checker.Type
+	a *checker.Type
+	e *checker.Type
+	r *checker.Type
 }
+
+func (r Effect) A() *checker.Type { return r.a }
+
+func (r Effect) E() *checker.Type { return r.e }
+
+func (r Effect) R() *checker.Type { return r.r }
 
 // Layer represents parsed Layer<ROut, E, RIn> type parameters.
 type Layer struct {
-	ROut *checker.Type
-	E    *checker.Type
-	RIn  *checker.Type
+	rOut *checker.Type
+	e    *checker.Type
+	rIn  *checker.Type
 }
+
+func (r Layer) ROut() *checker.Type { return r.rOut }
+
+func (r Layer) E() *checker.Type { return r.e }
+
+func (r Layer) RIn() *checker.Type { return r.rIn }
 
 // Service represents parsed service identifier and implementation shape types.
 type Service struct {
-	Identifier *checker.Type
-	Shape      *checker.Type
+	identifier *checker.Type
+	shape      *checker.Type
 }
+
+func (r Service) Identifier() *checker.Type { return r.identifier }
+
+func (r Service) Shape() *checker.Type { return r.shape }
 
 // SchemaTypes represents parsed Schema type and encoded type parameters.
 type SchemaTypes struct {
-	A *checker.Type
-	E *checker.Type
+	a *checker.Type
+	e *checker.Type
 }
+
+func (r SchemaTypes) A() *checker.Type { return r.a }
+
+func (r SchemaTypes) E() *checker.Type { return r.e }
 
 // NewTypeParser builds a checker-backed TypeParser.
 func NewTypeParser(program checker.Program, checker *checker.Checker) *TypeParser {
@@ -123,26 +143,26 @@ func effectFromInternal(effect *typeparser.Effect) *Effect {
 	if effect == nil {
 		return nil
 	}
-	return &Effect{A: effect.A, E: effect.E, R: effect.R}
+	return &Effect{a: effect.A(), e: effect.E(), r: effect.R()}
 }
 
 func layerFromInternal(layer *typeparser.Layer) *Layer {
 	if layer == nil {
 		return nil
 	}
-	return &Layer{ROut: layer.ROut, E: layer.E, RIn: layer.RIn}
+	return &Layer{rOut: layer.ROut(), e: layer.E(), rIn: layer.RIn()}
 }
 
 func serviceFromInternal(service *typeparser.Service) *Service {
 	if service == nil {
 		return nil
 	}
-	return &Service{Identifier: service.Identifier, Shape: service.Shape}
+	return &Service{identifier: service.Identifier(), shape: service.Shape()}
 }
 
 func schemaTypesFromInternal(schemaTypes *typeparser.SchemaTypes) *SchemaTypes {
 	if schemaTypes == nil {
 		return nil
 	}
-	return &SchemaTypes{A: schemaTypes.A, E: schemaTypes.E}
+	return &SchemaTypes{a: schemaTypes.A(), e: schemaTypes.E()}
 }

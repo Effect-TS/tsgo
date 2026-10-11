@@ -2,6 +2,7 @@
 package typeparser
 
 import (
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/scanner"
@@ -9,17 +10,43 @@ import (
 
 // EffectFnOpportunityResult represents a function that can be converted to Effect.fn.
 type EffectFnOpportunityResult struct {
-	TargetNode              *ast.Node               // The function node being reported
-	NameIdentifier          *ast.Node               // The discovered name node for the function
-	GeneratorFunction       *ast.FunctionExpression // Non-nil for gen opportunity, nil for regular
-	PipeArguments           []*ast.Node             // Pipe args from piped Effect.gen (may be empty)
-	ExplicitTraceExpression *ast.Node               // Span name from Effect.withSpan if last pipe arg, or nil
-	SuggestedTraceName      string                  // The local function/variable name for suggested span
-	InferredTraceName       string                  // Context-aware name (e.g., "ServiceTag.member" or exported name)
-	EffectModule            *ast.Expression         // The Effect module identifier
-	HasGenBody              bool                    // True for gen opportunity, false for regular
-	IsLayerMember           bool                    // True when the target is a property value inside a Layer service definition
+	targetNode              *ast.Node               // The function node being reported
+	nameIdentifier          *ast.Node               // The discovered name node for the function
+	generatorFunction       *ast.FunctionExpression // Non-nil for gen opportunity, nil for regular
+	pipeArguments           []*ast.Node             // Pipe args from piped Effect.gen (may be empty)
+	explicitTraceExpression *ast.Node               // Span name from Effect.withSpan if last pipe arg, or nil
+	suggestedTraceName      string                  // The local function/variable name for suggested span
+	inferredTraceName       string                  // Context-aware name (e.g., "ServiceTag.member" or exported name)
+	effectModule            *ast.Expression         // The Effect module identifier
+	hasGenBody              bool                    // True for gen opportunity, false for regular
+	isLayerMember           bool                    // True when the target is a property value inside a Layer service definition
 }
+
+func (r EffectFnOpportunityResult) TargetNode() *ast.Node { return r.targetNode }
+
+func (r EffectFnOpportunityResult) NameIdentifier() *ast.Node { return r.nameIdentifier }
+
+func (r EffectFnOpportunityResult) GeneratorFunction() *ast.FunctionExpression {
+	return r.generatorFunction
+}
+
+func (r EffectFnOpportunityResult) PipeArguments() readonly.Slice[*ast.Node] {
+	return readonly.New(r.pipeArguments)
+}
+
+func (r EffectFnOpportunityResult) ExplicitTraceExpression() *ast.Node {
+	return r.explicitTraceExpression
+}
+
+func (r EffectFnOpportunityResult) SuggestedTraceName() string { return r.suggestedTraceName }
+
+func (r EffectFnOpportunityResult) InferredTraceName() string { return r.inferredTraceName }
+
+func (r EffectFnOpportunityResult) EffectModule() *ast.Expression { return r.effectModule }
+
+func (r EffectFnOpportunityResult) HasGenBody() bool { return r.hasGenBody }
+
+func (r EffectFnOpportunityResult) IsLayerMember() bool { return r.isLayerMember }
 
 // IsInsideEffectFn checks if a function node is already the first argument
 // of an Effect.fn, Effect.fnGen, or Effect.fnUntraced call.
@@ -177,28 +204,28 @@ func (tp *TypeParser) parseEffectFnOpportunityInner(node *ast.Node) *EffectFnOpp
 			return nil
 		}
 		return &EffectFnOpportunityResult{
-			TargetNode:              node,
-			NameIdentifier:          nameIdentifier,
-			GeneratorFunction:       result.generatorFunction,
-			PipeArguments:           result.pipeArguments,
-			ExplicitTraceExpression: result.explicitTraceExpression,
-			SuggestedTraceName:      suggestedTraceName,
-			InferredTraceName:       inferredTraceName,
-			EffectModule:            result.effectModule,
-			HasGenBody:              true,
-			IsLayerMember:           isLayerMember,
+			targetNode:              node,
+			nameIdentifier:          nameIdentifier,
+			generatorFunction:       result.generatorFunction,
+			pipeArguments:           result.pipeArguments,
+			explicitTraceExpression: result.explicitTraceExpression,
+			suggestedTraceName:      suggestedTraceName,
+			inferredTraceName:       inferredTraceName,
+			effectModule:            result.effectModule,
+			hasGenBody:              true,
+			isLayerMember:           isLayerMember,
 		}
 	}
 
 	// Step 10: Try regular opportunity (block body with >5 statements, relaxed in Layer context)
 	if result := tryParseRegularOpportunity(node, isLayerMember); result {
 		return &EffectFnOpportunityResult{
-			TargetNode:         node,
-			NameIdentifier:     nameIdentifier,
-			SuggestedTraceName: suggestedTraceName,
-			InferredTraceName:  inferredTraceName,
-			HasGenBody:         false,
-			IsLayerMember:      isLayerMember,
+			targetNode:         node,
+			nameIdentifier:     nameIdentifier,
+			suggestedTraceName: suggestedTraceName,
+			inferredTraceName:  inferredTraceName,
+			hasGenBody:         false,
+			isLayerMember:      isLayerMember,
 		}
 	}
 
@@ -290,8 +317,8 @@ func (tp *TypeParser) tryParseGenOpportunity(fnNode *ast.Node) *genOpportunityRe
 	var outerPipeArgs []*ast.Node
 
 	if pipeResult := tp.ParsePipeCall(bodyExpr); pipeResult != nil {
-		subject = pipeResult.Subject
-		outerPipeArgs = pipeResult.Args
+		subject = pipeResult.subject
+		outerPipeArgs = pipeResult.args
 	} else {
 		subject = bodyExpr
 	}
@@ -303,10 +330,10 @@ func (tp *TypeParser) tryParseGenOpportunity(fnNode *ast.Node) *genOpportunityRe
 	}
 
 	// with no this binding
-	if genResult.OptionsNode != nil {
+	if genResult.optionsNode != nil {
 		return nil
 	}
-	pipeArgs := append([]*ast.Node{}, genResult.PipeArguments...)
+	pipeArgs := append([]*ast.Node{}, genResult.pipeArguments...)
 	pipeArgs = append(pipeArgs, outerPipeArgs...)
 	for _, arg := range pipeArgs {
 		// A spread can contain bare pipeables, but cannot itself be wrapped as
@@ -326,8 +353,8 @@ func (tp *TypeParser) tryParseGenOpportunity(fnNode *ast.Node) *genOpportunityRe
 	}
 
 	return &genOpportunityResult{
-		effectModule:            genResult.EffectModule,
-		generatorFunction:       genResult.GeneratorFunction,
+		effectModule:            genResult.effectModule,
+		generatorFunction:       genResult.generatorFunction,
 		pipeArguments:           pipeArgs,
 		explicitTraceExpression: explicitTraceExpression,
 	}
@@ -688,7 +715,7 @@ func (tp *TypeParser) tryMatchLayerEffectInference(objectLiteral *ast.Node) stri
 	}
 	// Verify this is actually an Effect.gen call with our generator
 	parsedGen := tp.EffectGenCall(genCallNode)
-	if parsedGen == nil || parsedGen.GeneratorFunction != genFn {
+	if parsedGen == nil || parsedGen.generatorFunction != genFn {
 		return ""
 	}
 	// Effect.gen(...) -> CallExpression (Layer.effect call)
@@ -816,7 +843,7 @@ func (tp *TypeParser) tryMatchServiceMapMakeInference(objectLiteral *ast.Node) s
 	}
 	// Verify this is actually an Effect.gen call with our generator
 	parsedGen := tp.EffectGenCall(genCallNode)
-	if parsedGen == nil || parsedGen.GeneratorFunction != genFn {
+	if parsedGen == nil || parsedGen.generatorFunction != genFn {
 		return ""
 	}
 	// Effect.gen(...) -> PropertyAssignment with name "make" and initializer == genCall

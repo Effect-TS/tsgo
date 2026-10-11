@@ -7,8 +7,8 @@ import (
 )
 
 func resultDispatchTagValue(condition typeparser.DispatchCondition) (string, bool) {
-	value := unwrapTransparentExpression(condition.TagValue)
-	if condition.TagSubject != nil && value != nil && ast.IsStringLiteral(value) {
+	value := unwrapTransparentExpression(condition.TagValue())
+	if condition.TagSubject() != nil && value != nil && ast.IsStringLiteral(value) {
 		return value.AsStringLiteral().Text, true
 	}
 	return "", false

@@ -43,15 +43,15 @@ var SchemaClassMissingBrand = rule.Rule{
 func schemaClassMissingBrandSelf(tp *typeparser.TypeParser, classNode *ast.Node) *ast.Node {
 	var self, brand *ast.Node
 	if result := tp.ExtendsSchemaClass(classNode); result != nil {
-		self, brand = result.SelfTypeNode, result.BrandTypeNode
+		self, brand = result.SelfTypeNode(), result.BrandTypeNode()
 	} else if result := tp.ExtendsSchemaTaggedClass(classNode); result != nil {
-		self, brand = result.SelfTypeNode, result.BrandTypeNode
+		self, brand = result.SelfTypeNode(), result.BrandTypeNode()
 	} else if result := tp.ExtendsSchemaError(classNode); result != nil {
-		self, brand = result.SelfTypeNode, result.BrandTypeNode
+		self, brand = result.SelfTypeNode(), result.BrandTypeNode()
 	} else if result := tp.ExtendsSchemaTaggedError(classNode); result != nil {
-		self, brand = result.SelfTypeNode, result.BrandTypeNode
+		self, brand = result.SelfTypeNode(), result.BrandTypeNode()
 	} else if result := tp.ExtendsSchemaOpaque(classNode); result != nil {
-		self, brand = result.SelfTypeNode, result.BrandTypeNode
+		self, brand = result.SelfTypeNode(), result.BrandTypeNode()
 	}
 	if brand != nil {
 		return nil

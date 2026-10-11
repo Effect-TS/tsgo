@@ -256,57 +256,57 @@ func generatePipingFlowBaseline(
 		}
 
 		flows := tp.PipingFlows(sf, true)
-		fmt.Fprintf(&sb, "==== %s (%d flows) ====\n", file.UnitName, len(flows))
+		fmt.Fprintf(&sb, "==== %s (%d flows) ====\n", file.UnitName, flows.Len())
 
-		for _, flow := range flows {
+		for _, flow := range flows.All() {
 			sb.WriteString("\n=== Piping Flow ===\n")
 
 			// Location
-			startLine, startChar := scanner.GetECMALineAndUTF16CharacterOfPosition(sf, flow.Node.Pos())
-			endLine, endChar := scanner.GetECMALineAndUTF16CharacterOfPosition(sf, flow.Node.End())
+			startLine, startChar := scanner.GetECMALineAndUTF16CharacterOfPosition(sf, flow.Node().Pos())
+			endLine, endChar := scanner.GetECMALineAndUTF16CharacterOfPosition(sf, flow.Node().End())
 			fmt.Fprintf(&sb, "Location: %d:%d - %d:%d\n", startLine+1, startChar+1, endLine+1, endChar+1)
 
 			// Node text
-			nodeText := scanner.GetSourceTextOfNodeFromSourceFile(sf, flow.Node, false)
+			nodeText := scanner.GetSourceTextOfNodeFromSourceFile(sf, flow.Node(), false)
 			fmt.Fprintf(&sb, "Node: %s\n", escapeNewlines(nodeText))
 
 			// Node kind
-			fmt.Fprintf(&sb, "Node Kind: %s\n", flow.Node.Kind.String())
+			fmt.Fprintf(&sb, "Node Kind: %s\n", flow.Node().Kind.String())
 			sb.WriteString("\n")
 
 			// Subject
-			subjectText := scanner.GetSourceTextOfNodeFromSourceFile(sf, flow.Subject.Node, false)
+			subjectText := scanner.GetSourceTextOfNodeFromSourceFile(sf, flow.Subject().Node(), false)
 			fmt.Fprintf(&sb, "Subject: %s\n", escapeNewlines(subjectText))
-			if flow.Subject.OutType != nil {
-				fmt.Fprintf(&sb, "Subject Type: %s\n", c.TypeToStringEx(flow.Subject.OutType, nil, checker.TypeFormatFlagsNoTruncation, nil))
+			if flow.Subject().OutType() != nil {
+				fmt.Fprintf(&sb, "Subject Type: %s\n", c.TypeToStringEx(flow.Subject().OutType(), nil, checker.TypeFormatFlagsNoTruncation, nil))
 			} else {
 				sb.WriteString("Subject Type: \n")
 			}
 			sb.WriteString("\n")
 
 			// Transformations
-			fmt.Fprintf(&sb, "Transformations (%d):\n", len(flow.Transformations))
-			for i, t := range flow.Transformations {
+			fmt.Fprintf(&sb, "Transformations (%d):\n", flow.Transformations().Len())
+			for i, t := range flow.Transformations().All() {
 				calleeText := ""
-				if t.Callee != nil {
-					calleeText = scanner.GetSourceTextOfNodeFromSourceFile(sf, t.Callee, false)
+				if t.Callee() != nil {
+					calleeText = scanner.GetSourceTextOfNodeFromSourceFile(sf, t.Callee(), false)
 				}
 
 				argsDisplay := "(constant)"
-				if len(t.Args) > 0 {
+				if t.Args().Len() > 0 {
 					var argTexts []string
-					for _, arg := range t.Args {
+					for _, arg := range t.Args().All() {
 						argTexts = append(argTexts, escapeNewlines(scanner.GetSourceTextOfNodeFromSourceFile(sf, arg, false)))
 					}
 					argsDisplay = "[" + strings.Join(argTexts, ", ") + "]"
 				}
 
 				outTypeStr := ""
-				if t.OutType != nil {
-					outTypeStr = c.TypeToStringEx(t.OutType, nil, checker.TypeFormatFlagsNoTruncation, nil)
+				if t.OutType() != nil {
+					outTypeStr = c.TypeToStringEx(t.OutType(), nil, checker.TypeFormatFlagsNoTruncation, nil)
 				}
 
-				fmt.Fprintf(&sb, "  [%d] kind: %s\n", i, string(t.Kind))
+				fmt.Fprintf(&sb, "  [%d] kind: %s\n", i, string(t.Kind()))
 				fmt.Fprintf(&sb, "      callee: %s\n", escapeNewlines(calleeText))
 				fmt.Fprintf(&sb, "      args: %s\n", argsDisplay)
 				fmt.Fprintf(&sb, "      outType: %s\n", outTypeStr)
@@ -368,7 +368,7 @@ func generateExecutionFlowBaseline(
 					return formatExecutionFlowNodeLabel(c, sf, node)
 				},
 				NodeShape: func(node typeparser.ExecutionNode) (string, string) {
-					switch node.Kind {
+					switch node.Kind() {
 					case typeparser.ExecutionNodeKindLogicMerge:
 						return "(((", ")))"
 					case typeparser.ExecutionNodeKindValue:
@@ -411,28 +411,28 @@ func nextExecutionFlowMermaidFileName(baselineName string, sourceFileName string
 
 func formatExecutionFlowNodeLabel(c *checker.Checker, sf *ast.SourceFile, node typeparser.ExecutionNode) string {
 	var lines []string
-	switch node.Kind {
+	switch node.Kind() {
 	case typeparser.ExecutionNodeKindValue:
-		lines = append(lines, "type: "+formatExecutionType(c, node.Type))
-		lines = append(lines, "node: "+formatExecutionSourceNode(sf, node.Node))
+		lines = append(lines, "type: "+formatExecutionType(c, node.Type()))
+		lines = append(lines, "node: "+formatExecutionSourceNode(sf, node.Node()))
 		return strings.Join(lines, "\n")
 	case typeparser.ExecutionNodeKindLogicMerge:
-		lines = append(lines, "type: "+formatExecutionType(c, node.Type))
-		lines = append(lines, "node: "+formatExecutionSourceNode(sf, node.Node))
+		lines = append(lines, "type: "+formatExecutionType(c, node.Type()))
+		lines = append(lines, "node: "+formatExecutionSourceNode(sf, node.Node()))
 		return strings.Join(lines, "\n")
 	case typeparser.ExecutionNodeKindFunction:
-		lines = append(lines, "type: "+formatExecutionType(c, node.Type))
-		lines = append(lines, "node: "+formatExecutionSourceNode(sf, node.Node))
+		lines = append(lines, "type: "+formatExecutionType(c, node.Type()))
+		lines = append(lines, "node: "+formatExecutionSourceNode(sf, node.Node()))
 		return strings.Join(lines, "\n")
 	default:
-		lines = append(lines, "type: "+formatExecutionType(c, node.Type))
-		lines = append(lines, "callee: "+formatExecutionSourceNode(sf, node.Callee))
+		lines = append(lines, "type: "+formatExecutionType(c, node.Type()))
+		lines = append(lines, "callee: "+formatExecutionSourceNode(sf, node.Callee()))
 	}
 
 	args := "[]"
-	if len(node.Args) > 0 {
-		parts := make([]string, 0, len(node.Args))
-		for _, arg := range node.Args {
+	if node.Args().Len() > 0 {
+		parts := make([]string, 0, node.Args().Len())
+		for _, arg := range node.Args().All() {
 			parts = append(parts, formatExecutionSourceNode(sf, arg))
 		}
 		args = "[" + strings.Join(parts, ", ") + "]"
@@ -443,7 +443,7 @@ func formatExecutionFlowNodeLabel(c *checker.Checker, sf *ast.SourceFile, node t
 
 func formatExecutionFlowEdgeLabel(_ *ast.SourceFile, edge typeparser.ExecutionLink) string {
 	var lines []string
-	lines = append(lines, "kind: "+string(edge.Kind))
+	lines = append(lines, "kind: "+string(edge.Kind()))
 	return strings.Join(lines, "\n")
 }
 

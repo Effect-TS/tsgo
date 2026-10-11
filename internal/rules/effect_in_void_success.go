@@ -23,32 +23,32 @@ var EffectInVoidSuccess = rule.Rule{
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 
-		for _, entry := range ctx.TypeParser.ExpectedAndRealTypes(ctx.SourceFile) {
-			if entry.ExpectedType == entry.RealType {
+		for _, entry := range ctx.TypeParser.ExpectedAndRealTypes(ctx.SourceFile).All() {
+			if entry.ExpectedType() == entry.RealType() {
 				continue
 			}
 
-			realEffect := ctx.TypeParser.EffectType(entry.RealType)
+			realEffect := ctx.TypeParser.EffectType(entry.RealType())
 			if realEffect == nil {
 				continue
 			}
 
-			expectedEffect := ctx.TypeParser.EffectType(entry.ExpectedType)
+			expectedEffect := ctx.TypeParser.EffectType(entry.ExpectedType())
 			if expectedEffect == nil {
 				continue
 			}
 
 			// Check if the expected Effect's success type is void
-			if expectedEffect.A.Flags()&checker.TypeFlagsVoid == 0 {
+			if expectedEffect.A().Flags()&checker.TypeFlagsVoid == 0 {
 				continue
 			}
 
 			// Unroll the real Effect's success type into union members
 			// and check if any member is strictly an Effect type
-			members := ctx.TypeParser.UnrollUnionMembers(realEffect.A)
+			members := ctx.TypeParser.UnrollUnionMembers(realEffect.A())
 			voidedEffect := findFirstStrictEffect(ctx.TypeParser, ctx.Checker, members)
 			if voidedEffect != nil {
-				diag := ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(entry.Node), tsdiag.There_is_a_nested_0_in_the_void_success_channel_beware_that_this_could_lead_to_nested_Effect_Effect_that_won_t_be_executed_effect_effectInVoidSuccess, nil, ctx.Checker.TypeToString(voidedEffect))
+				diag := ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(entry.Node()), tsdiag.There_is_a_nested_0_in_the_void_success_channel_beware_that_this_could_lead_to_nested_Effect_Effect_that_won_t_be_executed_effect_effectInVoidSuccess, nil, ctx.Checker.TypeToString(voidedEffect))
 				diags = append(diags, diag)
 			}
 		}

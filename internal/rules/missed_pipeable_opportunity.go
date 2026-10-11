@@ -5,6 +5,7 @@ import (
 
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
@@ -53,7 +54,7 @@ type MissedPipeableOpportunityMatch struct {
 	PipeableTransformations []typeparser.PipingFlowTransformation
 	Flow                    *typeparser.PipingFlow
 	SubjectText             string
-	AfterTransformations    []typeparser.PipingFlowTransformation
+	AfterTransformations    readonly.Slice[typeparser.PipingFlowTransformation]
 }
 
 // AnalyzeMissedPipeableOpportunity finds all nested call chains that can be converted to .pipe() style.
@@ -62,16 +63,16 @@ func AnalyzeMissedPipeableOpportunity(tp *typeparser.TypeParser, c *checker.Chec
 
 	var matches []MissedPipeableOpportunityMatch
 
-	for _, flow := range flows {
+	for _, flow := range flows.All() {
 		// Skip flows with too few transformations
-		if len(flow.Transformations) < minArgCount {
+		if flow.Transformations().Len() < minArgCount {
 			continue
 		}
 
 		// Skip if final output type is callable (has call signatures)
-		lastTransformation := flow.Transformations[len(flow.Transformations)-1]
-		if lastTransformation.OutType != nil {
-			callSigs := c.GetSignaturesOfType(lastTransformation.OutType, checker.SignatureKindCall)
+		lastTransformation := flow.Transformations().At(flow.Transformations().Len() - 1)
+		if lastTransformation.OutType() != nil {
+			callSigs := c.GetSignaturesOfType(lastTransformation.OutType(), checker.SignatureKindCall)
 			if len(callSigs) > 0 {
 				continue
 			}
@@ -80,11 +81,11 @@ func AnalyzeMissedPipeableOpportunity(tp *typeparser.TypeParser, c *checker.Chec
 		// Search for valid pipeable segments
 		searchStartIndex := 0
 
-		for searchStartIndex <= len(flow.Transformations) {
+		for searchStartIndex <= flow.Transformations().Len() {
 			// Find the first pipeable type starting from searchStartIndex
 			firstPipeableIndex := -1
 
-			for i := searchStartIndex; i <= len(flow.Transformations); i++ {
+			for i := searchStartIndex; i <= flow.Transformations().Len(); i++ {
 				if isPipeableAtIndex(tp, flow, i) {
 					firstPipeableIndex = i
 					break
@@ -98,9 +99,9 @@ func AnalyzeMissedPipeableOpportunity(tp *typeparser.TypeParser, c *checker.Chec
 			// Collect transformations while their callees are safely pipeable
 			var pipeableTransformations []typeparser.PipingFlowTransformation
 
-			for i := firstPipeableIndex; i < len(flow.Transformations); i++ {
-				t := flow.Transformations[i]
-				if !tp.IsSafelyPipeableCallee(t.Callee) {
+			for i := firstPipeableIndex; i < flow.Transformations().Len(); i++ {
+				t := flow.Transformations().At(i)
+				if !tp.IsSafelyPipeableCallee(t.Callee()) {
 					break
 				}
 				pipeableTransformations = append(pipeableTransformations, t)
@@ -109,7 +110,7 @@ func AnalyzeMissedPipeableOpportunity(tp *typeparser.TypeParser, c *checker.Chec
 			// Count "call" kind transformations
 			callKindCount := 0
 			for _, t := range pipeableTransformations {
-				if t.Kind == typeparser.TransformationKindCall {
+				if t.Kind() == typeparser.TransformationKindCall {
 					callKindCount++
 				}
 			}
@@ -120,11 +121,11 @@ func AnalyzeMissedPipeableOpportunity(tp *typeparser.TypeParser, c *checker.Chec
 				// Get subject text for the diagnostic message
 				subjectText := getSubjectText(c, sf, flow, firstPipeableIndex)
 
-				afterTransformations := flow.Transformations[pipeableEndIndex:]
+				afterTransformations := flow.Transformations().Slice(pipeableEndIndex, flow.Transformations().Len())
 
 				matches = append(matches, MissedPipeableOpportunityMatch{
 					SourceFile:              sf,
-					Location:                scanner.GetErrorRangeForNode(sf, flow.Node),
+					Location:                scanner.GetErrorRangeForNode(sf, flow.Node()),
 					PipeableStartIndex:      firstPipeableIndex,
 					PipeableTransformations: pipeableTransformations,
 					Flow:                    flow,
@@ -148,18 +149,18 @@ func AnalyzeMissedPipeableOpportunity(tp *typeparser.TypeParser, c *checker.Chec
 // Index 0 = subject, index > 0 = transformations[index - 1].outType
 func isPipeableAtIndex(tp *typeparser.TypeParser, flow *typeparser.PipingFlow, index int) bool {
 	if index == 0 {
-		subjectType := flow.Subject.OutType
+		subjectType := flow.Subject().OutType()
 		if subjectType == nil {
 			return false
 		}
 		return tp.IsPipeableType(subjectType)
 	}
 
-	t := flow.Transformations[index-1]
-	if t.OutType == nil {
+	t := flow.Transformations().At(index - 1)
+	if t.OutType() == nil {
 		return false
 	}
-	return tp.IsPipeableType(t.OutType)
+	return tp.IsPipeableType(t.OutType())
 }
 
 // getSubjectText extracts the subject text for the diagnostic message.
@@ -167,14 +168,14 @@ func isPipeableAtIndex(tp *typeparser.TypeParser, flow *typeparser.PipingFlow, i
 // Otherwise, traverses the flow node to find the node at the right depth.
 func getSubjectText(_ *checker.Checker, sf *ast.SourceFile, flow *typeparser.PipingFlow, firstPipeableIndex int) string {
 	if firstPipeableIndex == 0 {
-		return trimmedNodeText(sf, flow.Subject.Node)
+		return trimmedNodeText(sf, flow.Subject().Node())
 	}
 
 	// Traverse from flow.node into arguments to find the node at the right depth
-	current := flow.Node
-	for i := len(flow.Transformations); i > firstPipeableIndex; i-- {
-		t := flow.Transformations[i-1]
-		if t.Kind == typeparser.TransformationKindCall && ast.IsCallExpression(current) {
+	current := flow.Node()
+	for i := flow.Transformations().Len(); i > firstPipeableIndex; i-- {
+		t := flow.Transformations().At(i - 1)
+		if t.Kind() == typeparser.TransformationKindCall && ast.IsCallExpression(current) {
 			call := current.AsCallExpression()
 			if call.Arguments != nil && len(call.Arguments.Nodes) > 0 {
 				current = call.Arguments.Nodes[0]

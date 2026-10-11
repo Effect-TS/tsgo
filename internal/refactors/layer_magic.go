@@ -129,7 +129,7 @@ func tryBuildRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *check
 	}
 
 	// Get target output types from the Layer ROut
-	targetOutputTypes := ctx.TypeParser.UnrollUnionMembers(layer.ROut)
+	targetOutputTypes := ctx.TypeParser.UnrollUnionMembers(layer.ROut())
 
 	// Convert to magic result
 	magicResult := layergraph.ConvertOutlineGraphToLayerMagic(ctx.TypeParser, outlineGraph, targetOutputTypes)
@@ -286,7 +286,7 @@ func tryPrepareRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *che
 	if exprType != nil {
 		parsedLayer := tp.LayerType(exprType)
 		if parsedLayer != nil {
-			previouslyProvided = parsedLayer.ROut
+			previouslyProvided = parsedLayer.ROut()
 		}
 	}
 

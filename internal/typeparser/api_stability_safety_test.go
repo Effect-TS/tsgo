@@ -99,7 +99,7 @@ export interface X<T> { v: Select<T> }`,
 	before := c.TotalInstantiationCount
 	used := tp.ApiStabilityUsedBySymbol(x)
 	delta := c.TotalInstantiationCount - before
-	if len(used.Dependencies) != 0 {
+	if len(used.dependencies) != 0 {
 		t.Fatalf("deferred anonymous operand should expose nothing, got %v", apiStabilityDependencyNames(used))
 	}
 	if delta != 0 {
@@ -128,7 +128,7 @@ export declare const x: Holder<{ value: string }>`,
 	x := apiStabilityTestExport(t, c, files["/.src/test.ts"], "x")
 	session := tp.NewApiStabilitySession()
 	used := session.UsedBySymbol(x)
-	if len(used.Dependencies) != 0 {
+	if len(used.dependencies) != 0 {
 		t.Fatalf("structural conditional selected the true branch; E must stay quiet: %v", apiStabilityDependencyNames(used))
 	}
 	entry := session.analysis.sessionSymbols[x]
@@ -226,7 +226,7 @@ func TestApiStabilitySafetyComputedNameDisplayAndSort(t *testing.T) {
 			continue
 		}
 		seen++
-		dependency := ApiStabilityDependency{Symbol: member, Declaration: member.Declarations[0]}
+		dependency := ApiStabilityDependency{symbol: member, declaration: member.Declarations[0]}
 		if rendered := ApiStabilityDependencyName(dependency); rendered != wantRendered {
 			t.Errorf("member %q displayed as %q, want %q", key, rendered, wantRendered)
 		}
@@ -247,7 +247,7 @@ func TestApiStabilitySafetyComputedNameDisplayAndSort(t *testing.T) {
 		t.Fatalf("expected %d computed members, got %d", len(wantInOrder), len(memberNodes))
 	}
 	for index, member := range memberNodes {
-		dependency := ApiStabilityDependency{Declaration: member}
+		dependency := ApiStabilityDependency{declaration: member}
 		if rendered := ApiStabilityDependencyName(dependency); rendered != wantInOrder[index] {
 			t.Errorf("declaration %d displayed as %q, want %q", index, rendered, wantInOrder[index])
 		}

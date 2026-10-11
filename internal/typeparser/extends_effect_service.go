@@ -6,11 +6,19 @@ import (
 
 // EffectServiceResult holds the parsed result of a class extending Effect.Service.
 type EffectServiceResult struct {
-	ClassName        *ast.Node // The class name identifier
-	SelfTypeNode     *ast.Node // The Self type argument node (first type arg of the inner call)
-	Options          *ast.Node // The options expression (second argument of the outer call), or nil
-	KeyStringLiteral *ast.Node // The key string literal from the outer call's first argument, or nil
+	className        *ast.Node // The class name identifier
+	selfTypeNode     *ast.Node // The Self type argument node (first type arg of the inner call)
+	options          *ast.Node // The options expression (second argument of the outer call), or nil
+	keyStringLiteral *ast.Node // The key string literal from the outer call's first argument, or nil
 }
+
+func (r EffectServiceResult) ClassName() *ast.Node { return r.className }
+
+func (r EffectServiceResult) SelfTypeNode() *ast.Node { return r.selfTypeNode }
+
+func (r EffectServiceResult) Options() *ast.Node { return r.options }
+
+func (r EffectServiceResult) KeyStringLiteral() *ast.Node { return r.keyStringLiteral }
 
 // ExtendsEffectV3Service checks if a class declaration extends Effect.Service<Self>()(key, options).
 // It detects the double-call pattern:
@@ -101,10 +109,10 @@ func (tp *TypeParser) ExtendsEffectV3Service(classNode *ast.Node) *EffectService
 			}
 
 			return &EffectServiceResult{
-				ClassName:        classNode.Name(),
-				SelfTypeNode:     innerCall.TypeArguments.Nodes[0],
-				Options:          options,
-				KeyStringLiteral: keyStringLiteral,
+				className:        classNode.Name(),
+				selfTypeNode:     innerCall.TypeArguments.Nodes[0],
+				options:          options,
+				keyStringLiteral: keyStringLiteral,
 			}
 		}
 

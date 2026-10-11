@@ -344,9 +344,9 @@ func isDeclarationName(node *ast.Node) bool {
 
 // formatEffectTypeParams formats Effect type parameters (A, E, R) and prepends them to documentation.
 func formatEffectTypeParams(c *checker.Checker, effect *typeparser.Effect, documentation string, isMarkdown bool) string {
-	aStr := c.TypeToStringEx(effect.A, nil, checker.TypeFormatFlagsNoTruncation, nil)
-	eStr := c.TypeToStringEx(effect.E, nil, checker.TypeFormatFlagsNoTruncation, nil)
-	rStr := c.TypeToStringEx(effect.R, nil, checker.TypeFormatFlagsNoTruncation, nil)
+	aStr := c.TypeToStringEx(effect.A(), nil, checker.TypeFormatFlagsNoTruncation, nil)
+	eStr := c.TypeToStringEx(effect.E(), nil, checker.TypeFormatFlagsNoTruncation, nil)
+	rStr := c.TypeToStringEx(effect.R(), nil, checker.TypeFormatFlagsNoTruncation, nil)
 
 	var prefix string
 	if isMarkdown {

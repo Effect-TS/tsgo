@@ -54,23 +54,23 @@ func AnalyzeFlatMapToMap(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.
 	var matches []FlatMapToMapMatch
 
 	flows := tp.PipingFlows(sf, true)
-	for _, flow := range flows {
-		for _, transformation := range flow.Transformations {
-			callee := transformation.Callee
-			args := transformation.Args
+	for _, flow := range flows.All() {
+		for _, transformation := range flow.Transformations().All() {
+			callee := transformation.Callee()
+			args := transformation.Args()
 
-			if len(args) == 0 || callee == nil {
+			if args.Len() == 0 || callee == nil {
 				continue
 			}
 			if !tp.IsNodeReferenceToEffectModuleApi(callee, "flatMap") {
 				continue
 			}
 
-			callback := typeparser.ParseLazyExpression(args[0], typeparser.LazyExpressionNone)
-			if callback == nil || callback.Expression == nil || callback.Expression.Kind != ast.KindCallExpression {
+			callback := typeparser.ParseLazyExpression(args.At(0), typeparser.LazyExpressionNone)
+			if callback == nil || callback.Expression() == nil || callback.Expression().Kind != ast.KindCallExpression {
 				continue
 			}
-			succeedCall := callback.Expression.AsCallExpression()
+			succeedCall := callback.Expression().AsCallExpression()
 			if succeedCall == nil || succeedCall.Expression == nil || succeedCall.Arguments == nil || len(succeedCall.Arguments.Nodes) != 1 {
 				continue
 			}
@@ -88,7 +88,7 @@ func AnalyzeFlatMapToMap(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.
 				Location:              scanner.GetErrorRangeForNode(sf, callee),
 				Callee:                callee,
 				CalleeNameNode:        calleeName,
-				SucceedCallExpression: callback.Expression,
+				SucceedCallExpression: callback.Expression(),
 				SucceedArgument:       succeedCall.Arguments.Nodes[0],
 			})
 		}

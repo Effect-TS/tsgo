@@ -37,7 +37,7 @@ func assertEffectGenFunctionReturnType(t *testing.T, version bundledeffect.Effec
 	defer done()
 
 	parsed := findFirstEffectGenCall(t, tp, sf)
-	returnType := tp.GetTypeAtLocation(parsed.Call.AsNode())
+	returnType := tp.GetTypeAtLocation(parsed.call.AsNode())
 	if returnType == nil {
 		t.Fatal("expected return type")
 	}
@@ -125,7 +125,7 @@ export const make = gen(function*() {
 })
 `)
 		parsed := findFirstEffectGenCall(t, tp, sf)
-		if parsed.EffectModule != nil {
+		if parsed.effectModule != nil {
 			done()
 			t.Fatal("expected a constant gen alias to have no directly replaceable Effect module receiver")
 		}

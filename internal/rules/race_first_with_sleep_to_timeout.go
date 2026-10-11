@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
@@ -50,40 +51,43 @@ func AnalyzeRaceFirstWithSleepToTimeout(tp *typeparser.TypeParser, c *checker.Ch
 	}
 
 	var matches []RaceFirstWithSleepToTimeoutMatch
-	for _, flow := range tp.PipingFlows(sf, true) {
-		for i := range flow.Transformations {
-			transformation := &flow.Transformations[i]
-			if transformation.Callee == nil {
+	for _, flow := range tp.PipingFlows(sf, true).All() {
+		for i := range flow.Transformations().All() {
+			transformation := flow.Transformations().At(i)
+			if transformation.Callee() == nil {
 				continue
 			}
 
 			var left, right *typeparser.PartialPipingFlow
 			switch {
-			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "raceFirst"):
+			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "raceFirst"):
 				// An onWinner option has observable behavior that timeoutOrElse
 				// cannot carry over, so only match the two-arm form.
-				if len(transformation.Args) != 1 {
+				if transformation.Args().Len() != 1 {
 					continue
 				}
 				left = flow.CopyPrefix(i)
-				if rightFlow := tp.LongestPipingFlowAt(transformation.Args[0], true); rightFlow != nil {
-					right = &rightFlow.PartialPipingFlow
+				if rightFlow := tp.LongestPipingFlowAt(transformation.Args().At(0), true); rightFlow != nil {
+					partial := rightFlow.Partial()
+					right = &partial
 				}
 
-			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "raceAllFirst"):
+			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "raceAllFirst"):
 				input := flow.CopyPrefix(i)
-				if input == nil || input.Subject.Node == nil {
+				if input == nil || input.Subject().Node() == nil {
 					continue
 				}
-				array := ast.SkipParentheses(input.Subject.Node)
+				array := ast.SkipParentheses(input.Subject().Node())
 				if array == nil || array.Kind != ast.KindArrayLiteralExpression || len(array.AsArrayLiteralExpression().Elements.Nodes) != 2 {
 					continue
 				}
 				if leftFlow := tp.LongestPipingFlowAt(array.AsArrayLiteralExpression().Elements.Nodes[0], true); leftFlow != nil {
-					left = &leftFlow.PartialPipingFlow
+					partial := leftFlow.Partial()
+					left = &partial
 				}
 				if rightFlow := tp.LongestPipingFlowAt(array.AsArrayLiteralExpression().Elements.Nodes[1], true); rightFlow != nil {
-					right = &rightFlow.PartialPipingFlow
+					partial := rightFlow.Partial()
+					right = &partial
 				}
 
 			default:
@@ -95,7 +99,7 @@ func AnalyzeRaceFirstWithSleepToTimeout(tp *typeparser.TypeParser, c *checker.Ch
 			}
 			matches = append(matches, RaceFirstWithSleepToTimeoutMatch{
 				SourceFile: sf,
-				Location:   scanner.GetErrorRangeForNode(sf, transformation.Callee),
+				Location:   scanner.GetErrorRangeForNode(sf, transformation.Callee()),
 			})
 		}
 	}
@@ -103,28 +107,28 @@ func AnalyzeRaceFirstWithSleepToTimeout(tp *typeparser.TypeParser, c *checker.Ch
 }
 
 func isRaceFirstTimerFlow(tp *typeparser.TypeParser, flow *typeparser.PartialPipingFlow) bool {
-	if tp == nil || flow == nil || len(flow.Transformations) == 0 {
+	if tp == nil || flow == nil || flow.Transformations().Len() == 0 {
 		return false
 	}
 
-	for i := range flow.Transformations {
-		transformation := &flow.Transformations[i]
-		if transformation.Callee == nil {
+	for i := range flow.Transformations().All() {
+		transformation := flow.Transformations().At(i)
+		if transformation.Callee() == nil {
 			continue
 		}
-		if tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "sleep") {
-			return i == 0 && timerTrailingTransformations(tp, flow.Transformations[i+1:])
+		if tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "sleep") {
+			return i == 0 && timerTrailingTransformations(tp, flow.Transformations().Slice(i+1, flow.Transformations().Len()))
 		}
-		if tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "delay") {
-			return timerTrailingTransformations(tp, flow.Transformations[i+1:])
+		if tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "delay") {
+			return timerTrailingTransformations(tp, flow.Transformations().Slice(i+1, flow.Transformations().Len()))
 		}
 	}
 	return false
 }
 
-func timerTrailingTransformations(tp *typeparser.TypeParser, transformations []typeparser.PipingFlowTransformation) bool {
-	for i := range transformations {
-		callee := transformations[i].Callee
+func timerTrailingTransformations(tp *typeparser.TypeParser, transformations readonly.Slice[typeparser.PipingFlowTransformation]) bool {
+	for _, transformation := range transformations.All() {
+		callee := transformation.Callee()
 		if callee == nil ||
 			!tp.IsNodeReferenceToEffectModuleApi(callee, "flatMap") &&
 				!tp.IsNodeReferenceToEffectModuleApi(callee, "andThen") &&

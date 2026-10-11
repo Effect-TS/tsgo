@@ -48,24 +48,24 @@ func AnalyzeCatchAllToMapError(tp *typeparser.TypeParser, _ *checker.Checker, sf
 	var matches []CatchAllToMapErrorMatch
 
 	flows := tp.PipingFlows(sf, true)
-	for _, flow := range flows {
-		for _, transformation := range flow.Transformations {
-			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "catch") &&
-				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "catchAll") {
+	for _, flow := range flows.All() {
+		for _, transformation := range flow.Transformations().All() {
+			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catch") &&
+				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchAll") {
 				continue
 			}
 
-			if len(transformation.Args) < 1 {
+			if transformation.Args().Len() < 1 {
 				continue
 			}
-			callback := transformation.Args[0]
+			callback := transformation.Args().At(0)
 
 			lazy := typeparser.ParseLazyExpression(callback, typeparser.LazyExpressionNone)
 			if lazy == nil {
 				continue
 			}
 
-			expr := lazy.Expression
+			expr := lazy.Expression()
 			if expr == nil || expr.Kind != ast.KindCallExpression {
 				continue
 			}
@@ -84,7 +84,7 @@ func AnalyzeCatchAllToMapError(tp *typeparser.TypeParser, _ *checker.Checker, sf
 			// Extract the "catch" name node from the PropertyAccessExpression callee
 			var calleeNameNode *ast.Node
 			catchMethodName := "catch"
-			callee := transformation.Callee
+			callee := transformation.Callee()
 			if callee.Kind == ast.KindPropertyAccessExpression {
 				prop := callee.AsPropertyAccessExpression()
 				if prop != nil && prop.Name() != nil {
@@ -95,8 +95,8 @@ func AnalyzeCatchAllToMapError(tp *typeparser.TypeParser, _ *checker.Checker, sf
 
 			matches = append(matches, CatchAllToMapErrorMatch{
 				SourceFile:         sf,
-				Location:           scanner.GetErrorRangeForNode(sf, transformation.Callee),
-				Callee:             transformation.Callee,
+				Location:           scanner.GetErrorRangeForNode(sf, transformation.Callee()),
+				Callee:             transformation.Callee(),
 				CalleeNameNode:     calleeNameNode,
 				CatchMethodName:    catchMethodName,
 				FailCallExpression: expr,

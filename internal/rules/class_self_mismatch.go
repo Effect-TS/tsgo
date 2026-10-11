@@ -77,38 +77,38 @@ func checkClassSelfMismatch(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 
 	// Try extends* functions in order, matching the TS reference
 	if result := tp.ExtendsEffectV3Service(classNode); result != nil {
-		selfTypeNode = result.SelfTypeNode
-		className = result.ClassName
+		selfTypeNode = result.SelfTypeNode()
+		className = result.ClassName()
 	} else if result := tp.ExtendsContextService(classNode); result != nil {
-		selfTypeNode = result.SelfTypeNode
-		className = result.ClassName
+		selfTypeNode = result.SelfTypeNode()
+		className = result.ClassName()
 	} else if result := tp.ExtendsContextTag(classNode); result != nil {
-		selfTypeNode = result.SelfTypeNode
-		className = result.ClassName
+		selfTypeNode = result.SelfTypeNode()
+		className = result.ClassName()
 	} else if result := tp.ExtendsEffectTag(classNode); result != nil {
-		selfTypeNode = result.SelfTypeNode
-		className = result.ClassName
+		selfTypeNode = result.SelfTypeNode()
+		className = result.ClassName()
 	} else if result := tp.ExtendsSchemaClass(classNode); result != nil {
-		selfTypeNode = result.SelfTypeNode
-		className = result.ClassName
+		selfTypeNode = result.SelfTypeNode()
+		className = result.ClassName()
 	} else if result := tp.ExtendsSchemaTaggedClass(classNode); result != nil {
-		selfTypeNode = result.SelfTypeNode
-		className = result.ClassName
+		selfTypeNode = result.SelfTypeNode()
+		className = result.ClassName()
 	} else if result := tp.ExtendsSchemaTaggedError(classNode); result != nil {
-		selfTypeNode = result.SelfTypeNode
-		className = result.ClassName
+		selfTypeNode = result.SelfTypeNode()
+		className = result.ClassName()
 	} else if result := tp.ExtendsSchemaTaggedRequest(classNode); result != nil {
-		selfTypeNode = result.SelfTypeNode
-		className = result.ClassName
+		selfTypeNode = result.SelfTypeNode()
+		className = result.ClassName()
 	} else if result := tp.ExtendsSchemaRequestClass(classNode); result != nil {
-		selfTypeNode = result.SelfTypeNode
-		className = result.ClassName
+		selfTypeNode = result.SelfTypeNode()
+		className = result.ClassName()
 	} else if result := tp.ExtendsEffectSqlModelClass(classNode); result != nil {
-		selfTypeNode = result.SelfTypeNode
-		className = result.ClassName
+		selfTypeNode = result.SelfTypeNode()
+		className = result.ClassName()
 	} else if result := tp.ExtendsEffectModelClass(classNode); result != nil {
-		selfTypeNode = result.SelfTypeNode
-		className = result.ClassName
+		selfTypeNode = result.SelfTypeNode()
+		className = result.ClassName()
 	}
 
 	if selfTypeNode == nil || className == nil {

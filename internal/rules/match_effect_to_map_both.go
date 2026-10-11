@@ -48,16 +48,16 @@ func AnalyzeMatchEffectToMapBoth(tp *typeparser.TypeParser, _ *checker.Checker, 
 		return nil
 	}
 	var matches []MatchEffectToMapBothMatch
-	for _, flow := range tp.PipingFlows(sf, true) {
-		for index := range flow.Transformations {
-			transformation := &flow.Transformations[index]
-			if len(transformation.Args) != 1 || transformation.Callee == nil ||
-				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "matchEffect") {
+	for _, flow := range tp.PipingFlows(sf, true).All() {
+		for index := range flow.Transformations().All() {
+			transformation := flow.Transformations().At(index)
+			if transformation.Args().Len() != 1 || transformation.Callee() == nil ||
+				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "matchEffect") {
 				continue
 			}
 
-			onFailure := typeparser.ObjectLiteralPropertyInitializer(transformation.Args[0], "onFailure")
-			onSuccess := typeparser.ObjectLiteralPropertyInitializer(transformation.Args[0], "onSuccess")
+			onFailure := typeparser.ObjectLiteralPropertyInitializer(transformation.Args().At(0), "onFailure")
+			onSuccess := typeparser.ObjectLiteralPropertyInitializer(transformation.Args().At(0), "onSuccess")
 			if onFailure == nil || onSuccess == nil {
 				continue
 			}
@@ -70,11 +70,11 @@ func AnalyzeMatchEffectToMapBoth(tp *typeparser.TypeParser, _ *checker.Checker, 
 				continue
 			}
 			var calleeName *ast.Node
-			if transformation.Callee.Kind == ast.KindPropertyAccessExpression {
-				calleeName = transformation.Callee.AsPropertyAccessExpression().Name()
+			if transformation.Callee().Kind == ast.KindPropertyAccessExpression {
+				calleeName = transformation.Callee().AsPropertyAccessExpression().Name()
 			}
 			matches = append(matches, MatchEffectToMapBothMatch{
-				SourceFile: sf, Location: scanner.GetErrorRangeForNode(sf, transformation.Callee), CalleeNode: transformation.Callee, CalleeNameNode: calleeName,
+				SourceFile: sf, Location: scanner.GetErrorRangeForNode(sf, transformation.Callee()), CalleeNode: transformation.Callee(), CalleeNameNode: calleeName,
 				HandlerResults: [2]*ast.Node{failureResult, successResult}, ConstructorArgs: [2]*ast.Node{failureArgument, successArgument},
 			})
 		}

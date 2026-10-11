@@ -3,6 +3,7 @@ package typeparser
 
 import (
 	"github.com/effect-ts/tsgo/internal/graph"
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
@@ -18,15 +19,25 @@ const (
 )
 
 type ExecutionNode struct {
-	Kind ExecutionNodeKind
-	Node *ast.Node
-	Type *checker.Type
+	kind ExecutionNodeKind
+	node *ast.Node
+	typ  *checker.Type
 
 	// Transform nodes preserve the original AST in Node and optionally expose a
 	// normalized callee/args view once the visitor reaches that node.
-	Callee *ast.Node
-	Args   []*ast.Node
+	callee *ast.Node
+	args   []*ast.Node
 }
+
+func (r ExecutionNode) Kind() ExecutionNodeKind { return r.kind }
+
+func (r ExecutionNode) Node() *ast.Node { return r.node }
+
+func (r ExecutionNode) Type() *checker.Type { return r.typ }
+
+func (r ExecutionNode) Callee() *ast.Node { return r.callee }
+
+func (r ExecutionNode) Args() readonly.Slice[*ast.Node] { return readonly.New(r.args) }
 
 type ExecutionLinkKind string
 
@@ -41,21 +52,31 @@ const (
 )
 
 type ExecutionLink struct {
-	Kind ExecutionLinkKind
-	Node *ast.Node
+	kind ExecutionLinkKind
+	node *ast.Node
 }
 
+func (r ExecutionLink) Kind() ExecutionLinkKind { return r.kind }
+
+func (r ExecutionLink) Node() *ast.Node { return r.node }
+
 type (
-	ExecutionFlow = graph.Graph[ExecutionNode, ExecutionLink]
-	GraphSlice    struct {
+	ExecutionFlow struct {
+		graph *graph.Graph[ExecutionNode, ExecutionLink]
+	}
+	GraphSlice struct {
 		Leading  *graph.NodeIndex
 		Trailing *graph.NodeIndex
 	}
 )
 
+func (flow *ExecutionFlow) ToMermaid(options graph.MermaidOptions[ExecutionNode, ExecutionLink]) string {
+	return flow.graph.ToMermaid(options)
+}
+
 type executionCollector struct {
 	tp          *TypeParser
-	g           *ExecutionFlow
+	g           *graph.Graph[ExecutionNode, ExecutionLink]
 	parsed      *core.LinkStore[*ast.Node, *GraphSlice]
 	usageTarget *GraphSlice
 }
@@ -70,9 +91,9 @@ func (ec *executionCollector) buildSlice(node ExecutionNode) *GraphSlice {
 
 func (ec *executionCollector) buildValueNode(node *ast.Node) *GraphSlice {
 	return ec.buildSlice(ExecutionNode{
-		Kind: ExecutionNodeKindValue,
-		Node: node,
-		Type: ec.tp.GetTypeAtLocation(node),
+		kind: ExecutionNodeKindValue,
+		node: node,
+		typ:  ec.tp.GetTypeAtLocation(node),
 	})
 }
 
@@ -99,7 +120,7 @@ func (ec *executionCollector) connectSlices(fromSlice *GraphSlice, toSlice *Grap
 		}
 	}
 	ec.g.AddEdge(*fromSlice.Trailing, *toSlice.Leading, ExecutionLink{
-		Kind: kind,
+		kind: kind,
 	})
 	return &GraphSlice{
 		Leading:  fromSlice.Leading,
@@ -189,16 +210,16 @@ func (ec *executionCollector) visitExpressionNode(node *ast.Expression, parentEx
 }
 
 func (ec *executionCollector) visitPipeCall(p *ParsedPipeCallResult, _ *ast.Node) *GraphSlice {
-	s := ec.visitNode(p.Subject)
-	for i, pipedTransform := range p.Args {
+	s := ec.visitNode(p.subject)
+	for i, pipedTransform := range p.args {
 		// TODO: OOB argsouttype check
 		callee, args := ec.extractCalleeAndArgs(pipedTransform)
 		transformSlice := ec.buildSlice(ExecutionNode{
-			Kind:   ExecutionNodeKindTransform,
-			Node:   pipedTransform,
-			Type:   p.ArgsOutType[i],
-			Callee: callee,
-			Args:   args,
+			kind:   ExecutionNodeKindTransform,
+			node:   pipedTransform,
+			typ:    p.argsOutType[i],
+			callee: callee,
+			args:   args,
 		})
 		*ec.parsed.Get(pipedTransform) = transformSlice
 		ec.visitNodeAndConnectSlice(callee, transformSlice, ExecutionLinkKindTransformCallee)
@@ -210,43 +231,43 @@ func (ec *executionCollector) visitPipeCall(p *ParsedPipeCallResult, _ *ast.Node
 
 func (ec *executionCollector) visitEffectGenCall(p *EffectGenCallResult, node *ast.Node) *GraphSlice {
 	s := ec.buildSlice(ExecutionNode{
-		Kind: ExecutionNodeKindLogicMerge,
-		Node: node,
-		Type: ec.tp.GetTypeAtLocation(node),
+		kind: ExecutionNodeKindLogicMerge,
+		node: node,
+		typ:  ec.tp.GetTypeAtLocation(node),
 	})
-	ast.ForEachReturnStatement(p.Body, func(stmt *ast.Node) bool {
+	ast.ForEachReturnStatement(p.body, func(stmt *ast.Node) bool {
 		if stmt.Kind == ast.KindReturnStatement {
 			ec.visitNodeAndConnectSlice(stmt.Expression(), s, ExecutionLinkKindPotentialReturn)
 		}
 		return false
 	})
-	checker.ForEachYieldExpression(p.Body, func(expr *ast.Node) bool {
+	checker.ForEachYieldExpression(p.body, func(expr *ast.Node) bool {
 		if expr != nil && expr.Expression() != nil {
 			*ec.parsed.Get(expr) = nil
 			ec.visitNodeAndConnectSlice(expr.Expression(), s, ExecutionLinkKindYieldable)
 		}
 		return false
 	})
-	if p.Body != nil {
-		ec.visitEachChildWithUsageTarget(p.Body, s)
+	if p.body != nil {
+		ec.visitEachChildWithUsageTarget(p.body, s)
 	}
 	return s
 }
 
 func (ec *executionCollector) visitEffectFnCall(p *EffectFnCallResult, node *ast.Node) *GraphSlice {
 	sExit := ec.buildSlice(ExecutionNode{
-		Kind: ExecutionNodeKindLogicMerge,
-		Node: p.FunctionNode,
-		Type: p.FunctionReturnType,
+		kind: ExecutionNodeKindLogicMerge,
+		node: p.functionNode,
+		typ:  p.functionReturnType,
 	})
-	for i, pipedTransform := range p.PipeArguments {
+	for i, pipedTransform := range p.pipeArguments {
 		callee, args := ec.extractCalleeAndArgs(pipedTransform)
 		transformSlice := ec.buildSlice(ExecutionNode{
-			Kind:   ExecutionNodeKindTransform,
-			Node:   pipedTransform,
-			Type:   p.PipeArgsOutType[i], // TODO: OOB?
-			Callee: callee,
-			Args:   args,
+			kind:   ExecutionNodeKindTransform,
+			node:   pipedTransform,
+			typ:    p.pipeArgsOutType[i], // TODO: OOB?
+			callee: callee,
+			args:   args,
 		})
 		*ec.parsed.Get(pipedTransform) = transformSlice
 		ec.visitNodeAndConnectSlice(callee, transformSlice, ExecutionLinkKindTransformCallee)
@@ -275,11 +296,11 @@ func (ec *executionCollector) visitEffectFnCall(p *EffectFnCallResult, node *ast
 	}
 	// function with parameters
 	s := ec.buildSlice(ExecutionNode{
-		Kind: ExecutionNodeKindFunction,
-		Node: node,
-		Type: ec.tp.GetTypeAtLocation(node),
+		kind: ExecutionNodeKindFunction,
+		node: node,
+		typ:  ec.tp.GetTypeAtLocation(node),
 	})
-	for _, arg := range p.FunctionNode.Parameters() {
+	for _, arg := range p.functionNode.Parameters() {
 		ec.visitNodeAndConnectSlice(arg, s, ExecutionLinkKindParameter)
 	}
 	ec.connectSlices(sExit, s, ExecutionLinkKindPotentialReturn)
@@ -290,11 +311,11 @@ func (ec *executionCollector) visitSingleArgInlineCall(p *parsedSingleArgInlineC
 	s := ec.visitNode(p.Subject)
 	callee, args := ec.extractCalleeAndArgs(p.Transform)
 	transformSlice := ec.buildSlice(ExecutionNode{
-		Kind:   ExecutionNodeKindTransform,
-		Node:   p.Transform,
-		Type:   ec.tp.GetTypeAtLocation(node),
-		Callee: callee,
-		Args:   args,
+		kind:   ExecutionNodeKindTransform,
+		node:   p.Transform,
+		typ:    ec.tp.GetTypeAtLocation(node),
+		callee: callee,
+		args:   args,
 	})
 	s = ec.connectSlices(s, transformSlice, ExecutionLinkKindPipe)
 	ec.visitNodeAndConnectSlice(callee, transformSlice, ExecutionLinkKindTransformCallee)
@@ -303,23 +324,23 @@ func (ec *executionCollector) visitSingleArgInlineCall(p *parsedSingleArgInlineC
 }
 
 func (ec *executionCollector) visitDataFirstOrLastCall(p *ParsedDataFirstOrLastCall, node *ast.Node) *GraphSlice {
-	s := ec.visitNode(p.Subject)
+	s := ec.visitNode(p.subject)
 	transformSlice := ec.buildSlice(ExecutionNode{
-		Kind: ExecutionNodeKindTransform,
-		Node: node,
-		Type: ec.tp.GetTypeAtLocation(node),
+		kind: ExecutionNodeKindTransform,
+		node: node,
+		typ:  ec.tp.GetTypeAtLocation(node),
 	})
 	s = ec.connectSlices(s, transformSlice, ExecutionLinkKindPipe)
-	ec.visitNodeAndConnectSlice(p.Callee, s, ExecutionLinkKindTransformCallee)
-	ec.visitNodesAndConnectSlice(p.Args, s, ExecutionLinkKindTransformArg)
+	ec.visitNodeAndConnectSlice(p.callee, s, ExecutionLinkKindTransformCallee)
+	ec.visitNodesAndConnectSlice(p.args, s, ExecutionLinkKindTransformArg)
 	return s
 }
 
 func (ec *executionCollector) visitFunctionLikeDeclaration(node *ast.Node) *GraphSlice {
 	s := ec.buildSlice(ExecutionNode{
-		Kind: ExecutionNodeKindFunction,
-		Node: node,
-		Type: ec.tp.GetTypeAtLocation(node),
+		kind: ExecutionNodeKindFunction,
+		node: node,
+		typ:  ec.tp.GetTypeAtLocation(node),
 	})
 	ec.visitNodesAndConnectSlice(node.Parameters(), s, ExecutionLinkKindParameter)
 	fnBody := node.Body()
@@ -352,7 +373,7 @@ func (tp *TypeParser) ExecutionFlow(sf *ast.SourceFile) *ExecutionFlow {
 			parsed: &core.LinkStore[*ast.Node, *GraphSlice]{},
 		}
 		ec.visitNode(sf.AsNode())
-		return g
+		return &ExecutionFlow{graph: g}
 	})
 }
 

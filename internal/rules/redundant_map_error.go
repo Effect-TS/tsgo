@@ -61,7 +61,7 @@ func AnalyzeRedundantGeneratorMapError(tp *typeparser.TypeParser, c *checker.Che
 	generatorCalls := make(map[*ast.FunctionExpression]*ast.Node)
 	candidatesByGenerator := make(map[*ast.FunctionExpression]map[*ast.Node]redundantMapErrorCandidate)
 
-	for _, flow := range tp.PipingFlows(sf, true) {
+	for _, flow := range tp.PipingFlows(sf, true).All() {
 		candidate, genFn, genCallNode, ok := analyzeRedundantMapErrorFlowCandidate(tp, sf, flow)
 		if !ok {
 			continue
@@ -87,20 +87,20 @@ func AnalyzeRedundantGeneratorMapError(tp *typeparser.TypeParser, c *checker.Che
 }
 
 func analyzeRedundantMapErrorFlowCandidate(tp *typeparser.TypeParser, sf *ast.SourceFile, flow *typeparser.PipingFlow) (redundantMapErrorCandidate, *ast.FunctionExpression, *ast.Node, bool) {
-	if tp == nil || sf == nil || flow == nil || flow.Node == nil || len(flow.Transformations) == 0 {
+	if tp == nil || sf == nil || flow == nil || flow.Node() == nil || flow.Transformations().Len() == 0 {
 		return redundantMapErrorCandidate{}, nil, nil, false
 	}
 
-	lastTransform := flow.Transformations[len(flow.Transformations)-1]
-	if lastTransform.Callee == nil || len(lastTransform.Args) == 0 {
+	lastTransform := flow.Transformations().At(flow.Transformations().Len() - 1)
+	if lastTransform.Callee() == nil || lastTransform.Args().Len() == 0 {
 		return redundantMapErrorCandidate{}, nil, nil, false
 	}
-	if !tp.IsNodeReferenceToEffectModuleApi(lastTransform.Callee, "mapError") {
+	if !tp.IsNodeReferenceToEffectModuleApi(lastTransform.Callee(), "mapError") {
 		return redundantMapErrorCandidate{}, nil, nil, false
 	}
 
-	yieldExpr := enclosingYieldExpression(flow.Node)
-	if yieldExpr == nil || yieldExpr.Expression == nil || yieldExpr.Expression != flow.Node || yieldExpr.AsteriskToken == nil {
+	yieldExpr := enclosingYieldExpression(flow.Node())
+	if yieldExpr == nil || yieldExpr.Expression == nil || yieldExpr.Expression != flow.Node() || yieldExpr.AsteriskToken == nil {
 		return redundantMapErrorCandidate{}, nil, nil, false
 	}
 	if tp.GetEffectContextFlags(yieldExpr.AsNode())&typeparser.EffectContextFlagCanYieldEffect == 0 {
@@ -117,7 +117,7 @@ func analyzeRedundantMapErrorFlowCandidate(tp *typeparser.TypeParser, sf *ast.So
 		return redundantMapErrorCandidate{}, nil, nil, false
 	}
 
-	mapperNode := unwrapTransparentExpression(lastTransform.Args[0])
+	mapperNode := unwrapTransparentExpression(lastTransform.Args().At(0))
 	mapperText := nodeSourceText(sf, mapperNode)
 	if mapperNode == nil || mapperText == "" {
 		return redundantMapErrorCandidate{}, nil, nil, false
@@ -125,7 +125,7 @@ func analyzeRedundantMapErrorFlowCandidate(tp *typeparser.TypeParser, sf *ast.So
 
 	return redundantMapErrorCandidate{
 		yieldExpression: yieldExpr.AsNode(),
-		mapErrorNode:    lastTransform.Callee,
+		mapErrorNode:    lastTransform.Callee(),
 		mapperNode:      mapperNode,
 		mapperText:      mapperText,
 	}, genFn, genCallNode, true

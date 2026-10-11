@@ -120,13 +120,13 @@ func analyzePreferUnsafeConstructorNode(tp *typeparser.TypeParser, c *checker.Ch
 	// The constructor call must produce an `Effect<A, never, never>`: a fallible or
 	// service-requiring effect has no behavior-preserving synchronous replacement.
 	eff := tp.EffectType(tp.GetTypeAtLocation(inner))
-	if eff == nil || eff.A == nil {
+	if eff == nil || eff.A() == nil {
 		return PreferUnsafeConstructorMatch{}, false
 	}
-	if eff.E == nil || eff.E.Flags()&checker.TypeFlagsNever == 0 {
+	if eff.E() == nil || eff.E().Flags()&checker.TypeFlagsNever == 0 {
 		return PreferUnsafeConstructorMatch{}, false
 	}
-	if eff.R == nil || eff.R.Flags()&checker.TypeFlagsNever == 0 {
+	if eff.R() == nil || eff.R().Flags()&checker.TypeFlagsNever == 0 {
 		return PreferUnsafeConstructorMatch{}, false
 	}
 
@@ -164,7 +164,7 @@ func analyzePreferUnsafeConstructorNode(tp *typeparser.TypeParser, c *checker.Ch
 		if sibling == nil {
 			continue
 		}
-		if !unsafeSiblingMatchesCall(tp, c, innerCall, sibling, eff.A) {
+		if !unsafeSiblingMatchesCall(tp, c, innerCall, sibling, eff.A()) {
 			continue
 		}
 

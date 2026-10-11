@@ -99,11 +99,11 @@ var AnyUnknownInErrorContext = rule.Rule{
 			// Try strict Effect type first, then Layer type
 			var eType, rType *checker.Type
 			if eff := ctx.TypeParser.StrictEffectType(t); eff != nil {
-				eType = eff.E
-				rType = eff.R
+				eType = eff.E()
+				rType = eff.R()
 			} else if layer := ctx.TypeParser.LayerType(t); layer != nil {
-				eType = layer.E
-				rType = layer.RIn
+				eType = layer.E()
+				rType = layer.RIn()
 			}
 
 			if eType == nil || rType == nil {

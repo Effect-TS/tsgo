@@ -141,24 +141,24 @@ func checkDeterministicKeyMatch(tp *typeparser.TypeParser, program checker.Progr
 func matchClassPattern(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, classNode *ast.Node, extendedKeyDetection bool) *deterministicKeyMatch {
 	// Service target: ExtendsEffectService → ExtendsContextTag → ExtendsEffectTag → ExtendsServiceMapService
 	if result := tp.ExtendsEffectV3Service(classNode); result != nil {
-		return &deterministicKeyMatch{className: result.ClassName, keyStringLiteral: result.KeyStringLiteral, target: "service"}
+		return &deterministicKeyMatch{className: result.ClassName(), keyStringLiteral: result.KeyStringLiteral(), target: "service"}
 	}
 	if result := tp.ExtendsContextTag(classNode); result != nil {
-		return &deterministicKeyMatch{className: result.ClassName, keyStringLiteral: result.KeyStringLiteral, target: "service"}
+		return &deterministicKeyMatch{className: result.ClassName(), keyStringLiteral: result.KeyStringLiteral(), target: "service"}
 	}
 	if result := tp.ExtendsEffectTag(classNode); result != nil {
-		return &deterministicKeyMatch{className: result.ClassName, keyStringLiteral: result.KeyStringLiteral, target: "service"}
+		return &deterministicKeyMatch{className: result.ClassName(), keyStringLiteral: result.KeyStringLiteral(), target: "service"}
 	}
 	if result := tp.ExtendsContextService(classNode); result != nil {
-		return &deterministicKeyMatch{className: result.ClassName, keyStringLiteral: result.KeyStringLiteral, target: "service"}
+		return &deterministicKeyMatch{className: result.ClassName(), keyStringLiteral: result.KeyStringLiteral(), target: "service"}
 	}
 
 	// Error target: ExtendsDataTaggedError → ExtendsSchemaTaggedError
 	if result := tp.ExtendsDataTaggedError(classNode); result != nil {
-		return &deterministicKeyMatch{className: result.ClassName, keyStringLiteral: result.KeyStringLiteral, target: "error"}
+		return &deterministicKeyMatch{className: result.ClassName(), keyStringLiteral: result.KeyStringLiteral(), target: "error"}
 	}
 	if result := tp.ExtendsSchemaTaggedError(classNode); result != nil {
-		return &deterministicKeyMatch{className: result.ClassName, keyStringLiteral: result.KeyStringLiteral, target: "error"}
+		return &deterministicKeyMatch{className: result.ClassName(), keyStringLiteral: result.KeyStringLiteral(), target: "error"}
 	}
 
 	// Custom target (only if extendedKeyDetection is enabled)

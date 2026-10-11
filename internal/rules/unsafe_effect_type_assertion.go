@@ -56,13 +56,13 @@ func AnalyzeUnsafeEffectTypeAssertion(tp *typeparser.TypeParser, c *checker.Chec
 	var matches []UnsafeEffectTypeAssertionMatch
 	parseEffectStreamOrLayer := func(t *checker.Type) (e *checker.Type, r *checker.Type, ok bool) {
 		if effect := tp.EffectType(t); effect != nil {
-			return effect.E, effect.R, true
+			return effect.E(), effect.R(), true
 		}
 		if stream := tp.StreamType(t); stream != nil {
-			return stream.E, stream.R, true
+			return stream.E(), stream.R(), true
 		}
 		if layer := tp.LayerType(t); layer != nil {
-			return layer.E, layer.RIn, true
+			return layer.E(), layer.RIn(), true
 		}
 		return nil, nil, false
 	}

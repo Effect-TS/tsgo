@@ -145,13 +145,13 @@ func checkLazyEffectService(ctx *rule.Context, stmt *ast.Node) []*ast.Diagnostic
 	}
 
 	service := ctx.TypeParser.ServiceType(classType)
-	if service == nil || service.Shape == nil {
+	if service == nil || service.Shape() == nil {
 		return nil
 	}
 
 	serviceName := scanner.GetTextOfNode(stmt.Name())
 	var diags []*ast.Diagnostic
-	for _, member := range ctx.Checker.GetPropertiesOfType(service.Shape) {
+	for _, member := range ctx.Checker.GetPropertiesOfType(service.Shape()) {
 		if member == nil {
 			continue
 		}

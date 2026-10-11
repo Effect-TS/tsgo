@@ -41,9 +41,9 @@ func AnalyzePreferSchemaTaggedError(tp *typeparser.TypeParser, sf *ast.SourceFil
 		}
 		if node.Kind == ast.KindClassDeclaration {
 			if result := tp.ExtendsDataTaggedError(node); result != nil {
-				locationNode := result.ClassName
+				locationNode := result.ClassName()
 				if locationNode == nil {
-					locationNode = result.CallExpression
+					locationNode = result.CallExpression()
 				}
 				matches = append(matches, PreferSchemaTaggedErrorMatch{
 					SourceFile: sf,

@@ -69,26 +69,26 @@ func TestParseReturningDispatchAcceptedShapes(t *testing.T) {
 			if dispatch == nil {
 				t.Fatal("expected returning dispatch")
 			}
-			if dispatch.Node != function || dispatch.Body == nil || len(dispatch.Params) != 1 || dispatch.Dispatch == nil {
+			if dispatch.node != function || dispatch.body == nil || len(dispatch.params) != 1 || dispatch.dispatch == nil {
 				t.Fatalf("unexpected function evidence: %+v", dispatch)
 			}
-			resultDispatch := dispatch.Dispatch
-			if resultDispatch.Node != dispatch.Body {
+			resultDispatch := dispatch.dispatch
+			if resultDispatch.node != dispatch.body {
 				t.Fatalf("result dispatch node does not preserve the function body")
 			}
 
-			tests := make([]string, len(resultDispatch.Branches))
-			discriminants := make([]string, len(resultDispatch.Branches))
-			results := make([]string, len(resultDispatch.Branches))
-			for index, branch := range resultDispatch.Branches {
-				test := branch.Condition.Subject
-				if branch.Condition.Kind == DispatchConditionSwitchCase {
-					discriminants[index] = returningDispatchNodeText(sf, branch.Condition.Subject)
-					test = branch.Condition.Value
+			tests := make([]string, len(resultDispatch.branches))
+			discriminants := make([]string, len(resultDispatch.branches))
+			results := make([]string, len(resultDispatch.branches))
+			for index, branch := range resultDispatch.branches {
+				test := branch.condition.subject
+				if branch.condition.kind == DispatchConditionSwitchCase {
+					discriminants[index] = returningDispatchNodeText(sf, branch.condition.subject)
+					test = branch.condition.value
 				}
 				tests[index] = returningDispatchNodeText(sf, test)
-				results[index] = returningDispatchNodeText(sf, branch.Result)
-				if branch.Condition.Source == nil {
+				results[index] = returningDispatchNodeText(sf, branch.result)
+				if branch.condition.source == nil {
 					t.Fatalf("branch %d is missing its source test node", index)
 				}
 			}
@@ -101,7 +101,7 @@ func TestParseReturningDispatchAcceptedShapes(t *testing.T) {
 			if len(tt.discriminants) > 0 && !slices.Equal(discriminants, tt.discriminants) {
 				t.Fatalf("discriminants = %v, want %v", discriminants, tt.discriminants)
 			}
-			if got := returningDispatchNodeText(sf, resultDispatch.Fallback); got != tt.fallback {
+			if got := returningDispatchNodeText(sf, resultDispatch.fallback); got != tt.fallback {
 				t.Fatalf("fallback = %q, want %q", got, tt.fallback)
 			}
 		})
@@ -155,20 +155,20 @@ func TestParseResultDispatchInputContract(t *testing.T) {
 				}
 				return
 			}
-			if dispatch == nil || dispatch.Node != body {
+			if dispatch == nil || dispatch.node != body {
 				t.Fatalf("expected result dispatch for body, got %+v", dispatch)
 			}
-			conditions := make([]string, len(dispatch.Branches))
-			for index, branch := range dispatch.Branches {
-				if branch.Condition.Kind != DispatchConditionPredicate || branch.Condition.Subject == nil || branch.Condition.Value != nil {
+			conditions := make([]string, len(dispatch.branches))
+			for index, branch := range dispatch.branches {
+				if branch.condition.kind != DispatchConditionPredicate || branch.condition.subject == nil || branch.condition.value != nil {
 					t.Fatalf("branch %d is not a predicate", index)
 				}
-				conditions[index] = returningDispatchNodeText(sf, branch.Condition.Subject)
+				conditions[index] = returningDispatchNodeText(sf, branch.condition.subject)
 			}
 			if !slices.Equal(conditions, tt.branches) {
 				t.Fatalf("branches = %v, want %v", conditions, tt.branches)
 			}
-			if got := returningDispatchNodeText(sf, dispatch.Fallback); got != tt.fallback {
+			if got := returningDispatchNodeText(sf, dispatch.fallback); got != tt.fallback {
 				t.Fatalf("fallback = %q, want %q", got, tt.fallback)
 			}
 		})
@@ -232,17 +232,17 @@ func TestParseResultDispatchTagHints(t *testing.T) {
 			t.Parallel()
 			sf, function := parseReturningDispatchTestFunction(t, tt.function)
 			parsed := (*TypeParser)(nil).ParseReturningDispatch(function)
-			if parsed == nil || parsed.Dispatch == nil {
+			if parsed == nil || parsed.dispatch == nil {
 				t.Fatal("expected returning dispatch")
 			}
-			if len(parsed.Dispatch.Branches) != len(tt.tagSubjects) || len(tt.tagSubjects) != len(tt.tagValues) {
-				t.Fatalf("branches = %d, want %d", len(parsed.Dispatch.Branches), len(tt.tagSubjects))
+			if len(parsed.dispatch.branches) != len(tt.tagSubjects) || len(tt.tagSubjects) != len(tt.tagValues) {
+				t.Fatalf("branches = %d, want %d", len(parsed.dispatch.branches), len(tt.tagSubjects))
 			}
-			for index, branch := range parsed.Dispatch.Branches {
-				if got := returningDispatchNodeText(sf, branch.Condition.TagSubject); got != tt.tagSubjects[index] {
+			for index, branch := range parsed.dispatch.branches {
+				if got := returningDispatchNodeText(sf, branch.condition.tagSubject); got != tt.tagSubjects[index] {
 					t.Fatalf("branch %d tag subject = %q, want %q", index, got, tt.tagSubjects[index])
 				}
-				if got := returningDispatchNodeText(sf, branch.Condition.TagValue); got != tt.tagValues[index] {
+				if got := returningDispatchNodeText(sf, branch.condition.tagValue); got != tt.tagValues[index] {
 					t.Fatalf("branch %d tag value = %q, want %q", index, got, tt.tagValues[index])
 				}
 			}
@@ -345,10 +345,10 @@ func TestResultDispatchCommonTagSubject(t *testing.T) {
 	for _, tt := range tests {
 		function := findReturningDispatchTestFunction(t, sf, tt.name)
 		parsed := tp.ParseReturningDispatch(function)
-		if parsed == nil || parsed.Dispatch == nil {
+		if parsed == nil || parsed.dispatch == nil {
 			t.Fatalf("%s: expected returning dispatch", tt.name)
 		}
-		subject := parsed.Dispatch.CommonTagSubject(tp)
+		subject := parsed.dispatch.CommonTagSubject(tp)
 		if got := returningDispatchNodeText(sf, subject); got != tt.subject {
 			t.Fatalf("%s: common tag subject = %q, want %q", tt.name, got, tt.subject)
 		}
