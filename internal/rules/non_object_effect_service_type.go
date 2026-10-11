@@ -65,7 +65,7 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 		return nil
 	}
 
-	options := serviceResult.Options
+	options := serviceResult.Options()
 	if options == nil || options.Kind != ast.KindObjectLiteralExpression {
 		return nil
 	}
@@ -132,7 +132,7 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 			// Try direct EffectType parse first
 			effectResult := ctx.TypeParser.EffectType(valueType)
 			if effectResult != nil {
-				if isPrimitiveType(ctx.TypeParser, effectResult.A) {
+				if isPrimitiveType(ctx.TypeParser, effectResult.A()) {
 					diags = append(diags, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						ctx.GetErrorRange(pa.Name()),
@@ -151,7 +151,7 @@ func checkServicePropertyTypes(ctx *rule.Context, node *ast.Node) []*ast.Diagnos
 					continue
 				}
 				effectReturnResult := ctx.TypeParser.EffectType(returnType)
-				if effectReturnResult != nil && isPrimitiveType(ctx.TypeParser, effectReturnResult.A) {
+				if effectReturnResult != nil && isPrimitiveType(ctx.TypeParser, effectReturnResult.A()) {
 					diags = append(diags, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						ctx.GetErrorRange(pa.Name()),

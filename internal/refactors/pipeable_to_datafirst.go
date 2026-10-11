@@ -2,12 +2,12 @@ package refactors
 
 import (
 	"github.com/effect-ts/tsgo/internal/refactor"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/astnav"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var PipeableToDatafirst = refactor.Refactor{
@@ -37,7 +37,7 @@ func runPipeableToDatafirst(ctx *refactor.Context) []ls.CodeAction {
 		}
 
 		// Only applies to pipe() calls (not .pipe())
-		if pipeCall.Kind != typeparser.TransformationKindPipe {
+		if pipeCall.Kind() != typeparser.TransformationKindPipe {
 			continue
 		}
 
@@ -53,7 +53,7 @@ func runPipeableToDatafirst(ctx *refactor.Context) []ls.CodeAction {
 		}
 
 		// Need at least one argument after the subject
-		if len(pipeCall.Args) == 0 {
+		if pipeCall.Args().Len() == 0 {
 			continue
 		}
 
@@ -77,10 +77,10 @@ func tryConvertToDatafirst(c *checker.Checker, pipeCall *typeparser.ParsedPipeCa
 		arg         *ast.Node // original arg node
 	}
 
-	steps := make([]conversionStep, len(pipeCall.Args))
+	steps := make([]conversionStep, pipeCall.Args().Len())
 	didSomething := false
 
-	for i, arg := range pipeCall.Args {
+	for i, arg := range pipeCall.Args().All() {
 		if arg.Kind == ast.KindCallExpression {
 			argCall := arg.AsCallExpression()
 			if argCall != nil && argCall.Expression != nil {
@@ -116,7 +116,7 @@ func tryConvertToDatafirst(c *checker.Checker, pipeCall *typeparser.ParsedPipeCa
 		Description: "Rewrite to datafirst",
 		Run: func(tracker *rewriter.Tracker) {
 			// Build the replacement node by accumulating from the subject
-			newNode := tracker.DeepCloneNode(pipeCall.Subject)
+			newNode := tracker.DeepCloneNode(pipeCall.Subject())
 
 			for _, step := range steps {
 				if step.isDataFirst {

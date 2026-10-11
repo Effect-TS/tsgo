@@ -81,19 +81,19 @@ func AnalyzeAllOfMapToForEach(tp *typeparser.TypeParser, c *checker.Checker, sf 
 
 	// Data-last Effect.all references inside piping flows. A bare reference is
 	// invisible to the call walk above because it never appears as a call.
-	for _, flow := range tp.PipingFlows(sf, true) {
+	for _, flow := range tp.PipingFlows(sf, true).All() {
 		sequences := flow.FindTransformationSequences(
-			func(*typeparser.PipingFlowTransformation) bool { return true },
-			func(transformation *typeparser.PipingFlowTransformation) bool {
-				return len(transformation.Args) == 0 &&
-					(transformation.Kind == typeparser.TransformationKindPipe || transformation.Kind == typeparser.TransformationKindPipeable) &&
-					transformation.Callee != nil && tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "all")
+			func(typeparser.PipingFlowTransformation) bool { return true },
+			func(transformation typeparser.PipingFlowTransformation) bool {
+				return transformation.Args().Len() == 0 &&
+					(transformation.Kind() == typeparser.TransformationKindPipe || transformation.Kind() == typeparser.TransformationKindPipeable) &&
+					transformation.Callee() != nil && tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "all")
 			},
 		)
-		for _, sequence := range sequences {
-			transformation := &flow.Transformations[sequence.Start+1]
-			mapNode := transformationApplicationNode(&flow.Transformations[sequence.Start])
-			if match, ok := analyzeAllOfMapToForEachReceiver(tp, c, sf, transformation.Callee, mapNode, nil, false); ok {
+		for _, sequence := range sequences.All() {
+			transformation := flow.Transformations().At(sequence.Start() + 1)
+			mapNode := transformationApplicationNode(new(flow.Transformations().At(sequence.Start())))
+			if match, ok := analyzeAllOfMapToForEachReceiver(tp, c, sf, transformation.Callee(), mapNode, nil, false); ok {
 				matches = append(matches, match)
 			}
 		}
@@ -109,12 +109,12 @@ func AnalyzeAllOfMapToForEach(tp *typeparser.TypeParser, c *checker.Checker, sf 
 // transformation's callee, when that application is represented in the tree.
 // Bare pipeable references have no application of their own and return nil.
 func transformationApplicationNode(transformation *typeparser.PipingFlowTransformation) *ast.Node {
-	if transformation == nil || transformation.Callee == nil || transformation.Callee.Parent == nil ||
-		!ast.IsCallExpression(transformation.Callee.Parent) {
+	if transformation == nil || transformation.Callee() == nil || transformation.Callee().Parent == nil ||
+		!ast.IsCallExpression(transformation.Callee().Parent) {
 		return nil
 	}
-	call := transformation.Callee.Parent.AsCallExpression()
-	if call == nil || call.Expression != transformation.Callee {
+	call := transformation.Callee().Parent.AsCallExpression()
+	if call == nil || call.Expression != transformation.Callee() {
 		return nil
 	}
 	return call.AsNode()

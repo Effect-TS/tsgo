@@ -30,21 +30,15 @@ func TestPipingFlowMatchesShape(t *testing.T) {
 			t.Parallel()
 			flow := &PipingFlow{}
 			for _, kind := range test.steps {
-				flow.Transformations = append(flow.Transformations, PipingFlowTransformation{Kind: kind})
+				flow.partial.transformations = append(flow.partial.transformations, PipingFlowTransformation{kind: kind})
 			}
-			subject := func(actual *PipingFlowSubject) bool {
-				if actual != &flow.Subject {
-					t.Fatal("subject predicate must receive the original subject")
-				}
+			subject := func(PipingFlowSubject) bool {
 				return test.subjectMatches
 			}
-			var predicates []func(*PipingFlowTransformation) bool
-			for i, kind := range test.pattern {
-				predicates = append(predicates, func(step *PipingFlowTransformation) bool {
-					if step != &flow.Transformations[i] {
-						t.Fatal("step predicate must receive the corresponding original transformation")
-					}
-					return step.Kind == kind
+			var predicates []func(PipingFlowTransformation) bool
+			for _, kind := range test.pattern {
+				predicates = append(predicates, func(step PipingFlowTransformation) bool {
+					return step.kind == kind
 				})
 			}
 			if got := flow.MatchesPrefix(subject, predicates...); got != test.prefix {
@@ -59,7 +53,7 @@ func TestPipingFlowMatchesShape(t *testing.T) {
 
 func TestPipingFlowMatchesShapeNil(t *testing.T) {
 	t.Parallel()
-	subject := func(*PipingFlowSubject) bool { t.Fatal("nil flow must not evaluate predicates"); return true }
+	subject := func(PipingFlowSubject) bool { t.Fatal("nil flow must not evaluate predicates"); return true }
 	var partial *PartialPipingFlow
 	var complete *PipingFlow
 	if partial.MatchesPrefix(subject) || partial.MatchesExactly(subject) || complete.MatchesPrefix(subject) || complete.MatchesExactly(subject) {
@@ -95,7 +89,7 @@ export const value = p(1)
 	}
 	visit(sf.AsNode())
 
-	if parsed == nil || parsed.Kind != TransformationKindPipe || len(parsed.Args) != 0 {
+	if parsed == nil || parsed.kind != TransformationKindPipe || len(parsed.args) != 0 {
 		t.Fatal("expected a constant alias of pipe to parse as a standalone pipe call")
 	}
 }

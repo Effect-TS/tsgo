@@ -5,6 +5,7 @@ import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
@@ -54,11 +55,11 @@ func AnalyzeUnnecessaryPipeChain(tp *typeparser.TypeParser, c *checker.Checker, 
 
 		if n.Kind == ast.KindCallExpression {
 			if result := tp.ParsePipeCall(n); result != nil {
-				if inner := tp.ParsePipeCall(result.Subject); inner != nil {
+				if inner := tp.ParsePipeCall(result.Subject()); inner != nil {
 					if pipeMergeSupportsArity(tp, c, inner, result) {
 						matches = append(matches, UnnecessaryPipeChainMatch{
 							SourceFile: sf,
-							Location:   scanner.GetErrorRangeForNode(sf, result.Node.AsNode()),
+							Location:   scanner.GetErrorRangeForNode(sf, result.Node().AsNode()),
 							Outer:      result,
 							Inner:      inner,
 						})
@@ -76,16 +77,16 @@ func AnalyzeUnnecessaryPipeChain(tp *typeparser.TypeParser, c *checker.Checker, 
 }
 
 func pipeMergeSupportsArity(tp *typeparser.TypeParser, c *checker.Checker, inner, outer *typeparser.ParsedPipeCallResult) bool {
-	if containsSpreadArgument(inner.Args) || containsSpreadArgument(outer.Args) {
+	if containsSpreadArgument(inner.Args()) || containsSpreadArgument(outer.Args()) {
 		return false
 	}
 
-	argumentCount := len(inner.Args) + len(outer.Args)
-	if inner.Kind == typeparser.TransformationKindPipe {
+	argumentCount := inner.Args().Len() + outer.Args().Len()
+	if inner.Kind() == typeparser.TransformationKindPipe {
 		argumentCount++ // Standalone pipe retains its subject as the first argument.
 	}
 
-	calleeType := tp.GetTypeAtLocation(inner.Node.Expression)
+	calleeType := tp.GetTypeAtLocation(inner.Node().Expression)
 	for _, signature := range c.GetSignaturesOfType(calleeType, checker.SignatureKindCall) {
 		if argumentCount < signature.MinArgumentCount() {
 			continue
@@ -97,8 +98,8 @@ func pipeMergeSupportsArity(tp *typeparser.TypeParser, c *checker.Checker, inner
 	return false
 }
 
-func containsSpreadArgument(args []*ast.Node) bool {
-	for _, arg := range args {
+func containsSpreadArgument(args readonly.Slice[*ast.Node]) bool {
+	for _, arg := range args.All() {
 		if arg != nil && arg.Kind == ast.KindSpreadElement {
 			return true
 		}

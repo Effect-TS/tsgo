@@ -1052,11 +1052,11 @@ export const clean = make<string>()
 			for i := range 5 {
 				clean := tp.ApiStabilityUsedBySymbol(apiStabilityExport(t, c, sf, "clean"))
 				leaky := tp.ApiStabilityUsedBySymbol(apiStabilityExport(t, c, sf, "leaky"))
-				if clean.Minimum != typeparser.ApiStabilityStable {
-					t.Fatalf("query %d: clean minimum=%d, want stable", i, clean.Minimum)
+				if clean.Minimum() != typeparser.ApiStabilityStable {
+					t.Fatalf("query %d: clean minimum=%d, want stable", i, clean.Minimum())
 				}
-				if leaky.Minimum != typeparser.ApiStabilityExperimental {
-					t.Fatalf("query %d: leaky minimum=%d, want experimental", i, leaky.Minimum)
+				if leaky.Minimum() != typeparser.ApiStabilityExperimental {
+					t.Fatalf("query %d: leaky minimum=%d, want experimental", i, leaky.Minimum())
 				}
 			}
 			if diagnostics := apiStabilityDiagnostics(t, c, sf); len(diagnostics) != 0 {
@@ -1250,7 +1250,7 @@ export declare const x: I<string>
 					t.Errorf("query %d repeated %d instantiations, want 0", i, delta)
 				}
 			}
-			if !last.Incomplete {
+			if !last.Incomplete() {
 				t.Error("a blocked recursive surface must report incomplete, not stable")
 			}
 			if firstDelta > 64 {
@@ -1380,7 +1380,7 @@ export const y = ` + test.expr,
 					// recursive read reports an incomplete result; nothing
 					// computed is persisted for a later analysis.
 					refused := typeparser.NewTypeParser(program, c).ApiStabilityUsedBySymbol(apiStabilityExport(t, c, depFile, "X"))
-					if !refused.Incomplete {
+					if !refused.Incomplete() {
 						t.Error("a refused recursive surface must report incomplete before the dependency is checked")
 					}
 				}
@@ -1449,7 +1449,7 @@ export declare const x: X`},
 				before := c.TotalInstantiationCount
 				used := tp.ApiStabilityUsedBySymbol(symbol)
 				delta := c.TotalInstantiationCount - before
-				if !used.Incomplete {
+				if !used.Incomplete() {
 					t.Fatalf("query %d reported a refused surface as stable", i)
 				}
 				if i > 0 && delta != 0 {
@@ -1751,7 +1751,7 @@ export interface X { y: Select<F> }`,
 					// checker itself materializes the inferred component below,
 					// completion is sound and is not asserted against.
 					refused := typeparser.NewTypeParser(program, c).ApiStabilityUsedBySymbol(apiStabilityExport(t, c, depFile, "X"))
-					if !refused.Incomplete {
+					if !refused.Incomplete() {
 						t.Errorf("refused surface X was not reported incomplete before the dependency was checked")
 					}
 				}

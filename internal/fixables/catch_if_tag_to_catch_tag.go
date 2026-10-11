@@ -25,8 +25,8 @@ func runCatchIfTagToCatchTagFix(ctx *fixable.Context) []ls.CodeAction {
 		}
 		action := ctx.NewFixAction(fixable.FixAction{Description: "Replace with Effect.catchTag", Run: func(tracker *rewriter.Tracker) {
 			var receiver *ast.Node
-			if match.Transformation.Callee.Kind == ast.KindPropertyAccessExpression {
-				receiver = match.Transformation.Callee.AsPropertyAccessExpression().Expression
+			if match.Transformation.Callee().Kind == ast.KindPropertyAccessExpression {
+				receiver = match.Transformation.Callee().AsPropertyAccessExpression().Expression
 			}
 			callee := effectModuleMethod(tracker, ctx.SourceFile, receiver, "catchTag")
 			arguments := tracker.NewNodeList([]*ast.Node{tracker.NewStringLiteral(match.Tag, 0), tracker.DeepCloneNode(match.Handler)})

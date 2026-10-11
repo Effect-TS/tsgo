@@ -1555,23 +1555,23 @@ export declare const f: Callable<Deep<E>>
 
 	cold := ruleCtx.TypeParser.ApiStabilityUsedBySymbol(symbol)
 	if !containsDependencyName(cold, "E") {
-		t.Fatalf("the cold surface should lazily resolve E, got %v", cold.Dependencies)
+		t.Fatalf("the cold surface should lazily resolve E, got %v", cold.Dependencies())
 	}
 
 	_ = apiStabilityCompilerDiagnostics(ruleCtx)
 	warm := ruleCtx.TypeParser.ApiStabilityUsedBySymbol(symbol)
 	if !containsDependencyName(warm, "E") {
-		t.Fatalf("warm surface should expose E, got %v", warm.Dependencies)
+		t.Fatalf("warm surface should expose E, got %v", warm.Dependencies())
 	}
-	if cold.Minimum != warm.Minimum || len(cold.Dependencies) != len(warm.Dependencies) {
-		t.Fatalf("cold and warm surfaces disagree: cold=%v warm=%v", cold.Dependencies, warm.Dependencies)
+	if cold.Minimum() != warm.Minimum() || cold.Dependencies().Len() != warm.Dependencies().Len() {
+		t.Fatalf("cold and warm surfaces disagree: cold=%v warm=%v", cold.Dependencies(), warm.Dependencies())
 	}
 }
 
 // containsDependencyName reports whether a computed surface lists the named
 // dependency, used by the cold/warm recompute regression.
 func containsDependencyName(used typeparser.ApiStabilityUsed, name string) bool {
-	for _, dependency := range used.Dependencies {
+	for _, dependency := range used.Dependencies().All() {
 		if typeparser.ApiStabilityDependencyName(dependency) == name {
 			return true
 		}
@@ -1887,7 +1887,7 @@ export declare const x: Holder<{ value: string }>`,
 				session := ruleCtx.TypeParser.NewApiStabilitySession()
 				incomplete := false
 				for _, symbol := range ruleCtx.Checker.GetExportsOfModule(ruleCtx.Checker.GetSymbolAtLocation(ruleCtx.SourceFile.AsNode())) {
-					if used := session.UsedBySymbol(symbol); used.Incomplete {
+					if used := session.UsedBySymbol(symbol); used.Incomplete() {
 						incomplete = true
 					}
 				}

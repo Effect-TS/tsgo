@@ -4,6 +4,7 @@ package typeparser
 import (
 	"sort"
 
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/scanner"
@@ -24,50 +25,70 @@ const (
 
 // PipingFlowTransformation represents a single transformation step in a piping flow.
 type PipingFlowTransformation struct {
-	Kind          TransformationKind // How the transformation was expressed
-	Callee        *ast.Node          // The function being applied (e.g., Effect.map)
-	TypeArguments *ast.NodeList      // Explicit type arguments to the transformation call, if any
-	Args          []*ast.Node        // Arguments to the transformation, or nil for constants/single-arg calls
-	OutType       *checker.Type      // The resulting type after this transformation (may be nil)
+	kind          TransformationKind // How the transformation was expressed
+	callee        *ast.Node          // The function being applied (e.g., Effect.map)
+	typeArguments *ast.NodeList      // Explicit type arguments to the transformation call, if any
+	args          []*ast.Node        // Arguments to the transformation, or nil for constants/single-arg calls
+	outType       *checker.Type      // The resulting type after this transformation (may be nil)
 }
+
+func (r PipingFlowTransformation) Kind() TransformationKind { return r.kind }
+
+func (r PipingFlowTransformation) Callee() *ast.Node { return r.callee }
+
+func (r PipingFlowTransformation) TypeArguments() *ast.NodeList { return r.typeArguments }
+
+func (r PipingFlowTransformation) Args() readonly.Slice[*ast.Node] { return readonly.New(r.args) }
+
+func (r PipingFlowTransformation) OutType() *checker.Type { return r.outType }
 
 // PipingFlowSubject is the starting expression of a piping flow.
 type PipingFlowSubject struct {
-	Node    *ast.Node     // The expression node
-	OutType *checker.Type // The type of the subject expression (may be nil)
+	node    *ast.Node     // The expression node
+	outType *checker.Type // The type of the subject expression (may be nil)
 }
+
+func (r PipingFlowSubject) Node() *ast.Node { return r.node }
+
+func (r PipingFlowSubject) OutType() *checker.Type { return r.outType }
 
 // PartialPipingFlow represents a logical piping flow that may not correspond to
 // a complete source expression, such as a prefix of a pipe call.
 type PartialPipingFlow struct {
-	Subject         PipingFlowSubject          // The starting expression and its type
-	Transformations []PipingFlowTransformation // Ordered list of transformations
+	subject         PipingFlowSubject          // The starting expression and its type
+	transformations []PipingFlowTransformation // Ordered list of transformations
+}
+
+func (r PartialPipingFlow) Subject() PipingFlowSubject { return r.subject }
+
+func (r PartialPipingFlow) Transformations() readonly.Slice[PipingFlowTransformation] {
+	return readonly.New(r.transformations)
 }
 
 // MatchesPrefix checks the subject and leading transformations, allowing extra
 // steps afterward. With no transformation predicates it checks only the subject.
-// A nil flow returns false. Predicates must not mutate the flow.
-func (flow *PartialPipingFlow) MatchesPrefix(subject func(*PipingFlowSubject) bool, transformations ...func(*PipingFlowTransformation) bool) bool {
+// A nil flow returns false. Predicates receive local copies.
+func (flow *PartialPipingFlow) MatchesPrefix(subject func(PipingFlowSubject) bool, transformations ...func(PipingFlowTransformation) bool) bool {
 	return flow.matchesShape(false, subject, transformations)
 }
 
 // MatchesExactly checks the subject and all transformations. The number of
 // transformations must equal the number of transformation predicates.
-// A nil flow returns false. Predicates must not mutate the flow.
-func (flow *PartialPipingFlow) MatchesExactly(subject func(*PipingFlowSubject) bool, transformations ...func(*PipingFlowTransformation) bool) bool {
+// A nil flow returns false. Predicates receive local copies.
+func (flow *PartialPipingFlow) MatchesExactly(subject func(PipingFlowSubject) bool, transformations ...func(PipingFlowTransformation) bool) bool {
 	return flow.matchesShape(true, subject, transformations)
 }
 
-func (flow *PartialPipingFlow) matchesShape(exact bool, subject func(*PipingFlowSubject) bool, transformations []func(*PipingFlowTransformation) bool) bool {
-	if flow == nil || len(flow.Transformations) < len(transformations) ||
-		exact && len(flow.Transformations) != len(transformations) {
+func (flow *PartialPipingFlow) matchesShape(exact bool, subject func(PipingFlowSubject) bool, transformations []func(PipingFlowTransformation) bool) bool {
+	if flow == nil || len(flow.transformations) < len(transformations) ||
+		exact && len(flow.transformations) != len(transformations) {
 		return false
 	}
-	if !subject(&flow.Subject) {
+	if !subject(flow.subject) {
 		return false
 	}
 	for i, predicate := range transformations {
-		if !predicate(&flow.Transformations[i]) {
+		if !predicate(flow.transformations[i]) {
 			return false
 		}
 	}
@@ -77,78 +98,84 @@ func (flow *PartialPipingFlow) matchesShape(exact bool, subject func(*PipingFlow
 // TransformationSequenceMatch identifies consecutive steps in a piping flow.
 // Transformations is a read-only view into the original flow's slice.
 type TransformationSequenceMatch struct {
-	Start           int
-	Transformations []PipingFlowTransformation
+	start           int
+	transformations []PipingFlowTransformation
+}
+
+func (r TransformationSequenceMatch) Start() int { return r.start }
+
+func (r TransformationSequenceMatch) Transformations() readonly.Slice[PipingFlowTransformation] {
+	return readonly.New(r.transformations)
 }
 
 // FindTransformationSequences returns all consecutive matches in source order,
-// including overlaps. It returns nil for a nil flow, no predicates, or no match.
-// Predicates must not mutate the flow or depend on earlier predicate calls.
-func (flow *PartialPipingFlow) FindTransformationSequences(predicates ...func(*PipingFlowTransformation) bool) []TransformationSequenceMatch {
+// including overlaps. The view is nil for a nil flow, no predicates, or no match.
+// Predicates receive local copies and must not depend on earlier calls.
+func (flow *PartialPipingFlow) FindTransformationSequences(predicates ...func(PipingFlowTransformation) bool) readonly.Slice[TransformationSequenceMatch] {
 	if flow == nil || len(predicates) == 0 {
-		return nil
+		return readonly.Slice[TransformationSequenceMatch]{}
 	}
 	var matches []TransformationSequenceMatch
-	for start := 0; start <= len(flow.Transformations)-len(predicates); start++ {
+	for start := 0; start <= len(flow.transformations)-len(predicates); start++ {
 		matched := true
 		for offset, predicate := range predicates {
-			if !predicate(&flow.Transformations[start+offset]) {
+			if !predicate(flow.transformations[start+offset]) {
 				matched = false
 				break
 			}
 		}
 		if matched {
 			matches = append(matches, TransformationSequenceMatch{
-				Start:           start,
-				Transformations: flow.Transformations[start : start+len(predicates)],
+				start:           start,
+				transformations: flow.transformations[start : start+len(predicates)],
 			})
 		}
 	}
-	return matches
+	return readonly.New(matches)
 }
 
 // CopyPrefix returns a copy containing the first transformationCount
 // transformations. It returns nil when transformationCount is out of bounds.
 func (flow *PartialPipingFlow) CopyPrefix(transformationCount int) *PartialPipingFlow {
-	if flow == nil || transformationCount < 0 || transformationCount > len(flow.Transformations) {
+	if flow == nil || transformationCount < 0 || transformationCount > len(flow.transformations) {
 		return nil
 	}
 	transformations := make([]PipingFlowTransformation, transformationCount)
-	copy(transformations, flow.Transformations[:transformationCount])
+	copy(transformations, flow.transformations[:transformationCount])
 	return &PartialPipingFlow{
-		Subject:         flow.Subject,
-		Transformations: transformations,
+		subject:         flow.subject,
+		transformations: transformations,
 	}
 }
 
 // TransformationInputType returns the type immediately before the indexed step.
 // Missing types and indices outside the flow return nil.
 func (flow *PartialPipingFlow) TransformationInputType(index int) *checker.Type {
-	if flow == nil || index < 0 || index >= len(flow.Transformations) {
+	if flow == nil || index < 0 || index >= len(flow.transformations) {
 		return nil
 	}
 	if index == 0 {
-		return flow.Subject.OutType
+		return flow.subject.outType
 	}
-	return flow.Transformations[index-1].OutType
+	return flow.transformations[index-1].outType
 }
 
 // TransformationInputNode returns the standalone source expression that feeds
 // the transformation at index, when that expression is represented directly
 // in the syntax tree.
 func (flow *PartialPipingFlow) TransformationInputNode(index int) *ast.Node {
-	if flow == nil || index < 0 || index >= len(flow.Transformations) {
+	if flow == nil || index < 0 || index >= len(flow.transformations) {
 		return nil
 	}
-	transformation := &flow.Transformations[index]
+	transformation := &flow.transformations[index]
 	call := pipingFlowTransformationCall(transformation)
-	if transformation.Kind == TransformationKindCall {
+	if transformation.kind == TransformationKindCall {
 		// Curried factories decompose into a factory call and a trailing
 		// application; the input feeds the outermost applied call.
 		call = appliedCallOf(call)
 	}
 	if call != nil && call.Arguments != nil {
-		switch transformation.Kind {
+		switch transformation.kind {
 		case TransformationKindCall:
 			if len(call.Arguments.Nodes) == 1 {
 				return call.Arguments.Nodes[0]
@@ -164,7 +191,7 @@ func (flow *PartialPipingFlow) TransformationInputNode(index int) *ast.Node {
 		}
 	}
 	if index == 0 {
-		return flow.Subject.Node
+		return flow.subject.node
 	}
 	return nil
 }
@@ -190,12 +217,12 @@ func appliedCallOf(call *ast.CallExpression) *ast.CallExpression {
 }
 
 func pipingFlowTransformationCall(transformation *PipingFlowTransformation) *ast.CallExpression {
-	if transformation == nil || transformation.Callee == nil || transformation.Callee.Parent == nil ||
-		!ast.IsCallExpression(transformation.Callee.Parent) {
+	if transformation == nil || transformation.callee == nil || transformation.callee.Parent == nil ||
+		!ast.IsCallExpression(transformation.callee.Parent) {
 		return nil
 	}
-	call := transformation.Callee.Parent.AsCallExpression()
-	if call == nil || call.Expression != transformation.Callee {
+	call := transformation.callee.Parent.AsCallExpression()
+	if call == nil || call.Expression != transformation.callee {
 		return nil
 	}
 	return call
@@ -203,35 +230,45 @@ func pipingFlowTransformationCall(transformation *PipingFlowTransformation) *ast
 
 // PipingFlow represents a complete piping flow rooted at a source expression.
 type PipingFlow struct {
-	Node *ast.Node // The outermost expression encompassing the entire flow
-	PartialPipingFlow
+	node    *ast.Node // The outermost expression encompassing the entire flow
+	partial PartialPipingFlow
+}
+
+func (r PipingFlow) Node() *ast.Node { return r.node }
+
+func (r PipingFlow) Partial() PartialPipingFlow { return r.partial }
+
+func (r PipingFlow) Subject() PipingFlowSubject { return r.partial.subject }
+
+func (r PipingFlow) Transformations() readonly.Slice[PipingFlowTransformation] {
+	return readonly.New(r.partial.transformations)
 }
 
 // MatchesPrefix checks the subject and leading transformations, allowing extra steps.
 // It is defined explicitly to support a nil *PipingFlow.
-func (flow *PipingFlow) MatchesPrefix(subject func(*PipingFlowSubject) bool, transformations ...func(*PipingFlowTransformation) bool) bool {
+func (flow *PipingFlow) MatchesPrefix(subject func(PipingFlowSubject) bool, transformations ...func(PipingFlowTransformation) bool) bool {
 	if flow == nil {
 		return false
 	}
-	return flow.PartialPipingFlow.MatchesPrefix(subject, transformations...)
+	return flow.partial.MatchesPrefix(subject, transformations...)
 }
 
 // MatchesExactly checks the subject and all transformations, requiring an exact length.
 // It is defined explicitly to support a nil *PipingFlow.
-func (flow *PipingFlow) MatchesExactly(subject func(*PipingFlowSubject) bool, transformations ...func(*PipingFlowTransformation) bool) bool {
+func (flow *PipingFlow) MatchesExactly(subject func(PipingFlowSubject) bool, transformations ...func(PipingFlowTransformation) bool) bool {
 	if flow == nil {
 		return false
 	}
-	return flow.PartialPipingFlow.MatchesExactly(subject, transformations...)
+	return flow.partial.MatchesExactly(subject, transformations...)
 }
 
 // FindTransformationSequences returns all consecutive matches, including overlaps.
 // It is defined explicitly to support a nil *PipingFlow.
-func (flow *PipingFlow) FindTransformationSequences(predicates ...func(*PipingFlowTransformation) bool) []TransformationSequenceMatch {
+func (flow *PipingFlow) FindTransformationSequences(predicates ...func(PipingFlowTransformation) bool) readonly.Slice[TransformationSequenceMatch] {
 	if flow == nil {
-		return nil
+		return readonly.Slice[TransformationSequenceMatch]{}
 	}
-	return flow.PartialPipingFlow.FindTransformationSequences(predicates...)
+	return flow.partial.FindTransformationSequences(predicates...)
 }
 
 // CopyPrefix returns a partial copy containing the first transformationCount
@@ -240,7 +277,7 @@ func (flow *PipingFlow) CopyPrefix(transformationCount int) *PartialPipingFlow {
 	if flow == nil {
 		return nil
 	}
-	return flow.PartialPipingFlow.CopyPrefix(transformationCount)
+	return flow.partial.CopyPrefix(transformationCount)
 }
 
 // TransformationInputType returns the type immediately before the indexed step.
@@ -248,7 +285,7 @@ func (flow *PipingFlow) TransformationInputType(index int) *checker.Type {
 	if flow == nil {
 		return nil
 	}
-	return flow.PartialPipingFlow.TransformationInputType(index)
+	return flow.partial.TransformationInputType(index)
 }
 
 // TransformationInputNode returns the source expression that feeds the
@@ -257,17 +294,31 @@ func (flow *PipingFlow) TransformationInputNode(index int) *ast.Node {
 	if flow == nil {
 		return nil
 	}
-	return flow.PartialPipingFlow.TransformationInputNode(index)
+	return flow.partial.TransformationInputNode(index)
 }
 
 // ParsedPipeCallResult is the result of parsing a pipe or pipeable call.
 type ParsedPipeCallResult struct {
-	Node        *ast.CallExpression
-	Subject     *ast.Node
-	Args        []*ast.Node
-	Kind        TransformationKind
-	SubjectType *checker.Type
-	ArgsOutType []*checker.Type
+	node        *ast.CallExpression
+	subject     *ast.Node
+	args        []*ast.Node
+	kind        TransformationKind
+	subjectType *checker.Type
+	argsOutType []*checker.Type
+}
+
+func (r ParsedPipeCallResult) Node() *ast.CallExpression { return r.node }
+
+func (r ParsedPipeCallResult) Subject() *ast.Node { return r.subject }
+
+func (r ParsedPipeCallResult) Args() readonly.Slice[*ast.Node] { return readonly.New(r.args) }
+
+func (r ParsedPipeCallResult) Kind() TransformationKind { return r.kind }
+
+func (r ParsedPipeCallResult) SubjectType() *checker.Type { return r.subjectType }
+
+func (r ParsedPipeCallResult) ArgsOutType() readonly.Slice[*checker.Type] {
+	return readonly.New(r.argsOutType)
 }
 
 // parsedSingleArgCallResult is the internal result of parsing a single-argument call.
@@ -349,12 +400,12 @@ func (tp *TypeParser) buildParsedPipeCallResult(
 	kind TransformationKind,
 ) *ParsedPipeCallResult {
 	result := &ParsedPipeCallResult{
-		Node:        call,
-		Subject:     subject,
-		Args:        args,
-		Kind:        kind,
-		SubjectType: tp.GetTypeAtLocation(subject),
-		ArgsOutType: make([]*checker.Type, len(args)),
+		node:        call,
+		subject:     subject,
+		args:        args,
+		kind:        kind,
+		subjectType: tp.GetTypeAtLocation(subject),
+		argsOutType: make([]*checker.Type, len(args)),
 	}
 
 	sig := tp.checker.GetResolvedSignature(call.AsNode())
@@ -365,7 +416,7 @@ func (tp *TypeParser) buildParsedPipeCallResult(
 	typeArgs := tp.checker.GetTypeArgumentsForResolvedSignature(sig)
 	for i := range args {
 		if i+1 < len(typeArgs) {
-			result.ArgsOutType[i] = typeArgs[i+1]
+			result.argsOutType[i] = typeArgs[i+1]
 		}
 	}
 
@@ -489,17 +540,17 @@ func (tp *TypeParser) parseEffectFnCall(node *ast.Node) *parsedEffectFnCallResul
 	if call == nil || call.Expression == nil || call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
 		return nil
 	}
-	if result := tp.EffectFnCall(node); result != nil && len(result.PipeArguments) > 0 {
+	if result := tp.EffectFnCall(node); result != nil && len(result.pipeArguments) > 0 {
 		kind := TransformationKindEffectFn
-		if result.Variant == EffectFnVariantFnUntraced || result.Variant == EffectFnVariantFnUntracedEager {
+		if result.variant == EffectFnVariantFnUntraced || result.variant == EffectFnVariantFnUntracedEager {
 			kind = TransformationKindEffectFnUntraced
 		}
 		return &parsedEffectFnCallResult{
-			node:                result.Call,
-			bodyNode:            result.FunctionNode,
-			trailingArgs:        result.PipeArguments,
-			trailingArgsOutType: result.PipeArgsOutType,
-			trailingStartIndex:  len(result.Call.Arguments.Nodes) - len(result.PipeArguments),
+			node:                result.call,
+			bodyNode:            result.functionNode,
+			trailingArgs:        result.pipeArguments,
+			trailingArgsOutType: result.pipeArgsOutType,
+			trailingStartIndex:  len(result.call.Arguments.Nodes) - len(result.pipeArguments),
 			kind:                kind,
 		}
 	}
@@ -514,9 +565,9 @@ type workItem struct {
 
 // PipingFlows returns all piping flows found in a source file, sorted by source position.
 // Each source transformation occurrence belongs to at most one returned flow.
-func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*PipingFlow {
+func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) readonly.Slice[*PipingFlow] {
 	if tp == nil || tp.checker == nil || sf == nil {
-		return nil
+		return readonly.Slice[*PipingFlow]{}
 	}
 	c := tp.checker
 
@@ -526,7 +577,7 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 		store = &links.PipingFlowsWithEffectFn
 	}
 
-	return Cached(store, sf, func() []*PipingFlow {
+	return readonly.New(Cached(store, sf, func() []*PipingFlow {
 		var result []*PipingFlow
 
 		// Initialize work queue with all children of the source file
@@ -557,20 +608,22 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 					if efnResult := tp.parseEffectFnCall(node); efnResult != nil {
 						transformations, subjectType := tp.buildEffectFnTransformations(efnResult)
 						flow := &PipingFlow{
-							Node: node,
-							Subject: PipingFlowSubject{
-								Node:    node,
-								OutType: subjectType,
+							node: node,
+							partial: PartialPipingFlow{
+								subject: PipingFlowSubject{
+									node:    node,
+									outType: subjectType,
+								},
+								transformations: transformations,
 							},
-							Transformations: transformations,
 						}
 						result = append(result, flow)
 
 						// If we were building a parent flow, finalize it with this node as subject
 						if item.parentFlow != nil {
-							item.parentFlow.Subject = PipingFlowSubject{
-								Node:    node,
-								OutType: tp.GetTypeAtLocation(node),
+							item.parentFlow.partial.subject = PipingFlowSubject{
+								node:    node,
+								outType: tp.GetTypeAtLocation(node),
 							}
 							result = append(result, item.parentFlow)
 						}
@@ -592,24 +645,26 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 				// Try pipe call
 				if pipeResult := tp.ParsePipeCall(node); pipeResult != nil {
 					transformations := tp.buildPipeTransformations(pipeResult)
-					flowNode := pipeResult.Node.AsNode()
+					flowNode := pipeResult.node.AsNode()
 
 					if item.parentFlow != nil {
 						// Extend parent flow: prepend our transformations
-						item.parentFlow.Transformations = append(transformations, item.parentFlow.Transformations...)
+						item.parentFlow.partial.transformations = append(transformations, item.parentFlow.partial.transformations...)
 						// Continue traversing the subject for further flattening
-						queue = append(queue, workItem{node: pipeResult.Subject, parentFlow: item.parentFlow})
+						queue = append(queue, workItem{node: pipeResult.subject, parentFlow: item.parentFlow})
 					} else {
 						// Start a new flow
 						newFlow := &PipingFlow{
-							Node:            flowNode,
-							Transformations: transformations,
+							node: flowNode,
+							partial: PartialPipingFlow{
+								transformations: transformations,
+							},
 						}
-						queue = append(queue, workItem{node: pipeResult.Subject, parentFlow: newFlow})
+						queue = append(queue, workItem{node: pipeResult.subject, parentFlow: newFlow})
 					}
 
 					// Queue transformation argument children for independent inner flow traversal
-					for _, arg := range pipeResult.Args {
+					for _, arg := range pipeResult.args {
 						if arg != nil {
 							arg.ForEachChild(enqueueChild)
 						}
@@ -621,33 +676,35 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 				if dataFirstResult := tp.DataFirstOrLastCall(node); dataFirstResult != nil {
 					callOutType := tp.GetTypeAtLocation(node)
 					kind := TransformationKindDataFirst
-					if dataFirstResult.SubjectIndex != 0 {
+					if dataFirstResult.subjectIndex != 0 {
 						kind = TransformationKindDataLast
 					}
 					transformation := PipingFlowTransformation{
-						Kind:          kind,
-						Callee:        dataFirstResult.Callee,
-						TypeArguments: pipingFlowTypeArguments(node, dataFirstResult.Callee),
-						Args:          dataFirstResult.Args,
-						OutType:       callOutType,
+						kind:          kind,
+						callee:        dataFirstResult.callee,
+						typeArguments: pipingFlowTypeArguments(node, dataFirstResult.callee),
+						args:          dataFirstResult.args,
+						outType:       callOutType,
 					}
 
 					if item.parentFlow != nil {
-						item.parentFlow.Transformations = append(
+						item.parentFlow.partial.transformations = append(
 							[]PipingFlowTransformation{transformation},
-							item.parentFlow.Transformations...,
+							item.parentFlow.partial.transformations...,
 						)
-						queue = append(queue, workItem{node: dataFirstResult.Subject, parentFlow: item.parentFlow})
+						queue = append(queue, workItem{node: dataFirstResult.subject, parentFlow: item.parentFlow})
 					} else {
 						newFlow := &PipingFlow{
-							Node:            node,
-							Transformations: []PipingFlowTransformation{transformation},
+							node: node,
+							partial: PartialPipingFlow{
+								transformations: []PipingFlowTransformation{transformation},
+							},
 						}
-						queue = append(queue, workItem{node: dataFirstResult.Subject, parentFlow: newFlow})
+						queue = append(queue, workItem{node: dataFirstResult.subject, parentFlow: newFlow})
 					}
 
-					dataFirstResult.Callee.ForEachChild(enqueueChild)
-					for _, arg := range dataFirstResult.Args {
+					dataFirstResult.callee.ForEachChild(enqueueChild)
+					for _, arg := range dataFirstResult.args {
 						if arg != nil {
 							arg.ForEachChild(enqueueChild)
 						}
@@ -662,26 +719,28 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 						callOutType = c.GetReturnTypeOfSignature(callSig)
 					}
 					transformation := PipingFlowTransformation{
-						Kind:          TransformationKindCall,
-						Callee:        singleResult.callee,
-						TypeArguments: pipingFlowTypeArguments(singleResult.typeArgumentsSrc, singleResult.callee),
-						Args:          singleResult.args,
-						OutType:       callOutType,
+						kind:          TransformationKindCall,
+						callee:        singleResult.callee,
+						typeArguments: pipingFlowTypeArguments(singleResult.typeArgumentsSrc, singleResult.callee),
+						args:          singleResult.args,
+						outType:       callOutType,
 					}
 
 					if item.parentFlow != nil {
 						// Extend parent flow: prepend this transformation
-						item.parentFlow.Transformations = append(
+						item.parentFlow.partial.transformations = append(
 							[]PipingFlowTransformation{transformation},
-							item.parentFlow.Transformations...,
+							item.parentFlow.partial.transformations...,
 						)
 						// Continue traversing the subject
 						queue = append(queue, workItem{node: singleResult.subject, parentFlow: item.parentFlow})
 					} else {
 						// Start a new flow
 						newFlow := &PipingFlow{
-							Node:            node,
-							Transformations: []PipingFlowTransformation{transformation},
+							node: node,
+							partial: PartialPipingFlow{
+								transformations: []PipingFlowTransformation{transformation},
+							},
 						}
 						queue = append(queue, workItem{node: singleResult.subject, parentFlow: newFlow})
 					}
@@ -706,9 +765,9 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 			// Node is not a parseable pipe/call
 			if item.parentFlow != nil {
 				// Subject chain terminated — finalize the flow
-				item.parentFlow.Subject = PipingFlowSubject{
-					Node:    node,
-					OutType: tp.GetTypeAtLocation(node),
+				item.parentFlow.partial.subject = PipingFlowSubject{
+					node:    node,
+					outType: tp.GetTypeAtLocation(node),
 				}
 				result = append(result, item.parentFlow)
 			}
@@ -718,11 +777,11 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) []*P
 
 		// Sort by source position
 		sort.Slice(result, func(i, j int) bool {
-			return result[i].Node.Pos() < result[j].Node.Pos()
+			return result[i].node.Pos() < result[j].node.Pos()
 		})
 
 		return result
-	})
+	}))
 }
 
 // LongestPipingFlowAt returns the longest normalized piping flow rooted at node.
@@ -739,36 +798,38 @@ func (tp *TypeParser) LongestPipingFlowAt(node *ast.Node, includeEffectFn bool) 
 		if result := tp.parseEffectFnCall(node); result != nil {
 			transformations, subjectType := tp.buildEffectFnTransformations(result)
 			return &PipingFlow{
-				Node: node,
-				Subject: PipingFlowSubject{
-					Node:    node,
-					OutType: subjectType,
+				node: node,
+				partial: PartialPipingFlow{
+					subject: PipingFlowSubject{
+						node:    node,
+						outType: subjectType,
+					},
+					transformations: transformations,
 				},
-				Transformations: transformations,
 			}
 		}
 	}
 
 	if result := tp.ParsePipeCall(node); result != nil {
-		flow := tp.pipingFlowSubjectAt(result.Subject, includeEffectFn)
-		flow.Node = node
-		flow.Transformations = append(flow.Transformations, tp.buildPipeTransformations(result)...)
+		flow := tp.pipingFlowSubjectAt(result.subject, includeEffectFn)
+		flow.node = node
+		flow.partial.transformations = append(flow.partial.transformations, tp.buildPipeTransformations(result)...)
 		return flow
 	}
 
 	if result := tp.DataFirstOrLastCall(node); result != nil {
-		flow := tp.pipingFlowSubjectAt(result.Subject, includeEffectFn)
+		flow := tp.pipingFlowSubjectAt(result.subject, includeEffectFn)
 		kind := TransformationKindDataFirst
-		if result.SubjectIndex != 0 {
+		if result.subjectIndex != 0 {
 			kind = TransformationKindDataLast
 		}
-		flow.Node = node
-		flow.Transformations = append(flow.Transformations, PipingFlowTransformation{
-			Kind:          kind,
-			Callee:        result.Callee,
-			TypeArguments: pipingFlowTypeArguments(node, result.Callee),
-			Args:          result.Args,
-			OutType:       tp.GetTypeAtLocation(node),
+		flow.node = node
+		flow.partial.transformations = append(flow.partial.transformations, PipingFlowTransformation{
+			kind:          kind,
+			callee:        result.callee,
+			typeArguments: pipingFlowTypeArguments(node, result.callee),
+			args:          result.args,
+			outType:       tp.GetTypeAtLocation(node),
 		})
 		return flow
 	}
@@ -779,22 +840,24 @@ func (tp *TypeParser) LongestPipingFlowAt(node *ast.Node, includeEffectFn bool) 
 		if signature := tp.checker.GetResolvedSignature(node); signature != nil {
 			outType = tp.checker.GetReturnTypeOfSignature(signature)
 		}
-		flow.Node = node
-		flow.Transformations = append(flow.Transformations, PipingFlowTransformation{
-			Kind:          TransformationKindCall,
-			Callee:        result.callee,
-			TypeArguments: pipingFlowTypeArguments(result.typeArgumentsSrc, result.callee),
-			Args:          result.args,
-			OutType:       outType,
+		flow.node = node
+		flow.partial.transformations = append(flow.partial.transformations, PipingFlowTransformation{
+			kind:          TransformationKindCall,
+			callee:        result.callee,
+			typeArguments: pipingFlowTypeArguments(result.typeArgumentsSrc, result.callee),
+			args:          result.args,
+			outType:       outType,
 		})
 		return flow
 	}
 
 	return &PipingFlow{
-		Node: node,
-		Subject: PipingFlowSubject{
-			Node:    node,
-			OutType: tp.GetTypeAtLocation(node),
+		node: node,
+		partial: PartialPipingFlow{
+			subject: PipingFlowSubject{
+				node:    node,
+				outType: tp.GetTypeAtLocation(node),
+			},
 		},
 	}
 }
@@ -804,25 +867,27 @@ func (tp *TypeParser) pipingFlowSubjectAt(node *ast.Node, includeEffectFn bool) 
 		return flow
 	}
 	return &PipingFlow{
-		Node: node,
-		Subject: PipingFlowSubject{
-			Node:    node,
-			OutType: tp.GetTypeAtLocation(node),
+		node: node,
+		partial: PartialPipingFlow{
+			subject: PipingFlowSubject{
+				node:    node,
+				outType: tp.GetTypeAtLocation(node),
+			},
 		},
 	}
 }
 
 // buildPipeTransformations builds PipingFlowTransformation slices from pipe call arguments.
 func (tp *TypeParser) buildPipeTransformations(result *ParsedPipeCallResult) []PipingFlowTransformation {
-	transformations := make([]PipingFlowTransformation, 0, len(result.Args))
-	for i, arg := range result.Args {
+	transformations := make([]PipingFlowTransformation, 0, len(result.args))
+	for i, arg := range result.args {
 		if arg == nil {
 			continue
 		}
 
 		var outType *checker.Type
-		if i < len(result.ArgsOutType) {
-			outType = result.ArgsOutType[i]
+		if i < len(result.argsOutType) {
+			outType = result.argsOutType[i]
 		}
 
 		var callee *ast.Node
@@ -840,11 +905,11 @@ func (tp *TypeParser) buildPipeTransformations(result *ParsedPipeCallResult) []P
 		}
 
 		transformations = append(transformations, PipingFlowTransformation{
-			Kind:          result.Kind,
-			Callee:        callee,
-			TypeArguments: pipingFlowTypeArguments(arg, callee),
-			Args:          args,
-			OutType:       outType,
+			kind:          result.kind,
+			callee:        callee,
+			typeArguments: pipingFlowTypeArguments(arg, callee),
+			args:          args,
+			outType:       outType,
 		})
 	}
 
@@ -900,11 +965,11 @@ func (tp *TypeParser) buildEffectFnTransformations(result *parsedEffectFnCallRes
 		}
 
 		transformations = append(transformations, PipingFlowTransformation{
-			Kind:          result.kind,
-			Callee:        callee,
-			TypeArguments: pipingFlowTypeArguments(arg, callee),
-			Args:          args,
-			OutType:       outType,
+			kind:          result.kind,
+			callee:        callee,
+			typeArguments: pipingFlowTypeArguments(arg, callee),
+			args:          args,
+			outType:       outType,
 		})
 	}
 

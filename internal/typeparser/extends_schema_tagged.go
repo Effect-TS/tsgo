@@ -6,12 +6,22 @@ import (
 
 // SchemaTaggedResult holds the parsed result of a class extending Schema.TaggedClass/TaggedError/TaggedRequest.
 type SchemaTaggedResult struct {
-	ClassName        *ast.Node // The class name identifier
-	SelfTypeNode     *ast.Node // The Self type argument node (first type arg of the inner call)
-	BrandTypeNode    *ast.Node
-	KeyStringLiteral *ast.Node // The identifier arg from the inner call (first arg), or nil
-	TagStringLiteral *ast.Node // The tag arg from the outer call (first arg), or nil
+	className        *ast.Node // The class name identifier
+	selfTypeNode     *ast.Node // The Self type argument node (first type arg of the inner call)
+	brandTypeNode    *ast.Node
+	keyStringLiteral *ast.Node // The identifier arg from the inner call (first arg), or nil
+	tagStringLiteral *ast.Node // The tag arg from the outer call (first arg), or nil
 }
+
+func (r SchemaTaggedResult) ClassName() *ast.Node { return r.className }
+
+func (r SchemaTaggedResult) SelfTypeNode() *ast.Node { return r.selfTypeNode }
+
+func (r SchemaTaggedResult) BrandTypeNode() *ast.Node { return r.brandTypeNode }
+
+func (r SchemaTaggedResult) KeyStringLiteral() *ast.Node { return r.keyStringLiteral }
+
+func (r SchemaTaggedResult) TagStringLiteral() *ast.Node { return r.tagStringLiteral }
 
 // extendsSchemaTagged checks if a class declaration extends Schema.<memberName>
 // with the double-call pattern:
@@ -105,11 +115,11 @@ func (tp *TypeParser) extendsSchemaTagged(classNode *ast.Node, memberName string
 		}
 
 		return &SchemaTaggedResult{
-			ClassName:        classNode.Name(),
-			SelfTypeNode:     innerCall.TypeArguments.Nodes[0],
-			BrandTypeNode:    brandTypeNode,
-			KeyStringLiteral: keyStringLiteral,
-			TagStringLiteral: tagStringLiteral,
+			className:        classNode.Name(),
+			selfTypeNode:     innerCall.TypeArguments.Nodes[0],
+			brandTypeNode:    brandTypeNode,
+			keyStringLiteral: keyStringLiteral,
+			tagStringLiteral: tagStringLiteral,
 		}
 	}
 

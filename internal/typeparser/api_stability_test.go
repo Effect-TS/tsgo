@@ -28,15 +28,15 @@ func apiStabilityTestExport(t *testing.T, c *checker.Checker, sf *ast.SourceFile
 }
 
 func apiStabilityDependencyNames(used ApiStabilityUsed) []string {
-	names := make([]string, 0, len(used.Dependencies))
-	for _, dependency := range used.Dependencies {
+	names := make([]string, 0, len(used.dependencies))
+	for _, dependency := range used.dependencies {
 		names = append(names, ApiStabilityDependencyName(dependency))
 	}
 	return names
 }
 
 func containsDependency(used ApiStabilityUsed, name string) bool {
-	for _, dependency := range used.Dependencies {
+	for _, dependency := range used.dependencies {
 		if ApiStabilityDependencyName(dependency) == name {
 			return true
 		}
@@ -409,11 +409,11 @@ export function f(x: string | number): string { return "" }
 
 	first := tp.DeclaredApiStabilityOfSignature(signatures[0])
 	second := tp.DeclaredApiStabilityOfSignature(signatures[1])
-	if first.Level == second.Level {
-		t.Fatalf("distinct overload tags collapsed: %v and %v", first.Level, second.Level)
+	if first.level == second.level {
+		t.Fatalf("distinct overload tags collapsed: %v and %v", first.level, second.level)
 	}
-	if first.Level != ApiStabilityStable || second.Level != ApiStabilityUnstable {
-		t.Fatalf("unexpected overload levels: first=%v second=%v", first.Level, second.Level)
+	if first.level != ApiStabilityStable || second.level != ApiStabilityUnstable {
+		t.Fatalf("unexpected overload levels: first=%v second=%v", first.level, second.level)
 	}
 	if !tp.links.ApiStabilityDeclaredSignature.Has(rawSignature(signatures[0])) ||
 		!tp.links.ApiStabilityDeclaredSignature.Has(rawSignature(signatures[1])) {
@@ -585,8 +585,8 @@ export interface S {
 
 	o := apiStabilityTestExport(t, c, files["/.src/test.ts"], "O")
 	oUsed := tp.ApiStabilityUsedBySymbol(o)
-	if oUsed.Minimum != ApiStabilityExperimental {
-		t.Fatalf("O minimum = %v, want experimental: %v", oUsed.Minimum, apiStabilityDependencyNames(oUsed))
+	if oUsed.minimum != ApiStabilityExperimental {
+		t.Fatalf("O minimum = %v, want experimental: %v", oUsed.minimum, apiStabilityDependencyNames(oUsed))
 	}
 	if !containsDependency(oUsed, "value") {
 		t.Fatalf("O should expose its tagged property, got %v", apiStabilityDependencyNames(oUsed))
@@ -594,12 +594,12 @@ export interface S {
 
 	s := apiStabilityTestExport(t, c, files["/.src/test.ts"], "S")
 	sUsed := tp.ApiStabilityUsedBySymbol(s)
-	if sUsed.Minimum != ApiStabilityUnstable {
-		t.Fatalf("S minimum = %v, want unstable: %v", sUsed.Minimum, apiStabilityDependencyNames(sUsed))
+	if sUsed.minimum != ApiStabilityUnstable {
+		t.Fatalf("S minimum = %v, want unstable: %v", sUsed.minimum, apiStabilityDependencyNames(sUsed))
 	}
 	foundSignature := false
-	for _, dependency := range sUsed.Dependencies {
-		if dependency.Signature != nil && dependency.Level == ApiStabilityUnstable && dependency.Declaration != nil {
+	for _, dependency := range sUsed.dependencies {
+		if dependency.signature != nil && dependency.level == ApiStabilityUnstable && dependency.declaration != nil {
 			foundSignature = true
 		}
 	}
@@ -731,7 +731,7 @@ export interface Stable { value: string }
 	stable := apiStabilityTestExport(t, c, testFile, "Stable")
 	stableSession := tp.NewApiStabilitySession()
 	stableUsed := stableSession.UsedBySymbol(stable)
-	if len(stableUsed.Dependencies) != 0 {
+	if len(stableUsed.dependencies) != 0 {
 		t.Fatalf("Stable should have no dependencies, got %v", apiStabilityDependencyNames(stableUsed))
 	}
 	if surface := stableSession.analysis.sessionSymbols[stable]; !surface.complete || surface.blocked {
@@ -878,7 +878,7 @@ export declare const f: Callable<Deep<E>>
 	if !containsDependency(warm, "E") {
 		t.Fatal("the materialized surface should expose E")
 	}
-	if cold.Minimum != warm.Minimum || len(cold.Dependencies) != len(warm.Dependencies) {
+	if cold.minimum != warm.minimum || len(cold.dependencies) != len(warm.dependencies) {
 		t.Fatalf("cold and warm results disagree: cold=%v warm=%v", apiStabilityDependencyNames(cold), apiStabilityDependencyNames(warm))
 	}
 }
@@ -917,7 +917,7 @@ export declare const x: A<string>
 	if !containsDependency(recomputed, "E") {
 		t.Fatalf("the materialized recomputation should expose E, got %v", apiStabilityDependencyNames(recomputed))
 	}
-	if recomputed.Minimum != warm.Minimum || len(recomputed.Dependencies) != len(warm.Dependencies) {
+	if recomputed.minimum != warm.minimum || len(recomputed.dependencies) != len(warm.dependencies) {
 		t.Fatalf("warm results disagree: first=%v recomputed=%v", apiStabilityDependencyNames(warm), apiStabilityDependencyNames(recomputed))
 	}
 }
@@ -946,13 +946,13 @@ export function untagged(x: number): number
 	untagged := apiStabilityTestExport(t, c, files["/.src/test.ts"], "untagged")
 
 	taggedDeclared := tp.DeclaredApiStabilityOfSymbol(tagged)
-	if taggedDeclared.Level != ApiStabilityStable || taggedDeclared.Declaration == nil {
+	if taggedDeclared.level != ApiStabilityStable || taggedDeclared.declaration == nil {
 		t.Fatalf("explicit stable root lost its provenance: %+v", taggedDeclared)
 	}
 	if !tp.links.ApiStabilityDeclaredSymbol.Has(tagged) {
 		t.Fatal("explicit stable root should be cached")
 	}
-	if declared := tp.DeclaredApiStabilityOfSymbol(untagged); declared.Level != ApiStabilityStable || declared.Declaration != nil {
+	if declared := tp.DeclaredApiStabilityOfSymbol(untagged); declared.level != ApiStabilityStable || declared.declaration != nil {
 		t.Fatalf("untagged root should be stable without provenance: %+v", declared)
 	}
 
@@ -967,18 +967,18 @@ export function untagged(x: number): number
 			t.Fatalf("tagged overload %d should be cached", index)
 		}
 		if index == 0 {
-			if declared.Level != ApiStabilityStable || declared.Declaration == nil {
+			if declared.level != ApiStabilityStable || declared.declaration == nil {
 				t.Fatalf("explicit stable overload lost its provenance: %+v", declared)
 			}
-			if !tp.links.ApiStabilityDeclaredDeclaration.Has(declared.Declaration) {
+			if !tp.links.ApiStabilityDeclaredDeclaration.Has(declared.declaration) {
 				t.Fatal("explicit stable declaration should be cached")
 			}
-		} else if declared.Level != ApiStabilityStable || declared.Declaration != nil {
+		} else if declared.level != ApiStabilityStable || declared.declaration != nil {
 			t.Fatalf("untagged overload should be stable without provenance: %+v", declared)
 		}
 	}
 	for index, signature := range untaggedSignatures {
-		if declared := tp.DeclaredApiStabilityOfSignature(signature); declared.Declaration != nil {
+		if declared := tp.DeclaredApiStabilityOfSignature(signature); declared.declaration != nil {
 			t.Fatalf("untagged signature %d has a declaration: %+v", index, declared)
 		}
 	}
@@ -1061,7 +1061,7 @@ export declare const computedObject: {
 	tagged := apiStabilityTestExport(t, c, files["/.src/test.ts"], "TaggedComputed")
 	used := tp.ApiStabilityUsedBySymbol(tagged)
 	rendered := map[string]bool{}
-	for _, dependency := range used.Dependencies {
+	for _, dependency := range used.dependencies {
 		rendered[ApiStabilityDependencyName(dependency)] = true
 		if strings.HasPrefix(ApiStabilityDependencyName(dependency), "\xfe") {
 			t.Errorf("late-bound internal name leaked into a diagnostic: %q", ApiStabilityDependencyName(dependency))
@@ -1070,7 +1070,7 @@ export declare const computedObject: {
 	if !rendered["[Symbol.iterator]"] || !rendered["[custom]"] {
 		t.Errorf("tagged computed members should render readable names, got %v", apiStabilityDependencyNames(used))
 	}
-	if len(used.Dependencies) < 2 {
+	if len(used.dependencies) < 2 {
 		t.Errorf("tagged computed members should report separately, got %v", apiStabilityDependencyNames(used))
 	}
 }
@@ -1421,16 +1421,16 @@ export interface AlsoLeaky { other: E }
 	}
 
 	used := session.UsedBySymbol(leaky)
-	if used.Incomplete || !containsDependency(used, "E") {
-		t.Fatalf("Leaky should be a complete surface exposing E, got %v (incomplete=%v)", apiStabilityDependencyNames(used), used.Incomplete)
+	if used.incomplete || !containsDependency(used, "E") {
+		t.Fatalf("Leaky should be a complete surface exposing E, got %v (incomplete=%v)", apiStabilityDependencyNames(used), used.incomplete)
 	}
 
 	// Repeating the same component inside the export reuses the session memo:
 	// the second query consumes no analysis work and returns the same surface.
 	work := session.analysis.work
 	repeat := session.UsedBySymbol(leaky)
-	if repeat.Incomplete || !containsDependency(repeat, "E") {
-		t.Fatalf("repeated session query lost E, got %v (incomplete=%v)", apiStabilityDependencyNames(repeat), repeat.Incomplete)
+	if repeat.incomplete || !containsDependency(repeat, "E") {
+		t.Fatalf("repeated session query lost E, got %v (incomplete=%v)", apiStabilityDependencyNames(repeat), repeat.incomplete)
 	}
 	if session.analysis.work != work {
 		t.Fatal("repeated session query recomputed a completed surface")
@@ -1448,8 +1448,8 @@ export interface AlsoLeaky { other: E }
 		t.Fatal("a new export must not observe an earlier export's symbol memo")
 	}
 	nextUsed := next.UsedBySymbol(alsoLeaky)
-	if nextUsed.Incomplete || !containsDependency(nextUsed, "E") {
-		t.Fatalf("AlsoLeaky should be a complete surface exposing E, got %v (incomplete=%v)", apiStabilityDependencyNames(nextUsed), nextUsed.Incomplete)
+	if nextUsed.incomplete || !containsDependency(nextUsed, "E") {
+		t.Fatalf("AlsoLeaky should be a complete surface exposing E, got %v (incomplete=%v)", apiStabilityDependencyNames(nextUsed), nextUsed.incomplete)
 	}
 	direct := newApiStabilityAnalysis(tp)
 	direct.typeSurface(declared, apiStabilityExpand, apiStabilitySubstitution{})
@@ -1479,7 +1479,7 @@ export interface AlsoLeaky { other: E }
 	// Reused snapshots still produce the same surface content.
 	fresh := NewTypeParser(c.Program(), c).NewApiStabilitySession()
 	again := fresh.UsedBySymbol(leaky)
-	if again.Incomplete || len(again.Dependencies) != len(used.Dependencies) {
+	if again.incomplete || len(again.dependencies) != len(used.dependencies) {
 		t.Fatalf("a later session disagrees with the first: first=%v again=%v", apiStabilityDependencyNames(used), apiStabilityDependencyNames(again))
 	}
 }
@@ -1503,7 +1503,7 @@ export interface WellKnownOnly { plain: number; [Symbol.iterator](): E }
 	symbol := apiStabilityTestExport(t, c, files["/.src/test.ts"], "WellKnownOnly")
 	declared := c.GetDeclaredTypeOfSymbol(symbol)
 	cold := tp.ApiStabilityUsedBySymbol(symbol)
-	if !cold.Incomplete {
+	if !cold.incomplete {
 		t.Fatal("an unmaterialized computed member must report an incomplete result")
 	}
 	if apiStabilitySharedTypeEntry(tp, declared, apiStabilityExpand) != nil {
@@ -1512,8 +1512,8 @@ export interface WellKnownOnly { plain: number; [Symbol.iterator](): E }
 
 	primeApiStabilityChecker(t, c)
 	warm := NewTypeParser(c.Program(), c).ApiStabilityUsedBySymbol(symbol)
-	if warm.Incomplete || !containsDependency(warm, "E") {
-		t.Fatalf("the materialized retry should settle complete with E, got %v (incomplete=%v)", apiStabilityDependencyNames(warm), warm.Incomplete)
+	if warm.incomplete || !containsDependency(warm, "E") {
+		t.Fatalf("the materialized retry should settle complete with E, got %v (incomplete=%v)", apiStabilityDependencyNames(warm), warm.incomplete)
 	}
 	if apiStabilitySharedTypeEntry(tp, declared, apiStabilityExpand) == nil {
 		t.Fatal("the materialized retry should publish its complete surface")

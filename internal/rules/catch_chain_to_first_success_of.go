@@ -53,7 +53,7 @@ func AnalyzeCatchChainToFirstSuccessOf(tp *typeparser.TypeParser, c *checker.Che
 	}
 
 	var matches []CatchChainToFirstSuccessOfMatch
-	for _, flow := range tp.PipingFlows(sf, true) {
+	for _, flow := range tp.PipingFlows(sf, true).All() {
 		var chain []catchChainToFirstSuccessOfCandidate
 		var initialError *checker.Type
 		var outputError *checker.Type
@@ -63,7 +63,7 @@ func AnalyzeCatchChainToFirstSuccessOf(tp *typeparser.TypeParser, c *checker.Che
 				outermost := chain[len(chain)-1].transformation
 				matches = append(matches, CatchChainToFirstSuccessOfMatch{
 					SourceFile: sf,
-					Location:   scanner.GetErrorRangeForNode(sf, outermost.Callee),
+					Location:   scanner.GetErrorRangeForNode(sf, outermost.Callee()),
 				})
 			}
 			chain = nil
@@ -71,34 +71,34 @@ func AnalyzeCatchChainToFirstSuccessOf(tp *typeparser.TypeParser, c *checker.Che
 			outputError = nil
 		}
 
-		for i := range flow.Transformations {
-			transformation := &flow.Transformations[i]
-			candidate, ok := analyzeCatchChainToFirstSuccessOfCandidate(tp, c, transformation)
+		for i := range flow.Transformations().All() {
+			transformation := flow.Transformations().At(i)
+			candidate, ok := analyzeCatchChainToFirstSuccessOfCandidate(tp, c, &transformation)
 			if !ok {
 				flush()
 				continue
 			}
 
 			if len(chain) == 0 {
-				inputType := flow.Subject.OutType
+				inputType := flow.Subject().OutType()
 				if i > 0 {
-					inputType = flow.Transformations[i-1].OutType
+					inputType = flow.Transformations().At(i - 1).OutType()
 				}
 				inputEffect := tp.StrictEffectType(inputType)
-				if inputEffect == nil || inputEffect.E == nil {
+				if inputEffect == nil || inputEffect.E() == nil {
 					flush()
 					continue
 				}
-				initialError = inputEffect.E
+				initialError = inputEffect.E()
 			}
 
-			outputEffect := tp.StrictEffectType(transformation.OutType)
-			if outputEffect == nil || outputEffect.E == nil {
+			outputEffect := tp.StrictEffectType(transformation.OutType())
+			if outputEffect == nil || outputEffect.E() == nil {
 				flush()
 				continue
 			}
 			chain = append(chain, candidate)
-			outputError = outputEffect.E
+			outputError = outputEffect.E()
 		}
 
 		flush()
@@ -108,17 +108,17 @@ func AnalyzeCatchChainToFirstSuccessOf(tp *typeparser.TypeParser, c *checker.Che
 }
 
 func analyzeCatchChainToFirstSuccessOfCandidate(tp *typeparser.TypeParser, c *checker.Checker, transformation *typeparser.PipingFlowTransformation) (catchChainToFirstSuccessOfCandidate, bool) {
-	if tp == nil || c == nil || transformation == nil || transformation.Callee == nil ||
-		!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "catch") || len(transformation.Args) != 1 {
+	if tp == nil || c == nil || transformation == nil || transformation.Callee() == nil ||
+		!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catch") || transformation.Args().Len() != 1 {
 		return catchChainToFirstSuccessOfCandidate{}, false
 	}
 
-	lazy := typeparser.ParseLazyExpression(transformation.Args[0], typeparser.LazyExpressionThunk)
-	if lazy == nil || lazy.Expression == nil {
+	lazy := typeparser.ParseLazyExpression(transformation.Args().At(0), typeparser.LazyExpressionThunk)
+	if lazy == nil || lazy.Expression() == nil {
 		return catchChainToFirstSuccessOfCandidate{}, false
 	}
 
-	handlerType := tp.GetTypeAtLocation(transformation.Args[0])
+	handlerType := tp.GetTypeAtLocation(transformation.Args().At(0))
 	if handlerType == nil {
 		return catchChainToFirstSuccessOfCandidate{}, false
 	}
@@ -128,13 +128,13 @@ func analyzeCatchChainToFirstSuccessOfCandidate(tp *typeparser.TypeParser, c *ch
 	}
 
 	fallbackType := tp.StrictEffectType(c.GetReturnTypeOfSignature(signatures[0]))
-	if fallbackType == nil || fallbackType.E == nil {
+	if fallbackType == nil || fallbackType.E() == nil {
 		return catchChainToFirstSuccessOfCandidate{}, false
 	}
 
 	return catchChainToFirstSuccessOfCandidate{
 		transformation: transformation,
-		errorType:      fallbackType.E,
+		errorType:      fallbackType.E(),
 	}, true
 }
 

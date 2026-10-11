@@ -253,9 +253,9 @@ func layerSymbolDetail(tp *typeparser.TypeParser, c *checker.Checker, node *ast.
 		if layer == nil {
 			continue
 		}
-		rOut := c.TypeToStringEx(layer.ROut, typeCheckNode, checker.TypeFormatFlagsNoTruncation, nil)
-		e := c.TypeToStringEx(layer.E, typeCheckNode, checker.TypeFormatFlagsNoTruncation, nil)
-		rIn := c.TypeToStringEx(layer.RIn, typeCheckNode, checker.TypeFormatFlagsNoTruncation, nil)
+		rOut := c.TypeToStringEx(layer.ROut(), typeCheckNode, checker.TypeFormatFlagsNoTruncation, nil)
+		e := c.TypeToStringEx(layer.E(), typeCheckNode, checker.TypeFormatFlagsNoTruncation, nil)
+		rIn := c.TypeToStringEx(layer.RIn(), typeCheckNode, checker.TypeFormatFlagsNoTruncation, nil)
 		detail := "<" + rOut + ", " + e + ", " + rIn + ">"
 		return &detail
 	}

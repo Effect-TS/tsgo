@@ -26,18 +26,18 @@ var CatchUnfailableEffect = rule.Rule{
 		var diags []*ast.Diagnostic
 
 		flows := ctx.TypeParser.PipingFlows(ctx.SourceFile, true)
-		for _, flow := range flows {
-			for i, transformation := range flow.Transformations {
-				if !isCatchCallee(ctx.TypeParser, ctx.Checker, transformation.Callee) {
+		for _, flow := range flows.All() {
+			for i, transformation := range flow.Transformations().All() {
+				if !isCatchCallee(ctx.TypeParser, ctx.Checker, transformation.Callee()) {
 					continue
 				}
 
 				// Determine the input type for this transformation
 				var inputType *checker.Type
 				if i == 0 {
-					inputType = flow.Subject.OutType
+					inputType = flow.Subject().OutType()
 				} else {
-					inputType = flow.Transformations[i-1].OutType
+					inputType = flow.Transformations().At(i - 1).OutType()
 				}
 				if inputType == nil {
 					continue
@@ -50,11 +50,11 @@ var CatchUnfailableEffect = rule.Rule{
 				}
 
 				// Check if E is never
-				if effect.E == nil || effect.E.Flags()&checker.TypeFlagsNever == 0 {
+				if effect.E() == nil || effect.E().Flags()&checker.TypeFlagsNever == 0 {
 					continue
 				}
 
-				diags = append(diags, ctx.NewDiagnostic(ast.GetSourceFileOfNode(transformation.Callee), ctx.GetErrorRange(transformation.Callee), tsdiag.The_previous_Effect_does_not_fail_so_this_error_handling_branch_will_never_run_effect_catchUnfailableEffect, nil))
+				diags = append(diags, ctx.NewDiagnostic(ast.GetSourceFileOfNode(transformation.Callee()), ctx.GetErrorRange(transformation.Callee()), tsdiag.The_previous_Effect_does_not_fail_so_this_error_handling_branch_will_never_run_effect_catchUnfailableEffect, nil))
 			}
 		}
 

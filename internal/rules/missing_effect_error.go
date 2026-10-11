@@ -61,19 +61,19 @@ func AnalyzeMissingEffectError(tp *typeparser.TypeParser, c *checker.Checker, sf
 		}
 
 		// If source has no errors, nothing to report
-		if srcEffect.E.Flags()&checker.TypeFlagsNever != 0 {
+		if srcEffect.E().Flags()&checker.TypeFlagsNever != 0 {
 			continue
 		}
 
 		// Find unhandled error types
-		unhandledErrors := findUnhandledErrors(tp, c, srcEffect.E, tgtEffect.E)
+		unhandledErrors := findUnhandledErrors(tp, c, srcEffect.E(), tgtEffect.E())
 		if len(unhandledErrors) > 0 {
 			matches = append(matches, MissingEffectErrorMatch{
 				SourceFile:        sf,
 				Location:          scanner.GetErrorRangeForNode(sf, re.ErrorNode),
 				ErrorNode:         re.ErrorNode,
 				UnhandledErrors:   unhandledErrors,
-				ExpectedErrorType: tgtEffect.E,
+				ExpectedErrorType: tgtEffect.E(),
 				ErrorTypeStr:      formatErrorTypes(c, unhandledErrors),
 			})
 		}

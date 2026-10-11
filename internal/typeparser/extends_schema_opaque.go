@@ -4,9 +4,13 @@ import "github.com/microsoft/TypeScript/tsc/shim/ast"
 
 // SchemaOpaqueResult holds the type arguments from a class extending Schema.Opaque.
 type SchemaOpaqueResult struct {
-	SelfTypeNode  *ast.Node
-	BrandTypeNode *ast.Node
+	selfTypeNode  *ast.Node
+	brandTypeNode *ast.Node
 }
+
+func (r SchemaOpaqueResult) SelfTypeNode() *ast.Node { return r.selfTypeNode }
+
+func (r SchemaOpaqueResult) BrandTypeNode() *ast.Node { return r.brandTypeNode }
 
 // ExtendsSchemaOpaque checks for the exact Schema.Opaque double-call heritage shape:
 //
@@ -34,9 +38,9 @@ func (tp *TypeParser) ExtendsSchemaOpaque(classNode *ast.Node) *SchemaOpaqueResu
 				continue
 			}
 			if tp.IsNodeReferenceToEffectSchemaModuleApi(innerCall.Expression, "Opaque") {
-				result := &SchemaOpaqueResult{SelfTypeNode: innerCall.TypeArguments.Nodes[0]}
+				result := &SchemaOpaqueResult{selfTypeNode: innerCall.TypeArguments.Nodes[0]}
 				if len(innerCall.TypeArguments.Nodes) == 2 {
-					result.BrandTypeNode = innerCall.TypeArguments.Nodes[1]
+					result.brandTypeNode = innerCall.TypeArguments.Nodes[1]
 				}
 				return result
 			}

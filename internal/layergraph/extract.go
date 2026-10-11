@@ -69,17 +69,17 @@ func ExtractLayerGraph(
 				if !visitedNodes[current] {
 					// First pass: push self back, then subject and args.
 					appendNodeToVisit(current, currentDepth)
-					appendNodeToVisit(pipeResult.Subject, currentDepth)
-					for _, arg := range pipeResult.Args {
+					appendNodeToVisit(pipeResult.Subject(), currentDepth)
+					for _, arg := range pipeResult.Args().All() {
 						appendNodeToVisit(arg, currentDepth)
 						nodeInPipeContext[arg] = true
 					}
 					visitedNodes[current] = true
 				} else {
 					// Second pass: collect child graph indices.
-					allChildren := make([]*ast.Node, 0, 1+len(pipeResult.Args))
-					allChildren = append(allChildren, pipeResult.Subject)
-					allChildren = append(allChildren, pipeResult.Args...)
+					allChildren := make([]*ast.Node, 0, 1+pipeResult.Args().Len())
+					allChildren = append(allChildren, pipeResult.Subject())
+					allChildren = pipeResult.Args().AppendTo(allChildren)
 
 					childIndices := collectChildIndices(allChildren, nodeToGraphIndex, g)
 
@@ -262,12 +262,12 @@ func extractNodeInfo(tp *typeparser.TypeParser, c *checker.Checker, node *ast.No
 	info.LayerType = layer
 
 	// Unroll provides and requires, filtering out Never types.
-	for _, p := range tp.UnrollUnionMembers(layer.ROut) {
+	for _, p := range tp.UnrollUnionMembers(layer.ROut()) {
 		if p.Flags()&checker.TypeFlagsNever == 0 {
 			info.Provides = append(info.Provides, p)
 		}
 	}
-	for _, r := range tp.UnrollUnionMembers(layer.RIn) {
+	for _, r := range tp.UnrollUnionMembers(layer.RIn()) {
 		if r.Flags()&checker.TypeFlagsNever == 0 {
 			info.Requires = append(info.Requires, r)
 		}
@@ -275,7 +275,7 @@ func extractNodeInfo(tp *typeparser.TypeParser, c *checker.Checker, node *ast.No
 
 	// ActualProvides: provides that are NOT assignable to the RIn type.
 	for _, p := range info.Provides {
-		if !checker.Checker_isTypeAssignableTo(c, p, layer.RIn) {
+		if !checker.Checker_isTypeAssignableTo(c, p, layer.RIn()) {
 			info.ActualProvides = append(info.ActualProvides, p)
 		}
 	}

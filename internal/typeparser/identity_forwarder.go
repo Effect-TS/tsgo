@@ -22,11 +22,11 @@ func (tp *TypeParser) UnwrapIdentityForwarder(node *ast.Node) (target *ast.Node,
 		return node, nil, nil
 	}
 	lazy := ParseLazyExpression(node, LazyExpressionNone)
-	if lazy == nil || len(lazy.Params) != 1 || lazy.Expression == nil {
+	if lazy == nil || len(lazy.params) != 1 || lazy.expression == nil {
 		return node, nil, nil
 	}
 
-	parameterNode := lazy.Params[0]
+	parameterNode := lazy.params[0]
 	if parameterNode == nil || parameterNode.Kind != ast.KindParameter {
 		return node, nil, nil
 	}
@@ -36,7 +36,7 @@ func (tp *TypeParser) UnwrapIdentityForwarder(node *ast.Node) (target *ast.Node,
 		return node, nil, nil
 	}
 
-	expression := ast.SkipParentheses(lazy.Expression)
+	expression := ast.SkipParentheses(lazy.expression)
 	if expression == nil || expression.Kind != ast.KindCallExpression {
 		return node, nil, nil
 	}

@@ -6,10 +6,16 @@ import (
 
 // DataTaggedErrorResult holds the parsed result of a class extending Data.TaggedError.
 type DataTaggedErrorResult struct {
-	ClassName        *ast.Node // The class name identifier, or nil for an anonymous declaration
-	CallExpression   *ast.Node // The matched Data.TaggedError call, always non-nil
-	KeyStringLiteral *ast.Node // The key string literal from the call's first argument, or nil
+	className        *ast.Node // The class name identifier, or nil for an anonymous declaration
+	callExpression   *ast.Node // The matched Data.TaggedError call, always non-nil
+	keyStringLiteral *ast.Node // The key string literal from the call's first argument, or nil
 }
+
+func (r DataTaggedErrorResult) ClassName() *ast.Node { return r.className }
+
+func (r DataTaggedErrorResult) CallExpression() *ast.Node { return r.callExpression }
+
+func (r DataTaggedErrorResult) KeyStringLiteral() *ast.Node { return r.keyStringLiteral }
 
 // ExtendsDataTaggedError checks if a class declaration extends Data.TaggedError("key")<Fields>.
 // It detects the pattern:
@@ -71,9 +77,9 @@ func (tp *TypeParser) ExtendsDataTaggedError(classNode *ast.Node) *DataTaggedErr
 			}
 
 			return &DataTaggedErrorResult{
-				ClassName:        classNode.Name(),
-				CallExpression:   callNode,
-				KeyStringLiteral: keyStringLiteral,
+				className:        classNode.Name(),
+				callExpression:   callNode,
+				keyStringLiteral: keyStringLiteral,
 			}
 		}
 

@@ -51,14 +51,14 @@ func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
 			return declarationStabilityInfo{}
 		}
 		info := ctx.TypeParser.DeclaredApiStabilityOfSymbol(symbol)
-		return declarationStabilityInfo{stability: typeparser.ApiStabilityLevelTag(info.Level), declaration: info.Declaration}
+		return declarationStabilityInfo{stability: typeparser.ApiStabilityLevelTag(info.Level()), declaration: info.Declaration()}
 	}
 	readSignature := func(signature *checker.Signature) declarationStabilityInfo {
 		if signature == nil {
 			return declarationStabilityInfo{}
 		}
 		info := ctx.TypeParser.DeclaredApiStabilityOfSignature(signature)
-		return declarationStabilityInfo{stability: typeparser.ApiStabilityLevelTag(info.Level), declaration: info.Declaration}
+		return declarationStabilityInfo{stability: typeparser.ApiStabilityLevelTag(info.Level()), declaration: info.Declaration()}
 	}
 
 	allow := newStabilityApiAllowlist(ctx, wanted)

@@ -56,15 +56,15 @@ func runWriteTagClassAccessors(ctx *refactor.Context) []ls.CodeAction {
 	var className *ast.Node
 	serviceResult := ctx.TypeParser.ExtendsEffectV3Service(classNode)
 	if serviceResult != nil {
-		if !hasAccessorsTrue(serviceResult.Options) {
+		if !hasAccessorsTrue(serviceResult.Options()) {
 			return nil
 		}
-		className = serviceResult.ClassName
+		className = serviceResult.ClassName()
 	} else {
 		tagResult := ctx.TypeParser.ExtendsEffectTag(classNode)
 		if tagResult != nil {
 			// Effect.Tag always has accessors
-			className = tagResult.ClassName
+			className = tagResult.ClassName()
 		} else {
 			return nil
 		}
@@ -85,12 +85,12 @@ func runWriteTagClassAccessors(ctx *refactor.Context) []ls.CodeAction {
 	}
 
 	contextTag := ctx.TypeParser.ContextTag(classType)
-	if contextTag == nil || contextTag.Shape == nil {
+	if contextTag == nil || contextTag.Shape() == nil {
 		return nil
 	}
 
 	// Unroll union and filter out primitives
-	nonPrimitiveServices := filterNonPrimitiveTypes(ctx.TypeParser.UnrollUnionMembers(contextTag.Shape))
+	nonPrimitiveServices := filterNonPrimitiveTypes(ctx.TypeParser.UnrollUnionMembers(contextTag.Shape()))
 	if len(nonPrimitiveServices) == 0 {
 		return nil
 	}
@@ -336,14 +336,14 @@ func buildWrappedReturnTypeText(
 	// Try to parse as Effect type
 	effect := tp.EffectType(returnType)
 	if effect != nil {
-		aStr := c.TypeToStringEx(effect.A, classNode, checker.TypeFormatFlagsNoTruncation, nil)
-		eStr := c.TypeToStringEx(effect.E, classNode, checker.TypeFormatFlagsNoTruncation, nil)
+		aStr := c.TypeToStringEx(effect.A(), classNode, checker.TypeFormatFlagsNoTruncation, nil)
+		eStr := c.TypeToStringEx(effect.E(), classNode, checker.TypeFormatFlagsNoTruncation, nil)
 
 		var rStr string
-		if effect.R != nil && effect.R.Flags()&checker.TypeFlagsNever != 0 {
+		if effect.R() != nil && effect.R().Flags()&checker.TypeFlagsNever != 0 {
 			rStr = classNameText
 		} else {
-			rStr = classNameText + " | " + c.TypeToStringEx(effect.R, classNode, checker.TypeFormatFlagsNoTruncation, nil)
+			rStr = classNameText + " | " + c.TypeToStringEx(effect.R(), classNode, checker.TypeFormatFlagsNoTruncation, nil)
 		}
 
 		return effectIdentifier + ".Effect<" + aStr + ", " + eStr + ", " + rStr + ">"

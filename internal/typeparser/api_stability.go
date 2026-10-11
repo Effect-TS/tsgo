@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
@@ -51,19 +52,35 @@ func ApiStabilityLevelFromTag(tag string) ApiStabilityLevel {
 // explicit `@stability stable` tag keeps its declaration, distinct from an
 // untagged default-stable symbol, which has no declaration.
 type ApiStabilityDeclaration struct {
-	Level       ApiStabilityLevel
-	Declaration *ast.Node
+	level       ApiStabilityLevel
+	declaration *ast.Node
 }
+
+func (r ApiStabilityDeclaration) Level() ApiStabilityLevel { return r.level }
+
+func (r ApiStabilityDeclaration) Declaration() *ast.Node { return r.declaration }
 
 // ApiStabilityDependency names one exposed component of a public API surface
 // whose declared stability is above stable. The offender is either a symbol
 // (properties, methods, referenced types) or a signature declaration; the
 // declaration carries the `@stability` provenance used for reporting.
 type ApiStabilityDependency struct {
-	Symbol      *ast.Symbol
-	Signature   *checker.Signature
-	Declaration *ast.Node
-	Level       ApiStabilityLevel
+	symbol      *ast.Symbol
+	signature   *checker.Signature
+	declaration *ast.Node
+	level       ApiStabilityLevel
+}
+
+func (r ApiStabilityDependency) Symbol() *ast.Symbol { return r.symbol }
+
+func (r ApiStabilityDependency) Signature() *checker.Signature { return r.signature }
+
+func (r ApiStabilityDependency) Declaration() *ast.Node { return r.declaration }
+
+func (r ApiStabilityDependency) Level() ApiStabilityLevel { return r.level }
+
+func NewApiStabilityDependency(symbol *ast.Symbol, signature *checker.Signature, declaration *ast.Node, level ApiStabilityLevel) ApiStabilityDependency {
+	return ApiStabilityDependency{symbol: symbol, signature: signature, declaration: declaration, level: level}
 }
 
 // ApiStabilityUsed is the computed stability of the components a surface
@@ -85,10 +102,18 @@ type ApiStabilityDependency struct {
 // stable result; the incomplete result is discarded with its session and a
 // later export or call retries.
 type ApiStabilityUsed struct {
-	Minimum      ApiStabilityLevel
-	Dependencies []ApiStabilityDependency
-	Incomplete   bool
+	minimum      ApiStabilityLevel
+	dependencies []ApiStabilityDependency
+	incomplete   bool
 }
+
+func (r ApiStabilityUsed) Minimum() ApiStabilityLevel { return r.minimum }
+
+func (r ApiStabilityUsed) Dependencies() readonly.Slice[ApiStabilityDependency] {
+	return readonly.New(r.dependencies)
+}
+
+func (r ApiStabilityUsed) Incomplete() bool { return r.incomplete }
 
 // apiStabilityInspection distinguishes how a represented type is inspected. A
 // named class or interface reached as a dependency stays shallow: its symbol
@@ -507,7 +532,7 @@ func InternalTagOfDeclaration(declaration *ast.Node) bool {
 // files share the same lookup. Declared lookups never trigger any computed
 // surface analysis.
 func (tp *TypeParser) DeclaredApiStability(symbol *ast.Symbol) ApiStabilityLevel {
-	return tp.DeclaredApiStabilityOfSymbol(symbol).Level
+	return tp.DeclaredApiStabilityOfSymbol(symbol).level
 }
 
 // DeclaredApiStabilityOfSymbol returns the declared stability of a symbol,
@@ -550,7 +575,7 @@ func (tp *TypeParser) DeclaredApiStabilityOfDeclaration(declaration *ast.Node) A
 	}
 	return Cached(&tp.links.ApiStabilityDeclaredDeclaration, declaration, func() ApiStabilityDeclaration {
 		if stability := stabilityOfDeclarationTag(declaration); stability != "" {
-			return ApiStabilityDeclaration{Level: apiStabilityRank(stability), Declaration: declaration}
+			return ApiStabilityDeclaration{level: apiStabilityRank(stability), declaration: declaration}
 		}
 		return ApiStabilityDeclaration{}
 	})
@@ -580,7 +605,7 @@ func declaredStabilityOfSymbolChain(c *checker.Checker, symbol *ast.Symbol) ApiS
 		seen[symbol] = true
 		for _, declaration := range symbol.Declarations {
 			if stability := stabilityOfDeclarationTag(declaration); stability != "" {
-				return ApiStabilityDeclaration{Level: apiStabilityRank(stability), Declaration: declaration}
+				return ApiStabilityDeclaration{level: apiStabilityRank(stability), declaration: declaration}
 			}
 		}
 		if symbol.Flags&ast.SymbolFlagsAlias == 0 {
@@ -795,7 +820,7 @@ func (a *apiStabilityAnalysis) symbolOwnTag(symbol *ast.Symbol) apiStabilityOwnT
 		return apiStabilityOwnTag{}
 	}
 	declared := a.tp.DeclaredApiStabilityOfSymbol(symbol)
-	return apiStabilityOwnTag{symbol: symbol, declaration: declared.Declaration}
+	return apiStabilityOwnTag{symbol: symbol, declaration: declared.declaration}
 }
 
 // typeOwnTag builds the own-tag identity of a represented type root. A type
@@ -823,7 +848,7 @@ func (a *apiStabilityAnalysis) signatureOwnTag(signature *checker.Signature) api
 		return apiStabilityOwnTag{}
 	}
 	declared := a.tp.DeclaredApiStabilityOfSignature(raw)
-	return apiStabilityOwnTag{signature: raw, declaration: declared.Declaration}
+	return apiStabilityOwnTag{signature: raw, declaration: declared.declaration}
 }
 
 // apiStabilityUsedOf converts a stored symbol surface into the public result
@@ -838,7 +863,7 @@ func apiStabilityUsedOf(surface apiStabilitySurface, owner *ast.Symbol) ApiStabi
 // skipping every finding that is the root's own declared tag. The stored
 // surface itself is never modified.
 func apiStabilityUsedOfOwn(surface apiStabilitySurface, own apiStabilityOwnTag) ApiStabilityUsed {
-	used := ApiStabilityUsed{Minimum: ApiStabilityStable, Incomplete: !surface.complete}
+	used := ApiStabilityUsed{minimum: ApiStabilityStable, incomplete: !surface.complete}
 	for key, finding := range surface.findings {
 		if own.excludes(key, finding) {
 			continue
@@ -847,17 +872,17 @@ func apiStabilityUsedOfOwn(surface apiStabilitySurface, own apiStabilityOwnTag) 
 		if declaration == nil {
 			declaration = key.declaration
 		}
-		used.Dependencies = append(used.Dependencies, ApiStabilityDependency{
-			Symbol:      key.symbol,
-			Signature:   key.signature,
-			Declaration: declaration,
-			Level:       finding.level,
+		used.dependencies = append(used.dependencies, ApiStabilityDependency{
+			symbol:      key.symbol,
+			signature:   key.signature,
+			declaration: declaration,
+			level:       finding.level,
 		})
-		if finding.level > used.Minimum {
-			used.Minimum = finding.level
+		if finding.level > used.minimum {
+			used.minimum = finding.level
 		}
 	}
-	sortApiStabilityDependencies(used.Dependencies)
+	sortApiStabilityDependencies(used.dependencies)
 	return used
 }
 
@@ -868,27 +893,27 @@ func sortApiStabilityDependencies(deps []ApiStabilityDependency) {
 		if leftName != rightName {
 			return leftName < rightName
 		}
-		if left.Level != right.Level {
-			return left.Level > right.Level
+		if left.level != right.level {
+			return left.level > right.level
 		}
-		return left.Symbol != nil && right.Symbol == nil
+		return left.symbol != nil && right.symbol == nil
 	})
 }
 
 func apiStabilityDependencySortName(dependency ApiStabilityDependency) string {
-	if name := apiStabilityUsableSymbolName(dependency.Symbol); name != "" {
+	if name := apiStabilityUsableSymbolName(dependency.symbol); name != "" {
 		return name
 	}
-	if name, ok := apiStabilityDeclarationDisplayName(dependency.Declaration); ok {
+	if name, ok := apiStabilityDeclarationDisplayName(dependency.declaration); ok {
 		return name
 	}
-	if name := apiStabilityLateBoundSymbolDisplayName(dependency.Symbol); name != "" {
+	if name := apiStabilityLateBoundSymbolDisplayName(dependency.symbol); name != "" {
 		return name
 	}
-	if dependency.Symbol != nil && dependency.Symbol.Name != "" {
-		return dependency.Symbol.Name
+	if dependency.symbol != nil && dependency.symbol.Name != "" {
+		return dependency.symbol.Name
 	}
-	if dependency.Signature != nil {
+	if dependency.signature != nil {
 		return "signature"
 	}
 	return "<anonymous>"
@@ -900,20 +925,20 @@ func apiStabilityDependencySortName(dependency ApiStabilityDependency) string {
 // never evaluated; its display spelling comes from its declaration symbol or
 // its well-known symbol expression.
 func ApiStabilityDependencyName(dependency ApiStabilityDependency) string {
-	if name := apiStabilityUsableSymbolName(dependency.Symbol); name != "" {
+	if name := apiStabilityUsableSymbolName(dependency.symbol); name != "" {
 		return name
 	}
-	if name, ok := apiStabilityDeclarationDisplayName(dependency.Declaration); ok {
+	if name, ok := apiStabilityDeclarationDisplayName(dependency.declaration); ok {
 		return name
 	}
-	if name := apiStabilityLateBoundSymbolDisplayName(dependency.Symbol); name != "" {
+	if name := apiStabilityLateBoundSymbolDisplayName(dependency.symbol); name != "" {
 		return name
 	}
-	if dependency.Symbol != nil && dependency.Symbol.Name != "" {
-		return dependency.Symbol.Name
+	if dependency.symbol != nil && dependency.symbol.Name != "" {
+		return dependency.symbol.Name
 	}
-	if dependency.Declaration != nil {
-		switch dependency.Declaration.Kind {
+	if dependency.declaration != nil {
+		switch dependency.declaration.Kind {
 		case ast.KindCallSignature:
 			return "call signature"
 		case ast.KindConstructSignature:
@@ -921,12 +946,12 @@ func ApiStabilityDependencyName(dependency ApiStabilityDependency) string {
 		case ast.KindIndexSignature:
 			return "index signature"
 		}
-		if name := ast.GetNameOfDeclaration(dependency.Declaration); name != nil && name.Kind == ast.KindComputedPropertyName {
+		if name := ast.GetNameOfDeclaration(dependency.declaration); name != nil && name.Kind == ast.KindComputedPropertyName {
 			return "[computed]"
 		}
 	}
-	if dependency.Signature != nil {
-		if dependency.Signature.Flags()&checker.SignatureFlagsConstruct != 0 {
+	if dependency.signature != nil {
+		if dependency.signature.Flags()&checker.SignatureFlagsConstruct != 0 {
 			return "constructor"
 		}
 		return "call signature"
@@ -2758,7 +2783,7 @@ func (a *apiStabilityAnalysis) memberSurface(member *ast.Symbol, subst apiStabil
 		return surface
 	}
 	a.recordSymbol(&surface, member)
-	if declared := a.tp.DeclaredApiStabilityOfSymbol(member); declared.Declaration != nil {
+	if declared := a.tp.DeclaredApiStabilityOfSymbol(member); declared.declaration != nil {
 		return surface
 	}
 	memberType := a.typeOfSymbolSafely(member)
@@ -4307,7 +4332,7 @@ func (a *apiStabilityAnalysis) recordSymbol(surface *apiStabilitySurface, symbol
 		return
 	}
 	declared := a.tp.DeclaredApiStabilityOfSymbol(symbol)
-	if declared.Level <= ApiStabilityStable {
+	if declared.level <= ApiStabilityStable {
 		return
 	}
 	a.addFinding(surface, apiStabilityFindingKey{symbol: symbol}, declared)
@@ -4321,7 +4346,7 @@ func (a *apiStabilityAnalysis) recordSignatureStability(surface *apiStabilitySur
 		return
 	}
 	declared := a.tp.DeclaredApiStabilityOfSignature(signature)
-	if declared.Level <= ApiStabilityStable {
+	if declared.level <= ApiStabilityStable {
 		return
 	}
 	a.addFinding(surface, apiStabilityFindingKey{signature: rawSignature(signature)}, declared)
@@ -4338,7 +4363,7 @@ func (a *apiStabilityAnalysis) typeChildBoundarySymbol(t *checker.Type) *ast.Sym
 		return nil
 	}
 	if alias := t.Alias(); alias != nil && alias.Symbol() != nil {
-		if declared := a.tp.DeclaredApiStabilityOfSymbol(alias.Symbol()); declared.Declaration != nil {
+		if declared := a.tp.DeclaredApiStabilityOfSymbol(alias.Symbol()); declared.declaration != nil {
 			return alias.Symbol()
 		}
 	}
@@ -4349,7 +4374,7 @@ func (a *apiStabilityAnalysis) typeChildBoundarySymbol(t *checker.Type) *ast.Sym
 	if symbol == nil {
 		return nil
 	}
-	if declared := a.tp.DeclaredApiStabilityOfSymbol(symbol); declared.Declaration != nil {
+	if declared := a.tp.DeclaredApiStabilityOfSymbol(symbol); declared.declaration != nil {
 		return symbol
 	}
 	return nil
@@ -4362,7 +4387,7 @@ func (a *apiStabilityAnalysis) typeChildBoundarySymbol(t *checker.Type) *ast.Sym
 func (a *apiStabilityAnalysis) heritageChildBoundarySymbol(base, target *checker.Type) *ast.Symbol {
 	if base != nil {
 		if alias := base.Alias(); alias != nil && alias.Symbol() != nil {
-			if declared := a.tp.DeclaredApiStabilityOfSymbol(alias.Symbol()); declared.Declaration != nil {
+			if declared := a.tp.DeclaredApiStabilityOfSymbol(alias.Symbol()); declared.declaration != nil {
 				return alias.Symbol()
 			}
 		}
@@ -4377,7 +4402,7 @@ func (a *apiStabilityAnalysis) heritageChildBoundarySymbol(base, target *checker
 	if symbol == nil {
 		return nil
 	}
-	if declared := a.tp.DeclaredApiStabilityOfSymbol(symbol); declared.Declaration != nil {
+	if declared := a.tp.DeclaredApiStabilityOfSymbol(symbol); declared.declaration != nil {
 		return symbol
 	}
 	return nil
@@ -4498,7 +4523,7 @@ func (a *apiStabilityAnalysis) inheritedChildBoundarySymbol(member, owner *ast.S
 	if declaring == nil || declaring == owner {
 		return nil
 	}
-	if declared := a.tp.DeclaredApiStabilityOfSymbol(declaring); declared.Declaration != nil {
+	if declared := a.tp.DeclaredApiStabilityOfSymbol(declaring); declared.declaration != nil {
 		return declaring
 	}
 	return nil
@@ -4520,7 +4545,7 @@ func (a *apiStabilityAnalysis) inheritedChildBoundarySymbolForDeclaration(declar
 	if declaring == nil || declaring == owner {
 		return nil
 	}
-	if declared := a.tp.DeclaredApiStabilityOfSymbol(declaring); declared.Declaration != nil {
+	if declared := a.tp.DeclaredApiStabilityOfSymbol(declaring); declared.declaration != nil {
 		return declaring
 	}
 	return nil
@@ -4542,8 +4567,8 @@ func (a *apiStabilityAnalysis) childSignatureBoundary(surface *apiStabilitySurfa
 	if raw == nil {
 		return false
 	}
-	if declared := a.tp.DeclaredApiStabilityOfSignature(raw); declared.Declaration != nil {
-		if owner != nil && apiStabilityDeclarationBelongsToSymbol(declared.Declaration, owner) {
+	if declared := a.tp.DeclaredApiStabilityOfSignature(raw); declared.declaration != nil {
+		if owner != nil && apiStabilityDeclarationBelongsToSymbol(declared.declaration, owner) {
 			return false
 		}
 		a.recordSignatureStability(surface, raw)
@@ -4576,7 +4601,7 @@ func (a *apiStabilityAnalysis) declarationChildBoundary(surface *apiStabilitySur
 	if declaration == nil {
 		return false
 	}
-	if declared := a.tp.DeclaredApiStabilityOfDeclaration(declaration); declared.Declaration != nil {
+	if declared := a.tp.DeclaredApiStabilityOfDeclaration(declaration); declared.declaration != nil {
 		a.recordDeclarationStability(surface, declaration)
 		return true
 	}
@@ -4608,7 +4633,7 @@ func (a *apiStabilityAnalysis) recordDeclarationStability(surface *apiStabilityS
 		return
 	}
 	declared := a.tp.DeclaredApiStabilityOfDeclaration(declaration)
-	if declared.Level <= ApiStabilityStable {
+	if declared.level <= ApiStabilityStable {
 		return
 	}
 	a.addFinding(surface, apiStabilityFindingKey{declaration: declaration}, declared)
@@ -4616,8 +4641,8 @@ func (a *apiStabilityAnalysis) recordDeclarationStability(surface *apiStabilityS
 
 func (a *apiStabilityAnalysis) addFinding(surface *apiStabilitySurface, key apiStabilityFindingKey, declared ApiStabilityDeclaration) {
 	existing, ok := surface.findings[key]
-	if !ok || declared.Level > existing.level {
-		surface.findings[key] = apiStabilityFinding{level: declared.Level, declaration: declared.Declaration}
+	if !ok || declared.level > existing.level {
+		surface.findings[key] = apiStabilityFinding(declared)
 	}
 }
 

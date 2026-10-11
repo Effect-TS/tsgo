@@ -9,6 +9,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/layergraph"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
@@ -41,7 +42,7 @@ var MissingEffectContext = rule.Rule{
 
 			// Find unhandled context types by checking each source requirement member
 			// against the target requirement type
-			unhandledContexts := findUnhandledContexts(ctx.TypeParser, ctx.Checker, srcEffect.R, tgtEffect.R)
+			unhandledContexts := findUnhandledContexts(ctx.TypeParser, ctx.Checker, srcEffect.R(), tgtEffect.R())
 			if len(unhandledContexts) > 0 {
 				contextTypeStr := formatContextTypes(ctx.Checker, unhandledContexts)
 				diag := ctx.NewDiagnostic(
@@ -122,11 +123,11 @@ func findRelatedProvideLocation(tp *typeparser.TypeParser, c *checker.Checker, s
 		return provideLocation{}
 	}
 	flows := tp.PipingFlows(sf, true)
-	for _, flow := range flows {
-		if flow == nil || flow.Node == nil {
+	for _, flow := range flows.All() {
+		if flow == nil || flow.Node() == nil {
 			continue
 		}
-		if !nodeContains(flow.Node, errorNode) {
+		if !nodeContains(flow.Node(), errorNode) {
 			continue
 		}
 		errorTransformationIndex := findTransformationIndexContainingNode(flow, errorNode)
@@ -134,13 +135,13 @@ func findRelatedProvideLocation(tp *typeparser.TypeParser, c *checker.Checker, s
 			continue
 		}
 		for i := errorTransformationIndex - 1; i >= 0; i-- {
-			transformation := flow.Transformations[i]
-			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "provide") {
+			transformation := flow.Transformations().At(i)
+			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "provide") {
 				continue
 			}
 			return provideLocation{
-				LayerNode: firstNode(transformation.Args),
-				Location:  scanner.GetErrorRangeForNode(sf, transformation.Callee),
+				LayerNode: firstNode(transformation.Args()),
+				Location:  scanner.GetErrorRangeForNode(sf, transformation.Callee()),
 			}
 		}
 	}
@@ -210,7 +211,7 @@ func rootLayerProvidesTypes(tp *typeparser.TypeParser, c *checker.Checker, layer
 	if layerType == nil {
 		return nil
 	}
-	return tp.UnrollUnionMembers(layerType.ROut)
+	return tp.UnrollUnionMembers(layerType.ROut())
 }
 
 func rootProvidesType(c *checker.Checker, providedTypes []*checker.Type, target *checker.Type) bool {
@@ -239,11 +240,11 @@ func outlineNodeProvidesType(c *checker.Checker, node layergraph.LayerOutlineGra
 	return false
 }
 
-func firstNode(nodes []*ast.Node) *ast.Node {
-	if len(nodes) == 0 {
+func firstNode(nodes readonly.Slice[*ast.Node]) *ast.Node {
+	if nodes.Len() == 0 {
 		return nil
 	}
-	return nodes[0]
+	return nodes.At(0)
 }
 
 func findTransformationIndexContainingNode(flow *typeparser.PipingFlow, target *ast.Node) int {
@@ -251,9 +252,9 @@ func findTransformationIndexContainingNode(flow *typeparser.PipingFlow, target *
 		return -1
 	}
 	target = ast.SkipParentheses(target)
-	for i := range flow.Transformations {
-		transformation := flow.Transformations[i]
-		callee := ast.SkipParentheses(transformation.Callee)
+	for i := range flow.Transformations().All() {
+		transformation := flow.Transformations().At(i)
+		callee := ast.SkipParentheses(transformation.Callee())
 		if callee == target || callee != nil && callee.Pos() == target.Pos() && target.End() >= callee.End() {
 			return i
 		}

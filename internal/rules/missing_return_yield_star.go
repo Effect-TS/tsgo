@@ -91,8 +91,8 @@ func shouldReportMissingReturnYieldStar(tp *typeparser.TypeParser, c *checker.Ch
 		return false
 	}
 	effect := tp.EffectYieldableType(t)
-	if effect == nil || effect.A == nil {
+	if effect == nil || effect.A() == nil {
 		return false
 	}
-	return effect.A.Flags()&checker.TypeFlagsNever != 0
+	return effect.A().Flags()&checker.TypeFlagsNever != 0
 }

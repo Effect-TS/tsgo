@@ -5,6 +5,7 @@ import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
@@ -54,7 +55,7 @@ type EffectFnIifeResult struct {
 	EffectModule      *ast.Expression
 	Variant           string
 	GeneratorFunction *ast.FunctionExpression
-	PipeArguments     []*ast.Node
+	PipeArguments     readonly.Slice[*ast.Node]
 	TraceExpression   *ast.Node
 }
 
@@ -110,11 +111,11 @@ func parseEffectFnIife(tp *typeparser.TypeParser, node *ast.Node) *EffectFnIifeR
 		return &EffectFnIifeResult{
 			OuterCall:         outerCall,
 			InnerCall:         innerCall,
-			EffectModule:      result.EffectModule,
-			Variant:           string(result.Variant),
+			EffectModule:      result.EffectModule(),
+			Variant:           string(result.Variant()),
 			GeneratorFunction: result.GeneratorFunction(),
-			PipeArguments:     result.PipeArguments,
-			TraceExpression:   result.TraceExpression,
+			PipeArguments:     result.PipeArguments(),
+			TraceExpression:   result.TraceExpression(),
 		}
 	}
 

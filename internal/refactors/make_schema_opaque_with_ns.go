@@ -34,7 +34,7 @@ func runMakeSchemaOpaqueWithNs(ctx *refactor.Context) []ls.CodeAction {
 			origName := info.identifier.AsIdentifier().Text
 			newName := origName + "_"
 
-			isEObject := info.schemaTypes.E.Flags()&checker.TypeFlagsObject != 0
+			isEObject := info.schemaTypes.E().Flags()&checker.TypeFlagsObject != 0
 
 			// 1. Rename the original variable identifier (append "_")
 			newIdentifier := tracker.NewIdentifier(newName)

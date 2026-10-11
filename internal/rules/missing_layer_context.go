@@ -38,7 +38,7 @@ var MissingLayerContext = rule.Rule{
 
 			// Find unhandled context types by checking each source RIn member
 			// against the target RIn type
-			unhandled := findUnhandledLayerContexts(ctx.TypeParser, ctx.Checker, srcLayer.RIn, tgtLayer.RIn)
+			unhandled := findUnhandledLayerContexts(ctx.TypeParser, ctx.Checker, srcLayer.RIn(), tgtLayer.RIn())
 			if len(unhandled) > 0 {
 				// Sort deterministically by type name (alphabetical)
 				sort.Slice(unhandled, func(i, j int) bool {

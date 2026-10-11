@@ -6,10 +6,16 @@ import (
 
 // ServiceMapServiceResult holds the parsed result of a class extending Context.Service.
 type ServiceMapServiceResult struct {
-	ClassName        *ast.Node // The class name identifier
-	SelfTypeNode     *ast.Node // The Self type argument node (first type arg of the inner call)
-	KeyStringLiteral *ast.Node // The key string literal from the outer call's first argument, or nil
+	className        *ast.Node // The class name identifier
+	selfTypeNode     *ast.Node // The Self type argument node (first type arg of the inner call)
+	keyStringLiteral *ast.Node // The key string literal from the outer call's first argument, or nil
 }
+
+func (r ServiceMapServiceResult) ClassName() *ast.Node { return r.className }
+
+func (r ServiceMapServiceResult) SelfTypeNode() *ast.Node { return r.selfTypeNode }
+
+func (r ServiceMapServiceResult) KeyStringLiteral() *ast.Node { return r.keyStringLiteral }
 
 // ExtendsContextService checks if a class declaration extends Context.Service<Self, Shape>()(key).
 // It detects the double-call pattern:
@@ -91,9 +97,9 @@ func (tp *TypeParser) ExtendsContextService(classNode *ast.Node) *ServiceMapServ
 			}
 
 			return &ServiceMapServiceResult{
-				ClassName:        classNode.Name(),
-				SelfTypeNode:     innerCall.TypeArguments.Nodes[0],
-				KeyStringLiteral: keyStringLiteral,
+				className:        classNode.Name(),
+				selfTypeNode:     innerCall.TypeArguments.Nodes[0],
+				keyStringLiteral: keyStringLiteral,
 			}
 		}
 
