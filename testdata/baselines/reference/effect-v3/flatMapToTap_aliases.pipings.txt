@@ -1,0 +1,197 @@
+==== /.src/flatMapToTap_aliases.ts (14 flows) ====
+
+=== Piping Flow ===
+Location: 10:24 - 10:68
+Node: source.pipe(bind((n) => restore(audit, n)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: bind
+      args: [(n) => restore(audit, n)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 10:48 - 10:66
+Node: restore(audit, n)
+Node Kind: KindCallExpression
+
+Subject: audit
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: restore
+      args: [n]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 12:24 - 12:70
+Node: source.pipe(bind((n) => map(audit, () => n)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: bind
+      args: [(n) => map(audit, () => n)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 12:48 - 12:68
+Node: map(audit, () => n)
+Node Kind: KindCallExpression
+
+Subject: audit
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: map
+      args: [() => n]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 13:32 - 13:104
+Node: source.pipe(Library.Effect.andThen((n) => Library.Effect.as(audit, n)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Library.Effect.andThen
+      args: [(n) => Library.Effect.as(audit, n)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 13:74 - 13:102
+Node: Library.Effect.as(audit, n)
+Node Kind: KindCallExpression
+
+Subject: audit
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Library.Effect.as
+      args: [n]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 14:30 - 14:100
+Node: ((Library: number) => source.pipe(bind((n) => restore(audit, n))))(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: ((Library: number) => source.pipe(bind((n) => restore(audit, n))))
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 14:52 - 14:96
+Node: source.pipe(bind((n) => restore(audit, n)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: bind
+      args: [(n) => restore(audit, n)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 14:76 - 14:94
+Node: restore(audit, n)
+Node Kind: KindCallExpression
+
+Subject: audit
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: restore
+      args: [n]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 15:27 - 15:97
+Node: ((observe: number) => source.pipe(bind((n) => restore(audit, n))))(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: ((observe: number) => source.pipe(bind((n) => restore(audit, n))))
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 15:49 - 15:93
+Node: source.pipe(bind((n) => restore(audit, n)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: bind
+      args: [(n) => restore(audit, n)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 15:73 - 15:91
+Node: restore(audit, n)
+Node Kind: KindCallExpression
+
+Subject: audit
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: restore
+      args: [n]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 16:85 - 16:129
+Node: source.pipe(bind((n) => restore(audit, n)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: bind
+      args: [(n) => restore(audit, n)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 16:109 - 16:127
+Node: restore(audit, n)
+Node Kind: KindCallExpression
+
+Subject: audit
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: restore
+      args: [n]
+      outType: Effect<number, never, never>

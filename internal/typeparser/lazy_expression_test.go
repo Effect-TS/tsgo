@@ -2,6 +2,40 @@ package typeparser
 
 import "testing"
 
+func TestParseLazyExpressionMultiStatementBlock(t *testing.T) {
+	t.Parallel()
+	_, _, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `
+const statements = () => { const value = 1; console.log(value); return value }
+const nested = () => { const inner = () => { return 2 }; return inner() }
+const early = () => { if (Math.random()) return 1; return 2 }
+const bare = () => { if (Math.random()) return; return 2 }
+const finallyReturn = () => { try { return 1 } finally {} return 2 }
+const notFinal = () => { return 1; console.log(2) }
+const empty = () => {}
+const single = () => { return 3 }
+`)
+	defer done()
+	for _, name := range []string{"statements", "nested", "single"} {
+		parsed := ParseLazyExpression(findVariableInitializer(t, sf, name), LazyExpressionAllowMultiStatementBlock)
+		if parsed == nil {
+			t.Fatalf("%s: expected the final return expression", name)
+		}
+		text := sf.Text()[parsed.Expression().Pos():parsed.Expression().End()]
+		want := map[string]string{"statements": " value", "nested": " inner()", "single": " 3"}[name]
+		if text != want {
+			t.Fatalf("%s: expression = %q, want %q", name, text, want)
+		}
+	}
+	for _, name := range []string{"early", "bare", "finallyReturn", "notFinal", "empty"} {
+		if ParseLazyExpression(findVariableInitializer(t, sf, name), LazyExpressionAllowMultiStatementBlock) != nil {
+			t.Fatalf("%s: expected rejection", name)
+		}
+	}
+	if ParseLazyExpression(findVariableInitializer(t, sf, "statements"), LazyExpressionNone) != nil {
+		t.Fatal("the default parser must still reject multiple statements")
+	}
+}
+
 func TestParseLazyExpressionFlags(t *testing.T) {
 	t.Parallel()
 

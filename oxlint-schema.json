@@ -2347,6 +2347,9 @@
         "effecttsgo/flat-map-to-map": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/flat-map-to-tap": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/floating-effect": {
           "$ref": "#/definitions/RuleNoConfig"
         },

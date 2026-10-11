@@ -33,6 +33,8 @@ const (
 	LazyExpressionAllowAsync
 	// LazyExpressionAllowGenerator additionally accepts generator functions.
 	LazyExpressionAllowGenerator
+	// LazyExpressionAllowMultiStatementBlock accepts statements before a sole final return.
+	LazyExpressionAllowMultiStatementBlock
 )
 
 // ParseLazyExpression parses an arrow function or function expression, extracting its inner expression.
@@ -93,11 +95,17 @@ func ParseLazyExpression(node *ast.Node, flags LazyExpressionFlags) *ParsedLazyE
 	var expr *ast.Node
 	if body.Kind == ast.KindBlock {
 		block := body.AsBlock()
-		if block.Statements == nil || len(block.Statements.Nodes) != 1 {
+		if block.Statements == nil || len(block.Statements.Nodes) == 0 ||
+			flags&LazyExpressionAllowMultiStatementBlock == 0 && len(block.Statements.Nodes) != 1 {
 			return nil
 		}
-		stmt := block.Statements.Nodes[0]
+		stmt := block.Statements.Nodes[len(block.Statements.Nodes)-1]
 		if stmt.Kind != ast.KindReturnStatement {
+			return nil
+		}
+		if flags&LazyExpressionAllowMultiStatementBlock != 0 && ast.ForEachReturnStatement(body, func(ret *ast.Node) bool {
+			return ret != stmt
+		}) {
 			return nil
 		}
 		returnExpr := stmt.AsReturnStatement().Expression
