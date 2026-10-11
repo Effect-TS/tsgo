@@ -1,0 +1,23 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/flatMapToTap_preview.ts(12,3): suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+
+
+==== /.src/flatMapToTap_preview.ts (1 errors) ====
+    import { Effect } from "effect"
+    
+    interface User {
+      readonly id: string
+      readonly name: string
+    }
+    
+    declare const findUser: (id: string) => Effect.Effect<User>
+    declare const auditUser: (user: User) => Effect.Effect<void>
+    
+    export const loadUser = (id: string) => findUser(id).pipe(
+      Effect.flatMap((user) => auditUser(user).pipe(Effect.as(user)))
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+    )
+    

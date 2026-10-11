@@ -113,6 +113,7 @@ var All = []rule.Rule{
 	AllOfMapToForEach,
 	MapSomeToAsSome,
 	FlatMapToMap,
+	FlatMapToTap,
 	FlatMapIgnoredParamToAndThen,
 	MatchEffectToMatch,
 	MatchEffectToMapBoth,

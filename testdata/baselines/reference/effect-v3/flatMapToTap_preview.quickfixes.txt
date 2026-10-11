@@ -1,0 +1,32 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:3-12:17) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+  Fix 0: "Disable flatMapToTap for this line"
+  Fix 1: "Disable flatMapToTap for entire file"
+  Fix 2: "Replace with Effect.tap"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable flatMapToTap for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable flatMapToTap for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.tap" ===
+
+--- file:///.src/flatMapToTap_preview.ts ---
+import { Effect } from "effect"
+
+interface User {
+  readonly id: string
+  readonly name: string
+}
+
+declare const findUser: (id: string) => Effect.Effect<User>
+declare const auditUser: (user: User) => Effect.Effect<void>
+
+export const loadUser = (id: string) => findUser(id).pipe(
+  Effect.tap((user) => auditUser(user))
+)
+

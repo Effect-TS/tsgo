@@ -1,0 +1,43 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/flatMapToTap_aliases.ts(10,37): suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+/.src/flatMapToTap_aliases.ts(12,37): suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+/.src/flatMapToTap_aliases.ts(13,45): suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.andThen` with a manual re-yield. effect(flatMapToTap)
+/.src/flatMapToTap_aliases.ts(14,65): suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+/.src/flatMapToTap_aliases.ts(15,62): suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+/.src/flatMapToTap_aliases.ts(16,98): suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+
+
+==== /.src/flatMapToTap_aliases.ts (6 errors) ====
+    import type { Effect } from "effect"
+    import { as as restore, flatMap as bind, map, tap as observe } from "effect/Effect"
+    import * as Library from "effect"
+    
+    declare const source: Effect.Effect<number>
+    declare const audit: Effect.Effect<void>
+    const aTap: unknown = observe
+    const Module = Library.Effect
+    
+    export const namedTap = source.pipe(bind((n) => restore(audit, n)))
+                                        ~~~~
+!!! suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+    const inspect = observe
+    export const constTap = source.pipe(bind((n) => map(audit, () => n)))
+                                        ~~~~
+!!! suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+    export const packageNamespace = source.pipe(Library.Effect.andThen((n) => Library.Effect.as(audit, n)))
+                                                ~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.andThen` with a manual re-yield. effect(flatMapToTap)
+    export const shadowedModule = ((Library: number) => source.pipe(bind((n) => restore(audit, n))))(0)
+                                                                    ~~~~
+!!! suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+    export const shadowedTap = ((observe: number) => source.pipe(bind((n) => restore(audit, n))))(0)
+                                                                 ~~~~
+!!! suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+    export const moduleInScope = ((Library: number, observe: number, inspect: number) => source.pipe(bind((n) => restore(audit, n))))(0, 0, 0)
+                                                                                                     ~~~~
+!!! suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+    void inspect
+    void aTap
+    

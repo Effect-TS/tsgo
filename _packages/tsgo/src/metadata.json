@@ -61,6 +61,7 @@
         "flatMapConditionalToFilterOrFail": "suggestion",
         "flatMapIgnoredParamToAndThen": "suggestion",
         "flatMapToMap": "suggestion",
+        "flatMapToTap": "suggestion",
         "floatingEffect": "error",
         "floatingEffectInVitest": "error",
         "genericEffectServices": "warning",
@@ -151,6 +152,7 @@
         "flatMapConditionalToFilterOrFail": "error",
         "flatMapIgnoredParamToAndThen": "error",
         "flatMapToMap": "error",
+        "flatMapToTap": "error",
         "floatingEffect": "error",
         "floatingEffectInVitest": "error",
         "genericEffectServices": "error",
@@ -319,6 +321,7 @@
         "flatMapConditionalToFilterOrFail": "warning",
         "flatMapIgnoredParamToAndThen": "warning",
         "flatMapToMap": "warning",
+        "flatMapToTap": "warning",
         "mapSomeToAsSome": "warning",
         "matchEffectToMapBoth": "warning",
         "matchEffectToMatch": "warning",
@@ -2528,6 +2531,30 @@
             "start": 75,
             "end": 89,
             "text": "`Effect.map` expresses this success-value transformation more directly than `Effect.flatMap` followed by `Effect.succeed`. effect(flatMapToMap)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "flatMapToTap",
+      "group": "style",
+      "description": "Suggests Effect.tap when a flatMap or andThen callback runs an effect and returns its unchanged parameter",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377144
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ninterface User {\n  readonly id: string\n  readonly name: string\n}\n\ndeclare const findUser: (id: string) =\u003e Effect.Effect\u003cUser\u003e\ndeclare const auditUser: (user: User) =\u003e Effect.Effect\u003cvoid\u003e\n\nexport const loadUser = (id: string) =\u003e findUser(id).pipe(\n  Effect.flatMap((user) =\u003e auditUser(user).pipe(Effect.as(user)))\n)\n",
+        "diagnostics": [
+          {
+            "start": 282,
+            "end": 296,
+            "text": "`Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)"
           }
         ]
       }

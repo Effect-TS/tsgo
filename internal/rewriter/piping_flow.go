@@ -1,8 +1,12 @@
 package rewriter
 
 import (
+	"strings"
+
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/core"
+	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 // PipingFlowTransformationReplacement describes a replacement operator in its
@@ -168,6 +172,113 @@ func appliedCallExpression(call *ast.CallExpression) *ast.CallExpression {
 		current = parent.AsNode()
 	}
 	return current.AsCallExpression()
+}
+
+// RemoveTrailingPipingFlowTransformation removes the last step while retaining
+// its input and any earlier transformations. Unsupported flows produce no edits.
+func (t *Tracker) RemoveTrailingPipingFlowTransformation(sf *ast.SourceFile, flow *typeparser.PipingFlow) bool {
+	if t == nil || sf == nil || flow == nil || flow.Transformations().Len() == 0 {
+		return false
+	}
+	last := flow.Transformations().Len() - 1
+	terminal := flow.Transformations().At(last)
+	if terminal.Callee() == nil || terminal.Callee().Flags&ast.NodeFlagsOptionalChain != 0 {
+		return false
+	}
+	switch terminal.Kind() {
+	case typeparser.TransformationKindDataFirst, typeparser.TransformationKindDataLast, typeparser.TransformationKindCall:
+		call := callExpressionForCallee(terminal.Callee())
+		if call == nil || call.AsNode().Flags&ast.NodeFlagsOptionalChain != 0 {
+			return false
+		}
+		callNode := call.AsNode()
+		if terminal.Kind() == typeparser.TransformationKindCall {
+			for callNode != flow.Node() {
+				applied := callNode
+				for applied.Parent != nil && applied.Parent.Kind == ast.KindParenthesizedExpression {
+					applied = applied.Parent
+				}
+				if applied.Parent == nil || !ast.IsCallExpression(applied.Parent) || applied.Parent.AsCallExpression().Expression != applied {
+					break
+				}
+				callNode = applied.Parent
+				if callNode.Flags&ast.NodeFlagsOptionalChain != 0 {
+					return false
+				}
+			}
+		}
+		input := flow.TransformationInputNode(last)
+		if terminal.Kind() == typeparser.TransformationKindCall {
+			call = callNode.AsCallExpression()
+			if call.Arguments == nil || len(call.Arguments.Nodes) != 1 {
+				return false
+			}
+			input = call.Arguments.Nodes[0]
+		}
+		if input == nil {
+			return false
+		}
+		t.ReplaceNode(sf, callNode, input, nil)
+		return true
+
+	case typeparser.TransformationKindPipe, typeparser.TransformationKindPipeable:
+		node := pipingFlowTransformationNode(terminal)
+		if node == nil || node.Flags&ast.NodeFlagsOptionalChain != 0 {
+			return false
+		}
+		callNode, call, index := containingCallArgument(node)
+		if call == nil || index < 0 || callNode.Flags&ast.NodeFlagsOptionalChain != 0 {
+			return false
+		}
+		arguments := call.Arguments.Nodes
+		minimum := 1
+		if terminal.Kind() == typeparser.TransformationKindPipe {
+			minimum = 2
+		}
+		if len(arguments) == minimum {
+			var input *ast.Node
+			if terminal.Kind() == typeparser.TransformationKindPipe {
+				input = arguments[0]
+			} else if ast.IsPropertyAccessExpression(call.Expression) {
+				input = call.Expression.AsPropertyAccessExpression().Expression
+			}
+			if input == nil {
+				return false
+			}
+			t.ReplaceNode(sf, callNode, input, nil)
+			return true
+		}
+		var span core.TextRange
+		switch {
+		case index < len(arguments)-1:
+			span = core.NewTextRange(scanner.GetTokenPosOfNode(arguments[index], sf, false), scanner.GetTokenPosOfNode(arguments[index+1], sf, false))
+		case index > 0:
+			span = core.NewTextRange(arguments[index-1].End(), arguments[index].End())
+			start := scanner.GetTokenPosOfNode(arguments[index], sf, false)
+			text := sf.Text()
+			trivia := text[span.Pos():start]
+			if strings.Contains(trivia, "//") || strings.Contains(trivia, "/*") {
+				separator := scanner.SkipTrivia(text, span.Pos())
+				if separator >= start || text[separator] != ',' {
+					return false
+				}
+				trimStart := start
+				for trimStart > span.Pos() && (trimStart-1 == separator || text[trimStart-1] == ' ' || text[trimStart-1] == '\t') {
+					trimStart--
+				}
+				t.DeleteRange(sf, core.NewTextRange(trimStart, span.End()))
+				if separator < trimStart {
+					t.DeleteRange(sf, core.NewTextRange(separator, separator+1))
+				}
+				return true
+			}
+		default:
+			return false
+		}
+		t.DeleteRange(sf, span)
+		return true
+	}
+	return false
 }
 
 // ReplacePipingFlowTransformation replaces a transformation while preserving

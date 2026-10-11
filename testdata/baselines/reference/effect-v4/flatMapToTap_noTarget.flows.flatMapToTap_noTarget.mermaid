@@ -1,0 +1,16 @@
+flowchart TB
+  0[/"type: Effect#lt;number, never, never#gt;<br/>node: source"/]
+  1["type: Effect#lt;number, never, never#gt;<br/>callee: bind<br/>args: #91;#40;n#41; =#gt; restore#40;audit, n#41;#93;"]
+  2[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: bind"/]
+  3[["type: #40;n: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: #40;n#41; =#gt; restore#40;audit, n#41;"]]
+  4[/"type: Effect#lt;void, never, never#gt;<br/>node: audit"/]
+  5["type: Effect#lt;number, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  6[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: restore"/]
+  7[/"type: number<br/>node: n"/]
+  2 -->|"kind: transformCallee"| 1
+  4 -->|"kind: pipe"| 5
+  6 -->|"kind: transformCallee"| 4
+  7 -->|"kind: transformArg"| 4
+  5 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: transformArg"| 1
+  0 -->|"kind: pipe"| 1
