@@ -7,13 +7,10 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
-	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
-	"github.com/microsoft/TypeScript/tsc/shim/core"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 var FlatMapToTapFix = fixable.Fixable{
@@ -31,10 +28,6 @@ func runFlatMapToTapFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		remove := tapReturnRemoval(match.SourceFile, match.ReturnFlow)
-		if remove == nil {
-			continue
-		}
 		target, receiver := tapReference(ctx, match.Callee)
 		if target == nil {
 			continue
@@ -42,7 +35,9 @@ func runFlatMapToTapFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.tap",
 			Run: func(tracker *rewriter.Tracker) {
-				remove(tracker)
+				if !tracker.RemoveTrailingPipingFlowTransformation(match.SourceFile, match.ReturnFlow) {
+					return
+				}
 				if match.Callee.Kind == ast.KindPropertyAccessExpression && target == match.Callee.AsPropertyAccessExpression().Expression {
 					tracker.ReplaceNode(match.SourceFile, match.Callee.AsPropertyAccessExpression().Name(), tracker.NewIdentifier("tap"), nil)
 					return
@@ -108,81 +103,4 @@ func tapReference(ctx *fixable.Context, callee *ast.Node) (*ast.Node, bool) {
 func tapModuleReference(ctx *fixable.Context, receiver *ast.Node) bool {
 	tap := ctx.Checker.GetPropertyOfType(ctx.TypeParser.GetTypeAtLocation(receiver), "tap")
 	return tap != nil && tap.ValueDeclaration != nil && ctx.TypeParser.IsNodeReferenceToEffectModuleApi(tap.ValueDeclaration.Name(), "tap")
-}
-
-func tapReturnRemoval(sf *ast.SourceFile, flow *typeparser.PipingFlow) func(*rewriter.Tracker) {
-	last := flow.Transformations().Len() - 1
-	terminal := flow.Transformations().At(last)
-	switch terminal.Kind() {
-	case typeparser.TransformationKindDataFirst, typeparser.TransformationKindDataLast, typeparser.TransformationKindCall:
-		callNode, call := directCallForCallee(terminal.Callee())
-		if call == nil {
-			return nil
-		}
-		if terminal.Kind() == typeparser.TransformationKindCall {
-			for callNode.Parent != nil && callNode.Parent.Kind == ast.KindParenthesizedExpression {
-				callNode = callNode.Parent
-			}
-			if callNode.Parent == nil || callNode.Parent.Kind != ast.KindCallExpression || callNode.Parent.AsCallExpression().Expression != callNode {
-				return nil
-			}
-			callNode = callNode.Parent
-		}
-		input := flow.TransformationInputNode(last)
-		if input == nil || callNode.Flags&ast.NodeFlagsOptionalChain != 0 {
-			return nil
-		}
-		return func(tracker *rewriter.Tracker) {
-			tracker.ReplaceNode(sf, callNode, input, nil)
-		}
-	case typeparser.TransformationKindPipe, typeparser.TransformationKindPipeable:
-		callNode, call, index := containingCallArgumentForExit(terminal.Callee())
-		if call == nil || call.Arguments == nil || index < 0 || callNode.Flags&ast.NodeFlagsOptionalChain != 0 {
-			return nil
-		}
-		arguments := call.Arguments.Nodes
-		minimum := 1
-		if terminal.Kind() == typeparser.TransformationKindPipe {
-			minimum = 2
-		}
-		if len(arguments) == minimum {
-			var input *ast.Node
-			if terminal.Kind() == typeparser.TransformationKindPipe {
-				input = arguments[0]
-			} else if call.Expression.Kind == ast.KindPropertyAccessExpression {
-				input = call.Expression.AsPropertyAccessExpression().Expression
-			}
-			if input == nil {
-				return nil
-			}
-			return func(tracker *rewriter.Tracker) {
-				tracker.ReplaceNode(sf, callNode, input, nil)
-			}
-		}
-		var span core.TextRange
-		switch {
-		case index < len(arguments)-1:
-			span = core.NewTextRange(scanner.GetTokenPosOfNode(arguments[index], sf, false), scanner.GetTokenPosOfNode(arguments[index+1], sf, false))
-		case index > 0:
-			span = core.NewTextRange(arguments[index-1].End(), arguments[index].End())
-			start := scanner.GetTokenPosOfNode(arguments[index], sf, false)
-			trivia := sf.Text()[span.Pos():start]
-			if strings.Contains(trivia, "//") || strings.Contains(trivia, "/*") {
-				separator := scanner.SkipTrivia(sf.Text(), span.Pos())
-				if separator >= start || sf.Text()[separator] != ',' {
-					return nil
-				}
-				preserved := strings.TrimRight(sf.Text()[span.Pos():separator]+sf.Text()[separator+1:start], " \t")
-				return func(tracker *rewriter.Tracker) {
-					tracker.ReplaceTextRangeWithText(sf, span, preserved)
-				}
-			}
-		default:
-			return nil
-		}
-		return func(tracker *rewriter.Tracker) {
-			tracker.DeleteRange(sf, span)
-		}
-	}
-	return nil
 }
