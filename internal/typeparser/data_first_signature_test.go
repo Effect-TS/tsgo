@@ -591,7 +591,7 @@ export const result = operation("value", 1)
 	if !ast.NodeIsSynthesized(syntheticDataFirst.Declaration()) || !ast.NodeIsSynthesized(syntheticPipeable.Declaration()) {
 		t.Fatal("expected signatures with no source declaration site")
 	}
-	if !MatchesPipeableSignature(c, syntheticDataFirst, syntheticPipeable, 0, nil) {
+	if !MatchesPipeableSignature(tp, syntheticDataFirst, syntheticPipeable, 0, nil) {
 		t.Fatal("expected raw signature structures to match without declaration nodes")
 	}
 }
@@ -623,21 +623,21 @@ export const result = operation(box, String)
 	if resolved == nil || pipeable == nil {
 		t.Fatal("expected data-first and pipeable signatures")
 	}
-	if !pipeableSignatureShapesMatch(c, resolved, pipeable, 0) {
+	if !pipeableSignatureShapesMatch(tp, resolved, pipeable, 0) {
 		t.Fatal("expected signatures to be alpha-equivalent")
 	}
-	if !MatchesPipeableSignature(c, resolved, pipeable, 0, nil) {
+	if !MatchesPipeableSignature(tp, resolved, pipeable, 0, nil) {
 		t.Fatal("expected full matcher to recognize the signatures")
 	}
 	before := c.TotalInstantiationCount
 	for range 100 {
-		if !comparePipeableSignatureTypes(c, rawSignature(resolved), rawSignature(pipeable), 0) {
+		if !comparePipeableSignatureTypes(tp, rawSignature(resolved), rawSignature(pipeable), 0) {
 			t.Fatal("expected repeated raw type comparison to match")
 		}
-		if !pipeableSignatureShapesMatch(c, resolved, pipeable, 0) {
+		if !pipeableSignatureShapesMatch(tp, resolved, pipeable, 0) {
 			t.Fatal("expected cached signature comparison to match")
 		}
-		if !MatchesPipeableSignature(c, resolved, pipeable, 0, nil) {
+		if !MatchesPipeableSignature(tp, resolved, pipeable, 0, nil) {
 			t.Fatal("expected repeated full signature comparison to match")
 		}
 	}
@@ -887,7 +887,7 @@ func logDerivedPipeableSignatureComparison(t *testing.T, tp *TypeParser, node *a
 				c.TypeToString(candidateReturn),
 				len(candidate.TypeParameters()),
 				returnedArity,
-				MatchesPipeableSignature(c, resolved, candidate, subjectIndex, nil),
+				MatchesPipeableSignature(tp, resolved, candidate, subjectIndex, nil),
 			)
 		}
 	}

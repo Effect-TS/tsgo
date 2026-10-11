@@ -1,0 +1,98 @@
+package customlint
+
+import (
+	"strings"
+	"testing"
+
+	"golang.org/x/tools/go/analysis/analysistest"
+)
+
+func TestCheckerLocations(t *testing.T) {
+	analysistest.Run(t, analysistest.TestData(), checkerLocationAnalyzer,
+		"github.com/effect-ts/tsgo/internal/...",
+		"github.com/effect-ts/tsgo/public",
+		"github.com/other/internal/consumer",
+		"github.com/effect-ts/tsgo/internalish")
+}
+
+func TestForwardingSelector(t *testing.T) {
+	cases := []struct {
+		name string
+		body string
+	}{
+		{"forwarding", "return parser.checker.GetSymbolAtLocation(input)"},
+		{"earlier call", `parser.checker.GetSymbolAtLocation(input) // want "use TypeParser.GetSymbolAtLocation"
+return parser.checker.GetSymbolAtLocation(input)`},
+		{"earlier return", `if input != nil { return parser.checker.GetSymbolAtLocation(input) } // want "use TypeParser.GetSymbolAtLocation"
+return parser.checker.GetSymbolAtLocation(input)`},
+		{"nested call", `return parser.checker.GetSymbolAtLocation(parser.checker.GetSymbolAtLocation(input)) // want "use TypeParser.GetSymbolAtLocation" "use TypeParser.GetSymbolAtLocation"`},
+		{"different argument", `return parser.checker.GetSymbolAtLocation(nil) // want "use TypeParser.GetSymbolAtLocation"`},
+		{"different field", `return parser.other.GetSymbolAtLocation(input) // want "use TypeParser.GetSymbolAtLocation"`},
+		{"different receiver", `other := parser
+return other.checker.GetSymbolAtLocation(input) // want "use TypeParser.GetSymbolAtLocation"`},
+		{"checker alias", `c := parser.checker
+return c.GetSymbolAtLocation(input) // want "use TypeParser.GetSymbolAtLocation"`},
+		{"parameter alias", `otherInput := input
+return parser.checker.GetSymbolAtLocation(otherInput) // want "use TypeParser.GetSymbolAtLocation"`},
+		{"shadowed parameter", `if input := input; input != nil { parser.checker.GetSymbolAtLocation(input) } // want "use TypeParser.GetSymbolAtLocation"
+return parser.checker.GetSymbolAtLocation(input)`},
+		{"method value", `lookup := parser.checker.GetSymbolAtLocation // want "use TypeParser.GetSymbolAtLocation"
+return lookup(input)`},
+		{"closure", `return func() *checker.Node { return parser.checker.GetSymbolAtLocation(input) }() // want "use TypeParser.GetSymbolAtLocation"`},
+		{"earlier closure", `func() { parser.checker.GetSymbolAtLocation(input) }() // want "use TypeParser.GetSymbolAtLocation"
+return parser.checker.GetSymbolAtLocation(input)`},
+		{"shadowed receiver", `if parser := parser; input != nil { parser.checker.GetSymbolAtLocation(input) } // want "use TypeParser.GetSymbolAtLocation"
+return parser.checker.GetSymbolAtLocation(input)`},
+	}
+	for methodName, forwardingMethod := range checkerLocationMethods {
+		for _, receiver := range []string{"*TypeParser", "TypeParser"} {
+			for _, tc := range cases {
+				t.Run(methodName+"/"+receiver+"/"+tc.name, func(t *testing.T) {
+					body := strings.ReplaceAll(tc.body, "GetSymbolAtLocation", methodName)
+					runForwardingFixture(t, receiver, forwardingMethod, body)
+				})
+			}
+		}
+	}
+}
+
+func TestForwardingMethodMapping(t *testing.T) {
+	for _, tc := range []struct {
+		method string
+		body   string
+	}{
+		{"GetSymbolAtLocation", `return parser.checker.GetTypeAtLocation(input) // want "use TypeParser.GetTypeAtLocation"`},
+		{"getTypeAtLocationUncached", `return parser.checker.GetSymbolAtLocation(input) // want "use TypeParser.GetSymbolAtLocation"`},
+		{"GetTypeAtLocation", `return parser.checker.GetTypeAtLocation(input) // want "use TypeParser.GetTypeAtLocation"`},
+	} {
+		t.Run(tc.method, func(t *testing.T) {
+			runForwardingFixture(t, "TypeParser", tc.method, tc.body)
+		})
+	}
+}
+
+func runForwardingFixture(t *testing.T, receiver, method, body string) {
+	t.Helper()
+	dir, cleanup, err := analysistest.WriteFiles(map[string]string{
+		"github.com/microsoft/TypeScript/tsc/internal/checker/checker.go": `package checker
+type Node struct{}
+type Checker struct{}
+func (*Checker) GetSymbolAtLocation(n *Node) *Node { return n }
+func (*Checker) GetTypeAtLocation(n *Node) *Node { return n }`,
+		"github.com/microsoft/TypeScript/tsc/shim/checker/shim.go": `package checker
+import provider "github.com/microsoft/TypeScript/tsc/internal/checker"
+type Checker = provider.Checker
+type Node = provider.Node`,
+		"github.com/effect-ts/tsgo/internal/typeparser/parser.go": `package typeparser
+import "github.com/microsoft/TypeScript/tsc/shim/checker"
+type TypeParser struct { checker, other *checker.Checker }
+func (parser ` + receiver + `) ` + method + `(input *checker.Node) *checker.Node {
+` + body + `
+}`,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer cleanup()
+	analysistest.Run(t, dir, checkerLocationAnalyzer, typeParserPackage)
+}

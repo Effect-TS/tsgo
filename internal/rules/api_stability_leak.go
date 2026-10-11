@@ -371,7 +371,7 @@ func apiStabilityExportDeclarationForwards(ctx *rule.Context, declaration *ast.E
 		if declaration.ModuleSpecifier == nil {
 			return false
 		}
-		moduleSymbol := ctx.Checker.GetSymbolAtLocation(declaration.ModuleSpecifier)
+		moduleSymbol := ctx.TypeParser.GetSymbolAtLocation(declaration.ModuleSpecifier)
 		if moduleSymbol != nil && moduleSymbol.Flags&ast.SymbolFlagsAlias != 0 {
 			moduleSymbol = ctx.Checker.GetAliasedSymbol(moduleSymbol)
 		}
@@ -854,7 +854,7 @@ func apiStabilityModuleOfEntity(ctx *rule.Context, entity *ast.Node) *ast.Symbol
 	if entity == nil {
 		return nil
 	}
-	module := ctx.Checker.GetSymbolAtLocation(entity)
+	module := ctx.TypeParser.GetSymbolAtLocation(entity)
 	if module == nil {
 		return nil
 	}
@@ -880,7 +880,7 @@ func apiStabilityReexportLocation(ctx *rule.Context, exportSymbol *ast.Symbol) *
 		if fallback == nil {
 			fallback = statement
 		}
-		moduleSymbol := ctx.Checker.GetSymbolAtLocation(declaration.ModuleSpecifier)
+		moduleSymbol := ctx.TypeParser.GetSymbolAtLocation(declaration.ModuleSpecifier)
 		if moduleSymbol == nil {
 			continue
 		}

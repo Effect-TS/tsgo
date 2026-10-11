@@ -55,7 +55,7 @@ func checkMissingPipeableSignatures(ctx *rule.Context) []*ast.Diagnostic {
 					if candidate == dataFirst {
 						continue
 					}
-					if typeparser.MatchesPipeableSignature(ctx.Checker, dataFirst, candidate, subjectIndex, nil) {
+					if typeparser.MatchesPipeableSignature(ctx.TypeParser, dataFirst, candidate, subjectIndex, nil) {
 						hasPipeableSignature[dataFirst] = true
 						pipeableTargets[candidate] = true
 					}
