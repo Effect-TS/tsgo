@@ -24,6 +24,7 @@ import {
   runDiagnosticsBinary
 } from "./diagnostics.js"
 import { ensureIntegrationSelected, integrationFlags, IntegrationSelectionError } from "./integrationFlags.js"
+import { oxlintEnvCommand } from "./oxlintEnv.js"
 import { setupCommand } from "./setup/index.js"
 import * as pkgJson from "../../package.json" with { type: "json" }
 
@@ -207,7 +208,15 @@ const diagnosticsCommand = Command.make("diagnostics", {
 )
 
 const rootCommand = Command.make("tsgo").pipe(
-  Command.withSubcommands([patchCommand, unpatchCommand, getExePathCommand, diagnosticsCommand, setupCommand, configCommand])
+  Command.withSubcommands([
+    patchCommand,
+    unpatchCommand,
+    oxlintEnvCommand,
+    getExePathCommand,
+    diagnosticsCommand,
+    setupCommand,
+    configCommand
+  ])
 )
 
 rootCommand.pipe(
