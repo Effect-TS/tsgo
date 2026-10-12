@@ -8,7 +8,8 @@ import {
   componentArtifact,
   copyTypeScriptLibraries,
   latestTypeScriptCompiler,
-  oxlintBuildTargets
+  oxlintBuildTargets,
+  platformPackage
 } from "./build.ts"
 import { buildReleasePlan } from "./releasePlan.ts"
 import { readUpstream } from "./upstream.ts"
@@ -94,6 +95,40 @@ export const assembleReleaseArtifacts = Effect.fnUntraced(function*(
   yield* Console.log(`Assembled ${copies.length} release artifacts into platform packages`)
 })
 
+const preparePackageManifest = Effect.fnUntraced(function*(
+  packageRoot: string,
+  windows: boolean,
+  executableFiles: ReadonlyArray<string>,
+  files: ReadonlyArray<string>
+) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  for (const executable of executableFiles) {
+    const artifact = path.join(packageRoot, executable.slice(2))
+    if (!(yield* fs.exists(artifact))) {
+      return yield* new PackagePreparationError({ reason: `Missing packaged executable ${artifact}` })
+    }
+    if (!windows) yield* fs.chmod(artifact, 0o755)
+  }
+
+  const packageJsonPath = path.join(packageRoot, "package.json")
+  const packageJsonText = yield* fs.readFileString(packageJsonPath)
+  const packageJson = yield* Effect.try({
+    try: () => JSON.parse(packageJsonText) as Record<string, unknown>,
+    catch: (error) => new PackagePreparationError({
+      reason: `Unable to parse ${packageJsonPath}: ${String(error)}`
+    })
+  })
+  const publishConfig = typeof packageJson.publishConfig === "object" && packageJson.publishConfig !== null
+    ? packageJson.publishConfig as Record<string, unknown>
+    : {}
+  yield* fs.writeFileString(packageJsonPath, `${JSON.stringify({
+    ...packageJson,
+    files: [...new Set([...(Array.isArray(packageJson.files) ? packageJson.files : []), ...files])],
+    publishConfig: { ...publishConfig, executableFiles }
+  }, null, 2)}\n`)
+})
+
 export const preparePlatformPackages = Effect.fnUntraced(function*(repositoryRoot: string) {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
@@ -101,7 +136,7 @@ export const preparePlatformPackages = Effect.fnUntraced(function*(repositoryRoo
   const sourceUpstream = path.join(repositoryRoot, "_packages", "tsgo", "upstream.json")
 
   for (const target of Object.keys(buildTargets) as Array<keyof typeof buildTargets>) {
-    const packageRoot = path.join(repositoryRoot, "_packages", `tsgo-${target}`)
+    const packageRoot = path.join(repositoryRoot, "_packages", platformPackage("typescript", target))
     const windows = target.startsWith("win32-")
     const artifact = componentArtifact(repositoryRoot, target, "typescript", upstream.tags.typescript.latest, "tsc").path
     const latest = latestTypeScriptCompiler(repositoryRoot, target)
@@ -113,40 +148,23 @@ export const preparePlatformPackages = Effect.fnUntraced(function*(repositoryRoo
     yield* fs.copyFile(sourceUpstream, path.join(packageRoot, "lib", "upstream.json"))
     yield* fs.remove(path.join(packageRoot, "lib", windows ? "tsc-next.exe" : "tsc-next"), { force: true })
 
-    const executableFiles = [
+    yield* preparePackageManifest(packageRoot, windows, [
       `./lib/tsc${windows ? ".exe" : ""}`,
       ...Object.keys(upstream.components.typescript)
         .filter((version) => version !== upstream.tags.typescript.latest)
-        .map((version) => `./artifacts/typescript/${version}/tsc${windows ? ".exe" : ""}`),
-      ...(target in oxlintBuildTargets
-        ? Object.keys(upstream.components["oxlint-tsgolint"]).map((version) =>
-          `./artifacts/oxlint-tsgolint/${version}/tsgolint${windows ? ".exe" : ""}`)
-        : [])
-    ]
-    for (const executable of executableFiles) {
-      const artifact = path.join(packageRoot, executable.slice(2))
-      if (!(yield* fs.exists(artifact))) {
-        return yield* new PackagePreparationError({ reason: `Missing packaged executable ${artifact}` })
-      }
-      if (!windows) yield* fs.chmod(artifact, 0o755)
-    }
+        .map((version) => `./artifacts/typescript/${version}/tsc${windows ? ".exe" : ""}`)
+    ], ["lib/lib*.d.ts"])
+  }
 
-    const packageJsonPath = path.join(packageRoot, "package.json")
-    const packageJsonText = yield* fs.readFileString(packageJsonPath)
-    const packageJson = yield* Effect.try({
-      try: () => JSON.parse(packageJsonText) as Record<string, unknown>,
-      catch: (error) => new PackagePreparationError({
-        reason: `Unable to parse ${packageJsonPath}: ${String(error)}`
-      })
-    })
-    const publishConfig = typeof packageJson.publishConfig === "object" && packageJson.publishConfig !== null
-      ? packageJson.publishConfig as Record<string, unknown>
-      : {}
-    yield* fs.writeFileString(packageJsonPath, `${JSON.stringify({
-      ...packageJson,
-      files: [...new Set([...(Array.isArray(packageJson.files) ? packageJson.files : []), "lib/lib*.d.ts"])],
-      publishConfig: { ...publishConfig, executableFiles }
-    }, null, 2)}\n`)
+  for (const target of Object.keys(oxlintBuildTargets) as Array<keyof typeof oxlintBuildTargets>) {
+    const windows = target.startsWith("win32-")
+    yield* preparePackageManifest(
+      path.join(repositoryRoot, "_packages", platformPackage("oxlint", target)),
+      windows,
+      Object.keys(upstream.components["oxlint-tsgolint"]).map((version) =>
+        `./artifacts/oxlint-tsgolint/${version}/tsgolint${windows ? ".exe" : ""}`),
+      []
+    )
   }
   yield* Console.log("Prepared platform package manifests and moved the latest TypeScript compilers to lib/")
 })

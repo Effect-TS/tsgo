@@ -71,6 +71,43 @@ importers:
 
   _packages/tsgo-linux-x64: {}
 
+  _packages/tsgo-oxlint:
+    dependencies:
+      '@effect/tsgo':
+        specifier: workspace:*
+        version: link:../tsgo
+    optionalDependencies:
+      '@effect/tsgo-oxlint-darwin-arm64':
+        specifier: workspace:*
+        version: link:../tsgo-oxlint-darwin-arm64
+      '@effect/tsgo-oxlint-darwin-x64':
+        specifier: workspace:*
+        version: link:../tsgo-oxlint-darwin-x64
+      '@effect/tsgo-oxlint-linux-arm64':
+        specifier: workspace:*
+        version: link:../tsgo-oxlint-linux-arm64
+      '@effect/tsgo-oxlint-linux-x64':
+        specifier: workspace:*
+        version: link:../tsgo-oxlint-linux-x64
+      '@effect/tsgo-oxlint-win32-arm64':
+        specifier: workspace:*
+        version: link:../tsgo-oxlint-win32-arm64
+      '@effect/tsgo-oxlint-win32-x64':
+        specifier: workspace:*
+        version: link:../tsgo-oxlint-win32-x64
+
+  _packages/tsgo-oxlint-darwin-arm64: {}
+
+  _packages/tsgo-oxlint-darwin-x64: {}
+
+  _packages/tsgo-oxlint-linux-arm64: {}
+
+  _packages/tsgo-oxlint-linux-x64: {}
+
+  _packages/tsgo-oxlint-win32-arm64: {}
+
+  _packages/tsgo-oxlint-win32-x64: {}
+
   _packages/tsgo-win32-arm64: {}
 
   _packages/tsgo-win32-x64: {}

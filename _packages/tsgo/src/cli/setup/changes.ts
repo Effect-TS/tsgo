@@ -13,7 +13,8 @@ import {
   LSP_PACKAGE_NAME,
   LSP_PLUGIN_NAME,
   OXLINT_PACKAGE_NAME,
-  OXLINT_TSGOLINT_PACKAGE_NAME
+  OXLINT_TSGOLINT_PACKAGE_NAME,
+  TSGO_OXLINT_PACKAGE_NAME
 } from "./consts.js"
 import { getPatchCommand, updatePatchCommand } from "./patch-command.js"
 import type { RuleSeverity } from "./rule-info.js"
@@ -76,17 +77,32 @@ function deleteNodeFromList<T extends ts.Node>(
   nodeArray: ts.NodeArray<T>,
   nodeToDelete: T
 ) {
-  const index = nodeArray.indexOf(nodeToDelete)
-  if (index === -1) return
+  deleteNodesFromList(tracker, sourceFile, nodeArray, [nodeToDelete])
+}
 
-  if (index === 0 && nodeArray.length > 1) {
-    const secondElement = nodeArray[1]
-    tracker.deleteRange(sourceFile, { pos: nodeToDelete.pos, end: secondElement.pos })
-  } else if (index > 0) {
-    const previousElement = nodeArray[index - 1]
-    tracker.deleteRange(sourceFile, { pos: previousElement.end, end: nodeToDelete.end })
-  } else {
-    tracker.delete(sourceFile, nodeToDelete)
+/**
+ * Delete nodes from a list, deleting each run of adjacent nodes as one range so the deletions do not overlap
+ */
+function deleteNodesFromList<T extends ts.Node>(
+  tracker: any,
+  sourceFile: ts.SourceFile,
+  nodeArray: ts.NodeArray<T>,
+  nodesToDelete: ReadonlyArray<T>
+) {
+  for (let index = 0; index < nodeArray.length; index++) {
+    if (!nodesToDelete.includes(nodeArray[index])) continue
+    const first = index
+    while (index + 1 < nodeArray.length && nodesToDelete.includes(nodeArray[index + 1])) index++
+
+    if (first > 0) {
+      tracker.deleteRange(sourceFile, { pos: nodeArray[first - 1].end, end: nodeArray[index].end })
+    } else if (index + 1 < nodeArray.length) {
+      tracker.deleteRange(sourceFile, { pos: nodeArray[first].pos, end: nodeArray[index + 1].pos })
+    } else if (first === index) {
+      tracker.delete(sourceFile, nodeArray[first])
+    } else {
+      tracker.deleteRange(sourceFile, { pos: nodeArray[first].pos, end: nodeArray[index].end })
+    }
   }
 }
 
@@ -308,17 +324,22 @@ const computePackageJsonChanges = (
         )
       }
 
+      // vite-plus provides oxlint and oxlint-tsgolint, but not the Effect builds in @effect/tsgo-oxlint.
+      const providedByVitePlus = (packageName: string) =>
+        packageName !== TSGO_OXLINT_PACKAGE_NAME && Option.isSome(current.vitePlusVersion)
+
       const appendNewOxlintDependencies = (
         dependencyProperties: Array<ts.PropertyAssignment>,
         dependencyType: "dependencies" | "devDependencies"
       ) => {
         for (const [packageName, currentDependency, targetDependency] of [
+          [TSGO_OXLINT_PACKAGE_NAME, current.tsgoOxlintVersion, target.tsgoOxlintVersion],
           [OXLINT_PACKAGE_NAME, current.oxlintVersion, target.oxlintVersion],
           [OXLINT_TSGOLINT_PACKAGE_NAME, current.oxlintTsgolintVersion, target.oxlintTsgolintVersion]
         ] as const) {
           if (
             target.integrations.includes("oxlint") &&
-            Option.isNone(current.vitePlusVersion) &&
+            !providedByVitePlus(packageName) &&
             Option.isNone(currentDependency) &&
             Option.isSome(targetDependency) &&
             targetDependency.value.dependencyType === dependencyType
@@ -363,7 +384,7 @@ const computePackageJsonChanges = (
         targetDependency: Option.Option<PackageDependency>
       ) => {
         if (Option.isNone(targetDependency)) return
-        if (Option.isNone(currentDependency) && Option.isSome(current.vitePlusVersion)) return
+        if (Option.isNone(currentDependency) && providedByVitePlus(packageName)) return
         if (
           Option.isSome(currentDependency) &&
           currentDependency.value.version === targetDependency.value.version &&
@@ -384,6 +405,11 @@ const computePackageJsonChanges = (
         upsertDependency(tracker, current.sourceFile, rootObj, packageName, targetDependency.value)
       }
 
+      const removals: Array<{
+        readonly packageName: string
+        readonly dependencyType: "dependencies" | "devDependencies"
+      }> = []
+
       // Handle @effect/tsgo dependency
       if (Option.isSome(target.lspVersion)) {
         const targetDepType = target.lspVersion.value.dependencyType
@@ -398,13 +424,7 @@ const computePackageJsonChanges = (
             descriptions.push(`Move ${LSP_PACKAGE_NAME} from ${currentDepType} to ${targetDepType}`)
 
             // Remove from old location
-            const oldDepsProperty = findPropertyInObject(rootObj, currentDepType)
-            if (oldDepsProperty && ts.isObjectLiteralExpression(oldDepsProperty.initializer)) {
-              const lspProperty = findPropertyInObject(oldDepsProperty.initializer, LSP_PACKAGE_NAME)
-              if (lspProperty) {
-                deleteNodeFromList(tracker, current.sourceFile, oldDepsProperty.initializer.properties, lspProperty)
-              }
-            }
+            removals.push({ packageName: LSP_PACKAGE_NAME, dependencyType: currentDepType })
 
             // Add to new location
             const newDepsProperty = findDependencyCollectionProperty(rootObj, targetDepType)
@@ -493,6 +513,7 @@ const computePackageJsonChanges = (
 
         ensureTypescriptDependency()
         if (target.integrations.includes("oxlint")) {
+          ensurePinnedDependency(TSGO_OXLINT_PACKAGE_NAME, current.tsgoOxlintVersion, target.tsgoOxlintVersion)
           ensurePinnedDependency(OXLINT_PACKAGE_NAME, current.oxlintVersion, target.oxlintVersion)
           ensurePinnedDependency(
             OXLINT_TSGOLINT_PACKAGE_NAME,
@@ -503,16 +524,23 @@ const computePackageJsonChanges = (
       } else if (Option.isSome(current.lspVersion)) {
         // User wants to remove LSP
         descriptions.push(`Remove ${LSP_PACKAGE_NAME} from dependencies`)
+        removals.push({ packageName: LSP_PACKAGE_NAME, dependencyType: current.lspVersion.value.dependencyType })
+      }
 
-        const currentDepType = current.lspVersion.value.dependencyType
-        const depsProperty = findPropertyInObject(rootObj, currentDepType)
+      if (Option.isNone(target.tsgoOxlintVersion) && Option.isSome(current.tsgoOxlintVersion)) {
+        const dependencyType = current.tsgoOxlintVersion.value.dependencyType
+        descriptions.push(`Remove ${TSGO_OXLINT_PACKAGE_NAME} from ${dependencyType}`)
+        removals.push({ packageName: TSGO_OXLINT_PACKAGE_NAME, dependencyType })
+      }
 
-        if (depsProperty && ts.isObjectLiteralExpression(depsProperty.initializer)) {
-          const lspProperty = findPropertyInObject(depsProperty.initializer, LSP_PACKAGE_NAME)
-          if (lspProperty) {
-            deleteNodeFromList(tracker, current.sourceFile, depsProperty.initializer.properties, lspProperty)
-          }
-        }
+      for (const dependencyType of ["dependencies", "devDependencies"] as const) {
+        const depsProperty = findPropertyInObject(rootObj, dependencyType)
+        if (!depsProperty || !ts.isObjectLiteralExpression(depsProperty.initializer)) continue
+        const dependencies = depsProperty.initializer
+        const properties = removals
+          .filter((removal) => removal.dependencyType === dependencyType)
+          .flatMap(({ packageName }) => findPropertyInObject(dependencies, packageName) ?? [])
+        deleteNodesFromList(tracker, current.sourceFile, dependencies.properties, properties)
       }
 
       // Handle prepare script

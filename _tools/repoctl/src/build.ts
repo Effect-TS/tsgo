@@ -80,17 +80,21 @@ export class BuildError extends Data.TaggedError("BuildError")<{
   }
 }
 
+export const platformPackage = (component: ComponentName, target: BuildTarget) =>
+  component === "typescript" ? `tsgo-${target}` : `tsgo-oxlint-${target}`
+
 export const componentArtifact = (
   repositoryRoot: string,
   target: BuildTarget,
-  component: "typescript" | "oxlint-tsgolint" | "oxlint",
+  component: ComponentName,
   version: string,
   binaryName: string
 ) => {
   const executable = target.startsWith("win32-") && !binaryName.endsWith(".node") ? `${binaryName}.exe` : binaryName
+  const packageRoot = join(repositoryRoot, "_packages", platformPackage(component, target))
   return {
     binaryName,
-    path: join(repositoryRoot, "_packages", `tsgo-${target}`, "artifacts", component, version, executable)
+    path: join(packageRoot, "artifacts", component, version, executable)
   }
 }
 
@@ -113,7 +117,7 @@ export const oxlintArtifacts = (
   oxlintVersion: string,
   tsgolintVersion: string
 ) => {
-  const packageDirectory = join(repositoryRoot, "_packages", `tsgo-${targetName}`, "artifacts")
+  const packageDirectory = join(repositoryRoot, "_packages", platformPackage("oxlint", targetName), "artifacts")
   const windows = targetName.startsWith("win32-")
   const bindingName = oxlintBindingName(targetName)
   return {
@@ -380,6 +384,30 @@ export const buildArtifact = Effect.fnUntraced(function*(
   return yield* buildOxlintBinding(repositoryRoot, version, oxlintTarget)
 })
 
+const verifyPackagedArtifacts = Effect.fnUntraced(function*(
+  repositoryRoot: string,
+  packageName: string,
+  expected: ReadonlyArray<string>
+) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const artifacts = path.join(repositoryRoot, "_packages", packageName, "artifacts")
+  const packaged: Array<string> = []
+  if (yield* fs.exists(artifacts)) {
+    for (const component of yield* fs.readDirectory(artifacts)) {
+      for (const version of yield* fs.readDirectory(path.join(artifacts, component))) {
+        packaged.push(`${component}/${version}`)
+      }
+    }
+  }
+  const unexpected = packaged.filter((artifact) => !expected.includes(artifact)).sort()
+  if (unexpected.length > 0) {
+    return yield* new BuildError({
+      reason: `Unexpected artifacts in _packages/${packageName}: ${unexpected.join(", ")}`
+    })
+  }
+})
+
 export const verifyReleaseArtifacts = Effect.fnUntraced(function*(repositoryRoot: string) {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
@@ -421,11 +449,18 @@ export const verifyReleaseArtifacts = Effect.fnUntraced(function*(repositoryRoot
       )
     }
   }
+  const versions = (component: ComponentName) =>
+    Object.keys(upstream.components[component])
+      .filter((version) => component !== "typescript" || version !== upstream.tags.typescript.latest)
+      .map((version) => `${component}/${version}`)
   for (const target of Object.keys(buildTargets) as Array<BuildTarget>) {
-    const duplicate = dirname(componentArtifact(repositoryRoot, target, "typescript", upstream.tags.typescript.latest, "tsc").path)
-    if (yield* fs.exists(duplicate)) {
-      return yield* new BuildError({ reason: `The latest TypeScript compiler ships only in lib/, found ${duplicate}` })
-    }
+    yield* verifyPackagedArtifacts(repositoryRoot, platformPackage("typescript", target), versions("typescript"))
+  }
+  for (const target of Object.keys(oxlintBuildTargets) as Array<OxlintBuildTarget>) {
+    yield* verifyPackagedArtifacts(repositoryRoot, platformPackage("oxlint", target), [
+      ...versions("oxlint-tsgolint"),
+      ...versions("oxlint")
+    ])
   }
   yield* Console.log("Verified release artifacts for all components and targets")
 })

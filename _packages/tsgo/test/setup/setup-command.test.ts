@@ -5,6 +5,8 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { afterEach, describe, expect, it } from "vitest"
+import * as pkgJson from "../../package.json" with { type: "json" }
+import upstreamJson from "../../upstream.json" with { type: "json" }
 import { setupCommand } from "../../src/cli/setup/index.js"
 
 const originalCwd = process.cwd()
@@ -35,6 +37,37 @@ describe("setup command", () => {
       await runSetup([...args, "--apply"])
       expect(await readFile(packageJsonPath, "utf8")).toContain("@effect/tsgo")
       expect(await readFile(tsconfigPath, "utf8")).toContain("@effect/language-service")
+    } finally {
+      process.chdir(originalCwd)
+      await rm(projectDir, { recursive: true, force: true })
+    }
+  })
+
+  it("adds @effect/tsgo-oxlint at the @effect/tsgo version when Oxlint is selected", async () => {
+    const projectDir = await mkdtemp(join(tmpdir(), "effect-tsgo-setup-"))
+    const packageJsonPath = join(projectDir, "package.json")
+    await writeFile(packageJsonPath, JSON.stringify({ name: "test-project", devDependencies: {} }, null, 2))
+    await writeFile(join(projectDir, "tsconfig.json"), JSON.stringify({ compilerOptions: {} }, null, 2))
+    process.chdir(projectDir)
+
+    try {
+      await runSetup([
+        "--non-interactive",
+        "--project",
+        "tsconfig.json",
+        "--accept-defaults",
+        "--no-typescript",
+        "--oxlint",
+        "--apply"
+      ])
+      const packageJson = JSON.parse(await readFile(packageJsonPath, "utf8"))
+      expect(packageJson.devDependencies).toEqual({
+        "@effect/tsgo": pkgJson.version,
+        "@effect/tsgo-oxlint": pkgJson.version,
+        "oxlint": upstreamJson.tags.oxlint.latest,
+        "oxlint-tsgolint": upstreamJson.tags["oxlint-tsgolint"].latest
+      })
+      expect(packageJson.scripts.prepare).toBe("effect-tsgo patch --no-typescript --oxlint")
     } finally {
       process.chdir(originalCwd)
       await rm(projectDir, { recursive: true, force: true })

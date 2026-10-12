@@ -29,6 +29,7 @@ function runComputeChanges(opts: {
   vscodeSettingsText?: string | null
   editors?: ReadonlyArray<"vscode" | "nvim" | "emacs">
   lspVersion?: { dependencyType: "dependencies" | "devDependencies"; version: string } | null
+  tsgoOxlintVersion?: { dependencyType: "dependencies" | "devDependencies"; version: string } | null
   typescriptVersion?: { dependencyType: "dependencies" | "devDependencies"; version: string; packageName?: string } | null
   oxlintVersion?: { dependencyType: "dependencies" | "devDependencies"; version: string } | null
   oxlintTsgolintVersion?: { dependencyType: "dependencies" | "devDependencies"; version: string } | null
@@ -86,6 +87,9 @@ function runComputeChanges(opts: {
   const target = {
     packageJson: {
       lspVersion,
+      tsgoOxlintVersion: opts.tsgoOxlintVersion === undefined
+        ? assessment.packageJson.tsgoOxlintVersion
+        : opts.tsgoOxlintVersion === null ? Option.none() : Option.some(opts.tsgoOxlintVersion),
       typescriptVersion,
       oxlintVersion: opts.oxlintVersion === undefined
         ? assessment.packageJson.oxlintVersion
@@ -307,6 +311,7 @@ describe("computeChanges", () => {
         packageJsonText,
         integrations: ["oxlint"],
         typescriptVersion: null,
+        tsgoOxlintVersion: { dependencyType, version: "0.0.4" },
         oxlintVersion: { dependencyType, version: "1.77.0" },
         oxlintTsgolintVersion: { dependencyType, version: "7.0.2001" }
       })
@@ -317,6 +322,7 @@ describe("computeChanges", () => {
 
       const parsed = JSON.parse(updated)
       expect(parsed[dependencyType]["vite-plus"]).toBe("^0.2.8")
+      expect(parsed[dependencyType]["@effect/tsgo-oxlint"]).toBe("0.0.4")
       expect(parsed.dependencies?.oxlint).toBeUndefined()
       expect(parsed.dependencies?.["oxlint-tsgolint"]).toBeUndefined()
       expect(parsed.devDependencies?.oxlint).toBeUndefined()
@@ -348,6 +354,103 @@ describe("computeChanges", () => {
 
     expect(updated.devDependencies.oxlint).toBe("1.77.0")
     expect(updated.devDependencies["oxlint-tsgolint"]).toBe("7.0.2001")
+  })
+
+  it.each([
+    ["an empty devDependencies section", { name: "test-project", devDependencies: {} }],
+    ["no devDependencies section", { name: "test-project" }]
+  ])("should pin @effect/tsgo-oxlint to the @effect/tsgo version with %s", (_, packageJson) => {
+    const packageJsonText = JSON.stringify(packageJson, null, 2)
+    const result = runComputeChanges({
+      packageJsonText,
+      integrations: ["oxlint"],
+      typescriptVersion: null,
+      tsgoOxlintVersion: { dependencyType: "devDependencies", version: "0.0.4" },
+      oxlintVersion: { dependencyType: "devDependencies", version: "1.77.0" },
+      oxlintTsgolintVersion: { dependencyType: "devDependencies", version: "7.0.2001" }
+    })
+    const packageJsonAction = result.codeActions
+      .find((action) => action.changes.some((change) => change.fileName === "/test/package.json"))
+    const updated = JSON.parse(applyTextChanges(packageJsonText, packageJsonAction?.changes[0]?.textChanges ?? []))
+
+    expect(packageJsonAction?.description).toContain("Add @effect/tsgo-oxlint@0.0.4 in devDependencies")
+    expect(updated.devDependencies).toEqual({
+      "@effect/tsgo": "0.0.4",
+      "@effect/tsgo-oxlint": "0.0.4",
+      "oxlint": "1.77.0",
+      "oxlint-tsgolint": "7.0.2001"
+    })
+  })
+
+  it("should update @effect/tsgo-oxlint with @effect/tsgo", () => {
+    const packageJsonText = JSON.stringify({
+      name: "test-project",
+      devDependencies: {
+        "@effect/tsgo": "0.0.3",
+        "@effect/tsgo-oxlint": "0.0.3",
+        "oxlint": "1.77.0",
+        "oxlint-tsgolint": "7.0.2001"
+      }
+    }, null, 2)
+    const result = runComputeChanges({
+      packageJsonText,
+      integrations: ["oxlint"],
+      typescriptVersion: null,
+      tsgoOxlintVersion: { dependencyType: "devDependencies", version: "0.0.4" },
+      oxlintVersion: { dependencyType: "devDependencies", version: "1.77.0" },
+      oxlintTsgolintVersion: { dependencyType: "devDependencies", version: "7.0.2001" }
+    })
+    const packageJsonChange = result.codeActions
+      .flatMap((action) => action.changes)
+      .find((change) => change.fileName === "/test/package.json")
+    const updated = JSON.parse(applyTextChanges(packageJsonText, packageJsonChange?.textChanges ?? []))
+
+    expect(updated.devDependencies["@effect/tsgo"]).toBe("0.0.4")
+    expect(updated.devDependencies["@effect/tsgo-oxlint"]).toBe("0.0.4")
+  })
+
+  it("should remove @effect/tsgo-oxlint when Oxlint is not selected", () => {
+    const packageJsonText = JSON.stringify({
+      name: "test-project",
+      devDependencies: {
+        "@effect/tsgo": "0.0.4",
+        "@effect/tsgo-oxlint": "0.0.4",
+        "oxlint": "1.77.0"
+      }
+    }, null, 2)
+    const result = runComputeChanges({
+      packageJsonText,
+      integrations: ["typescript"],
+      typescriptVersion: null,
+      tsgoOxlintVersion: null
+    })
+    const packageJsonAction = result.codeActions
+      .find((action) => action.changes.some((change) => change.fileName === "/test/package.json"))
+    const updated = JSON.parse(applyTextChanges(packageJsonText, packageJsonAction?.changes[0]?.textChanges ?? []))
+
+    expect(packageJsonAction?.description).toContain("Remove @effect/tsgo-oxlint from devDependencies")
+    expect(updated.devDependencies).toEqual({ "@effect/tsgo": "0.0.4", "oxlint": "1.77.0" })
+  })
+
+  it.each([
+    [{ "@effect/tsgo": "0.0.4", "@effect/tsgo-oxlint": "0.0.4", "oxlint": "1.77.0" }, { "oxlint": "1.77.0" }],
+    [{ "oxlint": "1.77.0", "@effect/tsgo": "0.0.4", "@effect/tsgo-oxlint": "0.0.4" }, { "oxlint": "1.77.0" }],
+    [{ "@effect/tsgo": "0.0.4", "@effect/tsgo-oxlint": "0.0.4" }, {}]
+  ])("should remove @effect/tsgo-oxlint with @effect/tsgo from %j", (devDependencies, expected) => {
+    const packageJsonText = JSON.stringify({ name: "test-project", devDependencies }, null, 2)
+    const result = runComputeChanges({
+      packageJsonText,
+      lspVersion: null,
+      tsgoOxlintVersion: null,
+      integrations: [],
+      prepareScript: false
+    })
+    const packageJsonChange = result.codeActions
+      .flatMap((action) => action.changes)
+      .find((change) => change.fileName === "/test/package.json")
+    const updated = JSON.parse(applyTextChanges(packageJsonText, packageJsonChange?.textChanges ?? []))
+
+    expect(updated.devDependencies).toEqual(expected)
   })
 
   it("should prepend the Effect Oxlint schema to an existing .oxlintrc.json", () => {

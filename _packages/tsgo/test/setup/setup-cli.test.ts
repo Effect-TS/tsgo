@@ -65,10 +65,10 @@ function expectSetupChanges(
   targetState: {
     readonly packageJson: Omit<
       Target.PackageJson,
-      "oxlintVersion" | "oxlintTsgolintVersion" | "managePrepareScript" | "integrations"
+      "tsgoOxlintVersion" | "oxlintVersion" | "oxlintTsgolintVersion" | "managePrepareScript" | "integrations"
     > & Partial<Pick<
       Target.PackageJson,
-      "oxlintVersion" | "oxlintTsgolintVersion" | "managePrepareScript" | "integrations"
+      "tsgoOxlintVersion" | "oxlintVersion" | "oxlintTsgolintVersion" | "managePrepareScript" | "integrations"
     >>
     readonly tsconfig: {
       readonly schemaPath?: Option.Option<string>
@@ -86,6 +86,7 @@ function expectSetupChanges(
     ...targetState,
     packageJson: {
       ...targetState.packageJson,
+      tsgoOxlintVersion: targetState.packageJson.tsgoOxlintVersion ?? Option.none(),
       oxlintVersion: targetState.packageJson.oxlintVersion ?? Option.none(),
       oxlintTsgolintVersion: targetState.packageJson.oxlintTsgolintVersion ?? Option.none(),
       managePrepareScript: targetState.packageJson.managePrepareScript ?? true,

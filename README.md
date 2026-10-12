@@ -15,7 +15,7 @@ npx @effect/tsgo setup --help
 ```
 
 This will guide you through the installation process, which includes:
-1. Adding the `@effect/tsgo` dependency to your project.
+1. Adding the `@effect/tsgo` dependency to your project, and `@effect/tsgo-oxlint` when you select the Oxlint integration.
 2. Configuring your `tsconfig.json` to use the Effect Language Service plugin.
 3. Adjusting plugin options to your preference.
 4. Hinting at any additional editor configuration needed to ensure the LSP is active.
@@ -38,13 +38,13 @@ When running in dedicated diagnostics mode, the Effect diagnostics can be emitte
 <!-- supported-components:start -->
 ## Supported Package Versions
 
-The following target package versions are supported by `@effect/tsgo@0.51.1`:
+The following target package versions are supported by `@effect/tsgo@0.51.1` and `@effect/tsgo-oxlint@0.51.1`:
 
-| Component | Supported versions |
-|---|---|
-| TypeScript | `7.0.2`, `7.1.0-dev.20261006.1` |
-| Oxlint | `1.83.0`, `1.85.0`, `1.86.0`, `1.87.0` |
-| oxlint-tsgolint | `7.0.2001`, `7.0.2003` |
+| Component | Supported versions | Effect build ships in |
+|---|---|---|
+| TypeScript | `7.0.2`, `7.1.0-dev.20261006.1` | `@effect/tsgo` |
+| Oxlint | `1.83.0`, `1.85.0`, `1.86.0`, `1.87.0` | `@effect/tsgo-oxlint` |
+| oxlint-tsgolint | `7.0.2001`, `7.0.2003` | `@effect/tsgo-oxlint` |
 <!-- supported-components:end -->
 
 ## Diagnostic Status
@@ -245,7 +245,7 @@ Effect-tsgo is a **superset** of the official [TypeScript-Go](https://github.com
 
 Each release of `effect-tsgo` is built against the versioned components recorded in `_packages/tsgo/upstream.json`. The Nix flake consumes the TypeScript `next` tag directly. When upstream `tsgo` releases new features or fixes, `effect-tsgo` will adopt them in a subsequent release after validating compatibility with the Effect diagnostics layer.
 
-The npm compiler binaries load their TypeScript standard libraries from `lib.*.d.ts` files beside the executable. Each platform package ships the compiler for the latest TypeScript version as `lib/tsc` and other versions under `artifacts/typescript/<version>/`, each with its library files. If you relocate the executable returned by `effect-tsgo get-exe-path`, copy its library files into the same destination directory.
+The npm compiler binaries load their TypeScript standard libraries from `lib.*.d.ts` files beside the executable. Each `@effect/tsgo-<platform>` package ships the compiler for the latest TypeScript version as `lib/tsc` and other versions under `artifacts/typescript/<version>/`, each with its library files. If you relocate the executable returned by `effect-tsgo get-exe-path`, copy its library files into the same destination directory.
 
 ### When to Upgrade
 

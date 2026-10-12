@@ -147,18 +147,63 @@ const resolveOxlintDeclarations = (target: DiscoveredBinary) => Effect.gen(funct
   return { path: replacementPath, fileHash }
 })
 
+const oxlintPackageName = "@effect/tsgo-oxlint"
+
+const resolvePackageJson = (
+  require: NodeJS.Require,
+  packageName: string,
+  target: DiscoveredBinary,
+  reason: string
+) =>
+  Effect.try({
+    try: () => require.resolve(`${packageName}/package.json`),
+    catch: () => new ReplacementUnavailableError({ target, reason })
+  })
+
 const resolvePlatformPackage = (target: DiscoveredBinary) => Effect.gen(function*() {
   const path = yield* Path.Path
   const packageName = `@effect/tsgo-${process.platform}-${process.arch}`
-  const selfRequire = nodeModule.createRequire(import.meta.url)
-  const packageJsonPath = yield* Effect.try({
-    try: () => selfRequire.resolve(`${packageName}/package.json`),
-    catch: () => new ReplacementUnavailableError({
-      target,
-      reason: `Unable to resolve ${packageName}; no packaged replacement is available.`
-    })
+  const packageJsonPath = yield* resolvePackageJson(
+    nodeModule.createRequire(import.meta.url),
+    packageName,
+    target,
+    `Unable to resolve ${packageName}; no packaged replacement is available.`
+  )
+  return path.dirname(packageJsonPath)
+})
+
+const resolveOxlintPackage = (target: DiscoveredBinary) => Effect.gen(function*() {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const oxlintPackageJsonPath = yield* resolvePackageJson(
+    nodeModule.createRequire(path.join(process.cwd(), "noop.js")),
+    oxlintPackageName,
+    target,
+    `Unable to resolve ${oxlintPackageName}. Install ${oxlintPackageName}@${pkgJson.version} alongside `
+      + `@effect/tsgo to use the Effect Oxlint integration.`
+  )
+  const packageName = `${oxlintPackageName}-${process.platform}-${process.arch}`
+  const packageJsonPath = yield* resolvePackageJson(
+    nodeModule.createRequire(oxlintPackageJsonPath),
+    packageName,
+    target,
+    `Unable to resolve ${packageName}; no packaged replacement is available.`
+  )
+  const text = yield* fs.readFileString(packageJsonPath).pipe(
+    Effect.mapError(() => new PatcherError({ reason: `Unable to read ${packageJsonPath}.` }))
+  )
+  const packageJson = yield* Effect.try({
+    try: () => JSON.parse(text) as { readonly version?: unknown },
+    catch: () => new PatcherError({ reason: `Unable to parse ${packageJsonPath}.` })
   })
-  return { packageDir: path.dirname(packageJsonPath) }
+  if (packageJson.version !== pkgJson.version) {
+    return yield* new ReplacementUnavailableError({
+      target,
+      reason: `Package ${packageName} version ${String(packageJson.version)} does not match @effect/tsgo version `
+        + `${pkgJson.version}. Set ${oxlintPackageName} to ${pkgJson.version}.`
+    })
+  }
+  return path.dirname(packageJsonPath)
 })
 
 export const packagedArtifactPath = (packageDir: string, target: DiscoveredBinary) => Effect.gen(function*() {
@@ -178,13 +223,15 @@ export const resolveReplacement: ReplacementResolver = (target) => Effect.gen(fu
     })
   }
   if (target.component === "oxlint-dts") return yield* resolveOxlintDeclarations(target)
-  const platform = yield* resolvePlatformPackage(target)
-  const replacementPath = yield* packagedArtifactPath(platform.packageDir, target)
+  const versions = supportedVersions(target.component)
+  if (!versions.includes(target.packageVersion)) {
+    return yield* new UnsupportedTargetPackageVersionError({ target, supportedVersions: versions })
+  }
+  const packageDir = target.component === "typescript"
+    ? yield* resolvePlatformPackage(target)
+    : yield* resolveOxlintPackage(target)
+  const replacementPath = yield* packagedArtifactPath(packageDir, target)
   if (!(yield* exists(fs, replacementPath))) {
-    const versions = supportedVersions(target.component)
-    if (!versions.includes(target.packageVersion)) {
-      return yield* new UnsupportedTargetPackageVersionError({ target, supportedVersions: versions })
-    }
     return yield* new ReplacementUnavailableError({ target, reason: `Missing packaged artifact ${replacementPath}.` })
   }
   const fileHash = yield* hashFile(replacementPath).pipe(

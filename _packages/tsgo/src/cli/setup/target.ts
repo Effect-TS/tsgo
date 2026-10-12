@@ -39,6 +39,7 @@ export const create = (
       return {
         packageJson: {
           lspVersion: Option.none(),
+          tsgoOxlintVersion: Option.none(),
           typescriptVersion: assessment.packageJson.typescriptVersion,
           oxlintVersion: assessment.packageJson.oxlintVersion,
           oxlintTsgolintVersion: assessment.packageJson.oxlintTsgolintVersion,
@@ -86,6 +87,15 @@ export const create = (
     return {
       packageJson: {
         lspVersion: Option.some({ dependencyType, version: context.defaultLspVersion }),
+        tsgoOxlintVersion: useOxlint
+          ? Option.some({
+            dependencyType: Option.match(assessment.packageJson.tsgoOxlintVersion, {
+              onNone: () => dependencyType,
+              onSome: (dependency) => dependency.dependencyType
+            }),
+            version: context.defaultLspVersion
+          })
+          : Option.none(),
         typescriptVersion: useTypescript
           ? Option.orElse(assessment.packageJson.typescriptVersion, () => Option.some({
             dependencyType,
@@ -137,6 +147,7 @@ export const create = (
 export const fromAssessment = (inputState: Assessment.State): Target.State => ({
   packageJson: {
     lspVersion: inputState.packageJson.lspVersion,
+    tsgoOxlintVersion: inputState.packageJson.tsgoOxlintVersion,
     typescriptVersion: inputState.packageJson.typescriptVersion,
     oxlintVersion: inputState.packageJson.oxlintVersion,
     oxlintTsgolintVersion: inputState.packageJson.oxlintTsgolintVersion,

@@ -119,20 +119,20 @@ export const writeSupportedComponentsReadme = Effect.fnUntraced(function*(reposi
     return yield* new SupportedComponentsReadmeError({ reason: "Generated section markers are missing or invalid" })
   }
   const rows = [
-    ["TypeScript", Object.keys(upstream.components.typescript)],
-    ["Oxlint", Object.keys(upstream.components.oxlint)],
-    ["oxlint-tsgolint", Object.keys(upstream.components["oxlint-tsgolint"])]
+    ["TypeScript", Object.keys(upstream.components.typescript), "@effect/tsgo"],
+    ["Oxlint", Object.keys(upstream.components.oxlint), "@effect/tsgo-oxlint"],
+    ["oxlint-tsgolint", Object.keys(upstream.components["oxlint-tsgolint"]), "@effect/tsgo-oxlint"]
   ] as const
   const section = [
     supportedComponentsStart,
     "## Supported Package Versions",
     "",
-    `The following target package versions are supported by \`@effect/tsgo@${version}\`:`,
+    `The following target package versions are supported by \`@effect/tsgo@${version}\` and \`@effect/tsgo-oxlint@${version}\`:`,
     "",
-    "| Component | Supported versions |",
-    "|---|---|",
-    ...rows.map(([component, versions]) =>
-      `| ${component} | ${versions.sort(compare).map((version) => `\`${version}\``).join(", ")} |`),
+    "| Component | Supported versions | Effect build ships in |",
+    "|---|---|---|",
+    ...rows.map(([component, versions, packageName]) =>
+      `| ${component} | ${versions.sort(compare).map((version) => `\`${version}\``).join(", ")} | \`${packageName}\` |`),
     supportedComponentsEnd
   ].join("\n")
   const updated = readme.slice(0, start) + section + readme.slice(end + supportedComponentsEnd.length)

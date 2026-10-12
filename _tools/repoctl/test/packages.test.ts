@@ -5,11 +5,13 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import assert from "node:assert/strict"
 import test from "node:test"
-import { buildTargets, oxlintBuildTargets, verifyReleaseArtifacts } from "../src/build.ts"
+import { fileURLToPath } from "node:url"
+import { buildTargets, oxlintBindingName, oxlintBuildTargets, verifyReleaseArtifacts } from "../src/build.ts"
 import { assembleReleaseArtifacts, bundleUpstream, preparePlatformPackages } from "../src/packages.ts"
 import { buildReleasePlan } from "../src/releasePlan.ts"
 import { decodeUpstream } from "../src/upstream.ts"
 
+const repositoryRoot = fileURLToPath(new URL("../../..", import.meta.url))
 const revision = "0123456789abcdef0123456789abcdef01234567"
 
 test("bundles upstream metadata in every platform package", async() => {
@@ -98,6 +100,15 @@ test("prepares versioned platform artifacts and executable manifests", async() =
         files: ["artifacts/", `lib/tsc${extension}`, "README.md", "lib/upstream.json"]
       }), { flag: "w" })
     }
+    for (const target of Object.keys(oxlintBuildTargets)) {
+      const packageRoot = join(repository, "_packages", `tsgo-oxlint-${target}`)
+      mkdirSync(packageRoot, { recursive: true })
+      writeFileSync(join(packageRoot, "package.json"), JSON.stringify({
+        name: `@effect/tsgo-oxlint-${target}`,
+        publishConfig: { access: "public" },
+        files: ["artifacts/", "README.md"]
+      }))
+    }
 
     const artifactsDirectory = join(repository, "_release-artifacts")
     const decodedUpstream = await Effect.runPromise(decodeUpstream(JSON.stringify(upstream)))
@@ -153,24 +164,79 @@ test("prepares versioned platform artifacts and executable manifests", async() =
       assert.equal(readFileSync(join(next, "lib.d.ts"), "utf8"), "lib 7.1.0")
       assert.equal(readFileSync(join(next, "lib.es5.d.ts"), "utf8"), "es5 7.1.0")
       assert.deepEqual(
-        packageJson.publishConfig.executableFiles.filter((file: string) => !file.includes("oxlint-tsgolint")),
+        packageJson.publishConfig.executableFiles,
         [`./lib/tsc${extension}`, `./artifacts/typescript/7.1.0/tsc${extension}`]
       )
-      assert.equal(
-        packageJson.publishConfig.executableFiles.some((file: string) => file.includes("oxlint-tsgolint")),
-        target in oxlintBuildTargets
-      )
+      assert.equal(existsSync(join(packageRoot, "artifacts", "oxlint")), false)
+      assert.equal(existsSync(join(packageRoot, "artifacts", "oxlint-tsgolint")), false)
+    }
+
+    for (const target of Object.keys(oxlintBuildTargets) as Array<keyof typeof oxlintBuildTargets>) {
+      const packageRoot = join(repository, "_packages", `tsgo-oxlint-${target}`)
+      const extension = target.startsWith("win32-") ? ".exe" : ""
+      const binding = join(packageRoot, "artifacts", "oxlint", "1.0.0", oxlintBindingName(target))
+      const tsgolint = join(packageRoot, "artifacts", "oxlint-tsgolint", "1.0.0", `tsgolint${extension}`)
+      assert.equal(readFileSync(binding, "utf8"), "1.0.0")
+      assert.equal(readFileSync(tsgolint, "utf8"), "1.0.0")
+      assert.equal(existsSync(join(packageRoot, "artifacts", "typescript")), false)
+      const packageJson = JSON.parse(readFileSync(join(packageRoot, "package.json"), "utf8"))
+      assert.deepEqual(packageJson.files, ["artifacts/", "README.md"])
+      assert.deepEqual(packageJson.publishConfig, {
+        access: "public",
+        executableFiles: [`./artifacts/oxlint-tsgolint/1.0.0/tsgolint${extension}`]
+      })
     }
 
     await Effect.runPromise(verifyReleaseArtifacts(repository).pipe(Effect.provide(NodeServices.layer)))
-    const duplicate = join(repository, "_packages", "tsgo-linux-x64", "artifacts", "typescript", "7.0.0")
-    mkdirSync(duplicate)
-    writeFileSync(join(duplicate, "tsc"), "7.0.0")
-    await assert.rejects(
-      Effect.runPromise(verifyReleaseArtifacts(repository).pipe(Effect.provide(NodeServices.layer))),
-      /The latest TypeScript compiler ships only in lib\//
-    )
+    for (const [packageName, artifact] of [
+      ["tsgo-linux-x64", "typescript/7.0.0"],
+      ["tsgo-linux-x64", "oxlint/1.0.0"],
+      ["tsgo-oxlint-darwin-arm64", "typescript/7.1.0"]
+    ]) {
+      const directory = join(repository, "_packages", packageName, "artifacts", ...artifact.split("/"))
+      mkdirSync(directory, { recursive: true })
+      writeFileSync(join(directory, "artifact"), "unexpected")
+      await assert.rejects(
+        Effect.runPromise(verifyReleaseArtifacts(repository).pipe(Effect.provide(NodeServices.layer))),
+        new RegExp(`Unexpected artifacts in _packages/${packageName}: ${artifact}`)
+      )
+      rmSync(directory, { recursive: true })
+    }
   } finally {
     rmSync(repository, { recursive: true, force: true })
+  }
+})
+
+test("publishes the Oxlint builds in @effect/tsgo-oxlint and its platform packages", () => {
+  const readPackage = (directory: string) =>
+    JSON.parse(readFileSync(join(repositoryRoot, "_packages", directory, "package.json"), "utf8"))
+  const cli = readPackage("tsgo")
+  const oxlint = readPackage("tsgo-oxlint")
+  const oxlintPackages = Object.keys(oxlintBuildTargets).map((target) => `@effect/tsgo-oxlint-${target}`)
+
+  assert.deepEqual(
+    Object.keys(cli.optionalDependencies).sort(),
+    Object.keys(buildTargets).map((target) => `@effect/tsgo-${target}`).sort()
+  )
+  assert.equal(oxlint.version, cli.version)
+  assert.deepEqual(oxlint.peerDependencies, { "@effect/tsgo": "workspace:*" })
+  assert.deepEqual(
+    oxlint.optionalDependencies,
+    Object.fromEntries(oxlintPackages.map((name) => [name, "workspace:*"]))
+  )
+  for (const target of Object.keys(oxlintBuildTargets)) {
+    const [os, cpu] = target.split("-")
+    const platform = readPackage(`tsgo-oxlint-${target}`)
+    assert.equal(platform.name, `@effect/tsgo-oxlint-${target}`)
+    assert.equal(platform.version, cli.version)
+    assert.deepEqual(platform.files, ["artifacts/", "README.md"])
+    assert.deepEqual(platform.os, [os])
+    assert.deepEqual(platform.cpu, [cpu])
+    assert.deepEqual(platform.libc, os === "linux" ? ["glibc"] : undefined)
+  }
+
+  const changesets = JSON.parse(readFileSync(join(repositoryRoot, ".changeset", "config.json"), "utf8"))
+  for (const name of ["@effect/tsgo-oxlint", ...oxlintPackages]) {
+    assert.ok(changesets.fixed[0].includes(name), `${name} is released with @effect/tsgo`)
   }
 })

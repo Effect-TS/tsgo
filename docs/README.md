@@ -1,9 +1,9 @@
 # Oxlint Setup
 
-Be sure to have installed both Oxlint and the Effect TypeScript-Go integration. The following commands will install the latest versions of both:
+Be sure to have installed both Oxlint and the Effect TypeScript-Go integration. The Effect builds of the Oxlint binding and `tsgolint` ship in `@effect/tsgo-oxlint`, for macOS, Windows, and Linux with glibc, on x64 and arm64. It must have the same version as `@effect/tsgo`. The following command installs the latest versions of all of them:
 
 ```sh
-pnpm add --save-dev @effect/tsgo oxlint oxlint-tsgolint
+pnpm add --save-dev @effect/tsgo @effect/tsgo-oxlint oxlint oxlint-tsgolint
 ```
 
 Update the scripts section of your `package.json` to include the following:
@@ -89,7 +89,7 @@ You can then run Oxlint normally:
 pnpm exec oxlint .
 ```
 
-The installed `oxlint` and `oxlint-tsgolint` versions must match the versions supported by the installed `@effect/tsgo` release. The patch command validates this before changing either integration.
+The installed `oxlint` and `oxlint-tsgolint` versions must match the versions supported by the installed `@effect/tsgo` release, and `@effect/tsgo-oxlint` must have the same version as `@effect/tsgo`. The patch command validates both before changing either integration.
 
 Use the same integration flags when restoring binaries:
 

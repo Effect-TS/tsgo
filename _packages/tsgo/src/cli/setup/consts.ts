@@ -1,6 +1,7 @@
 import * as pkgJson from "../../../package.json"
 
 export const LSP_PACKAGE_NAME = pkgJson.name
+export const TSGO_OXLINT_PACKAGE_NAME = "@effect/tsgo-oxlint"
 export const LSP_PLUGIN_NAME = "@effect/language-service"
 export const defaultTypescriptPackageNames = ["typescript", "@typescript/native"] as const
 export const PATCH_COMMAND = "effect-tsgo patch"

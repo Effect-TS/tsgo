@@ -13,6 +13,7 @@ import {
   isNativeTypescriptVersion,
   OXLINT_PACKAGE_NAME,
   OXLINT_TSGOLINT_PACKAGE_NAME,
+  TSGO_OXLINT_PACKAGE_NAME,
   VITE_PLUS_PACKAGE_NAME
 } from "./consts.js"
 import { getPatchIntegrations, hasPatchCommand } from "./patch-command.js"
@@ -120,6 +121,7 @@ const assessPackageJson = (
   }
 
   const lspVersion = assessDependency(LSP_PACKAGE_NAME)
+  const tsgoOxlintVersion = assessDependency(TSGO_OXLINT_PACKAGE_NAME)
   const oxlintVersion = assessDependency(OXLINT_PACKAGE_NAME)
   const oxlintTsgolintVersion = assessDependency(OXLINT_TSGOLINT_PACKAGE_NAME)
   const vitePlusVersion = assessDependency(VITE_PLUS_PACKAGE_NAME)
@@ -147,6 +149,7 @@ const assessPackageJson = (
     parsed,
     text: input.text,
     lspVersion,
+    tsgoOxlintVersion,
     typescriptVersion,
     oxlintVersion,
     oxlintTsgolintVersion,

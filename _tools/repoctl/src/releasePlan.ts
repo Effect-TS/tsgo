@@ -1,4 +1,4 @@
-import { buildTargets, oxlintBindingName, oxlintBuildTargets, type BuildTarget } from "./build.ts"
+import { buildTargets, oxlintBindingName, oxlintBuildTargets, platformPackage, type BuildTarget } from "./build.ts"
 import type { ComponentName, Upstream } from "./upstream.ts"
 
 export interface ReleaseArtifactPlan {
@@ -34,7 +34,7 @@ const artifactPlan = (
     runner,
     artifactName: `${target}__${component}__${version}`,
     fileName,
-    destination: `_packages/tsgo-${target}/artifacts/${component}/${version}/${fileName}`
+    destination: `_packages/${platformPackage(component, target)}/artifacts/${component}/${version}/${fileName}`
   }
 }
 

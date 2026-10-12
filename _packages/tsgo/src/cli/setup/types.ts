@@ -42,6 +42,7 @@ export namespace Assessment {
     readonly parsed: Record<string, unknown>
     readonly text: string
     readonly lspVersion: Option.Option<PackageDependency>
+    readonly tsgoOxlintVersion: Option.Option<PackageDependency>
     readonly typescriptVersion: Option.Option<PackageDependency>
     readonly oxlintVersion: Option.Option<PackageDependency>
     readonly oxlintTsgolintVersion: Option.Option<PackageDependency>
@@ -90,6 +91,7 @@ export namespace Assessment {
 export namespace Target {
   export interface PackageJson {
     readonly lspVersion: Option.Option<PackageDependency>
+    readonly tsgoOxlintVersion: Option.Option<PackageDependency>
     readonly typescriptVersion: Option.Option<PackageDependency>
     readonly oxlintVersion: Option.Option<PackageDependency>
     readonly oxlintTsgolintVersion: Option.Option<PackageDependency>

@@ -1,0 +1,28 @@
+{
+  "name": "@effect/tsgo-oxlint-darwin-x64",
+  "version": "0.51.1",
+  "description": "Effect Language Service for TypeScript-Go — Effect-specific type-aware rules for Oxlint.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Effect-TS/tsgo.git",
+    "directory": "_packages/tsgo-oxlint-darwin-x64"
+  },
+  "bugs": "https://github.com/Effect-TS/tsgo/issues",
+  "homepage": "https://github.com/Effect-TS/tsgo#readme",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "preferUnplugged": true,
+  "files": [
+    "artifacts/",
+    "README.md"
+  ],
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "x64"
+  ]
+}

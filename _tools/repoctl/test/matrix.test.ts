@@ -152,6 +152,10 @@ test("builds a deduplicated matrix of compatible Oxlint component pairs", () => 
     runner: "ubuntu-latest",
     artifactName: "linux-arm64__oxlint__1.77.0",
     fileName: "oxlint.linux-arm64-gnu.node",
-    destination: "_packages/tsgo-linux-arm64/artifacts/oxlint/1.77.0/oxlint.linux-arm64-gnu.node"
+    destination: "_packages/tsgo-oxlint-linux-arm64/artifacts/oxlint/1.77.0/oxlint.linux-arm64-gnu.node"
   })
+  for (const artifact of release.include) {
+    const packageName = artifact.component === "typescript" ? `tsgo-${artifact.target}` : `tsgo-oxlint-${artifact.target}`
+    assert.ok(artifact.destination.startsWith(`_packages/${packageName}/artifacts/`), artifact.destination)
+  }
 })

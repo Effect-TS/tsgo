@@ -1,0 +1,31 @@
+{
+  "name": "@effect/tsgo-oxlint",
+  "version": "0.51.1",
+  "description": "Effect Language Service for TypeScript-Go — Effect-specific type-aware rules for Oxlint.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Effect-TS/tsgo.git",
+    "directory": "_packages/tsgo-oxlint"
+  },
+  "bugs": "https://github.com/Effect-TS/tsgo/issues",
+  "homepage": "https://github.com/Effect-TS/tsgo#readme",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "files": [
+    "README.md"
+  ],
+  "peerDependencies": {
+    "@effect/tsgo": "workspace:*"
+  },
+  "optionalDependencies": {
+    "@effect/tsgo-oxlint-darwin-arm64": "workspace:*",
+    "@effect/tsgo-oxlint-darwin-x64": "workspace:*",
+    "@effect/tsgo-oxlint-win32-x64": "workspace:*",
+    "@effect/tsgo-oxlint-win32-arm64": "workspace:*",
+    "@effect/tsgo-oxlint-linux-x64": "workspace:*",
+    "@effect/tsgo-oxlint-linux-arm64": "workspace:*"
+  }
+}

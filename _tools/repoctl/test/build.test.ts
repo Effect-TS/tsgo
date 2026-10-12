@@ -25,6 +25,17 @@ test("derives platform package artifact paths", () => {
     binaryName: "tsc",
     path: "/repo/_packages/tsgo-win32-x64/artifacts/typescript/7.0.0/tsc.exe"
   })
+  assert.deepEqual(componentArtifact("/repo", "linux-x64", "oxlint-tsgolint", "7.0.2001", "tsgolint"), {
+    binaryName: "tsgolint",
+    path: "/repo/_packages/tsgo-oxlint-linux-x64/artifacts/oxlint-tsgolint/7.0.2001/tsgolint"
+  })
+  assert.deepEqual(
+    componentArtifact("/repo", "win32-arm64", "oxlint", "1.77.0", "oxlint.win32-arm64-msvc.node"),
+    {
+      binaryName: "oxlint.win32-arm64-msvc.node",
+      path: "/repo/_packages/tsgo-oxlint-win32-arm64/artifacts/oxlint/1.77.0/oxlint.win32-arm64-msvc.node"
+    }
+  )
 })
 
 test("maps supported Oxlint release targets", () => {
@@ -49,17 +60,17 @@ test("rejects unsupported component release targets", async() => {
 
 test("derives packaged Oxlint artifact paths", () => {
   assert.deepEqual(oxlintArtifacts("/repo", "linux-x64", "1.77.0", "7.0.2001"), {
-    packageDirectory: "/repo/_packages/tsgo-linux-x64/artifacts",
+    packageDirectory: "/repo/_packages/tsgo-oxlint-linux-x64/artifacts",
     bindingName: "oxlint.linux-x64-gnu.node",
     bindingSourceName: "oxlint.linux-x64-gnu.node",
-    bindingPath: "/repo/_packages/tsgo-linux-x64/artifacts/oxlint/1.77.0/oxlint.linux-x64-gnu.node",
-    tsgolintPath: "/repo/_packages/tsgo-linux-x64/artifacts/oxlint-tsgolint/7.0.2001/tsgolint"
+    bindingPath: "/repo/_packages/tsgo-oxlint-linux-x64/artifacts/oxlint/1.77.0/oxlint.linux-x64-gnu.node",
+    tsgolintPath: "/repo/_packages/tsgo-oxlint-linux-x64/artifacts/oxlint-tsgolint/7.0.2001/tsgolint"
   })
   assert.deepEqual(oxlintArtifacts("/repo", "win32-arm64", "1.77.0", "7.0.2001"), {
-    packageDirectory: "/repo/_packages/tsgo-win32-arm64/artifacts",
+    packageDirectory: "/repo/_packages/tsgo-oxlint-win32-arm64/artifacts",
     bindingName: "oxlint.win32-arm64-msvc.node",
     bindingSourceName: "oxlint.win32-arm64-msvc.node",
-    bindingPath: "/repo/_packages/tsgo-win32-arm64/artifacts/oxlint/1.77.0/oxlint.win32-arm64-msvc.node",
-    tsgolintPath: "/repo/_packages/tsgo-win32-arm64/artifacts/oxlint-tsgolint/7.0.2001/tsgolint.exe"
+    bindingPath: "/repo/_packages/tsgo-oxlint-win32-arm64/artifacts/oxlint/1.77.0/oxlint.win32-arm64-msvc.node",
+    tsgolintPath: "/repo/_packages/tsgo-oxlint-win32-arm64/artifacts/oxlint-tsgolint/7.0.2001/tsgolint.exe"
   })
 })
