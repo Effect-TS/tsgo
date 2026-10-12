@@ -18,6 +18,8 @@ Update the scripts section of your `package.json` to include the following:
 ```
 This will patch Oxlint to use the Effect TypeScript-Go integration after any package installation. To avoid patching TypeScript, you can use the `--no-typescript` flag: `effect-tsgo patch --no-typescript --oxlint`. This will patch Oxlint to use the Effect TypeScript-Go integration without patching TypeScript.
 
+To leave `node_modules` unchanged instead, see [Running Oxlint without patching](#running-oxlint-without-patching).
+
 ## LSP diagnostics
 
 When you have the Effect LSP enabled as well, we recommend setting `diagnostics` to `false` in the LSP plugin settings so that Effect diagnostics are reported only by Oxlint and do not appear twice:
@@ -98,6 +100,40 @@ pnpm exec effect-tsgo unpatch --oxlint
 pnpm exec effect-tsgo unpatch --no-typescript --oxlint
 ```
 
+## Running Oxlint without patching
+
+Oxlint can load the Effect integration from the `@effect/tsgo` platform package instead of patched files: `NAPI_RS_NATIVE_LIBRARY_PATH` selects its native binding and `OXLINT_TSGOLINT_PATH` selects the tsgolint executable. `effect-tsgo oxlint-env` prints both variables for the `oxlint` and `oxlint-tsgolint` versions installed in the current project, and fails when the installed `@effect/tsgo` release has no build for those versions. Nothing in `node_modules` is changed, so there is nothing to reapply after an install:
+
+```json
+{
+  "scripts": {
+    "lint": "eval \"$(effect-tsgo oxlint-env)\" && oxlint"
+  }
+}
+```
+
+In PowerShell, print PowerShell assignments instead:
+
+```powershell
+pnpm exec effect-tsgo oxlint-env --shell powershell | Invoke-Expression
+pnpm exec oxlint
+```
+
+The presets keep Oxlint's default plugins. A configuration that sets `plugins` itself replaces the defaults, so list `typescript`, `unicorn`, and `oxc` alongside `effecttsgo`:
+
+```json
+{
+  "options": {
+    "typeAware": true
+  },
+  "plugins": ["typescript", "unicorn", "oxc", "effecttsgo"],
+  "rules": {
+    "effecttsgo/floating-effect": "error"
+  }
+}
+```
+
 ## Known limitations
 
 - All rules require Oxlint's type-aware mode, because they rely on type information to provide accurate diagnostics.
+- Oxlint's `unix`, `stylish`, and `github` formats report `missing-star-in-yield-effect-gen` at the start of the Effect generator, while `tsc` reports it at the `yield`. An `oxlint-disable-next-line` comment still belongs on the line before the `yield`.
