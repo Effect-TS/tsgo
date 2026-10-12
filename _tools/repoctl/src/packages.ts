@@ -3,7 +3,13 @@ import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
-import { buildTargets, componentArtifact, copyTypeScriptLibraries, oxlintBuildTargets } from "./build.ts"
+import {
+  buildTargets,
+  componentArtifact,
+  copyTypeScriptLibraries,
+  latestTypeScriptCompiler,
+  oxlintBuildTargets
+} from "./build.ts"
 import { buildReleasePlan } from "./releasePlan.ts"
 import { readUpstream } from "./upstream.ts"
 
@@ -97,19 +103,21 @@ export const preparePlatformPackages = Effect.fnUntraced(function*(repositoryRoo
   for (const target of Object.keys(buildTargets) as Array<keyof typeof buildTargets>) {
     const packageRoot = path.join(repositoryRoot, "_packages", `tsgo-${target}`)
     const windows = target.startsWith("win32-")
-    const latest = componentArtifact(repositoryRoot, target, "typescript", upstream.tags.typescript.latest, "tsc").path
-    const alias = path.join(packageRoot, "lib", windows ? "tsc.exe" : "tsc")
-    yield* fs.makeDirectory(path.dirname(alias), { recursive: true })
-    yield* fs.copyFile(latest, alias)
-    yield* copyTypeScriptLibraries(path.dirname(latest), path.dirname(alias))
-    if (!windows) yield* fs.chmod(alias, 0o755)
+    const artifact = componentArtifact(repositoryRoot, target, "typescript", upstream.tags.typescript.latest, "tsc").path
+    const latest = latestTypeScriptCompiler(repositoryRoot, target)
+    yield* fs.makeDirectory(path.dirname(latest), { recursive: true })
+    yield* fs.copyFile(artifact, latest)
+    yield* copyTypeScriptLibraries(path.dirname(artifact), path.dirname(latest))
+    yield* fs.remove(path.dirname(artifact), { recursive: true })
+    if (!windows) yield* fs.chmod(latest, 0o755)
     yield* fs.copyFile(sourceUpstream, path.join(packageRoot, "lib", "upstream.json"))
     yield* fs.remove(path.join(packageRoot, "lib", windows ? "tsc-next.exe" : "tsc-next"), { force: true })
 
     const executableFiles = [
       `./lib/tsc${windows ? ".exe" : ""}`,
-      ...Object.keys(upstream.components.typescript).map((version) =>
-        `./artifacts/typescript/${version}/tsc${windows ? ".exe" : ""}`),
+      ...Object.keys(upstream.components.typescript)
+        .filter((version) => version !== upstream.tags.typescript.latest)
+        .map((version) => `./artifacts/typescript/${version}/tsc${windows ? ".exe" : ""}`),
       ...(target in oxlintBuildTargets
         ? Object.keys(upstream.components["oxlint-tsgolint"]).map((version) =>
           `./artifacts/oxlint-tsgolint/${version}/tsgolint${windows ? ".exe" : ""}`)
@@ -140,5 +148,5 @@ export const preparePlatformPackages = Effect.fnUntraced(function*(repositoryRoo
       publishConfig: { ...publishConfig, executableFiles }
     }, null, 2)}\n`)
   }
-  yield* Console.log("Prepared platform package manifests and latest TypeScript aliases")
+  yield* Console.log("Prepared platform package manifests and moved the latest TypeScript compilers to lib/")
 })
