@@ -29,7 +29,7 @@ type PipingFlowTransformation struct {
 	callee        *ast.Node          // The function being applied (e.g., Effect.map)
 	typeArguments *ast.NodeList      // Explicit type arguments to the transformation call, if any
 	args          []*ast.Node        // Arguments to the transformation, or nil for constants/single-arg calls
-	outType       *checker.Type      // The resulting type after this transformation (may be nil)
+	outType       *lazy[*checker.Type] // The resulting type after this transformation (may be nil)
 }
 
 func (r PipingFlowTransformation) Kind() TransformationKind { return r.kind }
@@ -40,17 +40,17 @@ func (r PipingFlowTransformation) TypeArguments() *ast.NodeList { return r.typeA
 
 func (r PipingFlowTransformation) Args() readonly.Slice[*ast.Node] { return readonly.New(r.args) }
 
-func (r PipingFlowTransformation) OutType() *checker.Type { return r.outType }
+func (r PipingFlowTransformation) OutType() *checker.Type { return r.outType.get() }
 
 // PipingFlowSubject is the starting expression of a piping flow.
 type PipingFlowSubject struct {
 	node    *ast.Node     // The expression node
-	outType *checker.Type // The type of the subject expression (may be nil)
+	outType *lazy[*checker.Type] // The type of the subject expression (may be nil)
 }
 
 func (r PipingFlowSubject) Node() *ast.Node { return r.node }
 
-func (r PipingFlowSubject) OutType() *checker.Type { return r.outType }
+func (r PipingFlowSubject) OutType() *checker.Type { return r.outType.get() }
 
 // PartialPipingFlow represents a logical piping flow that may not correspond to
 // a complete source expression, such as a prefix of a pipe call.
@@ -155,9 +155,9 @@ func (flow *PartialPipingFlow) TransformationInputType(index int) *checker.Type 
 		return nil
 	}
 	if index == 0 {
-		return flow.subject.outType
+		return flow.subject.OutType()
 	}
-	return flow.transformations[index-1].outType
+	return flow.transformations[index-1].OutType()
 }
 
 // TransformationInputNode returns the standalone source expression that feeds
@@ -303,8 +303,8 @@ type ParsedPipeCallResult struct {
 	subject     *ast.Node
 	args        []*ast.Node
 	kind        TransformationKind
-	subjectType *checker.Type
-	argsOutType []*checker.Type
+	subjectType *lazy[*checker.Type]
+	argsOutType *lazy[[]*checker.Type]
 }
 
 func (r ParsedPipeCallResult) Node() *ast.CallExpression { return r.node }
@@ -315,10 +315,10 @@ func (r ParsedPipeCallResult) Args() readonly.Slice[*ast.Node] { return readonly
 
 func (r ParsedPipeCallResult) Kind() TransformationKind { return r.kind }
 
-func (r ParsedPipeCallResult) SubjectType() *checker.Type { return r.subjectType }
+func (r ParsedPipeCallResult) SubjectType() *checker.Type { return r.subjectType.get() }
 
 func (r ParsedPipeCallResult) ArgsOutType() readonly.Slice[*checker.Type] {
-	return readonly.New(r.argsOutType)
+	return readonly.New(r.argsOutType.get())
 }
 
 // parsedSingleArgCallResult is the internal result of parsing a single-argument call.
@@ -399,28 +399,29 @@ func (tp *TypeParser) buildParsedPipeCallResult(
 	args []*ast.Node,
 	kind TransformationKind,
 ) *ParsedPipeCallResult {
-	result := &ParsedPipeCallResult{
+	return &ParsedPipeCallResult{
 		node:        call,
 		subject:     subject,
 		args:        args,
 		kind:        kind,
-		subjectType: tp.GetTypeAtLocation(subject),
-		argsOutType: make([]*checker.Type, len(args)),
+		subjectType: tp.lazyTypeAtLocation(subject),
+		argsOutType: newLazy(func() []*checker.Type { return tp.buildPipeArgsOutType(call, len(args)) }),
 	}
+}
 
+func (tp *TypeParser) buildPipeArgsOutType(call *ast.CallExpression, argCount int) []*checker.Type {
+	outTypes := make([]*checker.Type, argCount)
 	sig := tp.checker.GetResolvedSignature(call.AsNode())
 	if sig == nil {
-		return result
+		return outTypes
 	}
-
 	typeArgs := tp.checker.GetTypeArgumentsForResolvedSignature(sig)
-	for i := range args {
+	for i := range outTypes {
 		if i+1 < len(typeArgs) {
-			result.argsOutType[i] = typeArgs[i+1]
+			outTypes[i] = typeArgs[i+1]
 		}
 	}
-
-	return result
+	return outTypes
 }
 
 // parseSingleArgCall detects single-argument call patterns like f(arg).
@@ -524,7 +525,7 @@ type parsedEffectFnCallResult struct {
 	node                *ast.CallExpression // the outer call expression
 	bodyNode            *ast.Node           // function or generator argument node
 	trailingArgs        []*ast.Node         // arguments after the function body
-	trailingArgsOutType []*checker.Type
+	trailingArgsOutType []*lazy[*checker.Type]
 	trailingStartIndex  int                // starting arg index of trailingArgs in node.Arguments
 	kind                TransformationKind // effectFn or effectFnUntraced
 }
@@ -569,7 +570,6 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) read
 	if tp == nil || tp.checker == nil || sf == nil {
 		return readonly.Slice[*PipingFlow]{}
 	}
-	c := tp.checker
 
 	links := tp.links
 	store := &links.PipingFlowsWithoutEffectFn
@@ -623,7 +623,7 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) read
 						if item.parentFlow != nil {
 							item.parentFlow.partial.subject = PipingFlowSubject{
 								node:    node,
-								outType: tp.GetTypeAtLocation(node),
+								outType: tp.lazyTypeAtLocation(node),
 							}
 							result = append(result, item.parentFlow)
 						}
@@ -674,7 +674,6 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) read
 
 				// Try single-arg call
 				if dataFirstResult := tp.DataFirstOrLastCall(node); dataFirstResult != nil {
-					callOutType := tp.GetTypeAtLocation(node)
 					kind := TransformationKindDataFirst
 					if dataFirstResult.subjectIndex != 0 {
 						kind = TransformationKindDataLast
@@ -684,7 +683,7 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) read
 						callee:        dataFirstResult.callee,
 						typeArguments: pipingFlowTypeArguments(node, dataFirstResult.callee),
 						args:          dataFirstResult.args,
-						outType:       callOutType,
+						outType:       tp.lazyTypeAtLocation(node),
 					}
 
 					if item.parentFlow != nil {
@@ -714,16 +713,12 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) read
 
 				// Try single-arg call
 				if singleResult := tp.parseSingleArgCall(node); singleResult != nil {
-					var callOutType *checker.Type
-					if callSig := c.GetResolvedSignature(node); callSig != nil {
-						callOutType = c.GetReturnTypeOfSignature(callSig)
-					}
 					transformation := PipingFlowTransformation{
 						kind:          TransformationKindCall,
 						callee:        singleResult.callee,
 						typeArguments: pipingFlowTypeArguments(singleResult.typeArgumentsSrc, singleResult.callee),
 						args:          singleResult.args,
-						outType:       callOutType,
+						outType:       tp.lazyCallReturnType(node),
 					}
 
 					if item.parentFlow != nil {
@@ -767,7 +762,7 @@ func (tp *TypeParser) PipingFlows(sf *ast.SourceFile, includeEffectFn bool) read
 				// Subject chain terminated — finalize the flow
 				item.parentFlow.partial.subject = PipingFlowSubject{
 					node:    node,
-					outType: tp.GetTypeAtLocation(node),
+					outType: tp.lazyTypeAtLocation(node),
 				}
 				result = append(result, item.parentFlow)
 			}
@@ -829,24 +824,20 @@ func (tp *TypeParser) LongestPipingFlowAt(node *ast.Node, includeEffectFn bool) 
 			callee:        result.callee,
 			typeArguments: pipingFlowTypeArguments(node, result.callee),
 			args:          result.args,
-			outType:       tp.GetTypeAtLocation(node),
+			outType:       tp.lazyTypeAtLocation(node),
 		})
 		return flow
 	}
 
 	if result := tp.parseSingleArgCall(node); result != nil {
 		flow := tp.pipingFlowSubjectAt(result.subject, includeEffectFn)
-		var outType *checker.Type
-		if signature := tp.checker.GetResolvedSignature(node); signature != nil {
-			outType = tp.checker.GetReturnTypeOfSignature(signature)
-		}
 		flow.node = node
 		flow.partial.transformations = append(flow.partial.transformations, PipingFlowTransformation{
 			kind:          TransformationKindCall,
 			callee:        result.callee,
 			typeArguments: pipingFlowTypeArguments(result.typeArgumentsSrc, result.callee),
 			args:          result.args,
-			outType:       outType,
+			outType:       tp.lazyCallReturnType(node),
 		})
 		return flow
 	}
@@ -856,7 +847,7 @@ func (tp *TypeParser) LongestPipingFlowAt(node *ast.Node, includeEffectFn bool) 
 		partial: PartialPipingFlow{
 			subject: PipingFlowSubject{
 				node:    node,
-				outType: tp.GetTypeAtLocation(node),
+				outType: tp.lazyTypeAtLocation(node),
 			},
 		},
 	}
@@ -871,7 +862,7 @@ func (tp *TypeParser) pipingFlowSubjectAt(node *ast.Node, includeEffectFn bool) 
 		partial: PartialPipingFlow{
 			subject: PipingFlowSubject{
 				node:    node,
-				outType: tp.GetTypeAtLocation(node),
+				outType: tp.lazyTypeAtLocation(node),
 			},
 		},
 	}
@@ -885,10 +876,12 @@ func (tp *TypeParser) buildPipeTransformations(result *ParsedPipeCallResult) []P
 			continue
 		}
 
-		var outType *checker.Type
-		if i < len(result.argsOutType) {
-			outType = result.argsOutType[i]
-		}
+		outType := newLazy(func() *checker.Type {
+			if outTypes := result.argsOutType.get(); i < len(outTypes) {
+				return outTypes[i]
+			}
+			return nil
+		})
 
 		var callee *ast.Node
 		var args []*ast.Node
@@ -918,37 +911,18 @@ func (tp *TypeParser) buildPipeTransformations(result *ParsedPipeCallResult) []P
 
 // buildEffectFnTransformations builds PipingFlowTransformation slices from Effect.fn trailing arguments.
 // It also returns the subject type (from the first transformation's input parameter type).
-func (tp *TypeParser) buildEffectFnTransformations(result *parsedEffectFnCallResult) ([]PipingFlowTransformation, *checker.Type) {
-	c := tp.checker
+func (tp *TypeParser) buildEffectFnTransformations(result *parsedEffectFnCallResult) ([]PipingFlowTransformation, *lazy[*checker.Type]) {
 	transformations := make([]PipingFlowTransformation, 0, len(result.trailingArgs))
-	var subjectType *checker.Type
-
-	callNode := result.node.AsNode()
+	subjectType := newLazy(func() *checker.Type { return tp.effectFnSubjectType(result) })
 
 	for i, arg := range result.trailingArgs {
 		if arg == nil {
 			continue
 		}
 
-		// Get the contextual type of the argument within the Effect.fn call.
-		argIndex := result.trailingStartIndex + i
-		contextualType := c.GetContextualTypeForArgumentAtIndex(callNode, argIndex)
-
-		var outType *checker.Type
+		var outType *lazy[*checker.Type]
 		if i < len(result.trailingArgsOutType) {
 			outType = result.trailingArgsOutType[i]
-		}
-		if contextualType != nil {
-			callSigs := c.GetSignaturesOfType(contextualType, checker.SignatureKindCall)
-			if len(callSigs) > 0 {
-				// For the first transformation, extract the subject type from the first parameter
-				if i == 0 {
-					params := callSigs[0].Parameters()
-					if len(params) > 0 {
-						subjectType = c.GetTypeOfSymbol(params[0])
-					}
-				}
-			}
 		}
 
 		var callee *ast.Node
@@ -974,6 +948,28 @@ func (tp *TypeParser) buildEffectFnTransformations(result *parsedEffectFnCallRes
 	}
 
 	return transformations, subjectType
+}
+
+// effectFnSubjectType is the first parameter type of the contextual signature
+// of the first trailing transformation.
+func (tp *TypeParser) effectFnSubjectType(result *parsedEffectFnCallResult) *checker.Type {
+	if len(result.trailingArgs) == 0 || result.trailingArgs[0] == nil {
+		return nil
+	}
+	c := tp.checker
+	contextualType := c.GetContextualTypeForArgumentAtIndex(result.node.AsNode(), result.trailingStartIndex)
+	if contextualType == nil {
+		return nil
+	}
+	callSigs := c.GetSignaturesOfType(contextualType, checker.SignatureKindCall)
+	if len(callSigs) == 0 {
+		return nil
+	}
+	params := callSigs[0].Parameters()
+	if len(params) == 0 {
+		return nil
+	}
+	return c.GetTypeOfSymbol(params[0])
 }
 
 func callTypeArguments(node *ast.Node) *ast.NodeList {
