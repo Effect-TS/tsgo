@@ -116,7 +116,7 @@ func hasOuterContextualFunctionType(tp *typeparser.TypeParser, c *checker.Checke
 		return false
 	}
 
-	contextualType := c.GetContextualType(node, checker.ContextFlagsNone)
+	contextualType := tp.GetContextualType(node, checker.ContextFlagsNone)
 	if contextualType == nil {
 		return false
 	}

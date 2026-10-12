@@ -175,7 +175,7 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 						// Check that this node is the name of the property (not the value)
 						nameNode := getObjectLiteralElementName(parent)
 						if nameNode == node {
-							contextualType := c.GetContextualType(grandparent, checker.ContextFlagsNone)
+							contextualType := tp.GetContextualType(grandparent, checker.ContextFlagsNone)
 							if contextualType != nil {
 								name := getNodeTextForPropertyLookup(node)
 								if name != "" {
@@ -252,7 +252,7 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 
 					if !hasTypeParams {
 						// Pattern 6: No type parameters — use contextual type
-						expectedType := c.GetContextualType(body, checker.ContextFlagsNone)
+						expectedType := tp.GetContextualType(body, checker.ContextFlagsNone)
 						if expectedType != nil {
 							realType := tp.GetTypeAtLocation(body)
 							result = append(result, ExpectedAndRealType{
