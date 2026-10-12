@@ -43,6 +43,8 @@ type declarationStabilityInfo struct {
 }
 
 func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
+	constraintTypes := make(map[*ast.Node]*checker.Type)
+
 	// Declared stability is cached per checker in TypeParser, so references to the
 	// same symbol or selected overload reuse one lookup across source files. The
 	// selected overload's own tag always wins over the symbol-level tag.
@@ -99,7 +101,14 @@ func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
 					// property. Use the constraint instead, as go-to-definition
 					// does, so its stability tag is not lost to inference.
 					if slices.ContainsFunc(properties, func(symbol *ast.Symbol) bool { return symbol.ValueDeclaration == node }) {
-						if constraintType := ctx.Checker.GetContextualType(node.Parent, checker.ContextFlagsIgnoreNodeInferences); constraintType != nil {
+						constraintType, cached := constraintTypes[node.Parent]
+						if !cached {
+							constraintType = ctx.Checker.GetContextualType(node.Parent, checker.ContextFlagsIgnoreNodeInferences)
+							if len(node.Parent.AsObjectLiteralExpression().Properties.Nodes) > 1 {
+								constraintTypes[node.Parent] = constraintType
+							}
+						}
+						if constraintType != nil {
 							if constraintProperties := ctx.Checker.GetPropertySymbolsFromContextualType(node, constraintType, false); len(constraintProperties) > 0 {
 								properties = constraintProperties
 							}
