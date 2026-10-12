@@ -45,6 +45,9 @@ return parser.checker.GetSymbolAtLocation(input)`},
 return parser.checker.GetSymbolAtLocation(input)`},
 	}
 	for methodName, forwardingMethod := range checkerLocationMethods {
+		if methodName == "GetContextualType" {
+			continue
+		}
 		for _, receiver := range []string{"*TypeParser", "TypeParser"} {
 			for _, tc := range cases {
 				t.Run(methodName+"/"+receiver+"/"+tc.name, func(t *testing.T) {
@@ -71,22 +74,32 @@ func TestForwardingMethodMapping(t *testing.T) {
 	}
 }
 
-func runForwardingFixture(t *testing.T, receiver, method, body string) {
+func runForwardingFixture(t *testing.T, receiver, method, body string, extraParameters ...string) {
 	t.Helper()
+	parameters := "input *checker.Node"
+	if method == "GetContextualType" {
+		parameters += ", flags checker.ContextFlags"
+	}
+	for _, parameter := range extraParameters {
+		parameters += ", " + parameter
+	}
 	dir, cleanup, err := analysistest.WriteFiles(map[string]string{
 		"github.com/microsoft/TypeScript/tsc/internal/checker/checker.go": `package checker
 type Node struct{}
 type Checker struct{}
+type ContextFlags int
+func (*Checker) GetContextualType(n *Node, flags ContextFlags) *Node { return n }
 func (*Checker) GetSymbolAtLocation(n *Node) *Node { return n }
 func (*Checker) GetTypeAtLocation(n *Node) *Node { return n }`,
 		"github.com/microsoft/TypeScript/tsc/shim/checker/shim.go": `package checker
 import provider "github.com/microsoft/TypeScript/tsc/internal/checker"
 type Checker = provider.Checker
-type Node = provider.Node`,
+type Node = provider.Node
+type ContextFlags = provider.ContextFlags`,
 		"github.com/effect-ts/tsgo/internal/typeparser/parser.go": `package typeparser
 import "github.com/microsoft/TypeScript/tsc/shim/checker"
 type TypeParser struct { checker, other *checker.Checker }
-func (parser ` + receiver + `) ` + method + `(input *checker.Node) *checker.Node {
+func (parser ` + receiver + `) ` + method + `(` + parameters + `) *checker.Node {
 ` + body + `
 }`,
 	})
@@ -95,4 +108,38 @@ func (parser ` + receiver + `) ` + method + `(input *checker.Node) *checker.Node
 	}
 	defer cleanup()
 	analysistest.Run(t, dir, checkerLocationAnalyzer, typeParserPackage)
+}
+
+func TestContextualTypeForwardingSelector(t *testing.T) {
+	cases := []struct {
+		name string
+		body string
+	}{
+		{"forwarding", `return parser.checker.GetContextualType(input, flags)`},
+		{"different node", `return parser.checker.GetContextualType(nil, flags) // want "use TypeParser.GetContextualType"`},
+		{"different flags", `return parser.checker.GetContextualType(input, 0) // want "use TypeParser.GetContextualType"`},
+		{"aliased flags", `otherFlags := flags
+return parser.checker.GetContextualType(input, otherFlags) // want "use TypeParser.GetContextualType"`},
+		{"shadowed flags", `if flags := flags; input != nil { return parser.checker.GetContextualType(input, flags) } // want "use TypeParser.GetContextualType"
+return parser.checker.GetContextualType(input, flags)`},
+		{"different checker", `return parser.other.GetContextualType(input, flags) // want "use TypeParser.GetContextualType"`},
+		{"earlier call", `parser.checker.GetContextualType(input, flags) // want "use TypeParser.GetContextualType"
+return parser.checker.GetContextualType(input, flags)`},
+		{"method value", `lookup := parser.checker.GetContextualType // want "use TypeParser.GetContextualType"
+return lookup(input, flags)`},
+		{"closure", `return func() *checker.Node { return parser.checker.GetContextualType(input, flags) }() // want "use TypeParser.GetContextualType"`},
+	}
+	for _, receiver := range []string{"*TypeParser", "TypeParser"} {
+		for _, tc := range cases {
+			t.Run(receiver+"/"+tc.name, func(t *testing.T) {
+				runForwardingFixture(t, receiver, "GetContextualType", tc.body)
+			})
+		}
+	}
+}
+
+func TestContextualTypeForwardingArity(t *testing.T) {
+	runForwardingFixture(t, "*TypeParser", "GetContextualType",
+		`return parser.checker.GetContextualType(input, flags) // want "use TypeParser.GetContextualType"`,
+		"unused int")
 }

@@ -14,11 +14,12 @@ const typeParserPackage = "github.com/effect-ts/tsgo/internal/typeparser"
 var checkerLocationMethods = map[string]string{
 	"GetSymbolAtLocation": "GetSymbolAtLocation",
 	"GetTypeAtLocation":   "getTypeAtLocationUncached",
+	"GetContextualType":   "GetContextualType",
 }
 
 var checkerLocationAnalyzer = &analysis.Analyzer{
 	Name: "checkerlocation",
-	Doc:  "require TypeParser wrappers for compiler symbol and type lookup in internal packages",
+	Doc:  "require TypeParser wrappers for compiler symbol, type, and contextual type lookup in internal packages",
 	Run:  runCheckerLocation,
 }
 
@@ -93,7 +94,7 @@ func forwardingSelector(pass *analysis.Pass, methodName, forwardingMethod string
 			}
 			signature := object.Type().(*types.Signature)
 			receiver := receiverType(signature.Recv().Type())
-			if receiver == nil || receiver.Obj() != pass.Pkg.Scope().Lookup("TypeParser") || signature.Params().Len() != 1 || signature.Results().Len() != 1 || signature.Variadic() {
+			if receiver == nil || receiver.Obj() != pass.Pkg.Scope().Lookup("TypeParser") || signature.Results().Len() != 1 || signature.Variadic() {
 				continue
 			}
 			result, ok := method.Body.List[len(method.Body.List)-1].(*ast.ReturnStmt)
@@ -101,7 +102,7 @@ func forwardingSelector(pass *analysis.Pass, methodName, forwardingMethod string
 				continue
 			}
 			call, ok := result.Results[0].(*ast.CallExpr)
-			if !ok || len(call.Args) != 1 || call.Ellipsis != token.NoPos {
+			if !ok || call.Ellipsis != token.NoPos {
 				continue
 			}
 			selector, ok := call.Fun.(*ast.SelectorExpr)
@@ -110,6 +111,10 @@ func forwardingSelector(pass *analysis.Pass, methodName, forwardingMethod string
 			}
 			selection := pass.TypesInfo.Selections[selector]
 			if selection == nil || selection.Obj().Name() != methodName || !isCompilerLocationMethod(selection.Obj()) {
+				continue
+			}
+			compilerSignature := selection.Obj().Type().(*types.Signature)
+			if compilerSignature.Variadic() || signature.Params().Len() != compilerSignature.Params().Len() || len(call.Args) != signature.Params().Len() {
 				continue
 			}
 			field, ok := selector.X.(*ast.SelectorExpr)
@@ -122,8 +127,18 @@ func forwardingSelector(pass *analysis.Pass, methodName, forwardingMethod string
 				continue
 			}
 			receiverID, receiverOK := field.X.(*ast.Ident)
-			argumentID, argumentOK := call.Args[0].(*ast.Ident)
-			if receiverOK && argumentOK && pass.TypesInfo.ObjectOf(receiverID) == signature.Recv() && pass.TypesInfo.ObjectOf(argumentID) == signature.Params().At(0) {
+			if !receiverOK || pass.TypesInfo.ObjectOf(receiverID) != signature.Recv() {
+				continue
+			}
+			forwarded := true
+			for i, argument := range call.Args {
+				argumentID, ok := argument.(*ast.Ident)
+				if !ok || pass.TypesInfo.ObjectOf(argumentID) != signature.Params().At(i) {
+					forwarded = false
+					break
+				}
+			}
+			if forwarded {
 				return selector
 			}
 		}

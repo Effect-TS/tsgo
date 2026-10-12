@@ -93,7 +93,7 @@ func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
 		// the ordinary reference path excludes declaration names.
 		if ast.IsObjectLiteralElement(node) && node.Name() != nil && node.Parent != nil && node.Parent.Kind == ast.KindObjectLiteralExpression {
 			if name := ast.GetTextOfPropertyName(node.Name()); name != "" {
-				if contextualType := ctx.Checker.GetContextualType(node.Parent, checker.ContextFlagsNone); contextualType != nil {
+				if contextualType := ctx.TypeParser.GetContextualType(node.Parent, checker.ContextFlagsNone); contextualType != nil {
 					// Keep the original symbols and let the checker filter union
 					// branches by discriminants before reading their own tags.
 					properties := ctx.Checker.GetPropertySymbolsFromContextualType(node, contextualType, false)
@@ -103,7 +103,7 @@ func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
 					if slices.ContainsFunc(properties, func(symbol *ast.Symbol) bool { return ast.TSGetSymbolValueDeclaration(symbol) == node }) {
 						constraintType, cached := constraintTypes[node.Parent]
 						if !cached {
-							constraintType = ctx.Checker.GetContextualType(node.Parent, checker.ContextFlagsIgnoreNodeInferences)
+							constraintType = ctx.TypeParser.GetContextualType(node.Parent, checker.ContextFlagsIgnoreNodeInferences)
 							if len(node.Parent.AsObjectLiteralExpression().Properties.Nodes) > 1 {
 								constraintTypes[node.Parent] = constraintType
 							}

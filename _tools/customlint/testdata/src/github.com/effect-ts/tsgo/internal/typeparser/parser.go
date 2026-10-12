@@ -49,3 +49,11 @@ func (p *OtherParser) GetSymbolAtLocation(n *checker.Node) *checker.Node {
 func (p OtherParser) getTypeAtLocationUncached(n *checker.Node) *checker.Node {
 	return p.checker.GetTypeAtLocation(n) // want "use TypeParser.GetTypeAtLocation"
 }
+
+func (p *TypeParser) GetContextualType(n *checker.Node, flags checker.ContextFlags) *checker.Node {
+	return p.checker.GetContextualType(n, flags)
+}
+
+func (p *TypeParser) OtherContextualType(n *checker.Node, flags checker.ContextFlags) *checker.Node {
+	return p.checker.GetContextualType(n, flags) // want "use TypeParser.GetContextualType"
+}
