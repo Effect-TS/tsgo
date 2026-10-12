@@ -2,12 +2,12 @@ package refactors
 
 import (
 	"github.com/effect-ts/tsgo/internal/refactor"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/astnav"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var EffectGenToFn = refactor.Refactor{
@@ -118,8 +118,8 @@ func parseFunctionReturningEffectGen(tp *typeparser.TypeParser, _ *checker.Check
 			break
 		}
 		// Prepend args (inner pipes go first)
-		pipeArgs = append(pipeResult.Args, pipeArgs...)
-		subject = pipeResult.Subject
+		pipeArgs = append(pipeResult.Args().Copy(), pipeArgs...)
+		subject = pipeResult.Subject()
 	}
 
 	// Check if the core expression is Effect.gen(function*() { ... })
@@ -162,8 +162,8 @@ func buildEffectGenToFnReplacement(tracker *rewriter.Tracker, parsed *effectGenP
 
 	// Get the generator body
 	var blockBody *ast.Node
-	if genCall.Body != nil {
-		body := genCall.Body
+	if genCall.Body() != nil {
+		body := genCall.Body()
 		if body.Kind == ast.KindBlock {
 			blockBody = tracker.DeepCloneNode(body)
 		} else {
@@ -213,7 +213,7 @@ func buildEffectGenToFnReplacement(tracker *rewriter.Tracker, parsed *effectGenP
 	)
 
 	// Build Effect.fn or Effect.fn("name")
-	effectId := tracker.DeepCloneNode(genCall.EffectModule)
+	effectId := tracker.DeepCloneNode(genCall.EffectModule())
 	fnAccess := tracker.NewPropertyAccessExpression(
 		effectId, nil, tracker.NewIdentifier("fn"), ast.NodeFlagsNone,
 	)

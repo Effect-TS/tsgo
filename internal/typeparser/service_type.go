@@ -7,9 +7,13 @@ const ServiceTypeId = "~effect/Context/Service"
 
 // Service represents parsed v4 service type parameters.
 type Service struct {
-	Identifier *checker.Type // The service identifier/tag type
-	Shape      *checker.Type // The service implementation shape
+	identifier *checker.Type // The service identifier/tag type
+	shape      *checker.Type // The service implementation shape
 }
+
+func (r Service) Identifier() *checker.Type { return r.identifier }
+
+func (r Service) Shape() *checker.Type { return r.shape }
 
 // parseServiceVarianceStruct extracts Identifier and Shape from a Service variance struct type.
 func (tp *TypeParser) parseServiceVarianceStruct(t *checker.Type) *Service {
@@ -23,7 +27,7 @@ func (tp *TypeParser) parseServiceVarianceStruct(t *checker.Type) *Service {
 		return nil
 	}
 
-	return &Service{Identifier: identifier, Shape: shape}
+	return &Service{identifier: identifier, shape: shape}
 }
 
 // ServiceType parses a v4 service type and extracts Identifier, Shape parameters.
@@ -53,7 +57,7 @@ func (tp *TypeParser) ServiceType(t *checker.Type) *Service {
 			return nil
 		}
 
-		return &Service{Identifier: identifier, Shape: shape}
+		return &Service{identifier: identifier, shape: shape}
 	})
 }
 

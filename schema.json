@@ -2488,6 +2488,11 @@
           "default": "suggestion",
           "description": "Suggests using Effect.map instead of Effect.flatMap when the callback only wraps its result with Effect.succeed"
         },
+        "flatMapToTap": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.tap when a flatMap or andThen callback runs an effect and returns its unchanged parameter"
+        },
         "floatingEffect": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "error",

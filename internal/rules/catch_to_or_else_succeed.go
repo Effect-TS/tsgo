@@ -48,23 +48,23 @@ func AnalyzeCatchToOrElseSucceed(tp *typeparser.TypeParser, _ *checker.Checker, 
 	var matches []CatchToOrElseSucceedMatch
 
 	flows := tp.PipingFlows(sf, true)
-	for _, flow := range flows {
-		for _, transformation := range flow.Transformations {
-			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "catch") &&
-				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "catchAll") {
+	for _, flow := range flows.All() {
+		for _, transformation := range flow.Transformations().All() {
+			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catch") &&
+				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchAll") {
 				continue
 			}
 
-			if len(transformation.Args) < 1 {
+			if transformation.Args().Len() < 1 {
 				continue
 			}
 
-			lazy := typeparser.ParseLazyExpression(transformation.Args[0], typeparser.LazyExpressionThunk)
+			lazy := typeparser.ParseLazyExpression(transformation.Args().At(0), typeparser.LazyExpressionThunk)
 			if lazy == nil {
 				continue
 			}
 
-			expr := lazy.Expression
+			expr := lazy.Expression()
 			if expr == nil || expr.Kind != ast.KindCallExpression {
 				continue
 			}
@@ -79,8 +79,8 @@ func AnalyzeCatchToOrElseSucceed(tp *typeparser.TypeParser, _ *checker.Checker, 
 
 			var calleeNameNode *ast.Node
 			catchMethodName := "catch"
-			if transformation.Callee.Kind == ast.KindPropertyAccessExpression {
-				prop := transformation.Callee.AsPropertyAccessExpression()
+			if transformation.Callee().Kind == ast.KindPropertyAccessExpression {
+				prop := transformation.Callee().AsPropertyAccessExpression()
 				if prop != nil && prop.Name() != nil {
 					calleeNameNode = prop.Name()
 					catchMethodName = prop.Name().Text()
@@ -93,8 +93,8 @@ func AnalyzeCatchToOrElseSucceed(tp *typeparser.TypeParser, _ *checker.Checker, 
 
 			matches = append(matches, CatchToOrElseSucceedMatch{
 				SourceFile:            sf,
-				Location:              scanner.GetErrorRangeForNode(sf, transformation.Callee),
-				Callee:                transformation.Callee,
+				Location:              scanner.GetErrorRangeForNode(sf, transformation.Callee()),
+				Callee:                transformation.Callee(),
 				CalleeNameNode:        calleeNameNode,
 				CatchMethodName:       catchMethodName,
 				SucceedCallExpression: expr,

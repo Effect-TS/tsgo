@@ -3,17 +3,28 @@ package typeparser
 import (
 	"strings"
 
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
 type ParsedDataFirstOrLastCall struct {
-	Node         *ast.CallExpression
-	Callee       *ast.Node
-	Subject      *ast.Node
-	Args         []*ast.Node
-	SubjectIndex int
+	node         *ast.CallExpression
+	callee       *ast.Node
+	subject      *ast.Node
+	args         []*ast.Node
+	subjectIndex int
 }
+
+func (r ParsedDataFirstOrLastCall) Node() *ast.CallExpression { return r.node }
+
+func (r ParsedDataFirstOrLastCall) Callee() *ast.Node { return r.callee }
+
+func (r ParsedDataFirstOrLastCall) Subject() *ast.Node { return r.subject }
+
+func (r ParsedDataFirstOrLastCall) Args() readonly.Slice[*ast.Node] { return readonly.New(r.args) }
+
+func (r ParsedDataFirstOrLastCall) SubjectIndex() int { return r.subjectIndex }
 
 type PipeableSignatureWitness struct {
 	ArgumentTypes []*checker.Type
@@ -104,18 +115,18 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 				continue
 			}
 
-			if matched != nil && matched.SubjectIndex != subjectIndex {
-				if matched.SubjectIndex < len(resolved.Parameters()) && isLikelySelfParameter(resolved.Parameters()[matched.SubjectIndex]) {
+			if matched != nil && matched.subjectIndex != subjectIndex {
+				if matched.subjectIndex < len(resolved.Parameters()) && isLikelySelfParameter(resolved.Parameters()[matched.subjectIndex]) {
 					return matched
 				}
 				return nil
 			}
 			matched = &ParsedDataFirstOrLastCall{
-				Node:         call,
-				Callee:       call.Expression,
-				Subject:      call.Arguments.Nodes[subjectIndex],
-				Args:         args,
-				SubjectIndex: subjectIndex,
+				node:         call,
+				callee:       call.Expression,
+				subject:      call.Arguments.Nodes[subjectIndex],
+				args:         args,
+				subjectIndex: subjectIndex,
 			}
 			break
 		}

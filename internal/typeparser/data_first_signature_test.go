@@ -2,9 +2,11 @@ package typeparser
 
 import (
 	"slices"
+
 	"strings"
 	"testing"
 
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
@@ -36,8 +38,8 @@ const provided = Effect.provide(program, MyService.Default, { local: true })
 		t.Fatal("expected provide call to normalize via derived signature comparison")
 		return
 	}
-	if result.SubjectIndex != 0 {
-		t.Fatalf("expected provide subject index 0, got %d", result.SubjectIndex)
+	if result.subjectIndex != 0 {
+		t.Fatalf("expected provide subject index 0, got %d", result.subjectIndex)
 	}
 }
 
@@ -66,8 +68,8 @@ const live = Layer.succeed(Service, make)
 		t.Fatal("expected Layer.succeed call to normalize via derived signature comparison")
 		return
 	}
-	if result.SubjectIndex != 1 {
-		t.Fatalf("expected Layer.succeed subject index 1, got %d", result.SubjectIndex)
+	if result.subjectIndex != 1 {
+		t.Fatalf("expected Layer.succeed subject index 1, got %d", result.subjectIndex)
 	}
 }
 
@@ -98,20 +100,20 @@ export const live = Layer.succeed(MyService, make)
 	liveCall := findVariableInitializerCallByName(t, sf, "live").AsNode()
 
 	providedFlow := findFlowByNode(t, sf, flows, providedCall)
-	if strings.TrimSpace(nodeText(sf, providedFlow.Subject.Node)) != "program" {
-		t.Fatalf("provided subject = %q, want %q", strings.TrimSpace(nodeText(sf, providedFlow.Subject.Node)), "program")
+	if strings.TrimSpace(nodeText(sf, providedFlow.partial.subject.node)) != "program" {
+		t.Fatalf("provided subject = %q, want %q", strings.TrimSpace(nodeText(sf, providedFlow.partial.subject.node)), "program")
 	}
 	assertSingleTransformation(t, sf, providedFlow, TransformationKindDataFirst, "Effect.provide", []string{"MyService.Default", "{ local: true }"})
-	if got := stripWhitespace(ReconstructPipingFlow(sf, &providedFlow.Subject, ptrTransformations(providedFlow.Transformations))); got != stripWhitespace("Effect.provide(MyService.Default, { local: true })(program)") {
+	if got := stripWhitespace(ReconstructPipingFlow(sf, &providedFlow.partial.subject, ptrTransformations(providedFlow.partial.transformations))); got != stripWhitespace("Effect.provide(MyService.Default, { local: true })(program)") {
 		t.Fatalf("provided reconstructed flow = %q", got)
 	}
 
 	liveFlow := findFlowByNode(t, sf, flows, liveCall)
-	if strings.TrimSpace(nodeText(sf, liveFlow.Subject.Node)) != "make" {
-		t.Fatalf("live subject = %q, want %q", strings.TrimSpace(nodeText(sf, liveFlow.Subject.Node)), "make")
+	if strings.TrimSpace(nodeText(sf, liveFlow.partial.subject.node)) != "make" {
+		t.Fatalf("live subject = %q, want %q", strings.TrimSpace(nodeText(sf, liveFlow.partial.subject.node)), "make")
 	}
 	assertSingleTransformation(t, sf, liveFlow, TransformationKindDataLast, "Layer.succeed", []string{"MyService"})
-	if got := stripWhitespace(ReconstructPipingFlow(sf, &liveFlow.Subject, ptrTransformations(liveFlow.Transformations))); got != stripWhitespace("Layer.succeed(MyService)(make)") {
+	if got := stripWhitespace(ReconstructPipingFlow(sf, &liveFlow.partial.subject, ptrTransformations(liveFlow.partial.transformations))); got != stripWhitespace("Layer.succeed(MyService)(make)") {
 		t.Fatalf("live reconstructed flow = %q", got)
 	}
 }
@@ -146,15 +148,15 @@ export const called = identity<string>("value")
 	} {
 		call := findVariableInitializerCallByName(t, sf, test.name)
 		flow := findFlowByNode(t, sf, tp.PipingFlows(sf, false), call.AsNode())
-		if len(flow.Transformations) == 0 {
+		if len(flow.partial.transformations) == 0 {
 			t.Fatalf("%s transformation count = 0, want at least 1", test.name)
 		}
-		transformation := flow.Transformations[len(flow.Transformations)-1]
-		if transformation.TypeArguments == nil {
+		transformation := flow.partial.transformations[len(flow.partial.transformations)-1]
+		if transformation.typeArguments == nil {
 			t.Fatalf("%s type arguments are nil", test.name)
 		}
-		got := make([]string, 0, len(transformation.TypeArguments.Nodes))
-		for _, typeArgument := range transformation.TypeArguments.Nodes {
+		got := make([]string, 0, len(transformation.typeArguments.Nodes))
+		for _, typeArgument := range transformation.typeArguments.Nodes {
 			got = append(got, strings.TrimSpace(nodeText(sf, typeArgument)))
 		}
 		if !slices.Equal(got, test.want) {
@@ -185,7 +187,7 @@ export const named = Effect.fn("named")(function*() {
 	if caughtFlow == nil {
 		t.Fatal("expected curried catch flow")
 	}
-	if got := strings.TrimSpace(nodeText(sf, caughtFlow.Subject.Node)); got != "program" {
+	if got := strings.TrimSpace(nodeText(sf, caughtFlow.partial.subject.node)); got != "program" {
 		t.Fatalf("caught subject = %q, want program", got)
 	}
 	assertSingleTransformation(t, sf, caughtFlow, TransformationKindCall, "Effect.catch", []string{"() => Effect.succeed(0)"})
@@ -227,17 +229,17 @@ export const effectFn = Effect.fn(
 	defer done()
 
 	seen := make(map[*ast.Node]int)
-	for flowIndex, flow := range tp.PipingFlows(sf, true) {
-		for _, transformation := range flow.Transformations {
-			if previousFlowIndex, duplicate := seen[transformation.Callee]; duplicate {
+	for flowIndex, flow := range tp.PipingFlows(sf, true).All() {
+		for _, transformation := range flow.partial.transformations {
+			if previousFlowIndex, duplicate := seen[transformation.callee]; duplicate {
 				t.Fatalf(
 					"transformation %q occurs in flows %d and %d",
-					nodeText(sf, transformation.Callee),
+					nodeText(sf, transformation.callee),
 					previousFlowIndex,
 					flowIndex,
 				)
 			}
-			seen[transformation.Callee] = flowIndex
+			seen[transformation.callee] = flowIndex
 		}
 	}
 }
@@ -257,22 +259,22 @@ export const none = Effect.succeed(((Option.none())))
 
 	someCall := findVariableInitializerCallByName(t, sf, "some")
 	someFlow := findFlowByNode(t, sf, tp.PipingFlows(sf, false), someCall.AsNode())
-	if got := strings.TrimSpace(nodeText(sf, someFlow.Subject.Node)); got != "1" {
+	if got := strings.TrimSpace(nodeText(sf, someFlow.partial.subject.node)); got != "1" {
 		t.Fatalf("some subject = %q, want %q", got, "1")
 	}
-	if len(someFlow.Transformations) != 2 {
-		t.Fatalf("some transformation count = %d, want 2", len(someFlow.Transformations))
+	if len(someFlow.partial.transformations) != 2 {
+		t.Fatalf("some transformation count = %d, want 2", len(someFlow.partial.transformations))
 	}
-	if got := strings.TrimSpace(nodeText(sf, someFlow.Transformations[0].Callee)); got != "Option.some" {
+	if got := strings.TrimSpace(nodeText(sf, someFlow.partial.transformations[0].callee)); got != "Option.some" {
 		t.Fatalf("first some transformation = %q, want %q", got, "Option.some")
 	}
-	if got := strings.TrimSpace(nodeText(sf, someFlow.Transformations[1].Callee)); got != "Effect.succeed" {
+	if got := strings.TrimSpace(nodeText(sf, someFlow.partial.transformations[1].callee)); got != "Effect.succeed" {
 		t.Fatalf("second some transformation = %q, want %q", got, "Effect.succeed")
 	}
 
 	noneCall := findVariableInitializerCallByName(t, sf, "none")
 	noneFlow := findFlowByNode(t, sf, tp.PipingFlows(sf, false), noneCall.AsNode())
-	if got := strings.TrimSpace(nodeText(sf, noneFlow.Subject.Node)); got != "Option.none()" {
+	if got := strings.TrimSpace(nodeText(sf, noneFlow.partial.subject.node)); got != "Option.none()" {
 		t.Fatalf("none subject = %q, want %q", got, "Option.none()")
 	}
 	assertSingleTransformation(t, sf, noneFlow, TransformationKindCall, "Effect.succeed", nil)
@@ -303,7 +305,7 @@ export const pipeable = Effect.raceFirst(
 	defer done()
 
 	dataFirstRace := findVariableInitializerCallByName(t, sf, "dataFirst")
-	if parsed := tp.DataFirstOrLastCall(dataFirstRace.AsNode()); parsed == nil || parsed.SubjectIndex != 0 {
+	if parsed := tp.DataFirstOrLastCall(dataFirstRace.AsNode()); parsed == nil || parsed.subjectIndex != 0 {
 		t.Fatal("expected data-first Effect.raceFirst with omitted options to normalize around self")
 	}
 	dataFirstTimer := dataFirstRace.Arguments.Nodes[0]
@@ -311,7 +313,7 @@ export const pipeable = Effect.raceFirst(
 	if dataFirstFlow == nil {
 		t.Fatal("expected data-first timer sub-flow")
 	}
-	if dataFirstFlow.Node != dataFirstTimer {
+	if dataFirstFlow.node != dataFirstTimer {
 		t.Fatal("data-first sub-flow should be rooted at the requested node")
 	}
 	if got := transformationCallees(sf, dataFirstFlow); !slices.Equal(got, []string{"Effect.sleep", "Effect.flatMap"}) {
@@ -340,24 +342,24 @@ export const pipeable = Effect.raceFirst(
 	if prefix == nil {
 		t.Fatal("expected a two-transformation prefix")
 	}
-	if prefix.Subject != outerFlow.Subject {
+	if prefix.subject != outerFlow.partial.subject {
 		t.Fatal("prefix should preserve the flow subject")
 	}
-	if len(prefix.Transformations) != 2 {
-		t.Fatalf("prefix transformation count = %d, want 2", len(prefix.Transformations))
+	if len(prefix.transformations) != 2 {
+		t.Fatalf("prefix transformation count = %d, want 2", len(prefix.transformations))
 	}
-	if got := strings.TrimSpace(nodeText(sf, prefix.Transformations[1].Callee)); got != "Effect.flatMap" {
+	if got := strings.TrimSpace(nodeText(sf, prefix.transformations[1].callee)); got != "Effect.flatMap" {
 		t.Fatalf("last prefix transformation = %q, want Effect.flatMap", got)
 	}
-	originalKind := outerFlow.Transformations[0].Kind
-	prefix.Transformations[0].Kind = TransformationKind("test")
-	if outerFlow.Transformations[0].Kind != originalKind {
+	originalKind := outerFlow.partial.transformations[0].kind
+	prefix.transformations[0].kind = TransformationKind("test")
+	if outerFlow.partial.transformations[0].kind != originalKind {
 		t.Fatal("prefix transformations should have an independent backing slice")
 	}
-	if empty := outerFlow.CopyPrefix(0); empty == nil || len(empty.Transformations) != 0 {
+	if empty := outerFlow.CopyPrefix(0); empty == nil || len(empty.transformations) != 0 {
 		t.Fatal("expected an empty prefix rooted at the flow subject")
 	}
-	if outerFlow.CopyPrefix(-1) != nil || outerFlow.CopyPrefix(len(outerFlow.Transformations)+1) != nil {
+	if outerFlow.CopyPrefix(-1) != nil || outerFlow.CopyPrefix(len(outerFlow.partial.transformations)+1) != nil {
 		t.Fatal("out-of-bounds prefixes should return nil")
 	}
 	var nilFlow *PipingFlow
@@ -367,9 +369,9 @@ export const pipeable = Effect.raceFirst(
 }
 
 func transformationCallees(sf *ast.SourceFile, flow *PipingFlow) []string {
-	result := make([]string, 0, len(flow.Transformations))
-	for i := range flow.Transformations {
-		result = append(result, strings.TrimSpace(nodeText(sf, flow.Transformations[i].Callee)))
+	result := make([]string, 0, len(flow.partial.transformations))
+	for i := range flow.partial.transformations {
+		result = append(result, strings.TrimSpace(nodeText(sf, flow.partial.transformations[i].callee)))
 	}
 	return result
 }
@@ -396,21 +398,21 @@ export const result = Option.match(value, {
 	if result == nil {
 		t.Fatal("expected Option.match data-first call to normalize")
 	}
-	if result.SubjectIndex != 0 {
-		t.Fatalf("subject index = %d, want 0", result.SubjectIndex)
+	if result.subjectIndex != 0 {
+		t.Fatalf("subject index = %d, want 0", result.subjectIndex)
 	}
-	if got := strings.TrimSpace(nodeText(sf, result.Subject)); got != "value" {
+	if got := strings.TrimSpace(nodeText(sf, result.subject)); got != "value" {
 		t.Fatalf("subject = %q, want %q", got, "value")
 	}
-	if got := strings.TrimSpace(nodeText(sf, result.Callee)); got != "Option.match" {
+	if got := strings.TrimSpace(nodeText(sf, result.callee)); got != "Option.match" {
 		t.Fatalf("callee = %q, want %q", got, "Option.match")
 	}
-	if len(result.Args) != 1 || !strings.HasPrefix(strings.TrimSpace(nodeText(sf, result.Args[0])), "{") {
+	if len(result.args) != 1 || !strings.HasPrefix(strings.TrimSpace(nodeText(sf, result.args[0])), "{") {
 		t.Fatalf("expected handlers object as sole transformation argument")
 	}
 
 	flow := findFlowByNode(t, sf, tp.PipingFlows(sf, false), call.AsNode())
-	if got := strings.TrimSpace(nodeText(sf, flow.Subject.Node)); got != "value" {
+	if got := strings.TrimSpace(nodeText(sf, flow.partial.subject.node)); got != "value" {
 		t.Fatalf("flow subject = %q, want %q", got, "value")
 	}
 	assertSingleTransformation(t, sf, flow, TransformationKindDataFirst, "Option.match", []string{`{
@@ -493,8 +495,8 @@ export const optionalSubjectResult = optionalSubject(box, 1)
 			t.Errorf("expected %s to normalize", name)
 			continue
 		}
-		if result.SubjectIndex != 0 {
-			t.Errorf("%s subject index = %d, want 0", name, result.SubjectIndex)
+		if result.subjectIndex != 0 {
+			t.Errorf("%s subject index = %d, want 0", name, result.subjectIndex)
 		}
 	}
 
@@ -533,8 +535,8 @@ export const result = operation("value", 1)
 	if result == nil {
 		t.Fatal("expected a pipeable overload returned through a callable alias to normalize")
 	}
-	if result.SubjectIndex != 0 {
-		t.Fatalf("subject index = %d, want 0", result.SubjectIndex)
+	if result.subjectIndex != 0 {
+		t.Fatalf("subject index = %d, want 0", result.subjectIndex)
 	}
 }
 
@@ -552,7 +554,7 @@ export const result = operation("value", 1)
 	defer done()
 
 	call := findVariableInitializerCallByName(t, sf, "result")
-	if result := tp.DataFirstOrLastCall(call.AsNode()); result == nil || result.SubjectIndex != 0 {
+	if result := tp.DataFirstOrLastCall(call.AsNode()); result == nil || result.subjectIndex != 0 {
 		t.Fatal("expected overloads with inferred any parameter types to normalize")
 	}
 }
@@ -699,8 +701,8 @@ export const exitMatch = Exit.match(exit, {
 			t.Errorf("expected %s to normalize", name)
 			continue
 		}
-		if result.SubjectIndex != 0 {
-			t.Errorf("%s subject index = %d, want 0", name, result.SubjectIndex)
+		if result.subjectIndex != 0 {
+			t.Errorf("%s subject index = %d, want 0", name, result.subjectIndex)
 		}
 	}
 }
@@ -727,23 +729,23 @@ export const shouldReportDataFirst = Effect.catchAll(
 		t.Fatal("expected data-first catchAll to normalize")
 		return
 	}
-	if strings.TrimSpace(nodeText(sf, result.Subject)) != "Effect.never" {
-		t.Fatalf("subject = %q, want %q", strings.TrimSpace(nodeText(sf, result.Subject)), "Effect.never")
+	if strings.TrimSpace(nodeText(sf, result.subject)) != "Effect.never" {
+		t.Fatalf("subject = %q, want %q", strings.TrimSpace(nodeText(sf, result.subject)), "Effect.never")
 	}
-	if strings.TrimSpace(nodeText(sf, result.Callee)) != "Effect.catchAll" {
-		t.Fatalf("callee = %q, want %q", strings.TrimSpace(nodeText(sf, result.Callee)), "Effect.catchAll")
+	if strings.TrimSpace(nodeText(sf, result.callee)) != "Effect.catchAll" {
+		t.Fatalf("callee = %q, want %q", strings.TrimSpace(nodeText(sf, result.callee)), "Effect.catchAll")
 	}
-	if result.SubjectIndex != 0 {
-		t.Fatalf("subject index = %d, want 0", result.SubjectIndex)
+	if result.subjectIndex != 0 {
+		t.Fatalf("subject index = %d, want 0", result.subjectIndex)
 	}
-	if len(result.Args) != 1 || stripWhitespace(nodeText(sf, result.Args[0])) != stripWhitespace("() => Effect.log(\"error\")") {
-		t.Fatalf("args = %q", strings.TrimSpace(nodeText(sf, result.Args[0])))
+	if len(result.args) != 1 || stripWhitespace(nodeText(sf, result.args[0])) != stripWhitespace("() => Effect.log(\"error\")") {
+		t.Fatalf("args = %q", strings.TrimSpace(nodeText(sf, result.args[0])))
 	}
 
 	flows := tp.PipingFlows(sf, false)
 	flow := findFlowByNode(t, sf, flows, call.AsNode())
-	if strings.TrimSpace(nodeText(sf, flow.Subject.Node)) != "Effect.never" {
-		t.Fatalf("flow subject = %q, want %q", strings.TrimSpace(nodeText(sf, flow.Subject.Node)), "Effect.never")
+	if strings.TrimSpace(nodeText(sf, flow.partial.subject.node)) != "Effect.never" {
+		t.Fatalf("flow subject = %q, want %q", strings.TrimSpace(nodeText(sf, flow.partial.subject.node)), "Effect.never")
 	}
 	assertSingleTransformation(t, sf, flow, TransformationKindDataFirst, "Effect.catchAll", []string{"() => Effect.log(\"error\")"})
 }
@@ -898,10 +900,10 @@ func signatureString(c *checker.Checker, sig *checker.Signature) string {
 	return c.SignatureToStringEx(sig, nil, checker.TypeFormatFlagsWriteArrowStyleSignature, nil)
 }
 
-func findFlowByNode(t *testing.T, sf *ast.SourceFile, flows []*PipingFlow, node *ast.Node) *PipingFlow {
+func findFlowByNode(t *testing.T, sf *ast.SourceFile, flows readonly.Slice[*PipingFlow], node *ast.Node) *PipingFlow {
 	t.Helper()
-	for _, flow := range flows {
-		if flow != nil && flow.Node == node {
+	for _, flow := range flows.All() {
+		if flow != nil && flow.node == node {
 			return flow
 		}
 	}
@@ -915,20 +917,20 @@ func assertSingleTransformation(t *testing.T, sf *ast.SourceFile, flow *PipingFl
 		t.Fatal("flow is nil")
 		return
 	}
-	if len(flow.Transformations) != 1 {
-		t.Fatalf("transformation count = %d, want 1", len(flow.Transformations))
+	if len(flow.partial.transformations) != 1 {
+		t.Fatalf("transformation count = %d, want 1", len(flow.partial.transformations))
 	}
-	tr := flow.Transformations[0]
-	if tr.Kind != wantKind {
-		t.Fatalf("kind = %q, want %q", tr.Kind, wantKind)
+	tr := flow.partial.transformations[0]
+	if tr.kind != wantKind {
+		t.Fatalf("kind = %q, want %q", tr.kind, wantKind)
 	}
-	if got := strings.TrimSpace(nodeText(sf, tr.Callee)); got != wantCallee {
+	if got := strings.TrimSpace(nodeText(sf, tr.callee)); got != wantCallee {
 		t.Fatalf("callee = %q, want %q", got, wantCallee)
 	}
-	if len(tr.Args) != len(wantArgs) {
-		t.Fatalf("arg count = %d, want %d", len(tr.Args), len(wantArgs))
+	if len(tr.args) != len(wantArgs) {
+		t.Fatalf("arg count = %d, want %d", len(tr.args), len(wantArgs))
 	}
-	for i, arg := range tr.Args {
+	for i, arg := range tr.args {
 		if got := strings.TrimSpace(nodeText(sf, arg)); got != wantArgs[i] {
 			t.Fatalf("arg[%d] = %q, want %q", i, got, wantArgs[i])
 		}

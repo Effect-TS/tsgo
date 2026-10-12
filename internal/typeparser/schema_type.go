@@ -24,9 +24,13 @@ func (tp *TypeParser) IsSchemaType(t *checker.Type) bool {
 
 // SchemaTypes holds the A (Type) and E (Encoded) types extracted from a Schema type.
 type SchemaTypes struct {
-	A *checker.Type
-	E *checker.Type
+	a *checker.Type
+	e *checker.Type
 }
+
+func (r SchemaTypes) A() *checker.Type { return r.a }
+
+func (r SchemaTypes) E() *checker.Type { return r.e }
 
 // EffectSchemaTypes extracts the A (Type) and E (Encoded) types from a Schema type.
 // Returns nil if the type is not a recognized Schema type or types cannot be extracted.
@@ -47,7 +51,7 @@ func (tp *TypeParser) EffectSchemaTypes(t *checker.Type) *SchemaTypes {
 			if aType == nil || eType == nil {
 				return nil
 			}
-			return &SchemaTypes{A: aType, E: eType}
+			return &SchemaTypes{a: aType, e: eType}
 		}
 
 		// V3: check for 'ast' property first
@@ -74,7 +78,7 @@ func (tp *TypeParser) EffectSchemaTypes(t *checker.Type) *SchemaTypes {
 			if r == nil {
 				continue
 			}
-			return &SchemaTypes{A: a, E: i}
+			return &SchemaTypes{a: a, e: i}
 		}
 
 		return nil

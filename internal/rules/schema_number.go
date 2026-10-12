@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
@@ -120,7 +121,7 @@ func schemaNumberHasFiniteMethodCheck(tp *typeparser.TypeParser, node *ast.Node)
 			if call.Arguments == nil {
 				return false
 			}
-			return schemaNumberHasFinitePredicate(tp, call.Arguments.Nodes)
+			return schemaNumberHasFinitePredicate(tp, readonly.New(call.Arguments.Nodes))
 		default:
 			return false
 		}
@@ -128,15 +129,15 @@ func schemaNumberHasFiniteMethodCheck(tp *typeparser.TypeParser, node *ast.Node)
 	return false
 }
 
-func schemaNumberHasFinitePipingCheck(tp *typeparser.TypeParser, reference *ast.Node, flows []*typeparser.PipingFlow) bool {
-	for _, flow := range flows {
-		if flow.Subject.Node == nil || !schemaNumberNodeContains(flow.Subject.Node, reference) {
+func schemaNumberHasFinitePipingCheck(tp *typeparser.TypeParser, reference *ast.Node, flows readonly.Slice[*typeparser.PipingFlow]) bool {
+	for _, flow := range flows.All() {
+		if flow.Subject().Node() == nil || !schemaNumberNodeContains(flow.Subject().Node(), reference) {
 			continue
 		}
-		for _, transformation := range flow.Transformations {
-			if transformation.Callee != nil &&
-				tp.IsNodeReferenceToEffectSchemaModuleApi(transformation.Callee, "check") &&
-				schemaNumberHasFinitePredicate(tp, transformation.Args) {
+		for _, transformation := range flow.Transformations().All() {
+			if transformation.Callee() != nil &&
+				tp.IsNodeReferenceToEffectSchemaModuleApi(transformation.Callee(), "check") &&
+				schemaNumberHasFinitePredicate(tp, transformation.Args()) {
 				return true
 			}
 		}
@@ -144,8 +145,8 @@ func schemaNumberHasFinitePipingCheck(tp *typeparser.TypeParser, reference *ast.
 	return false
 }
 
-func schemaNumberHasFinitePredicate(tp *typeparser.TypeParser, arguments []*ast.Node) bool {
-	for _, argument := range arguments {
+func schemaNumberHasFinitePredicate(tp *typeparser.TypeParser, arguments readonly.Slice[*ast.Node]) bool {
+	for _, argument := range arguments.All() {
 		argument = ast.SkipParentheses(argument)
 		if argument.Kind != ast.KindCallExpression {
 			continue

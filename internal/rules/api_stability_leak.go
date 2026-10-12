@@ -185,7 +185,7 @@ func (w *apiStabilityWalker) inspectSymbol(symbol *ast.Symbol) {
 		w.inspectModule(symbol)
 		return
 	}
-	for _, dependency := range w.session.UsedBySymbol(symbol).Dependencies {
+	for _, dependency := range w.session.UsedBySymbol(symbol).Dependencies().All() {
 		w.recordDependency(dependency)
 	}
 }
@@ -224,11 +224,7 @@ func (w *apiStabilityWalker) recordDeclared(symbol *ast.Symbol) {
 		return
 	}
 	declared := w.ctx.TypeParser.DeclaredApiStabilityOfSymbol(symbol)
-	w.report(typeparser.ApiStabilityDependency{
-		Symbol:      symbol,
-		Declaration: declared.Declaration,
-		Level:       declared.Level,
-	})
+	w.report(typeparser.NewApiStabilityDependency(symbol, nil, declared.Declaration(), declared.Level()))
 }
 
 // recordDependency reports a dependency whose declared stability is above the
@@ -240,26 +236,26 @@ func (w *apiStabilityWalker) recordDependency(dependency typeparser.ApiStability
 }
 
 func (w *apiStabilityWalker) report(dependency typeparser.ApiStabilityDependency) {
-	if dependency.Level <= w.ceiling {
+	if dependency.Level() <= w.ceiling {
 		return
 	}
-	if dependency.Symbol == nil && dependency.Signature == nil && dependency.Declaration == nil {
+	if dependency.Symbol() == nil && dependency.Signature() == nil && dependency.Declaration() == nil {
 		return
 	}
 	if w.sameAsExport(dependency) {
 		return
 	}
 	key := apiStabilityOffenderKey{
-		symbol:      dependency.Symbol,
-		signature:   dependency.Signature,
-		declaration: dependency.Declaration,
+		symbol:      dependency.Symbol(),
+		signature:   dependency.Signature(),
+		declaration: dependency.Declaration(),
 	}
 	if w.offenders[key] {
 		return
 	}
 	w.offenders[key] = true
 	var relatedInformation []*ast.Diagnostic
-	if declaration := dependency.Declaration; declaration != nil {
+	if declaration := dependency.Declaration(); declaration != nil {
 		if sourceFile := ast.GetSourceFileOfNode(declaration); sourceFile != nil {
 			relatedInformation = []*ast.Diagnostic{w.ctx.NewDiagnostic(
 				sourceFile,
@@ -267,7 +263,7 @@ func (w *apiStabilityWalker) report(dependency typeparser.ApiStabilityDependency
 				tsdiag.X_0_is_declared_1_here_effect_apiStabilityLeak,
 				nil,
 				typeparser.ApiStabilityDependencyName(dependency),
-				apiStabilityLevelName(dependency.Level),
+				apiStabilityLevelName(dependency.Level()),
 			)}
 		}
 	}
@@ -278,7 +274,7 @@ func (w *apiStabilityWalker) report(dependency typeparser.ApiStabilityDependency
 		relatedInformation,
 		apiStabilityExportDisplayName(w.ctx, w.exportSymbol),
 		typeparser.ApiStabilityDependencyName(dependency),
-		apiStabilityLevelName(dependency.Level),
+		apiStabilityLevelName(dependency.Level()),
 	))
 }
 
@@ -286,12 +282,12 @@ func (w *apiStabilityWalker) report(dependency typeparser.ApiStabilityDependency
 // signature or distinct declaration finding is never the export itself, so it
 // is still reported.
 func (w *apiStabilityWalker) sameAsExport(dependency typeparser.ApiStabilityDependency) bool {
-	if dependency.Symbol == nil || dependency.Signature != nil {
+	if dependency.Symbol() == nil || dependency.Signature() != nil {
 		return false
 	}
 	c := w.ctx.Checker
-	return checker.Checker_getSymbolIfSameReference(c, dependency.Symbol, w.exportSymbol) != nil ||
-		checker.Checker_getSymbolIfSameReference(c, dependency.Symbol, w.exportTarget) != nil
+	return checker.Checker_getSymbolIfSameReference(c, dependency.Symbol(), w.exportSymbol) != nil ||
+		checker.Checker_getSymbolIfSameReference(c, dependency.Symbol(), w.exportTarget) != nil
 }
 
 func apiStabilityLevelName(level typeparser.ApiStabilityLevel) string {

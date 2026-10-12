@@ -70,8 +70,8 @@ func checkServiceDependencies(ctx *rule.Context, node *ast.Node) []*ast.Diagnost
 		return nil
 	}
 
-	className := serviceResult.ClassName
-	options := serviceResult.Options
+	className := serviceResult.ClassName()
+	options := serviceResult.Options()
 
 	// Get the class symbol and type
 	classSym := ctx.TypeParser.GetSymbolAtLocation(className)
@@ -110,10 +110,10 @@ func checkServiceDependencies(ctx *rule.Context, node *ast.Node) []*ast.Diagnost
 	}
 
 	// Get all required service indexes from RIn
-	requiredResult := ctx.TypeParser.AppendToUniqueTypesMap(servicesMemory, layer.RIn, excludeNever)
-	requiredIndexes := requiredResult.AllIndexes
+	requiredResult := ctx.TypeParser.AppendToUniqueTypesMap(servicesMemory, layer.RIn(), excludeNever)
+	requiredIndexes := requiredResult.AllIndexes()
 
-	if len(requiredIndexes) == 0 {
+	if requiredIndexes.Len() == 0 {
 		return nil
 	}
 
@@ -136,8 +136,8 @@ func checkServiceDependencies(ctx *rule.Context, node *ast.Node) []*ast.Diagnost
 							depLayer := ctx.TypeParser.LayerType(depType)
 							if depLayer != nil {
 								// Add the ROut of this dependency to provided services
-								providedResult := ctx.TypeParser.AppendToUniqueTypesMap(servicesMemory, depLayer.ROut, excludeNever)
-								for _, idx := range providedResult.AllIndexes {
+								providedResult := ctx.TypeParser.AppendToUniqueTypesMap(servicesMemory, depLayer.ROut(), excludeNever)
+								for _, idx := range providedResult.AllIndexes().All() {
 									providedIndexes[idx] = true
 								}
 							}
@@ -150,7 +150,7 @@ func checkServiceDependencies(ctx *rule.Context, node *ast.Node) []*ast.Diagnost
 
 	// Find missing indexes: required but not provided
 	var missingIndexes []string
-	for _, idx := range requiredIndexes {
+	for _, idx := range requiredIndexes.All() {
 		if !providedIndexes[idx] {
 			missingIndexes = append(missingIndexes, idx)
 		}

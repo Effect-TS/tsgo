@@ -9,6 +9,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/effect-ts/tsgo/internal/typeparser"
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/astnav"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
@@ -53,21 +54,21 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 	if result == nil {
 		return nil
 	}
-	isFuncDecl := result.TargetNode.Kind == ast.KindFunctionDeclaration
+	isFuncDecl := result.TargetNode().Kind == ast.KindFunctionDeclaration
 
 	var actions []ls.CodeAction
 
 	// Fix 1: toEffectFnWithSpan - available when explicit withSpan expression exists
-	if effectConfig.EffectFnIncludes(etscore.EffectFnSpan) && result.ExplicitTraceExpression != nil {
+	if effectConfig.EffectFnIncludes(etscore.EffectFnSpan) && result.ExplicitTraceExpression() != nil {
 		// Remove withSpan from pipe args (it's the last one)
-		pipeArgs := result.PipeArguments
-		if len(pipeArgs) > 0 {
-			pipeArgs = pipeArgs[:len(pipeArgs)-1]
+		pipeArgs := result.PipeArguments()
+		if pipeArgs.Len() > 0 {
+			pipeArgs = pipeArgs.Slice(0, pipeArgs.Len()-1)
 		}
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Convert to Effect.fn (with span from withSpan)",
 			Run: func(tracker *rewriter.Tracker) {
-				trace := scanner.GetTextOfNode(result.ExplicitTraceExpression)
+				trace := scanner.GetTextOfNode(result.ExplicitTraceExpression())
 				effectFnBuildReplacement(ctx, tracker, sf, result, "fn", trace, pipeArgs, isFuncDecl)
 			},
 		}); action != nil {
@@ -76,11 +77,11 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 	}
 
 	// Fix 2: toEffectFnUntraced - available when gen opportunity (generator function exists)
-	if effectConfig.EffectFnIncludes(etscore.EffectFnUntraced) && result.GeneratorFunction != nil {
+	if effectConfig.EffectFnIncludes(etscore.EffectFnUntraced) && result.GeneratorFunction() != nil {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Convert to Effect.fnUntraced",
 			Run: func(tracker *rewriter.Tracker) {
-				effectFnBuildReplacement(ctx, tracker, sf, result, "fnUntraced", "", result.PipeArguments, isFuncDecl)
+				effectFnBuildReplacement(ctx, tracker, sf, result, "fnUntraced", "", result.PipeArguments(), isFuncDecl)
 			},
 		}); action != nil {
 			actions = append(actions, *action)
@@ -92,7 +93,7 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Convert to Effect.fn (no span)",
 			Run: func(tracker *rewriter.Tracker) {
-				effectFnBuildReplacement(ctx, tracker, sf, result, "fn", "", result.PipeArguments, isFuncDecl)
+				effectFnBuildReplacement(ctx, tracker, sf, result, "fn", "", result.PipeArguments(), isFuncDecl)
 			},
 		}); action != nil {
 			actions = append(actions, *action)
@@ -100,12 +101,12 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 	}
 
 	// Fix 4: toEffectFnSpanInferred - available when no explicit withSpan and inferred trace name exists
-	if effectConfig.EffectFnIncludes(etscore.EffectFnInferredSpan) && result.ExplicitTraceExpression == nil && result.InferredTraceName != "" {
+	if effectConfig.EffectFnIncludes(etscore.EffectFnInferredSpan) && result.ExplicitTraceExpression() == nil && result.InferredTraceName() != "" {
 		if action := ctx.NewFixAction(fixable.FixAction{
-			Description: "Convert to Effect.fn(\"" + result.InferredTraceName + "\")",
+			Description: "Convert to Effect.fn(\"" + result.InferredTraceName() + "\")",
 			Run: func(tracker *rewriter.Tracker) {
-				trace := strconv.Quote(result.InferredTraceName)
-				effectFnBuildReplacement(ctx, tracker, sf, result, "fn", trace, result.PipeArguments, isFuncDecl)
+				trace := strconv.Quote(result.InferredTraceName())
+				effectFnBuildReplacement(ctx, tracker, sf, result, "fn", trace, result.PipeArguments(), isFuncDecl)
 			},
 		}); action != nil {
 			actions = append(actions, *action)
@@ -114,13 +115,13 @@ func runEffectFnOpportunityFix(ctx *fixable.Context) []ls.CodeAction {
 
 	// Fix 5: toEffectFnSpanSuggested - available when no explicit withSpan, has suggested trace name,
 	// and (inferred-span is not enabled OR suggested name differs from inferred name)
-	if effectConfig.EffectFnIncludes(etscore.EffectFnSuggestedSpan) && result.ExplicitTraceExpression == nil && result.SuggestedTraceName != "" &&
-		(!effectConfig.EffectFnIncludes(etscore.EffectFnInferredSpan) || result.SuggestedTraceName != result.InferredTraceName) {
+	if effectConfig.EffectFnIncludes(etscore.EffectFnSuggestedSpan) && result.ExplicitTraceExpression() == nil && result.SuggestedTraceName() != "" &&
+		(!effectConfig.EffectFnIncludes(etscore.EffectFnInferredSpan) || result.SuggestedTraceName() != result.InferredTraceName()) {
 		if action := ctx.NewFixAction(fixable.FixAction{
-			Description: "Convert to Effect.fn(\"" + result.SuggestedTraceName + "\")",
+			Description: "Convert to Effect.fn(\"" + result.SuggestedTraceName() + "\")",
 			Run: func(tracker *rewriter.Tracker) {
-				trace := strconv.Quote(result.SuggestedTraceName)
-				effectFnBuildReplacement(ctx, tracker, sf, result, "fn", trace, result.PipeArguments, isFuncDecl)
+				trace := strconv.Quote(result.SuggestedTraceName())
+				effectFnBuildReplacement(ctx, tracker, sf, result, "fn", trace, result.PipeArguments(), isFuncDecl)
 			},
 		}); action != nil {
 			actions = append(actions, *action)
@@ -140,13 +141,13 @@ func effectFnBuildReplacement(
 	result *typeparser.EffectFnOpportunityResult,
 	variant string,
 	trace string,
-	pipeArgs []*ast.Node,
+	pipeArgs readonly.Slice[*ast.Node],
 	isFuncDecl bool,
 ) {
-	target := result.TargetNode
+	target := result.TargetNode()
 	body := typeparser.GetFunctionLikeBody(target)
-	if result.HasGenBody && result.GeneratorFunction != nil {
-		body = result.GeneratorFunction.Body
+	if result.HasGenBody() && result.GeneratorFunction() != nil {
+		body = result.GeneratorFunction().Body
 	}
 	if body == nil {
 		return
@@ -156,8 +157,8 @@ func effectFnBuildReplacement(
 	start := scanner.GetTokenPosOfNode(target, sf, false)
 	bodyStart := scanner.GetTokenPosOfNode(body, sf, false)
 	module := typeparser.FindEffectModuleIdentifier(sf)
-	if result.EffectModule != nil {
-		module = scanner.GetTextOfNode(result.EffectModule)
+	if result.EffectModule() != nil {
+		module = scanner.GetTextOfNode(result.EffectModule())
 	}
 	prefix := module + "." + variant
 	if trace != "" {
@@ -166,12 +167,12 @@ func effectFnBuildReplacement(
 	prefix += "("
 	var suffix strings.Builder
 
-	if !result.HasGenBody && target.Kind == ast.KindFunctionExpression {
+	if !result.HasGenBody() && target.Kind == ast.KindFunctionExpression {
 		// Keep the original function expression's signature verbatim.
 		prefix += text[start:bodyStart]
 	} else {
 		prefix += "function"
-		if result.HasGenBody {
+		if result.HasGenBody() {
 			prefix += "*"
 		}
 		signature := effectFnSignatureRange(sf, target)
@@ -205,7 +206,7 @@ func effectFnBuildReplacement(
 	}
 
 	cursor := body.End()
-	for _, arg := range pipeArgs {
+	for _, arg := range pipeArgs.All() {
 		// Include both leading and trailing trivia, including line comments before
 		// the next comma/closing parenthesis. Never reprint the argument itself.
 		end := scanner.SkipTrivia(text, arg.End())
@@ -219,7 +220,7 @@ func effectFnBuildReplacement(
 	}
 	var movedTrace *ast.Node
 	if trace != "" {
-		movedTrace = result.ExplicitTraceExpression
+		movedTrace = result.ExplicitTraceExpression()
 	}
 	suffix.WriteString(effectFnComments(sf, cursor, target.End(), movedTrace))
 	suffix.WriteString(")")

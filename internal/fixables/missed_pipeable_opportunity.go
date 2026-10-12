@@ -2,12 +2,13 @@ package fixables
 
 import (
 	"github.com/effect-ts/tsgo/internal/fixable"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/effect-ts/tsgo/internal/typeparser"
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var MissedPipeableOpportunityFix = fixable.Fixable{
@@ -61,7 +62,7 @@ func buildMissedPipeableReplacement(tracker *rewriter.Tracker, sf *ast.SourceFil
 	// Build the subject node for the pipe call
 	var subjectNode *ast.Node
 	if match.PipeableStartIndex == 0 {
-		subjectNode = tracker.DeepCloneNode(flow.Subject.Node)
+		subjectNode = tracker.DeepCloneNode(flow.Subject().Node())
 	} else {
 		// Need to find the original subject node at the right depth in the AST
 		subjectNode = findSubjectNodeAtDepth(tracker, flow, match.PipeableStartIndex)
@@ -74,17 +75,17 @@ func buildMissedPipeableReplacement(tracker *rewriter.Tracker, sf *ast.SourceFil
 	pipeArgs := make([]*ast.Node, 0, len(match.PipeableTransformations))
 	for _, t := range match.PipeableTransformations {
 		var arg *ast.Node
-		if len(t.Args) > 0 {
+		if t.Args().Len() > 0 {
 			// It's a function call like Effect.map((x) => x + 1) -> create callee(args...)
-			clonedCallee := tracker.DeepCloneNode(t.Callee)
-			clonedArgs := make([]*ast.Node, len(t.Args))
-			for j, a := range t.Args {
+			clonedCallee := tracker.DeepCloneNode(t.Callee())
+			clonedArgs := make([]*ast.Node, t.Args().Len())
+			for j, a := range t.Args().All() {
 				clonedArgs[j] = tracker.DeepCloneNode(a)
 			}
 			arg = tracker.NewCallExpression(clonedCallee, nil, nil, tracker.NewNodeList(clonedArgs), ast.NodeFlagsNone)
 		} else {
 			// It's a constant like Effect.asVoid
-			arg = tracker.DeepCloneNode(t.Callee)
+			arg = tracker.DeepCloneNode(t.Callee())
 		}
 		pipeArgs = append(pipeArgs, arg)
 	}
@@ -95,23 +96,23 @@ func buildMissedPipeableReplacement(tracker *rewriter.Tracker, sf *ast.SourceFil
 
 	// Wrap with "after" transformations if any
 	var replacementNode *ast.Node
-	if len(match.AfterTransformations) > 0 {
+	if match.AfterTransformations.Len() > 0 {
 		replacementNode = wrapWithAfterTransformations(tracker, pipeCall, match.AfterTransformations)
 	} else {
 		replacementNode = pipeCall
 	}
 
 	ast.SetParentInChildren(replacementNode)
-	tracker.ReplaceNode(sf, flow.Node, replacementNode, nil)
+	tracker.ReplaceNode(sf, flow.Node(), replacementNode, nil)
 }
 
 // findSubjectNodeAtDepth traverses the flow node into arguments to find the subject at the right depth,
 // then deep-clones it.
 func findSubjectNodeAtDepth(tracker *rewriter.Tracker, flow *typeparser.PipingFlow, firstPipeableIndex int) *ast.Node {
-	current := flow.Node
-	for i := len(flow.Transformations); i > firstPipeableIndex; i-- {
-		t := flow.Transformations[i-1]
-		if t.Kind == typeparser.TransformationKindCall && ast.IsCallExpression(current) {
+	current := flow.Node()
+	for i := flow.Transformations().Len(); i > firstPipeableIndex; i-- {
+		t := flow.Transformations().At(i - 1)
+		if t.Kind() == typeparser.TransformationKindCall && ast.IsCallExpression(current) {
 			call := current.AsCallExpression()
 			if call.Arguments != nil && len(call.Arguments.Nodes) > 0 {
 				current = call.Arguments.Nodes[0]
@@ -129,24 +130,24 @@ func findSubjectNodeAtDepth(tracker *rewriter.Tracker, flow *typeparser.PipingFl
 // For "call" kind: callee(innerNode)
 // For "pipe"/"pipeable" kind with args: callee(args...)(innerNode) (curried)
 // For "pipe"/"pipeable" kind without args: callee(innerNode)
-func wrapWithAfterTransformations(tracker *rewriter.Tracker, inner *ast.Node, transformations []typeparser.PipingFlowTransformation) *ast.Node {
+func wrapWithAfterTransformations(tracker *rewriter.Tracker, inner *ast.Node, transformations readonly.Slice[typeparser.PipingFlowTransformation]) *ast.Node {
 	result := inner
-	for _, t := range transformations {
-		if t.Kind == typeparser.TransformationKindEffectFn || t.Kind == typeparser.TransformationKindEffectFnUntraced {
+	for _, t := range transformations.All() {
+		if t.Kind() == typeparser.TransformationKindEffectFn || t.Kind() == typeparser.TransformationKindEffectFnUntraced {
 			continue
 		}
 
-		clonedCallee := tracker.DeepCloneNode(t.Callee)
+		clonedCallee := tracker.DeepCloneNode(t.Callee())
 
-		if t.Kind == typeparser.TransformationKindCall {
+		if t.Kind() == typeparser.TransformationKindCall {
 			// Single-arg call: callee(result)
 			result = tracker.NewCallExpression(clonedCallee, nil, nil, tracker.NewNodeList([]*ast.Node{result}), ast.NodeFlagsNone)
 		} else {
 			// Pipe or pipeable transformation
-			if len(t.Args) > 0 {
+			if t.Args().Len() > 0 {
 				// Curried form: callee(args...)(result)
-				clonedArgs := make([]*ast.Node, len(t.Args))
-				for j, a := range t.Args {
+				clonedArgs := make([]*ast.Node, t.Args().Len())
+				for j, a := range t.Args().All() {
 					clonedArgs[j] = tracker.DeepCloneNode(a)
 				}
 				curriedCall := tracker.NewCallExpression(clonedCallee, nil, nil, tracker.NewNodeList(clonedArgs), ast.NodeFlagsNone)

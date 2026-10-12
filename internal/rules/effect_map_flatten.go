@@ -49,26 +49,26 @@ func AnalyzeEffectMapFlatten(tp *typeparser.TypeParser, _ *checker.Checker, sf *
 	var matches []EffectMapFlattenMatch
 
 	flows := tp.PipingFlows(sf, false)
-	for _, flow := range flows {
+	for _, flow := range flows.All() {
 		sequences := flow.FindTransformationSequences(
-			func(transformation *typeparser.PipingFlowTransformation) bool {
-				return len(transformation.Args) > 0 && tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "map")
+			func(transformation typeparser.PipingFlowTransformation) bool {
+				return transformation.Args().Len() > 0 && tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "map")
 			},
-			func(transformation *typeparser.PipingFlowTransformation) bool {
-				return len(transformation.Args) == 0 && tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "flatten")
+			func(transformation typeparser.PipingFlowTransformation) bool {
+				return transformation.Args().Len() == 0 && tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "flatten")
 			},
 		)
-		for _, sequence := range sequences {
-			mapTransformation := &flow.Transformations[sequence.Start]
-			flattenTransformation := &flow.Transformations[sequence.Start+1]
-			if (mapTransformation.Kind != typeparser.TransformationKindPipe && mapTransformation.Kind != typeparser.TransformationKindPipeable) || flattenTransformation.Kind != mapTransformation.Kind {
+		for _, sequence := range sequences.All() {
+			mapTransformation := flow.Transformations().At(sequence.Start())
+			flattenTransformation := flow.Transformations().At(sequence.Start() + 1)
+			if (mapTransformation.Kind() != typeparser.TransformationKindPipe && mapTransformation.Kind() != typeparser.TransformationKindPipeable) || flattenTransformation.Kind() != mapTransformation.Kind() {
 				continue
 			}
 
 			matches = append(matches, EffectMapFlattenMatch{
 				SourceFile: sf,
-				Location:   scanner.GetErrorRangeForNode(sf, flattenTransformation.Callee),
-				Node:       flattenTransformation.Callee,
+				Location:   scanner.GetErrorRangeForNode(sf, flattenTransformation.Callee()),
+				Node:       flattenTransformation.Callee(),
 			})
 		}
 	}

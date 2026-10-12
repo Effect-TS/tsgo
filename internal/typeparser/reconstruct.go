@@ -38,35 +38,35 @@ func ReconstructPipingFlow(sf *ast.SourceFile, subject *PipingFlowSubject, trans
 	if len(transformations) > 0 {
 		allEffectFn := true
 		for _, t := range transformations {
-			if t.Kind != TransformationKindEffectFn && t.Kind != TransformationKindEffectFnUntraced {
+			if t.kind != TransformationKindEffectFn && t.kind != TransformationKindEffectFnUntraced {
 				allEffectFn = false
 				break
 			}
 		}
 		if allEffectFn {
-			return nodeText(sf, subject.Node)
+			return nodeText(sf, subject.node)
 		}
 	}
 
-	result := nodeText(sf, subject.Node)
+	result := nodeText(sf, subject.node)
 
 	for _, t := range transformations {
-		if t.Kind == TransformationKindEffectFn || t.Kind == TransformationKindEffectFnUntraced {
+		if t.kind == TransformationKindEffectFn || t.kind == TransformationKindEffectFnUntraced {
 			// Effect.fn transformations cannot be reconstructed as part of a chain
 			continue
 		}
 
-		calleeText := nodeText(sf, t.Callee)
+		calleeText := nodeText(sf, t.callee)
 
-		if t.Kind == TransformationKindCall {
+		if t.kind == TransformationKindCall {
 			// Single-arg call: callee(result)
 			result = calleeText + "(" + result + ")"
 		} else {
 			// Pipe or pipeable: apply the transformation
-			if len(t.Args) > 0 {
+			if len(t.args) > 0 {
 				// Curried form: callee(args...)(result)
 				var argsText strings.Builder
-				for i, arg := range t.Args {
+				for i, arg := range t.args {
 					if i > 0 {
 						argsText.WriteString(", ")
 					}

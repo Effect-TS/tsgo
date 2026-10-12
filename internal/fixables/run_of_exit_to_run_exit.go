@@ -50,13 +50,13 @@ func runRunOfExitToRunExitFix(ctx *fixable.Context) []ls.CodeAction {
 }
 
 func removeExitTransformation(tracker *rewriter.Tracker, sf *ast.SourceFile, transformation *typeparser.PipingFlowTransformation) bool {
-	if tracker == nil || sf == nil || transformation == nil || transformation.Callee == nil {
+	if tracker == nil || sf == nil || transformation == nil || transformation.Callee() == nil {
 		return false
 	}
 
-	switch transformation.Kind {
+	switch transformation.Kind() {
 	case typeparser.TransformationKindDataFirst, typeparser.TransformationKindDataLast, typeparser.TransformationKindCall:
-		callNode, call := directCallForCallee(transformation.Callee)
+		callNode, call := directCallForCallee(transformation.Callee())
 		if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) != 1 {
 			return false
 		}
@@ -64,18 +64,18 @@ func removeExitTransformation(tracker *rewriter.Tracker, sf *ast.SourceFile, tra
 		return true
 
 	case typeparser.TransformationKindPipe, typeparser.TransformationKindPipeable:
-		callNode, call, argumentIndex := containingCallArgumentForExit(transformation.Callee)
+		callNode, call, argumentIndex := containingCallArgumentForExit(transformation.Callee())
 		if call == nil || call.Arguments == nil || argumentIndex < 0 {
 			return false
 		}
 		arguments := call.Arguments.Nodes
 		minimumArguments := 1
-		if transformation.Kind == typeparser.TransformationKindPipe {
+		if transformation.Kind() == typeparser.TransformationKindPipe {
 			minimumArguments = 2 // Function.pipe also contains its subject.
 		}
 		if len(arguments) == minimumArguments {
 			var subject *ast.Node
-			if transformation.Kind == typeparser.TransformationKindPipe {
+			if transformation.Kind() == typeparser.TransformationKindPipe {
 				subject = arguments[0]
 			} else if call.Expression != nil && call.Expression.Kind == ast.KindPropertyAccessExpression {
 				subject = call.Expression.AsPropertyAccessExpression().Expression

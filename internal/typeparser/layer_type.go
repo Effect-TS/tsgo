@@ -15,10 +15,16 @@ const LayerTypeId = "~effect/Layer"
 
 // Layer represents parsed Layer<ROut, E, RIn> type parameters.
 type Layer struct {
-	ROut *checker.Type // Provided services (contravariant)
-	E    *checker.Type // Error type (covariant)
-	RIn  *checker.Type // Required services (covariant)
+	rOut *checker.Type // Provided services (contravariant)
+	e    *checker.Type // Error type (covariant)
+	rIn  *checker.Type // Required services (covariant)
 }
+
+func (r Layer) ROut() *checker.Type { return r.rOut }
+
+func (r Layer) E() *checker.Type { return r.e }
+
+func (r Layer) RIn() *checker.Type { return r.rIn }
 
 // parseLayerVarianceStruct extracts ROut, E, RIn from a Layer variance struct type.
 func (tp *TypeParser) parseLayerVarianceStruct(t *checker.Type) *Layer {
@@ -37,7 +43,7 @@ func (tp *TypeParser) parseLayerVarianceStruct(t *checker.Type) *Layer {
 		return nil
 	}
 
-	return &Layer{ROut: rOut, E: e, RIn: rIn}
+	return &Layer{rOut: rOut, e: e, rIn: rIn}
 }
 
 // LayerType parses a Layer type and extracts ROut, E, RIn parameters.

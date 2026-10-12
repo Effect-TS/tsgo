@@ -141,7 +141,7 @@ func checkEffectTrySimple(tp *typeparser.TypeParser, _ *checker.Checker, node *a
 		return nil
 	}
 
-	return parseJsonMethod(lazyExpr.Expression)
+	return parseJsonMethod(lazyExpr.Expression())
 }
 
 // checkEffectTryObject matches Effect.try({ try: () => JSON.parse/stringify(...), ... }) - object form.
@@ -198,7 +198,7 @@ func checkEffectTryObject(tp *typeparser.TypeParser, _ *checker.Checker, node *a
 		return nil
 	}
 
-	return parseJsonMethod(lazyExpr.Expression)
+	return parseJsonMethod(lazyExpr.Expression())
 }
 
 // checkJsonMethodInEffectGen matches direct JSON.parse/stringify inside an Effect generator (Effect.gen or Effect.fn).

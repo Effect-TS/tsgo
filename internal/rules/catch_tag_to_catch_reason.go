@@ -65,20 +65,20 @@ func AnalyzeCatchTagToCatchReason(tp *typeparser.TypeParser, c *checker.Checker,
 	}
 
 	var matches []CatchTagToCatchReasonMatch
-	for _, flow := range tp.PipingFlows(sf, true) {
-		for i := range flow.Transformations {
-			transformation := &flow.Transformations[i]
-			if transformation.Callee == nil {
+	for _, flow := range tp.PipingFlows(sf, true).All() {
+		for i := range flow.Transformations().All() {
+			transformation := flow.Transformations().At(i)
+			if transformation.Callee() == nil {
 				continue
 			}
 			switch {
-			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "catchTag"):
-				match, ok := analyzeCatchTagTransformation(tp, c, sf, transformation)
+			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchTag"):
+				match, ok := analyzeCatchTagTransformation(tp, c, sf, &transformation)
 				if ok {
 					matches = append(matches, match)
 				}
-			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "catchTags"):
-				match, ok := analyzeCatchTagsTransformation(tp, c, sf, transformation)
+			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchTags"):
+				match, ok := analyzeCatchTagsTransformation(tp, c, sf, &transformation)
 				if ok {
 					matches = append(matches, match)
 				}
@@ -95,25 +95,25 @@ func analyzeCatchTagTransformation(
 	sf *ast.SourceFile,
 	transformation *typeparser.PipingFlowTransformation,
 ) (CatchTagToCatchReasonMatch, bool) {
-	if transformation == nil || len(transformation.Args) != 2 {
+	if transformation == nil || transformation.Args().Len() != 2 {
 		return CatchTagToCatchReasonMatch{}, false
 	}
 
-	outerTag := unwrapTransparentExpression(transformation.Args[0])
+	outerTag := unwrapTransparentExpression(transformation.Args().At(0))
 	if outerTag == nil || !ast.IsStringLiteral(outerTag) {
 		return CatchTagToCatchReasonMatch{}, false
 	}
 
-	handler, ok := analyzeCatchTagToCatchReasonHandler(tp, c, transformation.Args[1])
+	handler, ok := analyzeCatchTagToCatchReasonHandler(tp, c, transformation.Args().At(1))
 	if !ok {
 		return CatchTagToCatchReasonMatch{}, false
 	}
 
 	return CatchTagToCatchReasonMatch{
 		SourceFile:      sf,
-		Location:        scanner.GetErrorRangeForNode(sf, transformation.Callee),
+		Location:        scanner.GetErrorRangeForNode(sf, transformation.Callee()),
 		Transformation:  transformation,
-		Callee:          transformation.Callee,
+		Callee:          transformation.Callee(),
 		OuterTag:        outerTag,
 		ParameterName:   handler.parameterName,
 		CatchMethodName: "catchTag",
@@ -128,11 +128,11 @@ func analyzeCatchTagsTransformation(
 	sf *ast.SourceFile,
 	transformation *typeparser.PipingFlowTransformation,
 ) (CatchTagToCatchReasonMatch, bool) {
-	if transformation == nil || len(transformation.Args) != 1 {
+	if transformation == nil || transformation.Args().Len() != 1 {
 		return CatchTagToCatchReasonMatch{}, false
 	}
 
-	casesNode := unwrapTransparentExpression(transformation.Args[0])
+	casesNode := unwrapTransparentExpression(transformation.Args().At(0))
 	if casesNode == nil || casesNode.Kind != ast.KindObjectLiteralExpression {
 		return CatchTagToCatchReasonMatch{}, false
 	}
@@ -167,9 +167,9 @@ func analyzeCatchTagsTransformation(
 
 	return CatchTagToCatchReasonMatch{
 		SourceFile:      sf,
-		Location:        scanner.GetErrorRangeForNode(sf, transformation.Callee),
+		Location:        scanner.GetErrorRangeForNode(sf, transformation.Callee()),
 		Transformation:  transformation,
-		Callee:          transformation.Callee,
+		Callee:          transformation.Callee(),
 		ParameterName:   candidate.parameterName,
 		CatchMethodName: "catchTags",
 		Branches:        candidate.branches,
@@ -179,12 +179,12 @@ func analyzeCatchTagsTransformation(
 
 func analyzeCatchTagToCatchReasonHandler(tp *typeparser.TypeParser, c *checker.Checker, handlerNode *ast.Node) (catchTagToCatchReasonHandler, bool) {
 	returning := tp.ParseReturningDispatch(handlerNode)
-	if returning == nil || len(returning.Params) != 1 {
+	if returning == nil || returning.Params().Len() != 1 {
 		return catchTagToCatchReasonHandler{}, false
 	}
-	handlerNode = returning.Node
-	body := returning.Body
-	parameter := returning.Params[0]
+	handlerNode = returning.Node()
+	body := returning.Body()
+	parameter := returning.Params().At(0)
 	if parameter == nil || parameter.Name() == nil || parameter.Name().Kind != ast.KindIdentifier {
 		return catchTagToCatchReasonHandler{}, false
 	}
@@ -198,8 +198,8 @@ func analyzeCatchTagToCatchReasonHandler(tp *typeparser.TypeParser, c *checker.C
 	}
 
 	dispatchRefs := make(map[*ast.Node]struct{})
-	dispatch := returning.Dispatch
-	if dispatch == nil || len(dispatch.Branches) == 0 || dispatch.Fallback == nil {
+	dispatch := returning.Dispatch()
+	if dispatch == nil || dispatch.Branches().Len() == 0 || dispatch.Fallback() == nil {
 		return catchTagToCatchReasonHandler{}, false
 	}
 	tagSubject := dispatch.CommonTagSubject(tp)
@@ -207,22 +207,22 @@ func analyzeCatchTagToCatchReasonHandler(tp *typeparser.TypeParser, c *checker.C
 		return catchTagToCatchReasonHandler{}, false
 	}
 
-	branches := make([]CatchTagToCatchReasonBranch, len(dispatch.Branches))
-	seenTags := make(map[string]struct{}, len(dispatch.Branches))
-	for index, branch := range dispatch.Branches {
-		tag, tagged := resultDispatchTagValue(branch.Condition)
-		root, exactReasonChain := catchReasonTagReference(tp, c, branch.Condition.TagSubject, parameterSymbol)
+	branches := make([]CatchTagToCatchReasonBranch, dispatch.Branches().Len())
+	seenTags := make(map[string]struct{}, dispatch.Branches().Len())
+	for index, branch := range dispatch.Branches().All() {
+		tag, tagged := resultDispatchTagValue(branch.Condition())
+		root, exactReasonChain := catchReasonTagReference(tp, c, branch.Condition().TagSubject(), parameterSymbol)
 		_, validReasonTag := reasonTags[tag]
 		_, duplicateTag := seenTags[tag]
-		if !tagged || !exactReasonChain || !validReasonTag || duplicateTag || !isEffectExpression(tp, branch.Result) {
+		if !tagged || !exactReasonChain || !validReasonTag || duplicateTag || !isEffectExpression(tp, branch.Result()) {
 			return catchTagToCatchReasonHandler{}, false
 		}
 		seenTags[tag] = struct{}{}
 		dispatchRefs[root] = struct{}{}
-		branches[index] = CatchTagToCatchReasonBranch{ReasonTag: tag, Result: branch.Result}
+		branches[index] = CatchTagToCatchReasonBranch{ReasonTag: tag, Result: branch.Result()}
 	}
 
-	fallbackParam, ok := catchTagReFailParameter(tp, c, dispatch.Fallback, parameterSymbol)
+	fallbackParam, ok := catchTagReFailParameter(tp, c, dispatch.Fallback(), parameterSymbol)
 	if !ok {
 		return catchTagToCatchReasonHandler{}, false
 	}

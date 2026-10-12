@@ -49,27 +49,27 @@ type MapSomeToAsSomeMatch struct {
 // mapper is Option.some or an identity forwarder such as value => Option.some(value).
 func AnalyzeMapSomeToAsSome(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []MapSomeToAsSomeMatch {
 	var matches []MapSomeToAsSomeMatch
-	for _, flow := range tp.PipingFlows(sf, true) {
-		for index := range flow.Transformations {
-			transformation := &flow.Transformations[index]
-			if len(transformation.Args) != 1 ||
-				transformation.Callee == nil ||
-				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "map") {
+	for _, flow := range tp.PipingFlows(sf, true).All() {
+		for index := range flow.Transformations().All() {
+			transformation := flow.Transformations().At(index)
+			if transformation.Args().Len() != 1 ||
+				transformation.Callee() == nil ||
+				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "map") {
 				continue
 			}
 
-			if transformation.TypeArguments != nil && len(transformation.TypeArguments.Nodes) > 0 ||
-				!isOptionSomeMapper(tp, transformation.Args[0]) {
+			if transformation.TypeArguments() != nil && len(transformation.TypeArguments().Nodes) > 0 ||
+				!isOptionSomeMapper(tp, transformation.Args().At(0)) {
 				continue
 			}
 			var effectModuleNode *ast.Node
-			if transformation.Callee.Kind == ast.KindPropertyAccessExpression {
-				effectModuleNode = transformation.Callee.AsPropertyAccessExpression().Expression
+			if transformation.Callee().Kind == ast.KindPropertyAccessExpression {
+				effectModuleNode = transformation.Callee().AsPropertyAccessExpression().Expression
 			}
 			matches = append(matches, MapSomeToAsSomeMatch{
 				SourceFile:       sf,
-				Location:         scanner.GetErrorRangeForNode(sf, transformation.Callee),
-				Transformation:   transformation,
+				Location:         scanner.GetErrorRangeForNode(sf, transformation.Callee()),
+				Transformation:   &transformation,
 				EffectModuleNode: effectModuleNode,
 			})
 		}

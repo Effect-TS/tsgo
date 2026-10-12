@@ -1,0 +1,1819 @@
+==== /.src/flatMapToTap.ts (113 flows) ====
+
+=== Piping Flow ===
+Location: 15:26 - 15:99
+Node: source.pipe(Effect.flatMap((user) => audit(user).pipe(Effect.as(user))))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => audit(user).pipe(Effect.as(user))]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 15:63 - 15:97
+Node: audit(user).pipe(Effect.as(user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: pipeable
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 16:23 - 16:105
+Node: pipe(source, Effect.flatMap((user) => pipe(audit(user), Effect.map(() => user))))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.flatMap
+      args: [(user) => pipe(audit(user), Effect.map(() => user))]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 16:61 - 16:103
+Node: pipe(audit(user), Effect.map(() => user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: pipe
+      callee: Effect.map
+      args: [() => user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 17:28 - 17:98
+Node: Effect.flatMap(source, (user) => Effect.map(audit(user), () => user))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(audit(user), () => user)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 17:61 - 17:97
+Node: Effect.map(audit(user), () => user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [() => user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 18:27 - 18:90
+Node: Effect.andThen(source, (user) => Effect.as(audit(user), user))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.andThen
+      args: [(user) => Effect.as(audit(user), user)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 18:60 - 18:89
+Node: Effect.as(audit(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 19:27 - 19:113
+Node: source.pipe(Effect.andThen((user) => audit(user).pipe(Effect.map((unused) => user))))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.andThen
+      args: [(user) => audit(user).pipe(Effect.map((unused) => user))]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 19:64 - 19:111
+Node: audit(user).pipe(Effect.map((unused) => user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(unused) => user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 20:30 - 20:122
+Node: Effect.flatMap((user) => Effect.as(Effect.log(user), user))(Effect.succeed<unknown>(other))
+Node Kind: KindCallExpression
+
+Subject: other
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<unknown, never, never>
+  [1] kind: call
+      callee: Effect.flatMap
+      args: [(user) => Effect.as(Effect.log(user), user)]
+      outType: Effect<unknown, never, never>
+
+=== Piping Flow ===
+Location: 20:55 - 20:89
+Node: Effect.as(Effect.log(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: unknown
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<unknown, never, never>
+
+=== Piping Flow ===
+Location: 21:37 - 21:129
+Node: Effect.andThen((user) => Effect.as(Effect.log(user), user))(Effect.succeed<unknown>(other))
+Node Kind: KindCallExpression
+
+Subject: other
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<unknown, never, never>
+  [1] kind: call
+      callee: Effect.andThen
+      args: [(user) => Effect.as(Effect.log(user), user)]
+      outType: Effect<unknown, never, never>
+
+=== Piping Flow ===
+Location: 21:62 - 21:96
+Node: Effect.as(Effect.log(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: unknown
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<unknown, never, never>
+
+=== Piping Flow ===
+Location: 22:35 - 22:110
+Node: pipe(source, Effect.andThen((user) => pipe(audit(user), Effect.as(user))))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.andThen
+      args: [(user) => pipe(audit(user), Effect.as(user))]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 22:73 - 22:108
+Node: pipe(audit(user), Effect.as(user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: pipe
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 23:31 - 23:99
+Node: source.pipe(Effect.flatMap((user) => Effect.as(user)(audit(user))))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => Effect.as(user)(audit(user))]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 23:68 - 23:97
+Node: Effect.as(user)(audit(user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: call
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 24:32 - 24:107
+Node: source.pipe(Effect.flatMap((user) => Effect.map(() => user)(audit(user))))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(() => user)(audit(user))]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 24:69 - 24:105
+Node: Effect.map(() => user)(audit(user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: call
+      callee: Effect.map
+      args: [() => user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 25:28 - 27:4
+Node: source.pipe(Effect.flatMap(function(user) {\n  return Effect.map(audit(user), (unused) => { return (user) })\n}))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [function(user) {\n  return Effect.map(audit(user), (unused) => { return (user) })\n}]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 26:9 - 26:64
+Node: Effect.map(audit(user), (unused) => { return (user) })
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(unused) => { return (user) }]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 28:26 - 34:4
+Node: source.pipe(Effect.andThen((user) => {\n  const id = user.id\n  record(id)\n  const nested = () => { return id }\n  record(nested())\n  return audit(user).pipe(Effect.as(user))\n}))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.andThen
+      args: [(user) => {\n  const id = user.id\n  record(id)\n  const nested = () => { return id }\n  record(nested())\n  return audit(user).pipe(Effect.as(user))\n}]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 29:21 - 30:13
+Node: record(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: record
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 31:37 - 32:19
+Node: record(nested())
+Node Kind: KindCallExpression
+
+Subject: nested()
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: record
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 33:9 - 33:43
+Node: audit(user).pipe(Effect.as(user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: pipeable
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 35:30 - 38:4
+Node: source.pipe(Effect.flatMap((user) => audit(user).pipe(\n  Effect.map((n) => n + 1),\n  Effect.as(user)\n)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => audit(user).pipe(\n  Effect.map((n) => n + 1),\n  Effect.as(user)\n)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 35:67 - 38:2
+Node: audit(user).pipe(\n  Effect.map((n) => n + 1),\n  Effect.as(user)\n)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (3):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, "audit", "service">
+  [2] kind: pipeable
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 39:31 - 43:4
+Node: source.pipe(Effect.flatMap((user) => pipe(\n  audit(user).pipe(Effect.map((n) => n + 1)),\n  Effect.map((n) => n * 2),\n  Effect.map(() => user)\n)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => pipe(\n  audit(user).pipe(Effect.map((n) => n + 1)),\n  Effect.map((n) => n * 2),\n  Effect.map(() => user)\n)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 39:68 - 43:2
+Node: pipe(\n  audit(user).pipe(Effect.map((n) => n + 1)),\n  Effect.map((n) => n * 2),\n  Effect.map(() => user)\n)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (4):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, "audit", "service">
+  [2] kind: pipe
+      callee: Effect.map
+      args: [(n) => n * 2]
+      outType: Effect<number, "audit", "service">
+  [3] kind: pipe
+      callee: Effect.map
+      args: [() => user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 44:33 - 47:4
+Node: source.pipe(Effect.flatMap((user) => Effect.as(\n  Effect.map(audit(user), (n) => n + 1),\n  user\n)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => Effect.as(\n  Effect.map(audit(user), (n) => n + 1),\n  user\n)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 44:70 - 47:2
+Node: Effect.as(\n  Effect.map(audit(user), (n) => n + 1),\n  user\n)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (3):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, "audit", "service">
+  [2] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 48:24 - 52:4
+Node: source.pipe(Effect.flatMap((user) => {\n  // This audit records the identifier before publishing.\n  record(user.id)\n  return Effect.as(audit(/* original user */ user).pipe(Effect.map((n) => n + 1)), user)\n}))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => {\n  // This audit records the identifier before publishing.\n  record(user.id)\n  return Effect.as(audit(/* original user */ user).pipe(Effect.map((n) => n + 1)), user)\n}]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 48:63 - 50:18
+Node: record(user.id)
+Node Kind: KindCallExpression
+
+Subject: user.id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: record
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 51:9 - 51:89
+Node: Effect.as(audit(/* original user */ user).pipe(Effect.map((n) => n + 1)), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (3):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, "audit", "service">
+  [2] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 53:28 - 56:4
+Node: source.pipe(Effect.flatMap((user) => {\n  user.id = "updated"\n  return audit(user).pipe(Effect.as(user))\n}))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => {\n  user.id = "updated"\n  return audit(user).pipe(Effect.as(user))\n}]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 55:9 - 55:43
+Node: audit(user).pipe(Effect.as(user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: pipeable
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 57:30 - 57:88
+Node: source.pipe(E.flatMap((user) => E.as(audit(user), user)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: E.flatMap
+      args: [(user) => E.as(audit(user), user)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 57:62 - 57:86
+Node: E.as(audit(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: E.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 59:27 - 59:95
+Node: source.pipe(Module.andThen((user) => Effect.as(audit(user), user)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Module.andThen
+      args: [(user) => Effect.as(audit(user), user)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 59:64 - 59:93
+Node: Effect.as(audit(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 61:25 - 61:94
+Node: source.pipe(flatMapAlias((user) => audit(user).pipe(reYield(user))))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: flatMapAlias
+      args: [(user) => audit(user).pipe(reYield(user))]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 61:60 - 61:92
+Node: audit(user).pipe(reYield(user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: pipeable
+      callee: reYield
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 62:29 - 62:87
+Node: source.pipe(bind((user) => Effect.as(audit(user), user)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: bind
+      args: [(user) => Effect.as(audit(user), user)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 62:56 - 62:85
+Node: Effect.as(audit(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 63:34 - 63:103
+Node: Effect.flatMap(source, (user: User) => Effect.as(audit(user), user))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user: User) => Effect.as(audit(user), user)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 63:73 - 63:102
+Node: Effect.as(audit(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 64:29 - 64:103
+Node: source.pipe(Effect.flatMap((user: User) => Effect.as(audit(user), user)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user: User) => Effect.as(audit(user), user)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 64:72 - 64:101
+Node: Effect.as(audit(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 66:26 - 69:4
+Node: source.pipe(Effect.flatMap((user) => {\n  user = other\n  return audit(user).pipe(Effect.as(user))\n}))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => {\n  user = other\n  return audit(user).pipe(Effect.as(user))\n}]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 68:9 - 68:43
+Node: audit(user).pipe(Effect.as(user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: pipeable
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 70:33 - 74:4
+Node: source.pipe(Effect.flatMap((user) => {\n  const update = () => { user = other }\n  update()\n  return audit(user).pipe(Effect.as(user))\n}))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => {\n  const update = () => { user = other }\n  update()\n  return audit(user).pipe(Effect.as(user))\n}]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 73:9 - 73:43
+Node: audit(user).pipe(Effect.as(user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: pipeable
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 75:26 - 78:4
+Node: source.pipe(Effect.flatMap(function(user) {\n  var user: User\n  return Effect.as(audit(user), user)\n}))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [function(user) {\n  var user: User\n  return Effect.as(audit(user), user)\n}]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 77:9 - 77:38
+Node: Effect.as(audit(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 79:24 - 79:103
+Node: source.pipe(Effect.flatMap((user) => Effect.map(audit(user), (user) => user)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(audit(user), (user) => user)]
+      outType: Effect<number, "audit", "service">
+
+=== Piping Flow ===
+Location: 79:61 - 79:101
+Node: Effect.map(audit(user), (user) => user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(user) => user]
+      outType: Effect<number, "audit", "service">
+
+=== Piping Flow ===
+Location: 80:27 - 80:96
+Node: source.pipe(Effect.flatMap((user) => Effect.as(audit(user), other)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => Effect.as(audit(user), other)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 80:64 - 80:94
+Node: Effect.as(audit(user), other)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [other]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 81:29 - 81:100
+Node: source.pipe(Effect.flatMap((user) => Effect.as(audit(user), user.id)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => Effect.as(audit(user), user.id)]
+      outType: Effect<string, "audit", "service">
+
+=== Piping Flow ===
+Location: 81:66 - 81:98
+Node: Effect.as(audit(user), user.id)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [user.id]
+      outType: Effect<string, "audit", "service">
+
+=== Piping Flow ===
+Location: 82:27 - 82:111
+Node: source.pipe(Effect.flatMap((user) => Effect.map(audit(user), () => ({ ...user }))))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(audit(user), () => ({ ...user }))]
+      outType: Effect<{ id: string; name: string; }, "audit", "service">
+
+=== Piping Flow ===
+Location: 82:64 - 82:109
+Node: Effect.map(audit(user), () => ({ ...user }))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [() => ({ ...user })]
+      outType: Effect<{ id: string; name: string; }, "audit", "service">
+
+=== Piping Flow ===
+Location: 83:25 - 83:116
+Node: source.pipe(Effect.flatMap((user) => Effect.map(audit(user), () => (record(user), user))))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(audit(user), () => (record(user), user))]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 83:62 - 83:114
+Node: Effect.map(audit(user), () => (record(user), user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [() => (record(user), user)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 83:94 - 83:106
+Node: record(user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (1):
+  [0] kind: call
+      callee: record
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 84:36 - 87:5
+Node: source.pipe(Effect.flatMap((user) => Effect.map(audit(user), () => {\n  record(user)\n  return user\n})))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(audit(user), () => {\n  record(user)\n  return user\n})]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 84:73 - 87:3
+Node: Effect.map(audit(user), () => {\n  record(user)\n  return user\n})
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [() => {\n  record(user)\n  return user\n}]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 84:105 - 85:15
+Node: record(user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (1):
+  [0] kind: call
+      callee: record
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 88:31 - 88:127
+Node: source.pipe(Effect.flatMap((user) => Effect.map(audit(user), (n = (record(user), 0)) => user)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(audit(user), (n = (record(user), 0)) => user)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 88:68 - 88:125
+Node: Effect.map(audit(user), (n = (record(user), 0)) => user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(n = (record(user), 0)) => user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 88:99 - 88:111
+Node: record(user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (1):
+  [0] kind: call
+      callee: record
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 89:34 - 89:125
+Node: source.pipe(Effect.flatMap((user) => Effect.map(Effect.succeed(other), ({ id }) => user)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(Effect.succeed(other), ({ id }) => user)]
+      outType: Effect<User, never, never>
+
+=== Piping Flow ===
+Location: 89:71 - 89:123
+Node: Effect.map(Effect.succeed(other), ({ id }) => user)
+Node Kind: KindCallExpression
+
+Subject: other
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<User, never, never>
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [({ id }) => user]
+      outType: Effect<User, never, never>
+
+=== Piping Flow ===
+Location: 90:26 - 90:110
+Node: source.pipe(Effect.flatMap((user) => Effect.map(audit(user), (...values) => user)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(audit(user), (...values) => user)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 90:63 - 90:108
+Node: Effect.map(audit(user), (...values) => user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(...values) => user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 91:27 - 91:108
+Node: source.pipe(Effect.flatMap((user) => Effect.map(audit(user), async () => user)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(audit(user), async () => user)]
+      outType: Effect<Promise<User>, "audit", "service">
+
+=== Piping Flow ===
+Location: 91:64 - 91:106
+Node: Effect.map(audit(user), async () => user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [async () => user]
+      outType: Effect<Promise<User>, "audit", "service">
+
+=== Piping Flow ===
+Location: 92:31 - 92:123
+Node: source.pipe(Effect.flatMap((user) => Effect.map(audit(user), function*() { return user })))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => Effect.map(audit(user), function*() { return user })]
+      outType: Effect<Generator<never, User, unknown>, "audit", "service">
+
+=== Piping Flow ===
+Location: 92:68 - 92:121
+Node: Effect.map(audit(user), function*() { return user })
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [function*() { return user }]
+      outType: Effect<Generator<never, User, unknown>, "audit", "service">
+
+=== Piping Flow ===
+Location: 93:32 - 96:4
+Node: source.pipe(Effect.flatMap((user) => {\n  if (user.id === "skip") return Effect.as(audit(user), user)\n  return Effect.as(audit(user), user)\n}))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => {\n  if (user.id === "skip") return Effect.as(audit(user), user)\n  return Effect.as(audit(user), user)\n}]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 94:33 - 94:62
+Node: Effect.as(audit(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 95:9 - 95:38
+Node: Effect.as(audit(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 97:37 - 100:4
+Node: source.pipe(Effect.flatMap((user) => {\n  return Effect.as(audit(user), user)\n  record(user)\n}))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => {\n  return Effect.as(audit(user), user)\n  record(user)\n}]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 98:9 - 98:38
+Node: Effect.as(audit(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 98:38 - 99:15
+Node: record(user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (1):
+  [0] kind: call
+      callee: record
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 101:33 - 101:104
+Node: source.pipe(Effect.flatMap(({ id }) => Effect.as(Effect.log(id), id)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [({ id }) => Effect.as(Effect.log(id), id)]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 101:72 - 101:102
+Node: Effect.as(Effect.log(id), id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [id]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 102:30 - 102:106
+Node: source.pipe(Effect.flatMap((user = other) => Effect.as(audit(user), user)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user = other) => Effect.as(audit(user), user)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 102:75 - 102:104
+Node: Effect.as(audit(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 103:25 - 103:104
+Node: source.pipe(Effect.flatMap((...users) => Effect.as(Effect.log(users), users)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(...users) => Effect.as(Effect.log(users), users)]
+      outType: Effect<[a: User], never, never>
+
+=== Piping Flow ===
+Location: 103:66 - 103:102
+Node: Effect.as(Effect.log(users), users)
+Node Kind: KindCallExpression
+
+Subject: users
+Subject Type: [a: User]
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [users]
+      outType: Effect<[a: User], never, never>
+
+=== Piping Flow ===
+Location: 104:31 - 104:140
+Node: source.pipe(Effect.flatMap((user): Effect.Effect<User, "audit", "service"> => Effect.as(audit(user), user)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user): Effect.Effect<User, "audit", "service"> => Effect.as(audit(user), user)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 104:109 - 104:138
+Node: Effect.as(audit(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 105:32 - 105:101
+Node: Effect.flatMap((user: User) => Effect.as(audit(user), user))(source)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.flatMap
+      args: [(user: User) => Effect.as(audit(user), user)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 105:63 - 105:92
+Node: Effect.as(audit(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 106:32 - 106:127
+Node: Effect.flatMap<User, User, "audit", "service">((user) => Effect.as(audit(user), user))(source)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.flatMap
+      args: [(user) => Effect.as(audit(user), user)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 106:89 - 106:118
+Node: Effect.as(audit(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 107:30 - 107:116
+Node: Effect.flatMap(source, (user: User | undefined) => Effect.as(Effect.log(user), user))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [(user: User | undefined) => Effect.as(Effect.log(user), user)]
+      outType: Effect<User | undefined, never, never>
+
+=== Piping Flow ===
+Location: 107:81 - 107:115
+Node: Effect.as(Effect.log(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User | undefined
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User | undefined, never, never>
+
+=== Piping Flow ===
+Location: 108:35 - 108:135
+Node: source.pipe(Effect.flatMap((user) => audit(user).pipe(Effect.as(user), Effect.map((u) => u.name))))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => audit(user).pipe(Effect.as(user), Effect.map((u) => u.name))]
+      outType: Effect<string, "audit", "service">
+
+=== Piping Flow ===
+Location: 108:72 - 108:133
+Node: audit(user).pipe(Effect.as(user), Effect.map((u) => u.name))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (3):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: pipeable
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+  [2] kind: pipeable
+      callee: Effect.map
+      args: [(u) => u.name]
+      outType: Effect<string, "audit", "service">
+
+=== Piping Flow ===
+Location: 109:29 - 109:119
+Node: source.pipe(Effect.flatMap((user) => audit(user).pipe(Effect.orElseSucceed(() => user))))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => audit(user).pipe(Effect.orElseSucceed(() => user))]
+      outType: Effect<number | User, never, "service">
+
+=== Piping Flow ===
+Location: 109:66 - 109:117
+Node: audit(user).pipe(Effect.orElseSucceed(() => user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: pipeable
+      callee: Effect.orElseSucceed
+      args: [() => user]
+      outType: Effect<number | User, never, "service">
+
+=== Piping Flow ===
+Location: 110:33 - 110:75
+Node: source.pipe(Effect.andThen(audit(other)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.andThen
+      args: [audit(other)]
+      outType: Effect<number, "audit", "service">
+
+=== Piping Flow ===
+Location: 110:61 - 110:73
+Node: audit(other)
+Node Kind: KindCallExpression
+
+Subject: other
+Subject Type: User
+
+Transformations (1):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+
+=== Piping Flow ===
+Location: 111:26 - 111:57
+Node: source.pipe(Effect.tap(audit))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.tap
+      args: [audit]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 113:32 - 113:100
+Node: source.pipe(custom.flatMap((user) => Effect.as(audit(user), user)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: custom.flatMap
+      args: [(user) => Effect.as(audit(user), user)]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 113:69 - 113:98
+Node: Effect.as(audit(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 114:25 - 116:4
+Node: source.pipe(((Effect) => Effect.flatMap((user: User) => E.as(audit(user), user)))({\n  flatMap: (callback: (user: User) => E.Effect<User, "audit", "service">) => (self: E.Effect<User>) => E.flatMap(self, callback)\n}))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: ((Effect) => Effect.flatMap((user: User) => E.as(audit(user), user)))
+      args: [{\n  flatMap: (callback: (user: User) => E.Effect<User, "audit", "service">) => (self: E.Effect<User>) => E.flatMap(self, callback)\n}]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 114:50 - 114:106
+Node: Effect.flatMap((user: User) => E.as(audit(user), user))
+Node Kind: KindCallExpression
+
+Subject: (user: User) => E.as(audit(user), user)
+Subject Type: (user: User) => Effect<User, "audit", "service">
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.flatMap
+      args: (constant)
+      outType: (self: Effect<User, never, never>) => Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 114:81 - 114:105
+Node: E.as(audit(user), user)
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: audit
+      args: (constant)
+      outType: Effect<number, "audit", "service">
+  [1] kind: dataFirst
+      callee: E.as
+      args: [user]
+      outType: Effect<User, "audit", "service">
+
+=== Piping Flow ===
+Location: 115:103 - 115:129
+Node: E.flatMap(self, callback)
+Node Kind: KindCallExpression
+
+Subject: self
+Subject Type: Effect<User, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: E.flatMap
+      args: [callback]
+      outType: Effect<User, "audit", "service">

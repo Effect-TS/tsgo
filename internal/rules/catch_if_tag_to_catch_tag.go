@@ -45,20 +45,20 @@ func AnalyzeCatchIfTagToCatchTag(tp *typeparser.TypeParser, c *checker.Checker, 
 	}
 
 	var matches []CatchIfTagToCatchTagMatch
-	for _, flow := range tp.PipingFlows(sf, true) {
-		for index := range flow.Transformations {
-			transformation := &flow.Transformations[index]
-			if transformation.Callee == nil || !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "catchIf") || len(transformation.Args) != 2 {
+	for _, flow := range tp.PipingFlows(sf, true).All() {
+		for index := range flow.Transformations().All() {
+			transformation := flow.Transformations().At(index)
+			if transformation.Callee() == nil || !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchIf") || transformation.Args().Len() != 2 {
 				continue
 			}
-			tag, ok := catchIfTagPredicate(tp, c, transformation.Args[0])
+			tag, ok := catchIfTagPredicate(tp, c, transformation.Args().At(0))
 			if !ok {
 				continue
 			}
 			matches = append(matches, CatchIfTagToCatchTagMatch{
-				SourceFile: sf, Location: scanner.GetErrorRangeForNode(sf, transformation.Callee),
-				Transformation: transformation,
-				Tag:            tag, Handler: transformation.Args[1],
+				SourceFile: sf, Location: scanner.GetErrorRangeForNode(sf, transformation.Callee()),
+				Transformation: &transformation,
+				Tag:            tag, Handler: transformation.Args().At(1),
 				CanFix: true,
 			})
 		}
@@ -68,10 +68,10 @@ func AnalyzeCatchIfTagToCatchTag(tp *typeparser.TypeParser, c *checker.Checker, 
 
 func catchIfTagPredicate(tp *typeparser.TypeParser, c *checker.Checker, predicateNode *ast.Node) (string, bool) {
 	lazy := typeparser.ParseLazyExpression(predicateNode, typeparser.LazyExpressionNone)
-	if lazy == nil || len(lazy.Params) != 1 {
+	if lazy == nil || lazy.Params().Len() != 1 {
 		return "", false
 	}
-	parameter := lazy.Params[0]
+	parameter := lazy.Params().At(0)
 	if parameter == nil || parameter.Name() == nil || parameter.Name().Kind != ast.KindIdentifier {
 		return "", false
 	}
@@ -80,7 +80,7 @@ func catchIfTagPredicate(tp *typeparser.TypeParser, c *checker.Checker, predicat
 		return "", false
 	}
 
-	tagSubject, tagValue := tp.ParseTagMatch(lazy.Expression)
+	tagSubject, tagValue := tp.ParseTagMatch(lazy.Expression())
 	if tagSubject == nil || tagValue == nil || !ast.IsStringLiteral(tagValue) || !isBareParameterTagReference(tp, c, tagSubject, parameterSymbol) {
 		return "", false
 	}

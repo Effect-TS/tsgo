@@ -18,10 +18,16 @@ const EffectTypeId = "~effect/Effect"
 
 // Effect represents parsed Effect<A, E, R> type parameters.
 type Effect struct {
-	A *checker.Type // Success type
-	E *checker.Type // Error type
-	R *checker.Type // Requirements type
+	a *checker.Type // Success type
+	e *checker.Type // Error type
+	r *checker.Type // Requirements type
 }
+
+func (r Effect) A() *checker.Type { return r.a }
+
+func (r Effect) E() *checker.Type { return r.e }
+
+func (r Effect) R() *checker.Type { return r.r }
 
 // EffectType parses an Effect type and extracts A, E, R parameters.
 // Returns nil if the type is not an Effect.
@@ -107,7 +113,7 @@ func (tp *TypeParser) parseVarianceStruct(t *checker.Type) *Effect {
 		return nil
 	}
 
-	return &Effect{A: a, E: e, R: r}
+	return &Effect{a: a, e: e, r: r}
 }
 
 // IsEffectType returns true if the type has the Effect variance struct.

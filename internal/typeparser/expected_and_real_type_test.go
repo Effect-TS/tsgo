@@ -73,13 +73,13 @@ const b: string = "hello"
 
 	// Should find 2 variable declaration sites
 	count := 0
-	for _, r := range results {
-		if r.Node != nil && r.ExpectedType != nil && r.ValueNode != nil && r.RealType != nil {
+	for _, r := range results.All() {
+		if r.Node() != nil && r.ExpectedType() != nil && r.ValueNode() != nil && r.RealType() != nil {
 			count++
 		}
 	}
 	if count < 2 {
-		t.Errorf("expected at least 2 assignment sites for variable declarations, got %d (total results: %d)", count, len(results))
+		t.Errorf("expected at least 2 assignment sites for variable declarations, got %d (total results: %d)", count, results.Len())
 	}
 }
 
@@ -98,13 +98,13 @@ foo(42, "hello")
 
 	// Should find at least 2 call argument sites (for x and y)
 	count := 0
-	for _, r := range results {
-		if r.Node != nil && r.ExpectedType != nil && r.RealType != nil {
+	for _, r := range results.All() {
+		if r.Node() != nil && r.ExpectedType() != nil && r.RealType() != nil {
 			count++
 		}
 	}
 	if count < 2 {
-		t.Errorf("expected at least 2 assignment sites for call arguments, got %d (total results: %d)", count, len(results))
+		t.Errorf("expected at least 2 assignment sites for call arguments, got %d (total results: %d)", count, results.Len())
 	}
 }
 
@@ -122,16 +122,16 @@ const obj: Obj = { a: 1, b: "hello" }
 	results := tp.ExpectedAndRealTypes(sf)
 
 	// Should find sites for the variable declaration and the object literal properties
-	if len(results) == 0 {
+	if results.Len() == 0 {
 		t.Error("expected at least one assignment site for object literal, got 0")
 	}
 
 	// Verify all results have non-nil types
-	for i, r := range results {
-		if r.ExpectedType == nil {
+	for i, r := range results.All() {
+		if r.ExpectedType() == nil {
 			t.Errorf("result[%d]: ExpectedType is nil", i)
 		}
-		if r.RealType == nil {
+		if r.RealType() == nil {
 			t.Errorf("result[%d]: RealType is nil", i)
 		}
 	}
@@ -151,19 +151,19 @@ x = 42
 	results := tp.ExpectedAndRealTypes(sf)
 
 	// Should find at least 2 sites: variable declaration + binary assignment
-	if len(results) < 2 {
-		t.Errorf("expected at least 2 assignment sites (var decl + binary assign), got %d", len(results))
+	if results.Len() < 2 {
+		t.Errorf("expected at least 2 assignment sites (var decl + binary assign), got %d", results.Len())
 	}
 
 	// Verify all results have non-nil fields
-	for i, r := range results {
-		if r.Node == nil {
+	for i, r := range results.All() {
+		if r.Node() == nil {
 			t.Errorf("result[%d]: Node is nil", i)
 		}
-		if r.ExpectedType == nil {
+		if r.ExpectedType() == nil {
 			t.Errorf("result[%d]: ExpectedType is nil", i)
 		}
-		if r.RealType == nil {
+		if r.RealType() == nil {
 			t.Errorf("result[%d]: RealType is nil", i)
 		}
 	}
@@ -185,19 +185,19 @@ function getNum(): number {
 
 	// Should find at least 1 site for the return statement
 	found := false
-	for _, r := range results {
-		if r.Node != nil && r.Node.Kind == ast.KindReturnStatement {
+	for _, r := range results.All() {
+		if r.Node() != nil && r.Node().Kind == ast.KindReturnStatement {
 			found = true
-			if r.ExpectedType == nil {
+			if r.ExpectedType() == nil {
 				t.Error("return statement: ExpectedType is nil")
 			}
-			if r.RealType == nil {
+			if r.RealType() == nil {
 				t.Error("return statement: RealType is nil")
 			}
 		}
 	}
 	if !found {
-		t.Errorf("expected to find a return statement assignment site, got %d total results", len(results))
+		t.Errorf("expected to find a return statement assignment site, got %d total results", results.Len())
 	}
 }
 
@@ -214,16 +214,16 @@ const fn: () => number = () => 42
 	results := tp.ExpectedAndRealTypes(sf)
 
 	// Should find at least 1 site for the variable declaration, and potentially 1 for the arrow body
-	if len(results) == 0 {
+	if results.Len() == 0 {
 		t.Error("expected at least 1 assignment site for arrow function body, got 0")
 	}
 
 	// Verify all results have valid types
-	for i, r := range results {
-		if r.ExpectedType == nil {
+	for i, r := range results.All() {
+		if r.ExpectedType() == nil {
 			t.Errorf("result[%d]: ExpectedType is nil", i)
 		}
-		if r.RealType == nil {
+		if r.RealType() == nil {
 			t.Errorf("result[%d]: RealType is nil", i)
 		}
 	}
@@ -243,7 +243,7 @@ const result = wrap(<A extends number>(): A => 42 as any as A)
 	results := tp.ExpectedAndRealTypes(sf)
 
 	// Should find at least some assignment sites
-	if len(results) == 0 {
+	if results.Len() == 0 {
 		t.Error("expected at least 1 assignment site for arrow function with type params, got 0")
 	}
 }
@@ -263,13 +263,13 @@ const y = "hello" satisfies string
 
 	// Should find at least 2 satisfies expression sites plus variable declarations
 	satisfiesCount := 0
-	for _, r := range results {
-		if r.Node != nil && r.ExpectedType != nil && r.RealType != nil {
+	for _, r := range results.All() {
+		if r.Node() != nil && r.ExpectedType() != nil && r.RealType() != nil {
 			satisfiesCount++
 		}
 	}
 	if satisfiesCount < 2 {
-		t.Errorf("expected at least 2 assignment sites (satisfies expressions), got %d valid results out of %d total", satisfiesCount, len(results))
+		t.Errorf("expected at least 2 assignment sites (satisfies expressions), got %d valid results out of %d total", satisfiesCount, results.Len())
 	}
 }
 
@@ -278,8 +278,8 @@ func TestExpectedAndRealTypes_NilInputs(t *testing.T) {
 
 	// Test nil checker
 	results := (*typeparser.TypeParser)(nil).ExpectedAndRealTypes(nil)
-	if results != nil {
-		t.Errorf("expected nil for nil checker, got %d results", len(results))
+	if !results.IsNil() {
+		t.Errorf("expected nil for nil checker, got %d results", results.Len())
 	}
 }
 
@@ -344,8 +344,8 @@ func TestExpectedAndRealTypes_EmptyFile(t *testing.T) {
 
 	results := tp.ExpectedAndRealTypes(sf)
 
-	if len(results) != 0 {
-		t.Errorf("expected 0 results for empty file, got %d", len(results))
+	if results.Len() != 0 {
+		t.Errorf("expected 0 results for empty file, got %d", results.Len())
 	}
 }
 
@@ -391,22 +391,22 @@ const s = "test" satisfies string
 	results := tp.ExpectedAndRealTypes(sf)
 
 	// Should find multiple assignment sites
-	if len(results) < 8 {
-		t.Errorf("expected at least 8 assignment sites from all patterns combined, got %d", len(results))
+	if results.Len() < 8 {
+		t.Errorf("expected at least 8 assignment sites from all patterns combined, got %d", results.Len())
 	}
 
 	// Verify no nil types in results
-	for i, r := range results {
-		if r.Node == nil {
+	for i, r := range results.All() {
+		if r.Node() == nil {
 			t.Errorf("result[%d]: Node is nil", i)
 		}
-		if r.ExpectedType == nil {
+		if r.ExpectedType() == nil {
 			t.Errorf("result[%d]: ExpectedType is nil", i)
 		}
-		if r.ValueNode == nil {
+		if r.ValueNode() == nil {
 			t.Errorf("result[%d]: ValueNode is nil", i)
 		}
-		if r.RealType == nil {
+		if r.RealType() == nil {
 			t.Errorf("result[%d]: RealType is nil", i)
 		}
 	}
@@ -426,15 +426,15 @@ const b: string = "hello"
 	results := tp.ExpectedAndRealTypes(sf)
 
 	// Verify we can use TypeToString on the results (confirms types are valid checker types)
-	for i, r := range results {
-		if r.ExpectedType != nil {
-			str := c.TypeToString(r.ExpectedType)
+	for i, r := range results.All() {
+		if r.ExpectedType() != nil {
+			str := c.TypeToString(r.ExpectedType())
 			if str == "" {
 				t.Errorf("result[%d]: TypeToString returned empty for ExpectedType", i)
 			}
 		}
-		if r.RealType != nil {
-			str := c.TypeToString(r.RealType)
+		if r.RealType() != nil {
+			str := c.TypeToString(r.RealType())
 			if str == "" {
 				t.Errorf("result[%d]: TypeToString returned empty for RealType", i)
 			}

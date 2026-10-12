@@ -64,33 +64,33 @@ func AnalyzeCatchConditionalRefailToCatchIf(tp *typeparser.TypeParser, c *checke
 	}
 
 	var matches []CatchConditionalRefailToCatchIfMatch
-	for _, flow := range tp.PipingFlows(sf, true) {
-		for index := range flow.Transformations {
-			transformation := &flow.Transformations[index]
-			if transformation.Callee == nil {
+	for _, flow := range tp.PipingFlows(sf, true).All() {
+		for index := range flow.Transformations().All() {
+			transformation := flow.Transformations().At(index)
+			if transformation.Callee() == nil {
 				continue
 			}
-			methods, ok := conditionalRefailMethods(tp, transformation.Callee)
-			if !ok || len(transformation.Args) != 1 {
+			methods, ok := conditionalRefailMethods(tp, transformation.Callee())
+			if !ok || transformation.Args().Len() != 1 {
 				continue
 			}
 
-			inputType := flow.Subject.OutType
+			inputType := flow.Subject().OutType()
 			if index > 0 {
-				inputType = flow.Transformations[index-1].OutType
+				inputType = flow.Transformations().At(index - 1).OutType()
 			}
 			if tp.StrictEffectType(inputType) == nil {
 				continue
 			}
 
-			preferredMethodName, ok := analyzeConditionalRefailHandler(tp, c, transformation.Args[0], methods)
+			preferredMethodName, ok := analyzeConditionalRefailHandler(tp, c, transformation.Args().At(0), methods)
 			if !ok {
 				continue
 			}
 
 			matches = append(matches, CatchConditionalRefailToCatchIfMatch{
 				SourceFile:          sf,
-				Location:            scanner.GetErrorRangeForNode(sf, transformation.Callee),
+				Location:            scanner.GetErrorRangeForNode(sf, transformation.Callee()),
 				CatchMethodName:     methods.catchMethodName,
 				FailMethodName:      methods.failMethodName,
 				PreferredMethodName: preferredMethodName,
@@ -127,11 +127,11 @@ func analyzeConditionalRefailHandler(
 	methods conditionalRefailCatchMethods,
 ) (string, bool) {
 	dispatch := tp.ParseReturningDispatch(handlerNode)
-	if dispatch == nil || len(dispatch.Params) != 1 || dispatch.Dispatch == nil ||
-		len(dispatch.Dispatch.Branches) != 1 || dispatch.Dispatch.Fallback == nil {
+	if dispatch == nil || dispatch.Params().Len() != 1 || dispatch.Dispatch() == nil ||
+		dispatch.Dispatch().Branches().Len() != 1 || dispatch.Dispatch().Fallback() == nil {
 		return "", false
 	}
-	parameter := dispatch.Params[0]
+	parameter := dispatch.Params().At(0)
 	if parameter == nil || parameter.Name() == nil || parameter.Name().Kind != ast.KindIdentifier {
 		return "", false
 	}
@@ -147,18 +147,18 @@ func analyzeConditionalRefailHandler(
 	// Bare _tag dispatch is handled by catchAllTagDispatchToCatchTag. Keep the
 	// generic conditional rule for inverted tag checks, which cannot be
 	// represented by catchTag, and for non-tag predicates.
-	branch := dispatch.Dispatch.Branches[0]
-	tagSubject := dispatch.Dispatch.CommonTagSubject(tp)
-	if _, ok := resultDispatchTagValue(branch.Condition); tagSubject != nil && ok &&
+	branch := dispatch.Dispatch().Branches().At(0)
+	tagSubject := dispatch.Dispatch().CommonTagSubject(tp)
+	if _, ok := resultDispatchTagValue(branch.Condition()); tagSubject != nil && ok &&
 		isResultDispatchTagReference(tp, c, tagSubject, parameterSymbol) {
-		branchRefails := isConditionalRefailExpression(tp, c, branch.Result, parameterSymbol, methods.failMethodName)
-		fallbackRefails := isConditionalRefailExpression(tp, c, dispatch.Dispatch.Fallback, parameterSymbol, methods.failMethodName)
+		branchRefails := isConditionalRefailExpression(tp, c, branch.Result(), parameterSymbol, methods.failMethodName)
+		fallbackRefails := isConditionalRefailExpression(tp, c, dispatch.Dispatch().Fallback(), parameterSymbol, methods.failMethodName)
 		if branchRefails == fallbackRefails {
 			return "", false
 		}
-		recovery := branch.Result
+		recovery := branch.Result()
 		if branchRefails {
-			recovery = dispatch.Dispatch.Fallback
+			recovery = dispatch.Dispatch().Fallback()
 		} else if methods.catchMethodName == "catch" && isBareParameterTagReference(tp, c, tagSubject, parameterSymbol) {
 			return "", false
 		}
@@ -168,20 +168,20 @@ func analyzeConditionalRefailHandler(
 		return methods.preferredMethodName, true
 	}
 
-	condition := branch.Condition.Subject
+	condition := branch.Condition().Subject()
 	if !isConditionalRefailPredicate(tp, c, condition, parameterSymbol) {
 		return "", false
 	}
 
-	trueRefails := isConditionalRefailExpression(tp, c, branch.Result, parameterSymbol, methods.failMethodName)
-	falseRefails := isConditionalRefailExpression(tp, c, dispatch.Dispatch.Fallback, parameterSymbol, methods.failMethodName)
+	trueRefails := isConditionalRefailExpression(tp, c, branch.Result(), parameterSymbol, methods.failMethodName)
+	falseRefails := isConditionalRefailExpression(tp, c, dispatch.Dispatch().Fallback(), parameterSymbol, methods.failMethodName)
 	if trueRefails == falseRefails {
 		return "", false
 	}
 
-	recovery := branch.Result
+	recovery := branch.Result()
 	if trueRefails {
-		recovery = dispatch.Dispatch.Fallback
+		recovery = dispatch.Dispatch().Fallback()
 	}
 	if !isEffectExpression(tp, recovery) {
 		return "", false

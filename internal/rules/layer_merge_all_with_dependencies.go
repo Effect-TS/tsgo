@@ -115,7 +115,7 @@ func analyzeLayerMergeAllCall(tp *typeparser.TypeParser, c *checker.Checker, sf 
 		}
 
 		// Unroll union members for provided types (ROut)
-		providedMembers := tp.UnrollUnionMembers(layer.ROut)
+		providedMembers := tp.UnrollUnionMembers(layer.ROut())
 
 		// Filter out never types and pass-through types
 		for _, providedType := range providedMembers {
@@ -123,7 +123,7 @@ func analyzeLayerMergeAllCall(tp *typeparser.TypeParser, c *checker.Checker, sf 
 				continue
 			}
 			// A pass-through type is both provided (ROut) and required (RIn) by the same layer
-			if checker.Checker_isTypeAssignableTo(c, providedType, layer.RIn) {
+			if checker.Checker_isTypeAssignableTo(c, providedType, layer.RIn()) {
 				continue
 			}
 			actuallyProvidedMap[providedType] = arg
@@ -131,7 +131,7 @@ func analyzeLayerMergeAllCall(tp *typeparser.TypeParser, c *checker.Checker, sf 
 
 		layerInfos = append(layerInfos, layerInfo{
 			arg:              arg,
-			requirementsType: layer.RIn,
+			requirementsType: layer.RIn(),
 		})
 	}
 

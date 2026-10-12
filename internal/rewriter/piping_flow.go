@@ -1,8 +1,12 @@
 package rewriter
 
 import (
+	"strings"
+
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/core"
+	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 // PipingFlowTransformationReplacement describes a replacement operator in its
@@ -24,14 +28,14 @@ func (t *Tracker) ReplacePipingFlowPrefix(
 	replacementSubject *ast.Node,
 ) bool {
 	if t == nil || sourceFile == nil || flow == nil || replacementSubject == nil ||
-		transformationCount <= 0 || transformationCount > len(flow.Transformations) {
+		transformationCount <= 0 || transformationCount > flow.Transformations().Len() {
 		return false
 	}
 
-	last := &flow.Transformations[transformationCount-1]
+	last := flow.Transformations().At(transformationCount - 1)
 	transformationNode := pipingFlowTransformationNode(last)
 	var target *ast.Node
-	switch last.Kind {
+	switch last.Kind() {
 	case typeparser.TransformationKindCall,
 		typeparser.TransformationKindDataFirst,
 		typeparser.TransformationKindDataLast:
@@ -126,12 +130,12 @@ func containingCallArgument(node *ast.Node) (*ast.Node, *ast.CallExpression, int
 	return nil, nil, -1
 }
 
-func pipingFlowTransformationNode(transformation *typeparser.PipingFlowTransformation) *ast.Node {
-	if transformation == nil || transformation.Callee == nil {
+func pipingFlowTransformationNode(transformation typeparser.PipingFlowTransformation) *ast.Node {
+	if transformation.Callee() == nil {
 		return nil
 	}
-	call := callExpressionForCallee(transformation.Callee)
-	if transformation.Kind == typeparser.TransformationKindCall {
+	call := callExpressionForCallee(transformation.Callee())
+	if transformation.Kind() == typeparser.TransformationKindCall {
 		// Curried factories decompose into a factory call and a trailing
 		// application; the replaced node is the outermost applied call.
 		call = appliedCallExpression(call)
@@ -139,7 +143,7 @@ func pipingFlowTransformationNode(transformation *typeparser.PipingFlowTransform
 	if call != nil {
 		return call.AsNode()
 	}
-	return transformation.Callee
+	return transformation.Callee()
 }
 
 func callExpressionForCallee(callee *ast.Node) *ast.CallExpression {
@@ -170,6 +174,113 @@ func appliedCallExpression(call *ast.CallExpression) *ast.CallExpression {
 	return current.AsCallExpression()
 }
 
+// RemoveTrailingPipingFlowTransformation removes the last step while retaining
+// its input and any earlier transformations. Unsupported flows produce no edits.
+func (t *Tracker) RemoveTrailingPipingFlowTransformation(sf *ast.SourceFile, flow *typeparser.PipingFlow) bool {
+	if t == nil || sf == nil || flow == nil || flow.Transformations().Len() == 0 {
+		return false
+	}
+	last := flow.Transformations().Len() - 1
+	terminal := flow.Transformations().At(last)
+	if terminal.Callee() == nil || terminal.Callee().Flags&ast.NodeFlagsOptionalChain != 0 {
+		return false
+	}
+	switch terminal.Kind() {
+	case typeparser.TransformationKindDataFirst, typeparser.TransformationKindDataLast, typeparser.TransformationKindCall:
+		call := callExpressionForCallee(terminal.Callee())
+		if call == nil || call.AsNode().Flags&ast.NodeFlagsOptionalChain != 0 {
+			return false
+		}
+		callNode := call.AsNode()
+		if terminal.Kind() == typeparser.TransformationKindCall {
+			for callNode != flow.Node() {
+				applied := callNode
+				for applied.Parent != nil && applied.Parent.Kind == ast.KindParenthesizedExpression {
+					applied = applied.Parent
+				}
+				if applied.Parent == nil || !ast.IsCallExpression(applied.Parent) || applied.Parent.AsCallExpression().Expression != applied {
+					break
+				}
+				callNode = applied.Parent
+				if callNode.Flags&ast.NodeFlagsOptionalChain != 0 {
+					return false
+				}
+			}
+		}
+		input := flow.TransformationInputNode(last)
+		if terminal.Kind() == typeparser.TransformationKindCall {
+			call = callNode.AsCallExpression()
+			if call.Arguments == nil || len(call.Arguments.Nodes) != 1 {
+				return false
+			}
+			input = call.Arguments.Nodes[0]
+		}
+		if input == nil {
+			return false
+		}
+		t.ReplaceNode(sf, callNode, input, nil)
+		return true
+
+	case typeparser.TransformationKindPipe, typeparser.TransformationKindPipeable:
+		node := pipingFlowTransformationNode(terminal)
+		if node == nil || node.Flags&ast.NodeFlagsOptionalChain != 0 {
+			return false
+		}
+		callNode, call, index := containingCallArgument(node)
+		if call == nil || index < 0 || callNode.Flags&ast.NodeFlagsOptionalChain != 0 {
+			return false
+		}
+		arguments := call.Arguments.Nodes
+		minimum := 1
+		if terminal.Kind() == typeparser.TransformationKindPipe {
+			minimum = 2
+		}
+		if len(arguments) == minimum {
+			var input *ast.Node
+			if terminal.Kind() == typeparser.TransformationKindPipe {
+				input = arguments[0]
+			} else if ast.IsPropertyAccessExpression(call.Expression) {
+				input = call.Expression.AsPropertyAccessExpression().Expression
+			}
+			if input == nil {
+				return false
+			}
+			t.ReplaceNode(sf, callNode, input, nil)
+			return true
+		}
+		var span core.TextRange
+		switch {
+		case index < len(arguments)-1:
+			span = core.NewTextRange(scanner.GetTokenPosOfNode(arguments[index], sf, false), scanner.GetTokenPosOfNode(arguments[index+1], sf, false))
+		case index > 0:
+			span = core.NewTextRange(arguments[index-1].End(), arguments[index].End())
+			start := scanner.GetTokenPosOfNode(arguments[index], sf, false)
+			text := sf.Text()
+			trivia := text[span.Pos():start]
+			if strings.Contains(trivia, "//") || strings.Contains(trivia, "/*") {
+				separator := scanner.SkipTrivia(text, span.Pos())
+				if separator >= start || text[separator] != ',' {
+					return false
+				}
+				trimStart := start
+				for trimStart > span.Pos() && (trimStart-1 == separator || text[trimStart-1] == ' ' || text[trimStart-1] == '\t') {
+					trimStart--
+				}
+				t.DeleteRange(sf, core.NewTextRange(trimStart, span.End()))
+				if separator < trimStart {
+					t.DeleteRange(sf, core.NewTextRange(separator, separator+1))
+				}
+				return true
+			}
+		default:
+			return false
+		}
+		t.DeleteRange(sf, span)
+		return true
+	}
+	return false
+}
+
 // ReplacePipingFlowTransformation replaces a transformation while preserving
 // how its input is applied in source: as a pipe argument, a data-first or
 // data-last argument, or a unary/curried application.
@@ -181,12 +292,12 @@ func (t *Tracker) ReplacePipingFlowTransformation(
 	if t == nil || sourceFile == nil || transformation == nil || replacement.Callee == nil {
 		return false
 	}
-	transformationNode := pipingFlowTransformationNode(transformation)
+	transformationNode := pipingFlowTransformationNode(*transformation)
 	if transformationNode == nil {
 		return false
 	}
 
-	switch transformation.Kind {
+	switch transformation.Kind() {
 	case typeparser.TransformationKindPipe,
 		typeparser.TransformationKindPipeable,
 		typeparser.TransformationKindEffectFn,
@@ -203,11 +314,11 @@ func (t *Tracker) ReplacePipingFlowTransformation(
 		}
 		arguments := cloneNodeListNodes(t, replacement.Arguments)
 		subjectIndex := 0
-		if transformation.Kind == typeparser.TransformationKindDataLast {
+		if transformation.Kind() == typeparser.TransformationKindDataLast {
 			subjectIndex = len(call.Arguments.Nodes) - 1
 		}
 		subject := t.DeepCloneNode(call.Arguments.Nodes[subjectIndex])
-		if transformation.Kind == typeparser.TransformationKindDataFirst {
+		if transformation.Kind() == typeparser.TransformationKindDataFirst {
 			arguments = append([]*ast.Node{subject}, arguments...)
 		} else {
 			arguments = append(arguments, subject)
@@ -290,18 +401,18 @@ func cloneNodeList(t *Tracker, list *ast.NodeList) *ast.NodeList {
 // steps with one operator at the last step. Nested applications are rewritten
 // together so removing an input step cannot overlap the replacement edit.
 func (t *Tracker) CollapsePipingFlowTransformations(sourceFile *ast.SourceFile, flow *typeparser.PipingFlow, start, end int, replacement PipingFlowTransformationReplacement) bool {
-	if t == nil || sourceFile == nil || flow == nil || start < 0 || end < start || end >= len(flow.Transformations) || replacement.Callee == nil {
+	if t == nil || sourceFile == nil || flow == nil || start < 0 || end < start || end >= flow.Transformations().Len() || replacement.Callee == nil {
 		return false
 	}
 	steps := make(map[*ast.Node]int)
 	emptiedPipes := make(map[*ast.Node]typeparser.TransformationKind)
 	for i := start; i <= end; i++ {
-		node := pipingFlowTransformationNode(&flow.Transformations[i])
+		node := pipingFlowTransformationNode(flow.Transformations().At(i))
 		if node == nil {
 			return false
 		}
 		steps[node] = i
-		kind := flow.Transformations[i].Kind
+		kind := flow.Transformations().At(i).Kind()
 		if i < end && (kind == typeparser.TransformationKindPipe || kind == typeparser.TransformationKindPipeable) {
 			call, _, _ := containingCallArgument(node)
 			emptiedPipes[call] = kind
@@ -309,10 +420,10 @@ func (t *Tracker) CollapsePipingFlowTransformations(sourceFile *ast.SourceFile, 
 	}
 	// Find the smallest source subtree containing all edited steps. Pipe
 	// arguments require their containing call so they can be removed as a list.
-	target := pipingFlowTransformationNode(&flow.Transformations[end])
+	target := pipingFlowTransformationNode(flow.Transformations().At(end))
 	for i := start; i <= end; i++ {
-		node := pipingFlowTransformationNode(&flow.Transformations[i])
-		if isPipingFlowArgument(flow.Transformations[i].Kind) {
+		node := pipingFlowTransformationNode(flow.Transformations().At(i))
+		if isPipingFlowArgument(flow.Transformations().At(i).Kind()) {
 			call, _, _ := containingCallArgument(node)
 			node = call
 		}
@@ -342,8 +453,8 @@ func (t *Tracker) CollapsePipingFlowTransformations(sourceFile *ast.SourceFile, 
 			}
 			return updated
 		}
-		step := &flow.Transformations[index]
-		if isPipingFlowArgument(step.Kind) {
+		step := flow.Transformations().At(index)
+		if isPipingFlowArgument(step.Kind()) {
 			if index < end {
 				return nil
 			}
@@ -358,7 +469,7 @@ func (t *Tracker) CollapsePipingFlowTransformations(sourceFile *ast.SourceFile, 
 			return subject
 		}
 		arguments := cloneNodeListNodes(t, replacement.Arguments)
-		switch step.Kind {
+		switch step.Kind() {
 		case typeparser.TransformationKindDataFirst:
 			arguments = append([]*ast.Node{subject}, arguments...)
 		case typeparser.TransformationKindDataLast:

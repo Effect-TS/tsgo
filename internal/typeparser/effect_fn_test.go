@@ -43,10 +43,10 @@ func assertEffectFnFunctionReturnType(t *testing.T, version bundledeffect.Effect
 	defer done()
 
 	parsed := findFirstEffectFnCall(t, tp, sf)
-	if parsed.FunctionReturnType == nil {
+	if parsed.functionReturnType == nil {
 		t.Fatal("expected FunctionReturnType")
 	}
-	if got := c.TypeToString(parsed.FunctionReturnType); got != want {
+	if got := c.TypeToString(parsed.functionReturnType); got != want {
 		t.Fatalf("FunctionReturnType = %q", got)
 	}
 }
@@ -64,7 +64,7 @@ export const make = fn(function*() {
 })
 `)
 		parsed := findFirstEffectFnCall(t, tp, sf)
-		if parsed.EffectModule != nil {
+		if parsed.effectModule != nil {
 			done()
 			t.Fatal("expected a constant fn alias to have no directly replaceable Effect module receiver")
 		}
@@ -169,15 +169,15 @@ export const make = Effect.fn(
 	for _, version := range []bundledeffect.EffectVersion{bundledeffect.EffectV4, bundledeffect.EffectV3} {
 		c, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectVersionInternal(t, version, source)
 		parsed := findFirstEffectFnCall(t, tp, sf)
-		if parsed.TraceExpression == nil {
+		if parsed.traceExpression == nil {
 			done()
 			t.Fatal("expected TraceExpression")
 		}
-		if parsed.FunctionReturnType == nil {
+		if parsed.functionReturnType == nil {
 			done()
 			t.Fatal("expected FunctionReturnType")
 		}
-		if got := c.TypeToString(parsed.FunctionReturnType); got != "Effect<number, never, never>" {
+		if got := c.TypeToString(parsed.functionReturnType); got != "Effect<number, never, never>" {
 			done()
 			t.Fatalf("FunctionReturnType = %q", got)
 		}
@@ -206,13 +206,13 @@ export const make = Effect.fn(
 	defer done()
 
 	parsed := findFirstEffectFnCall(t, tp, sf)
-	if parsed.OptionsNode == nil {
+	if parsed.optionsNode == nil {
 		t.Fatal("expected OptionsNode")
 	}
-	if parsed.FunctionReturnType == nil {
+	if parsed.functionReturnType == nil {
 		t.Fatal("expected FunctionReturnType")
 	}
-	if got := c.TypeToString(parsed.FunctionReturnType); got != "Effect<string, never, never>" {
+	if got := c.TypeToString(parsed.functionReturnType); got != "Effect<string, never, never>" {
 		t.Fatalf("FunctionReturnType = %q", got)
 	}
 }

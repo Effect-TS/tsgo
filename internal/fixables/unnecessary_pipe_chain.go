@@ -2,12 +2,12 @@ package fixables
 
 import (
 	"github.com/effect-ts/tsgo/internal/fixable"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var UnnecessaryPipeChainFix = fixable.Fixable{
@@ -45,28 +45,28 @@ func runUnnecessaryPipeChainFix(ctx *fixable.Context) []ls.CodeAction {
 		Description: "Rewrite as single pipe call",
 		Run: func(tracker *rewriter.Tracker) {
 			// Collect all arguments: deep-clone inner args then outer args
-			allArgs := make([]*ast.Node, 0, len(inner.Args)+len(outer.Args))
-			for _, arg := range inner.Args {
+			allArgs := make([]*ast.Node, 0, inner.Args().Len()+outer.Args().Len())
+			for _, arg := range inner.Args().All() {
 				allArgs = append(allArgs, tracker.DeepCloneNode(arg))
 			}
-			for _, arg := range outer.Args {
+			for _, arg := range outer.Args().All() {
 				allArgs = append(allArgs, tracker.DeepCloneNode(arg))
 			}
 
 			var replacementNode *ast.Node
-			switch inner.Kind {
+			switch inner.Kind() {
 			case typeparser.TransformationKindPipe:
 				// pipe(subject, f1, f2) + pipe(..., f3) => pipe(subject, f1, f2, f3)
 				// Deep-clone the original callee (bare `pipe` or `Function.pipe`)
-				clonedCallee := tracker.DeepCloneNode(inner.Node.AsCallExpression().Expression)
+				clonedCallee := tracker.DeepCloneNode(inner.Node().AsCallExpression().Expression)
 				// Build args: subject first, then all pipe args
 				callArgs := make([]*ast.Node, 0, 1+len(allArgs))
-				callArgs = append(callArgs, tracker.DeepCloneNode(inner.Subject))
+				callArgs = append(callArgs, tracker.DeepCloneNode(inner.Subject()))
 				callArgs = append(callArgs, allArgs...)
 				replacementNode = tracker.NewCallExpression(clonedCallee, nil, nil, tracker.NewNodeList(callArgs), ast.NodeFlagsNone)
 			case typeparser.TransformationKindPipeable:
 				// subject.pipe(f1, f2).pipe(f3) => subject.pipe(f1, f2, f3)
-				clonedSubject := tracker.DeepCloneNode(inner.Subject)
+				clonedSubject := tracker.DeepCloneNode(inner.Subject())
 				pipeAccess := tracker.NewPropertyAccessExpression(clonedSubject, nil, tracker.NewIdentifier("pipe"), ast.NodeFlagsNone)
 				replacementNode = tracker.NewCallExpression(pipeAccess, nil, nil, tracker.NewNodeList(allArgs), ast.NodeFlagsNone)
 			default:
@@ -74,7 +74,7 @@ func runUnnecessaryPipeChainFix(ctx *fixable.Context) []ls.CodeAction {
 			}
 
 			ast.SetParentInChildren(replacementNode)
-			tracker.ReplaceNode(sf, outer.Node.AsNode(), replacementNode, nil)
+			tracker.ReplaceNode(sf, outer.Node().AsNode(), replacementNode, nil)
 		},
 	}); action != nil {
 		return []ls.CodeAction{*action}

@@ -67,16 +67,16 @@ func AnalyzeOptionMatchToFromOption(tp *typeparser.TypeParser, c *checker.Checke
 func analyzeOptionMatchCalls(tp *typeparser.TypeParser, sf *ast.SourceFile) []OptionMatchToFromOptionMatch {
 	var matches []OptionMatchToFromOptionMatch
 
-	for _, flow := range tp.PipingFlows(sf, true) {
-		for index := range flow.Transformations {
-			transformation := &flow.Transformations[index]
-			callee := transformation.Callee
-			args := transformation.Args
-			if len(args) != 1 || !tp.IsNodeReferenceToEffectOptionModuleApi(callee, "match") {
+	for _, flow := range tp.PipingFlows(sf, true).All() {
+		for index := range flow.Transformations().All() {
+			transformation := flow.Transformations().At(index)
+			callee := transformation.Callee()
+			args := transformation.Args()
+			if args.Len() != 1 || !tp.IsNodeReferenceToEffectOptionModuleApi(callee, "match") {
 				continue
 			}
 
-			failure, effectModule, canFix, ok := analyzeOptionMatchHandlers(tp, args[0])
+			failure, effectModule, canFix, ok := analyzeOptionMatchHandlers(tp, args.At(0))
 			if !ok {
 				continue
 			}
@@ -84,14 +84,14 @@ func analyzeOptionMatchCalls(tp *typeparser.TypeParser, sf *ast.SourceFile) []Op
 			match := OptionMatchToFromOptionMatch{
 				SourceFile:       sf,
 				Location:         scanner.GetErrorRangeForNode(sf, callee),
-				Transformation:   transformation,
+				Transformation:   &transformation,
 				EffectModuleNode: effectModule,
 				FailureNode:      failure,
 				DefaultFailure:   isDefaultNoSuchElementError(tp, failure),
 				CanFix:           canFix,
 			}
 
-			switch transformation.Kind {
+			switch transformation.Kind() {
 			case typeparser.TransformationKindPipe,
 				typeparser.TransformationKindPipeable,
 				typeparser.TransformationKindDataFirst,
@@ -170,7 +170,7 @@ func analyzeEffectFailHandler(tp *typeparser.TypeParser, node *ast.Node) (*ast.N
 	if lazy == nil {
 		return nil, nil, false, false
 	}
-	expression := ast.SkipParentheses(lazy.Expression)
+	expression := ast.SkipParentheses(lazy.Expression())
 	if expression == nil || expression.Kind != ast.KindCallExpression {
 		return nil, nil, false, false
 	}
@@ -180,7 +180,7 @@ func analyzeEffectFailHandler(tp *typeparser.TypeParser, node *ast.Node) (*ast.N
 		!tp.IsNodeReferenceToEffectModuleApi(call.Expression, "fail") {
 		return nil, nil, false, false
 	}
-	return call.Arguments.Nodes[0], effectModuleExpression(call.Expression), lazy.Node.Kind == ast.KindArrowFunction, true
+	return call.Arguments.Nodes[0], effectModuleExpression(call.Expression), lazy.Node().Kind == ast.KindArrowFunction, true
 }
 
 func isSynchronousFunction(node *ast.Node) bool {
@@ -231,15 +231,15 @@ func analyzeOptionConditionals(tp *typeparser.TypeParser, c *checker.Checker, sf
 
 func analyzeOptionConditional(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, node *ast.Node) (OptionMatchToFromOptionMatch, bool) {
 	dispatch := tp.ParseResultDispatch(node)
-	if dispatch == nil || len(dispatch.Branches) != 1 || dispatch.Fallback == nil {
+	if dispatch == nil || dispatch.Branches().Len() != 1 || dispatch.Fallback() == nil {
 		return OptionMatchToFromOptionMatch{}, false
 	}
-	branch := dispatch.Branches[0]
-	if branch.Condition.Kind != typeparser.DispatchConditionPredicate || branch.Condition.Subject == nil || branch.Condition.Value != nil {
+	branch := dispatch.Branches().At(0)
+	if branch.Condition().Kind() != typeparser.DispatchConditionPredicate || branch.Condition().Subject() == nil || branch.Condition().Value() != nil {
 		return OptionMatchToFromOptionMatch{}, false
 	}
 
-	conditionNode := ast.SkipParentheses(branch.Condition.Subject)
+	conditionNode := ast.SkipParentheses(branch.Condition().Subject())
 	if conditionNode == nil || conditionNode.Kind != ast.KindCallExpression {
 		return OptionMatchToFromOptionMatch{}, false
 	}
@@ -259,8 +259,8 @@ func analyzeOptionConditional(tp *typeparser.TypeParser, c *checker.Checker, sf 
 		return OptionMatchToFromOptionMatch{}, false
 	}
 
-	succeedNode := branch.Result
-	failNode := dispatch.Fallback
+	succeedNode := branch.Result()
+	failNode := dispatch.Fallback()
 	if isNone {
 		succeedNode, failNode = failNode, succeedNode
 	}
@@ -280,7 +280,7 @@ func analyzeOptionConditional(tp *typeparser.TypeParser, c *checker.Checker, sf 
 	return OptionMatchToFromOptionMatch{
 		SourceFile:       sf,
 		Location:         scanner.GetErrorRangeForNode(sf, condition.Expression),
-		ReplacementNode:  dispatch.Node,
+		ReplacementNode:  dispatch.Node(),
 		EffectModuleNode: effectModule,
 		OptionNode:       optionNode,
 		FailureNode:      failure,

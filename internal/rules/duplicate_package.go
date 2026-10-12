@@ -72,15 +72,12 @@ func computeDuplicatePackageDiags(tp *typeparser.TypeParser, _ *checker.Checker,
 		dir     string
 	}
 	byName := map[string][]versionEntry{}
-	for _, pkg := range packages {
-		if pkg.Name != "effect" && !pkg.DependsOnEffect {
+	for _, pkg := range packages.All() {
+		if pkg.Name() != "effect" && !pkg.DependsOnEffect() {
 			continue
 		}
-		ver := ""
-		if pkg.Version != nil {
-			ver = *pkg.Version
-		}
-		byName[pkg.Name] = append(byName[pkg.Name], versionEntry{version: ver, dir: pkg.PackageDirectory})
+		ver, _ := pkg.Version()
+		byName[pkg.Name()] = append(byName[pkg.Name()], versionEntry{version: ver, dir: pkg.PackageDirectory()})
 	}
 
 	var allowed []string

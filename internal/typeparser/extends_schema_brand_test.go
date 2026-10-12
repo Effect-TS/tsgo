@@ -120,18 +120,18 @@ const schemaTag = "dynamic-tag"
 		case *SchemaClassResult:
 			matched = result != nil
 			if matched {
-				self, brand, className = result.SelfTypeNode, result.BrandTypeNode, result.ClassName
+				self, brand, className = result.selfTypeNode, result.brandTypeNode, result.className
 			}
 		case *SchemaTaggedResult:
 			matched = result != nil
 			if matched {
-				self, brand, className = result.SelfTypeNode, result.BrandTypeNode, result.ClassName
-				key, tag = result.KeyStringLiteral, result.TagStringLiteral
+				self, brand, className = result.selfTypeNode, result.brandTypeNode, result.className
+				key, tag = result.keyStringLiteral, result.tagStringLiteral
 			}
 		case *SchemaOpaqueResult:
 			matched = result != nil
 			if matched {
-				self, brand = result.SelfTypeNode, result.BrandTypeNode
+				self, brand = result.selfTypeNode, result.brandTypeNode
 			}
 		default:
 			t.Fatalf("unexpected parser result %T", got)
@@ -212,9 +212,9 @@ class SecondGeneric extends Schema.TaggedRequest<SecondGeneric, "Brand">("reques
 		if got == nil {
 			t.Fatal("expected RequestClass match")
 		}
-		assertSchemaExtendsNode(t, sf, got.ClassName, ast.KindIdentifier, name)
-		assertSchemaExtendsNode(t, sf, got.SelfTypeNode, ast.KindTypeReference, name)
-		assertSchemaExtendsNode(t, sf, got.BrandTypeNode, ast.KindUnknown, "")
+		assertSchemaExtendsNode(t, sf, got.className, ast.KindIdentifier, name)
+		assertSchemaExtendsNode(t, sf, got.selfTypeNode, ast.KindTypeReference, name)
+		assertSchemaExtendsNode(t, sf, got.brandTypeNode, ast.KindUnknown, "")
 		if tp.ExtendsSchemaRequestClass(class) != got {
 			t.Fatal("RequestClass did not return its cached result pointer")
 		}
@@ -226,11 +226,11 @@ class SecondGeneric extends Schema.TaggedRequest<SecondGeneric, "Brand">("reques
 		if got == nil {
 			t.Fatal("expected TaggedRequest match")
 		}
-		assertSchemaExtendsNode(t, sf, got.ClassName, ast.KindIdentifier, name)
-		assertSchemaExtendsNode(t, sf, got.SelfTypeNode, ast.KindTypeReference, name)
-		assertSchemaExtendsNode(t, sf, got.BrandTypeNode, ast.KindUnknown, "")
-		assertSchemaExtendsNode(t, sf, got.KeyStringLiteral, ast.KindStringLiteral, `"request-key"`)
-		assertSchemaExtendsNode(t, sf, got.TagStringLiteral, ast.KindStringLiteral, `"request-tag"`)
+		assertSchemaExtendsNode(t, sf, got.className, ast.KindIdentifier, name)
+		assertSchemaExtendsNode(t, sf, got.selfTypeNode, ast.KindTypeReference, name)
+		assertSchemaExtendsNode(t, sf, got.brandTypeNode, ast.KindUnknown, "")
+		assertSchemaExtendsNode(t, sf, got.keyStringLiteral, ast.KindStringLiteral, `"request-key"`)
+		assertSchemaExtendsNode(t, sf, got.tagStringLiteral, ast.KindStringLiteral, `"request-tag"`)
 		if tp.ExtendsSchemaTaggedRequest(class) != got {
 			t.Fatal("TaggedRequest did not return its cached result pointer")
 		}

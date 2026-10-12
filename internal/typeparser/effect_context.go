@@ -188,9 +188,9 @@ func (tp *TypeParser) analyzeEffectContextForSourceFile(sf *ast.SourceFile) {
 
 		// logic for this node
 		if effectGen := tp.EffectGenCall(node); effectGen != nil {
-			bodyNode := effectGen.Body.AsNode()
+			bodyNode := effectGen.body.AsNode()
 			setPendingEnableFlags(bodyNode, EffectContextFlagCanYieldEffect)
-			*links.EffectYieldGeneratorFunction.Get(bodyNode) = effectGen.GeneratorFunction
+			*links.EffectYieldGeneratorFunction.Get(bodyNode) = effectGen.generatorFunction
 		} else if effectFn := tp.EffectFnCall(node); effectFn != nil && effectFn.IsGenerator() {
 			body := effectFn.Body()
 			genFn := effectFn.GeneratorFunction()

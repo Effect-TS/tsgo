@@ -2,17 +2,32 @@
 package typeparser
 
 import (
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 )
 
 // EffectGenCallResult represents a parsed Effect.gen(...) call.
 type EffectGenCallResult struct {
-	Call              *ast.CallExpression
-	EffectModule      *ast.Expression // Namespace receiver for Effect.gen; nil for named imports and local aliases.
-	OptionsNode       *ast.Node
-	GeneratorFunction *ast.FunctionExpression
-	Body              *ast.BlockOrExpression
-	PipeArguments     []*ast.Node
+	call              *ast.CallExpression
+	effectModule      *ast.Expression // Namespace receiver for Effect.gen; nil for named imports and local aliases.
+	optionsNode       *ast.Node
+	generatorFunction *ast.FunctionExpression
+	body              *ast.BlockOrExpression
+	pipeArguments     []*ast.Node
+}
+
+func (r EffectGenCallResult) Call() *ast.CallExpression { return r.call }
+
+func (r EffectGenCallResult) EffectModule() *ast.Expression { return r.effectModule }
+
+func (r EffectGenCallResult) OptionsNode() *ast.Node { return r.optionsNode }
+
+func (r EffectGenCallResult) GeneratorFunction() *ast.FunctionExpression { return r.generatorFunction }
+
+func (r EffectGenCallResult) Body() *ast.BlockOrExpression { return r.body }
+
+func (r EffectGenCallResult) PipeArguments() readonly.Slice[*ast.Node] {
+	return readonly.New(r.pipeArguments)
 }
 
 // EffectGenCall parses a node as Effect.gen(<generator>).
@@ -45,12 +60,12 @@ func (tp *TypeParser) EffectGenCall(node *ast.Node) *EffectGenCallResult {
 		}
 
 		return &EffectGenCallResult{
-			Call:              call,
-			EffectModule:      effectModule,
-			OptionsNode:       optionsNode,
-			GeneratorFunction: genFn,
-			Body:              genFn.Body,
-			PipeArguments:     pipeArgs,
+			call:              call,
+			effectModule:      effectModule,
+			optionsNode:       optionsNode,
+			generatorFunction: genFn,
+			body:              genFn.Body,
+			pipeArguments:     pipeArgs,
 		}
 	})
 }
