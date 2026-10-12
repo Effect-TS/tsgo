@@ -22,9 +22,9 @@ type EffectFnCallResult struct {
 	effectModule       *ast.Expression
 	optionsNode        *ast.Node
 	functionNode       *ast.Node // ArrowFunction or FunctionExpression
-	functionReturnType *checker.Type
+	functionReturnType *lazy[*checker.Type]
 	pipeArguments      []*ast.Node // Transformation args after the body (may be empty/nil)
-	pipeArgsOutType    []*checker.Type
+	pipeArgsOutType    []*lazy[*checker.Type]
 	traceExpression    *ast.Node // The name string from curried Effect.fn("name")(...), or nil
 }
 
@@ -38,14 +38,18 @@ func (r EffectFnCallResult) OptionsNode() *ast.Node { return r.optionsNode }
 
 func (r EffectFnCallResult) FunctionNode() *ast.Node { return r.functionNode }
 
-func (r EffectFnCallResult) FunctionReturnType() *checker.Type { return r.functionReturnType }
+func (r EffectFnCallResult) FunctionReturnType() *checker.Type { return r.functionReturnType.get() }
 
 func (r EffectFnCallResult) PipeArguments() readonly.Slice[*ast.Node] {
 	return readonly.New(r.pipeArguments)
 }
 
 func (r EffectFnCallResult) PipeArgsOutType() readonly.Slice[*checker.Type] {
-	return readonly.New(r.pipeArgsOutType)
+	outTypes := make([]*checker.Type, len(r.pipeArgsOutType))
+	for i, outType := range r.pipeArgsOutType {
+		outTypes[i] = outType.get()
+	}
+	return readonly.New(outTypes)
 }
 
 func (r EffectFnCallResult) TraceExpression() *ast.Node { return r.traceExpression }
@@ -121,27 +125,30 @@ func isGeneratorFunctionNode(node *ast.Node) bool {
 	return fn != nil && fn.AsteriskToken != nil
 }
 
-func (tp *TypeParser) buildEffectFnPipeArgsOutType(call *ast.CallExpression, trailingStartIndex int, pipeArgs []*ast.Node) []*checker.Type {
-	outTypes := make([]*checker.Type, len(pipeArgs))
-	if tp == nil || tp.checker == nil || call == nil {
-		return outTypes
-	}
-
-	callNode := call.AsNode()
+func (tp *TypeParser) buildEffectFnPipeArgsOutType(call *ast.CallExpression, trailingStartIndex int, pipeArgs []*ast.Node) []*lazy[*checker.Type] {
+	outTypes := make([]*lazy[*checker.Type], len(pipeArgs))
 	for i := range pipeArgs {
 		argIndex := trailingStartIndex + i
-		contextualType := tp.checker.GetContextualTypeForArgumentAtIndex(callNode, argIndex)
-		if contextualType == nil {
-			continue
-		}
-		callSigs := tp.checker.GetSignaturesOfType(contextualType, checker.SignatureKindCall)
-		if len(callSigs) == 0 {
-			continue
-		}
-		outTypes[i] = tp.checker.GetReturnTypeOfSignature(callSigs[0])
+		outTypes[i] = newLazy(func() *checker.Type {
+			return tp.buildEffectFnPipeArgOutType(call, argIndex)
+		})
 	}
-
 	return outTypes
+}
+
+func (tp *TypeParser) buildEffectFnPipeArgOutType(call *ast.CallExpression, argIndex int) *checker.Type {
+	if tp == nil || tp.checker == nil || call == nil {
+		return nil
+	}
+	contextualType := tp.checker.GetContextualTypeForArgumentAtIndex(call.AsNode(), argIndex)
+	if contextualType == nil {
+		return nil
+	}
+	callSigs := tp.checker.GetSignaturesOfType(contextualType, checker.SignatureKindCall)
+	if len(callSigs) == 0 {
+		return nil
+	}
+	return tp.checker.GetReturnTypeOfSignature(callSigs[0])
 }
 
 func (tp *TypeParser) buildEffectFnFunctionReturnType(call *ast.CallExpression, trailingStartIndex int, pipeArgs []*ast.Node) *checker.Type {
@@ -265,7 +272,7 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 			effectModule:       effectModule,
 			optionsNode:        optionsNode,
 			functionNode:       bodyArg,
-			functionReturnType: tp.buildEffectFnFunctionReturnType(call, trailingStartIndex, pipeArgs),
+			functionReturnType: newLazy(func() *checker.Type { return tp.buildEffectFnFunctionReturnType(call, trailingStartIndex, pipeArgs) }),
 			pipeArguments:      pipeArgs,
 			pipeArgsOutType:    tp.buildEffectFnPipeArgsOutType(call, trailingStartIndex, pipeArgs),
 			traceExpression:    traceExpression,

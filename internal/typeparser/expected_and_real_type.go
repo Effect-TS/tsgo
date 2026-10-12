@@ -11,19 +11,19 @@ import (
 // This is used by diagnostic rules that need to compare what type was expected at a location
 // versus what type was actually provided.
 type ExpectedAndRealType struct {
-	node         *ast.Node     // The location node (for diagnostic reporting)
-	expectedType *checker.Type // The type expected at this location
-	valueNode    *ast.Node     // The actual value node
-	realType     *checker.Type // The actual type of the value
+	node         *ast.Node            // The location node (for diagnostic reporting)
+	expectedType *lazy[*checker.Type] // The type expected at this location
+	valueNode    *ast.Node            // The actual value node
+	realType     *lazy[*checker.Type] // The actual type of the value
 }
 
 func (r ExpectedAndRealType) Node() *ast.Node { return r.node }
 
-func (r ExpectedAndRealType) ExpectedType() *checker.Type { return r.expectedType }
+func (r ExpectedAndRealType) ExpectedType() *checker.Type { return r.expectedType.get() }
 
 func (r ExpectedAndRealType) ValueNode() *ast.Node { return r.valueNode }
 
-func (r ExpectedAndRealType) RealType() *checker.Type { return r.realType }
+func (r ExpectedAndRealType) RealType() *checker.Type { return r.realType.get() }
 
 // getInferredReturnType extracts the return type from a function-like declaration.
 // It handles overloaded functions (multiple call signatures), type predicates,
@@ -119,13 +119,11 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 				if vd != nil && vd.Initializer != nil {
 					nameNode := vd.Name()
 					if nameNode != nil {
-						expectedType := tp.GetTypeAtLocation(nameNode)
-						realType := tp.GetTypeAtLocation(vd.Initializer)
 						result = append(result, ExpectedAndRealType{
 							node:         nameNode,
-							expectedType: expectedType,
+							expectedType: tp.lazyTypeAtLocation(nameNode),
 							valueNode:    vd.Initializer,
-							realType:     realType,
+							realType:     tp.lazyTypeAtLocation(vd.Initializer),
 						})
 					}
 					queue = append(queue, vd.Initializer)
@@ -149,13 +147,11 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 								if arg == nil {
 									continue
 								}
-								expectedType := c.GetTypeOfSymbolAtLocation(param, node)
-								realType := tp.GetTypeAtLocation(arg)
 								result = append(result, ExpectedAndRealType{
 									node:         arg,
-									expectedType: expectedType,
+									expectedType: newLazy(func() *checker.Type { return c.GetTypeOfSymbolAtLocation(param, node) }),
 									valueNode:    arg,
-									realType:     realType,
+									realType:     tp.lazyTypeAtLocation(arg),
 								})
 							}
 						}
@@ -181,13 +177,11 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 								if name != "" {
 									sym := c.GetPropertyOfType(contextualType, name)
 									if sym != nil {
-										expectedType := c.GetTypeOfSymbolAtLocation(sym, node)
-										realType := tp.GetTypeAtLocation(node)
 										result = append(result, ExpectedAndRealType{
 											node:         node,
-											expectedType: expectedType,
+											expectedType: newLazy(func() *checker.Type { return c.GetTypeOfSymbolAtLocation(sym, node) }),
 											valueNode:    node,
-											realType:     realType,
+											realType:     tp.lazyTypeAtLocation(node),
 										})
 									}
 								}
@@ -205,13 +199,11 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 				if binExpr != nil && binExpr.OperatorToken != nil &&
 					binExpr.OperatorToken.Kind == ast.KindEqualsToken {
 					if binExpr.Left != nil && binExpr.Right != nil {
-						expectedType := tp.GetTypeAtLocation(binExpr.Left)
-						realType := tp.GetTypeAtLocation(binExpr.Right)
 						result = append(result, ExpectedAndRealType{
 							node:         binExpr.Left,
-							expectedType: expectedType,
+							expectedType: tp.lazyTypeAtLocation(binExpr.Left),
 							valueNode:    binExpr.Right,
-							realType:     realType,
+							realType:     tp.lazyTypeAtLocation(binExpr.Right),
 						})
 					}
 					if binExpr.Right != nil {
@@ -229,12 +221,11 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 					if parentDecl != nil {
 						expectedType := tp.getInferredReturnType(parentDecl)
 						if expectedType != nil {
-							realType := tp.GetTypeAtLocation(retStmt.Expression)
 							result = append(result, ExpectedAndRealType{
 								node:         node,
-								expectedType: expectedType,
+								expectedType: resolvedLazy(expectedType),
 								valueNode:    node,
-								realType:     realType,
+								realType:     tp.lazyTypeAtLocation(retStmt.Expression),
 							})
 						}
 					}
@@ -254,24 +245,22 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 						// Pattern 6: No type parameters — use contextual type
 						expectedType := tp.GetContextualType(body, checker.ContextFlagsNone)
 						if expectedType != nil {
-							realType := tp.GetTypeAtLocation(body)
 							result = append(result, ExpectedAndRealType{
 								node:         body,
-								expectedType: expectedType,
+								expectedType: resolvedLazy(expectedType),
 								valueNode:    body,
-								realType:     realType,
+								realType:     tp.lazyTypeAtLocation(body),
 							})
 						}
 					} else {
 						// Pattern 7: With type parameters — use inferred return type
 						expectedType := tp.getInferredReturnType(node)
 						if expectedType != nil {
-							realType := tp.GetTypeAtLocation(body)
 							result = append(result, ExpectedAndRealType{
 								node:         body,
-								expectedType: expectedType,
+								expectedType: resolvedLazy(expectedType),
 								valueNode:    body,
-								realType:     realType,
+								realType:     tp.lazyTypeAtLocation(body),
 							})
 						}
 					}
@@ -284,13 +273,11 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 			if node.Kind == ast.KindSatisfiesExpression {
 				satExpr := node.AsSatisfiesExpression()
 				if satExpr != nil && satExpr.Expression != nil && satExpr.Type != nil {
-					expectedType := tp.GetTypeAtLocation(satExpr.Type)
-					realType := tp.GetTypeAtLocation(satExpr.Expression)
 					result = append(result, ExpectedAndRealType{
 						node:         satExpr.Expression,
-						expectedType: expectedType,
+						expectedType: tp.lazyTypeAtLocation(satExpr.Type),
 						valueNode:    satExpr.Expression,
-						realType:     realType,
+						realType:     tp.lazyTypeAtLocation(satExpr.Expression),
 					})
 					queue = append(queue, satExpr.Expression)
 					continue

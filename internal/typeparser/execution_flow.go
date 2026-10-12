@@ -21,7 +21,7 @@ const (
 type ExecutionNode struct {
 	kind ExecutionNodeKind
 	node *ast.Node
-	typ  *checker.Type
+	typ  *lazy[*checker.Type]
 
 	// Transform nodes preserve the original AST in Node and optionally expose a
 	// normalized callee/args view once the visitor reaches that node.
@@ -33,7 +33,7 @@ func (r ExecutionNode) Kind() ExecutionNodeKind { return r.kind }
 
 func (r ExecutionNode) Node() *ast.Node { return r.node }
 
-func (r ExecutionNode) Type() *checker.Type { return r.typ }
+func (r ExecutionNode) Type() *checker.Type { return r.typ.get() }
 
 func (r ExecutionNode) Callee() *ast.Node { return r.callee }
 
@@ -93,7 +93,7 @@ func (ec *executionCollector) buildValueNode(node *ast.Node) *GraphSlice {
 	return ec.buildSlice(ExecutionNode{
 		kind: ExecutionNodeKindValue,
 		node: node,
-		typ:  ec.tp.GetTypeAtLocation(node),
+		typ:  ec.tp.lazyTypeAtLocation(node),
 	})
 }
 
@@ -212,12 +212,11 @@ func (ec *executionCollector) visitExpressionNode(node *ast.Expression, parentEx
 func (ec *executionCollector) visitPipeCall(p *ParsedPipeCallResult, _ *ast.Node) *GraphSlice {
 	s := ec.visitNode(p.subject)
 	for i, pipedTransform := range p.args {
-		// TODO: OOB argsouttype check
 		callee, args := ec.extractCalleeAndArgs(pipedTransform)
 		transformSlice := ec.buildSlice(ExecutionNode{
 			kind:   ExecutionNodeKindTransform,
 			node:   pipedTransform,
-			typ:    p.argsOutType[i],
+			typ:    newLazy(func() *checker.Type { return p.argsOutType.get()[i] }),
 			callee: callee,
 			args:   args,
 		})
@@ -233,7 +232,7 @@ func (ec *executionCollector) visitEffectGenCall(p *EffectGenCallResult, node *a
 	s := ec.buildSlice(ExecutionNode{
 		kind: ExecutionNodeKindLogicMerge,
 		node: node,
-		typ:  ec.tp.GetTypeAtLocation(node),
+		typ:  ec.tp.lazyTypeAtLocation(node),
 	})
 	ast.ForEachReturnStatement(p.body, func(stmt *ast.Node) bool {
 		if stmt.Kind == ast.KindReturnStatement {
@@ -298,7 +297,7 @@ func (ec *executionCollector) visitEffectFnCall(p *EffectFnCallResult, node *ast
 	s := ec.buildSlice(ExecutionNode{
 		kind: ExecutionNodeKindFunction,
 		node: node,
-		typ:  ec.tp.GetTypeAtLocation(node),
+		typ:  ec.tp.lazyTypeAtLocation(node),
 	})
 	for _, arg := range p.functionNode.Parameters() {
 		ec.visitNodeAndConnectSlice(arg, s, ExecutionLinkKindParameter)
@@ -313,7 +312,7 @@ func (ec *executionCollector) visitSingleArgInlineCall(p *parsedSingleArgInlineC
 	transformSlice := ec.buildSlice(ExecutionNode{
 		kind:   ExecutionNodeKindTransform,
 		node:   p.Transform,
-		typ:    ec.tp.GetTypeAtLocation(node),
+		typ:    ec.tp.lazyTypeAtLocation(node),
 		callee: callee,
 		args:   args,
 	})
@@ -328,7 +327,7 @@ func (ec *executionCollector) visitDataFirstOrLastCall(p *ParsedDataFirstOrLastC
 	transformSlice := ec.buildSlice(ExecutionNode{
 		kind: ExecutionNodeKindTransform,
 		node: node,
-		typ:  ec.tp.GetTypeAtLocation(node),
+		typ:  ec.tp.lazyTypeAtLocation(node),
 	})
 	s = ec.connectSlices(s, transformSlice, ExecutionLinkKindPipe)
 	ec.visitNodeAndConnectSlice(p.callee, s, ExecutionLinkKindTransformCallee)
@@ -340,7 +339,7 @@ func (ec *executionCollector) visitFunctionLikeDeclaration(node *ast.Node) *Grap
 	s := ec.buildSlice(ExecutionNode{
 		kind: ExecutionNodeKindFunction,
 		node: node,
-		typ:  ec.tp.GetTypeAtLocation(node),
+		typ:  ec.tp.lazyTypeAtLocation(node),
 	})
 	ec.visitNodesAndConnectSlice(node.Parameters(), s, ExecutionLinkKindParameter)
 	fnBody := node.Body()

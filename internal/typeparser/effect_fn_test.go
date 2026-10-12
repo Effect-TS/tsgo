@@ -46,7 +46,7 @@ func assertEffectFnFunctionReturnType(t *testing.T, version bundledeffect.Effect
 	if parsed.functionReturnType == nil {
 		t.Fatal("expected FunctionReturnType")
 	}
-	if got := c.TypeToString(parsed.functionReturnType); got != want {
+	if got := c.TypeToString(parsed.FunctionReturnType()); got != want {
 		t.Fatalf("FunctionReturnType = %q", got)
 	}
 }
@@ -177,7 +177,7 @@ export const make = Effect.fn(
 			done()
 			t.Fatal("expected FunctionReturnType")
 		}
-		if got := c.TypeToString(parsed.functionReturnType); got != "Effect<number, never, never>" {
+		if got := c.TypeToString(parsed.FunctionReturnType()); got != "Effect<number, never, never>" {
 			done()
 			t.Fatalf("FunctionReturnType = %q", got)
 		}
@@ -212,7 +212,7 @@ export const make = Effect.fn(
 	if parsed.functionReturnType == nil {
 		t.Fatal("expected FunctionReturnType")
 	}
-	if got := c.TypeToString(parsed.functionReturnType); got != "Effect<string, never, never>" {
+	if got := c.TypeToString(parsed.FunctionReturnType()); got != "Effect<string, never, never>" {
 		t.Fatalf("FunctionReturnType = %q", got)
 	}
 }

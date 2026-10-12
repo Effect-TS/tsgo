@@ -8,7 +8,7 @@ import (
 func TestTransformationInputType(t *testing.T) {
 	t.Parallel()
 	subject, intermediate, output := &checker.Type{}, &checker.Type{}, &checker.Type{}
-	flow := &PartialPipingFlow{subject: PipingFlowSubject{outType: subject}, transformations: []PipingFlowTransformation{{outType: intermediate}, {outType: output}}}
+	flow := &PartialPipingFlow{subject: PipingFlowSubject{outType: &lazy[*checker.Type]{value: subject}}, transformations: []PipingFlowTransformation{{outType: &lazy[*checker.Type]{value: intermediate}}, {outType: &lazy[*checker.Type]{value: output}}}}
 	if flow.TransformationInputType(0) != subject {
 		t.Fatal("first step must consume the subject type")
 	}
