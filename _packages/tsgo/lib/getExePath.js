@@ -62,7 +62,8 @@ export default function getExePath() {
 
   const packageDir = path.dirname(packageJson);
   const upstream = readJson(path.join(packageDir, "lib", "upstream.json"));
-  if (upstream.schemaVersion !== 5 || typeof upstream.components?.typescript !== "object") {
+  const latest = upstream.tags?.typescript?.latest;
+  if (upstream.schemaVersion !== 5 || typeof upstream.components?.typescript !== "object" || typeof latest !== "string") {
     throw new Error("Invalid " + platformPackageName + "/lib/upstream.json.");
   }
 
@@ -70,7 +71,9 @@ export default function getExePath() {
     if (typeof component?.gitHead !== "string") {
       throw new Error("Invalid TypeScript component metadata in " + platformPackageName + "/lib/upstream.json.");
     }
-    let exe = path.join(packageDir, "artifacts", "typescript", version, "tsc");
+    let exe = version === latest
+      ? path.join(packageDir, "lib", "tsc")
+      : path.join(packageDir, "artifacts", "typescript", version, "tsc");
     if (process.platform === "win32") {
       exe += ".exe";
       if (exe.length >= 248) {

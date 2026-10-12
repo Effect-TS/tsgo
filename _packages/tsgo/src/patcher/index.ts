@@ -161,9 +161,16 @@ const resolvePlatformPackage = (target: DiscoveredBinary) => Effect.gen(function
   return { packageDir: path.dirname(packageJsonPath) }
 })
 
+export const packagedArtifactPath = (packageDir: string, target: DiscoveredBinary) => Effect.gen(function*() {
+  const path = yield* Path.Path
+  const fileName = path.basename(target.binaryPath)
+  return target.component === "typescript" && target.packageVersion === upstreamJson.tags.typescript.latest
+    ? path.join(packageDir, "lib", fileName)
+    : path.join(packageDir, "artifacts", target.component, target.packageVersion, fileName)
+})
+
 export const resolveReplacement: ReplacementResolver = (target) => Effect.gen(function*() {
   const fs = yield* FileSystem.FileSystem
-  const path = yield* Path.Path
   if (target.component !== "typescript" && process.platform === "linux" && !isGlibc()) {
     return yield* new ReplacementUnavailableError({
       target,
@@ -172,13 +179,7 @@ export const resolveReplacement: ReplacementResolver = (target) => Effect.gen(fu
   }
   if (target.component === "oxlint-dts") return yield* resolveOxlintDeclarations(target)
   const platform = yield* resolvePlatformPackage(target)
-  const replacementPath = path.join(
-    platform.packageDir,
-    "artifacts",
-    target.component,
-    target.packageVersion,
-    path.basename(target.binaryPath)
-  )
+  const replacementPath = yield* packagedArtifactPath(platform.packageDir, target)
   if (!(yield* exists(fs, replacementPath))) {
     const versions = supportedVersions(target.component)
     if (!versions.includes(target.packageVersion)) {
