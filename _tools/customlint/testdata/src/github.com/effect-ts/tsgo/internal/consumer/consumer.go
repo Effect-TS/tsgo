@@ -66,3 +66,31 @@ func allowed(p *typeparser.TypeParser, alias *typeparser.ParserAlias, lookalike 
 	dynamic.GetSymbolAtLocation(n)
 	dynamic.GetTypeAtLocation(n)
 }
+
+func contextual(c *compiler.Checker, old *legacy.Checker, alias PointerAlias, promoted *Promoted, p *typeparser.TypeParser, n *compiler.Node) {
+	c.GetContextualType(n, 0)                 // want "use TypeParser.GetContextualType"
+	old.GetContextualType(nil, 0)             // want "use TypeParser.GetContextualType"
+	alias.GetContextualType(n, 0)             // want "use TypeParser.GetContextualType"
+	promoted.GetContextualType(n, 0)          // want "use TypeParser.GetContextualType"
+	_ = c.GetContextualType                   // want "use TypeParser.GetContextualType"
+	_ = (*compiler.Checker).GetContextualType // want "use TypeParser.GetContextualType"
+	_ = old.GetContextualType                 // want "use TypeParser.GetContextualType"
+	_ = (*legacy.Checker).GetContextualType   // want "use TypeParser.GetContextualType"
+	_ = PointerAlias.GetContextualType        // want "use TypeParser.GetContextualType"
+	_ = (*Promoted).GetContextualType         // want "use TypeParser.GetContextualType"
+	p.GetContextualType(n, 0)
+	_ = p.GetContextualType
+}
+
+func (*Checker) GetContextualType(n *compiler.Node, flags compiler.ContextFlags) *compiler.Node {
+	return n
+}
+
+func allowedContextual(p *typeparser.ParserAlias, lookalike *Checker, n *compiler.Node,
+	dynamic interface {
+		GetContextualType(*compiler.Node, compiler.ContextFlags) *compiler.Node
+	}) {
+	p.GetContextualType(n, 0)
+	lookalike.GetContextualType(n, 0)
+	dynamic.GetContextualType(n, 0)
+}

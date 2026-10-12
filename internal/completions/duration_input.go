@@ -43,9 +43,7 @@ func runDurationInput(ctx *completion.Context) []*lsproto.CompletionItem {
 		return nil
 	}
 
-	ch := ctx.Checker
-
-	contextualType := ch.GetContextualType(previousToken, checker.ContextFlagsNone)
+	contextualType := ctx.TypeParser.GetContextualType(previousToken, checker.ContextFlagsNone)
 	if contextualType == nil || !contextualType.IsUnion() {
 		return nil
 	}

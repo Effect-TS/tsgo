@@ -18,6 +18,9 @@ type TypeParser struct {
 // EffectLinks holds per-checker cached type-parser results.
 // One instance is lazily created per Checker and cached on TypeParser.
 type EffectLinks struct {
+	ObjectLiteralContextualType           core.LinkStore[*ast.Node, *checker.Type]
+	ObjectLiteralConstraintContextualType core.LinkStore[*ast.Node, *checker.Type]
+
 	TypeAtLocation         core.LinkStore[*ast.Node, *checker.Type]
 	EffectType             core.LinkStore[*checker.Type, *Effect]
 	StreamType             core.LinkStore[*checker.Type, *Effect]

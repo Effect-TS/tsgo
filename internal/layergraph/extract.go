@@ -240,7 +240,7 @@ func extractNodeInfo(tp *typeparser.TypeParser, c *checker.Checker, node *ast.No
 	// (the pipe argument is a function whose return type is the Layer).
 	var t *checker.Type
 	if inPipeContext && ast.IsExpression(node) {
-		contextualType := c.GetContextualType(node, checker.ContextFlagsNone)
+		contextualType := tp.GetContextualType(node, checker.ContextFlagsNone)
 		if contextualType != nil {
 			callSignatures := c.GetSignaturesOfType(contextualType, checker.SignatureKindCall)
 			if len(callSignatures) == 1 {
