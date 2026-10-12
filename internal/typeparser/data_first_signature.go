@@ -300,7 +300,7 @@ func isLikelySelfParameter(sym *ast.Symbol) bool {
 	if sym == nil {
 		return false
 	}
-	name := strings.ToLower(sym.Name)
+	name := strings.ToLower(ast.TSGetSymbolName(sym))
 	return name == "self" || strings.HasPrefix(name, "self") || name == "this"
 }
 

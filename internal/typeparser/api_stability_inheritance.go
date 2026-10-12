@@ -20,14 +20,14 @@ func (a *apiStabilityAnalysis) optionalTaggedBase(symbol *ast.Symbol) bool {
 	for len(pending) > 0 {
 		current := pending[len(pending)-1]
 		pending = pending[:len(pending)-1]
-		if current == nil || current.Flags&(ast.SymbolFlagsInterface|ast.SymbolFlagsClass) == 0 || len(current.Declarations) == 0 || !a.consumeWork() {
+		if current == nil || ast.TSGetSymbolFlags(current)&(ast.SymbolFlagsInterface|ast.SymbolFlagsClass) == 0 || len(ast.TSGetSymbolDeclarations(current)) == 0 || !a.consumeWork() {
 			return false
 		}
 		if seen[current] {
 			continue
 		}
 		seen[current] = true
-		if current.Flags&ast.SymbolFlagsClass != 0 && apiStabilitySymbolDeclaresHeritage(current) {
+		if ast.TSGetSymbolFlags(current)&ast.SymbolFlagsClass != 0 && apiStabilitySymbolDeclaresHeritage(current) {
 			declared := checker.GetResolvedDeclaredTypeOfSymbolIfMaterialized(a.tp.checker, current)
 			if declared == nil {
 				return false
@@ -36,7 +36,7 @@ func (a *apiStabilityAnalysis) optionalTaggedBase(symbol *ast.Symbol) bool {
 				return false
 			}
 		}
-		for _, declaration := range current.Declarations {
+		for _, declaration := range ast.TSGetSymbolDeclarations(current) {
 			var members []*ast.Node
 			switch declaration.Kind {
 			case ast.KindInterfaceDeclaration:
@@ -61,7 +61,7 @@ func (a *apiStabilityAnalysis) optionalTaggedBase(symbol *ast.Symbol) bool {
 				}
 			}
 		}
-		for _, declaration := range current.Declarations {
+		for _, declaration := range ast.TSGetSymbolDeclarations(current) {
 			if declaration.Kind != ast.KindInterfaceDeclaration {
 				continue
 			}
@@ -77,14 +77,14 @@ func (a *apiStabilityAnalysis) optionalTaggedBase(symbol *ast.Symbol) bool {
 				}
 				base := a.symbolAtTypeNameNode(name)
 				aliases := map[*ast.Symbol]bool{}
-				for base != nil && base.Flags&ast.SymbolFlagsAlias != 0 && !aliases[base] {
+				for base != nil && ast.TSGetSymbolFlags(base)&ast.SymbolFlagsAlias != 0 && !aliases[base] {
 					aliases[base] = true
 					base = ApiStabilityImmediateAliasedSymbol(a.tp.checker, base)
 				}
 				pending = append(pending, base)
 			}
 		}
-		if current.Flags&ast.SymbolFlagsClass != 0 && apiStabilitySymbolDeclaresHeritage(current) {
+		if ast.TSGetSymbolFlags(current)&ast.SymbolFlagsClass != 0 && apiStabilitySymbolDeclaresHeritage(current) {
 			declared := checker.GetResolvedDeclaredTypeOfSymbolIfMaterialized(a.tp.checker, current)
 			bases, _ := checker.GetResolvedBaseTypesOfTypeIfMaterialized(a.tp.checker, declared)
 			for _, base := range bases {

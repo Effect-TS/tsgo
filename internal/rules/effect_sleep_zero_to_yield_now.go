@@ -114,16 +114,16 @@ func isImportedModuleReceiver(tp *typeparser.TypeParser, node *ast.Node) bool {
 			return false
 		}
 		symbol := tp.GetSymbolAtLocation(root)
-		return symbol != nil && len(symbol.Declarations) == 1 && symbol.Declarations[0].Kind == ast.KindNamespaceImport
+		return symbol != nil && len(ast.TSGetSymbolDeclarations(symbol)) == 1 && ast.TSGetSymbolDeclarations(symbol)[0].Kind == ast.KindNamespaceImport
 	}
 	if node.Kind != ast.KindIdentifier {
 		return false
 	}
 	symbol := tp.GetSymbolAtLocation(node)
-	if symbol == nil || len(symbol.Declarations) != 1 {
+	if symbol == nil || len(ast.TSGetSymbolDeclarations(symbol)) != 1 {
 		return false
 	}
-	kind := symbol.Declarations[0].Kind
+	kind := ast.TSGetSymbolDeclarations(symbol)[0].Kind
 	return kind == ast.KindImportSpecifier || kind == ast.KindNamespaceImport
 }
 

@@ -539,7 +539,7 @@ func (tp *TypeParser) areParametersReferencedIn(fnNode *ast.Node, nodes []*ast.N
 
 // isSymbolDeclaredInRange checks if any of the symbol's declarations fall within the given range.
 func isSymbolDeclaredInRange(sym *ast.Symbol, start, end int) bool {
-	for _, decl := range sym.Declarations {
+	for _, decl := range ast.TSGetSymbolDeclarations(sym) {
 		if decl != nil && decl.Pos() >= start && decl.End() <= end {
 			return true
 		}

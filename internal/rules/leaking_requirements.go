@@ -5,9 +5,9 @@ import (
 	"strings"
 
 	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
-	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
@@ -308,14 +308,14 @@ func hasLeakableServiceAnnotation(c *checker.Checker, t *checker.Type) bool {
 	}
 
 	// Resolve aliases
-	if sym.Flags&ast.SymbolFlagsAlias != 0 {
+	if ast.TSGetSymbolFlags(sym)&ast.SymbolFlagsAlias != 0 {
 		resolved := c.GetAliasedSymbol(sym)
 		if resolved != nil {
 			sym = resolved
 		}
 	}
 
-	for _, decl := range sym.Declarations {
+	for _, decl := range ast.TSGetSymbolDeclarations(sym) {
 		if decl == nil {
 			continue
 		}

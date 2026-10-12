@@ -115,7 +115,7 @@ func TestGetSymbolAtLocationDeletePreservesOtherSymbols(t *testing.T) {
 					location = location.Parent
 				}
 			}
-			if symbol := tp.GetSymbolAtLocation(location); symbol == nil || symbol.Name != tc.wantSymbol {
+			if symbol := tp.GetSymbolAtLocation(location); symbol == nil || ast.TSGetSymbolName(symbol) != tc.wantSymbol {
 				t.Fatalf("expected symbol %q, got %v", tc.wantSymbol, symbol)
 			}
 			if typ := tp.GetTypeAtLocation(deleteExpression); typ == nil || c.TypeToString(typ) != "boolean" {
