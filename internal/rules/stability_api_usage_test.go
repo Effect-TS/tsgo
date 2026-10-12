@@ -191,28 +191,35 @@ declare function generic<T extends Options>(options: T): void
 const unrelated = { first: 8, second: 9 }
 accept({ first: 6, second: 7 })
 `
-			ctx, _, done := compileApiStabilitySource(t, source)
-			defer done()
-			for _, test := range []struct {
+			tests := []struct {
 				rule rule.Rule
 				name string
 				uses []string
 			}{
 				{ExperimentalApiUsage, "first", []string{"first: 1", "first: 4", "first: 6"}},
 				{UnstableApiUsage, "second", []string{"second: 3", "second: 5", "second: 7"}},
-			} {
-				diagnostics := test.rule.Run(ctx)
-				if len(diagnostics) != 3 {
-					t.Fatalf("%s: got %d diagnostics, want 3: %v", test.rule.Name, len(diagnostics), diagnostics)
-				}
-				for i, diagnostic := range diagnostics {
-					if want := strings.Index(source, test.uses[i]); diagnostic.Pos() != want {
-						t.Errorf("%s position = %d, want %d", test.rule.Name, diagnostic.Pos(), want)
+			}
+			for _, order := range [][2]int{{0, 1}, {1, 0}} {
+				t.Run(tests[order[0]].rule.Name+"-first", func(t *testing.T) {
+					t.Parallel()
+					ctx, _, done := compileApiStabilitySource(t, source)
+					defer done()
+					for _, index := range order {
+						test := tests[index]
+						diagnostics := test.rule.Run(ctx)
+						if len(diagnostics) != 3 {
+							t.Fatalf("%s: got %d diagnostics, want 3: %v", test.rule.Name, len(diagnostics), diagnostics)
+						}
+						for i, diagnostic := range diagnostics {
+							if want := strings.Index(source, test.uses[i]); diagnostic.Pos() != want {
+								t.Errorf("%s position = %d, want %d", test.rule.Name, diagnostic.Pos(), want)
+							}
+							if got := source[diagnostic.Pos() : diagnostic.Pos()+diagnostic.Len()]; got != test.name {
+								t.Errorf("%s highlights %q, want %q", test.rule.Name, got, test.name)
+							}
+						}
 					}
-					if got := source[diagnostic.Pos() : diagnostic.Pos()+diagnostic.Len()]; got != test.name {
-						t.Errorf("%s highlights %q, want %q", test.rule.Name, got, test.name)
-					}
-				}
+				})
 			}
 		})
 	}
@@ -243,25 +250,32 @@ pick({ kind: "b", y: pick({ kind: "a", x: 4 }).x, x: 5 })
 	for _, prime := range []bool{true, false} {
 		t.Run(fmt.Sprintf("prime=%t", prime), func(t *testing.T) {
 			t.Parallel()
-			ctx, _, done := compileApiStabilitySourcePrimed(t, source, prime)
-			defer done()
-			for _, test := range []struct {
+			tests := []struct {
 				rule rule.Rule
 				uses []string
 			}{
 				{ExperimentalApiUsage, []string{"x: pick", "x: 4"}},
 				{UnstableApiUsage, []string{"y: 2", "y: pick"}},
-			} {
-				var got, want []string
-				for _, diagnostic := range test.rule.Run(ctx) {
-					got = append(got, fmt.Sprintf("%d:%s", diagnostic.Pos(), source[diagnostic.Pos():diagnostic.Pos()+diagnostic.Len()]))
-				}
-				for _, use := range test.uses {
-					want = append(want, fmt.Sprintf("%d:%s", strings.Index(source, use), use[:1]))
-				}
-				if fmt.Sprint(got) != fmt.Sprint(want) {
-					t.Errorf("%s: got %v, want %v", test.rule.Name, got, want)
-				}
+			}
+			for _, order := range [][2]int{{0, 1}, {1, 0}} {
+				t.Run(tests[order[0]].rule.Name+"-first", func(t *testing.T) {
+					t.Parallel()
+					ctx, _, done := compileApiStabilitySourcePrimed(t, source, prime)
+					defer done()
+					for _, index := range order {
+						test := tests[index]
+						var got, want []string
+						for _, diagnostic := range test.rule.Run(ctx) {
+							got = append(got, fmt.Sprintf("%d:%s", diagnostic.Pos(), source[diagnostic.Pos():diagnostic.Pos()+diagnostic.Len()]))
+						}
+						for _, use := range test.uses {
+							want = append(want, fmt.Sprintf("%d:%s", strings.Index(source, use), use[:1]))
+						}
+						if fmt.Sprint(got) != fmt.Sprint(want) {
+							t.Errorf("%s: got %v, want %v", test.rule.Name, got, want)
+						}
+					}
+				})
 			}
 		})
 	}
