@@ -1,0 +1,38 @@
+=== Refactor Inventory ===
+
+[R1] selection: "5:27-5:27"
+  Refactor 0: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+
+[R2] selection: "8:27-8:27"
+  Refactor 0: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+
+[R3] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Toggle return type annotation" ===
+
+--- file:///.src/effectGenToFn_namedImport.ts ---
+// refactor: 5:27, 8:27
+import { gen } from "effect/Effect"
+import * as Effect from "effect/Effect"
+
+export const foo = (): Effect.Effect<number, never, never> => gen(function*() { return 1 })
+
+const localGen = Effect.gen
+export const bar = () => localGen(function*() { return 2 })
+
+
+=== [R2] Refactor 0: "Toggle return type annotation" ===
+
+--- file:///.src/effectGenToFn_namedImport.ts ---
+// refactor: 5:27, 8:27
+import { gen } from "effect/Effect"
+import * as Effect from "effect/Effect"
+
+export const foo = () => gen(function*() { return 1 })
+
+const localGen = Effect.gen
+export const bar = (): Effect.Effect<number, never, never> => localGen(function*() { return 2 })
+
