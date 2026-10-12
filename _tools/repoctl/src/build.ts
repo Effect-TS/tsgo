@@ -4,7 +4,7 @@ import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import { constants } from "node:fs"
-import { access, appendFile, readFile } from "node:fs/promises"
+import { access, appendFile } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { ensureEffectFixtures } from "./fixtures.ts"
 import { runCommand, runCommandString } from "./process.ts"
@@ -12,7 +12,8 @@ import {
   readUpstream,
   resolveMaterializedTypeScriptSource,
   type ComponentName,
-  typeScriptSourceEntrypoint
+  typeScriptSourceEntrypoint,
+  type Upstream
 } from "./upstream.ts"
 
 export const buildTargets = {
@@ -92,6 +93,19 @@ export const componentArtifact = (
     path: join(repositoryRoot, "_packages", `tsgo-${target}`, "artifacts", component, version, executable)
   }
 }
+
+export const latestTypeScriptCompiler = (repositoryRoot: string, target: BuildTarget) =>
+  join(repositoryRoot, "_packages", `tsgo-${target}`, "lib", target.startsWith("win32-") ? "tsc.exe" : "tsc")
+
+export const packagedTypeScriptCompiler = (
+  repositoryRoot: string,
+  target: BuildTarget,
+  upstream: typeof Upstream.Type,
+  version: string
+) =>
+  version === upstream.tags.typescript.latest
+    ? latestTypeScriptCompiler(repositoryRoot, target)
+    : componentArtifact(repositoryRoot, target, "typescript", version, "tsc").path
 
 export const oxlintArtifacts = (
   repositoryRoot: string,
@@ -373,7 +387,7 @@ export const verifyReleaseArtifacts = Effect.fnUntraced(function*(repositoryRoot
   const sourceUpstream = yield* fs.readFileString(path.join(repositoryRoot, "_packages", "tsgo", "upstream.json"))
   for (const version of Object.keys(upstream.components.typescript)) {
     for (const target of Object.keys(buildTargets) as Array<BuildTarget>) {
-      const binary = componentArtifact(repositoryRoot, target, "typescript", version, "tsc").path
+      const binary = packagedTypeScriptCompiler(repositoryRoot, target, upstream, version)
       yield* validateArtifact(binary)
       yield* validateArtifact(join(dirname(binary), "lib.d.ts"))
       const libraries = (yield* fs.readDirectory(dirname(binary))).filter((name) =>
@@ -408,21 +422,9 @@ export const verifyReleaseArtifacts = Effect.fnUntraced(function*(repositoryRoot
     }
   }
   for (const target of Object.keys(buildTargets) as Array<BuildTarget>) {
-    const latest = componentArtifact(repositoryRoot, target, "typescript", upstream.tags.typescript.latest, "tsc").path
-    const alias = join(repositoryRoot, "_packages", `tsgo-${target}`, "lib", target.startsWith("win32-") ? "tsc.exe" : "tsc")
-    yield* validateArtifact(alias)
-    if (!Buffer.from(yield* Effect.promise(() => readFile(latest))).equals(Buffer.from(yield* Effect.promise(() => readFile(alias))))) {
-      return yield* new BuildError({ reason: `Latest TypeScript alias does not match ${latest}` })
-    }
-    const libraries = (yield* fs.readDirectory(dirname(latest))).filter((name) =>
-      /^lib(?:\..+)?\.d\.ts$/.test(name))
-    for (const library of libraries) {
-      const source = join(dirname(latest), library)
-      const destination = join(dirname(alias), library)
-      yield* validateArtifact(destination)
-      if (!Buffer.from(yield* Effect.promise(() => readFile(source))).equals(Buffer.from(yield* Effect.promise(() => readFile(destination))))) {
-        return yield* new BuildError({ reason: `Latest TypeScript library alias does not match ${source}` })
-      }
+    const duplicate = dirname(componentArtifact(repositoryRoot, target, "typescript", upstream.tags.typescript.latest, "tsc").path)
+    if (yield* fs.exists(duplicate)) {
+      return yield* new BuildError({ reason: `The latest TypeScript compiler ships only in lib/, found ${duplicate}` })
     }
   }
   yield* Console.log("Verified release artifacts for all components and targets")

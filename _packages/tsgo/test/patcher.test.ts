@@ -10,9 +10,11 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { afterEach, describe, expect, it } from "vitest"
 import * as pkgJson from "../package.json" with { type: "json" }
+import upstreamJson from "../upstream.json" with { type: "json" }
 import {
   applyPlan,
   type DiscoveredBinary,
+  packagedArtifactPath,
   PatcherError,
   preparePatch,
   prepareUnpatch,
@@ -163,6 +165,27 @@ describe("patcher", () => {
       fileHash: hash("typescript")
     }
     await expect(run(resolveReplacement(target))).rejects.toBeInstanceOf(UnsupportedTargetPackageVersionError)
+  })
+
+  it("resolves the latest TypeScript compiler from lib and other artifacts by version", async () => {
+    const target = (component: DiscoveredBinary["component"], packageVersion: string, fileName: string) => ({
+      component,
+      packageName: component,
+      packageVersion,
+      binaryPath: join("/installed", fileName),
+      fileHash: hash(component)
+    })
+    const packageDir = "/platform"
+    const latest = upstreamJson.tags.typescript.latest
+    expect(await run(packagedArtifactPath(packageDir, target("typescript", latest, "tsc")))).toBe(
+      join(packageDir, "lib", "tsc")
+    )
+    expect(await run(packagedArtifactPath(packageDir, target("typescript", "7.9.0-other", "tsc.exe")))).toBe(
+      join(packageDir, "artifacts", "typescript", "7.9.0-other", "tsc.exe")
+    )
+    expect(await run(packagedArtifactPath(packageDir, target("oxlint-tsgolint", latest, "tsgolint")))).toBe(
+      join(packageDir, "artifacts", "oxlint-tsgolint", latest, "tsgolint")
+    )
   })
 
   it("preflights the whole plan without mutation", async () => {
