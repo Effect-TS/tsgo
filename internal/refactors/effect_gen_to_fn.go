@@ -124,7 +124,8 @@ func parseFunctionReturningEffectGen(tp *typeparser.TypeParser, _ *checker.Check
 
 	// Check if the core expression is Effect.gen(function*() { ... })
 	genCall := tp.EffectGenCall(subject)
-	if genCall == nil {
+	// Named imports and local aliases of gen have no namespace receiver to build Effect.fn from.
+	if genCall == nil || genCall.EffectModule() == nil {
 		return nil
 	}
 
