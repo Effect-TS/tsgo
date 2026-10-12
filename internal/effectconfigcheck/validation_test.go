@@ -133,6 +133,64 @@ func TestUnknownRuleNamesExtends(t *testing.T) {
 	}
 }
 
+func TestEffectPluginInheritance(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		name   string
+		files  map[string]string
+		active bool
+	}{
+		{
+			name: "omitted plugins inherits Effect",
+			files: map[string]string{
+				"/base.json":     config(`"diagnostics":false`, ""),
+				"/tsconfig.json": `{"extends":"./base.json"}`,
+			},
+			active: true,
+		},
+		{
+			name: "empty plugins clears Effect",
+			files: map[string]string{
+				"/base.json":     config(`"diagnostics":false`, ""),
+				"/tsconfig.json": `{"extends":"./base.json","compilerOptions":{"plugins":[]}}`,
+			},
+		},
+		{
+			name: "replacement plugins clears Effect",
+			files: map[string]string{
+				"/base.json":     config(`"diagnostics":false`, ""),
+				"/tsconfig.json": `{"extends":"./base.json","compilerOptions":{"plugins":[{"name":"other-plugin"}]}}`,
+			},
+		},
+		{
+			name: "multi-hop inheritance preserves explicit clearing list",
+			files: map[string]string{
+				"/base.json":     config(`"diagnostics":false`, ""),
+				"/middle.json":   `{"extends":"./base.json","compilerOptions":{"plugins":[]}}`,
+				"/tsconfig.json": `{"extends":"./middle.json"}`,
+			},
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			parsed := parse(t, newHost(tt.files), "/tsconfig.json", &tsc.ExtendedConfigCache{})
+			effect := parsed.CompilerOptions().Effect
+			if tt.active {
+				if effect == nil {
+					t.Fatal("expected Effect plugin to be active")
+				}
+				if effect.Diagnostics {
+					t.Fatal("expected inherited diagnostics=false")
+				}
+				return
+			}
+			if effect != nil {
+				t.Fatalf("expected Effect plugin to be inactive, got %+v", effect)
+			}
+		})
+	}
+}
+
 func TestInheritedOverridesUseLocalSyntaxOnly(t *testing.T) {
 	t.Parallel()
 	host := newHost(map[string]string{

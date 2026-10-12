@@ -21,8 +21,12 @@ func MergeEffectCompilerOptions(targetOptions, sourceOptions *core.CompilerOptio
 	if targetOptions == nil || sourceOptions == nil {
 		return
 	}
+	compilerOptionsRaw := getCompilerOptionsRaw(rawSource)
 	sourceEffect := cloneEffectOptions(sourceOptions.Effect)
 	if sourceEffect == nil {
+		if compilerOptionsRaw != nil && compilerOptionsRaw.Has("plugins") {
+			targetOptions.Effect = nil
+		}
 		return
 	}
 	rewriteEffectOptionsOverrides(sourceEffect, sourceConfigPath, basePath)
