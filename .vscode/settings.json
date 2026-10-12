@@ -28,6 +28,7 @@
     ".repos/effect-language-service",
     ".repos/tsgolint",
     "typescript-go",
+    "typescript",
     "typescript-go/_submodules/TypeScript"
   ]
 }

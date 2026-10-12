@@ -51,7 +51,12 @@ index 2e1622418..66059cab4 100644
  	GetProjectReferenceFromOutputDts(path tspath.PathKey) *tsoptions.SourceOutputAndProjectReference
  	GetRedirectForResolution(file ast.HasFileName) *tsoptions.ParsedCommandLine
  	CommonSourceDirectory() tspath.RootedDirectoryPath
-@@ -2186,6 +2220,8 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
+@@ -2241,10 +2276,13 @@
+ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFile, checkUnused bool) {
+ 	c.ctx = ctx
+ 	links := c.sourceFileLinks.Get(sourceFile)
++	callAfterSourceFileHook := false
+ 	if !links.typeChecked {
  		if tr := c.tracer; tr != nil {
  			defer tr.Push(tracing.PhaseCheck, "checkSourceFile", map[string]any{"path": sourceFile.FileName()}, true)()
  		}
@@ -60,15 +65,22 @@ index 2e1622418..66059cab4 100644
  		// Grammar checking
  		c.checkGrammarSourceFile(sourceFile)
  		c.renamedBindingElementsInTypes = nil
-@@ -2201,6 +2237,11 @@ func (c *Checker) checkSourceFile(ctx context.Context, sourceFile *ast.SourceFil
+@@ -2260,6 +2298,8 @@
  		c.produceDeferredDiagnostics()
  		c.reportedUnreachableNodes.Clear()
  		links.typeChecked = true
 +
-+		// Run Effect diagnostics after type checking.
-+		if AfterCheckSourceFileCallback != nil {
-+			AfterCheckSourceFileCallback(ctx, c.program, c, sourceFile)
-+		}
++		callAfterSourceFileHook = true
  	}
  	if checkUnused && !links.unusedChecked {
  		// The unused identifiers check relies on a full type check having first been performed
+@@ -2267,6 +2307,9 @@
+ 			c.checkUnusedIdentifiers(links.identifierCheckNodes)
+ 		}
+ 		links.unusedChecked = true
++	}
++	if callAfterSourceFileHook && AfterCheckSourceFileCallback != nil {
++		AfterCheckSourceFileCallback(ctx, c.program, c, sourceFile)
+ 	}
+ 	if c.isCanceled() {
+ 		c.wasCanceled = true
