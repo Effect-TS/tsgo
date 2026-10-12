@@ -671,7 +671,7 @@ func apiStabilityExport(t *testing.T, c *checker.Checker, sf *ast.SourceFile, na
 	t.Helper()
 	moduleSymbol := checker.Checker_getSymbolOfDeclaration(c, sf.AsNode())
 	for _, symbol := range c.GetExportsOfModule(moduleSymbol) {
-		if symbol != nil && symbol.Name == name {
+		if symbol != nil && ast.TSGetSymbolName(symbol) == name {
 			return symbol
 		}
 	}

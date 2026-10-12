@@ -1,7 +1,7 @@
 package checker
 
 import (
-	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/shim/ast"
 	"unsafe"
 )
 
@@ -112,12 +112,12 @@ func GetResolvedDeclaredTypeOfSymbolIfMaterialized(c *Checker, symbol *ast.Symbo
 		return nil
 	}
 	switch {
-	case symbol.Flags&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface|ast.SymbolFlagsAlias) != 0:
+	case ast.TSGetSymbolFlags(symbol)&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface|ast.SymbolFlagsAlias) != 0:
 		store := Checker_declaredTypeLinks(c)
 		if links := store.TryGet(symbol); links != nil {
 			return DeclaredTypeLinks_declaredType(links)
 		}
-	case symbol.Flags&ast.SymbolFlagsTypeAlias != 0:
+	case ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsTypeAlias != 0:
 		store := Checker_typeAliasLinks(c)
 		if links := store.TryGet(symbol); links != nil {
 			return TypeAliasLinks_declaredType(links)
@@ -139,7 +139,7 @@ func GetDeclaredIndexInfosOfSymbol(c *Checker, symbol *ast.Symbol) []*IndexInfo 
 		return nil
 	}
 	var infos []*IndexInfo
-	for _, symbolDeclaration := range symbol.Declarations {
+	for _, symbolDeclaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if symbolDeclaration == nil {
 			continue
 		}
@@ -275,7 +275,7 @@ func GetResolvedIndexInfosOfTypeIfMaterialized(c *Checker, t *Type) ([]*IndexInf
 // instantiates the symbol's type, so a caller can map an uninstantiated binder
 // forward without evaluating a recursive alias member.
 func GetInstantiatedSymbolMapper(c *Checker, symbol *ast.Symbol) *TypeMapper {
-	if symbol == nil || symbol.CheckFlags&ast.CheckFlagsInstantiated == 0 {
+	if symbol == nil || ast.TSGetSymbolCheckFlags(symbol)&ast.CheckFlagsInstantiated == 0 {
 		return nil
 	}
 	links := materializedValueSymbolLinks(c, symbol)

@@ -235,6 +235,7 @@ type extra_Checker struct {
   diagnostics ast.DiagnosticsCollection
   suggestionDiagnostics ast.DiagnosticsCollection
   symbolArena core.Arena[ast.Symbol]
+  symbolWithDataArena core.Arena[ast.SymbolWithData]
   signatureArena core.Arena[checker.Signature]
   indexInfoArena core.Arena[checker.IndexInfo]
   mergedSymbols map[*ast.Symbol]*ast.Symbol
@@ -242,7 +243,7 @@ type extra_Checker struct {
   factory ast.NodeFactory
   nodeLinks core.LinkStore[*ast.Node, checker.NodeLinks]
   signatureLinks core.LinkStore[*ast.Node, checker.SignatureLinks]
-  symbolNodeLinks struct{store core.PagedLinkStore[checker.SymbolNodeLinks]}
+  symbolNodeLinks struct{gen ast.NodeIdGenerator; links core.LinkStore[uint64, checker.SymbolNodeLinks]; pages core.PagedLinkStore[checker.SymbolNodeLinks]}
   typeNodeLinks core.LinkStore[*ast.Node, checker.TypeNodeLinks]
   enumMemberLinks core.LinkStore[*ast.Node, checker.EnumMemberLinks]
   assertionLinks core.LinkStore[*ast.Node, checker.AssertionLinks]
@@ -251,7 +252,7 @@ type extra_Checker struct {
   jsxElementLinks core.LinkStore[*ast.Node, checker.JsxElementLinks]
   computedNameLinks core.LinkStore[*ast.Node, checker.ComputedNameNodeLinks]
   symbolReferenceLinks core.LinkStore[*ast.Symbol, checker.SymbolReferenceLinks]
-  valueSymbolLinks struct{store core.PagedLinkStore[*checker.ValueSymbolLinks]; arena core.Arena[checker.ValueSymbolLinks]}
+  valueSymbolLinks struct{gen ast.SymbolIdGenerator; links core.LinkStore[uint64, checker.ValueSymbolLinks]; pages core.PagedLinkStore[checker.ValueSymbolLinks]}
   mappedSymbolLinks core.LinkStore[*ast.Symbol, checker.MappedSymbolLinks]
   deferredSymbolLinks core.LinkStore[*ast.Symbol, checker.DeferredSymbolLinks]
   aliasSymbolLinks core.LinkStore[*ast.Symbol, checker.AliasSymbolLinks]

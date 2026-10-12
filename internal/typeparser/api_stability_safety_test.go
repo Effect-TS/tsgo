@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
@@ -64,7 +65,7 @@ export declare const x: Select<F>`,
 			x := apiStabilityTestExport(t, c, files["/.src/dep.d.ts"], "x")
 			analysis := newApiStabilityAnalysis(tp)
 			before := c.TotalInstantiationCount
-			verdict := analysis.newSafetyScan().typeNode(x.Declarations[0].AsVariableDeclaration().Type, apiStabilitySubstitution{}, nil, false)
+			verdict := analysis.newSafetyScan().typeNode(ast.TSGetSymbolDeclarations(x)[0].AsVariableDeclaration().Type, apiStabilitySubstitution{}, nil, false)
 			delta := c.TotalInstantiationCount - before
 			if verdict == apiStabilitySafetySafe {
 				t.Errorf("compound operand was authorized as safe")
@@ -226,7 +227,7 @@ func TestApiStabilitySafetyComputedNameDisplayAndSort(t *testing.T) {
 			continue
 		}
 		seen++
-		dependency := ApiStabilityDependency{symbol: member, declaration: member.Declarations[0]}
+		dependency := ApiStabilityDependency{symbol: member, declaration: ast.TSGetSymbolDeclarations(member)[0]}
 		if rendered := ApiStabilityDependencyName(dependency); rendered != wantRendered {
 			t.Errorf("member %q displayed as %q, want %q", key, rendered, wantRendered)
 		}
@@ -339,7 +340,7 @@ func TestApiStabilitySafetyPostBudgetRefusalIsCheap(t *testing.T) {
 	if analysis.memberTableResolutionIsSafe(declaration, apiStabilitySubstitution{}) {
 		t.Fatal("exhausted analysis must refuse member table resolution")
 	}
-	if analysis.annotationResolutionIsSafe(declaration.Symbol().Declarations[0], apiStabilitySubstitution{}) {
+	if analysis.annotationResolutionIsSafe(ast.TSGetSymbolDeclarations(declaration.Symbol())[0], apiStabilitySubstitution{}) {
 		t.Fatal("exhausted analysis must refuse annotation resolution")
 	}
 	if analysis.safetyWork != apiStabilitySafetyMaxWork+1 {

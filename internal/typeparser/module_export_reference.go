@@ -61,7 +61,7 @@ func (tp *TypeParser) resolveConstantAliasSymbol(sym *ast.Symbol) *ast.Symbol {
 		}
 		seen[sym] = struct{}{}
 
-		declarationNode := sym.ValueDeclaration
+		declarationNode := ast.TSGetSymbolValueDeclaration(sym)
 		if declarationNode == nil || declarationNode.Kind != ast.KindVariableDeclaration ||
 			declarationNode.Parent == nil || declarationNode.Parent.Kind != ast.KindVariableDeclarationList ||
 			declarationNode.Parent.Flags&ast.NodeFlagsConst == 0 {
@@ -114,7 +114,7 @@ func (tp *TypeParser) IsNodeReferenceToModuleExport(node *ast.Node, desc Package
 }
 
 func (tp *TypeParser) isSymbolReferenceToModuleExport(sym *ast.Symbol, desc PackageSourceFileDescriptor, memberName string) bool {
-	for _, decl := range sym.Declarations {
+	for _, decl := range ast.TSGetSymbolDeclarations(sym) {
 		if decl == nil {
 			continue
 		}
@@ -145,7 +145,7 @@ func (tp *TypeParser) IsNodeReferenceToModule(node *ast.Node, desc PackageSource
 		return false
 	}
 
-	for _, decl := range sym.Declarations {
+	for _, decl := range ast.TSGetSymbolDeclarations(sym) {
 		if decl == nil {
 			continue
 		}

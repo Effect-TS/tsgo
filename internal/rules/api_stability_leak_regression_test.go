@@ -11,6 +11,7 @@ import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/bundled"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/compiler"
@@ -1815,12 +1816,12 @@ export declare const x: Holder<{ value: string }>`,
 			// Fully represent the conditional outcome: ask the checker for the
 			// instantiated member type, which materializes the selected branch.
 			for _, symbol := range ruleCtx.Checker.GetExportsOfModule(ruleCtx.TypeParser.GetSymbolAtLocation(ruleCtx.SourceFile.AsNode())) {
-				if symbol.Name != "x" {
+				if ast.TSGetSymbolName(symbol) != "x" {
 					continue
 				}
 				value := ruleCtx.Checker.GetTypeOfSymbol(symbol)
 				for _, property := range ruleCtx.Checker.GetPropertiesOfType(value) {
-					if property.Name == "value" {
+					if ast.TSGetSymbolName(property) == "value" {
 						_ = ruleCtx.Checker.GetTypeOfSymbol(property)
 					}
 				}

@@ -52,7 +52,7 @@ linters:
     custom:
       customlint:
         type: module
-        description: Require TypeParser wrappers for compiler symbol and type lookup
+        description: Require TypeParser lookups and Symbol compatibility helpers
     forbidigo:
       analyze-types: true
       forbid:

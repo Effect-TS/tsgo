@@ -35,6 +35,8 @@ var tsgoInternalPrefix = "github.com/microsoft/typescript-go/internal/"
 
 const generatedMarker = ".generated-by-gen-shims"
 
+const symbolGetterPrefix = "TSGetSymbol"
+
 const canonicalShimModulePrefix = "github.com/microsoft/TypeScript/tsc/shim"
 
 var providerShimModulePrefix = "github.com/microsoft/typescript-go/shim"
@@ -747,19 +749,44 @@ func rewriteImportPrefix(source []byte, fromPrefix, toPrefix string) ([]byte, er
 	return output.Bytes(), nil
 }
 
-// Compatibility helpers belong only to the canonical facade. Provider shims
-// must retain the API of the compiler they expose to consumers such as tsgolint.
-func splitShimHelpers(helpers map[string][]byte) (provider, adapters map[string][]byte) {
+func splitShimHelpers(helpers map[string][]byte) (provider, adapters map[string][]byte, err error) {
 	provider = make(map[string][]byte)
 	adapters = make(map[string][]byte)
 	for relative, source := range helpers {
 		if filepath.Base(relative) == "compatibility.go" {
 			adapters[relative] = source
+			if filepath.ToSlash(relative) == "ast/compatibility.go" {
+				additive, splitErr := providerSymbolCompatibility(source)
+				if splitErr != nil {
+					return nil, nil, splitErr
+				}
+				if additive != nil {
+					provider[relative] = additive
+				}
+			}
 		} else {
 			provider[relative] = source
 		}
 	}
 	return
+}
+
+func providerSymbolCompatibility(source []byte) ([]byte, error) {
+	names, err := exportedShimNames(source)
+	if err != nil {
+		return nil, err
+	}
+	getters := 0
+	for name := range names {
+		if strings.HasPrefix(name, symbolGetterPrefix) {
+			delete(names, name)
+			getters++
+		}
+	}
+	if getters == 0 {
+		return nil, nil
+	}
+	return omitAdaptedExports(source, names)
 }
 
 func exportedShimNames(source []byte) (map[string]bool, error) {
@@ -1068,11 +1095,18 @@ func run() error {
 		if err != nil {
 			return fmt.Errorf("normalize provider helper %s: %w", relative, err)
 		}
+		normalized, err = rewriteImportPrefix(normalized, "github.com/microsoft/typescript-go/shim/", providerShimPrefix+"/")
+		if err != nil {
+			return fmt.Errorf("normalize provider shim helper %s: %w", relative, err)
+		}
 		providerHelpers[relative] = normalized
 	}
 	var compatibilityHelpers map[string][]byte
 	if providerShimPrefix != canonicalShimModulePrefix {
-		providerHelpers, compatibilityHelpers = splitShimHelpers(providerHelpers)
+		providerHelpers, compatibilityHelpers, err = splitShimHelpers(providerHelpers)
+		if err != nil {
+			return err
+		}
 		for relative, source := range compatibilityHelpers {
 			names, err := exportedShimNames(source)
 			if err != nil {

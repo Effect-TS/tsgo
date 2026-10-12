@@ -133,5 +133,5 @@ func couldBeNamed(t *checker.Type, names map[string]bool, depth int) bool {
 	if sym == nil {
 		return true
 	}
-	return names[sym.Name]
+	return names[ast.TSGetSymbolName(sym)]
 }

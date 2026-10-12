@@ -603,12 +603,12 @@ func declaredStabilityOfSymbolChain(c *checker.Checker, symbol *ast.Symbol) ApiS
 			break
 		}
 		seen[symbol] = true
-		for _, declaration := range symbol.Declarations {
+		for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 			if stability := stabilityOfDeclarationTag(declaration); stability != "" {
 				return ApiStabilityDeclaration{level: apiStabilityRank(stability), declaration: declaration}
 			}
 		}
-		if symbol.Flags&ast.SymbolFlagsAlias == 0 {
+		if ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsAlias == 0 {
 			break
 		}
 		// The checker synthesizes a declaration-less `default` alias for `export =`
@@ -626,7 +626,7 @@ func declaredStabilityOfSymbolChain(c *checker.Checker, symbol *ast.Symbol) ApiS
 }
 
 func hasAliasDeclaration(symbol *ast.Symbol) bool {
-	return slices.ContainsFunc(symbol.Declarations, ast.IsAliasSymbolDeclaration)
+	return slices.ContainsFunc(ast.TSGetSymbolDeclarations(symbol), ast.IsAliasSymbolDeclaration)
 }
 
 // ApiStabilityImmediateAliasedSymbol follows one valid import/export alias hop.
@@ -635,7 +635,7 @@ func hasAliasDeclaration(symbol *ast.Symbol) bool {
 // then keep the immediate hop so forwarding declarations retain their tags.
 // Neither operation resolves or instantiates types.
 func ApiStabilityImmediateAliasedSymbol(c *checker.Checker, symbol *ast.Symbol) *ast.Symbol {
-	if symbol == nil || symbol.Flags&ast.SymbolFlagsAlias == 0 || !hasAliasDeclaration(symbol) {
+	if symbol == nil || ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsAlias == 0 || !hasAliasDeclaration(symbol) {
 		return nil
 	}
 	if checker.IsAliasResolutionFailed(c, symbol) {
@@ -910,8 +910,8 @@ func apiStabilityDependencySortName(dependency ApiStabilityDependency) string {
 	if name := apiStabilityLateBoundSymbolDisplayName(dependency.symbol); name != "" {
 		return name
 	}
-	if dependency.symbol != nil && dependency.symbol.Name != "" {
-		return dependency.symbol.Name
+	if dependency.symbol != nil && ast.TSGetSymbolName(dependency.symbol) != "" {
+		return ast.TSGetSymbolName(dependency.symbol)
 	}
 	if dependency.signature != nil {
 		return "signature"
@@ -934,8 +934,8 @@ func ApiStabilityDependencyName(dependency ApiStabilityDependency) string {
 	if name := apiStabilityLateBoundSymbolDisplayName(dependency.symbol); name != "" {
 		return name
 	}
-	if dependency.symbol != nil && dependency.symbol.Name != "" {
-		return dependency.symbol.Name
+	if dependency.symbol != nil && ast.TSGetSymbolName(dependency.symbol) != "" {
+		return ast.TSGetSymbolName(dependency.symbol)
 	}
 	if dependency.declaration != nil {
 		switch dependency.declaration.Kind {
@@ -967,7 +967,7 @@ func apiStabilityUsableSymbolName(symbol *ast.Symbol) string {
 	if symbol == nil {
 		return ""
 	}
-	name := symbol.Name
+	name := ast.TSGetSymbolName(symbol)
 	if name == "" || strings.HasPrefix(name, ast.InternalSymbolNamePrefix) || strings.HasPrefix(name, "__@") {
 		return ""
 	}
@@ -983,7 +983,7 @@ func apiStabilityLateBoundSymbolDisplayName(symbol *ast.Symbol) string {
 	if symbol == nil || !checker.IsKnownSymbol(symbol) {
 		return ""
 	}
-	name := strings.TrimPrefix(symbol.Name, ast.InternalSymbolNamePrefix+"@")
+	name := strings.TrimPrefix(ast.TSGetSymbolName(symbol), ast.InternalSymbolNamePrefix+"@")
 	if index := strings.LastIndex(name, "@"); index >= 0 {
 		name = name[:index]
 	}
@@ -1026,7 +1026,7 @@ func apiStabilityDeclarationDisplayName(declaration *ast.Node) (string, bool) {
 			}
 		}
 		if declarationSymbol := declaration.Symbol(); declarationSymbol != nil {
-			symbolName := declarationSymbol.Name
+			symbolName := ast.TSGetSymbolName(declarationSymbol)
 			if symbolName != "" && !strings.HasPrefix(symbolName, ast.InternalSymbolNamePrefix) {
 				return symbolName, true
 			}
@@ -1421,12 +1421,12 @@ func apiStabilitySymbolVisitKey(symbol *ast.Symbol) string {
 	if symbol == nil {
 		return ""
 	}
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if declaration != nil {
-			return symbol.Name + "@" + apiStabilityNodeVisitKey(declaration)
+			return ast.TSGetSymbolName(symbol) + "@" + apiStabilityNodeVisitKey(declaration)
 		}
 	}
-	return symbol.Name
+	return ast.TSGetSymbolName(symbol)
 }
 
 // apiStabilityTypeVisitKey renders a best-effort stable visit key for a
@@ -1436,16 +1436,16 @@ func apiStabilityTypeVisitKey(key apiStabilityTypeKey) string {
 	name := ""
 	if key.t != nil {
 		if symbol := key.t.Symbol(); symbol != nil {
-			name = symbol.Name
+			name = ast.TSGetSymbolName(symbol)
 		}
 		if name == "" {
 			if alias := key.t.Alias(); alias != nil && alias.Symbol() != nil {
-				name = alias.Symbol().Name
+				name = ast.TSGetSymbolName(alias.Symbol())
 			}
 		}
 		if name == "" && key.t.ObjectFlags()&checker.ObjectFlagsReference != 0 && key.t.Target() != nil {
 			if symbol := key.t.Target().Symbol(); symbol != nil {
-				name = symbol.Name
+				name = ast.TSGetSymbolName(symbol)
 			}
 		}
 	}
@@ -1799,14 +1799,14 @@ func (a *apiStabilityAnalysis) symbolSurface(symbol *ast.Symbol) apiStabilitySur
 func (a *apiStabilityAnalysis) collectSymbolSurface(symbol *ast.Symbol) apiStabilitySurface {
 	surface := newApiStabilitySurface()
 	empty := apiStabilitySubstitution{}
-	flags := symbol.Flags
+	flags := ast.TSGetSymbolFlags(symbol)
 	handled := false
 
 	// A default (or `export =`) assignment of an inline expression has no alias
 	// target. The expression's represented checker type is the public surface;
 	// it is materialized lazily when the checker has not computed it yet,
 	// unless the expression would expand a recursive alias.
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if declaration == nil || declaration.Kind != ast.KindExportAssignment {
 			continue
 		}
@@ -1854,7 +1854,7 @@ func (a *apiStabilityAnalysis) collectSymbolSurface(symbol *ast.Symbol) apiStabi
 	}
 
 	if !handled {
-		for _, declaration := range symbol.Declarations {
+		for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 			a.collectDeclaredTagSurface(&surface, a.declarationAnnotationNode(declaration))
 		}
 		surface.block()
@@ -1863,7 +1863,7 @@ func (a *apiStabilityAnalysis) collectSymbolSurface(symbol *ast.Symbol) apiStabi
 	// Erased alias provenance: pair each declaration's annotation nodes with
 	// the represented type the checker recorded for its annotation. The walk
 	// only records alias symbols that survive in the represented component.
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if declaration == nil || declaration.FunctionLikeData() != nil {
 			continue
 		}
@@ -1983,7 +1983,7 @@ func (a *apiStabilityAnalysis) declaredTypeOfSymbol(symbol *ast.Symbol) *checker
 // is bounded. It is only called for symbols with a value side, so a type-only
 // export is never forced into a value lookup.
 func (a *apiStabilityAnalysis) valueTypeOfSymbol(symbol *ast.Symbol) *checker.Type {
-	if symbol == nil || symbol.Flags&ast.SymbolFlagsValue == 0 {
+	if symbol == nil || ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsValue == 0 {
 		return nil
 	}
 	return a.typeOfSymbolSafely(symbol)
@@ -2482,7 +2482,7 @@ func (a *apiStabilityAnalysis) collectObjectSurface(surface *apiStabilitySurface
 		return
 	}
 	if flags&checker.ObjectFlagsAnonymous != 0 {
-		if symbol := t.Symbol(); symbol != nil && symbol.Flags&ast.SymbolFlagsClass != 0 {
+		if symbol := t.Symbol(); symbol != nil && ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsClass != 0 {
 			a.collectClassStaticSurface(surface, t, inspect, subst)
 			return
 		}
@@ -2491,8 +2491,7 @@ func (a *apiStabilityAnalysis) collectObjectSurface(surface *apiStabilitySurface
 	// finite anonymous surface. Recording the module symbol keeps the traversal
 	// bounded instead of enumerating and reporting every exported member; the
 	// rule enumerates namespace members explicitly.
-	if symbol := t.Symbol(); symbol != nil &&
-		symbol.Flags&(ast.SymbolFlagsModule|ast.SymbolFlagsValueModule|ast.SymbolFlagsNamespaceModule) != 0 {
+	if symbol := t.Symbol(); symbol != nil && ast.TSGetSymbolFlags(symbol)&(ast.SymbolFlagsModule|ast.SymbolFlagsValueModule|ast.SymbolFlagsNamespaceModule) != 0 {
 		a.recordSymbol(surface, symbol)
 		return
 	}
@@ -2569,7 +2568,7 @@ func (a *apiStabilityAnalysis) collectConcreteReferenceSurface(surface *apiStabi
 		case structuredSafe:
 			a.noteMaterializingRead()
 			for _, member := range c.GetPropertiesOfType(reference) {
-				if member == nil || member.Flags&ast.SymbolFlagsTypeParameter != 0 || apiStabilitySymbolIsNonPublic(member) {
+				if member == nil || ast.TSGetSymbolFlags(member)&ast.SymbolFlagsTypeParameter != 0 || apiStabilitySymbolIsNonPublic(member) {
 					continue
 				}
 				if a.optionalTaggedInheritedMember(member, owner) {
@@ -2651,7 +2650,7 @@ func (a *apiStabilityAnalysis) collectConcreteReferenceSurface(surface *apiStabi
 func (a *apiStabilityAnalysis) collectResolvedMemberTable(surface *apiStabilitySurface, members ast.SymbolTable, owner *ast.Symbol, subst apiStabilitySubstitution) {
 	for _, name := range sortedSymbolTableKeys(members) {
 		member := members[name]
-		if member == nil || member.Flags&ast.SymbolFlagsTypeParameter != 0 || apiStabilitySymbolIsNonPublic(member) {
+		if member == nil || ast.TSGetSymbolFlags(member)&ast.SymbolFlagsTypeParameter != 0 || apiStabilitySymbolIsNonPublic(member) {
 			continue
 		}
 		if !apiStabilityMemberTableNameIsVisible(name, member) {
@@ -2746,8 +2745,8 @@ func (a *apiStabilityAnalysis) collectDeclarationSurface(surface *apiStabilitySu
 
 	switch {
 	case a.collectResolvedMemberTableIfMaterialized(surface, declaration, symbol, subst):
-	case symbol.Members != nil:
-		a.collectResolvedMemberTable(surface, symbol.Members, symbol, subst)
+	case ast.TSGetSymbolMembers(symbol) != nil:
+		a.collectResolvedMemberTable(surface, ast.TSGetSymbolMembers(symbol), symbol, subst)
 		// A computed member name that the checker must evaluate to resolve the
 		// member table is not part of the early table; the surface is incomplete
 		// and is never treated as stable.
@@ -2810,7 +2809,7 @@ func (a *apiStabilityAnalysis) memberSurface(member *ast.Symbol, subst apiStabil
 		return surface
 	}
 	surface.merge(a.typeSurface(memberType, apiStabilityShallow, subst))
-	for _, declaration := range member.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(member) {
 		if !a.shouldInspectMemberDeclaration(declaration) {
 			continue
 		}
@@ -2831,7 +2830,7 @@ func (a *apiStabilityAnalysis) collectDeclarationSignatures(surface *apiStabilit
 		return
 	}
 	c := a.tp.checker
-	members := symbol.Members
+	members := ast.TSGetSymbolMembers(symbol)
 	if members == nil {
 		return
 	}
@@ -3064,12 +3063,12 @@ func (a *apiStabilityAnalysis) collectClassStaticSurface(surface *apiStabilitySu
 				}
 				surface.merge(a.memberSurface(member, apiStabilitySubstitution{}))
 			}
-		} else if symbol.Exports != nil {
-			for _, name := range sortedSymbolTableKeys(symbol.Exports) {
+		} else if ast.TSGetSymbolExports(symbol) != nil {
+			for _, name := range sortedSymbolTableKeys(ast.TSGetSymbolExports(symbol)) {
 				if name == "prototype" {
 					continue
 				}
-				member := symbol.Exports[name]
+				member := ast.TSGetSymbolExports(symbol)[name]
 				if member == nil || apiStabilitySymbolIsNonPublic(member) {
 					continue
 				}
@@ -3134,7 +3133,7 @@ func (a *apiStabilityAnalysis) collectAnonymousSurface(surface *apiStabilitySurf
 		case a.memberTableResolutionIsSafe(t, current):
 			a.noteMaterializingRead()
 			for _, member := range c.GetPropertiesOfType(t) {
-				if member == nil || member.Flags&ast.SymbolFlagsTypeParameter != 0 || apiStabilitySymbolIsNonPublic(member) {
+				if member == nil || ast.TSGetSymbolFlags(member)&ast.SymbolFlagsTypeParameter != 0 || apiStabilitySymbolIsNonPublic(member) {
 					continue
 				}
 				if boundary := a.inheritedChildBoundarySymbol(member, source.Symbol()); boundary != nil {
@@ -3143,8 +3142,8 @@ func (a *apiStabilityAnalysis) collectAnonymousSurface(surface *apiStabilitySurf
 				}
 				surface.merge(a.memberSurface(member, empty))
 			}
-		case source.Symbol() != nil && source.Symbol().Members != nil:
-			a.collectResolvedMemberTable(surface, source.Symbol().Members, source.Symbol(), current)
+		case source.Symbol() != nil && ast.TSGetSymbolMembers(source.Symbol()) != nil:
+			a.collectResolvedMemberTable(surface, ast.TSGetSymbolMembers(source.Symbol()), source.Symbol(), current)
 			if a.symbolHasLateBoundMembers(source.Symbol()) {
 				surface.block()
 			}
@@ -3158,8 +3157,8 @@ func (a *apiStabilityAnalysis) collectAnonymousSurface(surface *apiStabilitySurf
 	if source.Symbol() != nil {
 		switch {
 		case a.collectResolvedMemberTableIfMaterialized(surface, source, source.Symbol(), current):
-		case source.Symbol().Members != nil:
-			a.collectResolvedMemberTable(surface, source.Symbol().Members, source.Symbol(), current)
+		case ast.TSGetSymbolMembers(source.Symbol()) != nil:
+			a.collectResolvedMemberTable(surface, ast.TSGetSymbolMembers(source.Symbol()), source.Symbol(), current)
 			if a.symbolHasLateBoundMembers(source.Symbol()) {
 				surface.block()
 			}
@@ -3269,9 +3268,8 @@ func (a *apiStabilityAnalysis) collectFunctionSignatures(surface *apiStabilitySu
 			internal = ast.InternalSymbolNameNew
 		}
 		symbol := source.Symbol()
-		member := symbol.Members[internal]
-		if member == nil && kind == checker.SignatureKindCall &&
-			symbol.Flags&(ast.SymbolFlagsFunction|ast.SymbolFlagsMethod|ast.SymbolFlagsGetAccessor|ast.SymbolFlagsSetAccessor|ast.SymbolFlagsAccessor) != 0 {
+		member := ast.TSGetSymbolMembers(symbol)[internal]
+		if member == nil && kind == checker.SignatureKindCall && ast.TSGetSymbolFlags(symbol)&(ast.SymbolFlagsFunction|ast.SymbolFlagsMethod|ast.SymbolFlagsGetAccessor|ast.SymbolFlagsSetAccessor|ast.SymbolFlagsAccessor) != 0 {
 			// A function or accessor declaration keeps its call signatures on
 			// its own symbol rather than in a member table.
 			member = symbol
@@ -3314,7 +3312,7 @@ func (a *apiStabilityAnalysis) collectMappedSurface(surface *apiStabilitySurface
 	}
 	var constraintNode, nameNode, templateNode *ast.Node
 	if symbol := source.Symbol(); symbol != nil {
-		for _, declaration := range symbol.Declarations {
+		for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 			if declaration == nil || declaration.Kind != ast.KindMappedType {
 				continue
 			}
@@ -3403,7 +3401,7 @@ func (a *apiStabilityAnalysis) collectObjectComponentSurface(t *checker.Type, in
 		a.collectDeclarationSurface(&surface, t, inspect, subst)
 		return surface
 	}
-	if symbol := t.Symbol(); symbol != nil && symbol.Flags&ast.SymbolFlagsClass != 0 {
+	if symbol := t.Symbol(); symbol != nil && ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsClass != 0 {
 		a.collectClassStaticSurface(&surface, t, inspect, subst)
 		return surface
 	}
@@ -3606,7 +3604,7 @@ func (a *apiStabilityAnalysis) parameterRepresentedType(parameter *ast.Symbol) (
 	if resolved := a.typeOfSymbolSafely(parameter); resolved != nil {
 		return resolved, true
 	}
-	for _, declaration := range parameter.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(parameter) {
 		if declaration == nil || declaration.Kind != ast.KindParameter {
 			continue
 		}
@@ -3640,7 +3638,7 @@ func (a *apiStabilityAnalysis) typeParameterFromAnnotation(node *ast.Node) *chec
 		return nil
 	}
 	symbol := a.symbolAtTypeNameNode(reference.TypeName)
-	if symbol == nil || symbol.Flags&ast.SymbolFlagsTypeParameter == 0 {
+	if symbol == nil || ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsTypeParameter == 0 {
 		return nil
 	}
 	a.noteMaterializingSymbolRead(apiStabilityMaterializationReadDeclaredType, symbol)
@@ -4185,7 +4183,7 @@ func apiStabilityMemberSymbolForDeclaration(members ast.SymbolTable, member *ast
 		if candidate == nil {
 			continue
 		}
-		if slices.Contains(candidate.Declarations, member) {
+		if slices.Contains(ast.TSGetSymbolDeclarations(candidate), member) {
 			return candidate
 		}
 	}
@@ -4499,7 +4497,7 @@ func (a *apiStabilityAnalysis) memberDeclaringSymbol(member *ast.Symbol) *ast.Sy
 	if member == nil {
 		return nil
 	}
-	for _, declaration := range member.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(member) {
 		if declaring := a.declarationDeclaringSymbol(declaration); declaring != nil {
 			return declaring
 		}
@@ -4620,7 +4618,7 @@ func apiStabilityDeclarationBelongsToSymbol(declaration *ast.Node, symbol *ast.S
 	if declaration == nil || symbol == nil {
 		return false
 	}
-	return slices.Contains(symbol.Declarations, declaration)
+	return slices.Contains(ast.TSGetSymbolDeclarations(symbol), declaration)
 }
 
 // recordDeclarationStability records a `@stability` tag carried by a
@@ -4725,7 +4723,7 @@ func (a *apiStabilityAnalysis) typeNodeMentionsTypeParameter(node *ast.Node, vis
 		return true
 	case ast.KindTypeReference:
 		reference := node.AsTypeReferenceNode()
-		if symbol := a.symbolAtTypeNameNode(reference.TypeName); symbol != nil && symbol.Flags&ast.SymbolFlagsTypeParameter != 0 {
+		if symbol := a.symbolAtTypeNameNode(reference.TypeName); symbol != nil && ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsTypeParameter != 0 {
 			return true
 		}
 		if reference.TypeArguments != nil {
@@ -4798,10 +4796,10 @@ func (a *apiStabilityAnalysis) typeNodeMentionsTypeParameter(node *ast.Node, vis
 // outside the default library. The standard library is never stability-tagged
 // and expanding it would pull a large, irrelevant surface into every reference.
 func (a *apiStabilityAnalysis) shouldInspectSymbol(symbol *ast.Symbol) bool {
-	if symbol == nil || len(symbol.Declarations) == 0 {
+	if symbol == nil || len(ast.TSGetSymbolDeclarations(symbol)) == 0 {
 		return false
 	}
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		sourceFile := ast.GetSourceFileOfNode(declaration)
 		if sourceFile == nil || !a.tp.program.IsSourceFileDefaultLibrary(ast.SourceFilePath(sourceFile)) {
 			return true
@@ -4834,7 +4832,7 @@ func typeParameterAnnotationNode(t *checker.Type, constraint bool) *ast.Node {
 	if symbol == nil {
 		return nil
 	}
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if declaration == nil || declaration.Kind != ast.KindTypeParameter {
 			continue
 		}
@@ -4899,7 +4897,7 @@ func apiStabilityMappedDeclarationHasName(t *checker.Type) bool {
 	if symbol == nil {
 		return false
 	}
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if declaration == nil || declaration.Kind != ast.KindMappedType {
 			continue
 		}
@@ -4916,7 +4914,7 @@ func apiStabilityTypeAliasDeclaration(symbol *ast.Symbol) *ast.Node {
 	if symbol == nil {
 		return nil
 	}
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if declaration != nil && (declaration.Kind == ast.KindTypeAliasDeclaration || declaration.Kind == ast.KindJSTypeAliasDeclaration) {
 			return declaration
 		}
@@ -4932,7 +4930,7 @@ func apiStabilitySymbolDeclaresHeritage(symbol *ast.Symbol) bool {
 	if symbol == nil {
 		return false
 	}
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if declaration == nil {
 			continue
 		}
@@ -5010,10 +5008,10 @@ func apiStabilitySymbolIsNonPublic(symbol *ast.Symbol) bool {
 // declaration marks that property internal. Declaration-less synthetic members
 // also stay visible rather than inheriting the visibility of a referenced type.
 func apiStabilitySymbolHasOnlyInternalDeclarations(symbol *ast.Symbol) bool {
-	if symbol == nil || len(symbol.Declarations) == 0 {
+	if symbol == nil || len(ast.TSGetSymbolDeclarations(symbol)) == 0 {
 		return false
 	}
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if !apiStabilityPropertyDeclarationIsInternal(declaration) {
 			return false
 		}
