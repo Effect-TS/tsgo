@@ -56,26 +56,20 @@ func runAsyncAwaitToGen(ctx *refactor.Context) []ls.CodeAction {
 	return []ls.CodeAction{*action}
 }
 
-// replaceExpressionViaStatement replaces an expression node by finding its
-// containing VariableStatement, rebuilding it with the new expression as
-// initializer, and replacing the entire statement. This avoids a printer
-// assertion failure that occurs when replacing non-statement nodes with
-// complex synthetic trees.
+// replaceExpressionViaStatement replaces an expression node that is the sole
+// initializer of a VariableStatement by rebuilding and replacing the entire
+// statement. This avoids a printer assertion failure that occurs when replacing
+// non-statement nodes with complex synthetic trees. Any other expression is
+// replaced in place.
 func replaceExpressionViaStatement(tracker *rewriter.Tracker, sf *ast.SourceFile, oldExpr *ast.Node, newExpr *ast.Node) {
-	// Walk up to find containing VariableDeclaration
-	varDecl := findParentOfKind(oldExpr, ast.KindVariableDeclaration)
-	if varDecl == nil {
-		// Fallback: replace directly
+	varDecl := oldExpr.Parent
+	if varDecl == nil || varDecl.Kind != ast.KindVariableDeclaration || varDecl.Initializer() != oldExpr ||
+		varDecl.Parent.Kind != ast.KindVariableDeclarationList || len(varDecl.Parent.AsVariableDeclarationList().Declarations.Nodes) != 1 ||
+		varDecl.Parent.Parent.Kind != ast.KindVariableStatement {
 		tracker.ReplaceNode(sf, oldExpr, newExpr, nil)
 		return
 	}
-
-	// Walk up to find containing VariableStatement
-	varStmt := findParentOfKind(varDecl, ast.KindVariableStatement)
-	if varStmt == nil {
-		tracker.ReplaceNode(sf, oldExpr, newExpr, nil)
-		return
-	}
+	varStmt := varDecl.Parent.Parent
 
 	// Rebuild the VariableDeclaration with new initializer
 	vd := varDecl.AsVariableDeclaration()

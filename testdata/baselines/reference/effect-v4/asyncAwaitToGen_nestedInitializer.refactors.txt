@@ -1,0 +1,330 @@
+=== Refactor Inventory ===
+
+[R1] selection: "5:38-5:38"
+  Refactor 0: "Rewrite to Effect.gen" (refactor.rewrite.effect.asyncAwaitToGen)
+  Refactor 1: "Rewrite to Effect.gen with failures" (refactor.rewrite.effect.asyncAwaitToGenTryPromise)
+  Refactor 2: "Rewrite to Effect.fn" (refactor.rewrite.effect.asyncAwaitToFn)
+  Refactor 3: "Rewrite to Effect.fn with failures" (refactor.rewrite.effect.asyncAwaitToFnTryPromise)
+  Refactor 4: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+
+[R2] selection: "9:21-9:21"
+  Refactor 0: "Rewrite to Effect.gen" (refactor.rewrite.effect.asyncAwaitToGen)
+  Refactor 1: "Rewrite to Effect.gen with failures" (refactor.rewrite.effect.asyncAwaitToGenTryPromise)
+  Refactor 2: "Rewrite to Effect.fn" (refactor.rewrite.effect.asyncAwaitToFn)
+  Refactor 3: "Rewrite to Effect.fn with failures" (refactor.rewrite.effect.asyncAwaitToFnTryPromise)
+  Refactor 4: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+
+[R3] selection: "12:46-12:46"
+  Refactor 0: "Rewrite to Effect.gen" (refactor.rewrite.effect.asyncAwaitToGen)
+  Refactor 1: "Rewrite to Effect.gen with failures" (refactor.rewrite.effect.asyncAwaitToGenTryPromise)
+  Refactor 2: "Rewrite to Effect.fn" (refactor.rewrite.effect.asyncAwaitToFn)
+  Refactor 3: "Rewrite to Effect.fn with failures" (refactor.rewrite.effect.asyncAwaitToFnTryPromise)
+  Refactor 4: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+
+[R4] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Rewrite to Effect.gen" ===
+
+--- file:///.src/asyncAwaitToGen_nestedInitializer.ts ---
+// refactor: 5:38, 9:21, 12:46
+import * as Effect from "effect/Effect"
+
+export const inCatch = () => {
+  try {} catch ({ task = () => Effect.gen(function* () {
+    return yield* Effect.promise(() => Promise.resolve(1));
+}) }) {}
+}
+
+export const inObject = {
+  task: async () => await Promise.resolve(1)
+}
+
+export const first = 1, second = async () => await Promise.resolve(first)
+
+
+=== [R1] Refactor 1: "Rewrite to Effect.gen with failures" ===
+
+--- file:///.src/asyncAwaitToGen_nestedInitializer.ts ---
+// refactor: 5:38, 9:21, 12:46
+import * as Effect from "effect/Effect"
+
+export class Error1 extends Data.TaggedError("Error1")<{
+    cause: unknown;
+}> {}
+
+export const inCatch = () => {
+  try {} catch ({ task = () => Effect.gen(function* () {
+    return yield* Effect.tryPromise({ try: () => Promise.resolve(1), catch: cause => new Error1({ cause }) });
+}) }) {}
+}
+
+export const inObject = {
+  task: async () => await Promise.resolve(1)
+}
+
+export const first = 1, second = async () => await Promise.resolve(first)
+
+
+=== [R1] Refactor 2: "Rewrite to Effect.fn" ===
+
+--- file:///.src/asyncAwaitToGen_nestedInitializer.ts ---
+// refactor: 5:38, 9:21, 12:46
+import * as Effect from "effect/Effect"
+
+export const inCatch = () => {
+  try {} catch ({ task = Effect.fn(function* () {
+    return yield* Effect.promise(() => Promise.resolve(1));
+}) }) {}
+}
+
+export const inObject = {
+  task: async () => await Promise.resolve(1)
+}
+
+export const first = 1, second = async () => await Promise.resolve(first)
+
+
+=== [R1] Refactor 3: "Rewrite to Effect.fn with failures" ===
+
+--- file:///.src/asyncAwaitToGen_nestedInitializer.ts ---
+// refactor: 5:38, 9:21, 12:46
+import * as Effect from "effect/Effect"
+
+export class Error1 extends Data.TaggedError("Error1")<{
+    cause: unknown;
+}> {}
+
+export const inCatch = () => {
+  try {} catch ({ task = Effect.fn(function* () {
+    return yield* Effect.tryPromise({ try: () => Promise.resolve(1), catch: cause => new Error1({ cause }) });
+}) }) {}
+}
+
+export const inObject = {
+  task: async () => await Promise.resolve(1)
+}
+
+export const first = 1, second = async () => await Promise.resolve(first)
+
+
+=== [R1] Refactor 4: "Toggle return type annotation" ===
+
+--- file:///.src/asyncAwaitToGen_nestedInitializer.ts ---
+// refactor: 5:38, 9:21, 12:46
+import * as Effect from "effect/Effect"
+
+export const inCatch = () => {
+  try {} catch ({ task = async (): Promise<number> => await Promise.resolve(1) }) {}
+}
+
+export const inObject = {
+  task: async () => await Promise.resolve(1)
+}
+
+export const first = 1, second = async () => await Promise.resolve(first)
+
+
+=== [R2] Refactor 0: "Rewrite to Effect.gen" ===
+
+--- file:///.src/asyncAwaitToGen_nestedInitializer.ts ---
+// refactor: 5:38, 9:21, 12:46
+import * as Effect from "effect/Effect"
+
+export const inCatch = () => {
+  try {} catch ({ task = async () => await Promise.resolve(1) }) {}
+}
+
+export const inObject = {
+  task: () => Effect.gen(function* () {
+    return yield* Effect.promise(() => Promise.resolve(1));
+})
+}
+
+export const first = 1, second = async () => await Promise.resolve(first)
+
+
+=== [R2] Refactor 1: "Rewrite to Effect.gen with failures" ===
+
+--- file:///.src/asyncAwaitToGen_nestedInitializer.ts ---
+// refactor: 5:38, 9:21, 12:46
+import * as Effect from "effect/Effect"
+
+export const inCatch = () => {
+  try {} catch ({ task = async () => await Promise.resolve(1) }) {}
+}
+
+export class Error1 extends Data.TaggedError("Error1")<{
+    cause: unknown;
+}> {}
+
+export const inObject = {
+  task: () => Effect.gen(function* () {
+    return yield* Effect.tryPromise({ try: () => Promise.resolve(1), catch: cause => new Error1({ cause }) });
+})
+}
+
+export const first = 1, second = async () => await Promise.resolve(first)
+
+
+=== [R2] Refactor 2: "Rewrite to Effect.fn" ===
+
+--- file:///.src/asyncAwaitToGen_nestedInitializer.ts ---
+// refactor: 5:38, 9:21, 12:46
+import * as Effect from "effect/Effect"
+
+export const inCatch = () => {
+  try {} catch ({ task = async () => await Promise.resolve(1) }) {}
+}
+
+export const inObject = {
+  task: Effect.fn(function* () {
+    return yield* Effect.promise(() => Promise.resolve(1));
+})
+}
+
+export const first = 1, second = async () => await Promise.resolve(first)
+
+
+=== [R2] Refactor 3: "Rewrite to Effect.fn with failures" ===
+
+--- file:///.src/asyncAwaitToGen_nestedInitializer.ts ---
+// refactor: 5:38, 9:21, 12:46
+import * as Effect from "effect/Effect"
+
+export const inCatch = () => {
+  try {} catch ({ task = async () => await Promise.resolve(1) }) {}
+}
+
+export class Error1 extends Data.TaggedError("Error1")<{
+    cause: unknown;
+}> {}
+
+export const inObject = {
+  task: Effect.fn(function* () {
+    return yield* Effect.tryPromise({ try: () => Promise.resolve(1), catch: cause => new Error1({ cause }) });
+})
+}
+
+export const first = 1, second = async () => await Promise.resolve(first)
+
+
+=== [R2] Refactor 4: "Toggle return type annotation" ===
+
+--- file:///.src/asyncAwaitToGen_nestedInitializer.ts ---
+// refactor: 5:38, 9:21, 12:46
+import * as Effect from "effect/Effect"
+
+export const inCatch = () => {
+  try {} catch ({ task = async () => await Promise.resolve(1) }) {}
+}
+
+export const inObject = {
+  task: async (): Promise<number> => await Promise.resolve(1)
+}
+
+export const first = 1, second = async () => await Promise.resolve(first)
+
+
+=== [R3] Refactor 0: "Rewrite to Effect.gen" ===
+
+--- file:///.src/asyncAwaitToGen_nestedInitializer.ts ---
+// refactor: 5:38, 9:21, 12:46
+import * as Effect from "effect/Effect"
+
+export const inCatch = () => {
+  try {} catch ({ task = async () => await Promise.resolve(1) }) {}
+}
+
+export const inObject = {
+  task: async () => await Promise.resolve(1)
+}
+
+export const first = 1, second = () => Effect.gen(function* () {
+    return yield* Effect.promise(() => Promise.resolve(first));
+})
+
+
+=== [R3] Refactor 1: "Rewrite to Effect.gen with failures" ===
+
+--- file:///.src/asyncAwaitToGen_nestedInitializer.ts ---
+// refactor: 5:38, 9:21, 12:46
+import * as Effect from "effect/Effect"
+
+export const inCatch = () => {
+  try {} catch ({ task = async () => await Promise.resolve(1) }) {}
+}
+
+export const inObject = {
+  task: async () => await Promise.resolve(1)
+}
+
+export class Error1 extends Data.TaggedError("Error1")<{
+    cause: unknown;
+}> {}
+
+export const first = 1, second = () => Effect.gen(function* () {
+    return yield* Effect.tryPromise({ try: () => Promise.resolve(first), catch: cause => new Error1({ cause }) });
+})
+
+
+=== [R3] Refactor 2: "Rewrite to Effect.fn" ===
+
+--- file:///.src/asyncAwaitToGen_nestedInitializer.ts ---
+// refactor: 5:38, 9:21, 12:46
+import * as Effect from "effect/Effect"
+
+export const inCatch = () => {
+  try {} catch ({ task = async () => await Promise.resolve(1) }) {}
+}
+
+export const inObject = {
+  task: async () => await Promise.resolve(1)
+}
+
+export const first = 1, second = Effect.fn("second")(function* () {
+    return yield* Effect.promise(() => Promise.resolve(first));
+})
+
+
+=== [R3] Refactor 3: "Rewrite to Effect.fn with failures" ===
+
+--- file:///.src/asyncAwaitToGen_nestedInitializer.ts ---
+// refactor: 5:38, 9:21, 12:46
+import * as Effect from "effect/Effect"
+
+export const inCatch = () => {
+  try {} catch ({ task = async () => await Promise.resolve(1) }) {}
+}
+
+export const inObject = {
+  task: async () => await Promise.resolve(1)
+}
+
+export class Error1 extends Data.TaggedError("Error1")<{
+    cause: unknown;
+}> {}
+
+export const first = 1, second = Effect.fn("second")(function* () {
+    return yield* Effect.tryPromise({ try: () => Promise.resolve(first), catch: cause => new Error1({ cause }) });
+})
+
+
+=== [R3] Refactor 4: "Toggle return type annotation" ===
+
+--- file:///.src/asyncAwaitToGen_nestedInitializer.ts ---
+// refactor: 5:38, 9:21, 12:46
+import * as Effect from "effect/Effect"
+
+export const inCatch = () => {
+  try {} catch ({ task = async () => await Promise.resolve(1) }) {}
+}
+
+export const inObject = {
+  task: async () => await Promise.resolve(1)
+}
+
+export const first = 1, second = async (): Promise<number> => await Promise.resolve(first)
+
