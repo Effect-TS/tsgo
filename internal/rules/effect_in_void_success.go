@@ -24,10 +24,11 @@ var EffectInVoidSuccess = rule.Rule{
 		var diags []*ast.Diagnostic
 
 		for _, entry := range ctx.TypeParser.ExpectedAndRealTypes(ctx.SourceFile).All() {
-			// The expected type is checked first so the real type is only
-			// resolved at sites that expect a void-success Effect.
-			expectedEffect := ctx.TypeParser.EffectType(entry.ExpectedType())
-			if expectedEffect == nil || expectedEffect.A().Flags()&checker.TypeFlagsVoid == 0 {
+			// The real type goes first: parsing a deeply recursive expected type
+			// can raise TS2589 (#381), and the expected type stays unresolved
+			// unless the real type is an Effect.
+			realEffect := ctx.TypeParser.EffectType(entry.RealType())
+			if realEffect == nil {
 				continue
 			}
 
@@ -35,8 +36,13 @@ var EffectInVoidSuccess = rule.Rule{
 				continue
 			}
 
-			realEffect := ctx.TypeParser.EffectType(entry.RealType())
-			if realEffect == nil {
+			expectedEffect := ctx.TypeParser.EffectType(entry.ExpectedType())
+			if expectedEffect == nil {
+				continue
+			}
+
+			// Check if the expected Effect's success type is void
+			if expectedEffect.A().Flags()&checker.TypeFlagsVoid == 0 {
 				continue
 			}
 
