@@ -99,7 +99,7 @@ func (tp *TypeParser) resolveAliasedSymbol(sym *ast.Symbol) *ast.Symbol {
 		return sym
 	}
 	c := tp.checker
-	for sym != nil && sym.Flags&ast.SymbolFlagsAlias != 0 {
+	for sym != nil && ast.TSGetSymbolFlags(sym)&ast.SymbolFlagsAlias != 0 {
 		sym = c.GetAliasedSymbol(sym)
 	}
 	return sym
@@ -114,8 +114,8 @@ func (tp *TypeParser) ResolveToGlobalSymbol(sym *ast.Symbol) *ast.Symbol {
 
 	sym = tp.resolveAliasedSymbol(sym)
 	depth := 0
-	for depth < 2 && sym != nil && sym.ValueDeclaration != nil && sym.ValueDeclaration.Kind == ast.KindVariableDeclaration {
-		decl := sym.ValueDeclaration.AsVariableDeclaration()
+	for depth < 2 && sym != nil && ast.TSGetSymbolValueDeclaration(sym) != nil && ast.TSGetSymbolValueDeclaration(sym).Kind == ast.KindVariableDeclaration {
+		decl := ast.TSGetSymbolValueDeclaration(sym).AsVariableDeclaration()
 		if decl == nil || decl.Initializer == nil {
 			break
 		}

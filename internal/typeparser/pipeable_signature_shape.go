@@ -157,7 +157,7 @@ func (m *signatureTypeMatcher) compareParameter(left *ast.Symbol, leftRest bool,
 }
 
 func symbolIsOptional(symbol *ast.Symbol) bool {
-	return symbol != nil && symbol.Flags&ast.SymbolFlagsOptional != 0
+	return symbol != nil && ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsOptional != 0
 }
 
 func (m *signatureTypeMatcher) compareType(left *checker.Type, right *checker.Type, depth int) bool {
@@ -334,16 +334,16 @@ func (m *signatureTypeMatcher) compareAnonymousObject(left *checker.Type, right 
 	}
 	rightByName := make(map[string]*ast.Symbol, len(rightProperties))
 	for _, property := range rightProperties {
-		if property == nil || rightByName[property.Name] != nil {
+		if property == nil || rightByName[ast.TSGetSymbolName(property)] != nil {
 			return false
 		}
-		rightByName[property.Name] = property
+		rightByName[ast.TSGetSymbolName(property)] = property
 	}
 	for _, leftProperty := range leftProperties {
 		if leftProperty == nil {
 			return false
 		}
-		rightProperty := rightByName[leftProperty.Name]
+		rightProperty := rightByName[ast.TSGetSymbolName(leftProperty)]
 		if rightProperty == nil || symbolIsOptional(leftProperty) != symbolIsOptional(rightProperty) ||
 			checker.Checker_isReadonlySymbol(m.tp.checker, leftProperty) != checker.Checker_isReadonlySymbol(m.tp.checker, rightProperty) ||
 			!m.compareType(m.tp.checker.GetTypeOfSymbol(leftProperty), m.tp.checker.GetTypeOfSymbol(rightProperty), depth+1) {
@@ -521,7 +521,7 @@ func noInferBaseType(tp *TypeParser, t *checker.Type) *checker.Type {
 	if alias == nil || len(alias.TypeArguments()) != 1 || alias.Symbol() == nil {
 		return nil
 	}
-	for _, declaration := range alias.Symbol().Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(alias.Symbol()) {
 		if isNoInferAliasDeclaration(tp, declaration) {
 			return alias.TypeArguments()[0]
 		}

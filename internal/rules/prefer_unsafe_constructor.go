@@ -136,13 +136,13 @@ func analyzePreferUnsafeConstructorNode(tp *typeparser.TypeParser, c *checker.Ch
 	}
 	// Use the resolved export name: a named import may alias the local identifier
 	// (e.g. `import { make as makeScope }`), and the sibling lives under the export name.
-	name := sym.Name
+	name := ast.TSGetSymbolName(sym)
 	if name == "" || strings.HasSuffix(name, "Unsafe") {
 		return PreferUnsafeConstructorMatch{}, false
 	}
 
 	unsafeName := name + "Unsafe"
-	for _, decl := range sym.Declarations {
+	for _, decl := range ast.TSGetSymbolDeclarations(sym) {
 		if decl == nil {
 			continue
 		}
@@ -289,7 +289,7 @@ func returnsMutuallyAssignable(c *checker.Checker, ret *checker.Type, successTyp
 
 // resolveAliasedSymbol follows import/export aliases to the original symbol.
 func resolveAliasedSymbol(c *checker.Checker, sym *ast.Symbol) *ast.Symbol {
-	for sym != nil && sym.Flags&ast.SymbolFlagsAlias != 0 {
+	for sym != nil && ast.TSGetSymbolFlags(sym)&ast.SymbolFlagsAlias != 0 {
 		sym = c.GetAliasedSymbol(sym)
 	}
 	return sym

@@ -195,7 +195,7 @@ export declare const omega: Middle
 	wantNames := make([]string, 0, len(all))
 	for _, symbol := range all {
 		if symbol != nil {
-			wantNames = append(wantNames, symbol.Name)
+			wantNames = append(wantNames, ast.TSGetSymbolName(symbol))
 		}
 	}
 	slices.Sort(wantNames)
@@ -211,7 +211,7 @@ export declare const omega: Middle
 			if symbol == nil {
 				t.Fatalf("export sorting produced a nil symbol at %d", index)
 			}
-			names = append(names, symbol.Name)
+			names = append(names, ast.TSGetSymbolName(symbol))
 		}
 		if !slices.IsSorted(names) {
 			t.Fatalf("export order is not canonical: %v", names)

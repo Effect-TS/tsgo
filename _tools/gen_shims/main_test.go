@@ -658,7 +658,7 @@ func NewPath(directory string, options raw.Options) string
 //go:linkname IsSensitive example.com/facade/internal/paths.IsSensitive
 func IsSensitive(options raw.Options) bool
 `))
-	providerHelpers, adapters := splitShimHelpers(map[string][]byte{
+	providerHelpers, adapters, err := splitShimHelpers(map[string][]byte{
 		"paths/compatibility.go": []byte(`package paths
 
 import raw "example.com/facade/internal/paths"
@@ -670,6 +670,9 @@ func NewPath(directory string, sensitivity Sensitivity) string {
 }
 `),
 	})
+	if err != nil {
+		t.Fatal(err)
+	}
 	if err := writeShimHelpers(providerRoot, providerHelpers); err != nil {
 		t.Fatal(err)
 	}

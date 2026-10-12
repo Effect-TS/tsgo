@@ -62,7 +62,7 @@ func (tp *TypeParser) EffectSchemaTypes(t *checker.Type) *SchemaTypes {
 		// Find the variance struct property and extract A/I types
 		props := c.GetPropertiesOfType(t)
 		for _, prop := range props {
-			if prop == nil || prop.Flags&ast.SymbolFlagsProperty == 0 || prop.Flags&ast.SymbolFlagsOptional != 0 || prop.ValueDeclaration == nil {
+			if prop == nil || ast.TSGetSymbolFlags(prop)&ast.SymbolFlagsProperty == 0 || ast.TSGetSymbolFlags(prop)&ast.SymbolFlagsOptional != 0 || ast.TSGetSymbolValueDeclaration(prop) == nil {
 				continue
 			}
 			propType := c.GetTypeOfSymbolAtLocation(prop, nil)

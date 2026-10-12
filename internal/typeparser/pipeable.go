@@ -59,13 +59,13 @@ func (tp *TypeParser) IsSafelyPipeableCallee(callee *ast.Node) bool {
 		}
 
 		// Module/namespace imports are safe
-		if sym.Flags&(ast.SymbolFlagsModule|ast.SymbolFlagsNamespace|ast.SymbolFlagsValueModule) != 0 {
+		if ast.TSGetSymbolFlags(sym)&(ast.SymbolFlagsModule|ast.SymbolFlagsNamespace|ast.SymbolFlagsValueModule) != 0 {
 			return true
 		}
 
 		// Check if the symbol's declaration is a function, variable, or import (not a method)
-		if len(sym.Declarations) > 0 {
-			decl := sym.Declarations[0]
+		if len(ast.TSGetSymbolDeclarations(sym)) > 0 {
+			decl := ast.TSGetSymbolDeclarations(sym)[0]
 			switch decl.Kind {
 			case ast.KindFunctionDeclaration,
 				ast.KindVariableDeclaration,
@@ -89,13 +89,13 @@ func (tp *TypeParser) IsSafelyPipeableCallee(callee *ast.Node) bool {
 		}
 
 		// Check if subject is a module/namespace
-		if sym.Flags&(ast.SymbolFlagsModule|ast.SymbolFlagsNamespace|ast.SymbolFlagsValueModule) != 0 {
+		if ast.TSGetSymbolFlags(sym)&(ast.SymbolFlagsModule|ast.SymbolFlagsNamespace|ast.SymbolFlagsValueModule) != 0 {
 			return true
 		}
 
 		// Check if the symbol's declaration indicates it's a module import
-		if len(sym.Declarations) > 0 {
-			decl := sym.Declarations[0]
+		if len(ast.TSGetSymbolDeclarations(sym)) > 0 {
+			decl := ast.TSGetSymbolDeclarations(sym)[0]
 			switch decl.Kind {
 			case ast.KindNamespaceImport,
 				ast.KindSourceFile,

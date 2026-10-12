@@ -39,16 +39,16 @@ func (tp *TypeParser) IsScopeType(t *checker.Type) bool {
 			if prop == nil {
 				continue
 			}
-			if prop.Flags&ast.SymbolFlagsProperty == 0 {
+			if ast.TSGetSymbolFlags(prop)&ast.SymbolFlagsProperty == 0 {
 				continue
 			}
-			if prop.Flags&ast.SymbolFlagsOptional != 0 {
+			if ast.TSGetSymbolFlags(prop)&ast.SymbolFlagsOptional != 0 {
 				continue
 			}
-			if prop.ValueDeclaration == nil {
+			if ast.TSGetSymbolValueDeclaration(prop) == nil {
 				continue
 			}
-			if strings.Contains(prop.Name, "ScopeTypeId") {
+			if strings.Contains(ast.TSGetSymbolName(prop), "ScopeTypeId") {
 				return true
 			}
 		}

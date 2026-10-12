@@ -1,8 +1,8 @@
 package checker
 
 import (
-	"github.com/microsoft/TypeScript/tsc/internal/ast"
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
 
 	"unsafe"
 )
@@ -127,12 +127,12 @@ func GetResolvedDeclaredTypeOfSymbolIfMaterialized(c *Checker, symbol *ast.Symbo
 		return nil
 	}
 	switch {
-	case symbol.Flags&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface|ast.SymbolFlagsAlias) != 0:
+	case ast.TSGetSymbolFlags(symbol)&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface|ast.SymbolFlagsAlias) != 0:
 		store := Checker_declaredTypeLinks(c)
 		if links := store.TryGet(symbol); links != nil {
 			return DeclaredTypeLinks_declaredType(links)
 		}
-	case symbol.Flags&ast.SymbolFlagsTypeAlias != 0:
+	case ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsTypeAlias != 0:
 		store := Checker_typeAliasLinks(c)
 		if links := store.TryGet(symbol); links != nil {
 			return TypeAliasLinks_declaredType(links)
@@ -154,7 +154,7 @@ func GetDeclaredIndexInfosOfSymbol(c *Checker, symbol *ast.Symbol) []*IndexInfo 
 		return nil
 	}
 	var infos []*IndexInfo
-	for _, symbolDeclaration := range symbol.Declarations {
+	for _, symbolDeclaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if symbolDeclaration == nil {
 			continue
 		}
@@ -290,7 +290,7 @@ func GetResolvedIndexInfosOfTypeIfMaterialized(c *Checker, t *Type) ([]*IndexInf
 // instantiates the symbol's type, so a caller can map an uninstantiated binder
 // forward without evaluating a recursive alias member.
 func GetInstantiatedSymbolMapper(c *Checker, symbol *ast.Symbol) *TypeMapper {
-	if symbol == nil || symbol.CheckFlags&ast.CheckFlagsInstantiated == 0 {
+	if symbol == nil || ast.TSGetSymbolCheckFlags(symbol)&ast.CheckFlagsInstantiated == 0 {
 		return nil
 	}
 	links := materializedValueSymbolLinks(c, symbol)
@@ -335,12 +335,11 @@ func IsAliasResolutionFailed(c *Checker, symbol *ast.Symbol) bool {
 	return links != nil && AliasSymbolLinks_aliasTarget(links) == Checker_unknownSymbol(c)
 }
 
-// materializedValueSymbolLinks reads the modern provider's paged symbol store
-// through the generated checker layout, without allocating links.
 func materializedValueSymbolLinks(c *Checker, symbol *ast.Symbol) *ValueSymbolLinks {
-	store := (*extra_Checker)(unsafe.Pointer(c)).valueSymbolLinks.store
-	if link := store.TryGet(uint64(ast.GetSymbolId(symbol))); link != nil {
-		return *link
+	store := &(*extra_Checker)(unsafe.Pointer(c)).valueSymbolLinks
+	id := uint64(store.gen.GetSymbolId(symbol))
+	if id >= ast.BlockIdOffset && id < ast.BlockIdOffset+0x100_0000 {
+		return store.pages.TryGet(id - ast.BlockIdOffset)
 	}
-	return nil
+	return store.links.TryGet(id)
 }

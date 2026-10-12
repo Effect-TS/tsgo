@@ -19,7 +19,7 @@ func apiStabilityTestExport(t *testing.T, c *checker.Checker, sf *ast.SourceFile
 		t.Fatalf("no module symbol for %s", sf.FileName())
 	}
 	for _, symbol := range c.GetExportsOfModule(module) {
-		if symbol != nil && symbol.Name == name {
+		if symbol != nil && ast.TSGetSymbolName(symbol) == name {
 			return symbol
 		}
 	}
@@ -243,7 +243,7 @@ export { Leaky } from "./dep"
 func resolveAliasedSymbolForTest(t *testing.T, c *checker.Checker, symbol *ast.Symbol) *ast.Symbol {
 	t.Helper()
 	seen := map[*ast.Symbol]bool{}
-	for symbol != nil && symbol.Flags&ast.SymbolFlagsAlias != 0 {
+	for symbol != nil && ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsAlias != 0 {
 		if seen[symbol] {
 			break
 		}
@@ -430,7 +430,7 @@ func apiStabilityTestSignatures(t *testing.T, c *checker.Checker, symbol *ast.Sy
 	}
 	signatures := c.GetSignaturesOfType(c.GetTypeOfSymbol(symbol), checker.SignatureKindCall)
 	if len(signatures) == 0 {
-		t.Fatalf("symbol %q has no call signatures", symbol.Name)
+		t.Fatalf("symbol %q has no call signatures", ast.TSGetSymbolName(symbol))
 	}
 	return signatures
 }
@@ -1181,8 +1181,8 @@ function fn() { return object.a.value.length }`,
 	defer done()
 	sym := apiStabilityTestExport(t, c, files["/.src/dep.ts"], "Root")
 	_ = c.GetDeclaredTypeOfSymbol(sym)
-	value := sym.Members["a"]
-	functionType := c.GetTypeOfSymbol(sym.Members["z"])
+	value := ast.TSGetSymbolMembers(sym)["a"]
+	functionType := c.GetTypeOfSymbol(ast.TSGetSymbolMembers(sym)["z"])
 	signatures := c.GetSignaturesOfType(functionType, checker.SignatureKindCall)
 	if len(signatures) != 1 {
 		t.Fatal("signature missing")
@@ -1255,8 +1255,8 @@ function fn() { return object.a.value.length }`,
 	defer done()
 	sym := apiStabilityTestExport(t, c, files["/.src/dep.ts"], "Root")
 	_ = c.GetDeclaredTypeOfSymbol(sym)
-	value := sym.Members["a"]
-	functionType := c.GetTypeOfSymbol(sym.Members["z"])
+	value := ast.TSGetSymbolMembers(sym)["a"]
+	functionType := c.GetTypeOfSymbol(ast.TSGetSymbolMembers(sym)["z"])
 	signatures := c.GetSignaturesOfType(functionType, checker.SignatureKindCall)
 	if len(signatures) != 1 {
 		t.Fatal("signature missing")
@@ -1326,10 +1326,10 @@ function fn() { return root.a.value.length }`,
 	members := c.GetPropertiesOfType(typ)
 	var value, fnSymbol *ast.Symbol
 	for _, m := range members {
-		if m.Name == "a" {
+		if ast.TSGetSymbolName(m) == "a" {
 			value = m
 		}
-		if m.Name == "z" {
+		if ast.TSGetSymbolName(m) == "z" {
 			fnSymbol = m
 		}
 	}

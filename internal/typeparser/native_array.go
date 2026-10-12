@@ -54,11 +54,11 @@ func (tp *TypeParser) getNativeArrayRegistry() *nativeArrayRegistry {
 			return
 		}
 		for _, symbol := range checker.Checker_getMembersOfSymbol(tp.checker, owner) {
-			if symbol.Flags&ast.SymbolFlagsValue == 0 || len(symbol.Declarations) == 0 {
+			if ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsValue == 0 || len(ast.TSGetSymbolDeclarations(symbol)) == 0 {
 				continue
 			}
 			libraryOnly := true
-			for _, declaration := range symbol.Declarations {
+			for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 				sf := ast.GetSourceFileOfNode(declaration)
 				if sf == nil || !tp.program.IsSourceFileDefaultLibrary(ast.SourceFilePath(sf)) {
 					libraryOnly = false
@@ -66,7 +66,7 @@ func (tp *TypeParser) getNativeArrayRegistry() *nativeArrayRegistry {
 				}
 			}
 			if libraryOnly {
-				members[symbol.Name] = append(members[symbol.Name], tp.checker.GetRootSymbols(symbol)...)
+				members[ast.TSGetSymbolName(symbol)] = append(members[ast.TSGetSymbolName(symbol)], tp.checker.GetRootSymbols(symbol)...)
 			}
 		}
 	}
@@ -111,16 +111,16 @@ func (tp *TypeParser) nativeArrayReference(node *ast.Node, requested nativeArray
 		var member nativeArrayMember
 		for _, root := range tp.checker.GetRootSymbols(symbol) {
 			var matched nativeArrayMember
-			for _, canonical := range registry.instance[root.Name] {
+			for _, canonical := range registry.instance[ast.TSGetSymbolName(root)] {
 				if checker.Checker_getSymbolIfSameReference(tp.checker, root, canonical) != nil {
-					matched = nativeArrayMember{nativeArrayInstance, root.Name}
+					matched = nativeArrayMember{nativeArrayInstance, ast.TSGetSymbolName(root)}
 					break
 				}
 			}
 			if matched.namespace == 0 {
-				for _, canonical := range registry.constructor[root.Name] {
+				for _, canonical := range registry.constructor[ast.TSGetSymbolName(root)] {
 					if checker.Checker_getSymbolIfSameReference(tp.checker, root, canonical) != nil {
-						matched = nativeArrayMember{nativeArrayConstructor, root.Name}
+						matched = nativeArrayMember{nativeArrayConstructor, ast.TSGetSymbolName(root)}
 						break
 					}
 				}

@@ -66,13 +66,13 @@ func tapReference(ctx *fixable.Context, callee *ast.Node) (*ast.Node, bool) {
 	}
 	symbols := ctx.Checker.GetSymbolsInScope(callee, ast.SymbolFlagsValue|ast.SymbolFlagsAlias)
 	slices.SortFunc(symbols, func(left, right *ast.Symbol) int {
-		return strings.Compare(left.Name, right.Name)
+		return strings.Compare(ast.TSGetSymbolName(left), ast.TSGetSymbolName(right))
 	})
 	for _, symbol := range symbols {
-		if len(symbol.Declarations) != 1 || checker.Checker_isSymbolAssigned(ctx.Checker, symbol) {
+		if len(ast.TSGetSymbolDeclarations(symbol)) != 1 || checker.Checker_isSymbolAssigned(ctx.Checker, symbol) {
 			continue
 		}
-		declaration := symbol.Declarations[0]
+		declaration := ast.TSGetSymbolDeclarations(symbol)[0]
 		if ast.IsPartOfTypeOnlyImportOrExportDeclaration(declaration) {
 			continue
 		}
@@ -102,5 +102,5 @@ func tapReference(ctx *fixable.Context, callee *ast.Node) (*ast.Node, bool) {
 
 func tapModuleReference(ctx *fixable.Context, receiver *ast.Node) bool {
 	tap := ctx.Checker.GetPropertyOfType(ctx.TypeParser.GetTypeAtLocation(receiver), "tap")
-	return tap != nil && tap.ValueDeclaration != nil && ctx.TypeParser.IsNodeReferenceToEffectModuleApi(tap.ValueDeclaration.Name(), "tap")
+	return tap != nil && ast.TSGetSymbolValueDeclaration(tap) != nil && ctx.TypeParser.IsNodeReferenceToEffectModuleApi(ast.TSGetSymbolValueDeclaration(tap).Name(), "tap")
 }
