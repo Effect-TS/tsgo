@@ -11,6 +11,7 @@ import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/bundled"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/compiler"
@@ -1288,7 +1289,7 @@ export type C<T> = T extends number ? ` + branch + ` : boolean`
 			ruleCtx, done := compileApiStabilityFilesPrimed(t, map[string]string{"test.ts": source}, false)
 			defer done()
 
-			exports := ruleCtx.Checker.GetExportsOfModule(ruleCtx.Checker.GetSymbolAtLocation(ruleCtx.SourceFile.AsNode()))
+			exports := ruleCtx.Checker.GetExportsOfModule(ruleCtx.TypeParser.GetSymbolAtLocation(ruleCtx.SourceFile.AsNode()))
 			if len(exports) != 1 {
 				t.Fatalf("got %d exports, want 1", len(exports))
 			}
@@ -1317,7 +1318,7 @@ export interface I<T> {[key:string]:Deep<string>}`
 		ruleCtx, done := compileApiStabilityFilesPrimed(t, map[string]string{"test.ts": source}, false)
 		defer done()
 
-		exports := ruleCtx.Checker.GetExportsOfModule(ruleCtx.Checker.GetSymbolAtLocation(ruleCtx.SourceFile.AsNode()))
+		exports := ruleCtx.Checker.GetExportsOfModule(ruleCtx.TypeParser.GetSymbolAtLocation(ruleCtx.SourceFile.AsNode()))
 		if len(exports) != 1 {
 			t.Fatalf("got %d exports, want 1", len(exports))
 		}
@@ -1345,7 +1346,7 @@ export declare const x: S`
 		ruleCtx, done := compileApiStabilityFilesPrimed(t, map[string]string{"test.ts": source}, false)
 		defer done()
 
-		exports := ruleCtx.Checker.GetExportsOfModule(ruleCtx.Checker.GetSymbolAtLocation(ruleCtx.SourceFile.AsNode()))
+		exports := ruleCtx.Checker.GetExportsOfModule(ruleCtx.TypeParser.GetSymbolAtLocation(ruleCtx.SourceFile.AsNode()))
 		if len(exports) != 1 {
 			t.Fatalf("got %d exports, want 1", len(exports))
 		}
@@ -1547,7 +1548,7 @@ export declare const f: Callable<Deep<E>>
 	ruleCtx, done := compileApiStabilityFilesPrimed(t, files, false)
 	defer done()
 
-	exports := ruleCtx.Checker.GetExportsOfModule(ruleCtx.Checker.GetSymbolAtLocation(ruleCtx.SourceFile.AsNode()))
+	exports := ruleCtx.Checker.GetExportsOfModule(ruleCtx.TypeParser.GetSymbolAtLocation(ruleCtx.SourceFile.AsNode()))
 	if len(exports) != 1 {
 		t.Fatalf("got %d exports, want 1", len(exports))
 	}
@@ -1814,13 +1815,13 @@ export declare const x: Holder<{ value: string }>`,
 
 			// Fully represent the conditional outcome: ask the checker for the
 			// instantiated member type, which materializes the selected branch.
-			for _, symbol := range ruleCtx.Checker.GetExportsOfModule(ruleCtx.Checker.GetSymbolAtLocation(ruleCtx.SourceFile.AsNode())) {
-				if symbol.Name != "x" {
+			for _, symbol := range ruleCtx.Checker.GetExportsOfModule(ruleCtx.TypeParser.GetSymbolAtLocation(ruleCtx.SourceFile.AsNode())) {
+				if ast.TSGetSymbolName(symbol) != "x" {
 					continue
 				}
 				value := ruleCtx.Checker.GetTypeOfSymbol(symbol)
 				for _, property := range ruleCtx.Checker.GetPropertiesOfType(value) {
-					if property.Name == "value" {
+					if ast.TSGetSymbolName(property) == "value" {
 						_ = ruleCtx.Checker.GetTypeOfSymbol(property)
 					}
 				}
@@ -1886,7 +1887,7 @@ export declare const x: Holder<{ value: string }>`,
 				compiler := apiStabilityCompilerDiagnostics(ruleCtx)
 				session := ruleCtx.TypeParser.NewApiStabilitySession()
 				incomplete := false
-				for _, symbol := range ruleCtx.Checker.GetExportsOfModule(ruleCtx.Checker.GetSymbolAtLocation(ruleCtx.SourceFile.AsNode())) {
+				for _, symbol := range ruleCtx.Checker.GetExportsOfModule(ruleCtx.TypeParser.GetSymbolAtLocation(ruleCtx.SourceFile.AsNode())) {
 					if used := session.UsedBySymbol(symbol); used.Incomplete() {
 						incomplete = true
 					}

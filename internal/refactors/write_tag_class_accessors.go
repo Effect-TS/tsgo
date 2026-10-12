@@ -100,7 +100,7 @@ func runWriteTagClassAccessors(ctx *refactor.Context) []ls.CodeAction {
 	seen := make(map[string]bool)
 	for _, service := range nonPrimitiveServices {
 		for _, property := range c.GetPropertiesOfType(service) {
-			propName := property.Name
+			propName := ast.TSGetSymbolName(property)
 			if seen[propName] {
 				continue
 			}
@@ -208,7 +208,7 @@ func generateAccessors(
 
 	var sb strings.Builder
 	for _, member := range members {
-		propertyName := member.property.Name
+		propertyName := ast.TSGetSymbolName(member.property)
 		callSignatures := c.GetSignaturesOfType(member.propertyType, checker.SignatureKindCall)
 		if len(callSignatures) == 0 {
 			continue
@@ -288,7 +288,7 @@ func buildProxySignatureText(
 			if i > 0 {
 				sb.WriteString(", ")
 			}
-			sb.WriteString(tp.Symbol().Name)
+			sb.WriteString(ast.TSGetSymbolName(tp.Symbol()))
 			constraintType := c.GetConstraintOfTypeParameter(tp)
 			if constraintType != nil {
 				sb.WriteString(" extends ")
@@ -308,7 +308,7 @@ func buildProxySignatureText(
 		if sig.HasRestParameter() && i == len(params)-1 {
 			sb.WriteString("...")
 		}
-		sb.WriteString(param.Name)
+		sb.WriteString(ast.TSGetSymbolName(param))
 		sb.WriteString(": ")
 		paramType := c.GetTypeOfSymbolAtLocation(param, classNode)
 		sb.WriteString(c.TypeToStringEx(paramType, classNode, checker.TypeFormatFlagsNoTruncation, nil))

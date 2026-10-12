@@ -20,6 +20,11 @@ export const runChecks = Effect.fnUntraced(function*(repositoryRoot: string) {
     fs.remove(path.join(generatorRoot, "gen_shims"), { force: true }),
     fs.remove(path.join(generatorRoot, "gen_shims.exe"), { force: true })
   ]).pipe(Effect.ignore)))
+  yield* Console.log("Checking custom lint plugin")
+  yield* runCommand("go", path.join(repositoryRoot, "_tools", "customlint"), ["build", "./..."], false, {
+    CGO_ENABLED: "0",
+    GOWORK: "off"
+  })
   yield* Console.log("Checking CLI package")
   yield* runCommand("pnpm", path.join(repositoryRoot, "_packages", "tsgo"), [
     "exec",

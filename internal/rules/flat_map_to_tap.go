@@ -78,7 +78,7 @@ func AnalyzeFlatMapToTap(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.
 				continue
 			}
 			symbol := tp.GetSymbolAtLocation(parameter.Name())
-			if symbol == nil || len(symbol.Declarations) != 1 || checker.Checker_isSymbolAssigned(c, symbol) {
+			if symbol == nil || len(ast.TSGetSymbolDeclarations(symbol)) != 1 || checker.Checker_isSymbolAssigned(c, symbol) {
 				continue
 			}
 			returned := tp.LongestPipingFlowAt(callback.Expression(), false)

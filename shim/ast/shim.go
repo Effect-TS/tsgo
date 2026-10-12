@@ -61,6 +61,8 @@ type BindingPatternNode = ast.BindingPatternNode
 type BitwiseOperator = ast.BitwiseOperator
 type BitwiseOperatorOrHigher = ast.BitwiseOperatorOrHigher
 type Block = ast.Block
+const BlockIdOffset = ast.BlockIdOffset
+const BlockIdSize = ast.BlockIdSize
 type BlockNode = ast.BlockNode
 type BlockOrExpression = ast.BlockOrExpression
 type BodyBase = ast.BodyBase
@@ -2195,6 +2197,8 @@ func NewHasFileName(fileName tspath.RootedFilePath, path tspath.PathKey) ast.Has
 func NewNodeFactory(hooks ast.NodeFactoryHooks) *ast.NodeFactory
 //go:linkname NewNodeVisitor github.com/microsoft/TypeScript/tsc/internal/ast.NewNodeVisitor
 func NewNodeVisitor(visit func(node *ast.Node) *ast.Node, factory *ast.NodeFactory, hooks ast.NodeVisitorHooks) *ast.NodeVisitor
+//go:linkname NewSymbol github.com/microsoft/TypeScript/tsc/internal/ast.NewSymbol
+func NewSymbol() *ast.Symbol
 type NoSubstitutionTemplateLiteral = ast.NoSubstitutionTemplateLiteral
 type NoSubstitutionTemplateLiteralNode = ast.NoSubstitutionTemplateLiteralNode
 type Node = ast.Node
@@ -2254,6 +2258,7 @@ func NodeHasKind(node *ast.Node, kind ast.Kind) bool
 //go:linkname NodeHasName github.com/microsoft/TypeScript/tsc/internal/ast.NodeHasName
 func NodeHasName(statement *ast.Node, id *ast.Node) bool
 type NodeId = ast.NodeId
+type NodeIdGenerator = ast.NodeIdGenerator
 //go:linkname NodeIsDecorated github.com/microsoft/TypeScript/tsc/internal/ast.NodeIsDecorated
 func NodeIsDecorated(useLegacyDecorators bool, node *ast.Node, parent *ast.Node, grandparent *ast.Node) bool
 //go:linkname NodeIsMissing github.com/microsoft/TypeScript/tsc/internal/ast.NodeIsMissing
@@ -2598,9 +2603,11 @@ const SymbolFlagsValueModule = ast.SymbolFlagsValueModule
 const SymbolFlagsValueModuleExcludes = ast.SymbolFlagsValueModuleExcludes
 const SymbolFlagsVariable = ast.SymbolFlagsVariable
 type SymbolId = ast.SymbolId
+type SymbolIdGenerator = ast.SymbolIdGenerator
 //go:linkname SymbolName github.com/microsoft/TypeScript/tsc/internal/ast.SymbolName
 func SymbolName(symbol *ast.Symbol) string
 type SymbolTable = ast.SymbolTable
+type SymbolWithData = ast.SymbolWithData
 type SyntaxList = ast.SyntaxList
 type SyntaxListNode = ast.SyntaxListNode
 type SyntheticExpression = ast.SyntheticExpression

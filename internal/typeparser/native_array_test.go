@@ -36,7 +36,7 @@ func findNativeArrayAccess(t testing.TB, sf *ast.SourceFile, text string) *ast.N
 
 func TestIsArrayType(t *testing.T) {
 	t.Parallel()
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `
 type Numbers = number[];
 declare const mutable: number[];
 declare const readonly: readonly number[];
@@ -61,7 +61,7 @@ function constrained<T extends readonly number[]>(generic: T) {}
 		{"optional", false}, {"typed", false}, {"anyValue", false},
 		{"inherited", false}, {"generic", false},
 	} {
-		typ := c.GetTypeAtLocation(findIdentifierByText(t, sf, tc.name, 0))
+		typ := tp.GetTypeAtLocation(findIdentifierByText(t, sf, tc.name, 0))
 		if got := tp.IsArrayType(typ); got != tc.want {
 			t.Errorf("IsArrayType(%s) = %v, want %v", tc.name, got, tc.want)
 		}
@@ -281,7 +281,7 @@ custom.map;
 	if tp.links.nativeArrayRegistry != nil {
 		t.Fatal("registry was built before a reference query")
 	}
-	if !tp.IsArrayType(c.GetTypeAtLocation(findIdentifierByText(t, files["/.src/first.ts"], "values", 0))) || tp.links.nativeArrayRegistry != nil {
+	if !tp.IsArrayType(tp.GetTypeAtLocation(findIdentifierByText(t, files["/.src/first.ts"], "values", 0))) || tp.links.nativeArrayRegistry != nil {
 		t.Fatal("IsArrayType changed reference registry initialization")
 	}
 	second := NewTypeParser(c.Program(), c)
@@ -291,7 +291,7 @@ custom.map;
 		if got := tp.IsNativeArrayMethodReference(node, "map"); got != want {
 			t.Fatalf("first parser %s = %v, want %v", access, got, want)
 		}
-		symbol := c.GetSymbolAtLocation(node)
+		symbol := tp.GetSymbolAtLocation(node)
 		cached := tp.links.nativeArrayMember.TryGet(symbol)
 		wantMember := nativeArrayMember{}
 		if want {
@@ -308,14 +308,14 @@ custom.map;
 	if !second.IsNativeArrayMethodReference(findNativeArrayAccess(t, files["/.src/second.ts"], "values.map"), "map") || second.links.nativeArrayRegistry != registry {
 		t.Fatal("second source file did not reuse the canonical registry")
 	}
-	otherChecker, other, otherFile, otherDone := compileAndGetCheckerAndSourceFileInternal(t, source)
+	_, other, otherFile, otherDone := compileAndGetCheckerAndSourceFileInternal(t, source)
 	defer otherDone()
-	firstSymbol := c.GetSymbolAtLocation(findNativeArrayAccess(t, files["/.src/first.ts"], "values.map"))
+	firstSymbol := tp.GetSymbolAtLocation(findNativeArrayAccess(t, files["/.src/first.ts"], "values.map"))
 	if other.links == tp.links || other.links.nativeArrayRegistry != nil || other.links.nativeArrayMember.TryGet(firstSymbol) != nil {
 		t.Fatal("separate checker inherited native Array cache entries")
 	}
 	otherNode := findNativeArrayAccess(t, otherFile, "values.map")
-	if !other.IsNativeArrayMethodReference(otherNode, "map") || other.links.nativeArrayRegistry == registry || otherChecker.GetSymbolAtLocation(otherNode) == firstSymbol {
+	if !other.IsNativeArrayMethodReference(otherNode, "map") || other.links.nativeArrayRegistry == registry || other.GetSymbolAtLocation(otherNode) == firstSymbol {
 		t.Fatal("separate checker did not build its own native Array cache")
 	}
 }

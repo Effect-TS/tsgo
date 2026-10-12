@@ -163,7 +163,7 @@ func combineSafety(left, right apiStabilitySafety) apiStabilitySafety {
 // own expressions, so a later check of that file observes exactly the same
 // diagnostics and types.
 func (a *apiStabilityAnalysis) symbolTypeResolutionIsSafe(symbol *ast.Symbol) bool {
-	if symbol == nil || len(symbol.Declarations) == 0 {
+	if symbol == nil || len(ast.TSGetSymbolDeclarations(symbol)) == 0 {
 		return false
 	}
 	subst := apiStabilitySubstitution{}
@@ -178,7 +178,7 @@ func (a *apiStabilityAnalysis) symbolTypeResolutionIsSafe(symbol *ast.Symbol) bo
 		return false
 	}
 	s := a.newSafetyScan()
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if declaration == nil {
 			continue
 		}
@@ -236,7 +236,7 @@ func (a *apiStabilityAnalysis) signatureMemberResolutionIsSafe(member *ast.Symbo
 		return false
 	}
 	s := a.newSafetyScan()
-	for _, declaration := range member.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(member) {
 		if declaration == nil || declaration.FunctionLikeData() == nil {
 			continue
 		}
@@ -279,7 +279,7 @@ func (a *apiStabilityAnalysis) declaredTypeResolutionIsSafe(symbol *ast.Symbol) 
 	if symbol == nil {
 		return false
 	}
-	if symbol.Flags&ast.SymbolFlagsAlias != 0 {
+	if ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsAlias != 0 {
 		if hasAliasDeclaration(symbol) {
 			target := ApiStabilityImmediateAliasedSymbol(a.tp.checker, symbol)
 			if target != nil && target != symbol {
@@ -288,7 +288,7 @@ func (a *apiStabilityAnalysis) declaredTypeResolutionIsSafe(symbol *ast.Symbol) 
 		}
 		return true
 	}
-	if symbol.Flags&ast.SymbolFlagsTypeAlias == 0 {
+	if ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsTypeAlias == 0 {
 		return true
 	}
 	key := apiStabilitySafetyVerdictKey{operation: apiStabilitySafetyOperationDeclaredType, symbol: symbol}
@@ -456,7 +456,7 @@ func (a *apiStabilityAnalysis) symbolAtTypeNameNode(node *ast.Node) *ast.Symbol 
 	if symbol, ok := a.typeNameSymbols[node]; ok {
 		return symbol
 	}
-	symbol := a.tp.checker.GetSymbolAtLocation(node)
+	symbol := a.tp.GetSymbolAtLocation(node)
 	if symbol != nil {
 		if a.typeNameSymbols == nil {
 			a.typeNameSymbols = make(map[*ast.Node]*ast.Symbol)
@@ -611,9 +611,9 @@ func (s *apiStabilitySafetyScan) typeReference(node *ast.Node, subst apiStabilit
 		return apiStabilitySafetyUnknown
 	}
 	switch {
-	case symbol.Flags&ast.SymbolFlagsTypeParameter != 0:
+	case ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsTypeParameter != 0:
 		return s.typeParameterReference(symbol, subst, bindings, project)
-	case symbol.Flags&ast.SymbolFlagsAlias != 0:
+	case ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsAlias != 0:
 		if hasAliasDeclaration(symbol) {
 			target := ApiStabilityImmediateAliasedSymbol(s.a.tp.checker, symbol)
 			if target != nil && target != symbol {
@@ -621,9 +621,9 @@ func (s *apiStabilitySafetyScan) typeReference(node *ast.Node, subst apiStabilit
 			}
 		}
 		return apiStabilitySafetyUnknown
-	case symbol.Flags&ast.SymbolFlagsTypeAlias != 0:
+	case ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsTypeAlias != 0:
 		return s.aliasApplication(symbol, reference.TypeArguments, subst, bindings, project)
-	case symbol.Flags&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface|ast.SymbolFlagsEnum) != 0:
+	case ast.TSGetSymbolFlags(symbol)&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface|ast.SymbolFlagsEnum) != 0:
 		verdict := s.typeArguments(reference.TypeArguments, subst, bindings)
 		verdict = combineSafety(verdict, s.omittedArgumentDefaults(symbol, reference.TypeArguments, subst, bindings))
 		if !project {
@@ -638,11 +638,11 @@ func (s *apiStabilitySafetyScan) typeReference(node *ast.Node, subst apiStabilit
 // referenceToSymbol resolves an import alias reference to its target symbol.
 func (s *apiStabilitySafetyScan) referenceToSymbol(symbol *ast.Symbol, arguments *ast.NodeList, subst apiStabilitySubstitution, bindings *apiStabilitySafetyBinding, project bool) apiStabilitySafety {
 	switch {
-	case symbol.Flags&ast.SymbolFlagsTypeAlias != 0:
+	case ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsTypeAlias != 0:
 		return s.aliasApplication(symbol, arguments, subst, bindings, project)
-	case symbol.Flags&ast.SymbolFlagsTypeParameter != 0:
+	case ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsTypeParameter != 0:
 		return s.typeParameterReference(symbol, subst, bindings, project)
-	case symbol.Flags&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface|ast.SymbolFlagsEnum) != 0:
+	case ast.TSGetSymbolFlags(symbol)&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface|ast.SymbolFlagsEnum) != 0:
 		verdict := s.typeArguments(arguments, subst, bindings)
 		verdict = combineSafety(verdict, s.omittedArgumentDefaults(symbol, arguments, subst, bindings))
 		if !project {
@@ -942,7 +942,7 @@ func (s *apiStabilitySafetyScan) materializeArgument(argument apiStabilitySafety
 	if argument.node.Kind == ast.KindTypeReference {
 		reference := argument.node.AsTypeReferenceNode()
 		symbol := s.a.symbolAtTypeNameNode(reference.TypeName)
-		if symbol != nil && symbol.Flags&ast.SymbolFlagsTypeParameter != 0 {
+		if symbol != nil && ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsTypeParameter != 0 {
 			s.a.noteMaterializingSymbolRead(apiStabilityMaterializationReadDeclaredType, symbol)
 			parameter := s.a.tp.checker.GetDeclaredTypeOfSymbol(symbol)
 			if parameter != nil {
@@ -1445,7 +1445,7 @@ func (s *apiStabilitySafetyScan) typeNodeMentionsUnboundParameterScoped(node *as
 	case ast.KindTypeReference:
 		reference := node.AsTypeReferenceNode()
 		symbol := s.a.symbolAtTypeNameNode(reference.TypeName)
-		if symbol != nil && symbol.Flags&ast.SymbolFlagsTypeParameter != 0 {
+		if symbol != nil && ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsTypeParameter != 0 {
 			s.a.noteMaterializingSymbolRead(apiStabilityMaterializationReadDeclaredType, symbol)
 			parameter := s.a.tp.checker.GetDeclaredTypeOfSymbol(symbol)
 			if parameter != nil && !scope[parameter] {
@@ -1723,11 +1723,11 @@ func (s *apiStabilitySafetyScan) typeNodeMentionsInfer(node *ast.Node, visiting 
 // substitution its resolved members would carry. A compound without a
 // declaration cannot be established as safe and is refused.
 func (s *apiStabilitySafetyScan) rawDeclarationsMentionReplacedParameter(symbol *ast.Symbol, subst apiStabilitySubstitution, bindings *apiStabilitySafetyBinding) bool {
-	if symbol == nil || len(symbol.Declarations) == 0 {
+	if symbol == nil || len(ast.TSGetSymbolDeclarations(symbol)) == 0 {
 		return true
 	}
 	visiting := make(map[*ast.Node]bool)
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if declaration == nil {
 			continue
 		}
@@ -1813,7 +1813,7 @@ func (s *apiStabilitySafetyScan) typeNodeMentionsReplacedParameter(node *ast.Nod
 		return false
 	case ast.KindTypeReference:
 		reference := node.AsTypeReferenceNode()
-		if symbol := s.a.symbolAtTypeNameNode(reference.TypeName); symbol != nil && symbol.Flags&ast.SymbolFlagsTypeParameter != 0 {
+		if symbol := s.a.symbolAtTypeNameNode(reference.TypeName); symbol != nil && ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsTypeParameter != 0 {
 			s.a.noteMaterializingSymbolRead(apiStabilityMaterializationReadDeclaredType, symbol)
 			if parameter := s.a.tp.checker.GetDeclaredTypeOfSymbol(symbol); parameter != nil {
 				if _, replaced := s.mappedParameterValue(parameter, subst, bindings); replaced {
@@ -2164,7 +2164,7 @@ func (a *apiStabilityAnalysis) symbolHasLateBoundMembers(symbol *ast.Symbol) boo
 	if symbol == nil {
 		return false
 	}
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if declaration == nil {
 			continue
 		}
@@ -2179,7 +2179,7 @@ func (a *apiStabilityAnalysis) symbolHasLateBoundMembers(symbol *ast.Symbol) boo
 				continue
 			}
 			memberSymbol := member.Symbol()
-			if memberSymbol != nil && memberSymbol.Name == ast.InternalSymbolNameComputed {
+			if memberSymbol != nil && ast.TSGetSymbolName(memberSymbol) == ast.InternalSymbolNameComputed {
 				return true
 			}
 		}
@@ -2263,7 +2263,7 @@ func (s *apiStabilitySafetyScan) declarationStructure(symbol *ast.Symbol, subst 
 	defer delete(s.activeDeclarations, symbol)
 
 	verdict := apiStabilitySafetySafe
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if declaration == nil {
 			continue
 		}
@@ -2298,7 +2298,7 @@ func (s *apiStabilitySafetyScan) heritage(symbol *ast.Symbol, subst apiStability
 		return apiStabilitySafetySafe
 	}
 	verdict := apiStabilitySafetySafe
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if declaration == nil {
 			continue
 		}
@@ -2423,7 +2423,7 @@ func (s *apiStabilitySafetyScan) typeQuery(node *ast.Node, subst apiStabilitySub
 	if materialized := checker.GetResolvedTypeOfSymbolIfMaterialized(s.a.tp.checker, symbol); materialized != nil {
 		return s.typeValue(materialized, subst, bindings, project)
 	}
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if declaration == nil {
 			continue
 		}
@@ -2468,7 +2468,7 @@ func safetyTypeParameterDefaults(symbol *ast.Symbol) []*ast.Node {
 	if symbol == nil {
 		return nil
 	}
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if declaration == nil {
 			continue
 		}

@@ -214,11 +214,11 @@ func matchCustomPattern(c *checker.Checker, _ *ast.SourceFile, classNode *ast.No
 					}
 
 					param := params[i]
-					if param.Declarations == nil {
+					if ast.TSGetSymbolDeclarations(param) == nil {
 						continue
 					}
 
-					for _, decl := range param.Declarations {
+					for _, decl := range ast.TSGetSymbolDeclarations(param) {
 						paramSf := ast.GetSourceFileOfNode(decl)
 						if paramSf == nil {
 							continue

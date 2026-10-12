@@ -43,6 +43,8 @@ type declarationStabilityInfo struct {
 }
 
 func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
+	constraintTypes := make(map[*ast.Node]*checker.Type)
+
 	// Declared stability is cached per checker in TypeParser, so references to the
 	// same symbol or selected overload reuse one lookup across source files. The
 	// selected overload's own tag always wins over the symbol-level tag.
@@ -98,15 +100,22 @@ func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
 					// Generic inference can point back to the literal's own
 					// property. Use the constraint instead, as go-to-definition
 					// does, so its stability tag is not lost to inference.
-					if slices.ContainsFunc(properties, func(symbol *ast.Symbol) bool { return symbol.ValueDeclaration == node }) {
-						if constraintType := ctx.Checker.GetContextualType(node.Parent, checker.ContextFlagsIgnoreNodeInferences); constraintType != nil {
+					if slices.ContainsFunc(properties, func(symbol *ast.Symbol) bool { return ast.TSGetSymbolValueDeclaration(symbol) == node }) {
+						constraintType, cached := constraintTypes[node.Parent]
+						if !cached {
+							constraintType = ctx.Checker.GetContextualType(node.Parent, checker.ContextFlagsIgnoreNodeInferences)
+							if len(node.Parent.AsObjectLiteralExpression().Properties.Nodes) > 1 {
+								constraintTypes[node.Parent] = constraintType
+							}
+						}
+						if constraintType != nil {
 							if constraintProperties := ctx.Checker.GetPropertySymbolsFromContextualType(node, constraintType, false); len(constraintProperties) > 0 {
 								properties = constraintProperties
 							}
 						}
 					}
 					for _, symbol := range properties {
-						if symbol.ValueDeclaration == node {
+						if ast.TSGetSymbolValueDeclaration(symbol) == node {
 							continue
 						}
 						if report(node.Name(), name, readSymbol(symbol)) {
@@ -136,7 +145,7 @@ func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
 					}
 				}
 			}
-			symbol := ctx.Checker.GetSymbolAtLocation(node)
+			symbol := ctx.TypeParser.GetSymbolAtLocation(node)
 			resolvedSymbol := ctx.TypeParser.ReferenceSymbolAtNode(node)
 			useSymbol := selectedDeclaration == nil || !symbolHasDeclaration(symbol, selectedDeclaration) && !symbolHasDeclaration(resolvedSymbol, selectedDeclaration)
 			if stability.stability == "" && useSymbol {
@@ -158,7 +167,7 @@ func symbolHasDeclaration(symbol *ast.Symbol, declaration *ast.Node) bool {
 	if symbol == nil || declaration == nil {
 		return false
 	}
-	return slices.Contains(symbol.Declarations, declaration)
+	return slices.Contains(ast.TSGetSymbolDeclarations(symbol), declaration)
 }
 
 // stabilitySymbolIsModuleExport reports whether symbol is exported from the
@@ -167,7 +176,7 @@ func stabilitySymbolIsModuleExport(c *checker.Checker, symbol *ast.Symbol, modul
 	if symbol == nil || moduleSymbol == nil {
 		return false
 	}
-	return c.TryGetMemberInModuleExportsAndProperties(symbol.Name, moduleSymbol) == symbol
+	return c.TryGetMemberInModuleExportsAndProperties(ast.TSGetSymbolName(symbol), moduleSymbol) == symbol
 }
 
 // stabilityOwningExportSymbol walks out from a selected declaration to the
@@ -181,8 +190,8 @@ func stabilityOwningExportSymbol(c *checker.Checker, declaration *ast.Node, modu
 		if symbol == nil {
 			continue
 		}
-		if symbol.ExportSymbol != nil {
-			symbol = symbol.ExportSymbol
+		if ast.TSGetSymbolExportSymbol(symbol) != nil {
+			symbol = ast.TSGetSymbolExportSymbol(symbol)
 		}
 		if stabilitySymbolIsModuleExport(c, symbol, moduleSymbol) {
 			return symbol
@@ -236,8 +245,8 @@ func newStabilityApiAllowlist(ctx *rule.Context, wanted string) func(*ast.Node) 
 		}
 		moduleSymbol := checker.Checker_getSymbolOfDeclaration(ctx.Checker, sf.AsNode())
 		symbol := checker.Checker_getSymbolOfDeclaration(ctx.Checker, declaration)
-		if symbol != nil && symbol.ExportSymbol != nil {
-			symbol = symbol.ExportSymbol
+		if symbol != nil && ast.TSGetSymbolExportSymbol(symbol) != nil {
+			symbol = ast.TSGetSymbolExportSymbol(symbol)
 		}
 		// A selected overload (for example a call signature of a dual export)
 		// carries its own `__call` symbol rather than the export's, so it is not
@@ -250,9 +259,9 @@ func newStabilityApiAllowlist(ctx *rule.Context, wanted string) func(*ast.Node) 
 		}
 		result.name = moduleName
 		if moduleSymbol != nil && symbol != nil {
-			exported := ctx.Checker.TryGetMemberInModuleExportsAndProperties(symbol.Name, moduleSymbol)
+			exported := ctx.Checker.TryGetMemberInModuleExportsAndProperties(ast.TSGetSymbolName(symbol), moduleSymbol)
 			if exported == symbol {
-				result.name += "#" + symbol.Name
+				result.name += "#" + ast.TSGetSymbolName(symbol)
 			}
 		}
 		for _, entry := range entries {
@@ -309,12 +318,12 @@ func stabilityApiModuleName(packageName, directory, fileName string) string {
 // Synthetic default aliases have no alias declaration and cannot be resolved.
 func resolveStabilityAlias(c *checker.Checker, symbol *ast.Symbol) *ast.Symbol {
 	seen := make(map[*ast.Symbol]bool)
-	for symbol != nil && symbol.Flags&ast.SymbolFlagsAlias != 0 {
+	for symbol != nil && ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsAlias != 0 {
 		if seen[symbol] {
 			return nil
 		}
 		seen[symbol] = true
-		if !slices.ContainsFunc(symbol.Declarations, ast.IsAliasSymbolDeclaration) {
+		if !slices.ContainsFunc(ast.TSGetSymbolDeclarations(symbol), ast.IsAliasSymbolDeclaration) {
 			return nil
 		}
 		next := typeparser.ApiStabilityImmediateAliasedSymbol(c, symbol)

@@ -189,14 +189,14 @@ func ExtractLayerGraph(
 		if currentDepth > 0 && isSimpleIdentifier(current) {
 			sym := tp.GetSymbolAtLocation(current)
 			if sym != nil {
-				if sym.Flags&ast.SymbolFlagsAlias != 0 {
+				if ast.TSGetSymbolFlags(sym)&ast.SymbolFlagsAlias != 0 {
 					resolved := checker.SkipAlias(sym, c)
 					if resolved != nil {
 						sym = resolved
 					}
 				}
-				if len(sym.Declarations) == 1 {
-					declNode := getAdjustedNode(sym.Declarations[0])
+				if len(ast.TSGetSymbolDeclarations(sym)) == 1 {
+					declNode := getAdjustedNode(ast.TSGetSymbolDeclarations(sym)[0])
 					if declNode != nil {
 						if !visitedNodes[current] {
 							// First pass: push self back, push declaration with decremented depth.

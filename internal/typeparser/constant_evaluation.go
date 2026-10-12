@@ -57,7 +57,7 @@ func (tp *TypeParser) EvaluateConstantExpression(node *ast.Node, location *ast.N
 		if symbol == nil || !checker.Checker_isConstantVariable(tp.checker, symbol) {
 			return result
 		}
-		declaration := symbol.ValueDeclaration
+		declaration := ast.TSGetSymbolValueDeclaration(symbol)
 		if declaration == nil || !ast.IsVariableDeclaration(declaration) || declaration.Type() != nil || declaration.Initializer() == nil ||
 			entityLocation != nil && (declaration == entityLocation || !checker.Checker_isBlockScopedNameDeclaredBeforeUse(tp.checker, declaration, entityLocation)) {
 			return result

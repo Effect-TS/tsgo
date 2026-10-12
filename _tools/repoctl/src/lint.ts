@@ -8,6 +8,7 @@ import { CommandError, runCommand, runCommandCaptureSplit } from "./process.ts"
 import { getComponent, readUpstream } from "./upstream.ts"
 
 const deadcodeVersion = "v0.50.0"
+const golangciLintVersion = "v2.14.0"
 
 export class DeadCodeError extends Data.TaggedError("DeadCodeError")<{
   readonly findings: ReadonlyArray<string>
@@ -79,6 +80,28 @@ export const runDeadCode = Effect.fnUntraced(function*(repositoryRoot: string) {
 })
 
 export const runLint = Effect.fnUntraced(function*(repositoryRoot: string) {
-  yield* runCommand("golangci-lint", repositoryRoot, ["run", "./..."], false, { CGO_ENABLED: "0" })
+  yield* Effect.scoped(Effect.gen(function*() {
+    const fs = yield* FileSystem.FileSystem
+    const path = yield* Path.Path
+    const directory = yield* fs.makeTempDirectoryScoped({ prefix: "effect-tsgo-lint-" })
+    const name = "custom-gcl"
+    yield* fs.writeFileString(path.join(directory, ".custom-gcl.yml"), JSON.stringify({
+      version: golangciLintVersion,
+      name,
+      destination: directory,
+      plugins: [{
+        module: "github.com/effect-ts/tsgo/tools/customlint",
+        import: "github.com/effect-ts/tsgo/tools/customlint",
+        path: path.resolve(repositoryRoot, "_tools", "customlint")
+      }]
+    }))
+    yield* runCommand("go", directory, [
+      "run",
+      `github.com/golangci/golangci-lint/v2/cmd/golangci-lint@${golangciLintVersion}`,
+      "custom"
+    ], false, { CGO_ENABLED: "0", GOWORK: "off" })
+    const binary = path.join(directory, process.platform === "win32" ? `${name}.exe` : name)
+    yield* runCommand(binary, repositoryRoot, ["run", "./..."], false, { CGO_ENABLED: "0" })
+  }))
   yield* runDeadCode(repositoryRoot)
 })

@@ -91,10 +91,10 @@ func sortedApiStabilityExports(ctx *rule.Context, module *ast.Symbol) []*ast.Sym
 			}
 			return -1
 		}
-		if left.Name < right.Name {
+		if ast.TSGetSymbolName(left) < ast.TSGetSymbolName(right) {
 			return -1
 		}
-		if left.Name > right.Name {
+		if ast.TSGetSymbolName(left) > ast.TSGetSymbolName(right) {
 			return 1
 		}
 		return 0
@@ -181,7 +181,7 @@ func (w *apiStabilityWalker) inspectSymbol(symbol *ast.Symbol) {
 	if symbol == nil {
 		return
 	}
-	if symbol.Flags&ast.SymbolFlagsModule != 0 {
+	if ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsModule != 0 {
 		w.inspectModule(symbol)
 		return
 	}
@@ -298,7 +298,7 @@ func apiStabilityLevelName(level typeparser.ApiStabilityLevel) string {
 }
 
 func apiStabilityExportDisplayName(ctx *rule.Context, exportSymbol *ast.Symbol) string {
-	name := exportSymbol.Name
+	name := ast.TSGetSymbolName(exportSymbol)
 	pkg := ctx.TypeParser.PackageJsonForSourceFile(ctx.SourceFile)
 	if pkg == nil {
 		return name
@@ -318,7 +318,7 @@ func apiStabilityExportDisplayName(ctx *rule.Context, exportSymbol *ast.Symbol) 
 // export, preferring a local declaration and falling back to the `export * from`
 // declaration that forwards it.
 func apiStabilityExportLocation(ctx *rule.Context, exportSymbol *ast.Symbol) *ast.Node {
-	for _, declaration := range exportSymbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(exportSymbol) {
 		if declaration == nil || ast.GetSourceFileOfNode(declaration) != ctx.SourceFile {
 			continue
 		}
@@ -371,20 +371,20 @@ func apiStabilityExportDeclarationForwards(ctx *rule.Context, declaration *ast.E
 		if declaration.ModuleSpecifier == nil {
 			return false
 		}
-		moduleSymbol := ctx.Checker.GetSymbolAtLocation(declaration.ModuleSpecifier)
-		if moduleSymbol != nil && moduleSymbol.Flags&ast.SymbolFlagsAlias != 0 {
+		moduleSymbol := ctx.TypeParser.GetSymbolAtLocation(declaration.ModuleSpecifier)
+		if moduleSymbol != nil && ast.TSGetSymbolFlags(moduleSymbol)&ast.SymbolFlagsAlias != 0 {
 			moduleSymbol = ctx.Checker.GetAliasedSymbol(moduleSymbol)
 		}
 		if moduleSymbol == nil {
 			return false
 		}
-		exported := ctx.Checker.TryGetMemberInModuleExportsAndProperties(exportSymbol.Name, moduleSymbol)
+		exported := ctx.Checker.TryGetMemberInModuleExportsAndProperties(ast.TSGetSymbolName(exportSymbol), moduleSymbol)
 		return exported != nil && checker.Checker_getSymbolIfSameReference(ctx.Checker, exported, exportSymbol) != nil
 	}
 	switch declaration.ExportClause.Kind {
 	case ast.KindNamespaceExport:
 		namespace := declaration.ExportClause.AsNamespaceExport()
-		return namespace != nil && namespace.Name() != nil && namespace.Name().Text() == exportSymbol.Name
+		return namespace != nil && namespace.Name() != nil && namespace.Name().Text() == ast.TSGetSymbolName(exportSymbol)
 	case ast.KindNamedExports:
 		named := declaration.ExportClause.AsNamedExports()
 		if named == nil || named.Elements == nil {
@@ -395,7 +395,7 @@ func apiStabilityExportDeclarationForwards(ctx *rule.Context, declaration *ast.E
 				continue
 			}
 			specifier := element.AsExportSpecifier()
-			if specifier != nil && specifier.Name() != nil && specifier.Name().Text() == exportSymbol.Name {
+			if specifier != nil && specifier.Name() != nil && specifier.Name().Text() == ast.TSGetSymbolName(exportSymbol) {
 				return true
 			}
 		}
@@ -464,7 +464,7 @@ func apiStabilitySymbolIsInternal(ctx *rule.Context, module *ast.Symbol, symbol 
 		return false
 	}
 	found := false
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if declaration == nil || !apiStabilityDeclarationInFiles(declaration, files) {
 			continue
 		}
@@ -505,7 +505,7 @@ func apiStabilitySymbolIsModuleExport(ctx *rule.Context, module *ast.Symbol, sym
 	if module == nil || symbol == nil {
 		return false
 	}
-	exported := ctx.Checker.TryGetMemberInModuleExportsAndProperties(symbol.Name, module)
+	exported := ctx.Checker.TryGetMemberInModuleExportsAndProperties(ast.TSGetSymbolName(symbol), module)
 	return checker.Checker_getSymbolIfSameReference(ctx.Checker, exported, symbol) != nil
 }
 
@@ -553,10 +553,10 @@ func apiStabilityDeclarationPathIsInternal(ctx *rule.Context, module *ast.Symbol
 // target named by the import declaration is followed; no other identifier is
 // inferred and no type is read.
 func apiStabilityImportTargetIsInternal(ctx *rule.Context, declaration *ast.Node, symbol *ast.Symbol, visiting map[apiStabilityInternalVisit]bool) bool {
-	if symbol == nil || symbol.Flags&ast.SymbolFlagsAlias == 0 {
+	if symbol == nil || ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsAlias == 0 {
 		return false
 	}
-	if !slices.ContainsFunc(symbol.Declarations, ast.IsAliasSymbolDeclaration) {
+	if !slices.ContainsFunc(ast.TSGetSymbolDeclarations(symbol), ast.IsAliasSymbolDeclaration) {
 		return false
 	}
 	targetModule := apiStabilityImportTargetModule(ctx, declaration)
@@ -597,10 +597,10 @@ func apiStabilityImportTargetModule(ctx *rule.Context, declaration *ast.Node) *a
 // declaration keeps exactly the precedence the named and default import paths
 // give it.
 func apiStabilityImportEqualsTargetIsInternal(ctx *rule.Context, symbol *ast.Symbol, declaration *ast.Node, visiting map[apiStabilityInternalVisit]bool) bool {
-	if symbol == nil || symbol.Flags&ast.SymbolFlagsAlias == 0 {
+	if symbol == nil || ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsAlias == 0 {
 		return false
 	}
-	if !slices.ContainsFunc(symbol.Declarations, ast.IsAliasSymbolDeclaration) {
+	if !slices.ContainsFunc(ast.TSGetSymbolDeclarations(symbol), ast.IsAliasSymbolDeclaration) {
 		return false
 	}
 	importEquals := declaration.AsImportEqualsDeclaration()
@@ -699,7 +699,7 @@ func apiStabilityDeclarationModules(ctx *rule.Context, symbol *ast.Symbol) []*as
 		return nil
 	}
 	var modules []*ast.Symbol
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if declaration == nil {
 			continue
 		}
@@ -728,10 +728,10 @@ func apiStabilityStarPathIsInternal(ctx *rule.Context, symbol *ast.Symbol, state
 // synthesizes declaration-less aliases for `export =` and JSON modules and
 // panics when asked for their immediate target, so those stay public.
 func apiStabilityAliasedTargetIsInternal(ctx *rule.Context, module *ast.Symbol, symbol *ast.Symbol, visiting map[apiStabilityInternalVisit]bool) bool {
-	if symbol == nil || symbol.Flags&ast.SymbolFlagsAlias == 0 {
+	if symbol == nil || ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsAlias == 0 {
 		return false
 	}
-	if !slices.ContainsFunc(symbol.Declarations, ast.IsAliasSymbolDeclaration) {
+	if !slices.ContainsFunc(ast.TSGetSymbolDeclarations(symbol), ast.IsAliasSymbolDeclaration) {
 		return false
 	}
 	target := typeparser.ApiStabilityImmediateAliasedSymbol(ctx.Checker, symbol)
@@ -768,7 +768,7 @@ func apiStabilityModuleSourceFiles(module *ast.Symbol) []*ast.SourceFile {
 		return nil
 	}
 	var files []*ast.SourceFile
-	for _, declaration := range module.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(module) {
 		if declaration == nil {
 			continue
 		}
@@ -799,7 +799,7 @@ func apiStabilityModuleExportStatements(module *ast.Symbol) []*ast.Node {
 		return nil
 	}
 	var statements []*ast.Node
-	for _, declaration := range module.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(module) {
 		if declaration == nil {
 			continue
 		}
@@ -854,11 +854,11 @@ func apiStabilityModuleOfEntity(ctx *rule.Context, entity *ast.Node) *ast.Symbol
 	if entity == nil {
 		return nil
 	}
-	module := ctx.Checker.GetSymbolAtLocation(entity)
+	module := ctx.TypeParser.GetSymbolAtLocation(entity)
 	if module == nil {
 		return nil
 	}
-	if module.Flags&ast.SymbolFlagsAlias != 0 {
+	if ast.TSGetSymbolFlags(module)&ast.SymbolFlagsAlias != 0 {
 		module = ctx.Checker.GetAliasedSymbol(module)
 	}
 	if module == nil || len(apiStabilityModuleSourceFiles(module)) == 0 {
@@ -880,17 +880,17 @@ func apiStabilityReexportLocation(ctx *rule.Context, exportSymbol *ast.Symbol) *
 		if fallback == nil {
 			fallback = statement
 		}
-		moduleSymbol := ctx.Checker.GetSymbolAtLocation(declaration.ModuleSpecifier)
+		moduleSymbol := ctx.TypeParser.GetSymbolAtLocation(declaration.ModuleSpecifier)
 		if moduleSymbol == nil {
 			continue
 		}
-		if moduleSymbol.Flags&ast.SymbolFlagsAlias != 0 {
+		if ast.TSGetSymbolFlags(moduleSymbol)&ast.SymbolFlagsAlias != 0 {
 			moduleSymbol = ctx.Checker.GetAliasedSymbol(moduleSymbol)
 		}
 		if moduleSymbol == nil {
 			continue
 		}
-		exported := ctx.Checker.TryGetMemberInModuleExportsAndProperties(exportSymbol.Name, moduleSymbol)
+		exported := ctx.Checker.TryGetMemberInModuleExportsAndProperties(ast.TSGetSymbolName(exportSymbol), moduleSymbol)
 		if exported != nil && checker.Checker_getSymbolIfSameReference(ctx.Checker, exported, exportSymbol) != nil {
 			return statement
 		}

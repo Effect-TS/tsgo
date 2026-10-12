@@ -55,7 +55,7 @@ func checkMissingPipeableSignatures(ctx *rule.Context) []*ast.Diagnostic {
 					if candidate == dataFirst {
 						continue
 					}
-					if typeparser.MatchesPipeableSignature(ctx.Checker, dataFirst, candidate, subjectIndex, nil) {
+					if typeparser.MatchesPipeableSignature(ctx.TypeParser, dataFirst, candidate, subjectIndex, nil) {
 						hasPipeableSignature[dataFirst] = true
 						pipeableTargets[candidate] = true
 					}
@@ -71,9 +71,7 @@ func checkMissingPipeableSignatures(ctx *rule.Context) []*ast.Diagnostic {
 				ctx.SourceFile,
 				ctx.GetErrorRange(location),
 				tsdiag.Exported_function_0_has_no_pipeable_overload_corresponding_to_its_signature_1_effect_missingPipeableSignature,
-				nil,
-				exportSymbol.Name,
-				ctx.Checker.SignatureToStringEx(signature, location, checker.TypeFormatFlagsWriteArrowStyleSignature, nil),
+				nil, ast.TSGetSymbolName(exportSymbol), ctx.Checker.SignatureToStringEx(signature, location, checker.TypeFormatFlagsWriteArrowStyleSignature, nil),
 			))
 		}
 	}
@@ -87,7 +85,7 @@ func localExportTarget(ctx *rule.Context, exportSymbol *ast.Symbol) (*ast.Symbol
 	}
 
 	target := exportSymbol
-	if target.Flags&ast.SymbolFlagsAlias != 0 {
+	if ast.TSGetSymbolFlags(target)&ast.SymbolFlagsAlias != 0 {
 		target = ctx.Checker.GetAliasedSymbol(target)
 	}
 	if target == nil {
@@ -95,7 +93,7 @@ func localExportTarget(ctx *rule.Context, exportSymbol *ast.Symbol) (*ast.Symbol
 	}
 
 	var targetDeclaration *ast.Node
-	for _, declaration := range target.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(target) {
 		if declaration != nil && ast.GetSourceFileOfNode(declaration) == ctx.SourceFile {
 			targetDeclaration = declaration
 			break
@@ -105,7 +103,7 @@ func localExportTarget(ctx *rule.Context, exportSymbol *ast.Symbol) (*ast.Symbol
 		return nil, nil
 	}
 
-	location := ast.GetNameOfDeclaration(target.ValueDeclaration)
+	location := ast.GetNameOfDeclaration(ast.TSGetSymbolValueDeclaration(target))
 	if location == nil {
 		location = ast.GetNameOfDeclaration(targetDeclaration)
 	}

@@ -111,7 +111,7 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 					continue
 				}
 			}
-			if !MatchesPipeableSignature(c, resolved, candidate, subjectIndex, witness) {
+			if !MatchesPipeableSignature(tp, resolved, candidate, subjectIndex, witness) {
 				continue
 			}
 
@@ -138,10 +138,11 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 // MatchesPipeableSignature reports whether candidate is the pipeable form of
 // dataFirst with the parameter at subjectIndex moved into a returned unary function.
 // When witness is nil, parameter types from dataFirst are used for comparison.
-func MatchesPipeableSignature(c *checker.Checker, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int, witness *PipeableSignatureWitness) bool {
-	if c == nil || dataFirst == nil || candidate == nil {
+func MatchesPipeableSignature(tp *TypeParser, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int, witness *PipeableSignatureWitness) bool {
+	if tp == nil || tp.checker == nil || dataFirst == nil || candidate == nil {
 		return false
 	}
+	c := tp.checker
 	params := dataFirst.Parameters()
 	if subjectIndex < 0 || subjectIndex >= len(params) {
 		return false
@@ -165,7 +166,7 @@ func MatchesPipeableSignature(c *checker.Checker, dataFirst *checker.Signature, 
 
 	return argumentTypesMatchParameters(c, argumentTypes, candidate) &&
 		candidateAcceptsSubject(c, candidate, subjectType) &&
-		pipeableSignatureShapesMatch(c, dataFirst, candidate, subjectIndex)
+		pipeableSignatureShapesMatch(tp, dataFirst, candidate, subjectIndex)
 }
 
 func argumentTypesMatchParameters(c *checker.Checker, args []*checker.Type, sig *checker.Signature) bool {
@@ -299,7 +300,7 @@ func isLikelySelfParameter(sym *ast.Symbol) bool {
 	if sym == nil {
 		return false
 	}
-	name := strings.ToLower(sym.Name)
+	name := strings.ToLower(ast.TSGetSymbolName(sym))
 	return name == "self" || strings.HasPrefix(name, "self") || name == "this"
 }
 

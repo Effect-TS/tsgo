@@ -280,10 +280,10 @@ func mapperCanBeHoisted(tp *typeparser.TypeParser, c *checker.Checker, generator
 }
 
 func allSymbolDeclarationsInsideNode(symbol *ast.Symbol, node *ast.Node) bool {
-	if symbol == nil || node == nil || len(symbol.Declarations) == 0 {
+	if symbol == nil || node == nil || len(ast.TSGetSymbolDeclarations(symbol)) == 0 {
 		return false
 	}
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if declaration == nil || !ast.IsNodeDescendantOf(declaration, node) {
 			return false
 		}
@@ -295,7 +295,7 @@ func allSymbolDeclarationsOutsideNode(symbol *ast.Symbol, node *ast.Node) bool {
 	if symbol == nil || node == nil {
 		return false
 	}
-	for _, declaration := range symbol.Declarations {
+	for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 		if declaration != nil && ast.IsNodeDescendantOf(declaration, node) {
 			return false
 		}
