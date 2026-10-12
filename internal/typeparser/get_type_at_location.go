@@ -21,7 +21,6 @@ func (tp TypeParser) GetTypeAtLocation(node *ast.Node) (result *checker.Type) {
 }
 
 func (tp TypeParser) getTypeAtLocationUncached(node *ast.Node) (result *checker.Type) {
-	c := tp.checker
 	if node == nil {
 		return nil
 	}
@@ -74,7 +73,7 @@ func (tp TypeParser) getTypeAtLocationUncached(node *ast.Node) (result *checker.
 		}
 	}()
 
-	return c.GetTypeAtLocation(node)
+	return tp.checker.GetTypeAtLocation(node)
 }
 
 // isInsideTypeOnlyHeritageExpression reports whether node is an

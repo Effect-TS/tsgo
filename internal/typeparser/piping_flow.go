@@ -508,7 +508,7 @@ func (tp *TypeParser) decomposeCurriedPipeable(result *parsedSingleArgCallResult
 		}
 		parameters := dataFirst.Parameters()
 		for _, subjectIndex := range []int{0, len(parameters) - 1} {
-			if MatchesPipeableSignature(c, dataFirst, pipeable, subjectIndex, witness) {
+			if MatchesPipeableSignature(tp, dataFirst, pipeable, subjectIndex, witness) {
 				result.callee = factoryCall.Expression
 				result.args = factoryCall.Arguments.Nodes
 				result.typeArgumentsSrc = factory

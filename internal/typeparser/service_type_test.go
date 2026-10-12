@@ -100,7 +100,8 @@ func findClassTypeByName(t *testing.T, c *checker.Checker, sf *ast.SourceFile, c
 		t.Fatalf("class %q not found", className)
 	}
 
-	classSym := c.GetSymbolAtLocation(foundName)
+	tp := NewTypeParser(c.Program(), c)
+	classSym := tp.GetSymbolAtLocation(foundName)
 	if classSym == nil {
 		t.Fatalf("symbol for class %q not found", className)
 	}

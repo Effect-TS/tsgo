@@ -67,8 +67,8 @@ func (tp *TypeParser) GetTypeOfPropertyByName(t *checker.Type, name string) *che
 	return tp.checker.GetTypeOfPropertyOfType(t, name)
 }
 
-// GetSymbolAtLocation wraps checker.GetSymbolAtLocation with a meta-property
-// guard. Meta properties (import.meta, import.defer, new.target) never
+// GetSymbolAtLocation guards meta properties and delete targets.
+// Meta properties (import.meta, import.defer, new.target) never
 // reference a symbol rules care about, and the checker debug-asserts (panics)
 // when asked for `import.defer` used as an import-call callee. Always use
 // this instead of the raw checker call.
@@ -78,6 +78,18 @@ func (tp *TypeParser) GetSymbolAtLocation(node *ast.Node) *ast.Symbol {
 	}
 	if node.Kind == ast.KindMetaProperty {
 		return nil
+	}
+	// Symbol lookup can cache an index symbol that makes a later delete check
+	// incorrectly require an optional property.
+	target := node
+	if parent := target.Parent; parent != nil && ast.IsPropertyAccessExpression(parent) && parent.Name() == target {
+		target = parent
+	}
+	if ast.IsAccessExpression(target) {
+		parent := ast.WalkUpParenthesizedExpressions(target.Parent)
+		if parent != nil && parent.Kind == ast.KindDeleteExpression {
+			return nil
+		}
 	}
 	return tp.checker.GetSymbolAtLocation(node)
 }

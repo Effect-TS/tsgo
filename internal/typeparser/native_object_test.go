@@ -282,7 +282,7 @@ custom.keys;
 		if got := tp.IsNativeObjectConstructorMethodReference(node, "keys"); got != want {
 			t.Fatalf("first parser %s = %v, want %v", access, got, want)
 		}
-		symbol := c.GetSymbolAtLocation(node)
+		symbol := tp.GetSymbolAtLocation(node)
 		cached := tp.links.nativeObjectMember.TryGet(symbol)
 		wantMember := nativeObjectMember{}
 		if want {
@@ -299,14 +299,14 @@ custom.keys;
 	if !second.IsNativeObjectConstructorMethodReference(findNativeObjectAccess(t, files["/.src/second.ts"], "Object.keys"), "keys") || second.links.nativeObjectRegistry != registry {
 		t.Fatal("second source file did not reuse the canonical registry")
 	}
-	otherChecker, other, otherFile, otherDone := compileAndGetCheckerAndSourceFileInternal(t, source)
+	_, other, otherFile, otherDone := compileAndGetCheckerAndSourceFileInternal(t, source)
 	defer otherDone()
-	firstSymbol := c.GetSymbolAtLocation(findNativeObjectAccess(t, files["/.src/first.ts"], "Object.keys"))
+	firstSymbol := tp.GetSymbolAtLocation(findNativeObjectAccess(t, files["/.src/first.ts"], "Object.keys"))
 	if other.links == tp.links || other.links.nativeObjectRegistry != nil || other.links.nativeObjectMember.TryGet(firstSymbol) != nil {
 		t.Fatal("separate checker inherited native Object cache entries")
 	}
 	otherNode := findNativeObjectAccess(t, otherFile, "Object.keys")
-	if !other.IsNativeObjectConstructorMethodReference(otherNode, "keys") || other.links.nativeObjectRegistry == registry || otherChecker.GetSymbolAtLocation(otherNode) == firstSymbol {
+	if !other.IsNativeObjectConstructorMethodReference(otherNode, "keys") || other.links.nativeObjectRegistry == registry || other.GetSymbolAtLocation(otherNode) == firstSymbol {
 		t.Fatal("separate checker did not build its own native Object cache")
 	}
 }

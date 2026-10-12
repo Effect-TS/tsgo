@@ -81,15 +81,15 @@ func (tp *TypeParser) nativeObjectReference(node *ast.Node, requested nativeObje
 	var symbol *ast.Symbol
 	switch node.Kind {
 	case ast.KindPropertyAccessExpression:
-		symbol = tp.checker.GetSymbolAtLocation(node)
+		symbol = tp.GetSymbolAtLocation(node)
 	case ast.KindElementAccessExpression:
 		access := node.AsElementAccessExpression()
 		if access.ArgumentExpression == nil || !ast.IsStringLiteralLike(access.ArgumentExpression) {
 			return false
 		}
-		symbol = tp.checker.GetSymbolAtLocation(access.ArgumentExpression)
+		symbol = tp.GetSymbolAtLocation(access.ArgumentExpression)
 		if symbol == nil {
-			receiverType := tp.checker.GetNonNullableType(tp.checker.GetTypeAtLocation(access.Expression))
+			receiverType := tp.checker.GetNonNullableType(tp.GetTypeAtLocation(access.Expression))
 			symbol = tp.checker.GetPropertyOfType(receiverType, access.ArgumentExpression.Text())
 		}
 	default:

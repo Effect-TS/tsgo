@@ -456,7 +456,7 @@ func (a *apiStabilityAnalysis) symbolAtTypeNameNode(node *ast.Node) *ast.Symbol 
 	if symbol, ok := a.typeNameSymbols[node]; ok {
 		return symbol
 	}
-	symbol := a.tp.checker.GetSymbolAtLocation(node)
+	symbol := a.tp.GetSymbolAtLocation(node)
 	if symbol != nil {
 		if a.typeNameSymbols == nil {
 			a.typeNameSymbols = make(map[*ast.Node]*ast.Symbol)

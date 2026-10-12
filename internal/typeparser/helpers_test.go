@@ -335,10 +335,10 @@ func TestExtractContravariantType_AcceptsNonGenericSignature(t *testing.T) {
 func TestGetSymbolIfSameReference_UsesCanonicalExportSymbol(t *testing.T) {
 	t.Parallel()
 
-	c, _, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `export const Foo = 1`)
+	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `export const Foo = 1`)
 	defer done()
 
-	localFoo := c.GetSymbolAtLocation(findIdentifierByText(t, sf, "Foo", 0))
+	localFoo := tp.GetSymbolAtLocation(findIdentifierByText(t, sf, "Foo", 0))
 	if localFoo == nil {
 		t.Fatal("expected local Foo symbol")
 	}
@@ -361,7 +361,7 @@ func TestGetSymbolIfSameReference_UsesCanonicalExportSymbol(t *testing.T) {
 func TestGetSymbolIfSameReference_ResolvesImportAliases(t *testing.T) {
 	t.Parallel()
 
-	c, _, sourceFiles, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
+	c, tp, sourceFiles, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
 		"/.src/a.ts": `export const Foo = 1`,
 		"/.src/b.ts": `import { Foo as Bar } from "./a"
 const value = Bar`,
@@ -385,7 +385,7 @@ const value = Bar`,
 		t.Fatal("expected exported Foo symbol")
 	}
 
-	bar := c.GetSymbolAtLocation(findIdentifierByText(t, b, "Bar", 0))
+	bar := tp.GetSymbolAtLocation(findIdentifierByText(t, b, "Bar", 0))
 	if bar == nil {
 		t.Fatal("expected alias symbol for Bar")
 	}
@@ -401,12 +401,12 @@ const value = Bar`,
 func TestGetSymbolIfSameReference_DoesNotMatchDifferentExports(t *testing.T) {
 	t.Parallel()
 
-	c, _, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `export const Foo = 1
+	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `export const Foo = 1
 export const Bar = 2`)
 	defer done()
 
-	foo := c.GetSymbolAtLocation(findIdentifierByText(t, sf, "Foo", 0))
-	bar := c.GetSymbolAtLocation(findIdentifierByText(t, sf, "Bar", 0))
+	foo := tp.GetSymbolAtLocation(findIdentifierByText(t, sf, "Foo", 0))
+	bar := tp.GetSymbolAtLocation(findIdentifierByText(t, sf, "Bar", 0))
 	if foo == nil || bar == nil {
 		t.Fatal("expected Foo and Bar symbols")
 	}
