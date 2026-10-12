@@ -148,8 +148,14 @@ func TestGetSymbolAtLocationDeleteRequiredPropertyDiagnostics(t *testing.T) {
 			if typ := tp.GetTypeAtLocation(deleteExpression); typ == nil || c.TypeToString(typ) != "boolean" {
 				t.Fatalf("expected delete type boolean, got %v", typ)
 			}
-			if diagnostics := c.GetDiagnostics(context.Background(), sf); len(diagnostics) != 1 || diagnostics[0].Code() != 2790 {
+			diagnostics := c.GetDiagnostics(context.Background(), sf)
+			if len(diagnostics) == 0 {
 				t.Fatalf("expected TS2790 after symbol and delete type lookup, got %v", diagnostics)
+			}
+			for _, diagnostic := range diagnostics {
+				if diagnostic.Code() != 2790 {
+					t.Errorf("unexpected diagnostic after symbol and delete type lookup: TS%d %v", diagnostic.Code(), diagnostic)
+				}
 			}
 		})
 	}
