@@ -37,7 +37,7 @@ func (tp *TypeParser) ReferenceSymbolAtNode(node *ast.Node) *ast.Symbol {
 		return nil
 	}
 
-	return Cached(&tp.links.ReferenceSymbol, node, func() *ast.Symbol {
+	return CachedNode(&tp.links.ReferenceSymbol, node, func() *ast.Symbol {
 		sym := tp.GetSymbolAtLocation(node)
 		if sym == nil && node.Kind == ast.KindPropertyAccessExpression {
 			if prop := node.AsPropertyAccessExpression(); prop != nil && prop.Name() != nil {

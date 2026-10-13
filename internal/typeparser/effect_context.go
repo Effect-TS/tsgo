@@ -2,6 +2,7 @@ package typeparser
 
 import (
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 )
 
@@ -46,7 +47,7 @@ func (tp *TypeParser) GetEffectYieldGeneratorFunction(node *ast.Node) *ast.Funct
 	return nil
 }
 
-func getClosestNodeWithLinks[T any](store *core.LinkStore[*ast.Node, T], node *ast.Node) (*ast.Node, bool) {
+func getClosestNodeWithLinks[T any](store *checker.NodeLinkStore[T], node *ast.Node) (*ast.Node, bool) {
 	if store == nil || node == nil {
 		return nil, false
 	}

@@ -2,6 +2,7 @@ package checker
 
 import (
 	"github.com/microsoft/TypeScript/tsc/internal/checker"
+	"github.com/microsoft/TypeScript/tsc/internal/core"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 
 	"unsafe"
@@ -344,4 +345,35 @@ func materializedValueSymbolLinks(c *Checker, symbol *ast.Symbol) *ValueSymbolLi
 		}
 	}
 	return store.links.TryGet(id)
+}
+
+const maxPagedNodeLinks = 0x100_0000
+
+// NodeLinkStore mirrors the checker's own node link store: links live in a
+// paged array indexed by node ids handed out in per-store blocks, so nodes
+// first touched together share pages. Ids outside the paged range use a map.
+type NodeLinkStore[V any] struct {
+	gen   ast.NodeIdGenerator
+	links core.LinkStore[uint64, V]
+	pages core.PagedLinkStore[V]
+}
+
+func (s *NodeLinkStore[V]) Get(node *ast.Node) *V {
+	id := uint64(s.gen.GetNodeId(node))
+	if id >= ast.BlockIdOffset && id < ast.BlockIdOffset+maxPagedNodeLinks {
+		return s.pages.Get(id - ast.BlockIdOffset)
+	}
+	return s.links.Get(id)
+}
+
+func (s *NodeLinkStore[V]) Has(node *ast.Node) bool {
+	return s.TryGet(node) != nil
+}
+
+func (s *NodeLinkStore[V]) TryGet(node *ast.Node) *V {
+	id := uint64(s.gen.GetNodeId(node))
+	if id >= ast.BlockIdOffset && id < ast.BlockIdOffset+maxPagedNodeLinks {
+		return s.pages.TryGet(id - ast.BlockIdOffset)
+	}
+	return s.links.TryGet(id)
 }
