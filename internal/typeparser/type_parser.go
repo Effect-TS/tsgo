@@ -15,13 +15,19 @@ type TypeParser struct {
 	links   *EffectLinks
 }
 
+type denseNodeStore[V any] = checker.NodeLinkStore[V]
+
 // EffectLinks holds per-checker cached type-parser results.
 // One instance is lazily created per Checker and cached on TypeParser.
 type EffectLinks struct {
+	TypeAtLocation               denseNodeStore[*checker.Type]
+	ReferenceSymbol              denseNodeStore[*ast.Symbol]
+	EffectContextFlags           denseNodeStore[EffectContextFlags]
+	EffectYieldGeneratorFunction denseNodeStore[*ast.FunctionExpression]
+
 	ObjectLiteralContextualType           core.LinkStore[*ast.Node, *checker.Type]
 	ObjectLiteralConstraintContextualType core.LinkStore[*ast.Node, *checker.Type]
 
-	TypeAtLocation         core.LinkStore[*ast.Node, *checker.Type]
 	EffectType             core.LinkStore[*checker.Type, *Effect]
 	StreamType             core.LinkStore[*checker.Type, *Effect]
 	StrictEffectType       core.LinkStore[*checker.Type, *Effect]
@@ -38,7 +44,6 @@ type EffectLinks struct {
 	PromiseType            core.LinkStore[*checker.Type, *checker.Type]
 	IsGlobalErrorType      core.LinkStore[*checker.Type, bool]
 	IsYieldableErrorType   core.LinkStore[*checker.Type, bool]
-	ReferenceSymbol        core.LinkStore[*ast.Node, *ast.Symbol]
 	ModuleExportReference  core.LinkStore[moduleExportReferenceCacheKey, bool]
 	PipeableSignatureShape core.LinkStore[pipeableSignatureShapeCacheKey, bool]
 	nativeArrayRegistry    *nativeArrayRegistry
@@ -79,13 +84,11 @@ type EffectLinks struct {
 	ExtendsServiceMapService   core.LinkStore[*ast.Node, *ServiceMapServiceResult]
 	ExtendsEffectSqlModelClass core.LinkStore[*ast.Node, *SqlModelClassResult]
 
-	EffectGenCall                core.LinkStore[*ast.Node, *EffectGenCallResult]
-	EffectFnCall                 core.LinkStore[*ast.Node, *EffectFnCallResult]
-	ParseEffectFnOpportunity     core.LinkStore[*ast.Node, *EffectFnOpportunityResult]
-	ParsePipeCall                core.LinkStore[*ast.Node, *ParsedPipeCallResult]
-	ExecutionFlow                core.LinkStore[*ast.SourceFile, *ExecutionFlow]
-	EffectContextFlags           core.LinkStore[*ast.Node, EffectContextFlags]
-	EffectYieldGeneratorFunction core.LinkStore[*ast.Node, *ast.FunctionExpression]
+	EffectGenCall            core.LinkStore[*ast.Node, *EffectGenCallResult]
+	EffectFnCall             core.LinkStore[*ast.Node, *EffectFnCallResult]
+	ParseEffectFnOpportunity core.LinkStore[*ast.Node, *EffectFnOpportunityResult]
+	ParsePipeCall            core.LinkStore[*ast.Node, *ParsedPipeCallResult]
+	ExecutionFlow            core.LinkStore[*ast.SourceFile, *ExecutionFlow]
 
 	discoverPackagesComputed    bool
 	discoverPackagesValue       []DiscoveredPackage
@@ -107,6 +110,16 @@ func Cached[K comparable, V any](store *core.LinkStore[K, V], key K, compute fun
 	}
 	value := compute()
 	*store.Get(key) = value
+	return value
+}
+
+// CachedNode is Cached for node-keyed stores.
+func CachedNode[V any](store *checker.NodeLinkStore[V], node *ast.Node, compute func() V) V {
+	if value := store.TryGet(node); value != nil {
+		return *value
+	}
+	value := compute()
+	*store.Get(node) = value
 	return value
 }
 

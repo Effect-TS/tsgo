@@ -15,7 +15,7 @@ func (tp TypeParser) GetTypeAtLocation(node *ast.Node) (result *checker.Type) {
 		return nil
 	}
 
-	return Cached(&tp.links.TypeAtLocation, node, func() *checker.Type {
+	return CachedNode(&tp.links.TypeAtLocation, node, func() *checker.Type {
 		return tp.getTypeAtLocationUncached(node)
 	})
 }
