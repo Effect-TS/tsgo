@@ -1,5 +1,83 @@
 # @effect/tsgo
 
+## 0.52.0
+
+### Minor Changes
+
+- 3e4a55d: Route Effect contextual-type queries through `TypeParser.GetContextualType` and enforce the wrapper with customlint. For example, use `tp.GetContextualType(node, checker.ContextFlagsNone)` instead of the checker method. Query behavior stays unchanged, with one place to add contextual-type safety guards in future changes.
+- 0269634: Add `effectSleepZeroToYieldNow`, a style suggestion with a quick fix for zero-duration `Effect.sleep` calls.
+  
+  For example, `Effect.sleep(0)` becomes `Effect.yieldNow()` in Effect v3 and `Effect.yieldNow` in Effect v4. The rule also recognizes safe zero-duration strings, tuples, and Duration constructors. The replacement yields through the fiber scheduler instead of the Clock service.
+- 181b2b3: Add the `flatMapToTap` style suggestion and quick fix for Effect v3 and v4. Callbacks that run an effect and restore their unchanged parameter with terminal `Effect.as` or `Effect.map` can use `Effect.tap` instead. The fix preserves callback statements and earlier effect transformations.
+- 7d051dd: Route internal symbol and type location queries through TypeParser and enforce this with customlint. Reuse the existing TypeParser throughout pipeable signature comparison.
+  
+  Prevent false TS2790 diagnostics for valid index-signature deletes such as `declare const map: { [key: string]: number }; delete map.x;`. Symbol queries skip deleted property accesses and their names, including parenthesized and optional targets. Receiver and computed-key queries remain available, and invalid required-property and readonly deletes still report compiler errors.
+- f178ff2: Add the opt-in `preferEffectArray` diagnostic in `effectNative` for native Array method calls and references. It suggests 16 corresponding Effect Array APIs and explains migration differences, such as `values.find(predicate)` becoming `Array.findFirst(values, predicate)` with an `Option` result.
+  
+  The rule is disabled by default and enabled as a warning by the `effect-native` preset. It supports readonly arrays, tuples, aliases, and literal bracket access. Native Array recognition uses a lazy cache shared per checker. Conversion autofixes are not included.
+- f59b4b8: Add the opt-in `preferEffectRecord` diagnostic in `effectNative` for native Object calls and references. It suggests `Record.keys`, `Record.values`, `Record.toEntries`, `Record.fromEntries`, and `Record.has`, including native `hasOwnProperty` references.
+  
+  Each suggestion explains input typing or runtime differences. For example, `Object.entries(data)` suggests `Record.toEntries(data)` with typed keys and a caveat about getter or proxy mutations. `data.hasOwnProperty(key)` suggests passing the receiver explicitly to `Record.has(data, key)`.
+  
+  The rule defaults to off and the `effect-native` preset enables it as a warning. Both Effect v3 and v4 are supported. Only suppression quick fixes are available.
+- 2672190: Add the opt-in `preferSchemaTaggedError` diagnostic for Effect v3 and v4. It suggests `Schema.TaggedError` for class declarations that extend `Data.TaggedError`, including anonymous default exports. For example, `class NotFound extends Data.TaggedError("NotFound")<{ id: string }> {}` reports a warning when the rule is enabled.
+- ab20f55: Expose parser results through getters and readonly collection views. For Go consumers, `result.A` becomes `result.A()`, and `flow.Transformations[i]` becomes `flow.Transformations().At(i)`. Collection views support iteration and explicit owned copies. Compiler AST and type pointers remain borrowed.
+- c4aa628: Include `{ readonly brand: unique symbol }` in Effect v4 Schema class completions for `Class`, `TaggedClass`, `Error`, and `TaggedError`. Add a branded completion for `Schema.Opaque`.
+  
+  For example, the `Class<Person>` completion inserts `Schema.Class<Person, { readonly brand: unique symbol }>("Person")`. Effect v3 and `Model.Class` completions keep their existing type arguments.
+- 22f6106: Add `schemaClassMissingBrand`, a correctness suggestion enabled by default for Effect v4 schema classes, errors, and opaque classes.
+  
+  The diagnostic suggests adding a brand when the second brand type argument is omitted. For example, `Schema.Class<Person>("Person")` triggers a suggestion, while `Schema.Class<Person, { readonly brand: unique symbol }>("Person")` supplies a nominal brand. An explicit `{}` keeps structural typing and suppresses the suggestion. Effect v3 is excluded.
+- d565ab8: Recognize `Predicate.isTagged(value, "Foo")` and `Predicate.isTagged("Foo")(value)` as tag comparisons in dispatch analysis. Existing catch-tag diagnostics and quick fixes now handle both forms in Effect v3 and v4.
+
+### Patch Changes
+
+- 4ceb27f: Reduce repeated type inference when checking experimental and unstable properties in generic object literals.
+- e57688f: Clear an inherited Effect plugin when a child `tsconfig` defines an empty or replacement `plugins` list.
+- 9696634: Report experimental and unstable properties supplied in contextually typed object literals, including shorthand properties. For example, `x({ test: 42 })` and `x({ test })` now warn when the parameter type marks `test` with `@stability experimental`, even if the function and interface are stable.
+- 0dfc0be: Fix a crash in the "Convert to Effect.fn" refactor when `gen` is a named import or a local alias.
+  
+  ```ts
+  import { gen } from "effect/Effect"
+  export const foo = () => gen(function*() { return 1 })
+  ```
+  
+  Requesting code actions on `gen` used to fail the whole `textDocument/codeAction` request with a nil pointer panic. The refactor now rewrites to `Effect.fn`, using the file's existing Effect import name when there is one:
+  
+  ```ts
+  import { gen } from "effect/Effect"
+  export const foo = Effect.fn("foo")(function* () { return 1; });
+  ```
+  
+  The refactor does not add a missing `Effect` import. The user adds it.
+- 6107975: Update the shim generator's Go tools dependency to support Go 1.27.2 export data and restore compiler setup.
+  
+  Preserve pointers to unexported structs in generated shim mirrors so fields that follow them retain their offsets and accessors return the correct values.
+- 8e0b5bf: Resolve the types carried by typeparser results only when a rule reads them, and reuse the resolved type on later reads. For example, a piping flow no longer queries the type of every transformation up front, so a rule that filters flows by callee skips those queries. Diagnostics are unchanged.
+- 6512cfb: Cache module export checks per symbol. Rules check whether most identifiers and callees refer to a module export, such as `gen`, `fn`, or `map` from the `effect` package's `Effect` module. Each symbol now gets a slot in a paged array indexed by symbol id, the layout the TypeScript 7.1 checker uses for its own symbol caches. The slot holds a small map of answers keyed by module and member name. Before, every answer shared one large hash map. For example, `tsc -b` on the Effect monorepo with every rule enabled runs about 1% faster with identical diagnostics. On TypeScript 7.0.2, which lacks block-allocated symbol ids, the per-symbol slots stay in a hash map.
+- b780f66: Fix the Effect.fn and async-to-Effect refactors for functions nested inside another declaration's value. A function in a catch binding default no longer makes the code action request fail, and a function in an object, array, call argument, class field, or later declarator is now replaced in place instead of overwriting the whole value. For example, converting `task` in `export const inObject = { task: () => Effect.gen(function*() { return 1 }) }` now produces `export const inObject = { task: Effect.fn(function* () { return 1; }) }`.
+- 959570b: Store the Effect caches that cover most nodes of a file in paged arrays indexed by node id, the layout the TypeScript 7.1 checker uses for its own hottest node caches. A lookup now indexes an array instead of hashing a node pointer. For example, `tsc -b` on the Effect monorepo runs about 2% faster with identical diagnostics. On TypeScript 7.0.2, which lacks block-allocated node ids, these caches stay hash maps.
+- 60eac10: Run Effect diagnostics after TypeScript checks unused identifiers so plugin symbol queries cannot suppress TS6133. For example, with `noUnusedParameters` enabled, `export function unusedPredicate(value: unknown): value is number { return true; }` now reports the unused `value` parameter with the plugin enabled, just as it does with the plugin disabled.
+- 7450a52: Remove the `debug` plugin option and the debug-only `Flows` group from the document outline.
+- 3e4a55d: Cache object-literal contextual types per checker across experimental and unstable API diagnostics. Keep normal and inference-blocked queries separate, including nil results, to avoid repeating the same contextual-type queries.
+- 4d9fba4: Ship the latest TypeScript compiler once in each platform package. It was packaged twice, as `lib/tsc` and as `artifacts/typescript/<latest>/tsc`, each with its own `lib.*.d.ts` files. It now ships only as `lib/tsc`, which makes `@effect/tsgo-darwin-arm64` 29 MB smaller unpacked.
+  
+  `get-exe-path`, `diagnostics`, `patch` and `getExePath()` resolve the latest TypeScript version to `lib/tsc` and other versions to `artifacts/typescript/<version>/tsc`. Tools that run `lib/tsc` directly keep working.
+- 3e4a55d: Prevent false TypeScript iterator and object-spread diagnostics when experimental or unstable API checks query generic constraints inside inferred generator function expressions. Skip inference-blocked contextual queries in these expressions while retaining normal contextual lookups. This conservative fallback can omit constraint-based property warnings inside inferred generators.
+- da2f46d: Skip type queries for expressions that can never have an Effect library type, such as literals, functions and, on Effect v4, plain object literals. Diagnostics are unchanged, but they are cheaper to compute: on the Effect monorepo a `tsc -b` build is about 1.3s faster with the default rules and about 2.4s faster with every rule except `apiStabilityLeak` enabled.
+  
+  For example, rules such as `effectInVoidSuccess` no longer ask the checker for the type of the array and object literal arguments here, because neither can be an Effect:
+  
+  ```ts
+  Effect.forEach([1, 2, 3], (n) => Effect.log(n), { concurrency: 2 })
+  ```
+- 1c7cbf9: Update Effect v4 dependencies and test fixtures from `4.0.0-rc.118` to stable `4.0.2`. Align `@effect/platform-node`, `@effect/platform-node-shared`, and `@effect/vitest` with the same release.
+- fea53cc: Use the configured `keyPatterns` for `Data.TaggedError` and `Schema.TaggedError` completions, so the inserted tag already matches the key expected by `deterministicKeys`.
+  
+  For example, with `{ "target": "error", "pattern": "package-identifier" }` in `keyPatterns`, completing `class NotFound extends Data.` in `src/errors.ts` of package `@app/core` now inserts `Data.TaggedError("@app/core/errors/NotFound")<{}>{}` instead of `Data.TaggedError("NotFound")<{}>{}`. Without an `error` key pattern the completion still uses the class name.
+- cb7567e: Support both field-based and method-based compiler symbols through generated shim helpers.
+- 7450a52: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261007.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/d61a7d235906e78be9b111de0ba060e28e67ecfa) commit `d61a7d235906e78be9b111de0ba060e28e67ecfa`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.51.1
 
 ### Patch Changes
