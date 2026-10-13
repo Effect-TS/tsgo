@@ -80,7 +80,7 @@ func (tp *TypeParser) IsInsideEffectFn(fnNode *ast.Node) bool {
 // ParseEffectFnOpportunity detects whether a function node can be converted to Effect.fn.
 // Returns nil if the node is not an eligible candidate.
 func (tp *TypeParser) ParseEffectFnOpportunity(node *ast.Node) *EffectFnOpportunityResult {
-	if tp == nil || tp.checker == nil || node == nil {
+	if tp == nil || tp.checker == nil || node == nil || !isEffectFnOpportunityCandidate(node) {
 		return nil
 	}
 
@@ -89,44 +89,31 @@ func (tp *TypeParser) ParseEffectFnOpportunity(node *ast.Node) *EffectFnOpportun
 	})
 }
 
+// isEffectFnOpportunityCandidate holds the syntactic checks: a non-generator,
+// unnamed function expression, arrow function or function declaration without
+// a return type annotation. Rejected nodes never reach the per-node cache.
+func isEffectFnOpportunityCandidate(node *ast.Node) bool {
+	switch node.Kind {
+	case ast.KindFunctionExpression:
+		fn := node.AsFunctionExpression()
+		if fn != nil && (fn.AsteriskToken != nil || fn.Name() != nil) {
+			return false
+		}
+	case ast.KindFunctionDeclaration:
+		fn := node.AsFunctionDeclaration()
+		if fn != nil && fn.AsteriskToken != nil {
+			return false
+		}
+	case ast.KindArrowFunction:
+	default:
+		return false
+	}
+	return !hasReturnTypeAnnotation(node)
+}
+
 // parseEffectFnOpportunityInner contains the actual parsing logic for ParseEffectFnOpportunity.
 func (tp *TypeParser) parseEffectFnOpportunityInner(node *ast.Node) *EffectFnOpportunityResult {
 	c := tp.checker
-	// Step 1: Filter by node kind
-	switch node.Kind {
-	case ast.KindFunctionExpression, ast.KindArrowFunction, ast.KindFunctionDeclaration:
-		// OK
-	default:
-		return nil
-	}
-
-	// Step 2: Reject generators
-	if node.Kind == ast.KindFunctionExpression {
-		fn := node.AsFunctionExpression()
-		if fn != nil && fn.AsteriskToken != nil {
-			return nil
-		}
-	}
-	if node.Kind == ast.KindFunctionDeclaration {
-		fn := node.AsFunctionDeclaration()
-		if fn != nil && fn.AsteriskToken != nil {
-			return nil
-		}
-	}
-
-	// Step 3: Reject named function expressions (typically used for recursion)
-	if node.Kind == ast.KindFunctionExpression {
-		fn := node.AsFunctionExpression()
-		if fn != nil && fn.Name() != nil {
-			return nil
-		}
-	}
-
-	// Step 4: Reject functions with return type annotations
-	if hasReturnTypeAnnotation(node) {
-		return nil
-	}
-
 	// Step 5: Reject if already inside Effect.fn
 	if tp.IsInsideEffectFn(node) {
 		return nil
