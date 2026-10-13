@@ -8,9 +8,9 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
-var effectModuleDescriptor = newPackageSourceFileDescriptor("effect", isEffectTypeSourceFile)
+var effectModuleDescriptor = newPackageSourceFileDescriptor(moduleDescriptorEffect, "effect", isEffectTypeSourceFile)
 
-var effectPackageExportDescriptor = newPackageSourceFileDescriptor("effect", nil)
+var effectPackageExportDescriptor = newPackageSourceFileDescriptor(moduleDescriptorEffectPackage, "effect", nil)
 
 // EffectTypeId is the property key for Effect's variance struct.
 // Effect v4 (effect-smol) uses this pattern to encode type parameters.

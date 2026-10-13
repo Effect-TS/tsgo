@@ -47,6 +47,7 @@ type EffectLinks struct {
 	IsGlobalErrorType      core.LinkStore[*checker.Type, bool]
 	IsYieldableErrorType   core.LinkStore[*checker.Type, bool]
 	ModuleExportReference  checker.SymbolLinkStore[map[moduleExportReferenceCacheKey]bool]
+	ModuleExportFilter     checker.SymbolLinkStore[uint64]
 	PipeableSignatureShape core.LinkStore[pipeableSignatureShapeCacheKey, bool]
 	nativeArrayRegistry    *nativeArrayRegistry
 	nativeArrayMember      core.LinkStore[*ast.Symbol, nativeArrayMember]

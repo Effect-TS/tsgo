@@ -5,7 +5,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
-var effectModelPackageSourceFileDescriptor = newPackageSourceFileDescriptor("effect", isEffectModelTypeSourceFile)
+var effectModelPackageSourceFileDescriptor = newPackageSourceFileDescriptor(moduleDescriptorEffectModel, "effect", isEffectModelTypeSourceFile)
 
 // isEffectModelTypeSourceFile checks if a source file is the effect/schema Model module
 // by verifying it exports "Class", "Generated", and "FieldOption".

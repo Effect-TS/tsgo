@@ -5,11 +5,11 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
-var effectSchemaModuleDescriptor = newPackageSourceFileDescriptor("effect", isSchemaTypeSourceFile)
+var effectSchemaModuleDescriptor = newPackageSourceFileDescriptor(moduleDescriptorSchema, "effect", isSchemaTypeSourceFile)
 
-var effectParseResultModuleDescriptor = newPackageSourceFileDescriptor("effect", isParseResultSourceFile)
+var effectParseResultModuleDescriptor = newPackageSourceFileDescriptor(moduleDescriptorParseResult, "effect", isParseResultSourceFile)
 
-var effectSchemaParserModuleDescriptor = newPackageSourceFileDescriptor("effect", isSchemaParserSourceFile)
+var effectSchemaParserModuleDescriptor = newPackageSourceFileDescriptor(moduleDescriptorSchemaParser, "effect", isSchemaParserSourceFile)
 
 // SchemaTypeId is the property key for Schema's variance struct.
 const SchemaTypeId = "~effect/Schema/Schema"
