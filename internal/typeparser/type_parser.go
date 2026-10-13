@@ -24,6 +24,7 @@ type EffectLinks struct {
 	ReferenceSymbol              denseNodeStore[*ast.Symbol]
 	EffectContextFlags           denseNodeStore[EffectContextFlags]
 	EffectYieldGeneratorFunction denseNodeStore[*ast.FunctionExpression]
+	DataFirstOrLastCall          denseNodeStore[*ParsedDataFirstOrLastCall]
 
 	ObjectLiteralContextualType           core.LinkStore[*ast.Node, *checker.Type]
 	ObjectLiteralConstraintContextualType core.LinkStore[*ast.Node, *checker.Type]

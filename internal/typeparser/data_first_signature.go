@@ -46,6 +46,12 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 		}
 	}
 
+	return CachedNode(&tp.links.DataFirstOrLastCall, node, func() *ParsedDataFirstOrLastCall {
+		return tp.parseDataFirstOrLastCall(node, call)
+	})
+}
+
+func (tp *TypeParser) parseDataFirstOrLastCall(node *ast.Node, call *ast.CallExpression) *ParsedDataFirstOrLastCall {
 	c := tp.checker
 	resolved := c.GetResolvedSignature(node)
 	if resolved == nil {
@@ -86,16 +92,11 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 
 	var matched *ParsedDataFirstOrLastCall
 	for _, subjectIndex := range subjectIndexes {
-		subjectType := tp.GetTypeAtLocation(call.Arguments.Nodes[subjectIndex])
-		if subjectType == nil {
-			continue
-		}
 		args := omitArgAt(call.Arguments.Nodes, subjectIndex)
-		argumentTypes := make([]*checker.Type, 0, len(args))
-		for _, arg := range args {
-			argumentTypes = append(argumentTypes, tp.GetTypeAtLocation(arg))
-		}
-		witness := &PipeableSignatureWitness{ArgumentTypes: argumentTypes, SubjectType: subjectType}
+		// The argument types are only needed once a candidate passes the
+		// signature-only shape check, which is cached per signature pair.
+		var witness *PipeableSignatureWitness
+		witnessComputed := false
 
 		for _, candidate := range candidates {
 			if candidate == nil {
@@ -110,6 +111,22 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 				if candidateSymbol == nil || checker.Checker_getSymbolIfSameReference(c, resolvedSymbol, candidateSymbol) == nil {
 					continue
 				}
+			}
+			if !pipeableSignatureShapesMatch(tp, resolved, candidate, subjectIndex) {
+				continue
+			}
+			if !witnessComputed {
+				witnessComputed = true
+				if subjectType := tp.GetTypeAtLocation(call.Arguments.Nodes[subjectIndex]); subjectType != nil {
+					argumentTypes := make([]*checker.Type, 0, len(args))
+					for _, arg := range args {
+						argumentTypes = append(argumentTypes, tp.GetTypeAtLocation(arg))
+					}
+					witness = &PipeableSignatureWitness{ArgumentTypes: argumentTypes, SubjectType: subjectType}
+				}
+			}
+			if witness == nil {
+				break
 			}
 			if !MatchesPipeableSignature(tp, resolved, candidate, subjectIndex, witness) {
 				continue
