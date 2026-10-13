@@ -1,0 +1,19 @@
+==== /.src/missedPipeableOpportunity_objectPipe.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 14:26 - 14:41
+Node: f(g({ a: 1 }))
+Node Kind: KindCallExpression
+
+Subject: { a: 1 }
+Subject Type: { a: number; }
+
+Transformations (2):
+  [0] kind: call
+      callee: g
+      args: (constant)
+      outType: object
+  [1] kind: call
+      callee: f
+      args: (constant)
+      outType: number
