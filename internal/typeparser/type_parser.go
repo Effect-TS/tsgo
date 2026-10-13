@@ -44,7 +44,7 @@ type EffectLinks struct {
 	PromiseType            core.LinkStore[*checker.Type, *checker.Type]
 	IsGlobalErrorType      core.LinkStore[*checker.Type, bool]
 	IsYieldableErrorType   core.LinkStore[*checker.Type, bool]
-	ModuleExportReference  core.LinkStore[moduleExportReferenceCacheKey, bool]
+	ModuleExportReference  checker.SymbolLinkStore[map[moduleExportReferenceCacheKey]bool]
 	PipeableSignatureShape core.LinkStore[pipeableSignatureShapeCacheKey, bool]
 	nativeArrayRegistry    *nativeArrayRegistry
 	nativeArrayMember      core.LinkStore[*ast.Symbol, nativeArrayMember]

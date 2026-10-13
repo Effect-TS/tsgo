@@ -347,7 +347,7 @@ func materializedValueSymbolLinks(c *Checker, symbol *ast.Symbol) *ValueSymbolLi
 	return store.links.TryGet(id)
 }
 
-const maxPagedNodeLinks = 0x100_0000
+const maxPagedLinks = 0x100_0000
 
 // NodeLinkStore mirrors the checker's own node link store: links live in a
 // paged array indexed by node ids handed out in per-store blocks, so nodes
@@ -360,7 +360,7 @@ type NodeLinkStore[V any] struct {
 
 func (s *NodeLinkStore[V]) Get(node *ast.Node) *V {
 	id := uint64(s.gen.GetNodeId(node))
-	if id >= ast.BlockIdOffset && id < ast.BlockIdOffset+maxPagedNodeLinks {
+	if id >= ast.BlockIdOffset && id < ast.BlockIdOffset+maxPagedLinks {
 		return s.pages.Get(id - ast.BlockIdOffset)
 	}
 	return s.links.Get(id)
@@ -372,7 +372,33 @@ func (s *NodeLinkStore[V]) Has(node *ast.Node) bool {
 
 func (s *NodeLinkStore[V]) TryGet(node *ast.Node) *V {
 	id := uint64(s.gen.GetNodeId(node))
-	if id >= ast.BlockIdOffset && id < ast.BlockIdOffset+maxPagedNodeLinks {
+	if id >= ast.BlockIdOffset && id < ast.BlockIdOffset+maxPagedLinks {
+		return s.pages.TryGet(id - ast.BlockIdOffset)
+	}
+	return s.links.TryGet(id)
+}
+
+type SymbolLinkStore[V any] struct {
+	gen   ast.SymbolIdGenerator
+	links core.LinkStore[uint64, V]
+	pages core.PagedLinkStore[V]
+}
+
+func (s *SymbolLinkStore[V]) Get(symbol *ast.Symbol) *V {
+	id := uint64(s.gen.GetSymbolId(symbol))
+	if id >= ast.BlockIdOffset && id < ast.BlockIdOffset+maxPagedLinks {
+		return s.pages.Get(id - ast.BlockIdOffset)
+	}
+	return s.links.Get(id)
+}
+
+func (s *SymbolLinkStore[V]) Has(symbol *ast.Symbol) bool {
+	return s.TryGet(symbol) != nil
+}
+
+func (s *SymbolLinkStore[V]) TryGet(symbol *ast.Symbol) *V {
+	id := uint64(s.gen.GetSymbolId(symbol))
+	if id >= ast.BlockIdOffset && id < ast.BlockIdOffset+maxPagedLinks {
 		return s.pages.TryGet(id - ast.BlockIdOffset)
 	}
 	return s.links.TryGet(id)
