@@ -37,19 +37,34 @@ func (tp *TypeParser) ReferenceSymbolAtNode(node *ast.Node) *ast.Symbol {
 	}
 
 	return CachedNode(&tp.links.ReferenceSymbol, node, func() *ast.Symbol {
-		sym := tp.GetSymbolAtLocation(node)
-		if sym == nil && node.Kind == ast.KindPropertyAccessExpression {
-			if prop := node.AsPropertyAccessExpression(); prop != nil && prop.Name() != nil {
-				sym = tp.GetSymbolAtLocation(prop.Name())
-			}
-		}
-
-		sym = tp.resolveAliasedSymbol(sym)
-		if node.Kind == ast.KindIdentifier && !ast.IsDeclarationName(node) {
-			return tp.resolveConstantAliasSymbol(sym)
-		}
-		return sym
+		return tp.referenceSymbolFrom(node, tp.GetSymbolAtLocation(node))
 	})
+}
+
+// ReferenceSymbolAtNodeFrom is ReferenceSymbolAtNode for a caller that has just
+// computed GetSymbolAtLocation(node), so a cache miss does not look it up again.
+func (tp *TypeParser) ReferenceSymbolAtNodeFrom(node *ast.Node, symbolAtLocation *ast.Symbol) *ast.Symbol {
+	if tp == nil || tp.checker == nil || node == nil {
+		return nil
+	}
+
+	return CachedNode(&tp.links.ReferenceSymbol, node, func() *ast.Symbol {
+		return tp.referenceSymbolFrom(node, symbolAtLocation)
+	})
+}
+
+func (tp *TypeParser) referenceSymbolFrom(node *ast.Node, sym *ast.Symbol) *ast.Symbol {
+	if sym == nil && node.Kind == ast.KindPropertyAccessExpression {
+		if prop := node.AsPropertyAccessExpression(); prop != nil && prop.Name() != nil {
+			sym = tp.GetSymbolAtLocation(prop.Name())
+		}
+	}
+
+	sym = tp.resolveAliasedSymbol(sym)
+	if node.Kind == ast.KindIdentifier && !ast.IsDeclarationName(node) {
+		return tp.resolveConstantAliasSymbol(sym)
+	}
+	return sym
 }
 
 func (tp *TypeParser) resolveConstantAliasSymbol(sym *ast.Symbol) *ast.Symbol {
