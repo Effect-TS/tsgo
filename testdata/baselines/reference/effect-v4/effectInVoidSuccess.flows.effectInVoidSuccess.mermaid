@@ -19,6 +19,10 @@ flowchart TB
   17[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
   18["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.suspend<br/>args: #91;#93;"]
   19[/"type: #lt;A, E, R#gt;#40;effect: LazyArg#lt;Effect#lt;A, E, R#gt;#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: Effect.suspend"/]
+  20[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41;: Effect.Effect#lt;void#gt; =#gt; nestedSubtype"]]
+  21[/"type: NestedSubtype<br/>node: nestedSubtype"/]
+  22["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.suspend<br/>args: #91;#93;"]
+  23[/"type: #lt;A, E, R#gt;#40;effect: LazyArg#lt;Effect#lt;A, E, R#gt;#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: Effect.suspend"/]
   0 -->|"kind: pipe"| 1
   2 -->|"kind: transformCallee"| 1
   1 -->|"kind: pipe"| 3
@@ -38,3 +42,6 @@ flowchart TB
   9 -->|"kind: usedBy"| 5
   5 -->|"kind: pipe"| 18
   19 -->|"kind: transformCallee"| 18
+  21 -->|"kind: potentialReturn"| 20
+  20 -->|"kind: pipe"| 22
+  23 -->|"kind: transformCallee"| 22

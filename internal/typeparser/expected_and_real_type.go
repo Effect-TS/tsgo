@@ -14,6 +14,7 @@ type ExpectedAndRealType struct {
 	node         *ast.Node            // The location node (for diagnostic reporting)
 	expectedType *lazy[*checker.Type] // The type expected at this location
 	valueNode    *ast.Node            // The actual value node
+	realNode     *ast.Node            // The node whose type is the real type
 	realType     *lazy[*checker.Type] // The actual type of the value
 }
 
@@ -22,6 +23,8 @@ func (r ExpectedAndRealType) Node() *ast.Node { return r.node }
 func (r ExpectedAndRealType) ExpectedType() *checker.Type { return r.expectedType.get() }
 
 func (r ExpectedAndRealType) ValueNode() *ast.Node { return r.valueNode }
+
+func (r ExpectedAndRealType) RealNode() *ast.Node { return r.realNode }
 
 func (r ExpectedAndRealType) RealType() *checker.Type { return r.realType.get() }
 
@@ -123,6 +126,7 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 							node:         nameNode,
 							expectedType: tp.lazyTypeAtLocation(nameNode),
 							valueNode:    vd.Initializer,
+							realNode:     vd.Initializer,
 							realType:     tp.lazyTypeAtLocation(vd.Initializer),
 						})
 					}
@@ -151,6 +155,7 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 									node:         arg,
 									expectedType: newLazy(func() *checker.Type { return c.GetTypeOfSymbolAtLocation(param, node) }),
 									valueNode:    arg,
+									realNode:     arg,
 									realType:     tp.lazyTypeAtLocation(arg),
 								})
 							}
@@ -181,6 +186,7 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 											node:         node,
 											expectedType: newLazy(func() *checker.Type { return c.GetTypeOfSymbolAtLocation(sym, node) }),
 											valueNode:    node,
+											realNode:     node,
 											realType:     tp.lazyTypeAtLocation(node),
 										})
 									}
@@ -203,6 +209,7 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 							node:         binExpr.Left,
 							expectedType: tp.lazyTypeAtLocation(binExpr.Left),
 							valueNode:    binExpr.Right,
+							realNode:     binExpr.Right,
 							realType:     tp.lazyTypeAtLocation(binExpr.Right),
 						})
 					}
@@ -225,6 +232,7 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 								node:         node,
 								expectedType: resolvedLazy(expectedType),
 								valueNode:    node,
+								realNode:     retStmt.Expression,
 								realType:     tp.lazyTypeAtLocation(retStmt.Expression),
 							})
 						}
@@ -249,6 +257,7 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 								node:         body,
 								expectedType: resolvedLazy(expectedType),
 								valueNode:    body,
+								realNode:     body,
 								realType:     tp.lazyTypeAtLocation(body),
 							})
 						}
@@ -260,6 +269,7 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 								node:         body,
 								expectedType: resolvedLazy(expectedType),
 								valueNode:    body,
+								realNode:     body,
 								realType:     tp.lazyTypeAtLocation(body),
 							})
 						}
@@ -277,6 +287,7 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 						node:         satExpr.Expression,
 						expectedType: tp.lazyTypeAtLocation(satExpr.Type),
 						valueNode:    satExpr.Expression,
+						realNode:     satExpr.Expression,
 						realType:     tp.lazyTypeAtLocation(satExpr.Expression),
 					})
 					queue = append(queue, satExpr.Expression)

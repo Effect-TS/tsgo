@@ -61,7 +61,7 @@ func AnalyzeProvideLayerSucceedToProvideService(tp *typeparser.TypeParser, _ *ch
 			}
 
 			service, implementation, replacement, ok := inlineSingleServiceLayer(tp, provide.Args().At(0))
-			if !ok {
+			if !ok || tp.NodeCannotBeEffectLibraryType(service) {
 				continue
 			}
 			serviceType := tp.GetTypeAtLocation(service)

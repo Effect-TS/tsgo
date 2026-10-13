@@ -64,6 +64,7 @@ func AnalyzeFlatMapIgnoredParamToAndThen(tp *typeparser.TypeParser, _ *checker.C
 
 			callback := typeparser.ParseLazyExpression(transformation.Args().At(0), typeparser.LazyExpressionThunk)
 			if callback == nil || callback.Expression() == nil ||
+				tp.NodeCannotBeEffectLibraryType(callback.Expression()) ||
 				!tp.IsExpressionValueStableAtLocation(callback.Expression(), callee) ||
 				tp.EffectType(tp.GetTypeAtLocation(callback.Expression())) == nil {
 				continue

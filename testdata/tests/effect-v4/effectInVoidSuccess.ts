@@ -13,3 +13,8 @@ export const shouldReport2 = Effect.suspend((): Effect.Effect<void> => {
     })
   )
 })
+
+interface NestedSubtype extends Effect.Effect<Effect.Effect<number>> {}
+declare const nestedSubtype: NestedSubtype
+
+export const shouldReportSubtype = Effect.suspend((): Effect.Effect<void> => nestedSubtype)

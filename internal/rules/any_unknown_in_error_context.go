@@ -82,14 +82,21 @@ var AnyUnknownInErrorContext = rule.Rule{
 			// Enqueue children for visiting
 			node.ForEachChild(pushChild)
 
-			// Get the type at this location
-			t := ctx.TypeParser.GetTypeAtLocation(node)
+			// Only Effect and Layer types are inspected below.
+			if ctx.TypeParser.NodeCannotBeEffectLibraryType(node) {
+				continue
+			}
 
 			// For call expressions, use the resolved signature's return type
+			var sig *checker.Signature
 			if node.Kind == ast.KindCallExpression {
-				if sig := ctx.Checker.GetResolvedSignature(node); sig != nil {
-					t = ctx.Checker.GetReturnTypeOfSignature(sig)
-				}
+				sig = ctx.Checker.GetResolvedSignature(node)
+			}
+			var t *checker.Type
+			if sig != nil {
+				t = ctx.Checker.GetReturnTypeOfSignature(sig)
+			} else {
+				t = ctx.TypeParser.GetTypeAtLocation(node)
 			}
 
 			if t == nil {

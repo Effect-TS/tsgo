@@ -385,7 +385,8 @@ func uniqueCatchReasonParameterName(c *checker.Checker, location *ast.Node) stri
 }
 
 func isEffectExpression(tp *typeparser.TypeParser, expression *ast.Node) bool {
-	return expression != nil && tp.EffectType(tp.GetTypeAtLocation(expression)) != nil
+	return expression != nil && !tp.NodeCannotBeEffectLibraryType(expression) &&
+		tp.EffectType(tp.GetTypeAtLocation(expression)) != nil
 }
 
 func catchTagsPropertyName(name *ast.Node) (string, bool) {

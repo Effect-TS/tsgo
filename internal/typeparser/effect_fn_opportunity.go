@@ -797,7 +797,7 @@ func (tp *TypeParser) tryMatchOfInference(objectLiteral *ast.Node) string {
 	}
 	// Get the service tag expression (the object before .of)
 	serviceTagExpression := propAccess.Expression
-	if serviceTagExpression == nil {
+	if serviceTagExpression == nil || tp.NodeCannotBeEffectLibraryType(serviceTagExpression) {
 		return ""
 	}
 	serviceTagType := tp.GetTypeAtLocation(serviceTagExpression)

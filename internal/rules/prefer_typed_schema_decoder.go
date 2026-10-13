@@ -123,7 +123,7 @@ func schemaDecoderTransformation(transformation typeparser.PipingFlowTransformat
 
 func analyzeTypedSchemaDecoderApplication(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, callee, schema, inputNode *ast.Node, inputType *checker.Type) *PreferTypedSchemaDecoderMatch {
 	unknownName, typedName := matchUnknownSchemaDecoder(tp, callee)
-	if unknownName == "" {
+	if unknownName == "" || tp.NodeCannotBeEffectLibraryType(schema) {
 		return nil
 	}
 

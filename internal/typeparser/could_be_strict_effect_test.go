@@ -66,6 +66,7 @@ export const uses = [
 	anObjectKeyword,
 ]
 export function inner<T>(param: T) { return [param] }
+export const either = anAny || anEffect
 `
 	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, source)
 	defer done()
@@ -98,27 +99,30 @@ export function inner<T>(param: T) { return [param] }
 		}
 	}
 
-	// Other non-reference node kinds (e.g. binary expressions) are never
-	// ruled out.
-	var binary *ast.Node
-	var visit func(node *ast.Node) bool
-	visit = func(node *ast.Node) bool {
-		if binary != nil {
-			return true
+	findKind := func(kind ast.Kind) *ast.Node {
+		var found *ast.Node
+		var visit func(node *ast.Node) bool
+		visit = func(node *ast.Node) bool {
+			if found == nil && node.Kind == kind {
+				found = node
+			}
+			node.ForEachChild(visit)
+			return found != nil
 		}
-		if node.Kind == ast.KindArrayLiteralExpression {
-			binary = node
-			return true
+		sf.AsNode().ForEachChild(visit)
+		if found == nil {
+			t.Fatalf("no %v found", kind)
 		}
-		node.ForEachChild(visit)
-		return false
+		return found
 	}
-	sf.AsNode().ForEachChild(visit)
-	if binary == nil {
-		t.Fatal("no array literal expression found")
+	if tp.NodeCouldBeStrictEffect(findKind(ast.KindArrayLiteralExpression)) {
+		t.Error("an array literal can never be an Effect")
 	}
-	if !tp.NodeCouldBeStrictEffect(binary) {
-		t.Error("non-reference, non-call node kinds must not be ruled out")
+	if tp.NodeCouldBeStrictEffect(findKind(ast.KindObjectLiteralExpression)) {
+		t.Error("an object literal is never named Effect")
+	}
+	if !tp.NodeCouldBeStrictEffect(findKind(ast.KindBinaryExpression)) {
+		t.Error("other non-reference, non-call node kinds must not be ruled out")
 	}
 
 	// Nil receiver and nil node stay conservative.
@@ -237,6 +241,87 @@ export const uses = [
 		call := findCallByCalleeName(t, sf, tt.callee)
 		if got := tp.NodeCouldBeStrictEffect(call); got != tt.expected {
 			t.Errorf("NodeCouldBeStrictEffect(call %s) = %v, want %v", tt.callee, got, tt.expected)
+		}
+	}
+}
+
+func TestNodeCouldBeEffect(t *testing.T) {
+	t.Parallel()
+	if err := bundledeffect.EnsurePackageInstalled(bundledeffect.EffectV4, "effect"); err != nil {
+		t.Skip("Effect v4 not installed:", err)
+	}
+
+	source := `
+import { Effect } from "effect"
+
+interface Subtype extends Effect.Effect<number> {}
+declare const aSubtype: Subtype
+declare function makesSubtype(): Subtype
+declare function makesString(): string
+const anEffect = Effect.succeed(1)
+const aString = "hello"
+const anUnknown: unknown = null
+interface Plain { readonly value: number }
+const aPlainObject: Plain = { value: 1 }
+function generic<T>(param: T): T { return param }
+export const uses = [aSubtype, anEffect, aString, anUnknown, aPlainObject, makesSubtype(), makesString()]
+const key = "k"
+export const literals = {
+	"key": 1, arrow: () => 1, array: [1], value: "text", object: { a: 1 },
+	spread: { ...anEffect }, computed: { [key]: 1 }, marked: { "~effect/Effect": 1 }
+}
+`
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, source)
+	defer done()
+
+	identifiers := []struct {
+		identifier string
+		expected   bool
+	}{
+		// References are never ruled out: a type guard can narrow any
+		// declared type into an Effect.
+		{"aSubtype", true},
+		{"anEffect", true},
+		{"anUnknown", true},
+		{"param", true},
+		{"aString", true},
+		{"aPlainObject", true},
+	}
+	for _, tt := range identifiers {
+		node := findIdentifierByName(t, sf, tt.identifier)
+		if got := tp.NodeCouldBeEffect(node); got != tt.expected {
+			t.Errorf("NodeCouldBeEffect(%s) = %v, want %v", tt.identifier, got, tt.expected)
+		}
+	}
+
+	if !tp.NodeCouldBeEffect(findCallByCalleeName(t, sf, "makesSubtype")) {
+		t.Error("a call returning an Effect subtype must not be ruled out")
+	}
+	if tp.NodeCouldBeEffect(findCallByCalleeName(t, sf, "makesString")) {
+		t.Error("a call returning string should be ruled out")
+	}
+
+	initializers := map[string]bool{}
+	var visit func(node *ast.Node) bool
+	visit = func(node *ast.Node) bool {
+		if node.Kind == ast.KindPropertyAssignment && node.Name().Kind != ast.KindComputedPropertyName {
+			name := node.Name()
+			initializers[name.Text()] = tp.NodeCouldBeEffect(node.Initializer())
+			if name.Kind == ast.KindStringLiteral && !tp.NodeCouldBeEffect(name) {
+				t.Error("a string literal property name must not be ruled out")
+			}
+		}
+		node.ForEachChild(visit)
+		return false
+	}
+	sf.AsNode().ForEachChild(visit)
+	want := map[string]bool{
+		"key": false, "arrow": false, "array": false, "value": false, "object": false, "a": false,
+		"spread": true, "computed": true, "marked": true,
+	}
+	for name, expected := range want {
+		if got, ok := initializers[name]; !ok || got != expected {
+			t.Errorf("NodeCouldBeEffect(initializer of %s) = %v (found %v), want %v", name, got, ok, expected)
 		}
 	}
 }
