@@ -16,7 +16,6 @@ type PackageSourceFileDescriptor struct {
 type packageSourceFileDescriptorCacheKey byte
 
 type moduleExportReferenceCacheKey struct {
-	symbol     *ast.Symbol
 	descriptor *packageSourceFileDescriptorCacheKey
 	memberName string
 }
@@ -103,14 +102,17 @@ func (tp *TypeParser) IsNodeReferenceToModuleExport(node *ast.Node, desc Package
 		return tp.isSymbolReferenceToModuleExport(sym, desc, memberName)
 	}
 
-	key := moduleExportReferenceCacheKey{
-		symbol:     sym,
-		descriptor: desc.cacheKey,
-		memberName: memberName,
+	answers := tp.links.ModuleExportReference.Get(sym)
+	key := moduleExportReferenceCacheKey{descriptor: desc.cacheKey, memberName: memberName}
+	if answer, ok := (*answers)[key]; ok {
+		return answer
 	}
-	return Cached(&tp.links.ModuleExportReference, key, func() bool {
-		return tp.isSymbolReferenceToModuleExport(sym, desc, memberName)
-	})
+	answer := tp.isSymbolReferenceToModuleExport(sym, desc, memberName)
+	if *answers == nil {
+		*answers = make(map[moduleExportReferenceCacheKey]bool)
+	}
+	(*answers)[key] = answer
+	return answer
 }
 
 func (tp *TypeParser) isSymbolReferenceToModuleExport(sym *ast.Symbol, desc PackageSourceFileDescriptor, memberName string) bool {

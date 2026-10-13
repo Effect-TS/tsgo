@@ -24,3 +24,15 @@ func (s *NodeLinkStore[V]) Get(node *ast.Node) *V { return s.links.Get(node) }
 func (s *NodeLinkStore[V]) Has(node *ast.Node) bool { return s.links.Has(node) }
 
 func (s *NodeLinkStore[V]) TryGet(node *ast.Node) *V { return s.links.TryGet(node) }
+
+// SymbolLinkStore keeps symbol links in a map, for the reason NodeLinkStore
+// keeps node links in one.
+type SymbolLinkStore[V any] struct {
+	links core.LinkStore[*ast.Symbol, V]
+}
+
+func (s *SymbolLinkStore[V]) Get(symbol *ast.Symbol) *V { return s.links.Get(symbol) }
+
+func (s *SymbolLinkStore[V]) Has(symbol *ast.Symbol) bool { return s.links.Has(symbol) }
+
+func (s *SymbolLinkStore[V]) TryGet(symbol *ast.Symbol) *V { return s.links.TryGet(symbol) }

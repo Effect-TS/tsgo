@@ -100,3 +100,30 @@ func TestCachedNodeCachesPerNode(t *testing.T) {
 		t.Fatalf("expected one computation per node, got %d calls", calls)
 	}
 }
+
+func TestSymbolLinkStoreKeepsOneSlotPerSymbol(t *testing.T) {
+	t.Parallel()
+
+	first, second := new(ast.Symbol), new(ast.Symbol)
+	// A symbol that already has an id from the global counter, as symbols
+	// numbered by symbol accessibility or the node builder do.
+	numbered := new(ast.Symbol)
+	ast.GetSymbolId(numbered)
+
+	var store checker.SymbolLinkStore[string]
+	if store.TryGet(first) != nil {
+		t.Fatal("expected an empty store")
+	}
+	*store.Get(first) = "first"
+	*store.Get(second) = "second"
+	*store.Get(numbered) = "numbered"
+
+	for symbol, want := range map[*ast.Symbol]string{first: "first", second: "second", numbered: "numbered"} {
+		if got := store.TryGet(symbol); got == nil || *got != want {
+			t.Fatalf("expected %q from TryGet, got %v", want, got)
+		}
+		if got := *store.Get(symbol); got != want {
+			t.Fatalf("expected %q from Get, got %q", want, got)
+		}
+	}
+}
