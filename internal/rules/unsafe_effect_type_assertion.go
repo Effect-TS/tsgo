@@ -83,7 +83,7 @@ func AnalyzeUnsafeEffectTypeAssertion(tp *typeparser.TypeParser, c *checker.Chec
 		}
 
 		expr := node.Expression()
-		if expr == nil {
+		if expr == nil || tp.NodeCannotBeEffectLibraryType(expr) {
 			continue
 		}
 

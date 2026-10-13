@@ -105,6 +105,10 @@ func detectFloatingEffect(tp *typeparser.TypeParser, _ *checker.Checker, node *a
 		return nil
 	}
 
+	if tp.NodeCannotBeEffectLibraryType(expr) {
+		return nil
+	}
+
 	// Get the type of the expression
 	t := tp.GetTypeAtLocation(expr)
 	if t == nil {

@@ -24,6 +24,12 @@ var EffectInVoidSuccess = rule.Rule{
 		var diags []*ast.Diagnostic
 
 		for _, entry := range ctx.TypeParser.ExpectedAndRealTypes(ctx.SourceFile).All() {
+			// The real type query re-checks the expression, so rule out values
+			// that cannot be an Effect from their declared type first.
+			if !ctx.TypeParser.NodeCouldBeEffect(entry.RealNode()) {
+				continue
+			}
+
 			// The real type goes first: parsing a deeply recursive expected type
 			// can raise TS2589 (#381), and the expected type stays unresolved
 			// unless the real type is an Effect.
