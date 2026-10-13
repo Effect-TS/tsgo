@@ -65,6 +65,13 @@ func AnalyzeTimeoutCatchTagToTimeoutOrElse(tp *typeparser.TypeParser, c *checker
 			if tag.Kind != ast.KindStringLiteral || tag.AsStringLiteral().Text != "TimeoutError" {
 				continue
 			}
+			hasTypeArgs := false
+			for j := i; j <= end; j++ {
+				hasTypeArgs = hasTypeArgs || catchDieHasTypeArguments(new(flow.Transformations().At(j)))
+			}
+			if hasTypeArgs {
+				continue
+			}
 			handler := ast.SkipParentheses(catch.Args().At(1))
 			if !timeoutIgnoresError(tp, c, handler) {
 				continue
@@ -74,13 +81,6 @@ func AnalyzeTimeoutCatchTagToTimeoutOrElse(tp *typeparser.TypeParser, c *checker
 			}
 			input := tp.StrictEffectType(flow.TransformationInputType(i))
 			if input == nil || !timeoutErrorExcluded(tp, c, input.E()) {
-				continue
-			}
-			hasTypeArgs := false
-			for j := i; j <= end; j++ {
-				hasTypeArgs = hasTypeArgs || catchDieHasTypeArguments(new(flow.Transformations().At(j)))
-			}
-			if hasTypeArgs {
 				continue
 			}
 			name := "timeoutOrElse"

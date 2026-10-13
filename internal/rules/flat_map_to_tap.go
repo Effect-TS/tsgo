@@ -64,17 +64,17 @@ func AnalyzeFlatMapToTap(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.
 				!tp.IsNodeReferenceToEffectModuleApi(callee, "flatMap") && !tp.IsNodeReferenceToEffectModuleApi(callee, "andThen") {
 				continue
 			}
-			input := tp.StrictEffectType(flow.TransformationInputType(i))
-			output := tp.StrictEffectType(step.OutType())
-			if input == nil || output == nil || input.A() != output.A() {
-				continue
-			}
 			callback := typeparser.ParseLazyExpression(args.At(0), typeparser.LazyExpressionAllowMultiStatementBlock)
 			if callback == nil || callback.Params().Len() != 1 || callback.Node().Type() != nil {
 				continue
 			}
 			parameter := callback.Params().At(0).AsParameterDeclaration()
 			if !plainTapParameter(parameter) || step.Kind() == typeparser.TransformationKindCall && parameter.Type != nil {
+				continue
+			}
+			input := tp.StrictEffectType(flow.TransformationInputType(i))
+			output := tp.StrictEffectType(step.OutType())
+			if input == nil || output == nil || input.A() != output.A() {
 				continue
 			}
 			symbol := tp.GetSymbolAtLocation(parameter.Name())

@@ -70,8 +70,11 @@ func AnalyzeCatchConditionalRefailToCatchIf(tp *typeparser.TypeParser, c *checke
 			if transformation.Callee() == nil {
 				continue
 			}
+			if transformation.Args().Len() != 1 {
+				continue
+			}
 			methods, ok := conditionalRefailMethods(tp, transformation.Callee())
-			if !ok || transformation.Args().Len() != 1 {
+			if !ok {
 				continue
 			}
 

@@ -2155,7 +2155,7 @@ func (a *apiStabilityAnalysis) collectTypeSurface(t *checker.Type, inspect apiSt
 	// evaluating them.
 	if alias := t.Alias(); alias != nil {
 		a.recordSymbol(&surface, alias.Symbol())
-		if !a.aliasArgumentsAreSelf(alias) && apiStabilityRepresentedSurfaceAcceptsArguments(t) {
+		if apiStabilityRepresentedSurfaceAcceptsArguments(t) && !a.aliasArgumentsAreSelf(alias) {
 			for _, argument := range alias.TypeArguments() {
 				surface.merge(a.typeSurface(argument, apiStabilityShallow, subst))
 			}
@@ -4414,7 +4414,7 @@ func (a *apiStabilityAnalysis) collectChildTypeArguments(surface *apiStabilitySu
 	if t == nil {
 		return
 	}
-	if alias := t.Alias(); alias != nil && !a.aliasArgumentsAreSelf(alias) && apiStabilityRepresentedSurfaceAcceptsArguments(t) {
+	if alias := t.Alias(); alias != nil && apiStabilityRepresentedSurfaceAcceptsArguments(t) && !a.aliasArgumentsAreSelf(alias) {
 		for _, argument := range alias.TypeArguments() {
 			if argument == nil {
 				continue

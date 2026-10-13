@@ -139,10 +139,10 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 			if node.Kind == ast.KindCallExpression {
 				call := node.AsCallExpression()
 				if call != nil {
-					resolvedSig := c.GetResolvedSignature(node)
-					if resolvedSig != nil {
-						params := resolvedSig.Parameters()
-						if call.Arguments != nil {
+					if call.Arguments != nil {
+						resolvedSig := c.GetResolvedSignature(node)
+						if resolvedSig != nil {
+							params := resolvedSig.Parameters()
 							for i, param := range params {
 								if i >= len(call.Arguments.Nodes) {
 									break
@@ -176,10 +176,10 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[Ex
 						// Check that this node is the name of the property (not the value)
 						nameNode := getObjectLiteralElementName(parent)
 						if nameNode == node {
-							contextualType := tp.GetContextualType(grandparent, checker.ContextFlagsNone)
-							if contextualType != nil {
-								name := getNodeTextForPropertyLookup(node)
-								if name != "" {
+							name := getNodeTextForPropertyLookup(node)
+							if name != "" {
+								contextualType := tp.GetContextualType(grandparent, checker.ContextFlagsNone)
+								if contextualType != nil {
 									sym := c.GetPropertyOfType(contextualType, name)
 									if sym != nil {
 										result = append(result, ExpectedAndRealType{

@@ -72,10 +72,10 @@ func AnalyzeEffectSucceedWithVoid(tp *typeparser.TypeParser, _ *checker.Checker,
 
 		if n.Kind == ast.KindCallExpression {
 			call := n.AsCallExpression()
-			if call.Expression != nil && tp.IsNodeReferenceToEffectModuleApi(call.Expression, "succeed") {
-				if call.Arguments != nil && len(call.Arguments.Nodes) >= 1 {
-					arg := call.Arguments.Nodes[0]
-					if isVoidExpression(arg) {
+			if call.Arguments != nil && len(call.Arguments.Nodes) >= 1 {
+				arg := call.Arguments.Nodes[0]
+				if isVoidExpression(arg) {
+					if call.Expression != nil && tp.IsNodeReferenceToEffectModuleApi(call.Expression, "succeed") {
 						var effectModule *ast.Node
 						if call.Expression.Kind == ast.KindPropertyAccessExpression {
 							effectModule = call.Expression.AsPropertyAccessExpression().Expression

@@ -379,11 +379,11 @@ func (tp *TypeParser) ParsePipeCall(node *ast.Node) *ParsedPipeCallResult {
 
 		// Case 2: Identifier — bare pipe(subject, f1, f2, ...)
 		if call.Expression.Kind == ast.KindIdentifier {
-			if !tp.IsNodeReferenceToEffectPackageExport(call.Expression, "pipe") {
+			if call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
 				return nil
 			}
 
-			if call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
+			if !tp.IsNodeReferenceToEffectPackageExport(call.Expression, "pipe") {
 				return nil
 			}
 			return tp.buildParsedPipeCallResult(call, call.Arguments.Nodes[0], call.Arguments.Nodes[1:], TransformationKindPipe)

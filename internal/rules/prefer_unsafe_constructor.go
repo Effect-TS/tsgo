@@ -83,10 +83,6 @@ func analyzePreferUnsafeConstructorNode(tp *typeparser.TypeParser, c *checker.Ch
 	if call.Arguments == nil || len(call.Arguments.Nodes) != 1 {
 		return PreferUnsafeConstructorMatch{}, false
 	}
-	if !tp.IsNodeReferenceToEffectModuleApi(call.Expression, "runSync") {
-		return PreferUnsafeConstructorMatch{}, false
-	}
-
 	// The argument must itself be a direct constructor call, not a variable or composed effect.
 	inner := ast.SkipParentheses(call.Arguments.Nodes[0])
 	if inner == nil || inner.Kind != ast.KindCallExpression {
@@ -115,6 +111,10 @@ func analyzePreferUnsafeConstructorNode(tp *typeparser.TypeParser, c *checker.Ch
 				return PreferUnsafeConstructorMatch{}, false
 			}
 		}
+	}
+
+	if !tp.IsNodeReferenceToEffectModuleApi(call.Expression, "runSync") {
+		return PreferUnsafeConstructorMatch{}, false
 	}
 
 	// The constructor call must produce an `Effect<A, never, never>`: a fallible or

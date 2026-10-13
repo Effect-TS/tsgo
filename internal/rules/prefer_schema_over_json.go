@@ -125,11 +125,6 @@ func checkEffectTrySimple(tp *typeparser.TypeParser, _ *checker.Checker, node *a
 	}
 	call := node.AsCallExpression()
 
-	// Check callee is Effect.try
-	if !tp.IsNodeReferenceToEffectModuleApi(call.Expression, "try") {
-		return nil
-	}
-
 	// Must have at least one argument
 	if call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
 		return nil
@@ -138,6 +133,11 @@ func checkEffectTrySimple(tp *typeparser.TypeParser, _ *checker.Checker, node *a
 	// Parse the first argument as a lazy expression (thunk=false, like the TS reference)
 	lazyExpr := typeparser.ParseLazyExpression(call.Arguments.Nodes[0], typeparser.LazyExpressionNone)
 	if lazyExpr == nil {
+		return nil
+	}
+
+	// Check callee is Effect.try
+	if !tp.IsNodeReferenceToEffectModuleApi(call.Expression, "try") {
 		return nil
 	}
 
@@ -150,11 +150,6 @@ func checkEffectTryObject(tp *typeparser.TypeParser, _ *checker.Checker, node *a
 		return nil
 	}
 	call := node.AsCallExpression()
-
-	// Check callee is Effect.try
-	if !tp.IsNodeReferenceToEffectModuleApi(call.Expression, "try") {
-		return nil
-	}
 
 	// Must have at least one argument
 	if call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
@@ -195,6 +190,11 @@ func checkEffectTryObject(tp *typeparser.TypeParser, _ *checker.Checker, node *a
 	// Parse the try property initializer as a lazy expression
 	lazyExpr := typeparser.ParseLazyExpression(tryInitializer, typeparser.LazyExpressionNone)
 	if lazyExpr == nil {
+		return nil
+	}
+
+	// Check callee is Effect.try
+	if !tp.IsNodeReferenceToEffectModuleApi(call.Expression, "try") {
 		return nil
 	}
 

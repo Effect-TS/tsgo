@@ -71,6 +71,14 @@ func checkOverriddenSchemaConstructor(tp *typeparser.TypeParser, _ *checker.Chec
 		return nil
 	}
 
+	if node.Kind != ast.KindClassDeclaration {
+		return nil
+	}
+	classDecl := node.AsClassDeclaration()
+	if classDecl.Members == nil {
+		return nil
+	}
+
 	extendsSchema := false
 	for _, elem := range extendsElements {
 		if elem.Kind != ast.KindExpressionWithTypeArguments {
@@ -85,14 +93,6 @@ func checkOverriddenSchemaConstructor(tp *typeparser.TypeParser, _ *checker.Chec
 	}
 
 	if !extendsSchema {
-		return nil
-	}
-
-	if node.Kind != ast.KindClassDeclaration {
-		return nil
-	}
-	classDecl := node.AsClassDeclaration()
-	if classDecl.Members == nil {
 		return nil
 	}
 

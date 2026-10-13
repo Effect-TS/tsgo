@@ -56,8 +56,11 @@ func AnalyzeCatchAllTagDispatchToCatchTag(tp *typeparser.TypeParser, c *checker.
 	for _, flow := range tp.PipingFlows(sf, true).All() {
 		for index := range flow.Transformations().All() {
 			transformation := flow.Transformations().At(index)
+			if transformation.Args().Len() != 1 {
+				continue
+			}
 			catchMethod, ok := catchAllTagDispatchMethod(tp, transformation.Callee())
-			if !ok || transformation.Args().Len() != 1 {
+			if !ok {
 				continue
 			}
 			parameterName, branches, canFix, ok := analyzeCatchAllTagDispatchHandler(tp, c, transformation.Args().At(0))

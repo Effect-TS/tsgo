@@ -62,9 +62,6 @@ func AnalyzeFlatMapToMap(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.
 			if args.Len() == 0 || callee == nil {
 				continue
 			}
-			if !tp.IsNodeReferenceToEffectModuleApi(callee, "flatMap") {
-				continue
-			}
 
 			callback := typeparser.ParseLazyExpression(args.At(0), typeparser.LazyExpressionNone)
 			if callback == nil || callback.Expression() == nil || callback.Expression().Kind != ast.KindCallExpression {
@@ -72,6 +69,9 @@ func AnalyzeFlatMapToMap(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.
 			}
 			succeedCall := callback.Expression().AsCallExpression()
 			if succeedCall == nil || succeedCall.Expression == nil || succeedCall.Arguments == nil || len(succeedCall.Arguments.Nodes) != 1 {
+				continue
+			}
+			if !tp.IsNodeReferenceToEffectModuleApi(callee, "flatMap") {
 				continue
 			}
 			if !tp.IsNodeReferenceToEffectModuleApi(succeedCall.Expression, "succeed") {

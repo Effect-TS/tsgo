@@ -123,8 +123,15 @@ func schemaDecoderTransformation(transformation typeparser.PipingFlowTransformat
 }
 
 func analyzeTypedSchemaDecoderApplication(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, callee, schema, inputNode *ast.Node, inputType *checker.Type) *PreferTypedSchemaDecoderMatch {
+	nameNode := schemaDecoderNameNode(callee)
+	if nameNode == nil {
+		return nil
+	}
+	if tp.NodeCannotBeEffectLibraryType(schema) {
+		return nil
+	}
 	unknownName, typedName := matchUnknownSchemaDecoder(tp, callee)
-	if unknownName == "" || tp.NodeCannotBeEffectLibraryType(schema) {
+	if unknownName == "" {
 		return nil
 	}
 
@@ -149,10 +156,6 @@ func analyzeTypedSchemaDecoderApplication(tp *typeparser.TypeParser, c *checker.
 		return nil
 	}
 
-	nameNode := schemaDecoderNameNode(callee)
-	if nameNode == nil {
-		return nil
-	}
 	return &PreferTypedSchemaDecoderMatch{
 		SourceFile:  sf,
 		Location:    scanner.GetErrorRangeForNode(sf, nameNode),

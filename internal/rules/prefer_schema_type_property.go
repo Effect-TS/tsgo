@@ -73,17 +73,17 @@ func analyzePreferSchemaTypePropertyNode(tp *typeparser.TypeParser, sf *ast.Sour
 	if middleName == nil || middleName.Kind != ast.KindQualifiedName {
 		return nil
 	}
-	schemaExport := middleName.AsQualifiedName().Right
-	if schemaExport == nil || !tp.IsNodeReferenceToEffectSchemaModuleApi(schemaExport, "Schema") {
-		return nil
-	}
-
 	typeArgument := reference.TypeArguments.Nodes[0]
 	if typeArgument == nil || typeArgument.Kind != ast.KindTypeQuery {
 		return nil
 	}
 	query := typeArgument.AsTypeQueryNode()
 	if query.ExprName == nil || query.TypeArguments != nil && len(query.TypeArguments.Nodes) > 0 {
+		return nil
+	}
+
+	schemaExport := middleName.AsQualifiedName().Right
+	if schemaExport == nil || !tp.IsNodeReferenceToEffectSchemaModuleApi(schemaExport, "Schema") {
 		return nil
 	}
 

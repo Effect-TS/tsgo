@@ -70,14 +70,14 @@ func AnalyzeMultipleEffectProvide(tp *typeparser.TypeParser, _ *checker.Checker,
 		}
 
 		for _, transformation := range flow.Transformations().All() {
-			// Check if this is an Effect.provide call
-			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "provide") {
+			// Must have arguments
+			if transformation.Args().Len() == 0 {
 				finalizeChunk()
 				continue
 			}
 
-			// Must have arguments
-			if transformation.Args().Len() == 0 {
+			// Check if this is an Effect.provide call
+			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "provide") {
 				finalizeChunk()
 				continue
 			}

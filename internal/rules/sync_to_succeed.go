@@ -60,7 +60,7 @@ func AnalyzeSyncToSucceed(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 		if node.Kind == ast.KindCallExpression {
 			call := node.AsCallExpression()
 			if call != nil && call.Expression != nil &&
-				tp.IsNodeReferenceToEffectModuleApi(call.Expression, "sync") && call.Arguments != nil && len(call.Arguments.Nodes) == 1 {
+				call.Arguments != nil && len(call.Arguments.Nodes) == 1 && tp.IsNodeReferenceToEffectModuleApi(call.Expression, "sync") {
 				lazy := typeparser.ParseLazyExpression(call.Arguments.Nodes[0], typeparser.LazyExpressionThunk)
 				if lazy != nil && tp.IsExpressionValueStableAtLocation(lazy.Expression(), node) {
 					var calleeName *ast.Node

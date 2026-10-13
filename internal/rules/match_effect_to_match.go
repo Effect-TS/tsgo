@@ -56,6 +56,11 @@ func AnalyzeMatchEffectToMatch(tp *typeparser.TypeParser, _ *checker.Checker, sf
 			if transformation.Args().Len() != 1 || transformation.Callee() == nil {
 				continue
 			}
+			onFailure := typeparser.ObjectLiteralPropertyInitializer(transformation.Args().At(0), "onFailure")
+			onSuccess := typeparser.ObjectLiteralPropertyInitializer(transformation.Args().At(0), "onSuccess")
+			if onFailure == nil || onSuccess == nil {
+				continue
+			}
 			matchEffectName, replacementName := "", ""
 			switch {
 			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "matchEffect"):
@@ -66,11 +71,6 @@ func AnalyzeMatchEffectToMatch(tp *typeparser.TypeParser, _ *checker.Checker, sf
 				continue
 			}
 
-			onFailure := typeparser.ObjectLiteralPropertyInitializer(transformation.Args().At(0), "onFailure")
-			onSuccess := typeparser.ObjectLiteralPropertyInitializer(transformation.Args().At(0), "onSuccess")
-			if onFailure == nil || onSuccess == nil {
-				continue
-			}
 			failureResult, failureArgument, ok := matchEffectConstructorHandler(tp, onFailure, "succeed")
 			if !ok {
 				continue

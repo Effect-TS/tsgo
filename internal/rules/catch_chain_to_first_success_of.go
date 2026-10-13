@@ -109,12 +109,16 @@ func AnalyzeCatchChainToFirstSuccessOf(tp *typeparser.TypeParser, c *checker.Che
 
 func analyzeCatchChainToFirstSuccessOfCandidate(tp *typeparser.TypeParser, c *checker.Checker, transformation *typeparser.PipingFlowTransformation) (catchChainToFirstSuccessOfCandidate, bool) {
 	if tp == nil || c == nil || transformation == nil || transformation.Callee() == nil ||
-		!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catch") || transformation.Args().Len() != 1 {
+		transformation.Args().Len() != 1 {
 		return catchChainToFirstSuccessOfCandidate{}, false
 	}
 
 	lazy := typeparser.ParseLazyExpression(transformation.Args().At(0), typeparser.LazyExpressionThunk)
 	if lazy == nil || lazy.Expression() == nil {
+		return catchChainToFirstSuccessOfCandidate{}, false
+	}
+
+	if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catch") {
 		return catchChainToFirstSuccessOfCandidate{}, false
 	}
 

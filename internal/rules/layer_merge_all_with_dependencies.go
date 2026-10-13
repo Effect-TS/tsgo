@@ -88,13 +88,13 @@ func analyzeLayerMergeAllCall(tp *typeparser.TypeParser, c *checker.Checker, sf 
 	}
 	call := node.AsCallExpression()
 
-	// Check if this is Layer.mergeAll
-	if !tp.IsNodeReferenceToEffectLayerModuleApi(call.Expression, "mergeAll") {
+	args := call.Arguments
+	if args == nil || len(args.Nodes) < 2 {
 		return nil
 	}
 
-	args := call.Arguments
-	if args == nil || len(args.Nodes) < 2 {
+	// Check if this is Layer.mergeAll
+	if !tp.IsNodeReferenceToEffectLayerModuleApi(call.Expression, "mergeAll") {
 		return nil
 	}
 
