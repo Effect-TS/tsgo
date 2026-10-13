@@ -89,9 +89,6 @@ func (tp *TypeParser) ParseEffectFnOpportunity(node *ast.Node) *EffectFnOpportun
 	})
 }
 
-// isEffectFnOpportunityCandidate holds the syntactic checks: a non-generator,
-// unnamed function expression, arrow function or function declaration without
-// a return type annotation. Rejected nodes never reach the per-node cache.
 func isEffectFnOpportunityCandidate(node *ast.Node) bool {
 	switch node.Kind {
 	case ast.KindFunctionExpression:
@@ -111,10 +108,8 @@ func isEffectFnOpportunityCandidate(node *ast.Node) bool {
 	return !hasReturnTypeAnnotation(node)
 }
 
-// parseEffectFnOpportunityInner contains the actual parsing logic for ParseEffectFnOpportunity.
 func (tp *TypeParser) parseEffectFnOpportunityInner(node *ast.Node) *EffectFnOpportunityResult {
 	c := tp.checker
-	// Step 8: Extract name identifier from context
 	nameIdentifier := ast.GetNameOfDeclaration(node)
 	// GetNameOfDeclaration doesn't cover property declaration parents for arrow/function expressions
 	if nameIdentifier == nil && node.Parent != nil && node.Parent.Kind == ast.KindPropertyDeclaration {

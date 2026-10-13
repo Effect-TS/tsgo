@@ -22,13 +22,11 @@ func (tp *TypeParser) IsPipeableType(t *checker.Type) bool {
 	})
 }
 
-// LiteralCannotBePipeable reports, without computing the literal's type, that an
-// object or array literal has no `pipe` property. An object literal's type only
-// has the properties it declares plus those of the global Object interface; an
-// array literal's type is an array or tuple whose members come from Array or
-// ReadonlyArray and Object. Spreads and computed names could add `pipe`, and
-// the global interfaces are read through their declared types so members
-// inherited from augmented base interfaces count.
+// An object literal's type has only its own properties plus those of the global
+// Object interface. An array literal's type is an array or tuple whose members
+// come from Array or ReadonlyArray and Object. The global interfaces are read
+// through their declared types so members inherited from augmented base
+// interfaces count.
 func (tp *TypeParser) LiteralCannotBePipeable(node *ast.Node) bool {
 	if tp == nil || tp.checker == nil || node == nil {
 		return false

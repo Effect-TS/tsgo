@@ -93,10 +93,17 @@ func (tp *TypeParser) parseDataFirstOrLastCall(node *ast.Node, call *ast.CallExp
 	var matched *ParsedDataFirstOrLastCall
 	for _, subjectIndex := range subjectIndexes {
 		args := omitArgAt(call.Arguments.Nodes, subjectIndex)
-		// The argument types are only needed once a candidate passes the
-		// signature-only shape check, which is cached per signature pair.
-		var witness *PipeableSignatureWitness
-		witnessComputed := false
+		witness := newLazy(func() *PipeableSignatureWitness {
+			subjectType := tp.GetTypeAtLocation(call.Arguments.Nodes[subjectIndex])
+			if subjectType == nil {
+				return nil
+			}
+			argumentTypes := make([]*checker.Type, 0, len(args))
+			for _, arg := range args {
+				argumentTypes = append(argumentTypes, tp.GetTypeAtLocation(arg))
+			}
+			return &PipeableSignatureWitness{ArgumentTypes: argumentTypes, SubjectType: subjectType}
+		})
 
 		for _, candidate := range candidates {
 			if candidate == nil {
@@ -115,20 +122,10 @@ func (tp *TypeParser) parseDataFirstOrLastCall(node *ast.Node, call *ast.CallExp
 			if !pipeableSignatureShapesMatch(tp, resolved, candidate, subjectIndex) {
 				continue
 			}
-			if !witnessComputed {
-				witnessComputed = true
-				if subjectType := tp.GetTypeAtLocation(call.Arguments.Nodes[subjectIndex]); subjectType != nil {
-					argumentTypes := make([]*checker.Type, 0, len(args))
-					for _, arg := range args {
-						argumentTypes = append(argumentTypes, tp.GetTypeAtLocation(arg))
-					}
-					witness = &PipeableSignatureWitness{ArgumentTypes: argumentTypes, SubjectType: subjectType}
-				}
-			}
-			if witness == nil {
+			if witness.get() == nil {
 				break
 			}
-			if !MatchesPipeableSignature(tp, resolved, candidate, subjectIndex, witness) {
+			if !MatchesPipeableSignature(tp, resolved, candidate, subjectIndex, witness.get()) {
 				continue
 			}
 
