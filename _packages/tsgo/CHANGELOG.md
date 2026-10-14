@@ -1,5 +1,86 @@
 # @effect/tsgo
 
+## 0.53.0
+
+### Minor Changes
+
+- 13a46c9: The `deterministicKeys` rule and the key completions now compute a key for files without a `package.json`, or whose nearest `package.json` has no `name`. The key is built as usual, but without the package name. The sub-directory segment is relative to the `package.json` directory if one is found, otherwise to the `tsconfig.json` directory, otherwise to the program's common source directory.
+  
+  Projects that enabled `deterministicKeys` without a `package.json` will now see reports. This differs from the upstream `@effect/language-service`, which skips these files.
+  
+  ```json
+  {
+    "name": "@effect/language-service",
+    "keyPatterns": [{ "target": "service", "pattern": "default" }]
+  }
+  ```
+  
+  ```ts
+  // src/services/AuthService.ts, no package.json, tsconfig.json at the project root
+  // reports: the expected key is `services/AuthService/MyService`
+  export class MyService extends Context.Service<MyService, {}>()("MyService") {}
+  ```
+- d8c489b: Add `errorPayloadShadowsName` to detect inline `name` payload fields on Effect error classes. For example, `Data.TaggedError("ToolNotFound")<{ name: string }>` copies the payload's `name` onto the error instance and hides the error type in logs. Rename the field to `toolName`. The rule inspects inline payloads only and allows a field whose value is the literal the error already uses as its name.
+- 13a46c9: Add an `"identifier"` pattern to `keyPatterns` for the `deterministicKeys` rule. With it, the expected key is the class name alone.
+  
+  ```json
+  {
+    "name": "@effect/language-service",
+    "keyPatterns": [{ "target": "error", "pattern": "identifier" }]
+  }
+  ```
+  
+  ```ts
+  // reports: the expected key is `KeybindingsConfigError`
+  export class KeybindingsConfigError extends Data.TaggedError("KeybindingsConfigParseError")<{}> {}
+  ```
+- b1ed4ba: Add `preferNamespaceImport` and `preferBarrelImport`, two diagnostics that report existing imports that contradict the import style configured with `namespaceImportPackages` and `barrelImportPackages`. Auto-import already follows these options; the new rules also cover imports written by hand. Both are off by default and have no quick fix.
+  
+  `preferNamespaceImport` reports named imports from packages in `namespaceImportPackages`:
+  
+  ```ts
+  // "namespaceImportPackages": ["effect"]
+  import { Effect } from "effect" // expected: import * as Effect from "effect/Effect"
+  import { map } from "effect/Array" // expected: import * as Array from "effect/Array"
+  import { pipe } from "effect" // reported only with "topLevelNamedReexports": "follow"
+  ```
+  
+  `preferBarrelImport` reports imports of individual modules from packages in `barrelImportPackages`:
+  
+  ```ts
+  // "barrelImportPackages": ["effect"]
+  import * as Record from "effect/Record" // expected: import { Record } from "effect"
+  import * as HttpClient from "effect/http/HttpClient" // expected: import { HttpClient } from "effect/http"
+  ```
+  
+  Both the rules and auto-import find a barrel from the package files, for any package, instead of from a built-in list of Effect paths. A module's barrel is the nearest `index` module above it that forwards it with `export * as Name`, and `Name` is the import name used. Barrel files are read from disk when no file in the program imports them yet. Auto-import with `barrelImportPackages` uses the same lookup, so it no longer rewrites a module that no barrel forwards, and no longer rewrites an import that already comes from a barrel (such as `pipe` from `"effect"`) into `import { effect } from "effect"`.
+- b1ed4ba: Allow `namespaceImportPackages`, `barrelImportPackages`, `importAliases`, and `topLevelNamedReexports` in per-file `overrides`. Auto-import, the import quick fixes, and the `preferNamespaceImport` and `preferBarrelImport` diagnostics use the value resolved for the current file, and a scoped value replaces the base value.
+  
+  ```json
+  {
+    "namespaceImportPackages": ["effect"],
+    "overrides": [{
+      "include": ["src/legacy/**/*.ts"],
+      "options": {
+        "namespaceImportPackages": [],
+        "barrelImportPackages": ["effect"]
+      }
+    }]
+  }
+  ```
+
+### Patch Changes
+
+- 61eb79c: Compute Effect diagnostics with less work. Rules and the type parser now test node kinds, shapes and argument counts before they query types, symbols or signatures, and they compute types only for steps that can still report:
+  
+  - `IsNodeReferenceToModuleExport` answers symbols with no declaration in the requested module from a per-symbol bitmask instead of a per-symbol map.
+  - `DataFirstOrLastCall` checks the cached signature shape before it types call arguments, and caches its result per call.
+  - `missedPipeableOpportunity`, `catchDieToOrDie` and `preferTypedSchemaDecoder` type piping-flow steps only when a step matches.
+  - The `experimentalApiUsage` and `unstableApiUsage` rules reuse their own symbol lookup instead of repeating it.
+  
+  With every rule enabled, `tsc -b` of the Effect monorepo drops from 33.9s to 32.1s (stock TypeScript-Go: 20.4s). The reported diagnostics are unchanged.
+- cb5739d: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261013.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/b5c34ba0c61a756c8abaf133236dddf982c27f45) commit `b5c34ba0c61a756c8abaf133236dddf982c27f45`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2). Refresh the Oxlint configuration schema from the selected package.
+
 ## 0.52.0
 
 ### Minor Changes
