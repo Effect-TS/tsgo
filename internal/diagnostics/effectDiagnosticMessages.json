@@ -574,5 +574,17 @@
     "The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)": {
         "category": "Suggestion",
         "code": 377145
+    },
+    "'{0}' is imported by name from '{1}', but namespaceImportPackages expects a namespace import. Use '{2}' instead. effect(preferNamespaceImport)": {
+        "category": "Suggestion",
+        "code": 377146
+    },
+    "'{0}' is imported by name from '{1}', but namespaceImportPackages expects a namespace import of the module that declares '{0}'. effect(preferNamespaceImport)": {
+        "category": "Suggestion",
+        "code": 377147
+    },
+    "'{0}' is imported directly, but barrelImportPackages expects named imports from the barrel '{1}'. Use '{2}' instead. effect(preferBarrelImport)": {
+        "category": "Suggestion",
+        "code": 377148
     }
 }

@@ -335,6 +335,8 @@
         "nestedEffectGenYield": "warning",
         "newSchemaClass": "warning",
         "optionMatchToFromOption": "warning",
+        "preferBarrelImport": "warning",
+        "preferNamespaceImport": "warning",
         "preferSchemaTaggedError": "warning",
         "preferSchemaTypeProperty": "warning",
         "preferSucceedSomeOrNone": "warning",
@@ -2829,6 +2831,55 @@
             "start": 261,
             "end": 273,
             "text": "`Effect.fromOption` expresses this Option-to-Effect conversion more directly than `Option.match` or an Option tag conditional. effect(optionMatchToFromOption)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "preferBarrelImport",
+      "group": "style",
+      "description": "Reports imports of individual modules from packages configured in barrelImportPackages that should be named imports from the package barrel",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377148
+      ],
+      "preview": {
+        "sourceText": "import * as Record from \"effect/Record\"\n\nexport const keys = Record.keys({ a: 1 })\n",
+        "diagnostics": [
+          {
+            "start": 24,
+            "end": 39,
+            "text": "'effect/Record' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Record } from \"effect\"' instead. effect(preferBarrelImport)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "preferNamespaceImport",
+      "group": "style",
+      "description": "Reports named imports from packages configured in namespaceImportPackages that should be namespace imports",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377146,
+        377147
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const program = Effect.succeed(1)\n",
+        "diagnostics": [
+          {
+            "start": 9,
+            "end": 15,
+            "text": "'Effect' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Effect from \"effect/Effect\"' instead. effect(preferNamespaceImport)"
           }
         ]
       }

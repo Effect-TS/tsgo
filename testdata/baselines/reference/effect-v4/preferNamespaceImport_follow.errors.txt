@@ -1,0 +1,57 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/test.ts(5,10): warning TS377146: 'pipe' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
+/.src/test.ts(6,10): warning TS377146: 'flow' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
+/.src/test.ts(7,10): warning TS377146: 'hole' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import type * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
+/.src/test.ts(10,10): warning TS377146: 'Effect' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Effect from "effect/Effect"' instead. effect(preferNamespaceImport)
+/.src/test.ts(11,10): warning TS377146: 'identity' is imported by name from 'effect/Function', but namespaceImportPackages expects a namespace import. Use 'import * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "namespaceImportPackages": ["effect"],
+            "topLevelNamedReexports": "follow"
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/package.json (0 errors) ====
+    { "name": "@effect/test-app", "version": "1.0.0" }
+    
+
+==== /.src/test.ts (5 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferNamespaceImport:warning
+    
+    // reported: named re-export followed to the declaring module
+    import { pipe } from "effect"
+             ~~~~
+!!! warning TS377146: 'pipe' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
+    import { flow as composeFlow } from "effect"
+             ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377146: 'flow' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
+    import { type hole } from "effect"
+             ~~~~~~~~~
+!!! warning TS377146: 'hole' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import type * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
+    
+    // reported: unchanged by topLevelNamedReexports
+    import { Effect } from "effect"
+             ~~~~~~
+!!! warning TS377146: 'Effect' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Effect from "effect/Effect"' instead. effect(preferNamespaceImport)
+    import { identity } from "effect/Function"
+             ~~~~~~~~
+!!! warning TS377146: 'identity' is imported by name from 'effect/Function', but namespaceImportPackages expects a namespace import. Use 'import * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
+    
+    // not reported
+    import * as Option from "effect/Option"
+    
+    export const usages = [pipe, composeFlow, Effect, identity, Option]
+    export type Usages = typeof hole
+    

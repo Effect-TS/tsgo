@@ -2482,10 +2482,16 @@
         "effecttsgo/overridden-schema-constructor": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/prefer-barrel-import": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/prefer-effect-array": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/prefer-effect-record": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/prefer-namespace-import": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/prefer-schema-over-json": {

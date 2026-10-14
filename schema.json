@@ -2713,6 +2713,11 @@
           "default": "error",
           "description": "Prevents overriding constructors in Schema classes which breaks decoding behavior"
         },
+        "preferBarrelImport": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Reports imports of individual modules from packages configured in barrelImportPackages that should be named imports from the package barrel"
+        },
         "preferEffectArray": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
@@ -2722,6 +2727,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
           "description": "Suggests Effect Record APIs for native Object member references, with semantic caveats"
+        },
+        "preferNamespaceImport": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Reports named imports from packages configured in namespaceImportPackages that should be namespace imports"
         },
         "preferSchemaOverJson": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

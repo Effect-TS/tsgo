@@ -1,0 +1,6 @@
+flowchart TB
+  0[/"type: #123; a: number; #125;<br/>node: #123; a: 1 #125;"/]
+  1["type: #quot;a#quot;#91;#93;<br/>callee: Record.keys<br/>args: #91;#93;"]
+  2[/"type: #lt;K extends string #124; symbol, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; #40;K #amp; string#41;#91;#93;<br/>node: Record.keys"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1

@@ -58,7 +58,7 @@ func init() {
 				tspath.UseCaseSensitiveFileNames(program),
 			)
 		}
-		return autoimportstyle.NewFixTransformer(resolvedOptions, func(export *autoimport.Export) (string, modulespecifiers.ResultKind) {
+		return autoimportstyle.NewFixTransformer(resolvedOptions, program, func(export *autoimport.Export) (string, modulespecifiers.ResultKind) {
 			targetFileName := autoimport.ModuleIDFileName(export.Target.ModuleID)
 			if targetFile := program.GetSourceFile(targetFileName); targetFile != nil {
 				targetFileName = targetFile.FileName()
