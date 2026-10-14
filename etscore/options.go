@@ -152,14 +152,18 @@ type Override struct {
 
 // OverrideOptions is the subset of plugin options that can vary per file.
 type OverrideOptions struct {
-	DiagnosticSeverity        map[string]Severity `json:"diagnosticSeverity,omitzero" schema_description:"Severity overrides applied when this override matches."`
-	PipeableMinArgCount       *int                `json:"pipeableMinArgCount,omitzero" schema_description:"Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity." schema_minimum:"1"`
-	KeyPatterns               *[]KeyPattern       `json:"keyPatterns,omitzero" schema_description:"Scoped key pattern configuration for deterministicKeys."`
-	ExtendedKeyDetection      *bool               `json:"extendedKeyDetection,omitzero" schema_description:"Scoped override for extended deterministic key detection."`
-	AllowedUnstableApis       *[]string           `json:"allowedUnstableApis,omitzero" schema_description:"Scoped allow-list for unstableApiUsage." schema_items_type:"string"`
-	AllowedExperimentalApis   *[]string           `json:"allowedExperimentalApis,omitzero" schema_description:"Scoped allow-list for experimentalApiUsage." schema_items_type:"string"`
-	AllowedDuplicatedPackages *[]string           `json:"allowedDuplicatedPackages,omitzero" schema_description:"Scoped allow-list for duplicatePackage." schema_items_type:"string"`
-	EffectFn                  *[]string           `json:"effectFn,omitzero" schema_description:"Scoped override for effectFn quickfix variants." schema_items_type:"string" schema_items_enum:"[\"span\",\"untraced\",\"no-span\",\"inferred-span\",\"suggested-span\"]" schema_unique_items:"true"`
+	DiagnosticSeverity        map[string]Severity         `json:"diagnosticSeverity,omitzero" schema_description:"Severity overrides applied when this override matches."`
+	PipeableMinArgCount       *int                        `json:"pipeableMinArgCount,omitzero" schema_description:"Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity." schema_minimum:"1"`
+	KeyPatterns               *[]KeyPattern               `json:"keyPatterns,omitzero" schema_description:"Scoped key pattern configuration for deterministicKeys."`
+	ExtendedKeyDetection      *bool                       `json:"extendedKeyDetection,omitzero" schema_description:"Scoped override for extended deterministic key detection."`
+	AllowedUnstableApis       *[]string                   `json:"allowedUnstableApis,omitzero" schema_description:"Scoped allow-list for unstableApiUsage." schema_items_type:"string"`
+	AllowedExperimentalApis   *[]string                   `json:"allowedExperimentalApis,omitzero" schema_description:"Scoped allow-list for experimentalApiUsage." schema_items_type:"string"`
+	AllowedDuplicatedPackages *[]string                   `json:"allowedDuplicatedPackages,omitzero" schema_description:"Scoped allow-list for duplicatePackage." schema_items_type:"string"`
+	EffectFn                  *[]string                   `json:"effectFn,omitzero" schema_description:"Scoped override for effectFn quickfix variants." schema_items_type:"string" schema_items_enum:"[\"span\",\"untraced\",\"no-span\",\"inferred-span\",\"suggested-span\"]" schema_unique_items:"true"`
+	NamespaceImportPackages   *[]string                   `json:"namespaceImportPackages,omitzero" schema_description:"Scoped package names that should prefer namespace imports." schema_items_type:"string"`
+	BarrelImportPackages      *[]string                   `json:"barrelImportPackages,omitzero" schema_description:"Scoped package names that should prefer barrel named imports." schema_items_type:"string"`
+	ImportAliases             *map[string]string          `json:"importAliases,omitzero" schema_description:"Scoped package-level import aliases keyed by package name." schema_additional_properties_type:"string"`
+	TopLevelNamedReexports    *TopLevelNamedReexportsMode `json:"topLevelNamedReexports,omitzero" schema_description:"Scoped override for whether named reexports are followed at package top-level." schema_enum:"[\"ignore\",\"follow\"]"`
 }
 
 // TopLevelNamedReexportsMode configures top-level named reexport resolution behavior.

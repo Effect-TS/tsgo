@@ -314,6 +314,9 @@ func cloneJSON[T any](value T) T {
 func reflectedSchemaForField(field reflect.StructField) map[string]any {
 	schema := map[string]any{}
 	fieldType := field.Type
+	if fieldType.Kind() == reflect.Pointer {
+		fieldType = fieldType.Elem()
+	}
 
 	switch fieldType.Kind() {
 	case reflect.Bool:

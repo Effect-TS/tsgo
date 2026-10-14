@@ -241,6 +241,10 @@ func cloneOverrides(source []etscore.Override) []etscore.Override {
 				AllowedExperimentalApis:   cloneStringSlicePtr(override.Options.AllowedExperimentalApis),
 				AllowedDuplicatedPackages: cloneStringSlicePtr(override.Options.AllowedDuplicatedPackages),
 				EffectFn:                  cloneStringSlicePtr(override.Options.EffectFn),
+				NamespaceImportPackages:   cloneStringSlicePtr(override.Options.NamespaceImportPackages),
+				BarrelImportPackages:      cloneStringSlicePtr(override.Options.BarrelImportPackages),
+				ImportAliases:             cloneStringMapPtr(override.Options.ImportAliases),
+				TopLevelNamedReexports:    cloneTopLevelNamedReexportsPtr(override.Options.TopLevelNamedReexports),
 			},
 		}
 	}
@@ -303,6 +307,22 @@ func cloneIntPtr(source *int) *int {
 }
 
 func cloneBoolPtr(source *bool) *bool {
+	if source == nil {
+		return nil
+	}
+	v := *source
+	return &v
+}
+
+func cloneStringMapPtr(source *map[string]string) *map[string]string {
+	if source == nil {
+		return nil
+	}
+	v := maps.Clone(*source)
+	return &v
+}
+
+func cloneTopLevelNamedReexportsPtr(source *etscore.TopLevelNamedReexportsMode) *etscore.TopLevelNamedReexportsMode {
 	if source == nil {
 		return nil
 	}

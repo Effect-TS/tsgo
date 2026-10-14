@@ -375,6 +375,26 @@ while `effect/http/HttpClient#get` permits only its exported `get` API.
 Matching is case-sensitive and respects path segments: `effect/http` does not
 permit `effect/http-api`. Per-file `overrides` replace the base list.
 
+The import style options `namespaceImportPackages`, `barrelImportPackages`,
+`importAliases`, and `topLevelNamedReexports` can also be set per file in
+`overrides`. Auto-import, the import quick fixes, and the `preferNamespaceImport`
+and `preferBarrelImport` diagnostics all use the value resolved for the current
+file. A scoped value replaces the base value, so this override moves the
+`legacy/` folder from namespace imports to barrel imports:
+
+```json
+{
+  "namespaceImportPackages": ["effect"],
+  "overrides": [{
+    "include": ["src/legacy/**/*.ts"],
+    "options": {
+      "namespaceImportPackages": [],
+      "barrelImportPackages": ["effect"]
+    }
+  }]
+}
+```
+
 `apiStabilityLeak` ignores exports marked `@internal`. The tag is the compiler's
 `stripInternal` declaration-emit marker, and it is honoured wherever it is
 written: on an exported declaration, on a named, star or namespace forwarding

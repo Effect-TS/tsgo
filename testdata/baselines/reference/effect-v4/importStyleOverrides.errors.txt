@@ -1,0 +1,79 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/app.ts(6,10): warning TS377146: 'Effect' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Effect from "effect/Effect"' instead. effect(preferNamespaceImport)
+/.src/follow.ts(5,10): warning TS377146: 'pipe' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
+/.src/legacy/old.ts(8,25): warning TS377148: 'effect/Record' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Record } from "effect"' instead. effect(preferBarrelImport)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "namespaceImportPackages": ["effect"],
+            "overrides": [{
+              "include": ["legacy/**/*.ts"],
+              "options": {
+                "namespaceImportPackages": [],
+                "barrelImportPackages": ["effect"]
+              }
+            }, {
+              "include": ["follow.ts"],
+              "options": { "topLevelNamedReexports": "follow" }
+            }]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/package.json (0 errors) ====
+    { "name": "@effect/test-app", "version": "1.0.0" }
+    
+
+==== /.src/app.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferNamespaceImport:warning
+    // @effect-diagnostics preferBarrelImport:warning
+    
+    // reported by preferNamespaceImport: the base config applies
+    import { Effect } from "effect"
+             ~~~~~~
+!!! warning TS377146: 'Effect' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Effect from "effect/Effect"' instead. effect(preferNamespaceImport)
+    // not reported: pipe is a named re-export and the base config keeps "ignore"
+    import { pipe } from "effect"
+    // not reported: barrelImportPackages is only set for legacy files
+    import * as Record from "effect/Record"
+    
+    export const app = pipe(Effect.void, Effect.as(Record.empty()))
+    
+
+==== /.src/legacy/old.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferNamespaceImport:warning
+    // @effect-diagnostics preferBarrelImport:warning
+    
+    // not reported: the override clears namespaceImportPackages
+    import { Effect } from "effect"
+    // reported by preferBarrelImport: the override sets barrelImportPackages
+    import * as Record from "effect/Record"
+                            ~~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Record' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Record } from "effect"' instead. effect(preferBarrelImport)
+    
+    export const old = Effect.as(Effect.void, Record.empty())
+    
+
+==== /.src/follow.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferNamespaceImport:warning
+    
+    // reported: the override sets topLevelNamedReexports to "follow"
+    import { pipe } from "effect"
+             ~~~~
+!!! warning TS377146: 'pipe' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
+    import * as Effect from "effect/Effect"
+    
+    export const followed = pipe(Effect.void, Effect.asVoid)
+    

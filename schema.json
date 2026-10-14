@@ -3209,13 +3209,32 @@
       "additionalProperties": false,
       "properties": {
         "allowedDuplicatedPackages": {
-          "description": "Scoped allow-list for duplicatePackage."
+          "description": "Scoped allow-list for duplicatePackage.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "allowedExperimentalApis": {
-          "description": "Scoped allow-list for experimentalApiUsage."
+          "description": "Scoped allow-list for experimentalApiUsage.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "allowedUnstableApis": {
-          "description": "Scoped allow-list for unstableApiUsage."
+          "description": "Scoped allow-list for unstableApiUsage.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "barrelImportPackages": {
+          "description": "Scoped package names that should prefer barrel named imports.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "diagnosticSeverity": {
           "$ref": "#/definitions/effectLanguageServicePluginDiagnosticSeverityDefinition",
@@ -3223,10 +3242,29 @@
         },
         "effectFn": {
           "description": "Scoped override for effectFn quickfix variants.",
+          "items": {
+            "enum": [
+              "span",
+              "untraced",
+              "no-span",
+              "inferred-span",
+              "suggested-span"
+            ],
+            "type": "string"
+          },
+          "type": "array",
           "uniqueItems": true
         },
         "extendedKeyDetection": {
-          "description": "Scoped override for extended deterministic key detection."
+          "description": "Scoped override for extended deterministic key detection.",
+          "type": "boolean"
+        },
+        "importAliases": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Scoped package-level import aliases keyed by package name.",
+          "type": "object"
         },
         "keyPatterns": {
           "description": "Scoped key pattern configuration for deterministicKeys.",
@@ -3235,9 +3273,25 @@
           },
           "type": "array"
         },
+        "namespaceImportPackages": {
+          "description": "Scoped package names that should prefer namespace imports.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "pipeableMinArgCount": {
           "description": "Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity.",
-          "minimum": 1
+          "minimum": 1,
+          "type": "integer"
+        },
+        "topLevelNamedReexports": {
+          "description": "Scoped override for whether named reexports are followed at package top-level.",
+          "enum": [
+            "ignore",
+            "follow"
+          ],
+          "type": "string"
         }
       },
       "type": "object"
