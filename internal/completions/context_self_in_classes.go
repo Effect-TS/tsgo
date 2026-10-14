@@ -27,13 +27,12 @@ func runContextSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem 
 		return nil
 	}
 
-	ch := ctx.Checker
 	tp := ctx.TypeParser
 	version := tp.SupportedEffectVersion()
 	className := data.ClassNameText()
 	replacementRange := byteSpanToRange(ctx, data.ReplacementStart, data.ReplacementLength)
 	sortText := "11"
-	tagKey := computeDeterministicKey(ctx.Program, tp, ch, ctx.SourceFile, className, "service")
+	tagKey := computeDeterministicKey(ctx.Program, tp, ctx.SourceFile, className, "service")
 
 	contextIdentifier := typeparser.FindModuleIdentifier(ctx.SourceFile, "Context")
 	accessedText := data.AccessedObjectText()
@@ -95,21 +94,7 @@ func runContextSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem 
 // computeDeterministicKey computes the key the deterministicKeys rule expects for a class
 // of the given target ("service" or "error").
 // Falls back to the class name if keybuilder returns empty.
-func computeDeterministicKey(program checker.Program, tp *typeparser.TypeParser, ch *checker.Checker, sf *ast.SourceFile, className string, target string) string {
-	pkgJson := tp.PackageJsonForSourceFile(sf)
-	if pkgJson == nil {
-		return className
-	}
-	packageName, ok := pkgJson.Name.GetValue()
-	if !ok || packageName == "" {
-		return className
-	}
-
-	packageDirectory := getCompletionPackageJsonDirectory(program, ch, sf)
-	if packageDirectory == "" {
-		return className
-	}
-
+func computeDeterministicKey(program checker.Program, tp *typeparser.TypeParser, sf *ast.SourceFile, className string, target string) string {
 	effectConfig := program.Options().Effect
 	if effectConfig == nil {
 		return className
@@ -122,24 +107,9 @@ func computeDeterministicKey(program checker.Program, tp *typeparser.TypeParser,
 	)
 	keyPatterns := resolvedOptions.GetKeyPatterns()
 
-	key := keybuilder.CreateString(string(sf.FileName()), packageName, packageDirectory, className, target, keyPatterns)
+	key := keybuilder.CreateStringForSourceFile(program, tp, sf, className, target, keyPatterns)
 	if key == "" {
 		return className
 	}
 	return key
-}
-
-// getCompletionPackageJsonDirectory gets the package.json directory for a source file.
-func getCompletionPackageJsonDirectory(program checker.Program, _ *checker.Checker, sf *ast.SourceFile) string {
-	type metaProvider interface {
-		GetSourceFileMetaData(path tspath.PathKey) ast.SourceFileMetaData
-	}
-
-	prog, ok := program.(metaProvider)
-	if !ok || prog == nil {
-		return ""
-	}
-
-	meta := prog.GetSourceFileMetaData(ast.SourceFilePath(sf))
-	return string(meta.PackageJsonDirectory)
 }

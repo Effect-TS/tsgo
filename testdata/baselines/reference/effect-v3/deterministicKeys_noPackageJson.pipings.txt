@@ -1,0 +1,29 @@
+==== /app/src/services/test.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 6:31 - 6:62
+Node: Context.Tag("WrongServiceKey")
+Node Kind: KindCallExpression
+
+Subject: "WrongServiceKey"
+Subject Type: "WrongServiceKey"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "WrongServiceKey", Shape>
+
+=== Piping Flow ===
+Location: 8:29 - 8:63
+Node: Data.TaggedError("WrongErrorKey")
+Node Kind: KindCallExpression
+
+Subject: "WrongErrorKey"
+Subject Type: "WrongErrorKey"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "WrongErrorKey"; } & Readonly<A>

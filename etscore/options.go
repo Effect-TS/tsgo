@@ -7,8 +7,8 @@ type KeyPattern struct {
 	// Target is the category this pattern applies to: "service", "error", or "custom".
 	Target string `json:"target" schema_description:"Target category this pattern applies to." schema_default:"\"service\"" schema_enum:"[\"service\",\"error\",\"custom\"]"`
 
-	// Pattern is the formula to compute the key: "default", "package-identifier", or "default-hashed".
-	Pattern string `json:"pattern" schema_description:"Formula used to compute the key." schema_default:"\"default\"" schema_enum:"[\"default\",\"package-identifier\",\"default-hashed\"]"`
+	// Pattern is the formula to compute the key: "default", "package-identifier", "default-hashed", or "identifier".
+	Pattern string `json:"pattern" schema_description:"Formula used to compute the key." schema_default:"\"default\"" schema_enum:"[\"default\",\"package-identifier\",\"default-hashed\",\"identifier\"]"`
 
 	// SkipLeadingPath is a list of path prefixes to strip from the sub-directory segment.
 	SkipLeadingPath []string `json:"skipLeadingPath" schema_description:"Path prefixes to strip from the sub-directory segment." schema_default:"[\"src/\"]" schema_items_type:"string"`
