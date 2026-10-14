@@ -21,7 +21,7 @@ func newFakeFiles(loaded map[string]string, disk map[string]string) *fakeFiles {
 	files := &fakeFiles{loaded: map[tspath.RootedFilePath]*ast.SourceFile{}, disk: map[tspath.RootedFilePath]string{}, reads: map[tspath.RootedFilePath]int{}}
 	for name, text := range loaded {
 		fileName := tspath.RootedFilePath(name)
-		files.loaded[fileName] = parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: fileName, PathKey: tspath.PathKey(name)}, text, core.ScriptKindTS)
+		files.loaded[fileName] = parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: fileName}, text, core.ScriptKindTS)
 		files.disk[fileName] = text
 	}
 	for name, text := range disk {

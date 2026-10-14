@@ -103,7 +103,7 @@ func (r *BarrelReader) parseIndexFile(fileName tspath.RootedFilePath) *ast.Sourc
 	if !ok {
 		return nil
 	}
-	return parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: fileName, PathKey: tspath.PathKey(fileName)}, text, core.GetScriptKindFromFileName(fileName))
+	return parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: fileName}, text, core.GetScriptKindFromFileName(fileName))
 }
 
 // namespaceForwards collects the barrel's relative `export * as Name` statements.
