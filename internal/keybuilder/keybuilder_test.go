@@ -58,6 +58,9 @@ func TestCreateString(t *testing.T) {
 	packageIdentifierServicePattern := []etscore.KeyPattern{
 		{Target: "service", Pattern: "package-identifier", SkipLeadingPath: []string{"src/"}},
 	}
+	identifierErrorPattern := []etscore.KeyPattern{
+		{Target: "error", Pattern: "identifier", SkipLeadingPath: []string{"src/"}},
+	}
 
 	tests := []struct {
 		name             string
@@ -180,6 +183,26 @@ func TestCreateString(t *testing.T) {
 			target:           "service",
 			keyPatterns:      packageIdentifierServicePattern,
 			expected:         "@effect/myapp/AuthService/MyService",
+		},
+		{
+			name:             "identifier pattern - nested subdirectory, class different from file",
+			sourceFileName:   "/project/src/errors/keybindings.ts",
+			packageName:      "@effect/myapp",
+			packageDirectory: "/project",
+			className:        "KeybindingsConfigError",
+			target:           "error",
+			keyPatterns:      identifierErrorPattern,
+			expected:         "KeybindingsConfigError",
+		},
+		{
+			name:             "identifier pattern - class name matches file name",
+			sourceFileName:   "/project/src/errors/KeybindingsConfigError.ts",
+			packageName:      "@effect/myapp",
+			packageDirectory: "/project",
+			className:        "KeybindingsConfigError",
+			target:           "error",
+			keyPatterns:      identifierErrorPattern,
+			expected:         "KeybindingsConfigError",
 		},
 		{
 			name:             "no matching target - returns empty",

@@ -2935,7 +2935,8 @@
           "enum": [
             "default",
             "package-identifier",
-            "default-hashed"
+            "default-hashed",
+            "identifier"
           ],
           "type": "string"
         },

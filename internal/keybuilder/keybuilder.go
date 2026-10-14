@@ -97,6 +97,8 @@ func CreateString(sourceFileName, packageName, packageDirectory, className, targ
 			if !classNameMatches {
 				parts = append(parts, className)
 			}
+		case "identifier":
+			parts = []string{className}
 		default: // "default" and "default-hashed"
 			parts = []string{packageName, subDirectory, onlyFileName}
 			if !classNameMatches {
