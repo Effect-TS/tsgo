@@ -570,5 +570,9 @@
     "`Effect.tap` expresses this observation more directly than `Effect.{0}` with a manual re-yield. effect(flatMapToTap)": {
         "category": "Suggestion",
         "code": 377144
+    },
+    "The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)": {
+        "category": "Suggestion",
+        "code": 377145
     }
 }

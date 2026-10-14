@@ -1,0 +1,309 @@
+==== /.src/errorPayloadShadowsName.ts (22 flows) ====
+
+=== Piping Flow ===
+Location: 6:34 - 6:67
+Node: Data.TaggedError("ToolNotFound")
+Node Kind: KindCallExpression
+
+Subject: "ToolNotFound"
+Subject Type: "ToolNotFound"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "ToolNotFound"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 14:39 - 14:61
+Node: Data.TaggedError("A")
+Node Kind: KindCallExpression
+
+Subject: "A"
+Subject Type: "A"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "A"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 15:114 - 15:138
+Node: Schema.Literal("Other")
+Node Kind: KindCallExpression
+
+Subject: "Other"
+Subject Type: "Other"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<["Other"]>
+
+=== Piping Flow ===
+Location: 16:33 - 16:55
+Node: Data.TaggedError("E")
+Node Kind: KindCallExpression
+
+Subject: "E"
+Subject Type: "E"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "E"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 19:39 - 19:77
+Node: Data.TaggedError("ComputedDataError")
+Node Kind: KindCallExpression
+
+Subject: "ComputedDataError"
+Subject Type: "ComputedDataError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "ComputedDataError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 22:42 - 22:92
+Node: Schema.TaggedError<IdentifierSchemaName>("app/E")
+Node Kind: KindCallExpression
+
+Subject: "app/E"
+Subject Type: "app/E"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.TaggedError
+      args: (constant)
+      outType: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<IdentifierSchemaName, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedErrorClass<IdentifierSchemaName, Tag, { readonly _tag: tag<Tag>; } & Fields>
+
+=== Piping Flow ===
+Location: 22:105 - 22:129
+Node: Schema.Literal("app/E")
+Node Kind: KindCallExpression
+
+Subject: "app/E"
+Subject Type: "app/E"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<["app/E"]>
+
+=== Piping Flow ===
+Location: 24:60 - 24:78
+Node: Fake.Literal("F")
+Node Kind: KindCallExpression
+
+Subject: "F"
+Subject Type: "F"
+
+Transformations (1):
+  [0] kind: call
+      callee: Fake.Literal
+      args: (constant)
+      outType: typeof String$
+
+=== Piping Flow ===
+Location: 26:35 - 26:69
+Node: Data.TaggedError("SafeDataError")
+Node Kind: KindCallExpression
+
+Subject: "SafeDataError"
+Subject Type: "SafeDataError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "SafeDataError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 28:35 - 28:69
+Node: Data.TaggedError("WorktreeError")
+Node Kind: KindCallExpression
+
+Subject: "WorktreeError"
+Subject Type: "WorktreeError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "WorktreeError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 29:108 - 29:140
+Node: Schema.Literal("WorktreeError")
+Node Kind: KindCallExpression
+
+Subject: "WorktreeError"
+Subject Type: "WorktreeError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<["WorktreeError"]>
+
+=== Piping Flow ===
+Location: 30:114 - 30:142
+Node: Schema.tag("WorktreeError")
+Node Kind: KindCallExpression
+
+Subject: "WorktreeError"
+Subject Type: "WorktreeError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.tag
+      args: (constant)
+      outType: tag<"WorktreeError">
+
+=== Piping Flow ===
+Location: 31:39 - 31:86
+Node: Schema.TaggedError<IdentifierTagName>("app/D")
+Node Kind: KindCallExpression
+
+Subject: "app/D"
+Subject Type: "app/D"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.TaggedError
+      args: (constant)
+      outType: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<IdentifierTagName, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedErrorClass<IdentifierTagName, Tag, { readonly _tag: tag<Tag>; } & Fields>
+
+=== Piping Flow ===
+Location: 31:99 - 31:119
+Node: Schema.Literal("D")
+Node Kind: KindCallExpression
+
+Subject: "D"
+Subject Type: "D"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<["D"]>
+
+=== Piping Flow ===
+Location: 33:32 - 33:96
+Node: Schema.Class<NamedClass>("NamedClass")({ name: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { name: Schema.String }
+Subject Type: { name: typeof String$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<NamedClass>("NamedClass")
+      args: (constant)
+      outType: Class<NamedClass, { name: typeof String$; }, Encoded<{ name: typeof String$; }>, never, { readonly name: string; }, {}, {}>
+
+=== Piping Flow ===
+Location: 34:108 - 34:147
+Node: Schema.Struct({ name: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { name: Schema.String }
+Subject Type: { name: typeof String$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ name: typeof String$; }>
+
+=== Piping Flow ===
+Location: 35:37 - 35:73
+Node: Data.TaggedError("NestedDataError")
+Node Kind: KindCallExpression
+
+Subject: "NestedDataError"
+Subject Type: "NestedDataError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "NestedDataError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 39:41 - 39:81
+Node: Data.TaggedError("ReferencedDataError")
+Node Kind: KindCallExpression
+
+Subject: "ReferencedDataError"
+Subject Type: "ReferencedDataError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "ReferencedDataError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 43:100 - 43:139
+Node: Schema.Struct({ name: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { name: Schema.String }
+Subject Type: { name: typeof String$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ name: typeof String$; }>
+
+=== Piping Flow ===
+Location: 53:36 - 53:80
+Node: UnrelatedData.TaggedError("UnrelatedError")
+Node Kind: KindCallExpression
+
+Subject: "UnrelatedError"
+Subject Type: "UnrelatedError"
+
+Transformations (1):
+  [0] kind: call
+      callee: UnrelatedData.TaggedError
+      args: (constant)
+      outType: typeof (Anonymous class)
+
+=== Piping Flow ===
+Location: 56:36 - 56:76
+Node: Data.TaggedError("ShadowedTaggedError")
+Node Kind: KindCallExpression
+
+Subject: "ShadowedTaggedError"
+Subject Type: "ShadowedTaggedError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: typeof (Anonymous class)
+
+=== Piping Flow ===
+Location: 62:37 - 62:73
+Node: Data.TaggedError("SuppressedError")
+Node Kind: KindCallExpression
+
+Subject: "SuppressedError"
+Subject Type: "SuppressedError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "SuppressedError"; } & Readonly<A>

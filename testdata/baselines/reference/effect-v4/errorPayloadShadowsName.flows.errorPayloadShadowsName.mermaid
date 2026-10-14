@@ -1,0 +1,196 @@
+flowchart TB
+  0[/"type: #quot;ToolNotFound#quot;<br/>node: #quot;ToolNotFound#quot;"/]
+  1["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;ToolNotFound#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  2[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  3[/"type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; Readonly#lt;A#gt;<br/>node: Data.Error"/]
+  4[/"type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; Readonly#lt;A#gt;<br/>node: #40;Data#41;.Error"/]
+  5[/"type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; Readonly#lt;A#gt;<br/>node: Data!.Error"/]
+  6[/"type: Class#lt;TaggedSchemaError, TaggedStruct#lt;#quot;TaggedSchemaError#quot;, #123; readonly name: String; #125;#gt;, YieldableError#gt;<br/>node: Schema.TaggedError#lt;TaggedSchemaError#gt;#40;#41;#40;#quot;TaggedSchemaError#quot;, #123; name: Schema.String #125;#41;"/]
+  7[/"type: Class#lt;PlainSchemaError, Struct#lt;#123; readonly name: String; #125;#gt;, YieldableError#gt;<br/>node: Schema.Error#lt;PlainSchemaError#gt;#40;#quot;PlainSchemaError#quot;#41;#40;#123; name: Schema.String #125;#41;"/]
+  8[/"type: #quot;PlainSchemaError#quot;<br/>node: #quot;PlainSchemaError#quot;"/]
+  9["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;PlainSchemaError, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;PlainSchemaError, Struct#lt;Fields#gt;, YieldableError#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;PlainSchemaError, readonly #91;S#93;#gt; #124; undefined#41;: Class#lt;PlainSchemaError, S, YieldableError#gt;; #125;<br/>callee: Schema.Error<br/>args: #91;#93;"]
+  10[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Error#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;Fields#gt;, YieldableError #amp; Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Error#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, S, YieldableError #amp; Brand#gt;; #125;<br/>node: Schema.Error"/]
+  11[/"type: Class#lt;QuotedSchemaError, TaggedStruct#lt;#quot;QuotedSchemaError#quot;, #123; readonly name: String; #125;#gt;, YieldableError#gt;<br/>node: Schema.TaggedError#lt;QuotedSchemaError#gt;#40;#41;#40;#quot;QuotedSchemaError#quot;, #123; #quot;name#quot;: Schema.String #125;#41;"/]
+  12[/"type: String<br/>node: Schema.String"/]
+  13[/"type: Class#lt;ShorthandSchemaError, TaggedStruct#lt;#quot;ShorthandSchemaError#quot;, #123; readonly name: String; #125;#gt;, YieldableError#gt;<br/>node: Schema.TaggedError#lt;ShorthandSchemaError#gt;#40;#41;#40;#quot;ShorthandSchemaError#quot;, #123; name #125;#41;"/]
+  14[/"type: #quot;A#quot;<br/>node: #quot;A#quot;"/]
+  15["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;A#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  16[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  17[/"type: Class#lt;DifferentSchemaName, TaggedStruct#lt;#quot;DifferentSchemaName#quot;, #123; readonly name: Literal#lt;#quot;Other#quot;#gt;; #125;#gt;, YieldableError#gt;<br/>node: Schema.TaggedError#lt;DifferentSchemaName#gt;#40;#41;#40;#quot;DifferentSchemaName#quot;, #123; name: Schema.Literal#40;#quot;Other#quot;#41; #125;#41;"/]
+  18[/"type: #quot;Other#quot;<br/>node: #quot;Other#quot;"/]
+  19["type: Literal#lt;#quot;Other#quot;#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  20[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  21[/"type: typeof E<br/>node: class E extends Data.TaggedError#40;#quot;E#quot;#41;#lt;#123; name: string #125;#gt; #123;#125;"/]
+  22[/"type: #quot;E#quot;<br/>node: #quot;E#quot;"/]
+  23["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;E#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  24[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  25[/"type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; Readonly#lt;A#gt;<br/>node: Data.Error"/]
+  26[/"type: typeof AnonymousError<br/>node: class extends Data.Error#lt;#123; name: string #125;#gt; #123;#125;"/]
+  27[/"type: #quot;ComputedDataError#quot;<br/>node: #quot;ComputedDataError#quot;"/]
+  28["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;ComputedDataError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  29[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  30[/"type: #quot;name#quot;<br/>node: #quot;name#quot;"/]
+  31[/"type: Class#lt;ComputedSchemaError, TaggedStruct#lt;#quot;ComputedSchemaError#quot;, #123; readonly name: String; #125;#gt;, YieldableError#gt;<br/>node: Schema.TaggedError#lt;ComputedSchemaError#gt;#40;#41;#40;#quot;ComputedSchemaError#quot;, #123; #91;#quot;name#quot;#93;: Schema.String #125;#41;"/]
+  32[/"type: Class#lt;TemplateSchemaError, TaggedStruct#lt;#quot;TemplateSchemaError#quot;, #123; readonly name: String; #125;#gt;, YieldableError#gt;<br/>node: Schema.TaggedError#lt;TemplateSchemaError#gt;#40;#41;#40;#quot;TemplateSchemaError#quot;, #123; #91;`name`#93;: Schema.String #125;#41;"/]
+  33[/"type: Class#lt;A, TaggedStruct#lt;#quot;A#quot;, #123; readonly name: Literal#lt;#quot;A#quot;#gt;; #125;#gt;, YieldableError#gt;<br/>node: Schema.TaggedError#lt;A#gt;#40;#quot;app/A#quot;#41;#40;#quot;A#quot;, #123; name: Schema.Literal#40;#quot;A#quot;#41; #125;#41;"/]
+  34[/"type: #quot;app/A#quot;<br/>node: #quot;app/A#quot;"/]
+  35["type: #123; #lt;Tag extends string, const Fields extends Struct.Fields#gt;#40;tag: Tag, fields: Fields, annotations?: Declaration#lt;A, readonly #91;TaggedStruct#lt;Tag, Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;A, TaggedStruct#lt;Tag, Fields#gt;, YieldableError#gt;; #lt;Tag extends string, S extends Struct#lt;Struct.Fields#gt;#gt;#40;tag: Tag, schema: S, annotations?: Declaration#lt;A, readonly #91;Struct#lt;#123; #91;K in keyof #40;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; S#91;#quot;fields#quot;#93;#41;#93;: #40;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; S#91;#quot;fields#quot;#93;#41;#91;K#93;; #125;#gt;#93;#gt; #124; undefined#41;: Class#lt;A, Struct#lt;#123; #91;K in keyof #40;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; S#91;#quot;fields#quot;#93;#41;#93;: #40;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; S#91;#quot;fields#quot;#93;#41;#91;K#93;; #125;#gt;, YieldableError#gt;; #125;<br/>callee: Schema.TaggedError<br/>args: #91;#93;"]
+  36[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier?: string #124; undefined#41; =#gt; #123; #lt;Tag extends string, const Fields extends Struct.Fields#gt;#40;tag: Tag, fields: Fields, annotations?: Declaration#lt;Self, readonly #91;TaggedStruct#lt;Tag, Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.TaggedError#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, TaggedStruct#lt;Tag, Fields#gt;, YieldableError #amp; Brand#gt;; #lt;Tag extends string, S extends Struct#lt;Struct.Fields#gt;#gt;#40;tag: Tag, schema: S, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;#123; #91;K in keyof #40;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; S#91;#quot;fields#quot;#93;#41;#93;: #40;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; S#91;#quot;fields#quot;#93;#41;#91;K#93;; #125;#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.TaggedError#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;#123; #91;K in keyof #40;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; S#91;#quot;fields#quot;#93;#41;#93;: #40;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; S#91;#quot;fields#quot;#93;#41;#91;K#93;; #125;#gt;, YieldableError #amp; Brand#gt;; #125;<br/>node: Schema.TaggedError"/]
+  37[/"type: #quot;A#quot;<br/>node: #quot;A#quot;"/]
+  38["type: Literal#lt;#quot;A#quot;#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  39[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  40[/"type: #123; Literal: #40;_: string#41; =#gt; String; #125;<br/>node: #123; Literal: #40;_: string#41; =#gt; Schema.String #125;"/]
+  41[["type: #40;_: string#41; =#gt; String<br/>node: #40;_: string#41; =#gt; Schema.String"]]
+  42[/"type: String<br/>node: Schema.String"/]
+  43[/"type: Class#lt;F, TaggedStruct#lt;#quot;F#quot;, #123; readonly name: String; #125;#gt;, YieldableError#gt;<br/>node: Schema.TaggedError#lt;F#gt;#40;#41;#40;#quot;F#quot;, #123; name: Fake.Literal#40;#quot;F#quot;#41; #125;#41;"/]
+  44[/"type: #quot;F#quot;<br/>node: #quot;F#quot;"/]
+  45["type: String<br/>callee: Fake.Literal<br/>args: #91;#93;"]
+  46[/"type: #40;_: string#41; =#gt; String<br/>node: Fake.Literal"/]
+  47[/"type: #quot;SafeDataError#quot;<br/>node: #quot;SafeDataError#quot;"/]
+  48["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;SafeDataError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  49[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  50[/"type: Class#lt;SafeSchemaError, TaggedStruct#lt;#quot;SafeSchemaError#quot;, #123; readonly message: String; readonly cause: Unknown; readonly stack: String; readonly toolName: String; #125;#gt;, YieldableError#gt;<br/>node: Schema.TaggedError#lt;SafeSchemaError#gt;#40;#41;#40;#quot;SafeSchemaError#quot;, #123; message: Schema.String, cause: Schema.Unknown, stack: Schema.String, toolName: Schema.String #125;#41;"/]
+  51[/"type: #quot;WorktreeError#quot;<br/>node: #quot;WorktreeError#quot;"/]
+  52["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;WorktreeError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  53[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  54[/"type: Class#lt;WorktreeSchemaError, TaggedStruct#lt;#quot;WorktreeError#quot;, #123; readonly name: Literal#lt;#quot;WorktreeError#quot;#gt;; #125;#gt;, YieldableError#gt;<br/>node: Schema.TaggedError#lt;WorktreeSchemaError#gt;#40;#41;#40;#quot;WorktreeError#quot;, #123; name: Schema.Literal#40;#quot;WorktreeError#quot;#41; #125;#41;"/]
+  55[/"type: #quot;WorktreeError#quot;<br/>node: #quot;WorktreeError#quot;"/]
+  56["type: Literal#lt;#quot;WorktreeError#quot;#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  57[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  58[/"type: Class#lt;WorktreeTagSchemaError, TaggedStruct#lt;#quot;WorktreeError#quot;, #123; readonly name: tag#lt;#quot;WorktreeError#quot;#gt;; #125;#gt;, YieldableError#gt;<br/>node: Schema.TaggedError#lt;WorktreeTagSchemaError#gt;#40;#41;#40;#quot;WorktreeError#quot;, #123; name: Schema.tag#40;#quot;WorktreeError#quot;#41; #125;#41;"/]
+  59[/"type: #quot;WorktreeError#quot;<br/>node: #quot;WorktreeError#quot;"/]
+  60["type: tag#lt;#quot;WorktreeError#quot;#gt;<br/>callee: Schema.tag<br/>args: #91;#93;"]
+  61[/"type: #lt;Tag extends SchemaAST.LiteralValue#gt;#40;literal: Tag#41; =#gt; tag#lt;Tag#gt;<br/>node: Schema.tag"/]
+  62[/"type: Class#lt;WorktreeTagDefaultOmitSchemaError, TaggedStruct#lt;#quot;WorktreeError#quot;, #123; readonly name: withDecodingDefaultKey#lt;tag#lt;#quot;WorktreeError#quot;#gt;, never#gt;; #125;#gt;, YieldableError#gt;<br/>node: Schema.TaggedError#lt;WorktreeTagDefaultOmitSchemaError#gt;#40;#41;#40;#quot;WorktreeError#quot;, #123; name: Schema.tagDefaultOmit#40;#quot;WorktreeError#quot;#41; #125;#41;"/]
+  63[/"type: #quot;WorktreeError#quot;<br/>node: #quot;WorktreeError#quot;"/]
+  64["type: withDecodingDefaultKey#lt;tag#lt;#quot;WorktreeError#quot;#gt;, never#gt;<br/>callee: Schema.tagDefaultOmit<br/>args: #91;#93;"]
+  65[/"type: #lt;Tag extends SchemaAST.LiteralValue#gt;#40;literal: Tag#41; =#gt; withDecodingDefaultKey#lt;tag#lt;Tag#gt;, never#gt;<br/>node: Schema.tagDefaultOmit"/]
+  66[/"type: Class#lt;B, TaggedStruct#lt;#quot;B#quot;, #123; readonly name: Literal#lt;#quot;app/B#quot;#gt;; #125;#gt;, YieldableError#gt;<br/>node: Schema.TaggedError#lt;B#gt;#40;#quot;app/B#quot;#41;#40;#quot;B#quot;, #123; name: Schema.Literal#40;#quot;app/B#quot;#41; #125;#41;"/]
+  67[/"type: #quot;app/B#quot;<br/>node: #quot;app/B#quot;"/]
+  68["type: #123; #lt;Tag extends string, const Fields extends Struct.Fields#gt;#40;tag: Tag, fields: Fields, annotations?: Declaration#lt;B, readonly #91;TaggedStruct#lt;Tag, Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;B, TaggedStruct#lt;Tag, Fields#gt;, YieldableError#gt;; #lt;Tag extends string, S extends Struct#lt;Struct.Fields#gt;#gt;#40;tag: Tag, schema: S, annotations?: Declaration#lt;B, readonly #91;Struct#lt;#123; #91;K in keyof #40;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; S#91;#quot;fields#quot;#93;#41;#93;: #40;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; S#91;#quot;fields#quot;#93;#41;#91;K#93;; #125;#gt;#93;#gt; #124; undefined#41;: Class#lt;B, Struct#lt;#123; #91;K in keyof #40;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; S#91;#quot;fields#quot;#93;#41;#93;: #40;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; S#91;#quot;fields#quot;#93;#41;#91;K#93;; #125;#gt;, YieldableError#gt;; #125;<br/>callee: Schema.TaggedError<br/>args: #91;#93;"]
+  69[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier?: string #124; undefined#41; =#gt; #123; #lt;Tag extends string, const Fields extends Struct.Fields#gt;#40;tag: Tag, fields: Fields, annotations?: Declaration#lt;Self, readonly #91;TaggedStruct#lt;Tag, Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.TaggedError#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, TaggedStruct#lt;Tag, Fields#gt;, YieldableError #amp; Brand#gt;; #lt;Tag extends string, S extends Struct#lt;Struct.Fields#gt;#gt;#40;tag: Tag, schema: S, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;#123; #91;K in keyof #40;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; S#91;#quot;fields#quot;#93;#41;#93;: #40;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; S#91;#quot;fields#quot;#93;#41;#91;K#93;; #125;#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.TaggedError#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;#123; #91;K in keyof #40;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; S#91;#quot;fields#quot;#93;#41;#93;: #40;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; S#91;#quot;fields#quot;#93;#41;#91;K#93;; #125;#gt;, YieldableError #amp; Brand#gt;; #125;<br/>node: Schema.TaggedError"/]
+  70[/"type: #quot;app/B#quot;<br/>node: #quot;app/B#quot;"/]
+  71["type: Literal#lt;#quot;app/B#quot;#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  72[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  73[/"type: Class#lt;C, Struct#lt;#123; readonly name: Literal#lt;#quot;C#quot;#gt;; #125;#gt;, YieldableError#gt;<br/>node: Schema.Error#lt;C#gt;#40;#quot;C#quot;#41;#40;#123; name: Schema.Literal#40;#quot;C#quot;#41; #125;#41;"/]
+  74[/"type: #quot;C#quot;<br/>node: #quot;C#quot;"/]
+  75["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;C, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;C, Struct#lt;Fields#gt;, YieldableError#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;C, readonly #91;S#93;#gt; #124; undefined#41;: Class#lt;C, S, YieldableError#gt;; #125;<br/>callee: Schema.Error<br/>args: #91;#93;"]
+  76[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Error#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;Fields#gt;, YieldableError #amp; Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Error#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, S, YieldableError #amp; Brand#gt;; #125;<br/>node: Schema.Error"/]
+  77[/"type: #quot;C#quot;<br/>node: #quot;C#quot;"/]
+  78["type: Literal#lt;#quot;C#quot;#gt;<br/>callee: Schema.Literal<br/>args: #91;#93;"]
+  79[/"type: #lt;L extends SchemaAST.LiteralValue#gt;#40;literal: L#41; =#gt; Literal#lt;L#gt;<br/>node: Schema.Literal"/]
+  80[/"type: Class#lt;NamedTaggedClass, TaggedStruct#lt;#quot;NamedTaggedClass#quot;, #123; readonly name: String; #125;#gt;, #123;#125;#gt;<br/>node: Schema.TaggedClass#lt;NamedTaggedClass#gt;#40;#41;#40;#quot;NamedTaggedClass#quot;, #123; name: Schema.String #125;#41;"/]
+  81[/"type: Class#lt;NamedClass, Struct#lt;#123; readonly name: String; #125;#gt;, #123;#125;#gt;<br/>node: Schema.Class#lt;NamedClass#gt;#40;#quot;NamedClass#quot;#41;#40;#123; name: Schema.String #125;#41;"/]
+  82[/"type: #quot;NamedClass#quot;<br/>node: #quot;NamedClass#quot;"/]
+  83["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;NamedClass, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;NamedClass, Struct#lt;Fields#gt;, #123;#125;#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;NamedClass, readonly #91;S#93;#gt; #124; undefined#41;: Class#lt;NamedClass, S, #123;#125;#gt;; #125;<br/>callee: Schema.Class<br/>args: #91;#93;"]
+  84[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;Fields#gt;, Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, S, Brand#gt;; #125;<br/>node: Schema.Class"/]
+  85[/"type: Class#lt;NestedSchemaError, TaggedStruct#lt;#quot;NestedSchemaError#quot;, #123; readonly meta: Struct#lt;#123; readonly name: String; #125;#gt;; #125;#gt;, YieldableError#gt;<br/>node: Schema.TaggedError#lt;NestedSchemaError#gt;#40;#41;#40;#quot;NestedSchemaError#quot;, #123; meta: Schema.Struct#40;#123; name: Schema.String #125;#41; #125;#41;"/]
+  86[/"type: #123; name: String; #125;<br/>node: #123; name: Schema.String #125;"/]
+  87["type: Struct#lt;#123; readonly name: String; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  88[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  89[/"type: #quot;NestedDataError#quot;<br/>node: #quot;NestedDataError#quot;"/]
+  90["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;NestedDataError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  91[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  92[/"type: #quot;ReferencedDataError#quot;<br/>node: #quot;ReferencedDataError#quot;"/]
+  93["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;ReferencedDataError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  94[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  95[/"type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; Readonly#lt;A#gt;<br/>node: Data.Error"/]
+  96[/"type: #123; name: String; #125;<br/>node: #123; name: Schema.String #125;"/]
+  97[/"type: Class#lt;ReferencedSchemaError, TaggedStruct#lt;#quot;ReferencedSchemaError#quot;, #123; name: String; #125;#gt;, YieldableError#gt;<br/>node: Schema.TaggedError#lt;ReferencedSchemaError#gt;#40;#41;#40;#quot;ReferencedSchemaError#quot;, fields#41;"/]
+  98[/"type: Class#lt;StructSchemaError, Struct#lt;#123; readonly _tag: tag#lt;#quot;StructSchemaError#quot;#gt;; readonly name: String; #125;#gt;, YieldableError#gt;<br/>node: Schema.TaggedError#lt;StructSchemaError#gt;#40;#41;#40;#quot;StructSchemaError#quot;, Schema.Struct#40;#123; name: Schema.String #125;#41;#41;"/]
+  99[/"type: #123; name: String; #125;<br/>node: #123; name: Schema.String #125;"/]
+  100["type: Struct#lt;#123; readonly name: String; #125;#gt;<br/>callee: Schema.Struct<br/>args: #91;#93;"]
+  101[/"type: #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields#41; =#gt; Struct#lt;Fields#gt;<br/>node: Schema.Struct"/]
+  102[/"type: Class#lt;SpreadSchemaError, TaggedStruct#lt;#quot;SpreadSchemaError#quot;, #123; readonly name: String; #125;#gt;, YieldableError#gt;<br/>node: Schema.TaggedError#lt;SpreadSchemaError#gt;#40;#41;#40;#quot;SpreadSchemaError#quot;, #123; ...fields #125;#41;"/]
+  103[/"type: #quot;name#quot;<br/>node: #quot;name#quot;"/]
+  104[/"type: Class#lt;ReferencedKeySchemaError, TaggedStruct#lt;#quot;ReferencedKeySchemaError#quot;, #123; readonly name: String; #125;#gt;, YieldableError#gt;<br/>node: Schema.TaggedError#lt;ReferencedKeySchemaError#gt;#40;#41;#40;#quot;ReferencedKeySchemaError#quot;, #123; #91;k#93;: Schema.String #125;#41;"/]
+  105[/"type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; Readonly#lt;A#gt;<br/>node: Data.Error"/]
+  106[/"type: #123; TaggedError: #40;tag: string#41; =#gt; typeof #40;Anonymous class#41;; Error: typeof Error; #125;<br/>node: #123;#92;n  TaggedError: #40;tag: string#41; =#gt; class#lt;Fields#gt; #123; readonly _tag = tag; declare readonly fields: Fields #125;,#92;n  Error: class#lt;Fields#gt; #123; declare readonly fields: Fields #125;#92;n#125;"/]
+  107[["type: #40;tag: string#41; =#gt; typeof #40;Anonymous class#41;<br/>node: #40;tag: string#41; =#gt; class#lt;Fields#gt; #123; readonly _tag = tag; declare readonly fields: Fields #125;"]]
+  108[/"type: typeof #40;Anonymous class#41;<br/>node: class#lt;Fields#gt; #123; readonly _tag = tag; declare readonly fields: Fields #125;"/]
+  109[/"type: #quot;UnrelatedError#quot;<br/>node: #quot;UnrelatedError#quot;"/]
+  110["type: typeof #40;Anonymous class#41;<br/>callee: UnrelatedData.TaggedError<br/>args: #91;#93;"]
+  111[/"type: #40;tag: string#41; =#gt; typeof #40;Anonymous class#41;<br/>node: UnrelatedData.TaggedError"/]
+  112[["type: #40;#41; =#gt; #123; ShadowedTaggedError: typeof ShadowedTaggedError; ShadowedPlainError: typeof ShadowedPlainError; #125;<br/>node: export function shadowedData#40;#41; #123;#92;n  const Data = UnrelatedData#92;n  class ShadowedTaggedError extends Data.TaggedError#40;#quot;ShadowedTaggedError#quot;#41;#lt;#123; name: string #125;#gt; #123;#125;#92;n  class ShadowedPlainError extends Data.Error#lt;#123; name: string #125;#gt; #123;#125;#92;n  return #123; ShadowedTaggedError, ShadowedPlainError #125;#92;n#125;"]]
+  113[/"type: #123; ShadowedTaggedError: typeof ShadowedTaggedError; ShadowedPlainError: typeof ShadowedPlainError; #125;<br/>node: #123; ShadowedTaggedError, ShadowedPlainError #125;"/]
+  114[/"type: #quot;ShadowedTaggedError#quot;<br/>node: #quot;ShadowedTaggedError#quot;"/]
+  115["type: typeof #40;Anonymous class#41;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  116[/"type: #40;tag: string#41; =#gt; typeof #40;Anonymous class#41;<br/>node: Data.TaggedError"/]
+  117[/"type: #quot;SuppressedError#quot;<br/>node: #quot;SuppressedError#quot;"/]
+  118["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;SuppressedError#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  119[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  8 -->|"kind: pipe"| 9
+  10 -->|"kind: transformCallee"| 9
+  9 -->|"kind: usedBy"| 7
+  14 -->|"kind: pipe"| 15
+  16 -->|"kind: transformCallee"| 15
+  18 -->|"kind: pipe"| 19
+  20 -->|"kind: transformCallee"| 19
+  19 -->|"kind: usedBy"| 17
+  22 -->|"kind: pipe"| 23
+  24 -->|"kind: transformCallee"| 23
+  23 -->|"kind: usedBy"| 21
+  27 -->|"kind: pipe"| 28
+  29 -->|"kind: transformCallee"| 28
+  34 -->|"kind: pipe"| 35
+  36 -->|"kind: transformCallee"| 35
+  35 -->|"kind: usedBy"| 33
+  37 -->|"kind: pipe"| 38
+  39 -->|"kind: transformCallee"| 38
+  38 -->|"kind: usedBy"| 33
+  42 -->|"kind: potentialReturn"| 41
+  41 -->|"kind: usedBy"| 40
+  44 -->|"kind: pipe"| 45
+  46 -->|"kind: transformCallee"| 45
+  45 -->|"kind: usedBy"| 43
+  47 -->|"kind: pipe"| 48
+  49 -->|"kind: transformCallee"| 48
+  51 -->|"kind: pipe"| 52
+  53 -->|"kind: transformCallee"| 52
+  55 -->|"kind: pipe"| 56
+  57 -->|"kind: transformCallee"| 56
+  56 -->|"kind: usedBy"| 54
+  59 -->|"kind: pipe"| 60
+  61 -->|"kind: transformCallee"| 60
+  60 -->|"kind: usedBy"| 58
+  63 -->|"kind: pipe"| 64
+  65 -->|"kind: transformCallee"| 64
+  64 -->|"kind: usedBy"| 62
+  67 -->|"kind: pipe"| 68
+  69 -->|"kind: transformCallee"| 68
+  68 -->|"kind: usedBy"| 66
+  70 -->|"kind: pipe"| 71
+  72 -->|"kind: transformCallee"| 71
+  71 -->|"kind: usedBy"| 66
+  74 -->|"kind: pipe"| 75
+  76 -->|"kind: transformCallee"| 75
+  75 -->|"kind: usedBy"| 73
+  77 -->|"kind: pipe"| 78
+  79 -->|"kind: transformCallee"| 78
+  78 -->|"kind: usedBy"| 73
+  82 -->|"kind: pipe"| 83
+  84 -->|"kind: transformCallee"| 83
+  83 -->|"kind: usedBy"| 81
+  86 -->|"kind: pipe"| 87
+  88 -->|"kind: transformCallee"| 87
+  87 -->|"kind: usedBy"| 85
+  89 -->|"kind: pipe"| 90
+  91 -->|"kind: transformCallee"| 90
+  92 -->|"kind: pipe"| 93
+  94 -->|"kind: transformCallee"| 93
+  99 -->|"kind: pipe"| 100
+  101 -->|"kind: transformCallee"| 100
+  100 -->|"kind: usedBy"| 98
+  108 -->|"kind: potentialReturn"| 107
+  107 -->|"kind: usedBy"| 106
+  109 -->|"kind: pipe"| 110
+  111 -->|"kind: transformCallee"| 110
+  113 -->|"kind: potentialReturn"| 112
+  114 -->|"kind: pipe"| 115
+  116 -->|"kind: transformCallee"| 115
+  115 -->|"kind: usedBy"| 112
+  113 -->|"kind: usedBy"| 112
+  117 -->|"kind: pipe"| 118
+  119 -->|"kind: transformCallee"| 118

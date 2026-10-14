@@ -2332,6 +2332,9 @@
         "effecttsgo/effect-succeed-with-void": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/error-payload-shadows-name": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/experimental-api-usage": {
           "$ref": "#/definitions/RuleNoConfig"
         },
@@ -9737,7 +9740,24 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "unicorn/prefer-query-selector": {
-          "$ref": "#/definitions/RuleNoConfig"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/RuleNoConfig"
+            },
+            {
+              "items": [
+                {
+                  "$ref": "#/definitions/AllowWarnDeny"
+                },
+                {
+                  "$ref": "#/definitions/PreferQuerySelector"
+                }
+              ],
+              "maxItems": 2,
+              "minItems": 2,
+              "type": "array"
+            }
+          ]
         },
         "unicorn/prefer-reflect-apply": {
           "$ref": "#/definitions/RuleNoConfig"
@@ -18258,6 +18278,18 @@
           "default": false,
           "description": "Whether to allow rejecting Promises with values typed as `unknown`.",
           "markdownDescription": "Whether to allow rejecting Promises with values typed as `unknown`.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "PreferQuerySelector": {
+      "additionalProperties": false,
+      "properties": {
+        "allowWithVariables": {
+          "default": false,
+          "description": "When set to `true`, allows using `.getElementById()` and `.getElementsByClassName()` when called with a variable or expression.\nThis avoids the need to manually compose a CSS selector string, which can be less readable.",
+          "markdownDescription": "When set to `true`, allows using `.getElementById()` and `.getElementsByClassName()` when called with a variable or expression.\nThis avoids the need to manually compose a CSS selector string, which can be less readable.",
           "type": "boolean"
         }
       },

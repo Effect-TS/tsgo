@@ -2463,6 +2463,11 @@
           "default": "suggestion",
           "description": "Suggests using Effect.void instead of Effect.succeed(undefined) or Effect.succeed(void 0)"
         },
+        "errorPayloadShadowsName": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Detects error payload fields named `name` that shadow the error's own name"
+        },
         "experimentalApiUsage": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",
