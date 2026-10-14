@@ -1,6 +1,7 @@
 package typeparser
 
 import (
+	"slices"
 	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
@@ -45,9 +46,20 @@ type moduleExportFilter struct {
 	hasDeclaration moduleDescriptorMask
 }
 
-type moduleExportReferenceCacheKey struct {
-	descriptor moduleDescriptorID
-	memberName string
+// moduleExportIdentity is one module file declaring a symbol, with the names
+// that module exports the symbol under.
+type moduleExportIdentity struct {
+	file  *ast.SourceFile
+	names []string
+	// exportEquals marks an `export =` module. Members of its exported value
+	// count as exports too, so it is answered by looking the member up.
+	exportEquals bool
+}
+
+// moduleExportNames indexes a module's export names by resolved target.
+type moduleExportNames struct {
+	byTarget     map[*ast.Symbol][]string
+	exportEquals bool
 }
 
 func newPackageSourceFileDescriptor(
@@ -149,17 +161,96 @@ func (tp *TypeParser) IsNodeReferenceToModuleExport(node *ast.Node, desc package
 		return false
 	}
 
-	answers := tp.links.ModuleExportReference.Get(sym)
-	key := moduleExportReferenceCacheKey{descriptor: desc.id, memberName: memberName}
-	if answer, ok := (*answers)[key]; ok {
-		return answer
+	for _, identity := range tp.moduleExportIdentities(sym) {
+		if !tp.sourceFileMatchesModuleCached(identity.file, desc) {
+			continue
+		}
+		if identity.exportEquals {
+			if tp.isSymbolExportedFromModuleFile(sym, identity.file, memberName) {
+				return true
+			}
+		} else if slices.Contains(identity.names, memberName) {
+			return true
+		}
 	}
-	answer := tp.isSymbolReferenceToModuleExport(sym, desc, memberName)
-	if *answers == nil {
-		*answers = make(map[moduleExportReferenceCacheKey]bool)
+	return false
+}
+
+// moduleExportIdentities lists, once per symbol, the modules declaring sym
+// and the names each exports it under. Only files inside a package can match a
+// module descriptor, so other declarations are skipped.
+func (tp *TypeParser) moduleExportIdentities(sym *ast.Symbol) []moduleExportIdentity {
+	if identities := tp.links.ModuleExportIdentities.TryGet(sym); identities != nil {
+		return *identities
 	}
-	(*answers)[key] = answer
-	return answer
+
+	var identities []moduleExportIdentity
+	target := tp.resolvedTarget(sym)
+	for _, decl := range ast.TSGetSymbolDeclarations(sym) {
+		if decl == nil {
+			continue
+		}
+		sf := ast.GetSourceFileOfNode(decl)
+		if sf == nil || tp.PackageJsonForSourceFile(sf) == nil ||
+			slices.ContainsFunc(identities, func(identity moduleExportIdentity) bool { return identity.file == sf }) {
+			continue
+		}
+		exports := tp.moduleExportNamesOf(sf)
+		if exports.exportEquals {
+			identities = append(identities, moduleExportIdentity{file: sf, exportEquals: true})
+		} else if names := exports.byTarget[target]; len(names) > 0 {
+			identities = append(identities, moduleExportIdentity{file: sf, names: names})
+		}
+	}
+	*tp.links.ModuleExportIdentities.Get(sym) = identities
+	return identities
+}
+
+// moduleExportNamesOf groups a module's export names by the symbol each
+// resolves to, comparing symbols the way getSymbolIfSameReference does.
+func (tp *TypeParser) moduleExportNamesOf(sf *ast.SourceFile) moduleExportNames {
+	return Cached(&tp.links.ModuleExportNames, sf, func() moduleExportNames {
+		moduleSym := checker.Checker_getSymbolOfDeclaration(tp.checker, sf.AsNode())
+		if moduleSym == nil {
+			return moduleExportNames{}
+		}
+		if tp.checker.ResolveExternalModuleSymbol(moduleSym) != moduleSym {
+			return moduleExportNames{exportEquals: true}
+		}
+		byTarget := make(map[*ast.Symbol][]string)
+		tp.checker.ForEachExportAndPropertyOfModule(moduleSym, func(exportSym *ast.Symbol, name string) {
+			if target := tp.resolvedTarget(tp.resolveAliasedSymbol(exportSym)); target != nil {
+				byTarget[target] = append(byTarget[target], name)
+			}
+		})
+		return moduleExportNames{byTarget: byTarget}
+	})
+}
+
+// resolvedTarget mirrors the checker's getResolvedTarget, the key
+// getSymbolIfSameReference compares.
+func (tp *TypeParser) resolvedTarget(sym *ast.Symbol) *ast.Symbol {
+	if sym == nil {
+		return nil
+	}
+	return tp.checker.GetMergedSymbol(checker.Checker_resolveSymbol(tp.checker, tp.checker.GetMergedSymbol(sym)))
+}
+
+func (tp *TypeParser) sourceFileMatchesModuleCached(sf *ast.SourceFile, desc packageSourceFileDescriptor) bool {
+	filter := tp.links.ModuleFileFilter.Get(sf)
+	bit := moduleDescriptorMask(1) << desc.id
+	if filter.checked&bit == 0 {
+		filter.checked |= bit
+		if tp.sourceFileMatchesModule(sf, desc) {
+			filter.hasDeclaration |= bit
+		}
+	}
+	return filter.hasDeclaration&bit != 0
+}
+
+func (tp *TypeParser) sourceFileMatchesModule(sf *ast.SourceFile, desc packageSourceFileDescriptor) bool {
+	return tp.IsSourceFileInPackage(sf, desc.packageName) &&
+		(desc.matchesSourceFile == nil || desc.matchesSourceFile(tp, tp.checker, sf))
 }
 
 func (tp *TypeParser) symbolHasDeclarationInModuleCached(sym *ast.Symbol, desc packageSourceFileDescriptor) bool {
@@ -179,41 +270,22 @@ func (tp *TypeParser) symbolHasDeclarationInModule(sym *ast.Symbol, desc package
 		if decl == nil {
 			continue
 		}
-		sf := ast.GetSourceFileOfNode(decl)
-		if sf == nil || !tp.IsSourceFileInPackage(sf, desc.packageName) {
-			continue
-		}
-		if desc.matchesSourceFile == nil || desc.matchesSourceFile(tp, tp.checker, sf) {
+		if sf := ast.GetSourceFileOfNode(decl); sf != nil && tp.sourceFileMatchesModuleCached(sf, desc) {
 			return true
 		}
 	}
 	return false
 }
 
-func (tp *TypeParser) isSymbolReferenceToModuleExport(sym *ast.Symbol, desc packageSourceFileDescriptor, memberName string) bool {
-	for _, decl := range ast.TSGetSymbolDeclarations(sym) {
-		if decl == nil {
-			continue
-		}
-		sf := ast.GetSourceFileOfNode(decl)
-		if sf == nil || !tp.IsSourceFileInPackage(sf, desc.packageName) {
-			continue
-		}
-		if desc.matchesSourceFile != nil && !desc.matchesSourceFile(tp, tp.checker, sf) {
-			continue
-		}
-		moduleSym := checker.Checker_getSymbolOfDeclaration(tp.checker, sf.AsNode())
-		if moduleSym == nil {
-			continue
-		}
-		exportSym := tp.checker.TryGetMemberInModuleExportsAndProperties(memberName, moduleSym)
-		exportSym = tp.resolveAliasedSymbol(exportSym)
-		if checker.Checker_getSymbolIfSameReference(tp.checker, exportSym, sym) != nil {
-			return true
-		}
+// isSymbolExportedFromModuleFile looks memberName up in one module, including
+// the members of an `export =` value.
+func (tp *TypeParser) isSymbolExportedFromModuleFile(sym *ast.Symbol, sf *ast.SourceFile, memberName string) bool {
+	moduleSym := checker.Checker_getSymbolOfDeclaration(tp.checker, sf.AsNode())
+	if moduleSym == nil {
+		return false
 	}
-
-	return false
+	exportSym := tp.resolveAliasedSymbol(tp.checker.TryGetMemberInModuleExportsAndProperties(memberName, moduleSym))
+	return checker.Checker_getSymbolIfSameReference(tp.checker, exportSym, sym) != nil
 }
 
 func (tp *TypeParser) IsNodeReferenceToModule(node *ast.Node, desc packageSourceFileDescriptor) bool {

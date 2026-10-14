@@ -48,8 +48,10 @@ type EffectLinks struct {
 	PromiseType            core.LinkStore[*checker.Type, *checker.Type]
 	IsGlobalErrorType      core.LinkStore[*checker.Type, bool]
 	IsYieldableErrorType   core.LinkStore[*checker.Type, bool]
-	ModuleExportReference  checker.SymbolLinkStore[map[moduleExportReferenceCacheKey]bool]
+	ModuleExportIdentities checker.SymbolLinkStore[[]moduleExportIdentity]
 	ModuleExportFilter     checker.SymbolLinkStore[moduleExportFilter]
+	ModuleExportNames      core.LinkStore[*ast.SourceFile, moduleExportNames]
+	ModuleFileFilter       core.LinkStore[*ast.SourceFile, moduleExportFilter]
 	PipeableSignatureShape core.LinkStore[pipeableSignatureShapeCacheKey, bool]
 	nativeArrayRegistry    *nativeArrayRegistry
 	barrelReader           *importstyle.BarrelReader

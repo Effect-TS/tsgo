@@ -36,9 +36,20 @@ const mutableFooAliasUse = mutableFooAlias`,
 		"/packages/consumer/main.ts": `import { Foo as NestedFoo } from "cache-fixture"
 const nestedFoo = NestedFoo`,
 		"/node_modules/cache-fixture/package.json": moduleExportReferencePackageJSON,
-		"/node_modules/cache-fixture/index.d.ts":   `export { Foo, Bar } from "./source.js"`,
+		"/.src/renamed.ts": `import { Base, Renamed } from "cache-fixture"
+const baseUse = Base
+const renamedUse = Renamed`,
+		"/.src/cjs.ts": `import api = require("cjs-fixture")
+const runUse = api.run`,
+		"/node_modules/cache-fixture/index.d.ts": `export { Foo, Bar } from "./source.js"
+export { Base, Renamed } from "./renamed.js"`,
 		"/node_modules/cache-fixture/source.d.ts": `export declare const Foo: unique symbol
 export declare const Bar: unique symbol`,
+		"/node_modules/cache-fixture/renamed.d.ts": `declare const Base: unique symbol
+export { Base, Base as Renamed }`,
+		"/node_modules/cjs-fixture/package.json": `{ "name": "cjs-fixture", "version": "1.0.0", "types": "./index.d.ts" }`,
+		"/node_modules/cjs-fixture/index.d.ts": `declare const api: { run(): void; stop(): void }
+export = api`,
 		"/packages/consumer/node_modules/cache-fixture/package.json": strings.Replace(moduleExportReferencePackageJSON, "1.0.0", "2.0.0", 1),
 		"/packages/consumer/node_modules/cache-fixture/index.d.ts":   `export { Foo } from "./source.js"`,
 		"/packages/consumer/node_modules/cache-fixture/source.d.ts":  `export declare const Foo: unique symbol`,
@@ -156,6 +167,43 @@ func TestIsNodeReferenceToModuleExport_CachesBySymbolDescriptorAndMember(t *test
 	}
 	if tp.IsNodeReferenceToModuleExport(rootFoo1, matchingDesc, "Bar") {
 		t.Fatal("expected a different member not to reuse the cached Foo match")
+	}
+}
+
+func TestIsNodeReferenceToModuleExport_SymbolExportedUnderTwoNames(t *testing.T) {
+	t.Parallel()
+
+	tp, sourceFiles, done := moduleExportReferenceFixture(t)
+	defer done()
+
+	desc := newPackageSourceFileDescriptor(testDescriptorSourceFile, "cache-fixture", sourceFileNameMatcher("/renamed.d.ts", nil))
+	renamed := sourceFiles["/.src/renamed.ts"]
+	for _, node := range []*ast.Node{findIdentifierByText(t, renamed, "Base", 1), findIdentifierByText(t, renamed, "Renamed", 1)} {
+		for _, member := range []string{"Base", "Renamed"} {
+			if !tp.IsNodeReferenceToModuleExport(node, desc, member) {
+				t.Fatalf("expected %s to match the %s export of the same declaration", node.Text(), member)
+			}
+		}
+		if tp.IsNodeReferenceToModuleExport(node, desc, "Foo") {
+			t.Fatalf("expected %s not to match the Foo export", node.Text())
+		}
+	}
+}
+
+func TestIsNodeReferenceToModuleExport_ExportEqualsMembers(t *testing.T) {
+	t.Parallel()
+
+	tp, sourceFiles, done := moduleExportReferenceFixture(t)
+	defer done()
+
+	desc := newPackageSourceFileDescriptor(testDescriptorAnyFile, "cjs-fixture", nil)
+	run := findIdentifierByText(t, sourceFiles["/.src/cjs.ts"], "run", 0)
+
+	if !tp.IsNodeReferenceToModuleExport(run, desc, "run") {
+		t.Fatal("expected a member of an export= value to match its name")
+	}
+	if tp.IsNodeReferenceToModuleExport(run, desc, "stop") {
+		t.Fatal("expected run not to match the stop member")
 	}
 }
 
