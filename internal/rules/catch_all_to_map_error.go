@@ -50,11 +50,6 @@ func AnalyzeCatchAllToMapError(tp *typeparser.TypeParser, _ *checker.Checker, sf
 	flows := tp.PipingFlows(sf, true)
 	for _, flow := range flows.All() {
 		for _, transformation := range flow.Transformations().All() {
-			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catch") &&
-				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchAll") {
-				continue
-			}
-
 			if transformation.Args().Len() < 1 {
 				continue
 			}
@@ -74,6 +69,11 @@ func AnalyzeCatchAllToMapError(tp *typeparser.TypeParser, _ *checker.Checker, sf
 				continue
 			}
 			if call.Arguments == nil || len(call.Arguments.Nodes) < 1 {
+				continue
+			}
+
+			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catch") &&
+				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchAll") {
 				continue
 			}
 

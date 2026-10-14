@@ -3,9 +3,9 @@ package rules
 import (
 	"strings"
 
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
-	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
@@ -78,77 +78,70 @@ func AnalyzeMissedPipeableOpportunity(tp *typeparser.TypeParser, c *checker.Chec
 			}
 		}
 
-		// Search for valid pipeable segments
-		searchStartIndex := 0
-
-		for searchStartIndex <= flow.Transformations().Len() {
-			// Find the first pipeable type starting from searchStartIndex
-			firstPipeableIndex := -1
-
-			for i := searchStartIndex; i <= flow.Transformations().Len(); i++ {
-				if isPipeableAtIndex(tp, flow, i) {
-					firstPipeableIndex = i
-					break
-				}
+		transformationCount := flow.Transformations().Len()
+		runs := safelyPipeableRuns(tp, flow)
+		for firstPipeableIndex := 0; firstPipeableIndex <= transformationCount; firstPipeableIndex++ {
+			run := runs[firstPipeableIndex]
+			if run.callCount < minArgCount || !isPipeableAtIndex(tp, flow, firstPipeableIndex) {
+				continue
 			}
-
-			if firstPipeableIndex == -1 {
-				break
-			}
-
-			// Collect transformations while their callees are safely pipeable
 			var pipeableTransformations []typeparser.PipingFlowTransformation
-
-			for i := firstPipeableIndex; i < flow.Transformations().Len(); i++ {
-				t := flow.Transformations().At(i)
-				if !tp.IsSafelyPipeableCallee(t.Callee()) {
-					break
-				}
-				pipeableTransformations = append(pipeableTransformations, t)
+			for i := firstPipeableIndex; i < firstPipeableIndex+run.length; i++ {
+				pipeableTransformations = append(pipeableTransformations, flow.Transformations().At(i))
 			}
+			pipeableEndIndex := firstPipeableIndex + len(pipeableTransformations)
 
-			// Count "call" kind transformations
-			callKindCount := 0
-			for _, t := range pipeableTransformations {
-				if t.Kind() == typeparser.TransformationKindCall {
-					callKindCount++
-				}
-			}
+			// Get subject text for the diagnostic message
+			subjectText := getSubjectText(c, sf, flow, firstPipeableIndex)
 
-			if callKindCount >= minArgCount {
-				pipeableEndIndex := firstPipeableIndex + len(pipeableTransformations)
+			afterTransformations := flow.Transformations().Slice(pipeableEndIndex, flow.Transformations().Len())
 
-				// Get subject text for the diagnostic message
-				subjectText := getSubjectText(c, sf, flow, firstPipeableIndex)
+			matches = append(matches, MissedPipeableOpportunityMatch{
+				SourceFile:              sf,
+				Location:                scanner.GetErrorRangeForNode(sf, flow.Node()),
+				PipeableStartIndex:      firstPipeableIndex,
+				PipeableTransformations: pipeableTransformations,
+				Flow:                    flow,
+				SubjectText:             subjectText,
+				AfterTransformations:    afterTransformations,
+			})
 
-				afterTransformations := flow.Transformations().Slice(pipeableEndIndex, flow.Transformations().Len())
-
-				matches = append(matches, MissedPipeableOpportunityMatch{
-					SourceFile:              sf,
-					Location:                scanner.GetErrorRangeForNode(sf, flow.Node()),
-					PipeableStartIndex:      firstPipeableIndex,
-					PipeableTransformations: pipeableTransformations,
-					Flow:                    flow,
-					SubjectText:             subjectText,
-					AfterTransformations:    afterTransformations,
-				})
-
-				// Found and reported a valid segment, move past it (no overlapping diagnostics)
-				break
-			}
-
-			// Not enough transformations, try starting from the next position
-			searchStartIndex = firstPipeableIndex + len(pipeableTransformations) + 1
+			// Found and reported a valid segment, move past it (no overlapping diagnostics)
+			break
 		}
 	}
 
 	return matches
 }
 
+type safelyPipeableRun struct {
+	length    int
+	callCount int
+}
+
+func safelyPipeableRuns(tp *typeparser.TypeParser, flow *typeparser.PipingFlow) []safelyPipeableRun {
+	transformationCount := flow.Transformations().Len()
+	runs := make([]safelyPipeableRun, transformationCount+1)
+	for i := transformationCount - 1; i >= 0; i-- {
+		t := flow.Transformations().At(i)
+		if !tp.IsSafelyPipeableCallee(t.Callee()) {
+			continue
+		}
+		runs[i] = safelyPipeableRun{length: runs[i+1].length + 1, callCount: runs[i+1].callCount}
+		if t.Kind() == typeparser.TransformationKindCall {
+			runs[i].callCount++
+		}
+	}
+	return runs
+}
+
 // isPipeableAtIndex checks if the type at a given index in a flow is pipeable.
 // Index 0 = subject, index > 0 = transformations[index - 1].outType
 func isPipeableAtIndex(tp *typeparser.TypeParser, flow *typeparser.PipingFlow, index int) bool {
 	if index == 0 {
+		if tp.LiteralCannotBePipeable(flow.Subject().Node()) {
+			return false
+		}
 		subjectType := flow.Subject().OutType()
 		if subjectType == nil {
 			return false

@@ -24,6 +24,7 @@ type EffectLinks struct {
 	ReferenceSymbol              denseNodeStore[*ast.Symbol]
 	EffectContextFlags           denseNodeStore[EffectContextFlags]
 	EffectYieldGeneratorFunction denseNodeStore[*ast.FunctionExpression]
+	DataFirstOrLastCall          denseNodeStore[*ParsedDataFirstOrLastCall]
 
 	ObjectLiteralContextualType           core.LinkStore[*ast.Node, *checker.Type]
 	ObjectLiteralConstraintContextualType core.LinkStore[*ast.Node, *checker.Type]
@@ -41,10 +42,12 @@ type EffectLinks struct {
 	EffectSchemaTypes      core.LinkStore[*checker.Type, *SchemaTypes]
 	IsScopeType            core.LinkStore[*checker.Type, bool]
 	IsPipeableType         core.LinkStore[*checker.Type, bool]
+	GlobalInterfaceHasPipe core.LinkStore[string, bool]
 	PromiseType            core.LinkStore[*checker.Type, *checker.Type]
 	IsGlobalErrorType      core.LinkStore[*checker.Type, bool]
 	IsYieldableErrorType   core.LinkStore[*checker.Type, bool]
 	ModuleExportReference  checker.SymbolLinkStore[map[moduleExportReferenceCacheKey]bool]
+	ModuleExportFilter     checker.SymbolLinkStore[moduleExportFilter]
 	PipeableSignatureShape core.LinkStore[pipeableSignatureShapeCacheKey, bool]
 	nativeArrayRegistry    *nativeArrayRegistry
 	nativeArrayMember      core.LinkStore[*ast.Symbol, nativeArrayMember]

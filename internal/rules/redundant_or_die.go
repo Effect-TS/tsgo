@@ -92,12 +92,11 @@ func analyzeRedundantOrDieFlowCandidate(tp *typeparser.TypeParser, sf *ast.Sourc
 	if lastTransform.Callee() == nil {
 		return redundantOrDieCandidate{}, nil, nil, false
 	}
-	if !tp.IsNodeReferenceToEffectModuleApi(lastTransform.Callee(), "orDie") {
-		return redundantOrDieCandidate{}, nil, nil, false
-	}
-
 	yieldExpr := enclosingYieldExpression(flow.Node())
 	if yieldExpr == nil || yieldExpr.Expression == nil || yieldExpr.Expression != flow.Node() || yieldExpr.AsteriskToken == nil {
+		return redundantOrDieCandidate{}, nil, nil, false
+	}
+	if !tp.IsNodeReferenceToEffectModuleApi(lastTransform.Callee(), "orDie") {
 		return redundantOrDieCandidate{}, nil, nil, false
 	}
 	if tp.GetEffectContextFlags(yieldExpr.AsNode())&typeparser.EffectContextFlagCanYieldEffect == 0 {
@@ -138,12 +137,11 @@ func analyzeRedundantGeneratorOrDieCandidate(tp *typeparser.TypeParser, sf *ast.
 		if expr == nil || expr.Kind != ast.KindYieldExpression {
 			return false
 		}
-		if tp.GetEffectContextFlags(expr)&typeparser.EffectContextFlagCanYieldEffect == 0 || tp.GetEffectYieldGeneratorFunction(expr) != generatorFunction {
-			return false
-		}
-
 		yieldExpr := expr.AsYieldExpression()
 		if yieldExpr == nil || yieldExpr.AsteriskToken == nil || yieldExpr.Expression == nil {
+			return false
+		}
+		if tp.GetEffectContextFlags(expr)&typeparser.EffectContextFlagCanYieldEffect == 0 || tp.GetEffectYieldGeneratorFunction(expr) != generatorFunction {
 			return false
 		}
 

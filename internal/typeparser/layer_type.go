@@ -8,7 +8,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
-var effectLayerModuleDescriptor = newPackageSourceFileDescriptor("effect", isLayerTypeSourceFile)
+var effectLayerModuleDescriptor = newPackageSourceFileDescriptor(moduleDescriptorLayer, "effect", isLayerTypeSourceFile)
 
 // LayerTypeId is the property key for Layer's variance struct.
 const LayerTypeId = "~effect/Layer"

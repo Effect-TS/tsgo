@@ -95,11 +95,13 @@ func AnalyzeEffectMapVoid(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 		for index := range flow.Transformations().All() {
 			transformation := flow.Transformations().At(index)
 			if transformation.Args().Len() != 1 ||
-				transformation.Callee() == nil ||
-				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "map") {
+				transformation.Callee() == nil {
 				continue
 			}
 			if !isVoidCallback(transformation.Args().At(0)) {
+				continue
+			}
+			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "map") {
 				continue
 			}
 			var effectModule *ast.Node

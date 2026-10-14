@@ -72,6 +72,16 @@ func analyzeOptionMatchCalls(tp *typeparser.TypeParser, sf *ast.SourceFile) []Op
 			transformation := flow.Transformations().At(index)
 			callee := transformation.Callee()
 			args := transformation.Args()
+			switch transformation.Kind() {
+			case typeparser.TransformationKindPipe,
+				typeparser.TransformationKindPipeable,
+				typeparser.TransformationKindDataFirst,
+				typeparser.TransformationKindDataLast,
+				typeparser.TransformationKindCall:
+			default:
+				continue
+			}
+
 			if args.Len() != 1 || !tp.IsNodeReferenceToEffectOptionModuleApi(callee, "match") {
 				continue
 			}
@@ -89,16 +99,6 @@ func analyzeOptionMatchCalls(tp *typeparser.TypeParser, sf *ast.SourceFile) []Op
 				FailureNode:      failure,
 				DefaultFailure:   isDefaultNoSuchElementError(tp, failure),
 				CanFix:           canFix,
-			}
-
-			switch transformation.Kind() {
-			case typeparser.TransformationKindPipe,
-				typeparser.TransformationKindPipeable,
-				typeparser.TransformationKindDataFirst,
-				typeparser.TransformationKindDataLast,
-				typeparser.TransformationKindCall:
-			default:
-				continue
 			}
 
 			matches = append(matches, match)
@@ -249,13 +249,14 @@ func analyzeOptionConditional(tp *typeparser.TypeParser, c *checker.Checker, sf 
 		return OptionMatchToFromOptionMatch{}, false
 	}
 
+	optionNode := ast.SkipParentheses(condition.Arguments.Nodes[0])
+	if optionNode == nil || optionNode.Kind != ast.KindIdentifier {
+		return OptionMatchToFromOptionMatch{}, false
+	}
+
 	isSome := tp.IsNodeReferenceToEffectOptionModuleApi(condition.Expression, "isSome")
 	isNone := tp.IsNodeReferenceToEffectOptionModuleApi(condition.Expression, "isNone")
 	if isSome == isNone {
-		return OptionMatchToFromOptionMatch{}, false
-	}
-	optionNode := ast.SkipParentheses(condition.Arguments.Nodes[0])
-	if optionNode == nil || optionNode.Kind != ast.KindIdentifier {
 		return OptionMatchToFromOptionMatch{}, false
 	}
 

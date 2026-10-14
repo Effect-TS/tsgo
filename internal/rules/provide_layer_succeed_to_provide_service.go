@@ -55,8 +55,8 @@ func AnalyzeProvideLayerSucceedToProvideService(tp *typeparser.TypeParser, _ *ch
 	for _, flow := range tp.PipingFlows(sf, true).All() {
 		for index := range flow.Transformations().All() {
 			provide := flow.Transformations().At(index)
-			if provide.Callee() == nil ||
-				!tp.IsNodeReferenceToEffectModuleApi(provide.Callee(), "provide") || provide.Args().Len() != 1 {
+			if provide.Callee() == nil || provide.Args().Len() != 1 ||
+				!tp.IsNodeReferenceToEffectModuleApi(provide.Callee(), "provide") {
 				continue
 			}
 

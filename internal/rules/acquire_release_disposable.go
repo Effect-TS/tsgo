@@ -171,10 +171,6 @@ func isDisposalRelease(tp *typeparser.TypeParser, c *checker.Checker, node *ast.
 	if release.Params().Len() == 2 && !isPlainIdentifierParameter(release.Params().At(1)) {
 		return false
 	}
-	resourceSymbol := tp.GetSymbolAtLocation(resource.Name())
-	if resourceSymbol == nil {
-		return false
-	}
 
 	expression := ast.SkipParentheses(release.Expression())
 	if expression == nil || expression.Kind != ast.KindCallExpression {
@@ -183,6 +179,10 @@ func isDisposalRelease(tp *typeparser.TypeParser, c *checker.Checker, node *ast.
 	wrapper := expression.AsCallExpression()
 	if wrapper == nil || wrapper.Expression == nil || wrapper.QuestionDotToken != nil || wrapper.Arguments == nil || len(wrapper.Arguments.Nodes) != 1 ||
 		containsSpreadElement(wrapper.Arguments.Nodes) {
+		return false
+	}
+	resourceSymbol := tp.GetSymbolAtLocation(resource.Name())
+	if resourceSymbol == nil {
 		return false
 	}
 
@@ -238,10 +238,6 @@ func disposalProtocolCall(
 	if element == nil || element.QuestionDotToken != nil || element.Expression == nil || element.ArgumentExpression == nil {
 		return "", false
 	}
-	actualResource := tp.GetSymbolAtLocation(ast.SkipParentheses(element.Expression))
-	if actualResource == nil || checker.Checker_getSymbolIfSameReference(c, actualResource, resourceSymbol) == nil {
-		return "", false
-	}
 
 	key := ast.SkipParentheses(element.ArgumentExpression)
 	if key == nil || key.Kind != ast.KindPropertyAccessExpression {
@@ -249,6 +245,10 @@ func disposalProtocolCall(
 	}
 	access := key.AsPropertyAccessExpression()
 	if access == nil || access.QuestionDotToken != nil || access.Expression == nil || access.Name() == nil {
+		return "", false
+	}
+	actualResource := tp.GetSymbolAtLocation(ast.SkipParentheses(element.Expression))
+	if actualResource == nil || checker.Checker_getSymbolIfSameReference(c, actualResource, resourceSymbol) == nil {
 		return "", false
 	}
 	actualSymbol := tp.ResolveToGlobalSymbol(tp.GetSymbolAtLocation(access.Expression))

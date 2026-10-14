@@ -15,6 +15,12 @@ const moduleExportReferencePackageJSON = `{
   "exports": { ".": "./index.d.ts" }
 }`
 
+const (
+	testDescriptorSourceFile = moduleDescriptorCount + iota
+	testDescriptorAnyFile
+	testDescriptorOtherFile
+)
+
 func moduleExportReferenceSources() map[string]string {
 	return map[string]string{
 		"/.src/main.ts": `import { Foo as RootFoo, Bar } from "cache-fixture"
@@ -45,7 +51,7 @@ func TestIsNodeReferenceToModuleExport_ConstantAliases(t *testing.T) {
 	tp, sourceFiles, done := moduleExportReferenceFixture(t)
 	defer done()
 
-	desc := newPackageSourceFileDescriptor("cache-fixture", sourceFileNameMatcher("/source.d.ts", nil))
+	desc := newPackageSourceFileDescriptor(testDescriptorSourceFile, "cache-fixture", sourceFileNameMatcher("/source.d.ts", nil))
 	main := sourceFiles["/.src/main.ts"]
 	constantAliasDeclaration := findIdentifierByText(t, main, "rootFooAlias2", 0)
 	constantAlias := findIdentifierByText(t, main, "rootFooAlias2", 1)
@@ -84,7 +90,7 @@ func TestIsNodeReferenceToModuleExport_AliasesAndReexports(t *testing.T) {
 	tp, sourceFiles, done := moduleExportReferenceFixture(t)
 	defer done()
 
-	desc := newPackageSourceFileDescriptor("cache-fixture", sourceFileNameMatcher("/source.d.ts", nil))
+	desc := newPackageSourceFileDescriptor(testDescriptorSourceFile, "cache-fixture", sourceFileNameMatcher("/source.d.ts", nil))
 	main := sourceFiles["/.src/main.ts"]
 	rootFoo := findIdentifierByText(t, main, "RootFoo", 1)
 	rootBar := findIdentifierByText(t, main, "Bar", 1)
@@ -106,7 +112,7 @@ func TestIsNodeReferenceToModuleExport_DuplicatePackageVersions(t *testing.T) {
 	tp, sourceFiles, done := moduleExportReferenceFixture(t)
 	defer done()
 
-	desc := newPackageSourceFileDescriptor("cache-fixture", nil)
+	desc := newPackageSourceFileDescriptor(testDescriptorAnyFile, "cache-fixture", nil)
 	rootFoo := findIdentifierByText(t, sourceFiles["/.src/main.ts"], "RootFoo", 1)
 	nestedFoo := findIdentifierByText(t, sourceFiles["/packages/consumer/main.ts"], "NestedFoo", 1)
 
@@ -131,7 +137,7 @@ func TestIsNodeReferenceToModuleExport_CachesBySymbolDescriptorAndMember(t *test
 	rootFoo1 := findIdentifierByText(t, main, "RootFoo", 1)
 	rootFoo2 := findIdentifierByText(t, main, "RootFoo", 2)
 	calls := 0
-	matchingDesc := newPackageSourceFileDescriptor("cache-fixture", sourceFileNameMatcher("/source.d.ts", &calls))
+	matchingDesc := newPackageSourceFileDescriptor(testDescriptorSourceFile, "cache-fixture", sourceFileNameMatcher("/source.d.ts", &calls))
 
 	if !tp.IsNodeReferenceToModuleExport(rootFoo1, matchingDesc, "Foo") {
 		t.Fatal("expected first Foo reference to match")
@@ -144,7 +150,7 @@ func TestIsNodeReferenceToModuleExport_CachesBySymbolDescriptorAndMember(t *test
 		t.Fatalf("expected resolved-symbol cache hit, matcher calls increased from %d to %d", firstCallCount, calls)
 	}
 
-	nonMatchingDesc := newPackageSourceFileDescriptor("cache-fixture", sourceFileNameMatcher("/other.d.ts", nil))
+	nonMatchingDesc := newPackageSourceFileDescriptor(testDescriptorOtherFile, "cache-fixture", sourceFileNameMatcher("/other.d.ts", nil))
 	if tp.IsNodeReferenceToModuleExport(rootFoo1, nonMatchingDesc, "Foo") {
 		t.Fatal("expected a different source descriptor not to reuse the cached match")
 	}
@@ -157,7 +163,7 @@ func BenchmarkIsNodeReferenceToModuleExport(b *testing.B) {
 	tp, sourceFiles, done := moduleExportReferenceFixture(b)
 	defer done()
 
-	desc := newPackageSourceFileDescriptor("cache-fixture", sourceFileNameMatcher("/source.d.ts", nil))
+	desc := newPackageSourceFileDescriptor(testDescriptorSourceFile, "cache-fixture", sourceFileNameMatcher("/source.d.ts", nil))
 	rootFoo := findIdentifierByText(b, sourceFiles["/.src/main.ts"], "RootFoo", 1)
 
 	b.ResetTimer()

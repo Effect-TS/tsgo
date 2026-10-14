@@ -167,9 +167,9 @@ func isRemovableZeroDuration(tp *typeparser.TypeParser, node *ast.Node, version 
 		unit := callee.AsPropertyAccessExpression().Name().Text()
 		switch unit {
 		case "nanos", "micros":
-			return tp.IsNodeReferenceToEffectDurationModuleApi(callee, unit) && isZeroDurationNumber(call.Arguments.Nodes[0], true)
+			return isZeroDurationNumber(call.Arguments.Nodes[0], true) && tp.IsNodeReferenceToEffectDurationModuleApi(callee, unit)
 		case "millis", "seconds", "minutes", "hours", "days", "weeks":
-			return tp.IsNodeReferenceToEffectDurationModuleApi(callee, unit) && isZeroDurationNumber(call.Arguments.Nodes[0], false)
+			return isZeroDurationNumber(call.Arguments.Nodes[0], false) && tp.IsNodeReferenceToEffectDurationModuleApi(callee, unit)
 		}
 	}
 	return false

@@ -79,13 +79,13 @@ func AnalyzeSchemaUnionOfLiterals(tp *typeparser.TypeParser, c *checker.Checker,
 func analyzeSchemaUnionOfLiteralsNode(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile, node *ast.Node) (SchemaUnionOfLiteralsMatch, bool) {
 	call := node.AsCallExpression()
 
-	// Check if this is Schema.Union
-	if !tp.IsNodeReferenceToEffectSchemaModuleApi(call.Expression, "Union") {
+	// Must have at least 2 arguments
+	if call.Arguments == nil || len(call.Arguments.Nodes) < 2 {
 		return SchemaUnionOfLiteralsMatch{}, false
 	}
 
-	// Must have at least 2 arguments
-	if call.Arguments == nil || len(call.Arguments.Nodes) < 2 {
+	// Check if this is Schema.Union
+	if !tp.IsNodeReferenceToEffectSchemaModuleApi(call.Expression, "Union") {
 		return SchemaUnionOfLiteralsMatch{}, false
 	}
 

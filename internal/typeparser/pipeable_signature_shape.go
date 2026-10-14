@@ -73,6 +73,10 @@ func comparePipeableSignatureTypes(tp *TypeParser, dataFirst *checker.Signature,
 	if subjectIndex < 0 || subjectIndex >= len(leftParameters) {
 		return false
 	}
+	rightParameters := candidate.Parameters()
+	if len(rightParameters) != len(leftParameters)-1 {
+		return false
+	}
 
 	candidateReturn := c.GetReturnTypeOfSignature(candidate)
 	if candidateReturn == nil {
@@ -107,10 +111,6 @@ func comparePipeableSignatureTypes(tp *TypeParser, dataFirst *checker.Signature,
 		return false
 	}
 
-	rightParameters := candidate.Parameters()
-	if len(rightParameters) != len(leftParameters)-1 {
-		return false
-	}
 	rightIndex := 0
 	for leftIndex, leftParameter := range leftParameters {
 		if leftIndex == subjectIndex {
@@ -558,11 +558,11 @@ func isNoInferAliasDeclaration(tp *TypeParser, declaration *ast.Node) bool {
 	}
 	conditional := indexed.IndexType.AsConditionalTypeNode()
 	return binder != nil &&
-		isTypeParameterTypeNode(tp, indexed.ObjectType.AsTupleTypeNode().Elements.Nodes[0], binder) &&
-		isTypeParameterTypeNode(tp, conditional.CheckType, binder) &&
 		conditional.ExtendsType != nil && conditional.ExtendsType.Kind == ast.KindAnyKeyword &&
 		isNumericLiteralTypeNode(conditional.TrueType, "0") &&
-		conditional.FalseType != nil && conditional.FalseType.Kind == ast.KindNeverKeyword
+		conditional.FalseType != nil && conditional.FalseType.Kind == ast.KindNeverKeyword &&
+		isTypeParameterTypeNode(tp, indexed.ObjectType.AsTupleTypeNode().Elements.Nodes[0], binder) &&
+		isTypeParameterTypeNode(tp, conditional.CheckType, binder)
 }
 
 func isTypeParameterTypeNode(tp *TypeParser, node *ast.Node, binder *ast.Symbol) bool {

@@ -22,6 +22,42 @@ func (tp *TypeParser) IsPipeableType(t *checker.Type) bool {
 	})
 }
 
+// An object literal's type has only its own properties plus those of the global
+// Object interface. An array literal's type is an array or tuple whose members
+// come from Array or ReadonlyArray and Object. The global interfaces are read
+// through their declared types so members inherited from augmented base
+// interfaces count.
+func (tp *TypeParser) LiteralCannotBePipeable(node *ast.Node) bool {
+	if tp == nil || tp.checker == nil || node == nil {
+		return false
+	}
+	node = ast.SkipParentheses(node)
+	switch node.Kind {
+	case ast.KindObjectLiteralExpression:
+		for _, member := range node.AsObjectLiteralExpression().Properties.Nodes {
+			name := member.Name()
+			if member.Kind == ast.KindSpreadAssignment || name == nil || name.Kind == ast.KindComputedPropertyName || ast.GetTextOfPropertyName(name) == "pipe" {
+				return false
+			}
+		}
+		return !tp.globalInterfaceHasPipe("Object")
+	case ast.KindArrayLiteralExpression:
+		return !tp.globalInterfaceHasPipe("Object") && !tp.globalInterfaceHasPipe("Array") && !tp.globalInterfaceHasPipe("ReadonlyArray")
+	}
+	return false
+}
+
+func (tp *TypeParser) globalInterfaceHasPipe(name string) bool {
+	return Cached(&tp.links.GlobalInterfaceHasPipe, name, func() bool {
+		symbol := tp.checker.GetGlobalSymbol(name, ast.SymbolFlagsType, nil)
+		if symbol == nil {
+			return false
+		}
+		declared := tp.checker.GetDeclaredTypeOfSymbol(symbol)
+		return declared != nil && tp.checker.GetPropertyOfType(declared, "pipe") != nil
+	})
+}
+
 // IsSafelyPipeableCallee returns true if a callee expression can be safely
 // extracted into a pipe argument without losing `this` context.
 // This is used by the missedPipeableOpportunity rule to determine which

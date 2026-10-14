@@ -128,7 +128,7 @@ func analyzeAllOfMapToForEachCall(tp *typeparser.TypeParser, c *checker.Checker,
 	if allCall == nil || allCall.Expression == nil || allCall.Arguments == nil || len(allCall.Arguments.Nodes) < 1 || len(allCall.Arguments.Nodes) > 2 {
 		return AllOfMapToForEachMatch{}, false
 	}
-	if !tp.IsNodeReferenceToEffectModuleApi(allCall.Expression, "all") || containsSpreadElement(allCall.Arguments.Nodes) {
+	if containsSpreadElement(allCall.Arguments.Nodes) || !tp.IsNodeReferenceToEffectModuleApi(allCall.Expression, "all") {
 		return AllOfMapToForEachMatch{}, false
 	}
 

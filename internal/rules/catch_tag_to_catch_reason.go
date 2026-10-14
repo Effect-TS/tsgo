@@ -188,6 +188,10 @@ func analyzeCatchTagToCatchReasonHandler(tp *typeparser.TypeParser, c *checker.C
 	if parameter == nil || parameter.Name() == nil || parameter.Name().Kind != ast.KindIdentifier {
 		return catchTagToCatchReasonHandler{}, false
 	}
+	dispatch := returning.Dispatch()
+	if dispatch == nil || dispatch.Branches().Len() == 0 || dispatch.Fallback() == nil {
+		return catchTagToCatchReasonHandler{}, false
+	}
 	parameterSymbol := tp.GetSymbolAtLocation(parameter.Name())
 	if parameterSymbol == nil {
 		return catchTagToCatchReasonHandler{}, false
@@ -198,10 +202,6 @@ func analyzeCatchTagToCatchReasonHandler(tp *typeparser.TypeParser, c *checker.C
 	}
 
 	dispatchRefs := make(map[*ast.Node]struct{})
-	dispatch := returning.Dispatch()
-	if dispatch == nil || dispatch.Branches().Len() == 0 || dispatch.Fallback() == nil {
-		return catchTagToCatchReasonHandler{}, false
-	}
 	tagSubject := dispatch.CommonTagSubject(tp)
 	if tagSubject == nil || !isResultDispatchTagReference(tp, c, tagSubject, parameterSymbol) {
 		return catchTagToCatchReasonHandler{}, false

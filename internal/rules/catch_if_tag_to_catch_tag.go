@@ -48,7 +48,7 @@ func AnalyzeCatchIfTagToCatchTag(tp *typeparser.TypeParser, c *checker.Checker, 
 	for _, flow := range tp.PipingFlows(sf, true).All() {
 		for index := range flow.Transformations().All() {
 			transformation := flow.Transformations().At(index)
-			if transformation.Callee() == nil || !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchIf") || transformation.Args().Len() != 2 {
+			if transformation.Callee() == nil || transformation.Args().Len() != 2 || !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchIf") {
 				continue
 			}
 			tag, ok := catchIfTagPredicate(tp, c, transformation.Args().At(0))

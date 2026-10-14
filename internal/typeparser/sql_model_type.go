@@ -5,7 +5,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
-var sqlModelModuleDescriptor = newPackageSourceFileDescriptor("@effect/sql", isSqlModelTypeSourceFile)
+var sqlModelModuleDescriptor = newPackageSourceFileDescriptor(moduleDescriptorSqlModel, "@effect/sql", isSqlModelTypeSourceFile)
 
 // isSqlModelTypeSourceFile checks if a source file is @effect/sql Model module
 // by verifying it exports "Class", "makeRepository", and "makeDataLoaders".

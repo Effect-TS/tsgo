@@ -46,6 +46,12 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 		}
 	}
 
+	return CachedNode(&tp.links.DataFirstOrLastCall, node, func() *ParsedDataFirstOrLastCall {
+		return tp.parseDataFirstOrLastCall(node, call)
+	})
+}
+
+func (tp *TypeParser) parseDataFirstOrLastCall(node *ast.Node, call *ast.CallExpression) *ParsedDataFirstOrLastCall {
 	c := tp.checker
 	resolved := c.GetResolvedSignature(node)
 	if resolved == nil {
@@ -86,16 +92,18 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 
 	var matched *ParsedDataFirstOrLastCall
 	for _, subjectIndex := range subjectIndexes {
-		subjectType := tp.GetTypeAtLocation(call.Arguments.Nodes[subjectIndex])
-		if subjectType == nil {
-			continue
-		}
 		args := omitArgAt(call.Arguments.Nodes, subjectIndex)
-		argumentTypes := make([]*checker.Type, 0, len(args))
-		for _, arg := range args {
-			argumentTypes = append(argumentTypes, tp.GetTypeAtLocation(arg))
-		}
-		witness := &PipeableSignatureWitness{ArgumentTypes: argumentTypes, SubjectType: subjectType}
+		witness := newLazy(func() *PipeableSignatureWitness {
+			subjectType := tp.GetTypeAtLocation(call.Arguments.Nodes[subjectIndex])
+			if subjectType == nil {
+				return nil
+			}
+			argumentTypes := make([]*checker.Type, 0, len(args))
+			for _, arg := range args {
+				argumentTypes = append(argumentTypes, tp.GetTypeAtLocation(arg))
+			}
+			return &PipeableSignatureWitness{ArgumentTypes: argumentTypes, SubjectType: subjectType}
+		})
 
 		for _, candidate := range candidates {
 			if candidate == nil {
@@ -111,7 +119,13 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 					continue
 				}
 			}
-			if !MatchesPipeableSignature(tp, resolved, candidate, subjectIndex, witness) {
+			if !pipeableSignatureShapesMatch(tp, resolved, candidate, subjectIndex) {
+				continue
+			}
+			if witness.get() == nil {
+				break
+			}
+			if !MatchesPipeableSignature(tp, resolved, candidate, subjectIndex, witness.get()) {
 				continue
 			}
 

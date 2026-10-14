@@ -54,12 +54,12 @@ func AnalyzeCatchToIgnore(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 	for _, flow := range flows.All() {
 		for index := range flow.Transformations().All() {
 			transformation := flow.Transformations().At(index)
-			catchMethodName, ignoreMethodName, effectModuleNode, ok := catchToIgnoreMethods(tp, transformation.Callee())
-			if !ok {
+			if transformation.Args().Len() < 1 {
 				continue
 			}
 
-			if transformation.Args().Len() < 1 {
+			catchMethodName, ignoreMethodName, effectModuleNode, ok := catchToIgnoreMethods(tp, transformation.Callee())
+			if !ok {
 				continue
 			}
 

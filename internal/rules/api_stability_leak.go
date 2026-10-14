@@ -242,15 +242,15 @@ func (w *apiStabilityWalker) report(dependency typeparser.ApiStabilityDependency
 	if dependency.Symbol() == nil && dependency.Signature() == nil && dependency.Declaration() == nil {
 		return
 	}
-	if w.sameAsExport(dependency) {
-		return
-	}
 	key := apiStabilityOffenderKey{
 		symbol:      dependency.Symbol(),
 		signature:   dependency.Signature(),
 		declaration: dependency.Declaration(),
 	}
 	if w.offenders[key] {
+		return
+	}
+	if w.sameAsExport(dependency) {
 		return
 	}
 	w.offenders[key] = true

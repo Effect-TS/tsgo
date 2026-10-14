@@ -137,8 +137,7 @@ func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
 					}
 				}
 			}
-			symbol := ctx.TypeParser.GetSymbolAtLocation(node)
-			resolvedSymbol := ctx.TypeParser.ReferenceSymbolAtNode(node)
+			symbol, resolvedSymbol := ctx.TypeParser.SymbolAndReferenceSymbolAtNode(node)
 			useSymbol := selectedDeclaration == nil || !symbolHasDeclaration(symbol, selectedDeclaration) && !symbolHasDeclaration(resolvedSymbol, selectedDeclaration)
 			if stability.stability == "" && useSymbol {
 				stability = readSymbol(symbol)

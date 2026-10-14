@@ -50,11 +50,6 @@ func AnalyzeCatchToOrElseSucceed(tp *typeparser.TypeParser, _ *checker.Checker, 
 	flows := tp.PipingFlows(sf, true)
 	for _, flow := range flows.All() {
 		for _, transformation := range flow.Transformations().All() {
-			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catch") &&
-				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchAll") {
-				continue
-			}
-
 			if transformation.Args().Len() < 1 {
 				continue
 			}
@@ -73,6 +68,15 @@ func AnalyzeCatchToOrElseSucceed(tp *typeparser.TypeParser, _ *checker.Checker, 
 				continue
 			}
 
+			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catch") &&
+				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchAll") {
+				continue
+			}
+
+			if call.Arguments == nil || len(call.Arguments.Nodes) < 1 {
+				continue
+			}
+
 			if !tp.IsNodeReferenceToEffectModuleApi(call.Expression, "succeed") {
 				continue
 			}
@@ -85,10 +89,6 @@ func AnalyzeCatchToOrElseSucceed(tp *typeparser.TypeParser, _ *checker.Checker, 
 					calleeNameNode = prop.Name()
 					catchMethodName = prop.Name().Text()
 				}
-			}
-
-			if call.Arguments == nil || len(call.Arguments.Nodes) < 1 {
-				continue
 			}
 
 			matches = append(matches, CatchToOrElseSucceedMatch{

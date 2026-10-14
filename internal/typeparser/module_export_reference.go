@@ -7,27 +7,61 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
-type PackageSourceFileDescriptor struct {
-	PackageName       string
-	MatchesSourceFile func(*TypeParser, *checker.Checker, *ast.SourceFile) bool
-	cacheKey          *packageSourceFileDescriptorCacheKey
+type packageSourceFileDescriptor struct {
+	id                moduleDescriptorID
+	packageName       string
+	matchesSourceFile func(*TypeParser, *checker.Checker, *ast.SourceFile) bool
 }
 
-type packageSourceFileDescriptorCacheKey byte
+type moduleDescriptorID uint8
+
+const (
+	moduleDescriptorEffect moduleDescriptorID = iota
+	moduleDescriptorEffectPackage
+	moduleDescriptorLayer
+	moduleDescriptorSchema
+	moduleDescriptorParseResult
+	moduleDescriptorSchemaParser
+	moduleDescriptorPredicate
+	moduleDescriptorOption
+	moduleDescriptorDuration
+	moduleDescriptorEffectModel
+	moduleDescriptorSqlModel
+	moduleDescriptorContext
+	moduleDescriptorCause
+	moduleDescriptorData
+	moduleDescriptorVitestRunner
+	moduleDescriptorVitest
+	moduleDescriptorEffectVitest
+	moduleDescriptorCount
+)
+
+type moduleDescriptorMask uint32
+
+const maxModuleDescriptors = 32
+
+type moduleExportFilter struct {
+	checked        moduleDescriptorMask
+	hasDeclaration moduleDescriptorMask
+}
 
 type moduleExportReferenceCacheKey struct {
-	descriptor *packageSourceFileDescriptorCacheKey
+	descriptor moduleDescriptorID
 	memberName string
 }
 
 func newPackageSourceFileDescriptor(
+	id moduleDescriptorID,
 	packageName string,
 	matchesSourceFile func(*TypeParser, *checker.Checker, *ast.SourceFile) bool,
-) PackageSourceFileDescriptor {
-	return PackageSourceFileDescriptor{
-		PackageName:       packageName,
-		MatchesSourceFile: matchesSourceFile,
-		cacheKey:          new(packageSourceFileDescriptorCacheKey),
+) packageSourceFileDescriptor {
+	if id >= maxModuleDescriptors {
+		panic("typeparser: package source file descriptor id does not fit moduleDescriptorMask")
+	}
+	return packageSourceFileDescriptor{
+		id:                id,
+		packageName:       packageName,
+		matchesSourceFile: matchesSourceFile,
 	}
 }
 
@@ -37,19 +71,33 @@ func (tp *TypeParser) ReferenceSymbolAtNode(node *ast.Node) *ast.Symbol {
 	}
 
 	return CachedNode(&tp.links.ReferenceSymbol, node, func() *ast.Symbol {
-		sym := tp.GetSymbolAtLocation(node)
-		if sym == nil && node.Kind == ast.KindPropertyAccessExpression {
-			if prop := node.AsPropertyAccessExpression(); prop != nil && prop.Name() != nil {
-				sym = tp.GetSymbolAtLocation(prop.Name())
-			}
-		}
-
-		sym = tp.resolveAliasedSymbol(sym)
-		if node.Kind == ast.KindIdentifier && !ast.IsDeclarationName(node) {
-			return tp.resolveConstantAliasSymbol(sym)
-		}
-		return sym
+		return tp.referenceSymbolFrom(node, tp.GetSymbolAtLocation(node))
 	})
+}
+
+func (tp *TypeParser) SymbolAndReferenceSymbolAtNode(node *ast.Node) (*ast.Symbol, *ast.Symbol) {
+	symbol := tp.GetSymbolAtLocation(node)
+	if tp == nil || tp.checker == nil || node == nil {
+		return symbol, nil
+	}
+
+	return symbol, CachedNode(&tp.links.ReferenceSymbol, node, func() *ast.Symbol {
+		return tp.referenceSymbolFrom(node, symbol)
+	})
+}
+
+func (tp *TypeParser) referenceSymbolFrom(node *ast.Node, sym *ast.Symbol) *ast.Symbol {
+	if sym == nil && node.Kind == ast.KindPropertyAccessExpression {
+		if prop := node.AsPropertyAccessExpression(); prop != nil && prop.Name() != nil {
+			sym = tp.GetSymbolAtLocation(prop.Name())
+		}
+	}
+
+	sym = tp.resolveAliasedSymbol(sym)
+	if node.Kind == ast.KindIdentifier && !ast.IsDeclarationName(node) {
+		return tp.resolveConstantAliasSymbol(sym)
+	}
+	return sym
 }
 
 func (tp *TypeParser) resolveConstantAliasSymbol(sym *ast.Symbol) *ast.Symbol {
@@ -92,18 +140,17 @@ func (tp *TypeParser) IsSourceFileInPackage(sf *ast.SourceFile, packageName stri
 	return ok && strings.EqualFold(name, packageName)
 }
 
-func (tp *TypeParser) IsNodeReferenceToModuleExport(node *ast.Node, desc PackageSourceFileDescriptor, memberName string) bool {
+func (tp *TypeParser) IsNodeReferenceToModuleExport(node *ast.Node, desc packageSourceFileDescriptor, memberName string) bool {
 	sym := tp.ReferenceSymbolAtNode(node)
 	if sym == nil {
 		return false
 	}
-	// Exported descriptors built as struct literals have no stable matcher identity.
-	if desc.cacheKey == nil {
-		return tp.isSymbolReferenceToModuleExport(sym, desc, memberName)
+	if !tp.symbolHasDeclarationInModuleCached(sym, desc) {
+		return false
 	}
 
 	answers := tp.links.ModuleExportReference.Get(sym)
-	key := moduleExportReferenceCacheKey{descriptor: desc.cacheKey, memberName: memberName}
+	key := moduleExportReferenceCacheKey{descriptor: desc.id, memberName: memberName}
 	if answer, ok := (*answers)[key]; ok {
 		return answer
 	}
@@ -115,16 +162,44 @@ func (tp *TypeParser) IsNodeReferenceToModuleExport(node *ast.Node, desc Package
 	return answer
 }
 
-func (tp *TypeParser) isSymbolReferenceToModuleExport(sym *ast.Symbol, desc PackageSourceFileDescriptor, memberName string) bool {
+func (tp *TypeParser) symbolHasDeclarationInModuleCached(sym *ast.Symbol, desc packageSourceFileDescriptor) bool {
+	filter := tp.links.ModuleExportFilter.Get(sym)
+	bit := moduleDescriptorMask(1) << desc.id
+	if filter.checked&bit == 0 {
+		filter.checked |= bit
+		if tp.symbolHasDeclarationInModule(sym, desc) {
+			filter.hasDeclaration |= bit
+		}
+	}
+	return filter.hasDeclaration&bit != 0
+}
+
+func (tp *TypeParser) symbolHasDeclarationInModule(sym *ast.Symbol, desc packageSourceFileDescriptor) bool {
 	for _, decl := range ast.TSGetSymbolDeclarations(sym) {
 		if decl == nil {
 			continue
 		}
 		sf := ast.GetSourceFileOfNode(decl)
-		if sf == nil || !tp.IsSourceFileInPackage(sf, desc.PackageName) {
+		if sf == nil || !tp.IsSourceFileInPackage(sf, desc.packageName) {
 			continue
 		}
-		if desc.MatchesSourceFile != nil && !desc.MatchesSourceFile(tp, tp.checker, sf) {
+		if desc.matchesSourceFile == nil || desc.matchesSourceFile(tp, tp.checker, sf) {
+			return true
+		}
+	}
+	return false
+}
+
+func (tp *TypeParser) isSymbolReferenceToModuleExport(sym *ast.Symbol, desc packageSourceFileDescriptor, memberName string) bool {
+	for _, decl := range ast.TSGetSymbolDeclarations(sym) {
+		if decl == nil {
+			continue
+		}
+		sf := ast.GetSourceFileOfNode(decl)
+		if sf == nil || !tp.IsSourceFileInPackage(sf, desc.packageName) {
+			continue
+		}
+		if desc.matchesSourceFile != nil && !desc.matchesSourceFile(tp, tp.checker, sf) {
 			continue
 		}
 		moduleSym := checker.Checker_getSymbolOfDeclaration(tp.checker, sf.AsNode())
@@ -141,24 +216,10 @@ func (tp *TypeParser) isSymbolReferenceToModuleExport(sym *ast.Symbol, desc Pack
 	return false
 }
 
-func (tp *TypeParser) IsNodeReferenceToModule(node *ast.Node, desc PackageSourceFileDescriptor) bool {
+func (tp *TypeParser) IsNodeReferenceToModule(node *ast.Node, desc packageSourceFileDescriptor) bool {
 	sym := tp.ReferenceSymbolAtNode(node)
 	if sym == nil {
 		return false
 	}
-
-	for _, decl := range ast.TSGetSymbolDeclarations(sym) {
-		if decl == nil {
-			continue
-		}
-		sf := ast.GetSourceFileOfNode(decl)
-		if sf == nil || !tp.IsSourceFileInPackage(sf, desc.PackageName) {
-			continue
-		}
-		if desc.MatchesSourceFile == nil || desc.MatchesSourceFile(tp, tp.checker, sf) {
-			return true
-		}
-	}
-
-	return false
+	return tp.symbolHasDeclarationInModuleCached(sym, desc)
 }

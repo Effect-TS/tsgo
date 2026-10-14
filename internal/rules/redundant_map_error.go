@@ -95,12 +95,18 @@ func analyzeRedundantMapErrorFlowCandidate(tp *typeparser.TypeParser, sf *ast.So
 	if lastTransform.Callee() == nil || lastTransform.Args().Len() == 0 {
 		return redundantMapErrorCandidate{}, nil, nil, false
 	}
-	if !tp.IsNodeReferenceToEffectModuleApi(lastTransform.Callee(), "mapError") {
-		return redundantMapErrorCandidate{}, nil, nil, false
-	}
 
 	yieldExpr := enclosingYieldExpression(flow.Node())
 	if yieldExpr == nil || yieldExpr.Expression == nil || yieldExpr.Expression != flow.Node() || yieldExpr.AsteriskToken == nil {
+		return redundantMapErrorCandidate{}, nil, nil, false
+	}
+
+	mapperNode := unwrapTransparentExpression(lastTransform.Args().At(0))
+	mapperText := nodeSourceText(sf, mapperNode)
+	if mapperNode == nil || mapperText == "" {
+		return redundantMapErrorCandidate{}, nil, nil, false
+	}
+	if !tp.IsNodeReferenceToEffectModuleApi(lastTransform.Callee(), "mapError") {
 		return redundantMapErrorCandidate{}, nil, nil, false
 	}
 	if tp.GetEffectContextFlags(yieldExpr.AsNode())&typeparser.EffectContextFlagCanYieldEffect == 0 {
@@ -114,12 +120,6 @@ func analyzeRedundantMapErrorFlowCandidate(tp *typeparser.TypeParser, sf *ast.So
 
 	genCallNode := enclosingGeneratorCall(genFn.AsNode())
 	if genCallNode == nil {
-		return redundantMapErrorCandidate{}, nil, nil, false
-	}
-
-	mapperNode := unwrapTransparentExpression(lastTransform.Args().At(0))
-	mapperText := nodeSourceText(sf, mapperNode)
-	if mapperNode == nil || mapperText == "" {
 		return redundantMapErrorCandidate{}, nil, nil, false
 	}
 
@@ -152,12 +152,11 @@ func analyzeRedundantGeneratorMapErrorCandidate(tp *typeparser.TypeParser, c *ch
 		if expr == nil || expr.Kind != ast.KindYieldExpression {
 			return false
 		}
-		if tp.GetEffectContextFlags(expr)&typeparser.EffectContextFlagCanYieldEffect == 0 || tp.GetEffectYieldGeneratorFunction(expr) != generatorFunction {
-			return false
-		}
-
 		yieldExpr := expr.AsYieldExpression()
 		if yieldExpr == nil || yieldExpr.AsteriskToken == nil || yieldExpr.Expression == nil {
+			return false
+		}
+		if tp.GetEffectContextFlags(expr)&typeparser.EffectContextFlagCanYieldEffect == 0 || tp.GetEffectYieldGeneratorFunction(expr) != generatorFunction {
 			return false
 		}
 

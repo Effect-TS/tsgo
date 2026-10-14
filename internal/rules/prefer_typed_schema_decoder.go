@@ -69,18 +69,19 @@ func AnalyzePreferTypedSchemaDecoder(tp *typeparser.TypeParser, c *checker.Check
 	handledDecoderNames := make(map[*ast.Node]struct{})
 
 	for _, flow := range tp.PipingFlows(sf, false).All() {
-		inputNode := flow.Subject().Node()
-		inputType := flow.Subject().OutType()
-		for _, transformation := range flow.Transformations().All() {
+		for i, transformation := range flow.Transformations().All() {
 			callee, schema := schemaDecoderTransformation(transformation)
-			if callee != nil && schema != nil {
-				if match := analyzeTypedSchemaDecoderApplication(tp, c, sf, callee, schema, inputNode, inputType); match != nil {
-					matches = append(matches, *match)
-					handledDecoderNames[match.DecoderName] = struct{}{}
-				}
+			if callee == nil || schema == nil {
+				continue
 			}
-			inputNode = nil
-			inputType = transformation.OutType()
+			var inputNode *ast.Node
+			if i == 0 {
+				inputNode = flow.Subject().Node()
+			}
+			if match := analyzeTypedSchemaDecoderApplication(tp, c, sf, callee, schema, inputNode, flow.TransformationInputType(i)); match != nil {
+				matches = append(matches, *match)
+				handledDecoderNames[match.DecoderName] = struct{}{}
+			}
 		}
 	}
 
@@ -122,8 +123,15 @@ func schemaDecoderTransformation(transformation typeparser.PipingFlowTransformat
 }
 
 func analyzeTypedSchemaDecoderApplication(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, callee, schema, inputNode *ast.Node, inputType *checker.Type) *PreferTypedSchemaDecoderMatch {
+	nameNode := schemaDecoderNameNode(callee)
+	if nameNode == nil {
+		return nil
+	}
+	if tp.NodeCannotBeEffectLibraryType(schema) {
+		return nil
+	}
 	unknownName, typedName := matchUnknownSchemaDecoder(tp, callee)
-	if unknownName == "" || tp.NodeCannotBeEffectLibraryType(schema) {
+	if unknownName == "" {
 		return nil
 	}
 
@@ -148,10 +156,6 @@ func analyzeTypedSchemaDecoderApplication(tp *typeparser.TypeParser, c *checker.
 		return nil
 	}
 
-	nameNode := schemaDecoderNameNode(callee)
-	if nameNode == nil {
-		return nil
-	}
 	return &PreferTypedSchemaDecoderMatch{
 		SourceFile:  sf,
 		Location:    scanner.GetErrorRangeForNode(sf, nameNode),
