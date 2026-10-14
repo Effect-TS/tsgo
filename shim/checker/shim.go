@@ -215,6 +215,7 @@ type extra_Checker struct {
   iterationTypesCache map[checker.IterationTypesKey]checker.IterationTypes
   markerTypes collections.Set[*checker.Type]
   resolvingExplicitTypeOfSymbol collections.Set[*ast.Symbol]
+  constructorOrFunctionChecked collections.Set[*ast.Symbol]
   undefinedSymbol *ast.Symbol
   argumentsSymbol *ast.Symbol
   requireSymbol *ast.Symbol
@@ -1448,7 +1449,6 @@ type extra_ValueSymbolLinks struct {
   mapper *checker.TypeMapper
   nameType *checker.Type
   containingType *checker.Type
-  functionOrConstructorChecked bool
 }
 func ValueSymbolLinks_resolvedType(v *checker.ValueSymbolLinks) *checker.Type {
   return ((*extra_ValueSymbolLinks)(unsafe.Pointer(v))).resolvedType
