@@ -73,6 +73,7 @@ type EffectLinks struct {
 	ApiStabilitySurfaceSignature    core.LinkStore[*checker.Signature, apiStabilitySharedSurface]
 
 	ExtendsContextTag          core.LinkStore[*ast.Node, *ContextTagResult]
+	ExtendsDataError           core.LinkStore[*ast.Node, *DataErrorResult]
 	ExtendsDataTaggedError     core.LinkStore[*ast.Node, *DataTaggedErrorResult]
 	ExtendsEffectModelClass    core.LinkStore[*ast.Node, *EffectModelClassResult]
 	ExtendsEffectService       core.LinkStore[*ast.Node, *EffectServiceResult]

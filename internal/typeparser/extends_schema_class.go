@@ -6,9 +6,11 @@ import (
 
 // SchemaClassResult holds the parsed result of a class extending Schema.Class, Schema.Error or Schema.RequestClass.
 type SchemaClassResult struct {
-	className     *ast.Node // The class name identifier
-	selfTypeNode  *ast.Node // The Self type argument node (first type arg of the inner call)
-	brandTypeNode *ast.Node
+	className        *ast.Node // The class name identifier
+	selfTypeNode     *ast.Node // The Self type argument node (first type arg of the inner call)
+	brandTypeNode    *ast.Node
+	keyStringLiteral *ast.Node // The identifier arg from the inner call (first arg), or nil
+	fieldsNode       *ast.Node
 }
 
 func (r SchemaClassResult) ClassName() *ast.Node { return r.className }
@@ -16,6 +18,10 @@ func (r SchemaClassResult) ClassName() *ast.Node { return r.className }
 func (r SchemaClassResult) SelfTypeNode() *ast.Node { return r.selfTypeNode }
 
 func (r SchemaClassResult) BrandTypeNode() *ast.Node { return r.brandTypeNode }
+
+func (r SchemaClassResult) KeyStringLiteral() *ast.Node { return r.keyStringLiteral }
+
+func (r SchemaClassResult) FieldsNode() *ast.Node { return r.fieldsNode }
 
 // ExtendsSchemaClass checks if a class declaration extends Schema.Class<Self>("name")({}).
 // It detects the double-call pattern:
@@ -124,10 +130,25 @@ func (tp *TypeParser) extendsSchemaClassLike(classNode *ast.Node, memberName str
 			continue
 		}
 
+		var keyStringLiteral *ast.Node
+		if innerCall.Arguments != nil && len(innerCall.Arguments.Nodes) > 0 {
+			arg := innerCall.Arguments.Nodes[0]
+			if ast.IsStringLiteral(arg) {
+				keyStringLiteral = arg
+			}
+		}
+
+		var fieldsNode *ast.Node
+		if outerCall.Arguments != nil && len(outerCall.Arguments.Nodes) > 0 {
+			fieldsNode = outerCall.Arguments.Nodes[0]
+		}
+
 		return &SchemaClassResult{
-			className:     classNode.Name(),
-			selfTypeNode:  innerCall.TypeArguments.Nodes[0],
-			brandTypeNode: brandTypeNode,
+			className:        classNode.Name(),
+			selfTypeNode:     innerCall.TypeArguments.Nodes[0],
+			brandTypeNode:    brandTypeNode,
+			keyStringLiteral: keyStringLiteral,
+			fieldsNode:       fieldsNode,
 		}
 	}
 

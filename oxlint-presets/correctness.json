@@ -10,6 +10,7 @@
     "effecttsgo/class-self-mismatch": "warn",
     "effecttsgo/duplicate-package": "warn",
     "effecttsgo/effect-fn-implicit-any": "warn",
+    "effecttsgo/error-payload-shadows-name": "warn",
     "effecttsgo/experimental-api-usage": "warn",
     "effecttsgo/floating-effect": "warn",
     "effecttsgo/floating-effect-in-vitest": "warn",

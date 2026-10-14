@@ -11,6 +11,7 @@ type SchemaTaggedResult struct {
 	brandTypeNode    *ast.Node
 	keyStringLiteral *ast.Node // The identifier arg from the inner call (first arg), or nil
 	tagStringLiteral *ast.Node // The tag arg from the outer call (first arg), or nil
+	fieldsNode       *ast.Node
 }
 
 func (r SchemaTaggedResult) ClassName() *ast.Node { return r.className }
@@ -22,6 +23,8 @@ func (r SchemaTaggedResult) BrandTypeNode() *ast.Node { return r.brandTypeNode }
 func (r SchemaTaggedResult) KeyStringLiteral() *ast.Node { return r.keyStringLiteral }
 
 func (r SchemaTaggedResult) TagStringLiteral() *ast.Node { return r.tagStringLiteral }
+
+func (r SchemaTaggedResult) FieldsNode() *ast.Node { return r.fieldsNode }
 
 // extendsSchemaTagged checks if a class declaration extends Schema.<memberName>
 // with the double-call pattern:
@@ -114,12 +117,18 @@ func (tp *TypeParser) extendsSchemaTagged(classNode *ast.Node, memberName string
 			}
 		}
 
+		var fieldsNode *ast.Node
+		if outerCall.Arguments != nil && len(outerCall.Arguments.Nodes) > 1 {
+			fieldsNode = outerCall.Arguments.Nodes[1]
+		}
+
 		return &SchemaTaggedResult{
 			className:        classNode.Name(),
 			selfTypeNode:     innerCall.TypeArguments.Nodes[0],
 			brandTypeNode:    brandTypeNode,
 			keyStringLiteral: keyStringLiteral,
 			tagStringLiteral: tagStringLiteral,
+			fieldsNode:       fieldsNode,
 		}
 	}
 

@@ -57,6 +57,7 @@
         "effectMapVoid": "suggestion",
         "effectSleepZeroToYieldNow": "suggestion",
         "effectSucceedWithVoid": "suggestion",
+        "errorPayloadShadowsName": "suggestion",
         "experimentalApiUsage": "warning",
         "flatMapConditionalToFilterOrFail": "suggestion",
         "flatMapIgnoredParamToAndThen": "suggestion",
@@ -148,6 +149,7 @@
         "effectMapVoid": "error",
         "effectSleepZeroToYieldNow": "error",
         "effectSucceedWithVoid": "error",
+        "errorPayloadShadowsName": "error",
         "experimentalApiUsage": "error",
         "flatMapConditionalToFilterOrFail": "error",
         "flatMapIgnoredParamToAndThen": "error",
@@ -217,6 +219,7 @@
         "classSelfMismatch": "warning",
         "duplicatePackage": "warning",
         "effectFnImplicitAny": "warning",
+        "errorPayloadShadowsName": "warning",
         "experimentalApiUsage": "warning",
         "floatingEffect": "warning",
         "floatingEffectInVitest": "warning",
@@ -462,6 +465,30 @@
             "start": 78,
             "end": 83,
             "text": "Parameter `input` implicitly has type `any` in `Effect.fn`, `Effect.fnUntraced`, or `Effect.fnUntracedEager`. No parameter type is available from an explicit annotation or contextual function type. effect(effectFnImplicitAny)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "errorPayloadShadowsName",
+      "group": "correctness",
+      "description": "Detects error payload fields named `name` that shadow the error's own name",
+      "defaultSeverity": "suggestion",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377145
+      ],
+      "preview": {
+        "sourceText": "import { Data } from \"effect\"\n\nexport class ToolNotFound extends Data.TaggedError(\"ToolNotFound\")\u003c{ readonly name: string }\u003e {}\nnew ToolNotFound({ name: \"search\" }).name\n",
+        "diagnostics": [
+          {
+            "start": 109,
+            "end": 113,
+            "text": "The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)"
           }
         ]
       }

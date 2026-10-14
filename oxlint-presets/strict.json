@@ -32,6 +32,7 @@
     "effecttsgo/effect-map-void": "error",
     "effecttsgo/effect-sleep-zero-to-yield-now": "error",
     "effecttsgo/effect-succeed-with-void": "error",
+    "effecttsgo/error-payload-shadows-name": "error",
     "effecttsgo/experimental-api-usage": "error",
     "effecttsgo/flat-map-conditional-to-filter-or-fail": "error",
     "effecttsgo/flat-map-ignored-param-to-and-then": "error",
