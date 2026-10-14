@@ -92,30 +92,7 @@ func checkDeterministicKeyMatch(tp *typeparser.TypeParser, program checker.Progr
 		return nil
 	}
 
-	// Get class name text
-	classNameText := scanner.GetTextOfNode(match.className)
-
-	// Get package info
-	pkgJson := tp.PackageJsonForSourceFile(sf)
-	if pkgJson == nil {
-		return nil
-	}
-	packageName, ok := pkgJson.Name.GetValue()
-	if !ok || packageName == "" {
-		return nil
-	}
-
-	// Get package directory from source file metadata
-	packageDirectory := getPackageJsonDirectory(program, c, sf)
-	if packageDirectory == "" {
-		return nil
-	}
-
-	// Get source file name
-	sourceFileName := string(sf.FileName())
-
-	// Compute expected key
-	expectedKey := keybuilder.CreateString(sourceFileName, packageName, packageDirectory, classNameText, match.target, keyPatterns)
+	expectedKey := keybuilder.CreateStringForSourceFile(program, tp, sf, scanner.GetTextOfNode(match.className), match.target, keyPatterns)
 	if expectedKey == "" {
 		return nil
 	}

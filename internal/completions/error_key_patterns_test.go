@@ -25,10 +25,12 @@ const errorKeyPatternTsConfig = `{
   }
 }`
 
-func taggedItems(t *testing.T, tsconfig string, source string) []*lsproto.CompletionItem {
+const namedPackageJson = `{ "name": "@effect/harness-effect-v4" }`
+
+func taggedItems(t *testing.T, tsconfig string, packageJson string, source string) []*lsproto.CompletionItem {
 	t.Helper()
 	content := "// @Filename: /tsconfig.json\n" + tsconfig + "\n" +
-		"// @Filename: /package.json\n{ \"name\": \"@effect/harness-effect-v4\" }\n" +
+		"// @Filename: /package.json\n" + packageJson + "\n" +
 		"// @Filename: /test.ts\n" + source + "/*1*/"
 
 	f, done := fourslash.NewFourslash(t, nil, content)
@@ -46,11 +48,12 @@ func TestErrorKeyPatterns(t *testing.T) {
 	t.Parallel()
 
 	cases := []struct {
-		name     string
-		tsconfig string
-		source   string
-		label    string
-		newText  string
+		name        string
+		tsconfig    string
+		packageJson string
+		source      string
+		label       string
+		newText     string
 	}{
 		{
 			name:     "Data.TaggedError uses error key pattern",
@@ -58,6 +61,14 @@ func TestErrorKeyPatterns(t *testing.T) {
 			source:   "import { Data } from \"effect\"\n\nexport class MyError extends Data.",
 			label:    `TaggedError("MyError")`,
 			newText:  `Data.TaggedError("@effect/harness-effect-v4/test/MyError")<{${0}}>{}`,
+		},
+		{
+			name:        "Data.TaggedError without package name omits package from key",
+			tsconfig:    errorKeyPatternTsConfig,
+			packageJson: `{ "version": "1.0.0" }`,
+			source:      "import { Data } from \"effect\"\n\nexport class MyError extends Data.",
+			label:       `TaggedError("MyError")`,
+			newText:     `Data.TaggedError("test/MyError")<{${0}}>{}`,
 		},
 		{
 			name:     "Data.TaggedClass ignores error key pattern",
@@ -106,7 +117,11 @@ func TestErrorKeyPatterns(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-			item := findCompletionItem(taggedItems(t, tc.tsconfig, tc.source), tc.label)
+			packageJson := tc.packageJson
+			if packageJson == "" {
+				packageJson = namedPackageJson
+			}
+			item := findCompletionItem(taggedItems(t, tc.tsconfig, packageJson, tc.source), tc.label)
 			if item == nil {
 				t.Fatalf("completion %q not found", tc.label)
 			}

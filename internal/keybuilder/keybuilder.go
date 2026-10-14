@@ -5,6 +5,9 @@ import (
 	"strings"
 
 	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/typeparser"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 )
 
@@ -38,13 +41,8 @@ func imul(a, b uint32) uint32 {
 // CreateString computes the expected key string for a class declaration.
 // It takes the source file name, package name, package directory, class name,
 // and target category, and returns the expected key string using the first
-// matching key pattern. Returns empty string if no pattern matches or if
-// package info is missing.
+// matching key pattern. Returns empty string if no pattern matches.
 func CreateString(sourceFileName, packageName, packageDirectory, className, target string, keyPatterns []etscore.KeyPattern) string {
-	if packageName == "" {
-		return ""
-	}
-
 	for _, keyPattern := range keyPatterns {
 		if keyPattern.Target != target {
 			continue
@@ -130,4 +128,30 @@ func CreateString(sourceFileName, packageName, packageDirectory, className, targ
 	}
 
 	return ""
+}
+
+func CreateStringForSourceFile(program checker.Program, tp *typeparser.TypeParser, sf *ast.SourceFile, className, target string, keyPatterns []etscore.KeyPattern) string {
+	var packageName string
+	if pkgJson := tp.PackageJsonForSourceFile(sf); pkgJson != nil {
+		packageName, _ = pkgJson.Name.GetValue()
+	}
+
+	rootDirectory := keyRootDirectory(program, sf)
+	if rootDirectory == "" {
+		return ""
+	}
+
+	return CreateString(string(sf.FileName()), packageName, rootDirectory, className, target, keyPatterns)
+}
+
+func keyRootDirectory(program checker.Program, sf *ast.SourceFile) string {
+	if packageDirectory := program.GetSourceFileMetaData(ast.SourceFilePath(sf)).PackageJsonDirectory; packageDirectory != "" {
+		return string(packageDirectory)
+	}
+	// The tsconfig directory comes before the common source directory because
+	// it does not move as files are added to the program.
+	if configFilePath := program.Options().ConfigFilePath; configFilePath != "" {
+		return tspath.GetDirectoryPath(string(configFilePath))
+	}
+	return string(program.CommonSourceDirectory())
 }

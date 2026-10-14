@@ -61,6 +61,9 @@ func TestCreateString(t *testing.T) {
 	identifierErrorPattern := []etscore.KeyPattern{
 		{Target: "error", Pattern: "identifier", SkipLeadingPath: []string{"src/"}},
 	}
+	identifierServicePattern := []etscore.KeyPattern{
+		{Target: "service", Pattern: "identifier", SkipLeadingPath: []string{"src/"}},
+	}
 
 	tests := []struct {
 		name             string
@@ -215,14 +218,44 @@ func TestCreateString(t *testing.T) {
 			expected:         "",
 		},
 		{
-			name:             "empty package name - returns empty",
-			sourceFileName:   "/project/src/file.ts",
+			name:             "empty package name - default pattern omits package",
+			sourceFileName:   "/project/src/services/AuthService.ts",
 			packageName:      "",
 			packageDirectory: "/project",
-			className:        "Foo",
+			className:        "MyService",
 			target:           "service",
 			keyPatterns:      defaultServicePattern,
-			expected:         "",
+			expected:         "services/AuthService/MyService",
+		},
+		{
+			name:             "empty package name - package-identifier pattern omits package",
+			sourceFileName:   "/project/src/services/AuthService.ts",
+			packageName:      "",
+			packageDirectory: "/project",
+			className:        "MyService",
+			target:           "service",
+			keyPatterns:      packageIdentifierServicePattern,
+			expected:         "AuthService/MyService",
+		},
+		{
+			name:             "empty package name - identifier pattern omits package",
+			sourceFileName:   "/project/src/services/AuthService.ts",
+			packageName:      "",
+			packageDirectory: "/project",
+			className:        "MyService",
+			target:           "service",
+			keyPatterns:      identifierServicePattern,
+			expected:         "MyService",
+		},
+		{
+			name:             "empty package name - default-hashed pattern omits package",
+			sourceFileName:   "/project/src/services/AuthService.ts",
+			packageName:      "",
+			packageDirectory: "/project",
+			className:        "MyService",
+			target:           "service",
+			keyPatterns:      defaultHashedServicePattern,
+			expected:         Cyrb53("services/AuthService/MyService"),
 		},
 		{
 			name:             "source file not under package directory - returns empty (skips)",
