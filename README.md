@@ -38,12 +38,12 @@ When running in dedicated diagnostics mode, the Effect diagnostics can be emitte
 <!-- supported-components:start -->
 ## Supported Package Versions
 
-The following target package versions are supported by `@effect/tsgo@0.52.0`:
+The following target package versions are supported by `@effect/tsgo@0.53.0`:
 
 | Component | Supported versions |
 |---|---|
-| TypeScript | `7.0.2`, `7.1.0-dev.20261012.1` |
-| Oxlint | `1.83.0`, `1.85.0`, `1.86.0`, `1.87.0` |
+| TypeScript | `7.0.2`, `7.1.0-dev.20261013.1` |
+| Oxlint | `1.83.0`, `1.85.0`, `1.86.0`, `1.87.0`, `1.88.0` |
 | oxlint-tsgolint | `7.0.2001`, `7.0.2003`, `7.0.2004` |
 <!-- supported-components:end -->
 
@@ -163,6 +163,8 @@ Some diagnostics are off by default or have a default severity of suggestion, bu
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/nested-effect-gen-yield.md"><code>nestedEffectGenYield</code></a></td><td>Warns when yielding a nested bare Effect.gen inside an existing Effect generator context</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/new-schema-class.md"><code>newSchemaClass</code></a></td><td>Suggests using Schema make instead of new for Schema classes</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/option-match-to-from-option.md"><code>optionMatchToFromOption</code></a></td><td>Suggests Effect.fromOption when Option.match or an Option tag conditional only converts Some to Effect.succeed and None to Effect.fail</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-barrel-import.md"><code>preferBarrelImport</code></a></td><td>Reports imports of individual modules from packages configured in barrelImportPackages that should be named imports from the package barrel</td></tr>
+    <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-namespace-import.md"><code>preferNamespaceImport</code></a></td><td>Reports named imports from packages configured in namespaceImportPackages that should be namespace imports</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-schema-tagged-error.md"><code>preferSchemaTaggedError</code></a></td><td>Suggests using Schema.TaggedError instead of Data.TaggedError</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-schema-type-property.md"><code>preferSchemaTypeProperty</code></a></td><td>Disallows Schema.Schema.Type&lt;typeof X&gt; in favor of typeof X.Type</td></tr>
     <tr><td><a href="https://github.com/Effect-TS/tsgo/blob/main/docs/rules/prefer-succeed-some-or-none.md"><code>preferSucceedSomeOrNone</code></a></td><td>Suggests using Effect.succeedNone or Effect.succeedSome instead of wrapping Option.none or Option.some with Effect.succeed</td></tr>
@@ -372,6 +374,26 @@ and aliases. For example, `effect/http/HttpClient` permits the entire module,
 while `effect/http/HttpClient#get` permits only its exported `get` API.
 Matching is case-sensitive and respects path segments: `effect/http` does not
 permit `effect/http-api`. Per-file `overrides` replace the base list.
+
+The import style options `namespaceImportPackages`, `barrelImportPackages`,
+`importAliases`, and `topLevelNamedReexports` can also be set per file in
+`overrides`. Auto-import, the import quick fixes, and the `preferNamespaceImport`
+and `preferBarrelImport` diagnostics all use the value resolved for the current
+file. A scoped value replaces the base value, so this override moves the
+`legacy/` folder from namespace imports to barrel imports:
+
+```json
+{
+  "namespaceImportPackages": ["effect"],
+  "overrides": [{
+    "include": ["src/legacy/**/*.ts"],
+    "options": {
+      "namespaceImportPackages": [],
+      "barrelImportPackages": ["effect"]
+    }
+  }]
+}
+```
 
 `apiStabilityLeak` ignores exports marked `@internal`. The tag is the compiler's
 `stripInternal` declaration-emit marker, and it is honoured wherever it is

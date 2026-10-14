@@ -113,6 +113,18 @@ func applyOverride(target *etscore.ResolvedEffectPluginOptions, override etscore
 	if override.Options.EffectFn != nil {
 		target.EffectFn = append([]string(nil), (*override.Options.EffectFn)...)
 	}
+	if override.Options.NamespaceImportPackages != nil {
+		target.NamespaceImportPackages = append([]string(nil), (*override.Options.NamespaceImportPackages)...)
+	}
+	if override.Options.BarrelImportPackages != nil {
+		target.BarrelImportPackages = append([]string(nil), (*override.Options.BarrelImportPackages)...)
+	}
+	if override.Options.ImportAliases != nil {
+		target.ImportAliases = cloneStringMap(*override.Options.ImportAliases)
+	}
+	if override.Options.TopLevelNamedReexports != nil {
+		target.TopLevelNamedReexports = *override.Options.TopLevelNamedReexports
+	}
 }
 
 func cloneOptions(config *etscore.EffectPluginOptions) *etscore.ResolvedEffectPluginOptions {

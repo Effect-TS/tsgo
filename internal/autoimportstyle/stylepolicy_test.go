@@ -4,10 +4,12 @@ import (
 	"testing"
 
 	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/importstyle"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/ls/autoimport"
 	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/shim/modulespecifiers"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 )
 
 func TestNewStylePolicy(t *testing.T) {
@@ -18,13 +20,13 @@ func TestNewStylePolicy(t *testing.T) {
 		ImportAliases:           map[string]string{"effect": "Fx"},
 	})
 
-	if !sp.namespacePackages["effect"] {
+	if sp.styles.PackageStyle("effect") != importstyle.StyleNamespace {
 		t.Error("expected 'effect' in namespace packages")
 	}
-	if sp.namespacePackages["Effect"] {
-		t.Error("expected case-insensitive key (lowercase) for 'Effect'")
+	if sp.styles.PackageStyle("EFFECT") != importstyle.StyleNamespace {
+		t.Error("expected case-insensitive match for 'EFFECT'")
 	}
-	if !sp.barrelPackages["@effect/platform"] {
+	if sp.styles.PackageStyle("@effect/platform") != importstyle.StyleBarrel {
 		t.Error("expected '@effect/platform' in barrel packages")
 	}
 	if sp.aliases["effect"] != "Fx" {
@@ -215,54 +217,134 @@ func TestApplyNamespaceReexport(t *testing.T) {
 	}
 }
 
+func newBarrelPolicy(options *etscore.ResolvedEffectPluginOptions, disk map[string]string) *stylePolicy {
+	sp := newStylePolicy(options)
+	sp.barrels = importstyle.NewBarrelReader(
+		func(tspath.RootedFilePath) *ast.SourceFile { return nil },
+		func(fileName tspath.RootedFilePath) (string, bool) {
+			text, ok := disk[string(fileName)]
+			return text, ok
+		},
+	)
+	return sp
+}
+
+func makeBarrelFix(moduleSpecifier string, moduleFileName string, name string) *autoimport.Fix {
+	fix := makeAddNewFix(lsproto.ImportKindNamed, moduleSpecifier, name)
+	fix.ModuleFileName = tspath.RootedFilePath(moduleFileName)
+	return fix
+}
+
 func TestApplyBarrelRewrite(t *testing.T) {
 	t.Parallel()
-	sp := newStylePolicy(&etscore.ResolvedEffectPluginOptions{
+	sp := newBarrelPolicy(&etscore.ResolvedEffectPluginOptions{
 		BarrelImportPackages: []string{"@effect/platform"},
-	})
+	}, map[string]string{"/node_modules/@effect/platform/dist/dts/index.d.ts": `export * as HttpClient from "./HttpClient.js"`})
 
 	export := makeExport("@effect/platform", "@effect/platform/HttpClient", "")
-	fix := makeAddNewFix(lsproto.ImportKindNamed, "@effect/platform/HttpClient", "request")
+	fix := makeBarrelFix("@effect/platform/HttpClient", "/node_modules/@effect/platform/dist/dts/HttpClient.d.ts", "request")
 
 	result := sp.Apply(export, fix)
 	if result == nil {
 		t.Fatal("expected non-nil result")
-	} else {
-		if result.ImportKind != lsproto.ImportKindNamed {
-			t.Errorf("expected ImportKindNamed, got %v", result.ImportKind)
+	}
+	if result.ImportKind != lsproto.ImportKindNamed {
+		t.Errorf("expected ImportKindNamed, got %v", result.ImportKind)
+	}
+	if result.ModuleSpecifier != "@effect/platform" {
+		t.Errorf("expected module specifier '@effect/platform', got %q", result.ModuleSpecifier)
+	}
+	if result.Name != "request" {
+		t.Errorf("expected name 'request' (original export name), got %q", result.Name)
+	}
+	if result.NamespacePrefix != "HttpClient" {
+		t.Errorf("expected namespace prefix 'HttpClient', got %q", result.NamespacePrefix)
+	}
+}
+
+func TestApplyBarrelRewriteUsesNearestForwardingBarrel(t *testing.T) {
+	t.Parallel()
+	sp := newBarrelPolicy(&etscore.ResolvedEffectPluginOptions{
+		BarrelImportPackages: []string{"acme"},
+	}, map[string]string{
+		"/node_modules/acme/dist/index.d.ts":       `export * as Http from "./HttpClient.ts"`,
+		"/node_modules/acme/dist/forms/index.d.ts": `export * as TextInput from "./TextInput.ts"`,
+	})
+
+	tests := []struct {
+		moduleSpecifier string
+		moduleFileName  string
+		barrel          string
+		prefix          string
+	}{
+		{"acme/HttpClient", "/node_modules/acme/dist/HttpClient.d.ts", "acme", "Http"},
+		{"acme/forms/TextInput", "/node_modules/acme/dist/forms/TextInput.d.ts", "acme/forms", "TextInput"},
+	}
+	for _, tt := range tests {
+		result := sp.Apply(makeExport("acme", tt.moduleSpecifier, ""), makeBarrelFix(tt.moduleSpecifier, tt.moduleFileName, "make"))
+		if result == nil {
+			t.Fatalf("%s: expected non-nil result", tt.moduleSpecifier)
 		}
-		if result.ModuleSpecifier != "@effect/platform" {
-			t.Errorf("expected module specifier '@effect/platform', got %q", result.ModuleSpecifier)
+		if result.ModuleSpecifier != tt.barrel {
+			t.Errorf("%s: expected module specifier %q, got %q", tt.moduleSpecifier, tt.barrel, result.ModuleSpecifier)
 		}
-		if result.Name != "request" {
-			t.Errorf("expected name 'request' (original export name), got %q", result.Name)
+		if result.NamespacePrefix != tt.prefix {
+			t.Errorf("%s: expected namespace prefix %q, got %q", tt.moduleSpecifier, tt.prefix, result.NamespacePrefix)
 		}
-		if result.NamespacePrefix != "HttpClient" {
-			t.Errorf("expected namespace prefix 'HttpClient', got %q", result.NamespacePrefix)
+	}
+}
+
+func TestApplyBarrelRewriteWithoutBarrelPassthrough(t *testing.T) {
+	t.Parallel()
+	sp := newBarrelPolicy(&etscore.ResolvedEffectPluginOptions{
+		BarrelImportPackages: []string{"acme"},
+	}, map[string]string{"/node_modules/acme/dist/index.d.ts": `export * as Button from "./Button.ts"`})
+
+	fix := makeBarrelFix("acme/Private", "/node_modules/acme/dist/Private.d.ts", "secret")
+	if result := sp.Apply(makeExport("acme", "acme/Private", ""), fix); result != fix {
+		t.Errorf("expected fix for a module no barrel forwards to be returned unchanged, got %#v", result)
+	}
+}
+
+func TestApplyBarrelRewriteFromBarrelPassthrough(t *testing.T) {
+	t.Parallel()
+	sp := newBarrelPolicy(&etscore.ResolvedEffectPluginOptions{
+		BarrelImportPackages: []string{"effect"},
+	}, map[string]string{"/node_modules/effect/dist/index.d.ts": `export * as Function from "./Function.js"`})
+
+	for _, tt := range []struct{ moduleSpecifier, moduleFileName string }{
+		{"effect", "/node_modules/effect/dist/index.d.ts"},
+		{"effect/testing", "/node_modules/effect/dist/testing/index.d.ts"},
+		{"effect/http", "/node_modules/effect/dist/http/index.d.ts"},
+	} {
+		export := makeExport("effect", tt.moduleSpecifier, "effect/Function")
+		export.Syntax = autoimport.ExportSyntaxNamed
+		fix := makeBarrelFix(tt.moduleSpecifier, tt.moduleFileName, "pipe")
+		if result := sp.Apply(export, fix); result != fix {
+			t.Errorf("%s: expected fix from a barrel to be returned unchanged, got %#v", tt.moduleSpecifier, result)
 		}
 	}
 }
 
 func TestApplyBarrelRewriteWithAlias(t *testing.T) {
 	t.Parallel()
-	sp := newStylePolicy(&etscore.ResolvedEffectPluginOptions{
+	sp := newBarrelPolicy(&etscore.ResolvedEffectPluginOptions{
 		BarrelImportPackages: []string{"@effect/platform"},
 		ImportAliases:        map[string]string{"@effect/platform": "Platform"},
-	})
+	}, map[string]string{"/node_modules/@effect/platform/dist/dts/index.d.ts": `export * as HttpClient from "./HttpClient.js"`})
 
 	export := makeExport("@effect/platform", "@effect/platform/HttpClient", "")
-	fix := makeAddNewFix(lsproto.ImportKindNamed, "@effect/platform/HttpClient", "request")
+	fix := makeBarrelFix("@effect/platform/HttpClient", "/node_modules/@effect/platform/dist/dts/HttpClient.d.ts", "request")
 
 	result := sp.Apply(export, fix)
 	if result == nil {
 		t.Fatal("expected non-nil result")
-	} else {
-		if result.Name != "request" {
-			t.Errorf("expected name 'request' (original export name), got %q", result.Name)
-		}
-		if result.NamespacePrefix != "Platform" {
-			t.Errorf("expected namespace prefix 'Platform', got %q", result.NamespacePrefix)
-		}
+	}
+	if result.Name != "request" {
+		t.Errorf("expected name 'request' (original export name), got %q", result.Name)
+	}
+	if result.NamespacePrefix != "Platform" {
+		t.Errorf("expected namespace prefix 'Platform', got %q", result.NamespacePrefix)
 	}
 }
 
@@ -284,12 +366,12 @@ func TestApplyNamespaceRewriteWithoutUsagePositionFallsBack(t *testing.T) {
 
 func TestApplyBarrelRewriteWithoutUsagePositionFallsBack(t *testing.T) {
 	t.Parallel()
-	sp := newStylePolicy(&etscore.ResolvedEffectPluginOptions{
+	sp := newBarrelPolicy(&etscore.ResolvedEffectPluginOptions{
 		BarrelImportPackages: []string{"@effect/platform"},
-	})
+	}, map[string]string{"/node_modules/@effect/platform/dist/dts/index.d.ts": `export * as HttpClient from "./HttpClient.js"`})
 
 	export := makeExport("@effect/platform", "@effect/platform/HttpClient", "")
-	fix := makeAddNewFix(lsproto.ImportKindNamed, "@effect/platform/HttpClient", "request")
+	fix := makeBarrelFix("@effect/platform/HttpClient", "/node_modules/@effect/platform/dist/dts/HttpClient.d.ts", "request")
 	fix.UsagePosition = nil
 
 	result := sp.Apply(export, fix)
@@ -415,56 +497,9 @@ func TestApplyNilInputs(t *testing.T) {
 	}
 }
 
-func TestPackageNameFromSpecifier(t *testing.T) {
-	t.Parallel()
-	tests := []struct {
-		input    string
-		expected string
-	}{
-		{"effect", "effect"},
-		{"effect/Effect", "effect"},
-		{"@scope/pkg", "@scope/pkg"},
-		{"@scope/pkg/sub", "@scope/pkg"},
-		{"@scope/pkg/sub/deep", "@scope/pkg"},
-		{"./local", ""},
-		{"/absolute", ""},
-		{"", ""},
-		{"@scope", "@scope"},
-	}
-
-	for _, tt := range tests {
-		result := packageNameFromSpecifier(tt.input)
-		if result != tt.expected {
-			t.Errorf("packageNameFromSpecifier(%q) = %q, want %q", tt.input, result, tt.expected)
-		}
-	}
-}
-
-func TestInferNamespaceName(t *testing.T) {
-	t.Parallel()
-	tests := []struct {
-		input    string
-		expected string
-	}{
-		{"effect/Effect", "Effect"},
-		{"effect", "effect"},
-		{"@scope/pkg/Foo", "Foo"},
-		{"@effect/platform/HttpClient", "HttpClient"},
-		{"", ""},
-		{"foo/", ""},
-	}
-
-	for _, tt := range tests {
-		result := inferNamespaceName(tt.input)
-		if result != tt.expected {
-			t.Errorf("inferNamespaceName(%q) = %q, want %q", tt.input, result, tt.expected)
-		}
-	}
-}
-
 func TestNewFixTransformerNilForEmptyPrefs(t *testing.T) {
 	t.Parallel()
-	transformer := NewFixTransformer(&etscore.ResolvedEffectPluginOptions{}, nil)
+	transformer := NewFixTransformer(&etscore.ResolvedEffectPluginOptions{}, nil, nil)
 	if transformer != nil {
 		t.Error("expected nil transformer for empty preferences")
 	}
@@ -474,7 +509,7 @@ func TestNewFixTransformerAppliesPolicy(t *testing.T) {
 	t.Parallel()
 	transformer := NewFixTransformer(&etscore.ResolvedEffectPluginOptions{
 		NamespaceImportPackages: []string{"effect"},
-	}, nil)
+	}, nil, nil)
 	if transformer == nil {
 		t.Fatal("expected non-nil transformer")
 	}
@@ -495,7 +530,7 @@ func TestNewFixTransformerPrefersExistingNamespaceUse(t *testing.T) {
 	t.Parallel()
 	transformer := NewFixTransformer(&etscore.ResolvedEffectPluginOptions{
 		NamespaceImportPackages: []string{"effect"},
-	}, nil)
+	}, nil, nil)
 	if transformer == nil {
 		t.Fatal("expected non-nil transformer")
 	}

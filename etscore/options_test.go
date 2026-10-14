@@ -129,6 +129,89 @@ func TestResolveForFile_AppliesMatchingScopesInOrder(t *testing.T) {
 	}
 }
 
+func TestParseFromPlugins_OverrideImportStyle(t *testing.T) {
+	plugins := makePlugins(makePluginMap(
+		"name", etscore.EffectPluginName,
+		"overrides", []any{
+			makePluginMap(
+				"include", []any{"src/legacy/**/*.ts"},
+				"options", makePluginMap(
+					"namespaceImportPackages", []any{},
+					"barrelImportPackages", []any{" Effect "},
+					"importAliases", makePluginMap("@Effect/Platform", "Platform"),
+					"topLevelNamedReexports", "FOLLOW",
+				),
+			),
+		},
+	))
+
+	opts := etscore.ParseFromPlugins(plugins)
+	if opts == nil || len(opts.Overrides) != 1 {
+		t.Fatalf("unexpected options: %+v", opts)
+	}
+	options := opts.Overrides[0].Options
+	if options.NamespaceImportPackages == nil || len(*options.NamespaceImportPackages) != 0 {
+		t.Errorf("NamespaceImportPackages = %v, want empty non-nil", options.NamespaceImportPackages)
+	}
+	if options.BarrelImportPackages == nil || !reflect.DeepEqual(*options.BarrelImportPackages, []string{"effect"}) {
+		t.Errorf("BarrelImportPackages = %v, want [effect]", options.BarrelImportPackages)
+	}
+	if options.ImportAliases == nil || !reflect.DeepEqual(*options.ImportAliases, map[string]string{"@effect/platform": "Platform"}) {
+		t.Errorf("ImportAliases = %v, want map[@effect/platform:Platform]", options.ImportAliases)
+	}
+	if options.TopLevelNamedReexports == nil || *options.TopLevelNamedReexports != etscore.TopLevelNamedReexportsFollow {
+		t.Errorf("TopLevelNamedReexports = %v, want follow", options.TopLevelNamedReexports)
+	}
+}
+
+func TestResolveForFile_OverridesImportStyle(t *testing.T) {
+	follow := etscore.TopLevelNamedReexportsFollow
+	opts := &etscore.EffectPluginOptions{
+		Diagnostics:             true,
+		NamespaceImportPackages: []string{"effect"},
+		ImportAliases:           map[string]string{"effect": "E"},
+		Overrides: []etscore.Override{
+			{
+				Include: []string{"src/legacy/**/*.ts"},
+				Options: etscore.OverrideOptions{
+					NamespaceImportPackages: &[]string{},
+					BarrelImportPackages:    &[]string{"effect"},
+					ImportAliases:           &map[string]string{},
+					TopLevelNamedReexports:  &follow,
+				},
+			},
+		},
+	}
+
+	legacy := pluginoptions.ResolveEffectPluginOptionsForSourceFile(opts, "/repo/src/legacy/example.ts", "/repo/tsconfig.json", true)
+	if len(legacy.NamespaceImportPackages) != 0 {
+		t.Errorf("legacy NamespaceImportPackages = %v, want []", legacy.NamespaceImportPackages)
+	}
+	if !reflect.DeepEqual(legacy.BarrelImportPackages, []string{"effect"}) {
+		t.Errorf("legacy BarrelImportPackages = %v, want [effect]", legacy.BarrelImportPackages)
+	}
+	if len(legacy.ImportAliases) != 0 {
+		t.Errorf("legacy ImportAliases = %v, want empty", legacy.ImportAliases)
+	}
+	if legacy.TopLevelNamedReexports != etscore.TopLevelNamedReexportsFollow {
+		t.Errorf("legacy TopLevelNamedReexports = %q, want follow", legacy.TopLevelNamedReexports)
+	}
+
+	other := pluginoptions.ResolveEffectPluginOptionsForSourceFile(opts, "/repo/src/app/example.ts", "/repo/tsconfig.json", true)
+	if !reflect.DeepEqual(other.NamespaceImportPackages, []string{"effect"}) {
+		t.Errorf("other NamespaceImportPackages = %v, want [effect]", other.NamespaceImportPackages)
+	}
+	if len(other.BarrelImportPackages) != 0 {
+		t.Errorf("other BarrelImportPackages = %v, want []", other.BarrelImportPackages)
+	}
+	if !reflect.DeepEqual(other.ImportAliases, map[string]string{"effect": "E"}) {
+		t.Errorf("other ImportAliases = %v, want map[effect:E]", other.ImportAliases)
+	}
+	if other.TopLevelNamedReexports == etscore.TopLevelNamedReexportsFollow {
+		t.Errorf("other TopLevelNamedReexports = follow, want unset")
+	}
+}
+
 func TestResolveForFile_ExcludeOnlyAffectsCurrentScope(t *testing.T) {
 	opts := &etscore.EffectPluginOptions{
 		Diagnostics:        true,

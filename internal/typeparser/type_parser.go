@@ -1,6 +1,7 @@
 package typeparser
 
 import (
+	"github.com/effect-ts/tsgo/internal/importstyle"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
@@ -50,6 +51,7 @@ type EffectLinks struct {
 	ModuleExportFilter     checker.SymbolLinkStore[moduleExportFilter]
 	PipeableSignatureShape core.LinkStore[pipeableSignatureShapeCacheKey, bool]
 	nativeArrayRegistry    *nativeArrayRegistry
+	barrelReader           *importstyle.BarrelReader
 	nativeArrayMember      core.LinkStore[*ast.Symbol, nativeArrayMember]
 	nativeObjectRegistry   *nativeObjectRegistry
 	nativeObjectMember     core.LinkStore[*ast.Symbol, nativeObjectMember]
@@ -128,6 +130,19 @@ func CachedNode[V any](store *checker.NodeLinkStore[V], node *ast.Node, compute 
 }
 
 // NewTypeParser builds a checker-backed TypeParser.
+// BarrelReader returns the checker's barrel cache, or nil when the program
+// cannot read files.
+func (tp *TypeParser) BarrelReader() *importstyle.BarrelReader {
+	if tp.links.barrelReader == nil {
+		program, ok := tp.program.(importstyle.ProgramFiles)
+		if !ok {
+			return nil
+		}
+		tp.links.barrelReader = importstyle.NewProgramBarrelReader(program)
+	}
+	return tp.links.barrelReader
+}
+
 func NewTypeParser(p checker.Program, c *checker.Checker) *TypeParser {
 	if p == nil {
 		panic("typeparser.NewTypeParser: nil program")

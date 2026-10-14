@@ -1,0 +1,15 @@
+==== /.src/preferBarrelImport_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 6:20 - 6:42
+Node: Record.keys({ a: 1 })
+Node Kind: KindCallExpression
+
+Subject: { a: 1 }
+Subject Type: { a: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Record.keys
+      args: (constant)
+      outType: "a"[]

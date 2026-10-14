@@ -60,6 +60,8 @@ var All = []rule.Rule{
 	GlobalRandomInEffect,
 	PreferEffectArray,
 	PreferEffectRecord,
+	PreferNamespaceImport,
+	PreferBarrelImport,
 	GlobalTimers,
 	GlobalTimersInEffect,
 	RunEffectInsideEffect,

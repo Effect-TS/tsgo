@@ -250,11 +250,8 @@ func ParseFromPlugins(value any) *EffectPluginOptions {
 
 		// Parse topLevelNamedReexports (default: "", getter resolves to "ignore")
 		if val, exists := getPluginValue("topLevelNamedReexports"); exists {
-			if s, ok := val.(string); ok {
-				normalized := strings.ToLower(s)
-				if normalized == "ignore" || normalized == "follow" {
-					result.TopLevelNamedReexports = TopLevelNamedReexportsMode(normalized)
-				}
+			if mode, ok := parseTopLevelNamedReexports(val); ok {
+				result.TopLevelNamedReexports = mode
 			}
 		}
 
@@ -262,6 +259,18 @@ func ParseFromPlugins(value any) *EffectPluginOptions {
 	}
 
 	return nil
+}
+
+func parseTopLevelNamedReexports(value any) (TopLevelNamedReexportsMode, bool) {
+	s, ok := value.(string)
+	if !ok {
+		return "", false
+	}
+	switch mode := TopLevelNamedReexportsMode(strings.ToLower(s)); mode {
+	case TopLevelNamedReexportsIgnore, TopLevelNamedReexportsFollow:
+		return mode, true
+	}
+	return "", false
 }
 
 func parseNormalizedStringArrayStrict(value any) ([]string, bool) {
@@ -387,6 +396,26 @@ func parseOverrideOptions(value any) OverrideOptions {
 	if value, exists := optionsMap("effectFn"); exists {
 		if variants, ok := parseStringArrayStrict(value); ok {
 			result.EffectFn = &variants
+		}
+	}
+	if value, exists := optionsMap("namespaceImportPackages"); exists {
+		if pkgs, ok := parseNormalizedStringArrayStrict(value); ok {
+			result.NamespaceImportPackages = &pkgs
+		}
+	}
+	if value, exists := optionsMap("barrelImportPackages"); exists {
+		if pkgs, ok := parseNormalizedStringArrayStrict(value); ok {
+			result.BarrelImportPackages = &pkgs
+		}
+	}
+	if value, exists := optionsMap("importAliases"); exists {
+		if aliases, ok := parseNormalizedStringMapStrict(value); ok {
+			result.ImportAliases = &aliases
+		}
+	}
+	if value, exists := optionsMap("topLevelNamedReexports"); exists {
+		if mode, ok := parseTopLevelNamedReexports(value); ok {
+			result.TopLevelNamedReexports = &mode
 		}
 	}
 
