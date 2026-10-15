@@ -197,18 +197,19 @@ test("marks removed channels, compiler changes, and missing results", () => {
   ))
 })
 
-test("rejects stock counter drift for a shared compiler version", () => {
+test("renders stock counter jitter as a half-range", () => {
+  const report = renderPerfReport([
+    makeCell("next", "base", "7.1.0-dev.20261014.1", [overhead(4447736, 80), overhead(4447736, 80)]),
+    makeCell("next", "head", "7.1.0-dev.20261014.1", [overhead(4447736, 80)], { ...stock, types: 4050967 })
+  ])
+  assert.ok(report.includes(
+    "- Stock counters, next: `7.1.0-dev.20261014.1` symbols 12,849,728 · types 4,050,966 (±1) · " +
+      "instantiations 14,151,659\n"
+  ))
+})
+
+test("rejects duplicate results for one channel side", () => {
   const samples = [overhead(4447736, 80)]
-  assert.throws(
-    () =>
-      renderPerfReport([
-        makeCell("next", "base", "7.1.0-dev.20261014.1", samples),
-        makeCell("next", "head", "7.1.0-dev.20261014.1", samples, { ...stock, types: 4050967 })
-      ]),
-    (error) =>
-      error instanceof PerfReportError &&
-      error.reason.startsWith("stock counters drifted for next (7.1.0-dev.20261014.1): types 4050966 vs 4050967")
-  )
   assert.throws(
     () =>
       renderPerfReport([
