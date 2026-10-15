@@ -28,7 +28,7 @@ jobs:
   matrix:
     name: Generate perf matrix
     if: github.event.action != 'closed' && !github.event.pull_request.draft
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: read
@@ -133,7 +133,7 @@ jobs:
     name: Perf report
     needs: [matrix, bench]
     if: always() && github.repository_owner == 'Effect-TS' && needs.matrix.result == 'success' && needs.bench.result != 'cancelled'
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: read
