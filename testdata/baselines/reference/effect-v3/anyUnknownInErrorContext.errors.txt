@@ -13,6 +13,9 @@ Having an unknown or any error type is not useful. Consider instead using specif
 /.src/anyUnknownInErrorContext.ts(17,35): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 /.src/anyUnknownInErrorContext.ts(18,17): warning TS377030: This has unknown in the error channel which is not recommended.
 Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+/.src/anyUnknownInErrorContext.ts(21,34): warning TS377030: This has unknown in the requirements channel and any in the error channel which is not recommended.
+Only service identifiers should appear in the requirements channel.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
 /.src/anyUnknownInErrorContext.ts(22,10): warning TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
 /.src/anyUnknownInErrorContext.ts(23,17): warning TS377030: This has any in the error channel which is not recommended.
@@ -25,7 +28,7 @@ Only service identifiers should appear in the requirements channel. effect(anyUn
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
 
 
-==== /.src/anyUnknownInErrorContext.ts (13 errors) ====
+==== /.src/anyUnknownInErrorContext.ts (14 errors) ====
     // @effect-v3
     // @effect-diagnostics anyUnknownInErrorContext:warning
     import { Effect, Layer } from "effect"
@@ -75,15 +78,22 @@ Having an unknown or any error type is not useful. Consider instead using specif
 !!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
     
     export const hasBothAnyUnknown = Effect.gen(function*() {
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~
       yield* Effect.context<unknown>()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
              ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
       return yield* Effect.fail<any>(42)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     ~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377030: This has any in the error channel which is not recommended.
 Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
     })
+    ~~
+!!! warning TS377030: This has unknown in the requirements channel and any in the error channel which is not recommended.
+Only service identifiers should appear in the requirements channel.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
     
     export const thisIsFine: Effect.Effect<void, number> = Effect.fail<any>(42) as any
     

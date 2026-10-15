@@ -40,27 +40,33 @@ Having an unknown or any error type is not useful. Consider instead using specif
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D9] (22:10-22:35) TS377030: This has unknown in the requirements channel which is not recommended.
-Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
-  Fix 0: "Disable anyUnknownInErrorContext for this line"
-  Fix 1: "Disable anyUnknownInErrorContext for entire file"
-
-[D10] (23:17-23:37) TS377030: This has any in the error channel which is not recommended.
+[D9] (21:34-24:3) TS377030: This has unknown in the requirements channel and any in the error channel which is not recommended.
+Only service identifiers should appear in the requirements channel.
 Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D11] (38:22-38:47) TS377030: This has unknown in the requirements channel which is not recommended.
+[D10] (22:10-22:35) TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D12] (39:42-39:54) TS377030: This has unknown in the requirements channel which is not recommended.
+[D11] (23:17-23:37) TS377030: This has any in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+  Fix 0: "Disable anyUnknownInErrorContext for this line"
+  Fix 1: "Disable anyUnknownInErrorContext for entire file"
+
+[D12] (38:22-38:47) TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D13] (40:68-40:80) TS377030: This has unknown in the requirements channel which is not recommended.
+[D13] (39:42-39:54) TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+  Fix 0: "Disable anyUnknownInErrorContext for this line"
+  Fix 1: "Disable anyUnknownInErrorContext for entire file"
+
+[D14] (40:68-40:80) TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
@@ -315,4 +321,10 @@ skipped by default
 skipped by default
 
 === [D13] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
 skipped by default

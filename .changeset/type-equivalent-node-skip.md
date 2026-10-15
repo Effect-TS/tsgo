@@ -16,3 +16,11 @@ export const shouldReport = Effect.try({
 ```
 
 A property access is now reported over the whole expression `promiseEffectHolder.current` instead of the name `current`.
+
+`anyUnknownInErrorContext` keeps only the innermost warning when nested expressions report the same problem. It used to drop an outer warning whenever any warning inside it reported something. Now it drops the outer warning only when an inner warning reports every channel the outer one does, with the same `any` or `unknown`. An outer `unknown` error channel that comes from an explicit type argument is still reported when the inner expressions only have `any`:
+
+```ts
+declare const anyFailure: Effect.Effect<number, any>
+// warnings on `Effect.withFiber(...)` (unknown in the error channel) and on `anyFailure` (any)
+export const keepsDifferentKind = Effect.withFiber<number, unknown>(() => anyFailure)
+```

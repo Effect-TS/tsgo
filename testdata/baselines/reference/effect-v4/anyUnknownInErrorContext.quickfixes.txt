@@ -40,28 +40,50 @@ Having an unknown or any error type is not useful. Consider instead using specif
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D9] (21:10-21:35) TS377030: This has unknown in the requirements channel which is not recommended.
-Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
-  Fix 0: "Disable anyUnknownInErrorContext for this line"
-  Fix 1: "Disable anyUnknownInErrorContext for entire file"
-
-[D10] (22:17-22:37) TS377030: This has any in the error channel which is not recommended.
+[D9] (20:34-23:3) TS377030: This has unknown in the requirements channel and any in the error channel which is not recommended.
+Only service identifiers should appear in the requirements channel.
 Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D11] (37:22-37:47) TS377030: This has unknown in the requirements channel which is not recommended.
+[D10] (21:10-21:35) TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D12] (38:42-38:54) TS377030: This has unknown in the requirements channel which is not recommended.
+[D11] (22:17-22:37) TS377030: This has any in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+  Fix 0: "Disable anyUnknownInErrorContext for this line"
+  Fix 1: "Disable anyUnknownInErrorContext for entire file"
+
+[D12] (37:22-37:47) TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D13] (39:68-39:80) TS377030: This has unknown in the requirements channel which is not recommended.
+[D13] (38:42-38:54) TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+  Fix 0: "Disable anyUnknownInErrorContext for this line"
+  Fix 1: "Disable anyUnknownInErrorContext for entire file"
+
+[D14] (39:68-39:80) TS377030: This has unknown in the requirements channel which is not recommended.
+Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+  Fix 0: "Disable anyUnknownInErrorContext for this line"
+  Fix 1: "Disable anyUnknownInErrorContext for entire file"
+
+[D15] (42:35-42:86) TS377030: This has unknown in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+  Fix 0: "Disable anyUnknownInErrorContext for this line"
+  Fix 1: "Disable anyUnknownInErrorContext for entire file"
+
+[D16] (42:75-42:85) TS377030: This has any in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+  Fix 0: "Disable anyUnknownInErrorContext for this line"
+  Fix 1: "Disable anyUnknownInErrorContext for entire file"
+
+[D17] (45:47-45:60) TS377030: This has any in the requirements channel and any in the error channel which is not recommended.
+Only service identifiers should appear in the requirements channel.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
@@ -113,6 +135,12 @@ export class Test {
 const effectUnkown = Effect.context<unknown>()
 const layerUnknown = Layer.effectDiscard(effectUnkown)
 export const composedLayerUnknown = Layer.empty.pipe(Layer.provide(layerUnknown))
+
+declare const anyFailure: Effect.Effect<number, any>
+export const keepsDifferentKind = Effect.withFiber<number, unknown>(() => anyFailure)
+
+declare const anyEverywhere: Effect.Effect<number, any, any>
+export const dropsCoveredOuter = Effect.orDie(anyEverywhere)
 
 
 === [D2] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
@@ -168,6 +196,12 @@ const effectUnkown = Effect.context<unknown>()
 const layerUnknown = Layer.effectDiscard(effectUnkown)
 export const composedLayerUnknown = Layer.empty.pipe(Layer.provide(layerUnknown))
 
+declare const anyFailure: Effect.Effect<number, any>
+export const keepsDifferentKind = Effect.withFiber<number, unknown>(() => anyFailure)
+
+declare const anyEverywhere: Effect.Effect<number, any, any>
+export const dropsCoveredOuter = Effect.orDie(anyEverywhere)
+
 
 === [D4] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
 skipped by default
@@ -221,6 +255,12 @@ export class Test {
 const effectUnkown = Effect.context<unknown>()
 const layerUnknown = Layer.effectDiscard(effectUnkown)
 export const composedLayerUnknown = Layer.empty.pipe(Layer.provide(layerUnknown))
+
+declare const anyFailure: Effect.Effect<number, any>
+export const keepsDifferentKind = Effect.withFiber<number, unknown>(() => anyFailure)
+
+declare const anyEverywhere: Effect.Effect<number, any, any>
+export const dropsCoveredOuter = Effect.orDie(anyEverywhere)
 
 
 === [D6] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
@@ -276,6 +316,12 @@ const effectUnkown = Effect.context<unknown>()
 const layerUnknown = Layer.effectDiscard(effectUnkown)
 export const composedLayerUnknown = Layer.empty.pipe(Layer.provide(layerUnknown))
 
+declare const anyFailure: Effect.Effect<number, any>
+export const keepsDifferentKind = Effect.withFiber<number, unknown>(() => anyFailure)
+
+declare const anyEverywhere: Effect.Effect<number, any, any>
+export const dropsCoveredOuter = Effect.orDie(anyEverywhere)
+
 
 === [D8] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
 skipped by default
@@ -311,4 +357,28 @@ skipped by default
 skipped by default
 
 === [D13] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+skipped by default
+
+=== [D16] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+skipped by default
+
+=== [D17] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
 skipped by default

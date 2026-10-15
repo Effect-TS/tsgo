@@ -388,6 +388,11 @@
         "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  yield* Effect.context\u003cunknown\u003e()\n  return yield* Effect.fail\u003cany\u003e(\"boom\")\n})\n",
         "diagnostics": [
           {
+            "start": 56,
+            "end": 159,
+            "text": "This has unknown in the requirements channel and any in the error channel which is not recommended.\nOnly service identifiers should appear in the requirements channel.\nHaving an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)"
+          },
+          {
             "start": 90,
             "end": 115,
             "text": "This has unknown in the requirements channel which is not recommended.\nOnly service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)"
