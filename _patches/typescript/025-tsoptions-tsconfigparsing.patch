@@ -1,8 +1,23 @@
 diff --git a/tsc/internal/tsoptions/tsconfigparsing.go b/tsc/internal/tsoptions/tsconfigparsing.go
-index af1e72ac7..af61a371f 100644
+index d08c8a9a9..d8fbc402a 100644
 --- a/tsc/internal/tsoptions/tsconfigparsing.go
 +++ b/tsc/internal/tsoptions/tsconfigparsing.go
-@@ -1056,7 +1056,7 @@ func parseConfig(
+@@ -23,6 +23,14 @@ import (
+ 	"github.com/microsoft/TypeScript/tsc/internal/vfs/vfsmatch"
+ )
+ 
++// ValidateCompilerOptionsCallback validates the final options after configuration
++// inheritance and existing options have been merged.
++var ValidateCompilerOptionsCallback func(*core.CompilerOptions, *ast.SourceFile) []*ast.Diagnostic
++
++func RegisterValidateCompilerOptionsCallback(cb func(*core.CompilerOptions, *ast.SourceFile) []*ast.Diagnostic) {
++	ValidateCompilerOptionsCallback = cb
++}
++
+ type extendsResult struct {
+ 	options             *parsedCompilerOptions
+ 	include             []any
+@@ -1056,7 +1064,7 @@ func parseConfig(
  					result.compileOnSave = compileOnSave
  				}
  			}
@@ -11,8 +26,8 @@ index af1e72ac7..af61a371f 100644
  		}
  	}
  
-@@ -1092,7 +1092,7 @@ func parseConfig(
- 				sourceFile.ExtendedSourceFiles = core.InsertSorted(sourceFile.ExtendedSourceFiles, extendedSourceFile, cmp.Compare)
+@@ -1094,7 +1102,7 @@ func parseConfig(
+ 				}
  			}
  		}
 -		ownConfig.options = mergeParsedCompilerOptions(result.options, ownConfig.options, ownConfig.raw)
@@ -20,7 +35,7 @@ index af1e72ac7..af61a371f 100644
  	}
  	return ownConfig, errors
  }
-@@ -1138,7 +1138,7 @@ func parseJsonConfigFileContentWorker(
+@@ -1140,7 +1148,7 @@ func parseJsonConfigFileContentWorker(
  
  	var errors []*ast.Diagnostic
  	parsedConfig, errors := parseConfig(json, sourceFile, fs, baseDirectory, configFileName, resolutionStack, extendedConfigCache)
@@ -29,3 +44,14 @@ index af1e72ac7..af61a371f 100644
  	handleOptionConfigDirTemplateSubstitution(parsedConfig.options, basePathForFileNames)
  	rawConfig := parseJsonToStringKey(parsedConfig.raw)
  	if configFileName != "" && parsedConfig.options != nil {
+@@ -1440,6 +1448,10 @@ func parseJsonConfigFileContentWorker(
+ 		return projectReferences
+ 	}
+ 
++	if ValidateCompilerOptionsCallback != nil {
++		errors = append(errors, ValidateCompilerOptionsCallback(parsedConfig.options.CompilerOptions, tsconfigToSourceFile(sourceFile))...)
++	}
++
+ 	fileNames, literalFileNamesLen := getFileNames(basePathForFileNames)
+ 	compileOnSave := new(false)
+ 	if raw, ok := parsedConfig.raw.(*collections.OrderedMap[string, any]); ok {
