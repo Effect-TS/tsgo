@@ -26,6 +26,8 @@ type EffectLinks struct {
 	EffectContextFlags           denseNodeStore[EffectContextFlags]
 	EffectYieldGeneratorFunction denseNodeStore[*ast.FunctionExpression]
 	DataFirstOrLastCall          denseNodeStore[*ParsedDataFirstOrLastCall]
+	CheckedExpressionType        denseNodeStore[*checker.Type]
+	checkedExpressionTypesPaused bool
 
 	ObjectLiteralContextualType               core.LinkStore[*ast.Node, *checker.Type]
 	ObjectLiteralConstraintContextualType     core.LinkStore[*ast.Node, *checker.Type]
@@ -153,8 +155,12 @@ func NewTypeParser(p checker.Program, c *checker.Checker) *TypeParser {
 	if c == nil {
 		panic("typeparser.NewTypeParser: nil checker")
 	}
+	return &TypeParser{program: p, checker: c, links: effectLinksOf(c)}
+}
+
+func effectLinksOf(c *checker.Checker) *EffectLinks {
 	if c.EffectLinks == nil {
 		c.EffectLinks = &EffectLinks{}
 	}
-	return &TypeParser{program: p, checker: c, links: c.EffectLinks.(*EffectLinks)}
+	return c.EffectLinks.(*EffectLinks)
 }

@@ -73,6 +73,9 @@ func (tp TypeParser) getTypeAtLocationUncached(node *ast.Node) (result *checker.
 		}
 	}()
 
+	if t := tp.checkedExpressionType(node); t != nil {
+		return t
+	}
 	return tp.checker.GetTypeAtLocation(node)
 }
 

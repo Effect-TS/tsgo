@@ -1,0 +1,30 @@
+diff --git a/internal/checker/checker.go b/internal/checker/checker.go
+--- a/internal/checker/checker.go
++++ b/internal/checker/checker.go
+@@ -7571,6 +7571,16 @@ func (c *Checker) getContextFreeTypeOfExpression(node *ast.Node) *Type {
+ 	return t
+ }
+ 
++// ExpressionCheckedCallback is invoked with the result of every checkExpressionEx
++// evaluation, including intermediate inference passes; checkMode tells them apart.
++var ExpressionCheckedCallback func(*Checker, *ast.Node, CheckMode, *Type)
++
++// RegisterExpressionCheckedCallback registers the callback invoked after each
++// expression is checked. Only one callback can be registered.
++func RegisterExpressionCheckedCallback(cb func(*Checker, *ast.Node, CheckMode, *Type)) {
++	ExpressionCheckedCallback = cb
++}
++
+ func (c *Checker) checkExpression(node *ast.Node) *Type {
+ 	return c.checkExpressionEx(node, CheckModeNormal)
+ }
+@@ -7588,6 +7598,9 @@ func (c *Checker) checkExpressionEx(node *ast.Node, checkMode CheckMode) *Type {
+ 		c.checkConstEnumAccess(node, t)
+ 	}
+ 	c.currentNode = saveCurrentNode
++	if ExpressionCheckedCallback != nil {
++		ExpressionCheckedCallback(c, node, checkMode, t)
++	}
+ 	return t
+ }
+ 
