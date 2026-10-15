@@ -37,3 +37,9 @@ export class Test {
 const effectUnkown = Effect.context<unknown>()
 const layerUnknown = Layer.effectDiscard(effectUnkown)
 export const composedLayerUnknown = Layer.empty.pipe(Layer.provide(layerUnknown))
+
+declare const anyFailure: Effect.Effect<number, any>
+export const keepsDifferentKind = Effect.withFiber<number, unknown>(() => anyFailure)
+
+declare const anyEverywhere: Effect.Effect<number, any, any>
+export const dropsCoveredOuter = Effect.orDie(anyEverywhere)

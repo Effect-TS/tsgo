@@ -41,6 +41,13 @@ flowchart TB
   39["type: Layer#lt;never, never, unknown#gt;<br/>callee: Layer.provide<br/>args: #91;layerUnknown#93;"]
   40[/"type: #123; #lt;RIn, E, ROut#gt;#40;that: Layer#lt;ROut, E, RIn#gt;#41;: #lt;RIn2, E2, ROut2#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;#41; =#gt; Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;that: Layers#41;: #lt;A, E, R#gt;#40;self: Layer#lt;A, E, R#gt;#41; =#gt; Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #lt;RIn2, E2, ROut2, RIn, E, ROut#gt;#40;self: Layer#lt;ROut2, E2, RIn2#gt;, that: Layer#lt;ROut, E, RIn#gt;#41;: Layer#lt;ROut2, E #124; E2, RIn #124; Exclude#lt;RIn2, ROut#gt;#gt;; #lt;A, E, R, const Layers extends #91;Any, ...Array#lt;Any#gt;#93;#gt;#40;self: Layer#lt;A, E, R#gt;, that: Layers#41;: Layer#lt;A, E #124; Error#lt;Layers#91;number#93;#gt;, Exclude#lt;R, Success#lt;Layers#91;number#93;#gt;#gt; #124; Services#lt;Layers#91;number#93;#gt;#gt;; #125;<br/>node: Layer.provide"/]
   41[/"type: Layer#lt;never, never, unknown#gt;<br/>node: layerUnknown"/]
+  42[["type: #40;#41; =#gt; Effect#lt;number, any, never#gt;<br/>node: #40;#41; =#gt; anyFailure"]]
+  43[/"type: Effect#lt;number, any, never#gt;<br/>node: anyFailure"/]
+  44["type: Effect#lt;number, unknown, never#gt;<br/>callee: Effect.withFiber<br/>args: #91;#93;"]
+  45[/"type: #lt;A, E = never, R = never#gt;#40;evaluate: #40;fiber: Fiber#lt;unknown, unknown#gt;#41; =#gt; Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;<br/>node: Effect.withFiber"/]
+  46[/"type: Effect#lt;number, any, any#gt;<br/>node: anyEverywhere"/]
+  47["type: Effect#lt;number, never, any#gt;<br/>callee: Effect.orDie<br/>args: #91;#93;"]
+  48[/"type: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, never, R#gt;<br/>node: Effect.orDie"/]
   1 -->|"kind: yieldable"| 0
   3 -->|"kind: yieldable"| 2
   6 -->|"kind: pipe"| 7
@@ -75,3 +82,8 @@ flowchart TB
   40 -->|"kind: transformCallee"| 39
   41 -->|"kind: transformArg"| 39
   38 -->|"kind: pipe"| 39
+  43 -->|"kind: potentialReturn"| 42
+  42 -->|"kind: pipe"| 44
+  45 -->|"kind: transformCallee"| 44
+  46 -->|"kind: pipe"| 47
+  48 -->|"kind: transformCallee"| 47

@@ -59,6 +59,9 @@ var PromiseInEffectSuccess = rule.Rule{
 			if !ast.IsExpression(node) || ast.IsDeclarationName(node) {
 				continue
 			}
+			if _, ok := typeparser.TypeEquivalentNode(node); ok {
+				continue
+			}
 
 			// Declared-type prefilter: a diagnostic requires a strict Effect
 			// flow type on the node, which reference nodes with a

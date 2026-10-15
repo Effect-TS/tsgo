@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.2
 
-/.src/anyUnknownInErrorContext_preview.ts(5,14): warning TS377030: This has unknown in the requirements channel and any in the error channel which is not recommended.
+/.src/anyUnknownInErrorContext_preview.ts(5,24): warning TS377030: This has unknown in the requirements channel and any in the error channel which is not recommended.
 Only service identifiers should appear in the requirements channel.
 Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
 /.src/anyUnknownInErrorContext_preview.ts(6,10): warning TS377030: This has unknown in the requirements channel which is not recommended.
@@ -16,17 +16,20 @@ Having an unknown or any error type is not useful. Consider instead using specif
     import { Effect } from "effect"
     
     export const preview = Effect.gen(function*() {
-                 ~~~~~~~
-!!! warning TS377030: This has unknown in the requirements channel and any in the error channel which is not recommended.
-Only service identifiers should appear in the requirements channel.
-Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
+                           ~~~~~~~~~~~~~~~~~~~~~~~~
       yield* Effect.context<unknown>()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
              ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
       return yield* Effect.fail<any>("boom")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                     ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377030: This has any in the error channel which is not recommended.
 Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
     })
+    ~~
+!!! warning TS377030: This has unknown in the requirements channel and any in the error channel which is not recommended.
+Only service identifiers should appear in the requirements channel.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
     
