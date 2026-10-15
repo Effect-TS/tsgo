@@ -1,5 +1,20 @@
 # @effect/tsgo
 
+## 0.53.1
+
+### Patch Changes
+
+- 06f7842: Stop `experimentalApiUsage` and `unstableApiUsage` from causing TS2589 and follow-on type errors in generic calls such as `Match.when({ kind: "A0" }, ...)` over a wide union.
+  
+  When a generic call infers a property back to the object literal, the rules look up the type the literal would get without its own inferences. They used to resolve the call again with inference blocked, which could instantiate types the original check never built. They now replay the checker's type-argument inference on the signature it already resolved and leave out the literal's argument, so return type inferences, inferences from the other arguments, defaults, and constraints apply as before. When that type has no matching property, the rules use the type parameters' constraints.
+  
+  These cases are now reported too:
+  
+  - Constraint properties inside inferred generator functions.
+  - Array and rest-parameter constraints, for example `generic([{ test: 42 }])` when `T extends Reportable[]` marks `test` as experimental.
+  - Literals inside a call that is itself an argument of a generic call, for example `generic(id({ test: 42 }))`.
+- f4b49a4: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261014.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/9eedcb0dd7257f8a1a175adbef28f3b6d3492d7a) commit `9eedcb0dd7257f8a1a175adbef28f3b6d3492d7a`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.53.0
 
 ### Minor Changes
