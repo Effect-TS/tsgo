@@ -2,8 +2,8 @@ name: Perf
 
 on:
   pull_request:
-    # closed joins the PR's concurrency group so a merge or close cancels the in-progress run.
-    types: [opened, synchronize, reopened, closed]
+    # closed and converted_to_draft join the PR's concurrency group so they cancel the in-progress run.
+    types: [opened, synchronize, reopened, ready_for_review, converted_to_draft, closed]
     branches:
       - main
     paths:
@@ -27,7 +27,7 @@ permissions: {}
 jobs:
   matrix:
     name: Generate perf matrix
-    if: github.event.action != 'closed'
+    if: github.event.action != 'closed' && !github.event.pull_request.draft
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
