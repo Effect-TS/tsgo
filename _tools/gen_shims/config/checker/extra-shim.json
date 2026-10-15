@@ -1,9 +1,10 @@
 {
-  "ExtraFunctions": ["forEachYieldExpression", "getMappedTypeModifiers"],
+  "ExtraFunctions": ["forEachYieldExpression", "getMappedTypeModifiers", "newTypeMapper"],
   "ExtraMethods": {
-    "Checker": ["isTypeAssignableTo", "isArrayType", "isReadonlyArrayType", "getIndexInfosOfType", "getTypeArguments", "getLiteralTypeFromProperty", "getSymbolIfSameReference", "getSymbolOfDeclaration", "getSignaturesOfSymbol", "getMembersOfSymbol", "isReferenceToType", "newFunctionType", "newCallSignature", "isSymbolAssigned", "isPastLastAssignment", "evaluateEntity", "isConstantVariable", "isBlockScopedNameDeclaredBeforeUse", "checkExpressionWithContextualType", "isNoInferType", "isReadonlySymbol", "getTypeParameterModifiers", "getTypeParameterFromMappedType", "getConstraintTypeFromMappedType", "getNameTypeFromMappedType", "getTemplateTypeFromMappedType", "newIndexInfo"]
+    "Checker": ["isTypeAssignableTo", "isArrayType", "isReadonlyArrayType", "getIndexInfosOfType", "getTypeArguments", "getLiteralTypeFromProperty", "getSymbolIfSameReference", "getSymbolOfDeclaration", "getSignaturesOfSymbol", "getMembersOfSymbol", "isReferenceToType", "newFunctionType", "newCallSignature", "isSymbolAssigned", "isPastLastAssignment", "evaluateEntity", "isConstantVariable", "isBlockScopedNameDeclaredBeforeUse", "checkExpressionWithContextualType", "isNoInferType", "isReadonlySymbol", "getTypeParameterModifiers", "getTypeParameterFromMappedType", "getConstraintTypeFromMappedType", "getNameTypeFromMappedType", "getTemplateTypeFromMappedType", "newIndexInfo", "instantiateType", "pushContextualType", "popContextualType", "newInferenceContext", "inferTypes", "getMapperFromContext", "getSingleCallSignature", "getOrCreateTypeFromSignature", "getSignatureInstantiationWithoutFillingInTypeArguments", "getEffectiveCallArguments", "checkExpressionCached", "getThisTypeOfSignature", "getThisArgumentOfCall", "getThisArgumentType"]
   },
   "ExtraFields": {
+    "InferenceContext": ["inferences"],
     "Checker": [
       "getGlobalPromiseTypeChecked",
       "emptyGenericType",

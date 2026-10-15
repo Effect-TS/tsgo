@@ -96,13 +96,23 @@ func runStabilityApiUsage(ctx *rule.Context, wanted string) []*ast.Diagnostic {
 					// branches by discriminants before reading their own tags.
 					properties := ctx.Checker.GetPropertySymbolsFromContextualType(node, contextualType, false)
 					// Generic inference can point back to the literal's own
-					// property. Use the constraint instead, as go-to-definition
-					// does, so its stability tag is not lost to inference.
-					if slices.ContainsFunc(properties, func(symbol *ast.Symbol) bool { return ast.TSGetSymbolValueDeclaration(symbol) == node }) {
-						constraintType := ctx.TypeParser.CachedObjectLiteralConstraintContextualType(node.Parent)
-						if constraintType != nil {
-							if constraintProperties := ctx.Checker.GetPropertySymbolsFromContextualType(node, constraintType, false); len(constraintProperties) > 0 {
-								properties = constraintProperties
+					// property. Use the type the literal gets without its own
+					// inferences, as go-to-definition does, and the bare
+					// constraints when that type has no other property, so its
+					// stability tag is not lost to inference. Neither resolves the
+					// call again.
+					isOwn := func(symbol *ast.Symbol) bool { return ast.TSGetSymbolValueDeclaration(symbol) == node }
+					if slices.ContainsFunc(properties, isOwn) {
+						for _, lookup := range []func(*ast.Node) *checker.Type{
+							ctx.TypeParser.CachedObjectLiteralConstraintContextualType,
+							ctx.TypeParser.CachedObjectLiteralBareConstraintContextualType,
+						} {
+							if constraintType := lookup(node.Parent); constraintType != nil {
+								constraintProperties := ctx.Checker.GetPropertySymbolsFromContextualType(node, constraintType, false)
+								if slices.ContainsFunc(constraintProperties, func(symbol *ast.Symbol) bool { return !isOwn(symbol) }) {
+									properties = constraintProperties
+									break
+								}
 							}
 						}
 					}

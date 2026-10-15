@@ -27,8 +27,9 @@ type EffectLinks struct {
 	EffectYieldGeneratorFunction denseNodeStore[*ast.FunctionExpression]
 	DataFirstOrLastCall          denseNodeStore[*ParsedDataFirstOrLastCall]
 
-	ObjectLiteralContextualType           core.LinkStore[*ast.Node, *checker.Type]
-	ObjectLiteralConstraintContextualType core.LinkStore[*ast.Node, *checker.Type]
+	ObjectLiteralContextualType               core.LinkStore[*ast.Node, *checker.Type]
+	ObjectLiteralConstraintContextualType     core.LinkStore[*ast.Node, *checker.Type]
+	ObjectLiteralBareConstraintContextualType core.LinkStore[*ast.Node, *checker.Type]
 
 	EffectType             core.LinkStore[*checker.Type, *Effect]
 	StreamType             core.LinkStore[*checker.Type, *Effect]

@@ -43,8 +43,8 @@ const annotated = function* (): Generator<never, Options, unknown> {
 					rule rule.Rule
 					uses []string
 				}{
-					{ExperimentalApiUsage, []string{"experimental: 1", "experimental: 3", "experimental: 7"}},
-					{UnstableApiUsage, []string{"unstable: 2", "unstable: 4", "unstable: 8"}},
+					{ExperimentalApiUsage, []string{"experimental: 1", "experimental: 3", "experimental: 5", "experimental: 7"}},
+					{UnstableApiUsage, []string{"unstable: 2", "unstable: 4", "unstable: 6", "unstable: 8"}},
 				}
 				if !experimentalFirst {
 					slices.Reverse(tests)
@@ -52,7 +52,7 @@ const annotated = function* (): Generator<never, Options, unknown> {
 				for _, test := range tests {
 					diagnostics := test.rule.Run(ctx)
 					if len(diagnostics) != len(test.uses) {
-						t.Fatalf("%s: diagnostics = %v, want the outside, normal-context, and annotated-generator warnings", test.rule.Name, diagnostics)
+						t.Fatalf("%s: diagnostics = %v, want the outside, normal-context, constraint, and annotated-generator warnings", test.rule.Name, diagnostics)
 					}
 					for i, diagnostic := range diagnostics {
 						name := strings.Split(test.uses[i], ":")[0]
