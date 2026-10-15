@@ -80,6 +80,8 @@ const CachedTypeKindPromisedTypeOfPromise = checker.CachedTypeKindPromisedTypeOf
 const CachedTypeKindRegularObjectLiteral = checker.CachedTypeKindRegularObjectLiteral
 const CachedTypeKindRestrictiveInstantiation = checker.CachedTypeKindRestrictiveInstantiation
 const CachedTypeKindRestrictiveTypeParameter = checker.CachedTypeKindRestrictiveTypeParameter
+const CachedTypeKindSimplifiedConditionalTypeForReading = checker.CachedTypeKindSimplifiedConditionalTypeForReading
+const CachedTypeKindSimplifiedConditionalTypeForWriting = checker.CachedTypeKindSimplifiedConditionalTypeForWriting
 const CachedTypeKindStringIndexType = checker.CachedTypeKindStringIndexType
 const CachedTypeKindSyntheticType = checker.CachedTypeKindSyntheticType
 const CachedTypeKindWidened = checker.CachedTypeKindWidened
@@ -239,6 +241,16 @@ type extra_Checker struct {
   symbolWithDataArena core.Arena[ast.SymbolWithData]
   signatureArena core.Arena[checker.Signature]
   indexInfoArena core.Arena[checker.IndexInfo]
+  literalTypeArena core.Arena[checker.LiteralType]
+  objectTypeArena core.Arena[checker.ObjectType]
+  typeReferenceArena core.Arena[checker.TypeReference]
+  interfaceTypeArena core.Arena[checker.InterfaceType]
+  mappedTypeArena core.Arena[checker.MappedType]
+  unionTypeArena core.Arena[checker.UnionType]
+  intersectionTypeArena core.Arena[checker.IntersectionType]
+  typeParameterArena core.Arena[checker.TypeParameter]
+  indexedAccessTypeArena core.Arena[checker.IndexedAccessType]
+  conditionalTypeArena core.Arena[checker.ConditionalType]
   mergedSymbols map[*ast.Symbol]*ast.Symbol
   mergedExportsChecked collections.Set[*ast.Symbol]
   factory ast.NodeFactory
@@ -1188,7 +1200,6 @@ func TypeAliasLinks_declaredType(v *checker.TypeAliasLinks) *checker.Type {
 }
 type TypeBase = checker.TypeBase
 type TypeComparer = checker.TypeComparer
-type TypeData = checker.TypeData
 type TypeDiscriminator = checker.TypeDiscriminator
 type TypeFacts = checker.TypeFacts
 const TypeFactsAll = checker.TypeFactsAll

@@ -153,8 +153,6 @@ const ScriptTargetNone = core.ScriptTargetNone
 type Semaphore = core.Semaphore
 //go:linkname SetVersionSuffix github.com/microsoft/TypeScript/tsc/internal/core.SetVersionSuffix
 func SetVersionSuffix(s string)
-//go:linkname ShouldRewriteModuleSpecifier github.com/microsoft/TypeScript/tsc/internal/core.ShouldRewriteModuleSpecifier
-func ShouldRewriteModuleSpecifier(specifier string, compilerOptions *core.CompilerOptions) bool
 type Stack[T any] = core.Stack[T]
 //go:linkname StringifyJson github.com/microsoft/TypeScript/tsc/internal/core.StringifyJson
 func StringifyJson(input any, prefix string, indent string) (string, error)

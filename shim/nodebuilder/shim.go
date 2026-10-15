@@ -44,5 +44,6 @@ const InternalFlagsAllowUnresolvedNames = nodebuilder.InternalFlagsAllowUnresolv
 const InternalFlagsDoNotIncludeSymbolChain = nodebuilder.InternalFlagsDoNotIncludeSymbolChain
 const InternalFlagsNoSyntacticPrinter = nodebuilder.InternalFlagsNoSyntacticPrinter
 const InternalFlagsNone = nodebuilder.InternalFlagsNone
+const InternalFlagsRewriteModuleSpecifiers = nodebuilder.InternalFlagsRewriteModuleSpecifiers
 const InternalFlagsWriteComputedProps = nodebuilder.InternalFlagsWriteComputedProps
 type SymbolTracker = nodebuilder.SymbolTracker

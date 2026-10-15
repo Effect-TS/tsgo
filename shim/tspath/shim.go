@@ -83,6 +83,7 @@ const ExtensionJson = tspath.ExtensionJson
 const ExtensionJsx = tspath.ExtensionJsx
 const ExtensionMjs = tspath.ExtensionMjs
 const ExtensionMts = tspath.ExtensionMts
+type ExtensionRewrite = tspath.ExtensionRewrite
 const ExtensionTs = tspath.ExtensionTs
 const ExtensionTsBuildInfo = tspath.ExtensionTsBuildInfo
 const ExtensionTsx = tspath.ExtensionTsx

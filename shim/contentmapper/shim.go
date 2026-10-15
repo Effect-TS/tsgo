@@ -27,6 +27,8 @@ const DiagnosticDirectivePolicyExpect = contentmapper.DiagnosticDirectivePolicyE
 const DiagnosticDirectivePolicyIgnore = contentmapper.DiagnosticDirectivePolicyIgnore
 type DiagnosticDirectives = contentmapper.DiagnosticDirectives
 var ErrProjectUnavailable = contentmapper.ErrProjectUnavailable
+//go:linkname HasReservedSourceExtension github.com/microsoft/TypeScript/tsc/internal/contentmapper.HasReservedSourceExtension
+func HasReservedSourceExtension(extension string) bool
 type Host = contentmapper.Host
 type HostOptions = contentmapper.HostOptions
 type InitializeError = contentmapper.InitializeError
@@ -44,6 +46,8 @@ type InitializeResult = contentmapper.InitializeResult
 type InvalidVirtualExtensionError = contentmapper.InvalidVirtualExtensionError
 //go:linkname IsSupportedVirtualExtension github.com/microsoft/TypeScript/tsc/internal/contentmapper.IsSupportedVirtualExtension
 func IsSupportedVirtualExtension(extension string) bool
+//go:linkname IsValidExtension github.com/microsoft/TypeScript/tsc/internal/contentmapper.IsValidExtension
+func IsValidExtension(extension string) bool
 type Logger = contentmapper.Logger
 type Manifest = contentmapper.Manifest
 type MappedDiagnosticDirective = contentmapper.MappedDiagnosticDirective
