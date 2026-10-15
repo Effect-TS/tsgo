@@ -23,6 +23,7 @@ import { runLint } from "./lint.ts"
 import {
   printGeneratedMatrix,
   printOxlintTestMatrix,
+  printPerfMatrix,
   printReleaseMatrix,
   printTypeScriptTestMatrix
 } from "./matrix.ts"
@@ -307,13 +308,20 @@ const matrixGenerated = Command.make("generated", {}, () => printGeneratedMatrix
   Command.withDescription("Print the generated branch matrix as JSON")
 )
 
+const matrixPerf = Command.make("perf", {
+  baseRef: Flag.String("base-ref"),
+  headRef: Flag.String("head-ref")
+}, ({ baseRef, headRef }) => printPerfMatrix(repositoryRoot, baseRef, headRef)).pipe(
+  Command.withDescription("Print the base and head perf matrix as JSON")
+)
+
 const matrixRelease = Command.make("release", {}, () => printReleaseMatrix(repositoryRoot)).pipe(
   Command.withDescription("Print the platform release build matrix as JSON")
 )
 
 const matrix = Command.make("matrix").pipe(
   Command.withDescription("Generate CI matrices"),
-  Command.withSubcommands([matrixGenerated, matrixRelease, matrixTestOxlint, matrixTestTypeScript])
+  Command.withSubcommands([matrixGenerated, matrixPerf, matrixRelease, matrixTestOxlint, matrixTestTypeScript])
 )
 
 Command.make("repoctl").pipe(
