@@ -133,6 +133,9 @@ func Checker_getSymbolIfSameReference(recv *checker.Checker, s1 *ast.Symbol, s2 
 //go:linkname Checker_getSymbolOfDeclaration github.com/microsoft/typescript-go/internal/checker.(*Checker).getSymbolOfDeclaration
 func Checker_getSymbolOfDeclaration(recv *checker.Checker, node *ast.Node) *ast.Symbol
 
+//go:linkname Checker_resolveSymbol github.com/microsoft/typescript-go/internal/checker.(*Checker).resolveSymbol
+func Checker_resolveSymbol(recv *checker.Checker, symbol *ast.Symbol) *ast.Symbol
+
 //go:linkname Checker_getMembersOfSymbol github.com/microsoft/typescript-go/internal/checker.(*Checker).getMembersOfSymbol
 func Checker_getMembersOfSymbol(recv *checker.Checker, symbol *ast.Symbol) ast.SymbolTable
 
