@@ -132,7 +132,7 @@
   Fix 0: "Disable floatingEffect for this line"
   Fix 1: "Disable floatingEffect for entire file"
 
-[D34] (45:21-45:28) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+[D34] (45:1-45:28) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
   Fix 0: "Disable promiseInEffectSuccess for this line"
   Fix 1: "Disable promiseInEffectSuccess for entire file"
 

@@ -4,6 +4,7 @@ package rules
 import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 )
@@ -57,6 +58,10 @@ var EffectInFailure = rule.Rule{
 				if node.Parent != nil {
 					shouldSkip[node.Parent] = true
 				}
+				continue
+			}
+
+			if _, ok := typeparser.TypeEquivalentNode(node); ok {
 				continue
 			}
 

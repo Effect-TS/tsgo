@@ -34,7 +34,7 @@ Effect version: 4.0.2
 /.src/promiseInEffectSuccess.ts(44,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 /.src/promiseInEffectSuccess.ts(44,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
 /.src/promiseInEffectSuccess.ts(45,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
-/.src/promiseInEffectSuccess.ts(45,21): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(45,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
 /.src/promiseInEffectSuccess.ts(46,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 /.src/promiseInEffectSuccess.ts(46,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
 /.src/promiseInEffectSuccess.ts(47,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
@@ -191,7 +191,7 @@ Effect version: 4.0.2
     promiseEffectHolder.current
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
-                        ~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
     promiseEffects[0]
     ~~~~~~~~~~~~~~~~~

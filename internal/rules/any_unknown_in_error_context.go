@@ -6,6 +6,7 @@ import (
 
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
@@ -81,6 +82,10 @@ var AnyUnknownInErrorContext = rule.Rule{
 
 			// Enqueue children for visiting
 			node.ForEachChild(pushChild)
+
+			if _, ok := typeparser.TypeEquivalentNode(node); ok {
+				continue
+			}
 
 			// Only Effect and Layer types are inspected below.
 			if ctx.TypeParser.NodeCannotBeEffectLibraryType(node) {
