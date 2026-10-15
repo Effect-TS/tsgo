@@ -15,7 +15,7 @@ import { runCommand, runCommandCaptureSplit, runCommandString } from "./process.
 
 export const perfWorkload = {
   repository: "https://github.com/Effect-TS/effect",
-  revision: "c3c7647bdf9b5d19618f90b442c865492e10b1d9"
+  revision: "7f524e25cfb49a71ac39b0f44278d08d40dda5de"
 } as const
 
 export const PerfSample = Schema.Struct({
