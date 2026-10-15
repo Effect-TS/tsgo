@@ -23,10 +23,13 @@ import { runLint } from "./lint.ts"
 import {
   printGeneratedMatrix,
   printOxlintTestMatrix,
+  printPerfMatrix,
   printReleaseMatrix,
   printTypeScriptTestMatrix
 } from "./matrix.ts"
 import { comparePerformance } from "./perf.ts"
+import { runPerfCi } from "./perfCi.ts"
+import { writePerfReport } from "./perfReport.ts"
 import { assembleReleaseArtifacts, bundleUpstream, preparePlatformPackages } from "./packages.ts"
 import { prepareTsgolintComponent, validateOxlintComponent } from "./oxlint.ts"
 import { cloneSubmodules, patchSubmodules } from "./submodules.ts"
@@ -271,9 +274,33 @@ const perfCompare = Command.make("compare", {
     Command.withDescription("Compare stock and Effect-patched TypeScript-Go performance")
   )
 
+const perfCi = Command.make("ci", {
+  channel: Flag.String("channel"),
+  side: Flag.Literals("side", ["base", "head"]),
+  commit: Flag.String("commit"),
+  version: Flag.String("version"),
+  patchedBin: Flag.String("patched-bin"),
+  workloadDir: Flag.String("workload-dir"),
+  pairs: Flag.Int("pairs").pipe(Flag.withDefault(5)),
+  output: Flag.String("output")
+}, (options) => runPerfCi(options)).pipe(
+  Command.withDescription("Measure stock and Effect-patched compilers on the pinned Effect workload with all rules")
+)
+
+const perfReport = Command.make("report", {
+  input: Flag.String("input"),
+  output: Flag.String("output"),
+  matrix: Flag.String("matrix").pipe(
+    Flag.optional,
+    Flag.withDescription("Perf matrix JSON used to tell missing results apart from new or removed channels")
+  )
+}, ({ input, matrix, output }) => writePerfReport({ input, output, matrix: Option.getOrUndefined(matrix) })).pipe(
+  Command.withDescription("Render a markdown report from base and head perf cells")
+)
+
 const perf = Command.make("perf").pipe(
   Command.withDescription("Run performance comparisons"),
-  Command.withSubcommands([perfCompare])
+  Command.withSubcommands([perfCi, perfCompare, perfReport])
 )
 
 const bundlePackageUpstream = Command.make("bundle-upstream", {}, () => bundleUpstream(repositoryRoot)).pipe(
@@ -307,13 +334,20 @@ const matrixGenerated = Command.make("generated", {}, () => printGeneratedMatrix
   Command.withDescription("Print the generated branch matrix as JSON")
 )
 
+const matrixPerf = Command.make("perf", {
+  baseRef: Flag.String("base-ref"),
+  headRef: Flag.String("head-ref")
+}, ({ baseRef, headRef }) => printPerfMatrix(repositoryRoot, baseRef, headRef)).pipe(
+  Command.withDescription("Print the base and head perf matrix as JSON")
+)
+
 const matrixRelease = Command.make("release", {}, () => printReleaseMatrix(repositoryRoot)).pipe(
   Command.withDescription("Print the platform release build matrix as JSON")
 )
 
 const matrix = Command.make("matrix").pipe(
   Command.withDescription("Generate CI matrices"),
-  Command.withSubcommands([matrixGenerated, matrixRelease, matrixTestOxlint, matrixTestTypeScript])
+  Command.withSubcommands([matrixGenerated, matrixPerf, matrixRelease, matrixTestOxlint, matrixTestTypeScript])
 )
 
 Command.make("repoctl").pipe(

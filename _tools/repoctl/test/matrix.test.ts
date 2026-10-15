@@ -3,6 +3,7 @@ import test from "node:test"
 import {
   buildGeneratedMatrix,
   buildOxlintTestMatrix,
+  buildPerfMatrix,
   buildReleaseMatrix,
   buildTypeScriptTestMatrix
 } from "../src/matrix.ts"
@@ -153,5 +154,64 @@ test("builds a deduplicated matrix of compatible Oxlint component pairs", () => 
     artifactName: "linux-arm64__oxlint__1.77.0",
     fileName: "oxlint.linux-arm64-gnu.node",
     destination: "_packages/tsgo-linux-arm64/artifacts/oxlint/1.77.0/oxlint.linux-arm64-gnu.node"
+  })
+})
+
+const typeScriptUpstream = (
+  tags: { readonly latest: string; readonly next: string },
+  versions: Record<string, "typescript" | "typescript-go">
+): typeof Upstream.Type => ({
+  schemaVersion: 5,
+  tags: {
+    typescript: tags,
+    "oxlint-tsgolint": { latest: "unused" },
+    oxlint: { latest: "unused" }
+  },
+  components: {
+    typescript: Object.fromEntries(
+      Object.entries(versions).map(([version, provider]) => [version, { gitHead: revision, provider }])
+    ),
+    "oxlint-tsgolint": {},
+    oxlint: {}
+  },
+  profiles: []
+})
+
+const baseRef = "1111111111111111111111111111111111111111"
+const headRef = "2222222222222222222222222222222222222222"
+
+test("builds a perf matrix with one entry per channel and side", () => {
+  const base = typeScriptUpstream(
+    { latest: "7.0.2", next: "7.1.0-dev.20261007.1" },
+    { "7.0.2": "typescript-go", "7.1.0-dev.20261007.1": "typescript" }
+  )
+  const head = typeScriptUpstream(
+    { latest: "7.0.2", next: "7.1.0-dev.20261014.1" },
+    { "7.0.2": "typescript-go", "7.1.0-dev.20261014.1": "typescript" }
+  )
+
+  assert.deepEqual(buildPerfMatrix(base, head, baseRef, headRef), {
+    include: [
+      { name: "latest", side: "base", ref: baseRef, version: "7.0.2" },
+      { name: "next", side: "base", ref: baseRef, version: "7.1.0-dev.20261007.1" },
+      { name: "latest", side: "head", ref: headRef, version: "7.0.2" },
+      { name: "next", side: "head", ref: headRef, version: "7.1.0-dev.20261014.1" }
+    ]
+  })
+})
+
+test("builds a perf matrix where a channel exists on only one side", () => {
+  const base = typeScriptUpstream({ latest: "7.0.2", next: "7.0.2" }, { "7.0.2": "typescript-go" })
+  const head = typeScriptUpstream(
+    { latest: "7.0.2", next: "7.1.0-dev.20261014.1" },
+    { "7.0.2": "typescript-go", "7.1.0-dev.20261014.1": "typescript" }
+  )
+
+  assert.deepEqual(buildPerfMatrix(base, head, baseRef, headRef), {
+    include: [
+      { name: "latest+next", side: "base", ref: baseRef, version: "7.0.2" },
+      { name: "latest", side: "head", ref: headRef, version: "7.0.2" },
+      { name: "next", side: "head", ref: headRef, version: "7.1.0-dev.20261014.1" }
+    ]
   })
 })
