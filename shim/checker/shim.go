@@ -149,6 +149,8 @@ func Checker_isReadonlyArrayType(recv *checker.Checker, t *checker.Type) bool
 func Checker_evaluateEntity(recv *checker.Checker, expr *ast.Node, location *ast.Node) evaluator.Result
 //go:linkname Checker_newIndexInfo github.com/microsoft/TypeScript/tsc/internal/checker.(*Checker).newIndexInfo
 func Checker_newIndexInfo(recv *checker.Checker, keyType *checker.Type, valueType *checker.Type, isReadonly bool, declaration *ast.Node, components []*ast.Node) *checker.IndexInfo
+//go:linkname Checker_getRegularTypeOfLiteralType github.com/microsoft/TypeScript/tsc/internal/checker.(*Checker).getRegularTypeOfLiteralType
+func Checker_getRegularTypeOfLiteralType(recv *checker.Checker, t *checker.Type) *checker.Type
 //go:linkname Checker_getLiteralTypeFromProperty github.com/microsoft/TypeScript/tsc/internal/checker.(*Checker).getLiteralTypeFromProperty
 func Checker_getLiteralTypeFromProperty(recv *checker.Checker, prop *ast.Symbol, include checker.TypeFlags, includeNonPublic bool) *checker.Type
 //go:linkname Checker_isNoInferType github.com/microsoft/TypeScript/tsc/internal/checker.(*Checker).isNoInferType
@@ -691,6 +693,7 @@ const ExpandingFlagsTarget = checker.ExpandingFlagsTarget
 type ExportCollision = checker.ExportCollision
 type ExportCollisionTable = checker.ExportCollisionTable
 type ExportTypeLinks = checker.ExportTypeLinks
+var ExpressionCheckedCallback = checker.ExpressionCheckedCallback
 type ExternalEmitHelpers = checker.ExternalEmitHelpers
 const ExternalEmitHelpersAddDisposableResourceAndDisposeResources = checker.ExternalEmitHelpersAddDisposableResourceAndDisposeResources
 const ExternalEmitHelpersAsyncDelegator = checker.ExternalEmitHelpersAsyncDelegator
@@ -1082,6 +1085,8 @@ const ReferenceHintProperty = checker.ReferenceHintProperty
 const ReferenceHintUnspecified = checker.ReferenceHintUnspecified
 //go:linkname RegisterAfterCheckSourceFileCallback github.com/microsoft/TypeScript/tsc/internal/checker.RegisterAfterCheckSourceFileCallback
 func RegisterAfterCheckSourceFileCallback(cb func(context.Context, checker.Program, *checker.Checker, *ast.SourceFile))
+//go:linkname RegisterExpressionCheckedCallback github.com/microsoft/TypeScript/tsc/internal/checker.RegisterExpressionCheckedCallback
+func RegisterExpressionCheckedCallback(cb func(*checker.Checker, *ast.Node, checker.CheckMode, *checker.Type))
 type Relater = checker.Relater
 type Relation = checker.Relation
 type RelationComparisonResult = checker.RelationComparisonResult
