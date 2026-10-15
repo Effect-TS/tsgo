@@ -28,6 +28,7 @@ import {
   printTypeScriptTestMatrix
 } from "./matrix.ts"
 import { comparePerformance } from "./perf.ts"
+import { runPerfCi } from "./perfCi.ts"
 import { assembleReleaseArtifacts, bundleUpstream, preparePlatformPackages } from "./packages.ts"
 import { prepareTsgolintComponent, validateOxlintComponent } from "./oxlint.ts"
 import { cloneSubmodules, patchSubmodules } from "./submodules.ts"
@@ -272,9 +273,22 @@ const perfCompare = Command.make("compare", {
     Command.withDescription("Compare stock and Effect-patched TypeScript-Go performance")
   )
 
+const perfCi = Command.make("ci", {
+  channel: Flag.String("channel"),
+  side: Flag.Literals("side", ["base", "head"]),
+  commit: Flag.String("commit"),
+  version: Flag.String("version"),
+  patchedBin: Flag.String("patched-bin"),
+  workloadDir: Flag.String("workload-dir"),
+  pairs: Flag.Int("pairs").pipe(Flag.withDefault(5)),
+  output: Flag.String("output")
+}, (options) => runPerfCi(options)).pipe(
+  Command.withDescription("Measure stock and Effect-patched compilers on the pinned Effect workload with all rules")
+)
+
 const perf = Command.make("perf").pipe(
   Command.withDescription("Run performance comparisons"),
-  Command.withSubcommands([perfCompare])
+  Command.withSubcommands([perfCi, perfCompare])
 )
 
 const bundlePackageUpstream = Command.make("bundle-upstream", {}, () => bundleUpstream(repositoryRoot)).pipe(
