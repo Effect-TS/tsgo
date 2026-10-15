@@ -29,6 +29,7 @@ import {
 } from "./matrix.ts"
 import { comparePerformance } from "./perf.ts"
 import { runPerfCi } from "./perfCi.ts"
+import { writePerfReport } from "./perfReport.ts"
 import { assembleReleaseArtifacts, bundleUpstream, preparePlatformPackages } from "./packages.ts"
 import { prepareTsgolintComponent, validateOxlintComponent } from "./oxlint.ts"
 import { cloneSubmodules, patchSubmodules } from "./submodules.ts"
@@ -286,9 +287,20 @@ const perfCi = Command.make("ci", {
   Command.withDescription("Measure stock and Effect-patched compilers on the pinned Effect workload with all rules")
 )
 
+const perfReport = Command.make("report", {
+  input: Flag.String("input"),
+  output: Flag.String("output"),
+  matrix: Flag.String("matrix").pipe(
+    Flag.optional,
+    Flag.withDescription("Perf matrix JSON used to tell missing results apart from new or removed channels")
+  )
+}, ({ input, matrix, output }) => writePerfReport({ input, output, matrix: Option.getOrUndefined(matrix) })).pipe(
+  Command.withDescription("Render a markdown report from base and head perf cells")
+)
+
 const perf = Command.make("perf").pipe(
   Command.withDescription("Run performance comparisons"),
-  Command.withSubcommands([perfCi, perfCompare])
+  Command.withSubcommands([perfCi, perfCompare, perfReport])
 )
 
 const bundlePackageUpstream = Command.make("bundle-upstream", {}, () => bundleUpstream(repositoryRoot)).pipe(
