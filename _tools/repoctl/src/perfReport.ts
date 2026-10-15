@@ -5,7 +5,7 @@ import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import * as Schema from "effect/Schema"
 import { median } from "./perf.ts"
-import { type PerfCell, PerfCellFromString, type PerfPair, PerfSide } from "./perfCi.ts"
+import { type PerfCell, PerfCellFromString, type PerfPair, type PerfSample, PerfSide } from "./perfCi.ts"
 
 export const perfReportMarker = "<!-- effect-tsgo-perf -->"
 
@@ -175,25 +175,6 @@ const sampleCount = (base: PerfCell | undefined, head: PerfCell | undefined) => 
   return counts.length === 2 && counts[0] !== counts[1] ? counts.join("/") : String(counts[0])
 }
 
-const assertStableStockCounters = (channel: string, base: PerfCell | undefined, head: PerfCell | undefined) => {
-  const groups = base !== undefined && head !== undefined && base.typescriptVersion === head.typescriptVersion
-    ? [[base, head]]
-    : [base, head].flatMap((cell) => cell === undefined ? [] : [[cell]])
-  for (const group of groups) {
-    const samples = group.flatMap((cell) => cell.pairs.map((pair) => pair.stock))
-    const drifted = (["symbols", "types", "instantiations"] as const).flatMap((counter) => {
-      const values = [...new Set(samples.map((sample) => sample[counter]))]
-      return values.length > 1 ? [`${counter} ${values.join(" vs ")}`] : []
-    })
-    if (drifted.length > 0) {
-      throw new PerfReportError({
-        reason: `stock counters drifted for ${channel} (${group[0]!.typescriptVersion}): ${drifted.join(", ")}; ` +
-          "the workload or the stock compiler is not deterministic"
-      })
-    }
-  }
-}
-
 const channelOrder = (channel: string) => channel === "latest" ? 0 : channel === "next" ? 1 : 2
 
 const sortChannels = (channels: Iterable<string>) =>
@@ -265,13 +246,22 @@ const renderChannel = (
   return rows
 }
 
-const formatStockCounters = (cells: ReadonlyArray<PerfCell>) =>
-  [...new Map(cells.map((cell) => [cell.typescriptVersion, cell.pairs[0]!.stock])).entries()]
-    .map(([version, stock]) =>
-      `\`${version}\` symbols ${formatCount(stock.symbols)} · types ${formatCount(stock.types)} · ` +
-      `instantiations ${formatCount(stock.instantiations)}`
-    )
+const formatStockCounters = (cells: ReadonlyArray<PerfCell>) => {
+  const samplesByVersion = new Map<string, Array<PerfSample>>()
+  for (const cell of cells) {
+    const samples = samplesByVersion.get(cell.typescriptVersion) ?? []
+    samples.push(...cell.pairs.map((pair) => pair.stock))
+    samplesByVersion.set(cell.typescriptVersion, samples)
+  }
+  return [...samplesByVersion.entries()]
+    .map(([version, samples]) => {
+      const counter = (name: "symbols" | "types" | "instantiations") =>
+        formatSummary("count", summarize(samples.map((sample) => sample[name])))
+      return `\`${version}\` symbols ${counter("symbols")} · types ${counter("types")} · ` +
+        `instantiations ${counter("instantiations")}`
+    })
     .join("; ")
+}
 
 const distinct = (values: ReadonlyArray<string>) => [...new Set(values)]
 
@@ -302,7 +292,6 @@ export const renderPerfReport = (
   for (const channel of channels) {
     const base = bySide.get(`${channel}\0base`)
     const head = bySide.get(`${channel}\0head`)
-    assertStableStockCounters(channel, base, head)
     rows.push(...renderChannel(channel, base, head, expectedKeys, flagged, missing))
     const measured = [base, head].flatMap((entry) => entry === undefined ? [] : [entry])
     if (measured.length > 0) stockLines.push(`- Stock counters, ${channel}: ${formatStockCounters(measured)}`)

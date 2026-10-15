@@ -70,3 +70,54 @@ export const narrowed = Effect.isEffect(guarded) ? guarded : null
 		t.Error("a reference narrowed by a type guard must not be ruled out")
 	}
 }
+
+func TestNodeCannotBeEffectLibraryTypePrimitiveExpressions(t *testing.T) {
+	t.Parallel()
+	if err := bundledeffect.EnsurePackageInstalled(bundledeffect.EffectV4, "effect"); err != nil {
+		t.Skip("Effect v4 not installed:", err)
+	}
+	source := `import { Effect } from "effect"
+declare const x: number
+export const trueLiteral = true
+export const falseLiteral = false
+export const nullLiteral = null
+export const regex = /a/
+export const not = !x
+export const negate = -x
+export const voided = void 0
+export const typeOf = typeof x
+export const undefinedReference = undefined
+export const effect = Effect.void`
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, source)
+	defer done()
+
+	initializers := map[string]*ast.Node{}
+	for _, statement := range sf.Statements.Nodes {
+		if statement.Kind != ast.KindVariableStatement {
+			continue
+		}
+		for _, declaration := range statement.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes {
+			initializers[declaration.Name().Text()] = declaration.Initializer()
+		}
+	}
+	for name, expected := range map[string]bool{
+		"trueLiteral":        true,
+		"falseLiteral":       true,
+		"nullLiteral":        true,
+		"regex":              true,
+		"not":                true,
+		"negate":             true,
+		"voided":             true,
+		"typeOf":             true,
+		"undefinedReference": false,
+		"effect":             false,
+	} {
+		node := initializers[name]
+		if got := tp.NodeCannotBeEffectLibraryType(node); got != expected {
+			t.Errorf("NodeCannotBeEffectLibraryType(%s) = %v, want %v", name, got, expected)
+		}
+		if isEffect := tp.EffectType(tp.GetTypeAtLocation(node)) != nil; expected && isEffect {
+			t.Errorf("fixture: %s was ruled out but its type is an Effect", name)
+		}
+	}
+}
