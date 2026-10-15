@@ -21,10 +21,7 @@ import { Effect } from "effect"
 
 export const preview = Effect.try({
 /**
-             ^^^^^^^ effecttsgo(effect-in-failure): The error channel contains an Effect (Effect<void, never, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there.
-*/
-/**
-                       ^^^^^^^^^^^^
+                       ^^^^^^^^^^^^ effecttsgo(effect-in-failure): The error channel contains an Effect (Effect<void, never, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there.
 */
   try: () => JSON.parse("{"),
 /**
