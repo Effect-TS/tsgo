@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"maps"
+	"strconv"
 	"strings"
 
 	"github.com/effect-ts/tsgo/etscore"
@@ -48,19 +49,30 @@ const (
 	severityMessage severity = "message"
 )
 
-type formattedDiagnostic struct {
-	File      string   `json:"file"`
-	Start     int      `json:"start"`
-	Length    int      `json:"length"`
-	Line      int      `json:"line"`
-	Column    int      `json:"column"`
-	EndLine   int      `json:"endLine"`
-	EndColumn int      `json:"endColumn"`
-	Severity  severity `json:"severity"`
-	Code      int32    `json:"code"`
-	Name      string   `json:"name"`
-	Message   string   `json:"message"`
+type location struct {
+	File      string `json:"file"`
+	Start     int    `json:"start"`
+	Length    int    `json:"length"`
+	Line      int    `json:"line"`
+	Column    int    `json:"column"`
+	EndLine   int    `json:"endLine"`
+	EndColumn int    `json:"endColumn"`
 	source    string
+}
+
+type formattedDiagnostic struct {
+	location
+	Severity           severity             `json:"severity"`
+	Code               int32                `json:"code"`
+	Name               string               `json:"name"`
+	Message            string               `json:"message"`
+	RelatedInformation []relatedInformation `json:"relatedInformation,omitempty"`
+}
+
+type relatedInformation struct {
+	location
+	Code    int32  `json:"code"`
+	Message string `json:"message"`
 }
 
 type summary struct {
@@ -330,18 +342,38 @@ func parseSeverityFilter(value string) map[severity]struct{} {
 }
 
 func formatDiagnostic(diagnostic *ast.Diagnostic) formattedDiagnostic {
+	name := rule.CodeToRuleName(rules.All, diagnostic.Code())
+	if name == "" {
+		name = fmt.Sprintf("effect(%d)", diagnostic.Code())
+	}
+	var related []relatedInformation
+	for _, info := range diagnostic.RelatedInformation() {
+		if info == nil || info.File() == nil {
+			continue
+		}
+		related = append(related, relatedInformation{
+			location: formatLocation(info),
+			Code:     info.Code(),
+			Message:  formatMessage(info, name),
+		})
+	}
+	return formattedDiagnostic{
+		location:           formatLocation(diagnostic),
+		Severity:           categoryToSeverity(diagnostic.Category()),
+		Code:               diagnostic.Code(),
+		Name:               name,
+		Message:            formatMessage(diagnostic, name),
+		RelatedInformation: related,
+	}
+}
+
+func formatLocation(diagnostic *ast.Diagnostic) location {
 	file := diagnostic.File()
 	start := file.GetPositionMap().UTF8ToUTF16(diagnostic.Pos())
 	end := file.GetPositionMap().UTF8ToUTF16(diagnostic.End())
 	line, column := scanner.GetECMALineAndUTF16CharacterOfPosition(file, diagnostic.Pos())
 	endLine, endColumn := scanner.GetECMALineAndUTF16CharacterOfPosition(file, diagnostic.End())
-	name := rule.CodeToRuleName(rules.All, diagnostic.Code())
-	if name == "" {
-		name = fmt.Sprintf("effect(%d)", diagnostic.Code())
-	}
-	message := flattenMessage(diagnostic, 0)
-	message = strings.TrimSuffix(message, " effect("+name+")")
-	return formattedDiagnostic{
+	return location{
 		File:      string(file.FileName()),
 		Start:     start,
 		Length:    end - start,
@@ -349,12 +381,12 @@ func formatDiagnostic(diagnostic *ast.Diagnostic) formattedDiagnostic {
 		Column:    int(column) + 1,
 		EndLine:   endLine + 1,
 		EndColumn: int(endColumn) + 1,
-		Severity:  categoryToSeverity(diagnostic.Category()),
-		Code:      diagnostic.Code(),
-		Name:      name,
-		Message:   message,
 		source:    file.Text(),
 	}
+}
+
+func formatMessage(diagnostic *ast.Diagnostic, name string) string {
+	return strings.TrimSuffix(flattenMessage(diagnostic, 0), " effect("+name+")")
 }
 
 func flattenMessage(diagnostic *ast.Diagnostic, level int) string {
@@ -429,17 +461,34 @@ func writePrettyDiagnostic(output io.Writer, diagnostic formattedDiagnostic) {
 	case severityWarning:
 		color = "\x1b[93m"
 	default:
-		color = "\x1b[96m"
+		color = cyanColor
 	}
-	reset := "\x1b[0m"
 	fmt.Fprintf(output, "%s%s:%d:%d - %s %s:%s %s\n",
-		color, diagnostic.File, diagnostic.Line, diagnostic.Column, diagnostic.Severity, diagnosticLabel(diagnostic.Name), reset, diagnostic.Message)
-	lines := strings.Split(diagnostic.source, "\n")
-	if diagnostic.Line > 0 && diagnostic.Line <= len(lines) {
-		line := strings.TrimSuffix(lines[diagnostic.Line-1], "\r")
-		fmt.Fprintf(output, "\n%d %s\n  %s%s%s\n\n", diagnostic.Line, line, color,
-			strings.Repeat(" ", max(diagnostic.Column-1, 0))+strings.Repeat("~", max(diagnostic.EndColumn-diagnostic.Column, 1)), reset)
+		color, diagnostic.File, diagnostic.Line, diagnostic.Column, diagnostic.Severity, diagnosticLabel(diagnostic.Name), resetColor, diagnostic.Message)
+	fmt.Fprintln(output)
+	writeCodeSnippet(output, diagnostic.location, "", color)
+	fmt.Fprintln(output)
+	for _, related := range diagnostic.RelatedInformation {
+		fmt.Fprintf(output, "  %s%s:%d:%d%s - %s\n", cyanColor, related.File, related.Line, related.Column, resetColor, related.Message)
+		writeCodeSnippet(output, related.location, "    ", cyanColor)
+		fmt.Fprintln(output)
 	}
+}
+
+const (
+	cyanColor  = "\x1b[96m"
+	resetColor = "\x1b[0m"
+)
+
+func writeCodeSnippet(output io.Writer, loc location, indent string, color string) {
+	lines := strings.Split(loc.source, "\n")
+	if loc.Line <= 0 || loc.Line > len(lines) {
+		return
+	}
+	line := strings.TrimSuffix(lines[loc.Line-1], "\r")
+	gutter := strconv.Itoa(loc.Line) + " "
+	fmt.Fprintf(output, "%s%s%s\n%s%s%s%s%s\n", indent, gutter, line, indent, strings.Repeat(" ", len(gutter)), color,
+		strings.Repeat(" ", max(loc.Column-1, 0))+strings.Repeat("~", max(loc.EndColumn-loc.Column, 1)), resetColor)
 }
 
 func diagnosticLabel(name string) string {
