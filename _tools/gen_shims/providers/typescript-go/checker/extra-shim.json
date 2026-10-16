@@ -1,5 +1,6 @@
 {
   "ExtraFields": {
+    "Checker": ["typeNodeLinks"],
     "StructuredType": ["indexInfos"]
   }
 }

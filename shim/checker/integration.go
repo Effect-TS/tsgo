@@ -78,7 +78,7 @@ func GetResolvedTypeFromTypeNode(c *Checker, node *ast.Node) *Type {
 	if node == nil {
 		return nil
 	}
-	store := Checker_typeNodeLinks(c)
+	store := (*NodeLinkStore[TypeNodeLinks])(unsafe.Pointer(&(*extra_Checker)(unsafe.Pointer(c)).typeNodeLinks))
 	links := store.TryGet(node)
 	if links == nil {
 		return nil

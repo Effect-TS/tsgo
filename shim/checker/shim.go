@@ -273,7 +273,7 @@ type extra_Checker struct {
   symbolWithDataArena core.Arena[ast.SymbolWithData]
   symbolExtraArena ast.SymbolExtraArena
   signatureArena core.Arena[checker.Signature]
-  signatureExtraArena core.Arena[checker.signatureExtra]
+  signatureExtraArena core.Arena[struct{typeParameters []*checker.Type; thisParameter *ast.Symbol; resolvedTypePredicate *checker.TypePredicate; isolatedSignatureType *checker.Type; composite *checker.CompositeSignature}]
   indexInfoArena core.Arena[checker.IndexInfo]
   literalTypeArena core.Arena[checker.LiteralType]
   objectTypeArena core.Arena[checker.ObjectType]
@@ -287,8 +287,8 @@ type extra_Checker struct {
   conditionalTypeArena core.Arena[checker.ConditionalType]
   typeListArena core.Arena[*checker.Type]
   outerTypeParameterListArena core.Arena[[]*checker.Type]
-  valueSymbolExtraArena core.Arena[checker.valueSymbolExtra]
-  structuredTypeExtraArena core.Arena[checker.structuredTypeExtra]
+  valueSymbolExtraArena core.Arena[struct{writeType *checker.Type; nameType *checker.Type; containingType *checker.Type}]
+  structuredTypeExtraArena core.Arena[struct{signatures []*checker.Signature; callSignatureCount int; indexInfos []*checker.IndexInfo; objectTypeWithoutAbstractConstructSignatures *checker.Type}]
   freeTypeSets *extra_temporaryTypeSet
   freePropertyCounts *extra_temporaryPropertyCounts
   mergedSymbols map[*ast.Symbol]*ast.Symbol
@@ -582,9 +582,6 @@ func Checker_symbolReferenceLinks(v *checker.Checker) core.LinkStore[*ast.Symbol
 }
 func Checker_typeAliasLinks(v *checker.Checker) core.LinkStore[*ast.Symbol, checker.TypeAliasLinks] {
   return ((*extra_Checker)(unsafe.Pointer(v))).typeAliasLinks
-}
-func Checker_typeNodeLinks(v *checker.Checker) checker.nodeLinkStore[checker.TypeNodeLinks] {
-  return ((*extra_Checker)(unsafe.Pointer(v))).typeNodeLinks
 }
 func Checker_unknownSymbol(v *checker.Checker) *ast.Symbol {
   return ((*extra_Checker)(unsafe.Pointer(v))).unknownSymbol

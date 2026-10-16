@@ -1173,6 +1173,13 @@ func run() error {
 				if !ty.Obj().Exported() {
 					return fieldTypeString(ty.Underlying())
 				}
+				if ty.TypeArgs().Len() > 0 {
+					args := make([]string, 0, ty.TypeArgs().Len())
+					for arg := range ty.TypeArgs().Types() {
+						args = append(args, fieldTypeString(arg))
+					}
+					return qualifierOnlyPackageName(ty.Obj().Pkg()) + "." + ty.Obj().Name() + "[" + strings.Join(args, ", ") + "]"
+				}
 			case *types.Pointer:
 				return "*" + fieldTypeString(ty.Elem())
 			case *types.Slice:
