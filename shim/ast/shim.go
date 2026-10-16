@@ -362,7 +362,7 @@ func GetEmitModuleFormatOfFileWorker(fileName tspath.RootedFilePath, options *co
 //go:linkname GetEnclosingBlockScopeContainer github.com/microsoft/TypeScript/tsc/internal/ast.GetEnclosingBlockScopeContainer
 func GetEnclosingBlockScopeContainer(node *ast.Node) *ast.Node
 //go:linkname GetExports github.com/microsoft/TypeScript/tsc/internal/ast.GetExports
-func GetExports(symbol *ast.Symbol) ast.SymbolTable
+func GetExports(symbol *ast.Symbol, arena *ast.SymbolExtraArena) ast.SymbolTable
 //go:linkname GetExpressionPrecedence github.com/microsoft/TypeScript/tsc/internal/ast.GetExpressionPrecedence
 func GetExpressionPrecedence(expression *ast.Expression) ast.OperatorPrecedence
 //go:linkname GetExtendsHeritageClauseElements github.com/microsoft/TypeScript/tsc/internal/ast.GetExtendsHeritageClauseElements
@@ -420,7 +420,7 @@ func GetLocals(container *ast.Node) ast.SymbolTable
 //go:linkname GetMeaningFromDeclaration github.com/microsoft/TypeScript/tsc/internal/ast.GetMeaningFromDeclaration
 func GetMeaningFromDeclaration(node *ast.Node) ast.SemanticMeaning
 //go:linkname GetMembers github.com/microsoft/TypeScript/tsc/internal/ast.GetMembers
-func GetMembers(symbol *ast.Symbol) ast.SymbolTable
+func GetMembers(symbol *ast.Symbol, arena *ast.SymbolExtraArena) ast.SymbolTable
 //go:linkname GetModuleInstanceState github.com/microsoft/TypeScript/tsc/internal/ast.GetModuleInstanceState
 func GetModuleInstanceState(node *ast.Node) ast.ModuleInstanceState
 //go:linkname GetModuleSpecifierOfBareOrAccessedRequire github.com/microsoft/TypeScript/tsc/internal/ast.GetModuleSpecifierOfBareOrAccessedRequire
@@ -2534,6 +2534,7 @@ type SuperExpression = ast.SuperExpression
 type SwitchStatement = ast.SwitchStatement
 type SwitchStatementNode = ast.SwitchStatementNode
 type Symbol = ast.Symbol
+type SymbolExtraArena = ast.SymbolExtraArena
 type SymbolFlags = ast.SymbolFlags
 const SymbolFlagsAccessor = ast.SymbolFlagsAccessor
 const SymbolFlagsAccessorExcludes = ast.SymbolFlagsAccessorExcludes

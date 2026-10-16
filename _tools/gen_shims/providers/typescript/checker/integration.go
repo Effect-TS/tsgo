@@ -283,7 +283,7 @@ func GetResolvedIndexInfosOfTypeIfMaterialized(c *Checker, t *Type) ([]*IndexInf
 	if t == nil || t.Flags()&TypeFlagsObject == 0 || t.ObjectFlags()&ObjectFlagsMembersResolved == 0 {
 		return nil, false
 	}
-	return StructuredType_indexInfos(t.AsStructuredType()), true
+	return StructuredType_getIndexInfos(t.AsStructuredType()), true
 }
 
 // GetInstantiatedSymbolMapper returns the mapper already recorded on an
