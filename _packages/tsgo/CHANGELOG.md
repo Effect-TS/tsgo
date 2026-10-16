@@ -1,5 +1,66 @@
 # @effect/tsgo
 
+## 0.53.3
+
+### Patch Changes
+
+- 1ab5264: `effect-tsgo diagnostics` now reports a diagnostic's related locations. They used to be dropped in every format, so `missingEffectContext` never showed which layer could provide the missing service and `apiStabilityLeak` never showed where the unstable declaration lives.
+  
+  With `--format json`, each diagnostic that has related locations gets a `relatedInformation` array. Each entry has the same location fields as the diagnostic, plus its own `code` and `message`. Diagnostics without related locations are unchanged.
+  
+  ```json
+  {
+    "line": 23,
+    "column": 3,
+    "code": 377004,
+    "name": "missingEffectContext",
+    "message": "This Effect requires a service that is missing from the expected Effect context: `Db | Fs`.",
+    "relatedInformation": [
+      {
+        "file": ".../src/index.ts",
+        "start": 662,
+        "length": 14,
+        "line": 22,
+        "column": 3,
+        "endLine": 22,
+        "endColumn": 17,
+        "code": 377059,
+        "message": "Adjusting this layer composition could provide the missing service."
+      }
+    ]
+  }
+  ```
+  
+  With `--format pretty`, the related locations are printed under the diagnostic, each with its own code snippet, as `tsc --pretty` does:
+  
+  ```
+  src/index.ts:23:3 - error effect(missingEffectContext): This Effect requires a service that is missing from the expected Effect context: `Db | Fs`.
+  
+  23   Effect.runPromise
+       ~~~~~~~~~~~~~~~~~
+  
+    src/index.ts:22:3 - Adjusting this layer composition could provide the missing service.
+      22   Effect.provide(live),
+           ~~~~~~~~~~~~~~
+  ```
+  
+  The `~` markers in pretty output are also aligned again on lines 10 and above. They used to sit one column to the left of the code.
+- 4672ba1: Make `globalDate` and `globalDateInEffect` do less work per file. Their shared walker used to look up the Effect context flags of every node it visited, although only call expressions (`Date.now()`) and `new` expressions (`new Date()`) can produce a diagnostic. It now looks up the flags only on those two node kinds, like `globalFetch`, `globalConsole`, `globalTimers`, `globalRandom` and `cryptoRandomUUID` already do.
+  
+  Reported diagnostics are unchanged.
+- b5df4e9: Speed up `apiStabilityLeak` by reusing one stability analysis per file.
+  
+  The rule used to allocate a fresh analysis, with its maps and work queues, for every export of a file. It now keeps one analysis per file and resets it before each export. The reset analysis behaves exactly like a fresh one, so the reported diagnostics are unchanged. A published surface that a later export reads from the shared cache is no longer queued for publication again, and a published surface without retained findings no longer allocates a findings map.
+  
+  On `packages/effect` of effect 4.0.5 with every rule enabled, the rule allocates 252 MB → 140 MB.
+- d3b53a7: Make the Effect diagnostics write less to the checker's per-node caches. Rules run on the checker goroutine right after each file is checked, and on the Effect monorepo most of their cost was cache traffic (map misses, nil inserts, map growth) and the garbage collection it caused, not type computation.
+  
+  - Reference checks such as "is this node `Effect.gen`?" no longer probe or fill the symbol cache for statements, blocks, clauses and tokens, which can never resolve to a symbol.
+  - The analysis that tracks whether code runs inside `Effect.gen`, `Effect.fn` or an Effect thunk stores an entry only where the answer changes, about 2% of nodes, instead of two entries for every node of every file.
+  - Type lookups reject nodes that can never have a type before touching the cache, the strict Effect type check caches only types named `Effect`, and whether a file has been checked is asked once per file instead of on every query.
+  
+  Reported diagnostics are unchanged.
+
 ## 0.53.2
 
 ### Patch Changes
