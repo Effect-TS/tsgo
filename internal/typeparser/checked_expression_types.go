@@ -42,8 +42,17 @@ func (tp TypeParser) checkedExpressionType(node *ast.Node) *checker.Type {
 	if ast.IsRightSideOfQualifiedNameOrPropertyAccess(node) {
 		node = node.Parent
 	}
-	if !checker.IsSourceFileTypeChecked(tp.checker, ast.GetSourceFileOfNode(node)) {
+	// A checked file stays checked, so remember the last one found checked. An
+	// unchecked file can be checked later and is asked again.
+	sf := ast.GetSourceFileOfNode(node)
+	if sf == nil {
 		return nil
+	}
+	if sf != tp.links.checkedExpressionTypeSourceFile {
+		if !checker.IsSourceFileTypeChecked(tp.checker, sf) {
+			return nil
+		}
+		tp.links.checkedExpressionTypeSourceFile = sf
 	}
 	var t *checker.Type
 	if recorded := tp.links.CheckedExpressionType.TryGet(node); recorded != nil {

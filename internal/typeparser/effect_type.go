@@ -128,11 +128,11 @@ func (tp *TypeParser) StrictEffectType(t *checker.Type) *Effect {
 	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
+	// Checked before the cache so types of other names leave no entry.
+	if sym := t.Symbol(); sym == nil || ast.TSGetSymbolName(sym) != "Effect" {
+		return nil
+	}
 	return Cached(&tp.links.StrictEffectType, t, func() *Effect {
-		sym := t.Symbol()
-		if sym == nil || ast.TSGetSymbolName(sym) != "Effect" {
-			return nil
-		}
 		return tp.EffectType(t)
 	})
 }
