@@ -51,6 +51,10 @@ func runGlobalDate(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 		if node == nil {
 			return false
 		}
+		if node.Kind != ast.KindCallExpression && node.Kind != ast.KindNewExpression {
+			node.ForEachChild(walk)
+			return false
+		}
 		inEffect := ctx.TypeParser.GetEffectContextFlags(node)&typeparser.EffectContextFlagInEffect != 0
 		if inEffect == checkInEffect {
 			matched := false
