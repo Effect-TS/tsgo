@@ -13,7 +13,6 @@
       "moduleSymbolLinks",
       "typeAliasLinks",
       "declaredTypeLinks",
-      "typeNodeLinks",
       "sourceFileLinks",
       "unknownSymbol",
       "noConstraintType",
@@ -24,7 +23,7 @@
     ],
     "IndexInfo": ["keyType", "valueType"],
     "SymbolReferenceLinks": ["referenceKinds"],
-    "ValueSymbolLinks": ["resolvedType", "writeType", "mapper"],
+    "ValueSymbolLinks": ["resolvedType", "mapper"],
     "AliasSymbolLinks": ["immediateTarget", "aliasTarget", "referenced"],
     "ModuleSymbolLinks": ["resolvedExports", "exportsChecked"],
     "TypeAliasLinks": ["declaredType"],
@@ -38,7 +37,7 @@
     "Signature": ["resolvedReturnType"],
     "TypeParameter": ["constraint", "resolvedDefaultType"],
     "InterfaceType": ["baseTypesResolved", "resolvedBaseTypes"],
-    "StructuredType": ["members", "indexInfos"],
+    "StructuredType": ["members"],
     "SourceFileLinks": ["typeChecked"]
   }
 }

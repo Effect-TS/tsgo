@@ -1173,6 +1173,13 @@ func run() error {
 				if !ty.Obj().Exported() {
 					return fieldTypeString(ty.Underlying())
 				}
+				if ty.TypeArgs().Len() > 0 {
+					args := make([]string, 0, ty.TypeArgs().Len())
+					for arg := range ty.TypeArgs().Types() {
+						args = append(args, fieldTypeString(arg))
+					}
+					return qualifierOnlyPackageName(ty.Obj().Pkg()) + "." + ty.Obj().Name() + "[" + strings.Join(args, ", ") + "]"
+				}
 			case *types.Pointer:
 				return "*" + fieldTypeString(ty.Elem())
 			case *types.Slice:
@@ -1241,6 +1248,7 @@ func run() error {
 		for name := range extraShim.ExtraFields {
 			matchedExtraFields[name] = false
 		}
+		emittedExtraStructs := make(map[string]bool)
 		compactFieldNames := make(map[string]map[string]bool, len(extraShim.CompactFields))
 		for name, fields := range extraShim.CompactFields {
 			compactFieldNames[name] = make(map[string]bool, len(fields))
@@ -1354,6 +1362,10 @@ func run() error {
 
 					var emitExtraStruct func(name string, s *types.Struct)
 					emitExtraStruct = func(name string, s *types.Struct) {
+						if emittedExtraStructs[name] {
+							return
+						}
+						emittedExtraStructs[name] = true
 						shimBuilder.WriteString("type extra_")
 						shimBuilder.WriteString(name)
 						shimBuilder.WriteString(" struct {")
@@ -1364,7 +1376,8 @@ func run() error {
 						}){}
 						for field := range s.Fields() {
 							shimBuilder.WriteString("\n  ")
-							if !field.Embedded() {
+							embeddedNamed, isNamed := field.Type().(*types.Named)
+							if !field.Embedded() || isNamed && !embeddedNamed.Obj().Exported() {
 								shimBuilder.WriteString(field.Name())
 								shimBuilder.WriteByte(' ')
 							}

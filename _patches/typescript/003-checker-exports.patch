@@ -12,9 +12,9 @@ index 1976fc674..b0d11ee42 100644
 +	if sig == nil || sig.mapper == nil {
 +		return nil
 +	}
-+	typeParams := sig.typeParameters
++	typeParams := sig.TypeParameters()
 +	if sig.target != nil {
-+		typeParams = sig.target.typeParameters
++		typeParams = sig.target.TypeParameters()
 +	}
 +	if len(typeParams) == 0 {
 +		return nil
