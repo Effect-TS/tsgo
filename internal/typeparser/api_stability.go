@@ -159,6 +159,11 @@ type apiStabilityFinding struct {
 // component the guard had refused). It is never part of equality or merge
 // semantics: complete results ignore it, and blocked results are never
 // promoted.
+//
+// findings stays nil until the first finding is added, and every write goes
+// through add. A surface stored in a session map is never mutated afterwards:
+// growApiStabilitySurface shares the stored map when a recollection adds
+// nothing and allocates a fresh one before writing otherwise.
 type apiStabilitySurface struct {
 	findings map[apiStabilityFindingKey]apiStabilityFinding
 	complete bool
@@ -169,7 +174,7 @@ type apiStabilitySurface struct {
 }
 
 func newApiStabilitySurface() apiStabilitySurface {
-	return apiStabilitySurface{findings: make(map[apiStabilityFindingKey]apiStabilityFinding), complete: true}
+	return apiStabilitySurface{complete: true}
 }
 
 // cycleCutSurface marks a result cut by an in-progress cycle. The settle
@@ -177,14 +182,14 @@ func newApiStabilitySurface() apiStabilitySurface {
 // back-edge's own direct findings are collected when the cut target is first
 // entered.
 func cycleCutSurface() apiStabilitySurface {
-	return apiStabilitySurface{findings: make(map[apiStabilityFindingKey]apiStabilityFinding), cutCycle: true}
+	return apiStabilitySurface{cutCycle: true}
 }
 
 // blockedSurface marks a result whose components are not materialized or whose
 // represented outcome is unavailable. It is never promoted to complete, so a
 // later query or session against a checked checker recomputes it.
 func blockedSurface() apiStabilitySurface {
-	return apiStabilitySurface{findings: make(map[apiStabilityFindingKey]apiStabilityFinding), blocked: true}
+	return apiStabilitySurface{blocked: true}
 }
 
 // cutByCycle marks a surface that an in-progress cycle back-edge cut short. The
@@ -209,10 +214,20 @@ func (s *apiStabilitySurface) merge(other apiStabilitySurface) {
 		s.blocked = s.blocked || other.blocked
 	}
 	for key, finding := range other.findings {
-		if existing, ok := s.findings[key]; !ok || finding.level > existing.level {
-			s.findings[key] = finding
-		}
+		s.add(key, finding)
 	}
+}
+
+// add records a finding unless the surface already holds the key at an equal
+// or higher level, allocating the findings map on first use.
+func (s *apiStabilitySurface) add(key apiStabilityFindingKey, finding apiStabilityFinding) {
+	if existing, ok := s.findings[key]; ok && finding.level <= existing.level {
+		return
+	}
+	if s.findings == nil {
+		s.findings = make(map[apiStabilityFindingKey]apiStabilityFinding)
+	}
+	s.findings[key] = finding
 }
 
 // equals compares the semantic content of two surfaces. observedEpoch is
@@ -1049,6 +1064,51 @@ func apiStabilitySimpleNameText(name *ast.Node) (string, bool) {
 	return "", false
 }
 
+// apiStabilityScopeList is an insertion-ordered set. Settlement iterates it
+// instead of a Go map so the visit order is the order a query reached results.
+type apiStabilityScopeList[K comparable] struct {
+	keys []K
+	has  map[K]struct{}
+}
+
+func (l *apiStabilityScopeList[K]) add(key K) {
+	if _, ok := l.has[key]; ok {
+		return
+	}
+	if l.has == nil {
+		l.has = make(map[K]struct{})
+	}
+	l.has[key] = struct{}{}
+	l.keys = append(l.keys, key)
+}
+
+func (l *apiStabilityScopeList[K]) reset() {
+	l.keys = l.keys[:0]
+	clear(l.has)
+}
+
+// apiStabilitySettleScope holds the incomplete results the current query
+// stored or read since the last converged settle. A result the query never
+// reached cannot feed the query's root, so settlement only revisits these and
+// whatever their recollections reach.
+type apiStabilitySettleScope struct {
+	symbols    apiStabilityScopeList[*ast.Symbol]
+	types      apiStabilityScopeList[apiStabilityTypeKey]
+	components apiStabilityScopeList[apiStabilityTypeKey]
+	signatures apiStabilityScopeList[apiStabilitySignatureKey]
+}
+
+func (s *apiStabilitySettleScope) empty() bool {
+	return len(s.symbols.keys) == 0 && len(s.types.keys) == 0 && len(s.components.keys) == 0 && len(s.signatures.keys) == 0
+}
+
+func (s *apiStabilitySettleScope) reset() {
+	s.symbols.reset()
+	s.types.reset()
+	s.components.reset()
+	s.signatures.reset()
+}
+
 // apiStabilityAnalysis carries the cycle guards and memo for one computation.
 // Complete symbol, signature, type and component results are reused inside the
 // analysis, results contaminated by a cycle are settled with a bounded
@@ -1078,15 +1138,24 @@ type apiStabilityAnalysis struct {
 	carriers map[apiStabilityCarrier]*apiStabilityCarrier
 
 	// settleSymbols, settleTypes, settleComponents and settleSignatures record
-	// the first-insertion order of the session results. Settlement recollects
-	// incomplete results in that order instead of Go's randomized map order, so
-	// the bounded fixpoint visits exactly the same results in the same sequence
-	// over the same checker state and the reported findings are reproducible.
-	// The order is analysis-local bookkeeping; it is never part of any cache key.
+	// the first-insertion order of the session results. reconcileSettleOrder
+	// compares them with the session maps to find results stored without the
+	// store helpers. The order is analysis-local bookkeeping; it is never part
+	// of any cache key.
 	settleSymbols    []*ast.Symbol
 	settleTypes      []apiStabilityTypeKey
 	settleComponents []apiStabilityTypeKey
 	settleSignatures []apiStabilitySignatureKey
+
+	// scope is the set of incomplete results the next settle revisits, in the
+	// order the query reached them, so the fixpoint stays deterministic without
+	// walking the whole session.
+	scope apiStabilitySettleScope
+
+	// publishTypes and publishSignatures queue the complete context-free results
+	// produced since the last settle, so publication only visits new results.
+	publishTypes      []apiStabilityTypeKey
+	publishSignatures []apiStabilitySignatureKey
 
 	activeSymbols      map[apiStabilitySymbolKey]bool
 	activeTypes        map[apiStabilityTypeKey]bool
@@ -1205,9 +1274,19 @@ func (a *apiStabilityAnalysis) consumeWork() bool {
 // in progress, blocked or cycle-cut before promotion is never published; a
 // promoted cycle result is published only here, after the fixpoint established
 // that its findings no longer change.
+//
+// The fixpoint only revisits the settle scope: the incomplete results the
+// current query stored or read since the last converged settle, plus whatever
+// their recollections reach. A session that answers many queries (every member
+// of a namespace export) would otherwise recollect every result an earlier
+// query left blocked once per later query. A result outside the scope stays as
+// it is until a later query reads it, which enrolls it again. An unconverged
+// fixpoint keeps its scope so the next settle retries the same cycle cuts.
 func (a *apiStabilityAnalysis) settle() {
-	if a.hasIncomplete() {
-		converged := false
+	a.reconcileSettleOrder()
+	converged := true
+	if !a.scope.empty() {
+		converged = false
 		for range apiStabilityMaxSettleRounds {
 			if !a.settleRound() {
 				converged = true
@@ -1237,40 +1316,82 @@ func (a *apiStabilityAnalysis) settle() {
 		}
 	}
 	a.publishCompleteSurfaces()
+	if converged {
+		a.scope.reset()
+	}
 }
 
-// storeSymbolSurface records a symbol result and its first-insertion order.
+// storeSymbolSurface records a symbol result and its first-insertion order and
+// enrolls an incomplete result in the settle scope.
 func (a *apiStabilityAnalysis) storeSymbolSurface(symbol *ast.Symbol, surface apiStabilitySurface) {
 	if _, exists := a.sessionSymbols[symbol]; !exists {
 		a.settleSymbols = append(a.settleSymbols, symbol)
 	}
 	a.sessionSymbols[symbol] = surface
+	a.enrollSymbol(symbol, surface)
 }
 
-// storeTypeSurface records a type result and its first-insertion order.
+// storeTypeSurface records a type result and its first-insertion order and
+// enrolls it for settlement or publication.
 func (a *apiStabilityAnalysis) storeTypeSurface(key apiStabilityTypeKey, surface apiStabilitySurface) {
 	if _, exists := a.sessionTypes[key]; !exists {
 		a.settleTypes = append(a.settleTypes, key)
 	}
 	a.sessionTypes[key] = surface
+	a.enrollType(key, surface)
 }
 
 // storeComponentSurface records an object-component result and its
-// first-insertion order.
+// first-insertion order and enrolls an incomplete result in the settle scope.
 func (a *apiStabilityAnalysis) storeComponentSurface(key apiStabilityTypeKey, surface apiStabilitySurface) {
 	if _, exists := a.sessionComponents[key]; !exists {
 		a.settleComponents = append(a.settleComponents, key)
 	}
 	a.sessionComponents[key] = surface
+	a.enrollComponent(key, surface)
 }
 
 // storeSignatureSurface records a signature result and its first-insertion
-// order.
+// order and enrolls it for settlement or publication.
 func (a *apiStabilityAnalysis) storeSignatureSurface(key apiStabilitySignatureKey, surface apiStabilitySurface) {
 	if _, exists := a.sessionSignatures[key]; !exists {
 		a.settleSignatures = append(a.settleSignatures, key)
 	}
 	a.sessionSignatures[key] = surface
+	a.enrollSignature(key, surface)
+}
+
+func (a *apiStabilityAnalysis) enrollSymbol(symbol *ast.Symbol, surface apiStabilitySurface) {
+	if !surface.complete {
+		a.scope.symbols.add(symbol)
+	}
+}
+
+// enrollType puts an incomplete type result in the settle scope and queues a
+// complete context-free one for publication.
+func (a *apiStabilityAnalysis) enrollType(key apiStabilityTypeKey, surface apiStabilitySurface) {
+	switch {
+	case !surface.complete:
+		a.scope.types.add(key)
+	case key.carrier == nil:
+		a.publishTypes = append(a.publishTypes, key)
+	}
+}
+
+func (a *apiStabilityAnalysis) enrollComponent(key apiStabilityTypeKey, surface apiStabilitySurface) {
+	if !surface.complete {
+		a.scope.components.add(key)
+	}
+}
+
+// enrollSignature is enrollType for a signature result.
+func (a *apiStabilityAnalysis) enrollSignature(key apiStabilitySignatureKey, surface apiStabilitySurface) {
+	switch {
+	case !surface.complete:
+		a.scope.signatures.add(key)
+	case key.carrier == nil:
+		a.publishSignatures = append(a.publishSignatures, key)
+	}
 }
 
 // restoreOwnTagFinding re-adds one finding a published snapshot removed as the
@@ -1304,7 +1425,7 @@ func (a *apiStabilityAnalysis) sharedTypeSurface(t *checker.Type, inspect apiSta
 		return apiStabilitySurface{}, false
 	}
 	surface := newApiStabilitySurface()
-	maps.Copy(surface.findings, entry.findings)
+	surface.findings = maps.Clone(entry.findings)
 	for _, key := range entry.removed {
 		a.restoreOwnTagFinding(&surface, key)
 	}
@@ -1322,7 +1443,7 @@ func (a *apiStabilityAnalysis) sharedSignatureSurface(signature *checker.Signatu
 		return apiStabilitySurface{}, false
 	}
 	surface := newApiStabilitySurface()
-	maps.Copy(surface.findings, entry.findings)
+	surface.findings = maps.Clone(entry.findings)
 	for _, key := range entry.removed {
 		a.restoreOwnTagFinding(&surface, key)
 	}
@@ -1382,26 +1503,26 @@ func (a *apiStabilityAnalysis) publishSignatureSurface(signature *checker.Signat
 	*store.Get(signature) = entry
 }
 
-// publishCompleteSurfaces pushes every complete, settled, context-free session
-// result into the per-checker shared caches. It runs after the settle fixpoint
-// (including cycle promotion) so an in-progress or cycle-cut surface is never
-// published. Results computed under a substitution carrier stay analysis-local.
-// Symbol surfaces stay analysis-local too: a symbol root composes its own
-// declared identity with the reusable concrete type and signature surfaces.
+// publishCompleteSurfaces pushes the complete, settled, context-free session
+// results queued since the last settle into the per-checker shared caches. It
+// runs after the settle fixpoint (including cycle promotion) so an in-progress
+// or cycle-cut surface is never published. Only stores of complete results and
+// promotions queue a key, and only for results without a substitution carrier,
+// so a session that answers many queries does not revisit the results every
+// earlier query already published. Symbol surfaces stay analysis-local: a symbol
+// root composes its own declared identity with the reusable concrete type and
+// signature surfaces.
 func (a *apiStabilityAnalysis) publishCompleteSurfaces() {
-	if a.tp == nil || a.tp.links == nil {
-		return
-	}
-	for key, surface := range a.sessionTypes {
-		if key.carrier == nil {
-			a.publishTypeSurface(key.t, key.inspect, surface)
+	if a.tp != nil && a.tp.links != nil {
+		for _, key := range a.publishTypes {
+			a.publishTypeSurface(key.t, key.inspect, a.sessionTypes[key])
+		}
+		for _, key := range a.publishSignatures {
+			a.publishSignatureSurface(key.signature, a.sessionSignatures[key])
 		}
 	}
-	for key, surface := range a.sessionSignatures {
-		if key.carrier == nil {
-			a.publishSignatureSurface(key.signature, surface)
-		}
-	}
+	a.publishTypes = a.publishTypes[:0]
+	a.publishSignatures = a.publishSignatures[:0]
 }
 
 // apiStabilityNodeVisitKey renders a stable visit key for a declaration node.
@@ -1469,7 +1590,8 @@ func apiStabilitySignatureVisitKey(key apiStabilitySignatureKey) string {
 // store helpers, so settlement still visits them. Production results always go
 // through the helpers, whose size fast path keeps the order slices in sync; an
 // analysis-local seeded result (a test that installs a cycle cut directly) is
-// appended here in a canonical order so the visit sequence stays
+// appended here in a canonical order, and enrolled in the settle scope or the
+// publication queues exactly like a stored result, so the visit sequence stays
 // deterministic.
 func (a *apiStabilityAnalysis) reconcileSettleOrder() {
 	if len(a.sessionSymbols) != len(a.settleSymbols) {
@@ -1487,6 +1609,9 @@ func (a *apiStabilityAnalysis) reconcileSettleOrder() {
 			return apiStabilitySymbolVisitKey(missing[i]) < apiStabilitySymbolVisitKey(missing[j])
 		})
 		a.settleSymbols = append(a.settleSymbols, missing...)
+		for _, symbol := range missing {
+			a.enrollSymbol(symbol, a.sessionSymbols[symbol])
+		}
 	}
 	if len(a.sessionTypes) != len(a.settleTypes) {
 		seen := make(map[apiStabilityTypeKey]struct{}, len(a.settleTypes))
@@ -1503,6 +1628,9 @@ func (a *apiStabilityAnalysis) reconcileSettleOrder() {
 			return apiStabilityTypeVisitKey(missing[i]) < apiStabilityTypeVisitKey(missing[j])
 		})
 		a.settleTypes = append(a.settleTypes, missing...)
+		for _, key := range missing {
+			a.enrollType(key, a.sessionTypes[key])
+		}
 	}
 	if len(a.sessionComponents) != len(a.settleComponents) {
 		seen := make(map[apiStabilityTypeKey]struct{}, len(a.settleComponents))
@@ -1519,6 +1647,9 @@ func (a *apiStabilityAnalysis) reconcileSettleOrder() {
 			return apiStabilityTypeVisitKey(missing[i]) < apiStabilityTypeVisitKey(missing[j])
 		})
 		a.settleComponents = append(a.settleComponents, missing...)
+		for _, key := range missing {
+			a.enrollComponent(key, a.sessionComponents[key])
+		}
 	}
 	if len(a.sessionSignatures) != len(a.settleSignatures) {
 		seen := make(map[apiStabilitySignatureKey]struct{}, len(a.settleSignatures))
@@ -1535,88 +1666,110 @@ func (a *apiStabilityAnalysis) reconcileSettleOrder() {
 			return apiStabilitySignatureVisitKey(missing[i]) < apiStabilitySignatureVisitKey(missing[j])
 		})
 		a.settleSignatures = append(a.settleSignatures, missing...)
+		for _, key := range missing {
+			a.enrollSignature(key, a.sessionSignatures[key])
+		}
 	}
 }
 
-// settleRound recollects every incomplete surface once and reports whether any
-// surface changed. Complete results are always skipped: a completed result is
-// never recomputed. A blocked result is skipped only when it was already
-// collected at the current advancement epoch, so a materializing read or a
-// surface change that happened after its last collection is always revisited.
-// Results are visited in their first-insertion order so the bounded fixpoint
-// spends its rounds deterministically; a recollection that adds a new result
-// appends it to the end of the order and is visited in the same round, and a
-// result stored without the store helpers is reconciled into the order before
-// the round.
+// settleRound recollects every incomplete surface in the settle scope once and
+// reports whether any surface changed. Complete results are always skipped: a
+// completed result is never recomputed. A blocked result is skipped only when
+// it was already collected at the current advancement epoch, so a materializing
+// read or a surface change that happened after its last collection is always
+// revisited. Results are visited in the order the query reached them so the
+// bounded fixpoint spends its rounds deterministically. A recollection that
+// stores or reads another incomplete result enrolls it in the scope, and the
+// round visits it before returning, whichever kind it is.
 func (a *apiStabilityAnalysis) settleRound() bool {
-	a.reconcileSettleOrder()
 	changed := false
-	// The order slices can grow while a round runs: recollecting a result may
-	// store new results through the store helpers. The dynamic bound visits
-	// them in the same round, which the range-over-int rewrite would not.
-	for index := 0; index < len(a.settleTypes); index++ { //nolint:intrange // bounds grow during the round
-		key := a.settleTypes[index]
-		surface := a.sessionTypes[key]
-		if surface.complete || a.settleCannotAdvance(surface) {
-			continue
+	types, components, signatures, symbols := 0, 0, 0, 0
+	// The scope lists grow while a round runs, so their lengths are read on
+	// every iteration instead of being snapshotted.
+	for types < len(a.scope.types.keys) || components < len(a.scope.components.keys) ||
+		signatures < len(a.scope.signatures.keys) || symbols < len(a.scope.symbols.keys) {
+		for ; types < len(a.scope.types.keys); types++ {
+			if a.settleType(a.scope.types.keys[types]) {
+				changed = true
+			}
 		}
-		startEpoch := a.materializationEpoch
-		frame := a.typeFrames[key]
-		recomputed := a.collectTypeSurface(key.t, key.inspect, apiStabilitySubstitution{frame: frame})
-		merged := growApiStabilitySurface(surface, recomputed)
-		if !merged.equals(surface) {
-			changed = true
+		for ; components < len(a.scope.components.keys); components++ {
+			if a.settleComponent(a.scope.components.keys[components]) {
+				changed = true
+			}
 		}
-		merged.observedEpoch = startEpoch
-		a.sessionTypes[key] = merged
+		for ; signatures < len(a.scope.signatures.keys); signatures++ {
+			if a.settleSignature(a.scope.signatures.keys[signatures]) {
+				changed = true
+			}
+		}
+		for ; symbols < len(a.scope.symbols.keys); symbols++ {
+			if a.settleSymbol(a.scope.symbols.keys[symbols]) {
+				changed = true
+			}
+		}
 	}
-	for index := 0; index < len(a.settleComponents); index++ { //nolint:intrange // bounds grow during the round
-		key := a.settleComponents[index]
-		surface := a.sessionComponents[key]
-		if surface.complete || a.settleCannotAdvance(surface) {
-			continue
-		}
-		startEpoch := a.materializationEpoch
-		frame := a.typeFrames[key]
-		recomputed := a.collectObjectComponentSurface(key.t, key.inspect, apiStabilitySubstitution{frame: frame})
-		merged := growApiStabilitySurface(surface, recomputed)
-		if !merged.equals(surface) {
-			changed = true
-		}
-		merged.observedEpoch = startEpoch
-		a.sessionComponents[key] = merged
+	return changed
+}
+
+// settleType recollects one incomplete type result and reports whether its
+// surface changed.
+func (a *apiStabilityAnalysis) settleType(key apiStabilityTypeKey) bool {
+	surface := a.sessionTypes[key]
+	if surface.complete || a.settleCannotAdvance(surface) {
+		return false
 	}
-	for index := 0; index < len(a.settleSignatures); index++ { //nolint:intrange // bounds grow during the round
-		key := a.settleSignatures[index]
-		surface := a.sessionSignatures[key]
-		if surface.complete || a.settleCannotAdvance(surface) {
-			continue
-		}
-		startEpoch := a.materializationEpoch
-		frame := a.signatureFrames[key]
-		recomputed := a.collectSignatureSurface(rawSignature(key.signature), key.signature, apiStabilitySubstitution{frame: frame})
-		merged := growApiStabilitySurface(surface, recomputed)
-		if !merged.equals(surface) {
-			changed = true
-		}
-		merged.observedEpoch = startEpoch
-		a.sessionSignatures[key] = merged
+	startEpoch := a.materializationEpoch
+	recomputed := a.collectTypeSurface(key.t, key.inspect, apiStabilitySubstitution{frame: a.typeFrames[key]})
+	merged := growApiStabilitySurface(surface, recomputed)
+	changed := !merged.equals(surface)
+	merged.observedEpoch = startEpoch
+	a.sessionTypes[key] = merged
+	return changed
+}
+
+// settleComponent is settleType for an object-component result.
+func (a *apiStabilityAnalysis) settleComponent(key apiStabilityTypeKey) bool {
+	surface := a.sessionComponents[key]
+	if surface.complete || a.settleCannotAdvance(surface) {
+		return false
 	}
-	for index := 0; index < len(a.settleSymbols); index++ { //nolint:intrange // bounds grow during the round
-		symbol := a.settleSymbols[index]
-		surface := a.sessionSymbols[symbol]
-		if surface.complete || a.settleCannotAdvance(surface) {
-			continue
-		}
-		startEpoch := a.materializationEpoch
-		recomputed := a.collectSymbolSurface(symbol)
-		merged := growApiStabilitySurface(surface, recomputed)
-		if !merged.equals(surface) {
-			changed = true
-		}
-		merged.observedEpoch = startEpoch
-		a.sessionSymbols[symbol] = merged
+	startEpoch := a.materializationEpoch
+	recomputed := a.collectObjectComponentSurface(key.t, key.inspect, apiStabilitySubstitution{frame: a.typeFrames[key]})
+	merged := growApiStabilitySurface(surface, recomputed)
+	changed := !merged.equals(surface)
+	merged.observedEpoch = startEpoch
+	a.sessionComponents[key] = merged
+	return changed
+}
+
+// settleSignature is settleType for a signature result.
+func (a *apiStabilityAnalysis) settleSignature(key apiStabilitySignatureKey) bool {
+	surface := a.sessionSignatures[key]
+	if surface.complete || a.settleCannotAdvance(surface) {
+		return false
 	}
+	startEpoch := a.materializationEpoch
+	recomputed := a.collectSignatureSurface(rawSignature(key.signature), key.signature, apiStabilitySubstitution{frame: a.signatureFrames[key]})
+	merged := growApiStabilitySurface(surface, recomputed)
+	changed := !merged.equals(surface)
+	merged.observedEpoch = startEpoch
+	a.sessionSignatures[key] = merged
+	return changed
+}
+
+// settleSymbol is settleType for a symbol result.
+func (a *apiStabilityAnalysis) settleSymbol(symbol *ast.Symbol) bool {
+	surface := a.sessionSymbols[symbol]
+	if surface.complete || a.settleCannotAdvance(surface) {
+		return false
+	}
+	startEpoch := a.materializationEpoch
+	recomputed := a.collectSymbolSurface(symbol)
+	merged := growApiStabilitySurface(surface, recomputed)
+	changed := !merged.equals(surface)
+	merged.observedEpoch = startEpoch
+	a.sessionSymbols[symbol] = merged
 	return changed
 }
 
@@ -1697,15 +1850,21 @@ func (a *apiStabilityAnalysis) materializedSignaturesOfSymbol(c *checker.Checker
 // stored one. Findings only grow across fixpoint rounds, so a result
 // established in an earlier round is never lost when a later round observes a
 // dependency that is itself still settling; incompleteness is latched until
-// promotion, and a blocked result is never promoted.
+// promotion, and a blocked result is never promoted. The merged surface shares
+// the stored findings map when the recomputation adds nothing new; otherwise it
+// gets a fresh map, so the stored map is never written.
 func growApiStabilitySurface(previous, recomputed apiStabilitySurface) apiStabilitySurface {
 	merged := previous
-	merged.findings = make(map[apiStabilityFindingKey]apiStabilityFinding, len(previous.findings)+len(recomputed.findings))
-	maps.Copy(merged.findings, previous.findings)
 	for key, finding := range recomputed.findings {
-		if existing, ok := merged.findings[key]; !ok || finding.level > existing.level {
-			merged.findings[key] = finding
+		if existing, ok := previous.findings[key]; ok && finding.level <= existing.level {
+			continue
 		}
+		merged.findings = make(map[apiStabilityFindingKey]apiStabilityFinding, len(previous.findings)+len(recomputed.findings))
+		maps.Copy(merged.findings, previous.findings)
+		for recomputedKey, recomputedFinding := range recomputed.findings {
+			merged.add(recomputedKey, recomputedFinding)
+		}
+		break
 	}
 	if !recomputed.complete {
 		merged.complete = false
@@ -1715,57 +1874,42 @@ func growApiStabilitySurface(previous, recomputed apiStabilitySurface) apiStabil
 	return merged
 }
 
-// promoteSettled marks cycle-cut results as complete after the fixpoint
-// converged. A blocked result is never promoted.
+// promoteSettled marks the cycle-cut results in the settle scope as complete
+// after the fixpoint converged and queues the context-free ones for
+// publication. A blocked result is never promoted. A cycle-cut result outside
+// the scope was not reached by this query and stays cut until a later query
+// reads it.
 func (a *apiStabilityAnalysis) promoteSettled() {
-	for symbol, surface := range a.sessionSymbols {
-		if !surface.complete && !surface.blocked {
+	for _, symbol := range a.scope.symbols.keys {
+		if surface := a.sessionSymbols[symbol]; !surface.complete && !surface.blocked {
 			surface.complete, surface.cutCycle = true, false
 			a.sessionSymbols[symbol] = surface
 		}
 	}
-	for key, surface := range a.sessionTypes {
-		if !surface.complete && !surface.blocked {
+	for _, key := range a.scope.types.keys {
+		if surface := a.sessionTypes[key]; !surface.complete && !surface.blocked {
 			surface.complete, surface.cutCycle = true, false
 			a.sessionTypes[key] = surface
+			if key.carrier == nil {
+				a.publishTypes = append(a.publishTypes, key)
+			}
 		}
 	}
-	for key, surface := range a.sessionComponents {
-		if !surface.complete && !surface.blocked {
+	for _, key := range a.scope.components.keys {
+		if surface := a.sessionComponents[key]; !surface.complete && !surface.blocked {
 			surface.complete, surface.cutCycle = true, false
 			a.sessionComponents[key] = surface
 		}
 	}
-	for key, surface := range a.sessionSignatures {
-		if !surface.complete && !surface.blocked {
+	for _, key := range a.scope.signatures.keys {
+		if surface := a.sessionSignatures[key]; !surface.complete && !surface.blocked {
 			surface.complete, surface.cutCycle = true, false
 			a.sessionSignatures[key] = surface
+			if key.carrier == nil {
+				a.publishSignatures = append(a.publishSignatures, key)
+			}
 		}
 	}
-}
-
-func (a *apiStabilityAnalysis) hasIncomplete() bool {
-	for _, surface := range a.sessionSymbols {
-		if !surface.complete {
-			return true
-		}
-	}
-	for _, surface := range a.sessionTypes {
-		if !surface.complete {
-			return true
-		}
-	}
-	for _, surface := range a.sessionComponents {
-		if !surface.complete {
-			return true
-		}
-	}
-	for _, surface := range a.sessionSignatures {
-		if !surface.complete {
-			return true
-		}
-	}
-	return false
 }
 
 // symbolSurface computes the dependency surface of an export symbol in this
@@ -1776,6 +1920,9 @@ func (a *apiStabilityAnalysis) symbolSurface(symbol *ast.Symbol) apiStabilitySur
 		return newApiStabilitySurface()
 	}
 	if cached, ok := a.sessionSymbols[symbol]; ok {
+		if !cached.complete {
+			a.scope.symbols.add(symbol)
+		}
 		return cached
 	}
 	startEpoch := a.materializationEpoch
@@ -2099,6 +2246,9 @@ func (a *apiStabilityAnalysis) typeSurface(t *checker.Type, inspect apiStability
 	}
 	key := apiStabilityTypeKey{t: t, inspect: inspect, carrier: subst.carrier()}
 	if cached, ok := a.sessionTypes[key]; ok {
+		if !cached.complete {
+			a.scope.types.add(key)
+		}
 		return cached
 	}
 	if key.carrier == nil {
@@ -3367,6 +3517,9 @@ func (a *apiStabilityAnalysis) componentSurface(t *checker.Type, inspect apiStab
 	}
 	key := apiStabilityTypeKey{t: t, inspect: inspect, carrier: subst.carrier()}
 	if cached, ok := a.sessionComponents[key]; ok {
+		if !cached.complete {
+			a.scope.components.add(key)
+		}
 		return cached
 	}
 	a.typeFrames[key] = subst.frame
@@ -3431,6 +3584,9 @@ func (a *apiStabilityAnalysis) signatureSurface(signature *checker.Signature, su
 	}
 	key := apiStabilitySignatureKey{signature: signature, carrier: subst.carrier()}
 	if cached, ok := a.sessionSignatures[key]; ok {
+		if !cached.complete {
+			a.scope.signatures.add(key)
+		}
 		return cached
 	}
 	if key.carrier == nil {
@@ -4638,10 +4794,7 @@ func (a *apiStabilityAnalysis) recordDeclarationStability(surface *apiStabilityS
 }
 
 func (a *apiStabilityAnalysis) addFinding(surface *apiStabilitySurface, key apiStabilityFindingKey, declared ApiStabilityDeclaration) {
-	existing, ok := surface.findings[key]
-	if !ok || declared.level > existing.level {
-		surface.findings[key] = apiStabilityFinding(declared)
-	}
+	surface.add(key, apiStabilityFinding(declared))
 }
 
 // declarationRepresentedType returns the represented type of a symbol's own
