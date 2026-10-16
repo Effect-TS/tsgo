@@ -28,6 +28,9 @@ type EffectLinks struct {
 	DataFirstOrLastCall          denseNodeStore[*ParsedDataFirstOrLastCall]
 	CheckedExpressionType        denseNodeStore[*checker.Type]
 	checkedExpressionTypesPaused bool
+	// checkedExpressionTypeSourceFile is the last source file found type
+	// checked by checkedExpressionType.
+	checkedExpressionTypeSourceFile *ast.SourceFile
 
 	ObjectLiteralContextualType               core.LinkStore[*ast.Node, *checker.Type]
 	ObjectLiteralConstraintContextualType     core.LinkStore[*ast.Node, *checker.Type]
