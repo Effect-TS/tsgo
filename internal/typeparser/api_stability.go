@@ -159,6 +159,11 @@ type apiStabilityFinding struct {
 // component the guard had refused). It is never part of equality or merge
 // semantics: complete results ignore it, and blocked results are never
 // promoted.
+//
+// findings stays nil until the first finding is added, and every write goes
+// through add. A surface stored in a session map is never mutated afterwards:
+// growApiStabilitySurface shares the stored map when a recollection adds
+// nothing and allocates a fresh one before writing otherwise.
 type apiStabilitySurface struct {
 	findings map[apiStabilityFindingKey]apiStabilityFinding
 	complete bool
@@ -169,7 +174,7 @@ type apiStabilitySurface struct {
 }
 
 func newApiStabilitySurface() apiStabilitySurface {
-	return apiStabilitySurface{findings: make(map[apiStabilityFindingKey]apiStabilityFinding), complete: true}
+	return apiStabilitySurface{complete: true}
 }
 
 // cycleCutSurface marks a result cut by an in-progress cycle. The settle
@@ -177,14 +182,14 @@ func newApiStabilitySurface() apiStabilitySurface {
 // back-edge's own direct findings are collected when the cut target is first
 // entered.
 func cycleCutSurface() apiStabilitySurface {
-	return apiStabilitySurface{findings: make(map[apiStabilityFindingKey]apiStabilityFinding), cutCycle: true}
+	return apiStabilitySurface{cutCycle: true}
 }
 
 // blockedSurface marks a result whose components are not materialized or whose
 // represented outcome is unavailable. It is never promoted to complete, so a
 // later query or session against a checked checker recomputes it.
 func blockedSurface() apiStabilitySurface {
-	return apiStabilitySurface{findings: make(map[apiStabilityFindingKey]apiStabilityFinding), blocked: true}
+	return apiStabilitySurface{blocked: true}
 }
 
 // cutByCycle marks a surface that an in-progress cycle back-edge cut short. The
@@ -209,10 +214,20 @@ func (s *apiStabilitySurface) merge(other apiStabilitySurface) {
 		s.blocked = s.blocked || other.blocked
 	}
 	for key, finding := range other.findings {
-		if existing, ok := s.findings[key]; !ok || finding.level > existing.level {
-			s.findings[key] = finding
-		}
+		s.add(key, finding)
 	}
+}
+
+// add records a finding unless the surface already holds the key at an equal
+// or higher level, allocating the findings map on first use.
+func (s *apiStabilitySurface) add(key apiStabilityFindingKey, finding apiStabilityFinding) {
+	if existing, ok := s.findings[key]; ok && finding.level <= existing.level {
+		return
+	}
+	if s.findings == nil {
+		s.findings = make(map[apiStabilityFindingKey]apiStabilityFinding)
+	}
+	s.findings[key] = finding
 }
 
 // equals compares the semantic content of two surfaces. observedEpoch is
@@ -1410,7 +1425,7 @@ func (a *apiStabilityAnalysis) sharedTypeSurface(t *checker.Type, inspect apiSta
 		return apiStabilitySurface{}, false
 	}
 	surface := newApiStabilitySurface()
-	maps.Copy(surface.findings, entry.findings)
+	surface.findings = maps.Clone(entry.findings)
 	for _, key := range entry.removed {
 		a.restoreOwnTagFinding(&surface, key)
 	}
@@ -1428,7 +1443,7 @@ func (a *apiStabilityAnalysis) sharedSignatureSurface(signature *checker.Signatu
 		return apiStabilitySurface{}, false
 	}
 	surface := newApiStabilitySurface()
-	maps.Copy(surface.findings, entry.findings)
+	surface.findings = maps.Clone(entry.findings)
 	for _, key := range entry.removed {
 		a.restoreOwnTagFinding(&surface, key)
 	}
@@ -1835,15 +1850,21 @@ func (a *apiStabilityAnalysis) materializedSignaturesOfSymbol(c *checker.Checker
 // stored one. Findings only grow across fixpoint rounds, so a result
 // established in an earlier round is never lost when a later round observes a
 // dependency that is itself still settling; incompleteness is latched until
-// promotion, and a blocked result is never promoted.
+// promotion, and a blocked result is never promoted. The merged surface shares
+// the stored findings map when the recomputation adds nothing new; otherwise it
+// gets a fresh map, so the stored map is never written.
 func growApiStabilitySurface(previous, recomputed apiStabilitySurface) apiStabilitySurface {
 	merged := previous
-	merged.findings = make(map[apiStabilityFindingKey]apiStabilityFinding, len(previous.findings)+len(recomputed.findings))
-	maps.Copy(merged.findings, previous.findings)
 	for key, finding := range recomputed.findings {
-		if existing, ok := merged.findings[key]; !ok || finding.level > existing.level {
-			merged.findings[key] = finding
+		if existing, ok := previous.findings[key]; ok && finding.level <= existing.level {
+			continue
 		}
+		merged.findings = make(map[apiStabilityFindingKey]apiStabilityFinding, len(previous.findings)+len(recomputed.findings))
+		maps.Copy(merged.findings, previous.findings)
+		for recomputedKey, recomputedFinding := range recomputed.findings {
+			merged.add(recomputedKey, recomputedFinding)
+		}
+		break
 	}
 	if !recomputed.complete {
 		merged.complete = false
@@ -4773,10 +4794,7 @@ func (a *apiStabilityAnalysis) recordDeclarationStability(surface *apiStabilityS
 }
 
 func (a *apiStabilityAnalysis) addFinding(surface *apiStabilitySurface, key apiStabilityFindingKey, declared ApiStabilityDeclaration) {
-	existing, ok := surface.findings[key]
-	if !ok || declared.level > existing.level {
-		surface.findings[key] = apiStabilityFinding(declared)
-	}
+	surface.add(key, apiStabilityFinding(declared))
 }
 
 // declarationRepresentedType returns the represented type of a symbol's own
