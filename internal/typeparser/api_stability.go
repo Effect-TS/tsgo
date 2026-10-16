@@ -660,15 +660,15 @@ func ApiStabilityImmediateAliasedSymbol(c *checker.Checker, symbol *ast.Symbol) 
 }
 
 // ApiStabilitySession is the analysis-local memo for the computed stability of
-// one export. The rule creates one session per export and queries the export's
-// symbol (and any namespace member) through it, so repeated components are
-// computed once within the export. After settling, the session publishes every
-// complete, context-free concrete type and signature surface to the
-// per-checker shared caches, so a later export, file or TypeParser over the
-// same checker composes that snapshot instead of recomputing; the session's
-// symbol and carrier memos, and every incomplete or blocked result, are
-// discarded with the session. Declared stability is read from the per-checker
-// declared caches and never needs a session.
+// one export. The rule keeps one session per file, resets it before each export
+// and queries the export's symbol (and any namespace member) through it, so
+// repeated components are computed once within the export. After settling, the
+// session publishes every complete, context-free concrete type and signature
+// surface to the per-checker shared caches, so a later export, file or
+// TypeParser over the same checker composes that snapshot instead of
+// recomputing; the session's symbol and carrier memos, and every incomplete or
+// blocked result, are discarded with the session. Declared stability is read
+// from the per-checker declared caches and never needs a session.
 type ApiStabilitySession struct {
 	analysis *apiStabilityAnalysis
 }
@@ -682,6 +682,16 @@ func (tp *TypeParser) NewApiStabilitySession() *ApiStabilitySession {
 		return nil
 	}
 	return &ApiStabilitySession{analysis: newApiStabilityAnalysis(tp)}
+}
+
+// Reset discards every analysis-local result so the session analyzes the next
+// export exactly like a new session would, while keeping its allocated tables.
+// The published shared snapshots are unaffected.
+func (s *ApiStabilitySession) Reset() {
+	if s == nil || s.analysis == nil {
+		return
+	}
+	s.analysis.reset()
 }
 
 // UsedBySymbol computes the stability the children of a symbol's public
@@ -1245,6 +1255,40 @@ func newApiStabilityAnalysis(tp *TypeParser) *apiStabilityAnalysis {
 	}
 }
 
+// reset returns the analysis to the state newApiStabilityAnalysis produces,
+// keeping map and slice capacity. Every per-export field must be cleared here.
+func (a *apiStabilityAnalysis) reset() {
+	clear(a.sessionSymbols)
+	clear(a.sessionTypes)
+	clear(a.sessionComponents)
+	clear(a.sessionSignatures)
+	clear(a.typeFrames)
+	clear(a.signatureFrames)
+	clear(a.carriers)
+	a.settleSymbols = a.settleSymbols[:0]
+	a.settleTypes = a.settleTypes[:0]
+	a.settleComponents = a.settleComponents[:0]
+	a.settleSignatures = a.settleSignatures[:0]
+	a.scope.reset()
+	a.publishTypes = a.publishTypes[:0]
+	a.publishSignatures = a.publishSignatures[:0]
+	clear(a.activeSymbols)
+	clear(a.activeTypes)
+	clear(a.activeComponents)
+	clear(a.activeSignatures)
+	clear(a.activeAliases)
+	clear(a.activeConditionals)
+	clear(a.signatureArgs)
+	clear(a.signatureParameterCache)
+	clear(a.safetySafeMemo)
+	clear(a.typeNameSymbols)
+	clear(a.optionalTaggedSymbols)
+	a.work = 0
+	a.safetyWork = 0
+	clear(a.materializationReads)
+	a.materializationEpoch = 0
+}
+
 func (a *apiStabilityAnalysis) consumeWork() bool {
 	a.work++
 	return a.work <= apiStabilityMaxWork
@@ -1469,11 +1513,14 @@ func (a *apiStabilityAnalysis) publishTypeSurface(t *checker.Type, inspect apiSt
 		return
 	}
 	own := a.typeOwnTag(t)
-	entry := apiStabilitySharedSurface{findings: make(map[apiStabilityFindingKey]apiStabilityFinding, len(surface.findings))}
+	var entry apiStabilitySharedSurface
 	for findingKey, finding := range surface.findings {
 		if own.excludes(findingKey, finding) {
 			entry.removed = append(entry.removed, findingKey)
 			continue
+		}
+		if entry.findings == nil {
+			entry.findings = make(map[apiStabilityFindingKey]apiStabilityFinding, len(surface.findings))
 		}
 		entry.findings[findingKey] = finding
 	}
@@ -1492,11 +1539,14 @@ func (a *apiStabilityAnalysis) publishSignatureSurface(signature *checker.Signat
 		return
 	}
 	own := a.signatureOwnTag(signature)
-	entry := apiStabilitySharedSurface{findings: make(map[apiStabilityFindingKey]apiStabilityFinding, len(surface.findings))}
+	var entry apiStabilitySharedSurface
 	for findingKey, finding := range surface.findings {
 		if own.excludes(findingKey, finding) {
 			entry.removed = append(entry.removed, findingKey)
 			continue
+		}
+		if entry.findings == nil {
+			entry.findings = make(map[apiStabilityFindingKey]apiStabilityFinding, len(surface.findings))
 		}
 		entry.findings[findingKey] = finding
 	}
@@ -2253,7 +2303,10 @@ func (a *apiStabilityAnalysis) typeSurface(t *checker.Type, inspect apiStability
 	}
 	if key.carrier == nil {
 		if shared, ok := a.sharedTypeSurface(t, inspect); ok {
-			a.storeTypeSurface(key, shared)
+			// Already published, so it is recorded without being queued for
+			// publication again.
+			a.settleTypes = append(a.settleTypes, key)
+			a.sessionTypes[key] = shared
 			return shared
 		}
 	}
@@ -3591,7 +3644,10 @@ func (a *apiStabilityAnalysis) signatureSurface(signature *checker.Signature, su
 	}
 	if key.carrier == nil {
 		if shared, ok := a.sharedSignatureSurface(signature); ok {
-			a.storeSignatureSurface(key, shared)
+			// Already published, so it is recorded without being queued for
+			// publication again.
+			a.settleSignatures = append(a.settleSignatures, key)
+			a.sessionSignatures[key] = shared
 			return shared
 		}
 	}

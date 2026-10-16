@@ -30,13 +30,13 @@ var ApiStabilityLeak = rule.Rule{
 }
 
 // checkApiStabilityLeaks compares each export's declared stability ceiling with
-// the actual stability of its public surface. Every export is inspected in its
-// own ApiStabilitySession, so the export's type and signatures share one
-// traversal and unpublishable results stay local to it. Declared stability
-// lookups persist per checker, and a complete, settled, context-free concrete
-// type or signature surface is reused by later exports, files and TypeParsers
-// over the same checker. The ceiling and the diagnostic location are per
-// export.
+// the actual stability of its public surface. Every export is inspected in the
+// file's ApiStabilitySession, reset before each export, so the export's type
+// and signatures share one traversal and unpublishable results stay local to
+// it. Declared stability lookups persist per checker, and a complete, settled,
+// context-free concrete type or signature surface is reused by later exports,
+// files and TypeParsers over the same checker. The ceiling and the diagnostic
+// location are per export.
 func checkApiStabilityLeaks(ctx *rule.Context) []*ast.Diagnostic {
 	moduleSymbol := checker.Checker_getSymbolOfDeclaration(ctx.Checker, ctx.SourceFile.AsNode())
 	if moduleSymbol == nil {
@@ -44,6 +44,7 @@ func checkApiStabilityLeaks(ctx *rule.Context) []*ast.Diagnostic {
 	}
 
 	var diagnostics []*ast.Diagnostic
+	session := ctx.TypeParser.NewApiStabilitySession()
 	for _, exportSymbol := range sortedApiStabilityExports(ctx, moduleSymbol) {
 		if exportSymbol == nil {
 			continue
@@ -64,7 +65,7 @@ func checkApiStabilityLeaks(ctx *rule.Context) []*ast.Diagnostic {
 			continue
 		}
 
-		session := ctx.TypeParser.NewApiStabilitySession()
+		session.Reset()
 		walker := newApiStabilityWalker(ctx, session, exportSymbol, target, location, ceiling)
 		walker.inspectExport()
 		diagnostics = append(diagnostics, walker.diagnostics...)
