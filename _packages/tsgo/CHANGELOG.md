@@ -1,5 +1,75 @@
 # @effect/tsgo
 
+## 0.53.2
+
+### Patch Changes
+
+- c75c219: Make `apiStabilityLeak` allocate less. The rule used to create an empty findings map for every type, signature and symbol it inspected, and to copy the stored findings into a new map every time it re-checked an unresolved result. Most results never get a finding, and most re-checks add nothing. A result's map is now created when it gets its first finding, and a re-check that adds nothing keeps the stored map instead of copying it.
+  
+  For example, on the Effect monorepo the rule allocated 605 MB in 5.3 M objects before and 496 MB in 3.4 M objects after. Its CPU went from 3.4 s to 3.2 s.
+  
+  Reported diagnostics are unchanged.
+- 0076e24: Make `apiStabilityLeak` faster on namespace exports. The rule checks each member of a namespace export in one shared analysis, and every member used to re-check every unresolved result that earlier members left behind. A namespace with thousands of members did millions of repeated checks. Each member now re-checks only the results its own check reached.
+  
+  For example, on the Effect monorepo the `Generated` namespace export of `@effect/ai-openai` has 3,603 members. Across the whole repository the rule used 22.8 s of CPU before and 3.4 s after.
+  
+  Reported diagnostics are unchanged.
+- 410f21e: Rules now read the type the checker computed for an expression while it checked the file, instead of asking the checker again afterwards. Asking again repeated work, such as flow analysis, and in a few cases gave a different type than the check used. For example, a return literal checked while its enclosing generic call was still resolving:
+  
+  ```ts
+  export const takeWhileDefined = dual(2, <A>(self: Iterable<A>, f: (input: A) => A | undefined) => ({
+    [Symbol.iterator]() {
+      const iterator = self[Symbol.iterator]()
+      return {
+        next() {
+          const result = iterator.next()
+          if (result.done) {
+            // the check typed this as { done: boolean; value: undefined }
+            // asking again gave { done: true; value: undefined }
+            return { done: true, value: undefined }
+          }
+          return { done: false, value: f(result.value) }
+        }
+      }
+    }
+  }))
+  ```
+  
+  Rules now see `{ done: boolean; value: undefined }`, the type the rest of the check is based on.
+- c5d3d7a: Resolve Effect API references once per symbol. `IsNodeReferenceToModuleExport` used to answer "is this symbol exported as `gen`?" one member name at a time, caching each answer in a per-symbol map. It now computes, once per symbol, the names its declaring module exports it under, from a per-module index of exports keyed the way the checker compares symbols, and answers every member name from that list. `export =` modules keep the direct lookup.
+  
+  For example, checking whether a callee is `Effect.gen`, `Effect.fn` or `Effect.sync` now reads one cached list (`["gen"]` for `Effect.gen`) instead of hashing three cache keys.
+  
+  With 125 rules enabled on the Effect monorepo, wall time, CPU time and peak memory are unchanged within noise, and the reported diagnostics are unchanged.
+- f02bf75: Skip Effect type queries for more expressions that always produce a primitive or a `RegExp`. `NodeCannotBeEffectLibraryType` now also rules out `true`, `false`, `null`, regular expression literals, prefix unary expressions such as `!x` and `-x`, `void x` and `typeof x`. The `undefined` identifier still goes through the checker, because a local binding can shadow it.
+  
+  For example, for `return true` inside `Effect.gen`, `returnEffectInGen` no longer asks the checker for the type of `true`.
+  
+  Reported diagnostics are unchanged.
+- 67d58fc: Add a Perf workflow that compares each pull request against its base for every supported TypeScript channel. Each job runs stock and Effect-patched tsgo on a pinned Effect checkout with every rule executing, and a sticky PR comment reports the change in symbols, types, instantiations, allocations, and check and total time over stock. Run it locally with `repoctl perf ci` and `repoctl perf report`.
+- 01f337a: Report each problem once in `effectInFailure`, `anyUnknownInErrorContext` and `promiseInEffectSuccess`. These rules check the type of every node in a file, and the checker gives some pairs of nodes the same type. A declaration and its name share a type, and so do `a.b` and its name `b`. The rules now check one node of each pair.
+  
+  A variable whose initializer has the problem used to get two warnings, one on the variable name and one on the initializer. Now only the initializer is reported:
+  
+  ```ts
+  // before: warnings on `shouldReport` and on `Effect.try(...)`
+  // after: one warning on `Effect.try(...)`
+  export const shouldReport = Effect.try({
+    try: () => JSON.parse("{"),
+    catch: (e) => Effect.log(e)
+  })
+  ```
+  
+  A property access is now reported over the whole expression `promiseEffectHolder.current` instead of the name `current`.
+  
+  `anyUnknownInErrorContext` keeps only the innermost warning when nested expressions report the same problem. It used to drop an outer warning whenever any warning inside it reported something. Now it drops the outer warning only when an inner warning reports every channel the outer one does, with the same `any` or `unknown`. An outer `unknown` error channel that comes from an explicit type argument is still reported when the inner expressions only have `any`:
+  
+  ```ts
+  declare const anyFailure: Effect.Effect<number, any>
+  // warnings on `Effect.withFiber(...)` (unknown in the error channel) and on `anyFailure` (any)
+  export const keepsDifferentKind = Effect.withFiber<number, unknown>(() => anyFailure)
+  ```
+
 ## 0.53.1
 
 ### Patch Changes
