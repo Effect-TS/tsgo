@@ -81,10 +81,35 @@ func (tp *TypeParser) ReferenceSymbolAtNode(node *ast.Node) *ast.Symbol {
 	if tp == nil || tp.checker == nil || node == nil {
 		return nil
 	}
+	if node.Flags&ast.NodeFlagsJSDoc == 0 && !canHaveSymbolAtLocation(node.Kind) {
+		return nil
+	}
 
 	return CachedNode(&tp.links.ReferenceSymbol, node, func() *ast.Symbol {
 		return tp.referenceSymbolFrom(node, tp.GetSymbolAtLocation(node))
 	})
+}
+
+// canHaveSymbolAtLocation reports whether the checker's getSymbolAtLocation
+// can return a symbol for a node of this kind: the source file, the
+// declaration names it resolves before its switch, and the kinds its switch
+// handles. Every other kind falls through to its nil default. JSDoc nodes can
+// be swapped for their reparsed clones, so callers must not gate them.
+func canHaveSymbolAtLocation(kind ast.Kind) bool {
+	switch kind {
+	case ast.KindSourceFile,
+		ast.KindIdentifier, ast.KindPrivateIdentifier,
+		ast.KindStringLiteral, ast.KindNumericLiteral, ast.KindBigIntLiteral, ast.KindNoSubstitutionTemplateLiteral,
+		ast.KindComputedPropertyName,
+		ast.KindPropertyAccessExpression, ast.KindElementAccessExpression, ast.KindQualifiedName,
+		ast.KindThisKeyword, ast.KindThisType, ast.KindSuperKeyword,
+		ast.KindConstructorKeyword, ast.KindDefaultKeyword, ast.KindFunctionKeyword,
+		ast.KindEqualsGreaterThanToken, ast.KindClassKeyword,
+		ast.KindImportType, ast.KindExportKeyword, ast.KindImportKeyword, ast.KindNewKeyword,
+		ast.KindInstanceOfKeyword, ast.KindMetaProperty, ast.KindJsxNamespacedName:
+		return true
+	}
+	return false
 }
 
 func (tp *TypeParser) SymbolAndReferenceSymbolAtNode(node *ast.Node) (*ast.Symbol, *ast.Symbol) {
@@ -254,6 +279,10 @@ func (tp *TypeParser) sourceFileMatchesModule(sf *ast.SourceFile, desc packageSo
 }
 
 func (tp *TypeParser) symbolHasDeclarationInModuleCached(sym *ast.Symbol, desc packageSourceFileDescriptor) bool {
+	// With one declaration the per-file filter already answers in one lookup.
+	if len(ast.TSGetSymbolDeclarations(sym)) == 1 {
+		return tp.symbolHasDeclarationInModule(sym, desc)
+	}
 	filter := tp.links.ModuleExportFilter.Get(sym)
 	bit := moduleDescriptorMask(1) << desc.id
 	if filter.checked&bit == 0 {
