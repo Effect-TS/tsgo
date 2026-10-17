@@ -4,7 +4,7 @@ import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import type * as PlatformError from "effect/PlatformError"
 import type * as Terminal from "effect/Terminal"
-import * as Prompt from "effect/unstable/cli/Prompt"
+import { Prompt } from "effect/cli"
 import { FileReadError, TsConfigNotFoundError } from "./errors.js"
 import type { FileInput } from "./types.js"
 
@@ -27,7 +27,7 @@ const findTsConfigFiles = (
   })
 
 const promptForTsConfigPath = (currentDir: string) =>
-  Prompt.file({
+  Prompt.File({
     type: "file",
     message: "Select tsconfig to configure",
     startingPath: currentDir,
@@ -63,7 +63,7 @@ export const selectTsConfigFile = (
         }
       ]
 
-      const selected = yield* Prompt.select({
+      const selected = yield* Prompt.Select({
         message: "Select tsconfig to configure",
         choices
       })

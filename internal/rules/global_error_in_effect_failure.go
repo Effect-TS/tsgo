@@ -58,6 +58,9 @@ func checkGlobalErrorInEffectFailure(ctx *rule.Context, node *ast.Node) *ast.Dia
 
 	// Walk up the parent chain to find an enclosing Effect type
 	ancestor := ast.FindAncestorOrQuit(node.Parent, func(current *ast.Node) ast.FindAncestorResult {
+		if ctx.TypeParser.NodeCannotBeEffectLibraryType(current) {
+			return ast.FindAncestorFalse
+		}
 		currentType := ctx.TypeParser.GetTypeAtLocation(current)
 		if currentType == nil {
 			return ast.FindAncestorFalse
@@ -69,7 +72,7 @@ func checkGlobalErrorInEffectFailure(ctx *rule.Context, node *ast.Node) *ast.Dia
 		}
 
 		// Found an Effect type — check if the failure channel contains global Error
-		if slices.ContainsFunc(ctx.TypeParser.UnrollUnionMembers(effectType.E), ctx.TypeParser.IsGlobalErrorType) {
+		if slices.ContainsFunc(ctx.TypeParser.UnrollUnionMembers(effectType.E()), ctx.TypeParser.IsGlobalErrorType) {
 			return ast.FindAncestorTrue
 		}
 

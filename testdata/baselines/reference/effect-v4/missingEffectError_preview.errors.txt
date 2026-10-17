@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/missingEffectError_preview.ts(10,59): warning TS377003: Missing errors Boom in the expected Effect type. effect(missingEffectError)
 

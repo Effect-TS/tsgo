@@ -1,0 +1,15 @@
+==== /.src/preferSchemaTaggedError_default.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 3:37 - 3:73
+Node: Data.TaggedError("DefaultOffError")
+Node Kind: KindCallExpression
+
+Subject: "DefaultOffError"
+Subject Type: "DefaultOffError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "DefaultOffError"; } & Readonly<A>

@@ -23,7 +23,7 @@ export interface PerfOptions {
   readonly diagnosticsFlag: string
 }
 
-interface Compiler {
+export interface Compiler {
   readonly name: "stock" | "patched"
   readonly identity: string
   readonly command: string
@@ -41,6 +41,9 @@ export interface PerfMetrics {
   readonly changesTime?: string
   readonly memoryUsed?: string
   readonly memoryAllocs?: string
+  readonly symbols?: string
+  readonly types?: string
+  readonly instantiations?: string
 }
 
 interface PerfRun extends PerfMetrics {
@@ -71,7 +74,10 @@ export const parsePerfMetrics = (diagnostics: string): PerfMetrics => ({
   emitTime: metric(diagnostics, "Aggregate Emit time"),
   changesTime: metric(diagnostics, "Aggregate Changes compute time"),
   memoryUsed: metric(diagnostics, "Aggregate Memory used"),
-  memoryAllocs: metric(diagnostics, "Aggregate Memory allocs")
+  memoryAllocs: metric(diagnostics, "Aggregate Memory allocs"),
+  symbols: metric(diagnostics, "Aggregate Symbols"),
+  types: metric(diagnostics, "Aggregate Types"),
+  instantiations: metric(diagnostics, "Aggregate Instantiations")
 })
 
 export const median = (values: ReadonlyArray<number>) => {
@@ -83,9 +89,11 @@ export const median = (values: ReadonlyArray<number>) => {
     : (sorted[middle - 1]! + sorted[middle]!) / 2
 }
 
-const numericMetric = (value: string | undefined, suffix: string) => {
+export const numericMetric = (value: string | undefined, suffix: string) => {
   if (value === undefined || !value.endsWith(suffix)) return undefined
-  const parsed = Number(value.slice(0, -suffix.length))
+  const digits = value.slice(0, value.length - suffix.length)
+  if (digits === "") return undefined
+  const parsed = Number(digits)
   return Number.isFinite(parsed) ? parsed : undefined
 }
 
@@ -103,6 +111,65 @@ const formatRun = (run: PerfRun) => [
   `allocs=${run.memoryAllocs ?? "n/a"}`
 ].join(" ")
 
+export const cleanTarget = Effect.fnUntraced(function*(target: string, label: string, logPath: string) {
+  const fs = yield* FileSystem.FileSystem
+  yield* Console.log(`[${label}] pnpm clean`)
+  const clean = yield* runCommandCaptureSplit("pnpm", target, ["clean"])
+  yield* fs.writeFileString(logPath, clean.stdout + clean.stderr)
+  if (clean.exitCode !== 0) {
+    return yield* new PerfError({ reason: `pnpm clean exited with code ${clean.exitCode}` })
+  }
+})
+
+export const resolveCompilers = Effect.fnUntraced(function*(
+  cwd: string,
+  typescriptVersion: string,
+  patchedBin: string,
+  stockBin?: string
+) {
+  const path = yield* Path.Path
+  const stockCommand = stockBin === undefined ? "pnpm" : path.resolve(stockBin)
+  const stockArgs = stockBin === undefined
+    ? ["--silent", "--package", `typescript@${typescriptVersion}`, "dlx", "tsc"]
+    : []
+  const stockIdentity = stockBin === undefined
+    ? `pnpm --silent --package typescript@${typescriptVersion} dlx tsc`
+    : stockCommand
+  const [stockVersionResult, patchedVersionResult] = yield* Effect.all([
+    runCommandCaptureSplit(stockCommand, cwd, [...stockArgs, "--version"]),
+    runCommandCaptureSplit(patchedBin, cwd, ["--version"])
+  ], { concurrency: "unbounded" })
+  if (stockVersionResult.exitCode !== 0) {
+    return yield* new PerfError({ reason: `Unable to read stock compiler version: ${stockVersionResult.stderr}` })
+  }
+  if (patchedVersionResult.exitCode !== 0) {
+    return yield* new PerfError({ reason: `Unable to read patched compiler version: ${patchedVersionResult.stderr}` })
+  }
+  const stockVersion = stockVersionResult.stdout.trim()
+  const patchedVersion = patchedVersionResult.stdout.trim()
+  if (stockVersion.includes("+effect-tsgo.")) {
+    return yield* new PerfError({ reason: `Resolved stock binary is Effect-patched: ${stockIdentity} (${stockVersion})` })
+  }
+  yield* Console.log(`Stock compiler: ${stockIdentity} (${stockVersion})`)
+  yield* Console.log(`Patched compiler: ${patchedBin} (${patchedVersion})`)
+  return {
+    stock: {
+      name: "stock",
+      identity: stockIdentity,
+      command: stockCommand,
+      args: stockArgs,
+      version: stockVersion
+    },
+    patched: {
+      name: "patched",
+      identity: patchedBin,
+      command: patchedBin,
+      args: [],
+      version: patchedVersion
+    }
+  } satisfies Record<Compiler["name"], Compiler>
+})
+
 const runCompiler = Effect.fnUntraced(function*(
   target: string,
   runDirectory: string,
@@ -117,12 +184,7 @@ const runCompiler = Effect.fnUntraced(function*(
   const pprofDirectory = path.join(caseDirectory, "pprof")
   yield* fs.makeDirectory(pprofDirectory, { recursive: true })
 
-  yield* Console.log(`[${compiler.name} run ${run}] pnpm clean`)
-  const clean = yield* runCommandCaptureSplit("pnpm", target, ["clean"])
-  yield* fs.writeFileString(path.join(caseDirectory, "clean.log"), clean.stdout + clean.stderr)
-  if (clean.exitCode !== 0) {
-    return yield* new PerfError({ reason: `pnpm clean exited with code ${clean.exitCode}` })
-  }
+  yield* cleanTarget(target, `${compiler.name} run ${run}`, path.join(caseDirectory, "clean.log"))
 
   yield* Console.log(
     `[${compiler.name} run ${run}] ${compiler.identity} -b ${config} ${diagnosticsFlag} --pprofDir ${pprofDirectory}`
@@ -208,47 +270,8 @@ export const comparePerformance = Effect.fnUntraced(function*(repositoryRoot: st
     ], false, { CGO_ENABLED: "0" })
   }
 
-  const stockCommand = options.stockBin === undefined ? "pnpm" : path.resolve(options.stockBin)
-  const stockArgs = options.stockBin === undefined
-    ? ["--silent", "--package", `typescript@${typescriptVersion}`, "dlx", "tsc"]
-    : []
-  const stockIdentity = options.stockBin === undefined
-    ? `pnpm --silent --package typescript@${typescriptVersion} dlx tsc`
-    : stockCommand
-  const [stockVersionResult, patchedVersionResult] = yield* Effect.all([
-    runCommandCaptureSplit(stockCommand, repositoryRoot, [...stockArgs, "--version"]),
-    runCommandCaptureSplit(patchedBin, repositoryRoot, ["--version"])
-  ], { concurrency: "unbounded" })
-  if (stockVersionResult.exitCode !== 0) {
-    return yield* new PerfError({ reason: `Unable to read stock compiler version: ${stockVersionResult.stderr}` })
-  }
-  if (patchedVersionResult.exitCode !== 0) {
-    return yield* new PerfError({ reason: `Unable to read patched compiler version: ${patchedVersionResult.stderr}` })
-  }
-  const stockVersion = stockVersionResult.stdout.trim()
-  const patchedVersion = patchedVersionResult.stdout.trim()
-  if (stockVersion.includes("+effect-tsgo.")) {
-    return yield* new PerfError({ reason: `Resolved stock binary is Effect-patched: ${stockIdentity} (${stockVersion})` })
-  }
-
-  const compilers: ReadonlyArray<Compiler> = [
-    {
-      name: "stock",
-      identity: stockIdentity,
-      command: stockCommand,
-      args: stockArgs,
-      version: stockVersion
-    },
-    {
-      name: "patched",
-      identity: patchedBin,
-      command: patchedBin,
-      args: [],
-      version: patchedVersion
-    }
-  ]
-  yield* Console.log(`Stock compiler: ${stockIdentity} (${stockVersion})`)
-  yield* Console.log(`Patched compiler: ${patchedBin} (${patchedVersion})`)
+  const { patched, stock } = yield* resolveCompilers(repositoryRoot, typescriptVersion, patchedBin, options.stockBin)
+  const compilers: ReadonlyArray<Compiler> = [stock, patched]
 
   const results: Array<PerfRun> = []
   for (let run = 1; run <= options.runs; run++) {

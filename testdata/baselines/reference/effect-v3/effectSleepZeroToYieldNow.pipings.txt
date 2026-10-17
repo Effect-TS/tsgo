@@ -1,0 +1,1261 @@
+==== /.src/effectSleepZeroToYieldNow.ts (86 flows) ====
+
+=== Piping Flow ===
+Location: 4:27 - 4:43
+Node: Effect.sleep(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 5:28 - 5:45
+Node: Effect.sleep(+0)
+Node Kind: KindCallExpression
+
+Subject: +0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 6:28 - 6:45
+Node: Effect.sleep(-0)
+Node Kind: KindCallExpression
+
+Subject: -0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 7:27 - 7:45
+Node: Effect.sleep(0.0)
+Node Kind: KindCallExpression
+
+Subject: 0.0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 8:28 - 8:46
+Node: Effect.sleep(0e3)
+Node Kind: KindCallExpression
+
+Subject: 0e3
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 9:31 - 9:49
+Node: Effect.sleep(0x0)
+Node Kind: KindCallExpression
+
+Subject: 0x0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 10:26 - 10:44
+Node: Effect.sleep(0b0)
+Node Kind: KindCallExpression
+
+Subject: 0b0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 11:25 - 11:43
+Node: Effect.sleep(0o0)
+Node Kind: KindCallExpression
+
+Subject: 0o0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 12:26 - 12:43
+Node: Effect.sleep(0n)
+Node Kind: KindCallExpression
+
+Subject: 0n
+Subject Type: 0n
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 13:34 - 13:52
+Node: Effect.sleep(-0n)
+Node Kind: KindCallExpression
+
+Subject: -0n
+Subject Type: 0n
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 14:37 - 14:56
+Node: Effect.sleep(0x0n)
+Node Kind: KindCallExpression
+
+Subject: 0x0n
+Subject Type: 0n
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 15:33 - 15:53
+Node: Effect.sleep(((0)))
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 16:28 - 16:54
+Node: Effect.sleep(0 as number)
+Node Kind: KindCallExpression
+
+Subject: 0 as number
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 17:29 - 17:62
+Node: Effect.sleep(0 satisfies number)
+Node Kind: KindCallExpression
+
+Subject: 0 satisfies number
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 18:25 - 18:46
+Node: Effect.sleep([0, 0])
+Node Kind: KindCallExpression
+
+Subject: [0, 0]
+Subject Type: [number, number]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 19:31 - 19:54
+Node: Effect.sleep([-0, +0])
+Node Kind: KindCallExpression
+
+Subject: [-0, +0]
+Subject Type: [number, number]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 20:33 - 20:63
+Node: Effect.sleep([0, 0] as const)
+Node Kind: KindCallExpression
+
+Subject: [0, 0] as const
+Subject Type: readonly [0, 0]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 21:26 - 21:52
+Node: Effect.sleep("0 seconds")
+Node Kind: KindCallExpression
+
+Subject: "0 seconds"
+Subject Type: "0 seconds"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 22:32 - 22:63
+Node: Effect.sleep("-00.00 seconds")
+Node Kind: KindCallExpression
+
+Subject: "-00.00 seconds"
+Subject Type: "-00.00 seconds"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 23:28 - 23:53
+Node: Effect.sleep(`0 millis`)
+Node Kind: KindCallExpression
+
+Subject: `0 millis`
+Subject Type: "0 millis"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 24:31 - 24:55
+Node: Effect.sleep("0 nanos")
+Node Kind: KindCallExpression
+
+Subject: "0 nanos"
+Subject Type: "0 nanos"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 25:32 - 25:57
+Node: Effect.sleep("0 micros")
+Node Kind: KindCallExpression
+
+Subject: "0 micros"
+Subject Type: "0 micros"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 26:34 - 26:60
+Node: Effect.sleep("0.0 nanos")
+Node Kind: KindCallExpression
+
+Subject: "0.0 nanos"
+Subject Type: "0.0 nanos"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 27:35 - 27:62
+Node: Effect.sleep("0.0 micros")
+Node Kind: KindCallExpression
+
+Subject: "0.0 micros"
+Subject Type: "0.0 micros"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 28:32 - 28:55
+Node: Effect.sleep("0 nano")
+Node Kind: KindCallExpression
+
+Subject: "0 nano"
+Subject Type: "0 nano"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 29:33 - 29:57
+Node: Effect.sleep("0 micro")
+Node Kind: KindCallExpression
+
+Subject: "0 micro"
+Subject Type: "0 micro"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 30:33 - 30:57
+Node: Effect.sleep("0 milli")
+Node Kind: KindCallExpression
+
+Subject: "0 milli"
+Subject Type: "0 milli"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 31:34 - 31:59
+Node: Effect.sleep("0 second")
+Node Kind: KindCallExpression
+
+Subject: "0 second"
+Subject Type: "0 second"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 32:32 - 32:58
+Node: Effect.sleep("0 minutes")
+Node Kind: KindCallExpression
+
+Subject: "0 minutes"
+Subject Type: "0 minutes"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 33:30 - 33:54
+Node: Effect.sleep("0 hours")
+Node Kind: KindCallExpression
+
+Subject: "0 hours"
+Subject Type: "0 hours"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 34:29 - 34:52
+Node: Effect.sleep("0 days")
+Node Kind: KindCallExpression
+
+Subject: "0 days"
+Subject Type: "0 days"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 35:30 - 35:54
+Node: Effect.sleep("0 weeks")
+Node Kind: KindCallExpression
+
+Subject: "0 weeks"
+Subject Type: "0 weeks"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 36:28 - 36:56
+Node: Effect.sleep(Duration.zero)
+Node Kind: KindCallExpression
+
+Subject: Duration.zero
+Subject Type: Duration
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 37:33 - 37:66
+Node: Effect.sleep(Duration.nanos(0n))
+Node Kind: KindCallExpression
+
+Subject: 0n
+Subject Type: 0n
+
+Transformations (2):
+  [0] kind: call
+      callee: Duration.nanos
+      args: (constant)
+      outType: Duration
+  [1] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 38:34 - 38:69
+Node: Effect.sleep(Duration.micros(-0n))
+Node Kind: KindCallExpression
+
+Subject: -0n
+Subject Type: 0n
+
+Transformations (2):
+  [0] kind: call
+      callee: Duration.micros
+      args: (constant)
+      outType: Duration
+  [1] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 39:34 - 39:68
+Node: Effect.sleep(Duration.millis(+0))
+Node Kind: KindCallExpression
+
+Subject: +0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Duration.millis
+      args: (constant)
+      outType: Duration
+  [1] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 40:35 - 40:70
+Node: Effect.sleep(Duration.seconds(-0))
+Node Kind: KindCallExpression
+
+Subject: -0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Duration.seconds
+      args: (constant)
+      outType: Duration
+  [1] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 41:35 - 41:69
+Node: Effect.sleep(Duration.minutes(0))
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Duration.minutes
+      args: (constant)
+      outType: Duration
+  [1] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 42:33 - 42:65
+Node: Effect.sleep(Duration.hours(0))
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Duration.hours
+      args: (constant)
+      outType: Duration
+  [1] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 43:32 - 43:63
+Node: Effect.sleep(Duration.days(0))
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Duration.days
+      args: (constant)
+      outType: Duration
+  [1] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 44:33 - 44:65
+Node: Effect.sleep(Duration.weeks(0))
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Duration.weeks
+      args: (constant)
+      outType: Duration
+  [1] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 45:27 - 47:3
+Node: Effect.gen(function*() {\n  yield* Effect.sleep(0)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.sleep(0)\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 46:9 - 46:25
+Node: Effect.sleep(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 48:32 - 48:73
+Node: Effect.sleep(0).pipe(Effect.as("ready"))
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.as
+      args: ["ready"]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 49:30 - 49:72
+Node: Effect.sleep(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 51:23 - 51:39
+Node: Effect.sleep(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 52:31 - 52:48
+Node: Effect.sleep(-1)
+Node Kind: KindCallExpression
+
+Subject: -1
+Subject Type: -1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 53:29 - 53:46
+Node: Effect.sleep(1n)
+Node Kind: KindCallExpression
+
+Subject: 1n
+Subject Type: 1n
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 54:32 - 54:55
+Node: Effect.sleep(Infinity)
+Node Kind: KindCallExpression
+
+Subject: Infinity
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 55:26 - 55:44
+Node: Effect.sleep(NaN)
+Node Kind: KindCallExpression
+
+Subject: NaN
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 56:29 - 56:55
+Node: Effect.sleep("1 seconds")
+Node Kind: KindCallExpression
+
+Subject: "1 seconds"
+Subject Type: "1 seconds"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 57:32 - 57:59
+Node: Effect.sleep("0.1 millis")
+Node Kind: KindCallExpression
+
+Subject: "0.1 millis"
+Subject Type: "0.1 millis"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 58:29 - 58:76
+Node: Effect.sleep("0 ms" as Duration.DurationInput)
+Node Kind: KindCallExpression
+
+Subject: "0 ms" as Duration.DurationInput
+Subject Type: DurationInput
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 59:31 - 59:88
+Node: Effect.sleep("0 milliseconds" as Duration.DurationInput)
+Node Kind: KindCallExpression
+
+Subject: "0 milliseconds" as Duration.DurationInput
+Subject Type: DurationInput
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 60:32 - 60:85
+Node: Effect.sleep("0 seconds " as Duration.DurationInput)
+Node Kind: KindCallExpression
+
+Subject: "0 seconds " as Duration.DurationInput
+Subject Type: DurationInput
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 61:33 - 61:86
+Node: Effect.sleep(" 0 seconds" as Duration.DurationInput)
+Node Kind: KindCallExpression
+
+Subject: " 0 seconds" as Duration.DurationInput
+Subject Type: DurationInput
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 62:28 - 62:49
+Node: Effect.sleep([0, 1])
+Node Kind: KindCallExpression
+
+Subject: [0, 1]
+Subject Type: [number, number]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 63:34 - 63:68
+Node: Effect.sleep(Duration.seconds(1))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Duration.seconds
+      args: (constant)
+      outType: Duration
+  [1] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 65:32 - 65:51
+Node: Effect.sleep(zero)
+Node Kind: KindCallExpression
+
+Subject: zero
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 66:30 - 66:50
+Node: Effect.sleep(1 - 1)
+Node Kind: KindCallExpression
+
+Subject: 1 - 1
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 67:35 - 67:67
+Node: Effect.sleep(`${zero} seconds`)
+Node Kind: KindCallExpression
+
+Subject: `${zero} seconds`
+Subject Type: "0 seconds"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 68:30 - 68:55
+Node: console.log("evaluated")
+Node Kind: KindCallExpression
+
+Subject: "evaluated"
+Subject Type: "evaluated"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 69:41 - 69:66
+Node: console.log("evaluated")
+Node Kind: KindCallExpression
+
+Subject: "evaluated"
+Subject Type: "evaluated"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 70:30 - 70:57
+Node: Effect.sleep(returnZero())
+Node Kind: KindCallExpression
+
+Subject: returnZero()
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 71:30 - 71:64
+Node: Effect.sleep(zeroGetter.duration)
+Node Kind: KindCallExpression
+
+Subject: zeroGetter.duration
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 72:29 - 72:73
+Node: Effect.sleep((console.log("evaluated"), 0))
+Node Kind: KindCallExpression
+
+Subject: console.log("evaluated"), 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 72:44 - 72:68
+Node: console.log("evaluated")
+Node Kind: KindCallExpression
+
+Subject: "evaluated"
+Subject Type: "evaluated"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 73:28 - 73:60
+Node: Effect.sleep(returnZero() as 0)
+Node Kind: KindCallExpression
+
+Subject: returnZero() as 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 74:31 - 74:52
+Node: Effect.sleep(1 as 0)
+Node Kind: KindCallExpression
+
+Subject: 1 as 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 75:42 - 75:81
+Node: Effect.sleep(Duration.seconds(1 as 0))
+Node Kind: KindCallExpression
+
+Subject: 1 as 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Duration.seconds
+      args: (constant)
+      outType: Duration
+  [1] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 76:33 - 76:78
+Node: Effect.sleep(Duration.seconds(returnZero()))
+Node Kind: KindCallExpression
+
+Subject: returnZero()
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Duration.seconds
+      args: (constant)
+      outType: Duration
+  [1] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 77:29 - 77:47
+Node: Effect.sleep?.(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 78:35 - 78:52
+Node: Effect?.sleep(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect?.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 79:43 - 79:79
+Node: Effect.sleep(Duration.seconds?.(0))
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Duration.seconds
+      args: (constant)
+      outType: Duration
+  [1] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 80:36 - 80:65
+Node: Effect.sleep(Duration?.zero)
+Node Kind: KindCallExpression
+
+Subject: Duration?.zero
+Subject Type: Duration
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 83:30 - 83:49
+Node: unrelated.sleep(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: unrelated.sleep
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 84:29 - 84:58
+Node: Effect.sleep(unrelated.zero)
+Node Kind: KindCallExpression
+
+Subject: unrelated.zero
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 85:36 - 85:71
+Node: Effect.sleep(unrelated.seconds(0))
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: unrelated.seconds
+      args: (constant)
+      outType: number
+  [1] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 86:30 - 86:89
+Node: ((Effect: typeof unrelated) => Effect.sleep(0))(unrelated)
+Node Kind: KindCallExpression
+
+Subject: unrelated
+Subject Type: { sleep: (duration: number) => number; zero: number; seconds: (duration: number) => number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: ((Effect: typeof unrelated) => Effect.sleep(0))
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 86:61 - 86:77
+Node: Effect.sleep(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 89:34 - 89:52
+Node: Effect.sleep(+0n)
+Node Kind: KindCallExpression
+
+Subject: +0n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 93:28 - 93:52
+Node: Effect.sleep<number>(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 95:26 - 95:43
+Node: Effect.sleep([])
+Node Kind: KindCallExpression
+
+Subject: []
+Subject Type: []
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 97:25 - 97:45
+Node: Effect.sleep([, 0])
+Node Kind: KindCallExpression
+
+Subject: [, 0]
+Subject Type: [undefined, number]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 99:27 - 99:50
+Node: Effect.sleep([0n, 0n])
+Node Kind: KindCallExpression
+
+Subject: [0n, 0n]
+Subject Type: [bigint, bigint]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 101:27 - 101:53
+Node: Effect.sleep([...[0], 0])
+Node Kind: KindCallExpression
+
+Subject: [...[0], 0]
+Subject Type: [...number[], number]
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>

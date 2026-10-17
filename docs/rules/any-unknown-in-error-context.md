@@ -21,17 +21,26 @@ import { Effect } from "effect"
 
 export const preview = Effect.gen(function*() {
 /**
-             ^^^^^^^ effecttsgo(any-unknown-in-error-context): This has unknown in the requirements channel and any in the error channel which is not recommended. Only service identifiers should appear in the requirements channel. Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example.
+                       ^^^^^^^^^^^^^^^^^^^^^^^^ effecttsgo(any-unknown-in-error-context): This has unknown in the requirements channel and any in the error channel which is not recommended. Only service identifiers should appear in the requirements channel. Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example.
 */
   yield* Effect.context<unknown>()
+/**
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+*/
 /**
          ^^^^^^^^^^^^^^^^^^^^^^^^^ effecttsgo(any-unknown-in-error-context): This has unknown in the requirements channel which is not recommended. Only service identifiers should appear in the requirements channel.
 */
   return yield* Effect.fail<any>("boom")
 /**
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+*/
+/**
                 ^^^^^^^^^^^^^^^^^^^^^^^^ effecttsgo(any-unknown-in-error-context): This has any in the error channel which is not recommended. Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example.
 */
 })
+/**
+^^
+*/
 ```
 
 ## Language Service Configuration

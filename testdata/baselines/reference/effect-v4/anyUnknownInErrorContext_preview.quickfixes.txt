@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (5:14-5:21) TS377030: This has unknown in the requirements channel and any in the error channel which is not recommended.
+[D1] (5:24-8:3) TS377030: This has unknown in the requirements channel and any in the error channel which is not recommended.
 Only service identifiers should appear in the requirements channel.
 Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"

@@ -1,18 +1,18 @@
 === Quick Fix Inventory ===
 
-[D1] (13:14-13:28) TS377047: This expression can be rewritten in the reusable function form `Effect.fn((n) => { ... })`. effect(effectFnOpportunity)
+[D1] (9:14-9:28) TS377047: This expression can be rewritten in the reusable function form `Effect.fn((n) => { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (no span)"
   Fix 3: "Convert to Effect.fn(\"arrowPlainMany\")"
 
-[D2] (22:14-22:41) TS377047: This expression can be rewritten in the reusable function form `Effect.fn(function<T>(value) { ... })`. effect(effectFnOpportunity)
+[D2] (18:14-18:41) TS377047: This expression can be rewritten in the reusable function form `Effect.fn(function<T>(value) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (no span)"
   Fix 3: "Convert to Effect.fn(\"functionExpressionPlainMany\")"
 
-[D3] (32:17-32:45) TS377047: This expression can be rewritten in the reusable function form `Effect.fn(function<T>(value) { ... })`. effect(effectFnOpportunity)
+[D3] (28:17-28:45) TS377047: This expression can be rewritten in the reusable function form `Effect.fn(function<T>(value) { ... })`. effect(effectFnOpportunity)
   Fix 0: "Disable effectFnOpportunity for this line"
   Fix 1: "Disable effectFnOpportunity for entire file"
   Fix 2: "Convert to Effect.fn (no span)"
@@ -36,19 +36,15 @@ import * as Effect from "effect/Effect"
 //    tracing by adding spans. Recommended for app code.
 // 2. Effect.fn (without name) - won't add tracing spans.
 //
-// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
-// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
-// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
-// - Trailing semicolons on replacement statements (`});` vs `})`)
 
-export const arrowPlainMany = Effect.fn(function (n: number) {
-    const a = 1;
-    const b = 2;
-    const c = 3;
-    const d = 4;
-    const e = 5;
-    return Effect.succeed(a + b + c + d + e + n);
-});
+export const arrowPlainMany = Effect.fn(function(n: number) {
+  const a = 1
+  const b = 2
+  const c = 3
+  const d = 4
+  const e = 5
+  return Effect.succeed(a + b + c + d + e + n)
+})
 
 export const functionExpressionPlainMany = function<T>(value: T) {
   const a = 1
@@ -81,19 +77,15 @@ import * as Effect from "effect/Effect"
 //    tracing by adding spans. Recommended for app code.
 // 2. Effect.fn (without name) - won't add tracing spans.
 //
-// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
-// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
-// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
-// - Trailing semicolons on replacement statements (`});` vs `})`)
 
-export const arrowPlainMany = Effect.fn("arrowPlainMany")(function (n: number) {
-    const a = 1;
-    const b = 2;
-    const c = 3;
-    const d = 4;
-    const e = 5;
-    return Effect.succeed(a + b + c + d + e + n);
-});
+export const arrowPlainMany = Effect.fn("arrowPlainMany")(function(n: number) {
+  const a = 1
+  const b = 2
+  const c = 3
+  const d = 4
+  const e = 5
+  return Effect.succeed(a + b + c + d + e + n)
+})
 
 export const functionExpressionPlainMany = function<T>(value: T) {
   const a = 1
@@ -132,10 +124,6 @@ import * as Effect from "effect/Effect"
 //    tracing by adding spans. Recommended for app code.
 // 2. Effect.fn (without name) - won't add tracing spans.
 //
-// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
-// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
-// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
-// - Trailing semicolons on replacement statements (`});` vs `})`)
 
 export const arrowPlainMany = (n: number) => {
   const a = 1
@@ -146,15 +134,15 @@ export const arrowPlainMany = (n: number) => {
   return Effect.succeed(a + b + c + d + e + n)
 }
 
-export const functionExpressionPlainMany = Effect.fn(function <T>(value: T) {
-    const a = 1;
-    const b = 2;
-    const c = 3;
-    const d = 4;
-    const e = 5;
-    if (value === null) return Effect.fail("Error!");
-    return Effect.succeed(a + b + c + d + e);
-});
+export const functionExpressionPlainMany = Effect.fn(function<T>(value: T) {
+  const a = 1
+  const b = 2
+  const c = 3
+  const d = 4
+  const e = 5
+  if (value === null) return Effect.fail("Error!")
+  return Effect.succeed(a + b + c + d + e)
+})
 
 export function functionDeclarationPlainMany<T>(value: T) {
   const a = 1
@@ -177,10 +165,6 @@ import * as Effect from "effect/Effect"
 //    tracing by adding spans. Recommended for app code.
 // 2. Effect.fn (without name) - won't add tracing spans.
 //
-// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
-// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
-// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
-// - Trailing semicolons on replacement statements (`});` vs `})`)
 
 export const arrowPlainMany = (n: number) => {
   const a = 1
@@ -191,15 +175,15 @@ export const arrowPlainMany = (n: number) => {
   return Effect.succeed(a + b + c + d + e + n)
 }
 
-export const functionExpressionPlainMany = Effect.fn("functionExpressionPlainMany")(function <T>(value: T) {
-    const a = 1;
-    const b = 2;
-    const c = 3;
-    const d = 4;
-    const e = 5;
-    if (value === null) return Effect.fail("Error!");
-    return Effect.succeed(a + b + c + d + e);
-});
+export const functionExpressionPlainMany = Effect.fn("functionExpressionPlainMany")(function<T>(value: T) {
+  const a = 1
+  const b = 2
+  const c = 3
+  const d = 4
+  const e = 5
+  if (value === null) return Effect.fail("Error!")
+  return Effect.succeed(a + b + c + d + e)
+})
 
 export function functionDeclarationPlainMany<T>(value: T) {
   const a = 1
@@ -228,10 +212,6 @@ import * as Effect from "effect/Effect"
 //    tracing by adding spans. Recommended for app code.
 // 2. Effect.fn (without name) - won't add tracing spans.
 //
-// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
-// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
-// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
-// - Trailing semicolons on replacement statements (`});` vs `})`)
 
 export const arrowPlainMany = (n: number) => {
   const a = 1
@@ -252,14 +232,14 @@ export const functionExpressionPlainMany = function<T>(value: T) {
   return Effect.succeed(a + b + c + d + e)
 }
 
-export const functionDeclarationPlainMany = Effect.fn(function <T>(value: T) {
-    const a = 1;
-    const b = 2;
-    const c = 3;
-    const d = 4;
-    const e = 5;
-    if (value === null) return Effect.fail("Error!");
-    return Effect.succeed(a + b + c + d + e);
+export const functionDeclarationPlainMany = Effect.fn(function<T>(value: T) {
+  const a = 1
+  const b = 2
+  const c = 3
+  const d = 4
+  const e = 5
+  if (value === null) return Effect.fail("Error!")
+  return Effect.succeed(a + b + c + d + e)
 });
 
 
@@ -273,10 +253,6 @@ import * as Effect from "effect/Effect"
 //    tracing by adding spans. Recommended for app code.
 // 2. Effect.fn (without name) - won't add tracing spans.
 //
-// Note: Known formatting divergences from upstream (TypeScript-Go printer artifacts):
-// - Semicolons added to body statements inside replaced functions (e.g. `const a = 1;` vs `const a = 1`)
-// - Space before parens in zero-parameter function expressions (`function ()` vs `function()`)
-// - Trailing semicolons on replacement statements (`});` vs `})`)
 
 export const arrowPlainMany = (n: number) => {
   const a = 1
@@ -297,13 +273,13 @@ export const functionExpressionPlainMany = function<T>(value: T) {
   return Effect.succeed(a + b + c + d + e)
 }
 
-export const functionDeclarationPlainMany = Effect.fn("functionDeclarationPlainMany")(function <T>(value: T) {
-    const a = 1;
-    const b = 2;
-    const c = 3;
-    const d = 4;
-    const e = 5;
-    if (value === null) return Effect.fail("Error!");
-    return Effect.succeed(a + b + c + d + e);
+export const functionDeclarationPlainMany = Effect.fn("functionDeclarationPlainMany")(function<T>(value: T) {
+  const a = 1
+  const b = 2
+  const c = 3
+  const d = 4
+  const e = 5
+  if (value === null) return Effect.fail("Error!")
+  return Effect.succeed(a + b + c + d + e)
 });
 

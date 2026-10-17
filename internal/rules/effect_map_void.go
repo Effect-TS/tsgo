@@ -47,7 +47,7 @@ func isVoidCallback(node *ast.Node) bool {
 	lazy := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionThunk)
 	if lazy != nil {
 		// ParseLazyExpression succeeded — check if the expression is a void expression
-		return isVoidExpression(lazy.Expression)
+		return isVoidExpression(lazy.Expression())
 	}
 
 	// ParseLazyExpression returns nil for empty block bodies (0 statements).
@@ -91,25 +91,27 @@ func isVoidCallback(node *ast.Node) bool {
 func AnalyzeEffectMapVoid(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []EffectMapVoidMatch {
 	var matches []EffectMapVoidMatch
 
-	for _, flow := range tp.PipingFlows(sf, true) {
-		for index := range flow.Transformations {
-			transformation := &flow.Transformations[index]
-			if len(transformation.Args) != 1 ||
-				transformation.Callee == nil ||
-				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "map") {
+	for _, flow := range tp.PipingFlows(sf, true).All() {
+		for index := range flow.Transformations().All() {
+			transformation := flow.Transformations().At(index)
+			if transformation.Args().Len() != 1 ||
+				transformation.Callee() == nil {
 				continue
 			}
-			if !isVoidCallback(transformation.Args[0]) {
+			if !isVoidCallback(transformation.Args().At(0)) {
+				continue
+			}
+			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "map") {
 				continue
 			}
 			var effectModule *ast.Node
-			if transformation.Callee.Kind == ast.KindPropertyAccessExpression {
-				effectModule = transformation.Callee.AsPropertyAccessExpression().Expression
+			if transformation.Callee().Kind == ast.KindPropertyAccessExpression {
+				effectModule = transformation.Callee().AsPropertyAccessExpression().Expression
 			}
 			matches = append(matches, EffectMapVoidMatch{
 				SourceFile:       sf,
-				Location:         scanner.GetErrorRangeForNode(sf, transformation.Callee),
-				Transformation:   transformation,
+				Location:         scanner.GetErrorRangeForNode(sf, transformation.Callee()),
+				Transformation:   &transformation,
 				EffectModuleNode: effectModule,
 			})
 		}

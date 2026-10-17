@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/test.ts(5,60): error TS377049: This key does not match the deterministic key for this declaration. The expected key is `@effect/test-app/test/ExpectedServiceIdentifier`. effect(deterministicKeys)
 /.src/test.ts(8,46): error TS377049: This key does not match the deterministic key for this declaration. The expected key is `@effect/test-app/test/ErrorA`. effect(deterministicKeys)

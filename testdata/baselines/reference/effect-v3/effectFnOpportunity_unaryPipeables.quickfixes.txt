@@ -1,0 +1,1900 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:14-4:20) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(name, attributes) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"record\")"
+
+[D2] (5:3-7:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D3] (11:14-11:19) TS377047: This expression can be rewritten in the reusable function form `Effect.fn("mixed")(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fn (with span from withSpan)"
+  Fix 3: "Convert to Effect.fnUntraced"
+  Fix 4: "Convert to Effect.fn (no span)"
+
+[D4] (23:14-23:25) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"conditional\")"
+
+[D5] (24:3-26:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D6] (28:14-28:22) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"callback\")"
+
+[D7] (29:3-31:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D8] (35:14-35:24) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"underscore\")"
+
+[D9] (36:3-38:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D10] (41:14-41:21) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"factory\")"
+
+[D11] (51:14-51:29) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(name) { ... }, ...pipeTransformations)`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"optionalOptions\")"
+
+[D12] (52:3-54:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D13] (59:3-61:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = Effect.fnUntraced(function*(name: string, attributes: Record<string, string>) {
+    yield* Effect.log(name, attributes)
+  },_ => Effect.ignore(_))
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D1] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = Effect.fn(function*(name: string, attributes: Record<string, string>) {
+    yield* Effect.log(name, attributes)
+  },_ => Effect.ignore(_))
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D1] Fix 4: "Convert to Effect.fn(\"record\")" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = Effect.fn("record")(function*(name: string, attributes: Record<string, string>) {
+    yield* Effect.log(name, attributes)
+  },_ => Effect.ignore(_))
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D2] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) => Effect.log(name, attributes).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D3] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Convert to Effect.fn (with span from withSpan)" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = Effect.fn("mixed")(function*(n: number) {
+    const value = yield* Effect.succeed(n)
+    return value
+  },
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    _ => ignore(_) // keep the trailing comment too
+    )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D3] Fix 3: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = Effect.fnUntraced(function*(n: number) {
+    const value = yield* Effect.succeed(n)
+    return value
+  },
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    _ => ignore(_), // keep the trailing comment too
+    Effect.withSpan("mixed"))
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D3] Fix 4: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = Effect.fn(function*(n: number) {
+    const value = yield* Effect.succeed(n)
+    return value
+  },
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    _ => ignore(_), // keep the trailing comment too
+    Effect.withSpan("mixed"))
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D4] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = Effect.fnUntraced(function*(n: number) {
+    yield* Effect.log(n)
+  },_ => (Math.random() > 0.5 ? Effect.ignore : ignore)(_))
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D4] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = Effect.fn(function*(n: number) {
+    yield* Effect.log(n)
+  },_ => (Math.random() > 0.5 ? Effect.ignore : ignore)(_))
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D4] Fix 4: "Convert to Effect.fn(\"conditional\")" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = Effect.fn("conditional")(function*(n: number) {
+    yield* Effect.log(n)
+  },_ => (Math.random() > 0.5 ? Effect.ignore : ignore)(_))
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D5] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) => Effect.log(n).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D6] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = Effect.fnUntraced(function*(n: number) {
+    yield* Effect.log(n)
+  },_ => ((effect) => Effect.ignore(effect))(_))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D6] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = Effect.fn(function*(n: number) {
+    yield* Effect.log(n)
+  },_ => ((effect) => Effect.ignore(effect))(_))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D6] Fix 4: "Convert to Effect.fn(\"callback\")" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = Effect.fn("callback")(function*(n: number) {
+    yield* Effect.log(n)
+  },_ => ((effect) => Effect.ignore(effect))(_))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D7] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) => Effect.log(n).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D8] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = Effect.fnUntraced(function*(n: number) {
+    yield* Effect.log(n)
+  },_1 => _.ignore(_1))
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D8] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = Effect.fn(function*(n: number) {
+    yield* Effect.log(n)
+  },_1 => _.ignore(_1))
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D8] Fix 4: "Convert to Effect.fn(\"underscore\")" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = Effect.fn("underscore")(function*(n: number) {
+    yield* Effect.log(n)
+  },_1 => _.ignore(_1))
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D9] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) => Effect.log(n).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D10] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D10] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = Effect.fnUntraced(function*(n: number) {
+    const value = yield* Effect.succeed(n)
+    return value
+  },(Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D10] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = Effect.fn(function*(n: number) {
+    const value = yield* Effect.succeed(n)
+    return value
+  },(Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D10] Fix 4: "Convert to Effect.fn(\"factory\")" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = Effect.fn("factory")(function*(n: number) {
+    const value = yield* Effect.succeed(n)
+    return value
+  },(Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D11] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D11] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = Effect.fnUntraced(function*(name: string) {
+    yield* Effect.log(name)
+  },_ => withOptionalOptions(_))
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D11] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = Effect.fn(function*(name: string) {
+    yield* Effect.log(name)
+  },_ => withOptionalOptions(_))
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D11] Fix 4: "Convert to Effect.fn(\"optionalOptions\")" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = Effect.fn("optionalOptions")(function*(name: string) {
+    yield* Effect.log(name)
+  },_ => withOptionalOptions(_))
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D12] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D12] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) => Effect.log(name).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(...operators)
+
+
+=== [D13] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D13] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_unaryPipeables.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 5: ignore must only receive the Effect, not name/attributes.
+export const record = (name: string, attributes: Record<string, string>) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name, attributes)
+  }).pipe(Effect.ignore)
+
+const ignore = Effect.ignore
+
+export const mixed = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe(
+    Effect.map((value) => value + 1_000),
+    // keep this comment with the bare identifier
+    ignore, // keep the trailing comment too
+    Effect.withSpan("mixed"),
+  )
+
+// Non-call expressions need parentheses when used as the wrapper's callee.
+export const conditional = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(Math.random() > 0.5 ? Effect.ignore : ignore)
+
+export const callback = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe((effect) => Effect.ignore(effect))
+
+// Do not shadow an existing underscore reference in the pipe argument.
+const _ = Effect
+export const underscore = (n: number) =>
+  Effect.gen(function* () {
+    yield* Effect.log(n)
+  }).pipe(_.ignore)
+
+// Parentheses around an existing factory call do not require a wrapper.
+export const factory = (n: number) =>
+  Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value
+  }).pipe((Effect.map((value) => value + 1)))
+
+// Model pipeables whose optional second parameter must not receive name.
+const withOptionalOptions = (effect: Effect.Effect<void>, options?: { readonly silent: boolean }) =>
+  options?.silent ? Effect.ignore(effect) : effect
+
+export const optionalOptions = (name: string) =>
+  Effect.gen(function* () {
+    yield* Effect.log(name)
+  }).pipe(withOptionalOptions)
+
+// A spread is not a single callable expression; do not offer the gen conversion.
+const operators = [Effect.ignore] as const
+export const spread = (name: string) => Effect.log(name).pipe(...operators)
+

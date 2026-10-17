@@ -1,0 +1,6 @@
+flowchart TB
+  0[/"type: never#91;#93;<br/>node: #91;#93;"/]
+  1["type: boolean<br/>callee: Constructor.isArray<br/>args: #91;#93;"]
+  2[/"type: #40;arg: any#41; =#gt; arg is any#91;#93;<br/>node: Constructor.isArray"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1

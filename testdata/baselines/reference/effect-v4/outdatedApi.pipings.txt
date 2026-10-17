@@ -456,7 +456,7 @@ Transformations (1):
   [0] kind: call
       callee: Effect.partition
       args: (constant)
-      outType: (elements: Iterable<unknown>) => Effect<[excluded: unknown[], satisfying: unknown[]], never, unknown>
+      outType: (elements: Iterable<unknown>) => Effect<[passes: unknown[], fails: unknown[]], never, unknown>
 
 === Piping Flow ===
 Location: 84:46 - 84:63

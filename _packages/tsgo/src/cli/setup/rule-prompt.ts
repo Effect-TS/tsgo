@@ -2,7 +2,7 @@ import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import * as Terminal from "effect/Terminal"
-import * as Prompt from "effect/unstable/cli/Prompt"
+import { Prompt } from "effect/cli"
 import type { GroupInfo, RuleInfo, RuleSeverity } from "./rule-info.js"
 import { cycleSeverity, getAllGroups, getSeverityShortName } from "./rule-info.js"
 import {
@@ -592,7 +592,7 @@ export function createRulePrompt(
   const entries = getPromptEntries(rules)
   const groups = diagnosticGroups
 
-  return Prompt.custom(buildState(entries, groups, 0, "", initialSeverities), {
+  return Prompt.Custom(buildState(entries, groups, 0, "", initialSeverities), {
     render: (state, action) => {
       switch (action._tag) {
         case "Beep":

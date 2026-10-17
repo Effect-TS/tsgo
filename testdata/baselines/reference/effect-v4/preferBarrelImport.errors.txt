@@ -1,0 +1,72 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/test.ts(5,25): warning TS377148: 'effect/Record' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Record } from "effect"' instead. effect(preferBarrelImport)
+/.src/test.ts(6,20): warning TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option as O } from "effect"' instead. effect(preferBarrelImport)
+/.src/test.ts(7,27): warning TS377148: 'effect/Schema' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import type { Schema as Sch } from "effect"' instead. effect(preferBarrelImport)
+/.src/test.ts(8,29): warning TS377148: 'effect/http/HttpClient' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect/http'. Use 'import { HttpClient } from "effect/http"' instead. effect(preferBarrelImport)
+/.src/test.ts(11,29): warning TS377148: 'effect/Array' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Array } from "effect"' instead. effect(preferBarrelImport)
+/.src/test.ts(12,31): warning TS377148: 'effect/Duration' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import type { Duration } from "effect"' instead. effect(preferBarrelImport)
+/.src/test.ts(13,35): warning TS377148: 'effect/testing/TestClock' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect/testing'. Use 'import { TestClock } from "effect/testing"' instead. effect(preferBarrelImport)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "barrelImportPackages": ["effect"]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/package.json (0 errors) ====
+    { "name": "@effect/test-app", "version": "1.0.0" }
+    
+
+==== /.src/test.ts (7 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferBarrelImport:warning
+    
+    // reported: namespace import of a module
+    import * as Record from "effect/Record"
+                            ~~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Record' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Record } from "effect"' instead. effect(preferBarrelImport)
+    import * as O from "effect/Option"
+                       ~~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option as O } from "effect"' instead. effect(preferBarrelImport)
+    import type * as Sch from "effect/Schema"
+                              ~~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Schema' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import type { Schema as Sch } from "effect"' instead. effect(preferBarrelImport)
+    import * as HttpClient from "effect/http/HttpClient"
+                                ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/http/HttpClient' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect/http'. Use 'import { HttpClient } from "effect/http"' instead. effect(preferBarrelImport)
+    
+    // reported once per declaration: named imports from a module
+    import { map, filter } from "effect/Array"
+                                ~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Array' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Array } from "effect"' instead. effect(preferBarrelImport)
+    import type { Duration } from "effect/Duration"
+                                  ~~~~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Duration' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import type { Duration } from "effect"' instead. effect(preferBarrelImport)
+    import { make as makeClock } from "effect/testing/TestClock"
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/testing/TestClock' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect/testing'. Use 'import { TestClock } from "effect/testing"' instead. effect(preferBarrelImport)
+    
+    // not reported: imports from a barrel
+    import { Effect, pipe } from "effect"
+    import { TestClock } from "effect/testing"
+    import * as Http from "effect/http"
+    
+    // not reported: side-effect imports
+    import "effect/Order"
+    
+    // not reported: packages outside barrelImportPackages
+    import * as VitestUtils from "@effect/vitest/utils"
+    
+    export const usages = [Record, O, HttpClient, map, filter, makeClock, Effect, pipe, TestClock, Http, VitestUtils]
+    export type Usages = [Sch.Top, Duration]
+    

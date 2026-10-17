@@ -1,0 +1,14 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/effectSleepZeroToYieldNow_preview.ts(4,33): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+
+
+==== /.src/effectSleepZeroToYieldNow_preview.ts (1 errors) ====
+    // @effect-v3
+    import { Effect } from "effect"
+    
+    export const cooperativeYield = Effect.sleep(0)
+                                    ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    

@@ -57,10 +57,10 @@ const genAlias = Effect.gen
 // Converting to Effect.fnUntraced improves performance by not
 // reallocating the generator function on every call.
 
-export const arrowBlockGen = Effect.fnUntraced(function* () {
-    yield* Effect.succeed(1);
-    return 42;
-});
+export const arrowBlockGen = Effect.fnUntraced(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
 
 export const arrowExpressionGen = () =>
   Effect.gen(function*() {
@@ -104,10 +104,10 @@ const genAlias = Effect.gen
 // Converting to Effect.fnUntraced improves performance by not
 // reallocating the generator function on every call.
 
-export const arrowBlockGen = Effect.fn(function* () {
-    yield* Effect.succeed(1);
-    return 42;
-});
+export const arrowBlockGen = Effect.fn(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
 
 export const arrowExpressionGen = () =>
   Effect.gen(function*() {
@@ -151,10 +151,10 @@ const genAlias = Effect.gen
 // Converting to Effect.fnUntraced improves performance by not
 // reallocating the generator function on every call.
 
-export const arrowBlockGen = Effect.fn("arrowBlockGen")(function* () {
-    yield* Effect.succeed(1);
-    return 42;
-});
+export const arrowBlockGen = Effect.fn("arrowBlockGen")(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
 
 export const arrowExpressionGen = () =>
   Effect.gen(function*() {
@@ -211,10 +211,10 @@ export const arrowBlockGen = () => {
   })
 }
 
-export const arrowExpressionGen = Effect.fnUntraced(function* () {
-    yield* Effect.succeed(1);
-    return 42;
-});
+export const arrowExpressionGen = Effect.fnUntraced(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
 
 // Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
 export const arrowAliasedGen = () =>
@@ -259,10 +259,10 @@ export const arrowBlockGen = () => {
   })
 }
 
-export const arrowExpressionGen = Effect.fn(function* () {
-    yield* Effect.succeed(1);
-    return 42;
-});
+export const arrowExpressionGen = Effect.fn(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
 
 // Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
 export const arrowAliasedGen = () =>
@@ -307,10 +307,10 @@ export const arrowBlockGen = () => {
   })
 }
 
-export const arrowExpressionGen = Effect.fn("arrowExpressionGen")(function* () {
-    yield* Effect.succeed(1);
-    return 42;
-});
+export const arrowExpressionGen = Effect.fn("arrowExpressionGen")(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
 
 // Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
 export const arrowAliasedGen = () =>
@@ -368,10 +368,10 @@ export const arrowExpressionGen = () =>
   })
 
 // Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
-export const arrowAliasedGen = Effect.fnUntraced(function* () {
-    yield* Effect.succeed(1);
-    return 42;
-});
+export const arrowAliasedGen = Effect.fnUntraced(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
 
 export const functionExpressionGen = function() {
   return Effect.gen(function*() {
@@ -416,10 +416,10 @@ export const arrowExpressionGen = () =>
   })
 
 // Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
-export const arrowAliasedGen = Effect.fn(function* () {
-    yield* Effect.succeed(1);
-    return 42;
-});
+export const arrowAliasedGen = Effect.fn(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
 
 export const functionExpressionGen = function() {
   return Effect.gen(function*() {
@@ -464,10 +464,10 @@ export const arrowExpressionGen = () =>
   })
 
 // Should trigger with a fallback fix: Effect.gen is hidden behind a const alias.
-export const arrowAliasedGen = Effect.fn("arrowAliasedGen")(function* () {
-    yield* Effect.succeed(1);
-    return 42;
-});
+export const arrowAliasedGen = Effect.fn("arrowAliasedGen")(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
 
 export const functionExpressionGen = function() {
   return Effect.gen(function*() {
@@ -524,10 +524,10 @@ export const arrowAliasedGen = () =>
     return 42
   })
 
-export const functionExpressionGen = Effect.fnUntraced(function* () {
-    yield* Effect.succeed(1);
-    return 42;
-});
+export const functionExpressionGen = Effect.fnUntraced(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
 
 export function functionDeclarationGen() {
   return Effect.gen(function*() {
@@ -571,10 +571,10 @@ export const arrowAliasedGen = () =>
     return 42
   })
 
-export const functionExpressionGen = Effect.fn(function* () {
-    yield* Effect.succeed(1);
-    return 42;
-});
+export const functionExpressionGen = Effect.fn(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
 
 export function functionDeclarationGen() {
   return Effect.gen(function*() {
@@ -618,10 +618,10 @@ export const arrowAliasedGen = () =>
     return 42
   })
 
-export const functionExpressionGen = Effect.fn("functionExpressionGen")(function* () {
-    yield* Effect.succeed(1);
-    return 42;
-});
+export const functionExpressionGen = Effect.fn("functionExpressionGen")(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
 
 export function functionDeclarationGen() {
   return Effect.gen(function*() {
@@ -678,10 +678,10 @@ export const functionExpressionGen = function() {
   })
 }
 
-export const functionDeclarationGen = Effect.fnUntraced(function* () {
-    yield* Effect.succeed(1);
-    return 42;
-});
+export const functionDeclarationGen = Effect.fnUntraced(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  });
 
 
 === [D5] Fix 3: "Convert to Effect.fn (no span)" ===
@@ -725,10 +725,10 @@ export const functionExpressionGen = function() {
   })
 }
 
-export const functionDeclarationGen = Effect.fn(function* () {
-    yield* Effect.succeed(1);
-    return 42;
-});
+export const functionDeclarationGen = Effect.fn(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  });
 
 
 === [D5] Fix 4: "Convert to Effect.fn(\"functionDeclarationGen\")" ===
@@ -772,8 +772,8 @@ export const functionExpressionGen = function() {
   })
 }
 
-export const functionDeclarationGen = Effect.fn("functionDeclarationGen")(function* () {
-    yield* Effect.succeed(1);
-    return 42;
-});
+export const functionDeclarationGen = Effect.fn("functionDeclarationGen")(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  });
 

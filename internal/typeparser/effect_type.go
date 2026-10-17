@@ -8,9 +8,9 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
-var effectModuleDescriptor = newPackageSourceFileDescriptor("effect", isEffectTypeSourceFile)
+var effectModuleDescriptor = newPackageSourceFileDescriptor(moduleDescriptorEffect, "effect", isEffectTypeSourceFile)
 
-var effectPackageExportDescriptor = newPackageSourceFileDescriptor("effect", nil)
+var effectPackageExportDescriptor = newPackageSourceFileDescriptor(moduleDescriptorEffectPackage, "effect", nil)
 
 // EffectTypeId is the property key for Effect's variance struct.
 // Effect v4 (effect-smol) uses this pattern to encode type parameters.
@@ -18,10 +18,16 @@ const EffectTypeId = "~effect/Effect"
 
 // Effect represents parsed Effect<A, E, R> type parameters.
 type Effect struct {
-	A *checker.Type // Success type
-	E *checker.Type // Error type
-	R *checker.Type // Requirements type
+	a *checker.Type // Success type
+	e *checker.Type // Error type
+	r *checker.Type // Requirements type
 }
+
+func (r Effect) A() *checker.Type { return r.a }
+
+func (r Effect) E() *checker.Type { return r.e }
+
+func (r Effect) R() *checker.Type { return r.r }
 
 // EffectType parses an Effect type and extracts A, E, R parameters.
 // Returns nil if the type is not an Effect.
@@ -52,13 +58,13 @@ func (tp *TypeParser) EffectType(t *checker.Type) *Effect {
 			if prop == nil {
 				continue
 			}
-			if prop.Flags&ast.SymbolFlagsProperty == 0 {
+			if ast.TSGetSymbolFlags(prop)&ast.SymbolFlagsProperty == 0 {
 				continue
 			}
-			if prop.Flags&ast.SymbolFlagsOptional != 0 {
+			if ast.TSGetSymbolFlags(prop)&ast.SymbolFlagsOptional != 0 {
 				continue
 			}
-			if prop.ValueDeclaration == nil {
+			if ast.TSGetSymbolValueDeclaration(prop) == nil {
 				continue
 			}
 			candidates = append(candidates, prop)
@@ -70,8 +76,8 @@ func (tp *TypeParser) EffectType(t *checker.Type) *Effect {
 
 		// Sort so properties containing "EffectTypeId" come first (optimization heuristic)
 		sort.SliceStable(candidates, func(i, j int) bool {
-			iHas := strings.Contains(candidates[i].Name, "EffectTypeId")
-			jHas := strings.Contains(candidates[j].Name, "EffectTypeId")
+			iHas := strings.Contains(ast.TSGetSymbolName(candidates[i]), "EffectTypeId")
+			jHas := strings.Contains(ast.TSGetSymbolName(candidates[j]), "EffectTypeId")
 			if iHas && !jHas {
 				return true
 			}
@@ -107,7 +113,7 @@ func (tp *TypeParser) parseVarianceStruct(t *checker.Type) *Effect {
 		return nil
 	}
 
-	return &Effect{A: a, E: e, R: r}
+	return &Effect{a: a, e: e, r: r}
 }
 
 // IsEffectType returns true if the type has the Effect variance struct.
@@ -122,11 +128,11 @@ func (tp *TypeParser) StrictEffectType(t *checker.Type) *Effect {
 	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
+	// Checked before the cache so types of other names leave no entry.
+	if sym := t.Symbol(); sym == nil || ast.TSGetSymbolName(sym) != "Effect" {
+		return nil
+	}
 	return Cached(&tp.links.StrictEffectType, t, func() *Effect {
-		sym := t.Symbol()
-		if sym == nil || sym.Name != "Effect" {
-			return nil
-		}
 		return tp.EffectType(t)
 	})
 }

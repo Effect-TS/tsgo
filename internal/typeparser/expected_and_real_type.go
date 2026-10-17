@@ -1,6 +1,7 @@
 package typeparser
 
 import (
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/scanner"
@@ -10,11 +11,22 @@ import (
 // This is used by diagnostic rules that need to compare what type was expected at a location
 // versus what type was actually provided.
 type ExpectedAndRealType struct {
-	Node         *ast.Node     // The location node (for diagnostic reporting)
-	ExpectedType *checker.Type // The type expected at this location
-	ValueNode    *ast.Node     // The actual value node
-	RealType     *checker.Type // The actual type of the value
+	node         *ast.Node            // The location node (for diagnostic reporting)
+	expectedType *lazy[*checker.Type] // The type expected at this location
+	valueNode    *ast.Node            // The actual value node
+	realNode     *ast.Node            // The node whose type is the real type
+	realType     *lazy[*checker.Type] // The actual type of the value
 }
+
+func (r ExpectedAndRealType) Node() *ast.Node { return r.node }
+
+func (r ExpectedAndRealType) ExpectedType() *checker.Type { return r.expectedType.get() }
+
+func (r ExpectedAndRealType) ValueNode() *ast.Node { return r.valueNode }
+
+func (r ExpectedAndRealType) RealNode() *ast.Node { return r.realNode }
+
+func (r ExpectedAndRealType) RealType() *checker.Type { return r.realType.get() }
 
 // getInferredReturnType extracts the return type from a function-like declaration.
 // It handles overloaded functions (multiple call signatures), type predicates,
@@ -79,13 +91,13 @@ func (tp *TypeParser) getInferredReturnType(declaration *ast.Node) *checker.Type
 // 6. Arrow function body without type params ((): T => expr)
 // 7. Arrow function body with type params (<A>(): T => expr)
 // 8. Satisfies expression (expr satisfies T)
-func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) []ExpectedAndRealType {
+func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) readonly.Slice[ExpectedAndRealType] {
 	if tp == nil || tp.checker == nil || sf == nil {
-		return nil
+		return readonly.Slice[ExpectedAndRealType]{}
 	}
 	c := tp.checker
 
-	return Cached(&tp.links.ExpectedAndRealTypes, sf, func() []ExpectedAndRealType {
+	return readonly.New(Cached(&tp.links.ExpectedAndRealTypes, sf, func() []ExpectedAndRealType {
 		var result []ExpectedAndRealType
 
 		// Initialize BFS queue with the source file node
@@ -110,13 +122,12 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) []ExpectedAndReal
 				if vd != nil && vd.Initializer != nil {
 					nameNode := vd.Name()
 					if nameNode != nil {
-						expectedType := tp.GetTypeAtLocation(nameNode)
-						realType := tp.GetTypeAtLocation(vd.Initializer)
 						result = append(result, ExpectedAndRealType{
-							Node:         nameNode,
-							ExpectedType: expectedType,
-							ValueNode:    vd.Initializer,
-							RealType:     realType,
+							node:         nameNode,
+							expectedType: tp.lazyTypeAtLocation(nameNode),
+							valueNode:    vd.Initializer,
+							realNode:     vd.Initializer,
+							realType:     tp.lazyTypeAtLocation(vd.Initializer),
 						})
 					}
 					queue = append(queue, vd.Initializer)
@@ -128,10 +139,10 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) []ExpectedAndReal
 			if node.Kind == ast.KindCallExpression {
 				call := node.AsCallExpression()
 				if call != nil {
-					resolvedSig := c.GetResolvedSignature(node)
-					if resolvedSig != nil {
-						params := resolvedSig.Parameters()
-						if call.Arguments != nil {
+					if call.Arguments != nil {
+						resolvedSig := c.GetResolvedSignature(node)
+						if resolvedSig != nil {
+							params := resolvedSig.Parameters()
 							for i, param := range params {
 								if i >= len(call.Arguments.Nodes) {
 									break
@@ -140,13 +151,12 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) []ExpectedAndReal
 								if arg == nil {
 									continue
 								}
-								expectedType := c.GetTypeOfSymbolAtLocation(param, node)
-								realType := tp.GetTypeAtLocation(arg)
 								result = append(result, ExpectedAndRealType{
-									Node:         arg,
-									ExpectedType: expectedType,
-									ValueNode:    arg,
-									RealType:     realType,
+									node:         arg,
+									expectedType: newLazy(func() *checker.Type { return c.GetTypeOfSymbolAtLocation(param, node) }),
+									valueNode:    arg,
+									realNode:     arg,
+									realType:     tp.lazyTypeAtLocation(arg),
 								})
 							}
 						}
@@ -166,19 +176,18 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) []ExpectedAndReal
 						// Check that this node is the name of the property (not the value)
 						nameNode := getObjectLiteralElementName(parent)
 						if nameNode == node {
-							contextualType := c.GetContextualType(grandparent, checker.ContextFlagsNone)
-							if contextualType != nil {
-								name := getNodeTextForPropertyLookup(node)
-								if name != "" {
+							name := getNodeTextForPropertyLookup(node)
+							if name != "" {
+								contextualType := tp.GetContextualType(grandparent, checker.ContextFlagsNone)
+								if contextualType != nil {
 									sym := c.GetPropertyOfType(contextualType, name)
 									if sym != nil {
-										expectedType := c.GetTypeOfSymbolAtLocation(sym, node)
-										realType := tp.GetTypeAtLocation(node)
 										result = append(result, ExpectedAndRealType{
-											Node:         node,
-											ExpectedType: expectedType,
-											ValueNode:    node,
-											RealType:     realType,
+											node:         node,
+											expectedType: newLazy(func() *checker.Type { return c.GetTypeOfSymbolAtLocation(sym, node) }),
+											valueNode:    node,
+											realNode:     node,
+											realType:     tp.lazyTypeAtLocation(node),
 										})
 									}
 								}
@@ -196,13 +205,12 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) []ExpectedAndReal
 				if binExpr != nil && binExpr.OperatorToken != nil &&
 					binExpr.OperatorToken.Kind == ast.KindEqualsToken {
 					if binExpr.Left != nil && binExpr.Right != nil {
-						expectedType := tp.GetTypeAtLocation(binExpr.Left)
-						realType := tp.GetTypeAtLocation(binExpr.Right)
 						result = append(result, ExpectedAndRealType{
-							Node:         binExpr.Left,
-							ExpectedType: expectedType,
-							ValueNode:    binExpr.Right,
-							RealType:     realType,
+							node:         binExpr.Left,
+							expectedType: tp.lazyTypeAtLocation(binExpr.Left),
+							valueNode:    binExpr.Right,
+							realNode:     binExpr.Right,
+							realType:     tp.lazyTypeAtLocation(binExpr.Right),
 						})
 					}
 					if binExpr.Right != nil {
@@ -220,12 +228,12 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) []ExpectedAndReal
 					if parentDecl != nil {
 						expectedType := tp.getInferredReturnType(parentDecl)
 						if expectedType != nil {
-							realType := tp.GetTypeAtLocation(retStmt.Expression)
 							result = append(result, ExpectedAndRealType{
-								Node:         node,
-								ExpectedType: expectedType,
-								ValueNode:    node,
-								RealType:     realType,
+								node:         node,
+								expectedType: resolvedLazy(expectedType),
+								valueNode:    node,
+								realNode:     retStmt.Expression,
+								realType:     tp.lazyTypeAtLocation(retStmt.Expression),
 							})
 						}
 					}
@@ -243,26 +251,26 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) []ExpectedAndReal
 
 					if !hasTypeParams {
 						// Pattern 6: No type parameters — use contextual type
-						expectedType := c.GetContextualType(body, checker.ContextFlagsNone)
+						expectedType := tp.GetContextualType(body, checker.ContextFlagsNone)
 						if expectedType != nil {
-							realType := tp.GetTypeAtLocation(body)
 							result = append(result, ExpectedAndRealType{
-								Node:         body,
-								ExpectedType: expectedType,
-								ValueNode:    body,
-								RealType:     realType,
+								node:         body,
+								expectedType: resolvedLazy(expectedType),
+								valueNode:    body,
+								realNode:     body,
+								realType:     tp.lazyTypeAtLocation(body),
 							})
 						}
 					} else {
 						// Pattern 7: With type parameters — use inferred return type
 						expectedType := tp.getInferredReturnType(node)
 						if expectedType != nil {
-							realType := tp.GetTypeAtLocation(body)
 							result = append(result, ExpectedAndRealType{
-								Node:         body,
-								ExpectedType: expectedType,
-								ValueNode:    body,
-								RealType:     realType,
+								node:         body,
+								expectedType: resolvedLazy(expectedType),
+								valueNode:    body,
+								realNode:     body,
+								realType:     tp.lazyTypeAtLocation(body),
 							})
 						}
 					}
@@ -275,13 +283,12 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) []ExpectedAndReal
 			if node.Kind == ast.KindSatisfiesExpression {
 				satExpr := node.AsSatisfiesExpression()
 				if satExpr != nil && satExpr.Expression != nil && satExpr.Type != nil {
-					expectedType := tp.GetTypeAtLocation(satExpr.Type)
-					realType := tp.GetTypeAtLocation(satExpr.Expression)
 					result = append(result, ExpectedAndRealType{
-						Node:         satExpr.Expression,
-						ExpectedType: expectedType,
-						ValueNode:    satExpr.Expression,
-						RealType:     realType,
+						node:         satExpr.Expression,
+						expectedType: tp.lazyTypeAtLocation(satExpr.Type),
+						valueNode:    satExpr.Expression,
+						realNode:     satExpr.Expression,
+						realType:     tp.lazyTypeAtLocation(satExpr.Expression),
 					})
 					queue = append(queue, satExpr.Expression)
 					continue
@@ -293,7 +300,7 @@ func (tp *TypeParser) ExpectedAndRealTypes(sf *ast.SourceFile) []ExpectedAndReal
 		}
 
 		return result
-	})
+	}))
 }
 
 // getObjectLiteralElementName returns the name node of an object literal element

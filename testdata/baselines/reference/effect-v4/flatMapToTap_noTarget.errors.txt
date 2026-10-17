@@ -1,0 +1,17 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/flatMapToTap_noTarget.ts(7,43): suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+
+
+==== /.src/flatMapToTap_noTarget.ts (1 errors) ====
+    import type { Effect } from "effect"
+    import { as as restore, flatMap as bind } from "effect/Effect"
+    
+    declare const source: Effect.Effect<number>
+    declare const audit: Effect.Effect<void>
+    
+    export const diagnosticOnly = source.pipe(bind((n) => restore(audit, n)))
+                                              ~~~~
+!!! suggestion TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+    

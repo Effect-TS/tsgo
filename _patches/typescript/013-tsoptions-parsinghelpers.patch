@@ -1,16 +1,18 @@
 diff --git a/tsc/internal/tsoptions/parsinghelpers.go b/tsc/internal/tsoptions/parsinghelpers.go
-index fa7491b1..c02dbdca 100644
+index 53efb8061..f2f778590 100644
 --- a/tsc/internal/tsoptions/parsinghelpers.go
 +++ b/tsc/internal/tsoptions/parsinghelpers.go
-@@ -4,6 +4,7 @@ import (
- 	"reflect"
- 	"strings"
+@@ -2,6 +2,9 @@ package tsoptions
  
+ import (
+ 	"maps"
++	"strings"
++
 +	"github.com/effect-ts/tsgo/etscore"
+ 
  	"github.com/microsoft/TypeScript/tsc/internal/ast"
  	"github.com/microsoft/TypeScript/tsc/internal/collections"
- 	"github.com/microsoft/TypeScript/tsc/internal/contentmapper"
-@@ -13,6 +14,16 @@ import (
+@@ -12,6 +15,14 @@ import (
  	"github.com/microsoft/TypeScript/tsc/internal/tspath"
  )
  
@@ -18,8 +20,6 @@ index fa7491b1..c02dbdca 100644
 +// merge, allowing external integrations to customize merging for custom fields.
 +var MergeCompilerOptionsCallback func(targetOptions, sourceOptions *core.CompilerOptions, rawSource any, sourceConfigPath string, basePath string)
 +
-+// RegisterMergeCompilerOptionsCallback registers a callback invoked after
-+// standard compiler option merging.
 +func RegisterMergeCompilerOptionsCallback(cb func(targetOptions, sourceOptions *core.CompilerOptions, rawSource any, sourceConfigPath string, basePath string)) {
 +	MergeCompilerOptionsCallback = cb
 +}
@@ -27,17 +27,17 @@ index fa7491b1..c02dbdca 100644
  func ParseTristate(value any) core.Tristate {
  	if value == nil {
  		return core.TSUnknown
-@@ -548,6 +559,9 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
- 		allOptions.Quiet = ParseTristate(value)
- 	case "checkers":
- 		allOptions.Checkers = parseNumber(value)
-+	case "plugins":
-+		// Parse @effect/language-service plugin configuration.
+@@ -319,6 +330,9 @@ func ParseCompilerOptions(key string, value any, allOptions *core.CompilerOption
+ 	if allOptions == nil {
+ 		return
+ 	}
++	if strings.EqualFold(key, "plugins") {
 +		allOptions.Effect = etscore.ParseFromPlugins(value)
- 	case "runExternalCode":
- 		allOptions.RunExternalCode = ParseTristate(value)
- 	default:
-@@ -645,7 +659,7 @@ func ParseBuildOptions(key string, value any, allOptions *core.BuildOptions) []*
++	}
+ 	parseCompilerOptions(key, value, allOptions)
+ }
+ 
+@@ -333,7 +347,7 @@ func floatOrInt32ToFlag[T ~int32](value any) T {
  // with optional awareness of explicitly set null values in the raw JSON.
  // Fields in the source options will overwrite the corresponding fields in the target options,
  // including when they are explicitly set to null in the raw configuration (if rawSource is provided).
@@ -46,24 +46,72 @@ index fa7491b1..c02dbdca 100644
  	if sourceOptions == nil {
  		return targetOptions
  	}
-@@ -675,6 +689,9 @@ func mergeCompilerOptions(targetOptions, sourceOptions *core.CompilerOptions, ra
- 	for i := range targetValue.NumField() {
- 		targetField := targetValue.Field(i)
- 		sourceField := sourceValue.Field(i)
-+		if targetType.Field(i).Name == "Effect" {
-+			continue
-+		}
- 
- 		// Get the JSON field name for this struct field and check if it's explicitly null
- 		if jsonTag := targetType.Field(i).Tag.Get("json"); jsonTag != "" {
-@@ -690,6 +707,10 @@ func mergeCompilerOptions(targetOptions, sourceOptions *core.CompilerOptions, ra
- 		}
+@@ -356,10 +370,13 @@ func mergeCompilerOptions(targetOptions, sourceOptions *core.CompilerOptions, ra
  	}
  
+ 	mergeCompilerOptionFields(targetOptions, sourceOptions, explicitNullFields)
 +	if MergeCompilerOptionsCallback != nil {
 +		MergeCompilerOptionsCallback(targetOptions, sourceOptions, rawSource, sourceConfigPath, basePath)
 +	}
-+
  	return targetOptions
  }
  
+-func mergeParsedCompilerOptions(targetOptions, sourceOptions *parsedCompilerOptions, rawSource any) *parsedCompilerOptions {
++func mergeParsedCompilerOptions(targetOptions, sourceOptions *parsedCompilerOptions, rawSource any, sourceConfigPath string, basePath string) *parsedCompilerOptions {
+ 	if sourceOptions == nil {
+ 		return targetOptions
+ 	}
+@@ -369,7 +386,7 @@ func mergeParsedCompilerOptions(targetOptions, sourceOptions *parsedCompilerOpti
+ 			unresolvedPaths: make(unresolvedCompilerOptionPaths),
+ 		}
+ 	}
+-	mergeCompilerOptions(targetOptions.CompilerOptions, sourceOptions.CompilerOptions, rawSource)
++	mergeCompilerOptions(targetOptions.CompilerOptions, sourceOptions.CompilerOptions, rawSource, sourceConfigPath, basePath)
+ 	if rawMap, ok := rawSource.(*collections.OrderedMap[string, any]); ok && rawMap != nil {
+ 		if compilerOptionsRaw, ok := rawMap.Get("compilerOptions"); ok {
+ 			if compilerOptionsMap, ok := compilerOptionsRaw.(*collections.OrderedMap[string, any]); ok {
+diff --git a/tsc/internal/tsoptions/parsinghelpers_test.go b/tsc/internal/tsoptions/parsinghelpers_test.go
+index 87a2483ea..e53466d55 100644
+--- a/tsc/internal/tsoptions/parsinghelpers_test.go
++++ b/tsc/internal/tsoptions/parsinghelpers_test.go
+@@ -12,11 +12,11 @@ import (
+ func TestMergeCompilerOptions(t *testing.T) {
+ 	t.Parallel()
+ 
+-	if mergeCompilerOptions(nil, nil, nil) != nil {
++	if mergeCompilerOptions(nil, nil, nil, "", "") != nil {
+ 		t.Fatal("Merging nil options must return nil")
+ 	}
+ 	unchanged := &core.CompilerOptions{Strict: core.TSTrue}
+-	if mergeCompilerOptions(unchanged, nil, nil) != unchanged || unchanged.Strict != core.TSTrue {
++	if mergeCompilerOptions(unchanged, nil, nil, "", "") != unchanged || unchanged.Strict != core.TSTrue {
+ 		t.Fatal("A nil source must leave the target unchanged")
+ 	}
+ 
+@@ -48,7 +48,7 @@ func TestMergeCompilerOptions(t *testing.T) {
+ 						} else if !sourceValue.IsZero() {
+ 							expectedField.Set(sourceValue)
+ 						}
+-						if got := mergeCompilerOptions(target, source, rawSource); got != target || !reflect.DeepEqual(got, expected) {
++						if got := mergeCompilerOptions(target, source, rawSource, "", ""); got != target || !reflect.DeepEqual(got, expected) {
+ 							t.Fatalf("Merge differs for target=%v, source=%v, explicitNull=%v", targetValue, sourceValue, explicitNull)
+ 						}
+ 						actualField := reflect.ValueOf(target).Elem().FieldByIndex(field.Index)
+@@ -77,7 +77,7 @@ func TestMergeCompilerOptionsRawNulls(t *testing.T) {
+ 			raw.Set("compilerOptions", rawOptions)
+ 			target := &core.CompilerOptions{ModuleDetection: core.ModuleDetectionKindForce}
+ 			source := &core.CompilerOptions{ModuleDetection: core.ModuleDetectionKindAuto}
+-			mergeCompilerOptions(target, source, raw)
++			mergeCompilerOptions(target, source, raw, "", "")
+ 			expected := core.ModuleDetectionKindAuto
+ 			if name == "moduleDetection" {
+ 				expected = core.ModuleDetectionKindNone
+@@ -85,7 +85,7 @@ func TestMergeCompilerOptionsRawNulls(t *testing.T) {
+ 			if target.ModuleDetection != expected {
+ 				t.Fatalf("Got %v, want %v", target.ModuleDetection, expected)
+ 			}
+-			mergeCompilerOptions(source, source, raw)
++			mergeCompilerOptions(source, source, raw, "", "")
+ 			if source.ModuleDetection != expected {
+ 				t.Fatal("Merging an object with itself must still apply explicit nulls")
+ 			}

@@ -30,6 +30,8 @@ export class ExpectedServiceIdentifier
 
 export class ErrorA extends Data.TaggedError("ErrorA")<{}> {}
 
+export default class extends Data.TaggedError("AnonymousDefaultError")<{}> {}
+
 
 === [D2] Fix 0: "Disable deterministicKeys for this line" ===
 skipped by default
@@ -48,4 +50,6 @@ export class ExpectedServiceIdentifier
 {}
 
 export class ErrorA extends Data.TaggedError("@effect/test-app/test/ErrorA")<{}> {}
+
+export default class extends Data.TaggedError("AnonymousDefaultError")<{}> {}
 

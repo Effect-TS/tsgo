@@ -1,0 +1,46 @@
+==== /.src/package.json (0 flows) ====
+==== /.src/app.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 12:19 - 12:64
+Node: pipe(Effect.void, Effect.as(Record.empty()))
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.as
+      args: [Record.empty()]
+      outType: Effect<Record<never, never>, never, never>
+==== /.src/legacy/old.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 10:19 - 10:58
+Node: Effect.as(Effect.void, Record.empty())
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.as
+      args: [Record.empty()]
+      outType: Effect<Record<never, never>, never, never>
+==== /.src/follow.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 8:24 - 8:57
+Node: pipe(Effect.void, Effect.asVoid)
+Node Kind: KindCallExpression
+
+Subject: Effect.void
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>

@@ -10,6 +10,7 @@ package etslshooks
 import (
 	"context"
 	"fmt"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 	"strings"
 
 	"github.com/effect-ts/tsgo/etscore"
@@ -54,11 +55,11 @@ func init() {
 				effectConfig,
 				importingFile.FileName(),
 				program.Options().ConfigFilePath,
-				program.UseCaseSensitiveFileNames(),
+				tspath.UseCaseSensitiveFileNames(program),
 			)
 		}
-		return autoimportstyle.NewFixTransformer(resolvedOptions, func(export *autoimport.Export) (string, modulespecifiers.ResultKind) {
-			targetFileName := string(export.Target.ModuleID)
+		return autoimportstyle.NewFixTransformer(resolvedOptions, program, func(export *autoimport.Export) (string, modulespecifiers.ResultKind) {
+			targetFileName := autoimport.ModuleIDFileName(export.Target.ModuleID)
 			if targetFile := program.GetSourceFile(targetFileName); targetFile != nil {
 				targetFileName = targetFile.FileName()
 			}
@@ -72,8 +73,8 @@ func init() {
 				true,
 			)
 			for _, specifier := range specifiers {
-				if !strings.Contains(specifier, "/node_modules/") {
-					return specifier, kind
+				if !strings.Contains(string(specifier), "/node_modules/") {
+					return string(specifier), kind
 				}
 			}
 			return "", modulespecifiers.ResultKindNone
@@ -98,7 +99,7 @@ func getEffectCodeActions(ctx context.Context, fixCtx *ls.CodeFixContext) ([]*ls
 				parsedEffectConfig,
 				fixCtx.SourceFile.FileName(),
 				fixCtx.Program.Options().ConfigFilePath,
-				fixCtx.Program.UseCaseSensitiveFileNames(),
+				tspath.UseCaseSensitiveFileNames(fixCtx.Program),
 			)
 
 			ch, done := fixCtx.Program.GetTypeCheckerForFile(ctx, fixCtx.SourceFile)
@@ -343,9 +344,9 @@ func isDeclarationName(node *ast.Node) bool {
 
 // formatEffectTypeParams formats Effect type parameters (A, E, R) and prepends them to documentation.
 func formatEffectTypeParams(c *checker.Checker, effect *typeparser.Effect, documentation string, isMarkdown bool) string {
-	aStr := c.TypeToStringEx(effect.A, nil, checker.TypeFormatFlagsNoTruncation, nil)
-	eStr := c.TypeToStringEx(effect.E, nil, checker.TypeFormatFlagsNoTruncation, nil)
-	rStr := c.TypeToStringEx(effect.R, nil, checker.TypeFormatFlagsNoTruncation, nil)
+	aStr := c.TypeToStringEx(effect.A(), nil, checker.TypeFormatFlagsNoTruncation, nil)
+	eStr := c.TypeToStringEx(effect.E(), nil, checker.TypeFormatFlagsNoTruncation, nil)
+	rStr := c.TypeToStringEx(effect.R(), nil, checker.TypeFormatFlagsNoTruncation, nil)
 
 	var prefix string
 	if isMarkdown {

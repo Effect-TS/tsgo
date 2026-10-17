@@ -1,20 +1,16 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
-/.src/effectInFailure.ts(5,14): warning TS377054: The error channel contains an Effect (Effect<void, never, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
 /.src/effectInFailure.ts(5,29): warning TS377054: The error channel contains an Effect (Effect<void, never, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
-/.src/effectInFailure.ts(15,14): warning TS377054: The error channel contains an Effect (Effect<any, Effect<void, never, never>, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
 /.src/effectInFailure.ts(18,5): warning TS377054: The error channel contains an Effect (Effect<void, never, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
 
 
-==== /.src/effectInFailure.ts (4 errors) ====
+==== /.src/effectInFailure.ts (2 errors) ====
     import { Data, Effect } from "effect"
     
     class JsonParseError extends Data.TaggedError("JsonParseError")<{ cause: unknown }> {}
     
     export const shouldReport = Effect.try({
-                 ~~~~~~~~~~~~
-!!! warning TS377054: The error channel contains an Effect (Effect<void, never, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
                                 ~~~~~~~~~~~~
       try: () => JSON.parse("{"),
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -30,8 +26,6 @@ Effect version: 4.0.0
     })
     
     export const shouldReportOnlyInner = Effect.try({
-                 ~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377054: The error channel contains an Effect (Effect<any, Effect<void, never, never>, never>). Putting Effect computations in the failure channel is not intended; keep only failure types there. effect(effectInFailure)
       try: () => JSON.parse("{"),
       catch: (e) =>
         Effect.try({

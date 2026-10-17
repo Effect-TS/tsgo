@@ -48,7 +48,7 @@ func AnalyzeMultipleEffectProvide(tp *typeparser.TypeParser, _ *checker.Checker,
 	isEffectV4 := tp.SupportedEffectVersion() == typeparser.EffectMajorV4
 
 	flows := tp.PipingFlows(sf, true)
-	for _, flow := range flows {
+	for _, flow := range flows.All() {
 		// Track chunks of consecutive Effect.provide calls with Layer arguments.
 		var currentChunk []*ast.Node
 		var currentLayerArgs []*ast.Node
@@ -69,22 +69,22 @@ func AnalyzeMultipleEffectProvide(tp *typeparser.TypeParser, _ *checker.Checker,
 			currentEffectModuleNode = nil
 		}
 
-		for _, transformation := range flow.Transformations {
-			// Check if this is an Effect.provide call
-			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "provide") {
+		for _, transformation := range flow.Transformations().All() {
+			// Must have arguments
+			if transformation.Args().Len() == 0 {
 				finalizeChunk()
 				continue
 			}
 
-			// Must have arguments
-			if len(transformation.Args) == 0 {
+			// Check if this is an Effect.provide call
+			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "provide") {
 				finalizeChunk()
 				continue
 			}
 
 			isLocalProvide := false
-			if isEffectV4 && len(transformation.Args) > 1 {
-				options := transformation.Args[1]
+			if isEffectV4 && transformation.Args().Len() > 1 {
+				options := transformation.Args().At(1)
 				if options != nil && options.Kind == ast.KindObjectLiteralExpression {
 					for _, property := range options.AsObjectLiteralExpression().Properties.Nodes {
 						if property == nil || property.Kind != ast.KindPropertyAssignment {
@@ -105,7 +105,11 @@ func AnalyzeMultipleEffectProvide(tp *typeparser.TypeParser, _ *checker.Checker,
 			}
 
 			// Check if the first argument is a Layer type
-			arg := transformation.Args[0]
+			arg := transformation.Args().At(0)
+			if tp.NodeCannotBeEffectLibraryType(arg) {
+				finalizeChunk()
+				continue
+			}
 			argType := tp.GetTypeAtLocation(arg)
 			if argType == nil {
 				finalizeChunk()
@@ -119,15 +123,15 @@ func AnalyzeMultipleEffectProvide(tp *typeparser.TypeParser, _ *checker.Checker,
 			}
 
 			// Find the enclosing call expression for this provide
-			callNode := ast.FindAncestorKind(transformation.Callee, ast.KindCallExpression)
+			callNode := ast.FindAncestorKind(transformation.Callee(), ast.KindCallExpression)
 			if callNode == nil {
 				finalizeChunk()
 				continue
 			}
 
 			// Capture Effect module node from the callee's property access expression
-			if len(currentChunk) == 0 && transformation.Callee.Kind == ast.KindPropertyAccessExpression {
-				currentEffectModuleNode = transformation.Callee.AsPropertyAccessExpression().Expression
+			if len(currentChunk) == 0 && transformation.Callee().Kind == ast.KindPropertyAccessExpression {
+				currentEffectModuleNode = transformation.Callee().AsPropertyAccessExpression().Expression
 			}
 
 			currentChunk = append(currentChunk, callNode)

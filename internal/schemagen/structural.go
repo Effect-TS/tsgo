@@ -168,8 +168,8 @@ func (g *StructuralSchemaGen) resolveHoistName(t *checker.Type) string {
 	}
 
 	// Try to get name from the type's symbol
-	if t.Symbol() != nil && len(t.Symbol().Declarations) == 1 {
-		decl := t.Symbol().Declarations[0]
+	if t.Symbol() != nil && len(ast.TSGetSymbolDeclarations(t.Symbol())) == 1 {
+		decl := ast.TSGetSymbolDeclarations(t.Symbol())[0]
 		var hoistName string
 		if decl.Kind == ast.KindInterfaceDeclaration {
 			hoistName = decl.AsInterfaceDeclaration().Name().AsIdentifier().Text
@@ -442,7 +442,7 @@ func (g *StructuralSchemaGen) processObjectType(t *checker.Type, ctx processingC
 		propName := g.Checker.SymbolToString(prop)
 		propType := g.Checker.GetTypeOfSymbol(prop)
 
-		isOptional := prop.Flags&ast.SymbolFlagsOptional != 0
+		isOptional := ast.TSGetSymbolFlags(prop)&ast.SymbolFlagsOptional != 0
 
 		var schemaExpr *ast.Node
 		if isOptional {
@@ -580,7 +580,7 @@ func (g *StructuralSchemaGen) ScanExistingSchemas(scope *ast.Node) {
 		if schemaTypes == nil {
 			continue
 		}
-		aType := schemaTypes.A
+		aType := schemaTypes.A()
 		capturedName := name
 		g.hoistedSchemas[aType.Id()] = hoistedEntry{
 			t: aType,

@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/serviceNotAsClass.ts(7,16): warning TS377056: `Context.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class Config extends Context.Service<Config, ConfigService>()("Config") {}`. effect(serviceNotAsClass)
 /.src/serviceNotAsClass.ts(11,30): warning TS377056: `Context.Service` is assigned to a variable here, but this API is intended for a class declaration shape such as `class ArtifactStore extends Context.Service<ArtifactStore, ArtifactStoreService>()("@my-app/ArtifactStore") {}`. effect(serviceNotAsClass)

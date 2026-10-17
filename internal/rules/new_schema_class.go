@@ -85,7 +85,7 @@ func AnalyzeNewSchemaClass(tp *typeparser.TypeParser, c *checker.Checker, sf *as
 }
 
 func isV4SchemaClassExpression(tp *typeparser.TypeParser, c *checker.Checker, expr *ast.Node) bool {
-	if tp == nil || c == nil || expr == nil {
+	if tp == nil || c == nil || expr == nil || tp.NodeCannotBeEffectLibraryType(expr) {
 		return false
 	}
 

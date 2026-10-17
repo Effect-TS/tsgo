@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/deterministicKeys_preview.ts(7,49): warning TS377049: This key does not match the deterministic key for this declaration. The expected key is `effect-v4-tests/deterministicKeys_preview/RenamedService`. effect(deterministicKeys)
 

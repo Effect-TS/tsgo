@@ -51,32 +51,32 @@ func AnalyzeCatchToIgnore(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 	var matches []CatchToIgnoreMatch
 
 	flows := tp.PipingFlows(sf, true)
-	for _, flow := range flows {
-		for index := range flow.Transformations {
-			transformation := &flow.Transformations[index]
-			catchMethodName, ignoreMethodName, effectModuleNode, ok := catchToIgnoreMethods(tp, transformation.Callee)
+	for _, flow := range flows.All() {
+		for index := range flow.Transformations().All() {
+			transformation := flow.Transformations().At(index)
+			if transformation.Args().Len() < 1 {
+				continue
+			}
+
+			catchMethodName, ignoreMethodName, effectModuleNode, ok := catchToIgnoreMethods(tp, transformation.Callee())
 			if !ok {
 				continue
 			}
 
-			if len(transformation.Args) < 1 {
+			lazy := typeparser.ParseLazyExpression(transformation.Args().At(0), typeparser.LazyExpressionNone)
+			if lazy == nil || !isEffectVoidReference(tp, lazy.Expression()) {
 				continue
 			}
 
-			lazy := typeparser.ParseLazyExpression(transformation.Args[0], typeparser.LazyExpressionNone)
-			if lazy == nil || !isEffectVoidReference(tp, lazy.Expression) {
-				continue
-			}
-
-			effect := tp.StrictEffectType(transformation.OutType)
-			if effect == nil || !isVoidLikeEffectSuccess(effect.A) {
+			effect := tp.StrictEffectType(transformation.OutType())
+			if effect == nil || !isVoidLikeEffectSuccess(effect.A()) {
 				continue
 			}
 
 			matches = append(matches, CatchToIgnoreMatch{
 				SourceFile:       sf,
-				Location:         scanner.GetErrorRangeForNode(sf, transformation.Callee),
-				Transformation:   transformation,
+				Location:         scanner.GetErrorRangeForNode(sf, transformation.Callee()),
+				Transformation:   &transformation,
 				EffectModuleNode: effectModuleNode,
 				CatchMethodName:  catchMethodName,
 				IgnoreMethodName: ignoreMethodName,

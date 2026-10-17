@@ -1,5 +1,7 @@
 package typeparser
 
+import "github.com/effect-ts/tsgo/internal/readonly"
+
 import "github.com/microsoft/TypeScript/tsc/shim/ast"
 
 // DispatchConditionKind identifies how one result-producing branch is
@@ -19,40 +21,72 @@ const (
 // Predicate conditions set Subject to the condition expression and leave Value
 // nil. Switch cases set Subject to the shared discriminant and Value to the
 // case expression. Source is the predicate expression or case clause used for
-// diagnostics. TagSubject and TagValue are populated when the condition has
-// the syntactic shape of an equality dispatch on a `_tag` property.
+// diagnostics. TagSubject and TagValue are populated for `_tag` equality and
+// Effect Predicate.isTagged conditions.
 type DispatchCondition struct {
-	Kind       DispatchConditionKind
-	Source     *ast.Node
-	Subject    *ast.Node
-	Value      *ast.Node
-	TagSubject *ast.Node
-	TagValue   *ast.Node
+	kind       DispatchConditionKind
+	source     *ast.Node
+	subject    *ast.Node
+	value      *ast.Node
+	tagSubject *ast.Node
+	tagValue   *ast.Node
 }
+
+func (r DispatchCondition) Kind() DispatchConditionKind { return r.kind }
+
+func (r DispatchCondition) Source() *ast.Node { return r.source }
+
+func (r DispatchCondition) Subject() *ast.Node { return r.subject }
+
+func (r DispatchCondition) Value() *ast.Node { return r.value }
+
+func (r DispatchCondition) TagSubject() *ast.Node { return r.tagSubject }
+
+func (r DispatchCondition) TagValue() *ast.Node { return r.tagValue }
 
 // ResultDispatchBranch is one source-ordered branch in a decoded
 // result-producing expression or block.
 type ResultDispatchBranch struct {
-	Condition DispatchCondition
-	Result    *ast.Node
+	condition DispatchCondition
+	result    *ast.Node
 }
+
+func (r ResultDispatchBranch) Condition() DispatchCondition { return r.condition }
+
+func (r ResultDispatchBranch) Result() *ast.Node { return r.result }
 
 // ResultDispatch is an ordered, first-match result dispatch with an
 // optional fallback.
 type ResultDispatch struct {
-	Node     *ast.Node
-	Branches []ResultDispatchBranch
-	Fallback *ast.Node
+	node     *ast.Node
+	branches []ResultDispatchBranch
+	fallback *ast.Node
 }
+
+func (r ResultDispatch) Node() *ast.Node { return r.node }
+
+func (r ResultDispatch) Branches() readonly.Slice[ResultDispatchBranch] {
+	return readonly.New(r.branches)
+}
+
+func (r ResultDispatch) Fallback() *ast.Node { return r.fallback }
 
 // ParsedReturningDispatch is a decoded arrow function or function expression
 // whose body consists entirely of result-producing branches.
 type ParsedReturningDispatch struct {
-	Node     *ast.Node
-	Params   []*ast.Node
-	Body     *ast.Node
-	Dispatch *ResultDispatch
+	node     *ast.Node
+	params   []*ast.Node
+	body     *ast.Node
+	dispatch *ResultDispatch
 }
+
+func (r ParsedReturningDispatch) Node() *ast.Node { return r.node }
+
+func (r ParsedReturningDispatch) Params() readonly.Slice[*ast.Node] { return readonly.New(r.params) }
+
+func (r ParsedReturningDispatch) Body() *ast.Node { return r.body }
+
+func (r ParsedReturningDispatch) Dispatch() *ResultDispatch { return r.dispatch }
 
 type resultDispatchSyntax struct {
 	branches []ResultDispatchBranch
@@ -62,7 +96,8 @@ type resultDispatchSyntax struct {
 // ParseResultDispatch decodes a result-producing conditional expression or
 // block into source-ordered branches and an optional fallback. False-arm
 // conditional chains are flattened; conditionals in a true arm are rejected.
-func ParseResultDispatch(node *ast.Node) *ResultDispatch {
+// Tag hints include checker-backed recognition of Effect Predicate.isTagged.
+func (tp *TypeParser) ParseResultDispatch(node *ast.Node) *ResultDispatch {
 	if node == nil {
 		return nil
 	}
@@ -70,10 +105,14 @@ func ParseResultDispatch(node *ast.Node) *ResultDispatch {
 	if syntax == nil || len(syntax.branches) == 0 {
 		return nil
 	}
+	for i := range syntax.branches {
+		condition := &syntax.branches[i].condition
+		condition.tagSubject, condition.tagValue = tp.dispatchConditionTagNodes(*condition)
+	}
 	return &ResultDispatch{
-		Node:     node,
-		Branches: syntax.branches,
-		Fallback: syntax.fallback,
+		node:     node,
+		branches: syntax.branches,
+		fallback: syntax.fallback,
 	}
 }
 
@@ -81,7 +120,7 @@ func ParseResultDispatch(node *ast.Node) *ResultDispatch {
 // source-ordered result branches and an optional fallback. It recognizes
 // conditional expressions, returned conditional expressions, if/else-if,
 // sequential returning if statements, and returning switch cases.
-func ParseReturningDispatch(node *ast.Node) *ParsedReturningDispatch {
+func (tp *TypeParser) ParseReturningDispatch(node *ast.Node) *ParsedReturningDispatch {
 	node = unwrapResultDispatchExpression(node)
 	if node == nil || (node.Kind != ast.KindArrowFunction && node.Kind != ast.KindFunctionExpression) {
 		return nil
@@ -95,7 +134,7 @@ func ParseReturningDispatch(node *ast.Node) *ParsedReturningDispatch {
 		return nil
 	}
 
-	dispatch := ParseResultDispatch(body)
+	dispatch := tp.ParseResultDispatch(body)
 	if dispatch == nil {
 		return nil
 	}
@@ -105,10 +144,10 @@ func ParseReturningDispatch(node *ast.Node) *ParsedReturningDispatch {
 		params = parameters.Nodes
 	}
 	return &ParsedReturningDispatch{
-		Node:     node,
-		Params:   params,
-		Body:     body,
-		Dispatch: dispatch,
+		node:     node,
+		params:   params,
+		body:     body,
+		dispatch: dispatch,
 	}
 }
 
@@ -191,8 +230,8 @@ func parseResultDispatchSwitch(node *ast.Node) *resultDispatchSyntax {
 			return nil
 		}
 		dispatch.branches = append(dispatch.branches, ResultDispatchBranch{
-			Condition: newDispatchCondition(DispatchConditionSwitchCase, clauseNode, statement.Expression, clause.Expression),
-			Result:    result,
+			condition: newDispatchCondition(DispatchConditionSwitchCase, clauseNode, statement.Expression, clause.Expression),
+			result:    result,
 		})
 	}
 	if len(dispatch.branches) == 0 {
@@ -219,8 +258,8 @@ func parseResultDispatchConditional(node *ast.Node) *resultDispatchSyntax {
 			return nil
 		}
 		dispatch.branches = append(dispatch.branches, ResultDispatchBranch{
-			Condition: newDispatchCondition(DispatchConditionPredicate, conditional.Condition, conditional.Condition, nil),
-			Result:    conditional.WhenTrue,
+			condition: newDispatchCondition(DispatchConditionPredicate, conditional.Condition, conditional.Condition, nil),
+			result:    conditional.WhenTrue,
 		})
 
 		whenFalse := unwrapResultDispatchExpression(conditional.WhenFalse)
@@ -253,8 +292,8 @@ func parseResultDispatchIfElse(node *ast.Node) *resultDispatchSyntax {
 			return nil
 		}
 		dispatch.branches = append(dispatch.branches, ResultDispatchBranch{
-			Condition: newDispatchCondition(DispatchConditionPredicate, statement.Expression, statement.Expression, nil),
-			Result:    result,
+			condition: newDispatchCondition(DispatchConditionPredicate, statement.Expression, statement.Expression, nil),
+			result:    result,
 		})
 
 		if statement.ElseStatement == nil {
@@ -309,31 +348,29 @@ func parseResultDispatchSequentialIfs(statements []*ast.Node) *resultDispatchSyn
 			return nil
 		}
 		dispatch.branches = append(dispatch.branches, ResultDispatchBranch{
-			Condition: newDispatchCondition(DispatchConditionPredicate, statement.Expression, statement.Expression, nil),
-			Result:    result,
+			condition: newDispatchCondition(DispatchConditionPredicate, statement.Expression, statement.Expression, nil),
+			result:    result,
 		})
 	}
 	return dispatch
 }
 
 func newDispatchCondition(kind DispatchConditionKind, source *ast.Node, subject *ast.Node, value *ast.Node) DispatchCondition {
-	condition := DispatchCondition{
-		Kind:    kind,
-		Source:  source,
-		Subject: subject,
-		Value:   value,
+	return DispatchCondition{
+		kind:    kind,
+		source:  source,
+		subject: subject,
+		value:   value,
 	}
-	condition.TagSubject, condition.TagValue = dispatchConditionTagNodes(condition)
-	return condition
 }
 
-func dispatchConditionTagNodes(condition DispatchCondition) (tagSubject *ast.Node, tagValue *ast.Node) {
-	switch condition.Kind {
+func (tp *TypeParser) dispatchConditionTagNodes(condition DispatchCondition) (tagSubject *ast.Node, tagValue *ast.Node) {
+	switch condition.kind {
 	case DispatchConditionPredicate:
-		return ParseTagMatch(condition.Subject)
+		return tp.ParseTagMatch(condition.subject)
 	case DispatchConditionSwitchCase:
-		if subject, ok := dispatchTagSubject(condition.Subject); ok {
-			return subject, condition.Value
+		if subject, ok := dispatchTagSubject(condition.subject); ok {
+			return subject, condition.value
 		}
 		return nil, nil
 	default:
@@ -341,10 +378,54 @@ func dispatchConditionTagNodes(condition DispatchCondition) (tagSubject *ast.Nod
 	}
 }
 
-// ParseTagMatch decodes a positive equality comparison whose one operand is a
-// `_tag` property access. It returns the value owning `_tag` and the expression
-// compared with it, independent of operand order.
-func ParseTagMatch(node *ast.Node) (tagSubject *ast.Node, tagValue *ast.Node) {
+// ParseTagMatch decodes a positive `_tag` equality or an Effect
+// Predicate.isTagged call, returning the original subject and tag expressions.
+func (tp *TypeParser) ParseTagMatch(node *ast.Node) (tagSubject *ast.Node, tagValue *ast.Node) {
+	predicate := unwrapResultDispatchExpression(node)
+	if predicate == nil {
+		return nil, nil
+	}
+	if predicate.Kind == ast.KindBinaryExpression {
+		return parseTagEqualityMatch(predicate)
+	}
+	call := resultDispatchCall(predicate)
+	if call == nil {
+		return nil, nil
+	}
+	callee := unwrapResultDispatchExpression(call.Expression)
+	if len(call.Arguments.Nodes) == 2 && tp.IsNodeReferenceToEffectPredicateModuleApi(callee, "isTagged") {
+		return unwrapResultDispatchExpression(call.Arguments.Nodes[0]), unwrapResultDispatchExpression(call.Arguments.Nodes[1])
+	}
+	if len(call.Arguments.Nodes) == 1 {
+		inner := resultDispatchCall(callee)
+		if inner != nil && len(inner.Arguments.Nodes) == 1 &&
+			tp.IsNodeReferenceToEffectPredicateModuleApi(unwrapResultDispatchExpression(inner.Expression), "isTagged") {
+			return unwrapResultDispatchExpression(call.Arguments.Nodes[0]), unwrapResultDispatchExpression(inner.Arguments.Nodes[0])
+		}
+	}
+	return nil, nil
+}
+
+func resultDispatchCall(node *ast.Node) *ast.CallExpression {
+	node = unwrapResultDispatchExpression(node)
+	if node == nil || node.Kind != ast.KindCallExpression || ast.IsOptionalChain(node) {
+		return nil
+	}
+	call := node.AsCallExpression()
+	if call == nil || call.Expression == nil || call.Arguments == nil ||
+		ast.IsOptionalChain(unwrapResultDispatchExpression(call.Expression)) {
+		return nil
+	}
+	for _, argument := range call.Arguments.Nodes {
+		argument = unwrapResultDispatchExpression(argument)
+		if argument == nil || argument.Kind == ast.KindSpreadElement {
+			return nil
+		}
+	}
+	return call
+}
+
+func parseTagEqualityMatch(node *ast.Node) (tagSubject *ast.Node, tagValue *ast.Node) {
 	predicate := unwrapResultDispatchExpression(node)
 	if predicate == nil || predicate.Kind != ast.KindBinaryExpression {
 		return nil, nil

@@ -54,18 +54,19 @@ type FlatMapIgnoredParamToAndThenMatch struct {
 func AnalyzeFlatMapIgnoredParamToAndThen(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []FlatMapIgnoredParamToAndThenMatch {
 	var matches []FlatMapIgnoredParamToAndThenMatch
 
-	for _, flow := range tp.PipingFlows(sf, true) {
-		for _, transformation := range flow.Transformations {
-			callee := transformation.Callee
-			if callee == nil || len(transformation.Args) != 1 ||
+	for _, flow := range tp.PipingFlows(sf, true).All() {
+		for _, transformation := range flow.Transformations().All() {
+			callee := transformation.Callee()
+			if callee == nil || transformation.Args().Len() != 1 ||
 				!tp.IsNodeReferenceToEffectModuleApi(callee, "flatMap") {
 				continue
 			}
 
-			callback := typeparser.ParseLazyExpression(transformation.Args[0], typeparser.LazyExpressionThunk)
-			if callback == nil || callback.Expression == nil ||
-				!tp.IsExpressionValueStableAtLocation(callback.Expression, callee) ||
-				tp.EffectType(tp.GetTypeAtLocation(callback.Expression)) == nil {
+			callback := typeparser.ParseLazyExpression(transformation.Args().At(0), typeparser.LazyExpressionThunk)
+			if callback == nil || callback.Expression() == nil ||
+				tp.NodeCannotBeEffectLibraryType(callback.Expression()) ||
+				!tp.IsExpressionValueStableAtLocation(callback.Expression(), callee) ||
+				tp.EffectType(tp.GetTypeAtLocation(callback.Expression())) == nil {
 				continue
 			}
 
@@ -79,8 +80,8 @@ func AnalyzeFlatMapIgnoredParamToAndThen(tp *typeparser.TypeParser, _ *checker.C
 				Location:       scanner.GetErrorRangeForNode(sf, callee),
 				Callee:         callee,
 				CalleeNameNode: calleeName,
-				Callback:       callback.Node,
-				EffectValue:    callback.Expression,
+				Callback:       callback.Node(),
+				EffectValue:    callback.Expression(),
 			})
 		}
 	}

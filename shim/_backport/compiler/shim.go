@@ -48,9 +48,6 @@ type LibFile = compiler.LibFile
 //go:linkname NewCachedFSCompilerHost github.com/microsoft/typescript-go/internal/compiler.NewCachedFSCompilerHost
 func NewCachedFSCompilerHost(currentDirectory string, fs vfs.FS, defaultLibraryPath string, extendedConfigCache tsoptions.ExtendedConfigCache, trace func(msg *diagnostics.Message, args ...any)) compiler.CompilerHost
 
-//go:linkname NewProgram github.com/microsoft/typescript-go/internal/compiler.NewProgram
-func NewProgram(opts compiler.ProgramOptions) *compiler.Program
-
 type Program = compiler.Program
 type ProgramLike = compiler.ProgramLike
 type ProgramOptions = compiler.ProgramOptions

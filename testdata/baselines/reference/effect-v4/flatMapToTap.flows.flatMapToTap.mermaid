@@ -1,0 +1,1157 @@
+flowchart TB
+  0[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  1["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; audit#40;user#41;.pipe#40;Effect.as#40;user#41;#41;#93;"]
+  2[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  3[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; audit#40;user#41;.pipe#40;Effect.as#40;user#41;#41;"]]
+  4[/"type: User<br/>node: user"/]
+  5["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  6[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  7["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.as<br/>args: #91;user#93;"]
+  8[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  9[/"type: User<br/>node: user"/]
+  10[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  11["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; pipe#40;audit#40;user#41;, Effect.map#40;#40;#41; =#gt; user#41;#41;#93;"]
+  12[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  13[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; pipe#40;audit#40;user#41;, Effect.map#40;#40;#41; =#gt; user#41;#41;"]]
+  14[/"type: User<br/>node: user"/]
+  15["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  16[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  17["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; user#93;"]
+  18[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  19[["type: #40;#41; =#gt; User<br/>node: #40;#41; =#gt; user"]]
+  20[/"type: User<br/>node: user"/]
+  21[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  22["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  23[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  24[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.map#40;audit#40;user#41;, #40;#41; =#gt; user#41;"]]
+  25[/"type: User<br/>node: user"/]
+  26["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  27[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  28["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  29[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  30[["type: #40;#41; =#gt; User<br/>node: #40;#41; =#gt; user"]]
+  31[/"type: User<br/>node: user"/]
+  32[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  33["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  34[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  35[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.as#40;audit#40;user#41;, user#41;"]]
+  36[/"type: User<br/>node: user"/]
+  37["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  38[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  39["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  40[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  41[/"type: User<br/>node: user"/]
+  42[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  43["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.andThen<br/>args: #91;#40;user#41; =#gt; audit#40;user#41;.pipe#40;Effect.map#40;#40;unused#41; =#gt; user#41;#41;#93;"]
+  44[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  45[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; audit#40;user#41;.pipe#40;Effect.map#40;#40;unused#41; =#gt; user#41;#41;"]]
+  46[/"type: User<br/>node: user"/]
+  47["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  48[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  49["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.map<br/>args: #91;#40;unused#41; =#gt; user#93;"]
+  50[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  51[["type: #40;unused: number#41; =#gt; User<br/>node: #40;unused#41; =#gt; user"]]
+  52[/"type: User<br/>node: user"/]
+  53[/"type: User<br/>node: other"/]
+  54["type: Effect#lt;unknown, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  55[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  56["type: Effect#lt;unknown, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; Effect.as#40;Effect.log#40;user#41;, user#41;#93;"]
+  57[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  58[["type: #40;user: unknown#41; =#gt; Effect#lt;unknown, never, never#gt;<br/>node: #40;user#41; =#gt; Effect.as#40;Effect.log#40;user#41;, user#41;"]]
+  59[/"type: unknown<br/>node: user"/]
+  60["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  61[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  62["type: Effect#lt;unknown, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  63[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  64[/"type: unknown<br/>node: user"/]
+  65[/"type: User<br/>node: other"/]
+  66["type: Effect#lt;unknown, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  67[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  68["type: Effect#lt;unknown, never, never#gt;<br/>callee: Effect.andThen<br/>args: #91;#40;user#41; =#gt; Effect.as#40;Effect.log#40;user#41;, user#41;#93;"]
+  69[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  70[["type: #40;user: unknown#41; =#gt; Effect#lt;unknown, never, never#gt;<br/>node: #40;user#41; =#gt; Effect.as#40;Effect.log#40;user#41;, user#41;"]]
+  71[/"type: unknown<br/>node: user"/]
+  72["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  73[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  74["type: Effect#lt;unknown, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  75[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  76[/"type: unknown<br/>node: user"/]
+  77[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  78["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.andThen<br/>args: #91;#40;user#41; =#gt; pipe#40;audit#40;user#41;, Effect.as#40;user#41;#41;#93;"]
+  79[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  80[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; pipe#40;audit#40;user#41;, Effect.as#40;user#41;#41;"]]
+  81[/"type: User<br/>node: user"/]
+  82["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  83[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  84["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.as<br/>args: #91;user#93;"]
+  85[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  86[/"type: User<br/>node: user"/]
+  87[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  88["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; Effect.as#40;user#41;#40;audit#40;user#41;#41;#93;"]
+  89[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  90[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.as#40;user#41;#40;audit#40;user#41;#41;"]]
+  91[/"type: User<br/>node: user"/]
+  92["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  93[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  94["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.as<br/>args: #91;user#93;"]
+  95[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  96[/"type: User<br/>node: user"/]
+  97[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  98["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; Effect.map#40;#40;#41; =#gt; user#41;#40;audit#40;user#41;#41;#93;"]
+  99[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  100[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.map#40;#40;#41; =#gt; user#41;#40;audit#40;user#41;#41;"]]
+  101[/"type: User<br/>node: user"/]
+  102["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  103[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  104["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; user#93;"]
+  105[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  106[["type: #40;#41; =#gt; User<br/>node: #40;#41; =#gt; user"]]
+  107[/"type: User<br/>node: user"/]
+  108[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  109["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;function#40;user#41; #123;#92;n  return Effect.map#40;audit#40;user#41;, #40;unused#41; =#gt; #123; return #40;user#41; #125;#41;#92;n#125;#93;"]
+  110[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  111[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: function#40;user#41; #123;#92;n  return Effect.map#40;audit#40;user#41;, #40;unused#41; =#gt; #123; return #40;user#41; #125;#41;#92;n#125;"]]
+  112[/"type: User<br/>node: user"/]
+  113["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  114[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  115["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  116[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  117[["type: #40;unused: number#41; =#gt; User<br/>node: #40;unused#41; =#gt; #123; return #40;user#41; #125;"]]
+  118[/"type: User<br/>node: #40;user#41;"/]
+  119[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  120["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.andThen<br/>args: #91;#40;user#41; =#gt; #123;#92;n  const id = user.id#92;n  record#40;id#41;#92;n  const nested = #40;#41; =#gt; #123; return id #125;#92;n  record#40;nested#40;#41;#41;#92;n  return audit#40;user#41;.pipe#40;Effect.as#40;user#41;#41;#92;n#125;#93;"]
+  121[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  122[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; #123;#92;n  const id = user.id#92;n  record#40;id#41;#92;n  const nested = #40;#41; =#gt; #123; return id #125;#92;n  record#40;nested#40;#41;#41;#92;n  return audit#40;user#41;.pipe#40;Effect.as#40;user#41;#41;#92;n#125;"]]
+  123[/"type: User<br/>node: user"/]
+  124["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  125[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  126["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.as<br/>args: #91;user#93;"]
+  127[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  128[/"type: User<br/>node: user"/]
+  129[/"type: string<br/>node: id"/]
+  130["type: void<br/>callee: record<br/>args: #91;#93;"]
+  131[/"type: #40;value: unknown#41; =#gt; void<br/>node: record"/]
+  132[["type: #40;#41; =#gt; string<br/>node: #40;#41; =#gt; #123; return id #125;"]]
+  133[/"type: string<br/>node: id"/]
+  134[/"type: string<br/>node: nested#40;#41;"/]
+  135["type: void<br/>callee: record<br/>args: #91;#93;"]
+  136[/"type: #40;value: unknown#41; =#gt; void<br/>node: record"/]
+  137[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  138["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; audit#40;user#41;.pipe#40;#92;n  Effect.map#40;#40;n#41; =#gt; n + 1#41;,#92;n  Effect.as#40;user#41;#92;n#41;#93;"]
+  139[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  140[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; audit#40;user#41;.pipe#40;#92;n  Effect.map#40;#40;n#41; =#gt; n + 1#41;,#92;n  Effect.as#40;user#41;#92;n#41;"]]
+  141[/"type: User<br/>node: user"/]
+  142["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  143[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  144["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 1#93;"]
+  145[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  146[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1"]]
+  147[/"type: number<br/>node: n + 1"/]
+  148["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.as<br/>args: #91;user#93;"]
+  149[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  150[/"type: User<br/>node: user"/]
+  151[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  152["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; pipe#40;#92;n  audit#40;user#41;.pipe#40;Effect.map#40;#40;n#41; =#gt; n + 1#41;#41;,#92;n  Effect.map#40;#40;n#41; =#gt; n * 2#41;,#92;n  Effect.map#40;#40;#41; =#gt; user#41;#92;n#41;#93;"]
+  153[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  154[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; pipe#40;#92;n  audit#40;user#41;.pipe#40;Effect.map#40;#40;n#41; =#gt; n + 1#41;#41;,#92;n  Effect.map#40;#40;n#41; =#gt; n * 2#41;,#92;n  Effect.map#40;#40;#41; =#gt; user#41;#92;n#41;"]]
+  155[/"type: User<br/>node: user"/]
+  156["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  157[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  158["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 1#93;"]
+  159[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  160[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1"]]
+  161[/"type: number<br/>node: n + 1"/]
+  162["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n * 2#93;"]
+  163[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  164[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n * 2"]]
+  165[/"type: number<br/>node: n * 2"/]
+  166["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; user#93;"]
+  167[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  168[["type: #40;#41; =#gt; User<br/>node: #40;#41; =#gt; user"]]
+  169[/"type: User<br/>node: user"/]
+  170[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  171["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; Effect.as#40;#92;n  Effect.map#40;audit#40;user#41;, #40;n#41; =#gt; n + 1#41;,#92;n  user#92;n#41;#93;"]
+  172[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  173[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.as#40;#92;n  Effect.map#40;audit#40;user#41;, #40;n#41; =#gt; n + 1#41;,#92;n  user#92;n#41;"]]
+  174[/"type: User<br/>node: user"/]
+  175["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  176[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  177["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  178[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  179[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1"]]
+  180[/"type: number<br/>node: n + 1"/]
+  181["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  182[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  183[/"type: User<br/>node: user"/]
+  184[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  185["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; #123;#92;n  // This audit records the identifier before publishing.#92;n  record#40;user.id#41;#92;n  return Effect.as#40;audit#40;/* original user */ user#41;.pipe#40;Effect.map#40;#40;n#41; =#gt; n + 1#41;#41;, user#41;#92;n#125;#93;"]
+  186[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  187[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; #123;#92;n  // This audit records the identifier before publishing.#92;n  record#40;user.id#41;#92;n  return Effect.as#40;audit#40;/* original user */ user#41;.pipe#40;Effect.map#40;#40;n#41; =#gt; n + 1#41;#41;, user#41;#92;n#125;"]]
+  188[/"type: User<br/>node: user"/]
+  189["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  190[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  191["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.map<br/>args: #91;#40;n#41; =#gt; n + 1#93;"]
+  192[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  193[["type: #40;n: number#41; =#gt; number<br/>node: #40;n#41; =#gt; n + 1"]]
+  194[/"type: number<br/>node: n + 1"/]
+  195["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  196[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  197[/"type: User<br/>node: user"/]
+  198[/"type: string<br/>node: user.id"/]
+  199["type: void<br/>callee: record<br/>args: #91;#93;"]
+  200[/"type: #40;value: unknown#41; =#gt; void<br/>node: record"/]
+  201[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  202["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; #123;#92;n  user.id = #quot;updated#quot;#92;n  return audit#40;user#41;.pipe#40;Effect.as#40;user#41;#41;#92;n#125;#93;"]
+  203[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  204[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; #123;#92;n  user.id = #quot;updated#quot;#92;n  return audit#40;user#41;.pipe#40;Effect.as#40;user#41;#41;#92;n#125;"]]
+  205[/"type: User<br/>node: user"/]
+  206["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  207[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  208["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.as<br/>args: #91;user#93;"]
+  209[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  210[/"type: User<br/>node: user"/]
+  211[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  212["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: E.flatMap<br/>args: #91;#40;user#41; =#gt; E.as#40;audit#40;user#41;, user#41;#93;"]
+  213[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: E.flatMap"/]
+  214[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; E.as#40;audit#40;user#41;, user#41;"]]
+  215[/"type: User<br/>node: user"/]
+  216["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  217[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  218["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  219[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: E.as"/]
+  220[/"type: User<br/>node: user"/]
+  221[/"type: typeof import#40;#quot;/node_modules/effect/dist/Effect#quot;#41;<br/>node: Effect"/]
+  222[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  223["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Module.andThen<br/>args: #91;#40;user#41; =#gt; Effect.as#40;audit#40;user#41;, user#41;#93;"]
+  224[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Module.andThen"/]
+  225[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.as#40;audit#40;user#41;, user#41;"]]
+  226[/"type: User<br/>node: user"/]
+  227["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  228[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  229["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  230[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  231[/"type: User<br/>node: user"/]
+  232[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  233[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  234["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: flatMapAlias<br/>args: #91;#40;user#41; =#gt; audit#40;user#41;.pipe#40;reYield#40;user#41;#41;#93;"]
+  235[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: flatMapAlias"/]
+  236[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; audit#40;user#41;.pipe#40;reYield#40;user#41;#41;"]]
+  237[/"type: User<br/>node: user"/]
+  238["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  239[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  240["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: reYield<br/>args: #91;user#93;"]
+  241[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: reYield"/]
+  242[/"type: User<br/>node: user"/]
+  243[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  244["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: bind<br/>args: #91;#40;user#41; =#gt; Effect.as#40;audit#40;user#41;, user#41;#93;"]
+  245[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: bind"/]
+  246[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.as#40;audit#40;user#41;, user#41;"]]
+  247[/"type: User<br/>node: user"/]
+  248["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  249[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  250["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  251[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  252[/"type: User<br/>node: user"/]
+  253[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  254["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  255[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  256[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user: User#41; =#gt; Effect.as#40;audit#40;user#41;, user#41;"]]
+  257[/"type: User<br/>node: user"/]
+  258["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  259[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  260["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  261[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  262[/"type: User<br/>node: user"/]
+  263[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  264["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user: User#41; =#gt; Effect.as#40;audit#40;user#41;, user#41;#93;"]
+  265[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  266[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user: User#41; =#gt; Effect.as#40;audit#40;user#41;, user#41;"]]
+  267[/"type: User<br/>node: user"/]
+  268["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  269[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  270["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  271[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  272[/"type: User<br/>node: user"/]
+  273[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  274["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; #123;#92;n  user = other#92;n  return audit#40;user#41;.pipe#40;Effect.as#40;user#41;#41;#92;n#125;#93;"]
+  275[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  276[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; #123;#92;n  user = other#92;n  return audit#40;user#41;.pipe#40;Effect.as#40;user#41;#41;#92;n#125;"]]
+  277[/"type: User<br/>node: user"/]
+  278["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  279[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  280["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.as<br/>args: #91;user#93;"]
+  281[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  282[/"type: User<br/>node: user"/]
+  283[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  284["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; #123;#92;n  const update = #40;#41; =#gt; #123; user = other #125;#92;n  update#40;#41;#92;n  return audit#40;user#41;.pipe#40;Effect.as#40;user#41;#41;#92;n#125;#93;"]
+  285[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  286[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; #123;#92;n  const update = #40;#41; =#gt; #123; user = other #125;#92;n  update#40;#41;#92;n  return audit#40;user#41;.pipe#40;Effect.as#40;user#41;#41;#92;n#125;"]]
+  287[/"type: User<br/>node: user"/]
+  288["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  289[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  290["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.as<br/>args: #91;user#93;"]
+  291[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  292[/"type: User<br/>node: user"/]
+  293[["type: #40;#41; =#gt; void<br/>node: #40;#41; =#gt; #123; user = other #125;"]]
+  294[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  295["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;function#40;user#41; #123;#92;n  var user: User#92;n  return Effect.as#40;audit#40;user#41;, user#41;#92;n#125;#93;"]
+  296[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  297[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: function#40;user#41; #123;#92;n  var user: User#92;n  return Effect.as#40;audit#40;user#41;, user#41;#92;n#125;"]]
+  298[/"type: User<br/>node: user"/]
+  299["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  300[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  301["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  302[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  303[/"type: User<br/>node: user"/]
+  304[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  305["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; Effect.map#40;audit#40;user#41;, #40;user#41; =#gt; user#41;#93;"]
+  306[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  307[["type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.map#40;audit#40;user#41;, #40;user#41; =#gt; user#41;"]]
+  308[/"type: User<br/>node: user"/]
+  309["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  310[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  311["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  312[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  313[["type: #40;user: number#41; =#gt; number<br/>node: #40;user#41; =#gt; user"]]
+  314[/"type: number<br/>node: user"/]
+  315[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  316["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; Effect.as#40;audit#40;user#41;, other#41;#93;"]
+  317[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  318[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.as#40;audit#40;user#41;, other#41;"]]
+  319[/"type: User<br/>node: user"/]
+  320["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  321[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  322["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  323[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  324[/"type: User<br/>node: other"/]
+  325[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  326["type: Effect#lt;string, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; Effect.as#40;audit#40;user#41;, user.id#41;#93;"]
+  327[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  328[["type: #40;user: User#41; =#gt; Effect#lt;string, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.as#40;audit#40;user#41;, user.id#41;"]]
+  329[/"type: User<br/>node: user"/]
+  330["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  331[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  332["type: Effect#lt;string, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  333[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  334[/"type: string<br/>node: user.id"/]
+  335[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  336["type: Effect#lt;#123; id: string; name: string; #125;, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; Effect.map#40;audit#40;user#41;, #40;#41; =#gt; #40;#123; ...user #125;#41;#41;#93;"]
+  337[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  338[["type: #40;user: User#41; =#gt; Effect#lt;#123; id: string; name: string; #125;, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.map#40;audit#40;user#41;, #40;#41; =#gt; #40;#123; ...user #125;#41;#41;"]]
+  339[/"type: User<br/>node: user"/]
+  340["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  341[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  342["type: Effect#lt;#123; id: string; name: string; #125;, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  343[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  344[["type: #40;#41; =#gt; #123; id: string; name: string; #125;<br/>node: #40;#41; =#gt; #40;#123; ...user #125;#41;"]]
+  345[/"type: #123; id: string; name: string; #125;<br/>node: #40;#123; ...user #125;#41;"/]
+  346[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  347["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; Effect.map#40;audit#40;user#41;, #40;#41; =#gt; #40;record#40;user#41;, user#41;#41;#93;"]
+  348[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  349[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.map#40;audit#40;user#41;, #40;#41; =#gt; #40;record#40;user#41;, user#41;#41;"]]
+  350[/"type: User<br/>node: user"/]
+  351["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  352[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  353["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  354[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  355[["type: #40;#41; =#gt; User<br/>node: #40;#41; =#gt; #40;record#40;user#41;, user#41;"]]
+  356[/"type: User<br/>node: #40;record#40;user#41;, user#41;"/]
+  357[/"type: User<br/>node: user"/]
+  358["type: void<br/>callee: record<br/>args: #91;#93;"]
+  359[/"type: #40;value: unknown#41; =#gt; void<br/>node: record"/]
+  360[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  361["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; Effect.map#40;audit#40;user#41;, #40;#41; =#gt; #123;#92;n  record#40;user#41;#92;n  return user#92;n#125;#41;#93;"]
+  362[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  363[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.map#40;audit#40;user#41;, #40;#41; =#gt; #123;#92;n  record#40;user#41;#92;n  return user#92;n#125;#41;"]]
+  364[/"type: User<br/>node: user"/]
+  365["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  366[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  367["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  368[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  369[["type: #40;#41; =#gt; User<br/>node: #40;#41; =#gt; #123;#92;n  record#40;user#41;#92;n  return user#92;n#125;"]]
+  370[/"type: User<br/>node: user"/]
+  371[/"type: User<br/>node: user"/]
+  372["type: void<br/>callee: record<br/>args: #91;#93;"]
+  373[/"type: #40;value: unknown#41; =#gt; void<br/>node: record"/]
+  374[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  375["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; Effect.map#40;audit#40;user#41;, #40;n = #40;record#40;user#41;, 0#41;#41; =#gt; user#41;#93;"]
+  376[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  377[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.map#40;audit#40;user#41;, #40;n = #40;record#40;user#41;, 0#41;#41; =#gt; user#41;"]]
+  378[/"type: User<br/>node: user"/]
+  379["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  380[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  381["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  382[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  383[["type: #40;n?: number#41; =#gt; User<br/>node: #40;n = #40;record#40;user#41;, 0#41;#41; =#gt; user"]]
+  384[/"type: 0<br/>node: #40;record#40;user#41;, 0#41;"/]
+  385[/"type: User<br/>node: user"/]
+  386["type: void<br/>callee: record<br/>args: #91;#93;"]
+  387[/"type: #40;value: unknown#41; =#gt; void<br/>node: record"/]
+  388[/"type: User<br/>node: user"/]
+  389[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  390["type: Effect#lt;User, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; Effect.map#40;Effect.succeed#40;other#41;, #40;#123; id #125;#41; =#gt; user#41;#93;"]
+  391[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  392[["type: #40;user: User#41; =#gt; Effect#lt;User, never, never#gt;<br/>node: #40;user#41; =#gt; Effect.map#40;Effect.succeed#40;other#41;, #40;#123; id #125;#41; =#gt; user#41;"]]
+  393[/"type: User<br/>node: other"/]
+  394["type: Effect#lt;User, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  395[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  396["type: Effect#lt;User, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  397[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  398[["type: #40;#123; id #125;: User#41; =#gt; User<br/>node: #40;#123; id #125;#41; =#gt; user"]]
+  399[/"type: User<br/>node: user"/]
+  400[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  401["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; Effect.map#40;audit#40;user#41;, #40;...values#41; =#gt; user#41;#93;"]
+  402[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  403[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.map#40;audit#40;user#41;, #40;...values#41; =#gt; user#41;"]]
+  404[/"type: User<br/>node: user"/]
+  405["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  406[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  407["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  408[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  409[["type: #40;a: number#41; =#gt; User<br/>node: #40;...values#41; =#gt; user"]]
+  410[/"type: User<br/>node: user"/]
+  411[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  412["type: Effect#lt;Promise#lt;User#gt;, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; Effect.map#40;audit#40;user#41;, async #40;#41; =#gt; user#41;#93;"]
+  413[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  414[["type: #40;user: User#41; =#gt; Effect#lt;Promise#lt;User#gt;, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.map#40;audit#40;user#41;, async #40;#41; =#gt; user#41;"]]
+  415[/"type: User<br/>node: user"/]
+  416["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  417[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  418["type: Effect#lt;Promise#lt;User#gt;, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  419[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  420[["type: #40;#41; =#gt; Promise#lt;User#gt;<br/>node: async #40;#41; =#gt; user"]]
+  421[/"type: User<br/>node: user"/]
+  422[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  423["type: Effect#lt;Generator#lt;never, User, unknown#gt;, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; Effect.map#40;audit#40;user#41;, function*#40;#41; #123; return user #125;#41;#93;"]
+  424[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  425[["type: #40;user: User#41; =#gt; Effect#lt;Generator#lt;never, User, unknown#gt;, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.map#40;audit#40;user#41;, function*#40;#41; #123; return user #125;#41;"]]
+  426[/"type: User<br/>node: user"/]
+  427["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  428[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  429["type: Effect#lt;Generator#lt;never, User, unknown#gt;, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  430[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  431[["type: #40;#41; =#gt; Generator#lt;never, User, unknown#gt;<br/>node: function*#40;#41; #123; return user #125;"]]
+  432[/"type: User<br/>node: user"/]
+  433[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  434["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; #123;#92;n  if #40;user.id === #quot;skip#quot;#41; return Effect.as#40;audit#40;user#41;, user#41;#92;n  return Effect.as#40;audit#40;user#41;, user#41;#92;n#125;#93;"]
+  435[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  436[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; #123;#92;n  if #40;user.id === #quot;skip#quot;#41; return Effect.as#40;audit#40;user#41;, user#41;#92;n  return Effect.as#40;audit#40;user#41;, user#41;#92;n#125;"]]
+  437[/"type: User<br/>node: user"/]
+  438["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  439[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  440["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  441[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  442[/"type: User<br/>node: user"/]
+  443[/"type: User<br/>node: user"/]
+  444["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  445[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  446["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  447[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  448[/"type: User<br/>node: user"/]
+  449[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  450["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; #123;#92;n  return Effect.as#40;audit#40;user#41;, user#41;#92;n  record#40;user#41;#92;n#125;#93;"]
+  451[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  452[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; #123;#92;n  return Effect.as#40;audit#40;user#41;, user#41;#92;n  record#40;user#41;#92;n#125;"]]
+  453[/"type: User<br/>node: user"/]
+  454["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  455[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  456["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  457[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  458[/"type: User<br/>node: user"/]
+  459[/"type: User<br/>node: user"/]
+  460["type: void<br/>callee: record<br/>args: #91;#93;"]
+  461[/"type: #40;value: unknown#41; =#gt; void<br/>node: record"/]
+  462[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  463["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;#123; id #125;#41; =#gt; Effect.as#40;Effect.log#40;id#41;, id#41;#93;"]
+  464[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  465[["type: #40;#123; id #125;: User#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;#123; id #125;#41; =#gt; Effect.as#40;Effect.log#40;id#41;, id#41;"]]
+  466[/"type: string<br/>node: id"/]
+  467["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  468[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  469["type: Effect#lt;string, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  470[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  471[/"type: string<br/>node: id"/]
+  472[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  473["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user = other#41; =#gt; Effect.as#40;audit#40;user#41;, user#41;#93;"]
+  474[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  475[["type: #40;user?: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user = other#41; =#gt; Effect.as#40;audit#40;user#41;, user#41;"]]
+  476[/"type: User<br/>node: other"/]
+  477[/"type: User<br/>node: user"/]
+  478["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  479[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  480["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  481[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  482[/"type: User<br/>node: user"/]
+  483[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  484["type: Effect#lt;#91;a: User#93;, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;...users#41; =#gt; Effect.as#40;Effect.log#40;users#41;, users#41;#93;"]
+  485[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  486[["type: #40;a: User#41; =#gt; Effect#lt;#91;a: User#93;, never, never#gt;<br/>node: #40;...users#41; =#gt; Effect.as#40;Effect.log#40;users#41;, users#41;"]]
+  487[/"type: #91;a: User#93;<br/>node: users"/]
+  488["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  489[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  490["type: Effect#lt;#91;a: User#93;, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  491[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  492[/"type: #91;a: User#93;<br/>node: users"/]
+  493[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  494["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41;: Effect.Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt; =#gt; Effect.as#40;audit#40;user#41;, user#41;#93;"]
+  495[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  496[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41;: Effect.Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt; =#gt; Effect.as#40;audit#40;user#41;, user#41;"]]
+  497[/"type: User<br/>node: user"/]
+  498["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  499[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  500["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  501[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  502[/"type: User<br/>node: user"/]
+  503[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  504["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user: User#41; =#gt; Effect.as#40;audit#40;user#41;, user#41;#93;"]
+  505[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  506[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user: User#41; =#gt; Effect.as#40;audit#40;user#41;, user#41;"]]
+  507[/"type: User<br/>node: user"/]
+  508["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  509[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  510["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  511[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  512[/"type: User<br/>node: user"/]
+  513[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  514["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; Effect.as#40;audit#40;user#41;, user#41;#93;"]
+  515[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  516[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.as#40;audit#40;user#41;, user#41;"]]
+  517[/"type: User<br/>node: user"/]
+  518["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  519[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  520["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  521[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  522[/"type: User<br/>node: user"/]
+  523[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  524["type: Effect#lt;User #124; undefined, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  525[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  526[["type: #40;user: User #124; undefined#41; =#gt; Effect#lt;User #124; undefined, never, never#gt;<br/>node: #40;user: User #124; undefined#41; =#gt; Effect.as#40;Effect.log#40;user#41;, user#41;"]]
+  527[/"type: User #124; undefined<br/>node: user"/]
+  528["type: Effect#lt;void, never, never#gt;<br/>callee: Effect.log<br/>args: #91;#93;"]
+  529[/"type: #40;...message: readonly any#91;#93;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: Effect.log"/]
+  530["type: Effect#lt;User #124; undefined, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  531[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  532[/"type: User #124; undefined<br/>node: user"/]
+  533[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  534["type: Effect#lt;string, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; audit#40;user#41;.pipe#40;Effect.as#40;user#41;, Effect.map#40;#40;u#41; =#gt; u.name#41;#41;#93;"]
+  535[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  536[["type: #40;user: User#41; =#gt; Effect#lt;string, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; audit#40;user#41;.pipe#40;Effect.as#40;user#41;, Effect.map#40;#40;u#41; =#gt; u.name#41;#41;"]]
+  537[/"type: User<br/>node: user"/]
+  538["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  539[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  540["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.as<br/>args: #91;user#93;"]
+  541[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  542[/"type: User<br/>node: user"/]
+  543["type: Effect#lt;string, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.map<br/>args: #91;#40;u#41; =#gt; u.name#93;"]
+  544[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  545[["type: #40;u: User#41; =#gt; string<br/>node: #40;u#41; =#gt; u.name"]]
+  546[/"type: string<br/>node: u.name"/]
+  547[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  548["type: Effect#lt;number #124; User, never, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;user#41; =#gt; audit#40;user#41;.pipe#40;Effect.orElseSucceed#40;#40;#41; =#gt; user#41;#41;#93;"]
+  549[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  550[["type: #40;user: User#41; =#gt; Effect#lt;number #124; User, never, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; audit#40;user#41;.pipe#40;Effect.orElseSucceed#40;#40;#41; =#gt; user#41;#41;"]]
+  551[/"type: User<br/>node: user"/]
+  552["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  553[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  554["type: Effect#lt;number #124; User, never, #quot;service#quot;#gt;<br/>callee: Effect.orElseSucceed<br/>args: #91;#40;#41; =#gt; user#93;"]
+  555[/"type: #123; #lt;E, A2#gt;#40;f: #40;error: NoInfer#lt;E#gt;#41; =#gt; A2#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A #124; A2, never, R#gt;; #lt;A, E, R, A2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;error: E#41; =#gt; A2#41;: Effect#lt;A #124; A2, never, R#gt;; #125;<br/>node: Effect.orElseSucceed"/]
+  556[["type: #40;#41; =#gt; User<br/>node: #40;#41; =#gt; user"]]
+  557[/"type: User<br/>node: user"/]
+  558[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  559["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.andThen<br/>args: #91;audit#40;other#41;#93;"]
+  560[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  561[/"type: User<br/>node: other"/]
+  562["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  563[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  564[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  565["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.tap<br/>args: #91;audit#93;"]
+  566[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;A, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.tap"/]
+  567[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  568[/"type: #123; flatMap: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;; #125;<br/>node: #123; flatMap: Effect.flatMap #125;"/]
+  569[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  570["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: custom.flatMap<br/>args: #91;#40;user#41; =#gt; Effect.as#40;audit#40;user#41;, user#41;#93;"]
+  571[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: custom.flatMap"/]
+  572[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user#41; =#gt; Effect.as#40;audit#40;user#41;, user#41;"]]
+  573[/"type: User<br/>node: user"/]
+  574["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  575[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  576["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  577[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  578[/"type: User<br/>node: user"/]
+  579[/"type: Effect#lt;User, never, never#gt;<br/>node: source"/]
+  580["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: #40;#40;Effect#41; =#gt; Effect.flatMap#40;#40;user: User#41; =#gt; E.as#40;audit#40;user#41;, user#41;#41;#41;<br/>args: #91;#123;#92;n  flatMap: #40;callback: #40;user: User#41; =#gt; E.Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;#41; =#gt; #40;self: E.Effect#lt;User#gt;#41; =#gt; E.flatMap#40;self, callback#41;#92;n#125;#93;"]
+  581[/"type: #40;Effect: #123; flatMap: #40;callback: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;#41; =#gt; #40;self: Effect#lt;User, never, never#gt;#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;; #125;#41; =#gt; #40;self: Effect#lt;User, never, never#gt;#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;#40;Effect#41; =#gt; Effect.flatMap#40;#40;user: User#41; =#gt; E.as#40;audit#40;user#41;, user#41;#41;#41;"/]
+  582[["type: #40;Effect: #123; flatMap: #40;callback: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;#41; =#gt; #40;self: Effect#lt;User, never, never#gt;#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;; #125;#41; =#gt; #40;self: Effect#lt;User, never, never#gt;#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;Effect#41; =#gt; Effect.flatMap#40;#40;user: User#41; =#gt; E.as#40;audit#40;user#41;, user#41;#41;"]]
+  583[["type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;user: User#41; =#gt; E.as#40;audit#40;user#41;, user#41;"]]
+  584[/"type: User<br/>node: user"/]
+  585["type: Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: audit<br/>args: #91;#93;"]
+  586[/"type: #40;user: User#41; =#gt; Effect#lt;number, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: audit"/]
+  587["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  588[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: E.as"/]
+  589[/"type: User<br/>node: user"/]
+  590["type: #40;self: Effect#lt;User, never, never#gt;#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: Effect.flatMap<br/>args: #91;#93;"]
+  591[/"type: #40;callback: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;#41; =#gt; #40;self: Effect#lt;User, never, never#gt;#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: Effect.flatMap"/]
+  592[/"type: #123; flatMap: #40;callback: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;#41; =#gt; #40;self: Effect#lt;User, never, never#gt;#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;; #125;<br/>node: #123;#92;n  flatMap: #40;callback: #40;user: User#41; =#gt; E.Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;#41; =#gt; #40;self: E.Effect#lt;User#gt;#41; =#gt; E.flatMap#40;self, callback#41;#92;n#125;"/]
+  593[["type: #40;callback: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;#41; =#gt; #40;self: Effect#lt;User, never, never#gt;#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;callback: #40;user: User#41; =#gt; E.Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;#41; =#gt; #40;self: E.Effect#lt;User#gt;#41; =#gt; E.flatMap#40;self, callback#41;"]]
+  594[["type: #40;self: Effect#lt;User, never, never#gt;#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: #40;self: E.Effect#lt;User#gt;#41; =#gt; E.flatMap#40;self, callback#41;"]]
+  595[/"type: Effect#lt;User, never, never#gt;<br/>node: self"/]
+  596["type: Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>callee: <br/>args: #91;#93;"]
+  597[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: E.flatMap"/]
+  598[/"type: #40;user: User#41; =#gt; Effect#lt;User, #quot;audit#quot;, #quot;service#quot;#gt;<br/>node: callback"/]
+  599[/"type: undefined<br/>node: void observe"/]
+  2 -->|"kind: transformCallee"| 1
+  4 -->|"kind: pipe"| 5
+  6 -->|"kind: transformCallee"| 5
+  8 -->|"kind: transformCallee"| 7
+  9 -->|"kind: transformArg"| 7
+  5 -->|"kind: pipe"| 7
+  7 -->|"kind: potentialReturn"| 3
+  3 -->|"kind: transformArg"| 1
+  0 -->|"kind: pipe"| 1
+  12 -->|"kind: transformCallee"| 11
+  14 -->|"kind: pipe"| 15
+  16 -->|"kind: transformCallee"| 15
+  18 -->|"kind: transformCallee"| 17
+  20 -->|"kind: potentialReturn"| 19
+  19 -->|"kind: transformArg"| 17
+  15 -->|"kind: pipe"| 17
+  17 -->|"kind: potentialReturn"| 13
+  13 -->|"kind: transformArg"| 11
+  10 -->|"kind: pipe"| 11
+  21 -->|"kind: pipe"| 22
+  23 -->|"kind: transformCallee"| 21
+  25 -->|"kind: pipe"| 26
+  27 -->|"kind: transformCallee"| 26
+  26 -->|"kind: pipe"| 28
+  29 -->|"kind: transformCallee"| 25
+  31 -->|"kind: potentialReturn"| 30
+  30 -->|"kind: transformArg"| 25
+  28 -->|"kind: potentialReturn"| 24
+  24 -->|"kind: transformArg"| 21
+  32 -->|"kind: pipe"| 33
+  34 -->|"kind: transformCallee"| 32
+  36 -->|"kind: pipe"| 37
+  38 -->|"kind: transformCallee"| 37
+  37 -->|"kind: pipe"| 39
+  40 -->|"kind: transformCallee"| 36
+  41 -->|"kind: transformArg"| 36
+  39 -->|"kind: potentialReturn"| 35
+  35 -->|"kind: transformArg"| 32
+  44 -->|"kind: transformCallee"| 43
+  46 -->|"kind: pipe"| 47
+  48 -->|"kind: transformCallee"| 47
+  50 -->|"kind: transformCallee"| 49
+  52 -->|"kind: potentialReturn"| 51
+  51 -->|"kind: transformArg"| 49
+  47 -->|"kind: pipe"| 49
+  49 -->|"kind: potentialReturn"| 45
+  45 -->|"kind: transformArg"| 43
+  42 -->|"kind: pipe"| 43
+  53 -->|"kind: pipe"| 54
+  55 -->|"kind: transformCallee"| 54
+  54 -->|"kind: pipe"| 56
+  57 -->|"kind: transformCallee"| 56
+  59 -->|"kind: pipe"| 60
+  61 -->|"kind: transformCallee"| 60
+  60 -->|"kind: pipe"| 62
+  63 -->|"kind: transformCallee"| 59
+  64 -->|"kind: transformArg"| 59
+  62 -->|"kind: potentialReturn"| 58
+  58 -->|"kind: transformArg"| 56
+  65 -->|"kind: pipe"| 66
+  67 -->|"kind: transformCallee"| 66
+  66 -->|"kind: pipe"| 68
+  69 -->|"kind: transformCallee"| 68
+  71 -->|"kind: pipe"| 72
+  73 -->|"kind: transformCallee"| 72
+  72 -->|"kind: pipe"| 74
+  75 -->|"kind: transformCallee"| 71
+  76 -->|"kind: transformArg"| 71
+  74 -->|"kind: potentialReturn"| 70
+  70 -->|"kind: transformArg"| 68
+  79 -->|"kind: transformCallee"| 78
+  81 -->|"kind: pipe"| 82
+  83 -->|"kind: transformCallee"| 82
+  85 -->|"kind: transformCallee"| 84
+  86 -->|"kind: transformArg"| 84
+  82 -->|"kind: pipe"| 84
+  84 -->|"kind: potentialReturn"| 80
+  80 -->|"kind: transformArg"| 78
+  77 -->|"kind: pipe"| 78
+  89 -->|"kind: transformCallee"| 88
+  91 -->|"kind: pipe"| 92
+  93 -->|"kind: transformCallee"| 92
+  92 -->|"kind: pipe"| 94
+  95 -->|"kind: transformCallee"| 94
+  96 -->|"kind: transformArg"| 94
+  94 -->|"kind: potentialReturn"| 90
+  90 -->|"kind: transformArg"| 88
+  87 -->|"kind: pipe"| 88
+  99 -->|"kind: transformCallee"| 98
+  101 -->|"kind: pipe"| 102
+  103 -->|"kind: transformCallee"| 102
+  102 -->|"kind: pipe"| 104
+  105 -->|"kind: transformCallee"| 104
+  107 -->|"kind: potentialReturn"| 106
+  106 -->|"kind: transformArg"| 104
+  104 -->|"kind: potentialReturn"| 100
+  100 -->|"kind: transformArg"| 98
+  97 -->|"kind: pipe"| 98
+  110 -->|"kind: transformCallee"| 109
+  112 -->|"kind: pipe"| 113
+  114 -->|"kind: transformCallee"| 113
+  113 -->|"kind: pipe"| 115
+  116 -->|"kind: transformCallee"| 112
+  118 -->|"kind: potentialReturn"| 117
+  118 -->|"kind: usedBy"| 117
+  117 -->|"kind: transformArg"| 112
+  115 -->|"kind: potentialReturn"| 111
+  115 -->|"kind: usedBy"| 111
+  111 -->|"kind: transformArg"| 109
+  108 -->|"kind: pipe"| 109
+  121 -->|"kind: transformCallee"| 120
+  123 -->|"kind: pipe"| 124
+  125 -->|"kind: transformCallee"| 124
+  127 -->|"kind: transformCallee"| 126
+  128 -->|"kind: transformArg"| 126
+  124 -->|"kind: pipe"| 126
+  126 -->|"kind: potentialReturn"| 122
+  129 -->|"kind: pipe"| 130
+  131 -->|"kind: transformCallee"| 130
+  130 -->|"kind: usedBy"| 122
+  133 -->|"kind: potentialReturn"| 132
+  133 -->|"kind: usedBy"| 132
+  132 -->|"kind: usedBy"| 122
+  134 -->|"kind: pipe"| 135
+  136 -->|"kind: transformCallee"| 135
+  135 -->|"kind: usedBy"| 122
+  126 -->|"kind: usedBy"| 122
+  122 -->|"kind: transformArg"| 120
+  119 -->|"kind: pipe"| 120
+  139 -->|"kind: transformCallee"| 138
+  141 -->|"kind: pipe"| 142
+  143 -->|"kind: transformCallee"| 142
+  145 -->|"kind: transformCallee"| 144
+  147 -->|"kind: potentialReturn"| 146
+  146 -->|"kind: transformArg"| 144
+  142 -->|"kind: pipe"| 144
+  149 -->|"kind: transformCallee"| 148
+  150 -->|"kind: transformArg"| 148
+  144 -->|"kind: pipe"| 148
+  148 -->|"kind: potentialReturn"| 140
+  140 -->|"kind: transformArg"| 138
+  137 -->|"kind: pipe"| 138
+  153 -->|"kind: transformCallee"| 152
+  155 -->|"kind: pipe"| 156
+  157 -->|"kind: transformCallee"| 156
+  159 -->|"kind: transformCallee"| 158
+  161 -->|"kind: potentialReturn"| 160
+  160 -->|"kind: transformArg"| 158
+  156 -->|"kind: pipe"| 158
+  163 -->|"kind: transformCallee"| 162
+  165 -->|"kind: potentialReturn"| 164
+  164 -->|"kind: transformArg"| 162
+  158 -->|"kind: pipe"| 162
+  167 -->|"kind: transformCallee"| 166
+  169 -->|"kind: potentialReturn"| 168
+  168 -->|"kind: transformArg"| 166
+  162 -->|"kind: pipe"| 166
+  166 -->|"kind: potentialReturn"| 154
+  154 -->|"kind: transformArg"| 152
+  151 -->|"kind: pipe"| 152
+  172 -->|"kind: transformCallee"| 171
+  174 -->|"kind: pipe"| 175
+  176 -->|"kind: transformCallee"| 175
+  175 -->|"kind: pipe"| 177
+  178 -->|"kind: transformCallee"| 174
+  180 -->|"kind: potentialReturn"| 179
+  179 -->|"kind: transformArg"| 174
+  177 -->|"kind: pipe"| 181
+  182 -->|"kind: transformCallee"| 174
+  183 -->|"kind: transformArg"| 174
+  181 -->|"kind: potentialReturn"| 173
+  173 -->|"kind: transformArg"| 171
+  170 -->|"kind: pipe"| 171
+  186 -->|"kind: transformCallee"| 185
+  188 -->|"kind: pipe"| 189
+  190 -->|"kind: transformCallee"| 189
+  192 -->|"kind: transformCallee"| 191
+  194 -->|"kind: potentialReturn"| 193
+  193 -->|"kind: transformArg"| 191
+  189 -->|"kind: pipe"| 191
+  191 -->|"kind: pipe"| 195
+  196 -->|"kind: transformCallee"| 188
+  197 -->|"kind: transformArg"| 188
+  195 -->|"kind: potentialReturn"| 187
+  198 -->|"kind: pipe"| 199
+  200 -->|"kind: transformCallee"| 199
+  199 -->|"kind: usedBy"| 187
+  195 -->|"kind: usedBy"| 187
+  187 -->|"kind: transformArg"| 185
+  184 -->|"kind: pipe"| 185
+  203 -->|"kind: transformCallee"| 202
+  205 -->|"kind: pipe"| 206
+  207 -->|"kind: transformCallee"| 206
+  209 -->|"kind: transformCallee"| 208
+  210 -->|"kind: transformArg"| 208
+  206 -->|"kind: pipe"| 208
+  208 -->|"kind: potentialReturn"| 204
+  208 -->|"kind: usedBy"| 204
+  204 -->|"kind: transformArg"| 202
+  201 -->|"kind: pipe"| 202
+  213 -->|"kind: transformCallee"| 212
+  215 -->|"kind: pipe"| 216
+  217 -->|"kind: transformCallee"| 216
+  216 -->|"kind: pipe"| 218
+  219 -->|"kind: transformCallee"| 215
+  220 -->|"kind: transformArg"| 215
+  218 -->|"kind: potentialReturn"| 214
+  214 -->|"kind: transformArg"| 212
+  211 -->|"kind: pipe"| 212
+  224 -->|"kind: transformCallee"| 223
+  226 -->|"kind: pipe"| 227
+  228 -->|"kind: transformCallee"| 227
+  227 -->|"kind: pipe"| 229
+  230 -->|"kind: transformCallee"| 226
+  231 -->|"kind: transformArg"| 226
+  229 -->|"kind: potentialReturn"| 225
+  225 -->|"kind: transformArg"| 223
+  222 -->|"kind: pipe"| 223
+  235 -->|"kind: transformCallee"| 234
+  237 -->|"kind: pipe"| 238
+  239 -->|"kind: transformCallee"| 238
+  241 -->|"kind: transformCallee"| 240
+  242 -->|"kind: transformArg"| 240
+  238 -->|"kind: pipe"| 240
+  240 -->|"kind: potentialReturn"| 236
+  236 -->|"kind: transformArg"| 234
+  233 -->|"kind: pipe"| 234
+  245 -->|"kind: transformCallee"| 244
+  247 -->|"kind: pipe"| 248
+  249 -->|"kind: transformCallee"| 248
+  248 -->|"kind: pipe"| 250
+  251 -->|"kind: transformCallee"| 247
+  252 -->|"kind: transformArg"| 247
+  250 -->|"kind: potentialReturn"| 246
+  246 -->|"kind: transformArg"| 244
+  243 -->|"kind: pipe"| 244
+  253 -->|"kind: pipe"| 254
+  255 -->|"kind: transformCallee"| 253
+  257 -->|"kind: pipe"| 258
+  259 -->|"kind: transformCallee"| 258
+  258 -->|"kind: pipe"| 260
+  261 -->|"kind: transformCallee"| 257
+  262 -->|"kind: transformArg"| 257
+  260 -->|"kind: potentialReturn"| 256
+  256 -->|"kind: transformArg"| 253
+  265 -->|"kind: transformCallee"| 264
+  267 -->|"kind: pipe"| 268
+  269 -->|"kind: transformCallee"| 268
+  268 -->|"kind: pipe"| 270
+  271 -->|"kind: transformCallee"| 267
+  272 -->|"kind: transformArg"| 267
+  270 -->|"kind: potentialReturn"| 266
+  266 -->|"kind: transformArg"| 264
+  263 -->|"kind: pipe"| 264
+  275 -->|"kind: transformCallee"| 274
+  277 -->|"kind: pipe"| 278
+  279 -->|"kind: transformCallee"| 278
+  281 -->|"kind: transformCallee"| 280
+  282 -->|"kind: transformArg"| 280
+  278 -->|"kind: pipe"| 280
+  280 -->|"kind: potentialReturn"| 276
+  280 -->|"kind: usedBy"| 276
+  276 -->|"kind: transformArg"| 274
+  273 -->|"kind: pipe"| 274
+  285 -->|"kind: transformCallee"| 284
+  287 -->|"kind: pipe"| 288
+  289 -->|"kind: transformCallee"| 288
+  291 -->|"kind: transformCallee"| 290
+  292 -->|"kind: transformArg"| 290
+  288 -->|"kind: pipe"| 290
+  290 -->|"kind: potentialReturn"| 286
+  293 -->|"kind: usedBy"| 286
+  290 -->|"kind: usedBy"| 286
+  286 -->|"kind: transformArg"| 284
+  283 -->|"kind: pipe"| 284
+  296 -->|"kind: transformCallee"| 295
+  298 -->|"kind: pipe"| 299
+  300 -->|"kind: transformCallee"| 299
+  299 -->|"kind: pipe"| 301
+  302 -->|"kind: transformCallee"| 298
+  303 -->|"kind: transformArg"| 298
+  301 -->|"kind: potentialReturn"| 297
+  301 -->|"kind: usedBy"| 297
+  297 -->|"kind: transformArg"| 295
+  294 -->|"kind: pipe"| 295
+  306 -->|"kind: transformCallee"| 305
+  308 -->|"kind: pipe"| 309
+  310 -->|"kind: transformCallee"| 309
+  309 -->|"kind: pipe"| 311
+  312 -->|"kind: transformCallee"| 308
+  314 -->|"kind: potentialReturn"| 313
+  313 -->|"kind: transformArg"| 308
+  311 -->|"kind: potentialReturn"| 307
+  307 -->|"kind: transformArg"| 305
+  304 -->|"kind: pipe"| 305
+  317 -->|"kind: transformCallee"| 316
+  319 -->|"kind: pipe"| 320
+  321 -->|"kind: transformCallee"| 320
+  320 -->|"kind: pipe"| 322
+  323 -->|"kind: transformCallee"| 319
+  324 -->|"kind: transformArg"| 319
+  322 -->|"kind: potentialReturn"| 318
+  318 -->|"kind: transformArg"| 316
+  315 -->|"kind: pipe"| 316
+  327 -->|"kind: transformCallee"| 326
+  329 -->|"kind: pipe"| 330
+  331 -->|"kind: transformCallee"| 330
+  330 -->|"kind: pipe"| 332
+  333 -->|"kind: transformCallee"| 329
+  334 -->|"kind: transformArg"| 329
+  332 -->|"kind: potentialReturn"| 328
+  328 -->|"kind: transformArg"| 326
+  325 -->|"kind: pipe"| 326
+  337 -->|"kind: transformCallee"| 336
+  339 -->|"kind: pipe"| 340
+  341 -->|"kind: transformCallee"| 340
+  340 -->|"kind: pipe"| 342
+  343 -->|"kind: transformCallee"| 339
+  345 -->|"kind: potentialReturn"| 344
+  344 -->|"kind: transformArg"| 339
+  342 -->|"kind: potentialReturn"| 338
+  338 -->|"kind: transformArg"| 336
+  335 -->|"kind: pipe"| 336
+  348 -->|"kind: transformCallee"| 347
+  350 -->|"kind: pipe"| 351
+  352 -->|"kind: transformCallee"| 351
+  351 -->|"kind: pipe"| 353
+  354 -->|"kind: transformCallee"| 350
+  357 -->|"kind: pipe"| 358
+  359 -->|"kind: transformCallee"| 358
+  358 -->|"kind: usedBy"| 356
+  356 -->|"kind: potentialReturn"| 355
+  355 -->|"kind: transformArg"| 350
+  353 -->|"kind: potentialReturn"| 349
+  349 -->|"kind: transformArg"| 347
+  346 -->|"kind: pipe"| 347
+  362 -->|"kind: transformCallee"| 361
+  364 -->|"kind: pipe"| 365
+  366 -->|"kind: transformCallee"| 365
+  365 -->|"kind: pipe"| 367
+  368 -->|"kind: transformCallee"| 364
+  370 -->|"kind: potentialReturn"| 369
+  371 -->|"kind: pipe"| 372
+  373 -->|"kind: transformCallee"| 372
+  372 -->|"kind: usedBy"| 369
+  370 -->|"kind: usedBy"| 369
+  369 -->|"kind: transformArg"| 364
+  367 -->|"kind: potentialReturn"| 363
+  363 -->|"kind: transformArg"| 361
+  360 -->|"kind: pipe"| 361
+  376 -->|"kind: transformCallee"| 375
+  378 -->|"kind: pipe"| 379
+  380 -->|"kind: transformCallee"| 379
+  379 -->|"kind: pipe"| 381
+  382 -->|"kind: transformCallee"| 378
+  385 -->|"kind: pipe"| 386
+  387 -->|"kind: transformCallee"| 386
+  386 -->|"kind: usedBy"| 384
+  388 -->|"kind: potentialReturn"| 383
+  383 -->|"kind: transformArg"| 378
+  381 -->|"kind: potentialReturn"| 377
+  377 -->|"kind: transformArg"| 375
+  374 -->|"kind: pipe"| 375
+  391 -->|"kind: transformCallee"| 390
+  393 -->|"kind: pipe"| 394
+  395 -->|"kind: transformCallee"| 394
+  394 -->|"kind: pipe"| 396
+  397 -->|"kind: transformCallee"| 393
+  399 -->|"kind: potentialReturn"| 398
+  398 -->|"kind: transformArg"| 393
+  396 -->|"kind: potentialReturn"| 392
+  392 -->|"kind: transformArg"| 390
+  389 -->|"kind: pipe"| 390
+  402 -->|"kind: transformCallee"| 401
+  404 -->|"kind: pipe"| 405
+  406 -->|"kind: transformCallee"| 405
+  405 -->|"kind: pipe"| 407
+  408 -->|"kind: transformCallee"| 404
+  410 -->|"kind: potentialReturn"| 409
+  409 -->|"kind: transformArg"| 404
+  407 -->|"kind: potentialReturn"| 403
+  403 -->|"kind: transformArg"| 401
+  400 -->|"kind: pipe"| 401
+  413 -->|"kind: transformCallee"| 412
+  415 -->|"kind: pipe"| 416
+  417 -->|"kind: transformCallee"| 416
+  416 -->|"kind: pipe"| 418
+  419 -->|"kind: transformCallee"| 415
+  421 -->|"kind: potentialReturn"| 420
+  420 -->|"kind: transformArg"| 415
+  418 -->|"kind: potentialReturn"| 414
+  414 -->|"kind: transformArg"| 412
+  411 -->|"kind: pipe"| 412
+  424 -->|"kind: transformCallee"| 423
+  426 -->|"kind: pipe"| 427
+  428 -->|"kind: transformCallee"| 427
+  427 -->|"kind: pipe"| 429
+  430 -->|"kind: transformCallee"| 426
+  432 -->|"kind: potentialReturn"| 431
+  432 -->|"kind: usedBy"| 431
+  431 -->|"kind: transformArg"| 426
+  429 -->|"kind: potentialReturn"| 425
+  425 -->|"kind: transformArg"| 423
+  422 -->|"kind: pipe"| 423
+  435 -->|"kind: transformCallee"| 434
+  437 -->|"kind: pipe"| 438
+  439 -->|"kind: transformCallee"| 438
+  438 -->|"kind: pipe"| 440
+  441 -->|"kind: transformCallee"| 437
+  442 -->|"kind: transformArg"| 437
+  440 -->|"kind: potentialReturn"| 436
+  443 -->|"kind: pipe"| 444
+  445 -->|"kind: transformCallee"| 444
+  444 -->|"kind: pipe"| 446
+  447 -->|"kind: transformCallee"| 443
+  448 -->|"kind: transformArg"| 443
+  446 -->|"kind: potentialReturn"| 436
+  440 -->|"kind: usedBy"| 436
+  446 -->|"kind: usedBy"| 436
+  436 -->|"kind: transformArg"| 434
+  433 -->|"kind: pipe"| 434
+  451 -->|"kind: transformCallee"| 450
+  453 -->|"kind: pipe"| 454
+  455 -->|"kind: transformCallee"| 454
+  454 -->|"kind: pipe"| 456
+  457 -->|"kind: transformCallee"| 453
+  458 -->|"kind: transformArg"| 453
+  456 -->|"kind: potentialReturn"| 452
+  456 -->|"kind: usedBy"| 452
+  459 -->|"kind: pipe"| 460
+  461 -->|"kind: transformCallee"| 460
+  460 -->|"kind: usedBy"| 452
+  452 -->|"kind: transformArg"| 450
+  449 -->|"kind: pipe"| 450
+  464 -->|"kind: transformCallee"| 463
+  466 -->|"kind: pipe"| 467
+  468 -->|"kind: transformCallee"| 467
+  467 -->|"kind: pipe"| 469
+  470 -->|"kind: transformCallee"| 466
+  471 -->|"kind: transformArg"| 466
+  469 -->|"kind: potentialReturn"| 465
+  465 -->|"kind: transformArg"| 463
+  462 -->|"kind: pipe"| 463
+  474 -->|"kind: transformCallee"| 473
+  477 -->|"kind: pipe"| 478
+  479 -->|"kind: transformCallee"| 478
+  478 -->|"kind: pipe"| 480
+  481 -->|"kind: transformCallee"| 477
+  482 -->|"kind: transformArg"| 477
+  480 -->|"kind: potentialReturn"| 475
+  475 -->|"kind: transformArg"| 473
+  472 -->|"kind: pipe"| 473
+  485 -->|"kind: transformCallee"| 484
+  487 -->|"kind: pipe"| 488
+  489 -->|"kind: transformCallee"| 488
+  488 -->|"kind: pipe"| 490
+  491 -->|"kind: transformCallee"| 487
+  492 -->|"kind: transformArg"| 487
+  490 -->|"kind: potentialReturn"| 486
+  486 -->|"kind: transformArg"| 484
+  483 -->|"kind: pipe"| 484
+  495 -->|"kind: transformCallee"| 494
+  497 -->|"kind: pipe"| 498
+  499 -->|"kind: transformCallee"| 498
+  498 -->|"kind: pipe"| 500
+  501 -->|"kind: transformCallee"| 497
+  502 -->|"kind: transformArg"| 497
+  500 -->|"kind: potentialReturn"| 496
+  496 -->|"kind: transformArg"| 494
+  493 -->|"kind: pipe"| 494
+  503 -->|"kind: pipe"| 504
+  505 -->|"kind: transformCallee"| 504
+  507 -->|"kind: pipe"| 508
+  509 -->|"kind: transformCallee"| 508
+  508 -->|"kind: pipe"| 510
+  511 -->|"kind: transformCallee"| 507
+  512 -->|"kind: transformArg"| 507
+  510 -->|"kind: potentialReturn"| 506
+  506 -->|"kind: transformArg"| 504
+  513 -->|"kind: pipe"| 514
+  515 -->|"kind: transformCallee"| 514
+  517 -->|"kind: pipe"| 518
+  519 -->|"kind: transformCallee"| 518
+  518 -->|"kind: pipe"| 520
+  521 -->|"kind: transformCallee"| 517
+  522 -->|"kind: transformArg"| 517
+  520 -->|"kind: potentialReturn"| 516
+  516 -->|"kind: transformArg"| 514
+  523 -->|"kind: pipe"| 524
+  525 -->|"kind: transformCallee"| 523
+  527 -->|"kind: pipe"| 528
+  529 -->|"kind: transformCallee"| 528
+  528 -->|"kind: pipe"| 530
+  531 -->|"kind: transformCallee"| 527
+  532 -->|"kind: transformArg"| 527
+  530 -->|"kind: potentialReturn"| 526
+  526 -->|"kind: transformArg"| 523
+  535 -->|"kind: transformCallee"| 534
+  537 -->|"kind: pipe"| 538
+  539 -->|"kind: transformCallee"| 538
+  541 -->|"kind: transformCallee"| 540
+  542 -->|"kind: transformArg"| 540
+  538 -->|"kind: pipe"| 540
+  544 -->|"kind: transformCallee"| 543
+  546 -->|"kind: potentialReturn"| 545
+  545 -->|"kind: transformArg"| 543
+  540 -->|"kind: pipe"| 543
+  543 -->|"kind: potentialReturn"| 536
+  536 -->|"kind: transformArg"| 534
+  533 -->|"kind: pipe"| 534
+  549 -->|"kind: transformCallee"| 548
+  551 -->|"kind: pipe"| 552
+  553 -->|"kind: transformCallee"| 552
+  555 -->|"kind: transformCallee"| 554
+  557 -->|"kind: potentialReturn"| 556
+  556 -->|"kind: transformArg"| 554
+  552 -->|"kind: pipe"| 554
+  554 -->|"kind: potentialReturn"| 550
+  550 -->|"kind: transformArg"| 548
+  547 -->|"kind: pipe"| 548
+  560 -->|"kind: transformCallee"| 559
+  561 -->|"kind: pipe"| 562
+  563 -->|"kind: transformCallee"| 562
+  562 -->|"kind: transformArg"| 559
+  558 -->|"kind: pipe"| 559
+  566 -->|"kind: transformCallee"| 565
+  567 -->|"kind: transformArg"| 565
+  564 -->|"kind: pipe"| 565
+  571 -->|"kind: transformCallee"| 570
+  573 -->|"kind: pipe"| 574
+  575 -->|"kind: transformCallee"| 574
+  574 -->|"kind: pipe"| 576
+  577 -->|"kind: transformCallee"| 573
+  578 -->|"kind: transformArg"| 573
+  576 -->|"kind: potentialReturn"| 572
+  572 -->|"kind: transformArg"| 570
+  569 -->|"kind: pipe"| 570
+  584 -->|"kind: pipe"| 585
+  586 -->|"kind: transformCallee"| 585
+  585 -->|"kind: pipe"| 587
+  588 -->|"kind: transformCallee"| 584
+  589 -->|"kind: transformArg"| 584
+  587 -->|"kind: potentialReturn"| 583
+  583 -->|"kind: pipe"| 590
+  591 -->|"kind: transformCallee"| 590
+  590 -->|"kind: potentialReturn"| 582
+  582 -->|"kind: usedBy"| 581
+  581 -->|"kind: transformCallee"| 580
+  595 -->|"kind: pipe"| 596
+  597 -->|"kind: transformCallee"| 595
+  598 -->|"kind: transformArg"| 595
+  596 -->|"kind: potentialReturn"| 594
+  594 -->|"kind: potentialReturn"| 593
+  593 -->|"kind: usedBy"| 592
+  592 -->|"kind: transformArg"| 580
+  579 -->|"kind: pipe"| 580

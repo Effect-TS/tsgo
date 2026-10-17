@@ -1,0 +1,239 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/effectSleepZeroToYieldNow.ts(4,28): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(5,29): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(6,29): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(7,28): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(8,29): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(9,32): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(10,27): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(11,26): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(12,27): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(13,35): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(14,38): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(15,34): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(16,29): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(17,30): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(18,26): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(19,32): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(20,34): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(21,27): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(22,33): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(23,29): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(24,32): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(25,33): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(28,33): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(29,34): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(30,34): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(31,35): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(32,33): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(33,31): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(34,30): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(35,31): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(36,29): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(37,34): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(38,35): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(39,35): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(40,36): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(41,36): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(42,34): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(43,33): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(44,34): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(45,28): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+/.src/effectSleepZeroToYieldNow.ts(46,10): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(48,33): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow.ts(49,57): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+
+
+==== /.src/effectSleepZeroToYieldNow.ts (43 errors) ====
+    // @effect-v3
+    import { Duration, Effect } from "effect"
+    
+    export const numericZero = Effect.sleep(0)
+                               ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const positiveZero = Effect.sleep(+0)
+                                ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const negativeZero = Effect.sleep(-0)
+                                ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const decimalZero = Effect.sleep(0.0)
+                               ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const exponentZero = Effect.sleep(0e3)
+                                ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const hexadecimalZero = Effect.sleep(0x0)
+                                   ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const binaryZero = Effect.sleep(0b0)
+                              ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const octalZero = Effect.sleep(0o0)
+                             ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const bigintZero = Effect.sleep(0n)
+                              ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const negativeBigintZero = Effect.sleep(-0n)
+                                      ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const hexadecimalBigintZero = Effect.sleep(0x0n)
+                                         ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const parenthesizedZero = Effect.sleep(((0)))
+                                     ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const assertedZero = Effect.sleep(0 as number)
+                                ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const satisfiesZero = Effect.sleep(0 satisfies number)
+                                 ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const tupleZero = Effect.sleep([0, 0])
+                             ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const signedTupleZero = Effect.sleep([-0, +0])
+                                   ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const assertedTupleZero = Effect.sleep([0, 0] as const)
+                                     ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const stringZero = Effect.sleep("0 seconds")
+                              ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const signedStringZero = Effect.sleep("-00.00 seconds")
+                                    ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const templateZero = Effect.sleep(`0 millis`)
+                                ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const nanosStringZero = Effect.sleep("0 nanos")
+                                   ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const microsStringZero = Effect.sleep("0 micros")
+                                    ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const decimalNanosString = Effect.sleep("0.0 nanos")
+    export const decimalMicrosString = Effect.sleep("0.0 micros")
+    export const singularNanoZero = Effect.sleep("0 nano")
+                                    ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const singularMicroZero = Effect.sleep("0 micro")
+                                     ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const singularMilliZero = Effect.sleep("0 milli")
+                                     ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const singularSecondZero = Effect.sleep("0 second")
+                                      ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const minuteStringZero = Effect.sleep("0 minutes")
+                                    ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const hourStringZero = Effect.sleep("0 hours")
+                                  ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const dayStringZero = Effect.sleep("0 days")
+                                 ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const weekStringZero = Effect.sleep("0 weeks")
+                                  ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const durationZero = Effect.sleep(Duration.zero)
+                                ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const durationNanosZero = Effect.sleep(Duration.nanos(0n))
+                                     ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const durationMicrosZero = Effect.sleep(Duration.micros(-0n))
+                                      ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const durationMillisZero = Effect.sleep(Duration.millis(+0))
+                                      ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const durationSecondsZero = Effect.sleep(Duration.seconds(-0))
+                                       ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const durationMinutesZero = Effect.sleep(Duration.minutes(0))
+                                       ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const durationHoursZero = Effect.sleep(Duration.hours(0))
+                                     ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const durationDaysZero = Effect.sleep(Duration.days(0))
+                                    ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const durationWeeksZero = Effect.sleep(Duration.weeks(0))
+                                     ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const nestedYield = Effect.gen(function*() {
+                               ~~~~~~~~~~~~~~~~~~~~~~~~
+      yield* Effect.sleep(0)
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+             ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    })
+    ~~
+!!! suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+    export const largerExpression = Effect.sleep(0).pipe(Effect.as("ready"))
+                                    ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const leadingComment = /* yield cooperatively */ Effect.sleep(0) // keep this comment
+                                                            ~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    
+    export const nonzero = Effect.sleep(1)
+    export const negativeNonzero = Effect.sleep(-1)
+    export const bigintNonzero = Effect.sleep(1n)
+    export const infiniteDuration = Effect.sleep(Infinity)
+    export const notANumber = Effect.sleep(NaN)
+    export const nonzeroString = Effect.sleep("1 seconds")
+    export const fractionalString = Effect.sleep("0.1 millis")
+    export const invalidString = Effect.sleep("0 ms" as Duration.DurationInput)
+    export const unsupportedUnit = Effect.sleep("0 milliseconds" as Duration.DurationInput)
+    export const whitespaceSuffix = Effect.sleep("0 seconds " as Duration.DurationInput)
+    export const leadingWhitespace = Effect.sleep(" 0 seconds" as Duration.DurationInput)
+    export const nonzeroTuple = Effect.sleep([0, 1])
+    export const nonzeroConstructor = Effect.sleep(Duration.seconds(1))
+    const zero = 0
+    export const constantDuration = Effect.sleep(zero)
+    export const arithmeticZero = Effect.sleep(1 - 1)
+    export const substitutedTemplate = Effect.sleep(`${zero} seconds`)
+    const returnZero = (): 0 => { console.log("evaluated"); return 0 }
+    const zeroGetter = { get duration(): 0 { console.log("evaluated"); return 0 } }
+    export const calledDuration = Effect.sleep(returnZero())
+    export const getterDuration = Effect.sleep(zeroGetter.duration)
+    export const commaDuration = Effect.sleep((console.log("evaluated"), 0))
+    export const assertedCall = Effect.sleep(returnZero() as 0)
+    export const assertedNonzero = Effect.sleep(1 as 0)
+    export const assertedConstructorNonzero = Effect.sleep(Duration.seconds(1 as 0))
+    export const calledConstructor = Effect.sleep(Duration.seconds(returnZero()))
+    export const optionalSleep = Effect.sleep?.(0)
+    export const optionalModuleSleep = Effect?.sleep(0)
+    export const optionalDurationConstructor = Effect.sleep(Duration.seconds?.(0))
+    export const optionalDurationZero = Effect.sleep(Duration?.zero)
+    export const spreadDuration = Effect.sleep(...[0] as const)
+    const unrelated = { sleep: (duration: number) => duration, zero: 0, seconds: (duration: number) => duration }
+    export const unrelatedSleep = unrelated.sleep(0)
+    export const unrelatedZero = Effect.sleep(unrelated.zero)
+    export const unrelatedConstructor = Effect.sleep(unrelated.seconds(0))
+    export const shadowedEffect = ((Effect: typeof unrelated) => Effect.sleep(0))(unrelated)
+    
+    // @ts-expect-error
+    export const positiveBigintZero = Effect.sleep(+0n)
+    // @ts-expect-error
+    export const extraArgument = Effect.sleep(0, 0)
+    // @ts-expect-error
+    export const typeArgument = Effect.sleep<number>(0)
+    // @ts-expect-error
+    export const emptyTuple = Effect.sleep([])
+    // @ts-expect-error
+    export const holeTuple = Effect.sleep([, 0])
+    // @ts-expect-error
+    export const bigintTuple = Effect.sleep([0n, 0n])
+    // @ts-expect-error
+    export const spreadTuple = Effect.sleep([...[0], 0])
+    

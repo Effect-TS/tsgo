@@ -1,4 +1,4 @@
-==== /.src/anyUnknownInErrorContext.ts (14 flows) ====
+==== /.src/anyUnknownInErrorContext.ts (16 flows) ====
 
 === Piping Flow ===
 Location: 4:34 - 6:3
@@ -195,3 +195,31 @@ Transformations (1):
       callee: Layer.provide
       args: [layerUnknown]
       outType: Layer<never, never, unknown>
+
+=== Piping Flow ===
+Location: 42:34 - 42:86
+Node: Effect.withFiber<number, unknown>(() => anyFailure)
+Node Kind: KindCallExpression
+
+Subject: () => anyFailure
+Subject Type: () => Effect<number, any, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.withFiber
+      args: (constant)
+      outType: Effect<number, unknown, never>
+
+=== Piping Flow ===
+Location: 45:33 - 45:61
+Node: Effect.orDie(anyEverywhere)
+Node Kind: KindCallExpression
+
+Subject: anyEverywhere
+Subject Type: Effect<number, any, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<number, never, any>

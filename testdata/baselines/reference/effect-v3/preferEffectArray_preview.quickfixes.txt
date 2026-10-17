@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:30-6:34) TS377140: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+  Fix 0: "Disable preferEffectArray for this line"
+  Fix 1: "Disable preferEffectArray for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferEffectArray for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferEffectArray for entire file" ===
+skipped by default

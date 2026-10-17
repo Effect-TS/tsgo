@@ -152,7 +152,7 @@ Transformations (1):
   [0] kind: call
       callee: it.effect.each
       args: (constant)
-      outType: <A, E>(name: string, self: TestFunction<A, E, Scope, number[]>, timeout?: number | TestOptions | undefined) => void
+      outType: <A, E>(name: string, self: TestFunction<A, E, Scope, [number, TestContext]>, timeout?: number | TestOptions | undefined) => void
 
 === Piping Flow ===
 Location: 43:23 - 43:54

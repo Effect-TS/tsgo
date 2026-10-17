@@ -1,0 +1,149 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:14-12:27) TS377137: `effect-v4-tests/apiStabilityLeakInferred#arrowExplicit` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D2] (13:14-13:27) TS377137: `effect-v4-tests/apiStabilityLeakInferred#arrowInferred` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D3] (14:14-14:32) TS377137: `effect-v4-tests/apiStabilityLeakInferred#functionExpression` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D4] (22:14-22:31) TS377137: `effect-v4-tests/apiStabilityLeakInferred#callableReference` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D5] (25:14-25:28) TS377137: `effect-v4-tests/apiStabilityLeakInferred#inferredObject` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D6] (26:14-26:26) TS377137: `effect-v4-tests/apiStabilityLeakInferred#nestedObject` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D7] (27:17-27:37) TS377137: `effect-v4-tests/apiStabilityLeakInferred#inferredReturnObject` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D8] (32:14-32:27) TS377137: `effect-v4-tests/apiStabilityLeakInferred#InferredClass` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D9] (39:14-39:29) TS377137: `effect-v4-tests/apiStabilityLeakInferred#classExpression` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D10] (44:17-44:34) TS377137: `effect-v4-tests/apiStabilityLeakInferred#inferredParameter` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D11] (44:35-44:36) TS6133: 'x' is declared but its value is never read.
+  (no quick fixes)
+
+[D12] (45:14-45:29) TS377137: `effect-v4-tests/apiStabilityLeakInferred#InferredFactory` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D13] (46:15-46:16) TS6133: 'x' is declared but its value is never read.
+  (no quick fixes)
+
+[D14] (51:13-51:32) TS377137: `effect-v4-tests/apiStabilityLeakInferred#GenericFunctionType` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D15] (53:13-53:30) TS377137: `effect-v4-tests/apiStabilityLeakInferred#InferredArrowType` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+[D16] (60:22-60:37) TS377137: `effect-v4-tests/apiStabilityLeakInferred#genericCallable` exposes `InferredExperimental`, an experimental API. effect(apiStabilityLeak)
+  Fix 0: "Disable apiStabilityLeak for this line"
+  Fix 1: "Disable apiStabilityLeak for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default
+
+=== [D16] Fix 0: "Disable apiStabilityLeak for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable apiStabilityLeak for entire file" ===
+skipped by default

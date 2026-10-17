@@ -1,0 +1,47 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:65-4:82) TS377049: This key does not match the deterministic key for this declaration. The expected key is `services/test/MyService`. effect(deterministicKeys)
+  Fix 0: "Disable deterministicKeys for this line"
+  Fix 1: "Disable deterministicKeys for entire file"
+  Fix 2: "Replace 'WrongServiceKey' with 'services/test/MyService'"
+
+[D2] (6:47-6:62) TS377049: This key does not match the deterministic key for this declaration. The expected key is `MyError`. effect(deterministicKeys)
+  Fix 0: "Disable deterministicKeys for this line"
+  Fix 1: "Disable deterministicKeys for entire file"
+  Fix 2: "Replace 'WrongErrorKey' with 'MyError'"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable deterministicKeys for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable deterministicKeys for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace 'WrongServiceKey' with 'services/test/MyService'" ===
+
+--- file:///app/src/services/test.ts ---
+// @effect-diagnostics deterministicKeys:error
+import { Context, Data } from "effect"
+
+export class MyService extends Context.Service<MyService, {}>()("services/test/MyService") {}
+
+export class MyError extends Data.TaggedError("WrongErrorKey")<{}> {}
+
+
+=== [D2] Fix 0: "Disable deterministicKeys for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable deterministicKeys for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace 'WrongErrorKey' with 'MyError'" ===
+
+--- file:///app/src/services/test.ts ---
+// @effect-diagnostics deterministicKeys:error
+import { Context, Data } from "effect"
+
+export class MyService extends Context.Service<MyService, {}>()("WrongServiceKey") {}
+
+export class MyError extends Data.TaggedError("MyError")<{}> {}
+

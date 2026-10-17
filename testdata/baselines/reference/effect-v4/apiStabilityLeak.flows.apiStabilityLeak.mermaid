@@ -1,0 +1,11 @@
+flowchart TB
+  0[["type: #40;input: ExperimentalType#41; =#gt; UnstableType<br/>node: export function stableFunction#40;input: ExperimentalType#41;: UnstableType #123;#92;n  return input as unknown as UnstableType#92;n#125;"]]
+  1[/"type: UnstableType<br/>node: input as unknown as UnstableType"/]
+  2[["type: #40;x: #123; value: ExperimentalType; #125;#41; =#gt; void<br/>node: export declare function inlineParameter#40;x: #123; value: ExperimentalType #125;#41;: void"]]
+  3[["type: #40;#41; =#gt; #123; value: UnstableType; #125;<br/>node: export declare function inlineResult#40;#41;: #123; value: UnstableType #125;"]]
+  4[["type: #40;x: string#41; =#gt; string<br/>node: export declare function erasedAlias#40;x: ExperimentalText#41;: ExperimentalText"]]
+  5[["type: #lt;T extends UnstableType#gt;#40;x: T#41; =#gt; T<br/>node: export declare function constrained#lt;T extends UnstableType#gt;#40;x: T#41;: T"]]
+  6[["type: #lt;T = ExperimentalType#gt;#40;#41; =#gt; T<br/>node: export declare function defaulted#lt;T = ExperimentalType#gt;#40;#41;: T"]]
+  7[["type: any<br/>node: private constructor#40;value: ExperimentalType#41; #123;#125;"]]
+  1 -->|"kind: potentialReturn"| 0
+  1 -->|"kind: usedBy"| 0

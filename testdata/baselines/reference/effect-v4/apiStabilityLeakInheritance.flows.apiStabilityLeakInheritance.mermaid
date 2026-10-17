@@ -1,0 +1,10 @@
+flowchart TB
+  0[/"type: typeof ignored<br/>node: ignored"/]
+  1[["type: #40;reportable: Reportable#41; =#gt; void<br/>node: export declare function direct#40;reportable: Reportable#41;: void"]]
+  2[/"type: #quot;TaggedErrorFactory#quot;<br/>node: #quot;TaggedErrorFactory#quot;"/]
+  3["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;TaggedErrorFactory#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  4[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: VoidIfEmpty#lt;#123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#gt;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  5[/"type: new #40;#41; =#gt; Reportable #amp; #123; readonly _tag: string; #125;<br/>node: makeError"/]
+  6[/"type: new #40;#41; =#gt; ConstructorBase<br/>node: makeAliasedError"/]
+  2 -->|"kind: pipe"| 3
+  4 -->|"kind: transformCallee"| 3

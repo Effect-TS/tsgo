@@ -1,0 +1,155 @@
+=== Quick Fix Inventory ===
+
+[D1] (21:3-21:11) TS377122: Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
+  Fix 0: "Disable catchAllTagDispatchToCatchTag for this line"
+  Fix 1: "Disable catchAllTagDispatchToCatchTag for entire file"
+  Fix 2: "Replace with Effect.catchTag or Effect.catchTags"
+
+[D2] (26:24-26:32) TS377122: Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
+  Fix 0: "Disable catchAllTagDispatchToCatchTag for this line"
+  Fix 1: "Disable catchAllTagDispatchToCatchTag for entire file"
+  Fix 2: "Replace with Effect.catchTag or Effect.catchTags"
+
+[D3] (33:3-33:11) TS377122: Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
+  Fix 0: "Disable catchAllTagDispatchToCatchTag for this line"
+  Fix 1: "Disable catchAllTagDispatchToCatchTag for entire file"
+  Fix 2: "Replace with Effect.catchTag or Effect.catchTags"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchAllTagDispatchToCatchTag for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchAllTagDispatchToCatchTag for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.catchTag or Effect.catchTags" ===
+
+--- file:///.src/catchAllTagDispatchToCatchTagPredicate.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllTagDispatchToCatchTag:suggestion
+// @effect-diagnostics catchConditionalRefailToCatchIf:suggestion
+import { Effect as Fx, Predicate } from "effect"
+
+class NotFoundError {
+  readonly _tag = "NotFoundError"
+  constructor(readonly id: string) {}
+}
+class TimeoutError {
+  readonly _tag = "TimeoutError"
+  constructor(readonly ms: number) {}
+}
+class AuthError {
+  readonly _tag = "AuthError"
+}
+
+declare const program: Fx.Effect<string, NotFoundError | TimeoutError | AuthError>
+
+export const direct = program.pipe(
+  Fx.catchTag("NotFoundError", error => Fx.succeed(error.id))
+)
+
+export const curried = Fx.catch(program, (error) =>
+  Predicate.isTagged("TimeoutError")(error)
+    ? Fx.succeed(String(error.ms))
+    : Fx.fail(error)
+)
+
+export const mixed = program.pipe(
+  Fx.catch((error) => {
+    if (error._tag === "NotFoundError") return Fx.succeed(error.id)
+    if (Predicate.isTagged("TimeoutError")(error)) return Fx.succeed(String(error.ms))
+    return Fx.fail(error)
+  })
+)
+
+
+=== [D2] Fix 0: "Disable catchAllTagDispatchToCatchTag for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable catchAllTagDispatchToCatchTag for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.catchTag or Effect.catchTags" ===
+
+--- file:///.src/catchAllTagDispatchToCatchTagPredicate.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllTagDispatchToCatchTag:suggestion
+// @effect-diagnostics catchConditionalRefailToCatchIf:suggestion
+import { Effect as Fx, Predicate } from "effect"
+
+class NotFoundError {
+  readonly _tag = "NotFoundError"
+  constructor(readonly id: string) {}
+}
+class TimeoutError {
+  readonly _tag = "TimeoutError"
+  constructor(readonly ms: number) {}
+}
+class AuthError {
+  readonly _tag = "AuthError"
+}
+
+declare const program: Fx.Effect<string, NotFoundError | TimeoutError | AuthError>
+
+export const direct = program.pipe(
+  Fx.catch((error) => Predicate.isTagged(error, "NotFoundError")
+    ? Fx.succeed(error.id)
+    : Fx.fail(error))
+)
+
+export const curried = Fx.catchTag(program, "TimeoutError", error => Fx.succeed(String(error.ms)))
+
+export const mixed = program.pipe(
+  Fx.catch((error) => {
+    if (error._tag === "NotFoundError") return Fx.succeed(error.id)
+    if (Predicate.isTagged("TimeoutError")(error)) return Fx.succeed(String(error.ms))
+    return Fx.fail(error)
+  })
+)
+
+
+=== [D3] Fix 0: "Disable catchAllTagDispatchToCatchTag for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable catchAllTagDispatchToCatchTag for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.catchTag or Effect.catchTags" ===
+
+--- file:///.src/catchAllTagDispatchToCatchTagPredicate.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllTagDispatchToCatchTag:suggestion
+// @effect-diagnostics catchConditionalRefailToCatchIf:suggestion
+import { Effect as Fx, Predicate } from "effect"
+
+class NotFoundError {
+  readonly _tag = "NotFoundError"
+  constructor(readonly id: string) {}
+}
+class TimeoutError {
+  readonly _tag = "TimeoutError"
+  constructor(readonly ms: number) {}
+}
+class AuthError {
+  readonly _tag = "AuthError"
+}
+
+declare const program: Fx.Effect<string, NotFoundError | TimeoutError | AuthError>
+
+export const direct = program.pipe(
+  Fx.catch((error) => Predicate.isTagged(error, "NotFoundError")
+    ? Fx.succeed(error.id)
+    : Fx.fail(error))
+)
+
+export const curried = Fx.catch(program, (error) =>
+  Predicate.isTagged("TimeoutError")(error)
+    ? Fx.succeed(String(error.ms))
+    : Fx.fail(error)
+)
+
+export const mixed = program.pipe(
+  Fx.catchTags({ NotFoundError: error => Fx.succeed(error.id), TimeoutError: error => Fx.succeed(String(error.ms)) })
+)
+

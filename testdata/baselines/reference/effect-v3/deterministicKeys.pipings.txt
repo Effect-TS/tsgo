@@ -1,5 +1,5 @@
 ==== /.src/package.json (0 flows) ====
-==== /.src/test.ts (2 flows) ====
+==== /.src/test.ts (3 flows) ====
 
 === Piping Flow ===
 Location: 7:10 - 7:51
@@ -28,3 +28,17 @@ Transformations (1):
       callee: Data.TaggedError
       args: (constant)
       outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "ErrorA"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 12:29 - 12:71
+Node: Data.TaggedError("AnonymousDefaultError")
+Node Kind: KindCallExpression
+
+Subject: "AnonymousDefaultError"
+Subject Type: "AnonymousDefaultError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "AnonymousDefaultError"; } & Readonly<A>

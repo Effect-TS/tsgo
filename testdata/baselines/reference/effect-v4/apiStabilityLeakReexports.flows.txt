@@ -1,0 +1,7 @@
+/.src/dep.ts -> apiStabilityLeakReexports.flows.dep.mermaid
+/.src/named.ts -> apiStabilityLeakReexports.flows.named.mermaid
+/.src/star.ts -> apiStabilityLeakReexports.flows.star.mermaid
+/.src/tagged.ts -> apiStabilityLeakReexports.flows.tagged.mermaid
+/.src/barrel.ts -> apiStabilityLeakReexports.flows.barrel.mermaid
+/.src/aliased.ts -> apiStabilityLeakReexports.flows.aliased.mermaid
+/.src/taggedNamespace.ts -> apiStabilityLeakReexports.flows.taggedNamespace.mermaid

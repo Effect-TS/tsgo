@@ -89,6 +89,7 @@ var StrictBooleanExpressions = rule.Rule{
 				} else {
 					typesToCheck = append(typesToCheck, nodeType)
 				}
+				seenTypeNames := make(map[string]bool)
 
 				for len(typesToCheck) > 0 {
 					t := typesToCheck[len(typesToCheck)-1]
@@ -111,8 +112,13 @@ var StrictBooleanExpressions = rule.Rule{
 						continue
 					}
 
-					// Report the error
 					typeName := ctx.Checker.TypeToString(t)
+					if seenTypeNames[typeName] {
+						continue
+					}
+					seenTypeNames[typeName] = true
+
+					// Report the error
 					diags = append(diags, ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(nodeToCheck), tsdiag.Unexpected_0_type_in_condition_expected_strictly_a_boolean_instead_effect_strictBooleanExpressions, nil, typeName))
 				}
 			}

@@ -5,3 +5,5 @@ etsgoapi/
 
 # Public adapter consumed by the generated Oxlint integration.
 etsoxlintrunner/
+
+ParsedLazyExpression.Body

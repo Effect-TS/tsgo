@@ -2,11 +2,11 @@ package fixables
 
 import (
 	"github.com/effect-ts/tsgo/internal/fixable"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var UnnecessaryPipeFix = fixable.Fixable{
@@ -38,14 +38,14 @@ func runUnnecessaryPipeFix(ctx *fixable.Context) []ls.CodeAction {
 	}
 
 	result := match.Result
-	callNode := result.Node.AsNode()
+	callNode := result.Node().AsNode()
 
 	// Unwrap "pipe(subject)" or "subject.pipe()" to just "subject" by deleting the prefix and suffix around the subject.
 	if action := ctx.NewFixAction(fixable.FixAction{
 		Description: "Remove the pipe call",
 		Run: func(tracker *rewriter.Tracker) {
-			tracker.DeleteRange(sf, core.NewTextRange(callNode.Pos(), result.Subject.Pos()))
-			tracker.DeleteRange(sf, core.NewTextRange(result.Subject.End(), callNode.End()))
+			tracker.DeleteRange(sf, core.NewTextRange(callNode.Pos(), result.Subject().Pos()))
+			tracker.DeleteRange(sf, core.NewTextRange(result.Subject().End(), callNode.End()))
 		},
 	}); action != nil {
 		return []ls.CodeAction{*action}

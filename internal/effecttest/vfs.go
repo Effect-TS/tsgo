@@ -61,7 +61,7 @@ type cachingCompilerHost struct {
 
 func (h *cachingCompilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast.SourceFile {
 	// Cache bundled lib files (version-independent, keyed by filename only)
-	if bundled.IsBundled(opts.FileName) {
+	if bundled.IsBundled(string(opts.FileName)) {
 		if cached, ok := parsedLibCache.Load(opts.FileName); ok {
 			return cached.(*ast.SourceFile)
 		}
@@ -72,8 +72,8 @@ func (h *cachingCompilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *as
 		return sf
 	}
 	// Cache package files (under /node_modules/, keyed by version + filename)
-	if strings.HasPrefix(opts.FileName, "/node_modules/") {
-		key := astCacheKey{version: h.version, fileName: opts.FileName}
+	if strings.HasPrefix(string(opts.FileName), "/node_modules/") {
+		key := astCacheKey{version: h.version, fileName: string(opts.FileName)}
 		if cached, ok := parsedASTCache.Load(key); ok {
 			return cached.(*ast.SourceFile)
 		}

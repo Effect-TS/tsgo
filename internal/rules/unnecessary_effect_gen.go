@@ -73,11 +73,11 @@ func analyzeUnnecessaryEffectGenNode(tp *typeparser.TypeParser, _ *checker.Check
 	}
 
 	// Must have exactly one argument (just the generator, no options object)
-	if genResult.Call.Arguments == nil || len(genResult.Call.Arguments.Nodes) != 1 {
+	if genResult.Call().Arguments == nil || len(genResult.Call().Arguments.Nodes) != 1 {
 		return nil
 	}
 
-	body := genResult.Body
+	body := genResult.Body()
 	if body == nil || body.Kind != ast.KindBlock {
 		return nil
 	}
@@ -122,11 +122,14 @@ func analyzeUnnecessaryEffectGenNode(tp *typeparser.TypeParser, _ *checker.Check
 
 	// Determine if the success type is void-like
 	successIsVoid := false
-	t := tp.GetTypeAtLocation(yieldedExpr)
+	var t *checker.Type
+	if !tp.NodeCannotBeEffectLibraryType(yieldedExpr) {
+		t = tp.GetTypeAtLocation(yieldedExpr)
+	}
 	if t != nil {
 		effect := tp.EffectType(t)
-		if effect != nil && effect.A != nil {
-			successIsVoid = effect.A.Flags()&checker.TypeFlagsVoidLike != 0
+		if effect != nil && effect.A() != nil {
+			successIsVoid = effect.A().Flags()&checker.TypeFlagsVoidLike != 0
 		}
 	}
 
@@ -137,7 +140,7 @@ func analyzeUnnecessaryEffectGenNode(tp *typeparser.TypeParser, _ *checker.Check
 		YieldedExpression: yieldedExpr,
 		ExplicitReturn:    explicitReturn,
 		SuccessIsVoid:     successIsVoid,
-		EffectModuleNode:  genResult.EffectModule,
+		EffectModuleNode:  genResult.EffectModule(),
 	}
 }
 

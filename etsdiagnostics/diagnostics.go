@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"maps"
+	"strconv"
 	"strings"
 
 	"github.com/effect-ts/tsgo/etscore"
@@ -48,27 +49,39 @@ const (
 	severityMessage severity = "message"
 )
 
-type formattedDiagnostic struct {
-	File      string   `json:"file"`
-	Start     int      `json:"start"`
-	Length    int      `json:"length"`
-	Line      int      `json:"line"`
-	Column    int      `json:"column"`
-	EndLine   int      `json:"endLine"`
-	EndColumn int      `json:"endColumn"`
-	Severity  severity `json:"severity"`
-	Code      int32    `json:"code"`
-	Name      string   `json:"name"`
-	Message   string   `json:"message"`
+type location struct {
+	File      string `json:"file"`
+	Start     int    `json:"start"`
+	Length    int    `json:"length"`
+	Line      int    `json:"line"`
+	Column    int    `json:"column"`
+	EndLine   int    `json:"endLine"`
+	EndColumn int    `json:"endColumn"`
 	source    string
 }
 
+type formattedDiagnostic struct {
+	location
+	Severity           severity             `json:"severity"`
+	Code               int32                `json:"code"`
+	Name               string               `json:"name"`
+	Message            string               `json:"message"`
+	RelatedInformation []relatedInformation `json:"relatedInformation,omitempty"`
+}
+
+type relatedInformation struct {
+	location
+	Code    int32  `json:"code"`
+	Message string `json:"message"`
+}
+
 type summary struct {
-	FilesChecked int `json:"filesChecked"`
-	TotalFiles   int `json:"totalFiles"`
-	Errors       int `json:"errors"`
-	Warnings     int `json:"warnings"`
-	Messages     int `json:"messages"`
+	FilesChecked       int `json:"filesChecked"`
+	FilesWithoutPlugin int `json:"filesWithoutPlugin"`
+	TotalFiles         int `json:"totalFiles"`
+	Errors             int `json:"errors"`
+	Warnings           int `json:"warnings"`
+	Messages           int `json:"messages"`
 }
 
 type fileEffectVersion struct {
@@ -150,17 +163,17 @@ func collect(ctx context.Context, req request, override *etscore.EffectPluginOpt
 		BackgroundCtx: ctx,
 		FS:            fs,
 		Options: &project.SessionOptions{
-			CurrentDirectory:   req.CWD,
+			CurrentDirectory:   tspath.RootedDirectoryPathFromAbsolute(req.CWD),
 			DefaultLibraryPath: bundled.LibPath(),
 			PositionEncoding:   lsproto.PositionEncodingKindUTF8,
 		},
 	})
 	defer session.Close()
 
-	targets := make([]string, 0)
-	seenTargets := make(map[tspath.Path]struct{})
-	addTarget := func(fileName string) {
-		path := tspath.ToPath(fileName, req.CWD, fs.UseCaseSensitiveFileNames())
+	targets := make([]tspath.RootedFilePath, 0)
+	seenTargets := make(map[tspath.PathKey]struct{})
+	addTarget := func(fileName tspath.RootedFilePath) {
+		path := tspath.PathKeyForFile(tspath.ToRootedFilePath(string(fileName), tspath.RootedDirectoryPath(req.CWD)), tspath.UseCaseSensitiveFileNames(fs))
 		if _, seen := seenTargets[path]; seen {
 			return
 		}
@@ -169,11 +182,11 @@ func collect(ctx context.Context, req request, override *etscore.EffectPluginOpt
 	}
 
 	if req.Project != "" {
-		projectName := tspath.GetNormalizedAbsolutePath(req.Project, req.CWD)
-		if fs.DirectoryExists(projectName) {
-			projectName = tspath.CombinePaths(projectName, "tsconfig.json")
+		projectName := tspath.ToRootedFilePath(req.Project, tspath.RootedDirectoryPathFromAbsolute(req.CWD))
+		if fs.DirectoryExists(tspath.RootedDirectoryPath(projectName)) {
+			projectName = tspath.ToRootedFilePath("tsconfig.json", tspath.RootedDirectoryPath(projectName))
 		}
-		openProjects := &collections.Set[string]{}
+		openProjects := &collections.Set[tspath.RootedFilePath]{}
 		openProjects.Add(projectName)
 		if err := updateSession(ctx, session, &project.APISnapshotRequest{OpenProjects: openProjects}); err != nil {
 			return nil, nil, summary{}, err
@@ -192,11 +205,9 @@ func collect(ctx context.Context, req request, override *etscore.EffectPluginOpt
 	}
 
 	if req.File != "" {
-		fileName := tspath.GetNormalizedAbsolutePath(req.File, req.CWD)
-		uri := lsconv.FileNameToDocumentURI(fileName)
-		openFiles := &collections.Set[lsproto.DocumentUri]{}
-		openFiles.Add(uri)
-		if err := updateSession(ctx, session, &project.APISnapshotRequest{OpenFiles: openFiles}); err != nil {
+		fileName := tspath.ToRootedFilePath(req.File, tspath.RootedDirectoryPathFromAbsolute(req.CWD))
+		request := project.NewOpenFileSnapshotRequest(string(fileName), req.CWD, tspath.UseCaseSensitiveFileNames(fs))
+		if err := updateSession(ctx, session, request); err != nil {
 			return nil, nil, summary{}, err
 		}
 		addTarget(fileName)
@@ -228,7 +239,7 @@ func collect(ctx context.Context, req request, override *etscore.EffectPluginOpt
 	session.WithSnapshotLoadingProjectTree(ctx, nil, func(snapshot *project.Snapshot) {
 		for index, fileName := range targets {
 			if req.Progress {
-				fmt.Fprintf(stderr, "[%d/%d] %60s\r", index+1, len(targets), truncateLeft(fileName, 60))
+				fmt.Fprintf(stderr, "[%d/%d] %60s\r", index+1, len(targets), truncateLeft(string(fileName), 60))
 			}
 			uri := lsconv.FileNameToDocumentURI(fileName)
 			configuredProject := snapshot.GetDefaultProject(uri)
@@ -244,6 +255,9 @@ func collect(ctx context.Context, req request, override *etscore.EffectPluginOpt
 				program.Options().Effect = override
 			}
 			if program.Options().Effect == nil {
+				if !overrideProvided {
+					resultSummary.FilesWithoutPlugin++
+				}
 				continue
 			}
 
@@ -260,7 +274,7 @@ func collect(ctx context.Context, req request, override *etscore.EffectPluginOpt
 					versionCache[configuredProject] = record
 				}
 				files = append(files, fileEffectVersion{
-					File:            fileName,
+					File:            string(fileName),
 					DetectedEffect:  record.detected,
 					SupportedEffect: record.supported,
 				})
@@ -328,31 +342,51 @@ func parseSeverityFilter(value string) map[severity]struct{} {
 }
 
 func formatDiagnostic(diagnostic *ast.Diagnostic) formattedDiagnostic {
+	name := rule.CodeToRuleName(rules.All, diagnostic.Code())
+	if name == "" {
+		name = fmt.Sprintf("effect(%d)", diagnostic.Code())
+	}
+	var related []relatedInformation
+	for _, info := range diagnostic.RelatedInformation() {
+		if info == nil || info.File() == nil {
+			continue
+		}
+		related = append(related, relatedInformation{
+			location: formatLocation(info),
+			Code:     info.Code(),
+			Message:  formatMessage(info, name),
+		})
+	}
+	return formattedDiagnostic{
+		location:           formatLocation(diagnostic),
+		Severity:           categoryToSeverity(diagnostic.Category()),
+		Code:               diagnostic.Code(),
+		Name:               name,
+		Message:            formatMessage(diagnostic, name),
+		RelatedInformation: related,
+	}
+}
+
+func formatLocation(diagnostic *ast.Diagnostic) location {
 	file := diagnostic.File()
 	start := file.GetPositionMap().UTF8ToUTF16(diagnostic.Pos())
 	end := file.GetPositionMap().UTF8ToUTF16(diagnostic.End())
 	line, column := scanner.GetECMALineAndUTF16CharacterOfPosition(file, diagnostic.Pos())
 	endLine, endColumn := scanner.GetECMALineAndUTF16CharacterOfPosition(file, diagnostic.End())
-	name := rule.CodeToRuleName(rules.All, diagnostic.Code())
-	if name == "" {
-		name = fmt.Sprintf("effect(%d)", diagnostic.Code())
-	}
-	message := flattenMessage(diagnostic, 0)
-	message = strings.TrimSuffix(message, " effect("+name+")")
-	return formattedDiagnostic{
-		File:      file.FileName(),
+	return location{
+		File:      string(file.FileName()),
 		Start:     start,
 		Length:    end - start,
 		Line:      line + 1,
 		Column:    int(column) + 1,
 		EndLine:   endLine + 1,
 		EndColumn: int(endColumn) + 1,
-		Severity:  categoryToSeverity(diagnostic.Category()),
-		Code:      diagnostic.Code(),
-		Name:      name,
-		Message:   message,
 		source:    file.Text(),
 	}
+}
+
+func formatMessage(diagnostic *ast.Diagnostic, name string) string {
+	return strings.TrimSuffix(flattenMessage(diagnostic, 0), " effect("+name+")")
 }
 
 func flattenMessage(diagnostic *ast.Diagnostic, level int) string {
@@ -409,8 +443,13 @@ func writeOutput(output io.Writer, format string, diagnostics []formattedDiagnos
 			fmt.Fprintf(output, "  %s: detected=%s, supported=%s\n", file.File, file.DetectedEffect, file.SupportedEffect)
 		}
 	}
-	_, err := fmt.Fprintf(output, "Checked %d files out of %d files. \n%d errors, %d warnings and %d messages.\n",
-		resultSummary.FilesChecked, resultSummary.TotalFiles, resultSummary.Errors, resultSummary.Warnings, resultSummary.Messages)
+	fmt.Fprintf(output, "Checked %d files out of %d files. \n", resultSummary.FilesChecked, resultSummary.TotalFiles)
+	if resultSummary.FilesWithoutPlugin > 0 {
+		fmt.Fprintf(output, "Skipped %d files because their tsconfig does not enable the %s plugin.\n",
+			resultSummary.FilesWithoutPlugin, etscore.EffectPluginName)
+	}
+	_, err := fmt.Fprintf(output, "%d errors, %d warnings and %d messages.\n",
+		resultSummary.Errors, resultSummary.Warnings, resultSummary.Messages)
 	return err
 }
 
@@ -422,17 +461,34 @@ func writePrettyDiagnostic(output io.Writer, diagnostic formattedDiagnostic) {
 	case severityWarning:
 		color = "\x1b[93m"
 	default:
-		color = "\x1b[96m"
+		color = cyanColor
 	}
-	reset := "\x1b[0m"
 	fmt.Fprintf(output, "%s%s:%d:%d - %s %s:%s %s\n",
-		color, diagnostic.File, diagnostic.Line, diagnostic.Column, diagnostic.Severity, diagnosticLabel(diagnostic.Name), reset, diagnostic.Message)
-	lines := strings.Split(diagnostic.source, "\n")
-	if diagnostic.Line > 0 && diagnostic.Line <= len(lines) {
-		line := strings.TrimSuffix(lines[diagnostic.Line-1], "\r")
-		fmt.Fprintf(output, "\n%d %s\n  %s%s%s\n\n", diagnostic.Line, line, color,
-			strings.Repeat(" ", max(diagnostic.Column-1, 0))+strings.Repeat("~", max(diagnostic.EndColumn-diagnostic.Column, 1)), reset)
+		color, diagnostic.File, diagnostic.Line, diagnostic.Column, diagnostic.Severity, diagnosticLabel(diagnostic.Name), resetColor, diagnostic.Message)
+	fmt.Fprintln(output)
+	writeCodeSnippet(output, diagnostic.location, "", color)
+	fmt.Fprintln(output)
+	for _, related := range diagnostic.RelatedInformation {
+		fmt.Fprintf(output, "  %s%s:%d:%d%s - %s\n", cyanColor, related.File, related.Line, related.Column, resetColor, related.Message)
+		writeCodeSnippet(output, related.location, "    ", cyanColor)
+		fmt.Fprintln(output)
 	}
+}
+
+const (
+	cyanColor  = "\x1b[96m"
+	resetColor = "\x1b[0m"
+)
+
+func writeCodeSnippet(output io.Writer, loc location, indent string, color string) {
+	lines := strings.Split(loc.source, "\n")
+	if loc.Line <= 0 || loc.Line > len(lines) {
+		return
+	}
+	line := strings.TrimSuffix(lines[loc.Line-1], "\r")
+	gutter := strconv.Itoa(loc.Line) + " "
+	fmt.Fprintf(output, "%s%s%s\n%s%s%s%s%s\n", indent, gutter, line, indent, strings.Repeat(" ", len(gutter)), color,
+		strings.Repeat(" ", max(loc.Column-1, 0))+strings.Repeat("~", max(loc.EndColumn-loc.Column, 1)), resetColor)
 }
 
 func diagnosticLabel(name string) string {

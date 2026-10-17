@@ -1,0 +1,307 @@
+==== /.src/effectSleepZeroToYieldNow_aliases.ts (21 flows) ====
+
+=== Piping Flow ===
+Location: 8:29 - 8:40
+Node: E.sleep(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: E.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 9:31 - 9:47
+Node: E.sleep(D.zero)
+Node Kind: KindCallExpression
+
+Subject: D.zero
+Subject Type: Duration
+
+Transformations (1):
+  [0] kind: call
+      callee: E.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 10:34 - 10:56
+Node: E.sleep(D.seconds(0))
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: D.seconds
+      args: (constant)
+      outType: Duration
+  [1] kind: call
+      callee: E.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 11:31 - 11:56
+Node: EffectNamespace.sleep(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: EffectNamespace.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 12:33 - 12:79
+Node: EffectNamespace.sleep(DurationNamespace.zero)
+Node Kind: KindCallExpression
+
+Subject: DurationNamespace.zero
+Subject Type: Duration
+
+Transformations (1):
+  [0] kind: call
+      callee: EffectNamespace.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 13:32 - 13:82
+Node: Package.Effect.sleep(Package.Duration.seconds(0))
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: Package.Duration.seconds
+      args: (constant)
+      outType: Duration
+  [1] kind: call
+      callee: Package.Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 14:37 - 14:50
+Node: (E).sleep(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: (E).sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 15:32 - 15:57
+Node: (E as typeof E).sleep(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: (E as typeof E).sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 16:35 - 16:48
+Node: (E.sleep)(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: (E.sleep)
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 17:27 - 17:41
+Node: namedSleep(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: namedSleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 19:29 - 19:43
+Node: sleepAlias(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: sleepAlias
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 21:32 - 21:53
+Node: renamedSleepAlias(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: renamedSleepAlias
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 23:35 - 23:56
+Node: moduleAlias.sleep(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: moduleAlias.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 24:38 - 24:63
+Node: console.log("evaluated")
+Node Kind: KindCallExpression
+
+Subject: "evaluated"
+Subject Type: "evaluated"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 25:30 - 25:59
+Node: effectGetter.module.sleep(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: effectGetter.module.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 26:26 - 26:51
+Node: console.log("evaluated")
+Node Kind: KindCallExpression
+
+Subject: "evaluated"
+Subject Type: "evaluated"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 27:30 - 27:51
+Node: getEffect().sleep(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: getEffect().sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 28:40 - 28:65
+Node: console.log("evaluated")
+Node Kind: KindCallExpression
+
+Subject: "evaluated"
+Subject Type: "evaluated"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 29:38 - 29:74
+Node: E.sleep(durationGetter.module.zero)
+Node Kind: KindCallExpression
+
+Subject: durationGetter.module.zero
+Subject Type: Duration
+
+Transformations (1):
+  [0] kind: call
+      callee: E.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 30:28 - 30:53
+Node: console.log("evaluated")
+Node Kind: KindCallExpression
+
+Subject: "evaluated"
+Subject Type: "evaluated"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 31:38 - 31:72
+Node: E.sleep(getDuration().seconds(0))
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (2):
+  [0] kind: call
+      callee: getDuration().seconds
+      args: (constant)
+      outType: Duration
+  [1] kind: call
+      callee: E.sleep
+      args: (constant)
+      outType: Effect<void, never, never>

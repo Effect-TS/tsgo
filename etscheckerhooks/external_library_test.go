@@ -2,6 +2,7 @@ package etscheckerhooks_test
 
 import (
 	"context"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -35,7 +36,7 @@ export const value = ExternalProblem
 		},
 	}
 
-	fs := bundled.WrapFS(vfstest.FromMap(testfs, true))
+	fs := bundled.WrapFS(vfstest.FromMap(testfs, tspath.CaseSensitive))
 	options := &core.CompilerOptions{
 		NewLine:           core.NewLineKindLF,
 		NoErrorTruncation: core.TSTrue,
@@ -50,17 +51,12 @@ export const value = ExternalProblem
 		},
 	}
 	program := compiler.NewProgram(compiler.ProgramOptions{
-		Config: &tsoptions.ParsedCommandLine{
-			ParsedConfig: &core.ParsedOptions{
-				CompilerOptions: options,
-				FileNames:       []string{"/src/main.ts"},
-			},
-		},
-		Host:           compiler.NewCompilerHost("/", fs, bundled.LibPath(), nil, nil),
+		Config:         tsoptions.NewParsedCommandLine(options, []tspath.RootedFilePath{"/src/main.ts"}, nil, "/", tspath.CaseSensitive),
+		Host:           compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
 		SingleThreaded: core.TSTrue,
 	})
 
-	dependencySource := program.GetSourceFile("/node_modules/problem/index.ts")
+	dependencySource := program.GetSourceFile(tspath.RootedFilePath("/node_modules/problem/index.ts"))
 	if dependencySource == nil {
 		t.Fatal("expected dependency source file to be resolved")
 	}
@@ -77,7 +73,7 @@ export const value = ExternalProblem
 		}
 		fileName := diag.File().FileName()
 		switch {
-		case strings.Contains(fileName, "/node_modules/"):
+		case strings.Contains(string(fileName), "/node_modules/"):
 			externalEffectDiagnostics++
 		case fileName == "/src/main.ts":
 			localEffectDiagnostics++

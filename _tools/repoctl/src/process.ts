@@ -1,7 +1,7 @@
 import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
-import * as ChildProcess from "effect/unstable/process/ChildProcess"
-import * as ChildProcessSpawner from "effect/unstable/process/ChildProcessSpawner"
+import { ChildProcess } from "effect/process"
+import { ChildProcessSpawner } from "effect/process"
 import * as Stream from "effect/Stream"
 
 export class CommandError extends Data.TaggedError("CommandError")<{

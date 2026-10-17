@@ -81,15 +81,15 @@ func analyzeRedundantSchemaTagIdentifierNode(tp *typeparser.TypeParser, _ *check
 	}
 
 	// Both key and tag must be present and must be string literals
-	if result.KeyStringLiteral == nil || result.TagStringLiteral == nil {
+	if result.KeyStringLiteral() == nil || result.TagStringLiteral() == nil {
 		return RedundantSchemaTagIdentifierMatch{}, false
 	}
-	if result.KeyStringLiteral.Kind != ast.KindStringLiteral || result.TagStringLiteral.Kind != ast.KindStringLiteral {
+	if result.KeyStringLiteral().Kind != ast.KindStringLiteral || result.TagStringLiteral().Kind != ast.KindStringLiteral {
 		return RedundantSchemaTagIdentifierMatch{}, false
 	}
 
-	keyText := result.KeyStringLiteral.AsStringLiteral().Text
-	tagText := result.TagStringLiteral.AsStringLiteral().Text
+	keyText := result.KeyStringLiteral().AsStringLiteral().Text
+	tagText := result.TagStringLiteral().AsStringLiteral().Text
 
 	if keyText != tagText {
 		return RedundantSchemaTagIdentifierMatch{}, false
@@ -97,7 +97,7 @@ func analyzeRedundantSchemaTagIdentifierNode(tp *typeparser.TypeParser, _ *check
 
 	return RedundantSchemaTagIdentifierMatch{
 		SourceFile:       sf,
-		Location:         scanner.GetErrorRangeForNode(sf, result.KeyStringLiteral),
-		KeyStringLiteral: result.KeyStringLiteral,
+		Location:         scanner.GetErrorRangeForNode(sf, result.KeyStringLiteral()),
+		KeyStringLiteral: result.KeyStringLiteral(),
 	}, true
 }

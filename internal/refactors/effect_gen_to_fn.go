@@ -2,12 +2,12 @@ package refactors
 
 import (
 	"github.com/effect-ts/tsgo/internal/refactor"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/astnav"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 )
 
 var EffectGenToFn = refactor.Refactor{
@@ -48,7 +48,7 @@ func runEffectGenToFn(ctx *refactor.Context) []ls.CodeAction {
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: description,
 		Run: func(tracker *rewriter.Tracker) {
-			newNode := buildEffectGenToFnReplacement(tracker, parsed, fnName)
+			newNode := buildEffectGenToFnReplacement(tracker, ctx.SourceFile, parsed, fnName)
 			if newNode == nil {
 				return
 			}
@@ -118,8 +118,8 @@ func parseFunctionReturningEffectGen(tp *typeparser.TypeParser, _ *checker.Check
 			break
 		}
 		// Prepend args (inner pipes go first)
-		pipeArgs = append(pipeResult.Args, pipeArgs...)
-		subject = pipeResult.Subject
+		pipeArgs = append(pipeResult.Args().Copy(), pipeArgs...)
+		subject = pipeResult.Subject()
 	}
 
 	// Check if the core expression is Effect.gen(function*() { ... })
@@ -156,14 +156,14 @@ func skipReturnBlock(node *ast.Node) *ast.Node {
 }
 
 // buildEffectGenToFnReplacement builds the replacement node for the effectGenToFn refactor.
-func buildEffectGenToFnReplacement(tracker *rewriter.Tracker, parsed *effectGenParsed, fnName string) *ast.Node {
+func buildEffectGenToFnReplacement(tracker *rewriter.Tracker, sf *ast.SourceFile, parsed *effectGenParsed, fnName string) *ast.Node {
 	node := parsed.funcNode
 	genCall := parsed.genCall
 
 	// Get the generator body
 	var blockBody *ast.Node
-	if genCall.Body != nil {
-		body := genCall.Body
+	if genCall.Body() != nil {
+		body := genCall.Body()
 		if body.Kind == ast.KindBlock {
 			blockBody = tracker.DeepCloneNode(body)
 		} else {
@@ -213,7 +213,13 @@ func buildEffectGenToFnReplacement(tracker *rewriter.Tracker, parsed *effectGenP
 	)
 
 	// Build Effect.fn or Effect.fn("name")
-	effectId := tracker.DeepCloneNode(genCall.EffectModule)
+	// Named imports and local aliases of gen have no receiver; the user resolves the import.
+	var effectId *ast.Node
+	if genCall.EffectModule() != nil {
+		effectId = tracker.DeepCloneNode(genCall.EffectModule())
+	} else {
+		effectId = tracker.NewIdentifier(typeparser.FindEffectModuleIdentifier(sf))
+	}
 	fnAccess := tracker.NewPropertyAccessExpression(
 		effectId, nil, tracker.NewIdentifier("fn"), ast.NodeFlagsNone,
 	)

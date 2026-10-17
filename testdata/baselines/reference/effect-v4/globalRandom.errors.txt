@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/globalRandom.ts(5,23): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)
 /.src/globalRandom.ts(8,30): warning TS377070: This code uses `Math.random()`, randomness is represented through the Effect `Random` service. effect(globalRandom)

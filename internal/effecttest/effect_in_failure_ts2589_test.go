@@ -205,23 +205,23 @@ func collectDiagnosticStringsFromContent(t testing.TB, content string) []string 
 		t.Fatal(err)
 	}
 
-	var programFileNames []string
+	var programFileNames []tspath.RootedFilePath
 	var tsConfigFile *tsoptions.TsConfigSourceFile
 	var tsConfigUnit *testUnit
 	for _, unit := range units {
-		unitName := tspath.GetNormalizedAbsolutePath(unit.name, currentDirectory)
+		unitName := tspath.GetNormalizedAbsolutePath(unit.name, tspath.RootedDirectoryPath(currentDirectory))
 		testfs[unitName] = &fstest.MapFile{Data: []byte(unit.content)}
 		if isHarnessConfigFile(unit.name) {
-			path := tspath.ToPath(unitName, currentDirectory, true)
-			configJSON := parser.ParseSourceFile(ast.SourceFileParseOptions{FileName: unitName, Path: path}, unit.content, core.ScriptKindJSON)
+			path := tspath.PathKeyForFile(tspath.ToRootedFilePath(unitName, tspath.RootedDirectoryPath(currentDirectory)), true)
+			configJSON := parser.ParseSourceFile(ast.NewSourceFileParseOptions(tspath.RootedFilePath(unitName), path), unit.content, core.ScriptKindJSON)
 			tsConfigFile = &tsoptions.TsConfigSourceFile{SourceFile: configJSON}
 			tsConfigUnit = unit
 			continue
 		}
-		programFileNames = append(programFileNames, unitName)
+		programFileNames = append(programFileNames, tspath.RootedFilePath(unitName))
 	}
 
-	fs := vfstest.FromMap(testfs, true)
+	fs := vfstest.FromMap(testfs, tspath.CaseSensitive)
 	fs = bundled.WrapFS(fs)
 
 	compilerOptions := &core.CompilerOptions{
@@ -238,19 +238,8 @@ func collectDiagnosticStringsFromContent(t testing.TB, content string) []string 
 
 	var parsedConfig *tsoptions.ParsedCommandLine
 	if tsConfigFile != nil {
-		configDir := tspath.GetNormalizedAbsolutePath(tspath.GetDirectoryPath(tsConfigUnit.name), currentDirectory)
-		parseHost := &vfsParseConfigHost{fs: fs, currentDirectory: currentDirectory}
-		parsedConfig = tsoptions.ParseJsonSourceFileConfigFileContent(
-			tsConfigFile,
-			parseHost,
-			configDir,
-			nil,
-			nil,
-			tsConfigFile.SourceFile.FileName(),
-			nil,
-			nil,
-			nil,
-		)
+		configDir := tspath.GetNormalizedAbsolutePath(tspath.GetDirectoryPath(tsConfigUnit.name), tspath.RootedDirectoryPath(currentDirectory))
+		parsedConfig = tsoptions.ParseJsonSourceFileConfigFileContent(tsConfigFile, fs, tspath.RootedDirectoryPath(configDir), nil, nil, nil, nil)
 		if parsedConfig.CompilerOptions() != nil {
 			parsedConfig.CompilerOptions().NewLine = core.NewLineKindLF
 			parsedConfig.CompilerOptions().SkipDefaultLibCheck = core.TSTrue
@@ -270,7 +259,7 @@ func collectDiagnosticStringsFromContent(t testing.TB, content string) []string 
 	}
 
 	host := &cachingCompilerHost{
-		CompilerHost: compiler.NewCompilerHost(currentDirectory, fs, bundled.LibPath(), nil, nil),
+		CompilerHost: compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
 		version:      bundledeffect.EffectV4,
 	}
 
@@ -278,14 +267,10 @@ func collectDiagnosticStringsFromContent(t testing.TB, content string) []string 
 	if parsedConfig != nil {
 		configFile = parsedConfig.ConfigFile
 	}
+	programConfig := tsoptions.NewParsedCommandLine(compilerOptions, programFileNames, nil, tspath.RootedDirectoryPath(currentDirectory), tspath.CaseSensitive)
+	programConfig.ConfigFile = configFile
 	program := compiler.NewProgram(compiler.ProgramOptions{
-		Config: &tsoptions.ParsedCommandLine{
-			ParsedConfig: &core.ParsedOptions{
-				CompilerOptions: compilerOptions,
-				FileNames:       programFileNames,
-			},
-			ConfigFile: configFile,
-		},
+		Config:         programConfig,
 		Host:           host,
 		SingleThreaded: core.TSTrue,
 	})

@@ -59,9 +59,9 @@ func AnalyzeEffectFnOpportunity(tp *typeparser.TypeParser, _ *checker.Checker, s
 
 		if result := tp.ParseEffectFnOpportunity(n); result != nil {
 			// Report on the name identifier if available, otherwise the function node
-			reportNode := result.NameIdentifier
+			reportNode := result.NameIdentifier()
 			if reportNode == nil {
-				reportNode = result.TargetNode
+				reportNode = result.TargetNode()
 			}
 			matches = append(matches, EffectFnOpportunityMatch{
 				SourceFile: sf,
@@ -84,21 +84,21 @@ func AnalyzeEffectFnOpportunity(tp *typeparser.TypeParser, _ *checker.Checker, s
 // Returns empty string when no fix variant passes the config filter.
 func firstAvailableFixName(result *typeparser.EffectFnOpportunityResult, effectConfig *etscore.ResolvedEffectPluginOptions) string {
 	// Priority order matches upstream: withSpan > untraced > noSpan > spanInferred > spanSuggested
-	if effectConfig.EffectFnIncludes(etscore.EffectFnSpan) && result.ExplicitTraceExpression != nil {
+	if effectConfig.EffectFnIncludes(etscore.EffectFnSpan) && result.ExplicitTraceExpression() != nil {
 		return "effectFnOpportunity_toEffectFnWithSpan"
 	}
-	if effectConfig.EffectFnIncludes(etscore.EffectFnUntraced) && result.GeneratorFunction != nil {
+	if effectConfig.EffectFnIncludes(etscore.EffectFnUntraced) && result.GeneratorFunction() != nil {
 		return "effectFnOpportunity_toEffectFnUntraced"
 	}
 	if effectConfig.EffectFnIncludes(etscore.EffectFnNoSpan) {
 		return "effectFnOpportunity_toEffectFnNoSpan"
 	}
-	if result.ExplicitTraceExpression == nil {
-		if effectConfig.EffectFnIncludes(etscore.EffectFnInferredSpan) && result.InferredTraceName != "" {
+	if result.ExplicitTraceExpression() == nil {
+		if effectConfig.EffectFnIncludes(etscore.EffectFnInferredSpan) && result.InferredTraceName() != "" {
 			return "effectFnOpportunity_toEffectFnSpanInferred"
 		}
-		if effectConfig.EffectFnIncludes(etscore.EffectFnSuggestedSpan) && result.SuggestedTraceName != "" &&
-			(!effectConfig.EffectFnIncludes(etscore.EffectFnInferredSpan) || result.SuggestedTraceName != result.InferredTraceName) {
+		if effectConfig.EffectFnIncludes(etscore.EffectFnSuggestedSpan) && result.SuggestedTraceName() != "" &&
+			(!effectConfig.EffectFnIncludes(etscore.EffectFnInferredSpan) || result.SuggestedTraceName() != result.InferredTraceName()) {
 			return "effectFnOpportunity_toEffectFnSpanSuggested"
 		}
 	}
@@ -113,34 +113,34 @@ func buildExpectedSignature(sf *ast.SourceFile, m *EffectFnOpportunityMatch, fix
 
 	// Get the Effect module name
 	effectModuleName := "Effect"
-	if result.EffectModule != nil && result.EffectModule.Kind == ast.KindIdentifier {
-		effectModuleName = scanner.GetTextOfNode(result.EffectModule)
+	if result.EffectModule() != nil && result.EffectModule().Kind == ast.KindIdentifier {
+		effectModuleName = scanner.GetTextOfNode(result.EffectModule())
 	}
 
 	// Build type parameter string: <T, U, ...>
-	typeParamStr := getTypeParamString(result.TargetNode)
+	typeParamStr := getTypeParamString(result.TargetNode())
 
 	// Build parameter names string: (x, y, ...)
-	paramStr := getParamNamesString(result.TargetNode)
+	paramStr := getParamNamesString(result.TargetNode())
 
 	var fnSignature string
 	switch {
-	case result.HasGenBody:
+	case result.HasGenBody():
 		fnSignature = "function*" + typeParamStr + "(" + paramStr + ") { ... }"
-	case result.TargetNode != nil && result.TargetNode.Kind == ast.KindArrowFunction:
+	case result.TargetNode() != nil && result.TargetNode().Kind == ast.KindArrowFunction:
 		fnSignature = typeParamStr + "(" + paramStr + ") => { ... }"
 	default:
 		fnSignature = "function" + typeParamStr + "(" + paramStr + ") { ... }"
 	}
 
-	pipeArgs := result.PipeArguments
+	pipeArgs := result.PipeArguments()
 	pipeArgsForWithSpan := pipeArgs
-	if len(pipeArgs) > 0 {
-		pipeArgsForWithSpan = pipeArgs[:len(pipeArgs)-1]
+	if pipeArgs.Len() > 0 {
+		pipeArgsForWithSpan = pipeArgs.Slice(0, pipeArgs.Len()-1)
 	}
 
-	pipeArgsSuffix := func(args []*ast.Node) string {
-		if len(args) > 0 {
+	pipeArgsSuffix := func(count int) string {
+		if count > 0 {
 			return ", ...pipeTransformations"
 		}
 		return ""
@@ -149,22 +149,22 @@ func buildExpectedSignature(sf *ast.SourceFile, m *EffectFnOpportunityMatch, fix
 	switch fixName {
 	case "effectFnOpportunity_toEffectFnWithSpan":
 		traceName := ""
-		if result.ExplicitTraceExpression != nil {
-			traceName = strings.TrimSpace(sf.Text()[result.ExplicitTraceExpression.Pos():result.ExplicitTraceExpression.End()])
+		if result.ExplicitTraceExpression() != nil {
+			traceName = strings.TrimSpace(sf.Text()[result.ExplicitTraceExpression().Pos():result.ExplicitTraceExpression().End()])
 		}
-		return effectModuleName + ".fn(" + traceName + ")(" + fnSignature + pipeArgsSuffix(pipeArgsForWithSpan) + ")"
+		return effectModuleName + ".fn(" + traceName + ")(" + fnSignature + pipeArgsSuffix(pipeArgsForWithSpan.Len()) + ")"
 
 	case "effectFnOpportunity_toEffectFnUntraced":
-		return effectModuleName + ".fnUntraced(" + fnSignature + pipeArgsSuffix(pipeArgs) + ")"
+		return effectModuleName + ".fnUntraced(" + fnSignature + pipeArgsSuffix(pipeArgs.Len()) + ")"
 
 	case "effectFnOpportunity_toEffectFnNoSpan":
-		return effectModuleName + ".fn(" + fnSignature + pipeArgsSuffix(pipeArgs) + ")"
+		return effectModuleName + ".fn(" + fnSignature + pipeArgsSuffix(pipeArgs.Len()) + ")"
 
 	case "effectFnOpportunity_toEffectFnSpanInferred":
-		return effectModuleName + ".fn(\"" + result.InferredTraceName + "\")(" + fnSignature + pipeArgsSuffix(pipeArgs) + ")"
+		return effectModuleName + ".fn(\"" + result.InferredTraceName() + "\")(" + fnSignature + pipeArgsSuffix(pipeArgs.Len()) + ")"
 
 	case "effectFnOpportunity_toEffectFnSpanSuggested":
-		return effectModuleName + ".fn(\"" + result.SuggestedTraceName + "\")(" + fnSignature + pipeArgsSuffix(pipeArgs) + ")"
+		return effectModuleName + ".fn(\"" + result.SuggestedTraceName() + "\")(" + fnSignature + pipeArgsSuffix(pipeArgs.Len()) + ")"
 
 	default:
 		return effectModuleName + ".fn(" + fnSignature + ")"

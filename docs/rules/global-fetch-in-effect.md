@@ -22,7 +22,7 @@ import { Effect } from "effect"
 export const preview = Effect.gen(function*() {
   return yield* Effect.promise(() => fetch("https://example.com"))
 /**
-                                     ^^^^^ effecttsgo(global-fetch-in-effect): This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/unstable/http`.
+                                     ^^^^^ effecttsgo(global-fetch-in-effect): This Effect code calls the global `fetch` function, HTTP requests in Effect code are represented through `HttpClient` from `effect/http`.
 */
 })
 ```

@@ -52,10 +52,10 @@ func AnalyzeUnnecessaryPipe(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 
 		if n.Kind == ast.KindCallExpression {
 			if result := tp.ParsePipeCall(n); result != nil {
-				if len(result.Args) == 0 {
+				if result.Args().Len() == 0 {
 					matches = append(matches, UnnecessaryPipeMatch{
 						SourceFile: sf,
-						Location:   scanner.GetErrorRangeForNode(sf, result.Node.AsNode()),
+						Location:   scanner.GetErrorRangeForNode(sf, result.Node().AsNode()),
 						Result:     result,
 					})
 				}

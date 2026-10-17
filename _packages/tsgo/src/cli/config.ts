@@ -1,7 +1,7 @@
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
 import * as Path from "effect/Path"
-import * as Command from "effect/unstable/cli/Command"
+import { Command } from "effect/cli"
 import * as Assessment from "./setup/assessment.js"
 import * as Changes from "./setup/changes.js"
 import { getAllRules } from "./setup/rule-info.js"

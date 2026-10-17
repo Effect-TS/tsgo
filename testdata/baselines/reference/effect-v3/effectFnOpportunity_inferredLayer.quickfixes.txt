@@ -64,11 +64,7 @@ class MyService extends Context.Tag("MyService")<MyService, {
 const _shouldTrigger = Layer.effect(MyService)(Effect.gen(function*() {
     yield* Effect.log("log")
     // Log should be inferred with name MyService.log
-    return {
-    log: Effect.fn(function (what: string) {
-        return Effect.log(what);
-    })
-};
+    return { log: Effect.fn(function(what: string) { return Effect.log(what) }) }
 }))
 
 const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
@@ -104,11 +100,7 @@ class MyService extends Context.Tag("MyService")<MyService, {
 const _shouldTrigger = Layer.effect(MyService)(Effect.gen(function*() {
     yield* Effect.log("log")
     // Log should be inferred with name MyService.log
-    return {
-    log: Effect.fn("MyService.log")(function (what: string) {
-        return Effect.log(what);
-    })
-};
+    return { log: Effect.fn("MyService.log")(function(what: string) { return Effect.log(what) }) }
 }))
 
 const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
@@ -144,11 +136,7 @@ class MyService extends Context.Tag("MyService")<MyService, {
 const _shouldTrigger = Layer.effect(MyService)(Effect.gen(function*() {
     yield* Effect.log("log")
     // Log should be inferred with name MyService.log
-    return {
-    log: Effect.fn("log")(function (what: string) {
-        return Effect.log(what);
-    })
-};
+    return { log: Effect.fn("log")(function(what: string) { return Effect.log(what) }) }
 }))
 
 const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
@@ -196,11 +184,7 @@ const _shouldTrigger = Layer.effect(MyService)(Effect.gen(function*() {
 const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
     yield* Effect.log("log")
     // Log should be inferred with name MyService.log
-    return {
-    log: Effect.fn(function (what: string) {
-        return Effect.log(what);
-    })
-};
+    return { log: Effect.fn(function(what: string) { return Effect.log(what) }) }
 }))
 
 const _shouldTriggerSucceed = Layer.succeed(MyService)({
@@ -236,11 +220,7 @@ const _shouldTrigger = Layer.effect(MyService)(Effect.gen(function*() {
 const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
     yield* Effect.log("log")
     // Log should be inferred with name MyService.log
-    return {
-    log: Effect.fn("MyService.log")(function (what: string) {
-        return Effect.log(what);
-    })
-};
+    return { log: Effect.fn("MyService.log")(function(what: string) { return Effect.log(what) }) }
 }))
 
 const _shouldTriggerSucceed = Layer.succeed(MyService)({
@@ -276,11 +256,7 @@ const _shouldTrigger = Layer.effect(MyService)(Effect.gen(function*() {
 const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*() {
     yield* Effect.log("log")
     // Log should be inferred with name MyService.log
-    return {
-    log: Effect.fn("log")(function (what: string) {
-        return Effect.log(what);
-    })
-};
+    return { log: Effect.fn("log")(function(what: string) { return Effect.log(what) }) }
 }))
 
 const _shouldTriggerSucceed = Layer.succeed(MyService)({
@@ -327,9 +303,7 @@ const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*()
 
 const _shouldTriggerSucceed = Layer.succeed(MyService)({
     // Log should be inferred with name MyService.log
-    log: Effect.fn(function (what: string) {
-    return Effect.log(what);
-})
+    log: Effect.fn(function(what: string) { return Effect.log(what) })
 })
 
 const _shouldTriggerSync = Layer.sync(MyService)(() => {
@@ -365,9 +339,7 @@ const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*()
 
 const _shouldTriggerSucceed = Layer.succeed(MyService)({
     // Log should be inferred with name MyService.log
-    log: Effect.fn("MyService.log")(function (what: string) {
-    return Effect.log(what);
-})
+    log: Effect.fn("MyService.log")(function(what: string) { return Effect.log(what) })
 })
 
 const _shouldTriggerSync = Layer.sync(MyService)(() => {
@@ -403,9 +375,7 @@ const _shouldTriggerConstructor = Layer.effect(MyService, Effect.gen(function*()
 
 const _shouldTriggerSucceed = Layer.succeed(MyService)({
     // Log should be inferred with name MyService.log
-    log: Effect.fn("log")(function (what: string) {
-    return Effect.log(what);
-})
+    log: Effect.fn("log")(function(what: string) { return Effect.log(what) })
 })
 
 const _shouldTriggerSync = Layer.sync(MyService)(() => {
@@ -452,11 +422,7 @@ const _shouldTriggerSucceed = Layer.succeed(MyService)({
 
 const _shouldTriggerSync = Layer.sync(MyService)(() => {
     // Log should be inferred with name MyService.log
-    return {
-    log: Effect.fn(function (what: string) {
-        return Effect.log(what);
-    })
-};
+    return { log: Effect.fn(function(what: string) { return Effect.log(what) }) }
 })
 
 
@@ -492,11 +458,7 @@ const _shouldTriggerSucceed = Layer.succeed(MyService)({
 
 const _shouldTriggerSync = Layer.sync(MyService)(() => {
     // Log should be inferred with name MyService.log
-    return {
-    log: Effect.fn("MyService.log")(function (what: string) {
-        return Effect.log(what);
-    })
-};
+    return { log: Effect.fn("MyService.log")(function(what: string) { return Effect.log(what) }) }
 })
 
 
@@ -532,10 +494,6 @@ const _shouldTriggerSucceed = Layer.succeed(MyService)({
 
 const _shouldTriggerSync = Layer.sync(MyService)(() => {
     // Log should be inferred with name MyService.log
-    return {
-    log: Effect.fn("log")(function (what: string) {
-        return Effect.log(what);
-    })
-};
+    return { log: Effect.fn("log")(function(what: string) { return Effect.log(what) }) }
 })
 

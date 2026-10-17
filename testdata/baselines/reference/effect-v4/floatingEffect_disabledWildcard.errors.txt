@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/floatingEffect_disabledWildcard.ts(3,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 /.src/floatingEffect_disabledWildcard.ts(10,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)

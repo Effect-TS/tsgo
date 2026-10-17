@@ -1,0 +1,23 @@
+=== Quick Fix Inventory ===
+
+[D1] (14:8-14:14) TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D2] (15:8-15:14) TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default

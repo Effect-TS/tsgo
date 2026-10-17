@@ -1,0 +1,415 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:8-9:12) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D2] (10:27-10:31) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D3] (11:8-11:14) TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D4] (12:7-12:19) TS6133: 'nativeValues' is declared but its value is never read.
+  (no quick fixes)
+
+[D5] (12:29-12:35) TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D6] (13:8-13:15) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D7] (14:7-14:20) TS6133: 'nativeEntries' is declared but its value is never read.
+  (no quick fixes)
+
+[D8] (14:30-14:37) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D9] (15:8-15:19) TS377143: Consider effect/Record.fromEntries instead of native Object.fromEntries. Requires typed string or symbol key tuples; native numeric keys and loose entry arrays need adaptation. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D10] (16:7-16:24) TS6133: 'nativeFromEntries' is declared but its value is never read.
+  (no quick fixes)
+
+[D11] (16:34-16:45) TS377143: Consider effect/Record.fromEntries instead of native Object.fromEntries. Requires typed string or symbol key tuples; native numeric keys and loose entry arrays need adaptation. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D12] (17:8-17:14) TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D13] (18:7-18:19) TS6133: 'nativeHasOwn' is declared but its value is never read.
+  (no quick fixes)
+
+[D14] (18:29-18:35) TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D15] (19:6-19:20) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D16] (20:7-20:27) TS6133: 'nativeHasOwnProperty' is declared but its value is never read.
+  (no quick fixes)
+
+[D17] (20:35-20:49) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D18] (21:18-21:32) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D19] (22:8-22:22) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D20] (23:8-23:14) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D21] (24:8-24:16) TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D22] (25:8-25:17) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D23] (26:8-26:22) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D24] (27:8-27:15) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D25] (28:11-28:17) TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D26] (30:12-30:28) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D27] (32:23-32:29) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D28] (34:8-34:15) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D29] (35:14-35:18) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D30] (36:19-36:25) TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D31] (37:10-37:21) TS6133: 'constrained' is declared but its value is never read.
+  (no quick fixes)
+
+[D32] (37:78-37:84) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D33] (38:10-38:29) TS6133: 'constrainedInstance' is declared but its value is never read.
+  (no quick fixes)
+
+[D34] (38:73-38:87) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D35] (40:17-40:31) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D36] (42:8-42:15) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D37] (45:10-45:14) TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D38] (46:8-46:12) TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D39] (47:8-47:14) TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D40] (48:8-48:19) TS377143: Consider effect/Record.fromEntries instead of native Object.fromEntries. Requires typed string or symbol key tuples; native numeric keys and loose entry arrays need adaptation. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D41] (49:8-49:14) TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D42] (50:6-50:20) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D43] (51:6-51:20) TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D44] (52:63-52:70) TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+  Fix 0: "Disable preferEffectRecord for this line"
+  Fix 1: "Disable preferEffectRecord for entire file"
+
+[D45] (54:7-54:16) TS6133: 'typedKeys' is declared but its value is never read.
+  (no quick fixes)
+
+[D46] (55:7-55:19) TS6133: 'typedEntries' is declared but its value is never read.
+  (no quick fixes)
+
+[D47] (84:6-84:10) TS6196: 'Keys' is declared but never used.
+  (no quick fixes)
+
+[D48] (90:10-90:18) TS6133: 'shadowed' is declared but its value is never read.
+  (no quick fixes)
+
+[D49] (91:33-91:36) TS6133: 'key' is declared but its value is never read.
+  (no quick fixes)
+
+[D50] (93:7-93:12) TS6196: 'Child' is declared but never used.
+  (no quick fixes)
+
+[D51] (106:35-106:38) TS6133: 'key' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D17] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D18] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D18] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D19] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D19] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D20] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D20] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D21] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D21] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D22] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D22] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D23] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D23] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D24] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D24] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D25] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D25] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D26] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D26] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D27] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D27] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D28] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D28] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D29] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D29] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D30] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D30] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D32] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D32] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D34] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D34] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D35] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D35] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D36] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D36] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D37] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D37] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D38] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D38] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D39] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D39] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D40] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D40] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D41] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D41] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D42] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D42] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D43] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D43] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default
+
+=== [D44] Fix 0: "Disable preferEffectRecord for this line" ===
+skipped by default
+
+=== [D44] Fix 1: "Disable preferEffectRecord for entire file" ===
+skipped by default

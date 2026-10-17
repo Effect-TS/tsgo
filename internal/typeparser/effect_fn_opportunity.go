@@ -2,6 +2,7 @@
 package typeparser
 
 import (
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	"github.com/microsoft/TypeScript/tsc/shim/scanner"
@@ -9,17 +10,43 @@ import (
 
 // EffectFnOpportunityResult represents a function that can be converted to Effect.fn.
 type EffectFnOpportunityResult struct {
-	TargetNode              *ast.Node               // The function node being reported
-	NameIdentifier          *ast.Node               // The discovered name node for the function
-	GeneratorFunction       *ast.FunctionExpression // Non-nil for gen opportunity, nil for regular
-	PipeArguments           []*ast.Node             // Pipe args from piped Effect.gen (may be empty)
-	ExplicitTraceExpression *ast.Node               // Span name from Effect.withSpan if last pipe arg, or nil
-	SuggestedTraceName      string                  // The local function/variable name for suggested span
-	InferredTraceName       string                  // Context-aware name (e.g., "ServiceTag.member" or exported name)
-	EffectModule            *ast.Expression         // The Effect module identifier
-	HasGenBody              bool                    // True for gen opportunity, false for regular
-	IsLayerMember           bool                    // True when the target is a property value inside a Layer service definition
+	targetNode              *ast.Node               // The function node being reported
+	nameIdentifier          *ast.Node               // The discovered name node for the function
+	generatorFunction       *ast.FunctionExpression // Non-nil for gen opportunity, nil for regular
+	pipeArguments           []*ast.Node             // Pipe args from piped Effect.gen (may be empty)
+	explicitTraceExpression *ast.Node               // Span name from Effect.withSpan if last pipe arg, or nil
+	suggestedTraceName      string                  // The local function/variable name for suggested span
+	inferredTraceName       string                  // Context-aware name (e.g., "ServiceTag.member" or exported name)
+	effectModule            *ast.Expression         // The Effect module identifier
+	hasGenBody              bool                    // True for gen opportunity, false for regular
+	isLayerMember           bool                    // True when the target is a property value inside a Layer service definition
 }
+
+func (r EffectFnOpportunityResult) TargetNode() *ast.Node { return r.targetNode }
+
+func (r EffectFnOpportunityResult) NameIdentifier() *ast.Node { return r.nameIdentifier }
+
+func (r EffectFnOpportunityResult) GeneratorFunction() *ast.FunctionExpression {
+	return r.generatorFunction
+}
+
+func (r EffectFnOpportunityResult) PipeArguments() readonly.Slice[*ast.Node] {
+	return readonly.New(r.pipeArguments)
+}
+
+func (r EffectFnOpportunityResult) ExplicitTraceExpression() *ast.Node {
+	return r.explicitTraceExpression
+}
+
+func (r EffectFnOpportunityResult) SuggestedTraceName() string { return r.suggestedTraceName }
+
+func (r EffectFnOpportunityResult) InferredTraceName() string { return r.inferredTraceName }
+
+func (r EffectFnOpportunityResult) EffectModule() *ast.Expression { return r.effectModule }
+
+func (r EffectFnOpportunityResult) HasGenBody() bool { return r.hasGenBody }
+
+func (r EffectFnOpportunityResult) IsLayerMember() bool { return r.isLayerMember }
 
 // IsInsideEffectFn checks if a function node is already the first argument
 // of an Effect.fn, Effect.fnGen, or Effect.fnUntraced call.
@@ -53,7 +80,7 @@ func (tp *TypeParser) IsInsideEffectFn(fnNode *ast.Node) bool {
 // ParseEffectFnOpportunity detects whether a function node can be converted to Effect.fn.
 // Returns nil if the node is not an eligible candidate.
 func (tp *TypeParser) ParseEffectFnOpportunity(node *ast.Node) *EffectFnOpportunityResult {
-	if tp == nil || tp.checker == nil || node == nil {
+	if tp == nil || tp.checker == nil || node == nil || !isEffectFnOpportunityCandidate(node) {
 		return nil
 	}
 
@@ -62,41 +89,50 @@ func (tp *TypeParser) ParseEffectFnOpportunity(node *ast.Node) *EffectFnOpportun
 	})
 }
 
-// parseEffectFnOpportunityInner contains the actual parsing logic for ParseEffectFnOpportunity.
-func (tp *TypeParser) parseEffectFnOpportunityInner(node *ast.Node) *EffectFnOpportunityResult {
-	c := tp.checker
-	// Step 1: Filter by node kind
+func isEffectFnOpportunityCandidate(node *ast.Node) bool {
 	switch node.Kind {
-	case ast.KindFunctionExpression, ast.KindArrowFunction, ast.KindFunctionDeclaration:
-		// OK
-	default:
-		return nil
-	}
-
-	// Step 2: Reject generators
-	if node.Kind == ast.KindFunctionExpression {
+	case ast.KindFunctionExpression:
 		fn := node.AsFunctionExpression()
-		if fn != nil && fn.AsteriskToken != nil {
-			return nil
+		if fn != nil && (fn.AsteriskToken != nil || fn.Name() != nil) {
+			return false
 		}
-	}
-	if node.Kind == ast.KindFunctionDeclaration {
+	case ast.KindFunctionDeclaration:
 		fn := node.AsFunctionDeclaration()
 		if fn != nil && fn.AsteriskToken != nil {
-			return nil
+			return false
+		}
+	case ast.KindArrowFunction:
+	default:
+		return false
+	}
+	return !hasReturnTypeAnnotation(node)
+}
+
+func (tp *TypeParser) parseEffectFnOpportunityInner(node *ast.Node) *EffectFnOpportunityResult {
+	c := tp.checker
+	nameIdentifier := ast.GetNameOfDeclaration(node)
+	// GetNameOfDeclaration doesn't cover property declaration parents for arrow/function expressions
+	if nameIdentifier == nil && node.Parent != nil && node.Parent.Kind == ast.KindPropertyDeclaration {
+		pd := node.Parent.AsPropertyDeclaration()
+		if pd != nil {
+			nameIdentifier = pd.Name()
 		}
 	}
-
-	// Step 3: Reject named function expressions (typically used for recursion)
-	if node.Kind == ast.KindFunctionExpression {
-		fn := node.AsFunctionExpression()
-		if fn != nil && fn.Name() != nil {
-			return nil
+	// Also check PropertyAssignment parents (e.g., object literal members like { query: (...) => Effect... })
+	if nameIdentifier == nil && node.Parent != nil && node.Parent.Kind == ast.KindPropertyAssignment {
+		pa := node.Parent.AsPropertyAssignment()
+		if pa != nil && pa.Initializer == node {
+			nameIdentifier = pa.Name()
 		}
 	}
-
-	// Step 4: Reject functions with return type annotations
-	if hasReturnTypeAnnotation(node) {
+	if nameIdentifier != nil && nameIdentifier.Kind != ast.KindIdentifier && nameIdentifier.Kind != ast.KindStringLiteral {
+		nameIdentifier = nil
+	}
+	if nameIdentifier == nil {
+		return nil
+	}
+	traceName := scanner.GetTextOfNode(nameIdentifier)
+	if traceName == "" {
 		return nil
 	}
 
@@ -130,39 +166,18 @@ func (tp *TypeParser) parseEffectFnOpportunityInner(node *ast.Node) *EffectFnOpp
 		}
 	}
 
-	// Step 8: Extract name identifier from context
-	nameIdentifier := ast.GetNameOfDeclaration(node)
-	// GetNameOfDeclaration doesn't cover property declaration parents for arrow/function expressions
-	if nameIdentifier == nil && node.Parent != nil && node.Parent.Kind == ast.KindPropertyDeclaration {
-		pd := node.Parent.AsPropertyDeclaration()
-		if pd != nil {
-			nameIdentifier = pd.Name()
-		}
-	}
-	// Also check PropertyAssignment parents (e.g., object literal members like { query: (...) => Effect... })
-	if nameIdentifier == nil && node.Parent != nil && node.Parent.Kind == ast.KindPropertyAssignment {
-		pa := node.Parent.AsPropertyAssignment()
-		if pa != nil && pa.Initializer == node {
-			nameIdentifier = pa.Name()
-		}
-	}
-	if nameIdentifier != nil && nameIdentifier.Kind != ast.KindIdentifier && nameIdentifier.Kind != ast.KindStringLiteral {
-		nameIdentifier = nil
-	}
-	if nameIdentifier == nil {
-		return nil
-	}
-	traceName := scanner.GetTextOfNode(nameIdentifier)
-	if traceName == "" {
-		return nil
-	}
-
 	// Step 8b: Compute suggestedTraceName (local name) and inferredTraceName (context-aware name)
 	suggestedTraceName := traceName
 	inferredTraceName := tp.getInferredTraceName(node, suggestedTraceName)
 
 	// Detect whether the target function is a property value inside a Layer service definition
 	isLayerMember := inferredTraceName != "" && inferredTraceName != suggestedTraceName
+
+	// Converting a hoisted declaration to a const must not invalidate earlier uses.
+	// Keep this in the shared parser so neither the diagnostic nor the fix is offered.
+	if node.Kind == ast.KindFunctionDeclaration && tp.isFunctionReferencedBeforeDeclaration(node) {
+		return nil
+	}
 
 	// Step 9: Try gen opportunity first
 	if result := tp.tryParseGenOpportunity(node); result != nil {
@@ -171,32 +186,72 @@ func (tp *TypeParser) parseEffectFnOpportunityInner(node *ast.Node) *EffectFnOpp
 			return nil
 		}
 		return &EffectFnOpportunityResult{
-			TargetNode:              node,
-			NameIdentifier:          nameIdentifier,
-			GeneratorFunction:       result.generatorFunction,
-			PipeArguments:           result.pipeArguments,
-			ExplicitTraceExpression: result.explicitTraceExpression,
-			SuggestedTraceName:      suggestedTraceName,
-			InferredTraceName:       inferredTraceName,
-			EffectModule:            result.effectModule,
-			HasGenBody:              true,
-			IsLayerMember:           isLayerMember,
+			targetNode:              node,
+			nameIdentifier:          nameIdentifier,
+			generatorFunction:       result.generatorFunction,
+			pipeArguments:           result.pipeArguments,
+			explicitTraceExpression: result.explicitTraceExpression,
+			suggestedTraceName:      suggestedTraceName,
+			inferredTraceName:       inferredTraceName,
+			effectModule:            result.effectModule,
+			hasGenBody:              true,
+			isLayerMember:           isLayerMember,
 		}
 	}
 
 	// Step 10: Try regular opportunity (block body with >5 statements, relaxed in Layer context)
 	if result := tryParseRegularOpportunity(node, isLayerMember); result {
 		return &EffectFnOpportunityResult{
-			TargetNode:         node,
-			NameIdentifier:     nameIdentifier,
-			SuggestedTraceName: suggestedTraceName,
-			InferredTraceName:  inferredTraceName,
-			HasGenBody:         false,
-			IsLayerMember:      isLayerMember,
+			targetNode:         node,
+			nameIdentifier:     nameIdentifier,
+			suggestedTraceName: suggestedTraceName,
+			inferredTraceName:  inferredTraceName,
+			hasGenBody:         false,
+			isLayerMember:      isLayerMember,
 		}
 	}
 
 	return nil
+}
+
+// isFunctionReferencedBeforeDeclaration checks the preceding syntax in the
+// declaration's scope. Earlier closures are conservatively included: they may
+// be invoked before the replacement const is initialized.
+func (tp *TypeParser) isFunctionReferencedBeforeDeclaration(node *ast.Node) bool {
+	name := node.Name()
+	if name == nil || node.Parent == nil {
+		return false
+	}
+	scope := node.Parent
+	// Switch clauses share the enclosing case block's lexical scope.
+	if scope.Kind == ast.KindCaseClause || scope.Kind == ast.KindDefaultClause {
+		scope = scope.Parent
+	}
+	if scope == nil {
+		return false
+	}
+	symbol := tp.GetSymbolAtLocation(name)
+	if symbol == nil {
+		return false
+	}
+
+	var visit ast.Visitor
+	visit = func(current *ast.Node) bool {
+		if current.Pos() >= node.Pos() || ast.IsTypeNode(current) || current.Kind == ast.KindExportDeclaration {
+			return false
+		}
+		if current.Kind == ast.KindShorthandPropertyAssignment && current.Name().Text() == name.Text() {
+			if sameSymbolReference(tp.checker, tp.checker.GetShorthandAssignmentValueSymbol(current), symbol) {
+				return true
+			}
+		}
+		if current.Kind == ast.KindIdentifier && current.Text() == name.Text() &&
+			sameSymbolReference(tp.checker, tp.GetSymbolAtLocation(current), symbol) {
+			return true
+		}
+		return current.ForEachChild(visit)
+	}
+	return scope.ForEachChild(visit)
 }
 
 // hasReturnTypeAnnotation checks if a function node has an explicit return type annotation.
@@ -243,8 +298,8 @@ func (tp *TypeParser) tryParseGenOpportunity(fnNode *ast.Node) *genOpportunityRe
 	var outerPipeArgs []*ast.Node
 
 	if pipeResult := tp.ParsePipeCall(bodyExpr); pipeResult != nil {
-		subject = pipeResult.Subject
-		outerPipeArgs = pipeResult.Args
+		subject = pipeResult.subject
+		outerPipeArgs = pipeResult.args
 	} else {
 		subject = bodyExpr
 	}
@@ -256,11 +311,18 @@ func (tp *TypeParser) tryParseGenOpportunity(fnNode *ast.Node) *genOpportunityRe
 	}
 
 	// with no this binding
-	if genResult.OptionsNode != nil {
+	if genResult.optionsNode != nil {
 		return nil
 	}
-	pipeArgs := append([]*ast.Node{}, genResult.PipeArguments...)
+	pipeArgs := append([]*ast.Node{}, genResult.pipeArguments...)
 	pipeArgs = append(pipeArgs, outerPipeArgs...)
+	for _, arg := range pipeArgs {
+		// A spread can contain bare pipeables, but cannot itself be wrapped as
+		// a unary callback. Keep the original pipe call in this case.
+		if arg.Kind == ast.KindSpreadElement {
+			return nil
+		}
+	}
 
 	// Check if the last pipe argument is Effect.withSpan
 	var explicitTraceExpression *ast.Node
@@ -272,8 +334,8 @@ func (tp *TypeParser) tryParseGenOpportunity(fnNode *ast.Node) *genOpportunityRe
 	}
 
 	return &genOpportunityResult{
-		effectModule:            genResult.EffectModule,
-		generatorFunction:       genResult.GeneratorFunction,
+		effectModule:            genResult.effectModule,
+		generatorFunction:       genResult.generatorFunction,
 		pipeArguments:           pipeArgs,
 		explicitTraceExpression: explicitTraceExpression,
 	}
@@ -384,12 +446,12 @@ func (tp *TypeParser) tryExtractWithSpanExpression(expr *ast.Node) *ast.Node {
 		return nil
 	}
 
-	if !tp.IsNodeReferenceToEffectModuleApi(call.Expression, "withSpan") {
+	// withSpan has at least one argument (the span name)
+	if call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
 		return nil
 	}
 
-	// withSpan has at least one argument (the span name)
-	if call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
+	if !tp.IsNodeReferenceToEffectModuleApi(call.Expression, "withSpan") {
 		return nil
 	}
 
@@ -458,7 +520,7 @@ func (tp *TypeParser) areParametersReferencedIn(fnNode *ast.Node, nodes []*ast.N
 
 // isSymbolDeclaredInRange checks if any of the symbol's declarations fall within the given range.
 func isSymbolDeclaredInRange(sym *ast.Symbol, start, end int) bool {
-	for _, decl := range sym.Declarations {
+	for _, decl := range ast.TSGetSymbolDeclarations(sym) {
 		if decl != nil && decl.Pos() >= start && decl.End() <= end {
 			return true
 		}
@@ -532,9 +594,8 @@ func (tp *TypeParser) verifyLayerMethodAtCall(callExpr *ast.CallExpression, meth
 	}
 
 	// Check direct form: Layer.method(tag, impl)
-	directMethod := tp.tryGetLayerApiMethod(callExpr.Expression)
-	if directMethod == method && callExpr.Arguments != nil && len(callExpr.Arguments.Nodes) >= 2 &&
-		callExpr.Arguments.Nodes[1] == implementationExpr {
+	if callExpr.Arguments != nil && len(callExpr.Arguments.Nodes) >= 2 &&
+		callExpr.Arguments.Nodes[1] == implementationExpr && tp.tryGetLayerApiMethod(callExpr.Expression) == method {
 		return layerServiceNameFromExpression(callExpr.Arguments.Nodes[0])
 	}
 
@@ -542,10 +603,9 @@ func (tp *TypeParser) verifyLayerMethodAtCall(callExpr *ast.CallExpression, meth
 	if callExpr.Expression.Kind == ast.KindCallExpression {
 		innerCall := callExpr.Expression.AsCallExpression()
 		if innerCall != nil && innerCall.Expression != nil {
-			innerMethod := tp.tryGetLayerApiMethod(innerCall.Expression)
-			if innerMethod == method && innerCall.Arguments != nil && len(innerCall.Arguments.Nodes) >= 1 &&
+			if innerCall.Arguments != nil && len(innerCall.Arguments.Nodes) >= 1 &&
 				callExpr.Arguments != nil && len(callExpr.Arguments.Nodes) >= 1 &&
-				callExpr.Arguments.Nodes[0] == implementationExpr {
+				callExpr.Arguments.Nodes[0] == implementationExpr && tp.tryGetLayerApiMethod(innerCall.Expression) == method {
 				return layerServiceNameFromExpression(innerCall.Arguments.Nodes[0])
 			}
 		}
@@ -632,11 +692,6 @@ func (tp *TypeParser) tryMatchLayerEffectInference(objectLiteral *ast.Node) stri
 	if genCallNode == nil || genCallNode.Kind != ast.KindCallExpression {
 		return ""
 	}
-	// Verify this is actually an Effect.gen call with our generator
-	parsedGen := tp.EffectGenCall(genCallNode)
-	if parsedGen == nil || parsedGen.GeneratorFunction != genFn {
-		return ""
-	}
 	// Effect.gen(...) -> CallExpression (Layer.effect call)
 	layerCallNode := genCallNode.Parent
 	if layerCallNode == nil || layerCallNode.Kind != ast.KindCallExpression {
@@ -644,6 +699,11 @@ func (tp *TypeParser) tryMatchLayerEffectInference(objectLiteral *ast.Node) stri
 	}
 	layerCall := layerCallNode.AsCallExpression()
 	if layerCall == nil {
+		return ""
+	}
+	// Verify this is actually an Effect.gen call with our generator
+	parsedGen := tp.EffectGenCall(genCallNode)
+	if parsedGen == nil || parsedGen.generatorFunction != genFn {
 		return ""
 	}
 	return tp.verifyLayerMethodAtCall(layerCall, "effect", genCallNode)
@@ -716,7 +776,7 @@ func (tp *TypeParser) tryMatchOfInference(objectLiteral *ast.Node) string {
 	}
 	// Get the service tag expression (the object before .of)
 	serviceTagExpression := propAccess.Expression
-	if serviceTagExpression == nil {
+	if serviceTagExpression == nil || tp.NodeCannotBeEffectLibraryType(serviceTagExpression) {
 		return ""
 	}
 	serviceTagType := tp.GetTypeAtLocation(serviceTagExpression)
@@ -760,11 +820,6 @@ func (tp *TypeParser) tryMatchServiceMapMakeInference(objectLiteral *ast.Node) s
 	if genCallNode == nil || genCallNode.Kind != ast.KindCallExpression {
 		return ""
 	}
-	// Verify this is actually an Effect.gen call with our generator
-	parsedGen := tp.EffectGenCall(genCallNode)
-	if parsedGen == nil || parsedGen.GeneratorFunction != genFn {
-		return ""
-	}
 	// Effect.gen(...) -> PropertyAssignment with name "make" and initializer == genCall
 	makeProperty := genCallNode.Parent
 	if makeProperty == nil || makeProperty.Kind != ast.KindPropertyAssignment {
@@ -786,6 +841,11 @@ func (tp *TypeParser) tryMatchServiceMapMakeInference(objectLiteral *ast.Node) s
 		currentNode = currentNode.Parent
 	}
 	if currentNode == nil || currentNode.Name() == nil {
+		return ""
+	}
+	// Verify this is actually an Effect.gen call with our generator
+	parsedGen := tp.EffectGenCall(genCallNode)
+	if parsedGen == nil || parsedGen.generatorFunction != genFn {
 		return ""
 	}
 	// Verify the class extends Context.Service

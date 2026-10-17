@@ -1,0 +1,125 @@
+==== /.src/effectFnOpportunity_sourceText.ts (8 flows) ====
+
+=== Piping Flow ===
+Location: 9:9 - 17:4
+Node: Effect.gen(function*() {\n    // keep the body verbatim\n    yield* Effect.log(value)\n    return n + 0xff\n  }).pipe(\n    // before map\n    Effect.map((n) => n + 2_000) /* after map */,\n    Effect.withSpan('custom-span'),\n  )
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    // keep the body verbatim\n    yield* Effect.log(value)\n    return n + 0xff\n  }
+Subject Type: () => Generator<Effect<void, never, never>, number, any>
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n + 2_000]
+      outType: Effect<number, never, never>
+  [2] kind: pipeable
+      callee: Effect.withSpan
+      args: ['custom-span']
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 11:11 - 11:29
+Node: Effect.log(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: T
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 22:9 - 25:5
+Node: Effect.gen(function*() {\n    // declaration body\n    return (yield* Effect.succeed(n)) + 1_000\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    // declaration body\n    return (yield* Effect.succeed(n)) + 1_000\n  }
+Subject Type: () => Generator<Effect<number, never, never>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 24:19 - 24:37
+Node: Effect.succeed(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 35:9 - 35:46
+Node: Effect.succeed({ n, a, b, c, d, e })
+Node Kind: KindCallExpression
+
+Subject: { n, a, b, c, d, e }
+Subject Type: { n: number; a: number; b: number; c: string; d: RegExp; e: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ n: number; a: number; b: number; c: string; d: RegExp; e: string; }, never, never>
+
+=== Piping Flow ===
+Location: 38:63 - 42:3
+Node: Effect.gen(function*() {\n  // unparenthesized parameter\n  const result = yield* Effect.succeed(n)\n  return result\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // unparenthesized parameter\n  const result = yield* Effect.succeed(n)\n  return result\n}
+Subject Type: () => Generator<Effect<number, never, never>, number, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 40:24 - 40:42
+Node: Effect.succeed(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 44:37 - 53:2
+Node: Effect.gen(function*() {\n  yield* Effect.log("traced", n)\n  return 1_000\n}).pipe(\n  Effect.withSpan(\n    // span expression\n    `span-${"name" /* inside span */}-${/[/][*]/.source}`,\n    { attributes: { pattern: /[/][/]/.source } },\n  ),\n)
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.log("traced", n)\n  return 1_000\n}
+Subject Type: () => Generator<Effect<void, never, never>, number, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.withSpan
+      args: [`span-${"name" /* inside span */}-${/[/][*]/.source}`, { attributes: { pattern: /[/][/]/.source } }]
+      outType: Effect<number, never, never>

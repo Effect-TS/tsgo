@@ -27,13 +27,12 @@ func runContextSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem 
 		return nil
 	}
 
-	ch := ctx.Checker
 	tp := ctx.TypeParser
 	version := tp.SupportedEffectVersion()
 	className := data.ClassNameText()
 	replacementRange := byteSpanToRange(ctx, data.ReplacementStart, data.ReplacementLength)
 	sortText := "11"
-	tagKey := computeServiceTagKey(ctx.Program, tp, ch, ctx.SourceFile, className)
+	tagKey := computeDeterministicKey(ctx.Program, tp, ctx.SourceFile, className, "service")
 
 	contextIdentifier := typeparser.FindModuleIdentifier(ctx.SourceFile, "Context")
 	accessedText := data.AccessedObjectText()
@@ -92,23 +91,10 @@ func runContextSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem 
 	return items
 }
 
-// computeServiceTagKey computes the deterministic tag key for a service class.
+// computeDeterministicKey computes the key the deterministicKeys rule expects for a class
+// of the given target ("service" or "error").
 // Falls back to the class name if keybuilder returns empty.
-func computeServiceTagKey(program checker.Program, tp *typeparser.TypeParser, ch *checker.Checker, sf *ast.SourceFile, className string) string {
-	pkgJson := tp.PackageJsonForSourceFile(sf)
-	if pkgJson == nil {
-		return className
-	}
-	packageName, ok := pkgJson.Name.GetValue()
-	if !ok || packageName == "" {
-		return className
-	}
-
-	packageDirectory := getCompletionPackageJsonDirectory(program, ch, sf)
-	if packageDirectory == "" {
-		return className
-	}
-
+func computeDeterministicKey(program checker.Program, tp *typeparser.TypeParser, sf *ast.SourceFile, className string, target string) string {
 	effectConfig := program.Options().Effect
 	if effectConfig == nil {
 		return className
@@ -117,28 +103,13 @@ func computeServiceTagKey(program checker.Program, tp *typeparser.TypeParser, ch
 		effectConfig,
 		sf.FileName(),
 		program.Options().ConfigFilePath,
-		program.UseCaseSensitiveFileNames(),
+		tspath.UseCaseSensitiveFileNames(program),
 	)
 	keyPatterns := resolvedOptions.GetKeyPatterns()
 
-	key := keybuilder.CreateString(sf.FileName(), packageName, packageDirectory, className, "service", keyPatterns)
+	key := keybuilder.CreateStringForSourceFile(program, tp, sf, className, target, keyPatterns)
 	if key == "" {
 		return className
 	}
 	return key
-}
-
-// getCompletionPackageJsonDirectory gets the package.json directory for a source file.
-func getCompletionPackageJsonDirectory(program checker.Program, _ *checker.Checker, sf *ast.SourceFile) string {
-	type metaProvider interface {
-		GetSourceFileMetaData(path tspath.Path) ast.SourceFileMetaData
-	}
-
-	prog, ok := program.(metaProvider)
-	if !ok || prog == nil {
-		return ""
-	}
-
-	meta := prog.GetSourceFileMetaData(sf.Path())
-	return meta.PackageJsonDirectory
 }

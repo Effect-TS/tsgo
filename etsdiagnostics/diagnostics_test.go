@@ -4,11 +4,16 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"os"
 	"path/filepath"
+	"reflect"
+	"regexp"
 	"strings"
 	"testing"
+	"testing/fstest"
 
 	_ "github.com/effect-ts/tsgo/etscheckerhooks"
+	"github.com/effect-ts/tsgo/internal/bundledeffect"
 )
 
 func TestParseSeverityFilter(t *testing.T) {
@@ -102,40 +107,47 @@ func TestWriteFilesBlock(t *testing.T) {
 	}
 }
 
-func TestRunProjectJSON(t *testing.T) {
+func TestRunJSON(t *testing.T) {
 	t.Parallel()
 
 	cwd, err := filepath.Abs("testdata/native-diagnostics")
 	if err != nil {
 		t.Fatal(err)
 	}
-	request, err := json.Marshal(request{
-		CWD: cwd, Project: "tsconfig.json", Format: "json",
-	})
-	if err != nil {
-		t.Fatal(err)
-	}
-	var stdout bytes.Buffer
-	var stderr bytes.Buffer
-	if status := Run(context.Background(), []string{string(request)}, &stdout, &stderr); status != 1 {
-		t.Fatalf("unexpected status %d; stderr:\n%s", status, stderr.String())
-	}
-	var output jsonOutput
-	if err := json.Unmarshal(stdout.Bytes(), &output); err != nil {
-		t.Fatalf("invalid JSON output: %v\n%s", err, stdout.String())
-	}
-	if len(output.Diagnostics) != 1 {
-		t.Fatalf("expected one diagnostic, got %d", len(output.Diagnostics))
-	}
-	diagnostic := output.Diagnostics[0]
-	if diagnostic.Name != "asyncFunction" || diagnostic.Code != 377081 || diagnostic.Severity != severityError {
-		t.Fatalf("unexpected diagnostic: %#v", diagnostic)
-	}
-	if strings.Contains(diagnostic.Message, "effect(asyncFunction)") {
-		t.Fatalf("message includes redundant rule name: %q", diagnostic.Message)
-	}
-	if output.Files != nil {
-		t.Fatalf("expected no files list without listFiles: %#v", output.Files)
+	for name, req := range map[string]request{
+		"project": {Project: "tsconfig.json", Format: "json"},
+		"file":    {File: "main.ts", Format: "json"},
+	} {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+			req.CWD = cwd
+			request, err := json.Marshal(req)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var stdout bytes.Buffer
+			var stderr bytes.Buffer
+			if status := Run(context.Background(), []string{string(request)}, &stdout, &stderr); status != 1 {
+				t.Fatalf("unexpected status %d; stderr:\n%s", status, stderr.String())
+			}
+			var output jsonOutput
+			if err := json.Unmarshal(stdout.Bytes(), &output); err != nil {
+				t.Fatalf("invalid JSON output: %v\n%s", err, stdout.String())
+			}
+			if len(output.Diagnostics) != 1 {
+				t.Fatalf("expected one diagnostic, got %d", len(output.Diagnostics))
+			}
+			diagnostic := output.Diagnostics[0]
+			if diagnostic.Name != "asyncFunction" || diagnostic.Code != 377081 || diagnostic.Severity != severityError {
+				t.Fatalf("unexpected diagnostic: %#v", diagnostic)
+			}
+			if strings.Contains(diagnostic.Message, "effect(asyncFunction)") {
+				t.Fatalf("message includes redundant rule name: %q", diagnostic.Message)
+			}
+			if output.Files != nil {
+				t.Fatalf("expected no files list without listFiles: %#v", output.Files)
+			}
+		})
 	}
 }
 
@@ -174,5 +186,131 @@ func TestRunProjectJSONListFiles(t *testing.T) {
 		if entry.DetectedEffect == "" {
 			t.Fatalf("empty detected version for %s", entry.File)
 		}
+	}
+}
+
+const missingEffectContextSource = `import { Context, Effect, Layer } from "effect"
+
+class Db extends Context.Service<Db>()("Db", { make: Effect.succeed({}) }) {
+  static Default = Layer.effect(this, this.make)
+}
+
+class Fs extends Context.Service<Fs>()("Fs", { make: Effect.succeed({}) }) {
+  static Default = Layer.effect(this, this.make)
+}
+
+class Repo extends Context.Service<Repo>()("Repo", { make: Effect.as(Effect.andThen(Db, Fs), {}) }) {
+  static Default = Layer.effect(this, this.make)
+}
+
+const live = Repo.Default.pipe(Layer.provide(Fs.Default))
+
+Effect.gen(function*() {
+  yield* Fs
+  yield* Db
+}).pipe(
+  Effect.provide(live),
+  Effect.runPromise
+)
+`
+
+func writeEffectV4Project(t *testing.T, source string) string {
+	t.Helper()
+	files := make(map[string]any)
+	if err := bundledeffect.MountEffect(bundledeffect.EffectV4, files); err != nil {
+		t.Skip("Effect not installed:", err)
+	}
+	root := t.TempDir()
+	files["/.src/tsconfig.json"] = &fstest.MapFile{Data: []byte(`{
+  "compilerOptions": {
+    "strict": true,
+    "skipLibCheck": true,
+    "plugins": [{ "name": "@effect/language-service" }]
+  },
+  "files": ["main.ts"]
+}`)}
+	files["/.src/main.ts"] = &fstest.MapFile{Data: []byte(source)}
+	for name, file := range files {
+		path := filepath.Join(root, filepath.FromSlash(name))
+		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(path, file.(*fstest.MapFile).Data, 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	return filepath.Join(root, ".src")
+}
+
+func runMissingEffectContext(t *testing.T, format string) (string, string) {
+	t.Helper()
+	cwd := writeEffectV4Project(t, missingEffectContextSource)
+	request, err := json.Marshal(request{CWD: cwd, Project: "tsconfig.json", Format: format})
+	if err != nil {
+		t.Fatal(err)
+	}
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	if status := Run(context.Background(), []string{string(request)}, &stdout, &stderr); status != 1 {
+		t.Fatalf("unexpected status %d; stderr:\n%s", status, stderr.String())
+	}
+	return stdout.String(), filepath.Join(cwd, "main.ts")
+}
+
+func TestRunJSONReportsRelatedInformation(t *testing.T) {
+	t.Parallel()
+
+	stdout, file := runMissingEffectContext(t, "json")
+	var output struct {
+		Diagnostics []struct {
+			Code               int32            `json:"code"`
+			Message            string           `json:"message"`
+			RelatedInformation []map[string]any `json:"relatedInformation"`
+		} `json:"diagnostics"`
+	}
+	if err := json.Unmarshal([]byte(stdout), &output); err != nil {
+		t.Fatalf("invalid JSON output: %v\n%s", err, stdout)
+	}
+	if len(output.Diagnostics) != 1 || output.Diagnostics[0].Code != 377004 {
+		t.Fatalf("expected one missingEffectContext diagnostic:\n%s", stdout)
+	}
+	want := []map[string]any{
+		{
+			"file": file, "start": float64(580), "length": float64(14),
+			"line": float64(21), "column": float64(3), "endLine": float64(21), "endColumn": float64(17),
+			"code": float64(377059), "message": "Adjusting this layer composition could provide the missing service.",
+		},
+		{
+			"file": file, "start": float64(264), "length": float64(7),
+			"line": float64(8), "column": float64(10), "endLine": float64(8), "endColumn": float64(17),
+			"code": float64(377060), "message": "This layer provides the missing service Fs.",
+		},
+	}
+	if got := output.Diagnostics[0].RelatedInformation; !reflect.DeepEqual(got, want) {
+		t.Fatalf("unexpected relatedInformation\ngot:  %#v\nwant: %#v", got, want)
+	}
+}
+
+func TestRunPrettyReportsRelatedInformation(t *testing.T) {
+	t.Parallel()
+
+	stdout, file := runMissingEffectContext(t, "pretty")
+	plain := regexp.MustCompile("\x1b\\[[0-9;]*m").ReplaceAllString(stdout, "")
+	want := file + ":22:3 - error effect(missingEffectContext): This Effect requires a service that is missing from the expected Effect context: `Db | Fs`.\n" +
+		"\n" +
+		"22   Effect.runPromise\n" +
+		"     ~~~~~~~~~~~~~~~~~\n" +
+		"\n" +
+		"  " + file + ":21:3 - Adjusting this layer composition could provide the missing service.\n" +
+		"    21   Effect.provide(live),\n" +
+		"         ~~~~~~~~~~~~~~\n" +
+		"\n" +
+		"  " + file + ":8:10 - This layer provides the missing service Fs.\n" +
+		"    8   static Default = Layer.effect(this, this.make)\n" +
+		"               ~~~~~~~\n" +
+		"\n" +
+		"Checked 1 files out of 1 files. \n"
+	if !strings.HasPrefix(plain, want) {
+		t.Fatalf("unexpected pretty output\ngot:\n%s\nwant prefix:\n%s", plain, want)
 	}
 }

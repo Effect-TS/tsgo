@@ -1,0 +1,15 @@
+==== /.src/package.json (0 layer exports) ====
+==== /.src/node_modules/@acme/ui/package.json (0 layer exports) ====
+==== /.src/node_modules/@acme/ui/dist/index.d.ts (0 layer exports) ====
+==== /.src/node_modules/@acme/ui/dist/Button.d.ts (0 layer exports) ====
+==== /.src/node_modules/@acme/ui/dist/HttpClient.d.ts (0 layer exports) ====
+==== /.src/node_modules/@acme/ui/dist/Hidden.d.ts (0 layer exports) ====
+==== /.src/node_modules/@acme/ui/dist/forms/index.d.ts (0 layer exports) ====
+==== /.src/node_modules/@acme/ui/dist/forms/TextInput.d.ts (0 layer exports) ====
+==== /.src/node_modules/@acme/icons/package.json (0 layer exports) ====
+==== /.src/node_modules/@acme/icons/dist/index.d.ts (0 layer exports) ====
+==== /.src/node_modules/@acme/icons/dist/Arrow.d.ts (0 layer exports) ====
+==== /.src/node_modules/@acme/kit/package.json (0 layer exports) ====
+==== /.src/node_modules/@acme/kit/dist/index.d.ts (0 layer exports) ====
+==== /.src/node_modules/@acme/kit/dist/Dialog.d.ts (0 layer exports) ====
+==== /.src/test.ts (0 layer exports) ====

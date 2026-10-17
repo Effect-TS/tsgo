@@ -30,13 +30,13 @@ func (tp *TypeParser) ContextTag(t *checker.Type) *Service {
 			if prop == nil {
 				continue
 			}
-			if prop.Flags&ast.SymbolFlagsProperty == 0 {
+			if ast.TSGetSymbolFlags(prop)&ast.SymbolFlagsProperty == 0 {
 				continue
 			}
-			if prop.Flags&ast.SymbolFlagsOptional != 0 {
+			if ast.TSGetSymbolFlags(prop)&ast.SymbolFlagsOptional != 0 {
 				continue
 			}
-			if prop.ValueDeclaration == nil {
+			if ast.TSGetSymbolValueDeclaration(prop) == nil {
 				continue
 			}
 			candidates = append(candidates, prop)
@@ -47,8 +47,8 @@ func (tp *TypeParser) ContextTag(t *checker.Type) *Service {
 		}
 
 		sort.SliceStable(candidates, func(i, j int) bool {
-			iHas := strings.Contains(candidates[i].Name, "TypeId")
-			jHas := strings.Contains(candidates[j].Name, "TypeId")
+			iHas := strings.Contains(ast.TSGetSymbolName(candidates[i]), "TypeId")
+			jHas := strings.Contains(ast.TSGetSymbolName(candidates[j]), "TypeId")
 			if iHas && !jHas {
 				return true
 			}

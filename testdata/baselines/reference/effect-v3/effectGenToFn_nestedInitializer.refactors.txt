@@ -1,0 +1,126 @@
+=== Refactor Inventory ===
+
+[R1] selection: "6:32-6:32"
+  Refactor 0: "Convert to Effect.fn" (refactor.rewrite.effect.effectGenToFn)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+
+[R2] selection: "10:15-10:15"
+  Refactor 0: "Convert to Effect.fn" (refactor.rewrite.effect.effectGenToFn)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+
+[R3] selection: "13:40-13:40"
+  Refactor 0: "Convert to Effect.fn(\"second\")" (refactor.rewrite.effect.effectGenToFn)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+
+[R4] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Convert to Effect.fn" ===
+
+--- file:///.src/effectGenToFn_nestedInitializer.ts ---
+// refactor: 6:32, 10:15, 13:40
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const outer = () => {
+  try {} catch ({ task = Effect.fn(function* () { return 1; }) }) {}
+}
+
+export const nested = {
+  task: () => Effect.gen(function*() { return 1 })
+}
+
+export const first = 1, second = () => Effect.gen(function*() { return first })
+
+
+=== [R1] Refactor 1: "Toggle return type annotation" ===
+
+--- file:///.src/effectGenToFn_nestedInitializer.ts ---
+// refactor: 6:32, 10:15, 13:40
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const outer = () => {
+  try {} catch ({ task = (): Effect.Effect<number, never, never> => Effect.gen(function*() { return 1 }) }) {}
+}
+
+export const nested = {
+  task: () => Effect.gen(function*() { return 1 })
+}
+
+export const first = 1, second = () => Effect.gen(function*() { return first })
+
+
+=== [R2] Refactor 0: "Convert to Effect.fn" ===
+
+--- file:///.src/effectGenToFn_nestedInitializer.ts ---
+// refactor: 6:32, 10:15, 13:40
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const outer = () => {
+  try {} catch ({ task = () => Effect.gen(function*() { return 1 }) }) {}
+}
+
+export const nested = {
+  task: Effect.fn(function* () { return 1; })
+}
+
+export const first = 1, second = () => Effect.gen(function*() { return first })
+
+
+=== [R2] Refactor 1: "Toggle return type annotation" ===
+
+--- file:///.src/effectGenToFn_nestedInitializer.ts ---
+// refactor: 6:32, 10:15, 13:40
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const outer = () => {
+  try {} catch ({ task = () => Effect.gen(function*() { return 1 }) }) {}
+}
+
+export const nested = {
+  task: (): Effect.Effect<number, never, never> => Effect.gen(function*() { return 1 })
+}
+
+export const first = 1, second = () => Effect.gen(function*() { return first })
+
+
+=== [R3] Refactor 0: "Convert to Effect.fn(\"second\")" ===
+
+--- file:///.src/effectGenToFn_nestedInitializer.ts ---
+// refactor: 6:32, 10:15, 13:40
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const outer = () => {
+  try {} catch ({ task = () => Effect.gen(function*() { return 1 }) }) {}
+}
+
+export const nested = {
+  task: () => Effect.gen(function*() { return 1 })
+}
+
+export const first = 1, second = Effect.fn("second")(function* () { return first; })
+
+
+=== [R3] Refactor 1: "Toggle return type annotation" ===
+
+--- file:///.src/effectGenToFn_nestedInitializer.ts ---
+// refactor: 6:32, 10:15, 13:40
+// @effect-v3
+import * as Effect from "effect/Effect"
+
+export const outer = () => {
+  try {} catch ({ task = () => Effect.gen(function*() { return 1 }) }) {}
+}
+
+export const nested = {
+  task: () => Effect.gen(function*() { return 1 })
+}
+
+export const first = 1, second = (): Effect.Effect<number, never, never> => Effect.gen(function*() { return first })
+

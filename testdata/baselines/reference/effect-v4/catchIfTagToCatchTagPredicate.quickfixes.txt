@@ -1,0 +1,190 @@
+=== Quick Fix Inventory ===
+
+[D1] (17:3-17:13) TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
+  Fix 0: "Disable catchIfTagToCatchTag for this line"
+  Fix 1: "Disable catchIfTagToCatchTag for entire file"
+  Fix 2: "Replace with Effect.catchTag"
+
+[D2] (21:24-21:34) TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
+  Fix 0: "Disable catchIfTagToCatchTag for this line"
+  Fix 1: "Disable catchIfTagToCatchTag for entire file"
+  Fix 2: "Replace with Effect.catchTag"
+
+[D3] (29:3-29:13) TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
+  Fix 0: "Disable catchIfTagToCatchTag for this line"
+  Fix 1: "Disable catchIfTagToCatchTag for entire file"
+  Fix 2: "Replace with Effect.catchTag"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchIfTagToCatchTag for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchIfTagToCatchTag for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.catchTag" ===
+
+--- file:///.src/catchIfTagToCatchTagPredicate.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics catchIfTagToCatchTag:suggestion
+import { Effect as Fx, Predicate } from "effect"
+import { isTagged as tagged } from "effect/Predicate"
+
+class NotFoundError {
+  readonly _tag = "NotFoundError"
+  constructor(readonly id: string) {}
+}
+class TimeoutError {
+  readonly _tag = "TimeoutError"
+}
+
+declare const program: Fx.Effect<string, NotFoundError | TimeoutError>
+
+export const direct = program.pipe(
+  Fx.catchTag("NotFoundError", error => Fx.succeed(error.id))
+)
+
+export const curried = Fx.catchIf(
+  program,
+  (error) => tagged("TimeoutError")(error),
+  () => Fx.succeed("timeout")
+)
+
+const tagAlias = tagged
+export const aliased = program.pipe(
+  Fx.catchIf((error) => tagAlias(error, "NotFoundError"), () => Fx.succeed("missing"))
+)
+
+const fake = { isTagged: (_value: unknown, _tag: string) => false }
+export const lookalike = program.pipe(
+  Fx.catchIf((error) => fake.isTagged(error, "NotFoundError"), () => Fx.succeed("fake"))
+)
+
+declare const expectedTag: "NotFoundError" | "TimeoutError"
+export const dynamicTag = program.pipe(
+  Fx.catchIf((error) => Predicate.isTagged(error, expectedTag), () => Fx.succeed("dynamic"))
+)
+
+declare const nested: Fx.Effect<string, {
+  readonly _tag: "OuterError"
+  readonly reason: NotFoundError | TimeoutError
+}>
+export const nestedSubject = nested.pipe(
+  Fx.catchIf((error) => tagged("NotFoundError")(error.reason), () => Fx.succeed("nested"))
+)
+
+
+=== [D2] Fix 0: "Disable catchIfTagToCatchTag for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable catchIfTagToCatchTag for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.catchTag" ===
+
+--- file:///.src/catchIfTagToCatchTagPredicate.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics catchIfTagToCatchTag:suggestion
+import { Effect as Fx, Predicate } from "effect"
+import { isTagged as tagged } from "effect/Predicate"
+
+class NotFoundError {
+  readonly _tag = "NotFoundError"
+  constructor(readonly id: string) {}
+}
+class TimeoutError {
+  readonly _tag = "TimeoutError"
+}
+
+declare const program: Fx.Effect<string, NotFoundError | TimeoutError>
+
+export const direct = program.pipe(
+  Fx.catchIf((error) => Predicate.isTagged(error, "NotFoundError"),
+    (error) => Fx.succeed(error.id))
+)
+
+export const curried = Fx.catchTag(program, "TimeoutError", () => Fx.succeed("timeout"))
+
+const tagAlias = tagged
+export const aliased = program.pipe(
+  Fx.catchIf((error) => tagAlias(error, "NotFoundError"), () => Fx.succeed("missing"))
+)
+
+const fake = { isTagged: (_value: unknown, _tag: string) => false }
+export const lookalike = program.pipe(
+  Fx.catchIf((error) => fake.isTagged(error, "NotFoundError"), () => Fx.succeed("fake"))
+)
+
+declare const expectedTag: "NotFoundError" | "TimeoutError"
+export const dynamicTag = program.pipe(
+  Fx.catchIf((error) => Predicate.isTagged(error, expectedTag), () => Fx.succeed("dynamic"))
+)
+
+declare const nested: Fx.Effect<string, {
+  readonly _tag: "OuterError"
+  readonly reason: NotFoundError | TimeoutError
+}>
+export const nestedSubject = nested.pipe(
+  Fx.catchIf((error) => tagged("NotFoundError")(error.reason), () => Fx.succeed("nested"))
+)
+
+
+=== [D3] Fix 0: "Disable catchIfTagToCatchTag for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable catchIfTagToCatchTag for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.catchTag" ===
+
+--- file:///.src/catchIfTagToCatchTagPredicate.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics catchIfTagToCatchTag:suggestion
+import { Effect as Fx, Predicate } from "effect"
+import { isTagged as tagged } from "effect/Predicate"
+
+class NotFoundError {
+  readonly _tag = "NotFoundError"
+  constructor(readonly id: string) {}
+}
+class TimeoutError {
+  readonly _tag = "TimeoutError"
+}
+
+declare const program: Fx.Effect<string, NotFoundError | TimeoutError>
+
+export const direct = program.pipe(
+  Fx.catchIf((error) => Predicate.isTagged(error, "NotFoundError"),
+    (error) => Fx.succeed(error.id))
+)
+
+export const curried = Fx.catchIf(
+  program,
+  (error) => tagged("TimeoutError")(error),
+  () => Fx.succeed("timeout")
+)
+
+const tagAlias = tagged
+export const aliased = program.pipe(
+  Fx.catchTag("NotFoundError", () => Fx.succeed("missing"))
+)
+
+const fake = { isTagged: (_value: unknown, _tag: string) => false }
+export const lookalike = program.pipe(
+  Fx.catchIf((error) => fake.isTagged(error, "NotFoundError"), () => Fx.succeed("fake"))
+)
+
+declare const expectedTag: "NotFoundError" | "TimeoutError"
+export const dynamicTag = program.pipe(
+  Fx.catchIf((error) => Predicate.isTagged(error, expectedTag), () => Fx.succeed("dynamic"))
+)
+
+declare const nested: Fx.Effect<string, {
+  readonly _tag: "OuterError"
+  readonly reason: NotFoundError | TimeoutError
+}>
+export const nestedSubject = nested.pipe(
+  Fx.catchIf((error) => tagged("NotFoundError")(error.reason), () => Fx.succeed("nested"))
+)
+

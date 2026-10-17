@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/asyncFunction.ts(5,23): warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)
 /.src/asyncFunction.ts(11,27): warning TS377081: This code declares an async function, consider representing this async control flow with Effect values and `Effect.gen`. effect(asyncFunction)

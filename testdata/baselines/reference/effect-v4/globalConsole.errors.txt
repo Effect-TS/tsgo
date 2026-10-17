@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/globalConsole.ts(5,1): warning TS377064: This code uses `console.log`, the corresponding Effect logging API is `Effect.log or Logger`. effect(globalConsole)
 /.src/globalConsole.ts(9,3): warning TS377064: This code uses `console.warn`, the corresponding Effect logging API is `Effect.logWarning or Logger`. effect(globalConsole)

@@ -28,11 +28,11 @@ func (tp *TypeParser) IsExpressionValueStableAtLocation(expression *ast.Node, lo
 		if expression.Text() == "undefined" {
 			return symbol != nil && symbol == tp.checker.GetGlobalSymbol("undefined", ast.SymbolFlagsValue, nil)
 		}
-		if symbol == nil || symbol.ValueDeclaration == nil || symbol.ValueDeclaration.Kind != ast.KindVariableDeclaration {
+		if symbol == nil || ast.TSGetSymbolValueDeclaration(symbol) == nil || ast.TSGetSymbolValueDeclaration(symbol).Kind != ast.KindVariableDeclaration {
 			return false
 		}
 
-		declarationNode := symbol.ValueDeclaration
+		declarationNode := ast.TSGetSymbolValueDeclaration(symbol)
 		declaration := declarationNode.AsVariableDeclaration()
 		if declaration == nil || declaration.Initializer == nil || declarationNode.Parent == nil || declarationNode.Parent.Kind != ast.KindVariableDeclarationList {
 			return false

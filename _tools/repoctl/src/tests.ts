@@ -14,6 +14,11 @@ export const runTests = Effect.fnUntraced(function*(repositoryRoot: string) {
     CGO_ENABLED: "0",
     GOWORK: "off"
   })
+  yield* Console.log("Running custom lint plugin tests")
+  yield* runCommand("go", path.join(repositoryRoot, "_tools", "customlint"), ["test", "./..."], false, {
+    CGO_ENABLED: "0",
+    GOWORK: "off"
+  })
   yield* Console.log("Running CLI tests")
   yield* runCommand("pnpm", path.join(repositoryRoot, "_packages", "tsgo"), ["exec", "vitest", "run"])
 })

@@ -31,10 +31,10 @@ export class UserRepo extends Context.Service<UserRepo, { readonly find: () => s
 		t.Fatal("expected v4 service type to parse")
 		return
 	}
-	if service.Identifier == nil {
+	if service.identifier == nil {
 		t.Fatal("expected service identifier type")
 	}
-	if service.Shape == nil {
+	if service.shape == nil {
 		t.Fatal("expected service shape type")
 	}
 	if tp.ContextTag(classType) != nil {
@@ -65,10 +65,10 @@ export class Config extends Context.Tag("Config")<Config, { readonly port: numbe
 		t.Fatal("expected v3 Context.Tag type to parse")
 		return
 	}
-	if contextTag.Identifier == nil {
+	if contextTag.identifier == nil {
 		t.Fatal("expected context tag identifier type")
 	}
-	if contextTag.Shape == nil {
+	if contextTag.shape == nil {
 		t.Fatal("expected context tag shape type")
 	}
 	if tp.ServiceType(classType) != nil {
@@ -100,7 +100,8 @@ func findClassTypeByName(t *testing.T, c *checker.Checker, sf *ast.SourceFile, c
 		t.Fatalf("class %q not found", className)
 	}
 
-	classSym := c.GetSymbolAtLocation(foundName)
+	tp := NewTypeParser(c.Program(), c)
+	classSym := tp.GetSymbolAtLocation(foundName)
 	if classSym == nil {
 		t.Fatalf("symbol for class %q not found", className)
 	}

@@ -60,9 +60,9 @@ func runEffectFnIifeFix(ctx *fixable.Context) []ls.CodeAction {
 
 			// If pipe arguments exist, wrap with .pipe(...)
 			replacementNode := genCallNode
-			if len(result.PipeArguments) > 0 {
-				clonedArgs := make([]*ast.Node, len(result.PipeArguments))
-				for i, arg := range result.PipeArguments {
+			if result.PipeArguments.Len() > 0 {
+				clonedArgs := make([]*ast.Node, result.PipeArguments.Len())
+				for i, arg := range result.PipeArguments.All() {
 					clonedArgs[i] = tracker.DeepCloneNode(arg)
 				}
 				pipeAccess := tracker.NewPropertyAccessExpression(genCallNode, nil, tracker.NewIdentifier("pipe"), ast.NodeFlagsNone)

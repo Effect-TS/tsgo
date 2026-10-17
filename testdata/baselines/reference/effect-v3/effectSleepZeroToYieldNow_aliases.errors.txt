@@ -1,0 +1,83 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/effectSleepZeroToYieldNow_aliases.ts(8,30): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow_aliases.ts(9,32): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow_aliases.ts(10,35): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow_aliases.ts(11,32): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow_aliases.ts(12,34): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow_aliases.ts(13,33): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow_aliases.ts(14,38): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow_aliases.ts(15,33): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow_aliases.ts(16,36): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow_aliases.ts(17,28): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow_aliases.ts(19,30): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow_aliases.ts(21,33): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow_aliases.ts(23,36): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow_aliases.ts(25,31): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+/.src/effectSleepZeroToYieldNow_aliases.ts(27,31): suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+
+
+==== /.src/effectSleepZeroToYieldNow_aliases.ts (15 errors) ====
+    // @effect-v3
+    import { Effect as E, Duration as D } from "effect"
+    import * as EffectNamespace from "effect/Effect"
+    import * as DurationNamespace from "effect/Duration"
+    import * as Package from "effect"
+    import { sleep as namedSleep } from "effect/Effect"
+    
+    export const renamedEffect = E.sleep(0)
+                                 ~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const renamedDuration = E.sleep(D.zero)
+                                   ~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const renamedConstructor = E.sleep(D.seconds(0))
+                                      ~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const effectNamespace = EffectNamespace.sleep(0)
+                                   ~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const durationNamespace = EffectNamespace.sleep(DurationNamespace.zero)
+                                     ~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const packageNamespace = Package.Effect.sleep(Package.Duration.seconds(0))
+                                    ~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const parenthesizedReceiver = (E).sleep(0)
+                                         ~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const assertedReceiver = (E as typeof E).sleep(0)
+                                    ~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const parenthesizedCallee = (E.sleep)(0)
+                                       ~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    export const namedImport = namedSleep(0)
+                               ~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    const sleepAlias = E.sleep
+    export const constantAlias = sleepAlias(0)
+                                 ~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    const renamedSleepAlias = namedSleep
+    export const namedImportAlias = renamedSleepAlias(0)
+                                    ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    const moduleAlias = E
+    export const constantModuleAlias = moduleAlias.sleep(0)
+                                       ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    const effectGetter = { get module() { console.log("evaluated"); return E } }
+    export const getterReceiver = effectGetter.module.sleep(0)
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    const getEffect = () => { console.log("evaluated"); return E }
+    export const calledReceiver = getEffect().sleep(0)
+                                  ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377142: Consider `Effect.yieldNow` for cooperative yielding instead of sleeping for zero duration. effect(effectSleepZeroToYieldNow)
+    const durationGetter = { get module() { console.log("evaluated"); return D } }
+    export const getterDurationReceiver = E.sleep(durationGetter.module.zero)
+    const getDuration = () => { console.log("evaluated"); return D }
+    export const calledDurationReceiver = E.sleep(getDuration().seconds(0))
+    

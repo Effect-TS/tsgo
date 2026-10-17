@@ -25,3 +25,5 @@ export class ExpectedServiceIdentifier
 {}
 
 export class ErrorA extends Data.TaggedError("ErrorA")<{}> {}
+
+export default class extends Data.TaggedError("AnonymousDefaultError")<{}> {}

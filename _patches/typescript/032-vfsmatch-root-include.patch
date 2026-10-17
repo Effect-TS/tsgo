@@ -1,0 +1,38 @@
+diff --git a/tsc/internal/vfs/vfsmatch/vfsmatch.go b/tsc/internal/vfs/vfsmatch/vfsmatch.go
+index 882d83bb0..d9b61944a 100644
+--- a/tsc/internal/vfs/vfsmatch/vfsmatch.go
++++ b/tsc/internal/vfs/vfsmatch/vfsmatch.go
+@@ -51,7 +51,7 @@ func getIncludeBasePath(absolute string) string {
+ 		if !tspath.HasExtension(absolute) {
+ 			return absolute
+ 		} else {
+-			return tspath.RemoveTrailingDirectorySeparator(tspath.GetDirectoryPath(absolute))
++			return tspath.GetDirectoryPath(absolute)
+ 		}
+ 	}
+ 	return absolute[:max(strings.LastIndex(absolute[:wildcardOffset], string(tspath.DirectorySeparator)), tspath.GetRootLength(absolute))]
+diff --git a/tsc/internal/vfs/vfsmatch/root_include_test.go b/tsc/internal/vfs/vfsmatch/root_include_test.go
+new file mode 100644
+index 00000000..57ede03c
+--- /dev/null
++++ b/tsc/internal/vfs/vfsmatch/root_include_test.go
+@@ -0,0 +1,19 @@
++package vfsmatch
++
++import (
++	"slices"
++	"testing"
++
++	"github.com/microsoft/TypeScript/tsc/internal/tspath"
++)
++
++func TestIncludeFileInRootDirectory(t *testing.T) {
++	for _, root := range []tspath.RootedDirectoryPath{"/", "C:/"} {
++		t.Run(root.AsString(), func(t *testing.T) {
++			got := getBasePaths(root, []string{"index.ts"}, tspath.CaseSensitive)
++			if !slices.Equal(got, []tspath.RootedDirectoryPath{root}) {
++				t.Fatalf("got %v, want [%s]", got, root)
++			}
++		})
++	}
++}

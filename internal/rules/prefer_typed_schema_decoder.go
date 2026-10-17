@@ -68,19 +68,20 @@ func AnalyzePreferTypedSchemaDecoder(tp *typeparser.TypeParser, c *checker.Check
 	var matches []PreferTypedSchemaDecoderMatch
 	handledDecoderNames := make(map[*ast.Node]struct{})
 
-	for _, flow := range tp.PipingFlows(sf, false) {
-		inputNode := flow.Subject.Node
-		inputType := flow.Subject.OutType
-		for _, transformation := range flow.Transformations {
+	for _, flow := range tp.PipingFlows(sf, false).All() {
+		for i, transformation := range flow.Transformations().All() {
 			callee, schema := schemaDecoderTransformation(transformation)
-			if callee != nil && schema != nil {
-				if match := analyzeTypedSchemaDecoderApplication(tp, c, sf, callee, schema, inputNode, inputType); match != nil {
-					matches = append(matches, *match)
-					handledDecoderNames[match.DecoderName] = struct{}{}
-				}
+			if callee == nil || schema == nil {
+				continue
 			}
-			inputNode = nil
-			inputType = transformation.OutType
+			var inputNode *ast.Node
+			if i == 0 {
+				inputNode = flow.Subject().Node()
+			}
+			if match := analyzeTypedSchemaDecoderApplication(tp, c, sf, callee, schema, inputNode, flow.TransformationInputType(i)); match != nil {
+				matches = append(matches, *match)
+				handledDecoderNames[match.DecoderName] = struct{}{}
+			}
 		}
 	}
 
@@ -115,20 +116,27 @@ func AnalyzePreferTypedSchemaDecoder(tp *typeparser.TypeParser, c *checker.Check
 }
 
 func schemaDecoderTransformation(transformation typeparser.PipingFlowTransformation) (callee *ast.Node, schema *ast.Node) {
-	if transformation.Callee == nil || len(transformation.Args) == 0 {
+	if transformation.Callee() == nil || transformation.Args().Len() == 0 {
 		return nil, nil
 	}
-	return transformation.Callee, transformation.Args[0]
+	return transformation.Callee(), transformation.Args().At(0)
 }
 
 func analyzeTypedSchemaDecoderApplication(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, callee, schema, inputNode *ast.Node, inputType *checker.Type) *PreferTypedSchemaDecoderMatch {
+	nameNode := schemaDecoderNameNode(callee)
+	if nameNode == nil {
+		return nil
+	}
+	if tp.NodeCannotBeEffectLibraryType(schema) {
+		return nil
+	}
 	unknownName, typedName := matchUnknownSchemaDecoder(tp, callee)
 	if unknownName == "" {
 		return nil
 	}
 
 	schemaType := tp.EffectSchemaTypes(tp.GetTypeAtLocation(schema))
-	if schemaType == nil || schemaType.E == nil {
+	if schemaType == nil || schemaType.E() == nil {
 		return nil
 	}
 	if inputType == nil && inputNode != nil {
@@ -141,17 +149,13 @@ func analyzeTypedSchemaDecoderApplication(tp *typeparser.TypeParser, c *checker.
 	assignableType := inputType
 	if inputNode != nil {
 		if literal := ast.SkipParentheses(inputNode); literal != nil && (literal.Kind == ast.KindObjectLiteralExpression || literal.Kind == ast.KindArrayLiteralExpression) {
-			assignableType = checker.Checker_checkExpressionWithContextualType(c, literal, schemaType.E, nil, checker.CheckModeTypeOnly)
+			assignableType = checker.Checker_checkExpressionWithContextualType(c, literal, schemaType.E(), nil, checker.CheckModeTypeOnly)
 		}
 	}
-	if assignableType == nil || !checker.Checker_isTypeAssignableTo(c, assignableType, schemaType.E) {
+	if assignableType == nil || !checker.Checker_isTypeAssignableTo(c, assignableType, schemaType.E()) {
 		return nil
 	}
 
-	nameNode := schemaDecoderNameNode(callee)
-	if nameNode == nil {
-		return nil
-	}
 	return &PreferTypedSchemaDecoderMatch{
 		SourceFile:  sf,
 		Location:    scanner.GetErrorRangeForNode(sf, nameNode),

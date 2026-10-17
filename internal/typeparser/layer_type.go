@@ -8,17 +8,23 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
-var effectLayerModuleDescriptor = newPackageSourceFileDescriptor("effect", isLayerTypeSourceFile)
+var effectLayerModuleDescriptor = newPackageSourceFileDescriptor(moduleDescriptorLayer, "effect", isLayerTypeSourceFile)
 
 // LayerTypeId is the property key for Layer's variance struct.
 const LayerTypeId = "~effect/Layer"
 
 // Layer represents parsed Layer<ROut, E, RIn> type parameters.
 type Layer struct {
-	ROut *checker.Type // Provided services (contravariant)
-	E    *checker.Type // Error type (covariant)
-	RIn  *checker.Type // Required services (covariant)
+	rOut *checker.Type // Provided services (contravariant)
+	e    *checker.Type // Error type (covariant)
+	rIn  *checker.Type // Required services (covariant)
 }
+
+func (r Layer) ROut() *checker.Type { return r.rOut }
+
+func (r Layer) E() *checker.Type { return r.e }
+
+func (r Layer) RIn() *checker.Type { return r.rIn }
 
 // parseLayerVarianceStruct extracts ROut, E, RIn from a Layer variance struct type.
 func (tp *TypeParser) parseLayerVarianceStruct(t *checker.Type) *Layer {
@@ -37,7 +43,7 @@ func (tp *TypeParser) parseLayerVarianceStruct(t *checker.Type) *Layer {
 		return nil
 	}
 
-	return &Layer{ROut: rOut, E: e, RIn: rIn}
+	return &Layer{rOut: rOut, e: e, rIn: rIn}
 }
 
 // LayerType parses a Layer type and extracts ROut, E, RIn parameters.
@@ -69,13 +75,13 @@ func (tp *TypeParser) LayerType(t *checker.Type) *Layer {
 			if prop == nil {
 				continue
 			}
-			if prop.Flags&ast.SymbolFlagsProperty == 0 {
+			if ast.TSGetSymbolFlags(prop)&ast.SymbolFlagsProperty == 0 {
 				continue
 			}
-			if prop.Flags&ast.SymbolFlagsOptional != 0 {
+			if ast.TSGetSymbolFlags(prop)&ast.SymbolFlagsOptional != 0 {
 				continue
 			}
-			if prop.ValueDeclaration == nil {
+			if ast.TSGetSymbolValueDeclaration(prop) == nil {
 				continue
 			}
 			candidates = append(candidates, prop)
@@ -87,8 +93,8 @@ func (tp *TypeParser) LayerType(t *checker.Type) *Layer {
 
 		// Sort so properties containing "LayerTypeId" come first (optimization heuristic)
 		sort.SliceStable(candidates, func(i, j int) bool {
-			iHas := strings.Contains(candidates[i].Name, "LayerTypeId")
-			jHas := strings.Contains(candidates[j].Name, "LayerTypeId")
+			iHas := strings.Contains(ast.TSGetSymbolName(candidates[i]), "LayerTypeId")
+			jHas := strings.Contains(ast.TSGetSymbolName(candidates[j]), "LayerTypeId")
 			if iHas && !jHas {
 				return true
 			}

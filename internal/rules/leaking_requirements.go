@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/effect-ts/tsgo/etscore"
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
@@ -94,7 +95,7 @@ var LeakingRequirements = rule.Rule{
 					continue
 				}
 
-				leaked := parseLeakedRequirements(ctx.TypeParser, ctx.Checker, service.Shape, node)
+				leaked := parseLeakedRequirements(ctx.TypeParser, ctx.Checker, service.Shape(), node)
 				if len(leaked) > 0 {
 					leaked = filterExpectedLeakingRequirements(ctx.Checker, ttc.reportNode, leaked)
 				}
@@ -211,7 +212,7 @@ func parseLeakedRequirements(tp *typeparser.TypeParser, c *checker.Checker, serv
 	}
 
 	memory := make(map[string]*checker.Type)
-	var sharedRequirementsKeys []string
+	var sharedRequirementsKeys readonly.Slice[string]
 	sharedInitialized := false
 	effectMembers := 0
 
@@ -243,7 +244,7 @@ func parseLeakedRequirements(tp *typeparser.TypeParser, c *checker.Checker, serv
 
 		effect := tp.EffectType(servicePropertyType)
 		if effect != nil {
-			effectContextType = effect.R
+			effectContextType = effect.R()
 		} else {
 			// Try call signature: if exactly 1 call signature, parse return type as Effect
 			sigs := c.GetSignaturesOfType(servicePropertyType, checker.SignatureKindCall)
@@ -252,7 +253,7 @@ func parseLeakedRequirements(tp *typeparser.TypeParser, c *checker.Checker, serv
 				if retType != nil {
 					retEffect := tp.EffectType(retType)
 					if retEffect != nil {
-						effectContextType = retEffect.R
+						effectContextType = retEffect.R()
 					}
 				}
 			}
@@ -266,25 +267,25 @@ func parseLeakedRequirements(tp *typeparser.TypeParser, c *checker.Checker, serv
 		result := tp.AppendToUniqueTypesMap(memory, effectContextType, shouldExclude)
 
 		if !sharedInitialized {
-			sharedRequirementsKeys = result.AllIndexes
+			sharedRequirementsKeys = result.AllIndexes()
 			sharedInitialized = true
 		} else {
 			// Intersect with current keys
-			sharedRequirementsKeys = intersectStringSlices(sharedRequirementsKeys, result.AllIndexes)
-			if len(sharedRequirementsKeys) == 0 {
+			sharedRequirementsKeys = intersectStringSlices(sharedRequirementsKeys, result.AllIndexes())
+			if sharedRequirementsKeys.Len() == 0 {
 				return nil
 			}
 		}
 	}
 
 	// Need at least 2 effect members for the heuristic
-	if !sharedInitialized || len(sharedRequirementsKeys) == 0 || effectMembers < 2 {
+	if !sharedInitialized || sharedRequirementsKeys.Len() == 0 || effectMembers < 2 {
 		return nil
 	}
 
 	// Collect the shared requirement types, filtering out those with @effect-leakable-service
 	var leaked []*checker.Type
-	for _, key := range sharedRequirementsKeys {
+	for _, key := range sharedRequirementsKeys.All() {
 		t := memory[key]
 		if t == nil {
 			continue
@@ -307,14 +308,14 @@ func hasLeakableServiceAnnotation(c *checker.Checker, t *checker.Type) bool {
 	}
 
 	// Resolve aliases
-	if sym.Flags&ast.SymbolFlagsAlias != 0 {
+	if ast.TSGetSymbolFlags(sym)&ast.SymbolFlagsAlias != 0 {
 		resolved := c.GetAliasedSymbol(sym)
 		if resolved != nil {
 			sym = resolved
 		}
 	}
 
-	for _, decl := range sym.Declarations {
+	for _, decl := range ast.TSGetSymbolDeclarations(sym) {
 		if decl == nil {
 			continue
 		}
@@ -338,16 +339,16 @@ func hasLeakableServiceAnnotation(c *checker.Checker, t *checker.Type) bool {
 }
 
 // intersectStringSlices returns the elements that appear in both slices.
-func intersectStringSlices(a, b []string) []string {
-	set := make(map[string]bool, len(b))
-	for _, s := range b {
+func intersectStringSlices(a, b readonly.Slice[string]) readonly.Slice[string] {
+	set := make(map[string]bool, b.Len())
+	for _, s := range b.All() {
 		set[s] = true
 	}
 	var result []string
-	for _, s := range a {
+	for _, s := range a.All() {
 		if set[s] {
 			result = append(result, s)
 		}
 	}
-	return result
+	return readonly.New(result)
 }

@@ -1,0 +1,12 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+
+
+==== /.src/preferSchemaTaggedError_default.ts (0 errors) ====
+    import { Data } from "effect"
+    
+    export class DefaultOffError extends Data.TaggedError("DefaultOffError")<{
+      message: string
+    }> {}
+    

@@ -172,7 +172,7 @@ func resolvedSymbolType(c *checker.Checker, symbol *ast.Symbol, location *ast.No
 		return nil
 	}
 
-	if symbol.Flags&ast.SymbolFlagsType != 0 {
+	if ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsType != 0 {
 		if declaredType := c.GetDeclaredTypeOfSymbol(symbol); declaredType != nil {
 			return declaredType
 		}
@@ -182,7 +182,7 @@ func resolvedSymbolType(c *checker.Checker, symbol *ast.Symbol, location *ast.No
 }
 
 func resolveAliasSymbol(c *checker.Checker, symbol *ast.Symbol) *ast.Symbol {
-	for c != nil && symbol != nil && symbol.Flags&ast.SymbolFlagsAlias != 0 {
+	for c != nil && symbol != nil && ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsAlias != 0 {
 		symbol = c.GetAliasedSymbol(symbol)
 	}
 	return symbol
@@ -197,7 +197,7 @@ func isSelfReferentialTypeAliasReference(symbol *ast.Symbol, location *ast.Node)
 		if current.Kind != ast.KindTypeAliasDeclaration {
 			continue
 		}
-		if slices.Contains(symbol.Declarations, current) {
+		if slices.Contains(ast.TSGetSymbolDeclarations(symbol), current) {
 			return true
 		}
 	}

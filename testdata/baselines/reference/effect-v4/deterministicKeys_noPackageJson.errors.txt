@@ -1,0 +1,35 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/app/src/services/test.ts(4,65): error TS377049: This key does not match the deterministic key for this declaration. The expected key is `services/test/MyService`. effect(deterministicKeys)
+/app/src/services/test.ts(6,47): error TS377049: This key does not match the deterministic key for this declaration. The expected key is `MyError`. effect(deterministicKeys)
+
+
+==== /app/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "keyPatterns": [
+              { "target": "service", "pattern": "default" },
+              { "target": "error", "pattern": "identifier" }
+            ]
+          }
+        ]
+      }
+    }
+    
+
+==== /app/src/services/test.ts (2 errors) ====
+    // @effect-diagnostics deterministicKeys:error
+    import { Context, Data } from "effect"
+    
+    export class MyService extends Context.Service<MyService, {}>()("WrongServiceKey") {}
+                                                                    ~~~~~~~~~~~~~~~~~
+!!! error TS377049: This key does not match the deterministic key for this declaration. The expected key is `services/test/MyService`. effect(deterministicKeys)
+    
+    export class MyError extends Data.TaggedError("WrongErrorKey")<{}> {}
+                                                  ~~~~~~~~~~~~~~~
+!!! error TS377049: This key does not match the deterministic key for this declaration. The expected key is `MyError`. effect(deterministicKeys)
+    

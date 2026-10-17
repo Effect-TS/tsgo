@@ -780,7 +780,7 @@ const resolveOxlintComponent = Effect.fnUntraced(function*(repositoryRoot: strin
   const gitHead = yield* resolveRemoteTag(
     repositoryRoot,
     "https://github.com/oxc-project/oxc.git",
-    `apps_v${npmVersion}`
+    `oxlint_v${npmVersion}`
   )
   return { npmVersion, gitHead }
 })

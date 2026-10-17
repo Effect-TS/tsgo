@@ -11,33 +11,31 @@ import (
 // from checker panics (e.g. nil symbol dereferences on certain declaration
 // nodes) and returns nil.
 func (tp TypeParser) GetTypeAtLocation(node *ast.Node) (result *checker.Type) {
-	if tp.checker == nil || node == nil {
+	// The guards are syntactic, so rejected nodes never touch the cache.
+	if tp.checker == nil || node == nil || !isTypeAtLocationCandidate(node) {
 		return nil
 	}
 
-	return Cached(&tp.links.TypeAtLocation, node, func() *checker.Type {
+	return CachedNode(&tp.links.TypeAtLocation, node, func() *checker.Type {
 		return tp.getTypeAtLocationUncached(node)
 	})
 }
 
-func (tp TypeParser) getTypeAtLocationUncached(node *ast.Node) (result *checker.Type) {
-	c := tp.checker
-	if node == nil {
-		return nil
-	}
-
+// isTypeAtLocationCandidate reports whether GetTypeAtLocation may ask the
+// checker for the type of node.
+func isTypeAtLocationCandidate(node *ast.Node) bool {
 	if node.Parent != nil {
 		if ast.IsJsxTagName(node) {
-			return nil
+			return false
 		}
 
 		if ast.IsJsxAttribute(node.Parent) && node.Parent.Name() == node {
-			return nil
+			return false
 		}
 	}
 
 	if !ast.IsExpression(node) && !ast.IsTypeNode(node) && !ast.IsDeclaration(node) {
-		return nil
+		return false
 	}
 
 	// ImportClause passes the IsDeclaration check above, but a clause without a
@@ -46,7 +44,7 @@ func (tp TypeParser) getTypeAtLocationUncached(node *ast.Node) (result *checker.
 	// nil symbol. The clause type is never useful to rules: its bindings are
 	// visited as separate nodes and carry the actual types.
 	if node.Kind == ast.KindImportClause {
-		return nil
+		return false
 	}
 
 	// Tagged templates pass interpolation values directly to the tag function;
@@ -54,27 +52,34 @@ func (tp TypeParser) getTypeAtLocationUncached(node *ast.Node) (result *checker.
 	// TemplateExpression forces a normally unreachable checking path that can
 	// emit TS2731 for symbol-typed interpolations as a side effect.
 	if node.Kind == ast.KindTemplateExpression && node.Parent != nil && ast.IsTaggedTemplateExpression(node.Parent) {
-		return nil
+		return false
 	}
 
 	// A meta property used as a call callee (import.defer(...)) has no type of
 	// its own and the checker debug-asserts when asked (checkMetaProperty); the
 	// enclosing call expression carries the meaningful type.
 	if node.Kind == ast.KindMetaProperty && node.Parent != nil && ast.IsCallExpression(node.Parent) && node.Parent.Expression() == node {
-		return nil
+		return false
 	}
 
 	if isInsideTypeOnlyHeritageExpression(node) {
-		return nil
+		return false
 	}
 
+	return true
+}
+
+func (tp TypeParser) getTypeAtLocationUncached(node *ast.Node) (result *checker.Type) {
 	defer func() {
 		if r := recover(); r != nil {
 			result = nil
 		}
 	}()
 
-	return c.GetTypeAtLocation(node)
+	if t := tp.checkedExpressionType(node); t != nil {
+		return t
+	}
+	return tp.checker.GetTypeAtLocation(node)
 }
 
 // isInsideTypeOnlyHeritageExpression reports whether node is an

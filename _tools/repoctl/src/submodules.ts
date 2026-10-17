@@ -3,8 +3,8 @@ import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
-import * as ChildProcess from "effect/unstable/process/ChildProcess"
-import * as ChildProcessSpawner from "effect/unstable/process/ChildProcessSpawner"
+import { ChildProcess } from "effect/process"
+import { ChildProcessSpawner } from "effect/process"
 import { runCommand } from "./process.ts"
 import { type ComponentName, getComponent, readUpstream, type TypeScriptSource } from "./upstream.ts"
 
@@ -277,7 +277,10 @@ export const generateSubmoduleArtifacts = Effect.fnUntraced(function*(
     "-loc",
     "./loc_generated.go",
     "-locdir",
-    "./loc"
+    "./loc",
+    ...(compiler.provider === "typescript"
+      ? ["-locproject", "../../../tools/LocProject.json", "-locsource", "./diagnosticMessages.generated.json"]
+      : [])
   ], false, { GOWORK: "off" })
   yield* Console.log("Generating shims")
   yield* runCommand("go", path.join(repositoryRoot, "_tools", "gen_shims"), [

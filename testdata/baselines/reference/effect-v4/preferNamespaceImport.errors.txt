@@ -1,0 +1,85 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/test.ts(5,10): warning TS377146: 'Effect' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Effect from "effect/Effect"' instead. effect(preferNamespaceImport)
+/.src/test.ts(6,10): warning TS377146: 'Predicate' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as P from "effect/Predicate"' instead. effect(preferNamespaceImport)
+/.src/test.ts(7,10): warning TS377146: 'HttpClient' is imported by name from 'effect/http', but namespaceImportPackages expects a namespace import. Use 'import * as HttpClient from "effect/http/HttpClient"' instead. effect(preferNamespaceImport)
+/.src/test.ts(8,10): warning TS377146: 'TestClock' is imported by name from 'effect/testing', but namespaceImportPackages expects a namespace import. Use 'import * as TestClock from "effect/testing/TestClock"' instead. effect(preferNamespaceImport)
+/.src/test.ts(11,10): warning TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+/.src/test.ts(12,10): warning TS377146: 'some' is imported by name from 'effect/Option', but namespaceImportPackages expects a namespace import. Use 'import * as Option from "effect/Option"' instead. effect(preferNamespaceImport)
+/.src/test.ts(15,15): warning TS377146: 'Layer' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import type * as Layer from "effect/Layer"' instead. effect(preferNamespaceImport)
+/.src/test.ts(16,10): warning TS377146: 'Context' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import type * as Context from "effect/Context"' instead. effect(preferNamespaceImport)
+/.src/test.ts(17,15): warning TS377146: 'Exit' is imported by name from 'effect/Exit', but namespaceImportPackages expects a namespace import. Use 'import type * as Exit from "effect/Exit"' instead. effect(preferNamespaceImport)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "namespaceImportPackages": ["effect"]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/package.json (0 errors) ====
+    { "name": "@effect/test-app", "version": "1.0.0" }
+    
+
+==== /.src/test.ts (9 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferNamespaceImport:warning
+    
+    // reported: namespace re-exported by the barrel
+    import { Effect } from "effect"
+             ~~~~~~
+!!! warning TS377146: 'Effect' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Effect from "effect/Effect"' instead. effect(preferNamespaceImport)
+    import { Predicate as P } from "effect"
+             ~~~~~~~~~~~~~~
+!!! warning TS377146: 'Predicate' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as P from "effect/Predicate"' instead. effect(preferNamespaceImport)
+    import { HttpClient } from "effect/http"
+             ~~~~~~~~~~
+!!! warning TS377146: 'HttpClient' is imported by name from 'effect/http', but namespaceImportPackages expects a namespace import. Use 'import * as HttpClient from "effect/http/HttpClient"' instead. effect(preferNamespaceImport)
+    import { TestClock } from "effect/testing"
+             ~~~~~~~~~
+!!! warning TS377146: 'TestClock' is imported by name from 'effect/testing', but namespaceImportPackages expects a namespace import. Use 'import * as TestClock from "effect/testing/TestClock"' instead. effect(preferNamespaceImport)
+    
+    // reported: declared in the imported module
+    import { map } from "effect/Array"
+             ~~~
+!!! warning TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+    import { some as makeSome } from "effect/Option"
+             ~~~~~~~~~~~~~~~~
+!!! warning TS377146: 'some' is imported by name from 'effect/Option', but namespaceImportPackages expects a namespace import. Use 'import * as Option from "effect/Option"' instead. effect(preferNamespaceImport)
+    
+    // reported: type-only imports
+    import type { Layer } from "effect"
+                  ~~~~~
+!!! warning TS377146: 'Layer' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import type * as Layer from "effect/Layer"' instead. effect(preferNamespaceImport)
+    import { type Context } from "effect"
+             ~~~~~~~~~~~~
+!!! warning TS377146: 'Context' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import type * as Context from "effect/Context"' instead. effect(preferNamespaceImport)
+    import type { Exit } from "effect/Exit"
+                  ~~~~
+!!! warning TS377146: 'Exit' is imported by name from 'effect/Exit', but namespaceImportPackages expects a namespace import. Use 'import type * as Exit from "effect/Exit"' instead. effect(preferNamespaceImport)
+    
+    // not reported: named re-export with topLevelNamedReexports "ignore"
+    import { pipe } from "effect"
+    import { flow as composeFlow } from "effect"
+    
+    // not reported: already namespace imports
+    import * as Duration from "effect/Duration"
+    import * as Schedule from "effect/Schedule"
+    
+    // not reported: packages outside namespaceImportPackages
+    import { it } from "@effect/vitest"
+    import * as VitestUtils from "@effect/vitest/utils"
+    
+    export const usages = [
+      Effect, P, HttpClient, TestClock, map, makeSome, pipe, composeFlow, Duration, Schedule, it, VitestUtils
+    ]
+    export type Usages = [Layer.Layer<never>, Context.Context<never>, Exit<void>]
+    

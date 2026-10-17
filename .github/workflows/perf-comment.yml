@@ -1,0 +1,78 @@
+name: Perf Comment
+
+# Runs in the base repository context with a write token, so it must never check out or execute PR code;
+# the perf-report artifact is treated as untrusted data.
+on:
+  workflow_run:
+    workflows: [Perf]
+    types: [completed]
+
+permissions: {}
+
+jobs:
+  comment:
+    name: Post perf report
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion != 'cancelled'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      pull-requests: write
+
+    steps:
+      - name: Download perf report
+        id: download
+        continue-on-error: true
+        uses: actions/download-artifact@v8
+        with:
+          name: perf-report
+          path: ${{ runner.temp }}/perf-report
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+
+      - name: Upsert PR comment
+        if: steps.download.outcome == 'success'
+        working-directory: ${{ runner.temp }}/perf-report
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          marker='<!-- effect-tsgo-perf -->'
+
+          pr="$(head -n 1 pr-number.txt)"
+          if ! [[ "$pr" =~ ^[0-9]+$ ]]; then
+            echo "::error::Invalid PR number in artifact"
+            exit 1
+          fi
+          head_sha="$(head -n 1 head-sha.txt)"
+          if ! [[ "$head_sha" =~ ^[0-9a-f]{40}$ ]] || [ "$head_sha" != "$RUN_HEAD_SHA" ]; then
+            echo "::error::Artifact head SHA does not match the workflow run"
+            exit 1
+          fi
+          current_sha="$(gh api "repos/$REPO/pulls/$pr" --jq '.head.sha')"
+          if [ "$current_sha" != "$RUN_HEAD_SHA" ]; then
+            echo "PR #$pr head moved to $current_sha; skipping stale report for $RUN_HEAD_SHA"
+            exit 0
+          fi
+
+          size="$(stat -c %s report.md)"
+          if [ "$size" -ge 65000 ]; then
+            echo "::error::Report is $size bytes, refusing to post"
+            exit 1
+          fi
+          if [ "$(head -c "${#marker}" report.md)" != "$marker" ]; then
+            echo "::error::Report does not start with the perf marker"
+            exit 1
+          fi
+
+          comment_ids="$(gh api --paginate "repos/$REPO/issues/$pr/comments" \
+            --jq ".[] | select(.user.login == \"github-actions[bot]\" and (.body | startswith(\"$marker\"))) | .id")"
+          comment_id="${comment_ids%%$'\n'*}"
+          if [ -n "$comment_id" ]; then
+            gh api --method PATCH "repos/$REPO/issues/comments/$comment_id" -F body=@report.md > /dev/null
+            echo "Updated comment $comment_id on PR #$pr"
+          else
+            gh api --method POST "repos/$REPO/issues/$pr/comments" -F body=@report.md > /dev/null
+            echo "Created comment on PR #$pr"
+          fi

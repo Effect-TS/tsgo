@@ -33,19 +33,20 @@ func rawSignature(signature *checker.Signature) *checker.Signature {
 	return signature
 }
 
-func pipeableSignatureShapesMatch(c *checker.Checker, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int) bool {
+func pipeableSignatureShapesMatch(tp *TypeParser, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int) bool {
 	dataFirst = rawSignature(dataFirst)
 	candidate = rawSignature(candidate)
-	if c == nil || dataFirst == nil || candidate == nil {
+	if tp == nil || tp.checker == nil || dataFirst == nil || candidate == nil {
 		return false
 	}
+	c := tp.checker
 	key := pipeableSignatureShapeCacheKey{dataFirst: dataFirst, candidate: candidate, subjectIndex: subjectIndex}
 	if links, ok := c.EffectLinks.(*EffectLinks); ok && links != nil {
 		return Cached(&links.PipeableSignatureShape, key, func() bool {
-			return comparePipeableSignatureTypes(c, dataFirst, candidate, subjectIndex)
+			return comparePipeableSignatureTypes(tp, dataFirst, candidate, subjectIndex)
 		})
 	}
-	return comparePipeableSignatureTypes(c, dataFirst, candidate, subjectIndex)
+	return comparePipeableSignatureTypes(tp, dataFirst, candidate, subjectIndex)
 }
 
 // signatureTypeMatcher zips existing, uninstantiated compiler type graphs. It
@@ -53,7 +54,7 @@ func pipeableSignatureShapesMatch(c *checker.Checker, dataFirst *checker.Signatu
 // Generic binders are paired by structural occurrence rather than declaration
 // order, with maps in both directions to preserve binder identity.
 type signatureTypeMatcher struct {
-	checker      *checker.Checker
+	tp           *TypeParser
 	leftToRight  map[*checker.Type]*checker.Type
 	rightToLeft  map[*checker.Type]*checker.Type
 	leftBinders  map[*checker.Type]struct{}
@@ -63,12 +64,17 @@ type signatureTypeMatcher struct {
 	unionSearch  *int
 }
 
-func comparePipeableSignatureTypes(c *checker.Checker, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int) bool {
-	if c == nil || dataFirst == nil || candidate == nil {
+func comparePipeableSignatureTypes(tp *TypeParser, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int) bool {
+	if tp == nil || tp.checker == nil || dataFirst == nil || candidate == nil {
 		return false
 	}
+	c := tp.checker
 	leftParameters := dataFirst.Parameters()
 	if subjectIndex < 0 || subjectIndex >= len(leftParameters) {
+		return false
+	}
+	rightParameters := candidate.Parameters()
+	if len(rightParameters) != len(leftParameters)-1 {
 		return false
 	}
 
@@ -89,7 +95,7 @@ func comparePipeableSignatureTypes(c *checker.Checker, dataFirst *checker.Signat
 
 	work, unionSearch := 0, 0
 	m := &signatureTypeMatcher{
-		checker:      c,
+		tp:           tp,
 		leftToRight:  make(map[*checker.Type]*checker.Type),
 		rightToLeft:  make(map[*checker.Type]*checker.Type),
 		leftBinders:  make(map[*checker.Type]struct{}),
@@ -105,10 +111,6 @@ func comparePipeableSignatureTypes(c *checker.Checker, dataFirst *checker.Signat
 		return false
 	}
 
-	rightParameters := candidate.Parameters()
-	if len(rightParameters) != len(leftParameters)-1 {
-		return false
-	}
 	rightIndex := 0
 	for leftIndex, leftParameter := range leftParameters {
 		if leftIndex == subjectIndex {
@@ -151,14 +153,16 @@ func (m *signatureTypeMatcher) compareParameter(left *ast.Symbol, leftRest bool,
 	if left == nil || right == nil || leftRest != rightRest || symbolIsOptional(left) != symbolIsOptional(right) {
 		return false
 	}
-	return m.compareType(m.checker.GetTypeOfSymbol(left), m.checker.GetTypeOfSymbol(right), depth+1)
+	return m.compareType(m.tp.checker.GetTypeOfSymbol(left), m.tp.checker.GetTypeOfSymbol(right), depth+1)
 }
 
 func symbolIsOptional(symbol *ast.Symbol) bool {
-	return symbol != nil && symbol.Flags&ast.SymbolFlagsOptional != 0
+	return symbol != nil && ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsOptional != 0
 }
 
 func (m *signatureTypeMatcher) compareType(left *checker.Type, right *checker.Type, depth int) bool {
+	left = checker.GetNonDistributedTypeParameter(m.tp.checker, left)
+	right = checker.GetNonDistributedTypeParameter(m.tp.checker, right)
 	if left == right {
 		return left != nil
 	}
@@ -170,10 +174,10 @@ func (m *signatureTypeMatcher) compareType(left *checker.Type, right *checker.Ty
 		return false
 	}
 
-	if base := noInferBaseType(m.checker, left); base != nil {
+	if base := noInferBaseType(m.tp, left); base != nil {
 		return m.compareType(base, right, depth+1)
 	}
-	if base := noInferBaseType(m.checker, right); base != nil {
+	if base := noInferBaseType(m.tp, right); base != nil {
 		return m.compareType(left, base, depth+1)
 	}
 
@@ -187,7 +191,7 @@ func (m *signatureTypeMatcher) compareType(left *checker.Type, right *checker.Ty
 	leftAlias, rightAlias := left.Alias(), right.Alias()
 	if leftAlias != nil || rightAlias != nil {
 		return leftAlias != nil && rightAlias != nil &&
-			sameSymbolReference(m.checker, leftAlias.Symbol(), rightAlias.Symbol()) &&
+			sameSymbolReference(m.tp.checker, leftAlias.Symbol(), rightAlias.Symbol()) &&
 			m.compareTypeList(leftAlias.TypeArguments(), rightAlias.TypeArguments(), depth+1)
 	}
 
@@ -211,8 +215,8 @@ func (m *signatureTypeMatcher) compareType(left *checker.Type, right *checker.Ty
 		leftConditional, rightConditional := left.AsConditionalType(), right.AsConditionalType()
 		return m.compareType(leftConditional.CheckType(), rightConditional.CheckType(), depth+1) &&
 			m.compareType(leftConditional.ExtendsType(), rightConditional.ExtendsType(), depth+1) &&
-			m.compareType(m.checker.GetTrueTypeOfConditionalType(left), m.checker.GetTrueTypeOfConditionalType(right), depth+1) &&
-			m.compareType(m.checker.GetFalseTypeOfConditionalType(left), m.checker.GetFalseTypeOfConditionalType(right), depth+1)
+			m.compareType(m.tp.checker.GetTrueTypeOfConditionalType(left), m.tp.checker.GetTrueTypeOfConditionalType(right), depth+1) &&
+			m.compareType(m.tp.checker.GetFalseTypeOfConditionalType(left), m.tp.checker.GetFalseTypeOfConditionalType(right), depth+1)
 	case left.Flags()&checker.TypeFlagsIndexedAccess != 0:
 		leftIndexed, rightIndexed := left.AsIndexedAccessType(), right.AsIndexedAccessType()
 		return m.compareType(leftIndexed.ObjectType(), rightIndexed.ObjectType(), depth+1) &&
@@ -223,7 +227,7 @@ func (m *signatureTypeMatcher) compareType(left *checker.Type, right *checker.Ty
 		return slices.Equal(left.AsTemplateLiteralType().Texts(), right.AsTemplateLiteralType().Texts()) &&
 			m.compareTypeList(left.AsTemplateLiteralType().Types(), right.AsTemplateLiteralType().Types(), depth+1)
 	case left.Flags()&checker.TypeFlagsStringMapping != 0:
-		return sameSymbolReference(m.checker, left.Symbol(), right.Symbol()) &&
+		return sameSymbolReference(m.tp.checker, left.Symbol(), right.Symbol()) &&
 			m.compareType(left.AsStringMappingType().Target(), right.AsStringMappingType().Target(), depth+1)
 	case left.Flags()&checker.TypeFlagsSubstitution != 0:
 		leftSubstitution, rightSubstitution := left.AsSubstitutionType(), right.AsSubstitutionType()
@@ -233,10 +237,10 @@ func (m *signatureTypeMatcher) compareType(left *checker.Type, right *checker.Ty
 		return m.compareObject(left, right, depth+1)
 	case left.Flags()&checker.TypeFlagsLiteral != 0:
 		return reflect.DeepEqual(left.AsLiteralType().Value(), right.AsLiteralType().Value()) &&
-			sameOptionalSymbol(m.checker, left.Symbol(), right.Symbol())
+			sameOptionalSymbol(m.tp.checker, left.Symbol(), right.Symbol())
 	case left.Flags()&checker.TypeFlagsUniqueESSymbol != 0,
 		left.Flags()&checker.TypeFlagsEnum != 0:
-		return sameSymbolReference(m.checker, left.Symbol(), right.Symbol())
+		return sameSymbolReference(m.tp.checker, left.Symbol(), right.Symbol())
 	case left.Flags()&checker.TypeFlagsSingleton != 0:
 		return true
 	default:
@@ -261,7 +265,7 @@ func (m *signatureTypeMatcher) compareTypeParameter(left *checker.Type, right *c
 		m.rightToLeft[right] = left
 		return true
 	}
-	return left == right || sameSymbolReference(m.checker, left.Symbol(), right.Symbol())
+	return left == right || sameSymbolReference(m.tp.checker, left.Symbol(), right.Symbol())
 }
 
 func (m *signatureTypeMatcher) compareObject(left *checker.Type, right *checker.Type, depth int) bool {
@@ -284,21 +288,21 @@ func (m *signatureTypeMatcher) compareObject(left *checker.Type, right *checker.
 			return false
 		}
 		leftTarget, rightTarget := left.Target(), right.Target()
-		return (leftTarget == rightTarget || sameSymbolReference(m.checker, leftTarget.Symbol(), rightTarget.Symbol())) &&
-			m.compareTypeList(m.checker.GetTypeArguments(left), m.checker.GetTypeArguments(right), depth+1)
+		return (leftTarget == rightTarget || sameSymbolReference(m.tp.checker, leftTarget.Symbol(), rightTarget.Symbol())) &&
+			m.compareTypeList(m.tp.checker.GetTypeArguments(left), m.tp.checker.GetTypeArguments(right), depth+1)
 	}
 
 	leftAnonymous := leftFlags&checker.ObjectFlagsAnonymous != 0
 	rightAnonymous := rightFlags&checker.ObjectFlagsAnonymous != 0
 	if !leftAnonymous || !rightAnonymous {
-		return !leftAnonymous && !rightAnonymous && sameSymbolReference(m.checker, left.Symbol(), right.Symbol())
+		return !leftAnonymous && !rightAnonymous && sameSymbolReference(m.tp.checker, left.Symbol(), right.Symbol())
 	}
 	return m.compareAnonymousObject(left, right, depth+1)
 }
 
 func (m *signatureTypeMatcher) compareMappedType(left *checker.Type, right *checker.Type, depth int) bool {
-	leftBinder := checker.Checker_getTypeParameterFromMappedType(m.checker, left)
-	rightBinder := checker.Checker_getTypeParameterFromMappedType(m.checker, right)
+	leftBinder := checker.Checker_getTypeParameterFromMappedType(m.tp.checker, left)
+	rightBinder := checker.Checker_getTypeParameterFromMappedType(m.tp.checker, right)
 	if leftBinder == nil || rightBinder == nil || checker.GetMappedTypeModifiers(left) != checker.GetMappedTypeModifiers(right) {
 		return false
 	}
@@ -306,48 +310,48 @@ func (m *signatureTypeMatcher) compareMappedType(left *checker.Type, right *chec
 	m.registerBinders([]*checker.Type{rightBinder}, false)
 	return m.compareType(leftBinder, rightBinder, depth+1) &&
 		m.compareType(
-			checker.Checker_getConstraintTypeFromMappedType(m.checker, left),
-			checker.Checker_getConstraintTypeFromMappedType(m.checker, right),
+			checker.Checker_getConstraintTypeFromMappedType(m.tp.checker, left),
+			checker.Checker_getConstraintTypeFromMappedType(m.tp.checker, right),
 			depth+1,
 		) &&
 		m.compareOptionalTypeAt(
-			checker.Checker_getNameTypeFromMappedType(m.checker, left),
-			checker.Checker_getNameTypeFromMappedType(m.checker, right),
+			checker.Checker_getNameTypeFromMappedType(m.tp.checker, left),
+			checker.Checker_getNameTypeFromMappedType(m.tp.checker, right),
 			depth+1,
 		) &&
 		m.compareType(
-			checker.Checker_getTemplateTypeFromMappedType(m.checker, left),
-			checker.Checker_getTemplateTypeFromMappedType(m.checker, right),
+			checker.Checker_getTemplateTypeFromMappedType(m.tp.checker, left),
+			checker.Checker_getTemplateTypeFromMappedType(m.tp.checker, right),
 			depth+1,
 		)
 }
 
 func (m *signatureTypeMatcher) compareAnonymousObject(left *checker.Type, right *checker.Type, depth int) bool {
-	leftProperties := m.checker.GetPropertiesOfType(left)
-	rightProperties := m.checker.GetPropertiesOfType(right)
+	leftProperties := m.tp.checker.GetPropertiesOfType(left)
+	rightProperties := m.tp.checker.GetPropertiesOfType(right)
 	if len(leftProperties) != len(rightProperties) {
 		return false
 	}
 	rightByName := make(map[string]*ast.Symbol, len(rightProperties))
 	for _, property := range rightProperties {
-		if property == nil || rightByName[property.Name] != nil {
+		if property == nil || rightByName[ast.TSGetSymbolName(property)] != nil {
 			return false
 		}
-		rightByName[property.Name] = property
+		rightByName[ast.TSGetSymbolName(property)] = property
 	}
 	for _, leftProperty := range leftProperties {
 		if leftProperty == nil {
 			return false
 		}
-		rightProperty := rightByName[leftProperty.Name]
+		rightProperty := rightByName[ast.TSGetSymbolName(leftProperty)]
 		if rightProperty == nil || symbolIsOptional(leftProperty) != symbolIsOptional(rightProperty) ||
-			checker.Checker_isReadonlySymbol(m.checker, leftProperty) != checker.Checker_isReadonlySymbol(m.checker, rightProperty) ||
-			!m.compareType(m.checker.GetTypeOfSymbol(leftProperty), m.checker.GetTypeOfSymbol(rightProperty), depth+1) {
+			checker.Checker_isReadonlySymbol(m.tp.checker, leftProperty) != checker.Checker_isReadonlySymbol(m.tp.checker, rightProperty) ||
+			!m.compareType(m.tp.checker.GetTypeOfSymbol(leftProperty), m.tp.checker.GetTypeOfSymbol(rightProperty), depth+1) {
 			return false
 		}
 	}
 
-	leftIndexes, rightIndexes := m.checker.GetIndexInfosOfType(left), m.checker.GetIndexInfosOfType(right)
+	leftIndexes, rightIndexes := m.tp.checker.GetIndexInfosOfType(left), m.tp.checker.GetIndexInfosOfType(right)
 	if len(leftIndexes) != len(rightIndexes) {
 		return false
 	}
@@ -359,12 +363,12 @@ func (m *signatureTypeMatcher) compareAnonymousObject(left *checker.Type, right 
 		}
 	}
 
-	if len(m.checker.GetSignaturesOfType(left, checker.SignatureKindConstruct)) != 0 ||
-		len(m.checker.GetSignaturesOfType(right, checker.SignatureKindConstruct)) != 0 {
+	if len(m.tp.checker.GetSignaturesOfType(left, checker.SignatureKindConstruct)) != 0 ||
+		len(m.tp.checker.GetSignaturesOfType(right, checker.SignatureKindConstruct)) != 0 {
 		return false
 	}
-	leftCalls := m.checker.GetSignaturesOfType(left, checker.SignatureKindCall)
-	rightCalls := m.checker.GetSignaturesOfType(right, checker.SignatureKindCall)
+	leftCalls := m.tp.checker.GetSignaturesOfType(left, checker.SignatureKindCall)
+	rightCalls := m.tp.checker.GetSignaturesOfType(right, checker.SignatureKindCall)
 	if len(leftCalls) != len(rightCalls) {
 		return false
 	}
@@ -379,7 +383,7 @@ func (m *signatureTypeMatcher) compareAnonymousObject(left *checker.Type, right 
 func (m *signatureTypeMatcher) compareSignature(left *checker.Signature, right *checker.Signature, depth int) bool {
 	if left == nil || right == nil || left.HasRestParameter() != right.HasRestParameter() ||
 		left.MinArgumentCount() != right.MinArgumentCount() ||
-		(m.checker.GetTypePredicateOfSignature(left) != nil || m.checker.GetTypePredicateOfSignature(right) != nil) {
+		(m.tp.checker.GetTypePredicateOfSignature(left) != nil || m.tp.checker.GetTypePredicateOfSignature(right) != nil) {
 		return false
 	}
 	m.registerBinders(left.TypeParameters(), true)
@@ -403,7 +407,7 @@ func (m *signatureTypeMatcher) compareSignature(left *checker.Signature, right *
 			return false
 		}
 	}
-	return m.compareType(m.checker.GetReturnTypeOfSignature(left), m.checker.GetReturnTypeOfSignature(right), depth+1)
+	return m.compareType(m.tp.checker.GetReturnTypeOfSignature(left), m.tp.checker.GetReturnTypeOfSignature(right), depth+1)
 }
 
 func (m *signatureTypeMatcher) compareTypeList(left []*checker.Type, right []*checker.Type, depth int) bool {
@@ -473,14 +477,14 @@ func (m *signatureTypeMatcher) validateBinders() bool {
 		return false
 	}
 	for left, right := range m.leftToRight {
-		if checker.Checker_getTypeParameterModifiers(m.checker, left) != checker.Checker_getTypeParameterModifiers(m.checker, right) {
+		if checker.Checker_getTypeParameterModifiers(m.tp.checker, left) != checker.Checker_getTypeParameterModifiers(m.tp.checker, right) {
 			return false
 		}
-		leftConstraint, rightConstraint := m.checker.GetConstraintOfTypeParameter(left), m.checker.GetConstraintOfTypeParameter(right)
+		leftConstraint, rightConstraint := m.tp.checker.GetConstraintOfTypeParameter(left), m.tp.checker.GetConstraintOfTypeParameter(right)
 		if !m.compareOptionalType(leftConstraint, rightConstraint) {
 			return false
 		}
-		leftDefault, rightDefault := m.checker.GetDefaultFromTypeParameter(left), m.checker.GetDefaultFromTypeParameter(right)
+		leftDefault, rightDefault := m.tp.checker.GetDefaultFromTypeParameter(left), m.tp.checker.GetDefaultFromTypeParameter(right)
 		if !m.compareOptionalType(leftDefault, rightDefault) {
 			return false
 		}
@@ -506,19 +510,19 @@ func sameOptionalSymbol(c *checker.Checker, left *ast.Symbol, right *ast.Symbol)
 	return sameSymbolReference(c, left, right)
 }
 
-func noInferBaseType(c *checker.Checker, t *checker.Type) *checker.Type {
-	if c == nil || t == nil {
+func noInferBaseType(tp *TypeParser, t *checker.Type) *checker.Type {
+	if tp == nil || tp.checker == nil || t == nil {
 		return nil
 	}
-	if checker.Checker_isNoInferType(c, t) {
+	if checker.Checker_isNoInferType(tp.checker, t) {
 		return t.AsSubstitutionType().BaseType()
 	}
 	alias := t.Alias()
 	if alias == nil || len(alias.TypeArguments()) != 1 || alias.Symbol() == nil {
 		return nil
 	}
-	for _, declaration := range alias.Symbol().Declarations {
-		if isNoInferAliasDeclaration(c, declaration) {
+	for _, declaration := range ast.TSGetSymbolDeclarations(alias.Symbol()) {
+		if isNoInferAliasDeclaration(tp, declaration) {
 			return alias.TypeArguments()[0]
 		}
 	}
@@ -528,7 +532,7 @@ func noInferBaseType(c *checker.Checker, t *checker.Type) *checker.Type {
 // Effect supported NoInfer before it became a TypeScript intrinsic with the
 // standard tuple/indexed-access encoding. Recognize only those two exact
 // declarations so an unrelated alias named NoInfer is not made transparent.
-func isNoInferAliasDeclaration(c *checker.Checker, declaration *ast.Node) bool {
+func isNoInferAliasDeclaration(tp *TypeParser, declaration *ast.Node) bool {
 	if declaration == nil || declaration.Kind != ast.KindTypeAliasDeclaration || len(declaration.TypeParameters()) != 1 {
 		return false
 	}
@@ -550,23 +554,23 @@ func isNoInferAliasDeclaration(c *checker.Checker, declaration *ast.Node) bool {
 	}
 	binder := declaration.TypeParameters()[0].Symbol()
 	if binder == nil {
-		binder = c.GetSymbolAtLocation(declaration.TypeParameters()[0].Name())
+		binder = tp.GetSymbolAtLocation(declaration.TypeParameters()[0].Name())
 	}
 	conditional := indexed.IndexType.AsConditionalTypeNode()
 	return binder != nil &&
-		isTypeParameterTypeNode(c, indexed.ObjectType.AsTupleTypeNode().Elements.Nodes[0], binder) &&
-		isTypeParameterTypeNode(c, conditional.CheckType, binder) &&
 		conditional.ExtendsType != nil && conditional.ExtendsType.Kind == ast.KindAnyKeyword &&
 		isNumericLiteralTypeNode(conditional.TrueType, "0") &&
-		conditional.FalseType != nil && conditional.FalseType.Kind == ast.KindNeverKeyword
+		conditional.FalseType != nil && conditional.FalseType.Kind == ast.KindNeverKeyword &&
+		isTypeParameterTypeNode(tp, indexed.ObjectType.AsTupleTypeNode().Elements.Nodes[0], binder) &&
+		isTypeParameterTypeNode(tp, conditional.CheckType, binder)
 }
 
-func isTypeParameterTypeNode(c *checker.Checker, node *ast.Node, binder *ast.Symbol) bool {
+func isTypeParameterTypeNode(tp *TypeParser, node *ast.Node, binder *ast.Symbol) bool {
 	if node == nil || node.Kind != ast.KindTypeReference {
 		return false
 	}
 	reference := node.AsTypeReferenceNode()
-	return reference.TypeArguments == nil && sameSymbolReference(c, c.GetSymbolAtLocation(reference.TypeName), binder)
+	return reference.TypeArguments == nil && sameSymbolReference(tp.checker, tp.GetSymbolAtLocation(reference.TypeName), binder)
 }
 
 func isNumericLiteralTypeNode(node *ast.Node, value string) bool {

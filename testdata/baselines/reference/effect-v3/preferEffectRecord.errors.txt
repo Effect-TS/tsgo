@@ -1,0 +1,232 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/preferEffectRecord.ts(9,8): warning TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(10,27): warning TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(11,8): warning TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(12,29): warning TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(13,8): warning TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(14,30): warning TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(15,8): warning TS377143: Consider effect/Record.fromEntries instead of native Object.fromEntries. Requires typed string or symbol key tuples; native numeric keys and loose entry arrays need adaptation. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(16,34): warning TS377143: Consider effect/Record.fromEntries instead of native Object.fromEntries. Requires typed string or symbol key tuples; native numeric keys and loose entry arrays need adaptation. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(17,8): warning TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(18,29): warning TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(19,6): warning TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(20,35): warning TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(21,18): warning TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(22,8): warning TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(23,8): warning TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(24,8): warning TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(25,8): warning TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(26,8): warning TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(27,8): warning TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(28,11): warning TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(30,12): warning TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(32,23): warning TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(34,8): warning TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(35,14): warning TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(36,19): warning TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(37,78): warning TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(38,73): warning TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(40,17): warning TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(42,8): warning TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(45,10): warning TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(46,8): warning TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(47,8): warning TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(48,8): warning TS377143: Consider effect/Record.fromEntries instead of native Object.fromEntries. Requires typed string or symbol key tuples; native numeric keys and loose entry arrays need adaptation. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(49,8): warning TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(50,6): warning TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(51,6): warning TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+/.src/preferEffectRecord.ts(52,63): warning TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+
+
+==== /.src/preferEffectRecord.ts (37 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferEffectRecord:warning
+    import * as R from "effect/Record"
+    import { Effect, Record as EffectRecord } from "effect"
+    import { NativeObject } from "./aliases"
+    
+    const data = { a: 1, b: "two" }
+    const pairs: Array<[string | symbol, number]> = [["a", 1], [Symbol.for("b"), 2]]
+    Object.keys(data)
+           ~~~~
+!!! warning TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+    const nativeKeys = Object.keys
+                              ~~~~
+!!! warning TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+    Object.values(data)
+           ~~~~~~
+!!! warning TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+    const nativeValues = Object.values
+                                ~~~~~~
+!!! warning TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+    Object.entries(data)
+           ~~~~~~~
+!!! warning TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+    const nativeEntries = Object.entries
+                                 ~~~~~~~
+!!! warning TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+    Object.fromEntries(pairs)
+           ~~~~~~~~~~~
+!!! warning TS377143: Consider effect/Record.fromEntries instead of native Object.fromEntries. Requires typed string or symbol key tuples; native numeric keys and loose entry arrays need adaptation. effect(preferEffectRecord)
+    const nativeFromEntries = Object.fromEntries
+                                     ~~~~~~~~~~~
+!!! warning TS377143: Consider effect/Record.fromEntries instead of native Object.fromEntries. Requires typed string or symbol key tuples; native numeric keys and loose entry arrays need adaptation. effect(preferEffectRecord)
+    Object.hasOwn(data, "a")
+           ~~~~~~
+!!! warning TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+    const nativeHasOwn = Object.hasOwn
+                                ~~~~~~
+!!! warning TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+    data.hasOwnProperty("a")
+         ~~~~~~~~~~~~~~
+!!! warning TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+    const nativeHasOwnProperty = data.hasOwnProperty
+                                      ~~~~~~~~~~~~~~
+!!! warning TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+    Object.prototype.hasOwnProperty.call(data, "a")
+                     ~~~~~~~~~~~~~~
+!!! warning TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+    Object.hasOwnProperty.call(data, "a")
+           ~~~~~~~~~~~~~~
+!!! warning TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+    Object["keys"](data)
+           ~~~~~~
+!!! warning TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+    Object[`values`](data)
+           ~~~~~~~~
+!!! warning TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+    Object.k\u0065ys(data)
+           ~~~~~~~~~
+!!! warning TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+    Object["entr\u0069es"](data)
+           ~~~~~~~~~~~~~~
+!!! warning TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+    Object.entries?.(data)
+           ~~~~~~~
+!!! warning TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+    ;(Object).hasOwn(data, "a")
+              ~~~~~~
+!!! warning TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+    declare const optional: object | undefined
+    optional?.["hasOwnProperty"]("a")
+               ~~~~~~~~~~~~~~~~
+!!! warning TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+    declare const optionalConstructor: ObjectConstructor | undefined
+    optionalConstructor?.["keys"](data)
+                          ~~~~~~
+!!! warning TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+    const Native = Object
+    Native.entries(data)
+           ~~~~~~~
+!!! warning TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+    NativeObject.keys(data)
+                 ~~~~
+!!! warning TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+    globalThis.Object.hasOwn(data, "a")
+                      ~~~~~~
+!!! warning TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+    function constrained<T extends ObjectConstructor>(native: T) { return native["keys"](data) }
+                                                                                 ~~~~~~
+!!! warning TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+    function constrainedInstance<T extends object>(value: T) { return value.hasOwnProperty("a") }
+                                                                            ~~~~~~~~~~~~~~
+!!! warning TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+    class Inherited {}
+    new Inherited().hasOwnProperty("a")
+                    ~~~~~~~~~~~~~~
+!!! warning TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+    declare const picked: Pick<ObjectConstructor, "entries">
+    picked.entries(data)
+           ~~~~~~~
+!!! warning TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+    type Remapped = { [K in keyof ObjectConstructor as K extends "values" ? "keys" : never]: ObjectConstructor[K] }
+    declare const remapped: Remapped
+    remapped.keys(data)
+             ~~~~
+!!! warning TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+    Object.keys([1, 2])
+           ~~~~
+!!! warning TS377143: Consider effect/Record.keys instead of native Object.keys. Requires a record rather than arrays or primitives; types keys as the inferred key union, which does not guarantee exact runtime keys. effect(preferEffectRecord)
+    Object.values("ab")
+           ~~~~~~
+!!! warning TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+    Object.fromEntries([[1, "a"]])
+           ~~~~~~~~~~~
+!!! warning TS377143: Consider effect/Record.fromEntries instead of native Object.fromEntries. Requires typed string or symbol key tuples; native numeric keys and loose entry arrays need adaptation. effect(preferEffectRecord)
+    Object.hasOwn(data, 1)
+           ~~~~~~
+!!! warning TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+    ;[1].hasOwnProperty("0")
+         ~~~~~~~~~~~~~~
+!!! warning TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+    "ab".hasOwnProperty("0")
+         ~~~~~~~~~~~~~~
+!!! warning TS377143: Consider effect/Record.has instead of native Object.prototype.hasOwnProperty. Pass the receiver explicitly; requires a record rather than arrays or primitives and a string or symbol key of that record's key type. Avoids instance binding and overrides. effect(preferEffectRecord)
+    export const program = Effect.gen(function*() { return Object.entries(data) })
+                                                                  ~~~~~~~
+!!! warning TS377143: Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+    
+    const typedKeys: Array<"a" | "b"> = R.keys(data)
+    const typedEntries: Array<["a" | "b", string | number]> = R.toEntries(data)
+    R.values(data)
+    R.fromEntries(pairs)
+    R.has(data, "a")
+    EffectRecord.keys(data)
+    EffectRecord.values(data)
+    EffectRecord.toEntries(data)
+    EffectRecord.fromEntries(pairs)
+    EffectRecord.has(data, "b")
+    // @ts-expect-error Record keys rejects arrays.
+    R.keys([1])
+    // @ts-expect-error Record keys rejects primitive strings.
+    R.keys("ab")
+    // @ts-expect-error Record values rejects arrays.
+    R.values([1])
+    // @ts-expect-error Record toEntries rejects arrays.
+    R.toEntries([1])
+    // @ts-expect-error Record fromEntries requires string or symbol tuple keys.
+    R.fromEntries([[1, "a"]])
+    declare const arbitraryKey: string
+    // @ts-expect-error Record has requires a key of this record's type.
+    R.has(data, arbitraryKey)
+    // @ts-expect-error Record has rejects numeric keys.
+    R.has(data, 1)
+    // @ts-expect-error Record has rejects arrays.
+    R.has([1], "0")
+    nativeKeys(data)
+    const { keys: destructured } = Object
+    destructured(data)
+    type Keys = typeof Object.keys
+    declare const dynamic: "keys"
+    Object[dynamic](data)
+    declare const custom: { keys: typeof Object.keys; hasOwnProperty(key: PropertyKey): boolean }
+    custom.keys(data)
+    custom.hasOwnProperty("a")
+    function shadowed(Object: { keys(value: object): string[] }) { return Object.keys(data) }
+    class Override { hasOwnProperty(key: PropertyKey): boolean { return false } }
+    new Override().hasOwnProperty("a")
+    class Child extends Inherited { test() { return super.hasOwnProperty("a") } }
+    declare const mixed: ObjectConstructor | { keys: typeof Object.keys }
+    mixed.keys(data)
+    declare const mixedInstance: object | { hasOwnProperty(key: PropertyKey): boolean }
+    mixedInstance.hasOwnProperty("a")
+    declare const intersection: ObjectConstructor & { keys(value: number): string[] }
+    intersection.keys(data)
+    declare const conflicting: Remapped | Pick<ObjectConstructor, "keys">
+    conflicting.keys(data)
+    declare let writable: Partial<Pick<ObjectConstructor, "keys">>
+    writable.keys = () => []
+    delete (writable.keys)
+    ;({ keys: writable.keys } = Object)
+    Object.prototype.hasOwnProperty = key => false
+    void [[1].keys(), [1].values(), [1].entries(), new Map().keys(), new Map().values(), new Map().entries()]
+    void [Object.assign, Object.create, Object.defineProperties, Object.defineProperty, Object.freeze, Object.getOwnPropertyDescriptor, Object.getOwnPropertyDescriptors, Object.getOwnPropertyNames, Object.getOwnPropertySymbols, Object.getPrototypeOf, Object.groupBy, Object.is, Object.isExtensible, Object.isFrozen, Object.isSealed, Object.preventExtensions, Object.seal, Object.setPrototypeOf, Object.prototype]
+    void [data.isPrototypeOf, data.propertyIsEnumerable, data.toLocaleString, data.toString, data.valueOf]
+    
+
+==== /.src/aliases.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    export const NativeObject = Object
+    

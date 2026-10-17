@@ -1,0 +1,69 @@
+package effecttest
+
+import (
+	"fmt"
+	"testing"
+)
+
+// Issue #851: the experimental and unstable API rules resolved the constraint
+// of a generic call by resolving the call again with inference blocked. For a
+// Match.when pattern over a wide union this instantiated
+// WhenMatch<R, PatternBase<R>> on the shared checker and leaked TS2589 into the
+// program's diagnostics.
+func TestIssue851MatchWhenStabilityDoesNotReportTS2589(t *testing.T) {
+	t.Parallel()
+
+	const source = `import { Match, Schema } from "effect"
+
+const leaf = <K extends string, P extends string>(k: K, p: P) =>
+  Schema.Struct({ k: Schema.Literal(k), p: Schema.Literal(p) })
+
+const mid = <K extends string, P extends string>(k: K, p: P) =>
+  Schema.Struct({ a: leaf(k, ` + "`${p}a`" + `), b: Schema.Array(leaf(k, ` + "`${p}b`" + `)), c: Schema.optional(leaf(k, ` + "`${p}c`" + `)) })
+
+const variant = <K extends string>(k: K) =>
+  Schema.Struct({
+    kind: Schema.Literal(k),
+    body: Schema.Struct({ a: mid(k, "a"), b: Schema.Array(mid(k, "b")), c: Schema.optional(mid(k, "c")) })
+  })
+
+const Node = Schema.Union([
+  variant("A0"), variant("A1"), variant("A2"), variant("A3"), variant("A4"), variant("A5"), variant("A6"), variant("A7"),
+  variant("B0"), variant("B1"), variant("B2"), variant("B3"), variant("B4"), variant("B5"), variant("B6"), variant("B7"),
+  variant("C0"), variant("C1"), variant("C2"), variant("C3"), variant("C4"), variant("C5"), variant("C6"), variant("C7"),
+  variant("D0"), variant("D1"), variant("D2"), variant("D3"), variant("D4"), variant("D5"), variant("D6"), variant("D7"),
+  variant("E0"), variant("E1"), variant("E2"), variant("E3"), variant("E4"), variant("E5"), variant("E6"), variant("E7")
+])
+
+export const f = (node: typeof Node.Type) =>
+  Match.value(node).pipe(
+    Match.when({ kind: "A0" }, (v) => v.body),
+    Match.orElse(() => null)
+  )
+`
+	for _, severity := range []string{"off", "error"} {
+		t.Run("rules="+severity, func(t *testing.T) {
+			t.Parallel()
+			content := fmt.Sprintf(`// @filename: tsconfig.json
+{
+  "compilerOptions": {
+    "strict": true,
+    "plugins": [{
+      "name": "@effect/language-service",
+      "diagnosticSeverity": {
+        "experimentalApiUsage": %q,
+        "unstableApiUsage": %q
+      }
+    }]
+  }
+}
+// @filename: package.json
+{ "type": "module" }
+// @filename: test.ts
+`, severity, severity) + source
+			if got := collectDiagnosticStringsFromContent(t, content); len(got) != 0 {
+				t.Fatalf("diagnostics = %v, want none", got)
+			}
+		})
+	}
+}

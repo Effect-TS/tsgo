@@ -1,0 +1,4 @@
+/.src/package.json -> importStyleOverrides.flows.package.mermaid
+/.src/app.ts -> importStyleOverrides.flows.app.mermaid
+/.src/legacy/old.ts -> importStyleOverrides.flows.old.mermaid
+/.src/follow.ts -> importStyleOverrides.flows.follow.mermaid

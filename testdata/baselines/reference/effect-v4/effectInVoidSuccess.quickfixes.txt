@@ -8,6 +8,10 @@
   Fix 0: "Disable effectInVoidSuccess for this line"
   Fix 1: "Disable effectInVoidSuccess for entire file"
 
+[D3] (20:78-20:91) TS377020: There is a nested 'Effect<number, never, never>' in the 'void' success channel, beware that this could lead to nested Effect<Effect<...>> that won't be executed. effect(effectInVoidSuccess)
+  Fix 0: "Disable effectInVoidSuccess for this line"
+  Fix 1: "Disable effectInVoidSuccess for entire file"
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable effectInVoidSuccess for this line" ===
@@ -20,4 +24,10 @@ skipped by default
 skipped by default
 
 === [D2] Fix 1: "Disable effectInVoidSuccess for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable effectInVoidSuccess for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectInVoidSuccess for entire file" ===
 skipped by default

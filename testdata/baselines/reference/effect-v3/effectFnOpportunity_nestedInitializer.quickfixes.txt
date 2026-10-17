@@ -1,0 +1,215 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:3-10:9) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(value) { ... })`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"decode\")"
+
+[D2] (22:3-22:7) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(path) { ... })`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"read\")"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_nestedInitializer.ts ---
+import { Effect } from "effect"
+
+declare const define: <A>(options: {
+  readonly name: string
+  readonly decode: (value: string) => Effect.Effect<A>
+}) => A
+
+export const configuration = define({
+  name: "workspace",
+  decode: Effect.fnUntraced(function*(value) {
+      const text = yield* Effect.succeed(value)
+      return text.length
+    }),
+})
+
+interface Definition<A> {
+  readonly read: (path: string) => Effect.Effect<A>
+}
+
+export const make = <A>(value: A): Definition<A> => ({
+  read: (path) =>
+    Effect.gen(function*() {
+      yield* Effect.log(path)
+      return value
+    }),
+})
+
+
+=== [D1] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_nestedInitializer.ts ---
+import { Effect } from "effect"
+
+declare const define: <A>(options: {
+  readonly name: string
+  readonly decode: (value: string) => Effect.Effect<A>
+}) => A
+
+export const configuration = define({
+  name: "workspace",
+  decode: Effect.fn(function*(value) {
+      const text = yield* Effect.succeed(value)
+      return text.length
+    }),
+})
+
+interface Definition<A> {
+  readonly read: (path: string) => Effect.Effect<A>
+}
+
+export const make = <A>(value: A): Definition<A> => ({
+  read: (path) =>
+    Effect.gen(function*() {
+      yield* Effect.log(path)
+      return value
+    }),
+})
+
+
+=== [D1] Fix 4: "Convert to Effect.fn(\"decode\")" ===
+
+--- file:///.src/effectFnOpportunity_nestedInitializer.ts ---
+import { Effect } from "effect"
+
+declare const define: <A>(options: {
+  readonly name: string
+  readonly decode: (value: string) => Effect.Effect<A>
+}) => A
+
+export const configuration = define({
+  name: "workspace",
+  decode: Effect.fn("decode")(function*(value) {
+      const text = yield* Effect.succeed(value)
+      return text.length
+    }),
+})
+
+interface Definition<A> {
+  readonly read: (path: string) => Effect.Effect<A>
+}
+
+export const make = <A>(value: A): Definition<A> => ({
+  read: (path) =>
+    Effect.gen(function*() {
+      yield* Effect.log(path)
+      return value
+    }),
+})
+
+
+=== [D2] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_nestedInitializer.ts ---
+import { Effect } from "effect"
+
+declare const define: <A>(options: {
+  readonly name: string
+  readonly decode: (value: string) => Effect.Effect<A>
+}) => A
+
+export const configuration = define({
+  name: "workspace",
+  decode: (value) =>
+    Effect.gen(function*() {
+      const text = yield* Effect.succeed(value)
+      return text.length
+    }),
+})
+
+interface Definition<A> {
+  readonly read: (path: string) => Effect.Effect<A>
+}
+
+export const make = <A>(value: A): Definition<A> => ({
+  read: Effect.fnUntraced(function*(path) {
+      yield* Effect.log(path)
+      return value
+    }),
+})
+
+
+=== [D2] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_nestedInitializer.ts ---
+import { Effect } from "effect"
+
+declare const define: <A>(options: {
+  readonly name: string
+  readonly decode: (value: string) => Effect.Effect<A>
+}) => A
+
+export const configuration = define({
+  name: "workspace",
+  decode: (value) =>
+    Effect.gen(function*() {
+      const text = yield* Effect.succeed(value)
+      return text.length
+    }),
+})
+
+interface Definition<A> {
+  readonly read: (path: string) => Effect.Effect<A>
+}
+
+export const make = <A>(value: A): Definition<A> => ({
+  read: Effect.fn(function*(path) {
+      yield* Effect.log(path)
+      return value
+    }),
+})
+
+
+=== [D2] Fix 4: "Convert to Effect.fn(\"read\")" ===
+
+--- file:///.src/effectFnOpportunity_nestedInitializer.ts ---
+import { Effect } from "effect"
+
+declare const define: <A>(options: {
+  readonly name: string
+  readonly decode: (value: string) => Effect.Effect<A>
+}) => A
+
+export const configuration = define({
+  name: "workspace",
+  decode: (value) =>
+    Effect.gen(function*() {
+      const text = yield* Effect.succeed(value)
+      return text.length
+    }),
+})
+
+interface Definition<A> {
+  readonly read: (path: string) => Effect.Effect<A>
+}
+
+export const make = <A>(value: A): Definition<A> => ({
+  read: Effect.fn("read")(function*(path) {
+      yield* Effect.log(path)
+      return value
+    }),
+})
+

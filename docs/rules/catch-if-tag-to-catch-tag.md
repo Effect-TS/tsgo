@@ -2,7 +2,7 @@
 
 # `catchIfTagToCatchTag`
 
-Suggests Effect.catchTag instead of Effect.catchIf with a direct _tag equality predicate
+Suggests Effect.catchTag instead of Effect.catchIf with a _tag equality or Predicate.isTagged predicate
 
 | Property | Value |
 | --- | --- |
