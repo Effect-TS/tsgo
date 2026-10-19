@@ -76,6 +76,7 @@
     "effecttsgo/run-effect-inside-effect": "error",
     "effecttsgo/run-of-exit-to-run-exit": "error",
     "effecttsgo/schema-class-missing-brand": "error",
+    "effecttsgo/schema-class-object-literal": "error",
     "effecttsgo/schema-literal-non-finite": "error",
     "effecttsgo/schema-number": "error",
     "effecttsgo/schema-opaque-instance-member": "error",
