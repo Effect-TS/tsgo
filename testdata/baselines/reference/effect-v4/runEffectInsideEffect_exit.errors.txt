@@ -1,0 +1,35 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/runEffectInsideEffect_exit.ts(6,3): suggestion TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect_exit.ts(14,5): suggestion TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
+/.src/runEffectInsideEffect_exit.ts(16,5): suggestion TS377074: `Effect.runSync` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runSyncWith`. effect(runEffectInsideEffect)
+
+
+==== /.src/runEffectInsideEffect_exit.ts (3 errors) ====
+    import { Effect } from "effect"
+    
+    const child = Effect.succeed(1)
+    
+    export const sameScope = Effect.gen(function*() {
+      Effect.runSync(child)
+      ~~~~~~~~~~~~~~
+!!! suggestion TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+      Effect.runSyncExit(child)
+      yield* Effect.void
+    })
+    
+    export const nested = Effect.gen(function*() {
+      yield* Effect.void
+      setTimeout(() => {
+        Effect.runPromise(child)
+        ~~~~~~~~~~~~~~~~~
+!!! suggestion TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
+        Effect.runPromiseExit(child)
+        Effect.runSync(child)
+        ~~~~~~~~~~~~~~
+!!! suggestion TS377074: `Effect.runSync` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runSyncWith`. effect(runEffectInsideEffect)
+        Effect.runSyncExit(child)
+      }, 0)
+    })
+    

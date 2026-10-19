@@ -1,0 +1,87 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:3-6:17) TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+
+[D2] (14:5-14:22) TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+  Fix 2: "Use the current services to run the Effect"
+
+[D3] (16:5-16:19) TS377074: `Effect.runSync` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runSyncWith`. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+  Fix 2: "Use the current services to run the Effect"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Use the current services to run the Effect" ===
+
+--- file:///.src/runEffectInsideEffect_exit.ts ---
+import { Effect } from "effect"
+
+const child = Effect.succeed(1)
+
+export const sameScope = Effect.gen(function*() {
+  Effect.runSync(child)
+  Effect.runSyncExit(child)
+  yield* Effect.void
+})
+
+export const nested = Effect.gen(function*() {
+const effectContext = yield* Effect.context<never>();
+
+  yield* Effect.void
+  setTimeout(() => {
+    Effect.runPromiseWith(effectContext)(child)
+    Effect.runPromiseExit(child)
+    Effect.runSync(child)
+    Effect.runSyncExit(child)
+  }, 0)
+})
+
+
+=== [D3] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Use the current services to run the Effect" ===
+
+--- file:///.src/runEffectInsideEffect_exit.ts ---
+import { Effect } from "effect"
+
+const child = Effect.succeed(1)
+
+export const sameScope = Effect.gen(function*() {
+  Effect.runSync(child)
+  Effect.runSyncExit(child)
+  yield* Effect.void
+})
+
+export const nested = Effect.gen(function*() {
+const effectContext = yield* Effect.context<never>();
+
+  yield* Effect.void
+  setTimeout(() => {
+    Effect.runPromise(child)
+    Effect.runPromiseExit(child)
+    Effect.runSyncWith(effectContext)(child)
+    Effect.runSyncExit(child)
+  }, 0)
+})
+
