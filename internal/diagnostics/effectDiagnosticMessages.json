@@ -586,5 +586,9 @@
     "'{0}' is imported directly, but barrelImportPackages expects named imports from the barrel '{1}'. Use '{2}' instead. effect(preferBarrelImport)": {
         "category": "Suggestion",
         "code": 377148
+    },
+    "This object literal is checked as an instance of Schema class '{0}' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use '{0}.make(...)' or 'new {0}(...)' instead. effect(schemaClassObjectLiteral)": {
+        "category": "Warning",
+        "code": 377149
     }
 }
