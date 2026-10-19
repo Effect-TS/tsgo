@@ -238,7 +238,7 @@ type extra_Checker struct {
   subtypeReductionCache map[checker.CacheHashKey][]*checker.Type
   cachedTypes map[checker.CachedTypeKey]*checker.Type
   cachedSignatures map[checker.CachedSignatureKey]*checker.Signature
-  undefinedProperties map[string]*ast.Symbol
+  undefinedProperties map[*ast.Symbol]*ast.Symbol
   narrowedTypes map[checker.NarrowedTypeKey]*checker.Type
   assignmentReducedTypes map[checker.AssignmentReducedKey]*checker.Type
   discriminatedContextualTypes map[checker.DiscriminatedContextualTypeKey]*checker.Type
