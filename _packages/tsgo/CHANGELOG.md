@@ -1,5 +1,22 @@
 # @effect/tsgo
 
+## 0.53.5
+
+### Patch Changes
+
+- c83ee4d: `runEffectInsideEffect` now reports `Effect.runSyncExit` and `Effect.runPromiseExit`, the same as `Effect.runSync` and `Effect.runPromise`. The quick fix rewrites them to `Effect.runSyncExitWith` and `Effect.runPromiseExitWith` in Effect v4, and to `Runtime.runSyncExit` and `Runtime.runPromiseExit` in Effect v3.
+  
+  ```ts
+  export const nested = Effect.gen(function*() {
+    yield* Effect.void
+    setTimeout(() => {
+      Effect.runPromiseExit(child)
+      // ^- `Effect.runPromiseExit` is called inside an Effect with a separate services invocation.
+    }, 0)
+  })
+  ```
+- de42db0: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261018.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/5237fd46890956e4bb8177a1a05dcd69e4166560) commit `5237fd46890956e4bb8177a1a05dcd69e4166560`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.53.4
 
 ### Patch Changes
