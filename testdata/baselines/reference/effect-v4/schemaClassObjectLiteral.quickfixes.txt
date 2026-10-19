@@ -52,6 +52,26 @@
   Fix 0: "Disable schemaClassObjectLiteral for this line"
   Fix 1: "Disable schemaClassObjectLiteral for entire file"
 
+[D14] (79:59-79:73) TS377149: This object literal is checked as an instance of Schema class 'A' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'A.make(...)' or 'new A(...)' instead. effect(schemaClassObjectLiteral)
+  Fix 0: "Disable schemaClassObjectLiteral for this line"
+  Fix 1: "Disable schemaClassObjectLiteral for entire file"
+
+[D15] (82:55-82:69) TS377149: This object literal is checked as an instance of Schema class 'A' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'A.make(...)' or 'new A(...)' instead. effect(schemaClassObjectLiteral)
+  Fix 0: "Disable schemaClassObjectLiteral for this line"
+  Fix 1: "Disable schemaClassObjectLiteral for entire file"
+
+[D16] (84:51-84:76) TS377149: This object literal is checked as an instance of Schema class 'B' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'B.make(...)' or 'new B(...)' instead. effect(schemaClassObjectLiteral)
+  Fix 0: "Disable schemaClassObjectLiteral for this line"
+  Fix 1: "Disable schemaClassObjectLiteral for entire file"
+
+[D17] (84:60-84:74) TS377149: This object literal is checked as an instance of Schema class 'A' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'A.make(...)' or 'new A(...)' instead. effect(schemaClassObjectLiteral)
+  Fix 0: "Disable schemaClassObjectLiteral for this line"
+  Fix 1: "Disable schemaClassObjectLiteral for entire file"
+
+[D18] (87:43-87:57) TS377149: This object literal is checked as an instance of Schema class 'A' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'A.make(...)' or 'new A(...)' instead. effect(schemaClassObjectLiteral)
+  Fix 0: "Disable schemaClassObjectLiteral for this line"
+  Fix 1: "Disable schemaClassObjectLiteral for entire file"
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable schemaClassObjectLiteral for this line" ===
@@ -130,4 +150,34 @@ skipped by default
 skipped by default
 
 === [D13] Fix 1: "Disable schemaClassObjectLiteral for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable schemaClassObjectLiteral for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable schemaClassObjectLiteral for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable schemaClassObjectLiteral for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable schemaClassObjectLiteral for entire file" ===
+skipped by default
+
+=== [D16] Fix 0: "Disable schemaClassObjectLiteral for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable schemaClassObjectLiteral for entire file" ===
+skipped by default
+
+=== [D17] Fix 0: "Disable schemaClassObjectLiteral for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable schemaClassObjectLiteral for entire file" ===
+skipped by default
+
+=== [D18] Fix 0: "Disable schemaClassObjectLiteral for this line" ===
+skipped by default
+
+=== [D18] Fix 1: "Disable schemaClassObjectLiteral for entire file" ===
 skipped by default

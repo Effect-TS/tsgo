@@ -60,3 +60,28 @@ export class Regular {
   name = "a"
 }
 export const regular: Regular = { name: "a" }
+
+export class A extends Schema.Class<A, { readonly brand: unique symbol }>("A")({ a: Schema.String }) {}
+export const nestedA = A.make({ a: "a" })
+export class B extends Schema.Class<B>("B")({ inner: A }) {}
+export const S = Schema.Struct({ inner: A })
+
+export const nestedMade = B.make({ inner: { ...nestedA } })
+export const nestedConstructed = new B({ inner: { ...nestedA } })
+export const nestedStructMade = S.make({ inner: { ...nestedA } })
+export const nestedMadeOption = B.makeOption({ inner: { ...nestedA } })
+export const nestedParenthesized = B.make({ inner: ({ ...nestedA }) })
+
+export class X extends Schema.Class<X>("X")({ items: Schema.Array(A) }) {}
+export const arrayMade = X.make({ items: [{ ...nestedA }] })
+
+declare function pick(f: () => A): A
+export const nestedCallback = B.make({ inner: pick(() => ({ ...nestedA })) })
+
+declare function passThrough(value: A): A
+export const nestedCall = B.make({ inner: passThrough({ ...nestedA }) })
+
+export const encodedNested = Schema.encodeSync(B)({ inner: { ...nestedA } })
+
+declare const factory: { make(value: A): A }
+export const nonSchemaMade = factory.make({ ...nestedA })

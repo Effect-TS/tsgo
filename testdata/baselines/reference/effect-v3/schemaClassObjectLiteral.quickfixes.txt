@@ -40,6 +40,10 @@
   Fix 0: "Disable schemaClassObjectLiteral for this line"
   Fix 1: "Disable schemaClassObjectLiteral for entire file"
 
+[D11] (52:49-52:63) TS377149: This object literal is checked as an instance of Schema class 'A' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'A.make(...)' or 'new A(...)' instead. effect(schemaClassObjectLiteral)
+  Fix 0: "Disable schemaClassObjectLiteral for this line"
+  Fix 1: "Disable schemaClassObjectLiteral for entire file"
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable schemaClassObjectLiteral for this line" ===
@@ -100,4 +104,10 @@ skipped by default
 skipped by default
 
 === [D10] Fix 1: "Disable schemaClassObjectLiteral for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable schemaClassObjectLiteral for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable schemaClassObjectLiteral for entire file" ===
 skipped by default

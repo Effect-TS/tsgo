@@ -1,4 +1,4 @@
-==== /.src/schemaClassObjectLiteral.ts (12 flows) ====
+==== /.src/schemaClassObjectLiteral.ts (29 flows) ====
 
 === Piping Flow ===
 Location: 5:27 - 5:116
@@ -171,3 +171,241 @@ Transformations (1):
       callee: list.map
       args: (constant)
       outType: { brand: typeof brand; name: string; }[]
+
+=== Piping Flow ===
+Location: 64:23 - 64:101
+Node: Schema.Class<A, { readonly brand: unique symbol }>("A")({ a: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { a: Schema.String }
+Subject Type: { a: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<A, { readonly brand: unique symbol }>("A")
+      args: (constant)
+      outType: Class<A, Struct<{ readonly a: String; }>, { readonly brand: unique symbol; }>
+
+=== Piping Flow ===
+Location: 65:23 - 65:42
+Node: A.make({ a: "a" })
+Node Kind: KindCallExpression
+
+Subject: { a: "a" }
+Subject Type: { a: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: A.make
+      args: (constant)
+      outType: A
+
+=== Piping Flow ===
+Location: 66:23 - 66:58
+Node: Schema.Class<B>("B")({ inner: A })
+Node Kind: KindCallExpression
+
+Subject: { inner: A }
+Subject Type: { inner: typeof A; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<B>("B")
+      args: (constant)
+      outType: Class<B, Struct<{ readonly inner: typeof A; }>, {}>
+
+=== Piping Flow ===
+Location: 67:17 - 67:45
+Node: Schema.Struct({ inner: A })
+Node Kind: KindCallExpression
+
+Subject: { inner: A }
+Subject Type: { inner: typeof A; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly inner: typeof A; }>
+
+=== Piping Flow ===
+Location: 69:26 - 69:60
+Node: B.make({ inner: { ...nestedA } })
+Node Kind: KindCallExpression
+
+Subject: { inner: { ...nestedA } }
+Subject Type: { inner: { brand: typeof brand; a: string; }; }
+
+Transformations (1):
+  [0] kind: call
+      callee: B.make
+      args: (constant)
+      outType: B
+
+=== Piping Flow ===
+Location: 71:32 - 71:66
+Node: S.make({ inner: { ...nestedA } })
+Node Kind: KindCallExpression
+
+Subject: { inner: { ...nestedA } }
+Subject Type: { inner: { brand: typeof brand; a: string; }; }
+
+Transformations (1):
+  [0] kind: call
+      callee: S.make
+      args: (constant)
+      outType: { readonly inner: A; }
+
+=== Piping Flow ===
+Location: 72:32 - 72:72
+Node: B.makeOption({ inner: { ...nestedA } })
+Node Kind: KindCallExpression
+
+Subject: { inner: { ...nestedA } }
+Subject Type: { inner: { brand: typeof brand; a: string; }; }
+
+Transformations (1):
+  [0] kind: call
+      callee: B.makeOption
+      args: (constant)
+      outType: Option<B>
+
+=== Piping Flow ===
+Location: 73:35 - 73:71
+Node: B.make({ inner: ({ ...nestedA }) })
+Node Kind: KindCallExpression
+
+Subject: { inner: ({ ...nestedA }) }
+Subject Type: { inner: { brand: typeof brand; a: string; }; }
+
+Transformations (1):
+  [0] kind: call
+      callee: B.make
+      args: (constant)
+      outType: B
+
+=== Piping Flow ===
+Location: 75:23 - 75:72
+Node: Schema.Class<X>("X")({ items: Schema.Array(A) })
+Node Kind: KindCallExpression
+
+Subject: { items: Schema.Array(A) }
+Subject Type: { items: $Array<typeof A>; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<X>("X")
+      args: (constant)
+      outType: Class<X, Struct<{ readonly items: $Array<typeof A>; }>, {}>
+
+=== Piping Flow ===
+Location: 75:53 - 75:69
+Node: Schema.Array(A)
+Node Kind: KindCallExpression
+
+Subject: A
+Subject Type: typeof A
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Array
+      args: (constant)
+      outType: $Array<typeof A>
+
+=== Piping Flow ===
+Location: 76:25 - 76:61
+Node: X.make({ items: [{ ...nestedA }] })
+Node Kind: KindCallExpression
+
+Subject: { items: [{ ...nestedA }] }
+Subject Type: { items: { brand: typeof brand; a: string; }[]; }
+
+Transformations (1):
+  [0] kind: call
+      callee: X.make
+      args: (constant)
+      outType: X
+
+=== Piping Flow ===
+Location: 79:30 - 79:78
+Node: B.make({ inner: pick(() => ({ ...nestedA })) })
+Node Kind: KindCallExpression
+
+Subject: { inner: pick(() => ({ ...nestedA })) }
+Subject Type: { inner: A; }
+
+Transformations (1):
+  [0] kind: call
+      callee: B.make
+      args: (constant)
+      outType: B
+
+=== Piping Flow ===
+Location: 79:46 - 79:75
+Node: pick(() => ({ ...nestedA }))
+Node Kind: KindCallExpression
+
+Subject: () => ({ ...nestedA })
+Subject Type: () => { brand: typeof brand; a: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: pick
+      args: (constant)
+      outType: A
+
+=== Piping Flow ===
+Location: 82:26 - 82:73
+Node: B.make({ inner: passThrough({ ...nestedA }) })
+Node Kind: KindCallExpression
+
+Subject: { inner: passThrough({ ...nestedA }) }
+Subject Type: { inner: A; }
+
+Transformations (1):
+  [0] kind: call
+      callee: B.make
+      args: (constant)
+      outType: B
+
+=== Piping Flow ===
+Location: 82:42 - 82:70
+Node: passThrough({ ...nestedA })
+Node Kind: KindCallExpression
+
+Subject: { ...nestedA }
+Subject Type: { brand: typeof brand; a: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: passThrough
+      args: (constant)
+      outType: A
+
+=== Piping Flow ===
+Location: 84:29 - 84:77
+Node: Schema.encodeSync(B)({ inner: { ...nestedA } })
+Node Kind: KindCallExpression
+
+Subject: { inner: { ...nestedA } }
+Subject Type: { inner: { brand: typeof brand; a: string; }; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.encodeSync(B)
+      args: (constant)
+      outType: { readonly inner: { readonly a: string; }; }
+
+=== Piping Flow ===
+Location: 87:29 - 87:58
+Node: factory.make({ ...nestedA })
+Node Kind: KindCallExpression
+
+Subject: { ...nestedA }
+Subject Type: { brand: typeof brand; a: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: factory.make
+      args: (constant)
+      outType: A

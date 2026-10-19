@@ -45,3 +45,8 @@ export class Regular {
   name = "a"
 }
 export const regular: Regular = { name: "a" }
+
+export class A extends Schema.Class<A>("A")({ a: Schema.String }) {}
+export const nestedA = new A({ a: "a" })
+export class B extends Schema.Class<B>("B")({ inner: A }) {}
+export const nestedConstructed = new B({ inner: { ...nestedA } })

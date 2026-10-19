@@ -5,6 +5,7 @@ import (
 
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
@@ -62,7 +63,7 @@ var SchemaClassObjectLiteral = rule.Rule{
 						className = ast.TSGetSymbolName(member.Symbol())
 					}
 				}
-				if className != "" {
+				if className != "" && !schemaClassObjectLiteralInV4Constructor(ctx, node) {
 					diagnostics = append(diagnostics, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						ctx.GetErrorRange(node),
@@ -77,4 +78,36 @@ var SchemaClassObjectLiteral = rule.Rule{
 		walk(ctx.SourceFile.AsNode())
 		return diagnostics
 	},
+}
+
+func schemaClassObjectLiteralInV4Constructor(ctx *rule.Context, node *ast.Node) bool {
+	if ctx.TypeParser.SupportedEffectVersion() != typeparser.EffectMajorV4 {
+		return false
+	}
+	// V4 Schema constructors build nested class instances from plain objects.
+	for parent := node.Parent; parent != nil; node, parent = parent, parent.Parent {
+		switch parent.Kind {
+		case ast.KindObjectLiteralExpression, ast.KindPropertyAssignment, ast.KindArrayLiteralExpression, ast.KindParenthesizedExpression:
+			continue
+		case ast.KindCallExpression, ast.KindNewExpression:
+			if !slices.Contains(parent.Arguments(), node) {
+				return false
+			}
+			expression := parent.Expression()
+			if parent.Kind == ast.KindCallExpression {
+				if expression.Kind != ast.KindPropertyAccessExpression {
+					return false
+				}
+				access := expression.AsPropertyAccessExpression()
+				if access.Name().Text() != "make" && access.Name().Text() != "makeOption" {
+					return false
+				}
+				expression = access.Expression
+			}
+			return ctx.TypeParser.IsSchemaType(ctx.TypeParser.GetTypeAtLocation(expression))
+		default:
+			return false
+		}
+	}
+	return false
 }

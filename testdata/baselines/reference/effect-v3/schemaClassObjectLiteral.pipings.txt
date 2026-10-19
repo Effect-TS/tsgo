@@ -1,4 +1,4 @@
-==== /.src/schemaClassObjectLiteral.ts (5 flows) ====
+==== /.src/schemaClassObjectLiteral.ts (7 flows) ====
 
 === Piping Flow ===
 Location: 6:26 - 6:78
@@ -69,3 +69,31 @@ Transformations (1):
       callee: list.map
       args: (constant)
       outType: { name: string; }[]
+
+=== Piping Flow ===
+Location: 49:23 - 49:66
+Node: Schema.Class<A>("A")({ a: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { a: Schema.String }
+Subject Type: { a: typeof String$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<A>("A")
+      args: (constant)
+      outType: Class<A, { a: typeof String$; }, Encoded<{ a: typeof String$; }>, never, { readonly a: string; }, {}, {}>
+
+=== Piping Flow ===
+Location: 51:23 - 51:58
+Node: Schema.Class<B>("B")({ inner: A })
+Node Kind: KindCallExpression
+
+Subject: { inner: A }
+Subject Type: { inner: typeof A; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<B>("B")
+      args: (constant)
+      outType: Class<B, { inner: typeof A; }, Encoded<{ inner: typeof A; }>, never, { readonly inner: A; }, {}, {}>

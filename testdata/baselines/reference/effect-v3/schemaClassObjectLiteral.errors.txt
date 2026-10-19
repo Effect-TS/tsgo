@@ -11,9 +11,10 @@ Effect version: 3.19.19
 /.src/schemaClassObjectLiteral.ts(31,33): warning TS377149: This object literal is checked as an instance of Schema class 'Admin' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'Admin.make(...)' or 'new Admin(...)' instead. effect(schemaClassObjectLiteral)
 /.src/schemaClassObjectLiteral.ts(33,50): warning TS377149: This object literal is checked as an instance of Schema class 'User' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'User.make(...)' or 'new User(...)' instead. effect(schemaClassObjectLiteral)
 /.src/schemaClassObjectLiteral.ts(34,46): warning TS377149: This object literal is checked as an instance of Schema class 'TaggedUser' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'TaggedUser.make(...)' or 'new TaggedUser(...)' instead. effect(schemaClassObjectLiteral)
+/.src/schemaClassObjectLiteral.ts(52,49): warning TS377149: This object literal is checked as an instance of Schema class 'A' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'A.make(...)' or 'new A(...)' instead. effect(schemaClassObjectLiteral)
 
 
-==== /.src/schemaClassObjectLiteral.ts (10 errors) ====
+==== /.src/schemaClassObjectLiteral.ts (11 errors) ====
     // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics schemaClassObjectLiteral:warning
@@ -81,4 +82,11 @@ Effect version: 3.19.19
       name = "a"
     }
     export const regular: Regular = { name: "a" }
+    
+    export class A extends Schema.Class<A>("A")({ a: Schema.String }) {}
+    export const nestedA = new A({ a: "a" })
+    export class B extends Schema.Class<B>("B")({ inner: A }) {}
+    export const nestedConstructed = new B({ inner: { ...nestedA } })
+                                                    ~~~~~~~~~~~~~~
+!!! warning TS377149: This object literal is checked as an instance of Schema class 'A' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'A.make(...)' or 'new A(...)' instead. effect(schemaClassObjectLiteral)
     
