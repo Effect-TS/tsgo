@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:27-7:38) TS377149: This object literal is checked as an instance of Schema class 'User' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'User.make(...)' or 'new User(...)' instead. effect(schemaClassObjectLiteral)
+  Fix 0: "Disable schemaClassObjectLiteral for this line"
+  Fix 1: "Disable schemaClassObjectLiteral for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable schemaClassObjectLiteral for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable schemaClassObjectLiteral for entire file" ===
+skipped by default

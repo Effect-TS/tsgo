@@ -103,6 +103,7 @@ var All = []rule.Rule{
 	OverriddenSchemaConstructor,
 	SchemaOpaqueInstanceMember,
 	SchemaClassMissingBrand,
+	SchemaClassObjectLiteral,
 	RedundantSchemaTagIdentifier,
 	ClassSelfMismatch,
 	EffectFnOpportunity,

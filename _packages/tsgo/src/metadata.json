@@ -101,6 +101,7 @@
         "runEffectInsideEffect": "suggestion",
         "runOfExitToRunExit": "suggestion",
         "schemaClassMissingBrand": "suggestion",
+        "schemaClassObjectLiteral": "warning",
         "schemaLiteralNonFinite": "error",
         "schemaNumber": "suggestion",
         "schemaOpaqueInstanceMember": "error",
@@ -193,6 +194,7 @@
         "runEffectInsideEffect": "error",
         "runOfExitToRunExit": "error",
         "schemaClassMissingBrand": "error",
+        "schemaClassObjectLiteral": "error",
         "schemaLiteralNonFinite": "error",
         "schemaNumber": "error",
         "schemaOpaqueInstanceMember": "error",
@@ -236,6 +238,7 @@
         "overriddenSchemaConstructor": "warning",
         "promiseInEffectSuccess": "warning",
         "schemaClassMissingBrand": "warning",
+        "schemaClassObjectLiteral": "warning",
         "schemaLiteralNonFinite": "warning",
         "schemaOpaqueInstanceMember": "warning",
         "unsafeEffectTypeAssertion": "warning",
@@ -876,6 +879,30 @@
             "start": 72,
             "end": 76,
             "text": "Add `{ readonly brand: unique symbol }` as the second type argument. Without a brand, TypeScript may accept structurally compatible values where this class instance type is expected. effect(schemaClassMissingBrand)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "schemaClassObjectLiteral",
+      "group": "correctness",
+      "description": "Warns when object literals are checked as Schema class instances without the class prototype",
+      "defaultSeverity": "warning",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377149
+      ],
+      "preview": {
+        "sourceText": "import { Schema } from \"effect\"\n\nexport class User extends Schema.Class\u003cUser, { readonly brand: unique symbol }\u003e(\"User\")({ name: Schema.String }) {}\nexport const user = User.make({ name: \"a\" })\nexport const copy: User = { ...user }\nexport const renamed = User.make({ ...user, name: \"b\" })\n",
+        "diagnostics": [
+          {
+            "start": 220,
+            "end": 231,
+            "text": "This object literal is checked as an instance of Schema class 'User' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'User.make(...)' or 'new User(...)' instead. effect(schemaClassObjectLiteral)"
           }
         ]
       }

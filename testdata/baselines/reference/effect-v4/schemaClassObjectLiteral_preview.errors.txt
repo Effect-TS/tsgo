@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/schemaClassObjectLiteral_preview.ts(7,27): warning TS377149: This object literal is checked as an instance of Schema class 'User' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'User.make(...)' or 'new User(...)' instead. effect(schemaClassObjectLiteral)
+
+
+==== /.src/schemaClassObjectLiteral_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics schemaClassObjectLiteral:warning
+    import { Schema } from "effect"
+    
+    export class User extends Schema.Class<User, { readonly brand: unique symbol }>("User")({ name: Schema.String }) {}
+    export const user = User.make({ name: "a" })
+    export const copy: User = { ...user }
+                              ~~~~~~~~~~~
+!!! warning TS377149: This object literal is checked as an instance of Schema class 'User' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'User.make(...)' or 'new User(...)' instead. effect(schemaClassObjectLiteral)
+    export const renamed = User.make({ ...user, name: "b" })
+    

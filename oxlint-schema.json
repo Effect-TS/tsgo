@@ -2548,6 +2548,9 @@
         "effecttsgo/schema-class-missing-brand": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/schema-class-object-literal": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/schema-literal-non-finite": {
           "$ref": "#/definitions/RuleNoConfig"
         },
