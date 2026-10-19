@@ -1,4 +1,4 @@
-==== /.src/schemaClassObjectLiteral.ts (29 flows) ====
+==== /.src/schemaClassObjectLiteral.ts (30 flows) ====
 
 === Piping Flow ===
 Location: 5:27 - 5:116
@@ -271,7 +271,21 @@ Transformations (1):
       outType: Option<B>
 
 === Piping Flow ===
-Location: 73:35 - 73:71
+Location: 73:32 - 73:72
+Node: B.makeEffect({ inner: { ...nestedA } })
+Node Kind: KindCallExpression
+
+Subject: { inner: { ...nestedA } }
+Subject Type: { inner: { brand: typeof brand; a: string; }; }
+
+Transformations (1):
+  [0] kind: call
+      callee: B.makeEffect
+      args: (constant)
+      outType: Effect<B, Issue, never>
+
+=== Piping Flow ===
+Location: 74:35 - 74:71
 Node: B.make({ inner: ({ ...nestedA }) })
 Node Kind: KindCallExpression
 
@@ -285,7 +299,7 @@ Transformations (1):
       outType: B
 
 === Piping Flow ===
-Location: 75:23 - 75:72
+Location: 76:23 - 76:72
 Node: Schema.Class<X>("X")({ items: Schema.Array(A) })
 Node Kind: KindCallExpression
 
@@ -299,7 +313,7 @@ Transformations (1):
       outType: Class<X, Struct<{ readonly items: $Array<typeof A>; }>, {}>
 
 === Piping Flow ===
-Location: 75:53 - 75:69
+Location: 76:53 - 76:69
 Node: Schema.Array(A)
 Node Kind: KindCallExpression
 
@@ -313,7 +327,7 @@ Transformations (1):
       outType: $Array<typeof A>
 
 === Piping Flow ===
-Location: 76:25 - 76:61
+Location: 77:25 - 77:61
 Node: X.make({ items: [{ ...nestedA }] })
 Node Kind: KindCallExpression
 
@@ -327,7 +341,7 @@ Transformations (1):
       outType: X
 
 === Piping Flow ===
-Location: 79:30 - 79:78
+Location: 80:30 - 80:78
 Node: B.make({ inner: pick(() => ({ ...nestedA })) })
 Node Kind: KindCallExpression
 
@@ -341,7 +355,7 @@ Transformations (1):
       outType: B
 
 === Piping Flow ===
-Location: 79:46 - 79:75
+Location: 80:46 - 80:75
 Node: pick(() => ({ ...nestedA }))
 Node Kind: KindCallExpression
 
@@ -355,7 +369,7 @@ Transformations (1):
       outType: A
 
 === Piping Flow ===
-Location: 82:26 - 82:73
+Location: 83:26 - 83:73
 Node: B.make({ inner: passThrough({ ...nestedA }) })
 Node Kind: KindCallExpression
 
@@ -369,7 +383,7 @@ Transformations (1):
       outType: B
 
 === Piping Flow ===
-Location: 82:42 - 82:70
+Location: 83:42 - 83:70
 Node: passThrough({ ...nestedA })
 Node Kind: KindCallExpression
 
@@ -383,7 +397,7 @@ Transformations (1):
       outType: A
 
 === Piping Flow ===
-Location: 84:29 - 84:77
+Location: 85:29 - 85:77
 Node: Schema.encodeSync(B)({ inner: { ...nestedA } })
 Node Kind: KindCallExpression
 
@@ -397,7 +411,7 @@ Transformations (1):
       outType: { readonly inner: { readonly a: string; }; }
 
 === Piping Flow ===
-Location: 87:29 - 87:58
+Location: 88:29 - 88:58
 Node: factory.make({ ...nestedA })
 Node Kind: KindCallExpression
 

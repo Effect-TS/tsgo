@@ -99,7 +99,9 @@ func schemaClassObjectLiteralInV4Constructor(ctx *rule.Context, node *ast.Node) 
 					return false
 				}
 				access := expression.AsPropertyAccessExpression()
-				if access.Name().Text() != "make" && access.Name().Text() != "makeOption" {
+				switch access.Name().Text() {
+				case "make", "makeOption", "makeEffect":
+				default:
 					return false
 				}
 				expression = access.Expression

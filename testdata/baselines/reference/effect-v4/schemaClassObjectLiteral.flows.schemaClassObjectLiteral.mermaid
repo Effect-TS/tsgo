@@ -75,30 +75,31 @@ flowchart TB
   73[/"type: B<br/>node: new B#40;#123; inner: #123; ...nestedA #125; #125;#41;"/]
   74[/"type: #123; readonly inner: A; #125;<br/>node: S.make#40;#123; inner: #123; ...nestedA #125; #125;#41;"/]
   75[/"type: Option#lt;B#gt;<br/>node: B.makeOption#40;#123; inner: #123; ...nestedA #125; #125;#41;"/]
-  76[/"type: B<br/>node: B.make#40;#123; inner: #40;#123; ...nestedA #125;#41; #125;#41;"/]
-  77[/"type: Class#lt;X, Struct#lt;#123; readonly items: $Array#lt;typeof A#gt;; #125;#gt;, #123;#125;#gt;<br/>node: Schema.Class#lt;X#gt;#40;#quot;X#quot;#41;#40;#123; items: Schema.Array#40;A#41; #125;#41;"/]
-  78[/"type: #quot;X#quot;<br/>node: #quot;X#quot;"/]
-  79["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;X, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;X, Struct#lt;Fields#gt;, #123;#125;#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;X, readonly #91;S#93;#gt; #124; undefined#41;: Class#lt;X, S, #123;#125;#gt;; #125;<br/>callee: Schema.Class<br/>args: #91;#93;"]
-  80[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;Fields#gt;, Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, S, Brand#gt;; #125;<br/>node: Schema.Class"/]
-  81[/"type: typeof A<br/>node: A"/]
-  82["type: $Array#lt;typeof A#gt;<br/>callee: Schema.Array<br/>args: #91;#93;"]
-  83[/"type: ArrayLambda<br/>node: Schema.Array"/]
-  84[/"type: X<br/>node: X.make#40;#123; items: #91;#123; ...nestedA #125;#93; #125;#41;"/]
-  85[["type: #40;f: #40;#41; =#gt; A#41; =#gt; A<br/>node: declare function pick#40;f: #40;#41; =#gt; A#41;: A"]]
-  86[/"type: B<br/>node: B.make#40;#123; inner: pick#40;#40;#41; =#gt; #40;#123; ...nestedA #125;#41;#41; #125;#41;"/]
-  87[["type: #40;#41; =#gt; #123; brand: typeof brand; a: string; #125;<br/>node: #40;#41; =#gt; #40;#123; ...nestedA #125;#41;"]]
-  88[/"type: #123; brand: typeof brand; a: string; #125;<br/>node: #40;#123; ...nestedA #125;#41;"/]
-  89["type: A<br/>callee: pick<br/>args: #91;#93;"]
-  90[/"type: #40;f: #40;#41; =#gt; A#41; =#gt; A<br/>node: pick"/]
-  91[["type: #40;value: A#41; =#gt; A<br/>node: declare function passThrough#40;value: A#41;: A"]]
-  92[/"type: B<br/>node: B.make#40;#123; inner: passThrough#40;#123; ...nestedA #125;#41; #125;#41;"/]
-  93[/"type: #123; brand: typeof brand; a: string; #125;<br/>node: #123; ...nestedA #125;"/]
-  94["type: A<br/>callee: passThrough<br/>args: #91;#93;"]
-  95[/"type: #40;value: A#41; =#gt; A<br/>node: passThrough"/]
-  96[/"type: #123; readonly inner: #123; readonly a: string; #125;; #125;<br/>node: Schema.encodeSync#40;B#41;#40;#123; inner: #123; ...nestedA #125; #125;#41;"/]
-  97[/"type: #123; brand: typeof brand; a: string; #125;<br/>node: #123; ...nestedA #125;"/]
-  98["type: A<br/>callee: factory.make<br/>args: #91;#93;"]
-  99[/"type: #40;value: A#41; =#gt; A<br/>node: factory.make"/]
+  76[/"type: Effect#lt;B, Issue, never#gt;<br/>node: B.makeEffect#40;#123; inner: #123; ...nestedA #125; #125;#41;"/]
+  77[/"type: B<br/>node: B.make#40;#123; inner: #40;#123; ...nestedA #125;#41; #125;#41;"/]
+  78[/"type: Class#lt;X, Struct#lt;#123; readonly items: $Array#lt;typeof A#gt;; #125;#gt;, #123;#125;#gt;<br/>node: Schema.Class#lt;X#gt;#40;#quot;X#quot;#41;#40;#123; items: Schema.Array#40;A#41; #125;#41;"/]
+  79[/"type: #quot;X#quot;<br/>node: #quot;X#quot;"/]
+  80["type: #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;X, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: Class#lt;X, Struct#lt;Fields#gt;, #123;#125;#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;X, readonly #91;S#93;#gt; #124; undefined#41;: Class#lt;X, S, #123;#125;#gt;; #125;<br/>callee: Schema.Class<br/>args: #91;#93;"]
+  81[/"type: #lt;Self = never, Brand = #123;#125;#gt;#40;identifier: string#41; =#gt; #123; #lt;const Fields extends Struct.Fields#gt;#40;fields: Fields, annotations?: Declaration#lt;Self, readonly #91;Struct#lt;Fields#gt;#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, Struct#lt;Fields#gt;, Brand#gt;; #lt;S extends Struct#lt;Struct.Fields#gt;#gt;#40;schema: S, annotations?: Declaration#lt;Self, readonly #91;S#93;#gt; #124; undefined#41;: #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Schema.Class#lt;Self#gt;#40;...#41;`#quot; : Class#lt;Self, S, Brand#gt;; #125;<br/>node: Schema.Class"/]
+  82[/"type: typeof A<br/>node: A"/]
+  83["type: $Array#lt;typeof A#gt;<br/>callee: Schema.Array<br/>args: #91;#93;"]
+  84[/"type: ArrayLambda<br/>node: Schema.Array"/]
+  85[/"type: X<br/>node: X.make#40;#123; items: #91;#123; ...nestedA #125;#93; #125;#41;"/]
+  86[["type: #40;f: #40;#41; =#gt; A#41; =#gt; A<br/>node: declare function pick#40;f: #40;#41; =#gt; A#41;: A"]]
+  87[/"type: B<br/>node: B.make#40;#123; inner: pick#40;#40;#41; =#gt; #40;#123; ...nestedA #125;#41;#41; #125;#41;"/]
+  88[["type: #40;#41; =#gt; #123; brand: typeof brand; a: string; #125;<br/>node: #40;#41; =#gt; #40;#123; ...nestedA #125;#41;"]]
+  89[/"type: #123; brand: typeof brand; a: string; #125;<br/>node: #40;#123; ...nestedA #125;#41;"/]
+  90["type: A<br/>callee: pick<br/>args: #91;#93;"]
+  91[/"type: #40;f: #40;#41; =#gt; A#41; =#gt; A<br/>node: pick"/]
+  92[["type: #40;value: A#41; =#gt; A<br/>node: declare function passThrough#40;value: A#41;: A"]]
+  93[/"type: B<br/>node: B.make#40;#123; inner: passThrough#40;#123; ...nestedA #125;#41; #125;#41;"/]
+  94[/"type: #123; brand: typeof brand; a: string; #125;<br/>node: #123; ...nestedA #125;"/]
+  95["type: A<br/>callee: passThrough<br/>args: #91;#93;"]
+  96[/"type: #40;value: A#41; =#gt; A<br/>node: passThrough"/]
+  97[/"type: #123; readonly inner: #123; readonly a: string; #125;; #125;<br/>node: Schema.encodeSync#40;B#41;#40;#123; inner: #123; ...nestedA #125; #125;#41;"/]
+  98[/"type: #123; brand: typeof brand; a: string; #125;<br/>node: #123; ...nestedA #125;"/]
+  99["type: A<br/>callee: factory.make<br/>args: #91;#93;"]
+  100[/"type: #40;value: A#41; =#gt; A<br/>node: factory.make"/]
   1 -->|"kind: pipe"| 2
   3 -->|"kind: transformCallee"| 2
   2 -->|"kind: usedBy"| 0
@@ -128,18 +129,18 @@ flowchart TB
   67 -->|"kind: usedBy"| 65
   69 -->|"kind: pipe"| 70
   71 -->|"kind: transformCallee"| 70
-  78 -->|"kind: pipe"| 79
-  80 -->|"kind: transformCallee"| 79
-  79 -->|"kind: usedBy"| 77
-  81 -->|"kind: pipe"| 82
-  83 -->|"kind: transformCallee"| 82
-  82 -->|"kind: usedBy"| 77
-  88 -->|"kind: potentialReturn"| 87
-  87 -->|"kind: pipe"| 89
-  90 -->|"kind: transformCallee"| 89
-  89 -->|"kind: usedBy"| 86
-  93 -->|"kind: pipe"| 94
-  95 -->|"kind: transformCallee"| 94
-  94 -->|"kind: usedBy"| 92
-  97 -->|"kind: pipe"| 98
-  99 -->|"kind: transformCallee"| 98
+  79 -->|"kind: pipe"| 80
+  81 -->|"kind: transformCallee"| 80
+  80 -->|"kind: usedBy"| 78
+  82 -->|"kind: pipe"| 83
+  84 -->|"kind: transformCallee"| 83
+  83 -->|"kind: usedBy"| 78
+  89 -->|"kind: potentialReturn"| 88
+  88 -->|"kind: pipe"| 90
+  91 -->|"kind: transformCallee"| 90
+  90 -->|"kind: usedBy"| 87
+  94 -->|"kind: pipe"| 95
+  96 -->|"kind: transformCallee"| 95
+  95 -->|"kind: usedBy"| 93
+  98 -->|"kind: pipe"| 99
+  100 -->|"kind: transformCallee"| 99

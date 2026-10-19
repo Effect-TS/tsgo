@@ -70,6 +70,7 @@ export const nestedMade = B.make({ inner: { ...nestedA } })
 export const nestedConstructed = new B({ inner: { ...nestedA } })
 export const nestedStructMade = S.make({ inner: { ...nestedA } })
 export const nestedMadeOption = B.makeOption({ inner: { ...nestedA } })
+export const nestedMadeEffect = B.makeEffect({ inner: { ...nestedA } })
 export const nestedParenthesized = B.make({ inner: ({ ...nestedA }) })
 
 export class X extends Schema.Class<X>("X")({ items: Schema.Array(A) }) {}

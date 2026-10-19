@@ -14,11 +14,11 @@ Effect version: 4.0.2
 /.src/schemaClassObjectLiteral.ts(41,51): warning TS377149: This object literal is checked as an instance of Schema class 'Plain' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'Plain.make(...)' or 'new Plain(...)' instead. effect(schemaClassObjectLiteral)
 /.src/schemaClassObjectLiteral.ts(42,43): warning TS377149: This object literal is checked as an instance of Schema class 'Plain' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'Plain.make(...)' or 'new Plain(...)' instead. effect(schemaClassObjectLiteral)
 /.src/schemaClassObjectLiteral.ts(44,34): warning TS377149: This object literal is checked as an instance of Schema class 'Plain' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'Plain.make(...)' or 'new Plain(...)' instead. effect(schemaClassObjectLiteral)
-/.src/schemaClassObjectLiteral.ts(79,59): warning TS377149: This object literal is checked as an instance of Schema class 'A' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'A.make(...)' or 'new A(...)' instead. effect(schemaClassObjectLiteral)
-/.src/schemaClassObjectLiteral.ts(82,55): warning TS377149: This object literal is checked as an instance of Schema class 'A' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'A.make(...)' or 'new A(...)' instead. effect(schemaClassObjectLiteral)
-/.src/schemaClassObjectLiteral.ts(84,51): warning TS377149: This object literal is checked as an instance of Schema class 'B' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'B.make(...)' or 'new B(...)' instead. effect(schemaClassObjectLiteral)
-/.src/schemaClassObjectLiteral.ts(84,60): warning TS377149: This object literal is checked as an instance of Schema class 'A' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'A.make(...)' or 'new A(...)' instead. effect(schemaClassObjectLiteral)
-/.src/schemaClassObjectLiteral.ts(87,43): warning TS377149: This object literal is checked as an instance of Schema class 'A' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'A.make(...)' or 'new A(...)' instead. effect(schemaClassObjectLiteral)
+/.src/schemaClassObjectLiteral.ts(80,59): warning TS377149: This object literal is checked as an instance of Schema class 'A' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'A.make(...)' or 'new A(...)' instead. effect(schemaClassObjectLiteral)
+/.src/schemaClassObjectLiteral.ts(83,55): warning TS377149: This object literal is checked as an instance of Schema class 'A' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'A.make(...)' or 'new A(...)' instead. effect(schemaClassObjectLiteral)
+/.src/schemaClassObjectLiteral.ts(85,51): warning TS377149: This object literal is checked as an instance of Schema class 'B' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'B.make(...)' or 'new B(...)' instead. effect(schemaClassObjectLiteral)
+/.src/schemaClassObjectLiteral.ts(85,60): warning TS377149: This object literal is checked as an instance of Schema class 'A' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'A.make(...)' or 'new A(...)' instead. effect(schemaClassObjectLiteral)
+/.src/schemaClassObjectLiteral.ts(88,43): warning TS377149: This object literal is checked as an instance of Schema class 'A' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use 'A.make(...)' or 'new A(...)' instead. effect(schemaClassObjectLiteral)
 
 
 ==== /.src/schemaClassObjectLiteral.ts (18 errors) ====
@@ -120,6 +120,7 @@ Effect version: 4.0.2
     export const nestedConstructed = new B({ inner: { ...nestedA } })
     export const nestedStructMade = S.make({ inner: { ...nestedA } })
     export const nestedMadeOption = B.makeOption({ inner: { ...nestedA } })
+    export const nestedMadeEffect = B.makeEffect({ inner: { ...nestedA } })
     export const nestedParenthesized = B.make({ inner: ({ ...nestedA }) })
     
     export class X extends Schema.Class<X>("X")({ items: Schema.Array(A) }) {}
