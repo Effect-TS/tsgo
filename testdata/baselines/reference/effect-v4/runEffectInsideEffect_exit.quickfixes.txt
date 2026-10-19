@@ -4,12 +4,26 @@
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
 
-[D2] (14:5-14:22) TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
+[D2] (7:3-7:21) TS377024: `Effect.runSyncExit` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+
+[D3] (14:5-14:22) TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
   Fix 2: "Use the current services to run the Effect"
 
-[D3] (16:5-16:19) TS377074: `Effect.runSync` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runSyncWith`. effect(runEffectInsideEffect)
+[D4] (15:5-15:26) TS377074: `Effect.runPromiseExit` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseExitWith`. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+  Fix 2: "Use the current services to run the Effect"
+
+[D5] (16:5-16:19) TS377074: `Effect.runSync` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runSyncWith`. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+  Fix 2: "Use the current services to run the Effect"
+
+[D6] (17:5-17:23) TS377074: `Effect.runSyncExit` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runSyncExitWith`. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
   Fix 2: "Use the current services to run the Effect"
@@ -27,32 +41,6 @@ skipped by default
 
 === [D2] Fix 1: "Disable runEffectInsideEffect for entire file" ===
 skipped by default
-
-=== [D2] Fix 2: "Use the current services to run the Effect" ===
-
---- file:///.src/runEffectInsideEffect_exit.ts ---
-import { Effect } from "effect"
-
-const child = Effect.succeed(1)
-
-export const sameScope = Effect.gen(function*() {
-  Effect.runSync(child)
-  Effect.runSyncExit(child)
-  yield* Effect.void
-})
-
-export const nested = Effect.gen(function*() {
-const effectContext = yield* Effect.context<never>();
-
-  yield* Effect.void
-  setTimeout(() => {
-    Effect.runPromiseWith(effectContext)(child)
-    Effect.runPromiseExit(child)
-    Effect.runSync(child)
-    Effect.runSyncExit(child)
-  }, 0)
-})
-
 
 === [D3] Fix 0: "Disable runEffectInsideEffect for this line" ===
 skipped by default
@@ -78,10 +66,106 @@ const effectContext = yield* Effect.context<never>();
 
   yield* Effect.void
   setTimeout(() => {
+    Effect.runPromiseWith(effectContext)(child)
+    Effect.runPromiseExit(child)
+    Effect.runSync(child)
+    Effect.runSyncExit(child)
+  }, 0)
+})
+
+
+=== [D4] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Use the current services to run the Effect" ===
+
+--- file:///.src/runEffectInsideEffect_exit.ts ---
+import { Effect } from "effect"
+
+const child = Effect.succeed(1)
+
+export const sameScope = Effect.gen(function*() {
+  Effect.runSync(child)
+  Effect.runSyncExit(child)
+  yield* Effect.void
+})
+
+export const nested = Effect.gen(function*() {
+const effectContext = yield* Effect.context<never>();
+
+  yield* Effect.void
+  setTimeout(() => {
+    Effect.runPromise(child)
+    Effect.runPromiseExitWith(effectContext)(child)
+    Effect.runSync(child)
+    Effect.runSyncExit(child)
+  }, 0)
+})
+
+
+=== [D5] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Use the current services to run the Effect" ===
+
+--- file:///.src/runEffectInsideEffect_exit.ts ---
+import { Effect } from "effect"
+
+const child = Effect.succeed(1)
+
+export const sameScope = Effect.gen(function*() {
+  Effect.runSync(child)
+  Effect.runSyncExit(child)
+  yield* Effect.void
+})
+
+export const nested = Effect.gen(function*() {
+const effectContext = yield* Effect.context<never>();
+
+  yield* Effect.void
+  setTimeout(() => {
     Effect.runPromise(child)
     Effect.runPromiseExit(child)
     Effect.runSyncWith(effectContext)(child)
     Effect.runSyncExit(child)
+  }, 0)
+})
+
+
+=== [D6] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Use the current services to run the Effect" ===
+
+--- file:///.src/runEffectInsideEffect_exit.ts ---
+import { Effect } from "effect"
+
+const child = Effect.succeed(1)
+
+export const sameScope = Effect.gen(function*() {
+  Effect.runSync(child)
+  Effect.runSyncExit(child)
+  yield* Effect.void
+})
+
+export const nested = Effect.gen(function*() {
+const effectContext = yield* Effect.context<never>();
+
+  yield* Effect.void
+  setTimeout(() => {
+    Effect.runPromise(child)
+    Effect.runPromiseExit(child)
+    Effect.runSync(child)
+    Effect.runSyncExitWith(effectContext)(child)
   }, 0)
 })
 

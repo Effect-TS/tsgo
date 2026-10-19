@@ -13,10 +13,10 @@ import (
 )
 
 // runEffectApis lists the Effect module run APIs that should not be called inside Effect generators.
-var runEffectApis = []string{"runSync", "runPromise", "runFork", "runCallback"}
+var runEffectApis = []string{"runSync", "runSyncExit", "runPromise", "runPromiseExit", "runFork", "runCallback"}
 
-// RunEffectInsideEffect detects Effect.runSync, Effect.runPromise, Effect.runFork, and
-// Effect.runCallback call expressions inside Effect generator contexts and suggests alternatives.
+// RunEffectInsideEffect detects calls to the runEffectApis inside Effect generator contexts
+// and suggests alternatives.
 var RunEffectInsideEffect = rule.Rule{
 	Name:            "runEffectInsideEffect",
 	Group:           "antipattern",
