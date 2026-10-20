@@ -90,9 +90,7 @@ func runPreferEffectString(ctx *rule.Context) []*ast.Diagnostic {
 			parent = parent.Parent
 		}
 		if parent != nil && parent.Kind == ast.KindCallExpression && ast.SkipParentheses(parent.AsCallExpression().Expression) == node &&
-			name != nil && stringMethodNames[name.Text()] && ast.SkipParentheses(receiver).Kind != ast.KindSuperKeyword &&
-			!ast.IsAssignmentTarget(node) && !ast.IsDeclarationName(node) &&
-			(parent == nil || parent.Kind != ast.KindDeleteExpression) {
+			name != nil && stringMethodNames[name.Text()] && ast.SkipParentheses(receiver).Kind != ast.KindSuperKeyword {
 			for i := range stringMethodPreferences {
 				preference := &stringMethodPreferences[i]
 				if ctx.TypeParser.IsNativeStringMethodReference(node, preference.nativeName) {
