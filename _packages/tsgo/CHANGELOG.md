@@ -1,5 +1,11 @@
 # @effect/tsgo
 
+## 0.54.1
+
+### Patch Changes
+
+- 70bb791: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261019.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/5237fd46890956e4bb8177a1a05dcd69e4166560) commit `5237fd46890956e4bb8177a1a05dcd69e4166560`, and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2). Refresh the Oxlint configuration schema from the selected package.
+
 ## 0.54.0
 
 ### Minor Changes
