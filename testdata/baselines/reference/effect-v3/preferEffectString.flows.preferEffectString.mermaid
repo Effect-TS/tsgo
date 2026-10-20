@@ -1,0 +1,129 @@
+flowchart TB
+  0[/"type: 0<br/>node: 0"/]
+  1["type: string #124; undefined<br/>callee: value.at<br/>args: #91;#93;"]
+  2[/"type: #40;index: number#41; =#gt; string #124; undefined<br/>node: value.at"/]
+  3[/"type: 0<br/>node: 0"/]
+  4["type: string<br/>callee: value.charAt<br/>args: #91;#93;"]
+  5[/"type: #40;pos: number#41; =#gt; string<br/>node: value.charAt"/]
+  6[/"type: 0<br/>node: 0"/]
+  7["type: number<br/>callee: value.charCodeAt<br/>args: #91;#93;"]
+  8[/"type: #40;index: number#41; =#gt; number<br/>node: value.charCodeAt"/]
+  9[/"type: 0<br/>node: 0"/]
+  10["type: number #124; undefined<br/>callee: value.codePointAt<br/>args: #91;#93;"]
+  11[/"type: #40;pos: number#41; =#gt; number #124; undefined<br/>node: value.codePointAt"/]
+  12[/"type: #quot;!#quot;<br/>node: #quot;!#quot;"/]
+  13["type: string<br/>callee: value.concat<br/>args: #91;#93;"]
+  14[/"type: #40;...strings: string#91;#93;#41; =#gt; string<br/>node: value.concat"/]
+  15[/"type: boolean<br/>node: value.endsWith#40;#quot;o#quot;#41;"/]
+  16[/"type: boolean<br/>node: value.includes#40;#quot;e#quot;#41;"/]
+  17[/"type: number<br/>node: value.indexOf#40;#quot;l#quot;#41;"/]
+  18[/"type: number<br/>node: value.lastIndexOf#40;#quot;l#quot;#41;"/]
+  19[/"type: number<br/>node: value.localeCompare#40;#quot;world#quot;#41;"/]
+  20[/"type: RegExpMatchArray #124; null<br/>node: value.match#40;/l/#41;"/]
+  21[/"type: RegExp<br/>node: /l/g"/]
+  22["type: RegExpStringIterator#lt;RegExpExecArray#gt;<br/>callee: value.matchAll<br/>args: #91;#93;"]
+  23[/"type: #40;regexp: RegExp#41; =#gt; RegExpStringIterator#lt;RegExpExecArray#gt;<br/>node: value.matchAll"/]
+  24[/"type: string<br/>node: value.normalize#40;#41;"/]
+  25[/"type: string<br/>node: value.padEnd#40;8#41;"/]
+  26[/"type: string<br/>node: value.padStart#40;8#41;"/]
+  27[/"type: 2<br/>node: 2"/]
+  28["type: string<br/>callee: value.repeat<br/>args: #91;#93;"]
+  29[/"type: #40;count: number#41; =#gt; string<br/>node: value.repeat"/]
+  30[/"type: string<br/>node: value.replace#40;#quot;l#quot;, #quot;r#quot;#41;"/]
+  31[/"type: string<br/>node: value.replaceAll#40;#quot;l#quot;, #quot;r#quot;#41;"/]
+  32[/"type: number<br/>node: value.search#40;/l/#41;"/]
+  33[/"type: string<br/>node: value.slice#40;1#41;"/]
+  34[/"type: string#91;#93;<br/>node: value.split#40;#quot;#quot;#41;"/]
+  35[/"type: boolean<br/>node: value.startsWith#40;#quot;h#quot;#41;"/]
+  36[/"type: string<br/>node: value.substring#40;1#41;"/]
+  37[/"type: string<br/>node: value.toLocaleLowerCase#40;#41;"/]
+  38[/"type: string<br/>node: value.toLocaleUpperCase#40;#41;"/]
+  39[/"type: string<br/>node: value.toLowerCase#40;#41;"/]
+  40[/"type: string<br/>node: value.toUpperCase#40;#41;"/]
+  41[/"type: string<br/>node: value.trim#40;#41;"/]
+  42[/"type: string<br/>node: value.trimStart#40;#41;"/]
+  43[/"type: string<br/>node: value.trimEnd#40;#41;"/]
+  44[/"type: string<br/>node: value.trimLeft#40;#41;"/]
+  45[/"type: string<br/>node: value.trimRight#40;#41;"/]
+  46[/"type: string<br/>node: value#91;#quot;trim#quot;#93;#40;#41;"/]
+  47[/"type: string<br/>node: value#91;`trim`#93;#40;#41;"/]
+  48[/"type: string<br/>node: #40;value.trim#41;#40;#41;"/]
+  49[/"type: string<br/>node: value.trim?.#40;#41;"/]
+  50[/"type: string #124; undefined<br/>node: optional?.trim#40;#41;"/]
+  51[/"type: string #124; undefined<br/>node: optional?.#91;#quot;trim#quot;#93;#40;#41;"/]
+  52[/"type: string<br/>node: literal.trim#40;#41;"/]
+  53[/"type: string<br/>node: template.trim#40;#41;"/]
+  54[/"type: string<br/>node: branded.trim#40;#41;"/]
+  55[/"type: string<br/>node: boxed.trim#40;#41;"/]
+  56[["type: #lt;T extends string#gt;#40;generic: T#41; =#gt; string<br/>node: function constrained#lt;T extends string#gt;#40;generic: T#41; #123; return generic.trim#40;#41; #125;"]]
+  57[/"type: string<br/>node: generic.trim#40;#41;"/]
+  58[/"type: boolean<br/>node: mixed.includes#40;#quot;h#quot;#41;"/]
+  59[/"type: string #124; string#91;#93;<br/>node: mixed.slice#40;1#41;"/]
+  60[/"type: any<br/>node: anyValue.trim#40;#41;"/]
+  61[/"type: #40;#41; =#gt; string<br/>node: value.trim"/]
+  62[/"type: string#91;#93;<br/>node: #91;value#93;.map#40;value.trim#41;"/]
+  63[/"type: string<br/>node: String.prototype.trim.call#40;value#41;"/]
+  64[/"type: string<br/>node: value.substr#40;1#41;"/]
+  65[/"type: string<br/>node: value.toString#40;#41;"/]
+  66[/"type: #quot;id#quot;<br/>node: #quot;id#quot;"/]
+  67["type: string<br/>callee: value.anchor<br/>args: #91;#93;"]
+  68[/"type: #40;name: string#41; =#gt; string<br/>node: value.anchor"/]
+  69[/"type: boolean<br/>node: value.isWellFormed#40;#41;"/]
+  70[/"type: string<br/>node: value.toWellFormed#40;#41;"/]
+  71[/"type: string<br/>node: value.valueOf#40;#41;"/]
+  72[/"type: StringIterator#lt;string#gt;<br/>node: value#91;Symbol.iterator#93;#40;#41;"/]
+  73[/"type: number<br/>node: value.length"/]
+  74[/"type: 65<br/>node: 65"/]
+  75["type: string<br/>callee: String.fromCharCode<br/>args: #91;#93;"]
+  76[/"type: #40;...codes: number#91;#93;#41; =#gt; string<br/>node: String.fromCharCode"/]
+  77[/"type: 65<br/>node: 65"/]
+  78["type: string<br/>callee: String.fromCodePoint<br/>args: #91;#93;"]
+  79[/"type: #40;...codePoints: number#91;#93;#41; =#gt; string<br/>node: String.fromCodePoint"/]
+  80[/"type: string<br/>node: String.raw`hello`"/]
+  81[/"type: string<br/>node: value#91;key#93;#40;#41;"/]
+  82[/"type: string<br/>node: custom.trim#40;#41;"/]
+  83[/"type: StringConstructor<br/>node: String"/]
+  84[["type: #40;#41; =#gt; string<br/>node: trim#40;#41; #123; return #quot;#quot; #125;"]]
+  85[/"type: #quot;#quot;<br/>node: #quot;#quot;"/]
+  86[/"type: string<br/>node: new Custom#40;#41;.trim#40;#41;"/]
+  87[/"type: StringConstructor<br/>node: String"/]
+  88[["type: #40;#41; =#gt; string<br/>node: test#40;#41; #123; return super.trim#40;#41; #125;"]]
+  89[/"type: string<br/>node: super.trim#40;#41;"/]
+  90[/"type: #40;#41; =#gt; string<br/>node: writable.trim = #40;#41; =#gt; #quot;#quot;"/]
+  91[["type: #40;#41; =#gt; string<br/>node: #40;#41; =#gt; #quot;#quot;"]]
+  92[/"type: #quot;#quot;<br/>node: #quot;#quot;"/]
+  93[/"type: boolean<br/>node: delete #40;writable.trim#41;"/]
+  94[/"type: string<br/>node: value"/]
+  95[/"type: string<br/>node: value"/]
+  96["type: string<br/>callee: Str.trim<br/>args: #91;#93;"]
+  97[/"type: #lt;A extends string#gt;#40;self: A#41; =#gt; TrimEnd#lt;TrimStart#lt;A#gt;#gt;<br/>node: Str.trim"/]
+  0 -->|"kind: pipe"| 1
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  12 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 13
+  21 -->|"kind: pipe"| 22
+  23 -->|"kind: transformCallee"| 22
+  27 -->|"kind: pipe"| 28
+  29 -->|"kind: transformCallee"| 28
+  57 -->|"kind: potentialReturn"| 56
+  57 -->|"kind: usedBy"| 56
+  66 -->|"kind: pipe"| 67
+  68 -->|"kind: transformCallee"| 67
+  74 -->|"kind: pipe"| 75
+  76 -->|"kind: transformCallee"| 75
+  77 -->|"kind: pipe"| 78
+  79 -->|"kind: transformCallee"| 78
+  85 -->|"kind: potentialReturn"| 84
+  85 -->|"kind: usedBy"| 84
+  89 -->|"kind: potentialReturn"| 88
+  89 -->|"kind: usedBy"| 88
+  92 -->|"kind: potentialReturn"| 91
+  91 -->|"kind: usedBy"| 90
+  95 -->|"kind: pipe"| 96
+  97 -->|"kind: transformCallee"| 96

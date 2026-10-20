@@ -590,5 +590,9 @@
     "This object literal is checked as an instance of Schema class '{0}' but has no class prototype. instanceof checks, methods, and Schema encoding can fail. Use '{0}.make(...)' or 'new {0}(...)' instead. effect(schemaClassObjectLiteral)": {
         "category": "Warning",
         "code": 377149
+    },
+    "Consider effect/String.{0} instead of native String.{1}. {2} effect(preferEffectString)": {
+        "category": "Warning",
+        "code": 377150
     }
 }

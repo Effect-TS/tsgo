@@ -1,0 +1,9 @@
+flowchart TB
+  0[/"type: string<br/>node: value.trim#40;#41;"/]
+  1[/"type: string<br/>node: value#91;#quot;trim#quot;#93;#40;#41;"/]
+  2[/"type: string<br/>node: value.toUpperCase#40;#41;"/]
+  3[/"type: string<br/>node: value"/]
+  4["type: string<br/>callee: Str.trim<br/>args: #91;#93;"]
+  5[/"type: #lt;A extends string#gt;#40;self: A#41; =#gt; TrimEnd#lt;TrimStart#lt;A#gt;#gt;<br/>node: Str.trim"/]
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4

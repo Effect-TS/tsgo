@@ -1,0 +1,20 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/preferEffectString_augmentation.ts(9,7): warning TS377150: Consider effect/String.toUpperCase instead of native String.toUpperCase. Same runtime behavior; literal inputs keep an Uppercase<T> type. effect(preferEffectString)
+
+
+==== /.src/preferEffectString_augmentation.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferEffectString:warning
+    import * as Str from "effect/String"
+    
+    declare global { interface String { trim(): string } }
+    declare const value: string
+    value.trim()
+    value["trim"]()
+    value.toUpperCase()
+          ~~~~~~~~~~~
+!!! warning TS377150: Consider effect/String.toUpperCase instead of native String.toUpperCase. Same runtime behavior; literal inputs keep an Uppercase<T> type. effect(preferEffectString)
+    Str.trim(value)
+    
