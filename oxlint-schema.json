@@ -2491,6 +2491,9 @@
         "effecttsgo/prefer-effect-record": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/prefer-effect-string": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/prefer-namespace-import": {
           "$ref": "#/definitions/RuleNoConfig"
         },

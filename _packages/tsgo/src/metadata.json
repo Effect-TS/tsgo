@@ -295,6 +295,7 @@
         "nodeBuiltinImport": "warning",
         "preferEffectArray": "warning",
         "preferEffectRecord": "warning",
+        "preferEffectString": "warning",
         "preferSchemaOverJson": "warning",
         "processEnv": "warning",
         "processEnvInEffect": "warning",
@@ -1964,6 +1965,30 @@
             "start": 106,
             "end": 113,
             "text": "Consider effect/Record.toEntries instead of native Object.entries. Requires a record rather than arrays or primitives; types entries with inferred keys and snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "preferEffectString",
+      "group": "effectNative",
+      "description": "Suggests Effect String APIs for native String method invocations, with semantic caveats",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377150
+      ],
+      "preview": {
+        "sourceText": "import * as Str from \"effect/String\"\n\nconst email = \"alice@example.com\"\nexport const native = email.indexOf(\"@\")\nexport const preferred = Str.indexOf(\"@\")(email)\n",
+        "diagnostics": [
+          {
+            "start": 100,
+            "end": 107,
+            "text": "Consider effect/String.indexOf instead of native String.indexOf. Returns Option\u003cnumber\u003e, with None replacing -1; there is no position parameter. effect(preferEffectString)"
           }
         ]
       }

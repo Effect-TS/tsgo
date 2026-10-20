@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:7-9:18) TS377150: Consider effect/String.toUpperCase instead of native String.toUpperCase. Same runtime behavior; literal inputs keep an Uppercase<T> type. effect(preferEffectString)
+  Fix 0: "Disable preferEffectString for this line"
+  Fix 1: "Disable preferEffectString for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferEffectString for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferEffectString for entire file" ===
+skipped by default

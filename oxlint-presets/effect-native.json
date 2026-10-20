@@ -26,6 +26,7 @@
     "effecttsgo/node-builtin-import": "warn",
     "effecttsgo/prefer-effect-array": "warn",
     "effecttsgo/prefer-effect-record": "warn",
+    "effecttsgo/prefer-effect-string": "warn",
     "effecttsgo/prefer-schema-over-json": "warn",
     "effecttsgo/process-env": "warn",
     "effecttsgo/process-env-in-effect": "warn",

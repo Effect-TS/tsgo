@@ -1,0 +1,15 @@
+==== /.src/preferEffectString_augmentation.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 9:20 - 10:16
+Node: Str.trim(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Str.trim
+      args: (constant)
+      outType: string

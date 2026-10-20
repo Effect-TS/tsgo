@@ -72,6 +72,8 @@ The [Native Array method inventory](./native-array-inventory.md) lists the metho
 
 The [Native Object method inventory](./native-record-inventory.md) lists the methods covered by `preferEffectRecord`, their migration caveats, and matching limits.
 
+The [Native String method inventory](./native-string-inventory.md) lists the invocations covered by `preferEffectString`, their migration caveats, and matching limits.
+
 With `oxlint.config.ts`, import the same configurations from the package:
 
 ```ts

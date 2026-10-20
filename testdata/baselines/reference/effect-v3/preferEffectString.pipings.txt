@@ -1,0 +1,407 @@
+==== /.src/preferEffectString.ts (29 flows) ====
+
+=== Piping Flow ===
+Location: 5:28 - 6:12
+Node: value.at(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: value.at
+      args: (constant)
+      outType: string | undefined
+
+=== Piping Flow ===
+Location: 6:12 - 7:16
+Node: value.charAt(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: value.charAt
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 7:16 - 8:20
+Node: value.charCodeAt(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: value.charCodeAt
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 8:20 - 9:21
+Node: value.codePointAt(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: value.codePointAt
+      args: (constant)
+      outType: number | undefined
+
+=== Piping Flow ===
+Location: 9:21 - 10:18
+Node: value.concat("!")
+Node Kind: KindCallExpression
+
+Subject: "!"
+Subject Type: "!"
+
+Transformations (1):
+  [0] kind: call
+      callee: value.concat
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 10:18 - 11:20
+Node: value.endsWith("o")
+Node Kind: KindCallExpression
+
+Subject: "o"
+Subject Type: "o"
+
+Transformations (1):
+  [0] kind: call
+      callee: value.endsWith
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 11:20 - 12:20
+Node: value.includes("e")
+Node Kind: KindCallExpression
+
+Subject: "e"
+Subject Type: "e"
+
+Transformations (1):
+  [0] kind: call
+      callee: value.includes
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 12:20 - 13:19
+Node: value.indexOf("l")
+Node Kind: KindCallExpression
+
+Subject: "l"
+Subject Type: "l"
+
+Transformations (1):
+  [0] kind: call
+      callee: value.indexOf
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 13:19 - 14:23
+Node: value.lastIndexOf("l")
+Node Kind: KindCallExpression
+
+Subject: "l"
+Subject Type: "l"
+
+Transformations (1):
+  [0] kind: call
+      callee: value.lastIndexOf
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 14:23 - 15:29
+Node: value.localeCompare("world")
+Node Kind: KindCallExpression
+
+Subject: "world"
+Subject Type: "world"
+
+Transformations (1):
+  [0] kind: call
+      callee: value.localeCompare
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 15:29 - 16:17
+Node: value.match(/l/)
+Node Kind: KindCallExpression
+
+Subject: /l/
+Subject Type: RegExp
+
+Transformations (1):
+  [0] kind: call
+      callee: value.match
+      args: (constant)
+      outType: RegExpMatchArray | null
+
+=== Piping Flow ===
+Location: 16:17 - 17:21
+Node: value.matchAll(/l/g)
+Node Kind: KindCallExpression
+
+Subject: /l/g
+Subject Type: RegExp
+
+Transformations (1):
+  [0] kind: call
+      callee: value.matchAll
+      args: (constant)
+      outType: RegExpStringIterator<RegExpExecArray>
+
+=== Piping Flow ===
+Location: 18:18 - 19:16
+Node: value.padEnd(8)
+Node Kind: KindCallExpression
+
+Subject: 8
+Subject Type: 8
+
+Transformations (1):
+  [0] kind: call
+      callee: value.padEnd
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 19:16 - 20:18
+Node: value.padStart(8)
+Node Kind: KindCallExpression
+
+Subject: 8
+Subject Type: 8
+
+Transformations (1):
+  [0] kind: call
+      callee: value.padStart
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 20:18 - 21:16
+Node: value.repeat(2)
+Node Kind: KindCallExpression
+
+Subject: 2
+Subject Type: 2
+
+Transformations (1):
+  [0] kind: call
+      callee: value.repeat
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 23:27 - 24:18
+Node: value.search(/l/)
+Node Kind: KindCallExpression
+
+Subject: /l/
+Subject Type: RegExp
+
+Transformations (1):
+  [0] kind: call
+      callee: value.search
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 24:18 - 25:15
+Node: value.slice(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: value.slice
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 25:15 - 26:16
+Node: value.split("")
+Node Kind: KindCallExpression
+
+Subject: ""
+Subject Type: ""
+
+Transformations (1):
+  [0] kind: call
+      callee: value.split
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 26:16 - 27:22
+Node: value.startsWith("h")
+Node Kind: KindCallExpression
+
+Subject: "h"
+Subject Type: "h"
+
+Transformations (1):
+  [0] kind: call
+      callee: value.startsWith
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 27:22 - 28:19
+Node: value.substring(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: value.substring
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 56:44 - 57:20
+Node: mixed.includes("h")
+Node Kind: KindCallExpression
+
+Subject: "h"
+Subject Type: "h"
+
+Transformations (1):
+  [0] kind: call
+      callee: mixed.includes
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 57:20 - 58:15
+Node: mixed.slice(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: mixed.slice
+      args: (constant)
+      outType: string | string[]
+
+=== Piping Flow ===
+Location: 62:2 - 62:25
+Node: [value].map(value.trim)
+Node Kind: KindCallExpression
+
+Subject: value.trim
+Subject Type: () => string
+
+Transformations (1):
+  [0] kind: call
+      callee: [value].map
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 62:25 - 63:34
+Node: String.prototype.trim.call(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: String.prototype.trim.call
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 63:34 - 64:16
+Node: value.substr(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: value.substr
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 65:17 - 66:19
+Node: value.anchor("id")
+Node Kind: KindCallExpression
+
+Subject: "id"
+Subject Type: "id"
+
+Transformations (1):
+  [0] kind: call
+      callee: value.anchor
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 71:13 - 72:24
+Node: String.fromCharCode(65)
+Node Kind: KindCallExpression
+
+Subject: 65
+Subject Type: 65
+
+Transformations (1):
+  [0] kind: call
+      callee: String.fromCharCode
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 72:24 - 73:25
+Node: String.fromCodePoint(65)
+Node Kind: KindCallExpression
+
+Subject: 65
+Subject Type: 65
+
+Transformations (1):
+  [0] kind: call
+      callee: String.fromCodePoint
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 85:23 - 86:16
+Node: Str.trim(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Str.trim
+      args: (constant)
+      outType: string

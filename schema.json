@@ -2728,6 +2728,11 @@
           "default": "off",
           "description": "Suggests Effect Record APIs for native Object member references, with semantic caveats"
         },
+        "preferEffectString": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests Effect String APIs for native String method invocations, with semantic caveats"
+        },
         "preferNamespaceImport": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
