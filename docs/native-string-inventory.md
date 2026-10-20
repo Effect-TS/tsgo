@@ -1,6 +1,8 @@
 # Native String method inventory
 
-This inventory lists the counterparts a `preferEffectString` rule can suggest in Effect 3.19.19 and 4.0.2. It covers native String instance and constructor methods. The rule does not exist yet. 32 of the 51 instance methods have an `effect/String` counterpart. None of the three constructor methods has one.
+`preferEffectString` suggests Effect String APIs at native String method invocations in Effect 3.19.19 and 4.0.2. The rule belongs to `effectNative`, supports v3 and v4, and defaults to off. The `effect-native` preset enables it as a warning. Diagnostic 377150 includes the migration caveat. Only suppression quick fixes are available.
+
+This inventory covers native String instance and constructor methods. 32 of the 51 instance methods have an `effect/String` counterpart. None of the three constructor methods has one.
 
 The bundled compiler libraries declare 51 String instance methods, one `length` property, and three named String constructor methods. Overloads count once. The declarations are in `typescript/tsc/internal/bundled/libs/lib.es5.d.ts`, `lib.es2015.core.d.ts`, `lib.es2015.iterable.d.ts`, `lib.es2015.symbol.wellknown.d.ts`, `lib.es2017.string.d.ts`, `lib.es2019.string.d.ts`, `lib.es2020.string.d.ts`, `lib.es2021.string.d.ts`, `lib.es2022.string.d.ts`, and `lib.es2024.string.d.ts`. The libraries mark 16 of the instance methods `@deprecated`: the 13 HTML methods, `substr`, `trimLeft`, and `trimRight`.
 
