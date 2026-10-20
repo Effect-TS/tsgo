@@ -63,6 +63,8 @@ type EffectLinks struct {
 	nativeArrayMember      core.LinkStore[*ast.Symbol, nativeArrayMember]
 	nativeObjectRegistry   *nativeObjectRegistry
 	nativeObjectMember     core.LinkStore[*ast.Symbol, nativeObjectMember]
+	nativeStringRegistry   *nativeStringRegistry
+	nativeStringMember     core.LinkStore[*ast.Symbol, nativeStringMember]
 	// API-stability caches. Declared lookups persist per checker: the declared
 	// stability of a symbol, of a raw signature overload and of one
 	// declaration, shared with the unstableApiUsage/experimentalApiUsage rules.
