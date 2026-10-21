@@ -15,13 +15,14 @@ test("builds a deterministic matrix for every unique TypeScript component", () =
   const upstream: typeof Upstream.Type = {
     schemaVersion: 5,
     tags: {
-      typescript: { latest: "7.0.2", next: "7.1.0-dev" },
+      typescript: { latest: "7.0.2", beta: "7.1.0-beta", next: "7.1.0-dev" },
       "oxlint-tsgolint": { latest: "unused" },
       oxlint: { latest: "unused" }
     },
     components: {
       typescript: {
         "7.1.0-dev": { gitHead: revision, provider: "typescript" },
+        "7.1.0-beta": { gitHead: revision, provider: "typescript" },
         "6.9.0": { gitHead: revision, provider: "typescript-go" },
         "7.0.2": { gitHead: revision, provider: "typescript-go" }
       },
@@ -35,16 +36,17 @@ test("builds a deterministic matrix for every unique TypeScript component", () =
     include: [
       { name: "6.9.0", component: "typescript", version: "6.9.0", repoctl: false },
       { name: "latest", component: "typescript", version: "7.0.2", repoctl: false },
+      { name: "beta", component: "typescript", version: "7.1.0-beta", repoctl: false },
       { name: "next", component: "typescript", version: "7.1.0-dev", repoctl: true }
     ]
   })
 })
 
-test("combines channel labels when latest and next resolve to the same component", () => {
+test("combines channel labels when latest, beta and next resolve to the same component", () => {
   const upstream: typeof Upstream.Type = {
     schemaVersion: 5,
     tags: {
-      typescript: { latest: "7.0.2", next: "7.0.2" },
+      typescript: { latest: "7.0.2", beta: "7.0.2", next: "7.0.2" },
       "oxlint-tsgolint": { latest: "unused" },
       oxlint: { latest: "unused" }
     },
@@ -57,7 +59,7 @@ test("combines channel labels when latest and next resolve to the same component
   }
 
   assert.deepEqual(buildTypeScriptTestMatrix(upstream), {
-    include: [{ name: "latest+next", component: "typescript", version: "7.0.2", repoctl: true }]
+    include: [{ name: "latest+beta+next", component: "typescript", version: "7.0.2", repoctl: true }]
   })
 })
 
@@ -65,7 +67,7 @@ test("builds a component-aware generated branch matrix", () => {
   const upstream: typeof Upstream.Type = {
     schemaVersion: 5,
     tags: {
-      typescript: { latest: "7.0.2", next: "7.1.0-dev" },
+      typescript: { latest: "7.0.2", beta: "7.1.0-dev", next: "7.1.0-dev" },
       "oxlint-tsgolint": { latest: "unused" },
       oxlint: { latest: "unused" }
     },
@@ -89,7 +91,7 @@ test("builds a deduplicated matrix of compatible Oxlint component pairs", () => 
   const upstream: typeof Upstream.Type = {
     schemaVersion: 5,
     tags: {
-      typescript: { latest: "7.0.2", next: "7.1.0-dev" },
+      typescript: { latest: "7.0.2", beta: "7.1.0-dev", next: "7.1.0-dev" },
       "oxlint-tsgolint": { latest: "7.0.2001" },
       oxlint: { latest: "1.77.0" }
     },
@@ -158,7 +160,7 @@ test("builds a deduplicated matrix of compatible Oxlint component pairs", () => 
 })
 
 const typeScriptUpstream = (
-  tags: { readonly latest: string; readonly next: string },
+  tags: { readonly latest: string; readonly beta: string; readonly next: string },
   versions: Record<string, "typescript" | "typescript-go">
 ): typeof Upstream.Type => ({
   schemaVersion: 5,
@@ -182,36 +184,36 @@ const headRef = "2222222222222222222222222222222222222222"
 
 test("builds a perf matrix with one entry per channel and side", () => {
   const base = typeScriptUpstream(
-    { latest: "7.0.2", next: "7.1.0-dev.20261007.1" },
+    { latest: "7.0.2", beta: "7.1.0-dev.20261007.1", next: "7.1.0-dev.20261007.1" },
     { "7.0.2": "typescript-go", "7.1.0-dev.20261007.1": "typescript" }
   )
   const head = typeScriptUpstream(
-    { latest: "7.0.2", next: "7.1.0-dev.20261014.1" },
+    { latest: "7.0.2", beta: "7.1.0-dev.20261014.1", next: "7.1.0-dev.20261014.1" },
     { "7.0.2": "typescript-go", "7.1.0-dev.20261014.1": "typescript" }
   )
 
   assert.deepEqual(buildPerfMatrix(base, head, baseRef, headRef), {
     include: [
       { name: "latest", side: "base", ref: baseRef, version: "7.0.2" },
-      { name: "next", side: "base", ref: baseRef, version: "7.1.0-dev.20261007.1" },
+      { name: "beta+next", side: "base", ref: baseRef, version: "7.1.0-dev.20261007.1" },
       { name: "latest", side: "head", ref: headRef, version: "7.0.2" },
-      { name: "next", side: "head", ref: headRef, version: "7.1.0-dev.20261014.1" }
+      { name: "beta+next", side: "head", ref: headRef, version: "7.1.0-dev.20261014.1" }
     ]
   })
 })
 
 test("builds a perf matrix where a channel exists on only one side", () => {
-  const base = typeScriptUpstream({ latest: "7.0.2", next: "7.0.2" }, { "7.0.2": "typescript-go" })
+  const base = typeScriptUpstream({ latest: "7.0.2", beta: "7.0.2", next: "7.0.2" }, { "7.0.2": "typescript-go" })
   const head = typeScriptUpstream(
-    { latest: "7.0.2", next: "7.1.0-dev.20261014.1" },
+    { latest: "7.0.2", beta: "7.1.0-dev.20261014.1", next: "7.1.0-dev.20261014.1" },
     { "7.0.2": "typescript-go", "7.1.0-dev.20261014.1": "typescript" }
   )
 
   assert.deepEqual(buildPerfMatrix(base, head, baseRef, headRef), {
     include: [
-      { name: "latest+next", side: "base", ref: baseRef, version: "7.0.2" },
+      { name: "latest+beta+next", side: "base", ref: baseRef, version: "7.0.2" },
       { name: "latest", side: "head", ref: headRef, version: "7.0.2" },
-      { name: "next", side: "head", ref: headRef, version: "7.1.0-dev.20261014.1" }
+      { name: "beta+next", side: "head", ref: headRef, version: "7.1.0-dev.20261014.1" }
     ]
   })
 })

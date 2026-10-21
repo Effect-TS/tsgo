@@ -56,6 +56,7 @@ const manifest = () => ({
   tags: {
     typescript: {
       latest: "7.0.0",
+      beta: "7.1.0",
       next: "7.1.0"
     },
     oxlint: { latest: "1.1.0" },
@@ -90,6 +91,13 @@ test("decodes normalized upstream metadata", async() => {
   const upstream = await Effect.runPromise(decodeUpstream(JSON.stringify(manifest())))
   assert.equal(upstream.tags.typescript.latest, "7.0.0")
   assert.equal(upstream.profiles[0]?.description, "Vite+ 1.0.0 compatibility runtime")
+})
+
+test("decodes manifests that predate the TypeScript beta tag", async() => {
+  const upstream = manifest()
+  delete (upstream.tags.typescript as { beta?: string }).beta
+  const decoded = await Effect.runPromise(decodeUpstream(JSON.stringify(upstream)))
+  assert.equal(decoded.tags.typescript.beta, undefined)
 })
 
 test("rejects the deprecated pre-tag format", async() => {
@@ -128,6 +136,15 @@ test("rejects dangling component tags", async() => {
   await assert.rejects(
     Effect.runPromise(decodeUpstream(JSON.stringify(upstream))),
     /oxlint latest references unknown version missing/
+  )
+})
+
+test("rejects a dangling TypeScript beta tag", async() => {
+  const upstream = manifest()
+  upstream.tags.typescript.beta = "missing"
+  await assert.rejects(
+    Effect.runPromise(decodeUpstream(JSON.stringify(upstream))),
+    /TypeScript beta references unknown version missing/
   )
 })
 
@@ -270,6 +287,7 @@ test("retains the three newest stable npm versions through the latest tag", asyn
 test("builds deterministic normalized metadata and deduplicates components", () => {
   const upstream = buildUpstream({
     next: { npmVersion: "7.1.0", gitHead: secondRevision, provider: "typescript" },
+    beta: { npmVersion: "7.1.0-beta", gitHead: secondRevision, provider: "typescript" },
     latest: { npmVersion: "7.0.0", gitHead: revision, provider: "typescript-go" },
     oxlint: {
       oxlint: { npmVersion: "1.77.0", gitHead: thirdRevision },
@@ -291,12 +309,12 @@ test("builds deterministic normalized metadata and deduplicates components", () 
     }
   })
 
-  assert.deepEqual(Object.keys(upstream.components.typescript), ["6.0.0", "7.0.0", "7.1.0"])
+  assert.deepEqual(Object.keys(upstream.components.typescript), ["6.0.0", "7.0.0", "7.1.0", "7.1.0-beta"])
   assert.deepEqual(Object.keys(upstream.components["oxlint-tsgolint"]), ["7.0.2000", "7.0.2001"])
   assert.deepEqual(Object.keys(upstream.components.oxlint), ["1.72.0", "1.73.0", "1.74.0", "1.75.0", "1.76.0", "1.77.0"])
   assert.deepEqual(upstream.components["oxlint-tsgolint"]["7.0.2000"]!.dependencies, { typescript: "6.0.0" })
   assert.deepEqual(upstream.tags, {
-    typescript: { latest: "7.0.0", next: "7.1.0" },
+    typescript: { latest: "7.0.0", beta: "7.1.0-beta", next: "7.1.0" },
     oxlint: { latest: "1.77.0" },
     "oxlint-tsgolint": { latest: "7.0.2001" }
   })
@@ -329,6 +347,7 @@ test("describes upstream version and TypeScript-Go commit updates", () => {
   }>
   const afterOxlint = after.components.oxlint as Record<string, { gitHead: string }>
   after.tags.typescript.next = "7.2.0"
+  after.tags.typescript.beta = "7.2.0"
   afterTypeScript["7.2.0"] = { gitHead: thirdRevision, provider: "typescript" }
   after.tags.oxlint.latest = "1.2.0"
   afterOxlint["1.2.0"] = { gitHead: thirdRevision }
@@ -347,6 +366,7 @@ test("describes upstream version and TypeScript-Go commit updates", () => {
     "## Version updates",
     "",
     "- TypeScript next: [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.2.0) `7.1.0` -> `7.2.0`",
+    "- TypeScript beta: [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.2.0) `7.1.0` -> `7.2.0`",
     "- Oxlint: [`oxlint@latest`](https://www.npmjs.com/package/oxlint/v/1.2.0) `1.1.0` -> `1.2.0`",
     "- Vite+: [`vite-plus@latest`](https://www.npmjs.com/package/vite-plus/v/1.1.0) `1.0.0` -> `1.1.0`",
     "- Vite+ Oxlint runtime: [`oxlint`](https://www.npmjs.com/package/oxlint/v/1.2.0) `1.0.0` -> `1.2.0`",

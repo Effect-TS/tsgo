@@ -17,7 +17,7 @@ test("bundles upstream metadata in every platform package", async() => {
   const upstream = `${JSON.stringify({
     schemaVersion: 5,
     tags: {
-      typescript: { latest: "7.0.0", next: "7.1.0" },
+      typescript: { latest: "7.0.0", beta: "7.1.0", next: "7.1.0" },
       oxlint: { latest: "1.0.0" },
       "oxlint-tsgolint": { latest: "1.0.0" }
     },
@@ -62,7 +62,7 @@ test("prepares versioned platform artifacts and executable manifests", async() =
   const upstream = {
     schemaVersion: 5,
     tags: {
-      typescript: { latest: "7.0.0", next: "7.1.0" },
+      typescript: { latest: "7.0.0", beta: "7.1.0", next: "7.1.0" },
       oxlint: { latest: "1.0.0" },
       "oxlint-tsgolint": { latest: "1.0.0" }
     },

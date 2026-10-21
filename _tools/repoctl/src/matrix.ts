@@ -8,7 +8,7 @@ export const buildTypeScriptTestMatrix = (upstream: typeof Upstream.Type) => ({
   include: Object.keys(upstream.components.typescript)
     .sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)))
     .map((version) => {
-      const channels = (["latest", "next"] as const)
+      const channels = (["latest", "beta", "next"] as const)
         .filter((channel) => upstream.tags.typescript[channel] === version)
       return {
         name: channels.length === 0 ? version : channels.join("+"),
