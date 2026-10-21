@@ -255,7 +255,6 @@ export const generateSubmoduleArtifacts = Effect.fnUntraced(function*(
   const path = yield* Path.Path
   const checkout = path.join(repositoryRoot, compiler.checkoutDir)
   const moduleRoot = path.join(checkout, compiler.moduleDir)
-  const providerShimOverlay = path.join(repositoryRoot, compiler.shimOverlayDir)
   if (compiler.provider === "typescript-go") {
     yield* runGit(checkout, ["submodule", "sync", "--recursive"])
     yield* runGit(checkout, [
@@ -294,6 +293,7 @@ export const generateSubmoduleArtifacts = Effect.fnUntraced(function*(
     compiler.modulePrefix,
     "--provider-shim-prefix",
     compiler.providerShimPrefix,
-    ...[providerShimOverlay, ...shimOverlayRoots].flatMap((root) => ["--extra-shim-root", root])
+    ...[...compiler.shimOverlayDirs.map((dir) => path.join(repositoryRoot, dir)), ...shimOverlayRoots]
+      .flatMap((root) => ["--extra-shim-root", root])
   ], false, { GOWORK: "off" })
 })

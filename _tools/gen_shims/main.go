@@ -37,7 +37,9 @@ const generatedMarker = ".generated-by-gen-shims"
 
 const symbolGetterPrefix = "TSGetSymbol"
 
-const canonicalShimModulePrefix = "github.com/microsoft/TypeScript/tsc/shim"
+const canonicalModulePrefix = "github.com/microsoft/TypeScript/tsc"
+
+const canonicalShimModulePrefix = canonicalModulePrefix + "/shim"
 
 var providerShimModulePrefix = "github.com/microsoft/typescript-go/shim"
 
@@ -1000,7 +1002,7 @@ func run() error {
 	}
 	modulePrefix = strings.TrimSuffix(modulePrefix, "/")
 	providerShimPrefix = strings.TrimSuffix(providerShimPrefix, "/")
-	if providerShimPrefix == canonicalShimModulePrefix {
+	if modulePrefix == canonicalModulePrefix {
 		packagesToShim = normalizeStrings(append(packagesToShim, modernProviderDependencies...))
 	} else {
 		packagesToShim = normalizeStrings(append(packagesToShim, legacyBackportDependencies...))

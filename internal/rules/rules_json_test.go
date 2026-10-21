@@ -468,7 +468,7 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 	// Parse tsconfig
 	configDir := tspath.GetDirectoryPath("tsconfig.json")
 	configDir = tspath.GetNormalizedAbsolutePath(configDir, tspath.RootedDirectoryPath(currentDirectory))
-	parsedConfig := tsoptions.ParseJsonSourceFileConfigFileContent(tsConfigFile, fs, tspath.RootedDirectoryPath(configDir), nil, nil, nil, nil)
+	parsedConfig := tsoptions.ParseJsonSourceFileConfigFileContent(tsConfigFile, tsoptions.NewDefaultParseConfigHost(fs), tspath.RootedDirectoryPath(configDir), nil, nil, nil, nil)
 	if parsedConfig.CompilerOptions() != nil {
 		parsedConfig.CompilerOptions().NewLine = core.NewLineKindLF
 		parsedConfig.CompilerOptions().SkipDefaultLibCheck = core.TSTrue
