@@ -113,7 +113,7 @@ export const Upstream = Schema.Struct({
   tags: Schema.Struct({
     typescript: Schema.Struct({
       latest: NonEmptyString,
-      beta: NonEmptyString,
+      beta: Schema.optionalKey(NonEmptyString),
       next: NonEmptyString
     }),
     oxlint: Schema.Struct({ latest: NonEmptyString }),
@@ -145,9 +145,10 @@ const validateUpstream = (upstream: typeof Upstream.Type) => {
     names.add(profile.name)
   }
   for (const tag of ["latest", "beta", "next"] as const) {
-    if (upstream.components.typescript[upstream.tags.typescript[tag]] === undefined) {
+    const version = upstream.tags.typescript[tag]
+    if (version !== undefined && upstream.components.typescript[version] === undefined) {
       return Effect.fail(new UpstreamManifestError({
-        reason: `TypeScript ${tag} references unknown version ${upstream.tags.typescript[tag]}`
+        reason: `TypeScript ${tag} references unknown version ${version}`
       }))
     }
   }
@@ -850,9 +851,10 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
     npmVersion: upstream.tags.typescript.next,
     ...upstream.components.typescript[upstream.tags.typescript.next]!
   }
-  const betaBefore = {
-    npmVersion: upstream.tags.typescript.beta,
-    ...upstream.components.typescript[upstream.tags.typescript.beta]!
+  const betaBeforeVersion = upstream.tags.typescript.beta
+  const betaBefore = betaBeforeVersion === undefined ? undefined : {
+    npmVersion: betaBeforeVersion,
+    ...upstream.components.typescript[betaBeforeVersion]!
   }
   const latestBefore = {
     npmVersion: upstream.tags.typescript.latest,
@@ -979,8 +981,8 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
     next_version: next.npmVersion,
     next_git_head: next.gitHead,
     beta_spec: "typescript@beta",
-    beta_previous_version: betaBefore.npmVersion,
-    beta_previous_git_head: betaBefore.gitHead,
+    beta_previous_version: betaBefore?.npmVersion ?? "",
+    beta_previous_git_head: betaBefore?.gitHead ?? "",
     beta_version: beta.npmVersion,
     beta_git_head: beta.gitHead,
     latest_spec: "typescript@latest",

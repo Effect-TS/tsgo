@@ -93,11 +93,18 @@ test("decodes normalized upstream metadata", async() => {
   assert.equal(upstream.profiles[0]?.description, "Vite+ 1.0.0 compatibility runtime")
 })
 
+test("decodes manifests that predate the TypeScript beta tag", async() => {
+  const upstream = manifest()
+  delete (upstream.tags.typescript as { beta?: string }).beta
+  const decoded = await Effect.runPromise(decodeUpstream(JSON.stringify(upstream)))
+  assert.equal(decoded.tags.typescript.beta, undefined)
+})
+
 test("rejects the deprecated pre-tag format", async() => {
   await assert.rejects(
     Effect.runPromise(decodeUpstream(JSON.stringify({
       schemaVersion: 3,
-      typescript: { latest: "7.0.0", beta: "7.1.0", next: "7.1.0" },
+      typescript: { latest: "7.0.0", next: "7.1.0" },
       components: {},
       profiles: []
     }))),
@@ -129,6 +136,15 @@ test("rejects dangling component tags", async() => {
   await assert.rejects(
     Effect.runPromise(decodeUpstream(JSON.stringify(upstream))),
     /oxlint latest references unknown version missing/
+  )
+})
+
+test("rejects a dangling TypeScript beta tag", async() => {
+  const upstream = manifest()
+  upstream.tags.typescript.beta = "missing"
+  await assert.rejects(
+    Effect.runPromise(decodeUpstream(JSON.stringify(upstream))),
+    /TypeScript beta references unknown version missing/
   )
 })
 
