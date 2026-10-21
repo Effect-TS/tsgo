@@ -36,7 +36,7 @@ func parse(t *testing.T, host *parseHost, path string, cache tsoptions.ExtendedC
 		t.Fatalf("missing config %s", path)
 	}
 	source := tsoptions.NewTsconfigSourceFileFromFilePath(tspath.RootedFilePath(path), tspath.PathKey(path), text)
-	return tsoptions.ParseJsonSourceFileConfigFileContent(source, host.fs, tspath.RootedDirectoryPath(tspath.GetDirectoryPath(path)), nil, nil, nil, cache)
+	return tsoptions.ParseJsonSourceFileConfigFileContent(source, tsoptions.NewDefaultParseConfigHost(host.fs), tspath.RootedDirectoryPath(tspath.GetDirectoryPath(path)), nil, nil, nil, cache)
 }
 
 func config(options string, extra string) string {
@@ -219,7 +219,7 @@ func TestUnknownRuleNamesJSONAPI(t *testing.T) {
 	if len(errors) != 0 {
 		t.Fatalf("invalid config fixture: %v", errors)
 	}
-	parsed := tsoptions.ParseJsonConfigFileContent(raw, newHost(nil).fs, tspath.RootedDirectoryPath("/"), nil, tspath.RootedFilePath("/tsconfig.json"), nil, nil)
+	parsed := tsoptions.ParseJsonConfigFileContent(raw, tsoptions.NewDefaultParseConfigHost(newHost(nil).fs), tspath.RootedDirectoryPath("/"), nil, tspath.RootedFilePath("/tsconfig.json"), nil, nil)
 	got := unknownDiagnostics(parsed)
 	if len(got) != 1 || got[0].File() != nil {
 		t.Fatalf("expected one locationless warning: %v", got)
@@ -289,7 +289,7 @@ func TestMultipleExtendsAndExistingOptions(t *testing.T) {
 	text, _ := host.fs.ReadFile(tspath.RootedFilePath("/tsconfig.json"))
 	source := tsoptions.NewTsconfigSourceFileFromFilePath(tspath.RootedFilePath("/tsconfig.json"), "/tsconfig.json", text)
 	existing := &core.CompilerOptions{Effect: &etscore.EffectPluginOptions{Diagnostics: true, DiagnosticSeverity: map[string]etscore.Severity{"existingTypo": etscore.SeverityError}}}
-	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(source, host.fs, tspath.RootedDirectoryPath("/"), existing, nil, nil, nil)
+	parsed := tsoptions.ParseJsonSourceFileConfigFileContent(source, tsoptions.NewDefaultParseConfigHost(host.fs), tspath.RootedDirectoryPath("/"), existing, nil, nil, nil)
 	got = unknownDiagnostics(parsed)
 	if len(got) != 1 || !strings.Contains(strings.Join(got[0].MessageArgs(), " "), "existingTypo") {
 		t.Fatalf("existing options were not validated after merging: %v", got)

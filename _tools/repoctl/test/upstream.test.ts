@@ -175,7 +175,7 @@ test("resolves component checkouts and defaults to TypeScript next", async() => 
         moduleDir: "tsc",
         modulePrefix: "github.com/microsoft/TypeScript/tsc",
         providerShimPrefix: "github.com/microsoft/TypeScript/tsc/shim",
-        shimOverlayDir: "_tools/gen_shims/providers/typescript",
+        shimOverlayDirs: ["_tools/gen_shims/providers/typescript"],
         patchDir: "_patches/typescript",
         commandPath: "cmd/tsc",
         tsgolintGitlink: "typescript"
@@ -197,7 +197,7 @@ test("resolves component checkouts and defaults to TypeScript next", async() => 
         moduleDir: ".",
         modulePrefix: "github.com/microsoft/typescript-go",
         providerShimPrefix: "github.com/microsoft/typescript-go/shim",
-        shimOverlayDir: "_tools/gen_shims/providers/typescript-go",
+        shimOverlayDirs: ["_tools/gen_shims/providers/typescript-go"],
         patchDir: "_patches/typescript-go",
         commandPath: "cmd/tsgo",
         tsgolintGitlink: "typescript-go"
@@ -219,7 +219,7 @@ test("resolves component checkouts and defaults to TypeScript next", async() => 
         moduleDir: "tsc",
         modulePrefix: "github.com/microsoft/TypeScript/tsc",
         providerShimPrefix: "github.com/microsoft/TypeScript/tsc/shim",
-        shimOverlayDir: "_tools/gen_shims/providers/typescript",
+        shimOverlayDirs: ["_tools/gen_shims/providers/typescript"],
         patchDir: "_patches/typescript",
         commandPath: "cmd/tsc",
         tsgolintGitlink: "typescript"
@@ -329,6 +329,54 @@ test("builds deterministic normalized metadata and deduplicates components", () 
       dependencies: { oxlint: "1.76.0", "oxlint-tsgolint": "7.0.2001" }
     }
   ])
+})
+
+test("resolves per-version shim adapters and preserves them through updates", async() => {
+  const withBeta = manifest()
+  const beta = { gitHead: thirdRevision, provider: "typescript" as const, shims: "typescript-beta" as const }
+  const upstream = await Effect.runPromise(decodeUpstream(JSON.stringify({
+    ...withBeta,
+    tags: { ...withBeta.tags, typescript: { ...withBeta.tags.typescript, beta: "7.1.0-beta" } },
+    components: { ...withBeta.components, typescript: { ...withBeta.components.typescript, "7.1.0-beta": beta } }
+  })))
+
+  const selected = await Effect.runPromise(getComponent(upstream, "typescript", "7.1.0-beta"))
+  assert.equal(selected.typescript.source.providerShimPrefix, "github.com/microsoft/TypeScript/tsc/providershim")
+  assert.deepEqual(selected.typescript.source.shimOverlayDirs, [
+    "_tools/gen_shims/providers/typescript",
+    "_tools/gen_shims/providers/typescript-beta"
+  ])
+  assert.equal(selected.typescript.source.patchDir, "_patches/typescript")
+
+  await assert.rejects(
+    Effect.runPromise(decodeUpstream(JSON.stringify({
+      ...withBeta,
+      components: {
+        ...withBeta.components,
+        typescript: { ...withBeta.components.typescript, "7.0.0": { ...beta, provider: "typescript-go" } }
+      }
+    }))),
+    /TypeScript 7\.0\.0 uses typescript-beta shims with provider typescript-go/
+  )
+
+  const runtime = {
+    oxlint: { npmVersion: "1.77.0", gitHead: thirdRevision },
+    tsgolint: { npmVersion: "7.0.2001", gitHead: secondRevision },
+    ts: { npmVersion: "7.0.0", gitHead: revision, provider: "typescript-go" as const }
+  }
+  const rebuilt = buildUpstream({
+    next: { npmVersion: "7.1.0", gitHead: secondRevision, provider: "typescript" },
+    beta: { npmVersion: "7.1.0-beta", gitHead: thirdRevision, provider: "typescript" },
+    latest: { npmVersion: "7.0.0", gitHead: revision, provider: "typescript-go" },
+    oxlint: runtime,
+    vitePlus: { ...runtime, vitePlusVersion: "0.2.8" },
+    shims: { "7.1.0-beta": "typescript-beta" }
+  })
+  assert.deepEqual(rebuilt.components.typescript, {
+    "7.0.0": { gitHead: revision, provider: "typescript-go" },
+    "7.1.0": { gitHead: secondRevision, provider: "typescript" },
+    "7.1.0-beta": { gitHead: thirdRevision, provider: "typescript", shims: "typescript-beta" }
+  })
 })
 
 test("finds a TypeScript npm version by its git head", () => {

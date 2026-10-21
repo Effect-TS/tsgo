@@ -241,7 +241,7 @@ func RunEffectTest(t *testing.T, version bundledeffect.EffectVersion, testFile s
 		configDir := tspath.GetDirectoryPath(tsConfigUnit.name)
 		configDir = tspath.GetNormalizedAbsolutePath(configDir, tspath.RootedDirectoryPath(currentDirectory))
 
-		parsedConfig = tsoptions.ParseJsonSourceFileConfigFileContent(tsConfigFile, fs, tspath.RootedDirectoryPath(configDir), nil, nil, nil, nil)
+		parsedConfig = tsoptions.ParseJsonSourceFileConfigFileContent(tsConfigFile, tsoptions.NewDefaultParseConfigHost(fs), tspath.RootedDirectoryPath(configDir), nil, nil, nil, nil)
 		// Use parsed compiler options
 		if parsedConfig.CompilerOptions() != nil {
 			// Merge with our defaults

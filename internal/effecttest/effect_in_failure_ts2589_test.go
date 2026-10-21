@@ -239,7 +239,7 @@ func collectDiagnosticStringsFromContent(t testing.TB, content string) []string 
 	var parsedConfig *tsoptions.ParsedCommandLine
 	if tsConfigFile != nil {
 		configDir := tspath.GetNormalizedAbsolutePath(tspath.GetDirectoryPath(tsConfigUnit.name), tspath.RootedDirectoryPath(currentDirectory))
-		parsedConfig = tsoptions.ParseJsonSourceFileConfigFileContent(tsConfigFile, fs, tspath.RootedDirectoryPath(configDir), nil, nil, nil, nil)
+		parsedConfig = tsoptions.ParseJsonSourceFileConfigFileContent(tsConfigFile, tsoptions.NewDefaultParseConfigHost(fs), tspath.RootedDirectoryPath(configDir), nil, nil, nil, nil)
 		if parsedConfig.CompilerOptions() != nil {
 			parsedConfig.CompilerOptions().NewLine = core.NewLineKindLF
 			parsedConfig.CompilerOptions().SkipDefaultLibCheck = core.TSTrue

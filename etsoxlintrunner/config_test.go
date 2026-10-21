@@ -31,7 +31,7 @@ func TestEffectFnOptionsWithExtends(t *testing.T) {
 				"/tsconfig.json": tt.config,
 			}, tspath.CaseSensitive)}
 			source := tsoptions.NewTsconfigSourceFileFromFilePath(tspath.RootedFilePath("/tsconfig.json"), "/tsconfig.json", tt.config)
-			parsed := tsoptions.ParseJsonSourceFileConfigFileContent(source, host.fs, tspath.RootedDirectoryPath("/"), nil, nil, nil, nil)
+			parsed := tsoptions.ParseJsonSourceFileConfigFileContent(source, tsoptions.NewDefaultParseConfigHost(host.fs), tspath.RootedDirectoryPath("/"), nil, nil, nil, nil)
 			if len(parsed.Errors) != 0 {
 				t.Fatalf("unexpected config errors: %v", parsed.Errors)
 			}

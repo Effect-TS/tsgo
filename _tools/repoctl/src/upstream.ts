@@ -14,6 +14,20 @@ export type ComponentName = "typescript" | "oxlint-tsgolint" | "oxlint"
 export const TypeScriptProvider = Schema.Literals(["typescript-go", "typescript"])
 export type TypeScriptProvider = typeof TypeScriptProvider.Type
 
+export interface TypeScriptSource {
+  readonly provider: TypeScriptProvider
+  readonly repository: string
+  readonly repositorySlug: string
+  readonly checkoutDir: string
+  readonly moduleDir: string
+  readonly modulePrefix: string
+  readonly providerShimPrefix: string
+  readonly shimOverlayDirs: ReadonlyArray<string>
+  readonly patchDir: string
+  readonly commandPath: string
+  readonly tsgolintGitlink: string
+}
+
 export const typeScriptSources = {
   "typescript-go": {
     provider: "typescript-go",
@@ -23,7 +37,7 @@ export const typeScriptSources = {
     moduleDir: ".",
     modulePrefix: "github.com/microsoft/typescript-go",
     providerShimPrefix: "github.com/microsoft/typescript-go/shim",
-    shimOverlayDir: "_tools/gen_shims/providers/typescript-go",
+    shimOverlayDirs: ["_tools/gen_shims/providers/typescript-go"],
     patchDir: "_patches/typescript-go",
     commandPath: "cmd/tsgo",
     tsgolintGitlink: "typescript-go"
@@ -36,29 +50,47 @@ export const typeScriptSources = {
     moduleDir: "tsc",
     modulePrefix: "github.com/microsoft/TypeScript/tsc",
     providerShimPrefix: "github.com/microsoft/TypeScript/tsc/shim",
-    shimOverlayDir: "_tools/gen_shims/providers/typescript",
+    shimOverlayDirs: ["_tools/gen_shims/providers/typescript"],
     patchDir: "_patches/typescript",
     commandPath: "cmd/tsc",
     tsgolintGitlink: "typescript"
   }
-} as const satisfies Record<TypeScriptProvider, {
-  readonly provider: TypeScriptProvider
-  readonly repository: string
-  readonly repositorySlug: string
-  readonly checkoutDir: string
-  readonly moduleDir: string
-  readonly modulePrefix: string
-  readonly providerShimPrefix: string
-  readonly shimOverlayDir: string
-  readonly patchDir: string
-  readonly commandPath: string
-  readonly tsgolintGitlink: string
-}>
-
-export type TypeScriptSource = (typeof typeScriptSources)[TypeScriptProvider]
+} as const satisfies Record<TypeScriptProvider, TypeScriptSource>
 
 export const getTypeScriptSource = (provider: TypeScriptProvider): TypeScriptSource =>
   typeScriptSources[provider]
+
+// Versions whose compiler API lags the canonical (next) shim API get their
+// own provider shim prefix so gen_shims backports them through these adapters.
+export const TypeScriptShims = Schema.Literals(["typescript-beta"])
+export type TypeScriptShims = typeof TypeScriptShims.Type
+
+export const typeScriptShims = {
+  "typescript-beta": {
+    provider: "typescript",
+    providerShimPrefix: "github.com/microsoft/TypeScript/tsc/providershim",
+    shimOverlayDir: "_tools/gen_shims/providers/typescript-beta"
+  }
+} as const satisfies Record<TypeScriptShims, {
+  readonly provider: TypeScriptProvider
+  readonly providerShimPrefix: string
+  readonly shimOverlayDir: string
+}>
+
+export const getTypeScriptComponentSource = (
+  component: { readonly provider: TypeScriptProvider; readonly shims?: TypeScriptShims }
+): TypeScriptSource => {
+  const source = getTypeScriptSource(component.provider)
+  if (component.shims === undefined) {
+    return source
+  }
+  const shims = typeScriptShims[component.shims]
+  return {
+    ...source,
+    providerShimPrefix: shims.providerShimPrefix,
+    shimOverlayDirs: [...source.shimOverlayDirs, shims.shimOverlayDir]
+  }
+}
 
 export const typeScriptSourceEntrypoint = (source: TypeScriptSource) =>
   `./${[
@@ -96,7 +128,8 @@ const GitRevision = Schema.String.check(Schema.isPattern(/^[0-9a-f]{40}$/))
 const Component = Schema.Struct({ gitHead: GitRevision })
 const TypeScriptComponent = Schema.Struct({
   gitHead: GitRevision,
-  provider: TypeScriptProvider
+  provider: TypeScriptProvider,
+  shims: Schema.optionalKey(TypeScriptShims)
 })
 const TsgolintComponent = Schema.Struct({
   gitHead: GitRevision,
@@ -149,6 +182,13 @@ const validateUpstream = (upstream: typeof Upstream.Type) => {
     if (version !== undefined && upstream.components.typescript[version] === undefined) {
       return Effect.fail(new UpstreamManifestError({
         reason: `TypeScript ${tag} references unknown version ${version}`
+      }))
+    }
+  }
+  for (const [version, component] of Object.entries(upstream.components.typescript)) {
+    if (component.shims !== undefined && typeScriptShims[component.shims].provider !== component.provider) {
+      return Effect.fail(new UpstreamManifestError({
+        reason: `TypeScript ${version} uses ${component.shims} shims with provider ${component.provider}`
       }))
     }
   }
@@ -246,7 +286,7 @@ export const getComponent = Effect.fnUntraced(function*(
     typescript: {
       version: typescriptVersion,
       gitHead: typescript.gitHead,
-      source: getTypeScriptSource(typescript.provider)
+      source: getTypeScriptComponentSource(typescript)
     }
   }
 })
@@ -391,6 +431,7 @@ interface ResolvedRuntime {
 }
 
 interface BuildUpstreamOptions {
+  readonly shims?: Readonly<Record<string, TypeScriptShims>>
   readonly next: TypeScriptMetadata
   readonly beta: TypeScriptMetadata
   readonly latest: TypeScriptMetadata
@@ -403,9 +444,9 @@ const sortedRecord = <A>(entries: ReadonlyArray<readonly [string, A]>): Record<s
   Object.fromEntries([...entries].sort(([left], [right]) => Buffer.compare(Buffer.from(left), Buffer.from(right))))
 
 export const buildUpstream = ({
-  latest, beta, next, oxlint, vitePlus, retainedRuntimes = []
+  latest, beta, next, oxlint, vitePlus, retainedRuntimes = [], shims = {}
 }: BuildUpstreamOptions): typeof Upstream.Type => {
-  const typescript = new Map<string, { readonly gitHead: string; readonly provider: TypeScriptProvider }>()
+  const typescript = new Map<string, typeof TypeScriptComponent.Type>()
   const tsgolint = new Map<string, {
     readonly gitHead: string
     readonly dependencies: { readonly typescript: string }
@@ -414,7 +455,12 @@ export const buildUpstream = ({
 
   const runtimes = [...retainedRuntimes, oxlint, vitePlus]
   for (const metadata of [latest, beta, next, ...runtimes.map((runtime) => runtime.ts)]) {
-    typescript.set(metadata.npmVersion, { gitHead: metadata.gitHead, provider: metadata.provider })
+    const versionShims = shims[metadata.npmVersion]
+    typescript.set(metadata.npmVersion, {
+      gitHead: metadata.gitHead,
+      provider: metadata.provider,
+      ...(versionShims === undefined ? {} : { shims: versionShims })
+    })
   }
   for (const runtime of runtimes) {
     tsgolint.set(runtime.tsgolint.npmVersion, {
@@ -931,7 +977,12 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
       reason: `The oxlint@${oxlint.oxlint.npmVersion} configuration schema is invalid`
     })
   }
-  const updated = buildUpstream({ next, beta, latest, oxlint, vitePlus, retainedRuntimes })
+  const shims = Object.fromEntries(
+    Object.entries(upstream.components.typescript).flatMap(([version, component]) =>
+      component.shims === undefined ? [] : [[version, component.shims] as const]
+    )
+  )
+  const updated = buildUpstream({ next, beta, latest, oxlint, vitePlus, retainedRuntimes, shims })
   const metadataChanged = JSON.stringify(updated) !== JSON.stringify(upstream)
   const schemaPath = path.join(repositoryRoot, "_tools", "tsconfig-base-schema.json")
   const currentSchema = yield* fs.readFileString(schemaPath).pipe(
