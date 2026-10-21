@@ -113,6 +113,7 @@ export const Upstream = Schema.Struct({
   tags: Schema.Struct({
     typescript: Schema.Struct({
       latest: NonEmptyString,
+      beta: NonEmptyString,
       next: NonEmptyString
     }),
     oxlint: Schema.Struct({ latest: NonEmptyString }),
@@ -143,7 +144,7 @@ const validateUpstream = (upstream: typeof Upstream.Type) => {
     }
     names.add(profile.name)
   }
-  for (const tag of ["latest", "next"] as const) {
+  for (const tag of ["latest", "beta", "next"] as const) {
     if (upstream.components.typescript[upstream.tags.typescript[tag]] === undefined) {
       return Effect.fail(new UpstreamManifestError({
         reason: `TypeScript ${tag} references unknown version ${upstream.tags.typescript[tag]}`
@@ -390,6 +391,7 @@ interface ResolvedRuntime {
 
 interface BuildUpstreamOptions {
   readonly next: TypeScriptMetadata
+  readonly beta: TypeScriptMetadata
   readonly latest: TypeScriptMetadata
   readonly retainedRuntimes?: ReadonlyArray<ResolvedRuntime & { readonly name: string; readonly description: string }>
   readonly oxlint: ResolvedRuntime
@@ -400,7 +402,7 @@ const sortedRecord = <A>(entries: ReadonlyArray<readonly [string, A]>): Record<s
   Object.fromEntries([...entries].sort(([left], [right]) => Buffer.compare(Buffer.from(left), Buffer.from(right))))
 
 export const buildUpstream = ({
-  latest, next, oxlint, vitePlus, retainedRuntimes = []
+  latest, beta, next, oxlint, vitePlus, retainedRuntimes = []
 }: BuildUpstreamOptions): typeof Upstream.Type => {
   const typescript = new Map<string, { readonly gitHead: string; readonly provider: TypeScriptProvider }>()
   const tsgolint = new Map<string, {
@@ -410,7 +412,7 @@ export const buildUpstream = ({
   const oxlintComponents = new Map<string, { readonly gitHead: string }>()
 
   const runtimes = [...retainedRuntimes, oxlint, vitePlus]
-  for (const metadata of [latest, next, ...runtimes.map((runtime) => runtime.ts)]) {
+  for (const metadata of [latest, beta, next, ...runtimes.map((runtime) => runtime.ts)]) {
     typescript.set(metadata.npmVersion, { gitHead: metadata.gitHead, provider: metadata.provider })
   }
   for (const runtime of runtimes) {
@@ -426,6 +428,7 @@ export const buildUpstream = ({
     tags: {
       typescript: {
         latest: latest.npmVersion,
+        beta: beta.npmVersion,
         next: next.npmVersion
       },
       oxlint: { latest: oxlint.oxlint.npmVersion },
@@ -567,6 +570,13 @@ export const formatUpstreamUpdateDescription = ({
       spec: "typescript@next",
       previous: before.tags.typescript.next,
       updated: after.tags.typescript.next
+    },
+    {
+      label: "TypeScript beta",
+      packageName: "typescript",
+      spec: "typescript@beta",
+      previous: before.tags.typescript.beta,
+      updated: after.tags.typescript.beta
     },
     {
       label: "TypeScript latest",
@@ -840,12 +850,17 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
     npmVersion: upstream.tags.typescript.next,
     ...upstream.components.typescript[upstream.tags.typescript.next]!
   }
+  const betaBefore = {
+    npmVersion: upstream.tags.typescript.beta,
+    ...upstream.components.typescript[upstream.tags.typescript.beta]!
+  }
   const latestBefore = {
     npmVersion: upstream.tags.typescript.latest,
     ...upstream.components.typescript[upstream.tags.typescript.latest]!
   }
-  const [next, latest, oxlintSelections, vitePlusSelections, remoteSchema, packument] = yield* Effect.all([
+  const [next, beta, latest, oxlintSelections, vitePlusSelections, remoteSchema, packument] = yield* Effect.all([
     fetchTypeScriptMetadata(repositoryRoot, "typescript@next"),
+    fetchTypeScriptMetadata(repositoryRoot, "typescript@beta"),
     fetchTypeScriptMetadata(repositoryRoot, "typescript@latest"),
     fetchRecentNpmVersions(repositoryRoot, "oxlint").pipe(
       Effect.flatMap((versions) => Effect.forEach(versions, (version) => fetchOxlintSelection(repositoryRoot, version), {
@@ -914,7 +929,7 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
       reason: `The oxlint@${oxlint.oxlint.npmVersion} configuration schema is invalid`
     })
   }
-  const updated = buildUpstream({ next, latest, oxlint, vitePlus, retainedRuntimes })
+  const updated = buildUpstream({ next, beta, latest, oxlint, vitePlus, retainedRuntimes })
   const metadataChanged = JSON.stringify(updated) !== JSON.stringify(upstream)
   const schemaPath = path.join(repositoryRoot, "_tools", "tsconfig-base-schema.json")
   const currentSchema = yield* fs.readFileString(schemaPath).pipe(
@@ -963,6 +978,11 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
     next_previous_git_head: nextBefore.gitHead,
     next_version: next.npmVersion,
     next_git_head: next.gitHead,
+    beta_spec: "typescript@beta",
+    beta_previous_version: betaBefore.npmVersion,
+    beta_previous_git_head: betaBefore.gitHead,
+    beta_version: beta.npmVersion,
+    beta_git_head: beta.gitHead,
     latest_spec: "typescript@latest",
     latest_previous_version: latestBefore.npmVersion,
     latest_previous_git_head: latestBefore.gitHead,

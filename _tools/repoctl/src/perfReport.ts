@@ -175,7 +175,7 @@ const sampleCount = (base: PerfCell | undefined, head: PerfCell | undefined) => 
   return counts.length === 2 && counts[0] !== counts[1] ? counts.join("/") : String(counts[0])
 }
 
-const channelOrder = (channel: string) => channel === "latest" ? 0 : channel === "next" ? 1 : 2
+const channelOrder = (channel: string) => channel === "latest" ? 0 : channel === "beta" ? 1 : channel === "next" ? 2 : 3
 
 const sortChannels = (channels: Iterable<string>) =>
   [...new Set(channels)].sort((left, right) =>

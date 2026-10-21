@@ -66,7 +66,7 @@ test("generates the supported package versions README section", async() => {
     writeFileSync(join(repository, "_packages", "tsgo", "upstream.json"), JSON.stringify({
       schemaVersion: 5,
       tags: {
-        typescript: { latest: "7.0.2", next: "7.1.0-dev.10" },
+        typescript: { latest: "7.0.2", beta: "7.1.0-dev.10", next: "7.1.0-dev.10" },
         oxlint: { latest: "1.10.0" },
         "oxlint-tsgolint": { latest: "7.0.2001" }
       },
