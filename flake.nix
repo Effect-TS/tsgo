@@ -81,8 +81,7 @@
             src = typescript-src;
             patches = builtins.map (name: ./. + "/_patches/typescript/${name}") sortedPatchFiles;
             nativeBuildInputs = [ pkgs.git ];
-            # The options generator contains NUL bytes, so its patch uses Git's
-            # binary format, which the default patch command cannot apply.
+            # Apply with git, like `repoctl submodules setup`, so both paths agree.
             patchPhase = ''
               runHook prePatch
               for patch in $patches; do

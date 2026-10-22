@@ -60,17 +60,6 @@ index 975913279..a01d71ecb 100644
  		oldOptions.AllowUmdGlobalAccess != newOptions.AllowUmdGlobalAccess ||
  		oldOptions.AllowUnreachableCode != newOptions.AllowUnreachableCode ||
  		oldOptions.AllowUnusedLabels != newOptions.AllowUnusedLabels ||
-diff --git a/tools/scripts/tsc/generate-options.ts b/tools/scripts/tsc/generate-options.ts
-index 73246d836fa1e255c3ee27d3d31b21398f6dca17..9e1567a77a4993961595ae726f640ab09f2beea6 100644
-GIT binary patch
-delta 155
-zcmX@HkLmV)rVaN}>NC?6H1ZO2Qx$A&Z55P)Q*#sZN-~pOG85DD@{572VkJ$5)QW<l
-z)Z*gI{Jdhl(!An~%(M~>CB>rDw4BuB5<QpH)B@MS(!?B%{G1g3f)cPY*R(XCoQ^_X
-kYB{Qqrjn*LFP8!gY`&e6WHkA~B(BNIlS?+Qnm&&m0L@o900000
-
-delta 27
-lcmV+$0ObGMzXHg<0<hj>vtVUkGLy5GEt5Z*4zmlG&<Db24A1}o
-
 diff --git a/tsc/internal/tsoptions/effect_options_test.go b/tsc/internal/tsoptions/effect_options_test.go
 new file mode 100644
 --- /dev/null
