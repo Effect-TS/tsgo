@@ -1,0 +1,65 @@
+==== /.src/package.json (0 flows) ====
+==== /.src/node_modules/@acme/ui/package.json (0 flows) ====
+==== /.src/node_modules/@acme/ui/dist/index.d.ts (0 flows) ====
+==== /.src/node_modules/@acme/ui/dist/Button.d.ts (0 flows) ====
+==== /.src/uses.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 7:22 - 7:59
+Node: set(empty<string, number>(), "a", 1)
+Node Kind: KindCallExpression
+
+Subject: empty<string, number>()
+Subject Type: Record<string, number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: set
+      args: ["a", 1]
+      outType: Record<string, number>
+==== /.src/reuse.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 8:24 - 8:31
+Node: some(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: some
+      args: (constant)
+      outType: Option<number>
+==== /.src/typeOnly.ts (0 flows) ====
+==== /.src/style.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 7:23 - 7:49
+Node: map([1, 2], (n) => n * 2)
+Node Kind: KindCallExpression
+
+Subject: [1, 2]
+Subject Type: number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: map
+      args: [(n) => n * 2]
+      outType: number[]
+==== /.src/alias.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 7:20 - 7:33
+Node: make("save")
+Node Kind: KindCallExpression
+
+Subject: "save"
+Subject Type: "save"
+
+Transformations (1):
+  [0] kind: call
+      callee: make
+      args: (constant)
+      outType: string

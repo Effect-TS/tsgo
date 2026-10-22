@@ -1,0 +1,102 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/bound.ts(5,22): warning TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option } from "effect"' instead. effect(preferBarrelImport)
+/.src/comment.ts(5,45): warning TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option } from "effect"' instead. effect(preferBarrelImport)
+/.src/globalType.ts(5,23): warning TS377148: 'effect/Record' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Record } from "effect"' instead. effect(preferBarrelImport)
+/.src/globalValue.ts(5,21): warning TS377148: 'effect/Array' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Array } from "effect"' instead. effect(preferBarrelImport)
+/.src/reexport.ts(5,24): warning TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option } from "effect"' instead. effect(preferBarrelImport)
+/.src/shadowed.ts(5,22): warning TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option } from "effect"' instead. effect(preferBarrelImport)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "barrelImportPackages": ["effect"]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/package.json (0 errors) ====
+    { "name": "@effect/test-app", "version": "1.0.0" }
+    
+
+==== /.src/globalValue.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferBarrelImport:warning
+    
+    // no fix: Array would rebind the global Array that the file reads
+    import { map } from "effect/Array"
+                        ~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Array' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Array } from "effect"' instead. effect(preferBarrelImport)
+    
+    export const isList = Array.isArray
+    export const doubled = map([1, 2], (n) => n * 2)
+    
+
+==== /.src/globalType.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferBarrelImport:warning
+    
+    // no fix: Record would rebind the global Record type that the file reads
+    import { empty } from "effect/Record"
+                          ~~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Record' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Record } from "effect"' instead. effect(preferBarrelImport)
+    
+    export type Lookup = Record<string, number>
+    export const none = empty()
+    
+
+==== /.src/bound.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferBarrelImport:warning
+    
+    // no fix: the file already binds Option
+    import { some } from "effect/Option"
+                         ~~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option } from "effect"' instead. effect(preferBarrelImport)
+    
+    const Option = { label: "local" }
+    export const values = [some(1), Option]
+    
+
+==== /.src/shadowed.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferBarrelImport:warning
+    
+    // no fix: an inner scope binds Option
+    import { some } from "effect/Option"
+                         ~~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option } from "effect"' instead. effect(preferBarrelImport)
+    
+    export const wrap = (Option: number) => some(Option)
+    
+
+==== /.src/reexport.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferBarrelImport:warning
+    
+    // no fix: the binding is re-exported, and Option.isSome can't stand in an export specifier
+    import { isSome } from "effect/Option"
+                           ~~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option } from "effect"' instead. effect(preferBarrelImport)
+    
+    export { isSome }
+    
+
+==== /.src/comment.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferBarrelImport:warning
+    
+    // no fix: the rewrite would drop the comment inside the declaration
+    import { /* the empty Option */ none } from "effect/Option"
+                                                ~~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option } from "effect"' instead. effect(preferBarrelImport)
+    
+    export const nothing = none()
+    

@@ -1,0 +1,9 @@
+==== /.src/package.json (0 layer exports) ====
+==== /.src/node_modules/@acme/kit/package.json (0 layer exports) ====
+==== /.src/node_modules/@acme/kit/dist/index.d.ts (0 layer exports) ====
+==== /.src/node_modules/@acme/kit/dist/nested/deep.d.ts (0 layer exports) ====
+==== /.src/globalValue.ts (0 layer exports) ====
+==== /.src/followGlobal.ts (0 layer exports) ====
+==== /.src/reexport.ts (0 layer exports) ====
+==== /.src/comment.ts (0 layer exports) ====
+==== /.src/noTarget.ts (0 layer exports) ====

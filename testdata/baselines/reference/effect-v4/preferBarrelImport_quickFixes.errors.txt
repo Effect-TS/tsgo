@@ -1,0 +1,102 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/alias.ts(5,22): warning TS377148: '@acme/ui/Button' is imported directly, but barrelImportPackages expects named imports from the barrel '@acme/ui'. Use 'import { Button } from "@acme/ui"' instead. effect(preferBarrelImport)
+/.src/reuse.ts(6,28): warning TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option } from "effect"' instead. effect(preferBarrelImport)
+/.src/style.ts(5,21): warning TS377148: 'effect/Array' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Array } from "effect"' instead. effect(preferBarrelImport)
+/.src/typeOnly.ts(5,31): warning TS377148: 'effect/Duration' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Duration } from "effect"' instead. effect(preferBarrelImport)
+/.src/uses.ts(5,28): warning TS377148: 'effect/Record' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Record } from "effect"' instead. effect(preferBarrelImport)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "barrelImportPackages": ["effect", "@acme/ui"],
+            "importAliases": { "@acme/ui": "Ui" }
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/package.json (0 errors) ====
+    { "name": "@effect/test-app", "version": "1.0.0" }
+    
+
+==== /.src/node_modules/@acme/ui/package.json (0 errors) ====
+    { "name": "@acme/ui", "version": "1.0.0", "types": "./dist/index.d.ts", "exports": { ".": { "types": "./dist/index.d.ts" }, "./*": { "types": "./dist/*.d.ts" } } }
+    
+
+==== /.src/node_modules/@acme/ui/dist/index.d.ts (0 errors) ====
+    export * as Button from "./Button.js"
+    
+
+==== /.src/node_modules/@acme/ui/dist/Button.d.ts (0 errors) ====
+    export declare const make: (label: string) => string
+    
+
+==== /.src/uses.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferBarrelImport:warning
+    
+    // fix: the named imports become members of Record, shorthand properties included
+    import { empty, set } from "effect/Record"
+                               ~~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Record' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Record } from "effect"' instead. effect(preferBarrelImport)
+    
+    export const counts = set(empty<string, number>(), "a", 1)
+    export const factories = { empty }
+    export type Empty = typeof empty
+    
+
+==== /.src/reuse.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferBarrelImport:warning
+    
+    // fix: the uses are qualified with the Option import already in the file
+    import { Option } from "effect"
+    import { some, none } from "effect/Option"
+                               ~~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option } from "effect"' instead. effect(preferBarrelImport)
+    
+    export const values = [some(1), none(), Option.isSome]
+    
+
+==== /.src/typeOnly.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferBarrelImport:warning
+    
+    // fix: only types are imported, so the barrel import is type-only
+    import { type Duration } from "effect/Duration"
+                                  ~~~~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Duration' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Duration } from "effect"' instead. effect(preferBarrelImport)
+    
+    export type Timeout = Duration
+    
+
+==== /.src/style.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferBarrelImport:warning
+    
+    // fix: quotes and semicolons are kept
+    import { map } from 'effect/Array';
+                        ~~~~~~~~~~~~~~
+!!! warning TS377148: 'effect/Array' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Array } from "effect"' instead. effect(preferBarrelImport)
+    
+    export const doubled = map([1, 2], (n) => n * 2);
+    
+
+==== /.src/alias.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferBarrelImport:warning
+    
+    // fix: importAliases names the binding
+    import { make } from "@acme/ui/Button"
+                         ~~~~~~~~~~~~~~~~~
+!!! warning TS377148: '@acme/ui/Button' is imported directly, but barrelImportPackages expects named imports from the barrel '@acme/ui'. Use 'import { Button } from "@acme/ui"' instead. effect(preferBarrelImport)
+    
+    export const save = make("save")
+    

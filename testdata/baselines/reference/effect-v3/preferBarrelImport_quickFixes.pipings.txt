@@ -1,0 +1,45 @@
+==== /.src/namespace.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 8:21 - 8:31
+Node: O.some(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: O.some
+      args: (constant)
+      outType: Option<number>
+==== /.src/uses.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 8:22 - 8:59
+Node: set(empty<string, number>(), "a", 1)
+Node Kind: KindCallExpression
+
+Subject: empty<string, number>()
+Subject Type: Record<string, number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: set
+      args: ["a", 1]
+      outType: Record<string, number>
+==== /.src/globalValue.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 9:23 - 9:49
+Node: map([1, 2], (n) => n * 2)
+Node Kind: KindCallExpression
+
+Subject: [1, 2]
+Subject Type: number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: map
+      args: [(n) => n * 2]
+      outType: number[]
