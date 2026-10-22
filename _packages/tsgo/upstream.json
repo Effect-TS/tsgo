@@ -4,7 +4,7 @@
     "typescript": {
       "latest": "7.0.2",
       "beta": "7.1.0-beta",
-      "next": "7.1.0-dev.20261020.3"
+      "next": "7.1.0-dev.20261021.1"
     },
     "oxlint": {
       "latest": "1.89.0"
@@ -24,8 +24,8 @@
         "provider": "typescript",
         "shims": "typescript-beta"
       },
-      "7.1.0-dev.20261020.3": {
-        "gitHead": "28534d7609062699a68b1b66e2367f8d95dbf290",
+      "7.1.0-dev.20261021.1": {
+        "gitHead": "538671d3cc2dc1fa292dbb00185d3cdbef9aa73b",
         "provider": "typescript"
       }
     },
