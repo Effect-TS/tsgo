@@ -8,6 +8,9 @@ import { fileURLToPath } from "node:url"
 
 const root = fileURLToPath(new URL("./", import.meta.url))
 const compiler = resolve(process.argv[2] ?? join(root, "../../tsgo"))
+const queryShape = process.argv[3] ?? "single-table"
+assert.ok(["single-table", "left-join"].includes(queryShape), "Expected single-table or left-join")
+const withJoin = queryShape === "left-join"
 const directory = mkdtempSync(join(root, ".verify-measure-"))
 const config = JSON.parse(readFileSync(join(root, "tsconfig.json"), "utf8"))
 const queryCount = 100
@@ -38,7 +41,9 @@ try {
       "const minimumAge = 18; const limit = 2"
     ]
     for (let i = 0; i < queryCount; i++) {
-      const text = "SELECT id AS user" + i + ", name, email FROM users WHERE age >= "
+      const text = withJoin
+        ? "SELECT u.id AS user" + i + ", u.name, p.bio AS email FROM users u LEFT JOIN profiles p ON u.id = p.user_id WHERE u.age >= "
+        : "SELECT id AS user" + i + ", name, email FROM users WHERE age >= "
       const call = tagged
         ? "sql`" + text + "${minimumAge} ORDER BY name LIMIT ${limit}`"
         : "sql(" + JSON.stringify(text + ":minimumAge ORDER BY name LIMIT :limit") + ", { minimumAge, limit })"
@@ -76,7 +81,7 @@ try {
   console.log(JSON.stringify({
     compiler: run(["--version"]).output,
     environment: { platform: platform(), arch: arch(), cpu: cpus()[0]?.model, node: process.version },
-    workload: { queryCount, samples, warmups: 2, incremental: false, interleaved: true },
+    workload: { queryShape, queryCount, samples, warmups: 2, incremental: false, interleaved: true },
     parentheses: summarize(timings.parentheses),
     tagged: summarize(timings.tagged)
   }, null, 2))

@@ -16,11 +16,13 @@ const findUsers = Effect.gen(function*() {
   const sql = tagged(yield* Database)
   const minimumAge = 18
   return yield* sql`
-    SELECT id, name, email FROM users WHERE age >= ${minimumAge}
+    SELECT u.id, u.name, p.bio
+    FROM users u LEFT JOIN profiles p ON u.id = p.user_id
+    WHERE u.age >= ${minimumAge}
   `
 })
 // Effect.Effect<
-//   readonly { readonly id: number; readonly name: string; readonly email: string | null }[],
+//   readonly { readonly id: number; readonly name: string; readonly bio: string | null }[],
 //   SqlError,
 //   Database
 // >
@@ -30,6 +32,12 @@ const findUsers = Effect.gen(function*() {
 identifiers are rejected. Interpolated values remain bound SQL parameters.
 The runnable [`main.ts`](./main.ts) migrates an in-memory SQLite database and
 queries it with the exact tagged-template syntax.
+
+`profiles.bio` is `TEXT NOT NULL` in the snapshot. Its inferred result type is
+`string | null` because the left join can return a user without a profile.
+The join analysis belongs to Effect's SQL types; this needs no additional
+compiler changes. The verifier checks nullable joined results, interpolation
+types in `ON`, and incremental invalidation when a joined table's schema changes.
 
 ## Compiler change
 
@@ -68,7 +76,7 @@ the SQL parser.
 
 `tagged` is prototype library glue. Its signature and implementation could become
 a tagged overload on `SqlClient.Query`, allowing `const sql = yield* Database`
-directly. This spike keeps the existing Effect draft unchanged.
+directly. This spike consumes the core API from the separate Effect draft.
 
 ## Run
 
@@ -116,18 +124,17 @@ It checks the inferred fields, disables incremental compilation, performs two
 warmups per form, then alternates the order of eight measured runs per form.
 An optional first argument selects a different compiler executable.
 
-Measured with this patch on tsgo `93fc061`, TypeScript beta `3e92363`, and Effect
-`df7c415`, on an Apple M4 Max with macOS arm64 and Node 24.22.1:
+Choose the query shape with the second argument:
 
-| Query form | Median | Range |
-| --- | ---: | ---: |
-| Parentheses | 273 ms | 176–563 ms |
-| Tagged template | 288 ms | 155–399 ms |
+```sh
+node scratchpad/sql-tagged-template/measure.mjs ./tsgo single-table
+node scratchpad/sql-tagged-template/measure.mjs ./tsgo left-join
+```
 
-These runs overlapped repository validation builds and are too noisy to establish
-a consistent performance difference. They compare the two consumer APIs, not
+Each run reports its compiler version, environment, and individual samples.
+These compare the two consumer APIs in the same compiler; they do not compare
 unmodified and patched compiler binaries. Broad compiler performance remains
-unverified; this is an experimental spike.
+unverified.
 
 ## Scope
 
@@ -137,9 +144,12 @@ unverified; this is an experimental spike.
   its normal type; only cooked segments become literal tuple elements.
 - Invalid template escapes retain the standard argument type, since their
   cooked values are `undefined`. The typed SQL adapter consequently rejects them.
-- SQL support has the same single-table `SELECT` and SQLite `STRICT` limits as
-  the Effect draft. Use substitutions for values; handwritten named placeholders
-  are rejected by the adapter.
+- SQL support matches the Effect draft: SQLite `STRICT` tables, `SELECT`, table
+  aliases, and inner, left, right, full, and cross joins. Outer joins add null to
+  columns on the unmatched side; predicates do not narrow that nullability.
+  `NATURAL JOIN`, `USING`, subqueries, and expressions remain unsupported.
+  Use substitutions for values; handwritten named placeholders are rejected
+  by the adapter.
 - SQL validation reports at the template argument; ordinary substitution type
   errors report on the substituted expression. SQL-specific completions are not
   part of this spike.

@@ -79,6 +79,17 @@ try {
     "rows[0].email?.toLowerCase()"
   ].join("\n")
   accepts(valid)
+  const joined = [
+    "const rows = yield* sql`SELECT u.id, p.bio FROM users u LEFT JOIN profiles p ON u.id = p.user_id`",
+    "rows[0].id.toFixed()",
+    "rows[0].bio?.toUpperCase()"
+  ].join("\n")
+  accepts(joined)
+  rejects(joined + "; rows[0].bio.toUpperCase()", /possibly 'null'/)
+  accepts(joined.replace("LEFT JOIN", "INNER JOIN") + "; rows[0].bio.toUpperCase()")
+  accepts("yield* sql`SELECT u.id FROM users u LEFT JOIN profiles p ON u.id = p.user_id AND p.bio = ${'Analytical Engine'} WHERE u.age >= ${18} LIMIT ${2}`")
+  rejects("yield* sql`SELECT u.id FROM users u LEFT JOIN profiles p ON u.id = p.user_id AND p.bio = ${null}`", /null.*string/)
+  rejects("yield* sql`SELECT id FROM users u LEFT JOIN profiles p ON u.id = p.user_id`", /Ambiguous column id/)
   accepts("const rows = yield* sql`SELECT id FROM users`; rows[0].id.toFixed()")
   accepts("const rows = yield* sql`SELECT\\u0020name FROM users`; rows[0].name.toUpperCase()")
   accepts("yield* sql`SELECT id FROM users WHERE email = ${null}`")
@@ -103,6 +114,14 @@ try {
   rejects(valid, /toUpperCase/)
   writeFileSync(schemaPath, originalSchema)
   accepts(valid)
+
+  accepts(joined)
+  const changedProfile = JSON.parse(originalSchema)
+  changedProfile.tables.profiles.bio = { INTEGER: null }
+  writeFileSync(schemaPath, JSON.stringify(changedProfile))
+  rejects(joined, /toUpperCase/)
+  writeFileSync(schemaPath, originalSchema)
+  accepts(joined)
   configure(false)
   rejects(valid, /Expected 1 arguments|never/)
   configure(true)
@@ -143,15 +162,15 @@ try {
   const demo = run(process.execPath, [join(root, "main.ts")])
   assert.equal(demo.status, 0, demo.output)
   assert.deepEqual(JSON.parse(demo.output), {
-    sql: "SELECT id AS userId, name, email FROM users WHERE age >= ? ORDER BY name LIMIT ?",
+    sql: "SELECT u.id AS userId, u.name, u.email, p.bio AS profileBio FROM users AS u LEFT JOIN profiles AS p ON u.id = p.user_id WHERE u.age >= ? ORDER BY u.name LIMIT ?",
     parameters: [18, 2],
     cards: [
-      { id: "1", name: "ADA", email: "(no email)" },
-      { id: "2", name: "GRACE", email: "grace@example.com" }
+      { id: "1", name: "ADA", email: "(no email)", profile: "Analytical Engine" },
+      { id: "2", name: "GRACE", email: "grace@example.com", profile: "(no profile)" }
     ],
     untrustedNameMatches: 0
   })
-  console.log("Verified tagged-template inference, bound parameters, schema and option invalidation, and SQLite execution.")
+  console.log("Verified tagged-template inference, join nullability, bound parameters, schema and option invalidation, and SQLite execution.")
 } finally {
   rmSync(directory, { recursive: true, force: true })
 }
