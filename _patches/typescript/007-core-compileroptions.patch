@@ -55,20 +55,6 @@ index 911b2d6af..68a0ee2e2 100644
  	if options.AllowJs != other.AllowJs {
  		return false
  	}
-diff --git a/tools/scripts/tsc/generate-options.ts b/tools/scripts/tsc/generate-options.ts
-index 0ee304c8035219a2dbcbec100de13ca205f4cb68..43c9bd9f868f59d7877227ee0eb11117ffd5d9a9 100644
-GIT binary patch
-delta 346
-zcmZ9IF-rt75QX7Dkdw2ru@J`GAu6}KAQp14DCkudYH4TKo$Lm3$(m$sjzethH6s2C
-zl`RFav-S`8ODtS3shn<j-+RNGpSRA(d*@}Nf1M;SW(+e6r4qRTTOw3c8_eMV=RzW=
-zENWU{WKdu6tkp$ba0!``j2E@0mMa<ey3kI@+D2<Kr7`yV>D+Kq{ei}VgDK-Eau@ZV
-z*E}==<$+)tdeD8{M$N+DW~G#Lf{>;ukV7@8xIi5e3G4&m4AwO=(N>9%5UcTJO~vNF
-zNKkD*9S&^46g1jeOJGzOgc*Sm5Yo){&dwJ@7IB|<WYvEnvL>;nP)TS<dR_PZu<I_K
-Omfi4ir#ZfVUHS!(6M6&y
-
-delta 36
-ucmV+<0Nek-z5@Ka0<b0{lW;H_ler_Cvvnk@6tj>yNLiDhm3_01ld%ghln{sj
-
 diff --git a/tsc/internal/core/effect_options_test.go b/tsc/internal/core/effect_options_test.go
 new file mode 100644
 --- /dev/null

@@ -6,7 +6,7 @@
     nixpkgsUnstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     /* Source of truth: the next profile in `_packages/tsgo/upstream.json`. */
     typescript-src = {
-      url = "github:microsoft/TypeScript/28534d7609062699a68b1b66e2367f8d95dbf290";
+      url = "github:microsoft/TypeScript/538671d3cc2dc1fa292dbb00185d3cdbef9aa73b";
       flake = false;
     };
   };
@@ -81,8 +81,7 @@
             src = typescript-src;
             patches = builtins.map (name: ./. + "/_patches/typescript/${name}") sortedPatchFiles;
             nativeBuildInputs = [ pkgs.git ];
-            # The options generator contains NUL bytes, so its patch uses Git's
-            # binary format, which the default patch command cannot apply.
+            # Apply with git, like `repoctl submodules setup`, so both paths agree.
             patchPhase = ''
               runHook prePatch
               for patch in $patches; do
