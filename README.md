@@ -266,6 +266,8 @@ The npm compiler binaries load their TypeScript standard libraries from `lib.*.d
     "plugins": [
       {
         "name": "@effect/language-service",
+        // Experimental: infer cooked tagged-template segments as a readonly literal tuple. (default: false)
+        "experimentalLiteralTemplateStrings": false,
         // Controls Effect refactors. (default: true)
         "refactors": true,
         // Controls Effect diagnostics. (default: true)

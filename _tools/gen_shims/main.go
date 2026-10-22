@@ -652,7 +652,9 @@ func preparePackageLoad(repositoryRoot, sourceRoot string) ([]string, string, er
 	etscoreModule := []byte("module github.com/effect-ts/tsgo/etscore\n\ngo 1.26\n")
 	etscoreSource := []byte(`package etscore
 
-type EffectPluginOptions struct{}
+type EffectPluginOptions struct {
+	ExperimentalLiteralTemplateStrings bool
+}
 
 func ParseFromPlugins(any) *EffectPluginOptions { return nil }
 
