@@ -18,6 +18,10 @@ type KeyPattern struct {
 // `@effect/language-service` as parsed from tsconfig plugin JSON.
 // This type is stored in CompilerOptions.Effect after parsing tsconfig.json.
 type EffectPluginOptions struct {
+	// ExperimentalLiteralTemplateStrings preserves cooked template segments as a
+	// readonly literal tuple for tagged-template inference. Default: false.
+	ExperimentalLiteralTemplateStrings bool `json:"experimentalLiteralTemplateStrings,omitzero" schema_description:"Experimental: infer cooked tagged-template segments as a readonly literal tuple." schema_default:"false"`
+
 	// Refactors enables Effect refactor actions in the language service.
 	Refactors bool `json:"refactors,omitzero" schema_description:"Controls Effect refactors." schema_default:"true"`
 

@@ -48,6 +48,12 @@ func ParseFromPlugins(value any) *EffectPluginOptions {
 			DiagnosticSeverity:                   make(map[string]Severity),
 		}
 
+		if val, exists := getPluginValue("experimentalLiteralTemplateStrings"); exists {
+			if enabled, ok := val.(bool); ok {
+				result.ExperimentalLiteralTemplateStrings = enabled
+			}
+		}
+
 		// Parse refactors (default: true)
 		if val, exists := getPluginValue("refactors"); exists {
 			if b, ok := val.(bool); ok {
