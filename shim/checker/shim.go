@@ -197,6 +197,7 @@ type extra_Checker struct {
   SignatureCount uint32
   TotalInstantiationCount uint32
   instantiationCount uint32
+  memberLayoutCount uint32
   instantiationStack []*checker.Type
   conditionalConstraintDepth uint32
   inlineLevel int
@@ -247,6 +248,7 @@ type extra_Checker struct {
   reverseMappedCache map[checker.ReverseMappedTypeKey]*checker.Type
   reverseHomomorphicMappedCache map[checker.ReverseMappedTypeKey]*checker.Type
   iterationTypesCache map[checker.IterationTypesKey]checker.IterationTypes
+  memberLayoutCache map[checker.CacheHashKey]*checker.MemberLayout
   markerTypes collections.Set[*checker.Type]
   resolvingExplicitTypeOfSymbol collections.Set[*ast.Symbol]
   constructorOrFunctionChecked collections.Set[*ast.Symbol]
@@ -289,6 +291,9 @@ type extra_Checker struct {
   outerTypeParameterListArena core.Arena[[]*checker.Type]
   valueSymbolExtraArena core.Arena[struct{writeType *checker.Type; nameType *checker.Type; containingType *checker.Type}]
   structuredTypeExtraArena core.Arena[struct{signatures []*checker.Signature; callSignatureCount int; indexInfos []*checker.IndexInfo; objectTypeWithoutAbstractConstructSignatures *checker.Type}]
+  lazyStateArena core.Arena[checker.LazyState]
+  memberLayoutArena core.Arena[checker.MemberLayout]
+  layoutMemberInfos map[string]checker.MemberInfo
   freeTypeSets *extra_temporaryTypeSet
   freePropertyCounts *extra_temporaryPropertyCounts
   mergedSymbols map[*ast.Symbol]*ast.Symbol
@@ -925,6 +930,7 @@ const JsxReferenceKindMixed = checker.JsxReferenceKindMixed
 var LanguageFeatureMinimumTarget = checker.LanguageFeatureMinimumTarget
 type LanguageFeatureMinimumTargetMap = checker.LanguageFeatureMinimumTargetMap
 type LateBoundLinks = checker.LateBoundLinks
+type LazyState = checker.LazyState
 type LiteralType = checker.LiteralType
 const MAX_REVERSE_MAPPED_NESTING_INSPECTION_DEPTH = checker.MAX_REVERSE_MAPPED_NESTING_INSPECTION_DEPTH
 type MappedSymbolLinks = checker.MappedSymbolLinks
@@ -959,6 +965,8 @@ const MappedTypeNameTypeKindFiltering = checker.MappedTypeNameTypeKindFiltering
 const MappedTypeNameTypeKindNone = checker.MappedTypeNameTypeKindNone
 const MappedTypeNameTypeKindRemapping = checker.MappedTypeNameTypeKindRemapping
 type MarkedAssignmentSymbolLinks = checker.MarkedAssignmentSymbolLinks
+type MemberInfo = checker.MemberInfo
+type MemberLayout = checker.MemberLayout
 type MemberOverrideStatus = checker.MemberOverrideStatus
 const MemberOverrideStatusHasInvalidOverride = checker.MemberOverrideStatusHasInvalidOverride
 const MemberOverrideStatusNeedsOverride = checker.MemberOverrideStatusNeedsOverride
@@ -1498,6 +1506,7 @@ type extra_TypeReference struct {
   checker.ObjectType
   node *ast.Node
   resolvedTypeArguments []*checker.Type
+  lazy *checker.LazyState
 }
 func TypeReference_resolvedTypeArguments(v *checker.TypeReference) []*checker.Type {
   return ((*extra_TypeReference)(unsafe.Pointer(v))).resolvedTypeArguments
