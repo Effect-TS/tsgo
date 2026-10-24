@@ -1,0 +1,63 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:21-5:35) TS377148: 'effect/Array' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Array } from "effect"' instead. effect(preferBarrelImport)
+  Fix 0: "Disable preferBarrelImport for this line"
+  Fix 1: "Disable preferBarrelImport for entire file"
+
+[D2] (5:23-5:38) TS377148: 'effect/Record' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Record } from "effect"' instead. effect(preferBarrelImport)
+  Fix 0: "Disable preferBarrelImport for this line"
+  Fix 1: "Disable preferBarrelImport for entire file"
+
+[D3] (5:22-5:37) TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option } from "effect"' instead. effect(preferBarrelImport)
+  Fix 0: "Disable preferBarrelImport for this line"
+  Fix 1: "Disable preferBarrelImport for entire file"
+
+[D4] (5:22-5:37) TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option } from "effect"' instead. effect(preferBarrelImport)
+  Fix 0: "Disable preferBarrelImport for this line"
+  Fix 1: "Disable preferBarrelImport for entire file"
+
+[D5] (5:24-5:39) TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option } from "effect"' instead. effect(preferBarrelImport)
+  Fix 0: "Disable preferBarrelImport for this line"
+  Fix 1: "Disable preferBarrelImport for entire file"
+
+[D6] (5:45-5:60) TS377148: 'effect/Option' is imported directly, but barrelImportPackages expects named imports from the barrel 'effect'. Use 'import { Option } from "effect"' instead. effect(preferBarrelImport)
+  Fix 0: "Disable preferBarrelImport for this line"
+  Fix 1: "Disable preferBarrelImport for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferBarrelImport for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferBarrelImport for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable preferBarrelImport for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable preferBarrelImport for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable preferBarrelImport for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable preferBarrelImport for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable preferBarrelImport for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable preferBarrelImport for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable preferBarrelImport for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable preferBarrelImport for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable preferBarrelImport for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable preferBarrelImport for entire file" ===
+skipped by default

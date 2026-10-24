@@ -1,0 +1,7 @@
+/.src/package.json -> preferBarrelImport_noFix.flows.package.mermaid
+/.src/globalValue.ts -> preferBarrelImport_noFix.flows.globalValue.mermaid
+/.src/globalType.ts -> preferBarrelImport_noFix.flows.globalType.mermaid
+/.src/bound.ts -> preferBarrelImport_noFix.flows.bound.mermaid
+/.src/shadowed.ts -> preferBarrelImport_noFix.flows.shadowed.mermaid
+/.src/reexport.ts -> preferBarrelImport_noFix.flows.reexport.mermaid
+/.src/comment.ts -> preferBarrelImport_noFix.flows.comment.mermaid

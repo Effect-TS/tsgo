@@ -1,0 +1,53 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:10-5:13) TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+  Fix 0: "Disable preferNamespaceImport for this line"
+  Fix 1: "Disable preferNamespaceImport for entire file"
+
+[D2] (5:10-5:14) TS377146: 'pipe' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
+  Fix 0: "Disable preferNamespaceImport for this line"
+  Fix 1: "Disable preferNamespaceImport for entire file"
+
+[D3] (5:10-5:13) TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+  Fix 0: "Disable preferNamespaceImport for this line"
+  Fix 1: "Disable preferNamespaceImport for entire file"
+
+[D4] (5:10-5:13) TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+  Fix 0: "Disable preferNamespaceImport for this line"
+  Fix 1: "Disable preferNamespaceImport for entire file"
+
+[D5] (5:10-5:14) TS377147: 'deep' is imported by name from '@acme/kit', but namespaceImportPackages expects a namespace import of the module that declares 'deep'. effect(preferNamespaceImport)
+  Fix 0: "Disable preferNamespaceImport for this line"
+  Fix 1: "Disable preferNamespaceImport for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferNamespaceImport for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferNamespaceImport for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable preferNamespaceImport for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable preferNamespaceImport for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable preferNamespaceImport for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable preferNamespaceImport for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable preferNamespaceImport for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable preferNamespaceImport for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable preferNamespaceImport for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable preferNamespaceImport for entire file" ===
+skipped by default

@@ -8,7 +8,7 @@ Reports imports of individual modules from packages configured in barrelImportPa
 | --- | --- |
 | Category | Style |
 | Default severity | `off` |
-| Fixable | No |
+| Fixable | Yes |
 | Effect versions | v3, v4 |
 | Diagnostic codes | `TS377148` |
 | Language Service name | `preferBarrelImport` |

@@ -1,0 +1,8 @@
+flowchart TB
+  0[["type: #40;Option: number#41; =#gt; Option#lt;number#gt;<br/>node: #40;Option: number#41; =#gt; some#40;Option#41;"]]
+  1[/"type: number<br/>node: Option"/]
+  2["type: Option#lt;number#gt;<br/>callee: some<br/>args: #91;#93;"]
+  3[/"type: #lt;A#gt;#40;value: A#41; =#gt; Option#lt;A#gt;<br/>node: some"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: potentialReturn"| 0

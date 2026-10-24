@@ -1,0 +1,61 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/globalValue.ts(6,10): warning TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+/.src/namespace.ts(6,10): warning TS377146: 'Effect' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Effect from "effect/Effect"' instead. effect(preferNamespaceImport)
+/.src/uses.ts(6,10): warning TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "namespaceImportPackages": ["effect"]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/namespace.ts (1 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferNamespaceImport:warning
+    
+    // fix: the binding is already the namespace, so only the import changes
+    import { Effect } from "effect"
+             ~~~~~~
+!!! warning TS377146: 'Effect' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Effect from "effect/Effect"' instead. effect(preferNamespaceImport)
+    
+    export const program = Effect.succeed(1)
+    
+
+==== /.src/uses.ts (1 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferNamespaceImport:warning
+    
+    // fix: the named import becomes a member of Array, shorthand properties included
+    import { map } from "effect/Array"
+             ~~~
+!!! warning TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+    
+    export const doubled = map([1, 2], (n) => n * 2)
+    export const helpers = { map }
+    
+
+==== /.src/globalValue.ts (1 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferNamespaceImport:warning
+    
+    // no fix: Array would rebind the global Array that the file reads
+    import { map } from "effect/Array"
+             ~~~
+!!! warning TS377146: 'map' is imported by name from 'effect/Array', but namespaceImportPackages expects a namespace import. Use 'import * as Array from "effect/Array"' instead. effect(preferNamespaceImport)
+    
+    export const isList = Array.isArray
+    export const doubled = map([1, 2], (n) => n * 2)
+    

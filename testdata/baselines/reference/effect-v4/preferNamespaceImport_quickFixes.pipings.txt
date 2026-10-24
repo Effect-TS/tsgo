@@ -1,0 +1,69 @@
+==== /.src/package.json (0 flows) ====
+==== /.src/node_modules/@acme/kit/package.json (0 flows) ====
+==== /.src/node_modules/@acme/kit/dist/index.d.ts (0 flows) ====
+==== /.src/node_modules/@acme/kit/dist/Dialog.d.ts (0 flows) ====
+==== /.src/uses.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 10:53 - 10:85
+Node: map(users, (user) => user.name)
+Node Kind: KindCallExpression
+
+Subject: users
+Subject Type: readonly User[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: map
+      args: [(user) => user.name]
+      outType: string[]
+==== /.src/siblings.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 7:21 - 7:72
+Node: filter(map([1, 2, 3], (n) => n * 2), (n) => n > 2)
+Node Kind: KindCallExpression
+
+Subject: [1, 2, 3]
+Subject Type: number[]
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: map
+      args: [(n) => n * 2]
+      outType: number[]
+  [1] kind: dataFirst
+      callee: filter
+      args: [(n) => n > 2]
+      outType: number[]
+==== /.src/reuse.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 8:24 - 8:31
+Node: some(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: some
+      args: (constant)
+      outType: Option<number>
+==== /.src/style.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 7:23 - 7:49
+Node: map([1, 2], (n) => n * 2)
+Node Kind: KindCallExpression
+
+Subject: [1, 2]
+Subject Type: number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: map
+      args: [(n) => n * 2]
+      outType: number[]
+==== /.src/alias.ts (0 flows) ====

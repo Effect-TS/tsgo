@@ -3,14 +3,17 @@
 [D1] (6:10-6:16) TS377146: 'Effect' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Effect from "effect/Effect"' instead. effect(preferNamespaceImport)
   Fix 0: "Disable preferNamespaceImport for this line"
   Fix 1: "Disable preferNamespaceImport for entire file"
+  Fix 2: "Import 'effect/Effect' as Effect"
 
 [D2] (6:10-6:16) TS377146: 'Effect' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Effect from "effect/Effect"' instead. effect(preferNamespaceImport)
   Fix 0: "Disable preferNamespaceImport for this line"
   Fix 1: "Disable preferNamespaceImport for entire file"
+  Fix 2: "Import 'effect/Effect' as Effect"
 
 [D3] (5:10-5:14) TS377146: 'pipe' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
   Fix 0: "Disable preferNamespaceImport for this line"
   Fix 1: "Disable preferNamespaceImport for entire file"
+  Fix 2: "Import 'effect/Function' as Function and qualify the uses"
 
 === Quick Fix Application Results ===
 
@@ -20,14 +23,57 @@ skipped by default
 === [D1] Fix 1: "Disable preferNamespaceImport for entire file" ===
 skipped by default
 
+=== [D1] Fix 2: "Import 'effect/Effect' as Effect" ===
+
+--- file:///.src/app.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferNamespaceImport:warning
+// @effect-diagnostics preferBarrelImport:warning
+
+// reported by preferNamespaceImport: the base config applies
+import * as Effect from "effect/Effect"
+// not reported: pipe is a named re-export and the base config keeps "ignore"
+import { pipe } from "effect"
+// not reported: barrelImportPackages is only set for legacy files
+import * as Record from "effect/Record"
+
+export const app = pipe(Effect.void, Effect.as(Record.empty()))
+
 === [D2] Fix 0: "Disable preferNamespaceImport for this line" ===
 skipped by default
 
 === [D2] Fix 1: "Disable preferNamespaceImport for entire file" ===
 skipped by default
 
+=== [D2] Fix 2: "Import 'effect/Effect' as Effect" ===
+
+--- file:///.src/legacy/old.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferNamespaceImport:warning
+// @effect-diagnostics preferBarrelImport:warning
+
+// not reported: the override clears namespaceImportPackages
+import * as Effect from "effect/Effect"
+// reported by preferBarrelImport: the override sets barrelImportPackages
+import * as Record from "effect/Record"
+
+export const old = Effect.as(Effect.void, Record.empty())
+
 === [D3] Fix 0: "Disable preferNamespaceImport for this line" ===
 skipped by default
 
 === [D3] Fix 1: "Disable preferNamespaceImport for entire file" ===
 skipped by default
+
+=== [D3] Fix 2: "Import 'effect/Function' as Function and qualify the uses" ===
+
+--- file:///.src/follow.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferNamespaceImport:warning
+
+// reported: the override sets topLevelNamedReexports to "follow"
+import * as Function from "effect/Function"
+import * as Effect from "effect/Effect"
+
+export const followed = Function.pipe(Effect.void, Effect.asVoid)
+

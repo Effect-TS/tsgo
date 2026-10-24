@@ -1,0 +1,13 @@
+flowchart TB
+  0[["type: #40;users: readonly User#91;#93;#41; =#gt; string#91;#93;<br/>node: #40;users: ReadonlyArray#lt;User#gt;#41; =#gt; map#40;users, #40;user#41; =#gt; user.name#41;"]]
+  1[/"type: readonly User#91;#93;<br/>node: users"/]
+  2["type: string#91;#93;<br/>callee: <br/>args: #91;#93;"]
+  3[/"type: #123; #lt;S extends ReadonlyArray#lt;any#gt;, B#gt;#40;f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; B#41;: #40;self: S#41; =#gt; With#lt;S, B#gt;; #lt;S extends ReadonlyArray#lt;any#gt;, B#gt;#40;self: S, f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; B#41;: With#lt;S, B#gt;; #125;<br/>node: map"/]
+  4[["type: #40;user: User#41; =#gt; string<br/>node: #40;user#41; =#gt; user.name"]]
+  5[/"type: string<br/>node: user.name"/]
+  6[/"type: #123; map: #123; #lt;S extends ReadonlyArray#lt;any#gt;, B#gt;#40;f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; B#41;: #40;self: S#41; =#gt; With#lt;S, B#gt;; #lt;S extends ReadonlyArray#lt;any#gt;, B#gt;#40;self: S, f: #40;a: Infer#lt;S#gt;, i: number#41; =#gt; B#41;: With#lt;S, B#gt;; #125;; #125;<br/>node: #123; map #125;"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 1
+  5 -->|"kind: potentialReturn"| 4
+  4 -->|"kind: transformArg"| 1
+  2 -->|"kind: potentialReturn"| 0

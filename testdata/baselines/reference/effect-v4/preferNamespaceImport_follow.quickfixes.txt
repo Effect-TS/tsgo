@@ -3,22 +3,27 @@
 [D1] (5:10-5:14) TS377146: 'pipe' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
   Fix 0: "Disable preferNamespaceImport for this line"
   Fix 1: "Disable preferNamespaceImport for entire file"
+  Fix 2: "Import 'effect/Function' as Function and qualify the uses"
 
 [D2] (6:10-6:29) TS377146: 'flow' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
   Fix 0: "Disable preferNamespaceImport for this line"
   Fix 1: "Disable preferNamespaceImport for entire file"
+  Fix 2: "Import 'effect/Function' as Function and qualify the uses"
 
 [D3] (7:10-7:19) TS377146: 'hole' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import type * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
   Fix 0: "Disable preferNamespaceImport for this line"
   Fix 1: "Disable preferNamespaceImport for entire file"
+  Fix 2: "Import type 'effect/Function' as Function and qualify the uses"
 
 [D4] (10:10-10:16) TS377146: 'Effect' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Effect from "effect/Effect"' instead. effect(preferNamespaceImport)
   Fix 0: "Disable preferNamespaceImport for this line"
   Fix 1: "Disable preferNamespaceImport for entire file"
+  Fix 2: "Import 'effect/Effect' as Effect"
 
 [D5] (11:10-11:18) TS377146: 'identity' is imported by name from 'effect/Function', but namespaceImportPackages expects a namespace import. Use 'import * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
   Fix 0: "Disable preferNamespaceImport for this line"
   Fix 1: "Disable preferNamespaceImport for entire file"
+  Fix 2: "Import 'effect/Function' as Function and qualify the uses"
 
 === Quick Fix Application Results ===
 
@@ -28,11 +33,55 @@ skipped by default
 === [D1] Fix 1: "Disable preferNamespaceImport for entire file" ===
 skipped by default
 
+=== [D1] Fix 2: "Import 'effect/Function' as Function and qualify the uses" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferNamespaceImport:warning
+
+// reported: named re-export followed to the declaring module
+import * as Function from "effect/Function"
+import { flow as composeFlow } from "effect"
+import { type hole } from "effect"
+
+// reported: unchanged by topLevelNamedReexports
+import { Effect } from "effect"
+import { identity } from "effect/Function"
+
+// not reported
+import * as Option from "effect/Option"
+
+export const usages = [Function.pipe, composeFlow, Effect, identity, Option]
+export type Usages = typeof hole
+
+
 === [D2] Fix 0: "Disable preferNamespaceImport for this line" ===
 skipped by default
 
 === [D2] Fix 1: "Disable preferNamespaceImport for entire file" ===
 skipped by default
+
+=== [D2] Fix 2: "Import 'effect/Function' as Function and qualify the uses" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferNamespaceImport:warning
+
+// reported: named re-export followed to the declaring module
+import { pipe } from "effect"
+import * as Function from "effect/Function"
+import { type hole } from "effect"
+
+// reported: unchanged by topLevelNamedReexports
+import { Effect } from "effect"
+import { identity } from "effect/Function"
+
+// not reported
+import * as Option from "effect/Option"
+
+export const usages = [pipe, Function.flow, Effect, identity, Option]
+export type Usages = typeof hole
+
 
 === [D3] Fix 0: "Disable preferNamespaceImport for this line" ===
 skipped by default
@@ -40,14 +89,80 @@ skipped by default
 === [D3] Fix 1: "Disable preferNamespaceImport for entire file" ===
 skipped by default
 
+=== [D3] Fix 2: "Import type 'effect/Function' as Function and qualify the uses" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferNamespaceImport:warning
+
+// reported: named re-export followed to the declaring module
+import { pipe } from "effect"
+import { flow as composeFlow } from "effect"
+import type * as Function from "effect/Function"
+
+// reported: unchanged by topLevelNamedReexports
+import { Effect } from "effect"
+import { identity } from "effect/Function"
+
+// not reported
+import * as Option from "effect/Option"
+
+export const usages = [pipe, composeFlow, Effect, identity, Option]
+export type Usages = typeof Function.hole
+
+
 === [D4] Fix 0: "Disable preferNamespaceImport for this line" ===
 skipped by default
 
 === [D4] Fix 1: "Disable preferNamespaceImport for entire file" ===
 skipped by default
 
+=== [D4] Fix 2: "Import 'effect/Effect' as Effect" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferNamespaceImport:warning
+
+// reported: named re-export followed to the declaring module
+import { pipe } from "effect"
+import { flow as composeFlow } from "effect"
+import { type hole } from "effect"
+
+// reported: unchanged by topLevelNamedReexports
+import * as Effect from "effect/Effect"
+import { identity } from "effect/Function"
+
+// not reported
+import * as Option from "effect/Option"
+
+export const usages = [pipe, composeFlow, Effect, identity, Option]
+export type Usages = typeof hole
+
+
 === [D5] Fix 0: "Disable preferNamespaceImport for this line" ===
 skipped by default
 
 === [D5] Fix 1: "Disable preferNamespaceImport for entire file" ===
 skipped by default
+
+=== [D5] Fix 2: "Import 'effect/Function' as Function and qualify the uses" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics preferNamespaceImport:warning
+
+// reported: named re-export followed to the declaring module
+import { pipe } from "effect"
+import { flow as composeFlow } from "effect"
+import { type hole } from "effect"
+
+// reported: unchanged by topLevelNamedReexports
+import { Effect } from "effect"
+import * as Function from "effect/Function"
+
+// not reported
+import * as Option from "effect/Option"
+
+export const usages = [pipe, composeFlow, Effect, Function.identity, Option]
+export type Usages = typeof hole
+
