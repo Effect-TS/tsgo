@@ -1,0 +1,198 @@
+Port of _patches/typescript/009-execute-tsc-emit.patch (tsc/internal/execute/tsc.go, tsc/internal/execute/tsc/emit.go,
+tsc/internal/compiler/program.go) to tsrs.
+
+- CommandLine: tsrs_execute::execute::command_line_with_testing enters etscore's command-line mode for the call
+  (`ets_etscore::enter_command_line_mode`, restored on return as Go's `defer restore()`). tsrs_execute depends on
+  the workspace's ets_etscore crate, as Go's execute imports etscore (see patch 007).
+- FilterDiagnosticsForExitCodeCallback / RegisterFilterDiagnosticsForExitCodeCallback:
+  tsrs_execute::tsc::{FilterDiagnosticsForExitCodeCallback, register_filter_diagnostics_for_exit_code_callback} (an
+  Arc'd closure behind a process-wide RwLock, as patch 002's callback); emit_and_report_statistics computes the exit
+  status from the filtered diagnostics.
+- FilterDiagnosticsForNoEmitOnErrorCallback / RegisterFilterDiagnosticsForNoEmitOnErrorCallback:
+  tsrs_compiler::{FilterDiagnosticsForNoEmitOnErrorCallback, register_filter_diagnostics_for_no_emit_on_error_callback};
+  get_diagnostics_of_any_program filters its result with it when skip_no_emit_check_for_dts_diagnostics is set.
+  tsrs-only: tsrs has a second copy of GetDiagnosticsOfAnyProgram for non-compiler programs
+  (programlike.rs get_diagnostics_of_any_program_like), which gets the same hunk.
+- The callbacks take the diagnostics as a slice and return the kept ones (Go: a slice in, a slice out).
+
+diff --git a/crates/tsrs_compiler/src/lib.rs b/crates/tsrs_compiler/src/lib.rs
+index 39af157..877e31f 100644
+--- a/crates/tsrs_compiler/src/lib.rs
++++ b/crates/tsrs_compiler/src/lib.rs
+@@ -53,6 +53,11 @@ pub use program::{
+     get_diagnostics_of_any_program, new_program, shared_program_data,
+     sort_and_deduplicate_diagnostics, worker_pool,
+ };
++// effect-tsgo patch 009.
++pub use program::{
++    FilterDiagnosticsForNoEmitOnErrorCallback,
++    register_filter_diagnostics_for_no_emit_on_error_callback,
++};
+ pub use program_emit::{
+     EmitOptions, EmitResult, SourceMapEmitResult, WriteFile, WriteFileData, combine_emit_results,
+     handle_no_emit_options,
+diff --git a/crates/tsrs_compiler/src/program.rs b/crates/tsrs_compiler/src/program.rs
+index 6a72b24..6b49f73 100644
+--- a/crates/tsrs_compiler/src/program.rs
++++ b/crates/tsrs_compiler/src/program.rs
+@@ -46,6 +46,36 @@ pub type CreateModuleResolver = Arc<dyn Fn(ResolverOptions) -> Box<dyn Resolver>
+ // Go `ProgramFactories.CreateCheckerPool func(*Program) CheckerPool`.
+ pub type CreateCheckerPool = Arc<dyn Fn(&'static Program) -> Box<dyn CheckerPool> + Send + Sync>;
+ 
++// effect-tsgo patch 009 (program.go `FilterDiagnosticsForNoEmitOnErrorCallback`).
++// FilterDiagnosticsForNoEmitOnErrorCallback is invoked before diagnostics
++// suppress emit when noEmitOnError is enabled.
++pub type FilterDiagnosticsForNoEmitOnErrorCallback =
++    Arc<dyn Fn(&CompilerOptions, &[P<Diagnostic>]) -> Vec<P<Diagnostic>> + Send + Sync>;
++
++static FILTER_DIAGNOSTICS_FOR_NO_EMIT_ON_ERROR_CALLBACK: std::sync::RwLock<
++    Option<FilterDiagnosticsForNoEmitOnErrorCallback>,
++> = std::sync::RwLock::new(None);
++
++// effect-tsgo patch 009 (program.go `RegisterFilterDiagnosticsForNoEmitOnErrorCallback`).
++// RegisterFilterDiagnosticsForNoEmitOnErrorCallback registers a callback to
++// filter diagnostics used by noEmitOnError.
++pub fn register_filter_diagnostics_for_no_emit_on_error_callback(
++    cb: FilterDiagnosticsForNoEmitOnErrorCallback,
++) {
++    *FILTER_DIAGNOSTICS_FOR_NO_EMIT_ON_ERROR_CALLBACK
++        .write()
++        .unwrap_or_else(std::sync::PoisonError::into_inner) = Some(cb);
++}
++
++/// tsrs-only (effect-tsgo patch 009): Go reads the package variable; the Rust port clones it out of its lock.
++pub(crate) fn filter_diagnostics_for_no_emit_on_error_callback()
++-> Option<FilterDiagnosticsForNoEmitOnErrorCallback> {
++    FILTER_DIAGNOSTICS_FOR_NO_EMIT_ON_ERROR_CALLBACK
++        .read()
++        .unwrap_or_else(std::sync::PoisonError::into_inner)
++        .clone()
++}
++
+ // Go `ProgramOptions` (= ProgramConfig + ProgramHosts + ProgramFactories, flattened; tracing is not ported).
+ pub struct ProgramOptions {
+     pub config: P<ParsedCommandLine>,
+@@ -3818,6 +3848,12 @@ pub fn get_diagnostics_of_any_program(
+             }
+         }
+     }
++    // effect-tsgo patch 009.
++    if skip_no_emit_check_for_dts_diagnostics
++        && let Some(callback) = filter_diagnostics_for_no_emit_on_error_callback()
++    {
++        all_diagnostics = callback(&program.options(), &all_diagnostics);
++    }
+     crate::checkerpool::write_cost_cache(program);
+     all_diagnostics
+ }
+diff --git a/crates/tsrs_compiler/src/programlike.rs b/crates/tsrs_compiler/src/programlike.rs
+index b8bf4b3..24c849a 100644
+--- a/crates/tsrs_compiler/src/programlike.rs
++++ b/crates/tsrs_compiler/src/programlike.rs
+@@ -199,5 +199,11 @@ pub fn get_diagnostics_of_any_program_like(
+             }
+         }
+     }
++    // effect-tsgo patch 009.
++    if skip_no_emit_check_for_dts_diagnostics
++        && let Some(callback) = crate::program::filter_diagnostics_for_no_emit_on_error_callback()
++    {
++        all_diagnostics = callback(&program.options(), &all_diagnostics);
++    }
+     all_diagnostics
+ }
+diff --git a/crates/tsrs_execute/Cargo.toml b/crates/tsrs_execute/Cargo.toml
+index 5e4384e..14bef04 100644
+--- a/crates/tsrs_execute/Cargo.toml
++++ b/crates/tsrs_execute/Cargo.toml
+@@ -12,6 +12,8 @@ workspace = true
+ # The tsc driver (Go's internal/execute: tsc, tsc -b), as a library: the `tsrs` binary and the WebAssembly build
+ # (crates/tsrs_wasm) call it. It links no allocator, language server, API server or file watcher.
+ [dependencies]
++# effect-tsgo patch 009: `command_line` enters etscore's command-line mode (Go's execute imports etscore).
++ets_etscore = { path = "../../../crates/ets_etscore" }
+ tsrs_core.workspace = true
+ tsrs_diagnostics.workspace = true
+ tsrs_ast.workspace = true
+diff --git a/crates/tsrs_execute/src/execute.rs b/crates/tsrs_execute/src/execute.rs
+index d03e440..ffbe634 100644
+--- a/crates/tsrs_execute/src/execute.rs
++++ b/crates/tsrs_execute/src/execute.rs
+@@ -55,6 +55,15 @@ pub fn command_line_with_testing(
+     command_line_args: Vec<String>,
+     testing: Option<&'static dyn tsc::CommandLineTesting>,
+ ) -> CommandLineResult {
++    // effect-tsgo patch 009: `restore := etscore.EnterCommandLineMode(); defer restore()`.
++    struct Restore<F: Fn()>(F);
++    impl<F: Fn()> Drop for Restore<F> {
++        fn drop(&mut self) {
++            (self.0)();
++        }
++    }
++    let _restore = Restore(ets_etscore::enter_command_line_mode());
++
+     if let Some(first) = command_line_args.first() {
+         match first.to_lowercase().as_str() {
+             "-b" | "--b" | "-build" | "--build" => {
+diff --git a/crates/tsrs_execute/src/tsc/emit.rs b/crates/tsrs_execute/src/tsc/emit.rs
+index 3cadf91..589a353 100644
+--- a/crates/tsrs_execute/src/tsc/emit.rs
++++ b/crates/tsrs_execute/src/tsc/emit.rs
+@@ -9,6 +9,31 @@ use super::{
+     Statistics, System, statistics_from_program,
+ };
+ 
++// effect-tsgo patch 009 (emit.go `FilterDiagnosticsForExitCodeCallback`).
++// FilterDiagnosticsForExitCodeCallback is invoked to filter diagnostics before
++// exit-code determination. It allows external packages to exclude certain
++// diagnostics from affecting the exit code while still reporting them.
++pub type FilterDiagnosticsForExitCodeCallback = std::sync::Arc<
++    dyn Fn(&tsrs_core::CompilerOptions, &[P<tsrs_ast::Diagnostic>]) -> Vec<P<tsrs_ast::Diagnostic>>
++        + Send
++        + Sync,
++>;
++
++static FILTER_DIAGNOSTICS_FOR_EXIT_CODE_CALLBACK: std::sync::RwLock<
++    Option<FilterDiagnosticsForExitCodeCallback>,
++> = std::sync::RwLock::new(None);
++
++// effect-tsgo patch 009 (emit.go `RegisterFilterDiagnosticsForExitCodeCallback`).
++// RegisterFilterDiagnosticsForExitCodeCallback registers a callback to filter
++// diagnostics for exit-code determination.
++pub fn register_filter_diagnostics_for_exit_code_callback(
++    cb: FilterDiagnosticsForExitCodeCallback,
++) {
++    *FILTER_DIAGNOSTICS_FOR_EXIT_CODE_CALLBACK
++        .write()
++        .unwrap_or_else(std::sync::PoisonError::into_inner) = Some(cb);
++}
++
+ pub struct EmitInput<'a> {
+     pub sys: &'a dyn System,
+     pub program: &'static Program,
+@@ -57,9 +82,23 @@ pub fn emit_and_report_statistics(input: &EmitInput) -> (CompileAndEmitResult, O
+         statistics = Some(stats);
+     }
+ 
+-    if result.emit_skipped && !result.diagnostics.is_empty() {
++    // effect-tsgo patch 009.
++    let callback = FILTER_DIAGNOSTICS_FOR_EXIT_CODE_CALLBACK
++        .read()
++        .unwrap_or_else(std::sync::PoisonError::into_inner)
++        .clone();
++    let filtered;
++    let diagnostics_for_exit_code = match callback {
++        Some(callback) => {
++            filtered = callback(&options, &result.diagnostics);
++            &filtered
++        }
++        None => &result.diagnostics,
++    };
++
++    if result.emit_skipped && !diagnostics_for_exit_code.is_empty() {
+         result.status = ExitStatus::DiagnosticsPresent_OutputsSkipped;
+-    } else if !result.diagnostics.is_empty() {
++    } else if !diagnostics_for_exit_code.is_empty() {
+         result.status = ExitStatus::DiagnosticsPresent_OutputsGenerated;
+     }
+     (result, statistics)

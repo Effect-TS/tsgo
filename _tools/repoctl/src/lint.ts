@@ -5,7 +5,7 @@ import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import { ChildProcessSpawner } from "effect/process"
 import { CommandError, runCommand, runCommandCaptureSplit } from "./process.ts"
-import { getComponent, readUpstream } from "./upstream.ts"
+import { getComponent, getTypeScriptSource, readUpstream } from "./upstream.ts"
 
 const deadcodeVersion = "v0.50.0"
 const golangciLintVersion = "v2.14.0"
@@ -50,7 +50,7 @@ export const runDeadCode = Effect.fnUntraced(function*(repositoryRoot: string) {
     yield* fs.readFileString(path.join(repositoryRoot, "_tools", "deadcode-allow.txt"))
   )
   const upstream = yield* readUpstream(repositoryRoot)
-  const compiler = (yield* getComponent(upstream, "typescript")).typescript.source
+  const compiler = getTypeScriptSource((yield* getComponent(upstream, "typescript")).typescript.provider)
   const entrypoint = [".", compiler.checkoutDir, compiler.moduleDir, compiler.commandPath]
     .filter((part) => part !== ".")
     .join("/")

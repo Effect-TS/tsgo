@@ -1,0 +1,22 @@
+[package]
+name = "ets_effectconfigcheck"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Port of internal/effectconfigcheck"
+
+[lints]
+workspace = true
+
+[dependencies]
+ets_directives.workspace = true
+ets_etscore.workspace = true
+ets_rule.workspace = true
+ets_rules.workspace = true
+ets_shim.workspace = true
+rustc-hash.workspace = true
+
+[dev-dependencies]
+ets_etscheckerhooks.workspace = true

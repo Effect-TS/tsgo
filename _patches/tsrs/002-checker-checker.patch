@@ -1,0 +1,191 @@
+Port of _patches/typescript/002-checker-checker.patch (tsc/internal/checker/checker.go) to tsrs.
+
+- AfterCheckSourceFileCallback / RegisterAfterCheckSourceFileCallback: tsrs_checker::AfterCheckSourceFileCallback
+  (an Arc'd closure behind a process-wide RwLock) and register_after_check_source_file_callback. check_source_file
+  calls it once per file, after the file's first full check and before the cancellation check, as Go does.
+- Checker.AddDiagnostic: Checker::add_diagnostic_exported (tsrs already has the unexported add_diagnostic).
+- Checker.Program: Checker::program (the pub field exists too).
+- Checker.GetRelationErrors: Checker::get_relation_errors (needs patches 004 and 005).
+- Program.IsSourceFileFromExternalLibrary on the checker's Program trait, implemented by tsrs_compiler::Program and
+  by tsrs_ls's aliasResolver (the aliasresolver.go hunk of _patches/typescript/018, which the trait needs).
+- tsrs-only: the checker's Program trait has `Any` as a supertrait, so that Effect code can make Go's type assertions
+  on a `checker.Program` (internal/typeparser asserts program capabilities; the after-check callback's program is
+  the concrete tsrs_compiler::Program, recovered with `downcast_ref`).
+
+Rust-only: tsrs's check_source_file_piece (a heavy declaration file split over several checkers) leaves the relation
+errors a piece reports in that piece's checker.
+
+diff --git a/crates/tsrs_checker/src/checker.rs b/crates/tsrs_checker/src/checker.rs
+index 546ff48..93644fe 100644
+--- a/crates/tsrs_checker/src/checker.rs
++++ b/crates/tsrs_checker/src/checker.rs
+@@ -9,6 +9,38 @@ use crate::direct_bitflags as bitflags;
+ use crate::*;
+ use tsrs_core::PSliceCell;
+ 
++// effect-tsgo patch 002 (checker.go `AfterCheckSourceFileCallback`).
++// AfterCheckSourceFileCallback is invoked after type checking each source file.
++// It allows external packages to run additional diagnostics with full type information.
++// Use Checker.AddDiagnostic to add diagnostics from within the callback.
++pub type AfterCheckSourceFileCallback = std::sync::Arc<
++    dyn Fn(&tsrs_core::context::Context, &'static dyn Program, &mut Checker, P<ast::SourceFile>)
++        + Send
++        + Sync,
++>;
++
++static AFTER_CHECK_SOURCE_FILE_CALLBACK: std::sync::RwLock<Option<AfterCheckSourceFileCallback>> =
++    std::sync::RwLock::new(None);
++
++// effect-tsgo patch 002 (checker.go `RegisterAfterCheckSourceFileCallback`).
++// RegisterAfterCheckSourceFileCallback registers a callback to be called after
++// each source file is type checked. The callback receives the program, checker
++// with full type information, and the source file that was checked.
++// Note: Only one callback can be registered. Subsequent calls will replace the previous callback.
++pub fn register_after_check_source_file_callback(cb: AfterCheckSourceFileCallback) {
++    *AFTER_CHECK_SOURCE_FILE_CALLBACK.write().unwrap_or_else(std::sync::PoisonError::into_inner) =
++        Some(cb);
++}
++
++/// tsrs-only (effect-tsgo patch 002): Go reads the package variable `AfterCheckSourceFileCallback`; the Rust port
++/// clones it out of its lock so the callback runs without holding the lock.
++pub(crate) fn after_check_source_file_callback() -> Option<AfterCheckSourceFileCallback> {
++    AFTER_CHECK_SOURCE_FILE_CALLBACK
++        .read()
++        .unwrap_or_else(std::sync::PoisonError::into_inner)
++        .clone()
++}
++
+ // CheckMode
+ 
+ bitflags! {
+diff --git a/crates/tsrs_checker/src/checker_02.rs b/crates/tsrs_checker/src/checker_02.rs
+index 8f0914a..3256ffd 100644
+--- a/crates/tsrs_checker/src/checker_02.rs
++++ b/crates/tsrs_checker/src/checker_02.rs
+@@ -8,6 +8,34 @@ use tsrs_diagnostics as diagnostics;
+ use tsrs_diagnostics::Message;
+ 
+ impl Checker {
++    // effect-tsgo patch 002 (checker.go `Checker.AddDiagnostic`).
++    // AddDiagnostic adds a diagnostic to the checker's diagnostics collection.
++    // tsrs-only: also counts the add, as every tsrs diagnostic add does (`infermemo` checks the count).
++    pub fn add_diagnostic_exported(&mut self, diagnostic: P<Diagnostic>) {
++        self.diagnostic_adds = self.diagnostic_adds.wrapping_add(1);
++        self.diagnostics.add(diagnostic);
++    }
++
++    // effect-tsgo patch 002 (checker.go `Checker.Program`).
++    // Program returns the program being checked.
++    pub fn program(&self) -> &'static dyn Program {
++        self.program
++    }
++
++    // effect-tsgo patch 002 (checker.go `Checker.GetRelationErrors`).
++    // GetRelationErrors returns the collected relation errors for a source file.
++    // These are collected during type checking and persist until the file is re-checked.
++    pub fn get_relation_errors(&mut self, sf: P<SourceFile>) -> Vec<RelationError> {
++        if !self.source_file_links.get(sf).type_checked.get() {
++            // Go passes `c.ctx`, the context of the last check (tsrs clears it when a check ends).
++            let ctx = self.ctx.clone().unwrap_or_else(Context::background);
++            self.get_diagnostics_exported(&ctx, sf);
++        }
++        self.source_file_links.get(sf).relation_errors.borrow().clone()
++    }
++
++    // Return the type-only declaration node (if any) for the given alias symbol (non-transitively)
++    // checker.go:2174
+     // Return the type-only declaration node (if any) for the given alias symbol (non-transitively)
+     // checker.go:2174
+     pub fn get_type_only_alias_declaration(&mut self, symbol: P<Symbol>) -> Option<P<Node>> {
+@@ -132,11 +160,14 @@ impl Checker {
+     ) {
+         self.ctx = Some(ctx.clone());
+         let links = self.source_file_links.get(source_file);
++        let mut call_after_source_file_hook = false;
+         if !links.type_checked.get() {
+             // tsrs-only: TSRS_TRACE_UNION_REDUCTION (uniontrace.rs) prints each checker's file order.
+             if crate::uniontrace::enabled() {
+                 crate::uniontrace::report_check_file(self, source_file, None);
+             }
++            // Clear any stale relation errors before type checking.
++            links.relation_errors.borrow_mut().clear();
+             self.run_deferred_type_argument_checks(source_file);
+             // Grammar checking
+             self.check_grammar_source_file(source_file);
+@@ -155,6 +186,8 @@ impl Checker {
+             self.produce_deferred_diagnostics();
+             self.reported_unreachable_nodes.clear();
+             links.type_checked.set(true);
++
++            call_after_source_file_hook = true;
+         }
+         if check_unused && !links.unused_checked.get() {
+             // The unused identifiers check relies on a full type check having first been performed
+@@ -164,6 +197,10 @@ impl Checker {
+             }
+             links.unused_checked.set(true);
+         }
++        if call_after_source_file_hook && let Some(callback) = after_check_source_file_callback() {
++            let program = self.program;
++            callback(ctx, program, self, source_file);
++        }
+         if self.is_canceled() {
+             self.was_canceled = true;
+         }
+diff --git a/crates/tsrs_checker/src/program.rs b/crates/tsrs_checker/src/program.rs
+index 1d96dbe..5502b79 100644
+--- a/crates/tsrs_checker/src/program.rs
++++ b/crates/tsrs_checker/src/program.rs
+@@ -8,7 +8,9 @@ pub use tsrs_tsoptions::{ParsedCommandLine, SourceOutputAndProjectReference};
+ 
+ /// Go `checker.Program` (plus the `modulespecifiers.ModuleSpecifierGenerationHost` methods the checker calls).
+ /// `ast.HasFileName` parameters are `P<SourceFile>`.
+-pub trait Program: Send + Sync {
++// effect-tsgo patch 002: `Any`, so that Effect code can make Go's type assertions on a `checker.Program` (the
++// after-check callback's program is the compiler's `*compiler.Program`).
++pub trait Program: Send + Sync + std::any::Any {
+     fn options(&self) -> P<CompilerOptions>;
+     fn source_files(&self) -> &'static [P<SourceFile>];
+     fn bind_source_files(&self);
+@@ -38,6 +40,8 @@ pub trait Program: Send + Sync {
+     fn get_import_helpers_import_specifier(&self, path: &Path) -> Option<P<Node>>;
+     fn source_file_may_be_emitted(&self, source_file: P<SourceFile>, force_dts_emit: bool) -> bool;
+     fn is_source_file_default_library(&self, path: &Path) -> bool;
++    // effect-tsgo patch 002 (checker.go `Program.IsSourceFileFromExternalLibrary`).
++    fn is_source_file_from_external_library(&self, file: P<SourceFile>) -> bool;
+     fn get_project_reference_from_output_dts(
+         &self,
+         path: &Path,
+diff --git a/crates/tsrs_compiler/src/checker_program.rs b/crates/tsrs_compiler/src/checker_program.rs
+index f7a5b36..83fe485 100644
+--- a/crates/tsrs_compiler/src/checker_program.rs
++++ b/crates/tsrs_compiler/src/checker_program.rs
+@@ -90,6 +90,11 @@ impl tsrs_checker::Program for Program {
+         Program::is_source_file_default_library(self, path)
+     }
+ 
++    // effect-tsgo patch 002: `*Program` implements the `checker.Program.IsSourceFileFromExternalLibrary` it adds.
++    fn is_source_file_from_external_library(&self, file: P<SourceFile>) -> bool {
++        Program::is_source_file_from_external_library(self, file)
++    }
++
+     fn get_project_reference_from_output_dts(
+         &self,
+         path: &Path,
+diff --git a/crates/tsrs_ls/src/autoimport/aliasresolver.rs b/crates/tsrs_ls/src/autoimport/aliasresolver.rs
+index afb1ccf..c1bcada 100644
+--- a/crates/tsrs_ls/src/autoimport/aliasresolver.rs
++++ b/crates/tsrs_ls/src/autoimport/aliasresolver.rs
+@@ -205,6 +205,12 @@ impl checker::Program for aliasResolver {
+         false
+     }
+ 
++    // effect-tsgo patch 018 (aliasresolver.go `aliasResolver.IsSourceFileFromExternalLibrary`): the
++    // `checker.Program` method patch 002 adds.
++    fn is_source_file_from_external_library(&self, _file: P<SourceFile>) -> bool {
++        false
++    }
++
+     // aliasresolver.go:196
+     fn get_project_reference_from_output_dts(
+         &self,

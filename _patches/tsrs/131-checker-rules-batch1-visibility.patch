@@ -1,0 +1,36 @@
+tsrs-only: visibility changes for the effect-tsgo shim accessors internal/rules calls (no Go counterpart: the Go
+shim reaches these unexported checker methods through extra-shim.json linknames). Each item only changes
+`pub(crate)` to `pub`:
+
+- Checker::is_symbol_assigned (Checker_isSymbolAssigned): the catch* rules (catchAllTagDispatchToCatchTag,
+  catchIfTagToCatchTag, catchConditionalRefailToCatchIf, catchRefailToTapError, catchTagToCatchReason) only rewrite
+  handlers whose parameter is never reassigned.
+- Checker::get_symbol_if_same_reference (Checker_getSymbolIfSameReference): the same rules compare a reference with
+  the handler parameter.
+
+Both are also used by flatMapConditionalToFilterOrFail and flatMapToTap (and their helpers).
+
+diff --git a/crates/tsrs_checker/src/checker_07.rs b/crates/tsrs_checker/src/checker_07.rs
+--- a/crates/tsrs_checker/src/checker_07.rs
++++ b/crates/tsrs_checker/src/checker_07.rs
+@@ -2572,7 +2572,7 @@
+     }
+ 
+     // checker.go:14605
+-    pub(crate) fn get_symbol_if_same_reference(
++    pub fn get_symbol_if_same_reference(
+         &mut self,
+         s1: P<Symbol>,
+         s2: P<Symbol>,
+diff --git a/crates/tsrs_checker/src/flow.rs b/crates/tsrs_checker/src/flow.rs
+--- a/crates/tsrs_checker/src/flow.rs
++++ b/crates/tsrs_checker/src/flow.rs
+@@ -4538,7 +4538,7 @@
+ 
+     // Check if a parameter, catch variable, or mutable local variable is assigned anywhere
+     // flow.go:2661
+-    pub(crate) fn is_symbol_assigned(&mut self, symbol: P<Symbol>) -> bool {
++    pub fn is_symbol_assigned(&mut self, symbol: P<Symbol>) -> bool {
+         self.ensure_assignments_marked(symbol);
+         self.marked_assignment_symbol_links.get(symbol).last_assignment_pos.get()
+             != LastAssignmentPosition::None

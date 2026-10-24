@@ -17,6 +17,11 @@ import {
   formatTSConfigSchema,
   formatUpstreamUpdateDescription,
   getComponent,
+  getTsrsComponent,
+  parseTsrsNpmVersion,
+  parseTsrsTypeScriptMetadata,
+  parseTypeScriptOverrideFolderName,
+  resolveComponent,
   resolveMaterializedTypeScriptSource,
   typeScriptSourceEntrypoint
 } from "../src/upstream.ts"
@@ -25,6 +30,22 @@ import { resolveUpstreamInfo } from "../src/upstreamResolve.ts"
 const revision = "0123456789abcdef0123456789abcdef01234567"
 const secondRevision = "1123456789abcdef0123456789abcdef01234567"
 const thirdRevision = "2123456789abcdef0123456789abcdef01234567"
+
+const resolveIn = (
+  repositoryRoot: string,
+  upstream: Parameters<typeof resolveComponent>[1],
+  name: Parameters<typeof resolveComponent>[2],
+  version?: string
+) => Effect.runPromise(resolveComponent(repositoryRoot, upstream, name, version).pipe(Effect.provide(NodeServices.layer)))
+
+const withRepository = async(run: (repository: string) => Promise<void>) => {
+  const repository = mkdtempSync(join(tmpdir(), "repoctl-typescript-overrides-"))
+  try {
+    await run(repository)
+  } finally {
+    rmSync(repository, { recursive: true, force: true })
+  }
+}
 
 test("prefers a materialized TSC entrypoint and falls back to TypeScript-Go", async() => {
   const repository = mkdtempSync(join(tmpdir(), "repoctl-typescript-source-"))
@@ -157,16 +178,17 @@ test("requires runtime profiles to declare both patched components", async() => 
   )
 })
 
-test("resolves component checkouts and defaults to TypeScript next", async() => {
+test("resolves component checkouts and defaults to TypeScript next", () => withRepository(async(repository) => {
   const upstream = await Effect.runPromise(decodeUpstream(JSON.stringify(manifest())))
 
-  assert.deepEqual(await Effect.runPromise(getComponent(upstream, "typescript")), {
+  assert.deepEqual(await resolveIn(repository, upstream, "typescript"), {
     name: "typescript",
     version: "7.1.0",
     gitHead: secondRevision,
     typescript: {
       version: "7.1.0",
       gitHead: secondRevision,
+      provider: "typescript",
       source: {
         provider: "typescript",
         repository: "https://github.com/microsoft/TypeScript.git",
@@ -182,13 +204,14 @@ test("resolves component checkouts and defaults to TypeScript next", async() => 
       }
     }
   })
-  assert.deepEqual(await Effect.runPromise(getComponent(upstream, "oxlint-tsgolint", "7.0.1000")), {
+  assert.deepEqual(await resolveIn(repository, upstream, "oxlint-tsgolint", "7.0.1000"), {
     name: "oxlint-tsgolint",
     version: "7.0.1000",
     gitHead: revision,
     typescript: {
       version: "7.0.0",
       gitHead: revision,
+      provider: "typescript-go",
       source: {
         provider: "typescript-go",
         repository: "https://github.com/microsoft/typescript-go.git",
@@ -204,13 +227,14 @@ test("resolves component checkouts and defaults to TypeScript next", async() => 
       }
     }
   })
-  assert.deepEqual(await Effect.runPromise(getComponent(upstream, "oxlint", "1.0.0")), {
+  assert.deepEqual(await resolveIn(repository, upstream, "oxlint", "1.0.0"), {
     name: "oxlint",
     version: "1.0.0",
     gitHead: revision,
     typescript: {
       version: "7.1.0",
       gitHead: secondRevision,
+      provider: "typescript",
       source: {
         provider: "typescript",
         repository: "https://github.com/microsoft/TypeScript.git",
@@ -227,10 +251,16 @@ test("resolves component checkouts and defaults to TypeScript next", async() => 
     }
   })
   await assert.rejects(
-    Effect.runPromise(getComponent(upstream, "oxlint")),
+    resolveIn(repository, upstream, "oxlint"),
     /A version is required for component oxlint/
   )
-})
+  // getComponent leaves the source (and its override folders) to resolveComponent.
+  assert.deepEqual((await Effect.runPromise(getComponent(upstream, "typescript"))).typescript, {
+    version: "7.1.0",
+    gitHead: secondRevision,
+    provider: "typescript"
+  })
+}))
 
 test("resolves platform build metadata for setup actions", async() => {
   const upstream = await Effect.runPromise(decodeUpstream(JSON.stringify(manifest())))
@@ -331,32 +361,188 @@ test("builds deterministic normalized metadata and deduplicates components", () 
   ])
 })
 
-test("resolves per-version shim adapters and preserves them through updates", async() => {
-  const withBeta = manifest()
-  const beta = { gitHead: thirdRevision, provider: "typescript" as const, shims: "typescript-beta" as const }
-  const upstream = await Effect.runPromise(decodeUpstream(JSON.stringify({
-    ...withBeta,
-    tags: { ...withBeta.tags, typescript: { ...withBeta.tags.typescript, beta: "7.1.0-beta" } },
-    components: { ...withBeta.components, typescript: { ...withBeta.components.typescript, "7.1.0-beta": beta } }
-  })))
+test("only a provider name followed by a full commit makes an override folder", () => {
+  assert.deepEqual(parseTypeScriptOverrideFolderName(`typescript-${revision}`), { provider: "typescript", gitHead: revision })
+  assert.deepEqual(parseTypeScriptOverrideFolderName(`typescript-go-${revision}`), {
+    provider: "typescript-go",
+    gitHead: revision
+  })
+  // The legacy provider's own folder, the TypeScript provider's, and names that are no full lowercase commit.
+  for (const name of [
+    "typescript-go",
+    "typescript",
+    "tsrs",
+    "typescript-beta",
+    "typescript-tsrs",
+    `typescript-${revision.slice(1)}`,
+    `typescript-${revision}0`,
+    `typescript-${revision.toUpperCase()}`,
+    `tsrs-${revision}`,
+    `typescript-go-go-${revision}`
+  ]) {
+    assert.equal(parseTypeScriptOverrideFolderName(name), undefined, name)
+  }
+})
 
-  const selected = await Effect.runPromise(getComponent(upstream, "typescript", "7.1.0-beta"))
-  assert.equal(selected.typescript.source.providerShimPrefix, "github.com/microsoft/TypeScript/tsc/providershim")
-  assert.deepEqual(selected.typescript.source.shimOverlayDirs, [
-    "_tools/gen_shims/providers/typescript",
-    "_tools/gen_shims/providers/typescript-beta"
-  ])
-  assert.equal(selected.typescript.source.patchDir, "_patches/typescript")
+test("replaces the provider's patch folder and shim overlays with the override folders of a commit", () =>
+  withRepository(async(repository) => {
+    const base = manifest()
+    const tsrsVersion = "0.18.0-ts7.1.0-dev.20260929"
+    const upstream = await Effect.runPromise(decodeUpstream(JSON.stringify({
+      ...base,
+      tags: { ...base.tags, typescript: { ...base.tags.typescript, beta: "7.1.0-beta" }, tsrs: { latest: tsrsVersion } },
+      components: {
+        ...base.components,
+        typescript: {
+          ...base.components.typescript,
+          "7.1.0-beta": { gitHead: thirdRevision, provider: "typescript" }
+        },
+        tsrs: { [tsrsVersion]: { gitHead: revision, typescript: { version: "7.1.0-beta", gitHead: thirdRevision } } }
+      }
+    })))
+    const source = async(version: string) => (await resolveIn(repository, upstream, "typescript", version)).typescript.source
+    const provider = {
+      providerShimPrefix: "github.com/microsoft/TypeScript/tsc/shim",
+      shimOverlayDirs: ["_tools/gen_shims/providers/typescript"],
+      patchDir: "_patches/typescript"
+    }
+    const pick = ({ patchDir, providerShimPrefix, shimOverlayDirs }: Awaited<ReturnType<typeof source>>) => ({
+      providerShimPrefix,
+      shimOverlayDirs,
+      patchDir
+    })
+
+    // Without override folders, every commit uses the provider's.
+    assert.deepEqual(pick(await source("7.1.0-beta")), provider)
+
+    // A shim folder alone: the only overlay (self-contained), through the backport prefix; the patches stay.
+    const shims = `_tools/gen_shims/providers/typescript-${thirdRevision}`
+    mkdirSync(join(repository, shims, "tsoptions"), { recursive: true })
+    assert.deepEqual(pick(await source("7.1.0-beta")), {
+      providerShimPrefix: "github.com/microsoft/TypeScript/tsc/providershim",
+      shimOverlayDirs: [shims],
+      patchDir: "_patches/typescript"
+    })
+
+    // With a patch folder too, applied instead of _patches/typescript.
+    const patches = `_patches/typescript-${thirdRevision}`
+    mkdirSync(join(repository, patches), { recursive: true })
+    const overridden = {
+      providerShimPrefix: "github.com/microsoft/TypeScript/tsc/providershim",
+      shimOverlayDirs: [shims],
+      patchDir: patches
+    }
+    assert.deepEqual(pick(await source("7.1.0-beta")), overridden)
+    // The tsrs component resolves the TypeScript it ports the same way.
+    assert.deepEqual(pick((await resolveIn(repository, upstream, "tsrs")).typescript.source), overridden)
+
+    // Other commits keep the provider's folders.
+    assert.deepEqual(pick(await source("7.1.0")), provider)
+
+    // The legacy provider: its own folder is `typescript-go`; an override keeps its (already backporting) prefix.
+    mkdirSync(join(repository, "_patches", "typescript-go"), { recursive: true })
+    mkdirSync(join(repository, "_patches", `typescript-go-${revision}`), { recursive: true })
+    mkdirSync(join(repository, "_tools", "gen_shims", "providers", `typescript-go-${revision}`), { recursive: true })
+    assert.deepEqual(pick(await source("7.0.0")), {
+      providerShimPrefix: "github.com/microsoft/typescript-go/shim",
+      shimOverlayDirs: [`_tools/gen_shims/providers/typescript-go-${revision}`],
+      patchDir: `_patches/typescript-go-${revision}`
+    })
+    // A folder naming the commit under the other provider does not apply.
+    mkdirSync(join(repository, "_patches", `typescript-go-${secondRevision}`), { recursive: true })
+    assert.equal((await source("7.1.0")).patchDir, "_patches/typescript")
+  }))
+
+test("keeps the TypeScript the pinned tsrs ports through updates", async() => {
+  const base = manifest()
+  const tsrsVersion = "0.18.0-ts7.1.0-dev.20260929"
+  const ported = { gitHead: thirdRevision, provider: "typescript" as const }
+  const upstream = await Effect.runPromise(decodeUpstream(JSON.stringify({
+    ...base,
+    tags: { ...base.tags, tsrs: { latest: tsrsVersion } },
+    components: {
+      ...base.components,
+      typescript: { ...base.components.typescript, "7.1.0-dev.20260929": ported },
+      tsrs: {
+        [tsrsVersion]: { gitHead: secondRevision, typescript: { version: "7.1.0-dev.20260929", gitHead: thirdRevision } }
+      }
+    }
+  })))
+  const runtime = {
+    oxlint: { npmVersion: "1.77.0", gitHead: thirdRevision },
+    tsgolint: { npmVersion: "7.0.2001", gitHead: secondRevision },
+    ts: { npmVersion: "7.0.0", gitHead: revision, provider: "typescript-go" as const }
+  }
+  const rebuilt = buildUpstream({
+    next: { npmVersion: "7.1.0", gitHead: secondRevision, provider: "typescript" },
+    beta: { npmVersion: "7.1.0", gitHead: secondRevision, provider: "typescript" },
+    latest: { npmVersion: "7.0.0", gitHead: revision, provider: "typescript-go" },
+    oxlint: runtime,
+    vitePlus: { ...runtime, vitePlusVersion: "0.2.8" },
+    tsrs: { tags: upstream.tags.tsrs!, components: upstream.components.tsrs! }
+  })
+  assert.deepEqual(rebuilt.components.typescript["7.1.0-dev.20260929"], ported)
+  await Effect.runPromise(decodeUpstream(JSON.stringify(rebuilt)))
+})
+
+test("resolves the tsrs component and preserves it through updates", async() => {
+  const base = manifest()
+  const tsrsVersion = "0.18.0-ts7.1.0-dev.20260929"
+  const tsrsComponent = {
+    gitHead: thirdRevision,
+    typescript: { version: "7.1.0-dev.20260929", gitHead: secondRevision }
+  }
+  const withTsrs = {
+    ...base,
+    tags: { ...base.tags, tsrs: { latest: tsrsVersion } },
+    components: {
+      ...base.components,
+      typescript: {
+        ...base.components.typescript,
+        "7.1.0-dev.20260929": { gitHead: secondRevision, provider: "typescript" as const }
+      },
+      tsrs: { [tsrsVersion]: tsrsComponent }
+    }
+  }
+  const upstream = await Effect.runPromise(decodeUpstream(JSON.stringify(withTsrs)))
+  assert.deepEqual(await Effect.runPromise(getTsrsComponent(upstream)), {
+    name: "tsrs",
+    version: tsrsVersion,
+    gitHead: thirdRevision,
+    typescript: tsrsComponent.typescript
+  })
+  await assert.rejects(Effect.runPromise(getTsrsComponent(upstream, "0.0.0")), /Unknown tsrs component version: 0\.0\.0/)
+  const without = await Effect.runPromise(decodeUpstream(JSON.stringify(base)))
+  assert.equal(await Effect.runPromise(getTsrsComponent(without)), undefined)
 
   await assert.rejects(
+    Effect.runPromise(decodeUpstream(JSON.stringify({ ...withTsrs, tags: { ...withTsrs.tags, tsrs: { latest: "0.0.0" } } }))),
+    /tsrs latest references unknown version 0\.0\.0/
+  )
+  await assert.rejects(
+    Effect.runPromise(decodeUpstream(JSON.stringify({ ...withTsrs, tags: base.tags }))),
+    /tsrs must have both a latest tag and components, or neither/
+  )
+  // The TypeScript a tsrs component ports must be recorded, on microsoft/TypeScript at the same commit.
+  await assert.rejects(
     Effect.runPromise(decodeUpstream(JSON.stringify({
-      ...withBeta,
+      ...withTsrs,
+      components: { ...withTsrs.components, typescript: base.components.typescript }
+    }))),
+    /tsrs 0\.18\.0-ts7\.1\.0-dev\.20260929 references unknown TypeScript 7\.1\.0-dev\.20260929/
+  )
+  await assert.rejects(
+    Effect.runPromise(decodeUpstream(JSON.stringify({
+      ...withTsrs,
       components: {
-        ...withBeta.components,
-        typescript: { ...withBeta.components.typescript, "7.0.0": { ...beta, provider: "typescript-go" } }
+        ...withTsrs.components,
+        typescript: {
+          ...base.components.typescript,
+          "7.1.0-dev.20260929": { gitHead: revision, provider: "typescript" }
+        }
       }
     }))),
-    /TypeScript 7\.0\.0 uses typescript-beta shims with provider typescript-go/
+    /ports TypeScript 7\.1\.0-dev\.20260929 at [0-9a-f]{40}, but the TypeScript component is typescript [0-9a-f]{40}/
   )
 
   const runtime = {
@@ -366,17 +552,147 @@ test("resolves per-version shim adapters and preserves them through updates", as
   }
   const rebuilt = buildUpstream({
     next: { npmVersion: "7.1.0", gitHead: secondRevision, provider: "typescript" },
-    beta: { npmVersion: "7.1.0-beta", gitHead: thirdRevision, provider: "typescript" },
+    beta: { npmVersion: "7.1.0", gitHead: secondRevision, provider: "typescript" },
     latest: { npmVersion: "7.0.0", gitHead: revision, provider: "typescript-go" },
     oxlint: runtime,
     vitePlus: { ...runtime, vitePlusVersion: "0.2.8" },
-    shims: { "7.1.0-beta": "typescript-beta" }
+    tsrs: { tags: upstream.tags.tsrs!, components: upstream.components.tsrs! }
   })
-  assert.deepEqual(rebuilt.components.typescript, {
-    "7.0.0": { gitHead: revision, provider: "typescript-go" },
-    "7.1.0": { gitHead: secondRevision, provider: "typescript" },
-    "7.1.0-beta": { gitHead: thirdRevision, provider: "typescript", shims: "typescript-beta" }
+  assert.deepEqual(rebuilt.tags.tsrs, { latest: tsrsVersion })
+  assert.deepEqual(rebuilt.components.tsrs, { [tsrsVersion]: tsrsComponent })
+  // The TypeScript the recorded tsrs ports stays a TypeScript component (none of the TypeScript tags names it).
+  assert.deepEqual(rebuilt.components.typescript["7.1.0-dev.20260929"], { gitHead: secondRevision, provider: "typescript" })
+  await Effect.runPromise(decodeUpstream(JSON.stringify(rebuilt)))
+
+  // A tsrs bump switches it: the new tsrs's TypeScript replaces the old one.
+  const bumpedVersion = "0.19.0-ts7.1.0-dev.20261101"
+  const bumpedComponent = { gitHead: secondRevision, typescript: { version: "7.1.0-dev.20261101", gitHead: thirdRevision } }
+  const bumped = buildUpstream({
+    next: { npmVersion: "7.1.0", gitHead: secondRevision, provider: "typescript" },
+    beta: { npmVersion: "7.1.0", gitHead: secondRevision, provider: "typescript" },
+    latest: { npmVersion: "7.0.0", gitHead: revision, provider: "typescript-go" },
+    oxlint: runtime,
+    vitePlus: { ...runtime, vitePlusVersion: "0.2.8" },
+    tsrs: { tags: { latest: bumpedVersion }, components: { [bumpedVersion]: bumpedComponent } }
   })
+  assert.deepEqual(Object.keys(bumped.components.typescript), ["7.0.0", "7.1.0", "7.1.0-dev.20261101"])
+  assert.deepEqual(bumped.components.typescript["7.1.0-dev.20261101"], { gitHead: thirdRevision, provider: "typescript" })
+  await Effect.runPromise(decodeUpstream(JSON.stringify(bumped)))
+})
+
+test("resolves the tsrs component next to the TypeScript it ports", async() => {
+  const base = manifest()
+  const tsrsVersion = "0.18.0-ts7.1.0-dev.20260929"
+  const upstream = await Effect.runPromise(decodeUpstream(JSON.stringify({
+    ...base,
+    tags: { ...base.tags, tsrs: { latest: tsrsVersion } },
+    components: {
+      ...base.components,
+      typescript: { ...base.components.typescript, "7.1.0-dev": { gitHead: thirdRevision, provider: "typescript" } },
+      tsrs: { [tsrsVersion]: { gitHead: thirdRevision, typescript: { version: "7.1.0-dev", gitHead: thirdRevision } } }
+    }
+  })))
+  // The TypeScript the tsrs version ports (as oxlint-tsgolint's dependency), not the next tag.
+  const selected = await Effect.runPromise(getComponent(upstream, "tsrs", tsrsVersion))
+  assert.equal(selected.name, "tsrs")
+  assert.equal(selected.gitHead, thirdRevision)
+  assert.equal(selected.typescript.version, "7.1.0-dev")
+  assert.equal(selected.typescript.gitHead, thirdRevision)
+  assert.equal(selected.typescript.provider, "typescript")
+  // Without a version: the latest tsrs (`repoctl submodules setup --component tsrs`).
+  const latest = await Effect.runPromise(getComponent(upstream, "tsrs"))
+  assert.equal(latest.version, tsrsVersion)
+  assert.equal(latest.typescript.version, "7.1.0-dev")
+  await assert.rejects(
+    Effect.runPromise(getComponent(await Effect.runPromise(decodeUpstream(JSON.stringify(base))), "tsrs")),
+    /A version is required for component tsrs/
+  )
+  await assert.rejects(Effect.runPromise(getComponent(upstream, "tsrs", "0.0.0")), /Unknown tsrs component version: 0\.0\.0/)
+
+  assert.deepEqual(await Effect.runPromise(resolveUpstreamInfo(upstream, "tsrs", tsrsVersion, "linux-arm64")), {
+    component: "tsrs",
+    version: tsrsVersion,
+    target: "linux-arm64",
+    goCache: { component: "typescript", version: "7.1.0-dev", save: false }
+  })
+  for (const target of ["darwin-x64", "win32-x64", "linux-arm"] as const) {
+    await assert.rejects(
+      Effect.runPromise(resolveUpstreamInfo(upstream, "tsrs", tsrsVersion, target)),
+      new RegExp(`tsrs does not support target ${target}`)
+    )
+  }
+})
+
+test("maps tsrs npm releases to their GitHub tag and ported TypeScript", () => {
+  assert.deepEqual(parseTsrsNpmVersion("0.18.0-ts7.1.0-dev.20260929"), {
+    tag: "v0.18.0",
+    typescriptVersion: "7.1.0-dev.20260929"
+  })
+  assert.deepEqual(parseTsrsNpmVersion("1.2.3-ts7.1.0"), { tag: "v1.2.3", typescriptVersion: "7.1.0" })
+  assert.equal(parseTsrsNpmVersion("0.0.0-snapshot-20240905062806"), undefined)
+  assert.equal(parseTsrsNpmVersion("0.18.0"), undefined)
+
+  const cargoToml = [
+    "[workspace.package]",
+    "version = \"0.18.0\"",
+    "",
+    "[workspace.metadata.typescript]",
+    "version = \"7.1.0-dev.20260929\"",
+    `commit = "${secondRevision}" # microsoft/TypeScript`,
+    "nightly = \"7.1.0-dev.20260930.4\"",
+    "",
+    "[workspace.dependencies]",
+    "version = \"9.9.9\""
+  ].join("\n")
+  assert.deepEqual(parseTsrsTypeScriptMetadata(cargoToml), {
+    version: "7.1.0-dev.20260929",
+    gitHead: secondRevision
+  })
+  assert.equal(parseTsrsTypeScriptMetadata("[workspace.package]\nversion = \"0.18.0\"\n"), undefined)
+  assert.equal(
+    parseTsrsTypeScriptMetadata("[workspace.metadata.typescript]\nversion = \"7.1.0\"\ncommit = \"main\"\n"),
+    undefined
+  )
+})
+
+test("describes tsrs updates", () => {
+  const before = manifest()
+  const tsrs = (version: string, gitHead: string) => ({
+    tags: { ...before.tags, tsrs: { latest: version } },
+    components: {
+      ...before.components,
+      tsrs: { [version]: { gitHead, typescript: { version: "7.1.0", gitHead: secondRevision } } }
+    }
+  })
+  const previous = { ...before, ...tsrs("0.17.0-ts7.1.0", revision) }
+  const updated = { ...before, ...tsrs("0.18.0-ts7.1.0", thirdRevision) }
+  const options = { nextCommits: [], schemaChanged: false, oxlintSchemaChanged: false }
+  const description = formatUpstreamUpdateDescription({ ...options, before: previous, after: updated })
+  assert.equal(description, [
+    "Automated update of upstream metadata, generated TypeScript next-tag sources, and Nix inputs.",
+    "",
+    "## Version updates",
+    "",
+    "- tsrs: [`tsrs@latest`](https://www.npmjs.com/package/tsrs/v/0.18.0-ts7.1.0) `0.17.0-ts7.1.0` -> `0.18.0-ts7.1.0`",
+    "",
+    "## tsrs",
+    "",
+    `- Previous commit: [\`${revision}\`](https://github.com/oxc-project/tsrs/commit/${revision})`,
+    `- Updated commit: [\`${thirdRevision}\`](https://github.com/oxc-project/tsrs/commit/${thirdRevision})`,
+    `- Compare: https://github.com/oxc-project/tsrs/compare/${revision}...${thirdRevision}`,
+    `- Ports TypeScript \`7.1.0\` ([\`${secondRevision}\`](https://github.com/microsoft/TypeScript/commit/${secondRevision}))`,
+    "",
+    "The Rust port follows tsrs: `_patches/tsrs` must apply with zero fuzz, and `rust-toolchain.toml` and",
+    "`[profile.release]` in `Cargo.toml` must match tsrs's (`sync-upstream` skill)."
+  ].join("\n"))
+
+  const added = formatUpstreamUpdateDescription({ ...options, before, after: updated })
+  assert.match(added, /`tsrs@latest`.* `none` -> `0\.18\.0-ts7\.1\.0`/)
+  assert.doesNotMatch(added, /Previous commit|Compare:/)
+  assert.doesNotMatch(
+    formatUpstreamUpdateDescription({ ...options, before: updated, after: updated }),
+    /tsrs/
+  )
 })
 
 test("finds a TypeScript npm version by its git head", () => {

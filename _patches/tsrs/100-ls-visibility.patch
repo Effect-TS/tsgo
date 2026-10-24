@@ -1,0 +1,34 @@
+tsrs-only visibility patch (no _patches/typescript counterpart): Go shim accessors that internal/rewriter and
+internal/fixable use reach unexported typescript-go members, which tsrs keeps private.
+
+- ls.LanguageService_converters (extra-shim): LanguageService::converters becomes `pub`.
+- change.Tracker_getNonformattedText (extra-shim): Tracker::get_nonformatted_text becomes `pub`.
+
+diff --git a/crates/tsrs_ls/src/change/trackerimpl.rs b/crates/tsrs_ls/src/change/trackerimpl.rs
+index 314ce12..0aa1215 100644
+--- a/crates/tsrs_ls/src/change/trackerimpl.rs
++++ b/crates/tsrs_ls/src/change/trackerimpl.rs
+@@ -281,7 +281,8 @@ impl Tracker {
+     }
+ 
+     // trackerimpl.go:295
+-    fn get_nonformatted_text(
++    // effect-tsgo patch 100: public (Go shim accessor `change.Tracker_getNonformattedText`).
++    pub fn get_nonformatted_text(
+         &self,
+         node: P<Node>,
+         source_file: P<SourceFile>,
+diff --git a/crates/tsrs_ls/src/languageservice.rs b/crates/tsrs_ls/src/languageservice.rs
+index 032a38a..76c9bb2 100644
+--- a/crates/tsrs_ls/src/languageservice.rs
++++ b/crates/tsrs_ls/src/languageservice.rs
+@@ -22,7 +22,8 @@ pub struct LanguageService {
+     pub(crate) host: Arc<dyn Host>,
+     active_config: UserPreferences,
+     program: &'static Program,
+-    pub(crate) converters: Arc<Converters>,
++    // effect-tsgo patch 100: public (Go shim accessor `ls.LanguageService_converters`).
++    pub converters: Arc<Converters>,
+     // Go mutates a plain map through the *LanguageService (one goroutine per service); a Mutex keeps the service
+     // Sync so it can be shared like Go's pointer.
+     document_position_mappers: Mutex<FxHashMap<String, Option<Arc<DocumentPositionMapper>>>>,

@@ -7,7 +7,9 @@ import {
   buildTargets,
   componentArtifact,
   oxlintArtifacts,
-  oxlintBuildTargets
+  oxlintBuildTargets,
+  tsrsBinaryName,
+  tsrsBuildTargets
 } from "../src/build.ts"
 
 test("maps release targets to Go platforms", () => {
@@ -45,6 +47,22 @@ test("rejects unsupported component release targets", async() => {
     ),
     /oxlint does not support target linux-arm/
   )
+})
+
+test("builds tsrs per tsrs version on its native platforms only", async() => {
+  assert.deepEqual(Object.keys(tsrsBuildTargets), ["darwin-arm64", "linux-x64", "linux-arm64"])
+  assert.deepEqual(componentArtifact("/repo", "linux-arm64", "tsrs", "0.18.0-ts7.1.0", tsrsBinaryName), {
+    binaryName: "tsrs",
+    path: "/repo/_packages/tsgo-linux-arm64/artifacts/tsrs/0.18.0-ts7.1.0/tsrs"
+  })
+  for (const target of ["darwin-x64", "win32-x64", "linux-arm"] as const) {
+    await assert.rejects(
+      Effect.runPromise(
+        buildArtifact("/repo", "tsrs", "0.18.0-ts7.1.0", target).pipe(Effect.provide(NodeServices.layer))
+      ),
+      new RegExp(`tsrs does not support target ${target}`)
+    )
+  }
 })
 
 test("derives packaged Oxlint artifact paths", () => {

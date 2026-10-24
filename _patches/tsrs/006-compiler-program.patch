@@ -1,0 +1,19 @@
+Port of _patches/typescript/006-compiler-program.patch: `get_diagnostics_with_preceding_directives` never
+suppresses Effect diagnostics (codes 377000..378000) with @ts-expect-error / @ts-ignore; Effect has its own
+directive system (@effect-diagnostics). The directive is still marked used, as in Go.
+
+diff --git a/crates/tsrs_compiler/src/program.rs b/crates/tsrs_compiler/src/program.rs
+--- a/crates/tsrs_compiler/src/program.rs
++++ b/crates/tsrs_compiler/src/program.rs
+@@ -2826,6 +2826,11 @@
+                 }
+                 line = current_line.checked_sub(1);
+             }
++            // EFFECT: Never suppress Effect diagnostics (377xxx range) with @ts-expect-error/@ts-ignore.
++            // Effect has its own directive system (@effect-diagnostics) for suppression.
++            if ignore_diagnostic && diagnostic.code() >= 377000 && diagnostic.code() < 378000 {
++                ignore_diagnostic = false;
++            }
+             if !ignore_diagnostic {
+                 filtered.push(diagnostic);
+             }

@@ -64,5 +64,7 @@ ignore (
 	./_packages
 	./_tools
 	./node_modules
+	./target
 	./testdata/tests
+	./tsrs
 )

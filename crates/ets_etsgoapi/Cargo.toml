@@ -1,0 +1,19 @@
+[package]
+name = "ets_etsgoapi"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Port of etsgoapi"
+
+[lints]
+workspace = true
+
+[dependencies]
+ets_layergraph.workspace = true
+ets_readonly.workspace = true
+ets_rewriter.workspace = true
+ets_schemagen.workspace = true
+ets_shim.workspace = true
+ets_typeparser.workspace = true

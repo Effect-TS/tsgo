@@ -7,8 +7,10 @@ import {
   buildTargets,
   componentArtifact,
   copyTypeScriptLibraries,
+  isTsrsBuildTarget,
   latestTypeScriptCompiler,
-  oxlintBuildTargets
+  oxlintBuildTargets,
+  tsrsBinaryName
 } from "./build.ts"
 import { buildReleasePlan } from "./releasePlan.ts"
 import { readUpstream } from "./upstream.ts"
@@ -121,6 +123,9 @@ export const preparePlatformPackages = Effect.fnUntraced(function*(repositoryRoo
       ...(target in oxlintBuildTargets
         ? Object.keys(upstream.components["oxlint-tsgolint"]).map((version) =>
           `./artifacts/oxlint-tsgolint/${version}/tsgolint${windows ? ".exe" : ""}`)
+        : []),
+      ...(isTsrsBuildTarget(target)
+        ? Object.keys(upstream.components.tsrs ?? {}).map((version) => `./artifacts/tsrs/${version}/${tsrsBinaryName}`)
         : [])
     ]
     for (const executable of executableFiles) {

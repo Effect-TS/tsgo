@@ -94,6 +94,43 @@ runs:
         restore-keys: |
           rust-build-oxlint-1.93.0-${{ runner.os }}-${{ runner.arch }}-${{ steps.upstream-component.outputs.rust-target }}-
 
+    # The tsrs component (the Rust port in crates/, built on the tsrs checkout) uses the toolchain pinned in
+    # rust-toolchain.toml.
+    - name: Setup Rust workspace toolchain
+      if: steps.upstream-component.outputs.component == 'tsrs'
+      shell: bash
+      run: |
+        if ! command -v rustup >/dev/null; then
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain none
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          export PATH="$HOME/.cargo/bin:$PATH"
+        fi
+        rustup toolchain install
+
+    # tsrs's CLI links mimalloc, built with CMake (the tsrs binary: `repoctl build artifact`, `repoctl test`).
+    - name: Install CMake
+      if: steps.upstream-component.outputs.component == 'tsrs'
+      shell: bash
+      run: |
+        if command -v cmake >/dev/null; then
+          cmake --version
+        elif [ "$RUNNER_OS" = Linux ]; then
+          sudo apt-get update
+          sudo apt-get install --yes cmake
+        elif [ "$RUNNER_OS" = macOS ]; then
+          brew install cmake
+        else
+          echo "::error::CMake is required to build the tsrs binary"
+          exit 1
+        fi
+
+    - name: Cache Rust workspace build
+      if: steps.upstream-component.outputs.component == 'tsrs'
+      uses: Swatinem/rust-cache@v2
+      with:
+        key: ${{ inputs.target }}-${{ hashFiles('_packages/tsgo/upstream.json', '_patches/tsrs/**') }}
+        save-if: ${{ github.ref == 'refs/heads/main' }}
+
     - name: Setup Go
       id: go
       uses: actions/setup-go@v6
@@ -155,7 +192,7 @@ runs:
       uses: actions/cache@v6
       with:
         path: ${{ runner.temp }}/gen-shims-cache
-        key: generated-shims-v1-${{ steps.go.outputs.go-version }}-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-${{ hashFiles('_tools/gen_shims/**', '_tools/repoctl/src/**', '_packages/tsgo/upstream.json', '_patches/typescript-go/**', '_patches/typescript/**', '_patches/tsgolint/**') }}
+        key: generated-shims-v1-${{ steps.go.outputs.go-version }}-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-${{ hashFiles('_tools/gen_shims/**', '_tools/repoctl/src/**', '_packages/tsgo/upstream.json', '_patches/typescript*/**', '_patches/tsgolint/**') }}
         enableCrossOsArchive: true
 
     - name: Restore generated shim cache
@@ -163,7 +200,7 @@ runs:
       uses: actions/cache/restore@v6
       with:
         path: ${{ runner.temp }}/gen-shims-cache
-        key: generated-shims-v1-${{ steps.go.outputs.go-version }}-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-${{ hashFiles('_tools/gen_shims/**', '_tools/repoctl/src/**', '_packages/tsgo/upstream.json', '_patches/typescript-go/**', '_patches/typescript/**', '_patches/tsgolint/**') }}
+        key: generated-shims-v1-${{ steps.go.outputs.go-version }}-${{ steps.upstream-component.outputs.component }}-${{ steps.upstream-component.outputs.version }}-${{ hashFiles('_tools/gen_shims/**', '_tools/repoctl/src/**', '_packages/tsgo/upstream.json', '_patches/typescript*/**', '_patches/tsgolint/**') }}
         enableCrossOsArchive: true
 
     - name: Materialize upstream component

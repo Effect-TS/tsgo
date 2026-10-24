@@ -1,0 +1,175 @@
+Port of _patches/typescript/007-core-compileroptions.patch (tsc/internal/core/options_generated.go) to tsrs.
+
+- CompilerOptions.Effect (`*etscore.EffectPluginOptions`): `CompilerOptions::effect: EffectOptionsCell`, an
+  `RwLock<Option<Arc<ets_etscore::EffectPluginOptions>>>` with `get`/`set`. tsrs_core depends on the workspace's
+  ets_etscore crate (a leaf crate with no tsrs dependency), as Go's core imports etscore, so the field holds the
+  concrete type and there is no crate cycle.
+- tsrs-only: the cell. Go assigns `program.Options().Effect` after the program is built (etsdiagnostics'
+  `--effect-config` override), and tsrs shares a program's options immutably (`P<CompilerOptions>`), so the field
+  takes that write through a shared reference.
+- Clone: `EffectOptionsCell::clone` copies the current `Arc` into a new cell (Go's shallow copy of the pointer).
+- Equals (`reflect.DeepEqual(options.Effect, other.Effect)`): `PartialEq` compares the options by value.
+- core/effect_options_test.go: src/effect_options_test.rs (plus a Rust-only test of the shared assignment).
+
+diff --git a/crates/tsrs_core/Cargo.toml b/crates/tsrs_core/Cargo.toml
+index 4bfb9ef..0d9da66 100644
+--- a/crates/tsrs_core/Cargo.toml
++++ b/crates/tsrs_core/Cargo.toml
+@@ -19,6 +19,8 @@ plain-ptrs = []
+ shared-graph = []
+ 
+ [dependencies]
++# effect-tsgo patch 007: `CompilerOptions::effect` holds etscore's plugin options (Go's core imports etscore).
++ets_etscore = { path = "../../../crates/ets_etscore" }
+ rustc-hash.workspace = true
+ hashbrown.workspace = true
+ indexmap.workspace = true
+diff --git a/crates/tsrs_core/src/compileroptions.rs b/crates/tsrs_core/src/compileroptions.rs
+index ed07dbc..5dfedd3 100644
+--- a/crates/tsrs_core/src/compileroptions.rs
++++ b/crates/tsrs_core/src/compileroptions.rs
+@@ -3,7 +3,7 @@ use crate::collections::OrderedMap;
+ use crate::tspath;
+ use rustc_hash::FxHashMap;
+ use std::fmt;
+-use std::sync::LazyLock;
++use std::sync::{Arc, LazyLock, PoisonError, RwLock};
+ 
+ #[derive(Clone, Debug, Default, PartialEq, Eq)]
+ pub struct PluginImport {
+@@ -15,6 +15,11 @@ pub struct PluginImport {
+ // Go `[]string` options are `Option<Vec<String>>` because the Go code distinguishes nil (unset) from empty.
+ #[derive(Clone, Debug, Default, PartialEq, Eq)]
+ pub struct CompilerOptions {
++    // Effect holds the parsed @effect/language-service plugin configuration.
++    //
++    // effect-tsgo patch 007: Go's `*etscore.EffectPluginOptions`, in an `EffectOptionsCell` because Go assigns the
++    // field of an options object a program already shares (see `EffectOptionsCell`).
++    pub effect: EffectOptionsCell,
+     /// API only (`gojson`): `moduleDetection` and `newLine` numbers decoded from the wire with no Rust variant (Go
+     /// keeps any int32), by JSON name. The typed field stays at its default (which behaves like Go's fallback) and
+     /// the value is echoed back. (`target`, `module`, `jsx` and `moduleResolution` hold any int32 directly.)
+@@ -780,3 +785,70 @@ impl PathSubstitutions for Option<Vec<String>> {
+         self.as_deref().unwrap_or_default()
+     }
+ }
++
++/// effect-tsgo patch 007: the `CompilerOptions::effect` field, Go's `*etscore.EffectPluginOptions`.
++///
++/// Go assigns `program.Options().Effect` after the program is built (the `--effect-config` override of the
++/// diagnostics command), while tsrs hands out the options of a program as a shared, immutable handle; the cell lets
++/// that write go through a shared reference. Readers take a snapshot of the pointer (`get`), so a write is seen by
++/// every read that starts after it, as in Go.
++///
++/// `Clone` copies the current pointer into a new cell (Go's shallow struct copy: both share the options, and a later
++/// assignment to one does not affect the other), and `PartialEq` compares the options by value (Go's
++/// `reflect.DeepEqual` in `Equals`).
++#[derive(Default)]
++pub struct EffectOptionsCell(RwLock<Option<Arc<ets_etscore::EffectPluginOptions>>>);
++
++impl EffectOptionsCell {
++    pub fn new(effect: Option<Arc<ets_etscore::EffectPluginOptions>>) -> Self {
++        Self(RwLock::new(effect))
++    }
++
++    /// The current options (Go's read of the field).
++    pub fn get(&self) -> Option<Arc<ets_etscore::EffectPluginOptions>> {
++        self.0.read().unwrap_or_else(PoisonError::into_inner).clone()
++    }
++
++    /// Replaces the options (Go's assignment to the field).
++    pub fn set(&self, effect: Option<Arc<ets_etscore::EffectPluginOptions>>) {
++        *self.0.write().unwrap_or_else(PoisonError::into_inner) = effect;
++    }
++
++    pub fn is_some(&self) -> bool {
++        self.0.read().unwrap_or_else(PoisonError::into_inner).is_some()
++    }
++
++    pub fn is_none(&self) -> bool {
++        !self.is_some()
++    }
++}
++
++impl From<Option<Arc<ets_etscore::EffectPluginOptions>>> for EffectOptionsCell {
++    fn from(effect: Option<Arc<ets_etscore::EffectPluginOptions>>) -> Self {
++        Self::new(effect)
++    }
++}
++
++impl Clone for EffectOptionsCell {
++    fn clone(&self) -> Self {
++        Self::new(self.get())
++    }
++}
++
++impl PartialEq for EffectOptionsCell {
++    fn eq(&self, other: &Self) -> bool {
++        self.get() == other.get()
++    }
++}
++
++impl Eq for EffectOptionsCell {}
++
++impl fmt::Debug for EffectOptionsCell {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        self.get().fmt(f)
++    }
++}
++
++#[cfg(test)]
++#[path = "effect_options_test.rs"]
++mod effect_options_test;
+diff --git a/crates/tsrs_core/src/effect_options_test.rs b/crates/tsrs_core/src/effect_options_test.rs
+new file mode 100644
+index 0000000..6149cbe
+--- /dev/null
++++ b/crates/tsrs_core/src/effect_options_test.rs
+@@ -0,0 +1,47 @@
++// effect-tsgo patch 007 (core/effect_options_test.go).
++use std::sync::Arc;
++
++use crate::CompilerOptions;
++
++#[test]
++fn test_effect_compiler_option_cloning_and_equality() {
++    let options = CompilerOptions {
++        effect: Some(Arc::new(ets_etscore::EffectPluginOptions {
++            diagnostics: true,
++            ..Default::default()
++        }))
++        .into(),
++        ..Default::default()
++    };
++    let cloned = options.clone();
++    assert!(
++        cloned.effect.get().zip(options.effect.get()).is_some_and(|(a, b)| Arc::ptr_eq(&a, &b)),
++        "shallow clone must retain Effect options"
++    );
++    assert!(options == cloned, "cloned options must be equal");
++    let equivalent = CompilerOptions {
++        effect: Some(Arc::new(ets_etscore::EffectPluginOptions {
++            diagnostics: true,
++            ..Default::default()
++        }))
++        .into(),
++        ..Default::default()
++    };
++    assert!(options == equivalent, "Effect options must compare by value");
++    let mut changed = equivalent.effect.get().unwrap();
++    Arc::make_mut(&mut changed).diagnostics = false;
++    equivalent.effect.set(Some(changed));
++    assert!(options != equivalent, "changed Effect options must invalidate equality");
++}
++
++// Rust-only: Go assigns `program.Options().Effect` through a shared options object; the cell takes that write
++// through a shared reference, and a clone taken before it keeps the old pointer (Go's shallow copy).
++#[test]
++fn test_effect_compiler_option_shared_assignment() {
++    let options = CompilerOptions::default();
++    let cloned = options.clone();
++    let shared = &options;
++    shared.effect.set(Some(Arc::new(ets_etscore::EffectPluginOptions::default())));
++    assert!(options.effect.is_some(), "assignment through a shared reference must be visible");
++    assert!(cloned.effect.is_none(), "a clone must not observe a later assignment");
++}

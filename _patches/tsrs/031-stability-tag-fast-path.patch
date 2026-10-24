@@ -1,0 +1,128 @@
+Port of _patches/typescript/031-stability-tag-fast-path.patch (tsc/internal/ast/nodeflags.go, ast/tokenflags.go,
+parser/jsdoc.go, parser/parser.go, scanner/scanner.go) to tsrs.
+
+- NodeFlagsPossiblyContainsStabilityTag: NodeFlags::PossiblyContainsStabilityTag (1 << 29).
+- TokenFlagsPrecedingJSDocWithStability: TokenFlags::PrecedingJSDocWithStability (1 << 19).
+- jsdocScannerInfoHasStability: JsdocScannerInfo::HasStability, between HasDeprecated and HasSeeOrLink as in Go.
+- Scanner.HasPrecedingJSDocWithStabilityTag: Scanner::has_preceding_jsdoc_with_stability_tag;
+  scan_jsdoc_comment_for_tags sets the token flag for a `@stability` tag and stops once all three flags are set.
+- Parser.withJSDoc: with_jsdoc_worker sets the node flag in the deferred (TS) path and on eagerly parsed JSDoc.
+
+Read by ets_typeparser's stability_of_declaration_tag (Go's stabilityOfDeclarationTag), which skips nodes without
+the flag; its api_stability tests find no `@stability` tag without this patch.
+
+diff --git a/crates/tsrs_ast/src/nodeflags.rs b/crates/tsrs_ast/src/nodeflags.rs
+index 3981671..d3ae47a 100644
+--- a/crates/tsrs_ast/src/nodeflags.rs
++++ b/crates/tsrs_ast/src/nodeflags.rs
+@@ -47,6 +47,7 @@ bitflags! {
+         const PossiblyContainsDeprecatedTag = 1 << 26; // Set during parse if comment text contains '@deprecated'; must confirm via JSDoc lookup
+         const Unreachable = 1 << 27; // If node is unreachable according to the binder
+         const ReparserTransformedLiteral = 1 << 28; // If node was transformed during parsing, making its' naive text source not match the AST
++        const PossiblyContainsStabilityTag = 1 << 29; // Set during parse if comment text contains '@stability'; must confirm via JSDoc lookup
+ 
+         const BlockScoped = Self::Let.bits() | Self::Const.bits() | Self::Using.bits();
+         const Constant = Self::Const.bits() | Self::Using.bits();
+diff --git a/crates/tsrs_ast/src/tokenflags.rs b/crates/tsrs_ast/src/tokenflags.rs
+index d7148bf..914a7b0 100644
+--- a/crates/tsrs_ast/src/tokenflags.rs
++++ b/crates/tsrs_ast/src/tokenflags.rs
+@@ -25,6 +25,7 @@ bitflags! {
+         const SingleQuote = 1 << 16; // e.g. `'abc'`
+         const PrecedingJSDocWithDeprecated = 1 << 17; // Preceding JSDoc comment contains @deprecated
+         const PrecedingJSDocWithSeeOrLink = 1 << 18; // Preceding JSDoc comment contains @see or @link
++        const PrecedingJSDocWithStability = 1 << 19; // Preceding JSDoc comment contains @stability
+         const BinaryOrOctalSpecifier = Self::BinarySpecifier.bits() | Self::OctalSpecifier.bits();
+         const WithSpecifier = Self::HexSpecifier.bits() | Self::BinaryOrOctalSpecifier.bits();
+         const StringLiteralFlags = Self::Unterminated.bits() | Self::HexEscape.bits() | Self::UnicodeEscape.bits() | Self::ExtendedUnicodeEscape.bits() | Self::ContainsInvalidEscape.bits() | Self::SingleQuote.bits();
+diff --git a/crates/tsrs_parser/src/jsdoc.rs b/crates/tsrs_parser/src/jsdoc.rs
+index 6411ba6..05111c0 100644
+--- a/crates/tsrs_parser/src/jsdoc.rs
++++ b/crates/tsrs_parser/src/jsdoc.rs
+@@ -85,6 +85,9 @@ impl Parser {
+             if info.intersects(JsdocScannerInfo::HasDeprecated) {
+                 node.set_flags(node.flags() | NodeFlags::PossiblyContainsDeprecatedTag);
+             }
++            if info.intersects(JsdocScannerInfo::HasStability) {
++                node.set_flags(node.flags() | NodeFlags::PossiblyContainsStabilityTag);
++            }
+             if !info.intersects(JsdocScannerInfo::HasSeeOrLink) {
+                 return &[];
+             }
+@@ -108,6 +111,9 @@ impl Parser {
+             jsdoc
+         });
+         if !jsdoc.is_empty() {
++            if info.intersects(JsdocScannerInfo::HasStability) {
++                node.set_flags(node.flags() | NodeFlags::PossiblyContainsStabilityTag);
++            }
+             if !node.flags().intersects(NodeFlags::HasJSDoc) {
+                 node.set_flags(node.flags() | NodeFlags::HasJSDoc);
+             }
+diff --git a/crates/tsrs_parser/src/parser_1.rs b/crates/tsrs_parser/src/parser_1.rs
+index d8e00e1..b766daa 100644
+--- a/crates/tsrs_parser/src/parser_1.rs
++++ b/crates/tsrs_parser/src/parser_1.rs
+@@ -97,7 +97,8 @@ bitflags! {
+     pub(crate) struct JsdocScannerInfo: u8 {
+         const HasJSDoc = 1 << 0;
+         const HasDeprecated = 1 << 1;
+-        const HasSeeOrLink = 1 << 2;
++        const HasStability = 1 << 2;
++        const HasSeeOrLink = 1 << 3;
+     }
+ }
+ 
+@@ -716,6 +717,9 @@ impl Parser {
+         if self.scanner.has_preceding_jsdoc_with_deprecated_tag() {
+             info |= JsdocScannerInfo::HasDeprecated;
+         }
++        if self.scanner.has_preceding_jsdoc_with_stability_tag() {
++            info |= JsdocScannerInfo::HasStability;
++        }
+         if self.scanner.has_preceding_jsdoc_with_see_or_link() {
+             info |= JsdocScannerInfo::HasSeeOrLink;
+         }
+diff --git a/crates/tsrs_scanner/src/scanner.rs b/crates/tsrs_scanner/src/scanner.rs
+index 6cc0857..d31a0d5 100644
+--- a/crates/tsrs_scanner/src/scanner.rs
++++ b/crates/tsrs_scanner/src/scanner.rs
+@@ -664,11 +664,15 @@ impl Scanner {
+         self.state.token_flags.intersects(TokenFlags::PrecedingJSDocWithDeprecated)
+     }
+ 
++    pub fn has_preceding_jsdoc_with_stability_tag(&self) -> bool {
++        self.state.token_flags.intersects(TokenFlags::PrecedingJSDocWithStability)
++    }
++
+     pub fn has_preceding_jsdoc_with_see_or_link(&self) -> bool {
+         self.state.token_flags.intersects(TokenFlags::PrecedingJSDocWithSeeOrLink)
+     }
+ 
+-    // scanJSDocCommentForTags scans a JSDoc comment for @deprecated, @see, and @link tags,
++    // scanJSDocCommentForTags scans a JSDoc comment for @deprecated, @stability, @see, and @link tags,
+     // setting the appropriate token flags. Called during scanning when a JSDoc comment is detected.
+     fn scan_jsdoc_comment_for_tags(&mut self, comment_text: &str) {
+         let mut comment_text = comment_text.as_bytes();
+@@ -682,13 +686,20 @@ impl Scanner {
+             {
+                 self.state.token_flags |= TokenFlags::PrecedingJSDocWithDeprecated;
+             }
++            if !self.state.token_flags.intersects(TokenFlags::PrecedingJSDocWithStability)
++                && has_jsdoc_tag(comment_text, &["stability"])
++            {
++                self.state.token_flags |= TokenFlags::PrecedingJSDocWithStability;
++            }
+             if !self.state.token_flags.intersects(TokenFlags::PrecedingJSDocWithSeeOrLink)
+                 && has_jsdoc_tag(comment_text, &["see", "link", "linkcode", "linkplain"])
+             {
+                 self.state.token_flags |= TokenFlags::PrecedingJSDocWithSeeOrLink;
+             }
+             if self.state.token_flags.contains(
+-                TokenFlags::PrecedingJSDocWithDeprecated | TokenFlags::PrecedingJSDocWithSeeOrLink,
++                TokenFlags::PrecedingJSDocWithDeprecated
++                    | TokenFlags::PrecedingJSDocWithSeeOrLink
++                    | TokenFlags::PrecedingJSDocWithStability,
+             ) {
+                 return;
+             }

@@ -1,0 +1,52 @@
+tsrs-only: makes Checker::get_members_of_symbol and Checker::get_signatures_of_symbol public and re-exports
+get_declaration_modifier_flags_from_symbol from tsrs_checker. The effect-tsgo Go shim exposes the two unexported
+methods through extra-shim.json (checker.Checker_getMembersOfSymbol, checker.Checker_getSignaturesOfSymbol), and
+GetDeclarationModifierFlagsFromSymbol is exported by typescript-go's checker package; the API-stability analysis
+(internal/typeparser/api_stability.go) reads a symbol's late-bound member table, a signature member's raw signatures
+and a member's declaration modifier flags through them. Visibility only, no behavior change.
+
+diff --git a/crates/tsrs_checker/src/checker_08.rs b/crates/tsrs_checker/src/checker_08.rs
+index 1157f1d..ff3d9de 100644
+--- a/crates/tsrs_checker/src/checker_08.rs
++++ b/crates/tsrs_checker/src/checker_08.rs
+@@ -1914,7 +1914,7 @@ impl Checker {
+      * For a description of late-binding, see `lateBindMember`.
+      */
+     // checker.go:16447
+-    pub(crate) fn get_members_of_symbol(&mut self, symbol: P<Symbol>) -> Option<P<SymbolTable>> {
++    pub fn get_members_of_symbol(&mut self, symbol: P<Symbol>) -> Option<P<SymbolTable>> {
+         if symbol.flags().intersects(SymbolFlags::LateBindingContainer) {
+             return self.get_resolved_members_or_exports_of_symbol(
+                 symbol,
+diff --git a/crates/tsrs_checker/src/checker_10.rs b/crates/tsrs_checker/src/checker_10.rs
+index 598e091..9b0701e 100644
+--- a/crates/tsrs_checker/src/checker_10.rs
++++ b/crates/tsrs_checker/src/checker_10.rs
+@@ -824,10 +824,7 @@ impl Checker {
+     }
+ 
+     // checker.go:20147
+-    pub(crate) fn get_signatures_of_symbol(
+-        &mut self,
+-        symbol: Option<P<Symbol>>,
+-    ) -> Vec<P<Signature>> {
++    pub fn get_signatures_of_symbol(&mut self, symbol: Option<P<Symbol>>) -> Vec<P<Signature>> {
+         let Some(symbol) = symbol else {
+             return Vec::new();
+         };
+diff --git a/crates/tsrs_checker/src/lib.rs b/crates/tsrs_checker/src/lib.rs
+index 86cf672..7e9f488 100644
+--- a/crates/tsrs_checker/src/lib.rs
++++ b/crates/tsrs_checker/src/lib.rs
+@@ -189,7 +189,8 @@ pub use printer::new_symbol_tracker_impl;
+ pub use services::get_resolved_signature_for_signature_help;
+ pub use utilities::{
+     compare_types, create_mode_mismatch_details, create_module_not_found_chain,
+-    get_set_accessor_value_parameter, get_single_variable_of_variable_statement,
+-    is_external_module_symbol, is_in_type_query, is_known_symbol, is_private_identifier_symbol,
+-    is_type_any, new_diagnostic_chain_for_node, skip_alias, value_to_string,
++    get_declaration_modifier_flags_from_symbol, get_set_accessor_value_parameter,
++    get_single_variable_of_variable_statement, is_external_module_symbol, is_in_type_query,
++    is_known_symbol, is_private_identifier_symbol, is_type_any, new_diagnostic_chain_for_node,
++    skip_alias, value_to_string,
+ };

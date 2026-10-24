@@ -1,0 +1,102 @@
+tsrs-only: port of typescript-go's project/api.go `Session.APIUpdate`, which tsrs has not ported (its
+update_snapshot_ref and merge_file_change_summary were dead code waiting for it). effect-tsgo's etsdiagnostics
+(`--effect-cli-diagnostics`, crates/ets_etsdiagnostics) opens the requested project or file through it, as the Go
+build does through the shim's `project.Session.APIUpdate`.
+
+- tsrs_project::Session::api_update(ctx, api_file_changes, api_request) -> Result<Arc<Snapshot>, lsproto::Error>:
+  Go's body (cancel the scheduled update, flush the pending changes, derive the snapshot with an extra caller
+  reference, on an API error release it and still adopt the flushed host changes). As tsrs's
+  SnapshotHost::clone_snapshot, a layered request file system takes precedence over `file_system`.
+- The two `#[expect(dead_code)]` attributes that waited for this caller are removed.
+
+diff --git a/crates/tsrs_project/src/filechange.rs b/crates/tsrs_project/src/filechange.rs
+index f459779..98ee047 100644
+--- a/crates/tsrs_project/src/filechange.rs
++++ b/crates/tsrs_project/src/filechange.rs
+@@ -91,7 +91,6 @@ impl FileChangeSummary {
+ 
+ // filechange.go:79
+ // mergeFileChangeSummary merges src into dst, combining their change sets.
+-#[expect(dead_code, reason = "Go's caller Session.APIUpdate (project/api.go) is not ported yet")]
+ pub(crate) fn merge_file_change_summary(dst: &mut FileChangeSummary, src: &FileChangeSummary) {
+     if src.is_empty() {
+         return;
+diff --git a/crates/tsrs_project/src/session.rs b/crates/tsrs_project/src/session.rs
+index 7fd0351..3fabb59 100644
+--- a/crates/tsrs_project/src/session.rs
++++ b/crates/tsrs_project/src/session.rs
+@@ -1274,6 +1274,63 @@ impl Session {
+         }
+     }
+ 
++    // effect-tsgo patch 101 (project/api.go `Session.APIUpdate`).
++    pub fn api_update(
++        &self,
++        ctx: &Context,
++        api_file_changes: FileChangeSummary,
++        api_request: Option<crate::snapshot::APISnapshotRequest>,
++    ) -> Result<Arc<Snapshot>, lsproto::Error> {
++        let _update = self.snapshot_update_mu.lock().unwrap();
++        self.cancel_scheduled_snapshot_update();
++
++        let (host_file_changes, overlays, ata_changes, _) = self.flush_changes(ctx);
++        let mut file_changes = host_file_changes.clone();
++        crate::filechange::merge_file_change_summary(&mut file_changes, &api_file_changes);
++        let mut fs = None;
++        let mut replace_file_system = false;
++        if let Some(api_request) = &api_request {
++            // tsrs-only: a layered request file system takes precedence (as `SnapshotHost::clone_snapshot`).
++            fs = match &api_request.layered_file_system {
++                Some(layered) => Some(FsRef::Layered(Arc::clone(layered))),
++                None => api_request.file_system.clone().map(FsRef::Host),
++            };
++            replace_file_system = api_request.replace_file_system;
++        }
++
++        let new_snapshot = self.update_snapshot_ref(
++            ctx,
++            Arc::clone(&overlays),
++            SnapshotChange {
++                api_request: api_request.map(Arc::new),
++                file_system_override: fs.is_some(),
++                fs,
++                replace_file_system,
++                file_changes,
++                ata_changes: ata_changes.clone(),
++                ..Default::default()
++            },
++        );
++        if let Some(api_error) = new_snapshot.api_error.clone() {
++            new_snapshot.deref();
++            if !host_file_changes.is_empty() || !ata_changes.is_empty() {
++                // The API request is rejected as a unit, but host changes were already
++                // flushed and must still advance the canonical session snapshot.
++                self.update_snapshot(
++                    ctx,
++                    overlays,
++                    SnapshotChange {
++                        file_changes: host_file_changes,
++                        ata_changes,
++                        ..Default::default()
++                    },
++                );
++            }
++            return Err(api_error);
++        }
++        Ok(new_snapshot)
++    }
++
+     // session.go:1344
+     pub fn update_snapshot(&self, ctx: &Context, overlays: OverlayMap, change: SnapshotChange) {
+         self.update_snapshot_with(ctx, overlays, change, false);
+@@ -1284,10 +1341,6 @@ impl Session {
+     // with an extra reference for the caller. The ref is taken atomically with
+     // the snapshot assignment under snapshotMu, so the snapshot is guaranteed
+     // to be alive when returned. The caller must call snapshot.Deref() when done.
+-    #[expect(
+-        dead_code,
+-        reason = "Go's caller Session.APIUpdate (project/api.go) is not ported yet"
+-    )]
+     pub(crate) fn update_snapshot_ref(
+         &self,
+         ctx: &Context,

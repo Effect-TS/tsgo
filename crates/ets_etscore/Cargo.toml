@@ -1,0 +1,24 @@
+[package]
+name = "ets_etscore"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Port of etscore"
+
+[lints]
+workspace = true
+
+# A leaf crate, as the Go package is: tsrs's `CompilerOptions` holds its `EffectPluginOptions` (patch 007), so it
+# must not depend on `ets_shim` / tsrs (that would be a crate cycle). See `options_parser.rs`, `AnyValue`.
+[dependencies]
+ets_go.workspace = true
+rustc-hash.workspace = true
+
+[dev-dependencies]
+ets_pluginoptions.workspace = true
+ets_rules.workspace = true
+ets_shim.workspace = true
+parking_lot.workspace = true
+similar.workspace = true

@@ -1,4 +1,12 @@
-import { buildTargets, oxlintBindingName, oxlintBuildTargets, type BuildTarget } from "./build.ts"
+import {
+  buildTargets,
+  oxlintBindingName,
+  oxlintBuildTargets,
+  type BuildTarget,
+  tsrsBinaryName,
+  tsrsBuildTargets,
+  type TsrsBuildTarget
+} from "./build.ts"
 import type { ComponentName, Upstream } from "./upstream.ts"
 
 export interface ReleaseArtifactPlan {
@@ -16,6 +24,7 @@ const sortedVersions = (components: Readonly<Record<string, unknown>>) =>
 
 const artifactFileName = (component: ComponentName, target: BuildTarget) => {
   if (component === "oxlint") return oxlintBindingName(target as keyof typeof oxlintBuildTargets)
+  if (component === "tsrs") return tsrsBinaryName
   const name = component === "typescript" ? "tsc" : "tsgolint"
   return target.startsWith("win32-") ? `${name}.exe` : name
 }
@@ -50,5 +59,9 @@ export const buildReleasePlan = (upstream: typeof Upstream.Type): ReadonlyArray<
       artifactPlan("oxlint-tsgolint", version, target, "ubuntu-latest"))),
   ...sortedVersions(upstream.components.oxlint).flatMap((version) =>
     (Object.keys(oxlintBuildTargets) as Array<keyof typeof oxlintBuildTargets>).map((target) =>
-      artifactPlan("oxlint", version, target, oxlintRunner(target))))
+      artifactPlan("oxlint", version, target, oxlintRunner(target)))),
+  // The patched tsrs binary, once per tsrs version and target, natively on the runner tsrs's own release uses.
+  ...sortedVersions(upstream.components.tsrs ?? {}).flatMap((version) =>
+    (Object.keys(tsrsBuildTargets) as Array<TsrsBuildTarget>).map((target) =>
+      artifactPlan("tsrs", version, target, tsrsBuildTargets[target].runner)))
 ]

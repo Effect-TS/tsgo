@@ -1,0 +1,23 @@
+Port of _patches/typescript/004-checker-relater.patch (tsc/internal/checker/relater.go) to tsrs:
+Relater::report_relation_error records a RelationError (patch 005) in the error node's source file links.
+
+diff --git a/crates/tsrs_checker/src/relater_2.rs b/crates/tsrs_checker/src/relater_2.rs
+index a9f9cb6..e164223 100644
+--- a/crates/tsrs_checker/src/relater_2.rs
++++ b/crates/tsrs_checker/src/relater_2.rs
+@@ -4595,6 +4595,15 @@ impl Relater {
+         source: P<Type>,
+         target: P<Type>,
+     ) {
++        // effect-tsgo patch 004 (relater.go `Relater.reportRelationError`).
++        // Collect relation error for Effect diagnostics processing
++        if let Some(error_node) = self.error_node.get()
++            && let Some(sf) = ast::get_source_file_of_node(error_node)
++        {
++            let links = c.source_file_links.get(sf);
++            links.relation_errors.borrow_mut().push(RelationError { source, target, error_node });
++        }
++
+         let (source_type, target_type) = c.get_type_names_for_error_display(source, target);
+         let mut generalized_source = source;
+         let mut generalized_source_type = source_type.clone();

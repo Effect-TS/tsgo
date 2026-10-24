@@ -33,8 +33,12 @@ node_modules/
 build/
 built/
 
-# Local test baselines
+# Cargo build output (the Rust workspace in crates/)
+/target/
+
+# Local test baselines (the Go runner's, then the Rust runner's: crates/ets_effecttest)
 testdata/baselines/local/*
+testdata/baselines/local-rs/
 internal/bundledeffect/testfixtures.tar.gz
 
 # Go compiled binaries and plugins
@@ -87,6 +91,7 @@ custom-gcl*
 Dockerfile
 _tools/docker-dev.sh
 _tools/.perf-out/
+_tools/.perf-tsrs/
 
 .lalph
 scripts/worktree-setup.sh

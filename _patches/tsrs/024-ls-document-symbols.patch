@@ -1,0 +1,110 @@
+Port of _patches/typescript/024-ls-document-symbols.patch (tsc/internal/ls/symbols.go) to tsrs.
+
+- AfterDocumentSymbolsCallback, RegisterAfterDocumentSymbolsCallback: `tsrs_ls::{AfterDocumentSymbolsCallback,
+  register_after_document_symbols_callback}` (a `fn` in a process-wide `RwLock`; registering replaces it).
+  getDocumentSymbolsForChildren passes the merged symbols through it, as in Go.
+- Go's callback works on `[]*lsproto.DocumentSymbol`; tsrs builds the tree as shared `DocSym`s
+  (`Rc<RefCell<DocSymData>>`, turned into `lsproto::DocumentSymbol`s when the response is built), so the callback
+  takes and returns `DocSym`s: `DocSym` and `DocSymData` become `pub` (re-exported from the crate root) and
+  `DocSymData` gets the `detail` field of `lsproto::DocumentSymbol` (Go's `Detail`), copied by `doc_sym_to_lsp`
+  (tsrs's own symbols leave it `None`, as Go's do).
+
+diff --git a/crates/tsrs_ls/src/lib.rs b/crates/tsrs_ls/src/lib.rs
+index 01ebcf69..637a5216 100644
+--- a/crates/tsrs_ls/src/lib.rs
++++ b/crates/tsrs_ls/src/lib.rs
+@@ -95,5 +95,8 @@ pub use rename::{
+ };
+ pub use semantictokens::semantic_tokens_legend;
+ pub use signaturehelp::{SIGNATURE_HELP_RETRIGGER_CHARACTERS, SIGNATURE_HELP_TRIGGER_CHARACTERS};
+-pub use symbols::provide_workspace_symbols;
++pub use symbols::{
++    AfterDocumentSymbolsCallback, DocSym, DocSymData, provide_workspace_symbols,
++    register_after_document_symbols_callback,
++};
+ pub use utilities::{is_in_string, range_contains_range};
+diff --git a/crates/tsrs_ls/src/symbols.rs b/crates/tsrs_ls/src/symbols.rs
+index 85ed44e0..e4924813 100644
+--- a/crates/tsrs_ls/src/symbols.rs
++++ b/crates/tsrs_ls/src/symbols.rs
+@@ -28,20 +28,22 @@ use crate::utilities::get_container_node;
+ // Go builds `[]*lsproto.DocumentSymbol` and `mergeExpandos` / `mergeChildren` mutate the pointed-to symbols, which
+ // may be shared between several parents' child lists; the shared-pointer tree keeps those semantics and is turned
+ // into `lsproto::DocumentSymbol` values when the response is built.
+-pub(crate) type DocSym = Rc<RefCell<DocSymData>>;
+-
+-pub(crate) struct DocSymData {
+-    pub(crate) name: String,
+-    pub(crate) kind: lsproto::SymbolKind,
+-    pub(crate) range: lsproto::Range,
+-    pub(crate) selection_range: lsproto::Range,
+-    pub(crate) children: Option<Vec<DocSym>>,
++pub type DocSym = Rc<RefCell<DocSymData>>;
++
++pub struct DocSymData {
++    pub name: String,
++    pub detail: Option<String>,
++    pub kind: lsproto::SymbolKind,
++    pub range: lsproto::Range,
++    pub selection_range: lsproto::Range,
++    pub children: Option<Vec<DocSym>>,
+ }
+ 
+ pub(crate) fn doc_sym_to_lsp(symbol: &DocSym) -> lsproto::DocumentSymbol {
+     let s = symbol.borrow();
+     lsproto::DocumentSymbol {
+         name: s.name.clone(),
++        detail: s.detail.clone(),
+         kind: s.kind,
+         range: s.range,
+         selection_range: s.selection_range,
+@@ -50,6 +52,27 @@ pub(crate) fn doc_sym_to_lsp(symbol: &DocSym) -> lsproto::DocumentSymbol {
+     }
+ }
+ 
++// AfterDocumentSymbolsCallback is invoked after document symbols are collected
++// and expando merging is complete, allowing external packages to augment the
++// hierarchical symbol tree before it is returned or flattened.
++pub type AfterDocumentSymbolsCallback = fn(
++    ctx: &Context,
++    sf: P<SourceFile>,
++    symbols: Vec<DocSym>,
++    program: &'static Program,
++    lang_service: &LanguageService,
++) -> Vec<DocSym>;
++
++static AFTER_DOCUMENT_SYMBOLS_CALLBACK: std::sync::RwLock<Option<AfterDocumentSymbolsCallback>> =
++    std::sync::RwLock::new(None);
++
++// RegisterAfterDocumentSymbolsCallback registers a callback that can augment
++// document symbols after upstream collection and expando merging.
++// Note: Only one callback can be registered. Subsequent calls replace it.
++pub fn register_after_document_symbols_callback(cb: AfterDocumentSymbolsCallback) {
++    *AFTER_DOCUMENT_SYMBOLS_CALLBACK.write().unwrap() = Some(cb);
++}
++
+ impl LanguageService {
+     // symbols.go:25
+     #[expect(
+@@ -400,7 +423,12 @@ impl LanguageService {
+             expando_targets: FxHashSet::default(),
+         };
+         node.for_each_child(&mut |c| v.visit(c));
+-        merge_expandos(v.symbols)
++        let mut symbols = merge_expandos(v.symbols);
++        let after_document_symbols_callback = *AFTER_DOCUMENT_SYMBOLS_CALLBACK.read().unwrap();
++        if let Some(after_document_symbols_callback) = after_document_symbols_callback {
++            symbols = after_document_symbols_callback(ctx, file, symbols, self.get_program(), self);
++        }
++        symbols
+     }
+ }
+ 
+@@ -506,6 +534,7 @@ impl LanguageService {
+         }
+         Some(Rc::new(RefCell::new(DocSymData {
+             name: text,
++            detail: None,
+             kind,
+             range: symbol_range,
+             selection_range,

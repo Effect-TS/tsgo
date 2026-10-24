@@ -117,7 +117,7 @@ export const enableAllRules = (text: string): string | undefined => {
   )
 }
 
-const prepareWorkload = Effect.fnUntraced(function*(workloadDir: string) {
+export const prepareWorkload = Effect.fnUntraced(function*(workloadDir: string) {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
   if (!(yield* fs.exists(workloadDir))) {

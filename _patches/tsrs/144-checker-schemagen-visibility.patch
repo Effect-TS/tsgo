@@ -1,0 +1,20 @@
+tsrs-only: visibility changes for the effect-tsgo shim accessors internal/schemagen calls (no Go counterpart: the Go
+shim reaches these unexported checker methods through extra-shim.json linknames). Each item only changes
+`pub(crate)` to `pub`:
+
+- Checker::is_readonly_array_type (Checker_isReadonlyArrayType): the structural schema generator
+  (structuralTypeToSchema, etsgoapi's RenderStructuralSchemaStatements) wraps a mutable array's
+  `Schema.Array(...)` in `Schema.mutable(...)`.
+
+diff --git a/crates/tsrs_checker/src/checker_11.rs b/crates/tsrs_checker/src/checker_11.rs
+--- a/crates/tsrs_checker/src/checker_11.rs
++++ b/crates/tsrs_checker/src/checker_11.rs
+@@ -3673,7 +3673,7 @@
+     }
+ 
+     // checker.go:23946
+-    pub(crate) fn is_readonly_array_type(&self, t: P<Type>) -> bool {
++    pub fn is_readonly_array_type(&self, t: P<Type>) -> bool {
+         t.object_flags().intersects(ObjectFlags::Reference)
+             && t.target() == Some(self.global_readonly_array_type)
+     }

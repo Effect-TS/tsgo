@@ -1,0 +1,57 @@
+diff --git a/tsc/internal/core/compileroptions.go b/tsc/internal/core/compileroptions.go
+index ca14ab0b2..fd19b0292 100644
+--- a/tsc/internal/core/compileroptions.go
++++ b/tsc/internal/core/compileroptions.go
+@@ -5,6 +5,8 @@ import (
+ 	"slices"
+ 	"strings"
+ 
++	"github.com/effect-ts/tsgo/etscore"
++
+ 	"github.com/microsoft/TypeScript/tsc/internal/collections"
+ 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
+ )
+@@ -17,7 +19,9 @@ type PluginImport struct {
+ 
+ // CompilerOptions contains the compiler options exposed by the API.
+ type CompilerOptions struct {
+-	_ noCopy
++	// Effect holds the parsed @effect/language-service plugin configuration.
++	Effect *etscore.EffectPluginOptions
++	_      noCopy
+ 
+ 	AllowJs                                   Tristate                                  `json:"allowJs,omitzero"`
+ 	AllowArbitraryExtensions                  Tristate                                  `json:"allowArbitraryExtensions,omitzero"`
+diff --git a/tsc/internal/core/effect_options_test.go b/tsc/internal/core/effect_options_test.go
+new file mode 100644
+index 000000000..ef9fdb001
+--- /dev/null
++++ b/tsc/internal/core/effect_options_test.go
+@@ -0,0 +1,27 @@
++package core
++
++import (
++	"reflect"
++	"testing"
++
++	"github.com/effect-ts/tsgo/etscore"
++)
++
++func TestEffectCompilerOptionCloningAndEquality(t *testing.T) {
++	options := &CompilerOptions{Effect: &etscore.EffectPluginOptions{Diagnostics: true}}
++	cloned := options.Clone()
++	if cloned == options || cloned.Effect != options.Effect {
++		t.Fatal("shallow clone must retain Effect options")
++	}
++	if !reflect.DeepEqual(options, cloned) {
++		t.Fatal("cloned options must be equal")
++	}
++	equivalent := &CompilerOptions{Effect: &etscore.EffectPluginOptions{Diagnostics: true}}
++	if !reflect.DeepEqual(options, equivalent) {
++		t.Fatal("Effect options must compare by value")
++	}
++	equivalent.Effect.Diagnostics = false
++	if reflect.DeepEqual(options, equivalent) {
++		t.Fatal("changed Effect options must invalidate equality")
++	}
++}

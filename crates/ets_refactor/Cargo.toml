@@ -1,0 +1,16 @@
+[package]
+name = "ets_refactor"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Port of effect-tsgo internal/refactor"
+
+[lints]
+workspace = true
+
+[dependencies]
+ets_rewriter.workspace = true
+ets_shim.workspace = true
+ets_typeparser.workspace = true

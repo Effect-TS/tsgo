@@ -79,6 +79,23 @@ export const experimentalOxlintTarget = (platform: NodeJS.Platform, arch: string
   }
 }
 
+// The platform packages tsrs publishes (`@tsrs/<target>`, an optional dependency of the `tsrs` package).
+export const tsrsTargets = [
+  "darwin-arm64",
+  "linux-x64-gnu",
+  "linux-x64-musl",
+  "linux-arm64-gnu",
+  "linux-arm64-musl"
+] as const
+
+export type TsrsTarget = typeof tsrsTargets[number]
+
+// The tsrs platform package for a host, or undefined when tsrs publishes none for it.
+export const tsrsTarget = (platform: NodeJS.Platform, arch: string, glibc: boolean): TsrsTarget | undefined => {
+  const target = platform === "linux" ? `${platform}-${arch}-${glibc ? "gnu" : "musl"}` : `${platform}-${arch}`
+  return (tsrsTargets as ReadonlyArray<string>).includes(target) ? target as TsrsTarget : undefined
+}
+
 const discoverTypeScript: (
   cwdRequire: NodeJS.Require,
   preferredPackage?: string
@@ -155,6 +172,28 @@ const discoverOxlint: (
     return discovered
   })
 
+// The installed tsrs binary: `<@tsrs/<target> package>/tsrs` (the package also ships the lib*.d.ts files next to it,
+// which are left alone). Nothing is discovered when tsrs is not installed or publishes no binary for this host.
+const discoverTsrs: (
+  cwdRequire: NodeJS.Require
+) => Effect.Effect<DiscoveredBinaryLocation[], DiscoveryError, FileSystem.FileSystem | Path.Path> = (cwdRequire) =>
+  Effect.gen(function*() {
+    const path = yield* Path.Path
+    const tsrs = yield* optionally(readPackage(cwdRequire, "tsrs"))
+    if (tsrs === undefined) return []
+    const target = tsrsTarget(process.platform, process.arch, isGlibc())
+    if (target === undefined) return []
+    const platformPackageName = `@tsrs/${target}`
+    const platformPackage = yield* optionally(readPackage(nodeModule.createRequire(tsrs.packageJsonPath), platformPackageName))
+    if (platformPackage === undefined) return []
+    return [{
+      component: "tsrs",
+      packageName: platformPackageName,
+      packageVersion: platformPackage.version,
+      binaryPath: path.join(path.dirname(platformPackage.packageJsonPath), "tsrs")
+    } satisfies DiscoveredBinaryLocation]
+  })
+
 const discoverVitePlusOxlint: (
   cwdRequire: NodeJS.Require
 ) => Effect.Effect<DiscoveredBinaryLocation[], DiscoveryError, FileSystem.FileSystem | Path.Path> = (cwdRequire) =>
@@ -170,8 +209,9 @@ export const discoverBinaries = (cwd: string, preferredTypescriptPackage?: strin
   const typescript = yield* discoverTypeScript(cwdRequire, preferredTypescriptPackage)
   const oxlint = yield* discoverOxlint(cwdRequire)
   const vitePlusOxlint = yield* discoverVitePlusOxlint(cwdRequire)
+  const tsrs = yield* discoverTsrs(cwdRequire)
   const discovered = [...new Map(
-    [...typescript, ...oxlint, ...vitePlusOxlint].map((binary) => [binary.binaryPath, binary])
+    [...typescript, ...oxlint, ...vitePlusOxlint, ...tsrs].map((binary) => [binary.binaryPath, binary])
   ).values()]
   return yield* Effect.forEach(discovered, (binary) => hashFile(binary.binaryPath).pipe(
     Effect.map((fileHash) => ({ ...binary, fileHash })),
@@ -190,7 +230,13 @@ export const requireComponents = (
 ) => Effect.gen(function*() {
   for (const component of components) {
     if (!binaries.some((binary) => binary.component === component)) {
-      return yield* new DiscoveryError({ reason: `Unable to discover an installed ${component} binary.` })
+      return yield* new DiscoveryError({
+        reason: component === "tsrs"
+          ? `Unable to discover an installed tsrs binary. Install the tsrs package; its binary is published for ${
+            tsrsTargets.join(", ")
+          }.`
+          : `Unable to discover an installed ${component} binary.`
+      })
     }
   }
   return binaries

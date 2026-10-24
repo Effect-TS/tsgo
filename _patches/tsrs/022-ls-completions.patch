@@ -1,0 +1,74 @@
+Port of _patches/typescript/022-ls-completions.patch (tsc/internal/ls/completions.go) to tsrs.
+
+- AfterCompletionCallback, RegisterAfterCompletionCallback: `tsrs_ls::{AfterCompletionCallback,
+  register_after_completion_callback}` (a `fn` in a process-wide `RwLock`; registering replaces the previous one).
+- ProvideCompletion converts the list, passes its items (a copy: Go shares the slice) through the callback, and
+  replaces the items with a non-empty result (creating the list if there was none), before ensureItemData.
+
+diff --git a/crates/tsrs_ls/src/completions.rs b/crates/tsrs_ls/src/completions.rs
+index 001ad8fd..494bc6a2 100644
+--- a/crates/tsrs_ls/src/completions.rs
++++ b/crates/tsrs_ls/src/completions.rs
+@@ -35,6 +35,28 @@ pub fn is_err_needs_auto_imports(err: &lsproto::Error) -> bool {
+     err.message == ERR_NEEDS_AUTO_IMPORTS
+ }
+ 
++// AfterCompletionCallback is invoked after completions are computed
++// to allow external packages to add or modify completion items.
++pub type AfterCompletionCallback = fn(
++    ctx: &Context,
++    sf: P<SourceFile>,
++    position: u32,
++    items: Vec<lsproto::CompletionItem>,
++    program: &'static tsrs_compiler::Program,
++    lang_service: &LanguageService,
++) -> Vec<lsproto::CompletionItem>;
++
++static AFTER_COMPLETION_CALLBACK: std::sync::RwLock<Option<AfterCompletionCallback>> =
++    std::sync::RwLock::new(None);
++
++// RegisterAfterCompletionCallback registers a callback to be called after
++// completions are computed. The callback can add or modify completion items
++// before they are returned.
++// Note: Only one callback can be registered. Subsequent calls replace the previous callback.
++pub fn register_after_completion_callback(cb: AfterCompletionCallback) {
++    *AFTER_COMPLETION_CALLBACK.write().unwrap() = Some(cb);
++}
++
+ // Go keeps the formatter settings as values of the request `context.Context` (`format.WithFormatCodeSettings`).
+ // The format package takes a `format::FormatContext` (format/api.rs); it travels as a value of the request
+ // context so that every Go `ctx` keeps carrying it.
+@@ -89,8 +111,19 @@ impl LanguageService {
+             trigger_character,
+             false, /*includeSymbols*/
+         )?;
+-        let mut completion_list =
+-            ensure_item_data(file, position, completion_list_internal.map(CompletionList::to_lsp));
++        let mut completion_list = completion_list_internal.map(CompletionList::to_lsp);
++        // EFFECT HOOK: Allow Effect to add or modify completion items.
++        let after_completion_callback = *AFTER_COMPLETION_CALLBACK.read().unwrap();
++        if let Some(after_completion_callback) = after_completion_callback {
++            let existing_items =
++                completion_list.as_ref().map(|list| list.items.clone()).unwrap_or_default();
++            let items =
++                after_completion_callback(ctx, file, position, existing_items, program, self);
++            if !items.is_empty() {
++                completion_list.get_or_insert_with(lsproto::CompletionList::default).items = items;
++            }
++        }
++        let mut completion_list = ensure_item_data(file, position, completion_list);
+         if crate::lsconv::Script::span_map(&file).is_some() {
+             self.filter_content_mapped_auto_imports(ctx, program, file, completion_list.as_mut());
+         }
+diff --git a/crates/tsrs_ls/src/lib.rs b/crates/tsrs_ls/src/lib.rs
+index f3375a6b..01ebcf69 100644
+--- a/crates/tsrs_ls/src/lib.rs
++++ b/crates/tsrs_ls/src/lib.rs
+@@ -63,6 +63,7 @@ pub use codeactions::{
+     CodeAction, CodeFixContext, CodeFixProvider, CombinedCodeActions, RefactorProvider,
+     register_code_fix_provider, register_refactor_provider,
+ };
++pub use completions::{AfterCompletionCallback, register_after_completion_callback};
+ pub use completions::{
+     COMPLETION_TRIGGER_CHARACTERS, CompletionItem, CompletionKind, CompletionList,
+     ERR_NEEDS_AUTO_IMPORTS, KeywordCompletionFilters, SORT_TEXT_AUTO_IMPORT_SUGGESTIONS,

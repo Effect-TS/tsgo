@@ -1,0 +1,32 @@
+tsrs-only: visibility changes for the effect-tsgo shim accessors internal/rules calls (no Go counterpart: the Go
+shim reaches these unexported checker methods through extra-shim.json linknames). Each item only changes
+`pub(crate)` to `pub`:
+
+- Checker::check_expression_with_contextual_type (Checker_checkExpressionWithContextualType):
+  rules.analyzeTypedSchemaDecoderApplication (preferTypedSchemaDecoder).
+- Checker::is_past_last_assignment (Checker_isPastLastAssignment): rules.mapperCanBeHoisted (redundantMapError).
+
+diff --git a/crates/tsrs_checker/src/checker_04.rs b/crates/tsrs_checker/src/checker_04.rs
+--- a/crates/tsrs_checker/src/checker_04.rs
++++ b/crates/tsrs_checker/src/checker_04.rs
+@@ -1919,7 +1919,7 @@
+             reason = "without the census the wrapper is a forwarding call; inlined, callers call the body as before (notes/perf-checker-algorithms.md)"
+         )
+     )]
+-    pub(crate) fn check_expression_with_contextual_type(
++    pub fn check_expression_with_contextual_type(
+         &mut self,
+         node: P<Node>,
+         contextual_type: P<Type>,
+diff --git a/crates/tsrs_checker/src/flow.rs b/crates/tsrs_checker/src/flow.rs
+--- a/crates/tsrs_checker/src/flow.rs
++++ b/crates/tsrs_checker/src/flow.rs
+@@ -4547,7 +4547,7 @@
+     // Return true if there are no assignments to the given symbol or if the given location
+     // is past the last assignment to the symbol.
+     // flow.go:2668
+-    pub(crate) fn is_past_last_assignment(
++    pub fn is_past_last_assignment(
+         &mut self,
+         symbol: P<Symbol>,
+         location: Option<P<Node>>,

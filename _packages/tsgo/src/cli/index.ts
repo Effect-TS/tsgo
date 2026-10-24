@@ -33,13 +33,14 @@ class ChmodBinaryError extends Data.TaggedError("ChmodBinaryError")<{ readonly t
   }
 }
 
-const selectedComponents = (typescript: boolean, oxlint: boolean): ReadonlySet<Component> => {
+const selectedComponents = (typescript: boolean, oxlint: boolean, tsrs: boolean): ReadonlySet<Component> => {
   const components = new Set<Component>()
   if (typescript) components.add("typescript")
   if (oxlint) {
     components.add("oxlint")
     components.add("oxlint-tsgolint")
   }
+  if (tsrs) components.add("tsrs")
   return components
 }
 
@@ -74,14 +75,14 @@ const patchCommand = Command.make("patch", {
   typescriptPackage: typescriptPackageFlag
 }).pipe(
   Command.withDescription("Patch the selected Effect integrations"),
-  Command.withHandler(({ oxlint, skipMissing, typescript, typescriptPackage }) => Effect.scoped(Effect.gen(function*() {
-    yield* ensureIntegrationSelected(typescript, oxlint)
+  Command.withHandler(({ oxlint, skipMissing, tsrs, typescript, typescriptPackage }) => Effect.scoped(Effect.gen(function*() {
+    yield* ensureIntegrationSelected(typescript, oxlint, tsrs)
     if (!typescript && Option.isSome(typescriptPackage)) {
       return yield* new IntegrationSelectionError({
         reason: "--typescript-package requires the TypeScript integration."
       })
     }
-    const components = selectedComponents(typescript, oxlint)
+    const components = selectedComponents(typescript, oxlint, tsrs)
     const result = yield* patch({
       cwd: process.cwd(),
       components,
@@ -102,14 +103,14 @@ const unpatchCommand = Command.make("unpatch", {
   typescriptPackage: typescriptPackageFlag
 }).pipe(
   Command.withDescription("Unpatch and restore the selected integrations"),
-  Command.withHandler(({ oxlint, typescript, typescriptPackage }) => Effect.gen(function*() {
-    yield* ensureIntegrationSelected(typescript, oxlint)
+  Command.withHandler(({ oxlint, tsrs, typescript, typescriptPackage }) => Effect.gen(function*() {
+    yield* ensureIntegrationSelected(typescript, oxlint, tsrs)
     if (!typescript && Option.isSome(typescriptPackage)) {
       return yield* new IntegrationSelectionError({
         reason: "--typescript-package requires the TypeScript integration."
       })
     }
-    const components = selectedComponents(typescript, oxlint)
+    const components = selectedComponents(typescript, oxlint, tsrs)
     const result = yield* unpatch({
       cwd: process.cwd(),
       components,

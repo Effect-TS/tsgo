@@ -1,0 +1,15 @@
+[package]
+name = "ets_graph"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Port of internal/graph"
+
+[lints]
+workspace = true
+
+[dependencies]
+ets_go.workspace = true
+rustc-hash.workspace = true

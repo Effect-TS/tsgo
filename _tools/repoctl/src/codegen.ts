@@ -5,6 +5,7 @@ import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import { generateTsgolintWorkspace } from "./oxlint.ts"
 import { runCommand } from "./process.ts"
+import { generateRustShims } from "./rust.ts"
 import { generateSubmoduleArtifacts } from "./submodules.ts"
 import type { TypeScriptSource } from "./upstream.ts"
 
@@ -286,6 +287,7 @@ export const generateTypeScriptGoIntegration = Effect.fnUntraced(function*(
   compiler: TypeScriptSource
 ) {
   yield* generateSubmoduleArtifacts(repositoryRoot, compiler)
+  yield* generateRustShims(repositoryRoot)
 })
 
 export const generateOxlintEffectRules = Effect.fnUntraced(function*(repositoryRoot: string) {

@@ -1,0 +1,144 @@
+Port of _patches/typescript/013-tsoptions-parsinghelpers.patch (tsc/internal/tsoptions/parsinghelpers.go) to tsrs.
+
+- MergeCompilerOptionsCallback / RegisterMergeCompilerOptionsCallback: tsrs_tsoptions::MergeCompilerOptionsCallback
+  (an Arc'd closure behind a process-wide RwLock, as patch 002's callback) and
+  register_merge_compiler_options_callback. merge_compiler_options takes the source config path and base path and
+  calls it after the field merge, as Go's mergeCompilerOptions does.
+- ParseCompilerOptions: a `plugins` key (strings.EqualFold) sets CompilerOptions::effect from
+  ets_etscore::parse_from_plugins (patch 007).
+- tsrs-only: the `impl ets_etscore::AnyValue for CompilerOptionsValue` that parse_from_plugins needs for Go's `any`
+  type assertions (the orphan rule puts it here: ets_etscore cannot depend on tsrs).
+- tsrs has no mergeParsedCompilerOptions (its callers call merge_compiler_options directly; see patch 025), and its
+  parsinghelpers tests do not call merge_compiler_options, so the test hunks have no counterpart.
+
+diff --git a/crates/tsrs_tsoptions/Cargo.toml b/crates/tsrs_tsoptions/Cargo.toml
+index 0b88cb3..9460e26 100644
+--- a/crates/tsrs_tsoptions/Cargo.toml
++++ b/crates/tsrs_tsoptions/Cargo.toml
+@@ -10,6 +10,8 @@ publish.workspace = true
+ workspace = true
+ 
+ [dependencies]
++# effect-tsgo patch 013: `ParseCompilerOptions` parses the Effect plugin options with etscore.
++ets_etscore = { path = "../../../crates/ets_etscore" }
+ tsrs_core.workspace = true
+ tsrs_diagnostics.workspace = true
+ tsrs_ast.workspace = true
+diff --git a/crates/tsrs_tsoptions/src/parsinghelpers.rs b/crates/tsrs_tsoptions/src/parsinghelpers.rs
+index ec0038c..163cade 100644
+--- a/crates/tsrs_tsoptions/src/parsinghelpers.rs
++++ b/crates/tsrs_tsoptions/src/parsinghelpers.rs
+@@ -21,6 +21,82 @@ use crate::namemap::BUILD_NAME_MAP;
+ use crate::tsconfigparsing::{COMMAND_LINE_COMPILER_OPTIONS_MAP, CommandLineOptionNameMap};
+ use tsrs_ast::new_compiler_diagnostic;
+ 
++// effect-tsgo patch 013 (parsinghelpers.go `MergeCompilerOptionsCallback`).
++// MergeCompilerOptionsCallback is invoked after the standard compiler option
++// merge, allowing external integrations to customize merging for custom fields.
++//
++// tsrs-only: Go's `targetOptions`/`sourceOptions` are never nil when it is called; the arguments after them are
++// `rawSource`, `sourceConfigPath` and `basePath`.
++pub type MergeCompilerOptionsCallback = std::sync::Arc<
++    dyn Fn(&mut CompilerOptions, &CompilerOptions, Option<&CompilerOptionsValue>, &str, &str)
++        + Send
++        + Sync,
++>;
++
++static MERGE_COMPILER_OPTIONS_CALLBACK: std::sync::RwLock<Option<MergeCompilerOptionsCallback>> =
++    std::sync::RwLock::new(None);
++
++// effect-tsgo patch 013 (parsinghelpers.go `RegisterMergeCompilerOptionsCallback`).
++pub fn register_merge_compiler_options_callback(cb: MergeCompilerOptionsCallback) {
++    *MERGE_COMPILER_OPTIONS_CALLBACK.write().unwrap_or_else(std::sync::PoisonError::into_inner) =
++        Some(cb);
++}
++
++/// tsrs-only (effect-tsgo patch 013): Go reads the package variable `MergeCompilerOptionsCallback`; the Rust port
++/// clones it out of its lock so the callback runs without holding the lock.
++fn merge_compiler_options_callback() -> Option<MergeCompilerOptionsCallback> {
++    MERGE_COMPILER_OPTIONS_CALLBACK
++        .read()
++        .unwrap_or_else(std::sync::PoisonError::into_inner)
++        .clone()
++}
++
++// effect-tsgo patch 013: etscore's `ParseFromPlugins` type-switches on Go's `any`, the tsconfig value that tsrs
++// holds as `CompilerOptionsValue`. `ets_etscore` cannot depend on tsrs, so the trait is implemented here.
++impl ets_etscore::AnyValue for CompilerOptionsValue {
++    fn is_nil(&self) -> bool {
++        matches!(self, CompilerOptionsValue::Null)
++    }
++
++    fn as_bool(&self) -> Option<bool> {
++        match self {
++            CompilerOptionsValue::Bool(b) => Some(*b),
++            _ => None,
++        }
++    }
++
++    fn as_float64(&self) -> Option<f64> {
++        match self {
++            CompilerOptionsValue::Float(f) => Some(*f),
++            _ => None,
++        }
++    }
++
++    fn as_string(&self) -> Option<&str> {
++        match self {
++            CompilerOptionsValue::String(s) => Some(s),
++            _ => None,
++        }
++    }
++
++    fn as_slice(&self) -> Option<&[Self]> {
++        match self {
++            CompilerOptionsValue::Array(a) => Some(a),
++            CompilerOptionsValue::NilArray => Some(&[]),
++            _ => None,
++        }
++    }
++
++    fn as_string_any_map(&self) -> Option<Vec<(&str, &Self)>> {
++        match self {
++            CompilerOptionsValue::Object(m) => {
++                Some(m.iter().map(|(k, v)| (k.as_str(), v)).collect())
++            }
++            _ => None,
++        }
++    }
++}
++
+ pub fn parse_tristate(value: &CompilerOptionsValue) -> Tristate {
+     match value {
+         CompilerOptionsValue::Null => Tristate::Unknown,
+@@ -308,6 +384,10 @@ pub fn parse_compiler_options(
+     if value.is_null() {
+         return Vec::new();
+     }
++    // effect-tsgo patch 013.
++    if tsrs_core::stringutil::equal_fold(key, "plugins") {
++        all_options.effect = ets_etscore::parse_from_plugins(value).map(std::sync::Arc::new).into();
++    }
+     parse_compiler_options_worker(key, value, all_options);
+     Vec::new()
+ }
+@@ -1004,6 +1084,8 @@ pub(crate) fn merge_compiler_options(
+     target_options: &mut CompilerOptions,
+     source_options: Option<&CompilerOptions>,
+     raw_source: Option<&CompilerOptionsValue>,
++    source_config_path: &str,
++    base_path: &str,
+ ) {
+     let Some(source_options) = source_options else {
+         return;
+@@ -1037,6 +1119,10 @@ pub(crate) fn merge_compiler_options(
+         };
+     }
+     for_each_compiler_options_field!(merge_fields);
++    // effect-tsgo patch 013.
++    if let Some(callback) = merge_compiler_options_callback() {
++        callback(target_options, source_options, raw_source, source_config_path, base_path);
++    }
+ }
+ 
+ pub(crate) fn convert_to_options_with_absolute_paths(

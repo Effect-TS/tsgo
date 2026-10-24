@@ -1,0 +1,16 @@
+[package]
+name = "ets_effectconfigraw"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Port of internal/effectconfigraw"
+
+[lints]
+workspace = true
+
+[dependencies]
+ets_etscore.workspace = true
+ets_shim.workspace = true
+rustc-hash.workspace = true

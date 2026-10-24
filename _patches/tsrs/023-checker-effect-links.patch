@@ -1,0 +1,37 @@
+Port of _patches/typescript/023-checker-effect-links.patch (tsc/internal/checker/checker.go) to tsrs: the
+Checker::effect_links field (Go's `EffectLinks any`), next to compiler_options as in Go. new_checker and Checker::fork
+start it empty (None); ets_typeparser fills it on first use (effectLinksOf), and the links are dropped with the
+checker, as Go's GC frees them with it.
+
+tsrs-only: Go's `any` is `Option<Box<dyn Any + Send + Sync>>` (None is Go's nil), so Checker stays Send and Sync. A
+fork starts without links, as a new Go checker does.
+
+diff --git a/crates/tsrs_checker/src/checker.rs b/crates/tsrs_checker/src/checker.rs
+--- a/crates/tsrs_checker/src/checker.rs
++++ b/crates/tsrs_checker/src/checker.rs
+@@ -1103,6 +1103,9 @@
+     pub id: u32,
+     pub program: &'static dyn Program,
+     pub compiler_options: P<CompilerOptions>,
++    // effect-tsgo patch 023 (checker.go `EffectLinks`): the Effect type parser's per-checker caches, created on first
++    // use by the parser and freed with the checker.
++    pub effect_links: Option<Box<dyn std::any::Any + Send + Sync>>,
+     pub files: &'static [P<SourceFile>],
+     pub file_index_map: FxHashMap<P<SourceFile>, usize>,
+     /// `source_file_and_index_of_node` (utilities.rs): (node key, file key, file index); key 0 is an empty slot.
+@@ -1629,6 +1632,7 @@
+         id: nextCheckerID.fetch_add(1, Ordering::Relaxed) + 1,
+         program,
+         compiler_options,
++        effect_links: None,
+         files,
+         file_index_map: create_file_index_map(files),
+         node_file_cache: Vec::new(),
+@@ -2171,6 +2175,7 @@
+             id: nextCheckerID.fetch_add(1, Ordering::Relaxed) + 1,
+             program: base.program,
+             compiler_options: base.compiler_options,
++            effect_links: None,
+             files: base.files,
+             file_index_map: base.file_index_map.clone(),
+             type_count: base.type_count,

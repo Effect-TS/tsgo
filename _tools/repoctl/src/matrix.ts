@@ -19,15 +19,33 @@ export const buildTypeScriptTestMatrix = (upstream: typeof Upstream.Type) => ({
     })
 })
 
+// A TypeScript recorded only as a tsrs component's dependency (no channel tag, oxlint-tsgolint release or profile
+// uses it) is the commit tsrs ports, which has no npm release: perf has no stock compiler to compare it against.
+const perfSkippedTypeScriptVersions = (upstream: typeof Upstream.Type): ReadonlySet<string> => {
+  const used = new Set<string | undefined>([
+    ...Object.values(upstream.tags.typescript),
+    ...Object.values(upstream.components["oxlint-tsgolint"]).map((component) => component.dependencies.typescript),
+    ...upstream.profiles.map((profile) => profile.dependencies.typescript)
+  ])
+  return new Set(
+    Object.values(upstream.components.tsrs ?? {})
+      .map((component) => component.typescript.version)
+      .filter((version) => !used.has(version))
+  )
+}
+
 export const buildPerfMatrix = (
   base: typeof Upstream.Type,
   head: typeof Upstream.Type,
   baseRef: string,
   headRef: string
 ) => ({
-  include: ([["base", base, baseRef], ["head", head, headRef]] as const).flatMap(([side, upstream, ref]) =>
-    buildTypeScriptTestMatrix(upstream).include.map(({ name, version }) => ({ name, side, ref, version }))
-  )
+  include: ([["base", base, baseRef], ["head", head, headRef]] as const).flatMap(([side, upstream, ref]) => {
+    const skipped = perfSkippedTypeScriptVersions(upstream)
+    return buildTypeScriptTestMatrix(upstream).include
+      .filter(({ version }) => !skipped.has(version))
+      .map(({ name, version }) => ({ name, side, ref, version }))
+  })
 })
 
 export const buildOxlintTestMatrix = (upstream: typeof Upstream.Type) => {
