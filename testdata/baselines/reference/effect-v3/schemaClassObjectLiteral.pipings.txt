@@ -1,0 +1,99 @@
+==== /.src/schemaClassObjectLiteral.ts (7 flows) ====
+
+=== Piping Flow ===
+Location: 6:26 - 6:78
+Node: Schema.Class<User>("User")({ name: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { name: Schema.String }
+Subject Type: { name: typeof String$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<User>("User")
+      args: (constant)
+      outType: Class<User, { name: typeof String$; }, Encoded<{ name: typeof String$; }>, never, { readonly name: string; }, {}, {}>
+
+=== Piping Flow ===
+Location: 15:47 - 16:21
+Node: acceptUser({ ...p })
+Node Kind: KindCallExpression
+
+Subject: { ...p }
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: acceptUser
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 19:22 - 19:68
+Node: Ref.update(ref, (u) => ({ ...u, name: "c" }))
+Node Kind: KindCallExpression
+
+Subject: ref
+Subject Type: Ref<User>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Ref.update
+      args: [(u) => ({ ...u, name: "c" })]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 36:20 - 36:51
+Node: User.make({ ...p, name: "b" })
+Node Kind: KindCallExpression
+
+Subject: { ...p, name: "b" }
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: User.make
+      args: (constant)
+      outType: User
+
+=== Piping Flow ===
+Location: 42:25 - 42:64
+Node: list.map((u) => ({ ...u, name: "x" }))
+Node Kind: KindCallExpression
+
+Subject: (u) => ({ ...u, name: "x" })
+Subject Type: (u: User) => { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: list.map
+      args: (constant)
+      outType: { name: string; }[]
+
+=== Piping Flow ===
+Location: 49:23 - 49:66
+Node: Schema.Class<A>("A")({ a: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { a: Schema.String }
+Subject Type: { a: typeof String$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<A>("A")
+      args: (constant)
+      outType: Class<A, { a: typeof String$; }, Encoded<{ a: typeof String$; }>, never, { readonly a: string; }, {}, {}>
+
+=== Piping Flow ===
+Location: 51:23 - 51:58
+Node: Schema.Class<B>("B")({ inner: A })
+Node Kind: KindCallExpression
+
+Subject: { inner: A }
+Subject Type: { inner: typeof A; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<B>("B")
+      args: (constant)
+      outType: Class<B, { inner: typeof A; }, Encoded<{ inner: typeof A; }>, never, { readonly inner: A; }, {}, {}>

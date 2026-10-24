@@ -1,0 +1,36 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/test.ts(7,62): error TS377049: This key does not match the deterministic key for this declaration. The expected key is `KeybindingsConfigError`. effect(deterministicKeys)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "keyPatterns": [
+              { "target": "error", "pattern": "identifier" }
+            ]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/package.json (0 errors) ====
+    { "name": "@effect/test-app", "version": "1.0.0" }
+    
+
+==== /.src/test.ts (1 errors) ====
+    // @effect-v3
+    // @effect-diagnostics deterministicKeys:error
+    import * as Data from "effect/Data"
+    
+    export class ErrorA extends Data.TaggedError("ErrorA")<{}> {}
+    
+    export class KeybindingsConfigError extends Data.TaggedError("KeybindingsConfigParseError")<{}> {}
+                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377049: This key does not match the deterministic key for this declaration. The expected key is `KeybindingsConfigError`. effect(deterministicKeys)
+    

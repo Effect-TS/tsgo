@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/test.ts(1,1): warning TS377051: Multiple versions of package `my-effect-lib` were detected: 1.0.0 @ /node_modules/my-effect-lib, 2.0.0 @ /node_modules/wrapper/node_modules/my-effect-lib. Package duplication can change runtime identity and type equality across Effect modules.
 If this is intentional, set the LSP config `allowedDuplicatedPackages` to ["my-effect-lib"]. effect(duplicatePackage)

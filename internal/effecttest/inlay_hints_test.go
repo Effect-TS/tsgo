@@ -48,9 +48,9 @@ export const sample = Effect.gen(function*() {
 	defer done()
 
 	f.GoToFile(t, "/test.ts")
-	verifyLocalBaselineInlayHints(t, f, content, "/test.ts", &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{
+	verifyLocalBaselineInlayHints(t, f, content, "/test.ts", lsutil.NewInlayHintUserPreferences(lsutil.InlayHintsPreferences{
 		IncludeInlayFunctionLikeReturnTypeHints: core.TSTrue,
-	}})
+	}))
 }
 
 func TestEffectInlayHintsFnSuppression(t *testing.T) {
@@ -93,9 +93,9 @@ export const sampleFn = Effect.fn("sampleFn")(function*(
 	defer done()
 
 	f.GoToFile(t, "/test.ts")
-	verifyLocalBaselineInlayHints(t, f, content, "/test.ts", &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{
+	verifyLocalBaselineInlayHints(t, f, content, "/test.ts", lsutil.NewInlayHintUserPreferences(lsutil.InlayHintsPreferences{
 		IncludeInlayFunctionLikeReturnTypeHints: core.TSTrue,
-	}})
+	}))
 }
 
 func TestEffectInlayHintsFnUntracedSuppression(t *testing.T) {
@@ -135,9 +135,9 @@ export const sampleFnUntraced = Effect.fnUntraced(function*(_: boolean) {
 	defer done()
 
 	f.GoToFile(t, "/test.ts")
-	verifyLocalBaselineInlayHints(t, f, content, "/test.ts", &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{
+	verifyLocalBaselineInlayHints(t, f, content, "/test.ts", lsutil.NewInlayHintUserPreferences(lsutil.InlayHintsPreferences{
 		IncludeInlayFunctionLikeReturnTypeHints: core.TSTrue,
-	}})
+	}))
 }
 
 func TestEffectInlayHintsNonEffectNotSuppressed(t *testing.T) {
@@ -167,9 +167,9 @@ export function standardShouldAppear() {
 	defer done()
 
 	f.GoToFile(t, "/test.ts")
-	verifyLocalBaselineInlayHints(t, f, content, "/test.ts", &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{
+	verifyLocalBaselineInlayHints(t, f, content, "/test.ts", lsutil.NewInlayHintUserPreferences(lsutil.InlayHintsPreferences{
 		IncludeInlayFunctionLikeReturnTypeHints: core.TSTrue,
-	}})
+	}))
 }
 
 func TestEffectInlayHintsDisabledPassthrough(t *testing.T) {
@@ -208,7 +208,7 @@ export const sample = Effect.gen(function*() {
 	defer done()
 
 	f.GoToFile(t, "/test.ts")
-	verifyLocalBaselineInlayHints(t, f, content, "/test.ts", &lsutil.UserPreferences{InlayHints: lsutil.InlayHintsPreferences{
+	verifyLocalBaselineInlayHints(t, f, content, "/test.ts", lsutil.NewInlayHintUserPreferences(lsutil.InlayHintsPreferences{
 		IncludeInlayFunctionLikeReturnTypeHints: core.TSTrue,
-	}})
+	}))
 }

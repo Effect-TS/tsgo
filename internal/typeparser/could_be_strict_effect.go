@@ -14,19 +14,26 @@ var strictEffectTypeNames = map[string]bool{"Effect": true}
 // a strict Effect type (a type whose symbol is named "Effect", see
 // StrictEffectType). For reference nodes (identifiers and property accesses)
 // it inspects the referenced symbol's declared type, which is cheap compared
-// to the flow analysis performed by GetTypeAtLocation. Flow narrowing can
-// only refine the declared type — select union constituents, narrow
-// any/unknown, or intersect it — so a declared type that conclusively
-// contains no possibly-Effect constituent can never produce a strict-Effect
-// flow type.
+// to the flow analysis performed by GetTypeAtLocation.
+//
+// The declared-type shortcut is not sound for every narrowing: a type guard
+// can narrow any declared type into an Effect, e.g. Effect.isEffect narrows
+// to Effect<unknown, unknown, unknown>. Callers accept this because they only
+// report on specific A or E channel contents (an Effect in E for
+// effectInFailure, a Promise in A for promiseInEffectSuccess), which an
+// all-unknown Effect never has; only a custom guard narrowing to a concrete
+// Effect type could be missed. Checking every reference costs about 5s of
+// wall time on the Effect monorepo.
 //
 // It returns true ("cannot rule out") for every other node kind and whenever
-// the answer is not conclusively negative, so whole-file walker rules may use
-// a false result to skip expensive GetTypeAtLocation queries without ever
-// missing a strict Effect type.
+// the answer is not conclusively negative.
 func (tp *TypeParser) NodeCouldBeStrictEffect(node *ast.Node) bool {
 	if tp == nil || tp.checker == nil || node == nil {
 		return true
+	}
+	// An object literal's type is anonymous, so it is never named "Effect".
+	if node.Kind == ast.KindObjectLiteralExpression || tp.NodeCannotBeEffectLibraryType(node) {
+		return false
 	}
 	if node.Kind == ast.KindCallExpression {
 		return tp.callCouldReturnStrictEffect(node)
@@ -97,6 +104,15 @@ func (tp *TypeParser) CouldBeStrictEffect(t *checker.Type) bool {
 // could ever produce a type whose symbol name is in names. False only on a
 // conclusive negative.
 func couldBeNamed(t *checker.Type, names map[string]bool, depth int) bool {
+	return couldBe(t, depth, func(object *checker.Type) bool {
+		sym := object.Symbol()
+		return sym == nil || names[ast.TSGetSymbolName(sym)]
+	})
+}
+
+// couldBe walks declared type t conservatively and asks objectCouldMatch
+// about each plain object constituent. False only on a conclusive negative.
+func couldBe(t *checker.Type, depth int, objectCouldMatch func(*checker.Type) bool) bool {
 	if t == nil {
 		return true
 	}
@@ -109,7 +125,7 @@ func couldBeNamed(t *checker.Type, names map[string]bool, depth int) bool {
 			return true
 		}
 		for _, member := range t.Types() {
-			if couldBeNamed(member, names, depth+1) {
+			if couldBe(member, depth+1, objectCouldMatch) {
 				return true
 			}
 		}
@@ -129,9 +145,36 @@ func couldBeNamed(t *checker.Type, names map[string]bool, depth int) bool {
 	if flags&checker.TypeFlagsObject == 0 {
 		return true
 	}
-	sym := t.Symbol()
-	if sym == nil {
+	return objectCouldMatch(t)
+}
+
+// NodeCouldBeEffect reports whether node's type could possibly be an Effect
+// type as recognized by EffectType. Only calls are inspected beyond the
+// syntactic NodeCannotBeEffectLibraryType check: a call's type is its
+// resolved signature's return type and is never narrowed, while a reference
+// can be narrowed by a type guard such as Effect.isEffect into an Effect
+// whatever its declared type. Only v4 identifies Effects by a single
+// property, so calls stay possible for other versions.
+func (tp *TypeParser) NodeCouldBeEffect(node *ast.Node) (result bool) {
+	if tp == nil || tp.checker == nil || node == nil {
 		return true
 	}
-	return names[sym.Name]
+	if tp.NodeCannotBeEffectLibraryType(node) {
+		return false
+	}
+	if node.Kind != ast.KindCallExpression || tp.DetectEffectVersion() != EffectMajorV4 {
+		return true
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			result = true
+		}
+	}()
+	signature := tp.checker.GetResolvedSignature(node)
+	if signature == nil {
+		return true
+	}
+	return couldBe(tp.checker.GetReturnTypeOfSignature(signature), 0, func(object *checker.Type) bool {
+		return tp.GetTypeOfPropertyByName(object, EffectTypeId) != nil
+	})
 }

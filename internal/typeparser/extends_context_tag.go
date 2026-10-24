@@ -6,10 +6,16 @@ import (
 
 // ContextTagResult holds the parsed result of a class extending Context.Tag.
 type ContextTagResult struct {
-	ClassName        *ast.Node // The class name identifier
-	SelfTypeNode     *ast.Node // The Self type argument node (first type arg of the outer call)
-	KeyStringLiteral *ast.Node // The key string literal from the inner call's first argument, or nil
+	className        *ast.Node // The class name identifier
+	selfTypeNode     *ast.Node // The Self type argument node (first type arg of the outer call)
+	keyStringLiteral *ast.Node // The key string literal from the inner call's first argument, or nil
 }
+
+func (r ContextTagResult) ClassName() *ast.Node { return r.className }
+
+func (r ContextTagResult) SelfTypeNode() *ast.Node { return r.selfTypeNode }
+
+func (r ContextTagResult) KeyStringLiteral() *ast.Node { return r.keyStringLiteral }
 
 // ExtendsContextTag checks if a class declaration extends Context.Tag("key")<Self, Shape>().
 // It detects the pattern:
@@ -91,9 +97,9 @@ func (tp *TypeParser) ExtendsContextTag(classNode *ast.Node) *ContextTagResult {
 			}
 
 			return &ContextTagResult{
-				ClassName:        classNode.Name(),
-				SelfTypeNode:     outerCall.TypeArguments.Nodes[0],
-				KeyStringLiteral: keyStringLiteral,
+				className:        classNode.Name(),
+				selfTypeNode:     outerCall.TypeArguments.Nodes[0],
+				keyStringLiteral: keyStringLiteral,
 			}
 		}
 

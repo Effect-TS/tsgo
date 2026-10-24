@@ -34,10 +34,10 @@ const _notExportedNoSuggestion = () => {
   })
 }
 
-export const shouldHaveSuggestion = Effect.fn("shouldHaveSuggestion")(function* () {
-    yield* Effect.succeed(1);
-    return 42;
-});
+export const shouldHaveSuggestion = Effect.fn("shouldHaveSuggestion")(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  })
 
 export function shouldHaveSuggestionFunction() {
   return Effect.gen(function*() {
@@ -73,8 +73,8 @@ export const shouldHaveSuggestion = () => {
   })
 }
 
-export const shouldHaveSuggestionFunction = Effect.fn("shouldHaveSuggestionFunction")(function* () {
-    yield* Effect.succeed(1);
-    return 42;
-});
+export const shouldHaveSuggestionFunction = Effect.fn("shouldHaveSuggestionFunction")(function*() {
+    yield* Effect.succeed(1)
+    return 42
+  });
 

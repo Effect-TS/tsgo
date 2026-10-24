@@ -1,0 +1,9 @@
+flowchart TB
+  0[/"type: Effect#lt;HttpClientResponse, HttpClientError, HttpClient#gt;<br/>node: HttpClient.get#40;#quot;https://example.com#quot;#41;"/]
+  1[/"type: Effect#lt;HttpClientResponse, HttpClientError, HttpClient#gt;<br/>node: HttpClient.post#40;#quot;https://example.com#quot;#41;"/]
+  2[/"type: HttpClientRequest<br/>node: HttpClientRequest.get#40;#quot;https://example.com#quot;#41;"/]
+  3[/"type: #quot;example#quot;<br/>node: #quot;example#quot;"/]
+  4["type: HttpApi#lt;#quot;example#quot;, never#gt;<br/>callee: HttpApi.make<br/>args: #91;#93;"]
+  5[/"type: #lt;const Id extends string#gt;#40;identifier: Id#41; =#gt; HttpApi#lt;Id, never#gt;<br/>node: HttpApi.make"/]
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4

@@ -1,0 +1,628 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:10-9:5) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D2] (62:17-62:21) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"safe\")"
+
+[D3] (73:10-73:15) TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+  Fix 0: "Disable effectFnOpportunity for this line"
+  Fix 1: "Disable effectFnOpportunity for entire file"
+  Fix 2: "Convert to Effect.fnUntraced"
+  Fix 3: "Convert to Effect.fn (no span)"
+  Fix 4: "Convert to Effect.fn(\"later\")"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable unnecessaryEffectGen for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Remove the Effect.gen, and keep the body" ===
+
+--- file:///.src/effectFnOpportunity_hoistedDeclaration.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 4: no opportunity or conversion for this hoisted helper.
+export const program = helper(1)
+
+function helper(n: number) {
+  return Effect.succeed(n)
+}
+
+// Taking the function's value before its declaration also relies on hoisting.
+export const earlyObject = { shorthand }
+
+function shorthand(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// The same restriction applies inside a function body.
+export function enclosing(n: number) {
+  const result = local(n)
+  return result
+
+  function local(value: number) {
+    return Effect.gen(function* () {
+      const result = yield* Effect.succeed(value)
+      return result + 1
+    })
+  }
+}
+
+// Earlier closures can execute before the declaration is reached.
+const invokeCaptured = () => captured(1)
+export const earlyClosure = invokeCaptured()
+
+function captured(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// Non-generator conversions must also preserve hoisting.
+export const earlyRegular = regular(1)
+
+function regular(n: number) {
+  const a = n + 1
+  const b = a + 1
+  const c = b + 1
+  const d = c + 1
+  const e = d + 1
+  return Effect.succeed(e)
+}
+
+// These are different symbols and must not suppress the opportunity for safe.
+export const shadowed = (safe: number) => safe
+export const property = { safe: 1 }
+
+export function safe(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// Type-only references and re-exports do not evaluate the function's value.
+export type LaterSignature = typeof later
+export { later }
+
+function later(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// A reference after the declaration must still allow conversion.
+export const laterProgram = later(1)
+
+
+=== [D2] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_hoistedDeclaration.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 4: no opportunity or conversion for this hoisted helper.
+export const program = helper(1)
+
+function helper(n: number) {
+  return Effect.gen(function* () {
+    return yield* Effect.succeed(n)
+  })
+}
+
+// Taking the function's value before its declaration also relies on hoisting.
+export const earlyObject = { shorthand }
+
+function shorthand(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// The same restriction applies inside a function body.
+export function enclosing(n: number) {
+  const result = local(n)
+  return result
+
+  function local(value: number) {
+    return Effect.gen(function* () {
+      const result = yield* Effect.succeed(value)
+      return result + 1
+    })
+  }
+}
+
+// Earlier closures can execute before the declaration is reached.
+const invokeCaptured = () => captured(1)
+export const earlyClosure = invokeCaptured()
+
+function captured(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// Non-generator conversions must also preserve hoisting.
+export const earlyRegular = regular(1)
+
+function regular(n: number) {
+  const a = n + 1
+  const b = a + 1
+  const c = b + 1
+  const d = c + 1
+  const e = d + 1
+  return Effect.succeed(e)
+}
+
+// These are different symbols and must not suppress the opportunity for safe.
+export const shadowed = (safe: number) => safe
+export const property = { safe: 1 }
+
+export const safe = Effect.fnUntraced(function*(n: number) {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  });
+
+// Type-only references and re-exports do not evaluate the function's value.
+export type LaterSignature = typeof later
+export { later }
+
+function later(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// A reference after the declaration must still allow conversion.
+export const laterProgram = later(1)
+
+
+=== [D2] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_hoistedDeclaration.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 4: no opportunity or conversion for this hoisted helper.
+export const program = helper(1)
+
+function helper(n: number) {
+  return Effect.gen(function* () {
+    return yield* Effect.succeed(n)
+  })
+}
+
+// Taking the function's value before its declaration also relies on hoisting.
+export const earlyObject = { shorthand }
+
+function shorthand(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// The same restriction applies inside a function body.
+export function enclosing(n: number) {
+  const result = local(n)
+  return result
+
+  function local(value: number) {
+    return Effect.gen(function* () {
+      const result = yield* Effect.succeed(value)
+      return result + 1
+    })
+  }
+}
+
+// Earlier closures can execute before the declaration is reached.
+const invokeCaptured = () => captured(1)
+export const earlyClosure = invokeCaptured()
+
+function captured(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// Non-generator conversions must also preserve hoisting.
+export const earlyRegular = regular(1)
+
+function regular(n: number) {
+  const a = n + 1
+  const b = a + 1
+  const c = b + 1
+  const d = c + 1
+  const e = d + 1
+  return Effect.succeed(e)
+}
+
+// These are different symbols and must not suppress the opportunity for safe.
+export const shadowed = (safe: number) => safe
+export const property = { safe: 1 }
+
+export const safe = Effect.fn(function*(n: number) {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  });
+
+// Type-only references and re-exports do not evaluate the function's value.
+export type LaterSignature = typeof later
+export { later }
+
+function later(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// A reference after the declaration must still allow conversion.
+export const laterProgram = later(1)
+
+
+=== [D2] Fix 4: "Convert to Effect.fn(\"safe\")" ===
+
+--- file:///.src/effectFnOpportunity_hoistedDeclaration.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 4: no opportunity or conversion for this hoisted helper.
+export const program = helper(1)
+
+function helper(n: number) {
+  return Effect.gen(function* () {
+    return yield* Effect.succeed(n)
+  })
+}
+
+// Taking the function's value before its declaration also relies on hoisting.
+export const earlyObject = { shorthand }
+
+function shorthand(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// The same restriction applies inside a function body.
+export function enclosing(n: number) {
+  const result = local(n)
+  return result
+
+  function local(value: number) {
+    return Effect.gen(function* () {
+      const result = yield* Effect.succeed(value)
+      return result + 1
+    })
+  }
+}
+
+// Earlier closures can execute before the declaration is reached.
+const invokeCaptured = () => captured(1)
+export const earlyClosure = invokeCaptured()
+
+function captured(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// Non-generator conversions must also preserve hoisting.
+export const earlyRegular = regular(1)
+
+function regular(n: number) {
+  const a = n + 1
+  const b = a + 1
+  const c = b + 1
+  const d = c + 1
+  const e = d + 1
+  return Effect.succeed(e)
+}
+
+// These are different symbols and must not suppress the opportunity for safe.
+export const shadowed = (safe: number) => safe
+export const property = { safe: 1 }
+
+export const safe = Effect.fn("safe")(function*(n: number) {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  });
+
+// Type-only references and re-exports do not evaluate the function's value.
+export type LaterSignature = typeof later
+export { later }
+
+function later(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// A reference after the declaration must still allow conversion.
+export const laterProgram = later(1)
+
+
+=== [D3] Fix 0: "Disable effectFnOpportunity for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable effectFnOpportunity for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Convert to Effect.fnUntraced" ===
+
+--- file:///.src/effectFnOpportunity_hoistedDeclaration.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 4: no opportunity or conversion for this hoisted helper.
+export const program = helper(1)
+
+function helper(n: number) {
+  return Effect.gen(function* () {
+    return yield* Effect.succeed(n)
+  })
+}
+
+// Taking the function's value before its declaration also relies on hoisting.
+export const earlyObject = { shorthand }
+
+function shorthand(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// The same restriction applies inside a function body.
+export function enclosing(n: number) {
+  const result = local(n)
+  return result
+
+  function local(value: number) {
+    return Effect.gen(function* () {
+      const result = yield* Effect.succeed(value)
+      return result + 1
+    })
+  }
+}
+
+// Earlier closures can execute before the declaration is reached.
+const invokeCaptured = () => captured(1)
+export const earlyClosure = invokeCaptured()
+
+function captured(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// Non-generator conversions must also preserve hoisting.
+export const earlyRegular = regular(1)
+
+function regular(n: number) {
+  const a = n + 1
+  const b = a + 1
+  const c = b + 1
+  const d = c + 1
+  const e = d + 1
+  return Effect.succeed(e)
+}
+
+// These are different symbols and must not suppress the opportunity for safe.
+export const shadowed = (safe: number) => safe
+export const property = { safe: 1 }
+
+export function safe(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// Type-only references and re-exports do not evaluate the function's value.
+export type LaterSignature = typeof later
+export { later }
+
+const later = Effect.fnUntraced(function*(n: number) {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  });
+
+// A reference after the declaration must still allow conversion.
+export const laterProgram = later(1)
+
+
+=== [D3] Fix 3: "Convert to Effect.fn (no span)" ===
+
+--- file:///.src/effectFnOpportunity_hoistedDeclaration.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 4: no opportunity or conversion for this hoisted helper.
+export const program = helper(1)
+
+function helper(n: number) {
+  return Effect.gen(function* () {
+    return yield* Effect.succeed(n)
+  })
+}
+
+// Taking the function's value before its declaration also relies on hoisting.
+export const earlyObject = { shorthand }
+
+function shorthand(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// The same restriction applies inside a function body.
+export function enclosing(n: number) {
+  const result = local(n)
+  return result
+
+  function local(value: number) {
+    return Effect.gen(function* () {
+      const result = yield* Effect.succeed(value)
+      return result + 1
+    })
+  }
+}
+
+// Earlier closures can execute before the declaration is reached.
+const invokeCaptured = () => captured(1)
+export const earlyClosure = invokeCaptured()
+
+function captured(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// Non-generator conversions must also preserve hoisting.
+export const earlyRegular = regular(1)
+
+function regular(n: number) {
+  const a = n + 1
+  const b = a + 1
+  const c = b + 1
+  const d = c + 1
+  const e = d + 1
+  return Effect.succeed(e)
+}
+
+// These are different symbols and must not suppress the opportunity for safe.
+export const shadowed = (safe: number) => safe
+export const property = { safe: 1 }
+
+export function safe(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// Type-only references and re-exports do not evaluate the function's value.
+export type LaterSignature = typeof later
+export { later }
+
+const later = Effect.fn(function*(n: number) {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  });
+
+// A reference after the declaration must still allow conversion.
+export const laterProgram = later(1)
+
+
+=== [D3] Fix 4: "Convert to Effect.fn(\"later\")" ===
+
+--- file:///.src/effectFnOpportunity_hoistedDeclaration.ts ---
+import { Effect } from "effect"
+
+// Issue #758, point 4: no opportunity or conversion for this hoisted helper.
+export const program = helper(1)
+
+function helper(n: number) {
+  return Effect.gen(function* () {
+    return yield* Effect.succeed(n)
+  })
+}
+
+// Taking the function's value before its declaration also relies on hoisting.
+export const earlyObject = { shorthand }
+
+function shorthand(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// The same restriction applies inside a function body.
+export function enclosing(n: number) {
+  const result = local(n)
+  return result
+
+  function local(value: number) {
+    return Effect.gen(function* () {
+      const result = yield* Effect.succeed(value)
+      return result + 1
+    })
+  }
+}
+
+// Earlier closures can execute before the declaration is reached.
+const invokeCaptured = () => captured(1)
+export const earlyClosure = invokeCaptured()
+
+function captured(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// Non-generator conversions must also preserve hoisting.
+export const earlyRegular = regular(1)
+
+function regular(n: number) {
+  const a = n + 1
+  const b = a + 1
+  const c = b + 1
+  const d = c + 1
+  const e = d + 1
+  return Effect.succeed(e)
+}
+
+// These are different symbols and must not suppress the opportunity for safe.
+export const shadowed = (safe: number) => safe
+export const property = { safe: 1 }
+
+export function safe(n: number) {
+  return Effect.gen(function* () {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  })
+}
+
+// Type-only references and re-exports do not evaluate the function's value.
+export type LaterSignature = typeof later
+export { later }
+
+const later = Effect.fn("later")(function*(n: number) {
+    const value = yield* Effect.succeed(n)
+    return value + 1
+  });
+
+// A reference after the declaration must still allow conversion.
+export const laterProgram = later(1)
+

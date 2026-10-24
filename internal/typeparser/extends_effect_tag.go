@@ -6,10 +6,16 @@ import (
 
 // EffectTagResult holds the parsed result of a class extending Effect.Tag.
 type EffectTagResult struct {
-	ClassName        *ast.Node // The class name identifier
-	SelfTypeNode     *ast.Node // The Self type argument node (first type arg of the outer call)
-	KeyStringLiteral *ast.Node // The key string literal from the inner call's first argument, or nil
+	className        *ast.Node // The class name identifier
+	selfTypeNode     *ast.Node // The Self type argument node (first type arg of the outer call)
+	keyStringLiteral *ast.Node // The key string literal from the inner call's first argument, or nil
 }
+
+func (r EffectTagResult) ClassName() *ast.Node { return r.className }
+
+func (r EffectTagResult) SelfTypeNode() *ast.Node { return r.selfTypeNode }
+
+func (r EffectTagResult) KeyStringLiteral() *ast.Node { return r.keyStringLiteral }
 
 // ExtendsEffectTag checks if a class declaration extends Effect.Tag("key")<Self, Shape>().
 // It detects the pattern:
@@ -90,9 +96,9 @@ func (tp *TypeParser) ExtendsEffectTag(classNode *ast.Node) *EffectTagResult {
 			}
 
 			return &EffectTagResult{
-				ClassName:        classNode.Name(),
-				SelfTypeNode:     outerCall.TypeArguments.Nodes[0],
-				KeyStringLiteral: keyStringLiteral,
+				className:        classNode.Name(),
+				selfTypeNode:     outerCall.TypeArguments.Nodes[0],
+				keyStringLiteral: keyStringLiteral,
 			}
 		}
 

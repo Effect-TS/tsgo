@@ -1,126 +1,101 @@
 === Quick Fix Inventory ===
 
-[D1] (4:14-4:32) TS377030: This has unknown in the requirements channel which is not recommended.
-Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
-  Fix 0: "Disable anyUnknownInErrorContext for this line"
-  Fix 1: "Disable anyUnknownInErrorContext for entire file"
-
-[D2] (4:35-6:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+[D1] (4:35-6:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
   Fix 0: "Disable unnecessaryEffectGen for this line"
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
 
-[D3] (5:10-5:35) TS377030: This has unknown in the requirements channel which is not recommended.
+[D2] (5:10-5:35) TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D4] (8:14-8:28) TS377030: This has any in the requirements channel which is not recommended.
+[D3] (8:31-10:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+  Fix 0: "Disable unnecessaryEffectGen for this line"
+  Fix 1: "Disable unnecessaryEffectGen for entire file"
+  Fix 2: "Remove the Effect.gen, and keep the body"
+
+[D4] (9:10-9:31) TS377030: This has any in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D5] (8:31-10:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+[D5] (12:31-14:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
   Fix 0: "Disable unnecessaryEffectGen for this line"
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
 
-[D6] (9:10-9:31) TS377030: This has any in the requirements channel which is not recommended.
-Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
-  Fix 0: "Disable anyUnknownInErrorContext for this line"
-  Fix 1: "Disable anyUnknownInErrorContext for entire file"
-
-[D7] (12:14-12:28) TS377030: This has any in the error channel which is not recommended.
+[D6] (13:17-13:37) TS377030: This has any in the error channel which is not recommended.
 Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D8] (12:31-14:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
+[D7] (16:35-18:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
   Fix 0: "Disable unnecessaryEffectGen for this line"
   Fix 1: "Disable unnecessaryEffectGen for entire file"
   Fix 2: "Remove the Effect.gen, and keep the body"
 
-[D9] (13:17-13:37) TS377030: This has any in the error channel which is not recommended.
+[D8] (17:17-17:41) TS377030: This has unknown in the error channel which is not recommended.
 Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D10] (16:14-16:32) TS377030: This has unknown in the error channel which is not recommended.
-Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
-  Fix 0: "Disable anyUnknownInErrorContext for this line"
-  Fix 1: "Disable anyUnknownInErrorContext for entire file"
-
-[D11] (16:35-18:3) TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
-  Fix 0: "Disable unnecessaryEffectGen for this line"
-  Fix 1: "Disable unnecessaryEffectGen for entire file"
-  Fix 2: "Remove the Effect.gen, and keep the body"
-
-[D12] (17:17-17:41) TS377030: This has unknown in the error channel which is not recommended.
-Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
-  Fix 0: "Disable anyUnknownInErrorContext for this line"
-  Fix 1: "Disable anyUnknownInErrorContext for entire file"
-
-[D13] (20:14-20:31) TS377030: This has unknown in the requirements channel and any in the error channel which is not recommended.
+[D9] (20:34-23:3) TS377030: This has unknown in the requirements channel and any in the error channel which is not recommended.
 Only service identifiers should appear in the requirements channel.
 Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D14] (21:10-21:35) TS377030: This has unknown in the requirements channel which is not recommended.
+[D10] (21:10-21:35) TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D15] (22:17-22:37) TS377030: This has any in the error channel which is not recommended.
+[D11] (22:17-22:37) TS377030: This has any in the error channel which is not recommended.
 Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D16] (37:7-37:19) TS377030: This has unknown in the requirements channel which is not recommended.
+[D12] (37:22-37:47) TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D17] (37:22-37:47) TS377030: This has unknown in the requirements channel which is not recommended.
+[D13] (38:42-38:54) TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D18] (38:7-38:19) TS377030: This has unknown in the requirements channel which is not recommended.
+[D14] (39:68-39:80) TS377030: This has unknown in the requirements channel which is not recommended.
 Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D19] (38:42-38:54) TS377030: This has unknown in the requirements channel which is not recommended.
-Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+[D15] (42:35-42:86) TS377030: This has unknown in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D20] (39:14-39:34) TS377030: This has unknown in the requirements channel which is not recommended.
-Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+[D16] (42:75-42:85) TS377030: This has any in the error channel which is not recommended.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
-[D21] (39:68-39:80) TS377030: This has unknown in the requirements channel which is not recommended.
-Only service identifiers should appear in the requirements channel. effect(anyUnknownInErrorContext)
+[D17] (45:47-45:60) TS377030: This has any in the requirements channel and any in the error channel which is not recommended.
+Only service identifiers should appear in the requirements channel.
+Having an unknown or any error type is not useful. Consider instead using specific error types baked by Data.TaggedError for example. effect(anyUnknownInErrorContext)
   Fix 0: "Disable anyUnknownInErrorContext for this line"
   Fix 1: "Disable anyUnknownInErrorContext for entire file"
 
 === Quick Fix Application Results ===
 
-=== [D1] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+=== [D1] Fix 0: "Disable unnecessaryEffectGen for this line" ===
 skipped by default
 
-=== [D1] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+=== [D1] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
 skipped by default
 
-=== [D2] Fix 0: "Disable unnecessaryEffectGen for this line" ===
-skipped by default
-
-=== [D2] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
-skipped by default
-
-=== [D2] Fix 2: "Remove the Effect.gen, and keep the body" ===
+=== [D1] Fix 2: "Remove the Effect.gen, and keep the body" ===
 
 --- file:///.src/anyUnknownInErrorContext.ts ---
 // @effect-diagnostics anyUnknownInErrorContext:warning
@@ -161,26 +136,26 @@ const effectUnkown = Effect.context<unknown>()
 const layerUnknown = Layer.effectDiscard(effectUnkown)
 export const composedLayerUnknown = Layer.empty.pipe(Layer.provide(layerUnknown))
 
+declare const anyFailure: Effect.Effect<number, any>
+export const keepsDifferentKind = Effect.withFiber<number, unknown>(() => anyFailure)
 
-=== [D3] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+declare const anyEverywhere: Effect.Effect<number, any, any>
+export const dropsCoveredOuter = Effect.orDie(anyEverywhere)
+
+
+=== [D2] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
 skipped by default
 
-=== [D3] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+=== [D2] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
 skipped by default
 
-=== [D4] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+=== [D3] Fix 0: "Disable unnecessaryEffectGen for this line" ===
 skipped by default
 
-=== [D4] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+=== [D3] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
 skipped by default
 
-=== [D5] Fix 0: "Disable unnecessaryEffectGen for this line" ===
-skipped by default
-
-=== [D5] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
-skipped by default
-
-=== [D5] Fix 2: "Remove the Effect.gen, and keep the body" ===
+=== [D3] Fix 2: "Remove the Effect.gen, and keep the body" ===
 
 --- file:///.src/anyUnknownInErrorContext.ts ---
 // @effect-diagnostics anyUnknownInErrorContext:warning
@@ -221,26 +196,26 @@ const effectUnkown = Effect.context<unknown>()
 const layerUnknown = Layer.effectDiscard(effectUnkown)
 export const composedLayerUnknown = Layer.empty.pipe(Layer.provide(layerUnknown))
 
+declare const anyFailure: Effect.Effect<number, any>
+export const keepsDifferentKind = Effect.withFiber<number, unknown>(() => anyFailure)
 
-=== [D6] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+declare const anyEverywhere: Effect.Effect<number, any, any>
+export const dropsCoveredOuter = Effect.orDie(anyEverywhere)
+
+
+=== [D4] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
 skipped by default
 
-=== [D6] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+=== [D4] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
 skipped by default
 
-=== [D7] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+=== [D5] Fix 0: "Disable unnecessaryEffectGen for this line" ===
 skipped by default
 
-=== [D7] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+=== [D5] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
 skipped by default
 
-=== [D8] Fix 0: "Disable unnecessaryEffectGen for this line" ===
-skipped by default
-
-=== [D8] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
-skipped by default
-
-=== [D8] Fix 2: "Remove the Effect.gen, and keep the body" ===
+=== [D5] Fix 2: "Remove the Effect.gen, and keep the body" ===
 
 --- file:///.src/anyUnknownInErrorContext.ts ---
 // @effect-diagnostics anyUnknownInErrorContext:warning
@@ -281,26 +256,26 @@ const effectUnkown = Effect.context<unknown>()
 const layerUnknown = Layer.effectDiscard(effectUnkown)
 export const composedLayerUnknown = Layer.empty.pipe(Layer.provide(layerUnknown))
 
+declare const anyFailure: Effect.Effect<number, any>
+export const keepsDifferentKind = Effect.withFiber<number, unknown>(() => anyFailure)
 
-=== [D9] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+declare const anyEverywhere: Effect.Effect<number, any, any>
+export const dropsCoveredOuter = Effect.orDie(anyEverywhere)
+
+
+=== [D6] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
 skipped by default
 
-=== [D9] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+=== [D6] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
 skipped by default
 
-=== [D10] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+=== [D7] Fix 0: "Disable unnecessaryEffectGen for this line" ===
 skipped by default
 
-=== [D10] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+=== [D7] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
 skipped by default
 
-=== [D11] Fix 0: "Disable unnecessaryEffectGen for this line" ===
-skipped by default
-
-=== [D11] Fix 1: "Disable unnecessaryEffectGen for entire file" ===
-skipped by default
-
-=== [D11] Fix 2: "Remove the Effect.gen, and keep the body" ===
+=== [D7] Fix 2: "Remove the Effect.gen, and keep the body" ===
 
 --- file:///.src/anyUnknownInErrorContext.ts ---
 // @effect-diagnostics anyUnknownInErrorContext:warning
@@ -341,6 +316,36 @@ const effectUnkown = Effect.context<unknown>()
 const layerUnknown = Layer.effectDiscard(effectUnkown)
 export const composedLayerUnknown = Layer.empty.pipe(Layer.provide(layerUnknown))
 
+declare const anyFailure: Effect.Effect<number, any>
+export const keepsDifferentKind = Effect.withFiber<number, unknown>(() => anyFailure)
+
+declare const anyEverywhere: Effect.Effect<number, any, any>
+export const dropsCoveredOuter = Effect.orDie(anyEverywhere)
+
+
+=== [D8] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
+skipped by default
 
 === [D12] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
 skipped by default
@@ -376,28 +381,4 @@ skipped by default
 skipped by default
 
 === [D17] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
-skipped by default
-
-=== [D18] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
-skipped by default
-
-=== [D18] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
-skipped by default
-
-=== [D19] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
-skipped by default
-
-=== [D19] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
-skipped by default
-
-=== [D20] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
-skipped by default
-
-=== [D20] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
-skipped by default
-
-=== [D21] Fix 0: "Disable anyUnknownInErrorContext for this line" ===
-skipped by default
-
-=== [D21] Fix 1: "Disable anyUnknownInErrorContext for entire file" ===
 skipped by default

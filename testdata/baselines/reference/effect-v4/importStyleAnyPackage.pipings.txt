@@ -1,0 +1,57 @@
+==== /.src/package.json (0 flows) ====
+==== /.src/node_modules/@acme/ui/package.json (0 flows) ====
+==== /.src/node_modules/@acme/ui/dist/index.d.ts (0 flows) ====
+==== /.src/node_modules/@acme/ui/dist/Button.d.ts (0 flows) ====
+==== /.src/node_modules/@acme/ui/dist/HttpClient.d.ts (0 flows) ====
+==== /.src/node_modules/@acme/ui/dist/Hidden.d.ts (0 flows) ====
+==== /.src/node_modules/@acme/ui/dist/forms/index.d.ts (0 flows) ====
+==== /.src/node_modules/@acme/ui/dist/forms/TextInput.d.ts (0 flows) ====
+==== /.src/node_modules/@acme/icons/package.json (0 flows) ====
+==== /.src/node_modules/@acme/icons/dist/index.d.ts (0 flows) ====
+==== /.src/node_modules/@acme/icons/dist/Arrow.d.ts (0 flows) ====
+==== /.src/node_modules/@acme/kit/package.json (0 flows) ====
+==== /.src/node_modules/@acme/kit/dist/index.d.ts (0 flows) ====
+==== /.src/node_modules/@acme/kit/dist/Dialog.d.ts (0 flows) ====
+==== /.src/test.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 25:21 - 25:37
+Node: Button.make("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: Button.make
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 25:56 - 25:68
+Node: B.make("b")
+Node Kind: KindCallExpression
+
+Subject: "b"
+Subject Type: "b"
+
+Transformations (1):
+  [0] kind: call
+      callee: B.make
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 25:69 - 25:78
+Node: get("/")
+Node Kind: KindCallExpression
+
+Subject: "/"
+Subject Type: "/"
+
+Transformations (1):
+  [0] kind: call
+      callee: get
+      args: (constant)
+      outType: string

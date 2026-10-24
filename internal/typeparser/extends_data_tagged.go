@@ -6,9 +6,19 @@ import (
 
 // DataTaggedErrorResult holds the parsed result of a class extending Data.TaggedError.
 type DataTaggedErrorResult struct {
-	ClassName        *ast.Node // The class name identifier
-	KeyStringLiteral *ast.Node // The key string literal from the call's first argument, or nil
+	className        *ast.Node // The class name identifier, or nil for an anonymous declaration
+	callExpression   *ast.Node // The matched Data.TaggedError call, always non-nil
+	keyStringLiteral *ast.Node // The key string literal from the call's first argument, or nil
+	fieldsTypeNode   *ast.Node
 }
+
+func (r DataTaggedErrorResult) ClassName() *ast.Node { return r.className }
+
+func (r DataTaggedErrorResult) CallExpression() *ast.Node { return r.callExpression }
+
+func (r DataTaggedErrorResult) KeyStringLiteral() *ast.Node { return r.keyStringLiteral }
+
+func (r DataTaggedErrorResult) FieldsTypeNode() *ast.Node { return r.fieldsTypeNode }
 
 // ExtendsDataTaggedError checks if a class declaration extends Data.TaggedError("key")<Fields>.
 // It detects the pattern:
@@ -27,11 +37,6 @@ func (tp *TypeParser) ExtendsDataTaggedError(classNode *ast.Node) *DataTaggedErr
 
 	links := tp.links
 	return Cached(&links.ExtendsDataTaggedError, classNode, func() *DataTaggedErrorResult {
-		// Must have a name
-		if classNode.Name() == nil {
-			return nil
-		}
-
 		heritageElements := ast.GetExtendsHeritageClauseElements(classNode)
 		if len(heritageElements) == 0 {
 			return nil
@@ -74,9 +79,16 @@ func (tp *TypeParser) ExtendsDataTaggedError(classNode *ast.Node) *DataTaggedErr
 				}
 			}
 
+			var fieldsTypeNode *ast.Node
+			if ewta.TypeArguments != nil && len(ewta.TypeArguments.Nodes) > 0 {
+				fieldsTypeNode = ewta.TypeArguments.Nodes[0]
+			}
+
 			return &DataTaggedErrorResult{
-				ClassName:        classNode.Name(),
-				KeyStringLiteral: keyStringLiteral,
+				className:        classNode.Name(),
+				callExpression:   callNode,
+				keyStringLiteral: keyStringLiteral,
+				fieldsTypeNode:   fieldsTypeNode,
 			}
 		}
 

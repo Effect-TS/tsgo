@@ -1,36 +1,52 @@
 package tsoptions
 
 import (
+	shimpath "github.com/microsoft/TypeScript/tsc/shim/tspath"
 	"github.com/microsoft/typescript-go/shim/collections"
 	"github.com/microsoft/typescript-go/shim/core"
 	"github.com/microsoft/typescript-go/shim/tsoptions"
 	"github.com/microsoft/typescript-go/shim/tspath"
+	"github.com/microsoft/typescript-go/shim/vfs"
 )
 
-func ParseJsonSourceFileConfigFileContent(
-	sourceFile *tsoptions.TsConfigSourceFile,
-	host tsoptions.ParseConfigHost,
-	basePath string,
-	existingOptions *core.CompilerOptions,
-	existingOptionsRaw *collections.OrderedMap[string, any],
-	configFileName string,
-	resolutionStack []tspath.Path,
-	extraFileExtensions any,
-	extendedConfigCache tsoptions.ExtendedConfigCache,
-) *tsoptions.ParsedCommandLine {
-	var extensions []tsoptions.FileExtensionInfo
-	if extraFileExtensions != nil {
-		extensions = extraFileExtensions.([]tsoptions.FileExtensionInfo)
-	}
-	return tsoptions.ParseJsonSourceFileConfigFileContent(
-		sourceFile,
-		host,
-		basePath,
-		existingOptions,
-		existingOptionsRaw,
-		configFileName,
-		resolutionStack,
-		extensions,
-		extendedConfigCache,
-	)
+type ParsedOptions = core.ParsedOptions
+
+type parseConfigHost struct {
+	fs        vfs.FS
+	directory string
+}
+
+func (h *parseConfigHost) FS() vfs.FS                  { return h.fs }
+func (h *parseConfigHost) GetCurrentDirectory() string { return h.directory }
+
+type ParseConfigHost interface {
+	FS() vfs.FS
+	IsContentMapperPackageAllowed(packageDirectory string) bool
+}
+
+type defaultParseConfigHost struct {
+	fs vfs.FS
+}
+
+func NewDefaultParseConfigHost(fs vfs.FS) ParseConfigHost { return &defaultParseConfigHost{fs} }
+
+func (h *defaultParseConfigHost) FS() vfs.FS                                { return h.fs }
+func (h *defaultParseConfigHost) IsContentMapperPackageAllowed(string) bool { return true }
+
+func ParseJsonConfigFileContent(json any, host ParseConfigHost, basePath string, existingOptions *core.CompilerOptions, configFileName string, resolutionStack []tspath.Path, cache tsoptions.ExtendedConfigCache) *tsoptions.ParsedCommandLine {
+	return tsoptions.ParseJsonConfigFileContent(json, &parseConfigHost{host.FS(), basePath}, basePath, existingOptions, configFileName, resolutionStack, nil, cache)
+}
+
+func ParseJsonSourceFileConfigFileContent(source *tsoptions.TsConfigSourceFile, host ParseConfigHost, basePath string, existingOptions *core.CompilerOptions, raw *collections.OrderedMap[string, any], resolutionStack []tspath.Path, cache tsoptions.ExtendedConfigCache) *tsoptions.ParsedCommandLine {
+	return tsoptions.ParseJsonSourceFileConfigFileContent(source, &parseConfigHost{host.FS(), basePath}, basePath, existingOptions, raw, source.SourceFile.FileName(), resolutionStack, nil, cache)
+}
+
+// NewParsedCommandLine adapts the explicit base directory and case sensitivity API.
+func NewParsedCommandLine(options *core.CompilerOptions, files []string, references []*core.ProjectReference, directory string, sensitivity shimpath.CaseSensitivity) *tsoptions.ParsedCommandLine {
+	config := tsoptions.NewParsedCommandLine(options, files, tspath.ComparePathsOptions{
+		CurrentDirectory:          directory,
+		UseCaseSensitiveFileNames: sensitivity == shimpath.CaseSensitive,
+	})
+	config.ParsedConfig.ProjectReferences = references
+	return config
 }

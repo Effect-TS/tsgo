@@ -1,0 +1,26 @@
+=== Refactor Inventory ===
+
+[R1] selection: "3:27-3:27"
+  Refactor 0: "Convert to Effect.fn(\"foo\")" (refactor.rewrite.effect.effectGenToFn)
+  Refactor 1: "Toggle return type annotation" (refactor.rewrite.effect.toggleReturnTypeAnnotation)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Convert to Effect.fn(\"foo\")" ===
+
+--- file:///.src/effectGenToFn_namedImportOnly.ts ---
+// refactor: 3:27
+import { gen } from "effect/Effect"
+export const foo = Effect.fn("foo")(function* () { return 1; });
+
+
+=== [R1] Refactor 1: "Toggle return type annotation" ===
+
+--- file:///.src/effectGenToFn_namedImportOnly.ts ---
+// refactor: 3:27
+import { gen } from "effect/Effect"
+export const foo = (): import("effect/Effect").Effect<number, never, never> => gen(function*() { return 1 })
+

@@ -1,0 +1,29 @@
+==== /.src/flatMapToTap_noTarget.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 7:30 - 7:74
+Node: source.pipe(bind((n) => restore(audit, n)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: bind
+      args: [(n) => restore(audit, n)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 7:54 - 7:72
+Node: restore(audit, n)
+Node Kind: KindCallExpression
+
+Subject: audit
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: restore
+      args: [n]
+      outType: Effect<number, never, never>

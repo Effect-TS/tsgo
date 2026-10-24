@@ -1,6 +1,7 @@
 package rewriter
 
 import (
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
@@ -39,9 +40,9 @@ func NewTracker(raw *change.Tracker) *Tracker {
 	return &Tracker{Tracker: raw}
 }
 
-func (t *Tracker) GetChanges() map[string][]*lsproto.TextEdit {
+func (t *Tracker) GetChanges() map[tspath.RootedFilePath][]*lsproto.TextEdit {
 	t.flushPendingBefore()
-	return change.GetChanges(t.Tracker)
+	return change.CollectChanges(t.Tracker)
 }
 
 func (t *Tracker) NewModuleDeclaration(

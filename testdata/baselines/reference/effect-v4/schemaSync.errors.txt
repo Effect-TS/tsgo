@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/schemaSync.ts(13,32): warning TS377130: `Schema.decodeSync` executes synchronously. Use `Schema.decodeEffect` to compose this operation through Effect without throwing. effect(schemaSync)
 /.src/schemaSync.ts(14,39): warning TS377130: `Schema.decodeUnknownSync` executes synchronously. Use `Schema.decodeUnknownEffect` to compose this operation through Effect without throwing. effect(schemaSync)

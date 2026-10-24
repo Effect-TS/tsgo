@@ -60,9 +60,9 @@ func AnalyzeSyncToSucceed(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 		if node.Kind == ast.KindCallExpression {
 			call := node.AsCallExpression()
 			if call != nil && call.Expression != nil &&
-				tp.IsNodeReferenceToEffectModuleApi(call.Expression, "sync") && call.Arguments != nil && len(call.Arguments.Nodes) == 1 {
+				call.Arguments != nil && len(call.Arguments.Nodes) == 1 && tp.IsNodeReferenceToEffectModuleApi(call.Expression, "sync") {
 				lazy := typeparser.ParseLazyExpression(call.Arguments.Nodes[0], typeparser.LazyExpressionThunk)
-				if lazy != nil && tp.IsExpressionValueStableAtLocation(lazy.Expression, node) {
+				if lazy != nil && tp.IsExpressionValueStableAtLocation(lazy.Expression(), node) {
 					var calleeName *ast.Node
 					if call.Expression.Kind == ast.KindPropertyAccessExpression {
 						calleeName = call.Expression.AsPropertyAccessExpression().Name()
@@ -72,8 +72,8 @@ func AnalyzeSyncToSucceed(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 						Location:      scanner.GetErrorRangeForNode(sf, call.Expression),
 						Callee:        call.Expression,
 						CalleeName:    calleeName,
-						Thunk:         lazy.Node,
-						ConstantValue: lazy.Expression,
+						Thunk:         lazy.Node(),
+						ConstantValue: lazy.Expression(),
 					})
 				}
 			}

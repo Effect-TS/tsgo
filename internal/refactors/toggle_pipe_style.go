@@ -6,6 +6,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/refactor"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/typeparser"
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/astnav"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -37,11 +38,11 @@ func runTogglePipeStyle(ctx *refactor.Context) []ls.CodeAction {
 			continue
 		}
 
-		switch pipeCall.Kind {
+		switch pipeCall.Kind() {
 		case typeparser.TransformationKindPipe:
 			// pipe(subject, f1, f2) -> subject.pipe(f1, f2)
 			// Check that the subject's type is pipeable
-			subjectType := ctx.TypeParser.GetTypeAtLocation(pipeCall.Subject)
+			subjectType := ctx.TypeParser.GetTypeAtLocation(pipeCall.Subject())
 			if !ctx.TypeParser.IsPipeableType(subjectType) {
 				continue
 			}
@@ -50,7 +51,7 @@ func runTogglePipeStyle(ctx *refactor.Context) []ls.CodeAction {
 				Description: "Rewrite as X.pipe(Y, Z, ...)",
 				Run: func(tracker *rewriter.Tracker) {
 					start := astnav.GetStartOfNode(node, ctx.SourceFile, false)
-					rewritten := togglePipeToMethodText(ctx.SourceFile, pipeCall.Subject, pipeCall.Args)
+					rewritten := togglePipeToMethodText(ctx.SourceFile, pipeCall.Subject(), pipeCall.Args())
 					tracker.ReplaceRangeWithText(ctx.SourceFile, lsproto.Range{
 						Start: ctx.BytePosToLSPPosition(start),
 						End:   ctx.BytePosToLSPPosition(node.End()),
@@ -69,7 +70,7 @@ func runTogglePipeStyle(ctx *refactor.Context) []ls.CodeAction {
 				Description: "Rewrite as pipe(X, Y, Z, ...)",
 				Run: func(tracker *rewriter.Tracker) {
 					start := astnav.GetStartOfNode(node, ctx.SourceFile, false)
-					rewritten := togglePipeToFunctionText(ctx.SourceFile, pipeCall.Subject, pipeCall.Args)
+					rewritten := togglePipeToFunctionText(ctx.SourceFile, pipeCall.Subject(), pipeCall.Args())
 					tracker.ReplaceRangeWithText(ctx.SourceFile, lsproto.Range{
 						Start: ctx.BytePosToLSPPosition(start),
 						End:   ctx.BytePosToLSPPosition(node.End()),
@@ -87,18 +88,18 @@ func runTogglePipeStyle(ctx *refactor.Context) []ls.CodeAction {
 	return nil
 }
 
-func togglePipeToMethodText(sf *ast.SourceFile, subject *ast.Node, args []*ast.Node) string {
-	parts := make([]string, 0, len(args))
-	for _, arg := range args {
+func togglePipeToMethodText(sf *ast.SourceFile, subject *ast.Node, args readonly.Slice[*ast.Node]) string {
+	parts := make([]string, 0, args.Len())
+	for _, arg := range args.All() {
 		parts = append(parts, scanner.GetSourceTextOfNodeFromSourceFile(sf, arg, false))
 	}
 	return scanner.GetSourceTextOfNodeFromSourceFile(sf, subject, false) + ".pipe(" + strings.Join(parts, ", ") + ")"
 }
 
-func togglePipeToFunctionText(sf *ast.SourceFile, subject *ast.Node, args []*ast.Node) string {
-	parts := make([]string, 0, len(args)+1)
+func togglePipeToFunctionText(sf *ast.SourceFile, subject *ast.Node, args readonly.Slice[*ast.Node]) string {
+	parts := make([]string, 0, args.Len()+1)
 	parts = append(parts, scanner.GetSourceTextOfNodeFromSourceFile(sf, subject, false))
-	for _, arg := range args {
+	for _, arg := range args.All() {
 		parts = append(parts, scanner.GetSourceTextOfNodeFromSourceFile(sf, arg, false))
 	}
 	return "pipe(" + strings.Join(parts, ", ") + ")"

@@ -63,6 +63,9 @@ func checkEffectProvideWithLayer(ctx *rule.Context, node *ast.Node) *ast.Diagnos
 
 	// Check if any argument is a Layer type
 	for _, arg := range args.Nodes {
+		if ctx.TypeParser.NodeCannotBeEffectLibraryType(arg) {
+			continue
+		}
 		argType := ctx.TypeParser.GetTypeAtLocation(arg)
 		if argType == nil {
 			continue

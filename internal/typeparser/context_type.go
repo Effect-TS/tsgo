@@ -5,7 +5,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
-var effectContextPackageSourceFileDescriptor = newPackageSourceFileDescriptor(
+var effectContextPackageSourceFileDescriptor = newPackageSourceFileDescriptor(moduleDescriptorContext,
 	"effect",
 	func(tp *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
 		if c == nil || sf == nil {

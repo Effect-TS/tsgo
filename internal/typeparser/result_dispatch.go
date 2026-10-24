@@ -6,18 +6,18 @@ import "github.com/microsoft/TypeScript/tsc/shim/ast"
 // returns nil when any branch is not tag-based or when the tag subjects do not
 // refer to the same expression by symbol.
 func (dispatch *ResultDispatch) CommonTagSubject(tp *TypeParser) *ast.Node {
-	if dispatch == nil || tp == nil || tp.checker == nil || len(dispatch.Branches) == 0 {
+	if dispatch == nil || tp == nil || tp.checker == nil || len(dispatch.branches) == 0 {
 		return nil
 	}
 
-	common := dispatch.Branches[0].Condition.TagSubject
-	if common == nil || dispatch.Branches[0].Condition.TagValue == nil {
+	common := dispatch.branches[0].condition.tagSubject
+	if common == nil || dispatch.branches[0].condition.tagValue == nil {
 		return nil
 	}
-	for _, branch := range dispatch.Branches[1:] {
-		condition := branch.Condition
-		if condition.TagSubject == nil || condition.TagValue == nil ||
-			!tp.sameResultDispatchReference(common, condition.TagSubject) {
+	for _, branch := range dispatch.branches[1:] {
+		condition := branch.condition
+		if condition.tagSubject == nil || condition.tagValue == nil ||
+			!tp.sameResultDispatchReference(common, condition.tagSubject) {
 			return nil
 		}
 	}

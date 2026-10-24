@@ -58,6 +58,12 @@ func TestCreateString(t *testing.T) {
 	packageIdentifierServicePattern := []etscore.KeyPattern{
 		{Target: "service", Pattern: "package-identifier", SkipLeadingPath: []string{"src/"}},
 	}
+	identifierErrorPattern := []etscore.KeyPattern{
+		{Target: "error", Pattern: "identifier", SkipLeadingPath: []string{"src/"}},
+	}
+	identifierServicePattern := []etscore.KeyPattern{
+		{Target: "service", Pattern: "identifier", SkipLeadingPath: []string{"src/"}},
+	}
 
 	tests := []struct {
 		name             string
@@ -182,6 +188,26 @@ func TestCreateString(t *testing.T) {
 			expected:         "@effect/myapp/AuthService/MyService",
 		},
 		{
+			name:             "identifier pattern - nested subdirectory, class different from file",
+			sourceFileName:   "/project/src/errors/keybindings.ts",
+			packageName:      "@effect/myapp",
+			packageDirectory: "/project",
+			className:        "KeybindingsConfigError",
+			target:           "error",
+			keyPatterns:      identifierErrorPattern,
+			expected:         "KeybindingsConfigError",
+		},
+		{
+			name:             "identifier pattern - class name matches file name",
+			sourceFileName:   "/project/src/errors/KeybindingsConfigError.ts",
+			packageName:      "@effect/myapp",
+			packageDirectory: "/project",
+			className:        "KeybindingsConfigError",
+			target:           "error",
+			keyPatterns:      identifierErrorPattern,
+			expected:         "KeybindingsConfigError",
+		},
+		{
 			name:             "no matching target - returns empty",
 			sourceFileName:   "/project/src/file.ts",
 			packageName:      "@effect/myapp",
@@ -192,14 +218,44 @@ func TestCreateString(t *testing.T) {
 			expected:         "",
 		},
 		{
-			name:             "empty package name - returns empty",
-			sourceFileName:   "/project/src/file.ts",
+			name:             "empty package name - default pattern omits package",
+			sourceFileName:   "/project/src/services/AuthService.ts",
 			packageName:      "",
 			packageDirectory: "/project",
-			className:        "Foo",
+			className:        "MyService",
 			target:           "service",
 			keyPatterns:      defaultServicePattern,
-			expected:         "",
+			expected:         "services/AuthService/MyService",
+		},
+		{
+			name:             "empty package name - package-identifier pattern omits package",
+			sourceFileName:   "/project/src/services/AuthService.ts",
+			packageName:      "",
+			packageDirectory: "/project",
+			className:        "MyService",
+			target:           "service",
+			keyPatterns:      packageIdentifierServicePattern,
+			expected:         "AuthService/MyService",
+		},
+		{
+			name:             "empty package name - identifier pattern omits package",
+			sourceFileName:   "/project/src/services/AuthService.ts",
+			packageName:      "",
+			packageDirectory: "/project",
+			className:        "MyService",
+			target:           "service",
+			keyPatterns:      identifierServicePattern,
+			expected:         "MyService",
+		},
+		{
+			name:             "empty package name - default-hashed pattern omits package",
+			sourceFileName:   "/project/src/services/AuthService.ts",
+			packageName:      "",
+			packageDirectory: "/project",
+			className:        "MyService",
+			target:           "service",
+			keyPatterns:      defaultHashedServicePattern,
+			expected:         Cyrb53("services/AuthService/MyService"),
 		},
 		{
 			name:             "source file not under package directory - returns empty (skips)",

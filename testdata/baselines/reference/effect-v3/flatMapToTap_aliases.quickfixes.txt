@@ -1,0 +1,225 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:7-8:13) TS6133: 'Module' is declared but its value is never read.
+  (no quick fixes)
+
+[D2] (10:37-10:41) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+  Fix 0: "Disable flatMapToTap for this line"
+  Fix 1: "Disable flatMapToTap for entire file"
+  Fix 2: "Replace with Effect.tap"
+
+[D3] (12:37-12:41) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+  Fix 0: "Disable flatMapToTap for this line"
+  Fix 1: "Disable flatMapToTap for entire file"
+  Fix 2: "Replace with Effect.tap"
+
+[D4] (13:45-13:67) TS377144: `Effect.tap` expresses this observation more directly than `Effect.andThen` with a manual re-yield. effect(flatMapToTap)
+  Fix 0: "Disable flatMapToTap for this line"
+  Fix 1: "Disable flatMapToTap for entire file"
+  Fix 2: "Replace with Effect.tap"
+
+[D5] (14:33-14:40) TS6133: 'Library' is declared but its value is never read.
+  (no quick fixes)
+
+[D6] (14:65-14:69) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+  Fix 0: "Disable flatMapToTap for this line"
+  Fix 1: "Disable flatMapToTap for entire file"
+  Fix 2: "Replace with Effect.tap"
+
+[D7] (15:30-15:37) TS6133: 'observe' is declared but its value is never read.
+  (no quick fixes)
+
+[D8] (15:62-15:66) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+  Fix 0: "Disable flatMapToTap for this line"
+  Fix 1: "Disable flatMapToTap for entire file"
+  Fix 2: "Replace with Effect.tap"
+
+[D9] (16:32-16:39) TS6133: 'Library' is declared but its value is never read.
+  (no quick fixes)
+
+[D10] (16:49-16:56) TS6133: 'observe' is declared but its value is never read.
+  (no quick fixes)
+
+[D11] (16:66-16:73) TS6133: 'inspect' is declared but its value is never read.
+  (no quick fixes)
+
+[D12] (16:98-16:102) TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+  Fix 0: "Disable flatMapToTap for this line"
+  Fix 1: "Disable flatMapToTap for entire file"
+  Fix 2: "Replace with Effect.tap"
+
+=== Quick Fix Application Results ===
+
+=== [D2] Fix 0: "Disable flatMapToTap for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable flatMapToTap for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.tap" ===
+
+--- file:///.src/flatMapToTap_aliases.ts ---
+import type { Effect } from "effect"
+import { as as restore, flatMap as bind, map, tap as observe } from "effect/Effect"
+import * as Library from "effect"
+
+declare const source: Effect.Effect<number>
+declare const audit: Effect.Effect<void>
+const aTap: unknown = observe
+const Module = Library.Effect
+
+export const namedTap = source.pipe(Module.tap((n) => audit))
+const inspect = observe
+export const constTap = source.pipe(bind((n) => map(audit, () => n)))
+export const packageNamespace = source.pipe(Library.Effect.andThen((n) => Library.Effect.as(audit, n)))
+export const shadowedModule = ((Library: number) => source.pipe(bind((n) => restore(audit, n))))(0)
+export const shadowedTap = ((observe: number) => source.pipe(bind((n) => restore(audit, n))))(0)
+export const moduleInScope = ((Library: number, observe: number, inspect: number) => source.pipe(bind((n) => restore(audit, n))))(0, 0, 0)
+void inspect
+void aTap
+
+
+=== [D3] Fix 0: "Disable flatMapToTap for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable flatMapToTap for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.tap" ===
+
+--- file:///.src/flatMapToTap_aliases.ts ---
+import type { Effect } from "effect"
+import { as as restore, flatMap as bind, map, tap as observe } from "effect/Effect"
+import * as Library from "effect"
+
+declare const source: Effect.Effect<number>
+declare const audit: Effect.Effect<void>
+const aTap: unknown = observe
+const Module = Library.Effect
+
+export const namedTap = source.pipe(bind((n) => restore(audit, n)))
+const inspect = observe
+export const constTap = source.pipe(Module.tap((n) => audit))
+export const packageNamespace = source.pipe(Library.Effect.andThen((n) => Library.Effect.as(audit, n)))
+export const shadowedModule = ((Library: number) => source.pipe(bind((n) => restore(audit, n))))(0)
+export const shadowedTap = ((observe: number) => source.pipe(bind((n) => restore(audit, n))))(0)
+export const moduleInScope = ((Library: number, observe: number, inspect: number) => source.pipe(bind((n) => restore(audit, n))))(0, 0, 0)
+void inspect
+void aTap
+
+
+=== [D4] Fix 0: "Disable flatMapToTap for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable flatMapToTap for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.tap" ===
+
+--- file:///.src/flatMapToTap_aliases.ts ---
+import type { Effect } from "effect"
+import { as as restore, flatMap as bind, map, tap as observe } from "effect/Effect"
+import * as Library from "effect"
+
+declare const source: Effect.Effect<number>
+declare const audit: Effect.Effect<void>
+const aTap: unknown = observe
+const Module = Library.Effect
+
+export const namedTap = source.pipe(bind((n) => restore(audit, n)))
+const inspect = observe
+export const constTap = source.pipe(bind((n) => map(audit, () => n)))
+export const packageNamespace = source.pipe(Library.Effect.tap((n) => audit))
+export const shadowedModule = ((Library: number) => source.pipe(bind((n) => restore(audit, n))))(0)
+export const shadowedTap = ((observe: number) => source.pipe(bind((n) => restore(audit, n))))(0)
+export const moduleInScope = ((Library: number, observe: number, inspect: number) => source.pipe(bind((n) => restore(audit, n))))(0, 0, 0)
+void inspect
+void aTap
+
+
+=== [D6] Fix 0: "Disable flatMapToTap for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable flatMapToTap for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.tap" ===
+
+--- file:///.src/flatMapToTap_aliases.ts ---
+import type { Effect } from "effect"
+import { as as restore, flatMap as bind, map, tap as observe } from "effect/Effect"
+import * as Library from "effect"
+
+declare const source: Effect.Effect<number>
+declare const audit: Effect.Effect<void>
+const aTap: unknown = observe
+const Module = Library.Effect
+
+export const namedTap = source.pipe(bind((n) => restore(audit, n)))
+const inspect = observe
+export const constTap = source.pipe(bind((n) => map(audit, () => n)))
+export const packageNamespace = source.pipe(Library.Effect.andThen((n) => Library.Effect.as(audit, n)))
+export const shadowedModule = ((Library: number) => source.pipe(Module.tap((n) => audit)))(0)
+export const shadowedTap = ((observe: number) => source.pipe(bind((n) => restore(audit, n))))(0)
+export const moduleInScope = ((Library: number, observe: number, inspect: number) => source.pipe(bind((n) => restore(audit, n))))(0, 0, 0)
+void inspect
+void aTap
+
+
+=== [D8] Fix 0: "Disable flatMapToTap for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable flatMapToTap for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Effect.tap" ===
+
+--- file:///.src/flatMapToTap_aliases.ts ---
+import type { Effect } from "effect"
+import { as as restore, flatMap as bind, map, tap as observe } from "effect/Effect"
+import * as Library from "effect"
+
+declare const source: Effect.Effect<number>
+declare const audit: Effect.Effect<void>
+const aTap: unknown = observe
+const Module = Library.Effect
+
+export const namedTap = source.pipe(bind((n) => restore(audit, n)))
+const inspect = observe
+export const constTap = source.pipe(bind((n) => map(audit, () => n)))
+export const packageNamespace = source.pipe(Library.Effect.andThen((n) => Library.Effect.as(audit, n)))
+export const shadowedModule = ((Library: number) => source.pipe(bind((n) => restore(audit, n))))(0)
+export const shadowedTap = ((observe: number) => source.pipe(Module.tap((n) => audit)))(0)
+export const moduleInScope = ((Library: number, observe: number, inspect: number) => source.pipe(bind((n) => restore(audit, n))))(0, 0, 0)
+void inspect
+void aTap
+
+
+=== [D12] Fix 0: "Disable flatMapToTap for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable flatMapToTap for entire file" ===
+skipped by default
+
+=== [D12] Fix 2: "Replace with Effect.tap" ===
+
+--- file:///.src/flatMapToTap_aliases.ts ---
+import type { Effect } from "effect"
+import { as as restore, flatMap as bind, map, tap as observe } from "effect/Effect"
+import * as Library from "effect"
+
+declare const source: Effect.Effect<number>
+declare const audit: Effect.Effect<void>
+const aTap: unknown = observe
+const Module = Library.Effect
+
+export const namedTap = source.pipe(bind((n) => restore(audit, n)))
+const inspect = observe
+export const constTap = source.pipe(bind((n) => map(audit, () => n)))
+export const packageNamespace = source.pipe(Library.Effect.andThen((n) => Library.Effect.as(audit, n)))
+export const shadowedModule = ((Library: number) => source.pipe(bind((n) => restore(audit, n))))(0)
+export const shadowedTap = ((observe: number) => source.pipe(bind((n) => restore(audit, n))))(0)
+export const moduleInScope = ((Library: number, observe: number, inspect: number) => source.pipe(Module.tap((n) => audit)))(0, 0, 0)
+void inspect
+void aTap
+

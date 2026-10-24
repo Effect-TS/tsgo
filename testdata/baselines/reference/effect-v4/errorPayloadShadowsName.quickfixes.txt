@@ -1,0 +1,183 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:79-5:83) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+  Fix 0: "Disable errorPayloadShadowsName for this line"
+  Fix 1: "Disable errorPayloadShadowsName for entire file"
+
+[D2] (6:46-6:50) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+  Fix 0: "Disable errorPayloadShadowsName for this line"
+  Fix 1: "Disable errorPayloadShadowsName for entire file"
+
+[D3] (7:60-7:64) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+  Fix 0: "Disable errorPayloadShadowsName for this line"
+  Fix 1: "Disable errorPayloadShadowsName for entire file"
+
+[D4] (8:53-8:57) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+  Fix 0: "Disable errorPayloadShadowsName for this line"
+  Fix 1: "Disable errorPayloadShadowsName for entire file"
+
+[D5] (9:103-9:107) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+  Fix 0: "Disable errorPayloadShadowsName for this line"
+  Fix 1: "Disable errorPayloadShadowsName for entire file"
+
+[D6] (10:92-10:96) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+  Fix 0: "Disable errorPayloadShadowsName for this line"
+  Fix 1: "Disable errorPayloadShadowsName for entire file"
+
+[D7] (11:103-11:109) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+  Fix 0: "Disable errorPayloadShadowsName for this line"
+  Fix 1: "Disable errorPayloadShadowsName for entire file"
+
+[D8] (13:112-13:116) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+  Fix 0: "Disable errorPayloadShadowsName for this line"
+  Fix 1: "Disable errorPayloadShadowsName for entire file"
+
+[D9] (14:64-14:68) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+  Fix 0: "Disable errorPayloadShadowsName for this line"
+  Fix 1: "Disable errorPayloadShadowsName for entire file"
+
+[D10] (15:109-15:113) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+  Fix 0: "Disable errorPayloadShadowsName for this line"
+  Fix 1: "Disable errorPayloadShadowsName for entire file"
+
+[D11] (16:58-16:62) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+  Fix 0: "Disable errorPayloadShadowsName for this line"
+  Fix 1: "Disable errorPayloadShadowsName for entire file"
+
+[D12] (17:51-17:57) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+  Fix 0: "Disable errorPayloadShadowsName for this line"
+  Fix 1: "Disable errorPayloadShadowsName for entire file"
+
+[D13] (18:58-18:62) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+  Fix 0: "Disable errorPayloadShadowsName for this line"
+  Fix 1: "Disable errorPayloadShadowsName for entire file"
+
+[D14] (19:80-19:88) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+  Fix 0: "Disable errorPayloadShadowsName for this line"
+  Fix 1: "Disable errorPayloadShadowsName for entire file"
+
+[D15] (20:109-20:117) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+  Fix 0: "Disable errorPayloadShadowsName for this line"
+  Fix 1: "Disable errorPayloadShadowsName for entire file"
+
+[D16] (21:109-21:117) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+  Fix 0: "Disable errorPayloadShadowsName for this line"
+  Fix 1: "Disable errorPayloadShadowsName for entire file"
+
+[D17] (22:62-22:66) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+  Fix 0: "Disable errorPayloadShadowsName for this line"
+  Fix 1: "Disable errorPayloadShadowsName for entire file"
+
+[D18] (24:55-24:59) TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+  Fix 0: "Disable errorPayloadShadowsName for this line"
+  Fix 1: "Disable errorPayloadShadowsName for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable errorPayloadShadowsName for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable errorPayloadShadowsName for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable errorPayloadShadowsName for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable errorPayloadShadowsName for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable errorPayloadShadowsName for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable errorPayloadShadowsName for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable errorPayloadShadowsName for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable errorPayloadShadowsName for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable errorPayloadShadowsName for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable errorPayloadShadowsName for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable errorPayloadShadowsName for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable errorPayloadShadowsName for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable errorPayloadShadowsName for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable errorPayloadShadowsName for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable errorPayloadShadowsName for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable errorPayloadShadowsName for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable errorPayloadShadowsName for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable errorPayloadShadowsName for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable errorPayloadShadowsName for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable errorPayloadShadowsName for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable errorPayloadShadowsName for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable errorPayloadShadowsName for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable errorPayloadShadowsName for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable errorPayloadShadowsName for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable errorPayloadShadowsName for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable errorPayloadShadowsName for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable errorPayloadShadowsName for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable errorPayloadShadowsName for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable errorPayloadShadowsName for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable errorPayloadShadowsName for entire file" ===
+skipped by default
+
+=== [D16] Fix 0: "Disable errorPayloadShadowsName for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable errorPayloadShadowsName for entire file" ===
+skipped by default
+
+=== [D17] Fix 0: "Disable errorPayloadShadowsName for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable errorPayloadShadowsName for entire file" ===
+skipped by default
+
+=== [D18] Fix 0: "Disable errorPayloadShadowsName for this line" ===
+skipped by default
+
+=== [D18] Fix 1: "Disable errorPayloadShadowsName for entire file" ===
+skipped by default

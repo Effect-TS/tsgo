@@ -88,13 +88,13 @@ func analyzeLayerMergeAllCall(tp *typeparser.TypeParser, c *checker.Checker, sf 
 	}
 	call := node.AsCallExpression()
 
-	// Check if this is Layer.mergeAll
-	if !tp.IsNodeReferenceToEffectLayerModuleApi(call.Expression, "mergeAll") {
+	args := call.Arguments
+	if args == nil || len(args.Nodes) < 2 {
 		return nil
 	}
 
-	args := call.Arguments
-	if args == nil || len(args.Nodes) < 2 {
+	// Check if this is Layer.mergeAll
+	if !tp.IsNodeReferenceToEffectLayerModuleApi(call.Expression, "mergeAll") {
 		return nil
 	}
 
@@ -104,6 +104,9 @@ func analyzeLayerMergeAllCall(tp *typeparser.TypeParser, c *checker.Checker, sf 
 	actuallyProvidedMap := make(map[*checker.Type]*ast.Node)
 
 	for _, arg := range args.Nodes {
+		if tp.NodeCannotBeEffectLibraryType(arg) {
+			continue
+		}
 		argType := tp.GetTypeAtLocation(arg)
 		if argType == nil {
 			continue
@@ -115,7 +118,7 @@ func analyzeLayerMergeAllCall(tp *typeparser.TypeParser, c *checker.Checker, sf 
 		}
 
 		// Unroll union members for provided types (ROut)
-		providedMembers := tp.UnrollUnionMembers(layer.ROut)
+		providedMembers := tp.UnrollUnionMembers(layer.ROut())
 
 		// Filter out never types and pass-through types
 		for _, providedType := range providedMembers {
@@ -123,7 +126,7 @@ func analyzeLayerMergeAllCall(tp *typeparser.TypeParser, c *checker.Checker, sf 
 				continue
 			}
 			// A pass-through type is both provided (ROut) and required (RIn) by the same layer
-			if checker.Checker_isTypeAssignableTo(c, providedType, layer.RIn) {
+			if checker.Checker_isTypeAssignableTo(c, providedType, layer.RIn()) {
 				continue
 			}
 			actuallyProvidedMap[providedType] = arg
@@ -131,7 +134,7 @@ func analyzeLayerMergeAllCall(tp *typeparser.TypeParser, c *checker.Checker, sf 
 
 		layerInfos = append(layerInfos, layerInfo{
 			arg:              arg,
-			requirementsType: layer.RIn,
+			requirementsType: layer.RIn(),
 		})
 	}
 

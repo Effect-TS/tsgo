@@ -1,0 +1,238 @@
+flowchart TB
+  0[/"type: #123; a: number; b: string; #125;<br/>node: #123; a: 1, b: #quot;two#quot; #125;"/]
+  1[/"type: #40;#91;string, number#93; #124; #91;symbol, number#93;#41;#91;#93;<br/>node: #91;#91;#quot;a#quot;, 1#93;, #91;Symbol.for#40;#quot;b#quot;#41;, 2#93;#93;"/]
+  2[/"type: #quot;b#quot;<br/>node: #quot;b#quot;"/]
+  3["type: symbol<br/>callee: Symbol.for<br/>args: #91;#93;"]
+  4[/"type: #40;key: string#41; =#gt; symbol<br/>node: Symbol.for"/]
+  5[/"type: string#91;#93;<br/>node: Object.keys#40;data#41;"/]
+  6[/"type: #123; #40;o: object#41;: string#91;#93;; #40;o: #123;#125;#41;: string#91;#93;; #125;<br/>node: Object.keys"/]
+  7[/"type: #40;string #124; number#41;#91;#93;<br/>node: Object.values#40;data#41;"/]
+  8[/"type: #123; #lt;T#gt;#40;o: ArrayLike#lt;T#gt; #124; #123; #91;s: string#93;: T; #125;#41;: T#91;#93;; #40;o: #123;#125;#41;: any#91;#93;; #125;<br/>node: Object.values"/]
+  9[/"type: #91;string, string #124; number#93;#91;#93;<br/>node: Object.entries#40;data#41;"/]
+  10[/"type: #123; #lt;T#gt;#40;o: ArrayLike#lt;T#gt; #124; #123; #91;s: string#93;: T; #125;#41;: #91;string, T#93;#91;#93;; #40;o: #123;#125;#41;: #91;string, any#93;#91;#93;; #125;<br/>node: Object.entries"/]
+  11[/"type: #123; #91;k: string#93;: number; #125;<br/>node: Object.fromEntries#40;pairs#41;"/]
+  12[/"type: #123; #lt;T = any#gt;#40;entries: Iterable#lt;readonly #91;PropertyKey, T#93;#gt;#41;: #123; #91;k: string#93;: T; #125;; #40;entries: Iterable#lt;readonly any#91;#93;#gt;#41;: any; #125;<br/>node: Object.fromEntries"/]
+  13[/"type: boolean<br/>node: Object.hasOwn#40;data, #quot;a#quot;#41;"/]
+  14[/"type: #40;o: object, v: PropertyKey#41; =#gt; boolean<br/>node: Object.hasOwn"/]
+  15[/"type: #quot;a#quot;<br/>node: #quot;a#quot;"/]
+  16["type: boolean<br/>callee: data.hasOwnProperty<br/>args: #91;#93;"]
+  17[/"type: #40;v: PropertyKey#41; =#gt; boolean<br/>node: data.hasOwnProperty"/]
+  18[/"type: #40;v: PropertyKey#41; =#gt; boolean<br/>node: data.hasOwnProperty"/]
+  19[/"type: boolean<br/>node: Object.prototype.hasOwnProperty.call#40;data, #quot;a#quot;#41;"/]
+  20[/"type: boolean<br/>node: Object.hasOwnProperty.call#40;data, #quot;a#quot;#41;"/]
+  21[/"type: string#91;#93;<br/>node: Object#91;#quot;keys#quot;#93;#40;data#41;"/]
+  22[/"type: #40;string #124; number#41;#91;#93;<br/>node: Object#91;`values`#93;#40;data#41;"/]
+  23[/"type: string#91;#93;<br/>node: Object.k#92;u0065ys#40;data#41;"/]
+  24[/"type: #91;string, string #124; number#93;#91;#93;<br/>node: Object#91;#quot;entr#92;u0069es#quot;#93;#40;data#41;"/]
+  25[/"type: #91;string, string #124; number#93;#91;#93;<br/>node: Object.entries?.#40;data#41;"/]
+  26[/"type: boolean<br/>node: #40;Object#41;.hasOwn#40;data, #quot;a#quot;#41;"/]
+  27[/"type: boolean #124; undefined<br/>node: optional?.#91;#quot;hasOwnProperty#quot;#93;#40;#quot;a#quot;#41;"/]
+  28[/"type: string#91;#93; #124; undefined<br/>node: optionalConstructor?.#91;#quot;keys#quot;#93;#40;data#41;"/]
+  29[/"type: ObjectConstructor<br/>node: Object"/]
+  30[/"type: #91;string, string #124; number#93;#91;#93;<br/>node: Native.entries#40;data#41;"/]
+  31[/"type: string#91;#93;<br/>node: NativeObject.keys#40;data#41;"/]
+  32[/"type: boolean<br/>node: globalThis.Object.hasOwn#40;data, #quot;a#quot;#41;"/]
+  33[["type: #lt;T extends ObjectConstructor#gt;#40;native: T#41; =#gt; string#91;#93;<br/>node: function constrained#lt;T extends ObjectConstructor#gt;#40;native: T#41; #123; return native#91;#quot;keys#quot;#93;#40;data#41; #125;"]]
+  34[/"type: string#91;#93;<br/>node: native#91;#quot;keys#quot;#93;#40;data#41;"/]
+  35[["type: #lt;T extends object#gt;#40;value: T#41; =#gt; boolean<br/>node: function constrainedInstance#lt;T extends object#gt;#40;value: T#41; #123; return value.hasOwnProperty#40;#quot;a#quot;#41; #125;"]]
+  36[/"type: #quot;a#quot;<br/>node: #quot;a#quot;"/]
+  37["type: boolean<br/>callee: value.hasOwnProperty<br/>args: #91;#93;"]
+  38[/"type: #40;v: PropertyKey#41; =#gt; boolean<br/>node: value.hasOwnProperty"/]
+  39[/"type: #quot;a#quot;<br/>node: #quot;a#quot;"/]
+  40["type: boolean<br/>callee: new Inherited#40;#41;.hasOwnProperty<br/>args: #91;#93;"]
+  41[/"type: #40;v: PropertyKey#41; =#gt; boolean<br/>node: new Inherited#40;#41;.hasOwnProperty"/]
+  42[/"type: #91;string, string #124; number#93;#91;#93;<br/>node: picked.entries#40;data#41;"/]
+  43[/"type: #40;string #124; number#41;#91;#93;<br/>node: remapped.keys#40;data#41;"/]
+  44[/"type: string#91;#93;<br/>node: Object.keys#40;#91;1, 2#93;#41;"/]
+  45[/"type: string#91;#93;<br/>node: Object.values#40;#quot;ab#quot;#41;"/]
+  46[/"type: #123; #91;k: string#93;: string; #125;<br/>node: Object.fromEntries#40;#91;#91;1, #quot;a#quot;#93;#93;#41;"/]
+  47[/"type: boolean<br/>node: Object.hasOwn#40;data, 1#41;"/]
+  48[/"type: #quot;0#quot;<br/>node: #quot;0#quot;"/]
+  49["type: boolean<br/>callee: #91;1#93;.hasOwnProperty<br/>args: #91;#93;"]
+  50[/"type: #40;v: PropertyKey#41; =#gt; boolean<br/>node: #91;1#93;.hasOwnProperty"/]
+  51[/"type: #quot;0#quot;<br/>node: #quot;0#quot;"/]
+  52["type: boolean<br/>callee: #quot;ab#quot;.hasOwnProperty<br/>args: #91;#93;"]
+  53[/"type: #40;v: PropertyKey#41; =#gt; boolean<br/>node: #quot;ab#quot;.hasOwnProperty"/]
+  54((("type: Effect#lt;#91;string, string #124; number#93;#91;#93;, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123; return Object.entries#40;data#41; #125;#41;")))
+  55[/"type: #91;string, string #124; number#93;#91;#93;<br/>node: Object.entries#40;data#41;"/]
+  56[/"type: #123; a: number; b: string; #125;<br/>node: data"/]
+  57["type: #40;#quot;a#quot; #124; #quot;b#quot;#41;#91;#93;<br/>callee: R.keys<br/>args: #91;#93;"]
+  58[/"type: #lt;K extends string #124; symbol, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; #40;K #amp; string#41;#91;#93;<br/>node: R.keys"/]
+  59[/"type: #123; a: number; b: string; #125;<br/>node: data"/]
+  60["type: #91;#quot;a#quot; #124; #quot;b#quot;, string #124; number#93;#91;#93;<br/>callee: R.toEntries<br/>args: #91;#93;"]
+  61[/"type: #lt;K extends string, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; #91;K, A#93;#91;#93;<br/>node: R.toEntries"/]
+  62[/"type: #123; a: number; b: string; #125;<br/>node: data"/]
+  63["type: #40;string #124; number#41;#91;#93;<br/>callee: R.values<br/>args: #91;#93;"]
+  64[/"type: #lt;K extends string, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; A#91;#93;<br/>node: R.values"/]
+  65[/"type: #91;string #124; symbol, number#93;#91;#93;<br/>node: pairs"/]
+  66["type: Record#lt;string #124; symbol, number#gt;<br/>callee: R.fromEntries<br/>args: #91;#93;"]
+  67[/"type: #lt;Entry extends readonly #91;string #124; symbol, any#93;#gt;#40;entries: Iterable#lt;Entry#gt;#41; =#gt; Record#lt;NonLiteralKey#lt;Entry#91;0#93;#gt;, Entry#91;1#93;#gt;<br/>node: R.fromEntries"/]
+  68[/"type: #123; a: number; b: string; #125;<br/>node: data"/]
+  69["type: boolean<br/>callee: <br/>args: #91;#93;"]
+  70[/"type: #123; #lt;K extends string #124; symbol#gt;#40;key: NoInfer#lt;K#gt;#41;: #lt;A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; boolean; #lt;K extends string #124; symbol, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;, key: NoInfer#lt;K#gt;#41;: boolean; #125;<br/>node: R.has"/]
+  71[/"type: #quot;a#quot;<br/>node: #quot;a#quot;"/]
+  72[/"type: #123; a: number; b: string; #125;<br/>node: data"/]
+  73["type: #40;#quot;a#quot; #124; #quot;b#quot;#41;#91;#93;<br/>callee: EffectRecord.keys<br/>args: #91;#93;"]
+  74[/"type: #lt;K extends string #124; symbol, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; #40;K #amp; string#41;#91;#93;<br/>node: EffectRecord.keys"/]
+  75[/"type: #123; a: number; b: string; #125;<br/>node: data"/]
+  76["type: #40;string #124; number#41;#91;#93;<br/>callee: EffectRecord.values<br/>args: #91;#93;"]
+  77[/"type: #lt;K extends string, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; A#91;#93;<br/>node: EffectRecord.values"/]
+  78[/"type: #123; a: number; b: string; #125;<br/>node: data"/]
+  79["type: #91;#quot;a#quot; #124; #quot;b#quot;, string #124; number#93;#91;#93;<br/>callee: EffectRecord.toEntries<br/>args: #91;#93;"]
+  80[/"type: #lt;K extends string, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; #91;K, A#93;#91;#93;<br/>node: EffectRecord.toEntries"/]
+  81[/"type: #91;string #124; symbol, number#93;#91;#93;<br/>node: pairs"/]
+  82["type: Record#lt;string #124; symbol, number#gt;<br/>callee: EffectRecord.fromEntries<br/>args: #91;#93;"]
+  83[/"type: #lt;Entry extends readonly #91;string #124; symbol, any#93;#gt;#40;entries: Iterable#lt;Entry#gt;#41; =#gt; Record#lt;NonLiteralKey#lt;Entry#91;0#93;#gt;, Entry#91;1#93;#gt;<br/>node: EffectRecord.fromEntries"/]
+  84[/"type: #123; a: number; b: string; #125;<br/>node: data"/]
+  85["type: boolean<br/>callee: <br/>args: #91;#93;"]
+  86[/"type: #123; #lt;K extends string #124; symbol#gt;#40;key: NoInfer#lt;K#gt;#41;: #lt;A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; boolean; #lt;K extends string #124; symbol, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;, key: NoInfer#lt;K#gt;#41;: boolean; #125;<br/>node: EffectRecord.has"/]
+  87[/"type: #quot;b#quot;<br/>node: #quot;b#quot;"/]
+  88[/"type: number#91;#93;<br/>node: #91;1#93;"/]
+  89["type: string#91;#93;<br/>callee: R.keys<br/>args: #91;#93;"]
+  90[/"type: #lt;K extends string #124; symbol, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; #40;K #amp; string#41;#91;#93;<br/>node: R.keys"/]
+  91[/"type: #quot;ab#quot;<br/>node: #quot;ab#quot;"/]
+  92["type: string#91;#93;<br/>callee: R.keys<br/>args: #91;#93;"]
+  93[/"type: #lt;K extends string #124; symbol, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; #40;K #amp; string#41;#91;#93;<br/>node: R.keys"/]
+  94[/"type: number#91;#93;<br/>node: #91;1#93;"/]
+  95["type: #40;number #124; #40;#40;#41; =#gt; string#41; #124; #123; #40;#41;: string; #40;locales: string #124; string#91;#93;, options?: #40;NumberFormatOptions #amp; DateTimeFormatOptions#41; #124; undefined#41;: string; #125; #124; #40;#40;#41; =#gt; number #124; undefined#41; #124; #40;#40;...items: number#91;#93;#41; =#gt; number#41; #124; #123; #40;...items: ConcatArray#lt;number#gt;#91;#93;#41;: number#91;#93;; #40;...items: #40;number #124; ConcatArray#lt;number#gt;#41;#91;#93;#41;: number#91;#93;; #125; #124; #40;#40;separator?: string #124; undefined#41; =#gt; string#41; #124; #40;#40;#41; =#gt; number#91;#93;#41; #124; #40;#40;#41; =#gt; number #124; undefined#41; #124; #40;#40;start?: number #124; undefined, end?: number #124; undefined#41; =#gt; number#91;#93;#41; #124; #40;#40;compareFn?: #40;#40;a: number, b: number#41; =#gt; number#41; #124; undefined#41; =#gt; number#91;#93;#41; #124; #123; #40;start: number, deleteCount?: number #124; undefined#41;: number#91;#93;; #40;start: number, deleteCount: number, ...items: number#91;#93;#41;: number#91;#93;; #125; #124; #40;#40;...items: number#91;#93;#41; =#gt; number#41; #124; #40;#40;searchElement: number, fromIndex?: number #124; undefined#41; =#gt; number#41; #124; #40;#40;searchElement: number, fromIndex?: number #124; undefined#41; =#gt; number#41; #124; #123; #lt;S extends number#gt;#40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; value is S, thisArg?: any#41;: this is S#91;#93;; #40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; unknown, thisArg?: any#41;: boolean; #125; #124; #40;#40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; unknown, thisArg?: any#41; =#gt; boolean#41; #124; #40;#40;callbackfn: #40;value: number, index: number, array: number#91;#93;#41; =#gt; void, thisArg?: any#41; =#gt; void#41; #124; #40;#lt;U#gt;#40;callbackfn: #40;value: number, index: number, array: number#91;#93;#41; =#gt; U, thisArg?: any#41; =#gt; U#91;#93;#41; #124; #123; #lt;S extends number#gt;#40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; value is S, thisArg?: any#41;: S#91;#93;; #40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; unknown, thisArg?: any#41;: number#91;#93;; #125; #124; #123; #40;callbackfn: #40;previousValue: number, currentValue: number, currentIndex: number, array: number#91;#93;#41; =#gt; number#41;: number; #40;callbackfn: #40;previousValue: number, currentValue: number, currentIndex: number, array: number#91;#93;#41; =#gt; number, initialValue: number#41;: number; #lt;U#gt;#40;callbackfn: #40;previousValue: U, currentValue: number, currentIndex: number, array: number#91;#93;#41; =#gt; U, initialValue: U#41;: U; #125; #124; #123; #40;callbackfn: #40;previousValue: number, currentValue: number, currentIndex: number, array: number#91;#93;#41; =#gt; number#41;: number; #40;callbackfn: #40;previousValue: number, currentValue: number, currentIndex: number, array: number#91;#93;#41; =#gt; number, initialValue: number#41;: number; #lt;U#gt;#40;callbackfn: #40;previousValue: U, currentValue: number, currentIndex: number, array: number#91;#93;#41; =#gt; U, initialValue: U#41;: U; #125; #124; #123; #lt;S extends number#gt;#40;predicate: #40;value: number, index: number, obj: number#91;#93;#41; =#gt; value is S, thisArg?: any#41;: S #124; undefined; #40;predicate: #40;value: number, index: number, obj: number#91;#93;#41; =#gt; unknown, thisArg?: any#41;: number #124; undefined; #125; #124; #40;#40;predicate: #40;value: number, index: number, obj: number#91;#93;#41; =#gt; unknown, thisArg?: any#41; =#gt; number#41; #124; #40;#40;value: number, start?: number #124; undefined, end?: number #124; undefined#41; =#gt; number#91;#93;#41; #124; #40;#40;target: number, start: number, end?: number #124; undefined#41; =#gt; number#91;#93;#41; #124; #40;#40;#41; =#gt; ArrayIterator#lt;number#gt;#41; #124; #40;#40;#41; =#gt; ArrayIterator#lt;#91;number, number#93;#gt;#41; #124; #40;#40;#41; =#gt; ArrayIterator#lt;number#gt;#41; #124; #40;#40;#41; =#gt; ArrayIterator#lt;number#gt;#41; #124; #123; #91;x: number#93;: boolean #124; undefined; length?: boolean #124; undefined; toString?: boolean #124; undefined; toLocaleString?: boolean #124; undefined; pop?: boolean #124; undefined; push?: boolean #124; undefined; concat?: boolean #124; undefined; join?: boolean #124; undefined; reverse?: boolean #124; undefined; shift?: boolean #124; undefined; slice?: boolean #124; undefined; sort?: boolean #124; undefined; splice?: boolean #124; undefined; unshift?: boolean #124; undefined; indexOf?: boolean #124; undefined; lastIndexOf?: boolean #124; undefined; every?: boolean #124; undefined; some?: boolean #124; undefined; forEach?: boolean #124; undefined; map?: boolean #124; undefined; filter?: boolean #124; undefined; reduce?: boolean #124; undefined; reduceRight?: boolean #124; undefined; find?: boolean #124; undefined; findIndex?: boolean #124; undefined; fill?: boolean #124; undefined; copyWithin?: boolean #124; undefined; #91;Symbol.iterator#93;?: boolean #124; undefined; entries?: boolean #124; undefined; keys?: boolean #124; undefined; values?: boolean #124; undefined; readonly #91;Symbol.unscopables#93;?: boolean #124; undefined; includes?: boolean #124; undefined; flatMap?: boolean #124; undefined; flat?: boolean #124; undefined; at?: boolean #124; undefined; findLast?: boolean #124; undefined; findLastIndex?: boolean #124; undefined; toReversed?: boolean #124; undefined; toSorted?: boolean #124; undefined; toSpliced?: boolean #124; undefined; with?: boolean #124; undefined; #125; #124; #40;#40;searchElement: number, fromIndex?: number #124; undefined#41; =#gt; boolean#41; #124; #40;#lt;U, This = undefined#gt;#40;callback: #40;this: This, value: number, index: number, array: number#91;#93;#41; =#gt; U #124; readonly U#91;#93;, thisArg?: This #124; undefined#41; =#gt; U#91;#93;#41; #124; #40;#lt;A, D extends number = 1#gt;#40;this: A, depth?: D #124; undefined#41; =#gt; FlatArray#lt;A, D#gt;#91;#93;#41; #124; #40;#40;index: number#41; =#gt; number #124; undefined#41; #124; #123; #lt;S extends number#gt;#40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; value is S, thisArg?: any#41;: S #124; undefined; #40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; unknown, thisArg?: any#41;: number #124; undefined; #125; #124; #40;#40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; unknown, thisArg?: any#41; =#gt; number#41; #124; #40;#40;#41; =#gt; number#91;#93;#41; #124; #40;#40;compareFn?: #40;#40;a: number, b: number#41; =#gt; number#41; #124; undefined#41; =#gt; number#91;#93;#41; #124; #123; #40;start: number, deleteCount: number, ...items: number#91;#93;#41;: number#91;#93;; #40;start: number, deleteCount?: number #124; undefined#41;: number#91;#93;; #125; #124; #40;#40;index: number, value: number#41; =#gt; number#91;#93;#41;#41;#91;#93;<br/>callee: R.values<br/>args: #91;#93;"]
+  96[/"type: #lt;K extends string, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; A#91;#93;<br/>node: R.values"/]
+  97[/"type: number#91;#93;<br/>node: #91;1#93;"/]
+  98["type: #91;string, number #124; #40;#40;#41; =#gt; string#41; #124; #123; #40;#41;: string; #40;locales: string #124; string#91;#93;, options?: #40;NumberFormatOptions #amp; DateTimeFormatOptions#41; #124; undefined#41;: string; #125; #124; #40;#40;#41; =#gt; number #124; undefined#41; #124; #40;#40;...items: number#91;#93;#41; =#gt; number#41; #124; #123; #40;...items: ConcatArray#lt;number#gt;#91;#93;#41;: number#91;#93;; #40;...items: #40;number #124; ConcatArray#lt;number#gt;#41;#91;#93;#41;: number#91;#93;; #125; #124; #40;#40;separator?: string #124; undefined#41; =#gt; string#41; #124; #40;#40;#41; =#gt; number#91;#93;#41; #124; #40;#40;#41; =#gt; number #124; undefined#41; #124; #40;#40;start?: number #124; undefined, end?: number #124; undefined#41; =#gt; number#91;#93;#41; #124; #40;#40;compareFn?: #40;#40;a: number, b: number#41; =#gt; number#41; #124; undefined#41; =#gt; number#91;#93;#41; #124; #123; #40;start: number, deleteCount?: number #124; undefined#41;: number#91;#93;; #40;start: number, deleteCount: number, ...items: number#91;#93;#41;: number#91;#93;; #125; #124; #40;#40;...items: number#91;#93;#41; =#gt; number#41; #124; #40;#40;searchElement: number, fromIndex?: number #124; undefined#41; =#gt; number#41; #124; #40;#40;searchElement: number, fromIndex?: number #124; undefined#41; =#gt; number#41; #124; #123; #lt;S extends number#gt;#40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; value is S, thisArg?: any#41;: this is S#91;#93;; #40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; unknown, thisArg?: any#41;: boolean; #125; #124; #40;#40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; unknown, thisArg?: any#41; =#gt; boolean#41; #124; #40;#40;callbackfn: #40;value: number, index: number, array: number#91;#93;#41; =#gt; void, thisArg?: any#41; =#gt; void#41; #124; #40;#lt;U#gt;#40;callbackfn: #40;value: number, index: number, array: number#91;#93;#41; =#gt; U, thisArg?: any#41; =#gt; U#91;#93;#41; #124; #123; #lt;S extends number#gt;#40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; value is S, thisArg?: any#41;: S#91;#93;; #40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; unknown, thisArg?: any#41;: number#91;#93;; #125; #124; #123; #40;callbackfn: #40;previousValue: number, currentValue: number, currentIndex: number, array: number#91;#93;#41; =#gt; number#41;: number; #40;callbackfn: #40;previousValue: number, currentValue: number, currentIndex: number, array: number#91;#93;#41; =#gt; number, initialValue: number#41;: number; #lt;U#gt;#40;callbackfn: #40;previousValue: U, currentValue: number, currentIndex: number, array: number#91;#93;#41; =#gt; U, initialValue: U#41;: U; #125; #124; #123; #40;callbackfn: #40;previousValue: number, currentValue: number, currentIndex: number, array: number#91;#93;#41; =#gt; number#41;: number; #40;callbackfn: #40;previousValue: number, currentValue: number, currentIndex: number, array: number#91;#93;#41; =#gt; number, initialValue: number#41;: number; #lt;U#gt;#40;callbackfn: #40;previousValue: U, currentValue: number, currentIndex: number, array: number#91;#93;#41; =#gt; U, initialValue: U#41;: U; #125; #124; #123; #lt;S extends number#gt;#40;predicate: #40;value: number, index: number, obj: number#91;#93;#41; =#gt; value is S, thisArg?: any#41;: S #124; undefined; #40;predicate: #40;value: number, index: number, obj: number#91;#93;#41; =#gt; unknown, thisArg?: any#41;: number #124; undefined; #125; #124; #40;#40;predicate: #40;value: number, index: number, obj: number#91;#93;#41; =#gt; unknown, thisArg?: any#41; =#gt; number#41; #124; #40;#40;value: number, start?: number #124; undefined, end?: number #124; undefined#41; =#gt; number#91;#93;#41; #124; #40;#40;target: number, start: number, end?: number #124; undefined#41; =#gt; number#91;#93;#41; #124; #40;#40;#41; =#gt; ArrayIterator#lt;number#gt;#41; #124; #40;#40;#41; =#gt; ArrayIterator#lt;#91;number, number#93;#gt;#41; #124; #40;#40;#41; =#gt; ArrayIterator#lt;number#gt;#41; #124; #40;#40;#41; =#gt; ArrayIterator#lt;number#gt;#41; #124; #123; #91;x: number#93;: boolean #124; undefined; length?: boolean #124; undefined; toString?: boolean #124; undefined; toLocaleString?: boolean #124; undefined; pop?: boolean #124; undefined; push?: boolean #124; undefined; concat?: boolean #124; undefined; join?: boolean #124; undefined; reverse?: boolean #124; undefined; shift?: boolean #124; undefined; slice?: boolean #124; undefined; sort?: boolean #124; undefined; splice?: boolean #124; undefined; unshift?: boolean #124; undefined; indexOf?: boolean #124; undefined; lastIndexOf?: boolean #124; undefined; every?: boolean #124; undefined; some?: boolean #124; undefined; forEach?: boolean #124; undefined; map?: boolean #124; undefined; filter?: boolean #124; undefined; reduce?: boolean #124; undefined; reduceRight?: boolean #124; undefined; find?: boolean #124; undefined; findIndex?: boolean #124; undefined; fill?: boolean #124; undefined; copyWithin?: boolean #124; undefined; #91;Symbol.iterator#93;?: boolean #124; undefined; entries?: boolean #124; undefined; keys?: boolean #124; undefined; values?: boolean #124; undefined; readonly #91;Symbol.unscopables#93;?: boolean #124; undefined; includes?: boolean #124; undefined; flatMap?: boolean #124; undefined; flat?: boolean #124; undefined; at?: boolean #124; undefined; findLast?: boolean #124; undefined; findLastIndex?: boolean #124; undefined; toReversed?: boolean #124; undefined; toSorted?: boolean #124; undefined; toSpliced?: boolean #124; undefined; with?: boolean #124; undefined; #125; #124; #40;#40;searchElement: number, fromIndex?: number #124; undefined#41; =#gt; boolean#41; #124; #40;#lt;U, This = undefined#gt;#40;callback: #40;this: This, value: number, index: number, array: number#91;#93;#41; =#gt; U #124; readonly U#91;#93;, thisArg?: This #124; undefined#41; =#gt; U#91;#93;#41; #124; #40;#lt;A, D extends number = 1#gt;#40;this: A, depth?: D #124; undefined#41; =#gt; FlatArray#lt;A, D#gt;#91;#93;#41; #124; #40;#40;index: number#41; =#gt; number #124; undefined#41; #124; #123; #lt;S extends number#gt;#40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; value is S, thisArg?: any#41;: S #124; undefined; #40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; unknown, thisArg?: any#41;: number #124; undefined; #125; #124; #40;#40;predicate: #40;value: number, index: number, array: number#91;#93;#41; =#gt; unknown, thisArg?: any#41; =#gt; number#41; #124; #40;#40;#41; =#gt; number#91;#93;#41; #124; #40;#40;compareFn?: #40;#40;a: number, b: number#41; =#gt; number#41; #124; undefined#41; =#gt; number#91;#93;#41; #124; #123; #40;start: number, deleteCount: number, ...items: number#91;#93;#41;: number#91;#93;; #40;start: number, deleteCount?: number #124; undefined#41;: number#91;#93;; #125; #124; #40;#40;index: number, value: number#41; =#gt; number#91;#93;#41;#93;#91;#93;<br/>callee: R.toEntries<br/>args: #91;#93;"]
+  99[/"type: #lt;K extends string, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; #91;K, A#93;#91;#93;<br/>node: R.toEntries"/]
+  100[/"type: #91;number, string#93;#91;#93;<br/>node: #91;#91;1, #quot;a#quot;#93;#93;"/]
+  101["type: Record#lt;string #124; symbol, any#gt;<br/>callee: R.fromEntries<br/>args: #91;#93;"]
+  102[/"type: #lt;Entry extends readonly #91;string #124; symbol, any#93;#gt;#40;entries: Iterable#lt;Entry#gt;#41; =#gt; Record#lt;NonLiteralKey#lt;Entry#91;0#93;#gt;, Entry#91;1#93;#gt;<br/>node: R.fromEntries"/]
+  103[/"type: #123; a: number; b: string; #125;<br/>node: data"/]
+  104["type: boolean<br/>callee: <br/>args: #91;#93;"]
+  105[/"type: #123; #lt;K extends string #124; symbol#gt;#40;key: NoInfer#lt;K#gt;#41;: #lt;A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; boolean; #lt;K extends string #124; symbol, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;, key: NoInfer#lt;K#gt;#41;: boolean; #125;<br/>node: R.has"/]
+  106[/"type: string<br/>node: arbitraryKey"/]
+  107[/"type: #123; a: number; b: string; #125;<br/>node: data"/]
+  108["type: boolean<br/>callee: <br/>args: #91;#93;"]
+  109[/"type: #123; #lt;K extends string #124; symbol#gt;#40;key: NoInfer#lt;K#gt;#41;: #lt;A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; boolean; #lt;K extends string #124; symbol, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;, key: NoInfer#lt;K#gt;#41;: boolean; #125;<br/>node: R.has"/]
+  110[/"type: 1<br/>node: 1"/]
+  111[/"type: number#91;#93;<br/>node: #91;1#93;"/]
+  112["type: boolean<br/>callee: <br/>args: #91;#93;"]
+  113[/"type: #123; #lt;K extends string #124; symbol#gt;#40;key: NoInfer#lt;K#gt;#41;: #lt;A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;#41; =#gt; boolean; #lt;K extends string #124; symbol, A#gt;#40;self: ReadonlyRecord#lt;K, A#gt;, key: NoInfer#lt;K#gt;#41;: boolean; #125;<br/>node: R.has"/]
+  114[/"type: #quot;0#quot;<br/>node: #quot;0#quot;"/]
+  115[/"type: string#91;#93;<br/>node: nativeKeys#40;data#41;"/]
+  116[/"type: ObjectConstructor<br/>node: Object"/]
+  117[/"type: string#91;#93;<br/>node: destructured#40;data#41;"/]
+  118[/"type: <br/>node: Object.keys"/]
+  119[/"type: string#91;#93;<br/>node: Object#91;dynamic#93;#40;data#41;"/]
+  120[/"type: <br/>node: Object.keys"/]
+  121[/"type: string#91;#93;<br/>node: custom.keys#40;data#41;"/]
+  122[/"type: #quot;a#quot;<br/>node: #quot;a#quot;"/]
+  123["type: boolean<br/>callee: custom.hasOwnProperty<br/>args: #91;#93;"]
+  124[/"type: #40;key: PropertyKey#41; =#gt; boolean<br/>node: custom.hasOwnProperty"/]
+  125[["type: #40;Object: #123; keys#40;value: object#41;: string#91;#93;; #125;#41; =#gt; string#91;#93;<br/>node: function shadowed#40;Object: #123; keys#40;value: object#41;: string#91;#93; #125;#41; #123; return Object.keys#40;data#41; #125;"]]
+  126[/"type: #123; a: number; b: string; #125;<br/>node: data"/]
+  127["type: string#91;#93;<br/>callee: Object.keys<br/>args: #91;#93;"]
+  128[/"type: #40;value: object#41; =#gt; string#91;#93;<br/>node: Object.keys"/]
+  129[["type: #40;key: PropertyKey#41; =#gt; boolean<br/>node: hasOwnProperty#40;key: PropertyKey#41;: boolean #123; return false #125;"]]
+  130[/"type: false<br/>node: false"/]
+  131[/"type: #quot;a#quot;<br/>node: #quot;a#quot;"/]
+  132["type: boolean<br/>callee: new Override#40;#41;.hasOwnProperty<br/>args: #91;#93;"]
+  133[/"type: #40;key: PropertyKey#41; =#gt; boolean<br/>node: new Override#40;#41;.hasOwnProperty"/]
+  134[/"type: typeof Inherited<br/>node: Inherited"/]
+  135[["type: #40;#41; =#gt; boolean<br/>node: test#40;#41; #123; return super.hasOwnProperty#40;#quot;a#quot;#41; #125;"]]
+  136[/"type: #quot;a#quot;<br/>node: #quot;a#quot;"/]
+  137["type: boolean<br/>callee: super.hasOwnProperty<br/>args: #91;#93;"]
+  138[/"type: #40;v: PropertyKey#41; =#gt; boolean<br/>node: super.hasOwnProperty"/]
+  139[/"type: <br/>node: Object.keys"/]
+  140[/"type: string#91;#93;<br/>node: mixed.keys#40;data#41;"/]
+  141[/"type: #quot;a#quot;<br/>node: #quot;a#quot;"/]
+  142["type: boolean<br/>callee: mixedInstance.hasOwnProperty<br/>args: #91;#93;"]
+  143[/"type: #40;#40;v: PropertyKey#41; =#gt; boolean#41; #124; #40;#40;key: PropertyKey#41; =#gt; boolean#41;<br/>node: mixedInstance.hasOwnProperty"/]
+  144[/"type: string#91;#93;<br/>node: intersection.keys#40;data#41;"/]
+  145[/"type: any#91;#93;<br/>node: conflicting.keys#40;data#41;"/]
+  146[/"type: #40;#41; =#gt; never#91;#93;<br/>node: writable.keys = #40;#41; =#gt; #91;#93;"/]
+  147[["type: #40;#41; =#gt; never#91;#93;<br/>node: #40;#41; =#gt; #91;#93;"]]
+  148[/"type: never#91;#93;<br/>node: #91;#93;"/]
+  149[/"type: boolean<br/>node: delete #40;writable.keys#41;"/]
+  150[/"type: ObjectConstructor<br/>node: #40;#123; keys: writable.keys #125; = Object#41;"/]
+  151[/"type: #40;key: PropertyKey#41; =#gt; false<br/>node: Object.prototype.hasOwnProperty = key =#gt; false"/]
+  152[["type: #40;key: PropertyKey#41; =#gt; false<br/>node: key =#gt; false"]]
+  153[/"type: false<br/>node: false"/]
+  154[/"type: undefined<br/>node: void #91;#91;1#93;.keys#40;#41;, #91;1#93;.values#40;#41;, #91;1#93;.entries#40;#41;, new Map#40;#41;.keys#40;#41;, new Map#40;#41;.values#40;#41;, new Map#40;#41;.entries#40;#41;#93;"/]
+  155[/"type: undefined<br/>node: void #91;Object.assign, Object.create, Object.defineProperties, Object.defineProperty, Object.freeze, Object.getOwnPropertyDescriptor, Object.getOwnPropertyDescriptors, Object.getOwnPropertyNames, Object.getOwnPropertySymbols, Object.getPrototypeOf, Object.groupBy, Object.is, Object.isExtensible, Object.isFrozen, Object.isSealed, Object.preventExtensions, Object.seal, Object.setPrototypeOf, Object.prototype#93;"/]
+  156[/"type: undefined<br/>node: void #91;data.isPrototypeOf, data.propertyIsEnumerable, data.toLocaleString, data.toString, data.valueOf#93;"/]
+  2 -->|"kind: pipe"| 3
+  4 -->|"kind: transformCallee"| 3
+  3 -->|"kind: usedBy"| 1
+  15 -->|"kind: pipe"| 16
+  17 -->|"kind: transformCallee"| 16
+  34 -->|"kind: potentialReturn"| 33
+  34 -->|"kind: usedBy"| 33
+  36 -->|"kind: pipe"| 37
+  38 -->|"kind: transformCallee"| 37
+  37 -->|"kind: potentialReturn"| 35
+  37 -->|"kind: usedBy"| 35
+  39 -->|"kind: pipe"| 40
+  41 -->|"kind: transformCallee"| 40
+  48 -->|"kind: pipe"| 49
+  50 -->|"kind: transformCallee"| 49
+  51 -->|"kind: pipe"| 52
+  53 -->|"kind: transformCallee"| 52
+  55 -->|"kind: potentialReturn"| 54
+  55 -->|"kind: usedBy"| 54
+  56 -->|"kind: pipe"| 57
+  58 -->|"kind: transformCallee"| 57
+  59 -->|"kind: pipe"| 60
+  61 -->|"kind: transformCallee"| 60
+  62 -->|"kind: pipe"| 63
+  64 -->|"kind: transformCallee"| 63
+  65 -->|"kind: pipe"| 66
+  67 -->|"kind: transformCallee"| 66
+  68 -->|"kind: pipe"| 69
+  70 -->|"kind: transformCallee"| 68
+  71 -->|"kind: transformArg"| 68
+  72 -->|"kind: pipe"| 73
+  74 -->|"kind: transformCallee"| 73
+  75 -->|"kind: pipe"| 76
+  77 -->|"kind: transformCallee"| 76
+  78 -->|"kind: pipe"| 79
+  80 -->|"kind: transformCallee"| 79
+  81 -->|"kind: pipe"| 82
+  83 -->|"kind: transformCallee"| 82
+  84 -->|"kind: pipe"| 85
+  86 -->|"kind: transformCallee"| 84
+  87 -->|"kind: transformArg"| 84
+  88 -->|"kind: pipe"| 89
+  90 -->|"kind: transformCallee"| 89
+  91 -->|"kind: pipe"| 92
+  93 -->|"kind: transformCallee"| 92
+  94 -->|"kind: pipe"| 95
+  96 -->|"kind: transformCallee"| 95
+  97 -->|"kind: pipe"| 98
+  99 -->|"kind: transformCallee"| 98
+  100 -->|"kind: pipe"| 101
+  102 -->|"kind: transformCallee"| 101
+  103 -->|"kind: pipe"| 104
+  105 -->|"kind: transformCallee"| 103
+  106 -->|"kind: transformArg"| 103
+  107 -->|"kind: pipe"| 108
+  109 -->|"kind: transformCallee"| 107
+  110 -->|"kind: transformArg"| 107
+  111 -->|"kind: pipe"| 112
+  113 -->|"kind: transformCallee"| 111
+  114 -->|"kind: transformArg"| 111
+  122 -->|"kind: pipe"| 123
+  124 -->|"kind: transformCallee"| 123
+  126 -->|"kind: pipe"| 127
+  128 -->|"kind: transformCallee"| 127
+  127 -->|"kind: potentialReturn"| 125
+  127 -->|"kind: usedBy"| 125
+  130 -->|"kind: potentialReturn"| 129
+  130 -->|"kind: usedBy"| 129
+  131 -->|"kind: pipe"| 132
+  133 -->|"kind: transformCallee"| 132
+  136 -->|"kind: pipe"| 137
+  138 -->|"kind: transformCallee"| 137
+  137 -->|"kind: potentialReturn"| 135
+  137 -->|"kind: usedBy"| 135
+  141 -->|"kind: pipe"| 142
+  143 -->|"kind: transformCallee"| 142
+  148 -->|"kind: potentialReturn"| 147
+  147 -->|"kind: usedBy"| 146
+  153 -->|"kind: potentialReturn"| 152
+  152 -->|"kind: usedBy"| 151

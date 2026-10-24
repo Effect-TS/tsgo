@@ -56,7 +56,7 @@ func shouldOmitHint(
 	}
 
 	// Convert LSP position back to raw text offset
-	offset := int(converters.LineAndCharacterToPosition(sf, hint.Position))
+	offset := lsconv.FromLSPRangeToOriginal(converters, sf, lsproto.Range{Start: hint.Position, End: hint.Position}).Pos()
 
 	// Find the token at offset-1 (matching the TS reference: findNodeAtPositionIncludingTrivia(sf, position - 1))
 	node := astnav.GetTokenAtPosition(sf, offset-1)
@@ -99,7 +99,7 @@ func shouldOmitHint(
 // the generator function and body for the first match.
 func matchEffectGenCall(tp *typeparser.TypeParser, node *ast.Node) (*ast.FunctionExpression, *ast.BlockOrExpression) {
 	if result := tp.EffectGenCall(node); result != nil {
-		return result.GeneratorFunction, result.Body
+		return result.GeneratorFunction(), result.Body()
 	}
 	if result := tp.EffectFnCall(node); result != nil && result.IsGenerator() {
 		return result.GeneratorFunction(), result.Body()

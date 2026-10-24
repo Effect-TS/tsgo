@@ -1,0 +1,3 @@
+/.src/preferEffectArray.ts -> preferEffectArray.flows.preferEffectArray.mermaid
+/.src/aliases.ts -> preferEffectArray.flows.aliases.mermaid
+/.src/imported.ts -> preferEffectArray.flows.imported.mermaid

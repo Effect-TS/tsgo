@@ -53,20 +53,23 @@ func AnalyzeCatchAllTagDispatchToCatchTag(tp *typeparser.TypeParser, c *checker.
 	}
 
 	var matches []CatchAllTagDispatchMatch
-	for _, flow := range tp.PipingFlows(sf, true) {
-		for index := range flow.Transformations {
-			transformation := &flow.Transformations[index]
-			catchMethod, ok := catchAllTagDispatchMethod(tp, transformation.Callee)
-			if !ok || len(transformation.Args) != 1 {
+	for _, flow := range tp.PipingFlows(sf, true).All() {
+		for index := range flow.Transformations().All() {
+			transformation := flow.Transformations().At(index)
+			if transformation.Args().Len() != 1 {
 				continue
 			}
-			parameterName, branches, canFix, ok := analyzeCatchAllTagDispatchHandler(tp, c, transformation.Args[0])
+			catchMethod, ok := catchAllTagDispatchMethod(tp, transformation.Callee())
+			if !ok {
+				continue
+			}
+			parameterName, branches, canFix, ok := analyzeCatchAllTagDispatchHandler(tp, c, transformation.Args().At(0))
 			if !ok {
 				continue
 			}
 			matches = append(matches, CatchAllTagDispatchMatch{
-				SourceFile: sf, Location: scanner.GetErrorRangeForNode(sf, transformation.Callee),
-				Transformation: transformation, Callee: transformation.Callee,
+				SourceFile: sf, Location: scanner.GetErrorRangeForNode(sf, transformation.Callee()),
+				Transformation: &transformation, Callee: transformation.Callee(),
 				ParameterName: parameterName, CatchMethodName: catchMethod,
 				Branches: branches, CanFix: canFix,
 			})
@@ -86,11 +89,11 @@ func catchAllTagDispatchMethod(tp *typeparser.TypeParser, callee *ast.Node) (str
 }
 
 func analyzeCatchAllTagDispatchHandler(tp *typeparser.TypeParser, c *checker.Checker, handlerNode *ast.Node) (string, []CatchAllTagDispatchBranch, bool, bool) {
-	returning := typeparser.ParseReturningDispatch(handlerNode)
-	if returning == nil || len(returning.Params) != 1 || returning.Dispatch == nil || len(returning.Dispatch.Branches) == 0 || returning.Dispatch.Fallback == nil {
+	returning := tp.ParseReturningDispatch(handlerNode)
+	if returning == nil || returning.Params().Len() != 1 || returning.Dispatch() == nil || returning.Dispatch().Branches().Len() == 0 || returning.Dispatch().Fallback() == nil {
 		return "", nil, false, false
 	}
-	parameter := returning.Params[0]
+	parameter := returning.Params().At(0)
 	if parameter == nil || parameter.Name() == nil || parameter.Name().Kind != ast.KindIdentifier {
 		return "", nil, false, false
 	}
@@ -102,27 +105,27 @@ func analyzeCatchAllTagDispatchHandler(tp *typeparser.TypeParser, c *checker.Che
 	if !ok {
 		return "", nil, false, false
 	}
-	tagSubject := returning.Dispatch.CommonTagSubject(tp)
+	tagSubject := returning.Dispatch().CommonTagSubject(tp)
 	if tagSubject == nil || !isBareParameterTagReference(tp, c, tagSubject, parameterSymbol) {
 		return "", nil, false, false
 	}
 
-	branches := make([]CatchAllTagDispatchBranch, len(returning.Dispatch.Branches))
+	branches := make([]CatchAllTagDispatchBranch, returning.Dispatch().Branches().Len())
 	seen := make(map[string]struct{}, len(branches))
-	for i, branch := range returning.Dispatch.Branches {
-		tag, tagged := resultDispatchTagValue(branch.Condition)
+	for i, branch := range returning.Dispatch().Branches().All() {
+		tag, tagged := resultDispatchTagValue(branch.Condition())
 		_, validTag := tags[tag]
 		_, duplicate := seen[tag]
-		if !tagged || !validTag || duplicate || !isEffectExpression(tp, branch.Result) {
+		if !tagged || !validTag || duplicate || !isEffectExpression(tp, branch.Result()) {
 			return "", nil, false, false
 		}
 		seen[tag] = struct{}{}
-		branches[i] = CatchAllTagDispatchBranch{Tag: tag, Result: branch.Result, UsesParameter: conditionalRefailNodeContainsParameter(tp, c, branch.Result, parameterSymbol)}
+		branches[i] = CatchAllTagDispatchBranch{Tag: tag, Result: branch.Result(), UsesParameter: conditionalRefailNodeContainsParameter(tp, c, branch.Result(), parameterSymbol)}
 	}
-	if _, ok := catchTagReFailParameter(tp, c, returning.Dispatch.Fallback, parameterSymbol); !ok {
+	if _, ok := catchTagReFailParameter(tp, c, returning.Dispatch().Fallback(), parameterSymbol); !ok {
 		return "", nil, false, false
 	}
-	return parameter.Name().AsIdentifier().Text, branches, returning.Node.Kind == ast.KindArrowFunction && !checker.Checker_isSymbolAssigned(c, parameterSymbol), true
+	return parameter.Name().AsIdentifier().Text, branches, returning.Node().Kind == ast.KindArrowFunction && !checker.Checker_isSymbolAssigned(c, parameterSymbol), true
 }
 
 func literalTaggedUnionTags(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node) (map[string]struct{}, bool) {

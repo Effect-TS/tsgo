@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/effectMapFlatten.ts(6,3): suggestion TS377086: `Effect.map` + `Effect.flatten` is the same as `Effect.flatMap` that expresses the same steps more directly. effect(effectMapFlatten)
 /.src/effectMapFlatten.ts(13,3): suggestion TS377086: `Effect.map` + `Effect.flatten` is the same as `Effect.flatMap` that expresses the same steps more directly. effect(effectMapFlatten)

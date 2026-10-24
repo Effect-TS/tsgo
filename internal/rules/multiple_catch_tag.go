@@ -57,7 +57,7 @@ func AnalyzeMultipleCatchTag(tp *typeparser.TypeParser, c *checker.Checker, sf *
 	}
 
 	var matches []MultipleCatchTagMatch
-	for _, flow := range tp.PipingFlows(sf, true) {
+	for _, flow := range tp.PipingFlows(sf, true).All() {
 		var chain []multipleCatchTagCandidate
 		var introducedTags []*checker.Type
 
@@ -65,8 +65,8 @@ func AnalyzeMultipleCatchTag(tp *typeparser.TypeParser, c *checker.Checker, sf *
 			if len(chain) >= 2 {
 				matches = append(matches, MultipleCatchTagMatch{
 					SourceFile: sf,
-					Location:   scanner.GetErrorRangeForNode(sf, chain[0].transformation.Callee),
-					Node:       chain[0].transformation.Callee,
+					Location:   scanner.GetErrorRangeForNode(sf, chain[0].transformation.Callee()),
+					Node:       chain[0].transformation.Callee(),
 					CatchNodes: collectMultipleCatchTagNodes(chain),
 				})
 			}
@@ -74,14 +74,14 @@ func AnalyzeMultipleCatchTag(tp *typeparser.TypeParser, c *checker.Checker, sf *
 			introducedTags = nil
 		}
 
-		for i := range flow.Transformations {
-			transformation := &flow.Transformations[i]
-			if !tp.IsNodeReferenceToEffectPackageExport(transformation.Callee, "catchTag") {
+		for i := range flow.Transformations().All() {
+			transformation := flow.Transformations().At(i)
+			if !tp.IsNodeReferenceToEffectPackageExport(transformation.Callee(), "catchTag") {
 				flush()
 				continue
 			}
 
-			candidate, ok := analyzeMultipleCatchTagCandidate(tp, c, transformation)
+			candidate, ok := analyzeMultipleCatchTagCandidate(tp, c, &transformation)
 			if !ok {
 				flush()
 				continue
@@ -102,11 +102,11 @@ func AnalyzeMultipleCatchTag(tp *typeparser.TypeParser, c *checker.Checker, sf *
 }
 
 func analyzeMultipleCatchTagCandidate(tp *typeparser.TypeParser, c *checker.Checker, transformation *typeparser.PipingFlowTransformation) (multipleCatchTagCandidate, bool) {
-	if tp == nil || c == nil || transformation == nil || transformation.Callee == nil || len(transformation.Args) != 2 {
+	if tp == nil || c == nil || transformation == nil || transformation.Callee() == nil || transformation.Args().Len() != 2 {
 		return multipleCatchTagCandidate{}, false
 	}
 
-	tagArg := unwrapTransparentExpression(transformation.Args[0])
+	tagArg := unwrapTransparentExpression(transformation.Args().At(0))
 	if tagArg == nil || !ast.IsStringLiteral(tagArg) {
 		return multipleCatchTagCandidate{}, false
 	}
@@ -116,7 +116,7 @@ func analyzeMultipleCatchTagCandidate(tp *typeparser.TypeParser, c *checker.Chec
 		return multipleCatchTagCandidate{}, false
 	}
 
-	handlerType := tp.GetTypeAtLocation(transformation.Args[1])
+	handlerType := tp.GetTypeAtLocation(transformation.Args().At(1))
 	if handlerType == nil {
 		return multipleCatchTagCandidate{}, false
 	}
@@ -148,10 +148,10 @@ func catchTagReturnErrorChannel(tp *typeparser.TypeParser, returnType *checker.T
 		return nil
 	}
 	if effectType := tp.EffectType(returnType); effectType != nil {
-		return effectType.E
+		return effectType.E()
 	}
 	if streamType := tp.StreamType(returnType); streamType != nil {
-		return streamType.E
+		return streamType.E()
 	}
 	return nil
 }
@@ -200,10 +200,10 @@ func overlapsAnyTagType(c *checker.Checker, current *checker.Type, previous []*c
 func collectMultipleCatchTagNodes(chain []multipleCatchTagCandidate) []*ast.Node {
 	nodes := make([]*ast.Node, 0, len(chain))
 	for _, candidate := range chain {
-		if candidate.transformation == nil || candidate.transformation.Callee == nil {
+		if candidate.transformation == nil || candidate.transformation.Callee() == nil {
 			continue
 		}
-		nodes = append(nodes, candidate.transformation.Callee)
+		nodes = append(nodes, candidate.transformation.Callee())
 	}
 	return nodes
 }

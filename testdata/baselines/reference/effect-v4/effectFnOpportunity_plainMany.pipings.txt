@@ -1,7 +1,7 @@
 ==== /.src/effectFnOpportunity_plainMany.ts (5 flows) ====
 
 === Piping Flow ===
-Location: 19:9 - 19:47
+Location: 15:9 - 15:47
 Node: Effect.succeed(a + b + c + d + e + n)
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 28:29 - 28:51
+Location: 24:29 - 24:51
 Node: Effect.fail("Error!")
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<never, string, never>
 
 === Piping Flow ===
-Location: 29:9 - 29:43
+Location: 25:9 - 25:43
 Node: Effect.succeed(a + b + c + d + e)
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 38:29 - 38:51
+Location: 34:29 - 34:51
 Node: Effect.fail("Error!")
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Effect<never, string, never>
 
 === Piping Flow ===
-Location: 39:9 - 39:43
+Location: 35:9 - 35:43
 Node: Effect.succeed(a + b + c + d + e)
 Node Kind: KindCallExpression
 

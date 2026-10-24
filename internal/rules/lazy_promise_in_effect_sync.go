@@ -29,7 +29,7 @@ var LazyPromiseInEffectSync = rule.Rule{
 
 			if node.Kind == ast.KindCallExpression {
 				call := node.AsCallExpression()
-				if call != nil && ctx.TypeParser.IsNodeReferenceToEffectModuleApi(call.Expression, "sync") && call.Arguments != nil && len(call.Arguments.Nodes) > 0 {
+				if call != nil && call.Arguments != nil && len(call.Arguments.Nodes) > 0 && ctx.TypeParser.IsNodeReferenceToEffectModuleApi(call.Expression, "sync") {
 					lazyArg := call.Arguments.Nodes[0]
 					lazyArgType := ctx.TypeParser.GetTypeAtLocation(lazyArg)
 					if lazyArgType != nil && thunkReturnsPromise(ctx.Checker, ctx.TypeParser, lazyArgType) {

@@ -1,4 +1,4 @@
-==== /.src/effectInVoidSuccess.ts (4 flows) ====
+==== /.src/effectInVoidSuccess.ts (5 flows) ====
 
 === Piping Flow ===
 Location: 4:49 - 4:84
@@ -67,3 +67,17 @@ Transformations (1):
       callee: Effect.fail
       args: (constant)
       outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 20:35 - 20:92
+Node: Effect.suspend((): Effect.Effect<void> => nestedSubtype)
+Node Kind: KindCallExpression
+
+Subject: (): Effect.Effect<void> => nestedSubtype
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.suspend
+      args: (constant)
+      outType: Effect<void, never, never>

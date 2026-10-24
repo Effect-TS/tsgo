@@ -6,6 +6,7 @@ import (
 
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
@@ -25,6 +26,7 @@ var AnyUnknownInErrorContext = rule.Rule{
 		type matchEntry struct {
 			node        *ast.Node
 			messageText string
+			flagged     anyUnknownChannels
 			start       int
 			end         int
 		}
@@ -82,14 +84,25 @@ var AnyUnknownInErrorContext = rule.Rule{
 			// Enqueue children for visiting
 			node.ForEachChild(pushChild)
 
-			// Get the type at this location
-			t := ctx.TypeParser.GetTypeAtLocation(node)
+			if _, ok := typeparser.TypeEquivalentNode(node); ok {
+				continue
+			}
+
+			// Only Effect and Layer types are inspected below.
+			if ctx.TypeParser.NodeCannotBeEffectLibraryType(node) {
+				continue
+			}
 
 			// For call expressions, use the resolved signature's return type
+			var sig *checker.Signature
 			if node.Kind == ast.KindCallExpression {
-				if sig := ctx.Checker.GetResolvedSignature(node); sig != nil {
-					t = ctx.Checker.GetReturnTypeOfSignature(sig)
-				}
+				sig = ctx.Checker.GetResolvedSignature(node)
+			}
+			var t *checker.Type
+			if sig != nil {
+				t = ctx.Checker.GetReturnTypeOfSignature(sig)
+			} else {
+				t = ctx.TypeParser.GetTypeAtLocation(node)
 			}
 
 			if t == nil {
@@ -99,19 +112,23 @@ var AnyUnknownInErrorContext = rule.Rule{
 			// Try strict Effect type first, then Layer type
 			var eType, rType *checker.Type
 			if eff := ctx.TypeParser.StrictEffectType(t); eff != nil {
-				eType = eff.E
-				rType = eff.R
+				eType = eff.E()
+				rType = eff.R()
 			} else if layer := ctx.TypeParser.LayerType(t); layer != nil {
-				eType = layer.E
-				rType = layer.RIn
+				eType = layer.E()
+				rType = layer.RIn()
 			}
 
 			if eType == nil || rType == nil {
 				continue
 			}
 
-			hasAnyUnknownR := rType.Flags()&(checker.TypeFlagsAny|checker.TypeFlagsUnknown) != 0
-			hasAnyUnknownE := eType.Flags()&(checker.TypeFlagsAny|checker.TypeFlagsUnknown) != 0
+			flagged := anyUnknownChannels{
+				r: rType.Flags() & (checker.TypeFlagsAny | checker.TypeFlagsUnknown),
+				e: eType.Flags() & (checker.TypeFlagsAny | checker.TypeFlagsUnknown),
+			}
+			hasAnyUnknownR := flagged.r != 0
+			hasAnyUnknownE := flagged.e != 0
 
 			if !hasAnyUnknownR && !hasAnyUnknownE {
 				continue
@@ -148,9 +165,10 @@ var AnyUnknownInErrorContext = rule.Rule{
 			nodeStart := scanner.GetTokenPosOfNode(node, ctx.SourceFile, false)
 			nodeEnd := node.End()
 
-			// Innermost-node deduplication: remove parent nodes that contain this node
+			// Innermost-node deduplication: remove parent nodes that contain this
+			// node when this node already reports all of their channels
 			for i := len(matches) - 1; i >= 0; i-- {
-				if matches[i].start <= nodeStart && matches[i].end >= nodeEnd {
+				if matches[i].start <= nodeStart && matches[i].end >= nodeEnd && flagged.covers(matches[i].flagged) {
 					matches = append(matches[:i], matches[i+1:]...)
 				}
 			}
@@ -158,6 +176,7 @@ var AnyUnknownInErrorContext = rule.Rule{
 			matches = append(matches, matchEntry{
 				node:        node,
 				messageText: messageText,
+				flagged:     flagged,
 				start:       nodeStart,
 				end:         nodeEnd,
 			})
@@ -171,4 +190,17 @@ var AnyUnknownInErrorContext = rule.Rule{
 
 		return diags
 	},
+}
+
+// anyUnknownChannels holds TypeFlagsAny or TypeFlagsUnknown for each channel
+// that has one, and zero for a channel that has neither.
+type anyUnknownChannels struct {
+	r checker.TypeFlags
+	e checker.TypeFlags
+}
+
+// covers reports whether c flags every channel that other flags, with the
+// same any or unknown.
+func (c anyUnknownChannels) covers(other anyUnknownChannels) bool {
+	return (other.r == 0 || other.r == c.r) && (other.e == 0 || other.e == c.e)
 }

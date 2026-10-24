@@ -56,31 +56,30 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 	}
 
 	var matches []CatchDieToOrDieMatch
-	for _, flow := range tp.PipingFlows(sf, true) {
-		inputType := flow.Subject.OutType
-		for i := range flow.Transformations {
-			transformation := &flow.Transformations[i]
-			callee := transformation.Callee
-			args := transformation.Args
+	for _, flow := range tp.PipingFlows(sf, true).All() {
+		for i := range flow.Transformations().All() {
+			transformation := flow.Transformations().At(i)
+			callee := transformation.Callee()
+			args := transformation.Args()
 			methodName, effectModule, ok := catchDieMethod(tp, callee)
-			if ok && len(args) == 1 {
-				handler, _, _ := tp.UnwrapIdentityForwarder(args[0])
-				if tp.IsNodeReferenceToEffectModuleApi(handler, "die") {
-					inputEffect := tp.StrictEffectType(inputType)
-					if inputEffect != nil && inputEffect.E != nil && inputEffect.E.Flags()&checker.TypeFlagsNever == 0 {
-						matches = append(matches, CatchDieToOrDieMatch{
-							SourceFile:       sf,
-							Location:         scanner.GetErrorRangeForNode(sf, callee),
-							Transformation:   transformation,
-							EffectModule:     effectModule,
-							CatchMethodName:  methodName,
-							HasTypeArguments: catchDieHasTypeArguments(transformation),
-						})
-					}
-				}
+			if !ok || args.Len() != 1 {
+				continue
 			}
-
-			inputType = transformation.OutType
+			handler, _, _ := tp.UnwrapIdentityForwarder(args.At(0))
+			if !tp.IsNodeReferenceToEffectModuleApi(handler, "die") {
+				continue
+			}
+			inputEffect := tp.StrictEffectType(flow.TransformationInputType(i))
+			if inputEffect != nil && inputEffect.E() != nil && inputEffect.E().Flags()&checker.TypeFlagsNever == 0 {
+				matches = append(matches, CatchDieToOrDieMatch{
+					SourceFile:       sf,
+					Location:         scanner.GetErrorRangeForNode(sf, callee),
+					Transformation:   &transformation,
+					EffectModule:     effectModule,
+					CatchMethodName:  methodName,
+					HasTypeArguments: catchDieHasTypeArguments(&transformation),
+				})
+			}
 		}
 	}
 
@@ -110,5 +109,5 @@ func catchDieMethod(tp *typeparser.TypeParser, callee *ast.Node) (name string, e
 }
 
 func catchDieHasTypeArguments(transformation *typeparser.PipingFlowTransformation) bool {
-	return transformation != nil && transformation.TypeArguments != nil && len(transformation.TypeArguments.Nodes) > 0
+	return transformation != nil && transformation.TypeArguments() != nil && len(transformation.TypeArguments().Nodes) > 0
 }

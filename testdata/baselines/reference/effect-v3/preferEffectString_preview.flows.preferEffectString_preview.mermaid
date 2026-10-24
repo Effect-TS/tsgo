@@ -1,0 +1,10 @@
+flowchart TB
+  0[/"type: #quot;alice@example.com#quot;<br/>node: #quot;alice@example.com#quot;"/]
+  1[/"type: number<br/>node: email.indexOf#40;#quot;@#quot;#41;"/]
+  2[/"type: #quot;alice@example.com#quot;<br/>node: email"/]
+  3["type: Option#lt;number#gt;<br/>callee: Str.indexOf<br/>args: #91;#quot;@#quot;#93;"]
+  4[/"type: #40;searchString: string#41; =#gt; #40;self: string#41; =#gt; Option#lt;number#gt;<br/>node: Str.indexOf"/]
+  5[/"type: #quot;@#quot;<br/>node: #quot;@#quot;"/]
+  2 -->|"kind: pipe"| 3
+  4 -->|"kind: transformCallee"| 3
+  5 -->|"kind: transformArg"| 3

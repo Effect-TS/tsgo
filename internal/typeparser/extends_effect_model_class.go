@@ -5,14 +5,18 @@ import (
 )
 
 // EffectModelClassResult holds the parsed result of a class extending Model.Class
-// from effect/unstable/schema.
+// from effect/schema.
 type EffectModelClassResult struct {
-	ClassName    *ast.Node // The class name identifier
-	SelfTypeNode *ast.Node // The Self type argument node (first type arg of the inner call)
+	className    *ast.Node // The class name identifier
+	selfTypeNode *ast.Node // The Self type argument node (first type arg of the inner call)
 }
 
+func (r EffectModelClassResult) ClassName() *ast.Node { return r.className }
+
+func (r EffectModelClassResult) SelfTypeNode() *ast.Node { return r.selfTypeNode }
+
 // ExtendsEffectModelClass checks if a class declaration extends Model.Class<Self>(...)({...})
-// from the effect/unstable/schema module.
+// from the effect/schema module.
 // It detects the double-call pattern:
 //
 //	class X extends Model.Class<X>("name")({}) {}
@@ -76,8 +80,8 @@ func (tp *TypeParser) ExtendsEffectModelClass(classNode *ast.Node) *EffectModelC
 			}
 
 			return &EffectModelClassResult{
-				ClassName:    classNode.Name(),
-				SelfTypeNode: innerCall.TypeArguments.Nodes[0],
+				className:    classNode.Name(),
+				selfTypeNode: innerCall.TypeArguments.Nodes[0],
 			}
 		}
 

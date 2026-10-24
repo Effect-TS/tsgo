@@ -6,11 +6,25 @@ import (
 
 // SchemaTaggedResult holds the parsed result of a class extending Schema.TaggedClass/TaggedError/TaggedRequest.
 type SchemaTaggedResult struct {
-	ClassName        *ast.Node // The class name identifier
-	SelfTypeNode     *ast.Node // The Self type argument node (first type arg of the inner call)
-	KeyStringLiteral *ast.Node // The identifier arg from the inner call (first arg), or nil
-	TagStringLiteral *ast.Node // The tag arg from the outer call (first arg), or nil
+	className        *ast.Node // The class name identifier
+	selfTypeNode     *ast.Node // The Self type argument node (first type arg of the inner call)
+	brandTypeNode    *ast.Node
+	keyStringLiteral *ast.Node // The identifier arg from the inner call (first arg), or nil
+	tagStringLiteral *ast.Node // The tag arg from the outer call (first arg), or nil
+	fieldsNode       *ast.Node
 }
+
+func (r SchemaTaggedResult) ClassName() *ast.Node { return r.className }
+
+func (r SchemaTaggedResult) SelfTypeNode() *ast.Node { return r.selfTypeNode }
+
+func (r SchemaTaggedResult) BrandTypeNode() *ast.Node { return r.brandTypeNode }
+
+func (r SchemaTaggedResult) KeyStringLiteral() *ast.Node { return r.keyStringLiteral }
+
+func (r SchemaTaggedResult) TagStringLiteral() *ast.Node { return r.tagStringLiteral }
+
+func (r SchemaTaggedResult) FieldsNode() *ast.Node { return r.fieldsNode }
 
 // extendsSchemaTagged checks if a class declaration extends Schema.<memberName>
 // with the double-call pattern:
@@ -72,6 +86,10 @@ func (tp *TypeParser) extendsSchemaTagged(classNode *ast.Node, memberName string
 		if innerCall.TypeArguments == nil || len(innerCall.TypeArguments.Nodes) == 0 {
 			continue
 		}
+		var brandTypeNode *ast.Node
+		if (memberName == "TaggedClass" || memberName == "TaggedError") && len(innerCall.TypeArguments.Nodes) > 1 {
+			brandTypeNode = innerCall.TypeArguments.Nodes[1]
+		}
 
 		// Check if the inner call's expression resolves to Schema.<memberName>
 		if innerCall.Expression == nil {
@@ -99,11 +117,18 @@ func (tp *TypeParser) extendsSchemaTagged(classNode *ast.Node, memberName string
 			}
 		}
 
+		var fieldsNode *ast.Node
+		if outerCall.Arguments != nil && len(outerCall.Arguments.Nodes) > 1 {
+			fieldsNode = outerCall.Arguments.Nodes[1]
+		}
+
 		return &SchemaTaggedResult{
-			ClassName:        classNode.Name(),
-			SelfTypeNode:     innerCall.TypeArguments.Nodes[0],
-			KeyStringLiteral: keyStringLiteral,
-			TagStringLiteral: tagStringLiteral,
+			className:        classNode.Name(),
+			selfTypeNode:     innerCall.TypeArguments.Nodes[0],
+			brandTypeNode:    brandTypeNode,
+			keyStringLiteral: keyStringLiteral,
+			tagStringLiteral: tagStringLiteral,
+			fieldsNode:       fieldsNode,
 		}
 	}
 

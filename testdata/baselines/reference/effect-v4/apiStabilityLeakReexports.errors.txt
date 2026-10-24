@@ -1,0 +1,80 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/aliased.ts(5,13): warning TS377137: `effect-v4-tests/aliased#api` exposes `DepExperimental`, an experimental API. effect(apiStabilityLeak)
+/.src/named.ts(5,10): warning TS377137: `effect-v4-tests/named#DepLeaky` exposes `DepExperimental`, an experimental API. effect(apiStabilityLeak)
+/.src/star.ts(5,1): warning TS377137: `effect-v4-tests/star#DepLeaky` exposes `DepExperimental`, an experimental API. effect(apiStabilityLeak)
+
+
+==== /.src/dep.ts (0 errors) ====
+    /** @stability experimental */
+    export interface DepExperimental {
+      value: string
+    }
+    
+    export interface DepLeaky {
+      value: DepExperimental
+    }
+    
+    /** @stability unstable */
+    export interface DepUnstable {
+      value: string
+    }
+    
+
+==== /.src/named.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    // Re-exporting a stable API whose surface exposes an experimental type reports
+    // at the re-export specifier in this file.
+    export { DepLeaky } from "./dep"
+             ~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/named#DepLeaky` exposes `DepExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/dep.ts(2,18): `DepExperimental` is declared experimental here. effect(apiStabilityLeak)
+    // Re-exporting the unstable type directly inherits its stability, so the export
+    // is treated as unstable and does not itself leak.
+    export { DepUnstable } from "./dep"
+    
+
+==== /.src/star.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    // `export *` forwards DepLeaky, whose surface leaks an experimental type. The
+    // diagnostic is anchored at the `export *` declaration in this file.
+    export * from "./dep"
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/star#DepLeaky` exposes `DepExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/dep.ts(2,18): `DepExperimental` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/tagged.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    // The tag on the re-export declaration governs its ceiling: an experimental
+    // re-export imposes no restriction on the forwarded surface.
+    /** @stability experimental */
+    export { DepLeaky } from "./dep"
+    
+
+==== /.src/barrel.ts (0 errors) ====
+    export { DepLeaky } from "./dep"
+    
+
+==== /.src/aliased.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    // A namespace re-export of a barrel resolves the forwarded alias and reports
+    // the offending member at the namespace export in this file.
+    export * as api from "./barrel"
+                ~~~
+!!! warning TS377137: `effect-v4-tests/aliased#api` exposes `DepExperimental`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/dep.ts(2,18): `DepExperimental` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/taggedNamespace.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    // A tagged namespace re-export keeps its own ceiling and reports nothing.
+    /** @stability experimental */
+    export * as api from "./dep"
+    

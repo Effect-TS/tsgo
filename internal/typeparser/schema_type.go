@@ -5,11 +5,11 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
-var effectSchemaModuleDescriptor = newPackageSourceFileDescriptor("effect", isSchemaTypeSourceFile)
+var effectSchemaModuleDescriptor = newPackageSourceFileDescriptor(moduleDescriptorSchema, "effect", isSchemaTypeSourceFile)
 
-var effectParseResultModuleDescriptor = newPackageSourceFileDescriptor("effect", isParseResultSourceFile)
+var effectParseResultModuleDescriptor = newPackageSourceFileDescriptor(moduleDescriptorParseResult, "effect", isParseResultSourceFile)
 
-var effectSchemaParserModuleDescriptor = newPackageSourceFileDescriptor("effect", isSchemaParserSourceFile)
+var effectSchemaParserModuleDescriptor = newPackageSourceFileDescriptor(moduleDescriptorSchemaParser, "effect", isSchemaParserSourceFile)
 
 // SchemaTypeId is the property key for Schema's variance struct.
 const SchemaTypeId = "~effect/Schema/Schema"
@@ -24,9 +24,13 @@ func (tp *TypeParser) IsSchemaType(t *checker.Type) bool {
 
 // SchemaTypes holds the A (Type) and E (Encoded) types extracted from a Schema type.
 type SchemaTypes struct {
-	A *checker.Type
-	E *checker.Type
+	a *checker.Type
+	e *checker.Type
 }
+
+func (r SchemaTypes) A() *checker.Type { return r.a }
+
+func (r SchemaTypes) E() *checker.Type { return r.e }
 
 // EffectSchemaTypes extracts the A (Type) and E (Encoded) types from a Schema type.
 // Returns nil if the type is not a recognized Schema type or types cannot be extracted.
@@ -47,7 +51,7 @@ func (tp *TypeParser) EffectSchemaTypes(t *checker.Type) *SchemaTypes {
 			if aType == nil || eType == nil {
 				return nil
 			}
-			return &SchemaTypes{A: aType, E: eType}
+			return &SchemaTypes{a: aType, e: eType}
 		}
 
 		// V3: check for 'ast' property first
@@ -58,7 +62,7 @@ func (tp *TypeParser) EffectSchemaTypes(t *checker.Type) *SchemaTypes {
 		// Find the variance struct property and extract A/I types
 		props := c.GetPropertiesOfType(t)
 		for _, prop := range props {
-			if prop == nil || prop.Flags&ast.SymbolFlagsProperty == 0 || prop.Flags&ast.SymbolFlagsOptional != 0 || prop.ValueDeclaration == nil {
+			if prop == nil || ast.TSGetSymbolFlags(prop)&ast.SymbolFlagsProperty == 0 || ast.TSGetSymbolFlags(prop)&ast.SymbolFlagsOptional != 0 || ast.TSGetSymbolValueDeclaration(prop) == nil {
 				continue
 			}
 			propType := c.GetTypeOfSymbolAtLocation(prop, nil)
@@ -74,7 +78,7 @@ func (tp *TypeParser) EffectSchemaTypes(t *checker.Type) *SchemaTypes {
 			if r == nil {
 				continue
 			}
-			return &SchemaTypes{A: a, E: i}
+			return &SchemaTypes{a: a, e: i}
 		}
 
 		return nil

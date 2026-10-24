@@ -1,0 +1,37 @@
+=== Quick Fix Inventory ===
+
+[D1] (15:26-15:41) TS377050: This nested call structure has a pipeable form. `[1, 2, 3].pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+  Fix 0: "Disable missedPipeableOpportunity for this line"
+  Fix 1: "Disable missedPipeableOpportunity for entire file"
+  Fix 2: "Convert to pipe style"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable missedPipeableOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missedPipeableOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to pipe style" ===
+
+--- file:///.src/missedPipeableOpportunity_arrayPipe.ts ---
+// @effect-diagnostics missedPipeableOpportunity:warning
+interface HasPipe {
+  pipe(): unknown
+}
+
+declare global {
+  interface Array<T> extends HasPipe {}
+}
+
+declare const g: (x: ReadonlyArray<number>) => object
+declare const h: (x: object) => object
+declare const f: (x: object) => number
+
+// Should report: array literals get `pipe` from a base interface of the augmented Array
+export const fromArray = [1, 2, 3].pipe(g, f)
+
+// Should not report: object literals do not inherit Array members
+export const fromObject = f(h({ a: 1 }))
+

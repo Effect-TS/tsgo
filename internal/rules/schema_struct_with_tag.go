@@ -79,11 +79,6 @@ func analyzeSchemaStructWithTagNode(tp *typeparser.TypeParser, _ *checker.Checke
 	}
 	call := node.AsCallExpression()
 
-	// Check if this is Schema.Struct
-	if !tp.IsNodeReferenceToEffectSchemaModuleApi(call.Expression, "Struct") {
-		return SchemaStructWithTagMatch{}, false
-	}
-
 	// Must have exactly 1 argument
 	if call.Arguments == nil || len(call.Arguments.Nodes) != 1 {
 		return SchemaStructWithTagMatch{}, false
@@ -96,6 +91,11 @@ func analyzeSchemaStructWithTagNode(tp *typeparser.TypeParser, _ *checker.Checke
 
 	objLit := arg.AsObjectLiteralExpression()
 	if objLit == nil || objLit.Properties == nil {
+		return SchemaStructWithTagMatch{}, false
+	}
+
+	// Check if this is Schema.Struct
+	if !tp.IsNodeReferenceToEffectSchemaModuleApi(call.Expression, "Struct") {
 		return SchemaStructWithTagMatch{}, false
 	}
 
@@ -119,15 +119,15 @@ func analyzeSchemaStructWithTagNode(tp *typeparser.TypeParser, _ *checker.Checke
 		}
 
 		literalCall := init.AsCallExpression()
-		if !tp.IsNodeReferenceToEffectSchemaModuleApi(literalCall.Expression, "Literal") {
-			return SchemaStructWithTagMatch{}, false
-		}
 
 		// Schema.Literal must have exactly 1 argument that is a string literal
 		if literalCall.Arguments == nil || len(literalCall.Arguments.Nodes) != 1 {
 			return SchemaStructWithTagMatch{}, false
 		}
 		if literalCall.Arguments.Nodes[0].Kind != ast.KindStringLiteral {
+			return SchemaStructWithTagMatch{}, false
+		}
+		if !tp.IsNodeReferenceToEffectSchemaModuleApi(literalCall.Expression, "Literal") {
 			return SchemaStructWithTagMatch{}, false
 		}
 

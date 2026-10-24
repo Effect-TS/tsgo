@@ -21,8 +21,12 @@ func MergeEffectCompilerOptions(targetOptions, sourceOptions *core.CompilerOptio
 	if targetOptions == nil || sourceOptions == nil {
 		return
 	}
+	compilerOptionsRaw := getCompilerOptionsRaw(rawSource)
 	sourceEffect := cloneEffectOptions(sourceOptions.Effect)
 	if sourceEffect == nil {
+		if compilerOptionsRaw != nil && compilerOptionsRaw.Has("plugins") {
+			targetOptions.Effect = nil
+		}
 		return
 	}
 	rewriteEffectOptionsOverrides(sourceEffect, sourceConfigPath, basePath)
@@ -118,6 +122,12 @@ func mergeEffectOptions(target, source *etscore.EffectPluginOptions, sourcePlugi
 	if sourcePluginRaw.Has("pipeableMinArgCount") {
 		merged.PipeableMinArgCount = source.PipeableMinArgCount
 	}
+	if sourcePluginRaw.Has("allowedUnstableApis") {
+		merged.AllowedUnstableApis = append([]string(nil), source.AllowedUnstableApis...)
+	}
+	if sourcePluginRaw.Has("allowedExperimentalApis") {
+		merged.AllowedExperimentalApis = append([]string(nil), source.AllowedExperimentalApis...)
+	}
 	if sourcePluginRaw.Has("allowedDuplicatedPackages") {
 		merged.AllowedDuplicatedPackages = append([]string(nil), source.AllowedDuplicatedPackages...)
 	}
@@ -138,11 +148,7 @@ func rewriteEffectOptionsOverrides(effect *etscore.EffectPluginOptions, sourceCo
 	if effect == nil || len(effect.Overrides) == 0 || sourceConfigPath == "" {
 		return
 	}
-	t := tspath.ComparePathsOptions{
-		UseCaseSensitiveFileNames: true,
-		CurrentDirectory:          basePath,
-	}
-	relativeDifference := tspath.ConvertToRelativePath(tspath.GetDirectoryPath(sourceConfigPath), t)
+	relativeDifference := tspath.ConvertToRelativePath(tspath.GetDirectoryPath(sourceConfigPath), tspath.RootedDirectoryPath(basePath), tspath.CaseSensitive)
 	if relativeDifference == "" {
 		return
 	}
@@ -205,6 +211,8 @@ func cloneEffectOptions(source *etscore.EffectPluginOptions) *etscore.EffectPlug
 	}
 	cloned := *source
 	cloned.KeyPatterns = cloneKeyPatterns(source.KeyPatterns)
+	cloned.AllowedUnstableApis = append([]string(nil), source.AllowedUnstableApis...)
+	cloned.AllowedExperimentalApis = append([]string(nil), source.AllowedExperimentalApis...)
 	cloned.AllowedDuplicatedPackages = append([]string(nil), source.AllowedDuplicatedPackages...)
 	cloned.EffectFn = append([]string(nil), source.EffectFn...)
 	cloned.DiagnosticSeverity = mergeSeverityMaps(nil, source.DiagnosticSeverity)
@@ -229,8 +237,14 @@ func cloneOverrides(source []etscore.Override) []etscore.Override {
 				PipeableMinArgCount:       cloneIntPtr(override.Options.PipeableMinArgCount),
 				KeyPatterns:               cloneKeyPatternsPtr(override.Options.KeyPatterns),
 				ExtendedKeyDetection:      cloneBoolPtr(override.Options.ExtendedKeyDetection),
+				AllowedUnstableApis:       cloneStringSlicePtr(override.Options.AllowedUnstableApis),
+				AllowedExperimentalApis:   cloneStringSlicePtr(override.Options.AllowedExperimentalApis),
 				AllowedDuplicatedPackages: cloneStringSlicePtr(override.Options.AllowedDuplicatedPackages),
 				EffectFn:                  cloneStringSlicePtr(override.Options.EffectFn),
+				NamespaceImportPackages:   cloneStringSlicePtr(override.Options.NamespaceImportPackages),
+				BarrelImportPackages:      cloneStringSlicePtr(override.Options.BarrelImportPackages),
+				ImportAliases:             cloneStringMapPtr(override.Options.ImportAliases),
+				TopLevelNamedReexports:    cloneTopLevelNamedReexportsPtr(override.Options.TopLevelNamedReexports),
 			},
 		}
 	}
@@ -293,6 +307,22 @@ func cloneIntPtr(source *int) *int {
 }
 
 func cloneBoolPtr(source *bool) *bool {
+	if source == nil {
+		return nil
+	}
+	v := *source
+	return &v
+}
+
+func cloneStringMapPtr(source *map[string]string) *map[string]string {
+	if source == nil {
+		return nil
+	}
+	v := maps.Clone(*source)
+	return &v
+}
+
+func cloneTopLevelNamedReexportsPtr(source *etscore.TopLevelNamedReexportsMode) *etscore.TopLevelNamedReexportsMode {
 	if source == nil {
 		return nil
 	}

@@ -43,6 +43,12 @@ test("generates sorted metadata-only Oxlint rules", () => {
   const output = renderOxlintEffectRules({
     rules: [
       {
+        name: "apiStabilityLeak",
+        description: "Detects less stable API surface exposure",
+        fixable: false,
+        group: "maintainers"
+      },
+      {
         name: "globalFetchInEffect",
         description: "Detects global fetch",
         fixable: false,
@@ -60,6 +66,7 @@ test("generates sorted metadata-only Oxlint rules", () => {
   })
 
   assert.deepEqual(output.rules.map(({ moduleName }) => moduleName), [
+    "api_stability_leak",
     "crypto_random_uuid",
     "effect_fn_iife",
     "global_fetch_in_effect",
@@ -67,16 +74,18 @@ test("generates sorted metadata-only Oxlint rules", () => {
   ])
   assert.match(output.moduleBlock, /pub\(crate\) mod effecttsgo/)
   assert.match(output.moduleBlock, /pub mod crypto_random_uuid;/)
-  assert.match(output.rules[0]!.source, /pub struct CryptoRandomUuid;/)
-  assert.match(output.rules[0]!.source, /CryptoRandomUuid\(tsgolint\)/)
+  assert.match(output.rules[0]!.source, /pub struct ApiStabilityLeak;/)
+  assert.match(output.rules[0]!.source, /ApiStabilityLeak\(tsgolint\)/)
   assert.match(output.rules[0]!.source, /effecttsgo,/)
-  assert.match(output.rules[0]!.source, /correctness,/)
-  assert.match(output.rules[0]!.source, /pending,/)
-  assert.match(output.rules[0]!.source, /version = "next",/)
-  assert.match(output.rules[1]!.source, /suspicious,/)
-  assert.match(output.rules[2]!.source, /restriction,/)
-  assert.match(output.rules[3]!.source, /style,/)
-  assert.match(output.rules[3]!.source, /none,/)
+  assert.match(output.rules[0]!.source, /restriction,/)
+  assert.match(output.rules[0]!.source, /none,/)
+  assert.match(output.rules[1]!.source, /correctness,/)
+  assert.match(output.rules[1]!.source, /pending,/)
+  assert.match(output.rules[1]!.source, /version = "next",/)
+  assert.match(output.rules[2]!.source, /suspicious,/)
+  assert.match(output.rules[3]!.source, /restriction,/)
+  assert.match(output.rules[4]!.source, /style,/)
+  assert.match(output.rules[4]!.source, /none,/)
 })
 
 test("rejects Oxlint rules without descriptions", () => {

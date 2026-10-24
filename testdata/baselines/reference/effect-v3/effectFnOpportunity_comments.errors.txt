@@ -1,0 +1,23 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/effectFnOpportunity_comments.ts(3,14): suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {"compilerOptions":{"plugins":[{"name":"@effect/language-service","effectFn":["span","untraced","no-span","inferred-span","suggested-span"]}]}}
+    
+
+==== /.src/effectFnOpportunity_comments.ts (1 errors) ====
+    import { Effect } from "effect"
+    
+    export const f = (n: number) =>
+                 ~
+!!! suggestion TS377047: This expression can be rewritten in the reusable function form `Effect.fnUntraced(function*(n) { ... })`. effect(effectFnOpportunity)
+      Effect.gen(function* () {
+        // explains the next line
+        const x = yield* Effect.succeed(n) // trailing note
+        /* block note */
+        return x + 1_000
+      })
+    

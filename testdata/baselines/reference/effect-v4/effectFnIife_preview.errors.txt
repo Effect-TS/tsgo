@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/effectFnIife_preview.ts(5,24): warning TS377011: `Effect.fn` returns a reusable function that can take arguments, but it is invoked immediately here. `Effect.gen` represents the immediate-use form for this pattern with Effect.withSpan("preview") piped in the end to maintain tracing spans. effect(effectFnIife)
 

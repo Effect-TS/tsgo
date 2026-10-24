@@ -59,6 +59,9 @@ var PromiseInEffectSuccess = rule.Rule{
 			if !ast.IsExpression(node) || ast.IsDeclarationName(node) {
 				continue
 			}
+			if _, ok := typeparser.TypeEquivalentNode(node); ok {
+				continue
+			}
 
 			// Declared-type prefilter: a diagnostic requires a strict Effect
 			// flow type on the node, which reference nodes with a
@@ -80,7 +83,7 @@ var PromiseInEffectSuccess = rule.Rule{
 				t = ctx.TypeParser.GetTypeAtLocation(node)
 			}
 			effect := ctx.TypeParser.StrictEffectType(t)
-			if effect == nil || !typeContainsPromise(ctx.TypeParser, effect.A) {
+			if effect == nil || !typeContainsPromise(ctx.TypeParser, effect.A()) {
 				continue
 			}
 
@@ -132,7 +135,7 @@ func isExplicitPromiseEffectType(tp *typeparser.TypeParser, typeNode *ast.Node) 
 		return false
 	}
 	effect := tp.StrictEffectType(tp.GetTypeAtLocation(typeNode))
-	return effect != nil && typeContainsPromise(tp, effect.A)
+	return effect != nil && typeContainsPromise(tp, effect.A())
 }
 
 func hasExplicitPromiseEffectReturn(tp *typeparser.TypeParser, c *checker.Checker, function *ast.Node) bool {
@@ -154,7 +157,7 @@ func hasExplicitPromiseEffectReturn(tp *typeparser.TypeParser, c *checker.Checke
 	for _, member := range tp.UnrollUnionMembers(t) {
 		for _, signature := range c.GetSignaturesOfType(member, checker.SignatureKindCall) {
 			result := tp.StrictEffectType(c.GetReturnTypeOfSignature(signature))
-			if result != nil && typeContainsPromise(tp, result.A) {
+			if result != nil && typeContainsPromise(tp, result.A()) {
 				return true
 			}
 		}
@@ -184,14 +187,14 @@ var explicitPromiseSuccessApis = []string{"succeed", "as", "map", "zipWith"}
 // reports.
 func hasExplicitPromiseSuccessTypeArguments(tp *typeparser.TypeParser, node *ast.Node) bool {
 	flow := tp.LongestPipingFlowAt(node, true)
-	if flow == nil || len(flow.Transformations) == 0 {
+	if flow == nil || flow.Transformations().Len() == 0 {
 		return false
 	}
-	last := len(flow.Transformations) - 1
-	finalKind := flow.Transformations[last].Kind
+	last := flow.Transformations().Len() - 1
+	finalKind := flow.Transformations().At(last).Kind()
 	pipeRooted := finalKind == typeparser.TransformationKindPipe || finalKind == typeparser.TransformationKindPipeable
-	for i := range flow.Transformations {
-		if !isExplicitPromiseSuccessTransformation(tp, &flow.Transformations[i]) {
+	for i := range flow.Transformations().All() {
+		if !isExplicitPromiseSuccessTransformation(tp, new(flow.Transformations().At(i))) {
 			continue
 		}
 		if pipeRooted || i == last {
@@ -205,10 +208,10 @@ func hasExplicitPromiseSuccessTypeArguments(tp *typeparser.TypeParser, node *ast
 // applies one of the explicit promise-success APIs with explicit type arguments.
 // Callees may be wrapped in parentheses or curried (e.g. Effect.as<...>(value)).
 func isExplicitPromiseSuccessTransformation(tp *typeparser.TypeParser, transformation *typeparser.PipingFlowTransformation) bool {
-	if transformation == nil || transformation.TypeArguments == nil || len(transformation.TypeArguments.Nodes) == 0 {
+	if transformation == nil || transformation.TypeArguments() == nil || len(transformation.TypeArguments().Nodes) == 0 {
 		return false
 	}
-	callee := ast.SkipParentheses(transformation.Callee)
+	callee := ast.SkipParentheses(transformation.Callee())
 	if callee == nil {
 		return false
 	}

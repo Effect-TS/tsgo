@@ -1,7 +1,7 @@
 import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
-import * as Flag from "effect/unstable/cli/Flag"
+import { Flag } from "effect/cli"
 import {
   applyPresetDiagnosticSeverities,
   isPresetEnabled,
@@ -15,55 +15,55 @@ const dependencyTypes = ["devDependencies", "dependencies"] as const
 const severityNames = ["off", "suggestion", "message", "warning", "error"] as const
 
 export const setupFlags = {
-  project: Flag.file("project").pipe(
+  project: Flag.File("project").pipe(
     Flag.optional,
     Flag.withDescription("The project tsconfig file to configure")
   ),
-  nonInteractive: Flag.boolean("non-interactive").pipe(
+  nonInteractive: Flag.Boolean("non-interactive").pipe(
     Flag.withDefault(false),
     Flag.withDescription("Never open an interactive prompt")
   ),
-  acceptDefaults: Flag.boolean("accept-defaults").pipe(
+  acceptDefaults: Flag.Boolean("accept-defaults").pipe(
     Flag.withDefault(false),
     Flag.withDescription("Use recommended defaults for unspecified setup choices")
   ),
-  apply: Flag.boolean("apply").pipe(
+  apply: Flag.Boolean("apply").pipe(
     Flag.withDefault(false),
     Flag.withDescription("Apply changes without asking for confirmation")
   ),
-  typescript: Flag.boolean("typescript").pipe(
+  typescript: Flag.Boolean("typescript").pipe(
     Flag.optional,
     Flag.withDescription("Configure the TypeScript language service integration")
   ),
-  oxlint: Flag.boolean("oxlint").pipe(
+  oxlint: Flag.Boolean("oxlint").pipe(
     Flag.optional,
     Flag.withDescription("Configure the Oxlint type-aware rules integration")
   ),
-  dependencyType: Flag.choice("dependency-type", dependencyTypes).pipe(
+  dependencyType: Flag.Literals("dependency-type", dependencyTypes).pipe(
     Flag.optional,
     Flag.withDescription("Install @effect/tsgo in this dependency section")
   ),
-  preset: Flag.string("preset").pipe(
+  preset: Flag.String("preset").pipe(
     Flag.atLeast(0),
     Flag.withDescription("Enable a diagnostic preset; may be specified more than once")
   ),
-  noPresets: Flag.boolean("no-presets").pipe(
+  noPresets: Flag.Boolean("no-presets").pipe(
     Flag.withDefault(false),
     Flag.withDescription("Do not select any diagnostic presets")
   ),
-  diagnostic: Flag.string("diagnostic").pipe(
+  diagnostic: Flag.String("diagnostic").pipe(
     Flag.atLeast(0),
     Flag.withDescription("Set a diagnostic severity as <rule>=<severity>; may be specified more than once")
   ),
-  vscode: Flag.boolean("vscode").pipe(
+  vscode: Flag.Boolean("vscode").pipe(
     Flag.optional,
     Flag.withDescription("Configure VS Code-based editors")
   ),
-  nvim: Flag.boolean("nvim").pipe(
+  nvim: Flag.Boolean("nvim").pipe(
     Flag.optional,
     Flag.withDescription("Show Neovim setup instructions")
   ),
-  emacs: Flag.boolean("emacs").pipe(
+  emacs: Flag.Boolean("emacs").pipe(
     Flag.optional,
     Flag.withDescription("Show Emacs setup instructions")
   )

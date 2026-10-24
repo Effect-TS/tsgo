@@ -88,34 +88,11 @@ type deterministicKeyMatch struct {
 
 func checkDeterministicKeyMatch(tp *typeparser.TypeParser, program checker.Program, c *checker.Checker, sf *ast.SourceFile, classNode *ast.Node, keyPatterns []etscore.KeyPattern, extendedKeyDetection bool) *DeterministicKeyMatch {
 	match := matchClassPattern(tp, c, sf, classNode, extendedKeyDetection)
-	if match == nil || match.keyStringLiteral == nil {
+	if match == nil || match.keyStringLiteral == nil || match.className == nil {
 		return nil
 	}
 
-	// Get class name text
-	classNameText := scanner.GetTextOfNode(match.className)
-
-	// Get package info
-	pkgJson := tp.PackageJsonForSourceFile(sf)
-	if pkgJson == nil {
-		return nil
-	}
-	packageName, ok := pkgJson.Name.GetValue()
-	if !ok || packageName == "" {
-		return nil
-	}
-
-	// Get package directory from source file metadata
-	packageDirectory := getPackageJsonDirectory(program, c, sf)
-	if packageDirectory == "" {
-		return nil
-	}
-
-	// Get source file name
-	sourceFileName := sf.FileName()
-
-	// Compute expected key
-	expectedKey := keybuilder.CreateString(sourceFileName, packageName, packageDirectory, classNameText, match.target, keyPatterns)
+	expectedKey := keybuilder.CreateStringForSourceFile(program, tp, sf, scanner.GetTextOfNode(match.className), match.target, keyPatterns)
 	if expectedKey == "" {
 		return nil
 	}
@@ -141,24 +118,24 @@ func checkDeterministicKeyMatch(tp *typeparser.TypeParser, program checker.Progr
 func matchClassPattern(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, classNode *ast.Node, extendedKeyDetection bool) *deterministicKeyMatch {
 	// Service target: ExtendsEffectService → ExtendsContextTag → ExtendsEffectTag → ExtendsServiceMapService
 	if result := tp.ExtendsEffectV3Service(classNode); result != nil {
-		return &deterministicKeyMatch{className: result.ClassName, keyStringLiteral: result.KeyStringLiteral, target: "service"}
+		return &deterministicKeyMatch{className: result.ClassName(), keyStringLiteral: result.KeyStringLiteral(), target: "service"}
 	}
 	if result := tp.ExtendsContextTag(classNode); result != nil {
-		return &deterministicKeyMatch{className: result.ClassName, keyStringLiteral: result.KeyStringLiteral, target: "service"}
+		return &deterministicKeyMatch{className: result.ClassName(), keyStringLiteral: result.KeyStringLiteral(), target: "service"}
 	}
 	if result := tp.ExtendsEffectTag(classNode); result != nil {
-		return &deterministicKeyMatch{className: result.ClassName, keyStringLiteral: result.KeyStringLiteral, target: "service"}
+		return &deterministicKeyMatch{className: result.ClassName(), keyStringLiteral: result.KeyStringLiteral(), target: "service"}
 	}
 	if result := tp.ExtendsContextService(classNode); result != nil {
-		return &deterministicKeyMatch{className: result.ClassName, keyStringLiteral: result.KeyStringLiteral, target: "service"}
+		return &deterministicKeyMatch{className: result.ClassName(), keyStringLiteral: result.KeyStringLiteral(), target: "service"}
 	}
 
 	// Error target: ExtendsDataTaggedError → ExtendsSchemaTaggedError
 	if result := tp.ExtendsDataTaggedError(classNode); result != nil {
-		return &deterministicKeyMatch{className: result.ClassName, keyStringLiteral: result.KeyStringLiteral, target: "error"}
+		return &deterministicKeyMatch{className: result.ClassName(), keyStringLiteral: result.KeyStringLiteral(), target: "error"}
 	}
 	if result := tp.ExtendsSchemaTaggedError(classNode); result != nil {
-		return &deterministicKeyMatch{className: result.ClassName, keyStringLiteral: result.KeyStringLiteral, target: "error"}
+		return &deterministicKeyMatch{className: result.ClassName(), keyStringLiteral: result.KeyStringLiteral(), target: "error"}
 	}
 
 	// Custom target (only if extendedKeyDetection is enabled)
@@ -214,11 +191,11 @@ func matchCustomPattern(c *checker.Checker, _ *ast.SourceFile, classNode *ast.No
 					}
 
 					param := params[i]
-					if param.Declarations == nil {
+					if ast.TSGetSymbolDeclarations(param) == nil {
 						continue
 					}
 
-					for _, decl := range param.Declarations {
+					for _, decl := range ast.TSGetSymbolDeclarations(param) {
 						paramSf := ast.GetSourceFileOfNode(decl)
 						if paramSf == nil {
 							continue
@@ -251,7 +228,7 @@ func matchCustomPattern(c *checker.Checker, _ *ast.SourceFile, classNode *ast.No
 // getPackageJsonDirectory gets the package.json directory for a source file from its metadata.
 func getPackageJsonDirectory(program checker.Program, _ *checker.Checker, sf *ast.SourceFile) string {
 	type metaProvider interface {
-		GetSourceFileMetaData(path tspath.Path) ast.SourceFileMetaData
+		GetSourceFileMetaData(path tspath.PathKey) ast.SourceFileMetaData
 	}
 
 	prog, ok := program.(metaProvider)
@@ -259,6 +236,6 @@ func getPackageJsonDirectory(program checker.Program, _ *checker.Checker, sf *as
 		return ""
 	}
 
-	meta := prog.GetSourceFileMetaData(sf.Path())
-	return meta.PackageJsonDirectory
+	meta := prog.GetSourceFileMetaData(ast.SourceFilePath(sf))
+	return string(meta.PackageJsonDirectory)
 }

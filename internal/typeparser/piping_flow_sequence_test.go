@@ -27,22 +27,22 @@ func TestFindTransformationSequences(t *testing.T) {
 			if test.name != "nil flow" {
 				flow = &PipingFlow{}
 				for _, kind := range test.steps {
-					flow.Transformations = append(flow.Transformations, PipingFlowTransformation{Kind: kind})
+					flow.partial.transformations = append(flow.partial.transformations, PipingFlowTransformation{kind: kind})
 				}
 			}
-			var predicates []func(*PipingFlowTransformation) bool
+			var predicates []func(PipingFlowTransformation) bool
 			for _, kind := range test.pattern {
-				predicates = append(predicates, func(step *PipingFlowTransformation) bool { return step.Kind == kind })
+				predicates = append(predicates, func(step PipingFlowTransformation) bool { return step.kind == kind })
 			}
 			matches := flow.FindTransformationSequences(predicates...)
 			var starts []int
-			for _, match := range matches {
-				starts = append(starts, match.Start)
-				if len(match.Transformations) != len(test.pattern) {
+			for _, match := range matches.All() {
+				starts = append(starts, match.start)
+				if len(match.transformations) != len(test.pattern) {
 					t.Fatal("match must contain exactly the requested steps")
 				}
-				for i := range match.Transformations {
-					if &match.Transformations[i] != &flow.Transformations[match.Start+i] {
+				for i := range match.transformations {
+					if &match.transformations[i] != &flow.partial.transformations[match.start+i] {
 						t.Fatal("matched steps must refer to the original flow")
 					}
 				}
@@ -50,12 +50,12 @@ func TestFindTransformationSequences(t *testing.T) {
 			if !slices.Equal(starts, test.starts) {
 				t.Fatalf("got starts %v, want %v", starts, test.starts)
 			}
-			if len(test.starts) == 0 && matches != nil {
+			if len(test.starts) == 0 && !matches.IsNil() {
 				t.Fatal("no matches must return nil")
 			}
 		})
 	}
-	if (*PartialPipingFlow)(nil).FindTransformationSequences(func(*PipingFlowTransformation) bool { return true }) != nil {
+	if !(*PartialPipingFlow)(nil).FindTransformationSequences(func(PipingFlowTransformation) bool { return true }).IsNil() {
 		t.Fatal("nil partial flow must return nil")
 	}
 }

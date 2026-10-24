@@ -4,6 +4,7 @@ package rules
 import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 )
@@ -60,6 +61,10 @@ var EffectInFailure = rule.Rule{
 				continue
 			}
 
+			if _, ok := typeparser.TypeEquivalentNode(node); ok {
+				continue
+			}
+
 			// Declared-type prefilter: skip the expensive flow-analysis query
 			// for reference nodes that conclusively cannot have a strict
 			// Effect flow type. Skipped nodes can never match, so no
@@ -79,7 +84,7 @@ var EffectInFailure = rule.Rule{
 			}
 
 			// Check if any union member of the failure channel (E) is a strict Effect type
-			failureMembers := ctx.TypeParser.UnrollUnionMembers(effect.E)
+			failureMembers := ctx.TypeParser.UnrollUnionMembers(effect.E())
 			memberWithEffect := findFirstStrictEffect(ctx.TypeParser, ctx.Checker, failureMembers)
 			if memberWithEffect == nil {
 				continue

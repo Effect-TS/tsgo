@@ -39,7 +39,7 @@ func runGlobalFetch(ctx *rule.Context, checkInEffect bool) []*ast.Diagnostic {
 		return nil
 	}
 
-	packageName := "effect/unstable/http"
+	packageName := "effect/http"
 	if ctx.TypeParser.SupportedEffectVersion() == typeparser.EffectMajorV3 {
 		packageName = "@effect/platform"
 	}

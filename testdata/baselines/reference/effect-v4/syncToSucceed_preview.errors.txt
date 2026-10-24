@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/syncToSucceed_preview.ts(3,24): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
 

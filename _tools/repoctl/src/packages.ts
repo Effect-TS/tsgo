@@ -3,7 +3,13 @@ import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
-import { buildTargets, componentArtifact, oxlintBuildTargets } from "./build.ts"
+import {
+  buildTargets,
+  componentArtifact,
+  copyTypeScriptLibraries,
+  latestTypeScriptCompiler,
+  oxlintBuildTargets
+} from "./build.ts"
 import { buildReleasePlan } from "./releasePlan.ts"
 import { readUpstream } from "./upstream.ts"
 
@@ -57,17 +63,28 @@ export const assembleReleaseArtifacts = Effect.fnUntraced(function*(
   for (const artifact of plan) {
     const directory = path.join(sourceRoot, artifact.artifactName)
     const files = (yield* fs.readDirectory(directory)).sort()
-    if (files.length !== 1 || files[0] !== artifact.fileName) {
+    const libraries = artifact.component === "typescript"
+      ? files.filter((name) => /^lib(?:\..+)?\.d\.ts$/.test(name))
+      : []
+    const expectedFiles = new Set([artifact.fileName, ...libraries])
+    if (!files.includes(artifact.fileName) || files.some((name) => !expectedFiles.has(name))) {
       return yield* new PackagePreparationError({
-        reason: `${artifact.artifactName} must contain only ${artifact.fileName}, found ${files.join(", ") || "nothing"}`
+        reason: `${artifact.artifactName} must contain ${artifact.fileName}${
+          artifact.component === "typescript" ? " and TypeScript libraries" : ""
+        } only, found ${files.join(", ") || "nothing"}`
       })
     }
-    const source = path.join(directory, artifact.fileName)
-    const info = yield* fs.stat(source)
-    if (info.type !== "File" || info.size === 0n) {
-      return yield* new PackagePreparationError({ reason: `Invalid release artifact: ${source}` })
+    if (artifact.component === "typescript" && !libraries.includes("lib.d.ts")) {
+      return yield* new PackagePreparationError({ reason: `Missing TypeScript libraries in ${artifact.artifactName}` })
     }
-    copies.push({ source, destination: path.join(repositoryRoot, artifact.destination) })
+    for (const file of files) {
+      const source = path.join(directory, file)
+      const info = yield* fs.stat(source)
+      if (info.type !== "File" || info.size === 0n) {
+        return yield* new PackagePreparationError({ reason: `Invalid release artifact: ${source}` })
+      }
+      copies.push({ source, destination: path.join(repositoryRoot, path.dirname(artifact.destination), file) })
+    }
   }
 
   for (const copy of copies) {
@@ -86,18 +103,21 @@ export const preparePlatformPackages = Effect.fnUntraced(function*(repositoryRoo
   for (const target of Object.keys(buildTargets) as Array<keyof typeof buildTargets>) {
     const packageRoot = path.join(repositoryRoot, "_packages", `tsgo-${target}`)
     const windows = target.startsWith("win32-")
-    const latest = componentArtifact(repositoryRoot, target, "typescript", upstream.tags.typescript.latest, "tsc").path
-    const alias = path.join(packageRoot, "lib", windows ? "tsc.exe" : "tsc")
-    yield* fs.makeDirectory(path.dirname(alias), { recursive: true })
-    yield* fs.copyFile(latest, alias)
-    if (!windows) yield* fs.chmod(alias, 0o755)
+    const artifact = componentArtifact(repositoryRoot, target, "typescript", upstream.tags.typescript.latest, "tsc").path
+    const latest = latestTypeScriptCompiler(repositoryRoot, target)
+    yield* fs.makeDirectory(path.dirname(latest), { recursive: true })
+    yield* fs.copyFile(artifact, latest)
+    yield* copyTypeScriptLibraries(path.dirname(artifact), path.dirname(latest))
+    yield* fs.remove(path.dirname(artifact), { recursive: true })
+    if (!windows) yield* fs.chmod(latest, 0o755)
     yield* fs.copyFile(sourceUpstream, path.join(packageRoot, "lib", "upstream.json"))
     yield* fs.remove(path.join(packageRoot, "lib", windows ? "tsc-next.exe" : "tsc-next"), { force: true })
 
     const executableFiles = [
       `./lib/tsc${windows ? ".exe" : ""}`,
-      ...Object.keys(upstream.components.typescript).map((version) =>
-        `./artifacts/typescript/${version}/tsc${windows ? ".exe" : ""}`),
+      ...Object.keys(upstream.components.typescript)
+        .filter((version) => version !== upstream.tags.typescript.latest)
+        .map((version) => `./artifacts/typescript/${version}/tsc${windows ? ".exe" : ""}`),
       ...(target in oxlintBuildTargets
         ? Object.keys(upstream.components["oxlint-tsgolint"]).map((version) =>
           `./artifacts/oxlint-tsgolint/${version}/tsgolint${windows ? ".exe" : ""}`)
@@ -124,8 +144,9 @@ export const preparePlatformPackages = Effect.fnUntraced(function*(repositoryRoo
       : {}
     yield* fs.writeFileString(packageJsonPath, `${JSON.stringify({
       ...packageJson,
+      files: [...new Set([...(Array.isArray(packageJson.files) ? packageJson.files : []), "lib/lib*.d.ts"])],
       publishConfig: { ...publishConfig, executableFiles }
     }, null, 2)}\n`)
   }
-  yield* Console.log("Prepared platform package manifests and latest TypeScript aliases")
+  yield* Console.log("Prepared platform package manifests and moved the latest TypeScript compilers to lib/")
 })

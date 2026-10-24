@@ -2,6 +2,7 @@ package etsoxlintrunner
 
 import (
 	"context"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 	"testing"
 
 	"github.com/effect-ts/tsgo/etscore"
@@ -74,10 +75,7 @@ func TestNormalizeOptionsDoesNotMutateInput(t *testing.T) {
 func TestReportDiagnostics(t *testing.T) {
 	t.Parallel()
 
-	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/source.ts",
-		Path:     "/source.ts",
-	}, "const effect = 1", core.ScriptKindTS)
+	sourceFile := parser.ParseSourceFile(ast.NewSourceFileParseOptions(tspath.RootedFilePath("/source.ts"), "/source.ts"), "const effect = 1", core.ScriptKindTS)
 	related := ast.NewDiagnosticFromSerialized(
 		sourceFile,
 		core.NewTextRange(9, 15),

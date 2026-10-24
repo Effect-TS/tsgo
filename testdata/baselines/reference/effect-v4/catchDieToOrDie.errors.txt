@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/catchDieToOrDie.ts(9,41): warning TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catch` with an identity-forwarding `Effect.die` handler. effect(catchDieToOrDie)
 /.src/catchDieToOrDie.ts(13,3): warning TS377115: `Effect.orDie` expresses escalating every typed failure into a defect more directly than `Effect.catch` with an identity-forwarding `Effect.die` handler. effect(catchDieToOrDie)

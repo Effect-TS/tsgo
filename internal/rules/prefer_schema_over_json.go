@@ -125,11 +125,6 @@ func checkEffectTrySimple(tp *typeparser.TypeParser, _ *checker.Checker, node *a
 	}
 	call := node.AsCallExpression()
 
-	// Check callee is Effect.try
-	if !tp.IsNodeReferenceToEffectModuleApi(call.Expression, "try") {
-		return nil
-	}
-
 	// Must have at least one argument
 	if call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
 		return nil
@@ -141,7 +136,12 @@ func checkEffectTrySimple(tp *typeparser.TypeParser, _ *checker.Checker, node *a
 		return nil
 	}
 
-	return parseJsonMethod(lazyExpr.Expression)
+	// Check callee is Effect.try
+	if !tp.IsNodeReferenceToEffectModuleApi(call.Expression, "try") {
+		return nil
+	}
+
+	return parseJsonMethod(lazyExpr.Expression())
 }
 
 // checkEffectTryObject matches Effect.try({ try: () => JSON.parse/stringify(...), ... }) - object form.
@@ -150,11 +150,6 @@ func checkEffectTryObject(tp *typeparser.TypeParser, _ *checker.Checker, node *a
 		return nil
 	}
 	call := node.AsCallExpression()
-
-	// Check callee is Effect.try
-	if !tp.IsNodeReferenceToEffectModuleApi(call.Expression, "try") {
-		return nil
-	}
 
 	// Must have at least one argument
 	if call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
@@ -198,7 +193,12 @@ func checkEffectTryObject(tp *typeparser.TypeParser, _ *checker.Checker, node *a
 		return nil
 	}
 
-	return parseJsonMethod(lazyExpr.Expression)
+	// Check callee is Effect.try
+	if !tp.IsNodeReferenceToEffectModuleApi(call.Expression, "try") {
+		return nil
+	}
+
+	return parseJsonMethod(lazyExpr.Expression())
 }
 
 // checkJsonMethodInEffectGen matches direct JSON.parse/stringify inside an Effect generator (Effect.gen or Effect.fn).

@@ -1,11 +1,11 @@
 import * as NodeServices from "@effect/platform-node/NodeServices"
 import * as Effect from "effect/Effect"
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import assert from "node:assert/strict"
 import test from "node:test"
-import { buildTargets, oxlintBuildTargets } from "../src/build.ts"
+import { buildTargets, oxlintBuildTargets, verifyReleaseArtifacts } from "../src/build.ts"
 import { assembleReleaseArtifacts, bundleUpstream, preparePlatformPackages } from "../src/packages.ts"
 import { buildReleasePlan } from "../src/releasePlan.ts"
 import { decodeUpstream } from "../src/upstream.ts"
@@ -17,7 +17,7 @@ test("bundles upstream metadata in every platform package", async() => {
   const upstream = `${JSON.stringify({
     schemaVersion: 5,
     tags: {
-      typescript: { latest: "7.0.0", next: "7.1.0" },
+      typescript: { latest: "7.0.0", beta: "7.1.0", next: "7.1.0" },
       oxlint: { latest: "1.0.0" },
       "oxlint-tsgolint": { latest: "1.0.0" }
     },
@@ -62,7 +62,7 @@ test("prepares versioned platform artifacts and executable manifests", async() =
   const upstream = {
     schemaVersion: 5,
     tags: {
-      typescript: { latest: "7.0.0", next: "7.1.0" },
+      typescript: { latest: "7.0.0", beta: "7.1.0", next: "7.1.0" },
       oxlint: { latest: "1.0.0" },
       "oxlint-tsgolint": { latest: "1.0.0" }
     },
@@ -105,6 +105,10 @@ test("prepares versioned platform artifacts and executable manifests", async() =
       const directory = join(artifactsDirectory, artifact.artifactName)
       mkdirSync(directory, { recursive: true })
       writeFileSync(join(directory, artifact.fileName), artifact.version)
+      if (artifact.component === "typescript") {
+        writeFileSync(join(directory, "lib.d.ts"), `lib ${artifact.version}`)
+        writeFileSync(join(directory, "lib.es5.d.ts"), `es5 ${artifact.version}`)
+      }
     }
 
     const unexpected = join(artifactsDirectory, "unexpected")
@@ -117,6 +121,17 @@ test("prepares versioned platform artifacts and executable manifests", async() =
     )
     rmSync(unexpected, { recursive: true })
 
+    const compilerArtifact = buildReleasePlan(decodedUpstream).find((artifact) => artifact.component === "typescript")!
+    const libraryPath = join(artifactsDirectory, compilerArtifact.artifactName, "lib.d.ts")
+    rmSync(libraryPath)
+    await assert.rejects(
+      Effect.runPromise(
+        assembleReleaseArtifacts(repository, artifactsDirectory).pipe(Effect.provide(NodeServices.layer))
+      ),
+      /Missing TypeScript libraries/
+    )
+    writeFileSync(libraryPath, `lib ${compilerArtifact.version}`)
+
     await Effect.runPromise(
       assembleReleaseArtifacts(repository, artifactsDirectory).pipe(Effect.provide(NodeServices.layer))
     )
@@ -127,15 +142,34 @@ test("prepares versioned platform artifacts and executable manifests", async() =
       const extension = target.startsWith("win32-") ? ".exe" : ""
       assert.equal(readFileSync(join(packageRoot, "lib", `tsc${extension}`), "utf8"), "7.0.0")
       const packageJson = JSON.parse(readFileSync(join(packageRoot, "package.json"), "utf8"))
-      assert.deepEqual(packageJson.files, ["artifacts/", `lib/tsc${extension}`, "README.md", "lib/upstream.json"])
-      assert(packageJson.publishConfig.executableFiles.includes(
-        `./artifacts/typescript/7.1.0/tsc${extension}`
-      ))
+      assert.deepEqual(packageJson.files, [
+        "artifacts/", `lib/tsc${extension}`, "README.md", "lib/upstream.json", "lib/lib*.d.ts"
+      ])
+      assert.equal(readFileSync(join(packageRoot, "lib", "lib.d.ts"), "utf8"), "lib 7.0.0")
+      assert.equal(readFileSync(join(packageRoot, "lib", "lib.es5.d.ts"), "utf8"), "es5 7.0.0")
+      assert.equal(existsSync(join(packageRoot, "artifacts", "typescript", "7.0.0")), false)
+      const next = join(packageRoot, "artifacts", "typescript", "7.1.0")
+      assert.equal(readFileSync(join(next, `tsc${extension}`), "utf8"), "7.1.0")
+      assert.equal(readFileSync(join(next, "lib.d.ts"), "utf8"), "lib 7.1.0")
+      assert.equal(readFileSync(join(next, "lib.es5.d.ts"), "utf8"), "es5 7.1.0")
+      assert.deepEqual(
+        packageJson.publishConfig.executableFiles.filter((file: string) => !file.includes("oxlint-tsgolint")),
+        [`./lib/tsc${extension}`, `./artifacts/typescript/7.1.0/tsc${extension}`]
+      )
       assert.equal(
         packageJson.publishConfig.executableFiles.some((file: string) => file.includes("oxlint-tsgolint")),
         target in oxlintBuildTargets
       )
     }
+
+    await Effect.runPromise(verifyReleaseArtifacts(repository).pipe(Effect.provide(NodeServices.layer)))
+    const duplicate = join(repository, "_packages", "tsgo-linux-x64", "artifacts", "typescript", "7.0.0")
+    mkdirSync(duplicate)
+    writeFileSync(join(duplicate, "tsc"), "7.0.0")
+    await assert.rejects(
+      Effect.runPromise(verifyReleaseArtifacts(repository).pipe(Effect.provide(NodeServices.layer))),
+      /The latest TypeScript compiler ships only in lib\//
+    )
   } finally {
     rmSync(repository, { recursive: true, force: true })
   }

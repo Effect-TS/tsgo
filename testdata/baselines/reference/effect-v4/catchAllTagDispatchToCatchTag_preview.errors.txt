@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/catchAllTagDispatchToCatchTag_preview.ts(12,3): suggestion TS377122: Branching on `error._tag` inside `Effect.catch` hand-rolls tagged error dispatch; use `Effect.catchTag` or `Effect.catchTags`, which re-fail unmatched errors automatically. effect(catchAllTagDispatchToCatchTag)
 

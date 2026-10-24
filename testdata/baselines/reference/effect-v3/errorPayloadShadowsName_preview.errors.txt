@@ -1,0 +1,16 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/errorPayloadShadowsName_preview.ts(5,79): warning TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+
+
+==== /.src/errorPayloadShadowsName_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics errorPayloadShadowsName:warning
+    import { Data } from "effect"
+    
+    export class ToolNotFound extends Data.TaggedError("ToolNotFound")<{ readonly name: string }> {}
+                                                                                  ~~~~
+!!! warning TS377145: The payload field `name` shadows this error's own `name`, so logs and `String(error)` show the field value instead of the error type. Consider renaming it. effect(errorPayloadShadowsName)
+    new ToolNotFound({ name: "search" }).name
+    

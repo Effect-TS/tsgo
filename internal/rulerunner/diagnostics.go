@@ -3,6 +3,7 @@ package rulerunner
 import (
 	"context"
 	"fmt"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 	"slices"
 
 	"github.com/effect-ts/tsgo/etscore"
@@ -53,14 +54,14 @@ func Run(ctx context.Context, program checker.Program, c *checker.Checker, sf *a
 		effectConfig,
 		sf.FileName(),
 		program.Options().ConfigFilePath,
-		program.UseCaseSensitiveFileNames(),
+		tspath.UseCaseSensitiveFileNames(program),
 	)
 
 	resolvedSeverity := pluginoptions.ResolveDiagnosticSeverityForFile(
 		effectConfig,
 		sf.FileName(),
 		program.Options().ConfigFilePath,
-		program.UseCaseSensitiveFileNames(),
+		tspath.UseCaseSensitiveFileNames(program),
 	)
 
 	if !etscore.DiagnosticsEnabled(effectConfig) || resolvedSeverity == nil {
@@ -229,7 +230,7 @@ func createTransformedDiagnostic(original *ast.Diagnostic, newCategory tsdiag.Ca
 }
 
 func unusedDirectiveDiagnostics(sf *ast.SourceFile, allDirectives []directives.Directive, directiveSet *directives.DirectiveSet, resolvedSeverity map[string]etscore.Severity) []*ast.Diagnostic {
-	severity, ok := severityFromMap(resolvedSeverity, "unusedDirective")
+	severity, ok := severityFromMap(resolvedSeverity, rule.UnusedDirectiveName)
 	if !ok {
 		severity = etscore.SeverityWarning
 	}

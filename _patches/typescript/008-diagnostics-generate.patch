@@ -1,15 +1,15 @@
 diff --git a/tsc/internal/diagnostics/generate.go b/tsc/internal/diagnostics/generate.go
-index be38082b..cc623209 100644
+index 082c2359f..3a041194a 100644
 --- a/tsc/internal/diagnostics/generate.go
 +++ b/tsc/internal/diagnostics/generate.go
-@@ -91,6 +91,15 @@ func main() {
- 	rawExtraMessages := readRawMessages(filepath.Join(filepath.Dir(filename), "extraDiagnosticMessages.json"))
+@@ -62,6 +62,15 @@ func main() {
+ 	}
  
- 	maps.Copy(rawDiagnosticMessages, rawExtraMessages)
+ 	rawDiagnosticMessages := readRawMessages("diagnosticMessages.json")
 +
 +	// EFFECT: Read Effect diagnostic messages from the @effect/tsgo project
-+	// This allows Effect to define its own diagnostics without patching extraDiagnosticMessages.json
-+	effectMessagesPath := filepath.Join(filepath.Dir(filename), "..", "..", "..", "..", "internal", "diagnostics", "effectDiagnosticMessages.json")
++	// This allows Effect to define its own diagnostics without patching diagnosticMessages.json
++	effectMessagesPath := filepath.Join("..", "..", "..", "..", "internal", "diagnostics", "effectDiagnosticMessages.json")
 +	if _, err := os.Stat(effectMessagesPath); err == nil {
 +		rawEffectMessages := readRawMessages(effectMessagesPath)
 +		maps.Copy(rawDiagnosticMessages, rawEffectMessages)

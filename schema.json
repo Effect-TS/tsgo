@@ -1513,6 +1513,22 @@
                                 },
                                 "type": "array"
                               },
+                              "allowedExperimentalApis": {
+                                "default": [],
+                                "description": "Experimental APIs allowed by package/module subtree or package/module#export name.",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "allowedUnstableApis": {
+                                "default": [],
+                                "description": "Unstable APIs allowed by package/module subtree or package/module#export name.",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
                               "barrelImportPackages": {
                                 "default": [],
                                 "description": "Package names that should prefer barrel named imports.",
@@ -1524,11 +1540,6 @@
                               "completions": {
                                 "default": true,
                                 "description": "Controls Effect completions.",
-                                "type": "boolean"
-                              },
-                              "debug": {
-                                "default": false,
-                                "description": "Enables additional debug-only Effect language service output.",
                                 "type": "boolean"
                               },
                               "diagnosticSeverity": {
@@ -2307,6 +2318,11 @@
           "default": "off",
           "description": "Detects 'any' or 'unknown' types in Effect error or requirements channels"
         },
+        "apiStabilityLeak": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Reports exported APIs whose public surface exposes a less stable type"
+        },
         "asyncFunction": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
@@ -2340,7 +2356,12 @@
         "catchIfTagToCatchTag": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
-          "description": "Suggests Effect.catchTag instead of Effect.catchIf with a direct _tag equality predicate"
+          "description": "Suggests Effect.catchTag instead of Effect.catchIf with a _tag equality or Predicate.isTagged predicate"
+        },
+        "catchRefailToTapError": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.tapError for catch handlers that sequence an effect and then re-fail the original error"
         },
         "catchTagToCatchReason": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -2432,10 +2453,25 @@
           "default": "suggestion",
           "description": "Suggests using Effect.asVoid instead of Effect.map(() =\u003e void 0), Effect.map(() =\u003e undefined), or Effect.map(() =\u003e {})"
         },
+        "effectSleepZeroToYieldNow": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.yieldNow for cooperative yielding instead of sleeping for zero duration"
+        },
         "effectSucceedWithVoid": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests using Effect.void instead of Effect.succeed(undefined) or Effect.succeed(void 0)"
+        },
+        "errorPayloadShadowsName": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Detects error payload fields named `name` that shadow the error's own name"
+        },
+        "experimentalApiUsage": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Warns when using an API marked @stability experimental"
         },
         "extendsNativeError": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -2456,6 +2492,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests using Effect.map instead of Effect.flatMap when the callback only wraps its result with Effect.succeed"
+        },
+        "flatMapToTap": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.tap when a flatMap or andThen callback runs an effect and returns its unchanged parameter"
         },
         "floatingEffect": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -2672,10 +2713,40 @@
           "default": "error",
           "description": "Prevents overriding constructors in Schema classes which breaks decoding behavior"
         },
+        "preferBarrelImport": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Reports imports of individual modules from packages configured in barrelImportPackages that should be named imports from the package barrel"
+        },
+        "preferEffectArray": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests Effect Array APIs for native array member references, with semantic caveats"
+        },
+        "preferEffectRecord": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests Effect Record APIs for native Object member references, with semantic caveats"
+        },
+        "preferEffectString": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests Effect String APIs for native String method invocations, with semantic caveats"
+        },
+        "preferNamespaceImport": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Reports named imports from packages configured in namespaceImportPackages that should be namespace imports"
+        },
         "preferSchemaOverJson": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
           "description": "Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify"
+        },
+        "preferSchemaTaggedError": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests using Schema.TaggedError instead of Data.TaggedError"
         },
         "preferSchemaTypeProperty": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -2751,6 +2822,16 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
           "description": "Suggests using Effect.runPromiseExit instead of passing Effect.exit to Effect.runPromise"
+        },
+        "schemaClassMissingBrand": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Warns when Schema classes, errors, or Opaque classes omit the brand type argument"
+        },
+        "schemaClassObjectLiteral": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Warns when object literals are checked as Schema class instances without the class prototype"
         },
         "schemaLiteralNonFinite": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
@@ -2861,6 +2942,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
           "description": "Detects unsafe type assertions that narrow Effect, Stream, or Layer error or requirements channels"
+        },
+        "unstableApiUsage": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "warning",
+          "description": "Warns when using an API marked @stability unstable"
         }
       },
       "type": "object"
@@ -2874,7 +2960,8 @@
           "enum": [
             "default",
             "package-identifier",
-            "default-hashed"
+            "default-hashed",
+            "identifier"
           ],
           "type": "string"
         },
@@ -2912,6 +2999,22 @@
           },
           "type": "array"
         },
+        "allowedExperimentalApis": {
+          "default": [],
+          "description": "Experimental APIs allowed by package/module subtree or package/module#export name.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "allowedUnstableApis": {
+          "default": [],
+          "description": "Unstable APIs allowed by package/module subtree or package/module#export name.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "barrelImportPackages": {
           "default": [],
           "description": "Package names that should prefer barrel named imports.",
@@ -2923,11 +3026,6 @@
         "completions": {
           "default": true,
           "description": "Controls Effect completions.",
-          "type": "boolean"
-        },
-        "debug": {
-          "default": false,
-          "description": "Enables additional debug-only Effect language service output.",
           "type": "boolean"
         },
         "diagnosticSeverity": {
@@ -3121,7 +3219,32 @@
       "additionalProperties": false,
       "properties": {
         "allowedDuplicatedPackages": {
-          "description": "Scoped allow-list for duplicatePackage."
+          "description": "Scoped allow-list for duplicatePackage.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "allowedExperimentalApis": {
+          "description": "Scoped allow-list for experimentalApiUsage.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "allowedUnstableApis": {
+          "description": "Scoped allow-list for unstableApiUsage.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "barrelImportPackages": {
+          "description": "Scoped package names that should prefer barrel named imports.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "diagnosticSeverity": {
           "$ref": "#/definitions/effectLanguageServicePluginDiagnosticSeverityDefinition",
@@ -3129,10 +3252,29 @@
         },
         "effectFn": {
           "description": "Scoped override for effectFn quickfix variants.",
+          "items": {
+            "enum": [
+              "span",
+              "untraced",
+              "no-span",
+              "inferred-span",
+              "suggested-span"
+            ],
+            "type": "string"
+          },
+          "type": "array",
           "uniqueItems": true
         },
         "extendedKeyDetection": {
-          "description": "Scoped override for extended deterministic key detection."
+          "description": "Scoped override for extended deterministic key detection.",
+          "type": "boolean"
+        },
+        "importAliases": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Scoped package-level import aliases keyed by package name.",
+          "type": "object"
         },
         "keyPatterns": {
           "description": "Scoped key pattern configuration for deterministicKeys.",
@@ -3141,9 +3283,25 @@
           },
           "type": "array"
         },
+        "namespaceImportPackages": {
+          "description": "Scoped package names that should prefer namespace imports.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "pipeableMinArgCount": {
           "description": "Minimum number of contiguous pipeable transformations to trigger missedPipeableOpportunity.",
-          "minimum": 1
+          "minimum": 1,
+          "type": "integer"
+        },
+        "topLevelNamedReexports": {
+          "description": "Scoped override for whether named reexports are followed at package top-level.",
+          "enum": [
+            "ignore",
+            "follow"
+          ],
+          "type": "string"
         }
       },
       "type": "object"

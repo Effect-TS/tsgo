@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/multipleCatchTag.ts(14,3): warning TS377092: These 2 consecutive `catchTag` transformations can be collapsed into a single `catchTags` call. effect(multipleCatchTag)
 /.src/multipleCatchTag.ts(21,3): warning TS377092: These 3 consecutive `catchTag` transformations can be collapsed into a single `catchTags` call. effect(multipleCatchTag)

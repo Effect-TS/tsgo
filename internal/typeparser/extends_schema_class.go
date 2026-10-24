@@ -4,11 +4,24 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 )
 
-// SchemaClassResult holds the parsed result of a class extending Schema.Class or Schema.RequestClass.
+// SchemaClassResult holds the parsed result of a class extending Schema.Class, Schema.Error or Schema.RequestClass.
 type SchemaClassResult struct {
-	ClassName    *ast.Node // The class name identifier
-	SelfTypeNode *ast.Node // The Self type argument node (first type arg of the inner call)
+	className        *ast.Node // The class name identifier
+	selfTypeNode     *ast.Node // The Self type argument node (first type arg of the inner call)
+	brandTypeNode    *ast.Node
+	keyStringLiteral *ast.Node // The identifier arg from the inner call (first arg), or nil
+	fieldsNode       *ast.Node
 }
+
+func (r SchemaClassResult) ClassName() *ast.Node { return r.className }
+
+func (r SchemaClassResult) SelfTypeNode() *ast.Node { return r.selfTypeNode }
+
+func (r SchemaClassResult) BrandTypeNode() *ast.Node { return r.brandTypeNode }
+
+func (r SchemaClassResult) KeyStringLiteral() *ast.Node { return r.keyStringLiteral }
+
+func (r SchemaClassResult) FieldsNode() *ast.Node { return r.fieldsNode }
 
 // ExtendsSchemaClass checks if a class declaration extends Schema.Class<Self>("name")({}).
 // It detects the double-call pattern:
@@ -30,6 +43,16 @@ func (tp *TypeParser) ExtendsSchemaClass(classNode *ast.Node) *SchemaClassResult
 	})
 }
 
+func (tp *TypeParser) ExtendsSchemaError(classNode *ast.Node) *SchemaClassResult {
+	if tp == nil || tp.checker == nil || classNode == nil {
+		return nil
+	}
+	links := tp.links
+	return Cached(&links.ExtendsSchemaError, classNode, func() *SchemaClassResult {
+		return tp.extendsSchemaClassLike(classNode, "Error")
+	})
+}
+
 // ExtendsSchemaRequestClass checks if a class declaration extends Schema.RequestClass<Self>("name")({}).
 // Same double-call pattern as ExtendsSchemaClass but for Schema.RequestClass.
 //
@@ -44,7 +67,6 @@ func (tp *TypeParser) ExtendsSchemaRequestClass(classNode *ast.Node) *SchemaClas
 	})
 }
 
-// extendsSchemaClassLike is the shared implementation for ExtendsSchemaClass and ExtendsSchemaRequestClass.
 func (tp *TypeParser) extendsSchemaClassLike(classNode *ast.Node, memberName string) *SchemaClassResult {
 	c := tp.checker
 	if c == nil || classNode == nil {
@@ -95,6 +117,10 @@ func (tp *TypeParser) extendsSchemaClassLike(classNode *ast.Node, memberName str
 		if innerCall.TypeArguments == nil || len(innerCall.TypeArguments.Nodes) == 0 {
 			continue
 		}
+		var brandTypeNode *ast.Node
+		if (memberName == "Class" || memberName == "Error") && len(innerCall.TypeArguments.Nodes) > 1 {
+			brandTypeNode = innerCall.TypeArguments.Nodes[1]
+		}
 
 		// Check if the inner call's expression resolves to Schema.<memberName>
 		if innerCall.Expression == nil {
@@ -104,9 +130,25 @@ func (tp *TypeParser) extendsSchemaClassLike(classNode *ast.Node, memberName str
 			continue
 		}
 
+		var keyStringLiteral *ast.Node
+		if innerCall.Arguments != nil && len(innerCall.Arguments.Nodes) > 0 {
+			arg := innerCall.Arguments.Nodes[0]
+			if ast.IsStringLiteral(arg) {
+				keyStringLiteral = arg
+			}
+		}
+
+		var fieldsNode *ast.Node
+		if outerCall.Arguments != nil && len(outerCall.Arguments.Nodes) > 0 {
+			fieldsNode = outerCall.Arguments.Nodes[0]
+		}
+
 		return &SchemaClassResult{
-			ClassName:    classNode.Name(),
-			SelfTypeNode: innerCall.TypeArguments.Nodes[0],
+			className:        classNode.Name(),
+			selfTypeNode:     innerCall.TypeArguments.Nodes[0],
+			brandTypeNode:    brandTypeNode,
+			keyStringLiteral: keyStringLiteral,
+			fieldsNode:       fieldsNode,
 		}
 	}
 

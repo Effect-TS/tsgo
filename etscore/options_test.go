@@ -40,23 +40,6 @@ func TestParseFromPlugins_ExitCodeDefaults(t *testing.T) {
 	if opts.IgnoreEffectWarningsInTscExitCode {
 		t.Error("expected IgnoreEffectWarningsInTscExitCode to default to false")
 	}
-	if opts.GetDebugEnabled() {
-		t.Error("expected Debug to default to false")
-	}
-}
-
-func TestParseFromPlugins_DebugExplicitTrue(t *testing.T) {
-	plugins := makePlugins(makePluginMap(
-		"name", etscore.EffectPluginName,
-		"debug", true,
-	))
-	opts := etscore.ParseFromPlugins(plugins)
-	if opts == nil {
-		t.Fatal("expected non-nil options")
-	}
-	if !opts.GetDebugEnabled() {
-		t.Error("expected Debug to be true")
-	}
 }
 
 func TestParseFromPlugins_Overrides(t *testing.T) {
@@ -73,6 +56,8 @@ func TestParseFromPlugins_Overrides(t *testing.T) {
 					"pipeableMinArgCount", float64(3),
 					"extendedKeyDetection", true,
 					"allowedDuplicatedPackages", []any{"effect"},
+					"allowedUnstableApis", []any{"effect/http"},
+					"allowedExperimentalApis", []any{"effect/schema/SchemaJITCompiler"},
 				),
 			),
 		},
@@ -100,6 +85,12 @@ func TestParseFromPlugins_Overrides(t *testing.T) {
 	}
 	if override.Options.ExtendedKeyDetection == nil || !*override.Options.ExtendedKeyDetection {
 		t.Fatalf("ExtendedKeyDetection = %v, want true", override.Options.ExtendedKeyDetection)
+	}
+	if override.Options.AllowedUnstableApis == nil || !reflect.DeepEqual(*override.Options.AllowedUnstableApis, []string{"effect/http"}) {
+		t.Fatalf("AllowedUnstableApis = %v, want [effect/http]", override.Options.AllowedUnstableApis)
+	}
+	if override.Options.AllowedExperimentalApis == nil || !reflect.DeepEqual(*override.Options.AllowedExperimentalApis, []string{"effect/schema/SchemaJITCompiler"}) {
+		t.Fatalf("AllowedExperimentalApis = %v, want [effect/schema/SchemaJITCompiler]", override.Options.AllowedExperimentalApis)
 	}
 	if override.Options.AllowedDuplicatedPackages == nil || !reflect.DeepEqual(*override.Options.AllowedDuplicatedPackages, []string{"effect"}) {
 		t.Fatalf("AllowedDuplicatedPackages = %v, want [effect]", override.Options.AllowedDuplicatedPackages)
@@ -135,6 +126,89 @@ func TestResolveForFile_AppliesMatchingScopesInOrder(t *testing.T) {
 	}
 	if got := effective.GetPipeableMinArgCount(); got != 3 {
 		t.Errorf("PipeableMinArgCount = %d, want 3", got)
+	}
+}
+
+func TestParseFromPlugins_OverrideImportStyle(t *testing.T) {
+	plugins := makePlugins(makePluginMap(
+		"name", etscore.EffectPluginName,
+		"overrides", []any{
+			makePluginMap(
+				"include", []any{"src/legacy/**/*.ts"},
+				"options", makePluginMap(
+					"namespaceImportPackages", []any{},
+					"barrelImportPackages", []any{" Effect "},
+					"importAliases", makePluginMap("@Effect/Platform", "Platform"),
+					"topLevelNamedReexports", "FOLLOW",
+				),
+			),
+		},
+	))
+
+	opts := etscore.ParseFromPlugins(plugins)
+	if opts == nil || len(opts.Overrides) != 1 {
+		t.Fatalf("unexpected options: %+v", opts)
+	}
+	options := opts.Overrides[0].Options
+	if options.NamespaceImportPackages == nil || len(*options.NamespaceImportPackages) != 0 {
+		t.Errorf("NamespaceImportPackages = %v, want empty non-nil", options.NamespaceImportPackages)
+	}
+	if options.BarrelImportPackages == nil || !reflect.DeepEqual(*options.BarrelImportPackages, []string{"effect"}) {
+		t.Errorf("BarrelImportPackages = %v, want [effect]", options.BarrelImportPackages)
+	}
+	if options.ImportAliases == nil || !reflect.DeepEqual(*options.ImportAliases, map[string]string{"@effect/platform": "Platform"}) {
+		t.Errorf("ImportAliases = %v, want map[@effect/platform:Platform]", options.ImportAliases)
+	}
+	if options.TopLevelNamedReexports == nil || *options.TopLevelNamedReexports != etscore.TopLevelNamedReexportsFollow {
+		t.Errorf("TopLevelNamedReexports = %v, want follow", options.TopLevelNamedReexports)
+	}
+}
+
+func TestResolveForFile_OverridesImportStyle(t *testing.T) {
+	follow := etscore.TopLevelNamedReexportsFollow
+	opts := &etscore.EffectPluginOptions{
+		Diagnostics:             true,
+		NamespaceImportPackages: []string{"effect"},
+		ImportAliases:           map[string]string{"effect": "E"},
+		Overrides: []etscore.Override{
+			{
+				Include: []string{"src/legacy/**/*.ts"},
+				Options: etscore.OverrideOptions{
+					NamespaceImportPackages: &[]string{},
+					BarrelImportPackages:    &[]string{"effect"},
+					ImportAliases:           &map[string]string{},
+					TopLevelNamedReexports:  &follow,
+				},
+			},
+		},
+	}
+
+	legacy := pluginoptions.ResolveEffectPluginOptionsForSourceFile(opts, "/repo/src/legacy/example.ts", "/repo/tsconfig.json", true)
+	if len(legacy.NamespaceImportPackages) != 0 {
+		t.Errorf("legacy NamespaceImportPackages = %v, want []", legacy.NamespaceImportPackages)
+	}
+	if !reflect.DeepEqual(legacy.BarrelImportPackages, []string{"effect"}) {
+		t.Errorf("legacy BarrelImportPackages = %v, want [effect]", legacy.BarrelImportPackages)
+	}
+	if len(legacy.ImportAliases) != 0 {
+		t.Errorf("legacy ImportAliases = %v, want empty", legacy.ImportAliases)
+	}
+	if legacy.TopLevelNamedReexports != etscore.TopLevelNamedReexportsFollow {
+		t.Errorf("legacy TopLevelNamedReexports = %q, want follow", legacy.TopLevelNamedReexports)
+	}
+
+	other := pluginoptions.ResolveEffectPluginOptionsForSourceFile(opts, "/repo/src/app/example.ts", "/repo/tsconfig.json", true)
+	if !reflect.DeepEqual(other.NamespaceImportPackages, []string{"effect"}) {
+		t.Errorf("other NamespaceImportPackages = %v, want [effect]", other.NamespaceImportPackages)
+	}
+	if len(other.BarrelImportPackages) != 0 {
+		t.Errorf("other BarrelImportPackages = %v, want []", other.BarrelImportPackages)
+	}
+	if !reflect.DeepEqual(other.ImportAliases, map[string]string{"effect": "E"}) {
+		t.Errorf("other ImportAliases = %v, want map[effect:E]", other.ImportAliases)
+	}
+	if other.TopLevelNamedReexports == etscore.TopLevelNamedReexportsFollow {
+		t.Errorf("other TopLevelNamedReexports = follow, want unset")
 	}
 }
 
@@ -681,5 +755,27 @@ func TestParseFromPlugins_AutoImportStyleNormalizationDropsEmptyEntries(t *testi
 	}
 	if got, want := opts.GetImportAliases(), map[string]string{"effect": "E"}; !reflect.DeepEqual(got, want) {
 		t.Errorf("GetImportAliases() = %v, want %v", got, want)
+	}
+}
+
+func TestParseFromPlugins_AllowedUnstableApis(t *testing.T) {
+	plugins := makePlugins(makePluginMap(
+		"name", etscore.EffectPluginName,
+		"allowedUnstableApis", []any{"effect/http", "effect/rpc/Client#make"},
+	))
+	opts := etscore.ParseFromPlugins(plugins)
+	if opts == nil || !reflect.DeepEqual(opts.AllowedUnstableApis, []string{"effect/http", "effect/rpc/Client#make"}) {
+		t.Fatalf("unexpected options: %+v", opts)
+	}
+}
+
+func TestParseFromPlugins_AllowedExperimentalApis(t *testing.T) {
+	plugins := makePlugins(makePluginMap(
+		"name", etscore.EffectPluginName,
+		"allowedExperimentalApis", []any{"effect/http", "effect/rpc/Client#make"},
+	))
+	opts := etscore.ParseFromPlugins(plugins)
+	if opts == nil || !reflect.DeepEqual(opts.AllowedExperimentalApis, []string{"effect/http", "effect/rpc/Client#make"}) {
+		t.Fatalf("unexpected options: %+v", opts)
 	}
 }

@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/nestedEffectGenYield.ts(5,9): suggestion TS377017: This Effect.gen contains a single return statement. effect(unnecessaryEffectGen)
 /.src/nestedEffectGenYield.ts(5,9): warning TS377083: This `yield*` is applied to a nested `Effect.gen(...)` that can be inlined in the parent Effect generator context. effect(nestedEffectGenYield)

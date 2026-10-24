@@ -4,15 +4,16 @@ import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import { constants } from "node:fs"
-import { access, appendFile, readFile } from "node:fs/promises"
-import { join } from "node:path"
+import { access, appendFile } from "node:fs/promises"
+import { dirname, join } from "node:path"
 import { ensureEffectFixtures } from "./fixtures.ts"
 import { runCommand, runCommandString } from "./process.ts"
 import {
   readUpstream,
   resolveMaterializedTypeScriptSource,
   type ComponentName,
-  typeScriptSourceEntrypoint
+  typeScriptSourceEntrypoint,
+  type Upstream
 } from "./upstream.ts"
 
 export const buildTargets = {
@@ -93,6 +94,19 @@ export const componentArtifact = (
   }
 }
 
+export const latestTypeScriptCompiler = (repositoryRoot: string, target: BuildTarget) =>
+  join(repositoryRoot, "_packages", `tsgo-${target}`, "lib", target.startsWith("win32-") ? "tsc.exe" : "tsc")
+
+export const packagedTypeScriptCompiler = (
+  repositoryRoot: string,
+  target: BuildTarget,
+  upstream: typeof Upstream.Type,
+  version: string
+) =>
+  version === upstream.tags.typescript.latest
+    ? latestTypeScriptCompiler(repositoryRoot, target)
+    : componentArtifact(repositoryRoot, target, "typescript", version, "tsc").path
+
 export const oxlintArtifacts = (
   repositoryRoot: string,
   targetName: OxlintBuildTarget,
@@ -132,6 +146,20 @@ const validateExecutableArtifact = Effect.fnUntraced(function*(artifact: string)
     try: () => access(artifact, constants.X_OK),
     catch: () => new BuildError({ reason: `Artifact is not executable: ${artifact}` })
   })
+})
+
+export const copyTypeScriptLibraries = Effect.fnUntraced(function*(source: string, destination: string) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const libraries = (yield* fs.readDirectory(source)).filter((name) => /^lib(?:\..+)?\.d\.ts$/.test(name))
+  if (!libraries.includes("lib.d.ts")) {
+    return yield* new BuildError({ reason: `Missing TypeScript libraries in ${source}` })
+  }
+  yield* fs.makeDirectory(destination, { recursive: true })
+  for (const library of libraries) {
+    yield* validateArtifact(path.join(source, library))
+    yield* fs.copyFile(path.join(source, library), path.join(destination, library))
+  }
 })
 
 export const buildCli = Effect.fnUntraced(function*(repositoryRoot: string) {
@@ -307,6 +335,7 @@ const buildTsc = Effect.fnUntraced(function*(
   yield* Console.log(`Building TypeScript ${version} for ${targetName} -> ${artifact.path}`)
   yield* runCommand("go", repositoryRoot, [
     "build",
+    "-tags=noembed",
     "-ldflags=-s -w",
     "-o",
     artifact.path,
@@ -318,11 +347,15 @@ const buildTsc = Effect.fnUntraced(function*(
     GOARM: "goarm" in target ? target.goarm : ""
   })
   yield* validateArtifact(artifact.path)
+  yield* copyTypeScriptLibraries(
+    path.join(repositoryRoot, compiler.checkoutDir, compiler.moduleDir, "internal", "bundled", "libs"),
+    path.dirname(artifact.path)
+  )
 
   if (process.env.GITHUB_OUTPUT !== undefined) {
     yield* Effect.tryPromise(() => appendFile(
       process.env.GITHUB_OUTPUT!,
-      `component=typescript\nnpm_version=${version}\nartifact_path=${artifact.path}\n`
+      `component=typescript\nnpm_version=${version}\nartifact_path=${path.dirname(artifact.path)}\n`
     ))
   }
   return artifact
@@ -354,7 +387,14 @@ export const verifyReleaseArtifacts = Effect.fnUntraced(function*(repositoryRoot
   const sourceUpstream = yield* fs.readFileString(path.join(repositoryRoot, "_packages", "tsgo", "upstream.json"))
   for (const version of Object.keys(upstream.components.typescript)) {
     for (const target of Object.keys(buildTargets) as Array<BuildTarget>) {
-      yield* validateArtifact(componentArtifact(repositoryRoot, target, "typescript", version, "tsc").path)
+      const binary = packagedTypeScriptCompiler(repositoryRoot, target, upstream, version)
+      yield* validateArtifact(binary)
+      yield* validateArtifact(join(dirname(binary), "lib.d.ts"))
+      const libraries = (yield* fs.readDirectory(dirname(binary))).filter((name) =>
+        /^lib(?:\..+)?\.d\.ts$/.test(name))
+      for (const library of libraries) {
+        yield* validateArtifact(join(dirname(binary), library))
+      }
     }
   }
   for (const target of Object.keys(buildTargets) as Array<BuildTarget>) {
@@ -382,11 +422,9 @@ export const verifyReleaseArtifacts = Effect.fnUntraced(function*(repositoryRoot
     }
   }
   for (const target of Object.keys(buildTargets) as Array<BuildTarget>) {
-    const latest = componentArtifact(repositoryRoot, target, "typescript", upstream.tags.typescript.latest, "tsc").path
-    const alias = join(repositoryRoot, "_packages", `tsgo-${target}`, "lib", target.startsWith("win32-") ? "tsc.exe" : "tsc")
-    yield* validateArtifact(alias)
-    if (!Buffer.from(yield* Effect.promise(() => readFile(latest))).equals(Buffer.from(yield* Effect.promise(() => readFile(alias))))) {
-      return yield* new BuildError({ reason: `Latest TypeScript alias does not match ${latest}` })
+    const duplicate = dirname(componentArtifact(repositoryRoot, target, "typescript", upstream.tags.typescript.latest, "tsc").path)
+    if (yield* fs.exists(duplicate)) {
+      return yield* new BuildError({ reason: `The latest TypeScript compiler ships only in lib/, found ${duplicate}` })
     }
   }
   yield* Console.log("Verified release artifacts for all components and targets")

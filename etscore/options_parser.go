@@ -99,13 +99,6 @@ func ParseFromPlugins(value any) *EffectPluginOptions {
 			}
 		}
 
-		// Parse debug (default: false)
-		if val, exists := getPluginValue("debug"); exists {
-			if b, ok := val.(bool); ok {
-				result.Debug = b
-			}
-		}
-
 		// Parse goto (default: true)
 		if val, exists := getPluginValue("goto"); exists {
 			if b, ok := val.(bool); ok {
@@ -210,6 +203,17 @@ func ParseFromPlugins(value any) *EffectPluginOptions {
 			}
 		}
 
+		if val, exists := getPluginValue("allowedUnstableApis"); exists {
+			if apis, ok := parseStringArrayStrict(val); ok {
+				result.AllowedUnstableApis = apis
+			}
+		}
+		if val, exists := getPluginValue("allowedExperimentalApis"); exists {
+			if apis, ok := parseStringArrayStrict(val); ok {
+				result.AllowedExperimentalApis = apis
+			}
+		}
+
 		// Parse allowedDuplicatedPackages (default: nil)
 		if val, exists := getPluginValue("allowedDuplicatedPackages"); exists {
 			if arr, ok := val.([]any); ok {
@@ -246,11 +250,8 @@ func ParseFromPlugins(value any) *EffectPluginOptions {
 
 		// Parse topLevelNamedReexports (default: "", getter resolves to "ignore")
 		if val, exists := getPluginValue("topLevelNamedReexports"); exists {
-			if s, ok := val.(string); ok {
-				normalized := strings.ToLower(s)
-				if normalized == "ignore" || normalized == "follow" {
-					result.TopLevelNamedReexports = TopLevelNamedReexportsMode(normalized)
-				}
+			if mode, ok := parseTopLevelNamedReexports(val); ok {
+				result.TopLevelNamedReexports = mode
 			}
 		}
 
@@ -258,6 +259,18 @@ func ParseFromPlugins(value any) *EffectPluginOptions {
 	}
 
 	return nil
+}
+
+func parseTopLevelNamedReexports(value any) (TopLevelNamedReexportsMode, bool) {
+	s, ok := value.(string)
+	if !ok {
+		return "", false
+	}
+	switch mode := TopLevelNamedReexportsMode(strings.ToLower(s)); mode {
+	case TopLevelNamedReexportsIgnore, TopLevelNamedReexportsFollow:
+		return mode, true
+	}
+	return "", false
 }
 
 func parseNormalizedStringArrayStrict(value any) ([]string, bool) {
@@ -365,6 +378,16 @@ func parseOverrideOptions(value any) OverrideOptions {
 			result.ExtendedKeyDetection = &b
 		}
 	}
+	if value, exists := optionsMap("allowedUnstableApis"); exists {
+		if apis, ok := parseStringArrayStrict(value); ok {
+			result.AllowedUnstableApis = &apis
+		}
+	}
+	if value, exists := optionsMap("allowedExperimentalApis"); exists {
+		if apis, ok := parseStringArrayStrict(value); ok {
+			result.AllowedExperimentalApis = &apis
+		}
+	}
 	if value, exists := optionsMap("allowedDuplicatedPackages"); exists {
 		if pkgs, ok := parseStringArrayStrict(value); ok {
 			result.AllowedDuplicatedPackages = &pkgs
@@ -373,6 +396,26 @@ func parseOverrideOptions(value any) OverrideOptions {
 	if value, exists := optionsMap("effectFn"); exists {
 		if variants, ok := parseStringArrayStrict(value); ok {
 			result.EffectFn = &variants
+		}
+	}
+	if value, exists := optionsMap("namespaceImportPackages"); exists {
+		if pkgs, ok := parseNormalizedStringArrayStrict(value); ok {
+			result.NamespaceImportPackages = &pkgs
+		}
+	}
+	if value, exists := optionsMap("barrelImportPackages"); exists {
+		if pkgs, ok := parseNormalizedStringArrayStrict(value); ok {
+			result.BarrelImportPackages = &pkgs
+		}
+	}
+	if value, exists := optionsMap("importAliases"); exists {
+		if aliases, ok := parseNormalizedStringMapStrict(value); ok {
+			result.ImportAliases = &aliases
+		}
+	}
+	if value, exists := optionsMap("topLevelNamedReexports"); exists {
+		if mode, ok := parseTopLevelNamedReexports(value); ok {
+			result.TopLevelNamedReexports = &mode
 		}
 	}
 

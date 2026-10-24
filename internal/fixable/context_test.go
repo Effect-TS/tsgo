@@ -1,6 +1,7 @@
 package fixable
 
 import (
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
@@ -12,10 +13,7 @@ import (
 func TestStandaloneRangeConversionUsesLSPLineSemantics(t *testing.T) {
 	t.Parallel()
 
-	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: "/source.ts",
-		Path:     "/source.ts",
-	}, "😀x\u2028y", core.ScriptKindTS)
+	sourceFile := parser.ParseSourceFile(ast.NewSourceFileParseOptions(tspath.RootedFilePath("/source.ts"), "/source.ts"), "😀x\u2028y", core.ScriptKindTS)
 	ctx := &Context{
 		SourceFile: sourceFile,
 		converters: newStandaloneConverters(sourceFile),

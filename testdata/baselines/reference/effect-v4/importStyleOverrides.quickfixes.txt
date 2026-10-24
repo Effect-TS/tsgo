@@ -1,0 +1,33 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:10-6:16) TS377146: 'Effect' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Effect from "effect/Effect"' instead. effect(preferNamespaceImport)
+  Fix 0: "Disable preferNamespaceImport for this line"
+  Fix 1: "Disable preferNamespaceImport for entire file"
+
+[D2] (6:10-6:16) TS377146: 'Effect' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Effect from "effect/Effect"' instead. effect(preferNamespaceImport)
+  Fix 0: "Disable preferNamespaceImport for this line"
+  Fix 1: "Disable preferNamespaceImport for entire file"
+
+[D3] (5:10-5:14) TS377146: 'pipe' is imported by name from 'effect', but namespaceImportPackages expects a namespace import. Use 'import * as Function from "effect/Function"' instead. effect(preferNamespaceImport)
+  Fix 0: "Disable preferNamespaceImport for this line"
+  Fix 1: "Disable preferNamespaceImport for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferNamespaceImport for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferNamespaceImport for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable preferNamespaceImport for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable preferNamespaceImport for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable preferNamespaceImport for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable preferNamespaceImport for entire file" ===
+skipped by default

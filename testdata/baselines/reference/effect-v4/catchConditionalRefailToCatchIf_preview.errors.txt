@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/catchConditionalRefailToCatchIf_preview.ts(11,3): warning TS377116: `Effect.catchIf` expresses selective recovery more directly than `Effect.catch` with a conditional `Effect.fail` passthrough. effect(catchConditionalRefailToCatchIf)
 

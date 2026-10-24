@@ -1,0 +1,37 @@
+==== /.src/missedPipeableOpportunity_arrayPipe.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 15:25 - 15:41
+Node: f(g([1, 2, 3]))
+Node Kind: KindCallExpression
+
+Subject: [1, 2, 3]
+Subject Type: number[]
+
+Transformations (2):
+  [0] kind: call
+      callee: g
+      args: (constant)
+      outType: object
+  [1] kind: call
+      callee: f
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 18:26 - 18:41
+Node: f(h({ a: 1 }))
+Node Kind: KindCallExpression
+
+Subject: { a: 1 }
+Subject Type: { a: number; }
+
+Transformations (2):
+  [0] kind: call
+      callee: h
+      args: (constant)
+      outType: object
+  [1] kind: call
+      callee: f
+      args: (constant)
+      outType: number

@@ -1,0 +1,37 @@
+==== /.src/flatMapToTap_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 11:40 - 13:2
+Node: findUser(id).pipe(\n  Effect.flatMap((user) => auditUser(user).pipe(Effect.as(user)))\n)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (2):
+  [0] kind: call
+      callee: findUser
+      args: (constant)
+      outType: Effect<User, never, never>
+  [1] kind: pipeable
+      callee: Effect.flatMap
+      args: [(user) => auditUser(user).pipe(Effect.as(user))]
+      outType: Effect<User, never, never>
+
+=== Piping Flow ===
+Location: 12:27 - 12:65
+Node: auditUser(user).pipe(Effect.as(user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: auditUser
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.as
+      args: [user]
+      outType: Effect<User, never, never>

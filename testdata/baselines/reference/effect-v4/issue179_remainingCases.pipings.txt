@@ -12,7 +12,7 @@ Transformations (1):
   [0] kind: call
       callee: Effect.tryPromise
       args: (constant)
-      outType: Effect<T, never, never>
+      outType: Effect<T, UnknownError, never>
 
 === Piping Flow ===
 Location: 15:15 - 15:37

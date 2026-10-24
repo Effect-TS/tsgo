@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/catchIfTagToCatchTag_preview.ts(11,3): suggestion TS377131: Effect.catchTag expresses tagged error recovery more directly than Effect.catchIf with a `_tag` equality predicate. effect(catchIfTagToCatchTag)
 

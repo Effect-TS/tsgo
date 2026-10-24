@@ -1,13 +1,14 @@
 import * as Console from "effect/Console"
 import * as Effect from "effect/Effect"
+import { runCommandString } from "./process.ts"
 import { buildReleasePlan } from "./releasePlan.ts"
-import { readUpstream, type Upstream } from "./upstream.ts"
+import { decodeUpstream, readUpstream, type Upstream } from "./upstream.ts"
 
 export const buildTypeScriptTestMatrix = (upstream: typeof Upstream.Type) => ({
   include: Object.keys(upstream.components.typescript)
     .sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)))
     .map((version) => {
-      const channels = (["latest", "next"] as const)
+      const channels = (["latest", "beta", "next"] as const)
         .filter((channel) => upstream.tags.typescript[channel] === version)
       return {
         name: channels.length === 0 ? version : channels.join("+"),
@@ -16,6 +17,17 @@ export const buildTypeScriptTestMatrix = (upstream: typeof Upstream.Type) => ({
         repoctl: upstream.tags.typescript.next === version
       }
     })
+})
+
+export const buildPerfMatrix = (
+  base: typeof Upstream.Type,
+  head: typeof Upstream.Type,
+  baseRef: string,
+  headRef: string
+) => ({
+  include: ([["base", base, baseRef], ["head", head, headRef]] as const).flatMap(([side, upstream, ref]) =>
+    buildTypeScriptTestMatrix(upstream).include.map(({ name, version }) => ({ name, side, ref, version }))
+  )
 })
 
 export const buildOxlintTestMatrix = (upstream: typeof Upstream.Type) => {
@@ -64,6 +76,18 @@ export const buildReleaseMatrix = (upstream: typeof Upstream.Type) => ({
 export const printTypeScriptTestMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {
   const upstream = yield* readUpstream(repositoryRoot)
   yield* Console.log(JSON.stringify(buildTypeScriptTestMatrix(upstream)))
+})
+
+export const printPerfMatrix = Effect.fnUntraced(function*(
+  repositoryRoot: string,
+  baseRef: string,
+  headRef: string
+) {
+  const head = yield* readUpstream(repositoryRoot)
+  const base = yield* decodeUpstream(
+    yield* runCommandString("git", repositoryRoot, ["show", `${baseRef}:_packages/tsgo/upstream.json`])
+  )
+  yield* Console.log(JSON.stringify(buildPerfMatrix(base, head, baseRef, headRef)))
 })
 
 export const printOxlintTestMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {

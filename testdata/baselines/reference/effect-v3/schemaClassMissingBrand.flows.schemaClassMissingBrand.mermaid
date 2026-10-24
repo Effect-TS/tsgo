@@ -1,0 +1,18 @@
+flowchart TB
+  0[/"type: Class#lt;User, #123; name: typeof String$; #125;, Encoded#lt;#123; name: typeof String$; #125;#gt;, never, #123; readonly name: string; #125;, #123;#125;, #123;#125;#gt;<br/>node: Schema.Class#lt;User#gt;#40;#quot;User#quot;#41;#40;#123; name: Schema.String #125;#41;"/]
+  1[/"type: #quot;User#quot;<br/>node: #quot;User#quot;"/]
+  2["type: #lt;Fields extends Struct.Fields#gt;#40;fieldsOr: Fields #124; HasFields#lt;Fields#gt;, annotations?: ClassAnnotations#lt;User, #123; #91;K in keyof Type#lt;Fields#gt;#93;: Type#lt;Fields#gt;#91;K#93;; #125;#gt; #124; undefined#41; =#gt; Class#lt;User, Fields, Encoded#lt;Fields#gt;, Context#lt;Fields#91;keyof Fields#93;#gt;, Constructor#lt;Fields#gt;, #123;#125;, #123;#125;#gt;<br/>callee: Schema.Class<br/>args: #91;#93;"]
+  3[/"type: #lt;Self = never#gt;#40;identifier: string#41; =#gt; #lt;Fields extends Struct.Fields#gt;#40;fieldsOr: Fields #124; HasFields#lt;Fields#gt;, annotations?: ClassAnnotations#lt;Self, #123; #91;K in keyof Type#lt;Fields#gt;#93;: Type#lt;Fields#gt;#91;K#93;; #125;#gt; #124; undefined#41; =#gt; #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends Class#lt;Self#gt;#40;#41;#40;#123; ... #125;#41;`#quot; : Class#lt;Self, Fields, Encoded#lt;Fields#gt;, Context#lt;Fields#91;keyof Fields#93;#gt;, Constructor#lt;Fields#gt;, #123;#125;, #123;#125;#gt;<br/>node: Schema.Class"/]
+  4[/"type: TaggedClass#lt;TaggedUser, #quot;TaggedUser#quot;, #123; readonly _tag: tag#lt;#quot;TaggedUser#quot;#gt;; #125; #amp; #123; name: typeof String$; #125;#gt;<br/>node: Schema.TaggedClass#lt;TaggedUser#gt;#40;#41;#40;#quot;TaggedUser#quot;, #123; name: Schema.String #125;#41;"/]
+  5[/"type: TaggedErrorClass#lt;Failure, #quot;Failure#quot;, #123; readonly _tag: tag#lt;#quot;Failure#quot;#gt;; #125; #amp; #123; message: typeof String$; #125;#gt;<br/>node: Schema.TaggedError#lt;Failure#gt;#40;#41;#40;#quot;Failure#quot;, #123; message: Schema.String #125;#41;"/]
+  6[/"type: TaggedRequestClass#lt;Request, #quot;Request#quot;, #123; readonly _tag: tag#lt;#quot;Request#quot;#gt;; #125; #amp; #123; name: typeof String$; #125;, typeof String$, typeof Never#gt;<br/>node: Schema.TaggedRequest#lt;Request#gt;#40;#41;#40;#quot;Request#quot;, #123;#92;n  payload: #123; name: Schema.String #125;,#92;n  success: Schema.String,#92;n  failure: Schema.Never#92;n#125;#41;"/]
+  7[/"type: TagClass#lt;Service, #quot;Service#quot;, #123; readonly value: string; #125;#gt;<br/>node: Context.Tag#40;#quot;Service#quot;#41;#lt;Service, #123; readonly value: string #125;#gt;#40;#41;"/]
+  8[/"type: #quot;Service#quot;<br/>node: #quot;Service#quot;"/]
+  9["type: #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, #quot;Service#quot;, Shape#gt;<br/>callee: Context.Tag<br/>args: #91;#93;"]
+  10[/"type: #lt;const Id extends string#gt;#40;id: Id#41; =#gt; #lt;Self, Shape#gt;#40;#41; =#gt; TagClass#lt;Self, Id, Shape#gt;<br/>node: Context.Tag"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: usedBy"| 0
+  8 -->|"kind: pipe"| 9
+  10 -->|"kind: transformCallee"| 9
+  9 -->|"kind: usedBy"| 7

@@ -1,0 +1,11 @@
+{
+  "options": {
+    "typeAware": true
+  },
+  "plugins": [
+    "effecttsgo"
+  ],
+  "rules": {
+    "effecttsgo/api-stability-leak": "warn"
+  }
+}

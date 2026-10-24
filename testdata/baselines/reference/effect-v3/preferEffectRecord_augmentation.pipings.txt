@@ -1,0 +1,85 @@
+==== /.src/preferEffectRecord_augmentation.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 9:22 - 10:18
+Node: Object.keys(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Object.keys
+      args: (constant)
+      outType: "a"[]
+
+=== Piping Flow ===
+Location: 10:18 - 11:21
+Node: Object["keys"](data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Object["keys"]
+      args: (constant)
+      outType: "a"[]
+
+=== Piping Flow ===
+Location: 11:21 - 12:25
+Node: data.hasOwnProperty("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: data.hasOwnProperty
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 13:48 - 14:20
+Node: Object.values(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Object.values
+      args: (constant)
+      outType: number[]
+
+=== Piping Flow ===
+Location: 15:25 - 16:15
+Node: R.values(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: R.values
+      args: (constant)
+      outType: number[]
+
+=== Piping Flow ===
+Location: 16:15 - 17:17
+Node: R.has(data, "a")
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; }
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: R.has
+      args: ["a"]
+      outType: boolean

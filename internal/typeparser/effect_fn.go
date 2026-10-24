@@ -2,6 +2,7 @@
 package typeparser
 
 import (
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
@@ -16,26 +17,52 @@ const (
 
 // EffectFnCallResult represents a parsed Effect.fn-family call.
 type EffectFnCallResult struct {
-	Call               *ast.CallExpression
-	Variant            EffectFnVariant
-	EffectModule       *ast.Expression
-	OptionsNode        *ast.Node
-	FunctionNode       *ast.Node // ArrowFunction or FunctionExpression
-	FunctionReturnType *checker.Type
-	PipeArguments      []*ast.Node // Transformation args after the body (may be empty/nil)
-	PipeArgsOutType    []*checker.Type
-	TraceExpression    *ast.Node // The name string from curried Effect.fn("name")(...), or nil
+	call               *ast.CallExpression
+	variant            EffectFnVariant
+	effectModule       *ast.Expression
+	optionsNode        *ast.Node
+	functionNode       *ast.Node // ArrowFunction or FunctionExpression
+	functionReturnType *lazy[*checker.Type]
+	pipeArguments      []*ast.Node // Transformation args after the body (may be empty/nil)
+	pipeArgsOutType    []*lazy[*checker.Type]
+	traceExpression    *ast.Node // The name string from curried Effect.fn("name")(...), or nil
 }
+
+func (r EffectFnCallResult) Call() *ast.CallExpression { return r.call }
+
+func (r EffectFnCallResult) Variant() EffectFnVariant { return r.variant }
+
+func (r EffectFnCallResult) EffectModule() *ast.Expression { return r.effectModule }
+
+func (r EffectFnCallResult) OptionsNode() *ast.Node { return r.optionsNode }
+
+func (r EffectFnCallResult) FunctionNode() *ast.Node { return r.functionNode }
+
+func (r EffectFnCallResult) FunctionReturnType() *checker.Type { return r.functionReturnType.get() }
+
+func (r EffectFnCallResult) PipeArguments() readonly.Slice[*ast.Node] {
+	return readonly.New(r.pipeArguments)
+}
+
+func (r EffectFnCallResult) PipeArgsOutType() readonly.Slice[*checker.Type] {
+	outTypes := make([]*checker.Type, len(r.pipeArgsOutType))
+	for i, outType := range r.pipeArgsOutType {
+		outTypes[i] = outType.get()
+	}
+	return readonly.New(outTypes)
+}
+
+func (r EffectFnCallResult) TraceExpression() *ast.Node { return r.traceExpression }
 
 func (r *EffectFnCallResult) IsGenerator() bool {
 	return r.GeneratorFunction() != nil
 }
 
 func (r *EffectFnCallResult) GeneratorFunction() *ast.FunctionExpression {
-	if r == nil || r.FunctionNode == nil || r.FunctionNode.Kind != ast.KindFunctionExpression {
+	if r == nil || r.functionNode == nil || r.functionNode.Kind != ast.KindFunctionExpression {
 		return nil
 	}
-	fn := r.FunctionNode.AsFunctionExpression()
+	fn := r.functionNode.AsFunctionExpression()
 	if fn == nil || fn.AsteriskToken == nil {
 		return nil
 	}
@@ -43,18 +70,18 @@ func (r *EffectFnCallResult) GeneratorFunction() *ast.FunctionExpression {
 }
 
 func (r *EffectFnCallResult) Body() *ast.BlockOrExpression {
-	if r == nil || r.FunctionNode == nil {
+	if r == nil || r.functionNode == nil {
 		return nil
 	}
-	switch r.FunctionNode.Kind {
+	switch r.functionNode.Kind {
 	case ast.KindArrowFunction:
-		fn := r.FunctionNode.AsArrowFunction()
+		fn := r.functionNode.AsArrowFunction()
 		if fn == nil {
 			return nil
 		}
 		return fn.Body
 	case ast.KindFunctionExpression:
-		fn := r.FunctionNode.AsFunctionExpression()
+		fn := r.functionNode.AsFunctionExpression()
 		if fn == nil {
 			return nil
 		}
@@ -98,27 +125,30 @@ func isGeneratorFunctionNode(node *ast.Node) bool {
 	return fn != nil && fn.AsteriskToken != nil
 }
 
-func (tp *TypeParser) buildEffectFnPipeArgsOutType(call *ast.CallExpression, trailingStartIndex int, pipeArgs []*ast.Node) []*checker.Type {
-	outTypes := make([]*checker.Type, len(pipeArgs))
-	if tp == nil || tp.checker == nil || call == nil {
-		return outTypes
-	}
-
-	callNode := call.AsNode()
+func (tp *TypeParser) buildEffectFnPipeArgsOutType(call *ast.CallExpression, trailingStartIndex int, pipeArgs []*ast.Node) []*lazy[*checker.Type] {
+	outTypes := make([]*lazy[*checker.Type], len(pipeArgs))
 	for i := range pipeArgs {
 		argIndex := trailingStartIndex + i
-		contextualType := tp.checker.GetContextualTypeForArgumentAtIndex(callNode, argIndex)
-		if contextualType == nil {
-			continue
-		}
-		callSigs := tp.checker.GetSignaturesOfType(contextualType, checker.SignatureKindCall)
-		if len(callSigs) == 0 {
-			continue
-		}
-		outTypes[i] = tp.checker.GetReturnTypeOfSignature(callSigs[0])
+		outTypes[i] = newLazy(func() *checker.Type {
+			return tp.buildEffectFnPipeArgOutType(call, argIndex)
+		})
 	}
-
 	return outTypes
+}
+
+func (tp *TypeParser) buildEffectFnPipeArgOutType(call *ast.CallExpression, argIndex int) *checker.Type {
+	if tp == nil || tp.checker == nil || call == nil {
+		return nil
+	}
+	contextualType := tp.checker.GetContextualTypeForArgumentAtIndex(call.AsNode(), argIndex)
+	if contextualType == nil {
+		return nil
+	}
+	callSigs := tp.checker.GetSignaturesOfType(contextualType, checker.SignatureKindCall)
+	if len(callSigs) == 0 {
+		return nil
+	}
+	return tp.checker.GetReturnTypeOfSignature(callSigs[0])
 }
 
 func (tp *TypeParser) buildEffectFnFunctionReturnType(call *ast.CallExpression, trailingStartIndex int, pipeArgs []*ast.Node) *checker.Type {
@@ -237,15 +267,15 @@ func (tp *TypeParser) EffectFnCall(node *ast.Node) *EffectFnCallResult {
 		}
 
 		return &EffectFnCallResult{
-			Call:               call,
-			Variant:            variant,
-			EffectModule:       effectModule,
-			OptionsNode:        optionsNode,
-			FunctionNode:       bodyArg,
-			FunctionReturnType: tp.buildEffectFnFunctionReturnType(call, trailingStartIndex, pipeArgs),
-			PipeArguments:      pipeArgs,
-			PipeArgsOutType:    tp.buildEffectFnPipeArgsOutType(call, trailingStartIndex, pipeArgs),
-			TraceExpression:    traceExpression,
+			call:               call,
+			variant:            variant,
+			effectModule:       effectModule,
+			optionsNode:        optionsNode,
+			functionNode:       bodyArg,
+			functionReturnType: newLazy(func() *checker.Type { return tp.buildEffectFnFunctionReturnType(call, trailingStartIndex, pipeArgs) }),
+			pipeArguments:      pipeArgs,
+			pipeArgsOutType:    tp.buildEffectFnPipeArgsOutType(call, trailingStartIndex, pipeArgs),
+			traceExpression:    traceExpression,
 		}
 	})
 }

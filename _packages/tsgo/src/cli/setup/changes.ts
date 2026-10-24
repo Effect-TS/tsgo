@@ -4,7 +4,7 @@ import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Option from "effect/Option"
 import * as Path from "effect/Path"
-import * as Prompt from "effect/unstable/cli/Prompt"
+import { Prompt } from "effect/cli"
 import * as ts from "typescript"
 import { renderCodeActions } from "./diff-renderer.js"
 import type { Assessment, PackageDependency, SetupCodeAction, Target } from "./types.js"
@@ -1137,7 +1137,7 @@ export const reviewAndApplyChanges = (
       return
     }
 
-    const shouldProceed = yield* Prompt.confirm({
+    const shouldProceed = yield* Prompt.Confirm({
       message: options?.confirmMessage ?? "Apply all changes?",
       initial: true
     })

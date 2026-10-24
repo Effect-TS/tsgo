@@ -20,13 +20,13 @@ Node: Effect.sync(() => ({\n  val: Match.value(1),\n  m1: Match1,\n  mSub: Match
 Node Kind: KindCallExpression
 
 Subject: () => ({\n  val: Match.value(1),\n  m1: Match1,\n  mSub: MatchSub,\n  fromEffect: MatchFromEffect,\n  other: Other\n})
-Subject Type: () => { val: Matcher<1, Without<never>, 1, never, 1, any>; m1: any; mSub: any; fromEffect: typeof import("/node_modules/effect/dist/Match"); other: any; }
+Subject Type: () => { val: Matcher<1, Without<never>, 1, never, "value", any, []>; m1: any; mSub: any; fromEffect: typeof import("/node_modules/effect/dist/Match"); other: any; }
 
 Transformations (1):
   [0] kind: call
       callee: Effect.sync
       args: (constant)
-      outType: Effect<{ val: Matcher<1, Without<never>, 1, never, 1, any>; m1: any; mSub: any; fromEffect: typeof import("/node_modules/effect/dist/Match"); other: any; }, never, never>
+      outType: Effect<{ val: Matcher<1, Without<never>, 1, never, "value", any, []>; m1: any; mSub: any; fromEffect: typeof import("/node_modules/effect/dist/Match"); other: any; }, never, never>
 
 === Piping Flow ===
 Location: 29:7 - 29:22
@@ -40,4 +40,4 @@ Transformations (1):
   [0] kind: call
       callee: Match.value
       args: (constant)
-      outType: Matcher<1, Without<never>, 1, never, 1, any>
+      outType: Matcher<1, Without<never>, 1, never, "value", any, []>

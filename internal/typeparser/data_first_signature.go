@@ -3,17 +3,28 @@ package typeparser
 import (
 	"strings"
 
+	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
 type ParsedDataFirstOrLastCall struct {
-	Node         *ast.CallExpression
-	Callee       *ast.Node
-	Subject      *ast.Node
-	Args         []*ast.Node
-	SubjectIndex int
+	node         *ast.CallExpression
+	callee       *ast.Node
+	subject      *ast.Node
+	args         []*ast.Node
+	subjectIndex int
 }
+
+func (r ParsedDataFirstOrLastCall) Node() *ast.CallExpression { return r.node }
+
+func (r ParsedDataFirstOrLastCall) Callee() *ast.Node { return r.callee }
+
+func (r ParsedDataFirstOrLastCall) Subject() *ast.Node { return r.subject }
+
+func (r ParsedDataFirstOrLastCall) Args() readonly.Slice[*ast.Node] { return readonly.New(r.args) }
+
+func (r ParsedDataFirstOrLastCall) SubjectIndex() int { return r.subjectIndex }
 
 type PipeableSignatureWitness struct {
 	ArgumentTypes []*checker.Type
@@ -35,6 +46,12 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 		}
 	}
 
+	return CachedNode(&tp.links.DataFirstOrLastCall, node, func() *ParsedDataFirstOrLastCall {
+		return tp.parseDataFirstOrLastCall(node, call)
+	})
+}
+
+func (tp *TypeParser) parseDataFirstOrLastCall(node *ast.Node, call *ast.CallExpression) *ParsedDataFirstOrLastCall {
 	c := tp.checker
 	resolved := c.GetResolvedSignature(node)
 	if resolved == nil {
@@ -75,16 +92,18 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 
 	var matched *ParsedDataFirstOrLastCall
 	for _, subjectIndex := range subjectIndexes {
-		subjectType := tp.GetTypeAtLocation(call.Arguments.Nodes[subjectIndex])
-		if subjectType == nil {
-			continue
-		}
 		args := omitArgAt(call.Arguments.Nodes, subjectIndex)
-		argumentTypes := make([]*checker.Type, 0, len(args))
-		for _, arg := range args {
-			argumentTypes = append(argumentTypes, tp.GetTypeAtLocation(arg))
-		}
-		witness := &PipeableSignatureWitness{ArgumentTypes: argumentTypes, SubjectType: subjectType}
+		witness := newLazy(func() *PipeableSignatureWitness {
+			subjectType := tp.GetTypeAtLocation(call.Arguments.Nodes[subjectIndex])
+			if subjectType == nil {
+				return nil
+			}
+			argumentTypes := make([]*checker.Type, 0, len(args))
+			for _, arg := range args {
+				argumentTypes = append(argumentTypes, tp.GetTypeAtLocation(arg))
+			}
+			return &PipeableSignatureWitness{ArgumentTypes: argumentTypes, SubjectType: subjectType}
+		})
 
 		for _, candidate := range candidates {
 			if candidate == nil {
@@ -100,22 +119,28 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 					continue
 				}
 			}
-			if !MatchesPipeableSignature(c, resolved, candidate, subjectIndex, witness) {
+			if !pipeableSignatureShapesMatch(tp, resolved, candidate, subjectIndex) {
+				continue
+			}
+			if witness.get() == nil {
+				break
+			}
+			if !MatchesPipeableSignature(tp, resolved, candidate, subjectIndex, witness.get()) {
 				continue
 			}
 
-			if matched != nil && matched.SubjectIndex != subjectIndex {
-				if matched.SubjectIndex < len(resolved.Parameters()) && isLikelySelfParameter(resolved.Parameters()[matched.SubjectIndex]) {
+			if matched != nil && matched.subjectIndex != subjectIndex {
+				if matched.subjectIndex < len(resolved.Parameters()) && isLikelySelfParameter(resolved.Parameters()[matched.subjectIndex]) {
 					return matched
 				}
 				return nil
 			}
 			matched = &ParsedDataFirstOrLastCall{
-				Node:         call,
-				Callee:       call.Expression,
-				Subject:      call.Arguments.Nodes[subjectIndex],
-				Args:         args,
-				SubjectIndex: subjectIndex,
+				node:         call,
+				callee:       call.Expression,
+				subject:      call.Arguments.Nodes[subjectIndex],
+				args:         args,
+				subjectIndex: subjectIndex,
 			}
 			break
 		}
@@ -127,10 +152,11 @@ func (tp *TypeParser) DataFirstOrLastCall(node *ast.Node) *ParsedDataFirstOrLast
 // MatchesPipeableSignature reports whether candidate is the pipeable form of
 // dataFirst with the parameter at subjectIndex moved into a returned unary function.
 // When witness is nil, parameter types from dataFirst are used for comparison.
-func MatchesPipeableSignature(c *checker.Checker, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int, witness *PipeableSignatureWitness) bool {
-	if c == nil || dataFirst == nil || candidate == nil {
+func MatchesPipeableSignature(tp *TypeParser, dataFirst *checker.Signature, candidate *checker.Signature, subjectIndex int, witness *PipeableSignatureWitness) bool {
+	if tp == nil || tp.checker == nil || dataFirst == nil || candidate == nil {
 		return false
 	}
+	c := tp.checker
 	params := dataFirst.Parameters()
 	if subjectIndex < 0 || subjectIndex >= len(params) {
 		return false
@@ -154,7 +180,7 @@ func MatchesPipeableSignature(c *checker.Checker, dataFirst *checker.Signature, 
 
 	return argumentTypesMatchParameters(c, argumentTypes, candidate) &&
 		candidateAcceptsSubject(c, candidate, subjectType) &&
-		pipeableSignatureShapesMatch(c, dataFirst, candidate, subjectIndex)
+		pipeableSignatureShapesMatch(tp, dataFirst, candidate, subjectIndex)
 }
 
 func argumentTypesMatchParameters(c *checker.Checker, args []*checker.Type, sig *checker.Signature) bool {
@@ -288,7 +314,7 @@ func isLikelySelfParameter(sym *ast.Symbol) bool {
 	if sym == nil {
 		return false
 	}
-	name := strings.ToLower(sym.Name)
+	name := strings.ToLower(ast.TSGetSymbolName(sym))
 	return name == "self" || strings.HasPrefix(name, "self") || name == "this"
 }
 

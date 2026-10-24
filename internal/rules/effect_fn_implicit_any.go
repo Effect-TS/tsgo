@@ -38,7 +38,7 @@ var EffectFnImplicitAny = rule.Rule{
 				if result.IsGenerator() {
 					diags = append(diags, checkEffectFnImplicitAny(ctx, result)...)
 				} else {
-					diags = append(diags, checkEffectFnImplicitAnyBody(ctx, result.Call.AsNode(), result.FunctionNode)...)
+					diags = append(diags, checkEffectFnImplicitAnyBody(ctx, result.Call().AsNode(), result.FunctionNode())...)
 				}
 			}
 
@@ -57,7 +57,7 @@ func checkEffectFnImplicitAny(ctx *rule.Context, result *typeparser.EffectFnCall
 	if result == nil || genFn == nil || genFn.Parameters == nil {
 		return nil
 	}
-	return checkEffectFnImplicitAnyParameters(ctx, result.Call.AsNode(), genFn.Parameters.Nodes)
+	return checkEffectFnImplicitAnyParameters(ctx, result.Call().AsNode(), genFn.Parameters.Nodes)
 }
 
 func checkEffectFnImplicitAnyBody(ctx *rule.Context, callNode *ast.Node, fnNode *ast.Node) []*ast.Diagnostic {
@@ -116,7 +116,7 @@ func hasOuterContextualFunctionType(tp *typeparser.TypeParser, c *checker.Checke
 		return false
 	}
 
-	contextualType := c.GetContextualType(node, checker.ContextFlagsNone)
+	contextualType := tp.GetContextualType(node, checker.ContextFlagsNone)
 	if contextualType == nil {
 		return false
 	}

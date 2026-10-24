@@ -56,6 +56,7 @@ const manifest = () => ({
   tags: {
     typescript: {
       latest: "7.0.0",
+      beta: "7.1.0",
       next: "7.1.0"
     },
     oxlint: { latest: "1.1.0" },
@@ -90,6 +91,13 @@ test("decodes normalized upstream metadata", async() => {
   const upstream = await Effect.runPromise(decodeUpstream(JSON.stringify(manifest())))
   assert.equal(upstream.tags.typescript.latest, "7.0.0")
   assert.equal(upstream.profiles[0]?.description, "Vite+ 1.0.0 compatibility runtime")
+})
+
+test("decodes manifests that predate the TypeScript beta tag", async() => {
+  const upstream = manifest()
+  delete (upstream.tags.typescript as { beta?: string }).beta
+  const decoded = await Effect.runPromise(decodeUpstream(JSON.stringify(upstream)))
+  assert.equal(decoded.tags.typescript.beta, undefined)
 })
 
 test("rejects the deprecated pre-tag format", async() => {
@@ -131,6 +139,15 @@ test("rejects dangling component tags", async() => {
   )
 })
 
+test("rejects a dangling TypeScript beta tag", async() => {
+  const upstream = manifest()
+  upstream.tags.typescript.beta = "missing"
+  await assert.rejects(
+    Effect.runPromise(decodeUpstream(JSON.stringify(upstream))),
+    /TypeScript beta references unknown version missing/
+  )
+})
+
 test("requires runtime profiles to declare both patched components", async() => {
   const upstream = manifest()
   delete (upstream.profiles[0]!.dependencies as Record<string, string>)["oxlint-tsgolint"]
@@ -158,7 +175,7 @@ test("resolves component checkouts and defaults to TypeScript next", async() => 
         moduleDir: "tsc",
         modulePrefix: "github.com/microsoft/TypeScript/tsc",
         providerShimPrefix: "github.com/microsoft/TypeScript/tsc/shim",
-        shimOverlayDir: "_tools/gen_shims/providers/typescript",
+        shimOverlayDirs: ["_tools/gen_shims/providers/typescript"],
         patchDir: "_patches/typescript",
         commandPath: "cmd/tsc",
         tsgolintGitlink: "typescript"
@@ -180,7 +197,7 @@ test("resolves component checkouts and defaults to TypeScript next", async() => 
         moduleDir: ".",
         modulePrefix: "github.com/microsoft/typescript-go",
         providerShimPrefix: "github.com/microsoft/typescript-go/shim",
-        shimOverlayDir: "_tools/gen_shims/providers/typescript-go",
+        shimOverlayDirs: ["_tools/gen_shims/providers/typescript-go"],
         patchDir: "_patches/typescript-go",
         commandPath: "cmd/tsgo",
         tsgolintGitlink: "typescript-go"
@@ -202,7 +219,7 @@ test("resolves component checkouts and defaults to TypeScript next", async() => 
         moduleDir: "tsc",
         modulePrefix: "github.com/microsoft/TypeScript/tsc",
         providerShimPrefix: "github.com/microsoft/TypeScript/tsc/shim",
-        shimOverlayDir: "_tools/gen_shims/providers/typescript",
+        shimOverlayDirs: ["_tools/gen_shims/providers/typescript"],
         patchDir: "_patches/typescript",
         commandPath: "cmd/tsc",
         tsgolintGitlink: "typescript"
@@ -270,6 +287,7 @@ test("retains the three newest stable npm versions through the latest tag", asyn
 test("builds deterministic normalized metadata and deduplicates components", () => {
   const upstream = buildUpstream({
     next: { npmVersion: "7.1.0", gitHead: secondRevision, provider: "typescript" },
+    beta: { npmVersion: "7.1.0-beta", gitHead: secondRevision, provider: "typescript" },
     latest: { npmVersion: "7.0.0", gitHead: revision, provider: "typescript-go" },
     oxlint: {
       oxlint: { npmVersion: "1.77.0", gitHead: thirdRevision },
@@ -291,12 +309,12 @@ test("builds deterministic normalized metadata and deduplicates components", () 
     }
   })
 
-  assert.deepEqual(Object.keys(upstream.components.typescript), ["6.0.0", "7.0.0", "7.1.0"])
+  assert.deepEqual(Object.keys(upstream.components.typescript), ["6.0.0", "7.0.0", "7.1.0", "7.1.0-beta"])
   assert.deepEqual(Object.keys(upstream.components["oxlint-tsgolint"]), ["7.0.2000", "7.0.2001"])
   assert.deepEqual(Object.keys(upstream.components.oxlint), ["1.72.0", "1.73.0", "1.74.0", "1.75.0", "1.76.0", "1.77.0"])
   assert.deepEqual(upstream.components["oxlint-tsgolint"]["7.0.2000"]!.dependencies, { typescript: "6.0.0" })
   assert.deepEqual(upstream.tags, {
-    typescript: { latest: "7.0.0", next: "7.1.0" },
+    typescript: { latest: "7.0.0", beta: "7.1.0-beta", next: "7.1.0" },
     oxlint: { latest: "1.77.0" },
     "oxlint-tsgolint": { latest: "7.0.2001" }
   })
@@ -311,6 +329,54 @@ test("builds deterministic normalized metadata and deduplicates components", () 
       dependencies: { oxlint: "1.76.0", "oxlint-tsgolint": "7.0.2001" }
     }
   ])
+})
+
+test("resolves per-version shim adapters and preserves them through updates", async() => {
+  const withBeta = manifest()
+  const beta = { gitHead: thirdRevision, provider: "typescript" as const, shims: "typescript-beta" as const }
+  const upstream = await Effect.runPromise(decodeUpstream(JSON.stringify({
+    ...withBeta,
+    tags: { ...withBeta.tags, typescript: { ...withBeta.tags.typescript, beta: "7.1.0-beta" } },
+    components: { ...withBeta.components, typescript: { ...withBeta.components.typescript, "7.1.0-beta": beta } }
+  })))
+
+  const selected = await Effect.runPromise(getComponent(upstream, "typescript", "7.1.0-beta"))
+  assert.equal(selected.typescript.source.providerShimPrefix, "github.com/microsoft/TypeScript/tsc/providershim")
+  assert.deepEqual(selected.typescript.source.shimOverlayDirs, [
+    "_tools/gen_shims/providers/typescript",
+    "_tools/gen_shims/providers/typescript-beta"
+  ])
+  assert.equal(selected.typescript.source.patchDir, "_patches/typescript")
+
+  await assert.rejects(
+    Effect.runPromise(decodeUpstream(JSON.stringify({
+      ...withBeta,
+      components: {
+        ...withBeta.components,
+        typescript: { ...withBeta.components.typescript, "7.0.0": { ...beta, provider: "typescript-go" } }
+      }
+    }))),
+    /TypeScript 7\.0\.0 uses typescript-beta shims with provider typescript-go/
+  )
+
+  const runtime = {
+    oxlint: { npmVersion: "1.77.0", gitHead: thirdRevision },
+    tsgolint: { npmVersion: "7.0.2001", gitHead: secondRevision },
+    ts: { npmVersion: "7.0.0", gitHead: revision, provider: "typescript-go" as const }
+  }
+  const rebuilt = buildUpstream({
+    next: { npmVersion: "7.1.0", gitHead: secondRevision, provider: "typescript" },
+    beta: { npmVersion: "7.1.0-beta", gitHead: thirdRevision, provider: "typescript" },
+    latest: { npmVersion: "7.0.0", gitHead: revision, provider: "typescript-go" },
+    oxlint: runtime,
+    vitePlus: { ...runtime, vitePlusVersion: "0.2.8" },
+    shims: { "7.1.0-beta": "typescript-beta" }
+  })
+  assert.deepEqual(rebuilt.components.typescript, {
+    "7.0.0": { gitHead: revision, provider: "typescript-go" },
+    "7.1.0": { gitHead: secondRevision, provider: "typescript" },
+    "7.1.0-beta": { gitHead: thirdRevision, provider: "typescript", shims: "typescript-beta" }
+  })
 })
 
 test("finds a TypeScript npm version by its git head", () => {
@@ -329,6 +395,7 @@ test("describes upstream version and TypeScript-Go commit updates", () => {
   }>
   const afterOxlint = after.components.oxlint as Record<string, { gitHead: string }>
   after.tags.typescript.next = "7.2.0"
+  after.tags.typescript.beta = "7.2.0"
   afterTypeScript["7.2.0"] = { gitHead: thirdRevision, provider: "typescript" }
   after.tags.oxlint.latest = "1.2.0"
   afterOxlint["1.2.0"] = { gitHead: thirdRevision }
@@ -347,6 +414,7 @@ test("describes upstream version and TypeScript-Go commit updates", () => {
     "## Version updates",
     "",
     "- TypeScript next: [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.2.0) `7.1.0` -> `7.2.0`",
+    "- TypeScript beta: [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.2.0) `7.1.0` -> `7.2.0`",
     "- Oxlint: [`oxlint@latest`](https://www.npmjs.com/package/oxlint/v/1.2.0) `1.1.0` -> `1.2.0`",
     "- Vite+: [`vite-plus@latest`](https://www.npmjs.com/package/vite-plus/v/1.1.0) `1.0.0` -> `1.1.0`",
     "- Vite+ Oxlint runtime: [`oxlint`](https://www.npmjs.com/package/oxlint/v/1.2.0) `1.0.0` -> `1.2.0`",

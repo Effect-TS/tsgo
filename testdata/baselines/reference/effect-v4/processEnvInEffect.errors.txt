@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/processEnvInEffect.ts(7,10): warning TS377077: This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)
 /.src/processEnvInEffect.ts(12,10): warning TS377077: This Effect code reads from `process.env`, environment configuration in Effect code is represented through `Config` from Effect. effect(processEnvInEffect)

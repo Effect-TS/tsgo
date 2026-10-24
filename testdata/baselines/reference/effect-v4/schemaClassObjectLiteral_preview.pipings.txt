@@ -1,0 +1,43 @@
+==== /.src/schemaClassObjectLiteral_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 5:26 - 5:113
+Node: Schema.Class<User, { readonly brand: unique symbol }>("User")({ name: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { name: Schema.String }
+Subject Type: { name: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<User, { readonly brand: unique symbol }>("User")
+      args: (constant)
+      outType: Class<User, Struct<{ readonly name: String; }>, { readonly brand: unique symbol; }>
+
+=== Piping Flow ===
+Location: 6:20 - 6:45
+Node: User.make({ name: "a" })
+Node Kind: KindCallExpression
+
+Subject: { name: "a" }
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: User.make
+      args: (constant)
+      outType: User
+
+=== Piping Flow ===
+Location: 8:23 - 8:57
+Node: User.make({ ...user, name: "b" })
+Node Kind: KindCallExpression
+
+Subject: { ...user, name: "b" }
+Subject Type: { brand: typeof brand; name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: User.make
+      args: (constant)
+      outType: User

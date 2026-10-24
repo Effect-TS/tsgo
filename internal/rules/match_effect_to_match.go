@@ -50,27 +50,27 @@ func AnalyzeMatchEffectToMatch(tp *typeparser.TypeParser, _ *checker.Checker, sf
 		return nil
 	}
 	var matches []MatchEffectToMatchMatch
-	for _, flow := range tp.PipingFlows(sf, true) {
-		for index := range flow.Transformations {
-			transformation := &flow.Transformations[index]
-			if len(transformation.Args) != 1 || transformation.Callee == nil {
+	for _, flow := range tp.PipingFlows(sf, true).All() {
+		for index := range flow.Transformations().All() {
+			transformation := flow.Transformations().At(index)
+			if transformation.Args().Len() != 1 || transformation.Callee() == nil {
+				continue
+			}
+			onFailure := typeparser.ObjectLiteralPropertyInitializer(transformation.Args().At(0), "onFailure")
+			onSuccess := typeparser.ObjectLiteralPropertyInitializer(transformation.Args().At(0), "onSuccess")
+			if onFailure == nil || onSuccess == nil {
 				continue
 			}
 			matchEffectName, replacementName := "", ""
 			switch {
-			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "matchEffect"):
+			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "matchEffect"):
 				matchEffectName, replacementName = "matchEffect", "match"
-			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, "matchCauseEffect"):
+			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "matchCauseEffect"):
 				matchEffectName, replacementName = "matchCauseEffect", "matchCause"
 			default:
 				continue
 			}
 
-			onFailure := typeparser.ObjectLiteralPropertyInitializer(transformation.Args[0], "onFailure")
-			onSuccess := typeparser.ObjectLiteralPropertyInitializer(transformation.Args[0], "onSuccess")
-			if onFailure == nil || onSuccess == nil {
-				continue
-			}
 			failureResult, failureArgument, ok := matchEffectConstructorHandler(tp, onFailure, "succeed")
 			if !ok {
 				continue
@@ -80,12 +80,12 @@ func AnalyzeMatchEffectToMatch(tp *typeparser.TypeParser, _ *checker.Checker, sf
 				continue
 			}
 			var calleeName *ast.Node
-			if transformation.Callee.Kind == ast.KindPropertyAccessExpression {
-				calleeName = transformation.Callee.AsPropertyAccessExpression().Name()
+			if transformation.Callee().Kind == ast.KindPropertyAccessExpression {
+				calleeName = transformation.Callee().AsPropertyAccessExpression().Name()
 			}
 			matches = append(matches, MatchEffectToMatchMatch{
-				SourceFile: sf, Location: scanner.GetErrorRangeForNode(sf, transformation.Callee),
-				CalleeNode: transformation.Callee, CalleeNameNode: calleeName, MatchEffectName: matchEffectName, ReplacementName: replacementName,
+				SourceFile: sf, Location: scanner.GetErrorRangeForNode(sf, transformation.Callee()),
+				CalleeNode: transformation.Callee(), CalleeNameNode: calleeName, MatchEffectName: matchEffectName, ReplacementName: replacementName,
 				HandlerResults: [2]*ast.Node{failureResult, successResult}, SucceedArguments: [2]*ast.Node{failureArgument, successArgument},
 			})
 		}
@@ -95,21 +95,21 @@ func AnalyzeMatchEffectToMatch(tp *typeparser.TypeParser, _ *checker.Checker, sf
 
 func matchEffectConstructorHandler(tp *typeparser.TypeParser, node *ast.Node, constructorName string) (result *ast.Node, argument *ast.Node, ok bool) {
 	lazy := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionNone)
-	if lazy == nil || lazy.Expression == nil {
+	if lazy == nil || lazy.Expression() == nil {
 		return nil, nil, false
 	}
-	flow := tp.LongestPipingFlowAt(lazy.Expression, false)
-	if flow == nil || len(flow.Transformations) == 0 {
+	flow := tp.LongestPipingFlowAt(lazy.Expression(), false)
+	if flow == nil || flow.Transformations().Len() == 0 {
 		return nil, nil, false
 	}
-	last := len(flow.Transformations) - 1
-	transformation := &flow.Transformations[last]
-	if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee, constructorName) {
+	last := flow.Transformations().Len() - 1
+	transformation := flow.Transformations().At(last)
+	if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), constructorName) {
 		return nil, nil, false
 	}
 	argument = flow.TransformationInputNode(last)
 	if argument == nil {
 		return nil, nil, false
 	}
-	return lazy.Expression, argument, true
+	return lazy.Expression(), argument, true
 }

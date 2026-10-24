@@ -1,5 +1,5 @@
 === Metadata ===
-Effect version: 4.0.0
+Effect version: 4.0.2
 
 /.src/matchEffectToMatch.ts(9,42): suggestion TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)
 /.src/matchEffectToMatch.ts(14,26): suggestion TS377125: `Effect.match` expresses this non-effectful fold more directly than `Effect.matchEffect` with `Effect.succeed` handlers. effect(matchEffectToMatch)

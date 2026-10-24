@@ -1,0 +1,30 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/preferEffectRecord_augmentation.ts(14,8): warning TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+/.src/preferEffectRecord_augmentation.ts(15,8): warning TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+
+
+==== /.src/preferEffectRecord_augmentation.ts (2 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferEffectRecord:warning
+    import * as R from "effect/Record"
+    
+    declare global {
+      interface ObjectConstructor { keys<T>(value: T): (keyof T)[] }
+      interface Object { hasOwnProperty(key: string): boolean }
+    }
+    const data = { a: 1 }
+    Object.keys(data)
+    Object["keys"](data)
+    data.hasOwnProperty("a")
+    Object.prototype.hasOwnProperty.call(data, "a")
+    Object.values(data)
+           ~~~~~~
+!!! warning TS377143: Consider effect/Record.values instead of native Object.values. Requires a record rather than arrays or primitives; snapshots keys before reads, so getter or proxy mutations can change the result. effect(preferEffectRecord)
+    Object.hasOwn(data, "a")
+           ~~~~~~
+!!! warning TS377143: Consider effect/Record.has instead of native Object.hasOwn. Requires a record rather than arrays or primitives and a string or symbol key of that record's key type; arbitrary strings may need narrowing. effect(preferEffectRecord)
+    R.values(data)
+    R.has(data, "a")
+    

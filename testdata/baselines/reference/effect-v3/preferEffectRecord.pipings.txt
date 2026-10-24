@@ -1,0 +1,800 @@
+==== /.src/preferEffectRecord.ts (57 flows) ====
+
+=== Piping Flow ===
+Location: 8:61 - 8:76
+Node: Symbol.for("b")
+Node Kind: KindCallExpression
+
+Subject: "b"
+Subject Type: "b"
+
+Transformations (1):
+  [0] kind: call
+      callee: Symbol.for
+      args: (constant)
+      outType: symbol
+
+=== Piping Flow ===
+Location: 8:81 - 9:18
+Node: Object.keys(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Object.keys
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 10:31 - 11:20
+Node: Object.values(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Object.values
+      args: (constant)
+      outType: (string | number)[]
+
+=== Piping Flow ===
+Location: 12:35 - 13:21
+Node: Object.entries(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Object.entries
+      args: (constant)
+      outType: [string, string | number][]
+
+=== Piping Flow ===
+Location: 14:37 - 15:26
+Node: Object.fromEntries(pairs)
+Node Kind: KindCallExpression
+
+Subject: pairs
+Subject Type: [string | symbol, number][]
+
+Transformations (1):
+  [0] kind: call
+      callee: Object.fromEntries
+      args: (constant)
+      outType: { [k: string]: number; }
+
+=== Piping Flow ===
+Location: 18:35 - 19:25
+Node: data.hasOwnProperty("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: data.hasOwnProperty
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 22:38 - 23:21
+Node: Object["keys"](data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Object["keys"]
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 23:21 - 24:23
+Node: Object[`values`](data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Object[`values`]
+      args: (constant)
+      outType: (string | number)[]
+
+=== Piping Flow ===
+Location: 24:23 - 25:23
+Node: Object.k\u0065ys(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Object.k\u0065ys
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 25:23 - 26:29
+Node: Object["entr\u0069es"](data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Object["entr\u0069es"]
+      args: (constant)
+      outType: [string, string | number][]
+
+=== Piping Flow ===
+Location: 26:29 - 27:23
+Node: Object.entries?.(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Object.entries
+      args: (constant)
+      outType: [string, string | number][]
+
+=== Piping Flow ===
+Location: 29:43 - 30:34
+Node: optional?.["hasOwnProperty"]("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: optional?.["hasOwnProperty"]
+      args: (constant)
+      outType: boolean | undefined
+
+=== Piping Flow ===
+Location: 31:65 - 32:36
+Node: optionalConstructor?.["keys"](data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: optionalConstructor?.["keys"]
+      args: (constant)
+      outType: string[] | undefined
+
+=== Piping Flow ===
+Location: 33:22 - 34:21
+Node: Native.entries(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Native.entries
+      args: (constant)
+      outType: [string, string | number][]
+
+=== Piping Flow ===
+Location: 34:21 - 35:24
+Node: NativeObject.keys(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: NativeObject.keys
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 37:70 - 37:91
+Node: native["keys"](data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: native["keys"]
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 38:66 - 38:92
+Node: value.hasOwnProperty("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: value.hasOwnProperty
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 39:19 - 40:36
+Node: new Inherited().hasOwnProperty("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: new Inherited().hasOwnProperty
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 41:57 - 42:21
+Node: picked.entries(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: picked.entries
+      args: (constant)
+      outType: [string, string | number][]
+
+=== Piping Flow ===
+Location: 44:33 - 45:20
+Node: remapped.keys(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: remapped.keys
+      args: (constant)
+      outType: (string | number)[]
+
+=== Piping Flow ===
+Location: 45:20 - 46:20
+Node: Object.keys([1, 2])
+Node Kind: KindCallExpression
+
+Subject: [1, 2]
+Subject Type: number[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Object.keys
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 46:20 - 47:20
+Node: Object.values("ab")
+Node Kind: KindCallExpression
+
+Subject: "ab"
+Subject Type: "ab"
+
+Transformations (1):
+  [0] kind: call
+      callee: Object.values
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 47:20 - 48:31
+Node: Object.fromEntries([[1, "a"]])
+Node Kind: KindCallExpression
+
+Subject: [[1, "a"]]
+Subject Type: [number, string][]
+
+Transformations (1):
+  [0] kind: call
+      callee: Object.fromEntries
+      args: (constant)
+      outType: { [k: string]: string; }
+
+=== Piping Flow ===
+Location: 50:2 - 50:25
+Node: [1].hasOwnProperty("0")
+Node Kind: KindCallExpression
+
+Subject: "0"
+Subject Type: "0"
+
+Transformations (1):
+  [0] kind: call
+      callee: [1].hasOwnProperty
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 50:25 - 51:25
+Node: "ab".hasOwnProperty("0")
+Node Kind: KindCallExpression
+
+Subject: "0"
+Subject Type: "0"
+
+Transformations (1):
+  [0] kind: call
+      callee: "ab".hasOwnProperty
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 52:23 - 52:79
+Node: Effect.gen(function*() { return Object.entries(data) })
+Node Kind: KindCallExpression
+
+Subject: function*() { return Object.entries(data) }
+Subject Type: () => Generator<never, [string, string | number][], never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<[string, string | number][], never, never>
+
+=== Piping Flow ===
+Location: 52:55 - 52:76
+Node: Object.entries(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Object.entries
+      args: (constant)
+      outType: [string, string | number][]
+
+=== Piping Flow ===
+Location: 54:36 - 54:49
+Node: R.keys(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: R.keys
+      args: (constant)
+      outType: ("a" | "b")[]
+
+=== Piping Flow ===
+Location: 55:58 - 55:76
+Node: R.toEntries(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: R.toEntries
+      args: (constant)
+      outType: ["a" | "b", string | number][]
+
+=== Piping Flow ===
+Location: 55:76 - 56:15
+Node: R.values(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: R.values
+      args: (constant)
+      outType: (string | number)[]
+
+=== Piping Flow ===
+Location: 56:15 - 57:21
+Node: R.fromEntries(pairs)
+Node Kind: KindCallExpression
+
+Subject: pairs
+Subject Type: [string | symbol, number][]
+
+Transformations (1):
+  [0] kind: call
+      callee: R.fromEntries
+      args: (constant)
+      outType: Record<string | symbol, number>
+
+=== Piping Flow ===
+Location: 57:21 - 58:17
+Node: R.has(data, "a")
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: R.has
+      args: ["a"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 58:17 - 59:24
+Node: EffectRecord.keys(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: EffectRecord.keys
+      args: (constant)
+      outType: ("a" | "b")[]
+
+=== Piping Flow ===
+Location: 59:24 - 60:26
+Node: EffectRecord.values(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: EffectRecord.values
+      args: (constant)
+      outType: (string | number)[]
+
+=== Piping Flow ===
+Location: 60:26 - 61:29
+Node: EffectRecord.toEntries(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: EffectRecord.toEntries
+      args: (constant)
+      outType: ["a" | "b", string | number][]
+
+=== Piping Flow ===
+Location: 61:29 - 62:32
+Node: EffectRecord.fromEntries(pairs)
+Node Kind: KindCallExpression
+
+Subject: pairs
+Subject Type: [string | symbol, number][]
+
+Transformations (1):
+  [0] kind: call
+      callee: EffectRecord.fromEntries
+      args: (constant)
+      outType: Record<string | symbol, number>
+
+=== Piping Flow ===
+Location: 62:32 - 63:28
+Node: EffectRecord.has(data, "b")
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: EffectRecord.has
+      args: ["b"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 63:28 - 65:12
+Node: R.keys([1])
+Node Kind: KindCallExpression
+
+Subject: [1]
+Subject Type: number[]
+
+Transformations (1):
+  [0] kind: call
+      callee: R.keys
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 65:12 - 67:13
+Node: R.keys("ab")
+Node Kind: KindCallExpression
+
+Subject: "ab"
+Subject Type: "ab"
+
+Transformations (1):
+  [0] kind: call
+      callee: R.keys
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 67:13 - 69:14
+Node: R.values([1])
+Node Kind: KindCallExpression
+
+Subject: [1]
+Subject Type: number[]
+
+Transformations (1):
+  [0] kind: call
+      callee: R.values
+      args: (constant)
+      outType: (number | (() => string) | { (): string; (locales: string | string[], options?: (NumberFormatOptions & DateTimeFormatOptions) | undefined): string; } | (() => number | undefined) | ((...items: number[]) => number) | { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; } | ((separator?: string | undefined) => string) | (() => number[]) | (() => number | undefined) | ((start?: number | undefined, end?: number | undefined) => number[]) | ((compareFn?: ((a: number, b: number) => number) | undefined) => number[]) | { (start: number, deleteCount?: number | undefined): number[]; (start: number, deleteCount: number, ...items: number[]): number[]; } | ((...items: number[]) => number) | ((searchElement: number, fromIndex?: number | undefined) => number) | ((searchElement: number, fromIndex?: number | undefined) => number) | { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): boolean; } | ((predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any) => boolean) | ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void) | (<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]) | { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number[]; } | { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { <S extends number>(predicate: (value: number, index: number, obj: number[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any): number | undefined; } | ((predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any) => number) | ((value: number, start?: number | undefined, end?: number | undefined) => number[]) | ((target: number, start: number, end?: number | undefined) => number[]) | (() => ArrayIterator<number>) | (() => ArrayIterator<[number, number]>) | (() => ArrayIterator<number>) | (() => ArrayIterator<number>) | { [x: number]: boolean | undefined; length?: boolean | undefined; toString?: boolean | undefined; toLocaleString?: boolean | undefined; pop?: boolean | undefined; push?: boolean | undefined; concat?: boolean | undefined; join?: boolean | undefined; reverse?: boolean | undefined; shift?: boolean | undefined; slice?: boolean | undefined; sort?: boolean | undefined; splice?: boolean | undefined; unshift?: boolean | undefined; indexOf?: boolean | undefined; lastIndexOf?: boolean | undefined; every?: boolean | undefined; some?: boolean | undefined; forEach?: boolean | undefined; map?: boolean | undefined; filter?: boolean | undefined; reduce?: boolean | undefined; reduceRight?: boolean | undefined; find?: boolean | undefined; findIndex?: boolean | undefined; fill?: boolean | undefined; copyWithin?: boolean | undefined; [Symbol.iterator]?: boolean | undefined; entries?: boolean | undefined; keys?: boolean | undefined; values?: boolean | undefined; readonly [Symbol.unscopables]?: boolean | undefined; includes?: boolean | undefined; flatMap?: boolean | undefined; flat?: boolean | undefined; at?: boolean | undefined; findLast?: boolean | undefined; findLastIndex?: boolean | undefined; toReversed?: boolean | undefined; toSorted?: boolean | undefined; toSpliced?: boolean | undefined; with?: boolean | undefined; } | ((searchElement: number, fromIndex?: number | undefined) => boolean) | (<U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This | undefined) => U[]) | (<A, D extends number = 1>(this: A, depth?: D | undefined) => FlatArray<A, D>[]) | ((index: number) => number | undefined) | { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number | undefined; } | ((predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any) => number) | (() => number[]) | ((compareFn?: ((a: number, b: number) => number) | undefined) => number[]) | { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number | undefined): number[]; } | ((index: number, value: number) => number[]))[]
+
+=== Piping Flow ===
+Location: 69:14 - 71:17
+Node: R.toEntries([1])
+Node Kind: KindCallExpression
+
+Subject: [1]
+Subject Type: number[]
+
+Transformations (1):
+  [0] kind: call
+      callee: R.toEntries
+      args: (constant)
+      outType: [string, number | (() => string) | { (): string; (locales: string | string[], options?: (NumberFormatOptions & DateTimeFormatOptions) | undefined): string; } | (() => number | undefined) | ((...items: number[]) => number) | { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; } | ((separator?: string | undefined) => string) | (() => number[]) | (() => number | undefined) | ((start?: number | undefined, end?: number | undefined) => number[]) | ((compareFn?: ((a: number, b: number) => number) | undefined) => number[]) | { (start: number, deleteCount?: number | undefined): number[]; (start: number, deleteCount: number, ...items: number[]): number[]; } | ((...items: number[]) => number) | ((searchElement: number, fromIndex?: number | undefined) => number) | ((searchElement: number, fromIndex?: number | undefined) => number) | { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): boolean; } | ((predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any) => boolean) | ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void) | (<U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]) | { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number[]; } | { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; } | { <S extends number>(predicate: (value: number, index: number, obj: number[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any): number | undefined; } | ((predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any) => number) | ((value: number, start?: number | undefined, end?: number | undefined) => number[]) | ((target: number, start: number, end?: number | undefined) => number[]) | (() => ArrayIterator<number>) | (() => ArrayIterator<[number, number]>) | (() => ArrayIterator<number>) | (() => ArrayIterator<number>) | { [x: number]: boolean | undefined; length?: boolean | undefined; toString?: boolean | undefined; toLocaleString?: boolean | undefined; pop?: boolean | undefined; push?: boolean | undefined; concat?: boolean | undefined; join?: boolean | undefined; reverse?: boolean | undefined; shift?: boolean | undefined; slice?: boolean | undefined; sort?: boolean | undefined; splice?: boolean | undefined; unshift?: boolean | undefined; indexOf?: boolean | undefined; lastIndexOf?: boolean | undefined; every?: boolean | undefined; some?: boolean | undefined; forEach?: boolean | undefined; map?: boolean | undefined; filter?: boolean | undefined; reduce?: boolean | undefined; reduceRight?: boolean | undefined; find?: boolean | undefined; findIndex?: boolean | undefined; fill?: boolean | undefined; copyWithin?: boolean | undefined; [Symbol.iterator]?: boolean | undefined; entries?: boolean | undefined; keys?: boolean | undefined; values?: boolean | undefined; readonly [Symbol.unscopables]?: boolean | undefined; includes?: boolean | undefined; flatMap?: boolean | undefined; flat?: boolean | undefined; at?: boolean | undefined; findLast?: boolean | undefined; findLastIndex?: boolean | undefined; toReversed?: boolean | undefined; toSorted?: boolean | undefined; toSpliced?: boolean | undefined; with?: boolean | undefined; } | ((searchElement: number, fromIndex?: number | undefined) => boolean) | (<U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This | undefined) => U[]) | (<A, D extends number = 1>(this: A, depth?: D | undefined) => FlatArray<A, D>[]) | ((index: number) => number | undefined) | { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number | undefined; } | ((predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any) => number) | (() => number[]) | ((compareFn?: ((a: number, b: number) => number) | undefined) => number[]) | { (start: number, deleteCount: number, ...items: number[]): number[]; (start: number, deleteCount?: number | undefined): number[]; } | ((index: number, value: number) => number[])][]
+
+=== Piping Flow ===
+Location: 71:17 - 73:26
+Node: R.fromEntries([[1, "a"]])
+Node Kind: KindCallExpression
+
+Subject: [[1, "a"]]
+Subject Type: [number, string][]
+
+Transformations (1):
+  [0] kind: call
+      callee: R.fromEntries
+      args: (constant)
+      outType: Record<string | symbol, any>
+
+=== Piping Flow ===
+Location: 74:35 - 76:26
+Node: R.has(data, arbitraryKey)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: R.has
+      args: [arbitraryKey]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 76:26 - 78:15
+Node: R.has(data, 1)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: R.has
+      args: [1]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 78:15 - 80:16
+Node: R.has([1], "0")
+Node Kind: KindCallExpression
+
+Subject: [1]
+Subject Type: number[]
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: R.has
+      args: ["0"]
+      outType: boolean
+
+=== Piping Flow ===
+Location: 80:16 - 81:17
+Node: nativeKeys(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: nativeKeys
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 82:38 - 83:19
+Node: destructured(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: destructured
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 85:30 - 86:22
+Node: Object[dynamic](data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Object[dynamic]
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 87:94 - 88:18
+Node: custom.keys(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: custom.keys
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 88:18 - 89:27
+Node: custom.hasOwnProperty("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: custom.hasOwnProperty
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 90:70 - 90:88
+Node: Object.keys(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Object.keys
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 91:78 - 92:35
+Node: new Override().hasOwnProperty("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: new Override().hasOwnProperty
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 93:48 - 93:74
+Node: super.hasOwnProperty("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: super.hasOwnProperty
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 94:70 - 95:17
+Node: mixed.keys(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: mixed.keys
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 96:84 - 97:34
+Node: mixedInstance.hasOwnProperty("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: mixedInstance.hasOwnProperty
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 98:82 - 99:24
+Node: intersection.keys(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: intersection.keys
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 100:70 - 101:23
+Node: conflicting.keys(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { a: number; b: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: conflicting.keys
+      args: (constant)
+      outType: any[]
+==== /.src/aliases.ts (0 flows) ====

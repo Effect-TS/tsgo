@@ -1,7 +1,7 @@
 import * as NodeServices from "@effect/platform-node/NodeServices"
 import * as Effect from "effect/Effect"
 import * as Option from "effect/Option"
-import * as Command from "effect/unstable/cli/Command"
+import { Command } from "effect/cli"
 import { describe, expect, it } from "vitest"
 import { assess } from "../../src/cli/setup/assessment.js"
 import {

@@ -2,6 +2,7 @@ package typeparser
 
 import (
 	"context"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -20,15 +21,15 @@ func compileAndGetCheckerAndSourceFilesInternal(t testing.TB, sources map[string
 	t.Helper()
 
 	testfs := make(map[string]any, len(sources))
-	fileNames := make([]string, 0, len(sources))
+	fileNames := make([]tspath.RootedFilePath, 0, len(sources))
 	for path, source := range sources {
 		testfs[path] = &fstest.MapFile{Data: []byte(source)}
 		if !strings.Contains(path, "/node_modules/") && strings.HasSuffix(path, ".ts") {
-			fileNames = append(fileNames, path)
+			fileNames = append(fileNames, tspath.RootedFilePath(path))
 		}
 	}
 
-	fs := vfstest.FromMap(testfs, true)
+	fs := vfstest.FromMap(testfs, tspath.CaseSensitive)
 	fs = bundled.WrapFS(fs)
 
 	compilerOptions := &core.CompilerOptions{
@@ -41,14 +42,9 @@ func compileAndGetCheckerAndSourceFilesInternal(t testing.TB, sources map[string
 		Strict:              core.TSTrue,
 	}
 
-	host := compiler.NewCompilerHost("/.src", fs, bundled.LibPath(), nil, nil)
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
 	program := compiler.NewProgram(compiler.ProgramOptions{
-		Config: &tsoptions.ParsedCommandLine{
-			ParsedConfig: &core.ParsedOptions{
-				CompilerOptions: compilerOptions,
-				FileNames:       fileNames,
-			},
-		},
+		Config:         tsoptions.NewParsedCommandLine(compilerOptions, fileNames, nil, "/", tspath.CaseSensitive),
 		Host:           host,
 		SingleThreaded: core.TSTrue,
 	})
@@ -62,7 +58,7 @@ func compileAndGetCheckerAndSourceFilesInternal(t testing.TB, sources map[string
 			done()
 			t.Fatalf("failed to get source file %s", fileName)
 		}
-		sourceFiles[fileName] = sf
+		sourceFiles[string(fileName)] = sf
 	}
 
 	return c, NewTypeParser(c.Program(), c), sourceFiles, done
@@ -79,7 +75,7 @@ func compileAndGetCheckerAndSourceFileInternal(t *testing.T, source string) (*ch
 		},
 	}
 
-	fs := vfstest.FromMap(testfs, true)
+	fs := vfstest.FromMap(testfs, tspath.CaseSensitive)
 	fs = bundled.WrapFS(fs)
 
 	compilerOptions := &core.CompilerOptions{
@@ -92,21 +88,16 @@ func compileAndGetCheckerAndSourceFileInternal(t *testing.T, source string) (*ch
 		Strict:              core.TSTrue,
 	}
 
-	host := compiler.NewCompilerHost("/.src", fs, bundled.LibPath(), nil, nil)
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
 	program := compiler.NewProgram(compiler.ProgramOptions{
-		Config: &tsoptions.ParsedCommandLine{
-			ParsedConfig: &core.ParsedOptions{
-				CompilerOptions: compilerOptions,
-				FileNames:       []string{"/.src/test.ts"},
-			},
-		},
+		Config:         tsoptions.NewParsedCommandLine(compilerOptions, []tspath.RootedFilePath{"/.src/test.ts"}, nil, "/", tspath.CaseSensitive),
 		Host:           host,
 		SingleThreaded: core.TSTrue,
 	})
 
 	ctx := context.Background()
 	c, done := program.GetTypeChecker(ctx)
-	sf := program.GetSourceFile("/.src/test.ts")
+	sf := program.GetSourceFile(tspath.RootedFilePath("/.src/test.ts"))
 	if sf == nil {
 		done()
 		t.Fatal("Failed to get source file")
@@ -135,7 +126,7 @@ func compileAndGetCheckerAndSourceFileWithEffectVersionInternal(t *testing.T, ve
 		t.Fatalf("failed to mount effect %s: %v", version, err)
 	}
 
-	fs := vfstest.FromMap(testfs, true)
+	fs := vfstest.FromMap(testfs, tspath.CaseSensitive)
 	fs = bundled.WrapFS(fs)
 
 	compilerOptions := &core.CompilerOptions{
@@ -148,21 +139,16 @@ func compileAndGetCheckerAndSourceFileWithEffectVersionInternal(t *testing.T, ve
 		Strict:              core.TSTrue,
 	}
 
-	host := compiler.NewCompilerHost("/.src", fs, bundled.LibPath(), nil, nil)
+	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
 	program := compiler.NewProgram(compiler.ProgramOptions{
-		Config: &tsoptions.ParsedCommandLine{
-			ParsedConfig: &core.ParsedOptions{
-				CompilerOptions: compilerOptions,
-				FileNames:       []string{"/.src/test.ts"},
-			},
-		},
+		Config:         tsoptions.NewParsedCommandLine(compilerOptions, []tspath.RootedFilePath{"/.src/test.ts"}, nil, "/", tspath.CaseSensitive),
 		Host:           host,
 		SingleThreaded: core.TSTrue,
 	})
 
 	ctx := context.Background()
 	c, done := program.GetTypeChecker(ctx)
-	sf := program.GetSourceFile("/.src/test.ts")
+	sf := program.GetSourceFile(tspath.RootedFilePath("/.src/test.ts"))
 	if sf == nil {
 		done()
 		t.Fatal("Failed to get source file")
@@ -349,10 +335,10 @@ func TestExtractContravariantType_AcceptsNonGenericSignature(t *testing.T) {
 func TestGetSymbolIfSameReference_UsesCanonicalExportSymbol(t *testing.T) {
 	t.Parallel()
 
-	c, _, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `export const Foo = 1`)
+	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `export const Foo = 1`)
 	defer done()
 
-	localFoo := c.GetSymbolAtLocation(findIdentifierByText(t, sf, "Foo", 0))
+	localFoo := tp.GetSymbolAtLocation(findIdentifierByText(t, sf, "Foo", 0))
 	if localFoo == nil {
 		t.Fatal("expected local Foo symbol")
 	}
@@ -375,7 +361,7 @@ func TestGetSymbolIfSameReference_UsesCanonicalExportSymbol(t *testing.T) {
 func TestGetSymbolIfSameReference_ResolvesImportAliases(t *testing.T) {
 	t.Parallel()
 
-	c, _, sourceFiles, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
+	c, tp, sourceFiles, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
 		"/.src/a.ts": `export const Foo = 1`,
 		"/.src/b.ts": `import { Foo as Bar } from "./a"
 const value = Bar`,
@@ -399,7 +385,7 @@ const value = Bar`,
 		t.Fatal("expected exported Foo symbol")
 	}
 
-	bar := c.GetSymbolAtLocation(findIdentifierByText(t, b, "Bar", 0))
+	bar := tp.GetSymbolAtLocation(findIdentifierByText(t, b, "Bar", 0))
 	if bar == nil {
 		t.Fatal("expected alias symbol for Bar")
 	}
@@ -415,12 +401,12 @@ const value = Bar`,
 func TestGetSymbolIfSameReference_DoesNotMatchDifferentExports(t *testing.T) {
 	t.Parallel()
 
-	c, _, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `export const Foo = 1
+	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `export const Foo = 1
 export const Bar = 2`)
 	defer done()
 
-	foo := c.GetSymbolAtLocation(findIdentifierByText(t, sf, "Foo", 0))
-	bar := c.GetSymbolAtLocation(findIdentifierByText(t, sf, "Bar", 0))
+	foo := tp.GetSymbolAtLocation(findIdentifierByText(t, sf, "Foo", 0))
+	bar := tp.GetSymbolAtLocation(findIdentifierByText(t, sf, "Bar", 0))
 	if foo == nil || bar == nil {
 		t.Fatal("expected Foo and Bar symbols")
 	}

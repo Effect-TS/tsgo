@@ -1,0 +1,27 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/anonymousDefault.ts(6,30): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+/.src/namedDefault.ts(5,22): warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+
+
+==== /.src/anonymousDefault.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferSchemaTaggedError:warning
+    import { Data } from "effect"
+    
+    declare const dynamicTag: string
+    export default class extends Data.TaggedError(dynamicTag)<{ message: string }> {}
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+    
+
+==== /.src/namedDefault.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferSchemaTaggedError:warning
+    import { Data } from "effect"
+    
+    export default class NamedDefaultError extends Data.TaggedError("NamedDefaultError")<{ message: string }> {}
+                         ~~~~~~~~~~~~~~~~~
+!!! warning TS377139: Prefer `Schema.TaggedError` over `Data.TaggedError` for an explicit schema contract. effect(preferSchemaTaggedError)
+    

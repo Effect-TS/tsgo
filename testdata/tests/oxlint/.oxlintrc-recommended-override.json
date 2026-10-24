@@ -1,6 +1,6 @@
 {
   "extends": ["../../../oxlint-presets/recommended.json"],
   "rules": {
-    "effecttsgo/global-date": "off"
+    "effecttsgo/floating-effect": "off"
   }
 }

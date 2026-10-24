@@ -97,7 +97,7 @@ func formatLocation(node *ast.Node, fromSourceFile *ast.SourceFile) string {
 	if fromSourceFile == nil || nodeSourceFile == fromSourceFile {
 		return fmt.Sprintf("ln %d col %d", line+1, character)
 	}
-	fileName := nodeSourceFile.FileName()
+	fileName := string(nodeSourceFile.FileName())
 	if idx := strings.LastIndex(fileName, "/"); idx >= 0 {
 		fileName = fileName[idx+1:]
 	}

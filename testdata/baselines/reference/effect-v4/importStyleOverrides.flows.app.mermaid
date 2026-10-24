@@ -1,0 +1,8 @@
+flowchart TB
+  0[/"type: Effect#lt;void, never, never#gt;<br/>node: Effect.void"/]
+  1["type: Effect#lt;Record#lt;never, never#gt;, never, never#gt;<br/>callee: Effect.as<br/>args: #91;Record.empty#40;#41;#93;"]
+  2[/"type: #123; #lt;B#gt;#40;value: B#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, value: B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.as"/]
+  3[/"type: Record#lt;never, never#gt;<br/>node: Record.empty#40;#41;"/]
+  2 -->|"kind: transformCallee"| 1
+  3 -->|"kind: transformArg"| 1
+  0 -->|"kind: pipe"| 1

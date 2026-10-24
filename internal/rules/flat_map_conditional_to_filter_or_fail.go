@@ -62,23 +62,23 @@ func AnalyzeFlatMapConditionalToFilterOrFail(tp *typeparser.TypeParser, c *check
 	}
 
 	var matches []FlatMapConditionalToFilterOrFailMatch
-	for _, flow := range tp.PipingFlows(sf, true) {
-		for index := range flow.Transformations {
-			transformation := &flow.Transformations[index]
-			callee := transformation.Callee
-			args := transformation.Args
-			if callee == nil || len(args) != 1 || !tp.IsNodeReferenceToEffectModuleApi(callee, "flatMap") {
+	for _, flow := range tp.PipingFlows(sf, true).All() {
+		for index := range flow.Transformations().All() {
+			transformation := flow.Transformations().At(index)
+			callee := transformation.Callee()
+			args := transformation.Args()
+			if callee == nil || args.Len() != 1 || !tp.IsNodeReferenceToEffectModuleApi(callee, "flatMap") {
 				continue
 			}
-			parsed := typeparser.ParseReturningDispatch(args[0])
-			if parsed == nil || parsed.Dispatch == nil || len(parsed.Params) != 1 ||
-				len(parsed.Dispatch.Branches) != 1 || parsed.Dispatch.Fallback == nil ||
-				parsed.Dispatch.Branches[0].Condition.Kind != typeparser.DispatchConditionPredicate ||
-				!isSynchronousFunction(parsed.Node) {
+			parsed := tp.ParseReturningDispatch(args.At(0))
+			if parsed == nil || parsed.Dispatch() == nil || parsed.Params().Len() != 1 ||
+				parsed.Dispatch().Branches().Len() != 1 || parsed.Dispatch().Fallback() == nil ||
+				parsed.Dispatch().Branches().At(0).Condition().Kind() != typeparser.DispatchConditionPredicate ||
+				!isSynchronousFunction(parsed.Node()) {
 				continue
 			}
 
-			parameter := parsed.Params[0]
+			parameter := parsed.Params().At(0)
 			if parameter == nil || parameter.Name() == nil || parameter.Name().Kind != ast.KindIdentifier {
 				continue
 			}
@@ -91,17 +91,17 @@ func AnalyzeFlatMapConditionalToFilterOrFail(tp *typeparser.TypeParser, c *check
 				continue
 			}
 
-			branch := parsed.Dispatch.Branches[0]
-			branchIdentity := isIdentitySucceed(tp, c, branch.Result, parameterSymbol)
-			fallbackIdentity := isIdentitySucceed(tp, c, parsed.Dispatch.Fallback, parameterSymbol)
+			branch := parsed.Dispatch().Branches().At(0)
+			branchIdentity := isIdentitySucceed(tp, c, branch.Result(), parameterSymbol)
+			fallbackIdentity := isIdentitySucceed(tp, c, parsed.Dispatch().Fallback(), parameterSymbol)
 			if branchIdentity == fallbackIdentity {
 				continue
 			}
 
-			fallback := branch.Result
+			fallback := branch.Result()
 			negatePredicate := true
 			if branchIdentity {
-				fallback = parsed.Dispatch.Fallback
+				fallback = parsed.Dispatch().Fallback()
 				negatePredicate = false
 			}
 
@@ -118,10 +118,10 @@ func AnalyzeFlatMapConditionalToFilterOrFail(tp *typeparser.TypeParser, c *check
 			match := FlatMapConditionalToFilterOrFailMatch{
 				SourceFile:          sf,
 				Location:            scanner.GetErrorRangeForNode(sf, callee),
-				Transformation:      transformation,
+				Transformation:      &transformation,
 				EffectModuleNode:    effectModule,
 				ParameterNode:       parameter,
-				PredicateNode:       branch.Condition.Subject,
+				PredicateNode:       branch.Condition().Subject(),
 				FallbackNode:        fallbackNode,
 				PreferredMethodName: preferredMethod,
 				NegatePredicate:     negatePredicate,

@@ -40,9 +40,6 @@ func ContainsIgnoredPath(path string) bool
 //go:linkname ContainsPath github.com/microsoft/typescript-go/internal/tspath.ContainsPath
 func ContainsPath(parent string, child string, options tspath.ComparePathsOptions) bool
 
-//go:linkname ConvertToRelativePath github.com/microsoft/typescript-go/internal/tspath.ConvertToRelativePath
-func ConvertToRelativePath(absoluteOrRelativePath string, options tspath.ComparePathsOptions) string
-
 const DirectorySeparator = tspath.DirectorySeparator
 
 //go:linkname EnsurePathIsNonModuleName github.com/microsoft/typescript-go/internal/tspath.EnsurePathIsNonModuleName

@@ -8,8 +8,8 @@ import (
 )
 
 type packageJsonProgram interface {
-	GetSourceFileMetaData(path tspath.Path) ast.SourceFileMetaData
-	GetPackageJsonInfo(pkgJsonPath string) *packagejson.InfoCacheEntry
+	GetSourceFileMetaData(path tspath.PathKey) ast.SourceFileMetaData
+	GetPackageJsonInfo(pkgJsonPath tspath.RootedFilePath) *packagejson.InfoCacheEntry
 }
 
 // PackageJsonForSourceFile returns the nearest package.json contents for a source file, or nil.
@@ -25,13 +25,13 @@ func (tp *TypeParser) PackageJsonForSourceFile(sf *ast.SourceFile) *packagejson.
 			return nil
 		}
 
-		meta := prog.GetSourceFileMetaData(sf.Path())
+		meta := prog.GetSourceFileMetaData(ast.SourceFilePath(sf))
 		if meta.PackageJsonDirectory == "" {
 			return nil
 		}
 
-		packageJsonPath := tspath.CombinePaths(meta.PackageJsonDirectory, "package.json")
-		info := prog.GetPackageJsonInfo(packageJsonPath)
+		packageJsonPath := tspath.CombinePaths(string(meta.PackageJsonDirectory), "package.json")
+		info := prog.GetPackageJsonInfo(tspath.RootedFilePath(packageJsonPath))
 		if info == nil {
 			return nil
 		}

@@ -5,14 +5,17 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 	"testing/fstest"
 
 	"github.com/effect-ts/tsgo/internal/bundledeffect"
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/bundled"
 	"github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/locale"
+	"github.com/microsoft/TypeScript/tsc/shim/ls"
 	"github.com/microsoft/TypeScript/tsc/shim/ls/lsconv"
 	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/shim/project"
@@ -70,7 +73,7 @@ func RunEffectDocumentSymbolsTest(t *testing.T, version bundledeffect.EffectVers
 	configDirectory := currentDirectory
 
 	for _, unit := range units {
-		unitName := tspath.GetNormalizedAbsolutePath(unit.name, currentDirectory)
+		unitName := tspath.GetNormalizedAbsolutePath(unit.name, tspath.RootedDirectoryPath(currentDirectory))
 		testfs[unitName] = &fstest.MapFile{Data: []byte(unit.content)}
 
 		lowerName := strings.ToLower(unitName)
@@ -92,13 +95,13 @@ func RunEffectDocumentSymbolsTest(t *testing.T, version bundledeffect.EffectVers
 		testfs[unitName] = &fstest.MapFile{Data: []byte(DefaultTsConfig)}
 	}
 
-	fs := vfstest.FromMap(testfs, true /*useCaseSensitiveFileNames*/)
+	fs := vfstest.FromMap(testfs, tspath.CaseSensitive)
 	fs = bundled.WrapFS(fs)
 
 	session := project.NewSession(&project.SessionInit{
 		BackgroundCtx: context.Background(),
 		Options: &project.SessionOptions{
-			CurrentDirectory:   currentDirectory,
+			CurrentDirectory:   tspath.RootedDirectoryPath(currentDirectory),
 			DefaultLibraryPath: bundled.LibPath(),
 			TypingsLocation:    "/home/src/Library/Caches/typescript",
 			PositionEncoding:   lsproto.PositionEncodingKindUTF8,
@@ -116,7 +119,7 @@ func RunEffectDocumentSymbolsTest(t *testing.T, version bundledeffect.EffectVers
 		if !ok {
 			t.Fatalf("missing file content for %s", fileName)
 		}
-		session.DidOpenFile(context.Background(), lsconv.FileNameToDocumentURI(fileName), 1, content, lsproto.LanguageKindTypeScript)
+		session.DidOpenFile(context.Background(), lsconv.FileNameToDocumentURI(tspath.RootedFilePath(fileName)), 1, content, lsproto.LanguageKindTypeScript)
 	}
 
 	fileResults := make([]DocumentSymbolsFileResult, 0, len(sourceFileNames))
@@ -131,7 +134,7 @@ func RunEffectDocumentSymbolsTest(t *testing.T, version bundledeffect.EffectVers
 func collectDocumentSymbolsForFile(t *testing.T, session *project.Session, fileName string) DocumentSymbolsFileResult {
 	t.Helper()
 
-	uri := lsconv.FileNameToDocumentURI(fileName)
+	uri := lsconv.FileNameToDocumentURI(tspath.RootedFilePath(fileName))
 	langService, err := session.GetLanguageService(context.Background(), uri)
 	if err != nil {
 		t.Fatalf("failed to get language service for %s: %v", fileName, err)
@@ -139,6 +142,28 @@ func collectDocumentSymbolsForFile(t *testing.T, session *project.Session, fileN
 
 	hierarchical := collectHierarchicalDocumentSymbols(t, langService, uri)
 	flat := collectFlatDocumentSymbols(t, langService, uri)
+
+	// Native import symbols differ between compiler providers.
+	sourceFile := langService.GetProgram().GetSourceFile(tspath.RootedFilePath(fileName))
+	converters := ls.LanguageService_converters(langService)
+	isImportRange := func(r lsproto.Range) bool {
+		span := lsconv.FromLSPRangeToOriginal(converters, sourceFile, r)
+		if span.Pos() >= span.End() {
+			return false
+		}
+		for _, statement := range sourceFile.Statements.Nodes {
+			if statement.Kind == ast.KindImportDeclaration && statement.Pos() <= span.Pos() && span.End() <= statement.End() {
+				return true
+			}
+		}
+		return false
+	}
+	hierarchical = slices.DeleteFunc(hierarchical, func(symbol *lsproto.DocumentSymbol) bool {
+		return isImportRange(symbol.Range)
+	})
+	flat = slices.DeleteFunc(flat, func(symbol *lsproto.SymbolInformation) bool {
+		return (symbol.ContainerName == nil || *symbol.ContainerName == "") && isImportRange(symbol.Location.Range)
+	})
 
 	return DocumentSymbolsFileResult{
 		FileName:      fileName,

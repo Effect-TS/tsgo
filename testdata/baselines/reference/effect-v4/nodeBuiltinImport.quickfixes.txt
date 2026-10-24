@@ -76,28 +76,28 @@
 [D22] (15:10-15:14) TS6133: 'exec' is declared but its value is never read.
   (no quick fixes)
 
-[D23] (15:22-15:37) TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `ChildProcess` from `effect/unstable/process`. effect(nodeBuiltinImport)
+[D23] (15:22-15:37) TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `ChildProcess` from `effect/process`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D24] (16:10-16:15) TS6133: 'spawn' is declared but its value is never read.
   (no quick fixes)
 
-[D25] (16:23-16:43) TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `ChildProcess` from `effect/unstable/process`. effect(nodeBuiltinImport)
+[D25] (16:23-16:43) TS377057: This module reference uses the `child_process` module, the corresponding Effect API is `ChildProcess` from `effect/process`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D26] (17:8-17:12) TS6133: 'http' is declared but its value is never read.
   (no quick fixes)
 
-[D27] (17:18-17:24) TS377057: This module reference uses the `http` module, the corresponding Effect API is `HttpClient` from `effect/unstable/http`. effect(nodeBuiltinImport)
+[D27] (17:18-17:24) TS377057: This module reference uses the `http` module, the corresponding Effect API is `HttpClient` from `effect/http`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 
 [D28] (18:8-18:13) TS6133: 'https' is declared but its value is never read.
   (no quick fixes)
 
-[D29] (18:19-18:31) TS377057: This module reference uses the `https` module, the corresponding Effect API is `HttpClient` from `effect/unstable/http`. effect(nodeBuiltinImport)
+[D29] (18:19-18:31) TS377057: This module reference uses the `https` module, the corresponding Effect API is `HttpClient` from `effect/http`. effect(nodeBuiltinImport)
   Fix 0: "Disable nodeBuiltinImport for this line"
   Fix 1: "Disable nodeBuiltinImport for entire file"
 

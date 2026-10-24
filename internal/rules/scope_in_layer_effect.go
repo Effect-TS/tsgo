@@ -123,7 +123,7 @@ func matchLayerEffectCall(tp *typeparser.TypeParser, sf *ast.SourceFile, node *a
 	}
 
 	// Check if RIn contains a Scope type
-	if !hasScope(tp, layer.RIn) {
+	if !hasScope(tp, layer.RIn()) {
 		return nil
 	}
 
@@ -182,7 +182,7 @@ func matchClassWithDefaultLayer(tp *typeparser.TypeParser, c *checker.Checker, s
 	}
 
 	// Check if RIn contains a Scope type
-	if !hasScope(tp, layer.RIn) {
+	if !hasScope(tp, layer.RIn()) {
 		return nil
 	}
 
