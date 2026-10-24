@@ -1,0 +1,33 @@
+Port of _patches/typescript/001-cmd-tsgo-main.patch (tsc/cmd/tsc/main.go) to tsrs.
+
+Go imports the Effect hook packages from cmd/tsc/main.go, so their init()s run before main. The tsrs executable is a
+binary crate, which effect-tsgo's Rust binary (crates/ets_tsrs) cannot call into: this makes tsrs_cli a library too
+(lib.rs includes main.rs, whose `main` becomes public), so that crates/ets_tsrs registers the hook crates and then
+calls `tsrs_cli::main`. The `tsrs` binary target is unchanged.
+
+Not ported yet: the `--effect-cli-diagnostics` command (etsdiagnostics.Run); crates/ets_tsrs adds it once
+etsdiagnostics is ported.
+
+diff --git a/crates/tsrs_cli/src/lib.rs b/crates/tsrs_cli/src/lib.rs
+new file mode 100644
+index 0000000..e25f29f
+--- /dev/null
++++ b/crates/tsrs_cli/src/lib.rs
+@@ -0,0 +1,2 @@
++// effect-tsgo: the executable as a library (`tsrs_cli::main`), for crates/ets_tsrs. The binary target keeps main.rs.
++include!("main.rs");
+diff --git a/crates/tsrs_cli/src/main.rs b/crates/tsrs_cli/src/main.rs
+index 857dd34..3314245 100644
+--- a/crates/tsrs_cli/src/main.rs
++++ b/crates/tsrs_cli/src/main.rs
+@@ -75,7 +75,9 @@ fn mimalloc_collect(force: bool) {
+     let _ = force;
+ }
+ 
+-fn main() {
++// effect-tsgo: public, so that lib.rs can expose it to crates/ets_tsrs, which registers the Effect hooks first (as
++// effect-tsgo's patched cmd/tsc/main.go imports the hook packages).
++pub fn main() {
+     #[cfg(all(target_os = "linux", not(any(feature = "system-alloc", miri))))]
+     tsrs_core::allocator::init_mimalloc();
+     let args: Vec<String> = std::env::args().skip(1).collect();

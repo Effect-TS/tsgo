@@ -1,4 +1,4 @@
-export type Component = "typescript" | "oxlint" | "oxlint-dts" | "oxlint-tsgolint"
+export type Component = "typescript" | "oxlint" | "oxlint-dts" | "oxlint-tsgolint" | "tsrs"
 
 export interface DiscoveredBinary {
   readonly component: Component

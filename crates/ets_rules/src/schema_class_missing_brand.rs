@@ -1,0 +1,72 @@
+use std::sync::LazyLock;
+
+use ets_etscore::Severity;
+use ets_rule::{Context, Rule};
+use ets_shim::P;
+use ets_shim::ast::{Diagnostic, Kind, Node};
+use ets_shim::diagnostics::{self as tsdiag, Message};
+use ets_typeparser::{EffectMajorVersion, TypeParser};
+
+use crate::*;
+
+/// Rust-only: the rule's message (Go spells it out at each use).
+static MESSAGE: &Message =
+    &tsdiag::Add_readonly_brand_Colon_unique_symbol_as_the_second_type_argument_Without_a_brand_TypeScript_may_accept_structurally_compatible_values_where_this_class_instance_type_is_expected_effect_schemaClassMissingBrand;
+
+// go: internal/rules/schema_class_missing_brand.go:11 SchemaClassMissingBrand
+pub static SCHEMA_CLASS_MISSING_BRAND: LazyLock<Rule> = LazyLock::new(|| Rule {
+    name: "schemaClassMissingBrand",
+    group: "correctness",
+    description: "Warns when Schema classes, errors, or Opaque classes omit the brand type argument",
+    default_severity: Severity::Suggestion,
+    supported_effect: vec!["v4"],
+    codes: vec![MESSAGE.code()],
+    run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
+        if ctx.type_parser.supported_effect_version() != EffectMajorVersion::V4 {
+            return Vec::new();
+        }
+        let mut diagnostics = Vec::new();
+
+        // Rust: Go's recursive `walk` closure is a nested function.
+        fn walk(
+            ctx: &mut Context<'_, '_>,
+            node: P<Node>,
+            diagnostics: &mut Vec<P<Diagnostic>>,
+        ) -> bool {
+            if (node.kind() == Kind::ClassDeclaration || node.kind() == Kind::ClassExpression)
+                && let Some(self_) = schema_class_missing_brand_self(ctx.type_parser, node)
+            {
+                diagnostics.push(ctx.new_diagnostic(
+                    ctx.source_file,
+                    ctx.get_error_range(self_),
+                    MESSAGE,
+                    &[],
+                    &[],
+                ));
+            }
+            node.for_each_child(&mut |child| walk(ctx, child, diagnostics));
+            false
+        }
+
+        let root = ctx.source_file.as_node();
+        walk(ctx, root, &mut diagnostics);
+        diagnostics
+    },
+});
+
+// go: internal/rules/schema_class_missing_brand.go:43 schemaClassMissingBrandSelf
+pub(crate) fn schema_class_missing_brand_self(
+    tp: &mut TypeParser<'_>,
+    class_node: P<Node>,
+) -> Option<P<Node>> {
+    let (mut self_, mut brand) = schema_class_instance_self_and_brand(tp, class_node);
+    if self_.is_none()
+        && let Some(result) = tp.extends_schema_opaque(class_node)
+    {
+        (self_, brand) = (Some(result.self_type_node()), result.brand_type_node());
+    }
+    if brand.is_some() {
+        return None;
+    }
+    self_
+}

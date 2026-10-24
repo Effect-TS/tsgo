@@ -3,6 +3,7 @@ import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
+import { gnuTime, parsePeakRss, peakRssFormat, resolveTsrsBinaries } from "./perfTsrs.ts"
 import { runCommand, runCommandCaptureSplit } from "./process.ts"
 import {
   readUpstream,
@@ -10,8 +11,16 @@ import {
   typeScriptSourceEntrypoint
 } from "./upstream.ts"
 
+export type PerfEngine = "tsgo" | "tsrs"
+
 export interface PerfOptions {
   readonly target: string
+  // tsgo (default): stock TypeScript-Go vs the patched Go binary. tsrs: stock tsrs (tsrs_cli built from the pinned
+  // commit without _patches/tsrs) vs the patched Rust binary (ets_tsrs), both with this repository's release profile.
+  readonly engine?: PerfEngine
+  // tsrs only: TSRS_CHECKER_ASSIGNMENT (`--checkerAssignment`) for both binaries ("go" by default, deterministic; ""
+  // to leave it unset).
+  readonly checkerAssignment?: string
   readonly version?: string
   readonly latest: boolean
   readonly output?: string
@@ -50,6 +59,9 @@ interface PerfRun extends PerfMetrics {
   readonly name: Compiler["name"]
   readonly run: number
   readonly exitCode: number
+  // Measured outside the compiler: wall time of the process, and its peak resident set size (GNU time, Linux only).
+  readonly wallTimeSeconds: number
+  readonly peakRssKilobytes?: number
 }
 
 export class PerfError extends Data.TaggedError("PerfError")<{
@@ -108,7 +120,9 @@ const formatRun = (run: PerfRun) => [
   `emit=${run.emitTime ?? "n/a"}`,
   `changes=${run.changesTime ?? "n/a"}`,
   `memory=${run.memoryUsed ?? "n/a"}`,
-  `allocs=${run.memoryAllocs ?? "n/a"}`
+  `allocs=${run.memoryAllocs ?? "n/a"}`,
+  `wall=${run.wallTimeSeconds.toFixed(3)}s`,
+  `peakRss=${run.peakRssKilobytes === undefined ? "n/a" : `${run.peakRssKilobytes}K`}`
 ].join(" ")
 
 export const cleanTarget = Effect.fnUntraced(function*(target: string, label: string, logPath: string) {
@@ -176,7 +190,9 @@ const runCompiler = Effect.fnUntraced(function*(
   compiler: Compiler,
   run: number,
   config: string,
-  diagnosticsFlag: string
+  diagnosticsFlag: string,
+  engine: PerfEngine,
+  engineEnv: Readonly<Record<string, string>>
 ) {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
@@ -186,17 +202,26 @@ const runCompiler = Effect.fnUntraced(function*(
 
   yield* cleanTarget(target, `${compiler.name} run ${run}`, path.join(caseDirectory, "clean.log"))
 
-  yield* Console.log(
-    `[${compiler.name} run ${run}] ${compiler.identity} -b ${config} ${diagnosticsFlag} --pprofDir ${pprofDirectory}`
-  )
-  const result = yield* runCommandCaptureSplit(compiler.command, target, [
-    ...compiler.args,
-    "-b",
-    config,
-    diagnosticsFlag,
-    "--pprofDir",
-    pprofDirectory
-  ])
+  // tsrs writes no pprof profiles.
+  const compilerArgs = ["-b", config, diagnosticsFlag, ...(engine === "tsgo" ? ["--pprofDir", pprofDirectory] : [])]
+  const envPrefix = Object.entries(engineEnv).map(([name, value]) => `${name}=${value} `).join("")
+  yield* Console.log(`[${compiler.name} run ${run}] ${envPrefix}${compiler.identity} ${compilerArgs.join(" ")}`)
+  const time = yield* gnuTime()
+  const resourcesPath = path.join(caseDirectory, "resources.txt")
+  const startedAt = performance.now()
+  const result = time === undefined
+    ? yield* runCommandCaptureSplit(compiler.command, target, [...compiler.args, ...compilerArgs], engineEnv)
+    : yield* runCommandCaptureSplit(time, target, [
+      "-f",
+      peakRssFormat,
+      "-o",
+      resourcesPath,
+      compiler.command,
+      ...compiler.args,
+      ...compilerArgs
+    ], engineEnv)
+  const wallTimeSeconds = (performance.now() - startedAt) / 1000
+  const peakRssKilobytes = time === undefined ? undefined : parsePeakRss(yield* fs.readFileString(resourcesPath))
   const diagnostics = result.stdout + result.stderr
   yield* Effect.all([
     fs.writeFileString(path.join(caseDirectory, "stdout.log"), result.stdout),
@@ -211,7 +236,11 @@ const runCompiler = Effect.fnUntraced(function*(
       `config=${config}`,
       `pprofDir=${pprofDirectory}`,
       `diagnosticsFlag=${diagnosticsFlag}`,
+      `args=${compilerArgs.join(" ")}`,
+      `env=${envPrefix.trim()}`,
       `exit=${result.exitCode}`,
+      `wallTimeSeconds=${wallTimeSeconds.toFixed(3)}`,
+      `peakRssKilobytes=${peakRssKilobytes ?? "n/a"}`,
       ""
     ].join("\n"))
   ])
@@ -222,6 +251,8 @@ const runCompiler = Effect.fnUntraced(function*(
     name: compiler.name,
     run,
     exitCode: result.exitCode,
+    wallTimeSeconds,
+    ...(peakRssKilobytes === undefined ? {} : { peakRssKilobytes }),
     ...parsePerfMetrics(diagnostics)
   } satisfies PerfRun
 })
@@ -231,6 +262,38 @@ const metricValues = (runs: ReadonlyArray<PerfRun>, select: (run: PerfRun) => st
     const value = numericMetric(select(run), suffix)
     return value === undefined ? [] : [value]
   })
+
+export interface PerfSummary {
+  readonly name: Compiler["name"]
+  readonly totalTimeSeconds?: number | undefined
+  readonly checkTimeSeconds?: number | undefined
+  readonly memoryUsedKilobytes?: number | undefined
+  readonly wallTimeSeconds?: number | undefined
+  readonly peakRssKilobytes?: number | undefined
+}
+
+const overheadMetrics = [
+  ["wall", "wallTimeSeconds"],
+  ["total", "totalTimeSeconds"],
+  ["check", "checkTimeSeconds"],
+  ["memory", "memoryUsedKilobytes"],
+  ["peakRss", "peakRssKilobytes"]
+] as const
+
+// "overhead (patched vs stock medians): wall=+12.3% ..." from the stock and patched summaries.
+export const overheadLines = (summaries: ReadonlyArray<PerfSummary>): ReadonlyArray<string> => {
+  const stock = summaries.find((summary) => summary.name === "stock")
+  const patched = summaries.find((summary) => summary.name === "patched")
+  if (stock === undefined || patched === undefined) return []
+  const parts = overheadMetrics.flatMap(([label, key]) => {
+    const base = stock[key]
+    const value = patched[key]
+    if (base === undefined || value === undefined || base === 0) return []
+    const percent = (value / base - 1) * 100
+    return [`${label}=${percent >= 0 ? "+" : ""}${percent.toFixed(1)}%`]
+  })
+  return parts.length === 0 ? [] : [`overhead (patched vs stock medians): ${parts.join(" ")}`]
+}
 
 export const comparePerformance = Effect.fnUntraced(function*(repositoryRoot: string, options: PerfOptions) {
   if (!Number.isInteger(options.runs) || options.runs < 1) {
@@ -246,7 +309,7 @@ export const comparePerformance = Effect.fnUntraced(function*(repositoryRoot: st
   const output = path.resolve(options.output ?? path.join(repositoryRoot, "_tools", ".perf-out"))
   const runId = options.runId ?? new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z")
   const runDirectory = path.join(output, runId)
-  const patchedBin = path.resolve(options.patchedBin ?? path.join(repositoryRoot, "tsgo"))
+  const engine = options.engine ?? "tsgo"
 
   if (!(yield* fs.exists(target))) {
     return yield* new PerfError({ reason: `Target repository does not exist: ${target}` })
@@ -259,18 +322,39 @@ export const comparePerformance = Effect.fnUntraced(function*(repositoryRoot: st
     return yield* new PerfError({ reason: `Unknown TypeScript component version: ${typescriptVersion}` })
   }
 
-  if (!(yield* fs.exists(patchedBin))) {
-    const compiler = yield* resolveMaterializedTypeScriptSource(repositoryRoot)
-    yield* Console.log(`Patched binary missing, building ${patchedBin}`)
-    yield* runCommand("go", repositoryRoot, [
-      "build",
-      "-o",
-      patchedBin,
-      typeScriptSourceEntrypoint(compiler)
-    ], false, { CGO_ENABLED: "0" })
+  let patchedBin: string
+  let stockBin = options.stockBin
+  if (engine === "tsrs") {
+    const binaries = yield* resolveTsrsBinaries(
+      repositoryRoot,
+      options.patchedBin === undefined ? undefined : path.resolve(options.patchedBin),
+      stockBin
+    )
+    patchedBin = binaries.patched
+    stockBin = binaries.stock
+  } else {
+    patchedBin = path.resolve(options.patchedBin ?? path.join(repositoryRoot, "tsgo"))
+    if (!(yield* fs.exists(patchedBin))) {
+      const compiler = yield* resolveMaterializedTypeScriptSource(repositoryRoot)
+      yield* Console.log(`Patched binary missing, building ${patchedBin}`)
+      yield* runCommand("go", repositoryRoot, [
+        "build",
+        "-o",
+        patchedBin,
+        typeScriptSourceEntrypoint(compiler)
+      ], false, { CGO_ENABLED: "0" })
+    }
   }
+  const checkerAssignment = options.checkerAssignment ?? "go"
+  // tsrs's `--checkerAssignment` flag is not accepted with `-b`; its environment variable is.
+  const engineEnv: Record<string, string> = engine === "tsrs" && checkerAssignment !== ""
+    ? { TSRS_CHECKER_ASSIGNMENT: checkerAssignment }
+    : {}
 
-  const { patched, stock } = yield* resolveCompilers(repositoryRoot, typescriptVersion, patchedBin, options.stockBin)
+  const { patched, stock } = yield* resolveCompilers(repositoryRoot, typescriptVersion, patchedBin, stockBin)
+  if (engine === "tsrs" && !patched.version.includes("+effect-tsgo.")) {
+    return yield* new PerfError({ reason: `Patched tsrs binary is not Effect-patched: ${patchedBin} (${patched.version})` })
+  }
   const compilers: ReadonlyArray<Compiler> = [stock, patched]
 
   const results: Array<PerfRun> = []
@@ -282,7 +366,9 @@ export const comparePerformance = Effect.fnUntraced(function*(repositoryRoot: st
         compiler,
         run,
         options.config,
-        options.diagnosticsFlag
+        options.diagnosticsFlag,
+        engine,
+        engineEnv
       ))
     }
   }
@@ -293,7 +379,9 @@ export const comparePerformance = Effect.fnUntraced(function*(repositoryRoot: st
       name: compiler.name,
       totalTimeSeconds: median(metricValues(runs, (run) => run.totalTime, "s")),
       checkTimeSeconds: median(metricValues(runs, (run) => run.checkTime, "s")),
-      memoryUsedKilobytes: median(metricValues(runs, (run) => run.memoryUsed, "K"))
+      memoryUsedKilobytes: median(metricValues(runs, (run) => run.memoryUsed, "K")),
+      wallTimeSeconds: median(runs.map((run) => run.wallTimeSeconds)),
+      peakRssKilobytes: median(runs.flatMap((run) => run.peakRssKilobytes === undefined ? [] : [run.peakRssKilobytes]))
     }
   })
   const summaryLines = [
@@ -303,12 +391,16 @@ export const comparePerformance = Effect.fnUntraced(function*(repositoryRoot: st
         summary.memoryUsedKilobytes === undefined
       ? `${summary.name} median: unavailable`
       : `${summary.name} median: total=${summary.totalTimeSeconds.toFixed(3)}s ` +
-        `check=${summary.checkTimeSeconds.toFixed(3)}s memory=${summary.memoryUsedKilobytes.toFixed(0)}K`)
+        `check=${summary.checkTimeSeconds.toFixed(3)}s memory=${summary.memoryUsedKilobytes.toFixed(0)}K` +
+        ` wall=${summary.wallTimeSeconds?.toFixed(3) ?? "n/a"}s` +
+        ` peakRss=${summary.peakRssKilobytes === undefined ? "n/a" : `${summary.peakRssKilobytes.toFixed(0)}K`}`),
+    ...overheadLines(summaries)
   ]
   yield* Effect.all([
     fs.writeFileString(path.join(runDirectory, "summary.txt"), `${summaryLines.join("\n")}\n`),
     fs.writeFileString(path.join(runDirectory, "summary.json"), `${JSON.stringify({
       target,
+      engine,
       typescriptVersion,
       compilers,
       runs: results,

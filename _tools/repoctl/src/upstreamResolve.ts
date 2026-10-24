@@ -2,7 +2,7 @@ import * as Console from "effect/Console"
 import * as Data from "effect/Data"
 import * as Effect from "effect/Effect"
 import { appendFile } from "node:fs/promises"
-import { buildTargets, oxlintBuildTargets, type BuildTarget } from "./build.ts"
+import { buildTargets, oxlintBuildTargets, tsrsBuildTargets, type BuildTarget } from "./build.ts"
 import { getComponent, readUpstream, type ComponentName, type Upstream } from "./upstream.ts"
 
 export class UpstreamResolveError extends Data.TaggedError("UpstreamResolveError")<{
@@ -21,7 +21,11 @@ export const resolveUpstreamInfo = Effect.fnUntraced(function*(
 ) {
   const selected = yield* getComponent(upstream, component, version)
   if (target !== undefined) {
-    const supported = component === "typescript" ? buildTargets : oxlintBuildTargets
+    const supported = component === "typescript"
+      ? buildTargets
+      : component === "tsrs"
+      ? tsrsBuildTargets
+      : oxlintBuildTargets
     if (!(target in supported)) {
       return yield* new UpstreamResolveError({ reason: `${component} does not support target ${target}` })
     }

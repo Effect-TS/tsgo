@@ -9,7 +9,8 @@ import { join } from "node:path"
 import { maxSatisfying, rcompare, satisfies } from "semver"
 import { runCommand, runCommandString } from "./process.ts"
 
-export type ComponentName = "typescript" | "oxlint-tsgolint" | "oxlint"
+// tsrs: the Rust port's upstream (tsrs/), released as the patched `tsrs` binary per tsrs version.
+export type ComponentName = "typescript" | "oxlint-tsgolint" | "oxlint" | "tsrs"
 
 export const TypeScriptProvider = Schema.Literals(["typescript-go", "typescript"])
 export type TypeScriptProvider = typeof TypeScriptProvider.Type
@@ -60,37 +61,61 @@ export const typeScriptSources = {
 export const getTypeScriptSource = (provider: TypeScriptProvider): TypeScriptSource =>
   typeScriptSources[provider]
 
-// Versions whose compiler API lags the canonical (next) shim API get their
-// own provider shim prefix so gen_shims backports them through these adapters.
-export const TypeScriptShims = Schema.Literals(["typescript-beta"])
-export type TypeScriptShims = typeof TypeScriptShims.Type
+// Per-commit overrides, by folder naming convention. The plain provider folders (`_patches/<provider>`,
+// `_tools/gen_shims/providers/<provider>`) target the newest TypeScript (next). A TypeScript component whose sources
+// they no longer fit (beta, the TypeScript the pinned tsrs ports) gets a `<provider>-<gitHead>` folder next to them,
+// which replaces the plain folder as a whole when that commit is set up:
+// - `_patches/<provider>-<gitHead>/` is applied instead of `_patches/<provider>/` (the same patches, file for file,
+//   backported to that commit; `repoctl check` enforces the same file names);
+// - `_tools/gen_shims/providers/<provider>-<gitHead>/` is the only shim overlay instead of the provider's (so it is
+//   self-contained), and the shims are generated through the provider's backport prefix, whose `compatibility.go`
+//   adapters present the canonical (next) shim API over that older compiler.
+// Only a full 40-hex suffix makes an override (`_patches/typescript-go` is the legacy provider's own folder). A folder
+// naming no recorded TypeScript component of its provider is stale: `repoctl check` fails until it is deleted.
+export const typeScriptPatchesRoot = "_patches"
+export const typeScriptShimProvidersRoot = "_tools/gen_shims/providers"
 
-export const typeScriptShims = {
-  "typescript-beta": {
-    provider: "typescript",
-    providerShimPrefix: "github.com/microsoft/TypeScript/tsc/providershim",
-    shimOverlayDir: "_tools/gen_shims/providers/typescript-beta"
-  }
-} as const satisfies Record<TypeScriptShims, {
-  readonly provider: TypeScriptProvider
-  readonly providerShimPrefix: string
-  readonly shimOverlayDir: string
-}>
+const overrideProviderShimPrefixes = {
+  "typescript-go": typeScriptSources["typescript-go"].providerShimPrefix,
+  typescript: "github.com/microsoft/TypeScript/tsc/providershim"
+} as const satisfies Record<TypeScriptProvider, string>
 
-export const getTypeScriptComponentSource = (
-  component: { readonly provider: TypeScriptProvider; readonly shims?: TypeScriptShims }
-): TypeScriptSource => {
-  const source = getTypeScriptSource(component.provider)
-  if (component.shims === undefined) {
-    return source
+export const typeScriptOverrideFolderName = (provider: TypeScriptProvider, gitHead: string) => `${provider}-${gitHead}`
+
+// The provider and commit an override folder name targets, or undefined when the name is not an override.
+export const parseTypeScriptOverrideFolderName = (name: string) => {
+  for (const provider of TypeScriptProvider.literals) {
+    const match = new RegExp(`^${provider}-([0-9a-f]{40})$`).exec(name)
+    if (match !== null) {
+      return { provider, gitHead: match[1]! }
+    }
   }
-  const shims = typeScriptShims[component.shims]
-  return {
-    ...source,
-    providerShimPrefix: shims.providerShimPrefix,
-    shimOverlayDirs: [...source.shimOverlayDirs, shims.shimOverlayDir]
-  }
+  return undefined
 }
+
+// The source of one TypeScript component: the provider's, with the patch folder and the shim overlays replaced by the
+// override folders of its commit when they exist.
+export const getTypeScriptComponentSource = Effect.fnUntraced(function*(
+  repositoryRoot: string,
+  component: { readonly provider: TypeScriptProvider; readonly gitHead: string }
+) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const source: TypeScriptSource = getTypeScriptSource(component.provider)
+  const name = typeScriptOverrideFolderName(component.provider, component.gitHead)
+  const patchDir = `${typeScriptPatchesRoot}/${name}`
+  const shimOverlayDir = `${typeScriptShimProvidersRoot}/${name}`
+  const patches = yield* fs.exists(path.join(repositoryRoot, patchDir))
+  const shims = yield* fs.exists(path.join(repositoryRoot, shimOverlayDir))
+  const resolved: TypeScriptSource = {
+    ...source,
+    ...(shims
+      ? { providerShimPrefix: overrideProviderShimPrefixes[component.provider], shimOverlayDirs: [shimOverlayDir] }
+      : {}),
+    ...(patches ? { patchDir } : {})
+  }
+  return resolved
+})
 
 export const typeScriptSourceEntrypoint = (source: TypeScriptSource) =>
   `./${[
@@ -128,14 +153,23 @@ const GitRevision = Schema.String.check(Schema.isPattern(/^[0-9a-f]{40}$/))
 const Component = Schema.Struct({ gitHead: GitRevision })
 const TypeScriptComponent = Schema.Struct({
   gitHead: GitRevision,
-  provider: TypeScriptProvider,
-  shims: Schema.optionalKey(TypeScriptShims)
+  provider: TypeScriptProvider
 })
 const TsgolintComponent = Schema.Struct({
   gitHead: GitRevision,
   dependencies: Schema.Struct({ typescript: NonEmptyString })
 })
 const ProfileDependencies = Schema.Record(Schema.String, NonEmptyString)
+// tsrs (github.com/oxc-project/tsrs): the Rust port of TypeScript-Go that the Rust port of the Effect code builds
+// on. Versions are tsrs npm versions (`<tsrs>-ts<TypeScript>`); `typescript` records the microsoft/TypeScript
+// version and commit that the tsrs release ports (tsrs's Cargo.toml `[workspace.metadata.typescript]`). That version
+// is the tsrs component's TypeScript dependency, as `dependencies.typescript` is oxlint-tsgolint's: it must be a
+// `components.typescript` entry at the same commit (provider `typescript`), which `repoctl submodules setup
+// --component tsrs` checks out next to tsrs, so the Go build compared with the Rust one runs the same TypeScript.
+const TsrsComponent = Schema.Struct({
+  gitHead: GitRevision,
+  typescript: Schema.Struct({ version: NonEmptyString, gitHead: GitRevision })
+})
 const RuntimeProfile = Schema.Struct({
   name: NonEmptyString,
   description: NonEmptyString,
@@ -150,12 +184,14 @@ export const Upstream = Schema.Struct({
       next: NonEmptyString
     }),
     oxlint: Schema.Struct({ latest: NonEmptyString }),
-    "oxlint-tsgolint": Schema.Struct({ latest: NonEmptyString })
+    "oxlint-tsgolint": Schema.Struct({ latest: NonEmptyString }),
+    tsrs: Schema.optionalKey(Schema.Struct({ latest: NonEmptyString }))
   }),
   components: Schema.Struct({
     typescript: Schema.Record(Schema.String, TypeScriptComponent),
     "oxlint-tsgolint": Schema.Record(Schema.String, TsgolintComponent),
-    oxlint: Schema.Record(Schema.String, Component)
+    oxlint: Schema.Record(Schema.String, Component),
+    tsrs: Schema.optionalKey(Schema.Record(Schema.String, TsrsComponent))
   }),
   profiles: Schema.Array(RuntimeProfile)
 })
@@ -185,18 +221,36 @@ const validateUpstream = (upstream: typeof Upstream.Type) => {
       }))
     }
   }
-  for (const [version, component] of Object.entries(upstream.components.typescript)) {
-    if (component.shims !== undefined && typeScriptShims[component.shims].provider !== component.provider) {
-      return Effect.fail(new UpstreamManifestError({
-        reason: `TypeScript ${version} uses ${component.shims} shims with provider ${component.provider}`
-      }))
-    }
-  }
   for (const component of ["oxlint-tsgolint", "oxlint"] as const) {
     const version = upstream.tags[component].latest
     if (upstream.components[component][version] === undefined) {
       return Effect.fail(new UpstreamManifestError({
         reason: `${component} latest references unknown version ${version}`
+      }))
+    }
+  }
+  const tsrsLatest = upstream.tags.tsrs?.latest
+  if ((tsrsLatest === undefined) !== (upstream.components.tsrs === undefined)) {
+    return Effect.fail(new UpstreamManifestError({
+      reason: "tsrs must have both a latest tag and components, or neither"
+    }))
+  }
+  if (tsrsLatest !== undefined && upstream.components.tsrs?.[tsrsLatest] === undefined) {
+    return Effect.fail(new UpstreamManifestError({
+      reason: `tsrs latest references unknown version ${tsrsLatest}`
+    }))
+  }
+  for (const [version, component] of Object.entries(upstream.components.tsrs ?? {})) {
+    const typescript = upstream.components.typescript[component.typescript.version]
+    if (typescript === undefined) {
+      return Effect.fail(new UpstreamManifestError({
+        reason: `tsrs ${version} references unknown TypeScript ${component.typescript.version}`
+      }))
+    }
+    if (typescript.provider !== "typescript" || typescript.gitHead !== component.typescript.gitHead) {
+      return Effect.fail(new UpstreamManifestError({
+        reason: `tsrs ${version} ports TypeScript ${component.typescript.version} at ${component.typescript.gitHead}, ` +
+          `but the TypeScript component is ${typescript.provider} ${typescript.gitHead}`
       }))
     }
   }
@@ -260,18 +314,23 @@ export const getComponent = Effect.fnUntraced(function*(
   name: ComponentName,
   requestedVersion?: string
 ) {
-  const version = requestedVersion ?? (name === "typescript" ? upstream.tags.typescript.next : undefined)
+  const version = requestedVersion ??
+    (name === "typescript" ? upstream.tags.typescript.next : name === "tsrs" ? upstream.tags.tsrs?.latest : undefined)
   if (version === undefined) {
     return yield* new UpstreamManifestError({ reason: `A version is required for component ${name}` })
   }
   const component = name === "oxlint-tsgolint"
     ? upstream.components["oxlint-tsgolint"][version]
+    : name === "tsrs"
+    ? upstream.components.tsrs?.[version]
     : upstream.components[name][version]
   if (component === undefined) {
     return yield* new UpstreamManifestError({ reason: `Unknown ${name} component version: ${version}` })
   }
   const typescriptVersion = name === "oxlint-tsgolint"
     ? upstream.components["oxlint-tsgolint"][version]!.dependencies.typescript
+    : name === "tsrs"
+    ? upstream.components.tsrs![version]!.typescript.version
     : name === "typescript" ? version : upstream.tags.typescript.next
   const typescript = upstream.components.typescript[typescriptVersion]
   if (typescript === undefined) {
@@ -286,10 +345,42 @@ export const getComponent = Effect.fnUntraced(function*(
     typescript: {
       version: typescriptVersion,
       gitHead: typescript.gitHead,
-      source: getTypeScriptComponentSource(typescript)
+      provider: typescript.provider
     }
   }
 })
+
+// getComponent, with the TypeScript source resolved against the repository's override folders.
+export const resolveComponent = Effect.fnUntraced(function*(
+  repositoryRoot: string,
+  upstream: typeof Upstream.Type,
+  name: ComponentName,
+  requestedVersion?: string
+) {
+  const selected = yield* getComponent(upstream, name, requestedVersion)
+  return {
+    ...selected,
+    typescript: {
+      ...selected.typescript,
+      source: yield* getTypeScriptComponentSource(repositoryRoot, selected.typescript)
+    }
+  }
+})
+
+export const tsrsRepository = "https://github.com/oxc-project/tsrs.git"
+
+// The tsrs release checked out at `tsrs/` next to the TypeScript compiler, or undefined when the manifest has none.
+export const getTsrsComponent = (upstream: typeof Upstream.Type, requestedVersion?: string) => {
+  const version = requestedVersion ?? upstream.tags.tsrs?.latest
+  if (version === undefined) {
+    return Effect.succeed(undefined)
+  }
+  const component = upstream.components.tsrs?.[version]
+  if (component === undefined) {
+    return Effect.fail(new UpstreamManifestError({ reason: `Unknown tsrs component version: ${version}` }))
+  }
+  return Effect.succeed({ name: "tsrs" as const, version, gitHead: component.gitHead, typescript: component.typescript })
+}
 
 const NpmMetadata = Schema.fromJsonString(Schema.Struct({
   version: NonEmptyString,
@@ -431,20 +522,24 @@ interface ResolvedRuntime {
 }
 
 interface BuildUpstreamOptions {
-  readonly shims?: Readonly<Record<string, TypeScriptShims>>
   readonly next: TypeScriptMetadata
   readonly beta: TypeScriptMetadata
   readonly latest: TypeScriptMetadata
   readonly retainedRuntimes?: ReadonlyArray<ResolvedRuntime & { readonly name: string; readonly description: string }>
   readonly oxlint: ResolvedRuntime
   readonly vitePlus: ResolvedRuntime & { readonly vitePlusVersion: string }
+  // `upstream update` records the latest tsrs release only (resolveTsrsRelease).
+  readonly tsrs?: {
+    readonly tags: NonNullable<typeof Upstream.Type.tags.tsrs>
+    readonly components: NonNullable<typeof Upstream.Type.components.tsrs>
+  }
 }
 
 const sortedRecord = <A>(entries: ReadonlyArray<readonly [string, A]>): Record<string, A> =>
   Object.fromEntries([...entries].sort(([left], [right]) => Buffer.compare(Buffer.from(left), Buffer.from(right))))
 
 export const buildUpstream = ({
-  latest, beta, next, oxlint, vitePlus, retainedRuntimes = [], shims = {}
+  latest, beta, next, oxlint, vitePlus, retainedRuntimes = [], tsrs
 }: BuildUpstreamOptions): typeof Upstream.Type => {
   const typescript = new Map<string, typeof TypeScriptComponent.Type>()
   const tsgolint = new Map<string, {
@@ -455,11 +550,17 @@ export const buildUpstream = ({
 
   const runtimes = [...retainedRuntimes, oxlint, vitePlus]
   for (const metadata of [latest, beta, next, ...runtimes.map((runtime) => runtime.ts)]) {
-    const versionShims = shims[metadata.npmVersion]
     typescript.set(metadata.npmVersion, {
       gitHead: metadata.gitHead,
-      provider: metadata.provider,
-      ...(versionShims === undefined ? {} : { shims: versionShims })
+      provider: metadata.provider
+    })
+  }
+  // The TypeScript each recorded tsrs ports (its dependency), on microsoft/TypeScript: kept while that tsrs is recorded,
+  // dropped with it when tsrs is bumped.
+  for (const component of Object.values(tsrs?.components ?? {})) {
+    typescript.set(component.typescript.version, {
+      gitHead: component.typescript.gitHead,
+      provider: "typescript"
     })
   }
   for (const runtime of runtimes) {
@@ -479,12 +580,14 @@ export const buildUpstream = ({
         next: next.npmVersion
       },
       oxlint: { latest: oxlint.oxlint.npmVersion },
-      "oxlint-tsgolint": { latest: oxlint.tsgolint.npmVersion }
+      "oxlint-tsgolint": { latest: oxlint.tsgolint.npmVersion },
+      ...(tsrs === undefined ? {} : { tsrs: tsrs.tags })
     },
     components: {
       typescript: sortedRecord([...typescript]),
       "oxlint-tsgolint": sortedRecord([...tsgolint]),
-      oxlint: sortedRecord([...oxlintComponents])
+      oxlint: sortedRecord([...oxlintComponents]),
+      ...(tsrs === undefined ? {} : { tsrs: sortedRecord(Object.entries(tsrs.components)) })
     },
     profiles: [
       {
@@ -669,6 +772,17 @@ export const formatUpstreamUpdateDescription = ({
     }
   ].filter((update): update is typeof update & { readonly previous: string; readonly updated: string } =>
     update.previous !== undefined && update.updated !== undefined && update.previous !== update.updated)
+  const previousTsrs = before.tags.tsrs?.latest
+  const updatedTsrs = after.tags.tsrs?.latest
+  if (updatedTsrs !== undefined && previousTsrs !== updatedTsrs) {
+    versionUpdates.push({
+      label: "tsrs",
+      packageName: "tsrs",
+      spec: "tsrs@latest",
+      previous: previousTsrs ?? "none",
+      updated: updatedTsrs
+    })
+  }
   const previousNextComponent = before.components.typescript[before.tags.typescript.next]!
   const updatedNextComponent = after.components.typescript[after.tags.typescript.next]!
   const previousNext = previousNextComponent.gitHead
@@ -705,6 +819,26 @@ export const formatUpstreamUpdateDescription = ({
       "",
       ...nextCommits.map(({ message, sha }) =>
         `- [${sha.slice(0, 7)}](https://github.com/${getTypeScriptSource(updatedNextComponent.provider).repositorySlug}/commit/${sha}) ${message}`)
+    ].join("\n"))
+  }
+  const previousTsrsComponent = previousTsrs === undefined ? undefined : before.components.tsrs?.[previousTsrs]
+  const updatedTsrsComponent = updatedTsrs === undefined ? undefined : after.components.tsrs?.[updatedTsrs]
+  if (updatedTsrsComponent !== undefined && previousTsrsComponent?.gitHead !== updatedTsrsComponent.gitHead) {
+    const repository = "https://github.com/oxc-project/tsrs"
+    sections.push([
+      "## tsrs",
+      "",
+      ...(previousTsrsComponent === undefined
+        ? []
+        : [`- Previous commit: [\`${previousTsrsComponent.gitHead}\`](${repository}/commit/${previousTsrsComponent.gitHead})`]),
+      `- Updated commit: [\`${updatedTsrsComponent.gitHead}\`](${repository}/commit/${updatedTsrsComponent.gitHead})`,
+      ...(previousTsrsComponent === undefined
+        ? []
+        : [`- Compare: ${repository}/compare/${previousTsrsComponent.gitHead}...${updatedTsrsComponent.gitHead}`]),
+      `- Ports TypeScript \`${updatedTsrsComponent.typescript.version}\` ([\`${updatedTsrsComponent.typescript.gitHead}\`](https://github.com/microsoft/TypeScript/commit/${updatedTsrsComponent.typescript.gitHead}))`,
+      "",
+      "The Rust port follows tsrs: `_patches/tsrs` must apply with zero fuzz, and `rust-toolchain.toml` and",
+      "`[profile.release]` in `Cargo.toml` must match tsrs's (`sync-upstream` skill)."
     ].join("\n"))
   }
   const otherUpdates = [
@@ -876,6 +1010,75 @@ const resolveTsgolintComponent = Effect.fnUntraced(function*(
   }
 })
 
+// npm `tsrs` versions are `<crate version>-ts<TypeScript version>`; the release is tagged `v<crate version>`.
+export const parseTsrsNpmVersion = (npmVersion: string) => {
+  const match = /^(\d+\.\d+\.\d+)-ts(\d.*)$/.exec(npmVersion)
+  return match === null ? undefined : { tag: `v${match[1]!}`, typescriptVersion: match[2]! }
+}
+
+// The microsoft/TypeScript version and commit a tsrs release ports: its Cargo.toml `[workspace.metadata.typescript]`.
+export const parseTsrsTypeScriptMetadata = (cargoToml: string) => {
+  const lines = cargoToml.split(/\r?\n/)
+  const start = lines.findIndex((line) => line.trim() === "[workspace.metadata.typescript]")
+  if (start < 0) return undefined
+  const fields = new Map<string, string>()
+  for (const line of lines.slice(start + 1)) {
+    if (line.trim().startsWith("[")) break
+    const field = /^\s*([A-Za-z_-]+)\s*=\s*"([^"]*)"/.exec(line)
+    if (field !== null) fields.set(field[1]!, field[2]!)
+  }
+  const version = fields.get("version")
+  const gitHead = fields.get("commit")
+  return version === undefined || version === "" || gitHead === undefined || !/^[0-9a-f]{40}$/.test(gitHead)
+    ? undefined
+    : { version, gitHead }
+}
+
+const fetchText = Effect.fnUntraced(function*(url: string) {
+  const response = yield* Effect.tryPromise({
+    try: () => fetch(url, { headers: { "User-Agent": "effect-tsgo-repoctl" } }),
+    catch: (error) => new UpstreamManifestError({ reason: `Unable to fetch ${url}: ${String(error)}` })
+  })
+  if (!response.ok) {
+    return yield* new UpstreamManifestError({ reason: `Unable to fetch ${url}: HTTP ${response.status}` })
+  }
+  return yield* Effect.tryPromise({
+    try: () => response.text(),
+    catch: (error) => new UpstreamManifestError({ reason: `Unable to read ${url}: ${String(error)}` })
+  })
+})
+
+// The latest tsrs release: npm `tsrs@latest`, the commit of its GitHub tag, and the TypeScript it ports.
+export const resolveTsrsRelease = Effect.fnUntraced(function*(repositoryRoot: string) {
+  const output = yield* runCommandString("npm", repositoryRoot, ["view", "tsrs@latest", "version", "--json"])
+  const npmVersion = yield* Schema.decodeUnknownEffect(Schema.fromJsonString(NonEmptyString))(output).pipe(
+    Effect.mapError((error) => new UpstreamManifestError({ reason: `Unable to resolve tsrs@latest: ${error.message}` }))
+  )
+  const parsed = parseTsrsNpmVersion(npmVersion)
+  if (parsed === undefined) {
+    return yield* new UpstreamManifestError({
+      reason: `tsrs@latest ${npmVersion} is not a <version>-ts<TypeScript version> release`
+    })
+  }
+  const gitHead = yield* resolveRemoteTag(repositoryRoot, tsrsRepository, parsed.tag)
+  const cargoToml = yield* fetchText(`https://raw.githubusercontent.com/oxc-project/tsrs/${gitHead}/Cargo.toml`)
+  const typescript = parseTsrsTypeScriptMetadata(cargoToml)
+  if (typescript === undefined) {
+    return yield* new UpstreamManifestError({
+      reason: `tsrs ${parsed.tag} (${gitHead}) has no [workspace.metadata.typescript] version and commit`
+    })
+  }
+  if (typescript.version !== parsed.typescriptVersion) {
+    return yield* new UpstreamManifestError({
+      reason: `tsrs@${npmVersion} ports TypeScript ${parsed.typescriptVersion}, but ${parsed.tag} declares ${typescript.version}`
+    })
+  }
+  return {
+    tags: { latest: npmVersion },
+    components: { [npmVersion]: { gitHead, typescript } }
+  }
+})
+
 const resolveRuntime = Effect.fnUntraced(function*(
   selection: OxlintSelection,
   oxlint: ReadonlyMap<string, ComponentMetadata>,
@@ -906,7 +1109,7 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
     npmVersion: upstream.tags.typescript.latest,
     ...upstream.components.typescript[upstream.tags.typescript.latest]!
   }
-  const [next, beta, latest, oxlintSelections, vitePlusSelections, remoteSchema, packument] = yield* Effect.all([
+  const [next, beta, latest, oxlintSelections, vitePlusSelections, remoteSchema, packument, tsrs] = yield* Effect.all([
     fetchTypeScriptMetadata(repositoryRoot, "typescript@next"),
     fetchTypeScriptMetadata(repositoryRoot, "typescript@beta"),
     fetchTypeScriptMetadata(repositoryRoot, "typescript@latest"),
@@ -921,7 +1124,8 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
       }))
     ),
     fetchJson("https://json.schemastore.org/tsconfig"),
-    fetchJson("https://registry.npmjs.org/typescript")
+    fetchJson("https://registry.npmjs.org/typescript"),
+    resolveTsrsRelease(repositoryRoot)
   ], { concurrency: "unbounded" })
   if (typeof packument !== "object" || packument === null || !("versions" in packument) ||
     typeof packument.versions !== "object" || packument.versions === null) {
@@ -977,12 +1181,7 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
       reason: `The oxlint@${oxlint.oxlint.npmVersion} configuration schema is invalid`
     })
   }
-  const shims = Object.fromEntries(
-    Object.entries(upstream.components.typescript).flatMap(([version, component]) =>
-      component.shims === undefined ? [] : [[version, component.shims] as const]
-    )
-  )
-  const updated = buildUpstream({ next, beta, latest, oxlint, vitePlus, retainedRuntimes, shims })
+  const updated = buildUpstream({ next, beta, latest, oxlint, vitePlus, retainedRuntimes, tsrs })
   const metadataChanged = JSON.stringify(updated) !== JSON.stringify(upstream)
   const schemaPath = path.join(repositoryRoot, "_tools", "tsconfig-base-schema.json")
   const currentSchema = yield* fs.readFileString(schemaPath).pipe(
@@ -1041,6 +1240,9 @@ export const updateUpstream = Effect.fnUntraced(function*(repositoryRoot: string
     latest_previous_git_head: latestBefore.gitHead,
     latest_version: latest.npmVersion,
     latest_git_head: latest.gitHead,
+    tsrs_previous_version: upstream.tags.tsrs?.latest ?? "",
+    tsrs_version: tsrs.tags.latest,
+    tsrs_git_head: tsrs.components[tsrs.tags.latest]!.gitHead,
     description
   }
   if (process.env.GITHUB_OUTPUT !== undefined) {

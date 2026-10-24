@@ -1,0 +1,27 @@
+[package]
+name = "ets_etslshooks"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Port of effect-tsgo etslshooks"
+
+[lints]
+workspace = true
+
+[dependencies]
+ets_autoimportstyle.workspace = true
+ets_completion.workspace = true
+ets_completions.workspace = true
+ets_etscore.workspace = true
+ets_fixable.workspace = true
+ets_fixables.workspace = true
+ets_go.workspace = true
+ets_layergraph.workspace = true
+ets_pluginoptions.workspace = true
+ets_refactor.workspace = true
+ets_refactors.workspace = true
+ets_shim.workspace = true
+ets_typeparser.workspace = true
+rustc-hash.workspace = true

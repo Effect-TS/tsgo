@@ -1,0 +1,50 @@
+name: Validate tsrs
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: validate-tsrs-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  validate:
+    name: Validate the Rust port (tsrs)
+    if: github.repository_owner == 'Effect-TS'
+    runs-on: ubuntu-latest
+    # A cold Rust build of tsrs and the workspace; the rust-cache of the setup action covers warm runs.
+    timeout-minutes: 60
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # The tsrs component at its latest version checks out and patches tsrs next to the TypeScript it ports,
+      # regenerates the Go shims and crates/ets_shim, and prepares the Effect fixtures the Rust tests read. No Go
+      # build is needed.
+      - name: Setup tsrs
+        uses: ./.github/actions/setup-repo
+        with:
+          component: tsrs
+
+      # Node and Go only (no cargo, no checkout but this repository's): a parity failure shows before the Rust build.
+      - name: Check Rust port bookkeeping
+        run: pnpm exec repoctl tsrs port-check --summary "$GITHUB_STEP_SUMMARY"
+
+      - name: Lint
+        run: pnpm exec repoctl tsrs lint
+
+      - name: Check
+        run: pnpm exec repoctl tsrs check
+
+      - name: Test
+        run: pnpm exec repoctl tsrs test

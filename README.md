@@ -23,6 +23,19 @@ This will guide you through the installation process, which includes:
 > [!NOTE]
 > At the moment, you still need a native TypeScript install alongside `@effect/tsgo`: `typescript` >= 7 (e.g. `typescript@latest` or `typescript@next`) or an alias such as `@typescript/native`. `effect-tsgo patch` tries `typescript`, then `@typescript/native`, and accepts `--typescript-package <name>` to try a custom package name first.
 
+### Experimental: patch your installed tsrs
+
+If you use [tsrs](https://github.com/oxc-project/tsrs), the Rust port of TypeScript-Go, `effect-tsgo patch --tsrs` patches it too: it swaps the binary of your installed `tsrs` package (`node_modules/@tsrs/<platform>/tsrs`) for an experimental Effect-patched build of the same tsrs version, so `tsrs` reports the Effect diagnostics. Your TypeScript install is patched as usual; use `effect-tsgo patch --no-typescript --tsrs` to patch only tsrs.
+
+```sh
+npm i -D tsrs@<version>
+effect-tsgo patch --tsrs        # e.g. in the prepare script
+npx tsrs --noEmit               # now with Effect diagnostics
+effect-tsgo unpatch --tsrs      # restores tsrs's original binary
+```
+
+The patched build is available for macOS arm64 and Linux x64/arm64 (glibc), for the tsrs versions this `@effect/tsgo` release supports. A tsrs version or platform (such as Linux musl) without a patched build makes `patch --tsrs` fail with the reason, or skip tsrs with `--skip-missing`.
+
 ## LSP-based linter
 
 The Effect LSP doubles as a tool to perform type-aware linting of Effect code, and ships as well a way to emit additional Oxlint Type Aware rules.

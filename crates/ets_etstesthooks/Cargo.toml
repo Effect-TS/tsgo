@@ -1,0 +1,16 @@
+[package]
+name = "ets_etstesthooks"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Port of effect-tsgo etstesthooks"
+
+[lints]
+workspace = true
+
+[dependencies]
+ets_bundledeffect.workspace = true
+ets_fourslash.workspace = true
+ets_go.workspace = true

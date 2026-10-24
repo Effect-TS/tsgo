@@ -161,6 +161,10 @@ const resolvePlatformPackage = (target: DiscoveredBinary) => Effect.gen(function
   return { packageDir: path.dirname(packageJsonPath) }
 })
 
+// The platforms @effect/tsgo ships a patched tsrs binary for (artifacts/tsrs/<tsrs version>/tsrs): tsrs's own glibc
+// and macOS targets. Its musl targets are discovered but reported as unavailable.
+export const tsrsReplacementTargets = ["darwin-arm64", "linux-x64-gnu", "linux-arm64-gnu"] as const
+
 export const packagedArtifactPath = (packageDir: string, target: DiscoveredBinary) => Effect.gen(function*() {
   const path = yield* Path.Path
   const fileName = path.basename(target.binaryPath)
@@ -174,7 +178,9 @@ export const resolveReplacement: ReplacementResolver = (target) => Effect.gen(fu
   if (target.component !== "typescript" && process.platform === "linux" && !isGlibc()) {
     return yield* new ReplacementUnavailableError({
       target,
-      reason: "Linux musl is not supported by the packaged Oxlint integration."
+      reason: target.component === "tsrs"
+        ? `Linux musl is not supported by the packaged tsrs integration; it is built for ${tsrsReplacementTargets.join(", ")}.`
+        : "Linux musl is not supported by the packaged Oxlint integration."
     })
   }
   if (target.component === "oxlint-dts") return yield* resolveOxlintDeclarations(target)

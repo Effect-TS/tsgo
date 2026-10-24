@@ -1,0 +1,190 @@
+tsrs-only: the session refers to its server weakly, so that dropping the last `Arc<Server>` frees the session and
+everything it owns (snapshots, projects, program owners, checker and file regions). Go's session holds the `*Server`
+as its `project.Client` and `ata.NpmExecutor` and the GC collects the cycle; in tsrs the server owns the session
+(`Server.session`) and the session held `Arc<Server>` twice, so an in-process server (`lsptestutil`, which the Rust
+fourslash stand-in `crates/ets_fourslash` uses once per baseline case) was never freed: TestEffectQuickFixes grew by
+~60 MB per case (23.5 GB peak for 385 cases, 54.7 GB for the whole baseline suite).
+
+- tsrs_lsp/src/server.rs: `sessionClient(Weak<Server>)` implements `project::Client` and `project::NpmExecutor`
+  by forwarding to the server while it is alive (as the logger already holds `Weak<Server>`); once the server is
+  gone its methods do nothing (`Ok(())`, `false`, `Locale::DEFAULT`; `npm_install` fails). `handle_initialized`
+  passes it to `new_session` instead of `Arc<Server>`. No behavior change while the server is alive (the server
+  outlives the session in the binary: `tsrs --lsp` holds it until the process exits).
+- tsrs_lsp/src/server_test.rs: `a_closed_client_frees_the_server_and_its_session` (fails without the change).
+
+diff --git a/crates/tsrs_lsp/src/server.rs b/crates/tsrs_lsp/src/server.rs
+--- a/crates/tsrs_lsp/src/server.rs
++++ b/crates/tsrs_lsp/src/server.rs
+@@ -1988,9 +1988,11 @@
+ 
+         self.telemetry_enabled.store(enable_telemetry, Ordering::SeqCst);
+ 
+-        let client: Arc<dyn project::Client> = Arc::<Server>::clone(self);
++        // tsrs-only: the session refers to the server weakly (`sessionClient`), as the logger does.
++        let client: Arc<dyn project::Client> = Arc::new(sessionClient(Arc::downgrade(self)));
+         let logger: Arc<dyn logging::Logger> = self.logger_arc();
+-        let npm_executor: Arc<dyn project::NpmExecutor> = Arc::<Server>::clone(self);
++        let npm_executor: Arc<dyn project::NpmExecutor> =
++            Arc::new(sessionClient(Arc::downgrade(self)));
+         let session = project::new_session(&project::SessionInit {
+             background_ctx: lsproto::with_client_capabilities(
+                 &self.background_ctx(),
+@@ -3850,6 +3852,93 @@
+     }
+ }
+ 
++// tsrs-only: the server as the session's `project::Client` and `ata.NpmExecutor`. Go's session holds the
++// `*Server` itself and the GC collects the cycle; here the server owns the session, so the session refers to the
++// server weakly and dropping the last `Arc<Server>` frees the session with its snapshots and programs (an in-process
++// server per test, `lsptestutil`). Once the server is gone, its methods do nothing.
++struct sessionClient(Weak<Server>);
++
++impl sessionClient {
++    fn with<R>(&self, gone: R, f: impl FnOnce(&Server) -> R) -> R {
++        self.0.upgrade().map_or(gone, |s| f(&s))
++    }
++}
++
++impl project::Client for sessionClient {
++    fn watch_files(
++        &self,
++        ctx: &Context,
++        id: project::WatcherID,
++        watchers: Vec<lsproto::FileSystemWatcher>,
++    ) -> Result<(), Error> {
++        self.with(Ok(()), |s| project::Client::watch_files(s, ctx, id, watchers))
++    }
++    fn unwatch_files(&self, ctx: &Context, id: project::WatcherID) -> Result<(), Error> {
++        self.with(Ok(()), |s| project::Client::unwatch_files(s, ctx, id))
++    }
++    fn register_content_mapper_extensions(
++        &self,
++        ctx: &Context,
++        extensions: Vec<String>,
++    ) -> Result<(), Error> {
++        self.with(Ok(()), |s| s.register_content_mapper_extensions(ctx, &extensions))
++    }
++    fn refresh_diagnostics(&self, ctx: &Context) -> Result<(), Error> {
++        self.with(Ok(()), |s| s.refresh_diagnostics(ctx))
++    }
++    fn publish_diagnostics(
++        &self,
++        ctx: &Context,
++        params: lsproto::PublishDiagnosticsParams,
++    ) -> Result<(), Error> {
++        self.with(Ok(()), |s| s.publish_diagnostics(ctx, params))
++    }
++    fn refresh_inlay_hints(&self, ctx: &Context) -> Result<(), Error> {
++        self.with(Ok(()), |s| s.refresh_inlay_hints(ctx))
++    }
++    fn refresh_code_lens(&self, ctx: &Context) -> Result<(), Error> {
++        self.with(Ok(()), |s| s.refresh_code_lens(ctx))
++    }
++    fn progress_start(
++        &self,
++        message: &'static tsrs_diagnostics::Message,
++        args: &[&dyn std::fmt::Display],
++    ) {
++        self.with((), |s| s.progress_start(message, args));
++    }
++    fn progress_finish(
++        &self,
++        message: &'static tsrs_diagnostics::Message,
++        args: &[&dyn std::fmt::Display],
++    ) {
++        self.with((), |s| s.progress_finish(message, args));
++    }
++    fn send_telemetry(
++        &self,
++        ctx: &Context,
++        telemetry: lsproto::TelemetryEvent,
++    ) -> Result<(), Error> {
++        self.with(Ok(()), |s| s.send_telemetry(ctx, telemetry))
++    }
++    fn is_active(&self) -> bool {
++        self.with(false, Server::is_active)
++    }
++    fn set_locale(&self, locale: &str) {
++        self.with((), |s| s.set_locale(locale));
++    }
++    fn get_locale(&self) -> Locale {
++        self.with(Locale::DEFAULT, Server::get_locale)
++    }
++}
++
++impl project::NpmExecutor for sessionClient {
++    fn npm_install(&self, cwd: &str, args: &[String]) -> Result<Vec<u8>, String> {
++        self.with(Err("the language server is closed".to_string()), |s| {
++            project::NpmExecutor::npm_install(s, cwd, args)
++        })
++    }
++}
++
+ // Go's errgroup.WithContext: the first member that returns an error cancels the group's context; Wait returns
+ // that error after every member has returned.
+ #[derive(Clone)]
+diff --git a/crates/tsrs_lsp/src/server_test.rs b/crates/tsrs_lsp/src/server_test.rs
+--- a/crates/tsrs_lsp/src/server_test.rs
++++ b/crates/tsrs_lsp/src/server_test.rs
+@@ -552,6 +552,61 @@
+     let _ = close_client.close();
+ }
+ 
++// Not a Go test (Go's GC collects the server and its session). Once the client is closed and dropped, the server is
++// freed with its session, so an in-process server per test does not keep the programs of earlier tests alive.
++#[test]
++fn a_closed_client_frees_the_server_and_its_session() {
++    use crate::lsptestutil::{acknowledge_registrations, new_lsp_client, test_server_options};
++
++    let files = [
++        ("/home/projects/tsconfig.json", "{}"),
++        ("/home/projects/index.ts", "export const abc = 1;\n"),
++    ];
++    let (client, close_client) = new_lsp_client(
++        test_server_options("/home/projects", &files),
++        Some(acknowledge_registrations()),
++    );
++    let (init_msg, _) =
++        client.send_request(lsproto::INITIALIZE_INFO, lsproto::InitializeParams::default());
++    assert!(init_msg.error.is_none(), "Initialize failed");
++    client.send_notification(lsproto::INITIALIZED_INFO, lsproto::InitializedParams::default());
++    client.server.init_complete().wait();
++    let uri = lsproto::DocumentUri::from("file:///home/projects/index.ts");
++    client.send_notification(
++        lsproto::TEXT_DOCUMENT_DID_OPEN_INFO,
++        lsproto::DidOpenTextDocumentParams {
++            text_document: lsproto::TextDocumentItem {
++                uri: uri.clone(),
++                language_id: lsproto::LanguageKind::TypeScript,
++                text: "export const abc = 1;\n".to_string(),
++                ..Default::default()
++            },
++        },
++    );
++    let (msg, resp) = client.send_request(
++        lsproto::TEXT_DOCUMENT_HOVER_INFO,
++        lsproto::HoverParams {
++            text_document: lsproto::TextDocumentIdentifier { uri },
++            position: lsproto::Position { line: 0, character: 14 },
++            ..Default::default()
++        },
++    );
++    assert!(msg.error.is_none() && resp.is_some(), "{:?}", msg.error);
++    let server = std::sync::Arc::downgrade(&client.server);
++    let session = std::sync::Arc::downgrade(client.server.session());
++    let _ = close_client.close();
++    drop(client);
++    // The read thread is not joined (as in Go) and may hold the server for a moment longer.
++    let deadline = std::time::Instant::now() + std::time::Duration::from_secs(30);
++    while (server.strong_count() > 0 || session.strong_count() > 0)
++        && std::time::Instant::now() < deadline
++    {
++        std::thread::sleep(std::time::Duration::from_millis(10));
++    }
++    assert_eq!(server.strong_count(), 0, "the server outlives its client");
++    assert_eq!(session.strong_count(), 0, "the session outlives its server");
++}
++
+ // Not a Go test. `workspace/willRenameFiles` sends a `documentChanges` workspace edit with one entry per changed file or
+ // renamed companion file; returns (uri, edit text) for each text edit and (old uri, new uri) for each file rename.
+ fn will_rename_files(

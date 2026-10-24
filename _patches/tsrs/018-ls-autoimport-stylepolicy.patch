@@ -1,0 +1,254 @@
+Port of _patches/typescript/018-ls-autoimport-stylepolicy.patch (tsc/internal/ls/autoimport/fix.go) to tsrs.
+
+- Fix.Edits (AddNew): the named or namespace binding uses Fix::namespace_prefix when set, and a set prefix adds the
+  usage-site qualifier (add_namespace_qualifier).
+- View.GetFixes: every non-empty result goes through View::apply_style_policy; try_add_to_existing_import and the
+  AddNew fix record the usage position.
+- FixTransformer, autoImportFixTransformerFactory, RegisterAutoImportFixTransformer:
+  tsrs_ls::autoimport::{FixTransformer, register_auto_import_fix_transformer} (the factory behind a process-wide
+  RwLock, as patch 002's callback; AutoImportFixTransformerFactory names Go's inline func type). FixTransformer is
+  `Box<dyn Fn(Option<&Export>, Vec<Arc<Fix>>) -> Vec<Arc<Fix>> + Send + Sync>`: Go's `[]*Fix` is `Vec<Arc<Fix>>`
+  (empty for nil).
+- The aliasresolver.go hunk (IsSourceFileFromExternalLibrary) is in patch 002, which needs it first.
+- View.fixTransformer and the factory call in NewView are patch 027.
+
+diff --git a/crates/tsrs_ls/src/autoimport/fix.rs b/crates/tsrs_ls/src/autoimport/fix.rs
+index cd22b7d..8e3e3e4 100644
+--- a/crates/tsrs_ls/src/autoimport/fix.rs
++++ b/crates/tsrs_ls/src/autoimport/fix.rs
+@@ -115,9 +115,15 @@ impl Fix {
+                 } else {
+                     None
+                 };
++                let mut named_binding_name = &self.name;
++                if self.import_kind == lsproto::ImportKind::Named
++                    && !self.namespace_prefix.is_empty()
++                {
++                    named_binding_name = &self.namespace_prefix;
++                }
+                 let named_imports = if self.import_kind == lsproto::ImportKind::Named {
+                     vec![newImportBinding {
+-                        name: self.name.clone(),
++                        name: named_binding_name.clone(),
+                         add_as_type_only: self.add_as_type_only,
+                         ..Default::default()
+                     }]
+@@ -125,18 +131,18 @@ impl Fix {
+                     Vec::new()
+                 };
+                 let mut namespace_like_import: Option<newImportBinding> = None;
+-                // qualification := f.qualification()
+                 if self.import_kind == lsproto::ImportKind::Namespace
+                     || self.import_kind == lsproto::ImportKind::CommonJS
+                 {
++                    let mut ns_name = &self.name;
++                    if !self.namespace_prefix.is_empty() {
++                        ns_name = &self.namespace_prefix;
++                    }
+                     namespace_like_import = Some(newImportBinding {
+                         kind: self.import_kind,
+-                        name: self.name.clone(),
++                        name: ns_name.clone(),
+                         ..Default::default()
+                     });
+-                    // if qualification != nil && qualification.namespacePref != "" {
+-                    // 	namespaceLikeImport.name = qualification.namespacePref
+-                    // }
+                 }
+ 
+                 let quote_preference = lsutil::get_quote_preference(file, preferences);
+@@ -170,9 +176,11 @@ impl Fix {
+                     true, /*blankLineBetween*/
+                     preferences,
+                 );
+-                // if qualification != nil {
+-                // 	addNamespaceQualifier(tracker, file, qualification)
+-                // }
++                // When a style rewrite introduced a qualifier requirement (for example,
++                // a namespace or barrel), apply the usage-site prefix in the shared fix pipeline.
++                if !self.namespace_prefix.is_empty() {
++                    add_namespace_qualifier(self, &mut tracker, file);
++                }
+                 let (edits, safe) = file_edits(&mut tracker, file);
+                 (edits, diagnostics::Add_import_from_0.localize(&[&self.module_specifier]), safe)
+             }
+@@ -857,9 +865,11 @@ impl View {
+             fixes.push(Arc::new(namespace_fix));
+         }
+ 
+-        if let Some(fix) = self.try_add_to_existing_import(export, is_valid_type_only_use_site) {
++        if let Some(fix) =
++            self.try_add_to_existing_import(export, is_valid_type_only_use_site, usage_position)
++        {
+             fixes.push(Arc::new(fix));
+-            return fixes;
++            return self.apply_style_policy(export, fixes);
+         }
+ 
+         // !!! getNewImportFromExistingSpecifier - even worth it?
+@@ -867,7 +877,10 @@ impl View {
+         let (module_specifier, module_specifier_kind) =
+             self.get_module_specifier(export, &self.preferences);
+         if module_specifier.is_empty() {
+-            return fixes;
++            if !fixes.is_empty() {
++                return self.apply_style_policy(export, fixes);
++            }
++            return Vec::new();
+         }
+ 
+         // Check if we need a JSDoc import type fix (for JS files with type-only imports)
+@@ -876,19 +889,22 @@ impl View {
+             export.flags.intersects(ast::SymbolFlags::Value) || export.is_unresolved_alias();
+         if !imported_symbol_has_value_meaning && is_js && usage_position.is_some() {
+             // For pure types in JS files, use JSDoc import type syntax
+-            return vec![Arc::new(Fix {
+-                auto_import_fix: lsproto::AutoImportFix {
+-                    kind: lsproto::AutoImportFixKind::JsdocTypeImport,
+-                    module_specifier,
+-                    name: export.name().to_string(),
+-                    usage_position,
+-                    ..Default::default()
+-                },
+-                module_specifier_kind,
+-                is_re_export: export.target.module_id != export.module_id,
+-                module_file_name: export.module_file_name.clone(),
+-                type_only_alias_declaration: None,
+-            })];
++            return self.apply_style_policy(
++                export,
++                vec![Arc::new(Fix {
++                    auto_import_fix: lsproto::AutoImportFix {
++                        kind: lsproto::AutoImportFixKind::JsdocTypeImport,
++                        module_specifier,
++                        name: export.name().to_string(),
++                        usage_position,
++                        ..Default::default()
++                    },
++                    module_specifier_kind,
++                    is_re_export: export.target.module_id != export.module_id,
++                    module_file_name: export.module_file_name.clone(),
++                    type_only_alias_declaration: None,
++                })],
++            );
+         }
+ 
+         let import_kind = get_import_kind(
+@@ -921,6 +937,7 @@ impl View {
+                 name,
+                 use_require: self.should_use_require(),
+                 add_as_type_only,
++                usage_position,
+                 ..Default::default()
+             },
+             module_specifier_kind,
+@@ -928,7 +945,68 @@ impl View {
+             module_file_name: export.module_file_name.clone(),
+             type_only_alias_declaration: None,
+         }));
+-        fixes
++        self.apply_style_policy(export, fixes)
++    }
++}
++
++// effect-tsgo patch 018 (fix.go `FixTransformer`).
++// FixTransformer is a function that transforms auto-import fixes based on
++// style preferences. It receives an export and a list of fixes, and returns
++// the (potentially rewritten) list of fixes. A nil return suppresses the fixes.
++//
++// tsrs-only: Go's `[]*Fix` is `Vec<Arc<Fix>>` (an empty one is Go's nil); Go's `*Export` may be nil.
++pub type FixTransformer =
++    Box<dyn Fn(Option<&Export>, Vec<Arc<Fix>>) -> Vec<Arc<Fix>> + Send + Sync>;
++
++/// tsrs-only (effect-tsgo patch 018): the type of Go's `autoImportFixTransformerFactory` (a `func` type there).
++pub type AutoImportFixTransformerFactory = Arc<
++    dyn Fn(
++            &modulespecifiers::UserPreferences,
++            &'static Program,
++            P<SourceFile>,
++        ) -> Option<FixTransformer>
++        + Send
++        + Sync,
++>;
++
++// effect-tsgo patch 018 (fix.go `autoImportFixTransformerFactory`).
++// autoImportFixTransformerFactory is the registered factory that creates a
++// FixTransformer from user preferences and the compiler program.
++// Set via RegisterAutoImportFixTransformer.
++static AUTO_IMPORT_FIX_TRANSFORMER_FACTORY: std::sync::RwLock<
++    Option<AutoImportFixTransformerFactory>,
++> = std::sync::RwLock::new(None);
++
++// effect-tsgo patch 018 (fix.go `RegisterAutoImportFixTransformer`).
++// RegisterAutoImportFixTransformer registers a factory function that will be
++// called during NewView to create a FixTransformer from user preferences and
++// the compiler program. Only one factory can be registered; subsequent calls
++// replace the previous one.
++pub fn register_auto_import_fix_transformer(factory: AutoImportFixTransformerFactory) {
++    *AUTO_IMPORT_FIX_TRANSFORMER_FACTORY
++        .write()
++        .unwrap_or_else(std::sync::PoisonError::into_inner) = Some(factory);
++}
++
++/// tsrs-only (effect-tsgo patch 018): Go reads the package variable `autoImportFixTransformerFactory` (in
++/// `NewView`, patch 027); the Rust port clones it out of its lock so the factory runs without holding the lock.
++pub(crate) fn auto_import_fix_transformer_factory() -> Option<AutoImportFixTransformerFactory> {
++    AUTO_IMPORT_FIX_TRANSFORMER_FACTORY
++        .read()
++        .unwrap_or_else(std::sync::PoisonError::into_inner)
++        .clone()
++}
++
++impl View {
++    // effect-tsgo patch 018 (fix.go `View.applyStylePolicy`).
++    fn apply_style_policy(&self, export: &Export, fixes: Vec<Arc<Fix>>) -> Vec<Arc<Fix>> {
++        let Some(fix_transformer) = &self.fix_transformer else {
++            return fixes;
++        };
++        if fixes.is_empty() {
++            return fixes;
++        }
++        fix_transformer(Some(export), fixes)
+     }
+ }
+ 
+@@ -1035,6 +1113,7 @@ impl View {
+         &self,
+         export: &Export,
+         is_valid_type_only_use_site: bool,
++        usage_position: Option<lsproto::Position>,
+     ) -> Option<Fix> {
+         let existing_imports = self.get_existing_imports();
+         let matching_declarations = existing_imports
+@@ -1086,6 +1165,7 @@ impl View {
+                             import_index: import_index_to_protocol(existing_import.index),
+                             module_specifier: existing_import.module_specifier.clone(),
+                             add_as_type_only,
++                            usage_position,
+                             ..Default::default()
+                         },
+                         ..Default::default()
+@@ -1145,6 +1225,7 @@ impl View {
+                     import_index: import_index_to_protocol(existing_import.index),
+                     module_specifier: existing_import.module_specifier.clone(),
+                     add_as_type_only,
++                    usage_position,
+                     ..Default::default()
+                 },
+                 ..Default::default()
+diff --git a/crates/tsrs_ls/src/autoimport/mod.rs b/crates/tsrs_ls/src/autoimport/mod.rs
+index fef47db..9798b0e 100644
+--- a/crates/tsrs_ls/src/autoimport/mod.rs
++++ b/crates/tsrs_ls/src/autoimport/mod.rs
+@@ -12,7 +12,10 @@ mod util;
+ mod view;
+ 
+ pub use export::*;
+-pub use fix::{Fix, get_import_kind_for_import_statement};
++pub use fix::{
++    AutoImportFixTransformerFactory, Fix, FixTransformer, get_import_kind_for_import_statement,
++    register_auto_import_fix_transformer,
++};
+ pub use import_adder::*;
+ pub use index::{Index, Named};
+ pub use registry::*;

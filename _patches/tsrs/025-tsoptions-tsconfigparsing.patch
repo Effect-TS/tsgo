@@ -1,0 +1,94 @@
+Port of _patches/typescript/025-tsoptions-tsconfigparsing.patch (tsc/internal/tsoptions/tsconfigparsing.go) to tsrs.
+
+- The three mergeParsedCompilerOptions calls (extended config, own config, existing options) pass the source config
+  path and base path to merge_compiler_options (patch 013), with Go's arguments.
+- ValidateCompilerOptionsCallback / RegisterValidateCompilerOptionsCallback:
+  tsrs_tsoptions::{ValidateCompilerOptionsCallback, register_validate_compiler_options_callback} (an Arc'd closure
+  behind a process-wide RwLock, as patch 002's callback). parse_json_config_file_content_worker appends its
+  diagnostics after the project references are read and before the file names are computed, as Go does. Go's
+  `*core.CompilerOptions` and `*ast.SourceFile` (both may be nil) are `Option`s.
+
+diff --git a/crates/tsrs_tsoptions/src/tsconfigparsing.rs b/crates/tsrs_tsoptions/src/tsconfigparsing.rs
+index f220996..39ea4b0 100644
+--- a/crates/tsrs_tsoptions/src/tsconfigparsing.rs
++++ b/crates/tsrs_tsoptions/src/tsconfigparsing.rs
+@@ -38,6 +38,33 @@ use crate::parsinghelpers::{
+     parse_project_reference, parse_type_acquisition,
+ };
+ 
++// effect-tsgo patch 025 (tsconfigparsing.go `ValidateCompilerOptionsCallback`).
++// ValidateCompilerOptionsCallback validates the final options after configuration
++// inheritance and existing options have been merged.
++pub type ValidateCompilerOptionsCallback = std::sync::Arc<
++    dyn Fn(Option<&CompilerOptions>, Option<P<SourceFile>>) -> Vec<P<Diagnostic>> + Send + Sync,
++>;
++
++static VALIDATE_COMPILER_OPTIONS_CALLBACK: std::sync::RwLock<
++    Option<ValidateCompilerOptionsCallback>,
++> = std::sync::RwLock::new(None);
++
++// effect-tsgo patch 025 (tsconfigparsing.go `RegisterValidateCompilerOptionsCallback`).
++pub fn register_validate_compiler_options_callback(cb: ValidateCompilerOptionsCallback) {
++    *VALIDATE_COMPILER_OPTIONS_CALLBACK
++        .write()
++        .unwrap_or_else(std::sync::PoisonError::into_inner) = Some(cb);
++}
++
++/// tsrs-only (effect-tsgo patch 025): Go reads the package variable `ValidateCompilerOptionsCallback`; the Rust
++/// port clones it out of its lock so the callback runs without holding the lock.
++fn validate_compiler_options_callback() -> Option<ValidateCompilerOptionsCallback> {
++    VALIDATE_COMPILER_OPTIONS_CALLBACK
++        .read()
++        .unwrap_or_else(std::sync::PoisonError::into_inner)
++        .clone()
++}
++
+ struct ExtendsResult {
+     options: CompilerOptions,
+     include: Option<Vec<CompilerOptionsValue>>,
+@@ -1735,6 +1762,8 @@ fn parse_config(
+             &mut result.options,
+             own_config.options.as_ref(),
+             Some(&own_config.raw),
++            config_file_name,
++            &base_path,
+         );
+         own_config.options = Some(result.options);
+     }
+@@ -1845,6 +1874,8 @@ fn apply_extended_config(
+         &mut result.options,
+         extended_config.options.as_ref(),
+         Some(extends_raw),
++        extended_config_path,
++        base_path,
+     );
+ }
+ 
+@@ -1894,7 +1925,13 @@ fn parse_json_config_file_content_worker(
+         extended_config_cache,
+     );
+     if let Some(options) = &mut parsed_config.options {
+-        merge_compiler_options(options, existing_options, existing_options_raw);
++        merge_compiler_options(
++            options,
++            existing_options,
++            existing_options_raw,
++            config_file_name,
++            base_path,
++        );
+     }
+     handle_option_config_dir_template_substitution(
+         parsed_config.options.as_mut(),
+@@ -2287,6 +2324,12 @@ fn parse_json_config_file_content_worker(
+         project_references
+     };
+ 
++    // effect-tsgo patch 025.
++    if let Some(callback) = validate_compiler_options_callback() {
++        errors
++            .extend(callback(parsed_config.options.as_ref(), tsconfig_to_source_file(source_file)));
++    }
++
+     let (file_names, literal_file_names_len) =
+         get_file_names(&base_path_for_file_names, &mut errors);
+     let mut compile_on_save = false;

@@ -1,0 +1,21 @@
+[package]
+name = "ets_bundledeffect"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Port of internal/bundledeffect"
+
+[lints]
+workspace = true
+
+[dependencies]
+ets_go.workspace = true
+ets_shim.workspace = true
+flate2.workspace = true
+parking_lot.workspace = true
+rustc-hash.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+tar.workspace = true

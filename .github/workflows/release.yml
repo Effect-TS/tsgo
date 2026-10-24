@@ -93,7 +93,8 @@ jobs:
     needs: [select-mode, release-matrix]
     if: needs.select-mode.outputs.mode == 'publish'
     runs-on: ${{ matrix.runner }}
-    timeout-minutes: 45
+    # The tsrs jobs (matrix.rust) run a fat-LTO, single-codegen-unit Rust release build.
+    timeout-minutes: ${{ matrix.rust && 90 || 45 }}
     permissions:
       contents: read
     defaults:

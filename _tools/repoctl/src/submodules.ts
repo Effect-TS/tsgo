@@ -5,8 +5,17 @@ import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import { ChildProcess } from "effect/process"
 import { ChildProcessSpawner } from "effect/process"
-import { runCommand } from "./process.ts"
-import { type ComponentName, getComponent, readUpstream, type TypeScriptSource } from "./upstream.ts"
+import { appendFile } from "node:fs/promises"
+import { runCommand, runCommandCaptureSplit } from "./process.ts"
+import {
+  type ComponentName,
+  formatGitHubOutputs,
+  getTsrsComponent,
+  readUpstream,
+  resolveComponent,
+  tsrsRepository,
+  type TypeScriptSource
+} from "./upstream.ts"
 
 const repositories = {
   tsgolint: "https://github.com/oxc-project/tsgolint.git",
@@ -62,8 +71,12 @@ export const cloneSubmodules = Effect.fnUntraced(function*(
   const path = yield* Path.Path
   const spawner = yield* ChildProcessSpawner.ChildProcessSpawner
   const upstream = yield* readUpstream(repositoryRoot)
-  const selected = yield* getComponent(upstream, componentName, version)
+  const selected = yield* resolveComponent(repositoryRoot, upstream, componentName, version)
   const compiler = selected.typescript.source
+  // The Rust port (crates/) builds on tsrs, checked out only with the tsrs component (by default its latest version),
+  // next to the TypeScript next compiler, so that Go and Rust both build in that checkout. Every other component drops
+  // a tsrs checkout, as it drops oxlint and tsgolint.
+  const tsrs = selected.name === "tsrs" ? yield* getTsrsComponent(upstream, selected.version) : undefined
   const required = [
     { name: compiler.checkoutDir, repository: compiler.repository, revision: selected.typescript.gitHead },
     ...(selected.name === "oxlint-tsgolint"
@@ -71,15 +84,18 @@ export const cloneSubmodules = Effect.fnUntraced(function*(
       : []),
     ...(selected.name === "oxlint"
       ? [{ name: "oxlint", repository: repositories.oxlint, revision: selected.gitHead }] as const
+      : []),
+    ...(tsrs !== undefined
+      ? [{ name: "tsrs", repository: tsrsRepository, revision: tsrs.gitHead }] as const
       : [])
   ] as const
   const reused = new Set<string>()
   const configuredUnused: Array<{
-    readonly name: "typescript-go" | "typescript" | "tsgolint" | "oxlint"
+    readonly name: "typescript-go" | "typescript" | "tsgolint" | "oxlint" | "tsrs"
     readonly hasGitmodulesConfig: boolean
   }> = []
 
-  for (const name of ["typescript-go", "typescript", "tsgolint", "oxlint"] as const) {
+  for (const name of ["typescript-go", "typescript", "tsgolint", "oxlint", "tsrs"] as const) {
     const target = required.find((target) => target.name === name)
     const configuredExitCode = yield* spawner.exitCode(ChildProcess.make(
       "git",
@@ -215,6 +231,9 @@ export const cloneSubmodules = Effect.fnUntraced(function*(
     `submodule.${compiler.checkoutDir}.ignore`,
     "dirty"
   ])
+  if (tsrs !== undefined) {
+    yield* runGit(repositoryRoot, ["config", "-f", ".gitmodules", "submodule.tsrs.ignore", "dirty"])
+  }
   yield* runGit(repositoryRoot, ["add", ".gitmodules", ...required.map((target) => target.name)])
   return selected
 })
@@ -225,7 +244,8 @@ export const patchSubmodules = Effect.fnUntraced(function*(repositoryRoot: strin
   const targets = [
     { name: compiler.checkoutDir, patches: path.join(repositoryRoot, compiler.patchDir) },
     { name: "tsgolint", patches: path.join(repositoryRoot, "_patches", "tsgolint") },
-    { name: "oxlint", patches: path.join(repositoryRoot, "_patches", "oxlint") }
+    { name: "oxlint", patches: path.join(repositoryRoot, "_patches", "oxlint") },
+    { name: "tsrs", patches: path.join(repositoryRoot, "_patches", "tsrs") }
   ] as const
 
   for (const target of targets) {
@@ -240,12 +260,58 @@ export const patchSubmodules = Effect.fnUntraced(function*(repositoryRoot: strin
 
     for (const file of patches) {
       const patch = path.join(target.patches, file)
-      yield* Console.log(`Applying ${target.name} patch: ${path.relative(repositoryRoot, patch)}`)
-      yield* runGit(checkout, ["apply", "--check", patch], true)
+      const relativePatch = path.relative(repositoryRoot, patch)
+      yield* Console.log(`Applying ${target.name} patch: ${relativePatch}`)
+      const check = yield* runCommandCaptureSplit("git", checkout, ["apply", "--check", patch])
+      if (check.exitCode !== ChildProcessSpawner.ExitCode(0)) {
+        const revision = yield* readGit(checkout, ["rev-parse", "HEAD"])
+        const error = new PatchApplyError({
+          checkout: target.name,
+          revision,
+          patch: relativePatch.split(path.sep).join("/"),
+          detail: check.stderr.trim()
+        })
+        yield* reportPatchFailure(error)
+        return yield* error
+      }
       yield* runGit(checkout, ["apply", patch])
     }
   }
 })
+
+export class PatchApplyError extends Data.TaggedError("PatchApplyError")<{
+  readonly checkout: string
+  readonly revision: string
+  readonly patch: string
+  readonly detail: string
+}> {
+  get message(): string {
+    return `${this.patch} does not apply to ${this.checkout} ${this.revision}` +
+      (this.detail === "" ? "" : `:\n${this.detail}`)
+  }
+}
+
+// The markdown the update-upstreams workflow adds to its pull request when a patch no longer applies.
+export const formatPatchFailure = (error: PatchApplyError) => {
+  const detail = error.detail.split("\n").slice(0, 20).join("\n")
+  return [
+    "## Patch failure",
+    "",
+    `\`${error.patch}\` no longer applies to \`${error.checkout}\` at \`${error.revision}\`. ` +
+      "Rebase it (and the patches after it) on the new checkout" +
+      (error.checkout === "tsrs" ? " with the `sync-upstream` skill." : "."),
+    ...(detail === "" ? [] : ["", "```", detail, "```"])
+  ].join("\n")
+}
+
+// In GitHub Actions: the `patch_failure` step output, read by .github/workflows/update-upstreams.yml.
+const reportPatchFailure = (error: PatchApplyError) =>
+  process.env.GITHUB_OUTPUT === undefined
+    ? Effect.void
+    : Effect.promise(() => appendFile(
+      process.env.GITHUB_OUTPUT!,
+      formatGitHubOutputs({ patch_failure: formatPatchFailure(error), patch_failure_file: error.patch })
+    ))
 
 export const generateSubmoduleArtifacts = Effect.fnUntraced(function*(
   repositoryRoot: string,

@@ -18,10 +18,14 @@ export const integrationFlags = {
   oxlint: Flag.Boolean("oxlint").pipe(
     Flag.withDefault(false),
     Flag.withDescription("Include the experimental Oxlint integration")
+  ),
+  tsrs: Flag.Boolean("tsrs").pipe(
+    Flag.withDefault(false),
+    Flag.withDescription("Include the experimental tsrs integration (the installed tsrs package's binary)")
   )
 }
 
-export const ensureIntegrationSelected = (typescript: boolean, oxlint: boolean) =>
-  typescript || oxlint
+export const ensureIntegrationSelected = (typescript: boolean, oxlint: boolean, tsrs = false) =>
+  typescript || oxlint || tsrs
     ? Effect.void
     : Effect.fail(new IntegrationSelectionError({ reason: "Select at least one integration to manage." }))

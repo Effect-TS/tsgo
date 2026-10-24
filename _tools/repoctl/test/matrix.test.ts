@@ -159,6 +159,63 @@ test("builds a deduplicated matrix of compatible Oxlint component pairs", () => 
   })
 })
 
+test("builds the tsrs binary once per tsrs version and tsrs platform, natively", () => {
+  const versions = ["0.18.0-ts7.1.0-dev.20260929", "0.19.0-ts7.1.0-dev.20261020"]
+  const upstream: typeof Upstream.Type = {
+    schemaVersion: 5,
+    tags: {
+      typescript: { latest: "7.0.2", next: "7.1.0-dev" },
+      "oxlint-tsgolint": { latest: "unused" },
+      oxlint: { latest: "unused" },
+      tsrs: { latest: versions[1]! }
+    },
+    components: {
+      typescript: {
+        "7.0.2": { gitHead: revision, provider: "typescript-go" },
+        "7.1.0-dev": { gitHead: revision, provider: "typescript" }
+      },
+      "oxlint-tsgolint": {},
+      oxlint: {},
+      tsrs: Object.fromEntries(versions.map((version) => [
+        version,
+        { gitHead: revision, typescript: { version: "7.1.0-dev.20260929", gitHead: revision } }
+      ]))
+    },
+    profiles: []
+  }
+
+  const release = buildReleaseMatrix(upstream).include
+  // 2 TypeScript versions x 7 targets, independent of tsrs, then 2 tsrs versions x 3 targets.
+  assert.equal(release.length, 20)
+  assert.ok(release.filter((artifact) => artifact.component === "typescript").every((artifact) =>
+    artifact.runner === "ubuntu-latest"))
+  const tsrs = release.filter((artifact) => artifact.component === "tsrs")
+  assert.deepEqual(tsrs.map(({ runner, target, version }) => `${version} ${target} ${runner}`), [
+    `${versions[0]} darwin-arm64 macos-14`,
+    `${versions[0]} linux-x64 ubuntu-22.04`,
+    `${versions[0]} linux-arm64 ubuntu-22.04-arm`,
+    `${versions[1]} darwin-arm64 macos-14`,
+    `${versions[1]} linux-x64 ubuntu-22.04`,
+    `${versions[1]} linux-arm64 ubuntu-22.04-arm`
+  ])
+  assert.deepEqual(tsrs[1], {
+    component: "tsrs",
+    version: versions[0],
+    target: "linux-x64",
+    runner: "ubuntu-22.04",
+    artifactName: `linux-x64__tsrs__${versions[0]}`,
+    fileName: "tsrs",
+    destination: `_packages/tsgo-linux-x64/artifacts/tsrs/${versions[0]}/tsrs`
+  })
+
+  const { tsrs: _tags, ...tags } = upstream.tags
+  const { tsrs: _components, ...components } = upstream.components
+  assert.equal(
+    buildReleaseMatrix({ ...upstream, tags, components }).include.some((artifact) => artifact.component === "tsrs"),
+    false
+  )
+})
+
 const typeScriptUpstream = (
   tags: { readonly latest: string; readonly beta: string; readonly next: string },
   versions: Record<string, "typescript" | "typescript-go">
@@ -216,4 +273,45 @@ test("builds a perf matrix where a channel exists on only one side", () => {
       { name: "beta+next", side: "head", ref: headRef, version: "7.1.0-dev.20261014.1" }
     ]
   })
+})
+
+test("tests and releases the TypeScript the pinned tsrs ports like any other, but does not measure it", () => {
+  const tsrsVersion = "0.18.0-ts7.1.0-dev.20260929"
+  const upstream: typeof Upstream.Type = {
+    schemaVersion: 5,
+    tags: {
+      typescript: { latest: "7.0.2", next: "7.1.0-dev.20261023.1" },
+      "oxlint-tsgolint": { latest: "7.0.2005" },
+      oxlint: { latest: "unused" },
+      tsrs: { latest: tsrsVersion }
+    },
+    components: {
+      typescript: {
+        "7.0.2": { gitHead: revision, provider: "typescript-go" },
+        "7.1.0-dev.20260929": { gitHead: revision, provider: "typescript" },
+        "7.1.0-dev.20261023.1": { gitHead: revision, provider: "typescript" }
+      },
+      "oxlint-tsgolint": { "7.0.2005": { gitHead: revision, dependencies: { typescript: "7.0.2" } } },
+      oxlint: {},
+      tsrs: { [tsrsVersion]: { gitHead: revision, typescript: { version: "7.1.0-dev.20260929", gitHead: revision } } }
+    },
+    profiles: []
+  }
+
+  // Without a channel, its job is named after its version.
+  assert.deepEqual(buildTypeScriptTestMatrix(upstream).include, [
+    { name: "latest", component: "typescript", version: "7.0.2", repoctl: false },
+    { name: "7.1.0-dev.20260929", component: "typescript", version: "7.1.0-dev.20260929", repoctl: false },
+    { name: "next", component: "typescript", version: "7.1.0-dev.20261023.1", repoctl: true }
+  ])
+  const release = buildReleaseMatrix(upstream).include
+  assert.deepEqual(
+    [...new Set(release.filter((artifact) => artifact.component === "typescript").map((artifact) => artifact.version))],
+    ["7.0.2", "7.1.0-dev.20260929", "7.1.0-dev.20261023.1"]
+  )
+  // No npm release has its commit, so perf has no stock compiler for it.
+  assert.deepEqual(
+    buildPerfMatrix(upstream, upstream, baseRef, headRef).include.map(({ name, side }) => `${side} ${name}`),
+    ["base latest", "base next", "head latest", "head next"]
+  )
 })

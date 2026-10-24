@@ -1,0 +1,74 @@
+use std::sync::LazyLock;
+
+use ets_etscore::Severity;
+use ets_rule::{Context, Rule};
+use ets_shim::P;
+use ets_shim::ast::{Diagnostic, Node, SourceFile};
+use ets_shim::core::TextRange;
+use ets_shim::diagnostics::{self as tsdiag, Message};
+use ets_typeparser::TypeParser;
+
+/// Rust-only: the rule's message (Go spells it out at each use).
+static MESSAGE: &Message = &tsdiag::This_uses_the_Effect_do_emulation_Effect_gen_or_Effect_fn_achieve_the_same_result_with_native_JS_scopes_effect_effectDoNotation;
+
+// go: internal/rules/effect_do_notation.go:15 EffectDoNotation
+// EffectDoNotation suggests using Effect.gen or Effect.fn instead of Effect.Do.
+pub static EFFECT_DO_NOTATION: LazyLock<Rule> = LazyLock::new(|| Rule {
+    name: "effectDoNotation",
+    group: "style",
+    description: "Suggests using Effect.gen or Effect.fn instead of the Effect.Do notation helpers",
+    default_severity: Severity::Off,
+    supported_effect: vec!["v3", "v4"],
+    codes: vec![MESSAGE.code()],
+    run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
+        let source_file = ctx.source_file;
+        let matches = analyze_effect_do_notation(ctx.type_parser, source_file);
+        let mut diags = Vec::with_capacity(matches.len());
+        for m in &matches {
+            diags.push(ctx.new_diagnostic(m.source_file, m.location, MESSAGE, &[], &[]));
+        }
+        diags
+    },
+});
+
+// go: internal/rules/effect_do_notation.go:39 EffectDoNotationMatch
+#[derive(Clone)]
+pub struct EffectDoNotationMatch {
+    pub source_file: P<SourceFile>,
+    pub location: TextRange,
+    pub node: P<Node>,
+}
+
+// go: internal/rules/effect_do_notation.go:46 AnalyzeEffectDoNotation
+// AnalyzeEffectDoNotation finds all references to Effect.Do-style helpers.
+//
+// Rust: Go's checker argument is unused and dropped.
+pub fn analyze_effect_do_notation(
+    tp: &mut TypeParser<'_>,
+    sf: P<SourceFile>,
+) -> Vec<EffectDoNotationMatch> {
+    let mut matches = Vec::new();
+
+    // Rust: Go's recursive `walk` closure is a nested function.
+    fn walk(
+        tp: &mut TypeParser<'_>,
+        sf: P<SourceFile>,
+        n: P<Node>,
+        matches: &mut Vec<EffectDoNotationMatch>,
+    ) -> bool {
+        if tp.is_node_reference_to_effect_module_api(n, "Do") {
+            matches.push(EffectDoNotationMatch {
+                source_file: sf,
+                location: ets_shim::scanner::get_error_range_for_node(sf, n),
+                node: n,
+            });
+        } else {
+            n.for_each_child(&mut |child| walk(tp, sf, child, matches));
+        }
+
+        false
+    }
+
+    walk(tp, sf, sf.as_node(), &mut matches);
+    matches
+}

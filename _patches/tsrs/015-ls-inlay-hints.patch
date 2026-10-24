@@ -1,0 +1,76 @@
+Port of _patches/typescript/015-ls-inlay-hints.patch (tsc/internal/ls/inlay_hints.go) to tsrs.
+
+- AfterInlayHintsCallback, RegisterAfterInlayHintsCallback: `tsrs_ls::{AfterInlayHintsCallback,
+  register_after_inlay_hints_callback}` (a `fn` in a process-wide `RwLock`; registering replaces the previous one).
+  The program is the `&'static tsrs_compiler::Program` Go's `checker.Program` argument holds.
+- ProvideInlayHint passes each projection's hints through it before appending them to the result.
+
+diff --git a/crates/tsrs_ls/src/inlay_hints.rs b/crates/tsrs_ls/src/inlay_hints.rs
+index 0ba59647..6013510a 100644
+--- a/crates/tsrs_ls/src/inlay_hints.rs
++++ b/crates/tsrs_ls/src/inlay_hints.rs
+@@ -21,6 +21,29 @@ use crate::lsutil::{self, IncludeInlayParameterNameHints, InlayHintsPreferences,
+ use crate::spanmap::Feature;
+ use crate::utilities::get_leading_comment_ranges_of_node;
+ 
++// AfterInlayHintsCallback is invoked after inlay hints are computed
++// to allow external packages to filter or modify inlay hints.
++pub type AfterInlayHintsCallback = fn(
++    program: &'static tsrs_compiler::Program,
++    c: &mut Checker,
++    sf: P<SourceFile>,
++    span: TextRange,
++    preferences: &InlayHintsPreferences,
++    hints: Vec<lsproto::InlayHint>,
++    converters: &Converters,
++) -> Vec<lsproto::InlayHint>;
++
++static AFTER_INLAY_HINTS_CALLBACK: std::sync::RwLock<Option<AfterInlayHintsCallback>> =
++    std::sync::RwLock::new(None);
++
++// RegisterAfterInlayHintsCallback registers a callback to be called after
++// inlay hints are computed. The callback can filter or modify the hints
++// before they are returned.
++// Note: Only one callback can be registered. Subsequent calls will replace the previous callback.
++pub fn register_after_inlay_hints_callback(cb: AfterInlayHintsCallback) {
++    *AFTER_INLAY_HINTS_CALLBACK.write().unwrap() = Some(cb);
++}
++
+ impl LanguageService {
+     // inlay_hints.go:25
+     #[expect(
+@@ -61,7 +84,21 @@ impl LanguageService {
+                 result: Vec::new(),
+             };
+             inlay_hint_state.visit(projection.as_node());
+-            inlay_hint_state.result
++            let mut hints = inlay_hint_state.result;
++            // EFFECT HOOK: Allow Effect to filter inlay hints.
++            let after_inlay_hints_callback = *AFTER_INLAY_HINTS_CALLBACK.read().unwrap();
++            if let Some(after_inlay_hints_callback) = after_inlay_hints_callback {
++                hints = after_inlay_hints_callback(
++                    program,
++                    &mut checker,
++                    projection,
++                    mapped.span,
++                    inlay_hint_preferences,
++                    hints,
++                    &self.converters,
++                );
++            }
++            hints
+         }));
+         Ok(lsproto::InlayHintsOrNull { inlay_hints: Some(result) })
+     }
+diff --git a/crates/tsrs_ls/src/lib.rs b/crates/tsrs_ls/src/lib.rs
+index 420ca4fd..f3375a6b 100644
+--- a/crates/tsrs_ls/src/lib.rs
++++ b/crates/tsrs_ls/src/lib.rs
+@@ -85,6 +85,7 @@ pub use findallreferences::{
+ };
+ pub use host::*;
+ pub use hover::{AfterQuickInfoCallback, register_after_quick_info_callback};
++pub use inlay_hints::{AfterInlayHintsCallback, register_after_inlay_hints_callback};
+ pub use jsdoc::{JSDocTagInfo, get_symbol_documentation_comment, get_symbol_jsdoc_tags};
+ pub use languageservice::*;
+ pub use rename::{

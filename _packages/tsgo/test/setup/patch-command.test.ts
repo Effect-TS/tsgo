@@ -23,6 +23,14 @@ describe("setup patch command", () => {
     })
   })
 
+  it("keeps the experimental --tsrs integration flag when updating integrations", () => {
+    expect(updatePatchCommand("effect-tsgo patch --tsrs --typescript --no-oxlint", ["typescript", "oxlint"])).toEqual({
+      script: "effect-tsgo patch --typescript --oxlint --tsrs",
+      found: true
+    })
+    expect(getPatchIntegrations("effect-tsgo patch --tsrs")).toEqual(["typescript"])
+  })
+
   it("removes only the patch invocation from a command list", () => {
     expect(updatePatchCommand("husky && effect-tsgo patch --typescript --oxlint", [])).toEqual({
       script: "husky",

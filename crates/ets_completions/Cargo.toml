@@ -1,0 +1,34 @@
+[package]
+name = "ets_completions"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Port of effect-tsgo internal/completions"
+
+[lints]
+workspace = true
+
+[dependencies]
+ets_codegens.workspace = true
+ets_completion.workspace = true
+ets_etscore.workspace = true
+ets_go.workspace = true
+ets_keybuilder.workspace = true
+ets_pluginoptions.workspace = true
+ets_rules.workspace = true
+ets_shim.workspace = true
+ets_typeparser.workspace = true
+regex.workspace = true
+
+[dev-dependencies]
+ets_etscheckerhooks.workspace = true
+ets_etslshooks.workspace = true
+ets_etstesthooks.workspace = true
+ets_fourslash.workspace = true
+
+# The Go tests are an external test package (`package completions_test`), one module per Go file.
+[[test]]
+name = "completions_test"
+path = "tests/completions_test/main.rs"

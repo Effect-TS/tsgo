@@ -29,6 +29,7 @@
     ".repos/tsgolint",
     "typescript-go",
     "typescript",
+    "tsrs",
     "typescript-go/_submodules/TypeScript"
   ]
 }

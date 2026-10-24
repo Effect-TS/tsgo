@@ -1,0 +1,18 @@
+[package]
+name = "ets_fourslash"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Rust-only: the part of typescript-go's fourslash harness (shim/fourslash) the Effect LS baseline runners use, over tsrs's in-process LSP client"
+
+[lints]
+workspace = true
+
+[dependencies]
+ets_go.workspace = true
+ets_shim.workspace = true
+parking_lot.workspace = true
+regex.workspace = true
+rustc-hash.workspace = true

@@ -1,0 +1,29 @@
+Port of _patches/typescript/021-core-version-suffix.patch (tsc/internal/core/version.go) to tsrs.
+
+- SetVersionSuffix: tsrs_core::set_version_suffix; version() returns the version with the suffix. tsrs-only: the
+  full string is stored (behind a RwLock) so that version() keeps returning `&'static str`; each call to
+  set_version_suffix leaks one string (it is called once at startup).
+
+diff --git a/crates/tsrs_core/src/version.rs b/crates/tsrs_core/src/version.rs
+index db49e17..a9e2537 100644
+--- a/crates/tsrs_core/src/version.rs
++++ b/crates/tsrs_core/src/version.rs
+@@ -8,8 +8,17 @@ const VERSION: &str = match option_env!("TSRS_TS_VERSION") {
+     None => "7.1.0-dev",
+ };
+ 
++// effect-tsgo patch 021: Go's `version + versionSuffix`, stored whole (the suffix is set once at startup).
++static FULL_VERSION: std::sync::RwLock<&'static str> = std::sync::RwLock::new(VERSION);
++
+ pub fn version() -> &'static str {
+-    VERSION
++    *FULL_VERSION.read().unwrap_or_else(std::sync::PoisonError::into_inner)
++}
++
++// effect-tsgo patch 021 (version.go `SetVersionSuffix`).
++pub fn set_version_suffix(s: &str) {
++    let full: &'static str = Box::leak(format!("{VERSION}{s}").into_boxed_str());
++    *FULL_VERSION.write().unwrap_or_else(std::sync::PoisonError::into_inner) = full;
+ }
+ 
+ static VERSION_MAJOR_MINOR: LazyLock<&'static str> = LazyLock::new(|| {

@@ -1,0 +1,6 @@
+# Same toolchain as the pinned tsrs (its rust-toolchain.toml, _packages/tsgo/upstream.json `tags.tsrs`); bump them
+# together.
+[toolchain]
+channel = "1.99.1"
+components = ["clippy", "rustfmt"]
+profile = "minimal"

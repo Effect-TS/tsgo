@@ -1,0 +1,26 @@
+{
+  "crates": [
+    "tsrs_ast",
+    "tsrs_astnav",
+    "tsrs_binder",
+    "tsrs_checker",
+    "tsrs_compiler",
+    "tsrs_contentmapper",
+    "tsrs_core",
+    "tsrs_diagnostics",
+    "tsrs_execute",
+    "tsrs_ls",
+    "tsrs_lsp",
+    "tsrs_lsproto",
+    "tsrs_module",
+    "tsrs_modulespecifiers",
+    "tsrs_parser",
+    "tsrs_project",
+    "tsrs_scanner",
+    "tsrs_tsoptions",
+    "tsrs_vfs"
+  ],
+  "items": [
+    "tsrs_core::P"
+  ]
+}

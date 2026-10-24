@@ -8,6 +8,7 @@ import { access, appendFile } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { ensureEffectFixtures } from "./fixtures.ts"
 import { runCommand, runCommandString } from "./process.ts"
+import { buildRustBinary, missingRustBinaryTools, tsrsCheckedOut, tsrsSetupCommand } from "./rust.ts"
 import {
   readUpstream,
   resolveMaterializedTypeScriptSource,
@@ -69,6 +70,22 @@ export const oxlintBuildTargets = {
 
 export type OxlintBuildTarget = keyof typeof oxlintBuildTargets
 
+// The patched tsrs binary (crates/ets_tsrs, binary `tsrs`), released per tsrs version (upstream.json components.tsrs)
+// for the targets tsrs publishes a glibc or macOS binary for (tsrs/.github/workflows/release.yml), each built natively
+// on the runner tsrs uses (ubuntu-22.04 keeps the glibc requirement at 2.35). `effect-tsgo patch --tsrs` swaps it in
+// for the binary of the user's installed `@tsrs/<target>` package; tsrs's musl targets are reported as unsupported.
+export const tsrsBuildTargets = {
+  "darwin-arm64": { rustTarget: "aarch64-apple-darwin", runner: "macos-14" },
+  "linux-x64": { rustTarget: "x86_64-unknown-linux-gnu", runner: "ubuntu-22.04" },
+  "linux-arm64": { rustTarget: "aarch64-unknown-linux-gnu", runner: "ubuntu-22.04-arm" }
+} as const satisfies Partial<Record<BuildTarget, { readonly rustTarget: string; readonly runner: string }>>
+
+export type TsrsBuildTarget = keyof typeof tsrsBuildTargets
+
+export const isTsrsBuildTarget = (target: string): target is TsrsBuildTarget => target in tsrsBuildTargets
+
+export const tsrsBinaryName = "tsrs"
+
 export const oxlintBindingName = (target: OxlintBuildTarget) =>
   `oxlint.${oxlintBuildTargets[target].codeTarget}${target.startsWith("win32-") ? "-msvc" : ""}.node`
 
@@ -83,7 +100,7 @@ export class BuildError extends Data.TaggedError("BuildError")<{
 export const componentArtifact = (
   repositoryRoot: string,
   target: BuildTarget,
-  component: "typescript" | "oxlint-tsgolint" | "oxlint",
+  component: "typescript" | "oxlint-tsgolint" | "oxlint" | "tsrs",
   version: string,
   binaryName: string
 ) => {
@@ -188,6 +205,74 @@ export const buildLocal = Effect.fnUntraced(function*(repositoryRoot: string) {
   ], false, { CGO_ENABLED: "0" })
   yield* validateArtifact(binary)
   yield* buildCli(repositoryRoot)
+  yield* buildLocalRustBinary(repositoryRoot)
+})
+
+// The Rust engine for local use (dev profile, which is optimized: Cargo.toml). Optional: skipped with a message
+// without tsrs/ (the default setup), cargo or CMake.
+const buildLocalRustBinary = Effect.fnUntraced(function*(repositoryRoot: string) {
+  if (!(yield* tsrsCheckedOut(repositoryRoot))) {
+    yield* Console.log(`Skipping the local tsrs binary: tsrs/ is not checked out (${tsrsSetupCommand})`)
+    return
+  }
+  const missing = yield* missingRustBinaryTools(repositoryRoot)
+  if (missing !== undefined) {
+    yield* Console.log(`Skipping the local tsrs binary: ${missing}`)
+    return
+  }
+  const binary = yield* buildRustBinary(repositoryRoot, { release: false })
+  yield* validateExecutableArtifact(binary)
+  yield* Console.log(`Built the local tsrs binary: ${binary}`)
+})
+
+// The release build of the patched tsrs binary of one tsrs version for one platform, natively on that platform (tsrs's
+// CLI links mimalloc, a C library built with CMake, which rules out a plain cross build). Requires the tsrs checkout of
+// that version (`repoctl submodules setup --component tsrs --version <version>`).
+export const buildTsrs = Effect.fnUntraced(function*(
+  repositoryRoot: string,
+  version: string,
+  targetName: TsrsBuildTarget
+) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const upstream = yield* readUpstream(repositoryRoot)
+  const component = upstream.components.tsrs?.[version]
+  if (component === undefined) {
+    return yield* new BuildError({ reason: `Unknown tsrs component version ${version}` })
+  }
+  const host = `${process.platform}-${process.arch}`
+  if (host !== targetName) {
+    return yield* new BuildError({ reason: `The tsrs binary for ${targetName} is built natively, found host ${host}` })
+  }
+  const checkoutRevision = (yield* runCommandString("git", repositoryRoot, ["-C", "tsrs", "rev-parse", "HEAD"])).trim()
+  if (checkoutRevision !== component.gitHead) {
+    return yield* new BuildError({
+      reason: `tsrs ${version} expects checkout ${component.gitHead}, found ${checkoutRevision}`
+    })
+  }
+  const missing = yield* missingRustBinaryTools(repositoryRoot)
+  if (missing !== undefined) {
+    return yield* new BuildError({ reason: `Unable to build the tsrs binary: ${missing}` })
+  }
+  const binary = yield* buildRustBinary(repositoryRoot, {
+    release: true,
+    rustTarget: tsrsBuildTargets[targetName].rustTarget
+  })
+  const artifact = componentArtifact(repositoryRoot, targetName, "tsrs", version, tsrsBinaryName)
+  yield* Console.log(`Copying tsrs ${version} for ${targetName} -> ${artifact.path}`)
+  yield* fs.makeDirectory(path.dirname(artifact.path), { recursive: true })
+  yield* fs.copyFile(binary, artifact.path)
+  yield* fs.chmod(artifact.path, 0o755)
+  yield* validateExecutableArtifact(artifact.path)
+  yield* runCommand(artifact.path, repositoryRoot, ["--version"])
+
+  if (process.env.GITHUB_OUTPUT !== undefined) {
+    yield* Effect.tryPromise(() => appendFile(
+      process.env.GITHUB_OUTPUT!,
+      `component=tsrs\nnpm_version=${version}\nartifact_path=${artifact.path}\n`
+    ))
+  }
+  return artifact.path
 })
 
 const buildTsgolint = Effect.fnUntraced(function*(
@@ -370,6 +455,12 @@ export const buildArtifact = Effect.fnUntraced(function*(
   if (component === "typescript") {
     return yield* buildTsc(repositoryRoot, version, target)
   }
+  if (component === "tsrs") {
+    if (!isTsrsBuildTarget(target)) {
+      return yield* new BuildError({ reason: `tsrs does not support target ${target}` })
+    }
+    return yield* buildTsrs(repositoryRoot, version, target)
+  }
   if (!(target in oxlintBuildTargets)) {
     return yield* new BuildError({ reason: `${component} does not support target ${target}` })
   }
@@ -419,6 +510,16 @@ export const verifyReleaseArtifacts = Effect.fnUntraced(function*(repositoryRoot
       yield* validateArtifact(
         componentArtifact(repositoryRoot, target, "oxlint", version, oxlintBindingName(target)).path
       )
+    }
+  }
+  for (const target of Object.keys(buildTargets) as Array<BuildTarget>) {
+    const artifactDirectory = path.join(repositoryRoot, "_packages", `tsgo-${target}`, "artifacts", "tsrs")
+    if (isTsrsBuildTarget(target)) {
+      for (const version of Object.keys(upstream.components.tsrs ?? {})) {
+        yield* validateExecutableArtifact(componentArtifact(repositoryRoot, target, "tsrs", version, tsrsBinaryName).path)
+      }
+    } else if (yield* fs.exists(artifactDirectory)) {
+      return yield* new BuildError({ reason: `tsrs is not built for ${target}, found ${artifactDirectory}` })
     }
   }
   for (const target of Object.keys(buildTargets) as Array<BuildTarget>) {

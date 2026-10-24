@@ -52,9 +52,27 @@ jobs:
             --commit-message 'chore: update upstream metadata' \
             --check generation_check_id='Generate TypeScript next tag'
 
+      # The tsrs setup checks out and patches the TypeScript tsrs ports and tsrs and regenerates the Go shims and crates/ets_shim.
+      # A patch that no longer applies (e.g. _patches/tsrs after a tsrs bump) sets the patch_failure output, reported
+      # on the pull request below.
+      - name: Setup TypeScript next tag and tsrs
+        id: setup
+        if: steps.upstream.outputs.has_changes == 'true'
+        run: pnpm exec repoctl submodules setup --component tsrs
+
+      # Back to the default (Go-only) setup, which drops the tsrs checkout, so the generated tree commits no tsrs
+      # submodule; the regenerated crates/ets_shim stays. The pull request's Validate tsrs run builds and tests Rust.
       - name: Setup TypeScript next tag
         if: steps.upstream.outputs.has_changes == 'true'
         run: pnpm exec repoctl submodules setup
+
+      - name: Report broken patch on the pull request
+        if: failure() && steps.setup.outputs.patch_failure != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_BODY: ${{ steps.upstream.outputs.description }}
+          PATCH_FAILURE: ${{ steps.setup.outputs.patch_failure }}
+        run: gh pr edit update-upstreams --body "$PR_BODY"$'\n\n'"$PATCH_FAILURE"
 
       - name: Regenerate tsconfig schema
         if: steps.upstream.outputs.schema_changed == 'true'
@@ -102,13 +120,19 @@ jobs:
         if: always()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PATCH_FAILURE: ${{ steps.setup.outputs.patch_failure }}
+          PATCH_FAILURE_FILE: ${{ steps.setup.outputs.patch_failure_file }}
         run: |
+          failure_message='TypeScript next-tag generation failed'
+          if [ -n "$PATCH_FAILURE_FILE" ]; then
+            failure_message="$PATCH_FAILURE_FILE no longer applies"
+          fi
           pnpm exec repoctl github complete-check \
             --check-id '${{ steps.generated.outputs.generation_check_id }}' \
             --result '${{ job.status }}' \
             --success-message 'TypeScript next tag generated' \
-            --failure-message 'TypeScript next-tag generation failed' \
-            --summary 'See the workflow run for upstream setup and Nix output.'
+            --failure-message "$failure_message" \
+            --summary "${PATCH_FAILURE:-See the workflow run for upstream setup and Nix output.}"
 
       - name: Build TypeScript next tag
         if: steps.upstream.outputs.has_changes == 'true'

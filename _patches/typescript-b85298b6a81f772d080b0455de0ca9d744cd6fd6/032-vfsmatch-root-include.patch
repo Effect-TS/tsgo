@@ -1,0 +1,36 @@
+diff --git a/tsc/internal/vfs/vfsmatch/root_include_test.go b/tsc/internal/vfs/vfsmatch/root_include_test.go
+new file mode 100644
+index 000000000..754b6ce65
+--- /dev/null
++++ b/tsc/internal/vfs/vfsmatch/root_include_test.go
+@@ -0,0 +1,17 @@
++package vfsmatch
++
++import (
++	"slices"
++	"testing"
++)
++
++func TestIncludeFileInRootDirectory(t *testing.T) {
++	for _, root := range []string{"/", "C:/"} {
++		t.Run(root, func(t *testing.T) {
++			got := getBasePaths(root, []string{"index.ts"}, true)
++			if !slices.Equal(got, []string{root}) {
++				t.Fatalf("got %v, want [%s]", got, root)
++			}
++		})
++	}
++}
+diff --git a/tsc/internal/vfs/vfsmatch/vfsmatch.go b/tsc/internal/vfs/vfsmatch/vfsmatch.go
+index 4f4acf745..e7b945524 100644
+--- a/tsc/internal/vfs/vfsmatch/vfsmatch.go
++++ b/tsc/internal/vfs/vfsmatch/vfsmatch.go
+@@ -47,7 +47,7 @@ func getIncludeBasePath(absolute string) string {
+ 		if !tspath.HasExtension(absolute) {
+ 			return absolute
+ 		} else {
+-			return tspath.RemoveTrailingDirectorySeparator(tspath.GetDirectoryPath(absolute))
++			return tspath.GetDirectoryPath(absolute)
+ 		}
+ 	}
+ 	return absolute[:max(strings.LastIndex(absolute[:wildcardOffset], string(tspath.DirectorySeparator)), 0)]

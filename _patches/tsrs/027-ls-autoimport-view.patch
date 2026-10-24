@@ -1,0 +1,58 @@
+Port of _patches/typescript/027-ls-autoimport-view.patch (tsc/internal/ls/autoimport/view.go) to tsrs.
+
+- View.fixTransformer: View::fix_transformer (Option<FixTransformer>, patch 018).
+- NewView: calls the registered auto-import fix transformer factory (patch 018) with the view's preferences,
+  program and importing file.
+
+diff --git a/crates/tsrs_ls/src/autoimport/view.rs b/crates/tsrs_ls/src/autoimport/view.rs
+index 59545b8..2c197b2 100644
+--- a/crates/tsrs_ls/src/autoimport/view.rs
++++ b/crates/tsrs_ls/src/autoimport/view.rs
+@@ -15,7 +15,7 @@ use tsrs_modulespecifiers::{self as modulespecifiers, ModuleSpecifierEnding};
+ use tsrs_scanner as scanner;
+ 
+ use super::export::{Export, ExportID, ModuleID};
+-use super::fix::{Fix, existingImport};
++use super::fix::{Fix, FixTransformer, auto_import_fix_transformer_factory, existingImport};
+ use super::registry::{ProjectID, Registry, RegistryBucket};
+ use super::util::add_package_json_dependencies;
+ use crate::lsutil;
+@@ -31,6 +31,8 @@ pub struct View {
+     // keeps the checker's address (see `checker()`).
+     checker: NonNull<Checker>,
+     pub(crate) preferences: modulespecifiers::UserPreferences,
++    // effect-tsgo patch 027.
++    pub(crate) fix_transformer: Option<FixTransformer>,
+     pub(crate) project_id: ProjectID,
+ 
+     allowed_endings: OnceCell<Vec<ModuleSpecifierEnding>>,
+@@ -53,7 +55,7 @@ pub fn new_view(
+     if let Some(canonical) = importing_file.canonical_source_file() {
+         importing_file_path = canonical.path().clone();
+     }
+-    View {
++    let mut view = View {
+         registry,
+         importing_file,
+         importing_file_path,
+@@ -61,6 +63,7 @@ pub fn new_view(
+         checker: NonNull::from(type_checker),
+         project_id,
+         preferences,
++        fix_transformer: None,
+         conditions: new_set_from_items(tsrs_module::get_conditions(
+             &program.options(),
+             program.get_default_resolution_mode_for_file(importing_file),
+@@ -72,7 +75,12 @@ pub fn new_view(
+         allowed_endings: OnceCell::new(),
+         existing_imports: OnceCell::new(),
+         should_use_require_for_fixes: OnceCell::new(),
++    };
++    // effect-tsgo patch 027.
++    if let Some(factory) = auto_import_fix_transformer_factory() {
++        view.fix_transformer = factory(&view.preferences, program, importing_file);
+     }
++    view
+ }
+ 
+ impl View {

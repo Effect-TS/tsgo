@@ -1,0 +1,18 @@
+[package]
+name = "ets_completion"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Port of effect-tsgo internal/completion"
+
+[lints]
+workspace = true
+
+[dependencies]
+ets_shim.workspace = true
+ets_typeparser.workspace = true
+
+[dev-dependencies]
+ets_go.workspace = true

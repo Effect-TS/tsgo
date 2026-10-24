@@ -1,0 +1,18 @@
+[package]
+name = "ets_rule"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Port of internal/rule"
+
+[lints]
+workspace = true
+
+[dependencies]
+ets_directives.workspace = true
+ets_etscore.workspace = true
+ets_shim.workspace = true
+ets_typeparser.workspace = true
+rustc-hash.workspace = true

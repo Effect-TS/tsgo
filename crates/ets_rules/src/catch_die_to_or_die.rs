@@ -1,0 +1,139 @@
+use std::sync::LazyLock;
+
+use ets_etscore::Severity;
+use ets_rule::{Context, Rule};
+use ets_shim::P;
+use ets_shim::ast::{Diagnostic, Kind, Node, SourceFile};
+use ets_shim::checker::TypeFlags;
+use ets_shim::core::TextRange;
+use ets_shim::diagnostics::{self as tsdiag, Message};
+use ets_typeparser::{EffectMajorVersion, PipingFlow, PipingFlowTransformation, TypeParser};
+
+/// Rust-only: the rule's message (Go spells it out at each use).
+static MESSAGE: &Message = &tsdiag::Effect_orDie_expresses_escalating_every_typed_failure_into_a_defect_more_directly_than_Effect_0_with_an_identity_forwarding_Effect_die_handler_effect_catchDieToOrDie;
+
+// go: internal/rules/catch_die_to_or_die.go:16 CatchDieToOrDie
+// CatchDieToOrDie suggests using Effect.orDie instead of a catch-all
+// handler that forwards the typed failure unchanged to Effect.die.
+pub static CATCH_DIE_TO_OR_DIE: LazyLock<Rule> = LazyLock::new(|| Rule {
+    name: "catchDieToOrDie",
+    group: "style",
+    description: "Suggests using Effect.orDie instead of Effect.catch or Effect.catchAll with an identity-forwarding Effect.die handler",
+    default_severity: Severity::Suggestion,
+    supported_effect: vec!["v3", "v4"],
+    codes: vec![MESSAGE.code()],
+    run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
+        let source_file = ctx.source_file;
+        let matches = analyze_catch_die_to_or_die(ctx.type_parser, Some(source_file));
+        let mut diagnostics = Vec::with_capacity(matches.len());
+        for m in &matches {
+            diagnostics.push(ctx.new_diagnostic(
+                m.source_file,
+                m.location,
+                MESSAGE,
+                &[],
+                &[m.catch_method_name],
+            ));
+        }
+        diagnostics
+    },
+});
+
+// go: internal/rules/catch_die_to_or_die.go:42 CatchDieToOrDieMatch
+// CatchDieToOrDieMatch holds the nodes needed by the diagnostic and fix.
+#[derive(Clone)]
+pub struct CatchDieToOrDieMatch {
+    pub source_file: P<SourceFile>,
+    pub location: TextRange,
+    pub transformation: PipingFlowTransformation,
+    pub effect_module: Option<P<Node>>,
+    pub catch_method_name: &'static str,
+    pub has_type_arguments: bool,
+}
+
+// go: internal/rules/catch_die_to_or_die.go:53 AnalyzeCatchDieToOrDie
+// AnalyzeCatchDieToOrDie finds Effect.catch/catchAll transformations whose
+// handler is Effect.die or forwards its sole argument unchanged to Effect.die.
+//
+// Rust: Go's (ignored) checker argument is dropped.
+pub fn analyze_catch_die_to_or_die(
+    tp: &mut TypeParser<'_>,
+    sf: Option<P<SourceFile>>,
+) -> Vec<CatchDieToOrDieMatch> {
+    let Some(sf) = sf else {
+        return Vec::new();
+    };
+
+    let mut matches = Vec::new();
+    let flows = tp.piping_flows(sf, true);
+    for flow in flows.as_deref().unwrap_or_default() {
+        for (i, _) in flow.transformations().all() {
+            let transformation = flow.transformations().at(i).clone();
+            let callee = transformation.callee();
+            let args = transformation.args();
+            let method = catch_die_method(tp, Some(callee));
+            let Some((method_name, effect_module)) = method else {
+                continue;
+            };
+            if args.len() != 1 {
+                continue;
+            }
+            let (handler, _, _) = tp.unwrap_identity_forwarder(*args.at(0));
+            let Some(handler) = handler else {
+                continue;
+            };
+            if !tp.is_node_reference_to_effect_module_api(handler, "die") {
+                continue;
+            }
+            let input_type = PipingFlow::transformation_input_type(Some(flow), tp, i);
+            let input_effect = tp.strict_effect_type(input_type);
+            if let Some(input_effect) = input_effect
+                && !input_effect.e().flags().intersects(TypeFlags::Never)
+            {
+                matches.push(CatchDieToOrDieMatch {
+                    source_file: sf,
+                    location: ets_shim::scanner::get_error_range_for_node(sf, callee),
+                    effect_module,
+                    catch_method_name: method_name,
+                    has_type_arguments: catch_die_has_type_arguments(Some(&transformation)),
+                    transformation,
+                });
+            }
+        }
+    }
+
+    matches
+}
+
+// go: internal/rules/catch_die_to_or_die.go:89 catchDieMethod
+//
+// Rust: Go's `(name, effectModule, ok)` result is `Some((name, effectModule))` when ok.
+pub(crate) fn catch_die_method(
+    tp: &mut TypeParser<'_>,
+    callee: Option<P<Node>>,
+) -> Option<(&'static str, Option<P<Node>>)> {
+    let callee = callee?;
+
+    let mut name = "catchAll";
+    if tp.supported_effect_version() == EffectMajorVersion::V4 {
+        name = "catch";
+    }
+    if !tp.is_node_reference_to_effect_module_api(callee, name) {
+        return None;
+    }
+
+    let mut effect_module = None;
+    if callee.kind() == Kind::PropertyAccessExpression {
+        effect_module = Some(callee.as_property_access_expression().expression());
+    }
+    Some((name, effect_module))
+}
+
+// go: internal/rules/catch_die_to_or_die.go:111 catchDieHasTypeArguments
+pub(crate) fn catch_die_has_type_arguments(
+    transformation: Option<&PipingFlowTransformation>,
+) -> bool {
+    transformation
+        .and_then(PipingFlowTransformation::type_arguments)
+        .is_some_and(|type_arguments| !type_arguments.nodes().is_empty())
+}

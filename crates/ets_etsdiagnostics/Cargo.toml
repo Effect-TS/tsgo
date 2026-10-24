@@ -1,0 +1,26 @@
+[package]
+name = "ets_etsdiagnostics"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Port of etsdiagnostics"
+
+[lints]
+workspace = true
+
+[dependencies]
+ets_etscore.workspace = true
+ets_go.workspace = true
+ets_rule.workspace = true
+ets_rules.workspace = true
+ets_shim.workspace = true
+ets_typeparser.workspace = true
+rustc-hash.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+ets_bundledeffect.workspace = true
+ets_etscheckerhooks.workspace = true
+regex.workspace = true

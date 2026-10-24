@@ -1,0 +1,61 @@
+Port of _patches/typescript/033-checker-expression-checked-callback.patch (tsc/internal/checker/checker.go) to tsrs.
+
+- ExpressionCheckedCallback / RegisterExpressionCheckedCallback: tsrs_checker::ExpressionCheckedCallback (a plain
+  fn pointer) and register_expression_checked_callback, next to check_expression_ex (checker_04.rs), re-exported
+  from the crate root. check_expression_ex calls it with the node, the check mode and the result, after restoring
+  the current node, as Go does.
+
+tsrs-only: the callback lives in a OnceLock (a lock-free read on the hot path), so the first registration wins;
+Go's later registrations replace the callback, and every Go registrant (etscheckerhooks' init, the typeparser test
+init) registers the same function, typeparser.RecordCheckedExpressionType.
+
+diff --git a/crates/tsrs_checker/src/checker_04.rs b/crates/tsrs_checker/src/checker_04.rs
+--- a/crates/tsrs_checker/src/checker_04.rs
++++ b/crates/tsrs_checker/src/checker_04.rs
+@@ -9,6 +9,23 @@
+ //   type UnusedKind (checker.go:7249)
+ //   const (checker.go:7251): UnusedKindLocal, UnusedKindParameter
+ 
++// effect-tsgo patch 033 (checker.go `ExpressionCheckedCallback`).
++// ExpressionCheckedCallback is invoked with the result of every checkExpressionEx
++// evaluation, including intermediate inference passes; checkMode tells them apart.
++pub type ExpressionCheckedCallback = fn(&mut Checker, P<Node>, CheckMode, P<Type>);
++
++static EXPRESSION_CHECKED_CALLBACK: std::sync::OnceLock<ExpressionCheckedCallback> =
++    std::sync::OnceLock::new();
++
++// effect-tsgo patch 033 (checker.go `RegisterExpressionCheckedCallback`).
++// RegisterExpressionCheckedCallback registers the callback invoked after each
++// expression is checked. Only one callback can be registered.
++// tsrs-only: the first registration wins (a lock-free read on the hot path); Go's later registrations replace it,
++// and every Go registrant registers the same function.
++pub fn register_expression_checked_callback(cb: ExpressionCheckedCallback) {
++    let _ = EXPRESSION_CHECKED_CALLBACK.set(cb);
++}
++
+ impl Checker {
+     // checker.go:6527
+     pub(crate) fn get_iteration_types_of_iterable_fast(
+@@ -2059,6 +2076,9 @@
+         }
+         self.current_node = save_current_node;
+         self.end_instantiation_count();
++        if let Some(cb) = EXPRESSION_CHECKED_CALLBACK.get() {
++            cb(self, node, check_mode, t);
++        }
+         t
+     }
+ 
+diff --git a/crates/tsrs_checker/src/lib.rs b/crates/tsrs_checker/src/lib.rs
+--- a/crates/tsrs_checker/src/lib.rs
++++ b/crates/tsrs_checker/src/lib.rs
+@@ -109,6 +109,9 @@
+ pub use types::*;
+ pub use utilities_types::*;
+ 
++// effect-tsgo patch 033: the expression-checked callback (checker.go, ported next to checkExpressionEx).
++pub use checker_04::{ExpressionCheckedCallback, register_expression_checked_callback};
++
+ // Hand-ported function bodies.
+ mod checker_01;
+ pub(crate) use checker_01::*;

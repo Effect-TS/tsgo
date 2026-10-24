@@ -1,0 +1,57 @@
+# What the Rust port (crates/) covers, read by `repoctl tsrs port-*` (_tools/repoctl/src/port.ts).
+#
+# Paths are Go package directories relative to the repository root. A package is one directory (not recursive);
+# entries ending in `/...` cover that directory and everything below it. `repoctl tsrs port-check` fails when a Go
+# package of this repository is neither included nor excluded, so a new package has to be classified here.
+# Directories starting with `.` or `_` (_tools, _packages, _patches, .repos), `testdata` and `node_modules` are never
+# scanned. Generated Go files (`// Code generated ... DO NOT EDIT.`) are never in the manifest.
+#
+# Only top-level `key = value` pairs with strings, booleans and string arrays are supported (no tables).
+
+include = [
+  "etscheckerhooks",
+  "etscore",
+  "etsdiagnostics",
+  "etsexecutehooks",
+  "etsgoapi",
+  "etslshooks",
+  "etstesthooks",
+  "internal/...",
+]
+
+exclude = [
+  # Runner for the oxlint/tsgolint integration only; the Rust port targets the TypeScript-Go (tsrs) compiler and
+  # language server.
+  "etsoxlintrunner",
+  # Generated wrappers re-exporting the compiler's internal packages to Effect code; tsrs is used directly instead.
+  "shim/...",
+  # Compiler checkouts (TypeScript's tsc/ subtree, legacy typescript-go): what tsrs itself ports.
+  "typescript/...",
+  "typescript-go/...",
+  # The tsrs checkout (its Go oracle and fourslash tooling).
+  "tsrs/...",
+]
+
+# Files excluded inside included packages.
+exclude_files = [
+  # Checks the generated oxlint-schema.json and oxlint presets: oxlint-only output.
+  "etscore/oxlint_schema_test.go",
+]
+
+# Packages that exist only to support tests: their non-test files count as test helpers (reported with the tests,
+# marked with `// go test:`).
+test_packages = [
+  # Effect fixture packages (testdata/tests/*/node_modules) mounted into test file systems.
+  "internal/bundledeffect",
+  # Baseline runners for diagnostics, quick fixes, refactors, completions and LS features.
+  "internal/effecttest",
+  # Fourslash hook that mounts the Effect fixtures.
+  "etstesthooks",
+]
+
+# Go tests are tracked and reported separately from code.
+tests = true
+
+# When true, `repoctl tsrs port-check` fails on any in-scope declaration that is neither ported nor skipped. Enabled since
+# the port is complete: every change to in-scope Go code updates the Rust port in the same pull request.
+require_new = true

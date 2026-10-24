@@ -1,0 +1,102 @@
+Port of _patches/typescript/012-ls-hover.patch (tsc/internal/ls/hover.go) to tsrs.
+
+- AfterQuickInfoCallback, RegisterAfterQuickInfoCallback: `tsrs_ls::{AfterQuickInfoCallback,
+  register_after_quick_info_callback}` (a `fn` in a process-wide `RwLock`; registering replaces the previous one,
+  as in Go). Go passes the program as a `checker.Program` interface holding the `*compiler.Program`; the Rust
+  callback takes that `&'static tsrs_compiler::Program` directly.
+- ProvideHover calls it after getQuickInfoAndDocumentationForSymbol, before the empty-quickInfo check, and uses
+  the range node it returns when there is one.
+
+diff --git a/crates/tsrs_ls/src/hover.rs b/crates/tsrs_ls/src/hover.rs
+index d1cca814..5c455b3a 100644
+--- a/crates/tsrs_ls/src/hover.rs
++++ b/crates/tsrs_ls/src/hover.rs
+@@ -37,6 +37,30 @@ const SYMBOL_FORMAT_FLAGS: SymbolFormatFlags = SymbolFormatFlags::WriteTypeParam
+ const TYPE_FORMAT_FLAGS: TypeFormatFlags = TypeFormatFlags::UseAliasDefinedOutsideCurrentScope
+     .union(TypeFormatFlags::UseInstantiationExpressions);
+ 
++// AfterQuickInfoCallback is invoked after getQuickInfoAndDocumentationForSymbol
++// to allow external packages to enrich hover responses.
++pub type AfterQuickInfoCallback = fn(
++    program: &'static tsrs_compiler::Program,
++    c: &mut Checker,
++    sf: P<SourceFile>,
++    node: P<Node>,
++    symbol: Option<P<Symbol>>,
++    quick_info: String,
++    documentation: String,
++    is_markdown: bool,
++) -> (String, String, Option<P<Node>>);
++
++static AFTER_QUICK_INFO_CALLBACK: std::sync::RwLock<Option<AfterQuickInfoCallback>> =
++    std::sync::RwLock::new(None);
++
++// RegisterAfterQuickInfoCallback registers a callback to be called after
++// quickInfo and documentation are built for a hover. The callback can
++// rewrite quickInfo and documentation before they are returned.
++// Note: Only one callback can be registered. Subsequent calls will replace the previous callback.
++pub fn register_after_quick_info_callback(cb: AfterQuickInfoCallback) {
++    *AFTER_QUICK_INFO_CALLBACK.write().unwrap() = Some(cb);
++}
++
+ fn new_verbosity_context(level: usize, max_truncation_length: usize) -> P<VerbosityContext> {
+     P::new(VerbosityContext {
+         level: Cell::new(level),
+@@ -86,7 +110,7 @@ impl LanguageService {
+                 continue;
+             }
+             let mut c = program.get_type_checker_for_file(ctx, file);
+-            let range_node = get_node_for_quick_info(node);
++            let mut range_node = get_node_for_quick_info(node);
+             let symbol = get_symbol_at_location_for_quick_info(&mut c, range_node);
+ 
+             // Always create VerbosityContext for hover so that canExpandSymbol can signal
+@@ -99,7 +123,7 @@ impl LanguageService {
+             let vc = new_verbosity_context(verbosity_level, max_trunc_len);
+ 
+             let vs_capability = caps.vs_supports_visual_studio_extensions;
+-            let (quick_info, documentation, vs_documentation, quick_info_runs) = self
++            let (mut quick_info, mut documentation, vs_documentation, quick_info_runs) = self
+                 .get_quick_info_and_documentation_for_symbol(
+                     &mut c,
+                     symbol,
+@@ -108,6 +132,27 @@ impl LanguageService {
+                     Some(vc),
+                     vs_capability,
+                 );
++
++            // EFFECT HOOK: Allow Effect to enrich hover responses.
++            let after_quick_info_callback = *AFTER_QUICK_INFO_CALLBACK.read().unwrap();
++            if let Some(after_quick_info_callback) = after_quick_info_callback {
++                let is_markdown = content_format == lsproto::MarkupKind::Markdown;
++                let hook_range_node;
++                (quick_info, documentation, hook_range_node) = after_quick_info_callback(
++                    program,
++                    &mut c,
++                    file,
++                    range_node,
++                    symbol,
++                    quick_info,
++                    documentation,
++                    is_markdown,
++                );
++                if let Some(hook_range_node) = hook_range_node {
++                    range_node = hook_range_node;
++                }
++            }
++
+             if quick_info.is_empty() {
+                 drop(c);
+                 continue;
+diff --git a/crates/tsrs_ls/src/lib.rs b/crates/tsrs_ls/src/lib.rs
+index 5d313ea0..420ca4fd 100644
+--- a/crates/tsrs_ls/src/lib.rs
++++ b/crates/tsrs_ls/src/lib.rs
+@@ -84,6 +84,7 @@ pub use findallreferences::{
+     SymbolAndEntriesData,
+ };
+ pub use host::*;
++pub use hover::{AfterQuickInfoCallback, register_after_quick_info_callback};
+ pub use jsdoc::{JSDocTagInfo, get_symbol_documentation_comment, get_symbol_jsdoc_tags};
+ pub use languageservice::*;
+ pub use rename::{
