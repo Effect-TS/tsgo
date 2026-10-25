@@ -1208,6 +1208,8 @@ type StringLiteralType = checker.StringLiteralType
 type StringMappingKey = checker.StringMappingKey
 type StringMappingType = checker.StringMappingType
 type StructuredType = checker.StructuredType
+//go:linkname StructuredType_getMembers github.com/microsoft/TypeScript/tsc/internal/checker.(*StructuredType).getMembers
+func StructuredType_getMembers(recv *checker.StructuredType) ast.SymbolTable
 //go:linkname StructuredType_getIndexInfos github.com/microsoft/TypeScript/tsc/internal/checker.(*StructuredType).getIndexInfos
 func StructuredType_getIndexInfos(recv *checker.StructuredType) []*checker.IndexInfo
 type extra_StructuredType struct {
