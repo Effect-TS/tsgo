@@ -20,3 +20,6 @@ export type Address = S.Schema.Type<typeof Address>
 
 type GoodTypeQuery = typeof Address.Type
 type GoodSchemaType = Schema.Type<typeof Address>
+
+export type AddressEncoded = Schema.Schema.Encoded<typeof Address>
+export type AddressContext = S.Schema.Context<typeof Address>

@@ -6,6 +6,7 @@ Effect version: 4.0.2
 /.src/test.ts(13,19): error TS377104: Do not use `Schema.Schema.Type<typeof X>` to extract a schema's type. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
 /.src/test.ts(15,22): suggestion TS377090: This `typeof ... .Type` query can be replaced with `Address`. effect(unnecessaryTypeofType)
 /.src/test.ts(16,30): error TS2694: Namespace '"/node_modules/effect/dist/Schema"' has no exported member 'Type'.
+/.src/test.ts(29,39): error TS2694: Namespace '"/node_modules/effect/dist/Schema".Codec' has no exported member 'Type'.
 
 
 ==== /.src/tsconfig.json (0 errors) ====
@@ -19,7 +20,7 @@ Effect version: 4.0.2
       }
     }
 
-==== /.src/test.ts (5 errors) ====
+==== /.src/test.ts (6 errors) ====
     // @effect-diagnostics preferSchemaTypeProperty:error
     import { Schema, Schema as S } from "effect"
     
@@ -53,4 +54,12 @@ Effect version: 4.0.2
       }
     }
     type Unrelated = LocalSchema.Schema.Type<typeof Address>
+    
+    export const User = Schema.Struct({ id: Schema.String })
+    export type UserEncoded = Schema.Codec.Encoded<typeof User>
+    export type UserDecodingServices = Schema.Codec.DecodingServices<typeof User>
+    export type UserEncodingServices = S.Codec.EncodingServices<typeof User>
+    export type NotAHelper = Schema.Codec.Type<typeof User>
+                                          ~~~~
+!!! error TS2694: Namespace '"/node_modules/effect/dist/Schema".Codec' has no exported member 'Type'.
     

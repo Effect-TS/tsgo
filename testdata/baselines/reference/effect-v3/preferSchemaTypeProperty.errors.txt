@@ -39,3 +39,6 @@ Effect version: 3.19.19
                                  ~~~~
 !!! error TS2694: Namespace '"/node_modules/effect/dist/dts/Schema"' has no exported member 'Type'.
     
+    export type AddressEncoded = Schema.Schema.Encoded<typeof Address>
+    export type AddressContext = S.Schema.Context<typeof Address>
+    

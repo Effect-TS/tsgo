@@ -35,6 +35,9 @@
 [D9] (23:6-23:15) TS6196: 'Unrelated' is declared but never used.
   (no quick fixes)
 
+[D10] (29:39-29:43) TS2694: Namespace '"/node_modules/effect/dist/Schema".Codec' has no exported member 'Type'.
+  (no quick fixes)
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
@@ -70,6 +73,12 @@ declare namespace LocalSchema {
 }
 type Unrelated = LocalSchema.Schema.Type<typeof Address>
 
+export const User = Schema.Struct({ id: Schema.String })
+export type UserEncoded = Schema.Codec.Encoded<typeof User>
+export type UserDecodingServices = Schema.Codec.DecodingServices<typeof User>
+export type UserEncodingServices = S.Codec.EncodingServices<typeof User>
+export type NotAHelper = Schema.Codec.Type<typeof User>
+
 
 === [D2] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
 skipped by default
@@ -103,6 +112,12 @@ declare namespace LocalSchema {
   }
 }
 type Unrelated = LocalSchema.Schema.Type<typeof Address>
+
+export const User = Schema.Struct({ id: Schema.String })
+export type UserEncoded = Schema.Codec.Encoded<typeof User>
+export type UserDecodingServices = Schema.Codec.DecodingServices<typeof User>
+export type UserEncodingServices = S.Codec.EncodingServices<typeof User>
+export type NotAHelper = Schema.Codec.Type<typeof User>
 
 
 === [D4] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
@@ -138,6 +153,12 @@ declare namespace LocalSchema {
 }
 type Unrelated = LocalSchema.Schema.Type<typeof Address>
 
+export const User = Schema.Struct({ id: Schema.String })
+export type UserEncoded = Schema.Codec.Encoded<typeof User>
+export type UserDecodingServices = Schema.Codec.DecodingServices<typeof User>
+export type UserEncodingServices = S.Codec.EncodingServices<typeof User>
+export type NotAHelper = Schema.Codec.Type<typeof User>
+
 
 === [D6] Fix 0: "Disable unnecessaryTypeofType for this line" ===
 skipped by default
@@ -171,4 +192,10 @@ declare namespace LocalSchema {
   }
 }
 type Unrelated = LocalSchema.Schema.Type<typeof Address>
+
+export const User = Schema.Struct({ id: Schema.String })
+export type UserEncoded = Schema.Codec.Encoded<typeof User>
+export type UserDecodingServices = Schema.Codec.DecodingServices<typeof User>
+export type UserEncodingServices = S.Codec.EncodingServices<typeof User>
+export type NotAHelper = Schema.Codec.Type<typeof User>
 

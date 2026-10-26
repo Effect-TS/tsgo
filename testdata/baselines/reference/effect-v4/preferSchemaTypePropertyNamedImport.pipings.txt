@@ -1,0 +1,15 @@
+==== /.src/preferSchemaTypePropertyNamedImport.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:20 - 5:47
+Node: S.Struct({ id: S.String })
+Node Kind: KindCallExpression
+
+Subject: { id: S.String }
+Subject Type: { id: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: S.Struct
+      args: (constant)
+      outType: Struct<{ readonly id: String; }>

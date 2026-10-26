@@ -24,6 +24,12 @@
 [D6] (11:30-11:34) TS2694: Namespace '"/node_modules/effect/dist/Schema"' has no exported member 'Type'.
   (no quick fixes)
 
+[D7] (13:44-13:51) TS2694: Namespace '"/node_modules/effect/dist/Schema".Schema' has no exported member 'Encoded'.
+  (no quick fixes)
+
+[D8] (14:39-14:46) TS2694: Namespace '"/node_modules/effect/dist/Schema".Schema' has no exported member 'Context'.
+  (no quick fixes)
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
@@ -47,6 +53,9 @@ export type Address = S.Schema.Type<typeof Address>
 type GoodTypeQuery = typeof Address.Type
 type GoodSchemaType = Schema.Type<typeof Address>
 
+export type AddressEncoded = Schema.Schema.Encoded<typeof Address>
+export type AddressContext = S.Schema.Context<typeof Address>
+
 
 === [D2] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
 skipped by default
@@ -69,6 +78,9 @@ export type Address = typeof Address.Type
 type GoodTypeQuery = typeof Address.Type
 type GoodSchemaType = Schema.Type<typeof Address>
 
+export type AddressEncoded = Schema.Schema.Encoded<typeof Address>
+export type AddressContext = S.Schema.Context<typeof Address>
+
 
 === [D4] Fix 0: "Disable unnecessaryTypeofType for this line" ===
 skipped by default
@@ -90,4 +102,7 @@ export type Address = S.Schema.Type<typeof Address>
 
 type GoodTypeQuery = Address
 type GoodSchemaType = Schema.Type<typeof Address>
+
+export type AddressEncoded = Schema.Schema.Encoded<typeof Address>
+export type AddressContext = S.Schema.Context<typeof Address>
 
