@@ -134,12 +134,17 @@ func isIdentityCallback(tp *typeparser.TypeParser, callback *ast.Node, input *ch
 
 // sameFlattenChannel reports whether got is mutually assignable with the union
 // of parts, comparing union constituents so no union type has to be built.
+// any is assignable both ways, so got must be any exactly when a part is.
 func sameFlattenChannel(c *checker.Checker, got *checker.Type, parts ...*checker.Type) bool {
-	if got == nil {
+	if got == nil || slices.Contains(parts, nil) {
+		return false
+	}
+	isAny := func(t *checker.Type) bool { return t.Flags()&checker.TypeFlagsAny != 0 }
+	if isAny(got) != slices.ContainsFunc(parts, isAny) {
 		return false
 	}
 	for _, part := range parts {
-		if part == nil || !c.IsTypeAssignableTo(part, got) {
+		if !c.IsTypeAssignableTo(part, got) {
 			return false
 		}
 	}

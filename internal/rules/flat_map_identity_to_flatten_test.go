@@ -39,6 +39,12 @@ const unwrapSuccess: (x: Effect.Effect<string>) => Effect.Effect<unknown> = iden
 export const typedAliasWidensSuccess = source.pipe(Effect.flatMap(unwrapSuccess))
 const exactAlias: (x: Effect.Effect<string>) => Effect.Effect<string> = identity
 export const typedAliasExact = source.pipe(Effect.flatMap(exactAlias))
+const unwrapAnySuccess: (x: Effect.Effect<string>) => Effect.Effect<any> = identity
+export const typedAliasAnySuccess = source.pipe(Effect.flatMap(unwrapAnySuccess))
+const unwrapAnyError: (x: Effect.Effect<string>) => Effect.Effect<string, any> = identity
+export const typedAliasAnyError = source.pipe(Effect.flatMap(unwrapAnyError))
+const unwrapAnyRequirement: (x: Effect.Effect<string>) => Effect.Effect<string, never, any> = identity
+export const typedAliasAnyRequirement = source.pipe(Effect.flatMap(unwrapAnyRequirement))
 `, &rules.FlatMapIdentityToFlatten)
 			if len(preview.Diagnostics) != 4 {
 				t.Fatalf("expected only the valid, named-import, untyped-alias and exact-alias callbacks to match, got %d diagnostics: %+v", len(preview.Diagnostics), preview.Diagnostics)

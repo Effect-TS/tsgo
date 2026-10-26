@@ -94,6 +94,16 @@ export const handled = value.pipe(Effect.mapError((error) => error.message))
 					matches: 0, fixes: 0,
 				},
 				{
+					name: "typedAliasAnySuccess",
+					source: `import { Effect, identity } from "effect"
+declare const source: Effect.Effect<Effect.Effect<string>>
+const unwrap: (x: Effect.Effect<string>) => Effect.Effect<any> = identity
+export const value = source.pipe(Effect.flatMap(unwrap))
+export const mapped = value.pipe(Effect.map((value) => value.toFixed()))
+`,
+					matches: 0, fixes: 0,
+				},
+				{
 					name: "typedAliasExact",
 					source: `import { Effect, identity } from "effect"
 declare const source: Effect.Effect<Effect.Effect<string>>
