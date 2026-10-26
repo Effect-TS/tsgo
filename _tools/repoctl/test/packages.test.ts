@@ -15,7 +15,7 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import assert from "node:assert/strict"
 import test from "node:test"
-import { buildTargets, oxlintBuildTargets, tsrsBuildTargets, verifyReleaseArtifacts } from "../src/build.ts"
+import { buildTargets, copyTypeScriptLibraries, oxlintBuildTargets, tsrsBuildTargets, verifyReleaseArtifacts } from "../src/build.ts"
 import { assembleReleaseArtifacts, bundleUpstream, preparePlatformPackages } from "../src/packages.ts"
 import { buildReleasePlan } from "../src/releasePlan.ts"
 import { decodeUpstream } from "../src/upstream.ts"
@@ -122,7 +122,7 @@ test("prepares versioned platform artifacts and executable manifests", async() =
       const directory = join(artifactsDirectory, artifact.artifactName)
       mkdirSync(directory, { recursive: true })
       writeFileSync(join(directory, artifact.fileName), artifact.version)
-      if (artifact.component === "typescript") {
+      if (artifact.component === "typescript" || artifact.component === "tsrs") {
         writeFileSync(join(directory, "lib.d.ts"), `lib ${artifact.version}`)
         writeFileSync(join(directory, "lib.es5.d.ts"), `es5 ${artifact.version}`)
       }
@@ -139,9 +139,17 @@ test("prepares versioned platform artifacts and executable manifests", async() =
       Effect.runPromise(
         assembleReleaseArtifacts(repository, artifactsDirectory).pipe(Effect.provide(NodeServices.layer))
       ),
-      /linux-x64__tsrs__0\.18\.0-ts7\.1\.0 must contain tsrs only, found tsrs, tsrs\.debug/
+      /linux-x64__tsrs__0\.18\.0-ts7\.1\.0 must contain tsrs and TypeScript libraries only, found lib\.d\.ts, lib\.es5\.d\.ts, tsrs, tsrs\.debug/
     )
     rmSync(`${tsrsArtifactPath}.debug`)
+
+    const tsrsLibrary = join(artifactsDirectory, `linux-x64__tsrs__${tsrsVersion}`, "lib.d.ts")
+    rmSync(tsrsLibrary)
+    await assert.rejects(
+      Effect.runPromise(assembleReleaseArtifacts(repository, artifactsDirectory).pipe(Effect.provide(NodeServices.layer))),
+      /Missing TypeScript libraries in linux-x64__tsrs__/
+    )
+    writeFileSync(tsrsLibrary, `lib ${tsrsVersion}`)
 
     const unexpected = join(artifactsDirectory, "unexpected")
     mkdirSync(unexpected)
@@ -198,6 +206,8 @@ test("prepares versioned platform artifacts and executable manifests", async() =
         if (target in tsrsBuildTargets) {
           assert.equal(readFileSync(tsrsBinary, "utf8"), version)
           assert.equal(statSync(tsrsBinary).mode & 0o777, 0o755)
+          assert.equal(readFileSync(join(packageRoot, "artifacts", "tsrs", version, "lib.d.ts"), "utf8"), `lib ${version}`)
+          assert.equal(readFileSync(join(packageRoot, "artifacts", "tsrs", version, "lib.es5.d.ts"), "utf8"), `es5 ${version}`)
         }
       }
       assert.equal(
@@ -215,6 +225,13 @@ test("prepares versioned platform artifacts and executable manifests", async() =
     )
     rmSync(strayTsrs, { recursive: true })
     const linuxTsrs = join(repository, "_packages", "tsgo-linux-x64", "artifacts", "tsrs", tsrsVersion, "tsrs")
+    const linuxLibrary = join(linuxTsrs, "..", "lib.d.ts")
+    rmSync(linuxLibrary)
+    await assert.rejects(
+      Effect.runPromise(verifyReleaseArtifacts(repository).pipe(Effect.provide(NodeServices.layer))),
+      /Missing artifact .*tsrs.*lib\.d\.ts/
+    )
+    writeFileSync(linuxLibrary, `lib ${tsrsVersion}`)
     chmodSync(linuxTsrs, 0o644)
     await assert.rejects(
       Effect.runPromise(verifyReleaseArtifacts(repository).pipe(Effect.provide(NodeServices.layer))),
@@ -228,6 +245,31 @@ test("prepares versioned platform artifacts and executable manifests", async() =
       Effect.runPromise(verifyReleaseArtifacts(repository).pipe(Effect.provide(NodeServices.layer))),
       /The latest TypeScript compiler ships only in lib\//
     )
+  } finally {
+    rmSync(repository, { recursive: true, force: true })
+  }
+})
+
+test("copies every upstream declaration byte for byte", async() => {
+  const repository = mkdtempSync(join(tmpdir(), "repoctl-tsrs-libraries-"))
+  try {
+    const source = join(repository, "tsrs", "crates", "tsrs_vfs", "libs")
+    const destination = join(repository, "artifacts", "tsrs", tsrsVersion)
+    mkdirSync(source, { recursive: true })
+    const declarations = {
+      "lib.d.ts": "/// <reference lib=\"es5\" />\r\n",
+      "lib.es5.d.ts": "interface Array<T> { length: number }\r\n",
+      "additional.d.ts": "// Any declaration shipped by upstream\n"
+    }
+    for (const [name, contents] of Object.entries(declarations)) {
+      writeFileSync(join(source, name), contents)
+    }
+    writeFileSync(join(source, "README.md"), "not a declaration")
+    await Effect.runPromise(copyTypeScriptLibraries(source, destination).pipe(Effect.provide(NodeServices.layer)))
+    assert.deepEqual(readdirSync(destination).sort(), Object.keys(declarations).sort())
+    for (const [name, contents] of Object.entries(declarations)) {
+      assert.deepEqual(readFileSync(join(destination, name)), Buffer.from(contents))
+    }
   } finally {
     rmSync(repository, { recursive: true, force: true })
   }
