@@ -36,6 +36,26 @@ effect-tsgo unpatch --tsrs      # restores tsrs's original binary
 
 The patched build is available for macOS arm64 and Linux x64/arm64 (glibc), for the tsrs versions this `@effect/tsgo` release supports. A tsrs version or platform (such as Linux musl) without a patched build makes `patch --tsrs` fail with the reason, or skip tsrs with `--skip-missing`.
 
+### Run the patched tools without patching
+
+`effect-tsgo patch` rewrites files inside `node_modules`, which is not possible (or not desirable) with shared or read-only package stores, such as the pnpm global virtual store, Yarn PnP or Nix. Instead, `effect-tsgo` can run the Effect-patched builds it ships directly, leaving `node_modules` untouched:
+
+```sh
+effect-tsgo tsc -p tsconfig.json         # the Effect-patched tsc
+effect-tsgo tsc@7.0.2 --lsp --stdio      # a specific TypeScript version
+effect-tsgo tsc@next --build             # or an upstream tag: latest, beta, next
+effect-tsgo tsrs --noEmit                # the Effect-patched tsrs (tsrs@<version> and tsrs@latest work too)
+effect-tsgo oxlint --type-aware          # Oxlint with the Effect rules
+```
+
+Every argument after the tool is passed through unchanged, so the commands work as drop-in replacements in `package.json` scripts and editor settings that launch `tsc`.
+
+- `tsc` and `tsrs` run the requested version or tag; without one they run the build of the installed `typescript`/`@typescript/native` (>= 7) or `tsrs` version when this release ships it, and otherwise the latest supported version. They do not require TypeScript or tsrs to be installed.
+- `oxlint` runs the CLI of the installed `oxlint` package (installed directly or through `vite-plus`) with the Effect-patched native binding and, when `oxlint-tsgolint` is installed, the Effect-patched `tsgolint` of the installed versions. It does not accept a version.
+- As with `patch`, the packaged `tsrs` and `oxlint` builds do not support Linux musl.
+
+Prefer these commands whenever you cannot or do not want to modify `node_modules`; prefer `patch` when other tools must keep launching the stock binaries (for example `npx tsc`, or editor extensions that resolve the TypeScript package). Note that the type augmentation that adds the `effecttsgo` plugin and rules to Oxlint's config types (for `oxlint.config.ts`) is applied only by `patch`.
+
 ## LSP-based linter
 
 The Effect LSP doubles as a tool to perform type-aware linting of Effect code, and ships as well a way to emit additional Oxlint Type Aware rules.

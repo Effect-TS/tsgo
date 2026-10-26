@@ -67,7 +67,7 @@ export type ReplacementResolver = (
   Crypto.Crypto | FileSystem.FileSystem | Path.Path | Scope.Scope
 >
 
-const supportedVersions = (component: Exclude<Component, "oxlint-dts">): ReadonlyArray<string> =>
+export const supportedVersions = (component: Exclude<Component, "oxlint-dts">): ReadonlyArray<string> =>
   Object.keys(upstreamJson.components[component]).sort()
 
 const toKebabCase = (value: string): string => {
@@ -147,30 +147,47 @@ const resolveOxlintDeclarations = (target: DiscoveredBinary) => Effect.gen(funct
   return { path: replacementPath, fileHash }
 })
 
-const resolvePlatformPackage = (target: DiscoveredBinary) => Effect.gen(function*() {
+// The directory of this host's @effect/tsgo-<platform>-<arch> package, which ships the packaged artifacts.
+export const resolvePlatformPackageDirectory = Effect.gen(function*() {
   const path = yield* Path.Path
   const packageName = `@effect/tsgo-${process.platform}-${process.arch}`
   const selfRequire = nodeModule.createRequire(import.meta.url)
   const packageJsonPath = yield* Effect.try({
     try: () => selfRequire.resolve(`${packageName}/package.json`),
-    catch: () => new ReplacementUnavailableError({
-      target,
-      reason: `Unable to resolve ${packageName}; no packaged replacement is available.`
-    })
+    catch: () => new PatcherError({ reason: `Unable to resolve ${packageName}; no packaged replacement is available.` })
   })
-  return { packageDir: path.dirname(packageJsonPath) }
+  return path.dirname(packageJsonPath)
 })
+
+const resolvePlatformPackage = (target: DiscoveredBinary) => resolvePlatformPackageDirectory.pipe(
+  Effect.map((packageDir) => ({ packageDir })),
+  Effect.mapError(({ reason }) => new ReplacementUnavailableError({ target, reason }))
+)
 
 // The platforms @effect/tsgo ships a patched tsrs binary for (artifacts/tsrs/<tsrs version>/tsrs): tsrs's own glibc
 // and macOS targets. Its musl targets are discovered but reported as unavailable.
 export const tsrsReplacementTargets = ["darwin-arm64", "linux-x64-gnu", "linux-arm64-gnu"] as const
 
+// The packaged build of a component version: the latest TypeScript compiler ships in lib/, everything else in
+// artifacts/<component>/<version>/.
+export const packagedComponentPath = (
+  packageDir: string,
+  component: Exclude<Component, "oxlint-dts">,
+  version: string,
+  fileName: string
+) => Effect.gen(function*() {
+  const path = yield* Path.Path
+  return component === "typescript" && version === upstreamJson.tags.typescript.latest
+    ? path.join(packageDir, "lib", fileName)
+    : path.join(packageDir, "artifacts", component, version, fileName)
+})
+
 export const packagedArtifactPath = (packageDir: string, target: DiscoveredBinary) => Effect.gen(function*() {
   const path = yield* Path.Path
   const fileName = path.basename(target.binaryPath)
-  return target.component === "typescript" && target.packageVersion === upstreamJson.tags.typescript.latest
-    ? path.join(packageDir, "lib", fileName)
-    : path.join(packageDir, "artifacts", target.component, target.packageVersion, fileName)
+  return target.component === "oxlint-dts"
+    ? path.join(packageDir, "artifacts", target.component, target.packageVersion, fileName)
+    : yield* packagedComponentPath(packageDir, target.component, target.packageVersion, fileName)
 })
 
 export const resolveReplacement: ReplacementResolver = (target) => Effect.gen(function*() {
