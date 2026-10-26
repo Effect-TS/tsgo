@@ -588,6 +588,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "ets_pgotrain"
+version = "0.0.0"
+dependencies = [
+ "tsrs_fourslash_server",
+ "tsrs_testrunner",
+]
+
+[[package]]
 name = "ets_pluginoptions"
 version = "0.0.0"
 dependencies = [
@@ -1507,6 +1515,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "tsrs_fourslash_server"
+version = "0.20.0"
+dependencies = [
+ "tsrs_core",
+ "tsrs_lsp",
+ "tsrs_project",
+ "tsrs_tsoptions",
+ "tsrs_vfs",
+]
+
+[[package]]
 name = "tsrs_fswatch"
 version = "0.20.0"
 dependencies = [
@@ -1714,6 +1733,30 @@ version = "0.20.0"
 dependencies = [
  "bitflags",
  "tsrs_core",
+]
+
+[[package]]
+name = "tsrs_testrunner"
+version = "0.20.0"
+dependencies = [
+ "indexmap",
+ "mimalloc-safe",
+ "regex",
+ "rustc-hash",
+ "serde_json",
+ "similar",
+ "tsrs_ast",
+ "tsrs_checker",
+ "tsrs_compiler",
+ "tsrs_contentmapper",
+ "tsrs_core",
+ "tsrs_diagnostics",
+ "tsrs_incremental",
+ "tsrs_parser",
+ "tsrs_scanner",
+ "tsrs_sourcemap",
+ "tsrs_tsoptions",
+ "tsrs_vfs",
 ]
 
 [[package]]

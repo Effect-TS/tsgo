@@ -126,7 +126,8 @@ export const preparePlatformPackages = Effect.fnUntraced(function*(repositoryRoo
           `./artifacts/oxlint-tsgolint/${version}/tsgolint${windows ? ".exe" : ""}`)
         : []),
       ...(isTsrsBuildTarget(target)
-        ? Object.keys(upstream.components.tsrs ?? {}).map((version) => `./artifacts/tsrs/${version}/${tsrsBinaryName}`)
+        ? Object.keys(upstream.components.tsrs ?? {}).map((version) =>
+          `./artifacts/tsrs/${version}/${tsrsBinaryName}${windows ? ".exe" : ""}`)
         : [])
     ]
     for (const executable of executableFiles) {

@@ -49,13 +49,26 @@ test("rejects unsupported component release targets", async() => {
   )
 })
 
-test("builds tsrs per tsrs version on its native platforms only", async() => {
-  assert.deepEqual(Object.keys(tsrsBuildTargets), ["darwin-arm64", "linux-x64", "linux-arm64"])
+test("builds tsrs per tsrs version on its native platforms only, optimized as tsrs's release", async() => {
+  assert.deepEqual(
+    Object.entries(tsrsBuildTargets).map(([target, { optimization, runner }]) => `${target} ${runner} ${optimization}`),
+    [
+      "darwin-arm64 macos-latest pgo",
+      "darwin-x64 macos-26-intel pgo",
+      "linux-x64 ubuntu-22.04 pgo-bolt",
+      "linux-arm64 ubuntu-22.04-arm pgo-bolt",
+      "win32-x64 windows-latest pgo"
+    ]
+  )
   assert.deepEqual(componentArtifact("/repo", "linux-arm64", "tsrs", "0.18.0-ts7.1.0", tsrsBinaryName), {
     binaryName: "tsrs",
     path: "/repo/_packages/tsgo-linux-arm64/artifacts/tsrs/0.18.0-ts7.1.0/tsrs"
   })
-  for (const target of ["darwin-x64", "win32-x64", "linux-arm"] as const) {
+  assert.deepEqual(componentArtifact("/repo", "win32-x64", "tsrs", "0.18.0-ts7.1.0", tsrsBinaryName), {
+    binaryName: "tsrs",
+    path: "/repo/_packages/tsgo-win32-x64/artifacts/tsrs/0.18.0-ts7.1.0/tsrs.exe"
+  })
+  for (const target of ["win32-arm64", "linux-arm"] as const) {
     await assert.rejects(
       Effect.runPromise(
         buildArtifact("/repo", "tsrs", "0.18.0-ts7.1.0", target).pipe(Effect.provide(NodeServices.layer))
@@ -63,6 +76,12 @@ test("builds tsrs per tsrs version on its native platforms only", async() => {
       new RegExp(`tsrs does not support target ${target}`)
     )
   }
+  await assert.rejects(
+    Effect.runPromise(
+      buildArtifact("/repo", "typescript", "7.0.2", "linux-x64", "pgo").pipe(Effect.provide(NodeServices.layer))
+    ),
+    /--optimize pgo is for the tsrs component only/
+  )
 })
 
 test("derives packaged Oxlint artifact paths", () => {

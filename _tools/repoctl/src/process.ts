@@ -47,6 +47,28 @@ export const runCommand = Effect.fnUntraced(function*(
   }
 })
 
+// Like runCommand with the output on stderr only, but returns the exit code instead of failing on a nonzero one
+// (compiler runs, whose exit codes 1 and 2 report diagnostics).
+export const runCommandExitCode = Effect.fnUntraced(function*(
+  command: string,
+  cwd: string,
+  args: ReadonlyArray<string>,
+  env?: Readonly<Record<string, string>>
+) {
+  const spawner = yield* ChildProcessSpawner.ChildProcessSpawner
+  return Number(
+    yield* spawner.exitCode(ChildProcess.make(resolveCommand(command), args, {
+      cwd,
+      stdin: "inherit",
+      stdout: "ignore",
+      stderr: "inherit",
+      env,
+      extendEnv: true,
+      shell: isWindowsCommandShim(command)
+    }))
+  )
+})
+
 export const runCommandString = Effect.fnUntraced(function*(
   command: string,
   cwd: string,

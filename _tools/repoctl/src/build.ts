@@ -7,8 +7,14 @@ import { constants } from "node:fs"
 import { access, appendFile } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { ensureEffectFixtures } from "./fixtures.ts"
-import { runCommand, runCommandString } from "./process.ts"
+import { runCommand, runCommandExitCode, runCommandString } from "./process.ts"
 import { buildRustBinary, missingRustBinaryTools, tsrsCheckedOut, tsrsSetupCommand } from "./rust.ts"
+import {
+  buildOptimizedTsrsBinary,
+  type TsrsBuildTarget,
+  tsrsBuildTargets,
+  type TsrsOptimization
+} from "./tsrsRelease.ts"
 import {
   readUpstream,
   resolveMaterializedTypeScriptSource,
@@ -70,17 +76,7 @@ export const oxlintBuildTargets = {
 
 export type OxlintBuildTarget = keyof typeof oxlintBuildTargets
 
-// The patched tsrs binary (crates/ets_tsrs, binary `tsrs`), released per tsrs version (upstream.json components.tsrs)
-// for the targets tsrs publishes a glibc or macOS binary for (tsrs/.github/workflows/release.yml), each built natively
-// on the runner tsrs uses (ubuntu-22.04 keeps the glibc requirement at 2.35). `effect-tsgo patch --tsrs` swaps it in
-// for the binary of the user's installed `@tsrs/<target>` package; tsrs's musl targets are reported as unsupported.
-export const tsrsBuildTargets = {
-  "darwin-arm64": { rustTarget: "aarch64-apple-darwin", runner: "macos-14" },
-  "linux-x64": { rustTarget: "x86_64-unknown-linux-gnu", runner: "ubuntu-22.04" },
-  "linux-arm64": { rustTarget: "aarch64-unknown-linux-gnu", runner: "ubuntu-22.04-arm" }
-} as const satisfies Partial<Record<BuildTarget, { readonly rustTarget: string; readonly runner: string }>>
-
-export type TsrsBuildTarget = keyof typeof tsrsBuildTargets
+export { type TsrsBuildTarget, tsrsBuildTargets, type TsrsOptimization, tsrsOptimizations } from "./tsrsRelease.ts"
 
 export const isTsrsBuildTarget = (target: string): target is TsrsBuildTarget => target in tsrsBuildTargets
 
@@ -225,13 +221,29 @@ const buildLocalRustBinary = Effect.fnUntraced(function*(repositoryRoot: string)
   yield* Console.log(`Built the local tsrs binary: ${binary}`)
 })
 
+// tsrs's "Stage binary" smoke test: `--version`, and exit code 2 on a type error.
+const smokeTestTsrs = Effect.fnUntraced(function*(binary: string) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  yield* runCommand(binary, path.dirname(binary), ["--version"])
+  const directory = yield* fs.makeTempDirectoryScoped()
+  yield* fs.writeFileString(path.join(directory, "bad.ts"), `const x: number = "no";\n`)
+  const exitCode = yield* runCommandExitCode(binary, directory, ["--noEmit", "--ignoreConfig", "bad.ts"])
+  if (exitCode !== 2) {
+    return yield* new BuildError({ reason: `${binary} exited with ${exitCode} on a type error, expected 2` })
+  }
+}, Effect.scoped)
+
 // The release build of the patched tsrs binary of one tsrs version for one platform, natively on that platform (tsrs's
 // CLI links mimalloc, a C library built with CMake, which rules out a plain cross build). Requires the tsrs checkout of
-// that version (`repoctl submodules setup --component tsrs --version <version>`).
+// that version (`repoctl submodules setup --component tsrs --version <version>`). `optimization` is the target's
+// `tsrsBuildTargets` entry in the release workflow (PGO, plus BOLT on Linux, as tsrs's own release: tsrsRelease.ts);
+// `none` is the plain release profile.
 export const buildTsrs = Effect.fnUntraced(function*(
   repositoryRoot: string,
   version: string,
-  targetName: TsrsBuildTarget
+  targetName: TsrsBuildTarget,
+  optimization: TsrsOptimization = "none"
 ) {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
@@ -254,10 +266,9 @@ export const buildTsrs = Effect.fnUntraced(function*(
   if (missing !== undefined) {
     return yield* new BuildError({ reason: `Unable to build the tsrs binary: ${missing}` })
   }
-  const binary = yield* buildRustBinary(repositoryRoot, {
-    release: true,
-    rustTarget: tsrsBuildTargets[targetName].rustTarget
-  })
+  const binary = optimization === "none"
+    ? yield* buildRustBinary(repositoryRoot, { release: true, rustTarget: tsrsBuildTargets[targetName].rustTarget })
+    : yield* buildOptimizedTsrsBinary(repositoryRoot, targetName, optimization)
   const artifact = componentArtifact(repositoryRoot, targetName, "tsrs", version, tsrsBinaryName)
   yield* Console.log(`Copying tsrs ${version} for ${targetName} -> ${artifact.path}`)
   yield* fs.remove(path.dirname(artifact.path), { recursive: true, force: true })
@@ -268,8 +279,12 @@ export const buildTsrs = Effect.fnUntraced(function*(
     path.dirname(artifact.path)
   )
   yield* fs.chmod(artifact.path, 0o755)
-  yield* validateExecutableArtifact(artifact.path)
-  yield* runCommand(artifact.path, repositoryRoot, ["--version"])
+  if (targetName.startsWith("win32-")) {
+    yield* validateArtifact(artifact.path)
+  } else {
+    yield* validateExecutableArtifact(artifact.path)
+  }
+  yield* smokeTestTsrs(artifact.path)
 
   if (process.env.GITHUB_OUTPUT !== undefined) {
     yield* Effect.tryPromise(() => appendFile(
@@ -455,8 +470,12 @@ export const buildArtifact = Effect.fnUntraced(function*(
   repositoryRoot: string,
   component: ComponentName,
   version: string,
-  target: BuildTarget
+  target: BuildTarget,
+  optimization: TsrsOptimization = "none"
 ) {
+  if (optimization !== "none" && component !== "tsrs") {
+    return yield* new BuildError({ reason: `--optimize ${optimization} is for the tsrs component only` })
+  }
   if (component === "typescript") {
     return yield* buildTsc(repositoryRoot, version, target)
   }
@@ -464,7 +483,7 @@ export const buildArtifact = Effect.fnUntraced(function*(
     if (!isTsrsBuildTarget(target)) {
       return yield* new BuildError({ reason: `tsrs does not support target ${target}` })
     }
-    return yield* buildTsrs(repositoryRoot, version, target)
+    return yield* buildTsrs(repositoryRoot, version, target, optimization)
   }
   if (!(target in oxlintBuildTargets)) {
     return yield* new BuildError({ reason: `${component} does not support target ${target}` })
@@ -522,7 +541,11 @@ export const verifyReleaseArtifacts = Effect.fnUntraced(function*(repositoryRoot
     if (isTsrsBuildTarget(target)) {
       for (const version of Object.keys(upstream.components.tsrs ?? {})) {
         const binary = componentArtifact(repositoryRoot, target, "tsrs", version, tsrsBinaryName).path
-        yield* validateExecutableArtifact(binary)
+        if (target.startsWith("win32-")) {
+          yield* validateArtifact(binary)
+        } else {
+          yield* validateExecutableArtifact(binary)
+        }
         yield* validateArtifact(join(dirname(binary), "lib.d.ts"))
         for (const library of (yield* fs.readDirectory(dirname(binary))).filter((name) => name.endsWith(".d.ts"))) {
           yield* validateArtifact(join(dirname(binary), library))

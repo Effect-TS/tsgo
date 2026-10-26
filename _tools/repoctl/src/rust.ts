@@ -7,6 +7,7 @@ import * as Exit from "effect/Exit"
 import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import { runCommand, runCommandString } from "./process.ts"
+import { checkTsrsReleaseParity } from "./tsrsRelease.ts"
 
 export const tsrsSetupCommand = "pnpm exec repoctl submodules setup --component tsrs"
 
@@ -48,9 +49,10 @@ export const generateRustShims = Effect.fnUntraced(function*(repositoryRoot: str
   ], false, { GOWORK: "off" })
 })
 
-// `repoctl tsrs check`.
+// `repoctl tsrs check`: the release build still mirrors tsrs's release workflow (tsrsRelease.ts), then cargo.
 export const runRustChecks = Effect.fnUntraced(function*(repositoryRoot: string) {
   yield* requireTsrsCheckout(repositoryRoot)
+  yield* checkTsrsReleaseParity(repositoryRoot)
   yield* Console.log("Checking Rust workspace")
   yield* runCommand("cargo", repositoryRoot, ["check", "--workspace", "--all-targets", "--locked"])
 })
