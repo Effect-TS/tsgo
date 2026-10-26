@@ -3,6 +3,19 @@
 A wrapper around [TypeScript-Go](https://github.com/microsoft/TypeScript-Go) that builds the Effect Language Service, providing Effect-TS diagnostics and quick fixes.
 This project targets **Effect V4** (codename: "smol") primarily and also Effect V3.
 
+<!-- supported-components:start -->
+## Supported Package Versions
+
+The following target package versions are supported by `@effect/tsgo@0.58.0`:
+
+| Component | Supported versions |
+|---|---|
+| TypeScript | `7.0.2`, `7.1.0-beta`, `7.1.0-dev.20260929`, `7.1.0-dev.20261025.1` |
+| tsrs | `0.18.0-ts7.1.0-dev.20260929` |
+| Oxlint | `1.87.0`, `1.88.0`, `1.89.0` |
+| oxlint-tsgolint | `7.0.2004`, `7.0.2005` |
+<!-- supported-components:end -->
+
 ## Installation
 
 The setup of the TSGO version of the LSP can be performed via the command line interface:
@@ -22,19 +35,6 @@ This will guide you through the installation process, which includes:
 
 > [!NOTE]
 > At the moment, you still need a native TypeScript install alongside `@effect/tsgo`: `typescript` >= 7 (e.g. `typescript@latest` or `typescript@next`) or an alias such as `@typescript/native`. `effect-tsgo patch` tries `typescript`, then `@typescript/native`, and accepts `--typescript-package <name>` to try a custom package name first.
-
-### Experimental: patch your installed tsrs
-
-If you use [tsrs](https://github.com/oxc-project/tsrs), the Rust port of TypeScript-Go, `effect-tsgo patch --tsrs` patches it too: it swaps the binary of your installed `tsrs` package (`node_modules/@tsrs/<platform>/tsrs`) for an experimental Effect-patched build of the same tsrs version, so `tsrs` reports the Effect diagnostics. Your TypeScript install is patched as usual; use `effect-tsgo patch --no-typescript --tsrs` to patch only tsrs.
-
-```sh
-npm i -D tsrs@<version>
-effect-tsgo patch --tsrs        # e.g. in the prepare script
-npx tsrs --noEmit               # now with Effect diagnostics
-effect-tsgo unpatch --tsrs      # restores tsrs's original binary
-```
-
-The patched build is available for macOS arm64 and Linux x64/arm64 (glibc), for the tsrs versions this `@effect/tsgo` release supports. A tsrs version or platform (such as Linux musl) without a patched build makes `patch --tsrs` fail with the reason, or skip tsrs with `--skip-missing`.
 
 ### Run the patched tools without patching
 
@@ -67,18 +67,6 @@ Linting can occur either during the `tsc` typecheck phase (with the benefit of r
 When running in `tsc` mode, the Effect diagnostics are emitted as standard TypeScript diagnostics, and can be configured to affect the `tsc` exit code through the options `ignoreEffectSuggestionsInTscExitCode`, `ignoreEffectWarningsInTscExitCode`, and `ignoreEffectErrorsInTscExitCode`.
 
 When running in dedicated diagnostics mode, the Effect diagnostics can be emitted in structured formats, which can be further processed by other tools.
-
-<!-- supported-components:start -->
-## Supported Package Versions
-
-The following target package versions are supported by `@effect/tsgo@0.58.0`:
-
-| Component | Supported versions |
-|---|---|
-| TypeScript | `7.0.2`, `7.1.0-beta`, `7.1.0-dev.20260929`, `7.1.0-dev.20261025.1` |
-| Oxlint | `1.87.0`, `1.88.0`, `1.89.0` |
-| oxlint-tsgolint | `7.0.2004`, `7.0.2005` |
-<!-- supported-components:end -->
 
 ## Diagnostic Status
 

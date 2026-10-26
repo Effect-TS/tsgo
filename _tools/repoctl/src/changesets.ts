@@ -129,11 +129,12 @@ export const writeSupportedComponentsReadme = Effect.fnUntraced(function*(reposi
   if (end < start) {
     return yield* new SupportedComponentsReadmeError({ reason: "Generated section markers are missing or invalid" })
   }
-  const rows = [
+  const rows: ReadonlyArray<readonly [string, Array<string>]> = [
     ["TypeScript", Object.keys(upstream.components.typescript)],
+    ...(upstream.components.tsrs === undefined ? [] : [["tsrs", Object.keys(upstream.components.tsrs)] as const]),
     ["Oxlint", Object.keys(upstream.components.oxlint)],
     ["oxlint-tsgolint", Object.keys(upstream.components["oxlint-tsgolint"])]
-  ] as const
+  ]
   const section = [
     supportedComponentsStart,
     "## Supported Package Versions",
