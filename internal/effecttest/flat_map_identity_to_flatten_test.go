@@ -84,6 +84,30 @@ export const value = Effect.flatten(source)
 					matches: 1, fixes: 1,
 				},
 				{
+					name: "typedAliasWideningError",
+					source: `import { Effect, identity } from "effect"
+declare const source: Effect.Effect<Effect.Effect<string>>
+const unwrap: (x: Effect.Effect<string>) => Effect.Effect<string, Error> = identity
+export const value = source.pipe(Effect.flatMap(unwrap))
+export const handled = value.pipe(Effect.mapError((error) => error.message))
+`,
+					matches: 0, fixes: 0,
+				},
+				{
+					name: "typedAliasExact",
+					source: `import { Effect, identity } from "effect"
+declare const source: Effect.Effect<Effect.Effect<string>>
+const unwrap: (x: Effect.Effect<string>) => Effect.Effect<string> = identity
+export const value = source.pipe(Effect.flatMap(unwrap))
+`,
+					expected: `import { Effect, identity } from "effect"
+declare const source: Effect.Effect<Effect.Effect<string>>
+const unwrap: (x: Effect.Effect<string>) => Effect.Effect<string> = identity
+export const value = source.pipe(Effect.flatten)
+`,
+					matches: 1, fixes: 1,
+				},
+				{
 					name: "namedFlatMapHasNoFix",
 					source: `import type { Effect } from "effect"
 import { flatMap } from "effect/Effect"

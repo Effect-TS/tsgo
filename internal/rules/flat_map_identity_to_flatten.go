@@ -1,6 +1,8 @@
 package rules
 
 import (
+	"slices"
+
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/effect-ts/tsgo/internal/rule"
@@ -44,7 +46,7 @@ type FlatMapIdentityToFlattenMatch struct {
 
 // AnalyzeFlatMapIdentityToFlatten finds Effect.flatMap steps whose callback
 // returns its parameter unchanged, so the step only unwraps a nested effect.
-func AnalyzeFlatMapIdentityToFlatten(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []FlatMapIdentityToFlattenMatch {
+func AnalyzeFlatMapIdentityToFlatten(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []FlatMapIdentityToFlattenMatch {
 	var matches []FlatMapIdentityToFlattenMatch
 	flows := tp.PipingFlows(sf, true)
 	for _, flow := range flows.All() {
@@ -69,11 +71,19 @@ func AnalyzeFlatMapIdentityToFlatten(tp *typeparser.TypeParser, _ *checker.Check
 				continue
 			}
 			success := outer.A()
-			if success == nil || success.Flags()&(checker.TypeFlagsAny|checker.TypeFlagsNever) != 0 ||
-				tp.EffectType(success) == nil {
+			if success == nil || success.Flags()&(checker.TypeFlagsAny|checker.TypeFlagsNever) != 0 {
 				continue
 			}
-			if !isIdentityCallback(tp, args.At(0), success) {
+			inner := tp.EffectType(success)
+			if inner == nil || !isIdentityCallback(tp, args.At(0), success) {
+				continue
+			}
+			// A callback typed through an annotated alias of identity can still widen the
+			// result, so require the step to produce exactly what Effect.flatten would.
+			output := tp.EffectType(step.OutType())
+			if output == nil || !sameFlattenChannel(c, output.A(), inner.A()) ||
+				!sameFlattenChannel(c, output.E(), outer.E(), inner.E()) ||
+				!sameFlattenChannel(c, output.R(), outer.R(), inner.R()) {
 				continue
 			}
 			var effectModuleNode *ast.Node
@@ -120,4 +130,27 @@ func isIdentityCallback(tp *typeparser.TypeParser, callback *ast.Node, input *ch
 		return false
 	}
 	return parameter.Type == nil || tp.GetTypeAtLocation(parameter.Name()) == input
+}
+
+// sameFlattenChannel reports whether got is mutually assignable with the union
+// of parts, comparing union constituents so no union type has to be built.
+func sameFlattenChannel(c *checker.Checker, got *checker.Type, parts ...*checker.Type) bool {
+	if got == nil {
+		return false
+	}
+	for _, part := range parts {
+		if part == nil || !c.IsTypeAssignableTo(part, got) {
+			return false
+		}
+	}
+	constituents := []*checker.Type{got}
+	if got.Flags()&checker.TypeFlagsUnion != 0 {
+		constituents = got.Types()
+	}
+	for _, constituent := range constituents {
+		if !slices.ContainsFunc(parts, func(part *checker.Type) bool { return c.IsTypeAssignableTo(constituent, part) }) {
+			return false
+		}
+	}
+	return true
 }

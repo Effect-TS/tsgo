@@ -29,17 +29,29 @@ export const initializer = source.pipe(Effect.flatMap((inner = fallback) => inne
 export const optionalParameter = source.pipe(Effect.flatMap((inner?: Effect.Effect<string>) => inner))
 export const destructured = source.pipe(Effect.flatMap(({ pipe }) => pipe()))
 export const channelIdentity = source.pipe(Effect.flatMap(Channel.identity))
+const plainAlias = identity
+export const untypedAlias = source.pipe(Effect.flatMap(plainAlias))
+const unwrap: (x: Effect.Effect<string>) => Effect.Effect<string, Error> = identity
+export const typedAliasWidensError = source.pipe(Effect.flatMap(unwrap))
+const unwrapRequirement: (x: Effect.Effect<string>) => Effect.Effect<string, never, "Db"> = identity
+export const typedAliasWidensRequirement = source.pipe(Effect.flatMap(unwrapRequirement))
+const unwrapSuccess: (x: Effect.Effect<string>) => Effect.Effect<unknown> = identity
+export const typedAliasWidensSuccess = source.pipe(Effect.flatMap(unwrapSuccess))
+const exactAlias: (x: Effect.Effect<string>) => Effect.Effect<string> = identity
+export const typedAliasExact = source.pipe(Effect.flatMap(exactAlias))
 `, &rules.FlatMapIdentityToFlatten)
-			if len(preview.Diagnostics) != 2 {
-				t.Fatalf("expected only the valid and named-import callbacks to match, got %d diagnostics: %+v", len(preview.Diagnostics), preview.Diagnostics)
+			if len(preview.Diagnostics) != 4 {
+				t.Fatalf("expected only the valid, named-import, untyped-alias and exact-alias callbacks to match, got %d diagnostics: %+v", len(preview.Diagnostics), preview.Diagnostics)
 			}
-			for i, want := range []string{"Effect.flatMap", "flatMap"} {
+			for i, want := range []string{"Effect.flatMap", "flatMap", "Effect.flatMap", "Effect.flatMap"} {
 				if got := preview.SourceText[preview.Diagnostics[i].Start:preview.Diagnostics[i].End]; got != want {
 					t.Errorf("diagnostic %d covers %q, want %q", i, got, want)
 				}
 			}
-			if line := strings.Count(preview.SourceText[:preview.Diagnostics[1].Start], "\n"); line != 5 {
-				t.Errorf("named-import diagnostic on line %d, want 5", line)
+			for i, want := range []int{4, 5, 17, 25} {
+				if line := strings.Count(preview.SourceText[:preview.Diagnostics[i].Start], "\n"); line != want {
+					t.Errorf("diagnostic %d on line %d, want %d", i, line, want)
+				}
 			}
 		})
 	}
