@@ -1,5 +1,29 @@
 # @effect/tsgo
 
+## 0.59.0
+
+### Minor Changes
+
+- 9b9783c: Add proxy commands that run the Effect-patched tsc, tsrs and Oxlint shipped with `@effect/tsgo` directly, without patching `node_modules`. This works with shared or read-only package stores such as the pnpm global virtual store, where `effect-tsgo patch` cannot rewrite the installed binaries. Every argument after the tool is passed through unchanged.
+  
+  ```sh
+  effect-tsgo tsc -p tsconfig.json         # the build of the installed TypeScript version, else the latest
+  effect-tsgo tsc@7.0.2 --lsp --stdio      # a specific supported TypeScript version
+  effect-tsgo tsc@next --build             # an upstream tag: latest, beta, next
+  effect-tsgo tsrs --noEmit                # the build of the installed tsrs version, else the latest
+  effect-tsgo oxlint --type-aware          # the installed oxlint CLI with the patched binding and tsgolint
+  ```
+  
+  The type augmentation that adds the `effecttsgo` plugin to Oxlint's config types is still applied only by `effect-tsgo patch`.
+
+### Patch Changes
+
+- 9b9783c: Fix the tsrs build reusing stale Effect diagnostics in incremental builds after the plugin options change. The build info now records the Effect options, as the Go build does, and a change to them drops the cached semantic diagnostics. For example, with `"incremental": true` and an existing `.tsbuildinfo`, switching `"diagnosticSeverity": { "floatingEffect": "off" }` to `"error"` now reports `floatingEffect` without `--force`, and switching it back stops reporting it.
+- 9b9783c: Match upstream tsrs npm packaging by building release binaries with `noembed` and shipping the exact `.d.ts` library files from the pinned tsrs checkout beside each executable. Packaged tsrs binaries now load those files from disk instead of embedded libraries.
+- 9b9783c: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261026.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/8a62bbe746909624b69b6e671026b454da2f02cf) commit `8a62bbe746909624b69b6e671026b454da2f02cf`, update the TypeScript beta tag to [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.1.0-beta), and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2). Refresh the tsconfig schema from JSON Schema Store.
+  
+  Bump tsrs to [`tsrs@0.20.0-ts7.1.0-beta`](https://www.npmjs.com/package/tsrs/v/0.20.0-ts7.1.0-beta), which ports TypeScript `7.1.0-beta`.
+
 ## 0.58.0
 
 ### Minor Changes
