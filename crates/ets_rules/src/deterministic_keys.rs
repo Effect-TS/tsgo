@@ -156,7 +156,7 @@ pub(crate) fn check_deterministic_key_match(
 
 // go: internal/rules/deterministic_keys.go:118 matchClassPattern
 // matchClassPattern tries to match a class declaration against the supported patterns.
-// Priority: service targets first, then error targets, then custom.
+// Priority: service targets first, then error targets, then tagged class targets, then custom.
 pub(crate) fn match_class_pattern(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -209,6 +209,30 @@ pub(crate) fn match_class_pattern(
         });
     }
 
+    // Tagged class target: ExtendsSchemaTaggedClass → ExtendsDataTaggedClass → ExtendsSchemaTaggedRequest
+    // For Schema.* the checked literal is the tag, not the optional inner identifier.
+    if let Some(result) = tp.extends_schema_tagged_class(class_node) {
+        return Some(DeterministicKeyMatch {
+            class_name: Some(result.class_name()),
+            key_string_literal: result.tag_string_literal(),
+            target: "taggedClass",
+        });
+    }
+    if let Some(result) = tp.extends_data_tagged_class(class_node) {
+        return Some(DeterministicKeyMatch {
+            class_name: result.class_name(),
+            key_string_literal: result.key_string_literal(),
+            target: "taggedClass",
+        });
+    }
+    if let Some(result) = tp.extends_schema_tagged_request(class_node) {
+        return Some(DeterministicKeyMatch {
+            class_name: Some(result.class_name()),
+            key_string_literal: result.tag_string_literal(),
+            target: "taggedClass",
+        });
+    }
+
     // Custom target (only if extendedKeyDetection is enabled)
     if extended_key_detection {
         if let Some(result) = match_custom_pattern(tp, sf, class_node) {
@@ -219,7 +243,7 @@ pub(crate) fn match_class_pattern(
     None
 }
 
-// go: internal/rules/deterministic_keys.go:153 matchCustomPattern
+// go: internal/rules/deterministic_keys.go:165 matchCustomPattern
 // matchCustomPattern checks heritage clause nodes for call expressions with string literal
 // arguments whose parameter declarations contain the @effect-identifier annotation.
 //
@@ -293,7 +317,7 @@ pub(crate) fn match_custom_pattern(
     None
 }
 
-// go: internal/rules/deterministic_keys.go:229 getPackageJsonDirectory
+// go: internal/rules/deterministic_keys.go:241 getPackageJsonDirectory
 // getPackageJsonDirectory gets the package.json directory for a source file from its metadata.
 //
 // Rust: Go's checker argument is unused and dropped. Go's assertion to its `metaProvider` interface always

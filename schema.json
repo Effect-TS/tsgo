@@ -3022,7 +3022,8 @@
           "enum": [
             "service",
             "error",
-            "custom"
+            "custom",
+            "taggedClass"
           ],
           "type": "string"
         }

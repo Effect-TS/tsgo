@@ -4,8 +4,8 @@ import "strings"
 
 // KeyPattern defines a key pattern configuration for the deterministicKeys rule.
 type KeyPattern struct {
-	// Target is the category this pattern applies to: "service", "error", or "custom".
-	Target string `json:"target" schema_description:"Target category this pattern applies to." schema_default:"\"service\"" schema_enum:"[\"service\",\"error\",\"custom\"]"`
+	// Target is the category this pattern applies to: "service", "error", "custom", or "taggedClass".
+	Target string `json:"target" schema_description:"Target category this pattern applies to." schema_default:"\"service\"" schema_enum:"[\"service\",\"error\",\"custom\",\"taggedClass\"]"`
 
 	// Pattern is the formula to compute the key: "default", "package-identifier", "default-hashed", or "identifier".
 	Pattern string `json:"pattern" schema_description:"Formula used to compute the key." schema_default:"\"default\"" schema_enum:"[\"default\",\"package-identifier\",\"default-hashed\",\"identifier\"]"`

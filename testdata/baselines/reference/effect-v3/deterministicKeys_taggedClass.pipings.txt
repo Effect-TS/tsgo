@@ -1,0 +1,58 @@
+==== /.src/package.json (0 flows) ====
+==== /.src/test.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 10:31 - 10:84
+Node: Schema.TaggedClass<Cancelled>("CancelledIdentifier")
+Node Kind: KindCallExpression
+
+Subject: "CancelledIdentifier"
+Subject Type: "CancelledIdentifier"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.TaggedClass
+      args: (constant)
+      outType: <Tag extends string, Fields extends Struct.Fields>(tag: Tag, fieldsOr: Fields | HasFields<Fields>, annotations?: ClassAnnotations<Cancelled, { [K in keyof Type<{ readonly _tag: tag<Tag>; } & Fields>]: Type<{ readonly _tag: tag<Tag>; } & Fields>[K]; }> | undefined) => TaggedClass<Cancelled, Tag, { readonly _tag: tag<Tag>; } & Fields>
+
+=== Piping Flow ===
+Location: 12:28 - 12:55
+Node: Data.TaggedClass("Queued")
+Node Kind: KindCallExpression
+
+Subject: "Queued"
+Subject Type: "Queued"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedClass
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => Readonly<A> & { readonly _tag: "Queued"; }
+
+=== Piping Flow ===
+Location: 14:28 - 14:55
+Node: Data.TaggedClass("failed")
+Node Kind: KindCallExpression
+
+Subject: "failed"
+Subject Type: "failed"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedClass
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => Readonly<A> & { readonly _tag: "failed"; }
+
+=== Piping Flow ===
+Location: 22:31 - 22:62
+Node: Data.TaggedError("data-error")
+Node Kind: KindCallExpression
+
+Subject: "data-error"
+Subject Type: "data-error"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "data-error"; } & Readonly<A>
