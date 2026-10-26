@@ -1,0 +1,622 @@
+Port of _patches/typescript/028-incremental-effect-options.patch to tsrs.
+
+- BuildInfo.Effect (`*etscore.EffectPluginOptions`, `json:"effect,omitzero"`): `BuildInfo::effect:
+  Option<Arc<ets_etscore::EffectPluginOptions>>`, written after `options` by both writers (`marshal_json` and the
+  streaming `marshal`) and read back by `unmarshal_json`. tsrs_incremental depends on the workspace's ets_etscore
+  crate, as Go's incremental package imports etscore.
+- GetCompilerOptions (`options.Effect = b.Effect`): `get_compiler_options` sets the options' `effect` cell.
+- snapshotToBuildInfo (`Effect: snapshot.options.Effect`): `snapshot_to_build_info` records the snapshot's options.
+- CompilerOptionsAffectSemanticDiagnostics (`!reflect.DeepEqual(oldOptions.Effect, newOptions.Effect)`):
+  `compiler_options_affect_semantic_diagnostics` compares the `effect` cells by value first.
+- tsoptions/effect_options_test.go: crates/tsrs_tsoptions/src/effect_options_test.rs.
+- tsrs-only: Go encodes the options with encoding/json/v2 through etscore's struct tags; tsrs builds its JSON by hand,
+  so buildinfoeffect.rs writes and reads the same members field by field, with buildinfoeffect_test.rs holding the
+  bytes the Go build writes. Go writes map entries in random order; tsrs sorts them.
+
+diff --git a/crates/tsrs_incremental/Cargo.toml b/crates/tsrs_incremental/Cargo.toml
+index 08d70af..8199680 100644
+--- a/crates/tsrs_incremental/Cargo.toml
++++ b/crates/tsrs_incremental/Cargo.toml
+@@ -10,6 +10,8 @@ publish.workspace = true
+ workspace = true
+ 
+ [dependencies]
++# effect-tsgo patch 028: the build info records etscore's plugin options (Go's incremental imports etscore).
++ets_etscore = { path = "../../../crates/ets_etscore" }
+ tsrs_core.workspace = true
+ tsrs_diagnostics.workspace = true
+ tsrs_ast.workspace = true
+diff --git a/crates/tsrs_incremental/src/buildinfo.rs b/crates/tsrs_incremental/src/buildinfo.rs
+index ebe5ae1..1e8c4eb 100644
+--- a/crates/tsrs_incremental/src/buildinfo.rs
++++ b/crates/tsrs_incremental/src/buildinfo.rs
+@@ -5,6 +5,8 @@
+ // `json::marshal` produces Go's exact bytes in Go-compatible history. Unmarshaling follows the Go
+ // `UnmarshalJSON` fallbacks; default history adds an optional tsrs canonical-cache proof.
+ 
++use std::sync::Arc;
++
+ use rustc_hash::FxHashMap;
+ use tsrs_ast::RepopulateDiagnosticKind;
+ use tsrs_core::collections::OrderedMap;
+@@ -14,6 +16,7 @@ use tsrs_core::{CompilerOptions, ModuleKind, ResolutionMode};
+ use tsrs_diagnostics::Category;
+ use tsrs_tsoptions::{self as tsoptions, CompilerOptionsValue, ParsedCommandLine};
+ 
++use crate::buildinfoeffect::{marshal_effect_options, unmarshal_effect_options};
+ use crate::snapshot::{EmitSignature, FileEmitKind, FileInfo, get_pending_emit_kind_with_options};
+ 
+ pub type BuildInfoFileId = u32;
+@@ -653,6 +656,8 @@ pub struct BuildInfo {
+     pub file_infos_non_nil: bool,
+     pub file_ids_list: Vec<Vec<BuildInfoFileId>>,
+     pub options: Option<OrderedMap<String, Value>>,
++    // effect-tsgo patch 028: Go's `Effect *etscore.EffectPluginOptions` (`json:"effect,omitzero"`).
++    pub effect: Option<Arc<ets_etscore::EffectPluginOptions>>,
+     pub referenced_map: Vec<BuildInfoReferenceMapEntry>,
+     pub semantic_diagnostics_per_file: Vec<BuildInfoSemanticDiagnostic>,
+     pub emit_diagnostics_per_file: Vec<BuildInfoDiagnosticsOfFile>,
+@@ -694,6 +699,9 @@ impl BuildInfo {
+             // omitzero on a pointer: only nil is omitted.
+             o.set("options", Value::Object(options.clone()));
+         }
++        if let Some(effect) = &self.effect {
++            o.set("effect", marshal_effect_options(effect));
++        }
+         o.list("referencedMap", &self.referenced_map, BuildInfoReferenceMapEntry::marshal_json);
+         o.list(
+             "semanticDiagnosticsPerFile",
+@@ -768,6 +776,10 @@ impl BuildInfo {
+                 Some(Value::Object(m)) => Some(m.clone()),
+                 Some(_) => return Err("invalid options".to_string()),
+             },
++            effect: match o.get("effect") {
++                None | Some(Value::Null) => None,
++                Some(v) => Some(Arc::new(unmarshal_effect_options(v)?)),
++            },
+             referenced_map: get_array(
+                 o,
+                 "referencedMap",
+@@ -836,6 +848,10 @@ impl BuildInfo {
+             w.key("options");
+             write_compact(w.out, &Value::Object(options.clone()));
+         }
++        if let Some(effect) = &self.effect {
++            w.key("effect");
++            write_compact(w.out, &marshal_effect_options(effect));
++        }
+         w.values("referencedMap", &self.referenced_map, BuildInfoReferenceMapEntry::marshal_json);
+         w.values(
+             "semanticDiagnosticsPerFile",
+@@ -940,6 +956,7 @@ impl BuildInfo {
+                 tsoptions::parse_compiler_options(option, &value, &mut options);
+             }
+         }
++        options.effect.set(self.effect.clone());
+         options
+     }
+ 
+@@ -1444,6 +1461,11 @@ mod tests {
+             file_infos_non_nil: true,
+             file_ids_list: vec![vec![1, 2], vec![3], vec![1, 2, 3, 123_456_789]],
+             options: Some(options),
++            effect: Some(Arc::new(ets_etscore::EffectPluginOptions {
++                diagnostics: true,
++                diagnostic_severity: Some(FxHashMap::default()),
++                ..Default::default()
++            })),
+             referenced_map: vec![
+                 BuildInfoReferenceMapEntry { file_id: 2, file_id_list_id: 1 },
+                 BuildInfoReferenceMapEntry { file_id: 3, file_id_list_id: 3 },
+@@ -1483,10 +1505,12 @@ mod tests {
+         for build_info in [full, empty, bare] {
+             let expected = tsrs_core::json::marshal(&build_info.marshal_json()).unwrap();
+             assert_eq!(build_info.marshal(), expected);
++            let decoded = BuildInfo::unmarshal(&expected).unwrap();
+             assert_eq!(
+-                BuildInfo::unmarshal(&expected).unwrap().tsrs_canonical_check_signature,
++                decoded.tsrs_canonical_check_signature,
+                 build_info.tsrs_canonical_check_signature
+             );
++            assert_eq!(decoded.effect, build_info.effect);
+         }
+     }
+ }
+diff --git a/crates/tsrs_incremental/src/buildinfoeffect.rs b/crates/tsrs_incremental/src/buildinfoeffect.rs
+new file mode 100644
+index 0000000..0df0127
+--- /dev/null
++++ b/crates/tsrs_incremental/src/buildinfoeffect.rs
+@@ -0,0 +1,304 @@
++// effect-tsgo patch 028: the `effect` member of the build info, Go's encoding/json of `*etscore.EffectPluginOptions`
++// through its `json:` struct tags. Every field is `omitzero` but KeyPattern's: a false, zero or empty-string value and
++// a nil slice, map or pointer are omitted, while an empty non-nil slice or map is written as `[]` / `{}`. Members are
++// in Go's field order; Go writes map entries in random order, and they are sorted here.
++
++use std::borrow::Cow;
++
++use ets_etscore::{
++    EffectPluginOptions, KeyPattern, Override, OverrideOptions, Severity,
++    TopLevelNamedReexportsMode, parse_severity,
++};
++use rustc_hash::FxHashMap;
++use tsrs_core::collections::OrderedMap;
++use tsrs_core::json::Value;
++
++type Object = OrderedMap<String, Value>;
++
++pub(crate) fn marshal_effect_options(options: &EffectPluginOptions) -> Value {
++    let mut o = Members::default();
++    o.bool("refactors", options.refactors);
++    o.bool("diagnostics", options.diagnostics);
++    o.bool("includeSuggestionsInTsc", options.include_suggestions_in_tsc);
++    o.bool("quickinfo", options.quickinfo);
++    o.bool("completions", options.completions);
++    o.bool("goto", options.goto);
++    o.bool("renames", options.renames);
++    o.bool(
++        "ignoreEffectSuggestionsInTscExitCode",
++        options.ignore_effect_suggestions_in_tsc_exit_code,
++    );
++    o.bool("ignoreEffectWarningsInTscExitCode", options.ignore_effect_warnings_in_tsc_exit_code);
++    o.bool("ignoreEffectErrorsInTscExitCode", options.ignore_effect_errors_in_tsc_exit_code);
++    o.bool("skipDisabledOptimization", options.skip_disabled_optimization);
++    o.str("mermaidProvider", &options.mermaid_provider);
++    o.bool("noExternal", options.no_external);
++    o.int("layerGraphFollowDepth", options.layer_graph_follow_depth);
++    o.bool("inlays", options.inlays);
++    o.opt("namespaceImportPackages", options.namespace_import_packages.as_deref(), strings);
++    o.opt("barrelImportPackages", options.barrel_import_packages.as_deref(), strings);
++    o.opt("importAliases", options.import_aliases.as_ref(), string_map);
++    o.str("topLevelNamedReexports", &options.top_level_named_reexports.0);
++    o.opt("keyPatterns", options.key_patterns.as_deref(), key_patterns);
++    o.bool("extendedKeyDetection", options.extended_key_detection);
++    o.int("pipeableMinArgCount", options.pipeable_min_arg_count);
++    o.opt("allowedUnstableApis", options.allowed_unstable_apis.as_deref(), strings);
++    o.opt("allowedExperimentalApis", options.allowed_experimental_apis.as_deref(), strings);
++    o.opt("allowedDuplicatedPackages", options.allowed_duplicated_packages.as_deref(), strings);
++    o.opt("effectFn", options.effect_fn.as_deref(), strings);
++    o.opt("diagnosticSeverity", options.diagnostic_severity.as_ref(), severity_map);
++    o.opt("overrides", options.overrides.as_deref(), |overrides| {
++        Value::Array(overrides.iter().map(marshal_override).collect())
++    });
++    Value::Object(o.0)
++}
++
++pub(crate) fn unmarshal_effect_options(data: &Value) -> Result<EffectPluginOptions, String> {
++    let o = object(data, "effect")?;
++    Ok(EffectPluginOptions {
++        refactors: get_bool(o, "refactors")?,
++        diagnostics: get_bool(o, "diagnostics")?,
++        include_suggestions_in_tsc: get_bool(o, "includeSuggestionsInTsc")?,
++        quickinfo: get_bool(o, "quickinfo")?,
++        completions: get_bool(o, "completions")?,
++        goto: get_bool(o, "goto")?,
++        renames: get_bool(o, "renames")?,
++        ignore_effect_suggestions_in_tsc_exit_code: get_bool(
++            o,
++            "ignoreEffectSuggestionsInTscExitCode",
++        )?,
++        ignore_effect_warnings_in_tsc_exit_code: get_bool(o, "ignoreEffectWarningsInTscExitCode")?,
++        ignore_effect_errors_in_tsc_exit_code: get_bool(o, "ignoreEffectErrorsInTscExitCode")?,
++        skip_disabled_optimization: get_bool(o, "skipDisabledOptimization")?,
++        mermaid_provider: get_opt(o, "mermaidProvider", as_string)?.unwrap_or_default(),
++        no_external: get_bool(o, "noExternal")?,
++        layer_graph_follow_depth: get_opt(o, "layerGraphFollowDepth", as_int)?.unwrap_or_default(),
++        inlays: get_bool(o, "inlays")?,
++        namespace_import_packages: get_opt(o, "namespaceImportPackages", as_strings)?,
++        barrel_import_packages: get_opt(o, "barrelImportPackages", as_strings)?,
++        import_aliases: get_opt(o, "importAliases", as_string_map)?,
++        top_level_named_reexports: get_opt(o, "topLevelNamedReexports", as_mode)?
++            .unwrap_or_default(),
++        key_patterns: get_opt(o, "keyPatterns", as_key_patterns)?,
++        extended_key_detection: get_bool(o, "extendedKeyDetection")?,
++        pipeable_min_arg_count: get_opt(o, "pipeableMinArgCount", as_int)?.unwrap_or_default(),
++        allowed_unstable_apis: get_opt(o, "allowedUnstableApis", as_strings)?,
++        allowed_experimental_apis: get_opt(o, "allowedExperimentalApis", as_strings)?,
++        allowed_duplicated_packages: get_opt(o, "allowedDuplicatedPackages", as_strings)?,
++        effect_fn: get_opt(o, "effectFn", as_strings)?,
++        diagnostic_severity: get_opt(o, "diagnosticSeverity", as_severity_map)?,
++        overrides: get_opt(o, "overrides", |v| {
++            array(v, "overrides")?.iter().map(unmarshal_override).collect()
++        })?,
++    })
++}
++
++fn marshal_override(o: &Override) -> Value {
++    let mut m = Members::default();
++    m.opt("include", o.include.as_deref(), strings);
++    m.opt("exclude", o.exclude.as_deref(), strings);
++    if o.options != OverrideOptions::default() {
++        m.set("options", marshal_override_options(&o.options));
++    }
++    Value::Object(m.0)
++}
++
++fn unmarshal_override(data: &Value) -> Result<Override, String> {
++    let o = object(data, "overrides")?;
++    Ok(Override {
++        include: get_opt(o, "include", as_strings)?,
++        exclude: get_opt(o, "exclude", as_strings)?,
++        options: get_opt(o, "options", unmarshal_override_options)?.unwrap_or_default(),
++    })
++}
++
++fn marshal_override_options(o: &OverrideOptions) -> Value {
++    let mut m = Members::default();
++    m.opt("diagnosticSeverity", o.diagnostic_severity.as_ref(), severity_map);
++    m.opt("pipeableMinArgCount", o.pipeable_min_arg_count.as_ref(), |&n| Value::Integer(n));
++    m.opt("keyPatterns", o.key_patterns.as_deref(), key_patterns);
++    m.opt("extendedKeyDetection", o.extended_key_detection.as_ref(), |&b| Value::Bool(b));
++    m.opt("allowedUnstableApis", o.allowed_unstable_apis.as_deref(), strings);
++    m.opt("allowedExperimentalApis", o.allowed_experimental_apis.as_deref(), strings);
++    m.opt("allowedDuplicatedPackages", o.allowed_duplicated_packages.as_deref(), strings);
++    m.opt("effectFn", o.effect_fn.as_deref(), strings);
++    m.opt("namespaceImportPackages", o.namespace_import_packages.as_deref(), strings);
++    m.opt("barrelImportPackages", o.barrel_import_packages.as_deref(), strings);
++    m.opt("importAliases", o.import_aliases.as_ref(), string_map);
++    m.opt("topLevelNamedReexports", o.top_level_named_reexports.as_ref(), |mode| {
++        Value::String(mode.0.to_string())
++    });
++    Value::Object(m.0)
++}
++
++fn unmarshal_override_options(data: &Value) -> Result<OverrideOptions, String> {
++    let o = object(data, "options")?;
++    Ok(OverrideOptions {
++        diagnostic_severity: get_opt(o, "diagnosticSeverity", as_severity_map)?,
++        pipeable_min_arg_count: get_opt(o, "pipeableMinArgCount", as_int)?,
++        key_patterns: get_opt(o, "keyPatterns", as_key_patterns)?,
++        extended_key_detection: get_opt(o, "extendedKeyDetection", as_bool)?,
++        allowed_unstable_apis: get_opt(o, "allowedUnstableApis", as_strings)?,
++        allowed_experimental_apis: get_opt(o, "allowedExperimentalApis", as_strings)?,
++        allowed_duplicated_packages: get_opt(o, "allowedDuplicatedPackages", as_strings)?,
++        effect_fn: get_opt(o, "effectFn", as_strings)?,
++        namespace_import_packages: get_opt(o, "namespaceImportPackages", as_strings)?,
++        barrel_import_packages: get_opt(o, "barrelImportPackages", as_strings)?,
++        import_aliases: get_opt(o, "importAliases", as_string_map)?,
++        top_level_named_reexports: get_opt(o, "topLevelNamedReexports", as_mode)?,
++    })
++}
++
++// KeyPattern's tags have no `omitzero`: every member is written, a nil slice as `[]` (json/v2).
++fn key_patterns(patterns: &[KeyPattern]) -> Value {
++    Value::Array(
++        patterns
++            .iter()
++            .map(|p| {
++                let mut m = Members::default();
++                m.set("target", Value::String(p.target.clone()));
++                m.set("pattern", Value::String(p.pattern.clone()));
++                m.set(
++                    "skipLeadingPath",
++                    strings(p.skip_leading_path.as_deref().unwrap_or_default()),
++                );
++                Value::Object(m.0)
++            })
++            .collect(),
++    )
++}
++
++fn as_key_patterns(data: &Value) -> Result<Vec<KeyPattern>, String> {
++    array(data, "keyPatterns")?
++        .iter()
++        .map(|v| {
++            let o = object(v, "keyPatterns")?;
++            Ok(KeyPattern {
++                target: get_opt(o, "target", as_string)?.unwrap_or_default(),
++                pattern: get_opt(o, "pattern", as_string)?.unwrap_or_default(),
++                skip_leading_path: get_opt(o, "skipLeadingPath", as_strings)?,
++            })
++        })
++        .collect()
++}
++
++#[derive(Default)]
++struct Members(Object);
++
++impl Members {
++    fn set(&mut self, key: &str, v: Value) {
++        self.0.insert(key.to_string(), v);
++    }
++    fn bool(&mut self, key: &str, v: bool) {
++        if v {
++            self.set(key, Value::Bool(true));
++        }
++    }
++    fn int(&mut self, key: &str, v: i64) {
++        if v != 0 {
++            self.set(key, Value::Integer(v));
++        }
++    }
++    fn str(&mut self, key: &str, v: &str) {
++        if !v.is_empty() {
++            self.set(key, Value::String(v.to_string()));
++        }
++    }
++    fn opt<T: ?Sized>(&mut self, key: &str, v: Option<&T>, f: impl FnOnce(&T) -> Value) {
++        if let Some(v) = v {
++            self.set(key, f(v));
++        }
++    }
++}
++
++fn strings(v: &[String]) -> Value {
++    Value::Array(v.iter().map(|s| Value::String(s.clone())).collect())
++}
++
++fn sorted_map<T>(map: &FxHashMap<String, T>, f: impl Fn(&T) -> Value) -> Value {
++    let mut keys: Vec<&String> = map.keys().collect();
++    keys.sort();
++    let mut o = Object::default();
++    for key in keys {
++        o.insert(key.clone(), f(&map[key]));
++    }
++    Value::Object(o)
++}
++
++fn string_map(map: &FxHashMap<String, String>) -> Value {
++    sorted_map(map, |s| Value::String(s.clone()))
++}
++
++// Severity.MarshalJSON
++fn severity_map(map: &FxHashMap<String, Severity>) -> Value {
++    sorted_map(map, |s| Value::String(s.string().to_string()))
++}
++
++fn object<'a>(v: &'a Value, key: &str) -> Result<&'a Object, String> {
++    match v {
++        Value::Object(o) => Ok(o),
++        _ => Err(format!("invalid {key}")),
++    }
++}
++
++fn array<'a>(v: &'a Value, key: &str) -> Result<&'a [Value], String> {
++    match v {
++        Value::Array(items) => Ok(items),
++        _ => Err(format!("invalid {key}")),
++    }
++}
++
++// A missing member keeps the zero value, as does `null` (Go unmarshals `null` into a slice, map or pointer as nil).
++fn get_opt<T>(
++    o: &Object,
++    key: &str,
++    f: impl Fn(&Value) -> Result<T, String>,
++) -> Result<Option<T>, String> {
++    match o.get(key) {
++        None | Some(Value::Null) => Ok(None),
++        Some(v) => f(v).map(Some).map_err(|_| format!("invalid {key}")),
++    }
++}
++
++fn get_bool(o: &Object, key: &str) -> Result<bool, String> {
++    Ok(get_opt(o, key, as_bool)?.unwrap_or_default())
++}
++
++fn as_bool(v: &Value) -> Result<bool, String> {
++    match v {
++        Value::Bool(b) => Ok(*b),
++        _ => Err(String::new()),
++    }
++}
++
++fn as_int(v: &Value) -> Result<i64, String> {
++    match v {
++        Value::Number(n) if n.fract() == 0.0 => Ok(*n as i64),
++        Value::Integer(n) => Ok(*n),
++        _ => Err(String::new()),
++    }
++}
++
++fn as_string(v: &Value) -> Result<String, String> {
++    match v {
++        Value::String(s) => Ok(s.clone()),
++        _ => Err(String::new()),
++    }
++}
++
++fn as_strings(v: &Value) -> Result<Vec<String>, String> {
++    array(v, "")?.iter().map(as_string).collect()
++}
++
++fn as_mode(v: &Value) -> Result<TopLevelNamedReexportsMode, String> {
++    Ok(TopLevelNamedReexportsMode(Cow::Owned(as_string(v)?)))
++}
++
++fn as_string_map(v: &Value) -> Result<FxHashMap<String, String>, String> {
++    object(v, "")?.iter().map(|(k, v)| Ok((k.clone(), as_string(v)?))).collect()
++}
++
++// Severity.UnmarshalJSON
++fn as_severity_map(v: &Value) -> Result<FxHashMap<String, Severity>, String> {
++    object(v, "")?.iter().map(|(k, v)| Ok((k.clone(), parse_severity(&as_string(v)?)))).collect()
++}
+diff --git a/crates/tsrs_incremental/src/buildinfoeffect_test.rs b/crates/tsrs_incremental/src/buildinfoeffect_test.rs
+new file mode 100644
+index 0000000..8125d8d
+--- /dev/null
++++ b/crates/tsrs_incremental/src/buildinfoeffect_test.rs
+@@ -0,0 +1,83 @@
++// effect-tsgo patch 028: the `effect` build info member against Go's bytes. The expectations are the `effect` member
++// of .tsbuildinfo files written by the Go build (Go writes map entries in random order; these are sorted).
++use std::borrow::Cow;
++
++use ets_etscore::{
++    EffectPluginOptions, KeyPattern, Override, OverrideOptions, Severity,
++    TopLevelNamedReexportsMode,
++};
++
++use crate::buildinfoeffect::{marshal_effect_options, unmarshal_effect_options};
++
++fn round_trip(go: &str) -> String {
++    let options = unmarshal_effect_options(&tsrs_core::json::unmarshal(go).unwrap()).unwrap();
++    tsrs_core::json::marshal(&marshal_effect_options(&options)).unwrap()
++}
++
++#[test]
++fn test_effect_options_match_go_encoding() {
++    let options = EffectPluginOptions {
++        refactors: true,
++        diagnostics: true,
++        layer_graph_follow_depth: 2,
++        namespace_import_packages: Some(vec![]),
++        import_aliases: Some(
++            [
++                ("effect".to_string(), "E".to_string()),
++                ("@effect/platform".to_string(), "P".to_string()),
++            ]
++            .into_iter()
++            .collect(),
++        ),
++        key_patterns: Some(vec![KeyPattern {
++            target: "service".into(),
++            pattern: "default".into(),
++            skip_leading_path: None,
++        }]),
++        diagnostic_severity: Some(
++            [
++                ("floatingEffect".to_string(), Severity::Warning),
++                ("leakingRequirements".to_string(), Severity::Off),
++            ]
++            .into_iter()
++            .collect(),
++        ),
++        overrides: Some(vec![
++            Override {
++                include: Some(vec!["src/**".into()]),
++                exclude: None,
++                options: OverrideOptions {
++                    pipeable_min_arg_count: Some(3),
++                    extended_key_detection: Some(false),
++                    effect_fn: Some(vec![]),
++                    top_level_named_reexports: Some(TopLevelNamedReexportsMode(Cow::Borrowed(
++                        "follow",
++                    ))),
++                    ..Default::default()
++                },
++            },
++            Override { include: None, exclude: Some(vec![]), options: OverrideOptions::default() },
++        ]),
++        ..Default::default()
++    };
++    let go = r#"{"refactors":true,"diagnostics":true,"layerGraphFollowDepth":2,"namespaceImportPackages":[],"importAliases":{"@effect/platform":"P","effect":"E"},"keyPatterns":[{"target":"service","pattern":"default","skipLeadingPath":[]}],"diagnosticSeverity":{"floatingEffect":"warning","leakingRequirements":"off"},"overrides":[{"include":["src/**"],"options":{"pipeableMinArgCount":3,"extendedKeyDetection":false,"effectFn":[],"topLevelNamedReexports":"follow"}},{"exclude":[]}]}"#;
++    assert_eq!(tsrs_core::json::marshal(&marshal_effect_options(&options)).unwrap(), go);
++    let mut decoded = options;
++    decoded.key_patterns.as_mut().unwrap()[0].skip_leading_path = Some(vec![]);
++    assert_eq!(
++        unmarshal_effect_options(&tsrs_core::json::unmarshal(go).unwrap()).unwrap(),
++        decoded
++    );
++}
++
++#[test]
++fn test_effect_options_round_trip_go_build_info() {
++    for go in [
++        r#"{"refactors":true,"includeSuggestionsInTsc":true,"quickinfo":true,"completions":true,"goto":true,"renames":true,"ignoreEffectSuggestionsInTscExitCode":true,"diagnosticSeverity":{}}"#,
++        r#"{"refactors":true,"diagnostics":true,"includeSuggestionsInTsc":true,"quickinfo":true,"completions":true,"goto":true,"renames":true,"ignoreEffectSuggestionsInTscExitCode":true,"keyPatterns":[{"target":"service","pattern":"default","skipLeadingPath":[]},{"target":"error","pattern":"package-identifier","skipLeadingPath":["src/"]}],"diagnosticSeverity":{}}"#,
++        r#"{"refactors":true,"diagnostics":true,"includeSuggestionsInTsc":true,"quickinfo":true,"completions":true,"goto":true,"renames":true,"ignoreEffectSuggestionsInTscExitCode":true,"diagnosticSeverity":{},"overrides":[{"include":["src/**"],"options":{"diagnosticSeverity":{"floatingEffect":"off"},"pipeableMinArgCount":3,"extendedKeyDetection":false,"effectFn":[],"importAliases":{},"topLevelNamedReexports":"follow"}},{"exclude":[]}]}"#,
++        r#"{"refactors":true,"diagnostics":true,"includeSuggestionsInTsc":true,"quickinfo":true,"completions":true,"goto":true,"renames":true,"ignoreEffectSuggestionsInTscExitCode":true,"skipDisabledOptimization":true,"mermaidProvider":"mermaid.com","noExternal":true,"layerGraphFollowDepth":2,"inlays":true,"topLevelNamedReexports":"follow","extendedKeyDetection":true,"pipeableMinArgCount":5,"allowedUnstableApis":["a"],"allowedExperimentalApis":[],"allowedDuplicatedPackages":["b"],"diagnosticSeverity":{}}"#,
++    ] {
++        assert_eq!(round_trip(go), go);
++    }
++}
+diff --git a/crates/tsrs_incremental/src/lib.rs b/crates/tsrs_incremental/src/lib.rs
+index d6a22be..16bb377 100644
+--- a/crates/tsrs_incremental/src/lib.rs
++++ b/crates/tsrs_incremental/src/lib.rs
+@@ -5,6 +5,9 @@ mod affectedfileshandler;
+ mod buildinfo;
+ #[cfg(test)]
+ mod buildinfo_contentmapper_test;
++mod buildinfoeffect;
++#[cfg(test)]
++mod buildinfoeffect_test;
+ mod buildinfotosnapshot;
+ pub mod emit;
+ mod emitfileshandler;
+diff --git a/crates/tsrs_incremental/src/snapshottobuildinfo.rs b/crates/tsrs_incremental/src/snapshottobuildinfo.rs
+index 4b831b2..f884da3 100644
+--- a/crates/tsrs_incremental/src/snapshottobuildinfo.rs
++++ b/crates/tsrs_incremental/src/snapshottobuildinfo.rs
+@@ -29,6 +29,7 @@ pub(crate) fn snapshot_to_build_info(
+     let mut build_info = BuildInfo {
+         version: tsrs_core::version().to_string(),
+         content_mapper_identities,
++        effect: snapshot.options().effect.get(),
+         ..Default::default()
+     };
+     let mut to = toBuildInfo {
+diff --git a/crates/tsrs_tsoptions/src/declscompiler.rs b/crates/tsrs_tsoptions/src/declscompiler.rs
+index 28b003d..af19049 100644
+--- a/crates/tsrs_tsoptions/src/declscompiler.rs
++++ b/crates/tsrs_tsoptions/src/declscompiler.rs
+@@ -1499,6 +1499,12 @@ pub fn compiler_options_affect_semantic_diagnostics(
+     old_options: Option<&CompilerOptions>,
+     new_options: Option<&CompilerOptions>,
+ ) -> bool {
++    // effect-tsgo patch 028: `reflect.DeepEqual(oldOptions.Effect, newOptions.Effect)`.
++    if let (Some(old_options), Some(new_options)) = (old_options, new_options)
++        && old_options.effect != new_options.effect
++    {
++        return true;
++    }
+     compiler_option_changes(old_options, new_options)
+         .contains(CompilerOptionChanges::SEMANTIC_DIAGNOSTICS)
+ }
+diff --git a/crates/tsrs_tsoptions/src/effect_options_test.rs b/crates/tsrs_tsoptions/src/effect_options_test.rs
+new file mode 100644
+index 0000000..056258a
+--- /dev/null
++++ b/crates/tsrs_tsoptions/src/effect_options_test.rs
+@@ -0,0 +1,37 @@
++// effect-tsgo patch 028 (tsoptions/effect_options_test.go).
++use std::sync::Arc;
++
++use tsrs_core::CompilerOptions;
++
++use crate::compiler_options_affect_semantic_diagnostics;
++
++#[test]
++fn test_effect_options_invalidate_semantic_diagnostics() {
++    let effect = |diagnostics| CompilerOptions {
++        effect: Some(Arc::new(ets_etscore::EffectPluginOptions {
++            diagnostics,
++            ..Default::default()
++        }))
++        .into(),
++        ..Default::default()
++    };
++    let old_options = effect(true);
++    let new_options = effect(true);
++    assert!(
++        !compiler_options_affect_semantic_diagnostics(Some(&old_options), Some(&new_options)),
++        "equal Effect options must retain semantic diagnostics"
++    );
++    let new_options = effect(false);
++    assert!(
++        compiler_options_affect_semantic_diagnostics(Some(&old_options), Some(&new_options)),
++        "changed Effect options must invalidate semantic diagnostics"
++    );
++    assert!(
++        !compiler_options_affect_semantic_diagnostics(None, None),
++        "nil options must compare safely"
++    );
++    assert!(
++        compiler_options_affect_semantic_diagnostics(Some(&old_options), None),
++        "removing options must invalidate semantic diagnostics"
++    );
++}
+diff --git a/crates/tsrs_tsoptions/src/lib.rs b/crates/tsrs_tsoptions/src/lib.rs
+index 9304201..43105c7 100644
+--- a/crates/tsrs_tsoptions/src/lib.rs
++++ b/crates/tsrs_tsoptions/src/lib.rs
+@@ -28,6 +28,8 @@ mod contentmappers_test;
+ #[cfg(test)]
+ mod decls_test;
+ #[cfg(test)]
++mod effect_options_test;
++#[cfg(test)]
+ mod parsinghelpers_test;
+ #[cfg(test)]
+ mod testutil;

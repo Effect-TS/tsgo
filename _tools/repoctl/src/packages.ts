@@ -65,18 +65,19 @@ export const assembleReleaseArtifacts = Effect.fnUntraced(function*(
   for (const artifact of plan) {
     const directory = path.join(sourceRoot, artifact.artifactName)
     const files = (yield* fs.readDirectory(directory)).sort()
-    const libraries = artifact.component === "typescript"
-      ? files.filter((name) => /^lib(?:\..+)?\.d\.ts$/.test(name))
+    const hasLibraries = artifact.component === "typescript" || artifact.component === "tsrs"
+    const libraries = hasLibraries
+      ? files.filter((name) => name.endsWith(".d.ts"))
       : []
     const expectedFiles = new Set([artifact.fileName, ...libraries])
     if (!files.includes(artifact.fileName) || files.some((name) => !expectedFiles.has(name))) {
       return yield* new PackagePreparationError({
         reason: `${artifact.artifactName} must contain ${artifact.fileName}${
-          artifact.component === "typescript" ? " and TypeScript libraries" : ""
+          hasLibraries ? " and TypeScript libraries" : ""
         } only, found ${files.join(", ") || "nothing"}`
       })
     }
-    if (artifact.component === "typescript" && !libraries.includes("lib.d.ts")) {
+    if (hasLibraries && !libraries.includes("lib.d.ts")) {
       return yield* new PackagePreparationError({ reason: `Missing TypeScript libraries in ${artifact.artifactName}` })
     }
     for (const file of files) {

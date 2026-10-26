@@ -4,7 +4,7 @@
     "typescript": {
       "latest": "7.0.2",
       "beta": "7.1.0-beta",
-      "next": "7.1.0-dev.20261025.1"
+      "next": "7.1.0-dev.20261026.1"
     },
     "oxlint": {
       "latest": "1.89.0"
@@ -13,7 +13,7 @@
       "latest": "7.0.2005"
     },
     "tsrs": {
-      "latest": "0.18.0-ts7.1.0-dev.20260929"
+      "latest": "0.20.0-ts7.1.0-beta"
     }
   },
   "components": {
@@ -26,11 +26,7 @@
         "gitHead": "3e9236361fa97a9e6c685f4833ac457ae2d8c50a",
         "provider": "typescript"
       },
-      "7.1.0-dev.20260929": {
-        "gitHead": "b85298b6a81f772d080b0455de0ca9d744cd6fd6",
-        "provider": "typescript"
-      },
-      "7.1.0-dev.20261025.1": {
+      "7.1.0-dev.20261026.1": {
         "gitHead": "8a62bbe746909624b69b6e671026b454da2f02cf",
         "provider": "typescript"
       }
@@ -61,11 +57,11 @@
       }
     },
     "tsrs": {
-      "0.18.0-ts7.1.0-dev.20260929": {
-        "gitHead": "5f92808bc92bb97b06212153ab73d28d551c0b9b",
+      "0.20.0-ts7.1.0-beta": {
+        "gitHead": "d197eeea709616d61930c2bd5eac048471e404b8",
         "typescript": {
-          "version": "7.1.0-dev.20260929",
-          "gitHead": "b85298b6a81f772d080b0455de0ca9d744cd6fd6"
+          "version": "7.1.0-beta",
+          "gitHead": "3e9236361fa97a9e6c685f4833ac457ae2d8c50a"
         }
       }
     }

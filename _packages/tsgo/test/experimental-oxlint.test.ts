@@ -46,18 +46,21 @@ describe("experimental Oxlint discovery", () => {
   it("maps supported platforms to installed package names", () => {
     expect(experimentalOxlintTarget("linux", "x64", true)).toEqual({
       codeTarget: "linux-x64-gnu",
+      oxlintBinding: "oxlint.linux-x64-gnu.node",
       oxlintPackage: "@oxlint/binding-linux-x64-gnu",
       tsgolintPackage: "@oxlint-tsgolint/linux-x64",
       tsgolintExecutable: "tsgolint"
     })
     expect(experimentalOxlintTarget("win32", "arm64", false)).toEqual({
       codeTarget: "win32-arm64",
+      oxlintBinding: "oxlint.win32-arm64-msvc.node",
       oxlintPackage: "@oxlint/binding-win32-arm64-msvc",
       tsgolintPackage: "@oxlint-tsgolint/win32-arm64",
       tsgolintExecutable: "tsgolint.exe"
     })
     expect(experimentalOxlintTarget("linux", "x64", false)).toEqual({
       codeTarget: "linux-x64-musl",
+      oxlintBinding: "oxlint.linux-x64-musl.node",
       oxlintPackage: "@oxlint/binding-linux-x64-musl",
       tsgolintPackage: "@oxlint-tsgolint/linux-x64",
       tsgolintExecutable: "tsgolint"
