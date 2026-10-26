@@ -2792,7 +2792,7 @@
         "preferSchemaTypeProperty": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
-          "description": "Disallows Schema.Schema.Type\u003ctypeof X\u003e in favor of typeof X.Type"
+          "description": "Disallows Schema.Schema.Type\u003ctypeof X\u003e and Schema.Codec.Encoded\u003ctypeof X\u003e-style helpers in favor of typeof X.Type and typeof X.Encoded"
         },
         "preferSucceedSomeOrNone": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

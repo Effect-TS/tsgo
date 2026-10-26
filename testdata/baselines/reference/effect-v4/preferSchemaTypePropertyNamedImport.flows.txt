@@ -1,0 +1,1 @@
+/.src/preferSchemaTypePropertyNamedImport.ts -> preferSchemaTypePropertyNamedImport.flows.preferSchemaTypePropertyNamedImport.mermaid

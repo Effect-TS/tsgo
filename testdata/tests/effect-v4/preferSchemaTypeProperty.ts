@@ -32,3 +32,9 @@ declare namespace LocalSchema {
   }
 }
 type Unrelated = LocalSchema.Schema.Type<typeof Address>
+
+export const User = Schema.Struct({ id: Schema.String })
+export type UserEncoded = Schema.Codec.Encoded<typeof User>
+export type UserDecodingServices = Schema.Codec.DecodingServices<typeof User>
+export type UserEncodingServices = S.Codec.EncodingServices<typeof User>
+export type NotAHelper = Schema.Codec.Type<typeof User>

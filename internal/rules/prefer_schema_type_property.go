@@ -1,6 +1,8 @@
 package rules
 
 import (
+	"slices"
+
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
@@ -13,15 +15,15 @@ import (
 var PreferSchemaTypeProperty = rule.Rule{
 	Name:            "preferSchemaTypeProperty",
 	Group:           "style",
-	Description:     "Disallows Schema.Schema.Type<typeof X> in favor of typeof X.Type",
+	Description:     "Disallows Schema.Schema.Type<typeof X> and Schema.Codec.Encoded<typeof X>-style helpers in favor of typeof X.Type and typeof X.Encoded",
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
-	Codes:           []int32{tsdiag.Do_not_use_Schema_Schema_Type_typeof_X_to_extract_a_schema_s_type_Use_typeof_X_Type_instead_effect_preferSchemaTypeProperty.Code()},
+	Codes:           []int32{tsdiag.Do_not_use_0_typeof_X_Use_typeof_X_1_instead_effect_preferSchemaTypeProperty.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		matches := AnalyzePreferSchemaTypeProperty(ctx.TypeParser, ctx.SourceFile)
 		diags := make([]*ast.Diagnostic, len(matches))
 		for i, match := range matches {
-			diags[i] = ctx.NewDiagnostic(match.SourceFile, match.Location, tsdiag.Do_not_use_Schema_Schema_Type_typeof_X_to_extract_a_schema_s_type_Use_typeof_X_Type_instead_effect_preferSchemaTypeProperty, nil)
+			diags[i] = ctx.NewDiagnostic(match.SourceFile, match.Location, tsdiag.Do_not_use_0_typeof_X_Use_typeof_X_1_instead_effect_preferSchemaTypeProperty, nil, match.HelperText, match.PropertyName)
 		}
 		return diags
 	},
@@ -33,6 +35,18 @@ type PreferSchemaTypePropertyMatch struct {
 	TypeReference  *ast.Node
 	SchemaName     *ast.Node
 	SchemaNameText string
+	HelperText     string
+	PropertyName   string
+}
+
+// Each helper extracts the schema property of the same name; Encoded lives on
+// Schema in Effect v3 and on Codec in Effect v4.
+var schemaPropertyHelperNamespaces = map[string][]string{
+	"Type":             {"Schema"},
+	"Encoded":          {"Schema", "Codec"},
+	"Context":          {"Schema"},
+	"DecodingServices": {"Codec"},
+	"EncodingServices": {"Codec"},
 }
 
 func AnalyzePreferSchemaTypeProperty(tp *typeparser.TypeParser, sf *ast.SourceFile) []PreferSchemaTypePropertyMatch {
@@ -66,11 +80,19 @@ func analyzePreferSchemaTypePropertyNode(tp *typeparser.TypeParser, sf *ast.Sour
 		return nil
 	}
 	outerName := typeName.AsQualifiedName()
-	if outerName.Right == nil || outerName.Right.Text() != "Type" || outerName.Left == nil {
+	if outerName.Right == nil || outerName.Left == nil {
 		return nil
 	}
-	middleName := outerName.Left.AsNode()
-	if middleName == nil || middleName.Kind != ast.KindQualifiedName {
+	propertyName := outerName.Right.Text()
+	namespaces, ok := schemaPropertyHelperNamespaces[propertyName]
+	if !ok {
+		return nil
+	}
+	namespaceName := outerName.Left.AsNode()
+	if namespaceName != nil && namespaceName.Kind == ast.KindQualifiedName {
+		namespaceName = namespaceName.AsQualifiedName().Right
+	}
+	if namespaceName == nil || namespaceName.Kind != ast.KindIdentifier {
 		return nil
 	}
 	typeArgument := reference.TypeArguments.Nodes[0]
@@ -82,8 +104,9 @@ func analyzePreferSchemaTypePropertyNode(tp *typeparser.TypeParser, sf *ast.Sour
 		return nil
 	}
 
-	schemaExport := middleName.AsQualifiedName().Right
-	if schemaExport == nil || !tp.IsNodeReferenceToEffectSchemaModuleApi(schemaExport, "Schema") {
+	if !slices.ContainsFunc(namespaces, func(namespace string) bool {
+		return tp.IsNodeReferenceToEffectSchemaModuleApi(namespaceName, namespace)
+	}) {
 		return nil
 	}
 
@@ -93,5 +116,7 @@ func analyzePreferSchemaTypePropertyNode(tp *typeparser.TypeParser, sf *ast.Sour
 		TypeReference:  node,
 		SchemaName:     query.ExprName.AsNode(),
 		SchemaNameText: scanner.GetTextOfNode(query.ExprName.AsNode()),
+		HelperText:     scanner.GetTextOfNode(typeName),
+		PropertyName:   propertyName,
 	}
 }
