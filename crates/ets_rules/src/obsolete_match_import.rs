@@ -16,7 +16,7 @@ pub static OBSOLETE_MATCH_IMPORT: LazyLock<Rule> = LazyLock::new(|| {
         description: "Warns when importing @effect/match in projects targeting Effect v4, where Match is included directly in the effect package",
         default_severity: Severity::Warning,
         supported_effect: vec!["v4"],
-        codes: vec![tsdiag::This_module_reference_imports_0_which_is_obsolete_in_Effect_v4_In_Effect_v4_pattern_matching_is_provided_directly_by_Match_from_effect_or_effect_SlashMatch_effect_obsoleteMatchImport.code()],
+        codes: vec![tsdiag::THIS_MODULE_REFERENCE_IMPORTS_0_WHICH_IS_OBSOLETE_IN_EFFECT_V4_IN_EFFECT_V4_PATTERN_MATCHING_IS_PROVIDED_DIRECTLY_BY_MATCH_FROM_EFFECT_OR_EFFECT_SLASH_MATCH_EFFECT_OBSOLETE_MATCH_IMPORT.code()],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_obsolete_match_import(ctx.type_parser, Some(ctx.source_file));
             let mut diags = Vec::with_capacity(matches.len());
@@ -24,7 +24,7 @@ pub static OBSOLETE_MATCH_IMPORT: LazyLock<Rule> = LazyLock::new(|| {
                 diags.push(ctx.new_diagnostic(
                     m.source_file,
                     m.location,
-                    &tsdiag::This_module_reference_imports_0_which_is_obsolete_in_Effect_v4_In_Effect_v4_pattern_matching_is_provided_directly_by_Match_from_effect_or_effect_SlashMatch_effect_obsoleteMatchImport,
+                    &tsdiag::THIS_MODULE_REFERENCE_IMPORTS_0_WHICH_IS_OBSOLETE_IN_EFFECT_V4_IN_EFFECT_V4_PATTERN_MATCHING_IS_PROVIDED_DIRECTLY_BY_MATCH_FROM_EFFECT_OR_EFFECT_SLASH_MATCH_EFFECT_OBSOLETE_MATCH_IMPORT,
                     &[],
                     &[&m.imported_specifier],
                 ));

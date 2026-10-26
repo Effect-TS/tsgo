@@ -13,7 +13,7 @@ use ets_typeparser::{
 use crate::*;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::This_expression_discards_the_success_value_through_mapping_Effect_asVoid_represents_that_form_directly_effect_effectMapVoid;
+static MESSAGE: &Message = &tsdiag::THIS_EXPRESSION_DISCARDS_THE_SUCCESS_VALUE_THROUGH_MAPPING_EFFECT_AS_VOID_REPRESENTS_THAT_FORM_DIRECTLY_EFFECT_EFFECT_MAP_VOID;
 
 // go: internal/rules/effect_map_void.go:16 EffectMapVoid
 // EffectMapVoid suggests using Effect.asVoid instead of Effect.map(() => void 0),

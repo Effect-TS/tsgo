@@ -13,7 +13,7 @@ use ets_typeparser::{DispatchConditionKind, PipingFlowTransformation, TypeParser
 use crate::option_match_to_from_option::{effect_module_expression, is_synchronous_function};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::Effect_0_expresses_this_conditional_validation_more_directly_than_Effect_flatMap_with_an_identity_Effect_succeed_branch_effect_flatMapConditionalToFilterOrFail;
+static MESSAGE: &Message = &tsdiag::EFFECT_0_EXPRESSES_THIS_CONDITIONAL_VALIDATION_MORE_DIRECTLY_THAN_EFFECT_FLAT_MAP_WITH_AN_IDENTITY_EFFECT_SUCCEED_BRANCH_EFFECT_FLAT_MAP_CONDITIONAL_TO_FILTER_OR_FAIL;
 
 // go: internal/rules/flat_map_conditional_to_filter_or_fail.go:17 FlatMapConditionalToFilterOrFail
 // FlatMapConditionalToFilterOrFail suggests Effect.filterOrFail or

@@ -5,11 +5,11 @@ Port of _patches/typescript/021-core-version-suffix.patch (tsc/internal/core/ver
   set_version_suffix leaks one string (it is called once at startup).
 
 diff --git a/crates/tsrs_core/src/version.rs b/crates/tsrs_core/src/version.rs
-index db49e17..a9e2537 100644
+index 6010c65a..f0e1167f 100644
 --- a/crates/tsrs_core/src/version.rs
 +++ b/crates/tsrs_core/src/version.rs
-@@ -8,8 +8,17 @@ const VERSION: &str = match option_env!("TSRS_TS_VERSION") {
-     None => "7.1.0-dev",
+@@ -7,8 +7,17 @@ const VERSION: &str = match option_env!("TSRS_TS_VERSION") {
+     None => "7.1.0-beta",
  };
  
 +// effect-tsgo patch 021: Go's `version + versionSuffix`, stored whole (the suffix is set once at startup).

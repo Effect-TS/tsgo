@@ -4,7 +4,7 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 
 use ets_go::testing::T;
-use ets_shim::ast::{InternalSymbolNamePrefix, SourceFile, Symbol, SymbolFlags};
+use ets_shim::ast::{INTERNAL_SYMBOL_NAME_PREFIX, SourceFile, Symbol, SymbolFlags};
 use ets_shim::checker::{
     Checker, Signature, SignatureKind, register_after_check_source_file_callback,
 };
@@ -1293,7 +1293,7 @@ export declare const computedObject: {
         for dependency in &used.dependencies {
             rendered.insert(api_stability_dependency_name(dependency));
             // Rust: Go's `"\xfe"` is tsrs's internal-name prefix.
-            if api_stability_dependency_name(dependency).starts_with(InternalSymbolNamePrefix) {
+            if api_stability_dependency_name(dependency).starts_with(INTERNAL_SYMBOL_NAME_PREFIX) {
                 t.error(format!(
                     "late-bound internal name leaked into a diagnostic: {:?}",
                     api_stability_dependency_name(dependency)

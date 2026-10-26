@@ -13,7 +13,7 @@ use rustc_hash::FxHashSet;
 use crate::*;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::Branching_on_0_tag_inside_Effect_1_hand_rolls_tagged_error_dispatch_use_Effect_catchTag_or_Effect_catchTags_which_re_fail_unmatched_errors_automatically_effect_catchAllTagDispatchToCatchTag;
+static MESSAGE: &Message = &tsdiag::BRANCHING_ON_0_TAG_INSIDE_EFFECT_1_HAND_ROLLS_TAGGED_ERROR_DISPATCH_USE_EFFECT_CATCH_TAG_OR_EFFECT_CATCH_TAGS_WHICH_RE_FAIL_UNMATCHED_ERRORS_AUTOMATICALLY_EFFECT_CATCH_ALL_TAG_DISPATCH_TO_CATCH_TAG;
 
 // go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:14 CatchAllTagDispatchToCatchTag
 pub static CATCH_ALL_TAG_DISPATCH_TO_CATCH_TAG: LazyLock<Rule> = LazyLock::new(|| Rule {

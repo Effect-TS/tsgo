@@ -586,9 +586,9 @@ fn evaluate_preview(t: &T, version: EffectVersion, source_text: &str, r: &Rule) 
         new_line: NewLineKind::LF,
         skip_default_lib_check: Tristate::True,
         no_error_truncation: Tristate::True,
-        target: ScriptTarget::ESNext,
-        module: ModuleKind::NodeNext,
-        module_resolution: ModuleResolutionKind::NodeNext,
+        target: ScriptTarget::ES_NEXT,
+        module: ModuleKind::NODE_NEXT,
+        module_resolution: ModuleResolutionKind::NODE_NEXT,
         es_module_interop: Tristate::True,
         allow_synthetic_default_imports: Tristate::True,
         ..CompilerOptions::default()
@@ -620,14 +620,14 @@ fn evaluate_preview(t: &T, version: EffectVersion, source_text: &str, r: &Rule) 
         options.new_line = NewLineKind::LF;
         options.skip_default_lib_check = Tristate::True;
         options.no_error_truncation = Tristate::True;
-        if options.target == ScriptTarget::None {
-            options.target = ScriptTarget::ESNext;
+        if options.target == ScriptTarget::NONE {
+            options.target = ScriptTarget::ES_NEXT;
         }
-        if options.module == ModuleKind::None {
-            options.module = ModuleKind::NodeNext;
+        if options.module == ModuleKind::NONE {
+            options.module = ModuleKind::NODE_NEXT;
         }
-        if options.module_resolution == ModuleResolutionKind::Unknown {
-            options.module_resolution = ModuleResolutionKind::NodeNext;
+        if options.module_resolution == ModuleResolutionKind::UNKNOWN {
+            options.module_resolution = ModuleResolutionKind::NODE_NEXT;
         }
         compiler_options = P::new(options);
     }

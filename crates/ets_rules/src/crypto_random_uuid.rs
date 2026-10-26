@@ -8,10 +8,10 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::EffectContextFlags;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::This_code_uses_crypto_randomUUID_prefer_the_Effect_Crypto_module_instead_effect_cryptoRandomUUID;
+static MESSAGE: &Message = &tsdiag::THIS_CODE_USES_CRYPTO_RANDOM_UUID_PREFER_THE_EFFECT_CRYPTO_MODULE_INSTEAD_EFFECT_CRYPTO_RANDOM_UUID;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE_IN_EFFECT: &Message = &tsdiag::This_Effect_code_uses_crypto_randomUUID_prefer_the_Effect_Crypto_module_instead_effect_cryptoRandomUUIDInEffect;
+static MESSAGE_IN_EFFECT: &Message = &tsdiag::THIS_EFFECT_CODE_USES_CRYPTO_RANDOM_UUID_PREFER_THE_EFFECT_CRYPTO_MODULE_INSTEAD_EFFECT_CRYPTO_RANDOM_UUID_IN_EFFECT;
 
 // go: internal/rules/crypto_random_uuid.go:12 CryptoRandomUUID
 pub static CRYPTO_RANDOM_UUID: LazyLock<Rule> = LazyLock::new(|| Rule {

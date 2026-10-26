@@ -10,10 +10,10 @@ use ets_shim::scanner;
 use ets_typeparser::EffectMajorVersion;
 
 /// Rust-only: the fixable's runtime diagnostic message (Go spells it out in `ErrorCodes`).
-static RUNTIME_MESSAGE: &Message = &tsdiag::X_0_is_called_inside_an_Effect_with_a_separate_runtime_invocation_In_this_context_run_child_Effects_with_the_surrounding_runtime_which_can_be_accessed_through_Effect_runtime_and_Runtime_1_effect_runEffectInsideEffect;
+static RUNTIME_MESSAGE: &Message = &tsdiag::X_0_IS_CALLED_INSIDE_AN_EFFECT_WITH_A_SEPARATE_RUNTIME_INVOCATION_IN_THIS_CONTEXT_RUN_CHILD_EFFECTS_WITH_THE_SURROUNDING_RUNTIME_WHICH_CAN_BE_ACCESSED_THROUGH_EFFECT_RUNTIME_AND_RUNTIME_1_EFFECT_RUN_EFFECT_INSIDE_EFFECT;
 
 /// Rust-only: the fixable's services diagnostic message (Go spells it out in `ErrorCodes`).
-static SERVICES_MESSAGE: &Message = &tsdiag::X_0_is_called_inside_an_Effect_with_a_separate_services_invocation_In_this_context_child_Effects_run_with_the_surrounding_services_which_can_be_accessed_through_Effect_context_and_Effect_1_With_effect_runEffectInsideEffect;
+static SERVICES_MESSAGE: &Message = &tsdiag::X_0_IS_CALLED_INSIDE_AN_EFFECT_WITH_A_SEPARATE_SERVICES_INVOCATION_IN_THIS_CONTEXT_CHILD_EFFECTS_RUN_WITH_THE_SURROUNDING_SERVICES_WHICH_CAN_BE_ACCESSED_THROUGH_EFFECT_CONTEXT_AND_EFFECT_1_WITH_EFFECT_RUN_EFFECT_INSIDE_EFFECT;
 
 // go: internal/fixables/run_effect_inside_effect.go:17 RunEffectInsideEffectFix
 pub static RUN_EFFECT_INSIDE_EFFECT_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

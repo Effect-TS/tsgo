@@ -60,7 +60,7 @@ pub(crate) fn validate(
                 ets_shim::tsoptions::create_diagnostic_for_node_in_source_file_or_compiler_diagnostic(
                     source_file,
                     node,
-                    &diagnostics::Unknown_Effect_diagnostic_rule_0_in_diagnosticSeverity_effect_unknownRuleName,
+                    &diagnostics::UNKNOWN_EFFECT_DIAGNOSTIC_RULE_0_IN_DIAGNOSTIC_SEVERITY_EFFECT_UNKNOWN_RULE_NAME,
                     &[&name],
                 );
             diagnostic.set_category(ets_directives::to_category(severity));

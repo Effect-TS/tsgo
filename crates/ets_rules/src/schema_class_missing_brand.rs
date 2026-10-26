@@ -11,7 +11,7 @@ use crate::*;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message =
-    &tsdiag::Add_readonly_brand_Colon_unique_symbol_as_the_second_type_argument_Without_a_brand_TypeScript_may_accept_structurally_compatible_values_where_this_class_instance_type_is_expected_effect_schemaClassMissingBrand;
+    &tsdiag::ADD_READONLY_BRAND_COLON_UNIQUE_SYMBOL_AS_THE_SECOND_TYPE_ARGUMENT_WITHOUT_A_BRAND_TYPE_SCRIPT_MAY_ACCEPT_STRUCTURALLY_COMPATIBLE_VALUES_WHERE_THIS_CLASS_INSTANCE_TYPE_IS_EXPECTED_EFFECT_SCHEMA_CLASS_MISSING_BRAND;
 
 // go: internal/rules/schema_class_missing_brand.go:11 SchemaClassMissingBrand
 pub static SCHEMA_CLASS_MISSING_BRAND: LazyLock<Rule> = LazyLock::new(|| Rule {

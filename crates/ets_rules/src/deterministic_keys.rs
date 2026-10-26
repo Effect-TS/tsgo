@@ -11,7 +11,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::TypeParser;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::This_key_does_not_match_the_deterministic_key_for_this_declaration_The_expected_key_is_0_effect_deterministicKeys;
+static MESSAGE: &Message = &tsdiag::THIS_KEY_DOES_NOT_MATCH_THE_DETERMINISTIC_KEY_FOR_THIS_DECLARATION_THE_EXPECTED_KEY_IS_0_EFFECT_DETERMINISTIC_KEYS;
 
 // go: internal/rules/deterministic_keys.go:20 DeterministicKeys
 // DeterministicKeys ensures string key literals in Effect service/tag/error constructors

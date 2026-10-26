@@ -26,7 +26,7 @@ pub static MISSING_EFFECT_CONTEXT: LazyLock<Rule> = LazyLock::new(|| {
     description: "Detects Effect values with unhandled context requirements",
     default_severity: Severity::Error,
     supported_effect: vec!["v3", "v4"],
-    codes: vec![tsdiag::This_Effect_requires_a_service_that_is_missing_from_the_expected_Effect_context_Colon_0_effect_missingEffectContext.code()],
+    codes: vec![tsdiag::THIS_EFFECT_REQUIRES_A_SERVICE_THAT_IS_MISSING_FROM_THE_EXPECTED_EFFECT_CONTEXT_COLON_0_EFFECT_MISSING_EFFECT_CONTEXT.code()],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let mut diags = Vec::new();
 
@@ -50,7 +50,7 @@ pub static MISSING_EFFECT_CONTEXT: LazyLock<Rule> = LazyLock::new(|| {
                 let diag = ctx.new_diagnostic(
                     ctx.source_file,
                     ctx.get_error_range(re.error_node),
-                    &tsdiag::This_Effect_requires_a_service_that_is_missing_from_the_expected_Effect_context_Colon_0_effect_missingEffectContext,
+                    &tsdiag::THIS_EFFECT_REQUIRES_A_SERVICE_THAT_IS_MISSING_FROM_THE_EXPECTED_EFFECT_CONTEXT_COLON_0_EFFECT_MISSING_EFFECT_CONTEXT,
                     &related,
                     &[&context_type_str],
                 );
@@ -124,7 +124,7 @@ pub(crate) fn missing_effect_context_related_information(
     let provide_diagnostic = ctx.new_diagnostic(
         ctx.source_file,
         provide_location.location,
-        &tsdiag::Adjusting_this_layer_composition_could_provide_the_missing_service_effect_missingEffectContext,
+        &tsdiag::ADJUSTING_THIS_LAYER_COMPOSITION_COULD_PROVIDE_THE_MISSING_SERVICE_EFFECT_MISSING_EFFECT_CONTEXT,
         &[],
         &[],
     );
@@ -235,7 +235,7 @@ pub(crate) fn find_related_layer_provider_diagnostics(
             related.push(ctx.new_diagnostic(
                 display_source_file,
                 ets_shim::scanner::get_error_range_for_node(display_source_file, display_node),
-                &tsdiag::This_layer_provides_the_missing_service_0_effect_missingEffectContext,
+                &tsdiag::THIS_LAYER_PROVIDES_THE_MISSING_SERVICE_0_EFFECT_MISSING_EFFECT_CONTEXT,
                 &[],
                 &[&missing_type_text],
             ));

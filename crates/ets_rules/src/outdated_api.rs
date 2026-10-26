@@ -20,8 +20,8 @@ pub static OUTDATED_API: LazyLock<Rule> = LazyLock::new(|| {
         default_severity: Severity::Warning,
         supported_effect: vec!["v4"],
         codes: vec![
-            tsdiag::This_project_targets_Effect_v4_but_this_code_uses_the_Effect_v3_API_0_The_referenced_API_belongs_to_the_v3_surface_rather_than_the_configured_v4_surface_1_effect_outdatedApi.code(),
-            tsdiag::This_project_targets_Effect_v4_but_this_code_uses_Effect_v3_APIs_The_referenced_API_belongs_to_the_v3_surface_rather_than_the_configured_v4_surface_effect_outdatedApi.code(),
+            tsdiag::THIS_PROJECT_TARGETS_EFFECT_V4_BUT_THIS_CODE_USES_THE_EFFECT_V3_API_0_THE_REFERENCED_API_BELONGS_TO_THE_V3_SURFACE_RATHER_THAN_THE_CONFIGURED_V4_SURFACE_1_EFFECT_OUTDATED_API.code(),
+            tsdiag::THIS_PROJECT_TARGETS_EFFECT_V4_BUT_THIS_CODE_USES_EFFECT_V3_AP_IS_THE_REFERENCED_API_BELONGS_TO_THE_V3_SURFACE_RATHER_THAN_THE_CONFIGURED_V4_SURFACE_EFFECT_OUTDATED_API.code(),
         ],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_outdated_api(ctx.type_parser, ctx.source_file);
@@ -34,7 +34,7 @@ pub static OUTDATED_API: LazyLock<Rule> = LazyLock::new(|| {
                 diags.push(ctx.new_diagnostic(
                     m.source_file,
                     m.location,
-                    &tsdiag::This_project_targets_Effect_v4_but_this_code_uses_the_Effect_v3_API_0_The_referenced_API_belongs_to_the_v3_surface_rather_than_the_configured_v4_surface_1_effect_outdatedApi,
+                    &tsdiag::THIS_PROJECT_TARGETS_EFFECT_V4_BUT_THIS_CODE_USES_THE_EFFECT_V3_API_0_THE_REFERENCED_API_BELONGS_TO_THE_V3_SURFACE_RATHER_THAN_THE_CONFIGURED_V4_SURFACE_1_EFFECT_OUTDATED_API,
                     &[],
                     &[&m.property_name, &m.migration_hint],
                 ));
@@ -44,7 +44,7 @@ pub static OUTDATED_API: LazyLock<Rule> = LazyLock::new(|| {
             diags.push(ctx.new_diagnostic(
                 ctx.source_file,
                 TextRange::new(0, 0),
-                &tsdiag::This_project_targets_Effect_v4_but_this_code_uses_Effect_v3_APIs_The_referenced_API_belongs_to_the_v3_surface_rather_than_the_configured_v4_surface_effect_outdatedApi,
+                &tsdiag::THIS_PROJECT_TARGETS_EFFECT_V4_BUT_THIS_CODE_USES_EFFECT_V3_AP_IS_THE_REFERENCED_API_BELONGS_TO_THE_V3_SURFACE_RATHER_THAN_THE_CONFIGURED_V4_SURFACE_EFFECT_OUTDATED_API,
                 &[],
                 &[],
             ));

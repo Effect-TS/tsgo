@@ -7,7 +7,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::This_code_uses_instanceof_with_an_Effect_Schema_type_Schema_is_is_the_schema_aware_runtime_check_for_this_case_effect_instanceOfSchema;
+static MESSAGE: &Message = &tsdiag::THIS_CODE_USES_INSTANCEOF_WITH_AN_EFFECT_SCHEMA_TYPE_SCHEMA_IS_IS_THE_SCHEMA_AWARE_RUNTIME_CHECK_FOR_THIS_CASE_EFFECT_INSTANCE_OF_SCHEMA;
 
 // go: internal/fixables/instance_of_schema.go:13 InstanceOfSchemaFix
 pub static INSTANCE_OF_SCHEMA_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

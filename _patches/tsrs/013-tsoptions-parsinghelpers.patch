@@ -12,7 +12,7 @@ Port of _patches/typescript/013-tsoptions-parsinghelpers.patch (tsc/internal/tso
   parsinghelpers tests do not call merge_compiler_options, so the test hunks have no counterpart.
 
 diff --git a/crates/tsrs_tsoptions/Cargo.toml b/crates/tsrs_tsoptions/Cargo.toml
-index 0b88cb3..9460e26 100644
+index 6e9bab29..c077e37b 100644
 --- a/crates/tsrs_tsoptions/Cargo.toml
 +++ b/crates/tsrs_tsoptions/Cargo.toml
 @@ -10,6 +10,8 @@ publish.workspace = true
@@ -25,10 +25,10 @@ index 0b88cb3..9460e26 100644
  tsrs_diagnostics.workspace = true
  tsrs_ast.workspace = true
 diff --git a/crates/tsrs_tsoptions/src/parsinghelpers.rs b/crates/tsrs_tsoptions/src/parsinghelpers.rs
-index ec0038c..163cade 100644
+index ff2ab24b..c9306f0e 100644
 --- a/crates/tsrs_tsoptions/src/parsinghelpers.rs
 +++ b/crates/tsrs_tsoptions/src/parsinghelpers.rs
-@@ -21,6 +21,82 @@ use crate::namemap::BUILD_NAME_MAP;
+@@ -20,6 +20,82 @@ use crate::namemap::BUILD_NAME_MAP;
  use crate::tsconfigparsing::{COMMAND_LINE_COMPILER_OPTIONS_MAP, CommandLineOptionNameMap};
  use tsrs_ast::new_compiler_diagnostic;
  
@@ -108,7 +108,7 @@ index ec0038c..163cade 100644
 +    }
 +}
 +
- pub fn parse_tristate(value: &CompilerOptionsValue) -> Tristate {
+ fn parse_tristate(value: &CompilerOptionsValue) -> Tristate {
      match value {
          CompilerOptionsValue::Null => Tristate::Unknown,
 @@ -308,6 +384,10 @@ pub fn parse_compiler_options(
@@ -122,7 +122,7 @@ index ec0038c..163cade 100644
      parse_compiler_options_worker(key, value, all_options);
      Vec::new()
  }
-@@ -1004,6 +1084,8 @@ pub(crate) fn merge_compiler_options(
+@@ -981,6 +1061,8 @@ pub fn merge_compiler_options(
      target_options: &mut CompilerOptions,
      source_options: Option<&CompilerOptions>,
      raw_source: Option<&CompilerOptionsValue>,
@@ -131,7 +131,7 @@ index ec0038c..163cade 100644
  ) {
      let Some(source_options) = source_options else {
          return;
-@@ -1037,6 +1119,10 @@ pub(crate) fn merge_compiler_options(
+@@ -1014,6 +1096,10 @@ pub fn merge_compiler_options(
          };
      }
      for_each_compiler_options_field!(merge_fields);
@@ -141,4 +141,4 @@ index ec0038c..163cade 100644
 +    }
  }
  
- pub(crate) fn convert_to_options_with_absolute_paths(
+ pub fn convert_to_options_with_absolute_paths(

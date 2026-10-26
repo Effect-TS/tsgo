@@ -11,8 +11,8 @@ description = "Rust-only: the effect-tsgo executable on tsrs (registers the Effe
 workspace = true
 
 # Rust-only glue, not a port of a Go package: like the patched cmd/tsc/main.go, it reaches the compiler's entry point
-# directly (tsrs_cli, made a library by _patches/tsrs/001-cmd-tsgo-main.patch). Effect crates still reach tsrs only
-# through ets_shim.
+# directly (`tsrs_cli::main`, exposed by the `effect-main` feature that _patches/tsrs/001-cmd-tsgo-main.patch adds).
+# Effect crates still reach tsrs only through ets_shim.
 [dependencies]
 ets_etscheckerhooks.workspace = true
 ets_etsdiagnostics.workspace = true
@@ -24,7 +24,7 @@ tsrs_cli = { path = "../../tsrs/crates/tsrs_cli", optional = true }
 [features]
 # tsrs's CLI links mimalloc, whose build needs CMake. It is opt-in so that `cargo check/clippy/test --workspace` work
 # without CMake; `repoctl test` builds the binary with it (`cargo build -p ets_tsrs --features cli`).
-cli = ["dep:tsrs_cli"]
+cli = ["dep:tsrs_cli", "tsrs_cli/effect-main"]
 
 [[bin]]
 name = "tsrs"

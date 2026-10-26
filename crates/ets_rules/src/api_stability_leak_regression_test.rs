@@ -143,9 +143,9 @@ pub(crate) fn compile_api_stability_files_primed(
             skip_default_lib_check: Tristate::True,
             skip_lib_check: Tristate::True,
             no_error_truncation: Tristate::True,
-            target: ScriptTarget::ESNext,
-            module: ModuleKind::NodeNext,
-            module_resolution: ModuleResolutionKind::NodeNext,
+            target: ScriptTarget::ES_NEXT,
+            module: ModuleKind::NODE_NEXT,
+            module_resolution: ModuleResolutionKind::NODE_NEXT,
             strict: Tristate::True,
             ..Default::default()
         };

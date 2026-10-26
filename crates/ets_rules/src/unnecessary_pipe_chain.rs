@@ -13,7 +13,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{ParsedPipeCallResult, TransformationKind, TypeParser};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::This_expression_contains_chained_pipe_calls_that_can_be_simplified_to_a_single_pipe_call_effect_unnecessaryPipeChain;
+static MESSAGE: &Message = &tsdiag::THIS_EXPRESSION_CONTAINS_CHAINED_PIPE_CALLS_THAT_CAN_BE_SIMPLIFIED_TO_A_SINGLE_PIPE_CALL_EFFECT_UNNECESSARY_PIPE_CHAIN;
 
 // go: internal/rules/unnecessary_pipe_chain.go:18 UnnecessaryPipeChain
 // UnnecessaryPipeChain detects chained pipe() and .pipe() calls that can

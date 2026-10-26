@@ -29,9 +29,9 @@ fn test_registered_fix_transformer_rewrites_fixes() {
     ];
     let fs: Arc<dyn FS> = Arc::new(bundled::wrap_fs(vfstest::from_map(files, true)));
     let compiler_options = P::new(CompilerOptions {
-        target: ScriptTarget::ESNext,
-        module: ModuleKind::ESNext,
-        module_resolution: ModuleResolutionKind::Bundler,
+        target: ScriptTarget::ES_NEXT,
+        module: ModuleKind::ES_NEXT,
+        module_resolution: ModuleResolutionKind::BUNDLER,
         strict: Tristate::True,
         ..Default::default()
     });
@@ -52,7 +52,7 @@ fn test_registered_fix_transformer_rewrites_fixes() {
     // `Export` has crate-private fields: start from the default, as the shim integration does.
     let mut export = Export::default();
     export.export_id =
-        ExportID { module_id: ModuleID("/foo.ts".to_string()), export_name: "b".to_string() };
+        ExportID { module_id: ModuleID::File("/foo.ts".to_string()), export_name: "b".to_string() };
     export.target = export.export_id.clone();
     export.syntax = ExportSyntax::Modifier;
     export.flags = SymbolFlags::BlockScopedVariable;
@@ -76,7 +76,7 @@ fn test_registered_fix_transformer_rewrites_fixes() {
     let fixes = view.get_fixes(&export, false, true, None);
     assert_eq!(factory_calls.load(Ordering::SeqCst), 1, "NewView must call the factory once");
     assert_eq!(fixes.len(), 1, "expected the add-to-existing-import fix");
-    assert_eq!(fixes[0].kind, lsproto::AutoImportFixKind::AddToExisting);
+    assert_eq!(fixes[0].kind, lsproto::AutoImportFixKind::ADD_TO_EXISTING);
     drop(view);
 
     // A transformer replaces the fixes it is given.

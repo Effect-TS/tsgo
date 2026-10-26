@@ -7,7 +7,7 @@ use ets_shim::ast::{self, Diagnostic, Kind, ModifierFlags, Node};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::Classes_extending_Schema_Opaque_must_not_declare_instance_members_effect_schemaOpaqueInstanceMember;
+static MESSAGE: &Message = &tsdiag::CLASSES_EXTENDING_SCHEMA_OPAQUE_MUST_NOT_DECLARE_INSTANCE_MEMBERS_EFFECT_SCHEMA_OPAQUE_INSTANCE_MEMBER;
 
 // go: internal/rules/schema_opaque_instance_member.go:10 SchemaOpaqueInstanceMember
 pub static SCHEMA_OPAQUE_INSTANCE_MEMBER: LazyLock<Rule> = LazyLock::new(|| Rule {

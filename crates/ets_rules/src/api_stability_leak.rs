@@ -28,8 +28,8 @@ pub static API_STABILITY_LEAK: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Off,
     supported_effect: vec!["v4"],
     codes: vec![
-        tsdiag::X_0_exposes_1_an_2_API_effect_apiStabilityLeak.code(),
-        tsdiag::X_0_is_declared_1_here_effect_apiStabilityLeak.code(),
+        tsdiag::X_0_EXPOSES_1_AN_2_API_EFFECT_API_STABILITY_LEAK.code(),
+        tsdiag::X_0_IS_DECLARED_1_HERE_EFFECT_API_STABILITY_LEAK.code(),
     ],
     run: check_api_stability_leaks,
 });
@@ -276,7 +276,7 @@ impl ApiStabilityWalker<'_, '_, '_> {
             related_information = vec![self.ctx.new_diagnostic(
                 source_file,
                 ets_shim::scanner::get_error_range_for_node(source_file, declaration),
-                &tsdiag::X_0_is_declared_1_here_effect_apiStabilityLeak,
+                &tsdiag::X_0_IS_DECLARED_1_HERE_EFFECT_API_STABILITY_LEAK,
                 &[],
                 &[
                     &api_stability_dependency_name(&dependency),
@@ -288,7 +288,7 @@ impl ApiStabilityWalker<'_, '_, '_> {
         let diagnostic = self.ctx.new_diagnostic(
             self.ctx.source_file,
             self.ctx.get_error_range(self.location),
-            &tsdiag::X_0_exposes_1_an_2_API_effect_apiStabilityLeak,
+            &tsdiag::X_0_EXPOSES_1_AN_2_API_EFFECT_API_STABILITY_LEAK,
             &related_information,
             &[
                 &display_name,

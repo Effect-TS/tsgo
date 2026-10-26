@@ -17,7 +17,7 @@ pub static LAZY_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v4"],
     codes: vec![
-        tsdiag::X_0_returns_a_lazy_1_1_is_already_lazy_so_wrapping_it_in_a_zero_argument_function_adds_unnecessary_indirection_effect_lazyEffect.code(),
+        tsdiag::X_0_RETURNS_A_LAZY_1_1_IS_ALREADY_LAZY_SO_WRAPPING_IT_IN_A_ZERO_ARGUMENT_FUNCTION_ADDS_UNNECESSARY_INDIRECTION_EFFECT_LAZY_EFFECT.code(),
     ],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         if !ctx.type_parser.detect_effect_version_string().starts_with("4.") {
@@ -74,7 +74,7 @@ pub(crate) fn check_lazy_effect_interface(
         diags.push(ctx.new_diagnostic(
             ctx.source_file,
             ctx.get_error_range(member_name),
-            &tsdiag::X_0_returns_a_lazy_1_1_is_already_lazy_so_wrapping_it_in_a_zero_argument_function_adds_unnecessary_indirection_effect_lazyEffect,
+            &tsdiag::X_0_RETURNS_A_LAZY_1_1_IS_ALREADY_LAZY_SO_WRAPPING_IT_IN_A_ZERO_ARGUMENT_FUNCTION_ADDS_UNNECESSARY_INDIRECTION_EFFECT_LAZY_EFFECT,
             &[],
             &[&message_subject, lazy_type_name],
         ));
@@ -138,7 +138,7 @@ pub(crate) fn lazy_effect_diagnostic_for_exported_declaration(
     vec![ctx.new_diagnostic(
         ctx.source_file,
         ctx.get_error_range(name),
-        &tsdiag::X_0_returns_a_lazy_1_1_is_already_lazy_so_wrapping_it_in_a_zero_argument_function_adds_unnecessary_indirection_effect_lazyEffect,
+        &tsdiag::X_0_RETURNS_A_LAZY_1_1_IS_ALREADY_LAZY_SO_WRAPPING_IT_IN_A_ZERO_ARGUMENT_FUNCTION_ADDS_UNNECESSARY_INDIRECTION_EFFECT_LAZY_EFFECT,
         &[],
         &[&message_subject, lazy_type_name],
     )]
@@ -187,7 +187,7 @@ pub(crate) fn check_lazy_effect_service(
         diags.push(ctx.new_diagnostic(
             ctx.source_file,
             ctx.get_error_range(stmt_name),
-            &tsdiag::X_0_returns_a_lazy_1_1_is_already_lazy_so_wrapping_it_in_a_zero_argument_function_adds_unnecessary_indirection_effect_lazyEffect,
+            &tsdiag::X_0_RETURNS_A_LAZY_1_1_IS_ALREADY_LAZY_SO_WRAPPING_IT_IN_A_ZERO_ARGUMENT_FUNCTION_ADDS_UNNECESSARY_INDIRECTION_EFFECT_LAZY_EFFECT,
             &[],
             &[&message_subject, lazy_type_name],
         ));

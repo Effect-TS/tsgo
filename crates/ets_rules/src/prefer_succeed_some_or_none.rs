@@ -12,7 +12,7 @@ use ets_typeparser::{
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message =
-    &tsdiag::Effect_0_expresses_this_Option_success_value_directly_effect_preferSucceedSomeOrNone;
+    &tsdiag::EFFECT_0_EXPRESSES_THIS_OPTION_SUCCESS_VALUE_DIRECTLY_EFFECT_PREFER_SUCCEED_SOME_OR_NONE;
 
 // go: internal/rules/prefer_succeed_some_or_none.go:16 PreferSucceedSomeOrNone
 // PreferSucceedSomeOrNone suggests Effect.succeedNone and Effect.succeedSome for

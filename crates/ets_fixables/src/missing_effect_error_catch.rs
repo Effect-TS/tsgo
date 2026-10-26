@@ -16,7 +16,7 @@ pub static MISSING_EFFECT_ERROR_CATCH_FIX: LazyLock<Fixable> = LazyLock::new(|| 
     name: "missingEffectErrorCatch",
     description: "Catch all errors with Effect.catch/catchAll",
     error_codes: vec![
-        tsdiag::Missing_errors_0_in_the_expected_Effect_type_effect_missingEffectError.code(),
+        tsdiag::MISSING_ERRORS_0_IN_THE_EXPECTED_EFFECT_TYPE_EFFECT_MISSING_EFFECT_ERROR.code(),
     ],
     fix_ids: vec![
         "missingEffectError_catch",

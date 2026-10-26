@@ -12,7 +12,7 @@ use rustc_hash::FxHashSet;
 use crate::*;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::The_error_channel_contains_an_Effect_0_Putting_Effect_computations_in_the_failure_channel_is_not_intended_keep_only_failure_types_there_effect_effectInFailure;
+static MESSAGE: &Message = &tsdiag::THE_ERROR_CHANNEL_CONTAINS_AN_EFFECT_0_PUTTING_EFFECT_COMPUTATIONS_IN_THE_FAILURE_CHANNEL_IS_NOT_INTENDED_KEEP_ONLY_FAILURE_TYPES_THERE_EFFECT_EFFECT_IN_FAILURE;
 
 // go: internal/rules/effect_in_failure.go:15 EffectInFailure
 // EffectInFailure detects when an Effect type appears in the failure (E) channel

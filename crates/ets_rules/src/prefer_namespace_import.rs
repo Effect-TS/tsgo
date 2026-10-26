@@ -17,8 +17,8 @@ pub static PREFER_NAMESPACE_IMPORT: LazyLock<Rule> = LazyLock::new(|| {
         default_severity: Severity::Off,
         supported_effect: vec!["v3", "v4"],
         codes: vec![
-            tsdiag::X_0_is_imported_by_name_from_1_but_namespaceImportPackages_expects_a_namespace_import_Use_2_instead_effect_preferNamespaceImport.code(),
-            tsdiag::X_0_is_imported_by_name_from_1_but_namespaceImportPackages_expects_a_namespace_import_of_the_module_that_declares_0_effect_preferNamespaceImport.code(),
+            tsdiag::X_0_IS_IMPORTED_BY_NAME_FROM_1_BUT_NAMESPACE_IMPORT_PACKAGES_EXPECTS_A_NAMESPACE_IMPORT_USE_2_INSTEAD_EFFECT_PREFER_NAMESPACE_IMPORT.code(),
+            tsdiag::X_0_IS_IMPORTED_BY_NAME_FROM_1_BUT_NAMESPACE_IMPORT_PACKAGES_EXPECTS_A_NAMESPACE_IMPORT_OF_THE_MODULE_THAT_DECLARES_0_EFFECT_PREFER_NAMESPACE_IMPORT.code(),
         ],
         run: run_prefer_namespace_import,
     }
@@ -102,7 +102,7 @@ pub(crate) fn run_prefer_namespace_import(ctx: &mut Context<'_, '_>) -> Vec<P<Di
                 diags.push(ctx.new_diagnostic(
                     ctx.source_file,
                     location,
-                    &tsdiag::X_0_is_imported_by_name_from_1_but_namespaceImportPackages_expects_a_namespace_import_of_the_module_that_declares_0_effect_preferNamespaceImport,
+                    &tsdiag::X_0_IS_IMPORTED_BY_NAME_FROM_1_BUT_NAMESPACE_IMPORT_PACKAGES_EXPECTS_A_NAMESPACE_IMPORT_OF_THE_MODULE_THAT_DECLARES_0_EFFECT_PREFER_NAMESPACE_IMPORT,
                     &[],
                     &[imported_name.text(), specifier],
                 ));
@@ -111,7 +111,7 @@ pub(crate) fn run_prefer_namespace_import(ctx: &mut Context<'_, '_>) -> Vec<P<Di
             diags.push(ctx.new_diagnostic(
                 ctx.source_file,
                 location,
-                &tsdiag::X_0_is_imported_by_name_from_1_but_namespaceImportPackages_expects_a_namespace_import_Use_2_instead_effect_preferNamespaceImport,
+                &tsdiag::X_0_IS_IMPORTED_BY_NAME_FROM_1_BUT_NAMESPACE_IMPORT_PACKAGES_EXPECTS_A_NAMESPACE_IMPORT_USE_2_INSTEAD_EFFECT_PREFER_NAMESPACE_IMPORT,
                 &[],
                 &[imported_name.text(), specifier, &namespace_import_text(&target, type_only)],
             ));

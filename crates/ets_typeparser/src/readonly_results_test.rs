@@ -29,7 +29,7 @@ export const result = source.pipe(add(1), add(2), add(1))
         let mut compiled = new_compiled(
             testfs,
             CompilerOptions {
-                target: ScriptTarget::ESNext,
+                target: ScriptTarget::ES_NEXT,
                 strict: Tristate::True,
                 ..Default::default()
             },

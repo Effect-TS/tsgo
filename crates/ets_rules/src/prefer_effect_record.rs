@@ -16,7 +16,7 @@ pub static PREFER_EFFECT_RECORD: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![
-        tsdiag::Consider_effect_SlashRecord_0_instead_of_native_1_2_effect_preferEffectRecord
+        tsdiag::CONSIDER_EFFECT_SLASH_RECORD_0_INSTEAD_OF_NATIVE_1_2_EFFECT_PREFER_EFFECT_RECORD
             .code(),
     ],
     run: run_prefer_effect_record,
@@ -163,7 +163,7 @@ pub(crate) fn run_prefer_effect_record(ctx: &mut Context<'_, '_>) -> Vec<P<Diagn
                     diagnostics.push(ctx.new_diagnostic(
                         ctx.source_file,
                         ctx.get_error_range(name),
-                        &tsdiag::Consider_effect_SlashRecord_0_instead_of_native_1_2_effect_preferEffectRecord,
+                        &tsdiag::CONSIDER_EFFECT_SLASH_RECORD_0_INSTEAD_OF_NATIVE_1_2_EFFECT_PREFER_EFFECT_RECORD,
                         &[],
                         &[preference.effect_api, &preference.native_label(), preference.caveat],
                     ));

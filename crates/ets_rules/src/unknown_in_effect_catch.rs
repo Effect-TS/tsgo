@@ -11,7 +11,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::TypeParser;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::The_catch_callback_in_0_returns_unknown_so_the_Effect_error_type_stays_untyped_A_specific_typed_error_preserves_error_channel_information_for_example_by_narrowing_the_value_or_wrapping_it_in_Data_TaggedError_effect_unknownInEffectCatch;
+static MESSAGE: &Message = &tsdiag::THE_CATCH_CALLBACK_IN_0_RETURNS_UNKNOWN_SO_THE_EFFECT_ERROR_TYPE_STAYS_UNTYPED_A_SPECIFIC_TYPED_ERROR_PRESERVES_ERROR_CHANNEL_INFORMATION_FOR_EXAMPLE_BY_NARROWING_THE_VALUE_OR_WRAPPING_IT_IN_DATA_TAGGED_ERROR_EFFECT_UNKNOWN_IN_EFFECT_CATCH;
 
 // go: internal/rules/unknown_in_effect_catch.go:15 unknownCatchApis
 // unknownCatchApis lists the Effect module APIs that have a catch callback parameter.

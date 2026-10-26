@@ -6,7 +6,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::This_Schema_Union_contains_multiple_Schema_Literal_members_and_can_be_simplified_to_a_single_Schema_Literal_call_effect_schemaUnionOfLiterals;
+static MESSAGE: &Message = &tsdiag::THIS_SCHEMA_UNION_CONTAINS_MULTIPLE_SCHEMA_LITERAL_MEMBERS_AND_CAN_BE_SIMPLIFIED_TO_A_SINGLE_SCHEMA_LITERAL_CALL_EFFECT_SCHEMA_UNION_OF_LITERALS;
 
 // go: internal/fixables/schema_union_of_literals.go:12 SchemaUnionOfLiteralsFix
 pub static SCHEMA_UNION_OF_LITERALS_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

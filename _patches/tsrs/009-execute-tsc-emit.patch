@@ -16,10 +16,10 @@ tsc/internal/compiler/program.go) to tsrs.
 - The callbacks take the diagnostics as a slice and return the kept ones (Go: a slice in, a slice out).
 
 diff --git a/crates/tsrs_compiler/src/lib.rs b/crates/tsrs_compiler/src/lib.rs
-index 39af157..877e31f 100644
+index 905be184..d0f048d5 100644
 --- a/crates/tsrs_compiler/src/lib.rs
 +++ b/crates/tsrs_compiler/src/lib.rs
-@@ -53,6 +53,11 @@ pub use program::{
+@@ -46,6 +46,11 @@ pub use program::{
      get_diagnostics_of_any_program, new_program, shared_program_data,
      sort_and_deduplicate_diagnostics, worker_pool,
  };
@@ -32,10 +32,10 @@ index 39af157..877e31f 100644
      EmitOptions, EmitResult, SourceMapEmitResult, WriteFile, WriteFileData, combine_emit_results,
      handle_no_emit_options,
 diff --git a/crates/tsrs_compiler/src/program.rs b/crates/tsrs_compiler/src/program.rs
-index 6a72b24..6b49f73 100644
+index 00f16dbb..b541565d 100644
 --- a/crates/tsrs_compiler/src/program.rs
 +++ b/crates/tsrs_compiler/src/program.rs
-@@ -46,6 +46,36 @@ pub type CreateModuleResolver = Arc<dyn Fn(ResolverOptions) -> Box<dyn Resolver>
+@@ -46,6 +46,36 @@ pub type CreateModuleResolver =
  // Go `ProgramFactories.CreateCheckerPool func(*Program) CheckerPool`.
  pub type CreateCheckerPool = Arc<dyn Fn(&'static Program) -> Box<dyn CheckerPool> + Send + Sync>;
  
@@ -71,8 +71,8 @@ index 6a72b24..6b49f73 100644
 +
  // Go `ProgramOptions` (= ProgramConfig + ProgramHosts + ProgramFactories, flattened; tracing is not ported).
  pub struct ProgramOptions {
-     pub config: P<ParsedCommandLine>,
-@@ -3818,6 +3848,12 @@ pub fn get_diagnostics_of_any_program(
+     pub(crate) config: P<ParsedCommandLine>,
+@@ -3852,6 +3882,12 @@ pub fn get_diagnostics_of_any_program(
              }
          }
      }
@@ -86,7 +86,7 @@ index 6a72b24..6b49f73 100644
      all_diagnostics
  }
 diff --git a/crates/tsrs_compiler/src/programlike.rs b/crates/tsrs_compiler/src/programlike.rs
-index b8bf4b3..24c849a 100644
+index b8bf4b31..24c849a7 100644
 --- a/crates/tsrs_compiler/src/programlike.rs
 +++ b/crates/tsrs_compiler/src/programlike.rs
 @@ -199,5 +199,11 @@ pub fn get_diagnostics_of_any_program_like(
@@ -102,7 +102,7 @@ index b8bf4b3..24c849a 100644
      all_diagnostics
  }
 diff --git a/crates/tsrs_execute/Cargo.toml b/crates/tsrs_execute/Cargo.toml
-index 5e4384e..14bef04 100644
+index 1e4559a7..f3a04180 100644
 --- a/crates/tsrs_execute/Cargo.toml
 +++ b/crates/tsrs_execute/Cargo.toml
 @@ -12,6 +12,8 @@ workspace = true
@@ -115,10 +115,10 @@ index 5e4384e..14bef04 100644
  tsrs_diagnostics.workspace = true
  tsrs_ast.workspace = true
 diff --git a/crates/tsrs_execute/src/execute.rs b/crates/tsrs_execute/src/execute.rs
-index d03e440..ffbe634 100644
+index 38e964c6..000f0c57 100644
 --- a/crates/tsrs_execute/src/execute.rs
 +++ b/crates/tsrs_execute/src/execute.rs
-@@ -55,6 +55,15 @@ pub fn command_line_with_testing(
+@@ -56,6 +56,15 @@ pub fn command_line_with_testing(
      command_line_args: Vec<String>,
      testing: Option<&'static dyn tsc::CommandLineTesting>,
  ) -> CommandLineResult {
@@ -135,11 +135,11 @@ index d03e440..ffbe634 100644
          match first.to_lowercase().as_str() {
              "-b" | "--b" | "-build" | "--build" => {
 diff --git a/crates/tsrs_execute/src/tsc/emit.rs b/crates/tsrs_execute/src/tsc/emit.rs
-index 3cadf91..589a353 100644
+index e03af54d..5d8343b2 100644
 --- a/crates/tsrs_execute/src/tsc/emit.rs
 +++ b/crates/tsrs_execute/src/tsc/emit.rs
 @@ -9,6 +9,31 @@ use super::{
-     Statistics, System, statistics_from_program,
+     DiagnosticsReporter, ExitStatus, Statistics, System, statistics_from_program,
  };
  
 +// effect-tsgo patch 009 (emit.go `FilterDiagnosticsForExitCodeCallback`).
@@ -168,9 +168,9 @@ index 3cadf91..589a353 100644
 +}
 +
  pub struct EmitInput<'a> {
-     pub sys: &'a dyn System,
-     pub program: &'static Program,
-@@ -57,9 +82,23 @@ pub fn emit_and_report_statistics(input: &EmitInput) -> (CompileAndEmitResult, O
+     pub(crate) sys: &'a dyn System,
+     pub(crate) program: &'static Program,
+@@ -77,9 +102,23 @@ pub fn emit_and_report_statistics(input: &EmitInput) -> (CompileAndEmitResult, O
          statistics = Some(stats);
      }
  
@@ -190,9 +190,24 @@ index 3cadf91..589a353 100644
 +    };
 +
 +    if result.emit_skipped && !diagnostics_for_exit_code.is_empty() {
-         result.status = ExitStatus::DiagnosticsPresent_OutputsSkipped;
+         result.status = ExitStatus::DiagnosticsPresentOutputsSkipped;
 -    } else if !result.diagnostics.is_empty() {
 +    } else if !diagnostics_for_exit_code.is_empty() {
-         result.status = ExitStatus::DiagnosticsPresent_OutputsGenerated;
+         result.status = ExitStatus::DiagnosticsPresentOutputsGenerated;
      }
      (result, statistics)
+diff --git a/crates/tsrs_execute/src/tsc/mod.rs b/crates/tsrs_execute/src/tsc/mod.rs
+index 0b76fd2e..38db0959 100644
+--- a/crates/tsrs_execute/src/tsc/mod.rs
++++ b/crates/tsrs_execute/src/tsc/mod.rs
+@@ -9,6 +9,10 @@ mod statistics;
+ pub use compile::*;
+ pub use diagnostics::*;
+ pub(crate) use emit::*;
++// effect-tsgo patch 009: the exit-code filter hook is public (the rest of emit.rs is re-exported to the crate only).
++pub use emit::{
++    FilterDiagnosticsForExitCodeCallback, register_filter_diagnostics_for_exit_code_callback,
++};
+ pub use extendedconfigcache::*;
+ pub use statistics::*;
+ // The stream `System::spawn` returns (Go `io.ReadWriteCloser`).

@@ -66,9 +66,9 @@ pub(crate) fn api_stability_lifecycle_diagnostics(
 
     let fs: Arc<dyn FS> = Arc::new(bundled::wrap_fs(vfstest::from_map(fsmap, true)));
     let options = CompilerOptions {
-        target: ScriptTarget::ESNext,
-        module: ModuleKind::NodeNext,
-        module_resolution: ModuleResolutionKind::NodeNext,
+        target: ScriptTarget::ES_NEXT,
+        module: ModuleKind::NODE_NEXT,
+        module_resolution: ModuleResolutionKind::NODE_NEXT,
         strict: Tristate::True,
         skip_lib_check: Tristate::True,
         skip_default_lib_check: Tristate::True,
@@ -738,9 +738,9 @@ fn api_stability_program(
     let fs: Arc<dyn FS> = Arc::new(bundled::wrap_fs(vfstest::from_map(fsmap, true)));
     let options = CompilerOptions {
         effect: Some(Arc::new(api_stability_lifecycle_options(enabled))).into(),
-        target: ScriptTarget::ESNext,
-        module: ModuleKind::NodeNext,
-        module_resolution: ModuleResolutionKind::NodeNext,
+        target: ScriptTarget::ES_NEXT,
+        module: ModuleKind::NODE_NEXT,
+        module_resolution: ModuleResolutionKind::NODE_NEXT,
         strict: Tristate::True,
         skip_lib_check: Tristate::True,
         skip_default_lib_check: Tristate::True,

@@ -18,7 +18,7 @@ pub static GLOBAL_ERROR_IN_EFFECT_FAILURE: LazyLock<Rule> = LazyLock::new(|| {
     description: "Warns when the global Error type is used in an Effect failure channel",
     default_severity: Severity::Warning,
     supported_effect: vec!["v3", "v4"],
-    codes: vec![tsdiag::Global_Error_loses_type_safety_as_untagged_errors_merge_together_in_the_Effect_failure_channel_Consider_using_a_tagged_error_and_optionally_wrapping_the_original_in_a_cause_property_effect_globalErrorInEffectFailure.code()],
+    codes: vec![tsdiag::GLOBAL_ERROR_LOSES_TYPE_SAFETY_AS_UNTAGGED_ERRORS_MERGE_TOGETHER_IN_THE_EFFECT_FAILURE_CHANNEL_CONSIDER_USING_A_TAGGED_ERROR_AND_OPTIONALLY_WRAPPING_THE_ORIGINAL_IN_A_CAUSE_PROPERTY_EFFECT_GLOBAL_ERROR_IN_EFFECT_FAILURE.code()],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let mut diags = Vec::new();
 
@@ -87,7 +87,7 @@ pub(crate) fn check_global_error_in_effect_failure(
         return Some(ctx.new_diagnostic(
             ctx.source_file,
             ctx.get_error_range(node),
-            &tsdiag::Global_Error_loses_type_safety_as_untagged_errors_merge_together_in_the_Effect_failure_channel_Consider_using_a_tagged_error_and_optionally_wrapping_the_original_in_a_cause_property_effect_globalErrorInEffectFailure,
+            &tsdiag::GLOBAL_ERROR_LOSES_TYPE_SAFETY_AS_UNTAGGED_ERRORS_MERGE_TOGETHER_IN_THE_EFFECT_FAILURE_CHANNEL_CONSIDER_USING_A_TAGGED_ERROR_AND_OPTIONALLY_WRAPPING_THE_ORIGINAL_IN_A_CAUSE_PROPERTY_EFFECT_GLOBAL_ERROR_IN_EFFECT_FAILURE,
             &[],
             &[],
         ));

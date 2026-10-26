@@ -75,7 +75,7 @@ fn test_by_name() {
 /// diagnostics messages, with Go's identifiers, codes, categories and keys, and the key lookup finds them.
 #[test]
 fn effect_diagnostic_messages_are_generated() {
-    let message = &ets_shim::diagnostics::X_effect_diagnostics_directive_has_no_effect;
+    let message = &ets_shim::diagnostics::X_EFFECT_DIAGNOSTICS_DIRECTIVE_HAS_NO_EFFECT;
     assert_eq!(message.code(), 377_000);
     assert_eq!(message.category(), ets_shim::diagnostics::Category::Warning);
     assert_eq!(message.key().as_str(), "effect_diagnostics_directive_has_no_effect_377000");

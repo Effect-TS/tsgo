@@ -8,7 +8,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::This_Schema_subclass_defines_its_own_constructor_For_Schema_classes_constructor_overrides_break_decoding_behavior_for_the_class_shape_Custom_construction_can_be_expressed_through_a_static_new_method_instead_effect_overriddenSchemaConstructor;
+static MESSAGE: &Message = &tsdiag::THIS_SCHEMA_SUBCLASS_DEFINES_ITS_OWN_CONSTRUCTOR_FOR_SCHEMA_CLASSES_CONSTRUCTOR_OVERRIDES_BREAK_DECODING_BEHAVIOR_FOR_THE_CLASS_SHAPE_CUSTOM_CONSTRUCTION_CAN_BE_EXPRESSED_THROUGH_A_STATIC_NEW_METHOD_INSTEAD_EFFECT_OVERRIDDEN_SCHEMA_CONSTRUCTOR;
 
 // go: internal/fixables/overridden_schema_constructor.go:12 OverriddenSchemaConstructorFix
 pub static OVERRIDDEN_SCHEMA_CONSTRUCTOR_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

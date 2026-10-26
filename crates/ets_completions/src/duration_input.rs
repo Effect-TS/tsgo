@@ -86,7 +86,7 @@ fn build_duration_items(ctx: &Context<'_, '_>, node: P<Node>) -> Vec<lsproto::Co
             &format!("${{0}} {unit}"),
             sort_text,
             replacement_range,
-            Some(lsproto::CompletionItemKind::Constant),
+            Some(lsproto::CompletionItemKind::CONSTANT),
         ));
     }
     items

@@ -9,7 +9,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{EffectMajorVersion, TypeParser};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::The_payload_field_name_shadows_this_error_s_own_name_so_logs_and_String_error_show_the_field_value_instead_of_the_error_type_Consider_renaming_it_effect_errorPayloadShadowsName;
+static MESSAGE: &Message = &tsdiag::THE_PAYLOAD_FIELD_NAME_SHADOWS_THIS_ERROR_S_OWN_NAME_SO_LOGS_AND_STRING_ERROR_SHOW_THE_FIELD_VALUE_INSTEAD_OF_THE_ERROR_TYPE_CONSIDER_RENAMING_IT_EFFECT_ERROR_PAYLOAD_SHADOWS_NAME;
 
 // go: internal/rules/error_payload_shadows_name.go:13 ErrorPayloadShadowsName
 pub static ERROR_PAYLOAD_SHADOWS_NAME: LazyLock<Rule> = LazyLock::new(|| Rule {

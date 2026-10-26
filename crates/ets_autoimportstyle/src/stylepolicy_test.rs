@@ -20,9 +20,12 @@ fn string_map(entries: &[(&str, &str)]) -> FxHashMap<String, String> {
     entries.iter().map(|(k, v)| ((*k).to_string(), (*v).to_string())).collect()
 }
 
-/// Rust-only: the shim's `autoimport.NewAmbientModuleID` (tsrs's `ModuleID` is the string itself).
+/// Rust-only: the shim's `autoimport.NewAmbientModuleID`.
 fn new_ambient_module_id(specifier: &str) -> ModuleID {
-    ModuleID(specifier.to_string())
+    if specifier.is_empty() {
+        return ModuleID::default();
+    }
+    ModuleID::Ambient(specifier.to_string())
 }
 
 fn dbg(value: &impl std::fmt::Debug) -> String {
@@ -98,7 +101,7 @@ fn make_add_new_fix(import_kind: lsproto::ImportKind, module_specifier: &str, na
     let usage_position = lsproto::Position { line: 1, character: 1 };
     Fix {
         auto_import_fix: lsproto::AutoImportFix {
-            kind: lsproto::AutoImportFixKind::AddNew,
+            kind: lsproto::AutoImportFixKind::ADD_NEW,
             import_kind,
             module_specifier: module_specifier.to_string(),
             name: name.to_string(),
@@ -121,12 +124,12 @@ fn test_apply_namespace_rewrite() {
 
         let export = make_export("effect", "effect/Effect", "");
         let fix =
-            Arc::new(make_add_new_fix(lsproto::ImportKind::Named, "effect/Effect", "succeed"));
+            Arc::new(make_add_new_fix(lsproto::ImportKind::NAMED, "effect/Effect", "succeed"));
 
         let Some(result) = sp.apply(Some(&export), Some(fix)) else {
             t.fatal("expected non-nil result");
         };
-        if result.import_kind != lsproto::ImportKind::Namespace {
+        if result.import_kind != lsproto::ImportKind::NAMESPACE {
             t.error(sprintf!("expected ImportKindNamespace, got %v", dbg(&result.import_kind)));
         }
         if result.name != "succeed" {
@@ -162,7 +165,7 @@ fn test_apply_suppresses_effect_internal_import() {
 
         let export = make_export("effect", "effect/internal/schema/parser", "");
         let fix = Arc::new(make_add_new_fix(
-            lsproto::ImportKind::Named,
+            lsproto::ImportKind::NAMED,
             "effect/internal/schema/parser",
             "succeed",
         ));
@@ -188,19 +191,19 @@ fn test_apply_namespace_rewrite_from_add_to_existing() {
 
         let export = make_export("effect", "effect/testing/TestClock", "");
         let mut fix = make_add_new_fix(
-            lsproto::ImportKind::Named,
+            lsproto::ImportKind::NAMED,
             "effect/testing/TestClock",
             "testClockWith",
         );
-        fix.auto_import_fix.kind = lsproto::AutoImportFixKind::AddToExisting;
+        fix.auto_import_fix.kind = lsproto::AutoImportFixKind::ADD_TO_EXISTING;
 
         let Some(result) = sp.apply(Some(&export), Some(Arc::new(fix))) else {
             t.fatal("expected non-nil result");
         };
-        if result.kind != lsproto::AutoImportFixKind::AddNew {
+        if result.kind != lsproto::AutoImportFixKind::ADD_NEW {
             t.error(sprintf!("expected rewrite to AddNew, got %v", dbg(&result.kind)));
         }
-        if result.import_kind != lsproto::ImportKind::Namespace {
+        if result.import_kind != lsproto::ImportKind::NAMESPACE {
             t.error(sprintf!("expected ImportKindNamespace, got %v", dbg(&result.import_kind)));
         }
         if result.module_specifier != "effect/testing/TestClock" {
@@ -231,12 +234,12 @@ fn test_apply_namespace_rewrite_with_alias() {
 
         let export = make_export("effect", "effect/Effect", "");
         let fix =
-            Arc::new(make_add_new_fix(lsproto::ImportKind::Named, "effect/Effect", "succeed"));
+            Arc::new(make_add_new_fix(lsproto::ImportKind::NAMED, "effect/Effect", "succeed"));
 
         let Some(result) = sp.apply(Some(&export), Some(fix)) else {
             t.fatal("expected non-nil result");
         };
-        if result.import_kind != lsproto::ImportKind::Namespace {
+        if result.import_kind != lsproto::ImportKind::NAMESPACE {
             t.error(sprintf!("expected ImportKindNamespace, got %v", dbg(&result.import_kind)));
         }
         if result.name != "succeed" {
@@ -265,7 +268,8 @@ fn test_apply_namespace_reexport() {
         sp.resolve_target = Some(Box::new(move |export: &Export| {
             if module_id_string(&export.target.module_id) != "effect/Effect" {
                 // Rust: Go calls t.Fatalf from the callback; the test reports it after Apply returns.
-                *unexpected_in_callback.lock() = Some(export.target.module_id.0.clone());
+                *unexpected_in_callback.lock() =
+                    Some(module_id_string(&export.target.module_id).to_string());
             }
             ("effect/Effect".to_string(), ResultKind::NodeModules)
         }));
@@ -274,7 +278,7 @@ fn test_apply_namespace_reexport() {
         export.export_id.export_name = "Effect".to_string();
         export.syntax = ExportSyntax::Modifier;
         export.flags = SymbolFlags::ValueModule;
-        let fix = Arc::new(make_add_new_fix(lsproto::ImportKind::Named, "effect", "Effect"));
+        let fix = Arc::new(make_add_new_fix(lsproto::ImportKind::NAMED, "effect", "Effect"));
 
         let result = sp.apply(Some(&export), Some(fix));
         let unexpected_module_id = unexpected.lock().take();
@@ -284,7 +288,7 @@ fn test_apply_namespace_reexport() {
         let Some(result) = result else {
             t.fatal("expected non-nil result");
         };
-        if result.import_kind != lsproto::ImportKind::Namespace {
+        if result.import_kind != lsproto::ImportKind::NAMESPACE {
             t.error(sprintf!("expected ImportKindNamespace, got %v", dbg(&result.import_kind)));
         }
         if result.module_specifier != "effect/Effect" {
@@ -324,7 +328,7 @@ fn new_barrel_policy(options: &ResolvedEffectPluginOptions, disk: &[(&str, &str)
 
 // go test: internal/autoimportstyle/stylepolicy_test.go:232 makeBarrelFix
 fn make_barrel_fix(module_specifier: &str, module_file_name: &str, name: &str) -> Fix {
-    let mut fix = make_add_new_fix(lsproto::ImportKind::Named, module_specifier, name);
+    let mut fix = make_add_new_fix(lsproto::ImportKind::NAMED, module_specifier, name);
     fix.module_file_name = module_file_name.to_string();
     fix
 }
@@ -355,7 +359,7 @@ fn test_apply_barrel_rewrite() {
         let Some(result) = sp.apply(Some(&export), Some(fix)) else {
             t.fatal("expected non-nil result");
         };
-        if result.import_kind != lsproto::ImportKind::Named {
+        if result.import_kind != lsproto::ImportKind::NAMED {
             t.error(sprintf!("expected ImportKindNamed, got %v", dbg(&result.import_kind)));
         }
         if result.module_specifier != "@effect/platform" {
@@ -556,7 +560,7 @@ fn test_apply_namespace_rewrite_without_usage_position_falls_back() {
         }));
 
         let export = make_export("effect", "effect/Effect", "");
-        let mut fix = make_add_new_fix(lsproto::ImportKind::Named, "effect/Effect", "succeed");
+        let mut fix = make_add_new_fix(lsproto::ImportKind::NAMED, "effect/Effect", "succeed");
         fix.auto_import_fix.usage_position = None;
         let fix = Arc::new(fix);
 
@@ -613,13 +617,13 @@ fn test_apply_top_level_reexport_ignore() {
         // Export is a reexport (target module differs from module)
         let mut export = make_export("effect", "effect", "effect/Effect");
         export.syntax = ExportSyntax::Named;
-        let fix = Arc::new(make_add_new_fix(lsproto::ImportKind::Named, "effect", "succeed"));
+        let fix = Arc::new(make_add_new_fix(lsproto::ImportKind::NAMED, "effect", "succeed"));
 
         let Some(result) = sp.apply(Some(&export), Some(fix)) else {
             t.fatal("expected non-nil result");
         };
         // When ignoring reexports, the fix should be returned unchanged
-        if result.import_kind != lsproto::ImportKind::Named {
+        if result.import_kind != lsproto::ImportKind::NAMED {
             t.error(sprintf!(
                 "expected ImportKindNamed (unchanged), got %v",
                 dbg(&result.import_kind)
@@ -645,7 +649,7 @@ fn test_apply_top_level_reexport_follow() {
         // Export is a reexport (target module differs from module)
         let mut export = make_export("effect", "effect", "effect/Effect");
         export.syntax = ExportSyntax::Named;
-        let fix = Arc::new(make_add_new_fix(lsproto::ImportKind::Named, "effect", "succeed"));
+        let fix = Arc::new(make_add_new_fix(lsproto::ImportKind::NAMED, "effect", "succeed"));
 
         let result = sp.apply(Some(&export), Some(fix));
         // When following reexports, the reexport fix should be suppressed (nil)
@@ -670,7 +674,7 @@ fn test_apply_no_match_passthrough() {
         }));
 
         let export = make_export("lodash", "lodash", "");
-        let fix = Arc::new(make_add_new_fix(lsproto::ImportKind::Named, "lodash", "map"));
+        let fix = Arc::new(make_add_new_fix(lsproto::ImportKind::NAMED, "lodash", "map"));
 
         let result = sp.apply(Some(&export), Some(Arc::clone(&fix)));
         if !result.is_some_and(|result| Arc::ptr_eq(&result, &fix)) {
@@ -692,8 +696,8 @@ fn test_apply_non_add_new_passthrough() {
         let export = make_export("effect", "effect/Effect", "");
         let fix = Arc::new(Fix {
             auto_import_fix: lsproto::AutoImportFix {
-                kind: lsproto::AutoImportFixKind::AddToExisting,
-                import_kind: lsproto::ImportKind::Named,
+                kind: lsproto::AutoImportFixKind::ADD_TO_EXISTING,
+                import_kind: lsproto::ImportKind::NAMED,
                 module_specifier: "effect/Effect".to_string(),
                 name: "succeed".to_string(),
                 ..Default::default()
@@ -721,12 +725,12 @@ fn test_apply_case_insensitive_matching() {
         // Package name is lowercase but config was uppercase
         let export = make_export("effect", "effect/Effect", "");
         let fix =
-            Arc::new(make_add_new_fix(lsproto::ImportKind::Named, "effect/Effect", "succeed"));
+            Arc::new(make_add_new_fix(lsproto::ImportKind::NAMED, "effect/Effect", "succeed"));
 
         let Some(result) = sp.apply(Some(&export), Some(fix)) else {
             t.fatal("expected non-nil result");
         };
-        if result.import_kind != lsproto::ImportKind::Namespace {
+        if result.import_kind != lsproto::ImportKind::NAMESPACE {
             t.error(sprintf!(
                 "expected case-insensitive match to trigger namespace rewrite, got %v",
                 dbg(&result.import_kind)
@@ -746,7 +750,7 @@ fn test_apply_nil_inputs() {
         }));
 
         let fix =
-            Arc::new(make_add_new_fix(lsproto::ImportKind::Named, "effect/Effect", "succeed"));
+            Arc::new(make_add_new_fix(lsproto::ImportKind::NAMED, "effect/Effect", "succeed"));
         if sp.apply(None, Some(fix)).is_none() {
             t.error("expected fix returned when export is nil");
         }
@@ -790,7 +794,7 @@ fn test_new_fix_transformer_applies_policy() {
 
         let export = make_export("effect", "effect/Effect", "");
         let fixes = vec![Arc::new(make_add_new_fix(
-            lsproto::ImportKind::Named,
+            lsproto::ImportKind::NAMED,
             "effect/Effect",
             "succeed",
         ))];
@@ -799,7 +803,7 @@ fn test_new_fix_transformer_applies_policy() {
         if result.len() != 1 {
             t.fatal(sprintf!("expected 1 fix, got %d", result.len()));
         }
-        if result[0].import_kind != lsproto::ImportKind::Namespace {
+        if result[0].import_kind != lsproto::ImportKind::NAMESPACE {
             t.error(sprintf!("expected ImportKindNamespace, got %v", dbg(&result[0].import_kind)));
         }
     });
@@ -825,8 +829,8 @@ fn test_new_fix_transformer_prefers_existing_namespace_use() {
         let export = make_export("effect", "effect/testing/TestClock", "");
         let use_namespace = Arc::new(Fix {
             auto_import_fix: lsproto::AutoImportFix {
-                kind: lsproto::AutoImportFixKind::UseNamespace,
-                import_kind: lsproto::ImportKind::Namespace,
+                kind: lsproto::AutoImportFixKind::USE_NAMESPACE,
+                import_kind: lsproto::ImportKind::NAMESPACE,
                 module_specifier: "effect/testing/TestClock".to_string(),
                 name: "testClockWith".to_string(),
                 namespace_prefix: "TestClock".to_string(),
@@ -835,17 +839,17 @@ fn test_new_fix_transformer_prefers_existing_namespace_use() {
             ..Default::default()
         });
         let mut add_to_existing = make_add_new_fix(
-            lsproto::ImportKind::Named,
+            lsproto::ImportKind::NAMED,
             "effect/testing/TestClock",
             "testClockWith",
         );
-        add_to_existing.auto_import_fix.kind = lsproto::AutoImportFixKind::AddToExisting;
+        add_to_existing.auto_import_fix.kind = lsproto::AutoImportFixKind::ADD_TO_EXISTING;
 
         let result = transformer(Some(&export), vec![use_namespace, Arc::new(add_to_existing)]);
         if result.len() != 1 {
             t.fatal(sprintf!("expected 1 fix, got %d", result.len()));
         }
-        if result[0].kind != lsproto::AutoImportFixKind::UseNamespace {
+        if result[0].kind != lsproto::AutoImportFixKind::USE_NAMESPACE {
             t.fatal(sprintf!("expected UseNamespace fix, got %v", dbg(&result[0].kind)));
         }
     });

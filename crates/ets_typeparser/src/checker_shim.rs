@@ -3,7 +3,7 @@
 //! blocks; none reimplements checker logic beyond the few lines of the Go function it stands for.
 
 use ets_shim::ast::{
-    InternalSymbolNameComputed, ModifierFlags, Node, NodeFlags, SourceFile, Symbol, SymbolFlags,
+    INTERNAL_SYMBOL_NAME_COMPUTED, ModifierFlags, Node, NodeFlags, SourceFile, Symbol, SymbolFlags,
 };
 use ets_shim::checker::{
     AliasArg, Checker, MappedType, Signature, Type, TypeFlags, UnionReduction,
@@ -18,7 +18,7 @@ use ets_shim::core::P;
 pub fn get_symbol_of_declaration(c: &mut Checker, node: P<Node>) -> Option<P<Symbol>> {
     let symbol = node.symbol()?;
     if symbol.flags().intersects(SymbolFlags::ClassMember)
-        && symbol.name() == InternalSymbolNameComputed
+        && symbol.name() == INTERNAL_SYMBOL_NAME_COMPUTED
         && let Some(name) = node.name()
         && ets_shim::ast::is_declaration_name(name)
         && !name.flags().intersects(NodeFlags::InWithStatement)

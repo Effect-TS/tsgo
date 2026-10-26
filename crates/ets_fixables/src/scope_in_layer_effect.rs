@@ -7,7 +7,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::This_layer_construction_leaves_Scope_in_the_requirement_set_The_scoped_API_removes_Scope_from_the_resulting_requirements_effect_scopeInLayerEffect;
+static MESSAGE: &Message = &tsdiag::THIS_LAYER_CONSTRUCTION_LEAVES_SCOPE_IN_THE_REQUIREMENT_SET_THE_SCOPED_API_REMOVES_SCOPE_FROM_THE_RESULTING_REQUIREMENTS_EFFECT_SCOPE_IN_LAYER_EFFECT;
 
 // go: internal/fixables/scope_in_layer_effect.go:13 ScopeInLayerEffectScopedFix
 pub static SCOPE_IN_LAYER_EFFECT_SCOPED_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

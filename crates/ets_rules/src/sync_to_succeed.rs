@@ -9,7 +9,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{LazyExpressionFlags, TypeParser};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::Effect_succeed_expresses_this_constant_value_more_directly_than_Effect_sync_effect_syncToSucceed;
+static MESSAGE: &Message = &tsdiag::EFFECT_SUCCEED_EXPRESSES_THIS_CONSTANT_VALUE_MORE_DIRECTLY_THAN_EFFECT_SYNC_EFFECT_SYNC_TO_SUCCEED;
 
 // go: internal/rules/sync_to_succeed.go:16 SyncToSucceed
 // SyncToSucceed suggests using Effect.succeed when an Effect.sync thunk returns

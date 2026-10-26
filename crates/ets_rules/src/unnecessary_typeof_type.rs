@@ -11,7 +11,7 @@ use ets_typeparser::TypeParser;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message =
-    &tsdiag::This_typeof_Type_query_can_be_replaced_with_0_effect_unnecessaryTypeofType;
+    &tsdiag::THIS_TYPEOF_TYPE_QUERY_CAN_BE_REPLACED_WITH_0_EFFECT_UNNECESSARY_TYPEOF_TYPE;
 
 // go: internal/rules/unnecessary_typeof_type.go:16 UnnecessaryTypeofType
 pub static UNNECESSARY_TYPEOF_TYPE: LazyLock<Rule> = LazyLock::new(|| Rule {

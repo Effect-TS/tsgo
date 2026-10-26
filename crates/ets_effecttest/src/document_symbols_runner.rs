@@ -131,7 +131,7 @@ pub fn run_effect_document_symbols_test(t: &T, version: EffectVersion, test_file
             lsconv::file_name_to_document_uri(file_name),
             1,
             content,
-            lsproto::LanguageKind::TypeScript,
+            lsproto::LanguageKind::TYPE_SCRIPT,
         );
     }
 

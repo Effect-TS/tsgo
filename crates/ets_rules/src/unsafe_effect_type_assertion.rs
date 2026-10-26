@@ -10,7 +10,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::TypeParser;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::This_type_assertion_unsafely_narrows_the_error_or_requirements_channels_effect_unsafeEffectTypeAssertion;
+static MESSAGE: &Message = &tsdiag::THIS_TYPE_ASSERTION_UNSAFELY_NARROWS_THE_ERROR_OR_REQUIREMENTS_CHANNELS_EFFECT_UNSAFE_EFFECT_TYPE_ASSERTION;
 
 // go: internal/rules/unsafe_effect_type_assertion.go:14 UnsafeEffectTypeAssertion
 pub static UNSAFE_EFFECT_TYPE_ASSERTION: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -181,7 +181,7 @@ pub(crate) fn unsafe_effect_type_assertion_related_information(
         related.push(ctx.new_diagnostic(
             m.source_file,
             ets_shim::scanner::get_error_range_for_node(m.source_file, location_node),
-            &tsdiag::The_0_channel_is_narrowed_from_1_to_2_effect_unsafeEffectTypeAssertion,
+            &tsdiag::THE_0_CHANNEL_IS_NARROWED_FROM_1_TO_2_EFFECT_UNSAFE_EFFECT_TYPE_ASSERTION,
             &[],
             &[channel.name, &channel.original, &channel.asserted],
         ));

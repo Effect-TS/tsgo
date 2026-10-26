@@ -240,7 +240,7 @@ fn verify_import_fix_contents_unordered(
             let Some(code_action) = &item.code_action else {
                 continue;
             };
-            if code_action.kind != Some(lsproto::CodeActionKind::QuickFix) {
+            if code_action.kind != Some(lsproto::CodeActionKind::QUICK_FIX) {
                 continue;
             }
             let Some(changes) = code_action.edit.as_ref().and_then(|edit| edit.changes.as_ref())

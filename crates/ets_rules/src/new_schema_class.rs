@@ -19,7 +19,7 @@ pub static NEW_SCHEMA_CLASS: LazyLock<Rule> = LazyLock::new(|| {
         description: "Suggests using Schema make instead of new for Schema classes",
         default_severity: Severity::Off,
         supported_effect: vec!["v4"],
-        codes: vec![tsdiag::This_Schema_class_is_constructed_with_new_0_make_can_be_used_to_construct_the_Schema_class_instance_effect_newSchemaClass.code()],
+        codes: vec![tsdiag::THIS_SCHEMA_CLASS_IS_CONSTRUCTED_WITH_NEW_0_MAKE_CAN_BE_USED_TO_CONSTRUCT_THE_SCHEMA_CLASS_INSTANCE_EFFECT_NEW_SCHEMA_CLASS.code()],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_new_schema_class(ctx.type_parser, ctx.source_file);
             let mut diags = Vec::with_capacity(matches.len());
@@ -27,7 +27,7 @@ pub static NEW_SCHEMA_CLASS: LazyLock<Rule> = LazyLock::new(|| {
                 diags.push(ctx.new_diagnostic(
                     m.source_file,
                     m.location,
-                    &tsdiag::This_Schema_class_is_constructed_with_new_0_make_can_be_used_to_construct_the_Schema_class_instance_effect_newSchemaClass,
+                    &tsdiag::THIS_SCHEMA_CLASS_IS_CONSTRUCTED_WITH_NEW_0_MAKE_CAN_BE_USED_TO_CONSTRUCT_THE_SCHEMA_CLASS_INSTANCE_EFFECT_NEW_SCHEMA_CLASS,
                     &[],
                     &[&m.class_text],
                 ));

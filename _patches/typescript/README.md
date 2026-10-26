@@ -35,10 +35,9 @@ legacy provider (`_patches/typescript-go-<gitHead>/`,
 suffix makes an override, so `_patches/typescript-go` is the legacy provider's
 own folder. Today:
 
-- `typescript-b85298b6a81f772d080b0455de0ca9d744cd6fd6` (patches and shims): the
-  TypeScript the pinned tsrs ports (`7.1.0-dev.20260929`);
 - `typescript-3e9236361fa97a9e6c685f4833ac457ae2d8c50a` (shims only):
-  `7.1.0-beta`.
+  `7.1.0-beta`, which is also the TypeScript the pinned tsrs ports (tsrs 0.20.0;
+  this folder's patches apply to it unchanged).
 
 Rules, enforced by `repoctl check` where they can be:
 

@@ -10,7 +10,7 @@ use ets_typeparser::EffectMajorVersion;
 use crate::*;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::X_0_executes_synchronously_Use_Schema_1_to_compose_this_operation_through_Effect_without_throwing_effect_schemaSync;
+static MESSAGE: &Message = &tsdiag::X_0_EXECUTES_SYNCHRONOUSLY_USE_SCHEMA_1_TO_COMPOSE_THIS_OPERATION_THROUGH_EFFECT_WITHOUT_THROWING_EFFECT_SCHEMA_SYNC;
 
 // go: internal/rules/schema_sync.go:13 SchemaSync
 // SchemaSync discourages synchronous Schema decoding and encoding in any context.

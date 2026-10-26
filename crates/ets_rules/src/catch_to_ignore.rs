@@ -15,7 +15,7 @@ use ets_typeparser::{
 };
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::Effect_1_expresses_ignored_failure_more_directly_than_Effect_0_returning_Effect_void_effect_catchToIgnore;
+static MESSAGE: &Message = &tsdiag::EFFECT_1_EXPRESSES_IGNORED_FAILURE_MORE_DIRECTLY_THAN_EFFECT_0_RETURNING_EFFECT_VOID_EFFECT_CATCH_TO_IGNORE;
 
 // go: internal/rules/catch_to_ignore.go:16 CatchToIgnore
 // CatchToIgnore suggests using Effect.ignore or Effect.ignoreCause instead of Effect.catch/catchCause + Effect.void.

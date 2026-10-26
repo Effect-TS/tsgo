@@ -1,0 +1,1049 @@
+tsrs-only: tsrs 0.20.0 narrowed the visibility of much of its API ("apply Hawk visibility fixes", oxc-project/tsrs#761:
+`pub` items became `pub(crate)` or private). This restores `pub` on the items the Effect crates use, and only on
+those: checker type fields (`IndexInfo`, `MappedType`, `ConditionalType`, `SubstitutionType`, ...), `Checker` fields
+and methods the type parser and rules call, the change tracker's `NodeOptions` and methods, the code fix provider and
+context fields, autoimport's `ExportID::export_name`, `Fix::type_only_alias_declaration`, `ModuleID::as_str` and
+`ModuleID::as_file`, and a few others (see the diff). Each line keeps tsrs's code; only the visibility changes (and
+rustfmt reflows the signatures that now fit on one line).
+
+tsrs also moved its in-process LSP client (`lsptestutil`, the port of Go's testutil/lsptestutil) from tsrs_lsp's
+library to its integration tests; crates/ets_fourslash drives it, so tsrs_lsp's library includes that file again as
+the `lsptestutil` module.
+
+diff --git a/crates/tsrs_checker/src/checker.rs b/crates/tsrs_checker/src/checker.rs
+index 85faaa53..35629be4 100644
+--- a/crates/tsrs_checker/src/checker.rs
++++ b/crates/tsrs_checker/src/checker.rs
+@@ -684,7 +684,7 @@ pub struct InferencePriority(InferencePriorityRepr);
+ 
+ impl InferencePriority {
+     pub const CIRCULARITY: Self = Self(InferencePriorityRepr::Circularity);
+-    pub(crate) const NONE: Self = Self::from_bits(0);
++    pub const NONE: Self = Self::from_bits(0);
+     pub(crate) const NAKED_TYPE_VARIABLE: Self = Self::from_bits(1 << 0); // Naked type variable in union or intersection type
+     pub(crate) const SPECULATIVE_TUPLE: Self = Self::from_bits(1 << 1); // Speculative tuple inference
+     pub(crate) const SUBSTITUTE_SOURCE: Self = Self::from_bits(1 << 2); // Source of inference originated within a substitution type's substitute
+@@ -692,7 +692,7 @@ impl InferencePriority {
+     pub(crate) const PARTIAL_HOMOMORPHIC_MAPPED_TYPE: Self = Self::from_bits(1 << 4); // Partial reverse inference for homomorphic mapped type
+     pub(crate) const MAPPED_TYPE_CONSTRAINT: Self = Self::from_bits(1 << 5); // Reverse inference for mapped type
+     pub(crate) const CONTRAVARIANT_CONDITIONAL: Self = Self::from_bits(1 << 6); // Conditional type in contravariant position
+-    pub(crate) const RETURN_TYPE: Self = Self::from_bits(1 << 7); // Inference made from return type of generic function
++    pub const RETURN_TYPE: Self = Self::from_bits(1 << 7); // Inference made from return type of generic function
+     pub(crate) const LITERAL_KEYOF: Self = Self::from_bits(1 << 8); // Inference made from a string literal to a keyof T
+     // These priorities imply that the resulting type should be a combination of all candidates.
+     pub(crate) const PRIORITY_IMPLIES_COMBINATION: Self =
+@@ -1231,7 +1231,7 @@ pub struct Checker {
+     pub(crate) undefined_symbol: P<Symbol>,
+     pub(crate) arguments_symbol: P<Symbol>,
+     pub(crate) require_symbol: P<Symbol>,
+-    pub(crate) unknown_symbol: P<Symbol>,
++    pub unknown_symbol: P<Symbol>,
+     pub(crate) unresolved_symbols: FxHashMap<String, P<Symbol>>,
+     pub(crate) error_types: PackedMap<CacheHashKey, P<Type>>,
+     module_symbols: FxHashMap<P<Node>, P<Symbol>>,
+@@ -1259,7 +1259,7 @@ pub struct Checker {
+     pub(crate) node_links: LinkStore<Node, NodeLinks>,
+     pub(crate) signature_links: NodeValueLinkStore<SignatureLinks>,
+     pub(crate) symbol_node_links: NodeLinkStore<SymbolNodeLinks>,
+-    pub(crate) type_node_links: NodeValueLinkStore<TypeNodeLinks>,
++    pub type_node_links: NodeValueLinkStore<TypeNodeLinks>,
+     pub(crate) enum_member_links: LinkStore<Node, EnumMemberLinks>,
+     pub(crate) assertion_links: LinkStore<Node, AssertionLinks>,
+     pub(crate) array_literal_links: LinkStore<Node, ArrayLiteralLinks>,
+@@ -1267,22 +1267,22 @@ pub struct Checker {
+     pub(crate) jsx_element_links: LinkStore<Node, JsxElementLinks>,
+     pub(crate) computed_name_links: LinkStore<Node, ComputedNameNodeLinks>,
+     pub(crate) symbol_reference_links: SymbolReferenceLinkStore,
+-    pub(crate) value_symbol_links: SymbolArenaLinkStore<ValueSymbolLinks>,
++    pub value_symbol_links: SymbolArenaLinkStore<ValueSymbolLinks>,
+     pub(crate) mapped_symbol_links: LinkStore<Symbol, MappedSymbolLinks>,
+     pub(crate) deferred_symbol_links: LinkStore<Symbol, DeferredSymbolLinks>,
+-    pub(crate) alias_symbol_links: LinkStore<Symbol, AliasSymbolLinks>,
++    pub alias_symbol_links: LinkStore<Symbol, AliasSymbolLinks>,
+     pub(crate) module_symbol_links: LinkStore<Symbol, ModuleSymbolLinks>,
+     pub(crate) late_bound_links: LinkStore<Symbol, LateBoundLinks>,
+     pub(crate) export_type_links: LinkStore<Symbol, ExportTypeLinks>,
+     pub(crate) members_and_exports_links: LinkStore<Symbol, MembersAndExportsLinks>,
+-    pub(crate) type_alias_links: LinkStore<Symbol, TypeAliasLinks>,
+-    pub(crate) declared_type_links: LinkStore<Symbol, DeclaredTypeLinks>,
++    pub type_alias_links: LinkStore<Symbol, TypeAliasLinks>,
++    pub declared_type_links: LinkStore<Symbol, DeclaredTypeLinks>,
+     pub(crate) spread_links: LinkStore<Symbol, SpreadLinks>,
+     pub(crate) variance_links: LinkStore<Symbol, VarianceLinks>,
+     pub(crate) reverse_mapped_symbol_links: LinkStore<Symbol, ReverseMappedSymbolLinks>,
+     pub(crate) marked_assignment_symbol_links: LinkStore<Symbol, MarkedAssignmentSymbolLinks>,
+     pub(crate) symbol_container_links: LinkStore<Symbol, ContainingSymbolLinks>,
+-    pub(crate) source_file_links: LinkStore<SourceFile, SourceFileLinks>,
++    pub source_file_links: LinkStore<SourceFile, SourceFileLinks>,
+     pub(crate) reg_exp_scanner: Option<Box<Scanner>>,
+     pub(crate) pattern_for_type: FxHashMap<P<Type>, P<Node>>,
+     pub(crate) lazy_member_tables:
+@@ -1375,21 +1375,21 @@ pub struct Checker {
+     pub(crate) optional_type: P<Type>,
+     pub(crate) null_type: P<Type>,
+     pub(crate) null_widening_type: P<Type>,
+-    pub(crate) string_type: P<Type>,
+-    pub(crate) number_type: P<Type>,
++    pub string_type: P<Type>,
++    pub number_type: P<Type>,
+     pub(crate) bigint_type: P<Type>,
+     pub(crate) regular_false_type: P<Type>,
+     pub(crate) false_type: P<Type>,
+     pub(crate) regular_true_type: P<Type>,
+     pub(crate) true_type: P<Type>,
+-    pub(crate) boolean_type: P<Type>,
++    pub boolean_type: P<Type>,
+     pub(crate) es_symbol_type: P<Type>,
+     pub(crate) void_type: P<Type>,
+     pub(crate) never_type: P<Type>,
+     pub(crate) silent_never_type: P<Type>,
+     pub(crate) implicit_never_type: P<Type>,
+     pub(crate) unreachable_never_type: P<Type>,
+-    pub(crate) non_primitive_type: P<Type>,
++    pub non_primitive_type: P<Type>,
+     pub(crate) string_or_number_type: P<Type>,
+     pub(crate) string_number_symbol_type: P<Type>,
+     pub(crate) number_or_big_int_type: P<Type>,
+@@ -1408,11 +1408,11 @@ pub struct Checker {
+     pub(crate) empty_type_literal_type: P<Type>,
+     pub(crate) unknown_empty_object_type: P<Type>,
+     pub(crate) unknown_union_type: P<Type>,
+-    pub(crate) empty_generic_type: P<Type>,
++    pub empty_generic_type: P<Type>,
+     pub(crate) any_function_type: P<Type>,
+-    pub(crate) no_constraint_type: P<Type>,
+-    pub(crate) circular_constraint_type: P<Type>,
+-    pub(crate) resolving_default_type: P<Type>,
++    pub no_constraint_type: P<Type>,
++    pub circular_constraint_type: P<Type>,
++    pub resolving_default_type: P<Type>,
+     pub(crate) marker_super_type: P<Type>,
+     pub(crate) marker_sub_type: P<Type>,
+     pub(crate) marker_other_type: P<Type>,
+@@ -1594,7 +1594,7 @@ pub struct Checker {
+     pub(crate) jsx_namespace: String,
+     pub(crate) jsx_factory_entity: Option<P<Node>>,
+     pub(crate) skip_direct_inference_nodes: Set<P<Node>>,
+-    pub(crate) ctx: Option<Context>, // Go nil until checkSourceFile
++    pub ctx: Option<Context>, // Go nil until checkSourceFile
+     pub(crate) active_mappers: Vec<P<TypeMapper>>,
+     pub(crate) active_type_mappers_caches: Vec<PackedMap<CacheHashKey, P<Type>>>,
+     // Mappers and inference contexts `getConditionalType` made, recycled when it returns (notes/mem-recycle.md).
+diff --git a/crates/tsrs_checker/src/checker_02.rs b/crates/tsrs_checker/src/checker_02.rs
+index ea01496e..592205d5 100644
+--- a/crates/tsrs_checker/src/checker_02.rs
++++ b/crates/tsrs_checker/src/checker_02.rs
+@@ -67,7 +67,7 @@ impl Checker {
+     }
+ 
+     // checker.go:2196
+-    pub(crate) fn get_immediate_aliased_symbol(&mut self, symbol: P<Symbol>) -> Option<P<Symbol>> {
++    pub fn get_immediate_aliased_symbol(&mut self, symbol: P<Symbol>) -> Option<P<Symbol>> {
+         assert!(symbol.flags().intersects(SymbolFlags::Alias), "Should only get Alias here.");
+         let links = self.alias_symbol_links.get(symbol);
+         if links.immediate_target.get().is_none() {
+diff --git a/crates/tsrs_checker/src/checker_07.rs b/crates/tsrs_checker/src/checker_07.rs
+index 5a871702..0b439b75 100644
+--- a/crates/tsrs_checker/src/checker_07.rs
++++ b/crates/tsrs_checker/src/checker_07.rs
+@@ -1743,7 +1743,7 @@ impl Checker {
+     }
+ 
+     // checker.go:14084
+-    pub(crate) fn is_readonly_symbol(&mut self, symbol: P<Symbol>) -> bool {
++    pub fn is_readonly_symbol(&mut self, symbol: P<Symbol>) -> bool {
+         // The following symbols are considered read-only:
+         // Properties with a 'readonly' modifier
+         // Variables declared with 'const'
+diff --git a/crates/tsrs_checker/src/checker_08.rs b/crates/tsrs_checker/src/checker_08.rs
+index 386561ed..7f75e148 100644
+--- a/crates/tsrs_checker/src/checker_08.rs
++++ b/crates/tsrs_checker/src/checker_08.rs
+@@ -3325,10 +3325,7 @@ impl Checker {
+     }
+ 
+     // checker.go:17383
+-    pub(crate) fn get_constraint_of_type_parameter(
+-        &mut self,
+-        type_parameter: P<Type>,
+-    ) -> Option<P<Type>> {
++    pub fn get_constraint_of_type_parameter(&mut self, type_parameter: P<Type>) -> Option<P<Type>> {
+         if self.has_non_circular_base_constraint(type_parameter) {
+             return self.get_constraint_from_type_parameter(type_parameter);
+         }
+diff --git a/crates/tsrs_checker/src/checker_09.rs b/crates/tsrs_checker/src/checker_09.rs
+index 96f39217..5ef7010d 100644
+--- a/crates/tsrs_checker/src/checker_09.rs
++++ b/crates/tsrs_checker/src/checker_09.rs
+@@ -2745,7 +2745,7 @@ impl Checker {
+ 
+     // checker.go:19231
+     #[cfg_attr(feature = "site-counts", track_caller)]
+-    pub(crate) fn get_property_of_type(&mut self, t: P<Type>, name: &str) -> Option<P<Symbol>> {
++    pub fn get_property_of_type(&mut self, t: P<Type>, name: &str) -> Option<P<Symbol>> {
+         self.get_property_of_type_ex(
+             t, name, false, /*skipObjectFunctionPropertyAugment*/
+             false, /*includeTypeOnlyMembers*/
+@@ -3094,7 +3094,7 @@ impl Checker {
+     }
+ 
+     // checker.go:19318
+-    pub(crate) fn get_index_infos_of_type(&mut self, t: P<Type>) -> &'static [P<IndexInfo>] {
++    pub fn get_index_infos_of_type(&mut self, t: P<Type>) -> &'static [P<IndexInfo>] {
+         let t = self.get_reduced_apparent_type(t);
+         self.get_index_infos_of_structured_type(t)
+     }
+diff --git a/crates/tsrs_checker/src/checker_11.rs b/crates/tsrs_checker/src/checker_11.rs
+index 34b405f9..bfdf2f43 100644
+--- a/crates/tsrs_checker/src/checker_11.rs
++++ b/crates/tsrs_checker/src/checker_11.rs
+@@ -945,7 +945,7 @@ pub fn is_conflicting_private_property(prop: P<Symbol>) -> bool {
+ 
+ impl Checker {
+     // checker.go:22289
+-    pub(crate) fn get_type_arguments(&mut self, t: P<Type>) -> &'static [P<Type>] {
++    pub fn get_type_arguments(&mut self, t: P<Type>) -> &'static [P<Type>] {
+         let d = t.as_type_reference();
+         if d.resolved_type_arguments.get().is_none() {
+             let n = d.target.get().unwrap().as_interface_type();
+@@ -3655,7 +3655,7 @@ impl Checker {
+     }
+ 
+     // checker.go:23942
+-    pub(crate) fn is_array_type(&self, t: P<Type>) -> bool {
++    pub fn is_array_type(&self, t: P<Type>) -> bool {
+         t.object_flags().intersects(ObjectFlags::Reference)
+             && (t.target() == Some(self.global_array_type)
+                 || t.target() == Some(self.global_readonly_array_type))
+diff --git a/crates/tsrs_checker/src/checker_12.rs b/crates/tsrs_checker/src/checker_12.rs
+index 22aaa27d..6b090580 100644
+--- a/crates/tsrs_checker/src/checker_12.rs
++++ b/crates/tsrs_checker/src/checker_12.rs
+@@ -277,7 +277,7 @@ pub fn is_local_type_alias(symbol: P<Symbol>) -> bool {
+ 
+ impl Checker {
+     // checker.go:24131
+-    pub(crate) fn get_declared_type_of_symbol(&mut self, symbol: P<Symbol>) -> P<Type> {
++    pub fn get_declared_type_of_symbol(&mut self, symbol: P<Symbol>) -> P<Type> {
+         let mut result = self.try_get_declared_type_of_symbol(symbol);
+         if result.is_none() {
+             result = Some(self.error_type);
+@@ -3364,7 +3364,7 @@ impl Checker {
+     // circularly reference themselves and therefore cannot be subtype reduced during their declaration.
+     // For example, "type Item = string | (() => Item" is a named type that circularly references itself.
+     // checker.go:26098
+-    pub(crate) fn get_union_type_ex(
++    pub fn get_union_type_ex(
+         &mut self,
+         types: &[P<Type>],
+         union_reduction: UnionReduction,
+diff --git a/crates/tsrs_checker/src/checker_13.rs b/crates/tsrs_checker/src/checker_13.rs
+index 821301a0..ce84563b 100644
+--- a/crates/tsrs_checker/src/checker_13.rs
++++ b/crates/tsrs_checker/src/checker_13.rs
+@@ -3462,7 +3462,7 @@ impl Checker {
+     }
+ 
+     // checker.go:27906
+-    pub(crate) fn get_base_constraint_of_type(&mut self, t: P<Type>) -> Option<P<Type>> {
++    pub fn get_base_constraint_of_type(&mut self, t: P<Type>) -> Option<P<Type>> {
+         if t.flags().intersects(
+             TypeFlags::InstantiableNonPrimitive
+                 | TypeFlags::UnionOrIntersection
+diff --git a/crates/tsrs_checker/src/checker_14.rs b/crates/tsrs_checker/src/checker_14.rs
+index b26ba53e..0adf382c 100644
+--- a/crates/tsrs_checker/src/checker_14.rs
++++ b/crates/tsrs_checker/src/checker_14.rs
+@@ -2237,7 +2237,7 @@ impl Checker {
+      * @returns the contextual type of an expression.
+      */
+     // checker.go:29832
+-    pub(crate) fn get_contextual_type(
++    pub fn get_contextual_type(
+         &mut self,
+         node: P<Node>,
+         context_flags: ContextFlags,
+diff --git a/crates/tsrs_checker/src/checker_15.rs b/crates/tsrs_checker/src/checker_15.rs
+index 42fa7d37..ec87140f 100644
+--- a/crates/tsrs_checker/src/checker_15.rs
++++ b/crates/tsrs_checker/src/checker_15.rs
+@@ -1405,12 +1405,7 @@ impl Checker {
+     }
+ 
+     // checker.go:31365
+-    pub fn push_contextual_type(
+-        &mut self,
+-        node: P<Node>,
+-        t: Option<P<Type>>,
+-        is_cache: bool,
+-    ) {
++    pub fn push_contextual_type(&mut self, node: P<Node>, t: Option<P<Type>>, is_cache: bool) {
+         self.contextual_infos.push(ContextualInfo { node, t, is_cache });
+     }
+ 
+diff --git a/crates/tsrs_checker/src/evaluator.rs b/crates/tsrs_checker/src/evaluator.rs
+index dfc80e86..7eb345fa 100644
+--- a/crates/tsrs_checker/src/evaluator.rs
++++ b/crates/tsrs_checker/src/evaluator.rs
+@@ -6,11 +6,11 @@ use crate::*;
+ pub struct Result {
+     pub value: Option<LiteralValue>,
+     pub is_syntactically_string: bool,
+-    pub(crate) resolved_other_files: bool,
++    pub resolved_other_files: bool,
+     pub has_external_references: bool,
+ }
+ 
+-pub(crate) fn new_result(
++pub fn new_result(
+     value: Option<LiteralValue>,
+     is_syntactically_string: bool,
+     resolved_other_files: bool,
+@@ -24,7 +24,7 @@ pub(crate) type Evaluator<H> = fn(&mut H, P<Node>, P<Node>) -> Result;
+ 
+ /// Go `NewEvaluator(evaluateEntity, outerExpressionsToSkip)(expr, location)`: the evaluator closure body, with its
+ /// captured values passed explicitly.
+-pub(crate) fn evaluate<H>(
++pub fn evaluate<H>(
+     host: &mut H,
+     evaluate_entity: Evaluator<H>,
+     outer_expressions_to_skip: ast::OuterExpressionKinds,
+diff --git a/crates/tsrs_checker/src/lib.rs b/crates/tsrs_checker/src/lib.rs
+index 03aabad0..06fc486b 100644
+--- a/crates/tsrs_checker/src/lib.rs
++++ b/crates/tsrs_checker/src/lib.rs
+@@ -182,7 +182,7 @@ pub use tsrs_astnav as astnav;
+ 
+ // Exported Go package-level functions (the baseline writer, the language service and the project system call them).
+ pub use checker_09::is_non_deferred_type_reference;
+-pub(crate) use checker_14::get_mapped_type_modifiers;
++pub use checker_14::get_mapped_type_modifiers;
+ pub use exports::{
+     get_declaration_modifier_flags_from_symbol_exported, get_property_name_from_type_exported,
+     is_distributed_type_parameter, is_tuple_type_exported, is_tuple_type_target,
+diff --git a/crates/tsrs_checker/src/links.rs b/crates/tsrs_checker/src/links.rs
+index 461498c3..aff144ed 100644
+--- a/crates/tsrs_checker/src/links.rs
++++ b/crates/tsrs_checker/src/links.rs
+@@ -89,7 +89,7 @@ impl<K: 'static, V: 'static> LinkStore<K, V> {
+     }
+ 
+     #[inline]
+-    pub(crate) fn try_get(&self, key: P<K>) -> Option<P<V>> {
++    pub fn try_get(&self, key: P<K>) -> Option<P<V>> {
+         match self.index(key) {
+             Some(index) => Some(self.at(index)),
+             None => self.parent.filter(|_| tsrs_core::sharedgraph::COMPILED_IN)?.try_get(key),
+@@ -1017,7 +1017,7 @@ impl<V: Default + LinkCopy + 'static> SymbolArenaLinkStore<V> {
+ 
+ impl<V: 'static> SymbolArenaLinkStore<V> {
+     #[inline]
+-    pub(crate) fn try_get(&self, symbol: P<Symbol>) -> Option<P<V>> {
++    pub fn try_get(&self, symbol: P<Symbol>) -> Option<P<V>> {
+         let id = self.generator.get_symbol_id(symbol).0;
+         if let Some(key) = dense_link_key(id) {
+             self.block_store.try_get(key)
+diff --git a/crates/tsrs_checker/src/mapper.rs b/crates/tsrs_checker/src/mapper.rs
+index 499e3985..8e026bfb 100644
+--- a/crates/tsrs_checker/src/mapper.rs
++++ b/crates/tsrs_checker/src/mapper.rs
+@@ -292,7 +292,7 @@ impl TypeMapper {
+         self.second.set(self.second.get() | ESCAPED);
+     }
+ 
+-    pub(crate) fn map(&self, c: &mut Checker, t: P<Type>) -> P<Type> {
++    pub fn map(&self, c: &mut Checker, t: P<Type>) -> P<Type> {
+         match self.data() {
+             TypeMapperData::Simple { source, target } => {
+                 if t == source {
+@@ -469,7 +469,7 @@ impl MapperCell {
+         MapperCell(Cell::new(m))
+     }
+     #[inline]
+-    pub(crate) fn get(&self) -> Option<P<TypeMapper>> {
++    pub fn get(&self) -> Option<P<TypeMapper>> {
+         self.0.get()
+     }
+     #[inline]
+@@ -544,10 +544,7 @@ pub(crate) fn new_inference_type_mapper(n: P<InferenceContext>, fixing: bool) ->
+ }
+ 
+ #[cfg_attr(feature = "site-counts", track_caller)]
+-pub fn new_type_mapper(
+-    sources: &'static [P<Type>],
+-    targets: &'static [P<Type>],
+-) -> P<TypeMapper> {
++pub fn new_type_mapper(sources: &'static [P<Type>], targets: &'static [P<Type>]) -> P<TypeMapper> {
+     if sources.len() == 1 {
+         return new_simple_type_mapper(sources[0], targets[0]);
+     }
+diff --git a/crates/tsrs_checker/src/relater_1.rs b/crates/tsrs_checker/src/relater_1.rs
+index 193f4238..539b4860 100644
+--- a/crates/tsrs_checker/src/relater_1.rs
++++ b/crates/tsrs_checker/src/relater_1.rs
+@@ -143,7 +143,7 @@ impl Checker {
+     }
+ 
+     // relater.go:149
+-    pub(crate) fn is_type_assignable_to(&mut self, source: P<Type>, target: P<Type>) -> bool {
++    pub fn is_type_assignable_to(&mut self, source: P<Type>, target: P<Type>) -> bool {
+         let relation = self.assignable_relation;
+         self.is_type_related_to(source, target, relation)
+     }
+@@ -3725,10 +3725,7 @@ impl Checker {
+     }
+ 
+     // relater.go:1947
+-    pub fn get_this_type_of_signature(
+-        &mut self,
+-        signature: P<Signature>,
+-    ) -> Option<P<Type>> {
++    pub fn get_this_type_of_signature(&mut self, signature: P<Signature>) -> Option<P<Type>> {
+         if let Some(this_parameter) = signature.this_parameter() {
+             return Some(self.get_type_of_symbol(this_parameter));
+         }
+diff --git a/crates/tsrs_checker/src/types.rs b/crates/tsrs_checker/src/types.rs
+index 20cde2fb..db4371e7 100644
+--- a/crates/tsrs_checker/src/types.rs
++++ b/crates/tsrs_checker/src/types.rs
+@@ -343,7 +343,7 @@ pub struct SignatureId(pub u32);
+ 
+ #[derive(Default)]
+ pub struct ValueSymbolLinks {
+-    pub(crate) resolved_type: Cell<Option<P<Type>>>, // Type of value symbol
++    pub resolved_type: Cell<Option<P<Type>>>, // Type of value symbol
+     first: Cell<Option<P<()>>>, // plain: target (P<Symbol>); synthetic: containing_type (P<Type>); tail: P<ValueSymbolLinksTail>
+     second: Cell<usize>, // `P::to_bits` of: plain: mapper (P<TypeMapper>); synthetic: name_type (P<Type>) | SYNTHETIC; tail: TAIL
+ }
+@@ -567,7 +567,7 @@ pub struct DeferredSymbolLinks {
+ #[derive(Default)]
+ pub struct AliasSymbolLinks {
+     pub(crate) immediate_target: Cell<Option<P<Symbol>>>, // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
+-    pub(crate) alias_target: Cell<Option<P<Symbol>>>,     // Resolved (non-alias) target of an alias
++    pub alias_target: Cell<Option<P<Symbol>>>,            // Resolved (non-alias) target of an alias
+     pub(crate) referenced: Cell<bool>, // True if alias symbol has been referenced as a value that can be emitted
+     pub(crate) type_only_declaration: Cell<Option<P<Node>>>, // First resolved alias declaration that makes the symbol only usable in type constructs
+ }
+@@ -607,7 +607,7 @@ pub struct ExportTypeLinks {
+ 
+ #[derive(Default)]
+ pub struct TypeAliasLinks {
+-    pub(crate) declared_type: Cell<Option<P<Type>>>,
++    pub declared_type: Cell<Option<P<Type>>>,
+     pub(crate) type_parameters: Cell<&'static [P<Type>]>, // Type parameters of type alias (undefined if non-generic)
+     pub(crate) instantiations: GoPackedMap<CacheHashKey, P<Type>>, // Instantiations of generic type alias (undefined if non-generic)
+     pub is_constructor_declared_property: Cell<bool>,
+@@ -617,7 +617,7 @@ pub struct TypeAliasLinks {
+ 
+ #[derive(Default)]
+ pub struct DeclaredTypeLinks {
+-    pub(crate) declared_type: Cell<Option<P<Type>>>,
++    pub declared_type: Cell<Option<P<Type>>>,
+     pub(crate) interface_checked: Cell<bool>,
+     pub(crate) index_signatures_checked: Cell<bool>,
+     pub(crate) type_parameters_checked: Cell<bool>,
+@@ -848,7 +848,7 @@ pub struct RelationError {
+ 
+ #[derive(Default)]
+ pub struct SourceFileLinks {
+-    pub(crate) type_checked: Cell<bool>,
++    pub type_checked: Cell<bool>,
+     pub(crate) unused_checked: Cell<bool>,
+     pub(crate) external_helpers_module: Cell<Option<P<Symbol>>>,
+     pub(crate) requested_external_emit_helpers: Cell<ExternalEmitHelpers>,
+@@ -1746,7 +1746,7 @@ impl Type {
+     }
+ 
+     #[inline]
+-    pub(crate) fn mapper(&self) -> Option<P<TypeMapper>> {
++    pub fn mapper(&self) -> Option<P<TypeMapper>> {
+         let flags = self.flags.get();
+         if flags.intersects(TypeFlags::Object) {
+             return self.as_object_type().mapper.get();
+@@ -2095,7 +2095,7 @@ pub enum LiteralValue {
+ pub struct LiteralType {
+     pub(crate) value: Cell<Option<LiteralValue>>, // string | jsnum.Number | bool | PseudoBigInt | nil (computed enum)
+     pub(crate) fresh_type: OvCell<Option<P<Type>>>, // Fresh version of type
+-    pub(crate) regular_type: Cell<Option<P<Type>>>, // Regular version of type
++    pub regular_type: Cell<Option<P<Type>>>,      // Regular version of type
+ }
+ 
+ impl LiteralType {
+@@ -2245,7 +2245,7 @@ impl StructuredType {
+     }
+ 
+     #[inline]
+-    pub(crate) fn members(&self) -> Option<P<SymbolTable>> {
++    pub fn members(&self) -> Option<P<SymbolTable>> {
+         self.resolved.get()?.members.get()
+     }
+     #[inline]
+@@ -2278,7 +2278,7 @@ impl StructuredType {
+         self.resolved_for_write().count_or_index_infos.set_call_signature_count(count);
+     }
+     #[inline]
+-    pub(crate) fn index_infos(&self) -> &'static [P<IndexInfo>] {
++    pub fn index_infos(&self) -> &'static [P<IndexInfo>] {
+         self.resolved.get().map_or(&[], |r| r.count_or_index_infos.index_infos())
+     }
+     #[inline]
+@@ -2286,11 +2286,11 @@ impl StructuredType {
+         self.resolved_for_write().count_or_index_infos.set_index_infos(index_infos);
+     }
+     #[inline]
+-    pub(crate) fn call_signatures(&self) -> &'static [P<Signature>] {
++    pub fn call_signatures(&self) -> &'static [P<Signature>] {
+         &self.signatures()[..self.call_signature_count()]
+     }
+     #[inline]
+-    pub(crate) fn construct_signatures(&self) -> &'static [P<Signature>] {
++    pub fn construct_signatures(&self) -> &'static [P<Signature>] {
+         &self.signatures()[self.call_signature_count()..]
+     }
+ }
+@@ -2354,7 +2354,7 @@ embeds!(ObjectType, structured_type, StructuredType);
+ pub struct TypeReference {
+     object_type: ObjectType,
+     pub(crate) node: Cell<Option<P<Node>>>, // TypeReferenceNode | ArrayTypeNode | TupleTypeNode when deferred, else nil
+-    pub(crate) resolved_type_arguments: OvOptionThinSliceCell<P<Type>>, // nil = not computed (Go tests against nil)
++    pub resolved_type_arguments: OvOptionThinSliceCell<P<Type>>, // nil = not computed (Go tests against nil)
+ }
+ embeds!(TypeReference, object_type, ObjectType);
+ 
+@@ -2432,7 +2432,7 @@ impl ReferenceInstantiations {
+ pub struct InterfaceType {
+     type_reference: TypeReference,
+     pub(crate) all_type_parameters: Cell<&'static [P<Type>]>, // Type parameters (outer + local + thisType)
+-    pub(crate) resolved_base_types: OvCell<&'static [P<Type>]>,
++    pub resolved_base_types: OvCell<&'static [P<Type>]>,
+     pub(crate) declared_call_signatures: OvCell<&'static [P<Signature>]>, // Declared call signatures
+     pub(crate) declared_construct_signatures: OvCell<&'static [P<Signature>]>, // Declared construct signatures
+     pub(crate) declared_index_infos: OvCell<&'static [P<IndexInfo>]>, // Declared index signatures
+@@ -2441,7 +2441,7 @@ pub struct InterfaceType {
+     pub(crate) resolved_base_constructor_type: OvCell<Option<P<Type>>>,
+     pub(crate) declared_members: OvCell<Option<P<SymbolTable>>>, // Declared members
+     pub(crate) instantiations: ReferenceInstantiations, // Map of type instantiations (Go: in ObjectType)
+-    pub(crate) base_types_resolved: OvCell<bool>,
++    pub base_types_resolved: OvCell<bool>,
+     pub(crate) declared_members_resolved: OvCell<bool>,
+ }
+ embeds!(InterfaceType, type_reference, TypeReference);
+@@ -2561,11 +2561,11 @@ embeds!(InstantiationExpressionType, object_type, ObjectType);
+ #[repr(C)]
+ pub struct MappedType {
+     object_type: ObjectType,
+-    pub(crate) declaration: Cell<Option<P<Node>>>, // MappedTypeNode
+-    pub(crate) type_parameter: Cell<Option<P<Type>>>,
+-    pub(crate) constraint_type: OvCell<Option<P<Type>>>,
+-    pub(crate) name_type: OvCell<Option<P<Type>>>,
+-    pub(crate) template_type: OvCell<Option<P<Type>>>,
++    pub declaration: Cell<Option<P<Node>>>, // MappedTypeNode
++    pub type_parameter: Cell<Option<P<Type>>>,
++    pub constraint_type: OvCell<Option<P<Type>>>,
++    pub name_type: OvCell<Option<P<Type>>>,
++    pub template_type: OvCell<Option<P<Type>>>,
+     pub(crate) modifiers_type: OvCell<Option<P<Type>>>,
+     pub(crate) resolved_apparent_type: OvCell<Option<P<Type>>>,
+     pub(crate) contains_error: Cell<bool>,
+@@ -2638,7 +2638,7 @@ embeds!(EvolvingArrayType, object_type, ObjectType);
+ #[repr(C)]
+ pub struct UnionOrIntersectionType {
+     structured_type: StructuredType,
+-    pub(crate) types: ThinSliceCell<P<Type>>,
++    pub types: ThinSliceCell<P<Type>>,
+     rare: UnionOrIntersectionRareWord,
+ }
+ embeds!(UnionOrIntersectionType, structured_type, StructuredType);
+@@ -2792,17 +2792,17 @@ impl UnionType {
+         }
+     }
+     #[inline]
+-    pub(crate) fn regular_type(&self) -> Option<P<Type>> {
++    pub fn regular_type(&self) -> Option<P<Type>> {
+         self.union_rare()?.regular_type.get()
+     }
+     #[inline]
+-    pub(crate) fn set_regular_type(&self, t: Option<P<Type>>) {
++    pub fn set_regular_type(&self, t: Option<P<Type>>) {
+         if t.is_some() || self.union_rare().is_some() {
+             self.union_rare_for_write().regular_type.set(t);
+         }
+     }
+     #[inline]
+-    pub(crate) fn origin(&self) -> Option<P<Type>> {
++    pub fn origin(&self) -> Option<P<Type>> {
+         self.union_rare()?.origin.get()
+     }
+     #[inline]
+@@ -2897,12 +2897,12 @@ impl IntersectionType {
+ #[derive(Default)]
+ pub struct TypeParameter {
+     constrained_type: ConstrainedType,
+-    pub(crate) constraint: OvCell<Option<P<Type>>>,
++    pub constraint: OvCell<Option<P<Type>>>,
+     pub(crate) target: Cell<Option<P<Type>>>,
+     pub(crate) mapper: MapperCell,
+     pub is_this_type: Cell<bool>,
+-    pub(crate) is_distributed: Cell<bool>,
+-    pub(crate) resolved_default_type: OvCell<Option<P<Type>>>,
++    pub is_distributed: Cell<bool>,
++    pub resolved_default_type: OvCell<Option<P<Type>>>,
+     pub(crate) distributed_type: OvCell<Option<P<Type>>>,
+ }
+ embeds!(TypeParameter, constrained_type, ConstrainedType);
+@@ -2931,7 +2931,7 @@ bitflags! {
+ #[derive(Default)]
+ pub struct IndexType {
+     constrained_type: ConstrainedType,
+-    pub(crate) target: Cell<Option<P<Type>>>,
++    pub target: Cell<Option<P<Type>>>,
+     pub(crate) index_flags: Cell<IndexFlags>,
+ }
+ embeds!(IndexType, constrained_type, ConstrainedType);
+@@ -2948,8 +2948,8 @@ impl IndexType {
+ #[derive(Default)]
+ pub struct IndexedAccessType {
+     constrained_type: ConstrainedType,
+-    pub(crate) object_type: Cell<Option<P<Type>>>,
+-    pub(crate) index_type: Cell<Option<P<Type>>>,
++    pub object_type: Cell<Option<P<Type>>>,
++    pub index_type: Cell<Option<P<Type>>>,
+     pub(crate) access_flags: Cell<AccessFlags>, // Only includes AccessFlags.Persistent
+ }
+ embeds!(IndexedAccessType, constrained_type, ConstrainedType);
+@@ -2968,8 +2968,8 @@ impl IndexedAccessType {
+ #[derive(Default)]
+ pub struct TemplateLiteralType {
+     constrained_type: ConstrainedType,
+-    pub(crate) texts: Cell<&'static [&'static str]>, // Always one element longer than types
+-    pub(crate) types: Cell<&'static [P<Type>]>,      // Always at least one element
++    pub texts: Cell<&'static [&'static str]>, // Always one element longer than types
++    pub types: Cell<&'static [P<Type>]>,      // Always at least one element
+ }
+ embeds!(TemplateLiteralType, constrained_type, ConstrainedType);
+ 
+@@ -2979,7 +2979,7 @@ impl TemplateLiteralType {
+         self.texts.get()
+     }
+     #[inline]
+-    pub(crate) fn types(&self) -> &'static [P<Type>] {
++    pub fn types(&self) -> &'static [P<Type>] {
+         self.types.get()
+     }
+ }
+@@ -2987,7 +2987,7 @@ impl TemplateLiteralType {
+ #[derive(Default)]
+ pub struct StringMappingType {
+     constrained_type: ConstrainedType,
+-    pub(crate) target: Cell<Option<P<Type>>>,
++    pub target: Cell<Option<P<Type>>>,
+ }
+ embeds!(StringMappingType, constrained_type, ConstrainedType);
+ 
+@@ -3001,8 +3001,8 @@ impl StringMappingType {
+ #[derive(Default)]
+ pub struct SubstitutionType {
+     constrained_type: ConstrainedType,
+-    pub(crate) base_type: Cell<Option<P<Type>>>, // Target type
+-    pub(crate) constraint: Cell<Option<P<Type>>>, // Constraint that target type is known to satisfy
++    pub base_type: Cell<Option<P<Type>>>,  // Target type
++    pub constraint: Cell<Option<P<Type>>>, // Constraint that target type is known to satisfy
+ }
+ embeds!(SubstitutionType, constrained_type, ConstrainedType);
+ 
+@@ -3019,7 +3019,7 @@ impl SubstitutionType {
+ 
+ #[derive(Default)]
+ pub struct ConditionalRoot {
+-    pub(crate) node: Cell<Option<P<Node>>>, // ConditionalTypeNode
++    pub node: Cell<Option<P<Node>>>, // ConditionalTypeNode
+     pub(crate) check_type: Cell<Option<P<Type>>>,
+     pub(crate) extends_type: Cell<Option<P<Type>>>,
+     pub(crate) is_distributive: Cell<bool>,
+@@ -3032,11 +3032,11 @@ pub struct ConditionalRoot {
+ #[derive(Default)]
+ pub struct ConditionalType {
+     constrained_type: ConstrainedType,
+-    pub(crate) root: Cell<Option<P<ConditionalRoot>>>,
+-    pub(crate) check_type: Cell<Option<P<Type>>>,
+-    pub(crate) extends_type: Cell<Option<P<Type>>>,
+-    pub(crate) resolved_true_type: OvCell<Option<P<Type>>>,
+-    pub(crate) resolved_false_type: OvCell<Option<P<Type>>>,
++    pub root: Cell<Option<P<ConditionalRoot>>>,
++    pub check_type: Cell<Option<P<Type>>>,
++    pub extends_type: Cell<Option<P<Type>>>,
++    pub resolved_true_type: OvCell<Option<P<Type>>>,
++    pub resolved_false_type: OvCell<Option<P<Type>>>,
+     pub(crate) resolved_inferred_true_type: OvCell<Option<P<Type>>>, // The `trueType` instantiated with the `combinedMapper`, if present
+     pub(crate) resolved_default_constraint: OvCell<Option<P<Type>>>,
+     pub(crate) resolved_constraint_of_distributive: OvCell<Option<P<Type>>>,
+@@ -3093,7 +3093,7 @@ pub struct Signature {
+     pub(crate) parameters: ThinSliceCell<P<Symbol>>,
+     pub resolved_return_type: OvCell<Option<P<Type>>>,
+     pub(crate) target: Cell<Option<P<Signature>>>,
+-    pub(crate) mapper: MapperCell,
++    pub mapper: MapperCell,
+     // Type parameters, `thisParameter`, `isolatedSignatureType`, `composite` and a resolved type predicate other
+     // than the checker's `noTypePredicate` live in a tail allocated on the first non-nil write.
+     // `this_parameter()` / `set_this_parameter()` & co. read nil when it is absent. `resolvedTypePredicate ==
+@@ -3322,9 +3322,9 @@ impl TypePredicate {
+ 
+ #[derive(Default)]
+ pub struct IndexInfo {
+-    pub(crate) key_type: Cell<Option<P<Type>>>,
+-    pub(crate) value_type: Cell<Option<P<Type>>>,
+-    pub(crate) is_readonly: Cell<bool>,
++    pub key_type: Cell<Option<P<Type>>>,
++    pub value_type: Cell<Option<P<Type>>>,
++    pub is_readonly: Cell<bool>,
+     pub(crate) declaration: Cell<Option<P<Node>>>, // IndexSignatureDeclaration
+     pub(crate) index_symbol: Cell<Option<P<Symbol>>>, // Synthetic property symbol for this index signature
+     pub(crate) components: Cell<&'static [P<Node>]>,  // ElementWithComputedPropertyName
+diff --git a/crates/tsrs_ls/src/autoimport/export.rs b/crates/tsrs_ls/src/autoimport/export.rs
+index 8951c62e..07722fc4 100644
+--- a/crates/tsrs_ls/src/autoimport/export.rs
++++ b/crates/tsrs_ls/src/autoimport/export.rs
+@@ -21,14 +21,14 @@ pub enum ModuleID {
+ }
+ 
+ impl ModuleID {
+-    pub(crate) fn as_str(&self) -> &str {
++    pub fn as_str(&self) -> &str {
+         match self {
+             Self::Invalid => "",
+             Self::File(path) | Self::Ambient(path) => path,
+         }
+     }
+ 
+-    pub(crate) fn as_file(&self) -> Option<&str> {
++    pub fn as_file(&self) -> Option<&str> {
+         match self {
+             Self::File(path) => Some(path),
+             _ => None,
+@@ -52,8 +52,8 @@ impl std::fmt::Display for ModuleID {
+ // export.go:19
+ #[derive(Clone, Default, PartialEq, Eq, Hash, Debug)]
+ pub struct ExportID {
+-    pub(crate) module_id: ModuleID,
+-    pub(crate) export_name: String,
++    pub module_id: ModuleID,
++    pub export_name: String,
+ }
+ 
+ // export.go:24
+@@ -95,18 +95,18 @@ impl ExportSyntax {
+ // export.go:48
+ #[derive(Clone, Default, Debug)]
+ pub struct Export {
+-    pub(crate) export_id: ExportID,
++    pub export_id: ExportID,
+     pub(crate) module_file_name: String,
+     pub(crate) unresolved_module_specifier: String,
+-    pub(crate) syntax: ExportSyntax,
+-    pub(crate) flags: SymbolFlags,
++    pub syntax: ExportSyntax,
++    pub flags: SymbolFlags,
+     pub(crate) local_name: String,
+     // through is the name of the module symbol's export that this export was found on,
+     // either 'export=', InternalSymbolNameExportStar, or empty string.
+     pub(crate) through: String,
+ 
+     // Checker-set fields
+-    pub(crate) target: ExportID,
++    pub target: ExportID,
+     pub(crate) is_type_only: bool,
+     pub(crate) script_element_kind: ScriptElementKind,
+     pub(crate) script_element_kind_modifiers: ScriptElementKindModifier,
+@@ -114,7 +114,7 @@ pub struct Export {
+     // The file where the export was found.
+     pub(crate) path: Path,
+ 
+-    pub(crate) package_name: String,
++    pub package_name: String,
+ }
+ 
+ impl std::ops::Deref for Export {
+@@ -126,7 +126,7 @@ impl std::ops::Deref for Export {
+ 
+ impl Export {
+     // export.go:71
+-    pub(crate) fn name(&self) -> &str {
++    pub fn name(&self) -> &str {
+         if !self.local_name.is_empty() {
+             return &self.local_name;
+         }
+diff --git a/crates/tsrs_ls/src/autoimport/fix.rs b/crates/tsrs_ls/src/autoimport/fix.rs
+index 807f810b..47c775ce 100644
+--- a/crates/tsrs_ls/src/autoimport/fix.rs
++++ b/crates/tsrs_ls/src/autoimport/fix.rs
+@@ -38,12 +38,12 @@ pub struct NewImportBinding {
+ // fix.go:37
+ #[derive(Clone, Debug, Default)]
+ pub struct Fix {
+-    pub(crate) auto_import_fix: lsproto::AutoImportFix,
++    pub auto_import_fix: lsproto::AutoImportFix,
+ 
+-    pub(crate) module_specifier_kind: ResultKind,
+-    pub(crate) is_re_export: bool,
+-    pub(crate) module_file_name: String,
+-    pub(crate) type_only_alias_declaration: Option<P<Node>>,
++    pub module_specifier_kind: ResultKind,
++    pub is_re_export: bool,
++    pub module_file_name: String,
++    pub type_only_alias_declaration: Option<P<Node>>,
+ }
+ 
+ impl std::ops::Deref for Fix {
+@@ -872,7 +872,7 @@ fn make_import(
+ 
+ impl View {
+     // fix.go:554
+-    pub(crate) fn get_fixes(
++    pub fn get_fixes(
+         &self,
+         export: &Export,
+         for_jsx: bool,
+diff --git a/crates/tsrs_ls/src/change/tracker.rs b/crates/tsrs_ls/src/change/tracker.rs
+index 3f4dd9c9..bffb0ecc 100644
+--- a/crates/tsrs_ls/src/change/tracker.rs
++++ b/crates/tsrs_ls/src/change/tracker.rs
+@@ -23,10 +23,10 @@ use crate::spanmap::{self, Feature};
+ #[derive(Clone, Debug, Default)]
+ pub struct NodeOptions {
+     // Text to be inserted before the new node
+-    pub(crate) prefix: String,
++    pub prefix: String,
+ 
+     // Text to be inserted after the new node
+-    pub(crate) suffix: String,
++    pub suffix: String,
+ 
+     // Text of inserted node will be formatted with this indentation, otherwise indentation will be inferred from the old node
+     pub(crate) indentation: Option<i32>,
+@@ -34,8 +34,8 @@ pub struct NodeOptions {
+     // Text of inserted node will be formatted with this delta, otherwise delta will be inferred from the new node kind
+     pub(crate) delta: Option<i32>,
+ 
+-    pub(crate) leading_trivia_option: LeadingTriviaOption,
+-    pub(crate) trailing_trivia_option: TrailingTriviaOption,
++    pub leading_trivia_option: LeadingTriviaOption,
++    pub trailing_trivia_option: TrailingTriviaOption,
+     pub(crate) joiner: String,
+ }
+ 
+@@ -94,9 +94,9 @@ pub struct Tracker {
+     pub(crate) new_line: String,
+     pub(crate) converters: Arc<Converters>,
+     pub(crate) ctx: Context,
+-    pub(crate) emit_context: P<EmitContext>,
++    pub emit_context: P<EmitContext>,
+ 
+-    pub(crate) node_factory: NodeFactory,
++    pub node_factory: NodeFactory,
+ 
+     // Go `collections.MultiMap` (random iteration order; the edits are sorted per file afterwards).
+     pub(crate) changes: OrderedMap<P<SourceFile>, Vec<TrackerEdit>>,
+@@ -178,9 +178,7 @@ impl Tracker {
+     // logical change atomic, and returning the result inline means a caller cannot forget to check it or
+     // accidentally emit a partial, corrupting change.
+     // Note: after calling this, the Tracker object must be discarded!
+-    pub(crate) fn get_changes(
+-        &mut self,
+-    ) -> (OrderedMap<String, Vec<lsproto::TextEdit>>, Vec<String>) {
++    pub fn get_changes(&mut self) -> (OrderedMap<String, Vec<lsproto::TextEdit>>, Vec<String>) {
+         self.finish_delete_declarations();
+         self.finish_nodes_with_insertions_at_start();
+         let mut changes = self.get_text_changes_from_changes();
+@@ -333,7 +331,7 @@ impl Tracker {
+     // tracker.go:211
+     // ReplaceRangeWithText replaces an LSP range with text. For a content-mapped file, the LSP range is in the
+     // original document; text may be placed at any exact projection because it does not need formatting context.
+-    pub(crate) fn replace_range_with_text(
++    pub fn replace_range_with_text(
+         &mut self,
+         source_file: P<SourceFile>,
+         lsproto_range: lsproto::Range,
+@@ -346,7 +344,7 @@ impl Tracker {
+     // tracker.go:217
+     // ReplaceTextRangeWithText replaces textRange in sourceFile with text. For a content-mapped file, GetChanges
+     // maps the range back to the original document and drops the file if the edit cannot be represented there.
+-    pub(crate) fn replace_text_range_with_text(
++    pub fn replace_text_range_with_text(
+         &mut self,
+         source_file: P<SourceFile>,
+         text_range: TextRange,
+@@ -399,17 +397,12 @@ impl Tracker {
+ 
+     // tracker.go:236
+     // InsertText inserts text at an LSP position.
+-    pub(crate) fn insert_text(
+-        &mut self,
+-        source_file: P<SourceFile>,
+-        pos: lsproto::Position,
+-        text: &str,
+-    ) {
++    pub fn insert_text(&mut self, source_file: P<SourceFile>, pos: lsproto::Position, text: &str) {
+         self.replace_range_with_text(source_file, lsproto::Range { start: pos, end: pos }, text);
+     }
+ 
+     // tracker.go:240
+-    pub(crate) fn insert_node_at(
++    pub fn insert_node_at(
+         &mut self,
+         source_file: P<SourceFile>,
+         pos: u32,
+@@ -443,7 +436,7 @@ impl Tracker {
+     }
+ 
+     // tracker.go:253
+-    pub(crate) fn insert_nodes_after(
++    pub fn insert_nodes_after(
+         &mut self,
+         source_file: P<SourceFile>,
+         after: P<Node>,
+@@ -567,13 +560,13 @@ impl Tracker {
+     // tracker.go:330
+     // Delete queues a node for deletion with smart handling of list items, imports, etc.
+     // The actual deletion happens in finishDeleteDeclarations during GetChanges.
+-    pub(crate) fn delete(&mut self, source_file: P<SourceFile>, node: P<Node>) {
++    pub fn delete(&mut self, source_file: P<SourceFile>, node: P<Node>) {
+         self.deleted_nodes.push(DeletedNode { source_file, node });
+     }
+ 
+     // tracker.go:335
+     // DeleteRange deletes a text range from the source file.
+-    pub(crate) fn delete_range(&mut self, source_file: P<SourceFile>, text_range: TextRange) {
++    pub fn delete_range(&mut self, source_file: P<SourceFile>, text_range: TextRange) {
+         self.replace_text_range_with_text(source_file, text_range, "");
+     }
+ 
+diff --git a/crates/tsrs_ls/src/change/trackerimpl.rs b/crates/tsrs_ls/src/change/trackerimpl.rs
+index 2a90d15f..06b60752 100644
+--- a/crates/tsrs_ls/src/change/trackerimpl.rs
++++ b/crates/tsrs_ls/src/change/trackerimpl.rs
+@@ -311,7 +311,7 @@ impl Tracker {
+     // trackerimpl.go:308
+     // method on the changeTracker because use of converters
+     // GetAdjustedRange computes the adjusted range for a node in a source file, accounting for trivia.
+-    pub(crate) fn get_adjusted_range(
++    pub fn get_adjusted_range(
+         &self,
+         source_file: P<SourceFile>,
+         start_node: P<Node>,
+diff --git a/crates/tsrs_ls/src/codeactions.rs b/crates/tsrs_ls/src/codeactions.rs
+index 7e05bd80..02b6951a 100644
+--- a/crates/tsrs_ls/src/codeactions.rs
++++ b/crates/tsrs_ls/src/codeactions.rs
+@@ -16,11 +16,11 @@ use crate::spanmap::Feature;
+ // codeactions.go:21
+ // CodeFixProvider represents a provider for a specific type of code fix
+ pub struct CodeFixProvider {
+-    pub(crate) error_codes: &'static [i32],
+-    pub(crate) get_code_actions:
++    pub error_codes: &'static [i32],
++    pub get_code_actions:
+         fn(ctx: &Context, fix_context: &CodeFixContext) -> Result<Vec<CodeAction>, lsproto::Error>,
+     pub fix_ids: &'static [&'static str],
+-    pub(crate) get_all_code_actions: Option<
++    pub get_all_code_actions: Option<
+         fn(
+             ctx: &Context,
+             fix_context: &CodeFixContext,
+@@ -31,11 +31,11 @@ pub struct CodeFixProvider {
+ // codeactions.go:29
+ // CodeFixContext contains the context needed to generate code fixes
+ pub struct CodeFixContext<'a> {
+-    pub(crate) source_file: P<SourceFile>,
+-    pub(crate) span: TextRange,
+-    pub(crate) error_code: i32,
+-    pub(crate) program: &'static Program,
+-    pub(crate) ls: &'a LanguageService,
++    pub source_file: P<SourceFile>,
++    pub span: TextRange,
++    pub error_code: i32,
++    pub program: &'static Program,
++    pub ls: &'a LanguageService,
+     pub(crate) diagnostic: Option<&'a lsproto::Diagnostic>,
+     pub params: Option<&'a lsproto::CodeActionParams>,
+ }
+@@ -44,9 +44,9 @@ pub struct CodeFixContext<'a> {
+ // CodeAction represents a single code action fix
+ #[derive(Clone, Debug, Default)]
+ pub struct CodeAction {
+-    pub(crate) description: String,
+-    pub(crate) changes: Vec<lsproto::TextEdit>,
+-    pub(crate) fix_id: String,
++    pub description: String,
++    pub changes: Vec<lsproto::TextEdit>,
++    pub fix_id: String,
+     pub kind: lsproto::CodeActionKind, // optional; used by refactors to specify the code action kind
+     pub fix_all_description: String,
+ }
+diff --git a/crates/tsrs_ls/src/languageservice.rs b/crates/tsrs_ls/src/languageservice.rs
+index 467db16a..a732f62e 100644
+--- a/crates/tsrs_ls/src/languageservice.rs
++++ b/crates/tsrs_ls/src/languageservice.rs
+@@ -67,7 +67,7 @@ impl LanguageService {
+     }
+ 
+     // languageservice.go:53
+-    pub(crate) fn format_options(&self) -> FormatCodeSettings {
++    pub fn format_options(&self) -> FormatCodeSettings {
+         self.active_config.format_code_settings.clone()
+     }
+ 
+diff --git a/crates/tsrs_ls/src/lsconv/converters.rs b/crates/tsrs_ls/src/lsconv/converters.rs
+index 8cb65ec6..5d445324 100644
+--- a/crates/tsrs_ls/src/lsconv/converters.rs
++++ b/crates/tsrs_ls/src/lsconv/converters.rs
+@@ -159,7 +159,7 @@ impl Converters {
+     // through the file's span map and the fidelity of that mapping is returned. For normal files, the second
+     // return value is FidelityExact.
+     // converters.go:66
+-    pub(crate) fn to_lsp_range(
++    pub fn to_lsp_range(
+         &self,
+         script: &dyn Script,
+         text_range: TextRange,
+@@ -442,7 +442,7 @@ impl Converters {
+         clippy::wrong_self_convention,
+         reason = "The method name and mutable receiver match the upstream Go operation."
+     )]
+-    pub(crate) fn from_lsp_range_to_original(
++    pub fn from_lsp_range_to_original(
+         &self,
+         script: &dyn Script,
+         text_range: lsproto::Range,
+diff --git a/crates/tsrs_lsp/src/lib.rs b/crates/tsrs_lsp/src/lib.rs
+index de461733..013c109e 100644
+--- a/crates/tsrs_lsp/src/lib.rs
++++ b/crates/tsrs_lsp/src/lib.rs
+@@ -9,6 +9,15 @@ pub mod server;
+ pub mod stack_sanitizer;
+ pub mod workerpool;
+ 
++// effect-tsgo: the in-process LSP client of tsrs's tests (testutil/lsptestutil), which crates/ets_fourslash drives;
++// tsrs keeps it in its integration tests, whose `tsrs_lsp::` paths name this crate (and whose dead-code
++// expectations do not hold for a public module).
++extern crate self as tsrs_lsp;
++#[doc(hidden)]
++#[allow(unfulfilled_lint_expectations)]
++#[path = "../tests/integration/lsptestutil.rs"]
++pub mod lsptestutil;
++
+ pub use server::{
+     NpmInstallFunc, Reader, Server, ServerOptions, Writer, new_server, to_reader, to_writer,
+ };
+diff --git a/crates/tsrs_project/src/projectcollection.rs b/crates/tsrs_project/src/projectcollection.rs
+index 18e5736d..c132e69e 100644
+--- a/crates/tsrs_project/src/projectcollection.rs
++++ b/crates/tsrs_project/src/projectcollection.rs
+@@ -113,7 +113,7 @@ impl ProjectCollection {
+ 
+     // projectcollection.go:92
+     // ConfiguredProjects returns all configured projects in a stable order.
+-    fn configured_projects(&self) -> Vec<Shared<Project>> {
++    pub fn configured_projects(&self) -> Vec<Shared<Project>> {
+         let mut projects = Vec::with_capacity(self.configured_projects.len());
+         self.fill_configured_projects(&mut projects);
+         projects

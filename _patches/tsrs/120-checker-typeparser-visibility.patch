@@ -19,9 +19,10 @@ Go shim reaches these unexported checker methods through extra-shim.json linknam
   TypeParser.ExecutionFlow.
 
 diff --git a/crates/tsrs_checker/src/checker.rs b/crates/tsrs_checker/src/checker.rs
+index 005b7295..85faaa53 100644
 --- a/crates/tsrs_checker/src/checker.rs
 +++ b/crates/tsrs_checker/src/checker.rs
-@@ -2924,7 +2924,7 @@
+@@ -2973,7 +2973,7 @@ impl Checker {
          t
      }
  
@@ -31,9 +32,10 @@ diff --git a/crates/tsrs_checker/src/checker.rs b/crates/tsrs_checker/src/checke
              return t;
          }
 diff --git a/crates/tsrs_checker/src/checker_01.rs b/crates/tsrs_checker/src/checker_01.rs
+index 6501ecf9..28f9a4e8 100644
 --- a/crates/tsrs_checker/src/checker_01.rs
 +++ b/crates/tsrs_checker/src/checker_01.rs
-@@ -1545,7 +1545,7 @@
+@@ -1530,7 +1530,7 @@ impl Checker {
      }
  
      // checker.go:1963
@@ -43,9 +45,10 @@ diff --git a/crates/tsrs_checker/src/checker_01.rs b/crates/tsrs_checker/src/che
          declaration: P<Node>,
          usage: P<Node>,
 diff --git a/crates/tsrs_checker/src/checker_04.rs b/crates/tsrs_checker/src/checker_04.rs
+index 105193c7..550beba0 100644
 --- a/crates/tsrs_checker/src/checker_04.rs
 +++ b/crates/tsrs_checker/src/checker_04.rs
-@@ -103,7 +103,7 @@
+@@ -103,7 +103,7 @@ impl IterationTypesResolver {
  
  impl Checker {
      // checker.go:6562
@@ -54,7 +57,7 @@ diff --git a/crates/tsrs_checker/src/checker_04.rs b/crates/tsrs_checker/src/che
          match t {
              Some(t) => {
                  t.object_flags().intersects(ObjectFlags::Reference) && t.target() == Some(target)
-@@ -2008,7 +2008,7 @@
+@@ -1990,7 +1990,7 @@ impl Checker {
      }
  
      // checker.go:7685
@@ -64,30 +67,32 @@ diff --git a/crates/tsrs_checker/src/checker_04.rs b/crates/tsrs_checker/src/che
      }
  
 diff --git a/crates/tsrs_checker/src/checker_05.rs b/crates/tsrs_checker/src/checker_05.rs
+index 26b5d0e1..3abe6050 100644
 --- a/crates/tsrs_checker/src/checker_05.rs
 +++ b/crates/tsrs_checker/src/checker_05.rs
-@@ -1346,7 +1346,7 @@
+@@ -1334,7 +1334,7 @@ impl Checker {
  
      // Returns the `this` argument node in calls like `x.f(...)` and `x[f](...)`. `nil` otherwise.
      // checker.go:9537
--    pub(crate) fn get_this_argument_of_call(&self, node: P<Node>) -> Option<P<Node>> {
+-    fn get_this_argument_of_call(&self, node: P<Node>) -> Option<P<Node>> {
 +    pub fn get_this_argument_of_call(&self, node: P<Node>) -> Option<P<Node>> {
          if is_binary_expression(node) {
              return Some(node.as_binary_expression().right());
          }
-@@ -1368,7 +1368,7 @@
+@@ -1356,7 +1356,7 @@ impl Checker {
      }
  
      // checker.go:9559
--    pub(crate) fn get_this_argument_type(&mut self, node: Option<P<Node>>) -> P<Type> {
+-    fn get_this_argument_type(&mut self, node: Option<P<Node>>) -> P<Type> {
 +    pub fn get_this_argument_type(&mut self, node: Option<P<Node>>) -> P<Type> {
          let Some(node) = node else {
              return self.void_type;
          };
 diff --git a/crates/tsrs_checker/src/checker_10.rs b/crates/tsrs_checker/src/checker_10.rs
+index bae4c1b0..11c9723d 100644
 --- a/crates/tsrs_checker/src/checker_10.rs
 +++ b/crates/tsrs_checker/src/checker_10.rs
-@@ -116,7 +116,7 @@
+@@ -120,7 +120,7 @@ impl Checker {
      }
  
      // checker.go:19659
@@ -96,7 +101,7 @@ diff --git a/crates/tsrs_checker/src/checker_10.rs b/crates/tsrs_checker/src/che
          &mut self,
          sig: P<Signature>,
          type_arguments: &[P<Type>],
-@@ -160,7 +160,7 @@
+@@ -163,7 +163,7 @@ impl Checker {
      // If type has a single call signature and no other members, return that signature. Otherwise, return nil.
      // checker.go:19682
      #[cfg_attr(feature = "site-counts", track_caller)]
@@ -105,7 +110,7 @@ diff --git a/crates/tsrs_checker/src/checker_10.rs b/crates/tsrs_checker/src/che
          self.get_single_signature(t, SignatureKind::Call, false /*allowMembers*/)
      }
  
-@@ -211,7 +211,7 @@
+@@ -213,7 +213,7 @@ impl Checker {
      }
  
      // checker.go:19709
@@ -115,9 +120,10 @@ diff --git a/crates/tsrs_checker/src/checker_10.rs b/crates/tsrs_checker/src/che
          // using the constructor keyword, and the other is declaring a bare construct signature in an
          // object type literal or interface (using the new keyword). Each way of declaring a constructor
 diff --git a/crates/tsrs_checker/src/checker_11.rs b/crates/tsrs_checker/src/checker_11.rs
+index df446d07..a504215a 100644
 --- a/crates/tsrs_checker/src/checker_11.rs
 +++ b/crates/tsrs_checker/src/checker_11.rs
-@@ -1254,7 +1254,7 @@
+@@ -1253,7 +1253,7 @@ impl Checker {
      }
  
      // checker.go:22496
@@ -127,9 +133,10 @@ diff --git a/crates/tsrs_checker/src/checker_11.rs b/crates/tsrs_checker/src/che
      }
  
 diff --git a/crates/tsrs_checker/src/checker_12.rs b/crates/tsrs_checker/src/checker_12.rs
+index 6ff6a5bc..22aaa27d 100644
 --- a/crates/tsrs_checker/src/checker_12.rs
 +++ b/crates/tsrs_checker/src/checker_12.rs
-@@ -826,7 +826,7 @@
+@@ -821,7 +821,7 @@ impl Checker {
      }
  
      // checker.go:24494
@@ -139,9 +146,10 @@ diff --git a/crates/tsrs_checker/src/checker_12.rs b/crates/tsrs_checker/src/che
          expr: P<Node>,
          location: Option<P<Node>>,
 diff --git a/crates/tsrs_checker/src/checker_15.rs b/crates/tsrs_checker/src/checker_15.rs
+index d021e7b7..42fa7d37 100644
 --- a/crates/tsrs_checker/src/checker_15.rs
 +++ b/crates/tsrs_checker/src/checker_15.rs
-@@ -49,7 +49,7 @@
+@@ -49,7 +49,7 @@ impl Checker {
  
      // Returns the effective arguments for an expression that works like a function invocation.
      // checker.go:30531
@@ -150,25 +158,25 @@ diff --git a/crates/tsrs_checker/src/checker_15.rs b/crates/tsrs_checker/src/che
          if ast::is_jsx_opening_fragment(node) {
              // This attributes Type does not include a children property yet, the same way a fragment created with <React.Fragment> does not at this stage
              let t = self.empty_fresh_jsx_object_type;
-@@ -714,7 +714,7 @@
+@@ -710,7 +710,7 @@ impl Checker {
  
      // Creates a synthetic `FunctionType`
      // checker.go:30993
--    pub(crate) fn new_function_type(
+-    fn new_function_type(
 +    pub fn new_function_type(
          &mut self,
          type_parameters: &[P<Type>],
          this_parameter: Option<P<Symbol>>,
-@@ -740,7 +740,7 @@
+@@ -736,7 +736,7 @@ impl Checker {
  
      // Creates a synthetic `Signature` corresponding to a call signature.
      // checker.go:31008
--    pub(crate) fn new_call_signature(
+-    fn new_call_signature(
 +    pub fn new_call_signature(
          &mut self,
          type_parameters: &[P<Type>],
          this_parameter: Option<P<Symbol>>,
-@@ -1414,7 +1414,7 @@
+@@ -1405,7 +1405,7 @@ impl Checker {
      }
  
      // checker.go:31365
@@ -177,7 +185,7 @@ diff --git a/crates/tsrs_checker/src/checker_15.rs b/crates/tsrs_checker/src/che
          &mut self,
          node: P<Node>,
          t: Option<P<Type>>,
-@@ -1424,7 +1424,7 @@
+@@ -1415,7 +1415,7 @@ impl Checker {
      }
  
      // checker.go:31369
@@ -187,9 +195,10 @@ diff --git a/crates/tsrs_checker/src/checker_15.rs b/crates/tsrs_checker/src/che
      }
  
 diff --git a/crates/tsrs_checker/src/inference.rs b/crates/tsrs_checker/src/inference.rs
+index 9181885a..b813f660 100644
 --- a/crates/tsrs_checker/src/inference.rs
 +++ b/crates/tsrs_checker/src/inference.rs
-@@ -38,7 +38,7 @@
+@@ -47,7 +47,7 @@ impl Checker {
      }
  
      // inference.go:53
@@ -198,7 +207,7 @@ diff --git a/crates/tsrs_checker/src/inference.rs b/crates/tsrs_checker/src/infe
          &mut self,
          inferences: &[P<InferenceInfo>],
          original_source: P<Type>,
-@@ -2091,7 +2091,7 @@
+@@ -2094,7 +2094,7 @@ impl Checker {
      }
  
      // inference.go:1251
@@ -207,7 +216,7 @@ diff --git a/crates/tsrs_checker/src/inference.rs b/crates/tsrs_checker/src/infe
          type_parameters: &[P<Type>],
          signature: Option<P<Signature>>,
          flags: InferenceFlags,
-@@ -2401,7 +2401,7 @@
+@@ -2409,7 +2409,7 @@ impl Checker {
  
      // inference.go:1414
      // n and the result are Option (Go returns nil for a nil context; callers pass nil-able contexts).
@@ -217,18 +226,20 @@ diff --git a/crates/tsrs_checker/src/inference.rs b/crates/tsrs_checker/src/infe
          n.mapper()
      }
 diff --git a/crates/tsrs_checker/src/lib.rs b/crates/tsrs_checker/src/lib.rs
+index f3f2a778..03aabad0 100644
 --- a/crates/tsrs_checker/src/lib.rs
 +++ b/crates/tsrs_checker/src/lib.rs
-@@ -197,3 +197,5 @@
+@@ -199,3 +199,5 @@ pub use utilities::{
      is_known_symbol, is_private_identifier_symbol, is_type_any, new_diagnostic_chain_for_node,
      skip_alias, value_to_string,
  };
 +// effect-tsgo: Go exports ForEachYieldExpression (typeparser.ExecutionFlow calls it).
 +pub use utilities::for_each_yield_expression;
 diff --git a/crates/tsrs_checker/src/mapper.rs b/crates/tsrs_checker/src/mapper.rs
+index fa3b0aa7..499e3985 100644
 --- a/crates/tsrs_checker/src/mapper.rs
 +++ b/crates/tsrs_checker/src/mapper.rs
-@@ -544,7 +544,7 @@
+@@ -544,7 +544,7 @@ pub(crate) fn new_inference_type_mapper(n: P<InferenceContext>, fixing: bool) ->
  }
  
  #[cfg_attr(feature = "site-counts", track_caller)]
@@ -238,9 +249,10 @@ diff --git a/crates/tsrs_checker/src/mapper.rs b/crates/tsrs_checker/src/mapper.
      targets: &'static [P<Type>],
  ) -> P<TypeMapper> {
 diff --git a/crates/tsrs_checker/src/relater_1.rs b/crates/tsrs_checker/src/relater_1.rs
+index d63deee9..193f4238 100644
 --- a/crates/tsrs_checker/src/relater_1.rs
 +++ b/crates/tsrs_checker/src/relater_1.rs
-@@ -3710,7 +3710,7 @@
+@@ -3725,7 +3725,7 @@ impl Checker {
      }
  
      // relater.go:1947
@@ -250,9 +262,10 @@ diff --git a/crates/tsrs_checker/src/relater_1.rs b/crates/tsrs_checker/src/rela
          signature: P<Signature>,
      ) -> Option<P<Type>> {
 diff --git a/crates/tsrs_checker/src/utilities.rs b/crates/tsrs_checker/src/utilities.rs
+index 2aff310b..a663cebe 100644
 --- a/crates/tsrs_checker/src/utilities.rs
 +++ b/crates/tsrs_checker/src/utilities.rs
-@@ -1529,7 +1529,7 @@
+@@ -1533,7 +1533,7 @@ pub fn is_this_initialized_declaration(node: Option<P<Node>>) -> bool {
  
  impl Checker {
      // utilities.go:1083
@@ -261,12 +274,3 @@ diff --git a/crates/tsrs_checker/src/utilities.rs b/crates/tsrs_checker/src/util
          symbol.flags().intersects(SymbolFlags::Variable)
              && self.get_declaration_node_flags_from_symbol(symbol).intersects(NodeFlags::Constant)
      }
-@@ -1779,7 +1779,7 @@
- }
- 
- // utilities.go:1264
--pub(crate) fn for_each_yield_expression(
-+pub fn for_each_yield_expression(
-     body: P<Node>,
-     mut visitor: impl FnMut(P<Node>) -> bool,
- ) -> bool {

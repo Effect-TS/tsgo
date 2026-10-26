@@ -356,7 +356,7 @@ pub static NODE_BUILTIN_IMPORT: LazyLock<Rule> = LazyLock::new(|| {
         description: "Warns when importing Node.js built-in modules that have Effect-native counterparts",
         default_severity: Severity::Off,
         supported_effect: vec!["v3", "v4"],
-        codes: vec![tsdiag::This_module_reference_uses_the_2_module_the_corresponding_Effect_API_is_0_from_1_effect_nodeBuiltinImport.code()],
+        codes: vec![tsdiag::THIS_MODULE_REFERENCE_USES_THE_2_MODULE_THE_CORRESPONDING_EFFECT_API_IS_0_FROM_1_EFFECT_NODE_BUILTIN_IMPORT.code()],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_node_builtin_import(ctx.type_parser, ctx.source_file);
             let mut diags = Vec::with_capacity(matches.len());
@@ -364,7 +364,7 @@ pub static NODE_BUILTIN_IMPORT: LazyLock<Rule> = LazyLock::new(|| {
                 diags.push(ctx.new_diagnostic(
                     m.source_file,
                     m.location,
-                    &tsdiag::This_module_reference_uses_the_2_module_the_corresponding_Effect_API_is_0_from_1_effect_nodeBuiltinImport,
+                    &tsdiag::THIS_MODULE_REFERENCE_USES_THE_2_MODULE_THE_CORRESPONDING_EFFECT_API_IS_0_FROM_1_EFFECT_NODE_BUILTIN_IMPORT,
                     &[],
                     &[&m.alternative, &m.package, &m.module],
                 ));

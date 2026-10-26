@@ -11,9 +11,10 @@ shim reaches these unexported checker methods through extra-shim.json linknames)
 Both are also used by flatMapConditionalToFilterOrFail and flatMapToTap (and their helpers).
 
 diff --git a/crates/tsrs_checker/src/checker_07.rs b/crates/tsrs_checker/src/checker_07.rs
+index 05f83ce4..5a871702 100644
 --- a/crates/tsrs_checker/src/checker_07.rs
 +++ b/crates/tsrs_checker/src/checker_07.rs
-@@ -2572,7 +2572,7 @@
+@@ -2572,7 +2572,7 @@ impl Checker {
      }
  
      // checker.go:14605
@@ -23,9 +24,10 @@ diff --git a/crates/tsrs_checker/src/checker_07.rs b/crates/tsrs_checker/src/che
          s1: P<Symbol>,
          s2: P<Symbol>,
 diff --git a/crates/tsrs_checker/src/flow.rs b/crates/tsrs_checker/src/flow.rs
+index 75fb7452..766625be 100644
 --- a/crates/tsrs_checker/src/flow.rs
 +++ b/crates/tsrs_checker/src/flow.rs
-@@ -4538,7 +4538,7 @@
+@@ -4450,7 +4450,7 @@ impl Checker {
  
      // Check if a parameter, catch variable, or mutable local variable is assigned anywhere
      // flow.go:2661

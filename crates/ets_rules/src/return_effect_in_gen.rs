@@ -10,7 +10,7 @@ use ets_typeparser::{EffectContextFlags, TypeParser};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message =
-    &tsdiag::This_generator_returns_an_Effect_able_value_directly_which_produces_a_nested_Effect_Effect_If_the_intended_result_is_the_inner_Effect_value_return_yield_Asterisk_represents_that_form_effect_returnEffectInGen;
+    &tsdiag::THIS_GENERATOR_RETURNS_AN_EFFECT_ABLE_VALUE_DIRECTLY_WHICH_PRODUCES_A_NESTED_EFFECT_EFFECT_IF_THE_INTENDED_RESULT_IS_THE_INNER_EFFECT_VALUE_RETURN_YIELD_ASTERISK_REPRESENTS_THAT_FORM_EFFECT_RETURN_EFFECT_IN_GEN;
 
 // go: internal/rules/return_effect_in_gen.go:16 ReturnEffectInGen
 // ReturnEffectInGen detects return statements inside Effect generators

@@ -27,7 +27,7 @@ pub static GLOBAL_CONSOLE: LazyLock<Rule> = LazyLock::new(|| {
     description: "Warns when using console methods outside Effect generators instead of Effect.log/Logger",
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
-    codes: vec![tsdiag::This_code_uses_console_1_the_corresponding_Effect_logging_API_is_0_effect_globalConsole.code()],
+    codes: vec![tsdiag::THIS_CODE_USES_CONSOLE_1_THE_CORRESPONDING_EFFECT_LOGGING_API_IS_0_EFFECT_GLOBAL_CONSOLE.code()],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_console(ctx, false) },
 }
 });
@@ -40,7 +40,7 @@ pub static GLOBAL_CONSOLE_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
     description: "Warns when using console methods inside Effect generators instead of Effect.log/Logger",
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
-    codes: vec![tsdiag::This_Effect_code_uses_console_1_logging_in_Effect_code_is_represented_through_0_effect_globalConsoleInEffect.code()],
+    codes: vec![tsdiag::THIS_EFFECT_CODE_USES_CONSOLE_1_LOGGING_IN_EFFECT_CODE_IS_REPRESENTED_THROUGH_0_EFFECT_GLOBAL_CONSOLE_IN_EFFECT.code()],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_console(ctx, true) },
 }
 });
@@ -51,9 +51,9 @@ pub(crate) fn run_global_console(
     check_in_effect: bool,
 ) -> Vec<P<Diagnostic>> {
     let mut message: &'static Message =
-        &tsdiag::This_code_uses_console_1_the_corresponding_Effect_logging_API_is_0_effect_globalConsole;
+        &tsdiag::THIS_CODE_USES_CONSOLE_1_THE_CORRESPONDING_EFFECT_LOGGING_API_IS_0_EFFECT_GLOBAL_CONSOLE;
     if check_in_effect {
-        message = &tsdiag::This_Effect_code_uses_console_1_logging_in_Effect_code_is_represented_through_0_effect_globalConsoleInEffect;
+        message = &tsdiag::THIS_EFFECT_CODE_USES_CONSOLE_1_LOGGING_IN_EFFECT_CODE_IS_REPRESENTED_THROUGH_0_EFFECT_GLOBAL_CONSOLE_IN_EFFECT;
     }
 
     let mut diags = Vec::new();

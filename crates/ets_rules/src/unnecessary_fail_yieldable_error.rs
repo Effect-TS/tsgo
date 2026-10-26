@@ -9,7 +9,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::TypeParser;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::This_yield_Asterisk_Effect_fail_passes_a_yieldable_error_value_yield_Asterisk_represents_that_value_directly_without_wrapping_it_in_Effect_fail_effect_unnecessaryFailYieldableError;
+static MESSAGE: &Message = &tsdiag::THIS_YIELD_ASTERISK_EFFECT_FAIL_PASSES_A_YIELDABLE_ERROR_VALUE_YIELD_ASTERISK_REPRESENTS_THAT_VALUE_DIRECTLY_WITHOUT_WRAPPING_IT_IN_EFFECT_FAIL_EFFECT_UNNECESSARY_FAIL_YIELDABLE_ERROR;
 
 // go: internal/rules/unnecessary_fail_yieldable_error.go:16 UnnecessaryFailYieldableError
 // UnnecessaryFailYieldableError suggests yielding yieldable errors directly

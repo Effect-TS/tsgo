@@ -3,14 +3,14 @@ Port of _patches/typescript/017-ls-server-refactor-capability.patch (tsc/interna
 - supportedCodeActionKinds advertises CodeActionKindRefactorRewrite (the kind of the Effect refactors, patch 011).
 
 diff --git a/crates/tsrs_lsp/src/server.rs b/crates/tsrs_lsp/src/server.rs
-index dccdeaa8..c5ffcba0 100644
+index 52c65133..b74550d8 100644
 --- a/crates/tsrs_lsp/src/server.rs
 +++ b/crates/tsrs_lsp/src/server.rs
-@@ -3191,6 +3191,7 @@ const CONTENT_MAPPER_WILL_RENAME_FILES_REGISTRATION_ID: &str = "content-mapper-w
+@@ -3531,6 +3531,7 @@ const CONTENT_MAPPER_WILL_RENAME_FILES_REGISTRATION_ID: &str = "content-mapper-w
  fn supported_code_action_kinds() -> Vec<lsproto::CodeActionKind> {
      vec![
-         lsproto::CodeActionKind::QuickFix,
-+        lsproto::CodeActionKind::RefactorRewrite,
-         lsproto::CodeActionKind::SourceOrganizeImportsTs,
-         lsproto::CodeActionKind::SourceRemoveUnusedImportsTs,
-         lsproto::CodeActionKind::SourceSortImportsTs,
+         lsproto::CodeActionKind::QUICK_FIX,
++        lsproto::CodeActionKind::REFACTOR_REWRITE,
+         lsproto::CodeActionKind::SOURCE_ORGANIZE_IMPORTS_TS,
+         lsproto::CodeActionKind::SOURCE_REMOVE_UNUSED_IMPORTS_TS,
+         lsproto::CodeActionKind::SOURCE_SORT_IMPORTS_TS,

@@ -19,7 +19,7 @@ pub static MATCH_EFFECT_TO_MATCH: LazyLock<Rule> = LazyLock::new(|| {
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
     codes: vec![
-        tsdiag::Effect_0_expresses_this_non_effectful_fold_more_directly_than_Effect_1_with_Effect_succeed_handlers_effect_matchEffectToMatch.code(),
+        tsdiag::EFFECT_0_EXPRESSES_THIS_NON_EFFECTFUL_FOLD_MORE_DIRECTLY_THAN_EFFECT_1_WITH_EFFECT_SUCCEED_HANDLERS_EFFECT_MATCH_EFFECT_TO_MATCH.code(),
     ],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let matches = analyze_match_effect_to_match(ctx.type_parser, Some(ctx.source_file));
@@ -28,7 +28,7 @@ pub static MATCH_EFFECT_TO_MATCH: LazyLock<Rule> = LazyLock::new(|| {
             diagnostics.push(ctx.new_diagnostic(
                 m.source_file,
                 m.location,
-                &tsdiag::Effect_0_expresses_this_non_effectful_fold_more_directly_than_Effect_1_with_Effect_succeed_handlers_effect_matchEffectToMatch,
+                &tsdiag::EFFECT_0_EXPRESSES_THIS_NON_EFFECTFUL_FOLD_MORE_DIRECTLY_THAN_EFFECT_1_WITH_EFFECT_SUCCEED_HANDLERS_EFFECT_MATCH_EFFECT_TO_MATCH,
                 &[],
                 &[m.replacement_name, m.match_effect_name],
             ));

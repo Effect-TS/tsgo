@@ -20,7 +20,7 @@ pub static MULTIPLE_CATCH_TAG: LazyLock<Rule> = LazyLock::new(|| {
         default_severity: Severity::Suggestion,
         supported_effect: vec!["v4"],
         codes: vec![
-            tsdiag::These_0_consecutive_catchTag_transformations_can_be_collapsed_into_a_single_catchTags_call_effect_multipleCatchTag.code(),
+            tsdiag::THESE_0_CONSECUTIVE_CATCH_TAG_TRANSFORMATIONS_CAN_BE_COLLAPSED_INTO_A_SINGLE_CATCH_TAGS_CALL_EFFECT_MULTIPLE_CATCH_TAG.code(),
         ],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_multiple_catch_tag(ctx.type_parser, Some(ctx.source_file));
@@ -30,7 +30,7 @@ pub static MULTIPLE_CATCH_TAG: LazyLock<Rule> = LazyLock::new(|| {
                 diags.push(ctx.new_diagnostic(
                     m.source_file,
                     m.location,
-                    &tsdiag::These_0_consecutive_catchTag_transformations_can_be_collapsed_into_a_single_catchTags_call_effect_multipleCatchTag,
+                    &tsdiag::THESE_0_CONSECUTIVE_CATCH_TAG_TRANSFORMATIONS_CAN_BE_COLLAPSED_INTO_A_SINGLE_CATCH_TAGS_CALL_EFFECT_MULTIPLE_CATCH_TAG,
                     &related,
                     &[&m.catch_nodes.len().to_string()],
                 ));
@@ -255,7 +255,7 @@ pub(crate) fn multiple_catch_tag_related_information(
         related.push(ctx.new_diagnostic(
             m.source_file,
             ets_shim::scanner::get_error_range_for_node(m.source_file, node),
-            &tsdiag::This_catchTag_transformation_is_part_of_a_consecutive_chain_that_can_be_collapsed_into_catchTags_effect_multipleCatchTag,
+            &tsdiag::THIS_CATCH_TAG_TRANSFORMATION_IS_PART_OF_A_CONSECUTIVE_CHAIN_THAT_CAN_BE_COLLAPSED_INTO_CATCH_TAGS_EFFECT_MULTIPLE_CATCH_TAG,
             &[],
             &[],
         ));

@@ -14,7 +14,7 @@ use ets_typeparser::{
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message =
-    &tsdiag::This_code_uses_JSON_parse_or_JSON_stringify_0_effect_preferSchemaOverJson;
+    &tsdiag::THIS_CODE_USES_JSON_PARSE_OR_JSON_STRINGIFY_0_EFFECT_PREFER_SCHEMA_OVER_JSON;
 
 // go: internal/rules/prefer_schema_over_json.go:18 PreferSchemaOverJson
 // PreferSchemaOverJson detects JSON.parse and JSON.stringify call expressions inside

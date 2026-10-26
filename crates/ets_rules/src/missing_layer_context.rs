@@ -20,7 +20,9 @@ pub static MISSING_LAYER_CONTEXT: LazyLock<Rule> = LazyLock::new(|| Rule {
     description: "Detects Layer values with unhandled context requirements",
     default_severity: Severity::Error,
     supported_effect: vec!["v3", "v4"],
-    codes: vec![tsdiag::Missing_0_in_the_expected_Layer_context_effect_missingLayerContext.code()],
+    codes: vec![
+        tsdiag::MISSING_0_IN_THE_EXPECTED_LAYER_CONTEXT_EFFECT_MISSING_LAYER_CONTEXT.code(),
+    ],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let mut diags = Vec::new();
 
@@ -49,7 +51,7 @@ pub static MISSING_LAYER_CONTEXT: LazyLock<Rule> = LazyLock::new(|| Rule {
                 let diag = ctx.new_diagnostic(
                     ctx.source_file,
                     ctx.get_error_range(re.error_node),
-                    &tsdiag::Missing_0_in_the_expected_Layer_context_effect_missingLayerContext,
+                    &tsdiag::MISSING_0_IN_THE_EXPECTED_LAYER_CONTEXT_EFFECT_MISSING_LAYER_CONTEXT,
                     &[],
                     &[&context_type_str],
                 );

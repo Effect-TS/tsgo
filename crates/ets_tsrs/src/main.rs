@@ -44,10 +44,10 @@ fn run_effect_cli_diagnostics() {
 }
 
 #[cfg(feature = "cli")]
-fn main() {
+fn main() -> std::process::ExitCode {
     register_hooks();
     run_effect_cli_diagnostics();
-    tsrs_cli::main();
+    tsrs_cli::main()
 }
 
 /// Rust-only: without the `cli` feature (see Cargo.toml) there is no compiler to run.

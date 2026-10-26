@@ -35,7 +35,7 @@ fn test_after_check_source_file_callback() {
             RELATION_ERRORS_IN_CALLBACK.store(relation_errors.len(), Ordering::SeqCst);
             checker.add_diagnostic_exported(new_diagnostic_for_node(
                 Some(sf.as_node()),
-                Some(&ets_shim::diagnostics::Cannot_find_name_0),
+                Some(&ets_shim::diagnostics::CANNOT_FIND_NAME_0),
                 &[&MARKER],
             ));
         }));

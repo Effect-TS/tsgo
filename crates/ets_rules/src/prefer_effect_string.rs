@@ -15,7 +15,7 @@ pub static PREFER_EFFECT_STRING: LazyLock<Rule> = LazyLock::new(|| {
         description: "Suggests Effect String APIs for native String method invocations, with semantic caveats",
         default_severity: Severity::Off,
         supported_effect: vec!["v3", "v4"],
-        codes: vec![tsdiag::Consider_effect_SlashString_0_instead_of_native_String_1_2_effect_preferEffectString.code()],
+        codes: vec![tsdiag::CONSIDER_EFFECT_SLASH_STRING_0_INSTEAD_OF_NATIVE_STRING_1_2_EFFECT_PREFER_EFFECT_STRING.code()],
         run: run_prefer_effect_string,
     }
 });
@@ -213,7 +213,7 @@ pub(crate) fn run_prefer_effect_string(ctx: &mut Context<'_, '_>) -> Vec<P<Diagn
                     diagnostics.push(ctx.new_diagnostic(
                         ctx.source_file,
                         ctx.get_error_range(name),
-                        &tsdiag::Consider_effect_SlashString_0_instead_of_native_String_1_2_effect_preferEffectString,
+                        &tsdiag::CONSIDER_EFFECT_SLASH_STRING_0_INSTEAD_OF_NATIVE_STRING_1_2_EFFECT_PREFER_EFFECT_STRING,
                         &[],
                         &[preference.effect_api, preference.native_name, preference.caveat],
                     ));

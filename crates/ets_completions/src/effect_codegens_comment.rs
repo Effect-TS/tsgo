@@ -44,6 +44,6 @@ fn run_effect_codegens_comment(ctx: &mut Context<'_, '_>) -> Vec<lsproto::Comple
         &format!("@effect-codegens {enable_snippet}"),
         sort_text,
         replacement_range,
-        Some(lsproto::CompletionItemKind::Constant),
+        Some(lsproto::CompletionItemKind::CONSTANT),
     )]
 }

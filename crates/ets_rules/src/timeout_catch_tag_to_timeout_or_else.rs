@@ -16,14 +16,15 @@ use crate::catch_die_to_or_die::catch_die_has_type_arguments;
 use crate::prefer_succeed_some_or_none::is_option_none_call;
 
 // go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:14 TimeoutCatchTagToTimeoutOrElse
-pub static TIMEOUT_CATCH_TAG_TO_TIMEOUT_OR_ELSE: LazyLock<Rule> = LazyLock::new(|| Rule {
+pub static TIMEOUT_CATCH_TAG_TO_TIMEOUT_OR_ELSE: LazyLock<Rule> = LazyLock::new(|| {
+    Rule {
     name: "timeoutCatchTagToTimeoutOrElse",
     group: "style",
     description: "Suggests dedicated timeout combinators instead of catching TimeoutError immediately after Effect.timeout",
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v4"],
     codes: vec![
-        tsdiag::Use_Effect_0_to_handle_this_timeout_directly_effect_timeoutCatchTagToTimeoutOrElse
+        tsdiag::USE_EFFECT_0_TO_HANDLE_THIS_TIMEOUT_DIRECTLY_EFFECT_TIMEOUT_CATCH_TAG_TO_TIMEOUT_OR_ELSE
             .code(),
     ],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
@@ -33,13 +34,14 @@ pub static TIMEOUT_CATCH_TAG_TO_TIMEOUT_OR_ELSE: LazyLock<Rule> = LazyLock::new(
             diagnostics.push(ctx.new_diagnostic(
                 ctx.source_file,
                 m.location,
-                &tsdiag::Use_Effect_0_to_handle_this_timeout_directly_effect_timeoutCatchTagToTimeoutOrElse,
+                &tsdiag::USE_EFFECT_0_TO_HANDLE_THIS_TIMEOUT_DIRECTLY_EFFECT_TIMEOUT_CATCH_TAG_TO_TIMEOUT_OR_ELSE,
                 &[],
                 &[m.replacement_name],
             ));
         }
         diagnostics
     },
+}
 });
 
 // go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:30 TimeoutCatchTagToTimeoutOrElseMatch

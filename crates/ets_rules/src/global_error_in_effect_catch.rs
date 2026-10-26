@@ -25,7 +25,7 @@ pub static GLOBAL_ERROR_IN_EFFECT_CATCH: LazyLock<Rule> = LazyLock::new(|| {
     description: "Warns when catch callbacks return global Error type instead of typed errors",
     default_severity: Severity::Warning,
     supported_effect: vec!["v3", "v4"],
-    codes: vec![tsdiag::The_catch_callback_in_0_returns_the_global_Error_type_Untagged_errors_merge_together_in_the_Effect_error_channel_and_lose_type_level_distinction_a_tagged_error_preserves_that_distinction_and_can_wrap_the_original_error_in_a_cause_property_effect_globalErrorInEffectCatch.code()],
+    codes: vec![tsdiag::THE_CATCH_CALLBACK_IN_0_RETURNS_THE_GLOBAL_ERROR_TYPE_UNTAGGED_ERRORS_MERGE_TOGETHER_IN_THE_EFFECT_ERROR_CHANNEL_AND_LOSE_TYPE_LEVEL_DISTINCTION_A_TAGGED_ERROR_PRESERVES_THAT_DISTINCTION_AND_CAN_WRAP_THE_ORIGINAL_ERROR_IN_A_CAUSE_PROPERTY_EFFECT_GLOBAL_ERROR_IN_EFFECT_CATCH.code()],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let mut diags = Vec::new();
 
@@ -102,7 +102,7 @@ pub(crate) fn check_global_error_in_effect_catch(
             return Some(ctx.new_diagnostic(
                 ctx.source_file,
                 ctx.get_error_range(callee),
-                &tsdiag::The_catch_callback_in_0_returns_the_global_Error_type_Untagged_errors_merge_together_in_the_Effect_error_channel_and_lose_type_level_distinction_a_tagged_error_preserves_that_distinction_and_can_wrap_the_original_error_in_a_cause_property_effect_globalErrorInEffectCatch,
+                &tsdiag::THE_CATCH_CALLBACK_IN_0_RETURNS_THE_GLOBAL_ERROR_TYPE_UNTAGGED_ERRORS_MERGE_TOGETHER_IN_THE_EFFECT_ERROR_CHANNEL_AND_LOSE_TYPE_LEVEL_DISTINCTION_A_TAGGED_ERROR_PRESERVES_THAT_DISTINCTION_AND_CAN_WRAP_THE_ORIGINAL_ERROR_IN_A_CAUSE_PROPERTY_EFFECT_GLOBAL_ERROR_IN_EFFECT_CATCH,
                 &[],
                 &[&callee_text],
             ));

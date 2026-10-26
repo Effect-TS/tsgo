@@ -7,7 +7,7 @@ use ets_shim::ls::CodeAction;
 use crate::*;
 
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::Effect_mapBoth_expresses_these_failure_and_success_transformations_more_directly_than_Effect_matchEffect_effect_matchEffectToMapBoth;
+static MESSAGE: &Message = &tsdiag::EFFECT_MAP_BOTH_EXPRESSES_THESE_FAILURE_AND_SUCCESS_TRANSFORMATIONS_MORE_DIRECTLY_THAN_EFFECT_MATCH_EFFECT_EFFECT_MATCH_EFFECT_TO_MAP_BOTH;
 
 // go: internal/fixables/match_effect_to_map_both.go:11 MatchEffectToMapBothFix
 pub static MATCH_EFFECT_TO_MAP_BOTH_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

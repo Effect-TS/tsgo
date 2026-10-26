@@ -52,7 +52,7 @@ export function unusedPredicate([|value|]: unknown): value is number {{
                                     markup_content: None,
                                 },
                                 range: f.ranges()[0].ls_range,
-                                tags: Some(vec![lsproto::DiagnosticTag::Unnecessary]),
+                                tags: Some(vec![lsproto::DiagnosticTag::UNNECESSARY]),
                                 ..Default::default()
                             }],
                         );

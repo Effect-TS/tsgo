@@ -7,9 +7,10 @@ shim reaches these unexported checker methods through extra-shim.json linknames)
   `Schema.Array(...)` in `Schema.mutable(...)`.
 
 diff --git a/crates/tsrs_checker/src/checker_11.rs b/crates/tsrs_checker/src/checker_11.rs
+index a504215a..34b405f9 100644
 --- a/crates/tsrs_checker/src/checker_11.rs
 +++ b/crates/tsrs_checker/src/checker_11.rs
-@@ -3673,7 +3673,7 @@
+@@ -3662,7 +3662,7 @@ impl Checker {
      }
  
      // checker.go:23946

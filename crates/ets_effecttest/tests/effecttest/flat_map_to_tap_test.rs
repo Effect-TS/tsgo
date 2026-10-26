@@ -149,7 +149,7 @@ export const value = source.pipe(Effect.tap((n) => {
                     fixes: 1,
                 },
             ];
-            let code = tsdiag::Effect_tap_expresses_this_observation_more_directly_than_Effect_0_with_a_manual_re_yield_effect_flatMapToTap.code();
+            let code = tsdiag::EFFECT_TAP_EXPRESSES_THIS_OBSERVATION_MORE_DIRECTLY_THAN_EFFECT_0_WITH_A_MANUAL_RE_YIELD_EFFECT_FLAT_MAP_TO_TAP.code();
             let uri = lsconv::file_name_to_document_uri("/repro.ts");
             for test in &cases {
                 t.run(test.name, |t| {

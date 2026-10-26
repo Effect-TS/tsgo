@@ -256,9 +256,9 @@ fn test_prefer_effect_record_lifecycle() {
                             ..Default::default()
                         }))
                         .into(),
-                        target: ScriptTarget::ESNext,
-                        module: ModuleKind::NodeNext,
-                        module_resolution: ModuleResolutionKind::NodeNext,
+                        target: ScriptTarget::ES_NEXT,
+                        module: ModuleKind::NODE_NEXT,
+                        module_resolution: ModuleResolutionKind::NODE_NEXT,
                         strict: Tristate::True,
                         skip_default_lib_check: Tristate::True,
                         skip_lib_check: Tristate::True,

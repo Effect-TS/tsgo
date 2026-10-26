@@ -42,9 +42,9 @@ export const value = ExternalProblem
             let options = CompilerOptions {
                 new_line: NewLineKind::LF,
                 no_error_truncation: Tristate::True,
-                target: ScriptTarget::ESNext,
-                module: ModuleKind::CommonJS,
-                module_resolution: ModuleResolutionKind::Node10,
+                target: ScriptTarget::ES_NEXT,
+                module: ModuleKind::COMMON_JS,
+                module_resolution: ModuleResolutionKind::NODE10,
                 effect: Some(Arc::new(EffectPluginOptions {
                     diagnostics: true,
                     diagnostic_severity: Some(FxHashMap::from_iter([(

@@ -7,7 +7,7 @@ use ets_shim::ast::{self, Diagnostic, Kind, ModifierFlags, Node};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::This_code_declares_an_async_function_consider_representing_this_async_control_flow_with_Effect_values_and_Effect_gen_effect_asyncFunction;
+static MESSAGE: &Message = &tsdiag::THIS_CODE_DECLARES_AN_ASYNC_FUNCTION_CONSIDER_REPRESENTING_THIS_ASYNC_CONTROL_FLOW_WITH_EFFECT_VALUES_AND_EFFECT_GEN_EFFECT_ASYNC_FUNCTION;
 
 // go: internal/rules/async_function.go:10 AsyncFunction
 pub static ASYNC_FUNCTION: LazyLock<Rule> = LazyLock::new(|| Rule {

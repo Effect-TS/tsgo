@@ -18,7 +18,7 @@ pub static UNNECESSARY_EFFECT_GEN: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
     codes: vec![
-        tsdiag::This_Effect_gen_contains_a_single_return_statement_effect_unnecessaryEffectGen
+        tsdiag::THIS_EFFECT_GEN_CONTAINS_A_SINGLE_RETURN_STATEMENT_EFFECT_UNNECESSARY_EFFECT_GEN
             .code(),
     ],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
@@ -29,7 +29,7 @@ pub static UNNECESSARY_EFFECT_GEN: LazyLock<Rule> = LazyLock::new(|| Rule {
             diags.push(ctx.new_diagnostic(
                 m.source_file,
                 m.location,
-                &tsdiag::This_Effect_gen_contains_a_single_return_statement_effect_unnecessaryEffectGen,
+                &tsdiag::THIS_EFFECT_GEN_CONTAINS_A_SINGLE_RETURN_STATEMENT_EFFECT_UNNECESSARY_EFFECT_GEN,
                 &[],
                 &[],
             ));

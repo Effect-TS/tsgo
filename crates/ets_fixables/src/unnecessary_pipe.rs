@@ -6,7 +6,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::This_pipe_call_contains_no_arguments_effect_unnecessaryPipe;
+static MESSAGE: &Message = &tsdiag::THIS_PIPE_CALL_CONTAINS_NO_ARGUMENTS_EFFECT_UNNECESSARY_PIPE;
 
 // go: internal/fixables/unnecessary_pipe.go:12 UnnecessaryPipeFix
 pub static UNNECESSARY_PIPE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

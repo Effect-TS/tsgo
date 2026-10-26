@@ -13,11 +13,11 @@ use crate::*;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message =
-    &tsdiag::This_generator_applies_Effect_orDie_to_every_yielded_effect_Hoist_it_once_to_the_generator_result_Colon_Effect_gen_pipe_Effect_orDie_or_Effect_fn_function_Asterisk_Effect_orDie_effect_redundantOrDie;
+    &tsdiag::THIS_GENERATOR_APPLIES_EFFECT_OR_DIE_TO_EVERY_YIELDED_EFFECT_HOIST_IT_ONCE_TO_THE_GENERATOR_RESULT_COLON_EFFECT_GEN_PIPE_EFFECT_OR_DIE_OR_EFFECT_FN_FUNCTION_ASTERISK_EFFECT_OR_DIE_EFFECT_REDUNDANT_OR_DIE;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static RELATED_MESSAGE: &Message =
-    &tsdiag::This_repeated_Effect_orDie_site_participates_in_the_hoistable_generator_wide_orDie_effect_redundantOrDie;
+    &tsdiag::THIS_REPEATED_EFFECT_OR_DIE_SITE_PARTICIPATES_IN_THE_HOISTABLE_GENERATOR_WIDE_OR_DIE_EFFECT_REDUNDANT_OR_DIE;
 
 // go: internal/rules/redundant_or_die.go:14 RedundantOrDie
 pub static REDUNDANT_OR_DIE: LazyLock<Rule> = LazyLock::new(|| Rule {

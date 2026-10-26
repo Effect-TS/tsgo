@@ -9,7 +9,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::TypeParser;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::This_uses_the_Effect_do_emulation_Effect_gen_or_Effect_fn_achieve_the_same_result_with_native_JS_scopes_effect_effectDoNotation;
+static MESSAGE: &Message = &tsdiag::THIS_USES_THE_EFFECT_DO_EMULATION_EFFECT_GEN_OR_EFFECT_FN_ACHIEVE_THE_SAME_RESULT_WITH_NATIVE_JS_SCOPES_EFFECT_EFFECT_DO_NOTATION;
 
 // go: internal/rules/effect_do_notation.go:15 EffectDoNotation
 // EffectDoNotation suggests using Effect.gen or Effect.fn instead of Effect.Do.

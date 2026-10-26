@@ -20,12 +20,12 @@ pub static MISSING_RETURN_YIELD_STAR: LazyLock<Rule> = LazyLock::new(|| {
         description: "Suggests using return yield* for Effects that never succeed",
         default_severity: Severity::Error,
         supported_effect: vec!["v3", "v4"],
-        codes: vec![tsdiag::This_Effect_never_succeeds_using_return_yield_Asterisk_preserves_a_definitive_generator_exit_point_for_type_narrowing_and_tooling_support_effect_missingReturnYieldStar.code()],
+        codes: vec![tsdiag::THIS_EFFECT_NEVER_SUCCEEDS_USING_RETURN_YIELD_ASTERISK_PRESERVES_A_DEFINITIVE_GENERATOR_EXIT_POINT_FOR_TYPE_NARROWING_AND_TOOLING_SUPPORT_EFFECT_MISSING_RETURN_YIELD_STAR.code()],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_missing_return_yield_star(ctx.type_parser, ctx.source_file);
             let mut diags = Vec::with_capacity(matches.len());
             for m in &matches {
-                diags.push(ctx.new_diagnostic(m.source_file, m.location, &tsdiag::This_Effect_never_succeeds_using_return_yield_Asterisk_preserves_a_definitive_generator_exit_point_for_type_narrowing_and_tooling_support_effect_missingReturnYieldStar, &[], &[]));
+                diags.push(ctx.new_diagnostic(m.source_file, m.location, &tsdiag::THIS_EFFECT_NEVER_SUCCEEDS_USING_RETURN_YIELD_ASTERISK_PRESERVES_A_DEFINITIVE_GENERATOR_EXIT_POINT_FOR_TYPE_NARROWING_AND_TOOLING_SUPPORT_EFFECT_MISSING_RETURN_YIELD_STAR, &[], &[]));
             }
             diags
         },

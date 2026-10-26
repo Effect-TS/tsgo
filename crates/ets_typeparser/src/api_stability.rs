@@ -2,9 +2,9 @@ use std::rc::Rc;
 
 use ets_readonly::Slice;
 use ets_shim::ast::{
-    ClassLikeBase, InternalSymbolNameCall, InternalSymbolNameConstructor, InternalSymbolNameNew,
-    InternalSymbolNamePrefix, Kind, ModifierFlags, Node, NodeFlags, NodeList, Symbol, SymbolFlags,
-    SymbolTable,
+    ClassLikeBase, INTERNAL_SYMBOL_NAME_CALL, INTERNAL_SYMBOL_NAME_CONSTRUCTOR,
+    INTERNAL_SYMBOL_NAME_NEW, INTERNAL_SYMBOL_NAME_PREFIX, Kind, ModifierFlags, Node, NodeFlags,
+    NodeList, Symbol, SymbolFlags, SymbolTable,
 };
 use ets_shim::checker::{
     Checker, IndexInfo, ObjectFlags, Signature, SignatureFlags, SignatureKind, Type, TypeAlias,
@@ -1321,7 +1321,7 @@ pub(crate) fn api_stability_usable_symbol_name(symbol: Option<P<Symbol>>) -> &'s
         return "";
     };
     let name = symbol.name();
-    if name.is_empty() || name.starts_with(InternalSymbolNamePrefix) || name.starts_with("__@") {
+    if name.is_empty() || name.starts_with(INTERNAL_SYMBOL_NAME_PREFIX) || name.starts_with("__@") {
         return "";
     }
     name
@@ -1341,7 +1341,7 @@ pub(crate) fn api_stability_late_bound_symbol_display_name(symbol: Option<P<Symb
         return String::new();
     }
     let full = symbol.name();
-    let prefix = format!("{InternalSymbolNamePrefix}@");
+    let prefix = format!("{INTERNAL_SYMBOL_NAME_PREFIX}@");
     let mut name = full.strip_prefix(prefix.as_str()).unwrap_or(full);
     if let Some(index) = name.rfind('@') {
         name = &name[..index];
@@ -1390,7 +1390,7 @@ pub(crate) fn api_stability_declaration_display_name(
         }
         if let Some(declaration_symbol) = declaration.symbol() {
             let symbol_name = declaration_symbol.name();
-            if !symbol_name.is_empty() && !symbol_name.starts_with(InternalSymbolNamePrefix) {
+            if !symbol_name.is_empty() && !symbol_name.starts_with(INTERNAL_SYMBOL_NAME_PREFIX) {
                 return Some(symbol_name.to_string());
             }
         }
@@ -3948,9 +3948,9 @@ impl ApiStabilityAnalysis {
         let Some(members) = symbol.members() else {
             return;
         };
-        let mut internals = vec![InternalSymbolNameCall, InternalSymbolNameNew];
+        let mut internals = vec![INTERNAL_SYMBOL_NAME_CALL, INTERNAL_SYMBOL_NAME_NEW];
         if include_class_constructors {
-            internals.push(InternalSymbolNameConstructor);
+            internals.push(INTERNAL_SYMBOL_NAME_CONSTRUCTOR);
         }
         for internal in internals {
             let Some(member) = SymbolTable::get(&members, internal) else {
@@ -4554,9 +4554,9 @@ impl ApiStabilityAnalysis {
                 surface.block();
                 continue;
             };
-            let mut internal = InternalSymbolNameCall;
+            let mut internal = INTERNAL_SYMBOL_NAME_CALL;
             if kind == SignatureKind::Construct {
-                internal = InternalSymbolNameNew;
+                internal = INTERNAL_SYMBOL_NAME_NEW;
             }
             let mut member =
                 symbol.members().and_then(|members| SymbolTable::get(&members, internal));
@@ -7030,7 +7030,7 @@ pub(crate) fn api_stability_member_table_name_is_visible(
     let Some(member) = member else {
         return false;
     };
-    if !name.starts_with(InternalSymbolNamePrefix) {
+    if !name.starts_with(INTERNAL_SYMBOL_NAME_PREFIX) {
         return true;
     }
     ets_shim::checker::is_known_symbol(member)

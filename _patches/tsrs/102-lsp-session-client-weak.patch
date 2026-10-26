@@ -13,23 +13,24 @@ fourslash stand-in `crates/ets_fourslash` uses once per baseline case) was never
 - tsrs_lsp/src/server_test.rs: `a_closed_client_frees_the_server_and_its_session` (fails without the change).
 
 diff --git a/crates/tsrs_lsp/src/server.rs b/crates/tsrs_lsp/src/server.rs
+index b74550d8..df273a43 100644
 --- a/crates/tsrs_lsp/src/server.rs
 +++ b/crates/tsrs_lsp/src/server.rs
-@@ -1988,9 +1988,11 @@
+@@ -2054,9 +2054,11 @@ impl Server {
  
          self.telemetry_enabled.store(enable_telemetry, Ordering::SeqCst);
  
 -        let client: Arc<dyn project::Client> = Arc::<Server>::clone(self);
 +        // tsrs-only: the session refers to the server weakly (`sessionClient`), as the logger does.
-+        let client: Arc<dyn project::Client> = Arc::new(sessionClient(Arc::downgrade(self)));
++        let client: Arc<dyn project::Client> = Arc::new(SessionClient(Arc::downgrade(self)));
          let logger: Arc<dyn logging::Logger> = self.logger_arc();
 -        let npm_executor: Arc<dyn project::NpmExecutor> = Arc::<Server>::clone(self);
 +        let npm_executor: Arc<dyn project::NpmExecutor> =
-+            Arc::new(sessionClient(Arc::downgrade(self)));
++            Arc::new(SessionClient(Arc::downgrade(self)));
          let session = project::new_session(&project::SessionInit {
              background_ctx: lsproto::with_client_capabilities(
                  &self.background_ctx(),
-@@ -3850,6 +3852,93 @@
+@@ -4209,6 +4211,93 @@ impl project::NpmExecutor for Server {
      }
  }
  
@@ -37,15 +38,15 @@ diff --git a/crates/tsrs_lsp/src/server.rs b/crates/tsrs_lsp/src/server.rs
 +// `*Server` itself and the GC collects the cycle; here the server owns the session, so the session refers to the
 +// server weakly and dropping the last `Arc<Server>` frees the session with its snapshots and programs (an in-process
 +// server per test, `lsptestutil`). Once the server is gone, its methods do nothing.
-+struct sessionClient(Weak<Server>);
++struct SessionClient(Weak<Server>);
 +
-+impl sessionClient {
++impl SessionClient {
 +    fn with<R>(&self, gone: R, f: impl FnOnce(&Server) -> R) -> R {
 +        self.0.upgrade().map_or(gone, |s| f(&s))
 +    }
 +}
 +
-+impl project::Client for sessionClient {
++impl project::Client for SessionClient {
 +    fn watch_files(
 +        &self,
 +        ctx: &Context,
@@ -112,7 +113,7 @@ diff --git a/crates/tsrs_lsp/src/server.rs b/crates/tsrs_lsp/src/server.rs
 +    }
 +}
 +
-+impl project::NpmExecutor for sessionClient {
++impl project::NpmExecutor for SessionClient {
 +    fn npm_install(&self, cwd: &str, args: &[String]) -> Result<Vec<u8>, String> {
 +        self.with(Err("the language server is closed".to_string()), |s| {
 +            project::NpmExecutor::npm_install(s, cwd, args)
@@ -123,10 +124,11 @@ diff --git a/crates/tsrs_lsp/src/server.rs b/crates/tsrs_lsp/src/server.rs
  // Go's errgroup.WithContext: the first member that returns an error cancels the group's context; Wait returns
  // that error after every member has returned.
  #[derive(Clone)]
-diff --git a/crates/tsrs_lsp/src/server_test.rs b/crates/tsrs_lsp/src/server_test.rs
---- a/crates/tsrs_lsp/src/server_test.rs
-+++ b/crates/tsrs_lsp/src/server_test.rs
-@@ -552,6 +552,61 @@
+diff --git a/crates/tsrs_lsp/tests/integration/server_test.rs b/crates/tsrs_lsp/tests/integration/server_test.rs
+index 86624109..b3eb7f3c 100644
+--- a/crates/tsrs_lsp/tests/integration/server_test.rs
++++ b/crates/tsrs_lsp/tests/integration/server_test.rs
+@@ -571,6 +571,61 @@ fn a_bad_root_uri_falls_back_to_the_server_directory() {
      let _ = close_client.close();
  }
  
@@ -155,7 +157,7 @@ diff --git a/crates/tsrs_lsp/src/server_test.rs b/crates/tsrs_lsp/src/server_tes
 +        lsproto::DidOpenTextDocumentParams {
 +            text_document: lsproto::TextDocumentItem {
 +                uri: uri.clone(),
-+                language_id: lsproto::LanguageKind::TypeScript,
++                language_id: lsproto::LanguageKind::TYPE_SCRIPT,
 +                text: "export const abc = 1;\n".to_string(),
 +                ..Default::default()
 +            },

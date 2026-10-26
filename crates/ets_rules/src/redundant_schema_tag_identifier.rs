@@ -10,7 +10,7 @@ use ets_typeparser::TypeParser;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message =
-    &tsdiag::Identifier_0_is_redundant_since_it_equals_the_tag_value_effect_redundantSchemaTagIdentifier;
+    &tsdiag::IDENTIFIER_0_IS_REDUNDANT_SINCE_IT_EQUALS_THE_TAG_VALUE_EFFECT_REDUNDANT_SCHEMA_TAG_IDENTIFIER;
 
 // go: internal/rules/redundant_schema_tag_identifier.go:14 RedundantSchemaTagIdentifier
 pub static REDUNDANT_SCHEMA_TAG_IDENTIFIER: LazyLock<Rule> = LazyLock::new(|| Rule {

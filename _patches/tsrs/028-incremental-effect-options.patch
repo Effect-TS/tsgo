@@ -14,7 +14,7 @@ Port of _patches/typescript/028-incremental-effect-options.patch to tsrs.
   bytes the Go build writes. Go writes map entries in random order; tsrs sorts them.
 
 diff --git a/crates/tsrs_incremental/Cargo.toml b/crates/tsrs_incremental/Cargo.toml
-index 08d70af..8199680 100644
+index 68d7220c..2c4cdbe1 100644
 --- a/crates/tsrs_incremental/Cargo.toml
 +++ b/crates/tsrs_incremental/Cargo.toml
 @@ -10,6 +10,8 @@ publish.workspace = true
@@ -27,12 +27,12 @@ index 08d70af..8199680 100644
  tsrs_diagnostics.workspace = true
  tsrs_ast.workspace = true
 diff --git a/crates/tsrs_incremental/src/buildinfo.rs b/crates/tsrs_incremental/src/buildinfo.rs
-index ebe5ae1..1e8c4eb 100644
+index 7f5772e8..9fa2f637 100644
 --- a/crates/tsrs_incremental/src/buildinfo.rs
 +++ b/crates/tsrs_incremental/src/buildinfo.rs
 @@ -5,6 +5,8 @@
  // `json::marshal` produces Go's exact bytes in Go-compatible history. Unmarshaling follows the Go
- // `UnmarshalJSON` fallbacks; default history adds an optional tsrs canonical-cache proof.
+ // `UnmarshalJSON` fallbacks; opt-in modes add a performance-policy marker and canonical-cache proof.
  
 +use std::sync::Arc;
 +
@@ -47,16 +47,16 @@ index ebe5ae1..1e8c4eb 100644
  use crate::snapshot::{EmitSignature, FileEmitKind, FileInfo, get_pending_emit_kind_with_options};
  
  pub type BuildInfoFileId = u32;
-@@ -653,6 +656,8 @@ pub struct BuildInfo {
+@@ -655,6 +658,8 @@ pub struct BuildInfo {
      pub file_infos_non_nil: bool,
      pub file_ids_list: Vec<Vec<BuildInfoFileId>>,
-     pub options: Option<OrderedMap<String, Value>>,
+     pub options: Option<JsonMap>,
 +    // effect-tsgo patch 028: Go's `Effect *etscore.EffectPluginOptions` (`json:"effect,omitzero"`).
 +    pub effect: Option<Arc<ets_etscore::EffectPluginOptions>>,
      pub referenced_map: Vec<BuildInfoReferenceMapEntry>,
      pub semantic_diagnostics_per_file: Vec<BuildInfoSemanticDiagnostic>,
      pub emit_diagnostics_per_file: Vec<BuildInfoDiagnosticsOfFile>,
-@@ -694,6 +699,9 @@ impl BuildInfo {
+@@ -706,6 +711,9 @@ impl BuildInfo {
              // omitzero on a pointer: only nil is omitted.
              o.set("options", Value::Object(options.clone()));
          }
@@ -66,7 +66,7 @@ index ebe5ae1..1e8c4eb 100644
          o.list("referencedMap", &self.referenced_map, BuildInfoReferenceMapEntry::marshal_json);
          o.list(
              "semanticDiagnosticsPerFile",
-@@ -768,6 +776,10 @@ impl BuildInfo {
+@@ -782,6 +790,10 @@ impl BuildInfo {
                  Some(Value::Object(m)) => Some(m.clone()),
                  Some(_) => return Err("invalid options".to_string()),
              },
@@ -77,7 +77,7 @@ index ebe5ae1..1e8c4eb 100644
              referenced_map: get_array(
                  o,
                  "referencedMap",
-@@ -836,6 +848,10 @@ impl BuildInfo {
+@@ -851,6 +863,10 @@ impl BuildInfo {
              w.key("options");
              write_compact(w.out, &Value::Object(options.clone()));
          }
@@ -88,7 +88,7 @@ index ebe5ae1..1e8c4eb 100644
          w.values("referencedMap", &self.referenced_map, BuildInfoReferenceMapEntry::marshal_json);
          w.values(
              "semanticDiagnosticsPerFile",
-@@ -940,6 +956,7 @@ impl BuildInfo {
+@@ -955,6 +971,7 @@ impl BuildInfo {
                  tsoptions::parse_compiler_options(option, &value, &mut options);
              }
          }
@@ -96,38 +96,12 @@ index ebe5ae1..1e8c4eb 100644
          options
      }
  
-@@ -1444,6 +1461,11 @@ mod tests {
-             file_infos_non_nil: true,
-             file_ids_list: vec![vec![1, 2], vec![3], vec![1, 2, 3, 123_456_789]],
-             options: Some(options),
-+            effect: Some(Arc::new(ets_etscore::EffectPluginOptions {
-+                diagnostics: true,
-+                diagnostic_severity: Some(FxHashMap::default()),
-+                ..Default::default()
-+            })),
-             referenced_map: vec![
-                 BuildInfoReferenceMapEntry { file_id: 2, file_id_list_id: 1 },
-                 BuildInfoReferenceMapEntry { file_id: 3, file_id_list_id: 3 },
-@@ -1483,10 +1505,12 @@ mod tests {
-         for build_info in [full, empty, bare] {
-             let expected = tsrs_core::json::marshal(&build_info.marshal_json()).unwrap();
-             assert_eq!(build_info.marshal(), expected);
-+            let decoded = BuildInfo::unmarshal(&expected).unwrap();
-             assert_eq!(
--                BuildInfo::unmarshal(&expected).unwrap().tsrs_canonical_check_signature,
-+                decoded.tsrs_canonical_check_signature,
-                 build_info.tsrs_canonical_check_signature
-             );
-+            assert_eq!(decoded.effect, build_info.effect);
-         }
-     }
- }
 diff --git a/crates/tsrs_incremental/src/buildinfoeffect.rs b/crates/tsrs_incremental/src/buildinfoeffect.rs
 new file mode 100644
-index 0000000..0df0127
+index 00000000..41e0b9b3
 --- /dev/null
 +++ b/crates/tsrs_incremental/src/buildinfoeffect.rs
-@@ -0,0 +1,304 @@
+@@ -0,0 +1,306 @@
 +// effect-tsgo patch 028: the `effect` member of the build info, Go's encoding/json of `*etscore.EffectPluginOptions`
 +// through its `json:` struct tags. Every field is `omitzero` but KeyPattern's: a false, zero or empty-string value and
 +// a nil slice, map or pointer are omitted, while an empty non-nil slice or map is written as `[]` / `{}`. Members are
@@ -140,10 +114,9 @@ index 0000000..0df0127
 +    TopLevelNamedReexportsMode, parse_severity,
 +};
 +use rustc_hash::FxHashMap;
-+use tsrs_core::collections::OrderedMap;
-+use tsrs_core::json::Value;
++use tsrs_core::json::{JsonMap, Value};
 +
-+type Object = OrderedMap<String, Value>;
++type Object = JsonMap;
 +
 +pub(crate) fn marshal_effect_options(options: &EffectPluginOptions) -> Value {
 +    let mut o = Members::default();
@@ -425,16 +398,19 @@ index 0000000..0df0127
 +}
 +
 +fn as_string_map(v: &Value) -> Result<FxHashMap<String, String>, String> {
-+    object(v, "")?.iter().map(|(k, v)| Ok((k.clone(), as_string(v)?))).collect()
++    object(v, "")?.iter().map(|(k, v)| Ok((k.to_string(), as_string(v)?))).collect()
 +}
 +
 +// Severity.UnmarshalJSON
 +fn as_severity_map(v: &Value) -> Result<FxHashMap<String, Severity>, String> {
-+    object(v, "")?.iter().map(|(k, v)| Ok((k.clone(), parse_severity(&as_string(v)?)))).collect()
++    object(v, "")?
++        .iter()
++        .map(|(k, v)| Ok((k.to_string(), parse_severity(&as_string(v)?))))
++        .collect()
 +}
 diff --git a/crates/tsrs_incremental/src/buildinfoeffect_test.rs b/crates/tsrs_incremental/src/buildinfoeffect_test.rs
 new file mode 100644
-index 0000000..8125d8d
+index 00000000..8125d8da
 --- /dev/null
 +++ b/crates/tsrs_incremental/src/buildinfoeffect_test.rs
 @@ -0,0 +1,83 @@
@@ -522,13 +498,13 @@ index 0000000..8125d8d
 +    }
 +}
 diff --git a/crates/tsrs_incremental/src/lib.rs b/crates/tsrs_incremental/src/lib.rs
-index d6a22be..16bb377 100644
+index 5fc36a9e..e5c1d040 100644
 --- a/crates/tsrs_incremental/src/lib.rs
 +++ b/crates/tsrs_incremental/src/lib.rs
-@@ -5,6 +5,9 @@ mod affectedfileshandler;
- mod buildinfo;
- #[cfg(test)]
- mod buildinfo_contentmapper_test;
+@@ -3,6 +3,9 @@
+ 
+ mod affectedfileshandler;
+ pub mod buildinfo;
 +mod buildinfoeffect;
 +#[cfg(test)]
 +mod buildinfoeffect_test;
@@ -536,22 +512,39 @@ index d6a22be..16bb377 100644
  pub mod emit;
  mod emitfileshandler;
 diff --git a/crates/tsrs_incremental/src/snapshottobuildinfo.rs b/crates/tsrs_incremental/src/snapshottobuildinfo.rs
-index 4b831b2..f884da3 100644
+index abcfd509..139a66ac 100644
 --- a/crates/tsrs_incremental/src/snapshottobuildinfo.rs
 +++ b/crates/tsrs_incremental/src/snapshottobuildinfo.rs
-@@ -29,6 +29,7 @@ pub(crate) fn snapshot_to_build_info(
-     let mut build_info = BuildInfo {
-         version: tsrs_core::version().to_string(),
+@@ -30,6 +30,7 @@ pub fn snapshot_to_build_info(
          content_mapper_identities,
+         tsrs_performance: BuildInfo::performance_mode(program.uses_canonical_diagnostics())
+             .to_string(),
 +        effect: snapshot.options().effect.get(),
          ..Default::default()
      };
-     let mut to = toBuildInfo {
+     let mut to = ToBuildInfo {
+diff --git a/crates/tsrs_incremental/tests/integration/buildinfo_test.rs b/crates/tsrs_incremental/tests/integration/buildinfo_test.rs
+index 6cc19bd9..65bbe5e4 100644
+--- a/crates/tsrs_incremental/tests/integration/buildinfo_test.rs
++++ b/crates/tsrs_incremental/tests/integration/buildinfo_test.rs
+@@ -63,6 +63,12 @@ fn marshal_streams_the_marshal_json_document() {
+         file_infos_non_nil: true,
+         file_ids_list: vec![vec![1, 2], vec![3], vec![1, 2, 3, 123_456_789]],
+         options: Some(options),
++        // effect-tsgo patch 028: the Effect options are streamed like the other fields.
++        effect: Some(std::sync::Arc::new(ets_etscore::EffectPluginOptions {
++            diagnostics: true,
++            diagnostic_severity: Some(rustc_hash::FxHashMap::default()),
++            ..Default::default()
++        })),
+         referenced_map: vec![
+             BuildInfoReferenceMapEntry { file_id: 2, file_id_list_id: 1 },
+             BuildInfoReferenceMapEntry { file_id: 3, file_id_list_id: 3 },
 diff --git a/crates/tsrs_tsoptions/src/declscompiler.rs b/crates/tsrs_tsoptions/src/declscompiler.rs
-index 28b003d..af19049 100644
+index a04ab1af..ebe5c8b3 100644
 --- a/crates/tsrs_tsoptions/src/declscompiler.rs
 +++ b/crates/tsrs_tsoptions/src/declscompiler.rs
-@@ -1499,6 +1499,12 @@ pub fn compiler_options_affect_semantic_diagnostics(
+@@ -1498,6 +1498,12 @@ pub fn compiler_options_affect_semantic_diagnostics(
      old_options: Option<&CompilerOptions>,
      new_options: Option<&CompilerOptions>,
  ) -> bool {
@@ -566,7 +559,7 @@ index 28b003d..af19049 100644
  }
 diff --git a/crates/tsrs_tsoptions/src/effect_options_test.rs b/crates/tsrs_tsoptions/src/effect_options_test.rs
 new file mode 100644
-index 0000000..056258a
+index 00000000..056258a9
 --- /dev/null
 +++ b/crates/tsrs_tsoptions/src/effect_options_test.rs
 @@ -0,0 +1,37 @@
@@ -608,15 +601,17 @@ index 0000000..056258a
 +    );
 +}
 diff --git a/crates/tsrs_tsoptions/src/lib.rs b/crates/tsrs_tsoptions/src/lib.rs
-index 9304201..43105c7 100644
+index fe036d39..ea843983 100644
 --- a/crates/tsrs_tsoptions/src/lib.rs
 +++ b/crates/tsrs_tsoptions/src/lib.rs
-@@ -28,6 +28,8 @@ mod contentmappers_test;
- #[cfg(test)]
- mod decls_test;
- #[cfg(test)]
-+mod effect_options_test;
+@@ -20,6 +20,10 @@ pub mod outputpaths;
+ 
+ pub mod tsoptionstest;
+ 
++// effect-tsgo patch 028.
 +#[cfg(test)]
- mod parsinghelpers_test;
- #[cfg(test)]
- mod testutil;
++mod effect_options_test;
++
+ pub use commandlineoption::*;
+ pub use commandlineparser::*;
+ pub use contentmappers::*;

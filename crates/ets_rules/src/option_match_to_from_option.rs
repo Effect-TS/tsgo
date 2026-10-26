@@ -23,7 +23,7 @@ pub static OPTION_MATCH_TO_FROM_OPTION: LazyLock<Rule> = LazyLock::new(|| {
         default_severity: Severity::Suggestion,
         supported_effect: vec!["v4"],
         codes: vec![
-            tsdiag::Effect_fromOption_expresses_this_Option_to_Effect_conversion_more_directly_than_Option_match_or_an_Option_tag_conditional_effect_optionMatchToFromOption.code(),
+            tsdiag::EFFECT_FROM_OPTION_EXPRESSES_THIS_OPTION_TO_EFFECT_CONVERSION_MORE_DIRECTLY_THAN_OPTION_MATCH_OR_AN_OPTION_TAG_CONDITIONAL_EFFECT_OPTION_MATCH_TO_FROM_OPTION.code(),
         ],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_option_match_to_from_option(ctx.type_parser, Some(ctx.source_file));
@@ -32,7 +32,7 @@ pub static OPTION_MATCH_TO_FROM_OPTION: LazyLock<Rule> = LazyLock::new(|| {
                 diagnostics.push(ctx.new_diagnostic(
                     m.source_file,
                     m.location,
-                    &tsdiag::Effect_fromOption_expresses_this_Option_to_Effect_conversion_more_directly_than_Option_match_or_an_Option_tag_conditional_effect_optionMatchToFromOption,
+                    &tsdiag::EFFECT_FROM_OPTION_EXPRESSES_THIS_OPTION_TO_EFFECT_CONVERSION_MORE_DIRECTLY_THAN_OPTION_MATCH_OR_AN_OPTION_TAG_CONDITIONAL_EFFECT_OPTION_MATCH_TO_FROM_OPTION,
                     &[],
                     &[],
                 ));

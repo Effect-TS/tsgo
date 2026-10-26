@@ -10,7 +10,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use rustc_hash::FxHashSet;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::Unexpected_0_type_in_condition_expected_strictly_a_boolean_instead_effect_strictBooleanExpressions;
+static MESSAGE: &Message = &tsdiag::UNEXPECTED_0_TYPE_IN_CONDITION_EXPECTED_STRICTLY_A_BOOLEAN_INSTEAD_EFFECT_STRICT_BOOLEAN_EXPRESSIONS;
 
 // go: internal/rules/strict_boolean_expressions.go:13 StrictBooleanExpressions
 // StrictBooleanExpressions enforces that expressions in conditional positions

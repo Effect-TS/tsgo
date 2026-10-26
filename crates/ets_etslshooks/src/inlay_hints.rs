@@ -50,7 +50,7 @@ fn should_omit_hint(
     hint: &lsproto::InlayHint,
     converters: &Converters,
 ) -> bool {
-    if hint.kind != Some(lsproto::InlayHintKind::Type) {
+    if hint.kind != Some(lsproto::InlayHintKind::TYPE) {
         return false;
     }
 

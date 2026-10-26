@@ -10,9 +10,10 @@ Go's later registrations replace the callback, and every Go registrant (etscheck
 init) registers the same function, typeparser.RecordCheckedExpressionType.
 
 diff --git a/crates/tsrs_checker/src/checker_04.rs b/crates/tsrs_checker/src/checker_04.rs
+index e424da57..105193c7 100644
 --- a/crates/tsrs_checker/src/checker_04.rs
 +++ b/crates/tsrs_checker/src/checker_04.rs
-@@ -9,6 +9,23 @@
+@@ -9,6 +9,23 @@ use tsrs_diagnostics::Message;
  //   type UnusedKind (checker.go:7249)
  //   const (checker.go:7251): UnusedKindLocal, UnusedKindParameter
  
@@ -36,7 +37,7 @@ diff --git a/crates/tsrs_checker/src/checker_04.rs b/crates/tsrs_checker/src/che
  impl Checker {
      // checker.go:6527
      pub(crate) fn get_iteration_types_of_iterable_fast(
-@@ -2059,6 +2076,9 @@
+@@ -2041,6 +2058,9 @@ impl Checker {
          }
          self.current_node = save_current_node;
          self.end_instantiation_count();
@@ -47,9 +48,10 @@ diff --git a/crates/tsrs_checker/src/checker_04.rs b/crates/tsrs_checker/src/che
      }
  
 diff --git a/crates/tsrs_checker/src/lib.rs b/crates/tsrs_checker/src/lib.rs
+index dc76c9e9..284ba62b 100644
 --- a/crates/tsrs_checker/src/lib.rs
 +++ b/crates/tsrs_checker/src/lib.rs
-@@ -109,6 +109,9 @@
+@@ -111,6 +111,9 @@ pub use relater_types::*;
  pub use types::*;
  pub use utilities_types::*;
  
@@ -57,5 +59,5 @@ diff --git a/crates/tsrs_checker/src/lib.rs b/crates/tsrs_checker/src/lib.rs
 +pub use checker_04::{ExpressionCheckedCallback, register_expression_checked_callback};
 +
  // Hand-ported function bodies.
- mod checker_01;
+ pub mod checker_01;
  pub(crate) use checker_01::*;

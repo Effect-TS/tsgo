@@ -392,14 +392,14 @@ pub(crate) fn collect(
 }
 
 // go: etsdiagnostics/diagnostics.go:319 updateSession
-// Rust: Go's `session.APIUpdate` is tsrs's `Session::api_update` (tsrs patch 101); Go's `DerefSnapshot` (shim
-// integration) is `Snapshot::deref`.
+// Rust: Go's `session.APIUpdate` is tsrs's `Session::api_update`; Go's `DerefSnapshot` (shim integration) is
+// `Snapshot::deref`.
 pub(crate) fn update_session(
     ctx: &Context,
     session: &Session,
     request: APISnapshotRequest,
 ) -> Result<(), String> {
-    match session.api_update(ctx, FileChangeSummary::default(), Some(request)) {
+    match session.api_update(ctx, &FileChangeSummary::default(), Some(Arc::new(request))) {
         Ok(snapshot) => {
             snapshot.deref();
             Ok(())

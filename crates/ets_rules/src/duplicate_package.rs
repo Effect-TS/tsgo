@@ -9,7 +9,7 @@ use ets_typeparser::TypeParser;
 use rustc_hash::FxHashMap;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::Multiple_versions_of_package_0_were_detected_Colon_1_Package_duplication_can_change_runtime_identity_and_type_equality_across_Effect_modules_If_this_is_intentional_set_the_LSP_config_allowedDuplicatedPackages_to_2_effect_duplicatePackage;
+static MESSAGE: &Message = &tsdiag::MULTIPLE_VERSIONS_OF_PACKAGE_0_WERE_DETECTED_COLON_1_PACKAGE_DUPLICATION_CAN_CHANGE_RUNTIME_IDENTITY_AND_TYPE_EQUALITY_ACROSS_EFFECT_MODULES_IF_THIS_IS_INTENTIONAL_SET_THE_LSP_CONFIG_ALLOWED_DUPLICATED_PACKAGES_TO_2_EFFECT_DUPLICATE_PACKAGE;
 
 // go: internal/rules/duplicate_package.go:18 duplicatePackageDiag
 // duplicatePackageDiag holds pre-computed diagnostic info for a single duplicated package name.

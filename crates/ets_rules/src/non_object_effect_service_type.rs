@@ -20,7 +20,7 @@ pub static NON_OBJECT_EFFECT_SERVICE_TYPE: LazyLock<Rule> = LazyLock::new(|| {
         default_severity: Severity::Error,
         supported_effect: vec!["v3"],
         codes: vec![
-            tsdiag::Effect_Service_is_declared_with_a_primitive_service_type_Effect_Service_models_object_shaped_services_primitive_values_use_Context_Tag_or_Effect_Tag_directly_effect_nonObjectEffectServiceType.code(),
+            tsdiag::EFFECT_SERVICE_IS_DECLARED_WITH_A_PRIMITIVE_SERVICE_TYPE_EFFECT_SERVICE_MODELS_OBJECT_SHAPED_SERVICES_PRIMITIVE_VALUES_USE_CONTEXT_TAG_OR_EFFECT_TAG_DIRECTLY_EFFECT_NON_OBJECT_EFFECT_SERVICE_TYPE.code(),
         ],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             // V3-only rule
@@ -105,7 +105,7 @@ pub(crate) fn check_service_property_types(
                     diags.push(ctx.new_diagnostic(
                         ctx.source_file,
                         ctx.get_error_range(name),
-                        &tsdiag::Effect_Service_is_declared_with_a_primitive_service_type_Effect_Service_models_object_shaped_services_primitive_values_use_Context_Tag_or_Effect_Tag_directly_effect_nonObjectEffectServiceType,
+                        &tsdiag::EFFECT_SERVICE_IS_DECLARED_WITH_A_PRIMITIVE_SERVICE_TYPE_EFFECT_SERVICE_MODELS_OBJECT_SHAPED_SERVICES_PRIMITIVE_VALUES_USE_CONTEXT_TAG_OR_EFFECT_TAG_DIRECTLY_EFFECT_NON_OBJECT_EFFECT_SERVICE_TYPE,
                         &[],
                         &[],
                     ));
@@ -124,7 +124,7 @@ pub(crate) fn check_service_property_types(
                         diags.push(ctx.new_diagnostic(
                             ctx.source_file,
                             ctx.get_error_range(name),
-                            &tsdiag::Effect_Service_is_declared_with_a_primitive_service_type_Effect_Service_models_object_shaped_services_primitive_values_use_Context_Tag_or_Effect_Tag_directly_effect_nonObjectEffectServiceType,
+                            &tsdiag::EFFECT_SERVICE_IS_DECLARED_WITH_A_PRIMITIVE_SERVICE_TYPE_EFFECT_SERVICE_MODELS_OBJECT_SHAPED_SERVICES_PRIMITIVE_VALUES_USE_CONTEXT_TAG_OR_EFFECT_TAG_DIRECTLY_EFFECT_NON_OBJECT_EFFECT_SERVICE_TYPE,
                             &[],
                             &[],
                         ));
@@ -145,7 +145,7 @@ pub(crate) fn check_service_property_types(
                         diags.push(ctx.new_diagnostic(
                             ctx.source_file,
                             ctx.get_error_range(name),
-                            &tsdiag::Effect_Service_is_declared_with_a_primitive_service_type_Effect_Service_models_object_shaped_services_primitive_values_use_Context_Tag_or_Effect_Tag_directly_effect_nonObjectEffectServiceType,
+                            &tsdiag::EFFECT_SERVICE_IS_DECLARED_WITH_A_PRIMITIVE_SERVICE_TYPE_EFFECT_SERVICE_MODELS_OBJECT_SHAPED_SERVICES_PRIMITIVE_VALUES_USE_CONTEXT_TAG_OR_EFFECT_TAG_DIRECTLY_EFFECT_NON_OBJECT_EFFECT_SERVICE_TYPE,
                             &[],
                             &[],
                         ));
@@ -165,7 +165,7 @@ pub(crate) fn check_service_property_types(
                         diags.push(ctx.new_diagnostic(
                             ctx.source_file,
                             ctx.get_error_range(name),
-                            &tsdiag::Effect_Service_is_declared_with_a_primitive_service_type_Effect_Service_models_object_shaped_services_primitive_values_use_Context_Tag_or_Effect_Tag_directly_effect_nonObjectEffectServiceType,
+                            &tsdiag::EFFECT_SERVICE_IS_DECLARED_WITH_A_PRIMITIVE_SERVICE_TYPE_EFFECT_SERVICE_MODELS_OBJECT_SHAPED_SERVICES_PRIMITIVE_VALUES_USE_CONTEXT_TAG_OR_EFFECT_TAG_DIRECTLY_EFFECT_NON_OBJECT_EFFECT_SERVICE_TYPE,
                             &[],
                             &[],
                         ));

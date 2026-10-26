@@ -207,7 +207,7 @@ Exit: a release ships the patched tsrs binary behind `effect-tsgo patch --tsrs`;
 
 ## The TypeScript tsrs ports
 
-A tsrs release ports one TypeScript commit (tsrs 0.18.0: TypeScript `7.1.0-dev.20260929`, `b85298b6`), recorded as
+A tsrs release ports one TypeScript commit (tsrs 0.20.0: TypeScript `7.1.0-beta`, `3e923636`), recorded as
 the tsrs component's `typescript` dependency. `repoctl submodules setup --component tsrs` checks out that commit, not
 TypeScript next, so the Go build compared with the Rust one runs the same TypeScript. It is a `components.typescript`
 entry of its own, kept by `repoctl upstream update` while that tsrs is recorded and switched on a tsrs bump.
@@ -217,14 +217,13 @@ folders"): the plain folders target TypeScript next, and a folder suffixed with 
 replaces the plain one as a whole for that commit. `repoctl check` fails on an override folder that names no recorded
 TypeScript component ("stale override folder").
 
-- **Patches.** Our `_patches/typescript` stack targets TypeScript next and does not apply to that older commit (the
-  `tspath.Path` -> `tspath.PathKey` rename and the generated compiler options landed after it).
-  `_patches/typescript-b85298b6a81f772d080b0455de0ca9d744cd6fd6` holds the same patches, file for file, backported to
-  that commit with the same behavior and the same exported API (see its README), and is applied instead.
-- **Shims.** The Go shims are generated through
-  `_tools/gen_shims/providers/typescript-b85298b6a81f772d080b0455de0ca9d744cd6fd6` alone (in place of the
-  `typescript` provider overlays), whose `compatibility.go` adapters present the canonical (next) shim API over the
-  older compiler, the way the `typescript-go` provider does for 7.0.2.
+- **Patches.** Our `_patches/typescript` stack targets TypeScript next. When it does not apply to the commit tsrs
+  ports, `_patches/typescript-<gitHead>` holds the same patches, file for file, backported to that commit with the
+  same behavior and the same exported API, and is applied instead. Today (`7.1.0-beta`) the plain stack applies.
+- **Shims.** The Go shims for that commit are generated through `_tools/gen_shims/providers/typescript-<gitHead>`
+  alone when it exists (in place of the `typescript` provider overlays), whose `compatibility.go` adapters present
+  the canonical (next) shim API over the older compiler, the way the `typescript-go` provider does for 7.0.2. Today
+  this is the beta folder, `typescript-3e9236361fa97a9e6c685f4833ac457ae2d8c50a`.
 - **tsrs bump.** When tsrs moves to another TypeScript, both folders turn stale: rename them to the new `gitHead`
   (re-making what no longer applies), or delete them once `_patches/typescript` and the canonical shims apply to it.
 - **Release and CI.** It is a TypeScript component like any other: a patched compiler is released for it, the

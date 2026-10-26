@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 use ets_shim::scanner;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::X_0_starts_a_fiber_to_run_a_pure_constructor_Use_the_synchronous_variant_1_instead_effect_preferUnsafeConstructor;
+static MESSAGE: &Message = &tsdiag::X_0_STARTS_A_FIBER_TO_RUN_A_PURE_CONSTRUCTOR_USE_THE_SYNCHRONOUS_VARIANT_1_INSTEAD_EFFECT_PREFER_UNSAFE_CONSTRUCTOR;
 
 // go: internal/fixables/prefer_unsafe_constructor.go:14 PreferUnsafeConstructorFix
 pub static PREFER_UNSAFE_CONSTRUCTOR_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

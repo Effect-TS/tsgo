@@ -10,7 +10,7 @@ use ets_typeparser::{EffectMajorVersion, TypeParser};
 use regex::Regex;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::Consider_Effect_yieldNow_for_cooperative_yielding_instead_of_sleeping_for_zero_duration_effect_effectSleepZeroToYieldNow;
+static MESSAGE: &Message = &tsdiag::CONSIDER_EFFECT_YIELD_NOW_FOR_COOPERATIVE_YIELDING_INSTEAD_OF_SLEEPING_FOR_ZERO_DURATION_EFFECT_EFFECT_SLEEP_ZERO_TO_YIELD_NOW;
 
 // go: internal/rules/effect_sleep_zero_to_yield_now.go:19 EffectSleepZeroToYieldNow
 pub static EFFECT_SLEEP_ZERO_TO_YIELD_NOW: LazyLock<Rule> = LazyLock::new(|| Rule {

@@ -10,7 +10,7 @@ use crate::*;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message =
-    &tsdiag::This_Effect_gen_contains_a_single_return_statement_effect_unnecessaryEffectGen;
+    &tsdiag::THIS_EFFECT_GEN_CONTAINS_A_SINGLE_RETURN_STATEMENT_EFFECT_UNNECESSARY_EFFECT_GEN;
 
 // go: internal/fixables/unnecessary_effect_gen.go:13 UnnecessaryEffectGenFix
 pub static UNNECESSARY_EFFECT_GEN_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

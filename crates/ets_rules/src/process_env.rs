@@ -9,11 +9,11 @@ use ets_typeparser::EffectContextFlags;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static PROCESS_ENV_MESSAGE: &Message =
-    &tsdiag::This_code_reads_from_process_env_environment_configuration_is_represented_through_Config_from_Effect_effect_processEnv;
+    &tsdiag::THIS_CODE_READS_FROM_PROCESS_ENV_ENVIRONMENT_CONFIGURATION_IS_REPRESENTED_THROUGH_CONFIG_FROM_EFFECT_EFFECT_PROCESS_ENV;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static PROCESS_ENV_IN_EFFECT_MESSAGE: &Message =
-    &tsdiag::This_Effect_code_reads_from_process_env_environment_configuration_in_Effect_code_is_represented_through_Config_from_Effect_effect_processEnvInEffect;
+    &tsdiag::THIS_EFFECT_CODE_READS_FROM_PROCESS_ENV_ENVIRONMENT_CONFIGURATION_IN_EFFECT_CODE_IS_REPRESENTED_THROUGH_CONFIG_FROM_EFFECT_EFFECT_PROCESS_ENV_IN_EFFECT;
 
 // go: internal/rules/process_env.go:12 ProcessEnv
 pub static PROCESS_ENV: LazyLock<Rule> = LazyLock::new(|| Rule {

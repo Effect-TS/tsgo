@@ -13,15 +13,15 @@ use ets_typeparser::{EffectContextFlags, EffectMajorVersion, TypeParser};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static EXISTING_CONTEXT_MESSAGE: &Message =
-    &tsdiag::X_0_is_called_inside_an_existing_Effect_context_Here_the_inner_Effect_can_be_used_directly_effect_runEffectInsideEffect;
+    &tsdiag::X_0_IS_CALLED_INSIDE_AN_EXISTING_EFFECT_CONTEXT_HERE_THE_INNER_EFFECT_CAN_BE_USED_DIRECTLY_EFFECT_RUN_EFFECT_INSIDE_EFFECT;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static RUNTIME_MESSAGE: &Message =
-    &tsdiag::X_0_is_called_inside_an_Effect_with_a_separate_runtime_invocation_In_this_context_run_child_Effects_with_the_surrounding_runtime_which_can_be_accessed_through_Effect_runtime_and_Runtime_1_effect_runEffectInsideEffect;
+    &tsdiag::X_0_IS_CALLED_INSIDE_AN_EFFECT_WITH_A_SEPARATE_RUNTIME_INVOCATION_IN_THIS_CONTEXT_RUN_CHILD_EFFECTS_WITH_THE_SURROUNDING_RUNTIME_WHICH_CAN_BE_ACCESSED_THROUGH_EFFECT_RUNTIME_AND_RUNTIME_1_EFFECT_RUN_EFFECT_INSIDE_EFFECT;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static SERVICES_MESSAGE: &Message =
-    &tsdiag::X_0_is_called_inside_an_Effect_with_a_separate_services_invocation_In_this_context_child_Effects_run_with_the_surrounding_services_which_can_be_accessed_through_Effect_context_and_Effect_1_With_effect_runEffectInsideEffect;
+    &tsdiag::X_0_IS_CALLED_INSIDE_AN_EFFECT_WITH_A_SEPARATE_SERVICES_INVOCATION_IN_THIS_CONTEXT_CHILD_EFFECTS_RUN_WITH_THE_SURROUNDING_SERVICES_WHICH_CAN_BE_ACCESSED_THROUGH_EFFECT_CONTEXT_AND_EFFECT_1_WITH_EFFECT_RUN_EFFECT_INSIDE_EFFECT;
 
 // go: internal/rules/run_effect_inside_effect.go:16 runEffectApis
 // runEffectApis lists the Effect module run APIs that should not be called inside Effect generators.

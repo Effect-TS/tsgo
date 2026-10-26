@@ -6,7 +6,7 @@ use ets_shim::ls::CodeAction;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message =
-    &tsdiag::This_typeof_Type_query_can_be_replaced_with_0_effect_unnecessaryTypeofType;
+    &tsdiag::THIS_TYPEOF_TYPE_QUERY_CAN_BE_REPLACED_WITH_0_EFFECT_UNNECESSARY_TYPEOF_TYPE;
 
 // go: internal/fixables/unnecessary_typeof_type.go:11 UnnecessaryTypeofTypeFix
 pub static UNNECESSARY_TYPEOF_TYPE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

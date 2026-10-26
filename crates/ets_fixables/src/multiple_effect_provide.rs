@@ -9,7 +9,7 @@ use ets_shim::ls::CodeAction;
 use ets_shim::scanner;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::This_expression_chains_multiple_Effect_provide_calls_Providing_Layers_in_multiple_calls_in_a_chain_can_break_service_lifecycle_behavior_compared_with_a_single_combined_provide_with_merged_layers_effect_multipleEffectProvide;
+static MESSAGE: &Message = &tsdiag::THIS_EXPRESSION_CHAINS_MULTIPLE_EFFECT_PROVIDE_CALLS_PROVIDING_LAYERS_IN_MULTIPLE_CALLS_IN_A_CHAIN_CAN_BREAK_SERVICE_LIFECYCLE_BEHAVIOR_COMPARED_WITH_A_SINGLE_COMBINED_PROVIDE_WITH_MERGED_LAYERS_EFFECT_MULTIPLE_EFFECT_PROVIDE;
 
 // go: internal/fixables/multiple_effect_provide.go:15 MultipleEffectProvideFix
 pub static MULTIPLE_EFFECT_PROVIDE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

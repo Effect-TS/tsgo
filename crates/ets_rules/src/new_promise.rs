@@ -14,7 +14,7 @@ pub static NEW_PROMISE: LazyLock<Rule> = LazyLock::new(|| {
         description: "Warns when constructing promises with new Promise instead of using Effect APIs",
         default_severity: Severity::Off,
         supported_effect: vec!["v3", "v4"],
-        codes: vec![tsdiag::This_code_constructs_new_Promise_prefer_Effect_APIs_such_as_Effect_async_Effect_promise_or_Effect_tryPromise_instead_of_manual_Promise_construction_effect_newPromise.code()],
+        codes: vec![tsdiag::THIS_CODE_CONSTRUCTS_NEW_PROMISE_PREFER_EFFECT_AP_IS_SUCH_AS_EFFECT_ASYNC_EFFECT_PROMISE_OR_EFFECT_TRY_PROMISE_INSTEAD_OF_MANUAL_PROMISE_CONSTRUCTION_EFFECT_NEW_PROMISE.code()],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let Some(promise_symbol) =
                 ctx.checker().resolve_name_exported("Promise", None, SymbolFlags::Value, false)
@@ -37,7 +37,7 @@ pub static NEW_PROMISE: LazyLock<Rule> = LazyLock::new(|| {
                         diags.push(ctx.new_diagnostic(
                             ctx.source_file,
                             ets_shim::scanner::get_error_range_for_node(ctx.source_file, node),
-                            &tsdiag::This_code_constructs_new_Promise_prefer_Effect_APIs_such_as_Effect_async_Effect_promise_or_Effect_tryPromise_instead_of_manual_Promise_construction_effect_newPromise,
+                            &tsdiag::THIS_CODE_CONSTRUCTS_NEW_PROMISE_PREFER_EFFECT_AP_IS_SUCH_AS_EFFECT_ASYNC_EFFECT_PROMISE_OR_EFFECT_TRY_PROMISE_INSTEAD_OF_MANUAL_PROMISE_CONSTRUCTION_EFFECT_NEW_PROMISE,
                             &[],
                             &[],
                         ));

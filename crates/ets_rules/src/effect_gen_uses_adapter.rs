@@ -7,7 +7,7 @@ use ets_shim::ast::{Diagnostic, Kind, Node};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::The_adapter_of_Effect_gen_is_not_required_anymore_it_is_now_just_an_alias_of_pipe_effect_effectGenUsesAdapter;
+static MESSAGE: &Message = &tsdiag::THE_ADAPTER_OF_EFFECT_GEN_IS_NOT_REQUIRED_ANYMORE_IT_IS_NOW_JUST_AN_ALIAS_OF_PIPE_EFFECT_EFFECT_GEN_USES_ADAPTER;
 
 // go: internal/rules/effect_gen_uses_adapter.go:11 EffectGenUsesAdapter
 // EffectGenUsesAdapter warns when using the deprecated adapter parameter in Effect.gen.

@@ -5,15 +5,15 @@ Port of _patches/typescript/027-ls-autoimport-view.patch (tsc/internal/ls/autoim
   program and importing file.
 
 diff --git a/crates/tsrs_ls/src/autoimport/view.rs b/crates/tsrs_ls/src/autoimport/view.rs
-index 59545b8..2c197b2 100644
+index 39711571..4e49b734 100644
 --- a/crates/tsrs_ls/src/autoimport/view.rs
 +++ b/crates/tsrs_ls/src/autoimport/view.rs
 @@ -15,7 +15,7 @@ use tsrs_modulespecifiers::{self as modulespecifiers, ModuleSpecifierEnding};
  use tsrs_scanner as scanner;
  
  use super::export::{Export, ExportID, ModuleID};
--use super::fix::{Fix, existingImport};
-+use super::fix::{Fix, FixTransformer, auto_import_fix_transformer_factory, existingImport};
+-use super::fix::{ExistingImport, Fix};
++use super::fix::{ExistingImport, Fix, FixTransformer, auto_import_fix_transformer_factory};
  use super::registry::{ProjectID, Registry, RegistryBucket};
  use super::util::add_package_json_dependencies;
  use crate::lsutil;
@@ -23,7 +23,7 @@ index 59545b8..2c197b2 100644
      pub(crate) preferences: modulespecifiers::UserPreferences,
 +    // effect-tsgo patch 027.
 +    pub(crate) fix_transformer: Option<FixTransformer>,
-     pub(crate) project_id: ProjectID,
+     project_id: ProjectID,
  
      allowed_endings: OnceCell<Vec<ModuleSpecifierEnding>>,
 @@ -53,7 +55,7 @@ pub fn new_view(

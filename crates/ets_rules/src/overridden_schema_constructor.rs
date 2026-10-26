@@ -16,12 +16,12 @@ pub static OVERRIDDEN_SCHEMA_CONSTRUCTOR: LazyLock<Rule> = LazyLock::new(|| {
         description: "Prevents overriding constructors in Schema classes which breaks decoding behavior",
         default_severity: Severity::Error,
         supported_effect: vec!["v3", "v4"],
-        codes: vec![tsdiag::This_Schema_subclass_defines_its_own_constructor_For_Schema_classes_constructor_overrides_break_decoding_behavior_for_the_class_shape_Custom_construction_can_be_expressed_through_a_static_new_method_instead_effect_overriddenSchemaConstructor.code()],
+        codes: vec![tsdiag::THIS_SCHEMA_SUBCLASS_DEFINES_ITS_OWN_CONSTRUCTOR_FOR_SCHEMA_CLASSES_CONSTRUCTOR_OVERRIDES_BREAK_DECODING_BEHAVIOR_FOR_THE_CLASS_SHAPE_CUSTOM_CONSTRUCTION_CAN_BE_EXPRESSED_THROUGH_A_STATIC_NEW_METHOD_INSTEAD_EFFECT_OVERRIDDEN_SCHEMA_CONSTRUCTOR.code()],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_overridden_schema_constructor(ctx.type_parser, ctx.source_file);
             let mut diags = Vec::with_capacity(matches.len());
             for m in &matches {
-                diags.push(ctx.new_diagnostic(m.source_file, m.location, &tsdiag::This_Schema_subclass_defines_its_own_constructor_For_Schema_classes_constructor_overrides_break_decoding_behavior_for_the_class_shape_Custom_construction_can_be_expressed_through_a_static_new_method_instead_effect_overriddenSchemaConstructor, &[], &[]));
+                diags.push(ctx.new_diagnostic(m.source_file, m.location, &tsdiag::THIS_SCHEMA_SUBCLASS_DEFINES_ITS_OWN_CONSTRUCTOR_FOR_SCHEMA_CLASSES_CONSTRUCTOR_OVERRIDES_BREAK_DECODING_BEHAVIOR_FOR_THE_CLASS_SHAPE_CUSTOM_CONSTRUCTION_CAN_BE_EXPRESSED_THROUGH_A_STATIC_NEW_METHOD_INSTEAD_EFFECT_OVERRIDDEN_SCHEMA_CONSTRUCTOR, &[], &[]));
             }
             diags
         },

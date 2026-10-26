@@ -12,7 +12,7 @@ use ets_typeparser::{
 };
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::Use_Effect_tapError_to_observe_the_error_and_preserve_the_original_failure_without_having_to_re_fail_it_effect_catchRefailToTapError;
+static MESSAGE: &Message = &tsdiag::USE_EFFECT_TAP_ERROR_TO_OBSERVE_THE_ERROR_AND_PRESERVE_THE_ORIGINAL_FAILURE_WITHOUT_HAVING_TO_RE_FAIL_IT_EFFECT_CATCH_REFAIL_TO_TAP_ERROR;
 
 // go: internal/rules/catch_refail_to_tap_error.go:14 CatchRefailToTapError
 // CatchRefailToTapError recognizes observation followed by an unchanged refail.

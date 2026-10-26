@@ -11,7 +11,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::TypeParser;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::There_is_a_nested_0_in_the_void_success_channel_beware_that_this_could_lead_to_nested_Effect_Effect_that_won_t_be_executed_effect_effectInVoidSuccess;
+static MESSAGE: &Message = &tsdiag::THERE_IS_A_NESTED_0_IN_THE_VOID_SUCCESS_CHANNEL_BEWARE_THAT_THIS_COULD_LEAD_TO_NESTED_EFFECT_EFFECT_THAT_WON_T_BE_EXECUTED_EFFECT_EFFECT_IN_VOID_SUCCESS;
 
 // go: internal/rules/effect_in_void_success.go:16 EffectInVoidSuccess
 // EffectInVoidSuccess detects nested Effects in void success channels.

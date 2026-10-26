@@ -13,15 +13,14 @@ use rustc_hash::FxHashMap;
 /// Rust-only: the Go provider's `resolveTarget` callback type.
 pub type ResolveTarget = Box<dyn Fn(&Export) -> (String, ResultKind) + Send + Sync>;
 
-/// Rust-only: the shim's `autoimport.ModuleIDString`. tsrs's `ModuleID` is the module id string itself (as in
-/// the typescript-go provider's compatibility shim).
+/// Rust-only: the shim's `autoimport.ModuleIDString` (`id.AsString()`).
 pub(crate) fn module_id_string(id: &ModuleID) -> &str {
-    &id.0
+    id.as_str()
 }
 
-/// Rust-only: the shim's `autoimport.ModuleIDFileName` (the typescript-go provider's: the id string itself).
+/// Rust-only: the shim's `autoimport.ModuleIDFileName`: the path of a file module, empty for an ambient one.
 pub(crate) fn module_id_file_name(id: &ModuleID) -> String {
-    id.0.clone()
+    id.as_file().unwrap_or_default().to_string()
 }
 
 // go: internal/autoimportstyle/stylepolicy.go:15 stylePolicy
@@ -60,7 +59,7 @@ pub fn new_fix_transformer(
         for fix in fixes {
             let adjusted = sp.apply(export, Some(fix));
             if let Some(adjusted) = adjusted {
-                if adjusted.kind == lsproto::AutoImportFixKind::UseNamespace {
+                if adjusted.kind == lsproto::AutoImportFixKind::USE_NAMESPACE {
                     has_use_namespace.insert(namespace_fix_key(Some(&adjusted)), true);
                 }
                 rewritten.push(adjusted);
@@ -69,8 +68,8 @@ pub fn new_fix_transformer(
         if !has_use_namespace.is_empty() {
             let mut filtered = Vec::with_capacity(rewritten.len());
             for fix in rewritten {
-                if fix.kind == lsproto::AutoImportFixKind::AddNew
-                    && fix.import_kind == lsproto::ImportKind::Namespace
+                if fix.kind == lsproto::AutoImportFixKind::ADD_NEW
+                    && fix.import_kind == lsproto::ImportKind::NAMESPACE
                     && has_use_namespace
                         .get(&namespace_fix_key(Some(&fix)))
                         .copied()
@@ -139,8 +138,8 @@ impl StylePolicy {
         }
 
         // Only rewrite new imports or additions to existing imports.
-        if fix.kind != lsproto::AutoImportFixKind::AddNew
-            && fix.kind != lsproto::AutoImportFixKind::AddToExisting
+        if fix.kind != lsproto::AutoImportFixKind::ADD_NEW
+            && fix.kind != lsproto::AutoImportFixKind::ADD_TO_EXISTING
         {
             return Some(Arc::clone(fix));
         }
@@ -166,7 +165,7 @@ impl StylePolicy {
         fix: &Arc<Fix>,
     ) -> Option<Arc<Fix>> {
         // Only rewrite named imports
-        if fix.import_kind != lsproto::ImportKind::Named {
+        if fix.import_kind != lsproto::ImportKind::NAMED {
             return Some(Arc::clone(fix));
         }
         // Rewrites require usage qualification (e.g. `succeed` -> `Effect.succeed`).
@@ -184,8 +183,8 @@ impl StylePolicy {
             }
             return Some(Arc::new(Fix {
                 auto_import_fix: lsproto::AutoImportFix {
-                    kind: lsproto::AutoImportFixKind::AddNew,
-                    import_kind: lsproto::ImportKind::Namespace,
+                    kind: lsproto::AutoImportFixKind::ADD_NEW,
+                    import_kind: lsproto::ImportKind::NAMESPACE,
                     module_specifier,
                     name: export.name().to_string(),
                     use_require: fix.use_require,
@@ -223,8 +222,8 @@ impl StylePolicy {
 
         let result = Fix {
             auto_import_fix: lsproto::AutoImportFix {
-                kind: lsproto::AutoImportFixKind::AddNew,
-                import_kind: lsproto::ImportKind::Namespace,
+                kind: lsproto::AutoImportFixKind::ADD_NEW,
+                import_kind: lsproto::ImportKind::NAMESPACE,
                 module_specifier: fix.module_specifier.clone(),
                 name: fix.name.clone(),
                 use_require: fix.use_require,
@@ -278,8 +277,8 @@ impl StylePolicy {
 
         let result = Fix {
             auto_import_fix: lsproto::AutoImportFix {
-                kind: lsproto::AutoImportFixKind::AddNew,
-                import_kind: lsproto::ImportKind::Named,
+                kind: lsproto::AutoImportFixKind::ADD_NEW,
+                import_kind: lsproto::ImportKind::NAMED,
                 module_specifier: barrel.specifier,
                 name: fix.name.clone(),
                 use_require: fix.use_require,

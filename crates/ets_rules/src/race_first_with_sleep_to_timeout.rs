@@ -13,7 +13,7 @@ use ets_typeparser::{
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message =
-    &tsdiag::This_Effect_first_completion_race_has_exactly_one_sleep_or_delay_based_timer_arm_Effect_timeoutOrElse_expresses_the_timeout_and_fallback_directly_effect_raceFirstWithSleepToTimeout;
+    &tsdiag::THIS_EFFECT_FIRST_COMPLETION_RACE_HAS_EXACTLY_ONE_SLEEP_OR_DELAY_BASED_TIMER_ARM_EFFECT_TIMEOUT_OR_ELSE_EXPRESSES_THE_TIMEOUT_AND_FALLBACK_DIRECTLY_EFFECT_RACE_FIRST_WITH_SLEEP_TO_TIMEOUT;
 
 // go: internal/rules/race_first_with_sleep_to_timeout.go:17 RaceFirstWithSleepToTimeout
 // RaceFirstWithSleepToTimeout suggests timeoutOrElse when one side of an

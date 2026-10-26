@@ -15,7 +15,7 @@ pub static GLOBAL_FETCH: LazyLock<Rule> = LazyLock::new(|| {
     description: "Warns when using the global fetch function outside Effect generators instead of the Effect HTTP client",
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
-    codes: vec![tsdiag::This_code_uses_the_global_fetch_function_HTTP_requests_are_represented_through_HttpClient_from_0_effect_globalFetch.code()],
+    codes: vec![tsdiag::THIS_CODE_USES_THE_GLOBAL_FETCH_FUNCTION_HTTP_REQUESTS_ARE_REPRESENTED_THROUGH_HTTP_CLIENT_FROM_0_EFFECT_GLOBAL_FETCH.code()],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_fetch(ctx, false) },
 }
 });
@@ -28,7 +28,7 @@ pub static GLOBAL_FETCH_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
     description: "Warns when using the global fetch function inside Effect generators instead of the Effect HTTP client",
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
-    codes: vec![tsdiag::This_Effect_code_calls_the_global_fetch_function_HTTP_requests_in_Effect_code_are_represented_through_HttpClient_from_0_effect_globalFetchInEffect.code()],
+    codes: vec![tsdiag::THIS_EFFECT_CODE_CALLS_THE_GLOBAL_FETCH_FUNCTION_HTTP_REQUESTS_IN_EFFECT_CODE_ARE_REPRESENTED_THROUGH_HTTP_CLIENT_FROM_0_EFFECT_GLOBAL_FETCH_IN_EFFECT.code()],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_fetch(ctx, true) },
 }
 });
@@ -49,9 +49,9 @@ pub(crate) fn run_global_fetch(
         package_name = "@effect/platform";
     }
 
-    let mut message: &'static Message = &tsdiag::This_code_uses_the_global_fetch_function_HTTP_requests_are_represented_through_HttpClient_from_0_effect_globalFetch;
+    let mut message: &'static Message = &tsdiag::THIS_CODE_USES_THE_GLOBAL_FETCH_FUNCTION_HTTP_REQUESTS_ARE_REPRESENTED_THROUGH_HTTP_CLIENT_FROM_0_EFFECT_GLOBAL_FETCH;
     if check_in_effect {
-        message = &tsdiag::This_Effect_code_calls_the_global_fetch_function_HTTP_requests_in_Effect_code_are_represented_through_HttpClient_from_0_effect_globalFetchInEffect;
+        message = &tsdiag::THIS_EFFECT_CODE_CALLS_THE_GLOBAL_FETCH_FUNCTION_HTTP_REQUESTS_IN_EFFECT_CODE_ARE_REPRESENTED_THROUGH_HTTP_CLIENT_FROM_0_EFFECT_GLOBAL_FETCH_IN_EFFECT;
     }
 
     let mut diags = Vec::new();

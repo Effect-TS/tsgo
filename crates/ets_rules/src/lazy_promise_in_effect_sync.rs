@@ -17,7 +17,7 @@ pub static LAZY_PROMISE_IN_EFFECT_SYNC: LazyLock<Rule> = LazyLock::new(|| {
     default_severity: Severity::Warning,
     supported_effect: vec!["v3", "v4"],
     codes: vec![
-        tsdiag::This_Effect_sync_thunk_returns_a_Promise_Use_Effect_promise_or_Effect_tryPromise_to_represent_async_work_effect_lazyPromiseInEffectSync.code(),
+        tsdiag::THIS_EFFECT_SYNC_THUNK_RETURNS_A_PROMISE_USE_EFFECT_PROMISE_OR_EFFECT_TRY_PROMISE_TO_REPRESENT_ASYNC_WORK_EFFECT_LAZY_PROMISE_IN_EFFECT_SYNC.code(),
     ],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let mut diags = Vec::new();
@@ -38,7 +38,7 @@ pub static LAZY_PROMISE_IN_EFFECT_SYNC: LazyLock<Rule> = LazyLock::new(|| {
                         diags.push(ctx.new_diagnostic(
                             ctx.source_file,
                             ets_shim::scanner::get_error_range_for_node(ctx.source_file, lazy_arg),
-                            &tsdiag::This_Effect_sync_thunk_returns_a_Promise_Use_Effect_promise_or_Effect_tryPromise_to_represent_async_work_effect_lazyPromiseInEffectSync,
+                            &tsdiag::THIS_EFFECT_SYNC_THUNK_RETURNS_A_PROMISE_USE_EFFECT_PROMISE_OR_EFFECT_TRY_PROMISE_TO_REPRESENT_ASYNC_WORK_EFFECT_LAZY_PROMISE_IN_EFFECT_SYNC,
                             &[],
                             &[],
                         ));
