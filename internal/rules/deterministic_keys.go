@@ -114,7 +114,7 @@ func checkDeterministicKeyMatch(tp *typeparser.TypeParser, program checker.Progr
 }
 
 // matchClassPattern tries to match a class declaration against the supported patterns.
-// Priority: service targets first, then error targets, then custom.
+// Priority: service targets first, then error targets, then tagged class targets, then custom.
 func matchClassPattern(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, classNode *ast.Node, extendedKeyDetection bool) *deterministicKeyMatch {
 	// Service target: ExtendsEffectService → ExtendsContextTag → ExtendsEffectTag → ExtendsServiceMapService
 	if result := tp.ExtendsEffectV3Service(classNode); result != nil {
@@ -136,6 +136,18 @@ func matchClassPattern(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.So
 	}
 	if result := tp.ExtendsSchemaTaggedError(classNode); result != nil {
 		return &deterministicKeyMatch{className: result.ClassName(), keyStringLiteral: result.KeyStringLiteral(), target: "error"}
+	}
+
+	// Tagged class target: ExtendsSchemaTaggedClass → ExtendsDataTaggedClass → ExtendsSchemaTaggedRequest
+	// For Schema.* the checked literal is the tag, not the optional inner identifier.
+	if result := tp.ExtendsSchemaTaggedClass(classNode); result != nil {
+		return &deterministicKeyMatch{className: result.ClassName(), keyStringLiteral: result.TagStringLiteral(), target: "taggedClass"}
+	}
+	if result := tp.ExtendsDataTaggedClass(classNode); result != nil {
+		return &deterministicKeyMatch{className: result.ClassName(), keyStringLiteral: result.KeyStringLiteral(), target: "taggedClass"}
+	}
+	if result := tp.ExtendsSchemaTaggedRequest(classNode); result != nil {
+		return &deterministicKeyMatch{className: result.ClassName(), keyStringLiteral: result.TagStringLiteral(), target: "taggedClass"}
 	}
 
 	// Custom target (only if extendedKeyDetection is enabled)

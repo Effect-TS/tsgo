@@ -1,0 +1,27 @@
+flowchart TB
+  0[/"type: TaggedClass#lt;Started, #quot;Started#quot;, #123; readonly _tag: tag#lt;#quot;Started#quot;#gt;; #125;#gt;<br/>node: Schema.TaggedClass#lt;Started#gt;#40;#41;#40;#quot;Started#quot;, #123;#125;#41;"/]
+  1[/"type: TaggedClass#lt;Completed, #quot;completed#quot;, #123; readonly _tag: tag#lt;#quot;completed#quot;#gt;; #125;#gt;<br/>node: Schema.TaggedClass#lt;Completed#gt;#40;#41;#40;#quot;completed#quot;, #123;#125;#41;"/]
+  2[/"type: TaggedClass#lt;Cancelled, #quot;cancelled#quot;, #123; readonly _tag: tag#lt;#quot;cancelled#quot;#gt;; #125;#gt;<br/>node: Schema.TaggedClass#lt;Cancelled#gt;#40;#quot;CancelledIdentifier#quot;#41;#40;#quot;cancelled#quot;, #123;#125;#41;"/]
+  3[/"type: #quot;CancelledIdentifier#quot;<br/>node: #quot;CancelledIdentifier#quot;"/]
+  4["type: #lt;Tag extends string, Fields extends Struct.Fields#gt;#40;tag: Tag, fieldsOr: Fields #124; HasFields#lt;Fields#gt;, annotations?: ClassAnnotations#lt;Cancelled, #123; #91;K in keyof Type#lt;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; Fields#gt;#93;: Type#lt;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; Fields#gt;#91;K#93;; #125;#gt; #124; undefined#41; =#gt; TaggedClass#lt;Cancelled, Tag, #123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; Fields#gt;<br/>callee: Schema.TaggedClass<br/>args: #91;#93;"]
+  5[/"type: #lt;Self = never#gt;#40;identifier?: string #124; undefined#41; =#gt; #lt;Tag extends string, Fields extends Struct.Fields#gt;#40;tag: Tag, fieldsOr: Fields #124; HasFields#lt;Fields#gt;, annotations?: ClassAnnotations#lt;Self, #123; #91;K in keyof Type#lt;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; Fields#gt;#93;: Type#lt;#123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; Fields#gt;#91;K#93;; #125;#gt; #124; undefined#41; =#gt; #91;Self#93; extends #91;never#93; ? #quot;Missing `Self` generic - use `class Self extends TaggedClass#lt;Self#gt;#40;#41;#40;#92;#quot;Tag#92;#quot;, #123; ... #125;#41;`#quot; : TaggedClass#lt;Self, Tag, #123; readonly _tag: tag#lt;Tag#gt;; #125; #amp; Fields#gt;<br/>node: Schema.TaggedClass"/]
+  6[/"type: #quot;Queued#quot;<br/>node: #quot;Queued#quot;"/]
+  7["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; Readonly#lt;A#gt; #amp; #123; readonly _tag: #quot;Queued#quot;; #125;<br/>callee: Data.TaggedClass<br/>args: #91;#93;"]
+  8[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; Readonly#lt;A#gt; #amp; #123; readonly _tag: Tag; #125;<br/>node: Data.TaggedClass"/]
+  9[/"type: #quot;failed#quot;<br/>node: #quot;failed#quot;"/]
+  10["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; Readonly#lt;A#gt; #amp; #123; readonly _tag: #quot;failed#quot;; #125;<br/>callee: Data.TaggedClass<br/>args: #91;#93;"]
+  11[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; Readonly#lt;A#gt; #amp; #123; readonly _tag: Tag; #125;<br/>node: Data.TaggedClass"/]
+  12[/"type: TaggedRequestClass#lt;Fetch, #quot;fetch#quot;, #123; readonly _tag: tag#lt;#quot;fetch#quot;#gt;; #125;, typeof Void, typeof Never#gt;<br/>node: Schema.TaggedRequest#lt;Fetch#gt;#40;#41;#40;#quot;fetch#quot;, #123;#92;n  payload: #123;#125;,#92;n  success: Schema.Void,#92;n  failure: Schema.Never#92;n#125;#41;"/]
+  13[/"type: #quot;data-error#quot;<br/>node: #quot;data-error#quot;"/]
+  14["type: new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: #quot;data-error#quot;; #125; #amp; Readonly#lt;A#gt;<br/>callee: Data.TaggedError<br/>args: #91;#93;"]
+  15[/"type: #lt;Tag extends string#gt;#40;tag: Tag#41; =#gt; new #lt;A extends Record#lt;string, any#gt; = #123;#125;#gt;#40;args: Equals#lt;A, #123;#125;#gt; extends true ? void : #123; readonly #91;P in keyof A as P extends #quot;_tag#quot; ? never : P#93;: A#91;P#93;; #125;#41; =#gt; YieldableError #amp; #123; readonly _tag: Tag; #125; #amp; Readonly#lt;A#gt;<br/>node: Data.TaggedError"/]
+  16[/"type: TaggedErrorClass#lt;SchemaError, #quot;schema-error#quot;, #123; readonly _tag: tag#lt;#quot;schema-error#quot;#gt;; #125;#gt;<br/>node: Schema.TaggedError#lt;SchemaError#gt;#40;#41;#40;#quot;schema-error#quot;, #123;#125;#41;"/]
+  3 -->|"kind: pipe"| 4
+  5 -->|"kind: transformCallee"| 4
+  4 -->|"kind: usedBy"| 2
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 7
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  13 -->|"kind: pipe"| 14
+  15 -->|"kind: transformCallee"| 14

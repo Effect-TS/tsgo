@@ -68,10 +68,17 @@ fn run_effect_data_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::Completion
             .type_parser
             .is_node_reference_to_effect_data_module_api(data.accessed_object, "TaggedClass")
     {
+        let tag_key = compute_deterministic_key(
+            ctx.program,
+            &mut ctx.type_parser,
+            ctx.source_file,
+            &class_name,
+            "taggedClass",
+        );
         let insert_text = if is_fully_qualified {
-            format!(r#"{data_identifier}.TaggedClass("{class_name}")<{{${{0}}}}>{{}}"#)
+            format!(r#"{data_identifier}.TaggedClass("{tag_key}")<{{${{0}}}}>{{}}"#)
         } else {
-            format!(r#"TaggedClass("{class_name}")<{{${{0}}}}>{{}}"#)
+            format!(r#"TaggedClass("{tag_key}")<{{${{0}}}}>{{}}"#)
         };
         items.push(make_extends_completion_item(
             &accessed_text,

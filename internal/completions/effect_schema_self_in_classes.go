@@ -74,11 +74,12 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 
 	// Schema.TaggedClass (both v3 and v4)
 	if isFullyQualified || tp.IsNodeReferenceToEffectSchemaModuleApi(data.AccessedObject, "TaggedClass") {
+		tagKey := computeDeterministicKey(ctx.Program, tp, ctx.SourceFile, className, "taggedClass")
 		var insertText string
 		if isFullyQualified {
-			insertText = fmt.Sprintf(`%s.TaggedClass<%s>()("%s", {${0}}){}`, schemaIdentifier, schemaTypeArgs, className)
+			insertText = fmt.Sprintf(`%s.TaggedClass<%s>()("%s", {${0}}){}`, schemaIdentifier, schemaTypeArgs, tagKey)
 		} else {
-			insertText = fmt.Sprintf(`TaggedClass<%s>()("%s", {${0}}){}`, schemaTypeArgs, className)
+			insertText = fmt.Sprintf(`TaggedClass<%s>()("%s", {${0}}){}`, schemaTypeArgs, tagKey)
 		}
 		items = append(items, makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf("TaggedClass<%s>", className),
@@ -89,11 +90,12 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 	// Schema.TaggedRequest (v3 only)
 	if version == typeparser.EffectMajorV3 {
 		if isFullyQualified || tp.IsNodeReferenceToEffectSchemaModuleApi(data.AccessedObject, "TaggedRequest") {
+			tagKey := computeDeterministicKey(ctx.Program, tp, ctx.SourceFile, className, "taggedClass")
 			var insertText string
 			if isFullyQualified {
-				insertText = fmt.Sprintf(`%s.TaggedRequest<%s>()("%s", {${0}}){}`, schemaIdentifier, className, className)
+				insertText = fmt.Sprintf(`%s.TaggedRequest<%s>()("%s", {${0}}){}`, schemaIdentifier, className, tagKey)
 			} else {
-				insertText = fmt.Sprintf(`TaggedRequest<%s>()("%s", {${0}}){}`, className, className)
+				insertText = fmt.Sprintf(`TaggedRequest<%s>()("%s", {${0}}){}`, className, tagKey)
 			}
 			items = append(items, makeExtendsCompletionItem(accessedText,
 				fmt.Sprintf("TaggedRequest<%s>", className),

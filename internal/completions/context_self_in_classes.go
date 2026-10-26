@@ -92,7 +92,7 @@ func runContextSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem 
 }
 
 // computeDeterministicKey computes the key the deterministicKeys rule expects for a class
-// of the given target ("service" or "error").
+// of the given target ("service", "error", or "taggedClass").
 // Falls back to the class name if keybuilder returns empty.
 func computeDeterministicKey(program checker.Program, tp *typeparser.TypeParser, sf *ast.SourceFile, className string, target string) string {
 	effectConfig := program.Options().Effect

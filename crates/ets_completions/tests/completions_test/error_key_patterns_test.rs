@@ -22,10 +22,28 @@ const ERROR_KEY_PATTERN_TS_CONFIG: &str = r#"{
   }
 }"#;
 
-// go test: internal/completions/error_key_patterns_test.go:28 namedPackageJson
+// go test: internal/completions/error_key_patterns_test.go:28 taggedClassKeyPatternTsConfig
+const TAGGED_CLASS_KEY_PATTERN_TS_CONFIG: &str = r#"{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "keyPatterns": [
+          { "target": "taggedClass", "pattern": "package-identifier" }
+        ]
+      }
+    ]
+  }
+}"#;
+
+// go test: internal/completions/error_key_patterns_test.go:45 namedPackageJson
 const NAMED_PACKAGE_JSON: &str = r#"{ "name": "@effect/harness-effect-v4" }"#;
 
-// go test: internal/completions/error_key_patterns_test.go:30 taggedItems
+// go test: internal/completions/error_key_patterns_test.go:47 taggedItems
 fn tagged_items(
     t: &T,
     tsconfig: &str,
@@ -48,7 +66,7 @@ fn tagged_items(
     completions.items
 }
 
-// go test: internal/completions/error_key_patterns_test.go:47 TestErrorKeyPatterns
+// go test: internal/completions/error_key_patterns_test.go:64 TestErrorKeyPatterns
 #[test]
 fn test_error_key_patterns() {
     go_test(|t| {
@@ -118,6 +136,54 @@ fn test_error_key_patterns() {
                 source: "import { Schema } from \"effect\"\n\nexport class MyError extends Schema.",
                 label: "TaggedClass<MyError>",
                 new_text: r#"Schema.TaggedClass<MyError, { readonly brand: unique symbol }>()("MyError", {${0}}){}"#,
+            },
+            Case {
+                name: "Data.TaggedClass uses taggedClass key pattern",
+                tsconfig: TAGGED_CLASS_KEY_PATTERN_TS_CONFIG,
+                package_json: "",
+                source: "import { Data } from \"effect\"\n\nexport class Completed extends Data.",
+                label: r#"TaggedClass("Completed")"#,
+                new_text: r#"Data.TaggedClass("@effect/harness-effect-v4/test/Completed")<{${0}}>{}"#,
+            },
+            Case {
+                name: "Data.TaggedError ignores taggedClass key pattern",
+                tsconfig: TAGGED_CLASS_KEY_PATTERN_TS_CONFIG,
+                package_json: "",
+                source: "import { Data } from \"effect\"\n\nexport class Completed extends Data.",
+                label: r#"TaggedError("Completed")"#,
+                new_text: r#"Data.TaggedError("Completed")<{${0}}>{}"#,
+            },
+            Case {
+                name: "Schema.TaggedClass v4 uses taggedClass key pattern",
+                tsconfig: TAGGED_CLASS_KEY_PATTERN_TS_CONFIG,
+                package_json: "",
+                source: "import { Schema } from \"effect\"\n\nexport class Completed extends Schema.",
+                label: "TaggedClass<Completed>",
+                new_text: r#"Schema.TaggedClass<Completed, { readonly brand: unique symbol }>()("@effect/harness-effect-v4/test/Completed", {${0}}){}"#,
+            },
+            Case {
+                name: "Schema.TaggedClass v3 uses taggedClass key pattern",
+                tsconfig: TAGGED_CLASS_KEY_PATTERN_TS_CONFIG,
+                package_json: "",
+                source: "// @effect-v3\nimport { Schema } from \"effect\"\n\nexport class Completed extends Schema.",
+                label: "TaggedClass<Completed>",
+                new_text: r#"Schema.TaggedClass<Completed>()("@effect/harness-effect-v4/test/Completed", {${0}}){}"#,
+            },
+            Case {
+                name: "Schema.TaggedRequest v3 uses taggedClass key pattern",
+                tsconfig: TAGGED_CLASS_KEY_PATTERN_TS_CONFIG,
+                package_json: "",
+                source: "// @effect-v3\nimport { Schema } from \"effect\"\n\nexport class Completed extends Schema.",
+                label: "TaggedRequest<Completed>",
+                new_text: r#"Schema.TaggedRequest<Completed>()("@effect/harness-effect-v4/test/Completed", {${0}}){}"#,
+            },
+            Case {
+                name: "Schema.TaggedClass without taggedClass key pattern keeps class name",
+                tsconfig: COMPLETION_TEST_TS_CONFIG,
+                package_json: "",
+                source: "import { Schema } from \"effect\"\n\nexport class Completed extends Schema.",
+                label: "TaggedClass<Completed>",
+                new_text: r#"Schema.TaggedClass<Completed, { readonly brand: unique symbol }>()("Completed", {${0}}){}"#,
             },
             Case {
                 name: "Schema.TaggedError without error key pattern keeps class name",

@@ -1,0 +1,58 @@
+==== /.src/package.json (0 flows) ====
+==== /.src/test.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 8:31 - 8:119
+Node: Schema.TaggedClass<Cancelled, { readonly brand: unique symbol }>("CancelledIdentifier")
+Node Kind: KindCallExpression
+
+Subject: "CancelledIdentifier"
+Subject Type: "CancelledIdentifier"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.TaggedClass
+      args: (constant)
+      outType: { <Tag extends string, const Fields extends Struct.Fields>(tag: Tag, fields: Fields, annotations?: Declaration<Cancelled, readonly [TaggedStruct<Tag, Fields>]> | undefined): Class<Cancelled, TaggedStruct<Tag, Fields>, { readonly brand: unique symbol; }>; <Tag extends string, S extends Struct<Struct.Fields>>(tag: Tag, schema: S, annotations?: Declaration<Cancelled, readonly [Struct<{ [K in keyof ({ readonly _tag: tag<Tag>; } & S["fields"])]: ({ readonly _tag: tag<Tag>; } & S["fields"])[K]; }>]> | undefined): Class<Cancelled, Struct<{ [K in keyof ({ readonly _tag: tag<Tag>; } & S["fields"])]: ({ readonly _tag: tag<Tag>; } & S["fields"])[K]; }>, { readonly brand: unique symbol; }>; }
+
+=== Piping Flow ===
+Location: 10:28 - 10:55
+Node: Data.TaggedClass("Queued")
+Node Kind: KindCallExpression
+
+Subject: "Queued"
+Subject Type: "Queued"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedClass
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => Readonly<A> & { readonly _tag: "Queued"; } & Pipeable
+
+=== Piping Flow ===
+Location: 12:28 - 12:55
+Node: Data.TaggedClass("failed")
+Node Kind: KindCallExpression
+
+Subject: "failed"
+Subject Type: "failed"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedClass
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => Readonly<A> & { readonly _tag: "failed"; } & Pipeable
+
+=== Piping Flow ===
+Location: 14:31 - 14:62
+Node: Data.TaggedError("data-error")
+Node Kind: KindCallExpression
+
+Subject: "data-error"
+Subject Type: "data-error"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "data-error"; } & Readonly<A>

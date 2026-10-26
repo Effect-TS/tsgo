@@ -124,7 +124,8 @@ pub struct EffectLinks {
 
     pub extends_context_tag: FxHashMap<P<Node>, Option<ContextTagResult>>,
     pub extends_data_error: FxHashMap<P<Node>, Option<DataErrorResult>>,
-    pub extends_data_tagged_error: FxHashMap<P<Node>, Option<DataTaggedErrorResult>>,
+    pub extends_data_tagged_class: FxHashMap<P<Node>, Option<DataTaggedResult>>,
+    pub extends_data_tagged_error: FxHashMap<P<Node>, Option<DataTaggedResult>>,
     pub extends_effect_model_class: FxHashMap<P<Node>, Option<EffectModelClassResult>>,
     pub extends_effect_service: FxHashMap<P<Node>, Option<EffectServiceResult>>,
     pub extends_effect_tag: FxHashMap<P<Node>, Option<EffectTagResult>>,
@@ -155,7 +156,7 @@ pub struct EffectLinks {
     pub piping_flows_without_effect_fn: FxHashMap<P<SourceFile>, Option<Arc<[PipingFlow]>>>,
 }
 
-// go: internal/typeparser/type_parser.go:123 Cached
+// go: internal/typeparser/type_parser.go:124 Cached
 // Cached checks the store for an existing value. On miss, it calls compute,
 // stores the result, and returns it. This correctly caches zero/nil values
 // as valid negative results.
@@ -177,7 +178,7 @@ pub fn cached<'c, K: Eq + Hash + Clone, V: Clone>(
     value
 }
 
-// go: internal/typeparser/type_parser.go:133 CachedNode
+// go: internal/typeparser/type_parser.go:134 CachedNode
 // CachedNode is Cached for node-keyed stores.
 pub fn cached_node<'c, V: Clone>(
     tp: &mut TypeParser<'c>,
@@ -194,7 +195,7 @@ pub fn cached_node<'c, V: Clone>(
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/type_parser.go:145 TypeParser.BarrelReader
+    // go: internal/typeparser/type_parser.go:146 TypeParser.BarrelReader
     // BarrelReader returns the checker's barrel cache, or nil when the program
     // cannot read files.
     //
@@ -211,7 +212,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/type_parser.go:156 NewTypeParser
+// go: internal/typeparser/type_parser.go:157 NewTypeParser
 // NewTypeParser builds a checker-backed TypeParser.
 //
 // Rust: Go panics on a nil program or checker; references cannot be nil.
@@ -220,7 +221,7 @@ pub fn new_type_parser<'c>(p: &'static Program, c: &'c mut Checker) -> TypeParse
     TypeParser { program: p, checker: c, links }
 }
 
-// go: internal/typeparser/type_parser.go:166 effectLinksOf
+// go: internal/typeparser/type_parser.go:167 effectLinksOf
 // Rust: `c.effect_links` is effect-tsgo's TypeScript patch 023 (`_patches/tsrs/023-checker-effect-links.patch`). It
 // holds the links behind an `Arc` (Go's `*EffectLinks`) that the parser shares while it borrows the checker, and
 // they are freed with the checker. The mutex is the checker's own (Go: none, one goroutine per checker).

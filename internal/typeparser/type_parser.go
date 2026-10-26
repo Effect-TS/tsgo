@@ -86,7 +86,8 @@ type EffectLinks struct {
 
 	ExtendsContextTag          core.LinkStore[*ast.Node, *ContextTagResult]
 	ExtendsDataError           core.LinkStore[*ast.Node, *DataErrorResult]
-	ExtendsDataTaggedError     core.LinkStore[*ast.Node, *DataTaggedErrorResult]
+	ExtendsDataTaggedClass     core.LinkStore[*ast.Node, *DataTaggedResult]
+	ExtendsDataTaggedError     core.LinkStore[*ast.Node, *DataTaggedResult]
 	ExtendsEffectModelClass    core.LinkStore[*ast.Node, *EffectModelClassResult]
 	ExtendsEffectService       core.LinkStore[*ast.Node, *EffectServiceResult]
 	ExtendsEffectTag           core.LinkStore[*ast.Node, *EffectTagResult]
