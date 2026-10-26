@@ -14,15 +14,16 @@ export class DiscoveryError extends Data.TaggedError("DiscoveryError")<{ readonl
   }
 }
 
-interface PackageMetadata {
+export interface PackageMetadata {
   readonly packageJsonPath: string
   readonly version: string
   readonly main?: string
+  readonly bin?: string | Readonly<Record<string, string>>
 }
 
 type DiscoveredBinaryLocation = Omit<DiscoveredBinary, "fileHash">
 
-const isNativeTypescriptVersion = (version: string) => {
+export const isNativeTypescriptVersion = (version: string) => {
   const match = /\d+/.exec(version.trim())
   return match !== null && Number(match[0]) >= 7
 }
@@ -43,16 +44,24 @@ const readPackage = (require: NodeJS.Require, packageName: string) => Effect.gen
   if (typeof json !== "object" || json === null || !("version" in json) || typeof json.version !== "string") {
     return yield* new DiscoveryError({ reason: `${packageJsonPath} does not contain a version.` })
   }
+  const bin = "bin" in json ? json.bin : undefined
   return {
     packageJsonPath,
     version: json.version,
-    ...("main" in json && typeof json.main === "string" ? { main: json.main } : {})
+    ...("main" in json && typeof json.main === "string" ? { main: json.main } : {}),
+    ...(typeof bin === "string" || (typeof bin === "object" && bin !== null)
+      ? { bin: bin as string | Readonly<Record<string, string>> }
+      : {})
   } satisfies PackageMetadata
 })
 
 const optionally = <A, R>(effect: Effect.Effect<A, DiscoveryError, R>) =>
   effect.pipe(Effect.catchTag("DiscoveryError", (error) =>
     error.reason.startsWith("Unable to resolve ") ? Effect.succeed(undefined) : Effect.fail(error)))
+
+// The metadata of a package resolved through `require`, or undefined when the package is not installed.
+export const findInstalledPackage = (require: NodeJS.Require, packageName: string) =>
+  optionally(readPackage(require, packageName))
 
 export const isGlibc = () => {
   if (process.platform !== "linux") return false
@@ -73,6 +82,7 @@ export const experimentalOxlintTarget = (platform: NodeJS.Platform, arch: string
   const oxlintTarget = platform === "win32" ? `${codeTarget}-msvc` : codeTarget
   return {
     codeTarget,
+    oxlintBinding: `oxlint.${oxlintTarget}.node`,
     oxlintPackage: `@oxlint/binding-${oxlintTarget}`,
     tsgolintPackage: `@oxlint-tsgolint/${packageTarget}`,
     tsgolintExecutable: platform === "win32" ? "tsgolint.exe" : "tsgolint"
