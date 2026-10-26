@@ -1518,6 +1518,7 @@ name = "tsrs_incremental"
 version = "0.18.0"
 dependencies = [
  "bitflags",
+ "ets_etscore",
  "rayon",
  "rustc-hash",
  "tsrs_ast",
