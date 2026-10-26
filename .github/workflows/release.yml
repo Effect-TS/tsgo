@@ -93,8 +93,8 @@ jobs:
     needs: [select-mode, release-matrix]
     if: needs.select-mode.outputs.mode == 'publish'
     runs-on: ${{ matrix.runner }}
-    # The tsrs jobs (matrix.rust) run a fat-LTO, single-codegen-unit Rust release build.
-    timeout-minutes: ${{ matrix.rust && 90 || 45 }}
+    # The tsrs jobs train PGO (and on Linux BOLT) profiles, as tsrs's own release jobs: repoctl release plan.
+    timeout-minutes: ${{ matrix.timeoutMinutes }}
     permissions:
       contents: read
     defaults:
@@ -123,6 +123,7 @@ jobs:
           target: ${{ matrix.target }}
 
       - name: Build release artifact
+        if: matrix.component != 'tsrs'
         id: build
         env:
           TARGET_CC: clang
@@ -132,11 +133,31 @@ jobs:
           --version "${{ matrix.version }}"
           --target "${{ matrix.target }}"
 
+      # BOLT from the LLVM release that matches rustc's LLVM, which rust-toolchain.toml pins (tsrsRelease.ts).
+      - name: Cache BOLT
+        if: matrix.component == 'tsrs' && matrix.optimize == 'pgo-bolt'
+        uses: actions/cache@v6
+        with:
+          path: ${{ runner.temp }}/tsrs-release/llvm
+          key: release-bolt-v1-${{ matrix.runner }}-${{ runner.arch }}-${{ hashFiles('rust-toolchain.toml') }}
+
+      # tsrs's release pipeline (PGO, plus BOLT on Linux; tsrsRelease.ts): the C code (mimalloc) is built with the
+      # runner's default compiler, as there.
+      - name: Build tsrs release artifact
+        if: matrix.component == 'tsrs'
+        id: build-tsrs
+        run: >
+          pnpm exec repoctl build artifact
+          --component tsrs
+          --version "${{ matrix.version }}"
+          --target "${{ matrix.target }}"
+          --optimize "${{ matrix.optimize }}"
+
       - name: Upload release artifact
         uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifactName }}
-          path: ${{ steps.build.outputs.artifact_path }}
+          path: ${{ steps.build.outputs.artifact_path || steps.build-tsrs.outputs.artifact_path }}
           if-no-files-found: error
 
   pack:

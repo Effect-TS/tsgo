@@ -8,7 +8,7 @@ import { Command } from "effect/cli"
 import { Flag } from "effect/cli"
 import * as Option from "effect/Option"
 import { fileURLToPath } from "node:url"
-import { buildArtifact, buildCli, buildLocal, verifyReleaseArtifacts } from "./build.ts"
+import { buildArtifact, buildCli, buildLocal, tsrsOptimizations, verifyReleaseArtifacts } from "./build.ts"
 import { runChecks } from "./checks.ts"
 import { addChangeset, publishChangeset, versionChangeset } from "./changesets.ts"
 import {
@@ -152,8 +152,15 @@ const buildArtifactCommand = Command.make("artifact", {
     "linux-x64",
     "linux-arm64",
     "linux-arm"
-  ])
-}, ({ component, target, version }) => buildArtifact(repositoryRoot, component, version, target)).pipe(
+  ]),
+  optimize: Flag.Literals("optimize", tsrsOptimizations).pipe(
+    Flag.withDefault("none"),
+    Flag.withDescription(
+      "tsrs only: PGO (pgo), plus BOLT on Linux (pgo-bolt), as tsrs's release; the release matrix passes each target's"
+        + " setting. Needs network, Node.js, pnpm and Go for the training"
+    )
+  )
+}, ({ component, optimize, target, version }) => buildArtifact(repositoryRoot, component, version, target, optimize)).pipe(
   Command.withDescription("Build a versioned component artifact for a platform package")
 )
 

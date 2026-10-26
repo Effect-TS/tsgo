@@ -1,0 +1,62 @@
+tsrs-only: the release's BOLT step (.github/scripts/bolt.sh) driven by effect-tsgo's release build
+(`repoctl build artifact --component tsrs --optimize pgo-bolt`, _tools/repoctl/src/tsrsRelease.ts), which runs this
+script unchanged otherwise. No Go counterpart: it changes no compiler code.
+
+- `BOLT_EXTRA_WORKLOAD`: a command that runs a given tsrs on a workload of the caller's. It trains the instrumented
+  tsrs next to the two bench projects, and the BOLT-optimized tsrs must print byte-identical output to the input on
+  it (one and four checkers), as on the bench projects. effect-tsgo passes the Effect workload with every rule on, so
+  that BOLT does not lay out the Effect rules as cold code.
+- `TSRS_DETERMINISM`: a built `tsrs_determinism` for the conformance gate, instead of `cargo run --locked` in this
+  checkout, whose Cargo.lock lacks the Effect crates that the other patches add as path dependencies.
+
+diff --git a/.github/scripts/bolt.sh b/.github/scripts/bolt.sh
+index bc878af..9edcfa0 100755
+--- a/.github/scripts/bolt.sh
++++ b/.github/scripts/bolt.sh
+@@ -46,6 +46,14 @@ for p in xstate-main webpack; do
+     > /dev/null 2>> "$work/tsrs-train-stderr.log") && status=0 || status=$?
+   check_exit "$status" "instrumented tsrs -p $p"
+ done
++# effect-tsgo: BOLT_EXTRA_WORKLOAD=<command> adds a workload of the embedder's own; `<command> <tsrs> <output file>
++# [tsrs arguments...]` runs the given tsrs on it, writes its output and returns its exit status. It trains the
++# instrumented tsrs like the bench projects and gets the same byte comparison below.
++if [ -n "${BOLT_EXTRA_WORKLOAD:-}" ]; then
++  "$BOLT_EXTRA_WORKLOAD" "$work/tsrs.inst" "$work/extra-train.txt" 2>> "$work/tsrs-train-stderr.log" \
++    && status=0 || status=$?
++  check_exit "$status" "instrumented tsrs on BOLT_EXTRA_WORKLOAD"
++fi
+ if [ ${#bins[@]} -gt 1 ]; then
+   TSRS_TEST_RESULTS="$work/train-test-results" "$work/tsrs-test.inst" run --suite all --timeout 300 > /dev/null \
+     && status=0 || status=$?
+@@ -64,7 +72,11 @@ done
+ 
+ # All compiler baselines on the BOLT-optimized binaries, in both checker histories.
+ if [ ${#bins[@]} -gt 1 ]; then
+-  cargo run --profile dev --locked -q -p tsrs_determinism -- conformance --tsrs-test "$work/tsrs-test.bolt" \
++  # effect-tsgo: TSRS_DETERMINISM=<a built tsrs_determinism> replaces the `cargo run`, which needs the checkout's
++  # Cargo.lock to be current.
++  determinism=(cargo run --profile dev --locked -q -p tsrs_determinism --)
++  [ -n "${TSRS_DETERMINISM:-}" ] && determinism=("$TSRS_DETERMINISM")
++  "${determinism[@]}" conformance --tsrs-test "$work/tsrs-test.bolt" \
+     --out-dir "$work/test-results" | tail -1
+   TSRS_FOURSLASH_SERVER="$work/fourslash_server.bolt" TSRS_GO_FOURSLASH_WORK="$work/go-fourslash" \
+     .github/scripts/go-fourslash-gate.sh | tail -1
+@@ -82,6 +94,18 @@ for p in xstate-main webpack; do
+       || { echo "::error::BOLT-optimized tsrs prints different output on $p (--checkers $c)"; exit 1; }
+   done
+ done
++if [ -n "${BOLT_EXTRA_WORKLOAD:-}" ]; then
++  for c in 1 4; do
++    for v in prebolt bolt; do
++      exe="$dist/tsrs"; [ "$v" = bolt ] && exe="$work/tsrs.bolt"
++      "$BOLT_EXTRA_WORKLOAD" "$exe" "$work/out-extra-$c-$v.txt" --checkers "$c" && status=0 || status=$?
++      check_exit "$status" "$v tsrs on BOLT_EXTRA_WORKLOAD --checkers $c"
++      echo "exit $status" >> "$work/out-extra-$c-$v.txt"
++    done
++    cmp "$work/out-extra-$c-prebolt.txt" "$work/out-extra-$c-bolt.txt" \
++      || { echo "::error::BOLT-optimized tsrs prints different output on BOLT_EXTRA_WORKLOAD (--checkers $c)"; exit 1; }
++  done
++fi
+ 
+ # BOLT needs symbols in its input, but the staged release binary does not. Strip only after instrumentation,
+ # optimization and the correctness comparisons above have finished.

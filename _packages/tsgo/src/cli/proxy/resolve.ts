@@ -16,6 +16,7 @@ import {
   type PackageMetadata,
   packagedComponentPath,
   supportedVersions,
+  tsrsExecutableName,
   tsrsReplacementTargets,
   tsrsTarget
 } from "../../patcher/index.js"
@@ -143,7 +144,7 @@ export const tscExecutable = (context: ProxyContext, version: string) =>
   packagedComponentPath(context.packageDirectory, "typescript", version, context.platform === "win32" ? "tsc.exe" : "tsc")
 
 export const tsrsExecutable = (context: ProxyContext, version: string) =>
-  packagedComponentPath(context.packageDirectory, "tsrs", version, "tsrs")
+  packagedComponentPath(context.packageDirectory, "tsrs", version, tsrsExecutableName(context.platform))
 
 const resolveTsc = (context: ProxyContext, invocation: ProxyInvocation) => Effect.gen(function*() {
   const installed = invocation.version === undefined ? yield* installedTypescriptVersion(context) : undefined
@@ -185,7 +186,8 @@ const resolveTsrs = (context: ProxyContext, invocation: ProxyInvocation) => Effe
     })
   }
   yield* ensureExecutable(executable, context.platform)
-  return { file: executable, args: invocation.args, env: context.env } satisfies ProxyCommand
+  return { file: executablePath(executable, context.platform), args: invocation.args, env: context.env } satisfies
+    ProxyCommand
 })
 
 export interface OxlintInstallation {

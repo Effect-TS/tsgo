@@ -164,9 +164,15 @@ const resolvePlatformPackage = (target: DiscoveredBinary) => resolvePlatformPack
   Effect.mapError(({ reason }) => new ReplacementUnavailableError({ target, reason }))
 )
 
-// The platforms @effect/tsgo ships a patched tsrs binary for (artifacts/tsrs/<tsrs version>/tsrs): tsrs's own glibc
-// and macOS targets. Its musl targets are discovered but reported as unavailable.
-export const tsrsReplacementTargets = ["darwin-arm64", "linux-x64-gnu", "linux-arm64-gnu"] as const
+// The platforms @effect/tsgo ships a patched tsrs binary for (artifacts/tsrs/<tsrs version>/tsrs[.exe]): tsrs's own
+// macOS, glibc and Windows targets. Its musl targets are discovered but reported as unavailable.
+export const tsrsReplacementTargets = [
+  "darwin-arm64",
+  "darwin-x64",
+  "linux-x64-gnu",
+  "linux-arm64-gnu",
+  "win32-x64"
+] as const
 
 // The packaged build of a component version: the latest TypeScript compiler ships in lib/, everything else in
 // artifacts/<component>/<version>/.

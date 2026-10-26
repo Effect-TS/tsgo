@@ -615,7 +615,7 @@ test("resolves the tsrs component next to the TypeScript it ports", async() => {
     target: "linux-arm64",
     goCache: { component: "typescript", version: "7.1.0-dev", save: false }
   })
-  for (const target of ["darwin-x64", "win32-x64", "linux-arm"] as const) {
+  for (const target of ["win32-arm64", "linux-arm"] as const) {
     await assert.rejects(
       Effect.runPromise(resolveUpstreamInfo(upstream, "tsrs", tsrsVersion, target)),
       new RegExp(`tsrs does not support target ${target}`)

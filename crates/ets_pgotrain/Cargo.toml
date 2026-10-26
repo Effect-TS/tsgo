@@ -1,0 +1,26 @@
+[package]
+name = "ets_pgotrain"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+description = "Rust-only: brings tsrs's PGO/BOLT training binaries (tsrs-test, fourslash_server) into this workspace"
+
+[lints]
+workspace = true
+
+# Rust-only release tooling, not a port of a Go package. PGO applies a profile by symbol name, and symbol names carry
+# each crate's `-C metadata`, which depends on the workspace that builds it. tsrs's release trains `tsrs`, `tsrs-test`
+# and `fourslash_server` built together in one cargo invocation (tsrs/.github/workflows/release.yml); our `tsrs`
+# (crates/ets_tsrs) is built here, so its training binaries must be too. These dependencies put tsrs's two binary
+# packages in this workspace's dependency graph, so that `cargo build -p ets_tsrs -p ets_pgotrain -p tsrs_testrunner
+# -p tsrs_fourslash_server --bins --features ets_pgotrain/train,...` (`repoctl build artifact --optimize`) builds them
+# with the very crate units of `cargo build -p ets_tsrs`. Both link mimalloc (CMake), hence the opt-in feature, as
+# ets_tsrs's `cli`.
+[dependencies]
+tsrs_fourslash_server = { path = "../../tsrs/tasks/fourslash_server", optional = true }
+tsrs_testrunner = { path = "../../tsrs/crates/tsrs_testrunner", optional = true }
+
+[features]
+train = ["dep:tsrs_fourslash_server", "dep:tsrs_testrunner"]
