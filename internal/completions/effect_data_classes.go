@@ -51,11 +51,12 @@ func runEffectDataClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 
 	// Data.TaggedClass
 	if isFullyQualified || ctx.TypeParser.IsNodeReferenceToEffectDataModuleApi(data.AccessedObject, "TaggedClass") {
+		tagKey := computeDeterministicKey(ctx.Program, ctx.TypeParser, ctx.SourceFile, className, "taggedClass")
 		var insertText string
 		if isFullyQualified {
-			insertText = fmt.Sprintf(`%s.TaggedClass("%s")<{${0}}>{}`, dataIdentifier, className)
+			insertText = fmt.Sprintf(`%s.TaggedClass("%s")<{${0}}>{}`, dataIdentifier, tagKey)
 		} else {
-			insertText = fmt.Sprintf(`TaggedClass("%s")<{${0}}>{}`, className)
+			insertText = fmt.Sprintf(`TaggedClass("%s")<{${0}}>{}`, tagKey)
 		}
 		items = append(items, makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf(`TaggedClass("%s")`, className),

@@ -20,7 +20,7 @@ use crate::*;
 // KeyPattern defines a key pattern configuration for the deterministicKeys rule.
 #[derive(Clone, PartialEq, Eq, Debug, Default)]
 pub struct KeyPattern {
-    // Target is the category this pattern applies to: "service", "error", or "custom".
+    // Target is the category this pattern applies to: "service", "error", "custom", or "taggedClass".
     pub target: String,
 
     // Pattern is the formula to compute the key: "default", "package-identifier", "default-hashed", or "identifier".
@@ -39,7 +39,7 @@ impl KeyPattern {
             StructField::new(
                 "Target",
                 &Type::STRING,
-                r#"json:"target" schema_description:"Target category this pattern applies to." schema_default:"\"service\"" schema_enum:"[\"service\",\"error\",\"custom\"]""#,
+                r#"json:"target" schema_description:"Target category this pattern applies to." schema_default:"\"service\"" schema_enum:"[\"service\",\"error\",\"custom\",\"taggedClass\"]""#,
             ),
             StructField::new(
                 "Pattern",

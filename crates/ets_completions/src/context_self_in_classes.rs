@@ -110,7 +110,7 @@ fn run_context_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::Comple
 
 // go: internal/completions/context_self_in_classes.go:97 computeDeterministicKey
 // computeDeterministicKey computes the key the deterministicKeys rule expects for a class
-// of the given target ("service" or "error").
+// of the given target ("service", "error", or "taggedClass").
 // Falls back to the class name if keybuilder returns empty.
 pub(crate) fn compute_deterministic_key(
     program: &'static dyn Program,

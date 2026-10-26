@@ -1,0 +1,62 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/test.ts(8,64): error TS377049: This key does not match the deterministic key for this declaration. The expected key is `Completed`. effect(deterministicKeys)
+/.src/test.ts(10,85): error TS377049: This key does not match the deterministic key for this declaration. The expected key is `Cancelled`. effect(deterministicKeys)
+/.src/test.ts(14,46): error TS377049: This key does not match the deterministic key for this declaration. The expected key is `Failed`. effect(deterministicKeys)
+/.src/test.ts(16,58): error TS377049: This key does not match the deterministic key for this declaration. The expected key is `Fetch`. effect(deterministicKeys)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "keyPatterns": [
+              { "target": "taggedClass", "pattern": "identifier" }
+            ]
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/package.json (0 errors) ====
+    { "name": "@effect/test-app", "version": "1.0.0" }
+    
+
+==== /.src/test.ts (4 errors) ====
+    // @effect-v3
+    // @effect-diagnostics deterministicKeys:error
+    import * as Data from "effect/Data"
+    import * as Schema from "effect/Schema"
+    
+    export class Started extends Schema.TaggedClass<Started>()("Started", {}) {}
+    
+    export class Completed extends Schema.TaggedClass<Completed>()("completed", {}) {}
+                                                                   ~~~~~~~~~~~
+!!! error TS377049: This key does not match the deterministic key for this declaration. The expected key is `Completed`. effect(deterministicKeys)
+    
+    export class Cancelled extends Schema.TaggedClass<Cancelled>("CancelledIdentifier")("cancelled", {}) {}
+                                                                                        ~~~~~~~~~~~
+!!! error TS377049: This key does not match the deterministic key for this declaration. The expected key is `Cancelled`. effect(deterministicKeys)
+    
+    export class Queued extends Data.TaggedClass("Queued")<{}> {}
+    
+    export class Failed extends Data.TaggedClass("failed")<{}> {}
+                                                 ~~~~~~~~
+!!! error TS377049: This key does not match the deterministic key for this declaration. The expected key is `Failed`. effect(deterministicKeys)
+    
+    export class Fetch extends Schema.TaggedRequest<Fetch>()("fetch", {
+                                                             ~~~~~~~
+!!! error TS377049: This key does not match the deterministic key for this declaration. The expected key is `Fetch`. effect(deterministicKeys)
+      payload: {},
+      success: Schema.Void,
+      failure: Schema.Never
+    }) {}
+    
+    export class DataError extends Data.TaggedError("data-error")<{}> {}
+    
+    export class SchemaError extends Schema.TaggedError<SchemaError>()("schema-error", {}) {}
+    

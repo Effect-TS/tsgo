@@ -1,0 +1,163 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:64-8:75) TS377049: This key does not match the deterministic key for this declaration. The expected key is `Completed`. effect(deterministicKeys)
+  Fix 0: "Disable deterministicKeys for this line"
+  Fix 1: "Disable deterministicKeys for entire file"
+  Fix 2: "Replace 'completed' with 'Completed'"
+
+[D2] (10:85-10:96) TS377049: This key does not match the deterministic key for this declaration. The expected key is `Cancelled`. effect(deterministicKeys)
+  Fix 0: "Disable deterministicKeys for this line"
+  Fix 1: "Disable deterministicKeys for entire file"
+  Fix 2: "Replace 'cancelled' with 'Cancelled'"
+
+[D3] (14:46-14:54) TS377049: This key does not match the deterministic key for this declaration. The expected key is `Failed`. effect(deterministicKeys)
+  Fix 0: "Disable deterministicKeys for this line"
+  Fix 1: "Disable deterministicKeys for entire file"
+  Fix 2: "Replace 'failed' with 'Failed'"
+
+[D4] (16:58-16:65) TS377049: This key does not match the deterministic key for this declaration. The expected key is `Fetch`. effect(deterministicKeys)
+  Fix 0: "Disable deterministicKeys for this line"
+  Fix 1: "Disable deterministicKeys for entire file"
+  Fix 2: "Replace 'fetch' with 'Fetch'"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable deterministicKeys for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable deterministicKeys for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace 'completed' with 'Completed'" ===
+
+--- file:///.src/test.ts ---
+// @effect-v3
+// @effect-diagnostics deterministicKeys:error
+import * as Data from "effect/Data"
+import * as Schema from "effect/Schema"
+
+export class Started extends Schema.TaggedClass<Started>()("Started", {}) {}
+
+export class Completed extends Schema.TaggedClass<Completed>()("Completed", {}) {}
+
+export class Cancelled extends Schema.TaggedClass<Cancelled>("CancelledIdentifier")("cancelled", {}) {}
+
+export class Queued extends Data.TaggedClass("Queued")<{}> {}
+
+export class Failed extends Data.TaggedClass("failed")<{}> {}
+
+export class Fetch extends Schema.TaggedRequest<Fetch>()("fetch", {
+  payload: {},
+  success: Schema.Void,
+  failure: Schema.Never
+}) {}
+
+export class DataError extends Data.TaggedError("data-error")<{}> {}
+
+export class SchemaError extends Schema.TaggedError<SchemaError>()("schema-error", {}) {}
+
+
+=== [D2] Fix 0: "Disable deterministicKeys for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable deterministicKeys for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace 'cancelled' with 'Cancelled'" ===
+
+--- file:///.src/test.ts ---
+// @effect-v3
+// @effect-diagnostics deterministicKeys:error
+import * as Data from "effect/Data"
+import * as Schema from "effect/Schema"
+
+export class Started extends Schema.TaggedClass<Started>()("Started", {}) {}
+
+export class Completed extends Schema.TaggedClass<Completed>()("completed", {}) {}
+
+export class Cancelled extends Schema.TaggedClass<Cancelled>("CancelledIdentifier")("Cancelled", {}) {}
+
+export class Queued extends Data.TaggedClass("Queued")<{}> {}
+
+export class Failed extends Data.TaggedClass("failed")<{}> {}
+
+export class Fetch extends Schema.TaggedRequest<Fetch>()("fetch", {
+  payload: {},
+  success: Schema.Void,
+  failure: Schema.Never
+}) {}
+
+export class DataError extends Data.TaggedError("data-error")<{}> {}
+
+export class SchemaError extends Schema.TaggedError<SchemaError>()("schema-error", {}) {}
+
+
+=== [D3] Fix 0: "Disable deterministicKeys for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable deterministicKeys for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace 'failed' with 'Failed'" ===
+
+--- file:///.src/test.ts ---
+// @effect-v3
+// @effect-diagnostics deterministicKeys:error
+import * as Data from "effect/Data"
+import * as Schema from "effect/Schema"
+
+export class Started extends Schema.TaggedClass<Started>()("Started", {}) {}
+
+export class Completed extends Schema.TaggedClass<Completed>()("completed", {}) {}
+
+export class Cancelled extends Schema.TaggedClass<Cancelled>("CancelledIdentifier")("cancelled", {}) {}
+
+export class Queued extends Data.TaggedClass("Queued")<{}> {}
+
+export class Failed extends Data.TaggedClass("Failed")<{}> {}
+
+export class Fetch extends Schema.TaggedRequest<Fetch>()("fetch", {
+  payload: {},
+  success: Schema.Void,
+  failure: Schema.Never
+}) {}
+
+export class DataError extends Data.TaggedError("data-error")<{}> {}
+
+export class SchemaError extends Schema.TaggedError<SchemaError>()("schema-error", {}) {}
+
+
+=== [D4] Fix 0: "Disable deterministicKeys for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable deterministicKeys for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace 'fetch' with 'Fetch'" ===
+
+--- file:///.src/test.ts ---
+// @effect-v3
+// @effect-diagnostics deterministicKeys:error
+import * as Data from "effect/Data"
+import * as Schema from "effect/Schema"
+
+export class Started extends Schema.TaggedClass<Started>()("Started", {}) {}
+
+export class Completed extends Schema.TaggedClass<Completed>()("completed", {}) {}
+
+export class Cancelled extends Schema.TaggedClass<Cancelled>("CancelledIdentifier")("cancelled", {}) {}
+
+export class Queued extends Data.TaggedClass("Queued")<{}> {}
+
+export class Failed extends Data.TaggedClass("failed")<{}> {}
+
+export class Fetch extends Schema.TaggedRequest<Fetch>()("Fetch", {
+  payload: {},
+  success: Schema.Void,
+  failure: Schema.Never
+}) {}
+
+export class DataError extends Data.TaggedError("data-error")<{}> {}
+
+export class SchemaError extends Schema.TaggedError<SchemaError>()("schema-error", {}) {}
+

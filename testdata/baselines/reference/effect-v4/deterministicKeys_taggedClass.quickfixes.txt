@@ -1,0 +1,99 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:99-6:110) TS377049: This key does not match the deterministic key for this declaration. The expected key is `Completed`. effect(deterministicKeys)
+  Fix 0: "Disable deterministicKeys for this line"
+  Fix 1: "Disable deterministicKeys for entire file"
+  Fix 2: "Replace 'completed' with 'Completed'"
+
+[D2] (8:120-8:131) TS377049: This key does not match the deterministic key for this declaration. The expected key is `Cancelled`. effect(deterministicKeys)
+  Fix 0: "Disable deterministicKeys for this line"
+  Fix 1: "Disable deterministicKeys for entire file"
+  Fix 2: "Replace 'cancelled' with 'Cancelled'"
+
+[D3] (12:46-12:54) TS377049: This key does not match the deterministic key for this declaration. The expected key is `Failed`. effect(deterministicKeys)
+  Fix 0: "Disable deterministicKeys for this line"
+  Fix 1: "Disable deterministicKeys for entire file"
+  Fix 2: "Replace 'failed' with 'Failed'"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable deterministicKeys for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable deterministicKeys for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace 'completed' with 'Completed'" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics deterministicKeys:error
+import { Data, Schema } from "effect"
+
+export class Started extends Schema.TaggedClass<Started, { readonly brand: unique symbol }>()("Started", {}) {}
+
+export class Completed extends Schema.TaggedClass<Completed, { readonly brand: unique symbol }>()("Completed", {}) {}
+
+export class Cancelled extends Schema.TaggedClass<Cancelled, { readonly brand: unique symbol }>("CancelledIdentifier")("cancelled", {}) {}
+
+export class Queued extends Data.TaggedClass("Queued")<{}> {}
+
+export class Failed extends Data.TaggedClass("failed")<{}> {}
+
+export class DataError extends Data.TaggedError("data-error")<{}> {}
+
+export class SchemaError extends Schema.TaggedError<SchemaError, { readonly brand: unique symbol }>()("schema-error", {}) {}
+
+
+=== [D2] Fix 0: "Disable deterministicKeys for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable deterministicKeys for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace 'cancelled' with 'Cancelled'" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics deterministicKeys:error
+import { Data, Schema } from "effect"
+
+export class Started extends Schema.TaggedClass<Started, { readonly brand: unique symbol }>()("Started", {}) {}
+
+export class Completed extends Schema.TaggedClass<Completed, { readonly brand: unique symbol }>()("completed", {}) {}
+
+export class Cancelled extends Schema.TaggedClass<Cancelled, { readonly brand: unique symbol }>("CancelledIdentifier")("Cancelled", {}) {}
+
+export class Queued extends Data.TaggedClass("Queued")<{}> {}
+
+export class Failed extends Data.TaggedClass("failed")<{}> {}
+
+export class DataError extends Data.TaggedError("data-error")<{}> {}
+
+export class SchemaError extends Schema.TaggedError<SchemaError, { readonly brand: unique symbol }>()("schema-error", {}) {}
+
+
+=== [D3] Fix 0: "Disable deterministicKeys for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable deterministicKeys for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace 'failed' with 'Failed'" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics deterministicKeys:error
+import { Data, Schema } from "effect"
+
+export class Started extends Schema.TaggedClass<Started, { readonly brand: unique symbol }>()("Started", {}) {}
+
+export class Completed extends Schema.TaggedClass<Completed, { readonly brand: unique symbol }>()("completed", {}) {}
+
+export class Cancelled extends Schema.TaggedClass<Cancelled, { readonly brand: unique symbol }>("CancelledIdentifier")("cancelled", {}) {}
+
+export class Queued extends Data.TaggedClass("Queued")<{}> {}
+
+export class Failed extends Data.TaggedClass("Failed")<{}> {}
+
+export class DataError extends Data.TaggedError("data-error")<{}> {}
+
+export class SchemaError extends Schema.TaggedError<SchemaError, { readonly brand: unique symbol }>()("schema-error", {}) {}
+

@@ -101,12 +101,19 @@ fn run_effect_schema_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::
             .type_parser
             .is_node_reference_to_effect_schema_module_api(data.accessed_object, "TaggedClass")
     {
+        let tag_key = compute_deterministic_key(
+            ctx.program,
+            &mut ctx.type_parser,
+            ctx.source_file,
+            &class_name,
+            "taggedClass",
+        );
         let insert_text = if is_fully_qualified {
             format!(
-                r#"{schema_identifier}.TaggedClass<{schema_type_args}>()("{class_name}", {{${{0}}}}){{}}"#
+                r#"{schema_identifier}.TaggedClass<{schema_type_args}>()("{tag_key}", {{${{0}}}}){{}}"#
             )
         } else {
-            format!(r#"TaggedClass<{schema_type_args}>()("{class_name}", {{${{0}}}}){{}}"#)
+            format!(r#"TaggedClass<{schema_type_args}>()("{tag_key}", {{${{0}}}}){{}}"#)
         };
         items.push(make_extends_completion_item(
             &accessed_text,
@@ -125,12 +132,19 @@ fn run_effect_schema_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::
                 "TaggedRequest",
             )
         {
+            let tag_key = compute_deterministic_key(
+                ctx.program,
+                &mut ctx.type_parser,
+                ctx.source_file,
+                &class_name,
+                "taggedClass",
+            );
             let insert_text = if is_fully_qualified {
                 format!(
-                    r#"{schema_identifier}.TaggedRequest<{class_name}>()("{class_name}", {{${{0}}}}){{}}"#
+                    r#"{schema_identifier}.TaggedRequest<{class_name}>()("{tag_key}", {{${{0}}}}){{}}"#
                 )
             } else {
-                format!(r#"TaggedRequest<{class_name}>()("{class_name}", {{${{0}}}}){{}}"#)
+                format!(r#"TaggedRequest<{class_name}>()("{tag_key}", {{${{0}}}}){{}}"#)
             };
             items.push(make_extends_completion_item(
                 &accessed_text,
@@ -217,7 +231,7 @@ fn run_effect_schema_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::
     items
 }
 
-// go: internal/completions/effect_schema_self_in_classes.go:157 makeCompletionItem
+// go: internal/completions/effect_schema_self_in_classes.go:159 makeCompletionItem
 // makeCompletionItem creates a CompletionItem with snippet format and a text edit.
 //
 // Rust: Go's variadic `kindOverride ...lsproto.CompletionItemKind` (only its first element is read) is an
@@ -250,7 +264,7 @@ pub(crate) fn make_completion_item(
     }
 }
 
-// go: internal/completions/effect_schema_self_in_classes.go:180 makeExtendsCompletionItem
+// go: internal/completions/effect_schema_self_in_classes.go:182 makeExtendsCompletionItem
 // makeExtendsCompletionItem creates a CompletionItem for an extends-clause completion.
 // It sets FilterText to accessedText.label so VS Code can filter correctly when the
 // replacement range covers the full "Module.Property" expression.
@@ -267,7 +281,7 @@ pub(crate) fn make_extends_completion_item(
     item
 }
 
-// go: internal/completions/effect_schema_self_in_classes.go:188 byteSpanToRange
+// go: internal/completions/effect_schema_self_in_classes.go:190 byteSpanToRange
 // byteSpanToRange converts a byte offset span to an LSP Range.
 pub(crate) fn byte_span_to_range(ctx: &Context<'_, '_>, start: u32, length: u32) -> lsproto::Range {
     let (start_line, start_char) =
