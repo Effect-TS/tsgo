@@ -77,7 +77,8 @@ test("generates the supported package versions README section", async() => {
       tags: {
         typescript: { latest: "7.0.2", beta: "7.1.0-dev.10", next: "7.1.0-dev.10" },
         oxlint: { latest: "1.10.0" },
-        "oxlint-tsgolint": { latest: "7.0.2001" }
+        "oxlint-tsgolint": { latest: "7.0.2001" },
+        tsrs: { latest: "0.18.0-ts7.1.0-dev.10" }
       },
       components: {
         typescript: {
@@ -93,6 +94,16 @@ test("generates the supported package versions README section", async() => {
           "7.0.2001": {
             gitHead: "5555555555555555555555555555555555555555",
             dependencies: { typescript: "7.0.2" }
+          }
+        },
+        tsrs: {
+          "0.18.0-ts7.1.0-dev.10": {
+            gitHead: "7777777777777777777777777777777777777777",
+            typescript: { version: "7.1.0-dev.10", gitHead: "2222222222222222222222222222222222222222" }
+          },
+          "0.17.0-ts7.1.0-dev.2": {
+            gitHead: "8888888888888888888888888888888888888888",
+            typescript: { version: "7.1.0-dev.2", gitHead: "6666666666666666666666666666666666666666" }
           }
         }
       },
@@ -125,6 +136,7 @@ test("generates the supported package versions README section", async() => {
       "| Component | Supported versions |",
       "|---|---|",
       "| TypeScript | `7.0.2`, `7.1.0-dev.2`, `7.1.0-dev.10` |",
+      "| tsrs | `0.17.0-ts7.1.0-dev.2`, `0.18.0-ts7.1.0-dev.10` |",
       "| Oxlint | `1.9.0`, `1.10.0` |",
       "| oxlint-tsgolint | `7.0.2001` |",
       "<!-- supported-components:end -->",
