@@ -567,6 +567,20 @@
                   "markdownDescription": "Enables [experimental support for decorators](https://github.com/tc39/proposal-decorators), which is a version of decorators that predates the TC39 standardization process.\n\nDecorators are a language feature which hasn't yet been fully ratified into the JavaScript specification.\nThis means that the implementation version in TypeScript may differ from the implementation in JavaScript when it is decided by TC39.\n\nYou can find out more about decorator support in TypeScript in [the handbook](https://typescriptlang.org/docs/handbook/decorators.html).",
                   "x-intellij-html-description": "\u003cp\u003eEnables \u003ca href=\"https://github.com/tc39/proposal-decorators\"\u003eexperimental support for decorators\u003c/a\u003e, which is a version of decorators that predates the TC39 standardization process.\u003c/p\u003e\n\u003cp\u003eDecorators are a language feature which hasn\u0026#39;t yet been fully ratified into the JavaScript specification.\nThis means that the implementation version in TypeScript may differ from the implementation in JavaScript when it is decided by TC39.\u003c/p\u003e\n\u003cp\u003eYou can find out more about decorator support in TypeScript in \u003ca href=\"https://typescriptlang.org/docs/handbook/decorators.html\"\u003ethe handbook\u003c/a\u003e.\u003c/p\u003e\n"
                 },
+                "explainFiles": {
+                  "anyOf": [
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": false,
+                  "description": "Print files read during the compilation including why it was included.",
+                  "markdownDescription": "Print files read during the compilation including why it was included.",
+                  "x-intellij-html-description": "\u003cp\u003ePrint files read during the compilation including why it was included.\u003c/p\u003e\n"
+                },
                 "extendedDiagnostics": {
                   "anyOf": [
                     {
@@ -620,6 +634,19 @@
                   "description": "This option gives you the chance to have TypeScript emit a v8 CPU profile during the compiler run. The CPU profile can provide insight into why your builds may be slow.\n\nThis option can only be used from the CLI via: `--generateCpuProfile tsc-output.cpuprofile`.\n\n```sh\nnpm run tsc --generateCpuProfile tsc-output.cpuprofile\n```\n\nThis file can be opened in a chromium based browser like Chrome or Edge Developer in [the CPU profiler](https://developers.google.com/web/tools/chrome-devtools/rendering-tools/js-execution) section.\nYou can learn more about understanding the compilers performance in the [TypeScript wiki section on performance](https://github.com/microsoft/TypeScript/wiki/Performance).",
                   "markdownDescription": "This option gives you the chance to have TypeScript emit a v8 CPU profile during the compiler run. The CPU profile can provide insight into why your builds may be slow.\n\nThis option can only be used from the CLI via: `--generateCpuProfile tsc-output.cpuprofile`.\n\n```sh\nnpm run tsc --generateCpuProfile tsc-output.cpuprofile\n```\n\nThis file can be opened in a chromium based browser like Chrome or Edge Developer in [the CPU profiler](https://developers.google.com/web/tools/chrome-devtools/rendering-tools/js-execution) section.\nYou can learn more about understanding the compilers performance in the [TypeScript wiki section on performance](https://github.com/microsoft/TypeScript/wiki/Performance).",
                   "x-intellij-html-description": "\u003cp\u003eThis option gives you the chance to have TypeScript emit a v8 CPU profile during the compiler run. The CPU profile can provide insight into why your builds may be slow.\u003c/p\u003e\n\u003cp\u003eThis option can only be used from the CLI via: \u003ccode\u003e--generateCpuProfile tsc-output.cpuprofile\u003c/code\u003e.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-sh\"\u003enpm run tsc --generateCpuProfile tsc-output.cpuprofile\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThis file can be opened in a chromium based browser like Chrome or Edge Developer in \u003ca href=\"https://developers.google.com/web/tools/chrome-devtools/rendering-tools/js-execution\"\u003ethe CPU profiler\u003c/a\u003e section.\nYou can learn more about understanding the compilers performance in the \u003ca href=\"https://github.com/microsoft/TypeScript/wiki/Performance\"\u003eTypeScript wiki section on performance\u003c/a\u003e.\u003c/p\u003e\n"
+                },
+                "generateTrace": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "Generates an event trace and a list of types in the given directory.",
+                  "markdownDescription": "Generates an event trace and a list of types in the given directory.",
+                  "x-intellij-html-description": "\u003cp\u003eGenerates an event trace and a list of types in the given directory.\u003c/p\u003e\n"
                 },
                 "ignoreDeprecations": {
                   "description": "Can be used to silence deprecation warnings about features, that are slated for removal in a future release. For example, if you are using a feature that is deprecated in TypeScript 6.0 but you want to continue using it without seeing warnings until it is removed in TypeScript 7.0, you can set `ignoreDeprecations` to `6.0`.",
@@ -1977,6 +2004,20 @@
                   "description": "Specify the location where a debugger should locate TypeScript files instead of relative source locations.\nThis string is treated verbatim inside the source-map where you can use a path or a URL:\n\n```json tsconfig\n{\n  \"compilerOptions\": {\n    \"sourceMap\": true,\n    \"sourceRoot\": \"https://my-website.com/debug/source/\"\n  }\n}\n```\n\nWould declare that `index.js` will have a source file at `https://my-website.com/debug/source/index.ts`.",
                   "markdownDescription": "Specify the location where a debugger should locate TypeScript files instead of relative source locations.\nThis string is treated verbatim inside the source-map where you can use a path or a URL:\n\n```json tsconfig\n{\n  \"compilerOptions\": {\n    \"sourceMap\": true,\n    \"sourceRoot\": \"https://my-website.com/debug/source/\"\n  }\n}\n```\n\nWould declare that `index.js` will have a source file at `https://my-website.com/debug/source/index.ts`.",
                   "x-intellij-html-description": "\u003cp\u003eSpecify the location where a debugger should locate TypeScript files instead of relative source locations.\nThis string is treated verbatim inside the source-map where you can use a path or a URL:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-json\"\u003e{\n  \u0026quot;compilerOptions\u0026quot;: {\n    \u0026quot;sourceMap\u0026quot;: true,\n    \u0026quot;sourceRoot\u0026quot;: \u0026quot;https://my-website.com/debug/source/\u0026quot;\n  }\n}\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eWould declare that \u003ccode\u003eindex.js\u003c/code\u003e will have a source file at \u003ccode\u003ehttps://my-website.com/debug/source/index.ts\u003c/code\u003e.\u003c/p\u003e\n"
+                },
+                "stableTypeOrdering": {
+                  "anyOf": [
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": false,
+                  "description": "Ensure types are ordered stably and deterministically across compilations.",
+                  "markdownDescription": "Ensure types are ordered stably and deterministically across compilations.",
+                  "x-intellij-html-description": "\u003cp\u003eEnsure types are ordered stably and deterministically across compilations.\u003c/p\u003e\n"
                 },
                 "strict": {
                   "anyOf": [
