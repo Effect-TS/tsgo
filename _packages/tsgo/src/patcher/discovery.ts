@@ -92,10 +92,12 @@ export const experimentalOxlintTarget = (platform: NodeJS.Platform, arch: string
 // The platform packages tsrs publishes (`@tsrs/<target>`, an optional dependency of the `tsrs` package).
 export const tsrsTargets = [
   "darwin-arm64",
+  "darwin-x64",
   "linux-x64-gnu",
   "linux-x64-musl",
   "linux-arm64-gnu",
-  "linux-arm64-musl"
+  "linux-arm64-musl",
+  "win32-x64"
 ] as const
 
 export type TsrsTarget = typeof tsrsTargets[number]
@@ -182,7 +184,10 @@ const discoverOxlint: (
     return discovered
   })
 
-// The installed tsrs binary: `<@tsrs/<target> package>/tsrs` (the package also ships the lib*.d.ts files next to it,
+// The tsrs executable's file name in its platform package (and in ours: artifacts/tsrs/<version>/).
+export const tsrsExecutableName = (platform: NodeJS.Platform) => platform === "win32" ? "tsrs.exe" : "tsrs"
+
+// The installed tsrs binary: `<@tsrs/<target> package>/tsrs[.exe]` (the package also ships the lib*.d.ts files next to it,
 // which are left alone). Nothing is discovered when tsrs is not installed or publishes no binary for this host.
 const discoverTsrs: (
   cwdRequire: NodeJS.Require
@@ -200,7 +205,7 @@ const discoverTsrs: (
       component: "tsrs",
       packageName: platformPackageName,
       packageVersion: platformPackage.version,
-      binaryPath: path.join(path.dirname(platformPackage.packageJsonPath), "tsrs")
+      binaryPath: path.join(path.dirname(platformPackage.packageJsonPath), tsrsExecutableName(process.platform))
     } satisfies DiscoveredBinaryLocation]
   })
 

@@ -147,6 +147,8 @@ test("builds a deduplicated matrix of compatible Oxlint component pairs", () => 
     artifactName: "darwin-arm64__typescript__7.0.2",
     fileName: "tsc",
     destination: "_packages/tsgo-darwin-arm64/artifacts/typescript/7.0.2/tsc"
+,
+    timeoutMinutes: 45
   })
   assert.deepEqual(release.include.at(-1), {
     component: "oxlint",
@@ -156,6 +158,8 @@ test("builds a deduplicated matrix of compatible Oxlint component pairs", () => 
     artifactName: "linux-arm64__oxlint__1.77.0",
     fileName: "oxlint.linux-arm64-gnu.node",
     destination: "_packages/tsgo-linux-arm64/artifacts/oxlint/1.77.0/oxlint.linux-arm64-gnu.node"
+,
+    timeoutMinutes: 45
   })
 })
 
@@ -185,27 +189,35 @@ test("builds the tsrs binary once per tsrs version and tsrs platform, natively",
   }
 
   const release = buildReleaseMatrix(upstream).include
-  // 2 TypeScript versions x 7 targets, independent of tsrs, then 2 tsrs versions x 3 targets.
-  assert.equal(release.length, 20)
+  // 2 TypeScript versions x 7 targets, independent of tsrs, then 2 tsrs versions x 5 targets.
+  assert.equal(release.length, 24)
   assert.ok(release.filter((artifact) => artifact.component === "typescript").every((artifact) =>
     artifact.runner === "ubuntu-latest"))
   const tsrs = release.filter((artifact) => artifact.component === "tsrs")
-  assert.deepEqual(tsrs.map(({ runner, target, version }) => `${version} ${target} ${runner}`), [
-    `${versions[0]} darwin-arm64 macos-14`,
-    `${versions[0]} linux-x64 ubuntu-22.04`,
-    `${versions[0]} linux-arm64 ubuntu-22.04-arm`,
-    `${versions[1]} darwin-arm64 macos-14`,
-    `${versions[1]} linux-x64 ubuntu-22.04`,
-    `${versions[1]} linux-arm64 ubuntu-22.04-arm`
-  ])
-  assert.deepEqual(tsrs[1], {
+  assert.deepEqual(
+    tsrs.map(({ optimize, runner, target, timeoutMinutes, version }) =>
+      `${version} ${target} ${runner} ${optimize} ${timeoutMinutes}`),
+    versions.flatMap((version) => [
+      `${version} darwin-arm64 macos-latest pgo 120`,
+      `${version} darwin-x64 macos-26-intel pgo 120`,
+      `${version} linux-x64 ubuntu-22.04 pgo-bolt 120`,
+      `${version} linux-arm64 ubuntu-22.04-arm pgo-bolt 120`,
+      `${version} win32-x64 windows-latest pgo 180`
+    ])
+  )
+  assert.ok(release.filter((artifact) => artifact.component !== "tsrs").every((artifact) =>
+    artifact.optimize === undefined && artifact.timeoutMinutes === 45))
+  assert.equal(tsrs[4]?.fileName, "tsrs.exe")
+  assert.deepEqual(tsrs[2], {
     component: "tsrs",
     version: versions[0],
     target: "linux-x64",
     runner: "ubuntu-22.04",
     artifactName: `linux-x64__tsrs__${versions[0]}`,
     fileName: "tsrs",
-    destination: `_packages/tsgo-linux-x64/artifacts/tsrs/${versions[0]}/tsrs`
+    destination: `_packages/tsgo-linux-x64/artifacts/tsrs/${versions[0]}/tsrs`,
+    timeoutMinutes: 120,
+    optimize: "pgo-bolt"
   })
 
   const { tsrs: _tags, ...tags } = upstream.tags

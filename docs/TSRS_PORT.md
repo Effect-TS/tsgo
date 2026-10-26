@@ -160,18 +160,51 @@ repoctl perf compare --engine tsrs --effect-workload --runs 7 --diagnostics-flag
 Perf CI (`repoctl perf ci`, the PR matrix) stays tsgo-only: a cell would need two extra fat-LTO Rust builds.
 
 Release build: our binary (tsrs CLI + `_patches/tsrs` + Effect crates) is built by our pipeline, not taken from tsrs's
-releases. `repoctl build artifact --component tsrs --version <tsrs version> --target <t>` builds it into
-`_packages/tsgo-<t>/artifacts/tsrs/<tsrs version>/tsrs`, using `[profile.release]` copied from tsrs's (fat LTO, one
-codegen unit, stripped; keep in sync on tsrs bumps). Platforms: tsrs's own glibc and macOS targets (darwin-arm64,
-linux-x64, linux-arm64); tsrs's musl packages are discovered but skipped with "Linux musl is not supported by the
-packaged tsrs integration", and hosts tsrs publishes no binary for have nothing to patch. Add targets as tsrs adds
-them. PGO/BOLT (tsrs's `pgo-train.sh`/`bolt.sh`, trained on our binary) is not planned until
-`repoctl perf compare` shows it's worth the build time.
+releases, but the pipeline is tsrs's own: the `build` and `build-windows` jobs of `tsrs/.github/workflows/release.yml`
+at the pinned commit, in `_tools/repoctl/src/tsrsRelease.ts`. `repoctl build artifact --component tsrs --version
+<tsrs version> --target <t> --optimize <none|pgo|pgo-bolt>` builds it into
+`_packages/tsgo-<t>/artifacts/tsrs/<tsrs version>/tsrs[.exe]`, with `[profile.release]` copied from tsrs's (fat LTO,
+one codegen unit; keep in sync on tsrs bumps). Targets and their optimization are tsrs's (`tsrsBuildTargets`, which the
+release matrix passes on): darwin-arm64 and darwin-x64 PGO, linux-x64 and linux-arm64 PGO + BOLT, win32-x64 PGO, each
+on tsrs's runner. The flags, profile settings, C compiler (the runner's default: gcc, Apple clang, MSVC) and strip
+behaviour are tsrs's: an instrumented build (`-Cprofile-generate -Clto=thin`, outside `target/`), the training, an
+`llvm-profdata` merge, the final `-Cprofile-use` build (Linux: `--emit-relocs`, symbols kept), then on Linux
+`bolt.sh` with BOLT from the LLVM release that matches rustc's (instrument, retrain, rewrite, gates, strip). The local
+default is `none` (a plain fat-LTO build: the training needs network, Node.js, pnpm and Go, and ~10 extra minutes).
+
+The training runs tsrs's scripts on our binaries. tsrs trains `tsrs`, `tsrs-test` (the conformance suite, in process)
+and `fourslash_server` (the Go fourslash suite) built in one cargo invocation, because PGO matches profiles by symbol
+name and the names carry each crate's `-C metadata`; ours are built in this workspace, in the same invocation as
+`ets_tsrs` (`crates/ets_pgotrain` brings tsrs's two binary packages into the dependency graph; `cargo --unit-graph`
+shows the same 156-159 `ets_tsrs` units, features and profiles with and without them on all five targets), so no
+coverage is lost. `pgo-train.sh` and `pgo-train-windows.ps1` run unchanged; `tsrs/ts-ref` is a link to the
+`typescript/` checkout (the TypeScript commit tsrs ports, checked; tsrs-test reads its unpatched `tsc/testdata`).
+Our rules are trained too: the instrumented binary builds perf CI's Effect workload with every rule on (`-b`, from
+clean), and `bolt.sh` gets it as `BOLT_EXTRA_WORKLOAD` (`_patches/tsrs/160-bolt-extra-workload.patch`): BOLT trains on
+it and the BOLT-optimized binary must print byte-identical output to the PGO one on it, as on tsrs's bench projects.
+The same patch lets `bolt.sh` use a `tsrs_determinism` built without `--locked` (the patched checkout's `Cargo.lock`
+lacks our crates). `repoctl tsrs check` fails when tsrs's release workflow drops a mirrored setting or changes its
+targets or runners (`tsrsReleaseWorkflowSnippets`), so a tsrs bump updates the pipeline with it. tsrs's musl packages
+(static, no PGO) are not built: they are discovered but skipped with "Linux musl is not supported by the packaged tsrs
+integration", and hosts tsrs publishes no binary for have nothing to patch.
+
+Measured on linux-x64 (12 cores, 2026-10-26, medians of 7 interleaved runs, identical output): on mui-docs, which no
+training uses, PGO + BOLT takes 15% less CPU than the fat-LTO build, within 1% of tsrs's npm binary; on the Effect
+workload (`-b`, every rule on) -18% wall and -20% CPU, and our binary vs npm `tsrs@0.20.0-ts7.1.0-beta` goes from +85%
+to +52% wall. The build takes 1,233 s instead of 182 s: instrumented build ~2.5 min, training ~4.5 min (mostly the
+Go fourslash suite), final build ~3.5 min, BOLT with its gates ~11 min.
+
+Perf caveat: training on the Effect workload means our binary's tsrs code is also tuned on the code perf CI measures,
+which tsrs's npm binary is not; a comparison against npm `tsrs@<version>` on that workload favours ours by that much
+(measure it on a project outside the training set). Two PGO builds lay out code differently, so base vs PR
+comparisons of separately trained binaries carry a noise margin even when a PR changes nothing performance-relevant;
+reusing one profile for both sides is not done, since it leaves every function a PR changes without profile data.
 
 How it is wired: `tsrs` is a release component like `typescript` and `oxlint`, independent of the TypeScript
 versions: the release plan has one `<target>__tsrs__<tsrs version>` job per `components.tsrs` version and tsrs target
-(`releasePlan.ts`), built natively on tsrs's runners (`macos-14`, `ubuntu-22.04` for glibc 2.35, `ubuntu-22.04-arm`)
-with the Rust workspace toolchain and CMake (`rust: true`, setup-repo). `repoctl submodules setup --component tsrs
+(`releasePlan.ts`), built natively on tsrs's runners (`macos-latest`, `macos-26-intel`, `ubuntu-22.04` for glibc 2.35,
+`ubuntu-22.04-arm`, `windows-latest`) with the Rust workspace toolchain and CMake (setup-repo), with tsrs's job
+timeouts plus the Effect workload (120 minutes, Windows 180). `repoctl submodules setup --component tsrs
 --version <v>` checks out tsrs at that version's gitHead (next to the TypeScript it ports, for the codegen).
 `packages assemble`, `packages prepare` (executable bits) and `build verify-release` cover every tsrs version on the
 tsrs targets and reject an `artifacts/tsrs` directory anywhere else. `repoctl build local` builds the dev-profile tsrs binary
@@ -239,7 +272,7 @@ TypeScript component ("stale override folder").
   file). Baseline runs and comparisons use `--checkerAssignment go` (Go's assignment) until fixed. A flaky baseline
   is investigated as non-determinism first, never papered over to make it pass.
 - **Binary size**: shipping the patched tsrs binary (one per supported tsrs version) next to the Go binaries grows
-  the darwin-arm64, linux-x64 and linux-arm64 platform packages. Options if this is a problem: separate optional
+  the darwin-arm64, darwin-x64, linux-x64, linux-arm64 and win32-x64 platform packages. Options if this is a problem: separate optional
   packages for the tsrs binary, or download on `patch --tsrs`.
 - **tsrs API churn**: tsrs is young and its public API moves. `ets_shim` absorbs renames in one generated place;
   tsrs bumps are their own pull requests (`sync-upstream`); patches are kept minimal so they rebase. PRs to tsrs are

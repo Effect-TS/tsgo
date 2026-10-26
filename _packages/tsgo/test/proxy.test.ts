@@ -156,6 +156,9 @@ describe("proxy executable paths", () => {
       join("/platform", "artifacts", "typescript", olderTypescript, "tsc.exe")
     )
     expect(await run(tsrsExecutable(context, tsrsVersion))).toBe(join("/platform", "artifacts", "tsrs", tsrsVersion, "tsrs"))
+    expect(await run(tsrsExecutable({ ...context, platform: "win32" }, tsrsVersion))).toBe(
+      join("/platform", "artifacts", "tsrs", tsrsVersion, "tsrs.exe")
+    )
   })
 
   it("prefixes long Windows paths", () => {
@@ -240,12 +243,12 @@ describe("proxy tsc and tsrs resolution", () => {
     const musl = await makeContext({ isGlibc: () => false })
     await expect(run(resolveProxyCommand({ tool: "tsrs", version: undefined, args: [] }, musl))).rejects.toMatchObject({
       reason: "Linux musl is not supported by the packaged tsrs integration; it is built for "
-        + "darwin-arm64, linux-x64-gnu, linux-arm64-gnu."
+        + "darwin-arm64, darwin-x64, linux-x64-gnu, linux-arm64-gnu, win32-x64."
     })
-    const windows = await makeContext({ platform: "win32" })
+    const windows = await makeContext({ platform: "win32", arch: "arm64" })
     await expect(run(resolveProxyCommand({ tool: "tsrs", version: undefined, args: [] }, windows))).rejects.toMatchObject({
-      reason: "The packaged tsrs integration is not available for win32-x64; it is built for "
-        + "darwin-arm64, linux-x64-gnu, linux-arm64-gnu."
+      reason: "The packaged tsrs integration is not available for win32-arm64; it is built for "
+        + "darwin-arm64, darwin-x64, linux-x64-gnu, linux-arm64-gnu, win32-x64."
     })
   })
 })
