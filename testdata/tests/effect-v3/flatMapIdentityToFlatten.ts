@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics flatMapIdentityToFlatten:warning
 import { Array, Effect, Fiber, Function, identity, Option, pipe, Stream } from "effect"
