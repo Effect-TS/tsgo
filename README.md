@@ -6,12 +6,12 @@ This project targets **Effect V4** (codename: "smol") primarily and also Effect 
 <!-- supported-components:start -->
 ## Supported Package Versions
 
-The following target package versions are supported by `@effect/tsgo@0.58.0`:
+The following target package versions are supported by `@effect/tsgo@0.59.0`:
 
 | Component | Supported versions |
 |---|---|
-| TypeScript | `7.0.2`, `7.1.0-beta`, `7.1.0-dev.20260929`, `7.1.0-dev.20261025.1` |
-| tsrs | `0.18.0-ts7.1.0-dev.20260929` |
+| TypeScript | `7.0.2`, `7.1.0-beta`, `7.1.0-dev.20261026.1` |
+| tsrs | `0.20.0-ts7.1.0-beta` |
 | Oxlint | `1.87.0`, `1.88.0`, `1.89.0` |
 | oxlint-tsgolint | `7.0.2004`, `7.0.2005` |
 <!-- supported-components:end -->
