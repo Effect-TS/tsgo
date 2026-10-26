@@ -7,16 +7,17 @@ use ets_shim::ast::{Diagnostic, Kind, Node, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::TypeParser;
+use rustc_hash::FxHashMap;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message =
-    &tsdiag::DO_NOT_USE_SCHEMA_SCHEMA_TYPE_TYPEOF_X_TO_EXTRACT_A_SCHEMA_S_TYPE_USE_TYPEOF_X_TYPE_INSTEAD_EFFECT_PREFER_SCHEMA_TYPE_PROPERTY;
+    &tsdiag::DO_NOT_USE_0_TYPEOF_X_USE_TYPEOF_X_1_INSTEAD_EFFECT_PREFER_SCHEMA_TYPE_PROPERTY;
 
-// go: internal/rules/prefer_schema_type_property.go:13 PreferSchemaTypeProperty
+// go: internal/rules/prefer_schema_type_property.go:15 PreferSchemaTypeProperty
 pub static PREFER_SCHEMA_TYPE_PROPERTY: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "preferSchemaTypeProperty",
     group: "style",
-    description: "Disallows Schema.Schema.Type<typeof X> in favor of typeof X.Type",
+    description: "Disallows Schema.Schema.Type<typeof X> and Schema.Codec.Encoded<typeof X>-style helpers in favor of typeof X.Type and typeof X.Encoded",
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
@@ -25,13 +26,19 @@ pub static PREFER_SCHEMA_TYPE_PROPERTY: LazyLock<Rule> = LazyLock::new(|| Rule {
         let matches = analyze_prefer_schema_type_property(ctx.type_parser, source_file);
         let mut diags = Vec::with_capacity(matches.len());
         for m in &matches {
-            diags.push(ctx.new_diagnostic(m.source_file, m.location, MESSAGE, &[], &[]));
+            diags.push(ctx.new_diagnostic(
+                m.source_file,
+                m.location,
+                MESSAGE,
+                &[],
+                &[&m.helper_text, m.property_name],
+            ));
         }
         diags
     },
 });
 
-// go: internal/rules/prefer_schema_type_property.go:30 PreferSchemaTypePropertyMatch
+// go: internal/rules/prefer_schema_type_property.go:32 PreferSchemaTypePropertyMatch
 #[derive(Clone)]
 pub struct PreferSchemaTypePropertyMatch {
     pub source_file: P<SourceFile>,
@@ -39,9 +46,24 @@ pub struct PreferSchemaTypePropertyMatch {
     pub type_reference: P<Node>,
     pub schema_name: P<Node>,
     pub schema_name_text: String,
+    pub helper_text: String,
+    pub property_name: &'static str,
 }
 
-// go: internal/rules/prefer_schema_type_property.go:38 AnalyzePreferSchemaTypeProperty
+// go: internal/rules/prefer_schema_type_property.go:44 schemaPropertyHelperNamespaces
+static SCHEMA_PROPERTY_HELPER_NAMESPACES: LazyLock<
+    FxHashMap<&'static str, &'static [&'static str]>,
+> = LazyLock::new(|| {
+    FxHashMap::from_iter([
+        ("Type", &["Schema"][..]),
+        ("Encoded", &["Schema", "Codec"][..]),
+        ("Context", &["Schema"][..]),
+        ("DecodingServices", &["Codec"][..]),
+        ("EncodingServices", &["Codec"][..]),
+    ])
+});
+
+// go: internal/rules/prefer_schema_type_property.go:52 AnalyzePreferSchemaTypeProperty
 pub fn analyze_prefer_schema_type_property(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -69,7 +91,7 @@ pub fn analyze_prefer_schema_type_property(
     matches
 }
 
-// go: internal/rules/prefer_schema_type_property.go:58 analyzePreferSchemaTypePropertyNode
+// go: internal/rules/prefer_schema_type_property.go:72 analyzePreferSchemaTypePropertyNode
 pub(crate) fn analyze_prefer_schema_type_property_node(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -86,11 +108,14 @@ pub(crate) fn analyze_prefer_schema_type_property_node(
         return None;
     }
     let outer_name = type_name.as_qualified_name();
-    if outer_name.right().text() != "Type" {
-        return None;
+    let property_name = outer_name.right().text();
+    let (&property_name, &namespaces) =
+        SCHEMA_PROPERTY_HELPER_NAMESPACES.get_key_value(property_name)?;
+    let mut namespace_name = outer_name.left();
+    if namespace_name.kind() == Kind::QualifiedName {
+        namespace_name = namespace_name.as_qualified_name().right();
     }
-    let middle_name = outer_name.left();
-    if middle_name.kind() != Kind::QualifiedName {
+    if namespace_name.kind() != Kind::Identifier {
         return None;
     }
     let type_argument = type_arguments.nodes()[0];
@@ -102,8 +127,9 @@ pub(crate) fn analyze_prefer_schema_type_property_node(
         return None;
     }
 
-    let schema_export = middle_name.as_qualified_name().right();
-    if !tp.is_node_reference_to_effect_schema_module_api(schema_export, "Schema") {
+    if !namespaces.iter().any(|namespace| {
+        tp.is_node_reference_to_effect_schema_module_api(namespace_name, namespace)
+    }) {
         return None;
     }
 
@@ -113,5 +139,7 @@ pub(crate) fn analyze_prefer_schema_type_property_node(
         type_reference: node,
         schema_name: query.expr_name(),
         schema_name_text: ets_shim::scanner::get_text_of_node(query.expr_name()),
+        helper_text: ets_shim::scanner::get_text_of_node(type_name),
+        property_name,
     })
 }

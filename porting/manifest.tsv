@@ -835,8 +835,8 @@ internal/fixables/option_match_to_from_option.go	buildFromOptionReplacement	func
 internal/fixables/overridden_schema_constructor.go	OverriddenSchemaConstructorFix	var	12	10	cff5580ca89382f2
 internal/fixables/overridden_schema_constructor.go	runOverriddenSchemaConstructorFix	func	23	110	df1b8e415f0c21fa
 internal/fixables/overridden_schema_constructor.go	constructorSupportsStaticRewrite	func	134	12	5f47205b2587306f
-internal/fixables/prefer_schema_type_property.go	PreferSchemaTypePropertyFix	var	11	7	a58be7537f052701
-internal/fixables/prefer_schema_type_property.go	runPreferSchemaTypePropertyFix	func	19	25	307888f71eb246e5
+internal/fixables/prefer_schema_type_property.go	PreferSchemaTypePropertyFix	var	11	7	2557d3b99bf607ec
+internal/fixables/prefer_schema_type_property.go	runPreferSchemaTypePropertyFix	func	19	25	490aa7cd75ecc2a2
 internal/fixables/prefer_succeed_some_or_none.go	PreferSucceedSomeOrNoneFix	var	13	9	ddf0deee0669c61e
 internal/fixables/prefer_succeed_some_or_none.go	runPreferSucceedSomeOrNoneFix	func	23	52	10eb66c77808e8af
 internal/fixables/prefer_typed_schema_decoder.go	PreferTypedSchemaDecoderFix	var	12	9	d2e9416fb3f10b32
@@ -1811,10 +1811,11 @@ internal/rules/prefer_schema_over_json.go	checkJsonMethodInEffectGen	func	205	13
 internal/rules/prefer_schema_tagged_error.go	PreferSchemaTaggedError	var	13	16	d124bb5317dd9c2a
 internal/rules/prefer_schema_tagged_error.go	PreferSchemaTaggedErrorMatch	type	30	4	bf6d6d479a6994f3
 internal/rules/prefer_schema_tagged_error.go	AnalyzePreferSchemaTaggedError	func	35	25	dd49f4b3158265af
-internal/rules/prefer_schema_type_property.go	PreferSchemaTypeProperty	var	13	16	ec2cd3e23650b703
-internal/rules/prefer_schema_type_property.go	PreferSchemaTypePropertyMatch	type	30	7	de2d89ed549e73a1
-internal/rules/prefer_schema_type_property.go	AnalyzePreferSchemaTypeProperty	func	38	19	e47a2083e298fe9c
-internal/rules/prefer_schema_type_property.go	analyzePreferSchemaTypePropertyNode	func	58	40	0267aed99c2a4ab0
+internal/rules/prefer_schema_type_property.go	PreferSchemaTypeProperty	var	15	16	ac0531a0a86fa4fe
+internal/rules/prefer_schema_type_property.go	PreferSchemaTypePropertyMatch	type	32	9	53e3ee9be2179cb5
+internal/rules/prefer_schema_type_property.go	schemaPropertyHelperNamespaces	var	44	7	1b4d5712dc4b0d0c
+internal/rules/prefer_schema_type_property.go	AnalyzePreferSchemaTypeProperty	func	52	19	e47a2083e298fe9c
+internal/rules/prefer_schema_type_property.go	analyzePreferSchemaTypePropertyNode	func	72	51	1a8eefa661bba717
 internal/rules/prefer_succeed_some_or_none.go	PreferSucceedSomeOrNone	var	16	24	37029b0abad2842d
 internal/rules/prefer_succeed_some_or_none.go	PreferSucceedSomeOrNoneMatch	type	42	10	abff32b06910f3cb
 internal/rules/prefer_succeed_some_or_none.go	normalizedOptionInput	type	53	5	b45c887c637dfa54

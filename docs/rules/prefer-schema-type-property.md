@@ -2,7 +2,7 @@
 
 # `preferSchemaTypeProperty`
 
-Disallows Schema.Schema.Type<typeof X> in favor of typeof X.Type
+Disallows Schema.Schema.Type<typeof X> and Schema.Codec.Encoded<typeof X>-style helpers in favor of typeof X.Type and typeof X.Encoded
 
 | Property | Value |
 | --- | --- |
@@ -22,7 +22,7 @@ import { Schema } from "effect"
 const User = Schema.Struct({ name: Schema.String })
 type User = Schema.Schema.Type<typeof User>
 /**
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ effecttsgo(prefer-schema-type-property): Do not use `Schema.Schema.Type<typeof X>` to extract a schema's type. Use `typeof X.Type` instead.
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ effecttsgo(prefer-schema-type-property): Do not use `Schema.Schema.Type<typeof X>`. Use `typeof X.Type` instead.
 */
 ```
 

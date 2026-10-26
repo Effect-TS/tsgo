@@ -1,11 +1,11 @@
 === Quick Fix Inventory ===
 
-[D1] (5:25-5:61) TS377104: Do not use `Schema.Schema.Type<typeof X>` to extract a schema's type. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+[D1] (5:25-5:61) TS377104: Do not use `Schema.Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
   Fix 0: "Disable preferSchemaTypeProperty for this line"
   Fix 1: "Disable preferSchemaTypeProperty for entire file"
   Fix 2: "Replace with 'typeof AddressId.Type'"
 
-[D2] (8:23-8:52) TS377104: Do not use `Schema.Schema.Type<typeof X>` to extract a schema's type. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+[D2] (8:23-8:52) TS377104: Do not use `S.Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
   Fix 0: "Disable preferSchemaTypeProperty for this line"
   Fix 1: "Disable preferSchemaTypeProperty for entire file"
   Fix 2: "Replace with 'typeof Address.Type'"
@@ -13,7 +13,7 @@
 [D3] (13:6-13:16) TS6196: 'BusinessId' is declared but never used.
   (no quick fixes)
 
-[D4] (13:19-13:63) TS377104: Do not use `Schema.Schema.Type<typeof X>` to extract a schema's type. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+[D4] (13:19-13:63) TS377104: Do not use `Schema.Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
   Fix 0: "Disable preferSchemaTypeProperty for this line"
   Fix 1: "Disable preferSchemaTypeProperty for entire file"
   Fix 2: "Replace with 'typeof Models.BusinessId.Type'"
@@ -35,7 +35,22 @@
 [D9] (23:6-23:15) TS6196: 'Unrelated' is declared but never used.
   (no quick fixes)
 
-[D10] (29:39-29:43) TS2694: Namespace '"/node_modules/effect/dist/Schema".Codec' has no exported member 'Type'.
+[D10] (26:27-26:60) TS377104: Do not use `Schema.Codec.Encoded<typeof X>`. Use `typeof X.Encoded` instead. effect(preferSchemaTypeProperty)
+  Fix 0: "Disable preferSchemaTypeProperty for this line"
+  Fix 1: "Disable preferSchemaTypeProperty for entire file"
+  Fix 2: "Replace with 'typeof User.Encoded'"
+
+[D11] (27:36-27:78) TS377104: Do not use `Schema.Codec.DecodingServices<typeof X>`. Use `typeof X.DecodingServices` instead. effect(preferSchemaTypeProperty)
+  Fix 0: "Disable preferSchemaTypeProperty for this line"
+  Fix 1: "Disable preferSchemaTypeProperty for entire file"
+  Fix 2: "Replace with 'typeof User.DecodingServices'"
+
+[D12] (28:36-28:73) TS377104: Do not use `S.Codec.EncodingServices<typeof X>`. Use `typeof X.EncodingServices` instead. effect(preferSchemaTypeProperty)
+  Fix 0: "Disable preferSchemaTypeProperty for this line"
+  Fix 1: "Disable preferSchemaTypeProperty for entire file"
+  Fix 2: "Replace with 'typeof User.EncodingServices'"
+
+[D13] (29:39-29:43) TS2694: Namespace '"/node_modules/effect/dist/Schema".Codec' has no exported member 'Type'.
   (no quick fixes)
 
 === Quick Fix Application Results ===
@@ -197,5 +212,125 @@ export const User = Schema.Struct({ id: Schema.String })
 export type UserEncoded = Schema.Codec.Encoded<typeof User>
 export type UserDecodingServices = Schema.Codec.DecodingServices<typeof User>
 export type UserEncodingServices = S.Codec.EncodingServices<typeof User>
+export type NotAHelper = Schema.Codec.Type<typeof User>
+
+
+=== [D10] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable preferSchemaTypeProperty for entire file" ===
+skipped by default
+
+=== [D10] Fix 2: "Replace with 'typeof User.Encoded'" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics preferSchemaTypeProperty:error
+import { Schema, Schema as S } from "effect"
+
+export const AddressId = Schema.String
+export type AddressId = Schema.Schema.Type<typeof AddressId>
+
+export const Address = Schema.Struct({ id: AddressId })
+export type Address = S.Schema.Type<typeof Address>
+
+namespace Models {
+  export const BusinessId = Schema.String
+}
+type BusinessId = Schema.Schema.Type<typeof Models.BusinessId>
+
+type GoodTypeQuery = typeof Address.Type
+type GoodSchemaType = Schema.Type<typeof Address>
+
+declare namespace LocalSchema {
+  namespace Schema {
+    type Type<T> = T
+  }
+}
+type Unrelated = LocalSchema.Schema.Type<typeof Address>
+
+export const User = Schema.Struct({ id: Schema.String })
+export type UserEncoded = typeof User.Encoded
+export type UserDecodingServices = Schema.Codec.DecodingServices<typeof User>
+export type UserEncodingServices = S.Codec.EncodingServices<typeof User>
+export type NotAHelper = Schema.Codec.Type<typeof User>
+
+
+=== [D11] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable preferSchemaTypeProperty for entire file" ===
+skipped by default
+
+=== [D11] Fix 2: "Replace with 'typeof User.DecodingServices'" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics preferSchemaTypeProperty:error
+import { Schema, Schema as S } from "effect"
+
+export const AddressId = Schema.String
+export type AddressId = Schema.Schema.Type<typeof AddressId>
+
+export const Address = Schema.Struct({ id: AddressId })
+export type Address = S.Schema.Type<typeof Address>
+
+namespace Models {
+  export const BusinessId = Schema.String
+}
+type BusinessId = Schema.Schema.Type<typeof Models.BusinessId>
+
+type GoodTypeQuery = typeof Address.Type
+type GoodSchemaType = Schema.Type<typeof Address>
+
+declare namespace LocalSchema {
+  namespace Schema {
+    type Type<T> = T
+  }
+}
+type Unrelated = LocalSchema.Schema.Type<typeof Address>
+
+export const User = Schema.Struct({ id: Schema.String })
+export type UserEncoded = Schema.Codec.Encoded<typeof User>
+export type UserDecodingServices = typeof User.DecodingServices
+export type UserEncodingServices = S.Codec.EncodingServices<typeof User>
+export type NotAHelper = Schema.Codec.Type<typeof User>
+
+
+=== [D12] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable preferSchemaTypeProperty for entire file" ===
+skipped by default
+
+=== [D12] Fix 2: "Replace with 'typeof User.EncodingServices'" ===
+
+--- file:///.src/test.ts ---
+// @effect-diagnostics preferSchemaTypeProperty:error
+import { Schema, Schema as S } from "effect"
+
+export const AddressId = Schema.String
+export type AddressId = Schema.Schema.Type<typeof AddressId>
+
+export const Address = Schema.Struct({ id: AddressId })
+export type Address = S.Schema.Type<typeof Address>
+
+namespace Models {
+  export const BusinessId = Schema.String
+}
+type BusinessId = Schema.Schema.Type<typeof Models.BusinessId>
+
+type GoodTypeQuery = typeof Address.Type
+type GoodSchemaType = Schema.Type<typeof Address>
+
+declare namespace LocalSchema {
+  namespace Schema {
+    type Type<T> = T
+  }
+}
+type Unrelated = LocalSchema.Schema.Type<typeof Address>
+
+export const User = Schema.Struct({ id: Schema.String })
+export type UserEncoded = Schema.Codec.Encoded<typeof User>
+export type UserDecodingServices = Schema.Codec.DecodingServices<typeof User>
+export type UserEncodingServices = typeof User.EncodingServices
 export type NotAHelper = Schema.Codec.Type<typeof User>
 
