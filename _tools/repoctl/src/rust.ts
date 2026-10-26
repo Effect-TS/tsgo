@@ -95,7 +95,7 @@ export const buildRustBinary = Effect.fnUntraced(function*(repositoryRoot: strin
     "-p",
     "ets_tsrs",
     "--features",
-    "cli",
+    options.release ? "cli,tsrs_cli/noembed" : "cli",
     "--locked",
     ...(options.release ? ["--release"] : []),
     ...(options.rustTarget === undefined ? [] : ["--target", options.rustTarget])

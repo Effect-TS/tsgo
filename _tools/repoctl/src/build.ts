@@ -168,7 +168,7 @@ const validateExecutableArtifact = Effect.fnUntraced(function*(artifact: string)
 export const copyTypeScriptLibraries = Effect.fnUntraced(function*(source: string, destination: string) {
   const fs = yield* FileSystem.FileSystem
   const path = yield* Path.Path
-  const libraries = (yield* fs.readDirectory(source)).filter((name) => /^lib(?:\..+)?\.d\.ts$/.test(name))
+  const libraries = (yield* fs.readDirectory(source)).filter((name) => name.endsWith(".d.ts"))
   if (!libraries.includes("lib.d.ts")) {
     return yield* new BuildError({ reason: `Missing TypeScript libraries in ${source}` })
   }
@@ -260,8 +260,13 @@ export const buildTsrs = Effect.fnUntraced(function*(
   })
   const artifact = componentArtifact(repositoryRoot, targetName, "tsrs", version, tsrsBinaryName)
   yield* Console.log(`Copying tsrs ${version} for ${targetName} -> ${artifact.path}`)
+  yield* fs.remove(path.dirname(artifact.path), { recursive: true, force: true })
   yield* fs.makeDirectory(path.dirname(artifact.path), { recursive: true })
   yield* fs.copyFile(binary, artifact.path)
+  yield* copyTypeScriptLibraries(
+    path.join(repositoryRoot, "tsrs", "crates", "tsrs_vfs", "libs"),
+    path.dirname(artifact.path)
+  )
   yield* fs.chmod(artifact.path, 0o755)
   yield* validateExecutableArtifact(artifact.path)
   yield* runCommand(artifact.path, repositoryRoot, ["--version"])
@@ -269,7 +274,7 @@ export const buildTsrs = Effect.fnUntraced(function*(
   if (process.env.GITHUB_OUTPUT !== undefined) {
     yield* Effect.tryPromise(() => appendFile(
       process.env.GITHUB_OUTPUT!,
-      `component=tsrs\nnpm_version=${version}\nartifact_path=${artifact.path}\n`
+      `component=tsrs\nnpm_version=${version}\nartifact_path=${path.dirname(artifact.path)}\n`
     ))
   }
   return artifact.path
@@ -516,7 +521,12 @@ export const verifyReleaseArtifacts = Effect.fnUntraced(function*(repositoryRoot
     const artifactDirectory = path.join(repositoryRoot, "_packages", `tsgo-${target}`, "artifacts", "tsrs")
     if (isTsrsBuildTarget(target)) {
       for (const version of Object.keys(upstream.components.tsrs ?? {})) {
-        yield* validateExecutableArtifact(componentArtifact(repositoryRoot, target, "tsrs", version, tsrsBinaryName).path)
+        const binary = componentArtifact(repositoryRoot, target, "tsrs", version, tsrsBinaryName).path
+        yield* validateExecutableArtifact(binary)
+        yield* validateArtifact(join(dirname(binary), "lib.d.ts"))
+        for (const library of (yield* fs.readDirectory(dirname(binary))).filter((name) => name.endsWith(".d.ts"))) {
+          yield* validateArtifact(join(dirname(binary), library))
+        }
       }
     } else if (yield* fs.exists(artifactDirectory)) {
       return yield* new BuildError({ reason: `tsrs is not built for ${target}, found ${artifactDirectory}` })
