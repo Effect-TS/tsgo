@@ -2344,6 +2344,9 @@
         "effecttsgo/flat-map-conditional-to-filter-or-fail": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/flat-map-identity-to-flatten": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/flat-map-ignored-param-to-and-then": {
           "$ref": "#/definitions/RuleNoConfig"
         },

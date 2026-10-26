@@ -60,6 +60,7 @@
         "errorPayloadShadowsName": "suggestion",
         "experimentalApiUsage": "warning",
         "flatMapConditionalToFilterOrFail": "suggestion",
+        "flatMapIdentityToFlatten": "suggestion",
         "flatMapIgnoredParamToAndThen": "suggestion",
         "flatMapToMap": "suggestion",
         "flatMapToTap": "suggestion",
@@ -153,6 +154,7 @@
         "errorPayloadShadowsName": "error",
         "experimentalApiUsage": "error",
         "flatMapConditionalToFilterOrFail": "error",
+        "flatMapIdentityToFlatten": "error",
         "flatMapIgnoredParamToAndThen": "error",
         "flatMapToMap": "error",
         "flatMapToTap": "error",
@@ -326,6 +328,7 @@
         "effectSleepZeroToYieldNow": "warning",
         "effectSucceedWithVoid": "warning",
         "flatMapConditionalToFilterOrFail": "warning",
+        "flatMapIdentityToFlatten": "warning",
         "flatMapIgnoredParamToAndThen": "warning",
         "flatMapToMap": "warning",
         "flatMapToTap": "warning",
@@ -2559,6 +2562,30 @@
             "start": 95,
             "end": 109,
             "text": "`Effect.filterOrFail` expresses this conditional validation more directly than `Effect.flatMap` with an identity `Effect.succeed` branch. effect(flatMapConditionalToFilterOrFail)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "flatMapIdentityToFlatten",
+      "group": "style",
+      "description": "Suggests Effect.flatten instead of Effect.flatMap when the callback is an identity function",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377151
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\ndeclare const loadTask: Effect.Effect\u003cEffect.Effect\u003cstring\u003e\u003e\n\nexport const program = loadTask.pipe(Effect.flatMap((inner) =\u003e inner))\n",
+        "diagnostics": [
+          {
+            "start": 132,
+            "end": 146,
+            "text": "`Effect.flatten` expresses this unwrapping more directly than `Effect.flatMap` with an identity callback. effect(flatMapIdentityToFlatten)"
           }
         ]
       }

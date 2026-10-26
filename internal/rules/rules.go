@@ -120,6 +120,7 @@ var All = []rule.Rule{
 	FlatMapToMap,
 	FlatMapToTap,
 	FlatMapIgnoredParamToAndThen,
+	FlatMapIdentityToFlatten,
 	MatchEffectToMatch,
 	MatchEffectToMapBoth,
 	FlatMapConditionalToFilterOrFail,

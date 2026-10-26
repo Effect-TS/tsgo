@@ -1,0 +1,17 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/flatMapIdentityToFlatten_preview.ts(7,38): warning TS377151: `Effect.flatten` expresses this unwrapping more directly than `Effect.flatMap` with an identity callback. effect(flatMapIdentityToFlatten)
+
+
+==== /.src/flatMapIdentityToFlatten_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics flatMapIdentityToFlatten:warning
+    import { Effect } from "effect"
+    
+    declare const loadTask: Effect.Effect<Effect.Effect<string>>
+    
+    export const program = loadTask.pipe(Effect.flatMap((inner) => inner))
+                                         ~~~~~~~~~~~~~~
+!!! warning TS377151: `Effect.flatten` expresses this unwrapping more directly than `Effect.flatMap` with an identity callback. effect(flatMapIdentityToFlatten)
+    

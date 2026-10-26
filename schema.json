@@ -2524,6 +2524,11 @@
           "default": "suggestion",
           "description": "Suggests Effect.filterOrFail or Effect.filterOrElse when Effect.flatMap conditionally passes its input through with Effect.succeed"
         },
+        "flatMapIdentityToFlatten": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.flatten instead of Effect.flatMap when the callback is an identity function"
+        },
         "flatMapIgnoredParamToAndThen": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",
