@@ -16,7 +16,7 @@ Rust-only: tsrs's check_source_file_piece (a heavy declaration file split over s
 errors a piece reports in that piece's checker.
 
 diff --git a/crates/tsrs_checker/src/checker.rs b/crates/tsrs_checker/src/checker.rs
-index 546ff48..93644fe 100644
+index 89c00e69..037498ac 100644
 --- a/crates/tsrs_checker/src/checker.rs
 +++ b/crates/tsrs_checker/src/checker.rs
 @@ -9,6 +9,38 @@ use crate::direct_bitflags as bitflags;
@@ -59,7 +59,7 @@ index 546ff48..93644fe 100644
  
  bitflags! {
 diff --git a/crates/tsrs_checker/src/checker_02.rs b/crates/tsrs_checker/src/checker_02.rs
-index 8f0914a..3256ffd 100644
+index 13c1635e..ea01496e 100644
 --- a/crates/tsrs_checker/src/checker_02.rs
 +++ b/crates/tsrs_checker/src/checker_02.rs
 @@ -8,6 +8,34 @@ use tsrs_diagnostics as diagnostics;
@@ -133,7 +133,7 @@ index 8f0914a..3256ffd 100644
              self.was_canceled = true;
          }
 diff --git a/crates/tsrs_checker/src/program.rs b/crates/tsrs_checker/src/program.rs
-index 1d96dbe..5502b79 100644
+index 6544dc92..be754d8c 100644
 --- a/crates/tsrs_checker/src/program.rs
 +++ b/crates/tsrs_checker/src/program.rs
 @@ -8,7 +8,9 @@ pub use tsrs_tsoptions::{ParsedCommandLine, SourceOutputAndProjectReference};
@@ -147,7 +147,7 @@ index 1d96dbe..5502b79 100644
      fn options(&self) -> P<CompilerOptions>;
      fn source_files(&self) -> &'static [P<SourceFile>];
      fn bind_source_files(&self);
-@@ -38,6 +40,8 @@ pub trait Program: Send + Sync {
+@@ -36,6 +38,8 @@ pub trait Program: Send + Sync {
      fn get_import_helpers_import_specifier(&self, path: &Path) -> Option<P<Node>>;
      fn source_file_may_be_emitted(&self, source_file: P<SourceFile>, force_dts_emit: bool) -> bool;
      fn is_source_file_default_library(&self, path: &Path) -> bool;
@@ -157,10 +157,10 @@ index 1d96dbe..5502b79 100644
          &self,
          path: &Path,
 diff --git a/crates/tsrs_compiler/src/checker_program.rs b/crates/tsrs_compiler/src/checker_program.rs
-index f7a5b36..83fe485 100644
+index 8cd02a97..b9b9fed5 100644
 --- a/crates/tsrs_compiler/src/checker_program.rs
 +++ b/crates/tsrs_compiler/src/checker_program.rs
-@@ -90,6 +90,11 @@ impl tsrs_checker::Program for Program {
+@@ -88,6 +88,11 @@ impl tsrs_checker::Program for Program {
          Program::is_source_file_default_library(self, path)
      }
  
@@ -173,10 +173,10 @@ index f7a5b36..83fe485 100644
          &self,
          path: &Path,
 diff --git a/crates/tsrs_ls/src/autoimport/aliasresolver.rs b/crates/tsrs_ls/src/autoimport/aliasresolver.rs
-index afb1ccf..c1bcada 100644
+index d3cc03ef..37a9c135 100644
 --- a/crates/tsrs_ls/src/autoimport/aliasresolver.rs
 +++ b/crates/tsrs_ls/src/autoimport/aliasresolver.rs
-@@ -205,6 +205,12 @@ impl checker::Program for aliasResolver {
+@@ -205,6 +205,12 @@ impl checker::Program for AliasResolver {
          false
      }
  

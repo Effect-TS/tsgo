@@ -9,7 +9,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{EffectFnCallResult, TypeParser};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::Parameter_0_implicitly_has_type_any_in_Effect_fn_Effect_fnUntraced_or_Effect_fnUntracedEager_No_parameter_type_is_available_from_an_explicit_annotation_or_contextual_function_type_effect_effectFnImplicitAny;
+static MESSAGE: &Message = &tsdiag::PARAMETER_0_IMPLICITLY_HAS_TYPE_ANY_IN_EFFECT_FN_EFFECT_FN_UNTRACED_OR_EFFECT_FN_UNTRACED_EAGER_NO_PARAMETER_TYPE_IS_AVAILABLE_FROM_AN_EXPLICIT_ANNOTATION_OR_CONTEXTUAL_FUNCTION_TYPE_EFFECT_EFFECT_FN_IMPLICIT_ANY;
 
 // go: internal/rules/effect_fn_implicit_any.go:16 EffectFnImplicitAny
 // EffectFnImplicitAny mirrors TypeScript's noImplicitAny behavior for

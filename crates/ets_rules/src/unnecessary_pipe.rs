@@ -19,7 +19,7 @@ pub static UNNECESSARY_PIPE: LazyLock<Rule> = LazyLock::new(|| Rule {
     description: "Removes pipe calls with no arguments",
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
-    codes: vec![tsdiag::This_pipe_call_contains_no_arguments_effect_unnecessaryPipe.code()],
+    codes: vec![tsdiag::THIS_PIPE_CALL_CONTAINS_NO_ARGUMENTS_EFFECT_UNNECESSARY_PIPE.code()],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_unnecessary_pipe(ctx.type_parser, source_file);
@@ -28,7 +28,7 @@ pub static UNNECESSARY_PIPE: LazyLock<Rule> = LazyLock::new(|| Rule {
             diags.push(ctx.new_diagnostic(
                 m.source_file,
                 m.location,
-                &tsdiag::This_pipe_call_contains_no_arguments_effect_unnecessaryPipe,
+                &tsdiag::THIS_PIPE_CALL_CONTAINS_NO_ARGUMENTS_EFFECT_UNNECESSARY_PIPE,
                 &[],
                 &[],
             ));

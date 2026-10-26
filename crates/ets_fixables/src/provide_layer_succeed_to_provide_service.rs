@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 use crate::*;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::Effect_0_provides_this_inline_single_service_layer_directly_effect_provideLayerSucceedToProvideService;
+static MESSAGE: &Message = &tsdiag::EFFECT_0_PROVIDES_THIS_INLINE_SINGLE_SERVICE_LAYER_DIRECTLY_EFFECT_PROVIDE_LAYER_SUCCEED_TO_PROVIDE_SERVICE;
 
 // go: internal/fixables/provide_layer_succeed_to_provide_service.go:12 ProvideLayerSucceedToProvideServiceFix
 pub static PROVIDE_LAYER_SUCCEED_TO_PROVIDE_SERVICE_FIX: LazyLock<Fixable> =

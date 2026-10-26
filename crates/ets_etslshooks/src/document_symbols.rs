@@ -219,7 +219,7 @@ fn new_synthetic_namespace_symbol(name: &str) -> DocSym {
     Rc::new(RefCell::new(DocSymData {
         name: name.to_string(),
         detail: None,
-        kind: lsproto::SymbolKind::Package,
+        kind: lsproto::SymbolKind::PACKAGE,
         range: lsproto::Range { start: zero, end: zero },
         selection_range: lsproto::Range { start: zero, end: zero },
         children: Some(children),
@@ -539,15 +539,15 @@ fn layer_symbol_name(sf: P<SourceFile>, node: P<Node>) -> String {
 // go: etslshooks/document_symbols.go:440 layerSymbolKind
 fn layer_symbol_kind(node: P<Node>) -> lsproto::SymbolKind {
     match node.kind() {
-        Kind::VariableDeclaration | Kind::BindingElement => lsproto::SymbolKind::Variable,
+        Kind::VariableDeclaration | Kind::BindingElement => lsproto::SymbolKind::VARIABLE,
         Kind::PropertyDeclaration | Kind::PropertyAssignment | Kind::PropertySignature => {
-            lsproto::SymbolKind::Property
+            lsproto::SymbolKind::PROPERTY
         }
         Kind::FunctionDeclaration
         | Kind::FunctionExpression
         | Kind::ArrowFunction
-        | Kind::MethodDeclaration => lsproto::SymbolKind::Function,
-        Kind::ClassDeclaration | Kind::ClassExpression => lsproto::SymbolKind::Class,
-        _ => lsproto::SymbolKind::Variable,
+        | Kind::MethodDeclaration => lsproto::SymbolKind::FUNCTION,
+        Kind::ClassDeclaration | Kind::ClassExpression => lsproto::SymbolKind::CLASS,
+        _ => lsproto::SymbolKind::VARIABLE,
     }
 }

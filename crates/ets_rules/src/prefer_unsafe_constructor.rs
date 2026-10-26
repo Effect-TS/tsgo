@@ -12,7 +12,7 @@ use ets_typeparser::{TypeParser, get_symbol_if_same_reference, get_symbol_of_dec
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message =
-    &tsdiag::X_0_starts_a_fiber_to_run_a_pure_constructor_Use_the_synchronous_variant_1_instead_effect_preferUnsafeConstructor;
+    &tsdiag::X_0_STARTS_A_FIBER_TO_RUN_A_PURE_CONSTRUCTOR_USE_THE_SYNCHRONOUS_VARIANT_1_INSTEAD_EFFECT_PREFER_UNSAFE_CONSTRUCTOR;
 
 // go: internal/rules/prefer_unsafe_constructor.go:19 PreferUnsafeConstructor
 // PreferUnsafeConstructor detects Effect.runSync applied directly to an effect-package

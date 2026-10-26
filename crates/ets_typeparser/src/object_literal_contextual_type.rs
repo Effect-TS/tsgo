@@ -219,7 +219,7 @@ impl TypeParser<'_> {
                     inferences,
                     source,
                     return_type,
-                    InferencePriority::ReturnType,
+                    InferencePriority::RETURN_TYPE,
                     false, /*contravariant*/
                 );
             }
@@ -234,7 +234,7 @@ impl TypeParser<'_> {
                 inferences,
                 this_type,
                 target_this_type,
-                InferencePriority::None,
+                InferencePriority::NONE,
                 false, /*contravariant*/
             );
         }
@@ -247,7 +247,7 @@ impl TypeParser<'_> {
                 inferences,
                 argument_type,
                 parameter_type,
-                InferencePriority::None,
+                InferencePriority::NONE,
                 false, /*contravariant*/
             );
         }

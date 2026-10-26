@@ -9,7 +9,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{PipingFlow, PipingFlowTransformation, TransformationKind, TypeParser};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::Effect_map_Effect_flatten_is_the_same_as_Effect_flatMap_that_expresses_the_same_steps_more_directly_effect_effectMapFlatten;
+static MESSAGE: &Message = &tsdiag::EFFECT_MAP_EFFECT_FLATTEN_IS_THE_SAME_AS_EFFECT_FLAT_MAP_THAT_EXPRESSES_THE_SAME_STEPS_MORE_DIRECTLY_EFFECT_EFFECT_MAP_FLATTEN;
 
 // go: internal/rules/effect_map_flatten.go:16 EffectMapFlatten
 // EffectMapFlatten suggests using Effect.flatMap instead of Effect.map followed

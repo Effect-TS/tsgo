@@ -11,11 +11,11 @@ use rustc_hash::FxHashMap;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message =
-    &tsdiag::This_generator_applies_the_same_inline_Effect_mapError_to_every_yielded_effect_Keep_that_Effect_mapError_inline_and_hoist_it_once_to_the_generator_result_Colon_Effect_gen_pipe_Effect_mapError_or_Effect_fn_function_Asterisk_Effect_mapError_effect_redundantMapError;
+    &tsdiag::THIS_GENERATOR_APPLIES_THE_SAME_INLINE_EFFECT_MAP_ERROR_TO_EVERY_YIELDED_EFFECT_KEEP_THAT_EFFECT_MAP_ERROR_INLINE_AND_HOIST_IT_ONCE_TO_THE_GENERATOR_RESULT_COLON_EFFECT_GEN_PIPE_EFFECT_MAP_ERROR_OR_EFFECT_FN_FUNCTION_ASTERISK_EFFECT_MAP_ERROR_EFFECT_REDUNDANT_MAP_ERROR;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static RELATED_MESSAGE: &Message =
-    &tsdiag::This_repeated_Effect_mapError_site_participates_in_the_hoistable_generator_wide_mapping_effect_redundantMapError;
+    &tsdiag::THIS_REPEATED_EFFECT_MAP_ERROR_SITE_PARTICIPATES_IN_THE_HOISTABLE_GENERATOR_WIDE_MAPPING_EFFECT_REDUNDANT_MAP_ERROR;
 
 // go: internal/rules/redundant_map_error.go:14 RedundantMapError
 pub static REDUNDANT_MAP_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {

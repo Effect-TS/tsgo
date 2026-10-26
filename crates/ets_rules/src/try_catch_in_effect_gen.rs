@@ -10,7 +10,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::EffectContextFlags;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::This_Effect_generator_contains_try_Slashcatch_in_this_context_error_handling_is_expressed_with_Effect_APIs_such_as_Effect_try_Effect_tryPromise_Effect_catch_Effect_catchTag_effect_tryCatchInEffectGen;
+static MESSAGE: &Message = &tsdiag::THIS_EFFECT_GENERATOR_CONTAINS_TRY_SLASHCATCH_IN_THIS_CONTEXT_ERROR_HANDLING_IS_EXPRESSED_WITH_EFFECT_AP_IS_SUCH_AS_EFFECT_TRY_EFFECT_TRY_PROMISE_EFFECT_CATCH_EFFECT_CATCH_TAG_EFFECT_TRY_CATCH_IN_EFFECT_GEN;
 
 // go: internal/rules/try_catch_in_effect_gen.go:14 TryCatchInEffectGen
 // TryCatchInEffectGen detects try/catch statements inside Effect generators

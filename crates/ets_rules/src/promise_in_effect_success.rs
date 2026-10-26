@@ -13,7 +13,7 @@ use rustc_hash::FxHashMap;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message =
-    &tsdiag::The_Effect_success_channel_contains_a_Promise_that_is_not_awaited_Use_Effect_promise_or_Effect_tryPromise_to_represent_async_work_effect_promiseInEffectSuccess;
+    &tsdiag::THE_EFFECT_SUCCESS_CHANNEL_CONTAINS_A_PROMISE_THAT_IS_NOT_AWAITED_USE_EFFECT_PROMISE_OR_EFFECT_TRY_PROMISE_TO_REPRESENT_ASYNC_WORK_EFFECT_PROMISE_IN_EFFECT_SUCCESS;
 
 // go: internal/rules/promise_in_effect_success.go:12 PromiseInEffectSuccess
 pub static PROMISE_IN_EFFECT_SUCCESS: LazyLock<Rule> = LazyLock::new(|| Rule {

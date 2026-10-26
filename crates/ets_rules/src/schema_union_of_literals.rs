@@ -9,7 +9,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{EffectMajorVersion, TypeParser};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::This_Schema_Union_contains_multiple_Schema_Literal_members_and_can_be_simplified_to_a_single_Schema_Literal_call_effect_schemaUnionOfLiterals;
+static MESSAGE: &Message = &tsdiag::THIS_SCHEMA_UNION_CONTAINS_MULTIPLE_SCHEMA_LITERAL_MEMBERS_AND_CAN_BE_SIMPLIFIED_TO_A_SINGLE_SCHEMA_LITERAL_CALL_EFFECT_SCHEMA_UNION_OF_LITERALS;
 
 // go: internal/rules/schema_union_of_literals.go:17 SchemaUnionOfLiterals
 // SchemaUnionOfLiterals detects Schema.Union(...) calls where all arguments

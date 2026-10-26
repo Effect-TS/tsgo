@@ -17,7 +17,7 @@ pub static MISSING_PIPEABLE_SIGNATURE: LazyLock<Rule> = LazyLock::new(|| {
         default_severity: Severity::Off,
         supported_effect: vec!["v3", "v4"],
         codes: vec![
-            tsdiag::Exported_function_0_has_no_pipeable_overload_corresponding_to_its_signature_1_effect_missingPipeableSignature.code(),
+            tsdiag::EXPORTED_FUNCTION_0_HAS_NO_PIPEABLE_OVERLOAD_CORRESPONDING_TO_ITS_SIGNATURE_1_EFFECT_MISSING_PIPEABLE_SIGNATURE.code(),
         ],
         run: check_missing_pipeable_signatures,
     }
@@ -92,7 +92,7 @@ pub(crate) fn check_missing_pipeable_signatures(ctx: &mut Context<'_, '_>) -> Ve
             diagnostics.push(ctx.new_diagnostic(
                 ctx.source_file,
                 ctx.get_error_range(location),
-                &tsdiag::Exported_function_0_has_no_pipeable_overload_corresponding_to_its_signature_1_effect_missingPipeableSignature,
+                &tsdiag::EXPORTED_FUNCTION_0_HAS_NO_PIPEABLE_OVERLOAD_CORRESPONDING_TO_ITS_SIGNATURE_1_EFFECT_MISSING_PIPEABLE_SIGNATURE,
                 &[],
                 &[export_symbol.name(), &signature_text],
             ));

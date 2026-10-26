@@ -367,7 +367,7 @@ pub(crate) fn compile_fixtures_with_js(
     let compiler_options = CompilerOptions {
         allow_js: Tristate::True,
         check_js: Tristate::True,
-        jsx: JsxEmit::Preserve,
+        jsx: JsxEmit::PRESERVE,
         ..test_compiler_options()
     };
     let compiled = new_compiled(testfs, compiler_options, file_names.clone());

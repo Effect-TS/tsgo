@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 use crate::*;
 
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::This_expression_discards_the_success_value_through_mapping_Effect_asVoid_represents_that_form_directly_effect_effectMapVoid;
+static MESSAGE: &Message = &tsdiag::THIS_EXPRESSION_DISCARDS_THE_SUCCESS_VALUE_THROUGH_MAPPING_EFFECT_AS_VOID_REPRESENTS_THAT_FORM_DIRECTLY_EFFECT_EFFECT_MAP_VOID;
 
 // go: internal/fixables/effect_map_void.go:11 EffectMapVoidFix
 pub static EFFECT_MAP_VOID_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

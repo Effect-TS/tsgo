@@ -16,8 +16,8 @@ pub static GLOBAL_DATE: LazyLock<Rule> = LazyLock::new(|| {
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![
-        tsdiag::This_code_uses_Date_now_time_access_is_represented_through_Clock_from_Effect_effect_globalDate.code(),
-        tsdiag::This_code_constructs_new_Date_date_values_are_represented_through_DateTime_from_Effect_effect_globalDate.code(),
+        tsdiag::THIS_CODE_USES_DATE_NOW_TIME_ACCESS_IS_REPRESENTED_THROUGH_CLOCK_FROM_EFFECT_EFFECT_GLOBAL_DATE.code(),
+        tsdiag::THIS_CODE_CONSTRUCTS_NEW_DATE_DATE_VALUES_ARE_REPRESENTED_THROUGH_DATE_TIME_FROM_EFFECT_EFFECT_GLOBAL_DATE.code(),
     ],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_date(ctx, false) },
 }
@@ -32,8 +32,8 @@ pub static GLOBAL_DATE_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![
-        tsdiag::This_Effect_code_uses_Date_now_time_access_in_Effect_code_is_represented_through_Clock_from_Effect_effect_globalDateInEffect.code(),
-        tsdiag::This_Effect_code_constructs_new_Date_date_values_in_Effect_code_are_represented_through_DateTime_from_Effect_effect_globalDateInEffect.code(),
+        tsdiag::THIS_EFFECT_CODE_USES_DATE_NOW_TIME_ACCESS_IN_EFFECT_CODE_IS_REPRESENTED_THROUGH_CLOCK_FROM_EFFECT_EFFECT_GLOBAL_DATE_IN_EFFECT.code(),
+        tsdiag::THIS_EFFECT_CODE_CONSTRUCTS_NEW_DATE_DATE_VALUES_IN_EFFECT_CODE_ARE_REPRESENTED_THROUGH_DATE_TIME_FROM_EFFECT_EFFECT_GLOBAL_DATE_IN_EFFECT.code(),
     ],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_date(ctx, true) },
 }
@@ -70,7 +70,7 @@ pub(crate) fn run_global_date(
         if in_effect == check_in_effect {
             let mut matched = false;
             let mut message: &'static Message =
-                &tsdiag::This_code_uses_Date_now_time_access_is_represented_through_Clock_from_Effect_effect_globalDate;
+                &tsdiag::THIS_CODE_USES_DATE_NOW_TIME_ACCESS_IS_REPRESENTED_THROUGH_CLOCK_FROM_EFFECT_EFFECT_GLOBAL_DATE;
 
             match node.kind() {
                 Kind::CallExpression => {
@@ -81,7 +81,7 @@ pub(crate) fn run_global_date(
                         "now",
                     );
                     if matched && check_in_effect {
-                        message = &tsdiag::This_Effect_code_uses_Date_now_time_access_in_Effect_code_is_represented_through_Clock_from_Effect_effect_globalDateInEffect;
+                        message = &tsdiag::THIS_EFFECT_CODE_USES_DATE_NOW_TIME_ACCESS_IN_EFFECT_CODE_IS_REPRESENTED_THROUGH_CLOCK_FROM_EFFECT_EFFECT_GLOBAL_DATE_IN_EFFECT;
                     }
                 }
                 Kind::NewExpression => {
@@ -89,9 +89,9 @@ pub(crate) fn run_global_date(
                         .type_parser
                         .get_symbol_at_location(node.as_new_expression().expression());
                     matched = ctx.type_parser.resolve_to_global_symbol(symbol) == Some(date_symbol);
-                    message = &tsdiag::This_code_constructs_new_Date_date_values_are_represented_through_DateTime_from_Effect_effect_globalDate;
+                    message = &tsdiag::THIS_CODE_CONSTRUCTS_NEW_DATE_DATE_VALUES_ARE_REPRESENTED_THROUGH_DATE_TIME_FROM_EFFECT_EFFECT_GLOBAL_DATE;
                     if check_in_effect {
-                        message = &tsdiag::This_Effect_code_constructs_new_Date_date_values_in_Effect_code_are_represented_through_DateTime_from_Effect_effect_globalDateInEffect;
+                        message = &tsdiag::THIS_EFFECT_CODE_CONSTRUCTS_NEW_DATE_DATE_VALUES_IN_EFFECT_CODE_ARE_REPRESENTED_THROUGH_DATE_TIME_FROM_EFFECT_EFFECT_GLOBAL_DATE_IN_EFFECT;
                     }
                 }
                 _ => {}

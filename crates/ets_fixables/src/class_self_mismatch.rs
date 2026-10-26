@@ -11,7 +11,8 @@ pub static CLASS_SELF_MISMATCH_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable
     name: "classSelfMismatch",
     description: "Replace Self type parameter with the correct class name",
     error_codes: vec![
-        tsdiag::The_Self_type_parameter_for_this_class_should_be_0_effect_classSelfMismatch.code(),
+        tsdiag::THE_SELF_TYPE_PARAMETER_FOR_THIS_CLASS_SHOULD_BE_0_EFFECT_CLASS_SELF_MISMATCH
+            .code(),
     ],
     fix_ids: vec!["classSelfMismatch_fix"],
     run: run_class_self_mismatch_fix,

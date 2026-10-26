@@ -18,7 +18,7 @@ pub static INSTANCE_OF_SCHEMA: LazyLock<Rule> = LazyLock::new(|| {
     description: "Suggests using Schema.is instead of instanceof for Effect Schema types",
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
-    codes: vec![tsdiag::This_code_uses_instanceof_with_an_Effect_Schema_type_Schema_is_is_the_schema_aware_runtime_check_for_this_case_effect_instanceOfSchema.code()],
+    codes: vec![tsdiag::THIS_CODE_USES_INSTANCEOF_WITH_AN_EFFECT_SCHEMA_TYPE_SCHEMA_IS_IS_THE_SCHEMA_AWARE_RUNTIME_CHECK_FOR_THIS_CASE_EFFECT_INSTANCE_OF_SCHEMA.code()],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let matches = analyze_instance_of_schema(ctx.type_parser, ctx.source_file);
         let mut diags = Vec::with_capacity(matches.len());
@@ -26,7 +26,7 @@ pub static INSTANCE_OF_SCHEMA: LazyLock<Rule> = LazyLock::new(|| {
             diags.push(ctx.new_diagnostic(
                 m.source_file,
                 m.location,
-                &tsdiag::This_code_uses_instanceof_with_an_Effect_Schema_type_Schema_is_is_the_schema_aware_runtime_check_for_this_case_effect_instanceOfSchema,
+                &tsdiag::THIS_CODE_USES_INSTANCEOF_WITH_AN_EFFECT_SCHEMA_TYPE_SCHEMA_IS_IS_THE_SCHEMA_AWARE_RUNTIME_CHECK_FOR_THIS_CASE_EFFECT_INSTANCE_OF_SCHEMA,
                 &[],
                 &[],
             ));

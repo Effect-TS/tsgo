@@ -22,8 +22,8 @@ pub static MISSING_EFFECT_SERVICE_DEPENDENCY: LazyLock<Rule> = LazyLock::new(|| 
     default_severity: Severity::Off,
     supported_effect: vec!["v3"],
     codes: vec![
-        tsdiag::Service_0_is_required_but_not_provided_by_dependencies_effect_missingEffectServiceDependency.code(),
-        tsdiag::Services_0_are_required_but_not_provided_by_dependencies_effect_missingEffectServiceDependency.code(),
+        tsdiag::SERVICE_0_IS_REQUIRED_BUT_NOT_PROVIDED_BY_DEPENDENCIES_EFFECT_MISSING_EFFECT_SERVICE_DEPENDENCY.code(),
+        tsdiag::SERVICES_0_ARE_REQUIRED_BUT_NOT_PROVIDED_BY_DEPENDENCIES_EFFECT_MISSING_EFFECT_SERVICE_DEPENDENCY.code(),
     ],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         // V3-only rule
@@ -179,7 +179,7 @@ pub(crate) fn check_service_dependencies(
         let diag = ctx.new_diagnostic(
             ctx.source_file,
             ctx.get_error_range(class_name),
-            &tsdiag::Service_0_is_required_but_not_provided_by_dependencies_effect_missingEffectServiceDependency,
+            &tsdiag::SERVICE_0_IS_REQUIRED_BUT_NOT_PROVIDED_BY_DEPENDENCIES_EFFECT_MISSING_EFFECT_SERVICE_DEPENDENCY,
             &[],
             &[&missing_type_names[0]],
         );
@@ -195,7 +195,7 @@ pub(crate) fn check_service_dependencies(
     let diag = ctx.new_diagnostic(
         ctx.source_file,
         ctx.get_error_range(class_name),
-        &tsdiag::Services_0_are_required_but_not_provided_by_dependencies_effect_missingEffectServiceDependency,
+        &tsdiag::SERVICES_0_ARE_REQUIRED_BUT_NOT_PROVIDED_BY_DEPENDENCIES_EFFECT_MISSING_EFFECT_SERVICE_DEPENDENCY,
         &[],
         &[&formatted],
     );

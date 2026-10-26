@@ -12,13 +12,13 @@ Port of _patches/typescript/011-ls-codeactions.patch (tsc/internal/ls/codeaction
   not optional, so Go's `params.Context == nil` check is the `only == None` one.
 
 diff --git a/crates/tsrs_ls/src/codeactions.rs b/crates/tsrs_ls/src/codeactions.rs
-index 54ad9ad7..2c50f8cd 100644
+index 40e11620..7e05bd80 100644
 --- a/crates/tsrs_ls/src/codeactions.rs
 +++ b/crates/tsrs_ls/src/codeactions.rs
 @@ -47,6 +47,7 @@ pub struct CodeAction {
-     pub description: String,
-     pub changes: Vec<lsproto::TextEdit>,
-     pub fix_id: String,
+     pub(crate) description: String,
+     pub(crate) changes: Vec<lsproto::TextEdit>,
+     pub(crate) fix_id: String,
 +    pub kind: lsproto::CodeActionKind, // optional; used by refactors to specify the code action kind
      pub fix_all_description: String,
  }
@@ -109,7 +109,7 @@ index 54ad9ad7..2c50f8cd 100644
          Ok(lsproto::CommandOrCodeActionArrayOrNull { command_or_code_action_array: Some(actions) })
      }
  
-@@ -465,6 +529,37 @@ pub(crate) fn contains_error_code(codes: &[i32], code: i32) -> bool {
+@@ -465,6 +529,37 @@ pub fn contains_error_code(codes: &[i32], code: i32) -> bool {
      codes.contains(&code)
  }
  
@@ -129,7 +129,7 @@ index 54ad9ad7..2c50f8cd 100644
 +) -> lsproto::CommandOrCodeAction {
 +    let mut kind = action.kind;
 +    if kind.0.is_empty() {
-+        kind = lsproto::CodeActionKind::RefactorRewrite;
++        kind = lsproto::CodeActionKind::REFACTOR_REWRITE;
 +    }
 +    let mut changes = OrderedMap::default();
 +    changes.insert(uri.clone(), action.changes.clone());
@@ -148,47 +148,47 @@ index 54ad9ad7..2c50f8cd 100644
  // convertToLSPCodeAction converts an internal CodeAction to an LSP CodeAction
  fn convert_to_lsp_code_action(
 diff --git a/crates/tsrs_ls/src/codeactions_fixclassincorrectlyimplementsinterface.rs b/crates/tsrs_ls/src/codeactions_fixclassincorrectlyimplementsinterface.rs
-index 25a1529d..baadae94 100644
+index 88f469e3..e30c0305 100644
 --- a/crates/tsrs_ls/src/codeactions_fixclassincorrectlyimplementsinterface.rs
 +++ b/crates/tsrs_ls/src/codeactions_fixclassincorrectlyimplementsinterface.rs
 @@ -90,6 +90,7 @@ fn get_code_actions_to_fix_class_incorrectly_implements_interface(
              changes,
              fix_id: FIX_CLASS_INCORRECTLY_IMPLEMENTS_INTERFACE_FIX_ID.to_string(),
-             fix_all_description: diagnostics::Implement_all_unimplemented_interfaces.localize(&[]),
+             fix_all_description: diagnostics::IMPLEMENT_ALL_UNIMPLEMENTED_INTERFACES.localize(&[]),
 +            ..Default::default()
          });
      }
      Ok(actions)
 diff --git a/crates/tsrs_ls/src/codeactions_fixmissingtypeannotation.rs b/crates/tsrs_ls/src/codeactions_fixmissingtypeannotation.rs
-index 900b9865..f8ed15bc 100644
+index 9f4572e1..65db7950 100644
 --- a/crates/tsrs_ls/src/codeactions_fixmissingtypeannotation.rs
 +++ b/crates/tsrs_ls/src/codeactions_fixmissingtypeannotation.rs
 @@ -262,6 +262,7 @@ fn try_code_action(
          changes: file_changes,
          fix_id: FIX_MISSING_TYPE_ANNOTATION_ON_EXPORTS_FIX_ID.to_string(),
-         fix_all_description: diagnostics::Add_all_missing_type_annotations.localize(&[]),
+         fix_all_description: diagnostics::ADD_ALL_MISSING_TYPE_ANNOTATIONS.localize(&[]),
 +        ..Default::default()
      })
  }
  
 diff --git a/crates/tsrs_ls/src/codeactions_importfixes.rs b/crates/tsrs_ls/src/codeactions_importfixes.rs
-index 3e4ca882..86535d8b 100644
+index 5b6c33a4..6b4251ff 100644
 --- a/crates/tsrs_ls/src/codeactions_importfixes.rs
 +++ b/crates/tsrs_ls/src/codeactions_importfixes.rs
-@@ -98,6 +98,7 @@ fn get_import_code_actions(
+@@ -100,6 +100,7 @@ fn get_import_code_actions(
                  changes: edits,
                  fix_id: IMPORT_FIX_ID.to_string(),
-                 fix_all_description: diagnostics::Add_all_missing_imports.localize(&[]),
+                 fix_all_description: diagnostics::ADD_ALL_MISSING_IMPORTS.localize(&[]),
 +                ..Default::default()
              })
          } else {
              None
 diff --git a/crates/tsrs_ls/src/lib.rs b/crates/tsrs_ls/src/lib.rs
-index 03046542..5d313ea0 100644
+index 6c2f8d9d..f70202df 100644
 --- a/crates/tsrs_ls/src/lib.rs
 +++ b/crates/tsrs_ls/src/lib.rs
-@@ -59,7 +59,10 @@ mod symbols;
- mod utilities;
+@@ -52,7 +52,10 @@ mod utilities;
+ mod visitedchildren;
  
  pub use api::{ERR_NO_SOURCE_FILE, ERR_NO_TOKEN_AT_POSITION};
 -pub use codeactions::{CodeAction, CodeFixContext, CodeFixProvider, CombinedCodeActions};

@@ -42,7 +42,7 @@ impl Fixture {
         let fs: Arc<dyn FS> =
             Arc::new(bundled::wrap_fs(vfstest::from_map([("/.src/test.ts", source)], true)));
         let compiler_options = P::new(CompilerOptions {
-            target: ScriptTarget::ESNext,
+            target: ScriptTarget::ES_NEXT,
             strict: Tristate::True,
             ..Default::default()
         });

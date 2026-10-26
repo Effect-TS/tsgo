@@ -11,7 +11,7 @@ use ets_typeparser::{EffectMajorVersion, ResultDispatch, TypeParser};
 use crate::*;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::Effect_2_expresses_selective_recovery_more_directly_than_Effect_0_with_a_conditional_Effect_1_passthrough_effect_catchConditionalRefailToCatchIf;
+static MESSAGE: &Message = &tsdiag::EFFECT_2_EXPRESSES_SELECTIVE_RECOVERY_MORE_DIRECTLY_THAN_EFFECT_0_WITH_A_CONDITIONAL_EFFECT_1_PASSTHROUGH_EFFECT_CATCH_CONDITIONAL_REFAIL_TO_CATCH_IF;
 
 // go: internal/rules/catch_conditional_refail_to_catch_if.go:17 CatchConditionalRefailToCatchIf
 // CatchConditionalRefailToCatchIf detects conditional catch handlers that

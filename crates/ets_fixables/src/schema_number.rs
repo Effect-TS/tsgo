@@ -7,7 +7,7 @@ use ets_shim::ls::CodeAction;
 use ets_shim::lsproto;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::This_Schema_number_API_accepts_NaN_Infinity_and_Infinity_Use_0_for_finite_domain_numbers_If_non_finite_values_are_intentional_disable_this_diagnostic_for_that_line_effect_schemaNumber;
+static MESSAGE: &Message = &tsdiag::THIS_SCHEMA_NUMBER_API_ACCEPTS_NA_N_INFINITY_AND_INFINITY_USE_0_FOR_FINITE_DOMAIN_NUMBERS_IF_NON_FINITE_VALUES_ARE_INTENTIONAL_DISABLE_THIS_DIAGNOSTIC_FOR_THAT_LINE_EFFECT_SCHEMA_NUMBER;
 
 // go: internal/fixables/schema_number.go:13 SchemaNumberFix
 pub static SCHEMA_NUMBER_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

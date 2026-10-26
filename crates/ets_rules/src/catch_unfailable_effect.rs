@@ -9,7 +9,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::TypeParser;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::The_previous_Effect_does_not_fail_so_this_error_handling_branch_will_never_run_effect_catchUnfailableEffect;
+static MESSAGE: &Message = &tsdiag::THE_PREVIOUS_EFFECT_DOES_NOT_FAIL_SO_THIS_ERROR_HANDLING_BRANCH_WILL_NEVER_RUN_EFFECT_CATCH_UNFAILABLE_EFFECT;
 
 // go: internal/rules/catch_unfailable_effect.go:14 catchFunctions
 // catchFunctions lists the Effect module catch functions to check (V3 and V4).

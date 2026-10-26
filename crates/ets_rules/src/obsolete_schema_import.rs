@@ -16,7 +16,7 @@ pub static OBSOLETE_SCHEMA_IMPORT: LazyLock<Rule> = LazyLock::new(|| {
         description: "Warns when importing @effect/schema in projects targeting Effect v4, where Schema is included directly in the effect package",
         default_severity: Severity::Warning,
         supported_effect: vec!["v4"],
-        codes: vec![tsdiag::This_module_reference_imports_0_which_is_obsolete_in_Effect_v4_In_Effect_v4_Schema_is_provided_directly_by_Schema_from_effect_or_effect_SlashSchema_effect_obsoleteSchemaImport.code()],
+        codes: vec![tsdiag::THIS_MODULE_REFERENCE_IMPORTS_0_WHICH_IS_OBSOLETE_IN_EFFECT_V4_IN_EFFECT_V4_SCHEMA_IS_PROVIDED_DIRECTLY_BY_SCHEMA_FROM_EFFECT_OR_EFFECT_SLASH_SCHEMA_EFFECT_OBSOLETE_SCHEMA_IMPORT.code()],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_obsolete_schema_import(ctx.type_parser, Some(ctx.source_file));
             let mut diags = Vec::with_capacity(matches.len());
@@ -24,7 +24,7 @@ pub static OBSOLETE_SCHEMA_IMPORT: LazyLock<Rule> = LazyLock::new(|| {
                 diags.push(ctx.new_diagnostic(
                     m.source_file,
                     m.location,
-                    &tsdiag::This_module_reference_imports_0_which_is_obsolete_in_Effect_v4_In_Effect_v4_Schema_is_provided_directly_by_Schema_from_effect_or_effect_SlashSchema_effect_obsoleteSchemaImport,
+                    &tsdiag::THIS_MODULE_REFERENCE_IMPORTS_0_WHICH_IS_OBSOLETE_IN_EFFECT_V4_IN_EFFECT_V4_SCHEMA_IS_PROVIDED_DIRECTLY_BY_SCHEMA_FROM_EFFECT_OR_EFFECT_SLASH_SCHEMA_EFFECT_OBSOLETE_SCHEMA_IMPORT,
                     &[],
                     &[&m.imported_specifier],
                 ));

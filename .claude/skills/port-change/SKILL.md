@@ -31,9 +31,8 @@ Changed `_test.go` declarations show up like code (their Rust ports carry `// go
 same way). Also look at what the manifest does not track:
 
 - changed `_patches/typescript/*.patch`: mirror the change in each `_patches/typescript-<gitHead>/` override folder
-  (the same patch backported to that commit; for the TypeScript the pinned tsrs ports see
-  `_patches/typescript-b85298b6a81f772d080b0455de0ca9d744cd6fd6/README.md`: same file names, re-made against that
-  TypeScript, zero fuzz) and, where it maps, in the matching `_patches/tsrs/` patch (same number). `repoctl check`
+  (the same patch backported to that commit: same file names, re-made against that TypeScript, zero fuzz; see
+  `_patches/typescript/README.md`, "Per-commit override folders") and, where it maps, in the matching `_patches/tsrs/` patch (same number). `repoctl check`
   fails when an override folder and `_patches/typescript` do not hold the same patch files; check the backport with
   `pnpm exec repoctl submodules setup --component tsrs` and `pnpm exec repoctl test`;
 - changed shim config (`_tools/gen_shims/config/...`): mirror it in the `ets_shim` generator config; a change to

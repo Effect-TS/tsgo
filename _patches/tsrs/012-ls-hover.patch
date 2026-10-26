@@ -8,7 +8,7 @@ Port of _patches/typescript/012-ls-hover.patch (tsc/internal/ls/hover.go) to tsr
   the range node it returns when there is one.
 
 diff --git a/crates/tsrs_ls/src/hover.rs b/crates/tsrs_ls/src/hover.rs
-index d1cca814..5c455b3a 100644
+index 1d214a0f..367c37f2 100644
 --- a/crates/tsrs_ls/src/hover.rs
 +++ b/crates/tsrs_ls/src/hover.rs
 @@ -37,6 +37,30 @@ const SYMBOL_FORMAT_FLAGS: SymbolFormatFlags = SymbolFormatFlags::WriteTypeParam
@@ -68,7 +68,7 @@ index d1cca814..5c455b3a 100644
 +            // EFFECT HOOK: Allow Effect to enrich hover responses.
 +            let after_quick_info_callback = *AFTER_QUICK_INFO_CALLBACK.read().unwrap();
 +            if let Some(after_quick_info_callback) = after_quick_info_callback {
-+                let is_markdown = content_format == lsproto::MarkupKind::Markdown;
++                let is_markdown = content_format == lsproto::MarkupKind::MARKDOWN;
 +                let hook_range_node;
 +                (quick_info, documentation, hook_range_node) = after_quick_info_callback(
 +                    program,
@@ -89,10 +89,10 @@ index d1cca814..5c455b3a 100644
                  drop(c);
                  continue;
 diff --git a/crates/tsrs_ls/src/lib.rs b/crates/tsrs_ls/src/lib.rs
-index 5d313ea0..420ca4fd 100644
+index f70202df..60467368 100644
 --- a/crates/tsrs_ls/src/lib.rs
 +++ b/crates/tsrs_ls/src/lib.rs
-@@ -84,6 +84,7 @@ pub use findallreferences::{
+@@ -77,6 +77,7 @@ pub use findallreferences::{
      SymbolAndEntriesData,
  };
  pub use host::*;

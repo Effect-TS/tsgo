@@ -19,7 +19,7 @@ pub static MAP_SOME_TO_AS_SOME: LazyLock<Rule> = LazyLock::new(|| {
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
     codes: vec![
-        tsdiag::Effect_asSome_expresses_wrapping_the_success_value_in_Option_some_directly_effect_mapSomeToAsSome.code(),
+        tsdiag::EFFECT_AS_SOME_EXPRESSES_WRAPPING_THE_SUCCESS_VALUE_IN_OPTION_SOME_DIRECTLY_EFFECT_MAP_SOME_TO_AS_SOME.code(),
     ],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let matches = analyze_map_some_to_as_some(ctx.type_parser, ctx.source_file);
@@ -28,7 +28,7 @@ pub static MAP_SOME_TO_AS_SOME: LazyLock<Rule> = LazyLock::new(|| {
             diags.push(ctx.new_diagnostic(
                 m.source_file,
                 m.location,
-                &tsdiag::Effect_asSome_expresses_wrapping_the_success_value_in_Option_some_directly_effect_mapSomeToAsSome,
+                &tsdiag::EFFECT_AS_SOME_EXPRESSES_WRAPPING_THE_SUCCESS_VALUE_IN_OPTION_SOME_DIRECTLY_EFFECT_MAP_SOME_TO_AS_SOME,
                 &[],
                 &[],
             ));

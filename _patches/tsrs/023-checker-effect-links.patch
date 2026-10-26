@@ -7,28 +7,29 @@ tsrs-only: Go's `any` is `Option<Box<dyn Any + Send + Sync>>` (None is Go's nil)
 fork starts without links, as a new Go checker does.
 
 diff --git a/crates/tsrs_checker/src/checker.rs b/crates/tsrs_checker/src/checker.rs
+index 037498ac..005b7295 100644
 --- a/crates/tsrs_checker/src/checker.rs
 +++ b/crates/tsrs_checker/src/checker.rs
-@@ -1103,6 +1103,9 @@
+@@ -1130,6 +1130,9 @@ pub struct Checker {
      pub id: u32,
-     pub program: &'static dyn Program,
-     pub compiler_options: P<CompilerOptions>,
+     pub(crate) program: &'static dyn Program,
+     pub(crate) compiler_options: P<CompilerOptions>,
 +    // effect-tsgo patch 023 (checker.go `EffectLinks`): the Effect type parser's per-checker caches, created on first
 +    // use by the parser and freed with the checker.
 +    pub effect_links: Option<Box<dyn std::any::Any + Send + Sync>>,
-     pub files: &'static [P<SourceFile>],
-     pub file_index_map: FxHashMap<P<SourceFile>, usize>,
+     pub(crate) files: &'static [P<SourceFile>],
+     pub(crate) file_index_map: FxHashMap<P<SourceFile>, usize>,
      /// `source_file_and_index_of_node` (utilities.rs): (node key, file key, file index); key 0 is an empty slot.
-@@ -1629,6 +1632,7 @@
-         id: nextCheckerID.fetch_add(1, Ordering::Relaxed) + 1,
+@@ -1663,6 +1666,7 @@ pub fn new_checker(program: &'static dyn Program) -> Box<Checker> {
+         id: NEXT_CHECKER_ID.fetch_add(1, Ordering::Relaxed) + 1,
          program,
          compiler_options,
 +        effect_links: None,
          files,
          file_index_map: create_file_index_map(files),
          node_file_cache: Vec::new(),
-@@ -2171,6 +2175,7 @@
-             id: nextCheckerID.fetch_add(1, Ordering::Relaxed) + 1,
+@@ -2210,6 +2214,7 @@ impl Checker {
+             id: NEXT_CHECKER_ID.fetch_add(1, Ordering::Relaxed) + 1,
              program: base.program,
              compiler_options: base.compiler_options,
 +            effect_links: None,

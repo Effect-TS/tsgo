@@ -12,7 +12,7 @@ use ets_typeparser::{PipingFlowTransformation, TransformationKind};
 use crate::*;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::Effect_0_of_Effect_exit_re_implements_Effect_1_Use_the_dedicated_Exit_runner_directly_effect_runOfExitToRunExit;
+static MESSAGE: &Message = &tsdiag::EFFECT_0_OF_EFFECT_EXIT_RE_IMPLEMENTS_EFFECT_1_USE_THE_DEDICATED_EXIT_RUNNER_DIRECTLY_EFFECT_RUN_OF_EXIT_TO_RUN_EXIT;
 
 // go: internal/fixables/run_of_exit_to_run_exit.go:15 RunOfExitToRunExitFix
 pub static RUN_OF_EXIT_TO_RUN_EXIT_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

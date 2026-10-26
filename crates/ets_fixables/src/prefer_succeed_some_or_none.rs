@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message =
-    &tsdiag::Effect_0_expresses_this_Option_success_value_directly_effect_preferSucceedSomeOrNone;
+    &tsdiag::EFFECT_0_EXPRESSES_THIS_OPTION_SUCCESS_VALUE_DIRECTLY_EFFECT_PREFER_SUCCEED_SOME_OR_NONE;
 
 // go: internal/fixables/prefer_succeed_some_or_none.go:13 PreferSucceedSomeOrNoneFix
 pub static PREFER_SUCCEED_SOME_OR_NONE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

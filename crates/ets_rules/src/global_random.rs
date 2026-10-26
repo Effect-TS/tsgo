@@ -15,7 +15,7 @@ pub static GLOBAL_RANDOM: LazyLock<Rule> = LazyLock::new(|| {
     description: "Warns when using Math.random() outside Effect generators instead of the Random service",
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
-    codes: vec![tsdiag::This_code_uses_Math_random_randomness_is_represented_through_the_Effect_Random_service_effect_globalRandom.code()],
+    codes: vec![tsdiag::THIS_CODE_USES_MATH_RANDOM_RANDOMNESS_IS_REPRESENTED_THROUGH_THE_EFFECT_RANDOM_SERVICE_EFFECT_GLOBAL_RANDOM.code()],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_random(ctx, false) },
 }
 });
@@ -28,7 +28,7 @@ pub static GLOBAL_RANDOM_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
     description: "Warns when using Math.random() inside Effect generators instead of the Random service",
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
-    codes: vec![tsdiag::This_Effect_code_uses_Math_random_randomness_is_represented_through_the_Effect_Random_service_effect_globalRandomInEffect.code()],
+    codes: vec![tsdiag::THIS_EFFECT_CODE_USES_MATH_RANDOM_RANDOMNESS_IS_REPRESENTED_THROUGH_THE_EFFECT_RANDOM_SERVICE_EFFECT_GLOBAL_RANDOM_IN_EFFECT.code()],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_random(ctx, true) },
 }
 });
@@ -38,9 +38,9 @@ pub(crate) fn run_global_random(
     ctx: &mut Context<'_, '_>,
     check_in_effect: bool,
 ) -> Vec<P<Diagnostic>> {
-    let mut message: &'static Message = &tsdiag::This_code_uses_Math_random_randomness_is_represented_through_the_Effect_Random_service_effect_globalRandom;
+    let mut message: &'static Message = &tsdiag::THIS_CODE_USES_MATH_RANDOM_RANDOMNESS_IS_REPRESENTED_THROUGH_THE_EFFECT_RANDOM_SERVICE_EFFECT_GLOBAL_RANDOM;
     if check_in_effect {
-        message = &tsdiag::This_Effect_code_uses_Math_random_randomness_is_represented_through_the_Effect_Random_service_effect_globalRandomInEffect;
+        message = &tsdiag::THIS_EFFECT_CODE_USES_MATH_RANDOM_RANDOMNESS_IS_REPRESENTED_THROUGH_THE_EFFECT_RANDOM_SERVICE_EFFECT_GLOBAL_RANDOM_IN_EFFECT;
     }
 
     let mut diags = Vec::new();

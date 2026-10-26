@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 use crate::*;
 
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::Effect_asSome_expresses_wrapping_the_success_value_in_Option_some_directly_effect_mapSomeToAsSome;
+static MESSAGE: &Message = &tsdiag::EFFECT_AS_SOME_EXPRESSES_WRAPPING_THE_SUCCESS_VALUE_IN_OPTION_SOME_DIRECTLY_EFFECT_MAP_SOME_TO_AS_SOME;
 
 // go: internal/fixables/map_some_to_as_some.go:11 MapSomeToAsSomeFix
 pub static MAP_SOME_TO_AS_SOME_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

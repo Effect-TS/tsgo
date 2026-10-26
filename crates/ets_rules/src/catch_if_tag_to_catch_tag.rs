@@ -13,7 +13,7 @@ use ets_typeparser::{
 use crate::*;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::Effect_catchTag_expresses_tagged_error_recovery_more_directly_than_Effect_catchIf_with_a_tag_equality_predicate_effect_catchIfTagToCatchTag;
+static MESSAGE: &Message = &tsdiag::EFFECT_CATCH_TAG_EXPRESSES_TAGGED_ERROR_RECOVERY_MORE_DIRECTLY_THAN_EFFECT_CATCH_IF_WITH_A_TAG_EQUALITY_PREDICATE_EFFECT_CATCH_IF_TAG_TO_CATCH_TAG;
 
 // go: internal/rules/catch_if_tag_to_catch_tag.go:14 CatchIfTagToCatchTag
 pub static CATCH_IF_TAG_TO_CATCH_TAG: LazyLock<Rule> = LazyLock::new(|| Rule {

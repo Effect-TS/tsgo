@@ -9,10 +9,10 @@ Port of _patches/typescript/025-tsoptions-tsconfigparsing.patch (tsc/internal/ts
   `*core.CompilerOptions` and `*ast.SourceFile` (both may be nil) are `Option`s.
 
 diff --git a/crates/tsrs_tsoptions/src/tsconfigparsing.rs b/crates/tsrs_tsoptions/src/tsconfigparsing.rs
-index f220996..39ea4b0 100644
+index 5714d438..c719be17 100644
 --- a/crates/tsrs_tsoptions/src/tsconfigparsing.rs
 +++ b/crates/tsrs_tsoptions/src/tsconfigparsing.rs
-@@ -38,6 +38,33 @@ use crate::parsinghelpers::{
+@@ -42,6 +42,33 @@ use crate::parsinghelpers::{
      parse_project_reference, parse_type_acquisition,
  };
  
@@ -46,7 +46,7 @@ index f220996..39ea4b0 100644
  struct ExtendsResult {
      options: CompilerOptions,
      include: Option<Vec<CompilerOptionsValue>>,
-@@ -1735,6 +1762,8 @@ fn parse_config(
+@@ -1769,6 +1796,8 @@ fn parse_config(
              &mut result.options,
              own_config.options.as_ref(),
              Some(&own_config.raw),
@@ -55,7 +55,7 @@ index f220996..39ea4b0 100644
          );
          own_config.options = Some(result.options);
      }
-@@ -1845,6 +1874,8 @@ fn apply_extended_config(
+@@ -1875,6 +1904,8 @@ fn apply_extended_config(
          &mut result.options,
          extended_config.options.as_ref(),
          Some(extends_raw),
@@ -64,7 +64,7 @@ index f220996..39ea4b0 100644
      );
  }
  
-@@ -1894,7 +1925,13 @@ fn parse_json_config_file_content_worker(
+@@ -1924,7 +1955,13 @@ fn parse_json_config_file_content_worker(
          extended_config_cache,
      );
      if let Some(options) = &mut parsed_config.options {
@@ -79,7 +79,7 @@ index f220996..39ea4b0 100644
      }
      handle_option_config_dir_template_substitution(
          parsed_config.options.as_mut(),
-@@ -2287,6 +2324,12 @@ fn parse_json_config_file_content_worker(
+@@ -2428,6 +2465,12 @@ fn parse_json_config_file_content_worker(
          project_references
      };
  

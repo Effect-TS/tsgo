@@ -12,7 +12,7 @@ use ets_typeparser::{
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message =
-    &tsdiag::Effect_0_provides_this_inline_single_service_layer_directly_effect_provideLayerSucceedToProvideService;
+    &tsdiag::EFFECT_0_PROVIDES_THIS_INLINE_SINGLE_SERVICE_LAYER_DIRECTLY_EFFECT_PROVIDE_LAYER_SUCCEED_TO_PROVIDE_SERVICE;
 
 // go: internal/rules/provide_layer_succeed_to_provide_service.go:14 ProvideLayerSucceedToProvideService
 pub static PROVIDE_LAYER_SUCCEED_TO_PROVIDE_SERVICE: LazyLock<Rule> = LazyLock::new(|| Rule {

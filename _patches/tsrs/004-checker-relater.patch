@@ -2,10 +2,10 @@ Port of _patches/typescript/004-checker-relater.patch (tsc/internal/checker/rela
 Relater::report_relation_error records a RelationError (patch 005) in the error node's source file links.
 
 diff --git a/crates/tsrs_checker/src/relater_2.rs b/crates/tsrs_checker/src/relater_2.rs
-index a9f9cb6..e164223 100644
+index 517ab49f..eb3b7479 100644
 --- a/crates/tsrs_checker/src/relater_2.rs
 +++ b/crates/tsrs_checker/src/relater_2.rs
-@@ -4595,6 +4595,15 @@ impl Relater {
+@@ -4576,6 +4576,15 @@ impl Relater {
          source: P<Type>,
          target: P<Type>,
      ) {

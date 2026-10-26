@@ -10,7 +10,7 @@ use ets_shim::ls::CodeAction;
 use crate::*;
 
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::Effect_catchTag_expresses_tagged_error_recovery_more_directly_than_Effect_catchIf_with_a_tag_equality_predicate_effect_catchIfTagToCatchTag;
+static MESSAGE: &Message = &tsdiag::EFFECT_CATCH_TAG_EXPRESSES_TAGGED_ERROR_RECOVERY_MORE_DIRECTLY_THAN_EFFECT_CATCH_IF_WITH_A_TAG_EQUALITY_PREDICATE_EFFECT_CATCH_IF_TAG_TO_CATCH_TAG;
 
 // go: internal/fixables/catch_if_tag_to_catch_tag.go:12 CatchIfTagToCatchTagFix
 pub static CATCH_IF_TAG_TO_CATCH_TAG_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

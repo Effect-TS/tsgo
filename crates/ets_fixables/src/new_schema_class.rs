@@ -6,7 +6,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::This_Schema_class_is_constructed_with_new_0_make_can_be_used_to_construct_the_Schema_class_instance_effect_newSchemaClass;
+static MESSAGE: &Message = &tsdiag::THIS_SCHEMA_CLASS_IS_CONSTRUCTED_WITH_NEW_0_MAKE_CAN_BE_USED_TO_CONSTRUCT_THE_SCHEMA_CLASS_INSTANCE_EFFECT_NEW_SCHEMA_CLASS;
 
 // go: internal/fixables/new_schema_class.go:12 NewSchemaClassFix
 pub static NEW_SCHEMA_CLASS_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

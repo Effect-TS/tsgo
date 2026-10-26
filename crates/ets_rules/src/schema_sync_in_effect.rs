@@ -24,7 +24,7 @@ pub(crate) fn sync_to_effect_method_lookup(
 }
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::X_0_is_used_inside_an_Effect_generator_Schema_1_preserves_the_typed_Effect_error_channel_for_this_operation_without_throwing_effect_schemaSyncInEffect;
+static MESSAGE: &Message = &tsdiag::X_0_IS_USED_INSIDE_AN_EFFECT_GENERATOR_SCHEMA_1_PRESERVES_THE_TYPED_EFFECT_ERROR_CHANNEL_FOR_THIS_OPERATION_WITHOUT_THROWING_EFFECT_SCHEMA_SYNC_IN_EFFECT;
 
 // go: internal/rules/schema_sync_in_effect.go:14 syncToEffectMethodV3
 // syncToEffectMethodV3 maps Schema sync method names to their Effect-based V3 equivalents.

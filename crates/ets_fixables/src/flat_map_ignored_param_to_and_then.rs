@@ -7,7 +7,7 @@ use ets_shim::ls::CodeAction;
 use crate::*;
 
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::Effect_andThen_expresses_this_sequencing_more_directly_than_Effect_flatMap_with_a_zero_parameter_callback_effect_flatMapIgnoredParamToAndThen;
+static MESSAGE: &Message = &tsdiag::EFFECT_AND_THEN_EXPRESSES_THIS_SEQUENCING_MORE_DIRECTLY_THAN_EFFECT_FLAT_MAP_WITH_A_ZERO_PARAMETER_CALLBACK_EFFECT_FLAT_MAP_IGNORED_PARAM_TO_AND_THEN;
 
 // go: internal/fixables/flat_map_ignored_param_to_and_then.go:11 FlatMapIgnoredParamToAndThenFix
 pub static FLAT_MAP_IGNORED_PARAM_TO_AND_THEN_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

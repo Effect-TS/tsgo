@@ -50,7 +50,7 @@ fn test_effect_sleep_zero_to_yield_now_fixes_compile(t: &T) {
                 f.verify_non_suggestion_diagnostics(t, &[]);
                 let uri = lsconv::file_name_to_document_uri("/repro.ts");
                 let inventory = f.get_quick_fixes_for_diagnostics(t, &uri);
-                let code = tsdiag::Consider_Effect_yieldNow_for_cooperative_yielding_instead_of_sleeping_for_zero_duration_effect_effectSleepZeroToYieldNow.code();
+                let code = tsdiag::CONSIDER_EFFECT_YIELD_NOW_FOR_COOPERATIVE_YIELDING_INSTEAD_OF_SLEEPING_FOR_ZERO_DURATION_EFFECT_EFFECT_SLEEP_ZERO_TO_YIELD_NOW.code();
                 let mut suggestions = 0;
                 for diagnostic in &inventory {
                     if has_diagnostic_code(&diagnostic.diagnostic, code) {

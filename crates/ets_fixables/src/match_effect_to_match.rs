@@ -7,7 +7,7 @@ use ets_shim::ls::CodeAction;
 use crate::*;
 
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::Effect_0_expresses_this_non_effectful_fold_more_directly_than_Effect_1_with_Effect_succeed_handlers_effect_matchEffectToMatch;
+static MESSAGE: &Message = &tsdiag::EFFECT_0_EXPRESSES_THIS_NON_EFFECTFUL_FOLD_MORE_DIRECTLY_THAN_EFFECT_1_WITH_EFFECT_SUCCEED_HANDLERS_EFFECT_MATCH_EFFECT_TO_MATCH;
 
 // go: internal/fixables/match_effect_to_match.go:11 MatchEffectToMatchFix
 pub static MATCH_EFFECT_TO_MATCH_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

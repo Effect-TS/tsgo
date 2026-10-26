@@ -1,5 +1,40 @@
 # @effect/tsgo
 
+## 0.58.0
+
+### Minor Changes
+
+- ae07583: Add proxy commands that run the Effect-patched tsc, tsrs and Oxlint shipped with `@effect/tsgo` directly, without patching `node_modules`. This works with shared or read-only package stores such as the pnpm global virtual store, where `effect-tsgo patch` cannot rewrite the installed binaries. Every argument after the tool is passed through unchanged.
+  
+  ```sh
+  effect-tsgo tsc -p tsconfig.json         # the build of the installed TypeScript version, else the latest
+  effect-tsgo tsc@7.0.2 --lsp --stdio      # a specific supported TypeScript version
+  effect-tsgo tsc@next --build             # an upstream tag: latest, beta, next
+  effect-tsgo tsrs --noEmit                # the build of the installed tsrs version, else the latest
+  effect-tsgo oxlint --type-aware          # the installed oxlint CLI with the patched binding and tsgolint
+  ```
+  
+  The type augmentation that adds the `effecttsgo` plugin to Oxlint's config types is still applied only by `effect-tsgo patch`.
+
+### Patch Changes
+
+- a1b58f1: Fix `apiStabilityLeak` missing the members of class and interface types with the TypeScript next tag, which now resolves those members lazily. For example, this leak is reported again:
+  
+  ```ts
+  /** @stability experimental */
+  export interface PreviewExperimental {
+    value: string
+  }
+  
+  // `PreviewStable` exposes `PreviewExperimental`, an experimental API.
+  export interface PreviewStable {
+    leaked: PreviewExperimental
+  }
+  ```
+- 03d36f2: Fix the tsrs build reusing stale Effect diagnostics in incremental builds after the plugin options change. The build info now records the Effect options, as the Go build does, and a change to them drops the cached semantic diagnostics. For example, with `"incremental": true` and an existing `.tsbuildinfo`, switching `"diagnosticSeverity": { "floatingEffect": "off" }` to `"error"` now reports `floatingEffect` without `--force`, and switching it back stops reporting it.
+- 2276f61: Match upstream tsrs npm packaging by building release binaries with `noembed` and shipping the exact `.d.ts` library files from the pinned tsrs checkout beside each executable. Packaged tsrs binaries now load those files from disk instead of embedded libraries.
+- a1b58f1: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261025.1), which ships [`typescript-go`](https://github.com/microsoft/typescript-go/commit/8a62bbe746909624b69b6e671026b454da2f02cf) commit `8a62bbe746909624b69b6e671026b454da2f02cf`, update the TypeScript beta tag to [`typescript@beta`](https://www.npmjs.com/package/typescript/v/7.1.0-beta), and update the TypeScript latest tag to [`typescript@latest`](https://www.npmjs.com/package/typescript/v/7.0.2).
+
 ## 0.57.0
 
 ### Minor Changes

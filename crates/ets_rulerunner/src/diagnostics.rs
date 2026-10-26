@@ -309,9 +309,9 @@ pub(crate) fn unused_directive_diagnostics(
         diags.push(ets_shim::ast::new_diagnostic_from_serialized(
             Some(sf),
             TextRange::new(d.pos as u32, d.end as u32),
-            tsdiag::X_effect_diagnostics_directive_has_no_effect.code(),
+            tsdiag::X_EFFECT_DIAGNOSTICS_DIRECTIVE_HAS_NO_EFFECT.code(),
             ets_directives::to_category(severity),
-            tsdiag::X_effect_diagnostics_directive_has_no_effect.key(),
+            tsdiag::X_EFFECT_DIAGNOSTICS_DIRECTIVE_HAS_NO_EFFECT.key(),
             Vec::new(),
             &[],
             &[],

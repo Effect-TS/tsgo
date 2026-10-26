@@ -7,9 +7,10 @@ shim reaches these unexported checker methods through extra-shim.json linknames)
 - Checker::is_past_last_assignment (Checker_isPastLastAssignment): rules.mapperCanBeHoisted (redundantMapError).
 
 diff --git a/crates/tsrs_checker/src/checker_04.rs b/crates/tsrs_checker/src/checker_04.rs
+index 550beba0..07368147 100644
 --- a/crates/tsrs_checker/src/checker_04.rs
 +++ b/crates/tsrs_checker/src/checker_04.rs
-@@ -1919,7 +1919,7 @@
+@@ -1901,7 +1901,7 @@ impl Checker {
              reason = "without the census the wrapper is a forwarding call; inlined, callers call the body as before (notes/perf-checker-algorithms.md)"
          )
      )]
@@ -19,9 +20,10 @@ diff --git a/crates/tsrs_checker/src/checker_04.rs b/crates/tsrs_checker/src/che
          node: P<Node>,
          contextual_type: P<Type>,
 diff --git a/crates/tsrs_checker/src/flow.rs b/crates/tsrs_checker/src/flow.rs
+index 165c1593..75fb7452 100644
 --- a/crates/tsrs_checker/src/flow.rs
 +++ b/crates/tsrs_checker/src/flow.rs
-@@ -4547,7 +4547,7 @@
+@@ -4459,7 +4459,7 @@ impl Checker {
      // Return true if there are no assignments to the given symbol or if the given location
      // is past the last assignment to the symbol.
      // flow.go:2668

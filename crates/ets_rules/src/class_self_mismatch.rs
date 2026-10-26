@@ -20,7 +20,8 @@ pub static CLASS_SELF_MISMATCH: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Error,
     supported_effect: vec!["v3", "v4"],
     codes: vec![
-        tsdiag::The_Self_type_parameter_for_this_class_should_be_0_effect_classSelfMismatch.code(),
+        tsdiag::THE_SELF_TYPE_PARAMETER_FOR_THIS_CLASS_SHOULD_BE_0_EFFECT_CLASS_SELF_MISMATCH
+            .code(),
     ],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
@@ -30,7 +31,7 @@ pub static CLASS_SELF_MISMATCH: LazyLock<Rule> = LazyLock::new(|| Rule {
             diags.push(ctx.new_diagnostic(
                 m.source_file,
                 m.location,
-                &tsdiag::The_Self_type_parameter_for_this_class_should_be_0_effect_classSelfMismatch,
+                &tsdiag::THE_SELF_TYPE_PARAMETER_FOR_THIS_CLASS_SHOULD_BE_0_EFFECT_CLASS_SELF_MISMATCH,
                 &[],
                 &[&m.expected_name],
             ));

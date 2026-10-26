@@ -9,7 +9,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::TypeParser;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::This_Schema_Struct_includes_a_tag_field_Schema_TaggedStruct_is_the_tagged_struct_form_for_this_pattern_and_makes_the_tag_optional_in_the_constructor_effect_schemaStructWithTag;
+static MESSAGE: &Message = &tsdiag::THIS_SCHEMA_STRUCT_INCLUDES_A_TAG_FIELD_SCHEMA_TAGGED_STRUCT_IS_THE_TAGGED_STRUCT_FORM_FOR_THIS_PATTERN_AND_MAKES_THE_TAG_OPTIONAL_IN_THE_CONSTRUCTOR_EFFECT_SCHEMA_STRUCT_WITH_TAG;
 
 // go: internal/rules/schema_struct_with_tag.go:17 SchemaStructWithTag
 // SchemaStructWithTag detects Schema.Struct(...) calls where the argument

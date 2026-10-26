@@ -13,10 +13,10 @@ use ets_typeparser::TypeParser;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message =
-    &tsdiag::This_Effect_value_is_neither_yielded_nor_used_in_an_assignment_effect_floatingEffect;
+    &tsdiag::THIS_EFFECT_VALUE_IS_NEITHER_YIELDED_NOR_USED_IN_AN_ASSIGNMENT_EFFECT_FLOATING_EFFECT;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE_EFFECT_ABLE: &Message = &tsdiag::This_Effect_able_0_value_is_neither_yielded_nor_assigned_to_a_variable_effect_floatingEffect;
+static MESSAGE_EFFECT_ABLE: &Message = &tsdiag::THIS_EFFECT_ABLE_0_VALUE_IS_NEITHER_YIELDED_NOR_ASSIGNED_TO_A_VARIABLE_EFFECT_FLOATING_EFFECT;
 
 // go: internal/rules/floating_effect.go:16 floatingEffectResult
 // floatingEffectResult holds information about a detected floating Effect expression.

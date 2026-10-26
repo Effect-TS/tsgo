@@ -8,7 +8,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::This_layer_provides_0_which_is_required_by_another_layer_in_the_same_Layer_mergeAll_call_Layer_mergeAll_creates_layers_in_parallel_so_dependencies_between_layers_will_not_be_satisfied_Consider_moving_this_layer_into_a_Layer_provideMerge_after_the_Layer_mergeAll_effect_layerMergeAllWithDependencies;
+static MESSAGE: &Message = &tsdiag::THIS_LAYER_PROVIDES_0_WHICH_IS_REQUIRED_BY_ANOTHER_LAYER_IN_THE_SAME_LAYER_MERGE_ALL_CALL_LAYER_MERGE_ALL_CREATES_LAYERS_IN_PARALLEL_SO_DEPENDENCIES_BETWEEN_LAYERS_WILL_NOT_BE_SATISFIED_CONSIDER_MOVING_THIS_LAYER_INTO_A_LAYER_PROVIDE_MERGE_AFTER_THE_LAYER_MERGE_ALL_EFFECT_LAYER_MERGE_ALL_WITH_DEPENDENCIES;
 
 // go: internal/fixables/layer_merge_all_with_dependencies.go:14 LayerMergeAllWithDependenciesFix
 pub static LAYER_MERGE_ALL_WITH_DEPENDENCIES_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

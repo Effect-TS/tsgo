@@ -22,7 +22,7 @@ pub static MISSING_EFFECT_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Error,
     supported_effect: vec!["v3", "v4"],
     codes: vec![
-        tsdiag::Missing_errors_0_in_the_expected_Effect_type_effect_missingEffectError.code(),
+        tsdiag::MISSING_ERRORS_0_IN_THE_EXPECTED_EFFECT_TYPE_EFFECT_MISSING_EFFECT_ERROR.code(),
     ],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let matches = analyze_missing_effect_error(ctx.type_parser, ctx.source_file);
@@ -31,7 +31,7 @@ pub static MISSING_EFFECT_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {
             diags.push(ctx.new_diagnostic(
                 m.source_file,
                 m.location,
-                &tsdiag::Missing_errors_0_in_the_expected_Effect_type_effect_missingEffectError,
+                &tsdiag::MISSING_ERRORS_0_IN_THE_EXPECTED_EFFECT_TYPE_EFFECT_MISSING_EFFECT_ERROR,
                 &[],
                 &[&m.error_type_str],
             ));

@@ -20,7 +20,7 @@ pub static NESTED_EFFECT_GEN_YIELD: LazyLock<Rule> = LazyLock::new(|| {
         default_severity: Severity::Off,
         supported_effect: vec!["v3", "v4"],
         codes: vec![
-            tsdiag::This_yield_Asterisk_is_applied_to_a_nested_Effect_gen_that_can_be_inlined_in_the_parent_Effect_generator_context_effect_nestedEffectGenYield.code(),
+            tsdiag::THIS_YIELD_ASTERISK_IS_APPLIED_TO_A_NESTED_EFFECT_GEN_THAT_CAN_BE_INLINED_IN_THE_PARENT_EFFECT_GENERATOR_CONTEXT_EFFECT_NESTED_EFFECT_GEN_YIELD.code(),
         ],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_nested_effect_gen_yield(ctx.type_parser, ctx.source_file);
@@ -29,7 +29,7 @@ pub static NESTED_EFFECT_GEN_YIELD: LazyLock<Rule> = LazyLock::new(|| {
                 diags.push(ctx.new_diagnostic(
                     ctx.source_file,
                     m.location,
-                    &tsdiag::This_yield_Asterisk_is_applied_to_a_nested_Effect_gen_that_can_be_inlined_in_the_parent_Effect_generator_context_effect_nestedEffectGenYield,
+                    &tsdiag::THIS_YIELD_ASTERISK_IS_APPLIED_TO_A_NESTED_EFFECT_GEN_THAT_CAN_BE_INLINED_IN_THE_PARENT_EFFECT_GENERATOR_CONTEXT_EFFECT_NESTED_EFFECT_GEN_YIELD,
                     &[],
                     &[],
                 ));

@@ -3383,7 +3383,7 @@ impl ApiStabilityAnalysis {
             }
             for &member in declaration.members() {
                 if let Some(member_symbol) = member.symbol()
-                    && member_symbol.name() == ets_shim::ast::InternalSymbolNameComputed
+                    && member_symbol.name() == ets_shim::ast::INTERNAL_SYMBOL_NAME_COMPUTED
                 {
                     return true;
                 }

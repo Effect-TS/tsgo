@@ -10,7 +10,7 @@ use ets_typeparser::TypeParser;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message =
-    &tsdiag::Prefer_Schema_TaggedError_over_Data_TaggedError_for_an_explicit_schema_contract_effect_preferSchemaTaggedError;
+    &tsdiag::PREFER_SCHEMA_TAGGED_ERROR_OVER_DATA_TAGGED_ERROR_FOR_AN_EXPLICIT_SCHEMA_CONTRACT_EFFECT_PREFER_SCHEMA_TAGGED_ERROR;
 
 // go: internal/rules/prefer_schema_tagged_error.go:13 PreferSchemaTaggedError
 pub static PREFER_SCHEMA_TAGGED_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {

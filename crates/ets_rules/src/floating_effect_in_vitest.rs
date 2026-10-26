@@ -51,7 +51,7 @@ pub(crate) static EFFECT_AWARE_VITEST_METHODS: &[&str] =
     &["effect", "live", "scoped", "scopedLive"];
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::This_Vitest_callback_returns_an_Effect_that_Vitest_does_not_run_Use_an_Effect_aware_test_API_or_run_the_Effect_with_Effect_runPromise_effect_floatingEffectInVitest;
+static MESSAGE: &Message = &tsdiag::THIS_VITEST_CALLBACK_RETURNS_AN_EFFECT_THAT_VITEST_DOES_NOT_RUN_USE_AN_EFFECT_AWARE_TEST_API_OR_RUN_THE_EFFECT_WITH_EFFECT_RUN_PROMISE_EFFECT_FLOATING_EFFECT_IN_VITEST;
 
 // go: internal/rules/floating_effect_in_vitest.go:55 FloatingEffectInVitest
 // FloatingEffectInVitest detects Effects returned from Vitest callbacks that do

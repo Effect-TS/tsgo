@@ -2,10 +2,10 @@ Port of _patches/typescript/005-checker-types.patch (tsc/internal/checker/types.
 and SourceFileLinks.relation_errors (copied with the other links when a forked checker first reads a file's links).
 
 diff --git a/crates/tsrs_checker/src/types.rs b/crates/tsrs_checker/src/types.rs
-index f5af811..681f8a0 100644
+index 6370abd8..20cde2fb 100644
 --- a/crates/tsrs_checker/src/types.rs
 +++ b/crates/tsrs_checker/src/types.rs
-@@ -829,6 +829,15 @@ pub struct AssertionLinks {
+@@ -837,6 +837,15 @@ pub struct AssertionLinks {
  
  // SourceFile links
  
@@ -20,16 +20,16 @@ index f5af811..681f8a0 100644
 +
  #[derive(Default)]
  pub struct SourceFileLinks {
-     pub type_checked: Cell<bool>,
-@@ -842,6 +851,7 @@ pub struct SourceFileLinks {
-     pub local_jsx_factory: Cell<Option<P<Node>>>,
-     pub local_jsx_fragment_factory: Cell<Option<P<Node>>>,
-     pub jsx_fragment_type: Cell<Option<P<Type>>>,
+     pub(crate) type_checked: Cell<bool>,
+@@ -850,6 +859,7 @@ pub struct SourceFileLinks {
+     pub(crate) local_jsx_factory: Cell<Option<P<Node>>>,
+     pub(crate) local_jsx_fragment_factory: Cell<Option<P<Node>>>,
+     pub(crate) jsx_fragment_type: Cell<Option<P<Type>>>,
 +    pub relation_errors: RefCell<Vec<RelationError>>, // Collected during type checking for Effect diagnostics
  }
  
  // Signature specific links
-@@ -3539,6 +3549,12 @@ impl crate::links::LinkCopy for SourceFileLinks {
+@@ -3526,6 +3536,12 @@ impl crate::links::LinkCopy for SourceFileLinks {
          self.local_jsx_factory.set(frozen.local_jsx_factory.get());
          self.local_jsx_fragment_factory.set(frozen.local_jsx_fragment_factory.get());
          self.jsx_fragment_type.set(frozen.jsx_fragment_type.get());

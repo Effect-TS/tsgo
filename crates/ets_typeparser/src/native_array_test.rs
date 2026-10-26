@@ -304,7 +304,7 @@ Array.isArray;
             testfs,
             CompilerOptions {
                 no_lib: Tristate::True,
-                target: ScriptTarget::ESNext,
+                target: ScriptTarget::ES_NEXT,
                 strict: Tristate::True,
                 ..Default::default()
             },

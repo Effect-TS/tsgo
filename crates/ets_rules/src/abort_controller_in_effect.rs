@@ -8,7 +8,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::EffectContextFlags;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::AbortController_is_manually_constructed_inside_Effect_code_Use_Effect_abortSignal_for_Effect_managed_cancellation_effect_abortControllerInEffect;
+static MESSAGE: &Message = &tsdiag::ABORT_CONTROLLER_IS_MANUALLY_CONSTRUCTED_INSIDE_EFFECT_CODE_USE_EFFECT_ABORT_SIGNAL_FOR_EFFECT_MANAGED_CANCELLATION_EFFECT_ABORT_CONTROLLER_IN_EFFECT;
 
 // go: internal/rules/abort_controller_in_effect.go:12 AbortControllerInEffect
 pub static ABORT_CONTROLLER_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {

@@ -15,7 +15,7 @@ pub static PREFER_BARREL_IMPORT: LazyLock<Rule> = LazyLock::new(|| {
         description: "Reports imports of individual modules from packages configured in barrelImportPackages that should be named imports from the package barrel",
         default_severity: Severity::Off,
         supported_effect: vec!["v3", "v4"],
-        codes: vec![tsdiag::X_0_is_imported_directly_but_barrelImportPackages_expects_named_imports_from_the_barrel_1_Use_2_instead_effect_preferBarrelImport.code()],
+        codes: vec![tsdiag::X_0_IS_IMPORTED_DIRECTLY_BUT_BARREL_IMPORT_PACKAGES_EXPECTS_NAMED_IMPORTS_FROM_THE_BARREL_1_USE_2_INSTEAD_EFFECT_PREFER_BARREL_IMPORT.code()],
         run: run_prefer_barrel_import,
     }
 });
@@ -83,7 +83,7 @@ pub(crate) fn run_prefer_barrel_import(ctx: &mut Context<'_, '_>) -> Vec<P<Diagn
         diags.push(ctx.new_diagnostic(
             ctx.source_file,
             ctx.get_error_range(import_decl.module_specifier),
-            &tsdiag::X_0_is_imported_directly_but_barrelImportPackages_expects_named_imports_from_the_barrel_1_Use_2_instead_effect_preferBarrelImport,
+            &tsdiag::X_0_IS_IMPORTED_DIRECTLY_BUT_BARREL_IMPORT_PACKAGES_EXPECTS_NAMED_IMPORTS_FROM_THE_BARREL_1_USE_2_INSTEAD_EFFECT_PREFER_BARREL_IMPORT,
             &[],
             &[
                 specifier,

@@ -13,7 +13,7 @@ use crate::*;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message =
-    &tsdiag::This_object_literal_is_checked_as_an_instance_of_Schema_class_0_but_has_no_class_prototype_instanceof_checks_methods_and_Schema_encoding_can_fail_Use_0_make_or_new_0_instead_effect_schemaClassObjectLiteral;
+    &tsdiag::THIS_OBJECT_LITERAL_IS_CHECKED_AS_AN_INSTANCE_OF_SCHEMA_CLASS_0_BUT_HAS_NO_CLASS_PROTOTYPE_INSTANCEOF_CHECKS_METHODS_AND_SCHEMA_ENCODING_CAN_FAIL_USE_0_MAKE_OR_NEW_0_INSTEAD_EFFECT_SCHEMA_CLASS_OBJECT_LITERAL;
 
 // go: internal/rules/schema_class_object_literal.go:14 SchemaClassObjectLiteral
 pub static SCHEMA_CLASS_OBJECT_LITERAL: LazyLock<Rule> = LazyLock::new(|| Rule {

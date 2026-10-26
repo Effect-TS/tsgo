@@ -61,8 +61,9 @@ pub(crate) fn init() {
                 resolved_options.as_ref(),
                 Some(program),
                 Some(Box::new(move |export: &Export| -> (String, ResultKind) {
-                    // Go's shim `autoimport.ModuleIDFileName` (the module id string itself).
-                    let mut target_file_name = export.target.module_id.0.clone();
+                    // Go's shim `autoimport.ModuleIDFileName`: the path of a file module, empty for an ambient one.
+                    let mut target_file_name =
+                        export.target.module_id.as_file().unwrap_or_default().to_string();
                     if let Some(target_file) = program.get_source_file(&target_file_name) {
                         target_file_name = target_file.file_name().to_string();
                     }

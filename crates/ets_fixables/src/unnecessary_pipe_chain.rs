@@ -7,7 +7,7 @@ use ets_shim::ls::CodeAction;
 use ets_typeparser::TransformationKind;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::This_expression_contains_chained_pipe_calls_that_can_be_simplified_to_a_single_pipe_call_effect_unnecessaryPipeChain;
+static MESSAGE: &Message = &tsdiag::THIS_EXPRESSION_CONTAINS_CHAINED_PIPE_CALLS_THAT_CAN_BE_SIMPLIFIED_TO_A_SINGLE_PIPE_CALL_EFFECT_UNNECESSARY_PIPE_CHAIN;
 
 // go: internal/fixables/unnecessary_pipe_chain.go:13 UnnecessaryPipeChainFix
 pub static UNNECESSARY_PIPE_CHAIN_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

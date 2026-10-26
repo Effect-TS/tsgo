@@ -36,6 +36,6 @@ fn run_effect_jsdoc_comment(ctx: &mut Context<'_, '_>) -> Vec<lsproto::Completio
         "@effect-identifier",
         sort_text,
         replacement_range,
-        Some(lsproto::CompletionItemKind::Constant),
+        Some(lsproto::CompletionItemKind::CONSTANT),
     )]
 }

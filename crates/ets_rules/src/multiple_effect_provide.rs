@@ -19,12 +19,12 @@ pub static MULTIPLE_EFFECT_PROVIDE: LazyLock<Rule> = LazyLock::new(|| {
         description: "Warns against chaining Effect.provide calls which can cause service lifecycle issues",
         default_severity: Severity::Warning,
         supported_effect: vec!["v3", "v4"],
-        codes: vec![tsdiag::This_expression_chains_multiple_Effect_provide_calls_Providing_Layers_in_multiple_calls_in_a_chain_can_break_service_lifecycle_behavior_compared_with_a_single_combined_provide_with_merged_layers_effect_multipleEffectProvide.code()],
+        codes: vec![tsdiag::THIS_EXPRESSION_CHAINS_MULTIPLE_EFFECT_PROVIDE_CALLS_PROVIDING_LAYERS_IN_MULTIPLE_CALLS_IN_A_CHAIN_CAN_BREAK_SERVICE_LIFECYCLE_BEHAVIOR_COMPARED_WITH_A_SINGLE_COMBINED_PROVIDE_WITH_MERGED_LAYERS_EFFECT_MULTIPLE_EFFECT_PROVIDE.code()],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_multiple_effect_provide(ctx.type_parser, ctx.source_file);
             let mut diags = Vec::with_capacity(matches.len());
             for m in &matches {
-                diags.push(ctx.new_diagnostic(m.source_file, m.location, &tsdiag::This_expression_chains_multiple_Effect_provide_calls_Providing_Layers_in_multiple_calls_in_a_chain_can_break_service_lifecycle_behavior_compared_with_a_single_combined_provide_with_merged_layers_effect_multipleEffectProvide, &[], &[]));
+                diags.push(ctx.new_diagnostic(m.source_file, m.location, &tsdiag::THIS_EXPRESSION_CHAINS_MULTIPLE_EFFECT_PROVIDE_CALLS_PROVIDING_LAYERS_IN_MULTIPLE_CALLS_IN_A_CHAIN_CAN_BREAK_SERVICE_LIFECYCLE_BEHAVIOR_COMPARED_WITH_A_SINGLE_COMBINED_PROVIDE_WITH_MERGED_LAYERS_EFFECT_MULTIPLE_EFFECT_PROVIDE, &[], &[]));
             }
             diags
         },

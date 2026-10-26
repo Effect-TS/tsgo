@@ -5,7 +5,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::This_type_assertion_unsafely_narrows_the_error_or_requirements_channels_effect_unsafeEffectTypeAssertion;
+static MESSAGE: &Message = &tsdiag::THIS_TYPE_ASSERTION_UNSAFELY_NARROWS_THE_ERROR_OR_REQUIREMENTS_CHANNELS_EFFECT_UNSAFE_EFFECT_TYPE_ASSERTION;
 
 // go: internal/fixables/unsafe_effect_type_assertion.go:11 UnsafeEffectTypeAssertionFix
 pub static UNSAFE_EFFECT_TYPE_ASSERTION_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

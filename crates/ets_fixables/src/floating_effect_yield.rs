@@ -8,9 +8,9 @@ use ets_typeparser::EffectContextFlags;
 
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE_1: &Message =
-    &tsdiag::This_Effect_value_is_neither_yielded_nor_used_in_an_assignment_effect_floatingEffect;
+    &tsdiag::THIS_EFFECT_VALUE_IS_NEITHER_YIELDED_NOR_USED_IN_AN_ASSIGNMENT_EFFECT_FLOATING_EFFECT;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
-static MESSAGE_2: &Message = &tsdiag::This_Effect_able_0_value_is_neither_yielded_nor_assigned_to_a_variable_effect_floatingEffect;
+static MESSAGE_2: &Message = &tsdiag::THIS_EFFECT_ABLE_0_VALUE_IS_NEITHER_YIELDED_NOR_ASSIGNED_TO_A_VARIABLE_EFFECT_FLOATING_EFFECT;
 
 // go: internal/fixables/floating_effect_yield.go:14 FloatingEffectYieldFix
 // FloatingEffectYieldFix yields a floating Effect when it occurs in an Effect generator.

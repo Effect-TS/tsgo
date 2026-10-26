@@ -12,7 +12,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{EffectFnOpportunityResult, TypeParser};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::This_expression_can_be_rewritten_in_the_reusable_function_form_0_effect_effectFnOpportunity;
+static MESSAGE: &Message = &tsdiag::THIS_EXPRESSION_CAN_BE_REWRITTEN_IN_THE_REUSABLE_FUNCTION_FORM_0_EFFECT_EFFECT_FN_OPPORTUNITY;
 
 // go: internal/rules/effect_fn_opportunity.go:17 EffectFnOpportunity
 // EffectFnOpportunity detects functions that can be rewritten as Effect.fn calls.

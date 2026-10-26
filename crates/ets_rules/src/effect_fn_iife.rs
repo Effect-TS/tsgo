@@ -11,7 +11,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::TypeParser;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::X_0_1_returns_a_reusable_function_that_can_take_arguments_but_it_is_invoked_immediately_here_Effect_gen_represents_the_immediate_use_form_for_this_pattern_2_effect_effectFnIife;
+static MESSAGE: &Message = &tsdiag::X_0_1_RETURNS_A_REUSABLE_FUNCTION_THAT_CAN_TAKE_ARGUMENTS_BUT_IT_IS_INVOKED_IMMEDIATELY_HERE_EFFECT_GEN_REPRESENTS_THE_IMMEDIATE_USE_FORM_FOR_THIS_PATTERN_2_EFFECT_EFFECT_FN_IIFE;
 
 // go: internal/rules/effect_fn_iife.go:17 EffectFnIife
 // EffectFnIife detects Effect.fn or Effect.fnUntraced calls that are immediately invoked (IIFE pattern).

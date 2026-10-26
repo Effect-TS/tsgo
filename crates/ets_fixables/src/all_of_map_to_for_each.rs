@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 use crate::*;
 
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::Effect_forEach_expresses_this_effectful_array_mapping_more_directly_than_Effect_all_over_Array_map_effect_allOfMapToForEach;
+static MESSAGE: &Message = &tsdiag::EFFECT_FOR_EACH_EXPRESSES_THIS_EFFECTFUL_ARRAY_MAPPING_MORE_DIRECTLY_THAN_EFFECT_ALL_OVER_ARRAY_MAP_EFFECT_ALL_OF_MAP_TO_FOR_EACH;
 
 // go: internal/fixables/all_of_map_to_for_each.go:12 AllOfMapToForEachFix
 pub static ALL_OF_MAP_TO_FOR_EACH_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

@@ -18,7 +18,7 @@ pub static ANY_UNKNOWN_IN_ERROR_CONTEXT: LazyLock<Rule> = LazyLock::new(|| Rule 
     description: "Detects 'any' or 'unknown' types in Effect error or requirements channels",
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
-    codes: vec![tsdiag::X_0_effect_anyUnknownInErrorContext.code()],
+    codes: vec![tsdiag::X_0_EFFECT_ANY_UNKNOWN_IN_ERROR_CONTEXT.code()],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         struct MatchEntry {
             node: P<Node>,
@@ -197,7 +197,7 @@ pub static ANY_UNKNOWN_IN_ERROR_CONTEXT: LazyLock<Rule> = LazyLock::new(|| Rule 
             diags.push(ctx.new_diagnostic(
                 ast::get_source_file_of_node(m.node).expect("a node of the source file"),
                 ctx.get_error_range(m.node),
-                &tsdiag::X_0_effect_anyUnknownInErrorContext,
+                &tsdiag::X_0_EFFECT_ANY_UNKNOWN_IN_ERROR_CONTEXT,
                 &[],
                 &[&m.message_text],
             ));

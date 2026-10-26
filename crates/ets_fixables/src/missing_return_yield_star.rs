@@ -8,7 +8,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::This_Effect_never_succeeds_using_return_yield_Asterisk_preserves_a_definitive_generator_exit_point_for_type_narrowing_and_tooling_support_effect_missingReturnYieldStar;
+static MESSAGE: &Message = &tsdiag::THIS_EFFECT_NEVER_SUCCEEDS_USING_RETURN_YIELD_ASTERISK_PRESERVES_A_DEFINITIVE_GENERATOR_EXIT_POINT_FOR_TYPE_NARROWING_AND_TOOLING_SUPPORT_EFFECT_MISSING_RETURN_YIELD_STAR;
 
 // go: internal/fixables/missing_return_yield_star.go:14 MissingReturnYieldStarFix
 // MissingReturnYieldStarFix adds "return" before a yield* expression in Effect.gen when needed.

@@ -10,7 +10,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::TypeParser;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::This_class_extends_the_native_Error_type_directly_Untagged_native_errors_lose_distinction_in_the_Effect_failure_channel_effect_extendsNativeError;
+static MESSAGE: &Message = &tsdiag::THIS_CLASS_EXTENDS_THE_NATIVE_ERROR_TYPE_DIRECTLY_UNTAGGED_NATIVE_ERRORS_LOSE_DISTINCTION_IN_THE_EFFECT_FAILURE_CHANNEL_EFFECT_EXTENDS_NATIVE_ERROR;
 
 // go: internal/rules/extends_native_error.go:14 ExtendsNativeError
 pub static EXTENDS_NATIVE_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {

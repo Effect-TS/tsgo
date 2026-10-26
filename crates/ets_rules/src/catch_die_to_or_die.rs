@@ -10,7 +10,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{EffectMajorVersion, PipingFlow, PipingFlowTransformation, TypeParser};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::Effect_orDie_expresses_escalating_every_typed_failure_into_a_defect_more_directly_than_Effect_0_with_an_identity_forwarding_Effect_die_handler_effect_catchDieToOrDie;
+static MESSAGE: &Message = &tsdiag::EFFECT_OR_DIE_EXPRESSES_ESCALATING_EVERY_TYPED_FAILURE_INTO_A_DEFECT_MORE_DIRECTLY_THAN_EFFECT_0_WITH_AN_IDENTITY_FORWARDING_EFFECT_DIE_HANDLER_EFFECT_CATCH_DIE_TO_OR_DIE;
 
 // go: internal/rules/catch_die_to_or_die.go:16 CatchDieToOrDie
 // CatchDieToOrDie suggests using Effect.orDie instead of a catch-all

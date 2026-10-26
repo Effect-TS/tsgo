@@ -6,10 +6,10 @@ GetDeclarationModifierFlagsFromSymbol is exported by typescript-go's checker pac
 and a member's declaration modifier flags through them. Visibility only, no behavior change.
 
 diff --git a/crates/tsrs_checker/src/checker_08.rs b/crates/tsrs_checker/src/checker_08.rs
-index 1157f1d..ff3d9de 100644
+index f890cab4..386561ed 100644
 --- a/crates/tsrs_checker/src/checker_08.rs
 +++ b/crates/tsrs_checker/src/checker_08.rs
-@@ -1914,7 +1914,7 @@ impl Checker {
+@@ -1949,7 +1949,7 @@ impl Checker {
       * For a description of late-binding, see `lateBindMember`.
       */
      // checker.go:16447
@@ -19,10 +19,10 @@ index 1157f1d..ff3d9de 100644
              return self.get_resolved_members_or_exports_of_symbol(
                  symbol,
 diff --git a/crates/tsrs_checker/src/checker_10.rs b/crates/tsrs_checker/src/checker_10.rs
-index 598e091..9b0701e 100644
+index 73fecfa1..bae4c1b0 100644
 --- a/crates/tsrs_checker/src/checker_10.rs
 +++ b/crates/tsrs_checker/src/checker_10.rs
-@@ -824,10 +824,7 @@ impl Checker {
+@@ -827,10 +827,7 @@ impl Checker {
      }
  
      // checker.go:20147
@@ -35,10 +35,10 @@ index 598e091..9b0701e 100644
              return Vec::new();
          };
 diff --git a/crates/tsrs_checker/src/lib.rs b/crates/tsrs_checker/src/lib.rs
-index 86cf672..7e9f488 100644
+index 284ba62b..f3f2a778 100644
 --- a/crates/tsrs_checker/src/lib.rs
 +++ b/crates/tsrs_checker/src/lib.rs
-@@ -189,7 +189,8 @@ pub use printer::new_symbol_tracker_impl;
+@@ -194,7 +194,8 @@ pub(crate) use printer::new_symbol_tracker_impl;
  pub use services::get_resolved_signature_for_signature_help;
  pub use utilities::{
      compare_types, create_mode_mismatch_details, create_module_not_found_chain,

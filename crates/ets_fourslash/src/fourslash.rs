@@ -22,7 +22,7 @@ use ets_shim::core::{
 };
 use ets_shim::ls::lsconv::{self, Converters, LSPLineMap};
 use ets_shim::ls::lsutil::{self, UserPreferences};
-use ets_shim::lsp::lsptestutil::{self, LSPClient, closeClient};
+use ets_shim::lsp::lsptestutil::{self, CloseClient, LSPClient};
 use ets_shim::lsp::{Reader, ServerOptions, Writer};
 use ets_shim::lsproto::{self, Json};
 use ets_shim::project;
@@ -66,7 +66,7 @@ pub fn register_prepare_test_fs_callback(cb: PrepareTestFSCallback) {
 /// behind a lock; so are the user preferences the server-request handler answers `workspace/configuration` with.
 pub struct FourslashTest {
     client: Arc<LSPClient>,
-    close_client: Option<closeClient>,
+    close_client: Option<CloseClient>,
     vfs: Arc<dyn FS>,
 
     test_data: TestData,
@@ -214,8 +214,8 @@ pub fn new_fourslash(
     // !!! use default compiler options for inferred project as base
     let compiler_options = CompilerOptions {
         skip_default_lib_check: Tristate::True,
-        target: ScriptTarget::LatestStandard,
-        jsx: JsxEmit::Preserve,
+        target: ScriptTarget::LATEST_STANDARD,
+        jsx: JsxEmit::PRESERVE,
         ..CompilerOptions::default()
     };
     // Rust-only: Go's `harnessutil.SetOptionsFromTestConfig` applies the global `// @option:` lines; a case with a
@@ -315,7 +315,7 @@ fn handle_server_request(
     req: &lsproto::RequestMessage,
 ) -> Option<lsproto::ResponseMessage> {
     match req.method {
-        lsproto::Method::WorkspaceConfiguration => {
+        lsproto::Method::WORKSPACE_CONFIGURATION => {
             // Return current user preferences for each requested section.
             // The server requests multiple sections (js/ts, typescript, javascript, editor);
             // we return user preferences for "js/ts" and nil for others.
@@ -346,13 +346,12 @@ fn handle_server_request(
         }
         // Accept all capability registrations
         // Accept all capability unregistrations
-        lsproto::Method::ClientRegisterCapability | lsproto::Method::ClientUnregisterCapability => {
-            Some(lsproto::ResponseMessage {
-                id: req.id.clone(),
-                result: Some(lsproto::Null.to_json()),
-                ..Default::default()
-            })
-        }
+        lsproto::Method::CLIENT_REGISTER_CAPABILITY
+        | lsproto::Method::CLIENT_UNREGISTER_CAPABILITY => Some(lsproto::ResponseMessage {
+            id: req.id.clone(),
+            result: Some(lsproto::Null.to_json()),
+            ..Default::default()
+        }),
         // Unknown server request
         _ => None,
     }
@@ -368,7 +367,7 @@ fn get_base_file_name_from_test(t: &T) -> String {
 
 /// Rust-only: `fourslash.go` `isSuggestionDiagnostic`.
 fn is_suggestion_diagnostic(diag: &lsproto::Diagnostic) -> bool {
-    diag.severity == Some(lsproto::DiagnosticSeverity::Hint)
+    diag.severity == Some(lsproto::DiagnosticSeverity::HINT)
 }
 
 // Rust-only: fourslash.go showCodeLensLocationsCommandName.
@@ -469,7 +468,7 @@ impl FourslashTest {
         // multiple options usually send reconfiguration commands for each `verify` anyways
         let settings = config.marshal_json_to();
         *self.user_preferences.lock() = config;
-        let mut object = ets_shim::core::collections::OrderedMap::default();
+        let mut object = ets_shim::core::json::JsonMap::default();
         object.insert("js/ts".to_string(), settings);
         self.send_notification(
             lsproto::WORKSPACE_DID_CHANGE_CONFIGURATION_INFO,
@@ -965,7 +964,7 @@ impl FourslashTest {
         if let Some(items) = result.command_or_code_action_array {
             for item in items {
                 if let Some(code_action) = item.code_action
-                    && code_action.kind == Some(lsproto::CodeActionKind::QuickFix)
+                    && code_action.kind == Some(lsproto::CodeActionKind::QUICK_FIX)
                     && code_action.diagnostics.as_ref().is_some_and(|d| !d.is_empty())
                 {
                     import_actions.push(code_action);
@@ -1358,7 +1357,7 @@ impl FourslashTest {
         if let Some(items) = &result.command_or_code_action_array {
             for item in items {
                 if let Some(code_action) = &item.code_action
-                    && code_action.kind == Some(lsproto::CodeActionKind::QuickFix)
+                    && code_action.kind == Some(lsproto::CodeActionKind::QUICK_FIX)
                     && let Some(changes) =
                         code_action.edit.as_ref().and_then(|edit| edit.changes.as_ref())
                 {
@@ -1495,50 +1494,50 @@ fn get_language_kind(filename: &str) -> lsproto::LanguageKind {
             EXTENSION_DTS,
         ],
     ) {
-        return lsproto::LanguageKind::TypeScript;
+        return lsproto::LanguageKind::TYPE_SCRIPT;
     }
     if file_extension_is_one_of(filename, &[EXTENSION_JS, EXTENSION_MJS, EXTENSION_CJS]) {
-        return lsproto::LanguageKind::JavaScript;
+        return lsproto::LanguageKind::JAVA_SCRIPT;
     }
     if file_extension_is(filename, EXTENSION_JSX) {
-        return lsproto::LanguageKind::JavaScriptReact;
+        return lsproto::LanguageKind::JAVA_SCRIPT_REACT;
     }
     if file_extension_is(filename, EXTENSION_TSX) {
-        return lsproto::LanguageKind::TypeScriptReact;
+        return lsproto::LanguageKind::TYPE_SCRIPT_REACT;
     }
     if file_extension_is(filename, EXTENSION_JSON) {
         return lsproto::LanguageKind::JSON;
     }
-    lsproto::LanguageKind::TypeScript // !!! should we error in this case?
+    lsproto::LanguageKind::TYPE_SCRIPT // !!! should we error in this case?
 }
 
 /// Rust-only: `fourslash.go` `defaultSemanticTokenTypes`.
 fn default_semantic_token_types() -> Vec<String> {
     use lsproto::SemanticTokenType as S;
     [
-        S::Namespace,
-        S::Class,
-        S::Enum,
-        S::Interface,
-        S::Struct,
-        S::TypeParameter,
-        S::Type,
-        S::Parameter,
-        S::Variable,
-        S::Property,
-        S::EnumMember,
-        S::Decorator,
-        S::Event,
-        S::Function,
-        S::Method,
-        S::Macro,
-        S::Label,
-        S::Comment,
-        S::String,
-        S::Keyword,
-        S::Number,
-        S::Regexp,
-        S::Operator,
+        S::NAMESPACE,
+        S::CLASS,
+        S::ENUM,
+        S::INTERFACE,
+        S::STRUCT,
+        S::TYPE_PARAMETER,
+        S::TYPE,
+        S::PARAMETER,
+        S::VARIABLE,
+        S::PROPERTY,
+        S::ENUM_MEMBER,
+        S::DECORATOR,
+        S::EVENT,
+        S::FUNCTION,
+        S::METHOD,
+        S::MACRO,
+        S::LABEL,
+        S::COMMENT,
+        S::STRING,
+        S::KEYWORD,
+        S::NUMBER,
+        S::REGEXP,
+        S::OPERATOR,
     ]
     .into_iter()
     .map(|s| s.0.to_string())
@@ -1549,16 +1548,16 @@ fn default_semantic_token_types() -> Vec<String> {
 fn default_semantic_token_modifiers() -> Vec<String> {
     use lsproto::SemanticTokenModifier as S;
     let mut modifiers: Vec<String> = [
-        S::Declaration,
-        S::Definition,
-        S::Readonly,
-        S::Static,
-        S::Deprecated,
-        S::Abstract,
-        S::Async,
-        S::Modification,
-        S::Documentation,
-        S::DefaultLibrary,
+        S::DECLARATION,
+        S::DEFINITION,
+        S::READONLY,
+        S::STATIC,
+        S::DEPRECATED,
+        S::ABSTRACT,
+        S::ASYNC,
+        S::MODIFICATION,
+        S::DOCUMENTATION,
+        S::DEFAULT_LIBRARY,
     ]
     .into_iter()
     .map(|s| s.0.to_string())
@@ -1574,9 +1573,9 @@ fn get_capabilities_with_defaults(
     let ptr_true = Some(true);
     let ptr_false = Some(false);
     let markdown_and_plain_text =
-        Some(vec![lsproto::MarkupKind::Markdown, lsproto::MarkupKind::PlainText]);
+        Some(vec![lsproto::MarkupKind::MARKDOWN, lsproto::MarkupKind::PLAIN_TEXT]);
     let diagnostic_tags = || lsproto::ClientDiagnosticsTagOptions {
-        value_set: vec![lsproto::DiagnosticTag::Unnecessary, lsproto::DiagnosticTag::Deprecated],
+        value_set: vec![lsproto::DiagnosticTag::UNNECESSARY, lsproto::DiagnosticTag::DEPRECATED],
     };
 
     let mut capabilities_with_defaults = capabilities.unwrap_or_default();
@@ -1633,7 +1632,7 @@ fn get_capabilities_with_defaults(
             },
             token_types: default_semantic_token_types(),
             token_modifiers: default_semantic_token_modifiers(),
-            formats: vec![lsproto::TokenFormat::Relative],
+            formats: vec![lsproto::TokenFormat::RELATIVE],
             ..Default::default()
         });
     }
@@ -1687,9 +1686,9 @@ fn get_capabilities_with_defaults(
             // LineFoldingOnly: ptrTrue,
             folding_range_kind: Some(lsproto::ClientFoldingRangeKindOptions {
                 value_set: Some(vec![
-                    lsproto::FoldingRangeKind::Comment,
-                    lsproto::FoldingRangeKind::Imports,
-                    lsproto::FoldingRangeKind::Region,
+                    lsproto::FoldingRangeKind::COMMENT,
+                    lsproto::FoldingRangeKind::IMPORTS,
+                    lsproto::FoldingRangeKind::REGION,
                 ]),
             }),
             folding_range: Some(lsproto::ClientFoldingRangeOptions {
@@ -1708,7 +1707,7 @@ fn get_capabilities_with_defaults(
     if workspace.workspace_edit.is_none() {
         workspace.workspace_edit = Some(lsproto::WorkspaceEditClientCapabilities {
             document_changes: ptr_true,
-            resource_operations: Some(vec![lsproto::ResourceOperationKind::Rename]),
+            resource_operations: Some(vec![lsproto::ResourceOperationKind::RENAME]),
             ..Default::default()
         });
     }
@@ -1839,7 +1838,7 @@ impl FourslashTest {
                 range: diag.range,
                 context: lsproto::CodeActionContext {
                     diagnostics: vec![diag.clone()],
-                    only: Some(vec![lsproto::CodeActionKind::QuickFix]),
+                    only: Some(vec![lsproto::CodeActionKind::QUICK_FIX]),
                     ..Default::default()
                 },
                 ..Default::default()
@@ -1850,7 +1849,7 @@ impl FourslashTest {
             let mut titles = Vec::new();
             if let Some(items) = &code_actions.command_or_code_action_array {
                 for item in items {
-                    if is_code_action_of_kind(item, lsproto::CodeActionKind::QuickFix) {
+                    if is_code_action_of_kind(item, lsproto::CodeActionKind::QUICK_FIX) {
                         titles.push(item.code_action.as_ref().unwrap().title.clone());
                     }
                 }
@@ -1879,7 +1878,7 @@ impl FourslashTest {
             range: diagnostic.range,
             context: lsproto::CodeActionContext {
                 diagnostics: vec![diagnostic.clone()],
-                only: Some(vec![lsproto::CodeActionKind::QuickFix]),
+                only: Some(vec![lsproto::CodeActionKind::QUICK_FIX]),
                 ..Default::default()
             },
             ..Default::default()
@@ -1891,7 +1890,7 @@ impl FourslashTest {
             .command_or_code_action_array
             .unwrap_or_default()
             .into_iter()
-            .filter(|item| is_code_action_of_kind(item, lsproto::CodeActionKind::QuickFix))
+            .filter(|item| is_code_action_of_kind(item, lsproto::CodeActionKind::QUICK_FIX))
             .filter_map(|item| item.code_action)
             .collect();
 
@@ -1927,7 +1926,7 @@ impl FourslashTest {
             text_document: lsproto::TextDocumentIdentifier { uri: file_uri.clone() },
             range: selection_range,
             context: lsproto::CodeActionContext {
-                only: Some(vec![lsproto::CodeActionKind::Refactor]),
+                only: Some(vec![lsproto::CodeActionKind::REFACTOR]),
                 ..Default::default()
             },
             ..Default::default()
@@ -1964,7 +1963,7 @@ impl FourslashTest {
             text_document: lsproto::TextDocumentIdentifier { uri: file_uri.clone() },
             range: selection_range,
             context: lsproto::CodeActionContext {
-                only: Some(vec![lsproto::CodeActionKind::Refactor]),
+                only: Some(vec![lsproto::CodeActionKind::REFACTOR]),
                 ..Default::default()
             },
             ..Default::default()

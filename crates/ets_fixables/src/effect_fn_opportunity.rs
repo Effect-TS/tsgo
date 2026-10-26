@@ -20,7 +20,7 @@ use ets_typeparser::EffectFnOpportunityResult;
 use rustc_hash::FxHashSet;
 
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::This_expression_can_be_rewritten_in_the_reusable_function_form_0_effect_effectFnOpportunity;
+static MESSAGE: &Message = &tsdiag::THIS_EXPRESSION_CAN_BE_REWRITTEN_IN_THE_REUSABLE_FUNCTION_FORM_0_EFFECT_EFFECT_FN_OPPORTUNITY;
 
 // go: internal/fixables/effect_fn_opportunity.go:22 EffectFnOpportunityFix
 pub static EFFECT_FN_OPPORTUNITY_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

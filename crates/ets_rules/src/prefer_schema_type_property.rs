@@ -10,7 +10,7 @@ use ets_typeparser::TypeParser;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message =
-    &tsdiag::Do_not_use_Schema_Schema_Type_typeof_X_to_extract_a_schema_s_type_Use_typeof_X_Type_instead_effect_preferSchemaTypeProperty;
+    &tsdiag::DO_NOT_USE_SCHEMA_SCHEMA_TYPE_TYPEOF_X_TO_EXTRACT_A_SCHEMA_S_TYPE_USE_TYPEOF_X_TYPE_INSTEAD_EFFECT_PREFER_SCHEMA_TYPE_PROPERTY;
 
 // go: internal/rules/prefer_schema_type_property.go:13 PreferSchemaTypeProperty
 pub static PREFER_SCHEMA_TYPE_PROPERTY: LazyLock<Rule> = LazyLock::new(|| Rule {

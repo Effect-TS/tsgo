@@ -6,7 +6,7 @@ Port of _patches/typescript/015-ls-inlay-hints.patch (tsc/internal/ls/inlay_hint
 - ProvideInlayHint passes each projection's hints through it before appending them to the result.
 
 diff --git a/crates/tsrs_ls/src/inlay_hints.rs b/crates/tsrs_ls/src/inlay_hints.rs
-index 0ba59647..6013510a 100644
+index 970f0b28..6796bb51 100644
 --- a/crates/tsrs_ls/src/inlay_hints.rs
 +++ b/crates/tsrs_ls/src/inlay_hints.rs
 @@ -21,6 +21,29 @@ use crate::lsutil::{self, IncludeInlayParameterNameHints, InlayHintsPreferences,
@@ -63,10 +63,10 @@ index 0ba59647..6013510a 100644
          Ok(lsproto::InlayHintsOrNull { inlay_hints: Some(result) })
      }
 diff --git a/crates/tsrs_ls/src/lib.rs b/crates/tsrs_ls/src/lib.rs
-index 420ca4fd..f3375a6b 100644
+index 60467368..2c1a8a33 100644
 --- a/crates/tsrs_ls/src/lib.rs
 +++ b/crates/tsrs_ls/src/lib.rs
-@@ -85,6 +85,7 @@ pub use findallreferences::{
+@@ -78,6 +78,7 @@ pub use findallreferences::{
  };
  pub use host::*;
  pub use hover::{AfterQuickInfoCallback, register_after_quick_info_callback};

@@ -229,11 +229,11 @@ pub(crate) fn make_completion_item(
     replacement_range: lsproto::Range,
     kind_override: Option<lsproto::CompletionItemKind>,
 ) -> lsproto::CompletionItem {
-    let mut kind = lsproto::CompletionItemKind::Variable;
+    let mut kind = lsproto::CompletionItemKind::VARIABLE;
     if let Some(kind_override) = kind_override {
         kind = kind_override;
     }
-    let format = lsproto::InsertTextFormat::Snippet;
+    let format = lsproto::InsertTextFormat::SNIPPET;
     lsproto::CompletionItem {
         label: label.to_string(),
         kind: Some(kind),

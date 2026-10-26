@@ -6,7 +6,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::This_input_is_already_assignable_to_the_schema_s_Encoded_type_Use_0_to_preserve_compile_time_type_checking_instead_of_discarding_the_input_type_through_1_effect_preferTypedSchemaDecoder;
+static MESSAGE: &Message = &tsdiag::THIS_INPUT_IS_ALREADY_ASSIGNABLE_TO_THE_SCHEMA_S_ENCODED_TYPE_USE_0_TO_PRESERVE_COMPILE_TIME_TYPE_CHECKING_INSTEAD_OF_DISCARDING_THE_INPUT_TYPE_THROUGH_1_EFFECT_PREFER_TYPED_SCHEMA_DECODER;
 
 // go: internal/fixables/prefer_typed_schema_decoder.go:12 PreferTypedSchemaDecoderFix
 pub static PREFER_TYPED_SCHEMA_DECODER_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

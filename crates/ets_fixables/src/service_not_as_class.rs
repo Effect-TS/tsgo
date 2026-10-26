@@ -7,7 +7,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::Context_Service_is_assigned_to_a_variable_here_but_this_API_is_intended_for_a_class_declaration_shape_such_as_0_effect_serviceNotAsClass;
+static MESSAGE: &Message = &tsdiag::CONTEXT_SERVICE_IS_ASSIGNED_TO_A_VARIABLE_HERE_BUT_THIS_API_IS_INTENDED_FOR_A_CLASS_DECLARATION_SHAPE_SUCH_AS_0_EFFECT_SERVICE_NOT_AS_CLASS;
 
 // go: internal/fixables/service_not_as_class.go:12 ServiceNotAsClassFix
 pub static SERVICE_NOT_AS_CLASS_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

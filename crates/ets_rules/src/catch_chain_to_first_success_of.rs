@@ -12,7 +12,7 @@ use ets_typeparser::{
 };
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::Chained_Effect_catch_fallbacks_that_ignore_the_error_can_be_written_with_Effect_firstSuccessOf_Wrap_each_lazy_fallback_with_Effect_suspend_to_preserve_when_it_is_constructed_effect_catchChainToFirstSuccessOf;
+static MESSAGE: &Message = &tsdiag::CHAINED_EFFECT_CATCH_FALLBACKS_THAT_IGNORE_THE_ERROR_CAN_BE_WRITTEN_WITH_EFFECT_FIRST_SUCCESS_OF_WRAP_EACH_LAZY_FALLBACK_WITH_EFFECT_SUSPEND_TO_PRESERVE_WHEN_IT_IS_CONSTRUCTED_EFFECT_CATCH_CHAIN_TO_FIRST_SUCCESS_OF;
 
 // go: internal/rules/catch_chain_to_first_success_of.go:15 CatchChainToFirstSuccessOf
 // CatchChainToFirstSuccessOf suggests firstSuccessOf for equivalent catch fallback chains.

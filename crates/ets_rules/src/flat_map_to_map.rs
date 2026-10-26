@@ -11,7 +11,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{LazyExpressionFlags, TypeParser, parse_lazy_expression};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::Effect_map_expresses_this_success_value_transformation_more_directly_than_Effect_flatMap_followed_by_Effect_succeed_effect_flatMapToMap;
+static MESSAGE: &Message = &tsdiag::EFFECT_MAP_EXPRESSES_THIS_SUCCESS_VALUE_TRANSFORMATION_MORE_DIRECTLY_THAN_EFFECT_FLAT_MAP_FOLLOWED_BY_EFFECT_SUCCEED_EFFECT_FLAT_MAP_TO_MAP;
 
 // go: internal/rules/flat_map_to_map.go:17 FlatMapToMap
 // FlatMapToMap suggests using Effect.map when an Effect.flatMap callback only

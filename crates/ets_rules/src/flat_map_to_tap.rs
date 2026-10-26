@@ -11,7 +11,7 @@ use ets_typeparser::{
 };
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::Effect_tap_expresses_this_observation_more_directly_than_Effect_0_with_a_manual_re_yield_effect_flatMapToTap;
+static MESSAGE: &Message = &tsdiag::EFFECT_TAP_EXPRESSES_THIS_OBSERVATION_MORE_DIRECTLY_THAN_EFFECT_0_WITH_A_MANUAL_RE_YIELD_EFFECT_FLAT_MAP_TO_TAP;
 
 // go: internal/rules/flat_map_to_tap.go:15 FlatMapToTap
 pub static FLAT_MAP_TO_TAP: LazyLock<Rule> = LazyLock::new(|| Rule {

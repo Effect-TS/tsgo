@@ -17,13 +17,13 @@ pub static MISSING_STAR_IN_YIELD_EFFECT_GEN: LazyLock<Rule> = LazyLock::new(|| {
         description: "Detects bare yield (without *) inside Effect generator scopes",
         default_severity: Severity::Error,
         supported_effect: vec!["v3", "v4"],
-        codes: vec![tsdiag::Inside_this_Effect_generator_effect_missingStarInYieldEffectGen.code(), tsdiag::This_uses_yield_for_an_Effect_value_yield_Asterisk_is_the_Effect_aware_form_in_this_context_effect_missingStarInYieldEffectGen.code()],
+        codes: vec![tsdiag::INSIDE_THIS_EFFECT_GENERATOR_EFFECT_MISSING_STAR_IN_YIELD_EFFECT_GEN.code(), tsdiag::THIS_USES_YIELD_FOR_AN_EFFECT_VALUE_YIELD_ASTERISK_IS_THE_EFFECT_AWARE_FORM_IN_THIS_CONTEXT_EFFECT_MISSING_STAR_IN_YIELD_EFFECT_GEN.code()],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_missing_star_in_yield_effect_gen(ctx.type_parser, ctx.source_file);
             let mut diags = Vec::with_capacity(matches.len());
             for m in &matches {
-                let related_info = ctx.new_diagnostic(m.source_file, ctx.get_error_range(m.gen_fn_node), &tsdiag::Inside_this_Effect_generator_effect_missingStarInYieldEffectGen, &[], &[]);
-                diags.push(ctx.new_diagnostic(m.source_file, m.location, &tsdiag::This_uses_yield_for_an_Effect_value_yield_Asterisk_is_the_Effect_aware_form_in_this_context_effect_missingStarInYieldEffectGen, &[related_info], &[]));
+                let related_info = ctx.new_diagnostic(m.source_file, ctx.get_error_range(m.gen_fn_node), &tsdiag::INSIDE_THIS_EFFECT_GENERATOR_EFFECT_MISSING_STAR_IN_YIELD_EFFECT_GEN, &[], &[]);
+                diags.push(ctx.new_diagnostic(m.source_file, m.location, &tsdiag::THIS_USES_YIELD_FOR_AN_EFFECT_VALUE_YIELD_ASTERISK_IS_THE_EFFECT_AWARE_FORM_IN_THIS_CONTEXT_EFFECT_MISSING_STAR_IN_YIELD_EFFECT_GEN, &[related_info], &[]));
             }
             diags
         },

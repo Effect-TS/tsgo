@@ -14,9 +14,9 @@ use crate::deterministic_keys::get_package_json_directory;
 
 /// Rust-only: the rules' messages (Go spells them out at each use).
 static EXPERIMENTAL_MESSAGE: &Message =
-    &tsdiag::X_0_is_an_experimental_API_effect_experimentalApiUsage;
+    &tsdiag::X_0_IS_AN_EXPERIMENTAL_API_EFFECT_EXPERIMENTAL_API_USAGE;
 /// Rust-only: see `EXPERIMENTAL_MESSAGE`.
-static UNSTABLE_MESSAGE: &Message = &tsdiag::X_0_is_an_unstable_API_Breaking_changes_may_happen_between_versions_effect_unstableApiUsage;
+static UNSTABLE_MESSAGE: &Message = &tsdiag::X_0_IS_AN_UNSTABLE_API_BREAKING_CHANGES_MAY_HAPPEN_BETWEEN_VERSIONS_EFFECT_UNSTABLE_API_USAGE;
 
 // go: internal/rules/stability_api_usage.go:16 ExperimentalApiUsage
 pub static EXPERIMENTAL_API_USAGE: LazyLock<Rule> = LazyLock::new(|| Rule {

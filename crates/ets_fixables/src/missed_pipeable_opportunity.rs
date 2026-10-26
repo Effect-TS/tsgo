@@ -12,7 +12,7 @@ use ets_shim::ls::CodeAction;
 use ets_typeparser::{PipingFlow, PipingFlowTransformation, TransformationKind};
 
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::This_nested_call_structure_has_a_pipeable_form_0_pipe_represents_the_same_call_sequence_in_pipe_style_and_may_be_easier_to_read_effect_missedPipeableOpportunity;
+static MESSAGE: &Message = &tsdiag::THIS_NESTED_CALL_STRUCTURE_HAS_A_PIPEABLE_FORM_0_PIPE_REPRESENTS_THE_SAME_CALL_SEQUENCE_IN_PIPE_STYLE_AND_MAY_BE_EASIER_TO_READ_EFFECT_MISSED_PIPEABLE_OPPORTUNITY;
 
 // go: internal/fixables/missed_pipeable_opportunity.go:14 MissedPipeableOpportunityFix
 pub static MISSED_PIPEABLE_OPPORTUNITY_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

@@ -6,7 +6,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::This_uses_yield_for_an_Effect_value_yield_Asterisk_is_the_Effect_aware_form_in_this_context_effect_missingStarInYieldEffectGen;
+static MESSAGE: &Message = &tsdiag::THIS_USES_YIELD_FOR_AN_EFFECT_VALUE_YIELD_ASTERISK_IS_THE_EFFECT_AWARE_FORM_IN_THIS_CONTEXT_EFFECT_MISSING_STAR_IN_YIELD_EFFECT_GEN;
 
 // go: internal/fixables/missing_star_in_yield_effect_gen.go:12 MissingStarInYieldEffectGenFix
 pub static MISSING_STAR_IN_YIELD_EFFECT_GEN_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

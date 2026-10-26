@@ -12,7 +12,7 @@ Port of _patches/typescript/007-core-compileroptions.patch (tsc/internal/core/op
 - core/effect_options_test.go: src/effect_options_test.rs (plus a Rust-only test of the shared assignment).
 
 diff --git a/crates/tsrs_core/Cargo.toml b/crates/tsrs_core/Cargo.toml
-index 4bfb9ef..0d9da66 100644
+index 85725648..809424a4 100644
 --- a/crates/tsrs_core/Cargo.toml
 +++ b/crates/tsrs_core/Cargo.toml
 @@ -19,6 +19,8 @@ plain-ptrs = []
@@ -25,14 +25,14 @@ index 4bfb9ef..0d9da66 100644
  hashbrown.workspace = true
  indexmap.workspace = true
 diff --git a/crates/tsrs_core/src/compileroptions.rs b/crates/tsrs_core/src/compileroptions.rs
-index ed07dbc..5dfedd3 100644
+index 2acc8c70..17b8bc1a 100644
 --- a/crates/tsrs_core/src/compileroptions.rs
 +++ b/crates/tsrs_core/src/compileroptions.rs
 @@ -3,7 +3,7 @@ use crate::collections::OrderedMap;
  use crate::tspath;
  use rustc_hash::FxHashMap;
  use std::fmt;
--use std::sync::LazyLock;
+-use std::sync::{Arc, LazyLock};
 +use std::sync::{Arc, LazyLock, PoisonError, RwLock};
  
  #[derive(Clone, Debug, Default, PartialEq, Eq)]
@@ -49,7 +49,7 @@ index ed07dbc..5dfedd3 100644
      /// API only (`gojson`): `moduleDetection` and `newLine` numbers decoded from the wire with no Rust variant (Go
      /// keeps any int32), by JSON name. The typed field stays at its default (which behaves like Go's fallback) and
      /// the value is echoed back. (`target`, `module`, `jsx` and `moduleResolution` hold any int32 directly.)
-@@ -780,3 +785,70 @@ impl PathSubstitutions for Option<Vec<String>> {
+@@ -799,3 +804,70 @@ impl PathSubstitutions for Option<Vec<String>> {
          self.as_deref().unwrap_or_default()
      }
  }
@@ -122,7 +122,7 @@ index ed07dbc..5dfedd3 100644
 +mod effect_options_test;
 diff --git a/crates/tsrs_core/src/effect_options_test.rs b/crates/tsrs_core/src/effect_options_test.rs
 new file mode 100644
-index 0000000..6149cbe
+index 00000000..6149cbe8
 --- /dev/null
 +++ b/crates/tsrs_core/src/effect_options_test.rs
 @@ -0,0 +1,47 @@

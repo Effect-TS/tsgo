@@ -3,9 +3,10 @@ suppresses Effect diagnostics (codes 377000..378000) with @ts-expect-error / @ts
 directive system (@effect-diagnostics). The directive is still marked used, as in Go.
 
 diff --git a/crates/tsrs_compiler/src/program.rs b/crates/tsrs_compiler/src/program.rs
+index 29279a1c..00f16dbb 100644
 --- a/crates/tsrs_compiler/src/program.rs
 +++ b/crates/tsrs_compiler/src/program.rs
-@@ -2826,6 +2826,11 @@
+@@ -2828,6 +2828,11 @@ impl Program {
                  }
                  line = current_line.checked_sub(1);
              }

@@ -12,7 +12,7 @@ use ets_typeparser::{PipingFlow, PipingFlowTransformation, TransformationKind, T
 use crate::*;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::This_nested_call_structure_has_a_pipeable_form_0_pipe_represents_the_same_call_sequence_in_pipe_style_and_may_be_easier_to_read_effect_missedPipeableOpportunity;
+static MESSAGE: &Message = &tsdiag::THIS_NESTED_CALL_STRUCTURE_HAS_A_PIPEABLE_FORM_0_PIPE_REPRESENTS_THE_SAME_CALL_SEQUENCE_IN_PIPE_STYLE_AND_MAY_BE_EASIER_TO_READ_EFFECT_MISSED_PIPEABLE_OPPORTUNITY;
 
 // go: internal/rules/missed_pipeable_opportunity.go:19 MissedPipeableOpportunity
 // MissedPipeableOpportunity detects nested function call chains that can be converted to .pipe() style.

@@ -16,7 +16,7 @@ pub static PREFER_EFFECT_ARRAY: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![
-        tsdiag::Consider_effect_SlashArray_0_instead_of_native_Array_1_2_effect_preferEffectArray
+        tsdiag::CONSIDER_EFFECT_SLASH_ARRAY_0_INSTEAD_OF_NATIVE_ARRAY_1_2_EFFECT_PREFER_EFFECT_ARRAY
             .code(),
     ],
     run: run_prefer_effect_array,
@@ -215,7 +215,7 @@ pub(crate) fn run_prefer_effect_array(ctx: &mut Context<'_, '_>) -> Vec<P<Diagno
                     diagnostics.push(ctx.new_diagnostic(
                         ctx.source_file,
                         ctx.get_error_range(name),
-                        &tsdiag::Consider_effect_SlashArray_0_instead_of_native_Array_1_2_effect_preferEffectArray,
+                        &tsdiag::CONSIDER_EFFECT_SLASH_ARRAY_0_INSTEAD_OF_NATIVE_ARRAY_1_2_EFFECT_PREFER_EFFECT_ARRAY,
                         &[],
                         &[preference.effect_api, preference.native_name, preference.caveat],
                     ));

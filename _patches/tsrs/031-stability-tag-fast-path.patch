@@ -12,7 +12,7 @@ Read by ets_typeparser's stability_of_declaration_tag (Go's stabilityOfDeclarati
 the flag; its api_stability tests find no `@stability` tag without this patch.
 
 diff --git a/crates/tsrs_ast/src/nodeflags.rs b/crates/tsrs_ast/src/nodeflags.rs
-index 3981671..d3ae47a 100644
+index 39816718..d3ae47a2 100644
 --- a/crates/tsrs_ast/src/nodeflags.rs
 +++ b/crates/tsrs_ast/src/nodeflags.rs
 @@ -47,6 +47,7 @@ bitflags! {
@@ -24,7 +24,7 @@ index 3981671..d3ae47a 100644
          const BlockScoped = Self::Let.bits() | Self::Const.bits() | Self::Using.bits();
          const Constant = Self::Const.bits() | Self::Using.bits();
 diff --git a/crates/tsrs_ast/src/tokenflags.rs b/crates/tsrs_ast/src/tokenflags.rs
-index d7148bf..914a7b0 100644
+index d7148bf6..914a7b0e 100644
 --- a/crates/tsrs_ast/src/tokenflags.rs
 +++ b/crates/tsrs_ast/src/tokenflags.rs
 @@ -25,6 +25,7 @@ bitflags! {
@@ -36,10 +36,10 @@ index d7148bf..914a7b0 100644
          const WithSpecifier = Self::HexSpecifier.bits() | Self::BinaryOrOctalSpecifier.bits();
          const StringLiteralFlags = Self::Unterminated.bits() | Self::HexEscape.bits() | Self::UnicodeEscape.bits() | Self::ExtendedUnicodeEscape.bits() | Self::ContainsInvalidEscape.bits() | Self::SingleQuote.bits();
 diff --git a/crates/tsrs_parser/src/jsdoc.rs b/crates/tsrs_parser/src/jsdoc.rs
-index 6411ba6..05111c0 100644
+index febb5368..32cac926 100644
 --- a/crates/tsrs_parser/src/jsdoc.rs
 +++ b/crates/tsrs_parser/src/jsdoc.rs
-@@ -85,6 +85,9 @@ impl Parser {
+@@ -80,6 +80,9 @@ impl Parser {
              if info.intersects(JsdocScannerInfo::HasDeprecated) {
                  node.set_flags(node.flags() | NodeFlags::PossiblyContainsDeprecatedTag);
              }
@@ -49,10 +49,10 @@ index 6411ba6..05111c0 100644
              if !info.intersects(JsdocScannerInfo::HasSeeOrLink) {
                  return &[];
              }
-@@ -108,6 +111,9 @@ impl Parser {
-             jsdoc
-         });
-         if !jsdoc.is_empty() {
+@@ -90,6 +93,9 @@ impl Parser {
+         self.has_deprecated_tag = false;
+         let start = self.parse_jsdoc_comments(node);
+         if self.node_stack.len() > start {
 +            if info.intersects(JsdocScannerInfo::HasStability) {
 +                node.set_flags(node.flags() | NodeFlags::PossiblyContainsStabilityTag);
 +            }
@@ -60,7 +60,7 @@ index 6411ba6..05111c0 100644
                  node.set_flags(node.flags() | NodeFlags::HasJSDoc);
              }
 diff --git a/crates/tsrs_parser/src/parser_1.rs b/crates/tsrs_parser/src/parser_1.rs
-index d8e00e1..b766daa 100644
+index 6745d4f5..d3dd7a39 100644
 --- a/crates/tsrs_parser/src/parser_1.rs
 +++ b/crates/tsrs_parser/src/parser_1.rs
 @@ -97,7 +97,8 @@ bitflags! {
@@ -73,7 +73,7 @@ index d8e00e1..b766daa 100644
      }
  }
  
-@@ -716,6 +717,9 @@ impl Parser {
+@@ -761,6 +762,9 @@ impl Parser {
          if self.scanner.has_preceding_jsdoc_with_deprecated_tag() {
              info |= JsdocScannerInfo::HasDeprecated;
          }
@@ -84,10 +84,10 @@ index d8e00e1..b766daa 100644
              info |= JsdocScannerInfo::HasSeeOrLink;
          }
 diff --git a/crates/tsrs_scanner/src/scanner.rs b/crates/tsrs_scanner/src/scanner.rs
-index 6cc0857..d31a0d5 100644
+index 35cee4a9..8ad5c004 100644
 --- a/crates/tsrs_scanner/src/scanner.rs
 +++ b/crates/tsrs_scanner/src/scanner.rs
-@@ -664,11 +664,15 @@ impl Scanner {
+@@ -694,11 +694,15 @@ impl Scanner {
          self.state.token_flags.intersects(TokenFlags::PrecedingJSDocWithDeprecated)
      }
  
@@ -104,7 +104,7 @@ index 6cc0857..d31a0d5 100644
      // setting the appropriate token flags. Called during scanning when a JSDoc comment is detected.
      fn scan_jsdoc_comment_for_tags(&mut self, comment_text: &str) {
          let mut comment_text = comment_text.as_bytes();
-@@ -682,13 +686,20 @@ impl Scanner {
+@@ -712,13 +716,20 @@ impl Scanner {
              {
                  self.state.token_flags |= TokenFlags::PrecedingJSDocWithDeprecated;
              }

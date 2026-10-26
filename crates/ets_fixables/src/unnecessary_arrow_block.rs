@@ -7,7 +7,7 @@ use ets_shim::ls::CodeAction;
 use ets_shim::scanner;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::This_arrow_function_block_only_returns_an_expression_and_can_use_a_concise_body_effect_unnecessaryArrowBlock;
+static MESSAGE: &Message = &tsdiag::THIS_ARROW_FUNCTION_BLOCK_ONLY_RETURNS_AN_EXPRESSION_AND_CAN_USE_A_CONCISE_BODY_EFFECT_UNNECESSARY_ARROW_BLOCK;
 
 // go: internal/fixables/unnecessary_arrow_block.go:13 UnnecessaryArrowBlockFix
 pub static UNNECESSARY_ARROW_BLOCK_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

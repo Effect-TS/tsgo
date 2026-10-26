@@ -11,7 +11,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{LazyExpressionFlags, TypeParser, parse_lazy_expression};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
-static MESSAGE: &Message = &tsdiag::Effect_mapError_expresses_the_same_error_type_transformation_more_directly_than_Effect_0_followed_by_Effect_fail_effect_catchAllToMapError;
+static MESSAGE: &Message = &tsdiag::EFFECT_MAP_ERROR_EXPRESSES_THE_SAME_ERROR_TYPE_TRANSFORMATION_MORE_DIRECTLY_THAN_EFFECT_0_FOLLOWED_BY_EFFECT_FAIL_EFFECT_CATCH_ALL_TO_MAP_ERROR;
 
 // go: internal/rules/catch_all_to_map_error.go:16 CatchAllToMapError
 // CatchAllToMapError suggests using Effect.mapError instead of Effect.catch + Effect.fail.

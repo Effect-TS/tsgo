@@ -55,14 +55,14 @@ fn run_effect_diagnostics_comment(ctx: &mut Context<'_, '_>) -> Vec<lsproto::Com
             &format!("@effect-diagnostics {disable_snippet}"),
             sort_text,
             replacement_range,
-            Some(lsproto::CompletionItemKind::Constant),
+            Some(lsproto::CompletionItemKind::CONSTANT),
         ),
         make_completion_item(
             "@effect-diagnostics-next-line",
             &format!("@effect-diagnostics-next-line {disable_snippet}"),
             sort_text,
             replacement_range,
-            Some(lsproto::CompletionItemKind::Constant),
+            Some(lsproto::CompletionItemKind::CONSTANT),
         ),
     ]
 }

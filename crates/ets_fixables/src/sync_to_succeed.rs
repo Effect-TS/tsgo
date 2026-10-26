@@ -7,7 +7,7 @@ use ets_shim::ls::CodeAction;
 use crate::*;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
-static MESSAGE: &Message = &tsdiag::Effect_succeed_expresses_this_constant_value_more_directly_than_Effect_sync_effect_syncToSucceed;
+static MESSAGE: &Message = &tsdiag::EFFECT_SUCCEED_EXPRESSES_THIS_CONSTANT_VALUE_MORE_DIRECTLY_THAN_EFFECT_SYNC_EFFECT_SYNC_TO_SUCCEED;
 
 // go: internal/fixables/sync_to_succeed.go:11 SyncToSucceedFix
 pub static SYNC_TO_SUCCEED_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {

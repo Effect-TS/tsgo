@@ -36,7 +36,7 @@ pub static GLOBAL_TIMERS: LazyLock<Rule> = LazyLock::new(|| {
     description: "Warns when using setTimeout/setInterval outside Effect generators instead of Effect.sleep/Schedule",
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
-    codes: vec![tsdiag::This_code_uses_1_the_corresponding_Effect_timer_API_is_0_from_Effect_effect_globalTimers.code()],
+    codes: vec![tsdiag::THIS_CODE_USES_1_THE_CORRESPONDING_EFFECT_TIMER_API_IS_0_FROM_EFFECT_EFFECT_GLOBAL_TIMERS.code()],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_timers(ctx, false) },
 }
 });
@@ -49,7 +49,7 @@ pub static GLOBAL_TIMERS_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
     description: "Warns when using setTimeout/setInterval inside Effect generators instead of Effect.sleep/Schedule",
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
-    codes: vec![tsdiag::This_Effect_code_uses_1_the_corresponding_timer_API_in_this_context_is_0_from_Effect_effect_globalTimersInEffect.code()],
+    codes: vec![tsdiag::THIS_EFFECT_CODE_USES_1_THE_CORRESPONDING_TIMER_API_IN_THIS_CONTEXT_IS_0_FROM_EFFECT_EFFECT_GLOBAL_TIMERS_IN_EFFECT.code()],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_timers(ctx, true) },
 }
 });
@@ -74,9 +74,9 @@ pub(crate) fn run_global_timers(
     }
 
     let mut message: &'static Message =
-        &tsdiag::This_code_uses_1_the_corresponding_Effect_timer_API_is_0_from_Effect_effect_globalTimers;
+        &tsdiag::THIS_CODE_USES_1_THE_CORRESPONDING_EFFECT_TIMER_API_IS_0_FROM_EFFECT_EFFECT_GLOBAL_TIMERS;
     if check_in_effect {
-        message = &tsdiag::This_Effect_code_uses_1_the_corresponding_timer_API_in_this_context_is_0_from_Effect_effect_globalTimersInEffect;
+        message = &tsdiag::THIS_EFFECT_CODE_USES_1_THE_CORRESPONDING_TIMER_API_IN_THIS_CONTEXT_IS_0_FROM_EFFECT_EFFECT_GLOBAL_TIMERS_IN_EFFECT;
     }
 
     let mut diags = Vec::new();
