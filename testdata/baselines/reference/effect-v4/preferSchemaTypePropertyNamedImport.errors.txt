@@ -1,0 +1,28 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/preferSchemaTypePropertyNamedImport.ts(6,24): error TS377104: Do not use `Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+/.src/preferSchemaTypePropertyNamedImport.ts(7,27): error TS377104: Do not use `Codec.Encoded<typeof X>`. Use `typeof X.Encoded` instead. effect(preferSchemaTypeProperty)
+/.src/preferSchemaTypePropertyNamedImport.ts(8,36): error TS377104: Do not use `Codec.DecodingServices<typeof X>`. Use `typeof X.DecodingServices` instead. effect(preferSchemaTypeProperty)
+/.src/preferSchemaTypePropertyNamedImport.ts(9,36): error TS377104: Do not use `Codec.EncodingServices<typeof X>`. Use `typeof X.EncodingServices` instead. effect(preferSchemaTypeProperty)
+
+
+==== /.src/preferSchemaTypePropertyNamedImport.ts (4 errors) ====
+    // @effect-diagnostics preferSchemaTypeProperty:error
+    import { Codec, Schema } from "effect/Schema"
+    import * as S from "effect/Schema"
+    
+    export const User = S.Struct({ id: S.String })
+    export type UserType = Schema.Type<typeof User>
+                           ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377104: Do not use `Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+    export type UserEncoded = Codec.Encoded<typeof User>
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377104: Do not use `Codec.Encoded<typeof X>`. Use `typeof X.Encoded` instead. effect(preferSchemaTypeProperty)
+    export type UserDecodingServices = Codec.DecodingServices<typeof User>
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377104: Do not use `Codec.DecodingServices<typeof X>`. Use `typeof X.DecodingServices` instead. effect(preferSchemaTypeProperty)
+    export type UserEncodingServices = Codec.EncodingServices<typeof User>
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377104: Do not use `Codec.EncodingServices<typeof X>`. Use `typeof X.EncodingServices` instead. effect(preferSchemaTypeProperty)
+    

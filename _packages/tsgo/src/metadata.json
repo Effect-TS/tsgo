@@ -2958,7 +2958,7 @@
     {
       "name": "preferSchemaTypeProperty",
       "group": "style",
-      "description": "Disallows Schema.Schema.Type\u003ctypeof X\u003e in favor of typeof X.Type",
+      "description": "Disallows Schema.Schema.Type\u003ctypeof X\u003e and Schema.Codec.Encoded\u003ctypeof X\u003e-style helpers in favor of typeof X.Type and typeof X.Encoded",
       "defaultSeverity": "off",
       "fixable": true,
       "supportedEffect": [
@@ -2974,7 +2974,7 @@
           {
             "start": 97,
             "end": 128,
-            "text": "Do not use `Schema.Schema.Type\u003ctypeof X\u003e` to extract a schema's type. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)"
+            "text": "Do not use `Schema.Schema.Type\u003ctypeof X\u003e`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)"
           }
         ]
       }

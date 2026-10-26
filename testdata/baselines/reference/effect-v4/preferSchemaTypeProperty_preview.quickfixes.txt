@@ -6,7 +6,7 @@
 [D2] (5:6-5:10) TS6196: 'User' is declared but never used.
   (no quick fixes)
 
-[D3] (5:13-5:44) TS377104: Do not use `Schema.Schema.Type<typeof X>` to extract a schema's type. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+[D3] (5:13-5:44) TS377104: Do not use `Schema.Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
   Fix 0: "Disable preferSchemaTypeProperty for this line"
   Fix 1: "Disable preferSchemaTypeProperty for entire file"
   Fix 2: "Replace with 'typeof User.Type'"

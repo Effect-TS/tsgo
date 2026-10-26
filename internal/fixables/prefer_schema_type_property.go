@@ -10,8 +10,8 @@ import (
 
 var PreferSchemaTypePropertyFix = fixable.Fixable{
 	Name:        "preferSchemaTypeProperty",
-	Description: "Replace with typeof X.Type",
-	ErrorCodes:  []int32{tsdiag.Do_not_use_Schema_Schema_Type_typeof_X_to_extract_a_schema_s_type_Use_typeof_X_Type_instead_effect_preferSchemaTypeProperty.Code()},
+	Description: "Replace with typeof X.Type or typeof X.Encoded",
+	ErrorCodes:  []int32{tsdiag.Do_not_use_0_typeof_X_Use_typeof_X_1_instead_effect_preferSchemaTypeProperty.Code()},
 	FixIDs:      []string{"preferSchemaTypeProperty_fix"},
 	Run:         runPreferSchemaTypePropertyFix,
 }
@@ -24,11 +24,11 @@ func runPreferSchemaTypePropertyFix(ctx *fixable.Context) []ls.CodeAction {
 		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
-			Description: "Replace with 'typeof " + match.SchemaNameText + ".Type'",
+			Description: "Replace with 'typeof " + match.SchemaNameText + "." + match.PropertyName + "'",
 			Run: func(tracker *rewriter.Tracker) {
 				schemaType := tracker.NewQualifiedName(
 					tracker.DeepCloneNode(match.SchemaName),
-					tracker.NewIdentifier("Type"),
+					tracker.NewIdentifier(match.PropertyName),
 				)
 				replacement := tracker.NewTypeQueryNode(schemaType, nil)
 				tracker.ReplaceNode(ctx.SourceFile, match.TypeReference, replacement, nil)

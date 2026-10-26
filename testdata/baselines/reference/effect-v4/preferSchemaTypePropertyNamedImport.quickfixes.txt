@@ -1,0 +1,103 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:24-6:48) TS377104: Do not use `Schema.Type<typeof X>`. Use `typeof X.Type` instead. effect(preferSchemaTypeProperty)
+  Fix 0: "Disable preferSchemaTypeProperty for this line"
+  Fix 1: "Disable preferSchemaTypeProperty for entire file"
+  Fix 2: "Replace with 'typeof User.Type'"
+
+[D2] (7:27-7:53) TS377104: Do not use `Codec.Encoded<typeof X>`. Use `typeof X.Encoded` instead. effect(preferSchemaTypeProperty)
+  Fix 0: "Disable preferSchemaTypeProperty for this line"
+  Fix 1: "Disable preferSchemaTypeProperty for entire file"
+  Fix 2: "Replace with 'typeof User.Encoded'"
+
+[D3] (8:36-8:71) TS377104: Do not use `Codec.DecodingServices<typeof X>`. Use `typeof X.DecodingServices` instead. effect(preferSchemaTypeProperty)
+  Fix 0: "Disable preferSchemaTypeProperty for this line"
+  Fix 1: "Disable preferSchemaTypeProperty for entire file"
+  Fix 2: "Replace with 'typeof User.DecodingServices'"
+
+[D4] (9:36-9:71) TS377104: Do not use `Codec.EncodingServices<typeof X>`. Use `typeof X.EncodingServices` instead. effect(preferSchemaTypeProperty)
+  Fix 0: "Disable preferSchemaTypeProperty for this line"
+  Fix 1: "Disable preferSchemaTypeProperty for entire file"
+  Fix 2: "Replace with 'typeof User.EncodingServices'"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable preferSchemaTypeProperty for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with 'typeof User.Type'" ===
+
+--- file:///.src/preferSchemaTypePropertyNamedImport.ts ---
+// @effect-diagnostics preferSchemaTypeProperty:error
+import { Codec, Schema } from "effect/Schema"
+import * as S from "effect/Schema"
+
+export const User = S.Struct({ id: S.String })
+export type UserType = typeof User.Type
+export type UserEncoded = Codec.Encoded<typeof User>
+export type UserDecodingServices = Codec.DecodingServices<typeof User>
+export type UserEncodingServices = Codec.EncodingServices<typeof User>
+
+
+=== [D2] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable preferSchemaTypeProperty for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with 'typeof User.Encoded'" ===
+
+--- file:///.src/preferSchemaTypePropertyNamedImport.ts ---
+// @effect-diagnostics preferSchemaTypeProperty:error
+import { Codec, Schema } from "effect/Schema"
+import * as S from "effect/Schema"
+
+export const User = S.Struct({ id: S.String })
+export type UserType = Schema.Type<typeof User>
+export type UserEncoded = typeof User.Encoded
+export type UserDecodingServices = Codec.DecodingServices<typeof User>
+export type UserEncodingServices = Codec.EncodingServices<typeof User>
+
+
+=== [D3] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable preferSchemaTypeProperty for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with 'typeof User.DecodingServices'" ===
+
+--- file:///.src/preferSchemaTypePropertyNamedImport.ts ---
+// @effect-diagnostics preferSchemaTypeProperty:error
+import { Codec, Schema } from "effect/Schema"
+import * as S from "effect/Schema"
+
+export const User = S.Struct({ id: S.String })
+export type UserType = Schema.Type<typeof User>
+export type UserEncoded = Codec.Encoded<typeof User>
+export type UserDecodingServices = typeof User.DecodingServices
+export type UserEncodingServices = Codec.EncodingServices<typeof User>
+
+
+=== [D4] Fix 0: "Disable preferSchemaTypeProperty for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable preferSchemaTypeProperty for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with 'typeof User.EncodingServices'" ===
+
+--- file:///.src/preferSchemaTypePropertyNamedImport.ts ---
+// @effect-diagnostics preferSchemaTypeProperty:error
+import { Codec, Schema } from "effect/Schema"
+import * as S from "effect/Schema"
+
+export const User = S.Struct({ id: S.String })
+export type UserType = Schema.Type<typeof User>
+export type UserEncoded = Codec.Encoded<typeof User>
+export type UserDecodingServices = Codec.DecodingServices<typeof User>
+export type UserEncodingServices = typeof User.EncodingServices
+
