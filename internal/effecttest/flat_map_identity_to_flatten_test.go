@@ -35,9 +35,9 @@ func TestFlatMapIdentityToFlattenFixesCompile(t *testing.T) {
 }
 // @filename: /repro.ts
 `
-			mainMatches := 17
+			mainMatches := 16
 			if version == bundledeffect.EffectV3 {
-				mainMatches = 18
+				mainMatches = 17
 			}
 			cases := []struct {
 				name     string
@@ -72,16 +72,12 @@ export const value = Effect.flatten(source)
 					matches: 1, fixes: 1,
 				},
 				{
-					name: "exactDataLast",
+					name: "dataLastIgnored",
 					source: `import { Effect } from "effect"
 declare const source: Effect.Effect<Effect.Effect<number>>
 export const value = Effect.flatMap((inner: Effect.Effect<number>) => inner)(source)
 `,
-					expected: `import { Effect } from "effect"
-declare const source: Effect.Effect<Effect.Effect<number>>
-export const value = Effect.flatten(source)
-`,
-					matches: 1, fixes: 1,
+					matches: 0, fixes: 0,
 				},
 				{
 					name: "typedAliasWideningError",
@@ -104,18 +100,13 @@ export const mapped = value.pipe(Effect.map((value) => value.toFixed()))
 					matches: 0, fixes: 0,
 				},
 				{
-					name: "typedAliasExact",
+					name: "typedAliasMatchingIgnored",
 					source: `import { Effect, identity } from "effect"
 declare const source: Effect.Effect<Effect.Effect<string>>
 const unwrap: (x: Effect.Effect<string>) => Effect.Effect<string> = identity
 export const value = source.pipe(Effect.flatMap(unwrap))
 `,
-					expected: `import { Effect, identity } from "effect"
-declare const source: Effect.Effect<Effect.Effect<string>>
-const unwrap: (x: Effect.Effect<string>) => Effect.Effect<string> = identity
-export const value = source.pipe(Effect.flatten)
-`,
-					matches: 1, fixes: 1,
+					matches: 0, fixes: 0,
 				},
 				{
 					name: "namedFlatMapHasNoFix",

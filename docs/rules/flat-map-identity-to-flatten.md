@@ -2,7 +2,7 @@
 
 # `flatMapIdentityToFlatten`
 
-Suggests Effect.flatten instead of Effect.flatMap when the callback is an identity function
+Suggests Effect.flatten instead of Effect.flatMap when the callback is Effect's identity export referenced directly or an unannotated arrow returning its parameter
 
 | Property | Value |
 | --- | --- |

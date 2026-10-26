@@ -1,8 +1,6 @@
 package rules
 
 import (
-	"slices"
-
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/effect-ts/tsgo/internal/rule"
@@ -17,7 +15,7 @@ import (
 var FlatMapIdentityToFlatten = rule.Rule{
 	Name:            "flatMapIdentityToFlatten",
 	Group:           "style",
-	Description:     "Suggests Effect.flatten instead of Effect.flatMap when the callback is an identity function",
+	Description:     "Suggests Effect.flatten instead of Effect.flatMap when the callback is Effect's identity export referenced directly or an unannotated arrow returning its parameter",
 	DefaultSeverity: etscore.SeveritySuggestion,
 	SupportedEffect: []string{"v3", "v4"},
 	Codes: []int32{
@@ -44,9 +42,10 @@ type FlatMapIdentityToFlattenMatch struct {
 	EffectModuleNode *ast.Node
 }
 
-// AnalyzeFlatMapIdentityToFlatten finds Effect.flatMap steps whose callback
-// returns its parameter unchanged, so the step only unwraps a nested effect.
-func AnalyzeFlatMapIdentityToFlatten(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []FlatMapIdentityToFlattenMatch {
+// AnalyzeFlatMapIdentityToFlatten finds Effect.flatMap steps, in any call style,
+// whose callback is Effect's identity export referenced directly, or an
+// unannotated arrow returning its own parameter.
+func AnalyzeFlatMapIdentityToFlatten(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []FlatMapIdentityToFlattenMatch {
 	var matches []FlatMapIdentityToFlattenMatch
 	flows := tp.PipingFlows(sf, true)
 	for _, flow := range flows.All() {
@@ -63,7 +62,8 @@ func AnalyzeFlatMapIdentityToFlatten(tp *typeparser.TypeParser, c *checker.Check
 			}
 			if callee == nil || args.Len() != 1 || step.TypeArguments() != nil ||
 				callee.Flags&ast.NodeFlagsOptionalChain != 0 ||
-				!tp.IsNodeReferenceToEffectModuleApi(callee, "flatMap") {
+				!tp.IsNodeReferenceToEffectModuleApi(callee, "flatMap") ||
+				!isIdentityCallback(tp, args.At(0)) {
 				continue
 			}
 			outer := tp.EffectType(flow.TransformationInputType(i))
@@ -71,19 +71,8 @@ func AnalyzeFlatMapIdentityToFlatten(tp *typeparser.TypeParser, c *checker.Check
 				continue
 			}
 			success := outer.A()
-			if success == nil || success.Flags()&(checker.TypeFlagsAny|checker.TypeFlagsNever) != 0 {
-				continue
-			}
-			inner := tp.EffectType(success)
-			if inner == nil || !isIdentityCallback(tp, args.At(0), success) {
-				continue
-			}
-			// A callback typed through an annotated alias of identity can still widen the
-			// result, so require the step to produce exactly what Effect.flatten would.
-			output := tp.EffectType(step.OutType())
-			if output == nil || !sameFlattenChannel(c, output.A(), inner.A()) ||
-				!sameFlattenChannel(c, output.E(), outer.E(), inner.E()) ||
-				!sameFlattenChannel(c, output.R(), outer.R(), inner.R()) {
+			if success == nil || success.Flags()&(checker.TypeFlagsAny|checker.TypeFlagsNever) != 0 ||
+				tp.EffectType(success) == nil {
 				continue
 			}
 			var effectModuleNode *ast.Node
@@ -106,19 +95,25 @@ func AnalyzeFlatMapIdentityToFlatten(tp *typeparser.TypeParser, c *checker.Check
 	return matches
 }
 
-// isIdentityCallback reports whether callback is Effect's identity export or a
-// single-parameter function returning that parameter without changing its type.
-func isIdentityCallback(tp *typeparser.TypeParser, callback *ast.Node, input *checker.Type) bool {
-	if tp.IsNodeReferenceToEffectFunctionModuleApi(ast.SkipParentheses(callback), "identity") {
+// isIdentityCallback reports whether callback names Effect's identity export
+// without a local variable in between, or is an arrow function without type
+// annotations whose body returns its single parameter. Annotations and typed
+// aliases can change the flatMap result type, so they never match.
+func isIdentityCallback(tp *typeparser.TypeParser, callback *ast.Node) bool {
+	callback = ast.SkipParentheses(callback)
+	if tp.IsNodeDirectReferenceToEffectFunctionModuleApi(callback, "identity") {
 		return true
+	}
+	if callback.Kind != ast.KindArrowFunction {
+		return false
 	}
 	lazy := typeparser.ParseLazyExpression(callback, typeparser.LazyExpressionNone)
 	if lazy == nil || lazy.Params().Len() != 1 || lazy.Node().Type() != nil {
 		return false
 	}
 	parameter := lazy.Params().At(0).AsParameterDeclaration()
-	if parameter.Name() == nil || parameter.Name().Kind != ast.KindIdentifier || parameter.DotDotDotToken != nil ||
-		parameter.Initializer != nil || parameter.QuestionToken != nil {
+	if parameter.Name() == nil || parameter.Name().Kind != ast.KindIdentifier || parameter.Type != nil ||
+		parameter.DotDotDotToken != nil || parameter.Initializer != nil || parameter.QuestionToken != nil {
 		return false
 	}
 	returned := ast.SkipParentheses(lazy.Expression())
@@ -126,36 +121,5 @@ func isIdentityCallback(tp *typeparser.TypeParser, callback *ast.Node, input *ch
 		return false
 	}
 	symbol := tp.GetSymbolAtLocation(parameter.Name())
-	if symbol == nil || tp.GetSymbolAtLocation(returned) != symbol {
-		return false
-	}
-	return parameter.Type == nil || tp.GetTypeAtLocation(parameter.Name()) == input
-}
-
-// sameFlattenChannel reports whether got is mutually assignable with the union
-// of parts, comparing union constituents so no union type has to be built.
-// any is assignable both ways, so got must be any exactly when a part is.
-func sameFlattenChannel(c *checker.Checker, got *checker.Type, parts ...*checker.Type) bool {
-	if got == nil || slices.Contains(parts, nil) {
-		return false
-	}
-	isAny := func(t *checker.Type) bool { return t.Flags()&checker.TypeFlagsAny != 0 }
-	if isAny(got) != slices.ContainsFunc(parts, isAny) {
-		return false
-	}
-	for _, part := range parts {
-		if !c.IsTypeAssignableTo(part, got) {
-			return false
-		}
-	}
-	constituents := []*checker.Type{got}
-	if got.Flags()&checker.TypeFlagsUnion != 0 {
-		constituents = got.Types()
-	}
-	for _, constituent := range constituents {
-		if !slices.ContainsFunc(parts, func(part *checker.Type) bool { return c.IsTypeAssignableTo(constituent, part) }) {
-			return false
-		}
-	}
-	return true
+	return symbol != nil && tp.GetSymbolAtLocation(returned) == symbol
 }

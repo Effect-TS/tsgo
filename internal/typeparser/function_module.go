@@ -28,3 +28,12 @@ var effectFunctionPackageSourceFileDescriptor = newPackageSourceFileDescriptor(m
 func (tp *TypeParser) IsNodeReferenceToEffectFunctionModuleApi(node *ast.Node, memberName string) bool {
 	return tp.IsNodeReferenceToModuleExport(node, effectFunctionPackageSourceFileDescriptor, memberName)
 }
+
+// IsNodeDirectReferenceToEffectFunctionModuleApi is like
+// IsNodeReferenceToEffectFunctionModuleApi but does not follow local variable
+// aliases: node must name the export itself, through imports and re-exports only.
+func (tp *TypeParser) IsNodeDirectReferenceToEffectFunctionModuleApi(node *ast.Node, memberName string) bool {
+	sym := tp.resolveAliasedSymbol(tp.GetSymbolAtLocation(node))
+	return sym != nil && tp.symbolHasDeclarationInModuleCached(sym, effectFunctionPackageSourceFileDescriptor) &&
+		tp.IsNodeReferenceToEffectFunctionModuleApi(node, memberName)
+}

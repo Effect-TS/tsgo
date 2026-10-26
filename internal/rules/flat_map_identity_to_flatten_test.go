@@ -29,32 +29,25 @@ export const initializer = source.pipe(Effect.flatMap((inner = fallback) => inne
 export const optionalParameter = source.pipe(Effect.flatMap((inner?: Effect.Effect<string>) => inner))
 export const destructured = source.pipe(Effect.flatMap(({ pipe }) => pipe()))
 export const channelIdentity = source.pipe(Effect.flatMap(Channel.identity))
+export const functionExpression = source.pipe(Effect.flatMap(function(inner) { return inner }))
+export const dataLastIdentity = Effect.flatMap(identity)(source)
+export const returnAnnotatedAny = source.pipe(Effect.flatMap((inner): Effect.Effect<any> => inner))
 const plainAlias = identity
 export const untypedAlias = source.pipe(Effect.flatMap(plainAlias))
-const unwrap: (x: Effect.Effect<string>) => Effect.Effect<string, Error> = identity
-export const typedAliasWidensError = source.pipe(Effect.flatMap(unwrap))
-const unwrapRequirement: (x: Effect.Effect<string>) => Effect.Effect<string, never, "Db"> = identity
-export const typedAliasWidensRequirement = source.pipe(Effect.flatMap(unwrapRequirement))
-const unwrapSuccess: (x: Effect.Effect<string>) => Effect.Effect<unknown> = identity
-export const typedAliasWidensSuccess = source.pipe(Effect.flatMap(unwrapSuccess))
 const exactAlias: (x: Effect.Effect<string>) => Effect.Effect<string> = identity
 export const typedAliasExact = source.pipe(Effect.flatMap(exactAlias))
 const unwrapAnySuccess: (x: Effect.Effect<string>) => Effect.Effect<any> = identity
 export const typedAliasAnySuccess = source.pipe(Effect.flatMap(unwrapAnySuccess))
-const unwrapAnyError: (x: Effect.Effect<string>) => Effect.Effect<string, any> = identity
-export const typedAliasAnyError = source.pipe(Effect.flatMap(unwrapAnyError))
-const unwrapAnyRequirement: (x: Effect.Effect<string>) => Effect.Effect<string, never, any> = identity
-export const typedAliasAnyRequirement = source.pipe(Effect.flatMap(unwrapAnyRequirement))
 `, &rules.FlatMapIdentityToFlatten)
-			if len(preview.Diagnostics) != 4 {
-				t.Fatalf("expected only the valid, named-import, untyped-alias and exact-alias callbacks to match, got %d diagnostics: %+v", len(preview.Diagnostics), preview.Diagnostics)
+			if len(preview.Diagnostics) != 3 {
+				t.Fatalf("expected only the valid, named-import and data-last identity callbacks to match, got %d diagnostics: %+v", len(preview.Diagnostics), preview.Diagnostics)
 			}
-			for i, want := range []string{"Effect.flatMap", "flatMap", "Effect.flatMap", "Effect.flatMap"} {
+			for i, want := range []string{"Effect.flatMap", "flatMap", "Effect.flatMap"} {
 				if got := preview.SourceText[preview.Diagnostics[i].Start:preview.Diagnostics[i].End]; got != want {
 					t.Errorf("diagnostic %d covers %q, want %q", i, got, want)
 				}
 			}
-			for i, want := range []int{4, 5, 17, 25} {
+			for i, want := range []int{4, 5, 17} {
 				if line := strings.Count(preview.SourceText[:preview.Diagnostics[i].Start], "\n"); line != want {
 					t.Errorf("diagnostic %d on line %d, want %d", i, line, want)
 				}

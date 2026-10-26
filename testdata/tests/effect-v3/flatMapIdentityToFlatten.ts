@@ -35,29 +35,18 @@ export const dataFirstIdentity = Effect.flatMap(loadTask, identity)
 // MUST TRIGGER: data-first style with an arrow identity callback
 export const dataFirstArrow = Effect.flatMap(loadTask, (inner) => inner)
 
-// MUST TRIGGER: data-last style
-export const dataLast = Effect.flatMap((inner: Effect.Effect<string>) => inner)(loadTask)
-
-// MUST TRIGGER: annotated parameter is still an identity
-export const annotated = loadTask.pipe(Effect.flatMap((inner: Effect.Effect<string>) => inner))
-
 // MUST TRIGGER: parenthesized return of the parameter
 export const parenthesized = loadTask.pipe(Effect.flatMap((inner) => (inner)))
 
-// MUST TRIGGER: block body whose only statement returns the parameter
+// MUST TRIGGER: arrow block body whose only statement returns the parameter
 export const singleReturnBlock = loadTask.pipe(Effect.flatMap((inner) => {
-  return inner
-}))
-
-// MUST TRIGGER: function expression returning its parameter
-export const functionExpression = loadTask.pipe(Effect.flatMap(function(inner) {
   return inner
 }))
 
 // MUST TRIGGER: identity referenced through the Function module namespace
 export const functionNamespace = loadTask.pipe(Effect.flatMap(Function.identity))
 
-// MUST TRIGGER: identity imported from effect/Function under an alias
+// MUST TRIGGER: identity imported from effect/Function under an import alias (not a variable)
 export const aliasedIdentity = loadTask.pipe(Effect.flatMap(id))
 
 // MUST TRIGGER: Effect module imported under an alias
@@ -84,9 +73,54 @@ export const longerFlow = loadTask.pipe(
 export const generic = <A, E, R>(self: Effect.Effect<Effect.Effect<A, E, R>>) =>
   self.pipe(Effect.flatMap((inner) => inner))
 
+// MUST TRIGGER: identity step in an Effect.fn pipeline
+export const fnPipelineIdentity = Effect.fn(function*() {
+  return yield* loadTask
+}, Effect.flatMap(identity))
+
+// MUST TRIGGER: identity arrow step in an Effect.fn pipeline
+export const fnPipelineArrow = Effect.fn(function*() {
+  return yield* loadTask
+}, Effect.flatMap((inner) => inner))
+
 // MUST NOT TRIGGER: already using Effect.flatten
 export const alreadyFlatten = Effect.flatten(loadTask)
 export const alreadyFlattenPipe = loadTask.pipe(Effect.flatten)
+
+// MUST NOT TRIGGER: data-last style with an annotated parameter, which can change the type
+export const dataLast = Effect.flatMap((inner: Effect.Effect<string>) => inner)(loadTask)
+
+// MUST NOT TRIGGER: an annotated parameter can change the type, even when it matches
+export const annotated = loadTask.pipe(Effect.flatMap((inner: Effect.Effect<string>) => inner))
+
+// MUST NOT TRIGGER: a return type annotation can change the type, even when it matches
+export const returnAnnotated = loadTask.pipe(Effect.flatMap((inner): Effect.Effect<string> => inner))
+
+// MUST NOT TRIGGER: a return type annotation widening the success channel to any
+export const returnAnnotatedAny = loadTask.pipe(Effect.flatMap((inner): Effect.Effect<any> => inner))
+
+// MUST NOT TRIGGER: only arrow callbacks are matched, not function expressions
+export const functionExpression = loadTask.pipe(Effect.flatMap(function(inner) {
+  return inner
+}))
+
+// MUST NOT TRIGGER: identity reached through an unannotated local variable
+const localId = identity
+export const variableAlias = loadTask.pipe(Effect.flatMap(localId))
+
+// MUST NOT TRIGGER: an annotated alias of identity widening the error channel
+const widenError: (inner: Effect.Effect<string>) => Effect.Effect<string, Error> = identity
+export const errorWideningAlias = loadTask.pipe(Effect.flatMap(widenError))
+
+// MUST NOT TRIGGER: an annotated alias of identity widening the success channel to any
+const widenSuccess: (inner: Effect.Effect<string>) => Effect.Effect<any> = identity
+export const anyWideningAlias = loadTask.pipe(Effect.flatMap(widenSuccess))
+
+// MUST NOT TRIGGER: an annotated alias of identity widening a nested property to any
+declare const recordTask: Effect.Effect<Effect.Effect<{ readonly value: number }>>
+const widenNested: (inner: Effect.Effect<{ readonly value: number }>) => Effect.Effect<{ readonly value: any }> =
+  identity
+export const nestedAnyAlias = recordTask.pipe(Effect.flatMap(widenNested))
 
 // MUST NOT TRIGGER: type assertion makes the callback more than an identity
 export const typeAssertion = loadTask.pipe(
