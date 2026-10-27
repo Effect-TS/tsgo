@@ -48,7 +48,6 @@ type FailCauseToConstructorMatch struct {
 	ReplacementName    string    // fail, die, failSync or dieSync
 	SourceName         string    // failCause or failCauseSync
 	ConstructorName    string    // fail or die
-	EffectModuleNode   *ast.Node // The Effect module identifier (e.g., "Effect" in Effect.failCause)
 	ValueNode          *ast.Node // The value passed to Cause.fail / Cause.die
 	ValueTypeArguments *ast.NodeList
 	// Eager fix: the flow prefix up to and including Effect.failCause is
@@ -88,12 +87,6 @@ func AnalyzeFailCauseToConstructor(tp *typeparser.TypeParser, c *checker.Checker
 		}
 	}
 	allowLazyDie := tp.SupportedEffectVersion() != typeparser.EffectMajorV4
-	// A callee without an Effect module receiver (a named import or an alias) is
-	// rewritten through the file's Effect module identifier, which must resolve
-	// to the Effect module where the edit lands.
-	canRewriteCallee := func(callee *ast.Node) bool {
-		return effectModuleReceiver(callee) != nil || tp.EffectModuleIdentifierAt(callee) != ""
-	}
 
 	var matches []FailCauseToConstructorMatch
 	for _, flow := range tp.PipingFlows(sf, true).All() {
@@ -110,11 +103,10 @@ func AnalyzeFailCauseToConstructor(tp *typeparser.TypeParser, c *checker.Checker
 					ReplacementName:    constructorName,
 					SourceName:         "failCause",
 					ConstructorName:    constructorName,
-					EffectModuleNode:   effectModuleReceiver(failStep.Callee()),
 					ValueNode:          value,
 					ValueTypeArguments: causeStep.TypeArguments(),
 				}
-				if value != nil && canRewriteCallee(failStep.Callee()) && (failStep.Kind() == typeparser.TransformationKindCall ||
+				if value != nil && (failStep.Kind() == typeparser.TransformationKindCall ||
 					failStep.Kind() == typeparser.TransformationKindPipe ||
 					failStep.Kind() == typeparser.TransformationKindPipeable) {
 					match.Flow = flow
@@ -156,18 +148,16 @@ func AnalyzeFailCauseToConstructor(tp *typeparser.TypeParser, c *checker.Checker
 
 		failStep := flow.Transformations().At(0)
 		match := FailCauseToConstructorMatch{
-			SourceFile:       sf,
-			Location:         scanner.GetErrorRangeForNode(sf, failStep.Callee()),
-			ReplacementName:  constructorName + "Sync",
-			SourceName:       "failCauseSync",
-			ConstructorName:  constructorName,
-			EffectModuleNode: effectModuleReceiver(failStep.Callee()),
+			SourceFile:      sf,
+			Location:        scanner.GetErrorRangeForNode(sf, failStep.Callee()),
+			ReplacementName: constructorName + "Sync",
+			SourceName:      "failCauseSync",
+			ConstructorName: constructorName,
 		}
 		body := ast.SkipParentheses(lazy.Expression())
 		value := inner.TransformationInputNode(lastIndex)
 		if failStep.Kind() == typeparser.TransformationKindCall && noTypeArguments(last) && value != nil &&
 			body.Kind == ast.KindCallExpression && body.AsCallExpression().Expression == last.Callee() &&
-			canRewriteCallee(failStep.Callee()) &&
 			(constructorName == "die" || lazyFailKeepsErrorType(tp, c, failStep, value)) {
 			match.ValueNode = value
 			match.LazyCallee = failStep.Callee()
@@ -193,11 +183,4 @@ func lazyFailKeepsErrorType(tp *typeparser.TypeParser, c *checker.Checker, failS
 	}
 	return checker.Checker_isTypeAssignableTo(c, valueType, effect.E()) &&
 		checker.Checker_isTypeAssignableTo(c, effect.E(), valueType)
-}
-
-func effectModuleReceiver(callee *ast.Node) *ast.Node {
-	if callee != nil && callee.Kind == ast.KindPropertyAccessExpression {
-		return callee.AsPropertyAccessExpression().Expression
-	}
-	return nil
 }

@@ -84,9 +84,10 @@ func importedModuleMember(ctx *fixable.Context, location *ast.Node, module typep
 
 // importBindingName returns the name of symbol's value import declaration
 // when that name resolves to symbol at location, so a generated identifier
-// reaches the import and not a local that shadows it.
+// reaches the import and not a local that shadows it. Bindings that are
+// type-only, directly or through a type-only re-export, are not values.
 func importBindingName(ctx *fixable.Context, location *ast.Node, symbol *ast.Symbol) *ast.Node {
-	if symbol == nil || len(ast.TSGetSymbolDeclarations(symbol)) != 1 {
+	if symbol == nil || len(ast.TSGetSymbolDeclarations(symbol)) != 1 || ctx.Checker.GetTypeOnlyAliasDeclaration(symbol) != nil {
 		return nil
 	}
 	declaration := ast.TSGetSymbolDeclarations(symbol)[0]
