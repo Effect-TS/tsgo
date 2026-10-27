@@ -96,7 +96,7 @@ pub(crate) fn check_prefer_schema_over_json(
     None
 }
 
-// go: internal/rules/prefer_schema_over_json.go:68 preferSchemaOverJsonRecommendation 52d5bf740e55b768
+// go: internal/rules/prefer_schema_over_json.go:68 preferSchemaOverJsonRecommendation 68a73c59cb5d03a5
 pub(crate) fn prefer_schema_over_json_recommendation(is_v4: bool) -> &'static str {
     if is_v4 {
         return "Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings.";
