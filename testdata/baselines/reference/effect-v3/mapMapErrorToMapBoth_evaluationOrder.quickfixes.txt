@@ -33,10 +33,13 @@ const makeErrorMapper = () => {
 
 // MUST TRIGGER: non-eager nested data-first; Effect.map does not run its callback
 // when called, so evaluating makeErrorMapper() earlier is safe and the quickfix is offered
-export const lazyNested = Effect.mapBoth(Effect.succeed(3), {
+export const lazyNested = Effect.mapBoth(
+  Effect.succeed(3),
+  {
     onSuccess: n => n * multiplier,
     onFailure: makeErrorMapper()
-})
+}
+)
 
 // MUST TRIGGER: non-eager pipe; every pipe argument is evaluated before any step runs
 export const lazyPipe = Effect.succeed(3).pipe(
@@ -72,8 +75,10 @@ export const lazyNested = Effect.mapError(
 )
 
 // MUST TRIGGER: non-eager pipe; every pipe argument is evaluated before any step runs
-export const lazyPipe = Effect.succeed(3).pipe(Effect.mapBoth({
+export const lazyPipe = Effect.succeed(3).pipe(
+  Effect.mapBoth({
     onSuccess: n => n * multiplier,
     onFailure: makeErrorMapper()
-}))
+})
+)
 

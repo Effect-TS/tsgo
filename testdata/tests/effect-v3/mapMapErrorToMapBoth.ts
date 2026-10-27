@@ -191,12 +191,12 @@ export const nestedSeparated = Effect.map(
   (n) => n > 0
 )
 
-// MUST NOT TRIGGER: the two steps live in different .pipe(...) calls (pipe boundary)
+// MUST TRIGGER: the two steps are adjacent in one flow across chained .pipe(...) calls
 export const differentPipeCalls = fetchCount
   .pipe(Effect.map((n) => n > 0))
   .pipe(Effect.mapError((message) => new TaskError({ message })))
 
-// MUST NOT TRIGGER: data-first call wrapping a pipeable flow (mixed styles, no single edit point)
+// MUST TRIGGER: data-first call wrapping a pipeable flow (mixed styles, adjacent in one flow)
 export const mixedDataFirstAndPipeable = Effect.map(
   fetchCount.pipe(Effect.mapError((message) => new TaskError({ message }))),
   (n) => n > 0

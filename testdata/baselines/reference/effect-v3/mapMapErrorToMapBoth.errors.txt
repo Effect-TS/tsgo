@@ -21,9 +21,11 @@ Effect version: 3.19.19
 /.src/mapMapErrorToMapBoth.ts(141,3): warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
 /.src/mapMapErrorToMapBoth.ts(147,3): warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
 /.src/mapMapErrorToMapBoth.ts(149,3): warning TS377151: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth.ts(197,9): warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth.ts(200,42): warning TS377151: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
 
 
-==== /.src/mapMapErrorToMapBoth.ts (20 errors) ====
+==== /.src/mapMapErrorToMapBoth.ts (22 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics mapMapErrorToMapBoth:warning
     import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -257,13 +259,17 @@ Effect version: 3.19.19
       (n) => n > 0
     )
     
-    // MUST NOT TRIGGER: the two steps live in different .pipe(...) calls (pipe boundary)
+    // MUST TRIGGER: the two steps are adjacent in one flow across chained .pipe(...) calls
     export const differentPipeCalls = fetchCount
       .pipe(Effect.map((n) => n > 0))
       .pipe(Effect.mapError((message) => new TaskError({ message })))
+            ~~~~~~~~~~~~~~~
+!!! warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
     
-    // MUST NOT TRIGGER: data-first call wrapping a pipeable flow (mixed styles, no single edit point)
+    // MUST TRIGGER: data-first call wrapping a pipeable flow (mixed styles, adjacent in one flow)
     export const mixedDataFirstAndPipeable = Effect.map(
+                                             ~~~~~~~~~~
+!!! warning TS377151: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
       fetchCount.pipe(Effect.mapError((message) => new TaskError({ message }))),
       (n) => n > 0
     )

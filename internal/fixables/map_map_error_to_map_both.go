@@ -48,11 +48,16 @@ func runMapMapErrorToMapBothFix(ctx *fixable.Context) []ls.CodeAction {
 					firstName, secondName = secondName, firstName
 				}
 				options := t.NewObjectLiteralExpression(t.NewNodeList([]*ast.Node{
-					t.NewPropertyAssignment(nil, t.NewIdentifier(firstName), nil, nil, t.DeepCloneNode(match.FirstCallback)),
-					t.NewPropertyAssignment(nil, t.NewIdentifier(secondName), nil, nil, t.DeepCloneNode(match.SecondCallback)),
+					t.NewPropertyAssignment(nil, t.NewIdentifier(firstName), nil, nil, t.DeepCloneNode(match.First.Args().At(0))),
+					t.NewPropertyAssignment(nil, t.NewIdentifier(secondName), nil, nil, t.DeepCloneNode(match.Second.Args().At(0))),
 				}), true)
-				t.CollapsePipingFlowTransformations(match.SourceFile, match.Flow, match.Start, match.Start+1,
-					rewriter.PipingFlowTransformationReplacement{Callee: callee, Arguments: t.NewNodeList([]*ast.Node{options})})
+				// The first step is the second step's input, so removing it never
+				// overlaps the second step's callee or callback.
+				if !removePipingFlowTransformation(t, match.SourceFile, &match.First) {
+					return
+				}
+				t.ReplaceNode(match.SourceFile, match.Second.Callee(), callee, nil)
+				t.ReplaceNode(match.SourceFile, match.Second.Args().At(0), options, nil)
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}
@@ -68,7 +73,7 @@ func runMapMapErrorToMapBothFix(ctx *fixable.Context) []ls.CodeAction {
 // for example when the steps only use named imports of map and mapError.
 func mapBothReference(ctx *fixable.Context, match rules.MapMapErrorToMapBothMatch) (*ast.Node, bool) {
 	method := match.ReplacementName
-	for _, callee := range []*ast.Node{match.SecondCallee, match.FirstCallee} {
+	for _, callee := range []*ast.Node{match.Second.Callee(), match.First.Callee()} {
 		if callee.Kind != ast.KindPropertyAccessExpression {
 			continue
 		}
@@ -77,7 +82,7 @@ func mapBothReference(ctx *fixable.Context, match rules.MapMapErrorToMapBothMatc
 			return receiver, true
 		}
 	}
-	location := match.SecondCallee
+	location := match.Second.Callee()
 	symbols := ctx.Checker.GetSymbolsInScope(location, ast.SymbolFlagsValue|ast.SymbolFlagsAlias)
 	slices.SortFunc(symbols, func(left, right *ast.Symbol) int {
 		return strings.Compare(ast.TSGetSymbolName(left), ast.TSGetSymbolName(right))

@@ -95,12 +95,15 @@ export const eagerNestedIdentifier = Effect.mapErrorEager(
 )
 
 // MUST TRIGGER: a function literal runs no code when evaluated, so the quickfix is offered
-export const eagerNestedFunctionLiteral = Effect.mapBothEager(Effect.succeed(3), {
+export const eagerNestedFunctionLiteral = Effect.mapBothEager(
+  Effect.succeed(3),
+  {
     onSuccess: n => n * multiplier,
     onFailure: (function (message: string) {
         return message.length;
     })
-})
+}
+)
 
 // MUST TRIGGER: eager pipe; every pipe argument is evaluated before any step runs, so the
 // quickfix is offered even for a call expression
@@ -174,10 +177,12 @@ export const eagerNestedFunctionLiteral = Effect.mapErrorEager(
 
 // MUST TRIGGER: eager pipe; every pipe argument is evaluated before any step runs, so the
 // quickfix is offered even for a call expression
-export const eagerPipeCall = Effect.succeed(3).pipe(Effect.mapBothEager({
+export const eagerPipeCall = Effect.succeed(3).pipe(
+  Effect.mapBothEager({
     onSuccess: n => n * multiplier,
     onFailure: makeErrorMapper()
-}))
+})
+)
 
 // MUST TRIGGER: non-eager nested data-first; Effect.map does not run its callback
 // when called, so the quickfix is offered
@@ -251,8 +256,11 @@ export const eagerPipeCall = Effect.succeed(3).pipe(
 
 // MUST TRIGGER: non-eager nested data-first; Effect.map does not run its callback
 // when called, so the quickfix is offered
-export const lazyNestedCall = Effect.mapBoth(Effect.succeed(3), {
+export const lazyNestedCall = Effect.mapBoth(
+  Effect.succeed(3),
+  {
     onSuccess: n => n * multiplier,
     onFailure: makeErrorMapper()
-})
+}
+)
 

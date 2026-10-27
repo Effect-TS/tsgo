@@ -43,10 +43,9 @@ type MapMapErrorToMapBothMatch struct {
 	ReplacementName       string
 	// FirstFailure is true when the first step transforms the failure channel.
 	FirstFailure bool
-	// FirstCallee and SecondCallee are the callees of the two steps in flow order.
-	FirstCallee, SecondCallee     *ast.Node
-	FirstCallback, SecondCallback *ast.Node
-	Fixable                       bool
+	// First and Second are the two steps in flow order.
+	First, Second typeparser.PipingFlowTransformation
+	Fixable       bool
 }
 
 type mapMapErrorStep struct {
@@ -85,7 +84,7 @@ func AnalyzeMapMapErrorToMapBoth(tp *typeparser.TypeParser, c *checker.Checker, 
 			second := flow.Transformations().At(i + 1)
 			a, _ := classifyMapMapErrorStep(tp, first)
 			b, _ := classifyMapMapErrorStep(tp, second)
-			if a.failure == b.failure || a.eager != b.eager || !mapMapErrorSameLocation(first, second) {
+			if a.failure == b.failure || a.eager != b.eager {
 				continue
 			}
 			next = i + 2
@@ -103,12 +102,10 @@ func AnalyzeMapMapErrorToMapBoth(tp *typeparser.TypeParser, c *checker.Checker, 
 				SecondName:      b.name,
 				ReplacementName: replacement,
 				FirstFailure:    a.failure,
-				FirstCallee:     first.Callee(),
-				SecondCallee:    second.Callee(),
-				FirstCallback:   first.Args().At(0),
-				SecondCallback:  second.Args().At(0),
-				Fixable: !catchDieHasTypeArguments(&first) && !catchDieHasTypeArguments(&second) &&
-					mapMapErrorKeepsEvaluationOrder(first, a.eager, second.Args().At(0)),
+				First:           first,
+				Second:          second,
+				Fixable: !hasExplicitTypeArguments(&first) && !hasExplicitTypeArguments(&second) &&
+					mapMapErrorKeepsEvaluationOrder(first, second, a.eager),
 			})
 		}
 	}
@@ -116,16 +113,25 @@ func AnalyzeMapMapErrorToMapBoth(tp *typeparser.TypeParser, c *checker.Checker, 
 }
 
 // mapMapErrorKeepsEvaluationOrder reports whether merging keeps the order of
-// observable work. A nested eager data-first call runs its callback on an
-// already resolved effect before the outer call's callback argument is
-// evaluated, while mapBothEager evaluates both callbacks first. Only a function
-// literal can be evaluated earlier without running user code.
-func mapMapErrorKeepsEvaluationOrder(first typeparser.PipingFlowTransformation, eager bool, secondCallback *ast.Node) bool {
-	if !eager || first.Kind() != typeparser.TransformationKindDataFirst {
+// observable work. Steps in one pipe or Effect.fn argument list have all their
+// callbacks evaluated before any step runs. Otherwise an eager first step runs
+// its callback on an already resolved effect before the second callback is
+// evaluated, while the merged mapBothEager evaluates both callbacks first. Only
+// a function literal can be evaluated earlier without running user code.
+func mapMapErrorKeepsEvaluationOrder(first, second typeparser.PipingFlowTransformation, eager bool) bool {
+	if !eager || mapMapErrorShareArgumentList(first, second) {
 		return true
 	}
-	callback := ast.SkipParentheses(secondCallback)
+	callback := ast.SkipParentheses(second.Args().At(0))
 	return callback.Kind == ast.KindArrowFunction || callback.Kind == ast.KindFunctionExpression
+}
+
+func mapMapErrorShareArgumentList(first, second typeparser.PipingFlowTransformation) bool {
+	if !isPipingFlowArgumentKind(first.Kind()) || !isPipingFlowArgumentKind(second.Kind()) {
+		return false
+	}
+	firstStep, secondStep := first.Callee().Parent, second.Callee().Parent
+	return firstStep != nil && secondStep != nil && firstStep.Parent != nil && firstStep.Parent == secondStep.Parent
 }
 
 func classifyMapMapErrorStep(tp *typeparser.TypeParser, step typeparser.PipingFlowTransformation) (mapMapErrorStep, bool) {
@@ -138,35 +144,4 @@ func classifyMapMapErrorStep(tp *typeparser.TypeParser, step typeparser.PipingFl
 		}
 	}
 	return mapMapErrorStep{}, false
-}
-
-// mapMapErrorSameLocation requires both steps to share one argument list, or
-// the first data-first call to be the subject of the second one. Piping flows
-// merge chained pipe calls, so equal kinds alone do not guarantee this.
-func mapMapErrorSameLocation(first, second typeparser.PipingFlowTransformation) bool {
-	kind := first.Kind()
-	if kind != second.Kind() {
-		return false
-	}
-	firstCall := mapMapErrorStepCall(first)
-	secondCall := mapMapErrorStepCall(second)
-	if firstCall == nil || secondCall == nil {
-		return false
-	}
-	switch kind {
-	case typeparser.TransformationKindPipe, typeparser.TransformationKindPipeable, typeparser.TransformationKindEffectFn:
-		return firstCall.Parent != nil && firstCall.Parent == secondCall.Parent && firstCall.Parent.Kind == ast.KindCallExpression
-	case typeparser.TransformationKindDataFirst:
-		arguments := secondCall.AsCallExpression().Arguments
-		return arguments != nil && len(arguments.Nodes) > 0 && ast.SkipParentheses(arguments.Nodes[0]) == firstCall
-	}
-	return false
-}
-
-func mapMapErrorStepCall(step typeparser.PipingFlowTransformation) *ast.Node {
-	call := step.Callee().Parent
-	if call == nil || call.Kind != ast.KindCallExpression || call.AsCallExpression().Expression != step.Callee() {
-		return nil
-	}
-	return call
 }

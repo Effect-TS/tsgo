@@ -61,18 +61,25 @@ declare const callbacks: [(n: number) => number]
 export const control = source.pipe(Effect.map((n) => n + 1), Effect.mapError((e) => e.length))
 export const nestedPipeCalls = pipe(pipe(source, Effect.map((n) => n + 1)), Effect.mapError((e) => e.length))
 export const emptyPipeSubject = Effect.map(Effect.mapError(source, (e) => e.length).pipe(), (n) => n + 1)
-export const spreadArgument = source.pipe(Effect.map(...callbacks), Effect.mapError((e) => e.length))
 export const curried = Effect.map((n: number) => n + 1)(Effect.mapError((e: string) => e.length)(source))
 export const untracedPipeline = Effect.fnUntraced(function*() {
   return yield* source
 }, Effect.map((n) => n + 1), Effect.mapError((e) => e.length))
+export const spreadArgument = source.pipe(Effect.map(...callbacks), Effect.mapError((e) => e.length))
+export const separatedAcrossPipes = source.pipe(Effect.map((n) => n + 1), Effect.asVoid).pipe(Effect.mapError((e) => e.length))
+export const separateFlows = source.pipe(Effect.map((n) => Effect.succeed(n).pipe(Effect.mapError(() => 0))))
 `, &rules.MapMapErrorToMapBoth)
-			// Only the control pair may match.
-			if len(preview.Diagnostics) != 1 || !strings.HasPrefix(preview.SourceText[preview.Diagnostics[0].Start:], "Effect.mapError((e) => e.length))\nexport const nestedPipeCalls") {
-				for _, diagnostic := range preview.Diagnostics {
-					t.Logf("diagnostic at offset %d on %q", diagnostic.Start, preview.SourceText[diagnostic.Start:diagnostic.End])
-				}
-				t.Fatalf("expected only the control diagnostic, got %d", len(preview.Diagnostics))
+			// Adjacency anywhere in one flow counts; separated steps, spread
+			// arguments and steps of different flows do not.
+			want := []string{"control", "nestedPipeCalls", "emptyPipeSubject", "curried", "untracedPipeline"}
+			var got []string
+			for _, diagnostic := range preview.Diagnostics {
+				declaration := preview.SourceText[strings.LastIndex(preview.SourceText[:diagnostic.Start], "export const ")+len("export const "):]
+				name, _, _ := strings.Cut(declaration, " ")
+				got = append(got, name)
+			}
+			if strings.Join(got, ",") != strings.Join(want, ",") {
+				t.Fatalf("diagnostics in %v, want %v", got, want)
 			}
 		})
 	}

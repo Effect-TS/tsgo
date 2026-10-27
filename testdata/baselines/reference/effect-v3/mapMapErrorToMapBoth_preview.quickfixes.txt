@@ -27,8 +27,10 @@ class TaskError extends Data.TaggedError("TaskError")<{
 declare const fetchCount: Effect.Effect<number, string>
 
 // MUST TRIGGER: adjacent Effect.map + Effect.mapError is a single Effect.mapBoth
-export const isPositive = fetchCount.pipe(Effect.mapBoth({
+export const isPositive = fetchCount.pipe(
+  Effect.mapBoth({
     onSuccess: n => n > 0,
     onFailure: message => new TaskError({ message })
-}))
+})
+)
 

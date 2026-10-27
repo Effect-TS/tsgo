@@ -35,18 +35,20 @@ func TestMapMapErrorToMapBothFixesCompile(t *testing.T) {
 }
 // @filename: /repro.ts
 `
-			mainMatches, mainFixes := 23, 22
-			// Nested eager pairs whose outer callback is not a function literal have no fix.
+			mainMatches, mainFixes := 25, 24
+			// Eager pairs split across an evaluation point have no fix unless the
+			// second callback is a function literal.
 			orderMatches, orderFixes := 6, 3
+			crossMatches, crossFixes := 11, 9
 			if version == bundledeffect.EffectV3 {
-				mainMatches, mainFixes = 20, 19
+				mainMatches, mainFixes = 22, 21
 				orderMatches, orderFixes = 2, 2
+				crossMatches, crossFixes = 8, 8
 			}
 			cases := []struct {
 				name     string
 				source   string
 				expected string
-				title    string
 				matches  int
 				fixes    int
 			}{
@@ -56,6 +58,37 @@ func TestMapMapErrorToMapBothFixesCompile(t *testing.T) {
 				{name: "mapMapErrorToMapBoth_namedImportsNoTarget.ts", matches: 3, fixes: 0},
 				{name: "mapMapErrorToMapBoth_namedImportsTarget.ts", matches: 1, fixes: 1},
 				{name: "mapMapErrorToMapBoth_evaluationOrder.ts", matches: orderMatches, fixes: orderFixes},
+				{name: "mapMapErrorToMapBoth_crossPipe.ts", matches: crossMatches, fixes: crossFixes},
+				{
+					name: "exactCrossPipe",
+					source: `import { Effect } from "effect"
+declare const source: Effect.Effect<number, string>
+export const value = source.pipe(Effect.tap(() => Effect.void), Effect.map((n) => n + 1)).pipe(Effect.mapError((e) => e.length), Effect.asVoid)
+`,
+					expected: `import { Effect } from "effect"
+declare const source: Effect.Effect<number, string>
+export const value = source.pipe(Effect.tap(() => Effect.void)).pipe(Effect.mapBoth({
+    onSuccess: n => n + 1,
+    onFailure: e => e.length
+}), Effect.asVoid)
+`,
+					matches: 1, fixes: 1,
+				},
+				{
+					name: "exactEmptiedPipe",
+					source: `import { Effect } from "effect"
+declare const source: Effect.Effect<number, string>
+export const value = source.pipe(Effect.mapError((e) => e.length)).pipe(Effect.map((n) => n + 1))
+`,
+					expected: `import { Effect } from "effect"
+declare const source: Effect.Effect<number, string>
+export const value = source.pipe(Effect.mapBoth({
+    onFailure: e => e.length,
+    onSuccess: n => n + 1
+}))
+`,
+					matches: 1, fixes: 1,
+				},
 				{
 					name: "exactNamedImportTarget",
 					source: `import type { Effect } from "effect"
