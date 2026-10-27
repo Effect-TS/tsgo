@@ -1,0 +1,46 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+
+
+==== /.src/manualMetricTapToTrack_localAliases.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics manualMetricTapToTrack:warning
+    // Effect v3 has no Effect.trackSuccesses / trackErrors / trackDefects, so the rule never fires here.
+    import type { Effect } from "effect"
+    import { tap } from "effect/Effect"
+    import { counter, trackSuccess as zTrack, update } from "effect/Metric"
+    
+    const successes = counter("successes")
+    
+    declare const source: Effect.Effect<number>
+    
+    // MUST NOT TRIGGER (v3 has no Effect.track*): `aTrack` is declared earlier in the text but in a sibling switch
+    // clause, so it is uninitialized in case 1
+    export function switchClauses(choice: number) {
+      switch (choice) {
+        case 0:
+          const aTrack = zTrack
+          return aTrack
+        case 1:
+          return source.pipe(tap((n) => update(successes, n)))
+      }
+      return undefined
+    }
+    
+    // MUST NOT TRIGGER (v3 has no Effect.track*): `bTrack` precedes the hoisted function in the text, but the
+    // function runs before `bTrack` is initialized
+    export const early = hoisted()
+    const bTrack = zTrack
+    function hoisted() {
+      return source.pipe(tap((n) => update(successes, n)))
+    }
+    
+    // MUST NOT TRIGGER (v3 has no Effect.track*): the parameter shadows the zTrack import, alongside a module-level
+    // `bTrack` alias
+    export function onlyLocalAlias(zTrack: number) {
+      return source.pipe(tap((n) => update(successes, n + zTrack)))
+    }
+    
+    void bTrack
+    

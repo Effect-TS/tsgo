@@ -35,6 +35,7 @@ const (
 	moduleDescriptorVitest
 	moduleDescriptorEffectVitest
 	moduleDescriptorFunction
+	moduleDescriptorMetric
 	moduleDescriptorCount
 )
 

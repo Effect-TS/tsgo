@@ -1,0 +1,125 @@
+=== Quick Fix Inventory ===
+
+[D1] (20:26-20:29) TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+  Fix 0: "Disable manualMetricTapToTrack for this line"
+  Fix 1: "Disable manualMetricTapToTrack for entire file"
+  Fix 2: "Replace with Effect.trackSuccesses"
+
+[D2] (31:22-31:25) TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+  Fix 0: "Disable manualMetricTapToTrack for this line"
+  Fix 1: "Disable manualMetricTapToTrack for entire file"
+  Fix 2: "Replace with Effect.trackSuccesses"
+
+[D3] (37:22-37:25) TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+  Fix 0: "Disable manualMetricTapToTrack for this line"
+  Fix 1: "Disable manualMetricTapToTrack for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable manualMetricTapToTrack for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable manualMetricTapToTrack for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.trackSuccesses" ===
+
+--- file:///.src/manualMetricTapToTrack_localAliases.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics manualMetricTapToTrack:warning
+import type { Effect } from "effect"
+import { tap, trackSuccesses as zTrack } from "effect/Effect"
+import { counter, update } from "effect/Metric"
+
+const successes = counter("successes")
+
+declare const source: Effect.Effect<number>
+
+// MUST TRIGGER: `aTrack` is declared earlier in the text but in a sibling switch
+// clause, so it is uninitialized in case 1; the fix must use the zTrack import
+// -> zTrack(successes)
+export function switchClauses(choice: number) {
+  switch (choice) {
+    case 0:
+      const aTrack = zTrack
+      return aTrack
+    case 1:
+      return source.pipe(zTrack(successes))
+  }
+  return undefined
+}
+
+// MUST TRIGGER: `bTrack` precedes the hoisted function in the text, but the
+// function runs before `bTrack` is initialized; the fix must use the zTrack import
+// -> zTrack(successes)
+export const early = hoisted()
+const bTrack = zTrack
+function hoisted() {
+  return source.pipe(tap((n) => update(successes, n)))
+}
+
+// MUST TRIGGER, NO QUICKFIX: the parameter shadows the zTrack import, and the
+// module-level `bTrack` alias is never used as a target
+export function onlyLocalAlias(zTrack: number) {
+  return source.pipe(tap((n) => update(successes, n + zTrack)))
+}
+
+void bTrack
+
+
+=== [D2] Fix 0: "Disable manualMetricTapToTrack for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable manualMetricTapToTrack for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.trackSuccesses" ===
+
+--- file:///.src/manualMetricTapToTrack_localAliases.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics manualMetricTapToTrack:warning
+import type { Effect } from "effect"
+import { tap, trackSuccesses as zTrack } from "effect/Effect"
+import { counter, update } from "effect/Metric"
+
+const successes = counter("successes")
+
+declare const source: Effect.Effect<number>
+
+// MUST TRIGGER: `aTrack` is declared earlier in the text but in a sibling switch
+// clause, so it is uninitialized in case 1; the fix must use the zTrack import
+// -> zTrack(successes)
+export function switchClauses(choice: number) {
+  switch (choice) {
+    case 0:
+      const aTrack = zTrack
+      return aTrack
+    case 1:
+      return source.pipe(tap((n) => update(successes, n)))
+  }
+  return undefined
+}
+
+// MUST TRIGGER: `bTrack` precedes the hoisted function in the text, but the
+// function runs before `bTrack` is initialized; the fix must use the zTrack import
+// -> zTrack(successes)
+export const early = hoisted()
+const bTrack = zTrack
+function hoisted() {
+  return source.pipe(zTrack(successes))
+}
+
+// MUST TRIGGER, NO QUICKFIX: the parameter shadows the zTrack import, and the
+// module-level `bTrack` alias is never used as a target
+export function onlyLocalAlias(zTrack: number) {
+  return source.pipe(tap((n) => update(successes, n + zTrack)))
+}
+
+void bTrack
+
+
+=== [D3] Fix 0: "Disable manualMetricTapToTrack for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable manualMetricTapToTrack for entire file" ===
+skipped by default

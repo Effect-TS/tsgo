@@ -1,0 +1,28 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:48-9:58) TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+  Fix 0: "Disable manualMetricTapToTrack for this line"
+  Fix 1: "Disable manualMetricTapToTrack for entire file"
+  Fix 2: "Replace with Effect.trackSuccesses"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable manualMetricTapToTrack for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable manualMetricTapToTrack for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.trackSuccesses" ===
+
+--- file:///.src/manualMetricTapToTrack_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics manualMetricTapToTrack:warning
+import { Effect, Metric } from "effect"
+
+const responseSize = Metric.gauge("response_size")
+
+declare const handleRequest: Effect.Effect<number, Error>
+
+export const instrumented = handleRequest.pipe(Effect.trackSuccesses(responseSize))
+

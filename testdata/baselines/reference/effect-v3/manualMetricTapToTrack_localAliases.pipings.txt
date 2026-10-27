@@ -1,0 +1,99 @@
+==== /.src/manualMetricTapToTrack_localAliases.ts (7 flows) ====
+
+=== Piping Flow ===
+Location: 8:18 - 8:39
+Node: counter("successes")
+Node Kind: KindCallExpression
+
+Subject: "successes"
+Subject Type: "successes"
+
+Transformations (1):
+  [0] kind: call
+      callee: counter
+      args: (constant)
+      outType: Counter<number>
+
+=== Piping Flow ===
+Location: 20:13 - 20:59
+Node: source.pipe(tap((n) => update(successes, n)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: tap
+      args: [(n) => update(successes, n)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 20:36 - 20:57
+Node: update(successes, n)
+Node Kind: KindCallExpression
+
+Subject: successes
+Subject Type: Counter<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: update
+      args: [n]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 30:9 - 30:55
+Node: source.pipe(tap((n) => update(successes, n)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: tap
+      args: [(n) => update(successes, n)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 30:32 - 30:53
+Node: update(successes, n)
+Node Kind: KindCallExpression
+
+Subject: successes
+Subject Type: Counter<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: update
+      args: [n]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 36:9 - 36:64
+Node: source.pipe(tap((n) => update(successes, n + zTrack)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: tap
+      args: [(n) => update(successes, n + zTrack)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 36:32 - 36:62
+Node: update(successes, n + zTrack)
+Node Kind: KindCallExpression
+
+Subject: successes
+Subject Type: Counter<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: update
+      args: [n + zTrack]
+      outType: Effect<void, never, never>

@@ -97,6 +97,9 @@ mod lazy_expression;
 mod lazy_expression_test;
 #[cfg(test)]
 mod location_independent_type_parser_test;
+mod metric_api;
+#[cfg(test)]
+mod metric_api_test;
 mod module_export_reference;
 #[cfg(test)]
 mod module_export_reference_test;

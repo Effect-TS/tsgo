@@ -1,0 +1,46 @@
+flowchart TB
+  0[/"type: Gauge#lt;number#gt;<br/>node: gauge#40;#quot;response_size#quot;#41;"/]
+  1[/"type: Counter#lt;number#gt;<br/>node: counter#40;#quot;request_errors#quot;#41;"/]
+  2[/"type: Effect#lt;number, Error, never#gt;<br/>node: handleRequest"/]
+  3["type: Effect#lt;number, Error, never#gt;<br/>callee: tap<br/>args: #91;#40;size#41; =#gt; update#40;responseSize, size#41;#93;"]
+  4[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;A, E #124; E2, R #124; R2#gt;; #125;<br/>node: tap"/]
+  5[["type: #40;size: number#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;size#41; =#gt; update#40;responseSize, size#41;"]]
+  6[/"type: Gauge#lt;number#gt;<br/>node: responseSize"/]
+  7["type: Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  8[/"type: #123; #lt;Input#gt;#40;input: Input#41;: #lt;State#gt;#40;self: Metric#lt;Input, State#gt;#41; =#gt; Effect#lt;void, never, never#gt;; #lt;Input, State#gt;#40;self: Metric#lt;Input, State#gt;, input: Input#41;: Effect#lt;void, never, never#gt;; #125;<br/>node: update"/]
+  9[/"type: number<br/>node: size"/]
+  10[/"type: Effect#lt;number, Error, never#gt;<br/>node: handleRequest"/]
+  11["type: Effect#lt;number, Error, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  12[/"type: #123; #lt;E, X, E2, R2#gt;#40;f: #40;e: NoInfer#lt;E#gt;#41; =#gt; Effect#lt;X, E2, R2#gt;#41;: #lt;A, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;A, E, R, X, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;e: E#41; =#gt; Effect#lt;X, E2, R2#gt;#41;: Effect#lt;A, E #124; E2, R #124; R2#gt;; #125;<br/>node: tapError"/]
+  13[["type: #40;#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;#41; =#gt; update#40;requestErrors, 1#41;"]]
+  14[/"type: Counter#lt;number#gt;<br/>node: requestErrors"/]
+  15["type: Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  16[/"type: #123; #lt;Input#gt;#40;input: Input#41;: #lt;State#gt;#40;self: Metric#lt;Input, State#gt;#41; =#gt; Effect#lt;void, never, never#gt;; #lt;Input, State#gt;#40;self: Metric#lt;Input, State#gt;, input: Input#41;: Effect#lt;void, never, never#gt;; #125;<br/>node: update"/]
+  17[/"type: 1<br/>node: 1"/]
+  18[/"type: Effect#lt;number, Error, never#gt;<br/>node: handleRequest"/]
+  19["type: Effect#lt;number, Error, never#gt;<br/>callee: tap<br/>args: #91;update#40;requestErrors, 1#41;#93;"]
+  20[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;A, E #124; E2, R #124; R2#gt;; #125;<br/>node: tap"/]
+  21[/"type: Counter#lt;number#gt;<br/>node: requestErrors"/]
+  22["type: Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  23[/"type: #123; #lt;Input#gt;#40;input: Input#41;: #lt;State#gt;#40;self: Metric#lt;Input, State#gt;#41; =#gt; Effect#lt;void, never, never#gt;; #lt;Input, State#gt;#40;self: Metric#lt;Input, State#gt;, input: Input#41;: Effect#lt;void, never, never#gt;; #125;<br/>node: update"/]
+  24[/"type: 1<br/>node: 1"/]
+  4 -->|"kind: transformCallee"| 3
+  6 -->|"kind: pipe"| 7
+  8 -->|"kind: transformCallee"| 6
+  9 -->|"kind: transformArg"| 6
+  7 -->|"kind: potentialReturn"| 5
+  5 -->|"kind: transformArg"| 3
+  2 -->|"kind: pipe"| 3
+  10 -->|"kind: pipe"| 11
+  12 -->|"kind: transformCallee"| 10
+  14 -->|"kind: pipe"| 15
+  16 -->|"kind: transformCallee"| 14
+  17 -->|"kind: transformArg"| 14
+  15 -->|"kind: potentialReturn"| 13
+  13 -->|"kind: transformArg"| 10
+  20 -->|"kind: transformCallee"| 19
+  21 -->|"kind: pipe"| 22
+  23 -->|"kind: transformCallee"| 21
+  24 -->|"kind: transformArg"| 21
+  22 -->|"kind: transformArg"| 19
+  18 -->|"kind: pipe"| 19
