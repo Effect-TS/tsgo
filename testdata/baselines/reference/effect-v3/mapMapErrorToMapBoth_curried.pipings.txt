@@ -1,0 +1,145 @@
+==== /.src/mapMapErrorToMapBoth_curried.ts (8 flows) ====
+
+=== Piping Flow ===
+Location: 12:32 - 12:98
+Node: Effect.mapError(makeFailure())(Effect.map(makeSuccess())(source))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.map
+      args: [makeSuccess()]
+      outType: Effect<number, string, never>
+  [1] kind: call
+      callee: Effect.mapError
+      args: [makeFailure()]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 16:31 - 18:2
+Node: Effect.mapError((message: string) => message.length)(\n  Effect.map((n: number) => n + 1)(source)\n)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.map
+      args: [(n: number) => n + 1]
+      outType: Effect<number, string, never>
+  [1] kind: call
+      callee: Effect.mapError
+      args: [(message: string) => message.length]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 22:38 - 24:2
+Node: Effect.map(makeSuccess())(makeSource()).pipe(\n  Effect.mapError((message) => message.length)\n)
+Node Kind: KindCallExpression
+
+Subject: makeSource()
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.map
+      args: [makeSuccess()]
+      outType: Effect<number, string, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(message) => message.length]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 27:38 - 29:2
+Node: Effect.map((n: number) => n + 1)(makeSource()).pipe(\n  Effect.mapError(makeFailure())\n)
+Node Kind: KindCallExpression
+
+Subject: makeSource()
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.map
+      args: [(n: number) => n + 1]
+      outType: Effect<number, string, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [makeFailure()]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 33:38 - 35:2
+Node: Effect.mapError((message: string) => message.length)(\n  makeSource().pipe(Effect.map(makeSuccess()))\n)
+Node Kind: KindCallExpression
+
+Subject: makeSource()
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [makeSuccess()]
+      outType: Effect<number, string, never>
+  [1] kind: call
+      callee: Effect.mapError
+      args: [(message: string) => message.length]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 38:47 - 40:2
+Node: Effect.map((n: number) => n + 1)<number, never>(\n  Effect.mapError((message: string) => message.length)(source)\n)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.mapError
+      args: [(message: string) => message.length]
+      outType: Effect<number, number, never>
+  [1] kind: call
+      callee: Effect.map
+      args: [(n: number) => n + 1]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 43:43 - 45:2
+Node: Effect.map<number, number>((n) => n + 1)(\n  Effect.mapError((message: string) => message.length)(source)\n)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.mapError
+      args: [(message: string) => message.length]
+      outType: Effect<number, number, never>
+  [1] kind: call
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 49:33 - 53:82
+Node: pipe<\n  Effect.Effect<number, string>,\n  Effect.Effect<number, string>,\n  Effect.Effect<number, number>\n>(source, Effect.map((n) => n + 1), Effect.mapError((message) => message.length))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, string, never>
+  [1] kind: pipe
+      callee: Effect.mapError
+      args: [(message) => message.length]
+      outType: Effect<number, number, never>

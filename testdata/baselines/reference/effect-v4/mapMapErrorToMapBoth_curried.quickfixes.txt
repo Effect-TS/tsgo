@@ -1,0 +1,313 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:33-12:48) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+
+[D2] (16:32-16:47) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D3] (23:3-23:18) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+
+[D4] (28:3-28:18) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D5] (33:39-33:54) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+
+[D6] (38:48-38:58) TS377151: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+
+[D7] (43:44-43:54) TS377151: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+
+[D8] (53:37-53:52) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+
+[D9] (56:38-56:58) TS377151: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+
+[D10] (59:37-59:57) TS377151: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBothEager"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_curried.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect, pipe } from "effect"
+
+declare const source: Effect.Effect<number, string>
+declare const makeSource: () => Effect.Effect<number, string>
+declare const makeSuccess: () => (n: number) => number
+declare const makeFailure: () => (message: string) => number
+
+// MUST TRIGGER (no quickfix): both steps curried; JavaScript evaluates makeFailure() before
+// makeSuccess(), while Effect.mapBoth({ onSuccess, onFailure }) would evaluate them in flow order
+export const curriedFactories = Effect.mapError(makeFailure())(Effect.map(makeSuccess())(source))
+
+// MUST TRIGGER: both steps curried with function literals; evaluating them in another order
+// runs no code, so the quickfix is offered
+export const curriedLiterals = Effect.mapBoth({
+    onSuccess: (n: number) => n + 1,
+    onFailure: (message: string) => message.length
+})(
+  source
+)
+
+// MUST TRIGGER (no quickfix): curried first step, pipeable second step; makeSuccess() is
+// evaluated before makeSource(), the merged step would evaluate makeSource() first
+export const curriedThenPipeFactory = Effect.map(makeSuccess())(makeSource()).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: same shape with a function literal first callback; the quickfix is offered
+export const curriedThenPipeLiteral = Effect.map((n: number) => n + 1)(makeSource()).pipe(
+  Effect.mapError(makeFailure())
+)
+
+// MUST TRIGGER (no quickfix): pipeable first step, curried second step; makeSource() is
+// evaluated before makeSuccess(), the merged curried step would evaluate makeSuccess() first
+export const pipeThenCurriedFactory = Effect.mapError((message: string) => message.length)(
+  makeSource().pipe(Effect.map(makeSuccess()))
+)
+
+// MUST TRIGGER (no quickfix): explicit type arguments on the curried application
+export const curriedApplicationTypeArguments = Effect.map((n: number) => n + 1)<number, never>(
+  Effect.mapError((message: string) => message.length)(source)
+)
+
+// MUST TRIGGER (no quickfix): explicit type arguments on the curried factory
+export const curriedFactoryTypeArguments = Effect.map<number, number>((n) => n + 1)(
+  Effect.mapError((message: string) => message.length)(source)
+)
+
+// MUST TRIGGER (no quickfix): explicit type arguments on the pipe call that holds both steps;
+// removing a step would leave a type argument without its step
+export const pipeTypeArguments = pipe<
+  Effect.Effect<number, string>,
+  Effect.Effect<number, string>,
+  Effect.Effect<number, number>
+>(source, Effect.map((n) => n + 1), Effect.mapError((message) => message.length))
+
+// MUST TRIGGER (no quickfix): eager curried steps with factories, same reordering
+export const eagerCurriedFactories = Effect.mapErrorEager(makeFailure())(Effect.mapEager(makeSuccess())(source))
+
+// MUST TRIGGER: eager curried steps with function literals; the quickfix is offered
+export const eagerCurriedLiterals = Effect.mapErrorEager((message: string) => message.length)(
+  Effect.mapEager((n: number) => n + 1)(source)
+)
+
+
+=== [D3] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_curried.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect, pipe } from "effect"
+
+declare const source: Effect.Effect<number, string>
+declare const makeSource: () => Effect.Effect<number, string>
+declare const makeSuccess: () => (n: number) => number
+declare const makeFailure: () => (message: string) => number
+
+// MUST TRIGGER (no quickfix): both steps curried; JavaScript evaluates makeFailure() before
+// makeSuccess(), while Effect.mapBoth({ onSuccess, onFailure }) would evaluate them in flow order
+export const curriedFactories = Effect.mapError(makeFailure())(Effect.map(makeSuccess())(source))
+
+// MUST TRIGGER: both steps curried with function literals; evaluating them in another order
+// runs no code, so the quickfix is offered
+export const curriedLiterals = Effect.mapError((message: string) => message.length)(
+  Effect.map((n: number) => n + 1)(source)
+)
+
+// MUST TRIGGER (no quickfix): curried first step, pipeable second step; makeSuccess() is
+// evaluated before makeSource(), the merged step would evaluate makeSource() first
+export const curriedThenPipeFactory = Effect.map(makeSuccess())(makeSource()).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: same shape with a function literal first callback; the quickfix is offered
+export const curriedThenPipeLiteral = makeSource().pipe(
+  Effect.mapBoth({
+    onSuccess: (n: number) => n + 1,
+    onFailure: makeFailure()
+})
+)
+
+// MUST TRIGGER (no quickfix): pipeable first step, curried second step; makeSource() is
+// evaluated before makeSuccess(), the merged curried step would evaluate makeSuccess() first
+export const pipeThenCurriedFactory = Effect.mapError((message: string) => message.length)(
+  makeSource().pipe(Effect.map(makeSuccess()))
+)
+
+// MUST TRIGGER (no quickfix): explicit type arguments on the curried application
+export const curriedApplicationTypeArguments = Effect.map((n: number) => n + 1)<number, never>(
+  Effect.mapError((message: string) => message.length)(source)
+)
+
+// MUST TRIGGER (no quickfix): explicit type arguments on the curried factory
+export const curriedFactoryTypeArguments = Effect.map<number, number>((n) => n + 1)(
+  Effect.mapError((message: string) => message.length)(source)
+)
+
+// MUST TRIGGER (no quickfix): explicit type arguments on the pipe call that holds both steps;
+// removing a step would leave a type argument without its step
+export const pipeTypeArguments = pipe<
+  Effect.Effect<number, string>,
+  Effect.Effect<number, string>,
+  Effect.Effect<number, number>
+>(source, Effect.map((n) => n + 1), Effect.mapError((message) => message.length))
+
+// MUST TRIGGER (no quickfix): eager curried steps with factories, same reordering
+export const eagerCurriedFactories = Effect.mapErrorEager(makeFailure())(Effect.mapEager(makeSuccess())(source))
+
+// MUST TRIGGER: eager curried steps with function literals; the quickfix is offered
+export const eagerCurriedLiterals = Effect.mapErrorEager((message: string) => message.length)(
+  Effect.mapEager((n: number) => n + 1)(source)
+)
+
+
+=== [D5] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D10] Fix 2: "Replace with Effect.mapBothEager" ===
+
+--- file:///.src/mapMapErrorToMapBoth_curried.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect, pipe } from "effect"
+
+declare const source: Effect.Effect<number, string>
+declare const makeSource: () => Effect.Effect<number, string>
+declare const makeSuccess: () => (n: number) => number
+declare const makeFailure: () => (message: string) => number
+
+// MUST TRIGGER (no quickfix): both steps curried; JavaScript evaluates makeFailure() before
+// makeSuccess(), while Effect.mapBoth({ onSuccess, onFailure }) would evaluate them in flow order
+export const curriedFactories = Effect.mapError(makeFailure())(Effect.map(makeSuccess())(source))
+
+// MUST TRIGGER: both steps curried with function literals; evaluating them in another order
+// runs no code, so the quickfix is offered
+export const curriedLiterals = Effect.mapError((message: string) => message.length)(
+  Effect.map((n: number) => n + 1)(source)
+)
+
+// MUST TRIGGER (no quickfix): curried first step, pipeable second step; makeSuccess() is
+// evaluated before makeSource(), the merged step would evaluate makeSource() first
+export const curriedThenPipeFactory = Effect.map(makeSuccess())(makeSource()).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: same shape with a function literal first callback; the quickfix is offered
+export const curriedThenPipeLiteral = Effect.map((n: number) => n + 1)(makeSource()).pipe(
+  Effect.mapError(makeFailure())
+)
+
+// MUST TRIGGER (no quickfix): pipeable first step, curried second step; makeSource() is
+// evaluated before makeSuccess(), the merged curried step would evaluate makeSuccess() first
+export const pipeThenCurriedFactory = Effect.mapError((message: string) => message.length)(
+  makeSource().pipe(Effect.map(makeSuccess()))
+)
+
+// MUST TRIGGER (no quickfix): explicit type arguments on the curried application
+export const curriedApplicationTypeArguments = Effect.map((n: number) => n + 1)<number, never>(
+  Effect.mapError((message: string) => message.length)(source)
+)
+
+// MUST TRIGGER (no quickfix): explicit type arguments on the curried factory
+export const curriedFactoryTypeArguments = Effect.map<number, number>((n) => n + 1)(
+  Effect.mapError((message: string) => message.length)(source)
+)
+
+// MUST TRIGGER (no quickfix): explicit type arguments on the pipe call that holds both steps;
+// removing a step would leave a type argument without its step
+export const pipeTypeArguments = pipe<
+  Effect.Effect<number, string>,
+  Effect.Effect<number, string>,
+  Effect.Effect<number, number>
+>(source, Effect.map((n) => n + 1), Effect.mapError((message) => message.length))
+
+// MUST TRIGGER (no quickfix): eager curried steps with factories, same reordering
+export const eagerCurriedFactories = Effect.mapErrorEager(makeFailure())(Effect.mapEager(makeSuccess())(source))
+
+// MUST TRIGGER: eager curried steps with function literals; the quickfix is offered
+export const eagerCurriedLiterals = Effect.mapBothEager({
+    onSuccess: (n: number) => n + 1,
+    onFailure: (message: string) => message.length
+})(
+  source
+)
+
