@@ -71,8 +71,14 @@ func AnalyzeCatchAllToMapError(tp *typeparser.TypeParser, _ *checker.Checker, sf
 				continue
 			}
 
-			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catch") &&
-				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchAll") {
+			// Name the catch variant the callee resolves to, however it is written.
+			var catchMethodName string
+			switch {
+			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catch"):
+				catchMethodName = "catch"
+			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchAll"):
+				catchMethodName = "catchAll"
+			default:
 				continue
 			}
 
@@ -80,15 +86,6 @@ func AnalyzeCatchAllToMapError(tp *typeparser.TypeParser, _ *checker.Checker, sf
 				continue
 			}
 
-			// Extract the "catch" method name from the PropertyAccessExpression callee
-			catchMethodName := "catch"
-			callee := transformation.Callee()
-			if callee.Kind == ast.KindPropertyAccessExpression {
-				prop := callee.AsPropertyAccessExpression()
-				if prop != nil && prop.Name() != nil {
-					catchMethodName = prop.Name().Text()
-				}
-			}
 
 			matches = append(matches, CatchAllToMapErrorMatch{
 				SourceFile:         sf,

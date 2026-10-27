@@ -67,8 +67,14 @@ func AnalyzeCatchToOrElseSucceed(tp *typeparser.TypeParser, _ *checker.Checker, 
 				continue
 			}
 
-			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catch") &&
-				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchAll") {
+			// Name the catch variant the callee resolves to, however it is written.
+			var catchMethodName string
+			switch {
+			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catch"):
+				catchMethodName = "catch"
+			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchAll"):
+				catchMethodName = "catchAll"
+			default:
 				continue
 			}
 
@@ -80,13 +86,6 @@ func AnalyzeCatchToOrElseSucceed(tp *typeparser.TypeParser, _ *checker.Checker, 
 				continue
 			}
 
-			catchMethodName := "catch"
-			if transformation.Callee().Kind == ast.KindPropertyAccessExpression {
-				prop := transformation.Callee().AsPropertyAccessExpression()
-				if prop != nil && prop.Name() != nil {
-					catchMethodName = prop.Name().Text()
-				}
-			}
 
 			matches = append(matches, CatchToOrElseSucceedMatch{
 				SourceFile:            sf,
