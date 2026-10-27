@@ -42,6 +42,7 @@ Effect version: 4.0.2
 /.src/promiseInEffectSuccess.ts(48,3): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 /.src/promiseInEffectSuccess.ts(51,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 /.src/promiseInEffectSuccess.ts(51,1): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+/.src/promiseInEffectSuccess.ts(52,3): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
 /.src/promiseInEffectSuccess.ts(52,3): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 /.src/promiseInEffectSuccess.ts(52,15): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
 /.src/promiseInEffectSuccess.ts(55,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
@@ -54,6 +55,7 @@ Effect version: 4.0.2
 /.src/promiseInEffectSuccess.ts(62,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 /.src/promiseInEffectSuccess.ts(63,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 /.src/promiseInEffectSuccess.ts(64,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/promiseInEffectSuccess.ts(65,1): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
 /.src/promiseInEffectSuccess.ts(65,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
 /.src/promiseInEffectSuccess.ts(65,13): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
 /.src/promiseInEffectSuccess.ts(66,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
@@ -79,7 +81,7 @@ Effect version: 4.0.2
 /.src/promiseInEffectSuccess.ts(98,37): warning TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
 
 
-==== /.src/promiseInEffectSuccess.ts (76 errors) ====
+==== /.src/promiseInEffectSuccess.ts (78 errors) ====
     // @effect-diagnostics promiseInEffectSuccess:warning
     
     import { Effect } from "effect"
@@ -220,6 +222,8 @@ Effect version: 4.0.2
       Effect.sync(() => promiseValue)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~
+!!! suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
                   ~~~~~~~~~~~~~~~~~~
@@ -269,6 +273,8 @@ Effect version: 4.0.2
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
     Effect.sync(() => promiseValue)
+    ~~~~~~~~~~~
+!!! suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
                 ~~~~~~~~~~~~~~~~~~
