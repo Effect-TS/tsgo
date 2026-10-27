@@ -1,0 +1,242 @@
+=== Quick Fix Inventory ===
+
+[D1] (21:9-21:24) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+
+[D2] (26:9-26:24) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D3] (32:9-32:24) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D4] (36:39-36:54) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+
+[D5] (42:39-42:54) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+
+[D6] (48:26-48:41) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_boundaries.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect, pipe } from "effect"
+
+declare const source: Effect.Effect<number, string>
+let multiplier = 1
+const makeSuccess = () => {
+  const captured = multiplier
+  return (n: number) => n * captured
+}
+// A user-defined pipe step that runs code when applied
+const record = <A, E, R>(self: Effect.Effect<A, E, R>) => {
+  multiplier = 2
+  return self
+}
+
+// MUST TRIGGER (no quickfix): `record` runs before the second pipe is evaluated, so moving
+// makeSuccess() into the second pipe would evaluate it after `record` (result 6 instead of 3)
+export const precedingStepRuns = Effect.succeed(3)
+  .pipe(record, Effect.map(makeSuccess()))
+  .pipe(Effect.mapError(String))
+
+// MUST TRIGGER: same shape with a function literal callback; the quickfix is offered
+export const precedingStepLiteral = Effect.succeed(3)
+  .pipe(record)
+  .pipe(Effect.mapBoth({
+    onSuccess: n => n * multiplier,
+    onFailure: String
+}))
+
+// MUST TRIGGER: the pair starts the first pipe, so nothing runs between the callbacks;
+// the quickfix is offered for a non-literal callback
+export const firstStepOfPipe = Effect.succeed(3)
+  .pipe(Effect.map(makeSuccess()))
+  .pipe(Effect.mapError(String), record)
+
+// MUST TRIGGER (no quickfix): explicit type arguments on an empty .pipe() between the steps;
+// removing Effect.map changes its input type
+export const emptyPipeTypeArguments = Effect.mapError(
+  Effect.map(source, (n) => String(n)).pipe<Effect.Effect<string, string>>(),
+  (message) => message.length
+)
+
+// MUST TRIGGER (no quickfix): explicit type arguments on the pipe call that holds the first step
+export const firstPipeTypeArguments = Effect.mapError(
+  pipe<Effect.Effect<number, string>, Effect.Effect<string, string>>(source, Effect.map((n) => String(n))),
+  (message) => message.length
+)
+
+// MUST TRIGGER: an empty .pipe() without type arguments between the steps; the quickfix is offered
+export const emptyPipe = Effect.mapError(
+  Effect.map(source, (n) => String(n)).pipe(),
+  (message) => message.length
+)
+
+
+=== [D3] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_boundaries.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect, pipe } from "effect"
+
+declare const source: Effect.Effect<number, string>
+let multiplier = 1
+const makeSuccess = () => {
+  const captured = multiplier
+  return (n: number) => n * captured
+}
+// A user-defined pipe step that runs code when applied
+const record = <A, E, R>(self: Effect.Effect<A, E, R>) => {
+  multiplier = 2
+  return self
+}
+
+// MUST TRIGGER (no quickfix): `record` runs before the second pipe is evaluated, so moving
+// makeSuccess() into the second pipe would evaluate it after `record` (result 6 instead of 3)
+export const precedingStepRuns = Effect.succeed(3)
+  .pipe(record, Effect.map(makeSuccess()))
+  .pipe(Effect.mapError(String))
+
+// MUST TRIGGER: same shape with a function literal callback; the quickfix is offered
+export const precedingStepLiteral = Effect.succeed(3)
+  .pipe(record, Effect.map((n) => n * multiplier))
+  .pipe(Effect.mapError(String))
+
+// MUST TRIGGER: the pair starts the first pipe, so nothing runs between the callbacks;
+// the quickfix is offered for a non-literal callback
+export const firstStepOfPipe = Effect.succeed(3)
+  .pipe(Effect.mapBoth({
+    onSuccess: makeSuccess(),
+    onFailure: String
+}), record)
+
+// MUST TRIGGER (no quickfix): explicit type arguments on an empty .pipe() between the steps;
+// removing Effect.map changes its input type
+export const emptyPipeTypeArguments = Effect.mapError(
+  Effect.map(source, (n) => String(n)).pipe<Effect.Effect<string, string>>(),
+  (message) => message.length
+)
+
+// MUST TRIGGER (no quickfix): explicit type arguments on the pipe call that holds the first step
+export const firstPipeTypeArguments = Effect.mapError(
+  pipe<Effect.Effect<number, string>, Effect.Effect<string, string>>(source, Effect.map((n) => String(n))),
+  (message) => message.length
+)
+
+// MUST TRIGGER: an empty .pipe() without type arguments between the steps; the quickfix is offered
+export const emptyPipe = Effect.mapError(
+  Effect.map(source, (n) => String(n)).pipe(),
+  (message) => message.length
+)
+
+
+=== [D4] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_boundaries.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect, pipe } from "effect"
+
+declare const source: Effect.Effect<number, string>
+let multiplier = 1
+const makeSuccess = () => {
+  const captured = multiplier
+  return (n: number) => n * captured
+}
+// A user-defined pipe step that runs code when applied
+const record = <A, E, R>(self: Effect.Effect<A, E, R>) => {
+  multiplier = 2
+  return self
+}
+
+// MUST TRIGGER (no quickfix): `record` runs before the second pipe is evaluated, so moving
+// makeSuccess() into the second pipe would evaluate it after `record` (result 6 instead of 3)
+export const precedingStepRuns = Effect.succeed(3)
+  .pipe(record, Effect.map(makeSuccess()))
+  .pipe(Effect.mapError(String))
+
+// MUST TRIGGER: same shape with a function literal callback; the quickfix is offered
+export const precedingStepLiteral = Effect.succeed(3)
+  .pipe(record, Effect.map((n) => n * multiplier))
+  .pipe(Effect.mapError(String))
+
+// MUST TRIGGER: the pair starts the first pipe, so nothing runs between the callbacks;
+// the quickfix is offered for a non-literal callback
+export const firstStepOfPipe = Effect.succeed(3)
+  .pipe(Effect.map(makeSuccess()))
+  .pipe(Effect.mapError(String), record)
+
+// MUST TRIGGER (no quickfix): explicit type arguments on an empty .pipe() between the steps;
+// removing Effect.map changes its input type
+export const emptyPipeTypeArguments = Effect.mapError(
+  Effect.map(source, (n) => String(n)).pipe<Effect.Effect<string, string>>(),
+  (message) => message.length
+)
+
+// MUST TRIGGER (no quickfix): explicit type arguments on the pipe call that holds the first step
+export const firstPipeTypeArguments = Effect.mapError(
+  pipe<Effect.Effect<number, string>, Effect.Effect<string, string>>(source, Effect.map((n) => String(n))),
+  (message) => message.length
+)
+
+// MUST TRIGGER: an empty .pipe() without type arguments between the steps; the quickfix is offered
+export const emptyPipe = Effect.mapBoth(
+  source.pipe(),
+  {
+    onSuccess: n => String(n),
+    onFailure: message => message.length
+}
+)
+

@@ -106,7 +106,7 @@ func AnalyzeMapMapErrorToMapBoth(tp *typeparser.TypeParser, c *checker.Checker, 
 				FirstFailure:    a.failure,
 				First:           first,
 				Second:          second,
-				Fixable: !mapMapErrorHasTypeArguments(first) && !mapMapErrorHasTypeArguments(second) &&
+				Fixable: !hasExplicitTypeArguments(&second) && !mapMapErrorPathHasTypeArguments(first, second) &&
 					mapMapErrorKeepsEvaluationOrder(first, second, a.eager),
 			})
 		}
@@ -114,77 +114,115 @@ func AnalyzeMapMapErrorToMapBoth(tp *typeparser.TypeParser, c *checker.Checker, 
 	return matches
 }
 
-// mapMapErrorHasTypeArguments reports explicit type arguments on any call the
-// fix edits: the step itself, the application of a curried step, or the pipe or
-// Effect.fn call whose argument list holds the step. Those type arguments
-// describe signatures that the merged step or the shortened argument list no
-// longer has.
-func mapMapErrorHasTypeArguments(step typeparser.PipingFlowTransformation) bool {
-	if hasExplicitTypeArguments(&step) {
-		return true
-	}
-	if step.Kind() != typeparser.TransformationKindCall && !isPipingFlowArgumentKind(step.Kind()) {
-		return false
-	}
-	outer := step.Callee().Parent
-	if outer != nil {
-		outer = outer.Parent
-	}
-	for outer != nil && outer.Kind == ast.KindParenthesizedExpression {
-		outer = outer.Parent
-	}
-	if outer == nil || outer.Kind != ast.KindCallExpression {
-		return false
-	}
-	typeArguments := outer.AsCallExpression().TypeArguments
-	return typeArguments != nil && len(typeArguments.Nodes) > 0
-}
-
-// Positions in the evaluation order modeled by mapMapErrorKeepsEvaluationOrder.
-const (
-	mapMapErrorInput = iota // the first step's input
-	mapMapErrorFirstCallback
-	mapMapErrorSecondCallback
-)
-
-// mapMapErrorKeepsEvaluationOrder reports whether the merged step evaluates the
-// first step's input and both callbacks, and runs the first step, in the same
-// observable order as the original code. A curried or data-last step evaluates
-// its callback before its input; every other step evaluates its input first.
-// The merged step keeps the second step's form with the callbacks in flow
-// order. Only a function literal can move without running user code.
-func mapMapErrorKeepsEvaluationOrder(first, second typeparser.PipingFlowTransformation, eager bool) bool {
-	original := []int{mapMapErrorInput, mapMapErrorFirstCallback}
-	if mapMapErrorCallbackBeforeInput(first) {
-		original = []int{mapMapErrorFirstCallback, mapMapErrorInput}
-	}
-	merged := []int{mapMapErrorInput, mapMapErrorFirstCallback, mapMapErrorSecondCallback}
-	if mapMapErrorCallbackBeforeInput(second) {
-		original = append([]int{mapMapErrorSecondCallback}, original...)
-		merged = []int{mapMapErrorFirstCallback, mapMapErrorSecondCallback, mapMapErrorInput}
-	} else {
-		original = append(original, mapMapErrorSecondCallback)
-	}
-	literal := map[int]bool{
-		mapMapErrorFirstCallback:  isFunctionLiteral(first.Args().At(0)),
-		mapMapErrorSecondCallback: isFunctionLiteral(second.Args().At(0)),
-	}
-	if !slices.Equal(slices.DeleteFunc(original, func(position int) bool { return literal[position] }),
-		slices.DeleteFunc(merged, func(position int) bool { return literal[position] })) {
-		return false
-	}
-	// An eager first step runs its callback on an already resolved effect when
-	// it is applied. That happens before the second callback is evaluated unless
-	// the second step evaluates its callback first or both steps share one
-	// argument list, while the merged step evaluates both callbacks first.
-	if eager && !mapMapErrorCallbackBeforeInput(second) && !mapMapErrorShareArgumentList(first, second) {
-		return literal[mapMapErrorSecondCallback]
+// mapMapErrorPathHasTypeArguments reports explicit type arguments on any call
+// from the first step up to the call that applies the second step: the first
+// step itself, its curried application or containing pipe, empty pipe calls in
+// between, and the second step's application or containing pipe. Removing the
+// first step changes the input type of every one of them, so their type
+// arguments would no longer match. It also reports true when the second step's
+// application is not an ancestor of the first step.
+func mapMapErrorPathHasTypeArguments(first, second typeparser.PipingFlowTransformation) bool {
+	application := mapMapErrorStepApplication(second)
+	for node := first.Callee(); node != nil; node = node.Parent {
+		if node.Kind == ast.KindCallExpression {
+			typeArguments := node.AsCallExpression().TypeArguments
+			if typeArguments != nil && len(typeArguments.Nodes) > 0 {
+				return true
+			}
+		}
+		if node == application {
+			return false
+		}
 	}
 	return true
 }
 
-func mapMapErrorCallbackBeforeInput(step typeparser.PipingFlowTransformation) bool {
-	return step.Kind() == typeparser.TransformationKindCall || step.Kind() == typeparser.TransformationKindDataLast
+// mapMapErrorStepApplication returns the call that applies a step to its input.
+func mapMapErrorStepApplication(step typeparser.PipingFlowTransformation) *ast.Node {
+	call := step.Callee().Parent
+	if call == nil || (step.Kind() != typeparser.TransformationKindCall && !isPipingFlowArgumentKind(step.Kind())) {
+		return call
+	}
+	// A curried step is applied by the call around its factory, and a pipe
+	// argument by the pipe or Effect.fn call that holds it.
+	application := call.Parent
+	for application != nil && application.Kind == ast.KindParenthesizedExpression {
+		application = application.Parent
+	}
+	return application
+}
+
+// mapMapErrorKeepsEvaluationOrder reports whether the fix keeps the observable
+// order of evaluation. Steps in one argument list keep it: their callbacks are
+// evaluated before any of them runs. Otherwise the fix moves the first callback
+// into the second step and the first step's work into the merged step. Only a
+// function literal can move across other code, because evaluating it runs none.
+func mapMapErrorKeepsEvaluationOrder(first, second typeparser.PipingFlowTransformation, eager bool) bool {
+	if mapMapErrorShareArgumentList(first, second) {
+		return true
+	}
+	if !isFunctionLiteral(first.Args().At(0)) && !mapMapErrorFirstCallbackMovesFreely(first, second) {
+		return false
+	}
+	// A non-eager step only builds an effect, so moving its work is unobservable.
+	return !eager || mapMapErrorFirstWorkMovesFreely(second)
+}
+
+// mapMapErrorFirstCallbackMovesFreely reports whether nothing observable runs
+// between the first callback's evaluation and the second step's callback
+// position, apart from applying the first step. That holds when the first step
+// evaluates its input before its callback and is the first step of its pipe,
+// and the second step evaluates its input before its callback. A curried step
+// evaluates its callback before its input, and earlier steps of the first pipe
+// run before the second pipe's arguments are evaluated.
+func mapMapErrorFirstCallbackMovesFreely(first, second typeparser.PipingFlowTransformation) bool {
+	if second.Kind() != typeparser.TransformationKindDataFirst && !isPipingFlowArgumentKind(second.Kind()) {
+		return false
+	}
+	if first.Kind() == typeparser.TransformationKindDataFirst {
+		return true
+	}
+	if !isPipingFlowArgumentKind(first.Kind()) {
+		return false
+	}
+	index, _ := mapMapErrorArgumentIndex(first)
+	if first.Kind() == typeparser.TransformationKindPipeable {
+		return index == 0
+	}
+	// Function.pipe and Effect.fn hold their subject or body before the steps.
+	return index == 1
+}
+
+// mapMapErrorFirstWorkMovesFreely reports whether an eager first step can run
+// in the merged step without crossing observable code. When the first step is
+// applied before the second callback is evaluated, the merged step runs that
+// work after the second callback and, for a pipe argument, after the arguments
+// that follow it.
+func mapMapErrorFirstWorkMovesFreely(second typeparser.PipingFlowTransformation) bool {
+	switch {
+	case second.Kind() == typeparser.TransformationKindCall || second.Kind() == typeparser.TransformationKindDataLast:
+		return true
+	case second.Kind() == typeparser.TransformationKindDataFirst:
+		return isFunctionLiteral(second.Args().At(0))
+	case isPipingFlowArgumentKind(second.Kind()):
+		index, count := mapMapErrorArgumentIndex(second)
+		return isFunctionLiteral(second.Args().At(0)) && index == count-1
+	}
+	return false
+}
+
+// mapMapErrorArgumentIndex returns the position of a pipe argument step in its
+// call's argument list and the list's length, or -1 when it is not found.
+func mapMapErrorArgumentIndex(step typeparser.PipingFlowTransformation) (int, int) {
+	stepCall := step.Callee().Parent
+	if stepCall == nil || stepCall.Parent == nil || stepCall.Parent.Kind != ast.KindCallExpression {
+		return -1, 0
+	}
+	arguments := stepCall.Parent.AsCallExpression().Arguments
+	if arguments == nil {
+		return -1, 0
+	}
+	return slices.Index(arguments.Nodes, stepCall), len(arguments.Nodes)
 }
 
 func isFunctionLiteral(node *ast.Node) bool {

@@ -43,8 +43,13 @@ func TestMapMapErrorToMapBothFixesCompile(t *testing.T) {
 			// Curried pairs keep a fix only when no non-literal expression is reordered
 			// and no call they edit has explicit type arguments.
 			curriedMatches, curriedFixes := 10, 3
+			// Pairs split across calls keep a fix only when no non-literal callback or
+			// eager work moves across other code, and no call on the path between the
+			// steps has explicit type arguments.
+			boundaryMatches, boundaryFixes := 9, 4
 			if version == bundledeffect.EffectV3 {
 				curriedMatches, curriedFixes = 8, 2
+				boundaryMatches, boundaryFixes = 6, 3
 				mainMatches, mainFixes = 22, 21
 				orderMatches, orderFixes = 2, 2
 				crossMatches, crossFixes = 8, 8
@@ -64,6 +69,7 @@ func TestMapMapErrorToMapBothFixesCompile(t *testing.T) {
 				{name: "mapMapErrorToMapBoth_evaluationOrder.ts", matches: orderMatches, fixes: orderFixes},
 				{name: "mapMapErrorToMapBoth_crossPipe.ts", matches: crossMatches, fixes: crossFixes},
 				{name: "mapMapErrorToMapBoth_curried.ts", matches: curriedMatches, fixes: curriedFixes},
+				{name: "mapMapErrorToMapBoth_boundaries.ts", matches: boundaryMatches, fixes: boundaryFixes},
 				{
 					name: "exactCrossPipe",
 					source: `import { Effect } from "effect"

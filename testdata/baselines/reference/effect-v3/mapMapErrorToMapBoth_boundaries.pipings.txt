@@ -1,0 +1,175 @@
+==== /.src/mapMapErrorToMapBoth_boundaries.ts (9 flows) ====
+
+=== Piping Flow ===
+Location: 19:33 - 21:33
+Node: Effect.succeed(3)\n  .pipe(record, Effect.map(makeSuccess()))\n  .pipe(Effect.mapError(String))
+Node Kind: KindCallExpression
+
+Subject: 3
+Subject Type: 3
+
+Transformations (4):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: record
+      args: (constant)
+      outType: Effect<number, never, never>
+  [2] kind: pipeable
+      callee: Effect.map
+      args: [makeSuccess()]
+      outType: Effect<number, never, never>
+  [3] kind: pipeable
+      callee: Effect.mapError
+      args: [String]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 24:36 - 26:33
+Node: Effect.succeed(3)\n  .pipe(record, Effect.map((n) => n * multiplier))\n  .pipe(Effect.mapError(String))
+Node Kind: KindCallExpression
+
+Subject: 3
+Subject Type: 3
+
+Transformations (4):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: record
+      args: (constant)
+      outType: Effect<number, never, never>
+  [2] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n * multiplier]
+      outType: Effect<number, never, never>
+  [3] kind: pipeable
+      callee: Effect.mapError
+      args: [String]
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 30:31 - 32:41
+Node: Effect.succeed(3)\n  .pipe(Effect.map(makeSuccess()))\n  .pipe(Effect.mapError(String), record)
+Node Kind: KindCallExpression
+
+Subject: 3
+Subject Type: 3
+
+Transformations (4):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [makeSuccess()]
+      outType: Effect<number, never, never>
+  [2] kind: pipeable
+      callee: Effect.mapError
+      args: [String]
+      outType: Effect<number, string, never>
+  [3] kind: pipeable
+      callee: record
+      args: (constant)
+      outType: Effect<number, string, never>
+
+=== Piping Flow ===
+Location: 36:38 - 39:2
+Node: Effect.mapError(\n  Effect.map(source, (n) => String(n)).pipe<Effect.Effect<string, string>>(),\n  (message) => message.length\n)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => String(n)]
+      outType: Effect<string, string, never>
+  [1] kind: dataFirst
+      callee: Effect.mapError
+      args: [(message) => message.length]
+      outType: Effect<string, number, never>
+
+=== Piping Flow ===
+Location: 37:28 - 37:38
+Node: String(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 42:38 - 45:2
+Node: Effect.mapError(\n  pipe<Effect.Effect<number, string>, Effect.Effect<string, string>>(source, Effect.map((n) => String(n))),\n  (message) => message.length\n)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.map
+      args: [(n) => String(n)]
+      outType: Effect<string, string, never>
+  [1] kind: dataFirst
+      callee: Effect.mapError
+      args: [(message) => message.length]
+      outType: Effect<string, number, never>
+
+=== Piping Flow ===
+Location: 43:95 - 43:105
+Node: String(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 48:25 - 51:2
+Node: Effect.mapError(\n  Effect.map(source, (n) => String(n)).pipe(),\n  (message) => message.length\n)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => String(n)]
+      outType: Effect<string, string, never>
+  [1] kind: dataFirst
+      callee: Effect.mapError
+      args: [(message) => message.length]
+      outType: Effect<string, number, never>
+
+=== Piping Flow ===
+Location: 49:28 - 49:38
+Node: String(n)
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string
