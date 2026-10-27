@@ -1,5 +1,48 @@
 # @effect/tsgo
 
+## 0.60.0
+
+### Minor Changes
+
+- 45b0ce6: Add a `"taggedClass"` target to `keyPatterns` for the `deterministicKeys` rule. It covers `Schema.TaggedClass`, `Data.TaggedClass` and `Schema.TaggedRequest`, and checks the tag. For `Schema.*` classes that is the first argument of the outer call, not the optional identifier. Every pattern works with the new target, and the `TaggedClass` and `TaggedRequest` completions use it to fill in the tag. Nothing changes unless the target is configured.
+  
+  ```jsonc
+  {
+    "name": "@effect/language-service",
+    "keyPatterns": [{ "target": "taggedClass", "pattern": "identifier" }]
+  }
+  ```
+  
+  ```ts
+  // reports: the expected key is `Completed`
+  export class Completed extends Schema.TaggedClass<Completed>()("completed", {}) {}
+  ```
+- d7351fb: Build the Effect-patched tsrs binary exactly like tsrs's own npm release, and ship it for every target tsrs publishes a glibc, macOS or Windows binary for.
+  
+  - PGO on every target, plus BOLT on Linux, with tsrs's flags, profile settings, C compiler and strip behaviour. The training is tsrs's own (conformance suite, Go fourslash suite, xstate and webpack) plus the Effect-TS/effect monorepo with every Effect rule on, so the rules are optimized like the compiler instead of being laid out as cold code.
+  - New tsrs targets: `darwin-x64` and `win32-x64`, next to `darwin-arm64`, `linux-x64` and `linux-arm64`.
+  
+  ```sh
+  effect-tsgo patch --tsrs    # now also on Intel macOS and Windows x64
+  effect-tsgo tsrs --noEmit
+  ```
+
+### Patch Changes
+
+- 32611c0: `preferSchemaTypeProperty` now also reports the `Schema.Codec` helpers, the Effect v3 `Schema.Schema.Encoded` and `Schema.Schema.Context` helpers, and helpers referenced through a named `Schema` or `Codec` import. The quick fix rewrites each one to the matching property.
+  
+  ```ts
+  import { Schema } from "effect"
+  
+  const User = Schema.Struct({ id: Schema.NumberFromString })
+  
+  type UserEncoded = Schema.Codec.Encoded<typeof User> // now reported, fixed to: typeof User.Encoded
+  type UserDecodingServices = Schema.Codec.DecodingServices<typeof User> // fixed to: typeof User.DecodingServices
+  type UserEncodingServices = Schema.Codec.EncodingServices<typeof User> // fixed to: typeof User.EncodingServices
+  ```
+  
+  The message now names the helper as written and the property to use, for example "Do not use `Schema.Codec.Encoded<typeof X>`. Use `typeof X.Encoded` instead."
+
 ## 0.59.0
 
 ### Minor Changes
