@@ -14,7 +14,7 @@ import (
 var FlatMapIdentityToFlatten = rule.Rule{
 	Name:            "flatMapIdentityToFlatten",
 	Group:           "style",
-	Description:     "Suggests Effect.flatten instead of Effect.flatMap when the callback is Effect's identity export referenced directly or an unannotated arrow returning its parameter",
+	Description:     "Suggests Effect.flatten instead of Effect.flatMap when the callback is Effect's identity export referenced directly or an unannotated function returning its parameter",
 	DefaultSeverity: etscore.SeveritySuggestion,
 	SupportedEffect: []string{"v3", "v4"},
 	Codes: []int32{
@@ -43,7 +43,7 @@ type FlatMapIdentityToFlattenMatch struct {
 
 // AnalyzeFlatMapIdentityToFlatten finds Effect.flatMap steps whose callback is
 // Effect's identity export referenced directly, or an unannotated arrow
-// returning its own parameter.
+// function or function expression returning its own parameter.
 func AnalyzeFlatMapIdentityToFlatten(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []FlatMapIdentityToFlattenMatch {
 	var matches []FlatMapIdentityToFlattenMatch
 	flows := tp.PipingFlows(sf, true)
@@ -87,16 +87,13 @@ func AnalyzeFlatMapIdentityToFlatten(tp *typeparser.TypeParser, _ *checker.Check
 }
 
 // isIdentityCallback reports whether callback names Effect's identity export
-// without a local variable in between, or is an arrow function without type
-// annotations whose body returns its single parameter. Annotations and typed
+// without a local variable in between, or is an arrow function or function
+// expression without type annotations whose body returns its single parameter. Annotations and typed
 // aliases can change the flatMap result type, so they never match.
 func isIdentityCallback(tp *typeparser.TypeParser, callback *ast.Node) bool {
 	callback = ast.SkipParentheses(callback)
 	if tp.IsNodeDirectReferenceToEffectFunctionModuleApi(callback, "identity") {
 		return true
-	}
-	if callback.Kind != ast.KindArrowFunction {
-		return false
 	}
 	lazy := typeparser.ParseLazyExpression(callback, typeparser.LazyExpressionNone)
 	if lazy == nil || lazy.Params().Len() != 1 || lazy.Node().Type() != nil {

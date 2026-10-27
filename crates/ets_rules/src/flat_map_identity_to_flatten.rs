@@ -18,7 +18,7 @@ static MESSAGE: &Message = &tsdiag::EFFECT_FLATTEN_EXPRESSES_THIS_UNWRAPPING_MOR
 pub static FLAT_MAP_IDENTITY_TO_FLATTEN: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "flatMapIdentityToFlatten",
     group: "style",
-    description: "Suggests Effect.flatten instead of Effect.flatMap when the callback is Effect's identity export referenced directly or an unannotated arrow returning its parameter",
+    description: "Suggests Effect.flatten instead of Effect.flatMap when the callback is Effect's identity export referenced directly or an unannotated function returning its parameter",
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
@@ -48,7 +48,7 @@ pub struct FlatMapIdentityToFlattenMatch {
 // go: internal/rules/flat_map_identity_to_flatten.go:47 AnalyzeFlatMapIdentityToFlatten
 // AnalyzeFlatMapIdentityToFlatten finds Effect.flatMap steps whose callback is
 // Effect's identity export referenced directly, or an unannotated arrow
-// returning its own parameter.
+// function or function expression returning its own parameter.
 //
 // Rust: Go's checker argument is unused and dropped. A step's callee and an Effect's success type are never nil
 // here, so Go's nil checks on them drop.
@@ -103,16 +103,13 @@ pub fn analyze_flat_map_identity_to_flatten(
 
 // go: internal/rules/flat_map_identity_to_flatten.go:93 isIdentityCallback
 // isIdentityCallback reports whether callback names Effect's identity export
-// without a local variable in between, or is an arrow function without type
-// annotations whose body returns its single parameter. Annotations and typed
+// without a local variable in between, or is an arrow function or function
+// expression without type annotations whose body returns its single parameter. Annotations and typed
 // aliases can change the flatMap result type, so they never match.
 pub(crate) fn is_identity_callback(tp: &mut TypeParser<'_>, callback: P<Node>) -> bool {
     let callback = ast::skip_parentheses(callback);
     if tp.is_node_direct_reference_to_effect_function_module_api(callback, "identity") {
         return true;
-    }
-    if callback.kind() != Kind::ArrowFunction {
-        return false;
     }
     let lazy = parse_lazy_expression(callback, LazyExpressionFlags::None);
     let Some(lazy) = lazy else {

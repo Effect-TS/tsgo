@@ -42,22 +42,25 @@ const exactAlias: (x: Effect.Effect<string>) => Effect.Effect<string> = identity
 export const typedAliasExact = source.pipe(Effect.flatMap(exactAlias))
 const unwrapAnySuccess: (x: Effect.Effect<string>) => Effect.Effect<any> = identity
 export const typedAliasAnySuccess = source.pipe(Effect.flatMap(unwrapAnySuccess))
+export const asyncFunctionExpression = source.pipe(Effect.flatMap(async function(inner) { return inner }))
+export const generatorFunctionExpression = source.pipe(Effect.flatMap(function*(inner) { return inner }))
+export const typedFunctionExpression = source.pipe(Effect.flatMap(function(inner: Effect.Effect<string, unknown>) { return inner }))
 "#,
                     &ets_rules::FLAT_MAP_IDENTITY_TO_FLATTEN,
                 );
-                if preview.diagnostics.len() != 2 {
+                if preview.diagnostics.len() != 3 {
                     let diagnostics: Vec<String> = preview
                         .diagnostics
                         .iter()
                         .map(|d| format!("{{Start:{} End:{} Text:{}}}", d.start, d.end, d.text))
                         .collect();
                     t.fatal(format!(
-                        "expected only the valid and named-import callbacks to match, got {} diagnostics: [{}]",
+                        "expected only the valid, named-import and function-expression callbacks to match, got {} diagnostics: [{}]",
                         preview.diagnostics.len(),
                         diagnostics.join(" ")
                     ));
                 }
-                for (i, want) in ["Effect.flatMap", "flatMap"].into_iter().enumerate() {
+                for (i, want) in ["Effect.flatMap", "flatMap", "Effect.flatMap"].into_iter().enumerate() {
                     let diagnostic = &preview.diagnostics[i];
                     let got =
                         &preview.source_text[diagnostic.start as usize..diagnostic.end as usize];
@@ -65,7 +68,7 @@ export const typedAliasAnySuccess = source.pipe(Effect.flatMap(unwrapAnySuccess)
                         t.error(format!("diagnostic {i} covers {got:?}, want {want:?}"));
                     }
                 }
-                for (i, want) in [4, 5].into_iter().enumerate() {
+                for (i, want) in [4, 5, 16].into_iter().enumerate() {
                     let start = preview.diagnostics[i].start as usize;
                     let line = preview.source_text[..start].matches('\n').count();
                     if line != want {

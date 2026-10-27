@@ -41,9 +41,9 @@ fn test_flat_map_identity_to_flatten_fixes_compile(t: &T) {
 }
 // @filename: /repro.ts
 "#;
-            let mut main_matches = 16;
+            let mut main_matches = 18;
             if version == EffectVersion::V3 {
-                main_matches = 17;
+                main_matches = 19;
             }
             let mut cases = vec![
                 Case {

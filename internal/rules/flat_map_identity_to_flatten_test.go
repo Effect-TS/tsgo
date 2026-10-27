@@ -38,16 +38,19 @@ const exactAlias: (x: Effect.Effect<string>) => Effect.Effect<string> = identity
 export const typedAliasExact = source.pipe(Effect.flatMap(exactAlias))
 const unwrapAnySuccess: (x: Effect.Effect<string>) => Effect.Effect<any> = identity
 export const typedAliasAnySuccess = source.pipe(Effect.flatMap(unwrapAnySuccess))
+export const asyncFunctionExpression = source.pipe(Effect.flatMap(async function(inner) { return inner }))
+export const generatorFunctionExpression = source.pipe(Effect.flatMap(function*(inner) { return inner }))
+export const typedFunctionExpression = source.pipe(Effect.flatMap(function(inner: Effect.Effect<string, unknown>) { return inner }))
 `, &rules.FlatMapIdentityToFlatten)
-			if len(preview.Diagnostics) != 2 {
-				t.Fatalf("expected only the valid and named-import callbacks to match, got %d diagnostics: %+v", len(preview.Diagnostics), preview.Diagnostics)
+			if len(preview.Diagnostics) != 3 {
+				t.Fatalf("expected only the valid, named-import and function-expression callbacks to match, got %d diagnostics: %+v", len(preview.Diagnostics), preview.Diagnostics)
 			}
-			for i, want := range []string{"Effect.flatMap", "flatMap"} {
+			for i, want := range []string{"Effect.flatMap", "flatMap", "Effect.flatMap"} {
 				if got := preview.SourceText[preview.Diagnostics[i].Start:preview.Diagnostics[i].End]; got != want {
 					t.Errorf("diagnostic %d covers %q, want %q", i, got, want)
 				}
 			}
-			for i, want := range []int{4, 5} {
+			for i, want := range []int{4, 5, 16} {
 				if line := strings.Count(preview.SourceText[:preview.Diagnostics[i].Start], "\n"); line != want {
 					t.Errorf("diagnostic %d on line %d, want %d", i, line, want)
 				}

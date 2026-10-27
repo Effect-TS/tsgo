@@ -2569,7 +2569,7 @@
     {
       "name": "flatMapIdentityToFlatten",
       "group": "style",
-      "description": "Suggests Effect.flatten instead of Effect.flatMap when the callback is Effect's identity export referenced directly or an unannotated arrow returning its parameter",
+      "description": "Suggests Effect.flatten instead of Effect.flatMap when the callback is Effect's identity export referenced directly or an unannotated function returning its parameter",
       "defaultSeverity": "suggestion",
       "fixable": true,
       "supportedEffect": [

@@ -35,9 +35,9 @@ func TestFlatMapIdentityToFlattenFixesCompile(t *testing.T) {
 }
 // @filename: /repro.ts
 `
-			mainMatches := 16
+			mainMatches := 18
 			if version == bundledeffect.EffectV3 {
-				mainMatches = 17
+				mainMatches = 19
 			}
 			cases := []struct {
 				name     string

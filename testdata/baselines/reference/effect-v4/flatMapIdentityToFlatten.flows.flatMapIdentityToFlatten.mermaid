@@ -124,120 +124,135 @@ flowchart TB
   122[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
   123[["type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: function#40;inner#41; #123;#92;n  return inner#92;n#125;"]]
   124[/"type: Effect#lt;string, never, never#gt;<br/>node: inner"/]
-  125[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: identity"/]
-  126[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
-  127["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;localId#93;"]
-  128[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
-  129[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: localId"/]
-  130[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: identity"/]
-  131[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
-  132["type: Effect#lt;string, Error, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;widenError#93;"]
-  133[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
-  134[/"type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, Error, never#gt;<br/>node: widenError"/]
-  135[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: identity"/]
-  136[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
-  137["type: Effect#lt;any, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;widenSuccess#93;"]
-  138[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
-  139[/"type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;any, never, never#gt;<br/>node: widenSuccess"/]
+  125[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
+  126["type: Effect#lt;string, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  127[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  128[["type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: function unwrap#40;inner#41; #123;#92;n  return inner#92;n#125;"]]
+  129[/"type: Effect#lt;string, never, never#gt;<br/>node: inner"/]
+  130[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
+  131["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;function#40;inner: Effect.Effect#lt;string#gt;#41; #123;#92;n  return inner#92;n#125;#93;"]
+  132[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  133[["type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: function#40;inner: Effect.Effect#lt;string#gt;#41; #123;#92;n  return inner#92;n#125;"]]
+  134[/"type: Effect#lt;string, never, never#gt;<br/>node: inner"/]
+  135[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
+  136["type: Effect#lt;string, Error, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;function#40;inner#41;: Effect.Effect#lt;string, Error#gt; #123;#92;n    return inner#92;n  #125;#93;"]
+  137[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  138[["type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, Error, never#gt;<br/>node: function#40;inner#41;: Effect.Effect#lt;string, Error#gt; #123;#92;n    return inner#92;n  #125;"]]
+  139[/"type: Effect#lt;string, never, never#gt;<br/>node: inner"/]
   140[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: identity"/]
-  141[/"type: Effect#lt;Effect#lt;#123; readonly value: number; #125;, never, never#gt;, never, never#gt;<br/>node: recordTask"/]
-  142["type: Effect#lt;#123; readonly value: any; #125;, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;widenNested#93;"]
+  141[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
+  142["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;localId#93;"]
   143[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
-  144[/"type: #40;inner: Effect#lt;#123; readonly value: number; #125;, never, never#gt;#41; =#gt; Effect#lt;#123; readonly value: any; #125;, never, never#gt;<br/>node: widenNested"/]
-  145[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
-  146["type: Effect#lt;string, unknown, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;inner#41; =#gt; inner as Effect.Effect#lt;string, unknown#gt;#93;"]
-  147[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
-  148[["type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, unknown, never#gt;<br/>node: #40;inner#41; =#gt; inner as Effect.Effect#lt;string, unknown#gt;"]]
-  149[/"type: Effect#lt;string, unknown, never#gt;<br/>node: inner as Effect.Effect#lt;string, unknown#gt;"/]
-  150[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
-  151["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;inner#41; =#gt; #123;#92;n  console.log#40;#quot;unwrapping#quot;#41;#92;n  return inner#92;n#125;#93;"]
-  152[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
-  153[["type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;inner#41; =#gt; #123;#92;n  console.log#40;#quot;unwrapping#quot;#41;#92;n  return inner#92;n#125;"]]
-  154[/"type: Effect#lt;string, never, never#gt;<br/>node: inner"/]
-  155[/"type: #quot;unwrapping#quot;<br/>node: #quot;unwrapping#quot;"/]
-  156["type: void<br/>callee: console.log<br/>args: #91;#93;"]
-  157[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
-  158[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
-  159["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;_inner#41; =#gt; fallback#93;"]
-  160[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
-  161[["type: #40;_inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;_inner#41; =#gt; fallback"]]
-  162[/"type: Effect#lt;string, never, never#gt;<br/>node: fallback"/]
-  163[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
-  164["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;inner#41; =#gt; #40;#40;inner: Effect.Effect#lt;string#gt;#41; =#gt; inner#41;#40;fallback#41;#93;"]
-  165[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
-  166[["type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;inner#41; =#gt; #40;#40;inner: Effect.Effect#lt;string#gt;#41; =#gt; inner#41;#40;fallback#41;"]]
-  167[/"type: Effect#lt;string, never, never#gt;<br/>node: fallback"/]
-  168["type: Effect#lt;string, never, never#gt;<br/>callee: #40;inner: Effect.Effect#lt;string#gt;#41; =#gt; inner<br/>args: #91;#93;"]
-  169[["type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;inner: Effect.Effect#lt;string#gt;#41; =#gt; inner"]]
-  170[/"type: Effect#lt;string, never, never#gt;<br/>node: inner"/]
-  171[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
-  172["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;inner#41; =#gt; inner.pipe#40;Effect.map#40;#40;report#41; =#gt; report.toUpperCase#40;#41;#41;#41;#93;"]
-  173[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
-  174[["type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;inner#41; =#gt; inner.pipe#40;Effect.map#40;#40;report#41; =#gt; report.toUpperCase#40;#41;#41;#41;"]]
-  175[/"type: Effect#lt;string, never, never#gt;<br/>node: inner"/]
-  176["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;report#41; =#gt; report.toUpperCase#40;#41;#93;"]
-  177[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
-  178[["type: #40;report: string#41; =#gt; string<br/>node: #40;report#41; =#gt; report.toUpperCase#40;#41;"]]
-  179[/"type: string<br/>node: report.toUpperCase#40;#41;"/]
-  180[/"type: Effect#lt;#123; readonly task: Effect#lt;string, never, never#gt;; #125;, never, never#gt;<br/>node: holderTask"/]
-  181["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;holder#41; =#gt; holder.task#93;"]
-  182[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
-  183[["type: #40;holder: #123; readonly task: Effect#lt;string, never, never#gt;; #125;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;holder#41; =#gt; holder.task"]]
-  184[/"type: Effect#lt;string, never, never#gt;<br/>node: holder.task"/]
-  185[["type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: #lt;A#gt;#40;a: A#41;: A =#gt; a"]]
-  186[/"type: A<br/>node: a"/]
-  187[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
-  188["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;localIdentity#93;"]
-  189[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
-  190[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: localIdentity"/]
-  191[/"type: Effect#lt;any, never, never#gt;<br/>node: anyTask"/]
-  192["type: Effect#lt;unknown, unknown, unknown#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;value#41; =#gt; value#93;"]
-  193[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
-  194[["type: #40;value: any#41; =#gt; any<br/>node: #40;value#41; =#gt; value"]]
-  195[/"type: any<br/>node: value"/]
-  196[/"type: LoadError<br/>node: new LoadError#40;#41;"/]
-  197["type: Effect#lt;never, LoadError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
-  198[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
-  199["type: Effect#lt;unknown, unknown, unknown#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;value#41; =#gt; value#93;"]
-  200[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
-  201[["type: #40;value: never#41; =#gt; never<br/>node: #40;value#41; =#gt; value"]]
-  202[/"type: never<br/>node: value"/]
-  203[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
-  204["type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;inner#41; =#gt; inner#93;"]
-  205[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
-  206[["type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;inner#41; =#gt; inner"]]
-  207[/"type: Effect#lt;string, never, never#gt;<br/>node: inner"/]
-  208[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
-  209["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.andThen<br/>args: #91;#40;inner#41; =#gt; inner#93;"]
-  210[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
-  211[["type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;inner#41; =#gt; inner"]]
-  212[/"type: Effect#lt;string, never, never#gt;<br/>node: inner"/]
-  213[/"type: Option#lt;Option#lt;number#gt;#gt;<br/>node: nestedOption"/]
-  214["type: Option#lt;number#gt;<br/>callee: <br/>args: #91;#93;"]
-  215[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; Option#lt;B#gt;#41;: #40;self: Option#lt;A#gt;#41; =#gt; Option#lt;B#gt;; #lt;A, B#gt;#40;self: Option#lt;A#gt;, f: #40;a: A#41; =#gt; Option#lt;B#gt;#41;: Option#lt;B#gt;; #125;<br/>node: Option.flatMap"/]
-  216[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: identity"/]
-  217[/"type: Option#lt;Option#lt;number#gt;#gt;<br/>node: nestedOption"/]
-  218["type: Option#lt;number#gt;<br/>callee: Option.flatMap<br/>args: #91;#40;inner#41; =#gt; inner#93;"]
-  219[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; Option#lt;B#gt;#41;: #40;self: Option#lt;A#gt;#41; =#gt; Option#lt;B#gt;; #lt;A, B#gt;#40;self: Option#lt;A#gt;, f: #40;a: A#41; =#gt; Option#lt;B#gt;#41;: Option#lt;B#gt;; #125;<br/>node: Option.flatMap"/]
-  220[["type: #40;inner: Option#lt;number#gt;#41; =#gt; Option#lt;number#gt;<br/>node: #40;inner#41; =#gt; inner"]]
-  221[/"type: Option#lt;number#gt;<br/>node: inner"/]
-  222[/"type: number#91;#93;<br/>node: Array.flatMap#40;nestedArray, identity#41;"/]
-  223[/"type: number#91;#93;<br/>node: #91;#91;1#93;, #91;2#93;#93;.flatMap#40;#40;inner#41; =#gt; inner#41;"/]
-  224[["type: #40;this: undefined, inner: number#91;#93;#41; =#gt; number#91;#93;<br/>node: #40;inner#41; =#gt; inner"]]
-  225[/"type: number#91;#93;<br/>node: inner"/]
-  226[/"type: Stream#lt;Stream#lt;number, never, never#gt;, never, never#gt;<br/>node: nestedStream"/]
-  227["type: Stream#lt;number, never, never#gt;<br/>callee: Stream.flatMap<br/>args: #91;#40;inner#41; =#gt; inner#93;"]
-  228[/"type: #123; #lt;A, A2, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Stream#lt;A2, E2, R2#gt;, options?: #123; readonly concurrency?: Concurrency #124; undefined; readonly bufferSize?: number #124; undefined; #125; #124; undefined#41;: #lt;E, R#gt;#40;self: Stream#lt;A, E, R#gt;#41; =#gt; Stream#lt;A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Stream#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Stream#lt;A2, E2, R2#gt;, options?: #123; readonly concurrency?: Concurrency #124; undefined; readonly bufferSize?: number #124; undefined; #125; #124; undefined#41;: Stream#lt;A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: Stream.flatMap"/]
-  229[["type: #40;inner: Stream#lt;number, never, never#gt;#41; =#gt; Stream#lt;number, never, never#gt;<br/>node: #40;inner#41; =#gt; inner"]]
-  230[/"type: Stream#lt;number, never, never#gt;<br/>node: inner"/]
-  231[/"type: #123; flatMap: #lt;A, B#gt;#40;value: A, f: #40;value: A#41; =#gt; B#41; =#gt; B; #125;<br/>node: #123; flatMap: #lt;A, B#gt;#40;value: A, f: #40;value: A#41; =#gt; B#41;: B =#gt; f#40;value#41; #125;"/]
-  232[["type: #lt;A, B#gt;#40;value: A, f: #40;value: A#41; =#gt; B#41; =#gt; B<br/>node: #lt;A, B#gt;#40;value: A, f: #40;value: A#41; =#gt; B#41;: B =#gt; f#40;value#41;"]]
-  233[/"type: A<br/>node: value"/]
-  234["type: B<br/>callee: f<br/>args: #91;#93;"]
-  235[/"type: #40;value: A#41; =#gt; B<br/>node: f"/]
-  236[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: unrelated.flatMap#40;loadTask, #40;inner#41; =#gt; inner#41;"/]
-  237[["type: #40;inner: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;#41; =#gt; Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: #40;inner#41; =#gt; inner"]]
-  238[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: inner"/]
+  144[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: localId"/]
+  145[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: identity"/]
+  146[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
+  147["type: Effect#lt;string, Error, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;widenError#93;"]
+  148[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  149[/"type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, Error, never#gt;<br/>node: widenError"/]
+  150[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: identity"/]
+  151[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
+  152["type: Effect#lt;any, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;widenSuccess#93;"]
+  153[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  154[/"type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;any, never, never#gt;<br/>node: widenSuccess"/]
+  155[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: identity"/]
+  156[/"type: Effect#lt;Effect#lt;#123; readonly value: number; #125;, never, never#gt;, never, never#gt;<br/>node: recordTask"/]
+  157["type: Effect#lt;#123; readonly value: any; #125;, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;widenNested#93;"]
+  158[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  159[/"type: #40;inner: Effect#lt;#123; readonly value: number; #125;, never, never#gt;#41; =#gt; Effect#lt;#123; readonly value: any; #125;, never, never#gt;<br/>node: widenNested"/]
+  160[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
+  161["type: Effect#lt;string, unknown, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;inner#41; =#gt; inner as Effect.Effect#lt;string, unknown#gt;#93;"]
+  162[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  163[["type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, unknown, never#gt;<br/>node: #40;inner#41; =#gt; inner as Effect.Effect#lt;string, unknown#gt;"]]
+  164[/"type: Effect#lt;string, unknown, never#gt;<br/>node: inner as Effect.Effect#lt;string, unknown#gt;"/]
+  165[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
+  166["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;inner#41; =#gt; #123;#92;n  console.log#40;#quot;unwrapping#quot;#41;#92;n  return inner#92;n#125;#93;"]
+  167[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  168[["type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;inner#41; =#gt; #123;#92;n  console.log#40;#quot;unwrapping#quot;#41;#92;n  return inner#92;n#125;"]]
+  169[/"type: Effect#lt;string, never, never#gt;<br/>node: inner"/]
+  170[/"type: #quot;unwrapping#quot;<br/>node: #quot;unwrapping#quot;"/]
+  171["type: void<br/>callee: console.log<br/>args: #91;#93;"]
+  172[/"type: #40;...data: any#91;#93;#41; =#gt; void<br/>node: console.log"/]
+  173[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
+  174["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;_inner#41; =#gt; fallback#93;"]
+  175[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  176[["type: #40;_inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;_inner#41; =#gt; fallback"]]
+  177[/"type: Effect#lt;string, never, never#gt;<br/>node: fallback"/]
+  178[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
+  179["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;inner#41; =#gt; #40;#40;inner: Effect.Effect#lt;string#gt;#41; =#gt; inner#41;#40;fallback#41;#93;"]
+  180[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  181[["type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;inner#41; =#gt; #40;#40;inner: Effect.Effect#lt;string#gt;#41; =#gt; inner#41;#40;fallback#41;"]]
+  182[/"type: Effect#lt;string, never, never#gt;<br/>node: fallback"/]
+  183["type: Effect#lt;string, never, never#gt;<br/>callee: #40;inner: Effect.Effect#lt;string#gt;#41; =#gt; inner<br/>args: #91;#93;"]
+  184[["type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;inner: Effect.Effect#lt;string#gt;#41; =#gt; inner"]]
+  185[/"type: Effect#lt;string, never, never#gt;<br/>node: inner"/]
+  186[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
+  187["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;inner#41; =#gt; inner.pipe#40;Effect.map#40;#40;report#41; =#gt; report.toUpperCase#40;#41;#41;#41;#93;"]
+  188[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  189[["type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;inner#41; =#gt; inner.pipe#40;Effect.map#40;#40;report#41; =#gt; report.toUpperCase#40;#41;#41;#41;"]]
+  190[/"type: Effect#lt;string, never, never#gt;<br/>node: inner"/]
+  191["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;report#41; =#gt; report.toUpperCase#40;#41;#93;"]
+  192[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  193[["type: #40;report: string#41; =#gt; string<br/>node: #40;report#41; =#gt; report.toUpperCase#40;#41;"]]
+  194[/"type: string<br/>node: report.toUpperCase#40;#41;"/]
+  195[/"type: Effect#lt;#123; readonly task: Effect#lt;string, never, never#gt;; #125;, never, never#gt;<br/>node: holderTask"/]
+  196["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;holder#41; =#gt; holder.task#93;"]
+  197[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  198[["type: #40;holder: #123; readonly task: Effect#lt;string, never, never#gt;; #125;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;holder#41; =#gt; holder.task"]]
+  199[/"type: Effect#lt;string, never, never#gt;<br/>node: holder.task"/]
+  200[["type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: #lt;A#gt;#40;a: A#41;: A =#gt; a"]]
+  201[/"type: A<br/>node: a"/]
+  202[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
+  203["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.flatMap<br/>args: #91;localIdentity#93;"]
+  204[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  205[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: localIdentity"/]
+  206[/"type: Effect#lt;any, never, never#gt;<br/>node: anyTask"/]
+  207["type: Effect#lt;unknown, unknown, unknown#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;value#41; =#gt; value#93;"]
+  208[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  209[["type: #40;value: any#41; =#gt; any<br/>node: #40;value#41; =#gt; value"]]
+  210[/"type: any<br/>node: value"/]
+  211[/"type: LoadError<br/>node: new LoadError#40;#41;"/]
+  212["type: Effect#lt;never, LoadError, never#gt;<br/>callee: Effect.fail<br/>args: #91;#93;"]
+  213[/"type: #lt;E#gt;#40;error: E#41; =#gt; Effect#lt;never, E, never#gt;<br/>node: Effect.fail"/]
+  214["type: Effect#lt;unknown, unknown, unknown#gt;<br/>callee: Effect.flatMap<br/>args: #91;#40;value#41; =#gt; value#93;"]
+  215[/"type: #123; #lt;A, B, E1, R1#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E1, R #124; R1#gt;; #lt;A, E, R, B, E1, R1#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E1, R1#gt;#41;: Effect#lt;B, E #124; E1, R #124; R1#gt;; #125;<br/>node: Effect.flatMap"/]
+  216[["type: #40;value: never#41; =#gt; never<br/>node: #40;value#41; =#gt; value"]]
+  217[/"type: never<br/>node: value"/]
+  218[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
+  219["type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;inner#41; =#gt; inner#93;"]
+  220[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  221[["type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;inner#41; =#gt; inner"]]
+  222[/"type: Effect#lt;string, never, never#gt;<br/>node: inner"/]
+  223[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: loadTask"/]
+  224["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.andThen<br/>args: #91;#40;inner#41; =#gt; inner#93;"]
+  225[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;B, E #124; E2, R #124; R2#gt;; #125;<br/>node: Effect.andThen"/]
+  226[["type: #40;inner: Effect#lt;string, never, never#gt;#41; =#gt; Effect#lt;string, never, never#gt;<br/>node: #40;inner#41; =#gt; inner"]]
+  227[/"type: Effect#lt;string, never, never#gt;<br/>node: inner"/]
+  228[/"type: Option#lt;Option#lt;number#gt;#gt;<br/>node: nestedOption"/]
+  229["type: Option#lt;number#gt;<br/>callee: <br/>args: #91;#93;"]
+  230[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; Option#lt;B#gt;#41;: #40;self: Option#lt;A#gt;#41; =#gt; Option#lt;B#gt;; #lt;A, B#gt;#40;self: Option#lt;A#gt;, f: #40;a: A#41; =#gt; Option#lt;B#gt;#41;: Option#lt;B#gt;; #125;<br/>node: Option.flatMap"/]
+  231[/"type: #lt;A#gt;#40;a: A#41; =#gt; A<br/>node: identity"/]
+  232[/"type: Option#lt;Option#lt;number#gt;#gt;<br/>node: nestedOption"/]
+  233["type: Option#lt;number#gt;<br/>callee: Option.flatMap<br/>args: #91;#40;inner#41; =#gt; inner#93;"]
+  234[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; Option#lt;B#gt;#41;: #40;self: Option#lt;A#gt;#41; =#gt; Option#lt;B#gt;; #lt;A, B#gt;#40;self: Option#lt;A#gt;, f: #40;a: A#41; =#gt; Option#lt;B#gt;#41;: Option#lt;B#gt;; #125;<br/>node: Option.flatMap"/]
+  235[["type: #40;inner: Option#lt;number#gt;#41; =#gt; Option#lt;number#gt;<br/>node: #40;inner#41; =#gt; inner"]]
+  236[/"type: Option#lt;number#gt;<br/>node: inner"/]
+  237[/"type: number#91;#93;<br/>node: Array.flatMap#40;nestedArray, identity#41;"/]
+  238[/"type: number#91;#93;<br/>node: #91;#91;1#93;, #91;2#93;#93;.flatMap#40;#40;inner#41; =#gt; inner#41;"/]
+  239[["type: #40;this: undefined, inner: number#91;#93;#41; =#gt; number#91;#93;<br/>node: #40;inner#41; =#gt; inner"]]
+  240[/"type: number#91;#93;<br/>node: inner"/]
+  241[/"type: Stream#lt;Stream#lt;number, never, never#gt;, never, never#gt;<br/>node: nestedStream"/]
+  242["type: Stream#lt;number, never, never#gt;<br/>callee: Stream.flatMap<br/>args: #91;#40;inner#41; =#gt; inner#93;"]
+  243[/"type: #123; #lt;A, A2, E2, R2#gt;#40;f: #40;a: A#41; =#gt; Stream#lt;A2, E2, R2#gt;, options?: #123; readonly concurrency?: Concurrency #124; undefined; readonly bufferSize?: number #124; undefined; #125; #124; undefined#41;: #lt;E, R#gt;#40;self: Stream#lt;A, E, R#gt;#41; =#gt; Stream#lt;A2, E #124; E2, R #124; R2#gt;; #lt;A, E, R, A2, E2, R2#gt;#40;self: Stream#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; Stream#lt;A2, E2, R2#gt;, options?: #123; readonly concurrency?: Concurrency #124; undefined; readonly bufferSize?: number #124; undefined; #125; #124; undefined#41;: Stream#lt;A2, E #124; E2, R #124; R2#gt;; #125;<br/>node: Stream.flatMap"/]
+  244[["type: #40;inner: Stream#lt;number, never, never#gt;#41; =#gt; Stream#lt;number, never, never#gt;<br/>node: #40;inner#41; =#gt; inner"]]
+  245[/"type: Stream#lt;number, never, never#gt;<br/>node: inner"/]
+  246[/"type: #123; flatMap: #lt;A, B#gt;#40;value: A, f: #40;value: A#41; =#gt; B#41; =#gt; B; #125;<br/>node: #123; flatMap: #lt;A, B#gt;#40;value: A, f: #40;value: A#41; =#gt; B#41;: B =#gt; f#40;value#41; #125;"/]
+  247[["type: #lt;A, B#gt;#40;value: A, f: #40;value: A#41; =#gt; B#41; =#gt; B<br/>node: #lt;A, B#gt;#40;value: A, f: #40;value: A#41; =#gt; B#41;: B =#gt; f#40;value#41;"]]
+  248[/"type: A<br/>node: value"/]
+  249["type: B<br/>callee: f<br/>args: #91;#93;"]
+  250[/"type: #40;value: A#41; =#gt; B<br/>node: f"/]
+  251[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: unrelated.flatMap#40;loadTask, #40;inner#41; =#gt; inner#41;"/]
+  252[["type: #40;inner: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;#41; =#gt; Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: #40;inner#41; =#gt; inner"]]
+  253[/"type: Effect#lt;Effect#lt;string, never, never#gt;, never, never#gt;<br/>node: inner"/]
   5 -->|"kind: transformCallee"| 4
   7 -->|"kind: potentialReturn"| 6
   6 -->|"kind: transformArg"| 4
@@ -339,91 +354,106 @@ flowchart TB
   124 -->|"kind: usedBy"| 123
   123 -->|"kind: transformArg"| 121
   120 -->|"kind: pipe"| 121
-  128 -->|"kind: transformCallee"| 127
-  129 -->|"kind: transformArg"| 127
-  126 -->|"kind: pipe"| 127
-  133 -->|"kind: transformCallee"| 132
-  134 -->|"kind: transformArg"| 132
-  131 -->|"kind: pipe"| 132
-  138 -->|"kind: transformCallee"| 137
-  139 -->|"kind: transformArg"| 137
-  136 -->|"kind: pipe"| 137
+  125 -->|"kind: pipe"| 126
+  127 -->|"kind: transformCallee"| 125
+  129 -->|"kind: potentialReturn"| 128
+  129 -->|"kind: usedBy"| 128
+  128 -->|"kind: transformArg"| 125
+  132 -->|"kind: transformCallee"| 131
+  134 -->|"kind: potentialReturn"| 133
+  134 -->|"kind: usedBy"| 133
+  133 -->|"kind: transformArg"| 131
+  130 -->|"kind: pipe"| 131
+  137 -->|"kind: transformCallee"| 136
+  139 -->|"kind: potentialReturn"| 138
+  139 -->|"kind: usedBy"| 138
+  138 -->|"kind: transformArg"| 136
+  135 -->|"kind: pipe"| 136
   143 -->|"kind: transformCallee"| 142
   144 -->|"kind: transformArg"| 142
   141 -->|"kind: pipe"| 142
-  147 -->|"kind: transformCallee"| 146
-  149 -->|"kind: potentialReturn"| 148
-  148 -->|"kind: transformArg"| 146
-  145 -->|"kind: pipe"| 146
-  152 -->|"kind: transformCallee"| 151
-  154 -->|"kind: potentialReturn"| 153
-  155 -->|"kind: pipe"| 156
-  157 -->|"kind: transformCallee"| 156
-  156 -->|"kind: usedBy"| 153
-  154 -->|"kind: usedBy"| 153
-  153 -->|"kind: transformArg"| 151
-  150 -->|"kind: pipe"| 151
-  160 -->|"kind: transformCallee"| 159
-  162 -->|"kind: potentialReturn"| 161
-  161 -->|"kind: transformArg"| 159
-  158 -->|"kind: pipe"| 159
-  165 -->|"kind: transformCallee"| 164
-  167 -->|"kind: pipe"| 168
-  170 -->|"kind: potentialReturn"| 169
-  169 -->|"kind: transformCallee"| 168
-  168 -->|"kind: potentialReturn"| 166
-  166 -->|"kind: transformArg"| 164
-  163 -->|"kind: pipe"| 164
-  173 -->|"kind: transformCallee"| 172
-  177 -->|"kind: transformCallee"| 176
-  179 -->|"kind: potentialReturn"| 178
-  178 -->|"kind: transformArg"| 176
-  175 -->|"kind: pipe"| 176
-  176 -->|"kind: potentialReturn"| 174
-  174 -->|"kind: transformArg"| 172
-  171 -->|"kind: pipe"| 172
-  182 -->|"kind: transformCallee"| 181
-  184 -->|"kind: potentialReturn"| 183
-  183 -->|"kind: transformArg"| 181
-  180 -->|"kind: pipe"| 181
-  186 -->|"kind: potentialReturn"| 185
-  189 -->|"kind: transformCallee"| 188
-  190 -->|"kind: transformArg"| 188
-  187 -->|"kind: pipe"| 188
-  193 -->|"kind: transformCallee"| 192
-  195 -->|"kind: potentialReturn"| 194
-  194 -->|"kind: transformArg"| 192
-  191 -->|"kind: pipe"| 192
-  196 -->|"kind: pipe"| 197
-  198 -->|"kind: transformCallee"| 197
-  200 -->|"kind: transformCallee"| 199
-  202 -->|"kind: potentialReturn"| 201
-  201 -->|"kind: transformArg"| 199
-  197 -->|"kind: pipe"| 199
-  205 -->|"kind: transformCallee"| 204
-  207 -->|"kind: potentialReturn"| 206
-  206 -->|"kind: transformArg"| 204
-  203 -->|"kind: pipe"| 204
-  210 -->|"kind: transformCallee"| 209
-  212 -->|"kind: potentialReturn"| 211
-  211 -->|"kind: transformArg"| 209
-  208 -->|"kind: pipe"| 209
-  213 -->|"kind: pipe"| 214
-  215 -->|"kind: transformCallee"| 213
-  216 -->|"kind: transformArg"| 213
-  219 -->|"kind: transformCallee"| 218
-  221 -->|"kind: potentialReturn"| 220
-  220 -->|"kind: transformArg"| 218
-  217 -->|"kind: pipe"| 218
-  225 -->|"kind: potentialReturn"| 224
-  224 -->|"kind: usedBy"| 223
-  228 -->|"kind: transformCallee"| 227
-  230 -->|"kind: potentialReturn"| 229
-  229 -->|"kind: transformArg"| 227
-  226 -->|"kind: pipe"| 227
-  233 -->|"kind: pipe"| 234
-  235 -->|"kind: transformCallee"| 234
-  234 -->|"kind: potentialReturn"| 232
-  232 -->|"kind: usedBy"| 231
-  238 -->|"kind: potentialReturn"| 237
-  237 -->|"kind: usedBy"| 236
+  148 -->|"kind: transformCallee"| 147
+  149 -->|"kind: transformArg"| 147
+  146 -->|"kind: pipe"| 147
+  153 -->|"kind: transformCallee"| 152
+  154 -->|"kind: transformArg"| 152
+  151 -->|"kind: pipe"| 152
+  158 -->|"kind: transformCallee"| 157
+  159 -->|"kind: transformArg"| 157
+  156 -->|"kind: pipe"| 157
+  162 -->|"kind: transformCallee"| 161
+  164 -->|"kind: potentialReturn"| 163
+  163 -->|"kind: transformArg"| 161
+  160 -->|"kind: pipe"| 161
+  167 -->|"kind: transformCallee"| 166
+  169 -->|"kind: potentialReturn"| 168
+  170 -->|"kind: pipe"| 171
+  172 -->|"kind: transformCallee"| 171
+  171 -->|"kind: usedBy"| 168
+  169 -->|"kind: usedBy"| 168
+  168 -->|"kind: transformArg"| 166
+  165 -->|"kind: pipe"| 166
+  175 -->|"kind: transformCallee"| 174
+  177 -->|"kind: potentialReturn"| 176
+  176 -->|"kind: transformArg"| 174
+  173 -->|"kind: pipe"| 174
+  180 -->|"kind: transformCallee"| 179
+  182 -->|"kind: pipe"| 183
+  185 -->|"kind: potentialReturn"| 184
+  184 -->|"kind: transformCallee"| 183
+  183 -->|"kind: potentialReturn"| 181
+  181 -->|"kind: transformArg"| 179
+  178 -->|"kind: pipe"| 179
+  188 -->|"kind: transformCallee"| 187
+  192 -->|"kind: transformCallee"| 191
+  194 -->|"kind: potentialReturn"| 193
+  193 -->|"kind: transformArg"| 191
+  190 -->|"kind: pipe"| 191
+  191 -->|"kind: potentialReturn"| 189
+  189 -->|"kind: transformArg"| 187
+  186 -->|"kind: pipe"| 187
+  197 -->|"kind: transformCallee"| 196
+  199 -->|"kind: potentialReturn"| 198
+  198 -->|"kind: transformArg"| 196
+  195 -->|"kind: pipe"| 196
+  201 -->|"kind: potentialReturn"| 200
+  204 -->|"kind: transformCallee"| 203
+  205 -->|"kind: transformArg"| 203
+  202 -->|"kind: pipe"| 203
+  208 -->|"kind: transformCallee"| 207
+  210 -->|"kind: potentialReturn"| 209
+  209 -->|"kind: transformArg"| 207
+  206 -->|"kind: pipe"| 207
+  211 -->|"kind: pipe"| 212
+  213 -->|"kind: transformCallee"| 212
+  215 -->|"kind: transformCallee"| 214
+  217 -->|"kind: potentialReturn"| 216
+  216 -->|"kind: transformArg"| 214
+  212 -->|"kind: pipe"| 214
+  220 -->|"kind: transformCallee"| 219
+  222 -->|"kind: potentialReturn"| 221
+  221 -->|"kind: transformArg"| 219
+  218 -->|"kind: pipe"| 219
+  225 -->|"kind: transformCallee"| 224
+  227 -->|"kind: potentialReturn"| 226
+  226 -->|"kind: transformArg"| 224
+  223 -->|"kind: pipe"| 224
+  228 -->|"kind: pipe"| 229
+  230 -->|"kind: transformCallee"| 228
+  231 -->|"kind: transformArg"| 228
+  234 -->|"kind: transformCallee"| 233
+  236 -->|"kind: potentialReturn"| 235
+  235 -->|"kind: transformArg"| 233
+  232 -->|"kind: pipe"| 233
+  240 -->|"kind: potentialReturn"| 239
+  239 -->|"kind: usedBy"| 238
+  243 -->|"kind: transformCallee"| 242
+  245 -->|"kind: potentialReturn"| 244
+  244 -->|"kind: transformArg"| 242
+  241 -->|"kind: pipe"| 242
+  248 -->|"kind: pipe"| 249
+  250 -->|"kind: transformCallee"| 249
+  249 -->|"kind: potentialReturn"| 247
+  247 -->|"kind: usedBy"| 246
+  253 -->|"kind: potentialReturn"| 252
+  252 -->|"kind: usedBy"| 251

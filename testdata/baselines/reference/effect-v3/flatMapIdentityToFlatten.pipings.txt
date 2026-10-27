@@ -1,4 +1,4 @@
-==== /.src/flatMapIdentityToFlatten.ts (48 flows) ====
+==== /.src/flatMapIdentityToFlatten.ts (51 flows) ====
 
 === Piping Flow ===
 Location: 24:29 - 24:77
@@ -363,7 +363,49 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 109:29 - 109:68
+Location: 108:39 - 110:3
+Node: Effect.flatMap(loadTask, function unwrap(inner) {\n  return inner\n})
+Node Kind: KindCallExpression
+
+Subject: loadTask
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.flatMap
+      args: [function unwrap(inner) {\n  return inner\n}]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 113:43 - 115:4
+Node: loadTask.pipe(Effect.flatMap(function(inner: Effect.Effect<string>) {\n  return inner\n}))
+Node Kind: KindCallExpression
+
+Subject: loadTask
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [function(inner: Effect.Effect<string>) {\n  return inner\n}]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 118:49 - 122:2
+Node: loadTask.pipe(\n  Effect.flatMap(function(inner): Effect.Effect<string, Error> {\n    return inner\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: loadTask
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [function(inner): Effect.Effect<string, Error> {\n    return inner\n  }]
+      outType: Effect<string, Error, never>
+
+=== Piping Flow ===
+Location: 126:29 - 126:68
 Node: loadTask.pipe(Effect.flatMap(localId))
 Node Kind: KindCallExpression
 
@@ -377,7 +419,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 113:34 - 113:76
+Location: 130:34 - 130:76
 Node: loadTask.pipe(Effect.flatMap(widenError))
 Node Kind: KindCallExpression
 
@@ -391,7 +433,7 @@ Transformations (1):
       outType: Effect<string, Error, never>
 
 === Piping Flow ===
-Location: 117:32 - 117:76
+Location: 134:32 - 134:76
 Node: loadTask.pipe(Effect.flatMap(widenSuccess))
 Node Kind: KindCallExpression
 
@@ -405,7 +447,7 @@ Transformations (1):
       outType: Effect<any, never, never>
 
 === Piping Flow ===
-Location: 123:30 - 123:75
+Location: 140:30 - 140:75
 Node: recordTask.pipe(Effect.flatMap(widenNested))
 Node Kind: KindCallExpression
 
@@ -419,7 +461,7 @@ Transformations (1):
       outType: Effect<{ readonly value: any; }, never, never>
 
 === Piping Flow ===
-Location: 126:29 - 128:2
+Location: 143:29 - 145:2
 Node: loadTask.pipe(\n  Effect.flatMap((inner) => inner as Effect.Effect<string, unknown>)\n)
 Node Kind: KindCallExpression
 
@@ -433,7 +475,7 @@ Transformations (1):
       outType: Effect<string, unknown, never>
 
 === Piping Flow ===
-Location: 131:31 - 134:4
+Location: 148:31 - 151:4
 Node: loadTask.pipe(Effect.flatMap((inner) => {\n  console.log("unwrapping")\n  return inner\n}))
 Node Kind: KindCallExpression
 
@@ -447,7 +489,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 131:73 - 132:28
+Location: 148:73 - 149:28
 Node: console.log("unwrapping")
 Node Kind: KindCallExpression
 
@@ -461,7 +503,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 137:32 - 137:84
+Location: 154:32 - 154:84
 Node: loadTask.pipe(Effect.flatMap((_inner) => fallback))
 Node Kind: KindCallExpression
 
@@ -475,7 +517,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 140:24 - 140:118
+Location: 157:24 - 157:118
 Node: loadTask.pipe(Effect.flatMap((inner) => ((inner: Effect.Effect<string>) => inner)(fallback)))
 Node Kind: KindCallExpression
 
@@ -489,7 +531,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 140:64 - 140:116
+Location: 157:64 - 157:116
 Node: ((inner: Effect.Effect<string>) => inner)(fallback)
 Node Kind: KindCallExpression
 
@@ -503,7 +545,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 143:27 - 145:2
+Location: 160:27 - 162:2
 Node: loadTask.pipe(\n  Effect.flatMap((inner) => inner.pipe(Effect.map((report) => report.toUpperCase())))\n)
 Node Kind: KindCallExpression
 
@@ -517,7 +559,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 144:28 - 144:85
+Location: 161:28 - 161:85
 Node: inner.pipe(Effect.map((report) => report.toUpperCase()))
 Node Kind: KindCallExpression
 
@@ -531,7 +573,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 149:30 - 149:87
+Location: 166:30 - 166:87
 Node: holderTask.pipe(Effect.flatMap((holder) => holder.task))
 Node Kind: KindCallExpression
 
@@ -545,7 +587,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 153:28 - 153:73
+Location: 170:28 - 170:73
 Node: loadTask.pipe(Effect.flatMap(localIdentity))
 Node Kind: KindCallExpression
 
@@ -559,7 +601,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 157:26 - 157:73
+Location: 174:26 - 174:73
 Node: anyTask.pipe(Effect.flatMap((value) => value))
 Node Kind: KindCallExpression
 
@@ -573,7 +615,7 @@ Transformations (1):
       outType: Effect<unknown, unknown, unknown>
 
 === Piping Flow ===
-Location: 160:28 - 160:96
+Location: 177:28 - 177:96
 Node: Effect.fail(new LoadError()).pipe(Effect.flatMap((value) => value))
 Node Kind: KindCallExpression
 
@@ -591,7 +633,7 @@ Transformations (2):
       outType: Effect<unknown, unknown, unknown>
 
 === Piping Flow ===
-Location: 163:27 - 163:71
+Location: 180:27 - 180:71
 Node: loadTask.pipe(Effect.map((inner) => inner))
 Node Kind: KindCallExpression
 
@@ -605,7 +647,7 @@ Transformations (1):
       outType: Effect<Effect<string, never, never>, never, never>
 
 === Piping Flow ===
-Location: 166:31 - 166:79
+Location: 183:31 - 183:79
 Node: loadTask.pipe(Effect.andThen((inner) => inner))
 Node Kind: KindCallExpression
 
@@ -619,7 +661,7 @@ Transformations (1):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 170:29 - 170:68
+Location: 187:29 - 187:68
 Node: Option.flatMap(nestedOption, identity)
 Node Kind: KindCallExpression
 
@@ -633,7 +675,7 @@ Transformations (1):
       outType: Option<number>
 
 === Piping Flow ===
-Location: 171:33 - 171:85
+Location: 188:33 - 188:85
 Node: nestedOption.pipe(Option.flatMap((inner) => inner))
 Node Kind: KindCallExpression
 
@@ -647,7 +689,7 @@ Transformations (1):
       outType: Option<number>
 
 === Piping Flow ===
-Location: 178:29 - 178:66
+Location: 195:29 - 195:66
 Node: [[1], [2]].flatMap((inner) => inner)
 Node Kind: KindCallExpression
 
@@ -661,7 +703,7 @@ Transformations (1):
       outType: number[]
 
 === Piping Flow ===
-Location: 182:29 - 182:81
+Location: 199:29 - 199:81
 Node: nestedStream.pipe(Stream.flatMap((inner) => inner))
 Node Kind: KindCallExpression
 
@@ -675,7 +717,7 @@ Transformations (1):
       outType: Stream<number, never, never>
 
 === Piping Flow ===
-Location: 185:72 - 185:81
+Location: 202:72 - 202:81
 Node: f(value)
 Node Kind: KindCallExpression
 

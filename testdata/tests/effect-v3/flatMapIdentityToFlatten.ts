@@ -99,10 +99,27 @@ export const returnAnnotated = loadTask.pipe(Effect.flatMap((inner): Effect.Effe
 // MUST NOT TRIGGER: a return type annotation widening the success channel to any
 export const returnAnnotatedAny = loadTask.pipe(Effect.flatMap((inner): Effect.Effect<any> => inner))
 
-// MUST NOT TRIGGER: only arrow callbacks are matched, not function expressions
+// MUST TRIGGER: function expression returning its parameter
 export const functionExpression = loadTask.pipe(Effect.flatMap(function(inner) {
   return inner
 }))
+
+// MUST TRIGGER: named function expression returning its parameter
+export const namedFunctionExpression = Effect.flatMap(loadTask, function unwrap(inner) {
+  return inner
+})
+
+// MUST NOT TRIGGER: a function expression with an annotated parameter can change the type
+export const annotatedFunctionExpression = loadTask.pipe(Effect.flatMap(function(inner: Effect.Effect<string>) {
+  return inner
+}))
+
+// MUST NOT TRIGGER: a function expression with a return type annotation can change the type
+export const returnAnnotatedFunctionExpression = loadTask.pipe(
+  Effect.flatMap(function(inner): Effect.Effect<string, Error> {
+    return inner
+  })
+)
 
 // MUST NOT TRIGGER: identity reached through an unannotated local variable
 const localId = identity
