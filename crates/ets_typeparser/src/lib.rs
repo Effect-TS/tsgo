@@ -54,6 +54,8 @@ mod expected_and_real_type;
 #[cfg(test)]
 mod expected_and_real_type_test;
 mod expression_stability;
+#[cfg(test)]
+mod expression_stability_test;
 mod extends_context_service;
 mod extends_context_tag;
 mod extends_data_error;
