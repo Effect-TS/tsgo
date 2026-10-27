@@ -1,0 +1,734 @@
+=== Quick Fix Inventory ===
+
+[D1] (15:9-15:24) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D2] (20:9-20:19) TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D3] (29:5-29:20) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D4] (36:3-36:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D5] (41:3-41:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D6] (45:38-45:53) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D7] (54:24-54:39) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D8] (64:3-64:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_crossPipe.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Data, Effect, pipe } from "effect"
+
+class TaskError extends Data.TaggedError("TaskError")<{
+  readonly message: string
+}> {}
+
+declare const fetchCount: Effect.Effect<number, string>
+
+// MUST TRIGGER: the first .pipe(...) is left empty by the fix and collapses to its subject
+export const emptiedPipe = fetchCount
+  .pipe(Effect.mapBoth({
+    onSuccess: n => n > 0,
+    onFailure: message => new TaskError({ message })
+}))
+
+// MUST TRIGGER: reverse order across chained .pipe(...) calls
+export const emptiedPipeReverse = fetchCount
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+  .pipe(Effect.map((n) => n > 0))
+
+// MUST TRIGGER: other steps on both sides of the pipe boundary are kept
+export const stepsOnBothSides = fetchCount
+  .pipe(
+    Effect.tap((n) => Effect.log(n)),
+    Effect.map((n) => n > 0)
+  )
+  .pipe(
+    Effect.mapError((message) => new TaskError({ message })),
+    Effect.asVoid
+  )
+
+// MUST TRIGGER: nested function pipe; the inner pipe(...) collapses to its subject
+export const nestedFunctionPipe = pipe(
+  pipe(fetchCount, Effect.map((n) => n > 0)),
+  Effect.mapError((message) => new TaskError({ message }))
+)
+
+// MUST TRIGGER: data-first inner call, pipeable outer step
+export const dataFirstThenPipeable = Effect.map(fetchCount, (n) => n > 0).pipe(
+  Effect.mapError((message) => new TaskError({ message }))
+)
+
+// MUST TRIGGER: pipeable inner steps, data-first outer call; the earlier step is kept
+export const pipeableThenDataFirst = Effect.mapError(
+  fetchCount.pipe(
+    Effect.tap((n) => Effect.log(n)),
+    Effect.map((n) => n > 0)
+  ),
+  (message) => new TaskError({ message })
+)
+
+// MUST TRIGGER: curried applications
+export const curried = Effect.mapError((message: string) => new TaskError({ message }))(
+  Effect.map((n: number) => n > 0)(fetchCount)
+)
+
+// MUST TRIGGER: Effect.fnUntraced pipeline steps
+export const untracedPipeline = Effect.fnUntraced(
+  function*(n: number) {
+    return yield* Effect.succeed(n)
+  },
+  Effect.map((n) => n > 0),
+  Effect.mapError(() => new TaskError({ message: "never" }))
+)
+
+// MUST NOT TRIGGER: a step separates the pair across the pipe boundary
+export const separatedAcrossPipes = fetchCount
+  .pipe(
+    Effect.map((n) => n > 0),
+    Effect.tap((positive) => Effect.log(positive))
+  )
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+
+
+=== [D2] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_crossPipe.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Data, Effect, pipe } from "effect"
+
+class TaskError extends Data.TaggedError("TaskError")<{
+  readonly message: string
+}> {}
+
+declare const fetchCount: Effect.Effect<number, string>
+
+// MUST TRIGGER: the first .pipe(...) is left empty by the fix and collapses to its subject
+export const emptiedPipe = fetchCount
+  .pipe(Effect.map((n) => n > 0))
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+
+// MUST TRIGGER: reverse order across chained .pipe(...) calls
+export const emptiedPipeReverse = fetchCount
+  .pipe(Effect.mapBoth({
+    onFailure: message => new TaskError({ message }),
+    onSuccess: n => n > 0
+}))
+
+// MUST TRIGGER: other steps on both sides of the pipe boundary are kept
+export const stepsOnBothSides = fetchCount
+  .pipe(
+    Effect.tap((n) => Effect.log(n)),
+    Effect.map((n) => n > 0)
+  )
+  .pipe(
+    Effect.mapError((message) => new TaskError({ message })),
+    Effect.asVoid
+  )
+
+// MUST TRIGGER: nested function pipe; the inner pipe(...) collapses to its subject
+export const nestedFunctionPipe = pipe(
+  pipe(fetchCount, Effect.map((n) => n > 0)),
+  Effect.mapError((message) => new TaskError({ message }))
+)
+
+// MUST TRIGGER: data-first inner call, pipeable outer step
+export const dataFirstThenPipeable = Effect.map(fetchCount, (n) => n > 0).pipe(
+  Effect.mapError((message) => new TaskError({ message }))
+)
+
+// MUST TRIGGER: pipeable inner steps, data-first outer call; the earlier step is kept
+export const pipeableThenDataFirst = Effect.mapError(
+  fetchCount.pipe(
+    Effect.tap((n) => Effect.log(n)),
+    Effect.map((n) => n > 0)
+  ),
+  (message) => new TaskError({ message })
+)
+
+// MUST TRIGGER: curried applications
+export const curried = Effect.mapError((message: string) => new TaskError({ message }))(
+  Effect.map((n: number) => n > 0)(fetchCount)
+)
+
+// MUST TRIGGER: Effect.fnUntraced pipeline steps
+export const untracedPipeline = Effect.fnUntraced(
+  function*(n: number) {
+    return yield* Effect.succeed(n)
+  },
+  Effect.map((n) => n > 0),
+  Effect.mapError(() => new TaskError({ message: "never" }))
+)
+
+// MUST NOT TRIGGER: a step separates the pair across the pipe boundary
+export const separatedAcrossPipes = fetchCount
+  .pipe(
+    Effect.map((n) => n > 0),
+    Effect.tap((positive) => Effect.log(positive))
+  )
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+
+
+=== [D3] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_crossPipe.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Data, Effect, pipe } from "effect"
+
+class TaskError extends Data.TaggedError("TaskError")<{
+  readonly message: string
+}> {}
+
+declare const fetchCount: Effect.Effect<number, string>
+
+// MUST TRIGGER: the first .pipe(...) is left empty by the fix and collapses to its subject
+export const emptiedPipe = fetchCount
+  .pipe(Effect.map((n) => n > 0))
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+
+// MUST TRIGGER: reverse order across chained .pipe(...) calls
+export const emptiedPipeReverse = fetchCount
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+  .pipe(Effect.map((n) => n > 0))
+
+// MUST TRIGGER: other steps on both sides of the pipe boundary are kept
+export const stepsOnBothSides = fetchCount
+  .pipe(
+    Effect.tap((n) => Effect.log(n))
+  )
+  .pipe(
+    Effect.mapBoth({
+    onSuccess: n => n > 0,
+    onFailure: message => new TaskError({ message })
+}),
+    Effect.asVoid
+  )
+
+// MUST TRIGGER: nested function pipe; the inner pipe(...) collapses to its subject
+export const nestedFunctionPipe = pipe(
+  pipe(fetchCount, Effect.map((n) => n > 0)),
+  Effect.mapError((message) => new TaskError({ message }))
+)
+
+// MUST TRIGGER: data-first inner call, pipeable outer step
+export const dataFirstThenPipeable = Effect.map(fetchCount, (n) => n > 0).pipe(
+  Effect.mapError((message) => new TaskError({ message }))
+)
+
+// MUST TRIGGER: pipeable inner steps, data-first outer call; the earlier step is kept
+export const pipeableThenDataFirst = Effect.mapError(
+  fetchCount.pipe(
+    Effect.tap((n) => Effect.log(n)),
+    Effect.map((n) => n > 0)
+  ),
+  (message) => new TaskError({ message })
+)
+
+// MUST TRIGGER: curried applications
+export const curried = Effect.mapError((message: string) => new TaskError({ message }))(
+  Effect.map((n: number) => n > 0)(fetchCount)
+)
+
+// MUST TRIGGER: Effect.fnUntraced pipeline steps
+export const untracedPipeline = Effect.fnUntraced(
+  function*(n: number) {
+    return yield* Effect.succeed(n)
+  },
+  Effect.map((n) => n > 0),
+  Effect.mapError(() => new TaskError({ message: "never" }))
+)
+
+// MUST NOT TRIGGER: a step separates the pair across the pipe boundary
+export const separatedAcrossPipes = fetchCount
+  .pipe(
+    Effect.map((n) => n > 0),
+    Effect.tap((positive) => Effect.log(positive))
+  )
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+
+
+=== [D4] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_crossPipe.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Data, Effect, pipe } from "effect"
+
+class TaskError extends Data.TaggedError("TaskError")<{
+  readonly message: string
+}> {}
+
+declare const fetchCount: Effect.Effect<number, string>
+
+// MUST TRIGGER: the first .pipe(...) is left empty by the fix and collapses to its subject
+export const emptiedPipe = fetchCount
+  .pipe(Effect.map((n) => n > 0))
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+
+// MUST TRIGGER: reverse order across chained .pipe(...) calls
+export const emptiedPipeReverse = fetchCount
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+  .pipe(Effect.map((n) => n > 0))
+
+// MUST TRIGGER: other steps on both sides of the pipe boundary are kept
+export const stepsOnBothSides = fetchCount
+  .pipe(
+    Effect.tap((n) => Effect.log(n)),
+    Effect.map((n) => n > 0)
+  )
+  .pipe(
+    Effect.mapError((message) => new TaskError({ message })),
+    Effect.asVoid
+  )
+
+// MUST TRIGGER: nested function pipe; the inner pipe(...) collapses to its subject
+export const nestedFunctionPipe = pipe(
+  fetchCount,
+  Effect.mapBoth({
+    onSuccess: n => n > 0,
+    onFailure: message => new TaskError({ message })
+})
+)
+
+// MUST TRIGGER: data-first inner call, pipeable outer step
+export const dataFirstThenPipeable = Effect.map(fetchCount, (n) => n > 0).pipe(
+  Effect.mapError((message) => new TaskError({ message }))
+)
+
+// MUST TRIGGER: pipeable inner steps, data-first outer call; the earlier step is kept
+export const pipeableThenDataFirst = Effect.mapError(
+  fetchCount.pipe(
+    Effect.tap((n) => Effect.log(n)),
+    Effect.map((n) => n > 0)
+  ),
+  (message) => new TaskError({ message })
+)
+
+// MUST TRIGGER: curried applications
+export const curried = Effect.mapError((message: string) => new TaskError({ message }))(
+  Effect.map((n: number) => n > 0)(fetchCount)
+)
+
+// MUST TRIGGER: Effect.fnUntraced pipeline steps
+export const untracedPipeline = Effect.fnUntraced(
+  function*(n: number) {
+    return yield* Effect.succeed(n)
+  },
+  Effect.map((n) => n > 0),
+  Effect.mapError(() => new TaskError({ message: "never" }))
+)
+
+// MUST NOT TRIGGER: a step separates the pair across the pipe boundary
+export const separatedAcrossPipes = fetchCount
+  .pipe(
+    Effect.map((n) => n > 0),
+    Effect.tap((positive) => Effect.log(positive))
+  )
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+
+
+=== [D5] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_crossPipe.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Data, Effect, pipe } from "effect"
+
+class TaskError extends Data.TaggedError("TaskError")<{
+  readonly message: string
+}> {}
+
+declare const fetchCount: Effect.Effect<number, string>
+
+// MUST TRIGGER: the first .pipe(...) is left empty by the fix and collapses to its subject
+export const emptiedPipe = fetchCount
+  .pipe(Effect.map((n) => n > 0))
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+
+// MUST TRIGGER: reverse order across chained .pipe(...) calls
+export const emptiedPipeReverse = fetchCount
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+  .pipe(Effect.map((n) => n > 0))
+
+// MUST TRIGGER: other steps on both sides of the pipe boundary are kept
+export const stepsOnBothSides = fetchCount
+  .pipe(
+    Effect.tap((n) => Effect.log(n)),
+    Effect.map((n) => n > 0)
+  )
+  .pipe(
+    Effect.mapError((message) => new TaskError({ message })),
+    Effect.asVoid
+  )
+
+// MUST TRIGGER: nested function pipe; the inner pipe(...) collapses to its subject
+export const nestedFunctionPipe = pipe(
+  pipe(fetchCount, Effect.map((n) => n > 0)),
+  Effect.mapError((message) => new TaskError({ message }))
+)
+
+// MUST TRIGGER: data-first inner call, pipeable outer step
+export const dataFirstThenPipeable = fetchCount.pipe(
+  Effect.mapBoth({
+    onSuccess: n => n > 0,
+    onFailure: message => new TaskError({ message })
+})
+)
+
+// MUST TRIGGER: pipeable inner steps, data-first outer call; the earlier step is kept
+export const pipeableThenDataFirst = Effect.mapError(
+  fetchCount.pipe(
+    Effect.tap((n) => Effect.log(n)),
+    Effect.map((n) => n > 0)
+  ),
+  (message) => new TaskError({ message })
+)
+
+// MUST TRIGGER: curried applications
+export const curried = Effect.mapError((message: string) => new TaskError({ message }))(
+  Effect.map((n: number) => n > 0)(fetchCount)
+)
+
+// MUST TRIGGER: Effect.fnUntraced pipeline steps
+export const untracedPipeline = Effect.fnUntraced(
+  function*(n: number) {
+    return yield* Effect.succeed(n)
+  },
+  Effect.map((n) => n > 0),
+  Effect.mapError(() => new TaskError({ message: "never" }))
+)
+
+// MUST NOT TRIGGER: a step separates the pair across the pipe boundary
+export const separatedAcrossPipes = fetchCount
+  .pipe(
+    Effect.map((n) => n > 0),
+    Effect.tap((positive) => Effect.log(positive))
+  )
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+
+
+=== [D6] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_crossPipe.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Data, Effect, pipe } from "effect"
+
+class TaskError extends Data.TaggedError("TaskError")<{
+  readonly message: string
+}> {}
+
+declare const fetchCount: Effect.Effect<number, string>
+
+// MUST TRIGGER: the first .pipe(...) is left empty by the fix and collapses to its subject
+export const emptiedPipe = fetchCount
+  .pipe(Effect.map((n) => n > 0))
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+
+// MUST TRIGGER: reverse order across chained .pipe(...) calls
+export const emptiedPipeReverse = fetchCount
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+  .pipe(Effect.map((n) => n > 0))
+
+// MUST TRIGGER: other steps on both sides of the pipe boundary are kept
+export const stepsOnBothSides = fetchCount
+  .pipe(
+    Effect.tap((n) => Effect.log(n)),
+    Effect.map((n) => n > 0)
+  )
+  .pipe(
+    Effect.mapError((message) => new TaskError({ message })),
+    Effect.asVoid
+  )
+
+// MUST TRIGGER: nested function pipe; the inner pipe(...) collapses to its subject
+export const nestedFunctionPipe = pipe(
+  pipe(fetchCount, Effect.map((n) => n > 0)),
+  Effect.mapError((message) => new TaskError({ message }))
+)
+
+// MUST TRIGGER: data-first inner call, pipeable outer step
+export const dataFirstThenPipeable = Effect.map(fetchCount, (n) => n > 0).pipe(
+  Effect.mapError((message) => new TaskError({ message }))
+)
+
+// MUST TRIGGER: pipeable inner steps, data-first outer call; the earlier step is kept
+export const pipeableThenDataFirst = Effect.mapBoth(
+  fetchCount.pipe(
+    Effect.tap((n) => Effect.log(n))
+  ),
+  {
+    onSuccess: n => n > 0,
+    onFailure: message => new TaskError({ message })
+}
+)
+
+// MUST TRIGGER: curried applications
+export const curried = Effect.mapError((message: string) => new TaskError({ message }))(
+  Effect.map((n: number) => n > 0)(fetchCount)
+)
+
+// MUST TRIGGER: Effect.fnUntraced pipeline steps
+export const untracedPipeline = Effect.fnUntraced(
+  function*(n: number) {
+    return yield* Effect.succeed(n)
+  },
+  Effect.map((n) => n > 0),
+  Effect.mapError(() => new TaskError({ message: "never" }))
+)
+
+// MUST NOT TRIGGER: a step separates the pair across the pipe boundary
+export const separatedAcrossPipes = fetchCount
+  .pipe(
+    Effect.map((n) => n > 0),
+    Effect.tap((positive) => Effect.log(positive))
+  )
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+
+
+=== [D7] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_crossPipe.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Data, Effect, pipe } from "effect"
+
+class TaskError extends Data.TaggedError("TaskError")<{
+  readonly message: string
+}> {}
+
+declare const fetchCount: Effect.Effect<number, string>
+
+// MUST TRIGGER: the first .pipe(...) is left empty by the fix and collapses to its subject
+export const emptiedPipe = fetchCount
+  .pipe(Effect.map((n) => n > 0))
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+
+// MUST TRIGGER: reverse order across chained .pipe(...) calls
+export const emptiedPipeReverse = fetchCount
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+  .pipe(Effect.map((n) => n > 0))
+
+// MUST TRIGGER: other steps on both sides of the pipe boundary are kept
+export const stepsOnBothSides = fetchCount
+  .pipe(
+    Effect.tap((n) => Effect.log(n)),
+    Effect.map((n) => n > 0)
+  )
+  .pipe(
+    Effect.mapError((message) => new TaskError({ message })),
+    Effect.asVoid
+  )
+
+// MUST TRIGGER: nested function pipe; the inner pipe(...) collapses to its subject
+export const nestedFunctionPipe = pipe(
+  pipe(fetchCount, Effect.map((n) => n > 0)),
+  Effect.mapError((message) => new TaskError({ message }))
+)
+
+// MUST TRIGGER: data-first inner call, pipeable outer step
+export const dataFirstThenPipeable = Effect.map(fetchCount, (n) => n > 0).pipe(
+  Effect.mapError((message) => new TaskError({ message }))
+)
+
+// MUST TRIGGER: pipeable inner steps, data-first outer call; the earlier step is kept
+export const pipeableThenDataFirst = Effect.mapError(
+  fetchCount.pipe(
+    Effect.tap((n) => Effect.log(n)),
+    Effect.map((n) => n > 0)
+  ),
+  (message) => new TaskError({ message })
+)
+
+// MUST TRIGGER: curried applications
+export const curried = Effect.mapBoth({
+    onSuccess: (n: number) => n > 0,
+    onFailure: (message: string) => new TaskError({ message })
+})(
+  fetchCount
+)
+
+// MUST TRIGGER: Effect.fnUntraced pipeline steps
+export const untracedPipeline = Effect.fnUntraced(
+  function*(n: number) {
+    return yield* Effect.succeed(n)
+  },
+  Effect.map((n) => n > 0),
+  Effect.mapError(() => new TaskError({ message: "never" }))
+)
+
+// MUST NOT TRIGGER: a step separates the pair across the pipe boundary
+export const separatedAcrossPipes = fetchCount
+  .pipe(
+    Effect.map((n) => n > 0),
+    Effect.tap((positive) => Effect.log(positive))
+  )
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+
+
+=== [D8] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_crossPipe.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Data, Effect, pipe } from "effect"
+
+class TaskError extends Data.TaggedError("TaskError")<{
+  readonly message: string
+}> {}
+
+declare const fetchCount: Effect.Effect<number, string>
+
+// MUST TRIGGER: the first .pipe(...) is left empty by the fix and collapses to its subject
+export const emptiedPipe = fetchCount
+  .pipe(Effect.map((n) => n > 0))
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+
+// MUST TRIGGER: reverse order across chained .pipe(...) calls
+export const emptiedPipeReverse = fetchCount
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+  .pipe(Effect.map((n) => n > 0))
+
+// MUST TRIGGER: other steps on both sides of the pipe boundary are kept
+export const stepsOnBothSides = fetchCount
+  .pipe(
+    Effect.tap((n) => Effect.log(n)),
+    Effect.map((n) => n > 0)
+  )
+  .pipe(
+    Effect.mapError((message) => new TaskError({ message })),
+    Effect.asVoid
+  )
+
+// MUST TRIGGER: nested function pipe; the inner pipe(...) collapses to its subject
+export const nestedFunctionPipe = pipe(
+  pipe(fetchCount, Effect.map((n) => n > 0)),
+  Effect.mapError((message) => new TaskError({ message }))
+)
+
+// MUST TRIGGER: data-first inner call, pipeable outer step
+export const dataFirstThenPipeable = Effect.map(fetchCount, (n) => n > 0).pipe(
+  Effect.mapError((message) => new TaskError({ message }))
+)
+
+// MUST TRIGGER: pipeable inner steps, data-first outer call; the earlier step is kept
+export const pipeableThenDataFirst = Effect.mapError(
+  fetchCount.pipe(
+    Effect.tap((n) => Effect.log(n)),
+    Effect.map((n) => n > 0)
+  ),
+  (message) => new TaskError({ message })
+)
+
+// MUST TRIGGER: curried applications
+export const curried = Effect.mapError((message: string) => new TaskError({ message }))(
+  Effect.map((n: number) => n > 0)(fetchCount)
+)
+
+// MUST TRIGGER: Effect.fnUntraced pipeline steps
+export const untracedPipeline = Effect.fnUntraced(
+  function*(n: number) {
+    return yield* Effect.succeed(n)
+  },
+  Effect.mapBoth({
+    onSuccess: n => n > 0,
+    onFailure: () => new TaskError({ message: "never" })
+})
+)
+
+// MUST NOT TRIGGER: a step separates the pair across the pipe boundary
+export const separatedAcrossPipes = fetchCount
+  .pipe(
+    Effect.map((n) => n > 0),
+    Effect.tap((positive) => Effect.log(positive))
+  )
+  .pipe(Effect.mapError((message) => new TaskError({ message })))
+

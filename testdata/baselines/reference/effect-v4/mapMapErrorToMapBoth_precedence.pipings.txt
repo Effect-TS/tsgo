@@ -1,0 +1,145 @@
+==== /.src/mapMapErrorToMapBoth_precedence.ts (8 flows) ====
+
+=== Piping Flow ===
+Location: 14:34 - 16:2
+Node: Effect.map(flag ? first : second, (n) => n + 1).pipe(\n  Effect.mapError((message) => message.length)\n)
+Node Kind: KindCallExpression
+
+Subject: flag ? first : second
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, string, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(message) => message.length]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 19:30 - 21:2
+Node: Effect.map(maybe ?? first, (n) => n + 1).pipe(\n  Effect.mapError((message) => message.length)\n)
+Node Kind: KindCallExpression
+
+Subject: maybe ?? first
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, string, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(message) => message.length]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 24:25 - 26:2
+Node: Effect.map(unknownValue as Effect.Effect<number, string>, (n) => n + 1).pipe(\n  Effect.mapError((message) => message.length)\n)
+Node Kind: KindCallExpression
+
+Subject: unknownValue as Effect.Effect<number, string>
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, string, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(message) => message.length]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 29:40 - 32:4
+Node: Effect.map(await load(), (n) => n + 1).pipe(\n    Effect.mapError((message) => message.length)\n  )
+Node Kind: KindCallExpression
+
+Subject: await load()
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, string, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(message) => message.length]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 35:36 - 37:2
+Node: Effect.map(holder?.effect!, (n) => n + 1).pipe(\n  Effect.mapError((message) => message.length)\n)
+Node Kind: KindCallExpression
+
+Subject: holder?.effect!
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, string, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(message) => message.length]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 40:38 - 42:2
+Node: pipe(flag ? first : second, Effect.map((n) => n + 1)).pipe(\n  Effect.mapError((message) => message.length)\n)
+Node Kind: KindCallExpression
+
+Subject: flag ? first : second
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, string, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(message) => message.length]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 45:41 - 47:2
+Node: Effect.map((n: number) => n + 1)(flag ? first : second).pipe(\n  Effect.mapError((message) => message.length)\n)
+Node Kind: KindCallExpression
+
+Subject: flag ? first : second
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.map
+      args: [(n: number) => n + 1]
+      outType: Effect<number, string, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(message) => message.length]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 50:32 - 53:2
+Node: Effect.mapError(\n  Effect.map(flag ? first : second, (n) => n + 1),\n  (message) => message.length\n)
+Node Kind: KindCallExpression
+
+Subject: flag ? first : second
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, string, never>
+  [1] kind: dataFirst
+      callee: Effect.mapError
+      args: [(message) => message.length]
+      outType: Effect<number, number, never>

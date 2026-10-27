@@ -2649,6 +2649,11 @@
           "default": "suggestion",
           "description": "Suggests using Effect.as instead of Effect.map when the callback ignores its input and returns a constant"
         },
+        "mapMapErrorToMapBoth": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests Effect.mapBoth when Effect.map and Effect.mapError are adjacent steps of a piping flow"
+        },
         "mapSomeToAsSome": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

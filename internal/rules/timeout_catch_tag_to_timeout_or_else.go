@@ -67,7 +67,7 @@ func AnalyzeTimeoutCatchTagToTimeoutOrElse(tp *typeparser.TypeParser, c *checker
 			}
 			hasTypeArgs := false
 			for j := i; j <= end; j++ {
-				hasTypeArgs = hasTypeArgs || catchDieHasTypeArguments(new(flow.Transformations().At(j)))
+				hasTypeArgs = hasTypeArgs || hasExplicitTypeArguments(new(flow.Transformations().At(j)))
 			}
 			if hasTypeArgs {
 				continue

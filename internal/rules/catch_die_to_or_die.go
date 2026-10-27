@@ -77,7 +77,7 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 					Transformation:   &transformation,
 					EffectModule:     effectModule,
 					CatchMethodName:  methodName,
-					HasTypeArguments: catchDieHasTypeArguments(&transformation),
+					HasTypeArguments: hasExplicitTypeArguments(&transformation),
 				})
 			}
 		}
@@ -106,8 +106,4 @@ func catchDieMethod(tp *typeparser.TypeParser, callee *ast.Node) (name string, e
 		}
 	}
 	return name, effectModule, true
-}
-
-func catchDieHasTypeArguments(transformation *typeparser.PipingFlowTransformation) bool {
-	return transformation != nil && transformation.TypeArguments() != nil && len(transformation.TypeArguments().Nodes) > 0
 }

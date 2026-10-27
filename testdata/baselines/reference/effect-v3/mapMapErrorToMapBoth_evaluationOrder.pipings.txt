@@ -1,0 +1,45 @@
+==== /.src/mapMapErrorToMapBoth_evaluationOrder.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 14:26 - 17:2
+Node: Effect.mapError(\n  Effect.map(Effect.succeed(3), (n) => n * multiplier),\n  makeErrorMapper()\n)
+Node Kind: KindCallExpression
+
+Subject: 3
+Subject Type: 3
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n * multiplier]
+      outType: Effect<number, never, never>
+  [2] kind: dataFirst
+      callee: Effect.mapError
+      args: [makeErrorMapper()]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 20:24 - 23:2
+Node: Effect.succeed(3).pipe(\n  Effect.map((n) => n * multiplier),\n  Effect.mapError(makeErrorMapper())\n)
+Node Kind: KindCallExpression
+
+Subject: 3
+Subject Type: 3
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n * multiplier]
+      outType: Effect<number, never, never>
+  [2] kind: pipeable
+      callee: Effect.mapError
+      args: [makeErrorMapper()]
+      outType: Effect<number, number, never>

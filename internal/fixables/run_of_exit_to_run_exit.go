@@ -4,12 +4,8 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
-	"github.com/effect-ts/tsgo/internal/typeparser"
-	"github.com/microsoft/TypeScript/tsc/shim/ast"
-	"github.com/microsoft/TypeScript/tsc/shim/core"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 var RunOfExitToRunExitFix = fixable.Fixable{
@@ -35,7 +31,7 @@ func runRunOfExitToRunExitFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: description,
 			Run: func(tracker *rewriter.Tracker) {
-				if !removeExitTransformation(tracker, ctx.SourceFile, match.ExitTransformation) {
+				if !removePipingFlowTransformation(tracker, ctx.SourceFile, match.ExitTransformation) {
 					return
 				}
 				replaceEffectMethodCallee(tracker, ctx.SourceFile, match.RunnerCallee, match.RunnerNameNode, match.ReplacementName)
@@ -47,87 +43,4 @@ func runRunOfExitToRunExitFix(ctx *fixable.Context) []ls.CodeAction {
 	}
 
 	return nil
-}
-
-func removeExitTransformation(tracker *rewriter.Tracker, sf *ast.SourceFile, transformation *typeparser.PipingFlowTransformation) bool {
-	if tracker == nil || sf == nil || transformation == nil || transformation.Callee() == nil {
-		return false
-	}
-
-	switch transformation.Kind() {
-	case typeparser.TransformationKindDataFirst, typeparser.TransformationKindDataLast, typeparser.TransformationKindCall:
-		callNode, call := directCallForCallee(transformation.Callee())
-		if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) != 1 {
-			return false
-		}
-		tracker.ReplaceNode(sf, callNode, tracker.DeepCloneNode(call.Arguments.Nodes[0]), nil)
-		return true
-
-	case typeparser.TransformationKindPipe, typeparser.TransformationKindPipeable:
-		callNode, call, argumentIndex := containingCallArgumentForExit(transformation.Callee())
-		if call == nil || call.Arguments == nil || argumentIndex < 0 {
-			return false
-		}
-		arguments := call.Arguments.Nodes
-		minimumArguments := 1
-		if transformation.Kind() == typeparser.TransformationKindPipe {
-			minimumArguments = 2 // Function.pipe also contains its subject.
-		}
-		if len(arguments) == minimumArguments {
-			var subject *ast.Node
-			if transformation.Kind() == typeparser.TransformationKindPipe {
-				subject = arguments[0]
-			} else if call.Expression != nil && call.Expression.Kind == ast.KindPropertyAccessExpression {
-				subject = call.Expression.AsPropertyAccessExpression().Expression
-			}
-			if subject == nil {
-				return false
-			}
-			tracker.ReplaceNode(sf, callNode, tracker.DeepCloneNode(subject), nil)
-			return true
-		}
-
-		if argumentIndex < len(arguments)-1 {
-			start := scanner.GetTokenPosOfNode(arguments[argumentIndex], sf, false)
-			end := scanner.GetTokenPosOfNode(arguments[argumentIndex+1], sf, false)
-			tracker.DeleteRange(sf, core.NewTextRange(start, end))
-			return true
-		}
-		if argumentIndex > 0 {
-			tracker.DeleteRange(sf, core.NewTextRange(arguments[argumentIndex-1].End(), arguments[argumentIndex].End()))
-			return true
-		}
-	}
-
-	return false
-}
-
-func directCallForCallee(callee *ast.Node) (*ast.Node, *ast.CallExpression) {
-	if callee == nil || callee.Parent == nil || callee.Parent.Kind != ast.KindCallExpression {
-		return nil, nil
-	}
-	call := callee.Parent.AsCallExpression()
-	if call == nil || call.Expression != callee {
-		return nil, nil
-	}
-	return callee.Parent, call
-}
-
-func containingCallArgumentForExit(node *ast.Node) (*ast.Node, *ast.CallExpression, int) {
-	for child := node; child != nil && child.Parent != nil; child = child.Parent {
-		parent := child.Parent
-		if parent.Kind != ast.KindCallExpression {
-			continue
-		}
-		call := parent.AsCallExpression()
-		if call == nil || call.Arguments == nil {
-			continue
-		}
-		for index, argument := range call.Arguments.Nodes {
-			if argument == child {
-				return parent, call, index
-			}
-		}
-	}
-	return nil, nil, -1
 }
