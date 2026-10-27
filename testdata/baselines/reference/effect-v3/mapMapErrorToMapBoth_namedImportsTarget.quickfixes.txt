@@ -1,0 +1,34 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:65-9:67) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_namedImportsTarget.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import type { Effect } from "effect"
+import { map as m, mapBoth as both, mapError as me } from "effect/Effect"
+
+declare const fetchCount: Effect.Effect<number, string>
+
+// MUST TRIGGER: the quickfix uses the imported mapBoth binding `both`
+export const namedWithTarget = fetchCount.pipe(both({
+    onSuccess: n => n + 1,
+    onFailure: message => message.length
+}))
+
+// MUST NOT TRIGGER: already merged through the imported binding
+export const alreadyMerged = fetchCount.pipe(both({ onSuccess: (n) => n + 1, onFailure: (message) => message.length }))
+

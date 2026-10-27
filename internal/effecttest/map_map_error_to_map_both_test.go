@@ -36,8 +36,11 @@ func TestMapMapErrorToMapBothFixesCompile(t *testing.T) {
 // @filename: /repro.ts
 `
 			mainMatches, mainFixes := 23, 22
+			// Nested eager pairs whose outer callback is not a function literal have no fix.
+			orderMatches, orderFixes := 6, 3
 			if version == bundledeffect.EffectV3 {
 				mainMatches, mainFixes = 20, 19
+				orderMatches, orderFixes = 2, 2
 			}
 			cases := []struct {
 				name     string
@@ -49,6 +52,27 @@ func TestMapMapErrorToMapBothFixesCompile(t *testing.T) {
 			}{
 				{name: "mapMapErrorToMapBoth.ts", matches: mainMatches, fixes: mainFixes},
 				{name: "mapMapErrorToMapBoth_preview.ts", matches: 1, fixes: 1},
+				// No binding in scope reaches mapBoth, so no fix is offered.
+				{name: "mapMapErrorToMapBoth_namedImportsNoTarget.ts", matches: 3, fixes: 0},
+				{name: "mapMapErrorToMapBoth_namedImportsTarget.ts", matches: 1, fixes: 1},
+				{name: "mapMapErrorToMapBoth_evaluationOrder.ts", matches: orderMatches, fixes: orderFixes},
+				{
+					name: "exactNamedImportTarget",
+					source: `import type { Effect } from "effect"
+import { map, mapBoth, mapError } from "effect/Effect"
+declare const source: Effect.Effect<number, string>
+export const value = source.pipe(map((n) => n + 1), mapError((e) => e.length))
+`,
+					expected: `import type { Effect } from "effect"
+import { map, mapBoth, mapError } from "effect/Effect"
+declare const source: Effect.Effect<number, string>
+export const value = source.pipe(mapBoth({
+    onSuccess: n => n + 1,
+    onFailure: e => e.length
+}))
+`,
+					matches: 1, fixes: 1,
+				},
 				{
 					name: "exactReverseOrder",
 					source: `import { Effect } from "effect"

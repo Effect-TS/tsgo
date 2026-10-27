@@ -1,0 +1,133 @@
+==== /.src/mapMapErrorToMapBoth_evaluationOrder.ts (6 flows) ====
+
+=== Piping Flow ===
+Location: 19:31 - 22:2
+Node: Effect.mapErrorEager(\n  Effect.mapEager(Effect.succeed(3), (n) => n * multiplier),\n  makeErrorMapper()\n)
+Node Kind: KindCallExpression
+
+Subject: 3
+Subject Type: 3
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: dataFirst
+      callee: Effect.mapEager
+      args: [(n) => n * multiplier]
+      outType: Effect<number, never, never>
+  [2] kind: dataFirst
+      callee: Effect.mapErrorEager
+      args: [makeErrorMapper()]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 25:38 - 28:2
+Node: Effect.mapEager(\n  Effect.mapErrorEager(Effect.fail("boom"), (message) => message.length * multiplier),\n  makeSuccessMapper()\n)
+Node Kind: KindCallExpression
+
+Subject: "boom"
+Subject Type: "boom"
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, string, never>
+  [1] kind: dataFirst
+      callee: Effect.mapErrorEager
+      args: [(message) => message.length * multiplier]
+      outType: Effect<never, number, never>
+  [2] kind: dataFirst
+      callee: Effect.mapEager
+      args: [makeSuccessMapper()]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 31:37 - 37:2
+Node: Effect.mapErrorEager(\n  Effect.mapEager(Effect.succeed(3), (n) => {\n    errorMapper = (message) => message.length * 2\n    return n\n  }),\n  errorMapper\n)
+Node Kind: KindCallExpression
+
+Subject: 3
+Subject Type: 3
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: dataFirst
+      callee: Effect.mapEager
+      args: [(n) => {\n    errorMapper = (message) => message.length * 2\n    return n\n  }]
+      outType: Effect<number, never, never>
+  [2] kind: dataFirst
+      callee: Effect.mapErrorEager
+      args: [errorMapper]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 40:42 - 45:2
+Node: Effect.mapErrorEager(\n  Effect.mapEager(Effect.succeed(3), (n) => n * multiplier),\n  (function(message: string) {\n    return message.length\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: 3
+Subject Type: 3
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: dataFirst
+      callee: Effect.mapEager
+      args: [(n) => n * multiplier]
+      outType: Effect<number, never, never>
+  [2] kind: dataFirst
+      callee: Effect.mapErrorEager
+      args: [(function(message: string) {\n    return message.length\n  })]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 49:29 - 52:2
+Node: Effect.succeed(3).pipe(\n  Effect.mapEager((n) => n * multiplier),\n  Effect.mapErrorEager(makeErrorMapper())\n)
+Node Kind: KindCallExpression
+
+Subject: 3
+Subject Type: 3
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.mapEager
+      args: [(n) => n * multiplier]
+      outType: Effect<number, never, never>
+  [2] kind: pipeable
+      callee: Effect.mapErrorEager
+      args: [makeErrorMapper()]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 56:30 - 59:2
+Node: Effect.mapError(\n  Effect.map(Effect.succeed(3), (n) => n * multiplier),\n  makeErrorMapper()\n)
+Node Kind: KindCallExpression
+
+Subject: 3
+Subject Type: 3
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n * multiplier]
+      outType: Effect<number, never, never>
+  [2] kind: dataFirst
+      callee: Effect.mapError
+      args: [makeErrorMapper()]
+      outType: Effect<number, number, never>

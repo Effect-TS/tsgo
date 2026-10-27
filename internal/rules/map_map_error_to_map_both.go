@@ -42,8 +42,9 @@ type MapMapErrorToMapBothMatch struct {
 	FirstName, SecondName string
 	ReplacementName       string
 	// FirstFailure is true when the first step transforms the failure channel.
-	FirstFailure                  bool
-	EffectModule                  *ast.Node
+	FirstFailure bool
+	// FirstCallee and SecondCallee are the callees of the two steps in flow order.
+	FirstCallee, SecondCallee     *ast.Node
 	FirstCallback, SecondCallback *ast.Node
 	Fixable                       bool
 }
@@ -93,12 +94,6 @@ func AnalyzeMapMapErrorToMapBoth(tp *typeparser.TypeParser, c *checker.Checker, 
 			if a.eager {
 				replacement = "mapBothEager"
 			}
-			var module *ast.Node
-			if second.Callee().Kind == ast.KindPropertyAccessExpression {
-				module = second.Callee().AsPropertyAccessExpression().Expression
-			} else if first.Callee().Kind == ast.KindPropertyAccessExpression {
-				module = first.Callee().AsPropertyAccessExpression().Expression
-			}
 			matches = append(matches, MapMapErrorToMapBothMatch{
 				SourceFile:      sf,
 				Flow:            flow,
@@ -108,14 +103,29 @@ func AnalyzeMapMapErrorToMapBoth(tp *typeparser.TypeParser, c *checker.Checker, 
 				SecondName:      b.name,
 				ReplacementName: replacement,
 				FirstFailure:    a.failure,
-				EffectModule:    module,
+				FirstCallee:     first.Callee(),
+				SecondCallee:    second.Callee(),
 				FirstCallback:   first.Args().At(0),
 				SecondCallback:  second.Args().At(0),
-				Fixable:         !catchDieHasTypeArguments(&first) && !catchDieHasTypeArguments(&second),
+				Fixable: !catchDieHasTypeArguments(&first) && !catchDieHasTypeArguments(&second) &&
+					mapMapErrorKeepsEvaluationOrder(first, a.eager, second.Args().At(0)),
 			})
 		}
 	}
 	return matches
+}
+
+// mapMapErrorKeepsEvaluationOrder reports whether merging keeps the order of
+// observable work. A nested eager data-first call runs its callback on an
+// already resolved effect before the outer call's callback argument is
+// evaluated, while mapBothEager evaluates both callbacks first. Only a function
+// literal can be evaluated earlier without running user code.
+func mapMapErrorKeepsEvaluationOrder(first typeparser.PipingFlowTransformation, eager bool, secondCallback *ast.Node) bool {
+	if !eager || first.Kind() != typeparser.TransformationKindDataFirst {
+		return true
+	}
+	callback := ast.SkipParentheses(secondCallback)
+	return callback.Kind == ast.KindArrowFunction || callback.Kind == ast.KindFunctionExpression
 }
 
 func classifyMapMapErrorStep(tp *typeparser.TypeParser, step typeparser.PipingFlowTransformation) (mapMapErrorStep, bool) {
