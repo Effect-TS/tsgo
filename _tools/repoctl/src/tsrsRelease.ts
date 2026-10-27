@@ -68,6 +68,7 @@ export const tsrsReleaseLayout = (workDirectory: string, separator = "/") => {
     rawProfiles: join("pgo", "raw"),
     bench: join("pgo", "bench"),
     effectWorkload: join("pgo", "effect"),
+    pnpm: join("pnpm"),
     bolt: join("bolt"),
     llvm: join("llvm"),
     determinismTarget: join("determinism-target")
@@ -184,6 +185,27 @@ const nonEmptyFiles = Effect.fnUntraced(function*(directory: string, prefix: str
     if ((yield* fs.stat(file)).size > 0n) files.push(file)
   }
   return files
+})
+
+// The pnpm version of tsrs/package.json's `packageManager`, without its integrity hash.
+export const parseTsrsPnpmVersion = (packageJson: string): string | undefined => {
+  const packageManager: unknown = JSON.parse(packageJson).packageManager
+  return typeof packageManager === "string" ? /^pnpm@([^+]+)/.exec(packageManager)?.[1] : undefined
+}
+
+// pgo-train.sh installs the bench projects with `pnpm --pm-on-fail=ignore`, which this repository's pnpm does not
+// know: it runs with tsrs's pinned pnpm, as in tsrs's job (setup-node installs the packageManager one). Returns its
+// bin directory.
+const installTsrsPnpm = Effect.fnUntraced(function*(tsrsDirectory: string, layout: TsrsReleaseLayout) {
+  const fs = yield* FileSystem.FileSystem
+  const path = yield* Path.Path
+  const version = parseTsrsPnpmVersion(yield* fs.readFileString(path.join(tsrsDirectory, "package.json")))
+  if (version === undefined) {
+    return yield* new TsrsReleaseError({ reason: "No pnpm packageManager in tsrs/package.json" })
+  }
+  yield* fs.makeDirectory(layout.pnpm, { recursive: true })
+  yield* runCommand("npm", layout.pnpm, ["install", "--prefix", layout.pnpm, "--no-audit", "--no-fund", `pnpm@${version}`])
+  return path.join(layout.pnpm, "node_modules", ".bin")
 })
 
 // tsrs-test reads the conformance fixtures from `<tsrs>/ts-ref/tsc/testdata` and the Go fourslash runner archives
@@ -376,12 +398,13 @@ export const buildOptimizedTsrsBinary = Effect.fnUntraced(function*(
       layout.rawProfiles
     ], false, { ...reference, GITHUB_WORKSPACE: tsrsDirectory, RUNNER_TEMP: layout.work })
   } else {
+    const pnpmBin = yield* installTsrsPnpm(tsrsDirectory, layout)
     yield* runCommand("bash", tsrsDirectory, [
       path.join(".github", "scripts", "pgo-train.sh"),
       instrumented,
       layout.rawProfiles,
       layout.bench
-    ], false, { ...reference, ...libraries })
+    ], false, { ...reference, ...libraries, PATH: `${pnpmBin}:${process.env.PATH ?? ""}` })
   }
   yield* trainEffectWorkload(layout, path.join(instrumented, `tsrs${exe}`), libraries)
   const profile = yield* mergeProfiles(repositoryRoot, layout)
