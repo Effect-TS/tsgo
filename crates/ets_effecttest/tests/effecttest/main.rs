@@ -9,6 +9,7 @@ mod document_symbols_runner_test;
 mod effect_fn_pipeables_test;
 mod effect_sleep_zero_to_yield_now_test;
 mod feature_flags_test;
+mod flat_map_identity_to_flatten_test;
 mod flat_map_to_tap_test;
 mod hover_test;
 mod inlay_hints_baseline_test;
@@ -88,6 +89,7 @@ fn main() {
     trials.extend(effect_fn_pipeables_test::tests());
     trials.extend(effect_sleep_zero_to_yield_now_test::tests());
     trials.extend(flat_map_to_tap_test::tests());
+    trials.extend(flat_map_identity_to_flatten_test::tests());
 
     let conclusion = libtest_mimic::run(&args, trials);
     if !args.list {

@@ -22,4 +22,5 @@ ets_typeparser.workspace = true
 rustc-hash.workspace = true
 
 [dev-dependencies]
+ets_bundledeffect.workspace = true
 ets_etscheckerhooks.workspace = true

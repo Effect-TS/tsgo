@@ -44,24 +44,25 @@ impl ModuleDescriptorId {
     pub(crate) const VitestRunner: ModuleDescriptorId = ModuleDescriptorId(14);
     pub(crate) const Vitest: ModuleDescriptorId = ModuleDescriptorId(15);
     pub(crate) const EffectVitest: ModuleDescriptorId = ModuleDescriptorId(16);
+    pub(crate) const Function: ModuleDescriptorId = ModuleDescriptorId(17);
     #[cfg_attr(not(test), expect(dead_code, reason = "only the tests read it, as in Go"))]
-    pub(crate) const Count: ModuleDescriptorId = ModuleDescriptorId(17);
+    pub(crate) const Count: ModuleDescriptorId = ModuleDescriptorId(18);
 }
 
-// go: internal/typeparser/module_export_reference.go:40 moduleDescriptorMask
+// go: internal/typeparser/module_export_reference.go:41 moduleDescriptorMask
 pub(crate) type ModuleDescriptorMask = u32;
 
-// go: internal/typeparser/module_export_reference.go:42 maxModuleDescriptors
+// go: internal/typeparser/module_export_reference.go:43 maxModuleDescriptors
 pub(crate) const MAX_MODULE_DESCRIPTORS: u8 = 32;
 
-// go: internal/typeparser/module_export_reference.go:44 moduleExportFilter
+// go: internal/typeparser/module_export_reference.go:45 moduleExportFilter
 #[derive(Clone, Copy, Default)]
 pub(crate) struct ModuleExportFilter {
     checked: ModuleDescriptorMask,
     has_declaration: ModuleDescriptorMask,
 }
 
-// go: internal/typeparser/module_export_reference.go:51 moduleExportIdentity
+// go: internal/typeparser/module_export_reference.go:52 moduleExportIdentity
 // moduleExportIdentity is one module file declaring a symbol, with the names
 // that module exports the symbol under.
 #[derive(Clone)]
@@ -73,7 +74,7 @@ pub(crate) struct ModuleExportIdentity {
     export_equals: bool,
 }
 
-// go: internal/typeparser/module_export_reference.go:60 moduleExportNames
+// go: internal/typeparser/module_export_reference.go:61 moduleExportNames
 // moduleExportNames indexes a module's export names by resolved target.
 //
 // Rust: the map is shared between the cache and its readers, as Go's map is when the struct is copied.
@@ -83,7 +84,7 @@ pub(crate) struct ModuleExportNames {
     export_equals: bool,
 }
 
-// go: internal/typeparser/module_export_reference.go:65 newPackageSourceFileDescriptor
+// go: internal/typeparser/module_export_reference.go:66 newPackageSourceFileDescriptor
 pub(crate) const fn new_package_source_file_descriptor(
     id: ModuleDescriptorId,
     package_name: &'static str,
@@ -97,7 +98,7 @@ pub(crate) const fn new_package_source_file_descriptor(
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/module_export_reference.go:80 TypeParser.ReferenceSymbolAtNode
+    // go: internal/typeparser/module_export_reference.go:81 TypeParser.ReferenceSymbolAtNode
     pub fn reference_symbol_at_node(
         &mut self,
         node: impl Into<Option<P<Node>>>,
@@ -119,7 +120,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/module_export_reference.go:98 canHaveSymbolAtLocation
+// go: internal/typeparser/module_export_reference.go:99 canHaveSymbolAtLocation
 // canHaveSymbolAtLocation reports whether the checker's getSymbolAtLocation
 // can return a symbol for a node of this kind: the source file, the
 // declaration names it resolves before its switch, and the kinds its switch
@@ -158,7 +159,7 @@ pub(crate) fn can_have_symbol_at_location(kind: Kind) -> bool {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/module_export_reference.go:115 TypeParser.SymbolAndReferenceSymbolAtNode
+    // go: internal/typeparser/module_export_reference.go:116 TypeParser.SymbolAndReferenceSymbolAtNode
     pub fn symbol_and_reference_symbol_at_node(
         &mut self,
         node: impl Into<Option<P<Node>>>,
@@ -180,7 +181,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/module_export_reference.go:126 TypeParser.referenceSymbolFrom
+    // go: internal/typeparser/module_export_reference.go:127 TypeParser.referenceSymbolFrom
     pub(crate) fn reference_symbol_from(
         &mut self,
         node: P<Node>,
@@ -199,7 +200,7 @@ impl TypeParser<'_> {
         sym
     }
 
-    // go: internal/typeparser/module_export_reference.go:140 TypeParser.resolveConstantAliasSymbol
+    // go: internal/typeparser/module_export_reference.go:141 TypeParser.resolveConstantAliasSymbol
     pub(crate) fn resolve_constant_alias_symbol(
         &mut self,
         sym: Option<P<Symbol>>,
@@ -239,7 +240,7 @@ impl TypeParser<'_> {
         None
     }
 
-    // go: internal/typeparser/module_export_reference.go:168 TypeParser.IsSourceFileInPackage
+    // go: internal/typeparser/module_export_reference.go:169 TypeParser.IsSourceFileInPackage
     pub fn is_source_file_in_package(
         &mut self,
         sf: impl Into<Option<P<SourceFile>>>,
@@ -256,7 +257,7 @@ impl TypeParser<'_> {
         pkg.name.get_value().is_some_and(|name| name.eq_ignore_ascii_case(package_name))
     }
 
-    // go: internal/typeparser/module_export_reference.go:180 TypeParser.IsNodeReferenceToModuleExport
+    // go: internal/typeparser/module_export_reference.go:181 TypeParser.IsNodeReferenceToModuleExport
     pub(crate) fn is_node_reference_to_module_export(
         &mut self,
         node: P<Node>,
@@ -285,7 +286,7 @@ impl TypeParser<'_> {
         false
     }
 
-    // go: internal/typeparser/module_export_reference.go:207 TypeParser.moduleExportIdentities
+    // go: internal/typeparser/module_export_reference.go:208 TypeParser.moduleExportIdentities
     // moduleExportIdentities lists, once per symbol, the modules declaring sym
     // and the names each exports it under. Only files inside a package can match a
     // module descriptor, so other declarations are skipped.
@@ -330,7 +331,7 @@ impl TypeParser<'_> {
         identities
     }
 
-    // go: internal/typeparser/module_export_reference.go:236 TypeParser.moduleExportNamesOf
+    // go: internal/typeparser/module_export_reference.go:237 TypeParser.moduleExportNamesOf
     // moduleExportNamesOf groups a module's export names by the symbol each
     // resolves to, comparing symbols the way getSymbolIfSameReference does.
     pub(crate) fn module_export_names_of(&mut self, sf: P<SourceFile>) -> ModuleExportNames {
@@ -367,14 +368,14 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/module_export_reference.go:257 TypeParser.resolvedTarget
+    // go: internal/typeparser/module_export_reference.go:258 TypeParser.resolvedTarget
     // resolvedTarget mirrors the checker's getResolvedTarget, the key
     // getSymbolIfSameReference compares.
     pub(crate) fn resolved_target(&mut self, sym: Option<P<Symbol>>) -> Option<P<Symbol>> {
         get_resolved_target(self.checker, sym)
     }
 
-    // go: internal/typeparser/module_export_reference.go:264 TypeParser.sourceFileMatchesModuleCached
+    // go: internal/typeparser/module_export_reference.go:265 TypeParser.sourceFileMatchesModuleCached
     pub(crate) fn source_file_matches_module_cached(
         &mut self,
         sf: P<SourceFile>,
@@ -398,7 +399,7 @@ impl TypeParser<'_> {
         self.links().module_file_filter.entry(sf).or_default().has_declaration & bit != 0
     }
 
-    // go: internal/typeparser/module_export_reference.go:276 TypeParser.sourceFileMatchesModule
+    // go: internal/typeparser/module_export_reference.go:277 TypeParser.sourceFileMatchesModule
     pub(crate) fn source_file_matches_module(
         &mut self,
         sf: P<SourceFile>,
@@ -410,7 +411,7 @@ impl TypeParser<'_> {
                 .is_none_or(|matches_source_file| matches_source_file(self, sf))
     }
 
-    // go: internal/typeparser/module_export_reference.go:281 TypeParser.symbolHasDeclarationInModuleCached
+    // go: internal/typeparser/module_export_reference.go:282 TypeParser.symbolHasDeclarationInModuleCached
     pub(crate) fn symbol_has_declaration_in_module_cached(
         &mut self,
         sym: P<Symbol>,
@@ -438,7 +439,7 @@ impl TypeParser<'_> {
         self.links().module_export_filter.entry(sym).or_default().has_declaration & bit != 0
     }
 
-    // go: internal/typeparser/module_export_reference.go:297 TypeParser.symbolHasDeclarationInModule
+    // go: internal/typeparser/module_export_reference.go:298 TypeParser.symbolHasDeclarationInModule
     pub(crate) fn symbol_has_declaration_in_module(
         &mut self,
         sym: P<Symbol>,
@@ -454,7 +455,7 @@ impl TypeParser<'_> {
         false
     }
 
-    // go: internal/typeparser/module_export_reference.go:311 TypeParser.isSymbolExportedFromModuleFile
+    // go: internal/typeparser/module_export_reference.go:312 TypeParser.isSymbolExportedFromModuleFile
     // isSymbolExportedFromModuleFile looks memberName up in one module, including
     // the members of an `export =` value.
     pub(crate) fn is_symbol_exported_from_module_file(
@@ -472,7 +473,7 @@ impl TypeParser<'_> {
         get_symbol_if_same_reference(self.checker, export_sym, Some(sym)).is_some()
     }
 
-    // go: internal/typeparser/module_export_reference.go:320 TypeParser.IsNodeReferenceToModule
+    // go: internal/typeparser/module_export_reference.go:321 TypeParser.IsNodeReferenceToModule
     pub(crate) fn is_node_reference_to_module(
         &mut self,
         node: impl Into<Option<P<Node>>>,
