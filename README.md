@@ -6,7 +6,7 @@ This project targets **Effect V4** (codename: "smol") primarily and also Effect 
 <!-- supported-components:start -->
 ## Supported Package Versions
 
-The following target package versions are supported by `@effect/tsgo@0.60.1`:
+The following target package versions are supported by `@effect/tsgo@0.61.0`:
 
 | Component | Supported versions |
 |---|---|
