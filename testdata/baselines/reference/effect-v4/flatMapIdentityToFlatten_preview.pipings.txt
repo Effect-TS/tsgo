@@ -1,0 +1,15 @@
+==== /.src/flatMapIdentityToFlatten_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 7:23 - 7:71
+Node: loadTask.pipe(Effect.flatMap((inner) => inner))
+Node Kind: KindCallExpression
+
+Subject: loadTask
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(inner) => inner]
+      outType: Effect<string, never, never>

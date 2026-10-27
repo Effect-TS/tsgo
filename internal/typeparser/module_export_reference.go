@@ -34,6 +34,7 @@ const (
 	moduleDescriptorVitestRunner
 	moduleDescriptorVitest
 	moduleDescriptorEffectVitest
+	moduleDescriptorFunction
 	moduleDescriptorCount
 )
 

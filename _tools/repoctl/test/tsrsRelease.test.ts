@@ -135,6 +135,10 @@ test("reads the TypeScript commit tsrs ports from its Cargo.toml", () => {
     ),
     commit
   )
+  assert.equal(
+    parseTsrsTypeScriptCommit(`[workspace.metadata.typescript]\r\nversion = "7.1.0-beta"\r\ncommit = "${commit}"\r\n`),
+    commit
+  )
   assert.equal(parseTsrsTypeScriptCommit(`[package]\ncommit = "${commit}"\n`), undefined)
 })
 

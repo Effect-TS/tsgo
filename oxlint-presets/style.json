@@ -26,6 +26,7 @@
     "effecttsgo/effect-sleep-zero-to-yield-now": "warn",
     "effecttsgo/effect-succeed-with-void": "warn",
     "effecttsgo/flat-map-conditional-to-filter-or-fail": "warn",
+    "effecttsgo/flat-map-identity-to-flatten": "warn",
     "effecttsgo/flat-map-ignored-param-to-and-then": "warn",
     "effecttsgo/flat-map-to-map": "warn",
     "effecttsgo/flat-map-to-tap": "warn",
