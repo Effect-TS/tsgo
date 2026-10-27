@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
 )
@@ -27,7 +28,7 @@ func runFlatMapIgnoredParamToAndThenFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.andThen",
 			Run: func(tracker *rewriter.Tracker) {
-				replaceEffectMethodCallee(tracker, ctx.SourceFile, match.Callee, "andThen")
+				tracker.ReplaceNode(ctx.SourceFile, match.Callee, tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(ctx.SourceFile).Append("andThen")...), nil)
 				tracker.ReplaceNode(ctx.SourceFile, match.Callback, match.EffectValue, nil)
 			},
 		}); action != nil {

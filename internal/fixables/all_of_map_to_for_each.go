@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -36,7 +37,7 @@ func runAllOfMapToForEachFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.forEach",
 			Run: func(tracker *rewriter.Tracker) {
-				callee := effectModuleMethod(tracker, ctx.SourceFile, "forEach")
+				callee := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(ctx.SourceFile).Append("forEach")...)
 				arguments := []*ast.Node{
 					tracker.DeepCloneNode(match.Receiver),
 					tracker.DeepCloneNode(match.Callback),

@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -27,7 +28,7 @@ func runEffectSleepZeroToYieldNowFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.yieldNow",
 			Run: func(tracker *rewriter.Tracker) {
-				replacement := effectModuleMethod(tracker, match.SourceFile, "yieldNow")
+				replacement := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(match.SourceFile).Append("yieldNow")...)
 				if match.Form == rules.YieldNowCall {
 					replacement = tracker.NewCallExpression(replacement, nil, nil, tracker.NewNodeList(nil), ast.NodeFlagsNone)
 				}

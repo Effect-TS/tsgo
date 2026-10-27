@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
 )
@@ -30,7 +31,7 @@ func runSyncToSucceedFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.succeed",
 			Run: func(tracker *rewriter.Tracker) {
-				replaceEffectMethodCallee(tracker, ctx.SourceFile, match.Callee, "succeed")
+				tracker.ReplaceNode(ctx.SourceFile, match.Callee, tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(ctx.SourceFile).Append("succeed")...), nil)
 				tracker.ReplaceNode(ctx.SourceFile, match.Thunk, match.ConstantValue, nil)
 			},
 		}); action != nil {

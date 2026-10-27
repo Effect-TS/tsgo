@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -33,7 +34,7 @@ func runCatchAllToMapErrorFix(ctx *fixable.Context) []ls.CodeAction {
 			Description: "Replace with Effect.mapError",
 			Run: func(tracker *rewriter.Tracker) {
 				// Edit 1: Replace "catch" with "mapError" in the callee
-				replaceEffectMethodCallee(tracker, sf, match.Callee, "mapError")
+				tracker.ReplaceNode(sf, match.Callee, tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(sf).Append("mapError")...), nil)
 
 				// Edit 2: Unwrap "Effect.fail(arg)" to "arg" by deleting prefix and suffix
 				tracker.DeleteRange(sf, core.NewTextRange(match.FailCallExpression.Pos(), match.FailArgument.Pos()))

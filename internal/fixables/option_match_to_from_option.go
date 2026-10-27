@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -59,7 +60,7 @@ func runOptionMatchToFromOptionFix(ctx *fixable.Context) []ls.CodeAction {
 }
 
 func buildFromOptionReplacement(tracker *rewriter.Tracker, sf *ast.SourceFile, match rules.OptionMatchToFromOptionMatch) (*ast.Node, *ast.NodeList) {
-	fromOption := effectModuleMethod(tracker, sf, "fromOption")
+	fromOption := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(sf).Append("fromOption")...)
 
 	if match.DefaultFailure {
 		return fromOption, nil

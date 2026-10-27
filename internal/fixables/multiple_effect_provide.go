@@ -45,7 +45,7 @@ func runMultipleEffectProvideFix(ctx *fixable.Context) []ls.CodeAction {
 				tracker.DeleteRange(sf, core.NewTextRange(tokenPos, endPos))
 
 				// Step 2: Build Effect.provide(Layer.mergeAll(arg1, arg2, ...))
-				provideAccess := effectModuleMethod(tracker, sf, "provide")
+				provideAccess := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(sf).Append("provide")...)
 				mergeAllAccess := tracker.NewPropertyAccessPath(typeparser.FindModuleReference(sf, "Layer").Append("mergeAll")...)
 
 				// Clone all layer arguments

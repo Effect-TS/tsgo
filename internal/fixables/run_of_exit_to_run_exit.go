@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
 )
@@ -34,7 +35,7 @@ func runRunOfExitToRunExitFix(ctx *fixable.Context) []ls.CodeAction {
 				if !removePipingFlowTransformation(tracker, ctx.SourceFile, match.ExitTransformation) {
 					return
 				}
-				replaceEffectMethodCallee(tracker, ctx.SourceFile, match.RunnerCallee, match.ReplacementName)
+				tracker.ReplaceNode(ctx.SourceFile, match.RunnerCallee, tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(ctx.SourceFile).Append(match.ReplacementName)...), nil)
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}

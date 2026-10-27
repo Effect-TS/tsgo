@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
@@ -49,7 +50,7 @@ func runUnnecessaryEffectGenFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Remove the Effect.gen, and keep the body",
 			Run: func(tracker *rewriter.Tracker) {
-				asVoidAccess := effectModuleMethod(tracker, sf, "asVoid")
+				asVoidAccess := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(sf).Append("asVoid")...)
 
 				// Clone the yielded expression
 				clonedExpr := tracker.DeepCloneNode(match.YieldedExpression)

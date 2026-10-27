@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -53,7 +54,7 @@ func runEffectFnIifeFix(ctx *fixable.Context) []ls.CodeAction {
 			clonedGenFn := tracker.DeepCloneNode(genFn.AsNode())
 
 			// Build Effect.gen from the file's Effect import.
-			effectGenAccess := effectModuleMethod(tracker, sf, "gen")
+			effectGenAccess := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(sf).Append("gen")...)
 
 			// Build Effect.gen(genFn) call expression
 			genCallNode := tracker.NewCallExpression(effectGenAccess, nil, nil, tracker.NewNodeList([]*ast.Node{clonedGenFn}), ast.NodeFlagsNone)

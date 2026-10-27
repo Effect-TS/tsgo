@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -57,7 +58,7 @@ func buildCatchTagToCatchReasonReplacement(tracker *rewriter.Tracker, sf *ast.So
 	if len(match.Branches) > 1 {
 		methodName = "catchReasons"
 	}
-	method := effectModuleMethod(tracker, sf, methodName)
+	method := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(sf).Append(methodName)...)
 	arguments := []*ast.Node{tracker.DeepCloneNode(match.OuterTag)}
 	if len(match.Branches) == 1 {
 		branch := match.Branches[0]

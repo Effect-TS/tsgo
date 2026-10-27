@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -31,7 +32,7 @@ func runFlatMapIdentityToFlattenFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.flatten",
 			Run: func(tracker *rewriter.Tracker) {
-				flatten := effectModuleMethod(tracker, match.SourceFile, "flatten")
+				flatten := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(match.SourceFile).Append("flatten")...)
 				ast.SetParentInChildren(flatten)
 				tracker.ReplacePipingFlowTransformation(match.SourceFile, match.Transformation, rewriter.PipingFlowTransformationReplacement{
 					Callee: flatten,
