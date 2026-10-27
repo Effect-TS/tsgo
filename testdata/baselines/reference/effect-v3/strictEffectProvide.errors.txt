@@ -3,7 +3,7 @@ Effect version: 3.19.19
 
 /.src/strictEffectProvide.ts(16,3): warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
 /.src/strictEffectProvide.ts(20,30): warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
-/.src/strictEffectProvide.ts(24,3): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/strictEffectProvide.ts(24,3): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
 /.src/strictEffectProvide.ts(25,3): warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
 /.src/strictEffectProvide.ts(31,3): warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
 
@@ -38,7 +38,7 @@ Effect version: 3.19.19
     export const shouldReport3 = Effect.void.pipe(
       Effect.map(() => 42),
       ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
       Effect.provide(MyService1.Default),
       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)

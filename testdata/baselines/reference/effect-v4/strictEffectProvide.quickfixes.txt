@@ -8,7 +8,7 @@
   Fix 0: "Disable strictEffectProvide for this line"
   Fix 1: "Disable strictEffectProvide for entire file"
 
-[D3] (26:3-26:13) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D3] (26:3-26:13) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"

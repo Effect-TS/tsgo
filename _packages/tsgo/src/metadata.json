@@ -2676,7 +2676,7 @@
         "v4"
       ],
       "codes": [
-        377151
+        377152
       ],
       "preview": {
         "sourceText": "import { Effect } from \"effect\"\n\nconst saveUser = (name: string): Effect.Effect\u003cnumber\u003e =\u003e Effect.succeed(name.length)\n\nexport const saved = saveUser(\"alice\").pipe(Effect.map(() =\u003e \"saved\"))\n",

@@ -1,32 +1,32 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/mapConstToAs.ts(18,45): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(21,52): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(24,50): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(27,49): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(28,49): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(29,46): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(30,48): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(33,50): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(36,48): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(39,45): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(42,48): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(45,51): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(48,44): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(53,53): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(58,41): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(61,26): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(64,25): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(67,48): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(71,45): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(75,28): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(81,3): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(18,45): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(21,52): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(24,50): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(27,49): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(28,49): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(29,46): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(30,48): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(33,50): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(36,48): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(39,45): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(42,48): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(45,51): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(48,44): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(53,53): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(58,41): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(61,26): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(64,25): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(67,48): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(71,45): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(75,28): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(81,3): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
 /.src/mapConstToAs.ts(134,48): suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
 /.src/mapConstToAs.ts(135,43): suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
 /.src/mapConstToAs.ts(136,49): suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
-/.src/mapConstToAs.ts(173,76): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
-/.src/mapConstToAs.ts(176,53): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(173,76): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs.ts(176,53): suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
 
 
 ==== /.src/mapConstToAs.ts (26 errors) ====
@@ -49,102 +49,102 @@ Effect version: 3.19.19
     // MUST TRIGGER: string literal body in a pipeable flow (issue example)
     export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
                                                 ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     
     // MUST TRIGGER: declared const identifier body (issue example)
     export const ready = client.query("select 1").pipe(Effect.map(() => client))
                                                        ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     
     // MUST TRIGGER: initialized const identifier declared before the call
     export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
                                                      ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     
     // MUST TRIGGER: numeric, boolean, null and bigint literal bodies
     export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
                                                     ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
                                                     ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
                                                  ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
                                                    ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     
     // MUST TRIGGER: negative numeric literal
     export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
                                                      ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     
     // MUST TRIGGER: template literal without substitutions
     export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
                                                    ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     
     // MUST TRIGGER: enum member
     export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
                                                 ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     
     // MUST TRIGGER: parenthesized constant body
     export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
                                                    ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     
     // MUST TRIGGER: sole parameter is declared but never referenced
     export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
                                                       ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     
     // MUST TRIGGER: block body with a single return of a constant
     export const blockBody = numberEffect.pipe(Effect.map(() => {
                                                ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
       return "saved"
     }))
     
     // MUST TRIGGER: function expression returning a constant
     export const functionExpression = numberEffect.pipe(Effect.map(function() {
                                                         ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
       return "saved"
     }))
     
     // MUST TRIGGER: pipe function form
     export const piped = pipe(numberEffect, Effect.map(() => "saved"))
                                             ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     
     // MUST TRIGGER: data-first form
     export const dataFirst = Effect.map(numberEffect, () => "saved")
                              ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     
     // MUST TRIGGER: data-last form applied directly
     export const dataLast = Effect.map(() => "saved")(numberEffect)
                             ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     
     // MUST TRIGGER: aliased module import
     export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
                                                    ~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     
     // MUST TRIGGER: the API reference is hidden behind a const alias
     const mapAlias = Effect.map
     export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
                                                 ~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     
     // MUST TRIGGER: const identifier referenced from a nested scope
     export function nestedScope() {
       return numberEffect.pipe(Effect.map(() => status))
                                ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     }
     
     // MUST TRIGGER: constant map inside a longer pipe chain
@@ -152,7 +152,7 @@ Effect version: 3.19.19
       Effect.tap(() => Effect.void),
       Effect.map(() => "saved"),
       ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
       Effect.map((value) => value.length)
     )
     
@@ -252,12 +252,12 @@ Effect version: 3.19.19
     // MUST TRIGGER: a contextual expected type infers the same success type for Effect.as
     export const contextuallyTyped: Effect.Effect<"saved"> = numberEffect.pipe(Effect.map(() => "saved"))
                                                                                ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     
     // MUST TRIGGER: an annotated but unused parameter does not affect the success type
     export const annotatedParameter = numberEffect.pipe(Effect.map((_: number) => "saved"))
                                                         ~~~~~~~~~~
-!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! suggestion TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     
     void mutable
     

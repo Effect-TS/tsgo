@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.2
 
-/.src/mapConstToAs_preview.ts(7,45): warning TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/mapConstToAs_preview.ts(7,45): warning TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
 
 
 ==== /.src/mapConstToAs_preview.ts (1 errors) ====
@@ -13,5 +13,5 @@ Effect version: 4.0.2
     
     export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
                                                 ~~~~~~~~~~
-!!! warning TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+!!! warning TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     

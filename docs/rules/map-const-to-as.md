@@ -10,7 +10,7 @@ Suggests using Effect.as instead of Effect.map when the callback ignores its inp
 | Default severity | `suggestion` |
 | Fixable | Yes |
 | Effect versions | v3, v4 |
-| Diagnostic codes | `TS377151` |
+| Diagnostic codes | `TS377152` |
 | Language Service name | `mapConstToAs` |
 | Oxlint name | `effecttsgo/map-const-to-as` |
 

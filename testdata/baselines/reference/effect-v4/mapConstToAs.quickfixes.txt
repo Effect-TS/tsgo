@@ -1,96 +1,96 @@
 === Quick Fix Inventory ===
 
-[D1] (18:45-18:55) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D1] (18:45-18:55) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D2] (21:52-21:62) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D2] (21:52-21:62) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D3] (24:50-24:60) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D3] (24:50-24:60) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D4] (27:49-27:59) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D4] (27:49-27:59) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D5] (28:49-28:59) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D5] (28:49-28:59) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D6] (29:46-29:56) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D6] (29:46-29:56) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D7] (30:48-30:58) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D7] (30:48-30:58) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D8] (33:50-33:60) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D8] (33:50-33:60) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D9] (36:48-36:58) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D9] (36:48-36:58) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D10] (39:45-39:55) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D10] (39:45-39:55) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D11] (42:48-42:58) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D11] (42:48-42:58) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D12] (45:51-45:61) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D12] (45:51-45:61) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D13] (48:44-48:54) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D13] (48:44-48:54) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D14] (53:53-53:63) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D14] (53:53-53:63) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D15] (58:41-58:51) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D15] (58:41-58:51) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D16] (61:26-61:36) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D16] (61:26-61:36) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D17] (64:25-64:35) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D17] (64:25-64:35) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D18] (67:48-67:54) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D18] (67:48-67:54) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D19] (71:45-71:53) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D19] (71:45-71:53) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
@@ -99,12 +99,12 @@
   Fix 0: "Disable lazyEffect for this line"
   Fix 1: "Disable lazyEffect for entire file"
 
-[D21] (75:28-75:38) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D21] (75:28-75:38) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D22] (81:3-81:13) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D22] (81:3-81:13) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
@@ -124,12 +124,12 @@
   Fix 1: "Disable effectMapVoid for entire file"
   Fix 2: "Replace with Effect.asVoid"
 
-[D26] (173:76-173:86) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D26] (173:76-173:86) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
 
-[D27] (176:53-176:63) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D27] (176:53-176:63) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"

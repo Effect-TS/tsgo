@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (7:45-7:55) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+[D1] (7:45-7:55) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
   Fix 0: "Disable mapConstToAs for this line"
   Fix 1: "Disable mapConstToAs for entire file"
   Fix 2: "Replace with Effect.as"
