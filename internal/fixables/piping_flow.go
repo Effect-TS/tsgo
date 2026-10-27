@@ -13,7 +13,8 @@ import (
 // without steps collapses to its subject, and a data-first, data-last or unary
 // application is replaced by its subject, parenthesized when the subject binds
 // less tightly than the call it replaces. It edits nothing and returns false
-// when the step's shape is not recognized.
+// when the step's shape is not recognized, or when the subject would newly start
+// an expression statement with a token that continues the previous statement.
 func removePipingFlowTransformation(tracker *rewriter.Tracker, sf *ast.SourceFile, transformation *typeparser.PipingFlowTransformation) bool {
 	if tracker == nil || sf == nil || transformation == nil || transformation.Callee() == nil {
 		return false
@@ -48,7 +49,11 @@ func removePipingFlowTransformation(tracker *rewriter.Tracker, sf *ast.SourceFil
 		if subject == nil {
 			return false
 		}
-		tracker.ReplaceNode(sf, callNode, subjectInCallPosition(tracker, callNode, subject), nil)
+		replacement := subjectInCallPosition(tracker, sf, callNode, subject)
+		if replacement == nil {
+			return false
+		}
+		tracker.ReplaceNode(sf, callNode, replacement, nil)
 		return true
 
 	case typeparser.TransformationKindPipe, typeparser.TransformationKindPipeable,
@@ -76,7 +81,11 @@ func removePipingFlowTransformation(tracker *rewriter.Tracker, sf *ast.SourceFil
 			if subject == nil {
 				return false
 			}
-			tracker.ReplaceNode(sf, callNode, subjectInCallPosition(tracker, callNode, subject), nil)
+			replacement := subjectInCallPosition(tracker, sf, callNode, subject)
+			if replacement == nil {
+				return false
+			}
+			tracker.ReplaceNode(sf, callNode, replacement, nil)
 			return true
 		}
 
@@ -102,12 +111,97 @@ func removePipingFlowTransformation(tracker *rewriter.Tracker, sf *ast.SourceFil
 // over a following member access) is parenthesized unless the position accepts
 // any expression. Object, function and class expressions are always
 // parenthesized because they could start an expression statement.
-func subjectInCallPosition(tracker *rewriter.Tracker, position *ast.Node, subject *ast.Node) *ast.Node {
+//
+// It returns nil when the replacement would newly begin an expression statement
+// with a token that continues the previous statement when that one has no
+// semicolon, for example `(cond ? a : b).pipe(...)` on the line after
+// `const x = y`. The fix is then withheld instead of adding a semicolon,
+// whether or not the previous statement already ends with one.
+func subjectInCallPosition(tracker *rewriter.Tracker, sf *ast.SourceFile, position *ast.Node, subject *ast.Node) *ast.Node {
+	parenthesize := subjectNeedsParentheses(position, subject)
+	leading := ast.KindOpenParenToken
+	if !parenthesize {
+		leading = leadingTokenKind(subject)
+	}
+	if continuesPreviousStatement(leading) && leading != leadingTokenKind(position) &&
+		startsExpressionStatement(sf, position) {
+		return nil
+	}
 	clone := tracker.DeepCloneNode(subject)
-	if subjectNeedsParentheses(position, subject) {
+	if parenthesize {
 		return tracker.NewParenthesizedExpression(clone)
 	}
 	return clone
+}
+
+// startsExpressionStatement reports whether node begins the expression
+// statement that contains it.
+func startsExpressionStatement(sf *ast.SourceFile, node *ast.Node) bool {
+	start := scanner.GetTokenPosOfNode(node, sf, false)
+	for parent := node.Parent; parent != nil; parent = parent.Parent {
+		if scanner.GetTokenPosOfNode(parent, sf, false) != start {
+			return false
+		}
+		if parent.Kind == ast.KindExpressionStatement {
+			return true
+		}
+	}
+	return false
+}
+
+// leadingTokenKind returns the kind of an expression's first token, as far as
+// continuesPreviousStatement needs to tell tokens apart.
+func leadingTokenKind(node *ast.Node) ast.Kind {
+	for node != nil {
+		switch node.Kind {
+		case ast.KindParenthesizedExpression:
+			return ast.KindOpenParenToken
+		case ast.KindArrayLiteralExpression:
+			return ast.KindOpenBracketToken
+		case ast.KindNoSubstitutionTemplateLiteral, ast.KindTemplateExpression:
+			return ast.KindNoSubstitutionTemplateLiteral
+		case ast.KindRegularExpressionLiteral:
+			return ast.KindSlashToken
+		case ast.KindTypeAssertionExpression:
+			return ast.KindLessThanToken
+		case ast.KindPrefixUnaryExpression:
+			return node.AsPrefixUnaryExpression().Operator
+		case ast.KindPropertyAccessExpression:
+			node = node.AsPropertyAccessExpression().Expression
+		case ast.KindElementAccessExpression:
+			node = node.AsElementAccessExpression().Expression
+		case ast.KindCallExpression:
+			node = node.AsCallExpression().Expression
+		case ast.KindTaggedTemplateExpression:
+			node = node.AsTaggedTemplateExpression().Tag
+		case ast.KindNonNullExpression:
+			node = node.AsNonNullExpression().Expression
+		case ast.KindBinaryExpression:
+			node = node.AsBinaryExpression().Left
+		case ast.KindConditionalExpression:
+			node = node.AsConditionalExpression().Condition
+		case ast.KindAsExpression:
+			node = node.AsAsExpression().Expression
+		case ast.KindSatisfiesExpression:
+			node = node.AsSatisfiesExpression().Expression
+		case ast.KindPostfixUnaryExpression:
+			node = node.AsPostfixUnaryExpression().Operand
+		default:
+			return node.Kind
+		}
+	}
+	return ast.KindUnknown
+}
+
+// continuesPreviousStatement reports whether a statement beginning with token
+// is parsed as a continuation of a previous statement that has no semicolon.
+func continuesPreviousStatement(token ast.Kind) bool {
+	switch token {
+	case ast.KindOpenParenToken, ast.KindOpenBracketToken, ast.KindNoSubstitutionTemplateLiteral,
+		ast.KindPlusToken, ast.KindMinusToken, ast.KindSlashToken, ast.KindLessThanToken:
+		return true
+	}
+	return false
 }
 
 func subjectNeedsParentheses(position *ast.Node, subject *ast.Node) bool {

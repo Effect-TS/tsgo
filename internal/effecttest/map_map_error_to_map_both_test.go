@@ -74,6 +74,8 @@ func TestMapMapErrorToMapBothFixesCompile(t *testing.T) {
 				{name: "mapMapErrorToMapBoth_calleeExpressions.ts", matches: 4, fixes: 1},
 				// A low-precedence subject that becomes a receiver must be parenthesized.
 				{name: "mapMapErrorToMapBoth_precedence.ts", matches: 8, fixes: 8},
+				// No fix may newly start a statement with `(`, which joins it onto the previous line.
+				{name: "mapMapErrorToMapBoth_asi.ts", matches: 6, fixes: 3},
 				{
 					name: "exactCrossPipe",
 					source: `import { Effect } from "effect"

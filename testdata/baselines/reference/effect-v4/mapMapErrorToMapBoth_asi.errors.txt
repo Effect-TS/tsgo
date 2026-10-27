@@ -1,0 +1,59 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/mapMapErrorToMapBoth_asi.ts(13,45): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_asi.ts(17,36): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_asi.ts(21,51): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_asi.ts(25,3): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_asi.ts(30,34): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_asi.ts(34,53): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+
+
+==== /.src/mapMapErrorToMapBoth_asi.ts (6 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics mapMapErrorToMapBoth:warning
+    import { Effect, pipe } from "effect"
+    
+    declare const flag: boolean
+    declare const a: Effect.Effect<number, string>
+    declare const b: Effect.Effect<number, string>
+    declare const record: (value: unknown) => void
+    
+    // MUST TRIGGER (no quickfix): the fix would start the next statement with `(`, which joins
+    // it onto this line when the line has no semicolon
+    const previous = Effect.void
+    Effect.map(flag ? a : b, (n) => n + 1).pipe(Effect.mapError((message) => message.length))
+                                                ~~~~~~~~~~~~~~~
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+    
+    // MUST TRIGGER (no quickfix): a subject parenthesized in the source would also start the statement with `(`
+    record(previous)
+    Effect.map((a), (n) => n + 1).pipe(Effect.mapError((message) => message.length))
+                                       ~~~~~~~~~~~~~~~
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+    
+    // MUST TRIGGER (no quickfix): a function pipe collapsing to a parenthesized subject at the start of a statement
+    record(previous)
+    pipe(flag ? a : b, Effect.map((n) => n + 1)).pipe(Effect.mapError((message) => message.length))
+                                                      ~~~~~~~~~~~~~~~
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+    
+    // MUST TRIGGER: the parenthesized subject is not at the start of a statement; the quickfix is offered
+    export const notAtStatementStart = Effect.map(flag ? a : b, (n) => n + 1).pipe(
+      Effect.mapError((message) => message.length)
+      ~~~~~~~~~~~~~~~
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+    )
+    
+    // MUST TRIGGER: an identifier subject at the start of a statement needs no parentheses; the quickfix is offered
+    record(previous)
+    Effect.map(a, (n) => n + 1).pipe(Effect.mapError((message) => message.length))
+                                     ~~~~~~~~~~~~~~~
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+    
+    // MUST TRIGGER: the statement already starts with `(`, so the fix adds no new leading token; the quickfix is offered
+    record(previous)
+    ;(flag ? a : b).pipe(Effect.map((n) => n + 1)).pipe(Effect.mapError((message) => message.length))
+                                                        ~~~~~~~~~~~~~~~
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+    
