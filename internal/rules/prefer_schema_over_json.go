@@ -67,7 +67,7 @@ func checkPreferSchemaOverJson(ctx *rule.Context, node *ast.Node, isV4 bool) *as
 
 func preferSchemaOverJsonRecommendation(isV4 bool) string {
 	if isV4 {
-		return "Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings."
+		return "Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings."
 	}
 
 	return "Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones."

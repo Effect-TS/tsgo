@@ -23,7 +23,7 @@ export const preview = Effect.gen(function*() {
   const text = yield* Effect.succeed('{"ok":true}')
   return JSON.parse(text)
 /**
-         ^^^^^^^^^^^^^^^^ effecttsgo(prefer-schema-over-json): This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings.
+         ^^^^^^^^^^^^^^^^ effecttsgo(prefer-schema-over-json): This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings.
 */
 })
 ```
