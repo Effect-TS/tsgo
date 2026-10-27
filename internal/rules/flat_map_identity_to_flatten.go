@@ -2,7 +2,6 @@ package rules
 
 import (
 	"github.com/effect-ts/tsgo/etscore"
-	"github.com/effect-ts/tsgo/internal/readonly"
 	"github.com/effect-ts/tsgo/internal/rule"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
@@ -42,9 +41,9 @@ type FlatMapIdentityToFlattenMatch struct {
 	EffectModuleNode *ast.Node
 }
 
-// AnalyzeFlatMapIdentityToFlatten finds Effect.flatMap steps, in any call style,
-// whose callback is Effect's identity export referenced directly, or an
-// unannotated arrow returning its own parameter.
+// AnalyzeFlatMapIdentityToFlatten finds Effect.flatMap steps whose callback is
+// Effect's identity export referenced directly, or an unannotated arrow
+// returning its own parameter.
 func AnalyzeFlatMapIdentityToFlatten(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.SourceFile) []FlatMapIdentityToFlattenMatch {
 	var matches []FlatMapIdentityToFlattenMatch
 	flows := tp.PipingFlows(sf, true)
@@ -52,14 +51,6 @@ func AnalyzeFlatMapIdentityToFlatten(tp *typeparser.TypeParser, _ *checker.Check
 		for i, step := range flow.Transformations().All() {
 			callee := step.Callee()
 			args := step.Args()
-			if step.Kind() == typeparser.TransformationKindCall && callee != nil && callee.Kind == ast.KindCallExpression {
-				factory := callee.AsCallExpression()
-				if factory.Arguments != nil && len(factory.Arguments.Nodes) == 1 && factory.TypeArguments == nil &&
-					tp.IsNodeReferenceToEffectModuleApi(factory.Expression, "flatMap") {
-					callee = factory.Expression
-					args = readonly.New(factory.Arguments.Nodes)
-				}
-			}
 			if callee == nil || args.Len() != 1 || step.TypeArguments() != nil ||
 				callee.Flags&ast.NodeFlagsOptionalChain != 0 ||
 				!tp.IsNodeReferenceToEffectModuleApi(callee, "flatMap") ||

@@ -39,15 +39,15 @@ export const typedAliasExact = source.pipe(Effect.flatMap(exactAlias))
 const unwrapAnySuccess: (x: Effect.Effect<string>) => Effect.Effect<any> = identity
 export const typedAliasAnySuccess = source.pipe(Effect.flatMap(unwrapAnySuccess))
 `, &rules.FlatMapIdentityToFlatten)
-			if len(preview.Diagnostics) != 3 {
-				t.Fatalf("expected only the valid, named-import and data-last identity callbacks to match, got %d diagnostics: %+v", len(preview.Diagnostics), preview.Diagnostics)
+			if len(preview.Diagnostics) != 2 {
+				t.Fatalf("expected only the valid and named-import callbacks to match, got %d diagnostics: %+v", len(preview.Diagnostics), preview.Diagnostics)
 			}
-			for i, want := range []string{"Effect.flatMap", "flatMap", "Effect.flatMap"} {
+			for i, want := range []string{"Effect.flatMap", "flatMap"} {
 				if got := preview.SourceText[preview.Diagnostics[i].Start:preview.Diagnostics[i].End]; got != want {
 					t.Errorf("diagnostic %d covers %q, want %q", i, got, want)
 				}
 			}
-			for i, want := range []int{4, 5, 17} {
+			for i, want := range []int{4, 5} {
 				if line := strings.Count(preview.SourceText[:preview.Diagnostics[i].Start], "\n"); line != want {
 					t.Errorf("diagnostic %d on line %d, want %d", i, line, want)
 				}
