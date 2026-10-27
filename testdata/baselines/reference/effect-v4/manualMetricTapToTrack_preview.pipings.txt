@@ -1,0 +1,43 @@
+==== /.src/manualMetricTapToTrack_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 5:21 - 5:51
+Node: Metric.gauge("response_size")
+Node Kind: KindCallExpression
+
+Subject: "response_size"
+Subject Type: "response_size"
+
+Transformations (1):
+  [0] kind: call
+      callee: Metric.gauge
+      args: (constant)
+      outType: Gauge<number>
+
+=== Piping Flow ===
+Location: 9:28 - 9:104
+Node: handleRequest.pipe(Effect.tap((size) => Metric.update(responseSize, size)))
+Node Kind: KindCallExpression
+
+Subject: handleRequest
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.tap
+      args: [(size) => Metric.update(responseSize, size)]
+      outType: Effect<number, Error, never>
+
+=== Piping Flow ===
+Location: 9:68 - 9:102
+Node: Metric.update(responseSize, size)
+Node Kind: KindCallExpression
+
+Subject: responseSize
+Subject Type: Gauge<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Metric.update
+      args: [size]
+      outType: Effect<void, never, never>

@@ -606,5 +606,9 @@
     "`Effect.{0}` + `Effect.{1}` transform the success and failure channels one step at a time; `Effect.{2}` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)": {
         "category": "Suggestion",
         "code": 377153
+    },
+    "`Effect.{0}` expresses recording a metric on every {1} directly. effect(manualMetricTapToTrack)": {
+        "category": "Suggestion",
+        "code": 377154
     }
 }

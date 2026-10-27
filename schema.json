@@ -2644,6 +2644,11 @@
           "default": "suggestion",
           "description": "Detects implementation services leaked in service methods"
         },
+        "manualMetricTapToTrack": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.trackSuccesses/trackErrors/trackDefects when an Effect.tap/tapError/tapDefect only updates a metric"
+        },
         "mapConstToAs": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

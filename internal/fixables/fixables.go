@@ -31,6 +31,7 @@ var All = []fixable.Fixable{
 	FlatMapConditionalToFilterOrFailFix,
 	MapSomeToAsSomeFix,
 	MapConstToAsFix,
+	ManualMetricTapToTrackFix,
 	OptionMatchToFromOptionFix,
 	SyncToSucceedFix,
 	EffectSleepZeroToYieldNowFix,

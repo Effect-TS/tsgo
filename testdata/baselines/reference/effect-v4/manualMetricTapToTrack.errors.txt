@@ -1,0 +1,360 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/manualMetricTapToTrack.ts(32,3): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(33,3): warning TS377154: `Effect.trackErrors` expresses recording a metric on every error directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(34,3): warning TS377154: `Effect.trackDefects` expresses recording a metric on every defect directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(40,3): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(41,3): warning TS377154: `Effect.trackDefects` expresses recording a metric on every defect directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(47,3): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(52,3): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(59,3): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(60,3): warning TS377154: `Effect.trackErrors` expresses recording a metric on every error directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(66,3): warning TS377154: `Effect.trackErrors` expresses recording a metric on every error directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(69,3): warning TS377154: `Effect.trackDefects` expresses recording a metric on every defect directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(75,3): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(80,3): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(86,3): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(91,3): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(96,3): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(103,3): warning TS377154: `Effect.trackErrors` expresses recording a metric on every error directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(110,3): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(114,42): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(118,26): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(119,32): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(120,31): warning TS377154: `Effect.trackErrors` expresses recording a metric on every error directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(123,25): warning TS377154: `Effect.trackErrors` expresses recording a metric on every error directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(127,3): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(128,3): warning TS377154: `Effect.trackDefects` expresses recording a metric on every defect directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(134,47): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(141,3): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(142,3): warning TS377154: `Effect.trackErrors` expresses recording a metric on every error directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(148,3): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/manualMetricTapToTrack.ts(154,29): warning TS377154: `Effect.trackErrors` expresses recording a metric on every error directly. effect(manualMetricTapToTrack)
+
+
+==== /.src/manualMetricTapToTrack.ts (30 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics manualMetricTapToTrack:warning
+    import * as Fx from "effect/Effect"
+    import * as M from "effect/Metric"
+    import { Effect, Metric, pipe, Stream } from "effect"
+    
+    const responseSize = Metric.gauge("response_size")
+    const requestErrors = Metric.counter("request_errors")
+    const requestDefects = Metric.counter("request_defects")
+    const rpcSuccesses = Metric.counter("rpc_successes")
+    const userCount = Metric.gauge("user_count")
+    const errorsByTag = Metric.frequency("errors_by_tag")
+    const defectsSeen = Metric.frequency("defects_seen")
+    const bigintGauge = Metric.gauge("bigint_gauge", { bigint: true })
+    const metrics = { requests: Metric.counter("requests") }
+    let mutableCounter = Metric.counter("mutable_counter")
+    
+    type Failure = { readonly _tag: "NotFound" } | { readonly _tag: "Timeout" }
+    
+    declare const handleRequest: Effect.Effect<number, Error>
+    declare const fetchUsers: Effect.Effect<ReadonlyArray<string>, Failure>
+    declare const failsWithString: Effect.Effect<number, string>
+    declare const bigintEffect: Effect.Effect<bigint>
+    declare const computeSize: () => number
+    declare const metricFor: (tag: string) => Metric.Metric<number, Metric.CounterState<number>>
+    
+    // MUST TRIGGER: issue example, tap / tapError / tapDefect each only update one metric
+    // tap -> Effect.trackSuccesses(responseSize) (input is the parameter verbatim)
+    // tapError -> Effect.trackErrors(requestErrors, () => 1) (unused parameter, constant input)
+    // tapDefect -> Effect.trackDefects(requestDefects, () => 1)
+    export const issueExample = handleRequest.pipe(
+      Effect.tap((size) => Metric.update(responseSize, size)),
+      ~~~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+      Effect.tapError(() => Metric.update(requestErrors, 1)),
+      ~~~~~~~~~~~~~~~
+!!! warning TS377154: `Effect.trackErrors` expresses recording a metric on every error directly. effect(manualMetricTapToTrack)
+      Effect.tapDefect(() => Metric.update(requestDefects, 1))
+      ~~~~~~~~~~~~~~~~
+!!! warning TS377154: `Effect.trackDefects` expresses recording a metric on every defect directly. effect(manualMetricTapToTrack)
+    )
+    
+    // MUST TRIGGER: Effect.tap direct-effect overload (Effect-TS/effect rpc-schemas fixture)
+    // -> Effect.trackSuccesses(Metric.withConstantInput(rpcSuccesses, 1))
+    export const directEffect = handleRequest.pipe(
+      Effect.tap(Metric.update(rpcSuccesses, 1)),
+      ~~~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+      Effect.tapDefect(() => Metric.update(requestDefects, 1))
+      ~~~~~~~~~~~~~~~~
+!!! warning TS377154: `Effect.trackDefects` expresses recording a metric on every defect directly. effect(manualMetricTapToTrack)
+    )
+    
+    // MUST TRIGGER: direct-effect overload with a computed input; the input is evaluated
+    // once when the pipeline is built in both spellings, so withConstantInput keeps that
+    export const directEffectComputedInput = handleRequest.pipe(
+      Effect.tap(Metric.update(userCount, computeSize()))
+      ~~~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+    )
+    
+    // MUST TRIGGER: direct-effect overload with an inline metric; it is built once in both spellings
+    export const directEffectInlineMetric = handleRequest.pipe(
+      Effect.tap(Metric.update(Metric.counter("inline_successes"), 1))
+      ~~~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+    )
+    
+    // MUST TRIGGER: input is an expression of the parameter -> mapper overload
+    // -> Effect.trackSuccesses(userCount, (users) => users.length)
+    // -> Effect.trackErrors(errorsByTag, (error) => error._tag)
+    export const mapperInput = fetchUsers.pipe(
+      Effect.tap((users) => Metric.update(userCount, users.length)),
+      ~~~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+      Effect.tapError((error) => Metric.update(errorsByTag, error._tag))
+      ~~~~~~~~~~~~~~~
+!!! warning TS377154: `Effect.trackErrors` expresses recording a metric on every error directly. effect(manualMetricTapToTrack)
+    )
+    
+    // MUST TRIGGER: tapError / tapDefect with the parameter as the input verbatim
+    // -> Effect.trackErrors(errorsByTag) / Effect.trackDefects(defectsSeen, ...)
+    export const errorVerbatim = failsWithString.pipe(
+      Effect.tapError((error) => Metric.update(errorsByTag, error))
+      ~~~~~~~~~~~~~~~
+!!! warning TS377154: `Effect.trackErrors` expresses recording a metric on every error directly. effect(manualMetricTapToTrack)
+    )
+    export const defectMapped = handleRequest.pipe(
+      Effect.tapDefect((defect) => Metric.update(defectsSeen, String(defect)))
+      ~~~~~~~~~~~~~~~~
+!!! warning TS377154: `Effect.trackDefects` expresses recording a metric on every defect directly. effect(manualMetricTapToTrack)
+    )
+    
+    // MUST TRIGGER: constant input computed per run; the mapper form keeps per-run evaluation
+    // -> Effect.trackSuccesses(userCount, () => computeSize())
+    export const perRunConstantInput = handleRequest.pipe(
+      Effect.tap(() => Metric.update(userCount, computeSize()))
+      ~~~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+    )
+    
+    // MUST TRIGGER: ignored but named parameter
+    export const ignoredParameter = handleRequest.pipe(
+      Effect.tap((_) => Metric.update(rpcSuccesses, 1))
+      ~~~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+    )
+    
+    // MUST TRIGGER: destructured parameter; the mapper keeps the parameter list
+    // -> Effect.trackSuccesses(userCount, ({ length }) => length)
+    export const destructuredParameter = fetchUsers.pipe(
+      Effect.tap(({ length }) => Metric.update(userCount, length))
+      ~~~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+    )
+    
+    // MUST TRIGGER: bigint gauge fed with the success value verbatim
+    export const bigintVerbatim = bigintEffect.pipe(
+      Effect.tap((value) => Metric.update(bigintGauge, value))
+      ~~~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+    )
+    
+    // MUST TRIGGER: block body with a single return of the metric update
+    export const blockBody = handleRequest.pipe(
+      Effect.tap((size) => {
+      ~~~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+        return Metric.update(responseSize, size)
+      })
+    )
+    
+    // MUST TRIGGER: function expression callback
+    export const functionExpression = handleRequest.pipe(
+      Effect.tapError(function() {
+      ~~~~~~~~~~~~~~~
+!!! warning TS377154: `Effect.trackErrors` expresses recording a metric on every error directly. effect(manualMetricTapToTrack)
+        return Metric.update(requestErrors, 1)
+      })
+    )
+    
+    // MUST TRIGGER: parenthesized callback body
+    export const parenthesizedBody = handleRequest.pipe(
+      Effect.tap((size) => (Metric.update(responseSize, size)))
+      ~~~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+    )
+    
+    // MUST TRIGGER: pipe function form
+    export const piped = pipe(handleRequest, Effect.tap((size) => Metric.update(responseSize, size)))
+                                             ~~~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+    
+    // MUST TRIGGER: data-first forms (callback and direct effect)
+    // -> Effect.trackSuccesses(handleRequest, responseSize)
+    export const dataFirst = Effect.tap(handleRequest, (size) => Metric.update(responseSize, size))
+                             ~~~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+    export const dataFirstDirect = Effect.tap(handleRequest, Metric.update(rpcSuccesses, 1))
+                                   ~~~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+    export const dataFirstError = Effect.tapError(handleRequest, () => Metric.update(requestErrors, 1))
+                                  ~~~~~~~~~~~~~~~
+!!! warning TS377154: `Effect.trackErrors` expresses recording a metric on every error directly. effect(manualMetricTapToTrack)
+    
+    // MUST TRIGGER: data-last form applied directly
+    export const dataLast = Effect.tapError(() => Metric.update(requestErrors, 1))(handleRequest)
+                            ~~~~~~~~~~~~~~~
+!!! warning TS377154: `Effect.trackErrors` expresses recording a metric on every error directly. effect(manualMetricTapToTrack)
+    
+    // MUST TRIGGER: aliased module imports for both Effect and Metric
+    export const aliasedModules = handleRequest.pipe(
+      Fx.tap((size) => M.update(responseSize, size)),
+      ~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+      Fx.tapDefect(() => M.update(requestDefects, 1))
+      ~~~~~~~~~~~~
+!!! warning TS377154: `Effect.trackDefects` expresses recording a metric on every defect directly. effect(manualMetricTapToTrack)
+    )
+    
+    // MUST TRIGGER: the API references are hidden behind const aliases
+    const tapAlias = Effect.tap
+    const updateAlias = Metric.update
+    export const aliasedApis = handleRequest.pipe(tapAlias((size) => updateAlias(responseSize, size)))
+                                                  ~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+    
+    // MUST TRIGGER: pipeable arguments of Effect.fn
+    export const tracedHandler = Effect.fn("tracedHandler")(
+      function*(id: string) {
+        return id.length
+      },
+      Effect.tap((size) => Metric.update(responseSize, size)),
+      ~~~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+      Effect.tapError(() => Metric.update(requestErrors, 1))
+      ~~~~~~~~~~~~~~~
+!!! warning TS377154: `Effect.trackErrors` expresses recording a metric on every error directly. effect(manualMetricTapToTrack)
+    )
+    
+    // MUST TRIGGER: only the metric tap in a longer chain is reported
+    export const chained = handleRequest.pipe(
+      Effect.map((size) => size * 2),
+      Effect.tap((size) => Metric.update(responseSize, size)),
+      ~~~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+      Effect.tap((size) => Effect.log(size))
+    )
+    
+    // MUST TRIGGER: inside a function body, with module-level metrics declared before it
+    export function nestedScope() {
+      return handleRequest.pipe(Effect.tapError(() => Metric.update(requestErrors, 1)))
+                                ~~~~~~~~~~~~~~~
+!!! warning TS377154: `Effect.trackErrors` expresses recording a metric on every error directly. effect(manualMetricTapToTrack)
+    }
+    
+    // MUST NOT TRIGGER: already using the track* combinators
+    export const alreadyTracked = handleRequest.pipe(
+      Effect.trackSuccesses(responseSize),
+      Effect.trackErrors(requestErrors, () => 1),
+      Effect.trackDefects(requestDefects, () => 1),
+      Effect.trackSuccesses(Metric.withConstantInput(rpcSuccesses, 1))
+    )
+    
+    // MUST NOT TRIGGER: the callback does more than update one metric
+    export const alsoLogs = handleRequest.pipe(
+      Effect.tap((size) => Metric.update(responseSize, size).pipe(Effect.andThen(Effect.log(size))))
+    )
+    export const sequencedUpdates = handleRequest.pipe(
+      Effect.tap(() => Effect.andThen(Metric.update(rpcSuccesses, 1), Metric.update(userCount, 1)))
+    )
+    export const allUpdates = handleRequest.pipe(
+      Effect.tap((size) => Effect.all([Metric.update(responseSize, size), Metric.update(rpcSuccesses, 1)]))
+    )
+    export const delayedUpdate = handleRequest.pipe(
+      Effect.tap((size) => Metric.update(responseSize, size).pipe(Effect.delay("1 second")))
+    )
+    export const multiStatementBlock = handleRequest.pipe(
+      Effect.tap((size) => {
+        const doubled = size * 2
+        return Metric.update(responseSize, doubled)
+      })
+    )
+    
+    // MUST NOT TRIGGER: the update is conditional
+    export const conditionalUpdate = handleRequest.pipe(
+      Effect.tap((size) => size > 0 ? Metric.update(responseSize, size) : Effect.void)
+    )
+    
+    // MUST NOT TRIGGER: the update is wrapped in another effect constructor
+    export const suspendedUpdate = handleRequest.pipe(
+      Effect.tap((size) => Effect.suspend(() => Metric.update(responseSize, size)))
+    )
+    
+    // MUST NOT TRIGGER: the metric depends on the callback parameter
+    export const metricFromError = fetchUsers.pipe(
+      Effect.tapError((error) => Metric.update(metricFor(error._tag), 1))
+    )
+    export const metricWithErrorAttributes = fetchUsers.pipe(
+      Effect.tapError((error) => Metric.update(Metric.withAttributes(requestErrors, { tag: error._tag }), 1))
+    )
+    
+    // MUST NOT TRIGGER: inside a callback the metric expression is evaluated on every run;
+    // track* evaluates it once, so only stable metric references are safe to move
+    export const inlineMetricPerRun = handleRequest.pipe(
+      Effect.tap(() => Metric.update(Metric.counter("per_run"), 1))
+    )
+    export const mutableMetricBinding = handleRequest.pipe(
+      Effect.tap(() => Metric.update(mutableCounter, 1))
+    )
+    export const metricPropertyAccess = handleRequest.pipe(
+      Effect.tap(() => Metric.update(metrics.requests, 1))
+    )
+    
+    // MUST NOT TRIGGER: the metric is declared after the call; the lazy callback reads it
+    // later, but track* would read it while it is still in the TDZ
+    export const laterMetric = handleRequest.pipe(
+      Effect.tap(() => Metric.update(declaredLater, 1))
+    )
+    const declaredLater = Metric.counter("declared_later")
+    
+    // MUST NOT TRIGGER: Metric.modify adds a delta and is not what track* calls
+    export const modifyGauge = handleRequest.pipe(
+      Effect.tap((size) => Metric.modify(userCount, size))
+    )
+    
+    // MUST NOT TRIGGER: reading a metric value is not an update
+    export const readMetric = handleRequest.pipe(
+      Effect.tap(() => Metric.value(responseSize))
+    )
+    
+    // MUST NOT TRIGGER: data-last Metric.update is out of scope; only the data-first call is matched
+    export const dataLastUpdate = handleRequest.pipe(
+      Effect.tap((size) => responseSize.pipe(Metric.update(size)))
+    )
+    
+    // MUST NOT TRIGGER: the direct effect is a precomputed update, not an inline Metric.update call
+    const precomputedUpdate = Metric.update(rpcSuccesses, 1)
+    export const precomputedDirect = handleRequest.pipe(Effect.tap(precomputedUpdate))
+    
+    // MUST NOT TRIGGER: point-free callback, not an inline metric update
+    const recordSize = (size: number) => Metric.update(responseSize, size)
+    export const pointFree = handleRequest.pipe(Effect.tap(recordSize))
+    
+    // MUST NOT TRIGGER: tap variants without a track* counterpart
+    export const tapCause = handleRequest.pipe(Effect.tapCause(() => Metric.update(requestErrors, 1)))
+    export const tapErrorTag = fetchUsers.pipe(
+      Effect.tapErrorTag("NotFound", () => Metric.update(requestErrors, 1))
+    )
+    export const onExit = handleRequest.pipe(Effect.onExit(() => Metric.update(rpcSuccesses, 1)))
+    
+    // MUST NOT TRIGGER: Stream.tap is a different API
+    export const streamTap = Stream.make(1, 2, 3).pipe(Stream.tap((n) => Metric.update(responseSize, n)))
+    
+    // MUST NOT TRIGGER: unrelated tap/update APIs with the same shape
+    const unrelated = {
+      tap: <A>(f: (a: A) => unknown) => f,
+      update: (_metric: unknown, _input: number) => Effect.void
+    }
+    export const unrelatedTap = unrelated.tap((size: number) => Metric.update(responseSize, size))
+    export const unrelatedUpdate = handleRequest.pipe(Effect.tap((size) => unrelated.update(responseSize, size)))
+    
+    void (mutableCounter = Metric.counter("mutable_counter_2"))
+    

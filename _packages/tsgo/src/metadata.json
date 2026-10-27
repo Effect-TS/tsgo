@@ -73,6 +73,7 @@
         "lazyEffect": "suggestion",
         "lazyPromiseInEffectSync": "warning",
         "leakingRequirements": "suggestion",
+        "manualMetricTapToTrack": "suggestion",
         "mapConstToAs": "suggestion",
         "mapSomeToAsSome": "suggestion",
         "matchEffectToMapBoth": "suggestion",
@@ -168,6 +169,7 @@
         "lazyEffect": "error",
         "lazyPromiseInEffectSync": "error",
         "leakingRequirements": "error",
+        "manualMetricTapToTrack": "error",
         "mapConstToAs": "error",
         "mapSomeToAsSome": "error",
         "matchEffectToMapBoth": "error",
@@ -334,6 +336,7 @@
         "flatMapIgnoredParamToAndThen": "warning",
         "flatMapToMap": "warning",
         "flatMapToTap": "warning",
+        "manualMetricTapToTrack": "warning",
         "mapConstToAs": "warning",
         "mapMapErrorToMapBoth": "warning",
         "mapSomeToAsSome": "warning",
@@ -2662,6 +2665,29 @@
             "start": 282,
             "end": 296,
             "text": "`Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "manualMetricTapToTrack",
+      "group": "style",
+      "description": "Suggests Effect.trackSuccesses/trackErrors/trackDefects when an Effect.tap/tapError/tapDefect only updates a metric",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377154
+      ],
+      "preview": {
+        "sourceText": "import { Effect, Metric } from \"effect\"\n\nconst responseSize = Metric.gauge(\"response_size\")\n\ndeclare const handleRequest: Effect.Effect\u003cnumber, Error\u003e\n\nexport const instrumented = handleRequest.pipe(Effect.tap((size) =\u003e Metric.update(responseSize, size)))\n",
+        "diagnostics": [
+          {
+            "start": 199,
+            "end": 209,
+            "text": "`Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)"
           }
         ]
       }

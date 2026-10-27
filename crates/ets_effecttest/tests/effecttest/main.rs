@@ -15,6 +15,7 @@ mod hover_test;
 mod inlay_hints_baseline_test;
 mod inlay_hints_test;
 mod issue_173_test;
+mod manual_metric_tap_to_track_test;
 mod map_const_to_as_test;
 mod map_map_error_to_map_both_test;
 mod quickfix_runner_test;
@@ -94,6 +95,7 @@ fn main() {
     trials.extend(flat_map_identity_to_flatten_test::tests());
     trials.extend(map_const_to_as_test::tests());
     trials.extend(map_map_error_to_map_both_test::tests());
+    trials.extend(manual_metric_tap_to_track_test::tests());
 
     let conclusion = libtest_mimic::run(&args, trials);
     if !args.list {

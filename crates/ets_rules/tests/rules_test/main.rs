@@ -11,6 +11,7 @@
 mod effect_sleep_zero_to_yield_now_test;
 mod flat_map_identity_to_flatten_test;
 mod flat_map_to_tap_test;
+mod manual_metric_tap_to_track_test;
 mod map_const_to_as_test;
 mod map_map_error_to_map_both_test;
 
