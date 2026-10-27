@@ -74,6 +74,7 @@
         "lazyPromiseInEffectSync": "warning",
         "leakingRequirements": "suggestion",
         "mapConstToAs": "suggestion",
+        "mapMapErrorToMapBoth": "suggestion",
         "mapSomeToAsSome": "suggestion",
         "matchEffectToMapBoth": "suggestion",
         "matchEffectToMatch": "suggestion",
@@ -169,6 +170,7 @@
         "lazyPromiseInEffectSync": "error",
         "leakingRequirements": "error",
         "mapConstToAs": "error",
+        "mapMapErrorToMapBoth": "error",
         "mapSomeToAsSome": "error",
         "matchEffectToMapBoth": "error",
         "matchEffectToMatch": "error",
@@ -335,6 +337,7 @@
         "flatMapToMap": "warning",
         "flatMapToTap": "warning",
         "mapConstToAs": "warning",
+        "mapMapErrorToMapBoth": "warning",
         "mapSomeToAsSome": "warning",
         "matchEffectToMapBoth": "warning",
         "matchEffectToMatch": "warning",
@@ -2685,6 +2688,30 @@
             "start": 164,
             "end": 174,
             "text": "`Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "mapMapErrorToMapBoth",
+      "group": "style",
+      "description": "Suggests Effect.mapBoth when Effect.map and Effect.mapError are adjacent steps of a piping flow",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377153
+      ],
+      "preview": {
+        "sourceText": "import { Data, Effect } from \"effect\"\n\nclass TaskError extends Data.TaggedError(\"TaskError\")\u003c{\n  readonly message: string\n}\u003e {}\n\ndeclare const fetchCount: Effect.Effect\u003cnumber, string\u003e\n\n// MUST TRIGGER: adjacent Effect.map + Effect.mapError is a single Effect.mapBoth\nexport const isPositive = fetchCount.pipe(\n  Effect.map((n) =\u003e n \u003e 0),\n  Effect.mapError((message) =\u003e new TaskError({ message }))\n)\n",
+        "diagnostics": [
+          {
+            "start": 341,
+            "end": 356,
+            "text": "`Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)"
           }
         ]
       }

@@ -602,5 +602,9 @@
     "`Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)": {
         "category": "Suggestion",
         "code": 377152
+    },
+    "`Effect.{0}` + `Effect.{1}` transform the success and failure channels one step at a time; `Effect.{2}` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)": {
+        "category": "Suggestion",
+        "code": 377153
     }
 }

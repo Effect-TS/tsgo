@@ -49,6 +49,7 @@
     "effecttsgo/lazy-promise-in-effect-sync": "error",
     "effecttsgo/leaking-requirements": "error",
     "effecttsgo/map-const-to-as": "error",
+    "effecttsgo/map-map-error-to-map-both": "error",
     "effecttsgo/map-some-to-as-some": "error",
     "effecttsgo/match-effect-to-map-both": "error",
     "effecttsgo/match-effect-to-match": "error",
