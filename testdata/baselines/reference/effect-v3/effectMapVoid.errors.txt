@@ -7,12 +7,14 @@ Effect version: 3.19.19
 /.src/effectMapVoid.ts(22,3): suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
 /.src/effectMapVoid.ts(27,3): suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
 /.src/effectMapVoid.ts(33,3): suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+/.src/effectMapVoid.ts(43,3): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/effectMapVoid.ts(48,3): suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
 /.src/effectMapVoid.ts(57,49): suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
 /.src/effectMapVoid.ts(60,44): suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
 /.src/effectMapVoid.ts(64,63): suggestion TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
 
 
-==== /.src/effectMapVoid.ts (9 errors) ====
+==== /.src/effectMapVoid.ts (11 errors) ====
     // @effect-v3
     import { Effect } from "effect"
     
@@ -68,11 +70,15 @@ Effect version: 3.19.19
     // Should NOT trigger: Effect.map with non-void return
     export const shouldNotTriggerNonVoid = Effect.succeed(1).pipe(
       Effect.map(() => 42)
+      ~~~~~~~~~~
+!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     )
     
     // Should NOT trigger: Effect.map with string return
     export const shouldNotTriggerString = Effect.succeed(1).pipe(
       Effect.map(() => "hello")
+      ~~~~~~~~~~
+!!! suggestion TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
     )
     
     // Should NOT trigger: already using asVoid

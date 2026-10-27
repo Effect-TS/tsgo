@@ -598,5 +598,9 @@
     "`Effect.flatten` expresses this unwrapping more directly than `Effect.flatMap` with an identity callback. effect(flatMapIdentityToFlatten)": {
         "category": "Suggestion",
         "code": 377151
+    },
+    "`Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)": {
+        "category": "Suggestion",
+        "code": 377152
     }
 }

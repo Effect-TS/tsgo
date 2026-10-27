@@ -2416,6 +2416,9 @@
         "effecttsgo/leaking-requirements": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/map-const-to-as": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/map-some-to-as-some": {
           "$ref": "#/definitions/RuleNoConfig"
         },

@@ -1,0 +1,4209 @@
+=== Quick Fix Inventory ===
+
+[D1] (18:45-18:55) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D2] (21:52-21:62) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D3] (24:50-24:60) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D4] (27:49-27:59) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D5] (28:49-28:59) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D6] (29:46-29:56) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D7] (30:48-30:58) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D8] (33:50-33:60) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D9] (36:48-36:58) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D10] (39:45-39:55) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D11] (42:48-42:58) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D12] (45:51-45:61) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D13] (48:44-48:54) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D14] (53:53-53:63) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D15] (58:41-58:51) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D16] (61:26-61:36) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D17] (64:25-64:35) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D18] (67:48-67:54) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D19] (71:45-71:53) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D20] (74:17-74:28) TS377091: Exported declaration 'nestedScope' returns a lazy Effect. Effect is already lazy, so wrapping it in a zero-argument function adds unnecessary indirection. effect(lazyEffect)
+  Fix 0: "Disable lazyEffect for this line"
+  Fix 1: "Disable lazyEffect for entire file"
+
+[D21] (75:28-75:38) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D22] (81:3-81:13) TS377151: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D23] (134:48-134:58) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+  Fix 0: "Disable effectMapVoid for this line"
+  Fix 1: "Disable effectMapVoid for entire file"
+  Fix 2: "Replace with Effect.asVoid"
+
+[D24] (135:43-135:53) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+  Fix 0: "Disable effectMapVoid for this line"
+  Fix 1: "Disable effectMapVoid for entire file"
+  Fix 2: "Replace with Effect.asVoid"
+
+[D25] (136:49-136:59) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+  Fix 0: "Disable effectMapVoid for this line"
+  Fix 1: "Disable effectMapVoid for entire file"
+  Fix 2: "Replace with Effect.asVoid"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.as("saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D2] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.as(client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D3] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.as(status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D4] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.as(0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D5] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.as(true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D6] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.as(null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D7] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.as(10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D8] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.as(-1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D9] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.as(`done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D10] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D10] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.as(Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D11] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D11] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.as("saved"))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D12] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D12] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.as(0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D13] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D13] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.as("saved"))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D14] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D14] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.as("saved"))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D15] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D15] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.as("saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D16] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D16] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.as(numberEffect, "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D17] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D17] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.as("saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D18] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D18] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D18] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.as("saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D19] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D19] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D19] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(Fx.as("saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D20] Fix 0: "Disable lazyEffect for this line" ===
+skipped by default
+
+=== [D20] Fix 1: "Disable lazyEffect for entire file" ===
+skipped by default
+
+=== [D21] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D21] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D21] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.as(status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D22] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D22] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D22] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.as("saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D23] Fix 0: "Disable effectMapVoid for this line" ===
+skipped by default
+
+=== [D23] Fix 1: "Disable effectMapVoid for entire file" ===
+skipped by default
+
+=== [D23] Fix 2: "Replace with Effect.asVoid" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.asVoid)
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D24] Fix 0: "Disable effectMapVoid for this line" ===
+skipped by default
+
+=== [D24] Fix 1: "Disable effectMapVoid for entire file" ===
+skipped by default
+
+=== [D24] Fix 2: "Replace with Effect.asVoid" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.asVoid)
+export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+
+
+=== [D25] Fix 0: "Disable effectMapVoid for this line" ===
+skipped by default
+
+=== [D25] Fix 1: "Disable effectMapVoid for entire file" ===
+skipped by default
+
+=== [D25] Fix 2: "Replace with Effect.asVoid" ===
+
+--- file:///.src/mapConstToAs.ts ---
+import * as Fx from "effect/Effect"
+import { Effect, Option, pipe, Stream } from "effect"
+
+const saveUser = (name: string): Effect.Effect<number> => Effect.succeed(name.length)
+const numberEffect: Effect.Effect<number> = Effect.succeed(1)
+
+declare const client: { readonly query: (sql: string) => Effect.Effect<void> }
+const status = "saved"
+const config = { retries: 3 }
+let mutable = "mutable"
+
+enum Phase {
+  Done = "done",
+  Failed = "failed"
+}
+
+// MUST TRIGGER: string literal body in a pipeable flow (issue example)
+export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: declared const identifier body (issue example)
+export const ready = client.query("select 1").pipe(Effect.map(() => client))
+
+// MUST TRIGGER: initialized const identifier declared before the call
+export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
+
+// MUST TRIGGER: numeric, boolean, null and bigint literal bodies
+export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
+export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
+export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
+export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
+
+// MUST TRIGGER: negative numeric literal
+export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
+
+// MUST TRIGGER: template literal without substitutions
+export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
+
+// MUST TRIGGER: enum member
+export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
+
+// MUST TRIGGER: parenthesized constant body
+export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
+
+// MUST TRIGGER: sole parameter is declared but never referenced
+export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
+
+// MUST TRIGGER: block body with a single return of a constant
+export const blockBody = numberEffect.pipe(Effect.map(() => {
+  return "saved"
+}))
+
+// MUST TRIGGER: function expression returning a constant
+export const functionExpression = numberEffect.pipe(Effect.map(function() {
+  return "saved"
+}))
+
+// MUST TRIGGER: pipe function form
+export const piped = pipe(numberEffect, Effect.map(() => "saved"))
+
+// MUST TRIGGER: data-first form
+export const dataFirst = Effect.map(numberEffect, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly
+export const dataLast = Effect.map(() => "saved")(numberEffect)
+
+// MUST TRIGGER: aliased module import
+export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
+
+// MUST TRIGGER: the API reference is hidden behind a const alias
+const mapAlias = Effect.map
+export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
+
+// MUST TRIGGER: const identifier referenced from a nested scope
+export function nestedScope() {
+  return numberEffect.pipe(Effect.map(() => status))
+}
+
+// MUST TRIGGER: constant map inside a longer pipe chain
+export const chained = numberEffect.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map(() => "saved"),
+  Effect.map((value) => value.length)
+)
+
+// MUST NOT TRIGGER: already using Effect.as
+export const alreadyAs = numberEffect.pipe(Effect.as("saved"))
+
+// MUST NOT TRIGGER: the callback reads its parameter
+export const usesParameter = numberEffect.pipe(Effect.map((n) => n * 2))
+export const identity = numberEffect.pipe(Effect.map((n) => n))
+
+// MUST NOT TRIGGER: the parameter shadows the outer const and is the returned value
+export const shadowedParameter = client.query("select 1").pipe(
+  Effect.map((client) => client)
+)
+
+// MUST NOT TRIGGER: destructured parameter still reads the incoming value
+export const destructured = Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+
+// MUST NOT TRIGGER: a default parameter initializer is evaluated on every run
+export const defaultParameter = numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+
+// MUST NOT TRIGGER: object and array literals build a fresh value per run;
+// Effect.as would share a single instance across runs
+export const objectLiteral = numberEffect.pipe(
+  Effect.map(() => ({ kind: "abort" as const, code: null }))
+)
+export const arrayLiteral = numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+
+// MUST NOT TRIGGER: template literal with substitutions is computed per run
+export const templateWithSubstitution = numberEffect.pipe(Effect.map(() => `status: ${status}`))
+
+// MUST NOT TRIGGER: calls and `new` may have side effects or build fresh values
+export const callBody = numberEffect.pipe(Effect.map(() => Option.none()))
+export const newBody = numberEffect.pipe(Effect.map(() => new Date(0)))
+
+// MUST NOT TRIGGER: computed expressions are not constants
+export const binaryBody = numberEffect.pipe(Effect.map(() => 1 + 1))
+
+// MUST NOT TRIGGER: property access on a mutable object is read on every run
+export const propertyAccess = numberEffect.pipe(Effect.map(() => config.retries))
+
+// MUST NOT TRIGGER: mutable binding; Effect.as would capture a stale value
+export const mutableBinding = numberEffect.pipe(Effect.map(() => mutable))
+
+// MUST NOT TRIGGER: const declared after the call; Effect.as would hit the TDZ
+export const laterBinding = numberEffect.pipe(Effect.map(() => later))
+const later = "later"
+
+// MUST NOT TRIGGER: function parameters are mutable bindings
+export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
+
+// MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
+export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
+export const voidEmptyBlock = numberEffect.pipe(Effect.asVoid)
+
+// MUST NOT TRIGGER: block body with more than a single return statement
+export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
+  mutable = "changed"
+  return "saved"
+}))
+
+// MUST NOT TRIGGER: point-free mapper, not an inline constant callback
+const constantSaved = () => "saved"
+export const pointFree = numberEffect.pipe(Effect.map(constantSaved))
+
+// MUST NOT TRIGGER: Stream.map and Option.map are different APIs
+export const streamMap = Stream.make(1).pipe(Stream.map(() => "saved"))
+export const optionMap = Option.some(1).pipe(Option.map(() => "saved"))
+
+// MUST NOT TRIGGER: Array.prototype.map is not Effect.map
+export const arrayMap = [1, 2, 3].map(() => "saved")
+
+// MUST NOT TRIGGER: unrelated map API with the same shape
+const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
+export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
+
+void mutable
+

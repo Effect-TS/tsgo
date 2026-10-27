@@ -73,6 +73,7 @@
         "lazyEffect": "suggestion",
         "lazyPromiseInEffectSync": "warning",
         "leakingRequirements": "suggestion",
+        "mapConstToAs": "suggestion",
         "mapSomeToAsSome": "suggestion",
         "matchEffectToMapBoth": "suggestion",
         "matchEffectToMatch": "suggestion",
@@ -167,6 +168,7 @@
         "lazyEffect": "error",
         "lazyPromiseInEffectSync": "error",
         "leakingRequirements": "error",
+        "mapConstToAs": "error",
         "mapSomeToAsSome": "error",
         "matchEffectToMapBoth": "error",
         "matchEffectToMatch": "error",
@@ -332,6 +334,7 @@
         "flatMapIgnoredParamToAndThen": "warning",
         "flatMapToMap": "warning",
         "flatMapToTap": "warning",
+        "mapConstToAs": "warning",
         "mapSomeToAsSome": "warning",
         "matchEffectToMapBoth": "warning",
         "matchEffectToMatch": "warning",
@@ -2658,6 +2661,30 @@
             "start": 282,
             "end": 296,
             "text": "`Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "mapConstToAs",
+      "group": "style",
+      "description": "Suggests using Effect.as instead of Effect.map when the callback ignores its input and returns a constant",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377151
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nconst saveUser = (name: string): Effect.Effect\u003cnumber\u003e =\u003e Effect.succeed(name.length)\n\nexport const saved = saveUser(\"alice\").pipe(Effect.map(() =\u003e \"saved\"))\n",
+        "diagnostics": [
+          {
+            "start": 164,
+            "end": 174,
+            "text": "`Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)"
           }
         ]
       }

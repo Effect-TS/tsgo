@@ -29,6 +29,7 @@ var All = []fixable.Fixable{
 	MatchEffectToMapBothFix,
 	FlatMapConditionalToFilterOrFailFix,
 	MapSomeToAsSomeFix,
+	MapConstToAsFix,
 	OptionMatchToFromOptionFix,
 	SyncToSucceedFix,
 	EffectSleepZeroToYieldNowFix,
