@@ -14,7 +14,7 @@ use ets_typeparser::{
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_FLATTEN_EXPRESSES_THIS_UNWRAPPING_MORE_DIRECTLY_THAN_EFFECT_FLAT_MAP_WITH_AN_IDENTITY_CALLBACK_EFFECT_FLAT_MAP_IDENTITY_TO_FLATTEN;
 
-// go: internal/rules/flat_map_identity_to_flatten.go:14 FlatMapIdentityToFlatten
+// go: internal/rules/flat_map_identity_to_flatten.go:14 FlatMapIdentityToFlatten 6ae165f3ea1c793a
 pub static FLAT_MAP_IDENTITY_TO_FLATTEN: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "flatMapIdentityToFlatten",
     group: "style",
@@ -33,7 +33,7 @@ pub static FLAT_MAP_IDENTITY_TO_FLATTEN: LazyLock<Rule> = LazyLock::new(|| Rule 
     },
 });
 
-// go: internal/rules/flat_map_identity_to_flatten.go:34 FlatMapIdentityToFlattenMatch
+// go: internal/rules/flat_map_identity_to_flatten.go:34 FlatMapIdentityToFlattenMatch ed6efa4c4f195fd6
 #[derive(Clone)]
 pub struct FlatMapIdentityToFlattenMatch {
     pub source_file: P<SourceFile>,
@@ -45,7 +45,7 @@ pub struct FlatMapIdentityToFlattenMatch {
     pub effect_module_node: Option<P<Node>>,
 }
 
-// go: internal/rules/flat_map_identity_to_flatten.go:47 AnalyzeFlatMapIdentityToFlatten
+// go: internal/rules/flat_map_identity_to_flatten.go:47 AnalyzeFlatMapIdentityToFlatten 25bc4b45342038ee
 // AnalyzeFlatMapIdentityToFlatten finds Effect.flatMap steps whose callback is
 // Effect's identity export referenced directly, or an unannotated arrow
 // function or function expression returning its own parameter.
@@ -101,7 +101,7 @@ pub fn analyze_flat_map_identity_to_flatten(
     matches
 }
 
-// go: internal/rules/flat_map_identity_to_flatten.go:93 isIdentityCallback
+// go: internal/rules/flat_map_identity_to_flatten.go:93 isIdentityCallback 486079f3d322bf8a
 // isIdentityCallback reports whether callback names Effect's identity export
 // without a local variable in between, or is an arrow function or function
 // expression without type annotations whose body returns its single parameter. Annotations and typed

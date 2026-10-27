@@ -10,7 +10,7 @@ use crate::helpers_test::*;
 use crate::native_string_test::same_arc;
 use crate::*;
 
-// go test: internal/typeparser/native_object_test.go:17 findNativeObjectAccess
+// go test: internal/typeparser/native_object_test.go:17 findNativeObjectAccess 87ac6b1424939145
 fn find_native_object_access(t: &T, sf: P<SourceFile>, text: &str) -> P<Node> {
     t.helper();
     fn walk(sf: P<SourceFile>, node: P<Node>, text: &str, found: &mut Option<P<Node>>) -> bool {
@@ -38,7 +38,7 @@ fn find_native_object_access(t: &T, sf: P<SourceFile>, text: &str) -> P<Node> {
 /// Rust-only: Go's method values `tp.IsNativeObjectMethodReference` / `tp.IsNativeObjectConstructorMethodReference`.
 type NativeObjectQuery = fn(&mut TypeParser<'_>, P<Node>, &str) -> bool;
 
-// go test: internal/typeparser/native_object_test.go:37 TestNativeObjectMethodReference
+// go test: internal/typeparser/native_object_test.go:37 TestNativeObjectMethodReference 8a3d95b36370a0c4
 #[test]
 fn test_native_object_method_reference() {
     run(|t| {
@@ -220,7 +220,7 @@ alias;
     });
 }
 
-// go test: internal/typeparser/native_object_test.go:192 TestNativeObjectAugmentation
+// go test: internal/typeparser/native_object_test.go:192 TestNativeObjectAugmentation 7d8781a8b351afd1
 #[test]
 fn test_native_object_augmentation() {
     run(|t| {
@@ -265,7 +265,7 @@ Object.prototype.isPrototypeOf;
     });
 }
 
-// go test: internal/typeparser/native_object_test.go:218 TestNativeObjectInheritedAugmentation
+// go test: internal/typeparser/native_object_test.go:218 TestNativeObjectInheritedAugmentation 737484da42d6ba90
 #[test]
 fn test_native_object_inherited_augmentation() {
     run(|t| {
@@ -288,7 +288,7 @@ Object.keys;
     });
 }
 
-// go test: internal/typeparser/native_object_test.go:232 TestNativeObjectNoLib
+// go test: internal/typeparser/native_object_test.go:232 TestNativeObjectNoLib 7785ade68d795f07
 // Rust: Go's last check (`len(tp.links.nativeObjectRegistry.instance) != 0 || len(...constructor) != 0`, "noLib
 // registry contains canonical members") is left out: the registry's fields are private to `native_object`.
 #[test]
@@ -328,7 +328,7 @@ Object.prototype.hasOwnProperty;
     });
 }
 
-// go test: internal/typeparser/native_object_test.go:264 TestNativeObjectCheckerCache
+// go test: internal/typeparser/native_object_test.go:264 TestNativeObjectCheckerCache f1d5ceaf36dd51bb
 // Rust: a parser borrows its checker mutably, so `tp` and `second` (both `new_type_parser` over the same checker,
 // as in Go) are re-created for each use; they share the checker's links. Go compares the cached member pointers;
 // they come from one links store, so the values are compared. The member's fields are private to `native_object`,

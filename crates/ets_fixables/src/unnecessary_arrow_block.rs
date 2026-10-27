@@ -9,7 +9,7 @@ use ets_shim::scanner;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_ARROW_FUNCTION_BLOCK_ONLY_RETURNS_AN_EXPRESSION_AND_CAN_USE_A_CONCISE_BODY_EFFECT_UNNECESSARY_ARROW_BLOCK;
 
-// go: internal/fixables/unnecessary_arrow_block.go:13 UnnecessaryArrowBlockFix
+// go: internal/fixables/unnecessary_arrow_block.go:13 UnnecessaryArrowBlockFix 5f591924b62e2adb
 pub static UNNECESSARY_ARROW_BLOCK_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "unnecessaryArrowBlock",
     description: "Use a concise arrow body",
@@ -18,7 +18,7 @@ pub static UNNECESSARY_ARROW_BLOCK_FIX: LazyLock<Fixable> = LazyLock::new(|| Fix
     run: run_unnecessary_arrow_block_fix,
 });
 
-// go: internal/fixables/unnecessary_arrow_block.go:21 runUnnecessaryArrowBlockFix
+// go: internal/fixables/unnecessary_arrow_block.go:21 runUnnecessaryArrowBlockFix a09245d67111587a
 fn run_unnecessary_arrow_block_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     let matches = ets_rules::analyze_unnecessary_arrow_block(&mut ctx.type_parser, sf);

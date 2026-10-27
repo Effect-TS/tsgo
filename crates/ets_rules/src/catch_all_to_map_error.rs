@@ -13,7 +13,7 @@ use ets_typeparser::{LazyExpressionFlags, TypeParser, parse_lazy_expression};
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_MAP_ERROR_EXPRESSES_THE_SAME_ERROR_TYPE_TRANSFORMATION_MORE_DIRECTLY_THAN_EFFECT_0_FOLLOWED_BY_EFFECT_FAIL_EFFECT_CATCH_ALL_TO_MAP_ERROR;
 
-// go: internal/rules/catch_all_to_map_error.go:16 CatchAllToMapError
+// go: internal/rules/catch_all_to_map_error.go:16 CatchAllToMapError d2e76b0ced68556a
 // CatchAllToMapError suggests using Effect.mapError instead of Effect.catch + Effect.fail.
 pub static CATCH_ALL_TO_MAP_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "catchAllToMapError",
@@ -39,7 +39,7 @@ pub static CATCH_ALL_TO_MAP_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/catch_all_to_map_error.go:35 CatchAllToMapErrorMatch
+// go: internal/rules/catch_all_to_map_error.go:35 CatchAllToMapErrorMatch 958842021325f466
 // CatchAllToMapErrorMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the catchAllToMapError pattern.
 #[derive(Clone)]
@@ -52,7 +52,7 @@ pub struct CatchAllToMapErrorMatch {
     pub fail_argument: P<Node>,        // The first argument to Effect.fail (the replacement text)
 }
 
-// go: internal/rules/catch_all_to_map_error.go:46 AnalyzeCatchAllToMapError
+// go: internal/rules/catch_all_to_map_error.go:46 AnalyzeCatchAllToMapError dd111df5fcad1b05
 // AnalyzeCatchAllToMapError finds all Effect.catch callbacks that simply wrap the
 // error with Effect.fail, which can be simplified to Effect.mapError.
 //

@@ -11,7 +11,7 @@ use ets_typeparser::{PipingFlowTransformation, TypeParser};
 
 use crate::*;
 
-// go: internal/rules/multiple_catch_tag.go:16 MultipleCatchTag
+// go: internal/rules/multiple_catch_tag.go:16 MultipleCatchTag 0bd9d252458e761d
 pub static MULTIPLE_CATCH_TAG: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
         name: "multipleCatchTag",
@@ -40,7 +40,7 @@ pub static MULTIPLE_CATCH_TAG: LazyLock<Rule> = LazyLock::new(|| {
     }
 });
 
-// go: internal/rules/multiple_catch_tag.go:41 MultipleCatchTagMatch
+// go: internal/rules/multiple_catch_tag.go:41 MultipleCatchTagMatch 3c52fa6a586c2328
 #[derive(Clone)]
 pub struct MultipleCatchTagMatch {
     pub source_file: P<SourceFile>,
@@ -49,7 +49,7 @@ pub struct MultipleCatchTagMatch {
     pub catch_nodes: Vec<P<Node>>,
 }
 
-// go: internal/rules/multiple_catch_tag.go:48 multipleCatchTagCandidate
+// go: internal/rules/multiple_catch_tag.go:48 multipleCatchTagCandidate f0bfc9063fb2f957
 //
 // Rust: Go's `*typeparser.PipingFlowTransformation` points into the flow being scanned, so it is a borrow.
 pub(crate) struct MultipleCatchTagCandidate<'a> {
@@ -58,7 +58,7 @@ pub(crate) struct MultipleCatchTagCandidate<'a> {
     pub(crate) introduced_tags: Vec<P<Type>>,
 }
 
-// go: internal/rules/multiple_catch_tag.go:54 AnalyzeMultipleCatchTag
+// go: internal/rules/multiple_catch_tag.go:54 AnalyzeMultipleCatchTag 546d1d72eb3e0ff3
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`), so it is dropped; Go's nil checks of the
 // parser and checker cannot fail.
@@ -125,7 +125,7 @@ pub fn analyze_multiple_catch_tag(
     matches
 }
 
-// go: internal/rules/multiple_catch_tag.go:104 analyzeMultipleCatchTagCandidate
+// go: internal/rules/multiple_catch_tag.go:104 analyzeMultipleCatchTagCandidate bfae1b4b99765b85
 //
 // Rust: Go's `(candidate, ok)` is an `Option`; the checker is the parser's.
 pub(crate) fn analyze_multiple_catch_tag_candidate<'a>(
@@ -162,7 +162,7 @@ pub(crate) fn analyze_multiple_catch_tag_candidate<'a>(
     })
 }
 
-// go: internal/rules/multiple_catch_tag.go:146 catchTagReturnErrorChannel
+// go: internal/rules/multiple_catch_tag.go:146 catchTagReturnErrorChannel 896e0f723fcd32e6
 pub(crate) fn catch_tag_return_error_channel(
     tp: &mut TypeParser<'_>,
     return_type: Option<P<Type>>,
@@ -177,7 +177,7 @@ pub(crate) fn catch_tag_return_error_channel(
     None
 }
 
-// go: internal/rules/multiple_catch_tag.go:159 collectErrorTagTypes
+// go: internal/rules/multiple_catch_tag.go:159 collectErrorTagTypes dcc2c3a4d600adf5
 //
 // Rust: the checker is the parser's.
 pub(crate) fn collect_error_tag_types(
@@ -207,7 +207,7 @@ pub(crate) fn collect_error_tag_types(
     tags
 }
 
-// go: internal/rules/multiple_catch_tag.go:183 overlapsAnyTagType
+// go: internal/rules/multiple_catch_tag.go:183 overlapsAnyTagType 098b161c51172d87
 //
 // Rust: the checker is the parser's.
 pub(crate) fn overlaps_any_tag_type(
@@ -230,7 +230,7 @@ pub(crate) fn overlaps_any_tag_type(
     false
 }
 
-// go: internal/rules/multiple_catch_tag.go:200 collectMultipleCatchTagNodes
+// go: internal/rules/multiple_catch_tag.go:200 collectMultipleCatchTagNodes e1fb5a1ead8cec96
 pub(crate) fn collect_multiple_catch_tag_nodes(
     chain: &[MultipleCatchTagCandidate<'_>],
 ) -> Vec<P<Node>> {
@@ -241,7 +241,7 @@ pub(crate) fn collect_multiple_catch_tag_nodes(
     nodes
 }
 
-// go: internal/rules/multiple_catch_tag.go:211 multipleCatchTagRelatedInformation
+// go: internal/rules/multiple_catch_tag.go:211 multipleCatchTagRelatedInformation ef87f456a3fb88d7
 pub(crate) fn multiple_catch_tag_related_information(
     ctx: &Context<'_, '_>,
     m: &MultipleCatchTagMatch,

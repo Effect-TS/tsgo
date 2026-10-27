@@ -27,7 +27,7 @@ Rust bug until evidence shows otherwise.
 
 1. Find the first point where they diverge: narrow down with focused tests or temporary instrumentation on both
    sides (remove it afterwards).
-2. Locate the Rust item, then its Go original through the marker (`// go: <path>:<line> <Name>`). Compare the whole
+2. Locate the Rust item, then its Go original through the marker (`// go: <path>:<line> <Name> <hash>`). Compare the whole
    Go function with the Rust one, line by line. Don't reason from memory or from what the code "should" do.
 3. Common causes: map iteration order, sort tie order (Go's pdqsort vs Rust's), nil vs empty, integer width,
    position arithmetic (`u32` vs Go `int`), UTF-8 vs UTF-16 offsets, `%v` formatting, diagnostic order, a tsrs

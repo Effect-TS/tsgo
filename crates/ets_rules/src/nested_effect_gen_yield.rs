@@ -8,7 +8,7 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::{EffectContextFlags, TypeParser};
 
-// go: internal/rules/nested_effect_gen_yield.go:16 NestedEffectGenYield
+// go: internal/rules/nested_effect_gen_yield.go:16 NestedEffectGenYield 4a24c294905ffa63
 // NestedEffectGenYield warns when yield* targets a bare nested Effect.gen inside
 // an existing Effect generator context, since the inner generator can usually be
 // inlined directly into the surrounding Effect generator.
@@ -39,13 +39,13 @@ pub static NESTED_EFFECT_GEN_YIELD: LazyLock<Rule> = LazyLock::new(|| {
     }
 });
 
-// go: internal/rules/nested_effect_gen_yield.go:40 NestedEffectGenYieldMatch
+// go: internal/rules/nested_effect_gen_yield.go:40 NestedEffectGenYieldMatch 4f1b2261f6afcea2
 #[derive(Clone, Copy)]
 pub struct NestedEffectGenYieldMatch {
     pub location: TextRange,
 }
 
-// go: internal/rules/nested_effect_gen_yield.go:44 AnalyzeNestedEffectGenYield
+// go: internal/rules/nested_effect_gen_yield.go:44 AnalyzeNestedEffectGenYield 8f76da960a9408c9
 pub fn analyze_nested_effect_gen_yield(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,

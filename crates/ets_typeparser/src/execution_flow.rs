@@ -11,8 +11,8 @@ use rustc_hash::FxHashMap;
 
 use crate::*;
 
-// go: internal/typeparser/execution_flow.go:12 ExecutionNodeKind
-// go: internal/typeparser/execution_flow.go:14 ExecutionNodeKindValue
+// go: internal/typeparser/execution_flow.go:12 ExecutionNodeKind 0e4d1bd2063e6539
+// go: internal/typeparser/execution_flow.go:14 ExecutionNodeKindValue 9fa5efb8c96fede9
 // Rust: Go's `type ExecutionNodeKind string` with its constants, the only values it takes (docs/PORTING.md,
 // "Naming").
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
@@ -23,7 +23,7 @@ pub enum ExecutionNodeKind {
     Transform,
 }
 
-// go: internal/typeparser/execution_flow.go:12 ExecutionNodeKind
+// go: internal/typeparser/execution_flow.go:12 ExecutionNodeKind 0e4d1bd2063e6539
 impl ExecutionNodeKind {
     /// Rust-only: the Go string value (`string(kind)`).
     pub fn as_str(self) -> &'static str {
@@ -36,7 +36,7 @@ impl ExecutionNodeKind {
     }
 }
 
-// go: internal/typeparser/execution_flow.go:21 ExecutionNode
+// go: internal/typeparser/execution_flow.go:21 ExecutionNode b621e6baa17cd231
 pub struct ExecutionNode {
     pub(crate) kind: ExecutionNodeKind,
     pub(crate) node: P<Node>,
@@ -49,35 +49,35 @@ pub struct ExecutionNode {
 }
 
 impl ExecutionNode {
-    // go: internal/typeparser/execution_flow.go:32 ExecutionNode.Kind
+    // go: internal/typeparser/execution_flow.go:32 ExecutionNode.Kind 26a24cf4fb34b9e1
     pub fn kind(&self) -> ExecutionNodeKind {
         self.kind
     }
 
-    // go: internal/typeparser/execution_flow.go:34 ExecutionNode.Node
+    // go: internal/typeparser/execution_flow.go:34 ExecutionNode.Node 1201e2029e61b348
     pub fn node(&self) -> P<Node> {
         self.node
     }
 
-    // go: internal/typeparser/execution_flow.go:36 ExecutionNode.Type
+    // go: internal/typeparser/execution_flow.go:36 ExecutionNode.Type b9bc128f959abeb5
     // Rust: the lazy resolves through `tp` (see `Lazy`).
     pub fn type_(&self, tp: &mut TypeParser<'_>) -> Option<P<Type>> {
         Lazy::get(self.typ.as_ref(), tp)
     }
 
-    // go: internal/typeparser/execution_flow.go:38 ExecutionNode.Callee
+    // go: internal/typeparser/execution_flow.go:38 ExecutionNode.Callee 716f195f845e63dc
     pub fn callee(&self) -> Option<P<Node>> {
         self.callee
     }
 
-    // go: internal/typeparser/execution_flow.go:40 ExecutionNode.Args
+    // go: internal/typeparser/execution_flow.go:40 ExecutionNode.Args f4ae91e096097c7e
     pub fn args(&self) -> Slice<'_, P<Node>> {
         ets_readonly::new(self.args)
     }
 }
 
-// go: internal/typeparser/execution_flow.go:42 ExecutionLinkKind
-// go: internal/typeparser/execution_flow.go:44 ExecutionLinkKindUsedBy
+// go: internal/typeparser/execution_flow.go:42 ExecutionLinkKind fa605187c5a22db7
+// go: internal/typeparser/execution_flow.go:44 ExecutionLinkKindUsedBy 2b94b4f8b8b18f80
 // Rust: Go's `type ExecutionLinkKind string` with its constants, the only values it takes.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub enum ExecutionLinkKind {
@@ -90,7 +90,7 @@ pub enum ExecutionLinkKind {
     TransformCallee,
 }
 
-// go: internal/typeparser/execution_flow.go:42 ExecutionLinkKind
+// go: internal/typeparser/execution_flow.go:42 ExecutionLinkKind fa605187c5a22db7
 impl ExecutionLinkKind {
     /// Rust-only: the Go string value (`string(kind)`).
     pub fn as_str(self) -> &'static str {
@@ -106,30 +106,30 @@ impl ExecutionLinkKind {
     }
 }
 
-// go: internal/typeparser/execution_flow.go:54 ExecutionLink
+// go: internal/typeparser/execution_flow.go:54 ExecutionLink 055bc2599226b96c
 pub struct ExecutionLink {
     pub(crate) kind: ExecutionLinkKind,
     pub(crate) node: Option<P<Node>>,
 }
 
 impl ExecutionLink {
-    // go: internal/typeparser/execution_flow.go:59 ExecutionLink.Kind
+    // go: internal/typeparser/execution_flow.go:59 ExecutionLink.Kind 5ac58a1165470f03
     pub fn kind(&self) -> ExecutionLinkKind {
         self.kind
     }
 
-    // go: internal/typeparser/execution_flow.go:61 ExecutionLink.Node
+    // go: internal/typeparser/execution_flow.go:61 ExecutionLink.Node 024323e6e5244b29
     pub fn node(&self) -> Option<P<Node>> {
         self.node
     }
 }
 
-// go: internal/typeparser/execution_flow.go:64 ExecutionFlow
+// go: internal/typeparser/execution_flow.go:64 ExecutionFlow 96d222fc632148e9
 pub struct ExecutionFlow {
     pub(crate) graph: Box<Graph<ExecutionNode, ExecutionLink>>,
 }
 
-// go: internal/typeparser/execution_flow.go:67 GraphSlice
+// go: internal/typeparser/execution_flow.go:67 GraphSlice e98bec6c8d0bb771
 // Rust: Go's `*graph.NodeIndex` fields are never nil
 // (every slice is built by `buildSlice` or joins two built slices), so they are plain indices; Go's `*GraphSlice`
 // is `Option<GraphSlice>` (a copy: nothing writes a slice after it is built).
@@ -140,13 +140,13 @@ pub struct GraphSlice {
 }
 
 impl ExecutionFlow {
-    // go: internal/typeparser/execution_flow.go:73 ExecutionFlow.ToMermaid
+    // go: internal/typeparser/execution_flow.go:73 ExecutionFlow.ToMermaid 8708fdea869bbed7
     pub fn to_mermaid(&self, options: MermaidOptions<'_, ExecutionNode, ExecutionLink>) -> String {
         self.graph.to_mermaid(options)
     }
 }
 
-// go: internal/typeparser/execution_flow.go:77 executionCollector
+// go: internal/typeparser/execution_flow.go:77 executionCollector 73c1945cc0be2cce
 // Rust: Go's `*core.LinkStore[*ast.Node, *GraphSlice]` is a map whose entries may hold nil (`Has` tells an entry
 // from a missing one).
 pub(crate) struct ExecutionCollector<'a, 'c> {
@@ -157,13 +157,13 @@ pub(crate) struct ExecutionCollector<'a, 'c> {
 }
 
 impl ExecutionCollector<'_, '_> {
-    // go: internal/typeparser/execution_flow.go:84 executionCollector.buildSlice
+    // go: internal/typeparser/execution_flow.go:84 executionCollector.buildSlice 6ad2529cbe7a31b1
     pub(crate) fn build_slice(&mut self, node: ExecutionNode) -> GraphSlice {
         let node_index = self.g.add_node(node);
         GraphSlice { leading: node_index, trailing: node_index }
     }
 
-    // go: internal/typeparser/execution_flow.go:92 executionCollector.buildValueNode
+    // go: internal/typeparser/execution_flow.go:92 executionCollector.buildValueNode b45bb6409e440c2f
     pub(crate) fn build_value_node(&mut self, node: P<Node>) -> GraphSlice {
         let typ = self.tp.lazy_type_at_location(node);
         self.build_slice(ExecutionNode {
@@ -175,7 +175,7 @@ impl ExecutionCollector<'_, '_> {
         })
     }
 
-    // go: internal/typeparser/execution_flow.go:100 executionCollector.extractCalleeAndArgs
+    // go: internal/typeparser/execution_flow.go:100 executionCollector.extractCalleeAndArgs de64a652103ce143
     // Rust: Go's `node.Arguments()` of a call is the call's own argument list.
     #[expect(clippy::self_only_used_in_recursion, reason = "a collector method in Go")]
     pub(crate) fn extract_callee_and_args(
@@ -191,7 +191,7 @@ impl ExecutionCollector<'_, '_> {
         (Some(node), None)
     }
 
-    // go: internal/typeparser/execution_flow.go:109 executionCollector.connectSlices
+    // go: internal/typeparser/execution_flow.go:109 executionCollector.connectSlices 4b2aa56e5912d865
     pub(crate) fn connect_slices(
         &mut self,
         from_slice: Option<GraphSlice>,
@@ -211,7 +211,7 @@ impl ExecutionCollector<'_, '_> {
         Some(GraphSlice { leading: from_slice.leading, trailing: to_slice.trailing })
     }
 
-    // go: internal/typeparser/execution_flow.go:131 executionCollector.visitNode
+    // go: internal/typeparser/execution_flow.go:131 executionCollector.visitNode 374ab58f4fb1bead
     pub(crate) fn visit_node(&mut self, node: Option<P<Node>>) -> Option<GraphSlice> {
         // avoid double traversal
         let node = node?;
@@ -245,7 +245,7 @@ impl ExecutionCollector<'_, '_> {
         s
     }
 
-    // go: internal/typeparser/execution_flow.go:167 executionCollector.visitNodesAndConnectSlice
+    // go: internal/typeparser/execution_flow.go:167 executionCollector.visitNodesAndConnectSlice 918dbc62d9bd954e
     pub(crate) fn visit_nodes_and_connect_slice(
         &mut self,
         nodes: &[P<Node>],
@@ -258,7 +258,7 @@ impl ExecutionCollector<'_, '_> {
         false
     }
 
-    // go: internal/typeparser/execution_flow.go:174 executionCollector.visitNodeAndConnectSlice
+    // go: internal/typeparser/execution_flow.go:174 executionCollector.visitNodeAndConnectSlice 20db7b0c3b575e44
     pub(crate) fn visit_node_and_connect_slice(
         &mut self,
         n: Option<P<Node>>,
@@ -270,7 +270,7 @@ impl ExecutionCollector<'_, '_> {
         false
     }
 
-    // go: internal/typeparser/execution_flow.go:180 executionCollector.visitNodeVisitorConnectUsageTarget
+    // go: internal/typeparser/execution_flow.go:180 executionCollector.visitNodeVisitorConnectUsageTarget d2c60af014e9b5d6
     pub(crate) fn visit_node_visitor_connect_usage_target(&mut self, node: P<Node>) -> bool {
         let s = self.visit_node(Some(node));
         let usage_target = self.usage_target;
@@ -278,7 +278,7 @@ impl ExecutionCollector<'_, '_> {
         false
     }
 
-    // go: internal/typeparser/execution_flow.go:189 executionCollector.visitEachChildWithUsageTarget
+    // go: internal/typeparser/execution_flow.go:189 executionCollector.visitEachChildWithUsageTarget d3ff76ce1d13eadb
     pub(crate) fn visit_each_child_with_usage_target(
         &mut self,
         node: Option<P<Node>>,
@@ -294,7 +294,7 @@ impl ExecutionCollector<'_, '_> {
         false
     }
 
-    // go: internal/typeparser/execution_flow.go:200 executionCollector.visitExpressionNode
+    // go: internal/typeparser/execution_flow.go:200 executionCollector.visitExpressionNode 7f69537390b3689c
     // Rust: Go compares the `*GraphSlice` pointers `rootExpr != parentExpression`, which holds exactly when a value
     // node was built here.
     pub(crate) fn visit_expression_node(
@@ -318,7 +318,7 @@ impl ExecutionCollector<'_, '_> {
         None
     }
 
-    // go: internal/typeparser/execution_flow.go:212 executionCollector.visitPipeCall
+    // go: internal/typeparser/execution_flow.go:212 executionCollector.visitPipeCall 4b269a389d418a0c
     pub(crate) fn visit_pipe_call(
         &mut self,
         p: &Arc<ParsedPipeCallResult>,
@@ -351,7 +351,7 @@ impl ExecutionCollector<'_, '_> {
         s
     }
 
-    // go: internal/typeparser/execution_flow.go:231 executionCollector.visitEffectGenCall
+    // go: internal/typeparser/execution_flow.go:231 executionCollector.visitEffectGenCall b2c02faa0fbf25f6
     pub(crate) fn visit_effect_gen_call(
         &mut self,
         p: &EffectGenCallResult,
@@ -394,7 +394,7 @@ impl ExecutionCollector<'_, '_> {
         s
     }
 
-    // go: internal/typeparser/execution_flow.go:256 executionCollector.visitEffectFnCall
+    // go: internal/typeparser/execution_flow.go:256 executionCollector.visitEffectFnCall 38957c818fef6053
     pub(crate) fn visit_effect_fn_call(
         &mut self,
         p: &EffectFnCallResult,
@@ -475,7 +475,7 @@ impl ExecutionCollector<'_, '_> {
         s
     }
 
-    // go: internal/typeparser/execution_flow.go:309 executionCollector.visitSingleArgInlineCall
+    // go: internal/typeparser/execution_flow.go:309 executionCollector.visitSingleArgInlineCall c52a7533ad766b34
     pub(crate) fn visit_single_arg_inline_call(
         &mut self,
         p: &ParsedSingleArgInlineCallTransform,
@@ -505,7 +505,7 @@ impl ExecutionCollector<'_, '_> {
         s
     }
 
-    // go: internal/typeparser/execution_flow.go:325 executionCollector.visitDataFirstOrLastCall
+    // go: internal/typeparser/execution_flow.go:325 executionCollector.visitDataFirstOrLastCall 5c70205f6479aa39
     pub(crate) fn visit_data_first_or_last_call(
         &mut self,
         p: &ParsedDataFirstOrLastCall,
@@ -526,7 +526,7 @@ impl ExecutionCollector<'_, '_> {
         s
     }
 
-    // go: internal/typeparser/execution_flow.go:338 executionCollector.visitFunctionLikeDeclaration
+    // go: internal/typeparser/execution_flow.go:338 executionCollector.visitFunctionLikeDeclaration 5b1342288db454ea
     pub(crate) fn visit_function_like_declaration(&mut self, node: P<Node>) -> Option<GraphSlice> {
         let typ = self.tp.lazy_type_at_location(node);
         let s = Some(self.build_slice(ExecutionNode {
@@ -563,7 +563,7 @@ impl ExecutionCollector<'_, '_> {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/execution_flow.go:362 TypeParser.ExecutionFlow
+    // go: internal/typeparser/execution_flow.go:362 TypeParser.ExecutionFlow 61f84b410a0c36c4
     pub fn execution_flow(
         &mut self,
         sf: impl Into<Option<P<SourceFile>>>,
@@ -585,14 +585,14 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/execution_flow.go:379 parsedSingleArgInlineCallTransform
+// go: internal/typeparser/execution_flow.go:379 parsedSingleArgInlineCallTransform fd2cf086b1175a20
 pub(crate) struct ParsedSingleArgInlineCallTransform {
     subject: P<Node>,
     transform: P<Node>,
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/execution_flow.go:384 TypeParser.singleArgInlineCall
+    // go: internal/typeparser/execution_flow.go:384 TypeParser.singleArgInlineCall b37dca63d0e08929
     pub(crate) fn single_arg_inline_call(
         &mut self,
         node: Option<P<Node>>,

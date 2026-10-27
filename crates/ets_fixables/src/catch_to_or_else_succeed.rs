@@ -7,7 +7,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_OR_ELSE_SUCCEED_EXPRESSES_THE_SAME_RECOVERY_MORE_DIRECTLY_THAN_EFFECT_0_FOLLOWED_BY_EFFECT_SUCCEED_EFFECT_CATCH_TO_OR_ELSE_SUCCEED;
 
-// go: internal/fixables/catch_to_or_else_succeed.go:12 CatchToOrElseSucceedFix
+// go: internal/fixables/catch_to_or_else_succeed.go:12 CatchToOrElseSucceedFix 10595fd4cfc2a119
 pub static CATCH_TO_OR_ELSE_SUCCEED_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "catchToOrElseSucceed",
     description: "Replace Effect.catch + Effect.succeed with Effect.orElseSucceed",
@@ -16,7 +16,7 @@ pub static CATCH_TO_OR_ELSE_SUCCEED_FIX: LazyLock<Fixable> = LazyLock::new(|| Fi
     run: run_catch_to_or_else_succeed_fix,
 });
 
-// go: internal/fixables/catch_to_or_else_succeed.go:20 runCatchToOrElseSucceedFix
+// go: internal/fixables/catch_to_or_else_succeed.go:20 runCatchToOrElseSucceedFix 76b28b2a6be50fd2
 fn run_catch_to_or_else_succeed_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 

@@ -7,26 +7,26 @@ use rustc_hash::FxHashMap;
 
 use crate::*;
 
-// go: internal/typeparser/native_object.go:8 nativeObjectNamespace
-// go: internal/typeparser/native_object.go:10 nativeObjectInstance
+// go: internal/typeparser/native_object.go:8 nativeObjectNamespace 6f5834ca1227c643
+// go: internal/typeparser/native_object.go:10 nativeObjectInstance 38aaa4361d6a1aa0
 // Rust: a newtype over Go's `uint8` (its zero value means "no member"), with the Go constants as associated consts.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, Default)]
 pub(crate) struct NativeObjectNamespace(pub(crate) u8);
 
-// go: internal/typeparser/native_object.go:10 nativeObjectInstance
+// go: internal/typeparser/native_object.go:10 nativeObjectInstance 38aaa4361d6a1aa0
 impl NativeObjectNamespace {
     pub(crate) const Instance: NativeObjectNamespace = NativeObjectNamespace(1);
     pub(crate) const Constructor: NativeObjectNamespace = NativeObjectNamespace(2);
 }
 
-// go: internal/typeparser/native_object.go:15 nativeObjectMember
+// go: internal/typeparser/native_object.go:15 nativeObjectMember a072f5612c73fc8e
 #[derive(Clone, PartialEq, Eq, Hash, Debug, Default)]
 pub(crate) struct NativeObjectMember {
     namespace: NativeObjectNamespace,
     name: String,
 }
 
-// go: internal/typeparser/native_object.go:20 nativeObjectRegistry
+// go: internal/typeparser/native_object.go:20 nativeObjectRegistry 561f392aa595f220
 #[derive(Default)]
 pub(crate) struct NativeObjectRegistry {
     instance: FxHashMap<String, Vec<P<Symbol>>>,
@@ -34,7 +34,7 @@ pub(crate) struct NativeObjectRegistry {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/native_object.go:27 TypeParser.IsNativeObjectMethodReference
+    // go: internal/typeparser/native_object.go:27 TypeParser.IsNativeObjectMethodReference d9b6205df4f00b17
     // IsNativeObjectMethodReference compares the reference's roots with the named
     // Object prototype member, even when a mapped type renames the access.
     pub fn is_native_object_method_reference(
@@ -51,7 +51,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/native_object.go:33 TypeParser.IsNativeObjectConstructorMethodReference
+    // go: internal/typeparser/native_object.go:33 TypeParser.IsNativeObjectConstructorMethodReference 540957e10e49a606
     // IsNativeObjectConstructorMethodReference compares the reference's roots with
     // the named Object constructor member.
     pub fn is_native_object_constructor_method_reference(
@@ -68,7 +68,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/native_object.go:37 TypeParser.getNativeObjectRegistry
+    // go: internal/typeparser/native_object.go:37 TypeParser.getNativeObjectRegistry 4a764f3833ed1970
     pub(crate) fn get_native_object_registry(&mut self) -> Arc<NativeObjectRegistry> {
         if let Some(registry) = &self.links().native_object_registry {
             return Arc::clone(registry);
@@ -91,7 +91,7 @@ impl TypeParser<'_> {
         r
     }
 
-    // go: internal/typeparser/native_object.go:77 TypeParser.nativeObjectReference
+    // go: internal/typeparser/native_object.go:77 TypeParser.nativeObjectReference 68cdbbec901ef773
     pub(crate) fn native_object_reference(
         &mut self,
         node: Option<P<Node>>,
@@ -155,7 +155,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/native_object.go:37 TypeParser.getNativeObjectRegistry
+// go: internal/typeparser/native_object.go:37 TypeParser.getNativeObjectRegistry 4a764f3833ed1970
 // Rust: Go's `add` closure: the members of `t`'s symbol declared only in default library files, with their roots.
 // Go ranges over the member table (a map); the result does not depend on the order, as each name is one member.
 pub(crate) fn add_native_object_members(
@@ -191,7 +191,7 @@ pub(crate) fn add_native_object_members(
     }
 }
 
-// go: internal/typeparser/native_object.go:77 TypeParser.nativeObjectReference
+// go: internal/typeparser/native_object.go:77 TypeParser.nativeObjectReference 68cdbbec901ef773
 // Rust: the symbol lookup at the start of `nativeObjectReference`:
 // the referenced member of a property access, or of an element access with a string literal argument.
 pub(crate) fn native_object_reference_symbol(

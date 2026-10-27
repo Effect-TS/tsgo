@@ -10,7 +10,7 @@ use ets_shim::checker::{Checker, Type};
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::TypeParser;
 
-// go: internal/rules/missing_layer_context.go:19 MissingLayerContext
+// go: internal/rules/missing_layer_context.go:19 MissingLayerContext 43e23eee92e5390b
 // MissingLayerContext detects when a Layer has context requirements that are not
 // handled by the expected type. This happens when assigning a Layer with requirements
 // to a variable/parameter expecting a Layer with fewer or no requirements.
@@ -63,7 +63,7 @@ pub static MISSING_LAYER_CONTEXT: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/missing_layer_context.go:58 findUnhandledLayerContexts
+// go: internal/rules/missing_layer_context.go:58 findUnhandledLayerContexts dcd5895da9bc4e5c
 // findUnhandledLayerContexts returns the source Layer RIn types that are not assignable to the target RIn type.
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
@@ -85,7 +85,7 @@ pub(crate) fn find_unhandled_layer_contexts(
     unhandled
 }
 
-// go: internal/rules/missing_layer_context.go:73 formatLayerContextTypes
+// go: internal/rules/missing_layer_context.go:73 formatLayerContextTypes 038ebc4aaa7052bd
 // formatLayerContextTypes formats a slice of Layer context types as a union string (e.g., "ServiceA | ServiceB").
 pub(crate) fn format_layer_context_types(c: &mut Checker, types: &[P<Type>]) -> String {
     if types.is_empty() {

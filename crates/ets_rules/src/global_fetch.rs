@@ -7,7 +7,7 @@ use ets_shim::ast::{Diagnostic, Kind, Node, Symbol, SymbolFlags};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{EffectContextFlags, EffectMajorVersion};
 
-// go: internal/rules/global_fetch.go:12 GlobalFetch
+// go: internal/rules/global_fetch.go:12 GlobalFetch fd23c3a2f2b6b6c2
 pub static GLOBAL_FETCH: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
     name: "globalFetch",
@@ -20,7 +20,7 @@ pub static GLOBAL_FETCH: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/global_fetch.go:24 GlobalFetchInEffect
+// go: internal/rules/global_fetch.go:24 GlobalFetchInEffect a41d770884888e05
 pub static GLOBAL_FETCH_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
     name: "globalFetchInEffect",
@@ -33,7 +33,7 @@ pub static GLOBAL_FETCH_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/global_fetch.go:36 runGlobalFetch
+// go: internal/rules/global_fetch.go:36 runGlobalFetch f3a33c72328e0ce5
 pub(crate) fn run_global_fetch(
     ctx: &mut Context<'_, '_>,
     check_in_effect: bool,

@@ -3,7 +3,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go test: internal/completions/error_key_patterns_test.go:10 errorKeyPatternTsConfig
+// go test: internal/completions/error_key_patterns_test.go:10 errorKeyPatternTsConfig 515bd0bc82d68b0f
 const ERROR_KEY_PATTERN_TS_CONFIG: &str = r#"{
   "compilerOptions": {
     "strict": true,
@@ -22,7 +22,7 @@ const ERROR_KEY_PATTERN_TS_CONFIG: &str = r#"{
   }
 }"#;
 
-// go test: internal/completions/error_key_patterns_test.go:28 taggedClassKeyPatternTsConfig
+// go test: internal/completions/error_key_patterns_test.go:28 taggedClassKeyPatternTsConfig 47f671e7f9868a50
 const TAGGED_CLASS_KEY_PATTERN_TS_CONFIG: &str = r#"{
   "compilerOptions": {
     "strict": true,
@@ -40,10 +40,10 @@ const TAGGED_CLASS_KEY_PATTERN_TS_CONFIG: &str = r#"{
   }
 }"#;
 
-// go test: internal/completions/error_key_patterns_test.go:45 namedPackageJson
+// go test: internal/completions/error_key_patterns_test.go:45 namedPackageJson 7c071f81e6612149
 const NAMED_PACKAGE_JSON: &str = r#"{ "name": "@effect/harness-effect-v4" }"#;
 
-// go test: internal/completions/error_key_patterns_test.go:47 taggedItems
+// go test: internal/completions/error_key_patterns_test.go:47 taggedItems 8e2b17c083a7a1c4
 fn tagged_items(
     t: &T,
     tsconfig: &str,
@@ -66,7 +66,7 @@ fn tagged_items(
     completions.items
 }
 
-// go test: internal/completions/error_key_patterns_test.go:64 TestErrorKeyPatterns
+// go test: internal/completions/error_key_patterns_test.go:64 TestErrorKeyPatterns 8a1389a6a1ccefd8
 #[test]
 fn test_error_key_patterns() {
     go_test(|t| {

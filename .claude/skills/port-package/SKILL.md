@@ -26,7 +26,7 @@ files (`internal/rules: catch_*.go`).
   add it to the root `[workspace.dependencies]`. Dependencies are the Go imports, one for one, plus `ets_shim` for
   anything from `shim/...`. Never a `tsrs_*` crate.
 - Go file by Go file, in declaration order: for each declaration in `todo`, write the Rust item with its marker
-  (`// go: <path>:<line> <Name>`) on the line above. Keep the Go control flow, the order of operations, the message
+  (`// go: <path>:<line> <Name>`, as `todo` prints it, without a hash: `port-ack` adds it) on the line above. Keep the Go control flow, the order of operations, the message
   texts and the comments that explain why.
 - Go `init()` registration (rules, hooks) -> `pub(crate) fn` with the `init` marker, called from the crate's
   `pub fn init()` (`docs/PORTING.md`, "Go runtime equivalents").
@@ -63,6 +63,7 @@ When a declaration's Rust is complete and its tests pass:
 
 ```sh
 pnpm exec repoctl tsrs port-ack <path> <Name>...        # or: pnpm exec repoctl tsrs port-ack --prefix <package>/
+                                                        # (writes the Go hash at the end of each marker)
 pnpm exec repoctl tsrs port-check                       # must pass
 ```
 

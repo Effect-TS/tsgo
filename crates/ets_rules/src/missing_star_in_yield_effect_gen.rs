@@ -8,7 +8,7 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::{EffectContextFlags, TypeParser};
 
-// go: internal/rules/missing_star_in_yield_effect_gen.go:15 MissingStarInYieldEffectGen
+// go: internal/rules/missing_star_in_yield_effect_gen.go:15 MissingStarInYieldEffectGen 802bb6b725d9e65a
 // MissingStarInYieldEffectGen detects bare yield (without *) inside Effect generator scopes.
 pub static MISSING_STAR_IN_YIELD_EFFECT_GEN: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
@@ -30,7 +30,7 @@ pub static MISSING_STAR_IN_YIELD_EFFECT_GEN: LazyLock<Rule> = LazyLock::new(|| {
     }
 });
 
-// go: internal/rules/missing_star_in_yield_effect_gen.go:35 MissingStarInYieldEffectGenMatch
+// go: internal/rules/missing_star_in_yield_effect_gen.go:35 MissingStarInYieldEffectGenMatch 141189a149e5143d
 // MissingStarInYieldEffectGenMatch holds the AST node needed by both the diagnostic rule
 // and the quick-fix for the missingStarInYieldEffectGen pattern.
 #[derive(Clone)]
@@ -41,7 +41,7 @@ pub struct MissingStarInYieldEffectGenMatch {
     pub gen_fn_node: P<Node>,       // The generator function node (for related info)
 }
 
-// go: internal/rules/missing_star_in_yield_effect_gen.go:44 AnalyzeMissingStarInYieldEffectGen
+// go: internal/rules/missing_star_in_yield_effect_gen.go:44 AnalyzeMissingStarInYieldEffectGen 152d50385b96c5cd
 // AnalyzeMissingStarInYieldEffectGen finds all yield expressions inside Effect generators
 // that are missing the asterisk (yield instead of yield*).
 //

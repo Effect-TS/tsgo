@@ -7,7 +7,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_0_EXPRESSES_THIS_NON_EFFECTFUL_FOLD_MORE_DIRECTLY_THAN_EFFECT_1_WITH_EFFECT_SUCCEED_HANDLERS_EFFECT_MATCH_EFFECT_TO_MATCH;
 
-// go: internal/fixables/match_effect_to_match.go:12 MatchEffectToMatchFix
+// go: internal/fixables/match_effect_to_match.go:12 MatchEffectToMatchFix 6acfd3f3fedb6961
 pub static MATCH_EFFECT_TO_MATCH_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "matchEffectToMatch",
     description: "Replace Effect.matchEffect with Effect.match and unwrap Effect.succeed handlers",
@@ -16,7 +16,7 @@ pub static MATCH_EFFECT_TO_MATCH_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixab
     run: run_match_effect_to_match_fix,
 });
 
-// go: internal/fixables/match_effect_to_match.go:18 runMatchEffectToMatchFix
+// go: internal/fixables/match_effect_to_match.go:18 runMatchEffectToMatchFix be8ebc28afe6f50e
 //
 // Rust: the match's callee node is never nil (a non-optional field), so Go's nil check drops.
 fn run_match_effect_to_match_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {

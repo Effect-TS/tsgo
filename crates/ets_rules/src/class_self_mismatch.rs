@@ -8,7 +8,7 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::TypeParser;
 
-// go: internal/rules/class_self_mismatch.go:18 ClassSelfMismatch
+// go: internal/rules/class_self_mismatch.go:18 ClassSelfMismatch 8604fa5473ab39b1
 // ClassSelfMismatch ensures the Self type parameter matches the class name in
 // Effect.Service, Context.Service, Context.Tag, Effect.Tag, Schema.Class,
 // Schema.TaggedClass, Schema.TaggedError, Schema.TaggedRequest,
@@ -40,7 +40,7 @@ pub static CLASS_SELF_MISMATCH: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/class_self_mismatch.go:37 ClassSelfMismatchMatch
+// go: internal/rules/class_self_mismatch.go:37 ClassSelfMismatchMatch 63dca53c6a5208b6
 // ClassSelfMismatchMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the classSelfMismatch pattern.
 #[derive(Clone)]
@@ -53,7 +53,7 @@ pub struct ClassSelfMismatchMatch {
     pub actual_name: String,        // The actual name found in the Self type parameter
 }
 
-// go: internal/rules/class_self_mismatch.go:48 AnalyzeClassSelfMismatch
+// go: internal/rules/class_self_mismatch.go:48 AnalyzeClassSelfMismatch d7bc187efbd0f71e
 // AnalyzeClassSelfMismatch finds all class declarations where the Self type
 // parameter does not match the class name.
 //
@@ -86,7 +86,7 @@ pub fn analyze_class_self_mismatch(
     matches
 }
 
-// go: internal/rules/class_self_mismatch.go:74 checkClassSelfMismatch
+// go: internal/rules/class_self_mismatch.go:74 checkClassSelfMismatch 58b3a2172846397b
 pub(crate) fn check_class_self_mismatch(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -152,7 +152,7 @@ pub(crate) fn check_class_self_mismatch(
     })
 }
 
-// go: internal/rules/class_self_mismatch.go:142 extractSelfTypeName
+// go: internal/rules/class_self_mismatch.go:142 extractSelfTypeName 86a1fee1e6a6cf65
 // extractSelfTypeName extracts the name text from a Self type node.
 // For TypeReferenceNode with Identifier typeName → identifier text.
 // For TypeReferenceNode with QualifiedName typeName → right identifier text.

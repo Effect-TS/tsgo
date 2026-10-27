@@ -38,7 +38,7 @@ fn init_hooks() {
     ets_etstesthooks::init();
 }
 
-// go test: internal/completions/fourslash_test.go:15 completionTestTsConfig
+// go test: internal/completions/fourslash_test.go:15 completionTestTsConfig 9b1d4cf9cd83e9bc
 pub(crate) const COMPLETION_TEST_TS_CONFIG: &str = r#"{
   "compilerOptions": {
     "strict": true,
@@ -53,7 +53,7 @@ pub(crate) const COMPLETION_TEST_TS_CONFIG: &str = r#"{
   }
 }"#;
 
-// go test: internal/completions/fourslash_test.go:29 completionItemsAt
+// go test: internal/completions/fourslash_test.go:29 completionItemsAt 0efe0a729348a592
 pub(crate) fn completion_items_at(
     t: &T,
     source: &str,
@@ -84,7 +84,7 @@ pub(crate) fn completion_items_at(
     completions.items
 }
 
-// go test: internal/completions/fourslash_test.go:51 completionItemsAtWithPackageJSON
+// go test: internal/completions/fourslash_test.go:51 completionItemsAtWithPackageJSON 106832f810f8a102
 pub(crate) fn completion_items_at_with_package_json(
     t: &T,
     package_json: &str,
@@ -116,7 +116,7 @@ pub(crate) fn completion_items_at_with_package_json(
     completions.items
 }
 
-// go test: internal/completions/fourslash_test.go:74 filterCompletionItems
+// go test: internal/completions/fourslash_test.go:74 filterCompletionItems bafb82cb32041e59
 pub(crate) fn filter_completion_items(
     items: Vec<lsproto::CompletionItem>,
     keep: impl Fn(&lsproto::CompletionItem) -> bool,
@@ -124,7 +124,7 @@ pub(crate) fn filter_completion_items(
     items.into_iter().filter(|item| keep(item)).collect()
 }
 
-// go test: internal/completions/fourslash_test.go:90 findCompletionItem
+// go test: internal/completions/fourslash_test.go:90 findCompletionItem a6f4a6fdbfd26361
 pub(crate) fn find_completion_item<'a>(
     items: &'a [lsproto::CompletionItem],
     label: &str,
@@ -132,7 +132,7 @@ pub(crate) fn find_completion_item<'a>(
     items.iter().find(|item| item.label == label)
 }
 
-// go test: internal/completions/fourslash_test.go:99 fnFunctionStarItems
+// go test: internal/completions/fourslash_test.go:99 fnFunctionStarItems fb56911749cca170
 pub(crate) fn fn_function_star_items(
     t: &T,
     source: &str,
@@ -146,7 +146,7 @@ pub(crate) fn fn_function_star_items(
     })
 }
 
-// go test: internal/completions/fourslash_test.go:106 effectJsdocCommentItems
+// go test: internal/completions/fourslash_test.go:106 effectJsdocCommentItems 04e61bcc80bfe785
 pub(crate) fn effect_jsdoc_comment_items(
     t: &T,
     source: &str,
@@ -158,7 +158,7 @@ pub(crate) fn effect_jsdoc_comment_items(
     })
 }
 
-// go test: internal/completions/fourslash_test.go:113 effectCodegensCommentItems
+// go test: internal/completions/fourslash_test.go:113 effectCodegensCommentItems 3d688c18669bc6fe
 pub(crate) fn effect_codegens_comment_items(
     t: &T,
     source: &str,
@@ -170,7 +170,7 @@ pub(crate) fn effect_codegens_comment_items(
     })
 }
 
-// go test: internal/completions/fourslash_test.go:120 effectDiagnosticsCommentItems
+// go test: internal/completions/fourslash_test.go:120 effectDiagnosticsCommentItems 45f107a8ab889340
 pub(crate) fn effect_diagnostics_comment_items(
     t: &T,
     source: &str,
@@ -182,7 +182,7 @@ pub(crate) fn effect_diagnostics_comment_items(
     })
 }
 
-// go test: internal/completions/fourslash_test.go:127 durationInputItems
+// go test: internal/completions/fourslash_test.go:127 durationInputItems faaa0afc25a5cc71
 pub(crate) fn duration_input_items(
     t: &T,
     source: &str,
@@ -195,7 +195,7 @@ pub(crate) fn duration_input_items(
     })
 }
 
-// go test: internal/completions/fourslash_test.go:134 effectSelfInClassesItems
+// go test: internal/completions/fourslash_test.go:134 effectSelfInClassesItems 7401f14c674bb805
 pub(crate) fn effect_self_in_classes_items(
     t: &T,
     source: &str,
@@ -207,7 +207,7 @@ pub(crate) fn effect_self_in_classes_items(
     })
 }
 
-// go test: internal/completions/fourslash_test.go:141 contextSelfInClassesItems
+// go test: internal/completions/fourslash_test.go:141 contextSelfInClassesItems daba8b5542e70518
 pub(crate) fn context_self_in_classes_items(
     t: &T,
     source: &str,
@@ -219,7 +219,7 @@ pub(crate) fn context_self_in_classes_items(
     })
 }
 
-// go test: internal/completions/fourslash_test.go:148 contextSelfInClassesItemsWithPackageJSON
+// go test: internal/completions/fourslash_test.go:148 contextSelfInClassesItemsWithPackageJSON 3d9a8c0f60cd9adb
 pub(crate) fn context_self_in_classes_items_with_package_json(
     t: &T,
     source: &str,
@@ -235,7 +235,7 @@ pub(crate) fn context_self_in_classes_items_with_package_json(
     )
 }
 
-// go test: internal/completions/fourslash_test.go:158 effectSQLModelSelfInClassesItems
+// go test: internal/completions/fourslash_test.go:158 effectSQLModelSelfInClassesItems 011e7bd874e5d46c
 pub(crate) fn effect_sql_model_self_in_classes_items(
     t: &T,
     source: &str,
@@ -247,7 +247,7 @@ pub(crate) fn effect_sql_model_self_in_classes_items(
     })
 }
 
-// go test: internal/completions/fourslash_test.go:165 rpcMakeClassesItems
+// go test: internal/completions/fourslash_test.go:165 rpcMakeClassesItems 22c0dc870abd18bb
 pub(crate) fn rpc_make_classes_items(
     t: &T,
     source: &str,
@@ -259,7 +259,7 @@ pub(crate) fn rpc_make_classes_items(
     })
 }
 
-// go test: internal/completions/fourslash_test.go:172 schemaBrandItems
+// go test: internal/completions/fourslash_test.go:172 schemaBrandItems db5c66bf239f9abd
 pub(crate) fn schema_brand_items(
     t: &T,
     source: &str,

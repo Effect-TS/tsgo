@@ -4,7 +4,7 @@ use ets_bundledeffect::EffectVersion;
 
 use crate::*;
 
-// go test: internal/rules/effect_sleep_zero_to_yield_now_test.go:12 TestEffectSleepZeroToYieldNowVersionDetection
+// go test: internal/rules/effect_sleep_zero_to_yield_now_test.go:12 TestEffectSleepZeroToYieldNowVersionDetection 141e0e3d7765036c
 //
 // Rust: Go decodes package.json into `map[string]json.RawMessage` and re-encodes it (keys sorted, values compacted);
 // here the values go through the test's Go-`any` encoder (`Json`), which keeps the same keys and values.

@@ -2,7 +2,7 @@ use ets_go::testing::run;
 
 use crate::*;
 
-// go test: internal/rules/prefer_effect_record_test.go:5 TestPreferEffectRecordInheritedAugmentation
+// go test: internal/rules/prefer_effect_record_test.go:5 TestPreferEffectRecordInheritedAugmentation e70557c50149b0e6
 #[test]
 fn test_prefer_effect_record_inherited_augmentation() {
     run(|t| {
@@ -28,7 +28,7 @@ Object.keys({ a: 1 });
     });
 }
 
-// go test: internal/rules/prefer_effect_record_test.go:20 TestPreferEffectRecordRemappedMember
+// go test: internal/rules/prefer_effect_record_test.go:20 TestPreferEffectRecordRemappedMember a13614f3d767f7b5
 #[test]
 fn test_prefer_effect_record_remapped_member() {
     run(|t| {

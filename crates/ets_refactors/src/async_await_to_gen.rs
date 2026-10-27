@@ -16,7 +16,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go: internal/refactors/async_await_to_gen.go:12 AsyncAwaitToGen
+// go: internal/refactors/async_await_to_gen.go:12 AsyncAwaitToGen 1af34f958ed81d0a
 pub static ASYNC_AWAIT_TO_GEN: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "asyncAwaitToGen",
     description: "Convert async/await to Effect.gen",
@@ -24,7 +24,7 @@ pub static ASYNC_AWAIT_TO_GEN: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     run: run_async_await_to_gen,
 });
 
-// go: internal/refactors/async_await_to_gen.go:19 runAsyncAwaitToGen
+// go: internal/refactors/async_await_to_gen.go:19 runAsyncAwaitToGen eac75f29d9f4d4bf
 // Rust: tsrs's `get_token_at_position` never returns nil, so Go's nil check drops.
 pub(crate) fn run_async_await_to_gen(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let token = astnav::get_token_at_position(ctx.source_file, span_pos(ctx));
@@ -63,7 +63,7 @@ pub(crate) fn run_async_await_to_gen(ctx: &mut Context<'_, '_>) -> Vec<CodeActio
     vec![action]
 }
 
-// go: internal/refactors/async_await_to_gen.go:64 replaceExpressionViaStatement
+// go: internal/refactors/async_await_to_gen.go:64 replaceExpressionViaStatement a17d8b5b095ec89d
 // replaceExpressionViaStatement replaces an expression node that is the sole
 // initializer of a VariableStatement by rebuilding and replacing the entire
 // statement. This avoids a printer assertion failure that occurs when replacing
@@ -123,7 +123,7 @@ pub(crate) fn replace_expression_via_statement(
     tracker.replace_node(sf, Some(var_stmt), Some(new_var_stmt), None);
 }
 
-// go: internal/refactors/async_await_to_gen.go:109 findParentOfKind
+// go: internal/refactors/async_await_to_gen.go:109 findParentOfKind ee750be3dfe6eb13
 // findParentOfKind walks up the parent chain to find a node of the given kind.
 pub(crate) fn find_parent_of_kind(node: P<Node>, kind: Kind) -> Option<P<Node>> {
     let mut n = node.parent();
@@ -136,7 +136,7 @@ pub(crate) fn find_parent_of_kind(node: P<Node>, kind: Kind) -> Option<P<Node>> 
     None
 }
 
-// go: internal/refactors/async_await_to_gen.go:120 findAsyncFunction
+// go: internal/refactors/async_await_to_gen.go:120 findAsyncFunction 5c6b6b99ec63ae49
 // findAsyncFunction walks the ancestor chain from token to find the nearest
 // async function declaration, function expression, or arrow function.
 pub(crate) fn find_async_function(token: Option<P<Node>>) -> Option<P<Node>> {
@@ -159,7 +159,7 @@ pub(crate) fn find_async_function(token: Option<P<Node>>) -> Option<P<Node>> {
     None
 }
 
-// go: internal/refactors/async_await_to_gen.go:137 transformAsyncToEffectGen
+// go: internal/refactors/async_await_to_gen.go:137 transformAsyncToEffectGen 85b9e3933289df13
 // transformAsyncToEffectGen transforms an async function to use Effect.gen.
 pub(crate) fn transform_async_to_effect_gen(
     tracker: &Tracker,
@@ -185,14 +185,14 @@ pub(crate) fn transform_async_to_effect_gen(
     build_non_async_declaration(tracker, node, effect_gen_call)
 }
 
-// go: internal/refactors/async_await_to_gen.go:156 TransformAwaitExpr
+// go: internal/refactors/async_await_to_gen.go:156 TransformAwaitExpr 6359f9cfbf334c79
 // TransformAwaitExpr is the callback type for transforming await expressions.
 //
 // Rust: the callback runs inside tsrs's node visitor, whose callback is a `'static` closure that cannot borrow the
 // tracker, so it gets the tracker's factory (all Go's callbacks use the tracker only as a factory) and is shared.
 pub type TransformAwaitExpr = Rc<dyn Fn(&NodeFactory, P<Node>) -> P<Node>>;
 
-// go: internal/refactors/async_await_to_gen.go:160 transformBodyAwaitToYield
+// go: internal/refactors/async_await_to_gen.go:160 transformBodyAwaitToYield ba94ed933c32ca82
 // transformBodyAwaitToYield replaces all AwaitExpression nodes in the body
 // with the result of onAwait. Returns a deep-cloned, fully synthetic tree.
 pub(crate) fn transform_body_await_to_yield(
@@ -231,7 +231,7 @@ pub(crate) fn transform_body_await_to_yield(
     result
 }
 
-// go: internal/refactors/async_await_to_gen.go:187 containsAwaitExpression
+// go: internal/refactors/async_await_to_gen.go:187 containsAwaitExpression 983901e1c37b5eac
 // containsAwaitExpression checks if a node tree contains any AwaitExpression.
 pub(crate) fn contains_await_expression(node: P<Node>) -> bool {
     if node.kind() == Kind::AwaitExpression {
@@ -248,7 +248,7 @@ pub(crate) fn contains_await_expression(node: P<Node>) -> bool {
     found
 }
 
-// go: internal/refactors/async_await_to_gen.go:203 buildYieldStarPromise
+// go: internal/refactors/async_await_to_gen.go:203 buildYieldStarPromise d1bfb592ed49892c
 // buildYieldStarPromise builds: yield* Effect.promise(() => expr)
 pub(crate) fn build_yield_star_promise(
     tracker: &NodeFactory,
@@ -280,7 +280,7 @@ pub(crate) fn build_yield_star_promise(
     tracker.new_yield_expression(Some(tracker.new_token(Kind::AsteriskToken)), Some(promise_call))
 }
 
-// go: internal/refactors/async_await_to_gen.go:231 buildEffectGenCall
+// go: internal/refactors/async_await_to_gen.go:231 buildEffectGenCall d04215a44a18f742
 // buildEffectGenCall builds: Effect.gen(function*() { body })
 pub(crate) fn build_effect_gen_call(
     tracker: &NodeFactory,
@@ -318,7 +318,7 @@ pub(crate) fn build_effect_gen_call(
     )
 }
 
-// go: internal/refactors/async_await_to_gen.go:264 buildNonAsyncDeclaration
+// go: internal/refactors/async_await_to_gen.go:264 buildNonAsyncDeclaration 1c5d502c0cacd7a2
 // buildNonAsyncDeclaration builds a new function declaration/expression/arrow
 // without the async modifier, with the given effectGenCall as the new body.
 pub(crate) fn build_non_async_declaration(
@@ -380,7 +380,7 @@ pub(crate) fn build_non_async_declaration(
     }
 }
 
-// go: internal/refactors/async_await_to_gen.go:323 getModifiersWithoutAsync
+// go: internal/refactors/async_await_to_gen.go:323 getModifiersWithoutAsync 914c4ea0928e26fe
 // getModifiersWithoutAsync returns a new modifier list with the async keyword removed.
 pub(crate) fn get_modifiers_without_async(
     tracker: &NodeFactory,
@@ -407,7 +407,7 @@ pub(crate) fn get_modifiers_without_async(
     Some(tracker.new_modifier_list(mod_nodes))
 }
 
-// go: internal/refactors/async_await_to_gen.go:353 cloneNodeList
+// go: internal/refactors/async_await_to_gen.go:353 cloneNodeList fca2dfa629eedefa
 // cloneNodeList deep-clones a NodeList if non-nil.
 pub(crate) fn clone_node_list(
     tracker: &NodeFactory,

@@ -6,7 +6,7 @@ use ets_shim::core::P;
 
 use crate::helpers_test::*;
 
-// go test: internal/typeparser/effect_type_test.go:9 TestStrictEffectTypeCachesOnlyEffectNamedTypes
+// go test: internal/typeparser/effect_type_test.go:9 TestStrictEffectTypeCachesOnlyEffectNamedTypes 360a7d597a585d73
 // Rust: Go compares the cached `*Effect` by pointer; the Rust result is a value, compared by value.
 #[test]
 fn test_strict_effect_type_caches_only_effect_named_types() {

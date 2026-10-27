@@ -6,7 +6,7 @@ use ets_shim::ls::CodeAction;
 
 use crate::*;
 
-// go: internal/refactor/refactor.go:13 Refactor
+// go: internal/refactor/refactor.go:13 Refactor 4970b85bef66b3a2
 // Refactor defines a selection-based refactoring action.
 // Unlike Fixable, refactors are not tied to a specific diagnostic error code —
 // they apply based on the user's selection.

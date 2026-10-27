@@ -5,7 +5,7 @@ use rustc_hash::FxHashSet;
 use crate::*;
 
 impl ApiStabilityAnalysis {
-    // go: internal/typeparser/api_stability_inheritance.go:14 apiStabilityAnalysis.optionalTaggedBase
+    // go: internal/typeparser/api_stability_inheritance.go:14 apiStabilityAnalysis.optionalTaggedBase 0f8369605867c4be
     // optionalTaggedBase reads declaration metadata only. Every public member,
     // including inherited and merged members, must be an optional property or
     // method with its own recognized stability tag. Internal members are ignored.
@@ -120,7 +120,7 @@ impl ApiStabilityAnalysis {
         true
     }
 
-    // go: internal/typeparser/api_stability_inheritance.go:108 apiStabilityAnalysis.optionalTaggedInheritedMember
+    // go: internal/typeparser/api_stability_inheritance.go:108 apiStabilityAnalysis.optionalTaggedInheritedMember f3f0ab77fdd5e4c0
     // optionalTaggedInheritedMember applies the base exception to properties the
     // compiler flattened into a derived member table, including superclass factory
     // intersection types. Own members are always inspected independently.

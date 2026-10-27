@@ -7,7 +7,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/expected_and_real_type.go:13 ExpectedAndRealType
+// go: internal/typeparser/expected_and_real_type.go:13 ExpectedAndRealType 0c6ad21ce6dc477f
 // ExpectedAndRealType represents a pair of expected and actual types at an assignment site.
 // This is used by diagnostic rules that need to compare what type was expected at a location
 // versus what type was actually provided.
@@ -20,28 +20,28 @@ pub struct ExpectedAndRealType {
 }
 
 impl ExpectedAndRealType {
-    // go: internal/typeparser/expected_and_real_type.go:21 ExpectedAndRealType.Node
+    // go: internal/typeparser/expected_and_real_type.go:21 ExpectedAndRealType.Node 6505ddf90fa2843e
     pub fn node(&self) -> P<Node> {
         self.node
     }
 
-    // go: internal/typeparser/expected_and_real_type.go:23 ExpectedAndRealType.ExpectedType
+    // go: internal/typeparser/expected_and_real_type.go:23 ExpectedAndRealType.ExpectedType 77bc8ef64658adba
     // Rust: the lazy resolves through `tp` (see `Lazy`).
     pub fn expected_type(&self, tp: &mut TypeParser<'_>) -> Option<P<Type>> {
         Lazy::get(self.expected_type.as_ref(), tp)
     }
 
-    // go: internal/typeparser/expected_and_real_type.go:25 ExpectedAndRealType.ValueNode
+    // go: internal/typeparser/expected_and_real_type.go:25 ExpectedAndRealType.ValueNode 5c3f308b9a388175
     pub fn value_node(&self) -> P<Node> {
         self.value_node
     }
 
-    // go: internal/typeparser/expected_and_real_type.go:27 ExpectedAndRealType.RealNode
+    // go: internal/typeparser/expected_and_real_type.go:27 ExpectedAndRealType.RealNode 3244ac32d455c801
     pub fn real_node(&self) -> P<Node> {
         self.real_node
     }
 
-    // go: internal/typeparser/expected_and_real_type.go:29 ExpectedAndRealType.RealType
+    // go: internal/typeparser/expected_and_real_type.go:29 ExpectedAndRealType.RealType da4b2cddd21165c0
     // Rust: the lazy resolves through `tp` (see `Lazy`).
     pub fn real_type(&self, tp: &mut TypeParser<'_>) -> Option<P<Type>> {
         Lazy::get(self.real_type.as_ref(), tp)
@@ -49,7 +49,7 @@ impl ExpectedAndRealType {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/expected_and_real_type.go:34 TypeParser.getInferredReturnType
+    // go: internal/typeparser/expected_and_real_type.go:34 TypeParser.getInferredReturnType 58b0cafd115de079
     // getInferredReturnType extracts the return type from a function-like declaration.
     // It handles overloaded functions (multiple call signatures), type predicates,
     // and regular signature return types.
@@ -91,7 +91,7 @@ impl TypeParser<'_> {
         return_type
     }
 
-    // go: internal/typeparser/expected_and_real_type.go:94 TypeParser.ExpectedAndRealTypes
+    // go: internal/typeparser/expected_and_real_type.go:94 TypeParser.ExpectedAndRealTypes 0d088400b7a321f6
     // ExpectedAndRealTypes walks the AST of a source file using breadth-first traversal
     // and collects pairs of expected vs actual types at assignment sites.
     //
@@ -121,7 +121,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/expected_and_real_type.go:94 TypeParser.ExpectedAndRealTypes
+    // go: internal/typeparser/expected_and_real_type.go:94 TypeParser.ExpectedAndRealTypes 0d088400b7a321f6
     // Rust: the cached computation of `ExpectedAndRealTypes` (a Go func literal).
     fn collect_expected_and_real_types(
         &mut self,
@@ -321,7 +321,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/expected_and_real_type.go:308 getObjectLiteralElementName
+// go: internal/typeparser/expected_and_real_type.go:308 getObjectLiteralElementName 98a8ec51eb4a842c
 // getObjectLiteralElementName returns the name node of an object literal element
 // (PropertyAssignment, ShorthandPropertyAssignment, etc.), or nil.
 pub(crate) fn get_object_literal_element_name(node: Option<P<Node>>) -> Option<P<Node>> {
@@ -333,7 +333,7 @@ pub(crate) fn get_object_literal_element_name(node: Option<P<Node>>) -> Option<P
     }
 }
 
-// go: internal/typeparser/expected_and_real_type.go:329 getNodeTextForPropertyLookup
+// go: internal/typeparser/expected_and_real_type.go:329 getNodeTextForPropertyLookup 42ab0df560b49674
 // getNodeTextForPropertyLookup extracts the text from an identifier or string literal
 // node for use in property type lookup.
 pub(crate) fn get_node_text_for_property_lookup(node: Option<P<Node>>) -> String {

@@ -5,7 +5,7 @@ use ets_shim::core::json;
 
 use crate::*;
 
-// go test: etscore/version_generated_test.go:11 TestEffectVersionMatchesPackageJSON
+// go test: etscore/version_generated_test.go:11 TestEffectVersionMatchesPackageJSON 60f772d41ed859a6
 #[test]
 fn test_effect_version_matches_package_json() {
     ets_go::testing::run(|t| {

@@ -10,7 +10,7 @@ use crate::*;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_0_EXPRESSES_THIS_FAILURE_DIRECTLY_INSTEAD_OF_WRAPPING_CAUSE_2_IN_EFFECT_1_EFFECT_FAIL_CAUSE_TO_CONSTRUCTOR;
 
-// go: internal/fixables/fail_cause_to_constructor.go:13 FailCauseToConstructorFix
+// go: internal/fixables/fail_cause_to_constructor.go:13 FailCauseToConstructorFix 37d7ff7453c15089
 pub static FAIL_CAUSE_TO_CONSTRUCTOR_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "failCauseToConstructor",
     description: "Replace with the direct Effect failure constructor",
@@ -19,7 +19,7 @@ pub static FAIL_CAUSE_TO_CONSTRUCTOR_FIX: LazyLock<Fixable> = LazyLock::new(|| F
     run: run_fail_cause_to_constructor_fix,
 });
 
-// go: internal/fixables/fail_cause_to_constructor.go:23 runFailCauseToConstructorFix
+// go: internal/fixables/fail_cause_to_constructor.go:23 runFailCauseToConstructorFix 9efc8105ebef4e9c
 fn run_fail_cause_to_constructor_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     for m in ets_rules::analyze_fail_cause_to_constructor(&mut ctx.type_parser, Some(sf)) {

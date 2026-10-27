@@ -39,7 +39,7 @@ fn names(used: &ApiStabilityUsed) -> String {
     format!("{:?}", api_stability_dependency_names(used))
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:13 assertApiStabilitySurfaceExcludesOwnTag
+// go test: internal/typeparser/api_stability_surface_test.go:13 assertApiStabilitySurfaceExcludesOwnTag 977126e9371edff5
 // assertApiStabilitySurfaceExcludesOwnTag asserts that a surface result carries
 // none of the root's own findings. name is the display name the root's own tag
 // would report under; other names are legitimate child dependencies.
@@ -55,7 +55,7 @@ fn assert_api_stability_surface_excludes_own_tag(t: &T, used: &ApiStabilityUsed,
     }
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:29 TestApiStabilityRootTagIsExcludedFromResult
+// go test: internal/typeparser/api_stability_surface_test.go:29 TestApiStabilityRootTagIsExcludedFromResult 05e54f5c4669164b
 // TestApiStabilityRootTagIsExcludedFromResult pins the
 // declared-versus-surface split for every root kind: declared stability
 // is the component's own tag, while the surface result is the minimum
@@ -248,7 +248,7 @@ export type TaggedAliasLeaky = { value: E }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:161 TestApiStabilityRootExclusionIsAResultConversion
+// go test: internal/typeparser/api_stability_surface_test.go:161 TestApiStabilityRootExclusionIsAResultConversion 0597cc514375eaa8
 // TestApiStabilityRootExclusionIsAResultConversion proves
 // the exclusion belongs to the result conversion and not to the stored
 // surface: the stored surface always keeps its own tag, so the same concrete
@@ -333,7 +333,7 @@ export interface Holder { shared: Shared }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:222 TestApiStabilityAliasRootVersusConcreteIdentity
+// go test: internal/typeparser/api_stability_surface_test.go:222 TestApiStabilityAliasRootVersusConcreteIdentity 9b13cd6db0aa537e
 // TestApiStabilityAliasRootVersusConcreteIdentity pins the
 // alias treatment: a tagged alias root excludes its own tag but the concrete
 // underlying identity it resolves to stays an exposed child. A non-generic
@@ -440,7 +440,7 @@ export type TaggedAliasToConcrete = Concrete
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:282 TestApiStabilityOverloadTagsStayDistinct
+// go test: internal/typeparser/api_stability_surface_test.go:282 TestApiStabilityOverloadTagsStayDistinct ba351542310d3a67
 // TestApiStabilityOverloadTagsStayDistinct pins the
 // overload treatment: the root symbol's own tag is exactly the declared tag the
 // symbol-level declared accessor reports, so a tagged overload of that same
@@ -585,7 +585,7 @@ fn require_quiet(t: &T, used: &ApiStabilityUsed, message: &str) {
     }
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:366 TestApiStabilityExplicitStableBoundaries
+// go test: internal/typeparser/api_stability_surface_test.go:366 TestApiStabilityExplicitStableBoundaries bb2169d761725412
 // TestApiStabilityExplicitStableBoundaries pins the child
 // rules: an absent tag and an explicit stable tag are both effective stable at
 // the export ceiling while staying distinct in the declared lookup, a named
@@ -691,7 +691,7 @@ export interface RootWithPlainHidden { box: PlainHidden }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:442 TestApiStabilityChildrenStillChecked
+// go test: internal/typeparser/api_stability_surface_test.go:442 TestApiStabilityChildrenStillChecked 4148f839e777d5de
 // TestApiStabilityChildrenStillChecked pins that the
 // root-excluding split keeps the currently represented obligations checked:
 // generic parameters, constraints, inferred anonymous nested returns and
@@ -771,7 +771,7 @@ export interface TaggedConstrained<T extends E> { value: T }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:502 TestApiStabilityIncompleteAndCyclesKeepExclusion
+// go test: internal/typeparser/api_stability_surface_test.go:502 TestApiStabilityIncompleteAndCyclesKeepExclusion 0627b529e90b059e
 // TestApiStabilityIncompleteAndCyclesKeepExclusion pins
 // that an incomplete or cycle-settled result still excludes the root's own tag
 // and keeps the generality of the result: incomplete is never treated as
@@ -847,7 +847,7 @@ export interface Cold { plain: number; [Symbol.iterator](): E }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:558 TestApiStabilityDeclaredReadsStayIndependent
+// go test: internal/typeparser/api_stability_surface_test.go:558 TestApiStabilityDeclaredReadsStayIndependent 78e7401d8b914104
 // TestApiStabilityDeclaredReadsStayIndependent pins that
 // the split keeps declared and computed state independent for every new root
 // accessor: reading a declared level never populates a session or triggers a
@@ -917,7 +917,7 @@ export interface TaggedIface { value: string }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:613 TestApiStabilityChildBoundaryDifferentials
+// go test: internal/typeparser/api_stability_surface_test.go:613 TestApiStabilityChildBoundaryDifferentials c54ea07bd1d2a2b2
 // TestApiStabilityChildBoundaryDifferentials pins the
 // explicitly tagged child boundary on every surface edge: a child carrying an
 // explicit declared tag contributes its declared level and its internals are
@@ -1279,7 +1279,7 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:865 TestApiStabilityFlattenedInheritanceBoundaries
+// go test: internal/typeparser/api_stability_surface_test.go:865 TestApiStabilityFlattenedInheritanceBoundaries 665e0c0abe9a92f7
 // TestApiStabilityFlattenedInheritanceBoundaries pins the
 // fix2 correction: the compiler flattens inherited call, construct and index
 // signatures of a derived structured type while keeping each declaration's
@@ -1758,7 +1758,7 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1186 apiStabilitySharedTypeEntry
+// go test: internal/typeparser/api_stability_surface_test.go:1186 apiStabilitySharedTypeEntry 7bf95f3303e6326a
 // apiStabilitySharedTypeEntry returns the published snapshot of a concrete
 // type surface, or nil when nothing was published for the identity.
 //
@@ -1773,7 +1773,7 @@ pub(crate) fn api_stability_shared_type_entry(
     tp.links().api_stability_surface_type.get(&ApiStabilitySurfaceTypeKey { t, inspect }).cloned()
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1195 apiStabilitySharedSignatureEntry
+// go test: internal/typeparser/api_stability_surface_test.go:1195 apiStabilitySharedSignatureEntry 438ac986b6477a36
 // apiStabilitySharedSignatureEntry returns the published snapshot of a
 // concrete signature surface, or nil when nothing was published.
 pub(crate) fn api_stability_shared_signature_entry(
@@ -1784,7 +1784,7 @@ pub(crate) fn api_stability_shared_signature_entry(
     tp.links().api_stability_surface_signature.get(&signature).cloned()
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1204 apiStabilitySharedEntryHasSymbol
+// go test: internal/typeparser/api_stability_surface_test.go:1204 apiStabilitySharedEntryHasSymbol a0cc55bb0c55c989
 // apiStabilitySharedEntryHasSymbol reports whether a published snapshot still
 // carries a symbol finding.
 pub(crate) fn api_stability_shared_entry_has_symbol(
@@ -1799,7 +1799,7 @@ pub(crate) fn api_stability_shared_entry_has_symbol(
         .contains_key(&ApiStabilityFindingKey { symbol: Some(symbol), ..Default::default() })
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1214 apiStabilitySharedEntryRemovedSymbol
+// go test: internal/typeparser/api_stability_surface_test.go:1214 apiStabilitySharedEntryRemovedSymbol 2976a8c651b41679
 // apiStabilitySharedEntryRemovedSymbol reports whether a published snapshot
 // removed a symbol finding as the component's own declared tag.
 pub(crate) fn api_stability_shared_entry_removed_symbol(
@@ -1812,7 +1812,7 @@ pub(crate) fn api_stability_shared_entry_removed_symbol(
     entry.removed.iter().any(|key| key.symbol == Some(symbol))
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1228 apiStabilitySharedEntryHasSignature
+// go test: internal/typeparser/api_stability_surface_test.go:1228 apiStabilitySharedEntryHasSignature 9c5976bfbd4d7c92
 // apiStabilitySharedEntryHasSignature reports whether a published snapshot
 // still carries a raw signature finding.
 pub(crate) fn api_stability_shared_entry_has_signature(
@@ -1826,7 +1826,7 @@ pub(crate) fn api_stability_shared_entry_has_signature(
     entry.findings.keys().any(|key| key.signature.is_some() && raw_signature(key.signature) == raw)
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1243 apiStabilitySharedEntryRemovedSignature
+// go test: internal/typeparser/api_stability_surface_test.go:1243 apiStabilitySharedEntryRemovedSignature 072f62d2badde989
 // apiStabilitySharedEntryRemovedSignature reports whether a published snapshot
 // removed a raw signature finding as the component's own declared tag.
 pub(crate) fn api_stability_shared_entry_removed_signature(
@@ -1840,7 +1840,7 @@ pub(crate) fn api_stability_shared_entry_removed_signature(
     entry.removed.iter().any(|key| key.signature.is_some() && raw_signature(key.signature) == raw)
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1262 TestApiStabilitySnapshotsExcludeOwnTagAndCompose
+// go test: internal/typeparser/api_stability_surface_test.go:1262 TestApiStabilitySnapshotsExcludeOwnTagAndCompose e52b8501443d05a5
 // TestApiStabilitySnapshotsExcludeOwnTagAndCompose pins
 // the shared-cache contract: a complete root surface is published as an
 // immutable snapshot whose own declared-tag findings were removed and recorded,
@@ -1983,7 +1983,7 @@ export interface Holder { tagged: Tagged; fn: typeof taggedFn }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1356 TestApiStabilitySnapshotsReuseAcrossExportsFilesAndParsers
+// go test: internal/typeparser/api_stability_surface_test.go:1356 TestApiStabilitySnapshotsReuseAcrossExportsFilesAndParsers 09685f511a9efba1
 // TestApiStabilitySnapshotsReuseAcrossExportsFilesAndParsers
 // pins the reuse contract: a complete, settled, context-free type surface is
 // consumed by a later export, a later source file and a later TypeParser over
@@ -2127,7 +2127,7 @@ export interface AlsoConsumer { other: Shared }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1438 TestApiStabilityInspectionModesStaySeparate
+// go test: internal/typeparser/api_stability_surface_test.go:1438 TestApiStabilityInspectionModesStaySeparate b28ba84773d9b48a
 // TestApiStabilityInspectionModesStaySeparate proves the
 // shallow and expanded results of the same concrete type are separate entry
 // slots in both computation orders, so a root snapshot can never leak internals
@@ -2288,7 +2288,7 @@ export interface PlainChild { plain: Plain }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1540 TestApiStabilityConcreteInstantiationsAndCarriers
+// go test: internal/typeparser/api_stability_surface_test.go:1540 TestApiStabilityConcreteInstantiationsAndCarriers 74a5f5eac682b782
 // TestApiStabilityConcreteInstantiationsAndCarriers proves
 // concrete instantiations keep separate snapshots in both computation orders
 // and that a surface computed under a substitution carrier is never published.
@@ -2423,7 +2423,7 @@ export const leaky = make<E>()
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1653 TestApiStabilityDeclaredReadsPublishNothing
+// go test: internal/typeparser/api_stability_surface_test.go:1653 TestApiStabilityDeclaredReadsPublishNothing 3984898dfcae40c6
 // TestApiStabilityDeclaredReadsPublishNothing proves the
 // declared accessors stay independent of the shared surface caches: reading a
 // declared level neither computes nor publishes a surface.
@@ -2480,7 +2480,7 @@ export declare function taggedFn(): string
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1693 TestApiStabilitySnapshotMutationIsIsolated
+// go test: internal/typeparser/api_stability_surface_test.go:1693 TestApiStabilitySnapshotMutationIsIsolated e838432ab2607590
 // TestApiStabilitySnapshotMutationIsIsolated pins the
 // immutability requirement: consuming a snapshot copies it, so a caller
 // mutating its local surface cannot change the published findings, and
@@ -2565,7 +2565,7 @@ export interface Shared { leak: E }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1754 TestApiStabilityIncompleteAndBlockedAreNeverPublished
+// go test: internal/typeparser/api_stability_surface_test.go:1754 TestApiStabilityIncompleteAndBlockedAreNeverPublished 693c3d02d1a640fa
 // TestApiStabilityIncompleteAndBlockedAreNeverPublished
 // proves only complete, settled results are published: a cold blocked surface
 // and a budget-exhausted read publish nothing, and a later materialized retry
@@ -2656,7 +2656,7 @@ export interface Cold { plain: number; [Symbol.iterator](): E }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1817 TestApiStabilityCyclesPublishOnlySettledComplete
+// go test: internal/typeparser/api_stability_surface_test.go:1817 TestApiStabilityCyclesPublishOnlySettledComplete e5c5eb864dd42bc8
 // TestApiStabilityCyclesPublishOnlySettledComplete pins
 // the cycle policy: a cold mutual cycle with an unmaterialized computed member
 // is incomplete and never published, the materialized retry settles complete
@@ -2762,7 +2762,7 @@ export interface ColdB { a: ColdA; payload: E; [Symbol.iterator](): E }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1883 TestApiStabilityOverloadTagsSurviveSnapshotReuse
+// go test: internal/typeparser/api_stability_surface_test.go:1883 TestApiStabilityOverloadTagsSurviveSnapshotReuse d866a15afca060b3
 // TestApiStabilityOverloadTagsSurviveSnapshotReuse pins
 // the overload split through the shared caches: the root symbol's declared own
 // overload stays excluded and its sibling experimental overload stays an
@@ -2854,7 +2854,7 @@ export function mixed(x: string | number): string | number { return "" }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1939 TestApiStabilitySharedCachesAreCheckerLocal
+// go test: internal/typeparser/api_stability_surface_test.go:1939 TestApiStabilitySharedCachesAreCheckerLocal ff870c8432ec18f7
 // TestApiStabilitySharedCachesAreCheckerLocal proves the
 // published snapshots live on the per-checker EffectLinks: a second checker
 // never observes the first checker's entries for the same source shape.
@@ -2923,7 +2923,7 @@ export interface Holder { child: Shared }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1995 TestApiStabilityColdCompleteAgreesWithPureWarm
+// go test: internal/typeparser/api_stability_surface_test.go:1995 TestApiStabilityColdCompleteAgreesWithPureWarm a5461f497909c674
 // TestApiStabilityColdCompleteAgreesWithPureWarm pins the
 // cold-complete publication policy: a surface that settles complete on an
 // unprimed checker may be published, and reusing it after the checker
@@ -3010,7 +3010,7 @@ export declare const f: Callable<Deep<E>>
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:2051 TestApiStabilitySymbolLessTypesReuse
+// go test: internal/typeparser/api_stability_surface_test.go:2051 TestApiStabilitySymbolLessTypesReuse 924eafdba2a94b71
 // TestApiStabilitySymbolLessTypesReuse pins the snapshot
 // contract for represented types without an identity symbol: a union publishes
 // its component findings with nothing removed, and reusing it across sessions

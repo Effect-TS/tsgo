@@ -11,7 +11,7 @@ use ets_shim::vfs::vfstest::MapFile;
 use crate::helpers_test::*;
 use crate::*;
 
-// go test: internal/typeparser/readonly_results_test.go:21 TestReadonlyFlowConsumer
+// go test: internal/typeparser/readonly_results_test.go:21 TestReadonlyFlowConsumer 313d838e095c8484
 // Rust: Go clears a slot of each copied slice (`nil` or the zero value); the copies are owned values here, so a
 // slot is cleared by making the copy's elements optional. A cleared `PipingFlowTransformation` keeps its kind and
 // callee, which have no zero value.

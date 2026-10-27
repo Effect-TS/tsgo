@@ -7,7 +7,7 @@ use rustc_hash::FxHashSet;
 
 use crate::*;
 
-// go: internal/layergraph/providers.go:17 walkLeavesMatching
+// go: internal/layergraph/providers.go:17 walkLeavesMatching aa57623a00abbfc5
 // walkLeavesMatching performs a BFS from the given start node indices, walking
 // outgoing edges. For each node, it checks if any outgoing neighbors match the
 // predicate. If matching neighbors exist, it continues walking to those neighbors.
@@ -51,7 +51,7 @@ pub(crate) fn walk_leaves_matching(
     result
 }
 
-// go: internal/layergraph/providers.go:67 ExtractProvidersAndRequirers
+// go: internal/layergraph/providers.go:67 ExtractProvidersAndRequirers 48709a965cd99a57
 // ExtractProvidersAndRequirers extracts summary information about which layers
 // provide or require which services. It uses a two-step algorithm:
 //

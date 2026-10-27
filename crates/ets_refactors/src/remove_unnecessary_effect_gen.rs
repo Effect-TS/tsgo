@@ -9,7 +9,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go: internal/refactors/remove_unnecessary_effect_gen.go:14 RemoveUnnecessaryEffectGen
+// go: internal/refactors/remove_unnecessary_effect_gen.go:14 RemoveUnnecessaryEffectGen 9c2ec2cb60756f29
 pub static REMOVE_UNNECESSARY_EFFECT_GEN: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "removeUnnecessaryEffectGen",
     description: "Remove unnecessary Effect.gen",
@@ -17,7 +17,7 @@ pub static REMOVE_UNNECESSARY_EFFECT_GEN: LazyLock<Refactor> = LazyLock::new(|| 
     run: run_remove_unnecessary_effect_gen,
 });
 
-// go: internal/refactors/remove_unnecessary_effect_gen.go:21 runRemoveUnnecessaryEffectGen
+// go: internal/refactors/remove_unnecessary_effect_gen.go:21 runRemoveUnnecessaryEffectGen 218de653f3aafb8a
 pub(crate) fn run_remove_unnecessary_effect_gen(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let matches = ets_rules::analyze_unnecessary_effect_gen(&mut ctx.type_parser, ctx.source_file);
     if matches.is_empty() {

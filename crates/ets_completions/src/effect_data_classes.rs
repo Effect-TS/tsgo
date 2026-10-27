@@ -5,7 +5,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go: internal/completions/effect_data_classes.go:14 effectDataClasses
+// go: internal/completions/effect_data_classes.go:14 effectDataClasses 5d36c9cc6ba8cff6
 // effectDataClasses provides completion items for Data.TaggedError and Data.TaggedClass
 // when the cursor is in the extends clause of a class declaration.
 // For example, typing `class Foo extends Data.|` will suggest `TaggedError("Foo")` and `TaggedClass("Foo")`.
@@ -15,7 +15,7 @@ pub(crate) static EFFECT_DATA_CLASSES: LazyLock<Completion> = LazyLock::new(|| C
     run: run_effect_data_classes,
 });
 
-// go: internal/completions/effect_data_classes.go:20 runEffectDataClasses
+// go: internal/completions/effect_data_classes.go:20 runEffectDataClasses 715d0cb95c7a3b6c
 fn run_effect_data_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionItem> {
     let Some(data) =
         ets_completion::parse_data_for_extends_class_completion(ctx.source_file, ctx.position)

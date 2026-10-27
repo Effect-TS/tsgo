@@ -7,7 +7,7 @@ use libtest_mimic::Trial;
 
 use crate::run_case;
 
-// go test: internal/effecttest/effect_fn_pipeables_test.go:15 TestEffectFnOpportunityUnaryPipeablesCompile
+// go test: internal/effecttest/effect_fn_pipeables_test.go:15 TestEffectFnOpportunityUnaryPipeablesCompile cc847fba8f8c4009
 fn test_effect_fn_opportunity_unary_pipeables_compile(t: &T) {
     const PREFIX: &str = r#"// @Filename: /tsconfig.json
 {

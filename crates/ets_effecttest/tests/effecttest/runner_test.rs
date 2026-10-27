@@ -4,7 +4,7 @@ use libtest_mimic::Trial;
 
 use crate::{case_name, parent_failure, run_case};
 
-// go test: internal/effecttest/runner_test.go:11 TestEffectDiagnostics
+// go test: internal/effecttest/runner_test.go:11 TestEffectDiagnostics 848c4cd03e5d901e
 // Rust: Go's `t.Run(name, ...)` subtests are one libtest trial each, named `TestEffectDiagnostics/<case>`; a
 // failure of the parent before its subtests run (no Effect, no cases) is one failing (or ignored) trial.
 pub(crate) fn test_effect_diagnostics() -> Vec<Trial> {
@@ -42,7 +42,7 @@ pub(crate) fn test_effect_diagnostics() -> Vec<Trial> {
     trials
 }
 
-// go test: internal/effecttest/runner_test.go:38 TestEffectV3Diagnostics
+// go test: internal/effecttest/runner_test.go:38 TestEffectV3Diagnostics 6e2dcc9ef53541f1
 pub(crate) fn test_effect_v3_diagnostics() -> Vec<Trial> {
     const NAME: &str = "TestEffectV3Diagnostics";
     if let Err(err) = ets_bundledeffect::ensure_package_installed(EffectVersion::V3, "effect") {

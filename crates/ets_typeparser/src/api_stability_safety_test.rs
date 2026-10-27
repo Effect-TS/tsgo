@@ -6,13 +6,13 @@ use crate::api_stability_test::*;
 use crate::helpers_test::*;
 use crate::*;
 
-// go test: internal/typeparser/api_stability_safety_test.go:14 apiStabilityRecursiveAlias
+// go test: internal/typeparser/api_stability_safety_test.go:14 apiStabilityRecursiveAlias 62000c179e8e32ba
 // apiStabilityRecursiveAlias is the self-expanding alias the safety probes
 // use: any speculative resolution of an application trips the checker's depth
 // guard, so a guard that approves it would add TS2589.
 const API_STABILITY_RECURSIVE_ALIAS: &str = "type Deep<T> = T extends string ? Deep<T> : T\n";
 
-// go test: internal/typeparser/api_stability_safety_test.go:20 TestApiStabilitySafetyCompoundOperands
+// go test: internal/typeparser/api_stability_safety_test.go:20 TestApiStabilitySafetyCompoundOperands 3d7d9586b777f2fb
 // TestApiStabilitySafetyCompoundOperands pins that anonymous compound
 // conditional operands whose raw structure mentions a substituted parameter are
 // refused without asking the compiler relation. The guard performs no checker
@@ -100,7 +100,7 @@ export declare const x: Select<F>",
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:90 TestApiStabilitySafetyDeferredCompoundStaysSafe
+// go test: internal/typeparser/api_stability_safety_test.go:90 TestApiStabilitySafetyDeferredCompoundStaysSafe 9871921b36059250
 // TestApiStabilitySafetyDeferredCompoundStaysSafe pins that an anonymous
 // operand that mentions an unbound parameter keeps the conditional deferred:
 // no relation is asked, no checker instantiation happens, and no diagnostic or
@@ -143,7 +143,7 @@ export interface X<T> { v: Select<T> }",
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:118 TestApiStabilitySafetyStructuralConditionalStaysSelectable
+// go test: internal/typeparser/api_stability_safety_test.go:118 TestApiStabilitySafetyStructuralConditionalStaysSelectable fb128495bf3deea3
 // TestApiStabilitySafetyStructuralConditionalStaysSelectable pins that a
 // concrete structural conditional with no substituted parameters is still
 // resolved through the compiler relation, keeping the structural leak surfaces
@@ -185,7 +185,7 @@ export declare const x: Holder<{ value: string }>",
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:147 TestApiStabilitySafetyTypeLiteralComputedMembers
+// go test: internal/typeparser/api_stability_safety_test.go:147 TestApiStabilitySafetyTypeLiteralComputedMembers cedfc9968d2ff054
 // TestApiStabilitySafetyTypeLiteralComputedMembers pins the production crash
 // fix on the type-literal provenance walk: computed property and method names
 // are paired by declaration identity with their concrete represented member,
@@ -249,7 +249,7 @@ export declare const x: {
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:190 TestApiStabilitySafetyComputedNameDisplayAndSort
+// go test: internal/typeparser/api_stability_safety_test.go:190 TestApiStabilitySafetyComputedNameDisplayAndSort 90aa941855fab67c
 // TestApiStabilitySafetyComputedNameDisplayAndSort pins that display and sort
 // names of computed declarations never evaluate the computed expression:
 // well-known symbols and literal computed names render their own spelling,
@@ -377,7 +377,7 @@ fn test_api_stability_safety_computed_name_display_and_sort() {
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:265 TestApiStabilitySafetyMaterializedReferenceSkipsGuard
+// go test: internal/typeparser/api_stability_safety_test.go:265 TestApiStabilitySafetyMaterializedReferenceSkipsGuard b1844cf750716034
 // TestApiStabilitySafetyMaterializedReferenceSkipsGuard pins the
 // materialization-first guard path: when the checker already resolved a
 // reference's member table, signatures and index infos, collecting its concrete
@@ -421,7 +421,7 @@ fn test_api_stability_safety_materialized_reference_skips_guard() {
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:293 TestApiStabilitySafetySafeVerdictIsReused
+// go test: internal/typeparser/api_stability_safety_test.go:293 TestApiStabilitySafetySafeVerdictIsReused c18ad9472304a31b
 // TestApiStabilitySafetySafeVerdictIsReused pins the per-analysis completed
 // Safe memo: a second identical guard request must reuse the verdict without
 // consuming more shared safety budget.
@@ -473,7 +473,7 @@ fn test_api_stability_safety_safe_verdict_is_reused() {
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:328 TestApiStabilitySafetyPostBudgetRefusalIsCheap
+// go test: internal/typeparser/api_stability_safety_test.go:328 TestApiStabilitySafetyPostBudgetRefusalIsCheap 503ce8cbdac6d9c6
 // TestApiStabilitySafetyPostBudgetRefusalIsCheap pins the exhaustion refusal:
 // once the shared budget is exhausted a guard request is refused without
 // allocating scan state or consuming more budget, and no Safe verdict is
@@ -520,7 +520,7 @@ fn test_api_stability_safety_post_budget_refusal_is_cheap() {
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:361 TestApiStabilitySafetySettleSkipsBlockedRecollectionAfterExhaustion
+// go test: internal/typeparser/api_stability_safety_test.go:361 TestApiStabilitySafetySettleSkipsBlockedRecollectionAfterExhaustion 9d23a61f645d1d62
 // TestApiStabilitySafetySettleSkipsBlockedRecollectionAfterExhaustion pins
 // that an exhausted analysis does not re-walk a blocked surface when no
 // analysis read advanced the materialization epoch since it was collected and
@@ -569,7 +569,7 @@ fn test_api_stability_safety_settle_skips_blocked_recollection_after_exhaustion(
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:389 TestApiStabilitySafetyTypeNameLookupCacheIsIdentitySafe
+// go test: internal/typeparser/api_stability_safety_test.go:389 TestApiStabilitySafetyTypeNameLookupCacheIsIdentitySafe 5deb025168cc2652
 // TestApiStabilitySafetyTypeNameLookupCacheIsIdentitySafe pins that successful
 // raw type-name symbol lookups are cached by AST identity within one analysis
 // and that the cache stores only the symbol lookup.

@@ -6,7 +6,7 @@ use ets_shim::scanner::get_text_of_node;
 
 use crate::helpers_test::*;
 
-// go test: internal/typeparser/identity_forwarder_test.go:10 TestUnwrapIdentityForwarder
+// go test: internal/typeparser/identity_forwarder_test.go:10 TestUnwrapIdentityForwarder e1cf193c94cdcfbb
 #[test]
 fn test_unwrap_identity_forwarder() {
     run(|t| {
@@ -109,7 +109,7 @@ const notACall = (value: unknown) => value
     });
 }
 
-// go test: internal/typeparser/identity_forwarder_test.go:91 findVariableInitializer
+// go test: internal/typeparser/identity_forwarder_test.go:91 findVariableInitializer d2ef79445e3972ba
 pub(crate) fn find_variable_initializer(t: &T, sf: P<SourceFile>, name: &str) -> P<Node> {
     t.helper();
 

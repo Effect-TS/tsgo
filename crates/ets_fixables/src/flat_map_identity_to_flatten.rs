@@ -9,7 +9,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_FLATTEN_EXPRESSES_THIS_UNWRAPPING_MORE_DIRECTLY_THAN_EFFECT_FLAT_MAP_WITH_AN_IDENTITY_CALLBACK_EFFECT_FLAT_MAP_IDENTITY_TO_FLATTEN;
 
-// go: internal/fixables/flat_map_identity_to_flatten.go:13 FlatMapIdentityToFlattenFix
+// go: internal/fixables/flat_map_identity_to_flatten.go:13 FlatMapIdentityToFlattenFix 4711c9ae598004b0
 pub static FLAT_MAP_IDENTITY_TO_FLATTEN_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "flatMapIdentityToFlatten",
     description: "Replace Effect.flatMap with an identity callback by Effect.flatten",
@@ -18,7 +18,7 @@ pub static FLAT_MAP_IDENTITY_TO_FLATTEN_FIX: LazyLock<Fixable> = LazyLock::new(|
     run: run_flat_map_identity_to_flatten_fix,
 });
 
-// go: internal/fixables/flat_map_identity_to_flatten.go:23 runFlatMapIdentityToFlattenFix
+// go: internal/fixables/flat_map_identity_to_flatten.go:23 runFlatMapIdentityToFlattenFix e7383ab6838b588c
 fn run_flat_map_identity_to_flatten_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_flat_map_identity_to_flatten(&mut ctx.type_parser, source_file) {

@@ -6,7 +6,7 @@ use ets_typeparser::EffectMajorVersion;
 
 use crate::*;
 
-// go: internal/completions/effect_rpc_make_classes.go:14 rpcMakeClasses
+// go: internal/completions/effect_rpc_make_classes.go:14 rpcMakeClasses f45edb582e4dc71f
 // rpcMakeClasses provides completion items for @effect/rpc Rpc.make
 // when the cursor is in the extends clause of a class declaration.
 // This is a V3-only completion.
@@ -16,7 +16,7 @@ pub(crate) static RPC_MAKE_CLASSES: LazyLock<Completion> = LazyLock::new(|| Comp
     run: run_rpc_make_classes,
 });
 
-// go: internal/completions/effect_rpc_make_classes.go:20 runRpcMakeClasses
+// go: internal/completions/effect_rpc_make_classes.go:20 runRpcMakeClasses 6290849567031e03
 fn run_rpc_make_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionItem> {
     let Some(data) =
         ets_completion::parse_data_for_extends_class_completion(ctx.source_file, ctx.position)

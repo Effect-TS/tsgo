@@ -16,7 +16,7 @@ use ets_shim::vfs::{FS, bundled, vfstest};
 
 use crate::*;
 
-// go test: internal/effecttest/document_symbols_runner.go:28 DocumentSymbolTestCasesDir
+// go test: internal/effecttest/document_symbols_runner.go:28 DocumentSymbolTestCasesDir 1c15f842604e9045
 // DocumentSymbolTestCasesDir returns the path to the Effect document-symbol test cases directory.
 pub fn document_symbol_test_cases_dir(version: EffectVersion) -> PathBuf {
     ets_bundledeffect::effect_ts_go_root_path()
@@ -25,7 +25,7 @@ pub fn document_symbol_test_cases_dir(version: EffectVersion) -> PathBuf {
         .join(version.as_str().to_string() + "-document-symbols")
 }
 
-// go test: internal/effecttest/document_symbols_runner.go:33 DiscoverDocumentSymbolTestCases
+// go test: internal/effecttest/document_symbols_runner.go:33 DiscoverDocumentSymbolTestCases 240e86ca2155e622
 // DiscoverDocumentSymbolTestCases finds all .ts test files in the document-symbol test cases directory.
 pub fn discover_document_symbol_test_cases(
     version: EffectVersion,
@@ -46,7 +46,7 @@ pub fn discover_document_symbol_test_cases(
     Ok(cases)
 }
 
-// go test: internal/effecttest/document_symbols_runner.go:53 RunEffectDocumentSymbolsTest
+// go test: internal/effecttest/document_symbols_runner.go:53 RunEffectDocumentSymbolsTest 40856a281c071865
 // RunEffectDocumentSymbolsTest executes one document-symbol baseline test case.
 //
 // Rust: Go never closes the session (the GC frees it); here it is closed at the end.
@@ -149,7 +149,7 @@ pub fn run_effect_document_symbols_test(t: &T, version: EffectVersion, test_file
     session.close();
 }
 
-// go test: internal/effecttest/document_symbols_runner.go:134 collectDocumentSymbolsForFile
+// go test: internal/effecttest/document_symbols_runner.go:134 collectDocumentSymbolsForFile 6b1e5d85c76e645b
 pub(crate) fn collect_document_symbols_for_file(
     t: &T,
     session: &project::Session,
@@ -201,7 +201,7 @@ pub(crate) fn collect_document_symbols_for_file(
     }
 }
 
-// go test: internal/effecttest/document_symbols_runner.go:175 collectHierarchicalDocumentSymbols
+// go test: internal/effecttest/document_symbols_runner.go:175 collectHierarchicalDocumentSymbols 7b340d89b3404811
 pub(crate) fn collect_hierarchical_document_symbols(
     t: &T,
     lang_service: &LanguageService,
@@ -231,7 +231,7 @@ pub(crate) fn collect_hierarchical_document_symbols(
     result.document_symbols.unwrap_or_default()
 }
 
-// go test: internal/effecttest/document_symbols_runner.go:200 collectFlatDocumentSymbols
+// go test: internal/effecttest/document_symbols_runner.go:200 collectFlatDocumentSymbols d38d974e9affde9f
 pub(crate) fn collect_flat_document_symbols(
     t: &T,
     lang_service: &LanguageService,
@@ -260,7 +260,7 @@ pub(crate) fn collect_flat_document_symbols(
     result.symbol_informations.unwrap_or_default()
 }
 
-// go test: internal/effecttest/document_symbols_runner.go:225 readMapFileContent
+// go test: internal/effecttest/document_symbols_runner.go:225 readMapFileContent 98c99feeff1653d5
 //
 // Rust: Go's map holds `*fstest.MapFile`s or strings; the Rust test file system holds `MapFile`s only.
 pub(crate) fn read_map_file_content(entry: Option<&MapFile>) -> Option<String> {
@@ -268,11 +268,11 @@ pub(crate) fn read_map_file_content(entry: Option<&MapFile>) -> Option<String> {
     Some(String::from_utf8_lossy(&file.data).into_owned())
 }
 
-// go test: internal/effecttest/document_symbols_runner.go:236 noopProjectClient
+// go test: internal/effecttest/document_symbols_runner.go:236 noopProjectClient eb958a9c31a7b551
 pub(crate) struct NoopProjectClient;
 
 impl project::Client for NoopProjectClient {
-    // go test: internal/effecttest/document_symbols_runner.go:238 noopProjectClient.WatchFiles
+    // go test: internal/effecttest/document_symbols_runner.go:238 noopProjectClient.WatchFiles 887ebb05279d466d
     fn watch_files(
         &self,
         _ctx: &Context,
@@ -282,12 +282,12 @@ impl project::Client for NoopProjectClient {
         Ok(())
     }
 
-    // go test: internal/effecttest/document_symbols_runner.go:242 noopProjectClient.UnwatchFiles
+    // go test: internal/effecttest/document_symbols_runner.go:242 noopProjectClient.UnwatchFiles 30216a83c229aca0
     fn unwatch_files(&self, _ctx: &Context, _id: project::WatcherID) -> Result<(), lsproto::Error> {
         Ok(())
     }
 
-    // go test: internal/effecttest/document_symbols_runner.go:244 noopProjectClient.RegisterContentMapperExtensions
+    // go test: internal/effecttest/document_symbols_runner.go:244 noopProjectClient.RegisterContentMapperExtensions 62f089b106e57603
     fn register_content_mapper_extensions(
         &self,
         _ctx: &Context,
@@ -296,12 +296,12 @@ impl project::Client for NoopProjectClient {
         Ok(())
     }
 
-    // go test: internal/effecttest/document_symbols_runner.go:248 noopProjectClient.RefreshDiagnostics
+    // go test: internal/effecttest/document_symbols_runner.go:248 noopProjectClient.RefreshDiagnostics 1fa72b9a191c0d7e
     fn refresh_diagnostics(&self, _ctx: &Context) -> Result<(), lsproto::Error> {
         Ok(())
     }
 
-    // go test: internal/effecttest/document_symbols_runner.go:250 noopProjectClient.PublishDiagnostics
+    // go test: internal/effecttest/document_symbols_runner.go:250 noopProjectClient.PublishDiagnostics ab1d1535f82ebe39
     fn publish_diagnostics(
         &self,
         _ctx: &Context,
@@ -310,23 +310,23 @@ impl project::Client for NoopProjectClient {
         Ok(())
     }
 
-    // go test: internal/effecttest/document_symbols_runner.go:254 noopProjectClient.RefreshInlayHints
+    // go test: internal/effecttest/document_symbols_runner.go:254 noopProjectClient.RefreshInlayHints 668cd929ff2e3caa
     fn refresh_inlay_hints(&self, _ctx: &Context) -> Result<(), lsproto::Error> {
         Ok(())
     }
 
-    // go test: internal/effecttest/document_symbols_runner.go:256 noopProjectClient.RefreshCodeLens
+    // go test: internal/effecttest/document_symbols_runner.go:256 noopProjectClient.RefreshCodeLens 5d473f1f00b00385
     fn refresh_code_lens(&self, _ctx: &Context) -> Result<(), lsproto::Error> {
         Ok(())
     }
 
-    // go test: internal/effecttest/document_symbols_runner.go:258 noopProjectClient.ProgressStart
+    // go test: internal/effecttest/document_symbols_runner.go:258 noopProjectClient.ProgressStart bcadecd239fe9cf5
     fn progress_start(&self, _message: &'static Message, _args: &[&dyn Display]) {}
 
-    // go test: internal/effecttest/document_symbols_runner.go:260 noopProjectClient.ProgressFinish
+    // go test: internal/effecttest/document_symbols_runner.go:260 noopProjectClient.ProgressFinish 47aea43ac0426a21
     fn progress_finish(&self, _message: &'static Message, _args: &[&dyn Display]) {}
 
-    // go test: internal/effecttest/document_symbols_runner.go:262 noopProjectClient.SendTelemetry
+    // go test: internal/effecttest/document_symbols_runner.go:262 noopProjectClient.SendTelemetry a764820ff2c95563
     fn send_telemetry(
         &self,
         _ctx: &Context,
@@ -335,15 +335,15 @@ impl project::Client for NoopProjectClient {
         Ok(())
     }
 
-    // go test: internal/effecttest/document_symbols_runner.go:264 noopProjectClient.IsActive
+    // go test: internal/effecttest/document_symbols_runner.go:264 noopProjectClient.IsActive 22c40ce91f45c1ed
     fn is_active(&self) -> bool {
         true
     }
 
-    // go test: internal/effecttest/document_symbols_runner.go:266 noopProjectClient.SetLocale
+    // go test: internal/effecttest/document_symbols_runner.go:266 noopProjectClient.SetLocale 1cdc254d51b8948c
     fn set_locale(&self, _locale: &str) {}
 
-    // go test: internal/effecttest/document_symbols_runner.go:268 noopProjectClient.GetLocale
+    // go test: internal/effecttest/document_symbols_runner.go:268 noopProjectClient.GetLocale 7e39d049afb16543
     fn get_locale(&self) -> Locale {
         Locale::DEFAULT
     }

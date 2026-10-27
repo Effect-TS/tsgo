@@ -12,7 +12,7 @@ use ets_typeparser::{EffectMajorVersion, TypeParser};
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THIS_LAYER_CONSTRUCTION_LEAVES_SCOPE_IN_THE_REQUIREMENT_SET_THE_SCOPED_API_REMOVES_SCOPE_FROM_THE_RESULTING_REQUIREMENTS_EFFECT_SCOPE_IN_LAYER_EFFECT;
 
-// go: internal/rules/scope_in_layer_effect.go:18 ScopeInLayerEffect
+// go: internal/rules/scope_in_layer_effect.go:18 ScopeInLayerEffect 43e997145fba9c7c
 // ScopeInLayerEffect suggests using Layer.scoped instead of Layer.effect when
 // Scope is detected in the layer's requirements.
 pub static SCOPE_IN_LAYER_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -33,7 +33,7 @@ pub static SCOPE_IN_LAYER_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/scope_in_layer_effect.go:37 ScopeInLayerEffectMatch
+// go: internal/rules/scope_in_layer_effect.go:37 ScopeInLayerEffectMatch 06f29745eb1c2cdc
 // ScopeInLayerEffectMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the scopeInLayerEffect pattern.
 #[derive(Clone)]
@@ -43,7 +43,7 @@ pub struct ScopeInLayerEffectMatch {
     pub callee: Option<P<Node>>, // The Layer constructor callee; nil for class declaration matches
 }
 
-// go: internal/rules/scope_in_layer_effect.go:45 AnalyzeScopeInLayerEffect
+// go: internal/rules/scope_in_layer_effect.go:45 AnalyzeScopeInLayerEffect 547d72b07019e0a5
 // AnalyzeScopeInLayerEffect finds all Layer.effect*() calls and class declarations
 // with Default layer properties where Scope is in the layer's requirements.
 //
@@ -93,7 +93,7 @@ pub fn analyze_scope_in_layer_effect(
     matches
 }
 
-// go: internal/rules/scope_in_layer_effect.go:89 matchLayerEffectCall
+// go: internal/rules/scope_in_layer_effect.go:89 matchLayerEffectCall b953a794f3c17da4
 // matchLayerEffectCall checks if a call expression is Layer.effect*() with Scope in RIn.
 pub(crate) fn match_layer_effect_call(
     tp: &mut TypeParser<'_>,
@@ -138,7 +138,7 @@ pub(crate) fn match_layer_effect_call(
     })
 }
 
-// go: internal/rules/scope_in_layer_effect.go:137 matchClassWithDefaultLayer
+// go: internal/rules/scope_in_layer_effect.go:137 matchClassWithDefaultLayer 55b7f0099c3e491f
 // matchClassWithDefaultLayer checks if a class declaration has a Default layer property with Scope in RIn.
 pub(crate) fn match_class_with_default_layer(
     tp: &mut TypeParser<'_>,
@@ -181,7 +181,7 @@ pub(crate) fn match_class_with_default_layer(
     })
 }
 
-// go: internal/rules/scope_in_layer_effect.go:190 hasScope
+// go: internal/rules/scope_in_layer_effect.go:190 hasScope f6387e5a60f84fae
 // hasScope checks if any union member of the given type is a Scope type.
 pub(crate) fn has_scope(tp: &mut TypeParser<'_>, t: P<Type>) -> bool {
     let members = tp.unroll_union_members(t).unwrap_or_default();

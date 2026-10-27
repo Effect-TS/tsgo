@@ -7,7 +7,7 @@ use ets_completion::Completion;
 
 use crate::*;
 
-// go: internal/completions/completions.go:9 All
+// go: internal/completions/completions.go:9 All 668beb8e786c0eb5
 // All is the list of all completion providers.
 // Add new completions here explicitly - no init() magic.
 //

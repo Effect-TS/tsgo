@@ -5,7 +5,7 @@ use crate::helpers_test::*;
 use crate::piping_flow_shape_test::zero_step;
 use crate::*;
 
-// go test: internal/typeparser/piping_flow_input_type_test.go:8 TestTransformationInputType
+// go test: internal/typeparser/piping_flow_input_type_test.go:8 TestTransformationInputType dc1cb4e27b42d2e5
 #[test]
 fn test_transformation_input_type() {
     run(|t| {

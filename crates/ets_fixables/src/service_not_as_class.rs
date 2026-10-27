@@ -9,7 +9,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::CONTEXT_SERVICE_IS_ASSIGNED_TO_A_VARIABLE_HERE_BUT_THIS_API_IS_INTENDED_FOR_A_CLASS_DECLARATION_SHAPE_SUCH_AS_0_EFFECT_SERVICE_NOT_AS_CLASS;
 
-// go: internal/fixables/service_not_as_class.go:12 ServiceNotAsClassFix
+// go: internal/fixables/service_not_as_class.go:12 ServiceNotAsClassFix 9fd3746b5d34b477
 pub static SERVICE_NOT_AS_CLASS_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "serviceNotAsClass",
     description: "Convert to class declaration",
@@ -18,7 +18,7 @@ pub static SERVICE_NOT_AS_CLASS_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixabl
     run: run_service_not_as_class_fix,
 });
 
-// go: internal/fixables/service_not_as_class.go:20 runServiceNotAsClassFix
+// go: internal/fixables/service_not_as_class.go:20 runServiceNotAsClassFix 4835cfc59f44a6da
 //
 // Rust: tsrs's call expressions always have an argument list; Go's nil `Arguments` (the inner call, and the outer
 // one without arguments) is an empty list, which prints the same `()`.

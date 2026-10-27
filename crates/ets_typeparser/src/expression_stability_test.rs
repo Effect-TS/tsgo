@@ -3,7 +3,7 @@ use ets_go::sprintf;
 use crate::helpers_test::*;
 use crate::identity_forwarder_test::find_variable_initializer;
 
-// go test: internal/typeparser/expression_stability_test.go:5 TestIsExpressionValueStableAtLocation
+// go test: internal/typeparser/expression_stability_test.go:5 TestIsExpressionValueStableAtLocation 8cf212aa02d30e4e
 #[test]
 fn test_is_expression_value_stable_at_location() {
     run(|t| {

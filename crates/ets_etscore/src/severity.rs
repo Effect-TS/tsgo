@@ -4,14 +4,14 @@
 
 use std::borrow::Cow;
 
-// go: etscore/severity.go:9 Severity
+// go: etscore/severity.go:9 Severity 896b05ffb2160a77
 // Severity represents the configured severity level for a diagnostic rule.
 //
 // Rust: a newtype over Go's `int` (its `String` has a `default:` case for values outside the constants).
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, Default)]
 pub struct Severity(pub i64);
 
-// go: etscore/severity.go:11 SeverityOff
+// go: etscore/severity.go:11 SeverityOff f273e0dad3923ddf
 impl Severity {
     pub const Off: Severity = Severity(0);
     pub const Warning: Severity = Severity(1);
@@ -21,7 +21,7 @@ impl Severity {
     pub const SkipFile: Severity = Severity(5); // Used in directives only, not in tsconfig
 }
 
-// go: etscore/severity.go:22 ParseSeverity
+// go: etscore/severity.go:22 ParseSeverity 4372782873331872
 // ParseSeverity parses a severity string into a Severity constant.
 // Valid values: "off", "warning", "warn", "error", "suggestion", "message", "skip-file"
 pub fn parse_severity(s: &str) -> Severity {
@@ -37,7 +37,7 @@ pub fn parse_severity(s: &str) -> Severity {
 }
 
 impl Severity {
-    // go: etscore/severity.go:42 Severity.String
+    // go: etscore/severity.go:42 Severity.String fa95db8c5856cee2
     // String returns the string representation of a Severity.
     pub fn string(self) -> &'static str {
         match self {
@@ -51,13 +51,13 @@ impl Severity {
         }
     }
 
-    // go: etscore/severity.go:62 Severity.IsOff
+    // go: etscore/severity.go:62 Severity.IsOff f4bed277fe22a076
     // IsOff returns true if the severity disables the diagnostic.
     pub fn is_off(self) -> bool {
         self == Severity::Off || self == Severity::SkipFile
     }
 
-    // go: etscore/severity.go:70 Severity.visibilityRank
+    // go: etscore/severity.go:70 Severity.visibilityRank 519b11dd3d37d5ce
     // visibilityRank orders severities by how prominently they surface in output:
     // error > warning > suggestion > message > off/skip-file. This is distinct
     // from the declaration order of the constants, which is not a visibility
@@ -72,7 +72,7 @@ impl Severity {
         }
     }
 
-    // go: etscore/severity.go:88 Severity.AtLeastAsVisibleAs
+    // go: etscore/severity.go:88 Severity.AtLeastAsVisibleAs 42e2a90dca9a268c
     // AtLeastAsVisibleAs reports whether s surfaces at least as prominently as
     // min. Off and skip-file severities are never at least as visible as any
     // enabled severity.
@@ -80,7 +80,7 @@ impl Severity {
         self.visibility_rank() >= min.visibility_rank()
     }
 
-    // go: etscore/severity.go:94 Severity.MarshalJSON
+    // go: etscore/severity.go:94 Severity.MarshalJSON c6d28c1c5ac9d151
     // MarshalJSON implements json.Marshaler for Severity.
     // Serializes as the string representation (e.g., "error", "warning").
     #[expect(
@@ -91,7 +91,7 @@ impl Severity {
         Ok(format!("\"{}\"", self.string()).into_bytes())
     }
 
-    // go: etscore/severity.go:100 Severity.UnmarshalJSON
+    // go: etscore/severity.go:100 Severity.UnmarshalJSON d2f6e8cbe16c2fca
     // UnmarshalJSON implements json.Unmarshaler for Severity.
     // Parses from string representation (e.g., "error", "warning").
     #[expect(

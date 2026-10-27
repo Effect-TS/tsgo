@@ -7,7 +7,7 @@ use rustc_hash::FxHashMap;
 use crate::helpers_test::*;
 use crate::module_export_reference_test::kind_string;
 
-// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:10 firstNodeOfKind
+// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:10 firstNodeOfKind 443f30d1738d924f
 fn first_node_of_kind(t: &T, sf: P<SourceFile>, kind: Kind) -> P<Node> {
     t.helper();
     fn visit(node: P<Node>, kind: Kind, found: &mut Option<P<Node>>) -> bool {
@@ -25,7 +25,7 @@ fn first_node_of_kind(t: &T, sf: P<SourceFile>, kind: Kind) -> P<Node> {
     found
 }
 
-// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:28 TestNodeCannotBeEffectLibraryTypeObjectLiteralsOnlyInV4
+// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:28 TestNodeCannotBeEffectLibraryTypeObjectLiteralsOnlyInV4 5898e1073d9100a4
 #[test]
 fn test_node_cannot_be_effect_library_type_object_literals_only_in_v4() {
     run(|t| {
@@ -59,7 +59,7 @@ export const effect = Effect.void";
     });
 }
 
-// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:51 TestNodeCouldBeEffectKeepsNarrowedReferences
+// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:51 TestNodeCouldBeEffectKeepsNarrowedReferences 9fcaf6f4c42005b1
 #[test]
 fn test_node_could_be_effect_keeps_narrowed_references() {
     run(|t| {
@@ -90,7 +90,7 @@ export const narrowed = Effect.isEffect(guarded) ? guarded : null
     });
 }
 
-// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:74 TestNodeCannotBeEffectLibraryTypePrimitiveExpressions
+// go test: internal/typeparser/node_cannot_be_effect_library_type_test.go:74 TestNodeCannotBeEffectLibraryTypePrimitiveExpressions 749fdb3d01524547
 #[test]
 fn test_node_cannot_be_effect_library_type_primitive_expressions() {
     run(|t| {

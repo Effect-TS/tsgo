@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_AS_SOME_EXPRESSES_WRAPPING_THE_SUCCESS_VALUE_IN_OPTION_SOME_DIRECTLY_EFFECT_MAP_SOME_TO_AS_SOME;
 
-// go: internal/fixables/map_some_to_as_some.go:12 MapSomeToAsSomeFix
+// go: internal/fixables/map_some_to_as_some.go:12 MapSomeToAsSomeFix 1ee35fca02ec6c7f
 pub static MAP_SOME_TO_AS_SOME_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "mapSomeToAsSome",
     description: "Replace Effect.map(Option.some) with Effect.asSome",
@@ -17,7 +17,7 @@ pub static MAP_SOME_TO_AS_SOME_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable
     run: run_map_some_to_as_some_fix,
 });
 
-// go: internal/fixables/map_some_to_as_some.go:22 runMapSomeToAsSomeFix
+// go: internal/fixables/map_some_to_as_some.go:22 runMapSomeToAsSomeFix b83b5f88ad66a777
 //
 // Rust: the match's transformation is never nil (a non-optional field), so Go's nil check drops.
 fn run_map_some_to_as_some_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {

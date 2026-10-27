@@ -18,7 +18,7 @@ use rustc_hash::FxHashMap;
 
 use crate::*;
 
-// go: internal/schemagen/structural.go:21 StructuralSchemaGen
+// go: internal/schemagen/structural.go:21 StructuralSchemaGen d61245186d58e027
 // StructuralSchemaGen holds the context for converting resolved types to Schema expressions.
 //
 // Rust: Go keeps the checker and the type parser in the generator; the parser borrows the checker mutably, so
@@ -44,7 +44,7 @@ pub struct StructuralSchemaGen<'t> {
     pub(crate) used_global_identifiers: FxHashMap<String, i64>,
 }
 
-// go: internal/schemagen/structural.go:41 hoistedEntry
+// go: internal/schemagen/structural.go:41 hoistedEntry 58994200bb48f7ca
 // Rust: every `createRef` Go stores returns `Tracker.NewIdentifier(name)` for a name it captures; the entry keeps
 // that name and `create_ref` builds the identifier.
 #[derive(Clone)]
@@ -54,13 +54,13 @@ pub(crate) struct HoistedEntry {
 }
 
 impl HoistedEntry {
-    // go: internal/schemagen/structural.go:41 hoistedEntry
+    // go: internal/schemagen/structural.go:41 hoistedEntry 58994200bb48f7ca
     pub(crate) fn create_ref(&self, tracker: &Tracker) -> P<Node> {
         tracker.new_identifier(tracker.alloc_text(&self.ref_name))
     }
 }
 
-// go: internal/schemagen/structural.go:47 processingContext
+// go: internal/schemagen/structural.go:47 processingContext c044f7d3344be1f1
 // processingContext tracks state during recursive type traversal.
 #[derive(Clone)]
 pub(crate) struct ProcessingContext {
@@ -70,7 +70,7 @@ pub(crate) struct ProcessingContext {
     pub(crate) version: EffectMajorVersion,
 }
 
-// go: internal/schemagen/structural.go:55 NewStructuralSchemaGen
+// go: internal/schemagen/structural.go:55 NewStructuralSchemaGen e2f4c09cc1d4022c
 // NewStructuralSchemaGen creates a StructuralSchemaGen for type-checker-based schema generation.
 //
 // Rust: Go's `tp` and `c` arguments are passed to the methods instead (see `StructuralSchemaGen`).
@@ -98,13 +98,13 @@ fn new_error(text: String) -> Error {
 }
 
 impl StructuralSchemaGen<'_> {
-    // go: internal/schemagen/structural.go:72 StructuralSchemaGen.createApiPropertyAccess
+    // go: internal/schemagen/structural.go:72 StructuralSchemaGen.createApiPropertyAccess 50ab86a21a7d88e2
     // createApiPropertyAccess creates Schema.<name>.
     pub(crate) fn create_api_property_access(&self, name: &str) -> P<Node> {
         self.tracker.new_property_access_path(&self.schema_reference.append(&[name]))
     }
 
-    // go: internal/schemagen/structural.go:77 StructuralSchemaGen.createApiCall
+    // go: internal/schemagen/structural.go:77 StructuralSchemaGen.createApiCall a82a7db8af65828d
     // createApiCall creates Schema.<name>(...args).
     pub(crate) fn create_api_call(&self, name: &str, args: Vec<P<Node>>) -> P<Node> {
         let t = self.tracker;
@@ -117,7 +117,7 @@ impl StructuralSchemaGen<'_> {
         )
     }
 
-    // go: internal/schemagen/structural.go:87 StructuralSchemaGen.pushHoistedStatement
+    // go: internal/schemagen/structural.go:87 StructuralSchemaGen.pushHoistedStatement 845353c7516a6e52
     // pushHoistedStatement records a generated statement and its reference generator.
     //
     // Rust: `ref_name` is the name Go's `createRef` closure returns an identifier for (see `HoistedEntry`).
@@ -134,7 +134,7 @@ impl StructuralSchemaGen<'_> {
         self.hoisted_schemas.insert(t.id(), HoistedEntry { t, ref_name: ref_name.to_string() });
     }
 
-    // go: internal/schemagen/structural.go:95 StructuralSchemaGen.pushHoistedVariableStatement
+    // go: internal/schemagen/structural.go:95 StructuralSchemaGen.pushHoistedVariableStatement 6b43a36f627e3e53
     // pushHoistedVariableStatement creates a const variable statement and hoists it.
     pub(crate) fn push_hoisted_variable_statement(
         &mut self,
@@ -155,7 +155,7 @@ impl StructuralSchemaGen<'_> {
         self.push_hoisted_statement(name, t, stmt, name);
     }
 
-    // go: internal/schemagen/structural.go:112 StructuralSchemaGen.processType
+    // go: internal/schemagen/structural.go:112 StructuralSchemaGen.processType 1fc4a669d8bf551d
     // processType converts a TypeScript type to a Schema expression, with hoisting support.
     pub(crate) fn process_type(
         &mut self,
@@ -198,7 +198,7 @@ impl StructuralSchemaGen<'_> {
         Ok(expr)
     }
 
-    // go: internal/schemagen/structural.go:152 StructuralSchemaGen.resolveHoistName
+    // go: internal/schemagen/structural.go:152 StructuralSchemaGen.resolveHoistName 9e16a6e6e9d3171e
     // resolveHoistName tries to find a name for the type for hoisting purposes.
     pub(crate) fn resolve_hoist_name(&mut self, tp: &mut TypeParser<'_>, t: P<Type>) -> String {
         // Check nameToType map first
@@ -242,7 +242,7 @@ impl StructuralSchemaGen<'_> {
     }
 }
 
-// go: internal/schemagen/structural.go:188 StructuralSchemaGen.typesEqual
+// go: internal/schemagen/structural.go:188 StructuralSchemaGen.typesEqual 487f7469abd66c71
 // typesEqual checks if two types are bidirectionally assignable.
 //
 // Rust: it reads only the checker, so it is a free function over the parser (it is called while the generator's
@@ -252,7 +252,7 @@ pub(crate) fn types_equal(tp: &mut TypeParser<'_>, a: P<Type>, b: P<Type>) -> bo
 }
 
 impl StructuralSchemaGen<'_> {
-    // go: internal/schemagen/structural.go:194 StructuralSchemaGen.processTypeImpl
+    // go: internal/schemagen/structural.go:194 StructuralSchemaGen.processTypeImpl e689dca675737972
     // processTypeImpl dispatches type processing based on type flags.
     //
     // Rust: Go's `(expr, skipHoisting, err)` is `Result<(expr, skipHoisting), Error>`.
@@ -378,7 +378,7 @@ impl StructuralSchemaGen<'_> {
         Err(new_error(format!("type with flags {} is not supported", flags.bits())))
     }
 
-    // go: internal/schemagen/structural.go:296 StructuralSchemaGen.processUnionType
+    // go: internal/schemagen/structural.go:296 StructuralSchemaGen.processUnionType 9c5578d5417eb844
     // processUnionType converts union types to Schema.Union or optimized Schema.Literal.
     pub(crate) fn process_union_type(
         &mut self,
@@ -438,7 +438,7 @@ impl StructuralSchemaGen<'_> {
         Ok((self.create_api_call("Union", args), false))
     }
 
-    // go: internal/schemagen/structural.go:351 StructuralSchemaGen.processIntersectionType
+    // go: internal/schemagen/structural.go:351 StructuralSchemaGen.processIntersectionType b7ea48cbb7df0dfb
     // processIntersectionType converts intersection types to Schema.extend chains.
     pub(crate) fn process_intersection_type(
         &mut self,
@@ -483,7 +483,7 @@ impl StructuralSchemaGen<'_> {
         ))
     }
 
-    // go: internal/schemagen/structural.go:385 StructuralSchemaGen.processArrayType
+    // go: internal/schemagen/structural.go:385 StructuralSchemaGen.processArrayType 2232d5de92d28337
     // processArrayType converts array types to Schema.Array (wrapping in Schema.mutable for non-readonly).
     pub(crate) fn process_array_type(
         &mut self,
@@ -504,7 +504,7 @@ impl StructuralSchemaGen<'_> {
         Ok((self.create_api_call("mutable", vec![expr]), false))
     }
 
-    // go: internal/schemagen/structural.go:403 StructuralSchemaGen.processTupleType
+    // go: internal/schemagen/structural.go:403 StructuralSchemaGen.processTupleType 54a9d1a530b127b2
     // processTupleType converts tuple types to Schema.Tuple.
     pub(crate) fn process_tuple_type(
         &mut self,
@@ -530,13 +530,13 @@ impl StructuralSchemaGen<'_> {
     }
 }
 
-// go: internal/schemagen/structural.go:424 validIdentifierRegex
+// go: internal/schemagen/structural.go:424 validIdentifierRegex 0e77c5ac74217aaf
 // validIdentifierRegex matches valid JS identifiers.
 pub(crate) static VALID_IDENTIFIER_REGEX: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"^[a-zA-Z_$][a-zA-Z0-9_$]*$").unwrap());
 
 impl StructuralSchemaGen<'_> {
-    // go: internal/schemagen/structural.go:427 StructuralSchemaGen.processObjectType
+    // go: internal/schemagen/structural.go:427 StructuralSchemaGen.processObjectType 965ac618db5bfc3e
     // processObjectType converts object types to Schema.Struct or Schema.Class.
     pub(crate) fn process_object_type(
         &mut self,
@@ -677,7 +677,7 @@ impl StructuralSchemaGen<'_> {
         Ok((self.create_api_call("Struct", args), !has_properties))
     }
 
-    // go: internal/schemagen/structural.go:560 StructuralSchemaGen.ScanExistingSchemas
+    // go: internal/schemagen/structural.go:560 StructuralSchemaGen.ScanExistingSchemas cd247393045bafd4
     // ScanExistingSchemas looks for existing schema variables in scope and records them
     // in the hoisted map, so they can be reused instead of regenerated.
     pub fn scan_existing_schemas(&mut self, tp: &mut TypeParser<'_>, scope: P<Node>) {
@@ -700,7 +700,7 @@ impl StructuralSchemaGen<'_> {
         }
     }
 
-    // go: internal/schemagen/structural.go:586 StructuralSchemaGen.Process
+    // go: internal/schemagen/structural.go:586 StructuralSchemaGen.Process e987c545a3f36323
     // Process generates schema statements for one or more named types.
     // It populates internal state and returns accumulated statements.
     //

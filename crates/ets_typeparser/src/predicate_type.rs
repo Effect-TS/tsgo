@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/predicate_type.go:8 effectPredicatePackageSourceFileDescriptor
+// go: internal/typeparser/predicate_type.go:8 effectPredicatePackageSourceFileDescriptor a523b87fcd4949ca
 pub(crate) static EFFECT_PREDICATE_PACKAGE_SOURCE_FILE_DESCRIPTOR: PackageSourceFileDescriptor =
     new_package_source_file_descriptor(
         ModuleDescriptorId::Predicate,
@@ -11,7 +11,7 @@ pub(crate) static EFFECT_PREDICATE_PACKAGE_SOURCE_FILE_DESCRIPTOR: PackageSource
         Some(&is_effect_predicate_source_file),
     );
 
-// go: internal/typeparser/predicate_type.go:8 effectPredicatePackageSourceFileDescriptor
+// go: internal/typeparser/predicate_type.go:8 effectPredicatePackageSourceFileDescriptor a523b87fcd4949ca
 // Rust: the descriptor's matcher (a Go func literal). Go's nil checker and source file guards cannot fail here.
 fn is_effect_predicate_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> bool {
     let c = &mut *tp.checker;
@@ -26,7 +26,7 @@ fn is_effect_predicate_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/predicate_type.go:28 TypeParser.IsNodeReferenceToEffectPredicateModuleApi
+    // go: internal/typeparser/predicate_type.go:28 TypeParser.IsNodeReferenceToEffectPredicateModuleApi 473f4014ea5c12c0
     // IsNodeReferenceToEffectPredicateModuleApi reports whether node resolves to a
     // member exported by Effect's Predicate module.
     pub fn is_node_reference_to_effect_predicate_module_api(

@@ -4,7 +4,7 @@ use ets_readonly::Slice;
 use ets_shim::ast::{Kind, ModifierFlags, Node, NodeList};
 use ets_shim::core::P;
 
-// go: internal/typeparser/lazy_expression.go:10 ParsedLazyExpression
+// go: internal/typeparser/lazy_expression.go:10 ParsedLazyExpression 211dad59d871b242
 // ParsedLazyExpression represents a parsed arrow function or function expression
 // with its inner expression extracted.
 //
@@ -18,35 +18,35 @@ pub struct ParsedLazyExpression {
 }
 
 impl ParsedLazyExpression {
-    // go: internal/typeparser/lazy_expression.go:17 ParsedLazyExpression.Node
+    // go: internal/typeparser/lazy_expression.go:17 ParsedLazyExpression.Node 70e830b28ca10526
     pub fn node(&self) -> P<Node> {
         self.node
     }
 
-    // go: internal/typeparser/lazy_expression.go:19 ParsedLazyExpression.Params
+    // go: internal/typeparser/lazy_expression.go:19 ParsedLazyExpression.Params c8e594c485a9c7c6
     pub fn params(&self) -> Slice<'_, P<Node>> {
         ets_readonly::new(self.params)
     }
 
-    // go: internal/typeparser/lazy_expression.go:21 ParsedLazyExpression.Body
+    // go: internal/typeparser/lazy_expression.go:21 ParsedLazyExpression.Body ac2eb0946fe9cca3
     pub fn body(&self) -> P<Node> {
         self.body
     }
 
-    // go: internal/typeparser/lazy_expression.go:23 ParsedLazyExpression.Expression
+    // go: internal/typeparser/lazy_expression.go:23 ParsedLazyExpression.Expression 2bae5d50bbce9c06
     pub fn expression(&self) -> P<Node> {
         self.expression
     }
 }
 
-// go: internal/typeparser/lazy_expression.go:26 LazyExpressionFlags
+// go: internal/typeparser/lazy_expression.go:26 LazyExpressionFlags edf1df552e7298c4
 // LazyExpressionFlags controls which function shapes ParseLazyExpression accepts.
 //
 // Rust: a newtype over Go's `uint8` with the Go constants as associated consts.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, Default)]
 pub struct LazyExpressionFlags(pub u8);
 
-// go: internal/typeparser/lazy_expression.go:28 LazyExpressionNone
+// go: internal/typeparser/lazy_expression.go:28 LazyExpressionNone ac54eb8f0d606ce9
 impl LazyExpressionFlags {
     pub const None: LazyExpressionFlags = LazyExpressionFlags(0);
     // LazyExpressionThunk requires a function with no parameters.
@@ -72,7 +72,7 @@ impl BitOr for LazyExpressionFlags {
     }
 }
 
-// go: internal/typeparser/lazy_expression.go:43 ParseLazyExpression
+// go: internal/typeparser/lazy_expression.go:43 ParseLazyExpression 291af64e6c142cb7
 // ParseLazyExpression parses an arrow function or function expression, extracting its inner expression.
 // By default, only synchronous, non-generator functions are accepted.
 // Returns nil if the node is not a valid lazy expression.

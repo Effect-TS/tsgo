@@ -7,7 +7,7 @@ use ets_shim::P;
 use ets_shim::ast::{Diagnostic, Kind};
 use ets_shim::diagnostics as tsdiag;
 
-// go: internal/rules/prefer_barrel_import.go:11 PreferBarrelImport
+// go: internal/rules/prefer_barrel_import.go:11 PreferBarrelImport 5131f70b3b3e3d4c
 pub static PREFER_BARREL_IMPORT: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
         name: "preferBarrelImport",
@@ -20,7 +20,7 @@ pub static PREFER_BARREL_IMPORT: LazyLock<Rule> = LazyLock::new(|| {
     }
 });
 
-// go: internal/rules/prefer_barrel_import.go:21 runPreferBarrelImport
+// go: internal/rules/prefer_barrel_import.go:21 runPreferBarrelImport 3f625dd6ec5072d2
 //
 // Rust: `TypeParser::barrel_reader` is never nil (the compiler program always reads files), and the reader sits
 // behind a lock (see there); Go's `ctx.Program.GetResolvedModuleFromModuleSpecifier` is the program's

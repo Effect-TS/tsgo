@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/reconstruct.go:11 nodeText
+// go: internal/typeparser/reconstruct.go:11 nodeText 10e7b1d9ea8a6af6
 // nodeText extracts the source text of a node from the source file.
 //
 // Rust: Go slices the text's bytes; a node always spans whole characters, so the lossy conversion never changes
@@ -21,7 +21,7 @@ pub(crate) fn node_text(sf: Option<P<SourceFile>>, node: Option<P<Node>>) -> Str
     String::new()
 }
 
-// go: internal/typeparser/reconstruct.go:31 ReconstructPipingFlow
+// go: internal/typeparser/reconstruct.go:31 ReconstructPipingFlow 1d015cd11dce391f
 // ReconstructPipingFlow reconstructs a piping flow into a string expression
 // by applying transformations sequentially.
 // For example: subject with transformations [f, g] becomes "g(f(subject))".

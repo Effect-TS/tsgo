@@ -5,7 +5,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go: internal/completions/effect_codegens_comment.go:15 effectCodegensComment
+// go: internal/completions/effect_codegens_comment.go:15 effectCodegensComment f47364511c75a915
 // effectCodegensComment provides completions for @effect-codegens directives
 // when typing @ inside a comment.
 pub(crate) static EFFECT_CODEGENS_COMMENT: LazyLock<Completion> = LazyLock::new(|| Completion {
@@ -14,7 +14,7 @@ pub(crate) static EFFECT_CODEGENS_COMMENT: LazyLock<Completion> = LazyLock::new(
     run: run_effect_codegens_comment,
 });
 
-// go: internal/completions/effect_codegens_comment.go:21 runEffectCodegensComment
+// go: internal/completions/effect_codegens_comment.go:21 runEffectCodegensComment 68e0173d0d22ddfa
 fn run_effect_codegens_comment(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionItem> {
     let source_text = ctx.source_file.text();
     let text_before_cursor = &source_text.as_bytes()[..ctx.position as usize];

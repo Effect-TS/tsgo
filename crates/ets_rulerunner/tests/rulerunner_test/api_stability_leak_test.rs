@@ -16,7 +16,7 @@ use ets_shim::vfs::{FS, bundled, vfstest};
 use ets_typeparser::{ApiStabilityLevel, ApiStabilityUsed};
 use rustc_hash::FxHashMap;
 
-// go test: internal/rulerunner/api_stability_leak_test.go:30 apiStabilityLifecycleOptions
+// go test: internal/rulerunner/api_stability_leak_test.go:30 apiStabilityLifecycleOptions c9d550e3d49c8743
 // apiStabilityLifecycleOptions builds the effect plugin options with only the
 // API stability leak rule enabled at warning severity (or disabled entirely
 // for the control run).
@@ -35,7 +35,7 @@ pub(crate) fn api_stability_lifecycle_options(enabled: bool) -> EffectPluginOpti
     }
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:49 apiStabilityLifecycleDiagnostics
+// go test: internal/rulerunner/api_stability_leak_test.go:49 apiStabilityLifecycleDiagnostics e88e1aa2aabf71dd
 // apiStabilityLifecycleDiagnostics runs a virtual multi-file project through
 // the real after-check callback path (etscheckerhooks -> rulerunner) and returns
 // the diagnostics reported for the project, including global (file-less)
@@ -122,7 +122,7 @@ pub(crate) fn api_stability_lifecycle_diagnostics(
     messages
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:114 apiStabilityLifecycleContains
+// go test: internal/rulerunner/api_stability_leak_test.go:114 apiStabilityLifecycleContains edacfd637d66f4aa
 pub(crate) fn api_stability_lifecycle_contains(messages: &[String], want: &str) -> bool {
     for message in messages {
         if message.contains(want) {
@@ -166,7 +166,7 @@ fn lifecycle_case(
     LifecycleCase { name, files, want: want.to_vec(), not_want: not_want.to_vec() }
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:128 TestApiStabilityLeakLifecycle
+// go test: internal/rulerunner/api_stability_leak_test.go:128 TestApiStabilityLeakLifecycle afe486f13809036b
 // apiStabilityLifecycleCases covers the lazy-read lifecycle findings under the
 // corrected boundary. Each case runs through the production after-check
 // callback with normal diagnostics, in both the per-file and whole-program
@@ -404,7 +404,7 @@ fn run_strict_lifecycle_cases(t: &T, cases: &[LifecycleCase]) {
     }
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:299 TestApiStabilityLeakExportVisibilityLifecycle
+// go test: internal/rulerunner/api_stability_leak_test.go:299 TestApiStabilityLeakExportVisibilityLifecycle 1e6fe2351caa6738
 // TestApiStabilityLeakExportVisibilityLifecycle runs the corrected
 // export-level visibility policy through the production after-check callback in
 // both lifecycles: the explicit export winner beats a redundant star forward,
@@ -501,7 +501,7 @@ fn test_api_stability_leak_export_visibility_lifecycle() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:429 TestApiStabilityLeakImportEqualsLifecycle
+// go test: internal/rulerunner/api_stability_leak_test.go:429 TestApiStabilityLeakImportEqualsLifecycle 5d26fd931066a58a
 // TestApiStabilityLeakImportEqualsLifecycle pins the import-equals metadata
 // decision in the production after-check lifecycle: an `export import X = ...` alias follows
 // the target named by its module reference, so the tagged target stays quiet in
@@ -547,7 +547,7 @@ fn test_api_stability_leak_import_equals_lifecycle() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:509 TestApiStabilityLeakVisibilityLifecycleRecursiveSafety
+// go test: internal/rulerunner/api_stability_leak_test.go:509 TestApiStabilityLeakVisibilityLifecycleRecursiveSafety a0e9ca83539de92b
 // TestApiStabilityLeakVisibilityLifecycleRecursiveSafety keeps the
 // recursive-alias budget of the visibility fixtures: the star/cycle and
 // namespace shapes used by the regressions must add no compiler
@@ -590,7 +590,7 @@ fn test_api_stability_leak_visibility_lifecycle_recursive_safety() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:546 TestApiStabilityLeakLifecycleRecursiveSafety
+// go test: internal/rulerunner/api_stability_leak_test.go:546 TestApiStabilityLeakLifecycleRecursiveSafety 9a5683459a8d3ab2
 // TestApiStabilityLeakLifecycleRecursiveSafety keeps the recursive-alias safety
 // property in the production lifecycle: a recursive generic alias is never
 // expanded by the rule, so the rule adds no TS2589 to a program whose own
@@ -649,13 +649,13 @@ fn test_api_stability_leak_lifecycle_recursive_safety() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:588 apiStabilityRecursivePrefix
+// go test: internal/rulerunner/api_stability_leak_test.go:588 apiStabilityRecursivePrefix 308a98c787b5d7c4
 // apiStabilityRecursivePrefix declares the recursive alias used by the recursive-alias
 // safety regressions. `Deep<T>` keeps expanding itself so any speculative
 // resolution of an application of it would trip the checker's depth guard.
 const API_STABILITY_RECURSIVE_PREFIX: &str = "type Deep<T> = T extends string ? Deep<T> : T\n";
 
-// go test: internal/rulerunner/api_stability_leak_test.go:596 runApiStabilitySafetyCase
+// go test: internal/rulerunner/api_stability_leak_test.go:596 runApiStabilitySafetyCase bccee7d2d8a89589
 // runApiStabilitySafetyCase runs one project through the production after-check
 // callback in the per-file and whole-program lifecycles, with the rule enabled
 // and disabled. It asserts that the rule changes no compiler diagnostic on
@@ -713,7 +713,7 @@ fn run_api_stability_safety_case(
     }
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:638 apiStabilityProgram
+// go test: internal/rulerunner/api_stability_leak_test.go:638 apiStabilityProgram 6b86b2b21aab796c
 // apiStabilityProgram builds one virtual project and returns its program
 // and checker without running any rule. The caller owns the returned cleanup,
 // which releases the checker; sharing one checker across a sequence of queries
@@ -765,7 +765,7 @@ fn api_stability_program(
     (program, c)
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:670 apiStabilityExport
+// go test: internal/rulerunner/api_stability_leak_test.go:670 apiStabilityExport 2349d26885120317
 // apiStabilityExport returns the named export of a source file.
 fn api_stability_export(t: &T, c: &mut Checker, sf: P<SourceFile>, name: &str) -> P<Symbol> {
     t.helper();
@@ -790,7 +790,7 @@ fn diagnostic_text(d: P<Diagnostic>, text: &str) -> &str {
     &text[d.pos().unwrap_or_default() as usize..d.end().unwrap_or_default() as usize]
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:682 TestApiStabilityLeakRelatedDeclaration
+// go test: internal/rulerunner/api_stability_leak_test.go:682 TestApiStabilityLeakRelatedDeclaration b5f856db8730d8f3
 #[test]
 fn test_api_stability_leak_related_declaration() {
     ets_go::testing::run(|t| {
@@ -887,7 +887,7 @@ export interface Public { call: Callable }
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:761 apiStabilityDiagnostics
+// go test: internal/rulerunner/api_stability_leak_test.go:761 apiStabilityDiagnostics 0597570547d1c563
 // apiStabilityDiagnostics collects the checker diagnostics for one file
 // plus the global diagnostics, excluding the rule's own reports so a control
 // run can be compared exactly with an enabled run.
@@ -911,7 +911,7 @@ fn api_stability_diagnostics(t: &T, c: &mut Checker, sf: P<SourceFile>) -> Vec<S
     out
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:785 apiStabilityProgramDiagnostics
+// go test: internal/rulerunner/api_stability_leak_test.go:785 apiStabilityProgramDiagnostics 34d59c38e411e43c
 // apiStabilityProgramDiagnostics collects the whole-program semantic and
 // global diagnostics, excluding the rule's own reports.
 fn api_stability_program_diagnostics(t: &T, program: &'static Program) -> Vec<String> {
@@ -951,7 +951,7 @@ fn api_stability_whole_program_diagnostics(
     api_stability_program_diagnostics(t, program)
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:813 TestApiStabilityLeakWholeSurfaceSafety
+// go test: internal/rulerunner/api_stability_leak_test.go:813 TestApiStabilityLeakWholeSurfaceSafety f23069223aa90bcd
 // TestApiStabilityLeakWholeSurfaceSafety pins findings 1-4: a complete
 // structured surface is never materialized when any declaration it would
 // resolve (own members, inherited members, index values, alias defaults, wide
@@ -1049,7 +1049,7 @@ fn test_api_stability_leak_whole_surface_safety() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:910 TestApiStabilityLeakCoverage
+// go test: internal/rulerunner/api_stability_leak_test.go:910 TestApiStabilityLeakCoverage 2924b17ae407c603
 // TestApiStabilityLeakCoverage pins findings 5-8: bare generic binders
 // and safe inferred closures expose their concrete dependency; flattened
 // compound aliases keep their declared provenance; nested class statics stay
@@ -1185,7 +1185,7 @@ fn test_api_stability_leak_coverage() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1019 TestApiStabilityLeakBareBinderOrders
+// go test: internal/rulerunner/api_stability_leak_test.go:1019 TestApiStabilityLeakBareBinderOrders ceba70e7431d94bb
 // TestApiStabilityLeakBareBinderOrders exercises the bare generic binder
 // return with actual `make<string>()` / `make<E>()` applications across clean
 // and leaky export orders on one shared checker. Five repeated queries per
@@ -1254,7 +1254,7 @@ export const clean = make<string>()
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1075 TestApiStabilityLeakSubsequentCheckerExactness
+// go test: internal/rulerunner/api_stability_leak_test.go:1075 TestApiStabilityLeakSubsequentCheckerExactness b62c2823ce8da062
 // TestApiStabilityLeakSubsequentCheckerExactness checks the checker with
 // the rule enabled and disabled after the same read sequence: a namespace
 // barrel checked before the file that uses the recursive dependency. Both the
@@ -1365,7 +1365,7 @@ fn test_api_stability_leak_subsequent_checker_exactness() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1159 TestApiStabilityLeakInferredForwardingDiagnostics
+// go test: internal/rulerunner/api_stability_leak_test.go:1159 TestApiStabilityLeakInferredForwardingDiagnostics b8a417c13a43de2c
 // TestApiStabilityLeakInferredForwardingDiagnostics checks that
 // forwarding an ordinary inferred function resolves its body only through the
 // checker's native lazy inference, which attributes diagnostics to the
@@ -1431,7 +1431,7 @@ fn diagnostic_messages(diagnostics: &[P<Diagnostic>]) -> Vec<String> {
     diagnostics.iter().map(|d| d.localize()).collect()
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1203 TestApiStabilityLeakBlockedSurfaceNotCached
+// go test: internal/rulerunner/api_stability_leak_test.go:1203 TestApiStabilityLeakBlockedSurfaceNotCached 2c211c2f3d297e4f
 // TestApiStabilityLeakBlockedSurfaceNotCached checks that a surface whose
 // recursive component the guard refuses is never reported as stable and that
 // repeating the query does no checker work. It then resolves the ordinary
@@ -1524,14 +1524,14 @@ export declare const x: I<[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]>
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1281 apiStabilityRecursiveAlias
+// go test: internal/rulerunner/api_stability_leak_test.go:1281 apiStabilityRecursiveAlias dcc029423cc0e0ed
 // apiStabilityRecursiveAlias is the self-expanding alias the regression
 // probes use. Any speculative resolution of an application of it trips the
 // checker's instantiation depth guard, so a rule that approves it would add
 // TS2589 to a program whose own checking does not produce one.
 const API_STABILITY_RECURSIVE_ALIAS: &str = "type Deep<T> = T extends string ? Deep<T> : T\n";
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1290 TestApiStabilityLeakRelationSafety
+// go test: internal/rulerunner/api_stability_leak_test.go:1290 TestApiStabilityLeakRelationSafety 00ba3ff16c767aac
 // TestApiStabilityLeakRelationSafety pins that the conditional-branch
 // relation is only asked after a relation-operand pre-flight has established
 // that resolving the full projected operand surfaces is bounded. Every probe
@@ -1683,7 +1683,7 @@ fn test_api_stability_leak_relation_safety() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1422 TestApiStabilityLeakRefusedSurfaceStaysRetryable
+// go test: internal/rulerunner/api_stability_leak_test.go:1422 TestApiStabilityLeakRefusedSurfaceStaysRetryable ae7f5ed0181eb636
 // TestApiStabilityLeakRefusedSurfaceStaysRetryable repeats the direct
 // symbol query on one shared checker: a refused recursive surface always
 // reports an incomplete result, and every repeated query after the first
@@ -1744,7 +1744,7 @@ fn test_api_stability_leak_refused_surface_stays_retryable() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1468 TestApiStabilityLeakExplicitStableForwarding
+// go test: internal/rulerunner/api_stability_leak_test.go:1468 TestApiStabilityLeakExplicitStableForwarding 73f7cee9228b608b
 // TestApiStabilityLeakExplicitStableForwarding pins that a forwarding
 // `@stability stable` tag on a re-export is an explicit ceiling, distinct from
 // an absent tag: it tightens the forwarded symbol's inherited stability even
@@ -1841,7 +1841,7 @@ export interface X { v: E }";
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1544 TestApiStabilityLeakInferredReexportCoverage
+// go test: internal/rulerunner/api_stability_leak_test.go:1544 TestApiStabilityLeakInferredReexportCoverage a0413e2159ae98f4
 // TestApiStabilityLeakInferredReexportCoverage pins that an ordinary
 // inferred re-export is reported in both the per-file and the whole-program
 // lifecycle, while the dependency's own diagnostics stay exactly the control's.
@@ -1919,7 +1919,7 @@ fn test_api_stability_leak_inferred_reexport_coverage() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1595 TestApiStabilityLeakInferredDiagnosticsStayExact
+// go test: internal/rulerunner/api_stability_leak_test.go:1595 TestApiStabilityLeakInferredDiagnosticsStayExact 273304ec2b2239da
 // TestApiStabilityLeakInferredDiagnosticsStayExact pins that reading an
 // inferred re-export through native inference never changes the dependency's
 // own diagnostics, including the TS2589 a genuinely recursive initializer
@@ -1982,7 +1982,7 @@ fn test_api_stability_leak_inferred_diagnostics_stay_exact() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1639 TestApiStabilityLeakRelationOperands
+// go test: internal/rulerunner/api_stability_leak_test.go:1639 TestApiStabilityLeakRelationOperands f6151f8e024b0c18
 // TestApiStabilityLeakRelationOperands pins the relation
 // preflight fixes. A named property reached through a nested callable parameter
 // or return and an anonymous compound operand whose raw structure mentions a
@@ -2155,7 +2155,7 @@ export interface X { y: Select<F> }",
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1788 TestApiStabilityLeakAccessors
+// go test: internal/rulerunner/api_stability_leak_test.go:1788 TestApiStabilityLeakAccessors 0d25102857833365
 // TestApiStabilityLeakAccessors pins that inferred accessors re-exported
 // through named, star and namespace barrels are reported in the per-file and
 // whole-program lifecycles, including class accessors and accessors inside
@@ -2263,7 +2263,7 @@ fn test_api_stability_leak_accessors() {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1874 apiStabilityAccessorDiagnostic
+// go test: internal/rulerunner/api_stability_leak_test.go:1874 apiStabilityAccessorDiagnostic 961d1fb3b453dfda
 // apiStabilityAccessorDiagnostic serializes one diagnostic exactly so the enabled
 // and disabled runs can be compared including positions, codes and messages.
 fn api_stability_accessor_diagnostic(diagnostic: P<Diagnostic>) -> String {
@@ -2274,7 +2274,7 @@ fn api_stability_accessor_diagnostic(diagnostic: P<Diagnostic>) -> String {
     format!("{name}:{}", diagnostic.localize())
 }
 
-// go test: internal/rulerunner/api_stability_leak_test.go:1885 TestApiStabilityLeakAccessorDiagnosticsExact
+// go test: internal/rulerunner/api_stability_leak_test.go:1885 TestApiStabilityLeakAccessorDiagnosticsExact b7da0bf7b9b89ceb
 // TestApiStabilityLeakAccessorDiagnosticsExact forces the accessor
 // through the rule lifecycle and compares the exact diagnostics of the barrel,
 // the dependency file (checked twice) and the globals with a disabled control.

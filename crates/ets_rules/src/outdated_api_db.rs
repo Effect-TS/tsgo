@@ -2,13 +2,13 @@ use std::sync::LazyLock;
 
 use rustc_hash::FxHashMap;
 
-// go: internal/rules/outdated_api_db.go:4 MigrationTag
+// go: internal/rules/outdated_api_db.go:4 MigrationTag 2f33759c99f78a5f
 // MigrationTag identifies the type of migration for an API.
 //
 // Rust: Go's string type used only through its constants is an enum with `as_str()` (docs/PORTING.md).
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, Default)]
 pub enum MigrationTag {
-    // go: internal/rules/outdated_api_db.go:6 MigrationTagUnchanged
+    // go: internal/rules/outdated_api_db.go:6 MigrationTagUnchanged b7874f131b865971
     #[default]
     Unchanged,
     RenamedSameBehaviour,
@@ -16,7 +16,7 @@ pub enum MigrationTag {
     Removed,
 }
 
-// go: internal/rules/outdated_api_db.go:6 MigrationTagUnchanged
+// go: internal/rules/outdated_api_db.go:6 MigrationTagUnchanged b7874f131b865971
 impl MigrationTag {
     /// Rust-only: the Go string value (`string(tag)`).
     pub fn as_str(self) -> &'static str {
@@ -29,7 +29,7 @@ impl MigrationTag {
     }
 }
 
-// go: internal/rules/outdated_api_db.go:14 Migration
+// go: internal/rules/outdated_api_db.go:14 Migration 5e612da670a0dc1a
 // Migration describes how an Effect v3 API maps to v4.
 #[derive(Clone, PartialEq, Eq, Debug, Default)]
 pub struct Migration {
@@ -39,17 +39,17 @@ pub struct Migration {
     pub alternative_pattern: &'static str, // for Removed
 }
 
-// go: internal/rules/outdated_api_db.go:21 unchanged
+// go: internal/rules/outdated_api_db.go:21 unchanged 44fb5f816dab12b0
 pub(crate) fn unchanged() -> Migration {
     Migration { tag: MigrationTag::Unchanged, ..Default::default() }
 }
 
-// go: internal/rules/outdated_api_db.go:25 renamedSameBehaviour
+// go: internal/rules/outdated_api_db.go:25 renamedSameBehaviour a958aef7434867c2
 pub(crate) fn renamed_same_behaviour(new_name: &'static str) -> Migration {
     Migration { tag: MigrationTag::RenamedSameBehaviour, new_name, ..Default::default() }
 }
 
-// go: internal/rules/outdated_api_db.go:29 renamedAndNeedsOptions
+// go: internal/rules/outdated_api_db.go:29 renamedAndNeedsOptions 3efff87618602594
 pub(crate) fn renamed_and_needs_options(
     new_name: &'static str,
     options_instructions: &'static str,
@@ -62,12 +62,12 @@ pub(crate) fn renamed_and_needs_options(
     }
 }
 
-// go: internal/rules/outdated_api_db.go:33 removed
+// go: internal/rules/outdated_api_db.go:33 removed ba5852a18c28e202
 pub(crate) fn removed(alternative_pattern: &'static str) -> Migration {
     Migration { tag: MigrationTag::Removed, alternative_pattern, ..Default::default() }
 }
 
-// go: internal/rules/outdated_api_db.go:38 EffectModuleMigrationDb
+// go: internal/rules/outdated_api_db.go:38 EffectModuleMigrationDb 3a6ead0ae39169d3
 // EffectModuleMigrationDb maps Effect v3 API names to their migration status in v4.
 pub static EFFECT_MODULE_MIGRATION_DB: LazyLock<FxHashMap<&'static str, Migration>> = LazyLock::new(
     || {

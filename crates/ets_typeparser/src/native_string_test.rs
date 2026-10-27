@@ -9,7 +9,7 @@ use ets_shim::vfs::vfstest::MapFile;
 use crate::helpers_test::*;
 use crate::*;
 
-// go test: internal/typeparser/native_string_test.go:17 findNativeStringAccess
+// go test: internal/typeparser/native_string_test.go:17 findNativeStringAccess b95494b0cd9888ff
 fn find_native_string_access(t: &T, sf: P<SourceFile>, text: &str) -> P<Node> {
     t.helper();
     fn walk(sf: P<SourceFile>, node: P<Node>, text: &str, found: &mut Option<P<Node>>) -> bool {
@@ -40,7 +40,7 @@ fn native_string_member_string(name: &str) -> String {
     format!("NativeStringMember {{ name: {name:?} }}")
 }
 
-// go test: internal/typeparser/native_string_test.go:37 TestNativeStringMethodReference
+// go test: internal/typeparser/native_string_test.go:37 TestNativeStringMethodReference 8178154ce44bcef1
 #[test]
 fn test_native_string_method_reference() {
     run(|t| {
@@ -125,7 +125,7 @@ alias;
     });
 }
 
-// go test: internal/typeparser/native_string_test.go:110 TestNativeStringAugmentation
+// go test: internal/typeparser/native_string_test.go:110 TestNativeStringAugmentation 52aca8b5ff1638bd
 #[test]
 fn test_native_string_augmentation() {
     run(|t| {
@@ -158,7 +158,7 @@ value.toUpperCase;
     });
 }
 
-// go test: internal/typeparser/native_string_test.go:131 TestNativeStringNoLib
+// go test: internal/typeparser/native_string_test.go:131 TestNativeStringNoLib d7e31d2d247bd309
 // Rust: Go's last check (`len(tp.links.nativeStringRegistry.instance) != 0`, "noLib registry contains canonical
 // members") is left out: the registry's `instance` field is private to `native_string`.
 #[test]
@@ -193,7 +193,7 @@ value.trim;
     });
 }
 
-// go test: internal/typeparser/native_string_test.go:160 TestNativeStringCheckerCache
+// go test: internal/typeparser/native_string_test.go:160 TestNativeStringCheckerCache 1a7b8154ed48ce03
 // Rust: a parser borrows its checker mutably, so `tp` and `second` (both `new_type_parser` over the same checker,
 // as in Go) are re-created for each use; they share the checker's links. Go compares the cached member pointers;
 // they come from one links store, so the values are compared.

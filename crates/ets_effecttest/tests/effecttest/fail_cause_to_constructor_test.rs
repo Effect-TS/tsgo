@@ -18,7 +18,7 @@ struct FixCase {
     fixes: i32,
 }
 
-// go test: internal/effecttest/fail_cause_to_constructor_test.go:17 TestFailCauseToConstructorFixesCompile
+// go test: internal/effecttest/fail_cause_to_constructor_test.go:17 TestFailCauseToConstructorFixesCompile 84c711ca87ad33e9
 fn test_fail_cause_to_constructor_fixes_compile(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();

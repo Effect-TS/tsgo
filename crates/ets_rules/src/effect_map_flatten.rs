@@ -11,7 +11,7 @@ use ets_typeparser::{PipingFlow, PipingFlowTransformation, TransformationKind, T
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_MAP_EFFECT_FLATTEN_IS_THE_SAME_AS_EFFECT_FLAT_MAP_THAT_EXPRESSES_THE_SAME_STEPS_MORE_DIRECTLY_EFFECT_EFFECT_MAP_FLATTEN;
 
-// go: internal/rules/effect_map_flatten.go:16 EffectMapFlatten
+// go: internal/rules/effect_map_flatten.go:16 EffectMapFlatten 6f29b4722d813982
 // EffectMapFlatten suggests using Effect.flatMap instead of Effect.map followed
 // by Effect.flatten in piping flows.
 pub static EFFECT_MAP_FLATTEN: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -32,7 +32,7 @@ pub static EFFECT_MAP_FLATTEN: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/effect_map_flatten.go:40 EffectMapFlattenMatch
+// go: internal/rules/effect_map_flatten.go:40 EffectMapFlattenMatch 2b343d0f9910a900
 #[derive(Clone)]
 pub struct EffectMapFlattenMatch {
     pub source_file: P<SourceFile>,
@@ -40,7 +40,7 @@ pub struct EffectMapFlattenMatch {
     pub node: P<Node>,
 }
 
-// go: internal/rules/effect_map_flatten.go:48 AnalyzeEffectMapFlatten
+// go: internal/rules/effect_map_flatten.go:48 AnalyzeEffectMapFlatten 820b305db4c04c92
 // AnalyzeEffectMapFlatten finds adjacent Effect.map(...), Effect.flatten pairs
 // in pipe/pipeable flows.
 //

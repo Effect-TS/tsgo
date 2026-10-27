@@ -13,7 +13,7 @@ use ets_shim::vfs::vfstest::MapFile;
 use ets_shim::vfs::{FS, bundled, vfstest};
 use ets_typeparser::TransformationKind;
 
-// go test: internal/rewriter/piping_flow_test.go:23 TestRemoveTrailingPipingFlowTransformation
+// go test: internal/rewriter/piping_flow_test.go:23 TestRemoveTrailingPipingFlowTransformation 0ef9d05c78481a68
 // Rust: Go's `(*rewriter.Tracker)(nil)` receiver check is left out (a Rust `&mut Tracker` is never nil). The
 // subtests run in sequence; each program is leaked, as the test process ends right after.
 #[test]

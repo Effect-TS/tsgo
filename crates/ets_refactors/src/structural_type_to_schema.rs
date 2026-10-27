@@ -8,7 +8,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go: internal/refactors/structural_type_to_schema.go:12 StructuralTypeToSchema
+// go: internal/refactors/structural_type_to_schema.go:12 StructuralTypeToSchema 6ccef4fd59339888
 pub static STRUCTURAL_TYPE_TO_SCHEMA: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "structuralTypeToSchema",
     description: "Refactor to Schema (Structural)",
@@ -16,7 +16,7 @@ pub static STRUCTURAL_TYPE_TO_SCHEMA: LazyLock<Refactor> = LazyLock::new(|| Refa
     run: run_structural_type_to_schema,
 });
 
-// go: internal/refactors/structural_type_to_schema.go:19 runStructuralTypeToSchema
+// go: internal/refactors/structural_type_to_schema.go:19 runStructuralTypeToSchema 3a43fb21e4ce4d93
 // Rust: the edit closure uses the type parser, so the action is built with `new_refactor_action_with_type_parser`
 // (Go's closure captures `ctx.TypeParser` and `c`).
 pub(crate) fn run_structural_type_to_schema(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {

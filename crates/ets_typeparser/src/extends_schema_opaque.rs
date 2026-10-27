@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/extends_schema_opaque.go:6 SchemaOpaqueResult
+// go: internal/typeparser/extends_schema_opaque.go:6 SchemaOpaqueResult 079ecd8d1015a989
 // SchemaOpaqueResult holds the type arguments from a class extending Schema.Opaque.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct SchemaOpaqueResult {
@@ -12,19 +12,19 @@ pub struct SchemaOpaqueResult {
 }
 
 impl SchemaOpaqueResult {
-    // go: internal/typeparser/extends_schema_opaque.go:11 SchemaOpaqueResult.SelfTypeNode
+    // go: internal/typeparser/extends_schema_opaque.go:11 SchemaOpaqueResult.SelfTypeNode f642b1691a5faf9b
     pub fn self_type_node(self) -> P<Node> {
         self.self_type_node
     }
 
-    // go: internal/typeparser/extends_schema_opaque.go:13 SchemaOpaqueResult.BrandTypeNode
+    // go: internal/typeparser/extends_schema_opaque.go:13 SchemaOpaqueResult.BrandTypeNode 6521ed215f896038
     pub fn brand_type_node(self) -> Option<P<Node>> {
         self.brand_type_node
     }
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/extends_schema_opaque.go:18 TypeParser.ExtendsSchemaOpaque
+    // go: internal/typeparser/extends_schema_opaque.go:18 TypeParser.ExtendsSchemaOpaque 55a7465fde93dd27
     // ExtendsSchemaOpaque checks for the exact Schema.Opaque double-call heritage shape:
     //
     //	class X extends Schema.Opaque<X>()(schema) {}

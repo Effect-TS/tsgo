@@ -1,6 +1,6 @@
 use crate::*;
 
-// go test: internal/completions/schema_brand_test.go:7 TestSchemaBrand_EmptySource
+// go test: internal/completions/schema_brand_test.go:7 TestSchemaBrand_EmptySource 86407bd69e74b62d
 #[test]
 fn test_schema_brand_empty_source() {
     go_test(|t| {
@@ -13,7 +13,7 @@ fn test_schema_brand_empty_source() {
     });
 }
 
-// go test: internal/completions/schema_brand_test.go:16 TestSchemaBrand_CursorAtStartOfFile
+// go test: internal/completions/schema_brand_test.go:16 TestSchemaBrand_CursorAtStartOfFile cb65439585fcb84d
 #[test]
 fn test_schema_brand_cursor_at_start_of_file() {
     go_test(|t| {
@@ -26,7 +26,7 @@ fn test_schema_brand_cursor_at_start_of_file() {
     });
 }
 
-// go test: internal/completions/schema_brand_test.go:25 TestSchemaBrand_InsideImportDeclaration
+// go test: internal/completions/schema_brand_test.go:25 TestSchemaBrand_InsideImportDeclaration 07df99530a975807
 #[test]
 fn test_schema_brand_inside_import_declaration() {
     go_test(|t| {
@@ -44,7 +44,7 @@ fn test_schema_brand_inside_import_declaration() {
     });
 }
 
-// go test: internal/completions/schema_brand_test.go:36 TestSchemaBrand_CursorAfterNumber
+// go test: internal/completions/schema_brand_test.go:36 TestSchemaBrand_CursorAfterNumber a7c29bd0ebb695ba
 #[test]
 fn test_schema_brand_cursor_after_number() {
     go_test(|t| {
@@ -61,7 +61,7 @@ fn test_schema_brand_cursor_after_number() {
     });
 }
 
-// go test: internal/completions/schema_brand_test.go:46 TestSchemaBrand_CursorAfterString
+// go test: internal/completions/schema_brand_test.go:46 TestSchemaBrand_CursorAfterString 8af6a3bc1e7cdaf4
 #[test]
 fn test_schema_brand_cursor_after_string() {
     go_test(|t| {

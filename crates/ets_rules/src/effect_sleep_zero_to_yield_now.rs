@@ -12,7 +12,7 @@ use regex::Regex;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::CONSIDER_EFFECT_YIELD_NOW_FOR_COOPERATIVE_YIELDING_INSTEAD_OF_SLEEPING_FOR_ZERO_DURATION_EFFECT_EFFECT_SLEEP_ZERO_TO_YIELD_NOW;
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:19 EffectSleepZeroToYieldNow
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:19 EffectSleepZeroToYieldNow fce8fb32d5c3932d
 pub static EFFECT_SLEEP_ZERO_TO_YIELD_NOW: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "effectSleepZeroToYieldNow",
     group: "style",
@@ -31,8 +31,8 @@ pub static EFFECT_SLEEP_ZERO_TO_YIELD_NOW: LazyLock<Rule> = LazyLock::new(|| Rul
     },
 });
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:39 YieldNowForm
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:41 YieldNowCall
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:39 YieldNowForm b8963802ff0e8ed8
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:41 YieldNowCall 542c6f04ce224159
 // Rust: Go's `iota + 1` constants; the zero value is never used.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum YieldNowForm {
@@ -40,7 +40,7 @@ pub enum YieldNowForm {
     Value = 2,
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:46 EffectSleepZeroToYieldNowMatch
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:46 EffectSleepZeroToYieldNowMatch 8d12d5e28566ad43
 #[derive(Clone)]
 pub struct EffectSleepZeroToYieldNowMatch {
     pub source_file: P<SourceFile>,
@@ -50,7 +50,7 @@ pub struct EffectSleepZeroToYieldNowMatch {
     pub form: YieldNowForm,
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:54 AnalyzeEffectSleepZeroToYieldNow
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:54 AnalyzeEffectSleepZeroToYieldNow 83bbc1fc3a2c67cd
 //
 // Rust: Go's checker argument is unused and dropped.
 pub fn analyze_effect_sleep_zero_to_yield_now(
@@ -108,7 +108,7 @@ pub fn analyze_effect_sleep_zero_to_yield_now(
     matches
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:98 unwrapZeroDurationExpression
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:98 unwrapZeroDurationExpression 09e3400c206d959b
 pub(crate) fn unwrap_zero_duration_expression(node: P<Node>) -> P<Node> {
     ast::skip_outer_expressions(
         node,
@@ -118,7 +118,7 @@ pub(crate) fn unwrap_zero_duration_expression(node: P<Node>) -> P<Node> {
     )
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:102 isOrdinarySingleArgumentCall
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:102 isOrdinarySingleArgumentCall 449b85a4aa7eed12
 pub(crate) fn is_ordinary_single_argument_call(node: P<Node>) -> bool {
     let call = node.as_call_expression();
     let arguments = call.arguments().nodes();
@@ -128,7 +128,7 @@ pub(crate) fn is_ordinary_single_argument_call(node: P<Node>) -> bool {
         && arguments[0].kind() != Kind::SpreadElement
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:109 isImportedModuleReceiver
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:109 isImportedModuleReceiver 5b88b506b3a5a073
 pub(crate) fn is_imported_module_receiver(tp: &mut TypeParser<'_>, node: P<Node>) -> bool {
     let node = unwrap_zero_duration_expression(node);
     if node.kind() == Kind::PropertyAccessExpression
@@ -159,7 +159,7 @@ pub(crate) fn is_imported_module_receiver(tp: &mut TypeParser<'_>, node: P<Node>
     kind == Kind::ImportSpecifier || kind == Kind::NamespaceImport
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:130 zeroDurationString
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:130 zeroDurationString 7c51699657b1e4b8
 pub(crate) static ZERO_DURATION_STRING: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(
         r"^(-?0+(?:\.0+)?)[ \t]+(nanos?|micros?|millis?|seconds?|minutes?|hours?|days?|weeks?)$",
@@ -167,7 +167,7 @@ pub(crate) static ZERO_DURATION_STRING: LazyLock<Regex> = LazyLock::new(|| {
     .expect("valid regexp")
 });
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:132 isRemovableZeroDuration
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:132 isRemovableZeroDuration 94811fcfc9945915
 pub(crate) fn is_removable_zero_duration(
     tp: &mut TypeParser<'_>,
     node: P<Node>,
@@ -236,7 +236,7 @@ pub(crate) fn is_removable_zero_duration(
     }
 }
 
-// go: internal/rules/effect_sleep_zero_to_yield_now.go:178 isZeroDurationNumber
+// go: internal/rules/effect_sleep_zero_to_yield_now.go:178 isZeroDurationNumber 4f0885e90f8a81d6
 pub(crate) fn is_zero_duration_number(node: P<Node>, bigint: bool) -> bool {
     let mut node = unwrap_zero_duration_expression(node);
     if node.kind() == Kind::PrefixUnaryExpression {

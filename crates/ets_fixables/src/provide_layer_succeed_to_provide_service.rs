@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_0_PROVIDES_THIS_INLINE_SINGLE_SERVICE_LAYER_DIRECTLY_EFFECT_PROVIDE_LAYER_SUCCEED_TO_PROVIDE_SERVICE;
 
-// go: internal/fixables/provide_layer_succeed_to_provide_service.go:13 ProvideLayerSucceedToProvideServiceFix
+// go: internal/fixables/provide_layer_succeed_to_provide_service.go:13 ProvideLayerSucceedToProvideServiceFix 12cf61eb789b9464
 pub static PROVIDE_LAYER_SUCCEED_TO_PROVIDE_SERVICE_FIX: LazyLock<Fixable> =
     LazyLock::new(|| Fixable {
         name: "provideLayerSucceedToProvideService",
@@ -18,7 +18,7 @@ pub static PROVIDE_LAYER_SUCCEED_TO_PROVIDE_SERVICE_FIX: LazyLock<Fixable> =
         run: run_provide_layer_succeed_to_provide_service_fix,
     });
 
-// go: internal/fixables/provide_layer_succeed_to_provide_service.go:23 runProvideLayerSucceedToProvideServiceFix
+// go: internal/fixables/provide_layer_succeed_to_provide_service.go:23 runProvideLayerSucceedToProvideServiceFix 9c6dbd5b081e0d01
 //
 // Rust: the match's transformation is never nil (an owned copy), so Go's nil check drops. The implementation node
 // is the inline layer's piping subject, which the rule requires to be set.

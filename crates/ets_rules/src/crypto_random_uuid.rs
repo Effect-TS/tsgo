@@ -13,7 +13,7 @@ static MESSAGE: &Message = &tsdiag::THIS_CODE_USES_CRYPTO_RANDOM_UUID_PREFER_THE
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE_IN_EFFECT: &Message = &tsdiag::THIS_EFFECT_CODE_USES_CRYPTO_RANDOM_UUID_PREFER_THE_EFFECT_CRYPTO_MODULE_INSTEAD_EFFECT_CRYPTO_RANDOM_UUID_IN_EFFECT;
 
-// go: internal/rules/crypto_random_uuid.go:12 CryptoRandomUUID
+// go: internal/rules/crypto_random_uuid.go:12 CryptoRandomUUID 062373540fb780b3
 pub static CRYPTO_RANDOM_UUID: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "cryptoRandomUUID",
     group: "effectNative",
@@ -24,7 +24,7 @@ pub static CRYPTO_RANDOM_UUID: LazyLock<Rule> = LazyLock::new(|| Rule {
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_crypto_random_uuid(ctx, false) },
 });
 
-// go: internal/rules/crypto_random_uuid.go:24 CryptoRandomUUIDInEffect
+// go: internal/rules/crypto_random_uuid.go:24 CryptoRandomUUIDInEffect c2875ac105c75437
 pub static CRYPTO_RANDOM_UUID_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "cryptoRandomUUIDInEffect",
     group: "effectNative",
@@ -35,7 +35,7 @@ pub static CRYPTO_RANDOM_UUID_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule 
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_crypto_random_uuid(ctx, true) },
 });
 
-// go: internal/rules/crypto_random_uuid.go:36 runCryptoRandomUUID
+// go: internal/rules/crypto_random_uuid.go:36 runCryptoRandomUUID eb4e51d4a85bc7c7
 pub(crate) fn run_crypto_random_uuid(
     ctx: &mut Context<'_, '_>,
     check_in_effect: bool,

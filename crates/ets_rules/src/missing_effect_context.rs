@@ -15,7 +15,7 @@ use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::{PipingFlow, TypeParser};
 use rustc_hash::FxHashSet;
 
-// go: internal/rules/missing_effect_context.go:23 MissingEffectContext
+// go: internal/rules/missing_effect_context.go:23 MissingEffectContext b21dc0936153e35b
 // MissingEffectContext detects when an Effect has context requirements that are not
 // handled by the expected type. This happens when assigning an Effect with requirements
 // to a variable/parameter expecting an Effect with fewer or no requirements.
@@ -63,7 +63,7 @@ pub static MISSING_EFFECT_CONTEXT: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/missing_effect_context.go:64 findUnhandledContexts
+// go: internal/rules/missing_effect_context.go:64 findUnhandledContexts 9cfaf360f42bcf04
 // findUnhandledContexts returns the source context types that are not assignable to the target context type.
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
@@ -85,7 +85,7 @@ pub(crate) fn find_unhandled_contexts(
     unhandled
 }
 
-// go: internal/rules/missing_effect_context.go:79 formatContextTypes
+// go: internal/rules/missing_effect_context.go:79 formatContextTypes c94c46b19f91da2d
 // formatContextTypes formats a slice of context types as a union string (e.g., "EnvA | EnvB").
 pub(crate) fn format_context_types(c: &mut Checker, types: &[P<Type>]) -> String {
     if types.is_empty() {
@@ -103,7 +103,7 @@ pub(crate) fn format_context_types(c: &mut Checker, types: &[P<Type>]) -> String
     result
 }
 
-// go: internal/rules/missing_effect_context.go:95 missingEffectContextRelatedInformation
+// go: internal/rules/missing_effect_context.go:95 missingEffectContextRelatedInformation b1d2a1eb6e4f37b4
 //
 // Rust: Go's checker argument is the context's checker (`ctx.checker()`).
 pub(crate) fn missing_effect_context_related_information(
@@ -134,7 +134,7 @@ pub(crate) fn missing_effect_context_related_information(
     related_information
 }
 
-// go: internal/rules/missing_effect_context.go:116 provideLocation
+// go: internal/rules/missing_effect_context.go:116 provideLocation 5cbfa9b76d1acb6d
 #[derive(Clone, Copy)]
 pub(crate) struct ProvideLocation {
     pub(crate) layer_node: Option<P<Node>>,
@@ -148,7 +148,7 @@ impl Default for ProvideLocation {
     }
 }
 
-// go: internal/rules/missing_effect_context.go:121 findRelatedProvideLocation
+// go: internal/rules/missing_effect_context.go:121 findRelatedProvideLocation 603e6b102a16f69f
 //
 // Rust: Go's checker argument is the parser's checker; Go's nil checker check is the type system's.
 pub(crate) fn find_related_provide_location(
@@ -185,7 +185,7 @@ pub(crate) fn find_related_provide_location(
     ProvideLocation::default()
 }
 
-// go: internal/rules/missing_effect_context.go:151 findRelatedLayerProviderDiagnostics
+// go: internal/rules/missing_effect_context.go:151 findRelatedLayerProviderDiagnostics cbd4a3d334ded383
 //
 // Rust: Go's checker argument is the context's checker (`ctx.checker()`); Go's nil checker and context checks are
 // the type system's.
@@ -244,7 +244,7 @@ pub(crate) fn find_related_layer_provider_diagnostics(
     related
 }
 
-// go: internal/rules/missing_effect_context.go:206 rootLayerProvidesTypes
+// go: internal/rules/missing_effect_context.go:206 rootLayerProvidesTypes daa168f985a53e0f
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub(crate) fn root_layer_provides_types(
@@ -261,7 +261,7 @@ pub(crate) fn root_layer_provides_types(
     tp.unroll_union_members(layer_type.r_out()).unwrap_or_default()
 }
 
-// go: internal/rules/missing_effect_context.go:217 rootProvidesType
+// go: internal/rules/missing_effect_context.go:217 rootProvidesType b69946a55e7d6fc5
 pub(crate) fn root_provides_type(
     c: &mut Checker,
     provided_types: &[P<Type>],
@@ -280,7 +280,7 @@ pub(crate) fn root_provides_type(
     false
 }
 
-// go: internal/rules/missing_effect_context.go:230 outlineNodeProvidesType
+// go: internal/rules/missing_effect_context.go:230 outlineNodeProvidesType 7d8733f2b4b4a216
 pub(crate) fn outline_node_provides_type(
     c: &mut Checker,
     node: &LayerOutlineGraphNodeInfo,
@@ -299,7 +299,7 @@ pub(crate) fn outline_node_provides_type(
     false
 }
 
-// go: internal/rules/missing_effect_context.go:243 firstNode
+// go: internal/rules/missing_effect_context.go:243 firstNode 98b4f9ef625cdb21
 pub(crate) fn first_node(nodes: Slice<'_, P<Node>>) -> Option<P<Node>> {
     if nodes.len() == 0 {
         return None;
@@ -307,7 +307,7 @@ pub(crate) fn first_node(nodes: Slice<'_, P<Node>>) -> Option<P<Node>> {
     Some(*nodes.at(0))
 }
 
-// go: internal/rules/missing_effect_context.go:250 findTransformationIndexContainingNode
+// go: internal/rules/missing_effect_context.go:250 findTransformationIndexContainingNode 0eca03cc036a6f09
 pub(crate) fn find_transformation_index_containing_node(
     flow: Option<&PipingFlow>,
     target: Option<P<Node>>,
@@ -327,7 +327,7 @@ pub(crate) fn find_transformation_index_containing_node(
     -1
 }
 
-// go: internal/rules/missing_effect_context.go:265 nodeContains
+// go: internal/rules/missing_effect_context.go:265 nodeContains 1b416adbd327da4c
 pub(crate) fn node_contains(ancestor: Option<P<Node>>, target: Option<P<Node>>) -> bool {
     let (Some(ancestor), Some(target)) = (ancestor, target) else {
         return false;

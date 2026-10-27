@@ -5,21 +5,21 @@ use rustc_hash::FxHashMap;
 
 use crate::*;
 
-// go: internal/typeparser/unique_types_map.go:11 UniqueTypesResult
+// go: internal/typeparser/unique_types_map.go:11 UniqueTypesResult a0f141eece3329cf
 // UniqueTypesResult holds the result of AppendToUniqueTypesMap.
 pub struct UniqueTypesResult {
     pub(crate) all_indexes: Option<Vec<String>>, // All type indexes encountered (both new and existing)
 }
 
 impl UniqueTypesResult {
-    // go: internal/typeparser/unique_types_map.go:15 UniqueTypesResult.AllIndexes
+    // go: internal/typeparser/unique_types_map.go:15 UniqueTypesResult.AllIndexes d38e07dcead71bcc
     pub fn all_indexes(&self) -> Slice<'_, String> {
         ets_readonly::new(self.all_indexes.as_deref())
     }
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/unique_types_map.go:22 TypeParser.AppendToUniqueTypesMap
+    // go: internal/typeparser/unique_types_map.go:22 TypeParser.AppendToUniqueTypesMap 66eb440a9f288c44
     // AppendToUniqueTypesMap deduplicates types using bidirectional assignability checks.
     // It unrolls union types, skips excluded types (via shouldExclude), and for each
     // remaining type checks if it's already in the memory map. New types get fresh IDs

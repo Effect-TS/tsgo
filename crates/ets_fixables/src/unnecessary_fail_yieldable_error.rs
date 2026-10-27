@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_YIELD_ASTERISK_EFFECT_FAIL_PASSES_A_YIELDABLE_ERROR_VALUE_YIELD_ASTERISK_REPRESENTS_THAT_VALUE_DIRECTLY_WITHOUT_WRAPPING_IT_IN_EFFECT_FAIL_EFFECT_UNNECESSARY_FAIL_YIELDABLE_ERROR;
 
-// go: internal/fixables/unnecessary_fail_yieldable_error.go:12 UnnecessaryFailYieldableErrorFix
+// go: internal/fixables/unnecessary_fail_yieldable_error.go:12 UnnecessaryFailYieldableErrorFix 76f54507b43ca1eb
 pub static UNNECESSARY_FAIL_YIELDABLE_ERROR_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "unnecessaryFailYieldableError",
     description: "Replace yield* Effect.fail with yield*",
@@ -17,7 +17,7 @@ pub static UNNECESSARY_FAIL_YIELDABLE_ERROR_FIX: LazyLock<Fixable> = LazyLock::n
     run: run_unnecessary_fail_yieldable_error_fix,
 });
 
-// go: internal/fixables/unnecessary_fail_yieldable_error.go:20 runUnnecessaryFailYieldableErrorFix
+// go: internal/fixables/unnecessary_fail_yieldable_error.go:20 runUnnecessaryFailYieldableErrorFix 859be82c872a9b02
 fn run_unnecessary_fail_yieldable_error_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 

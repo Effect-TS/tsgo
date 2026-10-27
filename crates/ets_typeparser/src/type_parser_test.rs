@@ -14,7 +14,7 @@ use rustc_hash::FxHashMap;
 use crate::helpers_test::*;
 use crate::*;
 
-// go test: internal/typeparser/type_parser_test.go:11 TestCachedCachesNegativeValues
+// go test: internal/typeparser/type_parser_test.go:11 TestCachedCachesNegativeValues 6d74e69dc80bbf1b
 // Rust: the nil case uses a node-keyed store of optional values (Go: `core.LinkStore[string, *int]`), keyed by the
 // source file node; the false case uses the string-keyed boolean store (Go: `core.LinkStore[string, bool]`).
 #[test]
@@ -89,7 +89,7 @@ fn test_cached_caches_negative_values() {
     });
 }
 
-// go test: internal/typeparser/type_parser_test.go:57 TestCachedNodeCachesPerNode
+// go test: internal/typeparser/type_parser_test.go:57 TestCachedNodeCachesPerNode a39705d15f872b83
 // Rust: the store is a node-keyed store of optional nodes (Go: `checker.NodeLinkStore[*string]`); the values are
 // identifiers whose text is Go's string.
 #[test]
@@ -186,7 +186,7 @@ fn test_cached_node_caches_per_node() {
     });
 }
 
-// go test: internal/typeparser/type_parser_test.go:104 TestSymbolLinkStoreKeepsOneSlotPerSymbol
+// go test: internal/typeparser/type_parser_test.go:104 TestSymbolLinkStoreKeepsOneSlotPerSymbol f8489c931aefa018
 // Rust: Go's `checker.SymbolLinkStore[V]` is a symbol-keyed map (`FxHashMap<P<Symbol>, V>`, as in `EffectLinks`):
 // `TryGet` is `get`, `Get` is `entry(..).or_default()`.
 #[test]

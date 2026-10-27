@@ -3,20 +3,20 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/vitest_api.go:5 vitestRunnerPackageDescriptor
+// go: internal/typeparser/vitest_api.go:5 vitestRunnerPackageDescriptor 86077546da6614a3
 pub(crate) static VITEST_RUNNER_PACKAGE_DESCRIPTOR: PackageSourceFileDescriptor =
     new_package_source_file_descriptor(ModuleDescriptorId::VitestRunner, "@vitest/runner", None);
 
-// go: internal/typeparser/vitest_api.go:7 vitestPackageDescriptor
+// go: internal/typeparser/vitest_api.go:7 vitestPackageDescriptor 7a6ea327f13d4da2
 pub(crate) static VITEST_PACKAGE_DESCRIPTOR: PackageSourceFileDescriptor =
     new_package_source_file_descriptor(ModuleDescriptorId::Vitest, "vitest", None);
 
-// go: internal/typeparser/vitest_api.go:9 effectVitestPackageDescriptor
+// go: internal/typeparser/vitest_api.go:9 effectVitestPackageDescriptor 131edefe59b6da24
 pub(crate) static EFFECT_VITEST_PACKAGE_DESCRIPTOR: PackageSourceFileDescriptor =
     new_package_source_file_descriptor(ModuleDescriptorId::EffectVitest, "@effect/vitest", None);
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/vitest_api.go:15 TypeParser.IsNodeReferenceToVitestApi
+    // go: internal/typeparser/vitest_api.go:15 TypeParser.IsNodeReferenceToVitestApi 7beab75210e54975
     // IsNodeReferenceToVitestApi reports whether node resolves to a Vitest API.
     // Vitest re-exports most test APIs from @vitest/runner, while global APIs are
     // declared directly by the vitest package. The package fallback handles globals
@@ -41,7 +41,7 @@ impl TypeParser<'_> {
             || self.is_node_reference_to_module(node, &VITEST_PACKAGE_DESCRIPTOR)
     }
 
-    // go: internal/typeparser/vitest_api.go:30 TypeParser.IsNodeReferenceToEffectVitestApi
+    // go: internal/typeparser/vitest_api.go:30 TypeParser.IsNodeReferenceToEffectVitestApi 1a56af7af6fb9187
     // IsNodeReferenceToEffectVitestApi reports whether node resolves to an API
     // implemented by @effect/vitest rather than re-exported from Vitest.
     pub fn is_node_reference_to_effect_vitest_api(
@@ -57,7 +57,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/vitest_api.go:34 referenceNodeName
+// go: internal/typeparser/vitest_api.go:34 referenceNodeName 7832e313434e8f1e
 pub(crate) fn reference_node_name(node: Option<P<Node>>) -> &'static str {
     let Some(node) = node else {
         return "";

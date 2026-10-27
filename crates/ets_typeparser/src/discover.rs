@@ -4,7 +4,7 @@ use rustc_hash::FxHashSet;
 
 use crate::*;
 
-// go: internal/typeparser/discover.go:8 DiscoveredPackage
+// go: internal/typeparser/discover.go:8 DiscoveredPackage 5f3bc2803ef1c109
 // DiscoveredPackage represents a package found in the program's source files.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct DiscoveredPackage {
@@ -15,28 +15,28 @@ pub struct DiscoveredPackage {
 }
 
 impl DiscoveredPackage {
-    // go: internal/typeparser/discover.go:15 DiscoveredPackage.Name
+    // go: internal/typeparser/discover.go:15 DiscoveredPackage.Name b484f8ce366d7987
     pub fn name(&self) -> &str {
         &self.name
     }
 
-    // go: internal/typeparser/discover.go:17 DiscoveredPackage.Version
+    // go: internal/typeparser/discover.go:17 DiscoveredPackage.Version 4c4d1ee28730119f
     pub fn version(&self) -> Option<&str> {
         self.version.as_deref()
     }
 
-    // go: internal/typeparser/discover.go:24 DiscoveredPackage.DependsOnEffect
+    // go: internal/typeparser/discover.go:24 DiscoveredPackage.DependsOnEffect 95f4728783cb280c
     pub fn depends_on_effect(&self) -> bool {
         self.depends_on_effect
     }
 
-    // go: internal/typeparser/discover.go:26 DiscoveredPackage.PackageDirectory
+    // go: internal/typeparser/discover.go:26 DiscoveredPackage.PackageDirectory e5100f6a06d197d7
     pub fn package_directory(&self) -> &str {
         &self.package_directory
     }
 }
 
-// go: internal/typeparser/discover.go:29 packageKey
+// go: internal/typeparser/discover.go:29 packageKey 7255f0686dfc2d5c
 // packageKey is used for deduplication of discovered packages.
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub(crate) struct PackageKey {
@@ -45,8 +45,8 @@ pub(crate) struct PackageKey {
     has_ver: bool,
 }
 
-// go: internal/typeparser/discover.go:36 EffectMajorVersion
-// go: internal/typeparser/discover.go:38 EffectMajorUnknown
+// go: internal/typeparser/discover.go:36 EffectMajorVersion 87b9e2c45dd651d2
+// go: internal/typeparser/discover.go:38 EffectMajorUnknown 0268237f075c828e
 // EffectMajorVersion represents the detected major version of the Effect library.
 #[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]
 pub enum EffectMajorVersion {
@@ -56,7 +56,7 @@ pub enum EffectMajorVersion {
     V4 = 4,
 }
 
-// go: internal/typeparser/discover.go:45 EffectMajorVersion.String
+// go: internal/typeparser/discover.go:45 EffectMajorVersion.String 2fb47a39dd31f7d1
 // String returns the string representation of the Effect major version.
 //
 // Rust: Go's `String` method is `Display` (`to_string()`).
@@ -71,7 +71,7 @@ impl std::fmt::Display for EffectMajorVersion {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/discover.go:59 TypeParser.DetectEffectVersion
+    // go: internal/typeparser/discover.go:59 TypeParser.DetectEffectVersion 18940f33e739d55e
     // DetectEffectVersion detects the major version of the Effect library from the program's
     // source files. Returns EffectMajorUnknown if no Effect dependency is found or if
     // conflicting versions are detected. The result is cached per checker lifetime.
@@ -89,7 +89,7 @@ impl TypeParser<'_> {
         result
     }
 
-    // go: internal/typeparser/discover.go:73 TypeParser.detectEffectVersionUncached
+    // go: internal/typeparser/discover.go:73 TypeParser.detectEffectVersionUncached 417a9af6270a37bd
     // detectEffectVersionUncached performs the actual version detection logic.
     pub(crate) fn detect_effect_version_uncached(&mut self) -> EffectMajorVersion {
         let packages = self.discover_packages();
@@ -126,7 +126,7 @@ impl TypeParser<'_> {
         detected
     }
 
-    // go: internal/typeparser/discover.go:119 TypeParser.SupportedEffectVersion
+    // go: internal/typeparser/discover.go:119 TypeParser.SupportedEffectVersion 9f7af95d9c87592a
     // SupportedEffectVersion returns the normalized supported Effect major version.
     // It returns EffectMajorV4 when v4 is detected, and EffectMajorV3 for all other
     // outcomes (including unknown). This is the central extension point for future
@@ -138,7 +138,7 @@ impl TypeParser<'_> {
         EffectMajorVersion::V3
     }
 
-    // go: internal/typeparser/discover.go:132 TypeParser.DetectEffectVersionString
+    // go: internal/typeparser/discover.go:132 TypeParser.DetectEffectVersionString 9fbd333b6b27435a
     // DetectEffectVersionString returns the exact version string of the Effect library.
     // Returns "unknown" if no Effect dependency is found, if the version is nil, or if
     // conflicting versions are detected.
@@ -172,7 +172,7 @@ impl TypeParser<'_> {
         detected
     }
 
-    // go: internal/typeparser/discover.go:165 TypeParser.DiscoverPackages
+    // go: internal/typeparser/discover.go:165 TypeParser.DiscoverPackages eb533152fed0885f
     // DiscoverPackages iterates all source files in the program, resolves each one's
     // nearest package.json, and returns a deduplicated list of discovered packages.
     // Results are cached per checker so repeated calls within the same check cycle
@@ -196,7 +196,7 @@ impl TypeParser<'_> {
         result
     }
 
-    // go: internal/typeparser/discover.go:181 TypeParser.discoverPackagesUncached
+    // go: internal/typeparser/discover.go:181 TypeParser.discoverPackagesUncached c8a21ed3befccd80
     // discoverPackagesUncached performs the actual source file scan.
     //
     // Rust: Go's assertions to `sourceFileProgram` and `packageJsonProgram` succeed for the compiler program (see

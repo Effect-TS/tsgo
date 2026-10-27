@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_SCHEMA_UNION_CONTAINS_MULTIPLE_SCHEMA_LITERAL_MEMBERS_AND_CAN_BE_SIMPLIFIED_TO_A_SINGLE_SCHEMA_LITERAL_CALL_EFFECT_SCHEMA_UNION_OF_LITERALS;
 
-// go: internal/fixables/schema_union_of_literals.go:12 SchemaUnionOfLiteralsFix
+// go: internal/fixables/schema_union_of_literals.go:12 SchemaUnionOfLiteralsFix 7e9a19b05a984170
 pub static SCHEMA_UNION_OF_LITERALS_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "schemaUnionOfLiterals",
     description: "Replace with a single Schema.Literal call",
@@ -17,7 +17,7 @@ pub static SCHEMA_UNION_OF_LITERALS_FIX: LazyLock<Fixable> = LazyLock::new(|| Fi
     run: run_schema_union_of_literals_fix,
 });
 
-// go: internal/fixables/schema_union_of_literals.go:20 runSchemaUnionOfLiteralsFix
+// go: internal/fixables/schema_union_of_literals.go:20 runSchemaUnionOfLiteralsFix b5a1ace1e1049f56
 //
 // Rust: Go's `NewCallExpression` would take the nil clone of a nil first literal expression; tsrs's needs a node,
 // and the rule sets it for every match (`expect`).

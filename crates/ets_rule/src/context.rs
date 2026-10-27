@@ -7,7 +7,7 @@ use ets_shim::core::context;
 use ets_shim::diagnostics::Message;
 use ets_typeparser::TypeParser;
 
-// go: internal/rule/context.go:17 Context
+// go: internal/rule/context.go:17 Context bac8a1063c911107
 // Context bundles the checker, source file, and default severity for a rule invocation.
 // It provides a NewDiagnostic helper that simplifies diagnostic creation.
 //
@@ -30,7 +30,7 @@ impl Context<'_, '_> {
     }
 }
 
-// go: internal/rule/context.go:28 NewContext
+// go: internal/rule/context.go:28 NewContext 896d2711b0b0a4ad
 // NewContext creates a new Context for a rule invocation.
 //
 // Rust: the checker comes with the type parser (see `Context`).
@@ -46,14 +46,14 @@ pub fn new_context<'a, 'c>(
 }
 
 impl Context<'_, '_> {
-    // go: internal/rule/context.go:42 Context.GetErrorRange
+    // go: internal/rule/context.go:42 Context.GetErrorRange 490e24f06c1be4a5
     // GetErrorRange computes the error range for a node in the context's source file.
     // Use this in rules that don't have Analyze functions to get a location before calling NewDiagnostic.
     pub fn get_error_range(&self, node: P<Node>) -> TextRange {
         ets_shim::scanner::get_error_range_for_node(self.source_file, node)
     }
 
-    // go: internal/rule/context.go:49 Context.NewDiagnostic
+    // go: internal/rule/context.go:49 Context.NewDiagnostic 54c8ae3be9ee3227
     // NewDiagnostic creates a diagnostic using the context's source file and default severity.
     // The loc is the pre-computed error range, message provides the diagnostic code and key,
     // relatedInformation can be nil, and args are variadic message format arguments.

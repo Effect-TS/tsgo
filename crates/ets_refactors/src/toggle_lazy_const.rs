@@ -9,7 +9,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go: internal/refactors/toggle_lazy_const.go:12 ToggleLazyConst
+// go: internal/refactors/toggle_lazy_const.go:12 ToggleLazyConst 22aa1074d8647eba
 pub static TOGGLE_LAZY_CONST: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "toggleLazyConst",
     description: "Toggle lazy const",
@@ -17,7 +17,7 @@ pub static TOGGLE_LAZY_CONST: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     run: run_toggle_lazy_const,
 });
 
-// go: internal/refactors/toggle_lazy_const.go:19 runToggleLazyConst
+// go: internal/refactors/toggle_lazy_const.go:19 runToggleLazyConst f494dbaab79bb6df
 pub(crate) fn run_toggle_lazy_const(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let span_pos = span_pos(ctx);
     let token = astnav::get_token_at_position(ctx.source_file, span_pos);

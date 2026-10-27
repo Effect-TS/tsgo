@@ -10,7 +10,7 @@ use regex::Regex;
 
 use crate::*;
 
-// go test: internal/effecttest/refactor_runner.go:20 RefactorTestCasesDir
+// go test: internal/effecttest/refactor_runner.go:20 RefactorTestCasesDir 7e77ff4174589387
 // RefactorTestCasesDir returns the path to the Effect refactor test cases directory.
 pub fn refactor_test_cases_dir(version: EffectVersion) -> PathBuf {
     ets_bundledeffect::effect_ts_go_root_path()
@@ -19,7 +19,7 @@ pub fn refactor_test_cases_dir(version: EffectVersion) -> PathBuf {
         .join(version.as_str().to_string() + "-refactors")
 }
 
-// go test: internal/effecttest/refactor_runner.go:25 DiscoverRefactorTestCases
+// go test: internal/effecttest/refactor_runner.go:25 DiscoverRefactorTestCases 0cc2f747507f9514
 // DiscoverRefactorTestCases finds all .ts test files in the refactor test cases directory.
 pub fn discover_refactor_test_cases(version: EffectVersion) -> std::io::Result<Vec<PathBuf>> {
     let dir = refactor_test_cases_dir(version);
@@ -38,24 +38,24 @@ pub fn discover_refactor_test_cases(version: EffectVersion) -> std::io::Result<V
     Ok(cases)
 }
 
-// go test: internal/effecttest/refactor_runner.go:45 refactorCommentPrefix
+// go test: internal/effecttest/refactor_runner.go:45 refactorCommentPrefix 70fa76e6d69f8d00
 // refactorCommentPrefix matches lines starting with "// refactor:"
 //
 // Rust: Go's RE2 `\s` is an ASCII class; it is spelled out.
 pub(crate) static REFACTOR_COMMENT_PREFIX: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"^//[\t\n\x0C\r ]*refactor:[\t\n\x0C\r ]*").unwrap());
 
-// go test: internal/effecttest/refactor_runner.go:48 rangeRegex
+// go test: internal/effecttest/refactor_runner.go:48 rangeRegex 994d13ec59297cd1
 // rangeRegex matches a single "L:C-L:C" range token (dash-separated start and end).
 pub(crate) static RANGE_REGEX: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"^([0-9]+):([0-9]+)-([0-9]+):([0-9]+)$").unwrap());
 
-// go test: internal/effecttest/refactor_runner.go:51 pointRegex
+// go test: internal/effecttest/refactor_runner.go:51 pointRegex d4c2465ac76d44ca
 // pointRegex matches a single "L:C" point selection token (no dash).
 pub(crate) static POINT_REGEX: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"^([0-9]+):([0-9]+)$").unwrap());
 
-// go test: internal/effecttest/refactor_runner.go:54 refactorCommentResult
+// go test: internal/effecttest/refactor_runner.go:54 refactorCommentResult 12f0312a1042f14a
 // refactorCommentResult holds the parsed refactor comment data.
 #[derive(Clone, Debug, Default)]
 pub(crate) struct RefactorCommentResult {
@@ -76,7 +76,7 @@ fn one_based_to_u32(s: &str) -> u32 {
     v
 }
 
-// go test: internal/effecttest/refactor_runner.go:64 parseRefactorComment
+// go test: internal/effecttest/refactor_runner.go:64 parseRefactorComment 4acf3c767c69f93e
 // parseRefactorComment scans the test file content for a first-line
 // "// refactor: L:C-L:C,L:C-L:C,..." comment (1-based lines and columns).
 // Multiple ranges are separated by commas. A single "L:C" denotes a point
@@ -127,7 +127,7 @@ pub(crate) fn parse_refactor_comment(content: &str) -> RefactorCommentResult {
     RefactorCommentResult { found: true, ranges }
 }
 
-// go test: internal/effecttest/refactor_runner.go:115 RunEffectRefactorTest
+// go test: internal/effecttest/refactor_runner.go:115 RunEffectRefactorTest 6bce5f171307652c
 // RunEffectRefactorTest executes a single Effect refactor baseline test case.
 // It creates a fourslash test instance, collects refactor inventory and application
 // results for the selection specified by a "// refactor:" comment, and generates a *.refactors.txt baseline.

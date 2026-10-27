@@ -4,7 +4,7 @@ use ets_shim::core::P;
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/promise_type.go:9 TypeParser.PromiseType
+    // go: internal/typeparser/promise_type.go:9 TypeParser.PromiseType 842a9ebfad5184a7
     // PromiseType returns t when it is the global Promise type or a reference to it.
     // It intentionally does not match arbitrary thenables or PromiseLike values.
     //

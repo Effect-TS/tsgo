@@ -1,6 +1,6 @@
 use crate::*;
 
-// go test: internal/completions/effect_diagnostics_comment_test.go:11 TestEffectDiagnosticsComment_DoubleSlash
+// go test: internal/completions/effect_diagnostics_comment_test.go:11 TestEffectDiagnosticsComment_DoubleSlash c90fe2510e4c1a37
 #[test]
 fn test_effect_diagnostics_comment_double_slash() {
     go_test(|t| {
@@ -25,7 +25,7 @@ fn test_effect_diagnostics_comment_double_slash() {
     });
 }
 
-// go test: internal/completions/effect_diagnostics_comment_test.go:26 TestEffectDiagnosticsComment_SlashStar
+// go test: internal/completions/effect_diagnostics_comment_test.go:26 TestEffectDiagnosticsComment_SlashStar eff379f941ff3c88
 #[test]
 fn test_effect_diagnostics_comment_slash_star() {
     go_test(|t| {
@@ -50,7 +50,7 @@ fn test_effect_diagnostics_comment_slash_star() {
     });
 }
 
-// go test: internal/completions/effect_diagnostics_comment_test.go:41 TestEffectDiagnosticsComment_JSDocComment
+// go test: internal/completions/effect_diagnostics_comment_test.go:41 TestEffectDiagnosticsComment_JSDocComment 60c102ab0ffca5e0
 #[test]
 fn test_effect_diagnostics_comment_jsdoc_comment() {
     go_test(|t| {
@@ -63,7 +63,7 @@ fn test_effect_diagnostics_comment_jsdoc_comment() {
     });
 }
 
-// go test: internal/completions/effect_diagnostics_comment_test.go:50 TestEffectDiagnosticsComment_ExtraWhitespace
+// go test: internal/completions/effect_diagnostics_comment_test.go:50 TestEffectDiagnosticsComment_ExtraWhitespace cbef69218e97e967
 #[test]
 fn test_effect_diagnostics_comment_extra_whitespace() {
     go_test(|t| {
@@ -79,7 +79,7 @@ fn test_effect_diagnostics_comment_extra_whitespace() {
     });
 }
 
-// go test: internal/completions/effect_diagnostics_comment_test.go:59 TestEffectDiagnosticsComment_NoAtSymbol
+// go test: internal/completions/effect_diagnostics_comment_test.go:59 TestEffectDiagnosticsComment_NoAtSymbol a599bbd78fae8007
 #[test]
 fn test_effect_diagnostics_comment_no_at_symbol() {
     go_test(|t| {
@@ -92,7 +92,7 @@ fn test_effect_diagnostics_comment_no_at_symbol() {
     });
 }
 
-// go test: internal/completions/effect_diagnostics_comment_test.go:68 TestEffectDiagnosticsComment_AtOutsideComment
+// go test: internal/completions/effect_diagnostics_comment_test.go:68 TestEffectDiagnosticsComment_AtOutsideComment d5ec62380582ab46
 #[test]
 fn test_effect_diagnostics_comment_at_outside_comment() {
     go_test(|t| {
@@ -105,7 +105,7 @@ fn test_effect_diagnostics_comment_at_outside_comment() {
     });
 }
 
-// go test: internal/completions/effect_diagnostics_comment_test.go:77 TestEffectDiagnosticsComment_SnippetContainsSortedRuleNames
+// go test: internal/completions/effect_diagnostics_comment_test.go:77 TestEffectDiagnosticsComment_SnippetContainsSortedRuleNames 6cb749a861099916
 #[test]
 fn test_effect_diagnostics_comment_snippet_contains_sorted_rule_names() {
     go_test(|t| {
@@ -130,7 +130,7 @@ fn test_effect_diagnostics_comment_snippet_contains_sorted_rule_names() {
     });
 }
 
-// go test: internal/completions/effect_diagnostics_comment_test.go:99 TestEffectDiagnosticsComment_SnippetContainsSeverityChoices
+// go test: internal/completions/effect_diagnostics_comment_test.go:99 TestEffectDiagnosticsComment_SnippetContainsSeverityChoices 9e80887c424ea11f
 #[test]
 fn test_effect_diagnostics_comment_snippet_contains_severity_choices() {
     go_test(|t| {
@@ -151,7 +151,7 @@ fn test_effect_diagnostics_comment_snippet_contains_severity_choices() {
     });
 }
 
-// go test: internal/completions/effect_diagnostics_comment_test.go:114 TestEffectDiagnosticsComment_ReplacementSpanStartsAtAt
+// go test: internal/completions/effect_diagnostics_comment_test.go:114 TestEffectDiagnosticsComment_ReplacementSpanStartsAtAt 21bab2db20ecd9d3
 #[test]
 fn test_effect_diagnostics_comment_replacement_span_starts_at_at() {
     go_test(|t| {
@@ -173,7 +173,7 @@ fn test_effect_diagnostics_comment_replacement_span_starts_at_at() {
     });
 }
 
-// go test: internal/completions/effect_diagnostics_comment_test.go:129 TestEffectDiagnosticsComment_MultilineWithCommentOnSecondLine
+// go test: internal/completions/effect_diagnostics_comment_test.go:129 TestEffectDiagnosticsComment_MultilineWithCommentOnSecondLine 9806fa887c9564b2
 #[test]
 fn test_effect_diagnostics_comment_multiline_with_comment_on_second_line() {
     go_test(|t| {

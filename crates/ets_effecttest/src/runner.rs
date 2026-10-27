@@ -19,7 +19,7 @@ use regex::Regex;
 
 use crate::*;
 
-// go test: internal/effecttest/runner.go:30 TestCasesDir
+// go test: internal/effecttest/runner.go:30 TestCasesDir fc67156a98ca53d0
 // TestCasesDir returns the path to the Effect test cases directory for the given version.
 pub fn test_cases_dir(version: EffectVersion) -> PathBuf {
     ets_bundledeffect::effect_ts_go_root_path()
@@ -28,7 +28,7 @@ pub fn test_cases_dir(version: EffectVersion) -> PathBuf {
         .join(version.as_str())
 }
 
-// go test: internal/effecttest/runner.go:35 DiscoverTestCases
+// go test: internal/effecttest/runner.go:35 DiscoverTestCases 7bcb60f789001d56
 // DiscoverTestCases finds all .ts test files in the test cases directory for the given version.
 pub fn discover_test_cases(version: EffectVersion) -> std::io::Result<Vec<PathBuf>> {
     let dir = test_cases_dir(version);
@@ -55,15 +55,15 @@ pub(crate) fn read_dir_sorted(dir: &Path) -> std::io::Result<Vec<(String, bool)>
     Ok(entries)
 }
 
-// go test: internal/effecttest/runner.go:51 lineDelimiter
+// go test: internal/effecttest/runner.go:51 lineDelimiter c62222199296711a
 // Rust: Go's RE2 `\s` and `\w` are ASCII classes; they are spelled out, as the regex crate's are Unicode.
 pub(crate) static LINE_DELIMITER: LazyLock<Regex> = LazyLock::new(|| Regex::new("\r?\n").unwrap());
-// go test: internal/effecttest/runner.go:51 lineDelimiter
+// go test: internal/effecttest/runner.go:51 lineDelimiter c62222199296711a
 pub(crate) static OPTION_REGEX: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"(?m)^/{2}[\t\n\f\r ]*@([0-9A-Za-z_]+)[\t\n\f\r ]*:[\t\n\f\r ]*([^\r\n]*)").unwrap()
 });
 
-// go test: internal/effecttest/runner.go:57 testUnit
+// go test: internal/effecttest/runner.go:57 testUnit eca245d18458a581
 // testUnit represents a single file within a multi-file test case.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub(crate) struct TestUnit {
@@ -71,7 +71,7 @@ pub(crate) struct TestUnit {
     pub(crate) content: String,
 }
 
-// go test: internal/effecttest/runner.go:63 parseTestUnits
+// go test: internal/effecttest/runner.go:63 parseTestUnits 3387216c27ac2947
 // parseTestUnits parses a test file into multiple test units based on @filename directives.
 pub(crate) fn parse_test_units(content: &str, default_file_name: &str) -> Vec<TestUnit> {
     let lines = LINE_DELIMITER.split(content);
@@ -115,7 +115,7 @@ pub(crate) fn parse_test_units(content: &str, default_file_name: &str) -> Vec<Te
     units
 }
 
-// go test: internal/effecttest/runner.go:114 DefaultTsConfig
+// go test: internal/effecttest/runner.go:114 DefaultTsConfig b7d3467b28ac3b3b
 // DefaultTsConfig is the default tsconfig content injected when a test does not provide one.
 // It enables the Effect language service plugin while keeping stability rules
 // off in unrelated fixtures. Dedicated fixtures enable them explicitly.
@@ -137,7 +137,7 @@ pub const DEFAULT_TS_CONFIG: &str = r#"{
   }
 }"#;
 
-// go test: internal/effecttest/runner.go:133 RunEffectTest
+// go test: internal/effecttest/runner.go:133 RunEffectTest 3e2e65a6bec78c05
 // RunEffectTest executes a single Effect diagnostic test case for the given version.
 //
 // Rust: the Effect diagnostics come from the hook crates `init_hooks` registers (`etscheckerhooks`). Go's

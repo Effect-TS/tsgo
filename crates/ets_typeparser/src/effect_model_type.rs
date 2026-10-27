@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/effect_model_type.go:8 effectModelPackageSourceFileDescriptor
+// go: internal/typeparser/effect_model_type.go:8 effectModelPackageSourceFileDescriptor bc7e19c1896fd89c
 pub(crate) static EFFECT_MODEL_PACKAGE_SOURCE_FILE_DESCRIPTOR: PackageSourceFileDescriptor =
     new_package_source_file_descriptor(
         ModuleDescriptorId::EffectModel,
@@ -11,7 +11,7 @@ pub(crate) static EFFECT_MODEL_PACKAGE_SOURCE_FILE_DESCRIPTOR: PackageSourceFile
         Some(&is_effect_model_type_source_file),
     );
 
-// go: internal/typeparser/effect_model_type.go:14 isEffectModelTypeSourceFile
+// go: internal/typeparser/effect_model_type.go:14 isEffectModelTypeSourceFile 7f0443896c10eeaa
 // isEffectModelTypeSourceFile checks if a source file is the effect/schema Model module
 // by verifying it exports "Class", "Generated", and "FieldOption".
 // These symbols are chosen to disambiguate Model from Schema (which also exports "Class"),
@@ -41,7 +41,7 @@ pub(crate) fn is_effect_model_type_source_file(tp: &mut TypeParser<'_>, sf: P<So
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/effect_model_type.go:44 TypeParser.IsNodeReferenceToEffectModelModuleApi
+    // go: internal/typeparser/effect_model_type.go:44 TypeParser.IsNodeReferenceToEffectModelModuleApi 8bb5c502fd939c5b
     // IsNodeReferenceToEffectModelModuleApi reports whether node resolves to a member
     // exported by the "effect" package from a module that exports the Model API
     // (effect/schema).

@@ -13,14 +13,15 @@ same PR (`docs/TSRS_PORT.md`, "Parity policy"); `pnpm check` fails otherwise. Th
 ```sh
 git fetch origin
 git diff --stat origin/main...HEAD -- '*.go' '_patches/typescript*' testdata/tests
-pnpm exec repoctl tsrs port-check            # hash mismatches, unknown/misplaced markers, unacked markers
+pnpm exec repoctl tsrs port-check            # marker hash mismatches, unknown markers, unacked (hashless) markers
 pnpm exec repoctl tsrs port-diff origin/main HEAD
 ```
 
 Classify every row:
 
 - **changed** (hash mismatch on a ported declaration): the Rust must change.
-- **moved** (same declaration, other file or line): move the Rust item to the mirroring file / fix the line.
+- **moved** (same declaration, other file): move the Rust item to the mirroring file and fix its marker path. A
+  declaration whose lines merely shifted is not an error (`port-fix-lines` refreshes marker lines).
 - **removed**: delete the Rust item and its tests, and anything only it used.
 - **added**: port it, with its marker (`repoctl tsrs port-todo <prefix>` prints them), or add it to
   `porting/skipped.tsv` with a concrete reason. `require_new = true` in `porting/scope.toml`, so `repoctl tsrs
@@ -46,7 +47,8 @@ same way). Also look at what the manifest does not track:
 For each changed declaration:
 
 1. Read the Go diff of that declaration: `git diff origin/main...HEAD -- <file>`.
-2. Open the Rust item by its marker (`rg -n '// go: <path>:[0-9]+ <Name>$' crates/`).
+2. Open the Rust item by its marker (`rg -n '// go: <path>:[0-9]+ <Name>( |$)' crates/`); one declaration may have
+   several markers, update every item that carries one.
 3. Apply the same change, faithfully: same control flow, same order, same message texts. Don't re-port from
    scratch unless the Go declaration was rewritten, and don't "improve" neighboring code.
 4. If the change needs a tsrs API that `ets_shim` doesn't expose, follow `docs/PORTING.md`, "API gaps: a tsrs patch
@@ -55,8 +57,9 @@ For each changed declaration:
 Then:
 
 ```sh
-pnpm exec repoctl tsrs port-fix-lines
-pnpm exec repoctl tsrs port-ack <path> <Name>...     # only for declarations you updated and verified
+pnpm exec repoctl tsrs port-fix-lines                # refresh marker line numbers (hashes untouched)
+pnpm exec repoctl tsrs port-ack <path> <Name>...     # only for declarations you updated and verified: writes the
+                                                     # current Go hash (and line) into all their markers
 pnpm exec repoctl tsrs port-check                    # must pass
 ```
 

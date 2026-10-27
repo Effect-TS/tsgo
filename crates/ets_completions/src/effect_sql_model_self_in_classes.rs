@@ -6,7 +6,7 @@ use ets_typeparser::EffectMajorVersion;
 
 use crate::*;
 
-// go: internal/completions/effect_sql_model_self_in_classes.go:14 effectSqlModelSelfInClasses
+// go: internal/completions/effect_sql_model_self_in_classes.go:14 effectSqlModelSelfInClasses 82810a28aa6263fe
 // effectSqlModelSelfInClasses provides completion items for @effect/sql Model.Class
 // when the cursor is in the extends clause of a class declaration.
 // This is a V3-only completion.
@@ -17,7 +17,7 @@ pub(crate) static EFFECT_SQL_MODEL_SELF_IN_CLASSES: LazyLock<Completion> =
         run: run_effect_sql_model_self_in_classes,
     });
 
-// go: internal/completions/effect_sql_model_self_in_classes.go:20 runEffectSqlModelSelfInClasses
+// go: internal/completions/effect_sql_model_self_in_classes.go:20 runEffectSqlModelSelfInClasses d05d70e38acc4408
 fn run_effect_sql_model_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionItem> {
     let Some(data) =
         ets_completion::parse_data_for_extends_class_completion(ctx.source_file, ctx.position)

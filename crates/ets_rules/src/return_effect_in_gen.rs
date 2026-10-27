@@ -12,7 +12,7 @@ use ets_typeparser::{EffectContextFlags, TypeParser};
 static MESSAGE: &Message =
     &tsdiag::THIS_GENERATOR_RETURNS_AN_EFFECT_ABLE_VALUE_DIRECTLY_WHICH_PRODUCES_A_NESTED_EFFECT_EFFECT_IF_THE_INTENDED_RESULT_IS_THE_INNER_EFFECT_VALUE_RETURN_YIELD_ASTERISK_REPRESENTS_THAT_FORM_EFFECT_RETURN_EFFECT_IN_GEN;
 
-// go: internal/rules/return_effect_in_gen.go:16 ReturnEffectInGen
+// go: internal/rules/return_effect_in_gen.go:16 ReturnEffectInGen e8efca538e6f9e2a
 // ReturnEffectInGen detects return statements inside Effect generators
 // that return an Effect-able type, which would result in nested Effect<Effect<...>>.
 pub static RETURN_EFFECT_IN_GEN: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -33,7 +33,7 @@ pub static RETURN_EFFECT_IN_GEN: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/return_effect_in_gen.go:35 ReturnEffectInGenMatch
+// go: internal/rules/return_effect_in_gen.go:35 ReturnEffectInGenMatch 3f6a44bb11977bda
 // ReturnEffectInGenMatch holds the diagnostic and the return statement node needed
 // by both the diagnostic rule and the quick-fix.
 #[derive(Clone)]
@@ -43,7 +43,7 @@ pub struct ReturnEffectInGenMatch {
     pub return_node: P<Node>,       // The return statement AST node
 }
 
-// go: internal/rules/return_effect_in_gen.go:43 AnalyzeReturnEffectInGen
+// go: internal/rules/return_effect_in_gen.go:43 AnalyzeReturnEffectInGen ab7f54144dc8b5cb
 // AnalyzeReturnEffectInGen finds all return statements inside Effect generators
 // that return an Effect-able type, returning matches with both the diagnostic and the return node.
 //
@@ -77,7 +77,7 @@ pub fn analyze_return_effect_in_gen(
     matches
 }
 
-// go: internal/rules/return_effect_in_gen.go:72 checkReturnEffectInGenScope
+// go: internal/rules/return_effect_in_gen.go:72 checkReturnEffectInGenScope 27877a387b01e955
 // checkReturnEffectInGenScope checks if a return statement inside an Effect generator
 // is returning an Effect-able type (which would cause nested Effect<Effect<...>>).
 //

@@ -101,7 +101,7 @@ impl Drop for ApiStabilityCompiled {
     }
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:27 compileApiStabilityFiles
+// go test: internal/rules/api_stability_leak_regression_test.go:27 compileApiStabilityFiles 507367180ecf6a7d
 // compileApiStabilityFiles compiles a multi-file virtual project and runs the
 // rule against test.ts. It mirrors compileApiStabilitySource but supports the
 // dependency files needed to exercise namespace, barrel and star re-exports.
@@ -110,7 +110,7 @@ pub(crate) fn compile_api_stability_files(t: &T, files: &Files) -> ApiStabilityC
     compile_api_stability_files_primed(t, files, true)
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:36 compileApiStabilityFilesPrimed
+// go test: internal/rules/api_stability_leak_regression_test.go:36 compileApiStabilityFilesPrimed 48d32b9e168ec4cb
 // compileApiStabilityFilesPrimed optionally primes semantic diagnostics before
 // handing back the checker. Primed checkers model the language service warm
 // path; unprimed checkers model a cold first run where the rule itself may
@@ -187,7 +187,7 @@ pub(crate) fn compile_api_stability_files_primed(
     }
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:83 runApiStabilityMessages
+// go test: internal/rules/api_stability_leak_regression_test.go:83 runApiStabilityMessages b7a9cacc63996f48
 pub(crate) fn run_api_stability_messages(t: &T, rule_ctx: &mut Context<'_, '_>) -> Vec<String> {
     t.helper();
     let diagnostics = (API_STABILITY_LEAK.run)(rule_ctx);
@@ -198,13 +198,13 @@ pub(crate) fn run_api_stability_messages(t: &T, rule_ctx: &mut Context<'_, '_>) 
     messages
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:93 containsApiStabilityMessage
+// go test: internal/rules/api_stability_leak_regression_test.go:93 containsApiStabilityMessage 623ef286624fa5b0
 pub(crate) fn contains_api_stability_message(t: &T, messages: &[String], want: &str) -> bool {
     t.helper();
     messages.iter().any(|message| message.contains(want))
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:103 apiStabilityCompilerDiagnostics
+// go test: internal/rules/api_stability_leak_regression_test.go:103 apiStabilityCompilerDiagnostics 968fec381830827d
 // apiStabilityCompilerDiagnostics snapshots the source-file and global
 // diagnostics the checker currently reports, including codes such as TS2589
 // ("Type instantiation is excessively deep").
@@ -222,7 +222,7 @@ pub(crate) fn api_stability_compiler_diagnostics(rule_ctx: &mut Context<'_, '_>)
     out
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:117 assertApiStabilitySourcesParse
+// go test: internal/rules/api_stability_leak_regression_test.go:117 assertApiStabilitySourcesParse d670ccf08731586a
 // assertApiStabilitySourcesParse guards the regression fixtures themselves:
 // broken type syntax would silently disable the coverage they are meant to
 // provide.
@@ -236,7 +236,7 @@ pub(crate) fn assert_api_stability_sources_parse(t: &T, files: &Files) {
     }
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:130 apiStabilityRegressionCase
+// go test: internal/rules/api_stability_leak_regression_test.go:130 apiStabilityRegressionCase 68261a0f18f59638
 pub(crate) struct ApiStabilityRegressionCase {
     pub(crate) name: String,
     pub(crate) files: Files,
@@ -259,7 +259,7 @@ pub(crate) fn case(
     }
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:143 apiStabilityMaxInstantiationDelta
+// go test: internal/rules/api_stability_leak_regression_test.go:143 apiStabilityMaxInstantiationDelta a0ff5a52321e07ea
 // apiStabilityMaxInstantiationDelta bounds the checker instantiations the rule
 // may trigger for one case. Ordinary public surfaces stay far below it; a
 // recursive alias application reached through a lazy public read is refused by
@@ -268,7 +268,7 @@ pub(crate) fn case(
 // TestApiStabilityLeakInstantiationDoesNotScaleWithDepth pins that property.
 pub(crate) const API_STABILITY_MAX_INSTANTIATION_DELTA: u32 = 100_000;
 
-// go test: internal/rules/api_stability_leak_regression_test.go:148 apiStabilityControlCompilerDiagnostics
+// go test: internal/rules/api_stability_leak_regression_test.go:148 apiStabilityControlCompilerDiagnostics ad318c2dae2fc865
 // apiStabilityControlCompilerDiagnostics compiles the same files without ever
 // running the rule and snapshots the checker's diagnostics, so a genuinely cold
 // path can be compared against a control that the rule never touched.
@@ -278,7 +278,7 @@ pub(crate) fn api_stability_control_compiler_diagnostics(t: &T, files: &Files) -
     compiled.with_rule_ctx(api_stability_compiler_diagnostics)
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:174 runApiStabilityRegressionCase
+// go test: internal/rules/api_stability_leak_regression_test.go:174 runApiStabilityRegressionCase caf6a8c5a9cf1595
 // runApiStabilityRegressionCase runs a case against both a warm (primed) and a
 // genuinely cold (unprimed) checker.
 //
@@ -367,16 +367,16 @@ pub(crate) fn run_api_stability_regression_cases(t: &T, tests: &[ApiStabilityReg
     }
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:221 apiStabilityExperimentalPrefix
+// go test: internal/rules/api_stability_leak_regression_test.go:221 apiStabilityExperimentalPrefix af87b235e7ebcf6c
 pub(crate) const API_STABILITY_EXPERIMENTAL_PREFIX: &str =
     "/** @stability experimental */\ninterface E { value: string }\ndeclare const e: E\n";
 
-// go test: internal/rules/api_stability_leak_regression_test.go:223 singleApiStabilityFile
+// go test: internal/rules/api_stability_leak_regression_test.go:223 singleApiStabilityFile 127546e23e462399
 pub(crate) fn single_api_stability_file(source: &str) -> Files {
     files(&[("test.ts", &cat(&[API_STABILITY_EXPERIMENTAL_PREFIX, source]))])
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:230 TestApiStabilityLeakFindingRegressions
+// go test: internal/rules/api_stability_leak_regression_test.go:230 TestApiStabilityLeakFindingRegressions 83e36ac2c78d959a
 // TestApiStabilityLeakFindingRegressions pins the original findings:
 // instantiation safety, inline surfaces, erased aliases, constraints/defaults,
 // bounded traversal and accessibility.
@@ -523,7 +523,7 @@ export interface Leaky { value: E }
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:348 TestApiStabilityLeakInferredAndReexportRegressions
+// go test: internal/rules/api_stability_leak_regression_test.go:348 TestApiStabilityLeakInferredAndReexportRegressions a103139b375f85ae
 // TestApiStabilityLeakInferredAndReexportRegressions pins the inferred-surface
 // findings: inferred accessor budget safety, inferred/arrow/callable
 // signatures, inferred anonymous surfaces, inferred parameters, alias and
@@ -894,7 +894,7 @@ export interface Leaky { value: E }
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:586 TestApiStabilityLeakInstantiationAndSignatureRegressions
+// go test: internal/rules/api_stability_leak_regression_test.go:586 TestApiStabilityLeakInstantiationAndSignatureRegressions cb97d5af4177a335
 // TestApiStabilityLeakInstantiationAndSignatureRegressions pins instantiated
 // anonymous budget safety, signature substitutions,
 // instantiation expressions, public generic callable surfaces inside members and
@@ -1074,7 +1074,7 @@ export interface Leaky { value: E }
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:704 TestApiStabilityLeakAnonymousInstantiationColdBudget
+// go test: internal/rules/api_stability_leak_regression_test.go:704 TestApiStabilityLeakAnonymousInstantiationColdBudget b486467ad04659fd
 // TestApiStabilityLeakAnonymousInstantiationColdBudget pins the cold-budget P1
 // blocker on a genuinely unprimed checker: the rule runs before any diagnostic
 // snapshot, and the resulting diagnostics are compared with a separate control
@@ -1137,7 +1137,7 @@ export const object = make<string>()
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:746 TestApiStabilityLeakInspectionIsCycleSafe
+// go test: internal/rules/api_stability_leak_regression_test.go:746 TestApiStabilityLeakInspectionIsCycleSafe dd2bcab333fba99e
 // TestApiStabilityLeakInspectionIsCycleSafe guards against unbounded recursion
 // when a public surface refers back to itself through non-generic references.
 #[test]
@@ -1170,7 +1170,7 @@ export interface Node { next: Node; payload: E }
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:769 TestApiStabilityLeakDoesNotTruncateMembers
+// go test: internal/rules/api_stability_leak_regression_test.go:769 TestApiStabilityLeakDoesNotTruncateMembers da11c82ef4b5d5df
 // TestApiStabilityLeakDoesNotTruncateMembers covers the previous first-128
 // member cutoff: a leak positioned after many harmless members is still found.
 #[test]
@@ -1196,7 +1196,7 @@ fn test_api_stability_leak_does_not_truncate_members() {
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:792 TestApiStabilityLeakLongAliasChain
+// go test: internal/rules/api_stability_leak_regression_test.go:792 TestApiStabilityLeakLongAliasChain ad9a18fea365c331
 // TestApiStabilityLeakLongAliasChain covers a named re-export chain longer than
 // the old 32-hop resolution cap. Alias resolution is cycle-safe by identity, so
 // a 40-hop chain still forwards the public surface.
@@ -1243,7 +1243,7 @@ export interface Leaky { value: E }
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:829 TestApiStabilityLeakBudgetDiagnostics
+// go test: internal/rules/api_stability_leak_regression_test.go:829 TestApiStabilityLeakBudgetDiagnostics c932b07983a38c9e
 // TestApiStabilityLeakBudgetDiagnostics reproduces the budget blocker
 // directly: running the rule on the inferred accessor must neither add TS2589
 // (source or global) nor scale compiler instantiations, on warm and genuinely
@@ -1305,7 +1305,7 @@ export class Owner { get method() { return c } }
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:876 TestApiStabilityLeakInheritedGenericAndCacheRegressions
+// go test: internal/rules/api_stability_leak_regression_test.go:876 TestApiStabilityLeakInheritedGenericAndCacheRegressions 47d1e46d682f74e6
 // TestApiStabilityLeakInheritedGenericAndCacheRegressions pins inherited generic
 // surface budget safety, substitution-context cache
 // separation, sound cycle completion, nested named shallow surfaces, declared
@@ -1701,7 +1701,7 @@ export declare const g: Box<Text>
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:1130 TestApiStabilityLeakInstantiationDoesNotScaleWithDepth
+// go test: internal/rules/api_stability_leak_regression_test.go:1130 TestApiStabilityLeakInstantiationDoesNotScaleWithDepth 9b6a3fd0d40cf4b5
 // TestApiStabilityLeakInstantiationDoesNotScaleWithDepth is the core
 // anti-instantiation guard: traversing a deeply nested reference such as
 // `Box<Box<...<E>>>` must resolve each represented type argument exactly once,
@@ -1752,7 +1752,7 @@ fn test_api_stability_leak_instantiation_does_not_scale_with_depth() {
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:1164 TestApiStabilityLeakDeferredBranchRegressions
+// go test: internal/rules/api_stability_leak_regression_test.go:1164 TestApiStabilityLeakDeferredBranchRegressions 0795958598ea30fa
 // TestApiStabilityLeakDeferredBranchRegressions pins non-instantiating
 // declaration access for conditional branches and value
 // annotations, substitution-aware branch selection, deferred-branch erased
@@ -1867,7 +1867,7 @@ export const f = make<string>()",
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:1249 TestApiStabilityLeakCyclicCompletionIsReusable
+// go test: internal/rules/api_stability_leak_regression_test.go:1249 TestApiStabilityLeakCyclicCompletionIsReusable 350724ea05e6b699
 // TestApiStabilityLeakCyclicCompletionIsReusable compiles the mutual anonymous
 // cycle in both export orders, repeatedly and on warm checkers, and requires
 // every root to report the experimental dependency. A cut result must never be
@@ -1912,7 +1912,7 @@ interface E {value:string}
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:1279 TestApiStabilityNonInstantiatingAccessors
+// go test: internal/rules/api_stability_leak_regression_test.go:1279 TestApiStabilityNonInstantiatingAccessors 7aa9b6b02d8c1590
 // TestApiStabilityNonInstantiatingAccessors pins that the checker accessors the
 // analysis hides behind only peek cached fields: a conditional branch, an index
 // signature value and a symbol or alias type are never resolved, so a recursive
@@ -2065,7 +2065,7 @@ fn diagnostic_messages(diagnostics: &[P<Diagnostic>]) -> Vec<String> {
     diagnostics.iter().map(|diagnostic| diagnostic.localize()).collect()
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:1375 TestApiStabilityLeakConditionalApplicationRegressions
+// go test: internal/rules/api_stability_leak_regression_test.go:1375 TestApiStabilityLeakConditionalApplicationRegressions 92a7ee28688c6e0f
 // TestApiStabilityLeakConditionalApplicationRegressions pins annotated
 // recursive declarations are read without evaluating a generic alias, deferred
 // conditional applications distinguish concrete substitutions, declared member
@@ -2308,7 +2308,7 @@ value: Deep<string>
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:1539 TestApiStabilityLeakColdLazyReadMatchesWarm
+// go test: internal/rules/api_stability_leak_regression_test.go:1539 TestApiStabilityLeakColdLazyReadMatchesWarm 05218912e3bdaf03
 // TestApiStabilityLeakColdLazyReadMatchesWarm proves a cold public surface is
 // materialized through the checker's ordinary lazy reads and agrees with the
 // materialized recomputation: `Callable<Deep<E>>` resolves E on the cold
@@ -2370,7 +2370,7 @@ fn dependency_names(used: &ApiStabilityUsed) -> Vec<String> {
         .collect()
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:1574 containsDependencyName
+// go test: internal/rules/api_stability_leak_regression_test.go:1574 containsDependencyName 9003d8007b11a675
 // containsDependencyName reports whether a computed surface lists the named
 // dependency, used by the cold/warm recompute regression.
 fn contains_dependency_name(used: &ApiStabilityUsed, name: &str) -> bool {
@@ -2382,7 +2382,7 @@ fn contains_dependency_name(used: &ApiStabilityUsed, name: &str) -> bool {
     false
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:1587 apiStabilityColdUnavailableProbes
+// go test: internal/rules/api_stability_leak_regression_test.go:1587 apiStabilityColdUnavailableProbes 3d5165453f638fd9
 // apiStabilityColdUnavailableProbes groups the cold-unavailable probes whose
 // public types are unavailable on a genuinely unprimed checker. None of them
 // may trigger checker instantiation, produce a compiler diagnostic, report a
@@ -2470,7 +2470,7 @@ export const x = { nested: { deep } }",
     ]
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:1623 TestApiStabilityLeakColdUnavailableIsSafe
+// go test: internal/rules/api_stability_leak_regression_test.go:1623 TestApiStabilityLeakColdUnavailableIsSafe 326928ebcd4b757a
 // TestApiStabilityLeakColdUnavailableIsSafe runs every recursive probe whose
 // public type is not materialized on an unprimed checker. The analysis must do
 // zero recursive work: no checker instantiation, no global diagnostic, no
@@ -2517,7 +2517,7 @@ fn test_api_stability_leak_cold_unavailable_is_safe() {
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:1657 TestApiStabilityLeakWarmReanalysisIsExact
+// go test: internal/rules/api_stability_leak_regression_test.go:1657 TestApiStabilityLeakWarmReanalysisIsExact 3eff93d055ef00f9
 // TestApiStabilityLeakWarmReanalysisIsExact re-runs the same probes on a
 // checked checker, where the normal rule lifecycle makes the public types
 // available. Each repro must then report exactly its expected result.
@@ -2647,7 +2647,7 @@ export declare const x: A<string>",
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:1772 TestApiStabilityLeakRepresentedConditionalOutcomes
+// go test: internal/rules/api_stability_leak_regression_test.go:1772 TestApiStabilityLeakRepresentedConditionalOutcomes 4d3bb60e8d759d6c
 // TestApiStabilityLeakRepresentedConditionalOutcomes proves the analysis uses a
 // conditional outcome the checker has materialized instead of guessing a
 // branch. The instantiated member type is requested first, the way a consumer
@@ -2727,7 +2727,7 @@ export declare const x: Holder<{ value: string }>",
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:1850 TestApiStabilityLeakLazyConditionalOutcomes
+// go test: internal/rules/api_stability_leak_regression_test.go:1850 TestApiStabilityLeakLazyConditionalOutcomes 4277534e89369b34
 // TestApiStabilityLeakLazyConditionalOutcomes proves the corrected lazy-read
 // boundary for instantiated conditional members: the concrete member is
 // materialized through the checker's ordinary accessor, so the selected branch
@@ -2806,7 +2806,7 @@ export declare const x: Holder<{ value: string }>",
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:1916 TestApiStabilityLeakDeclaredIndexSignatureTags
+// go test: internal/rules/api_stability_leak_regression_test.go:1916 TestApiStabilityLeakDeclaredIndexSignatureTags f991e5e31a16039f
 // TestApiStabilityLeakDeclaredIndexSignatureTags pins the index signature tag
 // fix: the signature's own `@stability` tag contributes on both the warm
 // represented path and the cold metadata path, for a declared interface and an
@@ -2863,7 +2863,7 @@ fn test_api_stability_leak_declared_index_signature_tags() {
     });
 }
 
-// go test: internal/rules/api_stability_leak_regression_test.go:1966 TestApiStabilityLeakFiniteRecursionDoesNotInstantiate
+// go test: internal/rules/api_stability_leak_regression_test.go:1966 TestApiStabilityLeakFiniteRecursionDoesNotInstantiate 74f5aaab85538827
 // TestApiStabilityLeakFiniteRecursionDoesNotInstantiate is the
 // finite-recursion anti-instantiation guard for valid finite recursion: a 60-element `Step`
 // application reached through an indexed parameter or through inferred getter,

@@ -8,7 +8,7 @@ use ets_shim::diagnostics::Category;
 use crate::api_stability_leak_test::compile_api_stability_source_primed;
 use crate::*;
 
-// go test: internal/rules/inferred_generator_contextual_type_test.go:14 TestInferredGeneratorStabilityPreservesNativeErrors
+// go test: internal/rules/inferred_generator_contextual_type_test.go:14 TestInferredGeneratorStabilityPreservesNativeErrors 665fbfb73d1f3571
 #[test]
 fn test_inferred_generator_stability_preserves_native_errors() {
     run(|t| {

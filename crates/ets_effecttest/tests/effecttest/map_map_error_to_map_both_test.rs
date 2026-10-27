@@ -23,7 +23,7 @@ const fn fixture(name: &'static str, matches: i32, fixes: i32) -> Case {
     Case { name, source: "", expected: "", matches, fixes }
 }
 
-// go test: internal/effecttest/map_map_error_to_map_both_test.go:17 TestMapMapErrorToMapBothFixesCompile
+// go test: internal/effecttest/map_map_error_to_map_both_test.go:17 TestMapMapErrorToMapBothFixesCompile 0d0eae3fead7a055
 fn test_map_map_error_to_map_both_fixes_compile(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();

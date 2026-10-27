@@ -23,7 +23,7 @@ struct Case {
     want: Vec<String>,
 }
 
-// go test: internal/rulerunner/flat_map_identity_to_flatten_test.go:22 TestFlatMapIdentityToFlattenLifecycle
+// go test: internal/rulerunner/flat_map_identity_to_flatten_test.go:22 TestFlatMapIdentityToFlattenLifecycle 7927ea2e31fe2553
 #[test]
 fn test_flat_map_identity_to_flatten_lifecycle() {
     on_checker_stack(|| {

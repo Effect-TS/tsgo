@@ -26,7 +26,7 @@ struct Case {
     want: Vec<String>,
 }
 
-// go test: internal/rulerunner/map_map_error_to_map_both_test.go:22 TestMapMapErrorToMapBothLifecycle
+// go test: internal/rulerunner/map_map_error_to_map_both_test.go:22 TestMapMapErrorToMapBothLifecycle 53a8eea06570f87a
 #[test]
 fn test_map_map_error_to_map_both_lifecycle() {
     on_checker_stack(|| {

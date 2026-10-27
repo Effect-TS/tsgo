@@ -1,6 +1,6 @@
 use crate::*;
 
-// go test: internal/completions/effect_sql_model_self_in_classes_test.go:7 TestEffectSqlModelSelfInClasses_NotInExtendsClause
+// go test: internal/completions/effect_sql_model_self_in_classes_test.go:7 TestEffectSqlModelSelfInClasses_NotInExtendsClause 821cd68b11bcc458
 #[test]
 fn test_effect_sql_model_self_in_classes_not_in_extends_clause() {
     go_test(|t| {
@@ -18,7 +18,7 @@ const x = Model.Class"#;
     });
 }
 
-// go test: internal/completions/effect_sql_model_self_in_classes_test.go:18 TestEffectSqlModelSelfInClasses_NotInClass
+// go test: internal/completions/effect_sql_model_self_in_classes_test.go:18 TestEffectSqlModelSelfInClasses_NotInClass c06272f66fd09f66
 #[test]
 fn test_effect_sql_model_self_in_classes_not_in_class() {
     go_test(|t| {
@@ -33,7 +33,7 @@ const x = Model."#;
     });
 }
 
-// go test: internal/completions/effect_sql_model_self_in_classes_test.go:29 TestEffectSqlModelSelfInClasses_EmptySource
+// go test: internal/completions/effect_sql_model_self_in_classes_test.go:29 TestEffectSqlModelSelfInClasses_EmptySource 3dab9f199f57c2f3
 #[test]
 fn test_effect_sql_model_self_in_classes_empty_source() {
     go_test(|t| {
@@ -46,7 +46,7 @@ fn test_effect_sql_model_self_in_classes_empty_source() {
     });
 }
 
-// go test: internal/completions/effect_sql_model_self_in_classes_test.go:38 TestEffectSqlModelSelfInClasses_InsideImportDeclaration
+// go test: internal/completions/effect_sql_model_self_in_classes_test.go:38 TestEffectSqlModelSelfInClasses_InsideImportDeclaration 2c349849161900b8
 #[test]
 fn test_effect_sql_model_self_in_classes_inside_import_declaration() {
     go_test(|t| {
@@ -64,7 +64,7 @@ fn test_effect_sql_model_self_in_classes_inside_import_declaration() {
     });
 }
 
-// go test: internal/completions/effect_sql_model_self_in_classes_test.go:49 TestEffectSqlModelSelfInClasses_InterfaceNotClass
+// go test: internal/completions/effect_sql_model_self_in_classes_test.go:49 TestEffectSqlModelSelfInClasses_InterfaceNotClass 5fee33ff588fb25d
 #[test]
 fn test_effect_sql_model_self_in_classes_interface_not_class() {
     go_test(|t| {
@@ -81,7 +81,7 @@ fn test_effect_sql_model_self_in_classes_interface_not_class() {
     });
 }
 
-// go test: internal/completions/effect_sql_model_self_in_classes_test.go:59 TestEffectSqlModelSelfInClasses_AnonymousClass
+// go test: internal/completions/effect_sql_model_self_in_classes_test.go:59 TestEffectSqlModelSelfInClasses_AnonymousClass 95dced67f8eb9de8
 #[test]
 fn test_effect_sql_model_self_in_classes_anonymous_class() {
     go_test(|t| {

@@ -10,7 +10,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_SCHEMA_SUBCLASS_DEFINES_ITS_OWN_CONSTRUCTOR_FOR_SCHEMA_CLASSES_CONSTRUCTOR_OVERRIDES_BREAK_DECODING_BEHAVIOR_FOR_THE_CLASS_SHAPE_CUSTOM_CONSTRUCTION_CAN_BE_EXPRESSED_THROUGH_A_STATIC_NEW_METHOD_INSTEAD_EFFECT_OVERRIDDEN_SCHEMA_CONSTRUCTOR;
 
-// go: internal/fixables/overridden_schema_constructor.go:12 OverriddenSchemaConstructorFix
+// go: internal/fixables/overridden_schema_constructor.go:12 OverriddenSchemaConstructorFix cff5580ca89382f2
 pub static OVERRIDDEN_SCHEMA_CONSTRUCTOR_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "overriddenSchemaConstructorFix",
     description: "Remove or rewrite constructor in Schema class",
@@ -19,7 +19,7 @@ pub static OVERRIDDEN_SCHEMA_CONSTRUCTOR_FIX: LazyLock<Fixable> = LazyLock::new(
     run: run_overridden_schema_constructor_fix,
 });
 
-// go: internal/fixables/overridden_schema_constructor.go:23 runOverriddenSchemaConstructorFix
+// go: internal/fixables/overridden_schema_constructor.go:23 runOverriddenSchemaConstructorFix df1b8e415f0c21fa
 fn run_overridden_schema_constructor_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 
@@ -136,7 +136,7 @@ fn run_overridden_schema_constructor_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeA
     Vec::new()
 }
 
-// go: internal/fixables/overridden_schema_constructor.go:134 constructorSupportsStaticRewrite
+// go: internal/fixables/overridden_schema_constructor.go:134 constructorSupportsStaticRewrite 5f47205b2587306f
 pub(crate) fn constructor_supports_static_rewrite(ctor_node: P<Node>) -> bool {
     let ctor = ctor_node.as_constructor_declaration();
     let Some(parameters) = ctor.parameters() else {

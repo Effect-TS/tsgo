@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/extends_effect_model_class.go:9 EffectModelClassResult
+// go: internal/typeparser/extends_effect_model_class.go:9 EffectModelClassResult ed63a1428821ce17
 // EffectModelClassResult holds the parsed result of a class extending Model.Class
 // from effect/schema.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -13,19 +13,19 @@ pub struct EffectModelClassResult {
 }
 
 impl EffectModelClassResult {
-    // go: internal/typeparser/extends_effect_model_class.go:14 EffectModelClassResult.ClassName
+    // go: internal/typeparser/extends_effect_model_class.go:14 EffectModelClassResult.ClassName 45f93a577fea829a
     pub fn class_name(self) -> P<Node> {
         self.class_name
     }
 
-    // go: internal/typeparser/extends_effect_model_class.go:16 EffectModelClassResult.SelfTypeNode
+    // go: internal/typeparser/extends_effect_model_class.go:16 EffectModelClassResult.SelfTypeNode 064d261344daa7c1
     pub fn self_type_node(self) -> P<Node> {
         self.self_type_node
     }
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/extends_effect_model_class.go:27 TypeParser.ExtendsEffectModelClass
+    // go: internal/typeparser/extends_effect_model_class.go:27 TypeParser.ExtendsEffectModelClass ebfcfac741bd11bc
     // ExtendsEffectModelClass checks if a class declaration extends Model.Class<Self>(...)({...})
     // from the effect/schema module.
     // It detects the double-call pattern:

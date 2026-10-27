@@ -15,7 +15,7 @@ static PROCESS_ENV_MESSAGE: &Message =
 static PROCESS_ENV_IN_EFFECT_MESSAGE: &Message =
     &tsdiag::THIS_EFFECT_CODE_READS_FROM_PROCESS_ENV_ENVIRONMENT_CONFIGURATION_IN_EFFECT_CODE_IS_REPRESENTED_THROUGH_CONFIG_FROM_EFFECT_EFFECT_PROCESS_ENV_IN_EFFECT;
 
-// go: internal/rules/process_env.go:12 ProcessEnv
+// go: internal/rules/process_env.go:12 ProcessEnv 9ff67b597e05b208
 pub static PROCESS_ENV: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "processEnv",
     group: "effectNative",
@@ -26,7 +26,7 @@ pub static PROCESS_ENV: LazyLock<Rule> = LazyLock::new(|| Rule {
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_process_env(ctx, false) },
 });
 
-// go: internal/rules/process_env.go:24 ProcessEnvInEffect
+// go: internal/rules/process_env.go:24 ProcessEnvInEffect 75a1746bf0fa03fc
 pub static PROCESS_ENV_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "processEnvInEffect",
     group: "effectNative",
@@ -37,7 +37,7 @@ pub static PROCESS_ENV_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_process_env(ctx, true) },
 });
 
-// go: internal/rules/process_env.go:36 runProcessEnv
+// go: internal/rules/process_env.go:36 runProcessEnv bf7e6aca34d8c83e
 pub(crate) fn run_process_env(
     ctx: &mut Context<'_, '_>,
     check_in_effect: bool,
@@ -95,7 +95,7 @@ pub(crate) fn run_process_env(
     diags
 }
 
-// go: internal/rules/process_env.go:77 processEnvRoot
+// go: internal/rules/process_env.go:77 processEnvRoot 0b15de75dc119e11
 pub(crate) fn process_env_root(node: Option<P<Node>>) -> Option<P<Node>> {
     let node = node?;
     if node.kind() != Kind::PropertyAccessExpression && node.kind() != Kind::ElementAccessExpression
@@ -109,7 +109,7 @@ pub(crate) fn process_env_root(node: Option<P<Node>>) -> Option<P<Node>> {
     access?.expression()
 }
 
-// go: internal/rules/process_env.go:91 isEnvPropertyAccess
+// go: internal/rules/process_env.go:91 isEnvPropertyAccess 19ceeff17045b993
 pub(crate) fn is_env_property_access(node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;

@@ -8,13 +8,13 @@ use ets_typeparser::get_symbol_of_declaration;
 use crate::api_stability_leak_regression_test::*;
 use crate::*;
 
-// go test: internal/rules/api_stability_leak_test.go:24 compileApiStabilitySource
+// go test: internal/rules/api_stability_leak_test.go:24 compileApiStabilitySource ded003f532cebd39
 pub(crate) fn compile_api_stability_source(t: &T, source: &str) -> ApiStabilityCompiled {
     t.helper();
     compile_api_stability_source_primed(t, source, true)
 }
 
-// go test: internal/rules/api_stability_leak_test.go:31 compileApiStabilitySourcePrimed
+// go test: internal/rules/api_stability_leak_test.go:31 compileApiStabilitySourcePrimed f2dbe99bc8744346
 // compileApiStabilitySourcePrimed optionally skips the full type-check, so the
 // rules run against a cold checker.
 //
@@ -28,7 +28,7 @@ pub(crate) fn compile_api_stability_source_primed(
     compile_api_stability_files_primed(t, &files(&[("test.ts", source)]), prime)
 }
 
-// go test: internal/rules/api_stability_leak_test.go:72 TestApiStabilityLeakRule
+// go test: internal/rules/api_stability_leak_test.go:72 TestApiStabilityLeakRule 31af6d6a5b430783
 #[test]
 fn test_api_stability_leak_rule() {
     run(|t| {
@@ -83,7 +83,7 @@ export interface ExperimentalOk { member: Unstable }
     });
 }
 
-// go test: internal/rules/api_stability_leak_test.go:130 TestApiStabilityLeakComputedNames
+// go test: internal/rules/api_stability_leak_test.go:130 TestApiStabilityLeakComputedNames af35d488de3b1dcf
 // TestApiStabilityLeakComputedNames pins the production diagnostic path
 // that previously panicked on a type literal with a computed member name. The
 // rule must report the erased experimental aliases written in the computed
@@ -148,7 +148,7 @@ export interface Z { readonly [Symbol.iterator]?: never }
     });
 }
 
-// go test: internal/rules/api_stability_leak_test.go:181 TestApiStabilityLeakExportOrderIsDeterministic
+// go test: internal/rules/api_stability_leak_test.go:181 TestApiStabilityLeakExportOrderIsDeterministic 2c5b05da353f6e29
 // TestApiStabilityLeakExportOrderIsDeterministic pins the deterministic
 // export visit order the rule and the namespace walker use. The checker returns
 // module exports in Go map order, and the order in which the per-checker
@@ -226,7 +226,7 @@ export declare const omega: Middle
     });
 }
 
-// go test: internal/rules/api_stability_leak_test.go:246 TestApiStabilityLeakInternalExportsIgnored
+// go test: internal/rules/api_stability_leak_test.go:246 TestApiStabilityLeakInternalExportsIgnored de00527036181ef9
 // TestApiStabilityLeakInternalExportsIgnored pins the export-level
 // `@internal` exclusion: an export whose own declaration carries the tag is not
 // checked, while its public peers still are. The tag is read from the parsed
@@ -697,7 +697,7 @@ export declare const zHidden: E
     });
 }
 
-// go test: internal/rules/api_stability_leak_test.go:548 TestApiStabilityLeakExplicitExportPrecedence
+// go test: internal/rules/api_stability_leak_test.go:548 TestApiStabilityLeakExplicitExportPrecedence 897714d5d8c14b6a
 // TestApiStabilityLeakExplicitExportPrecedence pins that:
 // an explicit `@internal` export is the compiler's export winner for its name,
 // so a redundant `export *` forward of the same name must not defeat the tag.
@@ -835,7 +835,7 @@ interface E { value: string }
     });
 }
 
-// go test: internal/rules/api_stability_leak_test.go:650 TestApiStabilityLeakDeclaredNamespaceMembers
+// go test: internal/rules/api_stability_leak_test.go:650 TestApiStabilityLeakDeclaredNamespaceMembers 5f1f814b60e04a61
 // TestApiStabilityLeakDeclaredNamespaceMembers pins that:
 // symbols declared by a namespace ModuleDeclaration filter their own
 // `@internal` export members exactly like source-file namespace re-exports. A
@@ -961,7 +961,7 @@ interface F { value: string }
     });
 }
 
-// go test: internal/rules/api_stability_leak_test.go:747 TestApiStabilityLeakImportThenExportAliases
+// go test: internal/rules/api_stability_leak_test.go:747 TestApiStabilityLeakImportThenExportAliases 2be9903dac9a91a8
 // TestApiStabilityLeakImportThenExportAliases pins that:
 // an untagged import followed by a local export follows the named or default
 // import target to its original declaration. A public target still warns, a
@@ -1157,7 +1157,7 @@ declare const e: E
     });
 }
 
-// go test: internal/rules/api_stability_leak_test.go:875 TestApiStabilityLeakExplicitStableTag
+// go test: internal/rules/api_stability_leak_test.go:875 TestApiStabilityLeakExplicitStableTag d6b44ffb3f86221a
 // TestApiStabilityLeakExplicitStableTag pins the branch-facing explicit
 // stable support at the leak-rule level: `@stability stable` is a real tag, so
 // a stable root still enforces its ceiling, and an explicit stable forwarding
@@ -1204,7 +1204,7 @@ fn test_api_stability_leak_explicit_stable_tag() {
     });
 }
 
-// go test: internal/rules/api_stability_leak_test.go:917 TestApiStabilityLeakVisibilityIsMetadataOnly
+// go test: internal/rules/api_stability_leak_test.go:917 TestApiStabilityLeakVisibilityIsMetadataOnly b14b5694ef96b25d
 // TestApiStabilityLeakVisibilityIsMetadataOnly pins the metadata boundary
 // of the export-level visibility work: filtering an internal export never
 // resolves a type, so it adds no checker instantiation and produces no global
@@ -1265,7 +1265,7 @@ export declare const shown: E
     });
 }
 
-// go test: internal/rules/api_stability_leak_test.go:969 TestApiStabilityLeakExportVisibilityIsOrderIndependent
+// go test: internal/rules/api_stability_leak_test.go:969 TestApiStabilityLeakExportVisibilityIsOrderIndependent 313b9ad2741edef0
 // TestApiStabilityLeakExportVisibilityIsOrderIndependent runs the
 // explicit-precedence, declared-namespace and import-alias fixtures in both
 // declaration orders and requires the same diagnostics, so the corrected export
@@ -1325,7 +1325,7 @@ fn test_api_stability_leak_export_visibility_is_order_independent() {
     });
 }
 
-// go test: internal/rules/api_stability_leak_test.go:1017 TestApiStabilityLeakImportEqualsAliases
+// go test: internal/rules/api_stability_leak_test.go:1017 TestApiStabilityLeakImportEqualsAliases 1f5827a124aec072
 // TestApiStabilityLeakImportEqualsAliases pins that an
 // `export import X = ...` alias follows the target named by its module
 // reference exactly like a named or default import alias, so an untagged
@@ -1515,7 +1515,7 @@ interface E { value: string }
     });
 }
 
-// go test: internal/rules/api_stability_leak_test.go:1143 TestApiStabilityLeakImportEqualsIsMetadataOnly
+// go test: internal/rules/api_stability_leak_test.go:1143 TestApiStabilityLeakImportEqualsIsMetadataOnly 3830d9d222930cb9
 // TestApiStabilityLeakImportEqualsIsMetadataOnly pins the metadata
 // boundary of the import-equals path: deciding that the alias forwards an
 // `@internal` target resolves no type, so it adds no checker instantiation,
@@ -1581,7 +1581,7 @@ export import Shown = Impl.Shown
     });
 }
 
-// go test: internal/rules/api_stability_leak_test.go:1199 TestApiStabilityLeakSurfaceRootTagSplit
+// go test: internal/rules/api_stability_leak_test.go:1199 TestApiStabilityLeakSurfaceRootTagSplit eb8c303419ab2741
 // TestApiStabilityLeakSurfaceRootTagSplit pins the rule-facing
 // side of the declared-versus-surface split: an export's own declared
 // tag governs its ceiling and is never reported as its own dependency, while
@@ -1660,7 +1660,7 @@ export declare const boxed: StableBox<E>
     });
 }
 
-// go test: internal/rules/api_stability_leak_test.go:1277 TestApiStabilityLeakSurfaceChildBoundaryDifferentials
+// go test: internal/rules/api_stability_leak_test.go:1277 TestApiStabilityLeakSurfaceChildBoundaryDifferentials fb5a46452546f6c0
 // TestApiStabilityLeakSurfaceChildBoundaryDifferentials pins the
 // rule-facing explicit child boundary: a child with an explicit declared tag
 // contributes its declared level and its internals are not reported through the
@@ -1847,7 +1847,7 @@ export interface Overriding extends TaggedBase { secret: E }
     });
 }
 
-// go test: internal/rules/api_stability_leak_test.go:1437 TestApiStabilityLeakSurfaceFlattenedInheritanceDifferentials
+// go test: internal/rules/api_stability_leak_test.go:1437 TestApiStabilityLeakSurfaceFlattenedInheritanceDifferentials 9e52d1499dd6f9d5
 // TestApiStabilityLeakSurfaceFlattenedInheritanceDifferentials
 // pins the rule-facing side of the fix2 correction: call, construct and index
 // signatures the compiler flattens into a derived structured type keep their
@@ -2070,7 +2070,7 @@ export interface FixBlockedDerived<T, K extends keyof T> extends FixBlockedBox<T
     });
 }
 
-// go test: internal/rules/api_stability_leak_test.go:1654 TestApiStabilityLeakSurfaceSharedSnapshotReuse
+// go test: internal/rules/api_stability_leak_test.go:1654 TestApiStabilityLeakSurfaceSharedSnapshotReuse e273462f0f71f20d
 // TestApiStabilityLeakSurfaceSharedSnapshotReuse pins the
 // rule-facing side of the shared caches: running the rule twice over
 // one checker must report exactly the same diagnostics, because the second run

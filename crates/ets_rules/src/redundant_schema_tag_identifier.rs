@@ -12,7 +12,7 @@ use ets_typeparser::TypeParser;
 static MESSAGE: &Message =
     &tsdiag::IDENTIFIER_0_IS_REDUNDANT_SINCE_IT_EQUALS_THE_TAG_VALUE_EFFECT_REDUNDANT_SCHEMA_TAG_IDENTIFIER;
 
-// go: internal/rules/redundant_schema_tag_identifier.go:14 RedundantSchemaTagIdentifier
+// go: internal/rules/redundant_schema_tag_identifier.go:14 RedundantSchemaTagIdentifier ebe12c02f1c50677
 pub static REDUNDANT_SCHEMA_TAG_IDENTIFIER: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "redundantSchemaTagIdentifier",
     group: "style",
@@ -40,7 +40,7 @@ pub static REDUNDANT_SCHEMA_TAG_IDENTIFIER: LazyLock<Rule> = LazyLock::new(|| Ru
     },
 });
 
-// go: internal/rules/redundant_schema_tag_identifier.go:36 RedundantSchemaTagIdentifierMatch
+// go: internal/rules/redundant_schema_tag_identifier.go:36 RedundantSchemaTagIdentifierMatch 7b722d5686f065f6
 // RedundantSchemaTagIdentifierMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the redundantSchemaTagIdentifier pattern.
 #[derive(Clone)]
@@ -50,7 +50,7 @@ pub struct RedundantSchemaTagIdentifierMatch {
     pub key_string_literal: P<Node>, // The redundant identifier string literal in the inner call
 }
 
-// go: internal/rules/redundant_schema_tag_identifier.go:44 AnalyzeRedundantSchemaTagIdentifier
+// go: internal/rules/redundant_schema_tag_identifier.go:44 AnalyzeRedundantSchemaTagIdentifier 77d151bfeb85eb33
 // AnalyzeRedundantSchemaTagIdentifier finds all class declarations where the identifier
 // string literal equals the tag value in Schema.TaggedClass/TaggedError/TaggedRequest.
 //
@@ -83,7 +83,7 @@ pub fn analyze_redundant_schema_tag_identifier(
     matches
 }
 
-// go: internal/rules/redundant_schema_tag_identifier.go:70 analyzeRedundantSchemaTagIdentifierNode
+// go: internal/rules/redundant_schema_tag_identifier.go:70 analyzeRedundantSchemaTagIdentifierNode bb45fbe1a9759892
 //
 // Rust: Go's unused checker parameter is dropped; `(match, ok)` is an `Option`.
 pub(crate) fn analyze_redundant_schema_tag_identifier_node(

@@ -13,7 +13,7 @@ use rustc_hash::FxHashMap;
 use crate::helpers_test::*;
 use crate::*;
 
-// go test: internal/typeparser/module_export_reference_test.go:21 moduleExportReferencePackageJSON
+// go test: internal/typeparser/module_export_reference_test.go:21 moduleExportReferencePackageJSON e4467cfea49cfff5
 const MODULE_EXPORT_REFERENCE_PACKAGE_JSON: &str = r#"{
   "name": "cache-fixture",
   "version": "1.0.0",
@@ -21,7 +21,7 @@ const MODULE_EXPORT_REFERENCE_PACKAGE_JSON: &str = r#"{
   "exports": { ".": "./index.d.ts" }
 }"#;
 
-// go test: internal/typeparser/module_export_reference_test.go:28 testDescriptorSourceFile
+// go test: internal/typeparser/module_export_reference_test.go:28 testDescriptorSourceFile 2ada651c621dac2e
 const TEST_DESCRIPTOR_SOURCE_FILE: ModuleDescriptorId =
     ModuleDescriptorId(ModuleDescriptorId::Count.0);
 const TEST_DESCRIPTOR_ANY_FILE: ModuleDescriptorId =
@@ -29,7 +29,7 @@ const TEST_DESCRIPTOR_ANY_FILE: ModuleDescriptorId =
 const TEST_DESCRIPTOR_OTHER_FILE: ModuleDescriptorId =
     ModuleDescriptorId(ModuleDescriptorId::Count.0 + 2);
 
-// go test: internal/typeparser/module_export_reference_test.go:34 moduleExportReferenceSources
+// go test: internal/typeparser/module_export_reference_test.go:34 moduleExportReferenceSources 790276c35d9ee5f5
 fn module_export_reference_sources() -> Vec<(&'static str, String)> {
     vec![
         (
@@ -112,7 +112,7 @@ export = api"
     ]
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:92 moduleExportReferenceFixture
+// go test: internal/typeparser/module_export_reference_test.go:92 moduleExportReferenceFixture 561c00dee5ea4e4f
 fn module_export_reference_fixture(t: &T) -> (Compiled, FxHashMap<String, P<SourceFile>>) {
     t.helper();
 
@@ -122,7 +122,7 @@ fn module_export_reference_fixture(t: &T) -> (Compiled, FxHashMap<String, P<Sour
     compile_and_get_checker_and_source_files_internal(t, &sources)
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:99 sourceFileNameMatcher
+// go test: internal/typeparser/module_export_reference_test.go:99 sourceFileNameMatcher 4166f14b62d78a75
 // Rust: the matcher is leaked to be `'static` like the package-level descriptors' functions; `calls` is shared.
 fn source_file_name_matcher(
     suffix: &'static str,
@@ -136,7 +136,7 @@ fn source_file_name_matcher(
     }))
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:69 TestIsNodeReferenceToModuleExport_ConstantAliases
+// go test: internal/typeparser/module_export_reference_test.go:69 TestIsNodeReferenceToModuleExport_ConstantAliases 23ebf925175c3013
 #[test]
 fn test_is_node_reference_to_module_export_constant_aliases() {
     run(|t| {
@@ -167,7 +167,7 @@ fn test_is_node_reference_to_module_export_constant_aliases() {
     });
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:108 TestIsNodeReferenceToModuleExport_AliasesAndReexports
+// go test: internal/typeparser/module_export_reference_test.go:108 TestIsNodeReferenceToModuleExport_AliasesAndReexports c056b4c90f38798b
 #[test]
 fn test_is_node_reference_to_module_export_aliases_and_reexports() {
     run(|t| {
@@ -197,7 +197,7 @@ fn test_is_node_reference_to_module_export_aliases_and_reexports() {
     });
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:130 TestIsNodeReferenceToModuleExport_DuplicatePackageVersions
+// go test: internal/typeparser/module_export_reference_test.go:130 TestIsNodeReferenceToModuleExport_DuplicatePackageVersions 47d8753d97385a21
 #[test]
 fn test_is_node_reference_to_module_export_duplicate_package_versions() {
     run(|t| {
@@ -224,7 +224,7 @@ fn test_is_node_reference_to_module_export_duplicate_package_versions() {
     });
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:151 TestIsNodeReferenceToModuleExport_CachesBySymbolDescriptorAndMember
+// go test: internal/typeparser/module_export_reference_test.go:151 TestIsNodeReferenceToModuleExport_CachesBySymbolDescriptorAndMember 57ce0d6b39f71f1f
 #[test]
 fn test_is_node_reference_to_module_export_caches_by_symbol_descriptor_and_member() {
     run(|t| {
@@ -272,7 +272,7 @@ fn test_is_node_reference_to_module_export_caches_by_symbol_descriptor_and_membe
     });
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:183 TestIsNodeReferenceToModuleExport_SymbolExportedUnderTwoNames
+// go test: internal/typeparser/module_export_reference_test.go:183 TestIsNodeReferenceToModuleExport_SymbolExportedUnderTwoNames c5e01414885378f5
 #[test]
 fn test_is_node_reference_to_module_export_symbol_exported_under_two_names() {
     run(|t| {
@@ -307,7 +307,7 @@ fn test_is_node_reference_to_module_export_symbol_exported_under_two_names() {
     });
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:203 TestIsNodeReferenceToModuleExport_ExportEqualsMembers
+// go test: internal/typeparser/module_export_reference_test.go:203 TestIsNodeReferenceToModuleExport_ExportEqualsMembers 902cb0f85156f2d4
 #[test]
 fn test_is_node_reference_to_module_export_export_equals_members() {
     run(|t| {
@@ -329,7 +329,7 @@ fn test_is_node_reference_to_module_export_export_equals_members() {
     });
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:224 compileFixturesWithJS
+// go test: internal/typeparser/module_export_reference_test.go:224 compileFixturesWithJS 4226795ad67cff8b
 // compileFixturesWithJS compiles every .ts, .tsx and .js source outside
 // node_modules as a root file, with JS checking and JSX enabled. When version
 // is not empty the bundled Effect package is mounted too. Source files are
@@ -387,7 +387,7 @@ pub(crate) fn kind_string(kind: Kind) -> String {
     format!("Kind{kind:?}")
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:276 TestReferenceSymbolAtNode_MatchesUngatedComputation
+// go test: internal/typeparser/module_export_reference_test.go:276 TestReferenceSymbolAtNode_MatchesUngatedComputation d5a1d2a0c705144d
 #[test]
 fn test_reference_symbol_at_node_matches_ungated_computation() {
     run(|t| {
@@ -635,7 +635,7 @@ pub(crate) fn node_pos(node: P<Node>) -> i64 {
     node.pos().source_offset().map_or(-1, i64::from)
 }
 
-// go test: internal/typeparser/module_export_reference_test.go:430 TestSymbolHasDeclarationInModuleCached_DeclarationCounts
+// go test: internal/typeparser/module_export_reference_test.go:430 TestSymbolHasDeclarationInModuleCached_DeclarationCounts 5f0275243d57355e
 #[test]
 fn test_symbol_has_declaration_in_module_cached_declaration_counts() {
     run(|t| {

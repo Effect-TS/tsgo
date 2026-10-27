@@ -15,20 +15,20 @@ use rustc_hash::{FxHashMap, FxHashSet};
 
 use crate::*;
 
-// go: internal/typeparser/api_stability.go:18 ApiStabilityLevel
+// go: internal/typeparser/api_stability.go:18 ApiStabilityLevel 54453667d23bc6d2
 // ApiStabilityLevel orders the Effect stability tiers. A higher level is less
 // stable, so a public surface may only expose dependencies whose level is at
 // most the level declared for the export that owns the surface.
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug, Default)]
 pub enum ApiStabilityLevel {
-    // go: internal/typeparser/api_stability.go:20 ApiStabilityStable
+    // go: internal/typeparser/api_stability.go:20 ApiStabilityStable 4d7882dd11a562a2
     #[default]
     Stable,
     Unstable,
     Experimental,
 }
 
-// go: internal/typeparser/api_stability.go:32 ApiStabilityLevelTag
+// go: internal/typeparser/api_stability.go:32 ApiStabilityLevelTag b7a37b136a31656e
 // ApiStabilityLevelTag returns the `@stability` tag spelling for a level as
 // rendered by the usage diagnostics. The stable tier is spelled as the empty
 // string because it is the implicit default; an explicit `@stability stable`
@@ -43,14 +43,14 @@ pub fn api_stability_level_tag(level: ApiStabilityLevel) -> &'static str {
     }
 }
 
-// go: internal/typeparser/api_stability.go:45 ApiStabilityLevelFromTag
+// go: internal/typeparser/api_stability.go:45 ApiStabilityLevelFromTag cfcbb213dfa3a3aa
 // ApiStabilityLevelFromTag maps a `@stability` tag spelling to a level. An
 // unrecognized or empty tag is stable.
 pub fn api_stability_level_from_tag(tag: &str) -> ApiStabilityLevel {
     api_stability_rank(tag)
 }
 
-// go: internal/typeparser/api_stability.go:54 ApiStabilityDeclaration
+// go: internal/typeparser/api_stability.go:54 ApiStabilityDeclaration f6b5ed37409084b7
 // ApiStabilityDeclaration is a declared stability tier together with the
 // declaration that carries the tag. The declaration is retained for callers
 // that need provenance (allow-list naming and diagnostic locations). An
@@ -63,18 +63,18 @@ pub struct ApiStabilityDeclaration {
 }
 
 impl ApiStabilityDeclaration {
-    // go: internal/typeparser/api_stability.go:59 ApiStabilityDeclaration.Level
+    // go: internal/typeparser/api_stability.go:59 ApiStabilityDeclaration.Level 2b221600faad4a70
     pub fn level(self) -> ApiStabilityLevel {
         self.level
     }
 
-    // go: internal/typeparser/api_stability.go:61 ApiStabilityDeclaration.Declaration
+    // go: internal/typeparser/api_stability.go:61 ApiStabilityDeclaration.Declaration 7e023a52ae52bd81
     pub fn declaration(self) -> Option<P<Node>> {
         self.declaration
     }
 }
 
-// go: internal/typeparser/api_stability.go:67 ApiStabilityDependency
+// go: internal/typeparser/api_stability.go:67 ApiStabilityDependency e6a0231035bd28a2
 // ApiStabilityDependency names one exposed component of a public API surface
 // whose declared stability is above stable. The offender is either a symbol
 // (properties, methods, referenced types) or a signature declaration; the
@@ -88,28 +88,28 @@ pub struct ApiStabilityDependency {
 }
 
 impl ApiStabilityDependency {
-    // go: internal/typeparser/api_stability.go:74 ApiStabilityDependency.Symbol
+    // go: internal/typeparser/api_stability.go:74 ApiStabilityDependency.Symbol b2128b5a39505c85
     pub fn symbol(&self) -> Option<P<Symbol>> {
         self.symbol
     }
 
-    // go: internal/typeparser/api_stability.go:76 ApiStabilityDependency.Signature
+    // go: internal/typeparser/api_stability.go:76 ApiStabilityDependency.Signature 75e5d0362a2d0094
     pub fn signature(&self) -> Option<P<Signature>> {
         self.signature
     }
 
-    // go: internal/typeparser/api_stability.go:78 ApiStabilityDependency.Declaration
+    // go: internal/typeparser/api_stability.go:78 ApiStabilityDependency.Declaration 86c955ad77f38908
     pub fn declaration(&self) -> Option<P<Node>> {
         self.declaration
     }
 
-    // go: internal/typeparser/api_stability.go:80 ApiStabilityDependency.Level
+    // go: internal/typeparser/api_stability.go:80 ApiStabilityDependency.Level d3a2ddfa36de02bb
     pub fn level(&self) -> ApiStabilityLevel {
         self.level
     }
 }
 
-// go: internal/typeparser/api_stability.go:82 NewApiStabilityDependency
+// go: internal/typeparser/api_stability.go:82 NewApiStabilityDependency d86060dc2e25d202
 pub fn new_api_stability_dependency(
     symbol: Option<P<Symbol>>,
     signature: Option<P<Signature>>,
@@ -119,7 +119,7 @@ pub fn new_api_stability_dependency(
     ApiStabilityDependency { symbol, signature, declaration, level }
 }
 
-// go: internal/typeparser/api_stability.go:104 ApiStabilityUsed
+// go: internal/typeparser/api_stability.go:104 ApiStabilityUsed 6db0e4a1fc0a6f30
 // ApiStabilityUsed is the computed stability of the components a surface
 // exposes: the minimum guaranteed stability (the least stable dependency found,
 // stable when none was found) and the offending components themselves.
@@ -146,23 +146,23 @@ pub struct ApiStabilityUsed {
 }
 
 impl ApiStabilityUsed {
-    // go: internal/typeparser/api_stability.go:110 ApiStabilityUsed.Minimum
+    // go: internal/typeparser/api_stability.go:110 ApiStabilityUsed.Minimum bb227e048d15395c
     pub fn minimum(&self) -> ApiStabilityLevel {
         self.minimum
     }
 
-    // go: internal/typeparser/api_stability.go:112 ApiStabilityUsed.Dependencies
+    // go: internal/typeparser/api_stability.go:112 ApiStabilityUsed.Dependencies b55dbec187ebe98b
     pub fn dependencies(&self) -> Slice<'_, ApiStabilityDependency> {
         ets_readonly::new(self.dependencies.as_slice())
     }
 
-    // go: internal/typeparser/api_stability.go:116 ApiStabilityUsed.Incomplete
+    // go: internal/typeparser/api_stability.go:116 ApiStabilityUsed.Incomplete f2a350166748908e
     pub fn incomplete(&self) -> bool {
         self.incomplete
     }
 }
 
-// go: internal/typeparser/api_stability.go:123 apiStabilityInspection
+// go: internal/typeparser/api_stability.go:123 apiStabilityInspection dc6b95018278a9f3
 // apiStabilityInspection distinguishes how a represented type is inspected. A
 // named class or interface reached as a dependency stays shallow: its symbol
 // and its public call/construct signatures are inspected, but its members are
@@ -170,12 +170,12 @@ impl ApiStabilityUsed {
 // and inherited members, index signatures and signatures are all inspected.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub(crate) enum ApiStabilityInspection {
-    // go: internal/typeparser/api_stability.go:125 apiStabilityShallow
+    // go: internal/typeparser/api_stability.go:125 apiStabilityShallow f7cefa51ab12a883
     Shallow,
     Expand,
 }
 
-// go: internal/typeparser/api_stability.go:136 apiStabilityFindingKey
+// go: internal/typeparser/api_stability.go:136 apiStabilityFindingKey 9fe0b763be3172b3
 // apiStabilityFindingKey identifies one offender inside a surface. A symbol
 // finding and a signature finding are distinct, so a tagged overload of a
 // stable symbol is reported even though the symbol itself is stable. A
@@ -189,7 +189,7 @@ pub(crate) struct ApiStabilityFindingKey {
     pub(crate) declaration: Option<P<Node>>,
 }
 
-// go: internal/typeparser/api_stability.go:142 apiStabilityFinding
+// go: internal/typeparser/api_stability.go:142 apiStabilityFinding 5ff5278895d3adba
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub(crate) struct ApiStabilityFinding {
     pub(crate) level: ApiStabilityLevel,
@@ -208,7 +208,7 @@ impl From<ApiStabilityDeclaration> for ApiStabilityFinding {
 /// "allocate a fresh map before writing" Go does by hand.
 pub(crate) type ApiStabilityFindings = FxHashMap<ApiStabilityFindingKey, ApiStabilityFinding>;
 
-// go: internal/typeparser/api_stability.go:167 apiStabilitySurface
+// go: internal/typeparser/api_stability.go:167 apiStabilitySurface 785c5351b29b416d
 // apiStabilitySurface is a memoized set of stability findings. complete is
 // false when the result was cut by an in-progress cycle or by a component the
 // checker has not materialized; such a result is never treated as a finished
@@ -239,12 +239,12 @@ pub(crate) struct ApiStabilitySurface {
     pub(crate) observed_epoch: i64,
 }
 
-// go: internal/typeparser/api_stability.go:176 newApiStabilitySurface
+// go: internal/typeparser/api_stability.go:176 newApiStabilitySurface 473d86f701cd8431
 pub(crate) fn new_api_stability_surface() -> ApiStabilitySurface {
     ApiStabilitySurface { complete: true, ..Default::default() }
 }
 
-// go: internal/typeparser/api_stability.go:184 cycleCutSurface
+// go: internal/typeparser/api_stability.go:184 cycleCutSurface ebf9ca49f6fdd989
 // cycleCutSurface marks a result cut by an in-progress cycle. The settle
 // fixpoint can promote it to complete once findings stop changing, because the
 // back-edge's own direct findings are collected when the cut target is first
@@ -253,7 +253,7 @@ pub(crate) fn cycle_cut_surface() -> ApiStabilitySurface {
     ApiStabilitySurface { cut_cycle: true, ..Default::default() }
 }
 
-// go: internal/typeparser/api_stability.go:191 blockedSurface
+// go: internal/typeparser/api_stability.go:191 blockedSurface 44d3306a09a12d02
 // blockedSurface marks a result whose components are not materialized or whose
 // represented outcome is unavailable. It is never promoted to complete, so a
 // later query or session against a checked checker recomputes it.
@@ -262,7 +262,7 @@ pub(crate) fn blocked_surface() -> ApiStabilitySurface {
 }
 
 impl ApiStabilitySurface {
-    // go: internal/typeparser/api_stability.go:197 apiStabilitySurface.cutByCycle
+    // go: internal/typeparser/api_stability.go:197 apiStabilitySurface.cutByCycle 94a01b173c9cbccb
     // cutByCycle marks a surface that an in-progress cycle back-edge cut short. The
     // settle fixpoint can establish it as complete once findings stop changing.
     pub(crate) fn cut_by_cycle(&mut self) {
@@ -270,7 +270,7 @@ impl ApiStabilitySurface {
         self.cut_cycle = true;
     }
 
-    // go: internal/typeparser/api_stability.go:205 apiStabilitySurface.block
+    // go: internal/typeparser/api_stability.go:205 apiStabilitySurface.block 4d3eea208a1a3b2f
     // block marks a surface whose remaining components are unavailable. A blocked
     // surface is never promoted to complete, so a later query or session against a
     // materialized checker recomputes it.
@@ -279,7 +279,7 @@ impl ApiStabilitySurface {
         self.blocked = true;
     }
 
-    // go: internal/typeparser/api_stability.go:210 apiStabilitySurface.merge
+    // go: internal/typeparser/api_stability.go:210 apiStabilitySurface.merge 419bb47104a93e5f
     pub(crate) fn merge(&mut self, other: &ApiStabilitySurface) {
         if !other.complete {
             self.complete = false;
@@ -291,7 +291,7 @@ impl ApiStabilitySurface {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:223 apiStabilitySurface.add
+    // go: internal/typeparser/api_stability.go:223 apiStabilitySurface.add ddf70b09418ec248
     // add records a finding unless the surface already holds the key at an equal
     // or higher level, allocating the findings map on first use.
     pub(crate) fn add(&mut self, key: ApiStabilityFindingKey, finding: ApiStabilityFinding) {
@@ -303,7 +303,7 @@ impl ApiStabilitySurface {
         Rc::make_mut(&mut self.findings).insert(key, finding);
     }
 
-    // go: internal/typeparser/api_stability.go:236 apiStabilitySurface.equals
+    // go: internal/typeparser/api_stability.go:236 apiStabilitySurface.equals de25a4f4bf7f8cda
     // equals compares the semantic content of two surfaces. observedEpoch is
     // deliberately excluded: it is settlement bookkeeping, so updating it after a
     // recollection is not a fixpoint change.
@@ -321,7 +321,7 @@ impl ApiStabilitySurface {
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub(crate) struct ApiStabilityCarrierRef(u32);
 
-// go: internal/typeparser/api_stability.go:249 apiStabilityCarrier
+// go: internal/typeparser/api_stability.go:249 apiStabilityCarrier e9b44fd00b27c332
 // apiStabilityCarrier is the interned, concrete enclosing identity of an
 // internal raw-component traversal. It is built only from concrete compiler
 // objects: a reference or instantiated owner type, a concrete signature, and
@@ -344,7 +344,7 @@ pub(crate) struct ApiStabilityCarrier {
     pub(crate) marker: bool,
 }
 
-// go: internal/typeparser/api_stability.go:268 apiStabilitySubstFrame
+// go: internal/typeparser/api_stability.go:268 apiStabilitySubstFrame 1b78ad19b73de721
 // apiStabilitySubstFrame is one link in a composed substitution context. A
 // frame maps a signature's type parameters, a reference's type parameters, or
 // a compiler-provided mapper to represented types. The chain keeps nested
@@ -370,14 +370,14 @@ pub(crate) struct ApiStabilitySubstFrame {
     pub(crate) carrier: Option<ApiStabilityCarrierRef>,
 }
 
-// go: internal/typeparser/api_stability.go:284 apiStabilitySubstitution
+// go: internal/typeparser/api_stability.go:284 apiStabilitySubstitution debc4406680da8b9
 #[derive(Clone, Debug, Default)]
 pub(crate) struct ApiStabilitySubstitution {
     pub(crate) frame: Option<Rc<ApiStabilitySubstFrame>>,
 }
 
 impl ApiStabilitySubstitution {
-    // go: internal/typeparser/api_stability.go:290 apiStabilitySubstitution.carrier
+    // go: internal/typeparser/api_stability.go:290 apiStabilitySubstitution.carrier 2050be8c84602311
     // carrier returns the concrete enclosing identity of the whole substitution
     // chain, or nil when the traversal started at a concrete top-level object.
     pub(crate) fn carrier(&self) -> Option<ApiStabilityCarrierRef> {
@@ -386,7 +386,7 @@ impl ApiStabilitySubstitution {
 }
 
 impl ApiStabilityAnalysis {
-    // go: internal/typeparser/api_stability.go:301 apiStabilityAnalysis.aliasArgumentsAreSelf
+    // go: internal/typeparser/api_stability.go:301 apiStabilityAnalysis.aliasArgumentsAreSelf 2f117dfd4cb45604
     // aliasArgumentsAreSelf reports whether an alias's recorded type arguments are
     // exactly its own declared type parameters. The declared type of a generic
     // alias is parameterized that way; such arguments are declaration operands and
@@ -421,7 +421,7 @@ impl ApiStabilityAnalysis {
         true
     }
 
-    // go: internal/typeparser/api_stability.go:327 apiStabilityAnalysis.internCarrier
+    // go: internal/typeparser/api_stability.go:327 apiStabilityAnalysis.internCarrier e3fffd0228669fd1
     // internCarrier interns one concrete enclosing identity link into the analysis.
     // The table is discarded with the analysis, so no carrier survives an export.
     pub(crate) fn intern_carrier(
@@ -449,7 +449,7 @@ impl ApiStabilityAnalysis {
         carrier
     }
 
-    // go: internal/typeparser/api_stability.go:343 apiStabilityAnalysis.internArgumentCarrier
+    // go: internal/typeparser/api_stability.go:343 apiStabilityAnalysis.internArgumentCarrier d0b75228aa6acccf
     // internArgumentCarrier interns one concrete type argument of a represented
     // generic application. A nil argument still interns a distinct link because the
     // marker keeps the position of an unrepresented argument part of the identity.
@@ -462,7 +462,7 @@ impl ApiStabilityAnalysis {
         self.intern_carrier_key(key)
     }
 
-    // go: internal/typeparser/api_stability.go:357 apiStabilityAnalysis.extendParametersSubstitution
+    // go: internal/typeparser/api_stability.go:357 apiStabilityAnalysis.extendParametersSubstitution f696f8a0790af096
     // extendParametersSubstitution pushes one frame binding a set of type
     // parameters to represented arguments. The concrete owner is part of the
     // interned carrier, so the same raw component analyzed under two different
@@ -489,7 +489,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:373 apiStabilityAnalysis.extendMapperSubstitution
+    // go: internal/typeparser/api_stability.go:373 apiStabilityAnalysis.extendMapperSubstitution 607a3002ff5f84c6
     // extendMapperSubstitution pushes one frame for a compiler-provided mapper
     // attached to an instantiated type (an inferred anonymous object, an
     // instantiated mapped type, or an instantiated conditional).
@@ -510,7 +510,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:386 apiStabilityAnalysis.extendSignatureSubstitution
+    // go: internal/typeparser/api_stability.go:386 apiStabilityAnalysis.extendSignatureSubstitution 83a00874a4a87d44
     // extendSignatureSubstitution pushes one frame for a concrete signature. The
     // raw signature's type parameters are resolved through the concrete
     // signature's represented type arguments and its instantiated parameter
@@ -532,7 +532,7 @@ impl ApiStabilityAnalysis {
     }
 }
 
-// go: internal/typeparser/api_stability.go:399 apiStabilityTypeKey
+// go: internal/typeparser/api_stability.go:399 apiStabilityTypeKey b7298bbdfe597f14
 // Cache keys are concrete compiler identities. t and signature are the
 // represented objects under inspection; carrier is the interned concrete
 // enclosing identity when a raw (uninstantiated) component is walked inside a
@@ -544,28 +544,28 @@ pub(crate) struct ApiStabilityTypeKey {
     pub(crate) carrier: Option<ApiStabilityCarrierRef>,
 }
 
-// go: internal/typeparser/api_stability.go:405 apiStabilitySignatureKey
+// go: internal/typeparser/api_stability.go:405 apiStabilitySignatureKey 5ca89282dab440f6
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub(crate) struct ApiStabilitySignatureKey {
     pub(crate) signature: P<Signature>,
     pub(crate) carrier: Option<ApiStabilityCarrierRef>,
 }
 
-// go: internal/typeparser/api_stability.go:410 apiStabilitySymbolKey
+// go: internal/typeparser/api_stability.go:410 apiStabilitySymbolKey 9563066e63856175
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub(crate) struct ApiStabilitySymbolKey {
     pub(crate) symbol: P<Symbol>,
     pub(crate) carrier: Option<ApiStabilityCarrierRef>,
 }
 
-// go: internal/typeparser/api_stability.go:415 apiStabilityAliasKey
+// go: internal/typeparser/api_stability.go:415 apiStabilityAliasKey 12e072180b821a83
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub(crate) struct ApiStabilityAliasKey {
     pub(crate) t: P<Type>,
     pub(crate) carrier: Option<ApiStabilityCarrierRef>,
 }
 
-// go: internal/typeparser/api_stability.go:426 apiStabilitySurfaceTypeKey
+// go: internal/typeparser/api_stability.go:426 apiStabilitySurfaceTypeKey 458ee9545e46fd65
 // apiStabilitySurfaceTypeKey is the concrete, context-free identity of one
 // shared type-surface entry: the represented type pointer and the fixed
 // inspection policy. The two policies occupy separate entry slots, so an
@@ -578,7 +578,7 @@ pub(crate) struct ApiStabilitySurfaceTypeKey {
     pub(crate) inspect: ApiStabilityInspection,
 }
 
-// go: internal/typeparser/api_stability.go:439 apiStabilitySharedSurface
+// go: internal/typeparser/api_stability.go:439 apiStabilitySharedSurface f42f7a679b7c5f7f
 // apiStabilitySharedSurface is one immutable snapshot of a complete, settled,
 // context-free surface published on the per-checker EffectLinks. findings
 // excludes every finding that matches the component's own declared tag (the
@@ -593,19 +593,19 @@ pub(crate) struct ApiStabilitySharedSurface {
     pub(crate) removed: Vec<ApiStabilityFindingKey>,
 }
 
-// go: internal/typeparser/api_stability.go:446 apiStabilityMaterializationReadKind
+// go: internal/typeparser/api_stability.go:446 apiStabilityMaterializationReadKind cf0eaf0337b6fd25
 // apiStabilityMaterializationReadKind identifies one lazy read operation whose
 // materialization epoch advance is deduplicated per concrete identity.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub(crate) enum ApiStabilityMaterializationReadKind {
-    // go: internal/typeparser/api_stability.go:448 apiStabilityMaterializationReadDeclaredType
+    // go: internal/typeparser/api_stability.go:448 apiStabilityMaterializationReadDeclaredType 3878639802c1008e
     DeclaredType,
     Signatures,
     Members,
     NodeType,
 }
 
-// go: internal/typeparser/api_stability.go:459 apiStabilityMaterializationReadKey
+// go: internal/typeparser/api_stability.go:459 apiStabilityMaterializationReadKey 764f01b3f6b62ec3
 // apiStabilityMaterializationReadKey is the concrete identity of one
 // deduplicated lazy read: the operation and the symbol or annotation node it
 // resolves. It only decides whether the materialization epoch advances once
@@ -629,7 +629,7 @@ fn enclosing_variable_statement(declaration: P<Node>) -> Option<P<Node>> {
     (statement.kind() == Kind::VariableStatement).then_some(statement)
 }
 
-// go: internal/typeparser/api_stability.go:470 stabilityOfDeclarationTag
+// go: internal/typeparser/api_stability.go:470 stabilityOfDeclarationTag 87318c023c9a7ac8
 // stabilityOfDeclarationTag resolves the `@stability` tag of a declaration. A
 // variable's JSDoc is usually attached to its enclosing variable statement.
 // This is the single declaration-level parser shared by the API usage rules and
@@ -673,14 +673,14 @@ pub(crate) fn stability_of_declaration_tag(declaration: Option<P<Node>>) -> &'st
     ""
 }
 
-// go: internal/typeparser/api_stability.go:506 StabilityTagOfDeclaration
+// go: internal/typeparser/api_stability.go:506 StabilityTagOfDeclaration 47d78f293521cf83
 // StabilityTagOfDeclaration exposes the declaration-level `@stability` parser
 // so the existing usage diagnostics reuse one implementation.
 pub fn stability_tag_of_declaration(declaration: impl Into<Option<P<Node>>>) -> &'static str {
     stability_of_declaration_tag(declaration.into())
 }
 
-// go: internal/typeparser/api_stability.go:517 InternalTagOfDeclaration
+// go: internal/typeparser/api_stability.go:517 InternalTagOfDeclaration 5141c124ec310f70
 // InternalTagOfDeclaration reports whether a declaration carries the parsed
 // JSDoc `@internal` tag. Native TypeScript recognizes the same tag for
 // `stripInternal` declaration emit: a tagged declaration is omitted from the
@@ -715,7 +715,7 @@ pub fn internal_tag_of_declaration(declaration: impl Into<Option<P<Node>>>) -> b
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/api_stability.go:549 TypeParser.DeclaredApiStability
+    // go: internal/typeparser/api_stability.go:549 TypeParser.DeclaredApiStability fa70683d6bd4d739
     // DeclaredApiStability returns the stability tier declared for a symbol. The
     // result is cached per checker on EffectLinks so runs over different source
     // files share the same lookup. Declared lookups never trigger any computed
@@ -727,7 +727,7 @@ impl TypeParser<'_> {
         self.declared_api_stability_of_symbol(symbol).level
     }
 
-    // go: internal/typeparser/api_stability.go:556 TypeParser.DeclaredApiStabilityOfSymbol
+    // go: internal/typeparser/api_stability.go:556 TypeParser.DeclaredApiStabilityOfSymbol 3ad9d39dd0232fd7
     // DeclaredApiStabilityOfSymbol returns the declared stability of a symbol,
     // resolving import/export aliases and honouring a tag on the enclosing export
     // declaration. Untagged symbols are stable. The result is cached per checker.
@@ -746,7 +746,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/api_stability.go:570 TypeParser.DeclaredApiStabilityOfSignature
+    // go: internal/typeparser/api_stability.go:570 TypeParser.DeclaredApiStabilityOfSignature b89b6f76149f7a2e
     // DeclaredApiStabilityOfSignature returns the declared stability carried by a
     // selected signature declaration. It is cached per checker on the raw
     // (uninstantiated) signature so different overloads keep distinct tags; a
@@ -770,7 +770,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/api_stability.go:587 TypeParser.DeclaredApiStabilityOfDeclaration
+    // go: internal/typeparser/api_stability.go:587 TypeParser.DeclaredApiStabilityOfDeclaration 12331e5593fbf8ec
     // DeclaredApiStabilityOfDeclaration returns the stability tag attached to a
     // declaration and the declaration that carries it. The result is cached per
     // checker; this is the shared declaration-level lookup used by the symbol and
@@ -800,7 +800,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/api_stability.go:599 apiStabilityRank
+// go: internal/typeparser/api_stability.go:599 apiStabilityRank c71b7d28957e5fde
 pub(crate) fn api_stability_rank(stability: &str) -> ApiStabilityLevel {
     match stability {
         "unstable" => ApiStabilityLevel::Unstable,
@@ -809,7 +809,7 @@ pub(crate) fn api_stability_rank(stability: &str) -> ApiStabilityLevel {
     }
 }
 
-// go: internal/typeparser/api_stability.go:614 declaredStabilityOfSymbolChain
+// go: internal/typeparser/api_stability.go:614 declaredStabilityOfSymbolChain a30ccb3cace3df42
 // declaredStabilityOfSymbolChain mirrors the reference resolution used by the
 // stability usage rules: a declaration's own tag wins, then import/export
 // aliases are followed. Alias cycles are broken by symbol identity rather than
@@ -851,12 +851,12 @@ pub(crate) fn declared_stability_of_symbol_chain(
     ApiStabilityDeclaration::default()
 }
 
-// go: internal/typeparser/api_stability.go:643 hasAliasDeclaration
+// go: internal/typeparser/api_stability.go:643 hasAliasDeclaration 7cb32c802b0c3345
 pub(crate) fn has_alias_declaration(symbol: P<Symbol>) -> bool {
     symbol.declarations().iter().any(|&d| ets_shim::ast::is_alias_symbol_declaration(d))
 }
 
-// go: internal/typeparser/api_stability.go:652 ApiStabilityImmediateAliasedSymbol
+// go: internal/typeparser/api_stability.go:652 ApiStabilityImmediateAliasedSymbol e093401f0820771a
 // ApiStabilityImmediateAliasedSymbol follows one valid import/export alias hop.
 // Immediate target lookup can repeat diagnostics for failed resolutions on
 // the legacy compiler. Skip those cached failures without resolving the alias,
@@ -876,7 +876,7 @@ pub fn api_stability_immediate_aliased_symbol(
     c.get_immediate_aliased_symbol_exported(symbol)
 }
 
-// go: internal/typeparser/api_stability.go:672 ApiStabilitySession
+// go: internal/typeparser/api_stability.go:672 ApiStabilitySession 5276c1a26944045f
 // ApiStabilitySession is the analysis-local memo for the computed stability of
 // one export. The rule keeps one session per file, resets it before each export
 // and queries the export's symbol (and any namespace member) through it, so
@@ -896,7 +896,7 @@ pub struct ApiStabilitySession {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/api_stability.go:680 TypeParser.NewApiStabilitySession
+    // go: internal/typeparser/api_stability.go:680 TypeParser.NewApiStabilitySession a83d4eca766da806
     // NewApiStabilitySession starts a fresh computed-stability analysis. The
     // session owns its symbol, signature, concrete type/component and substitution
     // carrier memos; only the complete context-free surfaces published through
@@ -908,7 +908,7 @@ impl TypeParser<'_> {
 }
 
 impl ApiStabilitySession {
-    // go: internal/typeparser/api_stability.go:690 ApiStabilitySession.Reset
+    // go: internal/typeparser/api_stability.go:690 ApiStabilitySession.Reset 875d036c918ee032
     // Reset discards every analysis-local result so the session analyzes the next
     // export exactly like a new session would, while keeping its allocated tables.
     // The published shared snapshots are unaffected.
@@ -916,7 +916,7 @@ impl ApiStabilitySession {
         self.analysis.reset();
     }
 
-    // go: internal/typeparser/api_stability.go:710 ApiStabilitySession.UsedBySymbol
+    // go: internal/typeparser/api_stability.go:710 ApiStabilitySession.UsedBySymbol 2a836aef9828e561
     // UsedBySymbol computes the stability the children of a symbol's public
     // surface expose inside this session and settles cycle cuts: the root symbol's
     // own declared tag is excluded from the returned dependencies and minimum. The
@@ -945,7 +945,7 @@ impl ApiStabilitySession {
         api_stability_used_of_own(&surface, own)
     }
 
-    // go: internal/typeparser/api_stability.go:727 ApiStabilitySession.UsedByType
+    // go: internal/typeparser/api_stability.go:727 ApiStabilitySession.UsedByType 8156ebca67df6db4
     // UsedByType computes the stability the children of an already represented
     // checker type expose inside this session. The type's own declared tag is
     // excluded from the returned dependencies and minimum: a type alias
@@ -975,7 +975,7 @@ impl ApiStabilitySession {
         api_stability_used_of_own(&surface, own)
     }
 
-    // go: internal/typeparser/api_stability.go:742 ApiStabilitySession.UsedBySignature
+    // go: internal/typeparser/api_stability.go:742 ApiStabilitySession.UsedBySignature 99823b0efd3dd3c9
     // UsedBySignature computes the stability the children of an already
     // represented signature expose inside this session. The signature's own
     // declared tag is excluded from the returned dependencies and minimum; its
@@ -999,7 +999,7 @@ impl ApiStabilitySession {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/api_stability.go:786 TypeParser.ApiStabilityUsedBySymbol
+    // go: internal/typeparser/api_stability.go:786 TypeParser.ApiStabilityUsedBySymbol df5a169dad464c45
     // ApiStabilityUsedBySymbol computes the stability the children of a symbol's
     // public surface expose in a fresh one-call session. The root symbol's own
     // declared tag is excluded; use DeclaredApiStabilityOfSymbol to read it. The
@@ -1041,7 +1041,7 @@ impl TypeParser<'_> {
         self.new_api_stability_session().used_by_symbol(self, symbol)
     }
 
-    // go: internal/typeparser/api_stability.go:797 TypeParser.ApiStabilityUsedByType
+    // go: internal/typeparser/api_stability.go:797 TypeParser.ApiStabilityUsedByType 9d6f674052460867
     // ApiStabilityUsedByType computes the stability the children of an already
     // represented checker type expose in a fresh one-call session. The type's own
     // declared tag is excluded; use the declared accessors to read it. It switches
@@ -1056,7 +1056,7 @@ impl TypeParser<'_> {
         self.new_api_stability_session().used_by_type(self, t)
     }
 
-    // go: internal/typeparser/api_stability.go:808 TypeParser.ApiStabilityUsedBySignature
+    // go: internal/typeparser/api_stability.go:808 TypeParser.ApiStabilityUsedBySignature d266eea7ce61f01f
     // ApiStabilityUsedBySignature computes the stability the children of an
     // already represented signature expose in a fresh one-call session. The
     // signature's own declared tag is excluded; use DeclaredApiStabilityOfSignature
@@ -1072,7 +1072,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/api_stability.go:821 apiStabilityOwnTag
+// go: internal/typeparser/api_stability.go:821 apiStabilityOwnTag 608a8a885296ddae
 // apiStabilityOwnTag identifies a root component's own declared tag inside a
 // stored surface: the root symbol or raw signature identity together with the
 // declaration that carries the root's declared stability. Stored surfaces
@@ -1090,7 +1090,7 @@ pub(crate) struct ApiStabilityOwnTag {
 }
 
 impl ApiStabilityOwnTag {
-    // go: internal/typeparser/api_stability.go:830 apiStabilityOwnTag.excludes
+    // go: internal/typeparser/api_stability.go:830 apiStabilityOwnTag.excludes c5b028608af1073a
     // excludes reports whether one stored finding is the root's own declared tag.
     // A nil root field never matches, so a child-only conversion (a component, a
     // nil owner) excludes nothing.
@@ -1113,7 +1113,7 @@ impl ApiStabilityOwnTag {
 }
 
 impl ApiStabilityAnalysis {
-    // go: internal/typeparser/api_stability.go:843 apiStabilityAnalysis.symbolOwnTag
+    // go: internal/typeparser/api_stability.go:843 apiStabilityAnalysis.symbolOwnTag 842d90ac3f95a132
     // symbolOwnTag builds the own-tag identity of a symbol root from the declared
     // accessor. The declared lookup only reads the per-checker declared caches, so
     // building the identity never computes a surface.
@@ -1134,7 +1134,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:855 apiStabilityAnalysis.typeOwnTag
+    // go: internal/typeparser/api_stability.go:855 apiStabilityAnalysis.typeOwnTag 9f0d47985ca2bf79
     // typeOwnTag builds the own-tag identity of a represented type root. A type
     // alias application's own tag is the alias symbol's; an underlying named type
     // the alias resolves to stays an exposed child. Any other represented type's
@@ -1158,7 +1158,7 @@ impl ApiStabilityAnalysis {
         ApiStabilityOwnTag::default()
     }
 
-    // go: internal/typeparser/api_stability.go:870 apiStabilityAnalysis.signatureOwnTag
+    // go: internal/typeparser/api_stability.go:870 apiStabilityAnalysis.signatureOwnTag d88e6b1a1b79cee1
     // signatureOwnTag builds the own-tag identity of a signature root. The raw
     // (uninstantiated) signature keeps distinct overload tags distinct.
     #[expect(clippy::unused_self, reason = "a method of Go's apiStabilityAnalysis")]
@@ -1179,7 +1179,7 @@ impl ApiStabilityAnalysis {
     }
 }
 
-// go: internal/typeparser/api_stability.go:883 apiStabilityUsedOf
+// go: internal/typeparser/api_stability.go:883 apiStabilityUsedOf 214fcfd6a7cdd024
 #[cfg_attr(not(test), expect(dead_code, reason = "Go calls it from the settlement tests only"))]
 // apiStabilityUsedOf converts a stored symbol surface into the public result
 // for a symbol-rooted query, excluding the root symbol's own finding. It is the
@@ -1192,7 +1192,7 @@ pub(crate) fn api_stability_used_of(
     api_stability_used_of_own(surface, ApiStabilityOwnTag { symbol: owner, ..Default::default() })
 }
 
-// go: internal/typeparser/api_stability.go:890 apiStabilityUsedOfOwn
+// go: internal/typeparser/api_stability.go:890 apiStabilityUsedOfOwn 5a5240d3ef2971ce
 // apiStabilityUsedOfOwn converts a stored surface into the public result,
 // skipping every finding that is the root's own declared tag. The stored
 // surface itself is never modified.
@@ -1227,7 +1227,7 @@ pub(crate) fn api_stability_used_of_own(
     used
 }
 
-// go: internal/typeparser/api_stability.go:914 sortApiStabilityDependencies
+// go: internal/typeparser/api_stability.go:914 sortApiStabilityDependencies 17f9be188d71e2de
 pub(crate) fn sort_api_stability_dependencies(deps: &mut [ApiStabilityDependency]) {
     ets_go::sort::slice(deps, |left, right| {
         let left_name = api_stability_dependency_sort_name(left);
@@ -1242,7 +1242,7 @@ pub(crate) fn sort_api_stability_dependencies(deps: &mut [ApiStabilityDependency
     });
 }
 
-// go: internal/typeparser/api_stability.go:928 apiStabilityDependencySortName
+// go: internal/typeparser/api_stability.go:928 apiStabilityDependencySortName e00f29d44664abdf
 pub(crate) fn api_stability_dependency_sort_name(dependency: &ApiStabilityDependency) -> String {
     let name = api_stability_usable_symbol_name(dependency.symbol);
     if !name.is_empty() {
@@ -1266,7 +1266,7 @@ pub(crate) fn api_stability_dependency_sort_name(dependency: &ApiStabilityDepend
     "<anonymous>".to_string()
 }
 
-// go: internal/typeparser/api_stability.go:952 ApiStabilityDependencyName
+// go: internal/typeparser/api_stability.go:952 ApiStabilityDependencyName 39dcc8987234fae7
 // ApiStabilityDependencyName returns the display name of an exposed offender
 // for diagnostics: the symbol name, the declaration's safely read name, or a
 // descriptive fallback for anonymous signatures. A computed declaration name is
@@ -1311,7 +1311,7 @@ pub fn api_stability_dependency_name(dependency: &ApiStabilityDependency) -> Str
     "<anonymous>".to_string()
 }
 
-// go: internal/typeparser/api_stability.go:991 apiStabilityUsableSymbolName
+// go: internal/typeparser/api_stability.go:991 apiStabilityUsableSymbolName 532db58e7ac6a4f5
 // apiStabilityUsableSymbolName returns a symbol name suitable for display,
 // excluding the binder's `__computed` placeholder and the checker's `__@`
 // late-bound member spellings. A computed declaration renders its own readable
@@ -1327,7 +1327,7 @@ pub(crate) fn api_stability_usable_symbol_name(symbol: Option<P<Symbol>>) -> &'s
     name
 }
 
-// go: internal/typeparser/api_stability.go:1007 apiStabilityLateBoundSymbolDisplayName
+// go: internal/typeparser/api_stability.go:1007 apiStabilityLateBoundSymbolDisplayName 6dc7a2440ee79a64
 // apiStabilityLateBoundSymbolDisplayName renders the bound property name of a
 // checker late-bound member (`__@name@id`) for diagnostics and sorting. The
 // checker records that name when it late-binds a computed declaration, so
@@ -1352,7 +1352,7 @@ pub(crate) fn api_stability_late_bound_symbol_display_name(symbol: Option<P<Symb
     format!("[{name}]")
 }
 
-// go: internal/typeparser/api_stability.go:1028 apiStabilityDeclarationDisplayName
+// go: internal/typeparser/api_stability.go:1028 apiStabilityDeclarationDisplayName eaf11fe0fa3e6b6d
 // apiStabilityDeclarationDisplayName returns the name of a declaration for
 // sorting and display without evaluating the name. A simply named declaration
 // keeps its source spelling. A computed name is never asked for its text: a
@@ -1398,7 +1398,7 @@ pub(crate) fn api_stability_declaration_display_name(
     None
 }
 
-// go: internal/typeparser/api_stability.go:1066 apiStabilitySimpleNameText
+// go: internal/typeparser/api_stability.go:1066 apiStabilitySimpleNameText 0a5141a90a91b0d4
 // apiStabilitySimpleNameText returns the source text of a declaration name that
 // has one without evaluation. A computed or otherwise dynamic name reports
 // false; its text is never read.
@@ -1414,7 +1414,7 @@ pub(crate) fn api_stability_simple_name_text(name: Option<P<Node>>) -> Option<&'
     }
 }
 
-// go: internal/typeparser/api_stability.go:1079 apiStabilityScopeList
+// go: internal/typeparser/api_stability.go:1079 apiStabilityScopeList a907e102a20a32ee
 // apiStabilityScopeList is an insertion-ordered set. Settlement iterates it
 // instead of a Go map so the visit order is the order a query reached results.
 #[derive(Clone, Debug)]
@@ -1430,7 +1430,7 @@ impl<K> Default for ApiStabilityScopeList<K> {
 }
 
 impl<K: Copy + Eq + std::hash::Hash> ApiStabilityScopeList<K> {
-    // go: internal/typeparser/api_stability.go:1084 apiStabilityScopeList.add
+    // go: internal/typeparser/api_stability.go:1084 apiStabilityScopeList.add 236476ef80903b1a
     pub(crate) fn add(&mut self, key: K) {
         if self.has.contains(&key) {
             return;
@@ -1439,14 +1439,14 @@ impl<K: Copy + Eq + std::hash::Hash> ApiStabilityScopeList<K> {
         self.keys.push(key);
     }
 
-    // go: internal/typeparser/api_stability.go:1095 apiStabilityScopeList.reset
+    // go: internal/typeparser/api_stability.go:1095 apiStabilityScopeList.reset 931438bbf0037836
     pub(crate) fn reset(&mut self) {
         self.keys.clear();
         self.has.clear();
     }
 }
 
-// go: internal/typeparser/api_stability.go:1104 apiStabilitySettleScope
+// go: internal/typeparser/api_stability.go:1104 apiStabilitySettleScope ea4fa63fa692b611
 // apiStabilitySettleScope holds the incomplete results the current query
 // stored or read since the last converged settle. A result the query never
 // reached cannot feed the query's root, so settlement only revisits these and
@@ -1460,7 +1460,7 @@ pub(crate) struct ApiStabilitySettleScope {
 }
 
 impl ApiStabilitySettleScope {
-    // go: internal/typeparser/api_stability.go:1111 apiStabilitySettleScope.empty
+    // go: internal/typeparser/api_stability.go:1111 apiStabilitySettleScope.empty f449458ffebf2808
     pub(crate) fn empty(&self) -> bool {
         self.symbols.keys.is_empty()
             && self.types.keys.is_empty()
@@ -1468,7 +1468,7 @@ impl ApiStabilitySettleScope {
             && self.signatures.keys.is_empty()
     }
 
-    // go: internal/typeparser/api_stability.go:1115 apiStabilitySettleScope.reset
+    // go: internal/typeparser/api_stability.go:1115 apiStabilitySettleScope.reset dd753c0ebbb23a5e
     pub(crate) fn reset(&mut self) {
         self.symbols.reset();
         self.types.reset();
@@ -1477,7 +1477,7 @@ impl ApiStabilitySettleScope {
     }
 }
 
-// go: internal/typeparser/api_stability.go:1134 apiStabilityAnalysis
+// go: internal/typeparser/api_stability.go:1134 apiStabilityAnalysis 0db70def7c87d334
 // apiStabilityAnalysis carries the cycle guards and memo for one computation.
 // Complete symbol, signature, type and component results are reused inside the
 // analysis, results contaminated by a cycle are settled with a bounded
@@ -1578,7 +1578,7 @@ pub(crate) struct ApiStabilityAnalysis {
     pub(crate) materialization_epoch: i64,
 }
 
-// go: internal/typeparser/api_stability.go:1219 apiStabilityMaxWork
+// go: internal/typeparser/api_stability.go:1219 apiStabilityMaxWork f71286b93aefba4e
 // apiStabilityMaxWork bounds one analysis. The guard exists only so a
 // pathological represented graph cannot run away; ordinary surfaces with
 // deeply nested explicit components stay far below it. Exhausting the bound
@@ -1595,14 +1595,14 @@ pub(crate) const API_STABILITY_MAX_SETTLE_ROUNDS: i64 = 64;
 // with its session, so a later export or call retries it.
 pub(crate) const API_STABILITY_MAX_SETTLE_SWEEPS: i64 = 4;
 
-// go: internal/typeparser/api_stability.go:1237 newApiStabilityAnalysis
+// go: internal/typeparser/api_stability.go:1237 newApiStabilityAnalysis c3bebb389b4795a0
 // Rust: Go stores the parser; the Rust analysis receives it with every call (see `ApiStabilitySession`).
 pub(crate) fn new_api_stability_analysis() -> ApiStabilityAnalysis {
     ApiStabilityAnalysis::default()
 }
 
 impl ApiStabilityAnalysis {
-    // go: internal/typeparser/api_stability.go:1260 apiStabilityAnalysis.reset
+    // go: internal/typeparser/api_stability.go:1260 apiStabilityAnalysis.reset 271d5fce44fd1d16
     // reset returns the analysis to the state newApiStabilityAnalysis produces,
     // keeping map and slice capacity. Every per-export field must be cleared here.
     pub(crate) fn reset(&mut self) {
@@ -1637,13 +1637,13 @@ impl ApiStabilityAnalysis {
         self.materialization_epoch = 0;
     }
 
-    // go: internal/typeparser/api_stability.go:1292 apiStabilityAnalysis.consumeWork
+    // go: internal/typeparser/api_stability.go:1292 apiStabilityAnalysis.consumeWork 08cac84afd1e59a6
     pub(crate) fn consume_work(&mut self) -> bool {
         self.work += 1;
         self.work <= API_STABILITY_MAX_WORK
     }
 
-    // go: internal/typeparser/api_stability.go:1329 apiStabilityAnalysis.settle
+    // go: internal/typeparser/api_stability.go:1329 apiStabilityAnalysis.settle eb4134475728a05c
     // settle resolves cycle cuts with a bounded monotone fixpoint, then marks
     // every result that was established complete as settled within this analysis.
     // Findings are recomputed until they stop changing; a recomputed surface is
@@ -1715,7 +1715,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:1370 apiStabilityAnalysis.storeSymbolSurface
+    // go: internal/typeparser/api_stability.go:1370 apiStabilityAnalysis.storeSymbolSurface 76551cf59a942de3
     // storeSymbolSurface records a symbol result and its first-insertion order and
     // enrolls an incomplete result in the settle scope.
     pub(crate) fn store_symbol_surface(&mut self, symbol: P<Symbol>, surface: ApiStabilitySurface) {
@@ -1727,7 +1727,7 @@ impl ApiStabilityAnalysis {
         self.enroll_symbol(symbol, complete);
     }
 
-    // go: internal/typeparser/api_stability.go:1380 apiStabilityAnalysis.storeTypeSurface
+    // go: internal/typeparser/api_stability.go:1380 apiStabilityAnalysis.storeTypeSurface 174b0a6630a8a6c2
     // storeTypeSurface records a type result and its first-insertion order and
     // enrolls it for settlement or publication.
     pub(crate) fn store_type_surface(
@@ -1743,7 +1743,7 @@ impl ApiStabilityAnalysis {
         self.enroll_type(key, complete);
     }
 
-    // go: internal/typeparser/api_stability.go:1390 apiStabilityAnalysis.storeComponentSurface
+    // go: internal/typeparser/api_stability.go:1390 apiStabilityAnalysis.storeComponentSurface 9e5000b4c06e6598
     // storeComponentSurface records an object-component result and its
     // first-insertion order and enrolls an incomplete result in the settle scope.
     pub(crate) fn store_component_surface(
@@ -1759,7 +1759,7 @@ impl ApiStabilityAnalysis {
         self.enroll_component(key, complete);
     }
 
-    // go: internal/typeparser/api_stability.go:1400 apiStabilityAnalysis.storeSignatureSurface
+    // go: internal/typeparser/api_stability.go:1400 apiStabilityAnalysis.storeSignatureSurface 9a6d732e867f677d
     // storeSignatureSurface records a signature result and its first-insertion
     // order and enrolls it for settlement or publication.
     pub(crate) fn store_signature_surface(
@@ -1775,7 +1775,7 @@ impl ApiStabilityAnalysis {
         self.enroll_signature(key, complete);
     }
 
-    // go: internal/typeparser/api_stability.go:1408 apiStabilityAnalysis.enrollSymbol
+    // go: internal/typeparser/api_stability.go:1408 apiStabilityAnalysis.enrollSymbol 8f3010d46b7174eb
     // Rust: the enroll helpers take the surface's `complete` flag, the only part of the surface Go reads.
     pub(crate) fn enroll_symbol(&mut self, symbol: P<Symbol>, complete: bool) {
         if !complete {
@@ -1783,7 +1783,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:1416 apiStabilityAnalysis.enrollType
+    // go: internal/typeparser/api_stability.go:1416 apiStabilityAnalysis.enrollType 924e6219b97cb449
     // enrollType puts an incomplete type result in the settle scope and queues a
     // complete context-free one for publication.
     pub(crate) fn enroll_type(&mut self, key: ApiStabilityTypeKey, complete: bool) {
@@ -1794,14 +1794,14 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:1425 apiStabilityAnalysis.enrollComponent
+    // go: internal/typeparser/api_stability.go:1425 apiStabilityAnalysis.enrollComponent 1c1bb0f7cd59c858
     pub(crate) fn enroll_component(&mut self, key: ApiStabilityTypeKey, complete: bool) {
         if !complete {
             self.scope.components.add(key);
         }
     }
 
-    // go: internal/typeparser/api_stability.go:1432 apiStabilityAnalysis.enrollSignature
+    // go: internal/typeparser/api_stability.go:1432 apiStabilityAnalysis.enrollSignature 64ee7903c348fb90
     // enrollSignature is enrollType for a signature result.
     pub(crate) fn enroll_signature(&mut self, key: ApiStabilitySignatureKey, complete: bool) {
         if !complete {
@@ -1811,7 +1811,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:1447 apiStabilityAnalysis.restoreOwnTagFinding
+    // go: internal/typeparser/api_stability.go:1447 apiStabilityAnalysis.restoreOwnTagFinding c232766b4325cf21
     // restoreOwnTagFinding re-adds one finding a published snapshot removed as the
     // component's own declared tag. The declared level and provenance come from
     // the per-checker declared caches — the snapshot stores only the concrete
@@ -1833,7 +1833,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:1463 apiStabilityAnalysis.sharedTypeSurface
+    // go: internal/typeparser/api_stability.go:1463 apiStabilityAnalysis.sharedTypeSurface 02e9e485131983ce
     // sharedTypeSurface returns a fresh analysis-local copy of the published
     // complete surface of a concrete context-free type, re-adding the component's
     // own declared-tag findings from the declared caches. It reports false when no
@@ -1859,7 +1859,7 @@ impl ApiStabilityAnalysis {
         Some(surface)
     }
 
-    // go: internal/typeparser/api_stability.go:1481 apiStabilityAnalysis.sharedSignatureSurface
+    // go: internal/typeparser/api_stability.go:1481 apiStabilityAnalysis.sharedSignatureSurface fdc6c797088d76b7
     // sharedSignatureSurface is sharedTypeSurface for a concrete signature
     // identity.
     pub(crate) fn shared_signature_surface(
@@ -1877,7 +1877,7 @@ impl ApiStabilityAnalysis {
         Some(surface)
     }
 
-    // go: internal/typeparser/api_stability.go:1506 apiStabilityAnalysis.publishTypeSurface
+    // go: internal/typeparser/api_stability.go:1506 apiStabilityAnalysis.publishTypeSurface 7a5e13b567768c77
     // publishTypeSurface publishes one complete, settled, context-free type surface
     // as an immutable root-excluding snapshot. Every finding that matches the
     // component's own declared tag is removed and its concrete identity recorded;
@@ -1916,7 +1916,7 @@ impl ApiStabilityAnalysis {
         tp.links().api_stability_surface_type.insert(key, entry);
     }
 
-    // go: internal/typeparser/api_stability.go:1533 apiStabilityAnalysis.publishSignatureSurface
+    // go: internal/typeparser/api_stability.go:1533 apiStabilityAnalysis.publishSignatureSurface 702dd9ed607b98a2
     // publishSignatureSurface publishes one complete, settled, context-free
     // signature surface with the signature's own declared tag removed exactly like
     // publishTypeSurface does for a type.
@@ -1947,7 +1947,7 @@ impl ApiStabilityAnalysis {
         tp.links().api_stability_surface_signature.insert(signature, entry);
     }
 
-    // go: internal/typeparser/api_stability.go:1565 apiStabilityAnalysis.publishCompleteSurfaces
+    // go: internal/typeparser/api_stability.go:1565 apiStabilityAnalysis.publishCompleteSurfaces 79c6de0c49a60bda
     // publishCompleteSurfaces pushes the complete, settled, context-free session
     // results queued since the last settle into the per-checker shared caches. It
     // runs after the settle fixpoint (including cycle promotion) so an in-progress
@@ -1976,7 +1976,7 @@ impl ApiStabilityAnalysis {
     }
 }
 
-// go: internal/typeparser/api_stability.go:1579 apiStabilityNodeVisitKey
+// go: internal/typeparser/api_stability.go:1579 apiStabilityNodeVisitKey 7d5e3965281302ad
 // apiStabilityNodeVisitKey renders a stable visit key for a declaration node.
 pub(crate) fn api_stability_node_visit_key(node: Option<P<Node>>) -> String {
     let Some(node) = node else {
@@ -1994,7 +1994,7 @@ fn node_pos(node: P<Node>) -> i64 {
     node.pos().source_offset().map_or(-1, i64::from)
 }
 
-// go: internal/typeparser/api_stability.go:1591 apiStabilitySymbolVisitKey
+// go: internal/typeparser/api_stability.go:1591 apiStabilitySymbolVisitKey 7afa3fc51468cf6f
 // apiStabilitySymbolVisitKey renders a stable visit key for a symbol result.
 pub(crate) fn api_stability_symbol_visit_key(symbol: Option<P<Symbol>>) -> String {
     let Some(symbol) = symbol else {
@@ -2006,7 +2006,7 @@ pub(crate) fn api_stability_symbol_visit_key(symbol: Option<P<Symbol>>) -> Strin
     symbol.name().to_string()
 }
 
-// go: internal/typeparser/api_stability.go:1606 apiStabilityTypeVisitKey
+// go: internal/typeparser/api_stability.go:1606 apiStabilityTypeVisitKey 16d0089d619ac717
 // apiStabilityTypeVisitKey renders a best-effort stable visit key for a
 // represented type result. It only orders the rare results that settlement had
 // to reconcile because they were stored without the store helpers.
@@ -2032,7 +2032,7 @@ pub(crate) fn api_stability_type_visit_key(key: &ApiStabilityTypeKey) -> String 
     format!("{name}@{}", key.inspect as i64)
 }
 
-// go: internal/typeparser/api_stability.go:1628 apiStabilitySignatureVisitKey
+// go: internal/typeparser/api_stability.go:1628 apiStabilitySignatureVisitKey 1e1c1973095f36b8
 // apiStabilitySignatureVisitKey renders a stable visit key for a signature
 // result.
 pub(crate) fn api_stability_signature_visit_key(key: &ApiStabilitySignatureKey) -> String {
@@ -2043,7 +2043,7 @@ pub(crate) fn api_stability_signature_visit_key(key: &ApiStabilitySignatureKey) 
 }
 
 impl ApiStabilityAnalysis {
-    // go: internal/typeparser/api_stability.go:1646 apiStabilityAnalysis.reconcileSettleOrder
+    // go: internal/typeparser/api_stability.go:1646 apiStabilityAnalysis.reconcileSettleOrder 5d7f63f47e852673
     // reconcileSettleOrder enrolls session results that were stored without the
     // store helpers, so settlement still visits them. Production results always go
     // through the helpers, whose size fast path keeps the order slices in sync; an
@@ -2109,7 +2109,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:1734 apiStabilityAnalysis.settleRound
+    // go: internal/typeparser/api_stability.go:1734 apiStabilityAnalysis.settleRound 5c8da41104481b4b
     // settleRound recollects every incomplete surface in the settle scope once and
     // reports whether any surface changed. Complete results are always skipped: a
     // completed result is never recomputed. A blocked result is skipped only when
@@ -2157,7 +2157,7 @@ impl ApiStabilityAnalysis {
         changed
     }
 
-    // go: internal/typeparser/api_stability.go:1767 apiStabilityAnalysis.settleType
+    // go: internal/typeparser/api_stability.go:1767 apiStabilityAnalysis.settleType a36c015d7f8d4d66
     // settleType recollects one incomplete type result and reports whether its
     // surface changed.
     pub(crate) fn settle_type(
@@ -2184,7 +2184,7 @@ impl ApiStabilityAnalysis {
         changed
     }
 
-    // go: internal/typeparser/api_stability.go:1782 apiStabilityAnalysis.settleComponent
+    // go: internal/typeparser/api_stability.go:1782 apiStabilityAnalysis.settleComponent 0a4ee14ffac1a03b
     // settleComponent is settleType for an object-component result.
     pub(crate) fn settle_component(
         &mut self,
@@ -2210,7 +2210,7 @@ impl ApiStabilityAnalysis {
         changed
     }
 
-    // go: internal/typeparser/api_stability.go:1797 apiStabilityAnalysis.settleSignature
+    // go: internal/typeparser/api_stability.go:1797 apiStabilityAnalysis.settleSignature 092743f52be6b9b8
     // settleSignature is settleType for a signature result.
     pub(crate) fn settle_signature(
         &mut self,
@@ -2236,7 +2236,7 @@ impl ApiStabilityAnalysis {
         changed
     }
 
-    // go: internal/typeparser/api_stability.go:1812 apiStabilityAnalysis.settleSymbol
+    // go: internal/typeparser/api_stability.go:1812 apiStabilityAnalysis.settleSymbol 6de632c5a74c00d5
     // settleSymbol is settleType for a symbol result.
     pub(crate) fn settle_symbol(&mut self, tp: &mut TypeParser<'_>, symbol: P<Symbol>) -> bool {
         let surface = self.session_symbols.get(&symbol).cloned().unwrap_or_default();
@@ -2252,7 +2252,7 @@ impl ApiStabilityAnalysis {
         changed
     }
 
-    // go: internal/typeparser/api_stability.go:1838 apiStabilityAnalysis.settleCannotAdvance
+    // go: internal/typeparser/api_stability.go:1838 apiStabilityAnalysis.settleCannotAdvance 44fb8b244a5d4ca0
     // settleCannotAdvance reports whether a fixpoint recollection of an incomplete
     // surface provably cannot add anything. A blocked surface is only skipped once
     // the guard budget is exhausted and the surface was last collected at the
@@ -2272,7 +2272,7 @@ impl ApiStabilityAnalysis {
         surface.observed_epoch == self.materialization_epoch
     }
 
-    // go: internal/typeparser/api_stability.go:1849 apiStabilityAnalysis.noteMaterializingRead
+    // go: internal/typeparser/api_stability.go:1849 apiStabilityAnalysis.noteMaterializingRead 585a5e246df0286a
     // noteMaterializingRead records that the analysis is about to perform a lazy
     // checker read that can materialize represented components. Settlement uses the
     // resulting epoch to decide whether a blocked result may have become
@@ -2281,7 +2281,7 @@ impl ApiStabilityAnalysis {
         self.materialization_epoch += 1;
     }
 
-    // go: internal/typeparser/api_stability.go:1857 apiStabilityAnalysis.noteMaterializingSymbolRead
+    // go: internal/typeparser/api_stability.go:1857 apiStabilityAnalysis.noteMaterializingSymbolRead f20866b0455c2b83
     // noteMaterializingSymbolRead advances the materialization epoch for the first
     // lazy read of one symbol operation and is a no-op for repeats: a repeat cannot
     // materialize anything new, and letting it keep the epoch moving would mark
@@ -2299,7 +2299,7 @@ impl ApiStabilityAnalysis {
         self.note_materializing_read();
     }
 
-    // go: internal/typeparser/api_stability.go:1871 apiStabilityAnalysis.noteMaterializingNodeRead
+    // go: internal/typeparser/api_stability.go:1871 apiStabilityAnalysis.noteMaterializingNodeRead 94b930d813d6f2b4
     // noteMaterializingNodeRead advances the materialization epoch for the first
     // lazy read of one annotation node and is a no-op for repeats.
     pub(crate) fn note_materializing_node_read(&mut self, node: Option<P<Node>>) {
@@ -2315,7 +2315,7 @@ impl ApiStabilityAnalysis {
         self.note_materializing_read();
     }
 
-    // go: internal/typeparser/api_stability.go:1886 apiStabilityAnalysis.materializedMembersOfSymbol
+    // go: internal/typeparser/api_stability.go:1886 apiStabilityAnalysis.materializedMembersOfSymbol 364a09e33ce91ae1
     // materializedMembersOfSymbol resolves a symbol's member table through the
     // checker's ordinary lazy accessor after the caller established that the read
     // is safe. The read is recorded as materializing.
@@ -2331,7 +2331,7 @@ impl ApiStabilityAnalysis {
         c.get_members_of_symbol(symbol)
     }
 
-    // go: internal/typeparser/api_stability.go:1894 apiStabilityAnalysis.materializedSignaturesOfSymbol
+    // go: internal/typeparser/api_stability.go:1894 apiStabilityAnalysis.materializedSignaturesOfSymbol 49e24be7a642051f
     // materializedSignaturesOfSymbol resolves a signature member's signatures
     // through the checker's ordinary lazy accessor after the caller established
     // that the read is safe. The read is recorded as materializing.
@@ -2348,7 +2348,7 @@ impl ApiStabilityAnalysis {
     }
 }
 
-// go: internal/typeparser/api_stability.go:1906 growApiStabilitySurface
+// go: internal/typeparser/api_stability.go:1906 growApiStabilitySurface 9aac8516702bfb88
 // growApiStabilitySurface unions a recomputed surface into the previously
 // stored one. Findings only grow across fixpoint rounds, so a result
 // established in an earlier round is never lost when a later round observes a
@@ -2385,7 +2385,7 @@ pub(crate) fn grow_api_stability_surface(
 }
 
 impl ApiStabilityAnalysis {
-    // go: internal/typeparser/api_stability.go:1932 apiStabilityAnalysis.promoteSettled
+    // go: internal/typeparser/api_stability.go:1932 apiStabilityAnalysis.promoteSettled 3e18d48e5565473a
     // promoteSettled marks the cycle-cut results in the settle scope as complete
     // after the fixpoint converged and queues the context-free ones for
     // publication. A blocked result is never promoted. A cycle-cut result outside
@@ -2436,7 +2436,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:1968 apiStabilityAnalysis.symbolSurface
+    // go: internal/typeparser/api_stability.go:1968 apiStabilityAnalysis.symbolSurface 0b7804ad6be28a10
     // symbolSurface computes the dependency surface of an export symbol in this
     // analysis. A complete result is reused by later queries of the same session; a
     // result blocked by an unavailable component is kept, but never promoted.
@@ -2464,7 +2464,7 @@ impl ApiStabilityAnalysis {
         surface
     }
 
-    // go: internal/typeparser/api_stability.go:1996 apiStabilityAnalysis.collectSymbolSurface
+    // go: internal/typeparser/api_stability.go:1996 apiStabilityAnalysis.collectSymbolSurface 9cdcaa279fef4504
     // collectSymbolSurface selects the represented sources of a symbol's public
     // surface. A value symbol's type, a class/interface/enum declared type and a
     // type alias's declared type are read through the checker: an already computed
@@ -2570,7 +2570,7 @@ impl ApiStabilityAnalysis {
         surface
     }
 
-    // go: internal/typeparser/api_stability.go:2080 apiStabilityAnalysis.typeOfSymbolSafely
+    // go: internal/typeparser/api_stability.go:2080 apiStabilityAnalysis.typeOfSymbolSafely 0f69290c67ffa13d
     // typeOfSymbolSafely returns a symbol's checker type, preferring an already
     // computed result and otherwise materializing it through the ordinary lazy
     // accessor when the pre-flight recursion guard establishes that the resolution
@@ -2596,7 +2596,7 @@ impl ApiStabilityAnalysis {
         Some(tp.checker.get_type_of_symbol_exported(symbol))
     }
 
-    // go: internal/typeparser/api_stability.go:2097 apiStabilityAnalysis.typeFromNodeSafely
+    // go: internal/typeparser/api_stability.go:2097 apiStabilityAnalysis.typeFromNodeSafely 2c48e89e6b47941c
     // typeFromNodeSafely returns the checker type of an annotation node, preferring
     // an already resolved node and otherwise resolving it through the ordinary lazy
     // accessor when the recursion guard establishes that the resolution is bounded.
@@ -2617,7 +2617,7 @@ impl ApiStabilityAnalysis {
         Some(tp.checker.get_type_from_type_node_exported(node))
     }
 
-    // go: internal/typeparser/api_stability.go:2115 apiStabilityAnalysis.declaredTypeSafely
+    // go: internal/typeparser/api_stability.go:2115 apiStabilityAnalysis.declaredTypeSafely 88e24fc6a30319b3
     // declaredTypeSafely returns a symbol's declared type, preferring an already
     // computed result and otherwise materializing it through the ordinary lazy
     // accessor when the recursion guard establishes that the declaration resolution
@@ -2643,7 +2643,7 @@ impl ApiStabilityAnalysis {
         Some(tp.checker.get_declared_type_of_symbol_exported(symbol))
     }
 
-    // go: internal/typeparser/api_stability.go:2135 apiStabilityAnalysis.returnTypeSafely
+    // go: internal/typeparser/api_stability.go:2135 apiStabilityAnalysis.returnTypeSafely 6bc8dfc0c76b5aa6
     // returnTypeSafely returns a signature's return type, preferring an already
     // computed result and otherwise materializing it through the ordinary lazy
     // accessor when the pre-flight recursion guard establishes that the resolution
@@ -2668,7 +2668,7 @@ impl ApiStabilityAnalysis {
         Some(tp.checker.get_return_type_of_signature_exported(signature))
     }
 
-    // go: internal/typeparser/api_stability.go:2153 apiStabilityAnalysis.baseTypesSafely
+    // go: internal/typeparser/api_stability.go:2153 apiStabilityAnalysis.baseTypesSafely e6afb2e1ff14a356
     // baseTypesSafely returns a declaration's base types, preferring already
     // resolved base types and otherwise materializing the heritage through the
     // ordinary lazy accessor when the recursion guard establishes that the
@@ -2690,7 +2690,7 @@ impl ApiStabilityAnalysis {
         Some(tp.checker.get_base_types_exported(declaration))
     }
 
-    // go: internal/typeparser/api_stability.go:2173 apiStabilityAnalysis.declaredTypeOfSymbol
+    // go: internal/typeparser/api_stability.go:2173 apiStabilityAnalysis.declaredTypeOfSymbol 24dab0ebe36859c6
     // declaredTypeOfSymbol returns the declared type of a class, interface, enum
     // or type alias, preferring an already computed result and otherwise
     // materializing it through the ordinary lazy accessor when the recursion guard
@@ -2705,7 +2705,7 @@ impl ApiStabilityAnalysis {
         self.declared_type_safely(tp, symbol)
     }
 
-    // go: internal/typeparser/api_stability.go:2182 apiStabilityAnalysis.valueTypeOfSymbol
+    // go: internal/typeparser/api_stability.go:2182 apiStabilityAnalysis.valueTypeOfSymbol f90098068aec0154
     // valueTypeOfSymbol returns the value type of a symbol, preferring an already
     // computed result and otherwise materializing it through the ordinary lazy
     // accessor when the recursion guard establishes that the annotation resolution
@@ -2723,7 +2723,7 @@ impl ApiStabilityAnalysis {
         self.type_of_symbol_safely(tp, Some(symbol))
     }
 
-    // go: internal/typeparser/api_stability.go:2192 apiStabilityAnalysis.representedTypeFromNode
+    // go: internal/typeparser/api_stability.go:2192 apiStabilityAnalysis.representedTypeFromNode eb48765eacf03d7f
     // representedTypeFromNode returns the checker type of an annotation node under
     // the analysis safety guard. The node is never used as a syntax-level dependency
     // source: the returned represented type is what the surface traversal walks.
@@ -2736,7 +2736,7 @@ impl ApiStabilityAnalysis {
         self.type_from_node_safely(tp, node, subst)
     }
 
-    // go: internal/typeparser/api_stability.go:2200 apiStabilityAnalysis.collectTypeAliasDeclarationSurface
+    // go: internal/typeparser/api_stability.go:2200 apiStabilityAnalysis.collectTypeAliasDeclarationSurface 241693fbd18ef77d
     // collectTypeAliasDeclarationSurface reads the public surface of a type alias
     // whose declared type is not available from the checker. Only declaration
     // `@stability` tags are metadata-read here; the surface stays incomplete
@@ -2763,7 +2763,7 @@ impl ApiStabilityAnalysis {
         false
     }
 
-    // go: internal/typeparser/api_stability.go:2223 apiStabilityAnalysis.collectDeclaredTagSurface
+    // go: internal/typeparser/api_stability.go:2223 apiStabilityAnalysis.collectDeclaredTagSurface 1f68aa5db0970bb4
     // collectDeclaredTagSurface reads `@stability` tags from the declaration
     // structure of an annotation whose represented type is unavailable. Tags are
     // metadata: no annotation is resolved, no referenced declaration is followed,
@@ -2877,7 +2877,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:2293 apiStabilityAnalysis.typeSurface
+    // go: internal/typeparser/api_stability.go:2293 apiStabilityAnalysis.typeSurface d1d345c5d68b39fc
     // typeSurface computes the surface of a represented type in this analysis. A
     // complete, context-free result is first looked up in the per-checker shared
     // caches and composed from the immutable snapshot plus the component's declared
@@ -2929,7 +2929,7 @@ impl ApiStabilityAnalysis {
         surface
     }
 
-    // go: internal/typeparser/api_stability.go:2331 apiStabilityAnalysis.collectTypeSurface
+    // go: internal/typeparser/api_stability.go:2331 apiStabilityAnalysis.collectTypeSurface a49121ffcbc7deb5
     pub(crate) fn collect_type_surface(
         &mut self,
         tp: &mut TypeParser<'_>,
@@ -2998,7 +2998,7 @@ impl ApiStabilityAnalysis {
         surface
     }
 
-    // go: internal/typeparser/api_stability.go:2331 apiStabilityAnalysis.collectTypeSurface
+    // go: internal/typeparser/api_stability.go:2331 apiStabilityAnalysis.collectTypeSurface a49121ffcbc7deb5
     // Rust: the flag switch of collectTypeSurface, split out so the deferred alias release runs after it.
     fn collect_type_surface_by_flags(
         &mut self,
@@ -3093,7 +3093,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:2439 apiStabilityAnalysis.collectTypeParameterComponents
+    // go: internal/typeparser/api_stability.go:2439 apiStabilityAnalysis.collectTypeParameterComponents d8b2a1cec6576195
     // collectTypeParameterComponents records the constraint and default of a type
     // parameter, preferring cached checker materializations and otherwise
     // materializing the annotation through the ordinary lazy accessor. An
@@ -3138,7 +3138,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:2469 apiStabilityAnalysis.collectConditionalSurface
+    // go: internal/typeparser/api_stability.go:2469 apiStabilityAnalysis.collectConditionalSurface 67859b6de7dc0b79
     // collectConditionalSurface inspects a represented conditional type without
     // guessing its selected branch. A conditional whose operands are substituted by
     // an active concrete application, or whose operands are fully concrete, has an
@@ -3169,7 +3169,7 @@ impl ApiStabilityAnalysis {
         self.active_conditionals.remove(&conditional_key);
     }
 
-    // go: internal/typeparser/api_stability.go:2469 apiStabilityAnalysis.collectConditionalSurface
+    // go: internal/typeparser/api_stability.go:2469 apiStabilityAnalysis.collectConditionalSurface 67859b6de7dc0b79
     // Rust: the body after the cycle guard, split out so the deferred guard release runs after it.
     fn collect_conditional_surface_operands(
         &mut self,
@@ -3206,7 +3206,7 @@ impl ApiStabilityAnalysis {
         self.collect_conditional_branch_surface(tp, surface, t, false, subst);
     }
 
-    // go: internal/typeparser/api_stability.go:2512 apiStabilityAnalysis.containsSubstitutedParameter
+    // go: internal/typeparser/api_stability.go:2512 apiStabilityAnalysis.containsSubstitutedParameter 8ce562234ecafd42
     // containsSubstitutedParameter reports whether any type parameter reachable in
     // the represented operand graph is replaced by the active substitution. It only
     // reads represented components; it never evaluates a relation.
@@ -3230,7 +3230,7 @@ impl ApiStabilityAnalysis {
         result
     }
 
-    // go: internal/typeparser/api_stability.go:2512 apiStabilityAnalysis.containsSubstitutedParameter
+    // go: internal/typeparser/api_stability.go:2512 apiStabilityAnalysis.containsSubstitutedParameter 8ce562234ecafd42
     // Rust: the body after the cycle guard, split out so the deferred release runs after it.
     fn contains_substituted_parameter_inner(
         &mut self,
@@ -3291,7 +3291,7 @@ impl ApiStabilityAnalysis {
         false
     }
 
-    // go: internal/typeparser/api_stability.go:2563 apiStabilityAnalysis.representedContainsTypeParameter
+    // go: internal/typeparser/api_stability.go:2563 apiStabilityAnalysis.representedContainsTypeParameter 640c89478e91f7d9
     // representedContainsTypeParameter reports whether an unbound type parameter is
     // a reachable component of the represented operand graph.
     pub(crate) fn represented_contains_type_parameter(
@@ -3312,7 +3312,7 @@ impl ApiStabilityAnalysis {
         result
     }
 
-    // go: internal/typeparser/api_stability.go:2563 apiStabilityAnalysis.representedContainsTypeParameter
+    // go: internal/typeparser/api_stability.go:2563 apiStabilityAnalysis.representedContainsTypeParameter 640c89478e91f7d9
     // Rust: the body after the cycle guard, split out so the deferred release runs after it.
     fn represented_contains_type_parameter_inner(
         &mut self,
@@ -3362,7 +3362,7 @@ impl ApiStabilityAnalysis {
         false
     }
 
-    // go: internal/typeparser/api_stability.go:2622 apiStabilityAnalysis.collectConditionalBranchSurface
+    // go: internal/typeparser/api_stability.go:2622 apiStabilityAnalysis.collectConditionalBranchSurface cb6a0c93dfcc4e30
     // collectConditionalBranchSurface inspects one declared branch of a deferred
     // conditional. The checker's already resolved branch components are preferred;
     // otherwise the declared branch annotation is materialized lazily through the
@@ -3398,7 +3398,7 @@ impl ApiStabilityAnalysis {
     }
 }
 
-// go: internal/typeparser/api_stability.go:2647 apiStabilityPrimitiveTypeNode
+// go: internal/typeparser/api_stability.go:2647 apiStabilityPrimitiveTypeNode 5e0ed7187db7718b
 // apiStabilityPrimitiveTypeNode reports whether a type node resolves to a
 // primitive singleton that carries no symbol or member surface. Those nodes do
 // not cache a resolved type and expose nothing.
@@ -3428,7 +3428,7 @@ const API_STABILITY_SIGNATURE_KINDS: [SignatureKind; 2] =
     [SignatureKind::Call, SignatureKind::Construct];
 
 impl ApiStabilityAnalysis {
-    // go: internal/typeparser/api_stability.go:2668 apiStabilityAnalysis.collectObjectSurface
+    // go: internal/typeparser/api_stability.go:2668 apiStabilityAnalysis.collectObjectSurface 6bbc38bd8d5aa236
     // collectObjectSurface handles object types with the represented structure
     // rules used by the data-first matcher. A class or interface declaration is
     // inspected through its declared members and heritage clauses; an expanded
@@ -3534,7 +3534,7 @@ impl ApiStabilityAnalysis {
         surface.merge(&s);
     }
 
-    // go: internal/typeparser/api_stability.go:2754 apiStabilityAnalysis.collectConcreteReferenceSurface
+    // go: internal/typeparser/api_stability.go:2754 apiStabilityAnalysis.collectConcreteReferenceSurface d8a26b71dacaaaf0
     // collectConcreteReferenceSurface inspects the concrete public surface of a
     // class or interface reference in an expanded context. The checker's resolved
     // member table is preferred and read directly; the pre-flight recursion guard
@@ -3663,7 +3663,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:2853 apiStabilityAnalysis.collectResolvedMemberTable
+    // go: internal/typeparser/api_stability.go:2853 apiStabilityAnalysis.collectResolvedMemberTable cdb61df454642bac
     // collectResolvedMemberTable merges the public members of an already resolved
     // member table with the given substitution. Compiler-reserved internal entries
     // are skipped, while a late-bound computed member is traversed like any other
@@ -3705,7 +3705,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:2878 apiStabilityAnalysis.referenceArguments
+    // go: internal/typeparser/api_stability.go:2878 apiStabilityAnalysis.referenceArguments 155c74160bf423f8
     // referenceArguments returns the represented type arguments of a reference,
     // filling omitted arguments from the target's already materialized type
     // parameter defaults. A parameter the checker left unrepresented stays nil so
@@ -3747,7 +3747,7 @@ impl ApiStabilityAnalysis {
         arguments
     }
 
-    // go: internal/typeparser/api_stability.go:2903 apiStabilityAnalysis.referenceTypeParameters
+    // go: internal/typeparser/api_stability.go:2903 apiStabilityAnalysis.referenceTypeParameters 0068d8bc3be13bec
     // referenceTypeParameters returns the type parameters of a class or interface
     // reference target. Other reference targets (tuples, arrays of primitives) have
     // no bindable type parameters and return nil.
@@ -3765,7 +3765,7 @@ impl ApiStabilityAnalysis {
         Some(t.as_interface_type().type_parameters())
     }
 
-    // go: internal/typeparser/api_stability.go:2916 apiStabilityAnalysis.collectDeclarationSurface
+    // go: internal/typeparser/api_stability.go:2916 apiStabilityAnalysis.collectDeclarationSurface 42d1803898eab22d
     // collectDeclarationSurface inspects the public surface declared by a class or
     // interface declaration: its own members, index signatures and signatures,
     // its type parameters, and (when expanded) its inherited members. The
@@ -3801,7 +3801,7 @@ impl ApiStabilityAnalysis {
         self.active_symbols.remove(&key);
     }
 
-    // go: internal/typeparser/api_stability.go:2916 apiStabilityAnalysis.collectDeclarationSurface
+    // go: internal/typeparser/api_stability.go:2916 apiStabilityAnalysis.collectDeclarationSurface 42d1803898eab22d
     // Rust: the body after the cycle guard, split out so the deferred guard release runs after it.
     fn collect_declaration_surface_members(
         &mut self,
@@ -3858,7 +3858,7 @@ impl ApiStabilityAnalysis {
         self.collect_heritage(tp, surface, declaration, inspect, subst);
     }
 
-    // go: internal/typeparser/api_stability.go:2982 apiStabilityAnalysis.memberSurface
+    // go: internal/typeparser/api_stability.go:2982 apiStabilityAnalysis.memberSurface a4c038827b3936e5
     // memberSurface inspects one class or interface member. The member's own
     // declared `@stability` tag is metadata and always contributes; when the tag is
     // explicit the member is a child boundary for its own represented type and its
@@ -3926,7 +3926,7 @@ impl ApiStabilityAnalysis {
         surface
     }
 
-    // go: internal/typeparser/api_stability.go:3031 apiStabilityAnalysis.collectDeclarationSignatures
+    // go: internal/typeparser/api_stability.go:3031 apiStabilityAnalysis.collectDeclarationSignatures e2a61fdaa2c7cfc8
     // collectDeclarationSignatures collects a declaration's own public call and
     // construct signatures. Construct signatures declared under the class
     // constructor member are only included when includeClassConstructors is set;
@@ -3970,7 +3970,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:3071 apiStabilityAnalysis.collectIndexInfosOfDeclaration
+    // go: internal/typeparser/api_stability.go:3071 apiStabilityAnalysis.collectIndexInfosOfDeclaration 9b20157b73ef2d78
     // collectIndexInfosOfDeclaration reads a declaration's index signatures. The
     // already resolved index infos are used when the checker materialized them;
     // otherwise the declared index signatures contribute their own `@stability`
@@ -4011,7 +4011,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:3098 apiStabilityAnalysis.collectIndexInfoSurface
+    // go: internal/typeparser/api_stability.go:3098 apiStabilityAnalysis.collectIndexInfoSurface 7277eb3a8a6e05f5
     // collectIndexInfoSurface inspects one already resolved index info. The index
     // declaration's own `@stability` tag always contributes; when the tag is
     // explicit the index signature is a child boundary and its key and value
@@ -4071,7 +4071,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:3134 apiStabilityAnalysis.collectIndexSignatureSurface
+    // go: internal/typeparser/api_stability.go:3134 apiStabilityAnalysis.collectIndexSignatureSurface ad0f963cbaf2dc42
     // collectIndexSignatureSurface inspects one declared index signature. The key
     // and value types are used when the checker has already represented them;
     // otherwise the declaration's annotations are materialized lazily. An explicit
@@ -4134,7 +4134,7 @@ impl ApiStabilityAnalysis {
         surface.block();
     }
 
-    // go: internal/typeparser/api_stability.go:3177 apiStabilityAnalysis.collectHeritage
+    // go: internal/typeparser/api_stability.go:3177 apiStabilityAnalysis.collectHeritage 4c2a70cea6272bcc
     // collectHeritage inspects a declaration's inherited surface. Base types the
     // checker has already resolved are preferred; otherwise the declaration's
     // heritage is materialized through the ordinary lazy accessor. The clauses are
@@ -4165,7 +4165,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:3197 apiStabilityAnalysis.collectInheritedBase
+    // go: internal/typeparser/api_stability.go:3197 apiStabilityAnalysis.collectInheritedBase c82155e3d10497c4
     // collectInheritedBase preserves inheritance semantics through the intersection
     // return types of superclass factories. Direct references still use typeSurface.
     pub(crate) fn collect_inherited_base(
@@ -4214,7 +4214,7 @@ impl ApiStabilityAnalysis {
         self.collect_declaration_surface(tp, surface, Some(target), inspect, &base_subst);
     }
 
-    // go: internal/typeparser/api_stability.go:3233 apiStabilityAnalysis.collectClassStaticSurface
+    // go: internal/typeparser/api_stability.go:3233 apiStabilityAnalysis.collectClassStaticSurface 4fbb3f8f7f0c0718
     // collectClassStaticSurface inspects the class static side. Its members are
     // declared on the class symbol's exports and cannot depend on class type
     // parameters. The instance side of a class value is included when the class
@@ -4322,7 +4322,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:3320 apiStabilityAnalysis.collectAnonymousSurface
+    // go: internal/typeparser/api_stability.go:3320 apiStabilityAnalysis.collectAnonymousSurface 4592844a735d7f94
     // collectAnonymousSurface inspects a finite anonymous object type. The concrete
     // member surface of an instantiated anonymous type is preferred and read
     // directly when materialized. An unmaterialized instantiated member surface is
@@ -4438,7 +4438,7 @@ impl ApiStabilityAnalysis {
         self.collect_function_signatures(tp, surface, t, Some(source), &current);
     }
 
-    // go: internal/typeparser/api_stability.go:3386 apiStabilityAnalysis.collectResolvedMemberTableIfMaterialized
+    // go: internal/typeparser/api_stability.go:3386 apiStabilityAnalysis.collectResolvedMemberTableIfMaterialized 95e1bb51301f16ef
     // collectResolvedMemberTableIfMaterialized merges the checker's already
     // resolved member table when one exists.
     pub(crate) fn collect_resolved_member_table_if_materialized(
@@ -4456,7 +4456,7 @@ impl ApiStabilityAnalysis {
         false
     }
 
-    // go: internal/typeparser/api_stability.go:3398 apiStabilityAnalysis.collectAnonymousIndexInfos
+    // go: internal/typeparser/api_stability.go:3398 apiStabilityAnalysis.collectAnonymousIndexInfos 8a42e04293103e73
     // collectAnonymousIndexInfos reads the index signatures of an anonymous type.
     // The resolved infos of the (possibly instantiated) type are preferred; when
     // the checker has not resolved them, the raw declared infos contribute under
@@ -4491,7 +4491,7 @@ impl ApiStabilityAnalysis {
         self.collect_index_infos_of_symbol(tp, surface, Some(source_symbol), subst);
     }
 
-    // go: internal/typeparser/api_stability.go:3431 apiStabilityAnalysis.collectIndexInfosOfSymbol
+    // go: internal/typeparser/api_stability.go:3431 apiStabilityAnalysis.collectIndexInfosOfSymbol a5cb8f8aa2422359
     // collectIndexInfosOfSymbol contributes the declared index signatures of a
     // symbol under a substitution context. Key and value annotations are read
     // through the recursion guard; an unavailable annotation leaves the surface
@@ -4522,7 +4522,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:3449 apiStabilityAnalysis.collectFunctionSignatures
+    // go: internal/typeparser/api_stability.go:3449 apiStabilityAnalysis.collectFunctionSignatures 2c5cde883d27c750
     // collectFunctionSignatures reads the call and construct signatures of an
     // anonymous function-like type. Resolved signatures are preferred. An
     // unmaterialized surface is read from the raw declaration signatures under the
@@ -4591,7 +4591,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:3502 apiStabilityAnalysis.collectMappedSurface
+    // go: internal/typeparser/api_stability.go:3502 apiStabilityAnalysis.collectMappedSurface 394b8099081fe60d
     // collectMappedSurface reads the represented mapped type components. An
     // instantiated mapped type is read through its target so the mapped parameter
     // stays uninstantiated and the mapper provides the substitution. Cached
@@ -4664,7 +4664,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:3567 apiStabilityAnalysis.componentSurface
+    // go: internal/typeparser/api_stability.go:3567 apiStabilityAnalysis.componentSurface 0e59d2b3723b4108
     // componentSurface inspects a finite anonymous component exactly once per
     // recursion path and substitution context.
     pub(crate) fn component_surface(
@@ -4703,7 +4703,7 @@ impl ApiStabilityAnalysis {
         surface
     }
 
-    // go: internal/typeparser/api_stability.go:3599 apiStabilityAnalysis.collectObjectComponentSurface
+    // go: internal/typeparser/api_stability.go:3599 apiStabilityAnalysis.collectObjectComponentSurface 9efdae5dcd70d09b
     // collectObjectComponentSurface is used when a represented object type must be
     // inspected as a finite anonymous surface (mapped targets, reference targets
     // that are anonymous). Class and interface declarations never reach this path.
@@ -4734,7 +4734,7 @@ impl ApiStabilityAnalysis {
         surface
     }
 
-    // go: internal/typeparser/api_stability.go:3630 apiStabilityAnalysis.signatureSurface
+    // go: internal/typeparser/api_stability.go:3630 apiStabilityAnalysis.signatureSurface 8d01f83b62fd3880
     // signatureSurface reads a signature's uninstantiated target together with its
     // represented substitution. Using the target keeps a generic signature's
     // parameter and return types uninstantiated (so a recursive alias is never
@@ -4797,7 +4797,7 @@ impl ApiStabilityAnalysis {
         surface
     }
 
-    // go: internal/typeparser/api_stability.go:3672 apiStabilityAnalysis.collectSignatureSurface
+    // go: internal/typeparser/api_stability.go:3672 apiStabilityAnalysis.collectSignatureSurface 739ce0473ae33dfd
     pub(crate) fn collect_signature_surface(
         &mut self,
         tp: &mut TypeParser<'_>,
@@ -4882,7 +4882,7 @@ impl ApiStabilityAnalysis {
         surface
     }
 
-    // go: internal/typeparser/api_stability.go:3672 apiStabilityAnalysis.collectSignatureSurface
+    // go: internal/typeparser/api_stability.go:3672 apiStabilityAnalysis.collectSignatureSurface 739ce0473ae33dfd
     // Rust: Go's `collectParameter` closure.
     fn collect_signature_parameter(
         &mut self,
@@ -4922,7 +4922,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:3756 apiStabilityAnalysis.collectReturnTypeSurface
+    // go: internal/typeparser/api_stability.go:3756 apiStabilityAnalysis.collectReturnTypeSurface 4eddf806484421dc
     // collectReturnTypeSurface inspects the public return type of a signature. The
     // signature's materialized return type is preferred; otherwise it is
     // materialized lazily, with the already resolved annotation node, a primitive
@@ -4948,7 +4948,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:3773 apiStabilityAnalysis.returnRepresentedType
+    // go: internal/typeparser/api_stability.go:3773 apiStabilityAnalysis.returnRepresentedType 203625563f91d125
     // returnRepresentedType returns the return type component of a signature. The
     // boolean is false only when the component is genuinely unavailable, which
     // blocks the surface; a primitive keyword is known and exposes nothing.
@@ -4978,7 +4978,7 @@ impl ApiStabilityAnalysis {
         None
     }
 
-    // go: internal/typeparser/api_stability.go:3799 apiStabilityAnalysis.parameterTypeOf
+    // go: internal/typeparser/api_stability.go:3799 apiStabilityAnalysis.parameterTypeOf 0e1f2ba15b47cb17
     // parameterTypeOf returns the represented type of a parameter, or nil when the
     // parameter exposes no type component of its own (a primitive keyword) or is
     // unavailable.
@@ -4990,7 +4990,7 @@ impl ApiStabilityAnalysis {
         self.parameter_represented_type(tp, parameter).flatten()
     }
 
-    // go: internal/typeparser/api_stability.go:3809 apiStabilityAnalysis.parameterRepresentedType
+    // go: internal/typeparser/api_stability.go:3809 apiStabilityAnalysis.parameterRepresentedType b25b6d4ae1f80fe9
     // parameterRepresentedType returns the represented type component of a
     // parameter. The parameter's materialized type is preferred and otherwise
     // materialized lazily; the already resolved annotation node type and a bare
@@ -5033,7 +5033,7 @@ impl ApiStabilityAnalysis {
         None
     }
 
-    // go: internal/typeparser/api_stability.go:3844 apiStabilityAnalysis.typeParameterFromAnnotation
+    // go: internal/typeparser/api_stability.go:3844 apiStabilityAnalysis.typeParameterFromAnnotation ce77bfbfd8f73410
     // typeParameterFromAnnotation returns the declared type parameter a type
     // annotation names, when the annotation is exactly a bare type parameter
     // reference. It reads the annotation symbol only; no annotation type is
@@ -5064,7 +5064,7 @@ impl ApiStabilityAnalysis {
         Some(tp.checker.get_declared_type_of_symbol_exported(symbol))
     }
 
-    // go: internal/typeparser/api_stability.go:3863 apiStabilityAnalysis.signatureArguments
+    // go: internal/typeparser/api_stability.go:3863 apiStabilityAnalysis.signatureArguments 24821093f18cd8a4
     // signatureArguments returns the checker-supplied type arguments of an
     // instantiated signature, or nil when the signature has no represented
     // substitution. The result is memoized for the analysis.
@@ -5085,7 +5085,7 @@ impl ApiStabilityAnalysis {
         arguments
     }
 
-    // go: internal/typeparser/api_stability.go:3881 apiStabilityAnalysis.substitute
+    // go: internal/typeparser/api_stability.go:3881 apiStabilityAnalysis.substitute 89bc84045da35012
     // substitute resolves a type parameter through the active substitution chain.
     // A compiler mapper maps the parameter directly; a concrete signature maps its
     // own parameters through the concrete type arguments or its instantiated
@@ -5149,7 +5149,7 @@ impl ApiStabilityAnalysis {
         None
     }
 
-    // go: internal/typeparser/api_stability.go:3924 apiStabilityAnalysis.signatureTypeParameter
+    // go: internal/typeparser/api_stability.go:3924 apiStabilityAnalysis.signatureTypeParameter 775bfa36ecb76106
     // Rust: Go's `(*Type, bool)`: None is Go's false.
     #[expect(clippy::option_option, reason = "Go's (*Type, bool): the outer None is Go's false")]
     pub(crate) fn signature_type_parameter(
@@ -5174,7 +5174,7 @@ impl ApiStabilityAnalysis {
         self.signature_bound_type_parameter(tp, Some(signature), Some(t)).map(Some)
     }
 
-    // go: internal/typeparser/api_stability.go:3949 apiStabilityAnalysis.signatureBoundTypeParameter
+    // go: internal/typeparser/api_stability.go:3949 apiStabilityAnalysis.signatureBoundTypeParameter 0ee4a7802535bf52
     // signatureBoundTypeParameter resolves a bare type parameter through an
     // instantiated signature's own parameter and return types. It only reads a
     // concrete type when the corresponding target is itself a bare type parameter,
@@ -5203,7 +5203,7 @@ impl ApiStabilityAnalysis {
         self.signature_parameter_cache.get(&signature)?.get(&t).copied()
     }
 
-    // go: internal/typeparser/api_stability.go:3966 apiStabilityAnalysis.computeSignatureParameterMap
+    // go: internal/typeparser/api_stability.go:3966 apiStabilityAnalysis.computeSignatureParameterMap 021174ee99427691
     pub(crate) fn compute_signature_parameter_map(
         &mut self,
         tp: &mut TypeParser<'_>,
@@ -5245,7 +5245,7 @@ impl ApiStabilityAnalysis {
         bound
     }
 
-    // go: internal/typeparser/api_stability.go:3966 apiStabilityAnalysis.computeSignatureParameterMap
+    // go: internal/typeparser/api_stability.go:3966 apiStabilityAnalysis.computeSignatureParameterMap 021174ee99427691
     // Rust: Go's `bind` closure.
     fn bind_signature_parameter(
         &mut self,
@@ -5282,7 +5282,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:4010 apiStabilityAnalysis.parameterReturnType
+    // go: internal/typeparser/api_stability.go:4010 apiStabilityAnalysis.parameterReturnType 547ee3fa48f2ae60
     // parameterReturnType returns the represented return type of a signature: the
     // signature's materialized return type, the already resolved annotation node
     // type, or the declared binder when the return annotation is exactly a type
@@ -5296,7 +5296,7 @@ impl ApiStabilityAnalysis {
         self.return_represented_type(tp, signature, subst).flatten()
     }
 
-    // go: internal/typeparser/api_stability.go:4021 apiStabilityAnalysis.collectDeclarationProvenance
+    // go: internal/typeparser/api_stability.go:4021 apiStabilityAnalysis.collectDeclarationProvenance 2589ae172c9e4be8
     // collectDeclarationProvenance records the alias symbols written in a public
     // declaration's own type annotations. The checker erases an alias such as
     // `type ExperimentalText = string`, so symbol provenance is the only way to
@@ -5391,7 +5391,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:4059 apiStabilityAnalysis.collectSignatureProvenance
+    // go: internal/typeparser/api_stability.go:4059 apiStabilityAnalysis.collectSignatureProvenance c57404007fedb79e
     // collectSignatureProvenance records erased alias symbols in a signature's
     // public annotations. A type parameter replaced by a represented argument is
     // skipped together with its constraint and default, matching the represented
@@ -5478,7 +5478,7 @@ impl ApiStabilityAnalysis {
         );
     }
 
-    // go: internal/typeparser/api_stability.go:4128 apiStabilityAnalysis.collectTypeNodeProvenance
+    // go: internal/typeparser/api_stability.go:4128 apiStabilityAnalysis.collectTypeNodeProvenance 31d958901c5621eb
     // collectTypeNodeProvenance records alias symbols named by type annotation
     // nodes whose represented checker type is directly reachable. It is
     // deliberately structural and correlated with the represented types: unions,
@@ -5675,7 +5675,7 @@ impl ApiStabilityAnalysis {
     }
 }
 
-// go: internal/typeparser/api_stability.go:4218 apiStabilityRepresentedMembers
+// go: internal/typeparser/api_stability.go:4218 apiStabilityRepresentedMembers 7be3d6d42e58b27c
 pub(crate) fn api_stability_represented_members(t: Option<P<Type>>) -> Vec<P<Type>> {
     let Some(t) = t else {
         return Vec::new();
@@ -5688,7 +5688,7 @@ pub(crate) fn api_stability_represented_members(t: Option<P<Type>>) -> Vec<P<Typ
     vec![t]
 }
 
-// go: internal/typeparser/api_stability.go:4232 apiStabilityRepresentedContainsType
+// go: internal/typeparser/api_stability.go:4232 apiStabilityRepresentedContainsType d661541f527bde38
 // apiStabilityRepresentedContainsType reports whether the normalized aggregate
 // retained a component with the exact compiler identity of t.
 pub(crate) fn api_stability_represented_contains_type(
@@ -5701,7 +5701,7 @@ pub(crate) fn api_stability_represented_contains_type(
     members.contains(&t)
 }
 
-// go: internal/typeparser/api_stability.go:4244 apiStabilityRepresentedContainsAggregate
+// go: internal/typeparser/api_stability.go:4244 apiStabilityRepresentedContainsAggregate e57d533ff3fea5d7
 // apiStabilityRepresentedContainsAggregate reports whether every constituent of
 // a written union or intersection was retained in the normalized aggregate.
 // Compiler normalization flattens nested aggregates, so a written constituent
@@ -5724,7 +5724,7 @@ pub(crate) fn api_stability_represented_contains_aggregate(
 }
 
 impl ApiStabilityAnalysis {
-    // go: internal/typeparser/api_stability.go:4267 apiStabilityAnalysis.collectAggregateTypeNodeProvenance
+    // go: internal/typeparser/api_stability.go:4267 apiStabilityAnalysis.collectAggregateTypeNodeProvenance 1caaaebc58a7a6c2
     // collectAggregateTypeNodeProvenance correlates the written constituents of a
     // union or intersection annotation with the represented aggregate by concrete
     // component identity. Compiler normalization can remove, collapse, reorder or
@@ -5757,7 +5757,7 @@ impl ApiStabilityAnalysis {
     }
 }
 
-// go: internal/typeparser/api_stability.go:4282 apiStabilityRepresentedIndexedAccess
+// go: internal/typeparser/api_stability.go:4282 apiStabilityRepresentedIndexedAccess 5c4a0f58b427d1b0
 pub(crate) fn api_stability_represented_indexed_access(
     t: Option<P<Type>>,
 ) -> (Option<P<Type>>, Option<P<Type>>) {
@@ -5770,7 +5770,7 @@ pub(crate) fn api_stability_represented_indexed_access(
     (None, None)
 }
 
-// go: internal/typeparser/api_stability.go:4291 apiStabilityRepresentedConditionalParts
+// go: internal/typeparser/api_stability.go:4291 apiStabilityRepresentedConditionalParts cd3e649dabfe6532
 pub(crate) fn api_stability_represented_conditional_parts(
     t: Option<P<Type>>,
 ) -> (Option<P<Type>>, Option<P<Type>>) {
@@ -5783,7 +5783,7 @@ pub(crate) fn api_stability_represented_conditional_parts(
     (None, None)
 }
 
-// go: internal/typeparser/api_stability.go:4305 apiStabilityRepresentedSurfaceAcceptsArguments
+// go: internal/typeparser/api_stability.go:4305 apiStabilityRepresentedSurfaceAcceptsArguments 61f9c40cd7bc8523
 // apiStabilityRepresentedSurfaceAcceptsArguments reports whether the written
 // type arguments of a named reference are part of the represented surface. An
 // application the checker evaluated away (an eliminated conditional resolving
@@ -5809,7 +5809,7 @@ pub(crate) fn api_stability_represented_surface_accepts_arguments(
 }
 
 impl ApiStabilityAnalysis {
-    // go: internal/typeparser/api_stability.go:4315 apiStabilityAnalysis.collectTypeArgumentProvenance
+    // go: internal/typeparser/api_stability.go:4315 apiStabilityAnalysis.collectTypeArgumentProvenance 1ab36b6573c6e37d
     pub(crate) fn collect_type_argument_provenance(
         &mut self,
         tp: &mut TypeParser<'_>,
@@ -5831,7 +5831,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:4332 apiStabilityAnalysis.collectFunctionTypeProvenance
+    // go: internal/typeparser/api_stability.go:4332 apiStabilityAnalysis.collectFunctionTypeProvenance 55a27437857f3460
     // collectFunctionTypeProvenance pairs a function-like annotation's parameter
     // and return nodes with the represented signature when one is available. When
     // it is not, the annotation records nothing: nodes are never resolved here.
@@ -5915,7 +5915,7 @@ impl ApiStabilityAnalysis {
     }
 }
 
-// go: internal/typeparser/api_stability.go:4384 apiStabilityMemberSymbolForDeclaration
+// go: internal/typeparser/api_stability.go:4384 apiStabilityMemberSymbolForDeclaration 344c7d989292f2d0
 // apiStabilityMemberSymbolForDeclaration returns the member symbol a
 // declaration contributes to an already resolved member table. A simply named
 // declaration is looked up by its member-table key. A computed declaration is
@@ -5947,7 +5947,7 @@ pub(crate) fn api_stability_member_symbol_for_declaration(
 }
 
 impl ApiStabilityAnalysis {
-    // go: internal/typeparser/api_stability.go:4411 apiStabilityAnalysis.collectTypeLiteralProvenance
+    // go: internal/typeparser/api_stability.go:4411 apiStabilityAnalysis.collectTypeLiteralProvenance 97aa19134a4331e8
     // collectTypeLiteralProvenance pairs a type literal's member annotations with
     // the represented member types when the literal's member surface has been
     // materialized. An unmaterialized member records nothing instead of being
@@ -6080,7 +6080,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:4482 apiStabilityAnalysis.collectFunctionSignatureProvenance
+    // go: internal/typeparser/api_stability.go:4482 apiStabilityAnalysis.collectFunctionSignatureProvenance dcf607f34a2e50a1
     // collectFunctionSignatureProvenance pairs a function-like declaration's
     // annotation nodes with the represented signature it declares.
     pub(crate) fn collect_function_signature_provenance(
@@ -6124,7 +6124,7 @@ impl ApiStabilityAnalysis {
         self.collect_type_node_provenance(tp, surface, function_like.type_(), return_type, subst);
     }
 
-    // go: internal/typeparser/api_stability.go:4515 apiStabilityAnalysis.representedTypeArguments
+    // go: internal/typeparser/api_stability.go:4515 apiStabilityAnalysis.representedTypeArguments a8868cf48f342ca1
     // representedTypeArguments returns the already recorded type arguments of a
     // reference. A deferred reference whose arguments the checker has not
     // materialized returns nil; nothing is resolved here.
@@ -6133,14 +6133,14 @@ impl ApiStabilityAnalysis {
         get_resolved_type_arguments(t)
     }
 
-    // go: internal/typeparser/api_stability.go:4521 apiStabilityAnalysis.representedElementType
+    // go: internal/typeparser/api_stability.go:4521 apiStabilityAnalysis.representedElementType cfeaadecbf4b9c97
     // representedElementType returns the represented element type of an array or
     // tuple reference.
     pub(crate) fn represented_element_type(&self, t: Option<P<Type>>) -> Option<P<Type>> {
         self.represented_type_arguments(t).first().copied()
     }
 
-    // go: internal/typeparser/api_stability.go:4530 apiStabilityAnalysis.representedTupleArguments
+    // go: internal/typeparser/api_stability.go:4530 apiStabilityAnalysis.representedTupleArguments 05b132451e5398cf
     // representedTupleArguments returns the represented element types of a tuple
     // reference without instantiating anything.
     pub(crate) fn represented_tuple_arguments(&self, t: Option<P<Type>>) -> &'static [P<Type>] {
@@ -6155,7 +6155,7 @@ impl ApiStabilityAnalysis {
         self.represented_type_arguments(Some(t))
     }
 
-    // go: internal/typeparser/api_stability.go:4540 apiStabilityAnalysis.recordSymbol
+    // go: internal/typeparser/api_stability.go:4540 apiStabilityAnalysis.recordSymbol 726572a763c93382
     // recordSymbol records a symbol whose declared stability is above stable. A
     // stable symbol can never exceed any owner ceiling, so it is omitted to keep
     // each surface small.
@@ -6179,7 +6179,7 @@ impl ApiStabilityAnalysis {
         );
     }
 
-    // go: internal/typeparser/api_stability.go:4554 apiStabilityAnalysis.recordSignatureStability
+    // go: internal/typeparser/api_stability.go:4554 apiStabilityAnalysis.recordSignatureStability 741ba09502a5c0a3
     // recordSignatureStability records a public signature whose declaration carries
     // its own `@stability` tag. The raw (uninstantiated) signature keeps distinct
     // overload tags distinct.
@@ -6206,7 +6206,7 @@ impl ApiStabilityAnalysis {
         );
     }
 
-    // go: internal/typeparser/api_stability.go:4571 apiStabilityAnalysis.typeChildBoundarySymbol
+    // go: internal/typeparser/api_stability.go:4571 apiStabilityAnalysis.typeChildBoundarySymbol 099fb86fbd67d5a4
     // typeChildBoundarySymbol returns the identity symbol whose explicit declared
     // tag bounds a type reached as a child component, or nil when the type carries
     // no explicit tag. An alias application's alias symbol takes precedence over
@@ -6240,7 +6240,7 @@ impl ApiStabilityAnalysis {
         None
     }
 
-    // go: internal/typeparser/api_stability.go:4597 apiStabilityAnalysis.heritageChildBoundarySymbol
+    // go: internal/typeparser/api_stability.go:4597 apiStabilityAnalysis.heritageChildBoundarySymbol b5d48ee9a5324fdc
     // heritageChildBoundarySymbol returns the identity symbol whose explicit
     // declared tag bounds a heritage base reached as a child component, or nil.
     // As with a type edge, an alias application's alias symbol takes precedence
@@ -6275,7 +6275,7 @@ impl ApiStabilityAnalysis {
         None
     }
 
-    // go: internal/typeparser/api_stability.go:4625 apiStabilityAnalysis.collectChildTypeArguments
+    // go: internal/typeparser/api_stability.go:4625 apiStabilityAnalysis.collectChildTypeArguments d5b46a5fec251ed3
     // collectChildTypeArguments merges the independently represented type arguments
     // a tagged child type still exposes. Alias application arguments and reference
     // arguments are operands of the application, not internals of the tagged
@@ -6314,7 +6314,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:4654 apiStabilityAnalysis.collectTaggedHeritageArguments
+    // go: internal/typeparser/api_stability.go:4654 apiStabilityAnalysis.collectTaggedHeritageArguments e7470ef9a89b9a58
     // collectTaggedHeritageArguments records every tagged class or interface
     // ancestor of a declaration as a child boundary and exposes its independently
     // represented type arguments. It is used where the compiler has already
@@ -6368,7 +6368,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:4692 apiStabilityAnalysis.declarationDeclaringSymbol
+    // go: internal/typeparser/api_stability.go:4692 apiStabilityAnalysis.declarationDeclaringSymbol f8f87cb50a9ddd2e
     // declarationDeclaringSymbol returns the class or interface symbol whose
     // declaration directly contains the given declaration, or nil for a
     // declaration of a type literal or any other anonymous surface. Only a direct
@@ -6389,7 +6389,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:4708 apiStabilityAnalysis.memberDeclaringSymbol
+    // go: internal/typeparser/api_stability.go:4708 apiStabilityAnalysis.memberDeclaringSymbol dfe961be34afb211
     // memberDeclaringSymbol returns the class or interface symbol whose declaration
     // directly contains the member, or nil for a member of a type literal or any
     // other anonymous surface. Only a direct member declaration names an owner: a
@@ -6409,7 +6409,7 @@ impl ApiStabilityAnalysis {
         None
     }
 
-    // go: internal/typeparser/api_stability.go:4728 apiStabilityAnalysis.inheritedChildBoundarySymbol
+    // go: internal/typeparser/api_stability.go:4728 apiStabilityAnalysis.inheritedChildBoundarySymbol 7df55813eff803e7
     // inheritedChildBoundarySymbol returns the class or interface symbol that
     // declares a member when the declaring symbol is not the member table's owner
     // and carries an explicit declared tag. A member declared by the owner is an own
@@ -6436,7 +6436,7 @@ impl ApiStabilityAnalysis {
         None
     }
 
-    // go: internal/typeparser/api_stability.go:4753 apiStabilityAnalysis.inheritedChildBoundarySymbolForDeclaration
+    // go: internal/typeparser/api_stability.go:4753 apiStabilityAnalysis.inheritedChildBoundarySymbolForDeclaration c4a051b1da4df56d
     // inheritedChildBoundarySymbolForDeclaration returns the class or interface
     // symbol that directly declares a signature, constructor or index declaration
     // when that declaring symbol is not the member table's owner and carries an
@@ -6464,7 +6464,7 @@ impl ApiStabilityAnalysis {
         None
     }
 
-    // go: internal/typeparser/api_stability.go:4775 apiStabilityAnalysis.childSignatureBoundary
+    // go: internal/typeparser/api_stability.go:4775 apiStabilityAnalysis.childSignatureBoundary 53d061d68bc6581a
     // childSignatureBoundary records an explicitly tagged signature reached as a
     // child component of owner and reports whether the signature is a boundary.
     // A signature whose declaration belongs to the owner symbol is that owner's own
@@ -6513,7 +6513,7 @@ impl ApiStabilityAnalysis {
         false
     }
 
-    // go: internal/typeparser/api_stability.go:4810 apiStabilityAnalysis.declarationChildBoundary
+    // go: internal/typeparser/api_stability.go:4810 apiStabilityAnalysis.declarationChildBoundary c89c9e9ceae13796
     // declarationChildBoundary records an explicitly tagged declaration reached as
     // a child component and reports whether the declaration's internals are bounded.
     // It is used for index signatures, whose content annotations are the
@@ -6548,7 +6548,7 @@ impl ApiStabilityAnalysis {
     }
 }
 
-// go: internal/typeparser/api_stability.go:4829 apiStabilityDeclarationBelongsToSymbol
+// go: internal/typeparser/api_stability.go:4829 apiStabilityDeclarationBelongsToSymbol c1c481f990ac7112
 // apiStabilityDeclarationBelongsToSymbol reports whether a declaration is one
 // of a symbol's own declarations. It distinguishes a root function's overload
 // signatures (declarations of the root symbol) from child signatures declared
@@ -6564,7 +6564,7 @@ pub(crate) fn api_stability_declaration_belongs_to_symbol(
 }
 
 impl ApiStabilityAnalysis {
-    // go: internal/typeparser/api_stability.go:4841 apiStabilityAnalysis.recordDeclarationStability
+    // go: internal/typeparser/api_stability.go:4841 apiStabilityAnalysis.recordDeclarationStability f419740ce3d88f9b
     // recordDeclarationStability records a `@stability` tag carried by a
     // declaration whose checker type has not been materialized. Declared member and
     // signature stability contributes to the surface independently of type
@@ -6590,7 +6590,7 @@ impl ApiStabilityAnalysis {
         );
     }
 
-    // go: internal/typeparser/api_stability.go:4852 apiStabilityAnalysis.addFinding
+    // go: internal/typeparser/api_stability.go:4852 apiStabilityAnalysis.addFinding 2cf948d3d07115dc
     #[expect(clippy::unused_self, reason = "a method of Go's apiStabilityAnalysis")]
     pub(crate) fn add_finding(
         &self,
@@ -6601,7 +6601,7 @@ impl ApiStabilityAnalysis {
         surface.add(key, ApiStabilityFinding::from(declared));
     }
 
-    // go: internal/typeparser/api_stability.go:4861 apiStabilityAnalysis.declarationRepresentedType
+    // go: internal/typeparser/api_stability.go:4861 apiStabilityAnalysis.declarationRepresentedType 3c586d4f565e6efc
     // declarationRepresentedType returns the represented type of a symbol's own
     // declaration for annotation provenance. Type aliases use their declared type;
     // values use the symbol's value type when it exists, otherwise the
@@ -6645,7 +6645,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:4886 apiStabilityAnalysis.declarationAnnotationNode
+    // go: internal/typeparser/api_stability.go:4886 apiStabilityAnalysis.declarationAnnotationNode 75a380c9f84bf1f9
     // declarationAnnotationNode returns the public type annotation a declaration
     // exposes for metadata reading, or nil.
     #[expect(clippy::unused_self, reason = "a method of Go's apiStabilityAnalysis")]
@@ -6666,7 +6666,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:4911 apiStabilityAnalysis.conditionalDeclarationIsDeferred
+    // go: internal/typeparser/api_stability.go:4911 apiStabilityAnalysis.conditionalDeclarationIsDeferred bc6fbe7b46e861a8
     // conditionalDeclarationIsDeferred reports whether a conditional written at a
     // declaration site is symbolic: one of its operands mentions an unbound type
     // parameter or an infer binder. The check is a narrow binder scan; it resolves
@@ -6687,7 +6687,7 @@ impl ApiStabilityAnalysis {
             )
     }
 
-    // go: internal/typeparser/api_stability.go:4924 apiStabilityAnalysis.typeNodeMentionsTypeParameter
+    // go: internal/typeparser/api_stability.go:4924 apiStabilityAnalysis.typeNodeMentionsTypeParameter 2f1f647bed171444
     // typeNodeMentionsTypeParameter reports whether a type node names an unbound
     // type parameter (including an `infer` binder). It only looks up annotation
     // symbols; no annotation type is resolved.
@@ -6710,7 +6710,7 @@ impl ApiStabilityAnalysis {
         result
     }
 
-    // go: internal/typeparser/api_stability.go:4924 apiStabilityAnalysis.typeNodeMentionsTypeParameter
+    // go: internal/typeparser/api_stability.go:4924 apiStabilityAnalysis.typeNodeMentionsTypeParameter 2f1f647bed171444
     // Rust: the body after the cycle guard, split out so the deferred release runs after it.
     fn type_node_mentions_type_parameter_inner(
         &mut self,
@@ -6827,7 +6827,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:5007 apiStabilityAnalysis.shouldInspectSymbol
+    // go: internal/typeparser/api_stability.go:5007 apiStabilityAnalysis.shouldInspectSymbol 5518f25656de8d27
     // shouldInspectSymbol reports whether a symbol has at least one declaration
     // outside the default library. The standard library is never stability-tagged
     // and expanding it would pull a large, irrelevant surface into every reference.
@@ -6856,7 +6856,7 @@ impl ApiStabilityAnalysis {
         false
     }
 
-    // go: internal/typeparser/api_stability.go:5024 apiStabilityAnalysis.shouldInspectMemberDeclaration
+    // go: internal/typeparser/api_stability.go:5024 apiStabilityAnalysis.shouldInspectMemberDeclaration 08a5338397a2f9ce
     // shouldInspectMemberDeclaration reports whether a member declaration's public
     // annotation should be inspected for erased alias provenance. Function-like
     // declarations are covered by their public signatures, except accessors whose
@@ -6873,7 +6873,7 @@ impl ApiStabilityAnalysis {
     }
 }
 
-// go: internal/typeparser/api_stability.go:5036 typeParameterAnnotationNode
+// go: internal/typeparser/api_stability.go:5036 typeParameterAnnotationNode 54769fd1a0bd0421
 // typeParameterAnnotationNode returns the declared constraint or default
 // annotation of a type parameter.
 pub(crate) fn type_parameter_annotation_node(
@@ -6894,7 +6894,7 @@ pub(crate) fn type_parameter_annotation_node(
     None
 }
 
-// go: internal/typeparser/api_stability.go:5062 signatureReturnTypeNode
+// go: internal/typeparser/api_stability.go:5062 signatureReturnTypeNode a066dbaee803b1ef
 // signatureReturnTypeNode returns the declared return type annotation of a
 // signature, or nil when the return type is inferred.
 pub(crate) fn signature_return_type_node(signature: Option<P<Signature>>) -> Option<P<Node>> {
@@ -6902,7 +6902,7 @@ pub(crate) fn signature_return_type_node(signature: Option<P<Signature>>) -> Opt
     declaration.function_like_data()?.type_()
 }
 
-// go: internal/typeparser/api_stability.go:5079 apiStabilityIndexSignatureKeyNode
+// go: internal/typeparser/api_stability.go:5079 apiStabilityIndexSignatureKeyNode c82c15e0eb93ea7d
 // apiStabilityIndexSignatureKeyNode returns the key type node of an index
 // signature declaration.
 pub(crate) fn api_stability_index_signature_key_node(
@@ -6919,7 +6919,7 @@ pub(crate) fn api_stability_index_signature_key_node(
     parameters[0].as_parameter_declaration().type_()
 }
 
-// go: internal/typeparser/api_stability.go:5092 apiStabilityIndexSignatureValueNode
+// go: internal/typeparser/api_stability.go:5092 apiStabilityIndexSignatureValueNode 78373ec8871340ad
 // apiStabilityIndexSignatureValueNode returns the value type node of an index
 // signature declaration.
 pub(crate) fn api_stability_index_signature_value_node(
@@ -6932,7 +6932,7 @@ pub(crate) fn api_stability_index_signature_value_node(
     declaration.as_index_signature_declaration().type_()
 }
 
-// go: internal/typeparser/api_stability.go:5101 apiStabilityMappedDeclarationHasName
+// go: internal/typeparser/api_stability.go:5101 apiStabilityMappedDeclarationHasName 77e7082570b6e19f
 // apiStabilityMappedDeclarationHasName reports whether a mapped type declared a
 // `as` clause whose name type the checker has not materialized.
 pub(crate) fn api_stability_mapped_declaration_has_name(t: Option<P<Type>>) -> bool {
@@ -6950,7 +6950,7 @@ pub(crate) fn api_stability_mapped_declaration_has_name(t: Option<P<Type>>) -> b
     false
 }
 
-// go: internal/typeparser/api_stability.go:5122 apiStabilityTypeAliasDeclaration
+// go: internal/typeparser/api_stability.go:5122 apiStabilityTypeAliasDeclaration 60da93774f0e22c1
 // apiStabilityTypeAliasDeclaration returns the type alias declaration of a
 // symbol.
 pub(crate) fn api_stability_type_alias_declaration(symbol: Option<P<Symbol>>) -> Option<P<Node>> {
@@ -6960,7 +6960,7 @@ pub(crate) fn api_stability_type_alias_declaration(symbol: Option<P<Symbol>>) ->
     })
 }
 
-// go: internal/typeparser/api_stability.go:5138 apiStabilitySymbolDeclaresHeritage
+// go: internal/typeparser/api_stability.go:5138 apiStabilitySymbolDeclaresHeritage b025b83b39281ab3
 // apiStabilitySymbolDeclaresHeritage reports whether a class or interface
 // symbol declares heritage clauses. It reads declaration structure only and is
 // used to distinguish an unmaterialized heritage surface from one with nothing
@@ -6989,7 +6989,7 @@ pub(crate) fn api_stability_symbol_declares_heritage(symbol: Option<P<Symbol>>) 
     false
 }
 
-// go: internal/typeparser/api_stability.go:5171 sortedSymbolTableKeys
+// go: internal/typeparser/api_stability.go:5171 sortedSymbolTableKeys d2a94f2cbc2a9a54
 // Rust: Go sorts the keys bytewise (`sort.Strings`). tsrs spells the internal-name prefix `\u{7f}` where Go uses
 // byte `0xFE`; both sort after every ASCII character, but Go's sorts after non-ASCII UTF-8 too, so the prefix byte
 // is compared as `0xFE` to keep Go's order.
@@ -7011,7 +7011,7 @@ pub(crate) fn symbol_table_get(table: Option<P<SymbolTable>>, name: &str) -> Opt
     SymbolTable::get(&table, name)
 }
 
-// go: internal/typeparser/api_stability.go:5191 apiStabilityMemberTableNameIsVisible
+// go: internal/typeparser/api_stability.go:5191 apiStabilityMemberTableNameIsVisible 63c79ce7a570535f
 // apiStabilityMemberTableNameIsVisible reports whether a member-table entry is
 // a candidate public member. Entries whose names use the checker's documented
 // internal symbol-name prefix are reserved implementation spellings (`__call`,
@@ -7036,7 +7036,7 @@ pub(crate) fn api_stability_member_table_name_is_visible(
     ets_shim::checker::is_known_symbol(member)
 }
 
-// go: internal/typeparser/api_stability.go:5205 apiStabilitySymbolIsNonPublic
+// go: internal/typeparser/api_stability.go:5205 apiStabilitySymbolIsNonPublic 1657b92f290f588b
 // apiStabilitySymbolIsNonPublic classifies a member symbol by its declaration
 // accessibility. Private identifiers, private/protected members and members
 // whose declarations are all internal are excluded; a leading `__` name is
@@ -7054,7 +7054,7 @@ pub(crate) fn api_stability_symbol_is_non_public(symbol: Option<P<Symbol>>) -> b
     flags.intersects(ModifierFlags::Private | ModifierFlags::Protected)
 }
 
-// go: internal/typeparser/api_stability.go:5219 apiStabilitySymbolHasOnlyInternalDeclarations
+// go: internal/typeparser/api_stability.go:5219 apiStabilitySymbolHasOnlyInternalDeclarations e70f7a4003c0767a
 // A public declaration keeps a merged property visible even when another
 // declaration marks that property internal. Declaration-less synthetic members
 // also stay visible rather than inheriting the visibility of a referenced type.
@@ -7073,7 +7073,7 @@ pub(crate) fn api_stability_symbol_has_only_internal_declarations(
         .all(|&declaration| api_stability_property_declaration_is_internal(Some(declaration)))
 }
 
-// go: internal/typeparser/api_stability.go:5231 apiStabilityPropertyDeclarationIsInternal
+// go: internal/typeparser/api_stability.go:5231 apiStabilityPropertyDeclarationIsInternal b248090991f03443
 pub(crate) fn api_stability_property_declaration_is_internal(declaration: Option<P<Node>>) -> bool {
     let Some(declaration) = declaration else {
         return false;
@@ -7090,7 +7090,7 @@ pub(crate) fn api_stability_property_declaration_is_internal(declaration: Option
     }
 }
 
-// go: internal/typeparser/api_stability.go:5245 apiStabilitySignatureIsNonPublic
+// go: internal/typeparser/api_stability.go:5245 apiStabilitySignatureIsNonPublic b01ebe12deb1a6ce
 // apiStabilitySignatureIsNonPublic filters construct and method signatures whose
 // declaration is private or protected.
 pub(crate) fn api_stability_signature_is_non_public(signature: P<Signature>) -> bool {

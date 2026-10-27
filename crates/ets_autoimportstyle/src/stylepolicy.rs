@@ -23,7 +23,7 @@ pub(crate) fn module_id_file_name(id: &ModuleID) -> String {
     id.as_file().unwrap_or_default().to_string()
 }
 
-// go: internal/autoimportstyle/stylepolicy.go:15 stylePolicy
+// go: internal/autoimportstyle/stylepolicy.go:15 stylePolicy 5eb0df8161067122
 // stylePolicy applies auto-import style rewrites based on configured preferences.
 //
 // Rust: `BarrelReader.Find` fills a cache, and the policy lives in a shared `Fn` transformer, so the reader sits
@@ -37,7 +37,7 @@ pub(crate) struct StylePolicy {
     pub(crate) resolve_target: Option<ResolveTarget>,
 }
 
-// go: internal/autoimportstyle/stylepolicy.go:25 NewFixTransformer
+// go: internal/autoimportstyle/stylepolicy.go:25 NewFixTransformer 6fdd6332a38c506c
 // NewFixTransformer creates a FixTransformer from the given resolved Effect options.
 // Returns nil if the preferences are empty (no packages configured).
 pub fn new_fix_transformer(
@@ -88,7 +88,7 @@ pub fn new_fix_transformer(
     }))
 }
 
-// go: internal/autoimportstyle/stylepolicy.go:67 namespaceFixKey
+// go: internal/autoimportstyle/stylepolicy.go:67 namespaceFixKey 7642eace5c78bd74
 pub(crate) fn namespace_fix_key(fix: Option<&Fix>) -> String {
     let Some(fix) = fix else {
         return String::new();
@@ -96,7 +96,7 @@ pub(crate) fn namespace_fix_key(fix: Option<&Fix>) -> String {
     format!("{}\x00{}", fix.module_specifier, fix.namespace_prefix)
 }
 
-// go: internal/autoimportstyle/stylepolicy.go:76 newStylePolicy
+// go: internal/autoimportstyle/stylepolicy.go:76 newStylePolicy df4308a84b867d70
 // newStylePolicy creates a stylePolicy from the given resolved options.
 // Alias keys are lowercased for case-insensitive matching.
 pub(crate) fn new_style_policy(resolved: Option<&ResolvedEffectPluginOptions>) -> StylePolicy {
@@ -119,13 +119,13 @@ pub(crate) fn new_style_policy(resolved: Option<&ResolvedEffectPluginOptions>) -
 }
 
 impl StylePolicy {
-    // go: internal/autoimportstyle/stylepolicy.go:92 stylePolicy.isEmpty
+    // go: internal/autoimportstyle/stylepolicy.go:92 stylePolicy.isEmpty 188952c890df82a5
     // isEmpty returns true if no style preferences are configured.
     pub(crate) fn is_empty(sp: Option<&Self>) -> bool {
         sp.is_none_or(|sp| sp.styles.is_empty())
     }
 
-    // go: internal/autoimportstyle/stylepolicy.go:99 stylePolicy.Apply
+    // go: internal/autoimportstyle/stylepolicy.go:99 stylePolicy.Apply e3a2adb2f97d99e4
     // Apply transforms a fix based on the export's package and the configured style.
     // Returns nil if the fix should be suppressed (e.g., ignored top-level reexport).
     // Returns the fix unchanged if no style policy applies.
@@ -157,7 +157,7 @@ impl StylePolicy {
         Some(self.apply_barrel_rewrite(export, fix))
     }
 
-    // go: internal/autoimportstyle/stylepolicy.go:123 stylePolicy.applyNamespaceRewrite
+    // go: internal/autoimportstyle/stylepolicy.go:123 stylePolicy.applyNamespaceRewrite 8e4f22ecd7d6bcba
     // applyNamespaceRewrite rewrites a named-import fix to a namespace-import fix.
     pub(crate) fn apply_namespace_rewrite(
         &self,
@@ -241,7 +241,7 @@ impl StylePolicy {
     }
 }
 
-// go: internal/autoimportstyle/stylepolicy.go:195 isNamespaceReexport
+// go: internal/autoimportstyle/stylepolicy.go:195 isNamespaceReexport bd4f699072bfeb3e
 pub(crate) fn is_namespace_reexport(export: Option<&Export>) -> bool {
     export.is_some_and(|export| {
         export.syntax == ExportSyntax::Modifier
@@ -252,7 +252,7 @@ pub(crate) fn is_namespace_reexport(export: Option<&Export>) -> bool {
 }
 
 impl StylePolicy {
-    // go: internal/autoimportstyle/stylepolicy.go:205 stylePolicy.applyBarrelRewrite
+    // go: internal/autoimportstyle/stylepolicy.go:205 stylePolicy.applyBarrelRewrite 6a08c72878efee54
     // applyBarrelRewrite rewrites a fix to a named import from the barrel that
     // forwards the fix's module, keeping the fix unchanged when no barrel is found.
     // Rust: never nil, so the result is not an `Option`.
@@ -296,7 +296,7 @@ impl StylePolicy {
     }
 }
 
-// go: internal/autoimportstyle/stylepolicy.go:239 isEffectInternal
+// go: internal/autoimportstyle/stylepolicy.go:239 isEffectInternal 3c132e8e6c3c4a2a
 // isEffectInternal reports whether a specifier points into an internal
 // directory of the effect package, which auto-import never suggests.
 pub(crate) fn is_effect_internal(specifier: &str) -> bool {
@@ -304,7 +304,7 @@ pub(crate) fn is_effect_internal(specifier: &str) -> bool {
 }
 
 impl StylePolicy {
-    // go: internal/autoimportstyle/stylepolicy.go:245 stylePolicy.resolveAlias
+    // go: internal/autoimportstyle/stylepolicy.go:245 stylePolicy.resolveAlias 50ac6f948bc19d10
     // resolveAlias returns the configured alias for the given namespace name under
     // the given package, or the namespace name itself if no alias is configured.
     pub(crate) fn resolve_alias(&self, pkg_name_lower: &str, namespace_name: &str) -> String {

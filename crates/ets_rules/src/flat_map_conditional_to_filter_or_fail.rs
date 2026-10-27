@@ -15,7 +15,7 @@ use crate::option_match_to_from_option::is_synchronous_function;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_0_EXPRESSES_THIS_CONDITIONAL_VALIDATION_MORE_DIRECTLY_THAN_EFFECT_FLAT_MAP_WITH_AN_IDENTITY_EFFECT_SUCCEED_BRANCH_EFFECT_FLAT_MAP_CONDITIONAL_TO_FILTER_OR_FAIL;
 
-// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:17 FlatMapConditionalToFilterOrFail
+// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:17 FlatMapConditionalToFilterOrFail bb54b0a161d9eb7a
 // FlatMapConditionalToFilterOrFail suggests Effect.filterOrFail or
 // Effect.filterOrElse when a flatMap callback implements an identity filter.
 pub static FLAT_MAP_CONDITIONAL_TO_FILTER_OR_FAIL: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -42,7 +42,7 @@ pub static FLAT_MAP_CONDITIONAL_TO_FILTER_OR_FAIL: LazyLock<Rule> = LazyLock::ne
     },
 });
 
-// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:44 FlatMapConditionalToFilterOrFailMatch
+// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:44 FlatMapConditionalToFilterOrFailMatch bc2d58ade002a195
 // FlatMapConditionalToFilterOrFailMatch holds the source evidence needed by
 // the diagnostic and its quick fix.
 #[derive(Clone)]
@@ -58,7 +58,7 @@ pub struct FlatMapConditionalToFilterOrFailMatch {
     pub can_fix: bool,
 }
 
-// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:58 AnalyzeFlatMapConditionalToFilterOrFail
+// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:58 AnalyzeFlatMapConditionalToFilterOrFail 48f32eba59461529
 // AnalyzeFlatMapConditionalToFilterOrFail finds flatMap transformations whose
 // callback is a two-way conditional with one identity Effect.succeed branch.
 //
@@ -151,7 +151,7 @@ pub fn analyze_flat_map_conditional_to_filter_or_fail(
     matches
 }
 
-// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:134 isIdentitySucceed
+// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:134 isIdentitySucceed 002a49d8d61b7181
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub(crate) fn is_identity_succeed(
@@ -183,7 +183,7 @@ pub(crate) fn is_identity_succeed(
     })
 }
 
-// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:153 effectFailArgument
+// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:153 effectFailArgument 9e6e7c4cf93bfd84
 pub(crate) fn effect_fail_argument(
     tp: &mut TypeParser<'_>,
     expression: Option<P<Node>>,

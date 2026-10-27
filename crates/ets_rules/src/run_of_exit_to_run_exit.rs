@@ -12,7 +12,7 @@ use ets_typeparser::{PipingFlow, PipingFlowTransformation, TypeParser};
 static MESSAGE: &Message =
     &tsdiag::EFFECT_0_OF_EFFECT_EXIT_RE_IMPLEMENTS_EFFECT_1_USE_THE_DEDICATED_EXIT_RUNNER_DIRECTLY_EFFECT_RUN_OF_EXIT_TO_RUN_EXIT;
 
-// go: internal/rules/run_of_exit_to_run_exit.go:18 RunOfExitToRunExit
+// go: internal/rules/run_of_exit_to_run_exit.go:18 RunOfExitToRunExit c923e52677e1d31d
 // RunOfExitToRunExit suggests using the dedicated promise Exit runner instead
 // of running an Effect that has first been transformed with Effect.exit.
 pub static RUN_OF_EXIT_TO_RUN_EXIT: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -39,7 +39,7 @@ pub static RUN_OF_EXIT_TO_RUN_EXIT: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/run_of_exit_to_run_exit.go:46 RunOfExitToRunExitMatch
+// go: internal/rules/run_of_exit_to_run_exit.go:46 RunOfExitToRunExitMatch a88bd1642bf03757
 // RunOfExitToRunExitMatch holds the transformations needed by the diagnostic
 // and quick fix.
 //
@@ -54,7 +54,7 @@ pub struct RunOfExitToRunExitMatch {
     pub replacement_name: &'static str,
 }
 
-// go: internal/rules/run_of_exit_to_run_exit.go:58 AnalyzeRunOfExitToRunExit
+// go: internal/rules/run_of_exit_to_run_exit.go:58 AnalyzeRunOfExitToRunExit 9057e64065462e01
 // AnalyzeRunOfExitToRunExit finds Effect.exit immediately followed by a
 // non-Exit runner in a normalized piping flow. Adjacency is important: an
 // Effect.exit followed by another transformation is not the runner's input.
@@ -175,7 +175,7 @@ pub fn analyze_run_of_exit_to_run_exit(
     matches
 }
 
-// go: internal/rules/run_of_exit_to_run_exit.go:136 appendRunOfExitMatch
+// go: internal/rules/run_of_exit_to_run_exit.go:136 appendRunOfExitMatch 04e638c3179542f7
 //
 // Rust: appends in place (Go returns the grown slice).
 pub(crate) fn append_run_of_exit_match(
@@ -192,7 +192,7 @@ pub(crate) fn append_run_of_exit_match(
     matches.push(candidate);
 }
 
-// go: internal/rules/run_of_exit_to_run_exit.go:145 runOfExitLocation
+// go: internal/rules/run_of_exit_to_run_exit.go:145 runOfExitLocation bdf883a9572b6535
 pub(crate) fn run_of_exit_location(
     sf: P<SourceFile>,
     callee: P<Node>,
@@ -205,7 +205,7 @@ pub(crate) fn run_of_exit_location(
     ets_shim::scanner::get_error_range_for_node(sf, location_node)
 }
 
-// go: internal/rules/run_of_exit_to_run_exit.go:153 runOfExitRunner
+// go: internal/rules/run_of_exit_to_run_exit.go:153 runOfExitRunner e9bf2c44623a0f1e
 //
 // Rust: Go's named results `(targetNode, nameNode, runnerName, replacementName)`.
 pub(crate) fn run_of_exit_runner(

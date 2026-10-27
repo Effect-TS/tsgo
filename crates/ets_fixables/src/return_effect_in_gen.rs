@@ -10,7 +10,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_GENERATOR_RETURNS_AN_EFFECT_ABLE_VALUE_DIRECTLY_WHICH_PRODUCES_A_NESTED_EFFECT_EFFECT_IF_THE_INTENDED_RESULT_IS_THE_INNER_EFFECT_VALUE_RETURN_YIELD_ASTERISK_REPRESENTS_THAT_FORM_EFFECT_RETURN_EFFECT_IN_GEN;
 
-// go: internal/fixables/return_effect_in_gen.go:15 ReturnEffectInGenFix
+// go: internal/fixables/return_effect_in_gen.go:15 ReturnEffectInGenFix 7d49268b72dd840a
 // ReturnEffectInGenFix adds "yield*" before the return expression in an Effect generator
 // when the return value is an Effect-able type (which would cause nested Effect<Effect<...>>).
 pub static RETURN_EFFECT_IN_GEN_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
@@ -21,7 +21,7 @@ pub static RETURN_EFFECT_IN_GEN_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixabl
     run: run_return_effect_in_gen_fix,
 });
 
-// go: internal/fixables/return_effect_in_gen.go:23 runReturnEffectInGenFix
+// go: internal/fixables/return_effect_in_gen.go:23 runReturnEffectInGenFix 47afab64c8edcfe9
 fn run_return_effect_in_gen_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 

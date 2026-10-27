@@ -16,7 +16,7 @@ use crate::api_stability_surface_test::api_stability_shared_type_entry;
 use crate::helpers_test::*;
 use crate::*;
 
-// go test: internal/typeparser/api_stability_test.go:15 apiStabilityTestExport
+// go test: internal/typeparser/api_stability_test.go:15 apiStabilityTestExport 5d6383b4dfc316e6
 // apiStabilityTestExport looks up a module export by name so the cache tests can
 // exercise the public TypeParser API the same way the diagnostic does.
 pub(crate) fn api_stability_test_export(
@@ -37,7 +37,7 @@ pub(crate) fn api_stability_test_export(
     t.fatal(ets_go::sprintf!("export %q not found in %s", name, sf.file_name()));
 }
 
-// go test: internal/typeparser/api_stability_test.go:30 apiStabilityDependencyNames
+// go test: internal/typeparser/api_stability_test.go:30 apiStabilityDependencyNames 742ac281dfa30939
 pub(crate) fn api_stability_dependency_names(used: &ApiStabilityUsed) -> Vec<String> {
     let mut names = Vec::with_capacity(used.dependencies.len());
     for dependency in &used.dependencies {
@@ -46,7 +46,7 @@ pub(crate) fn api_stability_dependency_names(used: &ApiStabilityUsed) -> Vec<Str
     names
 }
 
-// go test: internal/typeparser/api_stability_test.go:38 containsDependency
+// go test: internal/typeparser/api_stability_test.go:38 containsDependency 55b4e1a3bde36dac
 pub(crate) fn contains_dependency(used: &ApiStabilityUsed, name: &str) -> bool {
     for dependency in &used.dependencies {
         if api_stability_dependency_name(dependency) == name {
@@ -56,7 +56,7 @@ pub(crate) fn contains_dependency(used: &ApiStabilityUsed, name: &str) -> bool {
     false
 }
 
-// go test: internal/typeparser/api_stability_test.go:52 primeApiStabilityChecker
+// go test: internal/typeparser/api_stability_test.go:52 primeApiStabilityChecker 1c6161e9ed07d19a
 // primeApiStabilityChecker type checks the program against the checker, the
 // way the normal rule lifecycle does before a diagnostic run. Only then are the
 // public types the analysis reads through its cached-materialization peeks
@@ -82,7 +82,7 @@ fn names(used: &ApiStabilityUsed) -> String {
     format!("{:?}", api_stability_dependency_names(used))
 }
 
-// go test: internal/typeparser/api_stability_test.go:66 TestApiStabilityDeclaredIndexInfosDoNotResolveComputedNames
+// go test: internal/typeparser/api_stability_test.go:66 TestApiStabilityDeclaredIndexInfosDoNotResolveComputedNames e6272d68610d1185
 // TestApiStabilityDeclaredIndexInfosDoNotResolveComputedNames proves the
 // declared index-info accessor inspects index signatures without resolving the
 // symbol's late-bound member table: a cold interface carrying a recursively
@@ -127,7 +127,7 @@ fn test_api_stability_declared_index_infos_do_not_resolve_computed_names() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:103 TestApiStabilityDeclaredCacheSharedAcrossTypeParsers
+// go test: internal/typeparser/api_stability_test.go:103 TestApiStabilityDeclaredCacheSharedAcrossTypeParsers db643a2f63294019
 // TestApiStabilityDeclaredCacheSharedAcrossTypeParsers proves declared lookups
 // persist per checker: a second TypeParser built from the same checker reuses
 // the first parser's declared results, so a run over a different source file
@@ -199,7 +199,7 @@ fn test_api_stability_declared_cache_shared_across_type_parsers() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:161 TestApiStabilityNestedNamedSurfaceStaysShallow
+// go test: internal/typeparser/api_stability_test.go:161 TestApiStabilityNestedNamedSurfaceStaysShallow e291a863313bfcb3
 // TestApiStabilityNestedNamedSurfaceStaysShallow proves the documented shallow
 // named-dependency boundary: a named interface reached inside another surface is
 // reported as a dependency but its arbitrary members are not expanded into the
@@ -243,7 +243,7 @@ fn test_api_stability_nested_named_surface_stays_shallow() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:203 TestApiStabilityCacheDeclaredCeilingIsPerAlias
+// go test: internal/typeparser/api_stability_test.go:203 TestApiStabilityCacheDeclaredCeilingIsPerAlias 0b3099603b9199a9
 // TestApiStabilityCacheDeclaredCeilingIsPerAlias verifies the declared-stability
 // cache stores the symbol's own declaration tag only. A tag on a selected-file
 // `export ... from` declaration is source-specific and is applied by the rule,
@@ -302,7 +302,7 @@ fn test_api_stability_cache_declared_ceiling_is_per_alias() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:243 resolveAliasedSymbolForTest
+// go test: internal/typeparser/api_stability_test.go:243 resolveAliasedSymbolForTest 9a1e621bc0689ad8
 pub(crate) fn resolve_aliased_symbol_for_test(
     t: &T,
     c: &mut Checker,
@@ -330,7 +330,7 @@ pub(crate) fn resolve_aliased_symbol_for_test(
     symbol
 }
 
-// go test: internal/typeparser/api_stability_test.go:266 TestApiStabilityCacheDifferentCheckerIsolation
+// go test: internal/typeparser/api_stability_test.go:266 TestApiStabilityCacheDifferentCheckerIsolation 27235a48a984a805
 // TestApiStabilityCacheDifferentCheckerIsolation proves two checkers do not
 // share declared results or pointer identity and that each analyzer computes an
 // independent session-local surface.
@@ -376,7 +376,7 @@ fn test_api_stability_cache_different_checker_isolation() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:311 TestApiStabilityCacheGenericArgumentsDoNotContaminate
+// go test: internal/typeparser/api_stability_test.go:311 TestApiStabilityCacheGenericArgumentsDoNotContaminate 81fa642068ddcea8
 // TestApiStabilityCacheGenericArgumentsDoNotContaminate proves the type-keyed
 // cache keeps distinct instantiations distinct: an experimental type argument
 // in one instantiation must not appear in another, in both declaration orders.
@@ -420,7 +420,7 @@ fn test_api_stability_cache_generic_arguments_do_not_contaminate() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:349 TestApiStabilityDeclaredReadsDoNotCompute
+// go test: internal/typeparser/api_stability_test.go:349 TestApiStabilityDeclaredReadsDoNotCompute 8edf9d12e0ab2f24
 // TestApiStabilityDeclaredReadsDoNotCompute proves the declared caches are
 // independent of the computed caches: asking for a declared level must never
 // trigger a symbol or signature surface computation.
@@ -476,7 +476,7 @@ fn test_api_stability_declared_reads_do_not_compute() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:392 TestApiStabilitySignatureDeclaredCacheKeepsOverloadsDistinct
+// go test: internal/typeparser/api_stability_test.go:392 TestApiStabilitySignatureDeclaredCacheKeepsOverloadsDistinct d88bd400812f8f76
 // TestApiStabilitySignatureDeclaredCacheKeepsOverloadsDistinct proves a tagged
 // overload keeps its own declared level even when the symbol-level lookup picks
 // up another declaration's tag, and that both are cached separately.
@@ -527,7 +527,7 @@ fn test_api_stability_signature_declared_cache_keeps_overloads_distinct() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:426 apiStabilityTestSignatures
+// go test: internal/typeparser/api_stability_test.go:426 apiStabilityTestSignatures 0166fbdc0fa6dbd5
 pub(crate) fn api_stability_test_signatures(
     t: &T,
     c: &mut Checker,
@@ -545,7 +545,7 @@ pub(crate) fn api_stability_test_signatures(
     signatures
 }
 
-// go test: internal/typeparser/api_stability_test.go:441 TestApiStabilitySignatureSurfaceRetainsSubstitution
+// go test: internal/typeparser/api_stability_test.go:441 TestApiStabilitySignatureSurfaceRetainsSubstitution 2fe9058bb965db48
 // TestApiStabilitySignatureSurfaceRetainsSubstitution proves an instantiated
 // inferred return keeps its represented argument while the raw target stays
 // shallow, and that a session memoizes the completed signature surface.
@@ -632,7 +632,7 @@ fn check_clean_and_leaky_roots(
     }
 }
 
-// go test: internal/typeparser/api_stability_test.go:490 TestApiStabilityComputedSignatureCacheSeparatesSubstitutionContexts
+// go test: internal/typeparser/api_stability_test.go:490 TestApiStabilityComputedSignatureCacheSeparatesSubstitutionContexts 05a4600d758cb2f7
 // TestApiStabilityComputedSignatureCacheSeparatesSubstitutionContexts proves the
 // same raw signature analyzed under different enclosing substitutions is not
 // conflated: the clean instantiation stays clean and the leaking one reports,
@@ -659,7 +659,7 @@ fn test_api_stability_computed_signature_cache_separates_substitution_contexts()
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:531 TestApiStabilityComputedSignatureCacheSeparatesNestedSubstitutionContexts
+// go test: internal/typeparser/api_stability_test.go:531 TestApiStabilityComputedSignatureCacheSeparatesNestedSubstitutionContexts 754c75e8a375fd33
 // TestApiStabilityComputedSignatureCacheSeparatesNestedSubstitutionContexts
 // covers the same contamination through a nested inferred object surface. The
 // computed signature cache is keyed by the concrete signature identity, so the
@@ -687,7 +687,7 @@ fn test_api_stability_computed_signature_cache_separates_nested_substitution_con
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:570 TestApiStabilityComputedIncludesDeclaredMemberStability
+// go test: internal/typeparser/api_stability_test.go:570 TestApiStabilityComputedIncludesDeclaredMemberStability 7e521e569495e34e
 // TestApiStabilityComputedIncludesDeclaredMemberStability proves the computed
 // minimum covers the declared stability of public properties and call
 // signatures, with provenance naming the offender.
@@ -745,7 +745,7 @@ fn test_api_stability_computed_includes_declared_member_stability() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:614 TestApiStabilityReplacedDefaultStaysClean
+// go test: internal/typeparser/api_stability_test.go:614 TestApiStabilityReplacedDefaultStaysClean 380f263a45b3d213
 // TestApiStabilityReplacedDefaultStaysClean proves a generic default replaced by
 // an explicit argument is not part of the represented surface, including the
 // annotation provenance pass.
@@ -771,7 +771,7 @@ fn test_api_stability_replaced_default_stays_clean() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:635 TestApiStabilitySignatureCacheIsolation
+// go test: internal/typeparser/api_stability_test.go:635 TestApiStabilitySignatureCacheIsolation 3621dd6a51076c42
 // TestApiStabilitySignatureCacheIsolation proves a computed signature surface
 // is checker-local: two checkers compute the same-looking signature
 // independently and neither can observe the other's analysis.
@@ -814,7 +814,7 @@ fn test_api_stability_signature_cache_isolation() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:676 TestApiStabilityCacheCyclesAndEmptyResultsAreSafe
+// go test: internal/typeparser/api_stability_test.go:676 TestApiStabilityCacheCyclesAndEmptyResultsAreSafe 03aaae3fcc7b4356
 // TestApiStabilityCacheCyclesAndEmptyResultsAreSafe proves a cyclic surface
 // still reports its leak, that settled results are reusable inside the session
 // that computed them, and that a stable/empty surface is a complete memo entry.
@@ -915,7 +915,7 @@ fn check_concrete_carriers(
     }
 }
 
-// go test: internal/typeparser/api_stability_test.go:747 TestApiStabilityConcreteCarrierSeparatesSharedRawTargets
+// go test: internal/typeparser/api_stability_test.go:747 TestApiStabilityConcreteCarrierSeparatesSharedRawTargets ef2b09bf69f29c54
 // TestApiStabilityConcreteCarrierSeparatesSharedRawTargets proves the type and
 // signature caches keep concrete identities: the same raw component (an
 // interface member whose type depends on the interface's type parameter) is
@@ -949,7 +949,7 @@ fn test_api_stability_concrete_carrier_separates_shared_raw_targets() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:784 TestApiStabilityConcreteCarrierSeparatesHeritageMaterializations
+// go test: internal/typeparser/api_stability_test.go:784 TestApiStabilityConcreteCarrierSeparatesHeritageMaterializations 8b94eeb221b82ed6
 // TestApiStabilityConcreteCarrierSeparatesHeritageMaterializations covers the
 // same concrete-identity requirement through inherited members: two exports
 // inherit the same shared base declaration with different concrete arguments.
@@ -981,7 +981,7 @@ fn test_api_stability_concrete_carrier_separates_heritage_materializations() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:819 TestApiStabilityCycleOrderDoesNotHideLeaks
+// go test: internal/typeparser/api_stability_test.go:819 TestApiStabilityCycleOrderDoesNotHideLeaks c138388df0363fb7
 // TestApiStabilityCycleOrderDoesNotHideLeaks analyzes the mutual cycle roots in
 // the reverse order so a cached intermediate result can never suppress the leak.
 #[test]
@@ -1011,7 +1011,7 @@ fn test_api_stability_cycle_order_does_not_hide_leaks() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:850 TestApiStabilityColdLazyReadsMaterialize
+// go test: internal/typeparser/api_stability_test.go:850 TestApiStabilityColdLazyReadsMaterialize 6fb146f59bac78f9
 // TestApiStabilityColdLazyReadsMaterialize proves a cold public surface is
 // materialized through the checker's ordinary lazy reads: the analysis no
 // longer needs the language service to warm the checker first. The cold surface
@@ -1061,7 +1061,7 @@ fn test_api_stability_cold_lazy_reads_materialize() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:890 TestApiStabilityColdLazyFiniteApplicationMatchesWarm
+// go test: internal/typeparser/api_stability_test.go:890 TestApiStabilityColdLazyFiniteApplicationMatchesWarm c419bf7f4e117ba4
 // TestApiStabilityColdLazyFiniteApplicationMatchesWarm proves a finite
 // recursive alias application resolves through the ordinary lazy read on a
 // genuinely cold checker, and the cold session result matches the materialized
@@ -1114,7 +1114,7 @@ fn test_api_stability_cold_lazy_finite_application_matches_warm() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:932 TestApiStabilityExplicitStableDeclaredPresence
+// go test: internal/typeparser/api_stability_test.go:932 TestApiStabilityExplicitStableDeclaredPresence 7adf8d6eabdaca61
 // TestApiStabilityExplicitStableDeclaredPresence pins that branch-style
 // `@stability stable` tags are parsed as an explicit value, not as an absent
 // tag. The root symbol and each public signature keep their declaration
@@ -1192,7 +1192,7 @@ fn test_api_stability_explicit_stable_declared_presence() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:994 TestApiStabilityComputedPublicMembers
+// go test: internal/typeparser/api_stability_test.go:994 TestApiStabilityComputedPublicMembers 719cdb6eaab82f8e
 // TestApiStabilityComputedPublicMembers pins that a root public surface
 // traverses public computed members of interfaces, classes and anonymous object
 // types: well-known symbols, custom unique symbols and literal computed names
@@ -1315,7 +1315,7 @@ export declare const computedObject: {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:1084 TestApiStabilityEarlyTableComputedMembersNotCachedComplete
+// go test: internal/typeparser/api_stability_test.go:1084 TestApiStabilityEarlyTableComputedMembersNotCachedComplete f0c4ec53afb2568a
 // TestApiStabilityEarlyTableComputedMembersNotCachedComplete pins the
 // complete-result invariant for the early member table: an interface whose
 // computed member has not been late-bound yet must stay incomplete and never be
@@ -1386,7 +1386,7 @@ fn test_api_stability_early_table_computed_members_not_cached_complete() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:1132 TestApiStabilitySettleSkipRequiresNoAdvancement
+// go test: internal/typeparser/api_stability_test.go:1132 TestApiStabilitySettleSkipRequiresNoAdvancement 9f9aae44969f6ab2
 // TestApiStabilitySettleSkipRequiresNoAdvancement pins the corrected
 // settlement predicate: a blocked surface is only skipped after the guard
 // budget is exhausted when no analysis read advanced the materialization epoch
@@ -1446,7 +1446,7 @@ fn cold_root_members(t: &T, c: &mut Checker, sym: P<Symbol>) -> (P<Symbol>, Vec<
     (value, signatures)
 }
 
-// go test: internal/typeparser/api_stability_test.go:1170 TestApiStabilitySettleRecollectsMaterializedMember
+// go test: internal/typeparser/api_stability_test.go:1170 TestApiStabilitySettleRecollectsMaterializedMember f7c20332595c312d
 // TestApiStabilitySettleRecollectsMaterializedMember pins the
 // P1 within one analysis: a component the guard refused while the budget was
 // exhausted can be materialized by a later ordinary read in the same collection,
@@ -1532,7 +1532,7 @@ fn test_api_stability_settle_recollects_materialized_member() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:1244 TestApiStabilityNaturalBudgetMaterializationRetry
+// go test: internal/typeparser/api_stability_test.go:1244 TestApiStabilityNaturalBudgetMaterializationRetry f9c9ffbaf0e0474d
 // TestApiStabilityNaturalBudgetMaterializationRetry reproduces the natural-budget
 // probe: the shared guard budget is exhausted by an
 // ordinary member while a later inferred return materializes a previously
@@ -1594,7 +1594,7 @@ fn test_api_stability_natural_budget_materialization_retry() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:1311 TestApiStabilityRecoveryPropagatesFindingsToEarlierResults
+// go test: internal/typeparser/api_stability_test.go:1311 TestApiStabilityRecoveryPropagatesFindingsToEarlierResults b746df13c60bf11f
 // TestApiStabilityRecoveryPropagatesFindingsToEarlierResults pins the
 // recovery settlement defect: a recovery round can discover a
 // finding in a component after the fixpoint has converged, but the blocked
@@ -1713,7 +1713,7 @@ fn test_api_stability_recovery_propagates_findings_to_earlier_results() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:1399 TestApiStabilityDeclaredPersistsAndCompleteSurfacesReuse
+// go test: internal/typeparser/api_stability_test.go:1399 TestApiStabilityDeclaredPersistsAndCompleteSurfacesReuse 2d2de59710f12a30
 // TestApiStabilityDeclaredPersistsAndCompleteSurfacesReuse pins the
 // current cache policy (updated from the original local-only policy,
 // which the latest shared-surface design supersedes): declared symbol/signature
@@ -1855,7 +1855,7 @@ fn test_api_stability_declared_persists_and_complete_surfaces_reuse() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:1492 TestApiStabilityIncompleteIsNotStable
+// go test: internal/typeparser/api_stability_test.go:1492 TestApiStabilityIncompleteIsNotStable 5cb0a37b70cca1d7
 // TestApiStabilityIncompleteIsNotStable pins that a surface the checker
 // has not materialized reports Incomplete from the public result, publishes
 // nothing, and that a later session over the materialized checker recomputes a

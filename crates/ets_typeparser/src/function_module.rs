@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/function_module.go:8 effectFunctionPackageSourceFileDescriptor
+// go: internal/typeparser/function_module.go:8 effectFunctionPackageSourceFileDescriptor 6414a6776d1c2bd0
 pub(crate) static EFFECT_FUNCTION_PACKAGE_SOURCE_FILE_DESCRIPTOR: PackageSourceFileDescriptor =
     new_package_source_file_descriptor(
         ModuleDescriptorId::Function,
@@ -11,7 +11,7 @@ pub(crate) static EFFECT_FUNCTION_PACKAGE_SOURCE_FILE_DESCRIPTOR: PackageSourceF
         Some(&is_effect_function_source_file),
     );
 
-// go: internal/typeparser/function_module.go:8 effectFunctionPackageSourceFileDescriptor
+// go: internal/typeparser/function_module.go:8 effectFunctionPackageSourceFileDescriptor 6414a6776d1c2bd0
 // Rust: the descriptor's matcher (a Go func literal). Go's nil checker and source file guards cannot fail here.
 fn is_effect_function_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> bool {
     let c = &mut *tp.checker;
@@ -26,7 +26,7 @@ fn is_effect_function_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) ->
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/function_module.go:28 TypeParser.IsNodeReferenceToEffectFunctionModuleApi
+    // go: internal/typeparser/function_module.go:28 TypeParser.IsNodeReferenceToEffectFunctionModuleApi dbb28dd35068f3f4
     // IsNodeReferenceToEffectFunctionModuleApi reports whether node resolves to a
     // member exported by Effect's Function module.
     pub fn is_node_reference_to_effect_function_module_api(
@@ -41,7 +41,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/function_module.go:35 TypeParser.IsNodeDirectReferenceToEffectFunctionModuleApi
+    // go: internal/typeparser/function_module.go:35 TypeParser.IsNodeDirectReferenceToEffectFunctionModuleApi 671113ee63f91a92
     // IsNodeDirectReferenceToEffectFunctionModuleApi is like
     // IsNodeReferenceToEffectFunctionModuleApi but does not follow local variable
     // aliases: node must name the export itself, through imports and re-exports only.

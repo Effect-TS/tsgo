@@ -4,7 +4,7 @@ use rustc_hash::FxHashMap;
 
 use crate::*;
 
-// go: internal/rules/metadata.go:10 metadataGroups
+// go: internal/rules/metadata.go:10 metadataGroups 1fed1c6001bd169d
 pub(crate) static METADATA_GROUPS: [MetadataGroup; 5] = [
     MetadataGroup {
         id: "correctness",
@@ -33,12 +33,12 @@ pub(crate) static METADATA_GROUPS: [MetadataGroup; 5] = [
     },
 ];
 
-// go: internal/rules/metadata.go:18 MetadataGroups
+// go: internal/rules/metadata.go:18 MetadataGroups c054d5dd3acb01e2
 pub fn metadata_groups() -> Vec<MetadataGroup> {
     METADATA_GROUPS.to_vec()
 }
 
-// go: internal/rules/metadata.go:22 MetadataPresets
+// go: internal/rules/metadata.go:22 MetadataPresets 16f93b733f29d0c5
 pub fn metadata_presets() -> Vec<MetadataPreset> {
     vec![
         MetadataPreset {
@@ -79,7 +79,7 @@ pub fn metadata_presets() -> Vec<MetadataPreset> {
     ]
 }
 
-// go: internal/rules/metadata.go:62 buildGroupPreset
+// go: internal/rules/metadata.go:62 buildGroupPreset 9f5511052fb1678c
 pub(crate) fn build_group_preset(group: &str, severity: Severity) -> FxHashMap<String, Severity> {
     let mut preset = FxHashMap::default();
     for current in ALL.iter() {
@@ -90,7 +90,7 @@ pub(crate) fn build_group_preset(group: &str, severity: Severity) -> FxHashMap<S
     preset
 }
 
-// go: internal/rules/metadata.go:72 buildStrictPreset
+// go: internal/rules/metadata.go:72 buildStrictPreset 44def83207a81ae1
 pub(crate) fn build_strict_preset() -> FxHashMap<String, Severity> {
     let mut preset = build_default_preset();
     for severity in preset.values_mut() {
@@ -99,7 +99,7 @@ pub(crate) fn build_strict_preset() -> FxHashMap<String, Severity> {
     preset
 }
 
-// go: internal/rules/metadata.go:80 buildDefaultPreset
+// go: internal/rules/metadata.go:80 buildDefaultPreset 2ee9dffa4274ca30
 pub(crate) fn build_default_preset() -> FxHashMap<String, Severity> {
     let mut preset = FxHashMap::default();
     for current in ALL.iter() {

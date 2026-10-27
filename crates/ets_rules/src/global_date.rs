@@ -7,7 +7,7 @@ use ets_shim::ast::{Diagnostic, Kind, Node, Symbol, SymbolFlags};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::EffectContextFlags;
 
-// go: internal/rules/global_date.go:12 GlobalDate
+// go: internal/rules/global_date.go:12 GlobalDate d970d294c5d288e9
 pub static GLOBAL_DATE: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
     name: "globalDate",
@@ -23,7 +23,7 @@ pub static GLOBAL_DATE: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/global_date.go:27 GlobalDateInEffect
+// go: internal/rules/global_date.go:27 GlobalDateInEffect c295f77d46072423
 pub static GLOBAL_DATE_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
     name: "globalDateInEffect",
@@ -39,7 +39,7 @@ pub static GLOBAL_DATE_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/global_date.go:42 runGlobalDate
+// go: internal/rules/global_date.go:42 runGlobalDate edd6d95bedf68fd1
 pub(crate) fn run_global_date(
     ctx: &mut Context<'_, '_>,
     check_in_effect: bool,

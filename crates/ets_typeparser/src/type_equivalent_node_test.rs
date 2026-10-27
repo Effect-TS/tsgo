@@ -7,7 +7,7 @@ use crate::helpers_test::*;
 use crate::module_export_reference_test::{kind_string, node_pos};
 use crate::*;
 
-// go test: internal/typeparser/type_equivalent_node_test.go:10 TestTypeEquivalentNodeMatchesCheckerTypes
+// go test: internal/typeparser/type_equivalent_node_test.go:10 TestTypeEquivalentNodeMatchesCheckerTypes 9f8c0711173ecdce
 #[test]
 fn test_type_equivalent_node_matches_checker_types() {
     run(|t| {

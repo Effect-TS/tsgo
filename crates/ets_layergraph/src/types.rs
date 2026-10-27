@@ -3,7 +3,7 @@ use ets_shim::checker::Type;
 use ets_shim::core::P;
 use ets_typeparser::Layer;
 
-// go: internal/layergraph/types.go:15 LayerGraphNodeInfo
+// go: internal/layergraph/types.go:15 LayerGraphNodeInfo a1abda71618aa704
 // LayerGraphNodeInfo holds data for each node in the layer graph.
 //
 // Rust: Go's nil and empty type slices are both `Vec::new()`: no in-scope reader tells them apart.
@@ -17,8 +17,8 @@ pub struct LayerGraphNodeInfo {
     pub requires: Vec<P<Type>>, // Individual service types from RIn (unrolled intersection, Never filtered)
 }
 
-// go: internal/layergraph/types.go:25 EdgeRelationship
-// go: internal/layergraph/types.go:27 EdgeRelationshipCall
+// go: internal/layergraph/types.go:25 EdgeRelationship 7441560e32339e31
+// go: internal/layergraph/types.go:27 EdgeRelationshipCall c46bd37125abb265
 // EdgeRelationship is the type of relationship between two nodes in the layer graph.
 //
 // Rust: Go's `type EdgeRelationship string` is only used through its constants (docs/PORTING.md, "Naming").
@@ -30,7 +30,7 @@ pub enum EdgeRelationship {
     Symbol,
 }
 
-// go: internal/layergraph/types.go:36 LayerGraphEdgeInfo
+// go: internal/layergraph/types.go:36 LayerGraphEdgeInfo 19e636e243c1292d
 // LayerGraphEdgeInfo describes the relationship between two nodes in the layer graph.
 // It is a discriminated union keyed on Relationship.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -40,7 +40,7 @@ pub struct LayerGraphEdgeInfo {
     pub index: i64,          // Only meaningful for "arrayLiteral" edges (0-based element position)
 }
 
-// go: internal/layergraph/types.go:25 EdgeRelationship
+// go: internal/layergraph/types.go:25 EdgeRelationship 7441560e32339e31
 impl EdgeRelationship {
     /// Rust-only: the Go string value (`string(relationship)`).
     pub fn as_str(self) -> &'static str {
@@ -59,7 +59,7 @@ impl LayerGraphEdgeInfo {
         LayerGraphEdgeInfo { relationship, argument_index: 0, index: 0 }
     }
 
-    // go: internal/layergraph/types.go:49 LayerGraphEdgeInfo.MarshalJSON
+    // go: internal/layergraph/types.go:49 LayerGraphEdgeInfo.MarshalJSON 30067835cd253404
     // MarshalJSON produces JSON matching the reference format, only including
     // fields relevant to each relationship type:
     //
@@ -86,7 +86,7 @@ impl LayerGraphEdgeInfo {
     }
 }
 
-// go: internal/layergraph/types.go:69 LayerOutlineGraphNodeInfo
+// go: internal/layergraph/types.go:69 LayerOutlineGraphNodeInfo 0f14578c0af4021f
 // LayerOutlineGraphNodeInfo holds data for nodes in the simplified outline graph.
 #[derive(Clone, Debug)]
 pub struct LayerOutlineGraphNodeInfo {
@@ -97,7 +97,7 @@ pub struct LayerOutlineGraphNodeInfo {
     pub requires: Vec<P<Type>>,        // Service types required
 }
 
-// go: internal/layergraph/types.go:79 LayerMagicNode
+// go: internal/layergraph/types.go:79 LayerMagicNode e319cdbad58c8b55
 // LayerMagicNode represents a single node in the layer magic result,
 // annotated with flags that determine which Layer.* combinator to use.
 #[derive(Clone, Debug)]
@@ -110,7 +110,7 @@ pub struct LayerMagicNode {
     pub required_types: Vec<P<Type>>, // Service types required
 }
 
-// go: internal/layergraph/types.go:89 LayerMagicResult
+// go: internal/layergraph/types.go:89 LayerMagicResult 99a70178bd27be02
 // LayerMagicResult holds the output of ConvertOutlineGraphToLayerMagic.
 #[derive(Clone, Debug, Default)]
 pub struct LayerMagicResult {
@@ -118,8 +118,8 @@ pub struct LayerMagicResult {
     pub missing_output_types: Vec<P<Type>>, // Target output types not satisfied by any node
 }
 
-// go: internal/layergraph/types.go:95 ProviderRequirerKind
-// go: internal/layergraph/types.go:97 ProviderRequirerKindProvided
+// go: internal/layergraph/types.go:95 ProviderRequirerKind a8e214157b0052ef
+// go: internal/layergraph/types.go:97 ProviderRequirerKindProvided 792c9d92a7bb9ab0
 // ProviderRequirerKind distinguishes between providers and requirers.
 //
 // Rust: Go's `type ProviderRequirerKind string` with its two constants, the only values it takes.
@@ -129,7 +129,7 @@ pub enum ProviderRequirerKind {
     Required,
 }
 
-// go: internal/layergraph/types.go:95 ProviderRequirerKind
+// go: internal/layergraph/types.go:95 ProviderRequirerKind a8e214157b0052ef
 impl ProviderRequirerKind {
     /// Rust-only: the Go string value (`string(kind)`).
     pub fn as_str(self) -> &'static str {
@@ -140,7 +140,7 @@ impl ProviderRequirerKind {
     }
 }
 
-// go: internal/layergraph/types.go:103 ProviderRequirerInfo
+// go: internal/layergraph/types.go:103 ProviderRequirerInfo ca75da09cbd993e7
 // ProviderRequirerInfo summarizes which leaf layers provide or require a service type.
 #[derive(Clone, Debug)]
 pub struct ProviderRequirerInfo {
@@ -150,7 +150,7 @@ pub struct ProviderRequirerInfo {
     pub display_nodes: Vec<P<Node>>, // Display nodes for those leaves
 }
 
-// go: internal/layergraph/types.go:111 ExtractLayerGraphOptions
+// go: internal/layergraph/types.go:111 ExtractLayerGraphOptions b259ab0facc808ff
 // ExtractLayerGraphOptions controls the behavior of ExtractLayerGraph.
 #[derive(Clone, Copy, Default, Debug)]
 pub struct ExtractLayerGraphOptions {

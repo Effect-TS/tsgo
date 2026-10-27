@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/extends_data_error.go:5 DataErrorResult
+// go: internal/typeparser/extends_data_error.go:5 DataErrorResult f76e7cf12f19f6f2
 // Rust: the class name is Go's `classNode.Name()`, nil for an anonymous class.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct DataErrorResult {
@@ -12,19 +12,19 @@ pub struct DataErrorResult {
 }
 
 impl DataErrorResult {
-    // go: internal/typeparser/extends_data_error.go:10 DataErrorResult.ClassName
+    // go: internal/typeparser/extends_data_error.go:10 DataErrorResult.ClassName e9b4d1751a7ee72c
     pub fn class_name(self) -> Option<P<Node>> {
         self.class_name
     }
 
-    // go: internal/typeparser/extends_data_error.go:12 DataErrorResult.FieldsTypeNode
+    // go: internal/typeparser/extends_data_error.go:12 DataErrorResult.FieldsTypeNode c736b45f1fe0aaed
     pub fn fields_type_node(self) -> Option<P<Node>> {
         self.fields_type_node
     }
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/extends_data_error.go:14 TypeParser.ExtendsDataError
+    // go: internal/typeparser/extends_data_error.go:14 TypeParser.ExtendsDataError b6468c7438769271
     pub fn extends_data_error(
         &mut self,
         class_node: impl Into<Option<P<Node>>>,

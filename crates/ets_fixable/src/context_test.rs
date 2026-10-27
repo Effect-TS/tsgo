@@ -10,7 +10,7 @@ use ets_shim::vfs::{FS, bundled, vfstest};
 
 use crate::*;
 
-// go test: internal/fixable/context_test.go:13 TestStandaloneRangeConversionUsesLSPLineSemantics
+// go test: internal/fixable/context_test.go:13 TestStandaloneRangeConversionUsesLSPLineSemantics d7972fd412c9fdb7
 // Rust: Go builds a `Context` literal with only `SourceFile` and `converters` (the zero values of the rest are
 // never read); a Rust `Context` needs a type parser, so the test makes one over an empty program. The subtests run
 // in sequence.

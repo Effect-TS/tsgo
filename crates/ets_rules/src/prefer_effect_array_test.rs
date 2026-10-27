@@ -2,7 +2,7 @@ use ets_go::testing::run;
 
 use crate::*;
 
-// go test: internal/rules/prefer_effect_array_test.go:5 TestPreferEffectArrayInheritedAugmentation
+// go test: internal/rules/prefer_effect_array_test.go:5 TestPreferEffectArrayInheritedAugmentation 616d3400e73c6bcc
 #[test]
 fn test_prefer_effect_array_inherited_augmentation() {
     run(|t| {
@@ -30,7 +30,7 @@ Array.isArray([]);
     });
 }
 
-// go test: internal/rules/prefer_effect_array_test.go:22 TestPreferEffectArrayRemappedMember
+// go test: internal/rules/prefer_effect_array_test.go:22 TestPreferEffectArrayRemappedMember 7fd58678b6d06256
 #[test]
 fn test_prefer_effect_array_remapped_member() {
     run(|t| {

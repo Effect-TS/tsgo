@@ -12,7 +12,7 @@ use ets_typeparser::TransformationKind;
 
 use crate::*;
 
-// go: internal/refactors/toggle_pipe_style.go:17 TogglePipeStyle
+// go: internal/refactors/toggle_pipe_style.go:17 TogglePipeStyle 26b80f75961992fb
 pub static TOGGLE_PIPE_STYLE: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "togglePipeStyle",
     description: "Toggle pipe style",
@@ -20,7 +20,7 @@ pub static TOGGLE_PIPE_STYLE: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     run: run_toggle_pipe_style,
 });
 
-// go: internal/refactors/toggle_pipe_style.go:24 runTogglePipeStyle
+// go: internal/refactors/toggle_pipe_style.go:24 runTogglePipeStyle 38dc81eadc44bc27
 pub(crate) fn run_toggle_pipe_style(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let token = astnav::get_token_at_position(ctx.source_file, span_pos(ctx));
 
@@ -104,7 +104,7 @@ pub(crate) fn run_toggle_pipe_style(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
     Vec::new()
 }
 
-// go: internal/refactors/toggle_pipe_style.go:91 togglePipeToMethodText
+// go: internal/refactors/toggle_pipe_style.go:91 togglePipeToMethodText df534a32ce711295
 pub(crate) fn toggle_pipe_to_method_text(
     sf: P<SourceFile>,
     subject: P<Node>,
@@ -120,7 +120,7 @@ pub(crate) fn toggle_pipe_to_method_text(
         + ")"
 }
 
-// go: internal/refactors/toggle_pipe_style.go:99 togglePipeToFunctionText
+// go: internal/refactors/toggle_pipe_style.go:99 togglePipeToFunctionText b6c9daf349fb8b33
 pub(crate) fn toggle_pipe_to_function_text(
     sf: P<SourceFile>,
     subject: P<Node>,

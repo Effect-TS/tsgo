@@ -11,7 +11,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_1_EXPRESSES_IGNORED_FAILURE_MORE_DIRECTLY_THAN_EFFECT_0_RETURNING_EFFECT_VOID_EFFECT_CATCH_TO_IGNORE;
 
-// go: internal/fixables/catch_to_ignore.go:13 CatchToIgnoreFix
+// go: internal/fixables/catch_to_ignore.go:13 CatchToIgnoreFix a4bc926159933c0a
 pub static CATCH_TO_IGNORE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "catchToIgnore",
     description: "Replace Effect.catch/catchCause + Effect.void with Effect.ignore/ignoreCause",
@@ -20,7 +20,7 @@ pub static CATCH_TO_IGNORE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     run: run_catch_to_ignore_fix,
 });
 
-// go: internal/fixables/catch_to_ignore.go:21 runCatchToIgnoreFix
+// go: internal/fixables/catch_to_ignore.go:21 runCatchToIgnoreFix fa64fb47c68689b0
 //
 // Rust: the match's transformation is never nil (a non-optional field), so Go's nil check drops.
 fn run_catch_to_ignore_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
@@ -55,7 +55,7 @@ fn run_catch_to_ignore_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     Vec::new()
 }
 
-// go: internal/fixables/catch_to_ignore.go:50 catchToIgnoreReplacementAccess
+// go: internal/fixables/catch_to_ignore.go:50 catchToIgnoreReplacementAccess 7846450c1919247a
 fn catch_to_ignore_replacement_access(
     tracker: &Tracker,
     sf: P<SourceFile>,

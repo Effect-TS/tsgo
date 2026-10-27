@@ -13,7 +13,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go: internal/refactors/async_await_to_fn_try_promise.go:14 AsyncAwaitToFnTryPromise
+// go: internal/refactors/async_await_to_fn_try_promise.go:14 AsyncAwaitToFnTryPromise 046582d5c1253bf5
 pub static ASYNC_AWAIT_TO_FN_TRY_PROMISE: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "asyncAwaitToFnTryPromise",
     description: "Convert async/await to Effect.fn (with error handling)",
@@ -21,7 +21,7 @@ pub static ASYNC_AWAIT_TO_FN_TRY_PROMISE: LazyLock<Refactor> = LazyLock::new(|| 
     run: run_async_await_to_fn_try_promise,
 });
 
-// go: internal/refactors/async_await_to_fn_try_promise.go:21 runAsyncAwaitToFnTryPromise
+// go: internal/refactors/async_await_to_fn_try_promise.go:21 runAsyncAwaitToFnTryPromise a05ec2b5707860c2
 // Rust: tsrs's `get_token_at_position` never returns nil, so Go's nil check drops.
 pub(crate) fn run_async_await_to_fn_try_promise(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let token = astnav::get_token_at_position(ctx.source_file, span_pos(ctx));
@@ -55,7 +55,7 @@ pub(crate) fn run_async_await_to_fn_try_promise(ctx: &mut Context<'_, '_>) -> Ve
     vec![action]
 }
 
-// go: internal/refactors/async_await_to_fn_try_promise.go:50 transformAsyncToEffectFnTryPromise
+// go: internal/refactors/async_await_to_fn_try_promise.go:50 transformAsyncToEffectFnTryPromise c4d5cca8adbf57c5
 // Rust: the await callback runs inside a `'static` visitor closure (`TransformAwaitExpr`), so the error count and
 // the error classes it collects are shared cells. `build_fn_declaration` never returns nil, so Go's nil check
 // after it drops.

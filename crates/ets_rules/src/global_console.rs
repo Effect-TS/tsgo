@@ -7,7 +7,7 @@ use ets_shim::ast::{Diagnostic, Kind, Node};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::EffectContextFlags;
 
-// go: internal/rules/global_console.go:12 globalConsoleMethodAlternatives
+// go: internal/rules/global_console.go:12 globalConsoleMethodAlternatives b980ad841c4a5976
 // Rust: Go's map is iterated in random order; at most one method can match a callee (each names a different member
 // of `console`), so the order is not observable and a slice in Go's literal order stands in for it.
 pub(crate) static GLOBAL_CONSOLE_METHOD_ALTERNATIVES: &[(&str, &str)] = &[
@@ -19,7 +19,7 @@ pub(crate) static GLOBAL_CONSOLE_METHOD_ALTERNATIVES: &[(&str, &str)] = &[
     ("trace", "Effect.logTrace or Logger"),
 ];
 
-// go: internal/rules/global_console.go:21 GlobalConsole
+// go: internal/rules/global_console.go:21 GlobalConsole 5b8ccd1e25e88dd1
 pub static GLOBAL_CONSOLE: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
     name: "globalConsole",
@@ -32,7 +32,7 @@ pub static GLOBAL_CONSOLE: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/global_console.go:33 GlobalConsoleInEffect
+// go: internal/rules/global_console.go:33 GlobalConsoleInEffect 693a9969c5bc73a1
 pub static GLOBAL_CONSOLE_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
     name: "globalConsoleInEffect",
@@ -45,7 +45,7 @@ pub static GLOBAL_CONSOLE_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/global_console.go:45 runGlobalConsole
+// go: internal/rules/global_console.go:45 runGlobalConsole ee3016e8dcddc76c
 pub(crate) fn run_global_console(
     ctx: &mut Context<'_, '_>,
     check_in_effect: bool,

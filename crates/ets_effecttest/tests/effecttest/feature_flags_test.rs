@@ -7,7 +7,7 @@ use libtest_mimic::Trial;
 
 use crate::run_case;
 
-// go test: internal/effecttest/feature_flags_test.go:14 TestEffectDiagnosticsDisabled
+// go test: internal/effecttest/feature_flags_test.go:14 TestEffectDiagnosticsDisabled 0ed1d5fb33d6cd59
 fn test_effect_diagnostics_disabled(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -41,7 +41,7 @@ Effect.succeed(1)"#;
     f.done(t);
 }
 
-// go test: internal/effecttest/feature_flags_test.go:46 TestEffectRefactorsDisabled
+// go test: internal/effecttest/feature_flags_test.go:46 TestEffectRefactorsDisabled 3deb8c9f460513a7
 fn test_effect_refactors_disabled(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -91,7 +91,7 @@ export const program = () =>
     f.done(t);
 }
 
-// go test: internal/effecttest/feature_flags_test.go:87 TestEffectOverridesCanDisableMatchingFile
+// go test: internal/effecttest/feature_flags_test.go:87 TestEffectOverridesCanDisableMatchingFile 0771b892557343d1
 fn test_effect_overrides_can_disable_matching_file(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -134,7 +134,7 @@ Effect.succeed(1)"#;
     f.done(t);
 }
 
-// go test: internal/effecttest/feature_flags_test.go:128 TestEffectOverridesCanOverrideRuleOptions
+// go test: internal/effecttest/feature_flags_test.go:128 TestEffectOverridesCanOverrideRuleOptions 5382db273ca265ac
 fn test_effect_overrides_can_override_rule_options(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -177,7 +177,7 @@ export const preview = identity(identity(Schema.decodeEffect(User)({ id: 1 })))"
     f.done(t);
 }
 
-// go test: internal/effecttest/feature_flags_test.go:169 TestEffectOverridesPreserveExtendedConfigBasePaths
+// go test: internal/effecttest/feature_flags_test.go:169 TestEffectOverridesPreserveExtendedConfigBasePaths ff4419ae36be44b3
 fn test_effect_overrides_preserve_extended_config_base_paths(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -231,7 +231,7 @@ Effect.succeed(1)"#;
     f.done(t);
 }
 
-// go test: internal/effecttest/feature_flags_test.go:221 TestEffectDiagnosticsWorkThroughMultiHopExtends
+// go test: internal/effecttest/feature_flags_test.go:221 TestEffectDiagnosticsWorkThroughMultiHopExtends 358d5f0d58969f89
 fn test_effect_diagnostics_work_through_multi_hop_extends(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();

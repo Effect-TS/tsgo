@@ -10,7 +10,7 @@ use ets_typeparser::{EffectMajorVersion, TypeParser};
 
 use crate::*;
 
-// go: internal/rules/outdated_api.go:17 OutdatedApi
+// go: internal/rules/outdated_api.go:17 OutdatedApi d9e51ae4c857c8a0
 // OutdatedApi detects usage of Effect v3 APIs in projects targeting Effect v4.
 pub static OUTDATED_API: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
@@ -54,7 +54,7 @@ pub static OUTDATED_API: LazyLock<Rule> = LazyLock::new(|| {
     }
 });
 
-// go: internal/rules/outdated_api.go:58 OutdatedApiMatch
+// go: internal/rules/outdated_api.go:58 OutdatedApiMatch aa554d851c743a84
 // OutdatedApiMatch holds the analysis results for one outdated API usage.
 #[derive(Clone)]
 pub struct OutdatedApiMatch {
@@ -65,7 +65,7 @@ pub struct OutdatedApiMatch {
     pub migration: Migration,
 }
 
-// go: internal/rules/outdated_api.go:67 AnalyzeOutdatedApi
+// go: internal/rules/outdated_api.go:67 AnalyzeOutdatedApi b7cc980964c98292
 // AnalyzeOutdatedApi finds all usages of Effect v3 APIs in an Effect v4 project.
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`), so it is dropped.
@@ -98,7 +98,7 @@ pub fn analyze_outdated_api(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> Vec<O
     matches
 }
 
-// go: internal/rules/outdated_api.go:95 checkOutdatedApiPropertyAccess
+// go: internal/rules/outdated_api.go:95 checkOutdatedApiPropertyAccess 9cfeda7d7408086c
 //
 // Rust: the checker is the parser's.
 pub(crate) fn check_outdated_api_property_access(
@@ -151,7 +151,7 @@ pub(crate) fn check_outdated_api_property_access(
     })
 }
 
-// go: internal/rules/outdated_api.go:153 migrationHintText
+// go: internal/rules/outdated_api.go:153 migrationHintText 9688d29085592404
 pub(crate) fn migration_hint_text(m: &Migration) -> String {
     match m.tag {
         MigrationTag::Removed => m.alternative_pattern.to_string(),

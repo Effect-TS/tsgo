@@ -9,7 +9,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::X_0_1_RETURNS_A_REUSABLE_FUNCTION_THAT_CAN_TAKE_ARGUMENTS_BUT_IT_IS_INVOKED_IMMEDIATELY_HERE_EFFECT_GEN_REPRESENTS_THE_IMMEDIATE_USE_FORM_FOR_THIS_PATTERN_2_EFFECT_EFFECT_FN_IIFE;
 
-// go: internal/fixables/effect_fn_iife.go:13 EffectFnIifeFix
+// go: internal/fixables/effect_fn_iife.go:13 EffectFnIifeFix 7572e7e32fd64283
 pub static EFFECT_FN_IIFE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "effectFnIife",
     description: "Convert Effect.fn IIFE to Effect.gen",
@@ -18,7 +18,7 @@ pub static EFFECT_FN_IIFE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     run: run_effect_fn_iife_fix,
 });
 
-// go: internal/fixables/effect_fn_iife.go:21 runEffectFnIifeFix
+// go: internal/fixables/effect_fn_iife.go:21 runEffectFnIifeFix 81542fa511276c54
 fn run_effect_fn_iife_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 

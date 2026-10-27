@@ -8,8 +8,8 @@ use ets_shim::checker::{SignatureKind, Type};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{LazyExpressionFlags, TypeParser};
 
-// go: internal/rules/floating_effect_in_vitest.go:12 vitestCallbackKind
-// go: internal/rules/floating_effect_in_vitest.go:14 vitestCallbackNone
+// go: internal/rules/floating_effect_in_vitest.go:12 vitestCallbackKind 2c8ba8af9b8c533e
+// go: internal/rules/floating_effect_in_vitest.go:14 vitestCallbackNone c56122ecf7d11e84
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub(crate) enum VitestCallbackKind {
     None,
@@ -17,14 +17,14 @@ pub(crate) enum VitestCallbackKind {
     Hook,
 }
 
-// go: internal/rules/floating_effect_in_vitest.go:20 vitestRoot
+// go: internal/rules/floating_effect_in_vitest.go:20 vitestRoot b298416e671ed4f6
 #[derive(Clone, Copy, Default)]
 pub(crate) struct VitestRoot {
     pub(crate) name: &'static str,
     pub(crate) effect_vitest: bool,
 }
 
-// go: internal/rules/floating_effect_in_vitest.go:25 vitestTestModifiers
+// go: internal/rules/floating_effect_in_vitest.go:25 vitestTestModifiers 29300f7b211a1658
 // Rust: Go's `map[string]struct{}` sets are slices searched with `contains`.
 pub(crate) static VITEST_TEST_MODIFIERS: &[&str] = &[
     "concurrent",
@@ -40,20 +40,20 @@ pub(crate) static VITEST_TEST_MODIFIERS: &[&str] = &[
     "todo",
 ];
 
-// go: internal/rules/floating_effect_in_vitest.go:39 vitestHookNames
+// go: internal/rules/floating_effect_in_vitest.go:39 vitestHookNames a65c68c83e41e6d5
 // Rust: Go iterates this set in random order in `matchVitestRoot`; a node references at most one of the hooks, so
 // the order is not observable.
 pub(crate) static VITEST_HOOK_NAMES: &[&str] =
     &["afterAll", "afterEach", "beforeAll", "beforeEach"];
 
-// go: internal/rules/floating_effect_in_vitest.go:46 effectAwareVitestMethods
+// go: internal/rules/floating_effect_in_vitest.go:46 effectAwareVitestMethods d7c05723027ebdaf
 pub(crate) static EFFECT_AWARE_VITEST_METHODS: &[&str] =
     &["effect", "live", "scoped", "scopedLive"];
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THIS_VITEST_CALLBACK_RETURNS_AN_EFFECT_THAT_VITEST_DOES_NOT_RUN_USE_AN_EFFECT_AWARE_TEST_API_OR_RUN_THE_EFFECT_WITH_EFFECT_RUN_PROMISE_EFFECT_FLOATING_EFFECT_IN_VITEST;
 
-// go: internal/rules/floating_effect_in_vitest.go:55 FloatingEffectInVitest
+// go: internal/rules/floating_effect_in_vitest.go:55 FloatingEffectInVitest a97f36d1f01a1274
 // FloatingEffectInVitest detects Effects returned from Vitest callbacks that do
 // not execute returned Effect values.
 pub static FLOATING_EFFECT_IN_VITEST: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -95,7 +95,7 @@ pub static FLOATING_EFFECT_IN_VITEST: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/floating_effect_in_vitest.go:96 floatingEffectVitestCallback
+// go: internal/rules/floating_effect_in_vitest.go:96 floatingEffectVitestCallback 8161dadb33315aa1
 //
 // Rust: takes the call expression node (Go's `*ast.CallExpression`).
 pub(crate) fn floating_effect_vitest_callback(
@@ -122,7 +122,7 @@ pub(crate) fn floating_effect_vitest_callback(
         .find(|&callback| vitest_callback_returns_effect(ctx.type_parser, callback))
 }
 
-// go: internal/rules/floating_effect_in_vitest.go:120 matchVitestCallee
+// go: internal/rules/floating_effect_in_vitest.go:120 matchVitestCallee 678e2d0ef18c3040
 pub(crate) fn match_vitest_callee(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,
@@ -156,7 +156,7 @@ pub(crate) fn match_vitest_callee(
     (VitestRoot::default(), Vec::new())
 }
 
-// go: internal/rules/floating_effect_in_vitest.go:158 matchVitestRoot
+// go: internal/rules/floating_effect_in_vitest.go:158 matchVitestRoot b9c247f8743ede84
 pub(crate) fn match_vitest_root(tp: &mut TypeParser<'_>, node: P<Node>) -> VitestRoot {
     for name in ["it", "test"] {
         if tp.is_node_reference_to_vitest_api(node, name) {
@@ -174,7 +174,7 @@ pub(crate) fn match_vitest_root(tp: &mut TypeParser<'_>, node: P<Node>) -> Vites
     VitestRoot::default()
 }
 
-// go: internal/rules/floating_effect_in_vitest.go:175 classifyVitestCallback
+// go: internal/rules/floating_effect_in_vitest.go:175 classifyVitestCallback 5cc74556d6c66a19
 pub(crate) fn classify_vitest_callback(root: VitestRoot, members: &[&str]) -> VitestCallbackKind {
     if root.name.is_empty() {
         return VitestCallbackKind::None;
@@ -203,7 +203,7 @@ pub(crate) fn classify_vitest_callback(root: VitestRoot, members: &[&str]) -> Vi
     VitestCallbackKind::Test
 }
 
-// go: internal/rules/floating_effect_in_vitest.go:204 vitestCallbackReturnsEffect
+// go: internal/rules/floating_effect_in_vitest.go:204 vitestCallbackReturnsEffect d814c01a545f512d
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub(crate) fn vitest_callback_returns_effect(tp: &mut TypeParser<'_>, callback: P<Node>) -> bool {
@@ -227,7 +227,7 @@ pub(crate) fn vitest_callback_returns_effect(tp: &mut TypeParser<'_>, callback: 
     false
 }
 
-// go: internal/rules/floating_effect_in_vitest.go:222 vitestReturnTypeContainsEffect
+// go: internal/rules/floating_effect_in_vitest.go:222 vitestReturnTypeContainsEffect a1d0a9b434d8425f
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 #[expect(

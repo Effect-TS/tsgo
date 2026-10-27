@@ -5,7 +5,7 @@ use ets_shim::scanner;
 
 use crate::*;
 
-// go test: internal/completion/position_test.go:12 parseSource
+// go test: internal/completion/position_test.go:12 parseSource f4cd2f032a49fd07
 fn parse_source(source: &str) -> P<SourceFile> {
     ets_shim::parser::parse_source_file(
         SourceFileParseOptions { file_name: "/test.ts".to_string(), ..Default::default() },
@@ -19,7 +19,7 @@ fn len(source: &str) -> u32 {
     u32::try_from(source.len()).unwrap()
 }
 
-// go test: internal/completion/position_test.go:18 TestParseDataForExtendsClassCompletion_AfterDot
+// go test: internal/completion/position_test.go:18 TestParseDataForExtendsClassCompletion_AfterDot a2aa5ef59b9115f5
 #[test]
 fn test_parse_data_for_extends_class_completion_after_dot() {
     ets_go::testing::run(|t| {
@@ -43,7 +43,7 @@ fn test_parse_data_for_extends_class_completion_after_dot() {
     });
 }
 
-// go test: internal/completion/position_test.go:37 TestParseDataForExtendsClassCompletion_BarrelNamespaceAfterDot
+// go test: internal/completion/position_test.go:37 TestParseDataForExtendsClassCompletion_BarrelNamespaceAfterDot d19c34753982e042
 #[test]
 fn test_parse_data_for_extends_class_completion_barrel_namespace_after_dot() {
     ets_go::testing::run(|t| {
@@ -62,7 +62,7 @@ fn test_parse_data_for_extends_class_completion_barrel_namespace_after_dot() {
     });
 }
 
-// go test: internal/completion/position_test.go:52 TestParseDataForExtendsClassCompletion_AfterPropertyName
+// go test: internal/completion/position_test.go:52 TestParseDataForExtendsClassCompletion_AfterPropertyName 3ac39f38f40625d0
 #[test]
 fn test_parse_data_for_extends_class_completion_after_property_name() {
     ets_go::testing::run(|t| {
@@ -86,7 +86,7 @@ fn test_parse_data_for_extends_class_completion_after_property_name() {
     });
 }
 
-// go test: internal/completion/position_test.go:71 TestParseDataForExtendsClassCompletion_StandaloneIdentifier
+// go test: internal/completion/position_test.go:71 TestParseDataForExtendsClassCompletion_StandaloneIdentifier 91f50fd950c2da1a
 #[test]
 fn test_parse_data_for_extends_class_completion_standalone_identifier() {
     ets_go::testing::run(|t| {
@@ -110,7 +110,7 @@ fn test_parse_data_for_extends_class_completion_standalone_identifier() {
     });
 }
 
-// go test: internal/completion/position_test.go:91 TestParseDataForExtendsClassCompletion_NonClassContext
+// go test: internal/completion/position_test.go:91 TestParseDataForExtendsClassCompletion_NonClassContext 5152ebf59cd0c807
 #[test]
 fn test_parse_data_for_extends_class_completion_non_class_context() {
     ets_go::testing::run(|t| {
@@ -127,7 +127,7 @@ fn test_parse_data_for_extends_class_completion_non_class_context() {
     });
 }
 
-// go test: internal/completion/position_test.go:104 TestParseDataForExtendsClassCompletion_InsideImportDeclaration
+// go test: internal/completion/position_test.go:104 TestParseDataForExtendsClassCompletion_InsideImportDeclaration dd0618fdb24627b1
 #[test]
 fn test_parse_data_for_extends_class_completion_inside_import_declaration() {
     ets_go::testing::run(|t| {
@@ -144,7 +144,7 @@ fn test_parse_data_for_extends_class_completion_inside_import_declaration() {
     });
 }
 
-// go test: internal/completion/position_test.go:117 TestParseDataForExtendsClassCompletion_ReplacementSpan
+// go test: internal/completion/position_test.go:117 TestParseDataForExtendsClassCompletion_ReplacementSpan b756611c4d28aca1
 #[test]
 fn test_parse_data_for_extends_class_completion_replacement_span() {
     ets_go::testing::run(|t| {

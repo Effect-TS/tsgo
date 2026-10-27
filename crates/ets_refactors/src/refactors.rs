@@ -7,7 +7,7 @@ use ets_refactor::Refactor;
 
 use crate::*;
 
-// go: internal/refactors/refactors.go:9 All
+// go: internal/refactors/refactors.go:9 All aa1d03a7ebf7278e
 // All is the list of all refactor providers.
 // Add new refactors here explicitly - no init() magic.
 //

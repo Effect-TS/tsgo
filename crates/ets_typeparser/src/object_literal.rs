@@ -1,7 +1,7 @@
 use ets_shim::ast::{Kind, Node};
 use ets_shim::core::P;
 
-// go: internal/typeparser/object_literal.go:7 ObjectLiteralPropertyInitializer
+// go: internal/typeparser/object_literal.go:7 ObjectLiteralPropertyInitializer c026dc8e1f1fb5b1
 // ObjectLiteralPropertyInitializer returns the initializer of an explicitly
 // assigned identifier or string-literal property in an object literal.
 pub fn object_literal_property_initializer(

@@ -8,7 +8,7 @@ use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile, Symbol, SymbolFlag
 use ets_shim::checker::Checker;
 use ets_shim::diagnostics as tsdiag;
 
-// go: internal/rules/prefer_namespace_import.go:12 PreferNamespaceImport
+// go: internal/rules/prefer_namespace_import.go:12 PreferNamespaceImport 1ebac69c7e6f24db
 pub static PREFER_NAMESPACE_IMPORT: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
         name: "preferNamespaceImport",
@@ -24,7 +24,7 @@ pub static PREFER_NAMESPACE_IMPORT: LazyLock<Rule> = LazyLock::new(|| {
     }
 });
 
-// go: internal/rules/prefer_namespace_import.go:25 runPreferNamespaceImport
+// go: internal/rules/prefer_namespace_import.go:25 runPreferNamespaceImport 84807e7b4c5c19ca
 pub(crate) fn run_prefer_namespace_import(ctx: &mut Context<'_, '_>) -> Vec<P<Diagnostic>> {
     let Some(options) = ctx.options else {
         return Vec::new();
@@ -120,7 +120,7 @@ pub(crate) fn run_prefer_namespace_import(ctx: &mut Context<'_, '_>) -> Vec<P<Di
     diags
 }
 
-// go: internal/rules/prefer_namespace_import.go:114 namespaceImport
+// go: internal/rules/prefer_namespace_import.go:114 namespaceImport 2ac449256597df6f
 // namespaceImport is the namespace import an offending named import should become.
 // An empty specifier means the declaring module could not be derived.
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
@@ -129,7 +129,7 @@ pub(crate) struct NamespaceImport {
     pub(crate) specifier: String,
 }
 
-// go: internal/rules/prefer_namespace_import.go:122 namespaceImportTarget
+// go: internal/rules/prefer_namespace_import.go:122 namespaceImportTarget f61fd2496ae8f979
 // namespaceImportTarget classifies an export of the module at specifier.
 // isReexport is true for exports that the module forwards from another module
 // by name or through `export *`; those follow topLevelNamedReexports.
@@ -190,7 +190,7 @@ pub(crate) fn namespace_import_target(
     (NamespaceImport::default(), true)
 }
 
-// go: internal/rules/prefer_namespace_import.go:157 reexportTarget
+// go: internal/rules/prefer_namespace_import.go:157 reexportTarget fe93c969813a3b03
 // reexportTarget derives the public specifier of the module an export
 // declaration in the barrel at specifier forwards from.
 pub(crate) fn reexport_target(export_declaration: Option<P<Node>>, specifier: &str) -> String {
@@ -213,7 +213,7 @@ pub(crate) fn reexport_target(export_declaration: Option<P<Node>>, specifier: &s
     ets_importstyle::reexport_specifier(specifier, module_specifier.text())
 }
 
-// go: internal/rules/prefer_namespace_import.go:168 symbolSourceFile
+// go: internal/rules/prefer_namespace_import.go:168 symbolSourceFile 516920f47618f18b
 pub(crate) fn symbol_source_file(symbol: P<Symbol>) -> Option<P<SourceFile>> {
     for &declaration in symbol.declarations() {
         if declaration.kind() == Kind::SourceFile {
@@ -226,7 +226,7 @@ pub(crate) fn symbol_source_file(symbol: P<Symbol>) -> Option<P<SourceFile>> {
     None
 }
 
-// go: internal/rules/prefer_namespace_import.go:180 namespaceImportText
+// go: internal/rules/prefer_namespace_import.go:180 namespaceImportText 37bb333750b0d0a2
 pub(crate) fn namespace_import_text(target: &NamespaceImport, type_only: bool) -> String {
     let mut keyword = "import ";
     if type_only {

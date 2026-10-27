@@ -8,7 +8,7 @@ use ets_shim::core::P;
 use crate::helpers_test::*;
 use crate::*;
 
-// go test: internal/typeparser/effect_gen_test.go:10 findFirstEffectGenCall
+// go test: internal/typeparser/effect_gen_test.go:10 findFirstEffectGenCall 3c8b0ceef2b1c002
 fn find_first_effect_gen_call(
     t: &T,
     tp: &mut TypeParser<'_>,
@@ -40,7 +40,7 @@ fn find_first_effect_gen_call(
     result
 }
 
-// go test: internal/typeparser/effect_gen_test.go:34 assertEffectGenFunctionReturnType
+// go test: internal/typeparser/effect_gen_test.go:34 assertEffectGenFunctionReturnType bb1194f598d1c072
 fn assert_effect_gen_function_return_type(t: &T, version: EffectVersion, source: &str, want: &str) {
     t.helper();
     let (mut compiled, sf) =
@@ -57,7 +57,7 @@ fn assert_effect_gen_function_return_type(t: &T, version: EffectVersion, source:
     }
 }
 
-// go test: internal/typeparser/effect_gen_test.go:49 TestEffectGenCall_FunctionReturnType_NoPipe
+// go test: internal/typeparser/effect_gen_test.go:49 TestEffectGenCall_FunctionReturnType_NoPipe c45605b49d13ebc7
 #[test]
 fn test_effect_gen_call_function_return_type_no_pipe() {
     run(|t| {
@@ -85,7 +85,7 @@ export const make = Effect.gen(function*() {
     });
 }
 
-// go test: internal/typeparser/effect_gen_test.go:63 TestEffectGenCall_FunctionReturnType_GenericNoPipe
+// go test: internal/typeparser/effect_gen_test.go:63 TestEffectGenCall_FunctionReturnType_GenericNoPipe 9e24da6ad43785e8
 #[test]
 fn test_effect_gen_call_function_return_type_generic_no_pipe() {
     run(|t| {
@@ -103,7 +103,7 @@ export const make = <A>(a: A) => Effect.gen(function*() {
     });
 }
 
-// go test: internal/typeparser/effect_gen_test.go:77 TestEffectGenCall_FunctionReturnType_SelfObject
+// go test: internal/typeparser/effect_gen_test.go:77 TestEffectGenCall_FunctionReturnType_SelfObject 0c81e4ea898e9f23
 #[test]
 fn test_effect_gen_call_function_return_type_self_object() {
     run(|t| {
@@ -129,7 +129,7 @@ export const make = Effect.gen({ self }, function*(this: typeof self) {
     });
 }
 
-// go test: internal/typeparser/effect_gen_test.go:94 TestEffectGenCall_FunctionReturnType_GenericSelfObject
+// go test: internal/typeparser/effect_gen_test.go:94 TestEffectGenCall_FunctionReturnType_GenericSelfObject 123f61ec8ffcedd1
 #[test]
 fn test_effect_gen_call_function_return_type_generic_self_object() {
     run(|t| {
@@ -154,7 +154,7 @@ export const make = <A>(self: { readonly value: A }) => Effect.gen(self, functio
     });
 }
 
-// go test: internal/typeparser/effect_gen_test.go:115 TestEffectGenCall_ConstantAlias
+// go test: internal/typeparser/effect_gen_test.go:115 TestEffectGenCall_ConstantAlias 222341ccc440b210
 #[test]
 fn test_effect_gen_call_constant_alias() {
     run(|t| {

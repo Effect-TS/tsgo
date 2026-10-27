@@ -1,6 +1,6 @@
 use crate::*;
 
-// go test: internal/completions/context_self_in_classes_test.go:8 TestContextSelfInClasses_NotInExtendsClause
+// go test: internal/completions/context_self_in_classes_test.go:8 TestContextSelfInClasses_NotInExtendsClause 4efe0a87898043ac
 #[test]
 fn test_context_self_in_classes_not_in_extends_clause() {
     go_test(|t| {
@@ -18,7 +18,7 @@ const x = Context.Tag"#;
     });
 }
 
-// go test: internal/completions/context_self_in_classes_test.go:19 TestContextSelfInClasses_NotInClass
+// go test: internal/completions/context_self_in_classes_test.go:19 TestContextSelfInClasses_NotInClass 18bb36f5a45daf46
 #[test]
 fn test_context_self_in_classes_not_in_class() {
     go_test(|t| {
@@ -33,7 +33,7 @@ const x = Context."#;
     });
 }
 
-// go test: internal/completions/context_self_in_classes_test.go:30 TestContextSelfInClasses_EmptySource
+// go test: internal/completions/context_self_in_classes_test.go:30 TestContextSelfInClasses_EmptySource 332024266850246b
 #[test]
 fn test_context_self_in_classes_empty_source() {
     go_test(|t| {
@@ -46,7 +46,7 @@ fn test_context_self_in_classes_empty_source() {
     });
 }
 
-// go test: internal/completions/context_self_in_classes_test.go:39 TestContextSelfInClasses_InsideImportDeclaration
+// go test: internal/completions/context_self_in_classes_test.go:39 TestContextSelfInClasses_InsideImportDeclaration a4397fd6c79527b2
 #[test]
 fn test_context_self_in_classes_inside_import_declaration() {
     go_test(|t| {
@@ -64,7 +64,7 @@ fn test_context_self_in_classes_inside_import_declaration() {
     });
 }
 
-// go test: internal/completions/context_self_in_classes_test.go:50 TestContextSelfInClasses_InterfaceNotClass
+// go test: internal/completions/context_self_in_classes_test.go:50 TestContextSelfInClasses_InterfaceNotClass f7254609d27ca4eb
 #[test]
 fn test_context_self_in_classes_interface_not_class() {
     go_test(|t| {
@@ -81,7 +81,7 @@ fn test_context_self_in_classes_interface_not_class() {
     });
 }
 
-// go test: internal/completions/context_self_in_classes_test.go:60 TestContextSelfInClasses_AnonymousClass
+// go test: internal/completions/context_self_in_classes_test.go:60 TestContextSelfInClasses_AnonymousClass 6532099d4580fd1d
 #[test]
 fn test_context_self_in_classes_anonymous_class() {
     go_test(|t| {
@@ -98,7 +98,7 @@ fn test_context_self_in_classes_anonymous_class() {
     });
 }
 
-// go test: internal/completions/context_self_in_classes_test.go:70 TestContextSelfInClasses_V4NamespaceImport
+// go test: internal/completions/context_self_in_classes_test.go:70 TestContextSelfInClasses_V4NamespaceImport 20d3d8e5a85478f5
 #[test]
 fn test_context_self_in_classes_v4_namespace_import() {
     go_test(|t| {
@@ -140,7 +140,7 @@ export class MyService extends Context."#;
     });
 }
 
-// go test: internal/completions/context_self_in_classes_test.go:96 TestContextSelfInClasses_V4DirectImport
+// go test: internal/completions/context_self_in_classes_test.go:96 TestContextSelfInClasses_V4DirectImport 6ca9d66ef65d2c24
 #[test]
 fn test_context_self_in_classes_v4_direct_import() {
     go_test(|t| {
@@ -167,7 +167,7 @@ export class MyService extends Service"#;
     });
 }
 
-// go test: internal/completions/context_self_in_classes_test.go:115 TestContextSelfInClasses_V4IdentifierKeyPattern
+// go test: internal/completions/context_self_in_classes_test.go:115 TestContextSelfInClasses_V4IdentifierKeyPattern 0a79139093793ca4
 #[test]
 fn test_context_self_in_classes_v4_identifier_key_pattern() {
     go_test(|t| {
@@ -193,7 +193,7 @@ export class MyService extends Context."#;
     });
 }
 
-// go test: internal/completions/context_self_in_classes_test.go:134 TestContextSelfInClasses_V4MiddleOfIdentifier
+// go test: internal/completions/context_self_in_classes_test.go:134 TestContextSelfInClasses_V4MiddleOfIdentifier b0cfe0f927a26317
 #[test]
 fn test_context_self_in_classes_v4_middle_of_identifier() {
     go_test(|t| {

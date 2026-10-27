@@ -8,7 +8,7 @@ use ets_shim::core::P;
 use crate::helpers_test::*;
 use crate::*;
 
-// go test: internal/typeparser/effect_fn_test.go:10 findFirstEffectFnCall
+// go test: internal/typeparser/effect_fn_test.go:10 findFirstEffectFnCall 5cc969ba06a09f41
 fn find_first_effect_fn_call(
     t: &T,
     tp: &mut TypeParser<'_>,
@@ -36,7 +36,7 @@ fn find_first_effect_fn_call(
     result
 }
 
-// go test: internal/typeparser/effect_fn_test.go:34 compileEffectFnTest
+// go test: internal/typeparser/effect_fn_test.go:34 compileEffectFnTest 37654c0fbfbd670a
 // Rust: the parser borrows the returned `Compiled` (`compiled.type_parser()`); dropping it is Go's `done`.
 fn compile_effect_fn_test(
     t: &T,
@@ -47,7 +47,7 @@ fn compile_effect_fn_test(
     compile_and_get_checker_and_source_file_with_effect_version_internal(t, version, source)
 }
 
-// go test: internal/typeparser/effect_fn_test.go:40 assertEffectFnFunctionReturnType
+// go test: internal/typeparser/effect_fn_test.go:40 assertEffectFnFunctionReturnType ad94ba9692fa595f
 // Rust: Go's `parsed.functionReturnType == nil` checks the lazy itself, which Rust's field cannot be; a nil
 // resolved type (which Go would hand to TypeToString) fails with the same message.
 fn assert_effect_fn_function_return_type(t: &T, version: EffectVersion, source: &str, want: &str) {
@@ -66,7 +66,7 @@ fn assert_effect_fn_function_return_type(t: &T, version: EffectVersion, source: 
     }
 }
 
-// go test: internal/typeparser/effect_fn_test.go:54 TestEffectFnCall_ConstantAlias
+// go test: internal/typeparser/effect_fn_test.go:54 TestEffectFnCall_ConstantAlias 80fe923276a4ce15
 #[test]
 fn test_effect_fn_call_constant_alias() {
     run(|t| {
@@ -96,7 +96,7 @@ export const make = fn(function*() {
     });
 }
 
-// go test: internal/typeparser/effect_fn_test.go:75 TestEffectFnCall_FunctionReturnType_NoPipe
+// go test: internal/typeparser/effect_fn_test.go:75 TestEffectFnCall_FunctionReturnType_NoPipe dad67a55c92ff0b5
 #[test]
 fn test_effect_fn_call_function_return_type_no_pipe() {
     run(|t| {
@@ -114,7 +114,7 @@ export const make = Effect.fn(function*(n: number) {
     });
 }
 
-// go test: internal/typeparser/effect_fn_test.go:89 TestEffectFnCall_FunctionReturnType_FirstPipeInput
+// go test: internal/typeparser/effect_fn_test.go:89 TestEffectFnCall_FunctionReturnType_FirstPipeInput 3aa9bfb41ec482cb
 #[test]
 fn test_effect_fn_call_function_return_type_first_pipe_input() {
     run(|t| {
@@ -135,7 +135,7 @@ export const make = Effect.fn(
     });
 }
 
-// go test: internal/typeparser/effect_fn_test.go:106 TestEffectFnCall_FunctionReturnType_Generic
+// go test: internal/typeparser/effect_fn_test.go:106 TestEffectFnCall_FunctionReturnType_Generic b5deb32ee2904f85
 #[test]
 fn test_effect_fn_call_function_return_type_generic() {
     run(|t| {
@@ -156,7 +156,7 @@ export const make = Effect.fn(
     });
 }
 
-// go test: internal/typeparser/effect_fn_test.go:123 TestEffectFnCall_FunctionReturnType_GenericNoPipe
+// go test: internal/typeparser/effect_fn_test.go:123 TestEffectFnCall_FunctionReturnType_GenericNoPipe 331a9112b6a4cdc8
 #[test]
 fn test_effect_fn_call_function_return_type_generic_no_pipe() {
     run(|t| {
@@ -174,7 +174,7 @@ export const make = Effect.fn(function*<A>(a: A) {
     });
 }
 
-// go test: internal/typeparser/effect_fn_test.go:137 TestEffectFnCall_FunctionReturnType_ConstrainedGeneric
+// go test: internal/typeparser/effect_fn_test.go:137 TestEffectFnCall_FunctionReturnType_ConstrainedGeneric 52250c1786c59125
 #[test]
 fn test_effect_fn_call_function_return_type_constrained_generic() {
     run(|t| {
@@ -195,7 +195,7 @@ export const make = Effect.fn(
     });
 }
 
-// go test: internal/typeparser/effect_fn_test.go:154 TestEffectFnCall_FunctionReturnType_NamedSpan
+// go test: internal/typeparser/effect_fn_test.go:154 TestEffectFnCall_FunctionReturnType_NamedSpan f7b4540b3cf23d99
 #[test]
 fn test_effect_fn_call_function_return_type_named_span() {
     run(|t| {
@@ -235,7 +235,7 @@ export const make = Effect.fn(
     });
 }
 
-// go test: internal/typeparser/effect_fn_test.go:188 TestEffectFnCall_FunctionReturnType_SelfObject
+// go test: internal/typeparser/effect_fn_test.go:188 TestEffectFnCall_FunctionReturnType_SelfObject 5897419a257fb1f6
 #[test]
 fn test_effect_fn_call_function_return_type_self_object() {
     run(|t| {

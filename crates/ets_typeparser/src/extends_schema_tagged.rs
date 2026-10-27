@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/extends_schema_tagged.go:8 SchemaTaggedResult
+// go: internal/typeparser/extends_schema_tagged.go:8 SchemaTaggedResult 7cd59a2d737f3aa0
 // SchemaTaggedResult holds the parsed result of a class extending Schema.TaggedClass/TaggedError/TaggedRequest.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct SchemaTaggedResult {
@@ -16,39 +16,39 @@ pub struct SchemaTaggedResult {
 }
 
 impl SchemaTaggedResult {
-    // go: internal/typeparser/extends_schema_tagged.go:17 SchemaTaggedResult.ClassName
+    // go: internal/typeparser/extends_schema_tagged.go:17 SchemaTaggedResult.ClassName 80eb40081fb1c4b0
     pub fn class_name(&self) -> P<Node> {
         self.class_name
     }
 
-    // go: internal/typeparser/extends_schema_tagged.go:19 SchemaTaggedResult.SelfTypeNode
+    // go: internal/typeparser/extends_schema_tagged.go:19 SchemaTaggedResult.SelfTypeNode c0838d28a52d0a77
     pub fn self_type_node(&self) -> P<Node> {
         self.self_type_node
     }
 
-    // go: internal/typeparser/extends_schema_tagged.go:21 SchemaTaggedResult.BrandTypeNode
+    // go: internal/typeparser/extends_schema_tagged.go:21 SchemaTaggedResult.BrandTypeNode 69398f0ac535671c
     pub fn brand_type_node(&self) -> Option<P<Node>> {
         self.brand_type_node
     }
 
-    // go: internal/typeparser/extends_schema_tagged.go:23 SchemaTaggedResult.KeyStringLiteral
+    // go: internal/typeparser/extends_schema_tagged.go:23 SchemaTaggedResult.KeyStringLiteral f07eceb1df44f4c1
     pub fn key_string_literal(&self) -> Option<P<Node>> {
         self.key_string_literal
     }
 
-    // go: internal/typeparser/extends_schema_tagged.go:25 SchemaTaggedResult.TagStringLiteral
+    // go: internal/typeparser/extends_schema_tagged.go:25 SchemaTaggedResult.TagStringLiteral e49053298c904ded
     pub fn tag_string_literal(&self) -> Option<P<Node>> {
         self.tag_string_literal
     }
 
-    // go: internal/typeparser/extends_schema_tagged.go:27 SchemaTaggedResult.FieldsNode
+    // go: internal/typeparser/extends_schema_tagged.go:27 SchemaTaggedResult.FieldsNode 6afce22de436b1db
     pub fn fields_node(&self) -> Option<P<Node>> {
         self.fields_node
     }
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/extends_schema_tagged.go:39 TypeParser.extendsSchemaTagged
+    // go: internal/typeparser/extends_schema_tagged.go:39 TypeParser.extendsSchemaTagged 8e701be8c078c136
     // extendsSchemaTagged checks if a class declaration extends Schema.<memberName>
     // with the double-call pattern:
     //
@@ -146,7 +146,7 @@ impl TypeParser<'_> {
         None
     }
 
-    // go: internal/typeparser/extends_schema_tagged.go:139 TypeParser.ExtendsSchemaTaggedClass
+    // go: internal/typeparser/extends_schema_tagged.go:139 TypeParser.ExtendsSchemaTaggedClass 6681882a7b34a9c7
     // ExtendsSchemaTaggedClass checks if a class declaration extends Schema.TaggedClass<T>("identifier")("tag", { ... }).
     pub fn extends_schema_tagged_class(
         &mut self,
@@ -161,7 +161,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/extends_schema_tagged.go:150 TypeParser.ExtendsSchemaTaggedError
+    // go: internal/typeparser/extends_schema_tagged.go:150 TypeParser.ExtendsSchemaTaggedError e8bb40c4788e6e8b
     // ExtendsSchemaTaggedError checks if a class declaration extends Schema.TaggedError<T>("identifier")("tag", { ... }).
     pub fn extends_schema_tagged_error(
         &mut self,
@@ -176,7 +176,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/extends_schema_tagged.go:161 TypeParser.ExtendsSchemaTaggedRequest
+    // go: internal/typeparser/extends_schema_tagged.go:161 TypeParser.ExtendsSchemaTaggedRequest fc15a080c268af5f
     // ExtendsSchemaTaggedRequest checks if a class declaration extends Schema.TaggedRequest<T>("identifier")("tag", { ... }).
     pub fn extends_schema_tagged_request(
         &mut self,

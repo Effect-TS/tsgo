@@ -10,7 +10,7 @@ use ets_shim::ls::{self, LanguageService, change};
 use ets_shim::lsproto;
 use ets_typeparser::TypeParser;
 
-// go: internal/refactor/context.go:20 Context
+// go: internal/refactor/context.go:20 Context 7cbdd1d788ed89e3
 // Context bundles the refactor request data and provides helpers for refactor implementations.
 // Unlike fixable.Context, there is no ErrorCode — refactors apply to any selection.
 //
@@ -34,7 +34,7 @@ impl Context<'_, '_> {
     }
 }
 
-// go: internal/refactor/context.go:32 NewContext
+// go: internal/refactor/context.go:32 NewContext 0ac9df00ca376f29
 // NewContext creates a refactor Context from the refactor provider callback parameters.
 //
 // Rust: Go panics on a nil program or checker; neither can be nil here. The checker is `tp`'s (see `Context`).
@@ -50,7 +50,7 @@ pub fn new_context<'a, 'c>(
 }
 
 impl Context<'_, '_> {
-    // go: internal/refactor/context.go:52 Context.BytePosToLSPPosition
+    // go: internal/refactor/context.go:52 Context.BytePosToLSPPosition 005a0ec586ac9e72
     // BytePosToLSPPosition converts a single byte offset in the context's SourceFile
     // to an lsproto.Position using ECMA line/character position.
     pub fn byte_pos_to_lsp_position(&self, pos: u32) -> lsproto::Position {
@@ -62,7 +62,7 @@ impl Context<'_, '_> {
     }
 }
 
-// go: internal/refactor/context.go:58 RefactorAction
+// go: internal/refactor/context.go:58 RefactorAction 94b4a72aae380c88
 // RefactorAction describes a single refactoring action to produce.
 //
 // Rust: `run` is called once (Go's closure), so it may move what it captures.
@@ -72,7 +72,7 @@ pub struct RefactorAction<'f> {
 }
 
 impl Context<'_, '_> {
-    // go: internal/refactor/context.go:66 Context.NewRefactorAction
+    // go: internal/refactor/context.go:66 Context.NewRefactorAction be5b5bd7e6efb5a1
     // NewRefactorAction creates a tracker, runs the action's edit closure, and returns
     // a *ls.CodeAction wrapping the resulting edits for the current SourceFile.
     // Returns nil if the closure produced no edits.

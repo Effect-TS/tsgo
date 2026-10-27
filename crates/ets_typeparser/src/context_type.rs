@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/context_type.go:8 effectContextPackageSourceFileDescriptor
+// go: internal/typeparser/context_type.go:8 effectContextPackageSourceFileDescriptor 00898d8f68eb53ff
 pub(crate) static EFFECT_CONTEXT_PACKAGE_SOURCE_FILE_DESCRIPTOR: PackageSourceFileDescriptor =
     new_package_source_file_descriptor(
         ModuleDescriptorId::Context,
@@ -11,7 +11,7 @@ pub(crate) static EFFECT_CONTEXT_PACKAGE_SOURCE_FILE_DESCRIPTOR: PackageSourceFi
         Some(&is_effect_context_source_file),
     );
 
-// go: internal/typeparser/context_type.go:8 effectContextPackageSourceFileDescriptor
+// go: internal/typeparser/context_type.go:8 effectContextPackageSourceFileDescriptor 00898d8f68eb53ff
 // Rust: the descriptor's matcher (a Go func literal). Go's nil checker and source file guards cannot fail here.
 fn is_effect_context_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> bool {
     let Some(module_sym) = get_symbol_of_declaration(tp.checker, sf.as_node()) else {
@@ -36,7 +36,7 @@ fn is_effect_context_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> 
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/context_type.go:36 TypeParser.IsNodeReferenceToEffectContextModuleApi
+    // go: internal/typeparser/context_type.go:36 TypeParser.IsNodeReferenceToEffectContextModuleApi f72b2a1da02b3612
     pub fn is_node_reference_to_effect_context_module_api(
         &mut self,
         node: P<Node>,

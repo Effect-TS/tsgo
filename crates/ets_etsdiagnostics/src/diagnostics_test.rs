@@ -52,7 +52,7 @@ fn run_request(request: &str) -> (i32, String, String) {
     (status, String::from_utf8(stdout).unwrap(), String::from_utf8(stderr).unwrap())
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:19 TestParseSeverityFilter
+// go test: etsdiagnostics/diagnostics_test.go:19 TestParseSeverityFilter b67eb20dbf2713f9
 #[test]
 fn test_parse_severity_filter() {
     let filter = parse_severity_filter(" ERROR, warning,invalid ").expect("a filter");
@@ -65,7 +65,7 @@ fn test_parse_severity_filter() {
     );
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:37 TestParseLSPConfigPresence
+// go test: etsdiagnostics/diagnostics_test.go:37 TestParseLSPConfigPresence e716c6ea268f5bdb
 #[test]
 fn test_parse_lsp_config_presence() {
     let result = parse_lsp_config(None);
@@ -101,7 +101,7 @@ fn diagnostic(
     }
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:53 TestWriteJSONOutput
+// go test: etsdiagnostics/diagnostics_test.go:53 TestWriteJSONOutput d05d7a809198d893
 #[test]
 fn test_write_json_output() {
     let diagnostics = [diagnostic(
@@ -135,7 +135,7 @@ fn test_write_json_output() {
     }
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:78 TestWriteGitHubActionsOutput
+// go test: etsdiagnostics/diagnostics_test.go:78 TestWriteGitHubActionsOutput f7b426b8d09d395b
 #[test]
 fn test_write_git_hub_actions_output() {
     let diagnostics = [diagnostic(
@@ -166,7 +166,7 @@ fn test_write_git_hub_actions_output() {
     assert!(output.starts_with(want), "unexpected output:\n{output}");
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:95 TestWriteFilesBlock
+// go test: etsdiagnostics/diagnostics_test.go:95 TestWriteFilesBlock 619f42035f4e7744
 #[test]
 fn test_write_files_block() {
     let files = [FileEffectVersion {
@@ -190,7 +190,7 @@ fn test_write_files_block() {
     );
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:110 TestRunJSON
+// go test: etsdiagnostics/diagnostics_test.go:110 TestRunJSON b4fc29510478388c
 #[test]
 fn test_run_json() {
     let cwd = testdata_dir("native-diagnostics");
@@ -237,7 +237,7 @@ fn test_run_json() {
     }
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:154 TestRunProjectJSONListFiles
+// go test: etsdiagnostics/diagnostics_test.go:154 TestRunProjectJSONListFiles ac4829244c39627d
 #[test]
 fn test_run_project_json_list_files() {
     let req = Request {
@@ -268,7 +268,7 @@ fn test_run_project_json_list_files() {
     }
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:192 missingEffectContextSource
+// go test: etsdiagnostics/diagnostics_test.go:192 missingEffectContextSource 0ca3e626270545c9
 const MISSING_EFFECT_CONTEXT_SOURCE: &str = r#"import { Context, Effect, Layer } from "effect"
 
 class Db extends Context.Service<Db>()("Db", { make: Effect.succeed({}) }) {
@@ -303,7 +303,7 @@ impl Drop for TempDir {
     }
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:217 writeEffectV4Project
+// go test: etsdiagnostics/diagnostics_test.go:217 writeEffectV4Project 11af852ef4277224
 // Rust: returns the temporary directory too (Go's `t.TempDir` is removed by the test framework).
 fn write_effect_v4_project(source: &str) -> (TempDir, String) {
     let mut files = ets_bundledeffect::TestFS::default();
@@ -341,7 +341,7 @@ fn write_effect_v4_project(source: &str) -> (TempDir, String) {
     (root, cwd)
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:245 runMissingEffectContext
+// go test: etsdiagnostics/diagnostics_test.go:245 runMissingEffectContext 4cffb1cdfb6bcc13
 fn run_missing_effect_context(format: &str) -> (TempDir, String, String) {
     let (root, cwd) = write_effect_v4_project(MISSING_EFFECT_CONTEXT_SOURCE);
     let req = Request {
@@ -355,7 +355,7 @@ fn run_missing_effect_context(format: &str) -> (TempDir, String, String) {
     (root, stdout, PathBuf::from(cwd).join("main.ts").to_string_lossy().into_owned())
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:260 TestRunJSONReportsRelatedInformation
+// go test: etsdiagnostics/diagnostics_test.go:260 TestRunJSONReportsRelatedInformation 93693d724b324073
 #[test]
 #[ignore = "needs the missingEffectContext rule (Phase 4)"]
 fn test_run_json_reports_related_information() {
@@ -383,7 +383,7 @@ fn test_run_json_reports_related_information() {
     assert_eq!(got, &want, "unexpected relatedInformation");
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:294 TestRunPrettyReportsRelatedInformation
+// go test: etsdiagnostics/diagnostics_test.go:294 TestRunPrettyReportsRelatedInformation 68d5633ea68ee186
 #[test]
 #[ignore = "needs the missingEffectContext rule (Phase 4)"]
 fn test_run_pretty_reports_related_information() {

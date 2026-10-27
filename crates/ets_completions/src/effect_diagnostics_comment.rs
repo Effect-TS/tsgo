@@ -6,7 +6,7 @@ use regex::bytes::Regex;
 
 use crate::*;
 
-// go: internal/completions/effect_diagnostics_comment.go:16 effectDiagnosticsComment
+// go: internal/completions/effect_diagnostics_comment.go:16 effectDiagnosticsComment 662fdcc24ce099b0
 // effectDiagnosticsComment provides completions for @effect-diagnostics and
 // @effect-diagnostics-next-line directives when typing @ inside a comment.
 pub(crate) static EFFECT_DIAGNOSTICS_COMMENT: LazyLock<Completion> = LazyLock::new(|| Completion {
@@ -15,7 +15,7 @@ pub(crate) static EFFECT_DIAGNOSTICS_COMMENT: LazyLock<Completion> = LazyLock::n
     run: run_effect_diagnostics_comment,
 });
 
-// go: internal/completions/effect_diagnostics_comment.go:23 commentAtRegex
+// go: internal/completions/effect_diagnostics_comment.go:23 commentAtRegex 7f18371138f86adf
 // commentAtRegex matches `//`, `/*`, or `/**` followed by optional whitespace and `@` at end of string.
 //
 // Rust: RE2's `\s` is `[\t\n\f\r ]` (docs/PORTING.md, "Types"). A byte regex, as Go's matches the bytes of a
@@ -23,7 +23,7 @@ pub(crate) static EFFECT_DIAGNOSTICS_COMMENT: LazyLock<Completion> = LazyLock::n
 pub(crate) static COMMENT_AT_REGEX: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"(//|/\*\*?)[\t\n\f\r ]*(@)[\t\n\f\r ]*$").unwrap());
 
-// go: internal/completions/effect_diagnostics_comment.go:25 runEffectDiagnosticsComment
+// go: internal/completions/effect_diagnostics_comment.go:25 runEffectDiagnosticsComment a7faf421ca45a56c
 fn run_effect_diagnostics_comment(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionItem> {
     let source_text = ctx.source_file.text();
     let text_before_cursor = &source_text.as_bytes()[..ctx.position as usize];

@@ -3,7 +3,7 @@ use ets_shim::astnav;
 use ets_shim::core::P;
 use ets_shim::scanner;
 
-// go: internal/completion/position.go:11 ExtendsClassCompletionData
+// go: internal/completion/position.go:11 ExtendsClassCompletionData c9d4b8b99d57c09c
 // ExtendsClassCompletionData holds the parsed context for a completion
 // triggered in the extends clause of a class declaration.
 #[derive(Clone, Debug)]
@@ -15,7 +15,7 @@ pub struct ExtendsClassCompletionData {
     pub replacement_length: u32,
 }
 
-// go: internal/completion/position.go:20 AccessedExpressionResult
+// go: internal/completion/position.go:20 AccessedExpressionResult b4289c0147e07354
 // AccessedExpressionResult is the result from parsing an accessed expression at a cursor position.
 #[derive(Clone, Debug)]
 pub struct AccessedExpressionResult {
@@ -25,7 +25,7 @@ pub struct AccessedExpressionResult {
     pub replacement_length: u32,
 }
 
-// go: internal/completion/position.go:32 ParseAccessedExpressionForCompletion
+// go: internal/completion/position.go:32 ParseAccessedExpressionForCompletion 4f5d30fbebe48427
 // ParseAccessedExpressionForCompletion finds the accessed expression at the given cursor position.
 // It handles three cases:
 //   - extends Schema.Tag| — cursor after a property name in a PropertyAccessExpression
@@ -91,7 +91,7 @@ pub fn parse_accessed_expression_for_completion(
     })
 }
 
-// go: internal/completion/position.go:90 ParseDataForExtendsClassCompletion
+// go: internal/completion/position.go:90 ParseDataForExtendsClassCompletion 14726a9e383d8cd0
 // ParseDataForExtendsClassCompletion parses position context for a completion in the
 // extends clause of a class declaration. It calls ParseAccessedExpressionForCompletion
 // and then walks up the AST to find the enclosing ClassDeclaration.
@@ -133,13 +133,13 @@ pub fn parse_data_for_extends_class_completion(
 }
 
 impl ExtendsClassCompletionData {
-    // go: internal/completion/position.go:131 ExtendsClassCompletionData.AccessedObjectText
+    // go: internal/completion/position.go:131 ExtendsClassCompletionData.AccessedObjectText 80018b386860b4ee
     // AccessedObjectText returns the text of the accessed object node.
     pub fn accessed_object_text(&self) -> String {
         scanner::get_text_of_node(self.accessed_object)
     }
 
-    // go: internal/completion/position.go:136 ExtendsClassCompletionData.ClassNameText
+    // go: internal/completion/position.go:136 ExtendsClassCompletionData.ClassNameText 7bae9a71d8fc10c2
     // ClassNameText returns the text of the class name node.
     pub fn class_name_text(&self) -> String {
         scanner::get_text_of_node(self.class_name)

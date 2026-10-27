@@ -22,7 +22,7 @@ fn completion_preferences() -> UserPreferences {
     }
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:18 TestAutoImportEffectStyleConsistency_namespace
+// go test: internal/effecttest/autoimport_style_consistency_test.go:18 TestAutoImportEffectStyleConsistency_namespace 643a8b3beb0162e1
 fn test_auto_import_effect_style_consistency_namespace(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -79,7 +79,7 @@ Effect.runPromiseExit();
     f.done(t);
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:64 TestAutoImportEffectStyleConsistency_namespaceReexport
+// go test: internal/effecttest/autoimport_style_consistency_test.go:64 TestAutoImportEffectStyleConsistency_namespaceReexport 13979f22ac448831
 fn test_auto_import_effect_style_consistency_namespace_reexport(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -128,7 +128,7 @@ const completion = Effect;"#
     f.done(t);
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:106 TestAutoImportEffectStyleConsistency_barrel
+// go test: internal/effecttest/autoimport_style_consistency_test.go:106 TestAutoImportEffectStyleConsistency_barrel bca108f082634664
 fn test_auto_import_effect_style_consistency_barrel(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -182,7 +182,7 @@ succeed/*fix*/(1);
     f.done(t);
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:154 verifyImportFixContentsUnordered
+// go test: internal/effecttest/autoimport_style_consistency_test.go:154 verifyImportFixContentsUnordered 525c442a32bf8ca8
 // Rust: Go's `client.NextID()` + `client.SendRequestWorker` + `UnmarshalResult` is the client's `send_request`; a
 // result that does not decode is Go's unmarshal error.
 fn verify_import_fix_contents_unordered(
@@ -266,7 +266,7 @@ fn verify_import_fix_contents_unordered(
     }
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:225 applyTextEdits
+// go test: internal/effecttest/autoimport_style_consistency_test.go:225 applyTextEdits d9285a3c84c58169
 fn apply_text_edits(
     original: &str,
     line_map: &Arc<LSPLineMap>,
@@ -300,7 +300,7 @@ fn apply_text_edits(
     content
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:253 lspPositionToOffset
+// go test: internal/effecttest/autoimport_style_consistency_test.go:253 lspPositionToOffset e061a58f31030520
 fn lsp_position_to_offset(text: &str, line_map: &LSPLineMap, mut pos: lsproto::Position) -> usize {
     let line_start = line_map.line_starts[pos.line as usize] as usize;
     let line_text = &text[line_start..];
@@ -316,7 +316,7 @@ fn lsp_position_to_offset(text: &str, line_map: &LSPLineMap, mut pos: lsproto::P
     text.len()
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:268 TestAutoImportEffectStyleConsistency_topLevelNamedReexportsIgnore
+// go test: internal/effecttest/autoimport_style_consistency_test.go:268 TestAutoImportEffectStyleConsistency_topLevelNamedReexportsIgnore 8abda8a0d578fb81
 fn test_auto_import_effect_style_consistency_top_level_named_reexports_ignore(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -371,7 +371,7 @@ succeed/*fix*/(1);
     f.done(t);
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:320 TestAutoImportEffectStyleConsistency_topLevelNamedReexportsFollow
+// go test: internal/effecttest/autoimport_style_consistency_test.go:320 TestAutoImportEffectStyleConsistency_topLevelNamedReexportsFollow 78a2684ba6a70b16
 fn test_auto_import_effect_style_consistency_top_level_named_reexports_follow(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -412,7 +412,7 @@ Effect.runPromiseExit();
     f.done(t);
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:358 TestAutoImportEffectStyleConsistency_testClockWithNamespace
+// go test: internal/effecttest/autoimport_style_consistency_test.go:358 TestAutoImportEffectStyleConsistency_testClockWithNamespace b1398735b44f3a2a
 fn test_auto_import_effect_style_consistency_test_clock_with_namespace(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -469,7 +469,7 @@ TestClock.testClockWith(() => undefined as any);
     f.done(t);
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:404 TestAutoImportEffectStyleConsistency_testClockWithNamespaceAlongsideNamedImport
+// go test: internal/effecttest/autoimport_style_consistency_test.go:404 TestAutoImportEffectStyleConsistency_testClockWithNamespaceAlongsideNamedImport 8bd8f758e50c359f
 fn test_auto_import_effect_style_consistency_test_clock_with_namespace_alongside_named_import(
     t: &T,
 ) {
@@ -512,7 +512,7 @@ TestClock.testClockWith(() => undefined as any);
     f.done(t);
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:442 TestAutoImportEffectStyleConsistency_testClockWithUsesExistingNamespaceImport
+// go test: internal/effecttest/autoimport_style_consistency_test.go:442 TestAutoImportEffectStyleConsistency_testClockWithUsesExistingNamespaceImport ddfb8721cbe91a7c
 fn test_auto_import_effect_style_consistency_test_clock_with_uses_existing_namespace_import(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();

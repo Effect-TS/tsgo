@@ -14,7 +14,7 @@ use rustc_hash::FxHashSet;
 static MESSAGE: &Message =
     &tsdiag::THIS_INPUT_IS_ALREADY_ASSIGNABLE_TO_THE_SCHEMA_S_ENCODED_TYPE_USE_0_TO_PRESERVE_COMPILE_TIME_TYPE_CHECKING_INSTEAD_OF_DISCARDING_THE_INPUT_TYPE_THROUGH_1_EFFECT_PREFER_TYPED_SCHEMA_DECODER;
 
-// go: internal/rules/prefer_typed_schema_decoder.go:16 typedSchemaDecoders
+// go: internal/rules/prefer_typed_schema_decoder.go:16 typedSchemaDecoders e9e04dd38f8b2368
 //
 // Rust: Go's map is only iterated to find the one entry whose unknown-input name the callee references; a callee
 // references at most one of these names, so the iteration order is not observable and a slice in source order
@@ -28,7 +28,7 @@ pub(crate) static TYPED_SCHEMA_DECODERS: &[(&str, &str)] = &[
     ("decodeUnknownPromise", "decodePromise"),
 ];
 
-// go: internal/rules/prefer_typed_schema_decoder.go:27 PreferTypedSchemaDecoder
+// go: internal/rules/prefer_typed_schema_decoder.go:27 PreferTypedSchemaDecoder 6ec82ea3a77de9f9
 // PreferTypedSchemaDecoder suggests typed Schema decoders when the input is
 // statically assignable to the schema's Encoded type.
 pub static PREFER_TYPED_SCHEMA_DECODER: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -55,7 +55,7 @@ pub static PREFER_TYPED_SCHEMA_DECODER: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/prefer_typed_schema_decoder.go:53 PreferTypedSchemaDecoderMatch
+// go: internal/rules/prefer_typed_schema_decoder.go:53 PreferTypedSchemaDecoderMatch 0d0d5294e45edcfe
 #[derive(Clone)]
 pub struct PreferTypedSchemaDecoderMatch {
     pub source_file: P<SourceFile>,
@@ -65,7 +65,7 @@ pub struct PreferTypedSchemaDecoderMatch {
     pub typed_name: &'static str,
 }
 
-// go: internal/rules/prefer_typed_schema_decoder.go:63 AnalyzePreferTypedSchemaDecoder
+// go: internal/rules/prefer_typed_schema_decoder.go:63 AnalyzePreferTypedSchemaDecoder c2518d611cbb7037
 // AnalyzePreferTypedSchemaDecoder finds unknown-input decoder applications whose
 // input is statically accepted by the schema's Encoded type.
 //
@@ -142,7 +142,7 @@ pub fn analyze_prefer_typed_schema_decoder(
     matches
 }
 
-// go: internal/rules/prefer_typed_schema_decoder.go:118 schemaDecoderTransformation
+// go: internal/rules/prefer_typed_schema_decoder.go:118 schemaDecoderTransformation e4eb87d05b5cfa29
 pub(crate) fn schema_decoder_transformation(
     transformation: &PipingFlowTransformation,
 ) -> (Option<P<Node>>, Option<P<Node>>) {
@@ -152,7 +152,7 @@ pub(crate) fn schema_decoder_transformation(
     (Some(transformation.callee()), Some(*transformation.args().at(0)))
 }
 
-// go: internal/rules/prefer_typed_schema_decoder.go:125 analyzeTypedSchemaDecoderApplication
+// go: internal/rules/prefer_typed_schema_decoder.go:125 analyzeTypedSchemaDecoderApplication c780b0564a57a3d1
 pub(crate) fn analyze_typed_schema_decoder_application(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -217,7 +217,7 @@ pub(crate) fn analyze_typed_schema_decoder_application(
     })
 }
 
-// go: internal/rules/prefer_typed_schema_decoder.go:168 containsUnresolvedTypeVariable
+// go: internal/rules/prefer_typed_schema_decoder.go:168 containsUnresolvedTypeVariable 45165762788695ff
 pub(crate) fn contains_unresolved_type_variable(
     c: &mut Checker,
     t: Option<P<Type>>,
@@ -261,7 +261,7 @@ pub(crate) fn contains_unresolved_type_variable(
     false
 }
 
-// go: internal/rules/prefer_typed_schema_decoder.go:203 matchUnknownSchemaDecoder
+// go: internal/rules/prefer_typed_schema_decoder.go:203 matchUnknownSchemaDecoder 5fbde6c52cc7a4b5
 pub(crate) fn match_unknown_schema_decoder(
     tp: &mut TypeParser<'_>,
     callee: P<Node>,
@@ -276,7 +276,7 @@ pub(crate) fn match_unknown_schema_decoder(
     ("", "")
 }
 
-// go: internal/rules/prefer_typed_schema_decoder.go:213 schemaDecoderNameNode
+// go: internal/rules/prefer_typed_schema_decoder.go:213 schemaDecoderNameNode 683e71467efadd80
 pub(crate) fn schema_decoder_name_node(callee: Option<P<Node>>) -> Option<P<Node>> {
     let callee = callee?;
     if callee.kind() == Kind::PropertyAccessExpression {

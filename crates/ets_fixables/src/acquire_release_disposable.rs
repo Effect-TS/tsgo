@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_ACQUIRE_DISPOSABLE_EXPRESSES_THIS_DISPOSABLE_RESOURCE_ACQUISITION_MORE_DIRECTLY_THAN_EFFECT_ACQUIRE_RELEASE_WITH_A_MANUAL_DISPOSAL_FINALIZER_EFFECT_ACQUIRE_RELEASE_DISPOSABLE;
 
-// go: internal/fixables/acquire_release_disposable.go:13 AcquireReleaseDisposableFix
+// go: internal/fixables/acquire_release_disposable.go:13 AcquireReleaseDisposableFix fd632045b00426c1
 pub static ACQUIRE_RELEASE_DISPOSABLE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "acquireReleaseDisposable",
     description: "Replace Effect.acquireRelease with Effect.acquireDisposable",
@@ -17,7 +17,7 @@ pub static ACQUIRE_RELEASE_DISPOSABLE_FIX: LazyLock<Fixable> = LazyLock::new(|| 
     run: run_acquire_release_disposable_fix,
 });
 
-// go: internal/fixables/acquire_release_disposable.go:23 runAcquireReleaseDisposableFix
+// go: internal/fixables/acquire_release_disposable.go:23 runAcquireReleaseDisposableFix e35812d6dc7ccfae
 fn run_acquire_release_disposable_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_acquire_release_disposable(&mut ctx.type_parser, Some(source_file))
