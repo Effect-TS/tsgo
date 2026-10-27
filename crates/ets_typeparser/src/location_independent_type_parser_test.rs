@@ -2,7 +2,7 @@ use ets_go::{sprintf, sprintln};
 
 use crate::helpers_test::*;
 
-// go test: internal/typeparser/location_independent_type_parser_test.go:9 TestEffectTypeParsesInstantiatedV3TypeWithoutLocation
+// go test: internal/typeparser/location_independent_type_parser_test.go:9 TestEffectTypeParsesInstantiatedV3TypeWithoutLocation 613e055505f19157
 #[test]
 fn test_effect_type_parses_instantiated_v3_type_without_location() {
     run(|t| {
@@ -41,7 +41,7 @@ effect
     });
 }
 
-// go test: internal/typeparser/location_independent_type_parser_test.go:39 TestLayerTypeParsesInstantiatedV3TypeWithoutLocation
+// go test: internal/typeparser/location_independent_type_parser_test.go:39 TestLayerTypeParsesInstantiatedV3TypeWithoutLocation 4243cac3610fb8cc
 #[test]
 fn test_layer_type_parses_instantiated_v3_type_without_location() {
     run(|t| {
@@ -80,7 +80,7 @@ layer
     });
 }
 
-// go test: internal/typeparser/location_independent_type_parser_test.go:69 TestEffectSchemaTypesParsesInstantiatedV3TypeWithoutLocation
+// go test: internal/typeparser/location_independent_type_parser_test.go:69 TestEffectSchemaTypesParsesInstantiatedV3TypeWithoutLocation aa628fc40fa3de0a
 #[test]
 fn test_effect_schema_types_parses_instantiated_v3_type_without_location() {
     run(|t| {
@@ -115,7 +115,7 @@ schema
     });
 }
 
-// go test: internal/typeparser/location_independent_type_parser_test.go:96 TestStreamTypeParsesInstantiatedV3TypeWithoutLocation
+// go test: internal/typeparser/location_independent_type_parser_test.go:96 TestStreamTypeParsesInstantiatedV3TypeWithoutLocation 111d38de66a9f913
 #[test]
 fn test_stream_type_parses_instantiated_v3_type_without_location() {
     run(|t| {

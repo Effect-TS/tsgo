@@ -9,7 +9,7 @@ use ets_typeparser::{ModuleReference, TypeParser};
 /// cannot be captured next to the context that owns it.
 pub(crate) type ModuleMemberPredicate = Box<dyn Fn(&mut TypeParser<'_>, P<Node>) -> bool>;
 
-// go: internal/fixables/module_member_reference.go:15 moduleMember
+// go: internal/fixables/module_member_reference.go:15 moduleMember b5c85a37ff4aa953
 // moduleMember describes a module export that a fix wants to reference.
 pub(crate) struct ModuleMember {
     pub(crate) name: &'static str,
@@ -17,7 +17,7 @@ pub(crate) struct ModuleMember {
     pub(crate) is_member: ModuleMemberPredicate, // node references the export itself
 }
 
-// go: internal/fixables/module_member_reference.go:22 moduleMemberReference
+// go: internal/fixables/module_member_reference.go:22 moduleMemberReference cc0f87f0e0dc9067
 // moduleMemberReference is a path of names, visible at a location, that reaches a moduleMember.
 #[derive(Clone)]
 pub(crate) struct ModuleMemberReference {
@@ -25,7 +25,7 @@ pub(crate) struct ModuleMemberReference {
     pub(crate) via_module: bool, // path is the module namespace, so the member is accessed on it
 }
 
-// go: internal/fixables/module_member_reference.go:37 resolveModuleMember
+// go: internal/fixables/module_member_reference.go:37 resolveModuleMember 9cb4b3955c797837
 // resolveModuleMember finds a reference that resolves at location to member:
 // preferred, the file's import of the module, when it reaches member,
 // otherwise an import binding in scope. It returns nil when nothing reaches
@@ -75,7 +75,7 @@ pub(crate) fn resolve_module_member(
     None
 }
 
-// go: internal/fixables/module_member_reference.go:63 importedModuleMember
+// go: internal/fixables/module_member_reference.go:63 importedModuleMember 3d7ca1ae927a514b
 // importedModuleMember returns module as a reference to member when its first
 // name resolves at location to an import binding and the value reached by
 // following the rest of the path has member, or nil otherwise.
@@ -106,7 +106,7 @@ pub(crate) fn imported_module_member(
     Some(ModuleMemberReference { path: module.clone(), via_module: true })
 }
 
-// go: internal/fixables/module_member_reference.go:89 importBindingName
+// go: internal/fixables/module_member_reference.go:89 importBindingName 1c8729d820eccea1
 // importBindingName returns the name of symbol's value import declaration
 // when that name resolves to symbol at location, so a generated identifier
 // reaches the import and not a local that shadows it. Bindings that are
@@ -142,7 +142,7 @@ pub(crate) fn import_binding_name(
     Some(name)
 }
 
-// go: internal/fixables/module_member_reference.go:106 typeHasMember
+// go: internal/fixables/module_member_reference.go:106 typeHasMember 3750c26412dd23cd
 pub(crate) fn type_has_member(
     ctx: &mut Context<'_, '_>,
     t: Option<P<Type>>,
@@ -162,7 +162,7 @@ pub(crate) fn type_has_member(
 }
 
 impl ModuleMemberReference {
-    // go: internal/fixables/module_member_reference.go:119 moduleMemberReference.expression
+    // go: internal/fixables/module_member_reference.go:119 moduleMemberReference.expression 62cc0fa23fcc2f21
     // expression builds the reference: module.member, or the direct binding.
     pub(crate) fn expression(&self, tracker: &Tracker, member: &ModuleMember) -> P<Node> {
         if self.via_module {

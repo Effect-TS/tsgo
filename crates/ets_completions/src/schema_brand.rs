@@ -6,7 +6,7 @@ use ets_typeparser::EffectMajorVersion;
 
 use crate::*;
 
-// go: internal/completions/schema_brand.go:13 schemaBrand
+// go: internal/completions/schema_brand.go:13 schemaBrand 66c9381029df5cc1
 // schemaBrand provides a `brand("varName")` completion when dot-accessing the
 // Schema identifier inside a variable declaration. V3-only.
 pub(crate) static SCHEMA_BRAND: LazyLock<Completion> = LazyLock::new(|| Completion {
@@ -15,7 +15,7 @@ pub(crate) static SCHEMA_BRAND: LazyLock<Completion> = LazyLock::new(|| Completi
     run: run_schema_brand,
 });
 
-// go: internal/completions/schema_brand.go:19 runSchemaBrand
+// go: internal/completions/schema_brand.go:19 runSchemaBrand 0057a7b968aa8816
 fn run_schema_brand(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionItem> {
     let Some(result) =
         ets_completion::parse_accessed_expression_for_completion(ctx.source_file, ctx.position)

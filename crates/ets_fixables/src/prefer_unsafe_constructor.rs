@@ -10,7 +10,7 @@ use ets_shim::scanner;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::X_0_STARTS_A_FIBER_TO_RUN_A_PURE_CONSTRUCTOR_USE_THE_SYNCHRONOUS_VARIANT_1_INSTEAD_EFFECT_PREFER_UNSAFE_CONSTRUCTOR;
 
-// go: internal/fixables/prefer_unsafe_constructor.go:14 PreferUnsafeConstructorFix
+// go: internal/fixables/prefer_unsafe_constructor.go:14 PreferUnsafeConstructorFix 8e8647c0d0e9eaef
 pub static PREFER_UNSAFE_CONSTRUCTOR_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "preferUnsafeConstructor",
     description: "Replace Effect.runSync of a pure constructor with the synchronous *Unsafe variant",
@@ -19,7 +19,7 @@ pub static PREFER_UNSAFE_CONSTRUCTOR_FIX: LazyLock<Fixable> = LazyLock::new(|| F
     run: run_prefer_unsafe_constructor_fix,
 });
 
-// go: internal/fixables/prefer_unsafe_constructor.go:24 runPreferUnsafeConstructorFix
+// go: internal/fixables/prefer_unsafe_constructor.go:24 runPreferUnsafeConstructorFix fd56c26b95032752
 fn run_prefer_unsafe_constructor_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 

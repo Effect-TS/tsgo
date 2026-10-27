@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_MAP_ERROR_EXPRESSES_THE_SAME_ERROR_TYPE_TRANSFORMATION_MORE_DIRECTLY_THAN_EFFECT_0_FOLLOWED_BY_EFFECT_FAIL_EFFECT_CATCH_ALL_TO_MAP_ERROR;
 
-// go: internal/fixables/catch_all_to_map_error.go:13 CatchAllToMapErrorFix
+// go: internal/fixables/catch_all_to_map_error.go:13 CatchAllToMapErrorFix 55fa8f11d581da85
 pub static CATCH_ALL_TO_MAP_ERROR_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "catchAllToMapError",
     description: "Replace Effect.catch + Effect.fail with Effect.mapError",
@@ -17,7 +17,7 @@ pub static CATCH_ALL_TO_MAP_ERROR_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixa
     run: run_catch_all_to_map_error_fix,
 });
 
-// go: internal/fixables/catch_all_to_map_error.go:21 runCatchAllToMapErrorFix
+// go: internal/fixables/catch_all_to_map_error.go:21 runCatchAllToMapErrorFix ef3fa07729f10915
 fn run_catch_all_to_map_error_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 

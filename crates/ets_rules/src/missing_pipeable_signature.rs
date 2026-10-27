@@ -8,7 +8,7 @@ use ets_shim::checker::{Signature, SignatureKind, TypeFormatFlags};
 use ets_shim::diagnostics as tsdiag;
 use rustc_hash::FxHashSet;
 
-// go: internal/rules/missing_pipeable_signature.go:12 MissingPipeableSignature
+// go: internal/rules/missing_pipeable_signature.go:12 MissingPipeableSignature 3a4da10e3aca0b7f
 pub static MISSING_PIPEABLE_SIGNATURE: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
         name: "missingPipeableSignature",
@@ -23,7 +23,7 @@ pub static MISSING_PIPEABLE_SIGNATURE: LazyLock<Rule> = LazyLock::new(|| {
     }
 });
 
-// go: internal/rules/missing_pipeable_signature.go:24 checkMissingPipeableSignatures
+// go: internal/rules/missing_pipeable_signature.go:24 checkMissingPipeableSignatures 3669592fc991488f
 //
 // Rust: Go's `map[*checker.Signature]bool` sets are `FxHashSet`s of the signature handles (pointer identity).
 pub(crate) fn check_missing_pipeable_signatures(ctx: &mut Context<'_, '_>) -> Vec<P<Diagnostic>> {
@@ -102,7 +102,7 @@ pub(crate) fn check_missing_pipeable_signatures(ctx: &mut Context<'_, '_>) -> Ve
     diagnostics
 }
 
-// go: internal/rules/missing_pipeable_signature.go:82 localExportTarget
+// go: internal/rules/missing_pipeable_signature.go:82 localExportTarget 1c47a156a671c482
 pub(crate) fn local_export_target(
     ctx: &mut Context<'_, '_>,
     export_symbol: Option<P<Symbol>>,
@@ -137,7 +137,7 @@ pub(crate) fn local_export_target(
     (Some(target), location)
 }
 
-// go: internal/rules/missing_pipeable_signature.go:116 isEligibleDataFirstSignature
+// go: internal/rules/missing_pipeable_signature.go:116 isEligibleDataFirstSignature 79131cc4f6ad805c
 pub(crate) fn is_eligible_data_first_signature(signature: Option<P<Signature>>) -> bool {
     signature.is_some_and(|signature| {
         !signature.has_rest_parameter() && signature.parameters().len() >= 2

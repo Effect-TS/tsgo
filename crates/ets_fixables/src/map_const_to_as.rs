@@ -9,7 +9,7 @@ use ets_shim::ls::CodeAction;
 static MESSAGE: &Message =
     &tsdiag::EFFECT_AS_EXPRESSES_REPLACING_THE_SUCCESS_VALUE_WITH_A_CONSTANT_DIRECTLY_EFFECT_MAP_CONST_TO_AS;
 
-// go: internal/fixables/map_const_to_as.go:13 MapConstToAsFix
+// go: internal/fixables/map_const_to_as.go:13 MapConstToAsFix e3c8c7a40928ec5c
 pub static MAP_CONST_TO_AS_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "mapConstToAs",
     description: "Replace Effect.map with Effect.as",
@@ -18,7 +18,7 @@ pub static MAP_CONST_TO_AS_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     run: run_map_const_to_as_fix,
 });
 
-// go: internal/fixables/map_const_to_as.go:23 runMapConstToAsFix
+// go: internal/fixables/map_const_to_as.go:23 runMapConstToAsFix 4eb6f32ce0c4e976
 //
 // Rust: the match's transformation is never nil (a non-optional field), so Go's nil check drops.
 fn run_map_const_to_as_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {

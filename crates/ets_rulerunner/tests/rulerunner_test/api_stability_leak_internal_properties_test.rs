@@ -12,7 +12,7 @@ struct InternalPropertiesCase {
     want: bool,
 }
 
-// go test: internal/rulerunner/api_stability_leak_internal_properties_test.go:8 TestApiStabilityLeakInternalProperties
+// go test: internal/rulerunner/api_stability_leak_internal_properties_test.go:8 TestApiStabilityLeakInternalProperties 8379452175d9567c
 #[test]
 fn test_api_stability_leak_internal_properties() {
     on_checker_stack(|| {
@@ -160,7 +160,7 @@ export interface Api {
     });
 }
 
-// go test: internal/rulerunner/api_stability_leak_internal_properties_test.go:136 TestApiStabilityLeakSchemaAnnotationAugmentation
+// go test: internal/rulerunner/api_stability_leak_internal_properties_test.go:136 TestApiStabilityLeakSchemaAnnotationAugmentation 23a276b1b1369ecd
 // Mirrors Effect's HttpApiSchema augmentation of Schema.Annotations.Augment:
 // the public status annotation remains visible, while the internal encoding
 // and headers payloads must not lower the schema annotation surface's stability.

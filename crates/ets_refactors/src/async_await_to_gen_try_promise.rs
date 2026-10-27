@@ -16,7 +16,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go: internal/refactors/async_await_to_gen_try_promise.go:14 AsyncAwaitToGenTryPromise
+// go: internal/refactors/async_await_to_gen_try_promise.go:14 AsyncAwaitToGenTryPromise 05f65e169b9cb009
 pub static ASYNC_AWAIT_TO_GEN_TRY_PROMISE: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "asyncAwaitToGenTryPromise",
     description: "Convert async/await to Effect.gen (with error handling)",
@@ -24,7 +24,7 @@ pub static ASYNC_AWAIT_TO_GEN_TRY_PROMISE: LazyLock<Refactor> = LazyLock::new(||
     run: run_async_await_to_gen_try_promise,
 });
 
-// go: internal/refactors/async_await_to_gen_try_promise.go:21 runAsyncAwaitToGenTryPromise
+// go: internal/refactors/async_await_to_gen_try_promise.go:21 runAsyncAwaitToGenTryPromise 914e98c41bf0bfaa
 // Rust: tsrs's `get_token_at_position` never returns nil, so Go's nil check drops.
 pub(crate) fn run_async_await_to_gen_try_promise(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let token = astnav::get_token_at_position(ctx.source_file, span_pos(ctx));
@@ -58,7 +58,7 @@ pub(crate) fn run_async_await_to_gen_try_promise(ctx: &mut Context<'_, '_>) -> V
     vec![action]
 }
 
-// go: internal/refactors/async_await_to_gen_try_promise.go:50 transformAsyncToEffectGenTryPromise
+// go: internal/refactors/async_await_to_gen_try_promise.go:50 transformAsyncToEffectGenTryPromise 59865224cbd5514a
 // Rust: the await callback runs inside a `'static` visitor closure (`TransformAwaitExpr`), so the error count and
 // the error classes it collects are shared cells.
 pub(crate) fn transform_async_to_effect_gen_try_promise(
@@ -139,7 +139,7 @@ pub(crate) fn transform_async_to_effect_gen_try_promise(
     }
 }
 
-// go: internal/refactors/async_await_to_gen_try_promise.go:112 findTopLevelStatement
+// go: internal/refactors/async_await_to_gen_try_promise.go:112 findTopLevelStatement 9b14c8e55684ee28
 // findTopLevelStatement walks up the parent chain from node until it finds
 // a node whose parent is the SourceFile.
 pub(crate) fn find_top_level_statement(node: P<Node>) -> P<Node> {
@@ -153,7 +153,7 @@ pub(crate) fn find_top_level_statement(node: P<Node>) -> P<Node> {
     current
 }
 
-// go: internal/refactors/async_await_to_gen_try_promise.go:121 buildYieldStarTryPromise
+// go: internal/refactors/async_await_to_gen_try_promise.go:121 buildYieldStarTryPromise 6161c23f20ae7cdb
 // buildYieldStarTryPromise builds: yield* Effect.tryPromise({ try: () => expr, catch: cause => new ErrorN({ cause }) })
 pub(crate) fn build_yield_star_try_promise(
     tracker: &NodeFactory,
@@ -247,7 +247,7 @@ pub(crate) fn build_yield_star_try_promise(
         .new_yield_expression(Some(tracker.new_token(Kind::AsteriskToken)), Some(try_promise_call))
 }
 
-// go: internal/refactors/async_await_to_gen_try_promise.go:208 buildTaggedErrorClass
+// go: internal/refactors/async_await_to_gen_try_promise.go:208 buildTaggedErrorClass 7ebeb6730a946a89
 // buildTaggedErrorClass builds: class ErrorN extends Data.TaggedError("ErrorN")<{ cause: unknown }> {}
 pub(crate) fn build_tagged_error_class(
     tracker: &NodeFactory,

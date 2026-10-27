@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/data_type.go:8 effectDataPackageSourceFileDescriptor
+// go: internal/typeparser/data_type.go:8 effectDataPackageSourceFileDescriptor ac7a5f8c214953cf
 pub(crate) static EFFECT_DATA_PACKAGE_SOURCE_FILE_DESCRIPTOR: PackageSourceFileDescriptor =
     new_package_source_file_descriptor(
         ModuleDescriptorId::Data,
@@ -11,7 +11,7 @@ pub(crate) static EFFECT_DATA_PACKAGE_SOURCE_FILE_DESCRIPTOR: PackageSourceFileD
         Some(&is_effect_data_source_file),
     );
 
-// go: internal/typeparser/data_type.go:8 effectDataPackageSourceFileDescriptor
+// go: internal/typeparser/data_type.go:8 effectDataPackageSourceFileDescriptor ac7a5f8c214953cf
 // Rust: the descriptor's matcher (a Go func literal). Go's nil checker and source file guards cannot fail here.
 fn is_effect_data_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> bool {
     let c = &mut *tp.checker;
@@ -41,7 +41,7 @@ fn is_effect_data_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> boo
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/data_type.go:39 TypeParser.IsNodeReferenceToEffectDataModuleApi
+    // go: internal/typeparser/data_type.go:39 TypeParser.IsNodeReferenceToEffectDataModuleApi 7c590a8a76c5b4a1
     pub fn is_node_reference_to_effect_data_module_api(
         &mut self,
         node: P<Node>,

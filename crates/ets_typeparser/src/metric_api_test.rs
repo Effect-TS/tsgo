@@ -6,7 +6,7 @@ use crate::helpers_test::*;
 use crate::returning_dispatch_test::find_returning_dispatch_test_function;
 use crate::*;
 
-// go test: internal/typeparser/metric_api_test.go:9 TestIsNodeReferenceToEffectMetricModuleApi
+// go test: internal/typeparser/metric_api_test.go:9 TestIsNodeReferenceToEffectMetricModuleApi fa717a7047709db1
 #[test]
 fn test_is_node_reference_to_effect_metric_module_api() {
     run(|t| {

@@ -23,7 +23,7 @@ struct Case {
     want: Vec<String>,
 }
 
-// go test: internal/rulerunner/manual_metric_tap_to_track_test.go:22 TestManualMetricTapToTrackLifecycle
+// go test: internal/rulerunner/manual_metric_tap_to_track_test.go:22 TestManualMetricTapToTrackLifecycle 6415fc6cfb7b2084
 #[test]
 fn test_manual_metric_tap_to_track_lifecycle() {
     on_checker_stack(|| {

@@ -11,7 +11,7 @@ use ets_typeparser::{EffectMajorVersion, TypeParser};
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::CONTEXT_SERVICE_IS_ASSIGNED_TO_A_VARIABLE_HERE_BUT_THIS_API_IS_INTENDED_FOR_A_CLASS_DECLARATION_SHAPE_SUCH_AS_0_EFFECT_SERVICE_NOT_AS_CLASS;
 
-// go: internal/rules/service_not_as_class.go:17 ServiceNotAsClass
+// go: internal/rules/service_not_as_class.go:17 ServiceNotAsClass 4011a23cc8840a05
 pub static SERVICE_NOT_AS_CLASS: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "serviceNotAsClass",
     group: "style",
@@ -36,7 +36,7 @@ pub static SERVICE_NOT_AS_CLASS: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/service_not_as_class.go:35 ServiceNotAsClassMatch
+// go: internal/rules/service_not_as_class.go:35 ServiceNotAsClassMatch e25401608b339f1b
 // ServiceNotAsClassMatch holds the data needed by both the diagnostic and the quickfix.
 #[derive(Clone)]
 pub struct ServiceNotAsClassMatch {
@@ -52,7 +52,7 @@ pub struct ServiceNotAsClassMatch {
     pub modifier_nodes: Option<P<ModifierList>>, // Modifiers from the variable statement (e.g. export)
 }
 
-// go: internal/rules/service_not_as_class.go:50 AnalyzeServiceNotAsClass
+// go: internal/rules/service_not_as_class.go:50 AnalyzeServiceNotAsClass 2bc11373b9cc3d48
 // AnalyzeServiceNotAsClass finds all const variable declarations using the v4 service constructor
 // that should be class declarations instead. V4-only rule.
 //
@@ -89,7 +89,7 @@ pub fn analyze_service_not_as_class(
     matches
 }
 
-// go: internal/rules/service_not_as_class.go:80 checkServiceNotAsClass
+// go: internal/rules/service_not_as_class.go:80 checkServiceNotAsClass 682c39c8692ef90c
 pub(crate) fn check_service_not_as_class(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -182,7 +182,7 @@ pub(crate) fn check_service_not_as_class(
     })
 }
 
-// go: internal/rules/service_not_as_class.go:169 extractNodeText
+// go: internal/rules/service_not_as_class.go:169 extractNodeText 6c972669ed450689
 // extractNodeText gets the source text of a node, skipping leading trivia.
 pub(crate) fn extract_node_text(sf: P<SourceFile>, text: &str, node: Option<P<Node>>) -> String {
     let Some(node) = node else {

@@ -16,7 +16,7 @@ use crate::*;
 // nil slice (only `cloneStringSlicePtr` of an empty slice builds one) and a pointer to an empty one both encode
 // as `[]` and are not told apart.
 
-// go: etscore/options.go:6 KeyPattern
+// go: etscore/options.go:6 KeyPattern 76fa156498920a0b
 // KeyPattern defines a key pattern configuration for the deterministicKeys rule.
 #[derive(Clone, PartialEq, Eq, Debug, Default)]
 pub struct KeyPattern {
@@ -55,7 +55,7 @@ impl KeyPattern {
     };
 }
 
-// go: etscore/options.go:20 EffectPluginOptions
+// go: etscore/options.go:20 EffectPluginOptions e8af8911b8865ef5
 // EffectPluginOptions defines the configuration schema for
 // `@effect/language-service` as parsed from tsconfig plugin JSON.
 // This type is stored in CompilerOptions.Effect after parsing tsconfig.json.
@@ -316,7 +316,7 @@ impl EffectPluginOptions {
     };
 }
 
-// go: etscore/options.go:128 ResolvedEffectPluginOptions
+// go: etscore/options.go:128 ResolvedEffectPluginOptions 7fe19661147e443b
 // ResolvedEffectPluginOptions contains Effect plugin options that may vary per
 // source file after applying matching overrides.
 //
@@ -336,12 +336,12 @@ pub struct ResolvedEffectPluginOptions {
     pub effect_fn: Vec<String>,
 }
 
-// go: etscore/options.go:144 EffectPluginDiagnosticsOptions
+// go: etscore/options.go:144 EffectPluginDiagnosticsOptions 542c095d5e144c5d
 // EffectPluginDiagnosticsOptions is a compatibility alias for the resolved
 // per-file diagnostic options.
 pub type EffectPluginDiagnosticsOptions = ResolvedEffectPluginOptions;
 
-// go: etscore/options.go:147 Override
+// go: etscore/options.go:147 Override 21131281ffc972d1
 // Override is a path-scoped partial override for diagnostic configuration.
 #[derive(Clone, PartialEq, Eq, Debug, Default)]
 pub struct Override {
@@ -375,7 +375,7 @@ impl Override {
     };
 }
 
-// go: etscore/options.go:154 OverrideOptions
+// go: etscore/options.go:154 OverrideOptions b8430e4a75ccefa9
 // OverrideOptions is the subset of plugin options that can vary per file.
 #[derive(Clone, PartialEq, Eq, Debug, Default)]
 pub struct OverrideOptions {
@@ -463,14 +463,14 @@ impl OverrideOptions {
     };
 }
 
-// go: etscore/options.go:170 TopLevelNamedReexportsMode
+// go: etscore/options.go:170 TopLevelNamedReexportsMode c512bad5d128f4dc
 // TopLevelNamedReexportsMode configures top-level named reexport resolution behavior.
 //
 // Rust: a newtype over Go's `string` (any string can be stored; the getter maps unknown ones to "ignore").
 #[derive(Clone, PartialEq, Eq, Hash, Debug, Default)]
 pub struct TopLevelNamedReexportsMode(pub Cow<'static, str>);
 
-// go: etscore/options.go:172 TopLevelNamedReexportsIgnore
+// go: etscore/options.go:172 TopLevelNamedReexportsIgnore 2e09b463f8964365
 impl TopLevelNamedReexportsMode {
     pub const Ignore: TopLevelNamedReexportsMode =
         TopLevelNamedReexportsMode(Cow::Borrowed("ignore"));
@@ -478,7 +478,7 @@ impl TopLevelNamedReexportsMode {
         TopLevelNamedReexportsMode(Cow::Borrowed("follow"));
 }
 
-// go: etscore/options.go:178 EffectFnSpan
+// go: etscore/options.go:178 EffectFnSpan 0c444b8346bbd449
 // EffectFn variant constants.
 pub const EFFECT_FN_SPAN: &str = "span";
 pub const EFFECT_FN_UNTRACED: &str = "untraced";
@@ -486,12 +486,12 @@ pub const EFFECT_FN_NO_SPAN: &str = "no-span";
 pub const EFFECT_FN_INFERRED_SPAN: &str = "inferred-span";
 pub const EFFECT_FN_SUGGESTED_SPAN: &str = "suggested-span";
 
-// go: etscore/options.go:187 DefaultEffectFn
+// go: etscore/options.go:187 DefaultEffectFn af1e5c26f2386ddd
 // DefaultEffectFn is the default effectFn configuration.
 pub static DEFAULT_EFFECT_FN: LazyLock<Vec<String>> =
     LazyLock::new(|| vec![EFFECT_FN_SPAN.to_string()]);
 
-// go: etscore/options.go:191 DiagnosticsEnabled
+// go: etscore/options.go:191 DiagnosticsEnabled 00c021c08faded94
 // DiagnosticsEnabled reports whether Effect diagnostics are enabled for the
 // parsed config in the current program.
 pub fn diagnostics_enabled(config: Option<&EffectPluginOptions>) -> bool {
@@ -501,7 +501,7 @@ pub fn diagnostics_enabled(config: Option<&EffectPluginOptions>) -> bool {
 // Rust: Go's methods on a possibly nil `*ResolvedEffectPluginOptions` / `*EffectPluginOptions` take
 // `e: Option<&Self>`.
 impl ResolvedEffectPluginOptions {
-    // go: etscore/options.go:196 ResolvedEffectPluginOptions.GetEffectFn
+    // go: etscore/options.go:196 ResolvedEffectPluginOptions.GetEffectFn 04838d419dcc1f78
     // GetEffectFn returns the configured effectFn variants, or the default ["span"] when unset/empty.
     pub fn get_effect_fn(e: Option<&Self>) -> &[String] {
         match e {
@@ -510,7 +510,7 @@ impl ResolvedEffectPluginOptions {
         }
     }
 
-    // go: etscore/options.go:204 ResolvedEffectPluginOptions.EffectFnIncludes
+    // go: etscore/options.go:204 ResolvedEffectPluginOptions.EffectFnIncludes 780861476e12f039
     // EffectFnIncludes checks if a variant is in the configured (or default) effectFn list.
     pub fn effect_fn_includes(e: Option<&Self>, variant: &str) -> bool {
         for v in Self::get_effect_fn(e) {
@@ -523,7 +523,7 @@ impl ResolvedEffectPluginOptions {
 }
 
 impl EffectPluginOptions {
-    // go: etscore/options.go:213 EffectPluginOptions.GetRefactorsEnabled
+    // go: etscore/options.go:213 EffectPluginOptions.GetRefactorsEnabled 8f2054226fc872d6
     pub fn get_refactors_enabled(e: Option<&Self>) -> bool {
         let Some(e) = e else {
             return true;
@@ -531,7 +531,7 @@ impl EffectPluginOptions {
         e.refactors
     }
 
-    // go: etscore/options.go:220 EffectPluginOptions.GetQuickinfoEnabled
+    // go: etscore/options.go:220 EffectPluginOptions.GetQuickinfoEnabled 0af8b32dfaa7a270
     pub fn get_quickinfo_enabled(e: Option<&Self>) -> bool {
         let Some(e) = e else {
             return true;
@@ -539,7 +539,7 @@ impl EffectPluginOptions {
         e.quickinfo
     }
 
-    // go: etscore/options.go:227 EffectPluginOptions.GetCompletionsEnabled
+    // go: etscore/options.go:227 EffectPluginOptions.GetCompletionsEnabled 41d4fe8e0014ea5f
     pub fn get_completions_enabled(e: Option<&Self>) -> bool {
         let Some(e) = e else {
             return true;
@@ -547,7 +547,7 @@ impl EffectPluginOptions {
         e.completions
     }
 
-    // go: etscore/options.go:236 EffectPluginOptions.GetIncludeSuggestionsInTsc
+    // go: etscore/options.go:236 EffectPluginOptions.GetIncludeSuggestionsInTsc 3932720e2d92886c
     // GetIncludeSuggestionsInTsc returns whether suggestion diagnostics should appear in tsc output.
     // Returns true (include suggestions) when the receiver is nil.
     pub fn get_include_suggestions_in_tsc(e: Option<&Self>) -> bool {
@@ -559,7 +559,7 @@ impl EffectPluginOptions {
 }
 
 impl ResolvedEffectPluginOptions {
-    // go: etscore/options.go:244 ResolvedEffectPluginOptions.GetPipeableMinArgCount
+    // go: etscore/options.go:244 ResolvedEffectPluginOptions.GetPipeableMinArgCount bfafc61db8d45f85
     // GetPipeableMinArgCount returns the configured minimum pipeable arg count, or 2 if not set.
     pub fn get_pipeable_min_arg_count(e: Option<&Self>) -> i64 {
         if let Some(e) = e
@@ -571,7 +571,7 @@ impl ResolvedEffectPluginOptions {
     }
 }
 
-// go: etscore/options.go:252 DefaultKeyPatterns
+// go: etscore/options.go:252 DefaultKeyPatterns 37a72324958d7c1a
 // DefaultKeyPatterns is the default key patterns configuration.
 pub static DEFAULT_KEY_PATTERNS: LazyLock<Vec<KeyPattern>> = LazyLock::new(|| {
     vec![
@@ -589,7 +589,7 @@ pub static DEFAULT_KEY_PATTERNS: LazyLock<Vec<KeyPattern>> = LazyLock::new(|| {
 });
 
 impl ResolvedEffectPluginOptions {
-    // go: etscore/options.go:258 ResolvedEffectPluginOptions.GetKeyPatterns
+    // go: etscore/options.go:258 ResolvedEffectPluginOptions.GetKeyPatterns 5e8dd05a0b93baac
     // GetKeyPatterns returns the configured key patterns or the defaults if none are configured.
     pub fn get_key_patterns(e: Option<&Self>) -> &[KeyPattern] {
         match e {
@@ -600,7 +600,7 @@ impl ResolvedEffectPluginOptions {
 }
 
 impl EffectPluginOptions {
-    // go: etscore/options.go:269 EffectPluginOptions.GetMermaidBaseURL
+    // go: etscore/options.go:269 EffectPluginOptions.GetMermaidBaseURL a26f8c658c2b112c
     // GetMermaidBaseURL resolves the MermaidProvider value to a full base URL.
     //   - "" or "mermaid.live" → "https://mermaid.live/edit#"
     //   - "mermaid.com" → "https://www.mermaidchart.com/play#"
@@ -617,7 +617,7 @@ impl EffectPluginOptions {
         }
     }
 
-    // go: etscore/options.go:285 EffectPluginOptions.GetLayerGraphFollowDepth
+    // go: etscore/options.go:285 EffectPluginOptions.GetLayerGraphFollowDepth 441901b35e8af021
     // GetLayerGraphFollowDepth returns the configured layer graph follow depth, or 0 if not set.
     pub fn get_layer_graph_follow_depth(e: Option<&Self>) -> i64 {
         if let Some(e) = e
@@ -630,7 +630,7 @@ impl EffectPluginOptions {
 }
 
 impl ResolvedEffectPluginOptions {
-    // go: etscore/options.go:294 ResolvedEffectPluginOptions.GetAllowedDuplicatedPackages
+    // go: etscore/options.go:294 ResolvedEffectPluginOptions.GetAllowedDuplicatedPackages ad56d29328c1ca0f
     // GetAllowedDuplicatedPackages returns the list of package names allowed to
     // have multiple versions, or nil if none are configured.
     pub fn get_allowed_duplicated_packages(e: Option<&Self>) -> &[String] {
@@ -642,7 +642,7 @@ impl ResolvedEffectPluginOptions {
 }
 
 impl EffectPluginOptions {
-    // go: etscore/options.go:303 EffectPluginOptions.GetNamespaceImportPackages
+    // go: etscore/options.go:303 EffectPluginOptions.GetNamespaceImportPackages fea530028fbacf69
     // GetNamespaceImportPackages returns normalized package names configured for namespace imports.
     // Defaults to an empty list when unset.
     pub fn get_namespace_import_packages(e: Option<&Self>) -> Vec<String> {
@@ -652,7 +652,7 @@ impl EffectPluginOptions {
         normalize_package_list(e.namespace_import_packages.as_deref().unwrap_or_default())
     }
 
-    // go: etscore/options.go:312 EffectPluginOptions.GetBarrelImportPackages
+    // go: etscore/options.go:312 EffectPluginOptions.GetBarrelImportPackages 8ad905f15cbae4d9
     // GetBarrelImportPackages returns normalized package names configured for barrel imports.
     // Defaults to an empty list when unset.
     pub fn get_barrel_import_packages(e: Option<&Self>) -> Vec<String> {
@@ -662,7 +662,7 @@ impl EffectPluginOptions {
         normalize_package_list(e.barrel_import_packages.as_deref().unwrap_or_default())
     }
 
-    // go: etscore/options.go:321 EffectPluginOptions.GetImportAliases
+    // go: etscore/options.go:321 EffectPluginOptions.GetImportAliases f3d8556a49b0ff68
     // GetImportAliases returns normalized import aliases keyed by lower-cased package names.
     // Defaults to an empty map when unset.
     pub fn get_import_aliases(e: Option<&Self>) -> FxHashMap<String, String> {
@@ -672,7 +672,7 @@ impl EffectPluginOptions {
         normalize_import_aliases(e.import_aliases.as_ref())
     }
 
-    // go: etscore/options.go:330 EffectPluginOptions.GetTopLevelNamedReexports
+    // go: etscore/options.go:330 EffectPluginOptions.GetTopLevelNamedReexports 850021b5e0662c70
     // GetTopLevelNamedReexports returns the normalized top-level named reexports mode.
     // Defaults to "ignore" when unset or invalid.
     pub fn get_top_level_named_reexports(e: Option<&Self>) -> TopLevelNamedReexportsMode {
@@ -688,7 +688,7 @@ impl EffectPluginOptions {
     }
 }
 
-// go: etscore/options.go:342 normalizePackageList
+// go: etscore/options.go:342 normalizePackageList 7f0be0028ca0df54
 pub(crate) fn normalize_package_list(packages: &[String]) -> Vec<String> {
     if packages.is_empty() {
         return Vec::new();
@@ -703,7 +703,7 @@ pub(crate) fn normalize_package_list(packages: &[String]) -> Vec<String> {
     normalized
 }
 
-// go: etscore/options.go:355 normalizeImportAliases
+// go: etscore/options.go:355 normalizeImportAliases 05683580c425e74d
 pub(crate) fn normalize_import_aliases(
     aliases: Option<&FxHashMap<String, String>>,
 ) -> FxHashMap<String, String> {
@@ -721,7 +721,7 @@ pub(crate) fn normalize_import_aliases(
     normalized
 }
 
-// go: etscore/options.go:368 normalizePackageName
+// go: etscore/options.go:368 normalizePackageName 1e2e7bee544d0618
 pub(crate) fn normalize_package_name(pkg: &str) -> String {
     ets_go::strings::to_lower(ets_go::strings::trim_space(pkg))
 }

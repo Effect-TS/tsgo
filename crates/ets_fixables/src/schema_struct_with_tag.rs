@@ -9,7 +9,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_SCHEMA_STRUCT_INCLUDES_A_TAG_FIELD_SCHEMA_TAGGED_STRUCT_IS_THE_TAGGED_STRUCT_FORM_FOR_THIS_PATTERN_AND_MAKES_THE_TAG_OPTIONAL_IN_THE_CONSTRUCTOR_EFFECT_SCHEMA_STRUCT_WITH_TAG;
 
-// go: internal/fixables/schema_struct_with_tag.go:13 SchemaStructWithTagFix
+// go: internal/fixables/schema_struct_with_tag.go:13 SchemaStructWithTagFix 64d6cbda6a2fac11
 pub static SCHEMA_STRUCT_WITH_TAG_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "schemaStructWithTag",
     description: "Rewrite as Schema.TaggedStruct",
@@ -18,7 +18,7 @@ pub static SCHEMA_STRUCT_WITH_TAG_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixa
     run: run_schema_struct_with_tag_fix,
 });
 
-// go: internal/fixables/schema_struct_with_tag.go:21 runSchemaStructWithTagFix
+// go: internal/fixables/schema_struct_with_tag.go:21 runSchemaStructWithTagFix 7ce68f499b969426
 fn run_schema_struct_with_tag_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 

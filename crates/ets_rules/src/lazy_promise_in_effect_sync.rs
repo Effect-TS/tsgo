@@ -8,7 +8,7 @@ use ets_shim::checker::{SignatureKind, Type};
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::TypeParser;
 
-// go: internal/rules/lazy_promise_in_effect_sync.go:13 LazyPromiseInEffectSync
+// go: internal/rules/lazy_promise_in_effect_sync.go:13 LazyPromiseInEffectSync e9f564e8a4def0e1
 pub static LAZY_PROMISE_IN_EFFECT_SYNC: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
     name: "lazyPromiseInEffectSync",
@@ -56,7 +56,7 @@ pub static LAZY_PROMISE_IN_EFFECT_SYNC: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/lazy_promise_in_effect_sync.go:55 thunkReturnsPromise
+// go: internal/rules/lazy_promise_in_effect_sync.go:55 thunkReturnsPromise b09f1edf3ea700a2
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub(crate) fn thunk_returns_promise(tp: &mut TypeParser<'_>, lazy_arg_type: P<Type>) -> bool {

@@ -15,7 +15,7 @@ use ets_typeparser::{
 static MESSAGE: &Message =
     &tsdiag::EFFECT_0_EXPRESSES_RECORDING_A_METRIC_ON_EVERY_1_DIRECTLY_EFFECT_MANUAL_METRIC_TAP_TO_TRACK;
 
-// go: internal/rules/manual_metric_tap_to_track.go:17 ManualMetricTapToTrack
+// go: internal/rules/manual_metric_tap_to_track.go:17 ManualMetricTapToTrack 96cca4c5ba84c290
 // ManualMetricTapToTrack suggests the Effect.track* combinators when a tap
 // variant exists only to feed one metric through Metric.update.
 pub static MANUAL_METRIC_TAP_TO_TRACK: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -41,8 +41,8 @@ pub static MANUAL_METRIC_TAP_TO_TRACK: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/manual_metric_tap_to_track.go:44 ManualMetricTapToTrackKind
-// go: internal/rules/manual_metric_tap_to_track.go:46 ManualMetricTapToTrackVerbatim
+// go: internal/rules/manual_metric_tap_to_track.go:44 ManualMetricTapToTrackKind 67c7f489b48f77fe
+// go: internal/rules/manual_metric_tap_to_track.go:46 ManualMetricTapToTrackVerbatim 20f98f3f7d29d4b1
 // ManualMetricTapToTrackKind selects the shape of the track* replacement.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum ManualMetricTapToTrackKind {
@@ -55,7 +55,7 @@ pub enum ManualMetricTapToTrackKind {
     ConstantInput,
 }
 
-// go: internal/rules/manual_metric_tap_to_track.go:57 ManualMetricTapToTrackMatch
+// go: internal/rules/manual_metric_tap_to_track.go:57 ManualMetricTapToTrackMatch f9a8924a2f790e82
 // ManualMetricTapToTrackMatch holds the nodes needed by the diagnostic and quick fix.
 //
 // Rust: the transformation is never nil (Go only takes its address), so it is held by value; the parameters are
@@ -73,21 +73,21 @@ pub struct ManualMetricTapToTrackMatch {
     pub params: Vec<P<Node>>,
 }
 
-// go: internal/rules/manual_metric_tap_to_track.go:69 manualMetricTapAPI
+// go: internal/rules/manual_metric_tap_to_track.go:69 manualMetricTapAPI 36893ad12920b9a3
 pub(crate) struct ManualMetricTapApi {
     tap: &'static str,
     track: &'static str,
     channel: &'static str,
 }
 
-// go: internal/rules/manual_metric_tap_to_track.go:75 manualMetricTapAPIs
+// go: internal/rules/manual_metric_tap_to_track.go:75 manualMetricTapAPIs ee01a8ac8c80914a
 static MANUAL_METRIC_TAP_APIS: [ManualMetricTapApi; 3] = [
     ManualMetricTapApi { tap: "tap", track: "trackSuccesses", channel: "success" },
     ManualMetricTapApi { tap: "tapError", track: "trackErrors", channel: "error" },
     ManualMetricTapApi { tap: "tapDefect", track: "trackDefects", channel: "defect" },
 ];
 
-// go: internal/rules/manual_metric_tap_to_track.go:84 AnalyzeManualMetricTapToTrack
+// go: internal/rules/manual_metric_tap_to_track.go:84 AnalyzeManualMetricTapToTrack 2681413a6b698952
 // AnalyzeManualMetricTapToTrack finds Effect.tap/tapError/tapDefect calls whose
 // argument only performs a data-first Metric.update, either as the whole body
 // of a callback or as tap's direct-effect argument.
@@ -183,7 +183,7 @@ pub fn analyze_manual_metric_tap_to_track(
     matches
 }
 
-// go: internal/rules/manual_metric_tap_to_track.go:152 metricUpdateCall
+// go: internal/rules/manual_metric_tap_to_track.go:152 metricUpdateCall ab3ed2964bc9c3ec
 // metricUpdateCall returns node as a plain data-first Metric.update(metric, input) call.
 //
 // Rust: Go's nil checks on the call's expression and argument list drop, both are non-optional here.
@@ -213,7 +213,7 @@ pub(crate) fn metric_update_call(
     Some(call)
 }
 
-// go: internal/rules/manual_metric_tap_to_track.go:174 hasThisParameter
+// go: internal/rules/manual_metric_tap_to_track.go:174 hasThisParameter 01e2d50eca02d649
 pub(crate) fn has_this_parameter(params: Slice<'_, P<Node>>) -> bool {
     for (_, param) in params.all() {
         if ast::is_this_parameter(*param) {
@@ -223,7 +223,7 @@ pub(crate) fn has_this_parameter(params: Slice<'_, P<Node>>) -> bool {
     false
 }
 
-// go: internal/rules/manual_metric_tap_to_track.go:184 isParameterVerbatim
+// go: internal/rules/manual_metric_tap_to_track.go:184 isParameterVerbatim a0b556ea8c2ee4a2
 // isParameterVerbatim reports whether input is the single plain callback parameter itself.
 pub(crate) fn is_parameter_verbatim(
     tp: &mut TypeParser<'_>,
@@ -249,7 +249,7 @@ pub(crate) fn is_parameter_verbatim(
     symbol.is_some() && symbol == tp.get_symbol_at_location(param.name())
 }
 
-// go: internal/rules/manual_metric_tap_to_track.go:205 usesFunctionExpressionBindings
+// go: internal/rules/manual_metric_tap_to_track.go:205 usesFunctionExpressionBindings 6e3954c058d2bbaa
 // usesFunctionExpressionBindings reports whether the parameters or the input of
 // the function expression fn read a binding that fn itself provides: this,
 // super, arguments, new.target or fn's own name. An arrow function in the
@@ -315,7 +315,7 @@ pub(crate) fn uses_function_expression_bindings(
     visit(tp, self_, Some(input), true)
 }
 
-// go: internal/rules/manual_metric_tap_to_track.go:247 resolveManualMetricTapAPI
+// go: internal/rules/manual_metric_tap_to_track.go:247 resolveManualMetricTapAPI 0af0435b267899a2
 pub(crate) fn resolve_manual_metric_tap_api(
     tp: &mut TypeParser<'_>,
     callee: P<Node>,

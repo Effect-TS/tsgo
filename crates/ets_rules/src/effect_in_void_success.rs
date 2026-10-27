@@ -13,7 +13,7 @@ use ets_typeparser::TypeParser;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THERE_IS_A_NESTED_0_IN_THE_VOID_SUCCESS_CHANNEL_BEWARE_THAT_THIS_COULD_LEAD_TO_NESTED_EFFECT_EFFECT_THAT_WON_T_BE_EXECUTED_EFFECT_EFFECT_IN_VOID_SUCCESS;
 
-// go: internal/rules/effect_in_void_success.go:16 EffectInVoidSuccess
+// go: internal/rules/effect_in_void_success.go:16 EffectInVoidSuccess 5a36f821c246dcd7
 // EffectInVoidSuccess detects nested Effects in void success channels.
 // When an Effect has void as its success type but the actual value contains
 // an Effect type, this likely means a nested Effect<Effect<...>> that won't be executed.
@@ -79,7 +79,7 @@ pub static EFFECT_IN_VOID_SUCCESS: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/effect_in_void_success.go:71 findFirstStrictEffect
+// go: internal/rules/effect_in_void_success.go:71 findFirstStrictEffect 34adecb62e659184
 // findFirstStrictEffect returns the first type in the slice that is strictly an Effect type,
 // or nil if none are found. This mirrors the Nano.firstSuccessOf pattern in the TS reference.
 //

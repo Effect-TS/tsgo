@@ -5,13 +5,13 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/yieldable_error.go:11 sourceFileProgram
+// go: internal/typeparser/yieldable_error.go:11 sourceFileProgram b3186739fbb49627
 // sourceFileProgram is a local interface for accessing program source files.
 pub(crate) trait SourceFileProgram {
     fn source_files(&self) -> &'static [P<SourceFile>];
 }
 
-// go: internal/typeparser/yieldable_error.go:11 sourceFileProgram
+// go: internal/typeparser/yieldable_error.go:11 sourceFileProgram b3186739fbb49627
 impl SourceFileProgram for Program {
     fn source_files(&self) -> &'static [P<SourceFile>] {
         Program::source_files(self)
@@ -19,7 +19,7 @@ impl SourceFileProgram for Program {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/yieldable_error.go:17 TypeParser.IsYieldableErrorType
+    // go: internal/typeparser/yieldable_error.go:17 TypeParser.IsYieldableErrorType ca0a32114f37016e
     // IsYieldableErrorType reports whether the given type is assignable to Cause.YieldableError
     // from the "effect" package. Returns false for never and any types.
     //

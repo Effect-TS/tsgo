@@ -13,7 +13,7 @@ use ets_typeparser::{LazyExpressionFlags, TypeParser, parse_lazy_expression};
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_MAP_EXPRESSES_THIS_SUCCESS_VALUE_TRANSFORMATION_MORE_DIRECTLY_THAN_EFFECT_FLAT_MAP_FOLLOWED_BY_EFFECT_SUCCEED_EFFECT_FLAT_MAP_TO_MAP;
 
-// go: internal/rules/flat_map_to_map.go:17 FlatMapToMap
+// go: internal/rules/flat_map_to_map.go:17 FlatMapToMap ab75659f15a65ff8
 // FlatMapToMap suggests using Effect.map when an Effect.flatMap callback only
 // wraps its result with Effect.succeed.
 pub static FLAT_MAP_TO_MAP: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -34,7 +34,7 @@ pub static FLAT_MAP_TO_MAP: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/flat_map_to_map.go:42 FlatMapToMapMatch
+// go: internal/rules/flat_map_to_map.go:42 FlatMapToMapMatch 6589914839a86317
 // FlatMapToMapMatch holds the AST nodes needed by the diagnostic and quick fix.
 #[derive(Clone)]
 pub struct FlatMapToMapMatch {
@@ -45,7 +45,7 @@ pub struct FlatMapToMapMatch {
     pub succeed_argument: P<Node>,
 }
 
-// go: internal/rules/flat_map_to_map.go:52 AnalyzeFlatMapToMap
+// go: internal/rules/flat_map_to_map.go:52 AnalyzeFlatMapToMap 76b650ec4ee8f61b
 // AnalyzeFlatMapToMap finds piping transformations whose Effect.flatMap
 // callback consists solely of an Effect.succeed call.
 //

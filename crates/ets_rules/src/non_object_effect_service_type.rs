@@ -8,7 +8,7 @@ use ets_shim::checker::{SignatureKind, Type, TypeFlags};
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::{EffectMajorVersion, TypeParser};
 
-// go: internal/rules/non_object_effect_service_type.go:16 NonObjectEffectServiceType
+// go: internal/rules/non_object_effect_service_type.go:16 NonObjectEffectServiceType 6dcc0d327a38741e
 // NonObjectEffectServiceType checks that Effect.Service option properties
 // (succeed, sync, effect, scoped) do not resolve to primitive types.
 // V3-only, default severity error.
@@ -58,7 +58,7 @@ pub static NON_OBJECT_EFFECT_SERVICE_TYPE: LazyLock<Rule> = LazyLock::new(|| {
     }
 });
 
-// go: internal/rules/non_object_effect_service_type.go:62 checkServicePropertyTypes
+// go: internal/rules/non_object_effect_service_type.go:62 checkServicePropertyTypes ee65687b541a4068
 // checkServicePropertyTypes checks if a class extending Effect.Service has option
 // properties that resolve to primitive types.
 pub(crate) fn check_service_property_types(
@@ -180,7 +180,7 @@ pub(crate) fn check_service_property_types(
     diags
 }
 
-// go: internal/rules/non_object_effect_service_type.go:171 isPrimitiveType
+// go: internal/rules/non_object_effect_service_type.go:171 isPrimitiveType 5b06ac98a027599f
 // isPrimitiveType checks if a type (or any member of a union type) is a primitive type.
 pub(crate) fn is_primitive_type(tp: &TypeParser<'_>, t: P<Type>) -> bool {
     let primitive_flags = TypeFlags::String

@@ -7,20 +7,20 @@ use rustc_hash::FxHashMap;
 
 use crate::*;
 
-// go: internal/typeparser/native_string.go:8 nativeStringMember
+// go: internal/typeparser/native_string.go:8 nativeStringMember ad81346652916c6f
 #[derive(Clone, PartialEq, Eq, Hash, Debug, Default)]
 pub(crate) struct NativeStringMember {
     name: String,
 }
 
-// go: internal/typeparser/native_string.go:12 nativeStringRegistry
+// go: internal/typeparser/native_string.go:12 nativeStringRegistry d1eb45c5aacd682f
 #[derive(Default)]
 pub(crate) struct NativeStringRegistry {
     instance: FxHashMap<String, Vec<P<Symbol>>>,
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/native_string.go:16 TypeParser.IsNativeStringMethodReference
+    // go: internal/typeparser/native_string.go:16 TypeParser.IsNativeStringMethodReference 36d4241826d754b8
     pub fn is_native_string_method_reference(
         &mut self,
         node: impl Into<Option<P<Node>>>,
@@ -32,7 +32,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/native_string.go:20 TypeParser.getNativeStringRegistry
+    // go: internal/typeparser/native_string.go:20 TypeParser.getNativeStringRegistry 399ebe8201f7e2e5
     pub(crate) fn get_native_string_registry(&mut self) -> Arc<NativeStringRegistry> {
         if let Some(registry) = &self.links().native_string_registry {
             return Arc::clone(registry);
@@ -49,7 +49,7 @@ impl TypeParser<'_> {
         r
     }
 
-    // go: internal/typeparser/native_string.go:56 TypeParser.nativeStringReference
+    // go: internal/typeparser/native_string.go:56 TypeParser.nativeStringReference 49bd5c8a5fba6a88
     pub(crate) fn native_string_reference(
         &mut self,
         node: Option<P<Node>>,
@@ -95,7 +95,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/native_string.go:20 TypeParser.getNativeStringRegistry
+// go: internal/typeparser/native_string.go:20 TypeParser.getNativeStringRegistry 399ebe8201f7e2e5
 // Rust: Go's `add` closure: the members of `t`'s symbol declared only in default library files, with their roots.
 // Go ranges over the member table (a map); the result does not depend on the order, as each name is one member.
 pub(crate) fn add_native_string_members(
@@ -131,7 +131,7 @@ pub(crate) fn add_native_string_members(
     }
 }
 
-// go: internal/typeparser/native_string.go:56 TypeParser.nativeStringReference
+// go: internal/typeparser/native_string.go:56 TypeParser.nativeStringReference 49bd5c8a5fba6a88
 // Rust: the symbol lookup at the start of `nativeStringReference`:
 // the referenced member of a property access, or of an element access with a string literal argument.
 pub(crate) fn native_string_reference_symbol(

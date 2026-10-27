@@ -12,7 +12,7 @@ use ets_typeparser::{EffectGenCallResult, TypeParser};
 
 use crate::*;
 
-// go: internal/refactors/effect_gen_to_fn.go:13 EffectGenToFn
+// go: internal/refactors/effect_gen_to_fn.go:13 EffectGenToFn 9a9e78fdcab456dc
 pub static EFFECT_GEN_TO_FN: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "effectGenToFn",
     description: "Convert to Effect.fn",
@@ -20,7 +20,7 @@ pub static EFFECT_GEN_TO_FN: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     run: run_effect_gen_to_fn,
 });
 
-// go: internal/refactors/effect_gen_to_fn.go:21 effectGenParsed
+// go: internal/refactors/effect_gen_to_fn.go:21 effectGenParsed 70f099194c286700
 // effectGenParsed holds the parsed components of a function returning Effect.gen.
 pub(crate) struct EffectGenParsed {
     pub(crate) func_node: P<Node>, // The function-like node (arrow, declaration, expression, method)
@@ -28,7 +28,7 @@ pub(crate) struct EffectGenParsed {
     pub(crate) pipe_args: Vec<P<Node>>, // Collected pipe arguments (from .pipe() or pipe() wrappers)
 }
 
-// go: internal/refactors/effect_gen_to_fn.go:27 runEffectGenToFn
+// go: internal/refactors/effect_gen_to_fn.go:27 runEffectGenToFn c86548be3f6ff26b
 // Rust: tsrs's `get_token_at_position` never returns nil, so Go's nil check drops; the checker is the type
 // parser's (`ets_refactor::Context`).
 pub(crate) fn run_effect_gen_to_fn(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
@@ -74,7 +74,7 @@ pub(crate) fn run_effect_gen_to_fn(ctx: &mut Context<'_, '_>) -> Vec<CodeAction>
     vec![action]
 }
 
-// go: internal/refactors/effect_gen_to_fn.go:76 findFunctionReturningEffectGen
+// go: internal/refactors/effect_gen_to_fn.go:76 findFunctionReturningEffectGen 11f75db6d99deacb
 // findFunctionReturningEffectGen walks from the token up the ancestor chain to find
 // a function-like node whose body directly returns an Effect.gen call, optionally
 // wrapped in pipe/pipeable chains.
@@ -105,7 +105,7 @@ pub(crate) fn find_function_returning_effect_gen(
     None
 }
 
-// go: internal/refactors/effect_gen_to_fn.go:104 parseFunctionReturningEffectGen
+// go: internal/refactors/effect_gen_to_fn.go:104 parseFunctionReturningEffectGen e91506fcc6bce83f
 // parseFunctionReturningEffectGen extracts the Effect.gen call and any pipe args
 // from a function-like node. Returns nil if the function doesn't match.
 //
@@ -135,7 +135,7 @@ pub(crate) fn parse_function_returning_effect_gen(
     Some(EffectGenParsed { func_node: node, gen_call, pipe_args })
 }
 
-// go: internal/refactors/effect_gen_to_fn.go:139 skipReturnBlock
+// go: internal/refactors/effect_gen_to_fn.go:139 skipReturnBlock 2ad5b59914ffe1b6
 // skipReturnBlock unwraps a block containing a single return statement to get the expression.
 pub(crate) fn skip_return_block(node: P<Node>) -> P<Node> {
     if node.kind() != Kind::Block {
@@ -156,7 +156,7 @@ pub(crate) fn skip_return_block(node: P<Node>) -> P<Node> {
     expression
 }
 
-// go: internal/refactors/effect_gen_to_fn.go:159 buildEffectGenToFnReplacement
+// go: internal/refactors/effect_gen_to_fn.go:159 buildEffectGenToFnReplacement a02dd96461af0df0
 // buildEffectGenToFnReplacement builds the replacement node for the effectGenToFn refactor.
 pub(crate) fn build_effect_gen_to_fn_replacement(
     tracker: &NodeFactory,
@@ -260,7 +260,7 @@ pub(crate) fn build_effect_gen_to_fn_replacement(
     Some(build_effect_gen_to_fn_declaration(tracker, node, effect_fn_call))
 }
 
-// go: internal/refactors/effect_gen_to_fn.go:248 buildEffectGenToFnDeclaration
+// go: internal/refactors/effect_gen_to_fn.go:248 buildEffectGenToFnDeclaration 08f0710450bf746f
 // buildEffectGenToFnDeclaration wraps the Effect.fn call in the appropriate declaration.
 pub(crate) fn build_effect_gen_to_fn_declaration(
     tracker: &NodeFactory,

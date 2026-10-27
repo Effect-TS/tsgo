@@ -15,7 +15,7 @@ use crate::*;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THIS_EXPRESSION_DISCARDS_THE_SUCCESS_VALUE_THROUGH_MAPPING_EFFECT_AS_VOID_REPRESENTS_THAT_FORM_DIRECTLY_EFFECT_EFFECT_MAP_VOID;
 
-// go: internal/rules/effect_map_void.go:16 EffectMapVoid
+// go: internal/rules/effect_map_void.go:16 EffectMapVoid 706bd0b61db7f866
 // EffectMapVoid suggests using Effect.asVoid instead of Effect.map(() => void 0),
 // Effect.map(() => undefined), or Effect.map(() => {}).
 pub static EFFECT_MAP_VOID: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -36,7 +36,7 @@ pub static EFFECT_MAP_VOID: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/effect_map_void.go:35 EffectMapVoidMatch
+// go: internal/rules/effect_map_void.go:35 EffectMapVoidMatch f82d66c3af620f00
 // EffectMapVoidMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the effectMapVoid pattern.
 #[derive(Clone)]
@@ -46,7 +46,7 @@ pub struct EffectMapVoidMatch {
     pub transformation: PipingFlowTransformation,
 }
 
-// go: internal/rules/effect_map_void.go:44 isVoidCallback
+// go: internal/rules/effect_map_void.go:44 isVoidCallback ce122e6fed2f7f04
 // isVoidCallback checks if a callback argument is a "void callback":
 // either an empty function (block body with zero statements) or a lazy void expression
 // (zero-param function returning void 0, undefined, or parenthesized versions).
@@ -87,7 +87,7 @@ pub(crate) fn is_void_callback(node: P<Node>) -> bool {
     false
 }
 
-// go: internal/rules/effect_map_void.go:90 AnalyzeEffectMapVoid
+// go: internal/rules/effect_map_void.go:90 AnalyzeEffectMapVoid d69ea1f312f26b36
 // AnalyzeEffectMapVoid finds data-last and data-first Effect.map calls with void
 // callbacks that can be replaced with Effect.asVoid. Driving detection off the
 // piping-flow transformations (rather than a raw AST walk) normalizes the subject

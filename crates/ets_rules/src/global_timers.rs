@@ -7,14 +7,14 @@ use ets_shim::ast::{Diagnostic, Kind, Node, Symbol, SymbolFlags};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::EffectContextFlags;
 
-// go: internal/rules/global_timers.go:12 globalTimerAlternative
+// go: internal/rules/global_timers.go:12 globalTimerAlternative 5c0d2db2b82f6e99
 #[derive(Clone, Copy)]
 pub(crate) struct GlobalTimerAlternative {
     pub(crate) name: &'static str,
     pub(crate) alternative: &'static str,
 }
 
-// go: internal/rules/global_timers.go:17 globalTimerAlternatives
+// go: internal/rules/global_timers.go:17 globalTimerAlternatives 4b065c0a9a9e66cc
 // Rust: Go's map is iterated in random order; each key resolves to a different global symbol, so at most one entry
 // matches a callee and the order is not observable. A slice in Go's literal order stands in for the map.
 pub(crate) static GLOBAL_TIMER_ALTERNATIVES: &[(&str, GlobalTimerAlternative)] = &[
@@ -28,7 +28,7 @@ pub(crate) static GLOBAL_TIMER_ALTERNATIVES: &[(&str, GlobalTimerAlternative)] =
     ),
 ];
 
-// go: internal/rules/global_timers.go:28 GlobalTimers
+// go: internal/rules/global_timers.go:28 GlobalTimers d9908aa791ff5156
 pub static GLOBAL_TIMERS: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
     name: "globalTimers",
@@ -41,7 +41,7 @@ pub static GLOBAL_TIMERS: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/global_timers.go:40 GlobalTimersInEffect
+// go: internal/rules/global_timers.go:40 GlobalTimersInEffect db418340438a269d
 pub static GLOBAL_TIMERS_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
     name: "globalTimersInEffect",
@@ -54,7 +54,7 @@ pub static GLOBAL_TIMERS_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/global_timers.go:52 runGlobalTimers
+// go: internal/rules/global_timers.go:52 runGlobalTimers a9b08edc4458b291
 pub(crate) fn run_global_timers(
     ctx: &mut Context<'_, '_>,
     check_in_effect: bool,

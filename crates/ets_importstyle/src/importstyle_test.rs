@@ -7,7 +7,7 @@ fn strings(values: &[&str]) -> Vec<String> {
     values.iter().map(ToString::to_string).collect()
 }
 
-// go test: internal/importstyle/importstyle_test.go:9 TestPolicyStyle
+// go test: internal/importstyle/importstyle_test.go:9 TestPolicyStyle 6054c82445c4659c
 #[test]
 fn test_policy_style() {
     ets_go::testing::run(|t| {
@@ -38,7 +38,7 @@ fn test_policy_style() {
     });
 }
 
-// go test: internal/importstyle/importstyle_test.go:36 TestPolicyIsEmpty
+// go test: internal/importstyle/importstyle_test.go:36 TestPolicyIsEmpty 0f247279bb27ffb3
 #[test]
 fn test_policy_is_empty() {
     ets_go::testing::run(|t| {
@@ -59,7 +59,7 @@ fn test_policy_is_empty() {
     });
 }
 
-// go test: internal/importstyle/importstyle_test.go:49 TestPackageName
+// go test: internal/importstyle/importstyle_test.go:49 TestPackageName ddf8653e3c53dff7
 #[test]
 fn test_package_name() {
     ets_go::testing::run(|t| {
@@ -84,7 +84,7 @@ fn test_package_name() {
     });
 }
 
-// go test: internal/importstyle/importstyle_test.go:72 TestNamespaceName
+// go test: internal/importstyle/importstyle_test.go:72 TestNamespaceName 5caa9fb6ba74ed57
 #[test]
 fn test_namespace_name() {
     ets_go::testing::run(|t| {
@@ -106,7 +106,7 @@ fn test_namespace_name() {
     });
 }
 
-// go test: internal/importstyle/importstyle_test.go:92 TestReexportSpecifier
+// go test: internal/importstyle/importstyle_test.go:92 TestReexportSpecifier 248a9b56274c626e
 #[test]
 fn test_reexport_specifier() {
     ets_go::testing::run(|t| {

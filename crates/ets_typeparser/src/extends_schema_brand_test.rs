@@ -20,7 +20,7 @@ enum SchemaParseResult {
     Opaque(Option<SchemaOpaqueResult>),
 }
 
-// go test: internal/typeparser/extends_schema_brand_test.go:12 TestExtendsSchemaBrandSyntax
+// go test: internal/typeparser/extends_schema_brand_test.go:12 TestExtendsSchemaBrandSyntax 749b14a366630ea2
 #[test]
 fn test_extends_schema_brand_syntax() {
     run(|t| {
@@ -324,7 +324,7 @@ const schemaTag = "dynamic-tag"
     });
 }
 
-// go test: internal/typeparser/extends_schema_brand_test.go:172 assertSchemaExtendsNode
+// go test: internal/typeparser/extends_schema_brand_test.go:172 assertSchemaExtendsNode 79a5cc6b770c91a1
 fn assert_schema_extends_node(
     t: &T,
     sf: P<SourceFile>,
@@ -356,7 +356,7 @@ fn assert_schema_extends_node(
     }
 }
 
-// go test: internal/typeparser/extends_schema_brand_test.go:191 TestExtendsSchemaRequestsHaveNoBrand
+// go test: internal/typeparser/extends_schema_brand_test.go:191 TestExtendsSchemaRequestsHaveNoBrand e5a02fd4cf35391c
 #[test]
 fn test_extends_schema_requests_have_no_brand() {
     run(|t| {

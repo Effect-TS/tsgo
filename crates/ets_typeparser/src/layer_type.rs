@@ -4,7 +4,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/layer_type.go:11 effectLayerModuleDescriptor
+// go: internal/typeparser/layer_type.go:11 effectLayerModuleDescriptor 68a692cb72a411d0
 pub(crate) static EFFECT_LAYER_MODULE_DESCRIPTOR: PackageSourceFileDescriptor =
     new_package_source_file_descriptor(
         ModuleDescriptorId::Layer,
@@ -12,11 +12,11 @@ pub(crate) static EFFECT_LAYER_MODULE_DESCRIPTOR: PackageSourceFileDescriptor =
         Some(&is_layer_type_source_file),
     );
 
-// go: internal/typeparser/layer_type.go:14 LayerTypeId
+// go: internal/typeparser/layer_type.go:14 LayerTypeId 58355dd578038478
 // LayerTypeId is the property key for Layer's variance struct.
 pub const LAYER_TYPE_ID: &str = "~effect/Layer";
 
-// go: internal/typeparser/layer_type.go:17 Layer
+// go: internal/typeparser/layer_type.go:17 Layer 18a890587ce0a99d
 // Layer represents parsed Layer<ROut, E, RIn> type parameters.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct Layer {
@@ -26,24 +26,24 @@ pub struct Layer {
 }
 
 impl Layer {
-    // go: internal/typeparser/layer_type.go:23 Layer.ROut
+    // go: internal/typeparser/layer_type.go:23 Layer.ROut c71a15db01afbb53
     pub fn r_out(&self) -> P<Type> {
         self.r_out
     }
 
-    // go: internal/typeparser/layer_type.go:25 Layer.E
+    // go: internal/typeparser/layer_type.go:25 Layer.E ef30a4dbbb4ac9f5
     pub fn e(&self) -> P<Type> {
         self.e
     }
 
-    // go: internal/typeparser/layer_type.go:27 Layer.RIn
+    // go: internal/typeparser/layer_type.go:27 Layer.RIn 82e5776df34c707a
     pub fn r_in(&self) -> P<Type> {
         self.r_in
     }
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/layer_type.go:30 TypeParser.parseLayerVarianceStruct
+    // go: internal/typeparser/layer_type.go:30 TypeParser.parseLayerVarianceStruct 05e69b0a2d490952
     // parseLayerVarianceStruct extracts ROut, E, RIn from a Layer variance struct type.
     pub(crate) fn parse_layer_variance_struct(&mut self, t: Option<P<Type>>) -> Option<Layer> {
         let r_out = self.extract_contravariant_type(t, "_ROut")?;
@@ -55,7 +55,7 @@ impl TypeParser<'_> {
         Some(Layer { r_out, e, r_in })
     }
 
-    // go: internal/typeparser/layer_type.go:53 TypeParser.LayerType
+    // go: internal/typeparser/layer_type.go:53 TypeParser.LayerType 4f591014306719e6
     // LayerType parses a Layer type and extracts ROut, E, RIn parameters.
     // Returns nil if the type is not a Layer.
     // The detection strategy is chosen based on the detected Effect version:
@@ -116,14 +116,14 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/layer_type.go:117 TypeParser.IsLayerType
+    // go: internal/typeparser/layer_type.go:117 TypeParser.IsLayerType 25c7e6f3e34586ce
     // IsLayerType returns true if the type has the Layer variance struct.
     pub fn is_layer_type(&mut self, t: impl Into<Option<P<Type>>>) -> bool {
         self.layer_type(t).is_some()
     }
 }
 
-// go: internal/typeparser/layer_type.go:121 isLayerTypeSourceFile
+// go: internal/typeparser/layer_type.go:121 isLayerTypeSourceFile e62644f8d31e8e3d
 // Rust: Go's `c` argument is `tp.checker`.
 pub(crate) fn is_layer_type_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> bool {
     let Some(module_sym) = get_symbol_of_declaration(tp.checker, sf.as_node()) else {
@@ -142,7 +142,7 @@ pub(crate) fn is_layer_type_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFil
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/layer_type.go:146 TypeParser.IsNodeReferenceToEffectLayerModuleApi
+    // go: internal/typeparser/layer_type.go:146 TypeParser.IsNodeReferenceToEffectLayerModuleApi ce310a86eb9eca49
     // IsNodeReferenceToEffectLayerModuleApi reports whether node resolves to a member
     // exported by the "effect" package from a module that exports the Layer type.
     pub fn is_node_reference_to_effect_layer_module_api(

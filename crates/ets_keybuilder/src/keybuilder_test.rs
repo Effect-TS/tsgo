@@ -2,7 +2,7 @@ use ets_etscore::KeyPattern;
 
 use crate::*;
 
-// go test: internal/keybuilder/keybuilder_test.go:9 TestCyrb53
+// go test: internal/keybuilder/keybuilder_test.go:9 TestCyrb53 c78d4cd8a74467b9
 #[test]
 fn test_cyrb53() {
     struct Case {
@@ -27,7 +27,7 @@ fn test_cyrb53() {
     }
 }
 
-// go test: internal/keybuilder/keybuilder_test.go:36 TestCyrb53Length
+// go test: internal/keybuilder/keybuilder_test.go:36 TestCyrb53Length da7d2d678b85ed98
 #[test]
 fn test_cyrb53_length() {
     let inputs = ["", "hello", "test/path/file", "@effect/myapp/services/AuthService"];
@@ -51,7 +51,7 @@ fn kp(target: &str, pattern: &str, skip_leading_path: &[&str]) -> KeyPattern {
     }
 }
 
-// go test: internal/keybuilder/keybuilder_test.go:47 TestCreateString
+// go test: internal/keybuilder/keybuilder_test.go:47 TestCreateString 0af2ea33ac89a45d
 #[test]
 fn test_create_string() {
     let default_service_pattern = [kp("service", "default", &["src/"])];

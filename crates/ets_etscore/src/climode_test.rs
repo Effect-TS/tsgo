@@ -8,7 +8,7 @@ use crate::*;
 // they all reset the process-wide flag.
 static SERIAL: Mutex<()> = Mutex::new(());
 
-// go test: etscore/climode_test.go:5 TestIsCommandLineMode_DefaultFalse
+// go test: etscore/climode_test.go:5 TestIsCommandLineMode_DefaultFalse 1e1df22aa9704239
 #[test]
 fn test_is_command_line_mode_default_false() {
     let _serial = SERIAL.lock();
@@ -22,7 +22,7 @@ fn test_is_command_line_mode_default_false() {
     });
 }
 
-// go test: etscore/climode_test.go:14 TestEnterCommandLineMode_SetsTrue
+// go test: etscore/climode_test.go:14 TestEnterCommandLineMode_SetsTrue e617f84fcc8543ac
 #[test]
 fn test_enter_command_line_mode_sets_true() {
     let _serial = SERIAL.lock();
@@ -38,7 +38,7 @@ fn test_enter_command_line_mode_sets_true() {
     });
 }
 
-// go test: etscore/climode_test.go:25 TestEnterCommandLineMode_RestoresPrevious
+// go test: etscore/climode_test.go:25 TestEnterCommandLineMode_RestoresPrevious 166e013b5e8d22df
 #[test]
 fn test_enter_command_line_mode_restores_previous() {
     let _serial = SERIAL.lock();
@@ -57,7 +57,7 @@ fn test_enter_command_line_mode_restores_previous() {
     });
 }
 
-// go test: etscore/climode_test.go:39 TestEnterCommandLineMode_Nesting
+// go test: etscore/climode_test.go:39 TestEnterCommandLineMode_Nesting f13d2ae0ba4f8fce
 #[test]
 fn test_enter_command_line_mode_nesting() {
     let _serial = SERIAL.lock();

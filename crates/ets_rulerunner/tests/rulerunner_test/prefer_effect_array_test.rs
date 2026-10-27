@@ -20,7 +20,7 @@ struct Case {
     want: Vec<String>,
 }
 
-// go test: internal/rulerunner/prefer_effect_array_test.go:20 TestPreferEffectArrayLifecycle
+// go test: internal/rulerunner/prefer_effect_array_test.go:20 TestPreferEffectArrayLifecycle 13254ea844f330a1
 #[test]
 fn test_prefer_effect_array_lifecycle() {
     on_checker_stack(|| {

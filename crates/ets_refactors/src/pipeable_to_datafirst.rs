@@ -11,7 +11,7 @@ use ets_typeparser::{ParsedPipeCallResult, TransformationKind};
 
 use crate::*;
 
-// go: internal/refactors/pipeable_to_datafirst.go:13 PipeableToDatafirst
+// go: internal/refactors/pipeable_to_datafirst.go:13 PipeableToDatafirst 1e96e96e92f4c027
 pub static PIPEABLE_TO_DATAFIRST: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "pipeableToDatafirst",
     description: "Rewrite to datafirst",
@@ -19,7 +19,7 @@ pub static PIPEABLE_TO_DATAFIRST: LazyLock<Refactor> = LazyLock::new(|| Refactor
     run: run_pipeable_to_datafirst,
 });
 
-// go: internal/refactors/pipeable_to_datafirst.go:20 runPipeableToDatafirst
+// go: internal/refactors/pipeable_to_datafirst.go:20 runPipeableToDatafirst 2cdb8f410d1a1121
 pub(crate) fn run_pipeable_to_datafirst(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let token = astnav::get_token_at_position(ctx.source_file, span_pos(ctx));
 
@@ -63,7 +63,7 @@ pub(crate) fn run_pipeable_to_datafirst(ctx: &mut Context<'_, '_>) -> Vec<CodeAc
     Vec::new()
 }
 
-// go: internal/refactors/pipeable_to_datafirst.go:72 tryConvertToDatafirst
+// go: internal/refactors/pipeable_to_datafirst.go:72 tryConvertToDatafirst 638659cadf3fbae2
 // Rust: Go's `c` is `ctx.checker()`; Go's nil result is an empty `Vec`.
 pub(crate) fn try_convert_to_datafirst(
     pipe_call: &ParsedPipeCallResult,
@@ -191,7 +191,7 @@ pub(crate) fn try_convert_to_datafirst(
     vec![action]
 }
 
-// go: internal/refactors/pipeable_to_datafirst.go:177 isPipeCallNode
+// go: internal/refactors/pipeable_to_datafirst.go:177 isPipeCallNode 50b7a39c1f74b786
 // isPipeCallNode checks if a synthesized node is a pipe(...) call by checking if the
 // expression is an identifier named "pipe".
 pub(crate) fn is_pipe_call_node(node: Option<P<Node>>) -> bool {

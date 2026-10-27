@@ -12,7 +12,7 @@ use ets_typeparser::TypeParser;
 static MESSAGE: &Message =
     &tsdiag::PREFER_SCHEMA_TAGGED_ERROR_OVER_DATA_TAGGED_ERROR_FOR_AN_EXPLICIT_SCHEMA_CONTRACT_EFFECT_PREFER_SCHEMA_TAGGED_ERROR;
 
-// go: internal/rules/prefer_schema_tagged_error.go:13 PreferSchemaTaggedError
+// go: internal/rules/prefer_schema_tagged_error.go:13 PreferSchemaTaggedError d124bb5317dd9c2a
 pub static PREFER_SCHEMA_TAGGED_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "preferSchemaTaggedError",
     group: "style",
@@ -31,14 +31,14 @@ pub static PREFER_SCHEMA_TAGGED_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/prefer_schema_tagged_error.go:30 PreferSchemaTaggedErrorMatch
+// go: internal/rules/prefer_schema_tagged_error.go:30 PreferSchemaTaggedErrorMatch bf6d6d479a6994f3
 #[derive(Clone)]
 pub struct PreferSchemaTaggedErrorMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
 }
 
-// go: internal/rules/prefer_schema_tagged_error.go:35 AnalyzePreferSchemaTaggedError
+// go: internal/rules/prefer_schema_tagged_error.go:35 AnalyzePreferSchemaTaggedError dd49f4b3158265af
 pub fn analyze_prefer_schema_tagged_error(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,

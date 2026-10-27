@@ -12,7 +12,7 @@ use ets_shim::lsproto;
 use ets_shim::vfs::{FS, bundled, vfstest};
 use rustc_hash::FxHashMap;
 
-// go test: etscheckerhooks/unused_parameters_test.go:20 TestEffectDiagnosticsPreserveUnusedPredicateParameterLSP
+// go test: etscheckerhooks/unused_parameters_test.go:20 TestEffectDiagnosticsPreserveUnusedPredicateParameterLSP 2a55c8c3da2570bd
 #[test]
 fn test_effect_diagnostics_preserve_unused_predicate_parameter_lsp() {
     ets_go::testing::on_checker_stack(|| {
@@ -64,7 +64,7 @@ export function unusedPredicate([|value|]: unknown): value is number {{
     });
 }
 
-// go test: etscheckerhooks/unused_parameters_test.go:50 TestEffectDiagnosticsPreserveUnusedPredicateParameter
+// go test: etscheckerhooks/unused_parameters_test.go:50 TestEffectDiagnosticsPreserveUnusedPredicateParameter 1bd2968be538421a
 #[test]
 fn test_effect_diagnostics_preserve_unused_predicate_parameter() {
     for enabled in [false, true] {
@@ -103,7 +103,7 @@ fn test_effect_diagnostics_preserve_unused_predicate_parameter() {
     }
 }
 
-// go test: etscheckerhooks/unused_parameters_test.go:80 TestEffectDiagnosticsRunWithoutUnusedChecking
+// go test: etscheckerhooks/unused_parameters_test.go:80 TestEffectDiagnosticsRunWithoutUnusedChecking 8f3d84aedbc6f5c0
 #[test]
 fn test_effect_diagnostics_run_without_unused_checking() {
     let program = unused_parameter_program(
@@ -125,7 +125,7 @@ fn test_effect_diagnostics_run_without_unused_checking() {
     }
 }
 
-// go test: etscheckerhooks/unused_parameters_test.go:98 unusedParameterProgram
+// go test: etscheckerhooks/unused_parameters_test.go:98 unusedParameterProgram c0f5f32ddd7196ab
 // Rust: the test package imports etscheckerhooks, whose `init` registers the hooks: `ets_etscheckerhooks::init()`.
 fn unused_parameter_program(
     plugin_enabled: bool,

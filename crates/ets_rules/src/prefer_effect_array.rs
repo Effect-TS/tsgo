@@ -8,7 +8,7 @@ use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::TypeParser;
 use rustc_hash::FxHashSet;
 
-// go: internal/rules/prefer_effect_array.go:11 PreferEffectArray
+// go: internal/rules/prefer_effect_array.go:11 PreferEffectArray 6f24c3491b302ace
 pub static PREFER_EFFECT_ARRAY: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "preferEffectArray",
     group: "effectNative",
@@ -22,15 +22,15 @@ pub static PREFER_EFFECT_ARRAY: LazyLock<Rule> = LazyLock::new(|| Rule {
     run: run_prefer_effect_array,
 });
 
-// go: internal/rules/prefer_effect_array.go:21 arrayMemberKind
-// go: internal/rules/prefer_effect_array.go:23 arrayInstanceMember
+// go: internal/rules/prefer_effect_array.go:21 arrayMemberKind 56f92663d689a42a
+// go: internal/rules/prefer_effect_array.go:23 arrayInstanceMember 8ee8ca8aa5a1f499
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub(crate) enum ArrayMemberKind {
     InstanceMember,
     ConstructorMember,
 }
 
-// go: internal/rules/prefer_effect_array.go:28 arrayMethodPreference
+// go: internal/rules/prefer_effect_array.go:28 arrayMethodPreference 6614c1057eed19b7
 pub(crate) struct ArrayMethodPreference {
     pub(crate) kind: ArrayMemberKind,
     pub(crate) native_name: &'static str,
@@ -48,7 +48,7 @@ const fn array_method_preference(
     ArrayMethodPreference { kind, native_name, effect_api, caveat }
 }
 
-// go: internal/rules/prefer_effect_array.go:35 arrayMethodPreferences
+// go: internal/rules/prefer_effect_array.go:35 arrayMethodPreferences 7f0ee91321eb15f5
 pub(crate) static ARRAY_METHOD_PREFERENCES: &[ArrayMethodPreference] = &[
     array_method_preference(
         ArrayMemberKind::InstanceMember,
@@ -148,7 +148,7 @@ pub(crate) static ARRAY_METHOD_PREFERENCES: &[ArrayMethodPreference] = &[
     ),
 ];
 
-// go: internal/rules/prefer_effect_array.go:54 arrayMethodNames
+// go: internal/rules/prefer_effect_array.go:54 arrayMethodNames 9dc072e177e223ab
 //
 // Rust: Go's `map[string]bool` of true values is a set.
 pub(crate) static ARRAY_METHOD_NAMES: LazyLock<FxHashSet<&'static str>> = LazyLock::new(|| {
@@ -160,7 +160,7 @@ pub(crate) static ARRAY_METHOD_NAMES: LazyLock<FxHashSet<&'static str>> = LazyLo
 });
 
 impl ArrayMethodPreference {
-    // go: internal/rules/prefer_effect_array.go:62 arrayMethodPreference.matches
+    // go: internal/rules/prefer_effect_array.go:62 arrayMethodPreference.matches 89749b24ca5f7257
     pub(crate) fn matches(&self, tp: &mut TypeParser<'_>, node: P<Node>) -> bool {
         if self.kind == ArrayMemberKind::ConstructorMember {
             return tp.is_native_array_constructor_method_reference(node, self.native_name);
@@ -169,7 +169,7 @@ impl ArrayMethodPreference {
     }
 }
 
-// go: internal/rules/prefer_effect_array.go:69 runPreferEffectArray
+// go: internal/rules/prefer_effect_array.go:69 runPreferEffectArray ade1bdb7a86f1df3
 pub(crate) fn run_prefer_effect_array(ctx: &mut Context<'_, '_>) -> Vec<P<Diagnostic>> {
     let mut diagnostics = Vec::new();
     // Rust: Go's recursive `walk` closure is a nested function.

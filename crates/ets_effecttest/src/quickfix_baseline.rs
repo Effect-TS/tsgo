@@ -7,7 +7,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go test: internal/effecttest/quickfix_baseline.go:15 QuickFixInventoryEntry
+// go test: internal/effecttest/quickfix_baseline.go:15 QuickFixInventoryEntry f7d9161bb0503989
 // QuickFixInventoryEntry represents one diagnostic occurrence with its available quick fixes.
 #[derive(Clone, Debug)]
 pub struct QuickFixInventoryEntry {
@@ -21,7 +21,7 @@ pub struct QuickFixInventoryEntry {
     pub fix_titles: Vec<String>,
 }
 
-// go test: internal/effecttest/quickfix_baseline.go:27 QuickFixApplicationResult
+// go test: internal/effecttest/quickfix_baseline.go:27 QuickFixApplicationResult bebfdde4374f4a9c
 // QuickFixApplicationResult represents the result of applying one quick fix.
 #[derive(Clone, Debug, Default)]
 pub struct QuickFixApplicationResult {
@@ -37,7 +37,7 @@ pub struct QuickFixApplicationResult {
     pub skipped: bool,
 }
 
-// go test: internal/effecttest/quickfix_baseline.go:41 diagnosticCodeString
+// go test: internal/effecttest/quickfix_baseline.go:41 diagnosticCodeString 94e3f664cee6b5d5
 // diagnosticCodeString formats the diagnostic code for display.
 pub(crate) fn diagnostic_code_string(d: &lsproto::Diagnostic) -> String {
     let Some(code) = &d.code else {
@@ -52,7 +52,7 @@ pub(crate) fn diagnostic_code_string(d: &lsproto::Diagnostic) -> String {
     "?".to_string()
 }
 
-// go test: internal/effecttest/quickfix_baseline.go:54 diagnosticMessageString
+// go test: internal/effecttest/quickfix_baseline.go:54 diagnosticMessageString 6224ffe2dc317dc2
 pub(crate) fn diagnostic_message_string(d: &lsproto::Diagnostic) -> String {
     if let Some(string) = &d.message.string {
         return string.clone();
@@ -63,7 +63,7 @@ pub(crate) fn diagnostic_message_string(d: &lsproto::Diagnostic) -> String {
     String::new()
 }
 
-// go test: internal/effecttest/quickfix_baseline.go:65 generateQuickFixBaseline
+// go test: internal/effecttest/quickfix_baseline.go:65 generateQuickFixBaseline c72a4cf0458f5456
 // generateQuickFixBaseline creates the content for a *.quickfixes.txt baseline file.
 pub(crate) fn generate_quick_fix_baseline(
     inventory: &[QuickFixInventoryEntry],
@@ -153,7 +153,7 @@ pub(crate) fn generate_quick_fix_baseline(
     sb
 }
 
-// go test: internal/effecttest/quickfix_baseline.go:152 DoQuickFixBaseline
+// go test: internal/effecttest/quickfix_baseline.go:152 DoQuickFixBaseline b277f76292cb6483
 // DoQuickFixBaseline generates a .quickfixes.txt baseline for Effect tests.
 pub fn do_quick_fix_baseline(
     t: &T,

@@ -22,7 +22,7 @@ use rustc_hash::FxHashSet;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_EXPRESSION_CAN_BE_REWRITTEN_IN_THE_REUSABLE_FUNCTION_FORM_0_EFFECT_EFFECT_FN_OPPORTUNITY;
 
-// go: internal/fixables/effect_fn_opportunity.go:22 EffectFnOpportunityFix
+// go: internal/fixables/effect_fn_opportunity.go:22 EffectFnOpportunityFix 2fa93ca779d87146
 pub static EFFECT_FN_OPPORTUNITY_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "effectFnOpportunity",
     description: "Convert to Effect.fn",
@@ -37,7 +37,7 @@ pub static EFFECT_FN_OPPORTUNITY_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixab
     run: run_effect_fn_opportunity_fix,
 });
 
-// go: internal/fixables/effect_fn_opportunity.go:36 runEffectFnOpportunityFix
+// go: internal/fixables/effect_fn_opportunity.go:36 runEffectFnOpportunityFix 95608618bd5e9ec9
 //
 // Rust: Go's `effectConfig.EffectFnIncludes(...)` (a nil-receiver method) is
 // `ResolvedEffectPluginOptions::effect_fn_includes(effect_config, ...)`; the result is shared by the actions'
@@ -200,7 +200,7 @@ fn run_effect_fn_opportunity_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     actions
 }
 
-// go: internal/fixables/effect_fn_opportunity.go:137 effectFnBuildReplacement
+// go: internal/fixables/effect_fn_opportunity.go:137 effectFnBuildReplacement 42ede7dded3d7430
 // effectFnBuildReplacement edits around the original body rather than printing a
 // cloned AST. The body and all surrounding declarations/properties retain their
 // comments, literal spelling, whitespace, and semicolon style.
@@ -332,7 +332,7 @@ fn effect_fn_build_replacement(
     );
 }
 
-// go: internal/fixables/effect_fn_opportunity.go:240 effectFnPipeArgumentText
+// go: internal/fixables/effect_fn_opportunity.go:240 effectFnPipeArgumentText 31727a063bdbf5a3
 // effectFnPipeArgumentText prevents Effect.fn's additional function arguments
 // from reaching a bare pipeable's optional parameters. Factory calls already
 // produce data-last pipeables and can be retained as written.
@@ -369,7 +369,7 @@ fn effect_fn_pipe_argument_text(arg: P<Node>, text: &str) -> String {
     format!("{parameter} => {text}({parameter})")
 }
 
-// go: internal/fixables/effect_fn_opportunity.go:273 effectFnSignatureRange
+// go: internal/fixables/effect_fn_opportunity.go:273 effectFnSignatureRange 29da66f2ca25dba8
 // effectFnSignatureRange locates the complete parameter/type-parameter spelling,
 // including comments and defaults. Bare arrow parameters need parentheses when
 // moved to a function expression.
@@ -391,7 +391,7 @@ fn effect_fn_signature_range(sf: P<SourceFile>, target: P<Node>) -> TextRange {
     TextRange::new(start, end)
 }
 
-// go: internal/fixables/effect_fn_opportunity.go:291 effectFnComments
+// go: internal/fixables/effect_fn_opportunity.go:291 effectFnComments f46f6ce346a0400c
 // effectFnComments retains comments from discarded wrapper syntax, such as the
 // outer return statement. Arguments and the function body are copied separately.
 fn effect_fn_comments(sf: P<SourceFile>, start: u32, end: u32, moved: Option<P<Node>>) -> String {

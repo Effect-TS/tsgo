@@ -5,7 +5,7 @@ use ets_shim::core::context::Context;
 
 use crate::helpers_test::*;
 
-// go test: internal/typeparser/checked_expression_types_test.go:5 TestCheckedExpressionTypeRemembersOnlyCheckedSourceFiles
+// go test: internal/typeparser/checked_expression_types_test.go:5 TestCheckedExpressionTypeRemembersOnlyCheckedSourceFiles 449e575b22ccfff0
 #[test]
 fn test_checked_expression_type_remembers_only_checked_source_files() {
     run(|t| {

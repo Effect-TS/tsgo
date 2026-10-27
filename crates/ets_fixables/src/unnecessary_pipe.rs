@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_PIPE_CALL_CONTAINS_NO_ARGUMENTS_EFFECT_UNNECESSARY_PIPE;
 
-// go: internal/fixables/unnecessary_pipe.go:12 UnnecessaryPipeFix
+// go: internal/fixables/unnecessary_pipe.go:12 UnnecessaryPipeFix 54676d4c445296b4
 pub static UNNECESSARY_PIPE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "unnecessaryPipe",
     description: "Remove the pipe call",
@@ -17,7 +17,7 @@ pub static UNNECESSARY_PIPE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     run: run_unnecessary_pipe_fix,
 });
 
-// go: internal/fixables/unnecessary_pipe.go:20 runUnnecessaryPipeFix
+// go: internal/fixables/unnecessary_pipe.go:20 runUnnecessaryPipeFix 9c7b9a45d2cdf7ed
 fn run_unnecessary_pipe_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 

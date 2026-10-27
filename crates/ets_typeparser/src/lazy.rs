@@ -12,7 +12,7 @@ use crate::*;
 /// they answer the same.
 type Resolver<T> = Box<dyn FnOnce(&mut TypeParser<'_>) -> T + Send>;
 
-// go: internal/typeparser/lazy.go:11 lazy
+// go: internal/typeparser/lazy.go:11 lazy 34e87cbe61ec3600
 // lazy resolves a value on its first read and returns the stored value on
 // later reads. Result structs hold it by pointer so their copies share one
 // resolution. A checker runs on a single goroutine, so no lock is needed.
@@ -32,20 +32,20 @@ impl<T> Clone for Lazy<T> {
     }
 }
 
-// go: internal/typeparser/lazy.go:16 newLazy
+// go: internal/typeparser/lazy.go:16 newLazy 398812cbba00a3c0
 pub(crate) fn new_lazy<T: Default>(
     resolve: impl FnOnce(&mut TypeParser<'_>) -> T + Send + 'static,
 ) -> Lazy<T> {
     Lazy(Arc::new(Mutex::new(LazyState { resolve: Some(Box::new(resolve)), value: T::default() })))
 }
 
-// go: internal/typeparser/lazy.go:20 resolvedLazy
+// go: internal/typeparser/lazy.go:20 resolvedLazy 85ad53ef2648de9f
 pub(crate) fn resolved_lazy<T>(value: T) -> Lazy<T> {
     Lazy(Arc::new(Mutex::new(LazyState { resolve: None, value })))
 }
 
 impl<T: Clone + Default> Lazy<T> {
-    // go: internal/typeparser/lazy.go:24 lazy.get
+    // go: internal/typeparser/lazy.go:24 lazy.get 2c815eb9982bd1c9
     // Rust: `this` is Go's receiver, which may be nil.
     pub(crate) fn get(this: Option<&Lazy<T>>, tp: &mut TypeParser<'_>) -> T {
         let Some(l) = this else {
@@ -62,7 +62,7 @@ impl<T: Clone + Default> Lazy<T> {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/lazy.go:36 TypeParser.lazyTypeAtLocation
+    // go: internal/typeparser/lazy.go:36 TypeParser.lazyTypeAtLocation 90da518a91e1a241
     #[expect(
         clippy::unused_self,
         reason = "a TypeParser method in Go; the lazy resolves through the parser it is read with"
@@ -71,7 +71,7 @@ impl TypeParser<'_> {
         new_lazy(move |tp| tp.get_type_at_location(node))
     }
 
-    // go: internal/typeparser/lazy.go:40 TypeParser.lazyCallReturnType
+    // go: internal/typeparser/lazy.go:40 TypeParser.lazyCallReturnType 954222397c36562f
     #[expect(
         clippy::unused_self,
         reason = "a TypeParser method in Go; the lazy resolves through the parser it is read with"

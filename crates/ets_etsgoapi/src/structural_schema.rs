@@ -11,7 +11,7 @@ use ets_shim::lsproto;
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: etsgoapi/structural_schema.go:20 TypeParser.RenderStructuralSchemaStatements
+    // go: etsgoapi/structural_schema.go:20 TypeParser.RenderStructuralSchemaStatements d32e0f3326055b7d
     // RenderStructuralSchemaStatements converts a resolved TypeScript type into
     // rendered Effect Schema statements using the same structural generator as the
     // structuralTypeToSchema refactor.

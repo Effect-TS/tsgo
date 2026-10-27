@@ -1,6 +1,6 @@
 use crate::*;
 
-// go test: internal/completions/fn_function_star_test.go:7 TestFnFunctionStar_NotEffectModule
+// go test: internal/completions/fn_function_star_test.go:7 TestFnFunctionStar_NotEffectModule 4de86fd5d7e65fe6
 #[test]
 fn test_fn_function_star_not_effect_module() {
     go_test(|t| {
@@ -18,7 +18,7 @@ const x = Foo.fn"#;
     });
 }
 
-// go test: internal/completions/fn_function_star_test.go:18 TestFnFunctionStar_NamespaceImport_InVarDecl
+// go test: internal/completions/fn_function_star_test.go:18 TestFnFunctionStar_NamespaceImport_InVarDecl 97fa0064c7c65cc6
 #[test]
 fn test_fn_function_star_namespace_import_in_var_decl() {
     go_test(|t| {
@@ -49,7 +49,7 @@ const myFn = Effect.fn"#;
     });
 }
 
-// go test: internal/completions/fn_function_star_test.go:39 TestFnFunctionStar_NamedImport_InVarDecl
+// go test: internal/completions/fn_function_star_test.go:39 TestFnFunctionStar_NamedImport_InVarDecl ccf7e8be23f8bdd1
 #[test]
 fn test_fn_function_star_named_import_in_var_decl() {
     go_test(|t| {
@@ -67,7 +67,7 @@ const myFn = Effect.fn"#;
     });
 }
 
-// go test: internal/completions/fn_function_star_test.go:53 TestFnFunctionStar_NotInVarDecl
+// go test: internal/completions/fn_function_star_test.go:53 TestFnFunctionStar_NotInVarDecl b56e257672a41bc1
 #[test]
 fn test_fn_function_star_not_in_var_decl() {
     go_test(|t| {
@@ -94,7 +94,7 @@ Effect.fn"#;
     });
 }
 
-// go test: internal/completions/fn_function_star_test.go:70 TestFnFunctionStar_AliasedImport
+// go test: internal/completions/fn_function_star_test.go:70 TestFnFunctionStar_AliasedImport f522e7c4855b6938
 #[test]
 fn test_fn_function_star_aliased_import() {
     go_test(|t| {
@@ -112,7 +112,7 @@ const myFn = Fx.fn"#;
     });
 }
 
-// go test: internal/completions/fn_function_star_test.go:84 TestFnFunctionStar_CursorAfterDot
+// go test: internal/completions/fn_function_star_test.go:84 TestFnFunctionStar_CursorAfterDot 0bcf764c79fd05bf
 #[test]
 fn test_fn_function_star_cursor_after_dot() {
     go_test(|t| {
@@ -127,7 +127,7 @@ const myFn = Effect."#;
     });
 }
 
-// go test: internal/completions/fn_function_star_test.go:95 TestFnFunctionStar_SnippetInsertText
+// go test: internal/completions/fn_function_star_test.go:95 TestFnFunctionStar_SnippetInsertText 9a891228f860c4f3
 #[test]
 fn test_fn_function_star_snippet_insert_text() {
     go_test(|t| {

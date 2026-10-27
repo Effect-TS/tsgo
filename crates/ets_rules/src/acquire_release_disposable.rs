@@ -14,7 +14,7 @@ use crate::*;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_ACQUIRE_DISPOSABLE_EXPRESSES_THIS_DISPOSABLE_RESOURCE_ACQUISITION_MORE_DIRECTLY_THAN_EFFECT_ACQUIRE_RELEASE_WITH_A_MANUAL_DISPOSAL_FINALIZER_EFFECT_ACQUIRE_RELEASE_DISPOSABLE;
 
-// go: internal/rules/acquire_release_disposable.go:17 AcquireReleaseDisposable
+// go: internal/rules/acquire_release_disposable.go:17 AcquireReleaseDisposable 8e579c8e95847096
 // AcquireReleaseDisposable suggests Effect.acquireDisposable when an
 // acquireRelease finalizer only invokes the acquired resource's JavaScript
 // disposal protocol.
@@ -36,7 +36,7 @@ pub static ACQUIRE_RELEASE_DISPOSABLE: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/acquire_release_disposable.go:43 AcquireReleaseDisposableMatch
+// go: internal/rules/acquire_release_disposable.go:43 AcquireReleaseDisposableMatch 6b952ab7f98e91ee
 // AcquireReleaseDisposableMatch holds the nodes needed by the diagnostic and
 // its quick fix.
 #[derive(Clone)]
@@ -48,7 +48,7 @@ pub struct AcquireReleaseDisposableMatch {
     pub has_type_arguments: bool,
 }
 
-// go: internal/rules/acquire_release_disposable.go:54 AnalyzeAcquireReleaseDisposable
+// go: internal/rules/acquire_release_disposable.go:54 AnalyzeAcquireReleaseDisposable 97fb0da445cc9c45
 // AnalyzeAcquireReleaseDisposable finds Effect.acquireRelease calls whose
 // resulting success type is disposable and whose release callback consists
 // solely of invoking that resource's disposal protocol.
@@ -95,7 +95,7 @@ pub fn analyze_acquire_release_disposable(
     matches
 }
 
-// go: internal/rules/acquire_release_disposable.go:84 globalDisposableUnion
+// go: internal/rules/acquire_release_disposable.go:84 globalDisposableUnion cd019e3fc2ce5ad8
 // Rust: Go's checker argument is the parser's checker. `GetDeclaredTypeOfSymbol` never returns nil in tsrs.
 pub(crate) fn global_disposable_union(tp: &mut TypeParser<'_>) -> Option<P<Type>> {
     let c = tp.checker();
@@ -115,7 +115,7 @@ pub(crate) fn global_disposable_union(tp: &mut TypeParser<'_>) -> Option<P<Type>
     Some(c.get_union_type_ex_exported(&types, UnionReduction::None))
 }
 
-// go: internal/rules/acquire_release_disposable.go:104 analyzeAcquireReleaseDisposableCall
+// go: internal/rules/acquire_release_disposable.go:104 analyzeAcquireReleaseDisposableCall f76adc225a44bdd6
 pub(crate) fn analyze_acquire_release_disposable_call(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -155,7 +155,7 @@ pub(crate) fn analyze_acquire_release_disposable_call(
     })
 }
 
-// go: internal/rules/acquire_release_disposable.go:139 isDefinitelyDisposable
+// go: internal/rules/acquire_release_disposable.go:139 isDefinitelyDisposable 006cbf7992fb77dd
 pub(crate) fn is_definitely_disposable(
     tp: &mut TypeParser<'_>,
     success: Option<P<Type>>,
@@ -172,7 +172,7 @@ pub(crate) fn is_definitely_disposable(
     tp.checker().is_type_assignable_to_exported(success, disposable)
 }
 
-// go: internal/rules/acquire_release_disposable.go:151 isDisposalRelease
+// go: internal/rules/acquire_release_disposable.go:151 isDisposalRelease f2b585469555f5b4
 pub(crate) fn is_disposal_release(
     tp: &mut TypeParser<'_>,
     node: P<Node>,
@@ -234,7 +234,7 @@ pub(crate) fn is_disposal_release(
         || protocol == "asyncDispose" && wrapper_name == "promise")
 }
 
-// go: internal/rules/acquire_release_disposable.go:202 isPlainIdentifierParameter
+// go: internal/rules/acquire_release_disposable.go:202 isPlainIdentifierParameter 74c6e6e2192550b0
 pub(crate) fn is_plain_identifier_parameter(node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;
@@ -248,7 +248,7 @@ pub(crate) fn is_plain_identifier_parameter(node: Option<P<Node>>) -> bool {
         && parameter.initializer().is_none()
 }
 
-// go: internal/rules/acquire_release_disposable.go:210 disposalProtocolCall
+// go: internal/rules/acquire_release_disposable.go:210 disposalProtocolCall 770e22371150945d
 pub(crate) fn disposal_protocol_call(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,

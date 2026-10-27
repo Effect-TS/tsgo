@@ -13,7 +13,7 @@ use crate::*;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_0_EFFECT_1_TRANSFORM_THE_SUCCESS_AND_FAILURE_CHANNELS_ONE_STEP_AT_A_TIME_EFFECT_2_EXPRESSES_BOTH_TRANSFORMATIONS_IN_A_SINGLE_STEP_EFFECT_MAP_MAP_ERROR_TO_MAP_BOTH;
 
-// go: internal/fixables/map_map_error_to_map_both.go:17 MapMapErrorToMapBothFix
+// go: internal/fixables/map_map_error_to_map_both.go:17 MapMapErrorToMapBothFix 4ba34b9a17c2d38e
 pub static MAP_MAP_ERROR_TO_MAP_BOTH_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "mapMapErrorToMapBoth",
     description: "Replace with Effect.mapBoth",
@@ -22,7 +22,7 @@ pub static MAP_MAP_ERROR_TO_MAP_BOTH_FIX: LazyLock<Fixable> = LazyLock::new(|| F
     run: run_map_map_error_to_map_both_fix,
 });
 
-// go: internal/fixables/map_map_error_to_map_both.go:27 runMapMapErrorToMapBothFix
+// go: internal/fixables/map_map_error_to_map_both.go:27 runMapMapErrorToMapBothFix 667633d54cc36401
 fn run_map_map_error_to_map_both_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_map_map_error_to_map_both(&mut ctx.type_parser, Some(source_file)) {
@@ -77,7 +77,7 @@ fn run_map_map_error_to_map_both_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActio
     Vec::new()
 }
 
-// go: internal/fixables/map_map_error_to_map_both.go:70 mapBothReference
+// go: internal/fixables/map_map_error_to_map_both.go:70 mapBothReference f7460e8f748a8e77
 // mapBothReference finds a reference that reaches the replacement API at the
 // diagnostic: the file's Effect import, or a binding in scope that is the
 // replacement API itself or the Effect module. It returns nil when the file

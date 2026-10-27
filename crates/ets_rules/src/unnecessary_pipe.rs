@@ -10,7 +10,7 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::{ParsedPipeCallResult, TypeParser};
 
-// go: internal/rules/unnecessary_pipe.go:17 UnnecessaryPipe
+// go: internal/rules/unnecessary_pipe.go:17 UnnecessaryPipe fcf77abc6c2df156
 // UnnecessaryPipe detects pipe() and .pipe() calls with no transformation
 // arguments and suggests removing the unnecessary pipe wrapper.
 pub static UNNECESSARY_PIPE: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -37,7 +37,7 @@ pub static UNNECESSARY_PIPE: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/unnecessary_pipe.go:36 UnnecessaryPipeMatch
+// go: internal/rules/unnecessary_pipe.go:36 UnnecessaryPipeMatch 04930eb6d9ea786c
 // UnnecessaryPipeMatch holds the diagnostic and parsed pipe call result needed
 // by both the diagnostic rule and the quick-fix.
 #[derive(Clone)]
@@ -47,7 +47,7 @@ pub struct UnnecessaryPipeMatch {
     pub result: Arc<ParsedPipeCallResult>, // The parsed pipe call (contains Subject node and call Node)
 }
 
-// go: internal/rules/unnecessary_pipe.go:44 AnalyzeUnnecessaryPipe
+// go: internal/rules/unnecessary_pipe.go:44 AnalyzeUnnecessaryPipe 6788ac26f39f19d1
 // AnalyzeUnnecessaryPipe finds all pipe() and .pipe() calls with no transformation
 // arguments, returning matches with both the diagnostic and the parsed result.
 //

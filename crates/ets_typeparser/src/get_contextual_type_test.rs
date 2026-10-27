@@ -6,7 +6,7 @@ use ets_shim::core::context::Context;
 
 use crate::helpers_test::*;
 
-// go test: internal/typeparser/get_contextual_type_test.go:11 TestGetContextualTypeInGeneratorExpressions
+// go test: internal/typeparser/get_contextual_type_test.go:11 TestGetContextualTypeInGeneratorExpressions 549c472da85d2807
 #[test]
 fn test_get_contextual_type_in_generator_expressions() {
     run(|t| {
@@ -113,7 +113,7 @@ fn test_get_contextual_type_in_generator_expressions() {
     });
 }
 
-// go test: internal/typeparser/get_contextual_type_test.go:55 TestGetContextualTypeOnGeneratorExpression
+// go test: internal/typeparser/get_contextual_type_test.go:55 TestGetContextualTypeOnGeneratorExpression 46fe8ffed4e4a403
 #[test]
 fn test_get_contextual_type_on_generator_expression() {
     run(|t| {
@@ -140,7 +140,7 @@ accept(function* () { yield 1; });",
     });
 }
 
-// go test: internal/typeparser/get_contextual_type_test.go:69 TestInferredGeneratorContextualCaches
+// go test: internal/typeparser/get_contextual_type_test.go:69 TestInferredGeneratorContextualCaches 74b043dbe9b97134
 // Rust: Go's second parser over the checker (`NewTypeParser(c.Program(), c)`) is made after the first is dropped
 // (each borrows the checker); both use the checker's links, which the test compares by identity.
 #[test]

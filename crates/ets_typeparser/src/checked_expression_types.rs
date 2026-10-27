@@ -4,7 +4,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/checked_expression_types.go:16 RecordCheckedExpressionType
+// go: internal/typeparser/checked_expression_types.go:16 RecordCheckedExpressionType d1118c301f8a473f
 // RecordCheckedExpressionType stores the type the checker computed for an
 // expression while checking a source file. Only final evaluations count: plain
 // Normal mode, or Contextual alone when a call argument is checked against its
@@ -30,7 +30,7 @@ pub fn record_checked_expression_type(
     links.checked_expression_type.insert(node, Some(t));
 }
 
-// go: internal/typeparser/checked_expression_types.go:29 PauseCheckedExpressionTypes
+// go: internal/typeparser/checked_expression_types.go:29 PauseCheckedExpressionTypes 1fcc5adecc4e9f1f
 // PauseCheckedExpressionTypes stops recording for the checker until the
 // returned function is called.
 pub fn pause_checked_expression_types(c: &mut Checker) -> impl FnOnce() + use<> {
@@ -40,7 +40,7 @@ pub fn pause_checked_expression_types(c: &mut Checker) -> impl FnOnce() + use<> 
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/checked_expression_types.go:38 TypeParser.checkedExpressionType
+    // go: internal/typeparser/checked_expression_types.go:38 TypeParser.checkedExpressionType 2ee86b7861731293
     // checkedExpressionType returns the type the file's check computed for an
     // expression, without evaluating anything, or nil when the check never
     // evaluated it.

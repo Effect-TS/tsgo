@@ -12,7 +12,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::BRANCHING_ON_0_REASON_TAG_INSIDE_EFFECT_1_HAND_ROLLS_REASON_DISPATCH_USE_EFFECT_CATCH_REASON_OR_EFFECT_CATCH_REASONS_WHICH_RE_FAIL_UNMATCHED_REASONS_AUTOMATICALLY_EFFECT_CATCH_TAG_TO_CATCH_REASON;
 
-// go: internal/fixables/catch_tag_to_catch_reason.go:13 CatchTagToCatchReasonFix
+// go: internal/fixables/catch_tag_to_catch_reason.go:13 CatchTagToCatchReasonFix 80cdefa5cbdde692
 pub static CATCH_TAG_TO_CATCH_REASON_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "catchTagToCatchReason",
     description: "Replace hand-rolled reason dispatch with Effect.catchReason or Effect.catchReasons",
@@ -21,7 +21,7 @@ pub static CATCH_TAG_TO_CATCH_REASON_FIX: LazyLock<Fixable> = LazyLock::new(|| F
     run: run_catch_tag_to_catch_reason_fix,
 });
 
-// go: internal/fixables/catch_tag_to_catch_reason.go:23 runCatchTagToCatchReasonFix
+// go: internal/fixables/catch_tag_to_catch_reason.go:23 runCatchTagToCatchReasonFix 159c01d1c6e529e1
 //
 // Rust: the match's transformation and callee are never nil (non-optional fields), so Go's nil check drops.
 fn run_catch_tag_to_catch_reason_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
@@ -55,7 +55,7 @@ fn run_catch_tag_to_catch_reason_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActio
     Vec::new()
 }
 
-// go: internal/fixables/catch_tag_to_catch_reason.go:53 buildCatchTagToCatchReasonReplacement
+// go: internal/fixables/catch_tag_to_catch_reason.go:53 buildCatchTagToCatchReasonReplacement f1a87de08afdd22b
 //
 // Rust: the tracker and the match's callee cannot be nil.
 fn build_catch_tag_to_catch_reason_replacement(
@@ -100,7 +100,7 @@ fn build_catch_tag_to_catch_reason_replacement(
     (Some(method), Some(tracker.new_node_list(arguments)))
 }
 
-// go: internal/fixables/catch_tag_to_catch_reason.go:83 newCatchReasonHandler
+// go: internal/fixables/catch_tag_to_catch_reason.go:83 newCatchReasonHandler 7766c9d605176efa
 fn new_catch_reason_handler(
     tracker: &Tracker,
     parameter_name: &str,

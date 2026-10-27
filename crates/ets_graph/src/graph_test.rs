@@ -4,7 +4,7 @@ use ets_go::sprintf;
 
 use crate::*;
 
-// go test: internal/graph/graph_test.go:11 buildDiamondGraph
+// go test: internal/graph/graph_test.go:11 buildDiamondGraph 6bec62f935998830
 // buildDiamondGraph creates: A→B, A→C, B→D, C→D
 fn build_diamond_graph() -> (Graph<String, String>, [NodeIndex; 4]) {
     let mut g = new::<String, String>();
@@ -19,7 +19,7 @@ fn build_diamond_graph() -> (Graph<String, String>, [NodeIndex; 4]) {
     (g, [a, b, c, d])
 }
 
-// go test: internal/graph/graph_test.go:25 buildChainGraph
+// go test: internal/graph/graph_test.go:25 buildChainGraph 4cb937007662cd25
 // buildChainGraph creates: A→B→C
 fn build_chain_graph() -> (Graph<String, String>, [NodeIndex; 3]) {
     let mut g = new::<String, String>();
@@ -31,7 +31,7 @@ fn build_chain_graph() -> (Graph<String, String>, [NodeIndex; 3]) {
     (g, [a, b, c])
 }
 
-// go test: internal/graph/graph_test.go:36 collectValues
+// go test: internal/graph/graph_test.go:36 collectValues 160671dec14be39d
 // collectValues collects the values from an iter.Seq2 into a slice.
 fn collect_values<'a, K, V: Clone + 'a>(seq: impl Iterator<Item = (K, &'a V)>) -> Vec<V> {
     let mut result = Vec::new();
@@ -41,7 +41,7 @@ fn collect_values<'a, K, V: Clone + 'a>(seq: impl Iterator<Item = (K, &'a V)>) -
     result
 }
 
-// go test: internal/graph/graph_test.go:45 collectIndices
+// go test: internal/graph/graph_test.go:45 collectIndices 3a6c1927b03bd274
 // collectIndices collects the indices from an iter.Seq2 into a slice.
 fn collect_indices<V>(seq: impl Iterator<Item = (i64, V)>) -> Vec<i64> {
     let mut result = Vec::new();
@@ -55,7 +55,7 @@ fn strings(values: &[&str]) -> Vec<String> {
     values.iter().map(ToString::to_string).collect()
 }
 
-// go test: internal/graph/graph_test.go:53 TestNodeOperations
+// go test: internal/graph/graph_test.go:53 TestNodeOperations c2cf403b4f64ed22
 #[test]
 fn test_node_operations() {
     ets_go::testing::run(|t| {
@@ -183,7 +183,7 @@ fn test_node_operations() {
     });
 }
 
-// go test: internal/graph/graph_test.go:173 TestEdgeOperations
+// go test: internal/graph/graph_test.go:173 TestEdgeOperations 09680cb9bcd5c5cc
 #[test]
 fn test_edge_operations() {
     ets_go::testing::run(|t| {
@@ -338,7 +338,7 @@ fn test_edge_operations() {
     });
 }
 
-// go test: internal/graph/graph_test.go:321 TestIteration
+// go test: internal/graph/graph_test.go:321 TestIteration 27bc795b2d0a5122
 #[test]
 fn test_iteration() {
     ets_go::testing::run(|t| {
@@ -391,7 +391,7 @@ fn test_iteration() {
     });
 }
 
-// go test: internal/graph/graph_test.go:360 TestQuerying
+// go test: internal/graph/graph_test.go:360 TestQuerying 13e58fa09f902d45
 #[test]
 fn test_querying() {
     ets_go::testing::run(|t| {
@@ -474,7 +474,7 @@ fn test_querying() {
     });
 }
 
-// go test: internal/graph/graph_test.go:445 TestNeighborhood
+// go test: internal/graph/graph_test.go:445 TestNeighborhood 761620b51d1fc7f1
 #[test]
 fn test_neighborhood() {
     ets_go::testing::run(|t| {
@@ -534,7 +534,7 @@ fn test_neighborhood() {
     });
 }
 
-// go test: internal/graph/graph_test.go:501 TestExternals
+// go test: internal/graph/graph_test.go:501 TestExternals abbdae212e5aa5b5
 #[test]
 fn test_externals() {
     ets_go::testing::run(|t| {
@@ -569,7 +569,7 @@ fn test_externals() {
     });
 }
 
-// go test: internal/graph/graph_test.go:532 TestTransformations
+// go test: internal/graph/graph_test.go:532 TestTransformations bc1e3ee154cb4efe
 #[test]
 fn test_transformations() {
     ets_go::testing::run(|t| {
@@ -647,7 +647,7 @@ fn test_transformations() {
     });
 }
 
-// go test: internal/graph/graph_test.go:603 TestClone
+// go test: internal/graph/graph_test.go:603 TestClone 071e5abfed670992
 #[test]
 fn test_clone() {
     ets_go::testing::run(|t| {
@@ -703,7 +703,7 @@ fn start(nodes: &[NodeIndex]) -> TraversalConfig {
     TraversalConfig { start: nodes.to_vec(), direction: None }
 }
 
-// go test: internal/graph/graph_test.go:643 TestDFS
+// go test: internal/graph/graph_test.go:643 TestDFS cb992e3e7f67f989
 #[test]
 fn test_dfs() {
     ets_go::testing::run(|t| {
@@ -772,7 +772,7 @@ fn test_dfs() {
     });
 }
 
-// go test: internal/graph/graph_test.go:720 TestDFSPostOrder
+// go test: internal/graph/graph_test.go:720 TestDFSPostOrder 48b9ced4f11bc288
 #[test]
 fn test_dfs_post_order() {
     ets_go::testing::run(|t| {
@@ -801,7 +801,7 @@ fn test_dfs_post_order() {
     });
 }
 
-// go test: internal/graph/graph_test.go:754 TestBFS
+// go test: internal/graph/graph_test.go:754 TestBFS f594f397b7cddce4
 #[test]
 fn test_bfs() {
     ets_go::testing::run(|t| {
@@ -840,7 +840,7 @@ fn test_bfs() {
     });
 }
 
-// go test: internal/graph/graph_test.go:799 TestTopo
+// go test: internal/graph/graph_test.go:799 TestTopo c677624343554bf5
 #[test]
 fn test_topo() {
     ets_go::testing::run(|t| {
@@ -889,7 +889,7 @@ fn test_topo() {
     });
 }
 
-// go test: internal/graph/graph_test.go:853 TestIsAcyclic
+// go test: internal/graph/graph_test.go:853 TestIsAcyclic 4235fd9149dff073
 #[test]
 fn test_is_acyclic() {
     ets_go::testing::run(|t| {
@@ -931,7 +931,7 @@ fn shape(open: &'static str, close: &'static str) -> MermaidShape<'static, Strin
     Box::new(move |_: &String| (open.to_string(), close.to_string()))
 }
 
-// go test: internal/graph/graph_test.go:886 TestToMermaid
+// go test: internal/graph/graph_test.go:886 TestToMermaid 31d3fee59bf318c1
 #[test]
 fn test_to_mermaid() {
     ets_go::testing::run(|t| {
@@ -1066,7 +1066,7 @@ fn test_to_mermaid() {
     });
 }
 
-// go test: internal/graph/graph_test.go:1035 TestEdgeCases
+// go test: internal/graph/graph_test.go:1035 TestEdgeCases 3fd78ed79b0f6bad
 #[test]
 fn test_edge_cases() {
     ets_go::testing::run(|t| {

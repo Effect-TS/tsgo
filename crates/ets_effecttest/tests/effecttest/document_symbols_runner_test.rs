@@ -6,7 +6,7 @@ use libtest_mimic::Trial;
 
 use crate::{case_name, parent_failure, run_case};
 
-// go test: internal/effecttest/document_symbols_runner_test.go:14 TestEffectDocumentSymbols
+// go test: internal/effecttest/document_symbols_runner_test.go:14 TestEffectDocumentSymbols 94e541e4814e7d0d
 // Rust: one libtest trial per Go subtest (`TestEffectDocumentSymbols/<case>`), as `test_effect_diagnostics`.
 pub(crate) fn test_effect_document_symbols() -> Vec<Trial> {
     const NAME: &str = "TestEffectDocumentSymbols";
@@ -54,7 +54,7 @@ pub(crate) fn test_effect_document_symbols() -> Vec<Trial> {
     trials
 }
 
-// go test: internal/effecttest/document_symbols_runner_test.go:40 TestEffectV3DocumentSymbols
+// go test: internal/effecttest/document_symbols_runner_test.go:40 TestEffectV3DocumentSymbols 63f927ce7aca81d4
 pub(crate) fn test_effect_v3_document_symbols() -> Vec<Trial> {
     const NAME: &str = "TestEffectV3DocumentSymbols";
     if let Err(err) = ets_bundledeffect::ensure_package_installed(EffectVersion::V3, "effect") {

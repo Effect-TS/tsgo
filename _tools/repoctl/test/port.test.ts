@@ -4,7 +4,6 @@ import { join } from "node:path"
 import test from "node:test"
 import { fileURLToPath } from "node:url"
 import {
-  ackPorted,
   buildManifest,
   checkPort,
   classifyPackage,
@@ -12,20 +11,19 @@ import {
   type Decl,
   diffManifests,
   fixMarkerLines,
-  manifestText,
+  malformedMarkers,
   type Marker,
   parseAckArguments,
   parseImports,
-  parseManifest,
   parseMarkers,
   parseModulePath,
-  parsePorted,
   parseScope,
   parseSkipped,
-  portedText,
   progressBy,
   type RawDecl,
-  type Scope
+  rewriteMarkers,
+  type Scope,
+  selectAcks
 } from "../src/port.ts"
 
 const repositoryRoot = fileURLToPath(new URL("../../..", import.meta.url))
@@ -39,11 +37,12 @@ const decl = (path: string, name: string, line: number, hash = "h", kind = "func
   hash
 })
 
-const marker = (path: string, name: string, goLine: number, test = false): Marker => ({
+const marker = (path: string, name: string, goLine: number, hash?: string, test = false): Marker => ({
   path,
   name,
   goLine,
   test,
+  hash,
   file: "crates/ets_x/src/lib.rs",
   line: 1
 })
@@ -130,26 +129,30 @@ test("builds the manifest from lister output", () => {
     "etscore/a_test.go TestA test 3"
   ])
   assert.equal(buildManifest([raw("etscore/a_test.go", "TestA", "test")], { ...baseScope, tests: false }).length, 0)
-  assert.deepEqual(parseManifest(manifestText(decls)), decls)
 })
 
 test("parses origin markers", () => {
-  const markers = parseMarkers([
-    "// go: internal/typeparser/effect_type.go:36 TypeParser.EffectType",
+  const file = "crates/ets_typeparser/src/lib.rs"
+  const text = [
+    "// go: internal/typeparser/effect_type.go:36 TypeParser.EffectType 8a9c52f8a845e081",
     "pub fn effect_type() {}",
-    "    // go test: internal/typeparser/effect_type_test.go:12 TestEffectType",
+    "    // go test: internal/typeparser/effect_type_test.go:12 TestEffectType 0123456789abcdef  ",
     "// Rust-only: no Go original",
     "// go (out of scope): etsoxlintrunner/runner.go:3 Run",
     "// go: not-a-go-file.rs:3 X",
-    "// go: etscore/a.go:7 init#2"
-  ].join("\n"), "crates/ets_typeparser/src/lib.rs")
-  assert.deepEqual(markers, [
+    "// go: etscore/a.go:7 init#2",
+    "// go: etscore/a.go:9 Short 0123",
+    "// go: etscore/a.go:9 Upper 0123456789ABCDEF",
+    "// TODO(port: unacked until F is ported; restore the marker) go: etscore/a.go:1 F"
+  ].join("\n")
+  assert.deepEqual(parseMarkers(text, file), [
     {
       path: "internal/typeparser/effect_type.go",
       name: "TypeParser.EffectType",
       goLine: 36,
       test: false,
-      file: "crates/ets_typeparser/src/lib.rs",
+      hash: "8a9c52f8a845e081",
+      file,
       line: 1
     },
     {
@@ -157,38 +160,61 @@ test("parses origin markers", () => {
       name: "TestEffectType",
       goLine: 12,
       test: true,
-      file: "crates/ets_typeparser/src/lib.rs",
+      hash: "0123456789abcdef",
+      file,
       line: 3
     },
-    { path: "etscore/a.go", name: "init#2", goLine: 7, test: false, file: "crates/ets_typeparser/src/lib.rs", line: 7 }
+    { path: "etscore/a.go", name: "init#2", goLine: 7, test: false, hash: undefined, file, line: 7 }
   ])
+  assert.deepEqual(malformedMarkers(text, file), [`${file}:6`, `${file}:8`, `${file}:9`])
 })
 
-test("rewrites marker lines from the manifest", () => {
-  const manifest = [decl("a/x.go", "F", 20), decl("a/x_test.go", "TestF", 5, "h", "test")]
+test("rewrites marker lines from the manifest, keeping hashes", () => {
+  const manifest = [decl("a/x.go", "F", 20, "1111111111111111"), decl("a/x_test.go", "TestF", 5, "h", "test")]
   const text = [
-    "// go: a/x.go:10 F",
+    "// go: a/x.go:10 F aaaaaaaaaaaaaaaa",
     "fn f() {}",
     "  // go test: a/x_test.go:1 TestF",
-    "// go: a/x.go:3 Unknown",
-    "// go: a/x.go:20 F"
+    "// go: a/x.go:3 Unknown bbbbbbbbbbbbbbbb",
+    "// go: a/x.go:20 F aaaaaaaaaaaaaaaa"
   ].join("\n")
   assert.equal(fixMarkerLines(text, manifest), [
-    "// go: a/x.go:20 F",
+    "// go: a/x.go:20 F aaaaaaaaaaaaaaaa",
     "fn f() {}",
     "  // go test: a/x_test.go:5 TestF",
-    "// go: a/x.go:3 Unknown",
-    "// go: a/x.go:20 F"
+    "// go: a/x.go:3 Unknown bbbbbbbbbbbbbbbb",
+    "// go: a/x.go:20 F aaaaaaaaaaaaaaaa"
   ].join("\n"))
 })
 
-test("check accepts a consistent port", () => {
+test("ack rewrites the hash and line of every marker of the acked declarations", () => {
+  const manifest = [decl("a/x.go", "F", 20, "1111111111111111"), decl("a/x.go", "G", 30, "2222222222222222")]
+  const text = [
+    "// go: a/x.go:10 F aaaaaaaaaaaaaaaa",
+    "fn f() {}",
+    "    // go: a/x.go:10 F",
+    "fn f_helper() {}",
+    "// go: a/x.go:30 G aaaaaaaaaaaaaaaa"
+  ].join("\n")
+  const result = rewriteMarkers(text, manifest, new Set(["a/x.go F"]))
+  assert.equal(result.acked, 2)
+  assert.equal(result.text, [
+    "// go: a/x.go:20 F 1111111111111111",
+    "fn f() {}",
+    "    // go: a/x.go:20 F 1111111111111111",
+    "fn f_helper() {}",
+    "// go: a/x.go:30 G aaaaaaaaaaaaaaaa"
+  ].join("\n"))
+  // Acking an up-to-date marker changes nothing.
+  assert.equal(rewriteMarkers(result.text, manifest, new Set(["a/x.go F"])).text, result.text)
+})
+
+test("check accepts a consistent port, whatever the marker line numbers", () => {
   const manifest = [decl("a/x.go", "F", 10, "h1"), decl("a/x.go", "G", 20, "h2")]
   assert.deepEqual(checkPort({
     manifest,
-    markers: [marker("a/x.go", "F", 10)],
+    markers: [marker("a/x.go", "F", 10, "h1"), marker("a/x.go", "F", 999, "h1")],
     skipped: new Map([["a/x.go G", "not needed"]]),
-    ported: new Map([["a/x.go F", "h1"]]),
     requireNew: true
   }), [])
 })
@@ -198,68 +224,59 @@ test("check reports every kind of inconsistency", () => {
     decl("a/x.go", "F", 10, "h1"),
     decl("a/x.go", "G", 20, "h2"),
     decl("a/x.go", "H", 30, "h3"),
+    decl("a/x.go", "M", 40, "h6"),
     decl("a/x_test.go", "TestF", 5, "h4", "test"),
     decl("a/y.go", "Todo", 1, "h5")
   ]
   const errors = checkPort({
     manifest,
     markers: [
-      marker("a/x.go", "F", 11),
-      marker("a/x.go", "Missing", 1),
-      marker("a/x.go", "G", 20),
+      marker("a/x.go", "F", 11, "h1"),
+      marker("a/x.go", "Missing", 1, "h1"),
+      marker("a/x.go", "G", 20, "h2"),
       marker("a/x.go", "H", 30),
-      marker("a/x_test.go", "TestF", 5)
+      { ...marker("a/x.go", "M", 40, "h6"), line: 7 },
+      { ...marker("a/x.go", "M", 40, "old"), line: 9 },
+      marker("a/x_test.go", "TestF", 5, "h4")
     ],
+    malformed: ["crates/ets_x/src/lib.rs:3"],
     skipped: new Map([["a/x.go G", "r"], ["a/x.go Nope", "r"]]),
-    ported: new Map([["a/x.go F", "h1"], ["a/x.go G", "old"], ["a/x.go Stale", "h"], ["a/x_test.go TestF", "h4"]]),
     requireNew: true
   })
   const expected = [
-    "a/x.go F is at line 10, marker says 11 (run `repoctl tsrs port-fix-lines`)",
-    "marker names 'a/x.go Missing', which is not in porting/manifest.tsv",
+    "crates/ets_x/src/lib.rs:3: malformed origin marker: write `// go: <path>:<line> <name> [<16 hex digit hash>]`",
+    "marker names 'a/x.go Missing', which is not an in-scope Go declaration",
+    "crates/ets_x/src/lib.rs:1: a/x.go H is marked as ported but not acked: run `repoctl tsrs port-ack a/x.go H`",
+    "crates/ets_x/src/lib.rs:9: a/x.go M: Go declaration changed since it was ported: update the Rust port, then " +
+    "`repoctl tsrs port-ack a/x.go M`",
     "a/x_test.go TestF is a test declaration: write `// go test: a/x_test.go:5 TestF`",
     "porting/skipped.tsv: 'a/x.go G' is skipped but also has a marker",
-    "porting/skipped.tsv: 'a/x.go Nope' is not in porting/manifest.tsv",
-    "porting/ported.tsv: a/x.go G: Go declaration changed since it was ported: update the Rust port, then " +
-    "`repoctl tsrs port-ack a/x.go G`",
-    "porting/ported.tsv: a/x.go H is marked as ported but not recorded: run `repoctl tsrs port-ack a/x.go H`",
-    "porting/ported.tsv: 'a/x.go Stale' has no marker under crates/ (run `repoctl tsrs port-ack --prune`)",
+    "porting/skipped.tsv: 'a/x.go Nope' is not an in-scope Go declaration",
     "a/y.go:1: Todo is neither ported nor in porting/skipped.tsv (require_new = true)"
   ]
   for (const message of expected) {
     assert.ok(errors.some((error) => error.endsWith(message)), `missing: ${message}\nin:\n${errors.join("\n")}`)
   }
   assert.equal(errors.length, expected.length, errors.join("\n"))
-  assert.equal(
-    checkPort({ manifest, markers: [], skipped: new Map(), ported: new Map(), requireNew: false }).length,
-    0
-  )
+  assert.equal(checkPort({ manifest, markers: [], skipped: new Map(), requireNew: false }).length, 0)
 })
 
-test("ack records manifest hashes for marked declarations", () => {
+test("ack selects marked declarations by id or prefix", () => {
   const manifest = [decl("a/x.go", "F", 10, "h1"), decl("a/x.go", "G", 20, "h2"), decl("b/y.go", "H", 1, "h3")]
   const markers = [marker("a/x.go", "F", 10), marker("a/x.go", "G", 20), marker("b/y.go", "H", 1)]
-  const ported = new Map([["a/x.go F", "old"], ["gone.go X", "h"]])
 
-  const explicit = ackPorted(ported, manifest, markers, { ids: ["a/x.go F"], prefixes: [], prune: false })
+  const explicit = selectAcks(manifest, markers, { ids: ["a/x.go F"], prefixes: [] })
   assert.deepEqual(explicit.errors, [])
-  assert.deepEqual([...explicit.ported], [["a/x.go F", "h1"], ["gone.go X", "h"]])
+  assert.deepEqual([...explicit.ids], ["a/x.go F"])
 
-  const prefixed = ackPorted(ported, manifest, markers, { ids: [], prefixes: ["a/"], prune: true })
-  assert.deepEqual(prefixed.acked, ["a/x.go F", "a/x.go G"])
-  assert.deepEqual([...prefixed.ported], [["a/x.go F", "h1"], ["a/x.go G", "h2"]])
+  const prefixed = selectAcks(manifest, markers, { ids: [], prefixes: ["a/"] })
+  assert.deepEqual([...prefixed.ids], ["a/x.go F", "a/x.go G"])
 
-  const bad = ackPorted(ported, manifest, [marker("a/x.go", "F", 10)], {
-    ids: ["a/x.go G", "a/x.go Nope"],
-    prefixes: ["c/"],
-    prune: false
-  })
+  const bad = selectAcks(manifest, [marker("a/x.go", "F", 10)], { ids: ["a/x.go G", "a/x.go Nope"], prefixes: ["c/"] })
   assert.equal(bad.errors.length, 3)
 
   assert.deepEqual(parseAckArguments(["a/x.go", "F", "a/x.go:20", "G"]), ["a/x.go F", "a/x.go G"])
   assert.throws(() => parseAckArguments(["a/x.go"]))
-
-  assert.deepEqual(parsePorted(portedText(prefixed.ported)), prefixed.ported)
 })
 
 test("parses skipped declarations", () => {
@@ -318,11 +335,9 @@ test("diffs manifests into removed, moved, changed and added", () => {
   assert.deepEqual(diff.added.map((e) => e.statusId), ["a/x.go New"])
 })
 
-test("committed manifest is well formed", () => {
-  const manifest = parseManifest(readFileSync(join(repositoryRoot, "porting", "manifest.tsv"), "utf8"))
-  assert.ok(manifest.length > 0)
-  const ids = new Set(manifest.map((d) => `${d.path} ${d.name}`))
-  assert.equal(ids.size, manifest.length)
-  assert.ok(manifest.every((d) => d.line > 0 && d.lines > 0 && /^[0-9a-f]{16}$/.test(d.hash)))
-  assert.ok(!manifest.some((d) => d.path.startsWith("etsoxlintrunner/") || d.path.startsWith("shim/")))
+test("committed markers carry their hash", () => {
+  const text = readFileSync(join(repositoryRoot, "crates", "ets_typeparser", "src", "effect_type.rs"), "utf8")
+  const markers = parseMarkers(text, "effect_type.rs")
+  assert.ok(markers.length > 0)
+  assert.ok(markers.every((m) => m.hash !== undefined && /^[0-9a-f]{16}$/.test(m.hash)))
 })

@@ -10,7 +10,7 @@ use ets_shim::ls::CodeAction;
 static MESSAGE: &Message =
     &tsdiag::USE_EFFECT_0_TO_HANDLE_THIS_TIMEOUT_DIRECTLY_EFFECT_TIMEOUT_CATCH_TAG_TO_TIMEOUT_OR_ELSE;
 
-// go: internal/fixables/timeout_catch_tag_to_timeout_or_else.go:13 TimeoutCatchTagToTimeoutOrElseFix
+// go: internal/fixables/timeout_catch_tag_to_timeout_or_else.go:13 TimeoutCatchTagToTimeoutOrElseFix 96ee800fd7b78686
 pub static TIMEOUT_CATCH_TAG_TO_TIMEOUT_OR_ELSE_FIX: LazyLock<Fixable> =
     LazyLock::new(|| Fixable {
         name: "timeoutCatchTagToTimeoutOrElse",

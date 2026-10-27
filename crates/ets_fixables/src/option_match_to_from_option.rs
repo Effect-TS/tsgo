@@ -11,7 +11,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_FROM_OPTION_EXPRESSES_THIS_OPTION_TO_EFFECT_CONVERSION_MORE_DIRECTLY_THAN_OPTION_MATCH_OR_AN_OPTION_TAG_CONDITIONAL_EFFECT_OPTION_MATCH_TO_FROM_OPTION;
 
-// go: internal/fixables/option_match_to_from_option.go:13 OptionMatchToFromOptionFix
+// go: internal/fixables/option_match_to_from_option.go:13 OptionMatchToFromOptionFix 018122f1be22165e
 pub static OPTION_MATCH_TO_FROM_OPTION_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "optionMatchToFromOption",
     description: "Replace Option.match or an Option tag conditional with Effect.fromOption",
@@ -20,7 +20,7 @@ pub static OPTION_MATCH_TO_FROM_OPTION_FIX: LazyLock<Fixable> = LazyLock::new(||
     run: run_option_match_to_from_option_fix,
 });
 
-// go: internal/fixables/option_match_to_from_option.go:23 runOptionMatchToFromOptionFix
+// go: internal/fixables/option_match_to_from_option.go:23 runOptionMatchToFromOptionFix 2742d1681d99747b
 fn run_option_match_to_from_option_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     for m in ets_rules::analyze_option_match_to_from_option(&mut ctx.type_parser, Some(sf)) {
@@ -72,7 +72,7 @@ fn run_option_match_to_from_option_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAct
     Vec::new()
 }
 
-// go: internal/fixables/option_match_to_from_option.go:62 buildFromOptionReplacement
+// go: internal/fixables/option_match_to_from_option.go:62 buildFromOptionReplacement 6ce2faf793ad6a31
 pub(crate) fn build_from_option_replacement(
     tracker: &Tracker,
     sf: P<SourceFile>,

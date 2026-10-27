@@ -10,7 +10,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_LAYER_PROVIDES_0_WHICH_IS_REQUIRED_BY_ANOTHER_LAYER_IN_THE_SAME_LAYER_MERGE_ALL_CALL_LAYER_MERGE_ALL_CREATES_LAYERS_IN_PARALLEL_SO_DEPENDENCIES_BETWEEN_LAYERS_WILL_NOT_BE_SATISFIED_CONSIDER_MOVING_THIS_LAYER_INTO_A_LAYER_PROVIDE_MERGE_AFTER_THE_LAYER_MERGE_ALL_EFFECT_LAYER_MERGE_ALL_WITH_DEPENDENCIES;
 
-// go: internal/fixables/layer_merge_all_with_dependencies.go:14 LayerMergeAllWithDependenciesFix
+// go: internal/fixables/layer_merge_all_with_dependencies.go:14 LayerMergeAllWithDependenciesFix a7d76d342276cb0a
 pub static LAYER_MERGE_ALL_WITH_DEPENDENCIES_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "layerMergeAllWithDependencies",
     description: "Move layer to Layer.provideMerge",
@@ -19,7 +19,7 @@ pub static LAYER_MERGE_ALL_WITH_DEPENDENCIES_FIX: LazyLock<Fixable> = LazyLock::
     run: run_layer_merge_all_with_dependencies_fix,
 });
 
-// go: internal/fixables/layer_merge_all_with_dependencies.go:22 runLayerMergeAllWithDependenciesFix
+// go: internal/fixables/layer_merge_all_with_dependencies.go:22 runLayerMergeAllWithDependenciesFix 0cb8a0ddb59d9c8a
 //
 // Rust: the match's call node is never nil (a non-optional field), and tsrs's call expression always has an
 // expression, so only Go's kind checks remain.

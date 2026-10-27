@@ -17,7 +17,7 @@ use ets_typeparser::{
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_1_EXPRESSES_IGNORED_FAILURE_MORE_DIRECTLY_THAN_EFFECT_0_RETURNING_EFFECT_VOID_EFFECT_CATCH_TO_IGNORE;
 
-// go: internal/rules/catch_to_ignore.go:16 CatchToIgnore
+// go: internal/rules/catch_to_ignore.go:16 CatchToIgnore 7d7b201fefbed8e4
 // CatchToIgnore suggests using Effect.ignore or Effect.ignoreCause instead of Effect.catch/catchCause + Effect.void.
 pub static CATCH_TO_IGNORE: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "catchToIgnore",
@@ -43,7 +43,7 @@ pub static CATCH_TO_IGNORE: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/catch_to_ignore.go:35 CatchToIgnoreMatch
+// go: internal/rules/catch_to_ignore.go:35 CatchToIgnoreMatch d957fe8c62b67e80
 // CatchToIgnoreMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the catchToIgnore pattern.
 #[derive(Clone)]
@@ -55,7 +55,7 @@ pub struct CatchToIgnoreMatch {
     pub ignore_method_name: &'static str,
 }
 
-// go: internal/rules/catch_to_ignore.go:45 AnalyzeCatchToIgnore
+// go: internal/rules/catch_to_ignore.go:45 AnalyzeCatchToIgnore 7931ec83d976bcab
 // AnalyzeCatchToIgnore finds Effect.catch/catchCause callbacks that return Effect.void
 // where the resulting success channel is void-like, so Effect.ignore/ignoreCause is equivalent.
 //
@@ -115,7 +115,7 @@ pub fn analyze_catch_to_ignore(
     matches
 }
 
-// go: internal/rules/catch_to_ignore.go:88 catchToIgnoreMethods
+// go: internal/rules/catch_to_ignore.go:88 catchToIgnoreMethods 5638072388b27ab6
 // Rust: Go's `(catchMethodName, ignoreMethodName, ok)` is an `Option` of the first two.
 pub(crate) fn catch_to_ignore_methods(
     tp: &mut TypeParser<'_>,
@@ -131,7 +131,7 @@ pub(crate) fn catch_to_ignore_methods(
     }
 }
 
-// go: internal/rules/catch_to_ignore.go:102 isEffectVoidReference
+// go: internal/rules/catch_to_ignore.go:102 isEffectVoidReference 984dedd0b9db9d55
 pub(crate) fn is_effect_void_reference(tp: &mut TypeParser<'_>, node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;
@@ -139,7 +139,7 @@ pub(crate) fn is_effect_void_reference(tp: &mut TypeParser<'_>, node: Option<P<N
     tp.is_node_reference_to_effect_module_api(ast::skip_parentheses(node), "void")
 }
 
-// go: internal/rules/catch_to_ignore.go:109 isVoidLikeEffectSuccess
+// go: internal/rules/catch_to_ignore.go:109 isVoidLikeEffectSuccess 3dd64589730c59f2
 pub(crate) fn is_void_like_effect_success(t: Option<P<Type>>) -> bool {
     let Some(t) = t else {
         return false;

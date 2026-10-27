@@ -11,7 +11,7 @@ use ets_typeparser::TypeParser;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THIS_SCHEMA_STRUCT_INCLUDES_A_TAG_FIELD_SCHEMA_TAGGED_STRUCT_IS_THE_TAGGED_STRUCT_FORM_FOR_THIS_PATTERN_AND_MAKES_THE_TAG_OPTIONAL_IN_THE_CONSTRUCTOR_EFFECT_SCHEMA_STRUCT_WITH_TAG;
 
-// go: internal/rules/schema_struct_with_tag.go:17 SchemaStructWithTag
+// go: internal/rules/schema_struct_with_tag.go:17 SchemaStructWithTag 5f659b0fabaa9f20
 // SchemaStructWithTag detects Schema.Struct(...) calls where the argument
 // contains a _tag property assigned to Schema.Literal("someString"), and
 // suggests using Schema.TaggedStruct instead.
@@ -33,7 +33,7 @@ pub static SCHEMA_STRUCT_WITH_TAG: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/schema_struct_with_tag.go:36 SchemaStructWithTagMatch
+// go: internal/rules/schema_struct_with_tag.go:36 SchemaStructWithTagMatch fe67a4346a4ae55f
 // SchemaStructWithTagMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the schemaStructWithTag pattern.
 #[derive(Clone)]
@@ -45,7 +45,7 @@ pub struct SchemaStructWithTagMatch {
     pub other_properties: Vec<P<Node>>, // All property assignment nodes in the object literal except _tag
 }
 
-// go: internal/rules/schema_struct_with_tag.go:46 AnalyzeSchemaStructWithTag
+// go: internal/rules/schema_struct_with_tag.go:46 AnalyzeSchemaStructWithTag 6722a83bacc60016
 // AnalyzeSchemaStructWithTag finds all Schema.Struct({ _tag: Schema.Literal("..."), ... })
 // call expressions and returns match structs for each.
 //
@@ -80,7 +80,7 @@ pub fn analyze_schema_struct_with_tag(
     matches
 }
 
-// go: internal/rules/schema_struct_with_tag.go:75 analyzeSchemaStructWithTagNode
+// go: internal/rules/schema_struct_with_tag.go:75 analyzeSchemaStructWithTagNode 21703e96352d02cd
 // analyzeSchemaStructWithTagNode checks a call expression for Schema.Struct({ _tag: Schema.Literal("...") }).
 pub(crate) fn analyze_schema_struct_with_tag_node(
     tp: &mut TypeParser<'_>,

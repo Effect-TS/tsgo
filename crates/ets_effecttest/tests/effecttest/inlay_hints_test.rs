@@ -34,7 +34,7 @@ fn run_inlay_hints_case(t: &T, content: &str) {
     f.done(t);
 }
 
-// go test: internal/effecttest/inlay_hints_test.go:14 TestEffectInlayHintsGenSuppression
+// go test: internal/effecttest/inlay_hints_test.go:14 TestEffectInlayHintsGenSuppression 0d8a19b81ad0dd95
 fn test_effect_inlay_hints_gen_suppression(t: &T) {
     t.parallel();
 
@@ -71,7 +71,7 @@ export const sample = Effect.gen(function*() {
     run_inlay_hints_case(t, content);
 }
 
-// go test: internal/effecttest/inlay_hints_test.go:56 TestEffectInlayHintsFnSuppression
+// go test: internal/effecttest/inlay_hints_test.go:56 TestEffectInlayHintsFnSuppression 229611f7c2579807
 fn test_effect_inlay_hints_fn_suppression(t: &T) {
     t.parallel();
 
@@ -111,7 +111,7 @@ export const sampleFn = Effect.fn("sampleFn")(function*(
     run_inlay_hints_case(t, content);
 }
 
-// go test: internal/effecttest/inlay_hints_test.go:101 TestEffectInlayHintsFnUntracedSuppression
+// go test: internal/effecttest/inlay_hints_test.go:101 TestEffectInlayHintsFnUntracedSuppression d991e2b22634e820
 fn test_effect_inlay_hints_fn_untraced_suppression(t: &T) {
     t.parallel();
 
@@ -148,7 +148,7 @@ export const sampleFnUntraced = Effect.fnUntraced(function*(_: boolean) {
     run_inlay_hints_case(t, content);
 }
 
-// go test: internal/effecttest/inlay_hints_test.go:143 TestEffectInlayHintsNonEffectNotSuppressed
+// go test: internal/effecttest/inlay_hints_test.go:143 TestEffectInlayHintsNonEffectNotSuppressed 6a45aa47ecea81e2
 fn test_effect_inlay_hints_non_effect_not_suppressed(t: &T) {
     t.parallel();
 
@@ -175,7 +175,7 @@ export function standardShouldAppear() {
     run_inlay_hints_case(t, content);
 }
 
-// go test: internal/effecttest/inlay_hints_test.go:175 TestEffectInlayHintsDisabledPassthrough
+// go test: internal/effecttest/inlay_hints_test.go:175 TestEffectInlayHintsDisabledPassthrough 1f8088bfb2c13195
 fn test_effect_inlay_hints_disabled_passthrough(t: &T) {
     t.parallel();
 

@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_EXPRESSION_DISCARDS_THE_SUCCESS_VALUE_THROUGH_MAPPING_EFFECT_AS_VOID_REPRESENTS_THAT_FORM_DIRECTLY_EFFECT_EFFECT_MAP_VOID;
 
-// go: internal/fixables/effect_map_void.go:12 EffectMapVoidFix
+// go: internal/fixables/effect_map_void.go:12 EffectMapVoidFix b27cdb53c6964b5e
 pub static EFFECT_MAP_VOID_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "effectMapVoid",
     description: "Replace with Effect.asVoid",
@@ -17,7 +17,7 @@ pub static EFFECT_MAP_VOID_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     run: run_effect_map_void_fix,
 });
 
-// go: internal/fixables/effect_map_void.go:20 runEffectMapVoidFix
+// go: internal/fixables/effect_map_void.go:20 runEffectMapVoidFix 76859f0c73e8f21e
 //
 // Rust: the match's transformation is never nil (a non-optional field), so Go's nil check drops.
 fn run_effect_map_void_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {

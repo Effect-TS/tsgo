@@ -6,7 +6,7 @@ use ets_go::testing::T;
 
 use crate::*;
 
-// go test: internal/effecttest/refactor_baseline.go:13 RefactorInventoryEntry
+// go test: internal/effecttest/refactor_baseline.go:13 RefactorInventoryEntry adc6746a9d1c16cb
 // RefactorInventoryEntry represents one selection range with its available refactor actions.
 #[derive(Clone, Debug)]
 pub struct RefactorInventoryEntry {
@@ -20,7 +20,7 @@ pub struct RefactorInventoryEntry {
     pub action_kinds: Vec<String>,
 }
 
-// go test: internal/effecttest/refactor_baseline.go:25 RefactorApplicationResult
+// go test: internal/effecttest/refactor_baseline.go:25 RefactorApplicationResult c24ac04693500ed8
 // RefactorApplicationResult represents the result of applying one refactor action.
 #[derive(Clone, Debug)]
 pub struct RefactorApplicationResult {
@@ -34,7 +34,7 @@ pub struct RefactorApplicationResult {
     pub changes: Vec<FileChange>,
 }
 
-// go test: internal/effecttest/refactor_baseline.go:37 generateRefactorBaseline
+// go test: internal/effecttest/refactor_baseline.go:37 generateRefactorBaseline 2979668fa12b58cf
 // generateRefactorBaseline creates the content for a *.refactors.txt baseline file.
 pub(crate) fn generate_refactor_baseline(
     inventory: &[RefactorInventoryEntry],
@@ -117,7 +117,7 @@ pub(crate) fn generate_refactor_baseline(
     sb
 }
 
-// go test: internal/effecttest/refactor_baseline.go:113 DoRefactorBaseline
+// go test: internal/effecttest/refactor_baseline.go:113 DoRefactorBaseline d697edf7ec11f55d
 // DoRefactorBaseline generates a .refactors.txt baseline for Effect refactor tests.
 pub fn do_refactor_baseline(
     t: &T,

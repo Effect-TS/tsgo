@@ -9,7 +9,7 @@ use ets_shim::scanner;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::IDENTIFIER_0_IS_REDUNDANT_SINCE_IT_EQUALS_THE_TAG_VALUE_EFFECT_REDUNDANT_SCHEMA_TAG_IDENTIFIER;
 
-// go: internal/fixables/redundant_schema_tag_identifier.go:15 RedundantSchemaTagIdentifierRemoveIdentifierFix
+// go: internal/fixables/redundant_schema_tag_identifier.go:15 RedundantSchemaTagIdentifierRemoveIdentifierFix 63fccb0aa476514c
 pub static REDUNDANT_SCHEMA_TAG_IDENTIFIER_REMOVE_IDENTIFIER_FIX: LazyLock<Fixable> =
     LazyLock::new(|| Fixable {
         name: "redundantSchemaTagIdentifier",
@@ -19,7 +19,7 @@ pub static REDUNDANT_SCHEMA_TAG_IDENTIFIER_REMOVE_IDENTIFIER_FIX: LazyLock<Fixab
         run: run_redundant_schema_tag_identifier_fix,
     });
 
-// go: internal/fixables/redundant_schema_tag_identifier.go:23 runRedundantSchemaTagIdentifierFix
+// go: internal/fixables/redundant_schema_tag_identifier.go:23 runRedundantSchemaTagIdentifierFix 2fc1c4be2281fe9f
 fn run_redundant_schema_tag_identifier_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 

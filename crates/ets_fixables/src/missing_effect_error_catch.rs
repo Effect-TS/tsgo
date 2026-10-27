@@ -11,7 +11,7 @@ use ets_shim::scanner;
 use ets_typeparser::{EffectMajorVersion, TypeParser};
 use rustc_hash::FxHashSet;
 
-// go: internal/fixables/missing_effect_error_catch.go:19 MissingEffectErrorCatchFix
+// go: internal/fixables/missing_effect_error_catch.go:19 MissingEffectErrorCatchFix f36c52d26049fccf
 pub static MISSING_EFFECT_ERROR_CATCH_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "missingEffectErrorCatch",
     description: "Catch all errors with Effect.catch/catchAll",
@@ -26,7 +26,7 @@ pub static MISSING_EFFECT_ERROR_CATCH_FIX: LazyLock<Fixable> = LazyLock::new(|| 
     run: run_missing_effect_error_catch_fix,
 });
 
-// go: internal/fixables/missing_effect_error_catch.go:27 runMissingEffectErrorCatchFix
+// go: internal/fixables/missing_effect_error_catch.go:27 runMissingEffectErrorCatchFix 75fa09546e60dffb
 fn run_missing_effect_error_catch_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 
@@ -123,7 +123,7 @@ fn run_missing_effect_error_catch_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActi
     actions
 }
 
-// go: internal/fixables/missing_effect_error_catch.go:114 collectLiteralMissingErrorTags
+// go: internal/fixables/missing_effect_error_catch.go:114 collectLiteralMissingErrorTags 14b0b17455b34b5f
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 fn collect_literal_missing_error_tags(
@@ -157,7 +157,7 @@ fn collect_literal_missing_error_tags(
     Some(tags)
 }
 
-// go: internal/fixables/missing_effect_error_catch.go:146 buildCatchTagsHandlersObject
+// go: internal/fixables/missing_effect_error_catch.go:146 buildCatchTagsHandlersObject e6f1e3f0e8997718
 fn build_catch_tags_handlers_object(tags: &[String]) -> String {
     let mut b = String::new();
     b.push_str("{ ");
@@ -174,7 +174,7 @@ fn build_catch_tags_handlers_object(tags: &[String]) -> String {
     b
 }
 
-// go: internal/fixables/missing_effect_error_catch.go:162 expressionNodeForMissingEffectError
+// go: internal/fixables/missing_effect_error_catch.go:162 expressionNodeForMissingEffectError 576c0363a4be747b
 fn expression_node_for_missing_effect_error(node: Option<P<Node>>) -> Option<P<Node>> {
     let node = node?;
     // Handle SatisfiesExpression before the general IsExpression check:

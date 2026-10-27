@@ -8,7 +8,7 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::{LazyExpressionFlags, PipingFlow, TypeParser};
 
-// go: internal/rules/match_effect_to_match.go:16 MatchEffectToMatch
+// go: internal/rules/match_effect_to_match.go:16 MatchEffectToMatch 1b72bdc3e494120a
 // MatchEffectToMatch suggests the non-effectful match variant when both
 // handlers only lift their result with Effect.succeed.
 pub static MATCH_EFFECT_TO_MATCH: LazyLock<Rule> = LazyLock::new(|| {
@@ -38,7 +38,7 @@ pub static MATCH_EFFECT_TO_MATCH: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/match_effect_to_match.go:37 MatchEffectToMatchMatch
+// go: internal/rules/match_effect_to_match.go:37 MatchEffectToMatchMatch 317c0494aeeb9243
 #[derive(Clone, Copy)]
 pub struct MatchEffectToMatchMatch {
     pub source_file: P<SourceFile>,
@@ -50,7 +50,7 @@ pub struct MatchEffectToMatchMatch {
     pub succeed_arguments: [P<Node>; 2],
 }
 
-// go: internal/rules/match_effect_to_match.go:47 AnalyzeMatchEffectToMatch
+// go: internal/rules/match_effect_to_match.go:47 AnalyzeMatchEffectToMatch 9a7c3365c644c20e
 //
 // Rust: Go's unused checker argument is dropped (the parser holds the checker); Go's nil parser check is the type
 // system's.
@@ -115,7 +115,7 @@ pub fn analyze_match_effect_to_match(
     matches
 }
 
-// go: internal/rules/match_effect_to_match.go:91 matchEffectConstructorHandler
+// go: internal/rules/match_effect_to_match.go:91 matchEffectConstructorHandler 5a87f87e6b4c80b2
 //
 // Rust: Go's `(result, argument, ok)` is `Option<(result, argument)>`.
 pub(crate) fn match_effect_constructor_handler(

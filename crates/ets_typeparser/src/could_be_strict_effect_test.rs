@@ -7,7 +7,7 @@ use rustc_hash::FxHashMap;
 use crate::helpers_test::*;
 use crate::module_export_reference_test::kind_string;
 
-// go test: internal/typeparser/could_be_strict_effect_test.go:14 findIdentifierByName
+// go test: internal/typeparser/could_be_strict_effect_test.go:14 findIdentifierByName 8cc587233a0530b5
 // findIdentifierByName returns the first identifier node with the given text
 // that is not a declaration name.
 fn find_identifier_by_name(t: &T, sf: P<SourceFile>, name: &str) -> P<Node> {
@@ -51,7 +51,7 @@ fn find_kind(t: &T, sf: P<SourceFile>, kind: Kind) -> P<Node> {
     found
 }
 
-// go test: internal/typeparser/could_be_strict_effect_test.go:36 TestNodeCouldBeStrictEffect
+// go test: internal/typeparser/could_be_strict_effect_test.go:36 TestNodeCouldBeStrictEffect 310dff17706bab73
 // Rust: Go's nil-receiver check (`nilTp.NodeCouldBeStrictEffect(nil)`) is left out: the Rust method takes `&mut self`,
 // so there is no nil parser to call it on.
 #[test]
@@ -143,7 +143,7 @@ export const either = anAny || anEffect
     });
 }
 
-// go test: internal/typeparser/could_be_strict_effect_test.go:138 TestCouldBeStrictEffectDeepUnionStaysConservative
+// go test: internal/typeparser/could_be_strict_effect_test.go:138 TestCouldBeStrictEffectDeepUnionStaysConservative 2030097021079744
 #[test]
 fn test_could_be_strict_effect_deep_union_stays_conservative() {
     run(|t| {
@@ -176,7 +176,7 @@ fn test_could_be_strict_effect_deep_union_stays_conservative() {
     });
 }
 
-// go test: internal/typeparser/could_be_strict_effect_test.go:169 findCallByCalleeName
+// go test: internal/typeparser/could_be_strict_effect_test.go:169 findCallByCalleeName 6cbd3846c9f057d4
 // findCallByCalleeName returns the first call expression whose callee text
 // contains the given substring.
 fn find_call_by_callee_name(t: &T, sf: P<SourceFile>, callee: &str) -> P<Node> {
@@ -203,7 +203,7 @@ fn find_call_by_callee_name(t: &T, sf: P<SourceFile>, callee: &str) -> P<Node> {
     found
 }
 
-// go test: internal/typeparser/could_be_strict_effect_test.go:194 TestCallCouldReturnStrictEffect
+// go test: internal/typeparser/could_be_strict_effect_test.go:194 TestCallCouldReturnStrictEffect 8426dd4f413b12ba
 #[test]
 fn test_call_could_return_strict_effect() {
     run(|t| {
@@ -265,7 +265,7 @@ export const uses = [
     });
 }
 
-// go test: internal/typeparser/could_be_strict_effect_test.go:248 TestNodeCouldBeEffect
+// go test: internal/typeparser/could_be_strict_effect_test.go:248 TestNodeCouldBeEffect 73c1814f797dae81
 #[test]
 fn test_node_could_be_effect() {
     run(|t| {

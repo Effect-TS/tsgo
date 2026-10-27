@@ -17,7 +17,7 @@ struct Case {
     matches: i32,
 }
 
-// go test: internal/effecttest/map_const_to_as_test.go:16 TestMapConstToAsFixesCompile
+// go test: internal/effecttest/map_const_to_as_test.go:16 TestMapConstToAsFixesCompile 771a1e1742a1627b
 fn test_map_const_to_as_fixes_compile(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();

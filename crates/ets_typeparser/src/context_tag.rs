@@ -5,7 +5,7 @@ use ets_shim::core::P;
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/context_tag.go:13 TypeParser.ContextTag
+    // go: internal/typeparser/context_tag.go:13 TypeParser.ContextTag 1d1e39128df4af52
     // ContextTag parses a v3 Context.Tag type and extracts Identifier, Shape parameters.
     // Returns nil if the type is not a v3 Context.Tag.
     pub fn context_tag(&mut self, t: impl Into<Option<P<Type>>>) -> Option<Service> {
@@ -61,7 +61,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/context_tag.go:70 TypeParser.IsContextTag
+    // go: internal/typeparser/context_tag.go:70 TypeParser.IsContextTag ce2c3f4928b6e37a
     // IsContextTag returns true if the type has the Context.Tag variance struct.
     pub fn is_context_tag(&mut self, t: impl Into<Option<P<Type>>>) -> bool {
         self.context_tag(t).is_some()

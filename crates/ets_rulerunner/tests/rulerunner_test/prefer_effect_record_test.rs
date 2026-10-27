@@ -22,7 +22,7 @@ struct Case {
     want: Vec<String>,
 }
 
-// go test: internal/rulerunner/prefer_effect_record_test.go:20 TestPreferEffectRecordLifecycle
+// go test: internal/rulerunner/prefer_effect_record_test.go:20 TestPreferEffectRecordLifecycle deb2ec2f4726eafc
 #[test]
 fn test_prefer_effect_record_lifecycle() {
     on_checker_stack(|| {

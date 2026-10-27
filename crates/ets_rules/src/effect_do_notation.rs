@@ -11,7 +11,7 @@ use ets_typeparser::TypeParser;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THIS_USES_THE_EFFECT_DO_EMULATION_EFFECT_GEN_OR_EFFECT_FN_ACHIEVE_THE_SAME_RESULT_WITH_NATIVE_JS_SCOPES_EFFECT_EFFECT_DO_NOTATION;
 
-// go: internal/rules/effect_do_notation.go:15 EffectDoNotation
+// go: internal/rules/effect_do_notation.go:15 EffectDoNotation 1c070437d9b9f6df
 // EffectDoNotation suggests using Effect.gen or Effect.fn instead of Effect.Do.
 pub static EFFECT_DO_NOTATION: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "effectDoNotation",
@@ -31,7 +31,7 @@ pub static EFFECT_DO_NOTATION: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/effect_do_notation.go:39 EffectDoNotationMatch
+// go: internal/rules/effect_do_notation.go:39 EffectDoNotationMatch ab789313a7ac3d81
 #[derive(Clone)]
 pub struct EffectDoNotationMatch {
     pub source_file: P<SourceFile>,
@@ -39,7 +39,7 @@ pub struct EffectDoNotationMatch {
     pub node: P<Node>,
 }
 
-// go: internal/rules/effect_do_notation.go:46 AnalyzeEffectDoNotation
+// go: internal/rules/effect_do_notation.go:46 AnalyzeEffectDoNotation e5e346d34497354e
 // AnalyzeEffectDoNotation finds all references to Effect.Do-style helpers.
 //
 // Rust: Go's checker argument is unused and dropped.

@@ -11,7 +11,7 @@ impl<F: Fn()> Drop for CommandLineMode<F> {
     }
 }
 
-// go test: internal/rulerunner/diagnostics_test.go:10 TestMinVisibleSeverity
+// go test: internal/rulerunner/diagnostics_test.go:10 TestMinVisibleSeverity e1fdee5dbf7a31d6
 // Not parallel: EnterCommandLineMode toggles process-global state.
 //
 // Rust: the subtests run in order in one test (no other test of this crate touches the mode).

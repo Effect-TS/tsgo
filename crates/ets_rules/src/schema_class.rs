@@ -2,7 +2,7 @@ use ets_shim::P;
 use ets_shim::ast::Node;
 use ets_typeparser::TypeParser;
 
-// go: internal/rules/schema_class.go:8 schemaClassInstanceSelfAndBrand
+// go: internal/rules/schema_class.go:8 schemaClassInstanceSelfAndBrand 8146539538fc9639
 //
 // Rust: Go's `(self, brand)` pair of nillable nodes; `self` is nil exactly when no schema class shape matched.
 pub(crate) fn schema_class_instance_self_and_brand(

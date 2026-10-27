@@ -13,7 +13,7 @@ use ets_typeparser::TypeParser;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::X_0_1_RETURNS_A_REUSABLE_FUNCTION_THAT_CAN_TAKE_ARGUMENTS_BUT_IT_IS_INVOKED_IMMEDIATELY_HERE_EFFECT_GEN_REPRESENTS_THE_IMMEDIATE_USE_FORM_FOR_THIS_PATTERN_2_EFFECT_EFFECT_FN_IIFE;
 
-// go: internal/rules/effect_fn_iife.go:17 EffectFnIife
+// go: internal/rules/effect_fn_iife.go:17 EffectFnIife 17c2449d006a927c
 // EffectFnIife detects Effect.fn or Effect.fnUntraced calls that are immediately invoked (IIFE pattern).
 pub static EFFECT_FN_IIFE: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "effectFnIife",
@@ -55,7 +55,7 @@ pub static EFFECT_FN_IIFE: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/effect_fn_iife.go:46 EffectFnIifeMatch
+// go: internal/rules/effect_fn_iife.go:46 EffectFnIifeMatch 9038c96856891968
 // EffectFnIifeMatch holds the parsed result needed by both the diagnostic rule
 // and the quick-fix for the effectFnIife pattern.
 #[derive(Clone)]
@@ -65,7 +65,7 @@ pub struct EffectFnIifeMatch {
     pub result: EffectFnIifeResult,
 }
 
-// go: internal/rules/effect_fn_iife.go:52 EffectFnIifeResult
+// go: internal/rules/effect_fn_iife.go:52 EffectFnIifeResult d16205827124e074
 // Rust: the call and function fields are the nodes (Go's `*ast.CallExpression` / `*ast.FunctionExpression` views),
 // and `pipe_arguments` is a copy of the read-only view (nil stays `None`).
 #[derive(Clone)]
@@ -79,7 +79,7 @@ pub struct EffectFnIifeResult {
     pub trace_expression: Option<P<Node>>,
 }
 
-// go: internal/rules/effect_fn_iife.go:64 AnalyzeEffectFnIife
+// go: internal/rules/effect_fn_iife.go:64 AnalyzeEffectFnIife 528dc13d3cd036b3
 // AnalyzeEffectFnIife finds all Effect.fn or Effect.fnUntraced calls that are
 // immediately invoked (IIFE pattern) in the given source file.
 //
@@ -114,7 +114,7 @@ pub fn analyze_effect_fn_iife(
     matches
 }
 
-// go: internal/rules/effect_fn_iife.go:90 parseEffectFnIife
+// go: internal/rules/effect_fn_iife.go:90 parseEffectFnIife 80958b783b6fa31d
 pub(crate) fn parse_effect_fn_iife(
     tp: &mut TypeParser<'_>,
     node: P<Node>,

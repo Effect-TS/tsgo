@@ -13,7 +13,7 @@ struct CauseReferenceCase {
     want: bool,
 }
 
-// go test: internal/typeparser/cause_type_test.go:9 TestIsNodeReferenceToEffectCauseModuleApi
+// go test: internal/typeparser/cause_type_test.go:9 TestIsNodeReferenceToEffectCauseModuleApi 3e4e8dbee4d11555
 #[test]
 fn test_is_node_reference_to_effect_cause_module_api() {
     run(|t| {

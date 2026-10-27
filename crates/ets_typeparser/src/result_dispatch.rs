@@ -4,7 +4,7 @@ use ets_shim::core::P;
 use crate::*;
 
 impl ResultDispatch {
-    // go: internal/typeparser/result_dispatch.go:8 ResultDispatch.CommonTagSubject
+    // go: internal/typeparser/result_dispatch.go:8 ResultDispatch.CommonTagSubject 697bdc50f4736e9d
     // CommonTagSubject returns the common subject of a tag-based dispatch. It
     // returns nil when any branch is not tag-based or when the tag subjects do not
     // refer to the same expression by symbol.
@@ -30,7 +30,7 @@ impl ResultDispatch {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/result_dispatch.go:27 TypeParser.sameResultDispatchReference
+    // go: internal/typeparser/result_dispatch.go:27 TypeParser.sameResultDispatchReference 7f43bec15f29ce07
     pub(crate) fn same_result_dispatch_reference(
         &mut self,
         left: Option<P<Node>>,

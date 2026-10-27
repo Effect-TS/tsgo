@@ -23,7 +23,7 @@ struct Case {
     want: Vec<String>,
 }
 
-// go test: internal/rulerunner/fail_cause_to_constructor_test.go:22 TestFailCauseToConstructorLifecycle
+// go test: internal/rulerunner/fail_cause_to_constructor_test.go:22 TestFailCauseToConstructorLifecycle 8b775c7d1222e674
 #[test]
 fn test_fail_cause_to_constructor_lifecycle() {
     on_checker_stack(|| {

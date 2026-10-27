@@ -22,7 +22,7 @@ const fn optional_case(
     OptionalTaggedInheritanceCase { name, members, extra, want }
 }
 
-// go test: internal/rulerunner/api_stability_leak_inheritance_test.go:8 TestApiStabilityLeakOptionalTaggedInheritance
+// go test: internal/rulerunner/api_stability_leak_inheritance_test.go:8 TestApiStabilityLeakOptionalTaggedInheritance 4648a503e69d8746
 #[test]
 fn test_api_stability_leak_optional_tagged_inheritance() {
     on_checker_stack(|| {
@@ -195,7 +195,7 @@ struct InheritancePathCase {
     want: bool,
 }
 
-// go test: internal/rulerunner/api_stability_leak_inheritance_test.go:80 TestApiStabilityLeakInheritancePaths
+// go test: internal/rulerunner/api_stability_leak_inheritance_test.go:80 TestApiStabilityLeakInheritancePaths 6418f38ec8bc9741
 #[test]
 fn test_api_stability_leak_inheritance_paths() {
     on_checker_stack(|| {

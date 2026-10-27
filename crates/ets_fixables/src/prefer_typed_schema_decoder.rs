@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_INPUT_IS_ALREADY_ASSIGNABLE_TO_THE_SCHEMA_S_ENCODED_TYPE_USE_0_TO_PRESERVE_COMPILE_TIME_TYPE_CHECKING_INSTEAD_OF_DISCARDING_THE_INPUT_TYPE_THROUGH_1_EFFECT_PREFER_TYPED_SCHEMA_DECODER;
 
-// go: internal/fixables/prefer_typed_schema_decoder.go:12 PreferTypedSchemaDecoderFix
+// go: internal/fixables/prefer_typed_schema_decoder.go:12 PreferTypedSchemaDecoderFix d2e9416fb3f10b32
 pub static PREFER_TYPED_SCHEMA_DECODER_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "preferTypedSchemaDecoder",
     description: "Replace the unknown-input Schema decoder with its typed variant",
@@ -17,7 +17,7 @@ pub static PREFER_TYPED_SCHEMA_DECODER_FIX: LazyLock<Fixable> = LazyLock::new(||
     run: run_prefer_typed_schema_decoder_fix,
 });
 
-// go: internal/fixables/prefer_typed_schema_decoder.go:22 runPreferTypedSchemaDecoderFix
+// go: internal/fixables/prefer_typed_schema_decoder.go:22 runPreferTypedSchemaDecoderFix e68d144801affba2
 fn run_prefer_typed_schema_decoder_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     for m in ets_rules::analyze_prefer_typed_schema_decoder(&mut ctx.type_parser, sf) {

@@ -8,7 +8,7 @@ use crate::*;
 
 // Rust: Go's `tspath.RootedFilePath` keys and arguments are plain file names (docs/TSRS_API.md).
 
-// go: internal/importstyle/barrel.go:15 ProgramFiles
+// go: internal/importstyle/barrel.go:15 ProgramFiles fce288ffd5ed4798
 // ProgramFiles is the part of a program barrels are read from.
 // *compiler.Program implements it.
 pub trait ProgramFiles: Sync {
@@ -27,7 +27,7 @@ impl ProgramFiles for Program {
     }
 }
 
-// go: internal/importstyle/barrel.go:21 Barrel
+// go: internal/importstyle/barrel.go:21 Barrel 70718d8cc8303014
 // Barrel is the index module a module specifier should be imported through.
 #[derive(Clone, PartialEq, Eq, Debug, Default)]
 pub struct Barrel {
@@ -40,7 +40,7 @@ pub struct Barrel {
 
 ets_go::impl_go_struct!(Barrel = "importstyle.Barrel" { "Specifier": specifier, "ExportName": export_name });
 
-// go: internal/importstyle/barrel.go:31 BarrelReader
+// go: internal/importstyle/barrel.go:31 BarrelReader ad6c4721ad8ddfbe
 // BarrelReader finds barrels and caches what each index file forwards.
 // It is not safe for concurrent use; keep one per checker or per request.
 //
@@ -54,7 +54,7 @@ pub struct BarrelReader {
     pub(crate) forwards: FxHashMap<String, Option<FxHashMap<String, String>>>,
 }
 
-// go: internal/importstyle/barrel.go:40 NewBarrelReader
+// go: internal/importstyle/barrel.go:40 NewBarrelReader 4491bf375cc65c52
 pub fn new_barrel_reader(
     program_file: impl Fn(&str) -> Option<P<SourceFile>> + Send + Sync + 'static,
     read_file: impl Fn(&str) -> Option<String> + Send + Sync + 'static,
@@ -66,7 +66,7 @@ pub fn new_barrel_reader(
     }
 }
 
-// go: internal/importstyle/barrel.go:48 NewProgramBarrelReader
+// go: internal/importstyle/barrel.go:48 NewProgramBarrelReader 35e4c6c94e24c412
 // NewProgramBarrelReader reads barrels from the program, falling back to its file system.
 pub fn new_program_barrel_reader(program: &'static dyn ProgramFiles) -> BarrelReader {
     new_barrel_reader(
@@ -75,17 +75,17 @@ pub fn new_program_barrel_reader(program: &'static dyn ProgramFiles) -> BarrelRe
     )
 }
 
-// go: internal/importstyle/barrel.go:52 indexExtensions
+// go: internal/importstyle/barrel.go:52 indexExtensions 3ed29f7ada4744ad
 pub(crate) static INDEX_EXTENSIONS: &[&str] =
     &[".d.ts", ".ts", ".tsx", ".d.mts", ".mts", ".d.cts", ".cts", ".js", ".mjs", ".cjs", ".jsx"];
 
-// go: internal/importstyle/barrel.go:54 IsBarrelFile
+// go: internal/importstyle/barrel.go:54 IsBarrelFile 8224e298cc0c47df
 pub fn is_barrel_file(file_name: &str) -> bool {
     file_stem(&tspath::get_base_file_name(file_name)) == "index"
 }
 
 impl BarrelReader {
-    // go: internal/importstyle/barrel.go:63 BarrelReader.Find
+    // go: internal/importstyle/barrel.go:63 BarrelReader.Find 351c433a5e9eab72
     // Find walks up from the file a bare specifier resolves to, one directory and
     // one specifier segment at a time, and returns the nearest index module that
     // forwards it with `export * as Name`. Index files outside the program are
@@ -123,7 +123,7 @@ impl BarrelReader {
         None
     }
 
-    // go: internal/importstyle/barrel.go:86 BarrelReader.barrelForwards
+    // go: internal/importstyle/barrel.go:86 BarrelReader.barrelForwards f0e28167e23df7a0
     // Rust: Go's `(forwards, forwards != nil)` is `Option<&map>`.
     pub(crate) fn barrel_forwards(
         &mut self,
@@ -139,7 +139,7 @@ impl BarrelReader {
         self.forwards[file_name].as_ref()
     }
 
-    // go: internal/importstyle/barrel.go:98 BarrelReader.parseIndexFile
+    // go: internal/importstyle/barrel.go:98 BarrelReader.parseIndexFile 66e3e882c7883ccc
     pub(crate) fn parse_index_file(&self, file_name: &str) -> Option<P<SourceFile>> {
         if let Some(file) = (self.program_file)(file_name) {
             return Some(file);
@@ -153,7 +153,7 @@ impl BarrelReader {
     }
 }
 
-// go: internal/importstyle/barrel.go:111 namespaceForwards
+// go: internal/importstyle/barrel.go:111 namespaceForwards 771c87093ade3fbd
 // namespaceForwards collects the barrel's relative `export * as Name` statements.
 // The result is never nil, so an index file without any marks a found barrel.
 pub(crate) fn namespace_forwards(barrel: P<SourceFile>) -> FxHashMap<String, String> {
@@ -191,7 +191,7 @@ pub(crate) fn namespace_forwards(barrel: P<SourceFile>) -> FxHashMap<String, Str
     forwards
 }
 
-// go: internal/importstyle/barrel.go:136 fileStem
+// go: internal/importstyle/barrel.go:136 fileStem 516298cf6d94c8d8
 pub(crate) fn file_stem(base: &str) -> &str {
     for extension in DECLARATION_EXTENSIONS {
         if let Some(trimmed) = base.strip_suffix(extension) {

@@ -9,7 +9,7 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::{EffectMajorVersion, TypeParser};
 
-// go: internal/rules/new_schema_class.go:16 NewSchemaClass
+// go: internal/rules/new_schema_class.go:16 NewSchemaClass d9209bf74b7e9135
 // NewSchemaClass suggests using the Schema make API instead of direct
 // construction with new for Schema classes.
 pub static NEW_SCHEMA_CLASS: LazyLock<Rule> = LazyLock::new(|| {
@@ -37,7 +37,7 @@ pub static NEW_SCHEMA_CLASS: LazyLock<Rule> = LazyLock::new(|| {
     }
 });
 
-// go: internal/rules/new_schema_class.go:39 NewSchemaClassMatch
+// go: internal/rules/new_schema_class.go:39 NewSchemaClassMatch 5102dac8394165b5
 #[derive(Clone)]
 pub struct NewSchemaClassMatch {
     pub source_file: P<SourceFile>,
@@ -48,7 +48,7 @@ pub struct NewSchemaClassMatch {
     pub arguments: Vec<P<Node>>,
 }
 
-// go: internal/rules/new_schema_class.go:48 AnalyzeNewSchemaClass
+// go: internal/rules/new_schema_class.go:48 AnalyzeNewSchemaClass 62e9a44848e82654
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`), so it is dropped.
 pub fn analyze_new_schema_class(
@@ -98,7 +98,7 @@ pub fn analyze_new_schema_class(
     matches
 }
 
-// go: internal/rules/new_schema_class.go:87 isV4SchemaClassExpression
+// go: internal/rules/new_schema_class.go:87 isV4SchemaClassExpression 3ba74497fd0b6fe2
 //
 // Rust: the checker is the parser's.
 pub(crate) fn is_v4_schema_class_expression(

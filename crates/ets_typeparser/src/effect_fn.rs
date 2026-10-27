@@ -9,8 +9,8 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/effect_fn.go:10 EffectFnVariant
-// go: internal/typeparser/effect_fn.go:12 EffectFnVariantFn
+// go: internal/typeparser/effect_fn.go:10 EffectFnVariant 6d001769638d05c7
+// go: internal/typeparser/effect_fn.go:12 EffectFnVariantFn cdb511c540eb7441
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub enum EffectFnVariant {
     Fn,
@@ -18,7 +18,7 @@ pub enum EffectFnVariant {
     FnUntracedEager,
 }
 
-// go: internal/typeparser/effect_fn.go:10 EffectFnVariant
+// go: internal/typeparser/effect_fn.go:10 EffectFnVariant 6d001769638d05c7
 impl EffectFnVariant {
     /// Rust-only: the Go string value (`string(variant)`).
     pub fn as_str(self) -> &'static str {
@@ -30,7 +30,7 @@ impl EffectFnVariant {
     }
 }
 
-// go: internal/typeparser/effect_fn.go:19 EffectFnCallResult
+// go: internal/typeparser/effect_fn.go:19 EffectFnCallResult 76016e1f4699227c
 // EffectFnCallResult represents a parsed Effect.fn-family call.
 //
 // Rust: Go's `*ast.CallExpression`, `*ast.Expression` and `*ast.Node` fields are all `P<Node>`; the argument
@@ -48,43 +48,43 @@ pub struct EffectFnCallResult {
 }
 
 impl EffectFnCallResult {
-    // go: internal/typeparser/effect_fn.go:31 EffectFnCallResult.Call
+    // go: internal/typeparser/effect_fn.go:31 EffectFnCallResult.Call db08507cc4f3c909
     pub fn call(&self) -> P<Node> {
         self.call
     }
 
-    // go: internal/typeparser/effect_fn.go:33 EffectFnCallResult.Variant
+    // go: internal/typeparser/effect_fn.go:33 EffectFnCallResult.Variant d72f1f946aebf831
     pub fn variant(&self) -> EffectFnVariant {
         self.variant
     }
 
-    // go: internal/typeparser/effect_fn.go:35 EffectFnCallResult.EffectModule
+    // go: internal/typeparser/effect_fn.go:35 EffectFnCallResult.EffectModule 325abfea99293984
     pub fn effect_module(&self) -> Option<P<Node>> {
         self.effect_module
     }
 
-    // go: internal/typeparser/effect_fn.go:37 EffectFnCallResult.OptionsNode
+    // go: internal/typeparser/effect_fn.go:37 EffectFnCallResult.OptionsNode 7a59b2a7e0096a23
     pub fn options_node(&self) -> Option<P<Node>> {
         self.options_node
     }
 
-    // go: internal/typeparser/effect_fn.go:39 EffectFnCallResult.FunctionNode
+    // go: internal/typeparser/effect_fn.go:39 EffectFnCallResult.FunctionNode e67d5444372e6474
     pub fn function_node(&self) -> P<Node> {
         self.function_node
     }
 
-    // go: internal/typeparser/effect_fn.go:41 EffectFnCallResult.FunctionReturnType
+    // go: internal/typeparser/effect_fn.go:41 EffectFnCallResult.FunctionReturnType 8134ce1515ee923c
     // Rust: the lazy resolves through `tp` (see `Lazy`).
     pub fn function_return_type(&self, tp: &mut TypeParser<'_>) -> Option<P<Type>> {
         Lazy::get(Some(&self.function_return_type), tp)
     }
 
-    // go: internal/typeparser/effect_fn.go:43 EffectFnCallResult.PipeArguments
+    // go: internal/typeparser/effect_fn.go:43 EffectFnCallResult.PipeArguments 29bf7f93b8465a08
     pub fn pipe_arguments(&self) -> Slice<'_, P<Node>> {
         ets_readonly::new(self.pipe_arguments)
     }
 
-    // go: internal/typeparser/effect_fn.go:47 EffectFnCallResult.PipeArgsOutType
+    // go: internal/typeparser/effect_fn.go:47 EffectFnCallResult.PipeArgsOutType 230775e0d93c8a7a
     // Rust: the lazies resolve through `tp` (see `Lazy`); Go returns a read-only view of the fresh slice, which
     // nothing else holds, so it is returned owned.
     pub fn pipe_args_out_type(&self, tp: &mut TypeParser<'_>) -> Vec<Option<P<Type>>> {
@@ -95,17 +95,17 @@ impl EffectFnCallResult {
         out_types
     }
 
-    // go: internal/typeparser/effect_fn.go:55 EffectFnCallResult.TraceExpression
+    // go: internal/typeparser/effect_fn.go:55 EffectFnCallResult.TraceExpression a7df74947699e930
     pub fn trace_expression(&self) -> Option<P<Node>> {
         self.trace_expression
     }
 
-    // go: internal/typeparser/effect_fn.go:57 EffectFnCallResult.IsGenerator
+    // go: internal/typeparser/effect_fn.go:57 EffectFnCallResult.IsGenerator da59ecd042da1124
     pub fn is_generator(&self) -> bool {
         self.generator_function().is_some()
     }
 
-    // go: internal/typeparser/effect_fn.go:61 EffectFnCallResult.GeneratorFunction
+    // go: internal/typeparser/effect_fn.go:61 EffectFnCallResult.GeneratorFunction 9644313011c73fae
     pub fn generator_function(&self) -> Option<P<Node>> {
         if self.function_node.kind() != Kind::FunctionExpression {
             return None;
@@ -115,7 +115,7 @@ impl EffectFnCallResult {
         Some(self.function_node)
     }
 
-    // go: internal/typeparser/effect_fn.go:72 EffectFnCallResult.Body
+    // go: internal/typeparser/effect_fn.go:72 EffectFnCallResult.Body a4f52a23a1fc160e
     pub fn body(&self) -> Option<P<Node>> {
         match self.function_node.kind() {
             Kind::ArrowFunction => self.function_node.as_arrow_function().body(),
@@ -125,7 +125,7 @@ impl EffectFnCallResult {
     }
 }
 
-// go: internal/typeparser/effect_fn.go:94 splitEffectFnArguments
+// go: internal/typeparser/effect_fn.go:94 splitEffectFnArguments 38aa898e6ea84fb1
 pub(crate) fn split_effect_fn_arguments(
     args: &'static [P<Node>],
 ) -> (Option<P<Node>>, Option<P<Node>>, Option<&'static [P<Node>]>) {
@@ -153,7 +153,7 @@ pub(crate) fn split_effect_fn_arguments(
     (options, None, None)
 }
 
-// go: internal/typeparser/effect_fn.go:120 isGeneratorFunctionNode
+// go: internal/typeparser/effect_fn.go:120 isGeneratorFunctionNode 317c251887a16d75
 pub(crate) fn is_generator_function_node(node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;
@@ -166,7 +166,7 @@ pub(crate) fn is_generator_function_node(node: Option<P<Node>>) -> bool {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/effect_fn.go:128 TypeParser.buildEffectFnPipeArgsOutType
+    // go: internal/typeparser/effect_fn.go:128 TypeParser.buildEffectFnPipeArgsOutType a953d2f568269bf1
     #[expect(
         clippy::unused_self,
         reason = "a TypeParser method in Go; its lazies resolve through the parser they are read with"
@@ -187,7 +187,7 @@ impl TypeParser<'_> {
         out_types
     }
 
-    // go: internal/typeparser/effect_fn.go:139 TypeParser.buildEffectFnPipeArgOutType
+    // go: internal/typeparser/effect_fn.go:139 TypeParser.buildEffectFnPipeArgOutType ac6e0c9fd9ac0cc9
     pub(crate) fn build_effect_fn_pipe_arg_out_type(
         &mut self,
         call: P<Node>,
@@ -204,7 +204,7 @@ impl TypeParser<'_> {
         Some(self.checker.get_return_type_of_signature_exported(call_sigs[0]))
     }
 
-    // go: internal/typeparser/effect_fn.go:154 TypeParser.buildEffectFnFunctionReturnType
+    // go: internal/typeparser/effect_fn.go:154 TypeParser.buildEffectFnFunctionReturnType d49a87f59e648b7b
     pub(crate) fn build_effect_fn_function_return_type(
         &mut self,
         call: P<Node>,
@@ -244,7 +244,7 @@ impl TypeParser<'_> {
         self.checker.get_type_of_symbol_at_location(pipe_input_params[0], Some(pipe_args[0]))
     }
 
-    // go: internal/typeparser/effect_fn.go:196 TypeParser.EffectFnCall
+    // go: internal/typeparser/effect_fn.go:196 TypeParser.EffectFnCall 3771509324edbbf6
     // EffectFnCall parses a node as an Effect.fn-family call.
     // It supports fn, fnUntraced, and fnUntracedEager, both regular and generator forms.
     pub fn effect_fn_call(

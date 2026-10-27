@@ -6,39 +6,39 @@ use ets_shim::core::collections::OrderedMap;
 use ets_shim::ls::change;
 use ets_shim::lsproto;
 
-// go: internal/rewriter/tracker.go:12 NodeOptions
+// go: internal/rewriter/tracker.go:12 NodeOptions e8d7eccb76d596cb
 pub type NodeOptions = change::NodeOptions;
-// go: internal/rewriter/tracker.go:13 LeadingTriviaOption
+// go: internal/rewriter/tracker.go:13 LeadingTriviaOption 0a8a032cb8ce61c9
 pub type LeadingTriviaOption = change::LeadingTriviaOption;
-// go: internal/rewriter/tracker.go:14 TrailingTriviaOption
+// go: internal/rewriter/tracker.go:14 TrailingTriviaOption c6053cf278b29c0a
 pub type TrailingTriviaOption = change::TrailingTriviaOption;
 
-// go: internal/rewriter/tracker.go:16 LeadingTriviaOptionNone
+// go: internal/rewriter/tracker.go:16 LeadingTriviaOptionNone f16ee4fc3a7ab318
 pub const LEADING_TRIVIA_OPTION_NONE: LeadingTriviaOption = change::LeadingTriviaOption::None;
-// go: internal/rewriter/tracker.go:17 LeadingTriviaOptionExclude
+// go: internal/rewriter/tracker.go:17 LeadingTriviaOptionExclude 48f281e3e6040d7e
 pub const LEADING_TRIVIA_OPTION_EXCLUDE: LeadingTriviaOption = change::LeadingTriviaOption::Exclude;
-// go: internal/rewriter/tracker.go:18 LeadingTriviaOptionIncludeAll
+// go: internal/rewriter/tracker.go:18 LeadingTriviaOptionIncludeAll 32ac46105e41c814
 pub const LEADING_TRIVIA_OPTION_INCLUDE_ALL: LeadingTriviaOption =
     change::LeadingTriviaOption::IncludeAll;
-// go: internal/rewriter/tracker.go:19 LeadingTriviaOptionJSDoc
+// go: internal/rewriter/tracker.go:19 LeadingTriviaOptionJSDoc af9c5a3794c67c36
 pub const LEADING_TRIVIA_OPTION_JS_DOC: LeadingTriviaOption = change::LeadingTriviaOption::JSDoc;
-// go: internal/rewriter/tracker.go:20 LeadingTriviaOptionStartLine
+// go: internal/rewriter/tracker.go:20 LeadingTriviaOptionStartLine 44ce9d93dd1b8a29
 pub const LEADING_TRIVIA_OPTION_START_LINE: LeadingTriviaOption =
     change::LeadingTriviaOption::StartLine;
 
-// go: internal/rewriter/tracker.go:22 TrailingTriviaOptionNone
+// go: internal/rewriter/tracker.go:22 TrailingTriviaOptionNone 5a4d0ea22eeea528
 pub const TRAILING_TRIVIA_OPTION_NONE: TrailingTriviaOption = change::TrailingTriviaOption::None;
-// go: internal/rewriter/tracker.go:23 TrailingTriviaOptionExclude
+// go: internal/rewriter/tracker.go:23 TrailingTriviaOptionExclude 53999591ad3102bc
 pub const TRAILING_TRIVIA_OPTION_EXCLUDE: TrailingTriviaOption =
     change::TrailingTriviaOption::Exclude;
-// go: internal/rewriter/tracker.go:24 TrailingTriviaOptionExcludeWhitespace
+// go: internal/rewriter/tracker.go:24 TrailingTriviaOptionExcludeWhitespace 06cd00c71c0c37e7
 pub const TRAILING_TRIVIA_OPTION_EXCLUDE_WHITESPACE: TrailingTriviaOption =
     change::TrailingTriviaOption::ExcludeWhitespace;
-// go: internal/rewriter/tracker.go:25 TrailingTriviaOptionInclude
+// go: internal/rewriter/tracker.go:25 TrailingTriviaOptionInclude 2578eed371f5b74e
 pub const TRAILING_TRIVIA_OPTION_INCLUDE: TrailingTriviaOption =
     change::TrailingTriviaOption::Include;
 
-// go: internal/rewriter/tracker.go:27 pendingBeforeEdit
+// go: internal/rewriter/tracker.go:27 pendingBeforeEdit 34b06f61c2d706ea
 // Rust: Go's nil `sourceFile` / `before` cannot be stored (InsertNodeBefore returns early on nil), so the
 // fields are plain handles.
 #[derive(Clone)]
@@ -49,7 +49,7 @@ pub(crate) struct PendingBeforeEdit {
     pub(crate) leading: change::LeadingTriviaOption,
 }
 
-// go: internal/rewriter/tracker.go:34 Tracker
+// go: internal/rewriter/tracker.go:34 Tracker c79a6fb6b9df7ffc
 // Rust: Go embeds `*change.Tracker`, promoting all of its methods (and its embedded `NodeFactory`'s). The
 // embedding is a named field plus `Deref`/`DerefMut` to it, which reproduces Go's promotion: the methods defined
 // here (`replace_node`, `insert_node_before`, `get_changes`, ...) shadow the promoted ones of the same name, as
@@ -72,20 +72,20 @@ impl std::ops::DerefMut for Tracker {
     }
 }
 
-// go: internal/rewriter/tracker.go:39 NewTracker
+// go: internal/rewriter/tracker.go:39 NewTracker 6d5a09bb9eef0e43
 pub fn new_tracker(raw: change::Tracker) -> Tracker {
     Tracker { tracker: raw, pending_before: Vec::new() }
 }
 
 impl Tracker {
-    // go: internal/rewriter/tracker.go:43 Tracker.GetChanges
+    // go: internal/rewriter/tracker.go:43 Tracker.GetChanges 120f5f95830f6621
     // Rust: Go's shim `change.CollectChanges` keeps the edits of `GetChanges` and drops the unmappable file list.
     pub fn get_changes(&mut self) -> OrderedMap<String, Vec<lsproto::TextEdit>> {
         self.flush_pending_before();
         self.tracker.get_changes().0
     }
 
-    // go: internal/rewriter/tracker.go:48 Tracker.NewModuleDeclaration
+    // go: internal/rewriter/tracker.go:48 Tracker.NewModuleDeclaration d4d8e550308dd841
     // Rust: Go's shim `change.NewModuleDeclaration` calls the factory with nil attributes.
     pub fn new_module_declaration(
         &self,
@@ -109,7 +109,7 @@ impl Tracker {
         NodeFactoryPaths::new_qualified_name_path(&*self.tracker, names)
     }
 
-    // go: internal/rewriter/tracker.go:81 Tracker.ReplaceNode
+    // go: internal/rewriter/tracker.go:81 Tracker.ReplaceNode 55acb47a7bae4409
     pub fn replace_node(
         &mut self,
         source_file: P<SourceFile>,
@@ -149,7 +149,7 @@ impl Tracker {
         self.tracker.replace_text_range_with_text(source_file, rng, &text);
     }
 
-    // go: internal/rewriter/tracker.go:109 Tracker.InsertNodeBefore
+    // go: internal/rewriter/tracker.go:109 Tracker.InsertNodeBefore 9d153ed402fcbc1d
     pub fn insert_node_before(
         &mut self,
         source_file: P<SourceFile>,
@@ -175,7 +175,7 @@ impl Tracker {
         });
     }
 
-    // go: internal/rewriter/tracker.go:122 Tracker.flushPendingBefore
+    // go: internal/rewriter/tracker.go:122 Tracker.flushPendingBefore 79cd0966efec54b9
     pub(crate) fn flush_pending_before(&mut self) {
         for edit in std::mem::take(&mut self.pending_before) {
             if edit.text.is_empty() {
@@ -199,7 +199,7 @@ impl Tracker {
         self.pending_before = Vec::new();
     }
 
-    // go: internal/rewriter/tracker.go:140 Tracker.consumePendingPrefix
+    // go: internal/rewriter/tracker.go:140 Tracker.consumePendingPrefix 030d7c7b41c395df
     pub(crate) fn consume_pending_prefix(
         &mut self,
         source_file: P<SourceFile>,
@@ -224,7 +224,7 @@ impl Tracker {
         builder
     }
 
-    // go: internal/rewriter/tracker.go:157 Tracker.nodeText
+    // go: internal/rewriter/tracker.go:157 Tracker.nodeText 35e9e4b510af8fd8
     pub(crate) fn node_text(&self, source_file: P<SourceFile>, node: P<Node>) -> String {
         let (text, _) = self.tracker.get_nonformatted_text(node, source_file);
         text
@@ -239,7 +239,7 @@ pub trait NodeFactoryPaths {
 }
 
 impl NodeFactoryPaths for NodeFactory {
-    // go: internal/rewriter/tracker.go:58 Tracker.NewPropertyAccessPath
+    // go: internal/rewriter/tracker.go:58 Tracker.NewPropertyAccessPath 494eb42f358a1fc5
     // NewPropertyAccessPath builds the expression a.b.c from ["a", "b", "c"].
     //
     // Rust: Go returns nil for an empty path; every caller passes a module reference, which is never empty, so the
@@ -258,7 +258,7 @@ impl NodeFactoryPaths for NodeFactory {
         node
     }
 
-    // go: internal/rewriter/tracker.go:70 Tracker.NewQualifiedNamePath
+    // go: internal/rewriter/tracker.go:70 Tracker.NewQualifiedNamePath b072f8d166f7910b
     // NewQualifiedNamePath builds the type-position name a.b.c from ["a", "b", "c"].
     //
     // Rust: as NewPropertyAccessPath, an empty path panics instead of returning nil.

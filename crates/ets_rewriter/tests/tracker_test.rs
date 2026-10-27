@@ -6,7 +6,7 @@ use ets_shim::core::{CompilerOptions, ScriptKind, TextChange};
 use ets_shim::ls::{change, lsconv, lsutil};
 use ets_shim::lsproto;
 
-// go test: internal/rewriter/tracker_test.go:18 TestNewPaths
+// go test: internal/rewriter/tracker_test.go:18 TestNewPaths a0e4355bea5bdcb8
 // Rust: the empty-path subcase is left out: the Rust helpers panic on an empty path instead of returning nil
 // (see Tracker.NewPropertyAccessPath).
 #[test]

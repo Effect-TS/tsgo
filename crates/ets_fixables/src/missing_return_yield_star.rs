@@ -10,7 +10,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_EFFECT_NEVER_SUCCEEDS_USING_RETURN_YIELD_ASTERISK_PRESERVES_A_DEFINITIVE_GENERATOR_EXIT_POINT_FOR_TYPE_NARROWING_AND_TOOLING_SUPPORT_EFFECT_MISSING_RETURN_YIELD_STAR;
 
-// go: internal/fixables/missing_return_yield_star.go:14 MissingReturnYieldStarFix
+// go: internal/fixables/missing_return_yield_star.go:14 MissingReturnYieldStarFix 5791022bf2b4c3f4
 // MissingReturnYieldStarFix adds "return" before a yield* expression in Effect.gen when needed.
 pub static MISSING_RETURN_YIELD_STAR_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "missingReturnYieldStar",
@@ -20,7 +20,7 @@ pub static MISSING_RETURN_YIELD_STAR_FIX: LazyLock<Fixable> = LazyLock::new(|| F
     run: run_missing_return_yield_star_fix,
 });
 
-// go: internal/fixables/missing_return_yield_star.go:22 runMissingReturnYieldStarFix
+// go: internal/fixables/missing_return_yield_star.go:22 runMissingReturnYieldStarFix e868741d6e00557d
 fn run_missing_return_yield_star_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 

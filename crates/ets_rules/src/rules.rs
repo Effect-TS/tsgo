@@ -4,7 +4,7 @@ use ets_rule::Rule;
 
 use crate::*;
 
-// go: internal/rules/rules.go:10 All
+// go: internal/rules/rules.go:10 All 7210b1cbbc6cb6f0
 // All is the list of all diagnostic rules.
 // Add new rules here explicitly - no init() magic.
 //

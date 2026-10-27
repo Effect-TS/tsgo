@@ -22,7 +22,7 @@ use rustc_hash::FxHashMap;
 
 use crate::*;
 
-// go test: internal/typeparser/checked_expression_types_init_test.go:5 init
+// go test: internal/typeparser/checked_expression_types_init_test.go:5 init a216750304cb260f
 // Rust: Go's test-binary `init`; every program-building helper runs it once before compiling.
 fn init() {
     static INIT: Once = Once::new();
@@ -115,7 +115,7 @@ pub(crate) fn test_compiler_options() -> CompilerOptions {
     }
 }
 
-// go test: internal/typeparser/helpers_test.go:20 compileAndGetCheckerAndSourceFilesInternal
+// go test: internal/typeparser/helpers_test.go:20 compileAndGetCheckerAndSourceFilesInternal 0624adbb43087f17
 // Rust: the checker handle's drop is Go's `done` (see `Compiled`).
 #[expect(
     clippy::case_sensitive_file_extension_comparisons,
@@ -147,7 +147,7 @@ pub(crate) fn compile_and_get_checker_and_source_files_internal(
     (compiled, source_files)
 }
 
-// go test: internal/typeparser/helpers_test.go:69 compileAndGetCheckerAndSourceFileInternal
+// go test: internal/typeparser/helpers_test.go:69 compileAndGetCheckerAndSourceFileInternal ead6360c85b7fffc
 // compileAndGetCheckerAndSourceFileInternal is a copy of compileAndGetCheckerAndSourceFile
 // for use in internal (package typeparser) tests that need access to unexported helpers.
 pub(crate) fn compile_and_get_checker_and_source_file_internal(
@@ -267,7 +267,7 @@ pub(crate) fn mount_effect(version: EffectVersion, testfs: &mut TestFS) -> Resul
     Ok(())
 }
 
-// go test: internal/typeparser/helpers_test.go:109 compileAndGetCheckerAndSourceFileWithEffectV4Internal
+// go test: internal/typeparser/helpers_test.go:109 compileAndGetCheckerAndSourceFileWithEffectV4Internal f847741f4e78a343
 pub(crate) fn compile_and_get_checker_and_source_file_with_effect_v4_internal(
     t: &T,
     source: &str,
@@ -275,7 +275,7 @@ pub(crate) fn compile_and_get_checker_and_source_file_with_effect_v4_internal(
     compile_and_get_checker_and_source_file_with_effect_version_internal(t, EFFECT_V4, source)
 }
 
-// go test: internal/typeparser/helpers_test.go:113 compileAndGetCheckerAndSourceFileWithEffectV3Internal
+// go test: internal/typeparser/helpers_test.go:113 compileAndGetCheckerAndSourceFileWithEffectV3Internal 9a882273dab795a8
 pub(crate) fn compile_and_get_checker_and_source_file_with_effect_v3_internal(
     t: &T,
     source: &str,
@@ -283,7 +283,7 @@ pub(crate) fn compile_and_get_checker_and_source_file_with_effect_v3_internal(
     compile_and_get_checker_and_source_file_with_effect_version_internal(t, EFFECT_V3, source)
 }
 
-// go test: internal/typeparser/helpers_test.go:117 compileAndGetCheckerAndSourceFileWithEffectVersionInternal
+// go test: internal/typeparser/helpers_test.go:117 compileAndGetCheckerAndSourceFileWithEffectVersionInternal e3bc086beeefc6c0
 pub(crate) fn compile_and_get_checker_and_source_file_with_effect_version_internal(
     t: &T,
     version: EffectVersion,
@@ -304,7 +304,7 @@ pub(crate) fn compile_and_get_checker_and_source_file_with_effect_version_intern
     (compiled, sf)
 }
 
-// go test: internal/typeparser/helpers_test.go:160 findIdentifierByText
+// go test: internal/typeparser/helpers_test.go:160 findIdentifierByText aee8d87e464c7b18
 pub(crate) fn find_identifier_by_text(
     t: &T,
     sf: P<SourceFile>,
@@ -345,7 +345,7 @@ pub(crate) fn find_identifier_by_text(
     found
 }
 
-// go test: internal/typeparser/helpers_test.go:196 getFirstVariableDeclarationType
+// go test: internal/typeparser/helpers_test.go:196 getFirstVariableDeclarationType a8dd86bf1e4230db
 // getFirstVariableDeclarationType finds the first variable declaration in the source file
 // and returns its type and the declaration node (for use as atLocation).
 fn get_first_variable_declaration_type(
@@ -381,7 +381,7 @@ pub(crate) fn type_string(tp: &mut TypeParser<'_>, t: P<Type>) -> String {
     tp.checker().type_to_string_exported(t)
 }
 
-// go test: internal/typeparser/helpers_test.go:224 TestExtractCovariantType_RejectsGenericSignature
+// go test: internal/typeparser/helpers_test.go:224 TestExtractCovariantType_RejectsGenericSignature 61d7e6c3e2cfab87
 #[test]
 fn test_extract_covariant_type_rejects_generic_signature() {
     run(|t| {
@@ -404,7 +404,7 @@ fn test_extract_covariant_type_rejects_generic_signature() {
     });
 }
 
-// go test: internal/typeparser/helpers_test.go:240 TestExtractContravariantType_RejectsGenericSignature
+// go test: internal/typeparser/helpers_test.go:240 TestExtractContravariantType_RejectsGenericSignature bebbb6f66b8fcc11
 #[test]
 fn test_extract_contravariant_type_rejects_generic_signature() {
     run(|t| {
@@ -427,7 +427,7 @@ fn test_extract_contravariant_type_rejects_generic_signature() {
     });
 }
 
-// go test: internal/typeparser/helpers_test.go:256 TestExtractCovariantType_AcceptsNonGenericSignature
+// go test: internal/typeparser/helpers_test.go:256 TestExtractCovariantType_AcceptsNonGenericSignature 978435398d81b2e0
 #[test]
 fn test_extract_covariant_type_accepts_non_generic_signature() {
     run(|t| {
@@ -451,7 +451,7 @@ fn test_extract_covariant_type_accepts_non_generic_signature() {
     });
 }
 
-// go test: internal/typeparser/helpers_test.go:277 TestExtractInvariantType_RejectsGenericSignature
+// go test: internal/typeparser/helpers_test.go:277 TestExtractInvariantType_RejectsGenericSignature 765bea23bdb06907
 #[test]
 fn test_extract_invariant_type_rejects_generic_signature() {
     run(|t| {
@@ -474,7 +474,7 @@ fn test_extract_invariant_type_rejects_generic_signature() {
     });
 }
 
-// go test: internal/typeparser/helpers_test.go:293 TestExtractInvariantType_AcceptsNonGenericSignature
+// go test: internal/typeparser/helpers_test.go:293 TestExtractInvariantType_AcceptsNonGenericSignature 7f475d4493c94044
 #[test]
 fn test_extract_invariant_type_accepts_non_generic_signature() {
     run(|t| {
@@ -498,7 +498,7 @@ fn test_extract_invariant_type_accepts_non_generic_signature() {
     });
 }
 
-// go test: internal/typeparser/helpers_test.go:314 TestExtractContravariantType_AcceptsNonGenericSignature
+// go test: internal/typeparser/helpers_test.go:314 TestExtractContravariantType_AcceptsNonGenericSignature 1d875b6ab6b3d615
 #[test]
 fn test_extract_contravariant_type_accepts_non_generic_signature() {
     run(|t| {
@@ -522,7 +522,7 @@ fn test_extract_contravariant_type_accepts_non_generic_signature() {
     });
 }
 
-// go test: internal/typeparser/helpers_test.go:335 TestGetSymbolIfSameReference_UsesCanonicalExportSymbol
+// go test: internal/typeparser/helpers_test.go:335 TestGetSymbolIfSameReference_UsesCanonicalExportSymbol 29cfa5202f971ce8
 #[test]
 fn test_get_symbol_if_same_reference_uses_canonical_export_symbol() {
     run(|t| {
@@ -553,7 +553,7 @@ fn test_get_symbol_if_same_reference_uses_canonical_export_symbol() {
     });
 }
 
-// go test: internal/typeparser/helpers_test.go:361 TestGetSymbolIfSameReference_ResolvesImportAliases
+// go test: internal/typeparser/helpers_test.go:361 TestGetSymbolIfSameReference_ResolvesImportAliases 9141069b2f36a790
 #[test]
 fn test_get_symbol_if_same_reference_resolves_import_aliases() {
     run(|t| {
@@ -596,7 +596,7 @@ fn test_get_symbol_if_same_reference_resolves_import_aliases() {
     });
 }
 
-// go test: internal/typeparser/helpers_test.go:401 TestGetSymbolIfSameReference_DoesNotMatchDifferentExports
+// go test: internal/typeparser/helpers_test.go:401 TestGetSymbolIfSameReference_DoesNotMatchDifferentExports e7545da97325c0e0
 #[test]
 fn test_get_symbol_if_same_reference_does_not_match_different_exports() {
     run(|t| {

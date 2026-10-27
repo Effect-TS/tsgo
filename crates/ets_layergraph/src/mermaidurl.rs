@@ -49,7 +49,7 @@ fn base64_raw_url_encode(data: &[u8]) -> String {
     out
 }
 
-// go: internal/layergraph/mermaidurl.go:13 EncodeMermaidURL
+// go: internal/layergraph/mermaidurl.go:13 EncodeMermaidURL 3c0b33efa6ad48b0
 // EncodeMermaidURL encodes a Mermaid diagram string into a pako-compatible URL fragment.
 // It JSON-serializes {"code": diagram}, compresses with zlib at max compression,
 // base64url-encodes (no padding), and returns baseURL + "pako:" + encoded.

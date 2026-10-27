@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_OR_DIE_EXPRESSES_ESCALATING_EVERY_TYPED_FAILURE_INTO_A_DEFECT_MORE_DIRECTLY_THAN_EFFECT_0_WITH_AN_IDENTITY_FORWARDING_EFFECT_DIE_HANDLER_EFFECT_CATCH_DIE_TO_OR_DIE;
 
-// go: internal/fixables/catch_die_to_or_die.go:12 CatchDieToOrDieFix
+// go: internal/fixables/catch_die_to_or_die.go:12 CatchDieToOrDieFix 3832b690afdb1d04
 pub static CATCH_DIE_TO_OR_DIE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "catchDieToOrDie",
     description: "Replace the catch-all Effect.die handler with Effect.orDie",
@@ -17,7 +17,7 @@ pub static CATCH_DIE_TO_OR_DIE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable
     run: run_catch_die_to_or_die_fix,
 });
 
-// go: internal/fixables/catch_die_to_or_die.go:22 runCatchDieToOrDieFix
+// go: internal/fixables/catch_die_to_or_die.go:22 runCatchDieToOrDieFix f4771d57ebe9b9fb
 //
 // Rust: the match's transformation is never nil (`CatchDieToOrDieMatch::transformation` is not optional), so only
 // Go's `HasTypeArguments` check remains.

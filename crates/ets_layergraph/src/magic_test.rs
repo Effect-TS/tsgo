@@ -18,7 +18,7 @@ use ets_typeparser::TypeParser;
 
 use crate::*;
 
-// go test: internal/layergraph/magic_test.go:217 dummyType
+// go test: internal/layergraph/magic_test.go:217 dummyType 8fbde95de8ee70cd
 // dummyType is a type alias used only for creating slices of the right length in tests.
 // Since we only need len(Provides) and len(Requires) for ordering, actual type values don't matter.
 pub(crate) type DummyType = Type;
@@ -80,7 +80,7 @@ impl Fixture {
         ets_typeparser::new_type_parser(self.program, &mut self.checker)
     }
 
-    // go test: internal/layergraph/magic_test.go:221 makeOutlineNode
+    // go test: internal/layergraph/magic_test.go:221 makeOutlineNode db7a622cf03913af
     // makeOutlineNode creates a LayerOutlineGraphNodeInfo for testing with the given
     // number of provides and requires (using nil pointers, sufficient for ordering tests).
     fn make_outline_node(
@@ -100,7 +100,7 @@ impl Fixture {
     }
 }
 
-// go test: internal/layergraph/magic_test.go:11 TestCompareNodesByOrder
+// go test: internal/layergraph/magic_test.go:11 TestCompareNodesByOrder 1ebac2c641e3d63c
 #[test]
 fn test_compare_nodes_by_order() {
     run(|t| {
@@ -138,7 +138,7 @@ fn test_compare_nodes_by_order() {
     });
 }
 
-// go test: internal/layergraph/magic_test.go:47 TestCompareNodesByOrderLayerShapes
+// go test: internal/layergraph/magic_test.go:47 TestCompareNodesByOrderLayerShapes 685b3897a2a5a70c
 #[test]
 fn test_compare_nodes_by_order_layer_shapes() {
     run(|t| {
@@ -167,7 +167,7 @@ fn test_compare_nodes_by_order_layer_shapes() {
     });
 }
 
-// go test: internal/layergraph/magic_test.go:69 TestDFSPostOrderWithOrder
+// go test: internal/layergraph/magic_test.go:69 TestDFSPostOrderWithOrder 9cf83eb3f66dfa8b
 #[test]
 fn test_dfs_post_order_with_order() {
     run(|t| {
@@ -219,7 +219,7 @@ fn test_dfs_post_order_with_order() {
     });
 }
 
-// go test: internal/layergraph/magic_test.go:111 TestDFSPostOrderWithOrderMultipleRoots
+// go test: internal/layergraph/magic_test.go:111 TestDFSPostOrderWithOrderMultipleRoots b8680f204c9aa017
 #[test]
 fn test_dfs_post_order_with_order_multiple_roots() {
     run(|t| {
@@ -259,7 +259,7 @@ fn test_dfs_post_order_with_order_multiple_roots() {
     });
 }
 
-// go test: internal/layergraph/magic_test.go:140 TestConvertOutlineGraphToLayerMagicOrdersUnrelatedLayers
+// go test: internal/layergraph/magic_test.go:140 TestConvertOutlineGraphToLayerMagicOrdersUnrelatedLayers 8e1adf3b88cd1941
 #[test]
 fn test_convert_outline_graph_to_layer_magic_orders_unrelated_layers() {
     run(|t| {
@@ -303,7 +303,7 @@ fn test_convert_outline_graph_to_layer_magic_orders_unrelated_layers() {
     });
 }
 
-// go test: internal/layergraph/magic_test.go:180 TestNeighborsOutgoingSorted
+// go test: internal/layergraph/magic_test.go:180 TestNeighborsOutgoingSorted eaa06218cb25698f
 #[test]
 fn test_neighbors_outgoing_sorted() {
     run(|t| {

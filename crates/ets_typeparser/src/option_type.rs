@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/option_type.go:8 effectOptionPackageSourceFileDescriptor
+// go: internal/typeparser/option_type.go:8 effectOptionPackageSourceFileDescriptor 6191cf203f90a873
 pub(crate) static EFFECT_OPTION_PACKAGE_SOURCE_FILE_DESCRIPTOR: PackageSourceFileDescriptor =
     new_package_source_file_descriptor(
         ModuleDescriptorId::Option,
@@ -11,7 +11,7 @@ pub(crate) static EFFECT_OPTION_PACKAGE_SOURCE_FILE_DESCRIPTOR: PackageSourceFil
         Some(&is_effect_option_source_file),
     );
 
-// go: internal/typeparser/option_type.go:8 effectOptionPackageSourceFileDescriptor
+// go: internal/typeparser/option_type.go:8 effectOptionPackageSourceFileDescriptor 6191cf203f90a873
 // Rust: the descriptor's matcher (a Go func literal). Go's nil checker and source file guards cannot fail here.
 fn is_effect_option_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> bool {
     let c = &mut *tp.checker;
@@ -27,7 +27,7 @@ fn is_effect_option_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> b
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/option_type.go:30 TypeParser.IsNodeReferenceToEffectOptionModuleApi
+    // go: internal/typeparser/option_type.go:30 TypeParser.IsNodeReferenceToEffectOptionModuleApi 7b3b9e6db7e6fe54
     // IsNodeReferenceToEffectOptionModuleApi reports whether node resolves to a
     // member exported by Effect's Option module.
     pub fn is_node_reference_to_effect_option_module_api(

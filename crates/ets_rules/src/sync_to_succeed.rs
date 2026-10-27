@@ -11,7 +11,7 @@ use ets_typeparser::{LazyExpressionFlags, TypeParser};
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_SUCCEED_EXPRESSES_THIS_CONSTANT_VALUE_MORE_DIRECTLY_THAN_EFFECT_SYNC_EFFECT_SYNC_TO_SUCCEED;
 
-// go: internal/rules/sync_to_succeed.go:16 SyncToSucceed
+// go: internal/rules/sync_to_succeed.go:16 SyncToSucceed eaeb502137e818fd
 // SyncToSucceed suggests using Effect.succeed when an Effect.sync thunk returns
 // a value that is already constant at Effect construction time.
 pub static SYNC_TO_SUCCEED: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -32,7 +32,7 @@ pub static SYNC_TO_SUCCEED: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/sync_to_succeed.go:41 SyncToSucceedMatch
+// go: internal/rules/sync_to_succeed.go:41 SyncToSucceedMatch 033767cc99b97378
 // SyncToSucceedMatch holds the nodes needed by the diagnostic and quick fix.
 #[derive(Clone)]
 pub struct SyncToSucceedMatch {
@@ -43,7 +43,7 @@ pub struct SyncToSucceedMatch {
     pub constant_value: P<Node>,
 }
 
-// go: internal/rules/sync_to_succeed.go:51 AnalyzeSyncToSucceed
+// go: internal/rules/sync_to_succeed.go:51 AnalyzeSyncToSucceed f1ac573c0d21921c
 // AnalyzeSyncToSucceed finds Effect.sync thunks whose result is already stable
 // when the Effect is constructed.
 //

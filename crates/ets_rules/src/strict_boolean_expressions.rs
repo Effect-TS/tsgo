@@ -12,7 +12,7 @@ use rustc_hash::FxHashSet;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::UNEXPECTED_0_TYPE_IN_CONDITION_EXPECTED_STRICTLY_A_BOOLEAN_INSTEAD_EFFECT_STRICT_BOOLEAN_EXPRESSIONS;
 
-// go: internal/rules/strict_boolean_expressions.go:13 StrictBooleanExpressions
+// go: internal/rules/strict_boolean_expressions.go:13 StrictBooleanExpressions 40afab6b12c9e9fa
 // StrictBooleanExpressions enforces that expressions in conditional positions
 // are strictly boolean-typed, reporting non-boolean types as diagnostics.
 pub static STRICT_BOOLEAN_EXPRESSIONS: LazyLock<Rule> = LazyLock::new(|| Rule {

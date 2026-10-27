@@ -7,7 +7,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_SUCCEED_EXPRESSES_THIS_CONSTANT_VALUE_MORE_DIRECTLY_THAN_EFFECT_SYNC_EFFECT_SYNC_TO_SUCCEED;
 
-// go: internal/fixables/sync_to_succeed.go:12 SyncToSucceedFix
+// go: internal/fixables/sync_to_succeed.go:12 SyncToSucceedFix 189de29d7bf371db
 pub static SYNC_TO_SUCCEED_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "syncToSucceed",
     description: "Replace Effect.sync with Effect.succeed",
@@ -16,7 +16,7 @@ pub static SYNC_TO_SUCCEED_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     run: run_sync_to_succeed_fix,
 });
 
-// go: internal/fixables/sync_to_succeed.go:22 runSyncToSucceedFix
+// go: internal/fixables/sync_to_succeed.go:22 runSyncToSucceedFix ba87f35bb60e7af6
 //
 // Rust: the match's callee is never nil, so Go's nil check drops.
 fn run_sync_to_succeed_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {

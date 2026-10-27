@@ -9,7 +9,7 @@ use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::{EffectMajorVersion, TypeParser};
 use rustc_hash::FxHashMap;
 
-// go: internal/rules/node_builtin_import.go:14 moduleAlternative
+// go: internal/rules/node_builtin_import.go:14 moduleAlternative 9d8eb0f9b22f36fb
 #[derive(Clone, Copy)]
 pub(crate) struct ModuleAlternative {
     pub(crate) alternative: &'static str,
@@ -17,7 +17,7 @@ pub(crate) struct ModuleAlternative {
     pub(crate) module: &'static str,
 }
 
-// go: internal/rules/node_builtin_import.go:20 moduleAlternativesV3
+// go: internal/rules/node_builtin_import.go:20 moduleAlternativesV3 b359ba4ca19aa4bd
 pub(crate) static MODULE_ALTERNATIVES_V3: LazyLock<FxHashMap<&'static str, ModuleAlternative>> =
     LazyLock::new(|| {
         FxHashMap::from_iter([
@@ -200,7 +200,7 @@ pub(crate) static MODULE_ALTERNATIVES_V3: LazyLock<FxHashMap<&'static str, Modul
         ])
     });
 
-// go: internal/rules/node_builtin_import.go:51 moduleAlternativesV4
+// go: internal/rules/node_builtin_import.go:51 moduleAlternativesV4 d91cce1d153bd3b7
 pub(crate) static MODULE_ALTERNATIVES_V4: LazyLock<FxHashMap<&'static str, ModuleAlternative>> =
     LazyLock::new(|| {
         FxHashMap::from_iter([
@@ -348,7 +348,7 @@ pub(crate) static MODULE_ALTERNATIVES_V4: LazyLock<FxHashMap<&'static str, Modul
         ])
     });
 
-// go: internal/rules/node_builtin_import.go:84 NodeBuiltinImport
+// go: internal/rules/node_builtin_import.go:84 NodeBuiltinImport 4f781659de009b60
 pub static NODE_BUILTIN_IMPORT: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
         name: "nodeBuiltinImport",
@@ -374,7 +374,7 @@ pub static NODE_BUILTIN_IMPORT: LazyLock<Rule> = LazyLock::new(|| {
     }
 });
 
-// go: internal/rules/node_builtin_import.go:109 NodeBuiltinImportMatch
+// go: internal/rules/node_builtin_import.go:109 NodeBuiltinImportMatch dab9d5fd550be655
 #[derive(Clone)]
 pub struct NodeBuiltinImportMatch {
     pub source_file: P<SourceFile>,
@@ -384,7 +384,7 @@ pub struct NodeBuiltinImportMatch {
     pub module: String,
 }
 
-// go: internal/rules/node_builtin_import.go:117 AnalyzeNodeBuiltinImport
+// go: internal/rules/node_builtin_import.go:117 AnalyzeNodeBuiltinImport 468fd8de936bcd0c
 //
 // Rust: Go's (ignored) checker argument is dropped.
 pub fn analyze_node_builtin_import(

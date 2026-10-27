@@ -19,7 +19,7 @@ static MESSAGE: &Message =
 static RELATED_MESSAGE: &Message =
     &tsdiag::THIS_REPEATED_EFFECT_OR_DIE_SITE_PARTICIPATES_IN_THE_HOISTABLE_GENERATOR_WIDE_OR_DIE_EFFECT_REDUNDANT_OR_DIE;
 
-// go: internal/rules/redundant_or_die.go:14 RedundantOrDie
+// go: internal/rules/redundant_or_die.go:14 RedundantOrDie 3048e016610bc7af
 pub static REDUNDANT_OR_DIE: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "redundantOrDie",
     group: "style",
@@ -39,7 +39,7 @@ pub static REDUNDANT_OR_DIE: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/redundant_or_die.go:39 RedundantGeneratorOrDieMatch
+// go: internal/rules/redundant_or_die.go:39 RedundantGeneratorOrDieMatch 9822ecb756f51368
 //
 // Rust: Go's `*ast.FunctionExpression` is its node.
 #[derive(Clone)]
@@ -52,14 +52,14 @@ pub struct RedundantGeneratorOrDieMatch {
     pub yield_expressions: Vec<P<Node>>,
 }
 
-// go: internal/rules/redundant_or_die.go:48 redundantOrDieCandidate
+// go: internal/rules/redundant_or_die.go:48 redundantOrDieCandidate bd2f8c1564aa3a1f
 #[derive(Clone, Copy)]
 pub(crate) struct RedundantOrDieCandidate {
     pub(crate) yield_expression: P<Node>,
     pub(crate) or_die_node: P<Node>,
 }
 
-// go: internal/rules/redundant_or_die.go:53 AnalyzeRedundantGeneratorOrDie
+// go: internal/rules/redundant_or_die.go:53 AnalyzeRedundantGeneratorOrDie 0a5bafc65286f0b3
 //
 // Rust: the checker is the parser's (Go's nil checks of the parser and checker have no counterpart). Go ranges
 // over its `candidatesByGenerator` map, so the order of the matches is random there; here the generators come in
@@ -114,7 +114,7 @@ pub fn analyze_redundant_generator_or_die(
     matches
 }
 
-// go: internal/rules/redundant_or_die.go:86 analyzeRedundantOrDieFlowCandidate
+// go: internal/rules/redundant_or_die.go:86 analyzeRedundantOrDieFlowCandidate 9bdf56e855e7b8b8
 //
 // Rust: Go's `(candidate, genFn, genCallNode, ok)` is an `Option`.
 pub(crate) fn analyze_redundant_or_die_flow_candidate(
@@ -156,7 +156,7 @@ pub(crate) fn analyze_redundant_or_die_flow_candidate(
     ))
 }
 
-// go: internal/rules/redundant_or_die.go:122 analyzeRedundantGeneratorOrDieCandidate
+// go: internal/rules/redundant_or_die.go:122 analyzeRedundantGeneratorOrDieCandidate ff07aa6dd4151fec
 //
 // Rust: `(match, ok)` is an `Option`.
 pub(crate) fn analyze_redundant_generator_or_die_candidate(
@@ -220,7 +220,7 @@ pub(crate) fn analyze_redundant_generator_or_die_candidate(
     })
 }
 
-// go: internal/rules/redundant_or_die.go:174 redundantOrDieRelatedInformation
+// go: internal/rules/redundant_or_die.go:174 redundantOrDieRelatedInformation c6298d0d95858352
 pub(crate) fn redundant_or_die_related_information(
     ctx: &Context<'_, '_>,
     m: &RedundantGeneratorOrDieMatch,

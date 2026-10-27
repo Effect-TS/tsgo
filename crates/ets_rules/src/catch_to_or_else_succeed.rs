@@ -13,7 +13,7 @@ use ets_typeparser::{LazyExpressionFlags, TypeParser, parse_lazy_expression};
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_OR_ELSE_SUCCEED_EXPRESSES_THE_SAME_RECOVERY_MORE_DIRECTLY_THAN_EFFECT_0_FOLLOWED_BY_EFFECT_SUCCEED_EFFECT_CATCH_TO_OR_ELSE_SUCCEED;
 
-// go: internal/rules/catch_to_or_else_succeed.go:16 CatchToOrElseSucceed
+// go: internal/rules/catch_to_or_else_succeed.go:16 CatchToOrElseSucceed 8ea6fffd60474774
 // CatchToOrElseSucceed suggests using Effect.orElseSucceed instead of Effect.catch + Effect.succeed.
 pub static CATCH_TO_OR_ELSE_SUCCEED: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "catchToOrElseSucceed",
@@ -39,7 +39,7 @@ pub static CATCH_TO_OR_ELSE_SUCCEED: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/catch_to_or_else_succeed.go:35 CatchToOrElseSucceedMatch
+// go: internal/rules/catch_to_or_else_succeed.go:35 CatchToOrElseSucceedMatch 1bd9bab8d736ff8f
 // CatchToOrElseSucceedMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the catchToOrElseSucceed pattern.
 #[derive(Clone)]
@@ -52,7 +52,7 @@ pub struct CatchToOrElseSucceedMatch {
     pub succeed_argument: P<Node>,
 }
 
-// go: internal/rules/catch_to_or_else_succeed.go:46 AnalyzeCatchToOrElseSucceed
+// go: internal/rules/catch_to_or_else_succeed.go:46 AnalyzeCatchToOrElseSucceed 50c2c3b298139a68
 // AnalyzeCatchToOrElseSucceed finds Effect.catch callbacks that ignore the error
 // and return Effect.succeed, which can be simplified to Effect.orElseSucceed.
 //

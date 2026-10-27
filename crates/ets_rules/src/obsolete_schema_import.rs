@@ -8,7 +8,7 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::{EffectMajorVersion, TypeParser};
 
-// go: internal/rules/obsolete_schema_import.go:16 ObsoleteSchemaImport
+// go: internal/rules/obsolete_schema_import.go:16 ObsoleteSchemaImport ed9630730471bc7a
 pub static OBSOLETE_SCHEMA_IMPORT: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
         name: "obsoleteSchemaImport",
@@ -34,7 +34,7 @@ pub static OBSOLETE_SCHEMA_IMPORT: LazyLock<Rule> = LazyLock::new(|| {
     }
 });
 
-// go: internal/rules/obsolete_schema_import.go:39 ObsoleteSchemaImportMatch
+// go: internal/rules/obsolete_schema_import.go:39 ObsoleteSchemaImportMatch 258da85d4680dd71
 #[derive(Clone)]
 pub struct ObsoleteSchemaImportMatch {
     pub source_file: P<SourceFile>,
@@ -42,7 +42,7 @@ pub struct ObsoleteSchemaImportMatch {
     pub imported_specifier: String,
 }
 
-// go: internal/rules/obsolete_schema_import.go:45 AnalyzeObsoleteSchemaImport
+// go: internal/rules/obsolete_schema_import.go:45 AnalyzeObsoleteSchemaImport eecb448c84153013
 //
 // Rust: Go's (ignored) checker argument is dropped; the parser is never nil.
 pub fn analyze_obsolete_schema_import(

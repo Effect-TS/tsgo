@@ -11,7 +11,7 @@ use ets_typeparser::TypeParser;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_VOID_REPRESENTS_THE_SAME_OUTCOME_AS_EFFECT_SUCCEED_UNDEFINED_OR_EFFECT_SUCCEED_VOID_0_EFFECT_EFFECT_SUCCEED_WITH_VOID;
 
-// go: internal/rules/effect_succeed_with_void.go:15 EffectSucceedWithVoid
+// go: internal/rules/effect_succeed_with_void.go:15 EffectSucceedWithVoid 9b81fc628ebdf43f
 // EffectSucceedWithVoid suggests using Effect.void instead of Effect.succeed(undefined) or Effect.succeed(void 0).
 pub static EFFECT_SUCCEED_WITH_VOID: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "effectSucceedWithVoid",
@@ -31,7 +31,7 @@ pub static EFFECT_SUCCEED_WITH_VOID: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/effect_succeed_with_void.go:34 EffectSucceedWithVoidMatch
+// go: internal/rules/effect_succeed_with_void.go:34 EffectSucceedWithVoidMatch 8f505c3fa2531b86
 // EffectSucceedWithVoidMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the effectSucceedWithVoid pattern.
 #[derive(Clone)]
@@ -41,7 +41,7 @@ pub struct EffectSucceedWithVoidMatch {
     pub call_node: P<Node>,         // The Effect.succeed(...) call expression (replacement target)
 }
 
-// go: internal/rules/effect_succeed_with_void.go:41 isVoidExpression
+// go: internal/rules/effect_succeed_with_void.go:41 isVoidExpression 5e71e29c88500c9e
 // isVoidExpression checks if a node is `undefined`, `void 0`, or a parenthesized version of either.
 //
 // Rust: Go dereferences the node without a nil check; a nil node is `None` and is not a void expression.
@@ -70,7 +70,7 @@ pub(crate) fn is_void_expression(node: Option<P<Node>>) -> bool {
     false
 }
 
-// go: internal/rules/effect_succeed_with_void.go:63 AnalyzeEffectSucceedWithVoid
+// go: internal/rules/effect_succeed_with_void.go:63 AnalyzeEffectSucceedWithVoid aaad7c7401ebf93f
 // AnalyzeEffectSucceedWithVoid finds all Effect.succeed(undefined) and Effect.succeed(void 0) calls
 // that can be replaced with Effect.void.
 //

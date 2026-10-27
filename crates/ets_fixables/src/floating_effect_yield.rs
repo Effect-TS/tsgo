@@ -12,7 +12,7 @@ static MESSAGE_1: &Message =
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE_2: &Message = &tsdiag::THIS_EFFECT_ABLE_0_VALUE_IS_NEITHER_YIELDED_NOR_ASSIGNED_TO_A_VARIABLE_EFFECT_FLOATING_EFFECT;
 
-// go: internal/fixables/floating_effect_yield.go:14 FloatingEffectYieldFix
+// go: internal/fixables/floating_effect_yield.go:14 FloatingEffectYieldFix fd78cf0499c400a3
 // FloatingEffectYieldFix yields a floating Effect when it occurs in an Effect generator.
 pub static FLOATING_EFFECT_YIELD_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "floatingEffectYield",
@@ -22,7 +22,7 @@ pub static FLOATING_EFFECT_YIELD_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixab
     run: run_floating_effect_yield_fix,
 });
 
-// go: internal/fixables/floating_effect_yield.go:25 runFloatingEffectYieldFix
+// go: internal/fixables/floating_effect_yield.go:25 runFloatingEffectYieldFix 09a2ed3d2fe38b11
 fn run_floating_effect_yield_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_floating_effect(&mut ctx.type_parser, source_file) {

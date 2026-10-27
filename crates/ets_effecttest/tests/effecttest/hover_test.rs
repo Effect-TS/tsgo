@@ -75,7 +75,7 @@ fn verify_quick_info_at_decoded(
     );
 }
 
-// go test: internal/effecttest/hover_test.go:12 TestEffectHoverYieldStar
+// go test: internal/effecttest/hover_test.go:12 TestEffectHoverYieldStar 6e6963d67aa46404
 fn test_effect_hover_yield_star(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -113,7 +113,7 @@ const program = Effect.gen(function*() {
     f.done(t);
 }
 
-// go test: internal/effecttest/hover_test.go:46 TestEffectHoverTypeArgs
+// go test: internal/effecttest/hover_test.go:46 TestEffectHoverTypeArgs 7fe01745eab63e4b
 fn test_effect_hover_type_args(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -152,7 +152,7 @@ declare const /*2*/notAnEffect: string"#;
     f.done(t);
 }
 
-// go test: internal/effecttest/hover_test.go:84 TestEffectHoverLayerQuickInfo
+// go test: internal/effecttest/hover_test.go:84 TestEffectHoverLayerQuickInfo 624eb1314739d309
 fn test_effect_hover_layer_quick_info(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -215,7 +215,7 @@ declare const /*2*/myEffect: Effect.Effect<string, Error, never>"#;
     f.done(t);
 }
 
-// go test: internal/effecttest/hover_test.go:137 TestEffectHoverLayerNoExternal
+// go test: internal/effecttest/hover_test.go:137 TestEffectHoverLayerNoExternal 1b778a70226ddcaa
 fn test_effect_hover_layer_no_external(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -264,7 +264,7 @@ const /*1*/app = Cache.Default.pipe(Layer.provide(Database.Default))"#;
     f.done(t);
 }
 
-// go test: internal/effecttest/hover_test.go:182 TestEffectHoverLayerNameOnly
+// go test: internal/effecttest/hover_test.go:182 TestEffectHoverLayerNameOnly 1b33fb1f4c62a893
 fn test_effect_hover_layer_name_only(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -324,7 +324,7 @@ const app2 = /*2*/app"#;
     f.done(t);
 }
 
-// go test: internal/effecttest/hover_test.go:237 TestEffectHoverDisabled
+// go test: internal/effecttest/hover_test.go:237 TestEffectHoverDisabled 0d291a1e070a409f
 fn test_effect_hover_disabled(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -354,7 +354,7 @@ declare const /*1*/myEffect: Effect.Effect<string, Error, never>"#;
     f.done(t);
 }
 
-// go test: internal/effecttest/hover_test.go:268 TestEffectHoverLayerMermaidProvider
+// go test: internal/effecttest/hover_test.go:268 TestEffectHoverLayerMermaidProvider 84cf698925ffcb60
 fn test_effect_hover_layer_mermaid_provider(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();

@@ -12,7 +12,7 @@ struct Expected {
     replacement: &'static str,
 }
 
-// go test: internal/rules/map_map_error_to_map_both_test.go:11 TestMapMapErrorToMapBothMessagesAndLocations
+// go test: internal/rules/map_map_error_to_map_both_test.go:11 TestMapMapErrorToMapBothMessagesAndLocations 68e18cf70f65e810
 #[test]
 fn test_map_map_error_to_map_both_messages_and_locations() {
     run_on_checker_stack(|t| {
@@ -98,7 +98,7 @@ export const nested = Effect.mapError(Effect.map(source, (n) => n + 1), (e) => e
     });
 }
 
-// go test: internal/rules/map_map_error_to_map_both_test.go:53 TestMapMapErrorToMapBothBoundaries
+// go test: internal/rules/map_map_error_to_map_both_test.go:53 TestMapMapErrorToMapBothBoundaries c632ff46d1c8f46d
 #[test]
 fn test_map_map_error_to_map_both_boundaries() {
     run_on_checker_stack(|t| {

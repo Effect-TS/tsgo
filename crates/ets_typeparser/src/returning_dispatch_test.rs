@@ -15,7 +15,7 @@ fn nil_type_parser_program(t: &T) -> Compiled {
     compiled
 }
 
-// go test: internal/typeparser/returning_dispatch_test.go:12 TestParseReturningDispatchAcceptedShapes
+// go test: internal/typeparser/returning_dispatch_test.go:12 TestParseReturningDispatchAcceptedShapes 17c9ceac8d89fae7
 // Rust: Go's `dispatch.body == nil`, `dispatch.dispatch == nil` and `branch.condition.source == nil` checks drop:
 // the body and the source are `P<Node>`s and the dispatch is held by value, never nil. Go prints the dispatch with `%+v` (pointer addresses); its
 // `Debug` form stands in.
@@ -129,7 +129,7 @@ fn test_parse_returning_dispatch_accepted_shapes() {
     });
 }
 
-// go test: internal/typeparser/returning_dispatch_test.go:111 TestParseResultDispatchInputContract
+// go test: internal/typeparser/returning_dispatch_test.go:111 TestParseResultDispatchInputContract e858bd5d74f0de55
 // Rust: Go's `branch.condition.subject == nil` check drops (the subject is a `P<Node>`, never nil). Go prints the
 // dispatch with `%+v` (pointer addresses); its `Debug` form stands in.
 #[test]
@@ -215,7 +215,7 @@ fn test_parse_result_dispatch_input_contract() {
     });
 }
 
-// go test: internal/typeparser/returning_dispatch_test.go:178 TestParseResultDispatchTagHints
+// go test: internal/typeparser/returning_dispatch_test.go:178 TestParseResultDispatchTagHints 58c441b4aab4a205
 #[test]
 fn test_parse_result_dispatch_tag_hints() {
     struct Case {
@@ -314,7 +314,7 @@ fn test_parse_result_dispatch_tag_hints() {
     });
 }
 
-// go test: internal/typeparser/returning_dispatch_test.go:253 TestParseTagMatch
+// go test: internal/typeparser/returning_dispatch_test.go:253 TestParseTagMatch 642a8f00bcca26c4
 #[test]
 fn test_parse_tag_match() {
     run(|t| {
@@ -361,7 +361,7 @@ fn test_parse_tag_match() {
     });
 }
 
-// go test: internal/typeparser/returning_dispatch_test.go:284 TestResultDispatchCommonTagSubject
+// go test: internal/typeparser/returning_dispatch_test.go:284 TestResultDispatchCommonTagSubject 3a08c0a7f87c6f4a
 #[test]
 fn test_result_dispatch_common_tag_subject() {
     run(|t| {
@@ -439,7 +439,7 @@ fn test_result_dispatch_common_tag_subject() {
     });
 }
 
-// go test: internal/typeparser/returning_dispatch_test.go:358 TestParseReturningDispatchInputContract
+// go test: internal/typeparser/returning_dispatch_test.go:358 TestParseReturningDispatchInputContract 5c293adaf170a8cc
 // Rust: Go ranges over a map literal (random order) and stops at the first failure; the cases run in a fixed order.
 // Go prints the dispatch with `%+v` (pointer addresses); its `Debug` form stands in.
 #[test]
@@ -495,7 +495,7 @@ fn test_parse_returning_dispatch_input_contract() {
     });
 }
 
-// go test: internal/typeparser/returning_dispatch_test.go:407 findReturningDispatchTestFunction
+// go test: internal/typeparser/returning_dispatch_test.go:407 findReturningDispatchTestFunction 55642b96da608cbe
 pub(crate) fn find_returning_dispatch_test_function(
     t: &T,
     sf: P<SourceFile>,
@@ -519,7 +519,7 @@ pub(crate) fn find_returning_dispatch_test_function(
     function
 }
 
-// go test: internal/typeparser/returning_dispatch_test.go:428 parseReturningDispatchTestFunction
+// go test: internal/typeparser/returning_dispatch_test.go:428 parseReturningDispatchTestFunction c4f462c8173c0481
 fn parse_returning_dispatch_test_function(
     t: &T,
     function_source: &str,
@@ -541,7 +541,7 @@ fn parse_returning_dispatch_test_function(
     (sf, function)
 }
 
-// go test: internal/typeparser/returning_dispatch_test.go:450 returningDispatchNodeText
+// go test: internal/typeparser/returning_dispatch_test.go:450 returningDispatchNodeText 8bbd7bee5545baa9
 pub(crate) fn returning_dispatch_node_text(
     sf: Option<P<SourceFile>>,
     node: Option<P<Node>>,

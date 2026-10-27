@@ -13,7 +13,7 @@ use rustc_hash::{FxHashMap, FxHashSet};
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THIS_LAYER_PROVIDES_0_WHICH_IS_REQUIRED_BY_ANOTHER_LAYER_IN_THE_SAME_LAYER_MERGE_ALL_CALL_LAYER_MERGE_ALL_CREATES_LAYERS_IN_PARALLEL_SO_DEPENDENCIES_BETWEEN_LAYERS_WILL_NOT_BE_SATISFIED_CONSIDER_MOVING_THIS_LAYER_INTO_A_LAYER_PROVIDE_MERGE_AFTER_THE_LAYER_MERGE_ALL_EFFECT_LAYER_MERGE_ALL_WITH_DEPENDENCIES;
 
-// go: internal/rules/layer_merge_all_with_dependencies.go:19 LayerMergeAllWithDependencies
+// go: internal/rules/layer_merge_all_with_dependencies.go:19 LayerMergeAllWithDependencies f9924feb04ba3f42
 // LayerMergeAllWithDependencies detects interdependencies in Layer.mergeAll calls
 // where one layer provides a service that another layer requires. Since mergeAll
 // creates layers in parallel, these dependencies will not be satisfied.
@@ -40,7 +40,7 @@ pub static LAYER_MERGE_ALL_WITH_DEPENDENCIES: LazyLock<Rule> = LazyLock::new(|| 
     },
 });
 
-// go: internal/rules/layer_merge_all_with_dependencies.go:38 LayerMergeAllWithDependenciesMatch
+// go: internal/rules/layer_merge_all_with_dependencies.go:38 LayerMergeAllWithDependenciesMatch 41d52807ef941464
 // LayerMergeAllWithDependenciesMatch holds the AST nodes needed by both the
 // diagnostic rule and the quick-fix for the layerMergeAllWithDependencies pattern.
 #[derive(Clone)]
@@ -54,7 +54,7 @@ pub struct LayerMergeAllWithDependenciesMatch {
     pub provided_types: String, // Formatted string of provided type names
 }
 
-// go: internal/rules/layer_merge_all_with_dependencies.go:50 AnalyzeLayerMergeAllWithDependencies
+// go: internal/rules/layer_merge_all_with_dependencies.go:50 AnalyzeLayerMergeAllWithDependencies eb4a27c8432dec8b
 // AnalyzeLayerMergeAllWithDependencies finds all Layer.mergeAll calls with
 // interdependencies where one layer provides a service required by another.
 //
@@ -90,7 +90,7 @@ pub fn analyze_layer_merge_all_with_dependencies(
     matches
 }
 
-// go: internal/rules/layer_merge_all_with_dependencies.go:79 layerInfo
+// go: internal/rules/layer_merge_all_with_dependencies.go:79 layerInfo 1fedd0140154b86f
 // layerInfo holds parsed layer information for a mergeAll argument.
 #[derive(Clone, Copy)]
 pub(crate) struct LayerInfo {
@@ -98,7 +98,7 @@ pub(crate) struct LayerInfo {
     pub(crate) requirements_type: P<Type>,
 }
 
-// go: internal/rules/layer_merge_all_with_dependencies.go:85 analyzeLayerMergeAllCall
+// go: internal/rules/layer_merge_all_with_dependencies.go:85 analyzeLayerMergeAllCall a5b28d432dd76ea0
 // analyzeLayerMergeAllCall checks a call expression for Layer.mergeAll interdependencies.
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`). Go ranges over `actuallyProvidedMap` (a

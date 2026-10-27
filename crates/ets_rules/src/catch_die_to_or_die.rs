@@ -14,7 +14,7 @@ use crate::piping_flow::has_explicit_type_arguments;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_OR_DIE_EXPRESSES_ESCALATING_EVERY_TYPED_FAILURE_INTO_A_DEFECT_MORE_DIRECTLY_THAN_EFFECT_0_WITH_AN_IDENTITY_FORWARDING_EFFECT_DIE_HANDLER_EFFECT_CATCH_DIE_TO_OR_DIE;
 
-// go: internal/rules/catch_die_to_or_die.go:16 CatchDieToOrDie
+// go: internal/rules/catch_die_to_or_die.go:16 CatchDieToOrDie 2d925775dc1ee96f
 // CatchDieToOrDie suggests using Effect.orDie instead of a catch-all
 // handler that forwards the typed failure unchanged to Effect.die.
 pub static CATCH_DIE_TO_OR_DIE: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -41,7 +41,7 @@ pub static CATCH_DIE_TO_OR_DIE: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/catch_die_to_or_die.go:42 CatchDieToOrDieMatch
+// go: internal/rules/catch_die_to_or_die.go:42 CatchDieToOrDieMatch 40020130086d7eba
 // CatchDieToOrDieMatch holds the nodes needed by the diagnostic and fix.
 #[derive(Clone)]
 pub struct CatchDieToOrDieMatch {
@@ -52,7 +52,7 @@ pub struct CatchDieToOrDieMatch {
     pub has_type_arguments: bool,
 }
 
-// go: internal/rules/catch_die_to_or_die.go:52 AnalyzeCatchDieToOrDie
+// go: internal/rules/catch_die_to_or_die.go:52 AnalyzeCatchDieToOrDie 6b95a0907e94a1fd
 // AnalyzeCatchDieToOrDie finds Effect.catch/catchAll transformations whose
 // handler is Effect.die or forwards its sole argument unchanged to Effect.die.
 //
@@ -105,7 +105,7 @@ pub fn analyze_catch_die_to_or_die(
     matches
 }
 
-// go: internal/rules/catch_die_to_or_die.go:87 catchDieMethod
+// go: internal/rules/catch_die_to_or_die.go:87 catchDieMethod 0de18339afa85519
 //
 // Rust: Go's `(name, ok)` result is `Some(name)` when ok.
 pub(crate) fn catch_die_method(

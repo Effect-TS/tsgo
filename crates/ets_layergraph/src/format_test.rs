@@ -2,7 +2,7 @@ use ets_go::sprintf;
 
 use crate::format::{mermaid_entity_encode, mermaid_safe};
 
-// go test: internal/layergraph/format_test.go:7 TestMermaidEntityEncode
+// go test: internal/layergraph/format_test.go:7 TestMermaidEntityEncode d59f62af6b55941c
 #[test]
 fn test_mermaid_entity_encode() {
     ets_go::testing::run(|t| {
@@ -50,7 +50,7 @@ fn test_mermaid_entity_encode() {
     });
 }
 
-// go test: internal/layergraph/format_test.go:82 TestMermaidSafe
+// go test: internal/layergraph/format_test.go:82 TestMermaidSafe d4c1d2a407caed84
 #[test]
 fn test_mermaid_safe() {
     ets_go::testing::run(|t| {

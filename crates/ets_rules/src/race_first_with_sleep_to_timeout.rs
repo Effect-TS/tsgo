@@ -15,7 +15,7 @@ use ets_typeparser::{
 static MESSAGE: &Message =
     &tsdiag::THIS_EFFECT_FIRST_COMPLETION_RACE_HAS_EXACTLY_ONE_SLEEP_OR_DELAY_BASED_TIMER_ARM_EFFECT_TIMEOUT_OR_ELSE_EXPRESSES_THE_TIMEOUT_AND_FALLBACK_DIRECTLY_EFFECT_RACE_FIRST_WITH_SLEEP_TO_TIMEOUT;
 
-// go: internal/rules/race_first_with_sleep_to_timeout.go:17 RaceFirstWithSleepToTimeout
+// go: internal/rules/race_first_with_sleep_to_timeout.go:17 RaceFirstWithSleepToTimeout 86744cee55d823c8
 // RaceFirstWithSleepToTimeout suggests timeoutOrElse when one side of an
 // Effect first-completion race is a hand-rolled timer arm.
 pub static RACE_FIRST_WITH_SLEEP_TO_TIMEOUT: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -36,14 +36,14 @@ pub static RACE_FIRST_WITH_SLEEP_TO_TIMEOUT: LazyLock<Rule> = LazyLock::new(|| R
     },
 });
 
-// go: internal/rules/race_first_with_sleep_to_timeout.go:41 RaceFirstWithSleepToTimeoutMatch
+// go: internal/rules/race_first_with_sleep_to_timeout.go:41 RaceFirstWithSleepToTimeoutMatch 118670b6a45a64f7
 #[derive(Clone)]
 pub struct RaceFirstWithSleepToTimeoutMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
 }
 
-// go: internal/rules/race_first_with_sleep_to_timeout.go:48 AnalyzeRaceFirstWithSleepToTimeout
+// go: internal/rules/race_first_with_sleep_to_timeout.go:48 AnalyzeRaceFirstWithSleepToTimeout 0bdd7f3eaeeb4520
 // AnalyzeRaceFirstWithSleepToTimeout finds Effect.raceFirst calls, and
 // two-element literal Effect.raceAllFirst calls, with exactly one timer arm.
 //
@@ -118,7 +118,7 @@ pub fn analyze_race_first_with_sleep_to_timeout(
     matches
 }
 
-// go: internal/rules/race_first_with_sleep_to_timeout.go:109 isRaceFirstTimerFlow
+// go: internal/rules/race_first_with_sleep_to_timeout.go:109 isRaceFirstTimerFlow 7adc1b90056ae470
 pub(crate) fn is_race_first_timer_flow(
     tp: &mut TypeParser<'_>,
     flow: Option<&PartialPipingFlow>,
@@ -149,7 +149,7 @@ pub(crate) fn is_race_first_timer_flow(
     false
 }
 
-// go: internal/rules/race_first_with_sleep_to_timeout.go:129 timerTrailingTransformations
+// go: internal/rules/race_first_with_sleep_to_timeout.go:129 timerTrailingTransformations ca2a0738ea4d10d2
 pub(crate) fn timer_trailing_transformations(
     tp: &mut TypeParser<'_>,
     transformations: Slice<'_, PipingFlowTransformation>,

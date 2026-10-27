@@ -7,7 +7,7 @@ use ets_shim::ls::LanguageService;
 use ets_shim::lsproto;
 use ets_typeparser::TypeParser;
 
-// go: internal/completion/context.go:16 Context
+// go: internal/completion/context.go:16 Context 899ddee2a2d8c4e6
 // Context bundles the completion request data and provides helpers for completion implementations.
 // It provides access to the source file, cursor position, existing completion items,
 //
@@ -36,7 +36,7 @@ impl Context<'_, '_> {
     }
 }
 
-// go: internal/completion/context.go:29 NewContext
+// go: internal/completion/context.go:29 NewContext 359def73a2872c19
 // NewContext creates a completion Context from the completion callback parameters.
 //
 // Rust: Go panics on a nil program or checker; neither can be nil here. The checker is `tp`'s (see `Context`).

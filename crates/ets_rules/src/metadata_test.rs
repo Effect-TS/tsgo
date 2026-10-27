@@ -3,7 +3,7 @@ use rustc_hash::FxHashMap;
 
 use crate::*;
 
-// go test: internal/rules/metadata_test.go:10 TestStrictPreset
+// go test: internal/rules/metadata_test.go:10 TestStrictPreset f5606515d170080b
 #[test]
 fn test_strict_preset() {
     let strict = metadata_preset_by_name("strict");
@@ -26,7 +26,7 @@ fn test_strict_preset() {
     }
 }
 
-// go test: internal/rules/metadata_test.go:31 TestRecommendedPreset
+// go test: internal/rules/metadata_test.go:31 TestRecommendedPreset a7aa9ca6aad19f36
 #[test]
 fn test_recommended_preset() {
     let recommended = metadata_preset_by_name("recommended");
@@ -48,7 +48,7 @@ fn test_recommended_preset() {
     }
 }
 
-// go test: internal/rules/metadata_test.go:50 TestMetadataPresetCatalog
+// go test: internal/rules/metadata_test.go:50 TestMetadataPresetCatalog 4e421eb868c0f3c6
 #[test]
 fn test_metadata_preset_catalog() {
     let presets = metadata_presets();
@@ -97,7 +97,7 @@ fn test_metadata_preset_catalog() {
     }
 }
 
-// go test: internal/rules/metadata_test.go:89 metadataPresetByName
+// go test: internal/rules/metadata_test.go:89 metadataPresetByName af65422e2357ae76
 fn metadata_preset_by_name(name: &str) -> FxHashMap<String, Severity> {
     for preset in metadata_presets() {
         if preset.name == name {

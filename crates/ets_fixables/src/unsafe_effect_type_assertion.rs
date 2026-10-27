@@ -7,7 +7,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_TYPE_ASSERTION_UNSAFELY_NARROWS_THE_ERROR_OR_REQUIREMENTS_CHANNELS_EFFECT_UNSAFE_EFFECT_TYPE_ASSERTION;
 
-// go: internal/fixables/unsafe_effect_type_assertion.go:11 UnsafeEffectTypeAssertionFix
+// go: internal/fixables/unsafe_effect_type_assertion.go:11 UnsafeEffectTypeAssertionFix d399f9b99290f2cd
 pub static UNSAFE_EFFECT_TYPE_ASSERTION_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "unsafeEffectTypeAssertion",
     description: "Remove the unsafe assertion",
@@ -16,7 +16,7 @@ pub static UNSAFE_EFFECT_TYPE_ASSERTION_FIX: LazyLock<Fixable> = LazyLock::new(|
     run: run_unsafe_effect_type_assertion_fix,
 });
 
-// go: internal/fixables/unsafe_effect_type_assertion.go:19 runUnsafeEffectTypeAssertionFix
+// go: internal/fixables/unsafe_effect_type_assertion.go:19 runUnsafeEffectTypeAssertionFix 4619fbcf76221179
 fn run_unsafe_effect_type_assertion_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     let matches = ets_rules::analyze_unsafe_effect_type_assertion(&mut ctx.type_parser, Some(sf));

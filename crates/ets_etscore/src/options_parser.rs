@@ -27,7 +27,7 @@ pub trait AnyValue: Sized {
     fn as_string_any_map(&self) -> Option<Vec<(&str, &Self)>>;
 }
 
-// go: etscore/options_parser.go:12 ParseFromPlugins
+// go: etscore/options_parser.go:12 ParseFromPlugins 35702843286ae20f
 // ParseFromPlugins parses the @effect/language-service plugin config from the plugins array.
 // The plugins parameter is the value of compilerOptions.plugins from tsconfig.json.
 // Returns nil if the plugin is not configured or if diagnosticSeverity is explicitly set to null.
@@ -284,7 +284,7 @@ fn go_int_from_float64(f: f64) -> i64 {
     f as i64
 }
 
-// go: etscore/options_parser.go:264 parseTopLevelNamedReexports
+// go: etscore/options_parser.go:264 parseTopLevelNamedReexports b40c293655847cbf
 pub(crate) fn parse_top_level_named_reexports<V: AnyValue>(
     value: &V,
 ) -> Option<TopLevelNamedReexportsMode> {
@@ -296,7 +296,7 @@ pub(crate) fn parse_top_level_named_reexports<V: AnyValue>(
     None
 }
 
-// go: etscore/options_parser.go:276 parseNormalizedStringArrayStrict
+// go: etscore/options_parser.go:276 parseNormalizedStringArrayStrict d041452ce54a2a77
 pub(crate) fn parse_normalized_string_array_strict<V: AnyValue>(value: &V) -> Option<Vec<String>> {
     let arr = value.as_slice()?;
     let mut result = Vec::with_capacity(arr.len());
@@ -310,7 +310,7 @@ pub(crate) fn parse_normalized_string_array_strict<V: AnyValue>(value: &V) -> Op
     Some(result)
 }
 
-// go: etscore/options_parser.go:294 parseNormalizedStringMapStrict
+// go: etscore/options_parser.go:294 parseNormalizedStringMapStrict d6a5c7eee50029a3
 // Rust: Go's two map cases (`*collections.OrderedMap[string, any]`, `map[string]any`) iterate the same way here
 // (`AnyValue::as_string_any_map`).
 pub(crate) fn parse_normalized_string_map_strict<V: AnyValue>(
@@ -328,7 +328,7 @@ pub(crate) fn parse_normalized_string_map_strict<V: AnyValue>(
     Some(result)
 }
 
-// go: etscore/options_parser.go:323 parseOverrides
+// go: etscore/options_parser.go:323 parseOverrides ca04710071effd3f
 pub(crate) fn parse_overrides<V: AnyValue>(value: &V) -> Option<Vec<Override>> {
     let arr = value.as_slice()?;
 
@@ -355,7 +355,7 @@ pub(crate) fn parse_overrides<V: AnyValue>(value: &V) -> Option<Vec<Override>> {
     Some(result)
 }
 
-// go: etscore/options_parser.go:353 parseOverrideOptions
+// go: etscore/options_parser.go:353 parseOverrideOptions 5135ef96cc815d73
 pub(crate) fn parse_override_options<V: AnyValue>(value: &V) -> OverrideOptions {
     let mut result = OverrideOptions::default();
     let Some(options_map) = as_string_any_map(value) else {
@@ -428,7 +428,7 @@ pub(crate) fn parse_override_options<V: AnyValue>(value: &V) -> OverrideOptions 
     result
 }
 
-// go: etscore/options_parser.go:425 parseStringArrayStrict
+// go: etscore/options_parser.go:425 parseStringArrayStrict b8422baac38eb927
 pub(crate) fn parse_string_array_strict<V: AnyValue>(value: &V) -> Option<Vec<String>> {
     let arr = value.as_slice()?;
     let mut result = Vec::with_capacity(arr.len());
@@ -439,7 +439,7 @@ pub(crate) fn parse_string_array_strict<V: AnyValue>(value: &V) -> Option<Vec<St
     Some(result)
 }
 
-// go: etscore/options_parser.go:441 parseStringArrayLossy
+// go: etscore/options_parser.go:441 parseStringArrayLossy b5c4a69aed313fe3
 pub(crate) fn parse_string_array_lossy<V: AnyValue>(value: &V) -> Option<Vec<String>> {
     let arr = value.as_slice()?;
     let mut result = Vec::with_capacity(arr.len());
@@ -451,7 +451,7 @@ pub(crate) fn parse_string_array_lossy<V: AnyValue>(value: &V) -> Option<Vec<Str
     Some(result)
 }
 
-// go: etscore/options_parser.go:455 asStringAnyMap
+// go: etscore/options_parser.go:455 asStringAnyMap ca3f30cd2c75356f
 // Rust: the getter answers Go's `(val, exists)` as `Option<&V>`.
 pub(crate) fn as_string_any_map<'a, V: AnyValue>(
     value: &'a V,
@@ -462,7 +462,7 @@ pub(crate) fn as_string_any_map<'a, V: AnyValue>(
     })
 }
 
-// go: etscore/options_parser.go:470 parseDiagnosticSeverityMap
+// go: etscore/options_parser.go:470 parseDiagnosticSeverityMap a19bb20bf6af0aab
 // parseDiagnosticSeverityMap converts a plugin rule configuration map to map[string]Severity.
 pub(crate) fn parse_diagnostic_severity_map<V: AnyValue>(value: &V) -> FxHashMap<String, Severity> {
     let mut result = FxHashMap::default();
@@ -476,7 +476,7 @@ pub(crate) fn parse_diagnostic_severity_map<V: AnyValue>(value: &V) -> FxHashMap
     result
 }
 
-// go: etscore/options_parser.go:490 parseKeyPatterns
+// go: etscore/options_parser.go:490 parseKeyPatterns e496c3e6205ed4ac
 // parseKeyPatterns converts a JSON array of key pattern objects to []KeyPattern.
 // Rust: `None` is Go's nil slice (no object in the array).
 pub(crate) fn parse_key_patterns<V: AnyValue>(arr: &[V]) -> Option<Vec<KeyPattern>> {

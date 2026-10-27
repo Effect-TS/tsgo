@@ -5,12 +5,12 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/effect_context.go:8 EffectContextFlags
+// go: internal/typeparser/effect_context.go:8 EffectContextFlags 5774b2b9c3b1c169
 // Rust: a newtype over Go's `uint8` with the Go constants as associated consts and the bit operators Go uses.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, Default)]
 pub struct EffectContextFlags(pub u8);
 
-// go: internal/typeparser/effect_context.go:10 EffectContextFlagNone
+// go: internal/typeparser/effect_context.go:10 EffectContextFlagNone 29bb874a57de5e83
 impl EffectContextFlags {
     pub const None: EffectContextFlags = EffectContextFlags(0);
     // Go: `1 << iota` with iota 1 on this line.
@@ -58,7 +58,7 @@ impl EffectContextFlags {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/effect_context.go:22 TypeParser.GetEffectContextFlags
+    // go: internal/typeparser/effect_context.go:22 TypeParser.GetEffectContextFlags a8efb5b3f6b4ba7b
     // GetEffectContextFlags returns the Effect context of node. The analysis stores
     // an entry only at the source file and at nodes whose value differs from their
     // parent's, so a node answers with the entry of its closest ancestor.
@@ -79,7 +79,7 @@ impl TypeParser<'_> {
         flags & EffectContextFlags::InEffect
     }
 
-    // go: internal/typeparser/effect_context.go:38 TypeParser.GetEffectYieldGeneratorFunction
+    // go: internal/typeparser/effect_context.go:38 TypeParser.GetEffectYieldGeneratorFunction 1c844de230f38018
     // GetEffectYieldGeneratorFunction returns the Effect.gen or Effect.fn generator
     // function node yields to, resolved like GetEffectContextFlags.
     pub fn get_effect_yield_generator_function(
@@ -96,7 +96,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/effect_context.go:55 getClosestNodeLinks
+// go: internal/typeparser/effect_context.go:55 getClosestNodeLinks b9265821502743b8
 // getClosestNodeLinks returns the entry of node or of its closest ancestor
 // with one. The source file always has an entry once analyzed, so nil means
 // the file has not been analyzed yet.
@@ -117,7 +117,7 @@ pub(crate) fn get_closest_node_links<T: Copy>(
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/effect_context.go:66 TypeParser.ensureEffectContextAnalyzed
+    // go: internal/typeparser/effect_context.go:66 TypeParser.ensureEffectContextAnalyzed d0932c57a1f51619
     // ensureEffectContextAnalyzed analyzes the source file of node once and reports
     // whether it has been analyzed.
     pub(crate) fn ensure_effect_context_analyzed(&mut self, node: P<Node>) -> bool {
@@ -136,7 +136,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/effect_context.go:79 effectContextRegistration
+// go: internal/typeparser/effect_context.go:79 effectContextRegistration 254e17142c3fde9b
 // effectContextRegistration is state a node registers for one of its
 // descendants, applied when the walk reaches that descendant.
 #[derive(Clone, Copy)]
@@ -162,7 +162,7 @@ struct EffectContextWalker<'a, 'c> {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/effect_context.go:87 TypeParser.analyzeEffectContextForSourceFile
+    // go: internal/typeparser/effect_context.go:87 TypeParser.analyzeEffectContextForSourceFile b19be467bd2a6cfc
     pub(crate) fn analyze_effect_context_for_source_file(&mut self, sf: P<SourceFile>) {
         let pending_flags_mask = EffectContextFlags::PendingNextFunctionIsEffectThunk
             | EffectContextFlags::PendingNextObjectTryPropertyIsEffectThunk;
@@ -183,7 +183,7 @@ impl TypeParser<'_> {
 }
 
 impl EffectContextWalker<'_, '_> {
-    // go: internal/typeparser/effect_context.go:87 TypeParser.analyzeEffectContextForSourceFile
+    // go: internal/typeparser/effect_context.go:87 TypeParser.analyzeEffectContextForSourceFile b19be467bd2a6cfc
     // Rust: Go's `setPendingEnableFlags` closure.
     fn set_pending_enable_flags(&mut self, node: Option<P<Node>>, flags: EffectContextFlags) {
         let Some(node) = node else {
@@ -201,7 +201,7 @@ impl EffectContextWalker<'_, '_> {
         });
     }
 
-    // go: internal/typeparser/effect_context.go:87 TypeParser.analyzeEffectContextForSourceFile
+    // go: internal/typeparser/effect_context.go:87 TypeParser.analyzeEffectContextForSourceFile b19be467bd2a6cfc
     // Rust: Go's `setPendingDisableFlags` closure.
     fn set_pending_disable_flags(&mut self, node: Option<P<Node>>, flags: EffectContextFlags) {
         let Some(node) = node else {
@@ -219,7 +219,7 @@ impl EffectContextWalker<'_, '_> {
         });
     }
 
-    // go: internal/typeparser/effect_context.go:87 TypeParser.analyzeEffectContextForSourceFile
+    // go: internal/typeparser/effect_context.go:87 TypeParser.analyzeEffectContextForSourceFile b19be467bd2a6cfc
     // Rust: Go's `setPendingGeneratorFunction` closure. Go registers a nil node too (it never matches a visited
     // node); here a missing node registers nothing.
     fn set_pending_generator_function(&mut self, node: Option<P<Node>>, gen_fn: Option<P<Node>>) {
@@ -235,7 +235,7 @@ impl EffectContextWalker<'_, '_> {
         });
     }
 
-    // go: internal/typeparser/effect_context.go:87 TypeParser.analyzeEffectContextForSourceFile
+    // go: internal/typeparser/effect_context.go:87 TypeParser.analyzeEffectContextForSourceFile b19be467bd2a6cfc
     // Rust: Go's `walk` closure.
     fn walk(&mut self, node: P<Node>) -> bool {
         let registrations_len = self.registrations.len();
@@ -376,7 +376,7 @@ impl EffectContextWalker<'_, '_> {
     }
 }
 
-// go: internal/typeparser/effect_context.go:87 TypeParser.analyzeEffectContextForSourceFile
+// go: internal/typeparser/effect_context.go:87 TypeParser.analyzeEffectContextForSourceFile b19be467bd2a6cfc
 // Rust: Go's `transparentPendingExpression` closure (it captures nothing).
 fn transparent_pending_expression(node: P<Node>) -> Option<P<Node>> {
     match node.kind() {

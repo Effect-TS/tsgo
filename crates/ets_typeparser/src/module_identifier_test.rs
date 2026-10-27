@@ -5,7 +5,7 @@ use ets_shim::core::{P, ScriptKind};
 use crate::helpers_test::*;
 use crate::*;
 
-// go test: internal/typeparser/module_identifier_test.go:12 parseSource
+// go test: internal/typeparser/module_identifier_test.go:12 parseSource f4cd2f032a49fd07
 // Rust: the parsed file is unbound and outside any program, as Go's.
 pub(crate) fn parse_source(source: &str) -> P<SourceFile> {
     ets_shim::parser::parse_source_file(
@@ -15,7 +15,7 @@ pub(crate) fn parse_source(source: &str) -> P<SourceFile> {
     )
 }
 
-// go test: internal/typeparser/module_identifier_test.go:18 TestFindModuleReferenceForPackage_NamespaceImport
+// go test: internal/typeparser/module_identifier_test.go:18 TestFindModuleReferenceForPackage_NamespaceImport c09fb3f6a5543701
 #[test]
 fn test_find_module_reference_for_package_namespace_import() {
     run(|t| {
@@ -30,7 +30,7 @@ fn test_find_module_reference_for_package_namespace_import() {
     });
 }
 
-// go test: internal/typeparser/module_identifier_test.go:29 TestFindModuleReferenceForPackage_NamedImportWithAlias
+// go test: internal/typeparser/module_identifier_test.go:29 TestFindModuleReferenceForPackage_NamedImportWithAlias b11157fdf2f961f0
 #[test]
 fn test_find_module_reference_for_package_named_import_with_alias() {
     run(|t| {
@@ -45,7 +45,7 @@ fn test_find_module_reference_for_package_named_import_with_alias() {
     });
 }
 
-// go test: internal/typeparser/module_identifier_test.go:40 TestFindModuleReferenceForPackage_NamedImportNoAlias
+// go test: internal/typeparser/module_identifier_test.go:40 TestFindModuleReferenceForPackage_NamedImportNoAlias cd9c0c54f4c41526
 #[test]
 fn test_find_module_reference_for_package_named_import_no_alias() {
     run(|t| {
@@ -60,7 +60,7 @@ fn test_find_module_reference_for_package_named_import_no_alias() {
     });
 }
 
-// go test: internal/typeparser/module_identifier_test.go:51 TestFindModuleReferenceForPackage_NoMatchingImport
+// go test: internal/typeparser/module_identifier_test.go:51 TestFindModuleReferenceForPackage_NoMatchingImport cb52c17519107358
 #[test]
 fn test_find_module_reference_for_package_no_matching_import() {
     run(|t| {
@@ -75,7 +75,7 @@ fn test_find_module_reference_for_package_no_matching_import() {
     });
 }
 
-// go test: internal/typeparser/module_identifier_test.go:62 TestFindModuleReferenceForPackage_NilSourceFile
+// go test: internal/typeparser/module_identifier_test.go:62 TestFindModuleReferenceForPackage_NilSourceFile 2562ce08ce2c30d8
 #[test]
 fn test_find_module_reference_for_package_nil_source_file() {
     run(|t| {
@@ -87,7 +87,7 @@ fn test_find_module_reference_for_package_nil_source_file() {
     });
 }
 
-// go test: internal/typeparser/module_identifier_test.go:70 TestFindModuleReference_ExistingBehavior
+// go test: internal/typeparser/module_identifier_test.go:70 TestFindModuleReference_ExistingBehavior f709097f9c1bde69
 #[test]
 fn test_find_module_reference_existing_behavior() {
     run(|t| {
@@ -135,7 +135,7 @@ fn test_find_module_reference_existing_behavior() {
     });
 }
 
-// go test: internal/typeparser/module_identifier_test.go:114 TestFindModuleReference_BarrelNamespaceImport
+// go test: internal/typeparser/module_identifier_test.go:114 TestFindModuleReference_BarrelNamespaceImport aef8d57c36368b4d
 #[test]
 fn test_find_module_reference_barrel_namespace_import() {
     run(|t| {
@@ -194,7 +194,7 @@ fn test_find_module_reference_barrel_namespace_import() {
     });
 }
 
-// go test: internal/typeparser/module_identifier_test.go:137 TestFindEffectModuleReference
+// go test: internal/typeparser/module_identifier_test.go:137 TestFindEffectModuleReference 98d99204acc9eddf
 #[test]
 fn test_find_effect_module_reference() {
     run(|t| {
@@ -243,7 +243,7 @@ fn test_find_effect_module_reference() {
     });
 }
 
-// go test: internal/typeparser/module_identifier_test.go:167 TestModuleReferenceMatchesNode
+// go test: internal/typeparser/module_identifier_test.go:167 TestModuleReferenceMatchesNode f3c0b1865bbd694e
 #[test]
 fn test_module_reference_matches_node() {
     run(|t| {

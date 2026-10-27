@@ -11,7 +11,7 @@ use ets_typeparser::TypeParser;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THIS_ARROW_FUNCTION_BLOCK_ONLY_RETURNS_AN_EXPRESSION_AND_CAN_USE_A_CONCISE_BODY_EFFECT_UNNECESSARY_ARROW_BLOCK;
 
-// go: internal/rules/unnecessary_arrow_block.go:16 UnnecessaryArrowBlock
+// go: internal/rules/unnecessary_arrow_block.go:16 UnnecessaryArrowBlock cfd853d53f92f8ec
 // UnnecessaryArrowBlock suggests using a concise arrow body when a block only
 // contains a single return statement.
 pub static UNNECESSARY_ARROW_BLOCK: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -32,7 +32,7 @@ pub static UNNECESSARY_ARROW_BLOCK: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/unnecessary_arrow_block.go:40 UnnecessaryArrowBlockMatch
+// go: internal/rules/unnecessary_arrow_block.go:40 UnnecessaryArrowBlockMatch 4752c679c73f8efa
 #[derive(Clone)]
 pub struct UnnecessaryArrowBlockMatch {
     pub source_file: P<SourceFile>,
@@ -42,7 +42,7 @@ pub struct UnnecessaryArrowBlockMatch {
     pub returned_expression: P<Node>,
 }
 
-// go: internal/rules/unnecessary_arrow_block.go:48 AnalyzeUnnecessaryArrowBlock
+// go: internal/rules/unnecessary_arrow_block.go:48 AnalyzeUnnecessaryArrowBlock 77d4f6ca19cddcf4
 //
 // Rust: Go ignores the parser and checker; the parser is kept so every Analyze* has the same shape.
 pub fn analyze_unnecessary_arrow_block(
@@ -67,7 +67,7 @@ pub fn analyze_unnecessary_arrow_block(
     matches
 }
 
-// go: internal/rules/unnecessary_arrow_block.go:71 analyzeUnnecessaryArrowBlockNode
+// go: internal/rules/unnecessary_arrow_block.go:71 analyzeUnnecessaryArrowBlockNode 6336a9cc5e8ea697
 pub(crate) fn analyze_unnecessary_arrow_block_node(
     sf: P<SourceFile>,
     n: P<Node>,

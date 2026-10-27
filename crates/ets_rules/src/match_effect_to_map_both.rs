@@ -10,7 +10,7 @@ use ets_typeparser::TypeParser;
 
 use crate::*;
 
-// go: internal/rules/match_effect_to_map_both.go:16 MatchEffectToMapBoth
+// go: internal/rules/match_effect_to_map_both.go:16 MatchEffectToMapBoth 36fadae40cbe1a1c
 // MatchEffectToMapBoth suggests mapBoth when matchEffect only maps the error
 // and success channels through Effect.fail and Effect.succeed, respectively.
 pub static MATCH_EFFECT_TO_MAP_BOTH: LazyLock<Rule> = LazyLock::new(|| {
@@ -40,7 +40,7 @@ pub static MATCH_EFFECT_TO_MAP_BOTH: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/match_effect_to_map_both.go:37 MatchEffectToMapBothMatch
+// go: internal/rules/match_effect_to_map_both.go:37 MatchEffectToMapBothMatch fd90f1bf13493bc6
 #[derive(Clone, Copy)]
 pub struct MatchEffectToMapBothMatch {
     pub source_file: P<SourceFile>,
@@ -50,7 +50,7 @@ pub struct MatchEffectToMapBothMatch {
     pub constructor_args: [P<Node>; 2],
 }
 
-// go: internal/rules/match_effect_to_map_both.go:45 AnalyzeMatchEffectToMapBoth
+// go: internal/rules/match_effect_to_map_both.go:45 AnalyzeMatchEffectToMapBoth 988cd8ca9f069abc
 //
 // Rust: Go's unused checker argument is dropped (the parser holds the checker); Go's nil parser check is the type
 // system's.

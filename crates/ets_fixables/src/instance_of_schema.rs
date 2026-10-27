@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_CODE_USES_INSTANCEOF_WITH_AN_EFFECT_SCHEMA_TYPE_SCHEMA_IS_IS_THE_SCHEMA_AWARE_RUNTIME_CHECK_FOR_THIS_CASE_EFFECT_INSTANCE_OF_SCHEMA;
 
-// go: internal/fixables/instance_of_schema.go:13 InstanceOfSchemaFix
+// go: internal/fixables/instance_of_schema.go:13 InstanceOfSchemaFix 24f9ad3bac532caa
 pub static INSTANCE_OF_SCHEMA_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "instanceOfSchema",
     description: "Replace with Schema.is",
@@ -17,7 +17,7 @@ pub static INSTANCE_OF_SCHEMA_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable 
     run: run_instance_of_schema_fix,
 });
 
-// go: internal/fixables/instance_of_schema.go:21 runInstanceOfSchemaFix
+// go: internal/fixables/instance_of_schema.go:21 runInstanceOfSchemaFix b084cf06178a1fc6
 fn run_instance_of_schema_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 

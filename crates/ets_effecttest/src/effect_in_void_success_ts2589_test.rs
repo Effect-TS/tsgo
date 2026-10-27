@@ -2,7 +2,7 @@ use ets_go::testing::on_checker_stack;
 
 use crate::*;
 
-// go test: internal/effecttest/effect_in_void_success_ts2589_test.go:5 TestIssue381EffectInVoidSuccessDoesNotReportExcessiveTypeDepth
+// go test: internal/effecttest/effect_in_void_success_ts2589_test.go:5 TestIssue381EffectInVoidSuccessDoesNotReportExcessiveTypeDepth c297ebfaf7b4feb3
 #[test]
 fn test_issue381_effect_in_void_success_does_not_report_excessive_type_depth() {
     on_checker_stack(|| {
@@ -30,7 +30,7 @@ fn test_issue381_effect_in_void_success_does_not_report_excessive_type_depth() {
     });
 }
 
-// go test: internal/effecttest/effect_in_void_success_ts2589_test.go:19 buildIssue381EffectInVoidSuccessCase
+// go test: internal/effecttest/effect_in_void_success_ts2589_test.go:19 buildIssue381EffectInVoidSuccessCase 066c06f5770af1b2
 fn build_issue381_effect_in_void_success_case(plugin_enabled: bool) -> String {
     let mut plugin_config = "";
     if plugin_enabled {

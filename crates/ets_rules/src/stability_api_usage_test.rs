@@ -35,7 +35,7 @@ fn diagnostic_text(source: &str, diagnostic: P<Diagnostic>) -> &str {
     &source[pos..pos + len]
 }
 
-// go test: internal/rules/stability_api_usage_test.go:17 TestStabilityOfDeclaration
+// go test: internal/rules/stability_api_usage_test.go:17 TestStabilityOfDeclaration a79a007f5216824d
 #[test]
 fn test_stability_of_declaration() {
     run(|t| {
@@ -78,7 +78,7 @@ fn test_stability_of_declaration() {
     });
 }
 
-// go test: internal/rules/stability_api_usage_test.go:43 TestStabilityApiModuleName
+// go test: internal/rules/stability_api_usage_test.go:43 TestStabilityApiModuleName cf782c93864dd5ff
 #[test]
 fn test_stability_api_module_name() {
     run(|t| {
@@ -104,7 +104,7 @@ fn test_stability_api_module_name() {
     });
 }
 
-// go test: internal/rules/stability_api_usage_test.go:64 TestStabilityApiUsageContextualProperties
+// go test: internal/rules/stability_api_usage_test.go:64 TestStabilityApiUsageContextualProperties 112ce46ce7ac871a
 #[test]
 fn test_stability_api_usage_contextual_properties() {
     run(|t| {
@@ -351,7 +351,7 @@ declare function x(arg: Reportable): void
     });
 }
 
-// go test: internal/rules/stability_api_usage_test.go:166 TestStabilityApiUsageContextualPropertiesAllowlist
+// go test: internal/rules/stability_api_usage_test.go:166 TestStabilityApiUsageContextualPropertiesAllowlist 8d13a3ba1a1ff6ff
 #[test]
 fn test_stability_api_usage_contextual_properties_allowlist() {
     run(|t| {
@@ -405,7 +405,7 @@ x({ test: 42 })"#,
     });
 }
 
-// go test: internal/rules/stability_api_usage_test.go:199 TestStabilityApiUsageRepeatedContextualProperties
+// go test: internal/rules/stability_api_usage_test.go:199 TestStabilityApiUsageRepeatedContextualProperties db4ab0a3060eff6e
 #[test]
 fn test_stability_api_usage_repeated_contextual_properties() {
     run(|t| {
@@ -480,7 +480,7 @@ accept({{ first: 6, second: 7 }})
     });
 }
 
-// go test: internal/rules/stability_api_usage_test.go:257 TestStabilityContextualCacheDiscriminants
+// go test: internal/rules/stability_api_usage_test.go:257 TestStabilityContextualCacheDiscriminants 8ec680ae18e221d4
 // TestStabilityContextualCacheDiscriminants checks that the per-literal
 // contextual type cache does not leak one property's lookup into another: the
 // same property name resolves to a different union member depending on each

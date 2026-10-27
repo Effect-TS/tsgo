@@ -28,7 +28,7 @@ pub(crate) fn zero_flow(node: P<Node>) -> PipingFlow {
     PipingFlow { node, partial: PartialPipingFlow::default() }
 }
 
-// go test: internal/typeparser/piping_flow_shape_test.go:10 TestPipingFlowMatchesShape
+// go test: internal/typeparser/piping_flow_shape_test.go:10 TestPipingFlowMatchesShape 102d82be4a667622
 #[test]
 fn test_piping_flow_matches_shape() {
     use TransformationKind::{Call, Pipe};
@@ -83,7 +83,7 @@ fn test_piping_flow_matches_shape() {
     });
 }
 
-// go test: internal/typeparser/piping_flow_shape_test.go:54 TestPipingFlowMatchesShapeNil
+// go test: internal/typeparser/piping_flow_shape_test.go:54 TestPipingFlowMatchesShapeNil 3f7f275f44a1ea83
 #[test]
 fn test_piping_flow_matches_shape_nil() {
     run(|t| {
@@ -103,7 +103,7 @@ fn test_piping_flow_matches_shape_nil() {
     });
 }
 
-// go test: internal/typeparser/piping_flow_shape_test.go:64 TestParsePipeCall_ConstantAlias
+// go test: internal/typeparser/piping_flow_shape_test.go:64 TestParsePipeCall_ConstantAlias d2c55e5eead58d32
 #[test]
 fn test_parse_pipe_call_constant_alias() {
     run(|t| {

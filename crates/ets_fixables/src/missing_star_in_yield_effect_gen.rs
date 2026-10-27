@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_USES_YIELD_FOR_AN_EFFECT_VALUE_YIELD_ASTERISK_IS_THE_EFFECT_AWARE_FORM_IN_THIS_CONTEXT_EFFECT_MISSING_STAR_IN_YIELD_EFFECT_GEN;
 
-// go: internal/fixables/missing_star_in_yield_effect_gen.go:12 MissingStarInYieldEffectGenFix
+// go: internal/fixables/missing_star_in_yield_effect_gen.go:12 MissingStarInYieldEffectGenFix 269059e400eb583b
 pub static MISSING_STAR_IN_YIELD_EFFECT_GEN_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "missingStarInYieldEffectGen",
     description: "Replace yield with yield* inside Effect generator scopes",
@@ -17,7 +17,7 @@ pub static MISSING_STAR_IN_YIELD_EFFECT_GEN_FIX: LazyLock<Fixable> = LazyLock::n
     run: run_missing_star_in_yield_effect_gen_fix,
 });
 
-// go: internal/fixables/missing_star_in_yield_effect_gen.go:20 runMissingStarInYieldEffectGenFix
+// go: internal/fixables/missing_star_in_yield_effect_gen.go:20 runMissingStarInYieldEffectGenFix 2a677891e2110f50
 fn run_missing_star_in_yield_effect_gen_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 

@@ -9,7 +9,7 @@ use libtest_mimic::Trial;
 
 use crate::{has_diagnostic_code, run_case};
 
-// go test: internal/effecttest/effect_sleep_zero_to_yield_now_test.go:16 TestEffectSleepZeroToYieldNowFixesCompile
+// go test: internal/effecttest/effect_sleep_zero_to_yield_now_test.go:16 TestEffectSleepZeroToYieldNowFixesCompile efad6b92091f5289
 fn test_effect_sleep_zero_to_yield_now_fixes_compile(t: &T) {
     const PREFIX: &str = r#"// @filename: /tsconfig.json
 {

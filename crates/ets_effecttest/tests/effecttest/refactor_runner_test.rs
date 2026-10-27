@@ -8,7 +8,7 @@ use libtest_mimic::Trial;
 
 use crate::{case_name, parent_failure, run_case};
 
-// go test: internal/effecttest/refactor_runner_test.go:17 TestEffectRefactors
+// go test: internal/effecttest/refactor_runner_test.go:17 TestEffectRefactors af71f2ace81fcf59
 // Rust: one libtest trial per Go subtest (`TestEffectRefactors/<case>`), as `test_effect_diagnostics`.
 pub(crate) fn test_effect_refactors() -> Vec<Trial> {
     const NAME: &str = "TestEffectRefactors";
@@ -52,7 +52,7 @@ pub(crate) fn test_effect_refactors() -> Vec<Trial> {
     trials
 }
 
-// go test: internal/effecttest/refactor_runner_test.go:43 TestEffectV3Refactors
+// go test: internal/effecttest/refactor_runner_test.go:43 TestEffectV3Refactors d25d66d9806bf8ce
 pub(crate) fn test_effect_v3_refactors() -> Vec<Trial> {
     const NAME: &str = "TestEffectV3Refactors";
     if let Err(err) = ets_bundledeffect::ensure_package_installed(EffectVersion::V3, "effect") {

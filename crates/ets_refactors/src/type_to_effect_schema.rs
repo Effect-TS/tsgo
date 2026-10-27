@@ -9,7 +9,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go: internal/refactors/type_to_effect_schema.go:12 TypeToEffectSchema
+// go: internal/refactors/type_to_effect_schema.go:12 TypeToEffectSchema d6b1b32955fecfc2
 pub static TYPE_TO_EFFECT_SCHEMA: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "typeToEffectSchema",
     description: "Generate Effect.Schema from type",
@@ -17,7 +17,7 @@ pub static TYPE_TO_EFFECT_SCHEMA: LazyLock<Refactor> = LazyLock::new(|| Refactor
     run: run_type_to_effect_schema,
 });
 
-// go: internal/refactors/type_to_effect_schema.go:22 findInterfaceOrTypeAlias
+// go: internal/refactors/type_to_effect_schema.go:22 findInterfaceOrTypeAlias 60abaad7c5bf4422
 // findInterfaceOrTypeAlias walks the ancestor chain from the token at the cursor
 // to find an InterfaceDeclaration or TypeAliasDeclaration whose name overlaps the
 // selection span, and that has no type parameters.
@@ -65,7 +65,7 @@ pub(crate) fn find_interface_or_type_alias(ctx: &Context<'_, '_>) -> Option<P<No
     None
 }
 
-// go: internal/refactors/type_to_effect_schema.go:64 runTypeToEffectSchema
+// go: internal/refactors/type_to_effect_schema.go:64 runTypeToEffectSchema 8e5fdce396972153
 pub(crate) fn run_type_to_effect_schema(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let Some(matched_node) = find_interface_or_type_alias(ctx) else {
         return Vec::new();

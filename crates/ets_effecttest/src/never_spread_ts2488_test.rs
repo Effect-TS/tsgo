@@ -2,7 +2,7 @@ use ets_go::testing::on_checker_stack;
 
 use crate::*;
 
-// go test: internal/effecttest/never_spread_ts2488_test.go:14 TestIssue916NeverSpreadMatchesStockDiagnostics
+// go test: internal/effecttest/never_spread_ts2488_test.go:14 TestIssue916NeverSpreadMatchesStockDiagnostics 419ee4c22124176b
 // Issue #916: promiseInEffectSuccess and other rules queried the type of a
 // spread element of a never-typed value, a node the checker only checks
 // through its enclosing array literal or call, leaking TS2488 into the

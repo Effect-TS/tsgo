@@ -11,7 +11,7 @@ use rustc_hash::FxHashMap;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::MULTIPLE_VERSIONS_OF_PACKAGE_0_WERE_DETECTED_COLON_1_PACKAGE_DUPLICATION_CAN_CHANGE_RUNTIME_IDENTITY_AND_TYPE_EQUALITY_ACROSS_EFFECT_MODULES_IF_THIS_IS_INTENTIONAL_SET_THE_LSP_CONFIG_ALLOWED_DUPLICATED_PACKAGES_TO_2_EFFECT_DUPLICATE_PACKAGE;
 
-// go: internal/rules/duplicate_package.go:18 duplicatePackageDiag
+// go: internal/rules/duplicate_package.go:18 duplicatePackageDiag e885cbfee7113032
 // duplicatePackageDiag holds pre-computed diagnostic info for a single duplicated package name.
 pub(crate) struct DuplicatePackageDiag {
     pub(crate) package_name: String,
@@ -19,7 +19,7 @@ pub(crate) struct DuplicatePackageDiag {
     pub(crate) config_value: String,
 }
 
-// go: internal/rules/duplicate_package.go:26 DuplicatePackage
+// go: internal/rules/duplicate_package.go:26 DuplicatePackage b85c554e76d71c36
 // DuplicatePackage warns when multiple versions of the same Effect-related package
 // are loaded into the program.
 pub static DUPLICATE_PACKAGE: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -56,7 +56,7 @@ pub static DUPLICATE_PACKAGE: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/duplicate_package.go:66 computeDuplicatePackageDiags
+// go: internal/rules/duplicate_package.go:66 computeDuplicatePackageDiags 91bcb7d7fe61ffe5
 // computeDuplicatePackageDiags scans all packages and finds names with multiple distinct versions.
 //
 // Rust: Go's checker argument is unused and dropped.

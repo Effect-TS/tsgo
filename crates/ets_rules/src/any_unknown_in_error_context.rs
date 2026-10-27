@@ -9,7 +9,7 @@ use ets_shim::ast::{self, Diagnostic, Kind, Node};
 use ets_shim::checker::{Signature, Type, TypeFlags};
 use ets_shim::diagnostics as tsdiag;
 
-// go: internal/rules/any_unknown_in_error_context.go:18 AnyUnknownInErrorContext
+// go: internal/rules/any_unknown_in_error_context.go:18 AnyUnknownInErrorContext 83c208542ba3dbc0
 // AnyUnknownInErrorContext detects 'any' or 'unknown' types in the error (E) or
 // requirements (R) channels of Effect and Layer types.
 pub static ANY_UNKNOWN_IN_ERROR_CONTEXT: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -207,7 +207,7 @@ pub static ANY_UNKNOWN_IN_ERROR_CONTEXT: LazyLock<Rule> = LazyLock::new(|| Rule 
     },
 });
 
-// go: internal/rules/any_unknown_in_error_context.go:197 anyUnknownChannels
+// go: internal/rules/any_unknown_in_error_context.go:197 anyUnknownChannels 012a7bb33777ba45
 // anyUnknownChannels holds TypeFlagsAny or TypeFlagsUnknown for each channel
 // that has one, and zero for a channel that has neither.
 #[derive(Clone, Copy)]
@@ -217,7 +217,7 @@ pub(crate) struct AnyUnknownChannels {
 }
 
 impl AnyUnknownChannels {
-    // go: internal/rules/any_unknown_in_error_context.go:204 anyUnknownChannels.covers
+    // go: internal/rules/any_unknown_in_error_context.go:204 anyUnknownChannels.covers c0ec76d0a0b919ef
     // covers reports whether c flags every channel that other flags, with the
     // same any or unknown.
     pub(crate) fn covers(self, other: AnyUnknownChannels) -> bool {

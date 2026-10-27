@@ -7,7 +7,7 @@ use ets_shim::ls::lsconv;
 
 use crate::*;
 
-// go test: internal/effecttest/quickfix_runner.go:17 isDisableStyleFix
+// go test: internal/effecttest/quickfix_runner.go:17 isDisableStyleFix 310001d799d10d4f
 // isDisableStyleFix returns true if the fix title matches the disable-style pattern:
 // "Disable ... for this line" or "Disable ... for entire file".
 pub(crate) fn is_disable_style_fix(title: &str) -> bool {
@@ -15,7 +15,7 @@ pub(crate) fn is_disable_style_fix(title: &str) -> bool {
         && (title.ends_with(" for this line") || title.ends_with(" for entire file"))
 }
 
-// go test: internal/effecttest/quickfix_runner.go:25 RunEffectQuickFixTest
+// go test: internal/effecttest/quickfix_runner.go:25 RunEffectQuickFixTest da7ac127e7e624e0
 // RunEffectQuickFixTest executes a single Effect quick-fix baseline test case.
 // It creates a fourslash test instance, collects quick-fix inventory and application
 // results, and generates a *.quickfixes.txt baseline.

@@ -417,13 +417,8 @@ const matrix = Command.make("matrix").pipe(
   Command.withSubcommands([matrixGenerated, matrixPerf, matrixRelease, matrixTestOxlint, matrixTestTypeScript])
 )
 
-const portManifestCommand = Command.make("port-manifest", {
-  write: Flag.Boolean("write").pipe(
-    Flag.withDefault(false),
-    Flag.withDescription("Write porting/manifest.tsv instead of printing it")
-  )
-}, ({ write }) => portManifest(repositoryRoot, write)).pipe(
-  Command.withDescription("Regenerate the manifest of in-scope Go declarations (porting/scope.toml)")
+const portManifestCommand = Command.make("port-manifest", {}, () => portManifest(repositoryRoot)).pipe(
+  Command.withDescription("Print the manifest of in-scope Go declarations (porting/scope.toml) the port-* commands compute")
 )
 
 const portStatusCommand = Command.make("port-status", {
@@ -448,11 +443,11 @@ const portCheckCommand = Command.make("port-check", {
     Flag.withDescription("Append a markdown progress table to this file (e.g. $GITHUB_STEP_SUMMARY)")
   )
 }, ({ summary }) => portCheck(repositoryRoot, Option.getOrUndefined(summary))).pipe(
-  Command.withDescription("Fail on a stale manifest, bad markers or skips, and Rust ports out of sync with Go")
+  Command.withDescription("Fail on bad markers or skips, unacked markers and Rust ports out of sync with Go")
 )
 
 const portFixLinesCommand = Command.make("port-fix-lines", {}, () => portFixLines(repositoryRoot)).pipe(
-  Command.withDescription("Rewrite the Go line numbers of origin markers under crates/ from the manifest")
+  Command.withDescription("Rewrite the Go line numbers of origin markers under crates/ to the current Go source")
 )
 
 const portAckCommand = Command.make("port-ack", {
@@ -467,15 +462,10 @@ const portAckCommand = Command.make("port-ack", {
   all: Flag.Boolean("all").pipe(
     Flag.withDefault(false),
     Flag.withDescription("Ack every marked declaration")
-  ),
-  prune: Flag.Boolean("prune").pipe(
-    Flag.withDefault(false),
-    Flag.withDescription("Drop porting/ported.tsv entries that have no marker")
   )
-}, ({ all, declarations, prefix, prune }) => portAck(repositoryRoot, declarations, { all, prefixes: prefix, prune }))
-  .pipe(
-    Command.withDescription("Record the current Go hash of ported declarations in porting/ported.tsv")
-  )
+}, ({ all, declarations, prefix }) => portAck(repositoryRoot, declarations, { all, prefixes: prefix })).pipe(
+  Command.withDescription("Write the current Go hash (and line) into the origin markers of ported declarations")
+)
 
 const portDiffCommand = Command.make("port-diff", {
   oldRef: Argument.String("old-ref"),

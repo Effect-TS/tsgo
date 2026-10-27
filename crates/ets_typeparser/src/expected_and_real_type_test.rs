@@ -12,7 +12,7 @@ use ets_shim::vfs::vfstest::MapFile;
 use crate::helpers_test::*;
 use crate::*;
 
-// go test: internal/typeparser/expected_and_real_type_test.go:21 compileAndGetCheckerAndSourceFile
+// go test: internal/typeparser/expected_and_real_type_test.go:21 compileAndGetCheckerAndSourceFile c55fb678e808cbf1
 // compileAndGetCheckerAndSourceFile compiles a TypeScript source string and returns the
 // checker, type parser, source file, and a done function to release the checker.
 //
@@ -38,7 +38,7 @@ fn results_len(results: Option<&[ExpectedAndRealType]>) -> i64 {
     results.map_or(0, |results| results.len() as i64)
 }
 
-// go test: internal/typeparser/expected_and_real_type_test.go:61 TestExpectedAndRealTypes_VariableDeclaration
+// go test: internal/typeparser/expected_and_real_type_test.go:61 TestExpectedAndRealTypes_VariableDeclaration c80daf110fc10948
 #[test]
 fn test_expected_and_real_types_variable_declaration() {
     run(|t| {
@@ -71,7 +71,7 @@ const b: string = "hello"
     });
 }
 
-// go test: internal/typeparser/expected_and_real_type_test.go:86 TestExpectedAndRealTypes_CallExpression
+// go test: internal/typeparser/expected_and_real_type_test.go:86 TestExpectedAndRealTypes_CallExpression 99f28d48e5222f18
 #[test]
 fn test_expected_and_real_types_call_expression() {
     run(|t| {
@@ -104,7 +104,7 @@ foo(42, "hello")
     });
 }
 
-// go test: internal/typeparser/expected_and_real_type_test.go:111 TestExpectedAndRealTypes_ObjectLiteralProperty
+// go test: internal/typeparser/expected_and_real_type_test.go:111 TestExpectedAndRealTypes_ObjectLiteralProperty 7b200b73ebcda29c
 #[test]
 fn test_expected_and_real_types_object_literal_property() {
     run(|t| {
@@ -137,7 +137,7 @@ const obj: Obj = { a: 1, b: "hello" }
     });
 }
 
-// go test: internal/typeparser/expected_and_real_type_test.go:140 TestExpectedAndRealTypes_BinaryAssignment
+// go test: internal/typeparser/expected_and_real_type_test.go:140 TestExpectedAndRealTypes_BinaryAssignment be5430c2a62998fa
 #[test]
 fn test_expected_and_real_types_binary_assignment() {
     run(|t| {
@@ -173,7 +173,7 @@ x = 42
     });
 }
 
-// go test: internal/typeparser/expected_and_real_type_test.go:172 TestExpectedAndRealTypes_ReturnStatement
+// go test: internal/typeparser/expected_and_real_type_test.go:172 TestExpectedAndRealTypes_ReturnStatement 567e23adcaab24da
 #[test]
 fn test_expected_and_real_types_return_statement() {
     run(|t| {
@@ -212,7 +212,7 @@ function getNum(): number {
     });
 }
 
-// go test: internal/typeparser/expected_and_real_type_test.go:204 TestExpectedAndRealTypes_ArrowFunctionBodyNoTypeParams
+// go test: internal/typeparser/expected_and_real_type_test.go:204 TestExpectedAndRealTypes_ArrowFunctionBodyNoTypeParams 4330b3a0e0479e5c
 #[test]
 fn test_expected_and_real_types_arrow_function_body_no_type_params() {
     run(|t| {
@@ -244,7 +244,7 @@ const fn: () => number = () => 42
     });
 }
 
-// go test: internal/typeparser/expected_and_real_type_test.go:232 TestExpectedAndRealTypes_ArrowFunctionBodyWithTypeParams
+// go test: internal/typeparser/expected_and_real_type_test.go:232 TestExpectedAndRealTypes_ArrowFunctionBodyWithTypeParams 6b40071287899a24
 #[test]
 fn test_expected_and_real_types_arrow_function_body_with_type_params() {
     run(|t| {
@@ -269,7 +269,7 @@ const result = wrap(<A extends number>(): A => 42 as any as A)
     });
 }
 
-// go test: internal/typeparser/expected_and_real_type_test.go:251 TestExpectedAndRealTypes_SatisfiesExpression
+// go test: internal/typeparser/expected_and_real_type_test.go:251 TestExpectedAndRealTypes_SatisfiesExpression ea79c3da86d4d8ea
 #[test]
 fn test_expected_and_real_types_satisfies_expression() {
     run(|t| {
@@ -302,7 +302,7 @@ const y = "hello" satisfies string
     });
 }
 
-// go test: internal/typeparser/expected_and_real_type_test.go:276 TestExpectedAndRealTypes_NilInputs
+// go test: internal/typeparser/expected_and_real_type_test.go:276 TestExpectedAndRealTypes_NilInputs 12e71b6083e406c1
 // Rust: a nil `*TypeParser` cannot be written; Go's call also passes a nil source file, which the same guard
 // rejects, so that input is checked on a parser.
 #[test]
@@ -324,7 +324,7 @@ fn test_expected_and_real_types_nil_inputs() {
     });
 }
 
-// go test: internal/typeparser/expected_and_real_type_test.go:286 TestEffectType_NilInputs
+// go test: internal/typeparser/expected_and_real_type_test.go:286 TestEffectType_NilInputs 090d804c8bf08c82
 // Rust: the nil checker case (a nil `*TypeParser` receiver) cannot be written and is left out.
 #[test]
 fn test_effect_type_nil_inputs() {
@@ -346,7 +346,7 @@ fn test_effect_type_nil_inputs() {
     });
 }
 
-// go test: internal/typeparser/expected_and_real_type_test.go:307 TestLayerType_NilInputs
+// go test: internal/typeparser/expected_and_real_type_test.go:307 TestLayerType_NilInputs 40c69b6c6363acc2
 // Rust: the nil checker case (a nil `*TypeParser` receiver) cannot be written and is left out.
 #[test]
 fn test_layer_type_nil_inputs() {
@@ -363,7 +363,7 @@ fn test_layer_type_nil_inputs() {
     });
 }
 
-// go test: internal/typeparser/expected_and_real_type_test.go:322 TestContextTag_NilInputs
+// go test: internal/typeparser/expected_and_real_type_test.go:322 TestContextTag_NilInputs 2951f63efa6cf832
 // Rust: the nil checker case (a nil `*TypeParser` receiver) cannot be written and is left out.
 #[test]
 fn test_context_tag_nil_inputs() {
@@ -380,7 +380,7 @@ fn test_context_tag_nil_inputs() {
     });
 }
 
-// go test: internal/typeparser/expected_and_real_type_test.go:337 TestExpectedAndRealTypes_EmptyFile
+// go test: internal/typeparser/expected_and_real_type_test.go:337 TestExpectedAndRealTypes_EmptyFile 1bf81203ccec5b4a
 #[test]
 fn test_expected_and_real_types_empty_file() {
     run(|t| {
@@ -402,7 +402,7 @@ fn test_expected_and_real_types_empty_file() {
     });
 }
 
-// go test: internal/typeparser/expected_and_real_type_test.go:352 TestExpectedAndRealTypes_AllPatterns
+// go test: internal/typeparser/expected_and_real_type_test.go:352 TestExpectedAndRealTypes_AllPatterns 6a4af26602a63fe6
 #[test]
 fn test_expected_and_real_types_all_patterns() {
     run(|t| {
@@ -466,7 +466,7 @@ const s = "test" satisfies string
     });
 }
 
-// go test: internal/typeparser/expected_and_real_type_test.go:415 TestExpectedAndRealTypes_TypeStringVerification
+// go test: internal/typeparser/expected_and_real_type_test.go:415 TestExpectedAndRealTypes_TypeStringVerification 212de00ff487fe81
 #[test]
 fn test_expected_and_real_types_type_string_verification() {
     run(|t| {

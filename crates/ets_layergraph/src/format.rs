@@ -5,7 +5,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/layergraph/format.go:16 mermaidEntityEncode
+// go: internal/layergraph/format.go:16 mermaidEntityEncode 71d245321b180e03
 // mermaidEntityEncode replaces Mermaid-special characters with Mermaid HTML entity codes.
 // Uses single-pass character-by-character replacement to avoid double-encoding.
 pub(crate) fn mermaid_entity_encode(s: &str) -> String {
@@ -32,7 +32,7 @@ fn truncate_bytes(s: &str, n: usize) -> String {
     String::from_utf8_lossy(&s.as_bytes()[..n]).into_owned()
 }
 
-// go: internal/layergraph/format.go:46 mermaidSafe
+// go: internal/layergraph/format.go:46 mermaidSafe 86053efb26d03216
 // mermaidSafe encodes a string for use in Mermaid subgraph headers (nested format).
 // It normalizes whitespace, truncates, and encodes only quotes and angle brackets.
 //
@@ -52,7 +52,7 @@ pub(crate) fn mermaid_safe(value: &str) -> String {
     value.trim().to_string()
 }
 
-// go: internal/layergraph/format.go:62 getNodeText
+// go: internal/layergraph/format.go:62 getNodeText e64e2878ad79794b
 // getNodeText returns the trimmed source text of a node.
 //
 // Rust: Go reads the text of a nil source file (a nil dereference); every node here is in a source file.
@@ -80,7 +80,7 @@ pub(crate) fn get_node_text(node: P<Node>, sf: Option<P<SourceFile>>) -> String 
     ets_shim::scanner::get_source_text_of_node_from_source_file(sf, node, false).trim().to_string()
 }
 
-// go: internal/layergraph/format.go:76 getNodeSourceFile
+// go: internal/layergraph/format.go:76 getNodeSourceFile d216f6afca460ed1
 // getNodeSourceFile walks up the parent chain to find the SourceFile ancestor.
 pub(crate) fn get_node_source_file(node: P<Node>) -> Option<P<SourceFile>> {
     let mut n = Some(node);
@@ -93,7 +93,7 @@ pub(crate) fn get_node_source_file(node: P<Node>) -> Option<P<SourceFile>> {
     None
 }
 
-// go: internal/layergraph/format.go:90 formatLocation
+// go: internal/layergraph/format.go:90 formatLocation 2355472c40ffc9de
 // formatLocation returns a human-readable location string for a node.
 // If the node is in the same source file as fromSourceFile, returns "ln {line} col {character}".
 // If different, returns "in {filename} at ln {line} col {character}".
@@ -114,13 +114,13 @@ pub(crate) fn format_location(node: P<Node>, from_source_file: Option<P<SourceFi
     format!("in {} at ln {} col {}", file_name, line + 1, character)
 }
 
-// go: internal/layergraph/format.go:108 getTypeDisplayName
+// go: internal/layergraph/format.go:108 getTypeDisplayName 7dd3772959ffae07
 // getTypeDisplayName returns the string representation of a type with no truncation.
 pub(crate) fn get_type_display_name(c: &mut Checker, t: P<Type>) -> String {
     c.type_to_string_ex(t, None, TypeFormatFlags::NoTruncation, None)
 }
 
-// go: internal/layergraph/format.go:114 mermaidEscapeOutputLabel
+// go: internal/layergraph/format.go:114 mermaidEscapeOutputLabel 464782c5e6877e5f
 // mermaidEscapeOutputLabel applies standard Mermaid escaping for backslash, brackets, and pipe
 // on top of entity-encoded text. This is used for the output format.
 pub(crate) fn mermaid_escape_output_label(s: &str) -> String {
@@ -131,7 +131,7 @@ pub(crate) fn mermaid_escape_output_label(s: &str) -> String {
     s
 }
 
-// go: internal/layergraph/format.go:128 FormatLayerGraph
+// go: internal/layergraph/format.go:128 FormatLayerGraph e8b6226aa2e4e806
 // FormatLayerGraph renders the full layer graph as a Mermaid flowchart TD with entity-encoded labels.
 // Intentional divergence from .repos reference: this output format includes cross-file location
 // annotations (e.g., "_in simple.ts at ln 6 col 19_") on nodes originating from a different source
@@ -186,7 +186,7 @@ pub fn format_layer_graph(
     lines.join("\n")
 }
 
-// go: internal/layergraph/format.go:175 FormatNestedLayerGraph
+// go: internal/layergraph/format.go:175 FormatNestedLayerGraph 490b0b3b16189b97
 // FormatNestedLayerGraph renders the layer graph as a Mermaid flowchart TB with nested subgraphs.
 pub fn format_nested_layer_graph(
     c: &mut Checker,
@@ -296,7 +296,7 @@ pub fn format_nested_layer_graph(
     lines.join("\n")
 }
 
-// go: internal/layergraph/format.go:284 FormatOutlineGraph
+// go: internal/layergraph/format.go:284 FormatOutlineGraph dfdc522464d90dba
 // FormatOutlineGraph renders the outline graph as a Mermaid flowchart TD.
 pub fn format_outline_graph(
     _c: &mut Checker,
@@ -321,7 +321,7 @@ pub fn format_outline_graph(
     })
 }
 
-// go: internal/layergraph/format.go:307 FormatQuickInfo
+// go: internal/layergraph/format.go:307 FormatQuickInfo bc0c340b28b4ab6a
 // FormatQuickInfo renders provider/requirer info as a JSDoc comment.
 pub fn format_quick_info(
     c: &mut Checker,

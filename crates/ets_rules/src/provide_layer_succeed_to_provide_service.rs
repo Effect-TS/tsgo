@@ -14,7 +14,7 @@ use ets_typeparser::{
 static MESSAGE: &Message =
     &tsdiag::EFFECT_0_PROVIDES_THIS_INLINE_SINGLE_SERVICE_LAYER_DIRECTLY_EFFECT_PROVIDE_LAYER_SUCCEED_TO_PROVIDE_SERVICE;
 
-// go: internal/rules/provide_layer_succeed_to_provide_service.go:14 ProvideLayerSucceedToProvideService
+// go: internal/rules/provide_layer_succeed_to_provide_service.go:14 ProvideLayerSucceedToProvideService 8e6512c5c73ad9e8
 pub static PROVIDE_LAYER_SUCCEED_TO_PROVIDE_SERVICE: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "provideLayerSucceedToProvideService",
     group: "style",
@@ -40,7 +40,7 @@ pub static PROVIDE_LAYER_SUCCEED_TO_PROVIDE_SERVICE: LazyLock<Rule> = LazyLock::
     },
 });
 
-// go: internal/rules/provide_layer_succeed_to_provide_service.go:39 ProvideLayerSucceedToProvideServiceMatch
+// go: internal/rules/provide_layer_succeed_to_provide_service.go:39 ProvideLayerSucceedToProvideServiceMatch adb0d2a4783ec3b1
 //
 // Rust: Go's `*PipingFlowTransformation` (a pointer to a local copy) is an owned copy.
 #[derive(Clone)]
@@ -53,7 +53,7 @@ pub struct ProvideLayerSucceedToProvideServiceMatch {
     pub replacement_method_name: &'static str,
 }
 
-// go: internal/rules/provide_layer_succeed_to_provide_service.go:48 AnalyzeProvideLayerSucceedToProvideService
+// go: internal/rules/provide_layer_succeed_to_provide_service.go:48 AnalyzeProvideLayerSucceedToProvideService ce9f692f330accb7
 //
 // Rust: Go's checker argument is the parser's checker; Go ignores it, so it is dropped.
 pub fn analyze_provide_layer_succeed_to_provide_service(
@@ -106,7 +106,7 @@ pub fn analyze_provide_layer_succeed_to_provide_service(
     matches
 }
 
-// go: internal/rules/provide_layer_succeed_to_provide_service.go:84 inlineSingleServiceLayer
+// go: internal/rules/provide_layer_succeed_to_provide_service.go:84 inlineSingleServiceLayer 9bfb76915b16917d
 //
 // Rust: Go's `(service, implementation, replacement, ok)` is an `Option`.
 pub(crate) fn inline_single_service_layer(

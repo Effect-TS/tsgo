@@ -15,11 +15,11 @@ use ets_shim::project::{self, APISnapshotRequest, FileChangeSummary, Session, Sn
 use ets_shim::vfs::{FS, bundled, osvfs};
 use rustc_hash::{FxHashMap, FxHashSet};
 
-// go: etsdiagnostics/diagnostics.go:30 noFilesMessage
+// go: etsdiagnostics/diagnostics.go:30 noFilesMessage aa808da56cf61f5d
 pub(crate) const NO_FILES_MESSAGE: &str =
     "No files to check. Please provide an existing .ts file or a project tsconfig.json";
 
-// go: etsdiagnostics/diagnostics.go:32 request
+// go: etsdiagnostics/diagnostics.go:32 request 43d8cd7c61cba8c6
 // Rust: decoded by `decode_request` (Go's `encoding/json` into this struct; `json:` names in the comments).
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub(crate) struct Request {
@@ -34,7 +34,7 @@ pub(crate) struct Request {
     pub(crate) list_files: bool,           // "listFiles,omitempty"
 }
 
-// go: etsdiagnostics/diagnostics.go:44 severity
+// go: etsdiagnostics/diagnostics.go:44 severity a924ad7b5ee88336
 // Rust: Go's `string` type with three constants; only those values are ever stored (`parseSeverityFilter` keeps
 // only them, `categoryToSeverity` returns only them).
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -44,7 +44,7 @@ pub(crate) enum Severity {
     Message,
 }
 
-// go: etsdiagnostics/diagnostics.go:46 severityError
+// go: etsdiagnostics/diagnostics.go:46 severityError 5aff3e7e5da30e81
 impl Severity {
     pub(crate) fn as_str(self) -> &'static str {
         match self {
@@ -65,7 +65,7 @@ impl Severity {
     }
 }
 
-// go: etsdiagnostics/diagnostics.go:52 location
+// go: etsdiagnostics/diagnostics.go:52 location 50491cddf505978d
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub(crate) struct Location {
     pub(crate) file: String,    // "file"
@@ -78,7 +78,7 @@ pub(crate) struct Location {
     pub(crate) source: &'static str,
 }
 
-// go: etsdiagnostics/diagnostics.go:63 formattedDiagnostic
+// go: etsdiagnostics/diagnostics.go:63 formattedDiagnostic 047c951f41cf078d
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub(crate) struct FormattedDiagnostic {
     pub(crate) location: Location,
@@ -89,7 +89,7 @@ pub(crate) struct FormattedDiagnostic {
     pub(crate) related_information: Vec<RelatedInformation>, // "relatedInformation,omitempty"
 }
 
-// go: etsdiagnostics/diagnostics.go:72 relatedInformation
+// go: etsdiagnostics/diagnostics.go:72 relatedInformation 0aa8f425477e2528
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub(crate) struct RelatedInformation {
     pub(crate) location: Location,
@@ -97,7 +97,7 @@ pub(crate) struct RelatedInformation {
     pub(crate) message: String, // "message"
 }
 
-// go: etsdiagnostics/diagnostics.go:78 summary
+// go: etsdiagnostics/diagnostics.go:78 summary bd471d8b176e7188
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub(crate) struct Summary {
     pub(crate) files_checked: i64,        // "filesChecked"
@@ -108,7 +108,7 @@ pub(crate) struct Summary {
     pub(crate) messages: i64,             // "messages"
 }
 
-// go: etsdiagnostics/diagnostics.go:87 fileEffectVersion
+// go: etsdiagnostics/diagnostics.go:87 fileEffectVersion d91a0860ba2ef491
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub(crate) struct FileEffectVersion {
     pub(crate) file: String,             // "file"
@@ -116,7 +116,7 @@ pub(crate) struct FileEffectVersion {
     pub(crate) supported_effect: String, // "supportedEffect"
 }
 
-// go: etsdiagnostics/diagnostics.go:93 jsonOutput
+// go: etsdiagnostics/diagnostics.go:93 jsonOutput 44f4f1745ebcaacc
 // Rust: encoded by `encode_json_output` (Go's `json.Encoder` with a two-space indent).
 pub(crate) struct JsonOutput<'a> {
     pub(crate) diagnostics: &'a [FormattedDiagnostic], // "diagnostics"
@@ -124,7 +124,7 @@ pub(crate) struct JsonOutput<'a> {
     pub(crate) summary: Summary,                       // "summary"
 }
 
-// go: etsdiagnostics/diagnostics.go:100 Run
+// go: etsdiagnostics/diagnostics.go:100 Run f83240e0aa9c9d21
 // Run decodes and executes one JSON diagnostics request.
 pub fn run(ctx: &Context, args: &[String], stdout: &mut dyn Write, stderr: &mut dyn Write) -> i32 {
     if args.len() != 1 {
@@ -182,7 +182,7 @@ pub fn run(ctx: &Context, args: &[String], stdout: &mut dyn Write, stderr: &mut 
     0
 }
 
-// go: etsdiagnostics/diagnostics.go:144 parseLSPConfig
+// go: etsdiagnostics/diagnostics.go:144 parseLSPConfig 7f7463a1d2a709ea
 // Rust: Go's `(config, provided, err)`; `Ok((config, provided))` or the decoding error.
 pub(crate) fn parse_lsp_config(
     value: Option<&str>,
@@ -210,7 +210,7 @@ struct VersionRecord {
     supported: String,
 }
 
-// go: etsdiagnostics/diagnostics.go:160 collect
+// go: etsdiagnostics/diagnostics.go:160 collect 4427762a04a71d74
 // Rust: Go's `(diagnostics, files, summary, error)`; Go's `files` is nil (omitted) without `ListFiles`, an empty
 // list here (also omitted). The progress line pads by characters, as Go's `%60s` pads by runes.
 pub(crate) fn collect(
@@ -391,7 +391,7 @@ pub(crate) fn collect(
     Ok((results, files, result_summary))
 }
 
-// go: etsdiagnostics/diagnostics.go:319 updateSession
+// go: etsdiagnostics/diagnostics.go:319 updateSession 54120a1a21956608
 // Rust: Go's `session.APIUpdate` is tsrs's `Session::api_update`; Go's `DerefSnapshot` (shim integration) is
 // `Snapshot::deref`.
 pub(crate) fn update_session(
@@ -408,7 +408,7 @@ pub(crate) fn update_session(
     }
 }
 
-// go: etsdiagnostics/diagnostics.go:327 parseSeverityFilter
+// go: etsdiagnostics/diagnostics.go:327 parseSeverityFilter 22cd02581e78cc45
 pub(crate) fn parse_severity_filter(value: &str) -> Option<FxHashSet<Severity>> {
     if value.is_empty() {
         return None;
@@ -427,7 +427,7 @@ pub(crate) fn parse_severity_filter(value: &str) -> Option<FxHashSet<Severity>> 
     Some(result)
 }
 
-// go: etsdiagnostics/diagnostics.go:344 formatDiagnostic
+// go: etsdiagnostics/diagnostics.go:344 formatDiagnostic 71b2a852884c1dec
 pub(crate) fn format_diagnostic(diagnostic: P<Diagnostic>) -> FormattedDiagnostic {
     let mut name = ets_rule::code_to_rule_name(&ets_rules::ALL, diagnostic.code()).to_string();
     if name.is_empty() {
@@ -454,7 +454,7 @@ pub(crate) fn format_diagnostic(diagnostic: P<Diagnostic>) -> FormattedDiagnosti
     }
 }
 
-// go: etsdiagnostics/diagnostics.go:370 formatLocation
+// go: etsdiagnostics/diagnostics.go:370 formatLocation a3e0a4396b1f5905
 // Rust: the diagnostics formatted here have a file and a range (Go reads them without checks).
 pub(crate) fn format_location(diagnostic: P<Diagnostic>) -> Location {
     let file = diagnostic.file().expect("diagnostic file");
@@ -478,7 +478,7 @@ pub(crate) fn format_location(diagnostic: P<Diagnostic>) -> Location {
     }
 }
 
-// go: etsdiagnostics/diagnostics.go:388 formatMessage
+// go: etsdiagnostics/diagnostics.go:388 formatMessage e799b65967722966
 pub(crate) fn format_message(diagnostic: P<Diagnostic>, name: &str) -> String {
     let message = flatten_message(diagnostic, 0);
     let suffix = format!(" effect({name})");
@@ -488,7 +488,7 @@ pub(crate) fn format_message(diagnostic: P<Diagnostic>, name: &str) -> String {
     }
 }
 
-// go: etsdiagnostics/diagnostics.go:392 flattenMessage
+// go: etsdiagnostics/diagnostics.go:392 flattenMessage cdcf854cda7fe046
 pub(crate) fn flatten_message(diagnostic: P<Diagnostic>, level: usize) -> String {
     let mut output = String::new();
     output.push_str(&diagnostic.localize());
@@ -500,7 +500,7 @@ pub(crate) fn flatten_message(diagnostic: P<Diagnostic>, level: usize) -> String
     output
 }
 
-// go: etsdiagnostics/diagnostics.go:403 categoryToSeverity
+// go: etsdiagnostics/diagnostics.go:403 categoryToSeverity 5a4218fd6f9e94bf
 pub(crate) fn category_to_severity(category: tsdiag::Category) -> Severity {
     match category {
         tsdiag::Category::Error => Severity::Error,
@@ -509,7 +509,7 @@ pub(crate) fn category_to_severity(category: tsdiag::Category) -> Severity {
     }
 }
 
-// go: etsdiagnostics/diagnostics.go:414 writeOutput
+// go: etsdiagnostics/diagnostics.go:414 writeOutput 1e544408217c0451
 pub(crate) fn write_output(
     output: &mut dyn Write,
     format: &str,
@@ -597,7 +597,7 @@ pub(crate) fn write_output(
     )
 }
 
-// go: etsdiagnostics/diagnostics.go:456 writePrettyDiagnostic
+// go: etsdiagnostics/diagnostics.go:456 writePrettyDiagnostic a47924a2a8160649
 pub(crate) fn write_pretty_diagnostic(output: &mut dyn Write, diagnostic: &FormattedDiagnostic) {
     let color = match diagnostic.severity {
         Severity::Error => "\x1b[91m",
@@ -628,12 +628,12 @@ pub(crate) fn write_pretty_diagnostic(output: &mut dyn Write, diagnostic: &Forma
     }
 }
 
-// go: etsdiagnostics/diagnostics.go:478 cyanColor
+// go: etsdiagnostics/diagnostics.go:478 cyanColor 33ab20a728b75206
 pub(crate) const CYAN_COLOR: &str = "\x1b[96m";
-// go: etsdiagnostics/diagnostics.go:478 cyanColor
+// go: etsdiagnostics/diagnostics.go:478 cyanColor 33ab20a728b75206
 pub(crate) const RESET_COLOR: &str = "\x1b[0m";
 
-// go: etsdiagnostics/diagnostics.go:483 writeCodeSnippet
+// go: etsdiagnostics/diagnostics.go:483 writeCodeSnippet 0825c57aafc79dcf
 pub(crate) fn write_code_snippet(
     output: &mut dyn Write,
     loc: &Location,
@@ -656,7 +656,7 @@ pub(crate) fn write_code_snippet(
     );
 }
 
-// go: etsdiagnostics/diagnostics.go:494 diagnosticLabel
+// go: etsdiagnostics/diagnostics.go:494 diagnosticLabel 3c2c1c88e6a2c936
 pub(crate) fn diagnostic_label(name: &str) -> String {
     if name.starts_with("effect(") {
         return name.to_string();
@@ -664,7 +664,7 @@ pub(crate) fn diagnostic_label(name: &str) -> String {
     "effect(".to_string() + name + ")"
 }
 
-// go: etsdiagnostics/diagnostics.go:501 truncateLeft
+// go: etsdiagnostics/diagnostics.go:501 truncateLeft 40e09d4acaabb6e5
 // Rust: Go slices at a byte offset, which may split a character; the cut is moved to the next character boundary
 // (the progress line is cosmetic).
 pub(crate) fn truncate_left(value: &str, width: usize) -> &str {

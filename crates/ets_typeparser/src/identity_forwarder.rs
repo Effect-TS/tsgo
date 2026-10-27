@@ -4,7 +4,7 @@ use ets_shim::core::P;
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/identity_forwarder.go:15 TypeParser.UnwrapIdentityForwarder
+    // go: internal/typeparser/identity_forwarder.go:15 TypeParser.UnwrapIdentityForwarder 52006fcf008df325
     // UnwrapIdentityForwarder returns the callee of a one-argument function that
     // forwards its argument unchanged, any explicit type arguments on the
     // forwarded call, and the forwarder's parameter declaration so that callers

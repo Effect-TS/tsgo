@@ -7,7 +7,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/data_first_signature.go:11 ParsedDataFirstOrLastCall
+// go: internal/typeparser/data_first_signature.go:11 ParsedDataFirstOrLastCall 41c03a6bd61a0cde
 pub struct ParsedDataFirstOrLastCall {
     pub(crate) node: P<Node>,
     pub(crate) callee: P<Node>,
@@ -17,34 +17,34 @@ pub struct ParsedDataFirstOrLastCall {
 }
 
 impl ParsedDataFirstOrLastCall {
-    // go: internal/typeparser/data_first_signature.go:19 ParsedDataFirstOrLastCall.Node
+    // go: internal/typeparser/data_first_signature.go:19 ParsedDataFirstOrLastCall.Node ada09a476c8f5283
     // Rust: the call expression node (Go's `*ast.CallExpression`).
     pub fn node(&self) -> P<Node> {
         self.node
     }
 
-    // go: internal/typeparser/data_first_signature.go:21 ParsedDataFirstOrLastCall.Callee
+    // go: internal/typeparser/data_first_signature.go:21 ParsedDataFirstOrLastCall.Callee 1154e0d94f58db96
     pub fn callee(&self) -> P<Node> {
         self.callee
     }
 
-    // go: internal/typeparser/data_first_signature.go:23 ParsedDataFirstOrLastCall.Subject
+    // go: internal/typeparser/data_first_signature.go:23 ParsedDataFirstOrLastCall.Subject 7c89cadf0e25764f
     pub fn subject(&self) -> P<Node> {
         self.subject
     }
 
-    // go: internal/typeparser/data_first_signature.go:25 ParsedDataFirstOrLastCall.Args
+    // go: internal/typeparser/data_first_signature.go:25 ParsedDataFirstOrLastCall.Args b5fd1698dd351504
     pub fn args(&self) -> Slice<'_, P<Node>> {
         ets_readonly::new(&self.args[..])
     }
 
-    // go: internal/typeparser/data_first_signature.go:27 ParsedDataFirstOrLastCall.SubjectIndex
+    // go: internal/typeparser/data_first_signature.go:27 ParsedDataFirstOrLastCall.SubjectIndex 461bd6962b37f94c
     pub fn subject_index(&self) -> i64 {
         self.subject_index as i64
     }
 }
 
-// go: internal/typeparser/data_first_signature.go:29 PipeableSignatureWitness
+// go: internal/typeparser/data_first_signature.go:29 PipeableSignatureWitness b1cd9c8b3992a63e
 #[derive(Clone, Default)]
 pub struct PipeableSignatureWitness {
     pub argument_types: Vec<Option<P<Type>>>,
@@ -52,7 +52,7 @@ pub struct PipeableSignatureWitness {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/data_first_signature.go:34 TypeParser.DataFirstOrLastCall
+    // go: internal/typeparser/data_first_signature.go:34 TypeParser.DataFirstOrLastCall c7bf5ce414f57c15
     pub fn data_first_or_last_call(
         &mut self,
         node: impl Into<Option<P<Node>>>,
@@ -81,7 +81,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/data_first_signature.go:54 TypeParser.parseDataFirstOrLastCall
+    // go: internal/typeparser/data_first_signature.go:54 TypeParser.parseDataFirstOrLastCall defc3a835b4f4c4d
     // Rust: Go's `call` argument is `node.AsCallExpression()`.
     pub(crate) fn parse_data_first_or_last_call(
         &mut self,
@@ -206,7 +206,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/data_first_signature.go:155 MatchesPipeableSignature
+// go: internal/typeparser/data_first_signature.go:155 MatchesPipeableSignature d83e38822858ac10
 // MatchesPipeableSignature reports whether candidate is the pipeable form of
 // dataFirst with the parameter at subjectIndex moved into a returned unary function.
 // When witness is nil, parameter types from dataFirst are used for comparison.
@@ -249,7 +249,7 @@ pub fn matches_pipeable_signature(
         && pipeable_signature_shapes_match(tp, Some(data_first), Some(candidate), subject_index)
 }
 
-// go: internal/typeparser/data_first_signature.go:186 argumentTypesMatchParameters
+// go: internal/typeparser/data_first_signature.go:186 argumentTypesMatchParameters bf343d1c0a71879d
 pub(crate) fn argument_types_match_parameters(
     c: &mut Checker,
     args: &[Option<P<Type>>],
@@ -284,7 +284,7 @@ pub(crate) fn argument_types_match_parameters(
     true
 }
 
-// go: internal/typeparser/data_first_signature.go:210 candidateAcceptsSubject
+// go: internal/typeparser/data_first_signature.go:210 candidateAcceptsSubject e1f29169c8a9285b
 pub(crate) fn candidate_accepts_subject(
     c: &mut Checker,
     candidate: Option<P<Signature>>,
@@ -309,7 +309,7 @@ pub(crate) fn candidate_accepts_subject(
     false
 }
 
-// go: internal/typeparser/data_first_signature.go:231 hasCompatibleCallShape
+// go: internal/typeparser/data_first_signature.go:231 hasCompatibleCallShape a70bd0311fe326bb
 pub(crate) fn has_compatible_call_shape(
     c: &mut Checker,
     left: Option<P<Type>>,
@@ -323,7 +323,7 @@ pub(crate) fn has_compatible_call_shape(
     left_callable == right_callable
 }
 
-// go: internal/typeparser/data_first_signature.go:240 typeAcceptsArgument
+// go: internal/typeparser/data_first_signature.go:240 typeAcceptsArgument 5b927248530928b3
 pub(crate) fn type_accepts_argument(
     c: &mut Checker,
     argument: Option<P<Type>>,
@@ -341,7 +341,7 @@ pub(crate) fn type_accepts_argument(
         || c.is_type_assignable_to(argument, parameter)
 }
 
-// go: internal/typeparser/data_first_signature.go:251 sameShallowTypeOrigin
+// go: internal/typeparser/data_first_signature.go:251 sameShallowTypeOrigin ddee47897b1d1fe6
 pub(crate) fn same_shallow_type_origin(
     c: &mut Checker,
     left: Option<P<Type>>,
@@ -388,7 +388,7 @@ pub(crate) fn same_shallow_type_origin(
     left.flags() == right.flags() && left.flags().intersects(TypeFlags::Singleton)
 }
 
-// go: internal/typeparser/data_first_signature.go:279 sameSymbolReference
+// go: internal/typeparser/data_first_signature.go:279 sameSymbolReference 4dcf04f307e4dade
 pub(crate) fn same_symbol_reference(
     c: &mut Checker,
     left: Option<P<Symbol>>,
@@ -397,7 +397,7 @@ pub(crate) fn same_symbol_reference(
     left.is_some() && right.is_some() && get_symbol_if_same_reference(c, left, right).is_some()
 }
 
-// go: internal/typeparser/data_first_signature.go:285 DerivePipeableSignatureFromDataFirst
+// go: internal/typeparser/data_first_signature.go:285 DerivePipeableSignatureFromDataFirst 5bf4e7a85c8fce07
 // DerivePipeableSignatureFromDataFirst removes the subject parameter from a
 // data-first signature and moves it to a unary function in the return type.
 pub fn derive_pipeable_signature_from_data_first(
@@ -430,7 +430,7 @@ pub fn derive_pipeable_signature_from_data_first(
     ))
 }
 
-// go: internal/typeparser/data_first_signature.go:313 isLikelySelfParameter
+// go: internal/typeparser/data_first_signature.go:313 isLikelySelfParameter 8ef23c8d4686debe
 pub(crate) fn is_likely_self_parameter(sym: Option<P<Symbol>>) -> bool {
     let Some(sym) = sym else {
         return false;
@@ -448,7 +448,7 @@ fn go_to_lower(s: &str) -> String {
         .collect()
 }
 
-// go: internal/typeparser/data_first_signature.go:321 omitArgAt
+// go: internal/typeparser/data_first_signature.go:321 omitArgAt a7472eff4597285f
 pub(crate) fn omit_arg_at(nodes: &[P<Node>], index: usize) -> Vec<P<Node>> {
     let mut result = Vec::with_capacity(nodes.len().saturating_sub(1));
     for (i, &node) in nodes.iter().enumerate() {

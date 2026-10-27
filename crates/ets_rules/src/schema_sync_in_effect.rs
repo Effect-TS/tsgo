@@ -26,7 +26,7 @@ pub(crate) fn sync_to_effect_method_lookup(
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::X_0_IS_USED_INSIDE_AN_EFFECT_GENERATOR_SCHEMA_1_PRESERVES_THE_TYPED_EFFECT_ERROR_CHANNEL_FOR_THIS_OPERATION_WITHOUT_THROWING_EFFECT_SCHEMA_SYNC_IN_EFFECT;
 
-// go: internal/rules/schema_sync_in_effect.go:14 syncToEffectMethodV3
+// go: internal/rules/schema_sync_in_effect.go:14 syncToEffectMethodV3 821c2ba3b4edb93d
 // syncToEffectMethodV3 maps Schema sync method names to their Effect-based V3 equivalents.
 pub(crate) static SYNC_TO_EFFECT_METHOD_V3: SyncToEffectMethod = &[
     ("decodeSync", "decode"),
@@ -35,7 +35,7 @@ pub(crate) static SYNC_TO_EFFECT_METHOD_V3: SyncToEffectMethod = &[
     ("encodeUnknownSync", "encodeUnknown"),
 ];
 
-// go: internal/rules/schema_sync_in_effect.go:22 syncToEffectMethodV4
+// go: internal/rules/schema_sync_in_effect.go:22 syncToEffectMethodV4 d765000c593d1bd2
 // syncToEffectMethodV4 maps Schema sync method names to their Effect-based V4 equivalents.
 pub(crate) static SYNC_TO_EFFECT_METHOD_V4: SyncToEffectMethod = &[
     ("decodeSync", "decodeEffect"),
@@ -44,7 +44,7 @@ pub(crate) static SYNC_TO_EFFECT_METHOD_V4: SyncToEffectMethod = &[
     ("encodeUnknownSync", "encodeUnknownEffect"),
 ];
 
-// go: internal/rules/schema_sync_in_effect.go:31 SchemaSyncInEffect
+// go: internal/rules/schema_sync_in_effect.go:31 SchemaSyncInEffect 2a1481214825dad3
 // SchemaSyncInEffect detects Schema sync methods (decodeSync, encodeSync, etc.) used inside
 // Effect generators and suggests using the Effect-based variants instead.
 pub static SCHEMA_SYNC_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -87,7 +87,7 @@ pub static SCHEMA_SYNC_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/schema_sync_in_effect.go:71 checkSchemaSyncInEffect
+// go: internal/rules/schema_sync_in_effect.go:71 checkSchemaSyncInEffect adbec8cb47cec7a6
 // checkSchemaSyncInEffect checks a single call expression for Schema sync methods inside an Effect generator.
 pub(crate) fn check_schema_sync_in_effect(
     ctx: &mut Context<'_, '_>,
@@ -124,7 +124,7 @@ pub(crate) fn check_schema_sync_in_effect(
     ))
 }
 
-// go: internal/rules/schema_sync_in_effect.go:97 matchSchemaSyncMethod
+// go: internal/rules/schema_sync_in_effect.go:97 matchSchemaSyncMethod 66a4dab5068a27f9
 // matchSchemaSyncMethod checks if the node references one of the Schema sync methods via
 // either the ParseResult module (V3) or the SchemaParser module (V4).
 //

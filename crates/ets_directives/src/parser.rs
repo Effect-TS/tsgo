@@ -8,7 +8,7 @@ use ets_shim::diagnostics;
 use regex::Regex;
 use rustc_hash::FxHashMap;
 
-// go: internal/directives/parser.go:16 ToCategory
+// go: internal/directives/parser.go:16 ToCategory dc777d979d15644a
 // ToCategory converts a Severity to the corresponding diagnostics.Category for diagnostic reporting.
 // This function stays here because etscore cannot import diagnostics (leaf package).
 // etscore.SeverityOff and etscore.SeveritySkipFile return CategoryWarning as a fallback (callers should
@@ -27,7 +27,7 @@ pub fn to_category(s: Severity) -> diagnostics::Category {
     }
 }
 
-// go: internal/directives/parser.go:34 RuleSeverity
+// go: internal/directives/parser.go:34 RuleSeverity b44b6d0abcc72eb7
 // RuleSeverity represents a rule:severity pair from a directive.
 #[derive(Clone, PartialEq, Eq, Debug, Default)]
 pub struct RuleSeverity {
@@ -35,7 +35,7 @@ pub struct RuleSeverity {
     pub severity: Severity,
 }
 
-// go: internal/directives/parser.go:40 Directive
+// go: internal/directives/parser.go:40 Directive 117e6365fb4fef1d
 // Directive represents a parsed @effect-diagnostics directive.
 #[derive(Clone, PartialEq, Eq, Debug, Default)]
 pub struct Directive {
@@ -52,7 +52,7 @@ pub struct Directive {
 }
 
 impl Directive {
-    // go: internal/directives/parser.go:56 Directive.AffectedLine
+    // go: internal/directives/parser.go:56 Directive.AffectedLine 844505badfa59e4f
     // AffectedLine returns the line number that this directive affects.
     // For regular directives, it affects the same line.
     // For -next-line directives, it affects the following line.
@@ -68,7 +68,7 @@ impl Directive {
 // `[\t\n\f\r ]` (Rust's ASCII `\s` adds `\v`) and `\w` is `[0-9A-Za-z_]` (Rust's `\w` is Unicode). Both engines
 // pick the leftmost-first match.
 
-// go: internal/directives/parser.go:69 directivePattern
+// go: internal/directives/parser.go:69 directivePattern a1802175f7797b3e
 // directivePattern matches @effect-diagnostics(-next-line)? followed by rule:level pairs
 // Examples:
 //   - @effect-diagnostics floatingEffect:off
@@ -82,12 +82,12 @@ pub(crate) static DIRECTIVE_PATTERN: LazyLock<Regex> = LazyLock::new(|| {
     .unwrap()
 });
 
-// go: internal/directives/parser.go:72 ruleSeverityPattern
+// go: internal/directives/parser.go:72 ruleSeverityPattern eaf620c94165a2a1
 // ruleSeverityPattern matches a single rule:severity pair
 pub(crate) static RULE_SEVERITY_PATTERN: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"([0-9A-Za-z_]+|\*):([0-9A-Za-z_]+(?:-[0-9A-Za-z_]+)?)").unwrap());
 
-// go: internal/directives/parser.go:75 CollectEffectDirectives
+// go: internal/directives/parser.go:75 CollectEffectDirectives e7ed1c5becf6e74d
 // CollectEffectDirectives scans the source text and returns all Effect directives found.
 pub fn collect_effect_directives(source_text: &str) -> Vec<Directive> {
     let lines = source_text.split('\n');
@@ -137,7 +137,7 @@ pub fn collect_effect_directives(source_text: &str) -> Vec<Directive> {
     directives
 }
 
-// go: internal/directives/parser.go:126 DirectiveSet
+// go: internal/directives/parser.go:126 DirectiveSet a22ab3a39a65e39f
 // DirectiveSet provides efficient lookup of directives by line and rule.
 #[derive(Clone, Debug, Default)]
 pub struct DirectiveSet {
@@ -153,7 +153,7 @@ pub struct DirectiveSet {
     pub(crate) used_directives: FxHashMap<i64, bool>,
 }
 
-// go: internal/directives/parser.go:140 BuildDirectiveSet
+// go: internal/directives/parser.go:140 BuildDirectiveSet 771bf423abe7eca6
 // BuildDirectiveSet creates a DirectiveSet from a slice of directives for efficient lookup.
 pub fn build_directive_set(directives: &[Directive]) -> DirectiveSet {
     let mut ds = DirectiveSet::default();
@@ -197,7 +197,7 @@ pub fn build_directive_set(directives: &[Directive]) -> DirectiveSet {
 }
 
 impl DirectiveSet {
-    // go: internal/directives/parser.go:187 DirectiveSet.GetEffectiveSeverity
+    // go: internal/directives/parser.go:187 DirectiveSet.GetEffectiveSeverity 2889367aefa2b10d
     // GetEffectiveSeverity returns the effective severity for a rule at a given line.
     // It checks file-level suppressions first, then next-line directives, then section directives.
     // If no directive applies, it returns the provided default severity.
@@ -246,14 +246,14 @@ impl DirectiveSet {
         default_severity
     }
 
-    // go: internal/directives/parser.go:228 DirectiveSet.IsSuppressed
+    // go: internal/directives/parser.go:228 DirectiveSet.IsSuppressed 9db00f2489e4c20d
     // IsSuppressed returns true if the given rule is suppressed (off or skip-file) at the given line.
     pub fn is_suppressed(&self, rule_name: &str, line: i64) -> bool {
         let severity = self.get_effective_severity(rule_name, line, Severity::Error);
         severity == Severity::Off || severity == Severity::SkipFile
     }
 
-    // go: internal/directives/parser.go:235 DirectiveSet.IsSkipFile
+    // go: internal/directives/parser.go:235 DirectiveSet.IsSkipFile b47c87f1c4f2f3cc
     // IsSkipFile returns true if a skip-file directive applies to the given rule.
     // Unlike IsSuppressed, this only considers true file-level skip-file directives.
     pub fn is_skip_file(&self, rule_name: &str) -> bool {
@@ -267,7 +267,7 @@ impl DirectiveSet {
         false
     }
 
-    // go: internal/directives/parser.go:248 DirectiveSet.GetEffectiveSeverityAndMarkUsed
+    // go: internal/directives/parser.go:248 DirectiveSet.GetEffectiveSeverityAndMarkUsed 992209bf7233e93e
     // GetEffectiveSeverityAndMarkUsed returns the effective severity and marks the directive as used
     // if it affected the result. This is used to track unused directives for warnings.
     pub fn get_effective_severity_and_mark_used(
@@ -318,7 +318,7 @@ impl DirectiveSet {
         default_severity
     }
 
-    // go: internal/directives/parser.go:295 DirectiveSet.HasEnablingDirective
+    // go: internal/directives/parser.go:295 DirectiveSet.HasEnablingDirective 080c96b4b59b6e0b
     // HasEnablingDirective returns true if any file-level section directive or next-line directive
     // enables the given rule (i.e., sets it to a non-off, non-skip-file severity).
     // This is used to avoid skipping rules that are off by default but enabled via directives.
@@ -354,7 +354,7 @@ impl DirectiveSet {
         false
     }
 
-    // go: internal/directives/parser.go:330 DirectiveSet.HasAnyDirectiveForRule
+    // go: internal/directives/parser.go:330 DirectiveSet.HasAnyDirectiveForRule 9a8d520428fda437
     // HasAnyDirectiveForRule returns true if any directive in the file references
     // the given rule, either by name or via a wildcard, regardless of the severity
     // it assigns. This includes file-level, section, and next-line directives. It
@@ -393,7 +393,7 @@ impl DirectiveSet {
         false
     }
 
-    // go: internal/directives/parser.go:363 DirectiveSet.GetUnusedNextLineDirectives
+    // go: internal/directives/parser.go:363 DirectiveSet.GetUnusedNextLineDirectives 4c639d87b242da16
     // GetUnusedNextLineDirectives returns next-line directives that did not suppress any diagnostic.
     // This is used to report unusedDirective warnings.
     pub fn get_unused_next_line_directives(&self, all_directives: &[Directive]) -> Vec<Directive> {

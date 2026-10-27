@@ -90,7 +90,7 @@ fn decode_payload(t: &T, encoded: &str) -> String {
     }
 }
 
-// go test: internal/layergraph/mermaidurl_test.go:13 TestEncodeMermaidURL
+// go test: internal/layergraph/mermaidurl_test.go:13 TestEncodeMermaidURL ac059358b57e9c24
 #[test]
 fn test_encode_mermaid_url() {
     ets_go::testing::run(|t| {
@@ -115,7 +115,7 @@ fn test_encode_mermaid_url() {
     });
 }
 
-// go test: internal/layergraph/mermaidurl_test.go:56 TestEncodeMermaidURL_CustomBase
+// go test: internal/layergraph/mermaidurl_test.go:56 TestEncodeMermaidURL_CustomBase 83d148e1f68f5941
 #[test]
 fn test_encode_mermaid_url_custom_base() {
     ets_go::testing::run(|t| {
@@ -139,7 +139,7 @@ fn test_encode_mermaid_url_custom_base() {
     });
 }
 
-// go test: internal/layergraph/mermaidurl_test.go:98 TestEncodeMermaidURL_Deterministic
+// go test: internal/layergraph/mermaidurl_test.go:98 TestEncodeMermaidURL_Deterministic fc22652768947308
 #[test]
 fn test_encode_mermaid_url_deterministic() {
     ets_go::testing::run(|t| {

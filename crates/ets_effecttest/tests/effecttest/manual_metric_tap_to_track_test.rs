@@ -18,7 +18,7 @@ struct Case {
     fixes: i32,
 }
 
-// go test: internal/effecttest/manual_metric_tap_to_track_test.go:17 TestManualMetricTapToTrackFixesCompile
+// go test: internal/effecttest/manual_metric_tap_to_track_test.go:17 TestManualMetricTapToTrackFixesCompile c91646929b055dbe
 fn test_manual_metric_tap_to_track_fixes_compile(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();

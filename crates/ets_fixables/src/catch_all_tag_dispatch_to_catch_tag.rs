@@ -13,7 +13,7 @@ use ets_shim::scanner;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::BRANCHING_ON_0_TAG_INSIDE_EFFECT_1_HAND_ROLLS_TAGGED_ERROR_DISPATCH_USE_EFFECT_CATCH_TAG_OR_EFFECT_CATCH_TAGS_WHICH_RE_FAIL_UNMATCHED_ERRORS_AUTOMATICALLY_EFFECT_CATCH_ALL_TAG_DISPATCH_TO_CATCH_TAG;
 
-// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:15 CatchAllTagDispatchToCatchTagFix
+// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:15 CatchAllTagDispatchToCatchTagFix f506792fa2f3559e
 pub static CATCH_ALL_TAG_DISPATCH_TO_CATCH_TAG_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "catchAllTagDispatchToCatchTag",
     description: "Replace hand-rolled tagged error dispatch with Effect.catchTag or Effect.catchTags",
@@ -22,7 +22,7 @@ pub static CATCH_ALL_TAG_DISPATCH_TO_CATCH_TAG_FIX: LazyLock<Fixable> = LazyLock
     run: run_catch_all_tag_dispatch_to_catch_tag_fix,
 });
 
-// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:21 runCatchAllTagDispatchToCatchTagFix
+// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:21 runCatchAllTagDispatchToCatchTagFix 7cba469b0aa3a0ad
 fn run_catch_all_tag_dispatch_to_catch_tag_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_catch_all_tag_dispatch_to_catch_tag(
@@ -57,7 +57,7 @@ fn run_catch_all_tag_dispatch_to_catch_tag_fix(ctx: &mut Context<'_, '_>) -> Vec
     Vec::new()
 }
 
-// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:39 buildCatchAllTagDispatchReplacement
+// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:39 buildCatchAllTagDispatchReplacement 15a636ebb6e35af5
 //
 // Rust: the tracker and the match's callee cannot be nil, so only Go's empty-branches check remains.
 fn build_catch_all_tag_dispatch_replacement(
@@ -107,7 +107,7 @@ fn build_catch_all_tag_dispatch_replacement(
     )
 }
 
-// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:63 newCatchTagHandler
+// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:63 newCatchTagHandler 2c37a49d830c9b68
 fn new_catch_tag_handler(
     tracker: &Tracker,
     parameter_name: &str,

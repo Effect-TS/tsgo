@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/extends_effect_tag.go:8 EffectTagResult
+// go: internal/typeparser/extends_effect_tag.go:8 EffectTagResult 65a62912fee62d6b
 // EffectTagResult holds the parsed result of a class extending Effect.Tag.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct EffectTagResult {
@@ -13,24 +13,24 @@ pub struct EffectTagResult {
 }
 
 impl EffectTagResult {
-    // go: internal/typeparser/extends_effect_tag.go:14 EffectTagResult.ClassName
+    // go: internal/typeparser/extends_effect_tag.go:14 EffectTagResult.ClassName 9405159382f362aa
     pub fn class_name(&self) -> P<Node> {
         self.class_name
     }
 
-    // go: internal/typeparser/extends_effect_tag.go:16 EffectTagResult.SelfTypeNode
+    // go: internal/typeparser/extends_effect_tag.go:16 EffectTagResult.SelfTypeNode 8e78d9e09e2d7c58
     pub fn self_type_node(&self) -> P<Node> {
         self.self_type_node
     }
 
-    // go: internal/typeparser/extends_effect_tag.go:18 EffectTagResult.KeyStringLiteral
+    // go: internal/typeparser/extends_effect_tag.go:18 EffectTagResult.KeyStringLiteral fda131eaadde6140
     pub fn key_string_literal(&self) -> Option<P<Node>> {
         self.key_string_literal
     }
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/extends_effect_tag.go:30 TypeParser.ExtendsEffectTag
+    // go: internal/typeparser/extends_effect_tag.go:30 TypeParser.ExtendsEffectTag a925df04d348256e
     // ExtendsEffectTag checks if a class declaration extends Effect.Tag("key")<Self, Shape>().
     // It detects the pattern:
     //

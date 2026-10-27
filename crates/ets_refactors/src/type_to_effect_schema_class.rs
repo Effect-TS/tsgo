@@ -6,7 +6,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go: internal/refactors/type_to_effect_schema_class.go:10 TypeToEffectSchemaClass
+// go: internal/refactors/type_to_effect_schema_class.go:10 TypeToEffectSchemaClass 7494e6a522ad8dcc
 pub static TYPE_TO_EFFECT_SCHEMA_CLASS: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "typeToEffectSchemaClass",
     description: "Generate Schema.Class from type",
@@ -14,7 +14,7 @@ pub static TYPE_TO_EFFECT_SCHEMA_CLASS: LazyLock<Refactor> = LazyLock::new(|| Re
     run: run_type_to_effect_schema_class,
 });
 
-// go: internal/refactors/type_to_effect_schema_class.go:17 runTypeToEffectSchemaClass
+// go: internal/refactors/type_to_effect_schema_class.go:17 runTypeToEffectSchemaClass 28a2b4568a346499
 pub(crate) fn run_type_to_effect_schema_class(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let Some(matched_node) = find_interface_or_type_alias(ctx) else {
         return Vec::new();

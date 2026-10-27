@@ -27,7 +27,7 @@ use ets_typeparser::{Effect, EffectContextFlags, TypeParser};
 use crate::document_symbols::after_document_symbols;
 use crate::inlay_hints::after_inlay_hints;
 
-// go: etslshooks/init.go:37 init
+// go: etslshooks/init.go:37 init 35abe87eabf7d922
 pub(crate) fn init() {
     // Register the Effect code fix provider with the language service
     ls::register_code_fix_provider(&EFFECT_FIX_PROVIDER);
@@ -89,7 +89,7 @@ pub(crate) fn init() {
     ));
 }
 
-// go: etslshooks/init.go:87 effectFixProvider
+// go: etslshooks/init.go:87 effectFixProvider 67f57a658eb43547
 // effectFixProvider is the CodeFixProvider that handles all Effect diagnostic codes.
 // It delegates to the fixables registered in internal/fixables.
 //
@@ -103,7 +103,7 @@ pub(crate) static EFFECT_FIX_PROVIDER: LazyLock<ls::CodeFixProvider> =
         get_all_code_actions: None,
     });
 
-// go: etslshooks/init.go:94 getEffectCodeActions
+// go: etslshooks/init.go:94 getEffectCodeActions 85c798f14222b6c6
 // getEffectCodeActions finds applicable fixables and collects their code actions.
 //
 // Rust: Go's `fixCtx.Program != nil` and `ch != nil` always hold here.
@@ -140,13 +140,13 @@ fn get_effect_code_actions(
     Ok(Vec::new())
 }
 
-// go: etslshooks/init.go:128 effectRefactorProvider
+// go: etslshooks/init.go:128 effectRefactorProvider 4b17d2204e6d0e1d
 // effectRefactorProvider is the RefactorProvider that handles all Effect refactoring actions.
 // It delegates to the refactors registered in internal/refactors.
 pub(crate) static EFFECT_REFACTOR_PROVIDER: ls::RefactorProvider =
     ls::RefactorProvider { get_refactor_actions: get_effect_refactor_actions };
 
-// go: etslshooks/init.go:133 getEffectRefactorActions
+// go: etslshooks/init.go:133 getEffectRefactorActions 8464da9de0e95c15
 // getEffectRefactorActions iterates all registered refactors and collects their code actions.
 #[expect(
     clippy::unnecessary_wraps,
@@ -180,7 +180,7 @@ fn get_effect_refactor_actions(
     Ok(actions)
 }
 
-// go: etslshooks/init.go:155 afterCompletion
+// go: etslshooks/init.go:155 afterCompletion e44788037a618b64
 // afterCompletion is called after TypeScript-Go builds the completion list.
 // It allows Effect to enrich completion responses with custom completions.
 //
@@ -220,7 +220,7 @@ fn after_completion(
     items
 }
 
-// go: etslshooks/init.go:181 afterQuickInfo
+// go: etslshooks/init.go:181 afterQuickInfo 16c695e2a1974efd
 // afterQuickInfo is called after building hover quickInfo and documentation.
 // It allows Effect to enrich hover responses with Effect-specific information.
 fn after_quick_info(
@@ -311,7 +311,7 @@ fn after_quick_info(
     (quick_info, documentation, None)
 }
 
-// go: etslshooks/init.go:245 formatLayerHover
+// go: etslshooks/init.go:245 formatLayerHover 6c03626a07563854
 // formatLayerHover builds the Layer hover documentation including providers/requirers
 // summary, Mermaid diagram links, and Layer type parameters.
 //
@@ -420,7 +420,7 @@ fn format_layer_hover(
     b
 }
 
-// go: etslshooks/init.go:332 isDeclarationName
+// go: etslshooks/init.go:332 isDeclarationName 8cdbca5519d5202f
 // isDeclarationName checks whether the given node is the name node of a variable or property declaration.
 // This is used to restrict layer hover enrichment to the declaration name only,
 // not to arbitrary nodes within the initializer expression.
@@ -434,7 +434,7 @@ fn is_declaration_name(node: P<Node>) -> bool {
     }
 }
 
-// go: etslshooks/init.go:346 formatEffectTypeParams
+// go: etslshooks/init.go:346 formatEffectTypeParams faebc023388098de
 // formatEffectTypeParams formats Effect type parameters (A, E, R) and prepends them to documentation.
 fn format_effect_type_params(
     c: &mut Checker,

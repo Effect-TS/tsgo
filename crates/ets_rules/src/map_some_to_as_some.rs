@@ -8,7 +8,7 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::{PipingFlowTransformation, TypeParser};
 
-// go: internal/rules/map_some_to_as_some.go:16 MapSomeToAsSome
+// go: internal/rules/map_some_to_as_some.go:16 MapSomeToAsSome 02b9f6ec5769ec28
 // MapSomeToAsSome suggests Effect.asSome when Effect.map only wraps the
 // success value with Option.some.
 pub static MAP_SOME_TO_AS_SOME: LazyLock<Rule> = LazyLock::new(|| {
@@ -38,7 +38,7 @@ pub static MAP_SOME_TO_AS_SOME: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/map_some_to_as_some.go:41 MapSomeToAsSomeMatch
+// go: internal/rules/map_some_to_as_some.go:41 MapSomeToAsSomeMatch 68c16d0bc1c9e542
 // MapSomeToAsSomeMatch holds the nodes needed by the diagnostic and quick fix.
 #[derive(Clone)]
 pub struct MapSomeToAsSomeMatch {
@@ -47,7 +47,7 @@ pub struct MapSomeToAsSomeMatch {
     pub transformation: PipingFlowTransformation,
 }
 
-// go: internal/rules/map_some_to_as_some.go:49 AnalyzeMapSomeToAsSome
+// go: internal/rules/map_some_to_as_some.go:49 AnalyzeMapSomeToAsSome 378ddb0d3664d8ba
 // AnalyzeMapSomeToAsSome finds data-last and data-first Effect.map calls whose
 // mapper is Option.some or an identity forwarder such as value => Option.some(value).
 //
@@ -84,7 +84,7 @@ pub fn analyze_map_some_to_as_some(
     matches
 }
 
-// go: internal/rules/map_some_to_as_some.go:74 isOptionSomeMapper
+// go: internal/rules/map_some_to_as_some.go:74 isOptionSomeMapper d4bcb2b70ac7dd5a
 pub(crate) fn is_option_some_mapper(tp: &mut TypeParser<'_>, node: P<Node>) -> bool {
     let (mapper, type_arguments, parameter) = tp.unwrap_identity_forwarder(node);
     if type_arguments.is_some_and(|type_arguments| !type_arguments.nodes().is_empty()) {

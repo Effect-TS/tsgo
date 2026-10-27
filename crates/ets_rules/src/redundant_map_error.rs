@@ -17,7 +17,7 @@ static MESSAGE: &Message =
 static RELATED_MESSAGE: &Message =
     &tsdiag::THIS_REPEATED_EFFECT_MAP_ERROR_SITE_PARTICIPATES_IN_THE_HOISTABLE_GENERATOR_WIDE_MAPPING_EFFECT_REDUNDANT_MAP_ERROR;
 
-// go: internal/rules/redundant_map_error.go:14 RedundantMapError
+// go: internal/rules/redundant_map_error.go:14 RedundantMapError 180d254b59cfcc97
 pub static REDUNDANT_MAP_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "redundantMapError",
     group: "style",
@@ -37,7 +37,7 @@ pub static REDUNDANT_MAP_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/redundant_map_error.go:39 RedundantGeneratorMapErrorMatch
+// go: internal/rules/redundant_map_error.go:39 RedundantGeneratorMapErrorMatch ea0f2320e10c9ac1
 //
 // Rust: Go's `*ast.FunctionExpression` is its node.
 #[derive(Clone)]
@@ -51,7 +51,7 @@ pub struct RedundantGeneratorMapErrorMatch {
     pub yield_expressions: Vec<P<Node>>,
 }
 
-// go: internal/rules/redundant_map_error.go:49 redundantMapErrorCandidate
+// go: internal/rules/redundant_map_error.go:49 redundantMapErrorCandidate b319af01d473b03c
 #[derive(Clone)]
 pub(crate) struct RedundantMapErrorCandidate {
     pub(crate) yield_expression: P<Node>,
@@ -60,7 +60,7 @@ pub(crate) struct RedundantMapErrorCandidate {
     pub(crate) mapper_text: String,
 }
 
-// go: internal/rules/redundant_map_error.go:56 AnalyzeRedundantGeneratorMapError
+// go: internal/rules/redundant_map_error.go:56 AnalyzeRedundantGeneratorMapError 4fa3f3b9097080ae
 //
 // Rust: the checker is the parser's (Go's nil checks of the parser and checker have no counterpart). Go ranges
 // over its `candidatesByGenerator` map, so the order of the matches is random there; here the generators come in
@@ -117,7 +117,7 @@ pub fn analyze_redundant_generator_map_error(
     matches
 }
 
-// go: internal/rules/redundant_map_error.go:89 analyzeRedundantMapErrorFlowCandidate
+// go: internal/rules/redundant_map_error.go:89 analyzeRedundantMapErrorFlowCandidate d6b92f55797652fa
 //
 // Rust: Go's `(candidate, genFn, genCallNode, ok)` is an `Option`.
 pub(crate) fn analyze_redundant_map_error_flow_candidate(
@@ -172,7 +172,7 @@ pub(crate) fn analyze_redundant_map_error_flow_candidate(
     ))
 }
 
-// go: internal/rules/redundant_map_error.go:134 analyzeRedundantGeneratorMapErrorCandidate
+// go: internal/rules/redundant_map_error.go:134 analyzeRedundantGeneratorMapErrorCandidate 18948cf36290fb49
 //
 // Rust: `(match, ok)` is an `Option`; the checker is the parser's.
 pub(crate) fn analyze_redundant_generator_map_error_candidate(
@@ -259,7 +259,7 @@ pub(crate) fn analyze_redundant_generator_map_error_candidate(
     })
 }
 
-// go: internal/rules/redundant_map_error.go:203 redundantMapErrorRelatedInformation
+// go: internal/rules/redundant_map_error.go:203 redundantMapErrorRelatedInformation 089297cbf51675b8
 pub(crate) fn redundant_map_error_related_information(
     ctx: &Context<'_, '_>,
     m: &RedundantGeneratorMapErrorMatch,
@@ -281,14 +281,14 @@ pub(crate) fn redundant_map_error_related_information(
     related
 }
 
-// go: internal/rules/redundant_map_error.go:223 enclosingYieldExpression
+// go: internal/rules/redundant_map_error.go:223 enclosingYieldExpression 8436359e02aca6d7
 //
 // Rust: Go's `*ast.YieldExpression` is its node.
 pub(crate) fn enclosing_yield_expression(node: Option<P<Node>>) -> Option<P<Node>> {
     ast::find_ancestor(node, |current| current.kind() == Kind::YieldExpression)
 }
 
-// go: internal/rules/redundant_map_error.go:233 enclosingGeneratorCall
+// go: internal/rules/redundant_map_error.go:233 enclosingGeneratorCall fc87131087e71419
 pub(crate) fn enclosing_generator_call(node: Option<P<Node>>) -> Option<P<Node>> {
     let mut current = node;
     while let Some(c) = current {
@@ -301,7 +301,7 @@ pub(crate) fn enclosing_generator_call(node: Option<P<Node>>) -> Option<P<Node>>
     None
 }
 
-// go: internal/rules/redundant_map_error.go:243 mapperCanBeHoisted
+// go: internal/rules/redundant_map_error.go:243 mapperCanBeHoisted 042ef1d3a1b86763
 //
 // Rust: the checker is the parser's.
 pub(crate) fn mapper_can_be_hoisted(
@@ -361,7 +361,7 @@ pub(crate) fn mapper_can_be_hoisted(
     can_hoist
 }
 
-// go: internal/rules/redundant_map_error.go:281 allSymbolDeclarationsInsideNode
+// go: internal/rules/redundant_map_error.go:281 allSymbolDeclarationsInsideNode e9fb8e9ac9b9b6ec
 pub(crate) fn all_symbol_declarations_inside_node(
     symbol: Option<P<Symbol>>,
     node: Option<P<Node>>,
@@ -380,7 +380,7 @@ pub(crate) fn all_symbol_declarations_inside_node(
     true
 }
 
-// go: internal/rules/redundant_map_error.go:293 allSymbolDeclarationsOutsideNode
+// go: internal/rules/redundant_map_error.go:293 allSymbolDeclarationsOutsideNode f0976b95279f4a81
 pub(crate) fn all_symbol_declarations_outside_node(
     symbol: Option<P<Symbol>>,
     node: Option<P<Node>>,
@@ -396,7 +396,7 @@ pub(crate) fn all_symbol_declarations_outside_node(
     true
 }
 
-// go: internal/rules/redundant_map_error.go:305 hoistSensitiveReferenceSymbol
+// go: internal/rules/redundant_map_error.go:305 hoistSensitiveReferenceSymbol 7c792d5a90d779d1
 //
 // Rust: the checker is the parser's.
 pub(crate) fn hoist_sensitive_reference_symbol(
@@ -413,7 +413,7 @@ pub(crate) fn hoist_sensitive_reference_symbol(
     tp.get_symbol_at_location(node)
 }
 
-// go: internal/rules/redundant_map_error.go:317 generatorFunctionKeywordRange
+// go: internal/rules/redundant_map_error.go:317 generatorFunctionKeywordRange f43246ec7ea19b70
 //
 // Rust: Go's `*ast.FunctionExpression` is its node (never nil here, as at Go's call sites).
 pub(crate) fn generator_function_keyword_range(
@@ -431,7 +431,7 @@ pub(crate) fn generator_function_keyword_range(
     TextRange::from_text_pos(ets_shim::core::TextPos::source(start), end)
 }
 
-// go: internal/rules/redundant_map_error.go:329 isHoistSensitiveValueReference
+// go: internal/rules/redundant_map_error.go:329 isHoistSensitiveValueReference 3dd839ac1265c916
 pub(crate) fn is_hoist_sensitive_value_reference(node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;
@@ -468,7 +468,7 @@ pub(crate) fn is_hoist_sensitive_value_reference(node: Option<P<Node>>) -> bool 
     true
 }
 
-// go: internal/rules/redundant_map_error.go:356 unwrapTransparentExpression
+// go: internal/rules/redundant_map_error.go:356 unwrapTransparentExpression cb8f071204eca4e3
 pub(crate) fn unwrap_transparent_expression(node: Option<P<Node>>) -> Option<P<Node>> {
     let mut node = node;
     while let Some(n) = node {
@@ -484,7 +484,7 @@ pub(crate) fn unwrap_transparent_expression(node: Option<P<Node>>) -> Option<P<N
     None
 }
 
-// go: internal/rules/redundant_map_error.go:368 nodeSourceText
+// go: internal/rules/redundant_map_error.go:368 nodeSourceText 5b512b47ccd971b4
 pub(crate) fn node_source_text(sf: Option<P<SourceFile>>, node: Option<P<Node>>) -> String {
     let (Some(sf), Some(node)) = (sf, node) else {
         return String::new();

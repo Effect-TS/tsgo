@@ -7,7 +7,7 @@ use ets_shim::core::context::Context;
 
 use crate::helpers_test::*;
 
-// go test: internal/typeparser/get_symbol_at_location_test.go:10 findDeleteExpression
+// go test: internal/typeparser/get_symbol_at_location_test.go:10 findDeleteExpression de70185f18d23f11
 fn find_delete_expression(t: &T, sf: P<SourceFile>) -> P<Node> {
     t.helper();
     let mut found = None;
@@ -31,7 +31,7 @@ fn diagnostic_codes(compiled: &mut Compiled, sf: P<SourceFile>) -> Vec<i32> {
     compiled.checker.get_diagnostics_exported(&ctx, sf).iter().map(|d| d.code()).collect()
 }
 
-// go test: internal/typeparser/get_symbol_at_location_test.go:28 TestGetSymbolAtLocationDeleteIndexDiagnostics
+// go test: internal/typeparser/get_symbol_at_location_test.go:28 TestGetSymbolAtLocationDeleteIndexDiagnostics 36376d5a76f9567e
 #[test]
 fn test_get_symbol_at_location_delete_index_diagnostics() {
     run(|t| {
@@ -92,7 +92,7 @@ fn test_get_symbol_at_location_delete_index_diagnostics() {
     });
 }
 
-// go test: internal/typeparser/get_symbol_at_location_test.go:77 TestGetSymbolAtLocationDeletePreservesOtherSymbols
+// go test: internal/typeparser/get_symbol_at_location_test.go:77 TestGetSymbolAtLocationDeletePreservesOtherSymbols f3fea3234ab0fc84
 #[test]
 fn test_get_symbol_at_location_delete_preserves_other_symbols() {
     run(|t| {
@@ -260,7 +260,7 @@ fn test_get_symbol_at_location_delete_preserves_other_symbols() {
     });
 }
 
-// go test: internal/typeparser/get_symbol_at_location_test.go:131 TestGetSymbolAtLocationDeleteRequiredPropertyDiagnostics
+// go test: internal/typeparser/get_symbol_at_location_test.go:131 TestGetSymbolAtLocationDeleteRequiredPropertyDiagnostics 94ff4a56e9353f35
 #[test]
 fn test_get_symbol_at_location_delete_required_property_diagnostics() {
     run(|t| {

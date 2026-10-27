@@ -12,7 +12,7 @@ use ets_typeparser::TypeParser;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THIS_CLASS_EXTENDS_THE_NATIVE_ERROR_TYPE_DIRECTLY_UNTAGGED_NATIVE_ERRORS_LOSE_DISTINCTION_IN_THE_EFFECT_FAILURE_CHANNEL_EFFECT_EXTENDS_NATIVE_ERROR;
 
-// go: internal/rules/extends_native_error.go:14 ExtendsNativeError
+// go: internal/rules/extends_native_error.go:14 ExtendsNativeError c09e2b0c4933b5e8
 pub static EXTENDS_NATIVE_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "extendsNativeError",
     group: "effectNative",
@@ -31,14 +31,14 @@ pub static EXTENDS_NATIVE_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/extends_native_error.go:31 ExtendsNativeErrorMatch
+// go: internal/rules/extends_native_error.go:31 ExtendsNativeErrorMatch 5f6491e8f01f0baf
 #[derive(Clone)]
 pub struct ExtendsNativeErrorMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
 }
 
-// go: internal/rules/extends_native_error.go:36 AnalyzeExtendsNativeError
+// go: internal/rules/extends_native_error.go:36 AnalyzeExtendsNativeError 45c812bdc67598e4
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub fn analyze_extends_native_error(
@@ -75,7 +75,7 @@ pub fn analyze_extends_native_error(
     matches
 }
 
-// go: internal/rules/extends_native_error.go:67 checkExtendsNativeError
+// go: internal/rules/extends_native_error.go:67 checkExtendsNativeError 4f04f9e96066a0ac
 pub(crate) fn check_extends_native_error(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,

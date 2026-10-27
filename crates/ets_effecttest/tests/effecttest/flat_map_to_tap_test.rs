@@ -18,7 +18,7 @@ struct Case {
     fixes: i32,
 }
 
-// go test: internal/effecttest/flat_map_to_tap_test.go:17 TestFlatMapToTapFixesCompile
+// go test: internal/effecttest/flat_map_to_tap_test.go:17 TestFlatMapToTapFixesCompile 38bad5ca841d32d9
 fn test_flat_map_to_tap_fixes_compile(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();

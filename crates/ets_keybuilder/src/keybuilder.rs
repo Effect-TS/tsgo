@@ -6,7 +6,7 @@ use ets_shim::core::stringutil::{equal_fold, go_strings_to_lower};
 use ets_shim::core::tspath;
 use ets_typeparser::TypeParser;
 
-// go: internal/keybuilder/keybuilder.go:17 Cyrb53
+// go: internal/keybuilder/keybuilder.go:17 Cyrb53 77d621986a194075
 // Cyrb53 computes a fast non-cryptographic hash of the input string,
 // producing a 16-character zero-padded hex string from two uint32 halves.
 // This is a Go port of the cyrb53 function from the reference TS implementation.
@@ -28,14 +28,14 @@ pub fn cyrb53(str: &str) -> String {
     format!("{h2:08x}{h1:08x}")
 }
 
-// go: internal/keybuilder/keybuilder.go:37 imul
+// go: internal/keybuilder/keybuilder.go:37 imul 2f1d70b95f5a2164
 // imul emulates JavaScript's Math.imul: 32-bit integer multiplication
 // that discards overflow (keeps only the lower 32 bits).
 pub(crate) fn imul(a: u32, b: u32) -> u32 {
     (a as u64 * b as u64) as u32
 }
 
-// go: internal/keybuilder/keybuilder.go:45 CreateString
+// go: internal/keybuilder/keybuilder.go:45 CreateString c2669b3f6cb78e48
 // CreateString computes the expected key string for a class declaration.
 // It takes the source file name, package name, package directory, class name,
 // and target category, and returns the expected key string using the first
@@ -137,7 +137,7 @@ pub fn create_string(
     String::new()
 }
 
-// go: internal/keybuilder/keybuilder.go:133 CreateStringForSourceFile
+// go: internal/keybuilder/keybuilder.go:133 CreateStringForSourceFile cda8a331cdc590f8
 pub fn create_string_for_source_file(
     program: &'static dyn Program,
     tp: &mut TypeParser<'_>,
@@ -159,7 +159,7 @@ pub fn create_string_for_source_file(
     create_string(sf.file_name(), &package_name, &root_directory, class_name, target, key_patterns)
 }
 
-// go: internal/keybuilder/keybuilder.go:147 keyRootDirectory
+// go: internal/keybuilder/keybuilder.go:147 keyRootDirectory 59c0a29222196f54
 pub(crate) fn key_root_directory(program: &'static dyn Program, sf: P<SourceFile>) -> String {
     let package_directory = program.get_source_file_meta_data(sf.path()).package_json_directory;
     if !package_directory.is_empty() {

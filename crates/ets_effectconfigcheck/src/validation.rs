@@ -9,12 +9,12 @@ use ets_shim::core::CompilerOptions;
 use ets_shim::diagnostics;
 use rustc_hash::FxHashMap;
 
-// go: internal/effectconfigcheck/validation.go:17 Register
+// go: internal/effectconfigcheck/validation.go:17 Register d3af5212dd47568b
 pub fn register() {
     ets_shim::tsoptions::register_validate_compiler_options_callback(Arc::new(validate));
 }
 
-// go: internal/effectconfigcheck/validation.go:21 validate
+// go: internal/effectconfigcheck/validation.go:21 validate 430887de3f635c6d
 pub(crate) fn validate(
     options: Option<&CompilerOptions>,
     source_file: Option<P<SourceFile>>,
@@ -92,7 +92,7 @@ pub(crate) fn validate(
     result
 }
 
-// go: internal/effectconfigcheck/validation.go:81 effectPluginSyntax
+// go: internal/effectconfigcheck/validation.go:81 effectPluginSyntax 229c909650d06bb7
 pub(crate) fn effect_plugin_syntax(source_file: Option<P<SourceFile>>) -> Option<P<Node>> {
     let compiler_options =
         ets_shim::tsoptions::for_each_ts_config_prop_array(source_file, "compilerOptions", Some)?;
@@ -108,7 +108,7 @@ pub(crate) fn effect_plugin_syntax(source_file: Option<P<SourceFile>>) -> Option
     None
 }
 
-// go: internal/effectconfigcheck/validation.go:97 findProperty
+// go: internal/effectconfigcheck/validation.go:97 findProperty bcdac960da91b16c
 // Rust: the property assignment node (Go's `*ast.PropertyAssignment`).
 pub(crate) fn find_property(node: Option<P<Node>>, name: &str) -> Option<P<Node>> {
     let node = node?;
@@ -127,7 +127,7 @@ pub(crate) fn find_property(node: Option<P<Node>>, name: &str) -> Option<P<Node>
     result
 }
 
-// go: internal/effectconfigcheck/validation.go:111 propertyValue
+// go: internal/effectconfigcheck/validation.go:111 propertyValue 8ee149fc306c6596
 pub(crate) fn property_value(node: Option<P<Node>>, name: &str) -> Option<P<Node>> {
     if let Some(property) = find_property(node, name) {
         return property.initializer();
@@ -135,7 +135,7 @@ pub(crate) fn property_value(node: Option<P<Node>>, name: &str) -> Option<P<Node
     None
 }
 
-// go: internal/effectconfigcheck/validation.go:118 arrayElements
+// go: internal/effectconfigcheck/validation.go:118 arrayElements 1b02ec45521e85d3
 pub(crate) fn array_elements(node: Option<P<Node>>) -> &'static [P<Node>] {
     if let Some(node) = node
         && ast::is_array_literal_expression(node)

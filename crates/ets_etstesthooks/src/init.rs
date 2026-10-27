@@ -1,12 +1,12 @@
 use ets_bundledeffect::EffectVersion;
 use ets_fourslash::{TestFS, TestFSEntry};
 
-// go test: etstesthooks/init.go:10 init
+// go test: etstesthooks/init.go:10 init d8940441b111151e
 pub(crate) fn init() {
     ets_fourslash::register_prepare_test_fs_callback(prepare_test_fs);
 }
 
-// go test: etstesthooks/init.go:16 prepareTestFS
+// go test: etstesthooks/init.go:16 prepareTestFS d9411af5e0035b2b
 // prepareTestFS detects Effect imports or explicit version markers in test files
 // and mounts real Effect packages into the fourslash VFS.
 pub(crate) fn prepare_test_fs(testfs: &mut TestFS) {

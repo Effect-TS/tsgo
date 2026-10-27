@@ -10,7 +10,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go: internal/refactors/function_to_arrow.go:12 FunctionToArrow
+// go: internal/refactors/function_to_arrow.go:12 FunctionToArrow cb159361501cf8bc
 pub static FUNCTION_TO_ARROW: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "functionToArrow",
     description: "Convert to arrow",
@@ -18,7 +18,7 @@ pub static FUNCTION_TO_ARROW: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     run: run_function_to_arrow,
 });
 
-// go: internal/refactors/function_to_arrow.go:19 runFunctionToArrow
+// go: internal/refactors/function_to_arrow.go:19 runFunctionToArrow 9e2ed25ebb9adc1b
 // Rust: tsrs's `get_token_at_position` never returns nil, so Go's nil check drops.
 pub(crate) fn run_function_to_arrow(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let token = astnav::get_token_at_position(ctx.source_file, span_pos(ctx));
@@ -84,7 +84,7 @@ pub(crate) fn run_function_to_arrow(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
     vec![action]
 }
 
-// go: internal/refactors/function_to_arrow.go:89 buildFunctionToArrowReplacement
+// go: internal/refactors/function_to_arrow.go:89 buildFunctionToArrowReplacement 959a93ed58047698
 // buildFunctionToArrowReplacement builds the replacement node for converting a
 // FunctionDeclaration or MethodDeclaration to an arrow function.
 pub(crate) fn build_function_to_arrow_replacement(
@@ -158,7 +158,7 @@ pub(crate) fn build_function_to_arrow_replacement(
     }
 }
 
-// go: internal/refactors/function_to_arrow.go:161 wrapArrowInVariableStatement
+// go: internal/refactors/function_to_arrow.go:161 wrapArrowInVariableStatement e3605cddaa716318
 // wrapArrowInVariableStatement wraps an arrow function in a const variable statement,
 // preserving export/default modifiers on the variable statement.
 pub(crate) fn wrap_arrow_in_variable_statement(
@@ -194,7 +194,7 @@ pub(crate) fn wrap_arrow_in_variable_statement(
     tracker.new_variable_statement(mods, var_decl_list)
 }
 
-// go: internal/refactors/function_to_arrow.go:194 wrapArrowInPropertyDeclaration
+// go: internal/refactors/function_to_arrow.go:194 wrapArrowInPropertyDeclaration da8452447a039231
 // wrapArrowInPropertyDeclaration wraps an arrow function in a property declaration,
 // preserving modifiers from the method.
 pub(crate) fn wrap_arrow_in_property_declaration(
@@ -224,7 +224,7 @@ pub(crate) fn wrap_arrow_in_property_declaration(
     )
 }
 
-// go: internal/refactors/function_to_arrow.go:218 getNodeModifiers
+// go: internal/refactors/function_to_arrow.go:218 getNodeModifiers 29d37459d4f86ae6
 // getNodeModifiers returns the modifier list from a function-like node.
 pub(crate) fn get_node_modifiers(node: P<Node>) -> Option<P<ModifierList>> {
     match node.kind() {

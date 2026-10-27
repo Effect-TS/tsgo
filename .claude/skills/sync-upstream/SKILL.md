@@ -70,12 +70,13 @@ happen for a range (a large upstream TypeScript bump, an urgent fix merged witho
 ### 1. See what changes
 
 ```sh
-pnpm exec repoctl tsrs port-check                   # hash mismatches, unknown/misplaced markers
+pnpm exec repoctl tsrs port-check                   # marker hash mismatches, unknown markers
 pnpm exec repoctl tsrs port-diff <oldRef> <newRef>  # removed / moved / changed / added declarations, with port status
 git diff --stat <oldRef> <newRef> -- _patches/typescript _packages/tsgo/upstream.json shim _tools/gen_shims
 ```
 
-`<oldRef>` is the last commit where `repoctl tsrs port-check` passed (CI history, or `git log -- porting/ported.tsv`).
+`<oldRef>` is the last commit where `repoctl tsrs port-check` passed (CI history of the Validate tsrs workflow, or
+`git log -G '// go( test)?: ' -- crates` for the last commit that acked markers).
 Only rows whose status is `ported` need Rust work; `skipped` rows need their reason re-read; `require_new` is on, so
 added rows must be ported (or skipped with a reason) now.
 

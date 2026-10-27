@@ -14,7 +14,7 @@ use ets_shim::core::{
 use ets_shim::vfs::{FS, bundled, vfstest};
 use rustc_hash::FxHashMap;
 
-// go test: etscheckerhooks/external_library_test.go:20 TestEffectDiagnosticsSkipExternalLibrarySourceFiles
+// go test: etscheckerhooks/external_library_test.go:20 TestEffectDiagnosticsSkipExternalLibrarySourceFiles 8a9c52f8a845e081
 #[test]
 fn test_effect_diagnostics_skip_external_library_source_files() {
     ets_go::testing::on_checker_stack(|| {
@@ -117,7 +117,7 @@ export const value = ExternalProblem
     });
 }
 
-// go test: etscheckerhooks/external_library_test.go:91 isEffectDiagnostic
+// go test: etscheckerhooks/external_library_test.go:91 isEffectDiagnostic a3cd7957daadebb7
 fn is_effect_diagnostic(diag: P<Diagnostic>) -> bool {
     let code = diag.code();
     (377_000..378_000).contains(&code)

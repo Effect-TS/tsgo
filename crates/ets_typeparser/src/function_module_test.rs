@@ -6,7 +6,7 @@ use crate::helpers_test::*;
 use crate::returning_dispatch_test::find_returning_dispatch_test_function;
 use crate::*;
 
-// go test: internal/typeparser/function_module_test.go:9 functionReferenceCase
+// go test: internal/typeparser/function_module_test.go:9 functionReferenceCase f356ec00a209292a
 struct FunctionReferenceCase {
     name: &'static str,
     member: &'static str,
@@ -16,7 +16,7 @@ struct FunctionReferenceCase {
     via_variable: bool,
 }
 
-// go test: internal/typeparser/function_module_test.go:18 TestIsNodeReferenceToEffectFunctionModuleApi
+// go test: internal/typeparser/function_module_test.go:18 TestIsNodeReferenceToEffectFunctionModuleApi 11bf8947742b922a
 #[test]
 fn test_is_node_reference_to_effect_function_module_api() {
     run(|t| {

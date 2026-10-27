@@ -4,7 +4,7 @@ use ets_bundledeffect::EffectVersion;
 
 use crate::*;
 
-// go test: internal/rules/flat_map_identity_to_flatten_test.go:11 TestFlatMapIdentityToFlattenCallbackShapes
+// go test: internal/rules/flat_map_identity_to_flatten_test.go:11 TestFlatMapIdentityToFlattenCallbackShapes 728349052ed74e00
 //
 // Rust: Go's `%+v` of the diagnostics is spelled out as `[{Start:.. End:.. Text:..} ...]`.
 #[test]

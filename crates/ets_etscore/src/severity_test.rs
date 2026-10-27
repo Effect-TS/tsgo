@@ -2,7 +2,7 @@ use ets_go::sprintf;
 
 use crate::*;
 
-// go test: etscore/severity_test.go:5 TestSeverityAtLeastAsVisibleAs
+// go test: etscore/severity_test.go:5 TestSeverityAtLeastAsVisibleAs 2bc2465e86537c77
 #[test]
 fn test_severity_at_least_as_visible_as() {
     ets_go::testing::run(|t| {

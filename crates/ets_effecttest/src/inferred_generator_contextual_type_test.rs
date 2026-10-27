@@ -3,12 +3,12 @@ use ets_go::testing::on_checker_stack;
 
 use crate::*;
 
-// go test: internal/effecttest/inferred_generator_contextual_type_test.go:11 inferredGeneratorContextualTypeSource
+// go test: internal/effecttest/inferred_generator_contextual_type_test.go:11 inferredGeneratorContextualTypeSource 5a41235da40b6189
 // Rust: Go's `//go:embed testdata/inferredGeneratorContextualType.ts`, read in place.
 const INFERRED_GENERATOR_CONTEXTUAL_TYPE_SOURCE: &str =
     include_str!("../../../internal/effecttest/testdata/inferredGeneratorContextualType.ts");
 
-// go test: internal/effecttest/inferred_generator_contextual_type_test.go:13 TestIssue833InferredGeneratorNativeDiagnostics
+// go test: internal/effecttest/inferred_generator_contextual_type_test.go:13 TestIssue833InferredGeneratorNativeDiagnostics dca7351900746cf6
 #[test]
 fn test_issue833_inferred_generator_native_diagnostics() {
     on_checker_stack(|| {

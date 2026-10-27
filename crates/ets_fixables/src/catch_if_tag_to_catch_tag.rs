@@ -10,7 +10,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_CATCH_TAG_EXPRESSES_TAGGED_ERROR_RECOVERY_MORE_DIRECTLY_THAN_EFFECT_CATCH_IF_WITH_A_TAG_EQUALITY_PREDICATE_EFFECT_CATCH_IF_TAG_TO_CATCH_TAG;
 
-// go: internal/fixables/catch_if_tag_to_catch_tag.go:13 CatchIfTagToCatchTagFix
+// go: internal/fixables/catch_if_tag_to_catch_tag.go:13 CatchIfTagToCatchTagFix 2aeeddb54da12dd2
 pub static CATCH_IF_TAG_TO_CATCH_TAG_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "catchIfTagToCatchTag",
     description: "Replace Effect.catchIf with Effect.catchTag",
@@ -19,7 +19,7 @@ pub static CATCH_IF_TAG_TO_CATCH_TAG_FIX: LazyLock<Fixable> = LazyLock::new(|| F
     run: run_catch_if_tag_to_catch_tag_fix,
 });
 
-// go: internal/fixables/catch_if_tag_to_catch_tag.go:19 runCatchIfTagToCatchTagFix
+// go: internal/fixables/catch_if_tag_to_catch_tag.go:19 runCatchIfTagToCatchTagFix 3ed0efb13d6148aa
 fn run_catch_if_tag_to_catch_tag_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_catch_if_tag_to_catch_tag(&mut ctx.type_parser, Some(source_file)) {

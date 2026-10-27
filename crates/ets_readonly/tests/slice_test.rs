@@ -13,7 +13,7 @@ fn values(cells: &[Cell<i64>]) -> Vec<i64> {
     cells.iter().map(Cell::get).collect()
 }
 
-// go test: internal/readonly/slice_test.go:10 TestSliceOwnershipAndIteration
+// go test: internal/readonly/slice_test.go:10 TestSliceOwnershipAndIteration 022cdb5a3188a829
 #[test]
 fn test_slice_ownership_and_iteration() {
     ets_go::testing::run(|t| {
@@ -50,7 +50,7 @@ fn test_slice_ownership_and_iteration() {
     });
 }
 
-// go test: internal/readonly/slice_test.go:40 TestSliceNilAndBounds
+// go test: internal/readonly/slice_test.go:40 TestSliceNilAndBounds b44599d951b61126
 #[test]
 fn test_slice_nil_and_bounds() {
     ets_go::testing::run(|t| {

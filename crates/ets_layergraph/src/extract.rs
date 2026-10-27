@@ -7,7 +7,7 @@ use rustc_hash::FxHashMap;
 
 use crate::*;
 
-// go: internal/layergraph/extract.go:14 workItem
+// go: internal/layergraph/extract.go:14 workItem 6e8123f858949363
 // workItem represents a node to visit in the DFS work queue.
 pub(crate) struct WorkItem {
     node: P<Node>,
@@ -38,7 +38,7 @@ fn add_node(
     idx
 }
 
-// go: internal/layergraph/extract.go:23 ExtractLayerGraph
+// go: internal/layergraph/extract.go:23 ExtractLayerGraph 83cb8f248f783eac
 // ExtractLayerGraph builds a directed graph of Layer composition from the given AST nodes.
 // It performs a DFS with a two-pass approach using an explicit work stack:
 //   - First pass: push children for processing
@@ -303,7 +303,7 @@ pub fn extract_layer_graph(
     g
 }
 
-// go: internal/layergraph/extract.go:232 extractNodeInfo
+// go: internal/layergraph/extract.go:232 extractNodeInfo 8f49d9d245faa408
 // extractNodeInfo computes the LayerGraphNodeInfo for a given AST node.
 pub(crate) fn extract_node_info(
     tp: &mut TypeParser<'_>,
@@ -382,7 +382,7 @@ pub(crate) fn extract_node_info(
     info
 }
 
-// go: internal/layergraph/extract.go:303 getDisplayNode
+// go: internal/layergraph/extract.go:303 getDisplayNode 55ef1704966205ad
 // getDisplayNode returns the node used for display purposes.
 // If the node's parent is a variable declaration and the node is the initializer,
 // use the variable's name node instead.
@@ -408,7 +408,7 @@ pub(crate) fn get_display_node(node: P<Node>) -> P<Node> {
     node
 }
 
-// go: internal/layergraph/extract.go:321 getAdjustedNode
+// go: internal/layergraph/extract.go:321 getAdjustedNode 131229b407ac2e19
 // getAdjustedNode extracts the initializer expression from a declaration node
 // to follow during symbol resolution.
 pub(crate) fn get_adjusted_node(node: P<Node>) -> Option<P<Node>> {
@@ -424,7 +424,7 @@ pub(crate) fn get_adjusted_node(node: P<Node>) -> Option<P<Node>> {
     }
 }
 
-// go: internal/layergraph/extract.go:337 isSimpleIdentifier
+// go: internal/layergraph/extract.go:337 isSimpleIdentifier 41d0c83658dee53b
 // isSimpleIdentifier checks if a node is a simple identifier or a chain of property accesses
 // with simple identifiers (e.g., `a`, `a.b`, `a.b.c`).
 pub(crate) fn is_simple_identifier(node: P<Node>) -> bool {
@@ -438,7 +438,7 @@ pub(crate) fn is_simple_identifier(node: P<Node>) -> bool {
     false
 }
 
-// go: internal/layergraph/extract.go:350 isLayerModuleCall
+// go: internal/layergraph/extract.go:350 isLayerModuleCall ab6e58d254efeb18
 // isLayerModuleCall checks if a call expression's callee is a Layer module API call
 // (e.g., Layer.provide, Layer.merge, etc.).
 //
@@ -455,7 +455,7 @@ pub(crate) fn is_layer_module_call(call_expr: P<Node>, layer_module_name: &str) 
     ets_shim::scanner::get_text_of_node(prop_access.expression()) == layer_module_name
 }
 
-// go: internal/layergraph/extract.go:364 findLayerModuleName
+// go: internal/layergraph/extract.go:364 findLayerModuleName 5759c5ea8fe4ebdc
 // findLayerModuleName resolves the imported identifier name for the "Layer" export
 // from the "effect" package. Falls back to "Layer" if not found.
 pub(crate) fn find_layer_module_name(sf: Option<P<SourceFile>>) -> String {
@@ -507,7 +507,7 @@ pub(crate) fn find_layer_module_name(sf: Option<P<SourceFile>>) -> String {
     "Layer".to_string()
 }
 
-// go: internal/layergraph/extract.go:416 collectChildIndices
+// go: internal/layergraph/extract.go:416 collectChildIndices 5468c5cbeec0d53c
 // collectChildIndices gathers graph node indices for the given AST nodes,
 // filtering out nodes that aren't in the graph.
 pub(crate) fn collect_child_indices(
@@ -526,7 +526,7 @@ pub(crate) fn collect_child_indices(
     indices
 }
 
-// go: internal/layergraph/extract.go:431 removePartialChildren
+// go: internal/layergraph/extract.go:431 removePartialChildren d68e219f7cbfb9bf
 // removePartialChildren removes graph nodes for the given AST nodes.
 pub(crate) fn remove_partial_children(
     nodes: &[P<Node>],

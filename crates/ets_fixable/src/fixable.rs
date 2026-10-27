@@ -6,7 +6,7 @@ use ets_shim::ls::CodeAction;
 
 use crate::*;
 
-// go: internal/fixable/fixable.go:14 Fixable
+// go: internal/fixable/fixable.go:14 Fixable 7789469028be9f87
 // Fixable defines a code fix provider for a set of diagnostic codes.
 // This is analogous to how Rule defines a diagnostic provider.
 //
@@ -36,7 +36,7 @@ pub struct Fixable {
 }
 
 impl Fixable {
-    // go: internal/fixable/fixable.go:36 Fixable.HandlesCode
+    // go: internal/fixable/fixable.go:36 Fixable.HandlesCode 2acde446f2ea044d
     // HandlesCode returns true if this fixable handles the given error code.
     pub fn handles_code(&self, code: i32) -> bool {
         self.error_codes.contains(&code)

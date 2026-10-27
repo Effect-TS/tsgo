@@ -7,26 +7,26 @@ use rustc_hash::FxHashMap;
 
 use crate::*;
 
-// go: internal/typeparser/native_array.go:8 nativeArrayNamespace
-// go: internal/typeparser/native_array.go:10 nativeArrayInstance
+// go: internal/typeparser/native_array.go:8 nativeArrayNamespace 4832b94011b1a3f9
+// go: internal/typeparser/native_array.go:10 nativeArrayInstance 10038c162f683677
 // Rust: a newtype over Go's `uint8` (its zero value means "no member"), with the Go constants as associated consts.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, Default)]
 pub(crate) struct NativeArrayNamespace(pub(crate) u8);
 
-// go: internal/typeparser/native_array.go:10 nativeArrayInstance
+// go: internal/typeparser/native_array.go:10 nativeArrayInstance 10038c162f683677
 impl NativeArrayNamespace {
     pub(crate) const Instance: NativeArrayNamespace = NativeArrayNamespace(1);
     pub(crate) const Constructor: NativeArrayNamespace = NativeArrayNamespace(2);
 }
 
-// go: internal/typeparser/native_array.go:15 nativeArrayMember
+// go: internal/typeparser/native_array.go:15 nativeArrayMember b02f7bc1b19e3243
 #[derive(Clone, PartialEq, Eq, Hash, Debug, Default)]
 pub(crate) struct NativeArrayMember {
     namespace: NativeArrayNamespace,
     name: String,
 }
 
-// go: internal/typeparser/native_array.go:20 nativeArrayRegistry
+// go: internal/typeparser/native_array.go:20 nativeArrayRegistry 078fc8d9c91fb16a
 #[derive(Default)]
 pub(crate) struct NativeArrayRegistry {
     instance: FxHashMap<String, Vec<P<Symbol>>>,
@@ -34,14 +34,14 @@ pub(crate) struct NativeArrayRegistry {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/native_array.go:27 TypeParser.IsArrayType
+    // go: internal/typeparser/native_array.go:27 TypeParser.IsArrayType 0346be6181525fcf
     // IsArrayType recognizes mutable and readonly arrays, but not tuples.
     // It does not normalize unions or type parameter constraints.
     pub fn is_array_type(&self, t: impl Into<Option<P<Type>>>) -> bool {
         t.into().is_some_and(|t| self.checker.is_array_type(t))
     }
 
-    // go: internal/typeparser/native_array.go:33 TypeParser.IsNativeArrayMethodReference
+    // go: internal/typeparser/native_array.go:33 TypeParser.IsNativeArrayMethodReference 15d6ab49f8e5a5b3
     // IsNativeArrayMethodReference compares the reference's roots with the named
     // Array or ReadonlyArray member, even when a mapped type renames the access.
     pub fn is_native_array_method_reference(
@@ -58,7 +58,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/native_array.go:39 TypeParser.IsNativeArrayConstructorMethodReference
+    // go: internal/typeparser/native_array.go:39 TypeParser.IsNativeArrayConstructorMethodReference 30be0415b3c3571e
     // IsNativeArrayConstructorMethodReference compares the reference's roots with
     // the named Array constructor member.
     pub fn is_native_array_constructor_method_reference(
@@ -75,7 +75,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/native_array.go:43 TypeParser.getNativeArrayRegistry
+    // go: internal/typeparser/native_array.go:43 TypeParser.getNativeArrayRegistry 5a76ee261b1b23d6
     pub(crate) fn get_native_array_registry(&mut self) -> Arc<NativeArrayRegistry> {
         if let Some(registry) = &self.links().native_array_registry {
             return Arc::clone(registry);
@@ -100,7 +100,7 @@ impl TypeParser<'_> {
         r
     }
 
-    // go: internal/typeparser/native_array.go:85 TypeParser.nativeArrayReference
+    // go: internal/typeparser/native_array.go:85 TypeParser.nativeArrayReference 42feb6c802885134
     pub(crate) fn native_array_reference(
         &mut self,
         node: Option<P<Node>>,
@@ -164,7 +164,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/native_array.go:43 TypeParser.getNativeArrayRegistry
+// go: internal/typeparser/native_array.go:43 TypeParser.getNativeArrayRegistry 5a76ee261b1b23d6
 // Rust: Go's `add` closure: the members of `t`'s symbol declared only in default library files, with their roots.
 // Go ranges over the member table (a map); the result does not depend on the order, as each name is one member.
 pub(crate) fn add_native_array_members(
@@ -200,7 +200,7 @@ pub(crate) fn add_native_array_members(
     }
 }
 
-// go: internal/typeparser/native_array.go:85 TypeParser.nativeArrayReference
+// go: internal/typeparser/native_array.go:85 TypeParser.nativeArrayReference 42feb6c802885134
 // Rust: the symbol lookup at the start of `nativeArrayReference`:
 // the referenced member of a property access, or of an element access with a string literal argument.
 pub(crate) fn native_array_reference_symbol(

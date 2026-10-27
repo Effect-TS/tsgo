@@ -8,7 +8,7 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::TypeParser;
 
-// go: internal/rules/instance_of_schema.go:16 InstanceOfSchema
+// go: internal/rules/instance_of_schema.go:16 InstanceOfSchema 7ae4d29f25b10462
 // InstanceOfSchema suggests using Schema.is instead of instanceof for Effect Schema types.
 // This rule is disabled by default.
 pub static INSTANCE_OF_SCHEMA: LazyLock<Rule> = LazyLock::new(|| {
@@ -36,7 +36,7 @@ pub static INSTANCE_OF_SCHEMA: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/instance_of_schema.go:35 InstanceOfSchemaMatch
+// go: internal/rules/instance_of_schema.go:35 InstanceOfSchemaMatch 7c487e071cb18f40
 // InstanceOfSchemaMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the instanceOfSchema pattern.
 #[derive(Clone, Copy)]
@@ -48,7 +48,7 @@ pub struct InstanceOfSchemaMatch {
     pub right_expr: P<Node>, // Right operand of instanceof (the schema type reference)
 }
 
-// go: internal/rules/instance_of_schema.go:45 AnalyzeInstanceOfSchema
+// go: internal/rules/instance_of_schema.go:45 AnalyzeInstanceOfSchema 2be9e7a9077716c1
 // AnalyzeInstanceOfSchema finds all `value instanceof SchemaClass` expressions
 // where the right-hand side is an Effect Schema type.
 //
