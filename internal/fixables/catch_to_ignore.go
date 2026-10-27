@@ -47,7 +47,7 @@ func runCatchToIgnoreFix(ctx *fixable.Context) []ls.CodeAction {
 }
 
 func catchToIgnoreReplacementAccess(tracker *rewriter.Tracker, sf *ast.SourceFile, match rules.CatchToIgnoreMatch) *ast.Node {
-	replacement := effectModuleMethod(tracker, sf, match.EffectModuleNode, match.IgnoreMethodName)
+	replacement := effectModuleMethod(tracker, sf, match.IgnoreMethodName)
 	ast.SetParentInChildren(replacement)
 	return replacement
 }

@@ -30,7 +30,7 @@ func runProvideLayerSucceedToProvideServiceFix(ctx *fixable.Context) []ls.CodeAc
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect." + match.ReplacementMethodName,
 			Run: func(tracker *rewriter.Tracker) {
-				callee := effectModuleMethod(tracker, ctx.SourceFile, match.EffectModuleNode, match.ReplacementMethodName)
+				callee := effectModuleMethod(tracker, ctx.SourceFile, match.ReplacementMethodName)
 				arguments := tracker.NewNodeList([]*ast.Node{
 					tracker.DeepCloneNode(match.ServiceNode),
 					tracker.DeepCloneNode(match.ImplementationNode),

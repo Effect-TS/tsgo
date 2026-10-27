@@ -34,7 +34,7 @@ func runRunOfExitToRunExitFix(ctx *fixable.Context) []ls.CodeAction {
 				if !removePipingFlowTransformation(tracker, ctx.SourceFile, match.ExitTransformation) {
 					return
 				}
-				replaceEffectMethodCallee(tracker, ctx.SourceFile, match.RunnerCallee, match.RunnerNameNode, match.ReplacementName)
+				replaceEffectMethodCallee(tracker, ctx.SourceFile, match.RunnerCallee, match.ReplacementName)
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}

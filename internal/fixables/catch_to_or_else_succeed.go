@@ -28,7 +28,7 @@ func runCatchToOrElseSucceedFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.orElseSucceed",
 			Run: func(tracker *rewriter.Tracker) {
-				replaceEffectMethodCallee(tracker, sf, match.Callee, match.CalleeNameNode, "orElseSucceed")
+				replaceEffectMethodCallee(tracker, sf, match.Callee, "orElseSucceed")
 
 				tracker.ReplaceNode(sf, match.SucceedCallExpression, match.SucceedArgument, nil)
 			},

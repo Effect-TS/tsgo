@@ -27,7 +27,7 @@ func runEffectSleepZeroToYieldNowFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.yieldNow",
 			Run: func(tracker *rewriter.Tracker) {
-				replacement := effectModuleMethod(tracker, match.SourceFile, match.EffectModule, "yieldNow")
+				replacement := effectModuleMethod(tracker, match.SourceFile, "yieldNow")
 				if match.Form == rules.YieldNowCall {
 					replacement = tracker.NewCallExpression(replacement, nil, nil, tracker.NewNodeList(nil), ast.NodeFlagsNone)
 				}

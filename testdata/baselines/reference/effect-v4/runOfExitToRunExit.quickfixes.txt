@@ -839,7 +839,7 @@ const runPromiseWith = Effect.runPromiseWith
 export const aliasedPromiseWith = runPromiseWith(context)(Effect.exit(program), { signal })
 
 // Namespace aliases remain fixable.
-export const alias = Fx.runPromiseExit((program))
+export const alias = Effect.runPromiseExit((program))
 
 // Effect.exit is not the runner input in these cases.
 export const transformedExit = Effect.runPromise(

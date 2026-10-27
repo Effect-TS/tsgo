@@ -28,7 +28,7 @@ func runAsyncAwaitToGen(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	effectModuleName := typeparser.FindEffectModuleIdentifier(ctx.SourceFile)
+	effectModuleName := typeparser.FindEffectModuleReference(ctx.SourceFile)
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Rewrite to Effect.gen",
@@ -134,7 +134,7 @@ func findAsyncFunction(token *ast.Node) *ast.Node {
 }
 
 // transformAsyncToEffectGen transforms an async function to use Effect.gen.
-func transformAsyncToEffectGen(tracker *rewriter.Tracker, node *ast.Node, effectModuleName string) *ast.Node {
+func transformAsyncToEffectGen(tracker *rewriter.Tracker, node *ast.Node, effectModuleName typeparser.ModuleReference) *ast.Node {
 	body := typeparser.GetFunctionLikeBody(node)
 	if body == nil {
 		return nil
@@ -200,7 +200,7 @@ func containsAwaitExpression(node *ast.Node) bool {
 }
 
 // buildYieldStarPromise builds: yield* Effect.promise(() => expr)
-func buildYieldStarPromise(tracker *rewriter.Tracker, expr *ast.Node, effectModuleName string) *ast.Node {
+func buildYieldStarPromise(tracker *rewriter.Tracker, expr *ast.Node, effectModuleName typeparser.ModuleReference) *ast.Node {
 	// () => expr
 	arrowFn := tracker.NewArrowFunction(
 		nil,                                // modifiers
@@ -213,10 +213,7 @@ func buildYieldStarPromise(tracker *rewriter.Tracker, expr *ast.Node, effectModu
 	)
 
 	// Effect.promise(() => expr)
-	effectId := tracker.NewIdentifier(effectModuleName)
-	promiseAccess := tracker.NewPropertyAccessExpression(
-		effectId, nil, tracker.NewIdentifier("promise"), ast.NodeFlagsNone,
-	)
+	promiseAccess := tracker.NewPropertyAccessPath(effectModuleName.Append("promise")...)
 	promiseCall := tracker.NewCallExpression(
 		promiseAccess, nil, nil,
 		tracker.NewNodeList([]*ast.Node{arrowFn}),
@@ -231,7 +228,7 @@ func buildYieldStarPromise(tracker *rewriter.Tracker, expr *ast.Node, effectModu
 }
 
 // buildEffectGenCall builds: Effect.gen(function*() { body })
-func buildEffectGenCall(tracker *rewriter.Tracker, body *ast.Node, effectModuleName string) *ast.Node {
+func buildEffectGenCall(tracker *rewriter.Tracker, body *ast.Node, effectModuleName typeparser.ModuleReference) *ast.Node {
 	var blockBody *ast.Node
 	if body.Kind == ast.KindBlock {
 		blockBody = body
@@ -254,10 +251,7 @@ func buildEffectGenCall(tracker *rewriter.Tracker, body *ast.Node, effectModuleN
 	)
 
 	// Effect.gen(function*() { ... })
-	effectId := tracker.NewIdentifier(effectModuleName)
-	genAccess := tracker.NewPropertyAccessExpression(
-		effectId, nil, tracker.NewIdentifier("gen"), ast.NodeFlagsNone,
-	)
+	genAccess := tracker.NewPropertyAccessPath(effectModuleName.Append("gen")...)
 	return tracker.NewCallExpression(
 		genAccess, nil, nil,
 		tracker.NewNodeList([]*ast.Node{genFn}),

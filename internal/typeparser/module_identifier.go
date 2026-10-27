@@ -1,17 +1,75 @@
 package typeparser
 
 import (
+	"slices"
+	"strings"
+
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
-// FindEffectModuleIdentifier finds the local name for the Effect module from imports.
-// It checks both namespace imports (import * as X from "effect/Effect") and
-// named imports (import { Effect } from "effect"), falling back to "Effect".
-func FindEffectModuleIdentifier(sf *ast.SourceFile) string {
-	if sf == nil {
-		return "Effect"
+// ModuleReference is the path of names that reaches a module from a file's
+// imports, for example ["Effect"] or ["X", "Effect"] for import * as X from "effect".
+type ModuleReference []string
+
+// String joins the path with ".", as it is written in source code.
+func (r ModuleReference) String() string {
+	return strings.Join(r, ".")
+}
+
+// Append returns a new reference that extends r with names, leaving r untouched.
+func (r ModuleReference) Append(names ...string) ModuleReference {
+	return slices.Concat(r, names)
+}
+
+// MatchesNode reports whether node spells out the reference: an identifier, a
+// property access chain or a qualified name with the same names.
+func (r ModuleReference) MatchesNode(node *ast.Node) bool {
+	for i := len(r) - 1; i > 0; i-- {
+		var name *ast.Node
+		switch node.Kind {
+		case ast.KindPropertyAccessExpression:
+			access := node.AsPropertyAccessExpression()
+			node, name = access.Expression, access.Name()
+		case ast.KindQualifiedName:
+			qualified := node.AsQualifiedName()
+			node, name = qualified.Left, qualified.Right
+		default:
+			return false
+		}
+		if name == nil || name.Kind != ast.KindIdentifier || name.Text() != r[i] {
+			return false
+		}
 	}
+	return len(r) > 0 && node != nil && node.Kind == ast.KindIdentifier && node.Text() == r[0]
+}
+
+// FindEffectModuleReference finds the reference to the Effect module from the
+// file's imports. See FindModuleReference.
+func FindEffectModuleReference(sf *ast.SourceFile) ModuleReference {
+	return FindModuleReference(sf, "Effect")
+}
+
+// FindModuleReference finds the reference to the given module of the "effect"
+// package from the file's imports. See FindModuleReferenceForPackage.
+func FindModuleReference(sf *ast.SourceFile, exportName string) ModuleReference {
+	return FindModuleReferenceForPackage(sf, "effect", exportName)
+}
+
+// FindModuleReferenceForPackage finds the reference to the given module of a
+// package from the file's imports. It recognises:
+//   - Namespace imports: import * as X from "<packageName>/<moduleName>" → X
+//   - Named imports: import { <moduleName> as X } from "<packageName>" → X
+//   - Namespace imports of the barrel: import * as X from "<packageName>" → X.<moduleName>
+//
+// The first two forms are preferred over the barrel form. Type-only imports
+// are skipped, as they cannot be referenced from values. Falls back to
+// moduleName if not found; no import is added.
+func FindModuleReferenceForPackage(sf *ast.SourceFile, packageName string, moduleName string) ModuleReference {
+	if sf == nil {
+		return ModuleReference{moduleName}
+	}
+	var barrel ModuleReference
 	for _, stmt := range sf.Statements.Nodes {
 		if stmt.Kind != ast.KindImportDeclaration {
 			continue
@@ -20,152 +78,43 @@ func FindEffectModuleIdentifier(sf *ast.SourceFile) string {
 		if importDecl.ModuleSpecifier == nil || importDecl.ImportClause == nil {
 			continue
 		}
-		moduleName := scanner.GetTextOfNode(importDecl.ModuleSpecifier)
-		if len(moduleName) >= 2 && (moduleName[0] == '"' || moduleName[0] == '\'') {
-			moduleName = moduleName[1 : len(moduleName)-1]
-		}
-
-		clause := importDecl.ImportClause.AsImportClause()
-		if clause.NamedBindings == nil {
-			continue
-		}
-
-		// Check namespace import: import * as X from "effect/Effect"
-		if moduleName == "effect/Effect" && clause.NamedBindings.Kind == ast.KindNamespaceImport {
-			nsImport := clause.NamedBindings.AsNamespaceImport()
-			if nsImport.Name() != nil {
-				return scanner.GetTextOfNode(nsImport.Name())
-			}
-		}
-
-		// Check named imports: import { Effect } from "effect"
-		if moduleName == "effect" && clause.NamedBindings.Kind == ast.KindNamedImports {
-			namedImports := clause.NamedBindings.AsNamedImports()
-			if namedImports.Elements == nil {
-				continue
-			}
-			for _, elem := range namedImports.Elements.Nodes {
-				spec := elem.AsImportSpecifier()
-				importedName := ""
-				if spec.PropertyName != nil {
-					importedName = scanner.GetTextOfNode(spec.PropertyName)
-				} else {
-					importedName = scanner.GetTextOfNode(spec.Name())
-				}
-				if importedName == "Effect" {
-					return scanner.GetTextOfNode(spec.Name())
-				}
-			}
-		}
-	}
-	return "Effect"
-}
-
-// FindModuleIdentifier resolves the imported identifier name for the given export
-// from the "effect" package. Falls back to the provided exportName if not found.
-// It checks named imports: import { ExportName as Alias } from "effect".
-func FindModuleIdentifier(sf *ast.SourceFile, exportName string) string {
-	if sf == nil {
-		return exportName
-	}
-	for _, stmt := range sf.Statements.Nodes {
-		if stmt.Kind != ast.KindImportDeclaration {
-			continue
-		}
-		importDecl := stmt.AsImportDeclaration()
-		if importDecl.ModuleSpecifier == nil {
-			continue
-		}
-		moduleName := scanner.GetTextOfNode(importDecl.ModuleSpecifier)
-		if len(moduleName) >= 2 && (moduleName[0] == '"' || moduleName[0] == '\'') {
-			moduleName = moduleName[1 : len(moduleName)-1]
-		}
-
-		if importDecl.ImportClause == nil {
-			continue
-		}
-		clause := importDecl.ImportClause.AsImportClause()
-		if clause.NamedBindings == nil {
-			continue
-		}
-
-		// Check namespace import: import * as X from "effect/<exportName>"
-		if moduleName == "effect/"+exportName && clause.NamedBindings.Kind == ast.KindNamespaceImport {
-			nsImport := clause.NamedBindings.AsNamespaceImport()
-			if nsImport.Name() != nil {
-				return scanner.GetTextOfNode(nsImport.Name())
-			}
-		}
-
-		// Check named imports: import { ExportName as Alias } from "effect"
-		if moduleName == "effect" && clause.NamedBindings.Kind == ast.KindNamedImports {
-			namedImports := clause.NamedBindings.AsNamedImports()
-			if namedImports.Elements == nil {
-				continue
-			}
-			for _, elem := range namedImports.Elements.Nodes {
-				spec := elem.AsImportSpecifier()
-				importedName := ""
-				if spec.PropertyName != nil {
-					importedName = scanner.GetTextOfNode(spec.PropertyName)
-				} else {
-					importedName = scanner.GetTextOfNode(spec.Name())
-				}
-				if importedName == exportName {
-					return scanner.GetTextOfNode(spec.Name())
-				}
-			}
-		}
-	}
-	return exportName
-}
-
-// FindModuleIdentifierForPackage resolves the imported identifier name for the given
-// module from an arbitrary package. It checks:
-//   - Namespace imports: import * as X from "<packageName>/<moduleName>"
-//   - Named imports: import { <moduleName> as X } from "<packageName>"
-//
-// Falls back to moduleName if not found.
-func FindModuleIdentifierForPackage(sf *ast.SourceFile, packageName string, moduleName string) string {
-	if sf == nil {
-		return moduleName
-	}
-	for _, stmt := range sf.Statements.Nodes {
-		if stmt.Kind != ast.KindImportDeclaration {
-			continue
-		}
-		importDecl := stmt.AsImportDeclaration()
-		if importDecl.ModuleSpecifier == nil {
-			continue
-		}
 		specifier := scanner.GetTextOfNode(importDecl.ModuleSpecifier)
 		if len(specifier) >= 2 && (specifier[0] == '"' || specifier[0] == '\'') {
 			specifier = specifier[1 : len(specifier)-1]
 		}
 
-		if importDecl.ImportClause == nil {
-			continue
-		}
 		clause := importDecl.ImportClause.AsImportClause()
 		if clause.NamedBindings == nil {
 			continue
 		}
 
-		// Check namespace import: import * as X from "<packageName>/<moduleName>"
-		if specifier == packageName+"/"+moduleName && clause.NamedBindings.Kind == ast.KindNamespaceImport {
+		if clause.NamedBindings.Kind == ast.KindNamespaceImport {
 			nsImport := clause.NamedBindings.AsNamespaceImport()
-			if nsImport.Name() != nil {
-				return scanner.GetTextOfNode(nsImport.Name())
+			if nsImport.Name() == nil || ast.IsPartOfTypeOnlyImportOrExportDeclaration(clause.NamedBindings) {
+				continue
 			}
+			name := scanner.GetTextOfNode(nsImport.Name())
+			// import * as X from "<packageName>/<moduleName>"
+			if specifier == packageName+"/"+moduleName {
+				return ModuleReference{name}
+			}
+			// import * as X from "<packageName>"
+			if specifier == packageName && barrel == nil {
+				barrel = ModuleReference{name, moduleName}
+			}
+			continue
 		}
 
-		// Check named imports: import { <moduleName> as X } from "<packageName>"
+		// import { <moduleName> as X } from "<packageName>"
 		if specifier == packageName && clause.NamedBindings.Kind == ast.KindNamedImports {
 			namedImports := clause.NamedBindings.AsNamedImports()
 			if namedImports.Elements == nil {
 				continue
 			}
 			for _, elem := range namedImports.Elements.Nodes {
+				if ast.IsPartOfTypeOnlyImportOrExportDeclaration(elem) {
+					continue
+				}
 				spec := elem.AsImportSpecifier()
 				importedName := ""
 				if spec.PropertyName != nil {
@@ -174,10 +123,13 @@ func FindModuleIdentifierForPackage(sf *ast.SourceFile, packageName string, modu
 					importedName = scanner.GetTextOfNode(spec.Name())
 				}
 				if importedName == moduleName {
-					return scanner.GetTextOfNode(spec.Name())
+					return ModuleReference{scanner.GetTextOfNode(spec.Name())}
 				}
 			}
 		}
 	}
-	return moduleName
+	if barrel != nil {
+		return barrel
+	}
+	return ModuleReference{moduleName}
 }

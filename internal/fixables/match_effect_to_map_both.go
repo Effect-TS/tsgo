@@ -25,7 +25,7 @@ func runMatchEffectToMapBothFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.mapBoth",
 			Run: func(tracker *rewriter.Tracker) {
-				replaceEffectMethodCallee(tracker, match.SourceFile, match.CalleeNode, match.CalleeNameNode, "mapBoth")
+				replaceEffectMethodCallee(tracker, match.SourceFile, match.CalleeNode, "mapBoth")
 				for i := range match.HandlerResults {
 					tracker.ReplaceNode(match.SourceFile, match.HandlerResults[i], match.ConstructorArgs[i], nil)
 				}

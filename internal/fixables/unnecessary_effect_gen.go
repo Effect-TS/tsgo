@@ -49,7 +49,7 @@ func runUnnecessaryEffectGenFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Remove the Effect.gen, and keep the body",
 			Run: func(tracker *rewriter.Tracker) {
-				asVoidAccess := effectModuleMethod(tracker, sf, match.EffectModuleNode, "asVoid")
+				asVoidAccess := effectModuleMethod(tracker, sf, "asVoid")
 
 				// Clone the yielded expression
 				clonedExpr := tracker.DeepCloneNode(match.YieldedExpression)

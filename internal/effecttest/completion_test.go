@@ -1,6 +1,7 @@
 package effecttest_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/microsoft/TypeScript/tsc/shim/fourslash"
@@ -11,12 +12,16 @@ import (
 )
 
 func findCompletionLabel(items []*lsproto.CompletionItem, label string) bool {
+	return findCompletionItem(items, label) != nil
+}
+
+func findCompletionItem(items []*lsproto.CompletionItem, label string) *lsproto.CompletionItem {
 	for _, item := range items {
 		if item.Label == label {
-			return true
+			return item
 		}
 	}
-	return false
+	return nil
 }
 
 func TestEffectCompletionExtendsServiceMap(t *testing.T) {
@@ -54,6 +59,44 @@ class MyService extends Context./*1*/`
 		if !findCompletionLabel(completions.Items, "Service<MyService>({ make })") {
 			t.Error("expected 'Service<MyService>({ make })' completion")
 		}
+	}
+}
+
+func TestEffectCompletionExtendsBarrelNamespace(t *testing.T) {
+	t.Parallel()
+
+	const content = `// @Filename: /tsconfig.json
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "plugins": [
+      {
+        "name": "@effect/language-service"
+      }
+    ]
+  }
+}
+// @Filename: /test.ts
+import * as X from "effect"
+class MyService extends X.Context./*1*/`
+
+	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	defer done()
+
+	f.GoToMarker(t, "1")
+	completions := f.GetCompletions(t, nil)
+	if completions == nil {
+		t.Fatal("completions is nil")
+	}
+	item := findCompletionItem(completions.Items, "Service<MyService, {}>")
+	if item == nil {
+		t.Fatal("expected 'Service<MyService, {}>' completion")
+	}
+	if item.TextEdit == nil || item.TextEdit.TextEdit == nil || !strings.HasPrefix(item.TextEdit.TextEdit.NewText, "X.Context.Service<MyService, {") {
+		t.Errorf("expected the completion to reference the module through the barrel namespace, got %+v", item.TextEdit)
 	}
 }
 

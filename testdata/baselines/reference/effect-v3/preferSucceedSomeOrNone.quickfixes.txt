@@ -399,7 +399,7 @@ export const shouldTriggerNone = Effect.succeed(Option.none())
 export const shouldTriggerSome = Effect.succeed(Option.some(1))
 
 // Should trigger: aliased modules
-export const shouldTriggerAliases = Fx.succeedSome("value")
+export const shouldTriggerAliases = Effect.succeedSome("value")
 
 // Should trigger: named Option exports
 export const shouldTriggerNamedNone = Effect.succeed(optionNone())

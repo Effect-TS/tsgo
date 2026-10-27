@@ -31,7 +31,7 @@ func runAcquireReleaseDisposableFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.acquireDisposable",
 			Run: func(tracker *rewriter.Tracker) {
-				callee := effectModuleMethod(tracker, ctx.SourceFile, match.EffectModule, "acquireDisposable")
+				callee := effectModuleMethod(tracker, ctx.SourceFile, "acquireDisposable")
 				replacement := tracker.NewCallExpression(
 					callee,
 					nil,

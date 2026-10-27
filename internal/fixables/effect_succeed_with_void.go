@@ -32,7 +32,7 @@ func runEffectSucceedWithVoidFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.void",
 			Run: func(tracker *rewriter.Tracker) {
-				replacementNode := effectModuleMethod(tracker, sf, match.EffectModuleNode, "void")
+				replacementNode := effectModuleMethod(tracker, sf, "void")
 				ast.SetParentInChildren(replacementNode)
 				tracker.ReplaceNode(sf, match.CallNode, replacementNode, nil)
 			},

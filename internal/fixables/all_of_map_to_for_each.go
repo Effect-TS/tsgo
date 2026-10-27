@@ -36,7 +36,7 @@ func runAllOfMapToForEachFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.forEach",
 			Run: func(tracker *rewriter.Tracker) {
-				callee := effectModuleMethod(tracker, ctx.SourceFile, match.EffectModule, "forEach")
+				callee := effectModuleMethod(tracker, ctx.SourceFile, "forEach")
 				arguments := []*ast.Node{
 					tracker.DeepCloneNode(match.Receiver),
 					tracker.DeepCloneNode(match.Callback),

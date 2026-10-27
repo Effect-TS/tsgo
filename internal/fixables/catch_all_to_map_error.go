@@ -33,7 +33,7 @@ func runCatchAllToMapErrorFix(ctx *fixable.Context) []ls.CodeAction {
 			Description: "Replace with Effect.mapError",
 			Run: func(tracker *rewriter.Tracker) {
 				// Edit 1: Replace "catch" with "mapError" in the callee
-				replaceEffectMethodCallee(tracker, sf, match.Callee, match.CalleeNameNode, "mapError")
+				replaceEffectMethodCallee(tracker, sf, match.Callee, "mapError")
 
 				// Edit 2: Unwrap "Effect.fail(arg)" to "arg" by deleting prefix and suffix
 				tracker.DeleteRange(sf, core.NewTextRange(match.FailCallExpression.Pos(), match.FailArgument.Pos()))

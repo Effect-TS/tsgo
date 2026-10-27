@@ -30,8 +30,8 @@ func runAsyncAwaitToFnTryPromise(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	effectModuleName := typeparser.FindEffectModuleIdentifier(ctx.SourceFile)
-	dataModuleName := typeparser.FindModuleIdentifier(ctx.SourceFile, "Data")
+	effectModuleName := typeparser.FindEffectModuleReference(ctx.SourceFile)
+	dataModuleName := typeparser.FindModuleReference(ctx.SourceFile, "Data")
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Rewrite to Effect.fn with failures",
@@ -47,7 +47,7 @@ func runAsyncAwaitToFnTryPromise(ctx *refactor.Context) []ls.CodeAction {
 	return []ls.CodeAction{*action}
 }
 
-func transformAsyncToEffectFnTryPromise(tracker *rewriter.Tracker, sf *ast.SourceFile, node *ast.Node, effectModuleName string, dataModuleName string) {
+func transformAsyncToEffectFnTryPromise(tracker *rewriter.Tracker, sf *ast.SourceFile, node *ast.Node, effectModuleName typeparser.ModuleReference, dataModuleName typeparser.ModuleReference) {
 	body := typeparser.GetFunctionLikeBody(node)
 	if body == nil {
 		return

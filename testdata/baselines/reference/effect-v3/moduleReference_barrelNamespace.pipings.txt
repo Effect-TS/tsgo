@@ -1,0 +1,79 @@
+==== /.src/moduleReference_barrelNamespace.ts (5 flows) ====
+
+=== Piping Flow ===
+Location: 7:24 - 7:51
+Node: X.Context.Tag("MyService")
+Node Kind: KindCallExpression
+
+Subject: "MyService"
+Subject Type: "MyService"
+
+Transformations (1):
+  [0] kind: call
+      callee: X.Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "MyService", Shape>
+
+=== Piping Flow ===
+Location: 12:23 - 18:2
+Node: X.Layer.effect(\n  MyService,\n  X.Effect.gen(function*() {\n    yield* X.Effect.addFinalizer(() => X.Effect.log("finalizer"))\n    return { a: 1 }\n  })\n)
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    yield* X.Effect.addFinalizer(() => X.Effect.log("finalizer"))\n    return { a: 1 }\n  }
+Subject Type: () => Generator<YieldWrap<Effect<void, never, Scope>>, { a: number; }, any>
+
+Transformations (2):
+  [0] kind: call
+      callee: X.Effect.gen
+      args: (constant)
+      outType: Effect<{ a: number; }, never, Scope>
+  [1] kind: dataLast
+      callee: X.Layer.effect
+      args: [MyService]
+      outType: Layer<MyService, never, Scope>
+
+=== Piping Flow ===
+Location: 15:11 - 15:66
+Node: X.Effect.addFinalizer(() => X.Effect.log("finalizer"))
+Node Kind: KindCallExpression
+
+Subject: () => X.Effect.log("finalizer")
+Subject Type: () => Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: X.Effect.addFinalizer
+      args: (constant)
+      outType: Effect<void, never, Scope>
+
+=== Piping Flow ===
+Location: 15:39 - 15:65
+Node: X.Effect.log("finalizer")
+Node Kind: KindCallExpression
+
+Subject: "finalizer"
+Subject Type: "finalizer"
+
+Transformations (1):
+  [0] kind: call
+      callee: X.Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 21:23 - 23:2
+Node: X.Effect.succeed(1).pipe(\n  X.Effect.map(() => undefined)\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: X.Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: X.Effect.map
+      args: [() => undefined]
+      outType: Effect<undefined, never, never>

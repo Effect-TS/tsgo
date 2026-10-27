@@ -4,7 +4,6 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
-	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -23,13 +22,7 @@ var TimeoutCatchTagToTimeoutOrElseFix = fixable.Fixable{
 			action := ctx.NewFixAction(fixable.FixAction{
 				Description: "Replace with Effect." + match.ReplacementName,
 				Run: func(t *rewriter.Tracker) {
-					var effectModule *ast.Node
-					if match.EffectModule != nil {
-						effectModule = t.DeepCloneNode(match.EffectModule)
-					} else {
-						effectModule = t.NewIdentifier(typeparser.FindEffectModuleIdentifier(ctx.SourceFile))
-					}
-					callee := t.NewPropertyAccessExpression(effectModule, nil, t.NewIdentifier(match.ReplacementName), ast.NodeFlagsNone)
+					callee := effectModuleMethod(t, ctx.SourceFile, match.ReplacementName)
 					argument := t.DeepCloneNode(match.Duration)
 					if match.ReplacementName == "timeoutOrElse" {
 						handler := t.DeepCloneNode(match.Handler)

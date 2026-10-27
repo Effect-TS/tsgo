@@ -41,15 +41,14 @@ var OptionMatchToFromOption = rule.Rule{
 // OptionMatchToFromOptionMatch holds the nodes needed by the diagnostic and
 // quick fix.
 type OptionMatchToFromOptionMatch struct {
-	SourceFile       *ast.SourceFile
-	Location         core.TextRange
-	Transformation   *typeparser.PipingFlowTransformation
-	ReplacementNode  *ast.Node
-	EffectModuleNode *ast.Node
-	OptionNode       *ast.Node
-	FailureNode      *ast.Node
-	DefaultFailure   bool
-	CanFix           bool
+	SourceFile      *ast.SourceFile
+	Location        core.TextRange
+	Transformation  *typeparser.PipingFlowTransformation
+	ReplacementNode *ast.Node
+	OptionNode      *ast.Node
+	FailureNode     *ast.Node
+	DefaultFailure  bool
+	CanFix          bool
 }
 
 // AnalyzeOptionMatchToFromOption finds Option.match and Option result
@@ -86,19 +85,18 @@ func analyzeOptionMatchCalls(tp *typeparser.TypeParser, sf *ast.SourceFile) []Op
 				continue
 			}
 
-			failure, effectModule, canFix, ok := analyzeOptionMatchHandlers(tp, args.At(0))
+			failure, canFix, ok := analyzeOptionMatchHandlers(tp, args.At(0))
 			if !ok {
 				continue
 			}
 
 			match := OptionMatchToFromOptionMatch{
-				SourceFile:       sf,
-				Location:         scanner.GetErrorRangeForNode(sf, callee),
-				Transformation:   &transformation,
-				EffectModuleNode: effectModule,
-				FailureNode:      failure,
-				DefaultFailure:   isDefaultNoSuchElementError(tp, failure),
-				CanFix:           canFix,
+				SourceFile:     sf,
+				Location:       scanner.GetErrorRangeForNode(sf, callee),
+				Transformation: &transformation,
+				FailureNode:    failure,
+				DefaultFailure: isDefaultNoSuchElementError(tp, failure),
+				CanFix:         canFix,
 			}
 
 			matches = append(matches, match)
@@ -108,79 +106,68 @@ func analyzeOptionMatchCalls(tp *typeparser.TypeParser, sf *ast.SourceFile) []Op
 	return matches
 }
 
-func analyzeOptionMatchHandlers(tp *typeparser.TypeParser, node *ast.Node) (failure *ast.Node, effectModule *ast.Node, canFix bool, ok bool) {
+func analyzeOptionMatchHandlers(tp *typeparser.TypeParser, node *ast.Node) (failure *ast.Node, canFix bool, ok bool) {
 	node = ast.SkipParentheses(node)
 	if node == nil || node.Kind != ast.KindObjectLiteralExpression {
-		return nil, nil, false, false
+		return nil, false, false
 	}
 	object := node.AsObjectLiteralExpression()
 	if object == nil || object.Properties == nil || len(object.Properties.Nodes) != 2 {
-		return nil, nil, false, false
+		return nil, false, false
 	}
 
 	var onNone, onSome *ast.Node
 	for _, propertyNode := range object.Properties.Nodes {
 		if propertyNode == nil || propertyNode.Kind != ast.KindPropertyAssignment {
-			return nil, nil, false, false
+			return nil, false, false
 		}
 		property := propertyNode.AsPropertyAssignment()
 		if property == nil || property.Name() == nil || property.Name().Kind != ast.KindIdentifier || property.Initializer == nil {
-			return nil, nil, false, false
+			return nil, false, false
 		}
 		switch scanner.GetTextOfNode(property.Name()) {
 		case "onNone":
 			if onNone != nil {
-				return nil, nil, false, false
+				return nil, false, false
 			}
 			onNone = property.Initializer
 		case "onSome":
 			if onSome != nil {
-				return nil, nil, false, false
+				return nil, false, false
 			}
 			onSome = property.Initializer
 		default:
-			return nil, nil, false, false
+			return nil, false, false
 		}
 	}
 
-	succeedModule, ok := analyzeEffectSucceedHandler(tp, onSome)
-	if !ok {
-		return nil, nil, false, false
+	if !isEffectSucceedHandler(tp, onSome) {
+		return nil, false, false
 	}
-	failure, failModule, canFix, ok := analyzeEffectFailHandler(tp, onNone)
-	if !ok {
-		return nil, nil, false, false
-	}
-	if succeedModule != nil {
-		return failure, succeedModule, canFix, true
-	}
-	return failure, failModule, canFix, true
+	return analyzeEffectFailHandler(tp, onNone)
 }
 
-func analyzeEffectSucceedHandler(tp *typeparser.TypeParser, node *ast.Node) (*ast.Node, bool) {
+func isEffectSucceedHandler(tp *typeparser.TypeParser, node *ast.Node) bool {
 	target, typeArguments, _ := tp.UnwrapIdentityForwarder(node)
-	if typeArguments != nil && len(typeArguments.Nodes) > 0 || !tp.IsNodeReferenceToEffectModuleApi(target, "succeed") {
-		return nil, false
-	}
-	return effectModuleExpression(target), true
+	return (typeArguments == nil || len(typeArguments.Nodes) == 0) && tp.IsNodeReferenceToEffectModuleApi(target, "succeed")
 }
 
-func analyzeEffectFailHandler(tp *typeparser.TypeParser, node *ast.Node) (*ast.Node, *ast.Node, bool, bool) {
+func analyzeEffectFailHandler(tp *typeparser.TypeParser, node *ast.Node) (*ast.Node, bool, bool) {
 	lazy := typeparser.ParseLazyExpression(node, typeparser.LazyExpressionThunk)
 	if lazy == nil {
-		return nil, nil, false, false
+		return nil, false, false
 	}
 	expression := ast.SkipParentheses(lazy.Expression())
 	if expression == nil || expression.Kind != ast.KindCallExpression {
-		return nil, nil, false, false
+		return nil, false, false
 	}
 	call := expression.AsCallExpression()
 	if call == nil || call.Expression == nil || call.Arguments == nil || len(call.Arguments.Nodes) != 1 ||
 		call.TypeArguments != nil && len(call.TypeArguments.Nodes) > 0 ||
 		!tp.IsNodeReferenceToEffectModuleApi(call.Expression, "fail") {
-		return nil, nil, false, false
+		return nil, false, false
 	}
-	return call.Arguments.Nodes[0], effectModuleExpression(call.Expression), lazy.Node().Kind == ast.KindArrowFunction, true
+	return call.Arguments.Nodes[0], lazy.Node().Kind == ast.KindArrowFunction, true
 }
 
 func isSynchronousFunction(node *ast.Node) bool {
@@ -192,22 +179,6 @@ func isSynchronousFunction(node *ast.Node) bool {
 		return function != nil && function.AsteriskToken == nil
 	}
 	return node.Kind == ast.KindArrowFunction
-}
-
-func effectModuleExpression(node *ast.Node) *ast.Node {
-	node = ast.SkipParentheses(node)
-	if node == nil || node.Kind != ast.KindPropertyAccessExpression {
-		return nil
-	}
-	property := node.AsPropertyAccessExpression()
-	if property == nil || property.QuestionDotToken != nil {
-		return nil
-	}
-	receiver := ast.SkipParentheses(property.Expression)
-	if receiver == nil || receiver.Kind != ast.KindIdentifier {
-		return nil
-	}
-	return receiver
 }
 
 func analyzeOptionConditionals(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []OptionMatchToFromOptionMatch {
@@ -266,66 +237,61 @@ func analyzeOptionConditional(tp *typeparser.TypeParser, c *checker.Checker, sf 
 		succeedNode, failNode = failNode, succeedNode
 	}
 
-	effectModule, ok := analyzeConditionalSucceed(tp, c, optionNode, succeedNode)
-	if !ok {
+	if !isConditionalSucceed(tp, c, optionNode, succeedNode) {
 		return OptionMatchToFromOptionMatch{}, false
 	}
-	failure, failModule, ok := analyzeEffectFailCall(tp, failNode)
+	failure, ok := analyzeEffectFailCall(tp, failNode)
 	if !ok {
 		return OptionMatchToFromOptionMatch{}, false
-	}
-	if effectModule == nil {
-		effectModule = failModule
 	}
 
 	return OptionMatchToFromOptionMatch{
-		SourceFile:       sf,
-		Location:         scanner.GetErrorRangeForNode(sf, condition.Expression),
-		ReplacementNode:  dispatch.Node(),
-		EffectModuleNode: effectModule,
-		OptionNode:       optionNode,
-		FailureNode:      failure,
-		DefaultFailure:   isDefaultNoSuchElementError(tp, failure),
-		CanFix:           true,
+		SourceFile:      sf,
+		Location:        scanner.GetErrorRangeForNode(sf, condition.Expression),
+		ReplacementNode: dispatch.Node(),
+		OptionNode:      optionNode,
+		FailureNode:     failure,
+		DefaultFailure:  isDefaultNoSuchElementError(tp, failure),
+		CanFix:          true,
 	}, true
 }
 
-func analyzeConditionalSucceed(tp *typeparser.TypeParser, c *checker.Checker, optionNode *ast.Node, node *ast.Node) (*ast.Node, bool) {
+func isConditionalSucceed(tp *typeparser.TypeParser, c *checker.Checker, optionNode *ast.Node, node *ast.Node) bool {
 	expression := ast.SkipParentheses(node)
 	if expression == nil || expression.Kind != ast.KindCallExpression {
-		return nil, false
+		return false
 	}
 	call := expression.AsCallExpression()
 	if call == nil || call.Expression == nil || call.Arguments == nil || len(call.Arguments.Nodes) != 1 ||
 		call.TypeArguments != nil && len(call.TypeArguments.Nodes) > 0 ||
 		!tp.IsNodeReferenceToEffectModuleApi(call.Expression, "succeed") {
-		return nil, false
+		return false
 	}
 
 	valueNode := ast.SkipParentheses(call.Arguments.Nodes[0])
 	if valueNode == nil || valueNode.Kind != ast.KindPropertyAccessExpression {
-		return nil, false
+		return false
 	}
 	value := valueNode.AsPropertyAccessExpression()
 	if value == nil || value.QuestionDotToken != nil || value.Name() == nil || scanner.GetTextOfNode(value.Name()) != "value" ||
 		!sameIdentifierReference(tp, c, optionNode, ast.SkipParentheses(value.Expression)) {
-		return nil, false
+		return false
 	}
-	return effectModuleExpression(call.Expression), true
+	return true
 }
 
-func analyzeEffectFailCall(tp *typeparser.TypeParser, node *ast.Node) (*ast.Node, *ast.Node, bool) {
+func analyzeEffectFailCall(tp *typeparser.TypeParser, node *ast.Node) (*ast.Node, bool) {
 	expression := ast.SkipParentheses(node)
 	if expression == nil || expression.Kind != ast.KindCallExpression {
-		return nil, nil, false
+		return nil, false
 	}
 	call := expression.AsCallExpression()
 	if call == nil || call.Expression == nil || call.Arguments == nil || len(call.Arguments.Nodes) != 1 ||
 		call.TypeArguments != nil && len(call.TypeArguments.Nodes) > 0 ||
 		!tp.IsNodeReferenceToEffectModuleApi(call.Expression, "fail") {
-		return nil, nil, false
+		return nil, false
 	}
-	return call.Arguments.Nodes[0], effectModuleExpression(call.Expression), true
+	return call.Arguments.Nodes[0], true
 }
 
 func sameIdentifierReference(tp *typeparser.TypeParser, c *checker.Checker, left *ast.Node, right *ast.Node) bool {

@@ -36,7 +36,6 @@ type CatchToIgnoreMatch struct {
 	SourceFile       *ast.SourceFile
 	Location         core.TextRange
 	Transformation   *typeparser.PipingFlowTransformation
-	EffectModuleNode *ast.Node
 	CatchMethodName  string
 	IgnoreMethodName string
 }
@@ -58,7 +57,7 @@ func AnalyzeCatchToIgnore(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 				continue
 			}
 
-			catchMethodName, ignoreMethodName, effectModuleNode, ok := catchToIgnoreMethods(tp, transformation.Callee())
+			catchMethodName, ignoreMethodName, ok := catchToIgnoreMethods(tp, transformation.Callee())
 			if !ok {
 				continue
 			}
@@ -77,7 +76,6 @@ func AnalyzeCatchToIgnore(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 				SourceFile:       sf,
 				Location:         scanner.GetErrorRangeForNode(sf, transformation.Callee()),
 				Transformation:   &transformation,
-				EffectModuleNode: effectModuleNode,
 				CatchMethodName:  catchMethodName,
 				IgnoreMethodName: ignoreMethodName,
 			})
@@ -87,23 +85,17 @@ func AnalyzeCatchToIgnore(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 	return matches
 }
 
-func catchToIgnoreMethods(tp *typeparser.TypeParser, callee *ast.Node) (catchMethodName string, ignoreMethodName string, effectModuleNode *ast.Node, ok bool) {
+func catchToIgnoreMethods(tp *typeparser.TypeParser, callee *ast.Node) (catchMethodName string, ignoreMethodName string, ok bool) {
 	if callee == nil {
-		return "", "", nil, false
-	}
-	if callee.Kind == ast.KindPropertyAccessExpression {
-		prop := callee.AsPropertyAccessExpression()
-		if prop != nil {
-			effectModuleNode = prop.Expression
-		}
+		return "", "", false
 	}
 	switch {
 	case tp.IsNodeReferenceToEffectModuleApi(callee, "catch"):
-		return "catch", "ignore", effectModuleNode, true
+		return "catch", "ignore", true
 	case tp.IsNodeReferenceToEffectModuleApi(callee, "catchCause"):
-		return "catchCause", "ignoreCause", effectModuleNode, true
+		return "catchCause", "ignoreCause", true
 	default:
-		return "", "", nil, false
+		return "", "", false
 	}
 }
 

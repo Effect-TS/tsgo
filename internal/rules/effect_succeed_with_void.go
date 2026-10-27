@@ -32,10 +32,9 @@ var EffectSucceedWithVoid = rule.Rule{
 // EffectSucceedWithVoidMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the effectSucceedWithVoid pattern.
 type EffectSucceedWithVoidMatch struct {
-	SourceFile       *ast.SourceFile // The source file where the diagnostic should be reported
-	Location         core.TextRange  // The pre-computed error range for this match
-	CallNode         *ast.Node       // The Effect.succeed(...) call expression (replacement target)
-	EffectModuleNode *ast.Node       // The Effect module identifier (e.g., "Effect" in Effect.succeed)
+	SourceFile *ast.SourceFile // The source file where the diagnostic should be reported
+	Location   core.TextRange  // The pre-computed error range for this match
+	CallNode   *ast.Node       // The Effect.succeed(...) call expression (replacement target)
 }
 
 // isVoidExpression checks if a node is `undefined`, `void 0`, or a parenthesized version of either.
@@ -76,15 +75,10 @@ func AnalyzeEffectSucceedWithVoid(tp *typeparser.TypeParser, _ *checker.Checker,
 				arg := call.Arguments.Nodes[0]
 				if isVoidExpression(arg) {
 					if call.Expression != nil && tp.IsNodeReferenceToEffectModuleApi(call.Expression, "succeed") {
-						var effectModule *ast.Node
-						if call.Expression.Kind == ast.KindPropertyAccessExpression {
-							effectModule = call.Expression.AsPropertyAccessExpression().Expression
-						}
 						matches = append(matches, EffectSucceedWithVoidMatch{
-							SourceFile:       sf,
-							Location:         scanner.GetErrorRangeForNode(sf, n),
-							CallNode:         n,
-							EffectModuleNode: effectModule,
+							SourceFile: sf,
+							Location:   scanner.GetErrorRangeForNode(sf, n),
+							CallNode:   n,
 						})
 					}
 				}

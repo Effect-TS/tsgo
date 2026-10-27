@@ -27,7 +27,7 @@ func runFlatMapIgnoredParamToAndThenFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.andThen",
 			Run: func(tracker *rewriter.Tracker) {
-				replaceEffectMethodCallee(tracker, ctx.SourceFile, match.Callee, match.CalleeNameNode, "andThen")
+				replaceEffectMethodCallee(tracker, ctx.SourceFile, match.Callee, "andThen")
 				tracker.ReplaceNode(ctx.SourceFile, match.Callback, match.EffectValue, nil)
 			},
 		}); action != nil {

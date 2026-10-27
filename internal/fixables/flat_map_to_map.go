@@ -29,7 +29,7 @@ func runFlatMapToMapFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.map",
 			Run: func(tracker *rewriter.Tracker) {
-				replaceEffectMethodCallee(tracker, sf, match.Callee, match.CalleeNameNode, "map")
+				replaceEffectMethodCallee(tracker, sf, match.Callee, "map")
 				tracker.ReplaceNode(sf, match.SucceedCallExpression, match.SucceedArgument, nil)
 			},
 		}); action != nil {

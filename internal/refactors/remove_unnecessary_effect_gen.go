@@ -3,6 +3,7 @@ package refactors
 import (
 	"github.com/effect-ts/tsgo/internal/refactor"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/astnav"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
@@ -64,14 +65,7 @@ func runRemoveUnnecessaryEffectGen(ctx *refactor.Context) []ls.CodeAction {
 			action := ctx.NewRefactorAction(refactor.RefactorAction{
 				Description: "Remove unnecessary Effect.gen",
 				Run: func(tracker *rewriter.Tracker) {
-					var effectModuleId *ast.Node
-					if match.EffectModuleNode != nil && match.EffectModuleNode.Kind == ast.KindIdentifier {
-						effectModuleId = tracker.DeepCloneNode(match.EffectModuleNode)
-					} else {
-						effectModuleId = tracker.NewIdentifier("Effect")
-					}
-
-					asVoidAccess := tracker.NewPropertyAccessExpression(effectModuleId, nil, tracker.NewIdentifier("asVoid"), ast.NodeFlagsNone)
+					asVoidAccess := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(sf).Append("asVoid")...)
 					clonedExpr := tracker.DeepCloneNode(match.YieldedExpression)
 					callExpr := tracker.NewCallExpression(asVoidAccess, nil, nil, tracker.NewNodeList([]*ast.Node{clonedExpr}), ast.NodeFlagsNone)
 					ast.SetParentInChildren(callExpr)

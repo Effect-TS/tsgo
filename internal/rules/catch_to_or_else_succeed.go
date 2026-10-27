@@ -36,7 +36,6 @@ type CatchToOrElseSucceedMatch struct {
 	SourceFile            *ast.SourceFile
 	Location              core.TextRange
 	Callee                *ast.Node
-	CalleeNameNode        *ast.Node
 	CatchMethodName       string
 	SucceedCallExpression *ast.Node
 	SucceedArgument       *ast.Node
@@ -81,12 +80,10 @@ func AnalyzeCatchToOrElseSucceed(tp *typeparser.TypeParser, _ *checker.Checker, 
 				continue
 			}
 
-			var calleeNameNode *ast.Node
 			catchMethodName := "catch"
 			if transformation.Callee().Kind == ast.KindPropertyAccessExpression {
 				prop := transformation.Callee().AsPropertyAccessExpression()
 				if prop != nil && prop.Name() != nil {
-					calleeNameNode = prop.Name()
 					catchMethodName = prop.Name().Text()
 				}
 			}
@@ -95,7 +92,6 @@ func AnalyzeCatchToOrElseSucceed(tp *typeparser.TypeParser, _ *checker.Checker, 
 				SourceFile:            sf,
 				Location:              scanner.GetErrorRangeForNode(sf, transformation.Callee()),
 				Callee:                transformation.Callee(),
-				CalleeNameNode:        calleeNameNode,
 				CatchMethodName:       catchMethodName,
 				SucceedCallExpression: expr,
 				SucceedArgument:       call.Arguments.Nodes[0],

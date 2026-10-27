@@ -4,7 +4,6 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
-	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -33,18 +32,7 @@ func runPreferSucceedSomeOrNoneFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: description,
 			Run: func(tracker *rewriter.Tracker) {
-				moduleNode := match.EffectModuleNode
-				if moduleNode == nil {
-					moduleNode = tracker.NewIdentifier(typeparser.FindEffectModuleIdentifier(ctx.SourceFile))
-				} else {
-					moduleNode = tracker.DeepCloneNode(moduleNode)
-				}
-				callee := tracker.NewPropertyAccessExpression(
-					moduleNode,
-					nil,
-					tracker.NewIdentifier(match.ReplacementName),
-					ast.NodeFlagsNone,
-				)
+				callee := effectModuleMethod(tracker, ctx.SourceFile, match.ReplacementName)
 				replacement := callee
 				if match.ValueNode != nil {
 					var typeArguments *ast.NodeList

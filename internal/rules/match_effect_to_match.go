@@ -38,7 +38,6 @@ type MatchEffectToMatchMatch struct {
 	SourceFile       *ast.SourceFile
 	Location         core.TextRange
 	CalleeNode       *ast.Node
-	CalleeNameNode   *ast.Node
 	MatchEffectName  string
 	ReplacementName  string
 	HandlerResults   [2]*ast.Node
@@ -79,13 +78,9 @@ func AnalyzeMatchEffectToMatch(tp *typeparser.TypeParser, _ *checker.Checker, sf
 			if !ok {
 				continue
 			}
-			var calleeName *ast.Node
-			if transformation.Callee().Kind == ast.KindPropertyAccessExpression {
-				calleeName = transformation.Callee().AsPropertyAccessExpression().Name()
-			}
 			matches = append(matches, MatchEffectToMatchMatch{
 				SourceFile: sf, Location: scanner.GetErrorRangeForNode(sf, transformation.Callee()),
-				CalleeNode: transformation.Callee(), CalleeNameNode: calleeName, MatchEffectName: matchEffectName, ReplacementName: replacementName,
+				CalleeNode: transformation.Callee(), MatchEffectName: matchEffectName, ReplacementName: replacementName,
 				HandlerResults: [2]*ast.Node{failureResult, successResult}, SucceedArguments: [2]*ast.Node{failureArgument, successArgument},
 			})
 		}

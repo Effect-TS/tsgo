@@ -34,9 +34,10 @@ func runContextSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem 
 	sortText := "11"
 	tagKey := computeDeterministicKey(ctx.Program, tp, ctx.SourceFile, className, "service")
 
-	contextIdentifier := typeparser.FindModuleIdentifier(ctx.SourceFile, "Context")
+	contextReference := typeparser.FindModuleReference(ctx.SourceFile, "Context")
+	contextIdentifier := contextReference.String()
 	accessedText := data.AccessedObjectText()
-	isFullyQualified := contextIdentifier == accessedText
+	isFullyQualified := contextReference.MatchesNode(data.AccessedObject)
 
 	if version == typeparser.EffectMajorV3 {
 		if !isFullyQualified && !tp.IsNodeReferenceToEffectContextModuleApi(data.AccessedObject, "Tag") {

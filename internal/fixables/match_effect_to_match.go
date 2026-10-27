@@ -25,7 +25,7 @@ func runMatchEffectToMatchFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect." + match.ReplacementName,
 			Run: func(tracker *rewriter.Tracker) {
-				replaceEffectMethodCallee(tracker, match.SourceFile, match.CalleeNode, match.CalleeNameNode, match.ReplacementName)
+				replaceEffectMethodCallee(tracker, match.SourceFile, match.CalleeNode, match.ReplacementName)
 				for i := range match.HandlerResults {
 					tracker.ReplaceNode(match.SourceFile, match.HandlerResults[i], match.SucceedArguments[i], nil)
 				}

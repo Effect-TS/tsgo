@@ -30,7 +30,7 @@ func runSyncToSucceedFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.succeed",
 			Run: func(tracker *rewriter.Tracker) {
-				replaceEffectMethodCallee(tracker, ctx.SourceFile, match.Callee, match.CalleeName, "succeed")
+				replaceEffectMethodCallee(tracker, ctx.SourceFile, match.Callee, "succeed")
 				tracker.ReplaceNode(ctx.SourceFile, match.Thunk, match.ConstantValue, nil)
 			},
 		}); action != nil {

@@ -60,7 +60,7 @@ func runWrapWithEffectGen(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	effectModuleName := typeparser.FindEffectModuleIdentifier(ctx.SourceFile)
+	effectModuleName := typeparser.FindEffectModuleReference(ctx.SourceFile).String()
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Wrap with Effect.gen",

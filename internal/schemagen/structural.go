@@ -19,12 +19,12 @@ import (
 
 // StructuralSchemaGen holds the context for converting resolved types to Schema expressions.
 type StructuralSchemaGen struct {
-	Tracker          *rewriter.Tracker
-	SourceFile       *ast.SourceFile
-	Checker          *checker.Checker
-	TypeParser       *typeparser.TypeParser
-	SchemaIdentifier string
-	Version          typeparser.EffectMajorVersion
+	Tracker         *rewriter.Tracker
+	SourceFile      *ast.SourceFile
+	Checker         *checker.Checker
+	TypeParser      *typeparser.TypeParser
+	SchemaReference typeparser.ModuleReference
+	Version         typeparser.EffectMajorVersion
 
 	// hoistedSchemas maps types to expression generators for reuse
 	hoistedSchemas map[checker.TypeId]hoistedEntry
@@ -58,7 +58,7 @@ func NewStructuralSchemaGen(tracker *rewriter.Tracker, tp *typeparser.TypeParser
 		SourceFile:            sf,
 		Checker:               c,
 		TypeParser:            tp,
-		SchemaIdentifier:      typeparser.FindModuleIdentifier(sf, "Schema"),
+		SchemaReference:       typeparser.FindModuleReference(sf, "Schema"),
 		Version:               version,
 		hoistedSchemas:        make(map[checker.TypeId]hoistedEntry),
 		typeToStatementIndex:  make(map[checker.TypeId]int),
@@ -70,23 +70,13 @@ func NewStructuralSchemaGen(tracker *rewriter.Tracker, tp *typeparser.TypeParser
 
 // createApiPropertyAccess creates Schema.<name>.
 func (g *StructuralSchemaGen) createApiPropertyAccess(name string) *ast.Node {
-	return g.Tracker.NewPropertyAccessExpression(
-		g.Tracker.NewIdentifier(g.SchemaIdentifier),
-		nil,
-		g.Tracker.NewIdentifier(name),
-		ast.NodeFlagsNone,
-	)
+	return g.Tracker.NewPropertyAccessPath(g.SchemaReference.Append(name)...)
 }
 
 // createApiCall creates Schema.<name>(...args).
 func (g *StructuralSchemaGen) createApiCall(name string, args []*ast.Node) *ast.Node {
 	return g.Tracker.NewCallExpression(
-		g.Tracker.NewPropertyAccessExpression(
-			g.Tracker.NewIdentifier(g.SchemaIdentifier),
-			nil,
-			g.Tracker.NewIdentifier(name),
-			ast.NodeFlagsNone,
-		),
+		g.Tracker.NewPropertyAccessPath(g.SchemaReference.Append(name)...),
 		nil, nil,
 		g.Tracker.NewNodeList(args),
 		ast.NodeFlagsNone,

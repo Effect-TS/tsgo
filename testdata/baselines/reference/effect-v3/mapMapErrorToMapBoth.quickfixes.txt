@@ -3131,7 +3131,7 @@ export const explicitTypeArguments = fetchCount.pipe(
 
 // MUST TRIGGER: namespace import alias (resolved by symbol, not by name)
 export const namespaceAlias = fetchCount.pipe(
-  E.mapBoth({
+  Effect.mapBoth({
     onSuccess: n => n + 1,
     onFailure: message => message.length
 })

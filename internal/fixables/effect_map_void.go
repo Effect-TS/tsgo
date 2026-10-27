@@ -33,7 +33,7 @@ func runEffectMapVoidFix(ctx *fixable.Context) []ls.CodeAction {
 			Description: "Replace with Effect.asVoid",
 			Run: func(tracker *rewriter.Tracker) {
 				// Build Effect.asVoid, preserving the original module reference (and any alias).
-				asVoid := effectModuleMethod(tracker, sf, match.EffectModuleNode, "asVoid")
+				asVoid := effectModuleMethod(tracker, sf, "asVoid")
 				tracker.ReplacePipingFlowTransformation(sf, match.Transformation, rewriter.PipingFlowTransformationReplacement{
 					Callee: asVoid,
 				})

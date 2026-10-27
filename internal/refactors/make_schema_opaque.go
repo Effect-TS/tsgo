@@ -100,50 +100,34 @@ func createTypeofReference(tracker *rewriter.Tracker, name string) *ast.Node {
 	)
 }
 
-// createSchemaPropertyAccess creates: <schemaId>.<ns>.<member> as a property access expression.
+// createSchemaPropertyAccess creates: <schema>.<ns>.<member> as a property access expression.
 // Used in ExpressionWithTypeArguments for heritage clauses.
-func createSchemaPropertyAccess(tracker *rewriter.Tracker, schemaId string, ns string, member string) *ast.Node {
-	return tracker.NewPropertyAccessExpression(
-		tracker.NewPropertyAccessExpression(
-			tracker.NewIdentifier(schemaId),
-			nil,
-			tracker.NewIdentifier(ns),
-			ast.NodeFlagsNone,
-		),
-		nil,
-		tracker.NewIdentifier(member),
-		ast.NodeFlagsNone,
-	)
+func createSchemaPropertyAccess(tracker *rewriter.Tracker, schema typeparser.ModuleReference, ns string, member string) *ast.Node {
+	return tracker.NewPropertyAccessPath(schema.Append(ns, member)...)
 }
 
-// createSchemaQualifiedName creates: <schemaId>.<ns>.<member> as a qualified name.
+// createSchemaQualifiedName creates: <schema>.<ns>.<member> as a qualified name.
 // Used in TypeReferenceNode for type alias declarations.
-func createSchemaQualifiedName(tracker *rewriter.Tracker, schemaId string, ns string, member string) *ast.Node {
-	return tracker.NewQualifiedName(
-		tracker.NewQualifiedName(
-			tracker.NewIdentifier(schemaId),
-			tracker.NewIdentifier(ns),
-		),
-		tracker.NewIdentifier(member),
-	)
+func createSchemaQualifiedName(tracker *rewriter.Tracker, schema typeparser.ModuleReference, ns string, member string) *ast.Node {
+	return tracker.NewQualifiedNamePath(schema.Append(ns, member)...)
 }
 
-// createHeritageTypeRef creates: <schemaId>.<ns>.<member><typeof <inferFrom>>
+// createHeritageTypeRef creates: <schema>.<ns>.<member><typeof <inferFrom>>
 // as an ExpressionWithTypeArguments node for use in interface heritage clauses.
-func createHeritageTypeRef(tracker *rewriter.Tracker, schemaId string, ns string, member string, inferFrom string) *ast.Node {
+func createHeritageTypeRef(tracker *rewriter.Tracker, schema typeparser.ModuleReference, ns string, member string, inferFrom string) *ast.Node {
 	return tracker.NewExpressionWithTypeArguments(
-		createSchemaPropertyAccess(tracker, schemaId, ns, member),
+		createSchemaPropertyAccess(tracker, schema, ns, member),
 		tracker.NewNodeList([]*ast.Node{
 			createTypeofReference(tracker, inferFrom),
 		}),
 	)
 }
 
-// createTypeAliasTypeRef creates: <schemaId>.<ns>.<member><typeof <inferFrom>>
+// createTypeAliasTypeRef creates: <schema>.<ns>.<member><typeof <inferFrom>>
 // as a TypeReferenceNode for use in type alias declarations.
-func createTypeAliasTypeRef(tracker *rewriter.Tracker, schemaId string, ns string, member string, inferFrom string) *ast.Node {
+func createTypeAliasTypeRef(tracker *rewriter.Tracker, schema typeparser.ModuleReference, ns string, member string, inferFrom string) *ast.Node {
 	return tracker.NewTypeReferenceNode(
-		createSchemaQualifiedName(tracker, schemaId, ns, member),
+		createSchemaQualifiedName(tracker, schema, ns, member),
 		tracker.NewNodeList([]*ast.Node{
 			createTypeofReference(tracker, inferFrom),
 		}),
@@ -157,8 +141,8 @@ func opaqueExportModifiers(tracker *rewriter.Tracker) *ast.ModifierList {
 }
 
 // createOpaqueInterface creates: export interface <name> extends <heritage> { }
-func createOpaqueInterface(tracker *rewriter.Tracker, name string, schemaId string, ns string, member string, inferFrom string) *ast.Node {
-	heritage := createHeritageTypeRef(tracker, schemaId, ns, member, inferFrom)
+func createOpaqueInterface(tracker *rewriter.Tracker, name string, schema typeparser.ModuleReference, ns string, member string, inferFrom string) *ast.Node {
+	heritage := createHeritageTypeRef(tracker, schema, ns, member, inferFrom)
 	node := tracker.NewInterfaceDeclaration(
 		opaqueExportModifiers(tracker),
 		tracker.NewIdentifier(name),
@@ -175,9 +159,9 @@ func createOpaqueInterface(tracker *rewriter.Tracker, name string, schemaId stri
 	return node
 }
 
-// createOpaqueTypeAlias creates: export type <name> = <schemaId>.<ns>.<member><typeof inferFrom>
-func createOpaqueTypeAlias(tracker *rewriter.Tracker, name string, schemaId string, ns string, member string, inferFrom string) *ast.Node {
-	typeRef := createTypeAliasTypeRef(tracker, schemaId, ns, member, inferFrom)
+// createOpaqueTypeAlias creates: export type <name> = <schema>.<ns>.<member><typeof inferFrom>
+func createOpaqueTypeAlias(tracker *rewriter.Tracker, name string, schema typeparser.ModuleReference, ns string, member string, inferFrom string) *ast.Node {
+	typeRef := createTypeAliasTypeRef(tracker, schema, ns, member, inferFrom)
 	node := tracker.NewTypeAliasDeclaration(
 		opaqueExportModifiers(tracker),
 		tracker.NewIdentifier(name),
@@ -189,11 +173,11 @@ func createOpaqueTypeAlias(tracker *rewriter.Tracker, name string, schemaId stri
 }
 
 // createOpaqueTypeDecl creates an interface (if isObject) or type alias for the given schema property.
-func createOpaqueTypeDecl(tracker *rewriter.Tracker, name string, schemaId string, ns string, member string, inferFrom string, isObject bool) *ast.Node {
+func createOpaqueTypeDecl(tracker *rewriter.Tracker, name string, schema typeparser.ModuleReference, ns string, member string, inferFrom string, isObject bool) *ast.Node {
 	if isObject {
-		return createOpaqueInterface(tracker, name, schemaId, ns, member, inferFrom)
+		return createOpaqueInterface(tracker, name, schema, ns, member, inferFrom)
 	}
-	return createOpaqueTypeAlias(tracker, name, schemaId, ns, member, inferFrom)
+	return createOpaqueTypeAlias(tracker, name, schema, ns, member, inferFrom)
 }
 
 func runMakeSchemaOpaque(ctx *refactor.Context) []ls.CodeAction {
@@ -210,7 +194,7 @@ func runMakeSchemaOpaque(ctx *refactor.Context) []ls.CodeAction {
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Make Schema opaque",
 		Run: func(tracker *rewriter.Tracker) {
-			schemaId := typeparser.FindModuleIdentifier(ctx.SourceFile, "Schema")
+			schema := typeparser.FindModuleReference(ctx.SourceFile, "Schema")
 			origName := info.identifier.AsIdentifier().Text
 			newName := origName + "_"
 
@@ -225,7 +209,7 @@ func runMakeSchemaOpaque(ctx *refactor.Context) []ls.CodeAction {
 			var insertNodes []*ast.Node
 
 			// 2. Opaque Type: export interface/type <Name> extends Schema.Schema.Type<typeof Name_>
-			opaqueType := createOpaqueTypeDecl(tracker, origName, schemaId, "Schema", "Type", newName, isAObject)
+			opaqueType := createOpaqueTypeDecl(tracker, origName, schema, "Schema", "Type", newName, isAObject)
 			insertNodes = append(insertNodes, opaqueType)
 
 			// 3. Encoded: export interface/type <Name>Encoded extends Schema.{Codec|Schema}.Encoded<typeof Name_>
@@ -234,7 +218,7 @@ func runMakeSchemaOpaque(ctx *refactor.Context) []ls.CodeAction {
 				encodedNs = "Codec"
 			}
 			encodedName := origName + "Encoded"
-			encodedType := createOpaqueTypeDecl(tracker, encodedName, schemaId, encodedNs, "Encoded", newName, isEObject)
+			encodedType := createOpaqueTypeDecl(tracker, encodedName, schema, encodedNs, "Encoded", newName, isEObject)
 			insertNodes = append(insertNodes, encodedType)
 
 			// 4. Context / DecodingServices
@@ -246,14 +230,14 @@ func runMakeSchemaOpaque(ctx *refactor.Context) []ls.CodeAction {
 				contextMember = "DecodingServices"
 				contextName = origName + "DecodingServices"
 			}
-			contextType := createOpaqueTypeAlias(tracker, contextName, schemaId, contextNs, contextMember, newName)
+			contextType := createOpaqueTypeAlias(tracker, contextName, schema, contextNs, contextMember, newName)
 			insertNodes = append(insertNodes, contextType)
 
 			// 5. V4 only: EncodingServices
 			var encodingServicesName string
 			if isV4 {
 				encodingServicesName = origName + "EncodingServices"
-				esType := createOpaqueTypeAlias(tracker, encodingServicesName, schemaId, "Codec", "EncodingServices", newName)
+				esType := createOpaqueTypeAlias(tracker, encodingServicesName, schema, "Codec", "EncodingServices", newName)
 				insertNodes = append(insertNodes, esType)
 			}
 
@@ -272,10 +256,7 @@ func runMakeSchemaOpaque(ctx *refactor.Context) []ls.CodeAction {
 			}
 
 			constType := tracker.NewTypeReferenceNode(
-				tracker.NewQualifiedName(
-					tracker.NewIdentifier(schemaId),
-					tracker.NewIdentifier(schemaTypeNs),
-				),
+				tracker.NewQualifiedNamePath(schema.Append(schemaTypeNs)...),
 				tracker.NewNodeList(typeArgs),
 			)
 

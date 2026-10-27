@@ -30,7 +30,7 @@ func runMakeSchemaOpaqueWithNs(ctx *refactor.Context) []ls.CodeAction {
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Make Schema opaque with namespace",
 		Run: func(tracker *rewriter.Tracker) {
-			schemaId := typeparser.FindModuleIdentifier(ctx.SourceFile, "Schema")
+			schema := typeparser.FindModuleReference(ctx.SourceFile, "Schema")
 			origName := info.identifier.AsIdentifier().Text
 			newName := origName + "_"
 
@@ -44,7 +44,7 @@ func runMakeSchemaOpaqueWithNs(ctx *refactor.Context) []ls.CodeAction {
 
 			// 2. Opaque Type: export interface <Name> extends Schema.Schema.Type<typeof Name_>
 			// Always uses Schema.Schema.Type, always an interface
-			opaqueType := createOpaqueInterface(tracker, origName, schemaId, "Schema", "Type", newName)
+			opaqueType := createOpaqueInterface(tracker, origName, schema, "Schema", "Type", newName)
 			insertNodes = append(insertNodes, opaqueType)
 
 			// 3. Build namespace members
@@ -57,9 +57,9 @@ func runMakeSchemaOpaqueWithNs(ctx *refactor.Context) []ls.CodeAction {
 			}
 			var encodedMember *ast.Node
 			if isEObject {
-				encodedMember = createOpaqueInterface(tracker, "Encoded", schemaId, encodedNs, "Encoded", newName)
+				encodedMember = createOpaqueInterface(tracker, "Encoded", schema, encodedNs, "Encoded", newName)
 			} else {
-				encodedMember = createOpaqueTypeAlias(tracker, "Encoded", schemaId, encodedNs, "Encoded", newName)
+				encodedMember = createOpaqueTypeAlias(tracker, "Encoded", schema, encodedNs, "Encoded", newName)
 			}
 			nsMembers = append(nsMembers, encodedMember)
 
@@ -67,17 +67,17 @@ func runMakeSchemaOpaqueWithNs(ctx *refactor.Context) []ls.CodeAction {
 			var contextMemberName string
 			if isV4 {
 				contextMemberName = "DecodingServices"
-				contextMember := createOpaqueTypeAlias(tracker, "DecodingServices", schemaId, "Codec", "DecodingServices", newName)
+				contextMember := createOpaqueTypeAlias(tracker, "DecodingServices", schema, "Codec", "DecodingServices", newName)
 				nsMembers = append(nsMembers, contextMember)
 			} else {
 				contextMemberName = "Context"
-				contextMember := createOpaqueTypeAlias(tracker, "Context", schemaId, "Schema", "Context", newName)
+				contextMember := createOpaqueTypeAlias(tracker, "Context", schema, "Schema", "Context", newName)
 				nsMembers = append(nsMembers, contextMember)
 			}
 
 			// V4 only: EncodingServices
 			if isV4 {
-				esMember := createOpaqueTypeAlias(tracker, "EncodingServices", schemaId, "Codec", "EncodingServices", newName)
+				esMember := createOpaqueTypeAlias(tracker, "EncodingServices", schema, "Codec", "EncodingServices", newName)
 				nsMembers = append(nsMembers, esMember)
 			}
 
@@ -115,10 +115,7 @@ func runMakeSchemaOpaqueWithNs(ctx *refactor.Context) []ls.CodeAction {
 			}
 
 			constType := tracker.NewTypeReferenceNode(
-				tracker.NewQualifiedName(
-					tracker.NewIdentifier(schemaId),
-					tracker.NewIdentifier("Schema"),
-				),
+				tracker.NewQualifiedNamePath(schema.Append("Schema")...),
 				tracker.NewNodeList(typeArgs),
 			)
 

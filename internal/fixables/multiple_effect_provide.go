@@ -32,15 +32,6 @@ func runMultipleEffectProvideFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		// Resolve the Effect module name, preserving import aliases
-		effectModuleName := typeparser.FindEffectModuleIdentifier(sf)
-		if match.EffectModuleNode != nil && match.EffectModuleNode.Kind == ast.KindIdentifier {
-			effectModuleName = scanner.GetTextOfNode(match.EffectModuleNode)
-		}
-
-		// Resolve the Layer module name from the source file imports
-		layerModuleName := typeparser.FindModuleIdentifier(sf, "Layer")
-
 		// Capture loop variables for the closure
 		chunk := match.Chunk
 		layerArgs := match.LayerArgs
@@ -54,15 +45,8 @@ func runMultipleEffectProvideFix(ctx *fixable.Context) []ls.CodeAction {
 				tracker.DeleteRange(sf, core.NewTextRange(tokenPos, endPos))
 
 				// Step 2: Build Effect.provide(Layer.mergeAll(arg1, arg2, ...))
-				effectId := tracker.NewIdentifier(effectModuleName)
-				provideAccess := tracker.NewPropertyAccessExpression(
-					effectId, nil, tracker.NewIdentifier("provide"), ast.NodeFlagsNone,
-				)
-
-				layerId := tracker.NewIdentifier(layerModuleName)
-				mergeAllAccess := tracker.NewPropertyAccessExpression(
-					layerId, nil, tracker.NewIdentifier("mergeAll"), ast.NodeFlagsNone,
-				)
+				provideAccess := effectModuleMethod(tracker, sf, "provide")
+				mergeAllAccess := tracker.NewPropertyAccessPath(typeparser.FindModuleReference(sf, "Layer").Append("mergeAll")...)
 
 				// Clone all layer arguments
 				clonedArgs := make([]*ast.Node, len(layerArgs))

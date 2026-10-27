@@ -24,14 +24,14 @@ func runFlatMapIdentityToFlattenFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		// Without an Effect module receiver there is no bound name to reach flatten through.
+		// Only offer the fix when the step is called through an Effect module receiver.
 		if match.EffectModuleNode == nil {
 			continue
 		}
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.flatten",
 			Run: func(tracker *rewriter.Tracker) {
-				flatten := effectModuleMethod(tracker, match.SourceFile, match.EffectModuleNode, "flatten")
+				flatten := effectModuleMethod(tracker, match.SourceFile, "flatten")
 				ast.SetParentInChildren(flatten)
 				tracker.ReplacePipingFlowTransformation(match.SourceFile, match.Transformation, rewriter.PipingFlowTransformationReplacement{
 					Callee: flatten,

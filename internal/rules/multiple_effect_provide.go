@@ -34,11 +34,10 @@ var MultipleEffectProvide = rule.Rule{
 // MultipleEffectProvideMatch holds the AST nodes needed by both the
 // diagnostic rule and the quick-fix for the multipleEffectProvide pattern.
 type MultipleEffectProvideMatch struct {
-	SourceFile       *ast.SourceFile // The source file where the diagnostic should be reported
-	Location         core.TextRange  // The diagnostic span (error range on the first call in the chunk)
-	Chunk            []*ast.Node     // The list of call expression nodes in the consecutive provide chain (2+ elements)
-	LayerArgs        []*ast.Node     // The layer argument nodes from each Effect.provide(layer) call
-	EffectModuleNode *ast.Node       // The Effect module identifier node from the first chunk callee
+	SourceFile *ast.SourceFile // The source file where the diagnostic should be reported
+	Location   core.TextRange  // The diagnostic span (error range on the first call in the chunk)
+	Chunk      []*ast.Node     // The list of call expression nodes in the consecutive provide chain (2+ elements)
+	LayerArgs  []*ast.Node     // The layer argument nodes from each Effect.provide(layer) call
 }
 
 // AnalyzeMultipleEffectProvide finds all consecutive Effect.provide call chains
@@ -52,21 +51,18 @@ func AnalyzeMultipleEffectProvide(tp *typeparser.TypeParser, _ *checker.Checker,
 		// Track chunks of consecutive Effect.provide calls with Layer arguments.
 		var currentChunk []*ast.Node
 		var currentLayerArgs []*ast.Node
-		var currentEffectModuleNode *ast.Node
 
 		finalizeChunk := func() {
 			if len(currentChunk) >= 2 {
 				matches = append(matches, MultipleEffectProvideMatch{
-					SourceFile:       sf,
-					Location:         scanner.GetErrorRangeForNode(sf, currentChunk[0]),
-					Chunk:            currentChunk,
-					LayerArgs:        currentLayerArgs,
-					EffectModuleNode: currentEffectModuleNode,
+					SourceFile: sf,
+					Location:   scanner.GetErrorRangeForNode(sf, currentChunk[0]),
+					Chunk:      currentChunk,
+					LayerArgs:  currentLayerArgs,
 				})
 			}
 			currentChunk = nil
 			currentLayerArgs = nil
-			currentEffectModuleNode = nil
 		}
 
 		for _, transformation := range flow.Transformations().All() {
@@ -127,11 +123,6 @@ func AnalyzeMultipleEffectProvide(tp *typeparser.TypeParser, _ *checker.Checker,
 			if callNode == nil {
 				finalizeChunk()
 				continue
-			}
-
-			// Capture Effect module node from the callee's property access expression
-			if len(currentChunk) == 0 && transformation.Callee().Kind == ast.KindPropertyAccessExpression {
-				currentEffectModuleNode = transformation.Callee().AsPropertyAccessExpression().Expression
 			}
 
 			currentChunk = append(currentChunk, callNode)

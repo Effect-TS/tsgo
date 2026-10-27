@@ -29,19 +29,15 @@ func runMapMapErrorToMapBothFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Fixable || (!match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location)) {
 			continue
 		}
-		target, receiver := mapBothReference(ctx, match)
+		member := effectModuleMember(ctx, match.ReplacementName)
+		target := mapBothReference(ctx, match, member)
 		if target == nil {
 			continue
 		}
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect." + match.ReplacementName,
 			Run: func(t *rewriter.Tracker) {
-				var callee *ast.Node
-				if receiver {
-					callee = effectModuleMethod(t, match.SourceFile, target, match.ReplacementName)
-				} else {
-					callee = t.NewIdentifier(target.Text())
-				}
+				callee := target.expression(t, member)
 				// Keep the callbacks in flow order so they are evaluated as before.
 				firstName, secondName := "onSuccess", "onFailure"
 				if match.FirstFailure {
@@ -66,29 +62,20 @@ func runMapMapErrorToMapBothFix(ctx *fixable.Context) []ls.CodeAction {
 	return nil
 }
 
-// mapBothReference finds a value that reaches the replacement API at the
-// diagnostic: the Effect module receiver of one of the steps, or a binding in
-// scope that is the replacement API itself (receiver false) or the Effect
-// module (receiver true). It returns nil when the file has no such binding,
-// for example when the steps only use named imports of map and mapError.
-func mapBothReference(ctx *fixable.Context, match rules.MapMapErrorToMapBothMatch) (*ast.Node, bool) {
-	method := match.ReplacementName
-	for _, callee := range []*ast.Node{match.Second.Callee(), match.First.Callee()} {
-		if callee.Kind != ast.KindPropertyAccessExpression {
-			continue
-		}
-		receiver := callee.AsPropertyAccessExpression().Expression
-		if ctx.TypeParser.IsExpressionEffectModule(receiver) && effectModuleHasMethod(ctx, receiver, method) {
-			return receiver, true
-		}
-	}
+// mapBothReference finds a reference that reaches the replacement API at the
+// diagnostic: the file's Effect import, or a binding in scope that is the
+// replacement API itself or the Effect module. It returns nil when the file
+// has no such binding, for example when the steps only use named imports of
+// map and mapError.
+func mapBothReference(ctx *fixable.Context, match rules.MapMapErrorToMapBothMatch, member moduleMember) *moduleMemberReference {
 	location := match.Second.Callee()
+	if reference := importedModuleMember(ctx, location, typeparser.FindEffectModuleReference(match.SourceFile), member); reference != nil {
+		return reference
+	}
 	symbols := ctx.Checker.GetSymbolsInScope(location, ast.SymbolFlagsValue|ast.SymbolFlagsAlias)
 	slices.SortFunc(symbols, func(left, right *ast.Symbol) int {
 		return strings.Compare(ast.TSGetSymbolName(left), ast.TSGetSymbolName(right))
 	})
-	// Among module bindings, prefer the one the file imports Effect under.
-	preferred := typeparser.FindEffectModuleIdentifier(match.SourceFile)
 	var module *ast.Node
 	for _, symbol := range symbols {
 		if len(ast.TSGetSymbolDeclarations(symbol)) != 1 || checker.Checker_isSymbolAssigned(ctx.Checker, symbol) {
@@ -113,21 +100,15 @@ func mapBothReference(ctx *fixable.Context, match rules.MapMapErrorToMapBothMatc
 			}
 		}
 		// Prefer a direct binding to the replacement API over a module binding.
-		if ctx.TypeParser.IsNodeReferenceToEffectModuleApi(reference, method) {
-			return name, false
+		if member.isMember(reference) {
+			return &moduleMemberReference{path: typeparser.ModuleReference{name.Text()}}
 		}
-		if (module == nil || name.Text() == preferred) && ctx.TypeParser.IsExpressionEffectModule(reference) && effectModuleHasMethod(ctx, name, method) {
+		if module == nil && member.isModule(reference) && typeHasMember(ctx, ctx.TypeParser.GetTypeAtLocation(name), member) {
 			module = name
 		}
 	}
 	if module != nil {
-		return module, true
+		return &moduleMemberReference{path: typeparser.ModuleReference{module.Text()}, viaModule: true}
 	}
-	return nil, false
-}
-
-func effectModuleHasMethod(ctx *fixable.Context, receiver *ast.Node, method string) bool {
-	property := ctx.Checker.GetPropertyOfType(ctx.TypeParser.GetTypeAtLocation(receiver), method)
-	return property != nil && ast.TSGetSymbolValueDeclaration(property) != nil &&
-		ctx.TypeParser.IsNodeReferenceToEffectModuleApi(ast.TSGetSymbolValueDeclaration(property).Name(), method)
+	return nil
 }

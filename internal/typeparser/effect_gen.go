@@ -18,8 +18,6 @@ type EffectGenCallResult struct {
 
 func (r EffectGenCallResult) Call() *ast.CallExpression { return r.call }
 
-func (r EffectGenCallResult) EffectModule() *ast.Expression { return r.effectModule }
-
 func (r EffectGenCallResult) OptionsNode() *ast.Node { return r.optionsNode }
 
 func (r EffectGenCallResult) GeneratorFunction() *ast.FunctionExpression { return r.generatorFunction }

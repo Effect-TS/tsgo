@@ -28,11 +28,11 @@ var TimeoutCatchTagToTimeoutOrElse = rule.Rule{
 }
 
 type TimeoutCatchTagToTimeoutOrElseMatch struct {
-	Flow                            *typeparser.PipingFlow
-	Start, End                      int
-	Location                        core.TextRange
-	ReplacementName                 string
-	EffectModule, Duration, Handler *ast.Node
+	Flow              *typeparser.PipingFlow
+	Start, End        int
+	Location          core.TextRange
+	ReplacementName   string
+	Duration, Handler *ast.Node
 }
 
 func AnalyzeTimeoutCatchTagToTimeoutOrElse(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []TimeoutCatchTagToTimeoutOrElseMatch {
@@ -87,11 +87,7 @@ func AnalyzeTimeoutCatchTagToTimeoutOrElse(tp *typeparser.TypeParser, c *checker
 			if option {
 				name = "timeoutOption"
 			}
-			var module *ast.Node
-			if catch.Callee().Kind == ast.KindPropertyAccessExpression {
-				module = catch.Callee().AsPropertyAccessExpression().Expression
-			}
-			matches = append(matches, TimeoutCatchTagToTimeoutOrElseMatch{Flow: flow, Start: i, End: end, Location: scanner.GetErrorRangeForNode(sf, catch.Callee()), ReplacementName: name, EffectModule: module, Duration: timeout.Args().At(0), Handler: catch.Args().At(1)})
+			matches = append(matches, TimeoutCatchTagToTimeoutOrElseMatch{Flow: flow, Start: i, End: end, Location: scanner.GetErrorRangeForNode(sf, catch.Callee()), ReplacementName: name, Duration: timeout.Args().At(0), Handler: catch.Args().At(1)})
 		}
 	}
 	return matches

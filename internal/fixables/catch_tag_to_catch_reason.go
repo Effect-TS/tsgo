@@ -53,16 +53,11 @@ func buildCatchTagToCatchReasonReplacement(tracker *rewriter.Tracker, sf *ast.So
 	if tracker == nil || match.Callee == nil || match.OuterTag == nil || len(match.Branches) == 0 {
 		return nil, nil
 	}
-	var receiver *ast.Node
-	if match.Callee.Kind == ast.KindPropertyAccessExpression {
-		receiver = match.Callee.AsPropertyAccessExpression().Expression
-	}
-
 	methodName := "catchReason"
 	if len(match.Branches) > 1 {
 		methodName = "catchReasons"
 	}
-	method := effectModuleMethod(tracker, sf, receiver, methodName)
+	method := effectModuleMethod(tracker, sf, methodName)
 	arguments := []*ast.Node{tracker.DeepCloneNode(match.OuterTag)}
 	if len(match.Branches) == 1 {
 		branch := match.Branches[0]

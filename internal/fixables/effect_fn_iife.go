@@ -52,8 +52,8 @@ func runEffectFnIifeFix(ctx *fixable.Context) []ls.CodeAction {
 			// Deep-clone the generator function to produce a synthesized copy
 			clonedGenFn := tracker.DeepCloneNode(genFn.AsNode())
 
-			// Build Effect.gen, preserving a direct receiver or finding the imported module.
-			effectGenAccess := effectModuleMethod(tracker, sf, result.EffectModule, "gen")
+			// Build Effect.gen from the file's Effect import.
+			effectGenAccess := effectModuleMethod(tracker, sf, "gen")
 
 			// Build Effect.gen(genFn) call expression
 			genCallNode := tracker.NewCallExpression(effectGenAccess, nil, nil, tracker.NewNodeList([]*ast.Node{clonedGenFn}), ast.NodeFlagsNone)

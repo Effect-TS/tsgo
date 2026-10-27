@@ -499,7 +499,7 @@ export const shouldTriggerDataFirst = Effect.map(numberEffect, Option.some)
 // Should trigger: function pipe form and aliased modules
 export const shouldTriggerAliases = pipe(
   numberEffect,
-  Fx.asSome
+  Effect.asSome
 )
 
 // Should trigger: named Option.some import

@@ -31,7 +31,7 @@ func runMapConstToAsFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.as",
 			Run: func(tracker *rewriter.Tracker) {
-				as := effectModuleMethod(tracker, ctx.SourceFile, match.EffectModuleNode, "as")
+				as := effectModuleMethod(tracker, ctx.SourceFile, "as")
 				tracker.ReplacePipingFlowTransformation(ctx.SourceFile, match.Transformation, rewriter.PipingFlowTransformationReplacement{
 					Callee:    as,
 					Arguments: tracker.NewNodeList([]*ast.Node{tracker.DeepCloneNode(match.ConstantValue)}),

@@ -30,8 +30,8 @@ func runAsyncAwaitToGenTryPromise(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	effectModuleName := typeparser.FindEffectModuleIdentifier(ctx.SourceFile)
-	dataModuleName := typeparser.FindModuleIdentifier(ctx.SourceFile, "Data")
+	effectModuleName := typeparser.FindEffectModuleReference(ctx.SourceFile)
+	dataModuleName := typeparser.FindModuleReference(ctx.SourceFile, "Data")
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Rewrite to Effect.gen with failures",
@@ -47,7 +47,7 @@ func runAsyncAwaitToGenTryPromise(ctx *refactor.Context) []ls.CodeAction {
 	return []ls.CodeAction{*action}
 }
 
-func transformAsyncToEffectGenTryPromise(tracker *rewriter.Tracker, sf *ast.SourceFile, node *ast.Node, effectModuleName string, dataModuleName string) {
+func transformAsyncToEffectGenTryPromise(tracker *rewriter.Tracker, sf *ast.SourceFile, node *ast.Node, effectModuleName typeparser.ModuleReference, dataModuleName typeparser.ModuleReference) {
 	body := typeparser.GetFunctionLikeBody(node)
 	if body == nil {
 		return
@@ -118,7 +118,7 @@ func findTopLevelStatement(node *ast.Node) *ast.Node {
 }
 
 // buildYieldStarTryPromise builds: yield* Effect.tryPromise({ try: () => expr, catch: cause => new ErrorN({ cause }) })
-func buildYieldStarTryPromise(tracker *rewriter.Tracker, expr *ast.Node, effectModuleName string, errorName string) *ast.Node {
+func buildYieldStarTryPromise(tracker *rewriter.Tracker, expr *ast.Node, effectModuleName typeparser.ModuleReference, errorName string) *ast.Node {
 	// try: () => expr
 	tryArrow := tracker.NewArrowFunction(
 		nil,                                // modifiers
@@ -190,10 +190,7 @@ func buildYieldStarTryPromise(tracker *rewriter.Tracker, expr *ast.Node, effectM
 	)
 
 	// Effect.tryPromise({ ... })
-	effectId := tracker.NewIdentifier(effectModuleName)
-	tryPromiseAccess := tracker.NewPropertyAccessExpression(
-		effectId, nil, tracker.NewIdentifier("tryPromise"), ast.NodeFlagsNone,
-	)
+	tryPromiseAccess := tracker.NewPropertyAccessPath(effectModuleName.Append("tryPromise")...)
 	tryPromiseCall := tracker.NewCallExpression(
 		tryPromiseAccess, nil, nil,
 		tracker.NewNodeList([]*ast.Node{optionsObj}),
@@ -208,12 +205,9 @@ func buildYieldStarTryPromise(tracker *rewriter.Tracker, expr *ast.Node, effectM
 }
 
 // buildTaggedErrorClass builds: class ErrorN extends Data.TaggedError("ErrorN")<{ cause: unknown }> {}
-func buildTaggedErrorClass(tracker *rewriter.Tracker, dataModuleName string, errorName string, isExported bool) *ast.Node {
+func buildTaggedErrorClass(tracker *rewriter.Tracker, dataModuleName typeparser.ModuleReference, errorName string, isExported bool) *ast.Node {
 	// Data.TaggedError("ErrorN")
-	dataId := tracker.NewIdentifier(dataModuleName)
-	taggedErrorAccess := tracker.NewPropertyAccessExpression(
-		dataId, nil, tracker.NewIdentifier("TaggedError"), ast.NodeFlagsNone,
-	)
+	taggedErrorAccess := tracker.NewPropertyAccessPath(dataModuleName.Append("TaggedError")...)
 	taggedErrorCall := tracker.NewCallExpression(
 		taggedErrorAccess, nil, nil,
 		tracker.NewNodeList([]*ast.Node{tracker.NewStringLiteral(errorName, 0)}),

@@ -30,7 +30,7 @@ func runCatchDieToOrDieFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.orDie",
 			Run: func(tracker *rewriter.Tracker) {
-				orDie := effectModuleMethod(tracker, ctx.SourceFile, match.EffectModule, "orDie")
+				orDie := effectModuleMethod(tracker, ctx.SourceFile, "orDie")
 				tracker.ReplacePipingFlowTransformation(ctx.SourceFile, match.Transformation, rewriter.PipingFlowTransformationReplacement{
 					Callee: orDie,
 				})
