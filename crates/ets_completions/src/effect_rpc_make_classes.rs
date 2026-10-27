@@ -32,12 +32,13 @@ fn run_rpc_make_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionIte
         return Vec::new();
     }
 
-    let rpc_identifier =
-        ets_typeparser::find_module_identifier_for_package(ctx.source_file, "@effect/rpc", "Rpc");
+    let rpc_reference =
+        ets_typeparser::find_module_reference_for_package(ctx.source_file, "@effect/rpc", "Rpc");
+    let rpc_identifier = rpc_reference.string();
     let accessed_text = data.accessed_object_text();
 
     // Only fully-qualified case (e.g., Rpc.make)
-    if rpc_identifier != accessed_text {
+    if !rpc_reference.matches_node(data.accessed_object) {
         return Vec::new();
     }
 

@@ -30,13 +30,7 @@ fn run_flat_map_to_map_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.map".to_string(),
             run: Box::new(move |tracker| {
-                replace_effect_method_callee(
-                    tracker,
-                    sf,
-                    Some(m.callee),
-                    m.callee_name_node,
-                    "map",
-                );
+                replace_effect_method_callee(tracker, sf, Some(m.callee), "map");
                 tracker.replace_node(
                     sf,
                     Some(m.succeed_call_expression),

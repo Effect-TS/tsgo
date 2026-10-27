@@ -55,12 +55,10 @@ fn run_unnecessary_effect_gen_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> 
         }
 
         // No return + non-void success: wrap with Effect.asVoid(...)
-        let effect_module_node = m.effect_module_node;
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Remove the Effect.gen, and keep the body".to_string(),
             run: Box::new(move |tracker| {
-                let as_void_access =
-                    effect_module_method(tracker, sf, effect_module_node, "asVoid");
+                let as_void_access = effect_module_method(tracker, sf, "asVoid");
 
                 // Clone the yielded expression
                 let cloned_expr = tracker.deep_clone_node(Some(yielded_expression)).unwrap();

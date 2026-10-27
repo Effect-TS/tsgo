@@ -34,7 +34,6 @@ fn run_match_effect_to_map_both_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
                     tracker,
                     m.source_file,
                     Some(m.callee_node),
-                    m.callee_name_node,
                     "mapBoth",
                 );
                 for i in 0..m.handler_results.len() {

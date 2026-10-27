@@ -27,15 +27,14 @@ fn run_flat_map_identity_to_flatten_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAc
         if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
             continue;
         }
-        // Without an Effect module receiver there is no bound name to reach flatten through.
+        // Only offer the fix when the step is called through an Effect module receiver.
         if m.effect_module_node.is_none() {
             continue;
         }
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.flatten".to_string(),
             run: Box::new(move |tracker| {
-                let flatten =
-                    effect_module_method(tracker, m.source_file, m.effect_module_node, "flatten");
+                let flatten = effect_module_method(tracker, m.source_file, "flatten");
                 ast::set_parent_in_children(flatten);
                 tracker.replace_piping_flow_transformation(
                     Some(m.source_file),

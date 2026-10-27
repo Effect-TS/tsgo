@@ -5,7 +5,7 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile};
+use ets_shim::ast::{self, Diagnostic, Node, SourceFile};
 use ets_shim::checker::{Type, TypeFlags};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
@@ -51,12 +51,11 @@ pub struct CatchToIgnoreMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
     pub transformation: PipingFlowTransformation,
-    pub effect_module_node: Option<P<Node>>,
     pub catch_method_name: &'static str,
     pub ignore_method_name: &'static str,
 }
 
-// go: internal/rules/catch_to_ignore.go:46 AnalyzeCatchToIgnore
+// go: internal/rules/catch_to_ignore.go:45 AnalyzeCatchToIgnore
 // AnalyzeCatchToIgnore finds Effect.catch/catchCause callbacks that return Effect.void
 // where the resulting success channel is void-like, so Effect.ignore/ignoreCause is equivalent.
 //
@@ -79,7 +78,7 @@ pub fn analyze_catch_to_ignore(
                 continue;
             }
 
-            let Some((catch_method_name, ignore_method_name, effect_module_node)) =
+            let Some((catch_method_name, ignore_method_name)) =
                 catch_to_ignore_methods(tp, Some(transformation.callee()))
             else {
                 continue;
@@ -107,7 +106,6 @@ pub fn analyze_catch_to_ignore(
                 source_file: sf,
                 location: ets_shim::scanner::get_error_range_for_node(sf, transformation.callee()),
                 transformation: transformation.clone(),
-                effect_module_node,
                 catch_method_name,
                 ignore_method_name,
             });
@@ -117,28 +115,23 @@ pub fn analyze_catch_to_ignore(
     matches
 }
 
-// go: internal/rules/catch_to_ignore.go:90 catchToIgnoreMethods
-// Rust: Go's `(catchMethodName, ignoreMethodName, effectModuleNode, ok)` is an `Option` of the first three.
+// go: internal/rules/catch_to_ignore.go:88 catchToIgnoreMethods
+// Rust: Go's `(catchMethodName, ignoreMethodName, ok)` is an `Option` of the first two.
 pub(crate) fn catch_to_ignore_methods(
     tp: &mut TypeParser<'_>,
     callee: Option<P<Node>>,
-) -> Option<(&'static str, &'static str, Option<P<Node>>)> {
+) -> Option<(&'static str, &'static str)> {
     let callee = callee?;
-    let mut effect_module_node = None;
-    if callee.kind() == Kind::PropertyAccessExpression {
-        let prop = callee.as_property_access_expression();
-        effect_module_node = Some(prop.expression());
-    }
     if tp.is_node_reference_to_effect_module_api(callee, "catch") {
-        Some(("catch", "ignore", effect_module_node))
+        Some(("catch", "ignore"))
     } else if tp.is_node_reference_to_effect_module_api(callee, "catchCause") {
-        Some(("catchCause", "ignoreCause", effect_module_node))
+        Some(("catchCause", "ignoreCause"))
     } else {
         None
     }
 }
 
-// go: internal/rules/catch_to_ignore.go:110 isEffectVoidReference
+// go: internal/rules/catch_to_ignore.go:102 isEffectVoidReference
 pub(crate) fn is_effect_void_reference(tp: &mut TypeParser<'_>, node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;
@@ -146,7 +139,7 @@ pub(crate) fn is_effect_void_reference(tp: &mut TypeParser<'_>, node: Option<P<N
     tp.is_node_reference_to_effect_module_api(ast::skip_parentheses(node), "void")
 }
 
-// go: internal/rules/catch_to_ignore.go:117 isVoidLikeEffectSuccess
+// go: internal/rules/catch_to_ignore.go:109 isVoidLikeEffectSuccess
 pub(crate) fn is_void_like_effect_success(t: Option<P<Type>>) -> bool {
     let Some(t) = t else {
         return false;

@@ -33,10 +33,11 @@ fn run_effect_sql_model_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsprot
         return Vec::new();
     }
 
-    let model_identifier =
-        ets_typeparser::find_module_identifier_for_package(ctx.source_file, "@effect/sql", "Model");
+    let model_reference =
+        ets_typeparser::find_module_reference_for_package(ctx.source_file, "@effect/sql", "Model");
+    let model_identifier = model_reference.string();
     let accessed_text = data.accessed_object_text();
-    let is_fully_qualified = model_identifier == accessed_text;
+    let is_fully_qualified = model_reference.matches_node(data.accessed_object);
     let class_name = data.class_name_text();
 
     // For non-fully-qualified: validate with IsNodeReferenceToEffectSqlModelModuleApi

@@ -70,15 +70,11 @@ fn build_catch_all_tag_dispatch_replacement(
     if m.branches.is_empty() {
         return (None, None);
     }
-    let mut receiver = None;
-    if m.callee.kind() == Kind::PropertyAccessExpression {
-        receiver = Some(m.callee.as_property_access_expression().expression());
-    }
     let mut method_name = "catchTag";
     if m.branches.len() > 1 {
         method_name = "catchTags";
     }
-    let callee = effect_module_method(tracker, sf, receiver, method_name);
+    let callee = effect_module_method(tracker, sf, method_name);
     if m.branches.len() == 1 {
         let branch = &m.branches[0];
         return (
@@ -111,7 +107,7 @@ fn build_catch_all_tag_dispatch_replacement(
     )
 }
 
-// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:66 newCatchTagHandler
+// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:62 newCatchTagHandler
 fn new_catch_tag_handler(
     tracker: &Tracker,
     parameter_name: &str,

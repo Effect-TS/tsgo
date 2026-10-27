@@ -43,7 +43,26 @@ fn test_parse_data_for_extends_class_completion_after_dot() {
     });
 }
 
-// go test: internal/completion/position_test.go:37 TestParseDataForExtendsClassCompletion_AfterPropertyName
+// go test: internal/completion/position_test.go:37 TestParseDataForExtendsClassCompletion_BarrelNamespaceAfterDot
+#[test]
+fn test_parse_data_for_extends_class_completion_barrel_namespace_after_dot() {
+    ets_go::testing::run(|t| {
+        t.parallel();
+        // class Foo extends X.Schema.| (cursor after the dot)
+        let source = "class Foo extends X.Schema.";
+        let sf = parse_source(source);
+
+        let Some(data) = parse_data_for_extends_class_completion(sf, len(source)) else {
+            t.fatal("expected non-nil result for 'class Foo extends X.Schema.'");
+        };
+        let got = data.accessed_object_text();
+        if got != "X.Schema" {
+            t.error(format!("AccessedObjectText = {}, want {}", quote(&got), quote("X.Schema")));
+        }
+    });
+}
+
+// go test: internal/completion/position_test.go:52 TestParseDataForExtendsClassCompletion_AfterPropertyName
 #[test]
 fn test_parse_data_for_extends_class_completion_after_property_name() {
     ets_go::testing::run(|t| {
@@ -67,7 +86,7 @@ fn test_parse_data_for_extends_class_completion_after_property_name() {
     });
 }
 
-// go test: internal/completion/position_test.go:56 TestParseDataForExtendsClassCompletion_StandaloneIdentifier
+// go test: internal/completion/position_test.go:71 TestParseDataForExtendsClassCompletion_StandaloneIdentifier
 #[test]
 fn test_parse_data_for_extends_class_completion_standalone_identifier() {
     ets_go::testing::run(|t| {
@@ -91,7 +110,7 @@ fn test_parse_data_for_extends_class_completion_standalone_identifier() {
     });
 }
 
-// go test: internal/completion/position_test.go:76 TestParseDataForExtendsClassCompletion_NonClassContext
+// go test: internal/completion/position_test.go:91 TestParseDataForExtendsClassCompletion_NonClassContext
 #[test]
 fn test_parse_data_for_extends_class_completion_non_class_context() {
     ets_go::testing::run(|t| {
@@ -108,7 +127,7 @@ fn test_parse_data_for_extends_class_completion_non_class_context() {
     });
 }
 
-// go test: internal/completion/position_test.go:89 TestParseDataForExtendsClassCompletion_InsideImportDeclaration
+// go test: internal/completion/position_test.go:104 TestParseDataForExtendsClassCompletion_InsideImportDeclaration
 #[test]
 fn test_parse_data_for_extends_class_completion_inside_import_declaration() {
     ets_go::testing::run(|t| {
@@ -125,7 +144,7 @@ fn test_parse_data_for_extends_class_completion_inside_import_declaration() {
     });
 }
 
-// go test: internal/completion/position_test.go:102 TestParseDataForExtendsClassCompletion_ReplacementSpan
+// go test: internal/completion/position_test.go:117 TestParseDataForExtendsClassCompletion_ReplacementSpan
 #[test]
 fn test_parse_data_for_extends_class_completion_replacement_span() {
     ets_go::testing::run(|t| {

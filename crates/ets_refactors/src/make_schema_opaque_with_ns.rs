@@ -32,7 +32,7 @@ pub(crate) fn run_make_schema_opaque_with_ns(ctx: &mut Context<'_, '_>) -> Vec<C
     let action = ctx.new_refactor_action(RefactorAction {
         description: "Make Schema opaque with namespace".to_string(),
         run: Box::new(move |tracker: &mut Tracker| {
-            let schema_id = ets_typeparser::find_module_identifier(sf, "Schema");
+            let schema = ets_typeparser::find_module_reference(sf, "Schema");
             let orig_name = info.identifier.as_identifier().text();
             let new_name = orig_name.to_string() + "_";
 
@@ -46,9 +46,8 @@ pub(crate) fn run_make_schema_opaque_with_ns(ctx: &mut Context<'_, '_>) -> Vec<C
 
             // 2. Opaque Type: export interface <Name> extends Schema.Schema.Type<typeof Name_>
             // Always uses Schema.Schema.Type, always an interface
-            let opaque_type = create_opaque_interface(
-                tracker, orig_name, &schema_id, "Schema", "Type", &new_name,
-            );
+            let opaque_type =
+                create_opaque_interface(tracker, orig_name, &schema, "Schema", "Type", &new_name);
             insert_nodes.push(opaque_type);
 
             // 3. Build namespace members
@@ -61,11 +60,11 @@ pub(crate) fn run_make_schema_opaque_with_ns(ctx: &mut Context<'_, '_>) -> Vec<C
             }
             let encoded_member = if is_e_object {
                 create_opaque_interface(
-                    tracker, "Encoded", &schema_id, encoded_ns, "Encoded", &new_name,
+                    tracker, "Encoded", &schema, encoded_ns, "Encoded", &new_name,
                 )
             } else {
                 create_opaque_type_alias(
-                    tracker, "Encoded", &schema_id, encoded_ns, "Encoded", &new_name,
+                    tracker, "Encoded", &schema, encoded_ns, "Encoded", &new_name,
                 )
             };
             ns_members.push(encoded_member);
@@ -77,7 +76,7 @@ pub(crate) fn run_make_schema_opaque_with_ns(ctx: &mut Context<'_, '_>) -> Vec<C
                 let context_member = create_opaque_type_alias(
                     tracker,
                     "DecodingServices",
-                    &schema_id,
+                    &schema,
                     "Codec",
                     "DecodingServices",
                     &new_name,
@@ -86,7 +85,7 @@ pub(crate) fn run_make_schema_opaque_with_ns(ctx: &mut Context<'_, '_>) -> Vec<C
             } else {
                 context_member_name = "Context";
                 let context_member = create_opaque_type_alias(
-                    tracker, "Context", &schema_id, "Schema", "Context", &new_name,
+                    tracker, "Context", &schema, "Schema", "Context", &new_name,
                 );
                 ns_members.push(context_member);
             }
@@ -96,7 +95,7 @@ pub(crate) fn run_make_schema_opaque_with_ns(ctx: &mut Context<'_, '_>) -> Vec<C
                 let es_member = create_opaque_type_alias(
                     tracker,
                     "EncodingServices",
-                    &schema_id,
+                    &schema,
                     "Codec",
                     "EncodingServices",
                     &new_name,
@@ -136,10 +135,7 @@ pub(crate) fn run_make_schema_opaque_with_ns(ctx: &mut Context<'_, '_>) -> Vec<C
             ];
 
             let const_type = tracker.new_type_reference_node(
-                tracker.new_qualified_name(
-                    tracker.new_identifier(alloc_str(&schema_id)),
-                    tracker.new_identifier("Schema"),
-                ),
+                tracker.new_qualified_name_path(&schema.append(&["Schema"])),
                 Some(tracker.new_node_list(type_args)),
             );
 

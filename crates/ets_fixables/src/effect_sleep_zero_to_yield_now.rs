@@ -32,8 +32,7 @@ fn run_effect_sleep_zero_to_yield_now_fix(ctx: &mut Context<'_, '_>) -> Vec<Code
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.yieldNow".to_string(),
             run: Box::new(move |tracker| {
-                let mut replacement =
-                    effect_module_method(tracker, m.source_file, m.effect_module, "yieldNow");
+                let mut replacement = effect_module_method(tracker, m.source_file, "yieldNow");
                 if m.form == YieldNowForm::Call {
                     replacement = tracker.new_call_expression(
                         replacement,

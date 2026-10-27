@@ -32,8 +32,7 @@ fn run_effect_succeed_with_void_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.void".to_string(),
             run: Box::new(move |tracker| {
-                let replacement_node =
-                    effect_module_method(tracker, sf, m.effect_module_node, "void");
+                let replacement_node = effect_module_method(tracker, sf, "void");
                 ast::set_parent_in_children(replacement_node);
                 tracker.replace_node(sf, Some(m.call_node), Some(replacement_node), None);
             }),

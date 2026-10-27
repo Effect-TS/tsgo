@@ -36,7 +36,7 @@ fn run_effect_map_void_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
             description: "Replace with Effect.asVoid".to_string(),
             run: Box::new(move |tracker| {
                 // Build Effect.asVoid, preserving the original module reference (and any alias).
-                let as_void = effect_module_method(tracker, sf, m.effect_module_node, "asVoid");
+                let as_void = effect_module_method(tracker, sf, "asVoid");
                 tracker.replace_piping_flow_transformation(
                     Some(sf),
                     Some(&m.transformation),

@@ -63,7 +63,7 @@ fn catch_to_ignore_replacement_access(
     sf: P<SourceFile>,
     m: &CatchToIgnoreMatch,
 ) -> P<Node> {
-    let replacement = effect_module_method(tracker, sf, m.effect_module_node, m.ignore_method_name);
+    let replacement = effect_module_method(tracker, sf, m.ignore_method_name);
     ast::set_parent_in_children(replacement);
     replacement
 }

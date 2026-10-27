@@ -70,7 +70,7 @@ fn build_flat_map_conditional_filter_replacement(
     sf: P<SourceFile>,
     m: &FlatMapConditionalToFilterOrFailMatch,
 ) -> (P<Node>, P<NodeList>) {
-    let callee = effect_module_method(tracker, sf, m.effect_module_node, m.preferred_method_name);
+    let callee = effect_module_method(tracker, sf, m.preferred_method_name);
     let mut predicate_body = tracker.deep_clone_node(Some(m.predicate_node)).unwrap();
     if m.negate_predicate {
         predicate_body =

@@ -2,7 +2,7 @@ use std::sync::LazyLock;
 
 use ets_fixable::{Context, FixAction, Fixable};
 use ets_rewriter::PipingFlowTransformationReplacement;
-use ets_shim::ast::{Kind, TokenFlags};
+use ets_shim::ast::TokenFlags;
 use ets_shim::core::alloc_str;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
@@ -34,13 +34,7 @@ fn run_catch_if_tag_to_catch_tag_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActio
         let action = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.catchTag".to_string(),
             run: Box::new(move |tracker| {
-                let mut receiver = None;
-                if m.transformation.callee().kind() == Kind::PropertyAccessExpression {
-                    receiver = Some(
-                        m.transformation.callee().as_property_access_expression().expression(),
-                    );
-                }
-                let callee = effect_module_method(tracker, source_file, receiver, "catchTag");
+                let callee = effect_module_method(tracker, source_file, "catchTag");
                 let arguments = tracker.new_node_list(vec![
                     tracker.new_string_literal(alloc_str(&m.tag), TokenFlags::None),
                     tracker.deep_clone_node(Some(m.handler)).unwrap(),

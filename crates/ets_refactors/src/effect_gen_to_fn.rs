@@ -1,3 +1,4 @@
+use ets_rewriter::NodeFactoryPaths;
 use std::sync::{Arc, LazyLock};
 
 use ets_refactor::{Context, Refactor, RefactorAction};
@@ -221,17 +222,8 @@ pub(crate) fn build_effect_gen_to_fn_replacement(
     );
 
     // Build Effect.fn or Effect.fn("name")
-    // Named imports and local aliases of gen have no receiver; the user resolves the import.
-    let effect_id = if let Some(effect_module) = gen_call.effect_module() {
-        tracker.deep_clone_node(Some(effect_module)).unwrap()
-    } else {
-        tracker.new_identifier(alloc_str(&ets_typeparser::find_effect_module_identifier(sf)))
-    };
-    let fn_access = tracker.new_property_access_expression(
-        effect_id,
-        None,
-        tracker.new_identifier("fn"),
-        NodeFlags::None,
+    let fn_access = tracker.new_property_access_path(
+        &ets_typeparser::find_effect_module_reference(sf).append(&["fn"]),
     );
 
     let fn_call_expr = if !fn_name.is_empty() {
@@ -268,7 +260,7 @@ pub(crate) fn build_effect_gen_to_fn_replacement(
     Some(build_effect_gen_to_fn_declaration(tracker, node, effect_fn_call))
 }
 
-// go: internal/refactors/effect_gen_to_fn.go:257 buildEffectGenToFnDeclaration
+// go: internal/refactors/effect_gen_to_fn.go:248 buildEffectGenToFnDeclaration
 // buildEffectGenToFnDeclaration wraps the Effect.fn call in the appropriate declaration.
 pub(crate) fn build_effect_gen_to_fn_declaration(
     tracker: &NodeFactory,

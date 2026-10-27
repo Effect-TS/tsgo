@@ -36,7 +36,7 @@ fn run_catch_die_to_or_die_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.orDie".to_string(),
             run: Box::new(move |tracker| {
-                let or_die = effect_module_method(tracker, source_file, m.effect_module, "orDie");
+                let or_die = effect_module_method(tracker, source_file, "orDie");
                 tracker.replace_piping_flow_transformation(
                     Some(source_file),
                     Some(&m.transformation),

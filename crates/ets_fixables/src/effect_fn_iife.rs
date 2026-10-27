@@ -54,8 +54,8 @@ fn run_effect_fn_iife_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
             // Deep-clone the generator function to produce a synthesized copy
             let cloned_gen_fn = tracker.deep_clone_node(Some(gen_fn)).unwrap();
 
-            // Build Effect.gen, preserving a direct receiver or finding the imported module.
-            let effect_gen_access = effect_module_method(tracker, sf, result.effect_module, "gen");
+            // Build Effect.gen from the file's Effect import.
+            let effect_gen_access = effect_module_method(tracker, sf, "gen");
 
             // Build Effect.gen(genFn) call expression
             let gen_call_node = tracker.new_call_expression(

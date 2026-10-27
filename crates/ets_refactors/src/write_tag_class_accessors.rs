@@ -117,7 +117,7 @@ pub(crate) fn run_write_tag_class_accessors(ctx: &mut Context<'_, '_>) -> Vec<Co
         return Vec::new();
     }
 
-    let effect_identifier = ets_typeparser::find_effect_module_identifier(ctx.source_file);
+    let effect_identifier = ets_typeparser::find_effect_module_reference(ctx.source_file).string();
     let class_name_text = scanner::get_text_of_node(class_name);
 
     let sf = ctx.source_file;

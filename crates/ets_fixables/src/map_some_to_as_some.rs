@@ -32,8 +32,7 @@ fn run_map_some_to_as_some_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.asSome".to_string(),
             run: Box::new(move |tracker| {
-                let as_some =
-                    effect_module_method(tracker, source_file, m.effect_module_node, "asSome");
+                let as_some = effect_module_method(tracker, source_file, "asSome");
                 tracker.replace_piping_flow_transformation(
                     Some(source_file),
                     Some(&m.transformation),

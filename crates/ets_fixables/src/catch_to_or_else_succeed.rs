@@ -31,13 +31,7 @@ fn run_catch_to_or_else_succeed_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.orElseSucceed".to_string(),
             run: Box::new(move |tracker| {
-                replace_effect_method_callee(
-                    tracker,
-                    sf,
-                    Some(m.callee),
-                    m.callee_name_node,
-                    "orElseSucceed",
-                );
+                replace_effect_method_callee(tracker, sf, Some(m.callee), "orElseSucceed");
 
                 tracker.replace_node(
                     sf,

@@ -101,7 +101,9 @@ pub fn parse_data_for_extends_class_completion(
 ) -> Option<ExtendsClassCompletionData> {
     let result = parse_accessed_expression_for_completion(sf, position)?;
 
-    if !ast::is_identifier(result.accessed_object) {
+    // An identifier or a property access chain such as X.Schema, for files
+    // that import the module through the package barrel.
+    if !ast::is_entity_name_expression(result.accessed_object) {
         return None;
     }
 
@@ -131,13 +133,13 @@ pub fn parse_data_for_extends_class_completion(
 }
 
 impl ExtendsClassCompletionData {
-    // go: internal/completion/position.go:129 ExtendsClassCompletionData.AccessedObjectText
+    // go: internal/completion/position.go:131 ExtendsClassCompletionData.AccessedObjectText
     // AccessedObjectText returns the text of the accessed object node.
     pub fn accessed_object_text(&self) -> String {
         scanner::get_text_of_node(self.accessed_object)
     }
 
-    // go: internal/completion/position.go:134 ExtendsClassCompletionData.ClassNameText
+    // go: internal/completion/position.go:136 ExtendsClassCompletionData.ClassNameText
     // ClassNameText returns the text of the class name node.
     pub fn class_name_text(&self) -> String {
         scanner::get_text_of_node(self.class_name)

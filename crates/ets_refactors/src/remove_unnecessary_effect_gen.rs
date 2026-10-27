@@ -9,7 +9,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go: internal/refactors/remove_unnecessary_effect_gen.go:13 RemoveUnnecessaryEffectGen
+// go: internal/refactors/remove_unnecessary_effect_gen.go:14 RemoveUnnecessaryEffectGen
 pub static REMOVE_UNNECESSARY_EFFECT_GEN: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "removeUnnecessaryEffectGen",
     description: "Remove unnecessary Effect.gen",
@@ -17,7 +17,7 @@ pub static REMOVE_UNNECESSARY_EFFECT_GEN: LazyLock<Refactor> = LazyLock::new(|| 
     run: run_remove_unnecessary_effect_gen,
 });
 
-// go: internal/refactors/remove_unnecessary_effect_gen.go:20 runRemoveUnnecessaryEffectGen
+// go: internal/refactors/remove_unnecessary_effect_gen.go:21 runRemoveUnnecessaryEffectGen
 pub(crate) fn run_remove_unnecessary_effect_gen(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let matches = ets_rules::analyze_unnecessary_effect_gen(&mut ctx.type_parser, ctx.source_file);
     if matches.is_empty() {
@@ -66,20 +66,8 @@ pub(crate) fn run_remove_unnecessary_effect_gen(ctx: &mut Context<'_, '_>) -> Ve
             let Some(mut action) = ctx.new_refactor_action(RefactorAction {
                 description: "Remove unnecessary Effect.gen".to_string(),
                 run: Box::new(|tracker| {
-                    let effect_module_id = match m.effect_module_node {
-                        Some(effect_module_node)
-                            if effect_module_node.kind() == Kind::Identifier =>
-                        {
-                            tracker.deep_clone_node(Some(effect_module_node)).unwrap()
-                        }
-                        _ => tracker.new_identifier("Effect"),
-                    };
-
-                    let as_void_access = tracker.new_property_access_expression(
-                        effect_module_id,
-                        None,
-                        tracker.new_identifier("asVoid"),
-                        NodeFlags::None,
+                    let as_void_access = tracker.new_property_access_path(
+                        &ets_typeparser::find_effect_module_reference(sf).append(&["asVoid"]),
                     );
                     let cloned_expr = tracker.deep_clone_node(Some(m.yielded_expression)).unwrap();
                     let call_expr = tracker.new_call_expression(

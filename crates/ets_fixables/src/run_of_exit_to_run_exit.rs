@@ -42,13 +42,7 @@ fn run_run_of_exit_to_run_exit_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction>
                 ) {
                     return;
                 }
-                replace_effect_method_callee(
-                    tracker,
-                    sf,
-                    Some(runner_callee),
-                    m.runner_name_node,
-                    m.replacement_name,
-                );
+                replace_effect_method_callee(tracker, sf, Some(runner_callee), m.replacement_name);
             }),
         }) {
             return vec![action];

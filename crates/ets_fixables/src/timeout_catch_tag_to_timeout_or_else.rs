@@ -2,16 +2,17 @@ use std::sync::LazyLock;
 
 use ets_fixable::{Context, FixAction, Fixable};
 use ets_rewriter::PipingFlowTransformationReplacement;
-use ets_shim::ast::{self, Kind, NodeFlags};
-use ets_shim::core::alloc_str;
+use ets_shim::ast::{self, Kind};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
+
+use crate::*;
 
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message =
     &tsdiag::USE_EFFECT_0_TO_HANDLE_THIS_TIMEOUT_DIRECTLY_EFFECT_TIMEOUT_CATCH_TAG_TO_TIMEOUT_OR_ELSE;
 
-// go: internal/fixables/timeout_catch_tag_to_timeout_or_else.go:13 TimeoutCatchTagToTimeoutOrElseFix
+// go: internal/fixables/timeout_catch_tag_to_timeout_or_else.go:12 TimeoutCatchTagToTimeoutOrElseFix
 pub static TIMEOUT_CATCH_TAG_TO_TIMEOUT_OR_ELSE_FIX: LazyLock<Fixable> =
     LazyLock::new(|| Fixable {
         name: "timeoutCatchTagToTimeoutOrElse",
@@ -30,18 +31,7 @@ pub static TIMEOUT_CATCH_TAG_TO_TIMEOUT_OR_ELSE_FIX: LazyLock<Fixable> =
                 let action = ctx.new_fix_action(FixAction {
                     description: "Replace with Effect.".to_string() + m.replacement_name,
                     run: Box::new(move |t| {
-                        let effect_module = match m.effect_module {
-                            Some(effect_module) => t.deep_clone_node(Some(effect_module)).unwrap(),
-                            None => t.new_identifier(alloc_str(
-                                &ets_typeparser::find_effect_module_identifier(sf),
-                            )),
-                        };
-                        let callee = t.new_property_access_expression(
-                            effect_module,
-                            None,
-                            t.new_identifier(m.replacement_name),
-                            NodeFlags::None,
-                        );
+                        let callee = effect_module_method(t, sf, m.replacement_name);
                         let mut argument = t.deep_clone_node(Some(m.duration)).unwrap();
                         if m.replacement_name == "timeoutOrElse" {
                             let mut handler = t.deep_clone_node(Some(m.handler)).unwrap();

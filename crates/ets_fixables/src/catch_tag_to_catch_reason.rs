@@ -71,16 +71,12 @@ fn build_catch_tag_to_catch_reason_replacement(
     if m.branches.is_empty() {
         return (None, None);
     }
-    let mut receiver = None;
-    if m.callee.kind() == Kind::PropertyAccessExpression {
-        receiver = Some(m.callee.as_property_access_expression().expression());
-    }
 
     let mut method_name = "catchReason";
     if m.branches.len() > 1 {
         method_name = "catchReasons";
     }
-    let method = effect_module_method(tracker, sf, receiver, method_name);
+    let method = effect_module_method(tracker, sf, method_name);
     let mut arguments = vec![tracker.deep_clone_node(Some(outer_tag)).unwrap()];
     if m.branches.len() == 1 {
         let branch = &m.branches[0];
@@ -104,7 +100,7 @@ fn build_catch_tag_to_catch_reason_replacement(
     (Some(method), Some(tracker.new_node_list(arguments)))
 }
 
-// go: internal/fixables/catch_tag_to_catch_reason.go:87 newCatchReasonHandler
+// go: internal/fixables/catch_tag_to_catch_reason.go:82 newCatchReasonHandler
 fn new_catch_reason_handler(
     tracker: &Tracker,
     parameter_name: &str,

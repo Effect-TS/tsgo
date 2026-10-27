@@ -28,34 +28,29 @@ impl EffectGenCallResult {
         self.call
     }
 
-    // go: internal/typeparser/effect_gen.go:21 EffectGenCallResult.EffectModule
-    pub fn effect_module(&self) -> Option<P<Node>> {
-        self.effect_module
-    }
-
-    // go: internal/typeparser/effect_gen.go:23 EffectGenCallResult.OptionsNode
+    // go: internal/typeparser/effect_gen.go:21 EffectGenCallResult.OptionsNode
     pub fn options_node(&self) -> Option<P<Node>> {
         self.options_node
     }
 
-    // go: internal/typeparser/effect_gen.go:25 EffectGenCallResult.GeneratorFunction
+    // go: internal/typeparser/effect_gen.go:23 EffectGenCallResult.GeneratorFunction
     pub fn generator_function(&self) -> P<Node> {
         self.generator_function
     }
 
-    // go: internal/typeparser/effect_gen.go:27 EffectGenCallResult.Body
+    // go: internal/typeparser/effect_gen.go:25 EffectGenCallResult.Body
     pub fn body(&self) -> Option<P<Node>> {
         self.body
     }
 
-    // go: internal/typeparser/effect_gen.go:29 EffectGenCallResult.PipeArguments
+    // go: internal/typeparser/effect_gen.go:27 EffectGenCallResult.PipeArguments
     pub fn pipe_arguments(&self) -> Slice<'_, P<Node>> {
         ets_readonly::new(self.pipe_arguments)
     }
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/effect_gen.go:35 TypeParser.EffectGenCall
+    // go: internal/typeparser/effect_gen.go:33 TypeParser.EffectGenCall
     // EffectGenCall parses a node as Effect.gen(<generator>).
     // Returns nil when the node is not an Effect.gen call.
     pub fn effect_gen_call(

@@ -33,7 +33,7 @@ fn run_map_const_to_as_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.as".to_string(),
             run: Box::new(move |tracker| {
-                let as_ = effect_module_method(tracker, source_file, m.effect_module_node, "as");
+                let as_ = effect_module_method(tracker, source_file, "as");
                 let arguments = tracker
                     .new_node_list(vec![tracker.deep_clone_node(Some(m.constant_value)).unwrap()]);
                 tracker.replace_piping_flow_transformation(

@@ -33,13 +33,7 @@ fn run_catch_all_to_map_error_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> 
             description: "Replace with Effect.mapError".to_string(),
             run: Box::new(move |tracker| {
                 // Edit 1: Replace "catch" with "mapError" in the callee
-                replace_effect_method_callee(
-                    tracker,
-                    sf,
-                    Some(m.callee),
-                    m.callee_name_node,
-                    "mapError",
-                );
+                replace_effect_method_callee(tracker, sf, Some(m.callee), "mapError");
 
                 // Edit 2: Unwrap "Effect.fail(arg)" to "arg" by deleting prefix and suffix
                 tracker.delete_range(

@@ -31,7 +31,7 @@ fn run_sync_to_succeed_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.succeed".to_string(),
             run: Box::new(move |tracker| {
-                replace_effect_method_callee(tracker, sf, Some(m.callee), m.callee_name, "succeed");
+                replace_effect_method_callee(tracker, sf, Some(m.callee), "succeed");
                 tracker.replace_node(sf, Some(m.thunk), Some(m.constant_value), None);
             }),
         }) {

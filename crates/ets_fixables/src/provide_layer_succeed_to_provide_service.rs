@@ -35,12 +35,7 @@ fn run_provide_layer_succeed_to_provide_service_fix(ctx: &mut Context<'_, '_>) -
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.".to_string() + m.replacement_method_name,
             run: Box::new(move |tracker| {
-                let callee = effect_module_method(
-                    tracker,
-                    sf,
-                    m.effect_module_node,
-                    m.replacement_method_name,
-                );
+                let callee = effect_module_method(tracker, sf, m.replacement_method_name);
                 let arguments = tracker.new_node_list(vec![
                     tracker.deep_clone_node(Some(m.service_node)).unwrap(),
                     tracker

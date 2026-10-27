@@ -31,13 +31,7 @@ fn run_flat_map_ignored_param_to_and_then_fix(ctx: &mut Context<'_, '_>) -> Vec<
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.andThen".to_string(),
             run: Box::new(move |tracker| {
-                replace_effect_method_callee(
-                    tracker,
-                    source_file,
-                    Some(m.callee),
-                    m.callee_name_node,
-                    "andThen",
-                );
+                replace_effect_method_callee(tracker, source_file, Some(m.callee), "andThen");
                 tracker.replace_node(source_file, Some(m.callback), Some(m.effect_value), None);
             }),
         }) {

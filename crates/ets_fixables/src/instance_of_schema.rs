@@ -2,7 +2,6 @@ use std::sync::LazyLock;
 
 use ets_fixable::{Context, FixAction, Fixable};
 use ets_shim::ast::{self, NodeFlags};
-use ets_shim::core::alloc_str;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
@@ -35,14 +34,8 @@ fn run_instance_of_schema_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
                 let cloned_right = tracker.deep_clone_node(Some(m.right_expr)).unwrap();
 
                 // Build Schema.is property access
-                let schema_is_access = tracker.new_property_access_expression(
-                    tracker.new_identifier(alloc_str(&ets_typeparser::find_module_identifier(
-                        Some(sf),
-                        "Schema",
-                    ))),
-                    None,
-                    tracker.new_identifier("is"),
-                    NodeFlags::None,
+                let schema_is_access = tracker.new_property_access_path(
+                    &ets_typeparser::find_module_reference(Some(sf), "Schema").append(&["is"]),
                 );
 
                 // Build inner call: Schema.is(right)

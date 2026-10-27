@@ -38,7 +38,7 @@ fn run_all_of_map_to_for_each_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> 
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.forEach".to_string(),
             run: Box::new(move |tracker| {
-                let callee = effect_module_method(tracker, source_file, m.effect_module, "forEach");
+                let callee = effect_module_method(tracker, source_file, "forEach");
                 let mut arguments = vec![
                     tracker.deep_clone_node(Some(m.receiver)).unwrap(),
                     tracker.deep_clone_node(Some(m.callback)).unwrap(),

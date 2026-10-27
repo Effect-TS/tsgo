@@ -229,11 +229,8 @@ fn effect_fn_build_replacement(
     let text = sf.text();
     let start = scanner::get_token_pos_of_node(target, sf, false);
     let body_start = scanner::get_token_pos_of_node(body, sf, false);
-    let mut module = ets_typeparser::find_effect_module_identifier(Some(sf));
-    if let Some(effect_module) = result.effect_module() {
-        module = scanner::get_text_of_node(effect_module);
-    }
-    let mut prefix = format!("{module}.{variant}");
+    let mut prefix =
+        format!("{}.{variant}", ets_typeparser::find_effect_module_reference(Some(sf)).string());
     if !trace.is_empty() {
         prefix += "(";
         prefix += trace;
@@ -335,7 +332,7 @@ fn effect_fn_build_replacement(
     );
 }
 
-// go: internal/fixables/effect_fn_opportunity.go:244 effectFnPipeArgumentText
+// go: internal/fixables/effect_fn_opportunity.go:240 effectFnPipeArgumentText
 // effectFnPipeArgumentText prevents Effect.fn's additional function arguments
 // from reaching a bare pipeable's optional parameters. Factory calls already
 // produce data-last pipeables and can be retained as written.
@@ -372,7 +369,7 @@ fn effect_fn_pipe_argument_text(arg: P<Node>, text: &str) -> String {
     format!("{parameter} => {text}({parameter})")
 }
 
-// go: internal/fixables/effect_fn_opportunity.go:277 effectFnSignatureRange
+// go: internal/fixables/effect_fn_opportunity.go:273 effectFnSignatureRange
 // effectFnSignatureRange locates the complete parameter/type-parameter spelling,
 // including comments and defaults. Bare arrow parameters need parentheses when
 // moved to a function expression.
@@ -394,7 +391,7 @@ fn effect_fn_signature_range(sf: P<SourceFile>, target: P<Node>) -> TextRange {
     TextRange::new(start, end)
 }
 
-// go: internal/fixables/effect_fn_opportunity.go:295 effectFnComments
+// go: internal/fixables/effect_fn_opportunity.go:291 effectFnComments
 // effectFnComments retains comments from discarded wrapper syntax, such as the
 // outer return statement. Arguments and the function body are copied separately.
 fn effect_fn_comments(sf: P<SourceFile>, start: u32, end: u32, moved: Option<P<Node>>) -> String {

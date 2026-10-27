@@ -34,12 +34,7 @@ fn run_acquire_release_disposable_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActi
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.acquireDisposable".to_string(),
             run: Box::new(move |tracker| {
-                let callee = effect_module_method(
-                    tracker,
-                    source_file,
-                    m.effect_module,
-                    "acquireDisposable",
-                );
+                let callee = effect_module_method(tracker, source_file, "acquireDisposable");
                 let replacement = tracker.new_call_expression(
                     callee,
                     None,
