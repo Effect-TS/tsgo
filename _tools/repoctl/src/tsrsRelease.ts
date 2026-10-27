@@ -156,7 +156,9 @@ export const parseLlvmVersion = (rustcVersion: string) => /^LLVM version: (\S+)$
 
 // The TypeScript commit tsrs ports (Cargo.toml `[workspace.metadata.typescript]`).
 export const parseTsrsTypeScriptCommit = (cargoToml: string) =>
-  /^\[workspace\.metadata\.typescript\]\n(?:[^[\n].*\n)*?commit = "([0-9a-f]{40})"/m.exec(cargoToml)?.[1]
+  /^\[workspace\.metadata\.typescript\]\n(?:[^[\n].*\n)*?commit = "([0-9a-f]{40})"/m.exec(
+    cargoToml.replace(/\r\n?/g, "\n")
+  )?.[1]
 
 const shellQuote = (value: string) => `'${value.replaceAll("'", `'\\''`)}'`
 

@@ -104,9 +104,11 @@ jobs:
       fail-fast: true
       matrix: ${{ fromJSON(needs.release-matrix.outputs.matrix) }}
     steps:
-      - name: Enable long Git paths
+      - name: Configure Git for Windows
         if: runner.os == 'Windows'
-        run: git config --system core.longpaths true
+        run: |
+          git config --system core.longpaths true
+          git config --system core.autocrlf false
 
       - name: Checkout
         uses: actions/checkout@v7
