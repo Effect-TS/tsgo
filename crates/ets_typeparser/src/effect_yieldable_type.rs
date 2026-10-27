@@ -4,7 +4,7 @@ use ets_shim::core::P;
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/effect_yieldable_type.go:11 TypeParser.EffectYieldableType
+    // go: internal/typeparser/effect_yieldable_type.go:11 TypeParser.EffectYieldableType ee42924e453a226a
     // EffectYieldableType resolves both plain Effect types and yieldable wrappers
     // that implement the asEffect() protocol.
     // For v3: delegates directly to EffectType (v3 models yieldable through Effect subtyping).

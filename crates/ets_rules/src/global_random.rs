@@ -7,7 +7,7 @@ use ets_shim::ast::{Diagnostic, Kind, Node};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::EffectContextFlags;
 
-// go: internal/rules/global_random.go:12 GlobalRandom
+// go: internal/rules/global_random.go:12 GlobalRandom 195701ee59a9f2c1
 pub static GLOBAL_RANDOM: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
     name: "globalRandom",
@@ -20,7 +20,7 @@ pub static GLOBAL_RANDOM: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/global_random.go:24 GlobalRandomInEffect
+// go: internal/rules/global_random.go:24 GlobalRandomInEffect 40a9dcc9f19f82fd
 pub static GLOBAL_RANDOM_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
     name: "globalRandomInEffect",
@@ -33,7 +33,7 @@ pub static GLOBAL_RANDOM_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/global_random.go:36 runGlobalRandom
+// go: internal/rules/global_random.go:36 runGlobalRandom 7dcc8ae630f51fa0
 pub(crate) fn run_global_random(
     ctx: &mut Context<'_, '_>,
     check_in_effect: bool,

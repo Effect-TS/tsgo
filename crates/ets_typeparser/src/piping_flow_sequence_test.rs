@@ -7,7 +7,7 @@ use crate::helpers_test::*;
 use crate::piping_flow_shape_test::{zero_flow, zero_step};
 use crate::*;
 
-// go test: internal/typeparser/piping_flow_sequence_test.go:8 TestFindTransformationSequences
+// go test: internal/typeparser/piping_flow_sequence_test.go:8 TestFindTransformationSequences 033ababa86ac6fda
 #[test]
 fn test_find_transformation_sequences() {
     use TransformationKind::{Call, DataFirst, Pipe};

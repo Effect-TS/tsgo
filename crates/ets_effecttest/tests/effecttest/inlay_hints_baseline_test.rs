@@ -6,7 +6,7 @@ use ets_shim::ls::lsconv;
 use ets_shim::ls::lsutil::{self, UserPreferences};
 use ets_shim::lsproto::{self, Json};
 
-// go test: internal/effecttest/inlay_hints_baseline_test.go:22 verifyLocalBaselineInlayHints
+// go test: internal/effecttest/inlay_hints_baseline_test.go:22 verifyLocalBaselineInlayHints c252efbfb50b136e
 //
 // Rust: Go builds the request message by hand through the shim accessor `fourslash.FourslashTest_client` to send it
 // without fourslash's checks; `LSPClient::send_request` is the same request. The deferred reset is run at the end.
@@ -61,7 +61,7 @@ pub(crate) fn verify_local_baseline_inlay_hints(
     f.configure(t, reset);
 }
 
-// go test: internal/effecttest/inlay_hints_baseline_test.go:69 mustFindFourslashFileContent
+// go test: internal/effecttest/inlay_hints_baseline_test.go:69 mustFindFourslashFileContent 61e0b060c004f626
 pub(crate) fn must_find_fourslash_file_content(
     t: &T,
     test_content: &str,
@@ -79,7 +79,7 @@ pub(crate) fn must_find_fourslash_file_content(
     t.fatal(format!("fourslash file {file_name} not found"));
 }
 
-// go test: internal/effecttest/inlay_hints_baseline_test.go:82 formatInlayHintBaseline
+// go test: internal/effecttest/inlay_hints_baseline_test.go:82 formatInlayHintBaseline 3027fe879d03113e
 pub(crate) fn format_inlay_hint_baseline(
     t: &T,
     file_content: &str,
@@ -122,7 +122,7 @@ pub(crate) fn format_inlay_hint_baseline(
     annotations.join("\n\n")
 }
 
-// go test: internal/effecttest/inlay_hints_baseline_test.go:118 runLocalInlayBaseline
+// go test: internal/effecttest/inlay_hints_baseline_test.go:118 runLocalInlayBaseline 92ca0e7911f587ff
 //
 // Rust: as `run_effect_baseline`: the Go runner owns the reference, so a missing reference is a mismatch here (Go
 // creates it); the outcome is recorded by `baseline_results::report`, which fails a mismatch as Go does.
@@ -160,7 +160,7 @@ pub(crate) fn run_local_inlay_baseline(t: &T, file_name: &str, actual: &str) {
     });
 }
 
-// go test: internal/effecttest/inlay_hints_baseline_test.go:161 localInlayBaselineFileName
+// go test: internal/effecttest/inlay_hints_baseline_test.go:161 localInlayBaselineFileName 1ac295f024691c49
 pub(crate) fn local_inlay_baseline_file_name(t: &T) -> String {
     t.helper();
     let name = t.name();
@@ -174,7 +174,7 @@ pub(crate) fn local_inlay_baseline_file_name(t: &T) -> String {
     ets_go::strings::to_lower(&r.to_string()) + chars.as_str() + ".baseline"
 }
 
-// go test: internal/effecttest/inlay_hints_baseline_test.go:175 isLibFile
+// go test: internal/effecttest/inlay_hints_baseline_test.go:175 isLibFile ce0ac1aaa5a55871
 pub(crate) fn is_lib_file(file_name: &str) -> bool {
     let base_name = std::path::Path::new(file_name)
         .file_name()

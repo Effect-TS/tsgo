@@ -9,7 +9,7 @@ use ets_shim::core::P;
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/get_type_at_location.go:13 TypeParser.GetTypeAtLocation
+    // go: internal/typeparser/get_type_at_location.go:13 TypeParser.GetTypeAtLocation 70ac5e9339a57751
     // GetTypeAtLocation wraps checker.GetTypeAtLocation with node-kind and JSX safety guards.
     // It returns nil when the node is nil, not an expression/type-node/declaration,
     // an import clause, a JSX tag name, or a JSX attribute name. It also recovers
@@ -30,7 +30,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/get_type_at_location.go:72 TypeParser.getTypeAtLocationUncached
+    // go: internal/typeparser/get_type_at_location.go:72 TypeParser.getTypeAtLocationUncached 9f2d2dc3efd714c3
     pub(crate) fn get_type_at_location_uncached(&mut self, node: P<Node>) -> Option<P<Type>> {
         // Go: a deferred recover turns a panic into nil.
         catch_unwind(AssertUnwindSafe(|| {
@@ -53,7 +53,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/get_type_at_location.go:26 isTypeAtLocationCandidate
+// go: internal/typeparser/get_type_at_location.go:26 isTypeAtLocationCandidate 2b0c96f33bb60114
 // isTypeAtLocationCandidate reports whether GetTypeAtLocation may ask the
 // checker for the type of node.
 pub(crate) fn is_type_at_location_candidate(node: P<Node>) -> bool {
@@ -111,7 +111,7 @@ pub(crate) fn is_type_at_location_candidate(node: P<Node>) -> bool {
     true
 }
 
-// go: internal/typeparser/get_type_at_location.go:97 isInsideTypeOnlyHeritageExpression
+// go: internal/typeparser/get_type_at_location.go:97 isInsideTypeOnlyHeritageExpression 1fbd83fdccf81b5d
 // isInsideTypeOnlyHeritageExpression reports whether node is an
 // ExpressionWithTypeArguments or one of its identifier/property-access
 // sub-expressions inside a type-only heritage clause. The checker can
@@ -140,7 +140,7 @@ pub(crate) fn is_inside_type_only_heritage_expression(node: P<Node>) -> bool {
     false
 }
 
-// go: internal/typeparser/get_type_at_location.go:120 isTypeOnlyHeritageClause
+// go: internal/typeparser/get_type_at_location.go:120 isTypeOnlyHeritageClause 59d11c82a7a31a80
 pub(crate) fn is_type_only_heritage_clause(node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;

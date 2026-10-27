@@ -6,7 +6,7 @@ use rustc_hash::FxHashMap;
 
 use crate::*;
 
-// go test: internal/rules/fail_cause_to_constructor_test.go:13 TestFailCauseToConstructorShapes
+// go test: internal/rules/fail_cause_to_constructor_test.go:13 TestFailCauseToConstructorShapes 2454a33741bee896
 #[test]
 fn test_fail_cause_to_constructor_shapes() {
     run_on_checker_stack(|t| {

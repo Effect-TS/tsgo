@@ -8,7 +8,7 @@ use ets_shim::ls::lsutil::InlayHintsPreferences;
 use ets_shim::lsproto;
 use ets_typeparser::TypeParser;
 
-// go: etslshooks/inlay_hints.go:16 afterInlayHints
+// go: etslshooks/inlay_hints.go:16 afterInlayHints 6bd061cce24a99db
 // afterInlayHints filters out redundant return-type inlay hints on Effect.gen,
 // Effect.fn, Effect.fnUntraced, and Effect.fnUntracedEager generator functions.
 pub(crate) fn after_inlay_hints(
@@ -41,7 +41,7 @@ pub(crate) fn after_inlay_hints(
     result
 }
 
-// go: etslshooks/inlay_hints.go:48 shouldOmitHint
+// go: etslshooks/inlay_hints.go:48 shouldOmitHint c0d80eb2f6855ace
 // shouldOmitHint checks whether a single inlay hint should be suppressed
 // because it is a return-type hint on an Effect generator function.
 fn should_omit_hint(
@@ -102,7 +102,7 @@ fn should_omit_hint(
     offset >= close_paren.end().expect_source("a token of the file") && offset <= body_start
 }
 
-// go: etslshooks/inlay_hints.go:100 matchEffectGenCall
+// go: etslshooks/inlay_hints.go:100 matchEffectGenCall 0b28b80a302934d5
 // matchEffectGenCall tries all four Effect generator call patterns and returns
 // the generator function and body for the first match.
 fn match_effect_gen_call(

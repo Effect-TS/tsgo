@@ -18,7 +18,7 @@ struct Case {
     fixes: i32,
 }
 
-// go test: internal/effecttest/flat_map_identity_to_flatten_test.go:17 TestFlatMapIdentityToFlattenFixesCompile
+// go test: internal/effecttest/flat_map_identity_to_flatten_test.go:17 TestFlatMapIdentityToFlattenFixesCompile 6263518c8189280a
 fn test_flat_map_identity_to_flatten_fixes_compile(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();

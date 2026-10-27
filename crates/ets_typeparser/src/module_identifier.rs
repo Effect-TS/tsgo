@@ -13,7 +13,7 @@ fn strip_specifier_quotes(text: String) -> String {
     text
 }
 
-// go: internal/typeparser/module_identifier.go:13 ModuleReference
+// go: internal/typeparser/module_identifier.go:13 ModuleReference 9c3f0bd9795283d4
 // ModuleReference is the path of names that reaches a module from a file's
 // imports, for example ["Effect"] or ["X", "Effect"] for import * as X from "effect".
 //
@@ -41,13 +41,13 @@ impl ModuleReference {
         ModuleReference(names.iter().map(|name| (*name).to_string()).collect())
     }
 
-    // go: internal/typeparser/module_identifier.go:16 ModuleReference.String
+    // go: internal/typeparser/module_identifier.go:16 ModuleReference.String 2f41b43f51ca846c
     // String joins the path with ".", as it is written in source code.
     pub fn string(&self) -> String {
         self.0.join(".")
     }
 
-    // go: internal/typeparser/module_identifier.go:21 ModuleReference.Append
+    // go: internal/typeparser/module_identifier.go:21 ModuleReference.Append 098f5f5a6a02eae8
     // Append returns a new reference that extends r with names, leaving r untouched.
     #[must_use]
     pub fn append(&self, names: &[&str]) -> ModuleReference {
@@ -56,7 +56,7 @@ impl ModuleReference {
         ModuleReference(result)
     }
 
-    // go: internal/typeparser/module_identifier.go:27 ModuleReference.MatchesNode
+    // go: internal/typeparser/module_identifier.go:27 ModuleReference.MatchesNode fac258ada79c72af
     // MatchesNode reports whether node spells out the reference: an identifier, a
     // property access chain or a qualified name with the same names.
     pub fn matches_node(&self, node: P<Node>) -> bool {
@@ -83,14 +83,14 @@ impl ModuleReference {
     }
 }
 
-// go: internal/typeparser/module_identifier.go:49 FindEffectModuleReference
+// go: internal/typeparser/module_identifier.go:49 FindEffectModuleReference 95a7a2aa7385119d
 // FindEffectModuleReference finds the reference to the Effect module from the
 // file's imports. See FindModuleReference.
 pub fn find_effect_module_reference(sf: impl Into<Option<P<SourceFile>>>) -> ModuleReference {
     find_module_reference(sf, "Effect")
 }
 
-// go: internal/typeparser/module_identifier.go:55 FindModuleReference
+// go: internal/typeparser/module_identifier.go:55 FindModuleReference f127cb8662d5f5b7
 // FindModuleReference finds the reference to the given module of the "effect"
 // package from the file's imports. See FindModuleReferenceForPackage.
 pub fn find_module_reference(
@@ -100,7 +100,7 @@ pub fn find_module_reference(
     find_module_reference_for_package(sf, "effect", export_name)
 }
 
-// go: internal/typeparser/module_identifier.go:68 FindModuleReferenceForPackage
+// go: internal/typeparser/module_identifier.go:68 FindModuleReferenceForPackage 3b45f3c175dd9bff
 // FindModuleReferenceForPackage finds the reference to the given module of a
 // package from the file's imports. It recognises:
 //   - Namespace imports: import * as X from "<packageName>/<moduleName>" → X

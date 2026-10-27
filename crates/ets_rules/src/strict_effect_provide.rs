@@ -9,7 +9,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_PROVIDE_WITH_A_LAYER_SHOULD_ONLY_BE_USED_AT_APPLICATION_ENTRY_POINTS_IF_THIS_IS_AN_ENTRY_POINT_YOU_CAN_SAFELY_DISABLE_THIS_DIAGNOSTIC_OTHERWISE_USING_EFFECT_PROVIDE_MAY_BREAK_SCOPE_LIFETIMES_COMPOSE_ALL_LAYERS_AT_YOUR_ENTRY_POINT_AND_PROVIDE_THEM_AT_ONCE_EFFECT_STRICT_EFFECT_PROVIDE;
 
-// go: internal/rules/strict_effect_provide.go:12 StrictEffectProvide
+// go: internal/rules/strict_effect_provide.go:12 StrictEffectProvide 6b307909bdfd6f8a
 // StrictEffectProvide warns when Effect.provide is called with a Layer argument.
 // This rule is disabled by default.
 pub static STRICT_EFFECT_PROVIDE: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -47,7 +47,7 @@ pub static STRICT_EFFECT_PROVIDE: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/strict_effect_provide.go:49 checkEffectProvideWithLayer
+// go: internal/rules/strict_effect_provide.go:49 checkEffectProvideWithLayer 9a1cf8b635cfebeb
 // checkEffectProvideWithLayer checks if a call expression is Effect.provide(...) with a Layer argument.
 pub(crate) fn check_effect_provide_with_layer(
     ctx: &mut Context<'_, '_>,

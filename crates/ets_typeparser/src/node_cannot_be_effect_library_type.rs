@@ -4,7 +4,7 @@ use ets_shim::core::P;
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/node_cannot_be_effect_library_type.go:16 TypeParser.NodeCannotBeEffectLibraryType
+    // go: internal/typeparser/node_cannot_be_effect_library_type.go:16 TypeParser.NodeCannotBeEffectLibraryType 4123650ef8c35c6b
     // NodeCannotBeEffectLibraryType reports whether node is an expression whose
     // type can never be an Effect library data type such as Effect, Stream or
     // Layer. Literals, functions, and operators that always produce a primitive

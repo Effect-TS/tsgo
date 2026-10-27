@@ -6,7 +6,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go test: internal/effecttest/document_symbols_baseline.go:12 DoDocumentSymbolsBaseline
+// go test: internal/effecttest/document_symbols_baseline.go:12 DoDocumentSymbolsBaseline 7bfbc8841373aa59
 // DoDocumentSymbolsBaseline generates a .symbols.txt baseline for Effect tests.
 pub fn do_document_symbols_baseline(
     t: &T,
@@ -18,7 +18,7 @@ pub fn do_document_symbols_baseline(
     run_effect_baseline(t, &(baseline_name.to_string() + ".symbols.txt"), &content, subfolder);
 }
 
-// go test: internal/effecttest/document_symbols_baseline.go:23 DocumentSymbolsFileResult
+// go test: internal/effecttest/document_symbols_baseline.go:23 DocumentSymbolsFileResult f932e24703970f6e
 // DocumentSymbolsFileResult stores document-symbol results for one file.
 #[derive(Clone, Debug)]
 pub struct DocumentSymbolsFileResult {
@@ -27,7 +27,7 @@ pub struct DocumentSymbolsFileResult {
     pub flat_lists: Vec<Vec<lsproto::SymbolInformation>>,
 }
 
-// go test: internal/effecttest/document_symbols_baseline.go:29 generateDocumentSymbolsBaseline
+// go test: internal/effecttest/document_symbols_baseline.go:29 generateDocumentSymbolsBaseline 8c9f1f7893a84132
 pub(crate) fn generate_document_symbols_baseline(
     file_symbols: &[DocumentSymbolsFileResult],
 ) -> String {
@@ -72,7 +72,7 @@ pub(crate) fn generate_document_symbols_baseline(
     sb
 }
 
-// go test: internal/effecttest/document_symbols_baseline.go:72 writeDocumentSymbolTree
+// go test: internal/effecttest/document_symbols_baseline.go:72 writeDocumentSymbolTree ddc5e80530077875
 pub(crate) fn write_document_symbol_tree(
     sb: &mut String,
     symbols: &[lsproto::DocumentSymbol],
@@ -99,7 +99,7 @@ pub(crate) fn write_document_symbol_tree(
     }
 }
 
-// go test: internal/effecttest/document_symbols_baseline.go:92 formatRange
+// go test: internal/effecttest/document_symbols_baseline.go:92 formatRange f3413caeb0177a04
 pub(crate) fn format_range(r: lsproto::Range) -> String {
     format!(
         "{}:{}-{}:{}",

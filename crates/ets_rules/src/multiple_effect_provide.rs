@@ -8,7 +8,7 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::{EffectMajorVersion, TypeParser};
 
-// go: internal/rules/multiple_effect_provide.go:17 MultipleEffectProvide
+// go: internal/rules/multiple_effect_provide.go:17 MultipleEffectProvide a374fbc3adcd084b
 // MultipleEffectProvide detects consecutive Effect.provide calls with Layer-typed
 // arguments within piping flows and warns that they should be merged into a single
 // provide call to avoid service lifecycle issues.
@@ -31,7 +31,7 @@ pub static MULTIPLE_EFFECT_PROVIDE: LazyLock<Rule> = LazyLock::new(|| {
     }
 });
 
-// go: internal/rules/multiple_effect_provide.go:36 MultipleEffectProvideMatch
+// go: internal/rules/multiple_effect_provide.go:36 MultipleEffectProvideMatch 3b10ecc792ca9760
 // MultipleEffectProvideMatch holds the AST nodes needed by both the
 // diagnostic rule and the quick-fix for the multipleEffectProvide pattern.
 #[derive(Clone)]
@@ -42,7 +42,7 @@ pub struct MultipleEffectProvideMatch {
     pub layer_args: Vec<P<Node>>, // The layer argument nodes from each Effect.provide(layer) call
 }
 
-// go: internal/rules/multiple_effect_provide.go:45 AnalyzeMultipleEffectProvide
+// go: internal/rules/multiple_effect_provide.go:45 AnalyzeMultipleEffectProvide 1ff3c9f522c7ff02
 // AnalyzeMultipleEffectProvide finds all consecutive Effect.provide call chains
 // with Layer-typed arguments within piping flows.
 //

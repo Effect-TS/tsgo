@@ -11,7 +11,7 @@ use ets_shim::core::tspath;
 use ets_shim::tsoptions::{self, CompilerOptionsValue};
 use rustc_hash::FxHashMap;
 
-// go: internal/effectconfigraw/hooks.go:15 Register
+// go: internal/effectconfigraw/hooks.go:15 Register 62833b0e8ff9c311
 // Register wires Effect-specific tsconfig merge hooks into TypeScript-Go.
 pub fn register() {
     tsoptions::register_merge_compiler_options_callback(Arc::new(
@@ -31,7 +31,7 @@ pub fn register() {
     ));
 }
 
-// go: internal/effectconfigraw/hooks.go:20 MergeEffectCompilerOptions
+// go: internal/effectconfigraw/hooks.go:20 MergeEffectCompilerOptions 2ecadb5c2f558b29
 // MergeEffectCompilerOptions customizes merging for Effect plugin config.
 //
 // Rust: `CompilerOptions::effect` is Go's `*etscore.EffectPluginOptions` as an `Option<Arc<_>>` (patch 007); every
@@ -76,7 +76,7 @@ pub fn merge_effect_compiler_options(
     );
 }
 
-// go: internal/effectconfigraw/hooks.go:50 mergeEffectOptions
+// go: internal/effectconfigraw/hooks.go:50 mergeEffectOptions c442e52cbc90ac01
 pub(crate) fn merge_effect_options(
     target: Option<&EffectPluginOptions>,
     source: Option<&EffectPluginOptions>,
@@ -186,7 +186,7 @@ pub(crate) fn merge_effect_options(
     Some(merged)
 }
 
-// go: internal/effectconfigraw/hooks.go:147 rewriteEffectOptionsOverrides
+// go: internal/effectconfigraw/hooks.go:147 rewriteEffectOptionsOverrides d6bef51df923dd33
 pub(crate) fn rewrite_effect_options_overrides(
     effect: Option<&mut EffectPluginOptions>,
     source_config_path: &str,
@@ -218,7 +218,7 @@ pub(crate) fn rewrite_effect_options_overrides(
     }
 }
 
-// go: internal/effectconfigraw/hooks.go:161 rewriteSpecs
+// go: internal/effectconfigraw/hooks.go:161 rewriteSpecs 87585c4268a94615
 pub(crate) fn rewrite_specs(
     specs: Option<Vec<String>>,
     relative_difference: &str,
@@ -241,7 +241,7 @@ pub(crate) fn rewrite_specs(
     Some(rewritten)
 }
 
-// go: internal/effectconfigraw/hooks.go:176 getEffectPluginRaw
+// go: internal/effectconfigraw/hooks.go:176 getEffectPluginRaw 94f81c98a2098c2d
 pub(crate) fn get_effect_plugin_raw(
     raw: Option<&CompilerOptionsValue>,
 ) -> Option<&OrderedMap<String, CompilerOptionsValue>> {
@@ -254,7 +254,7 @@ pub(crate) fn get_effect_plugin_raw(
     plugin
 }
 
-// go: internal/effectconfigraw/hooks.go:186 getCompilerOptionsRaw
+// go: internal/effectconfigraw/hooks.go:186 getCompilerOptionsRaw b1674208a866c134
 pub(crate) fn get_compiler_options_raw(
     raw: Option<&CompilerOptionsValue>,
 ) -> Option<&OrderedMap<String, CompilerOptionsValue>> {
@@ -268,7 +268,7 @@ pub(crate) fn get_compiler_options_raw(
     None
 }
 
-// go: internal/effectconfigraw/hooks.go:195 findEffectPluginRaw
+// go: internal/effectconfigraw/hooks.go:195 findEffectPluginRaw f4a7d986e379255a
 pub(crate) fn find_effect_plugin_raw(
     plugins: &[CompilerOptionsValue],
 ) -> (Option<&OrderedMap<String, CompilerOptionsValue>>, i64) {
@@ -285,7 +285,7 @@ pub(crate) fn find_effect_plugin_raw(
     (None, -1)
 }
 
-// go: internal/effectconfigraw/hooks.go:208 cloneEffectOptions
+// go: internal/effectconfigraw/hooks.go:208 cloneEffectOptions 9820ffe5ba7bc2c0
 pub(crate) fn clone_effect_options(
     source: Option<&EffectPluginOptions>,
 ) -> Option<EffectPluginOptions> {
@@ -304,7 +304,7 @@ pub(crate) fn clone_effect_options(
     Some(cloned)
 }
 
-// go: internal/effectconfigraw/hooks.go:226 cloneOverrides
+// go: internal/effectconfigraw/hooks.go:226 cloneOverrides efc138dec4a1960c
 pub(crate) fn clone_overrides(source: Option<&[Override]>) -> Option<Vec<Override>> {
     let source = source.filter(|source| !source.is_empty())?;
     let mut cloned = Vec::with_capacity(source.len());
@@ -346,7 +346,7 @@ pub(crate) fn clone_overrides(source: Option<&[Override]>) -> Option<Vec<Overrid
     Some(cloned)
 }
 
-// go: internal/effectconfigraw/hooks.go:254 cloneKeyPatterns
+// go: internal/effectconfigraw/hooks.go:254 cloneKeyPatterns 466e178d851647a9
 pub(crate) fn clone_key_patterns(source: Option<&[KeyPattern]>) -> Option<Vec<KeyPattern>> {
     let source = source.filter(|source| !source.is_empty())?;
     let mut cloned = Vec::with_capacity(source.len());
@@ -360,7 +360,7 @@ pub(crate) fn clone_key_patterns(source: Option<&[KeyPattern]>) -> Option<Vec<Ke
     Some(cloned)
 }
 
-// go: internal/effectconfigraw/hooks.go:269 cloneKeyPatternsPtr
+// go: internal/effectconfigraw/hooks.go:269 cloneKeyPatternsPtr e1720592740d7a60
 // Rust: a `*[]KeyPattern` is an `Option<Vec<KeyPattern>>` (see etscore's options.rs), so the pointee's nil
 // collapses to empty.
 pub(crate) fn clone_key_patterns_ptr(source: Option<&[KeyPattern]>) -> Option<Vec<KeyPattern>> {
@@ -369,7 +369,7 @@ pub(crate) fn clone_key_patterns_ptr(source: Option<&[KeyPattern]>) -> Option<Ve
     Some(cloned.unwrap_or_default())
 }
 
-// go: internal/effectconfigraw/hooks.go:277 cloneStringMap
+// go: internal/effectconfigraw/hooks.go:277 cloneStringMap a771cb728713a7ff
 pub(crate) fn clone_string_map(
     source: Option<&FxHashMap<String, String>>,
 ) -> Option<FxHashMap<String, String>> {
@@ -379,7 +379,7 @@ pub(crate) fn clone_string_map(
     Some(cloned)
 }
 
-// go: internal/effectconfigraw/hooks.go:286 mergeSeverityMaps
+// go: internal/effectconfigraw/hooks.go:286 mergeSeverityMaps 78b0a914e319f9b0
 pub(crate) fn merge_severity_maps(
     target: Option<&FxHashMap<String, Severity>>,
     source: Option<&FxHashMap<String, Severity>>,
@@ -401,19 +401,19 @@ pub(crate) fn merge_severity_maps(
     Some(merged)
 }
 
-// go: internal/effectconfigraw/hooks.go:301 cloneIntPtr
+// go: internal/effectconfigraw/hooks.go:301 cloneIntPtr ada8d075674754b4
 pub(crate) fn clone_int_ptr(source: Option<i64>) -> Option<i64> {
     let v = source?;
     Some(v)
 }
 
-// go: internal/effectconfigraw/hooks.go:309 cloneBoolPtr
+// go: internal/effectconfigraw/hooks.go:309 cloneBoolPtr ad5cfe99573d4c2d
 pub(crate) fn clone_bool_ptr(source: Option<bool>) -> Option<bool> {
     let v = source?;
     Some(v)
 }
 
-// go: internal/effectconfigraw/hooks.go:317 cloneStringMapPtr
+// go: internal/effectconfigraw/hooks.go:317 cloneStringMapPtr d18c69bb4cb32388
 // Rust: `maps.Clone` keeps nil-ness, which a `*map` field cannot show here (see etscore's options.rs).
 pub(crate) fn clone_string_map_ptr(
     source: Option<&FxHashMap<String, String>>,
@@ -423,7 +423,7 @@ pub(crate) fn clone_string_map_ptr(
     Some(v)
 }
 
-// go: internal/effectconfigraw/hooks.go:325 cloneTopLevelNamedReexportsPtr
+// go: internal/effectconfigraw/hooks.go:325 cloneTopLevelNamedReexportsPtr 4c0c2c6ce8193713
 pub(crate) fn clone_top_level_named_reexports_ptr(
     source: Option<&TopLevelNamedReexportsMode>,
 ) -> Option<TopLevelNamedReexportsMode> {
@@ -432,7 +432,7 @@ pub(crate) fn clone_top_level_named_reexports_ptr(
     Some(v)
 }
 
-// go: internal/effectconfigraw/hooks.go:333 cloneStringSlicePtr
+// go: internal/effectconfigraw/hooks.go:333 cloneStringSlicePtr 35368310ccb9faf6
 // Rust: the pointee's `append([]string(nil), ...)` nil collapses to empty (see etscore's options.rs).
 pub(crate) fn clone_string_slice_ptr(source: Option<&[String]>) -> Option<Vec<String>> {
     let source = source?;
@@ -440,10 +440,10 @@ pub(crate) fn clone_string_slice_ptr(source: Option<&[String]>) -> Option<Vec<St
     Some(v)
 }
 
-// go: internal/effectconfigraw/hooks.go:341 configDirTemplate
+// go: internal/effectconfigraw/hooks.go:341 configDirTemplate 0d5562b4a971c61f
 pub(crate) const CONFIG_DIR_TEMPLATE: &str = "${configDir}";
 
-// go: internal/effectconfigraw/hooks.go:343 startsWithConfigDirTemplate
+// go: internal/effectconfigraw/hooks.go:343 startsWithConfigDirTemplate b932a4ec464d99c0
 // Rust: Go takes `any` and returns false for a non-string; every caller passes a string.
 pub(crate) fn starts_with_config_dir_template(value: &str) -> bool {
     go_strings_to_lower(value).starts_with(&go_strings_to_lower(CONFIG_DIR_TEMPLATE))

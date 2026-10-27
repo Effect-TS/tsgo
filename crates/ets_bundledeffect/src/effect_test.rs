@@ -5,13 +5,13 @@ use rustc_hash::FxHashMap;
 
 use crate::*;
 
-// go test: internal/bundledeffect/effect_test.go:11 packageJSON
+// go test: internal/bundledeffect/effect_test.go:11 packageJSON 8f6a951bcc17620f
 pub(crate) struct PackageJson {
     pub(crate) dependencies: FxHashMap<String, String>,
     pub(crate) version: String,
 }
 
-// go test: internal/bundledeffect/effect_test.go:16 TestEmbeddedFixturesMatchInstalledPackages
+// go test: internal/bundledeffect/effect_test.go:16 TestEmbeddedFixturesMatchInstalledPackages bffe35236ac35de6
 #[test]
 fn test_embedded_fixtures_match_installed_packages() {
     ets_go::testing::run(|t| {
@@ -62,7 +62,7 @@ fn test_embedded_fixtures_match_installed_packages() {
     });
 }
 
-// go test: internal/bundledeffect/effect_test.go:41 readPackageJSON
+// go test: internal/bundledeffect/effect_test.go:41 readPackageJSON f0ad8b0be2909bb6
 pub(crate) fn read_package_json(t: &T, path: &Path) -> PackageJson {
     t.helper();
     let content = match std::fs::read(path) {

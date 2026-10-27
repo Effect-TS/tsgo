@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/extends_data_tagged.go:8 DataTaggedResult
+// go: internal/typeparser/extends_data_tagged.go:8 DataTaggedResult 6289ae677b5314a5
 // DataTaggedResult holds the parsed result of a class extending Data.TaggedError or Data.TaggedClass.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct DataTaggedResult {
@@ -14,29 +14,29 @@ pub struct DataTaggedResult {
 }
 
 impl DataTaggedResult {
-    // go: internal/typeparser/extends_data_tagged.go:15 DataTaggedResult.ClassName
+    // go: internal/typeparser/extends_data_tagged.go:15 DataTaggedResult.ClassName 9f461ace3ef56380
     pub fn class_name(&self) -> Option<P<Node>> {
         self.class_name
     }
 
-    // go: internal/typeparser/extends_data_tagged.go:17 DataTaggedResult.CallExpression
+    // go: internal/typeparser/extends_data_tagged.go:17 DataTaggedResult.CallExpression e5467276088380e7
     pub fn call_expression(&self) -> P<Node> {
         self.call_expression
     }
 
-    // go: internal/typeparser/extends_data_tagged.go:19 DataTaggedResult.KeyStringLiteral
+    // go: internal/typeparser/extends_data_tagged.go:19 DataTaggedResult.KeyStringLiteral 292edb367b54876e
     pub fn key_string_literal(&self) -> Option<P<Node>> {
         self.key_string_literal
     }
 
-    // go: internal/typeparser/extends_data_tagged.go:21 DataTaggedResult.FieldsTypeNode
+    // go: internal/typeparser/extends_data_tagged.go:21 DataTaggedResult.FieldsTypeNode 1e2547daa34676e4
     pub fn fields_type_node(&self) -> Option<P<Node>> {
         self.fields_type_node
     }
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/extends_data_tagged.go:33 TypeParser.extendsDataTagged
+    // go: internal/typeparser/extends_data_tagged.go:33 TypeParser.extendsDataTagged 224e622798be31cb
     // extendsDataTagged checks if a class declaration extends Data.<memberName>("key")<Fields>.
     // It detects the pattern:
     //
@@ -98,7 +98,7 @@ impl TypeParser<'_> {
         None
     }
 
-    // go: internal/typeparser/extends_data_tagged.go:93 TypeParser.ExtendsDataTaggedError
+    // go: internal/typeparser/extends_data_tagged.go:93 TypeParser.ExtendsDataTaggedError 44f2e93398105262
     // ExtendsDataTaggedError checks if a class declaration extends Data.TaggedError("key")<Fields>.
     pub fn extends_data_tagged_error(
         &mut self,
@@ -113,7 +113,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/extends_data_tagged.go:104 TypeParser.ExtendsDataTaggedClass
+    // go: internal/typeparser/extends_data_tagged.go:104 TypeParser.ExtendsDataTaggedClass a08f34aa951760b3
     // ExtendsDataTaggedClass checks if a class declaration extends Data.TaggedClass("tag")<Fields>.
     pub fn extends_data_tagged_class(
         &mut self,

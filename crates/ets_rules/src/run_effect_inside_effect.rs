@@ -23,12 +23,12 @@ static RUNTIME_MESSAGE: &Message =
 static SERVICES_MESSAGE: &Message =
     &tsdiag::X_0_IS_CALLED_INSIDE_AN_EFFECT_WITH_A_SEPARATE_SERVICES_INVOCATION_IN_THIS_CONTEXT_CHILD_EFFECTS_RUN_WITH_THE_SURROUNDING_SERVICES_WHICH_CAN_BE_ACCESSED_THROUGH_EFFECT_CONTEXT_AND_EFFECT_1_WITH_EFFECT_RUN_EFFECT_INSIDE_EFFECT;
 
-// go: internal/rules/run_effect_inside_effect.go:16 runEffectApis
+// go: internal/rules/run_effect_inside_effect.go:16 runEffectApis 46156d4d0e340906
 // runEffectApis lists the Effect module run APIs that should not be called inside Effect generators.
 pub(crate) static RUN_EFFECT_APIS: &[&str] =
     &["runSync", "runSyncExit", "runPromise", "runPromiseExit", "runFork", "runCallback"];
 
-// go: internal/rules/run_effect_inside_effect.go:20 RunEffectInsideEffect
+// go: internal/rules/run_effect_inside_effect.go:20 RunEffectInsideEffect 63e4e235296474ae
 // RunEffectInsideEffect detects calls to the runEffectApis inside Effect generator contexts
 // and suggests alternatives.
 pub static RUN_EFFECT_INSIDE_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -79,7 +79,7 @@ pub static RUN_EFFECT_INSIDE_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/run_effect_inside_effect.go:54 RunEffectInsideEffectMatch
+// go: internal/rules/run_effect_inside_effect.go:54 RunEffectInsideEffectMatch 4f70589c93ddb0fb
 // RunEffectInsideEffectMatch holds the diagnostic and AST nodes needed by both the
 // diagnostic rule and the quick-fix for the runEffectInsideEffect pattern.
 //
@@ -95,7 +95,7 @@ pub struct RunEffectInsideEffectMatch {
     pub generator_function: P<Node>, // The enclosing Effect generator function
 }
 
-// go: internal/rules/run_effect_inside_effect.go:66 AnalyzeRunEffectInsideEffect
+// go: internal/rules/run_effect_inside_effect.go:66 AnalyzeRunEffectInsideEffect 96865eebeae4b9db
 // AnalyzeRunEffectInsideEffect finds all Effect.run* calls inside Effect generators,
 // returning matches with structured data for both diagnostics and quick-fixes.
 //
@@ -127,7 +127,7 @@ pub fn analyze_run_effect_inside_effect(
     matches
 }
 
-// go: internal/rules/run_effect_inside_effect.go:90 analyzeRunEffectInsideEffectNode
+// go: internal/rules/run_effect_inside_effect.go:90 analyzeRunEffectInsideEffectNode b73babffcba4a7d8
 // analyzeRunEffectInsideEffectNode checks a single call expression for Effect.run* inside an Effect generator.
 //
 // Rust: `(match, ok)` is an `Option`; Go's unused checker parameter is dropped.
@@ -192,7 +192,7 @@ pub(crate) fn analyze_run_effect_inside_effect_node(
     })
 }
 
-// go: internal/rules/run_effect_inside_effect.go:148 matchRunEffectApi
+// go: internal/rules/run_effect_inside_effect.go:148 matchRunEffectApi eeef31b0776d262d
 // matchRunEffectApi checks if the node references one of the Effect.run* APIs and returns the method name.
 // Returns empty string if no match.
 //

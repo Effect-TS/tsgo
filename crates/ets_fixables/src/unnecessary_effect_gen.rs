@@ -10,7 +10,7 @@ use ets_shim::ls::CodeAction;
 static MESSAGE: &Message =
     &tsdiag::THIS_EFFECT_GEN_CONTAINS_A_SINGLE_RETURN_STATEMENT_EFFECT_UNNECESSARY_EFFECT_GEN;
 
-// go: internal/fixables/unnecessary_effect_gen.go:14 UnnecessaryEffectGenFix
+// go: internal/fixables/unnecessary_effect_gen.go:14 UnnecessaryEffectGenFix db5c006aa486a72d
 pub static UNNECESSARY_EFFECT_GEN_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "unnecessaryEffectGen",
     description: "Remove the Effect.gen, and keep the body",
@@ -19,7 +19,7 @@ pub static UNNECESSARY_EFFECT_GEN_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixa
     run: run_unnecessary_effect_gen_fix,
 });
 
-// go: internal/fixables/unnecessary_effect_gen.go:22 runUnnecessaryEffectGenFix
+// go: internal/fixables/unnecessary_effect_gen.go:22 runUnnecessaryEffectGenFix 0afb6a3402c36b61
 fn run_unnecessary_effect_gen_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 

@@ -6,7 +6,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go: internal/completions/gen_function_star.go:11 genFunctionStar
+// go: internal/completions/gen_function_star.go:11 genFunctionStar b6cb182ff8f0ed97
 // genFunctionStar provides a completion for `gen(function*(){})` when dot-accessing
 // an object that has a callable `gen` property (e.g., `Effect.gen`, `Micro.gen`).
 pub(crate) static GEN_FUNCTION_STAR: LazyLock<Completion> = LazyLock::new(|| Completion {
@@ -15,7 +15,7 @@ pub(crate) static GEN_FUNCTION_STAR: LazyLock<Completion> = LazyLock::new(|| Com
     run: run_gen_function_star,
 });
 
-// go: internal/completions/gen_function_star.go:17 runGenFunctionStar
+// go: internal/completions/gen_function_star.go:17 runGenFunctionStar 73dea6d9de8ed5bb
 //
 // Rust: Go's `ch` is `ctx.checker()` (the parser's checker, see `ets_completion::Context`).
 fn run_gen_function_star(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionItem> {

@@ -15,7 +15,7 @@ use ets_typeparser::{ParsedPipeCallResult, TransformationKind, TypeParser};
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THIS_EXPRESSION_CONTAINS_CHAINED_PIPE_CALLS_THAT_CAN_BE_SIMPLIFIED_TO_A_SINGLE_PIPE_CALL_EFFECT_UNNECESSARY_PIPE_CHAIN;
 
-// go: internal/rules/unnecessary_pipe_chain.go:18 UnnecessaryPipeChain
+// go: internal/rules/unnecessary_pipe_chain.go:18 UnnecessaryPipeChain 98fd3908269cdbfe
 // UnnecessaryPipeChain detects chained pipe() and .pipe() calls that can
 // be simplified to a single pipe call.
 pub static UNNECESSARY_PIPE_CHAIN: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -36,7 +36,7 @@ pub static UNNECESSARY_PIPE_CHAIN: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/unnecessary_pipe_chain.go:37 UnnecessaryPipeChainMatch
+// go: internal/rules/unnecessary_pipe_chain.go:37 UnnecessaryPipeChainMatch 1601ebe579eda261
 // UnnecessaryPipeChainMatch holds the diagnostic and parsed pipe call results
 // needed by both the diagnostic rule and the quick-fix.
 #[derive(Clone)]
@@ -47,7 +47,7 @@ pub struct UnnecessaryPipeChainMatch {
     pub inner: Arc<ParsedPipeCallResult>, // The inner pipe call parse result (subject of outer)
 }
 
-// go: internal/rules/unnecessary_pipe_chain.go:47 AnalyzeUnnecessaryPipeChain
+// go: internal/rules/unnecessary_pipe_chain.go:47 AnalyzeUnnecessaryPipeChain 4ae248a130a15a6a
 // AnalyzeUnnecessaryPipeChain finds all chained pipe() and .pipe() calls
 // (outer pipe whose subject is also a pipe call), returning matches with
 // the diagnostic and both parsed results.
@@ -87,7 +87,7 @@ pub fn analyze_unnecessary_pipe_chain(
     matches
 }
 
-// go: internal/rules/unnecessary_pipe_chain.go:79 pipeMergeSupportsArity
+// go: internal/rules/unnecessary_pipe_chain.go:79 pipeMergeSupportsArity 0023d1a6e90284be
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`). Go passes a nil callee type on to
 // `GetSignaturesOfType`; here a callee without a type has no signatures.
@@ -120,7 +120,7 @@ pub(crate) fn pipe_merge_supports_arity(
     false
 }
 
-// go: internal/rules/unnecessary_pipe_chain.go:101 containsSpreadArgument
+// go: internal/rules/unnecessary_pipe_chain.go:101 containsSpreadArgument c5c90d34d2885f12
 pub(crate) fn contains_spread_argument(args: Slice<'_, P<Node>>) -> bool {
     for (_, arg) in args.all() {
         if arg.kind() == Kind::SpreadElement {

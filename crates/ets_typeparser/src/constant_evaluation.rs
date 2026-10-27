@@ -14,7 +14,7 @@ struct ConstantEvaluationHost<'a, 'c> {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/constant_evaluation.go:12 TypeParser.EvaluateConstantExpression
+    // go: internal/typeparser/constant_evaluation.go:12 TypeParser.EvaluateConstantExpression c55981dd1bf2e994
     // EvaluateConstantExpression evaluates the subset of JavaScript expressions
     // that can be resolved statically without executing user code.
     pub fn evaluate_constant_expression(
@@ -39,7 +39,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/constant_evaluation.go:78 TypeParser.EvaluateConstantNumber
+    // go: internal/typeparser/constant_evaluation.go:78 TypeParser.EvaluateConstantNumber 47531c51edf9c1a9
     // EvaluateConstantNumber evaluates a statically resolvable JavaScript numeric
     // expression without executing user code.
     pub fn evaluate_constant_number(
@@ -55,7 +55,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/constant_evaluation.go:12 TypeParser.EvaluateConstantExpression
+// go: internal/typeparser/constant_evaluation.go:12 TypeParser.EvaluateConstantExpression c55981dd1bf2e994
 // Rust: the evaluator closure of `EvaluateConstantExpression` (tsrs's evaluator takes a function and a host).
 fn evaluate_constant_entity(
     host: &mut ConstantEvaluationHost<'_, '_>,

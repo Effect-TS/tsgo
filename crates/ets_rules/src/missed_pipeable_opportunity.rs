@@ -14,7 +14,7 @@ use crate::*;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THIS_NESTED_CALL_STRUCTURE_HAS_A_PIPEABLE_FORM_0_PIPE_REPRESENTS_THE_SAME_CALL_SEQUENCE_IN_PIPE_STYLE_AND_MAY_BE_EASIER_TO_READ_EFFECT_MISSED_PIPEABLE_OPPORTUNITY;
 
-// go: internal/rules/missed_pipeable_opportunity.go:19 MissedPipeableOpportunity
+// go: internal/rules/missed_pipeable_opportunity.go:19 MissedPipeableOpportunity d96dffe723cf29e9
 // MissedPipeableOpportunity detects nested function call chains that can be converted to .pipe() style.
 pub static MISSED_PIPEABLE_OPPORTUNITY: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "missedPipeableOpportunity",
@@ -46,7 +46,7 @@ pub static MISSED_PIPEABLE_OPPORTUNITY: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/missed_pipeable_opportunity.go:50 MissedPipeableOpportunityMatch
+// go: internal/rules/missed_pipeable_opportunity.go:50 MissedPipeableOpportunityMatch 694ebc31095f1e5d
 // MissedPipeableOpportunityMatch holds the parsed result needed by both the diagnostic rule
 // and the quick-fix for the missedPipeableOpportunity pattern.
 //
@@ -63,7 +63,7 @@ pub struct MissedPipeableOpportunityMatch {
     pub after_transformations: Option<Vec<PipingFlowTransformation>>,
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:61 AnalyzeMissedPipeableOpportunity
+// go: internal/rules/missed_pipeable_opportunity.go:61 AnalyzeMissedPipeableOpportunity d26849fe1b7bce8b
 // AnalyzeMissedPipeableOpportunity finds all nested call chains that can be converted to .pipe() style.
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
@@ -132,14 +132,14 @@ pub fn analyze_missed_pipeable_opportunity(
     matches
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:117 safelyPipeableRun
+// go: internal/rules/missed_pipeable_opportunity.go:117 safelyPipeableRun 8da24950a3b99dec
 #[derive(Clone, Copy, Default)]
 pub(crate) struct SafelyPipeableRun {
     pub(crate) length: i64,
     pub(crate) call_count: i64,
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:122 safelyPipeableRuns
+// go: internal/rules/missed_pipeable_opportunity.go:122 safelyPipeableRuns 98f5683b7e1b2f1b
 pub(crate) fn safely_pipeable_runs(
     tp: &mut TypeParser<'_>,
     flow: &PipingFlow,
@@ -164,7 +164,7 @@ pub(crate) fn safely_pipeable_runs(
     runs
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:140 isPipeableAtIndex
+// go: internal/rules/missed_pipeable_opportunity.go:140 isPipeableAtIndex 933d04bdf025ee66
 // isPipeableAtIndex checks if the type at a given index in a flow is pipeable.
 // Index 0 = subject, index > 0 = transformations[index - 1].outType
 pub(crate) fn is_pipeable_at_index(tp: &mut TypeParser<'_>, flow: &PipingFlow, index: i64) -> bool {
@@ -185,7 +185,7 @@ pub(crate) fn is_pipeable_at_index(tp: &mut TypeParser<'_>, flow: &PipingFlow, i
     tp.is_pipeable_type(out_type)
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:162 getSubjectText
+// go: internal/rules/missed_pipeable_opportunity.go:162 getSubjectText 2f4d633f0079d4a1
 // getSubjectText extracts the subject text for the diagnostic message.
 // If the pipeable segment starts at index 0, uses the subject node text directly.
 // Otherwise, traverses the flow node to find the node at the right depth.
@@ -221,7 +221,7 @@ pub(crate) fn get_subject_text(
     trimmed_node_text(sf, Some(current))
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:186 trimmedNodeText
+// go: internal/rules/missed_pipeable_opportunity.go:186 trimmedNodeText fbfa3a4a1c8bc526
 // trimmedNodeText extracts the source text of a node, trimmed of leading trivia.
 pub(crate) fn trimmed_node_text(sf: Option<P<SourceFile>>, node: Option<P<Node>>) -> String {
     let (Some(node), Some(sf)) = (node, sf) else {

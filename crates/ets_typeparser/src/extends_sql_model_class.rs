@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/extends_sql_model_class.go:8 SqlModelClassResult
+// go: internal/typeparser/extends_sql_model_class.go:8 SqlModelClassResult c426ba77bd75149c
 // SqlModelClassResult holds the parsed result of a class extending Model.Class.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct SqlModelClassResult {
@@ -12,19 +12,19 @@ pub struct SqlModelClassResult {
 }
 
 impl SqlModelClassResult {
-    // go: internal/typeparser/extends_sql_model_class.go:13 SqlModelClassResult.ClassName
+    // go: internal/typeparser/extends_sql_model_class.go:13 SqlModelClassResult.ClassName 650470d4a18f30dc
     pub fn class_name(self) -> P<Node> {
         self.class_name
     }
 
-    // go: internal/typeparser/extends_sql_model_class.go:15 SqlModelClassResult.SelfTypeNode
+    // go: internal/typeparser/extends_sql_model_class.go:15 SqlModelClassResult.SelfTypeNode 3f4c02e8ed57ce6c
     pub fn self_type_node(self) -> P<Node> {
         self.self_type_node
     }
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/extends_sql_model_class.go:25 TypeParser.ExtendsEffectSqlModelClass
+    // go: internal/typeparser/extends_sql_model_class.go:25 TypeParser.ExtendsEffectSqlModelClass 912d88180115cffd
     // ExtendsEffectSqlModelClass checks if a class declaration extends Model.Class<Self>(...)({...}).
     // It detects the double-call pattern:
     //

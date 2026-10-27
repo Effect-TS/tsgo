@@ -20,21 +20,21 @@ impl Error {
     }
 }
 
-// go: internal/schemagen/schemagen.go:18 ErrTypeParametersNotSupported
+// go: internal/schemagen/schemagen.go:18 ErrTypeParametersNotSupported 331666aceb73a760
 // Errors returned by schema generation when a type cannot be converted.
 pub const ERR_TYPE_PARAMETERS_NOT_SUPPORTED: Error =
     Error(Cow::Borrowed("could not process types with type parameters"));
-// go: internal/schemagen/schemagen.go:18 ErrTypeParametersNotSupported
+// go: internal/schemagen/schemagen.go:18 ErrTypeParametersNotSupported 331666aceb73a760
 pub const ERR_ONLY_LITERAL_PROPERTIES_SUPPORTED: Error =
     Error(Cow::Borrowed("only literal properties are supported"));
-// go: internal/schemagen/schemagen.go:18 ErrTypeParametersNotSupported
+// go: internal/schemagen/schemagen.go:18 ErrTypeParametersNotSupported 331666aceb73a760
 pub const ERR_REQUIRED_EXPLICIT_TYPES: Error =
     Error(Cow::Borrowed("only explicit types are supported"));
-// go: internal/schemagen/schemagen.go:18 ErrTypeParametersNotSupported
+// go: internal/schemagen/schemagen.go:18 ErrTypeParametersNotSupported 331666aceb73a760
 pub const ERR_INDEX_SIGNATURE_MULTIPLE_PARAMETERS: Error =
     Error(Cow::Borrowed("only index signatures with one parameter are supported"));
 
-// go: internal/schemagen/schemagen.go:26 SchemaGen
+// go: internal/schemagen/schemagen.go:26 SchemaGen f7dfb3b648d66ace
 // SchemaGen holds the context needed to convert AST type nodes into Schema expressions.
 //
 // Rust: the tracker is borrowed (Go: a pointer); the generator only builds nodes with its factory.
@@ -45,7 +45,7 @@ pub struct SchemaGen<'t> {
     pub version: EffectMajorVersion,
 }
 
-// go: internal/schemagen/schemagen.go:35 New
+// go: internal/schemagen/schemagen.go:35 New 671ac9c7a1db6d4e
 // New creates a SchemaGen from the given tracker and source file, resolving the
 // Schema import identifier automatically.
 pub fn new(tracker: &Tracker, sf: P<SourceFile>, version: EffectMajorVersion) -> SchemaGen<'_> {
@@ -58,13 +58,13 @@ pub fn new(tracker: &Tracker, sf: P<SourceFile>, version: EffectMajorVersion) ->
 }
 
 impl SchemaGen<'_> {
-    // go: internal/schemagen/schemagen.go:45 SchemaGen.createApiPropertyAccess
+    // go: internal/schemagen/schemagen.go:45 SchemaGen.createApiPropertyAccess 4e0bcc7d6582debc
     // createApiPropertyAccess creates Schema.<name> (e.g., Schema.String).
     pub(crate) fn create_api_property_access(&self, name: &str) -> P<Node> {
         self.tracker.new_property_access_path(&self.schema_reference.append(&[name]))
     }
 
-    // go: internal/schemagen/schemagen.go:50 SchemaGen.createApiCall
+    // go: internal/schemagen/schemagen.go:50 SchemaGen.createApiCall c50a8c2ca5867af7
     // createApiCall creates Schema.<name>(...args) (e.g., Schema.Array(Schema.String)).
     pub(crate) fn create_api_call(&self, name: &str, args: Vec<P<Node>>) -> P<Node> {
         let t = self.tracker;
@@ -77,7 +77,7 @@ impl SchemaGen<'_> {
         )
     }
 
-    // go: internal/schemagen/schemagen.go:62 SchemaGen.unsupportedComment
+    // go: internal/schemagen/schemagen.go:62 SchemaGen.unsupportedComment b2c1a2740f28090b
     // unsupportedComment creates a placeholder identifier for unsupported conversions.
     // This produces /* Not supported conversion: <text> */ in the emitted output.
     pub(crate) fn unsupported_comment(&self, node: P<Node>) -> P<Node> {
@@ -86,7 +86,7 @@ impl SchemaGen<'_> {
         t.new_identifier(t.alloc_text(&format!("undefined /* Not supported conversion: {text} */")))
     }
 
-    // go: internal/schemagen/schemagen.go:68 SchemaGen.processNode
+    // go: internal/schemagen/schemagen.go:68 SchemaGen.processNode e45837890b13fd5f
     // processNode recursively converts a TypeScript type AST node into a Schema expression.
     //
     // Rust: the node lists of union, tuple and type-literal nodes are never nil in tsrs, so Go's nil-list checks
@@ -254,7 +254,7 @@ impl SchemaGen<'_> {
         Ok(self.unsupported_comment(node))
     }
 
-    // go: internal/schemagen/schemagen.go:258 SchemaGen.processTypeReference
+    // go: internal/schemagen/schemagen.go:258 SchemaGen.processTypeReference d0f32ebd303c02a7
     // processTypeReference handles known type references like Array, Record, Option, etc.
     pub(crate) fn process_type_reference(
         &self,
@@ -364,7 +364,7 @@ impl SchemaGen<'_> {
         }
     }
 
-    // go: internal/schemagen/schemagen.go:342 SchemaGen.entityNameToDataTypeName
+    // go: internal/schemagen/schemagen.go:342 SchemaGen.entityNameToDataTypeName a9fd9dd99db13a9f
     // entityNameToDataTypeName maps a type name to a recognized data type name.
     //
     // Rust: a qualified name's two sides are never nil in tsrs, so Go's nil check of them drops.
@@ -395,7 +395,7 @@ impl SchemaGen<'_> {
         ""
     }
 
-    // go: internal/schemagen/schemagen.go:375 SchemaGen.typeEntityNameToNode
+    // go: internal/schemagen/schemagen.go:375 SchemaGen.typeEntityNameToNode 471fc1d5bcd58cd1
     // typeEntityNameToNode converts a type entity name to an expression node (identifier or property access).
     pub(crate) fn type_entity_name_to_node(&self, entity_name: Option<P<Node>>) -> P<Node> {
         let t = self.tracker;
@@ -418,7 +418,7 @@ impl SchemaGen<'_> {
         t.new_identifier(t.alloc_text(&scanner::get_text_of_node(entity_name)))
     }
 
-    // go: internal/schemagen/schemagen.go:396 SchemaGen.parseAllLiterals
+    // go: internal/schemagen/schemagen.go:396 SchemaGen.parseAllLiterals 9da5e42f5514837e
     // parseAllLiterals tries to parse a type node as a collection of literal values.
     // Returns (literals, true) on success, (nil, false) if the node contains non-literal types.
     //
@@ -464,7 +464,7 @@ impl SchemaGen<'_> {
         None
     }
 
-    // go: internal/schemagen/schemagen.go:441 SchemaGen.processNodeList
+    // go: internal/schemagen/schemagen.go:441 SchemaGen.processNodeList a1f37737bb4867ba
     // processNodeList processes a list of type nodes, converting each to a Schema expression.
     pub(crate) fn process_node_list(&self, nodes: &[P<Node>]) -> Result<Vec<P<Node>>, Error> {
         let mut result = Vec::with_capacity(nodes.len());
@@ -476,7 +476,7 @@ impl SchemaGen<'_> {
     }
 }
 
-// go: internal/schemagen/schemagen.go:454 membersResult
+// go: internal/schemagen/schemagen.go:454 membersResult 042ea05b9a6b00b2
 // membersResult holds the processed properties and records from type members.
 //
 // Rust: declared but never used in Go, as here.
@@ -487,7 +487,7 @@ pub(crate) struct MembersResult {
 }
 
 impl SchemaGen<'_> {
-    // go: internal/schemagen/schemagen.go:460 SchemaGen.processMembers
+    // go: internal/schemagen/schemagen.go:460 SchemaGen.processMembers cbfd7a55c8d79268
     // processMembers handles property signatures and index signatures from type members.
     //
     // Rust: Go's `(properties, records, err)` is `Result<(properties, records), Error>`. A property signature's
@@ -562,7 +562,7 @@ impl SchemaGen<'_> {
         Ok((properties, records))
     }
 
-    // go: internal/schemagen/schemagen.go:531 SchemaGen.ProcessInterfaceDeclaration
+    // go: internal/schemagen/schemagen.go:531 SchemaGen.ProcessInterfaceDeclaration ec254bb9f7380e1a
     // ProcessInterfaceDeclaration generates schema statements for an interface declaration.
     // When preferClass is true and there are no index signatures, generates a Schema.Class declaration.
     // Otherwise generates a Schema.Struct variable declaration.
@@ -596,7 +596,7 @@ impl SchemaGen<'_> {
         Ok(self.create_export_variable_declaration(&name, schema_struct))
     }
 
-    // go: internal/schemagen/schemagen.go:565 SchemaGen.ProcessTypeAliasDeclaration
+    // go: internal/schemagen/schemagen.go:565 SchemaGen.ProcessTypeAliasDeclaration 99c15d66bf8eed13
     // ProcessTypeAliasDeclaration generates schema statements for a type alias declaration.
     // When preferClass is true and the type is an object literal without index signatures,
     // generates a Schema.Class declaration. Otherwise generates a variable declaration.
@@ -631,7 +631,7 @@ impl SchemaGen<'_> {
         Ok(self.create_export_variable_declaration(&name, effect_schema))
     }
 
-    // go: internal/schemagen/schemagen.go:598 SchemaGen.createExportVariableDeclaration
+    // go: internal/schemagen/schemagen.go:598 SchemaGen.createExportVariableDeclaration b129c3ae47b7c407
     // createExportVariableDeclaration creates: export const <name> = <initializer>
     pub(crate) fn create_export_variable_declaration(
         &self,
@@ -651,7 +651,7 @@ impl SchemaGen<'_> {
         t.new_variable_statement(Some(modifiers), var_decl_list)
     }
 
-    // go: internal/schemagen/schemagen.go:618 SchemaGen.createExportSchemaClassDeclaration
+    // go: internal/schemagen/schemagen.go:618 SchemaGen.createExportSchemaClassDeclaration e826e597b4d057c7
     // createExportSchemaClassDeclaration creates:
     //
     //	export class <Name> extends Schema.Class<Name>("Name")({...}) { }
@@ -703,7 +703,7 @@ impl SchemaGen<'_> {
         )
     }
 
-    // go: internal/schemagen/schemagen.go:670 SchemaGen.Process
+    // go: internal/schemagen/schemagen.go:670 SchemaGen.Process 0dd3198db41ff7e3
     // Process converts an interface or type alias declaration into a schema statement.
     // On error, returns a comment node describing the error.
     pub fn process(&self, node: P<Node>, prefer_class: bool) -> Option<P<Node>> {
@@ -728,7 +728,7 @@ impl SchemaGen<'_> {
     }
 }
 
-// go: internal/schemagen/schemagen.go:693 HasIndexSignatures
+// go: internal/schemagen/schemagen.go:693 HasIndexSignatures c7210144c0915995
 // HasIndexSignatures checks whether an interface or type alias has index signatures.
 // Used by typeToEffectSchemaClass to determine applicability.
 pub fn has_index_signatures(node: P<Node>) -> bool {

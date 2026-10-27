@@ -11,7 +11,7 @@ use ets_typeparser::{EffectMajorVersion, TypeParser};
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THE_PAYLOAD_FIELD_NAME_SHADOWS_THIS_ERROR_S_OWN_NAME_SO_LOGS_AND_STRING_ERROR_SHOW_THE_FIELD_VALUE_INSTEAD_OF_THE_ERROR_TYPE_CONSIDER_RENAMING_IT_EFFECT_ERROR_PAYLOAD_SHADOWS_NAME;
 
-// go: internal/rules/error_payload_shadows_name.go:13 ErrorPayloadShadowsName
+// go: internal/rules/error_payload_shadows_name.go:13 ErrorPayloadShadowsName bde30c601044e8f7
 pub static ERROR_PAYLOAD_SHADOWS_NAME: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "errorPayloadShadowsName",
     group: "correctness",
@@ -30,14 +30,14 @@ pub static ERROR_PAYLOAD_SHADOWS_NAME: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/error_payload_shadows_name.go:30 ErrorPayloadShadowsNameMatch
+// go: internal/rules/error_payload_shadows_name.go:30 ErrorPayloadShadowsNameMatch 1918cffe8982cde2
 #[derive(Clone)]
 pub struct ErrorPayloadShadowsNameMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
 }
 
-// go: internal/rules/error_payload_shadows_name.go:35 AnalyzeErrorPayloadShadowsName
+// go: internal/rules/error_payload_shadows_name.go:35 AnalyzeErrorPayloadShadowsName fbaa035e6d935f9e
 pub fn analyze_error_payload_shadows_name(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -89,7 +89,7 @@ pub fn analyze_error_payload_shadows_name(
     matches
 }
 
-// go: internal/rules/error_payload_shadows_name.go:71 errorPayloadFields
+// go: internal/rules/error_payload_shadows_name.go:71 errorPayloadFields c8e2b72271b6c39c
 // Rust: Go's `(fields, errorName)` named results.
 pub(crate) fn error_payload_fields(
     tp: &mut TypeParser<'_>,
@@ -115,7 +115,7 @@ pub(crate) fn error_payload_fields(
     (None, None)
 }
 
-// go: internal/rules/error_payload_shadows_name.go:90 errorPayloadNameMatchesErrorName
+// go: internal/rules/error_payload_shadows_name.go:90 errorPayloadNameMatchesErrorName 396d779976631d71
 pub(crate) fn error_payload_name_matches_error_name(
     tp: &mut TypeParser<'_>,
     member: P<Node>,

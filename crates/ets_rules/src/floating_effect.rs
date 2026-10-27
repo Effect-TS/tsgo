@@ -18,7 +18,7 @@ static MESSAGE: &Message =
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE_EFFECT_ABLE: &Message = &tsdiag::THIS_EFFECT_ABLE_0_VALUE_IS_NEITHER_YIELDED_NOR_ASSIGNED_TO_A_VARIABLE_EFFECT_FLOATING_EFFECT;
 
-// go: internal/rules/floating_effect.go:16 floatingEffectResult
+// go: internal/rules/floating_effect.go:16 floatingEffectResult 2d2146b073b9aacb
 // floatingEffectResult holds information about a detected floating Effect expression.
 pub(crate) struct FloatingEffectResult {
     // isStrict is true when the type's symbol name is exactly "Effect"
@@ -27,7 +27,7 @@ pub(crate) struct FloatingEffectResult {
     pub(crate) expr_type: P<Type>,
 }
 
-// go: internal/rules/floating_effect.go:25 FloatingEffect
+// go: internal/rules/floating_effect.go:25 FloatingEffect 10fa1f961ea67616
 // FloatingEffect detects Effect values that are created as standalone
 // expression statements and are neither yielded nor assigned.
 pub static FLOATING_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -59,7 +59,7 @@ pub static FLOATING_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/floating_effect.go:52 FloatingEffectMatch
+// go: internal/rules/floating_effect.go:52 FloatingEffectMatch 892e4e6ec68e9fc8
 // FloatingEffectMatch holds the diagnostic location and expression needed by
 // both the diagnostic rule and its quick-fix.
 #[derive(Clone)]
@@ -71,7 +71,7 @@ pub struct FloatingEffectMatch {
     pub(crate) expr_type: P<Type>,
 }
 
-// go: internal/rules/floating_effect.go:61 AnalyzeFloatingEffect
+// go: internal/rules/floating_effect.go:61 AnalyzeFloatingEffect cf4dcbd0a8eb9f1c
 // AnalyzeFloatingEffect finds Effect values used as standalone expression statements.
 //
 // Rust: Go's checker argument is the parser's checker; its callee ignores it, so it is dropped.
@@ -105,7 +105,7 @@ pub fn analyze_floating_effect(
     matches
 }
 
-// go: internal/rules/floating_effect.go:90 detectFloatingEffect
+// go: internal/rules/floating_effect.go:90 detectFloatingEffect 9206a9c3a64f43c4
 // detectFloatingEffect checks if a node is an expression statement containing an Effect type
 // that is neither yielded nor assigned. Returns nil if the node should not be reported,
 // or a result with type info for selecting the appropriate diagnostic message.
@@ -161,7 +161,7 @@ pub(crate) fn detect_floating_effect(
     Some(FloatingEffectResult { is_strict, expr_type: t })
 }
 
-// go: internal/rules/floating_effect.go:146 isAssignmentExpression
+// go: internal/rules/floating_effect.go:146 isAssignmentExpression ad3ba8d34dd2ba22
 // isAssignmentExpression checks if an expression is an assignment (=, ??=, &&=, ||=).
 pub(crate) fn is_assignment_expression(node: Option<P<Node>>) -> bool {
     let Some(node) = node else {

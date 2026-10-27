@@ -11,7 +11,7 @@ use ets_shim::core::ptr::alloc_slice;
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/object_literal_contextual_type.go:10 TypeParser.CachedObjectLiteralContextualType
+    // go: internal/typeparser/object_literal_contextual_type.go:10 TypeParser.CachedObjectLiteralContextualType c1ae8131622bc7fd
     pub fn cached_object_literal_contextual_type(
         &mut self,
         node: impl Into<Option<P<Node>>>,
@@ -28,7 +28,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/object_literal_contextual_type.go:33 TypeParser.CachedObjectLiteralConstraintContextualType
+    // go: internal/typeparser/object_literal_contextual_type.go:33 TypeParser.CachedObjectLiteralConstraintContextualType dd27385ffecd56b0
     // CachedObjectLiteralConstraintContextualType returns the contextual type of an
     // object literal inside a generic call argument, as if the argument contributed
     // no inferences to the call's resolved signature. Type parameters then take
@@ -59,7 +59,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/object_literal_contextual_type.go:42 TypeParser.objectLiteralConstraintContextualType
+    // go: internal/typeparser/object_literal_contextual_type.go:42 TypeParser.objectLiteralConstraintContextualType 3f8274b1facd276b
     // Rust: Go's deferred pops run on every exit, a panic included (the panic is re-raised after them).
     pub(crate) fn object_literal_constraint_contextual_type(
         &mut self,
@@ -95,7 +95,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/object_literal_contextual_type.go:71 inferenceReplayLevel
+// go: internal/typeparser/object_literal_contextual_type.go:71 inferenceReplayLevel c9eabe0b1663fb51
 // inferenceReplayLevel is a generic call whose argument at index contains the
 // literal, with the checked types of its receiver and other arguments. A call
 // with explicit type arguments has a fixed parameter type instead.
@@ -110,7 +110,7 @@ pub(crate) struct InferenceReplayLevel {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/object_literal_contextual_type.go:86 TypeParser.inferenceReplayLevels
+    // go: internal/typeparser/object_literal_contextual_type.go:86 TypeParser.inferenceReplayLevels ed0f37e3c118526d
     // inferenceReplayLevels returns the generic calls enclosing node, innermost
     // first, stopping at the first enclosing call that is not generic or has
     // explicit type arguments. It returns nil when the nearest call is not generic.
@@ -168,7 +168,7 @@ impl TypeParser<'_> {
         }
     }
 
-    // go: internal/typeparser/object_literal_contextual_type.go:120 TypeParser.argumentTypeWithoutOwnInferences
+    // go: internal/typeparser/object_literal_contextual_type.go:120 TypeParser.argumentTypeWithoutOwnInferences d9fae91ee64aa59c
     // argumentTypeWithoutOwnInferences replays the checker's inferTypeArguments for
     // the level's call, skipping the argument that contains the literal, and
     // returns that argument's parameter type under the replayed inferences. The
@@ -256,7 +256,7 @@ impl TypeParser<'_> {
         Some(self.checker.instantiate_type(parameter_type, mapper))
     }
 
-    // go: internal/typeparser/object_literal_contextual_type.go:173 TypeParser.CachedObjectLiteralBareConstraintContextualType
+    // go: internal/typeparser/object_literal_contextual_type.go:173 TypeParser.CachedObjectLiteralBareConstraintContextualType 0857378aab5ac596
     // CachedObjectLiteralBareConstraintContextualType returns the contextual type of
     // an object literal inside a generic call argument, as if each constrained type
     // parameter of the call's resolved signature were its constraint. Constraints
@@ -282,7 +282,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/object_literal_contextual_type.go:182 TypeParser.objectLiteralBareConstraintContextualType
+    // go: internal/typeparser/object_literal_contextual_type.go:182 TypeParser.objectLiteralBareConstraintContextualType 4b31e9a1d4eae560
     // Rust: Go's deferred pop runs on every exit, a panic included (the panic is re-raised after it).
     pub(crate) fn object_literal_bare_constraint_contextual_type(
         &mut self,
@@ -334,7 +334,7 @@ impl TypeParser<'_> {
         }
     }
 
-    // go: internal/typeparser/object_literal_contextual_type.go:226 TypeParser.containingCallArgument
+    // go: internal/typeparser/object_literal_contextual_type.go:226 TypeParser.containingCallArgument 9e4dbb9e778dd202
     // containingCallArgument returns the nearest enclosing call whose arguments
     // contain node, its effective arguments, and the index of the argument that
     // contains node. It returns a nil call when there is none, or when a spread
@@ -356,7 +356,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/object_literal_contextual_type.go:242 containingCall
+// go: internal/typeparser/object_literal_contextual_type.go:242 containingCall e4d0e8d6f49fc299
 // containingCall returns the nearest enclosing call, new expression, or tagged
 // template whose arguments contain node.
 pub(crate) fn containing_call(node: P<Node>) -> Option<P<Node>> {

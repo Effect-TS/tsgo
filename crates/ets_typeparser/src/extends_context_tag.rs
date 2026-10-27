@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/extends_context_tag.go:8 ContextTagResult
+// go: internal/typeparser/extends_context_tag.go:8 ContextTagResult 1b03cc7a6d51ab09
 // ContextTagResult holds the parsed result of a class extending Context.Tag.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct ContextTagResult {
@@ -13,24 +13,24 @@ pub struct ContextTagResult {
 }
 
 impl ContextTagResult {
-    // go: internal/typeparser/extends_context_tag.go:14 ContextTagResult.ClassName
+    // go: internal/typeparser/extends_context_tag.go:14 ContextTagResult.ClassName 50cb461cd044db1c
     pub fn class_name(&self) -> P<Node> {
         self.class_name
     }
 
-    // go: internal/typeparser/extends_context_tag.go:16 ContextTagResult.SelfTypeNode
+    // go: internal/typeparser/extends_context_tag.go:16 ContextTagResult.SelfTypeNode f4912cdfade849c6
     pub fn self_type_node(&self) -> P<Node> {
         self.self_type_node
     }
 
-    // go: internal/typeparser/extends_context_tag.go:18 ContextTagResult.KeyStringLiteral
+    // go: internal/typeparser/extends_context_tag.go:18 ContextTagResult.KeyStringLiteral 2b3475794539e1c5
     pub fn key_string_literal(&self) -> Option<P<Node>> {
         self.key_string_literal
     }
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/extends_context_tag.go:30 TypeParser.ExtendsContextTag
+    // go: internal/typeparser/extends_context_tag.go:30 TypeParser.ExtendsContextTag 00566884fcd518f6
     // ExtendsContextTag checks if a class declaration extends Context.Tag("key")<Self, Shape>().
     // It detects the pattern:
     //

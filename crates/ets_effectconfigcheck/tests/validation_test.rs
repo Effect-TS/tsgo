@@ -14,7 +14,7 @@ use ets_shim::tsoptions::{
 use ets_shim::vfs::{FS, bundled, vfstest};
 use rustc_hash::FxHashMap;
 
-// go test: internal/effectconfigcheck/validation_test.go:22 parseHost
+// go test: internal/effectconfigcheck/validation_test.go:22 parseHost 140325da404d2758
 struct ParseHost {
     fs: Arc<dyn FS>,
 }
@@ -29,7 +29,7 @@ impl ParseConfigHost for ParseHost {
     }
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:24 newHost
+// go test: internal/effectconfigcheck/validation_test.go:24 newHost 491665c7ddc49098
 // Rust: the host is leaked (tsrs takes `&'static dyn ParseConfigHost`; docs/TSRS_API.md, "Gaps"). The test package
 // imports etscheckerhooks, whose `init` registers the callbacks: `ets_etscheckerhooks::init()` here.
 fn new_host(files: &[(&str, &str)]) -> &'static ParseHost {
@@ -43,7 +43,7 @@ fn new_host(files: &[(&str, &str)]) -> &'static ParseHost {
     Box::leak(Box::new(ParseHost { fs }))
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:32 parse
+// go test: internal/effectconfigcheck/validation_test.go:32 parse 0125bcab49ba9706
 fn parse(
     host: &'static ParseHost,
     path: &str,
@@ -66,14 +66,14 @@ fn parse(
     )
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:42 config
+// go test: internal/effectconfigcheck/validation_test.go:42 config f9526e3d9bec24d3
 fn config(options: &str, extra: &str) -> String {
     format!(
         r#"{{"files":["/main.ts"],"compilerOptions":{{"plugins":[{{"name":"@effect/language-service",{options}}}]}}{extra}}}"#
     )
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:46 unknownDiagnostics
+// go test: internal/effectconfigcheck/validation_test.go:46 unknownDiagnostics f16515b18f91acb2
 fn unknown_diagnostics(config: &ParsedCommandLine) -> Vec<P<Diagnostic>> {
     let mut result = Vec::new();
     for &diagnostic in &config.errors {
@@ -95,7 +95,7 @@ fn extended_config_cache() -> ets_shim::execute::tsc::ExtendedConfigCache {
     ets_shim::execute::tsc::ExtendedConfigCache::default()
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:56 TestUnknownRuleNames
+// go test: internal/effectconfigcheck/validation_test.go:56 TestUnknownRuleNames 489e1be29e060404
 #[test]
 fn test_unknown_rule_names() {
     for (name, options, count, category) in [
@@ -170,7 +170,7 @@ fn test_unknown_rule_names() {
     }
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:96 TestUnknownRuleNamesExtends
+// go test: internal/effectconfigcheck/validation_test.go:96 TestUnknownRuleNamesExtends cb950712265e3b29
 #[test]
 fn test_unknown_rule_names_extends() {
     for (name, base, child, count, category, local) in [
@@ -247,7 +247,7 @@ fn test_unknown_rule_names_extends() {
     }
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:136 TestEffectPluginInheritance
+// go test: internal/effectconfigcheck/validation_test.go:136 TestEffectPluginInheritance 1a65f2b80fbdc197
 #[test]
 fn test_effect_plugin_inheritance() {
     let base = config(r#""diagnostics":false"#, "");
@@ -299,7 +299,7 @@ fn test_effect_plugin_inheritance() {
     }
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:194 TestInheritedOverridesUseLocalSyntaxOnly
+// go test: internal/effectconfigcheck/validation_test.go:194 TestInheritedOverridesUseLocalSyntaxOnly 57ea5abcd4c79e92
 #[test]
 fn test_inherited_overrides_use_local_syntax_only() {
     let host = new_host(&[
@@ -328,7 +328,7 @@ fn test_inherited_overrides_use_local_syntax_only() {
     assert_eq!(underline(got[1]), r#""localTypo""#, "wrong local underline");
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:215 TestUnknownRuleNamesJSONAPI
+// go test: internal/effectconfigcheck/validation_test.go:215 TestUnknownRuleNamesJSONAPI 512ddd9baf6a637e
 #[test]
 fn test_unknown_rule_names_json_api() {
     // Use the compiler's JSON representation, which both providers accept.
@@ -355,7 +355,7 @@ fn test_unknown_rule_names_json_api() {
     );
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:229 TestProjectReferencesAndSharedExtends
+// go test: internal/effectconfigcheck/validation_test.go:229 TestProjectReferencesAndSharedExtends 44252f2a0210ea18
 #[test]
 fn test_project_references_and_shared_extends() {
     let host = new_host(&[
@@ -422,7 +422,7 @@ fn test_project_references_and_shared_extends() {
     assert!(got.len() == 1 && got[0].category() == Category::Warning, "cached severity leaked");
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:278 TestMultipleExtendsAndExistingOptions
+// go test: internal/effectconfigcheck/validation_test.go:278 TestMultipleExtendsAndExistingOptions 0e777470169add38
 #[test]
 fn test_multiple_extends_and_existing_options() {
     let host = new_host(&[
@@ -467,7 +467,7 @@ fn test_multiple_extends_and_existing_options() {
     );
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:299 TestOtherPluginsAndCompilerErrors
+// go test: internal/effectconfigcheck/validation_test.go:299 TestOtherPluginsAndCompilerErrors 235be75931db41d9
 #[test]
 fn test_other_plugins_and_compiler_errors() {
     let host = new_host(&[(
@@ -484,7 +484,7 @@ fn test_other_plugins_and_compiler_errors() {
     );
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:313 TestUnknownRuleNamesDeterministicOrder
+// go test: internal/effectconfigcheck/validation_test.go:313 TestUnknownRuleNamesDeterministicOrder 8d2d51201ffb4f0f
 #[test]
 fn test_unknown_rule_names_deterministic_order() {
     let host = new_host(&[(

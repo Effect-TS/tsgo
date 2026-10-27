@@ -15,7 +15,7 @@ use crate::is_void_expression;
 static MESSAGE: &Message =
     &tsdiag::EFFECT_AS_EXPRESSES_REPLACING_THE_SUCCESS_VALUE_WITH_A_CONSTANT_DIRECTLY_EFFECT_MAP_CONST_TO_AS;
 
-// go: internal/rules/map_const_to_as.go:17 MapConstToAs
+// go: internal/rules/map_const_to_as.go:17 MapConstToAs 9f547f3c83279855
 // MapConstToAs suggests Effect.as when an Effect.map callback ignores its
 // input and returns a constant.
 pub static MAP_CONST_TO_AS: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -35,7 +35,7 @@ pub static MAP_CONST_TO_AS: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/map_const_to_as.go:42 MapConstToAsMatch
+// go: internal/rules/map_const_to_as.go:42 MapConstToAsMatch 6b52e24681efab70
 // MapConstToAsMatch holds the nodes needed by the diagnostic and quick fix.
 #[derive(Clone)]
 pub struct MapConstToAsMatch {
@@ -45,7 +45,7 @@ pub struct MapConstToAsMatch {
     pub constant_value: P<Node>, // The returned constant, with parentheses skipped
 }
 
-// go: internal/rules/map_const_to_as.go:52 AnalyzeMapConstToAs
+// go: internal/rules/map_const_to_as.go:52 AnalyzeMapConstToAs 5c1881b98bfeecdd
 // AnalyzeMapConstToAs finds data-last and data-first Effect.map calls whose
 // callback ignores its input and returns a value that is stable when the
 // Effect is constructed, so Effect.as can capture it once.
@@ -103,7 +103,7 @@ pub fn analyze_map_const_to_as(
     matches
 }
 
-// go: internal/rules/map_const_to_as.go:92 isIgnorableMapParameterList
+// go: internal/rules/map_const_to_as.go:92 isIgnorableMapParameterList bca157fc30aee44d
 // isIgnorableMapParameterList accepts no parameters, or a single plain
 // identifier parameter. Stable values never resolve to that parameter, so it
 // is unused whenever the returned value is stable.

@@ -9,7 +9,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::CLASSES_EXTENDING_SCHEMA_OPAQUE_MUST_NOT_DECLARE_INSTANCE_MEMBERS_EFFECT_SCHEMA_OPAQUE_INSTANCE_MEMBER;
 
-// go: internal/rules/schema_opaque_instance_member.go:10 SchemaOpaqueInstanceMember
+// go: internal/rules/schema_opaque_instance_member.go:10 SchemaOpaqueInstanceMember a88facf490547303
 pub static SCHEMA_OPAQUE_INSTANCE_MEMBER: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "schemaOpaqueInstanceMember",
     group: "correctness",
@@ -51,7 +51,7 @@ pub static SCHEMA_OPAQUE_INSTANCE_MEMBER: LazyLock<Rule> = LazyLock::new(|| Rule
     },
 });
 
-// go: internal/rules/schema_opaque_instance_member.go:41 isSchemaOpaqueInstanceMember
+// go: internal/rules/schema_opaque_instance_member.go:41 isSchemaOpaqueInstanceMember 83df32041fef1e93
 pub(crate) fn is_schema_opaque_instance_member(node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;

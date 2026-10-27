@@ -7,7 +7,7 @@ use rustc_hash::{FxHashMap, FxHashSet};
 
 use crate::*;
 
-// go: internal/layergraph/outline.go:15 ExtractOutlineGraph
+// go: internal/layergraph/outline.go:15 ExtractOutlineGraph ec9ec82a2487e438
 // ExtractOutlineGraph builds a simplified dependency graph from the full layer graph.
 // It keeps only leaf nodes (deduplicated by symbol) and connects them based on
 // type compatibility: if node A requires a service that node B provides, add an edge.

@@ -9,7 +9,7 @@ use ets_shim::lsproto;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_SCHEMA_NUMBER_API_ACCEPTS_NA_N_INFINITY_AND_INFINITY_USE_0_FOR_FINITE_DOMAIN_NUMBERS_IF_NON_FINITE_VALUES_ARE_INTENTIONAL_DISABLE_THIS_DIAGNOSTIC_FOR_THAT_LINE_EFFECT_SCHEMA_NUMBER;
 
-// go: internal/fixables/schema_number.go:13 SchemaNumberFix
+// go: internal/fixables/schema_number.go:13 SchemaNumberFix 7bf89adc6284ec15
 pub static SCHEMA_NUMBER_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "schemaNumber",
     description: "Replace Schema.Number APIs with finite variants",
@@ -18,7 +18,7 @@ pub static SCHEMA_NUMBER_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     run: run_schema_number_fix,
 });
 
-// go: internal/fixables/schema_number.go:21 runSchemaNumberFix
+// go: internal/fixables/schema_number.go:21 runSchemaNumberFix c7ba984ff8465869
 //
 // Rust: the match's reference node is never nil.
 fn run_schema_number_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {

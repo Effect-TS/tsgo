@@ -1,6 +1,6 @@
 use crate::*;
 
-// go test: internal/completions/effect_jsdoc_comment_test.go:7 TestEffectJsdocComment_DoubleSlash
+// go test: internal/completions/effect_jsdoc_comment_test.go:7 TestEffectJsdocComment_DoubleSlash 3a4687a68789f892
 #[test]
 fn test_effect_jsdoc_comment_double_slash() {
     go_test(|t| {
@@ -19,7 +19,7 @@ fn test_effect_jsdoc_comment_double_slash() {
     });
 }
 
-// go test: internal/completions/effect_jsdoc_comment_test.go:19 TestEffectJsdocComment_SlashStar
+// go test: internal/completions/effect_jsdoc_comment_test.go:19 TestEffectJsdocComment_SlashStar b802697af89ead9c
 #[test]
 fn test_effect_jsdoc_comment_slash_star() {
     go_test(|t| {
@@ -38,7 +38,7 @@ fn test_effect_jsdoc_comment_slash_star() {
     });
 }
 
-// go test: internal/completions/effect_jsdoc_comment_test.go:31 TestEffectJsdocComment_JSDocComment
+// go test: internal/completions/effect_jsdoc_comment_test.go:31 TestEffectJsdocComment_JSDocComment bcccd1577c5f74e7
 #[test]
 fn test_effect_jsdoc_comment_jsdoc_comment() {
     go_test(|t| {
@@ -51,7 +51,7 @@ fn test_effect_jsdoc_comment_jsdoc_comment() {
     });
 }
 
-// go test: internal/completions/effect_jsdoc_comment_test.go:40 TestEffectJsdocComment_ExtraWhitespace
+// go test: internal/completions/effect_jsdoc_comment_test.go:40 TestEffectJsdocComment_ExtraWhitespace c791610539ee603e
 #[test]
 fn test_effect_jsdoc_comment_extra_whitespace() {
     go_test(|t| {
@@ -67,7 +67,7 @@ fn test_effect_jsdoc_comment_extra_whitespace() {
     });
 }
 
-// go test: internal/completions/effect_jsdoc_comment_test.go:49 TestEffectJsdocComment_NoAtSymbol
+// go test: internal/completions/effect_jsdoc_comment_test.go:49 TestEffectJsdocComment_NoAtSymbol 4f5e0ae6604c861f
 #[test]
 fn test_effect_jsdoc_comment_no_at_symbol() {
     go_test(|t| {
@@ -80,7 +80,7 @@ fn test_effect_jsdoc_comment_no_at_symbol() {
     });
 }
 
-// go test: internal/completions/effect_jsdoc_comment_test.go:58 TestEffectJsdocComment_AtOutsideComment
+// go test: internal/completions/effect_jsdoc_comment_test.go:58 TestEffectJsdocComment_AtOutsideComment 55572159755768b6
 #[test]
 fn test_effect_jsdoc_comment_at_outside_comment() {
     go_test(|t| {
@@ -93,7 +93,7 @@ fn test_effect_jsdoc_comment_at_outside_comment() {
     });
 }
 
-// go test: internal/completions/effect_jsdoc_comment_test.go:67 TestEffectJsdocComment_InsertText
+// go test: internal/completions/effect_jsdoc_comment_test.go:67 TestEffectJsdocComment_InsertText ac6cd86a936269a8
 #[test]
 fn test_effect_jsdoc_comment_insert_text() {
     go_test(|t| {
@@ -111,7 +111,7 @@ fn test_effect_jsdoc_comment_insert_text() {
     });
 }
 
-// go test: internal/completions/effect_jsdoc_comment_test.go:81 TestEffectJsdocComment_ReplacementSpanStartsAtAt
+// go test: internal/completions/effect_jsdoc_comment_test.go:81 TestEffectJsdocComment_ReplacementSpanStartsAtAt 1e3f1683af08e813
 #[test]
 fn test_effect_jsdoc_comment_replacement_span_starts_at_at() {
     go_test(|t| {
@@ -133,7 +133,7 @@ fn test_effect_jsdoc_comment_replacement_span_starts_at_at() {
     });
 }
 
-// go test: internal/completions/effect_jsdoc_comment_test.go:96 TestEffectJsdocComment_MultilineWithCommentOnSecondLine
+// go test: internal/completions/effect_jsdoc_comment_test.go:96 TestEffectJsdocComment_MultilineWithCommentOnSecondLine 7d9648ffe850ed65
 #[test]
 fn test_effect_jsdoc_comment_multiline_with_comment_on_second_line() {
     go_test(|t| {

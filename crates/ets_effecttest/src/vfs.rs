@@ -16,7 +16,7 @@ use ets_shim::vfs::{FS, bundled};
 use parking_lot::{Condvar, Mutex};
 use rustc_hash::FxHashMap;
 
-// go test: internal/effecttest/vfs.go:17 programSemaphore
+// go test: internal/effecttest/vfs.go:17 programSemaphore bb6a3630b19293a9
 // programSemaphore limits the number of concurrent TypeScript program
 // compilations to avoid OOM in memory-constrained environments.
 //
@@ -24,14 +24,14 @@ use rustc_hash::FxHashMap;
 pub(crate) static PROGRAM_SEMAPHORE: LazyLock<(Mutex<usize>, Condvar)> =
     LazyLock::new(|| (Mutex::new(0), Condvar::new()));
 
-// go test: internal/effecttest/vfs.go:19 maxConcurrentPrograms
+// go test: internal/effecttest/vfs.go:19 maxConcurrentPrograms abf3e2d63f37cc97
 // Rust: `runtime.GOMAXPROCS(0)` is the number of CPUs by default.
 pub(crate) fn max_concurrent_programs() -> usize {
     let n = std::thread::available_parallelism().map_or(1, std::num::NonZero::get);
     n.max(1)
 }
 
-// go test: internal/effecttest/vfs.go:26 AcquireProgram
+// go test: internal/effecttest/vfs.go:26 AcquireProgram c78bd51dbe9270f8
 // AcquireProgram acquires a slot from the program semaphore.
 pub fn acquire_program() {
     let (used, freed) = &*PROGRAM_SEMAPHORE;
@@ -42,7 +42,7 @@ pub fn acquire_program() {
     *used += 1;
 }
 
-// go test: internal/effecttest/vfs.go:30 ReleaseProgram
+// go test: internal/effecttest/vfs.go:30 ReleaseProgram 8e5d3ce2788ebe54
 // ReleaseProgram releases a slot back to the program semaphore, clears
 // per-program caches to allow GC of the program, and triggers GC.
 //
@@ -62,7 +62,7 @@ impl Drop for ReleaseProgramOnDrop {
     }
 }
 
-// go test: internal/effecttest/vfs.go:37 astCacheKey
+// go test: internal/effecttest/vfs.go:37 astCacheKey bb0d3972b9a8dcdf
 // astCacheKey combines EffectVersion and filename to avoid cross-version
 // collisions (V3 and V4 mount different package contents at the same VFS paths).
 #[derive(Clone, PartialEq, Eq, Hash)]
@@ -80,7 +80,7 @@ pub(crate) struct CachedSourceFile {
     pub(crate) _region: Region,
 }
 
-// go test: internal/effecttest/vfs.go:47 parsedASTCache
+// go test: internal/effecttest/vfs.go:47 parsedASTCache 369ca7a491a0073c
 // parsedASTCache caches parsed ASTs for node_modules package files.
 // These files are identical across all tests of the same EffectVersion,
 // so parsing them once and reusing the ASTs across programs saves
@@ -89,14 +89,14 @@ pub(crate) struct CachedSourceFile {
 pub(crate) static PARSED_AST_CACHE: LazyLock<Mutex<FxHashMap<AstCacheKey, CachedSourceFile>>> =
     LazyLock::new(Mutex::default);
 
-// go test: internal/effecttest/vfs.go:52 parsedLibCache
+// go test: internal/effecttest/vfs.go:52 parsedLibCache 29383b23c0a1dd90
 // parsedLibCache caches parsed ASTs for bundled lib files (e.g. lib.es2022.d.ts).
 // Lib files are version-independent and identical across all tests, so they
 // are keyed by filename only. There are ~108 lib files, so this cache is bounded.
 pub(crate) static PARSED_LIB_CACHE: LazyLock<Mutex<FxHashMap<String, CachedSourceFile>>> =
     LazyLock::new(Mutex::default);
 
-// go test: internal/effecttest/vfs.go:57 cachingCompilerHost
+// go test: internal/effecttest/vfs.go:57 cachingCompilerHost 874ec65a1e516a86
 // cachingCompilerHost wraps a CompilerHost and caches GetSourceFile results
 // for files under /node_modules/ and bundled lib files. Test-specific files
 // are not cached.
@@ -141,7 +141,7 @@ impl CompilerHost for CachingCompilerHost {
         self.compiler_host.trace(msg, args);
     }
 
-    // go test: internal/effecttest/vfs.go:62 cachingCompilerHost.GetSourceFile
+    // go test: internal/effecttest/vfs.go:62 cachingCompilerHost.GetSourceFile 1ed6382c65ba4469
     //
     // Rust: Go's `sync.Map` lets two tests that miss at once both parse and store (the later store wins); here the
     // first stored file wins and both return it, so a returned file is always the one the cache keeps alive.

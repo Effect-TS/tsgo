@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/extends_schema_class.go:8 SchemaClassResult
+// go: internal/typeparser/extends_schema_class.go:8 SchemaClassResult 5c1ad87ae9d8b7e5
 // SchemaClassResult holds the parsed result of a class extending Schema.Class, Schema.Error or Schema.RequestClass.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct SchemaClassResult {
@@ -15,34 +15,34 @@ pub struct SchemaClassResult {
 }
 
 impl SchemaClassResult {
-    // go: internal/typeparser/extends_schema_class.go:16 SchemaClassResult.ClassName
+    // go: internal/typeparser/extends_schema_class.go:16 SchemaClassResult.ClassName f438d9bc86d55028
     pub fn class_name(&self) -> P<Node> {
         self.class_name
     }
 
-    // go: internal/typeparser/extends_schema_class.go:18 SchemaClassResult.SelfTypeNode
+    // go: internal/typeparser/extends_schema_class.go:18 SchemaClassResult.SelfTypeNode fdf334b4e340efc1
     pub fn self_type_node(&self) -> P<Node> {
         self.self_type_node
     }
 
-    // go: internal/typeparser/extends_schema_class.go:20 SchemaClassResult.BrandTypeNode
+    // go: internal/typeparser/extends_schema_class.go:20 SchemaClassResult.BrandTypeNode aa9f95cdb2f6e15a
     pub fn brand_type_node(&self) -> Option<P<Node>> {
         self.brand_type_node
     }
 
-    // go: internal/typeparser/extends_schema_class.go:22 SchemaClassResult.KeyStringLiteral
+    // go: internal/typeparser/extends_schema_class.go:22 SchemaClassResult.KeyStringLiteral 06b8cf0a53806db8
     pub fn key_string_literal(&self) -> Option<P<Node>> {
         self.key_string_literal
     }
 
-    // go: internal/typeparser/extends_schema_class.go:24 SchemaClassResult.FieldsNode
+    // go: internal/typeparser/extends_schema_class.go:24 SchemaClassResult.FieldsNode adf6a05290d9ec67
     pub fn fields_node(&self) -> Option<P<Node>> {
         self.fields_node
     }
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/extends_schema_class.go:36 TypeParser.ExtendsSchemaClass
+    // go: internal/typeparser/extends_schema_class.go:36 TypeParser.ExtendsSchemaClass 7f8dbeec3a207abf
     // ExtendsSchemaClass checks if a class declaration extends Schema.Class<Self>("name")({}).
     // It detects the double-call pattern:
     //
@@ -66,7 +66,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/extends_schema_class.go:46 TypeParser.ExtendsSchemaError
+    // go: internal/typeparser/extends_schema_class.go:46 TypeParser.ExtendsSchemaError 9013891a7c7f2d76
     pub fn extends_schema_error(
         &mut self,
         class_node: impl Into<Option<P<Node>>>,
@@ -80,7 +80,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/extends_schema_class.go:60 TypeParser.ExtendsSchemaRequestClass
+    // go: internal/typeparser/extends_schema_class.go:60 TypeParser.ExtendsSchemaRequestClass f1d11e661eccd1d0
     // ExtendsSchemaRequestClass checks if a class declaration extends Schema.RequestClass<Self>("name")({}).
     // Same double-call pattern as ExtendsSchemaClass but for Schema.RequestClass.
     //
@@ -98,7 +98,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/extends_schema_class.go:70 TypeParser.extendsSchemaClassLike
+    // go: internal/typeparser/extends_schema_class.go:70 TypeParser.extendsSchemaClassLike e00fa76bc25f4eb6
     pub(crate) fn extends_schema_class_like(
         &mut self,
         class_node: P<Node>,

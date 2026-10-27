@@ -4,7 +4,7 @@ use ets_bundledeffect::EffectVersion;
 
 use crate::*;
 
-// go test: internal/rules/flat_map_to_tap_test.go:10 TestFlatMapToTapMalformedCallbacks
+// go test: internal/rules/flat_map_to_tap_test.go:10 TestFlatMapToTapMalformedCallbacks 134d501e4f8aee8c
 #[test]
 fn test_flat_map_to_tap_malformed_callbacks() {
     run_on_checker_stack(|t| {

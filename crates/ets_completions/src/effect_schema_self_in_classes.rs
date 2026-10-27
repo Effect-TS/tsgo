@@ -7,7 +7,7 @@ use ets_typeparser::EffectMajorVersion;
 
 use crate::*;
 
-// go: internal/completions/effect_schema_self_in_classes.go:15 effectSchemaSelfInClasses
+// go: internal/completions/effect_schema_self_in_classes.go:15 effectSchemaSelfInClasses e2a80dad4e0246c1
 // effectSchemaSelfInClasses provides completion items for Schema/Model class constructors
 // when the cursor is in the extends clause of a class declaration.
 // For example, typing `class Foo extends Schema.|` will suggest `Class<Foo>`, `TaggedClass<Foo>`, etc.
@@ -18,7 +18,7 @@ pub(crate) static EFFECT_SCHEMA_SELF_IN_CLASSES: LazyLock<Completion> =
         run: run_effect_schema_self_in_classes,
     });
 
-// go: internal/completions/effect_schema_self_in_classes.go:21 runEffectSchemaSelfInClasses
+// go: internal/completions/effect_schema_self_in_classes.go:21 runEffectSchemaSelfInClasses ed8a4bf9364d1a53
 fn run_effect_schema_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionItem> {
     let Some(data) =
         ets_completion::parse_data_for_extends_class_completion(ctx.source_file, ctx.position)
@@ -233,7 +233,7 @@ fn run_effect_schema_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::
     items
 }
 
-// go: internal/completions/effect_schema_self_in_classes.go:161 makeCompletionItem
+// go: internal/completions/effect_schema_self_in_classes.go:161 makeCompletionItem ea64337443f0ca3b
 // makeCompletionItem creates a CompletionItem with snippet format and a text edit.
 //
 // Rust: Go's variadic `kindOverride ...lsproto.CompletionItemKind` (only its first element is read) is an
@@ -266,7 +266,7 @@ pub(crate) fn make_completion_item(
     }
 }
 
-// go: internal/completions/effect_schema_self_in_classes.go:184 makeExtendsCompletionItem
+// go: internal/completions/effect_schema_self_in_classes.go:184 makeExtendsCompletionItem 8038343e7dee1181
 // makeExtendsCompletionItem creates a CompletionItem for an extends-clause completion.
 // It sets FilterText to accessedText.label so VS Code can filter correctly when the
 // replacement range covers the full "Module.Property" expression.
@@ -283,7 +283,7 @@ pub(crate) fn make_extends_completion_item(
     item
 }
 
-// go: internal/completions/effect_schema_self_in_classes.go:192 byteSpanToRange
+// go: internal/completions/effect_schema_self_in_classes.go:192 byteSpanToRange af9827399dde439e
 // byteSpanToRange converts a byte offset span to an LSP Range.
 pub(crate) fn byte_span_to_range(ctx: &Context<'_, '_>, start: u32, length: u32) -> lsproto::Range {
     let (start_line, start_char) =

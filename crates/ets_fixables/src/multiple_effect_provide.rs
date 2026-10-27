@@ -11,7 +11,7 @@ use ets_shim::scanner;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_EXPRESSION_CHAINS_MULTIPLE_EFFECT_PROVIDE_CALLS_PROVIDING_LAYERS_IN_MULTIPLE_CALLS_IN_A_CHAIN_CAN_BREAK_SERVICE_LIFECYCLE_BEHAVIOR_COMPARED_WITH_A_SINGLE_COMBINED_PROVIDE_WITH_MERGED_LAYERS_EFFECT_MULTIPLE_EFFECT_PROVIDE;
 
-// go: internal/fixables/multiple_effect_provide.go:15 MultipleEffectProvideFix
+// go: internal/fixables/multiple_effect_provide.go:15 MultipleEffectProvideFix 0ed85a50c572ea64
 pub static MULTIPLE_EFFECT_PROVIDE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "multipleEffectProvide",
     description: "Combine into a single provide",
@@ -20,7 +20,7 @@ pub static MULTIPLE_EFFECT_PROVIDE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fix
     run: run_multiple_effect_provide_fix,
 });
 
-// go: internal/fixables/multiple_effect_provide.go:23 runMultipleEffectProvideFix
+// go: internal/fixables/multiple_effect_provide.go:23 runMultipleEffectProvideFix 1bf43ff3675f264c
 fn run_multiple_effect_provide_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 

@@ -13,7 +13,7 @@ use ets_typeparser::{
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_TAP_EXPRESSES_THIS_OBSERVATION_MORE_DIRECTLY_THAN_EFFECT_0_WITH_A_MANUAL_RE_YIELD_EFFECT_FLAT_MAP_TO_TAP;
 
-// go: internal/rules/flat_map_to_tap.go:15 FlatMapToTap
+// go: internal/rules/flat_map_to_tap.go:15 FlatMapToTap 5250ef82cf40161b
 pub static FLAT_MAP_TO_TAP: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "flatMapToTap",
     group: "style",
@@ -42,7 +42,7 @@ pub static FLAT_MAP_TO_TAP: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/flat_map_to_tap.go:39 FlatMapToTapMatch
+// go: internal/rules/flat_map_to_tap.go:39 FlatMapToTapMatch c762330399bc8b9b
 #[derive(Clone)]
 pub struct FlatMapToTapMatch {
     pub source_file: P<SourceFile>,
@@ -51,7 +51,7 @@ pub struct FlatMapToTapMatch {
     pub return_flow: PipingFlow,
 }
 
-// go: internal/rules/flat_map_to_tap.go:47 AnalyzeFlatMapToTap
+// go: internal/rules/flat_map_to_tap.go:47 AnalyzeFlatMapToTap d0607b4bb86aa4d8
 // AnalyzeFlatMapToTap finds callbacks that restore their unchanged input after an effect.
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
@@ -165,7 +165,7 @@ pub fn analyze_flat_map_to_tap(
     matches
 }
 
-// go: internal/rules/flat_map_to_tap.go:122 plainTapParameter
+// go: internal/rules/flat_map_to_tap.go:122 plainTapParameter f3c0d2f3c44f0ac3
 // Rust: the parameter is the node (Go's `*ast.ParameterDeclaration` view).
 pub(crate) fn plain_tap_parameter(parameter: P<Node>) -> bool {
     parameter.name().is_some_and(|name| name.kind() == Kind::Identifier)

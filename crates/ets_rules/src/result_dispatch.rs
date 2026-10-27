@@ -4,7 +4,7 @@ use ets_typeparser::{DispatchCondition, TypeParser};
 
 use crate::*;
 
-// go: internal/rules/result_dispatch.go:9 resultDispatchTagValue
+// go: internal/rules/result_dispatch.go:9 resultDispatchTagValue 38cb2255ed3fdb04
 pub(crate) fn result_dispatch_tag_value(condition: DispatchCondition) -> Option<String> {
     let value = unwrap_transparent_expression(condition.tag_value());
     if condition.tag_subject().is_some()
@@ -16,7 +16,7 @@ pub(crate) fn result_dispatch_tag_value(condition: DispatchCondition) -> Option<
     None
 }
 
-// go: internal/rules/result_dispatch.go:17 isResultDispatchTagReference
+// go: internal/rules/result_dispatch.go:17 isResultDispatchTagReference 5c353eeef68d12b9
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub(crate) fn is_result_dispatch_tag_reference(

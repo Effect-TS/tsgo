@@ -14,7 +14,7 @@ use ets_typeparser::{
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::CHAINED_EFFECT_CATCH_FALLBACKS_THAT_IGNORE_THE_ERROR_CAN_BE_WRITTEN_WITH_EFFECT_FIRST_SUCCESS_OF_WRAP_EACH_LAZY_FALLBACK_WITH_EFFECT_SUSPEND_TO_PRESERVE_WHEN_IT_IS_CONSTRUCTED_EFFECT_CATCH_CHAIN_TO_FIRST_SUCCESS_OF;
 
-// go: internal/rules/catch_chain_to_first_success_of.go:15 CatchChainToFirstSuccessOf
+// go: internal/rules/catch_chain_to_first_success_of.go:15 CatchChainToFirstSuccessOf 94e70e85514935bb
 // CatchChainToFirstSuccessOf suggests firstSuccessOf for equivalent catch fallback chains.
 pub static CATCH_CHAIN_TO_FIRST_SUCCESS_OF: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "catchChainToFirstSuccessOf",
@@ -34,21 +34,21 @@ pub static CATCH_CHAIN_TO_FIRST_SUCCESS_OF: LazyLock<Rule> = LazyLock::new(|| Ru
     },
 });
 
-// go: internal/rules/catch_chain_to_first_success_of.go:39 CatchChainToFirstSuccessOfMatch
+// go: internal/rules/catch_chain_to_first_success_of.go:39 CatchChainToFirstSuccessOfMatch 90116ee91f6f8e16
 #[derive(Clone)]
 pub struct CatchChainToFirstSuccessOfMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
 }
 
-// go: internal/rules/catch_chain_to_first_success_of.go:44 catchChainToFirstSuccessOfCandidate
+// go: internal/rules/catch_chain_to_first_success_of.go:44 catchChainToFirstSuccessOfCandidate 57fe6c4996b6830b
 #[derive(Clone)]
 pub(crate) struct CatchChainToFirstSuccessOfCandidate {
     transformation: PipingFlowTransformation,
     error_type: P<Type>,
 }
 
-// go: internal/rules/catch_chain_to_first_success_of.go:50 AnalyzeCatchChainToFirstSuccessOf
+// go: internal/rules/catch_chain_to_first_success_of.go:50 AnalyzeCatchChainToFirstSuccessOf f6a93ec5845e2756
 // AnalyzeCatchChainToFirstSuccessOf finds consecutive zero-argument catch fallbacks.
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`), never nil.
@@ -130,7 +130,7 @@ pub fn analyze_catch_chain_to_first_success_of(
     matches
 }
 
-// go: internal/rules/catch_chain_to_first_success_of.go:110 analyzeCatchChainToFirstSuccessOfCandidate
+// go: internal/rules/catch_chain_to_first_success_of.go:110 analyzeCatchChainToFirstSuccessOfCandidate 07945e9b18f59481
 pub(crate) fn analyze_catch_chain_to_first_success_of_candidate(
     tp: &mut TypeParser<'_>,
     transformation: Option<&PipingFlowTransformation>,
@@ -162,7 +162,7 @@ pub(crate) fn analyze_catch_chain_to_first_success_of_candidate(
     })
 }
 
-// go: internal/rules/catch_chain_to_first_success_of.go:145 catchChainPreservesFirstSuccessOfError
+// go: internal/rules/catch_chain_to_first_success_of.go:145 catchChainPreservesFirstSuccessOfError 138d78ae0ebbe980
 pub(crate) fn catch_chain_preserves_first_success_of_error(
     c: &mut Checker,
     initial_error: Option<P<Type>>,

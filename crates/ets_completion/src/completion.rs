@@ -6,7 +6,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go: internal/completion/completion.go:13 Completion
+// go: internal/completion/completion.go:13 Completion 04b8febe748795c5
 // Completion defines a custom completion provider.
 // Each completion has a name, description, and a Run function that returns
 // additional completion items to merge into the existing completion list.

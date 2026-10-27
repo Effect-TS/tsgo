@@ -5,7 +5,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: etsgoapi/layer_magic.go:11 LayerMagicNode
+// go: etsgoapi/layer_magic.go:11 LayerMagicNode 5273e2e2b35f3943
 // LayerMagicNode represents a layer expression annotated with the combinator
 // choice needed to compose it.
 #[derive(Clone, Debug)]
@@ -18,7 +18,7 @@ pub struct LayerMagicNode {
     pub required_types: Vec<P<Type>>,
 }
 
-// go: etsgoapi/layer_magic.go:21 LayerMagicResult
+// go: etsgoapi/layer_magic.go:21 LayerMagicResult 3a7f1f95415f8182
 // LayerMagicResult holds the layer magic extraction result.
 #[derive(Clone, Debug, Default)]
 pub struct LayerMagicResult {
@@ -27,7 +27,7 @@ pub struct LayerMagicResult {
 }
 
 impl TypeParser<'_> {
-    // go: etsgoapi/layer_magic.go:29 TypeParser.ExtractLayerMagic
+    // go: etsgoapi/layer_magic.go:29 TypeParser.ExtractLayerMagic 1effb2d54742a7a5
     // ExtractLayerMagic extracts layer magic from nodes that already represent layers.
     // It does not decompose pipe/call/array expressions; callers are responsible for
     // passing the layer nodes they want included and the target output types.
@@ -63,7 +63,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: etsgoapi/layer_magic.go:45 layerMagicResultFromInternal
+// go: etsgoapi/layer_magic.go:45 layerMagicResultFromInternal f6beb94da5f1dd98
 pub(crate) fn layer_magic_result_from_internal(
     result: Option<ets_layergraph::LayerMagicResult>,
 ) -> Option<LayerMagicResult> {

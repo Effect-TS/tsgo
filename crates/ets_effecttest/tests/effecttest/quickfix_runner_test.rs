@@ -8,7 +8,7 @@ use libtest_mimic::Trial;
 
 use crate::{case_name, parent_failure, run_case};
 
-// go test: internal/effecttest/quickfix_runner_test.go:17 TestEffectQuickFixes
+// go test: internal/effecttest/quickfix_runner_test.go:17 TestEffectQuickFixes a81c9c9dc76775ee
 // Rust: one libtest trial per Go subtest (`TestEffectQuickFixes/<case>`), as `test_effect_diagnostics`.
 pub(crate) fn test_effect_quick_fixes() -> Vec<Trial> {
     const NAME: &str = "TestEffectQuickFixes";
@@ -48,7 +48,7 @@ pub(crate) fn test_effect_quick_fixes() -> Vec<Trial> {
     trials
 }
 
-// go test: internal/effecttest/quickfix_runner_test.go:43 TestEffectV3QuickFixes
+// go test: internal/effecttest/quickfix_runner_test.go:43 TestEffectV3QuickFixes 7a03e2bb8b8873a6
 pub(crate) fn test_effect_v3_quick_fixes() -> Vec<Trial> {
     const NAME: &str = "TestEffectV3QuickFixes";
     if let Err(err) = ets_bundledeffect::ensure_package_installed(EffectVersion::V3, "effect") {

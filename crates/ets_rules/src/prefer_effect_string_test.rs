@@ -2,7 +2,7 @@ use ets_go::testing::run;
 
 use crate::*;
 
-// go test: internal/rules/prefer_effect_string_test.go:5 TestPreferEffectStringMethods
+// go test: internal/rules/prefer_effect_string_test.go:5 TestPreferEffectStringMethods 1b7cb8682955b189
 #[test]
 fn test_prefer_effect_string_methods() {
     run(|t| {
@@ -154,7 +154,7 @@ fn test_prefer_effect_string_methods() {
     });
 }
 
-// go test: internal/rules/prefer_effect_string_test.go:56 TestPreferEffectStringInvocationOnly
+// go test: internal/rules/prefer_effect_string_test.go:56 TestPreferEffectStringInvocationOnly 2d48bb3ae2a7dd74
 #[test]
 fn test_prefer_effect_string_invocation_only() {
     run(|t| {

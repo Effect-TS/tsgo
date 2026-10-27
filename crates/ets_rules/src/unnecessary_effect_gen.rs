@@ -9,7 +9,7 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::TypeParser;
 
-// go: internal/rules/unnecessary_effect_gen.go:15 UnnecessaryEffectGen
+// go: internal/rules/unnecessary_effect_gen.go:15 UnnecessaryEffectGen 171d21359406901a
 // UnnecessaryEffectGen suggests removing Effect.gen when it contains only a single return statement.
 pub static UNNECESSARY_EFFECT_GEN: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "unnecessaryEffectGen",
@@ -38,7 +38,7 @@ pub static UNNECESSARY_EFFECT_GEN: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/unnecessary_effect_gen.go:34 UnnecessaryEffectGenMatch
+// go: internal/rules/unnecessary_effect_gen.go:34 UnnecessaryEffectGenMatch 9e2935b0ae0331de
 // UnnecessaryEffectGenMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the unnecessaryEffectGen pattern.
 #[derive(Clone)]
@@ -51,7 +51,7 @@ pub struct UnnecessaryEffectGenMatch {
     pub success_is_void: bool,      // Whether the yielded Effect's success type is void-like
 }
 
-// go: internal/rules/unnecessary_effect_gen.go:45 AnalyzeUnnecessaryEffectGen
+// go: internal/rules/unnecessary_effect_gen.go:45 AnalyzeUnnecessaryEffectGen c50a117ee2357d25
 // AnalyzeUnnecessaryEffectGen finds all Effect.gen calls that contain only a single
 // yield* statement and can be replaced with the yielded expression directly.
 //
@@ -83,7 +83,7 @@ pub fn analyze_unnecessary_effect_gen(
     matches
 }
 
-// go: internal/rules/unnecessary_effect_gen.go:68 analyzeUnnecessaryEffectGenNode
+// go: internal/rules/unnecessary_effect_gen.go:68 analyzeUnnecessaryEffectGenNode c8eb0b1f4e52b9f8
 pub(crate) fn analyze_unnecessary_effect_gen_node(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -148,7 +148,7 @@ pub(crate) fn analyze_unnecessary_effect_gen_node(
     })
 }
 
-// go: internal/rules/unnecessary_effect_gen.go:145 isYieldStarExpression
+// go: internal/rules/unnecessary_effect_gen.go:145 isYieldStarExpression d06aa13bfcca8545
 pub(crate) fn is_yield_star_expression(expr: P<Node>) -> bool {
     expr.as_yield_expression().asterisk_token().is_some()
 }

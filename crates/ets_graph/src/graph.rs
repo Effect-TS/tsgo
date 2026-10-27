@@ -3,16 +3,16 @@ use std::collections::VecDeque;
 use ets_go::fmt::{Value, sprint};
 use rustc_hash::{FxBuildHasher, FxHashMap, FxHashSet};
 
-// go: internal/graph/graph.go:14 NodeIndex
+// go: internal/graph/graph.go:14 NodeIndex c9fe4dd2e20f8eae
 // NodeIndex identifies a node in the graph. Indices are auto-incremented and never reused.
 pub type NodeIndex = i64;
 
-// go: internal/graph/graph.go:17 EdgeIndex
+// go: internal/graph/graph.go:17 EdgeIndex 7051e9ace4d65f20
 // EdgeIndex identifies an edge in the graph. Indices are auto-incremented and never reused.
 pub type EdgeIndex = i64;
 
-// go: internal/graph/graph.go:20 Direction
-// go: internal/graph/graph.go:22 Outgoing
+// go: internal/graph/graph.go:20 Direction 37666ff414489792
+// go: internal/graph/graph.go:22 Outgoing 3d64a4e53b341ff4
 // Direction specifies the direction of traversal or query.
 //
 // Rust: Go's `type Direction string` with its two constants. Only the constants are ever passed, so the type is
@@ -27,7 +27,7 @@ pub enum Direction {
 
 pub use Direction::{Incoming, Outgoing};
 
-// go: internal/graph/graph.go:30 Edge
+// go: internal/graph/graph.go:30 Edge 02da84760cff93ce
 // Edge represents a directed edge between two nodes with associated data.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct Edge<E> {
@@ -36,7 +36,7 @@ pub struct Edge<E> {
     pub data: E,
 }
 
-// go: internal/graph/graph.go:39 TraversalConfig
+// go: internal/graph/graph.go:39 TraversalConfig 4316a0852cd97543
 // TraversalConfig configures traversal algorithms (DFS, BFS, etc.).
 // When Start is empty, defaults to all source nodes (nodes with no incoming edges).
 // When Direction is empty, defaults to Outgoing.
@@ -52,7 +52,7 @@ pub type MermaidLabel<'a, T> = Box<dyn Fn(&T) -> String + 'a>;
 /// Rust-only: the shape function of `MermaidOptions` (open and close delimiters).
 pub type MermaidShape<'a, T> = Box<dyn Fn(&T) -> (String, String) + 'a>;
 
-// go: internal/graph/graph.go:45 MermaidOptions
+// go: internal/graph/graph.go:45 MermaidOptions 410d898042263a8d
 // MermaidOptions configures Mermaid flowchart rendering.
 //
 // Rust: Go's nil label functions fall back to `fmt.Sprint`, which formats any value; Rust can only format a
@@ -79,7 +79,7 @@ impl<N: Value, E: Value> Default for MermaidOptions<'_, N, E> {
     }
 }
 
-// go: internal/graph/graph.go:54 isAcyclicStackEntry
+// go: internal/graph/graph.go:54 isAcyclicStackEntry cbca4e5cdb686454
 // isAcyclicStackEntry is used by IsAcyclic for iterative DFS cycle detection.
 #[derive(Clone, Copy)]
 pub(crate) struct IsAcyclicStackEntry {
@@ -87,7 +87,7 @@ pub(crate) struct IsAcyclicStackEntry {
     neighbor_idx: usize,
 }
 
-// go: internal/graph/graph.go:61 Graph
+// go: internal/graph/graph.go:61 Graph f3f06b1412d98017
 // Graph is a generic directed graph with typed node and edge data.
 // It uses adjacency lists backed by maps for O(1) lookups.
 pub struct Graph<N, E> {
@@ -99,7 +99,7 @@ pub struct Graph<N, E> {
     pub(crate) next_edge_index: EdgeIndex,
 }
 
-// go: internal/graph/graph.go:71 New
+// go: internal/graph/graph.go:71 New e54a477dbbad2945
 // New creates an empty directed graph.
 pub fn new<N, E>() -> Graph<N, E> {
     Graph {
@@ -137,7 +137,7 @@ impl<N, E> Graph<N, E> {
         self.nodes.get(&node).expect("graph: traversal start node does not exist")
     }
 
-    // go: internal/graph/graph.go:81 Graph.AddNode
+    // go: internal/graph/graph.go:81 Graph.AddNode 13dd719e213a2c60
     // AddNode adds a node with the given data and returns its index.
     pub fn add_node(&mut self, data: N) -> NodeIndex {
         let idx = self.next_node_index;
@@ -148,20 +148,20 @@ impl<N, E> Graph<N, E> {
         idx
     }
 
-    // go: internal/graph/graph.go:92 Graph.GetNode
+    // go: internal/graph/graph.go:92 Graph.GetNode 5c2b3335f8cea2ac
     // GetNode returns the data for the node at the given index.
     // The second return value is false if the node does not exist.
     pub fn get_node(&self, index: NodeIndex) -> Option<&N> {
         self.nodes.get(&index)
     }
 
-    // go: internal/graph/graph.go:98 Graph.HasNode
+    // go: internal/graph/graph.go:98 Graph.HasNode 9d18a74d37711cc6
     // HasNode returns true if a node with the given index exists.
     pub fn has_node(&self, index: NodeIndex) -> bool {
         self.nodes.contains_key(&index)
     }
 
-    // go: internal/graph/graph.go:105 Graph.UpdateNode
+    // go: internal/graph/graph.go:105 Graph.UpdateNode d06e8ad16aea83a9
     // UpdateNode applies fn to the data of the node at the given index.
     // If the node does not exist, this is a no-op.
     //
@@ -172,7 +172,7 @@ impl<N, E> Graph<N, E> {
         }
     }
 
-    // go: internal/graph/graph.go:112 Graph.RemoveNode
+    // go: internal/graph/graph.go:112 Graph.RemoveNode 3b6a7bab4f43f151
     // RemoveNode removes the node at the given index and all its incident edges.
     pub fn remove_node(&mut self, index: NodeIndex) {
         if !self.has_node(index) {
@@ -207,13 +207,13 @@ impl<N, E> Graph<N, E> {
         self.reverse_adjacency.remove(&index);
     }
 
-    // go: internal/graph/graph.go:144 Graph.NodeCount
+    // go: internal/graph/graph.go:144 Graph.NodeCount a3f268e445fa0781
     // NodeCount returns the number of nodes in the graph.
     pub fn node_count(&self) -> i64 {
         self.nodes.len() as i64
     }
 
-    // go: internal/graph/graph.go:160 Graph.AddEdge
+    // go: internal/graph/graph.go:160 Graph.AddEdge 3f7b534dfd83bbe5
     // AddEdge adds a directed edge from source to target with the given data.
     // It panics if either source or target does not exist.
     pub fn add_edge(&mut self, source: NodeIndex, target: NodeIndex, data: E) -> EdgeIndex {
@@ -227,14 +227,14 @@ impl<N, E> Graph<N, E> {
         idx
     }
 
-    // go: internal/graph/graph.go:177 Graph.GetEdge
+    // go: internal/graph/graph.go:177 Graph.GetEdge f13b855935765e00
     // GetEdge returns the edge at the given index.
     // The second return value is false if the edge does not exist.
     pub fn get_edge(&self, index: EdgeIndex) -> Option<&Edge<E>> {
         self.edges.get(&index)
     }
 
-    // go: internal/graph/graph.go:183 Graph.HasEdge
+    // go: internal/graph/graph.go:183 Graph.HasEdge 23efea1408039c2c
     // HasEdge returns true if there is an edge from source to target.
     pub fn has_edge(&self, source: NodeIndex, target: NodeIndex) -> bool {
         for ei in adjacency_list(&self.adjacency, source) {
@@ -246,21 +246,21 @@ impl<N, E> Graph<N, E> {
         false
     }
 
-    // go: internal/graph/graph.go:194 Graph.OutgoingEdges
+    // go: internal/graph/graph.go:194 Graph.OutgoingEdges 8c20afb6bdbede67
     // OutgoingEdges returns the edge indices for all outgoing edges from the given node.
     // The returned indices preserve insertion order.
     pub fn outgoing_edges(&self, node_index: NodeIndex) -> Vec<EdgeIndex> {
         adjacency_list(&self.adjacency, node_index).to_vec()
     }
 
-    // go: internal/graph/graph.go:200 Graph.IncomingEdges
+    // go: internal/graph/graph.go:200 Graph.IncomingEdges 830bca264f2d55e8
     // IncomingEdges returns the edge indices for all incoming edges to the given node.
     // The returned indices preserve insertion order.
     pub fn incoming_edges(&self, node_index: NodeIndex) -> Vec<EdgeIndex> {
         adjacency_list(&self.reverse_adjacency, node_index).to_vec()
     }
 
-    // go: internal/graph/graph.go:206 Graph.UpdateEdge
+    // go: internal/graph/graph.go:206 Graph.UpdateEdge 20a7a7cf742e3eaa
     // UpdateEdge applies fn to the data of the edge at the given index.
     // If the edge does not exist, this is a no-op.
     //
@@ -271,7 +271,7 @@ impl<N, E> Graph<N, E> {
         }
     }
 
-    // go: internal/graph/graph.go:214 Graph.RemoveEdge
+    // go: internal/graph/graph.go:214 Graph.RemoveEdge eee3a3927fc0f268
     // RemoveEdge removes the edge at the given index.
     pub fn remove_edge(&mut self, index: EdgeIndex) {
         let Some(edge) = self.edges.get(&index) else {
@@ -283,27 +283,27 @@ impl<N, E> Graph<N, E> {
         self.edges.remove(&index);
     }
 
-    // go: internal/graph/graph.go:225 Graph.EdgeCount
+    // go: internal/graph/graph.go:225 Graph.EdgeCount a34bcbff51b9c8f4
     // EdgeCount returns the number of edges in the graph.
     pub fn edge_count(&self) -> i64 {
         self.edges.len() as i64
     }
 
-    // go: internal/graph/graph.go:230 Graph.Nodes
+    // go: internal/graph/graph.go:230 Graph.Nodes 7b3baef84a3f247f
     // Nodes iterates all nodes as (index, data) pairs, sorted by index.
     pub fn nodes(&self) -> impl Iterator<Item = (NodeIndex, &N)> {
         let keys = sorted_keys(&self.nodes);
         keys.into_iter().map(|k| (k, &self.nodes[&k]))
     }
 
-    // go: internal/graph/graph.go:246 Graph.Edges
+    // go: internal/graph/graph.go:246 Graph.Edges b99036247cd93fe9
     // Edges iterates all edges as (index, edge) pairs, sorted by index.
     pub fn edges(&self) -> impl Iterator<Item = (EdgeIndex, &Edge<E>)> {
         let keys = sorted_keys(&self.edges);
         keys.into_iter().map(|k| (k, &self.edges[&k]))
     }
 
-    // go: internal/graph/graph.go:263 Graph.FindNode
+    // go: internal/graph/graph.go:263 Graph.FindNode 45384aded68559c4
     // FindNode returns the index of the first node (in index order) matching the predicate.
     // Returns (0, false) if no node matches.
     pub fn find_node(&self, mut predicate: impl FnMut(&N) -> bool) -> Option<NodeIndex> {
@@ -311,7 +311,7 @@ impl<N, E> Graph<N, E> {
         keys.into_iter().find(|&k| predicate(&self.nodes[&k]))
     }
 
-    // go: internal/graph/graph.go:278 Graph.FindNodes
+    // go: internal/graph/graph.go:278 Graph.FindNodes 28c0890a7c25f255
     // FindNodes returns the indices of all nodes matching the predicate, in index order.
     pub fn find_nodes(&self, mut predicate: impl FnMut(&N) -> bool) -> Vec<NodeIndex> {
         let keys = sorted_keys(&self.nodes);
@@ -324,7 +324,7 @@ impl<N, E> Graph<N, E> {
         result
     }
 
-    // go: internal/graph/graph.go:295 Graph.FindEdge
+    // go: internal/graph/graph.go:295 Graph.FindEdge 284050fa530a7eb5
     // FindEdge returns the index of the first edge (in index order) matching the predicate.
     // The predicate receives (edgeData, source, target). Returns (0, false) if no edge matches.
     pub fn find_edge(
@@ -341,7 +341,7 @@ impl<N, E> Graph<N, E> {
         None
     }
 
-    // go: internal/graph/graph.go:312 Graph.FindEdges
+    // go: internal/graph/graph.go:312 Graph.FindEdges 721f99cad57df478
     // FindEdges returns the indices of all edges matching the predicate, in index order.
     // The predicate receives (edgeData, source, target).
     pub fn find_edges(
@@ -359,7 +359,7 @@ impl<N, E> Graph<N, E> {
         result
     }
 
-    // go: internal/graph/graph.go:331 Graph.NeighborsDirected
+    // go: internal/graph/graph.go:331 Graph.NeighborsDirected 246e0f2a0c9d33ac
     // NeighborsDirected returns the neighbor node indices reachable via edges in the given direction.
     // For Outgoing, returns target nodes. For Incoming, returns source nodes.
     // Does not deduplicate — if multiple edges connect to the same neighbor, it appears multiple times.
@@ -386,7 +386,7 @@ impl<N, E> Graph<N, E> {
         result
     }
 
-    // go: internal/graph/graph.go:354 Graph.Externals
+    // go: internal/graph/graph.go:354 Graph.Externals 228f75fd4b989670
     // Externals returns all nodes with no edges in the given direction, in index order.
     // Externals(Outgoing) yields sink/leaf nodes (no outgoing edges).
     // Externals(Incoming) yields source/root nodes (no incoming edges).
@@ -402,7 +402,7 @@ impl<N, E> Graph<N, E> {
         })
     }
 
-    // go: internal/graph/graph.go:379 Graph.Neighbors
+    // go: internal/graph/graph.go:379 Graph.Neighbors 79c72fcb2eec2bc5
     // Neighbors returns all neighbor node indices (union of outgoing targets and incoming sources),
     // deduplicated and sorted by index for determinism.
     pub fn neighbors(&self, node_index: NodeIndex) -> Vec<NodeIndex> {
@@ -425,7 +425,7 @@ impl<N, E> Graph<N, E> {
         result
     }
 
-    // go: internal/graph/graph.go:400 Graph.Reverse
+    // go: internal/graph/graph.go:400 Graph.Reverse fa31611d5104a054
     // Reverse reverses the direction of all edges in the graph in-place.
     pub fn reverse(&mut self) {
         for edge in self.edges.values_mut() {
@@ -434,7 +434,7 @@ impl<N, E> Graph<N, E> {
         std::mem::swap(&mut self.adjacency, &mut self.reverse_adjacency);
     }
 
-    // go: internal/graph/graph.go:410 Graph.FilterNodes
+    // go: internal/graph/graph.go:410 Graph.FilterNodes 3a9c80eceb9626e1
     // FilterNodes removes all nodes that do not satisfy the predicate.
     // Incident edges of removed nodes are also removed.
     //
@@ -451,7 +451,7 @@ impl<N, E> Graph<N, E> {
         }
     }
 
-    // go: internal/graph/graph.go:424 Graph.FilterEdges
+    // go: internal/graph/graph.go:424 Graph.FilterEdges 0faa1335b8dc09d0
     // FilterEdges removes all edges whose data does not satisfy the predicate.
     // All nodes are preserved.
     //
@@ -468,7 +468,7 @@ impl<N, E> Graph<N, E> {
         }
     }
 
-    // go: internal/graph/graph.go:437 Graph.MapNodes
+    // go: internal/graph/graph.go:437 Graph.MapNodes 26388c225da37dab
     // MapNodes applies fn to every node's data in-place.
     pub fn map_nodes(&mut self, mut f: impl FnMut(&N) -> N) {
         for data in self.nodes.values_mut() {
@@ -476,7 +476,7 @@ impl<N, E> Graph<N, E> {
         }
     }
 
-    // go: internal/graph/graph.go:444 Graph.MapEdges
+    // go: internal/graph/graph.go:444 Graph.MapEdges 1ddb0a19e989764a
     // MapEdges applies fn to every edge's data in-place.
     pub fn map_edges(&mut self, mut f: impl FnMut(&E) -> E) {
         for edge in self.edges.values_mut() {
@@ -484,7 +484,7 @@ impl<N, E> Graph<N, E> {
         }
     }
 
-    // go: internal/graph/graph.go:475 Graph.sortedNeighborsDirected
+    // go: internal/graph/graph.go:475 Graph.sortedNeighborsDirected 0b384e2bdca821e3
     // sortedNeighborsDirected returns neighbor node indices reachable via edges in the given direction,
     // sorted by edge index for deterministic traversal order.
     pub(crate) fn sorted_neighbors_directed(
@@ -512,7 +512,7 @@ impl<N, E> Graph<N, E> {
         result
     }
 
-    // go: internal/graph/graph.go:500 Graph.resolveTraversalConfig
+    // go: internal/graph/graph.go:500 Graph.resolveTraversalConfig be4155639ee90e66
     // resolveTraversalConfig returns the start nodes and direction for a traversal,
     // applying defaults when the config fields are empty.
     pub(crate) fn resolve_traversal_config(
@@ -529,7 +529,7 @@ impl<N, E> Graph<N, E> {
         (start, direction)
     }
 
-    // go: internal/graph/graph.go:516 Graph.DFS
+    // go: internal/graph/graph.go:516 Graph.DFS bb864da2035e70f4
     // DFS performs an iterative pre-order depth-first search, yielding (index, data) pairs.
     // Neighbors are visited in deterministic edge-index order.
     //
@@ -566,7 +566,7 @@ impl<N, E> Graph<N, E> {
         })
     }
 
-    // go: internal/graph/graph.go:556 Graph.DFSPostOrder
+    // go: internal/graph/graph.go:556 Graph.DFSPostOrder aa5918b5c005bdb1
     // DFSPostOrder performs an iterative post-order depth-first search, yielding (index, data) pairs.
     // Children are emitted before their parents. Neighbors are visited in deterministic edge-index order.
     pub fn dfs_post_order(&self, config: TraversalConfig) -> impl Iterator<Item = (NodeIndex, &N)> {
@@ -604,7 +604,7 @@ impl<N, E> Graph<N, E> {
         })
     }
 
-    // go: internal/graph/graph.go:597 Graph.BFS
+    // go: internal/graph/graph.go:597 Graph.BFS 367c37d9df23e5d6
     // BFS performs a breadth-first search traversal, yielding (index, data) pairs level by level.
     // Neighbors are visited in deterministic edge-index order.
     pub fn bfs(&self, config: TraversalConfig) -> impl Iterator<Item = (NodeIndex, &N)> {
@@ -635,7 +635,7 @@ impl<N, E> Graph<N, E> {
         })
     }
 
-    // go: internal/graph/graph.go:633 Graph.Topo
+    // go: internal/graph/graph.go:633 Graph.Topo ffd7e9956d8d48c4
     // Topo performs a topological sort using Kahn's algorithm, yielding (index, data) pairs.
     // Only meaningful for acyclic graphs. For cyclic graphs, nodes involved in cycles are not yielded.
     pub fn topo(&self) -> impl Iterator<Item = (NodeIndex, &N)> {
@@ -680,7 +680,7 @@ impl<N, E> Graph<N, E> {
         })
     }
 
-    // go: internal/graph/graph.go:680 Graph.IsAcyclic
+    // go: internal/graph/graph.go:680 Graph.IsAcyclic 6c162590410b9d12
     // IsAcyclic returns true if the graph contains no cycles.
     // Uses iterative DFS with recursion stack tracking to detect back edges.
     pub fn is_acyclic(&self) -> bool {
@@ -722,7 +722,7 @@ impl<N, E> Graph<N, E> {
         true
     }
 
-    // go: internal/graph/graph.go:745 Graph.ToMermaid
+    // go: internal/graph/graph.go:745 Graph.ToMermaid 80f6826d7e434cb4
     // ToMermaid renders the graph as a Mermaid flowchart diagram string.
     pub fn to_mermaid(&self, options: MermaidOptions<'_, N, E>) -> String {
         let mut direction = options.direction.as_str();
@@ -766,7 +766,7 @@ impl<N, E> Graph<N, E> {
     }
 }
 
-// go: internal/graph/graph.go:149 removeFromSlice
+// go: internal/graph/graph.go:149 removeFromSlice 802448d65ea86268
 // removeFromSlice removes the first occurrence of val from slice.
 //
 // Rust: removes in place; Go's `append(slice[:i], slice[i+1:]...)` reuses the backing array the same way.
@@ -779,7 +779,7 @@ pub(crate) fn remove_from_slice(slice: &mut Vec<EdgeIndex>, val: EdgeIndex) {
     }
 }
 
-// go: internal/graph/graph.go:453 Graph.Clone
+// go: internal/graph/graph.go:453 Graph.Clone cbdefde7e8f4897b
 // Clone returns a deep copy of the graph. Node and edge data values are
 // shallow-copied, but all internal maps and slices are independently allocated.
 impl<N: Clone, E: Clone> Clone for Graph<N, E> {
@@ -807,7 +807,7 @@ impl<N: Clone, E: Clone> Clone for Graph<N, E> {
     }
 }
 
-// go: internal/graph/graph.go:549 dfsPostOrderEntry
+// go: internal/graph/graph.go:549 dfsPostOrderEntry 646652214977f49e
 // dfsPostOrderEntry is used by DFSPostOrder for the two-phase stack approach.
 #[derive(Clone, Copy)]
 pub(crate) struct DfsPostOrderEntry {
@@ -815,7 +815,7 @@ pub(crate) struct DfsPostOrderEntry {
     expanded: bool,
 }
 
-// go: internal/graph/graph.go:726 escapeMermaidLabel
+// go: internal/graph/graph.go:726 escapeMermaidLabel bbe89401c80e861a
 // escapeMermaidLabel escapes special characters in a Mermaid label.
 pub(crate) fn escape_mermaid_label(label: &str) -> String {
     let mut label = label.replace('#', "#35;");

@@ -14,7 +14,7 @@ use ets_typeparser::{
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_0_EXPRESSES_THIS_FAILURE_DIRECTLY_INSTEAD_OF_WRAPPING_CAUSE_2_IN_EFFECT_1_EFFECT_FAIL_CAUSE_TO_CONSTRUCTOR;
 
-// go: internal/rules/fail_cause_to_constructor.go:17 FailCauseToConstructor
+// go: internal/rules/fail_cause_to_constructor.go:17 FailCauseToConstructor 647d57f58e521533
 // FailCauseToConstructor suggests Effect.fail, Effect.die, Effect.failSync and
 // Effect.dieSync when Effect.failCause or Effect.failCauseSync wraps a single
 // Cause.fail or Cause.die.
@@ -42,7 +42,7 @@ pub static FAIL_CAUSE_TO_CONSTRUCTOR: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/fail_cause_to_constructor.go:45 FailCauseToConstructorMatch
+// go: internal/rules/fail_cause_to_constructor.go:45 FailCauseToConstructorMatch 7b1ae6cc70061555
 // FailCauseToConstructorMatch holds the nodes needed by the diagnostic and quick fix.
 //
 // Rust: Go's `*PipingFlow` is an owned copy.
@@ -67,7 +67,7 @@ pub struct FailCauseToConstructorMatch {
     pub lazy_expression_body: bool,
 }
 
-// go: internal/rules/fail_cause_to_constructor.go:69 AnalyzeFailCauseToConstructor
+// go: internal/rules/fail_cause_to_constructor.go:69 AnalyzeFailCauseToConstructor 6277e3462181d23c
 // AnalyzeFailCauseToConstructor finds piping flows in which Cause.fail or
 // Cause.die feeds directly into Effect.failCause, and Effect.failCauseSync
 // thunks whose returned flow ends in Cause.fail (or Cause.die on Effect v3,
@@ -219,7 +219,7 @@ pub fn analyze_fail_cause_to_constructor(
     matches
 }
 
-// go: internal/rules/fail_cause_to_constructor.go:178 lazyFailKeepsErrorType
+// go: internal/rules/fail_cause_to_constructor.go:178 lazyFailKeepsErrorType 07e14f43ac97c387
 // lazyFailKeepsErrorType reports whether Effect.failSync(() => value) infers the
 // same error type as Effect.failCauseSync(() => Cause.fail(value)). Cause.fail
 // infers its error from a call argument, which widens literal unions, while a

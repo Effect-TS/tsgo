@@ -15,7 +15,7 @@ use rustc_hash::FxHashMap;
 static MESSAGE: &Message =
     &tsdiag::THE_EFFECT_SUCCESS_CHANNEL_CONTAINS_A_PROMISE_THAT_IS_NOT_AWAITED_USE_EFFECT_PROMISE_OR_EFFECT_TRY_PROMISE_TO_REPRESENT_ASYNC_WORK_EFFECT_PROMISE_IN_EFFECT_SUCCESS;
 
-// go: internal/rules/promise_in_effect_success.go:12 PromiseInEffectSuccess
+// go: internal/rules/promise_in_effect_success.go:12 PromiseInEffectSuccess f08cc7d8da68a7c4
 pub static PROMISE_IN_EFFECT_SUCCESS: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "promiseInEffectSuccess",
     group: "correctness",
@@ -113,7 +113,7 @@ pub static PROMISE_IN_EFFECT_SUCCESS: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/promise_in_effect_success.go:111 hasExplicitPromiseEffectContext
+// go: internal/rules/promise_in_effect_success.go:111 hasExplicitPromiseEffectContext 3816de2a9530cc76
 //
 // Rust: the checker is the parser's.
 pub(crate) fn has_explicit_promise_effect_context(tp: &mut TypeParser<'_>, node: P<Node>) -> bool {
@@ -151,7 +151,7 @@ pub(crate) fn has_explicit_promise_effect_context(tp: &mut TypeParser<'_>, node:
     false
 }
 
-// go: internal/rules/promise_in_effect_success.go:133 isExplicitPromiseEffectType
+// go: internal/rules/promise_in_effect_success.go:133 isExplicitPromiseEffectType 11868c113302fe43
 pub(crate) fn is_explicit_promise_effect_type(
     tp: &mut TypeParser<'_>,
     type_node: Option<P<Node>>,
@@ -164,7 +164,7 @@ pub(crate) fn is_explicit_promise_effect_type(
     effect.is_some_and(|effect| type_contains_promise(tp, Some(effect.a())))
 }
 
-// go: internal/rules/promise_in_effect_success.go:141 hasExplicitPromiseEffectReturn
+// go: internal/rules/promise_in_effect_success.go:141 hasExplicitPromiseEffectReturn 1a2183f2ad0ee1bb
 //
 // Rust: the checker is the parser's.
 pub(crate) fn has_explicit_promise_effect_return(
@@ -202,7 +202,7 @@ pub(crate) fn has_explicit_promise_effect_return(
     false
 }
 
-// go: internal/rules/promise_in_effect_success.go:168 typeContainsPromise
+// go: internal/rules/promise_in_effect_success.go:168 typeContainsPromise 2d88b981425a9e66
 pub(crate) fn type_contains_promise(tp: &mut TypeParser<'_>, t: Option<P<Type>>) -> bool {
     for member in tp.unroll_union_members(t).unwrap_or_default() {
         if tp.promise_type(member).is_some() {
@@ -212,12 +212,12 @@ pub(crate) fn type_contains_promise(tp: &mut TypeParser<'_>, t: Option<P<Type>>)
     false
 }
 
-// go: internal/rules/promise_in_effect_success.go:179 explicitPromiseSuccessApis
+// go: internal/rules/promise_in_effect_success.go:179 explicitPromiseSuccessApis b5ecd7089891d36e
 // explicitPromiseSuccessApis lists the Effect APIs whose explicit type
 // arguments annotate the success channel directly.
 pub(crate) static EXPLICIT_PROMISE_SUCCESS_APIS: &[&str] = &["succeed", "as", "map", "zipWith"];
 
-// go: internal/rules/promise_in_effect_success.go:188 hasExplicitPromiseSuccessTypeArguments
+// go: internal/rules/promise_in_effect_success.go:188 hasExplicitPromiseSuccessTypeArguments 8547e54866ab2dd0
 // hasExplicitPromiseSuccessTypeArguments reports whether the promise in the
 // success channel was written explicitly through type arguments on the node
 // itself or on a transformation of the piping flow rooted at the node.
@@ -250,7 +250,7 @@ pub(crate) fn has_explicit_promise_success_type_arguments(
     false
 }
 
-// go: internal/rules/promise_in_effect_success.go:210 isExplicitPromiseSuccessTransformation
+// go: internal/rules/promise_in_effect_success.go:210 isExplicitPromiseSuccessTransformation 81a09532d280412e
 // isExplicitPromiseSuccessTransformation reports whether a piping transformation
 // applies one of the explicit promise-success APIs with explicit type arguments.
 // Callees may be wrapped in parentheses or curried (e.g. Effect.as<...>(value)).
@@ -271,7 +271,7 @@ pub(crate) fn is_explicit_promise_success_transformation(
     is_explicit_promise_success_api(tp, callee)
 }
 
-// go: internal/rules/promise_in_effect_success.go:224 isExplicitPromiseSuccessApi
+// go: internal/rules/promise_in_effect_success.go:224 isExplicitPromiseSuccessApi 2ac1458b0d2b40f9
 pub(crate) fn is_explicit_promise_success_api(tp: &mut TypeParser<'_>, node: P<Node>) -> bool {
     for name in EXPLICIT_PROMISE_SUCCESS_APIS {
         if tp.is_node_reference_to_effect_module_api(node, name) {
@@ -281,7 +281,7 @@ pub(crate) fn is_explicit_promise_success_api(tp: &mut TypeParser<'_>, node: P<N
     false
 }
 
-// go: internal/rules/promise_in_effect_success.go:233 isEffectSyncCall
+// go: internal/rules/promise_in_effect_success.go:233 isEffectSyncCall bc7201984377b1f2
 pub(crate) fn is_effect_sync_call(tp: &mut TypeParser<'_>, node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;

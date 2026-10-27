@@ -1,7 +1,7 @@
 use ets_shim::ast::{Kind, Node};
 use ets_shim::core::P;
 
-// go: internal/typeparser/type_equivalent_node.go:15 TypeEquivalentNode
+// go: internal/typeparser/type_equivalent_node.go:15 TypeEquivalentNode 30ff53dfaea9a5cc
 // TypeEquivalentNode returns the node whose type the checker computes when
 // asked for the type of node, and true when that is a different node. Rules
 // that type-check every node can skip node because the walk also visits the

@@ -12,7 +12,7 @@ use ets_typeparser::TypeParser;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THIS_TYPE_ASSERTION_UNSAFELY_NARROWS_THE_ERROR_OR_REQUIREMENTS_CHANNELS_EFFECT_UNSAFE_EFFECT_TYPE_ASSERTION;
 
-// go: internal/rules/unsafe_effect_type_assertion.go:14 UnsafeEffectTypeAssertion
+// go: internal/rules/unsafe_effect_type_assertion.go:14 UnsafeEffectTypeAssertion 96d442f4eaaffa6b
 pub static UNSAFE_EFFECT_TYPE_ASSERTION: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "unsafeEffectTypeAssertion",
     group: "correctness",
@@ -32,7 +32,7 @@ pub static UNSAFE_EFFECT_TYPE_ASSERTION: LazyLock<Rule> = LazyLock::new(|| Rule 
     },
 });
 
-// go: internal/rules/unsafe_effect_type_assertion.go:36 UnsafeEffectTypeAssertionChannel
+// go: internal/rules/unsafe_effect_type_assertion.go:36 UnsafeEffectTypeAssertionChannel e220334dfe7ab62d
 #[derive(Clone)]
 pub struct UnsafeEffectTypeAssertionChannel {
     pub name: &'static str,
@@ -40,7 +40,7 @@ pub struct UnsafeEffectTypeAssertionChannel {
     pub asserted: String,
 }
 
-// go: internal/rules/unsafe_effect_type_assertion.go:42 UnsafeEffectTypeAssertionMatch
+// go: internal/rules/unsafe_effect_type_assertion.go:42 UnsafeEffectTypeAssertionMatch d3232df42345c25f
 #[derive(Clone)]
 pub struct UnsafeEffectTypeAssertionMatch {
     pub source_file: P<SourceFile>,
@@ -51,7 +51,7 @@ pub struct UnsafeEffectTypeAssertionMatch {
     pub channels: Vec<UnsafeEffectTypeAssertionChannel>,
 }
 
-// go: internal/rules/unsafe_effect_type_assertion.go:51 AnalyzeUnsafeEffectTypeAssertion
+// go: internal/rules/unsafe_effect_type_assertion.go:51 AnalyzeUnsafeEffectTypeAssertion 3114dd5858d77025
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`); the parser and checker are never nil.
 pub fn analyze_unsafe_effect_type_assertion(
@@ -157,12 +157,12 @@ pub fn analyze_unsafe_effect_type_assertion(
     matches
 }
 
-// go: internal/rules/unsafe_effect_type_assertion.go:143 isAnyType
+// go: internal/rules/unsafe_effect_type_assertion.go:143 isAnyType c8a188e72b87a725
 pub(crate) fn is_any_type(t: Option<P<Type>>) -> bool {
     t.is_some_and(|t| t.flags().intersects(TypeFlags::Any))
 }
 
-// go: internal/rules/unsafe_effect_type_assertion.go:147 unsafeEffectTypeAssertionRelatedInformation
+// go: internal/rules/unsafe_effect_type_assertion.go:147 unsafeEffectTypeAssertionRelatedInformation 8fa0f1b20fb7c26e
 pub(crate) fn unsafe_effect_type_assertion_related_information(
     ctx: Option<&Context<'_, '_>>,
     m: &UnsafeEffectTypeAssertionMatch,

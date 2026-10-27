@@ -8,7 +8,7 @@ use ets_shim::checker::{SignatureKind, Type};
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::TypeParser;
 
-// go: internal/rules/lazy_effect.go:16 LazyEffect
+// go: internal/rules/lazy_effect.go:16 LazyEffect e0fe2932415be719
 pub static LAZY_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
     name: "lazyEffect",
@@ -37,7 +37,7 @@ pub static LAZY_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/lazy_effect.go:46 checkLazyEffectInterface
+// go: internal/rules/lazy_effect.go:46 checkLazyEffectInterface 8500b5a3363255ec
 pub(crate) fn check_lazy_effect_interface(
     ctx: &mut Context<'_, '_>,
     stmt: P<Node>,
@@ -83,7 +83,7 @@ pub(crate) fn check_lazy_effect_interface(
     diags
 }
 
-// go: internal/rules/lazy_effect.go:81 checkLazyEffectExport
+// go: internal/rules/lazy_effect.go:81 checkLazyEffectExport 86872e6c6d3748ad
 pub(crate) fn check_lazy_effect_export(
     ctx: &mut Context<'_, '_>,
     stmt: P<Node>,
@@ -123,7 +123,7 @@ pub(crate) fn check_lazy_effect_export(
     }
 }
 
-// go: internal/rules/lazy_effect.go:112 lazyEffectDiagnosticForExportedDeclaration
+// go: internal/rules/lazy_effect.go:112 lazyEffectDiagnosticForExportedDeclaration 4c0142e0d83d9131
 pub(crate) fn lazy_effect_diagnostic_for_exported_declaration(
     ctx: &mut Context<'_, '_>,
     name: P<Node>,
@@ -144,7 +144,7 @@ pub(crate) fn lazy_effect_diagnostic_for_exported_declaration(
     )]
 }
 
-// go: internal/rules/lazy_effect.go:130 checkLazyEffectService
+// go: internal/rules/lazy_effect.go:130 checkLazyEffectService e000fdf6796d6d19
 pub(crate) fn check_lazy_effect_service(
     ctx: &mut Context<'_, '_>,
     stmt: P<Node>,
@@ -196,7 +196,7 @@ pub(crate) fn check_lazy_effect_service(
     diags
 }
 
-// go: internal/rules/lazy_effect.go:179 lazyEffectLikeTypeName
+// go: internal/rules/lazy_effect.go:179 lazyEffectLikeTypeName 61e85171bab09a03
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`); `(name, ok)` is `Option<name>`.
 pub(crate) fn lazy_effect_like_type_name(

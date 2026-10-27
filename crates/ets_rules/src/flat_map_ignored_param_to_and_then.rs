@@ -11,7 +11,7 @@ use ets_typeparser::{LazyExpressionFlags, TypeParser, parse_lazy_expression};
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_AND_THEN_EXPRESSES_THIS_SEQUENCING_MORE_DIRECTLY_THAN_EFFECT_FLAT_MAP_WITH_A_ZERO_PARAMETER_CALLBACK_EFFECT_FLAT_MAP_IGNORED_PARAM_TO_AND_THEN;
 
-// go: internal/rules/flat_map_ignored_param_to_and_then.go:16 FlatMapIgnoredParamToAndThen
+// go: internal/rules/flat_map_ignored_param_to_and_then.go:16 FlatMapIgnoredParamToAndThen f4c577d5ef3501c7
 // FlatMapIgnoredParamToAndThen suggests Effect.andThen when an Effect.flatMap
 // callback ignores the upstream value and returns an existing Effect value.
 pub static FLAT_MAP_IGNORED_PARAM_TO_AND_THEN: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -32,7 +32,7 @@ pub static FLAT_MAP_IGNORED_PARAM_TO_AND_THEN: LazyLock<Rule> = LazyLock::new(||
     },
 });
 
-// go: internal/rules/flat_map_ignored_param_to_and_then.go:42 FlatMapIgnoredParamToAndThenMatch
+// go: internal/rules/flat_map_ignored_param_to_and_then.go:42 FlatMapIgnoredParamToAndThenMatch 3cc8cff9a6d38ad3
 // FlatMapIgnoredParamToAndThenMatch holds the nodes needed by the diagnostic
 // and quick fix.
 #[derive(Clone)]
@@ -44,7 +44,7 @@ pub struct FlatMapIgnoredParamToAndThenMatch {
     pub effect_value: P<Node>,
 }
 
-// go: internal/rules/flat_map_ignored_param_to_and_then.go:53 AnalyzeFlatMapIgnoredParamToAndThen
+// go: internal/rules/flat_map_ignored_param_to_and_then.go:53 AnalyzeFlatMapIgnoredParamToAndThen 4325680290c2aaf3
 // AnalyzeFlatMapIgnoredParamToAndThen finds Effect.flatMap piping
 // transformations whose zero-parameter expression callback returns an Effect
 // value held by an already-initialized const binding.

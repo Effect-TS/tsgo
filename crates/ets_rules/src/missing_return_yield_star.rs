@@ -11,7 +11,7 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::{EffectContextFlags, TypeParser};
 
-// go: internal/rules/missing_return_yield_star.go:16 MissingReturnYieldStar
+// go: internal/rules/missing_return_yield_star.go:16 MissingReturnYieldStar 0e64a1c8b866398e
 // MissingReturnYieldStar suggests "return yield*" for Effects that never succeed.
 pub static MISSING_RETURN_YIELD_STAR: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
@@ -32,7 +32,7 @@ pub static MISSING_RETURN_YIELD_STAR: LazyLock<Rule> = LazyLock::new(|| {
     }
 });
 
-// go: internal/rules/missing_return_yield_star.go:35 MissingReturnYieldStarMatch
+// go: internal/rules/missing_return_yield_star.go:35 MissingReturnYieldStarMatch 734cc244bf8f7f67
 // MissingReturnYieldStarMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the missingReturnYieldStar pattern.
 #[derive(Clone)]
@@ -43,7 +43,7 @@ pub struct MissingReturnYieldStarMatch {
     pub expr_stmt_node: P<Node>,    // The expression statement node (for quickfix replacement)
 }
 
-// go: internal/rules/missing_return_yield_star.go:44 AnalyzeMissingReturnYieldStar
+// go: internal/rules/missing_return_yield_star.go:44 AnalyzeMissingReturnYieldStar 302621945792df17
 // AnalyzeMissingReturnYieldStar finds all yield* expressions inside Effect generators
 // where the yielded Effect never succeeds, suggesting "return yield*" instead.
 //
@@ -94,7 +94,7 @@ pub fn analyze_missing_return_yield_star(
     matches
 }
 
-// go: internal/rules/missing_return_yield_star.go:80 shouldReportMissingReturnYieldStar
+// go: internal/rules/missing_return_yield_star.go:80 shouldReportMissingReturnYieldStar 3c32943237704a26
 //
 // Rust: Go's checker argument is the parser's checker (never nil), so it is dropped.
 pub(crate) fn should_report_missing_return_yield_star(

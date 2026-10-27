@@ -10,7 +10,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go: internal/refactors/toggle_type_annotation.go:13 ToggleTypeAnnotation
+// go: internal/refactors/toggle_type_annotation.go:13 ToggleTypeAnnotation 56e81377a1c4517b
 pub static TOGGLE_TYPE_ANNOTATION: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "toggleTypeAnnotation",
     description: "Toggle type annotation",
@@ -18,7 +18,7 @@ pub static TOGGLE_TYPE_ANNOTATION: LazyLock<Refactor> = LazyLock::new(|| Refacto
     run: run_toggle_type_annotation,
 });
 
-// go: internal/refactors/toggle_type_annotation.go:20 runToggleTypeAnnotation
+// go: internal/refactors/toggle_type_annotation.go:20 runToggleTypeAnnotation da66695472d2e1ec
 pub(crate) fn run_toggle_type_annotation(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let span_pos = span_pos(ctx);
     let token = astnav::get_token_at_position(ctx.source_file, span_pos);

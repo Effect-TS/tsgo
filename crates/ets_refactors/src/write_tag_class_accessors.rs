@@ -14,7 +14,7 @@ use rustc_hash::FxHashSet;
 
 use crate::*;
 
-// go: internal/refactors/write_tag_class_accessors.go:17 WriteTagClassAccessors
+// go: internal/refactors/write_tag_class_accessors.go:17 WriteTagClassAccessors d048931555422f52
 pub static WRITE_TAG_CLASS_ACCESSORS: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "writeTagClassAccessors",
     description: "Implement Service accessors",
@@ -22,7 +22,7 @@ pub static WRITE_TAG_CLASS_ACCESSORS: LazyLock<Refactor> = LazyLock::new(|| Refa
     run: run_write_tag_class_accessors,
 });
 
-// go: internal/refactors/write_tag_class_accessors.go:25 involvedMember
+// go: internal/refactors/write_tag_class_accessors.go:25 involvedMember 2c4ecd02c273b1bd
 // involvedMember holds a property symbol and its type for accessor generation.
 #[derive(Clone, Copy)]
 pub(crate) struct InvolvedMember {
@@ -30,7 +30,7 @@ pub(crate) struct InvolvedMember {
     pub(crate) property_type: P<Type>,
 }
 
-// go: internal/refactors/write_tag_class_accessors.go:30 runWriteTagClassAccessors
+// go: internal/refactors/write_tag_class_accessors.go:30 runWriteTagClassAccessors df8274e21359ad8d
 // Rust: the edit closure uses the type parser, so the action is built with `new_refactor_action_with_type_parser`
 // (Go's closure captures `ctx` and `c`).
 pub(crate) fn run_write_tag_class_accessors(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
@@ -141,7 +141,7 @@ pub(crate) fn run_write_tag_class_accessors(ctx: &mut Context<'_, '_>) -> Vec<Co
     vec![action]
 }
 
-// go: internal/refactors/write_tag_class_accessors.go:147 hasAccessorsTrue
+// go: internal/refactors/write_tag_class_accessors.go:147 hasAccessorsTrue 6f7129d4e132341e
 // hasAccessorsTrue checks if an options object literal has `accessors: true`.
 pub(crate) fn has_accessors_true(options: Option<P<Node>>) -> bool {
     let Some(options) = options.filter(|o| o.kind() == Kind::ObjectLiteralExpression) else {
@@ -161,7 +161,7 @@ pub(crate) fn has_accessors_true(options: Option<P<Node>>) -> bool {
     false
 }
 
-// go: internal/refactors/write_tag_class_accessors.go:172 filterNonPrimitiveTypes
+// go: internal/refactors/write_tag_class_accessors.go:172 filterNonPrimitiveTypes ec1a57392c4d0984
 // filterNonPrimitiveTypes filters out primitive types (number, string, boolean, literals).
 pub(crate) fn filter_non_primitive_types(types: &[P<Type>]) -> Vec<P<Type>> {
     let mut result = Vec::new();
@@ -179,7 +179,7 @@ pub(crate) fn filter_non_primitive_types(types: &[P<Type>]) -> Vec<P<Type>> {
     result
 }
 
-// go: internal/refactors/write_tag_class_accessors.go:188 generateAccessors
+// go: internal/refactors/write_tag_class_accessors.go:188 generateAccessors da6a855d248998f6
 // generateAccessors generates accessor text directly via InsertText.
 //
 // Rust: Go's `ctx` and `c` are the source file and the parser (`tp.checker()`): the context's parser is lent to
@@ -270,7 +270,7 @@ pub(crate) fn generate_accessors(
     }
 }
 
-// go: internal/refactors/write_tag_class_accessors.go:274 buildProxySignatureText
+// go: internal/refactors/write_tag_class_accessors.go:274 buildProxySignatureText 12c25449cfa97bc1
 // buildProxySignatureText builds the text representation of a proxy function type for a call signature.
 //
 // Rust: Go's `c` is `tp.checker()`.
@@ -348,7 +348,7 @@ pub(crate) fn build_proxy_signature_text(
     sb
 }
 
-// go: internal/refactors/write_tag_class_accessors.go:328 buildWrappedReturnTypeText
+// go: internal/refactors/write_tag_class_accessors.go:328 buildWrappedReturnTypeText 06e3b2c47fa95c78
 // buildWrappedReturnTypeText builds the text representation of the wrapped return type.
 //
 // Rust: Go's `c` is `tp.checker()`.
@@ -408,7 +408,7 @@ pub(crate) fn build_wrapped_return_type_text(
     effect_identifier.to_string() + ".Effect<" + &a_str + ", never, " + class_name_text + ">"
 }
 
-// go: internal/refactors/write_tag_class_accessors.go:364 isPromiseTypeString
+// go: internal/refactors/write_tag_class_accessors.go:364 isPromiseTypeString 603d1de4bd2d8363
 // isPromiseTypeString checks if the type string represents a Promise<T> and extracts the inner type string.
 //
 // Rust: Go's `(inner, ok)` is `Option<&str>`.

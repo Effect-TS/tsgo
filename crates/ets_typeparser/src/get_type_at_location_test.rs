@@ -13,7 +13,7 @@ use crate::helpers_test::*;
 use crate::module_export_reference_test::{compile_fixtures_with_js, kind_string, node_pos};
 use crate::*;
 
-// go test: internal/typeparser/get_type_at_location_test.go:12 typeAtLocationGuardFixtureMain
+// go test: internal/typeparser/get_type_at_location_test.go:12 typeAtLocationGuardFixtureMain 6313ba02ffc2e50d
 const TYPE_AT_LOCATION_GUARD_FIXTURE_MAIN: &str = r#"import { value } from "./dep.js"
 import * as ns from "./dep.js"
 import type { Shape } from "./dep.js"
@@ -26,13 +26,13 @@ export function run(n: number = value, shape?: Shape & Alias): number {
 export default run
 "#;
 
-// go test: internal/typeparser/get_type_at_location_test.go:24 typeAtLocationGuardFixtureDep
+// go test: internal/typeparser/get_type_at_location_test.go:24 typeAtLocationGuardFixtureDep cc6eb3731f5fa73f
 const TYPE_AT_LOCATION_GUARD_FIXTURE_DEP: &str = r"export const value = 1
 export interface Shape { n: number }
 export default value
 ";
 
-// go test: internal/typeparser/get_type_at_location_test.go:29 typeAtLocationGuardFixtureSyntax
+// go test: internal/typeparser/get_type_at_location_test.go:29 typeAtLocationGuardFixtureSyntax 3cf41512cdcf383f
 const TYPE_AT_LOCATION_GUARD_FIXTURE_SYNTAX: &str = concat!(
     "export {}\n",
     "namespace N { export interface Base { n: number } export class Value { n = 1 } }\n",
@@ -49,14 +49,14 @@ const TYPE_AT_LOCATION_GUARD_FIXTURE_SYNTAX: &str = concat!(
     "enum E { A = 1 }\n",
 );
 
-// go test: internal/typeparser/get_type_at_location_test.go:43 typeAtLocationGuardFixtureView
+// go test: internal/typeparser/get_type_at_location_test.go:43 typeAtLocationGuardFixtureView 25390a444cd29c59
 const TYPE_AT_LOCATION_GUARD_FIXTURE_VIEW: &str = r#"declare global { namespace JSX { interface IntrinsicElements { div: { title?: string } } } }
 declare function View(props: { title: string }): any
 export const view = <div title="value"><View title="child" />{"text"}</div>
 export const fragment = <><View title={String(1)} /></>
 "#;
 
-// go test: internal/typeparser/get_type_at_location_test.go:49 typeAtLocationGuardFixtureJS
+// go test: internal/typeparser/get_type_at_location_test.go:49 typeAtLocationGuardFixtureJS 6091d5dcbf496f86
 const TYPE_AT_LOCATION_GUARD_FIXTURE_JS: &str = r#"// @ts-check
 import { value } from "./dep.js"
 /** @typedef {{ n: number }} Local */
@@ -65,7 +65,7 @@ export function read(local) { return local.n + value }
 export const cast = /** @type {Local} */ ({ n: value })
 "#;
 
-// go test: internal/typeparser/get_type_at_location_test.go:59 getTypeAtLocationUnhoisted
+// go test: internal/typeparser/get_type_at_location_test.go:59 getTypeAtLocationUnhoisted 96aab3849c23de10
 // getTypeAtLocationUnhoisted is GetTypeAtLocation with the guards inside the
 // cached computation, as before they were hoisted.
 //
@@ -87,7 +87,7 @@ fn get_type_at_location_unhoisted(
     value
 }
 
-// go test: internal/typeparser/get_type_at_location_test.go:68 TestGetTypeAtLocationHoistedGuardsMatchUnhoisted
+// go test: internal/typeparser/get_type_at_location_test.go:68 TestGetTypeAtLocationHoistedGuardsMatchUnhoisted d404f89e9d3513cf
 #[test]
 fn test_get_type_at_location_hoisted_guards_match_unhoisted() {
     run(|t| {
@@ -292,7 +292,7 @@ fn test_get_type_at_location_hoisted_guards_match_unhoisted() {
     });
 }
 
-// go test: internal/typeparser/get_type_at_location_test.go:179 TestGetTypeAtLocationImportClause
+// go test: internal/typeparser/get_type_at_location_test.go:179 TestGetTypeAtLocationImportClause 4f7612cfc4035ae1
 // Import clauses without a default binding declare no symbol; before the
 // KindImportClause guard, checker.GetTypeAtLocation panicked on them with a
 // nil symbol dereference (recovered silently, see issue #301 investigation).
@@ -355,7 +355,7 @@ export const use: T = String(A + ns.A + d.A)
     });
 }
 
-// go test: internal/typeparser/get_type_at_location_test.go:227 checkedTypeSource
+// go test: internal/typeparser/get_type_at_location_test.go:227 checkedTypeSource 50f716d15785f4cd
 // Re-evaluating these expressions after the check gives a different type than
 // the check itself computed: the iterator's return literals were checked while
 // the enclosing generic call was still resolving, and the narrowed reference
@@ -393,7 +393,7 @@ export const getRandomValues = <T extends ArrayBufferView | null>(array: T): T =
 }
 "#;
 
-// go test: internal/typeparser/get_type_at_location_test.go:260 TestGetTypeAtLocationReturnsCheckedType
+// go test: internal/typeparser/get_type_at_location_test.go:260 TestGetTypeAtLocationReturnsCheckedType 3dfcaa87e84a60b9
 #[test]
 fn test_get_type_at_location_returns_checked_type() {
     run(|t| {
@@ -450,7 +450,7 @@ fn test_get_type_at_location_returns_checked_type() {
     });
 }
 
-// go test: internal/typeparser/get_type_at_location_test.go:294 TestGetTypeAtLocationAddsNoDiagnosticsAfterCheck
+// go test: internal/typeparser/get_type_at_location_test.go:294 TestGetTypeAtLocationAddsNoDiagnosticsAfterCheck 96bcb272df48650a
 #[test]
 fn test_get_type_at_location_adds_no_diagnostics_after_check() {
     run(|t| {
@@ -489,7 +489,7 @@ export function inferred() { return takesString(2) }
     });
 }
 
-// go test: internal/typeparser/get_type_at_location_test.go:323 scannerText
+// go test: internal/typeparser/get_type_at_location_test.go:323 scannerText 900bc4c580366402
 fn scanner_text(sf: P<SourceFile>, node: P<Node>) -> &'static str {
     let pos = node.pos().source_offset().expect("a parsed node") as usize;
     let end = node.end().source_offset().expect("a parsed node") as usize;

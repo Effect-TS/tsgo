@@ -4,7 +4,7 @@ use crate::helpers_test::*;
 use crate::identity_forwarder_test::find_variable_initializer;
 use crate::*;
 
-// go test: internal/typeparser/lazy_expression_test.go:5 TestParseLazyExpressionMultiStatementBlock
+// go test: internal/typeparser/lazy_expression_test.go:5 TestParseLazyExpressionMultiStatementBlock 1303b0e3bdf5abc4
 #[test]
 fn test_parse_lazy_expression_multi_statement_block() {
     run(|t| {
@@ -64,7 +64,7 @@ const single = () => { return 3 }
     });
 }
 
-// go test: internal/typeparser/lazy_expression_test.go:39 TestParseLazyExpressionFlags
+// go test: internal/typeparser/lazy_expression_test.go:39 TestParseLazyExpressionFlags 00162875d7880f2b
 #[test]
 fn test_parse_lazy_expression_flags() {
     run(|t| {

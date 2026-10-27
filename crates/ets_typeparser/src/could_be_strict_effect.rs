@@ -7,7 +7,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/could_be_strict_effect.go:11 strictEffectTypeNames
+// go: internal/typeparser/could_be_strict_effect.go:11 strictEffectTypeNames 5ae0b6ba5486011c
 // strictEffectTypeNames are the type symbol names that StrictEffectType can
 // match. couldBeNamed takes a set so future prefilters for other wrapper
 // types (Stream, Layer, ...) can reuse the same conservative walk.
@@ -16,7 +16,7 @@ use crate::*;
 pub(crate) static STRICT_EFFECT_TYPE_NAMES: &[&str] = &["Effect"];
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/could_be_strict_effect.go:30 TypeParser.NodeCouldBeStrictEffect
+    // go: internal/typeparser/could_be_strict_effect.go:30 TypeParser.NodeCouldBeStrictEffect 44eadf626057189a
     // NodeCouldBeStrictEffect reports whether node's flow type could possibly be
     // a strict Effect type (a type whose symbol is named "Effect", see
     // StrictEffectType). For reference nodes (identifiers and property accesses)
@@ -56,7 +56,7 @@ impl TypeParser<'_> {
         self.symbol_could_be_strict_effect(sym)
     }
 
-    // go: internal/typeparser/could_be_strict_effect.go:59 TypeParser.callCouldReturnStrictEffect
+    // go: internal/typeparser/could_be_strict_effect.go:59 TypeParser.callCouldReturnStrictEffect f55945839b9bb659
     // callCouldReturnStrictEffect reports whether a call expression's type could
     // possibly be a strict Effect type, based on the return type of its resolved
     // signature. The signature and its return type are cached from the main check
@@ -80,7 +80,7 @@ impl TypeParser<'_> {
         .unwrap_or(true)
     }
 
-    // go: internal/typeparser/could_be_strict_effect.go:74 TypeParser.SymbolCouldBeStrictEffect
+    // go: internal/typeparser/could_be_strict_effect.go:74 TypeParser.SymbolCouldBeStrictEffect ca821370b6132dab
     // SymbolCouldBeStrictEffect reports whether a reference to sym could possibly
     // have a strict-Effect flow type, based on the symbol's declared type only.
     pub fn symbol_could_be_strict_effect(&mut self, sym: impl Into<Option<P<Symbol>>>) -> bool {
@@ -91,14 +91,14 @@ impl TypeParser<'_> {
         self.could_be_strict_effect(declared)
     }
 
-    // go: internal/typeparser/could_be_strict_effect.go:84 TypeParser.getTypeOfSymbolSafe
+    // go: internal/typeparser/could_be_strict_effect.go:84 TypeParser.getTypeOfSymbolSafe e70f6672a311517e
     // getTypeOfSymbolSafe wraps Checker.GetTypeOfSymbol with a panic guard,
     // returning nil (treated as inconclusive by callers) on any checker panic.
     pub(crate) fn get_type_of_symbol_safe(&mut self, sym: P<Symbol>) -> Option<P<Type>> {
         recover(AssertUnwindSafe(|| self.checker.get_type_of_symbol_exported(sym))).ok()
     }
 
-    // go: internal/typeparser/could_be_strict_effect.go:99 TypeParser.CouldBeStrictEffect
+    // go: internal/typeparser/could_be_strict_effect.go:99 TypeParser.CouldBeStrictEffect 79106edd3c261cce
     // CouldBeStrictEffect reports whether flow narrowing starting from declared
     // type t could ever produce a strict Effect type. It is deliberately
     // conservative: it only returns false when t is conclusively non-Effect (a
@@ -111,7 +111,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/could_be_strict_effect.go:106 couldBeNamed
+// go: internal/typeparser/could_be_strict_effect.go:106 couldBeNamed 886b74d570323ab8
 // couldBeNamed reports whether flow narrowing starting from declared type t
 // could ever produce a type whose symbol name is in names. False only on a
 // conclusive negative.
@@ -122,7 +122,7 @@ pub(crate) fn could_be_named(t: Option<P<Type>>, names: &[&str], depth: i64) -> 
     })
 }
 
-// go: internal/typeparser/could_be_strict_effect.go:115 couldBe
+// go: internal/typeparser/could_be_strict_effect.go:115 couldBe 957c76623986b841
 // couldBe walks declared type t conservatively and asks objectCouldMatch
 // about each plain object constituent. False only on a conclusive negative.
 pub(crate) fn could_be(
@@ -166,7 +166,7 @@ pub(crate) fn could_be(
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/could_be_strict_effect.go:158 TypeParser.NodeCouldBeEffect
+    // go: internal/typeparser/could_be_strict_effect.go:158 TypeParser.NodeCouldBeEffect b915c7357502d590
     // NodeCouldBeEffect reports whether node's type could possibly be an Effect
     // type as recognized by EffectType. Only calls are inspected beyond the
     // syntactic NodeCannotBeEffectLibraryType check: a call's type is its

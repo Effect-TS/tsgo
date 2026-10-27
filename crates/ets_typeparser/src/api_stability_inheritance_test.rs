@@ -4,7 +4,7 @@ use crate::api_stability_test::*;
 use crate::helpers_test::*;
 use crate::*;
 
-// go test: internal/typeparser/api_stability_inheritance_test.go:5 TestApiStabilityInheritanceMinimumAndCacheIsolation
+// go test: internal/typeparser/api_stability_inheritance_test.go:5 TestApiStabilityInheritanceMinimumAndCacheIsolation b00710b4dc7c1596
 #[test]
 fn test_api_stability_inheritance_minimum_and_cache_isolation() {
     run(|t| {

@@ -5,7 +5,7 @@ use ets_shim::core::P;
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/get_contextual_type.go:8 TypeParser.GetContextualType
+    // go: internal/typeparser/get_contextual_type.go:8 TypeParser.GetContextualType b554fe48fdf04334
     pub fn get_contextual_type(&mut self, node: P<Node>, flags: ContextFlags) -> Option<P<Type>> {
         if should_skip_inferred_generator_contextual_type(Some(node), flags) {
             return None;
@@ -14,7 +14,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/get_contextual_type.go:15 shouldSkipInferredGeneratorContextualType
+// go: internal/typeparser/get_contextual_type.go:15 shouldSkipInferredGeneratorContextualType 44cffc378fb60389
 pub(crate) fn should_skip_inferred_generator_contextual_type(
     node: Option<P<Node>>,
     flags: ContextFlags,

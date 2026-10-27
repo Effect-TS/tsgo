@@ -13,7 +13,7 @@ use ets_typeparser::ModuleReference;
 
 use crate::*;
 
-// go: internal/refactors/layer_magic.go:17 LayerMagic
+// go: internal/refactors/layer_magic.go:17 LayerMagic 41262d15bc94ab49
 pub static LAYER_MAGIC: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "layerMagic",
     description: "Layer Magic",
@@ -21,7 +21,7 @@ pub static LAYER_MAGIC: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     run: run_layer_magic,
 });
 
-// go: internal/refactors/layer_magic.go:24 runLayerMagic
+// go: internal/refactors/layer_magic.go:24 runLayerMagic 3b6c9a048685ab2d
 // Rust: tsrs's `get_token_at_position` never returns nil, so Go's nil check drops. Go passes the context's
 // type parser and checker next to the context; the Rust callees reach both through it.
 pub(crate) fn run_layer_magic(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
@@ -54,7 +54,7 @@ pub(crate) fn run_layer_magic(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     Vec::new()
 }
 
-// go: internal/refactors/layer_magic.go:59 adjustedNode
+// go: internal/refactors/layer_magic.go:59 adjustedNode 7c5fb205a0766931
 // adjustedNode redirects from a variable/property declaration name to the initializer.
 pub(crate) fn adjusted_node(node: P<Node>) -> P<Node> {
     if let Some(parent) = node.parent()
@@ -80,7 +80,7 @@ pub(crate) fn adjusted_node(node: P<Node>) -> P<Node> {
     node
 }
 
-// go: internal/refactors/layer_magic.go:80 tryBuildRefactor
+// go: internal/refactors/layer_magic.go:80 tryBuildRefactor 99ace6e1e5dee25c
 // tryBuildRefactor tries to produce the "build" refactor action for the given node.
 // It detects the `(expr as any) as Layer.Layer<ROut>` pattern.
 //
@@ -192,7 +192,7 @@ fn type_names(c: &mut Checker, types: &[P<Type>]) -> Vec<String> {
         .collect()
 }
 
-// go: internal/refactors/layer_magic.go:155 buildLayerMagicBuild
+// go: internal/refactors/layer_magic.go:155 buildLayerMagicBuild 4adfdbf48e86808d
 // buildLayerMagicBuild generates a pipe from the first requested output layer, or Layer.empty
 // when the first layer does not provide a requested output.
 //
@@ -282,7 +282,7 @@ pub(crate) fn build_layer_magic_build(
     }
 }
 
-// go: internal/refactors/layer_magic.go:225 tryPrepareRefactor
+// go: internal/refactors/layer_magic.go:225 tryPrepareRefactor c7677554b607eff1
 // tryPrepareRefactor tries to produce the "prepare" refactor action for the given node.
 // It flattens a layer expression into `[...] as any as Layer.Layer<T>`.
 //
@@ -400,7 +400,7 @@ pub(crate) fn try_prepare_refactor(
     vec![action]
 }
 
-// go: internal/refactors/layer_magic.go:314 buildLayerMagicPrepare
+// go: internal/refactors/layer_magic.go:314 buildLayerMagicPrepare 13661bf984b27139
 // buildLayerMagicPrepare generates: [leaf1, leaf2, ...] as any as Layer.Layer<NewTypes /* ExistingTypes */>
 //
 // Rust: Go's `ctx` is used for its source file, and `c` for printing `newlyIntroduced` and `existingBefore`,
@@ -475,7 +475,7 @@ pub(crate) fn build_layer_magic_prepare(
     }
 }
 
-// go: internal/refactors/layer_magic.go:382 isAsAnyAsLayerForm
+// go: internal/refactors/layer_magic.go:382 isAsAnyAsLayerForm 648cf73415fbd888
 // isAsAnyAsLayerForm checks if a node is already in the `(expr as any) as Layer.Layer<T>` form.
 pub(crate) fn is_as_any_as_layer_form(node: P<Node>) -> bool {
     if node.kind() != Kind::AsExpression {
@@ -493,7 +493,7 @@ pub(crate) fn is_as_any_as_layer_form(node: P<Node>) -> bool {
     inner_as.type_().kind() == Kind::AnyKeyword
 }
 
-// go: internal/refactors/layer_magic.go:399 sortedTypeSlice
+// go: internal/refactors/layer_magic.go:399 sortedTypeSlice 96c65de830a8f01c
 // sortedTypeSlice converts a type set to a sorted slice using TypeToString for deterministic ordering.
 //
 // Rust: the set is an insertion-ordered slice (see `try_prepare_refactor`); the sort is Go's `sort.Slice`.

@@ -16,7 +16,7 @@ use ets_typeparser::{
 static MESSAGE: &Message =
     &tsdiag::THIS_CODE_USES_JSON_PARSE_OR_JSON_STRINGIFY_0_EFFECT_PREFER_SCHEMA_OVER_JSON;
 
-// go: internal/rules/prefer_schema_over_json.go:18 PreferSchemaOverJson
+// go: internal/rules/prefer_schema_over_json.go:18 PreferSchemaOverJson 6bdbed7987eb6104
 // PreferSchemaOverJson detects JSON.parse and JSON.stringify call expressions inside
 // Effect contexts (Effect.try or Effect.gen/Effect.fn) and suggests using Effect Schema instead.
 // Both Effect v3 and v4 are supported (no version gating), except the simple Effect.try(() => ...)
@@ -55,7 +55,7 @@ pub static PREFER_SCHEMA_OVER_JSON: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/prefer_schema_over_json.go:52 checkPreferSchemaOverJson
+// go: internal/rules/prefer_schema_over_json.go:52 checkPreferSchemaOverJson c039792df46100a9
 // checkPreferSchemaOverJson checks a single call expression for JSON.parse/stringify
 // inside an Effect context (Effect.try or Effect.gen/Effect.fn).
 pub(crate) fn check_prefer_schema_over_json(
@@ -96,7 +96,7 @@ pub(crate) fn check_prefer_schema_over_json(
     None
 }
 
-// go: internal/rules/prefer_schema_over_json.go:68 preferSchemaOverJsonRecommendation
+// go: internal/rules/prefer_schema_over_json.go:68 preferSchemaOverJsonRecommendation 68a73c59cb5d03a5
 pub(crate) fn prefer_schema_over_json_recommendation(is_v4: bool) -> &'static str {
     if is_v4 {
         return "Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings.";
@@ -105,7 +105,7 @@ pub(crate) fn prefer_schema_over_json_recommendation(is_v4: bool) -> &'static st
     "Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones."
 }
 
-// go: internal/rules/prefer_schema_over_json.go:78 parseJsonMethod
+// go: internal/rules/prefer_schema_over_json.go:78 parseJsonMethod 7fc8c69d3933976c
 // parseJsonMethod checks if a call expression is JSON.parse or JSON.stringify.
 // Returns the call expression node if it matches, nil otherwise.
 pub(crate) fn parse_json_method(node: Option<P<Node>>) -> Option<P<Node>> {
@@ -140,7 +140,7 @@ pub(crate) fn parse_json_method(node: Option<P<Node>>) -> Option<P<Node>> {
     Some(node)
 }
 
-// go: internal/rules/prefer_schema_over_json.go:118 checkEffectTrySimple
+// go: internal/rules/prefer_schema_over_json.go:118 checkEffectTrySimple 4e221eccb9dbbaaa
 // checkEffectTrySimple matches Effect.try(() => JSON.parse/stringify(...)) - simple thunk form.
 // This pattern is V3-only (the simple thunk form was removed in V4).
 //
@@ -176,7 +176,7 @@ pub(crate) fn check_effect_try_simple(
     parse_json_method(Some(lazy_expr.expression()))
 }
 
-// go: internal/rules/prefer_schema_over_json.go:148 checkEffectTryObject
+// go: internal/rules/prefer_schema_over_json.go:148 checkEffectTryObject e02ff86078ba5a4f
 // checkEffectTryObject matches Effect.try({ try: () => JSON.parse/stringify(...), ... }) - object form.
 //
 // Rust: Go's unused checker parameter is dropped.
@@ -226,7 +226,7 @@ pub(crate) fn check_effect_try_object(tp: &mut TypeParser<'_>, node: P<Node>) ->
     parse_json_method(Some(lazy_expr.expression()))
 }
 
-// go: internal/rules/prefer_schema_over_json.go:205 checkJsonMethodInEffectGen
+// go: internal/rules/prefer_schema_over_json.go:205 checkJsonMethodInEffectGen 73c14bad6b4af3a1
 // checkJsonMethodInEffectGen matches direct JSON.parse/stringify inside an Effect generator (Effect.gen or Effect.fn).
 //
 // Rust: Go's unused checker parameter is dropped.

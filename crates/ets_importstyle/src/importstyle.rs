@@ -4,10 +4,10 @@
 use ets_etscore::ResolvedEffectPluginOptions;
 use ets_shim::core::stringutil::equal_fold;
 
-// go: internal/importstyle/importstyle.go:11 Style
+// go: internal/importstyle/importstyle.go:11 Style 815b17f01a44d825
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, Default)]
 pub enum Style {
-    // go: internal/importstyle/importstyle.go:13 StyleNone
+    // go: internal/importstyle/importstyle.go:13 StyleNone cc93ce6039ab3baf
     #[default]
     None,
     Namespace,
@@ -25,7 +25,7 @@ impl ets_go::fmt::Value for Style {
     }
 }
 
-// go: internal/importstyle/importstyle.go:21 Policy
+// go: internal/importstyle/importstyle.go:21 Policy 8534b2c6775f8bb5
 // Policy holds the configured package lists. It references the option slices
 // directly, so building one per file costs nothing.
 //
@@ -37,7 +37,7 @@ pub struct Policy {
     pub(crate) barrel_packages: Vec<String>,
 }
 
-// go: internal/importstyle/importstyle.go:26 NewPolicy
+// go: internal/importstyle/importstyle.go:26 NewPolicy b0ddf5fe0f9490c7
 pub fn new_policy(options: Option<&ResolvedEffectPluginOptions>) -> Policy {
     let Some(options) = options else {
         return Policy::default();
@@ -49,12 +49,12 @@ pub fn new_policy(options: Option<&ResolvedEffectPluginOptions>) -> Policy {
 }
 
 impl Policy {
-    // go: internal/importstyle/importstyle.go:36 Policy.IsEmpty
+    // go: internal/importstyle/importstyle.go:36 Policy.IsEmpty 4179d38d986a9c6e
     pub fn is_empty(&self) -> bool {
         self.namespace_packages.is_empty() && self.barrel_packages.is_empty()
     }
 
-    // go: internal/importstyle/importstyle.go:42 Policy.PackageStyle
+    // go: internal/importstyle/importstyle.go:42 Policy.PackageStyle 4e07588cfb889cec
     // PackageStyle returns the style configured for a package name. Matching is
     // case-insensitive, and a package listed in both options uses namespace imports.
     pub fn package_style(&self, package_name: &str) -> Style {
@@ -70,13 +70,13 @@ impl Policy {
         Style::None
     }
 
-    // go: internal/importstyle/importstyle.go:55 Policy.Style
+    // go: internal/importstyle/importstyle.go:55 Policy.Style 8c3fe8a23af915af
     pub fn style(&self, specifier: &str) -> Style {
         self.package_style(package_name(specifier))
     }
 }
 
-// go: internal/importstyle/importstyle.go:59 containsFold
+// go: internal/importstyle/importstyle.go:59 containsFold a98160da444816a4
 pub(crate) fn contains_fold(packages: &[String], package_name: &str) -> bool {
     for pkg in packages {
         if equal_fold(pkg, package_name) {
@@ -86,7 +86,7 @@ pub(crate) fn contains_fold(packages: &[String], package_name: &str) -> bool {
     false
 }
 
-// go: internal/importstyle/importstyle.go:72 PackageName
+// go: internal/importstyle/importstyle.go:72 PackageName ebc5b13e49c98407
 // PackageName extracts the npm package name from a bare module specifier.
 // For scoped packages like "@scope/pkg/sub", returns "@scope/pkg".
 // For non-scoped packages like "pkg/sub", returns "pkg".
@@ -108,18 +108,18 @@ pub fn package_name(specifier: &str) -> &str {
     name
 }
 
-// go: internal/importstyle/importstyle.go:93 NamespaceName
+// go: internal/importstyle/importstyle.go:93 NamespaceName 6abd44afaac9692c
 // NamespaceName derives a namespace name from the last segment of a module specifier.
 // For example, "effect/Effect" -> "Effect", "effect" -> "effect", "@scope/pkg/Foo" -> "Foo".
 pub fn namespace_name(specifier: &str) -> &str {
     &specifier[specifier.rfind('/').map_or(0, |i| i + 1)..]
 }
 
-// go: internal/importstyle/importstyle.go:97 declarationExtensions
+// go: internal/importstyle/importstyle.go:97 declarationExtensions 8ffe86186d0de76f
 pub(crate) static DECLARATION_EXTENSIONS: &[&str] =
     &[".d.ts", ".d.mts", ".d.cts", ".ts", ".mts", ".cts", ".js", ".mjs", ".cjs"];
 
-// go: internal/importstyle/importstyle.go:103 ReexportSpecifier
+// go: internal/importstyle/importstyle.go:103 ReexportSpecifier 7e324e6bf10b715a
 // ReexportSpecifier maps a sibling re-export inside a barrel ("./Effect.ts" in
 // the index of "effect") to its public specifier ("effect/Effect"). It returns
 // "" when the target is not a direct sibling, since only siblings map onto the

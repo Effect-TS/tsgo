@@ -13,7 +13,7 @@ use ets_shim::ls::{self, change};
 use ets_shim::lsproto;
 use ets_typeparser::TypeParser;
 
-// go: internal/fixable/context.go:24 Context
+// go: internal/fixable/context.go:24 Context da925ab1eb218917
 // Context bundles the code-fix request data and provides helpers for fixable implementations.
 // It replaces the (context.Context, *rewriter.Tracker, *ls.CodeFixContext) parameter triple,
 // giving each fixable self-contained access to the checker, tracker lifecycle, and edit finalization.
@@ -42,7 +42,7 @@ impl Context<'_, '_> {
     }
 }
 
-// go: internal/fixable/context.go:40 NewContext
+// go: internal/fixable/context.go:40 NewContext 014495efdfc2bd67
 // NewContext creates a fixable Context from the standard code-fix request parameters.
 //
 // Rust: Go panics on a nil program or checker; neither can be nil here. The checker is `tp`'s (see `Context`).
@@ -66,7 +66,7 @@ pub fn new_context<'a, 'c>(
     }
 }
 
-// go: internal/fixable/context.go:62 NewStandaloneContext
+// go: internal/fixable/context.go:62 NewStandaloneContext 3a25a94c7f60328b
 // NewStandaloneContext creates a fixable Context without a language service.
 //
 // Rust: Go panics on a nil program or checker; neither can be nil here. The checker is `tp`'s (see `Context`).
@@ -93,7 +93,7 @@ pub fn new_standalone_context<'a, 'c>(
     }
 }
 
-// go: internal/fixable/context.go:93 newStandaloneConverters
+// go: internal/fixable/context.go:93 newStandaloneConverters 34f75ad96156b548
 pub(crate) fn new_standalone_converters(source_file: P<SourceFile>) -> Arc<Converters> {
     let file_name = source_file.file_name().to_string();
     let text = source_file.text();
@@ -106,21 +106,21 @@ pub(crate) fn new_standalone_converters(source_file: P<SourceFile>) -> Arc<Conve
 }
 
 impl Context<'_, '_> {
-    // go: internal/fixable/context.go:103 Context.BytePosToLSPPosition
+    // go: internal/fixable/context.go:103 Context.BytePosToLSPPosition 35cc75e1220e2f18
     // BytePosToLSPPosition converts a byte offset using the context's LSP encoding.
     pub fn byte_pos_to_lsp_position(&self, pos: u32) -> lsproto::Position {
         let (position, _) = self.converters.to_lsp_position(&self.source_file, TextPos::from(pos));
         position
     }
 
-    // go: internal/fixable/context.go:109 Context.LSPRangeToTextRange
+    // go: internal/fixable/context.go:109 Context.LSPRangeToTextRange a946ab9f50b7b6ab
     // LSPRangeToTextRange converts a tracker edit range back to source byte offsets.
     pub fn lsp_range_to_text_range(&self, r: lsproto::Range) -> TextRange {
         self.converters.from_lsp_range_to_original(&self.source_file, r)
     }
 }
 
-// go: internal/fixable/context.go:114 FixAction
+// go: internal/fixable/context.go:114 FixAction 5ac38e672a866d8f
 // FixAction describes a single code action that a fixable wants to produce.
 //
 // Rust: `run` is called once (Go's closure), so it may move what it captures.
@@ -130,7 +130,7 @@ pub struct FixAction<'f> {
 }
 
 impl Context<'_, '_> {
-    // go: internal/fixable/context.go:122 Context.NewFixAction
+    // go: internal/fixable/context.go:122 Context.NewFixAction 030b4e9040996ea0
     // NewFixAction creates a tracker, runs the action's edit closure, and returns
     // a *ls.CodeAction wrapping the resulting edits for the current SourceFile.
     // Returns nil if the closure produced no edits.

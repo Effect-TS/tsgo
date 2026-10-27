@@ -1,6 +1,6 @@
 use ets_typeparser::{PipingFlowTransformation, TransformationKind};
 
-// go: internal/rules/piping_flow.go:7 hasExplicitTypeArguments
+// go: internal/rules/piping_flow.go:7 hasExplicitTypeArguments c26c940873797d7d
 // hasExplicitTypeArguments reports whether a piping flow step is called with
 // explicit type arguments, which a rewrite to another API cannot carry over.
 pub(crate) fn has_explicit_type_arguments(
@@ -11,7 +11,7 @@ pub(crate) fn has_explicit_type_arguments(
         .is_some_and(|type_arguments| !type_arguments.nodes().is_empty())
 }
 
-// go: internal/rules/piping_flow.go:13 isPipingFlowArgumentKind
+// go: internal/rules/piping_flow.go:13 isPipingFlowArgumentKind 30f71ee10160d78a
 // isPipingFlowArgumentKind reports whether a step is written as an argument of
 // a pipe, pipeable or Effect.fn call rather than applied to its input directly.
 pub(crate) fn is_piping_flow_argument_kind(kind: TransformationKind) -> bool {

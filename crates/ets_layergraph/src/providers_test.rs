@@ -11,7 +11,7 @@ use crate::magic_test::{Fixture, run};
 use crate::providers::walk_leaves_matching;
 use crate::*;
 
-// go test: internal/layergraph/providers_test.go:12 makeNodeInfo
+// go test: internal/layergraph/providers_test.go:12 makeNodeInfo 1ab0fda115e9d07d
 // makeNodeInfo creates a minimal LayerGraphNodeInfo for testing walkLeavesMatching.
 // When hasTag is true, Provides gets a non-empty slice so the predicate matches.
 fn make_node_info(fx: &Fixture, has_tag: bool) -> LayerGraphNodeInfo {
@@ -30,7 +30,7 @@ fn make_node_info(fx: &Fixture, has_tag: bool) -> LayerGraphNodeInfo {
     info
 }
 
-// go test: internal/layergraph/providers_test.go:21 tagPredicate
+// go test: internal/layergraph/providers_test.go:21 tagPredicate 2005249faa6d78f1
 // tagPredicate returns true for nodes where Provides is non-empty.
 fn tag_predicate(node: &LayerGraphNodeInfo) -> bool {
     !node.provides.is_empty()
@@ -54,7 +54,7 @@ fn expect_len(t: &T, result: &[LayerGraphNodeInfo], expected: usize, message: &s
     }
 }
 
-// go test: internal/layergraph/providers_test.go:25 TestWalkLeavesMatching
+// go test: internal/layergraph/providers_test.go:25 TestWalkLeavesMatching 0d6c09fff38d8b67
 #[test]
 fn test_walk_leaves_matching() {
     run(|t| {

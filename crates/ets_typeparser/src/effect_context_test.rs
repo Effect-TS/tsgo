@@ -11,7 +11,7 @@ use crate::helpers_test::*;
 use crate::module_export_reference_test::{compile_fixtures_with_js, kind_string, node_pos};
 use crate::*;
 
-// go test: internal/typeparser/effect_context_test.go:15 effectContextFixtureTS
+// go test: internal/typeparser/effect_context_test.go:15 effectContextFixtureTS 465a053fdec1a707
 pub(crate) const EFFECT_CONTEXT_FIXTURE_TS: &str = r#"import { Effect, pipe } from "effect"
 import * as Eff from "effect/Effect"
 import { gen, sync as syncAlias } from "effect/Effect"
@@ -154,7 +154,7 @@ function* notEffect(): Generator<number> {
 }
 "#;
 
-// go test: internal/typeparser/effect_context_test.go:157 effectContextFixtureJS
+// go test: internal/typeparser/effect_context_test.go:157 effectContextFixtureJS c1cf6bf12039f0c1
 pub(crate) const EFFECT_CONTEXT_FIXTURE_JS: &str = r#"// @ts-check
 import { Effect } from "effect"
 
@@ -218,7 +218,7 @@ struct EffectContextReference {
     generator_store: FxHashMap<P<Node>, Option<P<Node>>>,
 }
 
-// go test: internal/typeparser/effect_context_test.go:205 effectContextReference
+// go test: internal/typeparser/effect_context_test.go:205 effectContextReference badda4e720ee854c
 // effectContextReference is the analysis that stored an entry for every node.
 // It is kept here to prove that storing only the entries that differ from the
 // parent's answers identically for every node.
@@ -245,7 +245,7 @@ fn effect_context_reference(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> Effec
 }
 
 impl EffectContextReferenceWalker<'_, '_> {
-    // go test: internal/typeparser/effect_context_test.go:205 effectContextReference
+    // go test: internal/typeparser/effect_context_test.go:205 effectContextReference badda4e720ee854c
     // Rust: Go's `setPendingEnableFlags` closure.
     fn set_pending_enable_flags(&mut self, node: Option<P<Node>>, flags: EffectContextFlags) {
         let Some(node) = node else {
@@ -257,7 +257,7 @@ impl EffectContextReferenceWalker<'_, '_> {
         *self.pending_enable_flags.entry(node).or_default() |= flags;
     }
 
-    // go test: internal/typeparser/effect_context_test.go:205 effectContextReference
+    // go test: internal/typeparser/effect_context_test.go:205 effectContextReference badda4e720ee854c
     // Rust: Go's `setPendingDisableFlags` closure.
     fn set_pending_disable_flags(&mut self, node: Option<P<Node>>, flags: EffectContextFlags) {
         let Some(node) = node else {
@@ -269,7 +269,7 @@ impl EffectContextReferenceWalker<'_, '_> {
         *self.pending_disable_flags.entry(node).or_default() |= flags;
     }
 
-    // go test: internal/typeparser/effect_context_test.go:205 effectContextReference
+    // go test: internal/typeparser/effect_context_test.go:205 effectContextReference badda4e720ee854c
     // Rust: Go's `walk` closure.
     fn walk(&mut self, node: P<Node>) -> bool {
         if let Some(parent) = node.parent() {
@@ -400,7 +400,7 @@ impl EffectContextReferenceWalker<'_, '_> {
     }
 }
 
-// go test: internal/typeparser/effect_context_test.go:205 effectContextReference
+// go test: internal/typeparser/effect_context_test.go:205 effectContextReference badda4e720ee854c
 // Rust: Go's `transparentPendingExpression` closure (it captures nothing).
 fn transparent_pending_expression(node: P<Node>) -> Option<P<Node>> {
     match node.kind() {
@@ -414,7 +414,7 @@ fn transparent_pending_expression(node: P<Node>) -> Option<P<Node>> {
 }
 
 impl EffectContextReference {
-    // go test: internal/typeparser/effect_context_test.go:205 effectContextReference
+    // go test: internal/typeparser/effect_context_test.go:205 effectContextReference badda4e720ee854c
     // Rust: Go's `flagsOf` closure.
     fn flags_of(&self, node: P<Node>) -> EffectContextFlags {
         let mut current = Some(node);
@@ -427,7 +427,7 @@ impl EffectContextReference {
         EffectContextFlags::None
     }
 
-    // go test: internal/typeparser/effect_context_test.go:205 effectContextReference
+    // go test: internal/typeparser/effect_context_test.go:205 effectContextReference badda4e720ee854c
     // Rust: Go's `generatorOf` closure.
     fn generator_of(&self, node: P<Node>) -> Option<P<Node>> {
         let mut current = Some(node);
@@ -441,7 +441,7 @@ impl EffectContextReference {
     }
 }
 
-// go test: internal/typeparser/effect_context_test.go:368 allEffectContextNodes
+// go test: internal/typeparser/effect_context_test.go:368 allEffectContextNodes 176f3095c17dab2f
 // allEffectContextNodes returns every node reachable from the source file,
 // JSDoc nodes included, which the analysis does not visit.
 fn all_effect_context_nodes(sf: P<SourceFile>) -> Vec<P<Node>> {
@@ -457,7 +457,7 @@ fn all_effect_context_nodes(sf: P<SourceFile>) -> Vec<P<Node>> {
     nodes
 }
 
-// go test: internal/typeparser/effect_context_test.go:380 effectContextComparison
+// go test: internal/typeparser/effect_context_test.go:380 effectContextComparison 7ae3b45e7fad566d
 #[derive(Default)]
 struct EffectContextComparison {
     nodes: i64,
@@ -477,7 +477,7 @@ fn function_expression_pointer(node: Option<P<Node>>) -> GoValue<'static> {
     }
 }
 
-// go test: internal/typeparser/effect_context_test.go:389 compareEffectContext
+// go test: internal/typeparser/effect_context_test.go:389 compareEffectContext 7dbcb6cecb4cf11f
 // compareEffectContext checks every node of every file against the reference
 // analysis. Odd files are queried bottom-up and every third file asks for the
 // generator function first, so the first query of a file is often neither the
@@ -552,7 +552,7 @@ fn compare_effect_context(
     result
 }
 
-// go test: internal/typeparser/effect_context_test.go:444 TestEffectContextMatchesPerNodeAnalysis
+// go test: internal/typeparser/effect_context_test.go:444 TestEffectContextMatchesPerNodeAnalysis 03430c40c139ba74
 #[test]
 fn test_effect_context_matches_per_node_analysis() {
     run(|t| {
@@ -598,7 +598,7 @@ fn test_effect_context_matches_per_node_analysis() {
     });
 }
 
-// go test: internal/typeparser/effect_context_test.go:466 TestEffectContextMatchesPerNodeAnalysisOnRuleFixtures
+// go test: internal/typeparser/effect_context_test.go:466 TestEffectContextMatchesPerNodeAnalysisOnRuleFixtures b5af4bcddfae02c3
 #[test]
 fn test_effect_context_matches_per_node_analysis_on_rule_fixtures() {
     run(|t| {

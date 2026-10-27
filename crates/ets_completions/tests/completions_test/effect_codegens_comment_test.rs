@@ -1,6 +1,6 @@
 use crate::*;
 
-// go test: internal/completions/effect_codegens_comment_test.go:11 TestEffectCodegensComment_DoubleSlash
+// go test: internal/completions/effect_codegens_comment_test.go:11 TestEffectCodegensComment_DoubleSlash 5b5d5d8743691494
 #[test]
 fn test_effect_codegens_comment_double_slash() {
     go_test(|t| {
@@ -16,7 +16,7 @@ fn test_effect_codegens_comment_double_slash() {
     });
 }
 
-// go test: internal/completions/effect_codegens_comment_test.go:23 TestEffectCodegensComment_SlashStar
+// go test: internal/completions/effect_codegens_comment_test.go:23 TestEffectCodegensComment_SlashStar 894939fac6bcb927
 #[test]
 fn test_effect_codegens_comment_slash_star() {
     go_test(|t| {
@@ -29,7 +29,7 @@ fn test_effect_codegens_comment_slash_star() {
     });
 }
 
-// go test: internal/completions/effect_codegens_comment_test.go:32 TestEffectCodegensComment_JSDocComment
+// go test: internal/completions/effect_codegens_comment_test.go:32 TestEffectCodegensComment_JSDocComment e6ee24226a9255ab
 #[test]
 fn test_effect_codegens_comment_jsdoc_comment() {
     go_test(|t| {
@@ -42,7 +42,7 @@ fn test_effect_codegens_comment_jsdoc_comment() {
     });
 }
 
-// go test: internal/completions/effect_codegens_comment_test.go:41 TestEffectCodegensComment_ExtraWhitespace
+// go test: internal/completions/effect_codegens_comment_test.go:41 TestEffectCodegensComment_ExtraWhitespace 036732884a570ada
 #[test]
 fn test_effect_codegens_comment_extra_whitespace() {
     go_test(|t| {
@@ -58,7 +58,7 @@ fn test_effect_codegens_comment_extra_whitespace() {
     });
 }
 
-// go test: internal/completions/effect_codegens_comment_test.go:50 TestEffectCodegensComment_NoAtSymbol
+// go test: internal/completions/effect_codegens_comment_test.go:50 TestEffectCodegensComment_NoAtSymbol cdb0464a6dc19abb
 #[test]
 fn test_effect_codegens_comment_no_at_symbol() {
     go_test(|t| {
@@ -71,7 +71,7 @@ fn test_effect_codegens_comment_no_at_symbol() {
     });
 }
 
-// go test: internal/completions/effect_codegens_comment_test.go:59 TestEffectCodegensComment_AtOutsideComment
+// go test: internal/completions/effect_codegens_comment_test.go:59 TestEffectCodegensComment_AtOutsideComment f76bd23fa34a91e5
 #[test]
 fn test_effect_codegens_comment_at_outside_comment() {
     go_test(|t| {
@@ -84,7 +84,7 @@ fn test_effect_codegens_comment_at_outside_comment() {
     });
 }
 
-// go test: internal/completions/effect_codegens_comment_test.go:68 TestEffectCodegensComment_SnippetContainsSortedCodegenNames
+// go test: internal/completions/effect_codegens_comment_test.go:68 TestEffectCodegensComment_SnippetContainsSortedCodegenNames c75a24ea9d259950
 #[test]
 fn test_effect_codegens_comment_snippet_contains_sorted_codegen_names() {
     go_test(|t| {
@@ -109,7 +109,7 @@ fn test_effect_codegens_comment_snippet_contains_sorted_codegen_names() {
     });
 }
 
-// go test: internal/completions/effect_codegens_comment_test.go:90 TestEffectCodegensComment_ReplacementSpanStartsAtAt
+// go test: internal/completions/effect_codegens_comment_test.go:90 TestEffectCodegensComment_ReplacementSpanStartsAtAt fcc74bcd8ec4db74
 #[test]
 fn test_effect_codegens_comment_replacement_span_starts_at_at() {
     go_test(|t| {
@@ -131,7 +131,7 @@ fn test_effect_codegens_comment_replacement_span_starts_at_at() {
     });
 }
 
-// go test: internal/completions/effect_codegens_comment_test.go:105 TestEffectCodegensComment_MultilineWithCommentOnSecondLine
+// go test: internal/completions/effect_codegens_comment_test.go:105 TestEffectCodegensComment_MultilineWithCommentOnSecondLine c0284e23814972df
 #[test]
 fn test_effect_codegens_comment_multiline_with_comment_on_second_line() {
     go_test(|t| {

@@ -9,7 +9,7 @@ use ets_typeparser::TransformationKind;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_EXPRESSION_CONTAINS_CHAINED_PIPE_CALLS_THAT_CAN_BE_SIMPLIFIED_TO_A_SINGLE_PIPE_CALL_EFFECT_UNNECESSARY_PIPE_CHAIN;
 
-// go: internal/fixables/unnecessary_pipe_chain.go:13 UnnecessaryPipeChainFix
+// go: internal/fixables/unnecessary_pipe_chain.go:13 UnnecessaryPipeChainFix 45a37c9c27506c4c
 pub static UNNECESSARY_PIPE_CHAIN_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "unnecessaryPipeChain",
     description: "Rewrite as single pipe call",
@@ -18,7 +18,7 @@ pub static UNNECESSARY_PIPE_CHAIN_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixa
     run: run_unnecessary_pipe_chain_fix,
 });
 
-// go: internal/fixables/unnecessary_pipe_chain.go:21 runUnnecessaryPipeChainFix
+// go: internal/fixables/unnecessary_pipe_chain.go:21 runUnnecessaryPipeChainFix bc6c3f8a7bafe3fe
 fn run_unnecessary_pipe_chain_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 

@@ -13,7 +13,7 @@ use crate::piping_flow::{has_explicit_type_arguments, is_piping_flow_argument_ki
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_0_EFFECT_1_TRANSFORM_THE_SUCCESS_AND_FAILURE_CHANNELS_ONE_STEP_AT_A_TIME_EFFECT_2_EXPRESSES_BOTH_TRANSFORMATIONS_IN_A_SINGLE_STEP_EFFECT_MAP_MAP_ERROR_TO_MAP_BOTH;
 
-// go: internal/rules/map_map_error_to_map_both.go:18 MapMapErrorToMapBoth
+// go: internal/rules/map_map_error_to_map_both.go:18 MapMapErrorToMapBoth ae1a13250929ac22
 // MapMapErrorToMapBoth suggests Effect.mapBoth when Effect.map and
 // Effect.mapError are adjacent steps of the same piping flow.
 pub static MAP_MAP_ERROR_TO_MAP_BOTH: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -40,7 +40,7 @@ pub static MAP_MAP_ERROR_TO_MAP_BOTH: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/map_map_error_to_map_both.go:39 MapMapErrorToMapBothMatch
+// go: internal/rules/map_map_error_to_map_both.go:39 MapMapErrorToMapBothMatch f2c323b78e9c414d
 #[derive(Clone)]
 pub struct MapMapErrorToMapBothMatch {
     pub source_file: P<SourceFile>,
@@ -58,7 +58,7 @@ pub struct MapMapErrorToMapBothMatch {
     pub fixable: bool,
 }
 
-// go: internal/rules/map_map_error_to_map_both.go:53 mapMapErrorStep
+// go: internal/rules/map_map_error_to_map_both.go:53 mapMapErrorStep b9eff7a0d0d73dbd
 #[derive(Clone, Copy)]
 pub(crate) struct MapMapErrorStep {
     name: &'static str,
@@ -66,7 +66,7 @@ pub(crate) struct MapMapErrorStep {
     eager: bool,
 }
 
-// go: internal/rules/map_map_error_to_map_both.go:59 mapMapErrorSteps
+// go: internal/rules/map_map_error_to_map_both.go:59 mapMapErrorSteps 7450978eb2dbee50
 static MAP_MAP_ERROR_STEPS: [MapMapErrorStep; 4] = [
     MapMapErrorStep { name: "map", failure: false, eager: false },
     MapMapErrorStep { name: "mapError", failure: true, eager: false },
@@ -74,7 +74,7 @@ static MAP_MAP_ERROR_STEPS: [MapMapErrorStep; 4] = [
     MapMapErrorStep { name: "mapErrorEager", failure: true, eager: true },
 ];
 
-// go: internal/rules/map_map_error_to_map_both.go:68 AnalyzeMapMapErrorToMapBoth
+// go: internal/rules/map_map_error_to_map_both.go:68 AnalyzeMapMapErrorToMapBoth 7fcfee9bd4ed42eb
 // AnalyzeMapMapErrorToMapBoth finds adjacent success and failure mappings in
 // piping flows. Pairs are taken left to right without overlap.
 //
@@ -145,7 +145,7 @@ pub fn analyze_map_map_error_to_map_both(
     matches
 }
 
-// go: internal/rules/map_map_error_to_map_both.go:127 mapMapErrorPathHasTypeArguments
+// go: internal/rules/map_map_error_to_map_both.go:127 mapMapErrorPathHasTypeArguments 03ab74be7e21150c
 // mapMapErrorPathHasTypeArguments reports explicit type arguments on any call
 // from the first step up to the call that applies the second step: the first
 // step itself, its curried application or containing pipe, empty pipe calls in
@@ -175,7 +175,7 @@ pub(crate) fn map_map_error_path_has_type_arguments(
     true
 }
 
-// go: internal/rules/map_map_error_to_map_both.go:144 mapMapErrorStepApplication
+// go: internal/rules/map_map_error_to_map_both.go:144 mapMapErrorStepApplication 21960929190f40e5
 // mapMapErrorStepApplication returns the call that applies a step to its input.
 pub(crate) fn map_map_error_step_application(step: &PipingFlowTransformation) -> Option<P<Node>> {
     let call = step.callee().parent();
@@ -196,7 +196,7 @@ pub(crate) fn map_map_error_step_application(step: &PipingFlowTransformation) ->
     application
 }
 
-// go: internal/rules/map_map_error_to_map_both.go:163 mapMapErrorKeepsEvaluationOrder
+// go: internal/rules/map_map_error_to_map_both.go:163 mapMapErrorKeepsEvaluationOrder fd9411ca29a8e818
 // mapMapErrorKeepsEvaluationOrder reports whether the fix keeps the observable
 // order of evaluation. Steps in one argument list keep it: their callbacks are
 // evaluated before any of them runs. Otherwise the fix moves the first callback
@@ -219,7 +219,7 @@ pub(crate) fn map_map_error_keeps_evaluation_order(
     !eager || map_map_error_first_work_moves_freely(second)
 }
 
-// go: internal/rules/map_map_error_to_map_both.go:181 mapMapErrorFirstCallbackMovesFreely
+// go: internal/rules/map_map_error_to_map_both.go:181 mapMapErrorFirstCallbackMovesFreely dca0e4af30e73a63
 // mapMapErrorFirstCallbackMovesFreely reports whether nothing observable runs
 // between the first callback's evaluation and the second step's callback
 // position, apart from applying the first step. That holds when the first step
@@ -250,7 +250,7 @@ pub(crate) fn map_map_error_first_callback_moves_freely(
     index == 1
 }
 
-// go: internal/rules/map_map_error_to_map_both.go:204 mapMapErrorFirstWorkMovesFreely
+// go: internal/rules/map_map_error_to_map_both.go:204 mapMapErrorFirstWorkMovesFreely 81cd2659af69d389
 // mapMapErrorFirstWorkMovesFreely reports whether an eager first step can run
 // in the merged step without crossing observable code. When the first step is
 // applied before the second callback is evaluated, the merged step runs that
@@ -269,7 +269,7 @@ pub(crate) fn map_map_error_first_work_moves_freely(second: &PipingFlowTransform
     }
 }
 
-// go: internal/rules/map_map_error_to_map_both.go:219 mapMapErrorArgumentIndex
+// go: internal/rules/map_map_error_to_map_both.go:219 mapMapErrorArgumentIndex 46038525148273f1
 // mapMapErrorArgumentIndex returns the position of a pipe argument step in its
 // call's argument list and the list's length, or -1 when it is not found.
 //
@@ -289,13 +289,13 @@ pub(crate) fn map_map_error_argument_index(step: &PipingFlowTransformation) -> (
     (index.map_or(-1, |index| index as i64), arguments.len() as i64)
 }
 
-// go: internal/rules/map_map_error_to_map_both.go:231 isFunctionLiteral
+// go: internal/rules/map_map_error_to_map_both.go:231 isFunctionLiteral 2c4467fc729d82cf
 pub(crate) fn is_function_literal(node: P<Node>) -> bool {
     let node = ast::skip_parentheses(node);
     node.kind() == Kind::ArrowFunction || node.kind() == Kind::FunctionExpression
 }
 
-// go: internal/rules/map_map_error_to_map_both.go:236 mapMapErrorShareArgumentList
+// go: internal/rules/map_map_error_to_map_both.go:236 mapMapErrorShareArgumentList 290e5f6b913af59e
 pub(crate) fn map_map_error_share_argument_list(
     first: &PipingFlowTransformation,
     second: &PipingFlowTransformation,
@@ -310,7 +310,7 @@ pub(crate) fn map_map_error_share_argument_list(
     first_step.parent().is_some() && first_step.parent() == second_step.parent()
 }
 
-// go: internal/rules/map_map_error_to_map_both.go:244 classifyMapMapErrorStep
+// go: internal/rules/map_map_error_to_map_both.go:244 classifyMapMapErrorStep 1742c20e554ea552
 //
 // Rust: Go's `(step, ok)` result is `Some(step)` when ok; a transformation's callee is never nil, so that check
 // drops.

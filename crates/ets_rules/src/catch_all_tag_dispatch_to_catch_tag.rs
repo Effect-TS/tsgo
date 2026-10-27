@@ -15,7 +15,7 @@ use crate::*;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::BRANCHING_ON_0_TAG_INSIDE_EFFECT_1_HAND_ROLLS_TAGGED_ERROR_DISPATCH_USE_EFFECT_CATCH_TAG_OR_EFFECT_CATCH_TAGS_WHICH_RE_FAIL_UNMATCHED_ERRORS_AUTOMATICALLY_EFFECT_CATCH_ALL_TAG_DISPATCH_TO_CATCH_TAG;
 
-// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:14 CatchAllTagDispatchToCatchTag
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:14 CatchAllTagDispatchToCatchTag 4159688f4fa4d3fd
 pub static CATCH_ALL_TAG_DISPATCH_TO_CATCH_TAG: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "catchAllTagDispatchToCatchTag",
     group: "style",
@@ -41,7 +41,7 @@ pub static CATCH_ALL_TAG_DISPATCH_TO_CATCH_TAG: LazyLock<Rule> = LazyLock::new(|
     },
 });
 
-// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:33 CatchAllTagDispatchBranch
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:33 CatchAllTagDispatchBranch 6fe15dd4096f1fbe
 #[derive(Clone)]
 pub struct CatchAllTagDispatchBranch {
     pub tag: String,
@@ -49,7 +49,7 @@ pub struct CatchAllTagDispatchBranch {
     pub uses_parameter: bool,
 }
 
-// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:39 CatchAllTagDispatchMatch
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:39 CatchAllTagDispatchMatch 0e5c00caf0b28b4c
 #[derive(Clone)]
 pub struct CatchAllTagDispatchMatch {
     pub source_file: P<SourceFile>,
@@ -62,7 +62,7 @@ pub struct CatchAllTagDispatchMatch {
     pub can_fix: bool,
 }
 
-// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:50 AnalyzeCatchAllTagDispatchToCatchTag
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:50 AnalyzeCatchAllTagDispatchToCatchTag ce281d04e7a98615
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`), never nil.
 pub fn analyze_catch_all_tag_dispatch_to_catch_tag(
@@ -105,7 +105,7 @@ pub fn analyze_catch_all_tag_dispatch_to_catch_tag(
     matches
 }
 
-// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:81 catchAllTagDispatchMethod
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:81 catchAllTagDispatchMethod 5ddf7f07ba2bfb30
 pub(crate) fn catch_all_tag_dispatch_method(
     tp: &mut TypeParser<'_>,
     callee: P<Node>,
@@ -119,7 +119,7 @@ pub(crate) fn catch_all_tag_dispatch_method(
     None
 }
 
-// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:91 analyzeCatchAllTagDispatchHandler
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:91 analyzeCatchAllTagDispatchHandler b747896c4d1082e0
 //
 // Rust: Go's `(name, branches, canFix, ok)` result is `Some((name, branches, canFix))` when ok.
 pub(crate) fn analyze_catch_all_tag_dispatch_handler(
@@ -173,7 +173,7 @@ pub(crate) fn analyze_catch_all_tag_dispatch_handler(
     Some((parameter_name.as_identifier().text().to_string(), branches, can_fix))
 }
 
-// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:131 literalTaggedUnionTags
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:131 literalTaggedUnionTags 931ed3a1363bb4f2
 pub(crate) fn literal_tagged_union_tags(
     tp: &mut TypeParser<'_>,
     node: P<Node>,
@@ -200,7 +200,7 @@ pub(crate) fn literal_tagged_union_tags(
     if tags.is_empty() { None } else { Some(tags) }
 }
 
-// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:157 isBareParameterTagReference
+// go: internal/rules/catch_all_tag_dispatch_to_catch_tag.go:157 isBareParameterTagReference 499ac373ad000a8a
 pub(crate) fn is_bare_parameter_tag_reference(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,

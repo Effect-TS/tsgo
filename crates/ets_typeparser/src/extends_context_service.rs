@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/extends_context_service.go:8 ServiceMapServiceResult
+// go: internal/typeparser/extends_context_service.go:8 ServiceMapServiceResult cf431183f5ba18d8
 // ServiceMapServiceResult holds the parsed result of a class extending Context.Service.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct ServiceMapServiceResult {
@@ -13,24 +13,24 @@ pub struct ServiceMapServiceResult {
 }
 
 impl ServiceMapServiceResult {
-    // go: internal/typeparser/extends_context_service.go:14 ServiceMapServiceResult.ClassName
+    // go: internal/typeparser/extends_context_service.go:14 ServiceMapServiceResult.ClassName 35a2fdbbe8b10ed7
     pub fn class_name(&self) -> P<Node> {
         self.class_name
     }
 
-    // go: internal/typeparser/extends_context_service.go:16 ServiceMapServiceResult.SelfTypeNode
+    // go: internal/typeparser/extends_context_service.go:16 ServiceMapServiceResult.SelfTypeNode 9cfb1a183c5a5a5f
     pub fn self_type_node(&self) -> P<Node> {
         self.self_type_node
     }
 
-    // go: internal/typeparser/extends_context_service.go:18 ServiceMapServiceResult.KeyStringLiteral
+    // go: internal/typeparser/extends_context_service.go:18 ServiceMapServiceResult.KeyStringLiteral 23dfccbde67d10b6
     pub fn key_string_literal(&self) -> Option<P<Node>> {
         self.key_string_literal
     }
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/extends_context_service.go:30 TypeParser.ExtendsContextService
+    // go: internal/typeparser/extends_context_service.go:30 TypeParser.ExtendsContextService 2336b74c326d896d
     // ExtendsContextService checks if a class declaration extends Context.Service<Self, Shape>()(key).
     // It detects the double-call pattern:
     //

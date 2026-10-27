@@ -6,12 +6,12 @@ use libtest_mimic::Trial;
 
 use crate::run_case;
 
-// go test: internal/effecttest/completion_test.go:14 findCompletionLabel
+// go test: internal/effecttest/completion_test.go:14 findCompletionLabel 66cbf0e0358430bc
 fn find_completion_label(items: &[lsproto::CompletionItem], label: &str) -> bool {
     find_completion_item(items, label).is_some()
 }
 
-// go test: internal/effecttest/completion_test.go:18 findCompletionItem
+// go test: internal/effecttest/completion_test.go:18 findCompletionItem a6f4a6fdbfd26361
 fn find_completion_item<'i>(
     items: &'i [lsproto::CompletionItem],
     label: &str,
@@ -19,7 +19,7 @@ fn find_completion_item<'i>(
     items.iter().find(|item| item.label == label)
 }
 
-// go test: internal/effecttest/completion_test.go:27 TestEffectCompletionExtendsServiceMap
+// go test: internal/effecttest/completion_test.go:27 TestEffectCompletionExtendsServiceMap 5ca9eb6ee5b9a2bb
 fn test_effect_completion_extends_service_map(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -60,7 +60,7 @@ class MyService extends Context./*1*/"#;
     f.done(t);
 }
 
-// go test: internal/effecttest/completion_test.go:65 TestEffectCompletionExtendsBarrelNamespace
+// go test: internal/effecttest/completion_test.go:65 TestEffectCompletionExtendsBarrelNamespace 325fe3aa4729f244
 fn test_effect_completion_extends_barrel_namespace(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -106,7 +106,7 @@ class MyService extends X.Context./*1*/"#;
     f.done(t);
 }
 
-// go test: internal/effecttest/completion_test.go:103 TestEffectCompletionExtendsSchema
+// go test: internal/effecttest/completion_test.go:103 TestEffectCompletionExtendsSchema 1372bd0d064f3bbb
 fn test_effect_completion_extends_schema(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -153,7 +153,7 @@ class Foo extends Schema./*1*/"#;
     f.done(t);
 }
 
-// go test: internal/effecttest/completion_test.go:147 TestEffectCompletionDisabled
+// go test: internal/effecttest/completion_test.go:147 TestEffectCompletionDisabled fb74203cf8e8c531
 fn test_effect_completion_disabled(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();

@@ -13,7 +13,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go: internal/refactors/async_await_to_fn.go:12 AsyncAwaitToFn
+// go: internal/refactors/async_await_to_fn.go:12 AsyncAwaitToFn 10ab8fa64c62c262
 pub static ASYNC_AWAIT_TO_FN: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "asyncAwaitToFn",
     description: "Convert async/await to Effect.fn",
@@ -21,7 +21,7 @@ pub static ASYNC_AWAIT_TO_FN: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     run: run_async_await_to_fn,
 });
 
-// go: internal/refactors/async_await_to_fn.go:19 runAsyncAwaitToFn
+// go: internal/refactors/async_await_to_fn.go:19 runAsyncAwaitToFn 26eb9c21277e1031
 // Rust: tsrs's `get_token_at_position` never returns nil, so Go's nil check drops.
 pub(crate) fn run_async_await_to_fn(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let token = astnav::get_token_at_position(ctx.source_file, span_pos(ctx));
@@ -57,7 +57,7 @@ pub(crate) fn run_async_await_to_fn(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
     vec![action]
 }
 
-// go: internal/refactors/async_await_to_fn.go:57 transformAsyncToEffectFn
+// go: internal/refactors/async_await_to_fn.go:57 transformAsyncToEffectFn f4aeb15f395e3664
 // transformAsyncToEffectFn transforms an async function to use Effect.fn.
 pub(crate) fn transform_async_to_effect_fn(
     tracker: &Tracker,
@@ -87,7 +87,7 @@ pub(crate) fn transform_async_to_effect_fn(
     Some(build_fn_declaration(tracker, node, effect_fn_call, &fn_name))
 }
 
-// go: internal/refactors/async_await_to_fn.go:79 buildEffectFnCall
+// go: internal/refactors/async_await_to_fn.go:79 buildEffectFnCall 39660f96a69bdf70
 // buildEffectFnCall builds: Effect.fn("name")(function*(params) { body })
 pub(crate) fn build_effect_fn_call(
     tracker: &NodeFactory,
@@ -171,7 +171,7 @@ pub(crate) fn build_effect_fn_call(
     )
 }
 
-// go: internal/refactors/async_await_to_fn.go:150 buildFnDeclaration
+// go: internal/refactors/async_await_to_fn.go:150 buildFnDeclaration a6a3c0b2de2a2543
 // buildFnDeclaration builds the appropriate declaration wrapping the Effect.fn call.
 // For function declarations: const name = Effect.fn("name")(...)
 // For expressions/arrows: just the Effect.fn("name")(...) expression

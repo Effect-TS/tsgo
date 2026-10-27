@@ -9,7 +9,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_KEY_DOES_NOT_MATCH_THE_DETERMINISTIC_KEY_FOR_THIS_DECLARATION_THE_EXPECTED_KEY_IS_0_EFFECT_DETERMINISTIC_KEYS;
 
-// go: internal/fixables/deterministic_keys.go:12 DeterministicKeysFix
+// go: internal/fixables/deterministic_keys.go:12 DeterministicKeysFix 9fa1de8a2da87524
 pub static DETERMINISTIC_KEYS_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "deterministicKeys",
     description: "Replace key with expected deterministic key",
@@ -18,7 +18,7 @@ pub static DETERMINISTIC_KEYS_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable 
     run: run_deterministic_keys_fix,
 });
 
-// go: internal/fixables/deterministic_keys.go:20 runDeterministicKeysFix
+// go: internal/fixables/deterministic_keys.go:20 runDeterministicKeysFix 3751401c84c0d71a
 fn run_deterministic_keys_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let matches = ets_rules::analyze_deterministic_keys(
         &mut ctx.type_parser,

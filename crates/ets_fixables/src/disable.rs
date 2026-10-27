@@ -7,7 +7,7 @@ use ets_shim::ast::SourceFile;
 use ets_shim::core::P;
 use ets_shim::ls::CodeAction;
 
-// go: internal/fixables/disable.go:17 EffectDisable
+// go: internal/fixables/disable.go:17 EffectDisable 6afd40cc470cc83a
 // EffectDisable provides "disable for line/file" actions for all Effect diagnostics.
 // This fixable handles all Effect diagnostic codes and provides two actions:
 // 1. "Disable {ruleName} for this line" - inserts @effect-diagnostics-next-line directive
@@ -20,7 +20,7 @@ pub static EFFECT_DISABLE: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     run: run_effect_disable,
 });
 
-// go: internal/fixables/disable.go:26 runEffectDisable
+// go: internal/fixables/disable.go:26 runEffectDisable 518524d91f030ac7
 // runEffectDisable generates disable actions for Effect diagnostics.
 fn run_effect_disable(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let rule_name = ets_rule::code_to_rule_name(&ets_rules::ALL, ctx.error_code);
@@ -43,7 +43,7 @@ fn run_effect_disable(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     actions
 }
 
-// go: internal/fixables/disable.go:49 createDisableNextLineAction
+// go: internal/fixables/disable.go:49 createDisableNextLineAction 9f721669f82509d7
 // createDisableNextLineAction creates a code action to disable the diagnostic for the next line.
 // It inserts: // @effect-diagnostics-next-line {ruleName}:off
 fn create_disable_next_line_action(ctx: &Context<'_, '_>, rule_name: &str) -> Option<CodeAction> {
@@ -75,7 +75,7 @@ fn create_disable_next_line_action(ctx: &Context<'_, '_>, rule_name: &str) -> Op
     })
 }
 
-// go: internal/fixables/disable.go:77 createDisableFileAction
+// go: internal/fixables/disable.go:77 createDisableFileAction e9c54de25b552915
 // createDisableFileAction creates a code action to disable the diagnostic for the entire file.
 // It inserts: /** @effect-diagnostics {ruleName}:off */ at the top of the file.
 fn create_disable_file_action(ctx: &Context<'_, '_>, rule_name: &str) -> Option<CodeAction> {
@@ -94,7 +94,7 @@ fn create_disable_file_action(ctx: &Context<'_, '_>, rule_name: &str) -> Option<
     })
 }
 
-// go: internal/fixables/disable.go:93 getLineStartPositionForPosition
+// go: internal/fixables/disable.go:93 getLineStartPositionForPosition c6bb5f1d8270e73a
 // getLineStartPositionForPosition finds the start of the line containing the given position.
 fn get_line_start_position_for_position(pos: u32, source_file: P<SourceFile>) -> u32 {
     let text = source_file.text().as_bytes();
@@ -110,7 +110,7 @@ fn get_line_start_position_for_position(pos: u32, source_file: P<SourceFile>) ->
     0
 }
 
-// go: internal/fixables/disable.go:108 getIndentationAtPosition
+// go: internal/fixables/disable.go:108 getIndentationAtPosition 16d8ce5e39df1d24
 // getIndentationAtPosition returns the whitespace characters from line start to the first non-whitespace.
 fn get_indentation_at_position(source_file: P<SourceFile>, line_start_pos: u32) -> &'static str {
     let text = source_file.text();

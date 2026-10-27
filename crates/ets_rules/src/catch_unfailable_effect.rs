@@ -11,12 +11,12 @@ use ets_typeparser::TypeParser;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THE_PREVIOUS_EFFECT_DOES_NOT_FAIL_SO_THIS_ERROR_HANDLING_BRANCH_WILL_NEVER_RUN_EFFECT_CATCH_UNFAILABLE_EFFECT;
 
-// go: internal/rules/catch_unfailable_effect.go:14 catchFunctions
+// go: internal/rules/catch_unfailable_effect.go:14 catchFunctions ee141a557cda15b7
 // catchFunctions lists the Effect module catch functions to check (V3 and V4).
 pub(crate) static CATCH_FUNCTIONS: &[&str] =
     &["catch", "catchAll", "catchIf", "catchSome", "catchTag", "catchTags"];
 
-// go: internal/rules/catch_unfailable_effect.go:18 CatchUnfailableEffect
+// go: internal/rules/catch_unfailable_effect.go:18 CatchUnfailableEffect 31314a465e637468
 // CatchUnfailableEffect detects when error-handling functions are applied
 // to an Effect whose error type is never, meaning the handler will never trigger.
 pub static CATCH_UNFAILABLE_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -74,7 +74,7 @@ pub static CATCH_UNFAILABLE_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/catch_unfailable_effect.go:66 isCatchCallee
+// go: internal/rules/catch_unfailable_effect.go:66 isCatchCallee 14a58a3a4bed3a57
 // isCatchCallee checks if a node references one of the Effect module catch functions.
 //
 // Rust: Go's checker argument is unused and dropped.

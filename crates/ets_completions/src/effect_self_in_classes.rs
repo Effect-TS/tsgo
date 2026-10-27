@@ -6,7 +6,7 @@ use ets_typeparser::EffectMajorVersion;
 
 use crate::*;
 
-// go: internal/completions/effect_self_in_classes.go:14 effectSelfInClasses
+// go: internal/completions/effect_self_in_classes.go:14 effectSelfInClasses cb9faabaed9d7556
 // effectSelfInClasses provides completion items for Effect.Service and Effect.Tag class constructors
 // when the cursor is in the extends clause of a class declaration.
 // This is a V3-only completion.
@@ -16,7 +16,7 @@ pub(crate) static EFFECT_SELF_IN_CLASSES: LazyLock<Completion> = LazyLock::new(|
     run: run_effect_self_in_classes,
 });
 
-// go: internal/completions/effect_self_in_classes.go:20 runEffectSelfInClasses
+// go: internal/completions/effect_self_in_classes.go:20 runEffectSelfInClasses 999fd5b786916431
 fn run_effect_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionItem> {
     let Some(data) =
         ets_completion::parse_data_for_extends_class_completion(ctx.source_file, ctx.position)

@@ -2,7 +2,7 @@ use ets_go::sprintf;
 
 use crate::*;
 
-// go test: internal/layergraph/types_test.go:8 TestLayerGraphEdgeInfoMarshalJSON
+// go test: internal/layergraph/types_test.go:8 TestLayerGraphEdgeInfoMarshalJSON dd225fb980d0c072
 #[test]
 fn test_layer_graph_edge_info_marshal_json() {
     ets_go::testing::run(|t| {

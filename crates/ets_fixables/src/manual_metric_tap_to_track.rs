@@ -14,7 +14,7 @@ use crate::*;
 static MESSAGE: &Message =
     &tsdiag::EFFECT_0_EXPRESSES_RECORDING_A_METRIC_ON_EVERY_1_DIRECTLY_EFFECT_MANUAL_METRIC_TAP_TO_TRACK;
 
-// go: internal/fixables/manual_metric_tap_to_track.go:13 ManualMetricTapToTrackFix
+// go: internal/fixables/manual_metric_tap_to_track.go:13 ManualMetricTapToTrackFix bd46fe7787d2312a
 pub static MANUAL_METRIC_TAP_TO_TRACK_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "manualMetricTapToTrack",
     description: "Replace Effect.tap with Effect.track*",
@@ -23,7 +23,7 @@ pub static MANUAL_METRIC_TAP_TO_TRACK_FIX: LazyLock<Fixable> = LazyLock::new(|| 
     run: run_manual_metric_tap_to_track_fix,
 });
 
-// go: internal/fixables/manual_metric_tap_to_track.go:23 runManualMetricTapToTrackFix
+// go: internal/fixables/manual_metric_tap_to_track.go:23 runManualMetricTapToTrackFix 11bafc58e284cc54
 //
 // Rust: the match's transformation is never nil (a non-optional field), so Go's nil check drops.
 fn run_manual_metric_tap_to_track_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
@@ -87,7 +87,7 @@ fn run_manual_metric_tap_to_track_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActi
     Vec::new()
 }
 
-// go: internal/fixables/manual_metric_tap_to_track.go:65 effectModuleMember
+// go: internal/fixables/manual_metric_tap_to_track.go:65 effectModuleMember c786a10b978e4f43
 //
 // Rust: the predicates get the type parser as an argument, so Go's `ctx` parameter drops.
 #[expect(
@@ -102,7 +102,7 @@ pub(crate) fn effect_module_member(name: &'static str) -> ModuleMember {
     }
 }
 
-// go: internal/fixables/manual_metric_tap_to_track.go:73 metricModuleMember
+// go: internal/fixables/manual_metric_tap_to_track.go:73 metricModuleMember be90160d9bb970ed
 //
 // Rust: the predicates get the type parser as an argument, so Go's `ctx` parameter drops.
 #[expect(
@@ -119,7 +119,7 @@ fn metric_module_member(name: &'static str) -> ModuleMember {
     }
 }
 
-// go: internal/fixables/manual_metric_tap_to_track.go:81 manualMetricTrackArguments
+// go: internal/fixables/manual_metric_tap_to_track.go:81 manualMetricTrackArguments 75802ab5bfd9c8d6
 //
 // Rust: the callback gets the tracker as an argument (Go's closure captures it).
 fn manual_metric_track_arguments(

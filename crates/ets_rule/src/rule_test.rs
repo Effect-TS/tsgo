@@ -23,7 +23,7 @@ fn rule(name: &'static str, description: &'static str) -> Rule {
     }
 }
 
-// go test: internal/rule/rule_test.go:10 TestRuleStruct
+// go test: internal/rule/rule_test.go:10 TestRuleStruct bc64def8037515d3
 // Rust: Go's `r.Run == nil` check has no counterpart (`run` is a function pointer, never null).
 #[test]
 fn test_rule_struct() {
@@ -38,7 +38,7 @@ fn test_rule_struct() {
     );
 }
 
-// go test: internal/rule/rule_test.go:34 TestByName
+// go test: internal/rule/rule_test.go:34 TestByName df89b770fece8375
 #[test]
 fn test_by_name() {
     let rules = vec![rule("rule1", "First rule"), rule("rule2", "Second rule")];

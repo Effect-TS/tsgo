@@ -6,7 +6,7 @@ use libtest_mimic::Trial;
 
 use crate::run_case;
 
-// go test: internal/effecttest/issue_173_test.go:13 TestIssue173_DirectYieldedThisDoesNotReportFalsePositiveTS2683
+// go test: internal/effecttest/issue_173_test.go:13 TestIssue173_DirectYieldedThisDoesNotReportFalsePositiveTS2683 07425f8d7b282ca1
 fn test_issue173_direct_yielded_this_does_not_report_false_positive_ts2683(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
@@ -44,7 +44,7 @@ class Repro {
     f.done(t);
 }
 
-// go test: internal/effecttest/issue_173_test.go:49 TestIssue173_HoistedThisScopeDoesNotReportTS2683
+// go test: internal/effecttest/issue_173_test.go:49 TestIssue173_HoistedThisScopeDoesNotReportTS2683 41cb6568fe2e0a21
 fn test_issue173_hoisted_this_scope_does_not_report_ts2683(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();

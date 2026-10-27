@@ -8,7 +8,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/effect_gen.go:10 EffectGenCallResult
+// go: internal/typeparser/effect_gen.go:10 EffectGenCallResult 1bdd2ed3fc8ab50d
 // EffectGenCallResult represents a parsed Effect.gen(...) call.
 //
 // Rust: Go's node pointer fields are `P<Node>`; the pipe arguments are the call's own argument list (`None` where
@@ -23,34 +23,34 @@ pub struct EffectGenCallResult {
 }
 
 impl EffectGenCallResult {
-    // go: internal/typeparser/effect_gen.go:19 EffectGenCallResult.Call
+    // go: internal/typeparser/effect_gen.go:19 EffectGenCallResult.Call 4786fc50c05b0415
     pub fn call(&self) -> P<Node> {
         self.call
     }
 
-    // go: internal/typeparser/effect_gen.go:21 EffectGenCallResult.OptionsNode
+    // go: internal/typeparser/effect_gen.go:21 EffectGenCallResult.OptionsNode 8e7805075fac13c5
     pub fn options_node(&self) -> Option<P<Node>> {
         self.options_node
     }
 
-    // go: internal/typeparser/effect_gen.go:23 EffectGenCallResult.GeneratorFunction
+    // go: internal/typeparser/effect_gen.go:23 EffectGenCallResult.GeneratorFunction 123bb221cdd257a5
     pub fn generator_function(&self) -> P<Node> {
         self.generator_function
     }
 
-    // go: internal/typeparser/effect_gen.go:25 EffectGenCallResult.Body
+    // go: internal/typeparser/effect_gen.go:25 EffectGenCallResult.Body c295b7704e49a9a7
     pub fn body(&self) -> Option<P<Node>> {
         self.body
     }
 
-    // go: internal/typeparser/effect_gen.go:27 EffectGenCallResult.PipeArguments
+    // go: internal/typeparser/effect_gen.go:27 EffectGenCallResult.PipeArguments 35df897697851342
     pub fn pipe_arguments(&self) -> Slice<'_, P<Node>> {
         ets_readonly::new(self.pipe_arguments)
     }
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/effect_gen.go:33 TypeParser.EffectGenCall
+    // go: internal/typeparser/effect_gen.go:33 TypeParser.EffectGenCall 18d94f5804fbd7c7
     // EffectGenCall parses a node as Effect.gen(<generator>).
     // Returns nil when the node is not an Effect.gen call.
     pub fn effect_gen_call(

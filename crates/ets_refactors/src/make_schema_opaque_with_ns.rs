@@ -11,7 +11,7 @@ use ets_typeparser::EffectMajorVersion;
 
 use crate::*;
 
-// go: internal/refactors/make_schema_opaque_with_ns.go:12 MakeSchemaOpaqueWithNs
+// go: internal/refactors/make_schema_opaque_with_ns.go:12 MakeSchemaOpaqueWithNs 96e5aff3d68252ff
 pub static MAKE_SCHEMA_OPAQUE_WITH_NS: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "makeSchemaOpaqueWithNs",
     description: "Make Schema opaque with namespace",
@@ -19,7 +19,7 @@ pub static MAKE_SCHEMA_OPAQUE_WITH_NS: LazyLock<Refactor> = LazyLock::new(|| Ref
     run: run_make_schema_opaque_with_ns,
 });
 
-// go: internal/refactors/make_schema_opaque_with_ns.go:19 runMakeSchemaOpaqueWithNs
+// go: internal/refactors/make_schema_opaque_with_ns.go:19 runMakeSchemaOpaqueWithNs b8d8fd95970d10ca
 pub(crate) fn run_make_schema_opaque_with_ns(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let Some(info) = find_schema_variable_declaration(ctx) else {
         return Vec::new();

@@ -14,7 +14,7 @@ use ets_typeparser::{PipingFlow, PipingFlowTransformation, TransformationKind};
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_NESTED_CALL_STRUCTURE_HAS_A_PIPEABLE_FORM_0_PIPE_REPRESENTS_THE_SAME_CALL_SEQUENCE_IN_PIPE_STYLE_AND_MAY_BE_EASIER_TO_READ_EFFECT_MISSED_PIPEABLE_OPPORTUNITY;
 
-// go: internal/fixables/missed_pipeable_opportunity.go:14 MissedPipeableOpportunityFix
+// go: internal/fixables/missed_pipeable_opportunity.go:14 MissedPipeableOpportunityFix 35af22400f2b40b0
 pub static MISSED_PIPEABLE_OPPORTUNITY_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "missedPipeableOpportunity",
     description: "Convert to pipe style",
@@ -23,7 +23,7 @@ pub static MISSED_PIPEABLE_OPPORTUNITY_FIX: LazyLock<Fixable> = LazyLock::new(||
     run: run_missed_pipeable_opportunity_fix,
 });
 
-// go: internal/fixables/missed_pipeable_opportunity.go:22 runMissedPipeableOpportunityFix
+// go: internal/fixables/missed_pipeable_opportunity.go:22 runMissedPipeableOpportunityFix 0c32f2acead3b839
 fn run_missed_pipeable_opportunity_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 
@@ -59,7 +59,7 @@ fn run_missed_pipeable_opportunity_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAct
     Vec::new()
 }
 
-// go: internal/fixables/missed_pipeable_opportunity.go:59 buildMissedPipeableReplacement
+// go: internal/fixables/missed_pipeable_opportunity.go:59 buildMissedPipeableReplacement 937637545a6821fd
 // buildMissedPipeableReplacement builds the .pipe() replacement and applies it via tracker.ReplaceNode.
 fn build_missed_pipeable_replacement(
     tracker: &mut Tracker,
@@ -132,7 +132,7 @@ fn build_missed_pipeable_replacement(
     tracker.replace_node(sf, Some(flow.node()), Some(replacement_node), None);
 }
 
-// go: internal/fixables/missed_pipeable_opportunity.go:111 findSubjectNodeAtDepth
+// go: internal/fixables/missed_pipeable_opportunity.go:111 findSubjectNodeAtDepth 60e973de598c3cb7
 // findSubjectNodeAtDepth traverses the flow node into arguments to find the subject at the right depth,
 // then deep-clones it.
 //
@@ -161,7 +161,7 @@ fn find_subject_node_at_depth(
     tracker.deep_clone_node(Some(current))
 }
 
-// go: internal/fixables/missed_pipeable_opportunity.go:133 wrapWithAfterTransformations
+// go: internal/fixables/missed_pipeable_opportunity.go:133 wrapWithAfterTransformations 033b929e9ae297c5
 // wrapWithAfterTransformations wraps an inner node with the "after" transformations.
 // For "call" kind: callee(innerNode)
 // For "pipe"/"pipeable" kind with args: callee(args...)(innerNode) (curried)

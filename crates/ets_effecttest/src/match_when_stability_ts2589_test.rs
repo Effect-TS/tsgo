@@ -3,7 +3,7 @@ use ets_go::testing::on_checker_stack;
 
 use crate::*;
 
-// go test: internal/effecttest/match_when_stability_ts2589_test.go:13 TestIssue851MatchWhenStabilityDoesNotReportTS2589
+// go test: internal/effecttest/match_when_stability_ts2589_test.go:13 TestIssue851MatchWhenStabilityDoesNotReportTS2589 3cce8426001aa7be
 // Issue #851: the experimental and unstable API rules resolved the constraint
 // of a generic call by resolving the call again with inference blocked. For a
 // Match.when pattern over a wide union this instantiated

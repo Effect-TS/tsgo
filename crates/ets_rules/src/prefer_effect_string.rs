@@ -7,7 +7,7 @@ use ets_shim::ast::{self, Diagnostic, Kind, Node};
 use ets_shim::diagnostics as tsdiag;
 use rustc_hash::FxHashSet;
 
-// go: internal/rules/prefer_effect_string.go:10 PreferEffectString
+// go: internal/rules/prefer_effect_string.go:10 PreferEffectString 411678490545732d
 pub static PREFER_EFFECT_STRING: LazyLock<Rule> = LazyLock::new(|| {
     Rule {
         name: "preferEffectString",
@@ -20,7 +20,7 @@ pub static PREFER_EFFECT_STRING: LazyLock<Rule> = LazyLock::new(|| {
     }
 });
 
-// go: internal/rules/prefer_effect_string.go:20 stringMethodPreference
+// go: internal/rules/prefer_effect_string.go:20 stringMethodPreference 8c13423f67ffd4b2
 pub(crate) struct StringMethodPreference {
     pub(crate) native_name: &'static str,
     pub(crate) effect_api: &'static str,
@@ -36,7 +36,7 @@ const fn string_method_preference(
     StringMethodPreference { native_name, effect_api, caveat }
 }
 
-// go: internal/rules/prefer_effect_string.go:26 stringMethodPreferences
+// go: internal/rules/prefer_effect_string.go:26 stringMethodPreferences f17fa632185a92dc
 pub(crate) static STRING_METHOD_PREFERENCES: &[StringMethodPreference] = &[
     string_method_preference("at", "at", "Returns Option, with None replacing undefined."),
     string_method_preference(
@@ -156,7 +156,7 @@ pub(crate) static STRING_METHOD_PREFERENCES: &[StringMethodPreference] = &[
     ),
 ];
 
-// go: internal/rules/prefer_effect_string.go:61 stringMethodNames
+// go: internal/rules/prefer_effect_string.go:61 stringMethodNames a337baf7a722032e
 //
 // Rust: Go's `map[string]bool` of true values is a set.
 pub(crate) static STRING_METHOD_NAMES: LazyLock<FxHashSet<&'static str>> = LazyLock::new(|| {
@@ -167,7 +167,7 @@ pub(crate) static STRING_METHOD_NAMES: LazyLock<FxHashSet<&'static str>> = LazyL
     names
 });
 
-// go: internal/rules/prefer_effect_string.go:69 runPreferEffectString
+// go: internal/rules/prefer_effect_string.go:69 runPreferEffectString 100ea1289cc96a57
 pub(crate) fn run_prefer_effect_string(ctx: &mut Context<'_, '_>) -> Vec<P<Diagnostic>> {
     let mut diagnostics = Vec::new();
     // Rust: Go's recursive `walk` closure is a nested function.

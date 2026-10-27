@@ -10,7 +10,7 @@ use crate::returning_dispatch_test::{
 };
 use crate::*;
 
-// go test: internal/typeparser/predicate_type_test.go:12 predicateTestImports
+// go test: internal/typeparser/predicate_type_test.go:12 predicateTestImports 255894c6f7af5c15
 const PREDICATE_TEST_IMPORTS: &str = r#"
 	import { Predicate } from "effect"
 	import * as P from "effect/Predicate"
@@ -28,7 +28,7 @@ const PREDICATE_TEST_IMPORTS: &str = r#"
 	declare const ready: boolean
 "#;
 
-// go test: internal/typeparser/predicate_type_test.go:29 TestIsNodeReferenceToEffectPredicateModuleApi
+// go test: internal/typeparser/predicate_type_test.go:29 TestIsNodeReferenceToEffectPredicateModuleApi e570823bc6d9a4f0
 #[test]
 fn test_is_node_reference_to_effect_predicate_module_api() {
     run(|t| {
@@ -92,7 +92,7 @@ fn test_is_node_reference_to_effect_predicate_module_api() {
     });
 }
 
-// go test: internal/typeparser/predicate_type_test.go:72 TestParseTagMatchPredicate
+// go test: internal/typeparser/predicate_type_test.go:72 TestParseTagMatchPredicate 348b3936153171b3
 #[test]
 fn test_parse_tag_match_predicate() {
     run(|t| {
@@ -217,7 +217,7 @@ fn test_parse_tag_match_predicate() {
     });
 }
 
-// go test: internal/typeparser/predicate_type_test.go:148 TestParseResultDispatchPredicateHints
+// go test: internal/typeparser/predicate_type_test.go:148 TestParseResultDispatchPredicateHints be81a7e18498531a
 #[test]
 fn test_parse_result_dispatch_predicate_hints() {
     run(|t| {
@@ -339,7 +339,7 @@ fn test_parse_result_dispatch_predicate_hints() {
     });
 }
 
-// go test: internal/typeparser/predicate_type_test.go:221 predicateNodeDescendsFrom
+// go test: internal/typeparser/predicate_type_test.go:221 predicateNodeDescendsFrom 6c136ceadf054c7d
 fn predicate_node_descends_from(node: Option<P<Node>>, ancestor: Option<P<Node>>) -> bool {
     let mut node = node;
     while let Some(current) = node {

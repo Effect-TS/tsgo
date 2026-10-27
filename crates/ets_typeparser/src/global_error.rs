@@ -5,7 +5,7 @@ use ets_shim::core::P;
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/global_error.go:12 TypeParser.IsGlobalErrorType
+    // go: internal/typeparser/global_error.go:12 TypeParser.IsGlobalErrorType 539dd5445dfc86e6
     // IsGlobalErrorType reports whether the given type is exactly the global Error type.
     // It performs a bidirectional assignability check to ensure the type is not a subclass
     // or unrelated type. Types like any and unknown are excluded since they are

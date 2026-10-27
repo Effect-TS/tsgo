@@ -4,7 +4,7 @@ use ets_shim::core::P;
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/expression_stability.go:10 TypeParser.IsExpressionValueStableAtLocation
+    // go: internal/typeparser/expression_stability.go:10 TypeParser.IsExpressionValueStableAtLocation a8d28de85fcae8d7
     // IsExpressionValueStableAtLocation reports whether evaluating expression at
     // location produces the same value as evaluating it at its original site.
     pub fn is_expression_value_stable_at_location(
@@ -91,7 +91,7 @@ impl TypeParser<'_> {
         }
     }
 
-    // go: internal/typeparser/expression_stability.go:75 TypeParser.isDeclaredBeforeLocation
+    // go: internal/typeparser/expression_stability.go:75 TypeParser.isDeclaredBeforeLocation a77d7353b1800f30
     // isDeclaredBeforeLocation reports whether declaration's value already exists
     // when location is evaluated. The checker alone accepts later declarations used
     // from deferred function bodies, so the positional check is kept alongside it.

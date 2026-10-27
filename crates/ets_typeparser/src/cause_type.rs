@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/cause_type.go:8 effectCausePackageSourceFileDescriptor
+// go: internal/typeparser/cause_type.go:8 effectCausePackageSourceFileDescriptor 0c3c835e356c4311
 pub(crate) static EFFECT_CAUSE_PACKAGE_SOURCE_FILE_DESCRIPTOR: PackageSourceFileDescriptor =
     new_package_source_file_descriptor(
         ModuleDescriptorId::Cause,
@@ -11,7 +11,7 @@ pub(crate) static EFFECT_CAUSE_PACKAGE_SOURCE_FILE_DESCRIPTOR: PackageSourceFile
         Some(&is_effect_cause_source_file),
     );
 
-// go: internal/typeparser/cause_type.go:8 effectCausePackageSourceFileDescriptor
+// go: internal/typeparser/cause_type.go:8 effectCausePackageSourceFileDescriptor 0c3c835e356c4311
 // Rust: the descriptor's matcher (a Go func literal). Go's nil checker and source file guards cannot fail here.
 fn is_effect_cause_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> bool {
     let c = &mut *tp.checker;
@@ -28,7 +28,7 @@ fn is_effect_cause_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> bo
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/cause_type.go:31 TypeParser.IsNodeReferenceToEffectCauseModuleApi
+    // go: internal/typeparser/cause_type.go:31 TypeParser.IsNodeReferenceToEffectCauseModuleApi 21ff899b04a39706
     // IsNodeReferenceToEffectCauseModuleApi reports whether node resolves to a
     // member exported by Effect's Cause module.
     pub fn is_node_reference_to_effect_cause_module_api(

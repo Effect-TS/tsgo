@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/extends_effect_service.go:8 EffectServiceResult
+// go: internal/typeparser/extends_effect_service.go:8 EffectServiceResult 1f6849455f10fb1a
 // EffectServiceResult holds the parsed result of a class extending Effect.Service.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct EffectServiceResult {
@@ -14,29 +14,29 @@ pub struct EffectServiceResult {
 }
 
 impl EffectServiceResult {
-    // go: internal/typeparser/extends_effect_service.go:15 EffectServiceResult.ClassName
+    // go: internal/typeparser/extends_effect_service.go:15 EffectServiceResult.ClassName 0f28d80b7f73a513
     pub fn class_name(&self) -> P<Node> {
         self.class_name
     }
 
-    // go: internal/typeparser/extends_effect_service.go:17 EffectServiceResult.SelfTypeNode
+    // go: internal/typeparser/extends_effect_service.go:17 EffectServiceResult.SelfTypeNode 0a4e5a964b8c18cb
     pub fn self_type_node(&self) -> P<Node> {
         self.self_type_node
     }
 
-    // go: internal/typeparser/extends_effect_service.go:19 EffectServiceResult.Options
+    // go: internal/typeparser/extends_effect_service.go:19 EffectServiceResult.Options c53cebae30abb773
     pub fn options(&self) -> Option<P<Node>> {
         self.options
     }
 
-    // go: internal/typeparser/extends_effect_service.go:21 EffectServiceResult.KeyStringLiteral
+    // go: internal/typeparser/extends_effect_service.go:21 EffectServiceResult.KeyStringLiteral f309e38c16caad34
     pub fn key_string_literal(&self) -> Option<P<Node>> {
         self.key_string_literal
     }
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/extends_effect_service.go:33 TypeParser.ExtendsEffectV3Service
+    // go: internal/typeparser/extends_effect_service.go:33 TypeParser.ExtendsEffectV3Service 63800af25275664b
     // ExtendsEffectV3Service checks if a class declaration extends Effect.Service<Self>()(key, options).
     // It detects the double-call pattern:
     //

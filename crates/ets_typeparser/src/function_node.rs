@@ -1,7 +1,7 @@
 use ets_shim::ast::{Kind, Node, NodeList};
 use ets_shim::core::P;
 
-// go: internal/typeparser/function_node.go:10 GetFunctionLikeName
+// go: internal/typeparser/function_node.go:10 GetFunctionLikeName 7ffa5c354fa84f09
 // GetFunctionLikeName returns the name string from a function-like node.
 // Handles FunctionDeclaration, FunctionExpression, MethodDeclaration (with identifier name),
 // and falls back to checking the parent VariableDeclaration for arrow/expression functions.
@@ -39,7 +39,7 @@ pub fn get_function_like_name(node: P<Node>) -> String {
     String::new()
 }
 
-// go: internal/typeparser/function_node.go:42 GetFunctionLikeBody
+// go: internal/typeparser/function_node.go:42 GetFunctionLikeBody 253e28f029f21299
 // GetFunctionLikeBody returns the body node from a function-like node.
 // Handles FunctionDeclaration, FunctionExpression, ArrowFunction, and MethodDeclaration.
 pub fn get_function_like_body(node: P<Node>) -> Option<P<Node>> {
@@ -52,7 +52,7 @@ pub fn get_function_like_body(node: P<Node>) -> Option<P<Node>> {
     }
 }
 
-// go: internal/typeparser/function_node.go:70 GetFunctionLikeTypeParameters
+// go: internal/typeparser/function_node.go:70 GetFunctionLikeTypeParameters b32f5e34aad6c7d3
 // GetFunctionLikeTypeParameters returns the type parameters NodeList from a function-like node.
 // Handles ArrowFunction, FunctionExpression, FunctionDeclaration, and MethodDeclaration.
 pub fn get_function_like_type_parameters(node: P<Node>) -> Option<P<NodeList>> {
@@ -65,7 +65,7 @@ pub fn get_function_like_type_parameters(node: P<Node>) -> Option<P<NodeList>> {
     }
 }
 
-// go: internal/typeparser/function_node.go:86 GetFunctionLikeParameters
+// go: internal/typeparser/function_node.go:86 GetFunctionLikeParameters 759866a13f5eec26
 // GetFunctionLikeParameters returns the parameters NodeList from a function-like node.
 // Handles ArrowFunction, FunctionExpression, FunctionDeclaration, and MethodDeclaration.
 pub fn get_function_like_parameters(node: P<Node>) -> Option<P<NodeList>> {

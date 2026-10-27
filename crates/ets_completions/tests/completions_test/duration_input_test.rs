@@ -1,6 +1,6 @@
 use crate::*;
 
-// go test: internal/completions/duration_input_test.go:7 TestDurationInput_CursorOutsideString
+// go test: internal/completions/duration_input_test.go:7 TestDurationInput_CursorOutsideString 2d70b1313b8f4234
 #[test]
 fn test_duration_input_cursor_outside_string() {
     go_test(|t| {
@@ -14,7 +14,7 @@ fn test_duration_input_cursor_outside_string() {
     });
 }
 
-// go test: internal/completions/duration_input_test.go:17 TestDurationInput_CursorOnIdentifier
+// go test: internal/completions/duration_input_test.go:17 TestDurationInput_CursorOnIdentifier ff7e6cd714a84595
 #[test]
 fn test_duration_input_cursor_on_identifier() {
     go_test(|t| {
@@ -28,7 +28,7 @@ fn test_duration_input_cursor_on_identifier() {
     });
 }
 
-// go test: internal/completions/duration_input_test.go:27 TestDurationInput_CursorAtOpeningQuote
+// go test: internal/completions/duration_input_test.go:27 TestDurationInput_CursorAtOpeningQuote 6d375ea2a6a10034
 #[test]
 fn test_duration_input_cursor_at_opening_quote() {
     go_test(|t| {
@@ -44,7 +44,7 @@ fn test_duration_input_cursor_at_opening_quote() {
     });
 }
 
-// go test: internal/completions/duration_input_test.go:39 TestDurationInput_CursorAtClosingQuote
+// go test: internal/completions/duration_input_test.go:39 TestDurationInput_CursorAtClosingQuote c63ce8493aecff75
 #[test]
 fn test_duration_input_cursor_at_closing_quote() {
     go_test(|t| {
@@ -63,7 +63,7 @@ fn test_duration_input_cursor_at_closing_quote() {
     });
 }
 
-// go test: internal/completions/duration_input_test.go:51 TestDurationInput_EmptySource
+// go test: internal/completions/duration_input_test.go:51 TestDurationInput_EmptySource f876f02fb4fe5c16
 #[test]
 fn test_duration_input_empty_source() {
     go_test(|t| {
@@ -76,7 +76,7 @@ fn test_duration_input_empty_source() {
     });
 }
 
-// go test: internal/completions/duration_input_test.go:60 TestDurationInput_CursorInComment
+// go test: internal/completions/duration_input_test.go:60 TestDurationInput_CursorInComment aca5200d1aa968ea
 #[test]
 fn test_duration_input_cursor_in_comment() {
     go_test(|t| {
@@ -90,7 +90,7 @@ fn test_duration_input_cursor_in_comment() {
     });
 }
 
-// go test: internal/completions/duration_input_test.go:70 TestDurationInput_CursorBeforeString
+// go test: internal/completions/duration_input_test.go:70 TestDurationInput_CursorBeforeString fd2be3574fc133b6
 #[test]
 fn test_duration_input_cursor_before_string() {
     go_test(|t| {
@@ -108,7 +108,7 @@ fn test_duration_input_cursor_before_string() {
     });
 }
 
-// go test: internal/completions/duration_input_test.go:81 TestDurationInput_DurationUnitsCount
+// go test: internal/completions/duration_input_test.go:81 TestDurationInput_DurationUnitsCount 55271b1a3b15cce8
 #[test]
 fn test_duration_input_duration_units_count() {
     go_test(|t| {

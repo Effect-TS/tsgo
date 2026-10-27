@@ -10,7 +10,7 @@ use ets_typeparser::{EffectMajorVersion, TypeParser};
 
 use crate::*;
 
-// go: internal/completions/context_self_in_classes.go:18 contextSelfInClasses
+// go: internal/completions/context_self_in_classes.go:18 contextSelfInClasses c597daa602c390cc
 // contextSelfInClasses provides completion items for Effect context/service class
 // constructors when the cursor is in the extends clause of a class declaration.
 pub(crate) static CONTEXT_SELF_IN_CLASSES: LazyLock<Completion> = LazyLock::new(|| Completion {
@@ -19,7 +19,7 @@ pub(crate) static CONTEXT_SELF_IN_CLASSES: LazyLock<Completion> = LazyLock::new(
     run: run_context_self_in_classes,
 });
 
-// go: internal/completions/context_self_in_classes.go:24 runContextSelfInClasses
+// go: internal/completions/context_self_in_classes.go:24 runContextSelfInClasses 6f18228bcb1f36b2
 fn run_context_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionItem> {
     let Some(data) =
         ets_completion::parse_data_for_extends_class_completion(ctx.source_file, ctx.position)
@@ -109,7 +109,7 @@ fn run_context_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::Comple
     items
 }
 
-// go: internal/completions/context_self_in_classes.go:98 computeDeterministicKey
+// go: internal/completions/context_self_in_classes.go:98 computeDeterministicKey d2debe0a49c21d8e
 // computeDeterministicKey computes the key the deterministicKeys rule expects for a class
 // of the given target ("service", "error", or "taggedClass").
 // Falls back to the class name if keybuilder returns empty.

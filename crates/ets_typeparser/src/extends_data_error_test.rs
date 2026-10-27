@@ -9,7 +9,7 @@ use crate::helpers_test::*;
 use crate::module_export_reference_test::kind_string;
 use crate::*;
 
-// go test: internal/typeparser/extends_data_error_test.go:10 TestExtendsDataError
+// go test: internal/typeparser/extends_data_error_test.go:10 TestExtendsDataError fc969481cc9448b4
 #[test]
 fn test_extends_data_error() {
     run(|t| {

@@ -11,7 +11,7 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::TypeParser;
 
-// go: internal/rules/missing_effect_error.go:20 MissingEffectError
+// go: internal/rules/missing_effect_error.go:20 MissingEffectError a6b8a95862f2ea8b
 // MissingEffectError detects when an Effect has error types that are not
 // handled by the expected type. This happens when assigning an Effect with errors
 // to a variable/parameter expecting an Effect with fewer or no errors.
@@ -40,7 +40,7 @@ pub static MISSING_EFFECT_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/missing_effect_error.go:39 MissingEffectErrorMatch
+// go: internal/rules/missing_effect_error.go:39 MissingEffectErrorMatch f7bdc2af9ed8d8ef
 // MissingEffectErrorMatch holds the analysis results needed by both the
 // diagnostic rule and the quick-fixes for the missingEffectError pattern.
 #[derive(Clone)]
@@ -53,7 +53,7 @@ pub struct MissingEffectErrorMatch {
     pub error_type_str: String,     // The formatted union string of unhandled errors
 }
 
-// go: internal/rules/missing_effect_error.go:50 AnalyzeMissingEffectError
+// go: internal/rules/missing_effect_error.go:50 AnalyzeMissingEffectError 4f8af2539fcfd01e
 // AnalyzeMissingEffectError finds all relation errors where an Effect has error
 // types that are not handled by the expected type.
 //
@@ -97,7 +97,7 @@ pub fn analyze_missing_effect_error(
     matches
 }
 
-// go: internal/rules/missing_effect_error.go:86 findUnhandledErrors
+// go: internal/rules/missing_effect_error.go:86 findUnhandledErrors 5ac505e41050924f
 // findUnhandledErrors returns the source error types that are not assignable to the target error type.
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
@@ -119,7 +119,7 @@ pub(crate) fn find_unhandled_errors(
     unhandled
 }
 
-// go: internal/rules/missing_effect_error.go:101 formatErrorTypes
+// go: internal/rules/missing_effect_error.go:101 formatErrorTypes 4580d4d2e90459aa
 // formatErrorTypes formats a slice of error types as a union string (e.g., "ErrorA | ErrorB").
 pub(crate) fn format_error_types(c: &mut Checker, types: &[P<Type>]) -> String {
     if types.is_empty() {

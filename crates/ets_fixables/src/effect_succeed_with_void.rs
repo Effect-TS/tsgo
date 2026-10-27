@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_VOID_REPRESENTS_THE_SAME_OUTCOME_AS_EFFECT_SUCCEED_UNDEFINED_OR_EFFECT_SUCCEED_VOID_0_EFFECT_EFFECT_SUCCEED_WITH_VOID;
 
-// go: internal/fixables/effect_succeed_with_void.go:13 EffectSucceedWithVoidFix
+// go: internal/fixables/effect_succeed_with_void.go:13 EffectSucceedWithVoidFix 7377d505f5f97ba8
 pub static EFFECT_SUCCEED_WITH_VOID_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "effectSucceedWithVoid",
     description: "Replace with Effect.void",
@@ -17,7 +17,7 @@ pub static EFFECT_SUCCEED_WITH_VOID_FIX: LazyLock<Fixable> = LazyLock::new(|| Fi
     run: run_effect_succeed_with_void_fix,
 });
 
-// go: internal/fixables/effect_succeed_with_void.go:21 runEffectSucceedWithVoidFix
+// go: internal/fixables/effect_succeed_with_void.go:21 runEffectSucceedWithVoidFix ccc09e1c9b686498
 fn run_effect_succeed_with_void_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 

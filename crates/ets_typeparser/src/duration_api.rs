@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/duration_api.go:8 effectDurationModuleDescriptor
+// go: internal/typeparser/duration_api.go:8 effectDurationModuleDescriptor a5bd1787e4412daa
 pub(crate) static EFFECT_DURATION_MODULE_DESCRIPTOR: PackageSourceFileDescriptor =
     new_package_source_file_descriptor(
         ModuleDescriptorId::Duration,
@@ -11,7 +11,7 @@ pub(crate) static EFFECT_DURATION_MODULE_DESCRIPTOR: PackageSourceFileDescriptor
         Some(&is_effect_duration_source_file),
     );
 
-// go: internal/typeparser/duration_api.go:8 effectDurationModuleDescriptor
+// go: internal/typeparser/duration_api.go:8 effectDurationModuleDescriptor a5bd1787e4412daa
 // Rust: the descriptor's matcher (a Go func literal). Go's nil checker and source file guards cannot fail here.
 fn is_effect_duration_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> bool {
     let c = &mut *tp.checker;
@@ -25,7 +25,7 @@ fn is_effect_duration_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) ->
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/duration_api.go:23 TypeParser.IsNodeReferenceToEffectDurationModuleApi
+    // go: internal/typeparser/duration_api.go:23 TypeParser.IsNodeReferenceToEffectDurationModuleApi 48fff164baaf74eb
     pub fn is_node_reference_to_effect_duration_module_api(
         &mut self,
         node: P<Node>,
@@ -38,7 +38,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/duration_api.go:27 TypeParser.IsExpressionEffectDurationModule
+    // go: internal/typeparser/duration_api.go:27 TypeParser.IsExpressionEffectDurationModule fb18adcf929a2944
     pub fn is_expression_effect_duration_module(&mut self, node: P<Node>) -> bool {
         self.is_node_reference_to_module(node, &EFFECT_DURATION_MODULE_DESCRIPTOR)
     }

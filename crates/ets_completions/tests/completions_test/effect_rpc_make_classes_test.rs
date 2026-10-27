@@ -1,6 +1,6 @@
 use crate::*;
 
-// go test: internal/completions/effect_rpc_make_classes_test.go:7 TestRpcMakeClasses_NotInExtendsClause
+// go test: internal/completions/effect_rpc_make_classes_test.go:7 TestRpcMakeClasses_NotInExtendsClause 06ecb53f41dd7c14
 #[test]
 fn test_rpc_make_classes_not_in_extends_clause() {
     go_test(|t| {
@@ -18,7 +18,7 @@ const x = Rpc.make"#;
     });
 }
 
-// go test: internal/completions/effect_rpc_make_classes_test.go:18 TestRpcMakeClasses_NotInClass
+// go test: internal/completions/effect_rpc_make_classes_test.go:18 TestRpcMakeClasses_NotInClass ed6613e501657ab0
 #[test]
 fn test_rpc_make_classes_not_in_class() {
     go_test(|t| {
@@ -33,7 +33,7 @@ const x = Rpc."#;
     });
 }
 
-// go test: internal/completions/effect_rpc_make_classes_test.go:29 TestRpcMakeClasses_EmptySource
+// go test: internal/completions/effect_rpc_make_classes_test.go:29 TestRpcMakeClasses_EmptySource a63e489b02a6a93a
 #[test]
 fn test_rpc_make_classes_empty_source() {
     go_test(|t| {
@@ -46,7 +46,7 @@ fn test_rpc_make_classes_empty_source() {
     });
 }
 
-// go test: internal/completions/effect_rpc_make_classes_test.go:38 TestRpcMakeClasses_InsideImportDeclaration
+// go test: internal/completions/effect_rpc_make_classes_test.go:38 TestRpcMakeClasses_InsideImportDeclaration 7123d3a653bba3a2
 #[test]
 fn test_rpc_make_classes_inside_import_declaration() {
     go_test(|t| {
@@ -64,7 +64,7 @@ fn test_rpc_make_classes_inside_import_declaration() {
     });
 }
 
-// go test: internal/completions/effect_rpc_make_classes_test.go:49 TestRpcMakeClasses_InterfaceNotClass
+// go test: internal/completions/effect_rpc_make_classes_test.go:49 TestRpcMakeClasses_InterfaceNotClass 1750583bae624160
 #[test]
 fn test_rpc_make_classes_interface_not_class() {
     go_test(|t| {
@@ -81,7 +81,7 @@ fn test_rpc_make_classes_interface_not_class() {
     });
 }
 
-// go test: internal/completions/effect_rpc_make_classes_test.go:59 TestRpcMakeClasses_AnonymousClass
+// go test: internal/completions/effect_rpc_make_classes_test.go:59 TestRpcMakeClasses_AnonymousClass a5343076489a6fe2
 #[test]
 fn test_rpc_make_classes_anonymous_class() {
     go_test(|t| {

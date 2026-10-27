@@ -14,7 +14,7 @@ use ets_typeparser::{EffectFnOpportunityResult, TypeParser};
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THIS_EXPRESSION_CAN_BE_REWRITTEN_IN_THE_REUSABLE_FUNCTION_FORM_0_EFFECT_EFFECT_FN_OPPORTUNITY;
 
-// go: internal/rules/effect_fn_opportunity.go:17 EffectFnOpportunity
+// go: internal/rules/effect_fn_opportunity.go:17 EffectFnOpportunity a5733c46d784519e
 // EffectFnOpportunity detects functions that can be rewritten as Effect.fn calls.
 pub static EFFECT_FN_OPPORTUNITY: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "effectFnOpportunity",
@@ -46,7 +46,7 @@ pub static EFFECT_FN_OPPORTUNITY: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/effect_fn_opportunity.go:43 EffectFnOpportunityMatch
+// go: internal/rules/effect_fn_opportunity.go:43 EffectFnOpportunityMatch 61e419d87cfeba33
 // EffectFnOpportunityMatch holds the parsed result needed by both the diagnostic rule
 // and the quick-fix for the effectFnOpportunity pattern.
 #[derive(Clone)]
@@ -56,7 +56,7 @@ pub struct EffectFnOpportunityMatch {
     pub result: Arc<EffectFnOpportunityResult>,
 }
 
-// go: internal/rules/effect_fn_opportunity.go:51 AnalyzeEffectFnOpportunity
+// go: internal/rules/effect_fn_opportunity.go:51 AnalyzeEffectFnOpportunity 9ecdc4c24df36462
 // AnalyzeEffectFnOpportunity finds all functions that can be converted to Effect.fn
 // in the given source file.
 //
@@ -94,7 +94,7 @@ pub fn analyze_effect_fn_opportunity(
     matches
 }
 
-// go: internal/rules/effect_fn_opportunity.go:85 firstAvailableFixName
+// go: internal/rules/effect_fn_opportunity.go:85 firstAvailableFixName 48fb76ba60435f7a
 // firstAvailableFixName determines which fix variant would be first (highest priority)
 // for the given match, matching the reference implementation's fix ordering.
 // Returns empty string when no fix variant passes the config filter.
@@ -129,7 +129,7 @@ pub(crate) fn first_available_fix_name(
     ""
 }
 
-// go: internal/rules/effect_fn_opportunity.go:111 buildExpectedSignature
+// go: internal/rules/effect_fn_opportunity.go:111 buildExpectedSignature 9da6522720d35809
 // buildExpectedSignature constructs the human-readable expected signature string
 // for the diagnostic message. The format matches the reference implementation:
 // it shows how the function would look after conversion with the highest-priority fix.
@@ -228,7 +228,7 @@ pub(crate) fn build_expected_signature(
     }
 }
 
-// go: internal/rules/effect_fn_opportunity.go:176 getTypeParamString
+// go: internal/rules/effect_fn_opportunity.go:176 getTypeParamString 8438e67d3a1e9574
 // getTypeParamString extracts type parameter names from a function node and returns
 // a string like "<T, U>" or "" if there are no type parameters.
 pub(crate) fn get_type_param_string(fn_node: P<Node>) -> String {
@@ -256,7 +256,7 @@ pub(crate) fn get_type_param_string(fn_node: P<Node>) -> String {
     "<".to_string() + &names.join(", ") + ">"
 }
 
-// go: internal/rules/effect_fn_opportunity.go:202 getParamNamesString
+// go: internal/rules/effect_fn_opportunity.go:202 getParamNamesString 82837551850b542d
 // getParamNamesString extracts parameter names from a function node and returns
 // a string like "x, y" or "" if there are no parameters.
 // For destructuring patterns, uses "_" as a placeholder.

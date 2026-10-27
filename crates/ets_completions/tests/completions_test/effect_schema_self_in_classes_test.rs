@@ -16,7 +16,7 @@ pub(crate) struct SchemaClassCompletionCase {
     snippets: &'static [Snippet],
 }
 
-// go test: internal/completions/effect_schema_self_in_classes_test.go:14 schemaClassCompletionCases
+// go test: internal/completions/effect_schema_self_in_classes_test.go:14 schemaClassCompletionCases 05add3c6f7aa2a37
 static SCHEMA_CLASS_COMPLETION_CASES: &[SchemaClassCompletionCase] = &[
     SchemaClassCompletionCase {
         version: "v4",
@@ -56,7 +56,7 @@ static SCHEMA_CLASS_COMPLETION_CASES: &[SchemaClassCompletionCase] = &[
     },
 ];
 
-// go test: internal/completions/effect_schema_self_in_classes_test.go:50 schemaClassCompletionItems
+// go test: internal/completions/effect_schema_self_in_classes_test.go:50 schemaClassCompletionItems d3b7726a6c38e378
 fn schema_class_completion_items(
     t: &T,
     source: &str,
@@ -73,7 +73,7 @@ fn has_text_edit(item: Option<&lsproto::CompletionItem>) -> bool {
     item.is_some_and(|item| item.text_edit.as_ref().is_some_and(|e| e.text_edit.is_some()))
 }
 
-// go test: internal/completions/effect_schema_self_in_classes_test.go:57 TestEffectSchemaSelfInClasses_ModuleImports
+// go test: internal/completions/effect_schema_self_in_classes_test.go:57 TestEffectSchemaSelfInClasses_ModuleImports 43b3d6c1357c0135
 #[test]
 fn test_effect_schema_self_in_classes_module_imports() {
     go_test(|t| {
@@ -156,7 +156,7 @@ fn test_effect_schema_self_in_classes_module_imports() {
     });
 }
 
-// go test: internal/completions/effect_schema_self_in_classes_test.go:98 TestEffectSchemaSelfInClasses_DirectImports
+// go test: internal/completions/effect_schema_self_in_classes_test.go:98 TestEffectSchemaSelfInClasses_DirectImports 2a695a839c6452b8
 #[test]
 fn test_effect_schema_self_in_classes_direct_imports() {
     go_test(|t| {
@@ -191,7 +191,7 @@ fn test_effect_schema_self_in_classes_direct_imports() {
     });
 }
 
-// go test: internal/completions/effect_schema_self_in_classes_test.go:121 TestEffectSchemaSelfInClasses_MetadataAndRange
+// go test: internal/completions/effect_schema_self_in_classes_test.go:121 TestEffectSchemaSelfInClasses_MetadataAndRange 5e08bc5b89ae1369
 #[test]
 fn test_effect_schema_self_in_classes_metadata_and_range() {
     go_test(|t| {
@@ -238,7 +238,7 @@ const after = 1"#;
     });
 }
 
-// go test: internal/completions/effect_schema_self_in_classes_test.go:159 TestEffectSchemaSelfInClasses_ModelUnchanged
+// go test: internal/completions/effect_schema_self_in_classes_test.go:159 TestEffectSchemaSelfInClasses_ModelUnchanged ae05004428c89881
 #[test]
 fn test_effect_schema_self_in_classes_model_unchanged() {
     go_test(|t| {
@@ -269,7 +269,7 @@ fn test_effect_schema_self_in_classes_model_unchanged() {
     });
 }
 
-// go test: internal/completions/effect_schema_self_in_classes_test.go:179 TestEffectSchemaSelfInClasses_OutsideSchemaExtends
+// go test: internal/completions/effect_schema_self_in_classes_test.go:179 TestEffectSchemaSelfInClasses_OutsideSchemaExtends ebdf0b57e71917df
 #[test]
 fn test_effect_schema_self_in_classes_outside_schema_extends() {
     go_test(|t| {
@@ -300,7 +300,7 @@ class Foo extends Local."#,
     });
 }
 
-// go test: internal/completions/effect_schema_self_in_classes_test.go:204 TestEffectSchemaSelfInClasses_AcceptedSnippet
+// go test: internal/completions/effect_schema_self_in_classes_test.go:204 TestEffectSchemaSelfInClasses_AcceptedSnippet 976744b9a8b64b8e
 #[test]
 fn test_effect_schema_self_in_classes_accepted_snippet() {
     go_test(|t| {

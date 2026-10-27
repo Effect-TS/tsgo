@@ -5,7 +5,7 @@ use ets_shim::core::P;
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/pipeable.go:10 TypeParser.IsPipeableType
+    // go: internal/typeparser/pipeable.go:10 TypeParser.IsPipeableType d0b478c5cef831b9
     // IsPipeableType returns true if the type has a callable "pipe" property,
     // indicating it supports the pipeable pattern (e.g., value.pipe(f1, f2, ...)).
     pub fn is_pipeable_type(&mut self, t: impl Into<Option<P<Type>>>) -> bool {
@@ -27,7 +27,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/pipeable.go:30 TypeParser.LiteralCannotBePipeable
+    // go: internal/typeparser/pipeable.go:30 TypeParser.LiteralCannotBePipeable f40d4578c0d72fe2
     // An object literal's type has only its own properties plus those of the global
     // Object interface. An array literal's type is an array or tuple whose members
     // come from Array or ReadonlyArray and Object. The global interfaces are read
@@ -65,7 +65,7 @@ impl TypeParser<'_> {
         }
     }
 
-    // go: internal/typeparser/pipeable.go:50 TypeParser.globalInterfaceHasPipe
+    // go: internal/typeparser/pipeable.go:50 TypeParser.globalInterfaceHasPipe 70067f647ba61c91
     pub(crate) fn global_interface_has_pipe(&mut self, name: &str) -> bool {
         cached(
             self,
@@ -83,7 +83,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/pipeable.go:65 TypeParser.IsSafelyPipeableCallee
+    // go: internal/typeparser/pipeable.go:65 TypeParser.IsSafelyPipeableCallee e829f4254f27fd53
     // IsSafelyPipeableCallee returns true if a callee expression can be safely
     // extracted into a pipe argument without losing `this` context.
     // This is used by the missedPipeableOpportunity rule to determine which

@@ -16,7 +16,7 @@ use rustc_hash::FxHashSet;
 
 use crate::*;
 
-// go: internal/rules/api_stability_leak.go:19 ApiStabilityLeak
+// go: internal/rules/api_stability_leak.go:19 ApiStabilityLeak db23532cdef5707a
 // ApiStabilityLeak reports exported APIs whose public surface exposes a type
 // that is marked with a lower stability than the export itself. A stable export
 // may not expose unstable or experimental types, and an unstable export may not
@@ -34,7 +34,7 @@ pub static API_STABILITY_LEAK: LazyLock<Rule> = LazyLock::new(|| Rule {
     run: check_api_stability_leaks,
 });
 
-// go: internal/rules/api_stability_leak.go:40 checkApiStabilityLeaks
+// go: internal/rules/api_stability_leak.go:40 checkApiStabilityLeaks b5e85464f3660921
 // checkApiStabilityLeaks compares each export's declared stability ceiling with
 // the actual stability of its public surface. Every export is inspected in the
 // file's ApiStabilitySession, reset before each export, so the export's type
@@ -76,7 +76,7 @@ fn check_api_stability_leaks(ctx: &mut Context<'_, '_>) -> Vec<P<Diagnostic>> {
     diagnostics
 }
 
-// go: internal/rules/api_stability_leak.go:83 sortedApiStabilityExports
+// go: internal/rules/api_stability_leak.go:83 sortedApiStabilityExports 6efd631e17d7f3fa
 // sortedApiStabilityExports returns a module's exports in a deterministic
 // order. The checker returns them in Go map order; each export is analyzed
 // independently from its own session, so visit order only decides the order in
@@ -95,7 +95,7 @@ pub(crate) fn sorted_api_stability_exports(
     exports
 }
 
-// go: internal/rules/api_stability_leak.go:112 apiStabilityCeiling
+// go: internal/rules/api_stability_leak.go:112 apiStabilityCeiling 6cfe9cb33276a1bc
 // apiStabilityCeiling returns the stability ceiling that governs an export. A
 // forwarding tag written on a re-export declaration in the selected file takes
 // precedence over the forwarded symbol's own stability, including when it is
@@ -110,7 +110,7 @@ fn api_stability_ceiling(ctx: &mut Context<'_, '_>, export_symbol: P<Symbol>) ->
     ceiling
 }
 
-// go: internal/rules/api_stability_leak.go:128 apiStabilityWalker
+// go: internal/rules/api_stability_leak.go:128 apiStabilityWalker ee8f2928944e9446
 // apiStabilityWalker walks one export's public surface through the export's
 // analysis-local ApiStabilitySession and reports every dependency whose
 // declared stability exceeds the export's ceiling. Namespace re-exports are
@@ -137,7 +137,7 @@ struct ApiStabilityWalker<'w, 'a, 'c> {
     diagnostics: Vec<P<Diagnostic>>,
 }
 
-// go: internal/rules/api_stability_leak.go:146 apiStabilityOffenderKey
+// go: internal/rules/api_stability_leak.go:146 apiStabilityOffenderKey 989c4eef10a8734e
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
 struct ApiStabilityOffenderKey {
     symbol: Option<P<Symbol>>,
@@ -145,7 +145,7 @@ struct ApiStabilityOffenderKey {
     declaration: Option<P<Node>>,
 }
 
-// go: internal/rules/api_stability_leak.go:152 newApiStabilityWalker
+// go: internal/rules/api_stability_leak.go:152 newApiStabilityWalker 6e949cebd9a81705
 fn new_api_stability_walker<'w, 'a, 'c>(
     ctx: &'w mut Context<'a, 'c>,
     session: &'w mut ApiStabilitySession,
@@ -168,7 +168,7 @@ fn new_api_stability_walker<'w, 'a, 'c>(
 }
 
 impl ApiStabilityWalker<'_, '_, '_> {
-    // go: internal/rules/api_stability_leak.go:174 apiStabilityWalker.inspectExport
+    // go: internal/rules/api_stability_leak.go:174 apiStabilityWalker.inspectExport 115e55a0941e7b9c
     // inspectExport seeds the walk. Namespace re-exports expose their members'
     // surfaces, so modules are enumerated explicitly.
     //
@@ -177,7 +177,7 @@ impl ApiStabilityWalker<'_, '_, '_> {
         self.inspect_symbol(Some(self.export_target));
     }
 
-    // go: internal/rules/api_stability_leak.go:181 apiStabilityWalker.inspectSymbol
+    // go: internal/rules/api_stability_leak.go:181 apiStabilityWalker.inspectSymbol de3d7327cdec8f95
     fn inspect_symbol(&mut self, symbol: Option<P<Symbol>>) {
         let Some(symbol) = symbol else {
             return;
@@ -192,7 +192,7 @@ impl ApiStabilityWalker<'_, '_, '_> {
         }
     }
 
-    // go: internal/rules/api_stability_leak.go:198 apiStabilityWalker.inspectModule
+    // go: internal/rules/api_stability_leak.go:198 apiStabilityWalker.inspectModule ca6811c048c94acd
     // inspectModule enumerates a namespace module's exports and inspects each
     // member. Modules are guarded by resolved identity so namespace re-export cycles
     // terminate. Type-only exports (interfaces and aliases) are not value properties
@@ -220,7 +220,7 @@ impl ApiStabilityWalker<'_, '_, '_> {
         }
     }
 
-    // go: internal/rules/api_stability_leak.go:223 apiStabilityWalker.recordDeclared
+    // go: internal/rules/api_stability_leak.go:223 apiStabilityWalker.recordDeclared 1b1a200cd9807cd8
     // recordDeclared reports a namespace member whose own declared stability is
     // above the namespace owner's ceiling. The member's surface is inspected
     // separately for dependencies that themselves exceed the ceiling.
@@ -237,7 +237,7 @@ impl ApiStabilityWalker<'_, '_, '_> {
         ));
     }
 
-    // go: internal/rules/api_stability_leak.go:235 apiStabilityWalker.recordDependency
+    // go: internal/rules/api_stability_leak.go:235 apiStabilityWalker.recordDependency 956dad889e677145
     // recordDependency reports a dependency whose declared stability is above the
     // export's ceiling. The owner's ceiling governs the entire surface; a member's
     // own `@stability` tag never loosens it, and no separate stricter-member
@@ -246,7 +246,7 @@ impl ApiStabilityWalker<'_, '_, '_> {
         self.report(dependency);
     }
 
-    // go: internal/rules/api_stability_leak.go:239 apiStabilityWalker.report
+    // go: internal/rules/api_stability_leak.go:239 apiStabilityWalker.report 3736eae818f87cc1
     fn report(&mut self, dependency: ApiStabilityDependency) {
         if dependency.level() <= self.ceiling {
             return;
@@ -299,7 +299,7 @@ impl ApiStabilityWalker<'_, '_, '_> {
         self.diagnostics.push(diagnostic);
     }
 
-    // go: internal/rules/api_stability_leak.go:285 apiStabilityWalker.sameAsExport
+    // go: internal/rules/api_stability_leak.go:285 apiStabilityWalker.sameAsExport 149af099b7477a80
     // sameAsExport filters the export's own symbol from its dependency list. A
     // signature or distinct declaration finding is never the export itself, so it
     // is still reported.
@@ -314,7 +314,7 @@ impl ApiStabilityWalker<'_, '_, '_> {
     }
 }
 
-// go: internal/rules/api_stability_leak.go:294 apiStabilityLevelName
+// go: internal/rules/api_stability_leak.go:294 apiStabilityLevelName 688230aa0aba049d
 fn api_stability_level_name(level: ApiStabilityLevel) -> &'static str {
     if level == ApiStabilityLevel::Experimental {
         return "experimental";
@@ -322,7 +322,7 @@ fn api_stability_level_name(level: ApiStabilityLevel) -> &'static str {
     "unstable"
 }
 
-// go: internal/rules/api_stability_leak.go:301 apiStabilityExportDisplayName
+// go: internal/rules/api_stability_leak.go:301 apiStabilityExportDisplayName bf9bd27484b04493
 fn api_stability_export_display_name(
     ctx: &mut Context<'_, '_>,
     export_symbol: P<Symbol>,
@@ -346,7 +346,7 @@ fn api_stability_export_display_name(
     name.to_string()
 }
 
-// go: internal/rules/api_stability_leak.go:321 apiStabilityExportLocation
+// go: internal/rules/api_stability_leak.go:321 apiStabilityExportLocation 263d30de8b3c0e8b
 // apiStabilityExportLocation returns a node in the selected file that names the
 // export, preferring a local declaration and falling back to the `export * from`
 // declaration that forwards it.
@@ -366,7 +366,7 @@ fn api_stability_export_location(
     api_stability_reexport_location(ctx, export_symbol)
 }
 
-// go: internal/rules/api_stability_leak.go:339 apiStabilityForwardingStability
+// go: internal/rules/api_stability_leak.go:339 apiStabilityForwardingStability 1240e933dab3b33b
 // apiStabilityForwardingStability returns the stability declared by a re-export
 // declaration in the selected file that forwards this export: a star, a named
 // specifier or a namespace export. The boolean reports whether any forwarding
@@ -401,7 +401,7 @@ fn api_stability_forwarding_stability(
     present.then_some(best)
 }
 
-// go: internal/rules/api_stability_leak.go:370 apiStabilityExportDeclarationForwards
+// go: internal/rules/api_stability_leak.go:370 apiStabilityExportDeclarationForwards dd8fd23607bf869f
 // apiStabilityExportDeclarationForwards reports whether an export declaration in
 // the selected file forwards the given export symbol.
 //
@@ -454,7 +454,7 @@ fn api_stability_export_declaration_forwards(
     false
 }
 
-// go: internal/rules/api_stability_leak.go:410 apiStabilityInternalVisit
+// go: internal/rules/api_stability_leak.go:410 apiStabilityInternalVisit 86accbf6b7c8a9f8
 // apiStabilityInternalVisit identifies one module-scoped visibility question:
 // whether a symbol is internal as exported from a module. Recursion cycles are
 // broken by this identity.
@@ -464,7 +464,7 @@ struct ApiStabilityInternalVisit {
     symbol: P<Symbol>,
 }
 
-// go: internal/rules/api_stability_leak.go:430 apiStabilityExportIsInternal
+// go: internal/rules/api_stability_leak.go:430 apiStabilityExportIsInternal 3177ffd96f8d5fea
 // apiStabilityExportIsInternal reports whether an export is marked `@internal`
 // and must not be checked. Native TypeScript recognizes the same tag for
 // `stripInternal` declaration emit: a tagged declaration is omitted from the
@@ -498,7 +498,7 @@ fn api_stability_export_is_internal(
     )
 }
 
-// go: internal/rules/api_stability_leak.go:452 apiStabilitySymbolIsInternal
+// go: internal/rules/api_stability_leak.go:452 apiStabilitySymbolIsInternal 40c5eb2ddbfe4700
 // apiStabilitySymbolIsInternal reports whether a symbol is internal as exported
 // from one module. Declarations of the symbol that live in the module are its
 // paths; a star re-export is inspected separately because it is not a
@@ -580,7 +580,7 @@ fn api_stability_symbol_is_internal_visit(
     found
 }
 
-// go: internal/rules/api_stability_leak.go:505 apiStabilitySymbolIsModuleExport
+// go: internal/rules/api_stability_leak.go:505 apiStabilitySymbolIsModuleExport 65cac5d581af2bcc
 // apiStabilitySymbolIsModuleExport reports whether a module's own export table
 // selects exactly this symbol for its name. It is the metadata-only identity
 // test that lets an explicit export declaration take precedence over redundant
@@ -598,7 +598,7 @@ fn api_stability_symbol_is_module_export(
     get_symbol_if_same_reference(ctx.checker(), exported, Some(symbol)).is_some()
 }
 
-// go: internal/rules/api_stability_leak.go:522 apiStabilityDeclarationPathIsInternal
+// go: internal/rules/api_stability_leak.go:522 apiStabilityDeclarationPathIsInternal f36ddbef6429564f
 // apiStabilityDeclarationPathIsInternal reports whether one declaration of an
 // exported symbol is an internal path. A tag on the declaration or, for a named
 // or namespace forward, on its enclosing export declaration marks the path
@@ -645,7 +645,7 @@ fn api_stability_declaration_path_is_internal(
     }
 }
 
-// go: internal/rules/api_stability_leak.go:556 apiStabilityImportTargetIsInternal
+// go: internal/rules/api_stability_leak.go:556 apiStabilityImportTargetIsInternal ee6e332408082d19
 // apiStabilityImportTargetIsInternal follows an untagged import alias to the
 // symbol it imports and reports whether that symbol is internal as exported
 // from the module it was imported from. An `export { X }` or
@@ -678,7 +678,7 @@ fn api_stability_import_target_is_internal(
     api_stability_symbol_is_internal(ctx, Some(target_module), target, visiting)
 }
 
-// go: internal/rules/api_stability_leak.go:577 apiStabilityImportTargetModule
+// go: internal/rules/api_stability_leak.go:577 apiStabilityImportTargetModule 3d1b383309c504a4
 // apiStabilityImportTargetModule resolves the module an import alias targets
 // through the import declaration that contains the alias. An unresolvable
 // specifier reports no module, which keeps the import path public.
@@ -703,7 +703,7 @@ fn api_stability_import_target_module(
     None
 }
 
-// go: internal/rules/api_stability_leak.go:600 apiStabilityImportEqualsTargetIsInternal
+// go: internal/rules/api_stability_leak.go:600 apiStabilityImportEqualsTargetIsInternal 768b4331f9d37a87
 // apiStabilityImportEqualsTargetIsInternal follows an untagged `import X = ...`
 // alias, including the `export import` form, to the target it names and reports
 // whether that target is internal as exported from its own module. The checker's
@@ -772,7 +772,7 @@ fn api_stability_import_equals_target_is_internal(
     true
 }
 
-// go: internal/rules/api_stability_leak.go:646 apiStabilityImportEqualsQualifier
+// go: internal/rules/api_stability_leak.go:646 apiStabilityImportEqualsQualifier bbaaae82a3c92b35
 // apiStabilityImportEqualsQualifier returns the entity name that qualifies the
 // target of an import-equals reference: the left side of a qualified name (the
 // namespace the named member belongs to), the require argument of an external
@@ -788,7 +788,7 @@ fn api_stability_import_equals_qualifier(reference: Option<P<Node>>) -> Option<P
     }
 }
 
-// go: internal/rules/api_stability_leak.go:666 apiStabilityImportEqualsTargetName
+// go: internal/rules/api_stability_leak.go:666 apiStabilityImportEqualsTargetName 7329c883c98429a6
 // apiStabilityImportEqualsTargetName returns the member name an import-equals
 // reference names inside its qualifier module. A bare identifier names itself
 // and an external `require` names the module, so both report no member name.
@@ -802,7 +802,7 @@ fn api_stability_import_equals_target_name(reference: Option<P<Node>>) -> &'stat
     reference.as_qualified_name().right().text()
 }
 
-// go: internal/rules/api_stability_leak.go:682 apiStabilityDeclarationModule
+// go: internal/rules/api_stability_leak.go:682 apiStabilityDeclarationModule 835aff0c8f032014
 // apiStabilityDeclarationModule returns the module symbol that directly exports
 // a declaration: the nearest enclosing declared namespace, or the source file's
 // module for a top-level declaration. It is the metadata-only fallback for an
@@ -822,7 +822,7 @@ fn api_stability_declaration_module(
     None
 }
 
-// go: internal/rules/api_stability_leak.go:698 apiStabilityDeclarationModules
+// go: internal/rules/api_stability_leak.go:698 apiStabilityDeclarationModules c4865133e91202e5
 // apiStabilityDeclarationModules returns the distinct modules that declare a
 // symbol, in declaration order. A symbol merged from several modules has one
 // visibility path per module.
@@ -846,7 +846,7 @@ fn api_stability_declaration_modules(
     modules
 }
 
-// go: internal/rules/api_stability_leak.go:720 apiStabilityStarPathIsInternal
+// go: internal/rules/api_stability_leak.go:720 apiStabilityStarPathIsInternal 7fa21ca3c6787bd4
 // apiStabilityStarPathIsInternal reports whether one star re-export path is
 // internal. The tag on the star declaration marks the whole path internal;
 // otherwise the path inherits the visibility of the symbol in the module it is
@@ -867,7 +867,7 @@ fn api_stability_star_path_is_internal(
     api_stability_symbol_is_internal(ctx, module, Some(symbol), visiting)
 }
 
-// go: internal/rules/api_stability_leak.go:731 apiStabilityAliasedTargetIsInternal
+// go: internal/rules/api_stability_leak.go:731 apiStabilityAliasedTargetIsInternal cacccfbc394eaa15
 // apiStabilityAliasedTargetIsInternal follows an untagged alias declaration to
 // its immediate target and reports whether the target is internal. The checker
 // synthesizes declaration-less aliases for `export =` and JSON modules and
@@ -894,7 +894,7 @@ fn api_stability_aliased_target_is_internal(
     api_stability_symbol_is_internal(ctx, module, target, visiting)
 }
 
-// go: internal/rules/api_stability_leak.go:749 apiStabilityForwardingStatementOf
+// go: internal/rules/api_stability_leak.go:749 apiStabilityForwardingStatementOf 0200bbf1e6b886b4
 // apiStabilityForwardingStatementOf returns the export declaration statement a
 // named specifier or namespace export belongs to. A forwarding tag is written
 // above the whole statement, so the statement carries the tag for every
@@ -912,7 +912,7 @@ fn api_stability_forwarding_statement_of(declaration: Option<P<Node>>) -> Option
     None
 }
 
-// go: internal/rules/api_stability_leak.go:767 apiStabilityModuleSourceFiles
+// go: internal/rules/api_stability_leak.go:767 apiStabilityModuleSourceFiles 06f19334492cfe69
 // apiStabilityModuleSourceFiles returns the source files a module symbol is
 // declared in. A source file module is declared by the file itself; a declared
 // namespace or ambient module is declared by its module declaration, and its
@@ -940,7 +940,7 @@ fn api_stability_module_source_files(module: Option<P<Symbol>>) -> Vec<P<SourceF
     files
 }
 
-// go: internal/rules/api_stability_leak.go:798 apiStabilityModuleExportStatements
+// go: internal/rules/api_stability_leak.go:798 apiStabilityModuleExportStatements f477254fdefe40e6
 // apiStabilityModuleExportStatements returns the statements that can forward
 // exports out of a module with `export *`: the top-level statements of a source
 // file, or the statements of the module blocks of its declared namespaces and
@@ -969,7 +969,7 @@ fn api_stability_module_export_statements(module: Option<P<Symbol>>) -> Vec<P<No
     statements
 }
 
-// go: internal/rules/api_stability_leak.go:824 apiStabilityModuleBlockOf
+// go: internal/rules/api_stability_leak.go:824 apiStabilityModuleBlockOf 954a2ccd867f3840
 // apiStabilityModuleBlockOf returns the module block at the end of a module
 // declaration's body chain. A namespace declared without a body (an ambient
 // declaration) has no block and forwards nothing.
@@ -987,12 +987,12 @@ fn api_stability_module_block_of(declaration: P<Node>) -> Option<P<Node>> {
     None
 }
 
-// go: internal/rules/api_stability_leak.go:838 apiStabilityDeclarationInFiles
+// go: internal/rules/api_stability_leak.go:838 apiStabilityDeclarationInFiles e1636d3f93315d75
 fn api_stability_declaration_in_files(declaration: P<Node>, files: &[P<SourceFile>]) -> bool {
     ast::get_source_file_of_node(declaration).is_some_and(|file| files.contains(&file))
 }
 
-// go: internal/rules/api_stability_leak.go:846 apiStabilityModuleOfSpecifier
+// go: internal/rules/api_stability_leak.go:846 apiStabilityModuleOfSpecifier a4ba1e21bcaf5d56
 // apiStabilityModuleOfSpecifier resolves the module symbol a module specifier
 // refers to. An unresolved specifier reports no module, which keeps the
 // forwarding path public.
@@ -1003,7 +1003,7 @@ fn api_stability_module_of_specifier(
     api_stability_module_of_entity(ctx, module_specifier)
 }
 
-// go: internal/rules/api_stability_leak.go:854 apiStabilityModuleOfEntity
+// go: internal/rules/api_stability_leak.go:854 apiStabilityModuleOfEntity 367f5f30818dbc5d
 // apiStabilityModuleOfEntity resolves the module symbol an entity name or module
 // specifier refers to, following an import alias to the module it names. An
 // unresolved entity or a symbol that declares no module reports no module, which
@@ -1023,7 +1023,7 @@ fn api_stability_module_of_entity(
     Some(module)
 }
 
-// go: internal/rules/api_stability_leak.go:871 apiStabilityReexportLocation
+// go: internal/rules/api_stability_leak.go:871 apiStabilityReexportLocation 1cda32b49751043d
 fn api_stability_reexport_location(
     ctx: &mut Context<'_, '_>,
     export_symbol: P<Symbol>,

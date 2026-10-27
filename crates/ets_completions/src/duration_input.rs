@@ -10,7 +10,7 @@ use ets_shim::scanner;
 
 use crate::*;
 
-// go: internal/completions/duration_input.go:18 durationInput
+// go: internal/completions/duration_input.go:18 durationInput 3705b0db7a85c5d7
 // durationInput provides completion items for Duration string literals.
 // When the cursor is inside a string literal whose contextual type is a Duration union
 // (containing template literals with "nanos" text), it offers snippet completions
@@ -21,11 +21,11 @@ pub(crate) static DURATION_INPUT: LazyLock<Completion> = LazyLock::new(|| Comple
     run: run_duration_input,
 });
 
-// go: internal/completions/duration_input.go:24 durationUnits
+// go: internal/completions/duration_input.go:24 durationUnits 7ce86c2b92f72451
 pub(crate) static DURATION_UNITS: &[&str] =
     &["nanos", "micros", "millis", "seconds", "minutes", "hours", "days", "weeks"];
 
-// go: internal/completions/duration_input.go:26 runDurationInput
+// go: internal/completions/duration_input.go:26 runDurationInput 0e86f9a6985f8ed7
 fn run_duration_input(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionItem> {
     let Some(previous_token) = astnav::find_preceding_token(ctx.source_file, ctx.position) else {
         return Vec::new();
@@ -70,7 +70,7 @@ fn run_duration_input(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionItem>
     Vec::new()
 }
 
-// go: internal/completions/duration_input.go:64 buildDurationItems
+// go: internal/completions/duration_input.go:64 buildDurationItems 2a4c0992996f4709
 fn build_duration_items(ctx: &Context<'_, '_>, node: P<Node>) -> Vec<lsproto::CompletionItem> {
     // Replacement range covers the string content (between the quotes)
     let start = scanner::get_token_pos_of_node(node, ctx.source_file, false) + 1; // after opening quote

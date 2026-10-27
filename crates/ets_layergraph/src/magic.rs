@@ -6,7 +6,7 @@ use rustc_hash::FxHashSet;
 
 use crate::*;
 
-// go: internal/layergraph/magic.go:15 ConvertOutlineGraphToLayerMagic
+// go: internal/layergraph/magic.go:15 ConvertOutlineGraphToLayerMagic 5640162e1809546b
 // ConvertOutlineGraphToLayerMagic takes an outline graph and a set of target output types,
 // then computes an ordered list of layer nodes annotated with merges/provides flags
 // that determine which Layer.* combinator to use (provide, provideMerge, or merge).
@@ -92,7 +92,7 @@ pub fn convert_outline_graph_to_layer_magic(
     LayerMagicResult { nodes: result, missing_output_types: remaining }
 }
 
-// go: internal/layergraph/magic.go:99 dfsPostOrderWithOrder
+// go: internal/layergraph/magic.go:99 dfsPostOrderWithOrder b17b79562be3ba6b
 // dfsPostOrderWithOrder performs an iterative post-order DFS with custom node ordering.
 // Neighbors are sorted by layer shape, then provides/requires count.
 pub(crate) fn dfs_post_order_with_order(
@@ -140,7 +140,7 @@ pub(crate) fn dfs_post_order_with_order(
     result
 }
 
-// go: internal/layergraph/magic.go:149 neighborsOutgoingSorted
+// go: internal/layergraph/magic.go:149 neighborsOutgoingSorted c3186dc9caa8917f
 // neighborsOutgoingSorted returns outgoing neighbor indices sorted by the layer ordering:
 // layer shape, then provides/requires count.
 pub(crate) fn neighbors_outgoing_sorted(
@@ -152,7 +152,7 @@ pub(crate) fn neighbors_outgoing_sorted(
     neighbors
 }
 
-// go: internal/layergraph/magic.go:162 compareNodesByOrder
+// go: internal/layergraph/magic.go:162 compareNodesByOrder 2ed5e13b8e142f01
 // compareNodesByOrder compares two nodes by composition priority:
 // both provides/requires, only provides, neither, only requires.
 //
@@ -182,7 +182,7 @@ pub(crate) fn compare_nodes_by_order(
     a - b
 }
 
-// go: internal/layergraph/magic.go:183 layerOrderRank
+// go: internal/layergraph/magic.go:183 layerOrderRank fa601558455faba4
 pub(crate) fn layer_order_rank(node: &LayerOutlineGraphNodeInfo) -> i64 {
     let has_provides = !node.provides.is_empty();
     let has_requires = !node.requires.is_empty();

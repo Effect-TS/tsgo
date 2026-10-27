@@ -104,25 +104,30 @@ Add the crate to the root `[workspace.dependencies]` (`ets_x = { path = "crates/
 `ets_x.workspace = true`. Never add a `tsrs_*` dependency to an `ets_*` crate (other than `ets_shim`); `repoctl tsrs
 port-check` / lint rejects it.
 
-## Origin markers and the manifest
+## Origin markers
 
 Every ported Go declaration (function, method, type, const/var group) carries an origin marker on the line above the
 Rust item (above its attributes and comments):
 
 ```rust
-// go: internal/typeparser/effect_type.go:36 TypeParser.EffectType
+// go: internal/typeparser/effect_type.go:36 TypeParser.EffectType 8a9c52f8a845e081
 pub fn effect_type(&self, t: &'static Type, node: &'static Node) -> Option<Effect> {
 ```
 
 - The path is relative to this repository's root.
-- The line is the Go declaration's line at the current commit (`repoctl tsrs port-fix-lines` updates it).
+- The line is the Go declaration's line, a navigation hint only: `port-check` ignores it (a declaration is identified
+  by path and name), `port-fix-lines` and `port-ack` refresh it.
 - The name is `Func`, `Recv.Method` (receiver type without `*` or type parameters), a type name, or the first name of
   a `const`/`var` group (the group is ported as a whole), with `#2`, `#3`, ... for a name repeated in one file
-  (several `init`s). Copy markers from `repoctl tsrs port-todo <prefix>`, which prints them in this form.
-- One Go declaration may become several Rust items (each carries the same marker), and a struct's methods may land in
+  (several `init`s). Copy markers from `repoctl tsrs port-todo <prefix>`, which prints them without a hash.
+- The trailing 16-hex-digit hash is the hash of the Go declaration the Rust was last synced to. Never write it by hand:
+  `repoctl tsrs port-ack` writes it once the Rust is faithful. A marker without a hash is "not acked" and fails
+  `port-check`; so does a marker whose hash differs from the current Go declaration's (Go changed since the port was
+  synced).
+- One Go declaration may become several Rust items (each carries the same marker; `port-ack` updates all of them), and a struct's methods may land in
   one `impl` block, but a Rust item never mixes code from two Go declarations.
-- Ported tests carry `// go test: <path>:<line> <Name>` instead. Test declarations (`test`/`testhelper` kinds, plus
-  every declaration of the `test_packages` in `porting/scope.toml`) are in the manifest and acked like code, but
+- Ported tests carry `// go test: <path>:<line> <Name> <hash>` instead. Test declarations (`test`/`testhelper` kinds,
+  plus every declaration of the `test_packages` in `porting/scope.toml`) are in the manifest and acked like code, but
   reported separately by `repoctl tsrs port-status`; `check` rejects a `// go:` marker on a test declaration and vice
   versa. Say in a comment which subtests are left out, and why.
 - Hand-written Rust with no Go original carries `// Rust-only: <why>` (a tsrs gap helper, a `pub fn init()` that
@@ -133,19 +138,23 @@ pub fn effect_type(&self, t: &'static Type, node: &'static Node) -> Option<Effec
   ported yet) keeps the call site as `// TODO(port: needs <crate> <Name>)` with the Go code quoted, and is not acked.
   `check` fails on a marked but unacked declaration, so its marker is written
   `// TODO(port: unacked until <Name> is ported; restore the marker) go: <path>:<line> <Name>` (the marker pattern
-  does not match it). When the callee lands: restore the plain marker, replace the TODO with the call, `port-fix-lines`,
-  `port-ack`.
+  does not match it). When the callee lands: restore the plain marker, replace the TODO with the call, then
+  `port-ack` (which also writes the hash and the current line).
 
 ### The porting files
 
 | File | Kind | Content |
 | ---- | ---- | ------- |
 | `porting/scope.toml` | hand-written | in-scope packages and files, exclusions, options (`require_new`, on: every in-scope declaration must be ported or skipped) |
-| `porting/manifest.tsv` | generated (`repoctl tsrs port-manifest --write`) | every in-scope Go declaration: path, line, name, kind, hash |
 | `porting/skipped.tsv` | hand-written | `path`, `name`, `reason` of declarations deliberately not ported ("What not to port") |
-| `porting/ported.tsv` | generated (`repoctl tsrs port-ack`) | `path`, `name`, and the hash of the Go declaration the Rust port was last synced to |
 
-A declaration is **ported** when a marker names it and `ported.tsv` has it, **skipped** when `skipped.tsv` lists it,
+Nothing generated is committed. The **manifest** (every in-scope Go declaration: path, line, name, kind, hash) is
+computed on the fly by `_tools/port_manifest` (a Go program that parses the in-scope packages, a fraction of a second)
+each time a `port-*` command runs; `repoctl tsrs port-manifest` prints it. The synced-to state lives in the markers'
+hashes. So a Go edit rewrites no bookkeeping file, and two pull requests acking neighboring declarations do not
+conflict.
+
+A declaration is **ported** when a marker names it (acked: the marker has a hash), **skipped** when `skipped.tsv` lists it,
 and otherwise still to do. The port is complete and `require_new` is on, so a declaration still to do fails
 `repoctl tsrs port-check`: a pull request that adds in-scope Go code ports it (or skips it with a reason) itself.
 
@@ -156,12 +165,12 @@ command). The bookkeeping commands need only Node and Go, no tsrs checkout:
 
 | Command | What it does |
 | ------- | ------------ |
-| `port-manifest [--write]` | regenerate `porting/manifest.tsv` (prints the diff without `--write`) |
+| `port-manifest` | print the in-scope Go declarations with their current line and hash (for debugging) |
 | `port-status [prefix] [--files]` | progress per package (or per file) |
 | `port-todo <prefix>` | declarations still to do, with markers ready to copy |
-| `port-check [--summary <file>]` | the gate (run by `pnpm check`, and in CI by the Validate tsrs workflow, before the Rust build, which also posts its summary table): stale manifest; markers naming unknown declarations or with the wrong line/file; a declaration both skipped and marked; a marked declaration missing from `ported.tsv`; a hash mismatch (Go changed since the port was synced); with `require_new`, an in-scope declaration neither ported nor skipped |
-| `port-fix-lines` | rewrite marker line numbers after Go lines moved |
-| `port-ack <path> <name>...`, `port-ack --prefix <p>` | record the current Go hash of these declarations in `ported.tsv` |
+| `port-check [--summary <file>]` | the gate (run by `pnpm check`, and in CI by the Validate tsrs workflow, before the Rust build, which also posts its summary table): malformed markers; markers naming unknown declarations or with the wrong `go:`/`go test:` form; a declaration both skipped and marked; a marker without a hash (not acked); a marker hash mismatch (Go changed since the port was synced); with `require_new`, an in-scope declaration neither ported nor skipped. A stale marker line number is not an error |
+| `port-fix-lines` | rewrite marker line numbers after Go lines moved (hashes untouched) |
+| `port-ack <path> <name>...`, `port-ack --prefix <p>`, `port-ack --all` | write the current Go hash (and line) into every marker of these declarations |
 | `port-diff <oldRef> <newRef>` | declarations removed, moved, changed and added between two commits, with their port status |
 | `port-crate <pkg...>` | crate names for packages |
 | `port-deps <pkg>` | the package's in-scope imports and whether each is ported |
@@ -175,7 +184,8 @@ command). The bookkeeping commands need only Node and Go, no tsrs checkout:
 3. When the Rust is complete and faithful for a declaration (and its tests pass), `repoctl tsrs port-ack <path> <name>`
    (or `port-ack --prefix <pkg>/` for a fully ported package).
 4. When Go changes later, `check` reports a hash mismatch: read the Go change (`git diff origin/main -- <file>`),
-   apply the same change to the Rust, then `port-fix-lines` and `port-ack`. The `port-change` skill automates this.
+   apply the same change to the Rust, then `port-ack` (and `port-fix-lines` for the line numbers of the declarations
+   you did not touch). The `port-change` skill automates this.
 
 Ack records "the Rust is in sync with this Go text". Acking without updating the Rust defeats the parity policy
 and is rejected in review.

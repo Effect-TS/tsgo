@@ -32,7 +32,7 @@ fn dbg(value: &impl std::fmt::Debug) -> String {
     format!("{value:?}")
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:15 TestNewStylePolicy
+// go test: internal/autoimportstyle/stylepolicy_test.go:15 TestNewStylePolicy 2d737ebaa8a6f017
 #[test]
 fn test_new_style_policy() {
     ets_go::testing::run(|t| {
@@ -60,7 +60,7 @@ fn test_new_style_policy() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:37 TestStylePolicyIsEmpty
+// go test: internal/autoimportstyle/stylepolicy_test.go:37 TestStylePolicyIsEmpty e66ecdfe0cb46176
 #[test]
 fn test_style_policy_is_empty() {
     ets_go::testing::run(|t| {
@@ -85,7 +85,7 @@ fn test_style_policy_is_empty() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:57 makeExport
+// go test: internal/autoimportstyle/stylepolicy_test.go:57 makeExport ff2d7fd984dda74d
 fn make_export(package_name: &str, module_id: &str, target_module_id: &str) -> Export {
     let mut export = Export::default();
     export.export_id.module_id = new_ambient_module_id(module_id);
@@ -96,7 +96,7 @@ fn make_export(package_name: &str, module_id: &str, target_module_id: &str) -> E
     export
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:68 makeAddNewFix
+// go test: internal/autoimportstyle/stylepolicy_test.go:68 makeAddNewFix e1a0a09857f61dc6
 fn make_add_new_fix(import_kind: lsproto::ImportKind, module_specifier: &str, name: &str) -> Fix {
     let usage_position = lsproto::Position { line: 1, character: 1 };
     Fix {
@@ -112,7 +112,7 @@ fn make_add_new_fix(import_kind: lsproto::ImportKind, module_specifier: &str, na
     }
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:81 TestApplyNamespaceRewrite
+// go test: internal/autoimportstyle/stylepolicy_test.go:81 TestApplyNamespaceRewrite 810530f827d54c29
 #[test]
 fn test_apply_namespace_rewrite() {
     ets_go::testing::run(|t| {
@@ -153,7 +153,7 @@ fn test_apply_namespace_rewrite() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:109 TestApplySuppressesEffectInternalImport
+// go test: internal/autoimportstyle/stylepolicy_test.go:109 TestApplySuppressesEffectInternalImport 4fe0b0838bb52032
 #[test]
 fn test_apply_suppresses_effect_internal_import() {
     ets_go::testing::run(|t| {
@@ -179,7 +179,7 @@ fn test_apply_suppresses_effect_internal_import() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:123 TestApplyNamespaceRewriteFromAddToExisting
+// go test: internal/autoimportstyle/stylepolicy_test.go:123 TestApplyNamespaceRewriteFromAddToExisting a87ca1d37d878442
 #[test]
 fn test_apply_namespace_rewrite_from_add_to_existing() {
     ets_go::testing::run(|t| {
@@ -221,7 +221,7 @@ fn test_apply_namespace_rewrite_from_add_to_existing() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:152 TestApplyNamespaceRewriteWithAlias
+// go test: internal/autoimportstyle/stylepolicy_test.go:152 TestApplyNamespaceRewriteWithAlias 06d3c4e5ae429037
 #[test]
 fn test_apply_namespace_rewrite_with_alias() {
     ets_go::testing::run(|t| {
@@ -254,7 +254,7 @@ fn test_apply_namespace_rewrite_with_alias() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:178 TestApplyNamespaceReexport
+// go test: internal/autoimportstyle/stylepolicy_test.go:178 TestApplyNamespaceReexport 36cbc80197764799
 #[test]
 fn test_apply_namespace_reexport() {
     ets_go::testing::run(|t| {
@@ -315,7 +315,7 @@ fn test_apply_namespace_reexport() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:220 newBarrelPolicy
+// go test: internal/autoimportstyle/stylepolicy_test.go:220 newBarrelPolicy 934b69e60f6b14c2
 fn new_barrel_policy(options: &ResolvedEffectPluginOptions, disk: &[(&str, &str)]) -> StylePolicy {
     let mut sp = new_style_policy(Some(options));
     let disk = string_map(disk);
@@ -326,14 +326,14 @@ fn new_barrel_policy(options: &ResolvedEffectPluginOptions, disk: &[(&str, &str)
     sp
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:232 makeBarrelFix
+// go test: internal/autoimportstyle/stylepolicy_test.go:232 makeBarrelFix 64087d0c4013252e
 fn make_barrel_fix(module_specifier: &str, module_file_name: &str, name: &str) -> Fix {
     let mut fix = make_add_new_fix(lsproto::ImportKind::NAMED, module_specifier, name);
     fix.module_file_name = module_file_name.to_string();
     fix
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:238 TestApplyBarrelRewrite
+// go test: internal/autoimportstyle/stylepolicy_test.go:238 TestApplyBarrelRewrite c33e3dbfe1d9e097
 #[test]
 fn test_apply_barrel_rewrite() {
     ets_go::testing::run(|t| {
@@ -383,7 +383,7 @@ fn test_apply_barrel_rewrite() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:265 TestApplyBarrelRewriteUsesNearestForwardingBarrel
+// go test: internal/autoimportstyle/stylepolicy_test.go:265 TestApplyBarrelRewriteUsesNearestForwardingBarrel 3e8db9f727614b40
 #[test]
 fn test_apply_barrel_rewrite_uses_nearest_forwarding_barrel() {
     ets_go::testing::run(|t| {
@@ -442,7 +442,7 @@ fn test_apply_barrel_rewrite_uses_nearest_forwarding_barrel() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:297 TestApplyBarrelRewriteWithoutBarrelPassthrough
+// go test: internal/autoimportstyle/stylepolicy_test.go:297 TestApplyBarrelRewriteWithoutBarrelPassthrough d957a428833351e8
 #[test]
 fn test_apply_barrel_rewrite_without_barrel_passthrough() {
     ets_go::testing::run(|t| {
@@ -471,7 +471,7 @@ fn test_apply_barrel_rewrite_without_barrel_passthrough() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:309 TestApplyBarrelRewriteFromBarrelPassthrough
+// go test: internal/autoimportstyle/stylepolicy_test.go:309 TestApplyBarrelRewriteFromBarrelPassthrough 84a9f9ae5c6fda9f
 #[test]
 fn test_apply_barrel_rewrite_from_barrel_passthrough() {
     ets_go::testing::run(|t| {
@@ -507,7 +507,7 @@ fn test_apply_barrel_rewrite_from_barrel_passthrough() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:329 TestApplyBarrelRewriteWithAlias
+// go test: internal/autoimportstyle/stylepolicy_test.go:329 TestApplyBarrelRewriteWithAlias 32bd7258cc756df8
 #[test]
 fn test_apply_barrel_rewrite_with_alias() {
     ets_go::testing::run(|t| {
@@ -549,7 +549,7 @@ fn test_apply_barrel_rewrite_with_alias() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:351 TestApplyNamespaceRewriteWithoutUsagePositionFallsBack
+// go test: internal/autoimportstyle/stylepolicy_test.go:351 TestApplyNamespaceRewriteWithoutUsagePositionFallsBack ffa0f1bc3d6837cb
 #[test]
 fn test_apply_namespace_rewrite_without_usage_position_falls_back() {
     ets_go::testing::run(|t| {
@@ -571,7 +571,7 @@ fn test_apply_namespace_rewrite_without_usage_position_falls_back() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:367 TestApplyBarrelRewriteWithoutUsagePositionFallsBack
+// go test: internal/autoimportstyle/stylepolicy_test.go:367 TestApplyBarrelRewriteWithoutUsagePositionFallsBack 49e93e1223fe65a0
 #[test]
 fn test_apply_barrel_rewrite_without_usage_position_falls_back() {
     ets_go::testing::run(|t| {
@@ -603,7 +603,7 @@ fn test_apply_barrel_rewrite_without_usage_position_falls_back() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:383 TestApplyTopLevelReexportIgnore
+// go test: internal/autoimportstyle/stylepolicy_test.go:383 TestApplyTopLevelReexportIgnore ca4fa6054f23534f
 #[test]
 fn test_apply_top_level_reexport_ignore() {
     ets_go::testing::run(|t| {
@@ -635,7 +635,7 @@ fn test_apply_top_level_reexport_ignore() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:409 TestApplyTopLevelReexportFollow
+// go test: internal/autoimportstyle/stylepolicy_test.go:409 TestApplyTopLevelReexportFollow 1e0e21297cdf3fe9
 #[test]
 fn test_apply_top_level_reexport_follow() {
     ets_go::testing::run(|t| {
@@ -663,7 +663,7 @@ fn test_apply_top_level_reexport_follow() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:429 TestApplyNoMatchPassthrough
+// go test: internal/autoimportstyle/stylepolicy_test.go:429 TestApplyNoMatchPassthrough be688778fed9c48c
 #[test]
 fn test_apply_no_match_passthrough() {
     ets_go::testing::run(|t| {
@@ -683,7 +683,7 @@ fn test_apply_no_match_passthrough() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:444 TestApplyNonAddNewPassthrough
+// go test: internal/autoimportstyle/stylepolicy_test.go:444 TestApplyNonAddNewPassthrough 6784310e4e8a0e78
 #[test]
 fn test_apply_non_add_new_passthrough() {
     ets_go::testing::run(|t| {
@@ -712,7 +712,7 @@ fn test_apply_non_add_new_passthrough() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:466 TestApplyCaseInsensitiveMatching
+// go test: internal/autoimportstyle/stylepolicy_test.go:466 TestApplyCaseInsensitiveMatching 74ded0a10e2596be
 #[test]
 fn test_apply_case_insensitive_matching() {
     ets_go::testing::run(|t| {
@@ -739,7 +739,7 @@ fn test_apply_case_insensitive_matching() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:484 TestApplyNilInputs
+// go test: internal/autoimportstyle/stylepolicy_test.go:484 TestApplyNilInputs b61459d6e6745119
 #[test]
 fn test_apply_nil_inputs() {
     ets_go::testing::run(|t| {
@@ -762,7 +762,7 @@ fn test_apply_nil_inputs() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:500 TestNewFixTransformerNilForEmptyPrefs
+// go test: internal/autoimportstyle/stylepolicy_test.go:500 TestNewFixTransformerNilForEmptyPrefs 11879c762289cce9
 #[test]
 fn test_new_fix_transformer_nil_for_empty_prefs() {
     ets_go::testing::run(|t| {
@@ -775,7 +775,7 @@ fn test_new_fix_transformer_nil_for_empty_prefs() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:508 TestNewFixTransformerAppliesPolicy
+// go test: internal/autoimportstyle/stylepolicy_test.go:508 TestNewFixTransformerAppliesPolicy b69a773c3e058a13
 #[test]
 fn test_new_fix_transformer_applies_policy() {
     ets_go::testing::run(|t| {
@@ -809,7 +809,7 @@ fn test_new_fix_transformer_applies_policy() {
     });
 }
 
-// go test: internal/autoimportstyle/stylepolicy_test.go:529 TestNewFixTransformerPrefersExistingNamespaceUse
+// go test: internal/autoimportstyle/stylepolicy_test.go:529 TestNewFixTransformerPrefersExistingNamespaceUse cac50b277e2fadc0
 #[test]
 fn test_new_fix_transformer_prefers_existing_namespace_use() {
     ets_go::testing::run(|t| {

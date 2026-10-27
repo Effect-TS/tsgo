@@ -5,7 +5,7 @@ use ets_shim::core::P;
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/helpers.go:10 TypeParser.extractCovariantType
+    // go: internal/typeparser/helpers.go:10 TypeParser.extractCovariantType f1f0ded8b8c23b7e
     // extractCovariantType gets the type argument from a covariant property.
     // Covariant<A> is encoded as () => A, so we get the return type.
     pub(crate) fn extract_covariant_type(
@@ -28,7 +28,7 @@ impl TypeParser<'_> {
         Some(self.checker.get_return_type_of_signature_exported(signatures[0]))
     }
 
-    // go: internal/typeparser/helpers.go:31 TypeParser.extractContravariantType
+    // go: internal/typeparser/helpers.go:31 TypeParser.extractContravariantType 4005ee2cab9d4002
     // extractContravariantType gets the type argument from a contravariant property.
     // Contravariant<A> is encoded as (_: A) => void, so we get the first parameter type.
     pub(crate) fn extract_contravariant_type(
@@ -56,7 +56,7 @@ impl TypeParser<'_> {
         Some(self.checker.get_type_of_symbol_exported(params[0]))
     }
 
-    // go: internal/typeparser/helpers.go:57 TypeParser.extractInvariantType
+    // go: internal/typeparser/helpers.go:57 TypeParser.extractInvariantType a362f56871d8bb9d
     // extractInvariantType gets the type argument from an invariant property.
     // Invariant<A> is encoded as (_: A) => A, so we extract the return type (same as covariant).
     pub(crate) fn extract_invariant_type(
@@ -67,7 +67,7 @@ impl TypeParser<'_> {
         self.extract_covariant_type(t, prop_name)
     }
 
-    // go: internal/typeparser/helpers.go:63 TypeParser.GetTypeOfPropertyByName
+    // go: internal/typeparser/helpers.go:63 TypeParser.GetTypeOfPropertyByName 53757725b1cb50fd
     // GetTypeOfPropertyByName returns the type of a property by name.
     // Prefer this when only the property type is needed.
     pub fn get_type_of_property_by_name(
@@ -79,7 +79,7 @@ impl TypeParser<'_> {
         self.checker.get_type_of_property_of_type_exported(t, name)
     }
 
-    // go: internal/typeparser/helpers.go:75 TypeParser.GetSymbolAtLocation
+    // go: internal/typeparser/helpers.go:75 TypeParser.GetSymbolAtLocation adcb3bcfcdb644ed
     // GetSymbolAtLocation guards meta properties and delete targets.
     // Meta properties (import.meta, import.defer, new.target) never
     // reference a symbol rules care about, and the checker debug-asserts (panics)
@@ -113,7 +113,7 @@ impl TypeParser<'_> {
         self.checker.get_symbol_at_location_exported(node)
     }
 
-    // go: internal/typeparser/helpers.go:97 TypeParser.resolveAliasedSymbol
+    // go: internal/typeparser/helpers.go:97 TypeParser.resolveAliasedSymbol 5887b3fed9490acc
     pub(crate) fn resolve_aliased_symbol(&mut self, sym: Option<P<Symbol>>) -> Option<P<Symbol>> {
         let mut sym = sym;
         while let Some(s) = sym
@@ -124,7 +124,7 @@ impl TypeParser<'_> {
         sym
     }
 
-    // go: internal/typeparser/helpers.go:110 TypeParser.ResolveToGlobalSymbol
+    // go: internal/typeparser/helpers.go:110 TypeParser.ResolveToGlobalSymbol b5b323c2ecf3c25a
     // ResolveToGlobalSymbol follows aliases and up to two simple variable indirections
     // so rules can recognize references to the original global symbol.
     pub fn resolve_to_global_symbol(
@@ -160,7 +160,7 @@ impl TypeParser<'_> {
         sym
     }
 
-    // go: internal/typeparser/helpers.go:143 TypeParser.IsNodeReferenceToGlobalMember
+    // go: internal/typeparser/helpers.go:143 TypeParser.IsNodeReferenceToGlobalMember aa84cd0317aaf6a8
     // IsNodeReferenceToGlobalMember reports whether node resolves to a property of
     // a global value. ReferenceSymbolAtNode follows import and const aliases, so
     // callers do not need to constrain the source expression to property-access

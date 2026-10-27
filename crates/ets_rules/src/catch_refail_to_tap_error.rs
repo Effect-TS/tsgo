@@ -14,7 +14,7 @@ use ets_typeparser::{
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::USE_EFFECT_TAP_ERROR_TO_OBSERVE_THE_ERROR_AND_PRESERVE_THE_ORIGINAL_FAILURE_WITHOUT_HAVING_TO_RE_FAIL_IT_EFFECT_CATCH_REFAIL_TO_TAP_ERROR;
 
-// go: internal/rules/catch_refail_to_tap_error.go:14 CatchRefailToTapError
+// go: internal/rules/catch_refail_to_tap_error.go:14 CatchRefailToTapError d483c153d29fdcf7
 // CatchRefailToTapError recognizes observation followed by an unchanged refail.
 pub static CATCH_REFAIL_TO_TAP_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "catchRefailToTapError",
@@ -64,7 +64,7 @@ pub static CATCH_REFAIL_TO_TAP_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/catch_refail_to_tap_error.go:52 catchHandlerRefailsOriginalError
+// go: internal/rules/catch_refail_to_tap_error.go:52 catchHandlerRefailsOriginalError e1a402ea3623bbb3
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub(crate) fn catch_handler_refails_original_error(

@@ -13,11 +13,11 @@ use ets_typeparser::TypeParser;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THE_CATCH_CALLBACK_IN_0_RETURNS_UNKNOWN_SO_THE_EFFECT_ERROR_TYPE_STAYS_UNTYPED_A_SPECIFIC_TYPED_ERROR_PRESERVES_ERROR_CHANNEL_INFORMATION_FOR_EXAMPLE_BY_NARROWING_THE_VALUE_OR_WRAPPING_IT_IN_DATA_TAGGED_ERROR_EFFECT_UNKNOWN_IN_EFFECT_CATCH;
 
-// go: internal/rules/unknown_in_effect_catch.go:15 unknownCatchApis
+// go: internal/rules/unknown_in_effect_catch.go:15 unknownCatchApis 0fe9d434915140bb
 // unknownCatchApis lists the Effect module APIs that have a catch callback parameter.
 pub(crate) static UNKNOWN_CATCH_APIS: &[&str] = &["tryPromise", "try", "tryMap", "tryMapPromise"];
 
-// go: internal/rules/unknown_in_effect_catch.go:19 UnknownInEffectCatch
+// go: internal/rules/unknown_in_effect_catch.go:19 UnknownInEffectCatch 5daa8fe525aa3a61
 // UnknownInEffectCatch detects when catch callbacks in Effect APIs return 'unknown' or 'any'
 // instead of providing typed errors.
 pub static UNKNOWN_IN_EFFECT_CATCH: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -49,7 +49,7 @@ pub static UNKNOWN_IN_EFFECT_CATCH: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/unknown_in_effect_catch.go:52 checkUnknownInEffectCatch
+// go: internal/rules/unknown_in_effect_catch.go:52 checkUnknownInEffectCatch fef4cff700f82496
 // checkUnknownInEffectCatch checks a single call expression for the unknown-in-catch pattern.
 pub(crate) fn check_unknown_in_effect_catch(
     ctx: &mut Context<'_, '_>,
@@ -111,7 +111,7 @@ pub(crate) fn check_unknown_in_effect_catch(
     None
 }
 
-// go: internal/rules/unknown_in_effect_catch.go:109 isUnknownCatchCallee
+// go: internal/rules/unknown_in_effect_catch.go:109 isUnknownCatchCallee 0c453ab1cef9bf2e
 // isUnknownCatchCallee checks if a node references one of the Effect module catch APIs.
 //
 // Rust: Go's ignored checker argument is dropped.

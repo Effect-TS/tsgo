@@ -1,6 +1,6 @@
 use crate::*;
 
-// go test: internal/completions/effect_self_in_classes_test.go:7 TestEffectSelfInClasses_NotInExtendsClause
+// go test: internal/completions/effect_self_in_classes_test.go:7 TestEffectSelfInClasses_NotInExtendsClause a329ab326e4dbf26
 #[test]
 fn test_effect_self_in_classes_not_in_extends_clause() {
     go_test(|t| {
@@ -18,7 +18,7 @@ const x = Effect.Service"#;
     });
 }
 
-// go test: internal/completions/effect_self_in_classes_test.go:18 TestEffectSelfInClasses_NotInClass
+// go test: internal/completions/effect_self_in_classes_test.go:18 TestEffectSelfInClasses_NotInClass d2a0c29fce425f15
 #[test]
 fn test_effect_self_in_classes_not_in_class() {
     go_test(|t| {
@@ -33,7 +33,7 @@ const x = Effect."#;
     });
 }
 
-// go test: internal/completions/effect_self_in_classes_test.go:29 TestEffectSelfInClasses_EmptySource
+// go test: internal/completions/effect_self_in_classes_test.go:29 TestEffectSelfInClasses_EmptySource 7e2ab743fc1bf182
 #[test]
 fn test_effect_self_in_classes_empty_source() {
     go_test(|t| {
@@ -46,7 +46,7 @@ fn test_effect_self_in_classes_empty_source() {
     });
 }
 
-// go test: internal/completions/effect_self_in_classes_test.go:38 TestEffectSelfInClasses_InsideImportDeclaration
+// go test: internal/completions/effect_self_in_classes_test.go:38 TestEffectSelfInClasses_InsideImportDeclaration ee24db6d06858a49
 #[test]
 fn test_effect_self_in_classes_inside_import_declaration() {
     go_test(|t| {
@@ -64,7 +64,7 @@ fn test_effect_self_in_classes_inside_import_declaration() {
     });
 }
 
-// go test: internal/completions/effect_self_in_classes_test.go:49 TestEffectSelfInClasses_InterfaceNotClass
+// go test: internal/completions/effect_self_in_classes_test.go:49 TestEffectSelfInClasses_InterfaceNotClass c4aff7c94320dd19
 #[test]
 fn test_effect_self_in_classes_interface_not_class() {
     go_test(|t| {
@@ -81,7 +81,7 @@ fn test_effect_self_in_classes_interface_not_class() {
     });
 }
 
-// go test: internal/completions/effect_self_in_classes_test.go:59 TestEffectSelfInClasses_AnonymousClass
+// go test: internal/completions/effect_self_in_classes_test.go:59 TestEffectSelfInClasses_AnonymousClass d8f3d7c81b88a519
 #[test]
 fn test_effect_self_in_classes_anonymous_class() {
     go_test(|t| {

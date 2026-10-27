@@ -11,7 +11,7 @@ use ets_typeparser::TypeParser;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THIS_YIELD_ASTERISK_EFFECT_FAIL_PASSES_A_YIELDABLE_ERROR_VALUE_YIELD_ASTERISK_REPRESENTS_THAT_VALUE_DIRECTLY_WITHOUT_WRAPPING_IT_IN_EFFECT_FAIL_EFFECT_UNNECESSARY_FAIL_YIELDABLE_ERROR;
 
-// go: internal/rules/unnecessary_fail_yieldable_error.go:16 UnnecessaryFailYieldableError
+// go: internal/rules/unnecessary_fail_yieldable_error.go:16 UnnecessaryFailYieldableError d8a5f3d1dd474ae2
 // UnnecessaryFailYieldableError suggests yielding yieldable errors directly
 // instead of wrapping with Effect.fail.
 pub static UNNECESSARY_FAIL_YIELDABLE_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -32,7 +32,7 @@ pub static UNNECESSARY_FAIL_YIELDABLE_ERROR: LazyLock<Rule> = LazyLock::new(|| R
     },
 });
 
-// go: internal/rules/unnecessary_fail_yieldable_error.go:35 UnnecessaryFailYieldableErrorMatch
+// go: internal/rules/unnecessary_fail_yieldable_error.go:35 UnnecessaryFailYieldableErrorMatch be67fc0614497f6e
 // UnnecessaryFailYieldableErrorMatch holds the AST nodes needed by both the
 // diagnostic rule and the quick-fix for the unnecessaryFailYieldableError pattern.
 #[derive(Clone)]
@@ -44,7 +44,7 @@ pub struct UnnecessaryFailYieldableErrorMatch {
     pub fail_argument: P<Node>,     // The first argument to Effect.fail (the replacement text)
 }
 
-// go: internal/rules/unnecessary_fail_yieldable_error.go:45 AnalyzeUnnecessaryFailYieldableError
+// go: internal/rules/unnecessary_fail_yieldable_error.go:45 AnalyzeUnnecessaryFailYieldableError 850ef485c0a4af87
 // AnalyzeUnnecessaryFailYieldableError finds all yield* Effect.fail(...) calls
 // where the argument is a yieldable error type that can be yielded directly.
 //

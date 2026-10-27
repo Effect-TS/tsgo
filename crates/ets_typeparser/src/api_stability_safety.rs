@@ -8,7 +8,7 @@ use rustc_hash::FxHashSet;
 
 use crate::*;
 
-// go: internal/typeparser/api_stability_safety.go:17 apiStabilitySafety
+// go: internal/typeparser/api_stability_safety.go:17 apiStabilitySafety 77c66bfe54eeec2a
 // apiStabilitySafety is the verdict of the pre-flight recursion guard that runs
 // before a potentially recursive lazy checker read. The guard inspects the
 // represented compiler type graph and the raw declaration structure without
@@ -20,13 +20,13 @@ use crate::*;
 // stability findings and it never suppresses compiler diagnostics.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub(crate) enum ApiStabilitySafety {
-    // go: internal/typeparser/api_stability_safety.go:19 apiStabilitySafetySafe
+    // go: internal/typeparser/api_stability_safety.go:19 apiStabilitySafetySafe 959c0d81b0dee563
     Safe,
     Recursive,
     Unknown,
 }
 
-// go: internal/typeparser/api_stability_safety.go:25 apiStabilitySafetyMaxWork
+// go: internal/typeparser/api_stability_safety.go:25 apiStabilitySafetyMaxWork 0fee7965ed88db41
 // apiStabilitySafetyMaxWork bounds one guard run. Exhausting it yields
 // Unknown, which blocks the read; it is never memoized as safe.
 pub(crate) const API_STABILITY_SAFETY_MAX_WORK: i64 = 16_384;
@@ -34,12 +34,12 @@ pub(crate) const API_STABILITY_SAFETY_MAX_WORK: i64 = 16_384;
 // path. Exceeding it yields Unknown.
 pub(crate) const API_STABILITY_SAFETY_MAX_DEPTH: usize = 64;
 
-// go: internal/typeparser/api_stability_safety.go:36 apiStabilitySafetyOperation
+// go: internal/typeparser/api_stability_safety.go:36 apiStabilitySafetyOperation 510739b72cff6b8e
 // apiStabilitySafetyOperation identifies the guarded read family a completed
 // verdict belongs to, so a Safe result is only reused for the same operation.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub(crate) enum ApiStabilitySafetyOperation {
-    // go: internal/typeparser/api_stability_safety.go:38 apiStabilitySafetyOperationMemberTable
+    // go: internal/typeparser/api_stability_safety.go:38 apiStabilitySafetyOperationMemberTable 1e5af52a0adb043d
     MemberTable,
     BaseTypes,
     SymbolType,
@@ -49,7 +49,7 @@ pub(crate) enum ApiStabilitySafetyOperation {
     Annotation,
 }
 
-// go: internal/typeparser/api_stability_safety.go:56 apiStabilitySafetyVerdictKey
+// go: internal/typeparser/api_stability_safety.go:56 apiStabilitySafetyVerdictKey 09cf0a2858070ee3
 // apiStabilitySafetyVerdictKey is the concrete identity of one guard request:
 // the read operation, the represented compiler object or raw node it resolves,
 // and the interned carrier of the substitution it is read under. The carrier
@@ -82,7 +82,7 @@ impl ApiStabilitySafetyVerdictKey {
     }
 }
 
-// go: internal/typeparser/api_stability_safety.go:69 apiStabilitySafetyArg
+// go: internal/typeparser/api_stability_safety.go:69 apiStabilitySafetyArg 5ddb376dee453c6a
 // apiStabilitySafetyArg is one concrete argument of a represented generic
 // application. Either the checker already represented the argument type, or the
 // raw argument node is kept together with the environment it was written in so
@@ -96,13 +96,13 @@ pub(crate) struct ApiStabilitySafetyArg {
 }
 
 impl ApiStabilitySafetyArg {
-    // go: internal/typeparser/api_stability_safety.go:76 apiStabilitySafetyArg.empty
+    // go: internal/typeparser/api_stability_safety.go:76 apiStabilitySafetyArg.empty 68ef4d5e0637db1f
     pub(crate) fn empty(&self) -> bool {
         self.t.is_none() && self.node.is_none()
     }
 }
 
-// go: internal/typeparser/api_stability_safety.go:80 safetyArgsEqual
+// go: internal/typeparser/api_stability_safety.go:80 safetyArgsEqual baecf765c2648797
 pub(crate) fn safety_args_equal(
     left: &[ApiStabilitySafetyArg],
     right: &[ApiStabilitySafetyArg],
@@ -124,7 +124,7 @@ pub(crate) fn safety_args_equal(
     true
 }
 
-// go: internal/typeparser/api_stability_safety.go:101 apiStabilitySafetyBinding
+// go: internal/typeparser/api_stability_safety.go:101 apiStabilitySafetyBinding 7617fa9f4ec79477
 // apiStabilitySafetyBinding is one generic-application frame: the declared type
 // parameters of a class, interface or alias bound to the arguments of one
 // application. Frames chain so a nested application keeps the outer bindings.
@@ -138,7 +138,7 @@ pub(crate) struct ApiStabilitySafetyBinding {
     pub(crate) args: RefCell<Vec<ApiStabilitySafetyArg>>,
 }
 
-// go: internal/typeparser/api_stability_safety.go:111 apiStabilitySafetyApplication
+// go: internal/typeparser/api_stability_safety.go:111 apiStabilitySafetyApplication 81c683d4da862e48
 // apiStabilitySafetyApplication is one alias application on the current guard
 // path. The concrete argument list is compared by identity so a repeated
 // application of the same alias with the same represented arguments is
@@ -149,7 +149,7 @@ pub(crate) struct ApiStabilitySafetyApplication {
     pub(crate) args: Vec<ApiStabilitySafetyArg>,
 }
 
-// go: internal/typeparser/api_stability_safety.go:121 apiStabilitySafetyScan
+// go: internal/typeparser/api_stability_safety.go:121 apiStabilitySafetyScan dcc3c83cdec9e61f
 // apiStabilitySafetyScan is the mutable state of one guard run. The verdict is
 // computed by traversing raw annotations, represented types and declaration
 // structure; a work and depth bound makes the traversal total and fails closed.
@@ -175,14 +175,14 @@ pub(crate) struct ApiStabilitySafetyScan<'s> {
 }
 
 impl ApiStabilitySafetyScan<'_> {
-    // go: internal/typeparser/api_stability_safety.go:140 apiStabilitySafetyScan.exceeded
+    // go: internal/typeparser/api_stability_safety.go:140 apiStabilitySafetyScan.exceeded 1773bc1a2642a059
     pub(crate) fn exceeded(&mut self) -> bool {
         self.a.safety_work += 1;
         self.a.safety_work > API_STABILITY_SAFETY_MAX_WORK
     }
 }
 
-// go: internal/typeparser/api_stability_safety.go:147 combineSafety
+// go: internal/typeparser/api_stability_safety.go:147 combineSafety 15698b82be8eefcc
 // combineSafety merges two verdicts of one read: any recursion makes the whole
 // read recursive, and any unknown makes it unknown.
 pub(crate) fn combine_safety(
@@ -199,7 +199,7 @@ pub(crate) fn combine_safety(
 }
 
 impl ApiStabilityAnalysis {
-    // go: internal/typeparser/api_stability_safety.go:165 apiStabilityAnalysis.symbolTypeResolutionIsSafe
+    // go: internal/typeparser/api_stability_safety.go:165 apiStabilityAnalysis.symbolTypeResolutionIsSafe 4757cbe7f486dfbb
     // symbolTypeResolutionIsSafe reports whether resolving an unmaterialized
     // symbol's type through the ordinary lazy accessor is bounded. An annotation or
     // a function-like declaration is read through the recursion guard; an inferred
@@ -279,7 +279,7 @@ impl ApiStabilityAnalysis {
         true
     }
 
-    // go: internal/typeparser/api_stability_safety.go:227 apiStabilityAnalysis.signatureMemberResolutionIsSafe
+    // go: internal/typeparser/api_stability_safety.go:227 apiStabilityAnalysis.signatureMemberResolutionIsSafe 0548d60c77ea19ed
     // signatureMemberResolutionIsSafe reports whether materializing the raw
     // signatures of a signature member symbol is bounded. It only inspects
     // parameter annotations, which signature creation resolves eagerly.
@@ -317,7 +317,7 @@ impl ApiStabilityAnalysis {
         true
     }
 
-    // go: internal/typeparser/api_stability_safety.go:255 apiStabilityAnalysis.annotationResolutionIsSafe
+    // go: internal/typeparser/api_stability_safety.go:255 apiStabilityAnalysis.annotationResolutionIsSafe 1cfa0c2f151febfc
     // annotationResolutionIsSafe reports whether resolving a raw annotation node
     // through the ordinary lazy type accessor is bounded. The substitution context
     // is the concrete enclosing application whose mapper will be applied when the
@@ -351,7 +351,7 @@ impl ApiStabilityAnalysis {
         true
     }
 
-    // go: internal/typeparser/api_stability_safety.go:278 apiStabilityAnalysis.declaredTypeResolutionIsSafe
+    // go: internal/typeparser/api_stability_safety.go:278 apiStabilityAnalysis.declaredTypeResolutionIsSafe 7df8440be6599fd3
     // declaredTypeResolutionIsSafe reports whether resolving a symbol's declared
     // type through the ordinary lazy accessor is bounded. Only a type alias
     // actually resolves its right-hand side; a class or interface declared type is
@@ -405,7 +405,7 @@ impl ApiStabilityAnalysis {
         true
     }
 
-    // go: internal/typeparser/api_stability_safety.go:321 apiStabilityAnalysis.signatureReturnResolutionIsSafe
+    // go: internal/typeparser/api_stability_safety.go:321 apiStabilityAnalysis.signatureReturnResolutionIsSafe 3ed40b34abf894f4
     // signatureReturnResolutionIsSafe reports whether materializing an
     // unmaterialized signature return through the ordinary lazy accessor is
     // bounded. An inferred return has no annotation: it is read through the
@@ -449,7 +449,7 @@ impl ApiStabilityAnalysis {
         true
     }
 
-    // go: internal/typeparser/api_stability_safety.go:355 apiStabilityAnalysis.inferredComponentResolutionIsSafe
+    // go: internal/typeparser/api_stability_safety.go:355 apiStabilityAnalysis.inferredComponentResolutionIsSafe 4dd9930544f976bb
     // inferredComponentResolutionIsSafe reports whether the native lazy inference
     // of an unmaterialized component declared in a source file may be read. The
     // ordinary lazy accessors attribute the diagnostics inference produces to the
@@ -474,7 +474,7 @@ impl ApiStabilityAnalysis {
         is_checking_source_file(tp.checker)
     }
 
-    // go: internal/typeparser/api_stability_safety.go:369 apiStabilityAnalysis.baseTypesResolutionIsSafe
+    // go: internal/typeparser/api_stability_safety.go:369 apiStabilityAnalysis.baseTypesResolutionIsSafe b7cbb3ab924602cb
     // baseTypesResolutionIsSafe reports whether materializing an unmaterialized
     // heritage surface is bounded. Resolving base types evaluates the heritage type
     // argument annotations; the base declarations' own member surfaces are gated by
@@ -511,7 +511,7 @@ impl ApiStabilityAnalysis {
         true
     }
 
-    // go: internal/typeparser/api_stability_safety.go:397 apiStabilityAnalysis.memberTableResolutionIsSafe
+    // go: internal/typeparser/api_stability_safety.go:397 apiStabilityAnalysis.memberTableResolutionIsSafe 136e1a831dce3131
     // memberTableResolutionIsSafe reports whether resolving a structured type's
     // member table (properties, signatures or index infos) through the ordinary
     // lazy accessors is bounded. Member resolution eagerly instantiates declared
@@ -548,7 +548,7 @@ impl ApiStabilityAnalysis {
         true
     }
 
-    // go: internal/typeparser/api_stability_safety.go:423 apiStabilityAnalysis.safetyBudgetExhausted
+    // go: internal/typeparser/api_stability_safety.go:423 apiStabilityAnalysis.safetyBudgetExhausted 6549922679a1d479
     // safetyBudgetExhausted reports whether this analysis has already consumed its
     // shared guard budget. A guard request after exhaustion is refused immediately
     // without allocating scan state; the traversal still collects represented
@@ -557,7 +557,7 @@ impl ApiStabilityAnalysis {
         self.safety_work > API_STABILITY_SAFETY_MAX_WORK
     }
 
-    // go: internal/typeparser/api_stability_safety.go:431 apiStabilityAnalysis.safetySafeVerdict
+    // go: internal/typeparser/api_stability_safety.go:431 apiStabilityAnalysis.safetySafeVerdict 5f56f538b43178d7
     // safetySafeVerdict reports whether an identical guard request already
     // completed safely in this analysis. Only completed Safe verdicts are reused:
     // Unknown, recursion and exhaustion stay retryable by later scans and later
@@ -566,13 +566,13 @@ impl ApiStabilityAnalysis {
         self.safety_safe_memo.contains(key)
     }
 
-    // go: internal/typeparser/api_stability_safety.go:440 apiStabilityAnalysis.recordSafetySafeVerdict
+    // go: internal/typeparser/api_stability_safety.go:440 apiStabilityAnalysis.recordSafetySafeVerdict c1f9c7f617f17200
     // recordSafetySafeVerdict records one completed Safe guard verdict.
     pub(crate) fn record_safety_safe_verdict(&mut self, key: ApiStabilitySafetyVerdictKey) {
         self.safety_safe_memo.insert(key);
     }
 
-    // go: internal/typeparser/api_stability_safety.go:452 apiStabilityAnalysis.symbolAtTypeNameNode
+    // go: internal/typeparser/api_stability_safety.go:452 apiStabilityAnalysis.symbolAtTypeNameNode 15171ef42dfa9e36
     // symbolAtTypeNameNode returns the symbol named by a raw type-name, heritage,
     // qualifier or declaration-name node, caching successful lookups by AST
     // identity for this analysis. A failed lookup is never cached. Only the symbol
@@ -594,7 +594,7 @@ impl ApiStabilityAnalysis {
         symbol
     }
 
-    // go: internal/typeparser/api_stability_safety.go:469 apiStabilityAnalysis.newSafetyScan
+    // go: internal/typeparser/api_stability_safety.go:469 apiStabilityAnalysis.newSafetyScan 4d9141da2d11839a
     pub(crate) fn new_safety_scan(&mut self) -> ApiStabilitySafetyScan<'_> {
         ApiStabilitySafetyScan {
             a: self,
@@ -608,7 +608,7 @@ impl ApiStabilityAnalysis {
 }
 
 impl ApiStabilitySafetyScan<'_> {
-    // go: internal/typeparser/api_stability_safety.go:477 apiStabilitySafetyScan.typeNode
+    // go: internal/typeparser/api_stability_safety.go:477 apiStabilitySafetyScan.typeNode 249c4048e0a84fdd
     // typeNode scans one raw type annotation node. project marks a position whose
     // members are evaluated because the surrounding construct projects into them
     // (an indexed access or a keyof target), so nested property annotations are
@@ -785,7 +785,7 @@ impl ApiStabilitySafetyScan<'_> {
         }
     }
 
-    // go: internal/typeparser/api_stability_safety.go:588 apiStabilitySafetyScan.typeArguments
+    // go: internal/typeparser/api_stability_safety.go:588 apiStabilitySafetyScan.typeArguments f72766beb7cf35ae
     // typeArguments scans the eagerly evaluated type arguments of a reference.
     pub(crate) fn type_arguments(
         &mut self,
@@ -805,7 +805,7 @@ impl ApiStabilitySafetyScan<'_> {
         verdict
     }
 
-    // go: internal/typeparser/api_stability_safety.go:604 apiStabilitySafetyScan.typeReference
+    // go: internal/typeparser/api_stability_safety.go:604 apiStabilitySafetyScan.typeReference 44a773cd1d4eeb6a
     // typeReference scans an application or declaration reference. A reference to a
     // bound type parameter follows its concrete binding; a type alias application
     // follows the alias declaration with a new binding frame and detects an
@@ -881,7 +881,7 @@ impl ApiStabilitySafetyScan<'_> {
         ApiStabilitySafety::Unknown
     }
 
-    // go: internal/typeparser/api_stability_safety.go:639 apiStabilitySafetyScan.referenceToSymbol
+    // go: internal/typeparser/api_stability_safety.go:639 apiStabilitySafetyScan.referenceToSymbol 3b0e3f40f0f6e25a
     // referenceToSymbol resolves an import alias reference to its target symbol.
     pub(crate) fn reference_to_symbol(
         &mut self,
@@ -913,7 +913,7 @@ impl ApiStabilitySafetyScan<'_> {
         ApiStabilitySafety::Unknown
     }
 
-    // go: internal/typeparser/api_stability_safety.go:662 apiStabilitySafetyScan.omittedArgumentDefaults
+    // go: internal/typeparser/api_stability_safety.go:662 apiStabilitySafetyScan.omittedArgumentDefaults 4509634202d9e37c
     // omittedArgumentDefaults scans the declared default annotations the checker
     // evaluates when a generic application omits arguments. Later defaults are
     // scanned with the earlier parameters bound, so a default that references an
@@ -966,7 +966,7 @@ impl ApiStabilitySafetyScan<'_> {
         verdict
     }
 
-    // go: internal/typeparser/api_stability_safety.go:698 apiStabilitySafetyScan.typeParameterReference
+    // go: internal/typeparser/api_stability_safety.go:698 apiStabilitySafetyScan.typeParameterReference 00ecc05dece946e9
     // typeParameterReference follows a type parameter reference through the active
     // substitution and binding frames. An unbound parameter keeps the annotation
     // deferred, so the guarded read evaluates nothing for that reference and it is
@@ -1027,7 +1027,7 @@ impl ApiStabilitySafetyScan<'_> {
     }
 }
 
-// go: internal/typeparser/api_stability_safety.go:736 safetyBindingLookup
+// go: internal/typeparser/api_stability_safety.go:736 safetyBindingLookup 47f6523e0278f01a
 // safetyBindingLookup finds the binding of a declared type parameter in a
 // binding chain.
 pub(crate) fn safety_binding_lookup(
@@ -1059,7 +1059,7 @@ pub(crate) fn local_type_parameters(c: &mut Checker, symbol: P<Symbol>) -> Vec<P
 }
 
 impl ApiStabilitySafetyScan<'_> {
-    // go: internal/typeparser/api_stability_safety.go:760 apiStabilitySafetyScan.aliasApplication
+    // go: internal/typeparser/api_stability_safety.go:760 apiStabilitySafetyScan.aliasApplication 3dc423fd8f131630
     // aliasApplication follows one application of a type alias. The alias
     // declaration is scanned with a binding frame for its declared parameters. A
     // repeated application of the same alias with the same concrete arguments on
@@ -1145,7 +1145,7 @@ impl ApiStabilitySafetyScan<'_> {
         combine_safety(verdict, rhs)
     }
 
-    // go: internal/typeparser/api_stability_safety.go:824 apiStabilitySafetyScan.typeValue
+    // go: internal/typeparser/api_stability_safety.go:824 apiStabilitySafetyScan.typeValue 2e0d1f73edb6be8c
     // typeValue scans one represented type. The represented graph is the primary
     // carrier: it is followed through its concrete structure, and any type
     // parameter is resolved through the active substitution or binding frames.
@@ -1227,7 +1227,7 @@ impl ApiStabilitySafetyScan<'_> {
         ApiStabilitySafety::Safe
     }
 
-    // go: internal/typeparser/api_stability_safety.go:895 apiStabilitySafetyScan.mappedParameterValue
+    // go: internal/typeparser/api_stability_safety.go:895 apiStabilitySafetyScan.mappedParameterValue 482c17b672822ce3
     // mappedParameterValue resolves a type parameter through the binding chain or
     // the active substitution frames. The boolean reports whether the parameter is
     // replaced.
@@ -1250,7 +1250,7 @@ impl ApiStabilitySafetyScan<'_> {
         None
     }
 
-    // go: internal/typeparser/api_stability_safety.go:911 apiStabilitySafetyScan.materializeArgument
+    // go: internal/typeparser/api_stability_safety.go:911 apiStabilitySafetyScan.materializeArgument 0e32f58b7993c973
     // materializeArgument returns the represented type of a captured application
     // argument without performing the guarded resolution: a represented argument is
     // resolved through its own environment, a primitive or literal argument is read
@@ -1346,7 +1346,7 @@ impl ApiStabilitySafetyScan<'_> {
     }
 }
 
-// go: internal/typeparser/api_stability_safety.go:989 apiStabilityIntrinsicTypeOfNode
+// go: internal/typeparser/api_stability_safety.go:989 apiStabilityIntrinsicTypeOfNode 9d84870013b25c40
 // apiStabilityIntrinsicTypeOfNode returns the checker intrinsic for a primitive
 // keyword annotation. The mapping is a direct field read; no annotation is
 // resolved.
@@ -1373,7 +1373,7 @@ pub(crate) fn api_stability_intrinsic_type_of_node(
 }
 
 impl ApiStabilitySafetyScan<'_> {
-    // go: internal/typeparser/api_stability_safety.go:1026 apiStabilitySafetyScan.constraintSafety
+    // go: internal/typeparser/api_stability_safety.go:1026 apiStabilitySafetyScan.constraintSafety 0236c39a21b1c91f
     // constraintSafety follows the constraint of an unbound type parameter when the
     // guarded read may resolve it (an apparent-type request on a type parameter). A
     // relation-operand scan refuses an unbound parameter instead: the relation may
@@ -1395,7 +1395,7 @@ impl ApiStabilitySafetyScan<'_> {
         self.type_node(tp, Some(annotation), subst, bindings, project)
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1038 apiStabilitySafetyScan.objectValue
+    // go: internal/typeparser/api_stability_safety.go:1038 apiStabilitySafetyScan.objectValue 205db7fcce22508a
     // objectValue scans a represented object type.
     pub(crate) fn object_value(
         &mut self,
@@ -1450,7 +1450,7 @@ impl ApiStabilitySafetyScan<'_> {
         self.declaration_structure(tp, Some(symbol), subst, bindings, project)
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1073 apiStabilitySafetyScan.mappedValue
+    // go: internal/typeparser/api_stability_safety.go:1073 apiStabilitySafetyScan.mappedValue 11fa151975864e03
     // mappedValue scans a represented mapped type through its represented mapped
     // components.
     pub(crate) fn mapped_value(
@@ -1470,7 +1470,7 @@ impl ApiStabilitySafetyScan<'_> {
         combine_safety(verdict, template)
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1089 apiStabilitySafetyScan.conditionalValue
+    // go: internal/typeparser/api_stability_safety.go:1089 apiStabilitySafetyScan.conditionalValue b327a696a0fc1dab
     // conditionalValue scans a represented conditional type. A deferred
     // conditional whose operands still mention an unbound parameter is not
     // evaluated by the guarded read. A concrete conditional must be resolved: the
@@ -1520,7 +1520,7 @@ impl ApiStabilitySafetyScan<'_> {
         verdict
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1121 apiStabilitySafetyScan.conditionalBranchValue
+    // go: internal/typeparser/api_stability_safety.go:1121 apiStabilitySafetyScan.conditionalBranchValue abec407bc7719652
     // conditionalBranchValue scans one represented branch of a conditional. The
     // materialized branch is preferred; otherwise the declared branch annotation is
     // scanned with the conditional's own mapper bindings.
@@ -1542,7 +1542,7 @@ impl ApiStabilitySafetyScan<'_> {
         self.type_node(tp, Some(node), subst, bindings, project)
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1138 apiStabilitySafetyScan.conditionalNode
+    // go: internal/typeparser/api_stability_safety.go:1138 apiStabilitySafetyScan.conditionalNode 80df860e1141d110
     // conditionalNode scans a raw conditional annotation. Operands that mention an
     // unbound parameter keep the conditional deferred and safe: constructing a
     // deferred conditional never evaluates its branches, even when an infer binder
@@ -1606,13 +1606,13 @@ impl ApiStabilitySafetyScan<'_> {
     }
 }
 
-// go: internal/typeparser/api_stability_safety.go:1173 branchSelection
+// go: internal/typeparser/api_stability_safety.go:1173 branchSelection 6a0464ba1c4b1972
 // branchSelection is a bit set of conditional branches the compiler relation
 // evaluates.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, Default)]
 pub(crate) struct BranchSelection(pub(crate) i64);
 
-// go: internal/typeparser/api_stability_safety.go:1175 branchUnknown
+// go: internal/typeparser/api_stability_safety.go:1175 branchUnknown 40d2247f0a3cffaa
 impl BranchSelection {
     pub(crate) const Unknown: BranchSelection = BranchSelection(1 << 0);
     pub(crate) const True: BranchSelection = BranchSelection(1 << 1);
@@ -1625,7 +1625,7 @@ impl BranchSelection {
 }
 
 impl ApiStabilitySafetyScan<'_> {
-    // go: internal/typeparser/api_stability_safety.go:1189 apiStabilitySafetyScan.selectConditionalBranch
+    // go: internal/typeparser/api_stability_safety.go:1189 apiStabilitySafetyScan.selectConditionalBranch 57d3e915ca0ade71
     // selectConditionalBranch asks the compiler relation which branch a concrete
     // conditional evaluates. The check type distributes over unions, so a mixed
     // distribution evaluates both branches. The relation is only asked when both
@@ -1717,7 +1717,7 @@ impl ApiStabilitySafetyScan<'_> {
         selection
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1255 apiStabilitySafetyScan.operandType
+    // go: internal/typeparser/api_stability_safety.go:1255 apiStabilitySafetyScan.operandType 6c59cea29ec0cafe
     // operandType returns the represented type of a concrete conditional operand,
     // following only a top-level parameter reference through the active
     // environment. A compound operand that still mentions a substituted parameter
@@ -1744,7 +1744,7 @@ impl ApiStabilitySafetyScan<'_> {
         Some(represented)
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1275 apiStabilitySafetyScan.containsUnboundParameter
+    // go: internal/typeparser/api_stability_safety.go:1275 apiStabilitySafetyScan.containsUnboundParameter 339265efcda33f1d
     // containsUnboundParameter reports whether a represented type still mentions a
     // type parameter that no active frame replaces.
     pub(crate) fn contains_unbound_parameter(
@@ -1768,7 +1768,7 @@ impl ApiStabilitySafetyScan<'_> {
         result
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1275 apiStabilitySafetyScan.containsUnboundParameter
+    // go: internal/typeparser/api_stability_safety.go:1275 apiStabilitySafetyScan.containsUnboundParameter 339265efcda33f1d
     // Rust: the body after the cycle guard, split out so the deferred release runs after it.
     fn contains_unbound_parameter_inner(
         &mut self,
@@ -1860,7 +1860,7 @@ impl ApiStabilitySafetyScan<'_> {
         false
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1347 apiStabilitySafetyScan.containsReplacedParameter
+    // go: internal/typeparser/api_stability_safety.go:1347 apiStabilitySafetyScan.containsReplacedParameter f25241e94027496a
     // containsReplacedParameter reports whether a represented type still mentions a
     // type parameter the active environment replaces. The compiler would
     // instantiate such a compound operand before evaluating a relation over it, so
@@ -1890,7 +1890,7 @@ impl ApiStabilitySafetyScan<'_> {
         result
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1347 apiStabilitySafetyScan.containsReplacedParameter
+    // go: internal/typeparser/api_stability_safety.go:1347 apiStabilitySafetyScan.containsReplacedParameter f25241e94027496a
     // Rust: the body after the cycle guard, split out so the deferred release runs after it.
     fn contains_replaced_parameter_inner(
         &mut self,
@@ -2001,7 +2001,7 @@ impl ApiStabilitySafetyScan<'_> {
         false
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1429 apiStabilitySafetyScan.typeNodeMentionsUnboundParameter
+    // go: internal/typeparser/api_stability_safety.go:1429 apiStabilitySafetyScan.typeNodeMentionsUnboundParameter 139fafb42e3aaef2
     // typeNodeMentionsUnboundParameter reports whether a raw annotation mentions a
     // type parameter no active frame replaces. An infer binder is bound by its own
     // conditional, and a callable's own type parameters are bound by the callable,
@@ -2026,7 +2026,7 @@ impl ApiStabilitySafetyScan<'_> {
         )
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1436 apiStabilitySafetyScan.typeNodeMentionsUnboundParameterScoped
+    // go: internal/typeparser/api_stability_safety.go:1436 apiStabilitySafetyScan.typeNodeMentionsUnboundParameterScoped 3afa57c3ab1c7e25
     // typeNodeMentionsUnboundParameterScoped carries the type parameters the
     // enclosing callables bind so a reference to one of them is not mistaken for an
     // unbound parameter of the surrounding conditional.
@@ -2054,7 +2054,7 @@ impl ApiStabilitySafetyScan<'_> {
         result
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1436 apiStabilitySafetyScan.typeNodeMentionsUnboundParameterScoped
+    // go: internal/typeparser/api_stability_safety.go:1436 apiStabilitySafetyScan.typeNodeMentionsUnboundParameterScoped 3afa57c3ab1c7e25
     // Rust: the body after the cycle guard, split out so the deferred release runs after it.
     fn type_node_mentions_unbound_parameter_scoped_inner(
         &mut self,
@@ -2361,7 +2361,7 @@ impl ApiStabilitySafetyScan<'_> {
         }
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1576 apiStabilitySafetyScan.functionLikeMentionsUnboundParameter
+    // go: internal/typeparser/api_stability_safety.go:1576 apiStabilitySafetyScan.functionLikeMentionsUnboundParameter 05caf21754958b1a
     // functionLikeMentionsUnboundParameter walks the constraints, parameter and
     // return annotations of a function-like declaration looking for an unbound
     // parameter. The declaration's own type parameters are bound by the callable
@@ -2446,7 +2446,7 @@ impl ApiStabilitySafetyScan<'_> {
             )
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1629 apiStabilitySafetyScan.typeNodeMentionsInfer
+    // go: internal/typeparser/api_stability_safety.go:1629 apiStabilitySafetyScan.typeNodeMentionsInfer 9cf9bd6b21a8a1fb
     // typeNodeMentionsInfer reports whether an annotation mentions an infer binder.
     pub(crate) fn type_node_mentions_infer(
         &mut self,
@@ -2466,7 +2466,7 @@ impl ApiStabilitySafetyScan<'_> {
         result
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1629 apiStabilitySafetyScan.typeNodeMentionsInfer
+    // go: internal/typeparser/api_stability_safety.go:1629 apiStabilitySafetyScan.typeNodeMentionsInfer 9cf9bd6b21a8a1fb
     // Rust: the body after the cycle guard, split out so the deferred release runs after it.
     fn type_node_mentions_infer_inner(
         &mut self,
@@ -2576,7 +2576,7 @@ impl ApiStabilitySafetyScan<'_> {
         }
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1725 apiStabilitySafetyScan.rawDeclarationsMentionReplacedParameter
+    // go: internal/typeparser/api_stability_safety.go:1725 apiStabilitySafetyScan.rawDeclarationsMentionReplacedParameter 63689adf6cc317b7
     // rawDeclarationsMentionReplacedParameter reports whether the raw declarations
     // of a symbol contain an annotation that mentions a type parameter the active
     // environment replaces. It is a non-evaluating declaration-structure walk used
@@ -2611,7 +2611,7 @@ impl ApiStabilitySafetyScan<'_> {
         false
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1745 apiStabilitySafetyScan.declarationMentionsReplacedParameter
+    // go: internal/typeparser/api_stability_safety.go:1745 apiStabilitySafetyScan.declarationMentionsReplacedParameter da913dd8e8422afd
     // declarationMentionsReplacedParameter walks the public annotations of one raw
     // declaration: function-like parameters and returns, type literal and heritage
     // member annotations, index signatures and mapped components. It resolves
@@ -2673,7 +2673,7 @@ impl ApiStabilitySafetyScan<'_> {
         }
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1768 apiStabilitySafetyScan.functionLikeMentionsReplacedParameter
+    // go: internal/typeparser/api_stability_safety.go:1768 apiStabilitySafetyScan.functionLikeMentionsReplacedParameter cb3dd8b187fcd7b3
     // functionLikeMentionsReplacedParameter walks the parameter, type parameter
     // constraint and return annotations of a function-like declaration.
     pub(crate) fn function_like_mentions_replaced_parameter(
@@ -2726,7 +2726,7 @@ impl ApiStabilitySafetyScan<'_> {
         )
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1802 apiStabilitySafetyScan.typeNodeMentionsReplacedParameter
+    // go: internal/typeparser/api_stability_safety.go:1802 apiStabilitySafetyScan.typeNodeMentionsReplacedParameter 5c2f4c33f7fbf5b0
     // typeNodeMentionsReplacedParameter reports whether a raw annotation mentions a
     // type parameter the active environment replaces anywhere inside its structure.
     // It is a non-evaluating syntax gate: a conditional operand that still contains
@@ -2765,7 +2765,7 @@ impl ApiStabilitySafetyScan<'_> {
         result
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1802 apiStabilitySafetyScan.typeNodeMentionsReplacedParameter
+    // go: internal/typeparser/api_stability_safety.go:1802 apiStabilitySafetyScan.typeNodeMentionsReplacedParameter 5c2f4c33f7fbf5b0
     // Rust: the body after the cycle guard, split out so the deferred release runs after it.
     fn type_node_mentions_replaced_parameter_inner(
         &mut self,
@@ -3039,7 +3039,7 @@ impl ApiStabilitySafetyScan<'_> {
         }
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1932 apiStabilitySafetyScan.typeLiteral
+    // go: internal/typeparser/api_stability_safety.go:1932 apiStabilitySafetyScan.typeLiteral b12efdd36da3af69
     // typeLiteral scans a type literal annotation. Index signatures are evaluated
     // eagerly by member resolution; property and method annotations are evaluated
     // only when the literal is projected into.
@@ -3059,7 +3059,7 @@ impl ApiStabilitySafetyScan<'_> {
         verdict
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1945 apiStabilitySafetyScan.mappedTypeNode
+    // go: internal/typeparser/api_stability_safety.go:1945 apiStabilitySafetyScan.mappedTypeNode 5def240c7b240905
     // mappedTypeNode scans a mapped type annotation through its eagerly evaluated
     // constraint, name and template annotations.
     pub(crate) fn mapped_type_node(
@@ -3088,7 +3088,7 @@ impl ApiStabilitySafetyScan<'_> {
         verdict
     }
 
-    // go: internal/typeparser/api_stability_safety.go:1964 apiStabilitySafetyScan.memberAnnotation
+    // go: internal/typeparser/api_stability_safety.go:1964 apiStabilitySafetyScan.memberAnnotation 776da5538f152df4
     // memberAnnotation scans one class, interface or type literal member. Index
     // signatures and declared call and construct signatures are always evaluated by
     // member resolution; a named property or method is evaluated only when the
@@ -3180,7 +3180,7 @@ impl ApiStabilitySafetyScan<'_> {
         }
     }
 
-    // go: internal/typeparser/api_stability_safety.go:2035 apiStabilitySafetyScan.functionLikeResolution
+    // go: internal/typeparser/api_stability_safety.go:2035 apiStabilitySafetyScan.functionLikeResolution 30e5f7a4ada610b5
     // functionLikeResolution scans the parameter and type parameter constraint
     // annotations a function-like declaration resolves eagerly. The return
     // annotation is lazy and gated by its own read; a relation-operand scan reads
@@ -3269,7 +3269,7 @@ impl ApiStabilitySafetyScan<'_> {
         verdict
     }
 
-    // go: internal/typeparser/api_stability_safety.go:2093 apiStabilitySafetyScan.memberSymbolOfDeclaration
+    // go: internal/typeparser/api_stability_safety.go:2093 apiStabilitySafetyScan.memberSymbolOfDeclaration 8503fc3fd47e51c7
     // memberSymbolOfDeclaration returns the checker symbol a member declaration
     // names, or nil when the declaration does not name one. It only looks up the
     // declared name; no member type is resolved.
@@ -3285,7 +3285,7 @@ impl ApiStabilitySafetyScan<'_> {
         self.a.symbol_at_type_name_node(tp, Some(name))
     }
 
-    // go: internal/typeparser/api_stability_safety.go:2108 apiStabilitySafetyScan.memberHasLateBoundName
+    // go: internal/typeparser/api_stability_safety.go:2108 apiStabilitySafetyScan.memberHasLateBoundName 6d232c100264ee1d
     // memberHasLateBoundName reports whether a member's declared name must be
     // evaluated to resolve the member table. A computed name whose expression is an
     // entity name is late-bindable and is refused rather than checked, except for
@@ -3308,7 +3308,7 @@ impl ApiStabilitySafetyScan<'_> {
     }
 }
 
-// go: internal/typeparser/api_stability_safety.go:2123 apiStabilityWellKnownSymbolName
+// go: internal/typeparser/api_stability_safety.go:2123 apiStabilityWellKnownSymbolName ce4512f4af1db194
 // apiStabilityWellKnownSymbolName reports whether an entity-name expression is
 // a `Symbol.<well-known>` reference that resolves to a library unique symbol
 // without checking program code.
@@ -3343,7 +3343,7 @@ pub(crate) fn api_stability_well_known_symbol_name(expression: Option<P<Node>>) 
     )
 }
 
-// go: internal/typeparser/api_stability_safety.go:2146 apiStabilityWellKnownSymbolDisplayName
+// go: internal/typeparser/api_stability_safety.go:2146 apiStabilityWellKnownSymbolDisplayName 4c7ebdd72f41329b
 // apiStabilityWellKnownSymbolDisplayName renders a well-known `Symbol.<name>`
 // computed-name expression for diagnostics, or "" when the expression is not a
 // well-known symbol reference. It reads the expression's identifiers only and
@@ -3360,7 +3360,7 @@ pub(crate) fn api_stability_well_known_symbol_display_name(expression: Option<P<
 }
 
 impl ApiStabilityAnalysis {
-    // go: internal/typeparser/api_stability_safety.go:2163 apiStabilityAnalysis.symbolHasLateBoundMembers
+    // go: internal/typeparser/api_stability_safety.go:2163 apiStabilityAnalysis.symbolHasLateBoundMembers f89591535ba4f94e
     // symbolHasLateBoundMembers reports whether any declaration member of a symbol
     // still carries the binder's unresolved computed-name placeholder. Such a
     // member is absent from the early member table and only appears once the
@@ -3394,7 +3394,7 @@ impl ApiStabilityAnalysis {
 }
 
 impl ApiStabilitySafetyScan<'_> {
-    // go: internal/typeparser/api_stability_safety.go:2193 apiStabilitySafetyScan.declarationMembers
+    // go: internal/typeparser/api_stability_safety.go:2193 apiStabilitySafetyScan.declarationMembers 3ce1ae4def0a2c3d
     // declarationMembers scans the member resolution of a declaration symbol: index
     // signature annotations are evaluated eagerly, heritage is resolved
     // recursively, and a projected read evaluates the member annotations too.
@@ -3436,7 +3436,7 @@ impl ApiStabilitySafetyScan<'_> {
         self.declaration_structure(tp, Some(symbol), subst, frame.as_ref(), project)
     }
 
-    // go: internal/typeparser/api_stability_safety.go:2218 apiStabilitySafetyScan.declarationMembersOfRepresentedArguments
+    // go: internal/typeparser/api_stability_safety.go:2218 apiStabilitySafetyScan.declarationMembersOfRepresentedArguments 1988da768f2668ab
     // declarationMembersOfRepresentedArguments scans a reference target's
     // declaration surface with the reference's represented arguments bound as
     // concrete values. A nil argument stays an empty binding, so a parameter the
@@ -3475,7 +3475,7 @@ impl ApiStabilitySafetyScan<'_> {
         self.declaration_structure(tp, Some(symbol), subst, frame.as_ref(), project)
     }
 
-    // go: internal/typeparser/api_stability_safety.go:2242 apiStabilitySafetyScan.declarationStructure
+    // go: internal/typeparser/api_stability_safety.go:2242 apiStabilitySafetyScan.declarationStructure cc06f7517924f20a
     // declarationStructure scans a declaration symbol's own member and heritage
     // structure.
     pub(crate) fn declaration_structure(
@@ -3543,7 +3543,7 @@ impl ApiStabilitySafetyScan<'_> {
         verdict
     }
 
-    // go: internal/typeparser/api_stability_safety.go:2296 apiStabilitySafetyScan.heritage
+    // go: internal/typeparser/api_stability_safety.go:2296 apiStabilitySafetyScan.heritage 741c790d3bcbd028
     // heritage scans the heritage clause type arguments a base-type resolution
     // evaluates, and recursively inspects the base declarations' own member
     // structure because member resolution walks the whole inheritance chain. The
@@ -3641,7 +3641,7 @@ impl ApiStabilitySafetyScan<'_> {
         verdict
     }
 
-    // go: internal/typeparser/api_stability_safety.go:2375 apiStabilitySafetyScan.memberTable
+    // go: internal/typeparser/api_stability_safety.go:2375 apiStabilitySafetyScan.memberTable d0bb45a1de75ccdc
     // memberTable scans a represented type that is about to have its member table
     // resolved.
     pub(crate) fn member_table(
@@ -3696,7 +3696,7 @@ impl ApiStabilitySafetyScan<'_> {
         ApiStabilitySafety::Safe
     }
 
-    // go: internal/typeparser/api_stability_safety.go:2414 apiStabilitySafetyScan.typeQuery
+    // go: internal/typeparser/api_stability_safety.go:2414 apiStabilitySafetyScan.typeQuery 8596064ab4aa295f
     // typeQuery scans a `typeof` annotation through the value symbol it names.
     pub(crate) fn type_query(
         &mut self,
@@ -3739,7 +3739,7 @@ impl ApiStabilitySafetyScan<'_> {
     }
 }
 
-// go: internal/typeparser/api_stability_safety.go:2454 nonDistributedParameter
+// go: internal/typeparser/api_stability_safety.go:2454 nonDistributedParameter a809afbb73dcd735
 // nonDistributedParameter normalizes a distributed conditional's cloned check
 // parameter back to its declared binder.
 //
@@ -3756,7 +3756,7 @@ pub(crate) fn non_distributed_parameter(t: P<Type>) -> P<Type> {
     t
 }
 
-// go: internal/typeparser/api_stability_safety.go:2467 safetyTypeParameterDefaults
+// go: internal/typeparser/api_stability_safety.go:2467 safetyTypeParameterDefaults e646b55af5776a10
 // safetyTypeParameterDefaults returns the declared default annotations of a
 // symbol's type parameters, aligned with the symbol's local type parameter
 // order.
@@ -3791,7 +3791,7 @@ pub(crate) fn safety_type_parameter_defaults(symbol: Option<P<Symbol>>) -> Vec<O
     Vec::new()
 }
 
-// go: internal/typeparser/api_stability_safety.go:2506 functionLikeParameterNodes
+// go: internal/typeparser/api_stability_safety.go:2506 functionLikeParameterNodes 6fd6a29f248eb131
 // functionLikeParameterNodes returns the declared parameters of a function-like
 // node, or nil when it declares none.
 pub(crate) fn function_like_parameter_nodes(
@@ -3800,7 +3800,7 @@ pub(crate) fn function_like_parameter_nodes(
     function_like.and_then(FunctionLikeBase::parameters).map_or(&[], |list| list.nodes())
 }
 
-// go: internal/typeparser/api_stability_safety.go:2515 declarationAnnotationNodeOf
+// go: internal/typeparser/api_stability_safety.go:2515 declarationAnnotationNodeOf 84a96f92d5bc8786
 // declarationAnnotationNodeOf returns the type annotation node a declaration
 // resolves, or nil for an inferred declaration.
 pub(crate) fn declaration_annotation_node_of(declaration: Option<P<Node>>) -> Option<P<Node>> {

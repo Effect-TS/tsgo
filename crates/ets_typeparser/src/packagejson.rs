@@ -8,14 +8,14 @@ use ets_shim::module::packagejson::{InfoCacheEntry, PackageJson};
 
 use crate::*;
 
-// go: internal/typeparser/packagejson.go:10 packageJsonProgram
+// go: internal/typeparser/packagejson.go:10 packageJsonProgram ad8c5cb98911ab68
 // Rust: Go's `tspath.PathKey` and `tspath.RootedFilePath` are tsrs's `Path` and a plain file name (docs/TSRS_API.md).
 pub(crate) trait PackageJsonProgram {
     fn get_source_file_meta_data(&self, path: &Path) -> SourceFileMetaData;
     fn get_package_json_info(&self, pkg_json_path: &str) -> Option<P<InfoCacheEntry>>;
 }
 
-// go: internal/typeparser/packagejson.go:10 packageJsonProgram
+// go: internal/typeparser/packagejson.go:10 packageJsonProgram ad8c5cb98911ab68
 impl PackageJsonProgram for Program {
     fn get_source_file_meta_data(&self, path: &Path) -> SourceFileMetaData {
         Program::get_source_file_meta_data(self, path).clone()
@@ -27,7 +27,7 @@ impl PackageJsonProgram for Program {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/packagejson.go:17 TypeParser.PackageJsonForSourceFile
+    // go: internal/typeparser/packagejson.go:17 TypeParser.PackageJsonForSourceFile a9b87ffbe19bd8bb
     // PackageJsonForSourceFile returns the nearest package.json contents for a source file, or nil.
     // Results are cached per source file on EffectLinks for the checker's lifetime.
     pub fn package_json_for_source_file(

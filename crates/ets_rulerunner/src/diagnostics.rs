@@ -12,7 +12,7 @@ use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::TypeParser;
 use rustc_hash::FxHashMap;
 
-// go: internal/rulerunner/diagnostics.go:23 RuleDiagnostic
+// go: internal/rulerunner/diagnostics.go:23 RuleDiagnostic cfaf010ae15def8a
 // RuleDiagnostic pairs a diagnostic with its rule for directive processing.
 pub struct RuleDiagnostic {
     pub rule_name: &'static str,
@@ -20,7 +20,7 @@ pub struct RuleDiagnostic {
     pub diagnostic: P<Diagnostic>,
 }
 
-// go: internal/rulerunner/diagnostics.go:33 MinVisibleSeverity
+// go: internal/rulerunner/diagnostics.go:33 MinVisibleSeverity cda503105dd7c1ab
 // MinVisibleSeverity returns the least visible severity that can surface in
 // the current execution mode: in CLI (tsc) mode without includeSuggestionsInTsc
 // only warnings and errors are printed, so SeverityWarning; everywhere else
@@ -47,7 +47,7 @@ pub fn compiler_program(program: &'static dyn Program) -> &'static ets_shim::com
         .expect("the Effect rules run on a compiler program")
 }
 
-// go: internal/rulerunner/diagnostics.go:44 Run
+// go: internal/rulerunner/diagnostics.go:44 Run 36f7546dabd33e16
 // Run executes Effect diagnostics for a source file and returns diagnostics without emitting them.
 // minSeverity is the least visible severity the caller can surface (see
 // MinVisibleSeverity); rules whose configured severity is below it are skipped
@@ -134,7 +134,7 @@ pub fn run(
     Ok(final_diagnostics)
 }
 
-// go: internal/rulerunner/diagnostics.go:95 selectRules
+// go: internal/rulerunner/diagnostics.go:95 selectRules 2647b4b7be45ca4b
 pub(crate) fn select_rules(rule_names: Option<&[&str]>) -> Result<Vec<&'static Rule>, String> {
     if rule_names.is_some_and(<[&str]>::is_empty) {
         return Ok(Vec::new());
@@ -158,7 +158,7 @@ pub(crate) fn select_rules(rule_names: Option<&[&str]>) -> Result<Vec<&'static R
     Ok(selected)
 }
 
-// go: internal/rulerunner/diagnostics.go:120 collectDiagnostics
+// go: internal/rulerunner/diagnostics.go:120 collectDiagnostics 91b77e601db2fc7a
 // collectDiagnostics runs all enabled rules and collects their diagnostics.
 //
 // Rust: the checker comes with the type parser (`ets_rule::Context`).
@@ -214,7 +214,7 @@ pub(crate) fn collect_diagnostics(
     results
 }
 
-// go: internal/rulerunner/diagnostics.go:172 transformDiagnostics
+// go: internal/rulerunner/diagnostics.go:172 transformDiagnostics d330a8de7e60455d
 pub(crate) fn transform_diagnostics(
     diags: &[RuleDiagnostic],
     sf: P<SourceFile>,
@@ -264,7 +264,7 @@ pub(crate) fn transform_diagnostics(
     results
 }
 
-// go: internal/rulerunner/diagnostics.go:216 createTransformedDiagnostic
+// go: internal/rulerunner/diagnostics.go:216 createTransformedDiagnostic 1042efdbd2f60035
 pub(crate) fn create_transformed_diagnostic(
     original: P<Diagnostic>,
     new_category: tsdiag::Category,
@@ -284,7 +284,7 @@ pub(crate) fn create_transformed_diagnostic(
     )
 }
 
-// go: internal/rulerunner/diagnostics.go:232 unusedDirectiveDiagnostics
+// go: internal/rulerunner/diagnostics.go:232 unusedDirectiveDiagnostics 945b3e23738a66c9
 pub(crate) fn unused_directive_diagnostics(
     sf: P<SourceFile>,
     all_directives: &[Directive],
@@ -323,7 +323,7 @@ pub(crate) fn unused_directive_diagnostics(
     diags
 }
 
-// go: internal/rulerunner/diagnostics.go:265 severityFromMap
+// go: internal/rulerunner/diagnostics.go:265 severityFromMap b435bbdbd4dd8cdc
 pub(crate) fn severity_from_map(
     resolved: Option<&FxHashMap<String, Severity>>,
     rule_name: &str,

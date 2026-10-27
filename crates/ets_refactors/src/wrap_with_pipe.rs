@@ -6,7 +6,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go: internal/refactors/wrap_with_pipe.go:9 WrapWithPipe
+// go: internal/refactors/wrap_with_pipe.go:9 WrapWithPipe 673f9ab5c746823f
 pub static WRAP_WITH_PIPE: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "wrapWithPipe",
     description: "Wrap with pipe",
@@ -14,7 +14,7 @@ pub static WRAP_WITH_PIPE: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     run: run_wrap_with_pipe,
 });
 
-// go: internal/refactors/wrap_with_pipe.go:16 runWrapWithPipe
+// go: internal/refactors/wrap_with_pipe.go:16 runWrapWithPipe 192e8033c3d20508
 pub(crate) fn run_wrap_with_pipe(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     // Only applicable when the selection is non-empty.
     if ctx.span.pos() == ctx.span.end() {

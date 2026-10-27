@@ -5,7 +5,7 @@ use ets_shim::lsproto;
 
 use crate::*;
 
-// go: internal/completions/effect_jsdoc_comment.go:10 effectJsdocComment
+// go: internal/completions/effect_jsdoc_comment.go:10 effectJsdocComment ad6c3ac7d8097236
 // effectJsdocComment provides completion for @effect-identifier
 // when typing @ inside a comment.
 pub(crate) static EFFECT_JSDOC_COMMENT: LazyLock<Completion> = LazyLock::new(|| Completion {
@@ -14,7 +14,7 @@ pub(crate) static EFFECT_JSDOC_COMMENT: LazyLock<Completion> = LazyLock::new(|| 
     run: run_effect_jsdoc_comment,
 });
 
-// go: internal/completions/effect_jsdoc_comment.go:16 runEffectJsdocComment
+// go: internal/completions/effect_jsdoc_comment.go:16 runEffectJsdocComment c6c9690446853133
 fn run_effect_jsdoc_comment(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionItem> {
     let source_text = ctx.source_file.text();
     let text_before_cursor = &source_text.as_bytes()[..ctx.position as usize];

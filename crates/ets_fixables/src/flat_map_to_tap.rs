@@ -12,7 +12,7 @@ use crate::*;
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_TAP_EXPRESSES_THIS_OBSERVATION_MORE_DIRECTLY_THAN_EFFECT_0_WITH_A_MANUAL_RE_YIELD_EFFECT_FLAT_MAP_TO_TAP;
 
-// go: internal/fixables/flat_map_to_tap.go:17 FlatMapToTapFix
+// go: internal/fixables/flat_map_to_tap.go:17 FlatMapToTapFix e443e42f95da863c
 pub static FLAT_MAP_TO_TAP_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "flatMapToTap",
     description: "Replace Effect.flatMap or Effect.andThen with Effect.tap",
@@ -21,7 +21,7 @@ pub static FLAT_MAP_TO_TAP_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     run: run_flat_map_to_tap_fix,
 });
 
-// go: internal/fixables/flat_map_to_tap.go:27 runFlatMapToTapFix
+// go: internal/fixables/flat_map_to_tap.go:27 runFlatMapToTapFix 26efbe97982ed978
 fn run_flat_map_to_tap_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_flat_map_to_tap(&mut ctx.type_parser, source_file) {
@@ -52,7 +52,7 @@ fn run_flat_map_to_tap_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     Vec::new()
 }
 
-// go: internal/fixables/flat_map_to_tap.go:54 tapReference
+// go: internal/fixables/flat_map_to_tap.go:54 tapReference dd803e40a2b20d63
 // tapReference finds a reference that reaches Effect.tap at callee: the file's
 // Effect import, or a binding in scope that is tap itself or the Effect module.
 //

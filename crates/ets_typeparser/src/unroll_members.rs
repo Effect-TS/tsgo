@@ -4,7 +4,7 @@ use ets_shim::core::P;
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/unroll_members.go:7 TypeParser.UnrollUnionMembers
+    // go: internal/typeparser/unroll_members.go:7 TypeParser.UnrollUnionMembers d59e175b164e5987
     // UnrollUnionMembers returns the constituent types of a union type,
     // or a single-element slice containing the type itself if it's not a union.
     //

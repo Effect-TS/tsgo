@@ -8,7 +8,7 @@ use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::TypeParser;
 use rustc_hash::FxHashSet;
 
-// go: internal/rules/prefer_effect_record.go:11 PreferEffectRecord
+// go: internal/rules/prefer_effect_record.go:11 PreferEffectRecord c7ea75ef91a54381
 pub static PREFER_EFFECT_RECORD: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "preferEffectRecord",
     group: "effectNative",
@@ -22,15 +22,15 @@ pub static PREFER_EFFECT_RECORD: LazyLock<Rule> = LazyLock::new(|| Rule {
     run: run_prefer_effect_record,
 });
 
-// go: internal/rules/prefer_effect_record.go:21 recordMemberNamespace
-// go: internal/rules/prefer_effect_record.go:23 recordInstanceMember
+// go: internal/rules/prefer_effect_record.go:21 recordMemberNamespace 7cf8181f92762f15
+// go: internal/rules/prefer_effect_record.go:23 recordInstanceMember 46fc20e3b82abccf
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub(crate) enum RecordMemberNamespace {
     InstanceMember,
     ConstructorMember,
 }
 
-// go: internal/rules/prefer_effect_record.go:28 recordMethodPreference
+// go: internal/rules/prefer_effect_record.go:28 recordMethodPreference 8ce829f6f80569b2
 pub(crate) struct RecordMethodPreference {
     pub(crate) namespace: RecordMemberNamespace,
     pub(crate) native_name: &'static str,
@@ -48,7 +48,7 @@ const fn record_method_preference(
     RecordMethodPreference { namespace, native_name, effect_api, caveat }
 }
 
-// go: internal/rules/prefer_effect_record.go:35 recordMethodPreferences
+// go: internal/rules/prefer_effect_record.go:35 recordMethodPreferences 2ce38039bdf6d3cc
 pub(crate) static RECORD_METHOD_PREFERENCES: &[RecordMethodPreference] = &[
     record_method_preference(
         RecordMemberNamespace::ConstructorMember,
@@ -88,7 +88,7 @@ pub(crate) static RECORD_METHOD_PREFERENCES: &[RecordMethodPreference] = &[
     ),
 ];
 
-// go: internal/rules/prefer_effect_record.go:44 recordMethodNames
+// go: internal/rules/prefer_effect_record.go:44 recordMethodNames 20fa5697b7ce8a04
 //
 // Rust: Go's `map[string]bool` of true values is a set.
 pub(crate) static RECORD_METHOD_NAMES: LazyLock<FxHashSet<&'static str>> = LazyLock::new(|| {
@@ -100,7 +100,7 @@ pub(crate) static RECORD_METHOD_NAMES: LazyLock<FxHashSet<&'static str>> = LazyL
 });
 
 impl RecordMethodPreference {
-    // go: internal/rules/prefer_effect_record.go:52 recordMethodPreference.matches
+    // go: internal/rules/prefer_effect_record.go:52 recordMethodPreference.matches 48329a45ee1aa3ef
     pub(crate) fn matches(&self, tp: &mut TypeParser<'_>, node: P<Node>) -> bool {
         if self.namespace == RecordMemberNamespace::ConstructorMember {
             return tp.is_native_object_constructor_method_reference(node, self.native_name);
@@ -108,7 +108,7 @@ impl RecordMethodPreference {
         tp.is_native_object_method_reference(node, self.native_name)
     }
 
-    // go: internal/rules/prefer_effect_record.go:59 recordMethodPreference.nativeLabel
+    // go: internal/rules/prefer_effect_record.go:59 recordMethodPreference.nativeLabel b8472cc03c91774e
     pub(crate) fn native_label(&self) -> String {
         if self.namespace == RecordMemberNamespace::InstanceMember {
             return format!("Object.prototype.{}", self.native_name);
@@ -117,7 +117,7 @@ impl RecordMethodPreference {
     }
 }
 
-// go: internal/rules/prefer_effect_record.go:66 runPreferEffectRecord
+// go: internal/rules/prefer_effect_record.go:66 runPreferEffectRecord 2a8971473317ced3
 pub(crate) fn run_prefer_effect_record(ctx: &mut Context<'_, '_>) -> Vec<P<Diagnostic>> {
     let mut diagnostics = Vec::new();
     // Rust: Go's recursive `walk` closure is a nested function.

@@ -10,7 +10,7 @@ use ets_shim::ast::SourceFile;
 use ets_shim::checker::{Checker, Program};
 use ets_shim::core::context::Context;
 
-// go: etscheckerhooks/init.go:20 init
+// go: etscheckerhooks/init.go:20 init 272b800d10e891cc
 // init registers the Effect diagnostics callbacks with TypeScript-Go.
 pub(crate) fn init() {
     // Set the version suffix so that core.Version() includes the Effect version
@@ -24,14 +24,14 @@ pub(crate) fn init() {
     );
 }
 
-// go: etscheckerhooks/init.go:32 getEffectConfig
+// go: etscheckerhooks/init.go:32 getEffectConfig a78676d0f2ad78fb
 // getEffectConfig retrieves the Effect plugin configuration from the program's compiler options.
 // Returns nil if no Effect config is present.
 pub(crate) fn get_effect_config(p: &dyn Program) -> Option<Arc<EffectPluginOptions>> {
     p.options().effect.get()
 }
 
-// go: etscheckerhooks/init.go:38 afterCheckSourceFile
+// go: etscheckerhooks/init.go:38 afterCheckSourceFile cd439d15857df278
 // afterCheckSourceFile is called after type checking each source file.
 // It runs Effect diagnostics if the plugin is enabled.
 pub(crate) fn after_check_source_file(

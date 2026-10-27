@@ -13,7 +13,7 @@ use rustc_hash::FxHashMap;
 static MESSAGE: &Message =
     &tsdiag::DO_NOT_USE_0_TYPEOF_X_USE_TYPEOF_X_1_INSTEAD_EFFECT_PREFER_SCHEMA_TYPE_PROPERTY;
 
-// go: internal/rules/prefer_schema_type_property.go:15 PreferSchemaTypeProperty
+// go: internal/rules/prefer_schema_type_property.go:15 PreferSchemaTypeProperty ac0531a0a86fa4fe
 pub static PREFER_SCHEMA_TYPE_PROPERTY: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "preferSchemaTypeProperty",
     group: "style",
@@ -38,7 +38,7 @@ pub static PREFER_SCHEMA_TYPE_PROPERTY: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/prefer_schema_type_property.go:32 PreferSchemaTypePropertyMatch
+// go: internal/rules/prefer_schema_type_property.go:32 PreferSchemaTypePropertyMatch 53e3ee9be2179cb5
 #[derive(Clone)]
 pub struct PreferSchemaTypePropertyMatch {
     pub source_file: P<SourceFile>,
@@ -50,7 +50,7 @@ pub struct PreferSchemaTypePropertyMatch {
     pub property_name: &'static str,
 }
 
-// go: internal/rules/prefer_schema_type_property.go:44 schemaPropertyHelperNamespaces
+// go: internal/rules/prefer_schema_type_property.go:44 schemaPropertyHelperNamespaces 1b4d5712dc4b0d0c
 static SCHEMA_PROPERTY_HELPER_NAMESPACES: LazyLock<
     FxHashMap<&'static str, &'static [&'static str]>,
 > = LazyLock::new(|| {
@@ -63,7 +63,7 @@ static SCHEMA_PROPERTY_HELPER_NAMESPACES: LazyLock<
     ])
 });
 
-// go: internal/rules/prefer_schema_type_property.go:52 AnalyzePreferSchemaTypeProperty
+// go: internal/rules/prefer_schema_type_property.go:52 AnalyzePreferSchemaTypeProperty e47a2083e298fe9c
 pub fn analyze_prefer_schema_type_property(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -91,7 +91,7 @@ pub fn analyze_prefer_schema_type_property(
     matches
 }
 
-// go: internal/rules/prefer_schema_type_property.go:72 analyzePreferSchemaTypePropertyNode
+// go: internal/rules/prefer_schema_type_property.go:72 analyzePreferSchemaTypePropertyNode 1a8eefa661bba717
 pub(crate) fn analyze_prefer_schema_type_property_node(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,

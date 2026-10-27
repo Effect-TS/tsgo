@@ -13,7 +13,7 @@ use ets_typeparser::TypeParser;
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::THIS_KEY_DOES_NOT_MATCH_THE_DETERMINISTIC_KEY_FOR_THIS_DECLARATION_THE_EXPECTED_KEY_IS_0_EFFECT_DETERMINISTIC_KEYS;
 
-// go: internal/rules/deterministic_keys.go:20 DeterministicKeys
+// go: internal/rules/deterministic_keys.go:20 DeterministicKeys ec77d85411da6388
 // DeterministicKeys ensures string key literals in Effect service/tag/error constructors
 // follow a deterministic, location-based naming convention.
 pub static DETERMINISTIC_KEYS: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -40,7 +40,7 @@ pub static DETERMINISTIC_KEYS: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/deterministic_keys.go:39 DeterministicKeyMatch
+// go: internal/rules/deterministic_keys.go:39 DeterministicKeyMatch d9c5442427ade459
 // DeterministicKeyMatch holds the AST nodes and computed key info needed by both
 // the diagnostic rule and the quick-fix for the deterministicKeys pattern.
 #[derive(Clone)]
@@ -52,7 +52,7 @@ pub struct DeterministicKeyMatchExported {
     pub expected_key: String,        // The expected key computed by keybuilder
 }
 
-// go: internal/rules/deterministic_keys.go:49 AnalyzeDeterministicKeys
+// go: internal/rules/deterministic_keys.go:49 AnalyzeDeterministicKeys 294c50e3850a8a78
 // AnalyzeDeterministicKeys finds all class declarations where the key string literal
 // doesn't match the expected deterministic key.
 //
@@ -101,7 +101,7 @@ pub fn analyze_deterministic_keys(
     matches
 }
 
-// go: internal/rules/deterministic_keys.go:83 deterministicKeyMatch
+// go: internal/rules/deterministic_keys.go:83 deterministicKeyMatch 74cf8ad545c5f768
 // deterministicKeyMatch holds the matched key info from a class declaration.
 //
 // Rust: Go's `deterministicKeyMatch` and `DeterministicKeyMatch` clash after capitalization; the exported one is
@@ -112,7 +112,7 @@ pub(crate) struct DeterministicKeyMatch {
     pub(crate) target: &'static str,
 }
 
-// go: internal/rules/deterministic_keys.go:89 checkDeterministicKeyMatch
+// go: internal/rules/deterministic_keys.go:89 checkDeterministicKeyMatch 388031c463219885
 pub(crate) fn check_deterministic_key_match(
     tp: &mut TypeParser<'_>,
     program: &'static dyn Program,
@@ -154,7 +154,7 @@ pub(crate) fn check_deterministic_key_match(
     })
 }
 
-// go: internal/rules/deterministic_keys.go:118 matchClassPattern
+// go: internal/rules/deterministic_keys.go:118 matchClassPattern 701ccd86457afe9a
 // matchClassPattern tries to match a class declaration against the supported patterns.
 // Priority: service targets first, then error targets, then tagged class targets, then custom.
 pub(crate) fn match_class_pattern(
@@ -243,7 +243,7 @@ pub(crate) fn match_class_pattern(
     None
 }
 
-// go: internal/rules/deterministic_keys.go:165 matchCustomPattern
+// go: internal/rules/deterministic_keys.go:165 matchCustomPattern 39bd05fe97d24b59
 // matchCustomPattern checks heritage clause nodes for call expressions with string literal
 // arguments whose parameter declarations contain the @effect-identifier annotation.
 //
@@ -317,7 +317,7 @@ pub(crate) fn match_custom_pattern(
     None
 }
 
-// go: internal/rules/deterministic_keys.go:241 getPackageJsonDirectory
+// go: internal/rules/deterministic_keys.go:241 getPackageJsonDirectory 91834641597a83b0
 // getPackageJsonDirectory gets the package.json directory for a source file from its metadata.
 //
 // Rust: Go's checker argument is unused and dropped. Go's assertion to its `metaProvider` interface always

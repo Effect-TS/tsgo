@@ -10,7 +10,7 @@ use rustc_hash::FxHashMap;
 // Rust: Go's `tspath.RootedFilePath` arguments are plain file names (docs/TSRS_API.md: tsrs has no rooted path
 // types), so `tspath.RootedDirectoryPathFromAbsolute` drops out.
 
-// go: internal/pluginoptions/resolver.go:12 ResolveEffectPluginOptionsForSourceFile
+// go: internal/pluginoptions/resolver.go:12 ResolveEffectPluginOptionsForSourceFile 7d38bd40f9880eee
 // ResolveEffectPluginOptionsForSourceFile resolves ordered path-scoped diagnostic overrides for a file.
 pub fn resolve_effect_plugin_options_for_source_file(
     config: Option<&EffectPluginOptions>,
@@ -43,7 +43,7 @@ pub fn resolve_effect_plugin_options_for_source_file(
     effective
 }
 
-// go: internal/pluginoptions/resolver.go:40 ResolveDiagnosticSeverityForFile
+// go: internal/pluginoptions/resolver.go:40 ResolveDiagnosticSeverityForFile 0effa833ac3413da
 // ResolveDiagnosticSeverityForFile resolves ordered diagnostic severity overrides for a file.
 //
 // Rust: Go returns `config.DiagnosticSeverity` itself when there are no overrides (borrowed here) and a fresh map
@@ -79,7 +79,7 @@ pub fn resolve_diagnostic_severity_for_file<'a>(
     Some(Cow::Owned(resolved))
 }
 
-// go: internal/pluginoptions/resolver.go:67 matchesOverride
+// go: internal/pluginoptions/resolver.go:67 matchesOverride 68e4edc52efeccc9
 pub(crate) fn matches_override(
     override_: &Override,
     file_name: &str,
@@ -115,7 +115,7 @@ pub(crate) fn matches_override(
     true
 }
 
-// go: internal/pluginoptions/resolver.go:90 applyOverride
+// go: internal/pluginoptions/resolver.go:90 applyOverride 9475fdef1930f7a9
 pub(crate) fn apply_override(
     target: Option<&mut ResolvedEffectPluginOptions>,
     override_: &Override,
@@ -159,7 +159,7 @@ pub(crate) fn apply_override(
     }
 }
 
-// go: internal/pluginoptions/resolver.go:130 cloneOptions
+// go: internal/pluginoptions/resolver.go:130 cloneOptions 3e2e710f93f74cf2
 pub(crate) fn clone_options(
     config: Option<&EffectPluginOptions>,
 ) -> Option<ResolvedEffectPluginOptions> {
@@ -182,7 +182,7 @@ pub(crate) fn clone_options(
     Some(cloned)
 }
 
-// go: internal/pluginoptions/resolver.go:152 cloneDiagnosticSeverity
+// go: internal/pluginoptions/resolver.go:152 cloneDiagnosticSeverity ec59d3fe5b86a170
 pub(crate) fn clone_diagnostic_severity(
     input: Option<&FxHashMap<String, Severity>>,
 ) -> Option<FxHashMap<String, Severity>> {
@@ -192,7 +192,7 @@ pub(crate) fn clone_diagnostic_severity(
     Some(cloned)
 }
 
-// go: internal/pluginoptions/resolver.go:161 cloneStringMap
+// go: internal/pluginoptions/resolver.go:161 cloneStringMap 1eb570f6c2e7f6d5
 pub(crate) fn clone_string_map(
     input: Option<&FxHashMap<String, String>>,
 ) -> Option<FxHashMap<String, String>> {
@@ -202,7 +202,7 @@ pub(crate) fn clone_string_map(
     Some(cloned)
 }
 
-// go: internal/pluginoptions/resolver.go:170 cloneKeyPatterns
+// go: internal/pluginoptions/resolver.go:170 cloneKeyPatterns 67cd1e32945e9565
 pub(crate) fn clone_key_patterns(patterns: &[KeyPattern]) -> Vec<KeyPattern> {
     if patterns.is_empty() {
         return Vec::new();

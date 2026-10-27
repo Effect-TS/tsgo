@@ -9,7 +9,7 @@ use ets_shim::ls::CodeAction;
 static MESSAGE: &Message =
     &tsdiag::EFFECT_0_EXPRESSES_THIS_OPTION_SUCCESS_VALUE_DIRECTLY_EFFECT_PREFER_SUCCEED_SOME_OR_NONE;
 
-// go: internal/fixables/prefer_succeed_some_or_none.go:13 PreferSucceedSomeOrNoneFix
+// go: internal/fixables/prefer_succeed_some_or_none.go:13 PreferSucceedSomeOrNoneFix ddf0deee0669c61e
 pub static PREFER_SUCCEED_SOME_OR_NONE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "preferSucceedSomeOrNone",
     description: "Replace with the direct Effect Option constructor",
@@ -18,7 +18,7 @@ pub static PREFER_SUCCEED_SOME_OR_NONE_FIX: LazyLock<Fixable> = LazyLock::new(||
     run: run_prefer_succeed_some_or_none_fix,
 });
 
-// go: internal/fixables/prefer_succeed_some_or_none.go:23 runPreferSucceedSomeOrNoneFix
+// go: internal/fixables/prefer_succeed_some_or_none.go:23 runPreferSucceedSomeOrNoneFix ecaca4280a3b6134
 fn run_prefer_succeed_some_or_none_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     for m in ets_rules::analyze_prefer_succeed_some_or_none(&mut ctx.type_parser, Some(sf)) {

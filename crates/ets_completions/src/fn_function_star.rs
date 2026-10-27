@@ -8,7 +8,7 @@ use ets_shim::scanner;
 
 use crate::*;
 
-// go: internal/completions/fn_function_star.go:16 fnFunctionStar
+// go: internal/completions/fn_function_star.go:16 fnFunctionStar aa33489aaa9f1a25
 // fnFunctionStar provides completions for `fn(function*(){})` when dot-accessing
 // the Effect module identifier (e.g., `Effect.fn|`). This is AST-based and does
 // not require the type checker.
@@ -18,7 +18,7 @@ pub(crate) static FN_FUNCTION_STAR: LazyLock<Completion> = LazyLock::new(|| Comp
     run: run_fn_function_star,
 });
 
-// go: internal/completions/fn_function_star.go:22 runFnFunctionStar
+// go: internal/completions/fn_function_star.go:22 runFnFunctionStar 3f44feb51e5f4354
 fn run_fn_function_star(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionItem> {
     let Some(result) =
         ets_completion::parse_accessed_expression_for_completion(ctx.source_file, ctx.position)
@@ -75,7 +75,7 @@ fn run_fn_function_star(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionIte
     items
 }
 
-// go: internal/completions/fn_function_star.go:74 findEnclosingVariableName
+// go: internal/completions/fn_function_star.go:74 findEnclosingVariableName 7f330f73b4e7e234
 // findEnclosingVariableName walks up from the given node to find an enclosing
 // VariableDeclaration and returns its identifier name, or "" if not found.
 pub(crate) fn find_enclosing_variable_name(node: P<Node>) -> String {

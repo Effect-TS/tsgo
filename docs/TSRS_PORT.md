@@ -40,7 +40,7 @@ Cargo.toml                        workspace: members = crates/*; [patch] -> tsrs
 crates/ets_shim/                  generated: re-exports tsrs per shim package (+ accessors exposed by patches)
 crates/ets_<pkg>/                 one crate per Go package, 1:1 with the Go files
 crates/<binary>/                  Rust-only: the executable; registers the hook crates and runs tsrs's CLI/LSP
-porting/                          scope.toml, manifest.tsv, skipped.tsv, ported.tsv
+porting/                          scope.toml, skipped.tsv (the manifest is computed, sync hashes live in the markers)
 testdata/baselines/reference/     shared baselines (Go and Rust)
 ```
 
@@ -61,7 +61,8 @@ Each phase ends when its exit criteria hold on `main`.
 ### Phase 0: porting tooling, docs, skills
 
 - `repoctl tsrs port-*` (manifest, status, todo, check, fix-lines, ack, diff, crate, deps, ready), the check wired into `pnpm check`.
-- `porting/scope.toml`, an initial `porting/manifest.tsv`, empty `skipped.tsv` / `ported.tsv`.
+- `porting/scope.toml`, an initial `porting/manifest.tsv`, empty `skipped.tsv` / `ported.tsv` (later replaced: the
+  manifest is now computed on the fly and the synced-to hashes live in the origin markers).
 - This document, `PORTING.md`, `TSRS_API.md`, `DIVERGENCES.md`, the skills in `.claude/skills/`, a short "Rust
   port" section in `AGENTS.md`.
 
@@ -221,11 +222,12 @@ Exit: a release ships the patched tsrs binary behind `effect-tsgo patch --tsrs`;
 ## Parity policy
 
 - **Same pull request.** A pull request that changes a ported Go declaration must update its Rust port. The
-  mechanism: `porting/ported.tsv` stores, per ported declaration, the hash of the Go declaration the Rust was synced
-  to. When the Go changes, `repoctl tsrs port-check` (part of `pnpm check`) fails with a hash mismatch until the Rust is
-  updated and `repoctl tsrs port-ack` records the new hash. The `port-change` skill does this.
-- **Moved, removed or renamed declarations** fail `check` too (unknown or misplaced markers); fix the Rust and run
-  `repoctl tsrs port-fix-lines`.
+  mechanism: each origin marker ends with the hash of the Go declaration the Rust was synced to
+  (`// go: <path>:<line> <Name> <hash>`). When the Go changes, `repoctl tsrs port-check` (part of `pnpm check`) fails
+  with a hash mismatch until the Rust is updated and `repoctl tsrs port-ack` writes the new hash into the marker. The
+  `port-change` skill does this.
+- **Moved, removed or renamed declarations** fail `check` too (unknown markers); fix the Rust and its markers, then
+  `repoctl tsrs port-ack`. Lines that merely shifted are not an error (`repoctl tsrs port-fix-lines` refreshes them).
 - **New declarations.** The port is complete and `require_new` is enabled in `porting/scope.toml`: a new in-scope Go
   declaration (code or test) must be ported (marker + `repoctl tsrs port-ack`) or listed in `porting/skipped.tsv` with a
   reason in the same pull request; `repoctl tsrs port-check` fails otherwise.

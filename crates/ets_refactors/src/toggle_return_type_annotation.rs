@@ -11,7 +11,7 @@ use ets_typeparser::TypeParser;
 
 use crate::*;
 
-// go: internal/refactors/toggle_return_type_annotation.go:14 ToggleReturnTypeAnnotation
+// go: internal/refactors/toggle_return_type_annotation.go:14 ToggleReturnTypeAnnotation d56de473444c9d5c
 pub static TOGGLE_RETURN_TYPE_ANNOTATION: LazyLock<Refactor> = LazyLock::new(|| Refactor {
     name: "toggleReturnTypeAnnotation",
     description: "Toggle return type annotation",
@@ -19,7 +19,7 @@ pub static TOGGLE_RETURN_TYPE_ANNOTATION: LazyLock<Refactor> = LazyLock::new(|| 
     run: run_toggle_return_type_annotation,
 });
 
-// go: internal/refactors/toggle_return_type_annotation.go:21 runToggleReturnTypeAnnotation
+// go: internal/refactors/toggle_return_type_annotation.go:21 runToggleReturnTypeAnnotation f7cf1ff007a1e25c
 pub(crate) fn run_toggle_return_type_annotation(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let token = astnav::get_token_at_position(ctx.source_file, span_pos(ctx));
 
@@ -115,7 +115,7 @@ pub(crate) fn run_toggle_return_type_annotation(ctx: &mut Context<'_, '_>) -> Ve
     vec![action]
 }
 
-// go: internal/refactors/toggle_return_type_annotation.go:110 getFunctionLikeType
+// go: internal/refactors/toggle_return_type_annotation.go:110 getFunctionLikeType 3a1b88cebe920bfc
 // getFunctionLikeType returns the return type node from a function-like declaration.
 pub(crate) fn get_function_like_type(node: P<Node>) -> Option<P<Node>> {
     match node.kind() {
@@ -127,7 +127,7 @@ pub(crate) fn get_function_like_type(node: P<Node>) -> Option<P<Node>> {
     }
 }
 
-// go: internal/refactors/toggle_return_type_annotation.go:126 getInferredReturnTypeFromChecker
+// go: internal/refactors/toggle_return_type_annotation.go:126 getInferredReturnTypeFromChecker f74ecb76764f6efe
 // getInferredReturnTypeFromChecker extracts the return type from a function-like declaration
 // using the type checker. It handles overloaded functions and regular signatures.
 //

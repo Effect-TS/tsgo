@@ -4,7 +4,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/effect_type.go:11 effectModuleDescriptor
+// go: internal/typeparser/effect_type.go:11 effectModuleDescriptor fd459a5235ac54b2
 pub(crate) static EFFECT_MODULE_DESCRIPTOR: PackageSourceFileDescriptor =
     new_package_source_file_descriptor(
         ModuleDescriptorId::Effect,
@@ -12,16 +12,16 @@ pub(crate) static EFFECT_MODULE_DESCRIPTOR: PackageSourceFileDescriptor =
         Some(&is_effect_type_source_file),
     );
 
-// go: internal/typeparser/effect_type.go:13 effectPackageExportDescriptor
+// go: internal/typeparser/effect_type.go:13 effectPackageExportDescriptor 5ebfb55f7787d5b4
 pub(crate) static EFFECT_PACKAGE_EXPORT_DESCRIPTOR: PackageSourceFileDescriptor =
     new_package_source_file_descriptor(ModuleDescriptorId::EffectPackage, "effect", None);
 
-// go: internal/typeparser/effect_type.go:17 EffectTypeId
+// go: internal/typeparser/effect_type.go:17 EffectTypeId 588b9c56d48a762a
 // EffectTypeId is the property key for Effect's variance struct.
 // Effect v4 (effect-smol) uses this pattern to encode type parameters.
 pub const EFFECT_TYPE_ID: &str = "~effect/Effect";
 
-// go: internal/typeparser/effect_type.go:20 Effect
+// go: internal/typeparser/effect_type.go:20 Effect 7394cc61eec66c86
 // Effect represents parsed Effect<A, E, R> type parameters.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct Effect {
@@ -31,24 +31,24 @@ pub struct Effect {
 }
 
 impl Effect {
-    // go: internal/typeparser/effect_type.go:26 Effect.A
+    // go: internal/typeparser/effect_type.go:26 Effect.A 6ef90197255f6fc7
     pub fn a(&self) -> P<Type> {
         self.a
     }
 
-    // go: internal/typeparser/effect_type.go:28 Effect.E
+    // go: internal/typeparser/effect_type.go:28 Effect.E 190a2401a64c9acb
     pub fn e(&self) -> P<Type> {
         self.e
     }
 
-    // go: internal/typeparser/effect_type.go:30 Effect.R
+    // go: internal/typeparser/effect_type.go:30 Effect.R fad6c60fdffd2c4a
     pub fn r(&self) -> P<Type> {
         self.r
     }
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/effect_type.go:36 TypeParser.EffectType
+    // go: internal/typeparser/effect_type.go:36 TypeParser.EffectType 59a2c9f4eae75aff
     // EffectType parses an Effect type and extracts A, E, R parameters.
     // Returns nil if the type is not an Effect.
     // The detection strategy is chosen based on the detected Effect version:
@@ -111,7 +111,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/effect_type.go:100 TypeParser.parseVarianceStruct
+    // go: internal/typeparser/effect_type.go:100 TypeParser.parseVarianceStruct 9ca118d15f39d0d6
     // parseVarianceStruct extracts A, E, R from a variance struct type.
     pub(crate) fn parse_variance_struct(&mut self, t: Option<P<Type>>) -> Option<Effect> {
         let a = self.extract_covariant_type(t, "_A")?;
@@ -123,13 +123,13 @@ impl TypeParser<'_> {
         Some(Effect { a, e, r })
     }
 
-    // go: internal/typeparser/effect_type.go:120 TypeParser.IsEffectType
+    // go: internal/typeparser/effect_type.go:120 TypeParser.IsEffectType 2f86e174c143304c
     // IsEffectType returns true if the type has the Effect variance struct.
     pub fn is_effect_type(&mut self, t: impl Into<Option<P<Type>>>) -> bool {
         self.effect_type(t).is_some()
     }
 
-    // go: internal/typeparser/effect_type.go:127 TypeParser.StrictEffectType
+    // go: internal/typeparser/effect_type.go:127 TypeParser.StrictEffectType c0a6e52cf90b66cb
     // StrictEffectType returns the parsed Effect type only if the type's symbol name
     // is "Effect". This filters out types like Stream, Layer, HttpApp.Default that
     // carry the variance struct but are not Effect itself.
@@ -143,7 +143,7 @@ impl TypeParser<'_> {
         cached(self, |l| &mut l.strict_effect_type, t, |tp| tp.effect_type(t))
     }
 
-    // go: internal/typeparser/effect_type.go:143 TypeParser.StrictIsEffectType
+    // go: internal/typeparser/effect_type.go:143 TypeParser.StrictIsEffectType 37883f3f3f4a75fb
     // StrictIsEffectType returns true if the type has the Effect variance struct
     // AND the type's symbol name is "Effect". This filters out types like Stream,
     // Layer, HttpApp.Default that carry the variance struct but are not Effect itself.
@@ -151,7 +151,7 @@ impl TypeParser<'_> {
         self.strict_effect_type(t).is_some()
     }
 
-    // go: internal/typeparser/effect_type.go:149 TypeParser.EffectSubtype
+    // go: internal/typeparser/effect_type.go:149 TypeParser.EffectSubtype 4e37fadff81fa168
     // EffectSubtype detects types that have the Effect variance struct AND a "_tag" or "get"
     // marker property (e.g., Exit, Option, Either, Pool). Returns nil if not an Effect subtype.
     pub fn effect_subtype(&mut self, t: impl Into<Option<P<Type>>>) -> Option<Effect> {
@@ -173,13 +173,13 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/effect_type.go:166 TypeParser.IsEffectSubtype
+    // go: internal/typeparser/effect_type.go:166 TypeParser.IsEffectSubtype 2c59960070c9d84a
     // IsEffectSubtype returns true if the type is an Effect subtype (has variance struct + "_tag" or "get").
     pub fn is_effect_subtype(&mut self, t: impl Into<Option<P<Type>>>) -> bool {
         self.effect_subtype(t).is_some()
     }
 
-    // go: internal/typeparser/effect_type.go:172 TypeParser.FiberType
+    // go: internal/typeparser/effect_type.go:172 TypeParser.FiberType 4a24496a8740cc3a
     // FiberType detects types that have the Effect variance struct AND both "await" and "poll"
     // properties. Returns nil if the type is not a Fiber.
     pub fn fiber_type(&mut self, t: impl Into<Option<P<Type>>>) -> Option<Effect> {
@@ -201,13 +201,13 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/effect_type.go:189 TypeParser.IsFiberType
+    // go: internal/typeparser/effect_type.go:189 TypeParser.IsFiberType 9006f569d4017399
     // IsFiberType returns true if the type is a Fiber type (has variance struct + "await" and "poll").
     pub fn is_fiber_type(&mut self, t: impl Into<Option<P<Type>>>) -> bool {
         self.fiber_type(t).is_some()
     }
 
-    // go: internal/typeparser/effect_type.go:196 TypeParser.HasEffectTypeId
+    // go: internal/typeparser/effect_type.go:196 TypeParser.HasEffectTypeId bf5f30c863774395
     // HasEffectTypeId returns true if the type has the Effect type identifier.
     // For v4, this is a quick check for the "~effect/Effect" property.
     // For v3/unknown, this defers to IsEffectType since there is no single property shortcut.
@@ -231,7 +231,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/effect_type.go:210 isEffectTypeSourceFile
+// go: internal/typeparser/effect_type.go:210 isEffectTypeSourceFile addb74edd2c2095e
 // Rust: Go's `c` argument is `tp.checker`.
 pub(crate) fn is_effect_type_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> bool {
     let Some(module_sym) = get_symbol_of_declaration(tp.checker, sf.as_node()) else {
@@ -250,14 +250,14 @@ pub(crate) fn is_effect_type_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFi
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/effect_type.go:235 TypeParser.IsExpressionEffectModule
+    // go: internal/typeparser/effect_type.go:235 TypeParser.IsExpressionEffectModule 28df466e7fecff80
     // IsExpressionEffectModule reports whether node resolves to the Effect module namespace
     // (e.g., the `Effect` in `import { Effect } from "effect"`).
     pub fn is_expression_effect_module(&mut self, node: impl Into<Option<P<Node>>>) -> bool {
         self.is_node_reference_to_module(node, &EFFECT_MODULE_DESCRIPTOR)
     }
 
-    // go: internal/typeparser/effect_type.go:240 TypeParser.IsNodeReferenceToEffectModuleApi
+    // go: internal/typeparser/effect_type.go:240 TypeParser.IsNodeReferenceToEffectModuleApi d5ffc56aa2816747
     // IsNodeReferenceToEffectModuleApi reports whether node resolves to a member exported by the "effect" package.
     pub fn is_node_reference_to_effect_module_api(
         &mut self,
@@ -267,7 +267,7 @@ impl TypeParser<'_> {
         self.is_node_reference_to_module_export(node, &EFFECT_MODULE_DESCRIPTOR, member_name)
     }
 
-    // go: internal/typeparser/effect_type.go:249 TypeParser.IsNodeReferenceToEffectPackageExport
+    // go: internal/typeparser/effect_type.go:249 TypeParser.IsNodeReferenceToEffectPackageExport feb91efeae5a2452
     // IsNodeReferenceToEffectPackageExport reports whether node resolves to a member
     // exported by any module in the "effect" npm package. Unlike IsNodeReferenceToEffectModuleApi,
     // this does not require the source file to export the Effect type — it only checks

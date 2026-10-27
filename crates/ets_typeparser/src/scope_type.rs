@@ -4,12 +4,12 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/scope_type.go:11 ScopeTypeId
+// go: internal/typeparser/scope_type.go:11 ScopeTypeId 9af8a8881e3c6385
 // ScopeTypeId is the property key for Scope's variance struct.
 pub const SCOPE_TYPE_ID: &str = "~effect/Scope";
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/scope_type.go:17 TypeParser.IsScopeType
+    // go: internal/typeparser/scope_type.go:17 TypeParser.IsScopeType 31a0d40b69a7cdb0
     // IsScopeType returns true if the type is an Effect Scope type.
     // For v4, this checks for the "~effect/Scope" computed property.
     // For v3/unknown, this checks that the type is "pipeable" (has a callable pipe property)

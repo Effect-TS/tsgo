@@ -5,7 +5,7 @@ use regex::Regex;
 
 use crate::*;
 
-// go test: internal/rules/manual_metric_tap_to_track_test.go:13 TestManualMetricTapToTrackCallbackShapes
+// go test: internal/rules/manual_metric_tap_to_track_test.go:13 TestManualMetricTapToTrackCallbackShapes 160a8a2ce441d10c
 #[test]
 fn test_manual_metric_tap_to_track_callback_shapes() {
     run_on_checker_stack(|t| {

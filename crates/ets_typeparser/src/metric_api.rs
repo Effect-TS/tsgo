@@ -3,7 +3,7 @@ use ets_shim::core::P;
 
 use crate::*;
 
-// go: internal/typeparser/metric_api.go:8 effectMetricModuleDescriptor
+// go: internal/typeparser/metric_api.go:8 effectMetricModuleDescriptor b00521599e91c7be
 pub(crate) static EFFECT_METRIC_MODULE_DESCRIPTOR: PackageSourceFileDescriptor =
     new_package_source_file_descriptor(
         ModuleDescriptorId::Metric,
@@ -11,7 +11,7 @@ pub(crate) static EFFECT_METRIC_MODULE_DESCRIPTOR: PackageSourceFileDescriptor =
         Some(&is_effect_metric_source_file),
     );
 
-// go: internal/typeparser/metric_api.go:8 effectMetricModuleDescriptor
+// go: internal/typeparser/metric_api.go:8 effectMetricModuleDescriptor b00521599e91c7be
 // Rust: the descriptor's matcher (a Go func literal). Go's nil checker and source file guards cannot fail here.
 fn is_effect_metric_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> bool {
     let c = &mut *tp.checker;
@@ -26,7 +26,7 @@ fn is_effect_metric_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> b
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/metric_api.go:26 TypeParser.IsNodeReferenceToEffectMetricModuleApi
+    // go: internal/typeparser/metric_api.go:26 TypeParser.IsNodeReferenceToEffectMetricModuleApi 9f23fc6141c845cd
     // IsNodeReferenceToEffectMetricModuleApi reports whether node resolves to a
     // member exported by Effect's Metric module.
     pub fn is_node_reference_to_effect_metric_module_api(
@@ -37,7 +37,7 @@ impl TypeParser<'_> {
         self.is_node_reference_to_module_export(node, &EFFECT_METRIC_MODULE_DESCRIPTOR, member_name)
     }
 
-    // go: internal/typeparser/metric_api.go:31 TypeParser.IsExpressionEffectMetricModule
+    // go: internal/typeparser/metric_api.go:31 TypeParser.IsExpressionEffectMetricModule 81529c11717423ff
     // IsExpressionEffectMetricModule reports whether node references Effect's Metric module.
     pub fn is_expression_effect_metric_module(&mut self, node: P<Node>) -> bool {
         self.is_node_reference_to_module(node, &EFFECT_METRIC_MODULE_DESCRIPTOR)

@@ -12,7 +12,7 @@ fn directive(line: i64, is_next_line: bool, rules: Vec<RuleSeverity>) -> Directi
     Directive { line, is_next_line, rules, ..Default::default() }
 }
 
-// go test: internal/directives/parser_test.go:10 TestEtscoreParseSeverity
+// go test: internal/directives/parser_test.go:10 TestEtscoreParseSeverity f07631c4662abd1a
 #[test]
 fn test_etscore_parse_severity() {
     ets_go::testing::run(|t| {
@@ -54,7 +54,7 @@ fn test_etscore_parse_severity() {
     });
 }
 
-// go test: internal/directives/parser_test.go:46 TestEtscoreSeverityString
+// go test: internal/directives/parser_test.go:46 TestEtscoreSeverityString c722d5d306d123f1
 #[test]
 fn test_etscore_severity_string() {
     ets_go::testing::run(|t| {
@@ -86,7 +86,7 @@ fn test_etscore_severity_string() {
     });
 }
 
-// go test: internal/directives/parser_test.go:72 TestSeverityToCategory
+// go test: internal/directives/parser_test.go:72 TestSeverityToCategory 6485eaa033419651
 #[test]
 fn test_severity_to_category() {
     ets_go::testing::run(|t| {
@@ -125,7 +125,7 @@ fn test_severity_to_category() {
     });
 }
 
-// go test: internal/directives/parser_test.go:122 TestCollectEffectDirectives
+// go test: internal/directives/parser_test.go:122 TestCollectEffectDirectives fe13a8eb4efdf094
 #[test]
 fn test_collect_effect_directives() {
     ets_go::testing::run(|t| {
@@ -278,7 +278,7 @@ fn test_collect_effect_directives() {
     });
 }
 
-// go test: internal/directives/parser_test.go:264 TestDirectiveAffectedLine
+// go test: internal/directives/parser_test.go:264 TestDirectiveAffectedLine 5bbfc25eb0bdc7c0
 #[test]
 fn test_directive_affected_line() {
     ets_go::testing::run(|t| {
@@ -300,7 +300,7 @@ fn test_directive_affected_line() {
     });
 }
 
-// go test: internal/directives/parser_test.go:294 TestDirectiveSetGetEffectiveSeverity
+// go test: internal/directives/parser_test.go:294 TestDirectiveSetGetEffectiveSeverity 7ce25a84a6f69f43
 #[test]
 fn test_directive_set_get_effective_severity() {
     ets_go::testing::run(|t| {
@@ -358,7 +358,7 @@ anotherCall()"#;
     });
 }
 
-// go test: internal/directives/parser_test.go:348 TestDirectiveSetIsSuppressed
+// go test: internal/directives/parser_test.go:348 TestDirectiveSetIsSuppressed 7db4802dc67297e5
 #[test]
 fn test_directive_set_is_suppressed() {
     ets_go::testing::run(|t| {
@@ -395,7 +395,7 @@ Effect.log("hello")  // Line 2
     });
 }
 
-// go test: internal/directives/parser_test.go:396 TestCaseInsensitiveRuleMatching
+// go test: internal/directives/parser_test.go:396 TestCaseInsensitiveRuleMatching 6dee84255470ce9c
 #[test]
 fn test_case_insensitive_rule_matching() {
     ets_go::testing::run(|t| {
@@ -434,7 +434,7 @@ Effect.succeed(2)  // Line 3";
     });
 }
 
-// go test: internal/directives/parser_test.go:456 TestSectionDirectives
+// go test: internal/directives/parser_test.go:456 TestSectionDirectives 6c27bde7a73c7726
 #[test]
 fn test_section_directives() {
     ets_go::testing::run(|t| {
@@ -478,7 +478,7 @@ Effect.succeed(6)  // Line 8 - still warning through EOF";
     });
 }
 
-// go test: internal/directives/parser_test.go:520 TestSectionDirectiveAppliesByRuleUntilOverridden
+// go test: internal/directives/parser_test.go:520 TestSectionDirectiveAppliesByRuleUntilOverridden 91fc3dae129bf712
 #[test]
 fn test_section_directive_applies_by_rule_until_overridden() {
     ets_go::testing::run(|t| {
@@ -527,7 +527,7 @@ Effect.succeed(5)  // Line 7 - wildcard override error";
     });
 }
 
-// go test: internal/directives/parser_test.go:590 TestNextLineDirectiveTakesPrecedenceOverSection
+// go test: internal/directives/parser_test.go:590 TestNextLineDirectiveTakesPrecedenceOverSection 94170b09babd4a67
 #[test]
 fn test_next_line_directive_takes_precedence_over_section() {
     ets_go::testing::run(|t| {
@@ -564,7 +564,7 @@ Effect.succeed(3)  // Line 4 - back to off from section";
     });
 }
 
-// go test: internal/directives/parser_test.go:635 TestUsedDirectivesTracking
+// go test: internal/directives/parser_test.go:635 TestUsedDirectivesTracking 8150002b1ff3c38c
 #[test]
 fn test_used_directives_tracking() {
     ets_go::testing::run(|t| {
@@ -606,7 +606,7 @@ Effect.succeed(2)  // Line 3 - different rule, won't suppress floatingEffect";
     });
 }
 
-// go test: internal/directives/parser_test.go:667 TestWildcardSectionPrecedence
+// go test: internal/directives/parser_test.go:667 TestWildcardSectionPrecedence aab01429c5ca72da
 #[test]
 fn test_wildcard_section_precedence() {
     ets_go::testing::run(|t| {
@@ -648,7 +648,7 @@ Effect.succeed(1)  // Line 6 - suppressed again by wildcard";
     });
 }
 
-// go test: internal/directives/parser_test.go:721 TestWildcardOffThenRuleWarningReEnablesSpecificRule
+// go test: internal/directives/parser_test.go:721 TestWildcardOffThenRuleWarningReEnablesSpecificRule fed09ecc25b1ca62
 #[test]
 fn test_wildcard_off_then_rule_warning_re_enables_specific_rule() {
     ets_go::testing::run(|t| {
@@ -680,7 +680,7 @@ import fs from "node:fs""#;
     });
 }
 
-// go test: internal/directives/parser_test.go:739 TestWildcardOffAtTopLineStillLooksSuppressedAtLineZero
+// go test: internal/directives/parser_test.go:739 TestWildcardOffAtTopLineStillLooksSuppressedAtLineZero 742f80bdc8d15e5e
 #[test]
 fn test_wildcard_off_at_top_line_still_looks_suppressed_at_line_zero() {
     ets_go::testing::run(|t| {
@@ -702,7 +702,7 @@ import fs from "node:fs""#;
     });
 }
 
-// go test: internal/directives/parser_test.go:757 TestWildcardSkipFileIsDistinctFromOff
+// go test: internal/directives/parser_test.go:757 TestWildcardSkipFileIsDistinctFromOff db983356390ea760
 #[test]
 fn test_wildcard_skip_file_is_distinct_from_off() {
     ets_go::testing::run(|t| {
@@ -723,7 +723,7 @@ import fs from "node:fs""#;
     });
 }
 
-// go test: internal/directives/parser_test.go:774 TestWildcardNextLineSuppression
+// go test: internal/directives/parser_test.go:774 TestWildcardNextLineSuppression 9dff676fcdc357c2
 #[test]
 fn test_wildcard_next_line_suppression() {
     ets_go::testing::run(|t| {
@@ -759,7 +759,7 @@ Effect.succeed(2)  // Line 2 - not suppressed";
     });
 }
 
-// go test: internal/directives/parser_test.go:821 TestWildcardSkipFile
+// go test: internal/directives/parser_test.go:821 TestWildcardSkipFile 8d9789a1c8958da8
 #[test]
 fn test_wildcard_skip_file() {
     ets_go::testing::run(|t| {
@@ -792,7 +792,7 @@ Effect.succeed(1)  // Line 1 - skipped";
     });
 }
 
-// go test: internal/directives/parser_test.go:850 TestWildcardUnusedDirectiveTracking
+// go test: internal/directives/parser_test.go:850 TestWildcardUnusedDirectiveTracking 490da2ee87cc5344
 #[test]
 fn test_wildcard_unused_directive_tracking() {
     ets_go::testing::run(|t| {
@@ -826,7 +826,7 @@ Effect.succeed(2)  // Line 3 - specific rule next-line";
     });
 }
 
-// go test: internal/directives/parser_test.go:877 TestHasEnablingDirectiveWithWildcard
+// go test: internal/directives/parser_test.go:877 TestHasEnablingDirectiveWithWildcard ffb73059eeb68df4
 #[test]
 fn test_has_enabling_directive_with_wildcard() {
     ets_go::testing::run(|t| {
@@ -859,7 +859,7 @@ Effect.succeed(1)";
     });
 }
 
-// go test: internal/directives/parser_test.go:913 TestHasEnablingDirectiveWithWildcardOff
+// go test: internal/directives/parser_test.go:913 TestHasEnablingDirectiveWithWildcardOff 26c140989fda9537
 #[test]
 fn test_has_enabling_directive_with_wildcard_off() {
     ets_go::testing::run(|t| {
@@ -881,7 +881,7 @@ Effect.succeed(1)";
     });
 }
 
-// go test: internal/directives/parser_test.go:928 TestHasAnyDirectiveForRule
+// go test: internal/directives/parser_test.go:928 TestHasAnyDirectiveForRule afea3778253a051f
 #[test]
 fn test_has_any_directive_for_rule() {
     ets_go::testing::run(|t| {

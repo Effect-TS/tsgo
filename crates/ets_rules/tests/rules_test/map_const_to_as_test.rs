@@ -5,7 +5,7 @@ use regex::Regex;
 
 use crate::*;
 
-// go test: internal/rules/map_const_to_as_test.go:13 TestMapConstToAsCallbackShapes
+// go test: internal/rules/map_const_to_as_test.go:13 TestMapConstToAsCallbackShapes 06871fe169e021e2
 #[test]
 fn test_map_const_to_as_callback_shapes() {
     run_on_checker_stack(|t| {

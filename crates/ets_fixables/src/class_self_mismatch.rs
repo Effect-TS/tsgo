@@ -6,7 +6,7 @@ use ets_shim::core::alloc_str;
 use ets_shim::diagnostics as tsdiag;
 use ets_shim::ls::CodeAction;
 
-// go: internal/fixables/class_self_mismatch.go:12 ClassSelfMismatchFix
+// go: internal/fixables/class_self_mismatch.go:12 ClassSelfMismatchFix 469ac8c01d02947d
 pub static CLASS_SELF_MISMATCH_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "classSelfMismatch",
     description: "Replace Self type parameter with the correct class name",
@@ -18,7 +18,7 @@ pub static CLASS_SELF_MISMATCH_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable
     run: run_class_self_mismatch_fix,
 });
 
-// go: internal/fixables/class_self_mismatch.go:20 runClassSelfMismatchFix
+// go: internal/fixables/class_self_mismatch.go:20 runClassSelfMismatchFix 0ef5c2682acc964f
 fn run_class_self_mismatch_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 

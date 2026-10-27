@@ -8,7 +8,7 @@ use ets_shim::ls::CodeAction;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_SCHEMA_CLASS_IS_CONSTRUCTED_WITH_NEW_0_MAKE_CAN_BE_USED_TO_CONSTRUCT_THE_SCHEMA_CLASS_INSTANCE_EFFECT_NEW_SCHEMA_CLASS;
 
-// go: internal/fixables/new_schema_class.go:12 NewSchemaClassFix
+// go: internal/fixables/new_schema_class.go:12 NewSchemaClassFix eecfbb696b5253a9
 pub static NEW_SCHEMA_CLASS_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "newSchemaClass",
     description: "Replace new Schema class construction with .make",
@@ -17,7 +17,7 @@ pub static NEW_SCHEMA_CLASS_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     run: run_new_schema_class_fix,
 });
 
-// go: internal/fixables/new_schema_class.go:20 runNewSchemaClassFix
+// go: internal/fixables/new_schema_class.go:20 runNewSchemaClassFix 3fc262f5d98a6eb1
 fn run_new_schema_class_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     let matches = ets_rules::analyze_new_schema_class(&mut ctx.type_parser, sf);

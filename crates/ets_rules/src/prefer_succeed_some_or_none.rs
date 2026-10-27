@@ -14,7 +14,7 @@ use ets_typeparser::{
 static MESSAGE: &Message =
     &tsdiag::EFFECT_0_EXPRESSES_THIS_OPTION_SUCCESS_VALUE_DIRECTLY_EFFECT_PREFER_SUCCEED_SOME_OR_NONE;
 
-// go: internal/rules/prefer_succeed_some_or_none.go:16 PreferSucceedSomeOrNone
+// go: internal/rules/prefer_succeed_some_or_none.go:16 PreferSucceedSomeOrNone 37029b0abad2842d
 // PreferSucceedSomeOrNone suggests Effect.succeedNone and Effect.succeedSome for
 // Effect.succeed calls that directly wrap Option.none or Option.some.
 pub static PREFER_SUCCEED_SOME_OR_NONE: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -41,7 +41,7 @@ pub static PREFER_SUCCEED_SOME_OR_NONE: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/prefer_succeed_some_or_none.go:42 PreferSucceedSomeOrNoneMatch
+// go: internal/rules/prefer_succeed_some_or_none.go:42 PreferSucceedSomeOrNoneMatch 303ed4a64acfba6f
 // PreferSucceedSomeOrNoneMatch holds the nodes needed by the diagnostic and quick fix.
 //
 // Rust: Go's `*PipingFlow` (nil unless the succeed step is a call, pipe or pipeable step) is an owned copy.
@@ -56,14 +56,14 @@ pub struct PreferSucceedSomeOrNoneMatch {
     pub value_type_arguments: Option<P<NodeList>>,
 }
 
-// go: internal/rules/prefer_succeed_some_or_none.go:52 normalizedOptionInput
+// go: internal/rules/prefer_succeed_some_or_none.go:52 normalizedOptionInput b45c887c637dfa54
 pub(crate) struct NormalizedOptionInput {
     pub(crate) replacement_name: &'static str,
     pub(crate) value_node: Option<P<Node>>,
     pub(crate) value_type_arguments: Option<P<NodeList>>,
 }
 
-// go: internal/rules/prefer_succeed_some_or_none.go:61 AnalyzePreferSucceedSomeOrNone
+// go: internal/rules/prefer_succeed_some_or_none.go:61 AnalyzePreferSucceedSomeOrNone b2d8b7eb7a0f5074
 // AnalyzePreferSucceedSomeOrNone finds piping flows in which Option.none or
 // Option.some feeds directly into Effect.succeed. This covers both nested calls
 // and pipe forms such as Option.none().pipe(Effect.succeed).
@@ -138,7 +138,7 @@ pub fn analyze_prefer_succeed_some_or_none(
     matches
 }
 
-// go: internal/rules/prefer_succeed_some_or_none.go:100 preferSucceedSomeOrNoneMatch
+// go: internal/rules/prefer_succeed_some_or_none.go:100 preferSucceedSomeOrNoneMatch 78cc7a7cbfb55d18
 pub(crate) fn prefer_succeed_some_or_none_match(
     sf: P<SourceFile>,
     flow: &PipingFlow,
@@ -165,7 +165,7 @@ pub(crate) fn prefer_succeed_some_or_none_match(
     m
 }
 
-// go: internal/rules/prefer_succeed_some_or_none.go:118 isOptionNoneCall
+// go: internal/rules/prefer_succeed_some_or_none.go:118 isOptionNoneCall 44b554b98187b299
 pub(crate) fn is_option_none_call(tp: &mut TypeParser<'_>, node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;
