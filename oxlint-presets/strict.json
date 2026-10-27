@@ -48,6 +48,7 @@
     "effecttsgo/lazy-effect": "error",
     "effecttsgo/lazy-promise-in-effect-sync": "error",
     "effecttsgo/leaking-requirements": "error",
+    "effecttsgo/manual-metric-tap-to-track": "error",
     "effecttsgo/map-const-to-as": "error",
     "effecttsgo/map-some-to-as-some": "error",
     "effecttsgo/match-effect-to-map-both": "error",

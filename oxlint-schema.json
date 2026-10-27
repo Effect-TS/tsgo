@@ -2428,6 +2428,9 @@
         "effecttsgo/leaking-requirements": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/manual-metric-tap-to-track": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/map-const-to-as": {
           "$ref": "#/definitions/RuleNoConfig"
         },

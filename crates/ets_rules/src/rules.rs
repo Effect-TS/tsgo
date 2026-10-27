@@ -122,6 +122,7 @@ pub static ALL: LazyLock<Vec<Rule>> = LazyLock::new(|| {
         (*ALL_OF_MAP_TO_FOR_EACH).clone(),
         (*MAP_SOME_TO_AS_SOME).clone(),
         (*MAP_CONST_TO_AS).clone(),
+        (*MANUAL_METRIC_TAP_TO_TRACK).clone(),
         (*FLAT_MAP_TO_MAP).clone(),
         (*FLAT_MAP_TO_TAP).clone(),
         (*FLAT_MAP_IGNORED_PARAM_TO_AND_THEN).clone(),

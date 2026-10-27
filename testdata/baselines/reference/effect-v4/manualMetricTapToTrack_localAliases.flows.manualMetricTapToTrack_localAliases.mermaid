@@ -1,0 +1,65 @@
+flowchart TB
+  0[/"type: Counter#lt;number#gt;<br/>node: counter#40;#quot;successes#quot;#41;"/]
+  1[["type: #40;choice: number#41; =#gt; Effect#lt;number, never, never#gt; #124; #123; #lt;Input, State, A#gt;#40;metric: Metric#lt;Input, State#gt;, f: #40;value: A#41; =#gt; Input#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;; #lt;State, A#gt;#40;metric: Metric#lt;NoInfer#lt;A#gt;, State#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;; #lt;A, E, R, Input, State#gt;#40;self: Effect#lt;A, E, R#gt;, metric: Metric#lt;Input, State#gt;, f: #40;value: A#41; =#gt; Input#41;: Effect#lt;A, E, R#gt;; #lt;A, E, R, State#gt;#40;self: Effect#lt;A, E, R#gt;, metric: Metric#lt;NoInfer#lt;A#gt;, State#gt;#41;: Effect#lt;A, E, R#gt;; #125; #124; undefined<br/>node: export function switchClauses#40;choice: number#41; #123;#92;n  switch #40;choice#41; #123;#92;n    case 0:#92;n      const aTrack = zTrack#92;n      return aTrack#92;n    case 1:#92;n      return source.pipe#40;tap#40;#40;n#41; =#gt; update#40;successes, n#41;#41;#41;#92;n  #125;#92;n  return undefined#92;n#125;"]]
+  2[/"type: #123; #lt;Input, State, A#gt;#40;metric: Metric#lt;Input, State#gt;, f: #40;value: A#41; =#gt; Input#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;; #lt;State, A#gt;#40;metric: Metric#lt;NoInfer#lt;A#gt;, State#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;; #lt;A, E, R, Input, State#gt;#40;self: Effect#lt;A, E, R#gt;, metric: Metric#lt;Input, State#gt;, f: #40;value: A#41; =#gt; Input#41;: Effect#lt;A, E, R#gt;; #lt;A, E, R, State#gt;#40;self: Effect#lt;A, E, R#gt;, metric: Metric#lt;NoInfer#lt;A#gt;, State#gt;#41;: Effect#lt;A, E, R#gt;; #125;<br/>node: aTrack"/]
+  3[/"type: Effect#lt;number, never, never#gt;<br/>node: source"/]
+  4["type: Effect#lt;number, never, never#gt;<br/>callee: tap<br/>args: #91;#40;n#41; =#gt; update#40;successes, n#41;#93;"]
+  5[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;A, E #124; E2, R #124; R2#gt;; #125;<br/>node: tap"/]
+  6[["type: #40;n: number#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;n#41; =#gt; update#40;successes, n#41;"]]
+  7[/"type: Counter#lt;number#gt;<br/>node: successes"/]
+  8["type: Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  9[/"type: #123; #lt;Input#gt;#40;input: Input#41;: #lt;State#gt;#40;self: Metric#lt;Input, State#gt;#41; =#gt; Effect#lt;void, never, never#gt;; #lt;Input, State#gt;#40;self: Metric#lt;Input, State#gt;, input: Input#41;: Effect#lt;void, never, never#gt;; #125;<br/>node: update"/]
+  10[/"type: number<br/>node: n"/]
+  11[/"type: undefined<br/>node: undefined"/]
+  12[/"type: Effect#lt;number, never, never#gt;<br/>node: hoisted#40;#41;"/]
+  13[/"type: #123; #lt;Input, State, A#gt;#40;metric: Metric#lt;Input, State#gt;, f: #40;value: A#41; =#gt; Input#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;; #lt;State, A#gt;#40;metric: Metric#lt;NoInfer#lt;A#gt;, State#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E, R#gt;; #lt;A, E, R, Input, State#gt;#40;self: Effect#lt;A, E, R#gt;, metric: Metric#lt;Input, State#gt;, f: #40;value: A#41; =#gt; Input#41;: Effect#lt;A, E, R#gt;; #lt;A, E, R, State#gt;#40;self: Effect#lt;A, E, R#gt;, metric: Metric#lt;NoInfer#lt;A#gt;, State#gt;#41;: Effect#lt;A, E, R#gt;; #125;<br/>node: zTrack"/]
+  14[["type: #40;#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: function hoisted#40;#41; #123;#92;n  return source.pipe#40;tap#40;#40;n#41; =#gt; update#40;successes, n#41;#41;#41;#92;n#125;"]]
+  15[/"type: Effect#lt;number, never, never#gt;<br/>node: source"/]
+  16["type: Effect#lt;number, never, never#gt;<br/>callee: tap<br/>args: #91;#40;n#41; =#gt; update#40;successes, n#41;#93;"]
+  17[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;A, E #124; E2, R #124; R2#gt;; #125;<br/>node: tap"/]
+  18[["type: #40;n: number#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;n#41; =#gt; update#40;successes, n#41;"]]
+  19[/"type: Counter#lt;number#gt;<br/>node: successes"/]
+  20["type: Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  21[/"type: #123; #lt;Input#gt;#40;input: Input#41;: #lt;State#gt;#40;self: Metric#lt;Input, State#gt;#41; =#gt; Effect#lt;void, never, never#gt;; #lt;Input, State#gt;#40;self: Metric#lt;Input, State#gt;, input: Input#41;: Effect#lt;void, never, never#gt;; #125;<br/>node: update"/]
+  22[/"type: number<br/>node: n"/]
+  23[["type: #40;zTrack: number#41; =#gt; Effect#lt;number, never, never#gt;<br/>node: export function onlyLocalAlias#40;zTrack: number#41; #123;#92;n  return source.pipe#40;tap#40;#40;n#41; =#gt; update#40;successes, n + zTrack#41;#41;#41;#92;n#125;"]]
+  24[/"type: Effect#lt;number, never, never#gt;<br/>node: source"/]
+  25["type: Effect#lt;number, never, never#gt;<br/>callee: tap<br/>args: #91;#40;n#41; =#gt; update#40;successes, n + zTrack#41;#93;"]
+  26[/"type: #123; #lt;A, B, E2, R2#gt;#40;f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;B, E2, R2#gt;#40;f: Effect#lt;B, E2, R2#gt;#41;: #lt;A, E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: NoInfer#lt;A#gt;#41; =#gt; Effect#lt;B, E2, R2#gt;#41;: Effect#lt;A, E #124; E2, R #124; R2#gt;; #lt;A, E, R, B, E2, R2#gt;#40;self: Effect#lt;A, E, R#gt;, f: Effect#lt;B, E2, R2#gt;#41;: Effect#lt;A, E #124; E2, R #124; R2#gt;; #125;<br/>node: tap"/]
+  27[["type: #40;n: number#41; =#gt; Effect#lt;void, never, never#gt;<br/>node: #40;n#41; =#gt; update#40;successes, n + zTrack#41;"]]
+  28[/"type: Counter#lt;number#gt;<br/>node: successes"/]
+  29["type: Effect#lt;void, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  30[/"type: #123; #lt;Input#gt;#40;input: Input#41;: #lt;State#gt;#40;self: Metric#lt;Input, State#gt;#41; =#gt; Effect#lt;void, never, never#gt;; #lt;Input, State#gt;#40;self: Metric#lt;Input, State#gt;, input: Input#41;: Effect#lt;void, never, never#gt;; #125;<br/>node: update"/]
+  31[/"type: number<br/>node: n + zTrack"/]
+  32[/"type: undefined<br/>node: void bTrack"/]
+  2 -->|"kind: potentialReturn"| 1
+  5 -->|"kind: transformCallee"| 4
+  7 -->|"kind: pipe"| 8
+  9 -->|"kind: transformCallee"| 7
+  10 -->|"kind: transformArg"| 7
+  8 -->|"kind: potentialReturn"| 6
+  6 -->|"kind: transformArg"| 4
+  3 -->|"kind: pipe"| 4
+  4 -->|"kind: potentialReturn"| 1
+  11 -->|"kind: potentialReturn"| 1
+  2 -->|"kind: usedBy"| 1
+  4 -->|"kind: usedBy"| 1
+  11 -->|"kind: usedBy"| 1
+  17 -->|"kind: transformCallee"| 16
+  19 -->|"kind: pipe"| 20
+  21 -->|"kind: transformCallee"| 19
+  22 -->|"kind: transformArg"| 19
+  20 -->|"kind: potentialReturn"| 18
+  18 -->|"kind: transformArg"| 16
+  15 -->|"kind: pipe"| 16
+  16 -->|"kind: potentialReturn"| 14
+  16 -->|"kind: usedBy"| 14
+  26 -->|"kind: transformCallee"| 25
+  28 -->|"kind: pipe"| 29
+  30 -->|"kind: transformCallee"| 28
+  31 -->|"kind: transformArg"| 28
+  29 -->|"kind: potentialReturn"| 27
+  27 -->|"kind: transformArg"| 25
+  24 -->|"kind: pipe"| 25
+  25 -->|"kind: potentialReturn"| 23
+  25 -->|"kind: usedBy"| 23

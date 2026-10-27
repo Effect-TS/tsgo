@@ -1,0 +1,92 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+
+
+==== /.src/manualMetricTapToTrack_bindings.ts (0 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics manualMetricTapToTrack:warning
+    // Effect v3 has no Effect.trackSuccesses / trackErrors / trackDefects, so the rule never fires here.
+    import { Effect, Metric } from "effect"
+    import { tap } from "effect/Effect"
+    import { counter, update } from "effect/Metric"
+    
+    const responseSize = Metric.gauge("response_size")
+    const requestErrors = counter("request_errors")
+    const ops = { tap: Effect.tap, update: Metric.update }
+    
+    declare const handleRequest: Effect.Effect<number, Error>
+    
+    // MUST NOT TRIGGER (v3 has no Effect.track*): named tap import
+    export const namedTap = handleRequest.pipe(tap((size) => Metric.update(responseSize, size)))
+    
+    // MUST NOT TRIGGER (v3 has no Effect.track*): named update import
+    export const namedUpdateDirect = handleRequest.pipe(Effect.tap(update(requestErrors, 1)))
+    
+    // MUST NOT TRIGGER (v3 has no Effect.track*): parameters shadow `Effect` and `Metric`
+    export function shadowed(Effect: number, Metric: string) {
+      return handleRequest.pipe(tap(update(requestErrors, Effect + Metric.length)))
+    }
+    
+    // MUST NOT TRIGGER: properties of a plain object are not references to the module APIs
+    export const objectReceivers = handleRequest.pipe(ops.tap(ops.update(requestErrors, 1)))
+    
+    // MUST NOT TRIGGER (v3 has no Effect.track*): the receivers are parameters typed as the modules
+    export function typedReceivers(E: typeof Effect, M: typeof Metric) {
+      return handleRequest.pipe(E.tap(M.update(requestErrors, 1)))
+    }
+    
+    // MUST NOT TRIGGER: a function expression parameter default reads the callback's own arguments
+    export const argumentsInParameter = handleRequest.pipe(
+      Effect.tap(function(size = arguments.length) {
+        return Metric.update(responseSize, size)
+      })
+    )
+    
+    // MUST NOT TRIGGER: a function expression input reads the callback's own arguments,
+    // also through a nested arrow function
+    export const argumentsInInput = handleRequest.pipe(
+      Effect.tap(function() {
+        return Metric.update(responseSize, (() => arguments.length)())
+      })
+    )
+    
+    // MUST NOT TRIGGER: a named function expression reads its own name, in the input
+    // or in a parameter default
+    export const ownNameInInput = handleRequest.pipe(
+      Effect.tap(function record(size) {
+        return Metric.update(responseSize, size + record.length)
+      })
+    )
+    export const ownNameInParameter = handleRequest.pipe(
+      Effect.tap(function record(size = record.length) {
+        return Metric.update(responseSize, size)
+      })
+    )
+    
+    // MUST NOT TRIGGER: new.target belongs to the function expression
+    export const newTargetInInput = handleRequest.pipe(
+      Effect.tap(function(size) {
+        return Metric.update(responseSize, new.target === undefined ? size : 0)
+      })
+    )
+    
+    // MUST NOT TRIGGER (v3 has no Effect.track*): a nested non-arrow function binds its own arguments
+    export const nestedFunctionArguments = handleRequest.pipe(
+      Effect.tap(function(size) {
+        return Metric.update(responseSize, size + (function() { return arguments.length })())
+      })
+    )
+    
+    // MUST NOT TRIGGER (v3 has no Effect.track*): a named function expression that never reads its name
+    export const unusedOwnName = handleRequest.pipe(
+      Effect.tap(function record(size) {
+        return Metric.update(responseSize, size * 2)
+      })
+    )
+    
+    // MUST NOT TRIGGER (v3 has no Effect.track*): an arrow callback reads the enclosing function's arguments
+    export function enclosingArguments(..._args: Array<number>) {
+      return handleRequest.pipe(Effect.tap((size) => Metric.update(responseSize, size + arguments.length)))
+    }
+    

@@ -1,0 +1,19 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/manualMetricTapToTrack_preview.ts(9,48): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+
+
+==== /.src/manualMetricTapToTrack_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics manualMetricTapToTrack:warning
+    import { Effect, Metric } from "effect"
+    
+    const responseSize = Metric.gauge("response_size")
+    
+    declare const handleRequest: Effect.Effect<number, Error>
+    
+    export const instrumented = handleRequest.pipe(Effect.tap((size) => Metric.update(responseSize, size)))
+                                                   ~~~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+    
