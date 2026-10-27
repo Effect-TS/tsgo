@@ -4,7 +4,7 @@
   Fix 0: "Disable globalErrorInEffectCatch for this line"
   Fix 1: "Disable globalErrorInEffectCatch for entire file"
 
-[D2] (6:14-6:47) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
+[D2] (6:14-6:47) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
   Fix 0: "Disable preferSchemaOverJson for this line"
   Fix 1: "Disable preferSchemaOverJson for entire file"
 
@@ -16,7 +16,7 @@
   Fix 0: "Disable globalErrorInEffectCatch for this line"
   Fix 1: "Disable globalErrorInEffectCatch for entire file"
 
-[D5] (12:14-12:47) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
+[D5] (12:14-12:47) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
   Fix 0: "Disable preferSchemaOverJson for this line"
   Fix 1: "Disable preferSchemaOverJson for entire file"
 
@@ -24,15 +24,15 @@
   Fix 0: "Disable globalErrorInEffectFailure for this line"
   Fix 1: "Disable globalErrorInEffectFailure for entire file"
 
-[D7] (19:18-19:34) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
+[D7] (19:18-19:34) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
   Fix 0: "Disable preferSchemaOverJson for this line"
   Fix 1: "Disable preferSchemaOverJson for entire file"
 
-[D8] (27:16-27:36) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
+[D8] (27:16-27:36) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
   Fix 0: "Disable preferSchemaOverJson for this line"
   Fix 1: "Disable preferSchemaOverJson for entire file"
 
-[D9] (35:18-35:34) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.UnknownFromJsonString` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
+[D9] (35:18-35:34) TS377026: This code uses `JSON.parse` or `JSON.stringify`. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(preferSchemaOverJson)
   Fix 0: "Disable preferSchemaOverJson for this line"
   Fix 1: "Disable preferSchemaOverJson for entire file"
 
