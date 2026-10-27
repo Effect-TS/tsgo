@@ -12,7 +12,7 @@ use ets_typeparser::{
     PipingFlowTransformation, TypeParser,
 };
 
-use crate::catch_die_to_or_die::catch_die_has_type_arguments;
+use crate::piping_flow::has_explicit_type_arguments;
 use crate::prefer_succeed_some_or_none::is_option_none_call;
 
 // go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:14 TimeoutCatchTagToTimeoutOrElse
@@ -112,7 +112,7 @@ pub fn analyze_timeout_catch_tag_to_timeout_or_else(
             let mut has_type_args = false;
             for j in i..=end {
                 has_type_args =
-                    has_type_args || catch_die_has_type_arguments(Some(transformations.at(j)));
+                    has_type_args || has_explicit_type_arguments(Some(transformations.at(j)));
             }
             if has_type_args {
                 i += 1;
