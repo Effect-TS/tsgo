@@ -9,6 +9,8 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{EffectMajorVersion, PipingFlow, PipingFlowTransformation, TypeParser};
 
+use crate::piping_flow::has_explicit_type_arguments;
+
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_OR_DIE_EXPRESSES_ESCALATING_EVERY_TYPED_FAILURE_INTO_A_DEFECT_MORE_DIRECTLY_THAN_EFFECT_0_WITH_AN_IDENTITY_FORWARDING_EFFECT_DIE_HANDLER_EFFECT_CATCH_DIE_TO_OR_DIE;
 
@@ -95,7 +97,7 @@ pub fn analyze_catch_die_to_or_die(
                     location: ets_shim::scanner::get_error_range_for_node(sf, callee),
                     effect_module,
                     catch_method_name: method_name,
-                    has_type_arguments: catch_die_has_type_arguments(Some(&transformation)),
+                    has_type_arguments: has_explicit_type_arguments(Some(&transformation)),
                     transformation,
                 });
             }
@@ -127,13 +129,4 @@ pub(crate) fn catch_die_method(
         effect_module = Some(callee.as_property_access_expression().expression());
     }
     Some((name, effect_module))
-}
-
-// go: internal/rules/catch_die_to_or_die.go:111 catchDieHasTypeArguments
-pub(crate) fn catch_die_has_type_arguments(
-    transformation: Option<&PipingFlowTransformation>,
-) -> bool {
-    transformation
-        .and_then(PipingFlowTransformation::type_arguments)
-        .is_some_and(|type_arguments| !type_arguments.nodes().is_empty())
 }

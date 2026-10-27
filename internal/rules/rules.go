@@ -124,6 +124,7 @@ var All = []rule.Rule{
 	FlatMapIdentityToFlatten,
 	MatchEffectToMatch,
 	MatchEffectToMapBoth,
+	MapMapErrorToMapBoth,
 	FlatMapConditionalToFilterOrFail,
 	OptionMatchToFromOption,
 	SyncToSucceed,

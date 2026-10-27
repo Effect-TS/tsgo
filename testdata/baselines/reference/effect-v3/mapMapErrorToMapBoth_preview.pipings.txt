@@ -1,0 +1,33 @@
+==== /.src/mapMapErrorToMapBoth_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 6:24 - 6:54
+Node: Data.TaggedError("TaskError")
+Node Kind: KindCallExpression
+
+Subject: "TaskError"
+Subject Type: "TaskError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "TaskError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 13:26 - 16:2
+Node: fetchCount.pipe(\n  Effect.map((n) => n > 0),\n  Effect.mapError((message) => new TaskError({ message }))\n)
+Node Kind: KindCallExpression
+
+Subject: fetchCount
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n > 0]
+      outType: Effect<boolean, string, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(message) => new TaskError({ message })]
+      outType: Effect<boolean, TaskError, never>

@@ -1,0 +1,33 @@
+==== /.src/mapMapErrorToMapBoth_namedImportsTarget.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 10:31 - 10:97
+Node: fetchCount.pipe(m((n) => n + 1), me((message) => message.length))
+Node Kind: KindCallExpression
+
+Subject: fetchCount
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: m
+      args: [(n) => n + 1]
+      outType: Effect<number, string, never>
+  [1] kind: pipeable
+      callee: me
+      args: [(message) => message.length]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 13:29 - 13:120
+Node: fetchCount.pipe(both({ onSuccess: (n) => n + 1, onFailure: (message) => message.length }))
+Node Kind: KindCallExpression
+
+Subject: fetchCount
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: both
+      args: [{ onSuccess: (n) => n + 1, onFailure: (message) => message.length }]
+      outType: Effect<number, number, never>
