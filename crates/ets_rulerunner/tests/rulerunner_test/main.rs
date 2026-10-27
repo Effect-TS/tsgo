@@ -6,6 +6,7 @@
 mod api_stability_leak_inheritance_test;
 mod api_stability_leak_internal_properties_test;
 mod api_stability_leak_test;
+mod flat_map_identity_to_flatten_test;
 mod prefer_effect_array_test;
 mod prefer_effect_record_test;
 mod prefer_effect_string_test;

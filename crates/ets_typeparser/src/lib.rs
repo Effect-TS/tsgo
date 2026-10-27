@@ -69,6 +69,9 @@ mod extends_schema_class;
 mod extends_schema_opaque;
 mod extends_schema_tagged;
 mod extends_sql_model_class;
+mod function_module;
+#[cfg(test)]
+mod function_module_test;
 mod function_node;
 mod get_contextual_type;
 #[cfg(test)]

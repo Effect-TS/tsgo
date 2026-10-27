@@ -594,5 +594,9 @@
     "Consider effect/String.{0} instead of native String.{1}. {2} effect(preferEffectString)": {
         "category": "Warning",
         "code": 377150
+    },
+    "`Effect.flatten` expresses this unwrapping more directly than `Effect.flatMap` with an identity callback. effect(flatMapIdentityToFlatten)": {
+        "category": "Suggestion",
+        "code": 377151
     }
 }

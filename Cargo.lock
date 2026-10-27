@@ -662,6 +662,7 @@ dependencies = [
 name = "ets_rulerunner"
 version = "0.0.0"
 dependencies = [
+ "ets_bundledeffect",
  "ets_directives",
  "ets_etscheckerhooks",
  "ets_etscore",

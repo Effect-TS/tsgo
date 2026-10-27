@@ -9,6 +9,7 @@
 //! of `etscheckerhooks` is unneeded: `evaluatePreview` runs the rule directly.
 
 mod effect_sleep_zero_to_yield_now_test;
+mod flat_map_identity_to_flatten_test;
 mod flat_map_to_tap_test;
 
 use std::path::{Path, PathBuf};
