@@ -1,5 +1,19 @@
 # @effect/tsgo
 
+## 0.60.1
+
+### Patch Changes
+
+- 9e00121: Prevent a false TS2488 when a rule such as `promiseInEffectSuccess` asks for the type of a spread over a `never`-typed value. TypeScript checks a spread through its enclosing array literal or call, where `never` counts as array-like, but checking the spread element on its own reported that `never` has no `[Symbol.iterator]()` method.
+  
+  ```ts
+  export function f() {
+    const rows = [1] as never
+    return [...rows] // no longer reports TS2488
+  }
+  ```
+- 87803ae: Fix the tsrs release build on Linux and macOS. tsrs's PGO training installs its bench projects with `pnpm --pm-on-fail=ignore`, which this repository's pnpm 10 rejects. The training now runs with the pnpm version pinned in tsrs's `package.json`, installed into the release work directory. The rest of the release job keeps the repository's own pnpm.
+
 ## 0.60.0
 
 ### Minor Changes
