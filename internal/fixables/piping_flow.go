@@ -11,7 +11,8 @@ import (
 // removePipingFlowTransformation removes one step from its piping flow and
 // leaves the step's input in place. A pipe argument is deleted, a pipe call left
 // without steps collapses to its subject, and a data-first, data-last or unary
-// application is replaced by its subject. It edits nothing and returns false
+// application is replaced by its subject, parenthesized when the subject binds
+// less tightly than the call it replaces. It edits nothing and returns false
 // when the step's shape is not recognized.
 func removePipingFlowTransformation(tracker *rewriter.Tracker, sf *ast.SourceFile, transformation *typeparser.PipingFlowTransformation) bool {
 	if tracker == nil || sf == nil || transformation == nil || transformation.Callee() == nil {
@@ -47,7 +48,7 @@ func removePipingFlowTransformation(tracker *rewriter.Tracker, sf *ast.SourceFil
 		if subject == nil {
 			return false
 		}
-		tracker.ReplaceNode(sf, callNode, tracker.DeepCloneNode(subject), nil)
+		tracker.ReplaceNode(sf, callNode, subjectInCallPosition(tracker, callNode, subject), nil)
 		return true
 
 	case typeparser.TransformationKindPipe, typeparser.TransformationKindPipeable,
@@ -75,7 +76,7 @@ func removePipingFlowTransformation(tracker *rewriter.Tracker, sf *ast.SourceFil
 			if subject == nil {
 				return false
 			}
-			tracker.ReplaceNode(sf, callNode, tracker.DeepCloneNode(subject), nil)
+			tracker.ReplaceNode(sf, callNode, subjectInCallPosition(tracker, callNode, subject), nil)
 			return true
 		}
 
@@ -91,6 +92,61 @@ func removePipingFlowTransformation(tracker *rewriter.Tracker, sf *ast.SourceFil
 		}
 	}
 
+	return false
+}
+
+// subjectInCallPosition clones a removed step's subject for the position of the
+// call it replaces. A call binds as tightly as any expression, so a subject that
+// binds less tightly (a conditional, binary, assignment, `as` or arrow
+// expression, an argument-less `new X`, or an optional chain that would extend
+// over a following member access) is parenthesized unless the position accepts
+// any expression. Object, function and class expressions are always
+// parenthesized because they could start an expression statement.
+func subjectInCallPosition(tracker *rewriter.Tracker, position *ast.Node, subject *ast.Node) *ast.Node {
+	clone := tracker.DeepCloneNode(subject)
+	if subjectNeedsParentheses(position, subject) {
+		return tracker.NewParenthesizedExpression(clone)
+	}
+	return clone
+}
+
+func subjectNeedsParentheses(position *ast.Node, subject *ast.Node) bool {
+	switch subject.Kind {
+	case ast.KindObjectLiteralExpression, ast.KindFunctionExpression, ast.KindClassExpression:
+		return true
+	}
+	if positionAcceptsAnyExpression(position) {
+		return false
+	}
+	switch {
+	case subject.Kind == ast.KindNewExpression:
+		return subject.AsNewExpression().Arguments == nil
+	case subject.Flags&ast.NodeFlagsOptionalChain != 0:
+		return true
+	}
+	return !ast.IsLeftHandSideExpression(subject)
+}
+
+// positionAcceptsAnyExpression reports whether an expression of assignment
+// precedence can stand at position without parentheses.
+func positionAcceptsAnyExpression(position *ast.Node) bool {
+	parent := position.Parent
+	if parent == nil {
+		return false
+	}
+	switch parent.Kind {
+	case ast.KindCallExpression:
+		return parent.AsCallExpression().Expression != position
+	case ast.KindNewExpression:
+		return parent.AsNewExpression().Expression != position
+	case ast.KindParenthesizedExpression, ast.KindArrayLiteralExpression, ast.KindSpreadElement,
+		ast.KindTemplateSpan, ast.KindReturnStatement:
+		return true
+	case ast.KindVariableDeclaration:
+		return parent.AsVariableDeclaration().Initializer == position
+	case ast.KindPropertyAssignment:
+		return parent.AsPropertyAssignment().Initializer == position
+	}
 	return false
 }
 

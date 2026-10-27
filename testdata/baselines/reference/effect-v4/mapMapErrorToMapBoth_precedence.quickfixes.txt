@@ -1,0 +1,579 @@
+=== Quick Fix Inventory ===
+
+[D1] (15:3-15:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D2] (20:3-20:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D3] (25:3-25:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D4] (31:5-31:20) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D5] (36:3-36:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D6] (41:3-41:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D7] (46:3-46:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D8] (50:33-50:48) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_precedence.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect, pipe } from "effect"
+
+declare const flag: boolean
+declare const first: Effect.Effect<number, string>
+declare const second: Effect.Effect<number, string>
+declare const maybe: Effect.Effect<number, string> | undefined
+declare const unknownValue: unknown
+declare const holder: { readonly effect?: Effect.Effect<number, string> } | undefined
+declare const load: () => Promise<Effect.Effect<number, string>>
+
+// MUST TRIGGER: the conditional becomes the .pipe receiver; the quickfix must parenthesize it
+export const conditionalSubject = (flag ? first : second).pipe(
+  Effect.mapBoth({
+    onSuccess: n => n + 1,
+    onFailure: message => message.length
+})
+)
+
+// MUST TRIGGER: a nullish-coalescing subject is parenthesized as the receiver
+export const nullishSubject = Effect.map(maybe ?? first, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: an `as` expression subject is parenthesized as the receiver
+export const asSubject = Effect.map(unknownValue as Effect.Effect<number, string>, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: an `await` subject is parenthesized as the receiver
+export const awaitSubject = async () =>
+  Effect.map(await load(), (n) => n + 1).pipe(
+    Effect.mapError((message) => message.length)
+  )
+
+// MUST TRIGGER: a non-null optional chain is parenthesized so the chain does not extend over .pipe
+export const optionalChainSubject = Effect.map(holder?.effect!, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a function pipe left without steps collapses to a conditional receiver
+export const pipeConditionalSubject = pipe(flag ? first : second, Effect.map((n) => n + 1)).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a curried step applied to a conditional collapses to a parenthesized receiver
+export const curriedConditionalSubject = Effect.map((n: number) => n + 1)(flag ? first : second).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: the subject lands in an argument position, so no parentheses are added
+export const argumentPosition = Effect.mapError(
+  Effect.map(flag ? first : second, (n) => n + 1),
+  (message) => message.length
+)
+
+
+=== [D2] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_precedence.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect, pipe } from "effect"
+
+declare const flag: boolean
+declare const first: Effect.Effect<number, string>
+declare const second: Effect.Effect<number, string>
+declare const maybe: Effect.Effect<number, string> | undefined
+declare const unknownValue: unknown
+declare const holder: { readonly effect?: Effect.Effect<number, string> } | undefined
+declare const load: () => Promise<Effect.Effect<number, string>>
+
+// MUST TRIGGER: the conditional becomes the .pipe receiver; the quickfix must parenthesize it
+export const conditionalSubject = Effect.map(flag ? first : second, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a nullish-coalescing subject is parenthesized as the receiver
+export const nullishSubject = (maybe ?? first).pipe(
+  Effect.mapBoth({
+    onSuccess: n => n + 1,
+    onFailure: message => message.length
+})
+)
+
+// MUST TRIGGER: an `as` expression subject is parenthesized as the receiver
+export const asSubject = Effect.map(unknownValue as Effect.Effect<number, string>, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: an `await` subject is parenthesized as the receiver
+export const awaitSubject = async () =>
+  Effect.map(await load(), (n) => n + 1).pipe(
+    Effect.mapError((message) => message.length)
+  )
+
+// MUST TRIGGER: a non-null optional chain is parenthesized so the chain does not extend over .pipe
+export const optionalChainSubject = Effect.map(holder?.effect!, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a function pipe left without steps collapses to a conditional receiver
+export const pipeConditionalSubject = pipe(flag ? first : second, Effect.map((n) => n + 1)).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a curried step applied to a conditional collapses to a parenthesized receiver
+export const curriedConditionalSubject = Effect.map((n: number) => n + 1)(flag ? first : second).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: the subject lands in an argument position, so no parentheses are added
+export const argumentPosition = Effect.mapError(
+  Effect.map(flag ? first : second, (n) => n + 1),
+  (message) => message.length
+)
+
+
+=== [D3] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_precedence.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect, pipe } from "effect"
+
+declare const flag: boolean
+declare const first: Effect.Effect<number, string>
+declare const second: Effect.Effect<number, string>
+declare const maybe: Effect.Effect<number, string> | undefined
+declare const unknownValue: unknown
+declare const holder: { readonly effect?: Effect.Effect<number, string> } | undefined
+declare const load: () => Promise<Effect.Effect<number, string>>
+
+// MUST TRIGGER: the conditional becomes the .pipe receiver; the quickfix must parenthesize it
+export const conditionalSubject = Effect.map(flag ? first : second, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a nullish-coalescing subject is parenthesized as the receiver
+export const nullishSubject = Effect.map(maybe ?? first, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: an `as` expression subject is parenthesized as the receiver
+export const asSubject = (unknownValue as Effect.Effect<number, string>).pipe(
+  Effect.mapBoth({
+    onSuccess: n => n + 1,
+    onFailure: message => message.length
+})
+)
+
+// MUST TRIGGER: an `await` subject is parenthesized as the receiver
+export const awaitSubject = async () =>
+  Effect.map(await load(), (n) => n + 1).pipe(
+    Effect.mapError((message) => message.length)
+  )
+
+// MUST TRIGGER: a non-null optional chain is parenthesized so the chain does not extend over .pipe
+export const optionalChainSubject = Effect.map(holder?.effect!, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a function pipe left without steps collapses to a conditional receiver
+export const pipeConditionalSubject = pipe(flag ? first : second, Effect.map((n) => n + 1)).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a curried step applied to a conditional collapses to a parenthesized receiver
+export const curriedConditionalSubject = Effect.map((n: number) => n + 1)(flag ? first : second).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: the subject lands in an argument position, so no parentheses are added
+export const argumentPosition = Effect.mapError(
+  Effect.map(flag ? first : second, (n) => n + 1),
+  (message) => message.length
+)
+
+
+=== [D4] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_precedence.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect, pipe } from "effect"
+
+declare const flag: boolean
+declare const first: Effect.Effect<number, string>
+declare const second: Effect.Effect<number, string>
+declare const maybe: Effect.Effect<number, string> | undefined
+declare const unknownValue: unknown
+declare const holder: { readonly effect?: Effect.Effect<number, string> } | undefined
+declare const load: () => Promise<Effect.Effect<number, string>>
+
+// MUST TRIGGER: the conditional becomes the .pipe receiver; the quickfix must parenthesize it
+export const conditionalSubject = Effect.map(flag ? first : second, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a nullish-coalescing subject is parenthesized as the receiver
+export const nullishSubject = Effect.map(maybe ?? first, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: an `as` expression subject is parenthesized as the receiver
+export const asSubject = Effect.map(unknownValue as Effect.Effect<number, string>, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: an `await` subject is parenthesized as the receiver
+export const awaitSubject = async () =>
+  (await load()).pipe(
+    Effect.mapBoth({
+    onSuccess: n => n + 1,
+    onFailure: message => message.length
+})
+  )
+
+// MUST TRIGGER: a non-null optional chain is parenthesized so the chain does not extend over .pipe
+export const optionalChainSubject = Effect.map(holder?.effect!, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a function pipe left without steps collapses to a conditional receiver
+export const pipeConditionalSubject = pipe(flag ? first : second, Effect.map((n) => n + 1)).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a curried step applied to a conditional collapses to a parenthesized receiver
+export const curriedConditionalSubject = Effect.map((n: number) => n + 1)(flag ? first : second).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: the subject lands in an argument position, so no parentheses are added
+export const argumentPosition = Effect.mapError(
+  Effect.map(flag ? first : second, (n) => n + 1),
+  (message) => message.length
+)
+
+
+=== [D5] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_precedence.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect, pipe } from "effect"
+
+declare const flag: boolean
+declare const first: Effect.Effect<number, string>
+declare const second: Effect.Effect<number, string>
+declare const maybe: Effect.Effect<number, string> | undefined
+declare const unknownValue: unknown
+declare const holder: { readonly effect?: Effect.Effect<number, string> } | undefined
+declare const load: () => Promise<Effect.Effect<number, string>>
+
+// MUST TRIGGER: the conditional becomes the .pipe receiver; the quickfix must parenthesize it
+export const conditionalSubject = Effect.map(flag ? first : second, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a nullish-coalescing subject is parenthesized as the receiver
+export const nullishSubject = Effect.map(maybe ?? first, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: an `as` expression subject is parenthesized as the receiver
+export const asSubject = Effect.map(unknownValue as Effect.Effect<number, string>, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: an `await` subject is parenthesized as the receiver
+export const awaitSubject = async () =>
+  Effect.map(await load(), (n) => n + 1).pipe(
+    Effect.mapError((message) => message.length)
+  )
+
+// MUST TRIGGER: a non-null optional chain is parenthesized so the chain does not extend over .pipe
+export const optionalChainSubject = (holder?.effect)!.pipe(
+  Effect.mapBoth({
+    onSuccess: n => n + 1,
+    onFailure: message => message.length
+})
+)
+
+// MUST TRIGGER: a function pipe left without steps collapses to a conditional receiver
+export const pipeConditionalSubject = pipe(flag ? first : second, Effect.map((n) => n + 1)).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a curried step applied to a conditional collapses to a parenthesized receiver
+export const curriedConditionalSubject = Effect.map((n: number) => n + 1)(flag ? first : second).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: the subject lands in an argument position, so no parentheses are added
+export const argumentPosition = Effect.mapError(
+  Effect.map(flag ? first : second, (n) => n + 1),
+  (message) => message.length
+)
+
+
+=== [D6] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_precedence.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect, pipe } from "effect"
+
+declare const flag: boolean
+declare const first: Effect.Effect<number, string>
+declare const second: Effect.Effect<number, string>
+declare const maybe: Effect.Effect<number, string> | undefined
+declare const unknownValue: unknown
+declare const holder: { readonly effect?: Effect.Effect<number, string> } | undefined
+declare const load: () => Promise<Effect.Effect<number, string>>
+
+// MUST TRIGGER: the conditional becomes the .pipe receiver; the quickfix must parenthesize it
+export const conditionalSubject = Effect.map(flag ? first : second, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a nullish-coalescing subject is parenthesized as the receiver
+export const nullishSubject = Effect.map(maybe ?? first, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: an `as` expression subject is parenthesized as the receiver
+export const asSubject = Effect.map(unknownValue as Effect.Effect<number, string>, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: an `await` subject is parenthesized as the receiver
+export const awaitSubject = async () =>
+  Effect.map(await load(), (n) => n + 1).pipe(
+    Effect.mapError((message) => message.length)
+  )
+
+// MUST TRIGGER: a non-null optional chain is parenthesized so the chain does not extend over .pipe
+export const optionalChainSubject = Effect.map(holder?.effect!, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a function pipe left without steps collapses to a conditional receiver
+export const pipeConditionalSubject = (flag ? first : second).pipe(
+  Effect.mapBoth({
+    onSuccess: n => n + 1,
+    onFailure: message => message.length
+})
+)
+
+// MUST TRIGGER: a curried step applied to a conditional collapses to a parenthesized receiver
+export const curriedConditionalSubject = Effect.map((n: number) => n + 1)(flag ? first : second).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: the subject lands in an argument position, so no parentheses are added
+export const argumentPosition = Effect.mapError(
+  Effect.map(flag ? first : second, (n) => n + 1),
+  (message) => message.length
+)
+
+
+=== [D7] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_precedence.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect, pipe } from "effect"
+
+declare const flag: boolean
+declare const first: Effect.Effect<number, string>
+declare const second: Effect.Effect<number, string>
+declare const maybe: Effect.Effect<number, string> | undefined
+declare const unknownValue: unknown
+declare const holder: { readonly effect?: Effect.Effect<number, string> } | undefined
+declare const load: () => Promise<Effect.Effect<number, string>>
+
+// MUST TRIGGER: the conditional becomes the .pipe receiver; the quickfix must parenthesize it
+export const conditionalSubject = Effect.map(flag ? first : second, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a nullish-coalescing subject is parenthesized as the receiver
+export const nullishSubject = Effect.map(maybe ?? first, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: an `as` expression subject is parenthesized as the receiver
+export const asSubject = Effect.map(unknownValue as Effect.Effect<number, string>, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: an `await` subject is parenthesized as the receiver
+export const awaitSubject = async () =>
+  Effect.map(await load(), (n) => n + 1).pipe(
+    Effect.mapError((message) => message.length)
+  )
+
+// MUST TRIGGER: a non-null optional chain is parenthesized so the chain does not extend over .pipe
+export const optionalChainSubject = Effect.map(holder?.effect!, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a function pipe left without steps collapses to a conditional receiver
+export const pipeConditionalSubject = pipe(flag ? first : second, Effect.map((n) => n + 1)).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a curried step applied to a conditional collapses to a parenthesized receiver
+export const curriedConditionalSubject = (flag ? first : second).pipe(
+  Effect.mapBoth({
+    onSuccess: (n: number) => n + 1,
+    onFailure: message => message.length
+})
+)
+
+// MUST TRIGGER: the subject lands in an argument position, so no parentheses are added
+export const argumentPosition = Effect.mapError(
+  Effect.map(flag ? first : second, (n) => n + 1),
+  (message) => message.length
+)
+
+
+=== [D8] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_precedence.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect, pipe } from "effect"
+
+declare const flag: boolean
+declare const first: Effect.Effect<number, string>
+declare const second: Effect.Effect<number, string>
+declare const maybe: Effect.Effect<number, string> | undefined
+declare const unknownValue: unknown
+declare const holder: { readonly effect?: Effect.Effect<number, string> } | undefined
+declare const load: () => Promise<Effect.Effect<number, string>>
+
+// MUST TRIGGER: the conditional becomes the .pipe receiver; the quickfix must parenthesize it
+export const conditionalSubject = Effect.map(flag ? first : second, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a nullish-coalescing subject is parenthesized as the receiver
+export const nullishSubject = Effect.map(maybe ?? first, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: an `as` expression subject is parenthesized as the receiver
+export const asSubject = Effect.map(unknownValue as Effect.Effect<number, string>, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: an `await` subject is parenthesized as the receiver
+export const awaitSubject = async () =>
+  Effect.map(await load(), (n) => n + 1).pipe(
+    Effect.mapError((message) => message.length)
+  )
+
+// MUST TRIGGER: a non-null optional chain is parenthesized so the chain does not extend over .pipe
+export const optionalChainSubject = Effect.map(holder?.effect!, (n) => n + 1).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a function pipe left without steps collapses to a conditional receiver
+export const pipeConditionalSubject = pipe(flag ? first : second, Effect.map((n) => n + 1)).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: a curried step applied to a conditional collapses to a parenthesized receiver
+export const curriedConditionalSubject = Effect.map((n: number) => n + 1)(flag ? first : second).pipe(
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: the subject lands in an argument position, so no parentheses are added
+export const argumentPosition = Effect.mapBoth(
+  flag ? first : second,
+  {
+    onSuccess: n => n + 1,
+    onFailure: message => message.length
+}
+)
+

@@ -72,6 +72,8 @@ func TestMapMapErrorToMapBothFixesCompile(t *testing.T) {
 				{name: "mapMapErrorToMapBoth_boundaries.ts", matches: boundaryMatches, fixes: boundaryFixes},
 				// Computed callees have no fix: removing or replacing them would drop evaluation.
 				{name: "mapMapErrorToMapBoth_calleeExpressions.ts", matches: 4, fixes: 1},
+				// A low-precedence subject that becomes a receiver must be parenthesized.
+				{name: "mapMapErrorToMapBoth_precedence.ts", matches: 8, fixes: 8},
 				{
 					name: "exactCrossPipe",
 					source: `import { Effect } from "effect"
