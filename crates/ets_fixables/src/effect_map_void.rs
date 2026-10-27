@@ -5,12 +5,10 @@ use ets_rewriter::PipingFlowTransformationReplacement;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
-use crate::*;
-
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_EXPRESSION_DISCARDS_THE_SUCCESS_VALUE_THROUGH_MAPPING_EFFECT_AS_VOID_REPRESENTS_THAT_FORM_DIRECTLY_EFFECT_EFFECT_MAP_VOID;
 
-// go: internal/fixables/effect_map_void.go:11 EffectMapVoidFix
+// go: internal/fixables/effect_map_void.go:12 EffectMapVoidFix
 pub static EFFECT_MAP_VOID_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "effectMapVoid",
     description: "Replace with Effect.asVoid",
@@ -19,7 +17,7 @@ pub static EFFECT_MAP_VOID_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     run: run_effect_map_void_fix,
 });
 
-// go: internal/fixables/effect_map_void.go:19 runEffectMapVoidFix
+// go: internal/fixables/effect_map_void.go:20 runEffectMapVoidFix
 //
 // Rust: the match's transformation is never nil (a non-optional field), so Go's nil check drops.
 fn run_effect_map_void_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
@@ -36,7 +34,9 @@ fn run_effect_map_void_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
             description: "Replace with Effect.asVoid".to_string(),
             run: Box::new(move |tracker| {
                 // Build Effect.asVoid, preserving the original module reference (and any alias).
-                let as_void = effect_module_method(tracker, sf, "asVoid");
+                let as_void = tracker.new_property_access_path(
+                    &ets_typeparser::find_effect_module_reference(Some(sf)).append(&["asVoid"]),
+                );
                 tracker.replace_piping_flow_transformation(
                     Some(sf),
                     Some(&m.transformation),

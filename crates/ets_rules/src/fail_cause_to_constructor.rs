@@ -53,8 +53,7 @@ pub struct FailCauseToConstructorMatch {
     pub replacement_name: String,       // fail, die, failSync or dieSync
     pub source_name: &'static str,      // failCause or failCauseSync
     pub constructor_name: &'static str, // fail or die
-    pub effect_module_node: Option<P<Node>>, // The Effect module identifier (e.g., "Effect" in Effect.failCause)
-    pub value_node: Option<P<Node>>,         // The value passed to Cause.fail / Cause.die
+    pub value_node: Option<P<Node>>,    // The value passed to Cause.fail / Cause.die
     pub value_type_arguments: Option<P<NodeList>>,
     // Eager fix: the flow prefix up to and including Effect.failCause is
     // replaced. A nil Flow means the match is reported without a fix.
@@ -68,7 +67,7 @@ pub struct FailCauseToConstructorMatch {
     pub lazy_expression_body: bool,
 }
 
-// go: internal/rules/fail_cause_to_constructor.go:70 AnalyzeFailCauseToConstructor
+// go: internal/rules/fail_cause_to_constructor.go:69 AnalyzeFailCauseToConstructor
 // AnalyzeFailCauseToConstructor finds piping flows in which Cause.fail or
 // Cause.die feeds directly into Effect.failCause, and Effect.failCauseSync
 // thunks whose returned flow ends in Cause.fail (or Cause.die on Effect v3,
@@ -102,13 +101,6 @@ pub fn analyze_fail_cause_to_constructor(
         }
     };
     let allow_lazy_die = tp.supported_effect_version() != EffectMajorVersion::V4;
-    // A callee without an Effect module receiver (a named import or an alias) is
-    // rewritten through the file's Effect module identifier, which must resolve
-    // to the Effect module where the edit lands.
-    let can_rewrite_callee = |tp: &mut TypeParser<'_>, callee: P<Node>| -> bool {
-        effect_module_receiver(Some(callee)).is_some()
-            || !tp.effect_module_identifier_at(callee).is_empty()
-    };
 
     let mut matches = Vec::new();
     let flows = tp.piping_flows(sf, true);
@@ -130,7 +122,6 @@ pub fn analyze_fail_cause_to_constructor(
                     replacement_name: constructor_name.to_string(),
                     source_name: "failCause",
                     constructor_name,
-                    effect_module_node: effect_module_receiver(Some(fail_step.callee())),
                     value_node: value,
                     value_type_arguments: cause_step.type_arguments(),
                     flow: None,
@@ -140,7 +131,6 @@ pub fn analyze_fail_cause_to_constructor(
                     lazy_expression_body: false,
                 };
                 if value.is_some()
-                    && can_rewrite_callee(tp, fail_step.callee())
                     && (fail_step.kind() == TransformationKind::Call
                         || fail_step.kind() == TransformationKind::Pipe
                         || fail_step.kind() == TransformationKind::Pipeable)
@@ -202,7 +192,6 @@ pub fn analyze_fail_cause_to_constructor(
             replacement_name: constructor_name.to_string() + "Sync",
             source_name: "failCauseSync",
             constructor_name,
-            effect_module_node: effect_module_receiver(Some(fail_step.callee())),
             value_node: None,
             value_type_arguments: None,
             flow: None,
@@ -218,7 +207,6 @@ pub fn analyze_fail_cause_to_constructor(
             && let Some(value) = value
             && body.kind() == Kind::CallExpression
             && body.as_call_expression().expression() == last.callee()
-            && can_rewrite_callee(tp, fail_step.callee())
             && (constructor_name == "die" || lazy_fail_keeps_error_type(tp, fail_step, value))
         {
             m.value_node = Some(value);
@@ -231,7 +219,7 @@ pub fn analyze_fail_cause_to_constructor(
     matches
 }
 
-// go: internal/rules/fail_cause_to_constructor.go:188 lazyFailKeepsErrorType
+// go: internal/rules/fail_cause_to_constructor.go:178 lazyFailKeepsErrorType
 // lazyFailKeepsErrorType reports whether Effect.failSync(() => value) infers the
 // same error type as Effect.failCauseSync(() => Cause.fail(value)). Cause.fail
 // infers its error from a call argument, which widens literal unions, while a
@@ -253,14 +241,4 @@ pub(crate) fn lazy_fail_keeps_error_type(
     };
     tp.checker().is_type_assignable_to(value_type, effect.e())
         && tp.checker().is_type_assignable_to(effect.e(), value_type)
-}
-
-// go: internal/rules/fail_cause_to_constructor.go:198 effectModuleReceiver
-pub(crate) fn effect_module_receiver(callee: Option<P<Node>>) -> Option<P<Node>> {
-    if let Some(callee) = callee
-        && callee.kind() == Kind::PropertyAccessExpression
-    {
-        return Some(callee.as_property_access_expression().expression());
-    }
-    None
 }

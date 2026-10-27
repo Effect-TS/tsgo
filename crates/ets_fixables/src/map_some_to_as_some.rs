@@ -5,12 +5,10 @@ use ets_rewriter::PipingFlowTransformationReplacement;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
-use crate::*;
-
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_AS_SOME_EXPRESSES_WRAPPING_THE_SUCCESS_VALUE_IN_OPTION_SOME_DIRECTLY_EFFECT_MAP_SOME_TO_AS_SOME;
 
-// go: internal/fixables/map_some_to_as_some.go:11 MapSomeToAsSomeFix
+// go: internal/fixables/map_some_to_as_some.go:12 MapSomeToAsSomeFix
 pub static MAP_SOME_TO_AS_SOME_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "mapSomeToAsSome",
     description: "Replace Effect.map(Option.some) with Effect.asSome",
@@ -19,7 +17,7 @@ pub static MAP_SOME_TO_AS_SOME_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable
     run: run_map_some_to_as_some_fix,
 });
 
-// go: internal/fixables/map_some_to_as_some.go:21 runMapSomeToAsSomeFix
+// go: internal/fixables/map_some_to_as_some.go:22 runMapSomeToAsSomeFix
 //
 // Rust: the match's transformation is never nil (a non-optional field), so Go's nil check drops.
 fn run_map_some_to_as_some_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
@@ -32,7 +30,10 @@ fn run_map_some_to_as_some_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.asSome".to_string(),
             run: Box::new(move |tracker| {
-                let as_some = effect_module_method(tracker, source_file, "asSome");
+                let as_some = tracker.new_property_access_path(
+                    &ets_typeparser::find_effect_module_reference(Some(source_file))
+                        .append(&["asSome"]),
+                );
                 tracker.replace_piping_flow_transformation(
                     Some(source_file),
                     Some(&m.transformation),

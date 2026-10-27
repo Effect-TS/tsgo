@@ -4,12 +4,10 @@ use ets_fixable::{Context, FixAction, Fixable};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
-use crate::*;
-
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_MAP_EXPRESSES_THIS_SUCCESS_VALUE_TRANSFORMATION_MORE_DIRECTLY_THAN_EFFECT_FLAT_MAP_FOLLOWED_BY_EFFECT_SUCCEED_EFFECT_FLAT_MAP_TO_MAP;
 
-// go: internal/fixables/flat_map_to_map.go:11 FlatMapToMapFix
+// go: internal/fixables/flat_map_to_map.go:12 FlatMapToMapFix
 pub static FLAT_MAP_TO_MAP_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "flatMapToMap",
     description: "Replace Effect.flatMap + Effect.succeed with Effect.map",
@@ -18,7 +16,7 @@ pub static FLAT_MAP_TO_MAP_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     run: run_flat_map_to_map_fix,
 });
 
-// go: internal/fixables/flat_map_to_map.go:21 runFlatMapToMapFix
+// go: internal/fixables/flat_map_to_map.go:22 runFlatMapToMapFix
 fn run_flat_map_to_map_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 
@@ -30,7 +28,14 @@ fn run_flat_map_to_map_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.map".to_string(),
             run: Box::new(move |tracker| {
-                replace_effect_method_callee(tracker, sf, Some(m.callee), "map");
+                tracker.replace_node(
+                    sf,
+                    Some(m.callee),
+                    Some(tracker.new_property_access_path(
+                        &ets_typeparser::find_effect_module_reference(Some(sf)).append(&["map"]),
+                    )),
+                    None,
+                );
                 tracker.replace_node(
                     sf,
                     Some(m.succeed_call_expression),

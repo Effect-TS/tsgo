@@ -4,12 +4,10 @@ use ets_fixable::{Context, FixAction, Fixable};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
-use crate::*;
-
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_AND_THEN_EXPRESSES_THIS_SEQUENCING_MORE_DIRECTLY_THAN_EFFECT_FLAT_MAP_WITH_A_ZERO_PARAMETER_CALLBACK_EFFECT_FLAT_MAP_IGNORED_PARAM_TO_AND_THEN;
 
-// go: internal/fixables/flat_map_ignored_param_to_and_then.go:11 FlatMapIgnoredParamToAndThenFix
+// go: internal/fixables/flat_map_ignored_param_to_and_then.go:12 FlatMapIgnoredParamToAndThenFix
 pub static FLAT_MAP_IGNORED_PARAM_TO_AND_THEN_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "flatMapIgnoredParamToAndThen",
     description: "Replace Effect.flatMap with Effect.andThen",
@@ -18,7 +16,7 @@ pub static FLAT_MAP_IGNORED_PARAM_TO_AND_THEN_FIX: LazyLock<Fixable> = LazyLock:
     run: run_flat_map_ignored_param_to_and_then_fix,
 });
 
-// go: internal/fixables/flat_map_ignored_param_to_and_then.go:21 runFlatMapIgnoredParamToAndThenFix
+// go: internal/fixables/flat_map_ignored_param_to_and_then.go:22 runFlatMapIgnoredParamToAndThenFix
 fn run_flat_map_ignored_param_to_and_then_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in
@@ -31,7 +29,17 @@ fn run_flat_map_ignored_param_to_and_then_fix(ctx: &mut Context<'_, '_>) -> Vec<
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.andThen".to_string(),
             run: Box::new(move |tracker| {
-                replace_effect_method_callee(tracker, source_file, Some(m.callee), "andThen");
+                tracker.replace_node(
+                    source_file,
+                    Some(m.callee),
+                    Some(
+                        tracker.new_property_access_path(
+                            &ets_typeparser::find_effect_module_reference(Some(source_file))
+                                .append(&["andThen"]),
+                        ),
+                    ),
+                    None,
+                );
                 tracker.replace_node(source_file, Some(m.callback), Some(m.effect_value), None);
             }),
         }) {

@@ -4,12 +4,10 @@ use ets_fixable::{Context, FixAction, Fixable};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
-use crate::*;
-
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_OR_ELSE_SUCCEED_EXPRESSES_THE_SAME_RECOVERY_MORE_DIRECTLY_THAN_EFFECT_0_FOLLOWED_BY_EFFECT_SUCCEED_EFFECT_CATCH_TO_OR_ELSE_SUCCEED;
 
-// go: internal/fixables/catch_to_or_else_succeed.go:11 CatchToOrElseSucceedFix
+// go: internal/fixables/catch_to_or_else_succeed.go:12 CatchToOrElseSucceedFix
 pub static CATCH_TO_OR_ELSE_SUCCEED_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "catchToOrElseSucceed",
     description: "Replace Effect.catch + Effect.succeed with Effect.orElseSucceed",
@@ -18,7 +16,7 @@ pub static CATCH_TO_OR_ELSE_SUCCEED_FIX: LazyLock<Fixable> = LazyLock::new(|| Fi
     run: run_catch_to_or_else_succeed_fix,
 });
 
-// go: internal/fixables/catch_to_or_else_succeed.go:19 runCatchToOrElseSucceedFix
+// go: internal/fixables/catch_to_or_else_succeed.go:20 runCatchToOrElseSucceedFix
 fn run_catch_to_or_else_succeed_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 
@@ -31,7 +29,17 @@ fn run_catch_to_or_else_succeed_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.orElseSucceed".to_string(),
             run: Box::new(move |tracker| {
-                replace_effect_method_callee(tracker, sf, Some(m.callee), "orElseSucceed");
+                tracker.replace_node(
+                    sf,
+                    Some(m.callee),
+                    Some(
+                        tracker.new_property_access_path(
+                            &ets_typeparser::find_effect_module_reference(Some(sf))
+                                .append(&["orElseSucceed"]),
+                        ),
+                    ),
+                    None,
+                );
 
                 tracker.replace_node(
                     sf,

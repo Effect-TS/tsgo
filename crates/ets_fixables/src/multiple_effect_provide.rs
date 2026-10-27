@@ -8,8 +8,6 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 use ets_shim::scanner;
 
-use crate::*;
-
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::THIS_EXPRESSION_CHAINS_MULTIPLE_EFFECT_PROVIDE_CALLS_PROVIDING_LAYERS_IN_MULTIPLE_CALLS_IN_A_CHAIN_CAN_BREAK_SERVICE_LIFECYCLE_BEHAVIOR_COMPARED_WITH_A_SINGLE_COMBINED_PROVIDE_WITH_MERGED_LAYERS_EFFECT_MULTIPLE_EFFECT_PROVIDE;
 
@@ -49,7 +47,9 @@ fn run_multiple_effect_provide_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction>
                 );
 
                 // Step 2: Build Effect.provide(Layer.mergeAll(arg1, arg2, ...))
-                let provide_access = effect_module_method(tracker, sf, "provide");
+                let provide_access = tracker.new_property_access_path(
+                    &ets_typeparser::find_effect_module_reference(Some(sf)).append(&["provide"]),
+                );
                 let merge_all_access = tracker.new_property_access_path(
                     &ets_typeparser::find_module_reference(sf, "Layer").append(&["mergeAll"]),
                 );

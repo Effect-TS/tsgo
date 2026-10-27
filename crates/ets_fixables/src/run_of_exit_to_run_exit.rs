@@ -9,7 +9,7 @@ use crate::*;
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_0_OF_EFFECT_EXIT_RE_IMPLEMENTS_EFFECT_1_USE_THE_DEDICATED_EXIT_RUNNER_DIRECTLY_EFFECT_RUN_OF_EXIT_TO_RUN_EXIT;
 
-// go: internal/fixables/run_of_exit_to_run_exit.go:11 RunOfExitToRunExitFix
+// go: internal/fixables/run_of_exit_to_run_exit.go:12 RunOfExitToRunExitFix
 pub static RUN_OF_EXIT_TO_RUN_EXIT_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "runOfExitToRunExit",
     description: "Replace with the dedicated Effect Exit runner",
@@ -18,7 +18,7 @@ pub static RUN_OF_EXIT_TO_RUN_EXIT_FIX: LazyLock<Fixable> = LazyLock::new(|| Fix
     run: run_run_of_exit_to_run_exit_fix,
 });
 
-// go: internal/fixables/run_of_exit_to_run_exit.go:21 runRunOfExitToRunExitFix
+// go: internal/fixables/run_of_exit_to_run_exit.go:22 runRunOfExitToRunExitFix
 //
 // Rust: the match's exit transformation is never nil (an owned copy), so only the callee is checked.
 fn run_run_of_exit_to_run_exit_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
@@ -42,7 +42,17 @@ fn run_run_of_exit_to_run_exit_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction>
                 ) {
                     return;
                 }
-                replace_effect_method_callee(tracker, sf, Some(runner_callee), m.replacement_name);
+                tracker.replace_node(
+                    sf,
+                    Some(runner_callee),
+                    Some(
+                        tracker.new_property_access_path(
+                            &ets_typeparser::find_effect_module_reference(Some(sf))
+                                .append(&[m.replacement_name]),
+                        ),
+                    ),
+                    None,
+                );
             }),
         }) {
             return vec![action];

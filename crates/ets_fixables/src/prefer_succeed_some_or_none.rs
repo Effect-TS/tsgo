@@ -5,13 +5,11 @@ use ets_shim::ast::NodeFlags;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
-use crate::*;
-
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message =
     &tsdiag::EFFECT_0_EXPRESSES_THIS_OPTION_SUCCESS_VALUE_DIRECTLY_EFFECT_PREFER_SUCCEED_SOME_OR_NONE;
 
-// go: internal/fixables/prefer_succeed_some_or_none.go:12 PreferSucceedSomeOrNoneFix
+// go: internal/fixables/prefer_succeed_some_or_none.go:13 PreferSucceedSomeOrNoneFix
 pub static PREFER_SUCCEED_SOME_OR_NONE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "preferSucceedSomeOrNone",
     description: "Replace with the direct Effect Option constructor",
@@ -20,7 +18,7 @@ pub static PREFER_SUCCEED_SOME_OR_NONE_FIX: LazyLock<Fixable> = LazyLock::new(||
     run: run_prefer_succeed_some_or_none_fix,
 });
 
-// go: internal/fixables/prefer_succeed_some_or_none.go:22 runPreferSucceedSomeOrNoneFix
+// go: internal/fixables/prefer_succeed_some_or_none.go:23 runPreferSucceedSomeOrNoneFix
 fn run_prefer_succeed_some_or_none_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
     for m in ets_rules::analyze_prefer_succeed_some_or_none(&mut ctx.type_parser, Some(sf)) {
@@ -38,7 +36,10 @@ fn run_prefer_succeed_some_or_none_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAct
         if let Some(action) = ctx.new_fix_action(FixAction {
             description,
             run: Box::new(move |tracker| {
-                let callee = effect_module_method(tracker, sf, m.replacement_name);
+                let callee = tracker.new_property_access_path(
+                    &ets_typeparser::find_effect_module_reference(Some(sf))
+                        .append(&[m.replacement_name]),
+                );
                 let mut replacement = callee;
                 if let Some(value_node) = m.value_node {
                     let mut type_arguments = None;

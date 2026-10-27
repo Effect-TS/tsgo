@@ -106,17 +106,20 @@ pub(crate) fn imported_module_member(
     Some(ModuleMemberReference { path: module.clone(), via_module: true })
 }
 
-// go: internal/fixables/module_member_reference.go:88 importBindingName
+// go: internal/fixables/module_member_reference.go:89 importBindingName
 // importBindingName returns the name of symbol's value import declaration
 // when that name resolves to symbol at location, so a generated identifier
-// reaches the import and not a local that shadows it.
+// reaches the import and not a local that shadows it. Bindings that are
+// type-only, directly or through a type-only re-export, are not values.
 pub(crate) fn import_binding_name(
     ctx: &mut Context<'_, '_>,
     location: P<Node>,
     symbol: Option<P<Symbol>>,
 ) -> Option<P<Node>> {
     let symbol = symbol?;
-    if symbol.declarations().len() != 1 {
+    if symbol.declarations().len() != 1
+        || ctx.checker().get_type_only_alias_declaration_exported(symbol).is_some()
+    {
         return None;
     }
     let declaration = symbol.declarations()[0];
@@ -139,7 +142,7 @@ pub(crate) fn import_binding_name(
     Some(name)
 }
 
-// go: internal/fixables/module_member_reference.go:105 typeHasMember
+// go: internal/fixables/module_member_reference.go:106 typeHasMember
 pub(crate) fn type_has_member(
     ctx: &mut Context<'_, '_>,
     t: Option<P<Type>>,
@@ -159,7 +162,7 @@ pub(crate) fn type_has_member(
 }
 
 impl ModuleMemberReference {
-    // go: internal/fixables/module_member_reference.go:118 moduleMemberReference.expression
+    // go: internal/fixables/module_member_reference.go:119 moduleMemberReference.expression
     // expression builds the reference: module.member, or the direct binding.
     pub(crate) fn expression(&self, tracker: &Tracker, member: &ModuleMember) -> P<Node> {
         if self.via_module {

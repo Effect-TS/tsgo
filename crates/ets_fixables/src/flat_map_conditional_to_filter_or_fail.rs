@@ -8,12 +8,10 @@ use ets_shim::ast::{Kind, Node, NodeList, SourceFile};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
-use crate::*;
-
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_0_EXPRESSES_THIS_CONDITIONAL_VALIDATION_MORE_DIRECTLY_THAN_EFFECT_FLAT_MAP_WITH_AN_IDENTITY_EFFECT_SUCCEED_BRANCH_EFFECT_FLAT_MAP_CONDITIONAL_TO_FILTER_OR_FAIL;
 
-// go: internal/fixables/flat_map_conditional_to_filter_or_fail.go:12 FlatMapConditionalToFilterOrFailFix
+// go: internal/fixables/flat_map_conditional_to_filter_or_fail.go:13 FlatMapConditionalToFilterOrFailFix
 pub static FLAT_MAP_CONDITIONAL_TO_FILTER_OR_FAIL_FIX: LazyLock<Fixable> = LazyLock::new(|| {
     Fixable {
         name: "flatMapConditionalToFilterOrFail",
@@ -24,7 +22,7 @@ pub static FLAT_MAP_CONDITIONAL_TO_FILTER_OR_FAIL_FIX: LazyLock<Fixable> = LazyL
     }
 });
 
-// go: internal/fixables/flat_map_conditional_to_filter_or_fail.go:22 runFlatMapConditionalToFilterOrFailFix
+// go: internal/fixables/flat_map_conditional_to_filter_or_fail.go:23 runFlatMapConditionalToFilterOrFailFix
 //
 // Rust: the match's transformation, parameter, predicate and fallback are never nil (non-optional fields), so only
 // Go's `CanFix` check remains.
@@ -62,7 +60,7 @@ fn run_flat_map_conditional_to_filter_or_fail_fix(ctx: &mut Context<'_, '_>) -> 
     Vec::new()
 }
 
-// go: internal/fixables/flat_map_conditional_to_filter_or_fail.go:55 buildFlatMapConditionalFilterReplacement
+// go: internal/fixables/flat_map_conditional_to_filter_or_fail.go:56 buildFlatMapConditionalFilterReplacement
 //
 // Rust: both results are always non-nil in Go too, so they are returned unwrapped (the caller's nil check drops).
 fn build_flat_map_conditional_filter_replacement(
@@ -70,7 +68,9 @@ fn build_flat_map_conditional_filter_replacement(
     sf: P<SourceFile>,
     m: &FlatMapConditionalToFilterOrFailMatch,
 ) -> (P<Node>, P<NodeList>) {
-    let callee = effect_module_method(tracker, sf, m.preferred_method_name);
+    let callee = tracker.new_property_access_path(
+        &ets_typeparser::find_effect_module_reference(Some(sf)).append(&[m.preferred_method_name]),
+    );
     let mut predicate_body = tracker.deep_clone_node(Some(m.predicate_node)).unwrap();
     if m.negate_predicate {
         predicate_body =

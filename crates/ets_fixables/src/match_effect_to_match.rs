@@ -4,12 +4,10 @@ use ets_fixable::{Context, FixAction, Fixable};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
-use crate::*;
-
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_0_EXPRESSES_THIS_NON_EFFECTFUL_FOLD_MORE_DIRECTLY_THAN_EFFECT_1_WITH_EFFECT_SUCCEED_HANDLERS_EFFECT_MATCH_EFFECT_TO_MATCH;
 
-// go: internal/fixables/match_effect_to_match.go:11 MatchEffectToMatchFix
+// go: internal/fixables/match_effect_to_match.go:12 MatchEffectToMatchFix
 pub static MATCH_EFFECT_TO_MATCH_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "matchEffectToMatch",
     description: "Replace Effect.matchEffect with Effect.match and unwrap Effect.succeed handlers",
@@ -18,7 +16,7 @@ pub static MATCH_EFFECT_TO_MATCH_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixab
     run: run_match_effect_to_match_fix,
 });
 
-// go: internal/fixables/match_effect_to_match.go:17 runMatchEffectToMatchFix
+// go: internal/fixables/match_effect_to_match.go:18 runMatchEffectToMatchFix
 //
 // Rust: the match's callee node is never nil (a non-optional field), so Go's nil check drops.
 fn run_match_effect_to_match_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
@@ -30,11 +28,16 @@ fn run_match_effect_to_match_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: format!("Replace with Effect.{}", m.replacement_name),
             run: Box::new(move |tracker| {
-                replace_effect_method_callee(
-                    tracker,
+                tracker.replace_node(
                     m.source_file,
                     Some(m.callee_node),
-                    m.replacement_name,
+                    Some(
+                        tracker.new_property_access_path(
+                            &ets_typeparser::find_effect_module_reference(Some(m.source_file))
+                                .append(&[m.replacement_name]),
+                        ),
+                    ),
+                    None,
                 );
                 for i in 0..m.handler_results.len() {
                     tracker.replace_node(
