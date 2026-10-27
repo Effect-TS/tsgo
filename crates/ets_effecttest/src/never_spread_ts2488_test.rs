@@ -14,18 +14,21 @@ fn test_issue916_never_spread_matches_stock_diagnostics() {
         ets_go::testing::run(|t| {
             t.parallel();
 
-            let source = r#"declare function g(...values: Array<number>): void
+            let source = r"declare function g(...values: Array<number>): void
 
 export function f() {
   const rows = [1] as never;
   g(...rows);
   return [...rows];
 }
-"#;
+";
             // Rust: Go ranges over a map; the subtests run in parallel, so the order does not matter.
             for (name, plugin) in [
                 ("no plugin", ""),
-                ("diagnostics off", r#"{ "name": "@effect/language-service", "diagnostics": false }"#),
+                (
+                    "diagnostics off",
+                    r#"{ "name": "@effect/language-service", "diagnostics": false }"#,
+                ),
                 (
                     "rule off",
                     r#"{ "name": "@effect/language-service", "diagnosticSeverity": { "promiseInEffectSuccess": "off" } }"#,
@@ -39,12 +42,11 @@ export function f() {
                     t.parallel();
                     let content = format!(
                         r#"// @filename: tsconfig.json
-{{ "compilerOptions": {{ "strict": true, "plugins": [{}] }} }}
+{{ "compilerOptions": {{ "strict": true, "plugins": [{plugin}] }} }}
 // @filename: package.json
 {{ "type": "module" }}
 // @filename: test.ts
-"#,
-                        plugin
+"#
                     ) + source;
                     let got = collect_diagnostic_strings_from_content(t, &content);
                     let want = vec![
