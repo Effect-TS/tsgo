@@ -10,6 +10,7 @@ import {
   checkTsrsReleaseParity,
   effectWorkloadScript,
   parseLlvmVersion,
+  parseTsrsPnpmVersion,
   parseTsrsReleaseTargets,
   parseTsrsTypeScriptCommit,
   tsrsBuildTargets,
@@ -32,10 +33,18 @@ test("lays the release build's state out under its work directory", () => {
     rawProfiles: "/work/pgo/raw",
     bench: "/work/pgo/bench",
     effectWorkload: "/work/pgo/effect",
+    pnpm: "/work/pnpm",
     bolt: "/work/bolt",
     llvm: "/work/llvm",
     determinismTarget: "/work/determinism-target"
   })
+})
+
+test("reads tsrs's pinned pnpm version from its packageManager", () => {
+  assert.equal(parseTsrsPnpmVersion(`{"packageManager":"pnpm@12.15.0"}`), "12.15.0")
+  assert.equal(parseTsrsPnpmVersion(`{"packageManager":"pnpm@12.15.0+sha512.abc"}`), "12.15.0")
+  assert.equal(parseTsrsPnpmVersion(`{"packageManager":"yarn@4.0.0"}`), undefined)
+  assert.equal(parseTsrsPnpmVersion(`{}`), undefined)
 })
 
 test("gives both cargo builds tsrs's RUSTFLAGS, strip setting and CFLAGS per target", () => {
