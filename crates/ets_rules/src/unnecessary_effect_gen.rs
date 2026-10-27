@@ -49,10 +49,9 @@ pub struct UnnecessaryEffectGenMatch {
     pub yielded_expression: P<Node>, // The expression being yield*-ed (the replacement value)
     pub explicit_return: bool,      // Whether the statement had an explicit return
     pub success_is_void: bool,      // Whether the yielded Effect's success type is void-like
-    pub effect_module_node: Option<P<Node>>, // The Effect module identifier (for Effect.asVoid wrapping)
 }
 
-// go: internal/rules/unnecessary_effect_gen.go:46 AnalyzeUnnecessaryEffectGen
+// go: internal/rules/unnecessary_effect_gen.go:45 AnalyzeUnnecessaryEffectGen
 // AnalyzeUnnecessaryEffectGen finds all Effect.gen calls that contain only a single
 // yield* statement and can be replaced with the yielded expression directly.
 //
@@ -84,7 +83,7 @@ pub fn analyze_unnecessary_effect_gen(
     matches
 }
 
-// go: internal/rules/unnecessary_effect_gen.go:69 analyzeUnnecessaryEffectGenNode
+// go: internal/rules/unnecessary_effect_gen.go:68 analyzeUnnecessaryEffectGenNode
 pub(crate) fn analyze_unnecessary_effect_gen_node(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -146,11 +145,10 @@ pub(crate) fn analyze_unnecessary_effect_gen_node(
         yielded_expression: yielded_expr,
         explicit_return,
         success_is_void,
-        effect_module_node: gen_result.effect_module(),
     })
 }
 
-// go: internal/rules/unnecessary_effect_gen.go:147 isYieldStarExpression
+// go: internal/rules/unnecessary_effect_gen.go:145 isYieldStarExpression
 pub(crate) fn is_yield_star_expression(expr: P<Node>) -> bool {
     expr.as_yield_expression().asterisk_token().is_some()
 }

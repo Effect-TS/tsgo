@@ -8,6 +8,7 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 use ets_shim::scanner;
 use ets_typeparser::EffectMajorVersion;
+use ets_typeparser::ModuleReference;
 
 /// Rust-only: the fixable's runtime diagnostic message (Go spells it out in `ErrorCodes`).
 static RUNTIME_MESSAGE: &Message = &tsdiag::X_0_IS_CALLED_INSIDE_AN_EFFECT_WITH_A_SEPARATE_RUNTIME_INVOCATION_IN_THIS_CONTEXT_RUN_CHILD_EFFECTS_WITH_THE_SURROUNDING_RUNTIME_WHICH_CAN_BE_ACCESSED_THROUGH_EFFECT_RUNTIME_AND_RUNTIME_1_EFFECT_RUN_EFFECT_INSIDE_EFFECT;
@@ -98,7 +99,7 @@ fn run_run_effect_inside_effect_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
         if let Some(action) = ctx_ref.new_fix_action(FixAction {
             description: run_effect_inside_effect_fix_description(supported_effect).to_string(),
             run: Box::new(move |tracker| {
-                let effect_module_identifier = ets_typeparser::find_module_identifier(sf, "Effect");
+                let effect_module_identifier = ets_typeparser::find_module_reference(sf, "Effect");
                 if supported_effect == EffectMajorVersion::V4 {
                     if services_identifier.is_empty() {
                         services_identifier = "effectContext".to_string();
@@ -124,7 +125,7 @@ fn run_run_effect_inside_effect_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
                 }
 
                 let runtime_module_identifier =
-                    ets_typeparser::find_module_identifier(sf, "Runtime");
+                    ets_typeparser::find_module_reference(sf, "Runtime");
                 let callee_token_pos = scanner::get_token_pos_of_node(m.callee_node, sf, false);
                 let first_arg_pos = m.call_node.as_call_expression().arguments().nodes()[0]
                     .pos()
@@ -167,8 +168,8 @@ pub(crate) fn run_effect_inside_effect_fix_description(
 // go: internal/fixables/run_effect_inside_effect.go:129 runEffectInsideEffectReplacementText
 pub(crate) fn run_effect_inside_effect_replacement_text(
     supported_effect: EffectMajorVersion,
-    effect_module_identifier: &str,
-    runtime_module_identifier: &str,
+    effect_module_identifier: &ModuleReference,
+    runtime_module_identifier: &ModuleReference,
     method_name: &str,
     runtime_identifier: &str,
     services_identifier: &str,
@@ -186,17 +187,12 @@ pub(crate) fn insert_yielded_effect_module_call(
     tracker: &mut Tracker,
     sf: P<SourceFile>,
     block: P<Node>,
-    effect_module_identifier: &str,
+    effect_module_identifier: &ModuleReference,
     method_name: &str,
     variable_name: &str,
 ) {
-    let effect_id = tracker.new_identifier(alloc_str(effect_module_identifier));
-    let method_access = tracker.new_property_access_expression(
-        effect_id,
-        None,
-        tracker.new_identifier(alloc_str(method_name)),
-        NodeFlags::None,
-    );
+    let method_access =
+        tracker.new_property_access_path(&effect_module_identifier.append(&[method_name]));
     let method_call = tracker.new_call_expression(
         method_access,
         None,

@@ -162,7 +162,7 @@ enum Phase {
 }
 
 // MUST TRIGGER: string literal body in a pipeable flow (issue example)
-export const saved = saveUser("alice").pipe(Effect.as("saved"))
+export const saved = saveUser("alice").pipe(Fx.as("saved"))
 
 // MUST TRIGGER: declared const identifier body (issue example)
 export const ready = client.query("select 1").pipe(Effect.map(() => client))
@@ -354,7 +354,7 @@ enum Phase {
 export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
 
 // MUST TRIGGER: declared const identifier body (issue example)
-export const ready = client.query("select 1").pipe(Effect.as(client))
+export const ready = client.query("select 1").pipe(Fx.as(client))
 
 // MUST TRIGGER: initialized const identifier declared before the call
 export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
@@ -546,7 +546,7 @@ export const saved = saveUser("alice").pipe(Effect.map(() => "saved"))
 export const ready = client.query("select 1").pipe(Effect.map(() => client))
 
 // MUST TRIGGER: initialized const identifier declared before the call
-export const constIdentifier = numberEffect.pipe(Effect.as(status))
+export const constIdentifier = numberEffect.pipe(Fx.as(status))
 
 // MUST TRIGGER: numeric, boolean, null and bigint literal bodies
 export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
@@ -738,7 +738,7 @@ export const ready = client.query("select 1").pipe(Effect.map(() => client))
 export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
 
 // MUST TRIGGER: numeric, boolean, null and bigint literal bodies
-export const numericLiteral = numberEffect.pipe(Effect.as(0))
+export const numericLiteral = numberEffect.pipe(Fx.as(0))
 export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
 export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
 export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
@@ -928,7 +928,7 @@ export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
 
 // MUST TRIGGER: numeric, boolean, null and bigint literal bodies
 export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
-export const booleanLiteral = numberEffect.pipe(Effect.as(true))
+export const booleanLiteral = numberEffect.pipe(Fx.as(true))
 export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
 export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
 
@@ -1118,7 +1118,7 @@ export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
 // MUST TRIGGER: numeric, boolean, null and bigint literal bodies
 export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
 export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
-export const nullLiteral = numberEffect.pipe(Effect.as(null))
+export const nullLiteral = numberEffect.pipe(Fx.as(null))
 export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
 
 // MUST TRIGGER: negative numeric literal
@@ -1308,7 +1308,7 @@ export const constIdentifier = numberEffect.pipe(Effect.map(() => status))
 export const numericLiteral = numberEffect.pipe(Effect.map(() => 0))
 export const booleanLiteral = numberEffect.pipe(Effect.map(() => true))
 export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
-export const bigintLiteral = numberEffect.pipe(Effect.as(10n))
+export const bigintLiteral = numberEffect.pipe(Fx.as(10n))
 
 // MUST TRIGGER: negative numeric literal
 export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
@@ -1500,7 +1500,7 @@ export const nullLiteral = numberEffect.pipe(Effect.map(() => null))
 export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
 
 // MUST TRIGGER: negative numeric literal
-export const negativeLiteral = numberEffect.pipe(Effect.as(-1))
+export const negativeLiteral = numberEffect.pipe(Fx.as(-1))
 
 // MUST TRIGGER: template literal without substitutions
 export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
@@ -1692,7 +1692,7 @@ export const bigintLiteral = numberEffect.pipe(Effect.map(() => 10n))
 export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
 
 // MUST TRIGGER: template literal without substitutions
-export const plainTemplate = numberEffect.pipe(Effect.as(`done`))
+export const plainTemplate = numberEffect.pipe(Fx.as(`done`))
 
 // MUST TRIGGER: enum member
 export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
@@ -1884,7 +1884,7 @@ export const negativeLiteral = numberEffect.pipe(Effect.map(() => -1))
 export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
 
 // MUST TRIGGER: enum member
-export const enumMember = numberEffect.pipe(Effect.as(Phase.Done))
+export const enumMember = numberEffect.pipe(Fx.as(Phase.Done))
 
 // MUST TRIGGER: parenthesized constant body
 export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
@@ -2076,7 +2076,7 @@ export const plainTemplate = numberEffect.pipe(Effect.map(() => `done`))
 export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
 
 // MUST TRIGGER: parenthesized constant body
-export const parenthesized = numberEffect.pipe(Effect.as("saved"))
+export const parenthesized = numberEffect.pipe(Fx.as("saved"))
 
 // MUST TRIGGER: sole parameter is declared but never referenced
 export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
@@ -2268,7 +2268,7 @@ export const enumMember = numberEffect.pipe(Effect.map(() => Phase.Done))
 export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
 
 // MUST TRIGGER: sole parameter is declared but never referenced
-export const ignoredParameter = numberEffect.pipe(Effect.as(0))
+export const ignoredParameter = numberEffect.pipe(Fx.as(0))
 
 // MUST TRIGGER: block body with a single return of a constant
 export const blockBody = numberEffect.pipe(Effect.map(() => {
@@ -2460,7 +2460,7 @@ export const parenthesized = numberEffect.pipe(Effect.map(() => ("saved")))
 export const ignoredParameter = numberEffect.pipe(Effect.map((_) => 0))
 
 // MUST TRIGGER: block body with a single return of a constant
-export const blockBody = numberEffect.pipe(Effect.as("saved"))
+export const blockBody = numberEffect.pipe(Fx.as("saved"))
 
 // MUST TRIGGER: function expression returning a constant
 export const functionExpression = numberEffect.pipe(Effect.map(function() {
@@ -2652,7 +2652,7 @@ export const blockBody = numberEffect.pipe(Effect.map(() => {
 }))
 
 // MUST TRIGGER: function expression returning a constant
-export const functionExpression = numberEffect.pipe(Effect.as("saved"))
+export const functionExpression = numberEffect.pipe(Fx.as("saved"))
 
 // MUST TRIGGER: pipe function form
 export const piped = pipe(numberEffect, Effect.map(() => "saved"))
@@ -2844,7 +2844,7 @@ export const functionExpression = numberEffect.pipe(Effect.map(function() {
 }))
 
 // MUST TRIGGER: pipe function form
-export const piped = pipe(numberEffect, Effect.as("saved"))
+export const piped = pipe(numberEffect, Fx.as("saved"))
 
 // MUST TRIGGER: data-first form
 export const dataFirst = Effect.map(numberEffect, () => "saved")
@@ -3036,7 +3036,7 @@ export const functionExpression = numberEffect.pipe(Effect.map(function() {
 export const piped = pipe(numberEffect, Effect.map(() => "saved"))
 
 // MUST TRIGGER: data-first form
-export const dataFirst = Effect.as(numberEffect, "saved")
+export const dataFirst = Fx.as(numberEffect, "saved")
 
 // MUST TRIGGER: data-last form applied directly
 export const dataLast = Effect.map(() => "saved")(numberEffect)
@@ -3228,7 +3228,7 @@ export const piped = pipe(numberEffect, Effect.map(() => "saved"))
 export const dataFirst = Effect.map(numberEffect, () => "saved")
 
 // MUST TRIGGER: data-last form applied directly
-export const dataLast = Effect.as("saved")(numberEffect)
+export const dataLast = Fx.as("saved")(numberEffect)
 
 // MUST TRIGGER: aliased module import
 export const aliasedModule = numberEffect.pipe(Fx.map(() => "saved"))
@@ -3812,7 +3812,7 @@ export const aliasedMap = numberEffect.pipe(mapAlias(() => "saved"))
 
 // MUST TRIGGER: const identifier referenced from a nested scope
 export function nestedScope() {
-  return numberEffect.pipe(Effect.as(status))
+  return numberEffect.pipe(Fx.as(status))
 }
 
 // MUST TRIGGER: constant map inside a longer pipe chain
@@ -4007,7 +4007,7 @@ export function nestedScope() {
 // MUST TRIGGER: constant map inside a longer pipe chain
 export const chained = numberEffect.pipe(
   Effect.tap(() => Effect.void),
-  Effect.as("saved"),
+  Fx.as("saved"),
   Effect.map((value) => value.length)
 )
 
@@ -4249,7 +4249,7 @@ const later = "later"
 export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() => value))
 
 // MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
-export const voidUndefined = numberEffect.pipe(Effect.asVoid)
+export const voidUndefined = numberEffect.pipe(Fx.asVoid)
 export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
 export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
 
@@ -4439,7 +4439,7 @@ export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() 
 
 // MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
 export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
-export const voidZero = numberEffect.pipe(Effect.asVoid)
+export const voidZero = numberEffect.pipe(Fx.asVoid)
 export const voidEmptyBlock = numberEffect.pipe(Effect.map(() => {}))
 
 // MUST NOT TRIGGER: block body with more than a single return statement
@@ -4629,7 +4629,7 @@ export const fromParameter = (value: string) => numberEffect.pipe(Effect.map(() 
 // MUST NOT TRIGGER: void-producing bodies belong to effectMapVoid (Effect.asVoid)
 export const voidUndefined = numberEffect.pipe(Effect.map(() => undefined))
 export const voidZero = numberEffect.pipe(Effect.map(() => void 0))
-export const voidEmptyBlock = numberEffect.pipe(Effect.asVoid)
+export const voidEmptyBlock = numberEffect.pipe(Fx.asVoid)
 
 // MUST NOT TRIGGER: block body with more than a single return statement
 export const multiStatementBlock = numberEffect.pipe(Effect.map(() => {
@@ -4855,7 +4855,7 @@ export const annotatedFunctionReturn = numberEffect.pipe(Effect.map(function(): 
 }))
 
 // MUST TRIGGER: a contextual expected type infers the same success type for Effect.as
-export const contextuallyTyped: Effect.Effect<"saved"> = numberEffect.pipe(Effect.as("saved"))
+export const contextuallyTyped: Effect.Effect<"saved"> = numberEffect.pipe(Fx.as("saved"))
 
 // MUST TRIGGER: an annotated but unused parameter does not affect the success type
 export const annotatedParameter = numberEffect.pipe(Effect.map((_: number) => "saved"))
@@ -5047,7 +5047,7 @@ export const annotatedFunctionReturn = numberEffect.pipe(Effect.map(function(): 
 export const contextuallyTyped: Effect.Effect<"saved"> = numberEffect.pipe(Effect.map(() => "saved"))
 
 // MUST TRIGGER: an annotated but unused parameter does not affect the success type
-export const annotatedParameter = numberEffect.pipe(Effect.as("saved"))
+export const annotatedParameter = numberEffect.pipe(Fx.as("saved"))
 
 void mutable
 

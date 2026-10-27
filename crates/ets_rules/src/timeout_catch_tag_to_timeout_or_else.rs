@@ -54,7 +54,6 @@ pub struct TimeoutCatchTagToTimeoutOrElseMatch {
     pub end: i64,
     pub location: TextRange,
     pub replacement_name: &'static str,
-    pub effect_module: Option<P<Node>>,
     pub duration: P<Node>,
     pub handler: P<Node>,
 }
@@ -141,17 +140,12 @@ pub fn analyze_timeout_catch_tag_to_timeout_or_else(
             if option {
                 name = "timeoutOption";
             }
-            let mut module = None;
-            if catch.callee().kind() == Kind::PropertyAccessExpression {
-                module = Some(catch.callee().as_property_access_expression().expression());
-            }
             matches.push(TimeoutCatchTagToTimeoutOrElseMatch {
                 flow: flow.clone(),
                 start: i,
                 end,
                 location: ets_shim::scanner::get_error_range_for_node(sf, catch.callee()),
                 replacement_name: name,
-                effect_module: module,
                 duration: *timeout.args().at(0),
                 handler: *catch.args().at(1),
             });
@@ -161,7 +155,7 @@ pub fn analyze_timeout_catch_tag_to_timeout_or_else(
     matches
 }
 
-// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:99 timeoutAsSome
+// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:95 timeoutAsSome
 pub(crate) fn timeout_as_some(tp: &mut TypeParser<'_>, step: &PipingFlowTransformation) -> bool {
     step.args().len() == 0 && tp.is_node_reference_to_effect_module_api(step.callee(), "asSome")
         || step.args().len() == 1
@@ -169,7 +163,7 @@ pub(crate) fn timeout_as_some(tp: &mut TypeParser<'_>, step: &PipingFlowTransfor
             && tp.is_node_reference_to_effect_option_module_api(*step.args().at(0), "some")
 }
 
-// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:104 timeoutReturnsNone
+// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:100 timeoutReturnsNone
 pub(crate) fn timeout_returns_none(tp: &mut TypeParser<'_>, handler: P<Node>) -> bool {
     let Some(lazy) = ets_typeparser::parse_lazy_expression(handler, LazyExpressionFlags::None)
     else {
@@ -201,7 +195,7 @@ pub(crate) fn timeout_returns_none(tp: &mut TypeParser<'_>, handler: P<Node>) ->
     )
 }
 
-// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:125 timeoutErrorExcluded
+// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:121 timeoutErrorExcluded
 // Fail closed for unknown, generic, or broadly tagged errors: catchTag matches
 // structurally by tag, so checking only the canonical TimeoutError is unsafe.
 pub(crate) fn timeout_error_excluded(tp: &mut TypeParser<'_>, error_type: Option<P<Type>>) -> bool {
@@ -228,7 +222,7 @@ pub(crate) fn timeout_error_excluded(tp: &mut TypeParser<'_>, error_type: Option
     true
 }
 
-// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:151 timeoutIgnoresError
+// go: internal/rules/timeout_catch_tag_to_timeout_or_else.go:147 timeoutIgnoresError
 // Restrict callbacks to arrows so the caught error cannot be observed through
 // a function's arguments object. An unused plain parameter can be removed.
 pub(crate) fn timeout_ignores_error(tp: &mut TypeParser<'_>, handler: Option<P<Node>>) -> bool {

@@ -4,7 +4,7 @@ use ets_etscore::Severity;
 use ets_readonly::Slice;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile};
+use ets_shim::ast::{self, Diagnostic, Node, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{LazyExpressionFlags, PipingFlowTransformation, TypeParser};
@@ -42,11 +42,10 @@ pub struct MapConstToAsMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
     pub transformation: PipingFlowTransformation,
-    pub effect_module_node: Option<P<Node>>, // The Effect module identifier (e.g., "Effect" in Effect.map)
-    pub constant_value: P<Node>,             // The returned constant, with parentheses skipped
+    pub constant_value: P<Node>, // The returned constant, with parentheses skipped
 }
 
-// go: internal/rules/map_const_to_as.go:53 AnalyzeMapConstToAs
+// go: internal/rules/map_const_to_as.go:52 AnalyzeMapConstToAs
 // AnalyzeMapConstToAs finds data-last and data-first Effect.map calls whose
 // callback ignores its input and returns a value that is stable when the
 // Effect is constructed, so Effect.as can capture it once.
@@ -93,15 +92,10 @@ pub fn analyze_map_const_to_as(
                 continue;
             }
 
-            let mut effect_module_node = None;
-            if callee.kind() == Kind::PropertyAccessExpression {
-                effect_module_node = Some(callee.as_property_access_expression().expression());
-            }
             matches.push(MapConstToAsMatch {
                 source_file: sf,
                 location: ets_shim::scanner::get_error_range_for_node(sf, callee),
                 transformation: transformation.clone(),
-                effect_module_node,
                 constant_value: value,
             });
         }
@@ -109,7 +103,7 @@ pub fn analyze_map_const_to_as(
     matches
 }
 
-// go: internal/rules/map_const_to_as.go:98 isIgnorableMapParameterList
+// go: internal/rules/map_const_to_as.go:92 isIgnorableMapParameterList
 // isIgnorableMapParameterList accepts no parameters, or a single plain
 // identifier parameter. Stable values never resolve to that parameter, so it
 // is unused whenever the returned value is stable.

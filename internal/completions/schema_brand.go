@@ -5,9 +5,7 @@ import (
 
 	"github.com/effect-ts/tsgo/internal/completion"
 	"github.com/effect-ts/tsgo/internal/typeparser"
-	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
-	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 // schemaBrand provides a `brand("varName")` completion when dot-accessing the
@@ -24,10 +22,6 @@ func runSchemaBrand(ctx *completion.Context) []*lsproto.CompletionItem {
 		return nil
 	}
 
-	if !ast.IsIdentifier(result.AccessedObject) {
-		return nil
-	}
-
 	// V3 only
 	tp := ctx.TypeParser
 	version := tp.SupportedEffectVersion()
@@ -35,10 +29,8 @@ func runSchemaBrand(ctx *completion.Context) []*lsproto.CompletionItem {
 		return nil
 	}
 
-	// Resolve the Schema module identifier and compare
-	schemaIdentifier := typeparser.FindModuleIdentifier(ctx.SourceFile, "Schema")
-	accessedText := scanner.GetTextOfNode(result.AccessedObject)
-	if accessedText != schemaIdentifier {
+	// Compare the accessed object with the file's reference to the Schema module
+	if !typeparser.FindModuleReference(ctx.SourceFile, "Schema").MatchesNode(result.AccessedObject) {
 		return nil
 	}
 

@@ -6,12 +6,10 @@ use ets_shim::ast::{self, NodeFlags};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
-use crate::*;
-
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::X_0_1_RETURNS_A_REUSABLE_FUNCTION_THAT_CAN_TAKE_ARGUMENTS_BUT_IT_IS_INVOKED_IMMEDIATELY_HERE_EFFECT_GEN_REPRESENTS_THE_IMMEDIATE_USE_FORM_FOR_THIS_PATTERN_2_EFFECT_EFFECT_FN_IIFE;
 
-// go: internal/fixables/effect_fn_iife.go:12 EffectFnIifeFix
+// go: internal/fixables/effect_fn_iife.go:13 EffectFnIifeFix
 pub static EFFECT_FN_IIFE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "effectFnIife",
     description: "Convert Effect.fn IIFE to Effect.gen",
@@ -20,7 +18,7 @@ pub static EFFECT_FN_IIFE_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     run: run_effect_fn_iife_fix,
 });
 
-// go: internal/fixables/effect_fn_iife.go:20 runEffectFnIifeFix
+// go: internal/fixables/effect_fn_iife.go:21 runEffectFnIifeFix
 fn run_effect_fn_iife_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 
@@ -54,8 +52,10 @@ fn run_effect_fn_iife_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
             // Deep-clone the generator function to produce a synthesized copy
             let cloned_gen_fn = tracker.deep_clone_node(Some(gen_fn)).unwrap();
 
-            // Build Effect.gen, preserving a direct receiver or finding the imported module.
-            let effect_gen_access = effect_module_method(tracker, sf, result.effect_module, "gen");
+            // Build Effect.gen from the file's Effect import.
+            let effect_gen_access = tracker.new_property_access_path(
+                &ets_typeparser::find_effect_module_reference(Some(sf)).append(&["gen"]),
+            );
 
             // Build Effect.gen(genFn) call expression
             let gen_call_node = tracker.new_call_expression(

@@ -156,11 +156,7 @@ func effectFnBuildReplacement(
 	text := sf.Text()
 	start := scanner.GetTokenPosOfNode(target, sf, false)
 	bodyStart := scanner.GetTokenPosOfNode(body, sf, false)
-	module := typeparser.FindEffectModuleIdentifier(sf)
-	if result.EffectModule() != nil {
-		module = scanner.GetTextOfNode(result.EffectModule())
-	}
-	prefix := module + "." + variant
+	prefix := typeparser.FindEffectModuleReference(sf).String() + "." + variant
 	if trace != "" {
 		prefix += "(" + trace + ")"
 	}

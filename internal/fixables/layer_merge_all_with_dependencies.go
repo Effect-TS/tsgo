@@ -32,11 +32,6 @@ func runLayerMergeAllWithDependenciesFix(ctx *fixable.Context) []ls.CodeAction {
 		if match.CallNode == nil || match.CallNode.Kind != ast.KindCallExpression {
 			continue
 		}
-		call := match.CallNode.AsCallExpression()
-		var layerModuleNode *ast.Node
-		if call.Expression != nil && call.Expression.Kind == ast.KindPropertyAccessExpression {
-			layerModuleNode = call.Expression.AsPropertyAccessExpression().Expression
-		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Move layer to Layer.provideMerge",
@@ -52,19 +47,7 @@ func runLayerMergeAllWithDependenciesFix(ctx *fixable.Context) []ls.CodeAction {
 
 				// Step B: Build Layer.provideMerge(providerArg) call expression
 				clonedProviderArg := tracker.DeepCloneNode(match.ProviderArg)
-				clonedLayerModule := layerModuleNode
-				if clonedLayerModule == nil {
-					clonedLayerModule = tracker.NewIdentifier(typeparser.FindModuleIdentifier(sf, "Layer"))
-				} else {
-					clonedLayerModule = tracker.DeepCloneNode(clonedLayerModule)
-				}
-
-				provideMergeAccess := tracker.NewPropertyAccessExpression(
-					clonedLayerModule,
-					nil,
-					tracker.NewIdentifier("provideMerge"),
-					ast.NodeFlagsNone,
-				)
+				provideMergeAccess := tracker.NewPropertyAccessPath(typeparser.FindModuleReference(sf, "Layer").Append("provideMerge")...)
 
 				provideMergeCall := tracker.NewCallExpression(
 					provideMergeAccess,

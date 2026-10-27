@@ -1,0 +1,72 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/moduleReference_barrelNamespace.ts(15,3): warning TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+/.src/moduleReference_barrelNamespace.ts(21,3): warning TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+/.src/moduleReference_barrelNamespace.ts(26,3): warning TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+/.src/moduleReference_barrelNamespace.ts(32,3): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/moduleReference_barrelNamespace.ts(37,3): warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+/.src/moduleReference_barrelNamespace.ts(41,23): warning TS377036: This `Schema.Struct` includes a `_tag` field. `Schema.TaggedStruct` is the tagged-struct form for this pattern and makes the tag optional in the constructor. effect(schemaStructWithTag)
+
+
+==== /.src/moduleReference_barrelNamespace.ts (6 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics effectMapVoid:warning
+    // @effect-diagnostics flatMapToTap:warning
+    // @effect-diagnostics mapMapErrorToMapBoth:warning
+    // @effect-diagnostics manualMetricTapToTrack:warning
+    // @effect-diagnostics schemaStructWithTag:warning
+    import * as X from "effect"
+    
+    declare const source: X.Effect.Effect<number, string>
+    declare const audit: (n: number) => X.Effect.Effect<string>
+    const requests = X.Metric.counter("requests")
+    
+    // Fixes reference the modules through the barrel namespace import: X.Effect.asVoid
+    export const mapVoid = source.pipe(
+      X.Effect.map(() => undefined)
+      ~~~~~~~~~~~~
+!!! warning TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+    )
+    
+    // The receiver is a local alias of the module; the fix still uses the import
+    const E = X.Effect
+    export const aliasedMapVoid = source.pipe(
+      E.map(() => undefined)
+      ~~~~~
+!!! warning TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+    )
+    
+    // X.Effect.tap is resolved through the barrel namespace
+    export const flatMapToTap = source.pipe(
+      X.Effect.flatMap((n) => audit(n).pipe(X.Effect.as(n)))
+      ~~~~~~~~~~~~~~~~
+!!! warning TS377144: `Effect.tap` expresses this observation more directly than `Effect.flatMap` with a manual re-yield. effect(flatMapToTap)
+    )
+    
+    // X.Effect.mapBoth is resolved through the barrel namespace
+    export const mapMapError = source.pipe(
+      X.Effect.map((n) => n > 0),
+      X.Effect.mapError((message) => new Error(message))
+      ~~~~~~~~~~~~~~~~~
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+    )
+    
+    // X.Effect.trackSuccesses and X.Metric.withConstantInput are resolved through the barrel namespace
+    export const metricTap = source.pipe(
+      X.Effect.tap(X.Metric.update(requests, 1))
+      ~~~~~~~~~~~~
+!!! warning TS377154: `Effect.trackSuccesses` expresses recording a metric on every success directly. effect(manualMetricTapToTrack)
+    )
+    
+    // X.Schema.TaggedStruct
+    export const Tagged = X.Schema.Struct({
+                          ~~~~~~~~~~~~~~~~~
+      _tag: X.Schema.Literal("Tagged"),
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      value: X.Schema.Number
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+    })
+    ~~
+!!! warning TS377036: This `Schema.Struct` includes a `_tag` field. `Schema.TaggedStruct` is the tagged-struct form for this pattern and makes the tag optional in the constructor. effect(schemaStructWithTag)
+    

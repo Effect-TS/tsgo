@@ -23,9 +23,10 @@ fn run_effect_data_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::Completion
         return Vec::new();
     };
 
-    let data_identifier = ets_typeparser::find_module_identifier(ctx.source_file, "Data");
+    let data_reference = ets_typeparser::find_module_reference(ctx.source_file, "Data");
+    let data_identifier = data_reference.string();
     let accessed_text = data.accessed_object_text();
-    let is_fully_qualified = data_identifier == accessed_text;
+    let is_fully_qualified = data_reference.matches_node(data.accessed_object);
     let class_name = data.class_name_text();
 
     // Build replacement range from byte offsets

@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -53,7 +54,7 @@ func runFlatMapConditionalToFilterOrFailFix(ctx *fixable.Context) []ls.CodeActio
 }
 
 func buildFlatMapConditionalFilterReplacement(tracker *rewriter.Tracker, sf *ast.SourceFile, match rules.FlatMapConditionalToFilterOrFailMatch) (*ast.Node, *ast.NodeList) {
-	callee := effectModuleMethod(tracker, sf, match.EffectModuleNode, match.PreferredMethodName)
+	callee := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(sf).Append(match.PreferredMethodName)...)
 	predicateBody := tracker.DeepCloneNode(match.PredicateNode)
 	if match.NegatePredicate {
 		predicateBody = tracker.NewPrefixUnaryExpression(ast.KindExclamationToken, predicateBody)

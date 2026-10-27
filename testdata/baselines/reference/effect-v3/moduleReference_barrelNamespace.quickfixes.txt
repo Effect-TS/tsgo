@@ -1,0 +1,81 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:24-18:2) TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
+  Fix 0: "Disable scopeInLayerEffect for this line"
+  Fix 1: "Disable scopeInLayerEffect for entire file"
+  Fix 2: "Use scoped for Layer creation"
+
+[D2] (22:3-22:15) TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+  Fix 0: "Disable effectMapVoid for this line"
+  Fix 1: "Disable effectMapVoid for entire file"
+  Fix 2: "Replace with Effect.asVoid"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable scopeInLayerEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable scopeInLayerEffect for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Use scoped for Layer creation" ===
+
+--- file:///.src/moduleReference_barrelNamespace.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics scopeInLayerEffect:warning
+// @effect-diagnostics effectMapVoid:warning
+import * as X from "effect"
+
+class MyService extends X.Context.Tag("MyService")<MyService, {
+  a: number
+}>() {}
+
+// The fix builds X.Layer.scoped from the barrel namespace import
+export const myLayer = X.Layer.scoped(
+  MyService,
+  X.Effect.gen(function*() {
+    yield* X.Effect.addFinalizer(() => X.Effect.log("finalizer"))
+    return { a: 1 }
+  })
+)
+
+// The fix builds X.Effect.asVoid from the barrel namespace import
+export const mapVoid = X.Effect.succeed(1).pipe(
+  X.Effect.map(() => undefined)
+)
+
+
+=== [D2] Fix 0: "Disable effectMapVoid for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable effectMapVoid for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.asVoid" ===
+
+--- file:///.src/moduleReference_barrelNamespace.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics scopeInLayerEffect:warning
+// @effect-diagnostics effectMapVoid:warning
+import * as X from "effect"
+
+class MyService extends X.Context.Tag("MyService")<MyService, {
+  a: number
+}>() {}
+
+// The fix builds X.Layer.scoped from the barrel namespace import
+export const myLayer = X.Layer.effect(
+  MyService,
+  X.Effect.gen(function*() {
+    yield* X.Effect.addFinalizer(() => X.Effect.log("finalizer"))
+    return { a: 1 }
+  })
+)
+
+// The fix builds X.Effect.asVoid from the barrel namespace import
+export const mapVoid = X.Effect.succeed(1).pipe(
+  X.Effect.asVoid
+)
+

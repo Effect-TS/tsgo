@@ -43,7 +43,6 @@ type CatchDieToOrDieMatch struct {
 	SourceFile       *ast.SourceFile
 	Location         core.TextRange
 	Transformation   *typeparser.PipingFlowTransformation
-	EffectModule     *ast.Node
 	CatchMethodName  string
 	HasTypeArguments bool
 }
@@ -61,7 +60,7 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 			transformation := flow.Transformations().At(i)
 			callee := transformation.Callee()
 			args := transformation.Args()
-			methodName, effectModule, ok := catchDieMethod(tp, callee)
+			methodName, ok := catchDieMethod(tp, callee)
 			if !ok || args.Len() != 1 {
 				continue
 			}
@@ -75,7 +74,6 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 					SourceFile:       sf,
 					Location:         scanner.GetErrorRangeForNode(sf, callee),
 					Transformation:   &transformation,
-					EffectModule:     effectModule,
 					CatchMethodName:  methodName,
 					HasTypeArguments: hasExplicitTypeArguments(&transformation),
 				})
@@ -86,9 +84,9 @@ func AnalyzeCatchDieToOrDie(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 	return matches
 }
 
-func catchDieMethod(tp *typeparser.TypeParser, callee *ast.Node) (name string, effectModule *ast.Node, ok bool) {
+func catchDieMethod(tp *typeparser.TypeParser, callee *ast.Node) (name string, ok bool) {
 	if tp == nil || callee == nil {
-		return "", nil, false
+		return "", false
 	}
 
 	name = "catchAll"
@@ -96,14 +94,7 @@ func catchDieMethod(tp *typeparser.TypeParser, callee *ast.Node) (name string, e
 		name = "catch"
 	}
 	if !tp.IsNodeReferenceToEffectModuleApi(callee, name) {
-		return "", nil, false
+		return "", false
 	}
-
-	if callee.Kind == ast.KindPropertyAccessExpression {
-		access := callee.AsPropertyAccessExpression()
-		if access != nil {
-			effectModule = access.Expression
-		}
-	}
-	return name, effectModule, true
+	return name, true
 }

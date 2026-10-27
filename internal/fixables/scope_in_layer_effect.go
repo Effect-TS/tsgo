@@ -5,7 +5,6 @@ import (
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/effect-ts/tsgo/internal/typeparser"
-	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
 )
@@ -37,13 +36,8 @@ func runScopeInLayerEffectScopedFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Use scoped for Layer creation",
 			Run: func(tracker *rewriter.Tracker) {
-				if match.MethodIdentifier != nil {
-					tracker.ReplaceNode(sf, match.MethodIdentifier, tracker.NewIdentifier("scoped"), nil)
-				} else {
-					layerModule := tracker.NewIdentifier(typeparser.FindModuleIdentifier(sf, "Layer"))
-					scoped := tracker.NewPropertyAccessExpression(layerModule, nil, tracker.NewIdentifier("scoped"), ast.NodeFlagsNone)
-					tracker.ReplaceNode(sf, match.Callee, scoped, nil)
-				}
+				scoped := tracker.NewPropertyAccessPath(typeparser.FindModuleReference(sf, "Layer").Append("scoped")...)
+				tracker.ReplaceNode(sf, match.Callee, scoped, nil)
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}

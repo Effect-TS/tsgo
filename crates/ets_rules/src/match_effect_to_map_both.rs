@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{Diagnostic, Kind, Node, SourceFile};
+use ets_shim::ast::{Diagnostic, Node, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::TypeParser;
@@ -46,12 +46,11 @@ pub struct MatchEffectToMapBothMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
     pub callee_node: P<Node>,
-    pub callee_name_node: Option<P<Node>>,
     pub handler_results: [P<Node>; 2],
     pub constructor_args: [P<Node>; 2],
 }
 
-// go: internal/rules/match_effect_to_map_both.go:46 AnalyzeMatchEffectToMapBoth
+// go: internal/rules/match_effect_to_map_both.go:45 AnalyzeMatchEffectToMapBoth
 //
 // Rust: Go's unused checker argument is dropped (the parser holds the checker); Go's nil parser check is the type
 // system's.
@@ -95,15 +94,10 @@ pub fn analyze_match_effect_to_map_both(
             else {
                 continue;
             };
-            let mut callee_name = None;
-            if transformation.callee().kind() == Kind::PropertyAccessExpression {
-                callee_name = Some(transformation.callee().as_property_access_expression().name());
-            }
             matches.push(MatchEffectToMapBothMatch {
                 source_file: sf,
                 location: ets_shim::scanner::get_error_range_for_node(sf, transformation.callee()),
                 callee_node: transformation.callee(),
-                callee_name_node: callee_name,
                 handler_results: [failure_result, success_result],
                 constructor_args: [failure_argument, success_argument],
             });

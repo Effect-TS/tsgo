@@ -32,23 +32,13 @@ fn run_schema_struct_with_tag_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> 
         let tag_value = m.tag_value;
         let other_properties = m.other_properties;
         let call_node = m.call_node;
-        let schema_expr = m.schema_expr;
 
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Rewrite as Schema.TaggedStruct".to_string(),
             run: Box::new(move |tracker| {
-                let schema_module = match schema_expr {
-                    Some(schema_expr) => tracker.deep_clone_node(Some(schema_expr)).unwrap(),
-                    None => tracker.new_identifier(alloc_str(
-                        &ets_typeparser::find_module_identifier(sf, "Schema"),
-                    )),
-                };
-                // Build Schema.TaggedStruct property access, preserving the receiver.
-                let tagged_struct_access = tracker.new_property_access_expression(
-                    schema_module,
-                    None,
-                    tracker.new_identifier("TaggedStruct"),
-                    NodeFlags::None,
+                // Build Schema.TaggedStruct property access from the file's Schema import.
+                let tagged_struct_access = tracker.new_property_access_path(
+                    &ets_typeparser::find_module_reference(sf, "Schema").append(&["TaggedStruct"]),
                 );
 
                 // Build the tag value string literal argument

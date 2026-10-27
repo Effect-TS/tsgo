@@ -4,9 +4,9 @@ use ets_fixable::{Context, FixAction, Fixable};
 use ets_rules::MapMapErrorToMapBothMatch;
 use ets_shim::P;
 use ets_shim::ast::{self, Kind, Node, NodeFlags, SymbolFlags};
-use ets_shim::core::alloc_str;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
+use ets_typeparser::ModuleReference;
 
 use crate::*;
 
@@ -29,18 +29,15 @@ fn run_map_map_error_to_map_both_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActio
         if !m.fixable || (!m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location)) {
             continue;
         }
-        let (target, receiver) = map_both_reference(ctx, &m);
+        let member = effect_module_member(m.replacement_name);
+        let target = map_both_reference(ctx, &m, &member);
         let Some(target) = target else {
             continue;
         };
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.".to_string() + m.replacement_name,
             run: Box::new(move |t| {
-                let callee = if receiver {
-                    effect_module_method(t, m.source_file, Some(target), m.replacement_name)
-                } else {
-                    t.new_identifier(alloc_str(target.text()))
-                };
+                let callee = target.expression(t, &member);
                 // Keep the callbacks in flow order so they are evaluated as before.
                 let (mut first_name, mut second_name) = ("onSuccess", "onFailure");
                 if m.first_failure {
@@ -80,38 +77,33 @@ fn run_map_map_error_to_map_both_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActio
     Vec::new()
 }
 
-// go: internal/fixables/map_map_error_to_map_both.go:74 mapBothReference
-// mapBothReference finds a value that reaches the replacement API at the
-// diagnostic: the Effect module receiver of one of the steps, or a binding in
-// scope that is the replacement API itself (receiver false) or the Effect
-// module (receiver true). It returns nil when the file has no such binding,
-// for example when the steps only use named imports of map and mapError.
+// go: internal/fixables/map_map_error_to_map_both.go:70 mapBothReference
+// mapBothReference finds a reference that reaches the replacement API at the
+// diagnostic: the file's Effect import, or a binding in scope that is the
+// replacement API itself or the Effect module. It returns nil when the file
+// has no such binding, for example when the steps only use named imports of
+// map and mapError.
 //
 // Rust: `GetSymbolsInScope` returns one symbol per name (the checker collects them in a symbol table keyed by
 // name), so the keys of Go's unstable sort are unique and a stable sort orders them the same way.
 fn map_both_reference(
     ctx: &mut Context<'_, '_>,
     m: &MapMapErrorToMapBothMatch,
-) -> (Option<P<Node>>, bool) {
-    let method = m.replacement_name;
-    for callee in [m.second.callee(), m.first.callee()] {
-        if callee.kind() != Kind::PropertyAccessExpression {
-            continue;
-        }
-        let receiver = callee.as_property_access_expression().expression();
-        if ctx.type_parser.is_expression_effect_module(receiver)
-            && effect_module_has_method(ctx, receiver, method)
-        {
-            return (Some(receiver), true);
-        }
-    }
+    member: &ModuleMember,
+) -> Option<ModuleMemberReference> {
     let location = m.second.callee();
+    if let Some(reference) = imported_module_member(
+        ctx,
+        location,
+        &ets_typeparser::find_effect_module_reference(m.source_file),
+        member,
+    ) {
+        return Some(reference);
+    }
     let mut symbols = ctx
         .checker()
         .get_symbols_in_scope_exported(location, SymbolFlags::Value | SymbolFlags::Alias);
     symbols.sort_by(|left, right| left.name().cmp(right.name()));
-    // Among module bindings, prefer the one the file imports Effect under.
-    let preferred = ets_typeparser::find_effect_module_identifier(m.source_file);
     let mut module: Option<P<Node>> = None;
     for symbol in symbols {
         if symbol.declarations().len() != 1 || ctx.checker().is_symbol_assigned(symbol) {
@@ -149,39 +141,24 @@ fn map_both_reference(
             }
         }
         // Prefer a direct binding to the replacement API over a module binding.
-        if ctx.type_parser.is_node_reference_to_effect_module_api(reference, method) {
-            return (Some(name), false);
+        if (member.is_member)(&mut ctx.type_parser, reference) {
+            return Some(ModuleMemberReference {
+                path: ModuleReference(vec![name.text().to_string()]),
+                via_module: false,
+            });
         }
-        if (module.is_none() || name.text() == preferred)
-            && ctx.type_parser.is_expression_effect_module(reference)
-            && effect_module_has_method(ctx, name, method)
-        {
-            module = Some(name);
+        if module.is_none() && (member.is_module)(&mut ctx.type_parser, reference) {
+            let name_type = ctx.type_parser.get_type_at_location(name);
+            if type_has_member(ctx, name_type, member) {
+                module = Some(name);
+            }
         }
     }
-    if module.is_some() {
-        return (module, true);
+    if let Some(module) = module {
+        return Some(ModuleMemberReference {
+            path: ModuleReference(vec![module.text().to_string()]),
+            via_module: true,
+        });
     }
-    (None, false)
-}
-
-// go: internal/fixables/map_map_error_to_map_both.go:129 effectModuleHasMethod
-//
-// Rust: Go reads a property of the receiver's type, which `GetTypeAtLocation` always finds for these expressions;
-// a missing type is no such property.
-fn effect_module_has_method(ctx: &mut Context<'_, '_>, receiver: P<Node>, method: &str) -> bool {
-    let Some(receiver_type) = ctx.type_parser.get_type_at_location(receiver) else {
-        return false;
-    };
-    let property = ctx.checker().get_property_of_type_exported(receiver_type, method);
-    let Some(property) = property else {
-        return false;
-    };
-    let Some(value_declaration) = property.value_declaration() else {
-        return false;
-    };
-    let Some(name) = value_declaration.name() else {
-        return false;
-    };
-    ctx.type_parser.is_node_reference_to_effect_module_api(name, method)
+    None
 }

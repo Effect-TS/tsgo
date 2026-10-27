@@ -6,7 +6,7 @@ Effect version: 3.19.19
 /.src/catchToOrElseSucceed.ts(20,3): suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
 /.src/catchToOrElseSucceed.ts(25,3): suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
 /.src/catchToOrElseSucceed.ts(37,25): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
-/.src/catchToOrElseSucceed.ts(51,3): suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catch` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+/.src/catchToOrElseSucceed.ts(51,3): suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
 
 
 ==== /.src/catchToOrElseSucceed.ts (6 errors) ====
@@ -72,6 +72,6 @@ Effect version: 3.19.19
     export const shouldTriggerAliasedCatch = Effect.fail("error").pipe(
       catchAlias(() => Effect.succeed(42))
       ~~~~~~~~~~
-!!! suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catch` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+!!! suggestion TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
     )
     

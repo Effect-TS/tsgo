@@ -23,13 +23,7 @@ var TimeoutCatchTagToTimeoutOrElseFix = fixable.Fixable{
 			action := ctx.NewFixAction(fixable.FixAction{
 				Description: "Replace with Effect." + match.ReplacementName,
 				Run: func(t *rewriter.Tracker) {
-					var effectModule *ast.Node
-					if match.EffectModule != nil {
-						effectModule = t.DeepCloneNode(match.EffectModule)
-					} else {
-						effectModule = t.NewIdentifier(typeparser.FindEffectModuleIdentifier(ctx.SourceFile))
-					}
-					callee := t.NewPropertyAccessExpression(effectModule, nil, t.NewIdentifier(match.ReplacementName), ast.NodeFlagsNone)
+					callee := t.NewPropertyAccessPath(typeparser.FindEffectModuleReference(ctx.SourceFile).Append(match.ReplacementName)...)
 					argument := t.DeepCloneNode(match.Duration)
 					if match.ReplacementName == "timeoutOrElse" {
 						handler := t.DeepCloneNode(match.Handler)

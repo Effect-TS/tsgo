@@ -7,6 +7,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
@@ -28,7 +29,8 @@ func runFlatMapToTapFix(ctx *fixable.Context) []ls.CodeAction {
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
 			continue
 		}
-		target, receiver := tapReference(ctx, match.Callee)
+		tap := effectModuleMember(ctx, "tap")
+		target := tapReference(ctx, match.SourceFile, match.Callee, tap)
 		if target == nil {
 			continue
 		}
@@ -38,17 +40,7 @@ func runFlatMapToTapFix(ctx *fixable.Context) []ls.CodeAction {
 				if !tracker.RemoveTrailingPipingFlowTransformation(match.SourceFile, match.ReturnFlow) {
 					return
 				}
-				if match.Callee.Kind == ast.KindPropertyAccessExpression && target == match.Callee.AsPropertyAccessExpression().Expression {
-					tracker.ReplaceNode(match.SourceFile, match.Callee.AsPropertyAccessExpression().Name(), tracker.NewIdentifier("tap"), nil)
-					return
-				}
-				var replacement *ast.Node
-				if receiver {
-					replacement = effectModuleMethod(tracker, match.SourceFile, target, "tap")
-				} else {
-					replacement = tracker.NewIdentifier(target.Text())
-				}
-				tracker.ReplaceNode(match.SourceFile, match.Callee, replacement, nil)
+				tracker.ReplaceNode(match.SourceFile, match.Callee, target.expression(tracker, tap), nil)
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}
@@ -57,12 +49,11 @@ func runFlatMapToTapFix(ctx *fixable.Context) []ls.CodeAction {
 	return nil
 }
 
-func tapReference(ctx *fixable.Context, callee *ast.Node) (*ast.Node, bool) {
-	if callee.Kind == ast.KindPropertyAccessExpression {
-		receiver := callee.AsPropertyAccessExpression().Expression
-		if ctx.TypeParser.IsExpressionEffectModule(receiver) && tapModuleReference(ctx, receiver) {
-			return receiver, true
-		}
+// tapReference finds a reference that reaches Effect.tap at callee: the file's
+// Effect import, or a binding in scope that is tap itself or the Effect module.
+func tapReference(ctx *fixable.Context, sf *ast.SourceFile, callee *ast.Node, tap moduleMember) *moduleMemberReference {
+	if reference := importedModuleMember(ctx, callee, typeparser.FindEffectModuleReference(sf), tap); reference != nil {
+		return reference
 	}
 	symbols := ctx.Checker.GetSymbolsInScope(callee, ast.SymbolFlagsValue|ast.SymbolFlagsAlias)
 	slices.SortFunc(symbols, func(left, right *ast.Symbol) int {
@@ -90,17 +81,12 @@ func tapReference(ctx *fixable.Context, callee *ast.Node) (*ast.Node, bool) {
 				continue
 			}
 		}
-		if ctx.TypeParser.IsNodeReferenceToEffectModuleApi(reference, "tap") {
-			return name, false
+		if tap.isMember(reference) {
+			return &moduleMemberReference{path: typeparser.ModuleReference{name.Text()}}
 		}
-		if ctx.TypeParser.IsExpressionEffectModule(reference) && tapModuleReference(ctx, name) {
-			return name, true
+		if tap.isModule(reference) && typeHasMember(ctx, ctx.TypeParser.GetTypeAtLocation(name), tap) {
+			return &moduleMemberReference{path: typeparser.ModuleReference{name.Text()}, viaModule: true}
 		}
 	}
-	return nil, false
-}
-
-func tapModuleReference(ctx *fixable.Context, receiver *ast.Node) bool {
-	tap := ctx.Checker.GetPropertyOfType(ctx.TypeParser.GetTypeAtLocation(receiver), "tap")
-	return tap != nil && ast.TSGetSymbolValueDeclaration(tap) != nil && ctx.TypeParser.IsNodeReferenceToEffectModuleApi(ast.TSGetSymbolValueDeclaration(tap).Name(), "tap")
+	return nil
 }

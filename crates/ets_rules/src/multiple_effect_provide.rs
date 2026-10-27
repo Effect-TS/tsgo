@@ -40,10 +40,9 @@ pub struct MultipleEffectProvideMatch {
     pub location: TextRange, // The diagnostic span (error range on the first call in the chunk)
     pub chunk: Vec<P<Node>>, // The list of call expression nodes in the consecutive provide chain (2+ elements)
     pub layer_args: Vec<P<Node>>, // The layer argument nodes from each Effect.provide(layer) call
-    pub effect_module_node: Option<P<Node>>, // The Effect module identifier node from the first chunk callee
 }
 
-// go: internal/rules/multiple_effect_provide.go:46 AnalyzeMultipleEffectProvide
+// go: internal/rules/multiple_effect_provide.go:45 AnalyzeMultipleEffectProvide
 // AnalyzeMultipleEffectProvide finds all consecutive Effect.provide call chains
 // with Layer-typed arguments within piping flows.
 //
@@ -60,7 +59,6 @@ pub fn analyze_multiple_effect_provide(
         // Track chunks of consecutive Effect.provide calls with Layer arguments.
         let mut current_chunk: Vec<P<Node>> = Vec::new();
         let mut current_layer_args: Vec<P<Node>> = Vec::new();
-        let mut current_effect_module_node: Option<P<Node>> = None;
 
         // Rust: Go's `finalizeChunk` closure over the loop's state.
         fn finalize_chunk(
@@ -68,7 +66,6 @@ pub fn analyze_multiple_effect_provide(
             matches: &mut Vec<MultipleEffectProvideMatch>,
             current_chunk: &mut Vec<P<Node>>,
             current_layer_args: &mut Vec<P<Node>>,
-            current_effect_module_node: &mut Option<P<Node>>,
         ) {
             if current_chunk.len() >= 2 {
                 matches.push(MultipleEffectProvideMatch {
@@ -76,24 +73,16 @@ pub fn analyze_multiple_effect_provide(
                     location: ets_shim::scanner::get_error_range_for_node(sf, current_chunk[0]),
                     chunk: std::mem::take(current_chunk),
                     layer_args: std::mem::take(current_layer_args),
-                    effect_module_node: *current_effect_module_node,
                 });
             }
             current_chunk.clear();
             current_layer_args.clear();
-            *current_effect_module_node = None;
         }
 
         for (_, transformation) in flow.transformations().all() {
             macro_rules! finalize {
                 () => {
-                    finalize_chunk(
-                        sf,
-                        &mut matches,
-                        &mut current_chunk,
-                        &mut current_layer_args,
-                        &mut current_effect_module_node,
-                    )
+                    finalize_chunk(sf, &mut matches, &mut current_chunk, &mut current_layer_args)
                 };
             }
 
@@ -159,26 +148,12 @@ pub fn analyze_multiple_effect_provide(
                 continue;
             };
 
-            // Capture Effect module node from the callee's property access expression
-            if current_chunk.is_empty()
-                && transformation.callee().kind() == Kind::PropertyAccessExpression
-            {
-                current_effect_module_node =
-                    Some(transformation.callee().as_property_access_expression().expression);
-            }
-
             current_chunk.push(call_node);
             current_layer_args.push(arg);
         }
 
         // Finalize the last chunk after the loop
-        finalize_chunk(
-            sf,
-            &mut matches,
-            &mut current_chunk,
-            &mut current_layer_args,
-            &mut current_effect_module_node,
-        );
+        finalize_chunk(sf, &mut matches, &mut current_chunk, &mut current_layer_args);
     }
 
     matches

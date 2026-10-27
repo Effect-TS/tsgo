@@ -1,24 +1,27 @@
 === Quick Fix Inventory ===
 
-[D1] (11:22-11:31) TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+[D1] (6:13-6:15) TS6133: 'Fx' is declared but its value is never read.
+  (no quick fixes)
+
+[D2] (11:22-11:31) TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
   Fix 0: "Disable failCauseToConstructor for this line"
   Fix 1: "Disable failCauseToConstructor for entire file"
   Fix 2: "Replace with Effect.fail"
 
-[D2] (14:21-14:34) TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+[D3] (14:21-14:34) TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
   Fix 0: "Disable failCauseToConstructor for this line"
   Fix 1: "Disable failCauseToConstructor for entire file"
   Fix 2: "Replace with Effect.failSync"
 
 === Quick Fix Application Results ===
 
-=== [D1] Fix 0: "Disable failCauseToConstructor for this line" ===
+=== [D2] Fix 0: "Disable failCauseToConstructor for this line" ===
 skipped by default
 
-=== [D1] Fix 1: "Disable failCauseToConstructor for entire file" ===
+=== [D2] Fix 1: "Disable failCauseToConstructor for entire file" ===
 skipped by default
 
-=== [D1] Fix 2: "Replace with Effect.fail" ===
+=== [D2] Fix 2: "Replace with Effect.fail" ===
 
 --- file:///.src/failCauseToConstructor_aliasedEffect.ts ---
 // @effect-v3
@@ -37,13 +40,13 @@ export const eager = Fx.fail(error)
 export const lazy = failCauseSync(() => causeFail(error))
 
 
-=== [D2] Fix 0: "Disable failCauseToConstructor for this line" ===
+=== [D3] Fix 0: "Disable failCauseToConstructor for this line" ===
 skipped by default
 
-=== [D2] Fix 1: "Disable failCauseToConstructor for entire file" ===
+=== [D3] Fix 1: "Disable failCauseToConstructor for entire file" ===
 skipped by default
 
-=== [D2] Fix 2: "Replace with Effect.failSync" ===
+=== [D3] Fix 2: "Replace with Effect.failSync" ===
 
 --- file:///.src/failCauseToConstructor_aliasedEffect.ts ---
 // @effect-v3

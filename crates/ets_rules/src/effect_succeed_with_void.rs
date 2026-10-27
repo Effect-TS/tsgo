@@ -39,10 +39,9 @@ pub struct EffectSucceedWithVoidMatch {
     pub source_file: P<SourceFile>, // The source file where the diagnostic should be reported
     pub location: TextRange,        // The pre-computed error range for this match
     pub call_node: P<Node>,         // The Effect.succeed(...) call expression (replacement target)
-    pub effect_module_node: Option<P<Node>>, // The Effect module identifier (e.g., "Effect" in Effect.succeed)
 }
 
-// go: internal/rules/effect_succeed_with_void.go:42 isVoidExpression
+// go: internal/rules/effect_succeed_with_void.go:41 isVoidExpression
 // isVoidExpression checks if a node is `undefined`, `void 0`, or a parenthesized version of either.
 //
 // Rust: Go dereferences the node without a nil check; a nil node is `None` and is not a void expression.
@@ -71,7 +70,7 @@ pub(crate) fn is_void_expression(node: Option<P<Node>>) -> bool {
     false
 }
 
-// go: internal/rules/effect_succeed_with_void.go:64 AnalyzeEffectSucceedWithVoid
+// go: internal/rules/effect_succeed_with_void.go:63 AnalyzeEffectSucceedWithVoid
 // AnalyzeEffectSucceedWithVoid finds all Effect.succeed(undefined) and Effect.succeed(void 0) calls
 // that can be replaced with Effect.void.
 //
@@ -97,16 +96,10 @@ pub fn analyze_effect_succeed_with_void(
                 if is_void_expression(Some(arg))
                     && tp.is_node_reference_to_effect_module_api(call.expression(), "succeed")
                 {
-                    let mut effect_module = None;
-                    if call.expression().kind() == Kind::PropertyAccessExpression {
-                        effect_module =
-                            Some(call.expression().as_property_access_expression().expression());
-                    }
                     matches.push(EffectSucceedWithVoidMatch {
                         source_file: sf,
                         location: ets_shim::scanner::get_error_range_for_node(sf, n),
                         call_node: n,
-                        effect_module_node: effect_module,
                     });
                 }
             }

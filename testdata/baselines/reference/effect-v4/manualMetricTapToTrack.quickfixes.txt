@@ -192,7 +192,7 @@ declare const metricFor: (tag: string) => Metric.Metric<number, Metric.CounterSt
 // tapError -> Effect.trackErrors(requestErrors, () => 1) (unused parameter, constant input)
 // tapDefect -> Effect.trackDefects(requestDefects, () => 1)
 export const issueExample = handleRequest.pipe(
-  Effect.trackSuccesses(responseSize),
+  Fx.trackSuccesses(responseSize),
   Effect.tapError(() => Metric.update(requestErrors, 1)),
   Effect.tapDefect(() => Metric.update(requestDefects, 1))
 )
@@ -467,7 +467,7 @@ declare const metricFor: (tag: string) => Metric.Metric<number, Metric.CounterSt
 // tapDefect -> Effect.trackDefects(requestDefects, () => 1)
 export const issueExample = handleRequest.pipe(
   Effect.tap((size) => Metric.update(responseSize, size)),
-  Effect.trackErrors(requestErrors, () => 1),
+  Fx.trackErrors(requestErrors, () => 1),
   Effect.tapDefect(() => Metric.update(requestDefects, 1))
 )
 
@@ -742,7 +742,7 @@ declare const metricFor: (tag: string) => Metric.Metric<number, Metric.CounterSt
 export const issueExample = handleRequest.pipe(
   Effect.tap((size) => Metric.update(responseSize, size)),
   Effect.tapError(() => Metric.update(requestErrors, 1)),
-  Effect.trackDefects(requestDefects, () => 1)
+  Fx.trackDefects(requestDefects, () => 1)
 )
 
 // MUST TRIGGER: Effect.tap direct-effect overload (Effect-TS/effect rpc-schemas fixture)
@@ -1022,7 +1022,7 @@ export const issueExample = handleRequest.pipe(
 // MUST TRIGGER: Effect.tap direct-effect overload (Effect-TS/effect rpc-schemas fixture)
 // -> Effect.trackSuccesses(Metric.withConstantInput(rpcSuccesses, 1))
 export const directEffect = handleRequest.pipe(
-  Effect.trackSuccesses(Metric.withConstantInput(rpcSuccesses, 1)),
+  Fx.trackSuccesses(M.withConstantInput(rpcSuccesses, 1)),
   Effect.tapDefect(() => Metric.update(requestDefects, 1))
 )
 
@@ -1297,7 +1297,7 @@ export const issueExample = handleRequest.pipe(
 // -> Effect.trackSuccesses(Metric.withConstantInput(rpcSuccesses, 1))
 export const directEffect = handleRequest.pipe(
   Effect.tap(Metric.update(rpcSuccesses, 1)),
-  Effect.trackDefects(requestDefects, () => 1)
+  Fx.trackDefects(requestDefects, () => 1)
 )
 
 // MUST TRIGGER: direct-effect overload with a computed input; the input is evaluated
@@ -1577,7 +1577,7 @@ export const directEffect = handleRequest.pipe(
 // MUST TRIGGER: direct-effect overload with a computed input; the input is evaluated
 // once when the pipeline is built in both spellings, so withConstantInput keeps that
 export const directEffectComputedInput = handleRequest.pipe(
-  Effect.trackSuccesses(Metric.withConstantInput(userCount, computeSize()))
+  Fx.trackSuccesses(M.withConstantInput(userCount, computeSize()))
 )
 
 // MUST TRIGGER: direct-effect overload with an inline metric; it is built once in both spellings
@@ -1856,7 +1856,7 @@ export const directEffectComputedInput = handleRequest.pipe(
 
 // MUST TRIGGER: direct-effect overload with an inline metric; it is built once in both spellings
 export const directEffectInlineMetric = handleRequest.pipe(
-  Effect.trackSuccesses(Metric.withConstantInput(Metric.counter("inline_successes"), 1))
+  Fx.trackSuccesses(M.withConstantInput(Metric.counter("inline_successes"), 1))
 )
 
 // MUST TRIGGER: input is an expression of the parameter -> mapper overload
@@ -2137,7 +2137,7 @@ export const directEffectInlineMetric = handleRequest.pipe(
 // -> Effect.trackSuccesses(userCount, (users) => users.length)
 // -> Effect.trackErrors(errorsByTag, (error) => error._tag)
 export const mapperInput = fetchUsers.pipe(
-  Effect.trackSuccesses(userCount, users => users.length),
+  Fx.trackSuccesses(userCount, users => users.length),
   Effect.tapError((error) => Metric.update(errorsByTag, error._tag))
 )
 
@@ -2412,7 +2412,7 @@ export const directEffectInlineMetric = handleRequest.pipe(
 // -> Effect.trackErrors(errorsByTag, (error) => error._tag)
 export const mapperInput = fetchUsers.pipe(
   Effect.tap((users) => Metric.update(userCount, users.length)),
-  Effect.trackErrors(errorsByTag, error => error._tag)
+  Fx.trackErrors(errorsByTag, error => error._tag)
 )
 
 // MUST TRIGGER: tapError / tapDefect with the parameter as the input verbatim
@@ -2692,7 +2692,7 @@ export const mapperInput = fetchUsers.pipe(
 // MUST TRIGGER: tapError / tapDefect with the parameter as the input verbatim
 // -> Effect.trackErrors(errorsByTag) / Effect.trackDefects(defectsSeen, ...)
 export const errorVerbatim = failsWithString.pipe(
-  Effect.trackErrors(errorsByTag)
+  Fx.trackErrors(errorsByTag)
 )
 export const defectMapped = handleRequest.pipe(
   Effect.tapDefect((defect) => Metric.update(defectsSeen, String(defect)))
@@ -2969,7 +2969,7 @@ export const errorVerbatim = failsWithString.pipe(
   Effect.tapError((error) => Metric.update(errorsByTag, error))
 )
 export const defectMapped = handleRequest.pipe(
-  Effect.trackDefects(defectsSeen, defect => String(defect))
+  Fx.trackDefects(defectsSeen, defect => String(defect))
 )
 
 // MUST TRIGGER: constant input computed per run; the mapper form keeps per-run evaluation
@@ -3249,7 +3249,7 @@ export const defectMapped = handleRequest.pipe(
 // MUST TRIGGER: constant input computed per run; the mapper form keeps per-run evaluation
 // -> Effect.trackSuccesses(userCount, () => computeSize())
 export const perRunConstantInput = handleRequest.pipe(
-  Effect.trackSuccesses(userCount, () => computeSize())
+  Fx.trackSuccesses(userCount, () => computeSize())
 )
 
 // MUST TRIGGER: ignored but named parameter
@@ -3528,7 +3528,7 @@ export const perRunConstantInput = handleRequest.pipe(
 
 // MUST TRIGGER: ignored but named parameter
 export const ignoredParameter = handleRequest.pipe(
-  Effect.trackSuccesses(rpcSuccesses, _ => 1)
+  Fx.trackSuccesses(rpcSuccesses, _ => 1)
 )
 
 // MUST TRIGGER: destructured parameter; the mapper keeps the parameter list
@@ -3808,7 +3808,7 @@ export const ignoredParameter = handleRequest.pipe(
 // MUST TRIGGER: destructured parameter; the mapper keeps the parameter list
 // -> Effect.trackSuccesses(userCount, ({ length }) => length)
 export const destructuredParameter = fetchUsers.pipe(
-  Effect.trackSuccesses(userCount, ({ length }) => length)
+  Fx.trackSuccesses(userCount, ({ length }) => length)
 )
 
 // MUST TRIGGER: bigint gauge fed with the success value verbatim
@@ -4087,7 +4087,7 @@ export const destructuredParameter = fetchUsers.pipe(
 
 // MUST TRIGGER: bigint gauge fed with the success value verbatim
 export const bigintVerbatim = bigintEffect.pipe(
-  Effect.trackSuccesses(bigintGauge)
+  Fx.trackSuccesses(bigintGauge)
 )
 
 // MUST TRIGGER: block body with a single return of the metric update
@@ -4366,7 +4366,7 @@ export const bigintVerbatim = bigintEffect.pipe(
 
 // MUST TRIGGER: block body with a single return of the metric update
 export const blockBody = handleRequest.pipe(
-  Effect.trackSuccesses(responseSize)
+  Fx.trackSuccesses(responseSize)
 )
 
 // MUST TRIGGER: function expression callback
@@ -4645,7 +4645,7 @@ export const blockBody = handleRequest.pipe(
 
 // MUST TRIGGER: function expression callback
 export const functionExpression = handleRequest.pipe(
-  Effect.trackErrors(requestErrors, () => 1)
+  Fx.trackErrors(requestErrors, () => 1)
 )
 
 // MUST TRIGGER: parenthesized callback body
@@ -4924,7 +4924,7 @@ export const functionExpression = handleRequest.pipe(
 
 // MUST TRIGGER: parenthesized callback body
 export const parenthesizedBody = handleRequest.pipe(
-  Effect.trackSuccesses(responseSize)
+  Fx.trackSuccesses(responseSize)
 )
 
 // MUST TRIGGER: pipe function form
@@ -5202,7 +5202,7 @@ export const parenthesizedBody = handleRequest.pipe(
 )
 
 // MUST TRIGGER: pipe function form
-export const piped = pipe(handleRequest, Effect.trackSuccesses(responseSize))
+export const piped = pipe(handleRequest, Fx.trackSuccesses(responseSize))
 
 // MUST TRIGGER: data-first forms (callback and direct effect)
 // -> Effect.trackSuccesses(handleRequest, responseSize)
@@ -5480,7 +5480,7 @@ export const piped = pipe(handleRequest, Effect.tap((size) => Metric.update(resp
 
 // MUST TRIGGER: data-first forms (callback and direct effect)
 // -> Effect.trackSuccesses(handleRequest, responseSize)
-export const dataFirst = Effect.trackSuccesses(handleRequest, responseSize)
+export const dataFirst = Fx.trackSuccesses(handleRequest, responseSize)
 export const dataFirstDirect = Effect.tap(handleRequest, Metric.update(rpcSuccesses, 1))
 export const dataFirstError = Effect.tapError(handleRequest, () => Metric.update(requestErrors, 1))
 
@@ -5755,7 +5755,7 @@ export const piped = pipe(handleRequest, Effect.tap((size) => Metric.update(resp
 // MUST TRIGGER: data-first forms (callback and direct effect)
 // -> Effect.trackSuccesses(handleRequest, responseSize)
 export const dataFirst = Effect.tap(handleRequest, (size) => Metric.update(responseSize, size))
-export const dataFirstDirect = Effect.trackSuccesses(handleRequest, Metric.withConstantInput(rpcSuccesses, 1))
+export const dataFirstDirect = Fx.trackSuccesses(handleRequest, M.withConstantInput(rpcSuccesses, 1))
 export const dataFirstError = Effect.tapError(handleRequest, () => Metric.update(requestErrors, 1))
 
 // MUST TRIGGER: data-last form applied directly
@@ -6030,7 +6030,7 @@ export const piped = pipe(handleRequest, Effect.tap((size) => Metric.update(resp
 // -> Effect.trackSuccesses(handleRequest, responseSize)
 export const dataFirst = Effect.tap(handleRequest, (size) => Metric.update(responseSize, size))
 export const dataFirstDirect = Effect.tap(handleRequest, Metric.update(rpcSuccesses, 1))
-export const dataFirstError = Effect.trackErrors(handleRequest, requestErrors, () => 1)
+export const dataFirstError = Fx.trackErrors(handleRequest, requestErrors, () => 1)
 
 // MUST TRIGGER: data-last form applied directly
 export const dataLast = Effect.tapError(() => Metric.update(requestErrors, 1))(handleRequest)
@@ -6307,7 +6307,7 @@ export const dataFirstDirect = Effect.tap(handleRequest, Metric.update(rpcSucces
 export const dataFirstError = Effect.tapError(handleRequest, () => Metric.update(requestErrors, 1))
 
 // MUST TRIGGER: data-last form applied directly
-export const dataLast = Effect.trackErrors(requestErrors, () => 1)(handleRequest)
+export const dataLast = Fx.trackErrors(requestErrors, () => 1)(handleRequest)
 
 // MUST TRIGGER: aliased module imports for both Effect and Metric
 export const aliasedModules = handleRequest.pipe(
@@ -7421,7 +7421,7 @@ export const tracedHandler = Effect.fn("tracedHandler")(
   function*(id: string) {
     return id.length
   },
-  Effect.trackSuccesses(responseSize),
+  Fx.trackSuccesses(responseSize),
   Effect.tapError(() => Metric.update(requestErrors, 1))
 )
 
@@ -7696,7 +7696,7 @@ export const tracedHandler = Effect.fn("tracedHandler")(
     return id.length
   },
   Effect.tap((size) => Metric.update(responseSize, size)),
-  Effect.trackErrors(requestErrors, () => 1)
+  Fx.trackErrors(requestErrors, () => 1)
 )
 
 // MUST TRIGGER: only the metric tap in a longer chain is reported
@@ -7976,7 +7976,7 @@ export const tracedHandler = Effect.fn("tracedHandler")(
 // MUST TRIGGER: only the metric tap in a longer chain is reported
 export const chained = handleRequest.pipe(
   Effect.map((size) => size * 2),
-  Effect.trackSuccesses(responseSize),
+  Fx.trackSuccesses(responseSize),
   Effect.tap((size) => Effect.log(size))
 )
 
@@ -8256,7 +8256,7 @@ export const chained = handleRequest.pipe(
 
 // MUST TRIGGER: inside a function body, with module-level metrics declared before it
 export function nestedScope() {
-  return handleRequest.pipe(Effect.trackErrors(requestErrors, () => 1))
+  return handleRequest.pipe(Fx.trackErrors(requestErrors, () => 1))
 }
 
 // MUST NOT TRIGGER: already using the track* combinators

@@ -10,12 +10,10 @@ use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 use ets_shim::scanner;
 
-use crate::*;
-
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::BRANCHING_ON_0_TAG_INSIDE_EFFECT_1_HAND_ROLLS_TAGGED_ERROR_DISPATCH_USE_EFFECT_CATCH_TAG_OR_EFFECT_CATCH_TAGS_WHICH_RE_FAIL_UNMATCHED_ERRORS_AUTOMATICALLY_EFFECT_CATCH_ALL_TAG_DISPATCH_TO_CATCH_TAG;
 
-// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:14 CatchAllTagDispatchToCatchTagFix
+// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:15 CatchAllTagDispatchToCatchTagFix
 pub static CATCH_ALL_TAG_DISPATCH_TO_CATCH_TAG_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "catchAllTagDispatchToCatchTag",
     description: "Replace hand-rolled tagged error dispatch with Effect.catchTag or Effect.catchTags",
@@ -24,7 +22,7 @@ pub static CATCH_ALL_TAG_DISPATCH_TO_CATCH_TAG_FIX: LazyLock<Fixable> = LazyLock
     run: run_catch_all_tag_dispatch_to_catch_tag_fix,
 });
 
-// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:20 runCatchAllTagDispatchToCatchTagFix
+// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:21 runCatchAllTagDispatchToCatchTagFix
 fn run_catch_all_tag_dispatch_to_catch_tag_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_catch_all_tag_dispatch_to_catch_tag(
@@ -59,7 +57,7 @@ fn run_catch_all_tag_dispatch_to_catch_tag_fix(ctx: &mut Context<'_, '_>) -> Vec
     Vec::new()
 }
 
-// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:38 buildCatchAllTagDispatchReplacement
+// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:39 buildCatchAllTagDispatchReplacement
 //
 // Rust: the tracker and the match's callee cannot be nil, so only Go's empty-branches check remains.
 fn build_catch_all_tag_dispatch_replacement(
@@ -70,15 +68,13 @@ fn build_catch_all_tag_dispatch_replacement(
     if m.branches.is_empty() {
         return (None, None);
     }
-    let mut receiver = None;
-    if m.callee.kind() == Kind::PropertyAccessExpression {
-        receiver = Some(m.callee.as_property_access_expression().expression());
-    }
     let mut method_name = "catchTag";
     if m.branches.len() > 1 {
         method_name = "catchTags";
     }
-    let callee = effect_module_method(tracker, sf, receiver, method_name);
+    let callee = tracker.new_property_access_path(
+        &ets_typeparser::find_effect_module_reference(Some(sf)).append(&[method_name]),
+    );
     if m.branches.len() == 1 {
         let branch = &m.branches[0];
         return (
@@ -111,7 +107,7 @@ fn build_catch_all_tag_dispatch_replacement(
     )
 }
 
-// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:66 newCatchTagHandler
+// go: internal/fixables/catch_all_tag_dispatch_to_catch_tag.go:63 newCatchTagHandler
 fn new_catch_tag_handler(
     tracker: &Tracker,
     parameter_name: &str,

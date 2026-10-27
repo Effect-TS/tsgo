@@ -44,7 +44,6 @@ type AllOfMapToForEachMatch struct {
 	SourceFile       *ast.SourceFile
 	Location         core.TextRange
 	CallNode         *ast.Node
-	EffectModule     *ast.Node
 	Receiver         *ast.Node
 	Callback         *ast.Node
 	Options          *ast.Node
@@ -188,15 +187,9 @@ func analyzeAllOfMapToForEachReceiver(
 		}
 	}
 
-	var effectModule *ast.Node
-	if allNode.Kind == ast.KindPropertyAccessExpression {
-		effectModule = allNode.AsPropertyAccessExpression().Expression
-	}
-
 	return AllOfMapToForEachMatch{
 		SourceFile:       sf,
 		Location:         scanner.GetErrorRangeForNode(sf, allNode),
-		EffectModule:     effectModule,
 		Receiver:         mapAccess.Expression,
 		Callback:         callback,
 		Options:          options,

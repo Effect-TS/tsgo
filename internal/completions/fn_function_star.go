@@ -25,10 +25,8 @@ func runFnFunctionStar(ctx *completion.Context) []*lsproto.CompletionItem {
 		return nil
 	}
 
-	// Resolve the local Effect module identifier and compare
-	effectIdentifier := typeparser.FindEffectModuleIdentifier(ctx.SourceFile)
-	accessedText := scanner.GetTextOfNode(result.AccessedObject)
-	if accessedText != effectIdentifier {
+	// Compare the accessed object with the file's reference to the Effect module
+	if !typeparser.FindEffectModuleReference(ctx.SourceFile).MatchesNode(result.AccessedObject) {
 		return nil
 	}
 

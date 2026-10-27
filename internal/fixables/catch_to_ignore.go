@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -47,7 +48,7 @@ func runCatchToIgnoreFix(ctx *fixable.Context) []ls.CodeAction {
 }
 
 func catchToIgnoreReplacementAccess(tracker *rewriter.Tracker, sf *ast.SourceFile, match rules.CatchToIgnoreMatch) *ast.Node {
-	replacement := effectModuleMethod(tracker, sf, match.EffectModuleNode, match.IgnoreMethodName)
+	replacement := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(sf).Append(match.IgnoreMethodName)...)
 	ast.SetParentInChildren(replacement)
 	return replacement
 }

@@ -39,7 +39,6 @@ type SchemaStructWithTagMatch struct {
 	CallNode        *ast.Node      // The full Schema.Struct(...) call expression
 	TagValue        string         // The string value extracted from Schema.Literal("...")
 	OtherProperties []*ast.Node    // All property assignment nodes in the object literal except _tag
-	SchemaExpr      *ast.Node      // The expression node for the Schema part of Schema.Struct
 }
 
 // AnalyzeSchemaStructWithTag finds all Schema.Struct({ _tag: Schema.Literal("..."), ... })
@@ -142,19 +141,12 @@ func analyzeSchemaStructWithTagNode(tp *typeparser.TypeParser, _ *checker.Checke
 			otherProps = append(otherProps, p)
 		}
 
-		// Extract the Schema expression from Schema.Struct (the left side of the property access)
-		var schemaExpr *ast.Node
-		if call.Expression.Kind == ast.KindPropertyAccessExpression {
-			schemaExpr = call.Expression.AsPropertyAccessExpression().Expression
-		}
-
 		return SchemaStructWithTagMatch{
 			SourceFile:      sf,
 			Location:        scanner.GetErrorRangeForNode(sf, node),
 			CallNode:        node,
 			TagValue:        tagValue,
 			OtherProperties: otherProps,
-			SchemaExpr:      schemaExpr,
 		}, true
 	}
 

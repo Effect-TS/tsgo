@@ -35,10 +35,9 @@ var ScopeInLayerEffect = rule.Rule{
 // ScopeInLayerEffectMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the scopeInLayerEffect pattern.
 type ScopeInLayerEffectMatch struct {
-	SourceFile       *ast.SourceFile
-	Location         core.TextRange // The pre-computed error range for this match
-	Callee           *ast.Node      // The Layer constructor callee; nil for class declaration matches
-	MethodIdentifier *ast.Node      // The replaceable property name (e.g., "effect" in Layer.effect); nil for classes, named imports, and local aliases
+	SourceFile *ast.SourceFile
+	Location   core.TextRange // The pre-computed error range for this match
+	Callee     *ast.Node      // The Layer constructor callee; nil for class declaration matches
 }
 
 // AnalyzeScopeInLayerEffect finds all Layer.effect*() calls and class declarations
@@ -127,15 +126,10 @@ func matchLayerEffectCall(tp *typeparser.TypeParser, sf *ast.SourceFile, node *a
 		return nil
 	}
 
-	var methodIdentifier *ast.Node
-	if call.Expression.Kind == ast.KindPropertyAccessExpression {
-		methodIdentifier = call.Expression.AsPropertyAccessExpression().Name()
-	}
 	return &ScopeInLayerEffectMatch{
-		SourceFile:       sf,
-		Location:         scanner.GetErrorRangeForNode(sf, node),
-		Callee:           call.Expression,
-		MethodIdentifier: methodIdentifier,
+		SourceFile: sf,
+		Location:   scanner.GetErrorRangeForNode(sf, node),
+		Callee:     call.Expression,
 	}
 }
 
@@ -187,9 +181,8 @@ func matchClassWithDefaultLayer(tp *typeparser.TypeParser, c *checker.Checker, s
 	}
 
 	return &ScopeInLayerEffectMatch{
-		SourceFile:       sf,
-		Location:         scanner.GetErrorRangeForNode(sf, node),
-		MethodIdentifier: nil,
+		SourceFile: sf,
+		Location:   scanner.GetErrorRangeForNode(sf, node),
 	}
 }
 

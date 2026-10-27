@@ -1,0 +1,42 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/moduleReference_barrelNamespace.ts(12,24): warning TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
+/.src/moduleReference_barrelNamespace.ts(22,3): warning TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+
+
+==== /.src/moduleReference_barrelNamespace.ts (2 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics scopeInLayerEffect:warning
+    // @effect-diagnostics effectMapVoid:warning
+    import * as X from "effect"
+    
+    class MyService extends X.Context.Tag("MyService")<MyService, {
+      a: number
+    }>() {}
+    
+    // The fix builds X.Layer.scoped from the barrel namespace import
+    export const myLayer = X.Layer.effect(
+                           ~~~~~~~~~~~~~~~
+      MyService,
+    ~~~~~~~~~~~~
+      X.Effect.gen(function*() {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        yield* X.Effect.addFinalizer(() => X.Effect.log("finalizer"))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        return { a: 1 }
+    ~~~~~~~~~~~~~~~~~~~
+      })
+    ~~~~
+    )
+    ~
+!!! warning TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
+    
+    // The fix builds X.Effect.asVoid from the barrel namespace import
+    export const mapVoid = X.Effect.succeed(1).pipe(
+      X.Effect.map(() => undefined)
+      ~~~~~~~~~~~~
+!!! warning TS377018: This expression discards the success value through mapping. `Effect.asVoid` represents that form directly. effect(effectMapVoid)
+    )
+    

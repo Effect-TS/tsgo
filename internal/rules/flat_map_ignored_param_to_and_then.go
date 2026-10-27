@@ -40,12 +40,11 @@ var FlatMapIgnoredParamToAndThen = rule.Rule{
 // FlatMapIgnoredParamToAndThenMatch holds the nodes needed by the diagnostic
 // and quick fix.
 type FlatMapIgnoredParamToAndThenMatch struct {
-	SourceFile     *ast.SourceFile
-	Location       core.TextRange
-	Callee         *ast.Node
-	CalleeNameNode *ast.Node
-	Callback       *ast.Node
-	EffectValue    *ast.Node
+	SourceFile  *ast.SourceFile
+	Location    core.TextRange
+	Callee      *ast.Node
+	Callback    *ast.Node
+	EffectValue *ast.Node
 }
 
 // AnalyzeFlatMapIgnoredParamToAndThen finds Effect.flatMap piping
@@ -70,18 +69,12 @@ func AnalyzeFlatMapIgnoredParamToAndThen(tp *typeparser.TypeParser, _ *checker.C
 				continue
 			}
 
-			var calleeName *ast.Node
-			if callee.Kind == ast.KindPropertyAccessExpression {
-				calleeName = callee.AsPropertyAccessExpression().Name()
-			}
-
 			matches = append(matches, FlatMapIgnoredParamToAndThenMatch{
-				SourceFile:     sf,
-				Location:       scanner.GetErrorRangeForNode(sf, callee),
-				Callee:         callee,
-				CalleeNameNode: calleeName,
-				Callback:       callback.Node(),
-				EffectValue:    callback.Expression(),
+				SourceFile:  sf,
+				Location:    scanner.GetErrorRangeForNode(sf, callee),
+				Callee:      callee,
+				Callback:    callback.Node(),
+				EffectValue: callback.Expression(),
 			})
 		}
 	}

@@ -55,17 +55,15 @@ const (
 
 // ManualMetricTapToTrackMatch holds the nodes needed by the diagnostic and quick fix.
 type ManualMetricTapToTrackMatch struct {
-	SourceFile       *ast.SourceFile
-	Location         core.TextRange
-	Transformation   *typeparser.PipingFlowTransformation
-	EffectModuleNode *ast.Node // The Effect module identifier (e.g., "Effect" in Effect.tap)
-	MetricModuleNode *ast.Node // The Metric module identifier (e.g., "Metric" in Metric.update)
-	TrackAPI         string    // trackSuccesses, trackErrors or trackDefects
-	Channel          string    // success, error or defect
-	Kind             ManualMetricTapToTrackKind
-	Metric           *ast.Node // The updated metric, with parentheses skipped
-	Input            *ast.Node // The metric input as written
-	Params           readonly.Slice[*ast.Node]
+	SourceFile     *ast.SourceFile
+	Location       core.TextRange
+	Transformation *typeparser.PipingFlowTransformation
+	TrackAPI       string // trackSuccesses, trackErrors or trackDefects
+	Channel        string // success, error or defect
+	Kind           ManualMetricTapToTrackKind
+	Metric         *ast.Node // The updated metric, with parentheses skipped
+	Input          *ast.Node // The metric input as written
+	Params         readonly.Slice[*ast.Node]
 }
 
 type manualMetricTapAPI struct {
@@ -134,26 +132,16 @@ func AnalyzeManualMetricTapToTrack(tp *typeparser.TypeParser, _ *checker.Checker
 				continue
 			}
 
-			var effectModuleNode *ast.Node
-			if callee.Kind == ast.KindPropertyAccessExpression {
-				effectModuleNode = callee.AsPropertyAccessExpression().Expression
-			}
-			var metricModuleNode *ast.Node
-			if update.Expression.Kind == ast.KindPropertyAccessExpression {
-				metricModuleNode = update.Expression.AsPropertyAccessExpression().Expression
-			}
 			matches = append(matches, ManualMetricTapToTrackMatch{
-				SourceFile:       sf,
-				Location:         scanner.GetErrorRangeForNode(sf, callee),
-				Transformation:   &transformation,
-				EffectModuleNode: effectModuleNode,
-				MetricModuleNode: metricModuleNode,
-				TrackAPI:         api.track,
-				Channel:          api.channel,
-				Kind:             kind,
-				Metric:           ast.SkipParentheses(update.Arguments.Nodes[0]),
-				Input:            update.Arguments.Nodes[1],
-				Params:           params,
+				SourceFile:     sf,
+				Location:       scanner.GetErrorRangeForNode(sf, callee),
+				Transformation: &transformation,
+				TrackAPI:       api.track,
+				Channel:        api.channel,
+				Kind:           kind,
+				Metric:         ast.SkipParentheses(update.Arguments.Nodes[0]),
+				Input:          update.Arguments.Nodes[1],
+				Params:         params,
 			})
 		}
 	}

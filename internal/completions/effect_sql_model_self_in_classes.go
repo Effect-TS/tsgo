@@ -31,9 +31,10 @@ func runEffectSqlModelSelfInClasses(ctx *completion.Context) []*lsproto.Completi
 		return nil
 	}
 
-	modelIdentifier := typeparser.FindModuleIdentifierForPackage(ctx.SourceFile, "@effect/sql", "Model")
+	modelReference := typeparser.FindModuleReferenceForPackage(ctx.SourceFile, "@effect/sql", "Model")
+	modelIdentifier := modelReference.String()
 	accessedText := data.AccessedObjectText()
-	isFullyQualified := modelIdentifier == accessedText
+	isFullyQualified := modelReference.MatchesNode(data.AccessedObject)
 	className := data.ClassNameText()
 
 	// For non-fully-qualified: validate with IsNodeReferenceToEffectSqlModelModuleApi

@@ -59,7 +59,7 @@ const holder = { second }
 let mutable = second
 
 // Should trigger: pipeable style
-export const pipeable = first.pipe(Effect.andThen(second))
+export const pipeable = first.pipe(Fx.andThen(second))
 
 // Should trigger: pipe style
 export const piped = pipe(first, Effect.flatMap(() => second))
@@ -129,7 +129,7 @@ let mutable = second
 export const pipeable = first.pipe(Effect.flatMap(() => second))
 
 // Should trigger: pipe style
-export const piped = pipe(first, Effect.andThen(second))
+export const piped = pipe(first, Fx.andThen(second))
 
 // Should trigger: data-first style
 export const dataFirst = Effect.flatMap(first, () => second)
@@ -199,7 +199,7 @@ export const pipeable = first.pipe(Effect.flatMap(() => second))
 export const piped = pipe(first, Effect.flatMap(() => second))
 
 // Should trigger: data-first style
-export const dataFirst = Effect.andThen(first, second)
+export const dataFirst = Fx.andThen(first, second)
 
 // Should trigger: data-last style
 export const dataLast = Effect.flatMap(() => second)(first)
@@ -269,7 +269,7 @@ export const piped = pipe(first, Effect.flatMap(() => second))
 export const dataFirst = Effect.flatMap(first, () => second)
 
 // Should trigger: data-last style
-export const dataLast = Effect.andThen(second)(first)
+export const dataLast = Fx.andThen(second)(first)
 
 // Should trigger and fix the call site without changing the shared alias
 const flatMap = Fx.flatMap
@@ -423,7 +423,7 @@ export const laterBinding = first.pipe(Effect.flatMap(() => later))
 const later = Effect.succeed("later")
 
 // Should trigger: the lazy-expression parser unwraps a single-return block
-export const blockBody = first.pipe(Effect.andThen(second))
+export const blockBody = first.pipe(Fx.andThen(second))
 
 // Should trigger: const values remain stable when referenced from a nested scope
 export function nestedScope() {
@@ -500,7 +500,7 @@ export const blockBody = first.pipe(Effect.flatMap(() => {
 
 // Should trigger: const values remain stable when referenced from a nested scope
 export function nestedScope() {
-  return first.pipe(Effect.andThen(second))
+  return first.pipe(Fx.andThen(second))
 }
 
 // Should NOT trigger: the stable value is not an Effect

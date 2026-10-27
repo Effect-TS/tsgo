@@ -44,12 +44,11 @@ pub struct AcquireReleaseDisposableMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
     pub call_node: P<Node>,
-    pub effect_module: Option<P<Node>>,
     pub acquire: P<Node>,
     pub has_type_arguments: bool,
 }
 
-// go: internal/rules/acquire_release_disposable.go:55 AnalyzeAcquireReleaseDisposable
+// go: internal/rules/acquire_release_disposable.go:54 AnalyzeAcquireReleaseDisposable
 // AnalyzeAcquireReleaseDisposable finds Effect.acquireRelease calls whose
 // resulting success type is disposable and whose release callback consists
 // solely of invoking that resource's disposal protocol.
@@ -96,7 +95,7 @@ pub fn analyze_acquire_release_disposable(
     matches
 }
 
-// go: internal/rules/acquire_release_disposable.go:85 globalDisposableUnion
+// go: internal/rules/acquire_release_disposable.go:84 globalDisposableUnion
 // Rust: Go's checker argument is the parser's checker. `GetDeclaredTypeOfSymbol` never returns nil in tsrs.
 pub(crate) fn global_disposable_union(tp: &mut TypeParser<'_>) -> Option<P<Type>> {
     let c = tp.checker();
@@ -116,7 +115,7 @@ pub(crate) fn global_disposable_union(tp: &mut TypeParser<'_>) -> Option<P<Type>
     Some(c.get_union_type_ex_exported(&types, UnionReduction::None))
 }
 
-// go: internal/rules/acquire_release_disposable.go:105 analyzeAcquireReleaseDisposableCall
+// go: internal/rules/acquire_release_disposable.go:104 analyzeAcquireReleaseDisposableCall
 pub(crate) fn analyze_acquire_release_disposable_call(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -147,25 +146,16 @@ pub(crate) fn analyze_acquire_release_disposable_call(
         return None;
     }
 
-    let mut effect_module = None;
-    if call.expression().kind() == Kind::PropertyAccessExpression {
-        let access = call.expression().as_property_access_expression();
-        if access.question_dot_token().is_none() {
-            effect_module = Some(access.expression());
-        }
-    }
-
     Some(AcquireReleaseDisposableMatch {
         source_file: sf,
         location: ets_shim::scanner::get_error_range_for_node(sf, call.expression()),
         call_node: node,
-        effect_module,
         acquire: args[0],
         has_type_arguments: has_call_type_arguments(Some(call)),
     })
 }
 
-// go: internal/rules/acquire_release_disposable.go:149 isDefinitelyDisposable
+// go: internal/rules/acquire_release_disposable.go:139 isDefinitelyDisposable
 pub(crate) fn is_definitely_disposable(
     tp: &mut TypeParser<'_>,
     success: Option<P<Type>>,
@@ -182,7 +172,7 @@ pub(crate) fn is_definitely_disposable(
     tp.checker().is_type_assignable_to_exported(success, disposable)
 }
 
-// go: internal/rules/acquire_release_disposable.go:161 isDisposalRelease
+// go: internal/rules/acquire_release_disposable.go:151 isDisposalRelease
 pub(crate) fn is_disposal_release(
     tp: &mut TypeParser<'_>,
     node: P<Node>,
@@ -244,7 +234,7 @@ pub(crate) fn is_disposal_release(
         || protocol == "asyncDispose" && wrapper_name == "promise")
 }
 
-// go: internal/rules/acquire_release_disposable.go:212 isPlainIdentifierParameter
+// go: internal/rules/acquire_release_disposable.go:202 isPlainIdentifierParameter
 pub(crate) fn is_plain_identifier_parameter(node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;
@@ -258,7 +248,7 @@ pub(crate) fn is_plain_identifier_parameter(node: Option<P<Node>>) -> bool {
         && parameter.initializer().is_none()
 }
 
-// go: internal/rules/acquire_release_disposable.go:220 disposalProtocolCall
+// go: internal/rules/acquire_release_disposable.go:210 disposalProtocolCall
 pub(crate) fn disposal_protocol_call(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,

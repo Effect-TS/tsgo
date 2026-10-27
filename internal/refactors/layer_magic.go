@@ -30,7 +30,7 @@ func runLayerMagic(ctx *refactor.Context) []ls.CodeAction {
 	c := ctx.Checker
 	tp := ctx.TypeParser
 
-	layerIdentifier := typeparser.FindModuleIdentifier(ctx.SourceFile, "Layer")
+	layerIdentifier := typeparser.FindModuleReference(ctx.SourceFile, "Layer")
 
 	// Collect ancestor nodes from the token up to the source file.
 	var ancestors []*ast.Node
@@ -77,7 +77,7 @@ func adjustedNode(node *ast.Node) *ast.Node {
 
 // tryBuildRefactor tries to produce the "build" refactor action for the given node.
 // It detects the `(expr as any) as Layer.Layer<ROut>` pattern.
-func tryBuildRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node, layerIdentifier string) []ls.CodeAction {
+func tryBuildRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node, layerIdentifier typeparser.ModuleReference) []ls.CodeAction {
 	atLocation := adjustedNode(node)
 
 	// Must be an AsExpression: `... as Layer.Layer<ROut>`
@@ -152,7 +152,7 @@ func tryBuildRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *check
 
 // buildLayerMagicBuild generates a pipe from the first requested output layer, or Layer.empty
 // when the first layer does not provide a requested output.
-func buildLayerMagicBuild(tracker *rewriter.Tracker, ctx *refactor.Context, c *checker.Checker, oldNode *ast.Node, magicResult *layergraph.LayerMagicResult, layerIdentifier string) {
+func buildLayerMagicBuild(tracker *rewriter.Tracker, ctx *refactor.Context, c *checker.Checker, oldNode *ast.Node, magicResult *layergraph.LayerMagicResult, layerIdentifier typeparser.ModuleReference) {
 	nodes := magicResult.Nodes
 	if len(nodes) == 0 {
 		return
@@ -164,9 +164,7 @@ func buildLayerMagicBuild(tracker *rewriter.Tracker, ctx *refactor.Context, c *c
 		receiver = tracker.DeepCloneNode(nodes[0].Node)
 		firstPipeArg = 1
 	} else {
-		receiver = tracker.NewPropertyAccessExpression(
-			tracker.NewIdentifier(layerIdentifier), nil, tracker.NewIdentifier("empty"), ast.NodeFlagsNone,
-		)
+		receiver = tracker.NewPropertyAccessPath(layerIdentifier.Append("empty")...)
 	}
 
 	var pipeArgs []*ast.Node
@@ -183,10 +181,7 @@ func buildLayerMagicBuild(tracker *rewriter.Tracker, ctx *refactor.Context, c *c
 		}
 
 		// Layer.provideMerge(expr) or Layer.provide(expr) or Layer.merge(expr)
-		layerId := tracker.NewIdentifier(layerIdentifier)
-		combinatorAccess := tracker.NewPropertyAccessExpression(
-			layerId, nil, tracker.NewIdentifier(combinatorName), ast.NodeFlagsNone,
-		)
+		combinatorAccess := tracker.NewPropertyAccessPath(layerIdentifier.Append(combinatorName)...)
 		clonedExpr := tracker.DeepCloneNode(mn.Node)
 		call := tracker.NewCallExpression(
 			combinatorAccess, nil, nil,
@@ -227,7 +222,7 @@ func buildLayerMagicBuild(tracker *rewriter.Tracker, ctx *refactor.Context, c *c
 
 // tryPrepareRefactor tries to produce the "prepare" refactor action for the given node.
 // It flattens a layer expression into `[...] as any as Layer.Layer<T>`.
-func tryPrepareRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node, layerIdentifier string) []ls.CodeAction {
+func tryPrepareRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node, layerIdentifier typeparser.ModuleReference) []ls.CodeAction {
 	atLocation := adjustedNode(node)
 
 	// Skip if already in `as any as Layer.Layer<T>` form
@@ -324,7 +319,7 @@ func buildLayerMagicPrepare(
 	layerNodes []*ast.Node,
 	newlyIntroduced []*checker.Type,
 	existingBefore []*checker.Type,
-	layerIdentifier string,
+	layerIdentifier typeparser.ModuleReference,
 ) {
 	// Build array of cloned layer expressions
 	var elements []*ast.Node
@@ -367,7 +362,7 @@ func buildLayerMagicPrepare(
 	}
 
 	// Build Layer.Layer<providesType>
-	qualifiedName := tracker.NewQualifiedName(tracker.NewIdentifier(layerIdentifier), tracker.NewIdentifier("Layer"))
+	qualifiedName := tracker.NewQualifiedNamePath(layerIdentifier.Append("Layer")...)
 	layerTypeRef := tracker.NewTypeReferenceNode(qualifiedName, tracker.NewNodeList([]*ast.Node{providesType}))
 
 	// Outer as expression: `([...] as any) as Layer.Layer<T>`

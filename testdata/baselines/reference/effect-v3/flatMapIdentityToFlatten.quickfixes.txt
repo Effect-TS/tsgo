@@ -2085,7 +2085,7 @@ export const functionNamespace = loadTask.pipe(Effect.flatMap(Function.identity)
 export const aliasedIdentity = loadTask.pipe(Effect.flatMap(id))
 
 // MUST TRIGGER: Effect module imported under an alias
-export const aliasedModule = loadTask.pipe(Fx.flatten)
+export const aliasedModule = loadTask.pipe(Effect.flatten)
 
 // MUST TRIGGER: error and requirement channels on both levels are merged by flatten too
 export const withChannels = failingTask.pipe(Effect.flatMap((inner) => inner))
