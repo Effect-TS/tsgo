@@ -610,5 +610,9 @@
     "`Effect.{0}` expresses recording a metric on every {1} directly. effect(manualMetricTapToTrack)": {
         "category": "Suggestion",
         "code": 377154
+    },
+    "`Effect.{0}` expresses this failure directly instead of wrapping `Cause.{2}` in `Effect.{1}`. effect(failCauseToConstructor)": {
+        "category": "Suggestion",
+        "code": 377155
     }
 }

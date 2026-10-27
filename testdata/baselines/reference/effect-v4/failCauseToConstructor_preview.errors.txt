@@ -1,0 +1,16 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/failCauseToConstructor_preview.ts(6,24): warning TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+
+
+==== /.src/failCauseToConstructor_preview.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics *:off
+    // @effect-diagnostics failCauseToConstructor:warning
+    import { Cause, Effect } from "effect"
+    
+    export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+                           ~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+    

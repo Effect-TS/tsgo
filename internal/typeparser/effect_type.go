@@ -236,6 +236,26 @@ func (tp *TypeParser) IsExpressionEffectModule(node *ast.Node) bool {
 	return tp.IsNodeReferenceToModule(node, effectModuleDescriptor)
 }
 
+// EffectModuleIdentifierAt returns the name FindEffectModuleIdentifier picks
+// for the Effect module when that name resolves to the Effect module at
+// location, or "" when no such value binding is in scope there. Type-only
+// bindings, directly or through a type-only re-export, are not values.
+func (tp *TypeParser) EffectModuleIdentifierAt(location *ast.Node) string {
+	if tp == nil || tp.checker == nil || location == nil {
+		return ""
+	}
+	name := FindEffectModuleIdentifier(ast.GetSourceFileOfNode(location))
+	local := tp.checker.ResolveName(name, location, ast.SymbolFlagsValue, false)
+	if local == nil || tp.checker.GetTypeOnlyAliasDeclaration(local) != nil {
+		return ""
+	}
+	sym := tp.resolveAliasedSymbol(local)
+	if sym == nil || !tp.symbolHasDeclarationInModuleCached(sym, effectModuleDescriptor) {
+		return ""
+	}
+	return name
+}
+
 // IsNodeReferenceToEffectModuleApi reports whether node resolves to a member exported by the "effect" package.
 func (tp *TypeParser) IsNodeReferenceToEffectModuleApi(node *ast.Node, memberName string) bool {
 	return tp.IsNodeReferenceToModuleExport(node, effectModuleDescriptor, memberName)

@@ -1,0 +1,1165 @@
+==== /.src/failCauseToConstructor.ts (74 flows) ====
+
+=== Piping Flow ===
+Location: 27:23 - 27:70
+Node: Effect.failCause(Cause.die(new Error("boom")))
+Node Kind: KindCallExpression
+
+Subject: new Error("boom")
+Subject Type: Error
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.die
+      args: (constant)
+      outType: Cause<never>
+  [1] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 30:23 - 30:74
+Node: Effect.failCause(Cause.fail("not found" as const))
+Node Kind: KindCallExpression
+
+Subject: "not found" as const
+Subject Type: "not found"
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<"not found">
+  [1] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, "not found", never>
+
+=== Piping Flow ===
+Location: 33:20 - 33:78
+Node: Effect.failCauseSync(() => Cause.fail(new Error("late")))
+Node Kind: KindCallExpression
+
+Subject: () => Cause.fail(new Error("late"))
+Subject Type: () => Cause<Error>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCauseSync
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 33:47 - 33:77
+Node: Cause.fail(new Error("late"))
+Node Kind: KindCallExpression
+
+Subject: new Error("late")
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<Error>
+
+=== Piping Flow ===
+Location: 36:30 - 36:66
+Node: Effect.failCause(Cause.fail(error))
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+  [1] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 37:29 - 37:65
+Node: Effect.failCause(Cause.die(defect))
+Node Kind: KindCallExpression
+
+Subject: defect
+Subject Type: unknown
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.die
+      args: (constant)
+      outType: Cause<never>
+  [1] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 40:27 - 40:66
+Node: Effect.failCause(Cause.die(compute()))
+Node Kind: KindCallExpression
+
+Subject: compute()
+Subject Type: number
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.die
+      args: (constant)
+      outType: Cause<never>
+  [1] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 43:23 - 43:80
+Node: Effect.failCauseSync(() => Cause.die(new Error("late")))
+Node Kind: KindCallExpression
+
+Subject: () => Cause.die(new Error("late"))
+Subject Type: () => Cause<never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCauseSync
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 43:50 - 43:79
+Node: Cause.die(new Error("late"))
+Node Kind: KindCallExpression
+
+Subject: new Error("late")
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.die
+      args: (constant)
+      outType: Cause<never>
+
+=== Piping Flow ===
+Location: 46:25 - 48:3
+Node: Effect.failCauseSync(() => {\n  return Cause.fail(error)\n})
+Node Kind: KindCallExpression
+
+Subject: () => {\n  return Cause.fail(error)\n}
+Subject Type: () => Cause<AppError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCauseSync
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 47:9 - 47:27
+Node: Cause.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+
+=== Piping Flow ===
+Location: 51:28 - 53:3
+Node: Effect.failCauseSync(function() {\n  return Cause.fail(error)\n})
+Node Kind: KindCallExpression
+
+Subject: function() {\n  return Cause.fail(error)\n}
+Subject Type: () => Cause<AppError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCauseSync
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 52:9 - 52:27
+Node: Cause.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+
+=== Piping Flow ===
+Location: 56:29 - 56:67
+Node: Effect.failCause((Cause.fail(error)))
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+  [1] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 59:33 - 59:88
+Node: Effect.failCause(Cause.fail<AppError | string>(error))
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<string | AppError>
+  [1] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, string | AppError, never>
+
+=== Piping Flow ===
+Location: 63:28 - 63:56
+Node: failCause(causeDie(defect))
+Node Kind: KindCallExpression
+
+Subject: defect
+Subject Type: unknown
+
+Transformations (2):
+  [0] kind: call
+      callee: causeDie
+      args: (constant)
+      outType: Cause<never>
+  [1] kind: call
+      callee: failCause
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 64:32 - 64:70
+Node: failCauseSync(() => causeFail(error))
+Node Kind: KindCallExpression
+
+Subject: () => causeFail(error)
+Subject Type: () => Cause<AppError>
+
+Transformations (1):
+  [0] kind: call
+      callee: failCauseSync
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 64:52 - 64:69
+Node: causeFail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (1):
+  [0] kind: call
+      callee: causeFail
+      args: (constant)
+      outType: Cause<AppError>
+
+=== Piping Flow ===
+Location: 69:29 - 69:63
+Node: failCauseAlias(Cause.fail(error))
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+  [1] kind: call
+      callee: failCauseAlias
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 72:21 - 74:3
+Node: Effect.gen(function*() {\n  return yield* Effect.failCause(Cause.fail(error))\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return yield* Effect.failCause(Cause.fail(error))\n}
+Subject Type: () => Generator<YieldWrap<Effect<never, AppError, never>>, never, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 73:16 - 73:52
+Node: Effect.failCause(Cause.fail(error))
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+  [1] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 77:22 - 80:2
+Node: pipe(\n  Effect.succeed(1),\n  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipe
+      callee: Effect.flatMap
+      args: [() => Effect.failCause(Cause.fail(error))]
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 79:23 - 79:59
+Node: Effect.failCause(Cause.fail(error))
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+  [1] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 83:68 - 83:104
+Node: Effect.failCause(Cause.fail(error))
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+  [1] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 86:26 - 86:67
+Node: Cause.fail(error).pipe(Effect.failCause)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+  [1] kind: pipeable
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 89:28 - 89:70
+Node: pipe(Cause.die(defect), Effect.failCause)
+Node Kind: KindCallExpression
+
+Subject: defect
+Subject Type: unknown
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.die
+      args: (constant)
+      outType: Cause<never>
+  [1] kind: pipe
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 92:34 - 92:76
+Node: pipe(error, Cause.fail, Effect.failCause)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+  [1] kind: pipe
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 96:26 - 96:83
+Node: pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+Node Kind: KindCallExpression
+
+Subject: defect
+Subject Type: unknown
+
+Transformations (3):
+  [0] kind: call
+      callee: Cause.die
+      args: (constant)
+      outType: Cause<never>
+  [1] kind: pipe
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, never, never>
+  [2] kind: pipe
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 99:32 - 99:84
+Node: pipe(() => Cause.fail(error), Effect.failCauseSync)
+Node Kind: KindCallExpression
+
+Subject: () => Cause.fail(error)
+Subject Type: () => Cause<AppError>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.failCauseSync
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 99:43 - 99:61
+Node: Cause.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+
+=== Piping Flow ===
+Location: 102:27 - 102:79
+Node: pipe(() => Cause.die(defect), Effect.failCauseSync)
+Node Kind: KindCallExpression
+
+Subject: () => Cause.die(defect)
+Subject Type: () => Cause<never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.failCauseSync
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 102:38 - 102:56
+Node: Cause.die(defect)
+Node Kind: KindCallExpression
+
+Subject: defect
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.die
+      args: (constant)
+      outType: Cause<never>
+
+=== Piping Flow ===
+Location: 105:29 - 105:81
+Node: Effect.failCauseSync(() => pipe(error, Cause.fail))
+Node Kind: KindCallExpression
+
+Subject: () => pipe(error, Cause.fail)
+Subject Type: () => Cause<AppError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCauseSync
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 105:56 - 105:80
+Node: pipe(error, Cause.fail)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+
+=== Piping Flow ===
+Location: 108:25 - 108:55
+Node: Effect.die(new Error("boom"))
+Node Kind: KindCallExpression
+
+Subject: new Error("boom")
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.die
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 109:26 - 109:45
+Node: Effect.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 110:30 - 110:59
+Node: Effect.failSync(() => error)
+Node Kind: KindCallExpression
+
+Subject: () => error
+Subject Type: () => AppError
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failSync
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 111:29 - 111:69
+Node: Effect.dieSync(() => new Error("late"))
+Node Kind: KindCallExpression
+
+Subject: () => new Error("late")
+Subject Type: () => Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.dieSync
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 114:25 - 114:49
+Node: Effect.failCause(cause)
+Node Kind: KindCallExpression
+
+Subject: cause
+Subject Type: Cause<AppError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 115:33 - 115:54
+Node: Exit.isFailure(exit)
+Node Kind: KindCallExpression
+
+Subject: exit
+Subject Type: Exit<number, AppError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Exit.isFailure
+      args: (constant)
+      outType: boolean
+
+=== Piping Flow ===
+Location: 115:56 - 115:85
+Node: Effect.failCause(exit.cause)
+Node Kind: KindCallExpression
+
+Subject: exit.cause
+Subject Type: Cause<AppError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 118:20 - 118:38
+Node: Cause.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+
+=== Piping Flow ===
+Location: 119:31 - 119:61
+Node: Effect.failCause(storedCause)
+Node Kind: KindCallExpression
+
+Subject: storedCause
+Subject Type: Cause<AppError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 122:26 - 122:99
+Node: Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+Node Kind: KindCallExpression
+
+Subject: Cause.sequential(Cause.fail(error), Cause.die(defect))
+Subject Type: Cause<AppError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 122:61 - 122:78
+Node: Cause.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+
+=== Piping Flow ===
+Location: 122:79 - 122:97
+Node: Cause.die(defect)
+Node Kind: KindCallExpression
+
+Subject: defect
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.die
+      args: (constant)
+      outType: Cause<never>
+
+=== Piping Flow ===
+Location: 123:28 - 123:109
+Node: Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+Node Kind: KindCallExpression
+
+Subject: () => Cause.parallel(Cause.fail(error), Cause.die(defect))
+Subject Type: () => Cause<AppError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCauseSync
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 123:71 - 123:88
+Node: Cause.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+
+=== Piping Flow ===
+Location: 123:89 - 123:107
+Node: Cause.die(defect)
+Node Kind: KindCallExpression
+
+Subject: defect
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.die
+      args: (constant)
+      outType: Cause<never>
+
+=== Piping Flow ===
+Location: 126:27 - 126:89
+Node: Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (3):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+  [1] kind: dataFirst
+      callee: Cause.map
+      args: [(e) => e._tag]
+      outType: Cause<string>
+  [2] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 129:27 - 129:95
+Node: pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (3):
+  [0] kind: pipe
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+  [1] kind: pipe
+      callee: Cause.map
+      args: [(e) => e._tag]
+      outType: Cause<string>
+  [2] kind: pipe
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 132:27 - 132:75
+Node: Effect.failCause(Cause.interrupt(FiberId.none))
+Node Kind: KindCallExpression
+
+Subject: FiberId.none
+Subject Type: None
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.interrupt
+      args: (constant)
+      outType: Cause<never>
+  [1] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 133:26 - 133:56
+Node: Effect.failCause(Cause.empty)
+Node Kind: KindCallExpression
+
+Subject: Cause.empty
+Subject Type: Cause<never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 136:24 - 136:94
+Node: Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+Node Kind: KindCallExpression
+
+Subject: Cause.fail(error) as Cause.Cause<AppError | string>
+Subject Type: Cause<string | AppError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, string | AppError, never>
+
+=== Piping Flow ===
+Location: 136:42 - 136:59
+Node: Cause.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+
+=== Piping Flow ===
+Location: 140:36 - 140:82
+Node: Effect.failCause<AppError>(Cause.die(defect))
+Node Kind: KindCallExpression
+
+Subject: defect
+Subject Type: unknown
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.die
+      args: (constant)
+      outType: Cause<never>
+  [1] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 141:37 - 141:92
+Node: Effect.failCause<AppError | string>(Cause.fail(error))
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+  [1] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, string | AppError, never>
+
+=== Piping Flow ===
+Location: 142:37 - 142:89
+Node: pipe(Cause.die(defect), Effect.failCause<AppError>)
+Node Kind: KindCallExpression
+
+Subject: defect
+Subject Type: unknown
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.die
+      args: (constant)
+      outType: Cause<never>
+  [1] kind: pipe
+      callee: Effect.failCause<AppError>
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 145:30 - 145:108
+Node: Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+Node Kind: KindCallExpression
+
+Subject: (): Cause.Cause<AppError | string> => Cause.fail(error)
+Subject Type: () => Cause<string | AppError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCauseSync
+      args: (constant)
+      outType: Effect<never, string | AppError, never>
+
+=== Piping Flow ===
+Location: 145:89 - 145:107
+Node: Cause.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+
+=== Piping Flow ===
+Location: 148:29 - 148:63
+Node: Effect.failCauseSync(() => cause)
+Node Kind: KindCallExpression
+
+Subject: () => cause
+Subject Type: () => Cause<AppError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCauseSync
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 149:29 - 149:61
+Node: Effect.failCauseSync(makeCause)
+Node Kind: KindCallExpression
+
+Subject: makeCause
+Subject Type: () => Cause<AppError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCauseSync
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 152:34 - 155:3
+Node: Effect.failCauseSync(() => {\n  log("failing")\n  return Cause.fail(error)\n})
+Node Kind: KindCallExpression
+
+Subject: () => {\n  log("failing")\n  return Cause.fail(error)\n}
+Subject Type: () => Cause<AppError>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCauseSync
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 152:63 - 153:17
+Node: log("failing")
+Node Kind: KindCallExpression
+
+Subject: "failing"
+Subject Type: "failing"
+
+Transformations (1):
+  [0] kind: call
+      callee: log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 154:9 - 154:27
+Node: Cause.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+
+=== Piping Flow ===
+Location: 158:29 - 158:63
+Node: Exit.failCause(Cause.fail(error))
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+  [1] kind: call
+      callee: Exit.failCause
+      args: (constant)
+      outType: Exit<never, AppError>
+
+=== Piping Flow ===
+Location: 159:31 - 159:67
+Node: Stream.failCause(Cause.die(defect))
+Node Kind: KindCallExpression
+
+Subject: defect
+Subject Type: unknown
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.die
+      args: (constant)
+      outType: Cause<never>
+  [1] kind: call
+      callee: Stream.failCause
+      args: (constant)
+      outType: Stream<never, never, never>
+
+=== Piping Flow ===
+Location: 160:32 - 160:69
+Node: Channel.failCause(Cause.die(defect))
+Node Kind: KindCallExpression
+
+Subject: defect
+Subject Type: unknown
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.die
+      args: (constant)
+      outType: Cause<never>
+  [1] kind: call
+      callee: Channel.failCause
+      args: (constant)
+      outType: Channel<never, unknown, never, unknown, never, unknown, never>
+
+=== Piping Flow ===
+Location: 164:39 - 164:59
+Node: Effect.failCause(c)
+Node Kind: KindCallExpression
+
+Subject: c
+Subject Type: Cause<E>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, E, never>
+
+=== Piping Flow ===
+Location: 166:39 - 166:53
+Node: Cause.fail(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: E
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<E>
+
+=== Piping Flow ===
+Location: 167:45 - 167:58
+Node: Cause.die(d)
+Node Kind: KindCallExpression
+
+Subject: d
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.die
+      args: (constant)
+      outType: Cause<never>
+
+=== Piping Flow ===
+Location: 170:30 - 170:65
+Node: Local.failCause(Cause.fail(error))
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+  [1] kind: call
+      callee: Local.failCause
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 171:30 - 171:72
+Node: Effect.failCause(Local.Cause.fail(error))
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: AppError
+
+Transformations (2):
+  [0] kind: call
+      callee: Local.Cause.fail
+      args: (constant)
+      outType: Cause<AppError>
+  [1] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, AppError, never>
+
+=== Piping Flow ===
+Location: 172:29 - 172:71
+Node: Effect.failCause(Local.Cause.die(defect))
+Node Kind: KindCallExpression
+
+Subject: defect
+Subject Type: unknown
+
+Transformations (2):
+  [0] kind: call
+      callee: Local.Cause.die
+      args: (constant)
+      outType: Cause<never>
+  [1] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, never, never>

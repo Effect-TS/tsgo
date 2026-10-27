@@ -1,0 +1,3981 @@
+=== Quick Fix Inventory ===
+
+[D1] (27:24-27:40) TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.die"
+
+[D2] (30:24-30:40) TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.fail"
+
+[D3] (33:21-33:41) TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D4] (36:31-36:47) TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.fail"
+
+[D5] (37:30-37:46) TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.die"
+
+[D6] (40:28-40:44) TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.die"
+
+[D7] (43:24-43:44) TS377155: `Effect.dieSync` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.dieSync"
+
+[D8] (46:26-46:46) TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D9] (51:29-51:49) TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D10] (56:30-56:46) TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.fail"
+
+[D11] (59:34-59:50) TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.fail"
+
+[D12] (63:29-63:38) TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.die"
+
+[D13] (64:33-64:46) TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.failSync"
+
+[D14] (69:30-69:44) TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.fail"
+
+[D15] (73:17-73:33) TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.fail"
+
+[D16] (79:24-79:40) TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.fail"
+
+[D17] (83:69-83:85) TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.fail"
+
+[D18] (86:50-86:66) TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.fail"
+
+[D19] (89:53-89:69) TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.die"
+
+[D20] (92:59-92:75) TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.fail"
+
+[D21] (96:51-96:67) TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.die"
+
+[D22] (99:63-99:83) TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+
+[D23] (102:58-102:78) TS377155: `Effect.dieSync` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+
+[D24] (105:30-105:50) TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.die" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.die(new Error("boom"))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D2] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.fail" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.fail("not found" as const)
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D3] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failSync(() => new Error("late"))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D4] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.fail" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.fail(error)
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D5] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.die" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.die(defect)
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D6] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.die" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.die(compute())
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D7] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.dieSync" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.dieSync(() => new Error("late"))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D8] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failSync(() => {
+  return error
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D9] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failSync(function() {
+  return error
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D10] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D10] Fix 2: "Replace with Effect.fail" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.fail(error)
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D11] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D11] Fix 2: "Replace with Effect.fail" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.fail<AppError | string>(error)
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D12] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D12] Fix 2: "Replace with Effect.die" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = Effect.die(defect)
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D13] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D13] Fix 2: "Replace with Effect.failSync" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = Effect.failSync(() => error)
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D14] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D14] Fix 2: "Replace with Effect.fail" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = Effect.fail(error)
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D15] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D15] Fix 2: "Replace with Effect.fail" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.fail(error)
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D16] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D16] Fix 2: "Replace with Effect.fail" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.fail(error))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D17] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D17] Fix 2: "Replace with Effect.fail" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.fail(error)
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D18] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D18] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D18] Fix 2: "Replace with Effect.fail" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Effect.fail(error)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D19] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D19] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D19] Fix 2: "Replace with Effect.die" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = Effect.die(defect)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D20] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D20] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D20] Fix 2: "Replace with Effect.fail" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = Effect.fail(error)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D21] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D21] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D21] Fix 2: "Replace with Effect.die" ===
+
+--- file:///.src/failCauseToConstructor.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import * as Cause from "effect/Cause"
+import * as Channel from "effect/Channel"
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
+import * as FiberId from "effect/FiberId"
+import { pipe } from "effect/Function"
+import * as Stream from "effect/Stream"
+import { die as causeDie, fail as causeFail } from "effect/Cause"
+import { failCause, failCauseSync } from "effect/Effect"
+
+class AppError {
+  readonly _tag = "AppError"
+}
+
+declare const error: AppError
+declare const defect: unknown
+declare const cause: Cause.Cause<AppError>
+declare const exit: Exit.Exit<number, AppError>
+declare const compute: () => number
+declare const makeCause: () => Cause.Cause<AppError>
+declare const log: (message: string) => void
+
+// MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+
+// MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+export const missing = Effect.failCause(Cause.fail("not found" as const))
+
+// MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+
+// MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+export const failIdentifier = Effect.failCause(Cause.fail(error))
+export const dieIdentifier = Effect.failCause(Cause.die(defect))
+
+// MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+export const dieComputed = Effect.failCause(Cause.die(compute()))
+
+// MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+
+// MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+export const lazyBlock = Effect.failCauseSync(() => {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+export const lazyFunction = Effect.failCauseSync(function() {
+  return Cause.fail(error)
+})
+
+// MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+export const parenthesized = Effect.failCause((Cause.fail(error)))
+
+// MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+
+// MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+// file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+export const namedImports = failCause(causeDie(defect))
+export const namedImportsLazy = failCauseSync(() => causeFail(error))
+
+// MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+// file's Effect module identifier -> Effect.fail(error))
+const failCauseAlias = Effect.failCause
+export const aliasedCallee = failCauseAlias(Cause.fail(error))
+
+// MUST TRIGGER: inside a generator
+export const inGen = Effect.gen(function*() {
+  return yield* Effect.failCause(Cause.fail(error))
+})
+
+// MUST TRIGGER: inside a pipeline callback
+export const inPipe = pipe(
+  Effect.succeed(1),
+  Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+)
+
+// MUST TRIGGER: nested in a function with an explicit Effect return type
+export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+
+// MUST TRIGGER: method-pipe form -> Effect.fail(error)
+export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+
+// MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+
+// MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+
+// MUST TRIGGER: replacing the flow prefix keeps later transformations
+// -> pipe(Effect.die(defect), Effect.asVoid)
+export const pipePrefix = pipe(Effect.die(defect), Effect.asVoid)
+
+// MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+
+// MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+
+// MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+
+// MUST NOT TRIGGER: already the direct APIs
+export const directDie = Effect.die(new Error("boom"))
+export const directFail = Effect.fail(error)
+export const directFailSync = Effect.failSync(() => error)
+export const directDieSync = Effect.dieSync(() => new Error("late"))
+
+// MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+export const forwarded = Effect.failCause(cause)
+export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+
+// MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+const storedCause = Cause.fail(error)
+export const fromStoredCause = Effect.failCause(storedCause)
+
+// MUST NOT TRIGGER: composed causes
+export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+
+// MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+
+// MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+
+// MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+export const emptyCause = Effect.failCause(Cause.empty)
+
+// MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+
+// MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+// error channel, which Effect.die(x) would not preserve
+export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+
+// MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+
+// MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+export const lazyForwarded = Effect.failCauseSync(() => cause)
+export const lazyPointFree = Effect.failCauseSync(makeCause)
+
+// MUST NOT TRIGGER: thunk does more than return the constructed cause
+export const lazyMultiStatement = Effect.failCauseSync(() => {
+  log("failing")
+  return Cause.fail(error)
+})
+
+// MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+export const exitFailCause = Exit.failCause(Cause.fail(error))
+export const streamFailCause = Stream.failCause(Cause.die(defect))
+export const channelFailCause = Channel.failCause(Cause.die(defect))
+
+// MUST NOT TRIGGER: user-defined APIs with the same names
+const Local = {
+  failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+  Cause: {
+    fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+    die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+  }
+}
+export const localFailCause = Local.failCause(Cause.fail(error))
+export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+
+
+=== [D22] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D22] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D23] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D23] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D24] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D24] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
