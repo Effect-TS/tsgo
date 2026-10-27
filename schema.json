@@ -2644,6 +2644,11 @@
           "default": "suggestion",
           "description": "Detects implementation services leaked in service methods"
         },
+        "mapConstToAs": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests using Effect.as instead of Effect.map when the callback ignores its input and returns a constant"
+        },
         "mapSomeToAsSome": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

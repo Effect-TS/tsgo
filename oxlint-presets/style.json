@@ -30,6 +30,7 @@
     "effecttsgo/flat-map-ignored-param-to-and-then": "warn",
     "effecttsgo/flat-map-to-map": "warn",
     "effecttsgo/flat-map-to-tap": "warn",
+    "effecttsgo/map-const-to-as": "warn",
     "effecttsgo/map-some-to-as-some": "warn",
     "effecttsgo/match-effect-to-map-both": "warn",
     "effecttsgo/match-effect-to-match": "warn",

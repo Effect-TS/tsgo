@@ -2,11 +2,13 @@
 Effect version: 4.0.2
 
 /.src/lazyPromiseInEffectSync.ts(8,47): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+/.src/lazyPromiseInEffectSync.ts(11,33): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
 /.src/lazyPromiseInEffectSync.ts(11,45): warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
 /.src/lazyPromiseInEffectSync.ts(14,26): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+/.src/lazyPromiseInEffectSync.ts(17,29): suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
 
 
-==== /.src/lazyPromiseInEffectSync.ts (3 errors) ====
+==== /.src/lazyPromiseInEffectSync.ts (5 errors) ====
     // @effect-diagnostics lazyPromiseInEffectSync:warning
     import { Effect } from "effect"
     
@@ -20,6 +22,8 @@ Effect version: 4.0.2
     
     // Should trigger - declared Promise type returned from Effect.sync
     export const fromPromiseValue = Effect.sync(() => promiseValue)
+                                    ~~~~~~~~~~~
+!!! suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
                                                 ~~~~~~~~~~~~~~~~~~
 !!! warning TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
     
@@ -30,6 +34,8 @@ Effect version: 4.0.2
     
     // Should NOT trigger - thenable but not Promise
     export const fromThenable = Effect.sync(() => thenableValue)
+                                ~~~~~~~~~~~
+!!! suggestion TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
     
     // Should NOT trigger - already using the async constructor
     export const fromEffectPromise = Effect.promise(() => Promise.resolve(1))
