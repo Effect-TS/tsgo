@@ -40,7 +40,17 @@ func TestMapConstToAsFixesCompile(t *testing.T) {
 				expected string
 				matches  int
 			}{
-				{name: "mapConstToAs.ts", matches: 21},
+				{name: "mapConstToAs.ts", matches: 23},
+				{
+					// A return annotation pins the success type; Effect.as would widen it.
+					name: "annotatedReturn",
+					source: `import { Effect } from "effect"
+declare const source: Effect.Effect<number>
+const result = source.pipe(Effect.map((): "saved" => "saved"))
+export const checked: Effect.Effect<"saved"> = result
+`,
+					matches: 0,
+				},
 				{
 					name: "dataFirst",
 					source: `import { Effect } from "effect"

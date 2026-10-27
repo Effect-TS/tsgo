@@ -28,9 +28,12 @@ export const restParameter = source.pipe(Effect.map((..._args: Array<number>) =>
 export const asyncCallback = source.pipe(Effect.map(async () => "saved"))
 export const notNegative = source.pipe(Effect.map(() => +1))
 export const voidBody = source.pipe(Effect.map(() => undefined))
+export const annotatedReturn = source.pipe(Effect.map((): "saved" => "saved"))
+export const annotatedFunction = source.pipe(Effect.map(function(): number { return 1 }))
+export const annotatedParameter = source.pipe(Effect.map((_: number) => "saved"))
 declare const laterAmbient: string
 `
-	want := []string{"literal", "negativeBigint", "constEnum", "ambientConst"}
+	want := []string{"literal", "negativeBigint", "constEnum", "ambientConst", "annotatedParameter"}
 	exportName := regexp.MustCompile(`export const (\w+)`)
 
 	for _, version := range []bundledeffect.EffectVersion{bundledeffect.EffectV3, bundledeffect.EffectV4} {

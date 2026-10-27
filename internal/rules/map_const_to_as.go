@@ -62,7 +62,10 @@ func AnalyzeMapConstToAs(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.
 			}
 
 			lazy := typeparser.ParseLazyExpression(transformation.Args().At(0), typeparser.LazyExpressionNone)
-			if lazy == nil || lazy.Expression() == nil || !isIgnorableMapParameterList(lazy.Params()) {
+			// A return type annotation pins Effect.map's success type independently
+			// of the value; Effect.as infers it from the value alone.
+			if lazy == nil || lazy.Expression() == nil || lazy.Node().Type() != nil ||
+				!isIgnorableMapParameterList(lazy.Params()) {
 				continue
 			}
 			value := ast.SkipParentheses(lazy.Expression())

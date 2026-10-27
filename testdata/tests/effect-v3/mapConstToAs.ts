@@ -156,4 +156,23 @@ export const arrayMap = [1, 2, 3].map(() => "saved")
 const unrelated = { map: <A, B>(_input: A, f: () => B): B => f() }
 export const unrelatedMap = unrelated.map(numberEffect, () => "saved")
 
+// MUST NOT TRIGGER: a return type annotation pins the success type; Effect.as
+// would infer it from the value instead (narrower: compile error downstream)
+export const annotatedNarrowReturn = numberEffect.pipe(Effect.map((): "saved" => "saved"))
+export const annotatedNarrowConsumer: Effect.Effect<"saved"> = annotatedNarrowReturn
+
+// MUST NOT TRIGGER: a wider return annotation would be silently narrowed by Effect.as
+export const annotatedWideReturn = numberEffect.pipe(Effect.map((): string | number => 1))
+
+// MUST NOT TRIGGER: function expression with a return type annotation
+export const annotatedFunctionReturn = numberEffect.pipe(Effect.map(function(): "saved" {
+  return "saved"
+}))
+
+// MUST TRIGGER: a contextual expected type infers the same success type for Effect.as
+export const contextuallyTyped: Effect.Effect<"saved"> = numberEffect.pipe(Effect.map(() => "saved"))
+
+// MUST TRIGGER: an annotated but unused parameter does not affect the success type
+export const annotatedParameter = numberEffect.pipe(Effect.map((_: number) => "saved"))
+
 void mutable

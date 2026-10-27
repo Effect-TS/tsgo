@@ -264,7 +264,33 @@ flowchart TB
   262[/"type: string<br/>node: unrelated.map#40;numberEffect, #40;#41; =#gt; #quot;saved#quot;#41;"/]
   263[["type: #40;#41; =#gt; string<br/>node: #40;#41; =#gt; #quot;saved#quot;"]]
   264[/"type: #quot;saved#quot;<br/>node: #quot;saved#quot;"/]
-  265[/"type: undefined<br/>node: void mutable"/]
+  265[/"type: Effect#lt;number, never, never#gt;<br/>node: numberEffect"/]
+  266["type: Effect#lt;#quot;saved#quot;, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41;: #quot;saved#quot; =#gt; #quot;saved#quot;#93;"]
+  267[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  268[["type: #40;#41; =#gt; #quot;saved#quot;<br/>node: #40;#41;: #quot;saved#quot; =#gt; #quot;saved#quot;"]]
+  269[/"type: #quot;saved#quot;<br/>node: #quot;saved#quot;"/]
+  270[/"type: Effect#lt;#quot;saved#quot;, never, never#gt;<br/>node: annotatedNarrowReturn"/]
+  271[/"type: Effect#lt;number, never, never#gt;<br/>node: numberEffect"/]
+  272["type: Effect#lt;string #124; number, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41;: string #124; number =#gt; 1#93;"]
+  273[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  274[["type: #40;#41; =#gt; string #124; number<br/>node: #40;#41;: string #124; number =#gt; 1"]]
+  275[/"type: 1<br/>node: 1"/]
+  276[/"type: Effect#lt;number, never, never#gt;<br/>node: numberEffect"/]
+  277["type: Effect#lt;#quot;saved#quot;, never, never#gt;<br/>callee: Effect.map<br/>args: #91;function#40;#41;: #quot;saved#quot; #123;#92;n  return #quot;saved#quot;#92;n#125;#93;"]
+  278[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  279[["type: #40;#41; =#gt; #quot;saved#quot;<br/>node: function#40;#41;: #quot;saved#quot; #123;#92;n  return #quot;saved#quot;#92;n#125;"]]
+  280[/"type: #quot;saved#quot;<br/>node: #quot;saved#quot;"/]
+  281[/"type: Effect#lt;number, never, never#gt;<br/>node: numberEffect"/]
+  282["type: Effect#lt;#quot;saved#quot;, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;#41; =#gt; #quot;saved#quot;#93;"]
+  283[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  284[["type: #40;#41; =#gt; #quot;saved#quot;<br/>node: #40;#41; =#gt; #quot;saved#quot;"]]
+  285[/"type: #quot;saved#quot;<br/>node: #quot;saved#quot;"/]
+  286[/"type: Effect#lt;number, never, never#gt;<br/>node: numberEffect"/]
+  287["type: Effect#lt;string, never, never#gt;<br/>callee: Effect.map<br/>args: #91;#40;_: number#41; =#gt; #quot;saved#quot;#93;"]
+  288[/"type: #123; #lt;A, B#gt;#40;f: #40;a: A#41; =#gt; B#41;: #lt;E, R#gt;#40;self: Effect#lt;A, E, R#gt;#41; =#gt; Effect#lt;B, E, R#gt;; #lt;A, E, R, B#gt;#40;self: Effect#lt;A, E, R#gt;, f: #40;a: A#41; =#gt; B#41;: Effect#lt;B, E, R#gt;; #125;<br/>node: Effect.map"/]
+  289[["type: #40;_: number#41; =#gt; string<br/>node: #40;_: number#41; =#gt; #quot;saved#quot;"]]
+  290[/"type: #quot;saved#quot;<br/>node: #quot;saved#quot;"/]
+  291[/"type: undefined<br/>node: void mutable"/]
   1 -->|"kind: pipe"| 2
   3 -->|"kind: transformCallee"| 2
   2 -->|"kind: potentialReturn"| 0
@@ -476,3 +502,24 @@ flowchart TB
   260 -->|"kind: usedBy"| 259
   264 -->|"kind: potentialReturn"| 263
   263 -->|"kind: usedBy"| 262
+  267 -->|"kind: transformCallee"| 266
+  269 -->|"kind: potentialReturn"| 268
+  268 -->|"kind: transformArg"| 266
+  265 -->|"kind: pipe"| 266
+  273 -->|"kind: transformCallee"| 272
+  275 -->|"kind: potentialReturn"| 274
+  274 -->|"kind: transformArg"| 272
+  271 -->|"kind: pipe"| 272
+  278 -->|"kind: transformCallee"| 277
+  280 -->|"kind: potentialReturn"| 279
+  280 -->|"kind: usedBy"| 279
+  279 -->|"kind: transformArg"| 277
+  276 -->|"kind: pipe"| 277
+  283 -->|"kind: transformCallee"| 282
+  285 -->|"kind: potentialReturn"| 284
+  284 -->|"kind: transformArg"| 282
+  281 -->|"kind: pipe"| 282
+  288 -->|"kind: transformCallee"| 287
+  290 -->|"kind: potentialReturn"| 289
+  289 -->|"kind: transformArg"| 287
+  286 -->|"kind: pipe"| 287

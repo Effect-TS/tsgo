@@ -1,4 +1,4 @@
-==== /.src/mapConstToAs.ts (47 flows) ====
+==== /.src/mapConstToAs.ts (52 flows) ====
 
 === Piping Flow ===
 Location: 4:58 - 4:86
@@ -689,3 +689,73 @@ Transformations (1):
       callee: [1, 2, 3].map
       args: (constant)
       outType: string[]
+
+=== Piping Flow ===
+Location: 161:37 - 161:91
+Node: numberEffect.pipe(Effect.map((): "saved" => "saved"))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(): "saved" => "saved"]
+      outType: Effect<"saved", never, never>
+
+=== Piping Flow ===
+Location: 165:35 - 165:91
+Node: numberEffect.pipe(Effect.map((): string | number => 1))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(): string | number => 1]
+      outType: Effect<string | number, never, never>
+
+=== Piping Flow ===
+Location: 168:39 - 170:4
+Node: numberEffect.pipe(Effect.map(function(): "saved" {\n  return "saved"\n}))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [function(): "saved" {\n  return "saved"\n}]
+      outType: Effect<"saved", never, never>
+
+=== Piping Flow ===
+Location: 173:57 - 173:102
+Node: numberEffect.pipe(Effect.map(() => "saved"))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => "saved"]
+      outType: Effect<"saved", never, never>
+
+=== Piping Flow ===
+Location: 176:34 - 176:88
+Node: numberEffect.pipe(Effect.map((_: number) => "saved"))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(_: number) => "saved"]
+      outType: Effect<string, never, never>
