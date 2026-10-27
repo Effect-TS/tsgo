@@ -7,7 +7,7 @@ Suggests Effect.mapBoth when Effect.map and Effect.mapError are adjacent steps o
 | Property | Value |
 | --- | --- |
 | Category | Style |
-| Default severity | `suggestion` |
+| Default severity | `off` |
 | Fixable | Yes |
 | Effect versions | v3, v4 |
 | Diagnostic codes | `TS377153` |

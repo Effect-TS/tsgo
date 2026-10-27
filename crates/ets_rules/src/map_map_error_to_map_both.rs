@@ -20,7 +20,7 @@ pub static MAP_MAP_ERROR_TO_MAP_BOTH: LazyLock<Rule> = LazyLock::new(|| Rule {
     name: "mapMapErrorToMapBoth",
     group: "style",
     description: "Suggests Effect.mapBoth when Effect.map and Effect.mapError are adjacent steps of a piping flow",
-    default_severity: Severity::Suggestion,
+    default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {

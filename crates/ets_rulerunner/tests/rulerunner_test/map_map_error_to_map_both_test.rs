@@ -51,24 +51,21 @@ fn test_map_map_error_to_map_both_lifecycle() {
             let source = format!("{PRELUDE}{PAIR}");
             let cases = [
                 Case {
-                    name: "default suggestion",
+                    name: "default off",
                     source: source.clone(),
                     use_rule: true,
-                    want: vec![at(2, base)],
                     ..Default::default()
                 },
                 Case {
                     name: "recommended preset",
                     source: source.clone(),
                     preset: "recommended",
-                    want: vec![at(2, base)],
                     ..Default::default()
                 },
                 Case {
                     name: "strict preset",
                     source: source.clone(),
                     preset: "strict",
-                    want: vec![at(1, base)],
                     ..Default::default()
                 },
                 Case {

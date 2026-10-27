@@ -39,9 +39,9 @@ func TestMapMapErrorToMapBothLifecycle(t *testing.T) {
 		preset   string
 		want     []string
 	}{
-		{name: "default suggestion", source: prelude + pair, useRule: true, want: []string{at(2, base)}},
-		{name: "recommended preset", source: prelude + pair, preset: "recommended", want: []string{at(2, base)}},
-		{name: "strict preset", source: prelude + pair, preset: "strict", want: []string{at(1, base)}},
+		{name: "default off", source: prelude + pair, useRule: true},
+		{name: "recommended preset", source: prelude + pair, preset: "recommended"},
+		{name: "strict preset", source: prelude + pair, preset: "strict"},
 		{name: "style preset", source: prelude + pair, preset: "style", want: []string{at(0, base)}},
 		{name: "effect-native preset", source: prelude + pair, preset: "effect-native"},
 		{name: "warning", source: prelude + pair, severity: etscore.SeverityWarning, want: []string{at(0, base)}},

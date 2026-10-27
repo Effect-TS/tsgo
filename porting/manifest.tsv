@@ -1307,7 +1307,7 @@ internal/rulerunner/diagnostics.go	unusedDirectiveDiagnostics	func	232	32	945b3e
 internal/rulerunner/diagnostics.go	severityFromMap	func	265	7	b435bbdbd4dd8cdc
 internal/rulerunner/diagnostics_test.go	TestMinVisibleSeverity	test	10	34	e1fdee5dbf7a31d6
 internal/rulerunner/flat_map_identity_to_flatten_test.go	TestFlatMapIdentityToFlattenLifecycle	test	22	100	7927ea2e31fe2553
-internal/rulerunner/map_map_error_to_map_both_test.go	TestMapMapErrorToMapBothLifecycle	test	22	90	d75579941d063456
+internal/rulerunner/map_map_error_to_map_both_test.go	TestMapMapErrorToMapBothLifecycle	test	22	90	53a8eea06570f87a
 internal/rulerunner/prefer_effect_array_test.go	TestPreferEffectArrayLifecycle	test	20	71	13254ea844f330a1
 internal/rulerunner/prefer_effect_record_test.go	TestPreferEffectRecordLifecycle	test	20	90	deb2ec2f4726eafc
 internal/rulerunner/prefer_effect_string_test.go	TestPreferEffectStringLifecycle	test	20	119	5ffea446ef09ba5e
@@ -1662,7 +1662,7 @@ internal/rules/map_const_to_as.go	MapConstToAsMatch	type	42	7	401ea3c18b4610d3
 internal/rules/map_const_to_as.go	AnalyzeMapConstToAs	func	53	41	cc6afd577d5ea2b8
 internal/rules/map_const_to_as.go	isIgnorableMapParameterList	func	98	12	bca157fc30aee44d
 internal/rules/map_const_to_as_test.go	TestMapConstToAsCallbackShapes	test	13	48	06871fe169e021e2
-internal/rules/map_map_error_to_map_both.go	MapMapErrorToMapBoth	var	18	20	e812a18dfa7a7ace
+internal/rules/map_map_error_to_map_both.go	MapMapErrorToMapBoth	var	18	20	ae1a13250929ac22
 internal/rules/map_map_error_to_map_both.go	MapMapErrorToMapBothMatch	type	39	13	f2c323b78e9c414d
 internal/rules/map_map_error_to_map_both.go	mapMapErrorStep	type	53	5	b9eff7a0d0d73dbd
 internal/rules/map_map_error_to_map_both.go	mapMapErrorSteps	var	59	6	7450978eb2dbee50

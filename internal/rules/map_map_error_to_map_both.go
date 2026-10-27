@@ -19,7 +19,7 @@ var MapMapErrorToMapBoth = rule.Rule{
 	Name:            "mapMapErrorToMapBoth",
 	Group:           "style",
 	Description:     "Suggests Effect.mapBoth when Effect.map and Effect.mapError are adjacent steps of a piping flow",
-	DefaultSeverity: etscore.SeveritySuggestion,
+	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
 	Codes: []int32{
 		tsdiag.Effect_0_Effect_1_transform_the_success_and_failure_channels_one_step_at_a_time_Effect_2_expresses_both_transformations_in_a_single_step_effect_mapMapErrorToMapBoth.Code(),

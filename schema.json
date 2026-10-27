@@ -2651,7 +2651,7 @@
         },
         "mapMapErrorToMapBoth": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
-          "default": "suggestion",
+          "default": "off",
           "description": "Suggests Effect.mapBoth when Effect.map and Effect.mapError are adjacent steps of a piping flow"
         },
         "mapSomeToAsSome": {
