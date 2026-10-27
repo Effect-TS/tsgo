@@ -1,3 +1,5 @@
+use ets_rewriter::NodeFactoryPaths;
+use ets_typeparser::ModuleReference;
 use std::cell::{Cell, RefCell};
 use std::rc::Rc;
 use std::sync::LazyLock;
@@ -32,8 +34,8 @@ pub(crate) fn run_async_await_to_gen_try_promise(ctx: &mut Context<'_, '_>) -> V
         return Vec::new();
     };
 
-    let effect_module_name = ets_typeparser::find_effect_module_identifier(ctx.source_file);
-    let data_module_name = ets_typeparser::find_module_identifier(ctx.source_file, "Data");
+    let effect_module_name = ets_typeparser::find_effect_module_reference(ctx.source_file);
+    let data_module_name = ets_typeparser::find_module_reference(ctx.source_file, "Data");
 
     let sf = ctx.source_file;
     let action = ctx.new_refactor_action(RefactorAction {
@@ -63,8 +65,8 @@ pub(crate) fn transform_async_to_effect_gen_try_promise(
     tracker: &mut Tracker,
     sf: P<SourceFile>,
     node: P<Node>,
-    effect_module_name: &str,
-    data_module_name: &str,
+    effect_module_name: &ModuleReference,
+    data_module_name: &ModuleReference,
 ) {
     let Some(body) = ets_typeparser::get_function_like_body(node) else {
         return;
@@ -85,8 +87,8 @@ pub(crate) fn transform_async_to_effect_gen_try_promise(
     let transformed_body = {
         let error_count = Rc::clone(&error_count);
         let error_classes = Rc::clone(&error_classes);
-        let data_module_name = data_module_name.to_string();
-        let effect_module_name = effect_module_name.to_string();
+        let data_module_name = data_module_name.clone();
+        let effect_module_name = effect_module_name.clone();
         transform_body_await_to_yield(
             tracker,
             body,
@@ -156,7 +158,7 @@ pub(crate) fn find_top_level_statement(node: P<Node>) -> P<Node> {
 pub(crate) fn build_yield_star_try_promise(
     tracker: &NodeFactory,
     expr: P<Node>,
-    effect_module_name: &str,
+    effect_module_name: &ModuleReference,
     error_name: &str,
 ) -> P<Node> {
     // try: () => expr
@@ -230,13 +232,8 @@ pub(crate) fn build_yield_star_try_promise(
     );
 
     // Effect.tryPromise({ ... })
-    let effect_id = tracker.new_identifier(alloc_str(effect_module_name));
-    let try_promise_access = tracker.new_property_access_expression(
-        effect_id,
-        None,
-        tracker.new_identifier("tryPromise"),
-        NodeFlags::None,
-    );
+    let try_promise_access =
+        tracker.new_property_access_path(&effect_module_name.append(&["tryPromise"]));
     let try_promise_call = tracker.new_call_expression(
         try_promise_access,
         None,
@@ -250,22 +247,17 @@ pub(crate) fn build_yield_star_try_promise(
         .new_yield_expression(Some(tracker.new_token(Kind::AsteriskToken)), Some(try_promise_call))
 }
 
-// go: internal/refactors/async_await_to_gen_try_promise.go:211 buildTaggedErrorClass
+// go: internal/refactors/async_await_to_gen_try_promise.go:208 buildTaggedErrorClass
 // buildTaggedErrorClass builds: class ErrorN extends Data.TaggedError("ErrorN")<{ cause: unknown }> {}
 pub(crate) fn build_tagged_error_class(
     tracker: &NodeFactory,
-    data_module_name: &str,
+    data_module_name: &ModuleReference,
     error_name: &str,
     is_exported: bool,
 ) -> P<Node> {
     // Data.TaggedError("ErrorN")
-    let data_id = tracker.new_identifier(alloc_str(data_module_name));
-    let tagged_error_access = tracker.new_property_access_expression(
-        data_id,
-        None,
-        tracker.new_identifier("TaggedError"),
-        NodeFlags::None,
-    );
+    let tagged_error_access =
+        tracker.new_property_access_path(&data_module_name.append(&["TaggedError"]));
     let tagged_error_call = tracker.new_call_expression(
         tagged_error_access,
         None,

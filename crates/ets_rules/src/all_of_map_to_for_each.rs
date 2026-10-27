@@ -39,7 +39,6 @@ pub struct AllOfMapToForEachMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
     pub call_node: Option<P<Node>>,
-    pub effect_module: Option<P<Node>>,
     pub receiver: P<Node>,
     pub callback: P<Node>,
     pub options: Option<P<Node>>,
@@ -51,7 +50,7 @@ pub struct AllOfMapToForEachMatch {
     pub can_fix: bool,
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:62 AnalyzeAllOfMapToForEach
+// go: internal/rules/all_of_map_to_for_each.go:61 AnalyzeAllOfMapToForEach
 // AnalyzeAllOfMapToForEach finds Effect.all over an effectful Array#map whose
 // receiver is array-like, in both the direct data-first form and the data-last
 // form expressed through piping flows (e.g. pipe(xs.map(f), Effect.all)).
@@ -121,7 +120,7 @@ pub fn analyze_all_of_map_to_for_each(
     matches
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:111 transformationApplicationNode
+// go: internal/rules/all_of_map_to_for_each.go:110 transformationApplicationNode
 // transformationApplicationNode returns the call expression that applies the
 // transformation's callee, when that application is represented in the tree.
 // Bare pipeable references have no application of their own and return nil.
@@ -140,7 +139,7 @@ pub(crate) fn transformation_application_node(
     Some(parent)
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:123 analyzeAllOfMapToForEachCall
+// go: internal/rules/all_of_map_to_for_each.go:122 analyzeAllOfMapToForEachCall
 pub(crate) fn analyze_all_of_map_to_for_each_call(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -177,7 +176,7 @@ pub(crate) fn analyze_all_of_map_to_for_each_call(
     Some(m)
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:150 analyzeAllOfMapToForEachReceiver
+// go: internal/rules/all_of_map_to_for_each.go:149 analyzeAllOfMapToForEachReceiver
 // analyzeAllOfMapToForEachReceiver validates the xs.map(f) shape feeding an
 // Effect.all node and assembles the match.
 pub(crate) fn analyze_all_of_map_to_for_each_receiver(
@@ -224,16 +223,10 @@ pub(crate) fn analyze_all_of_map_to_for_each_receiver(
         }
     }
 
-    let mut effect_module = None;
-    if all_node.kind() == Kind::PropertyAccessExpression {
-        effect_module = Some(all_node.as_property_access_expression().expression());
-    }
-
     Some(AllOfMapToForEachMatch {
         source_file: sf,
         location: ets_shim::scanner::get_error_range_for_node(sf, all_node),
         call_node: None,
-        effect_module,
         receiver: map_access.expression(),
         callback,
         options,
@@ -242,7 +235,7 @@ pub(crate) fn analyze_all_of_map_to_for_each_receiver(
     })
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:206 containsSpreadElement
+// go: internal/rules/all_of_map_to_for_each.go:199 containsSpreadElement
 pub(crate) fn contains_spread_element(nodes: &[P<Node>]) -> bool {
     for node in nodes {
         if node.kind() == Kind::SpreadElement {
@@ -252,7 +245,7 @@ pub(crate) fn contains_spread_element(nodes: &[P<Node>]) -> bool {
     false
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:215 hasCallTypeArguments
+// go: internal/rules/all_of_map_to_for_each.go:208 hasCallTypeArguments
 pub(crate) fn has_call_type_arguments(call: Option<&CallExpression>) -> bool {
     call.is_some_and(|call| call.type_arguments().is_some_and(|t| !t.nodes().is_empty()))
 }

@@ -36,7 +36,6 @@ type CatchAllToMapErrorMatch struct {
 	SourceFile         *ast.SourceFile // The source file of the match
 	Location           core.TextRange  // The pre-computed error range for this match
 	Callee             *ast.Node       // The Effect.catch callee node (for diagnostic location)
-	CalleeNameNode     *ast.Node       // The "catch" name node within the PropertyAccessExpression (for text replacement)
 	CatchMethodName    string          // The catch variant name (e.g. "catch" or "catchAll")
 	FailCallExpression *ast.Node       // The Effect.fail(arg) call expression node (for replacement range)
 	FailArgument       *ast.Node       // The first argument to Effect.fail (the replacement text)
@@ -72,8 +71,14 @@ func AnalyzeCatchAllToMapError(tp *typeparser.TypeParser, _ *checker.Checker, sf
 				continue
 			}
 
-			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catch") &&
-				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchAll") {
+			// Name the catch variant the callee resolves to, however it is written.
+			var catchMethodName string
+			switch {
+			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catch"):
+				catchMethodName = "catch"
+			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchAll"):
+				catchMethodName = "catchAll"
+			default:
 				continue
 			}
 
@@ -81,23 +86,11 @@ func AnalyzeCatchAllToMapError(tp *typeparser.TypeParser, _ *checker.Checker, sf
 				continue
 			}
 
-			// Extract the "catch" name node from the PropertyAccessExpression callee
-			var calleeNameNode *ast.Node
-			catchMethodName := "catch"
-			callee := transformation.Callee()
-			if callee.Kind == ast.KindPropertyAccessExpression {
-				prop := callee.AsPropertyAccessExpression()
-				if prop != nil && prop.Name() != nil {
-					calleeNameNode = prop.Name()
-					catchMethodName = prop.Name().Text()
-				}
-			}
 
 			matches = append(matches, CatchAllToMapErrorMatch{
 				SourceFile:         sf,
 				Location:           scanner.GetErrorRangeForNode(sf, transformation.Callee()),
 				Callee:             transformation.Callee(),
-				CalleeNameNode:     calleeNameNode,
 				CatchMethodName:    catchMethodName,
 				FailCallExpression: expr,
 				FailArgument:       call.Arguments.Nodes[0],

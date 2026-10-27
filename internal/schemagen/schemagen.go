@@ -24,42 +24,32 @@ var (
 
 // SchemaGen holds the context needed to convert AST type nodes into Schema expressions.
 type SchemaGen struct {
-	Tracker          *rewriter.Tracker
-	SourceFile       *ast.SourceFile
-	SchemaIdentifier string
-	Version          typeparser.EffectMajorVersion
+	Tracker         *rewriter.Tracker
+	SourceFile      *ast.SourceFile
+	SchemaReference typeparser.ModuleReference
+	Version         typeparser.EffectMajorVersion
 }
 
 // New creates a SchemaGen from the given tracker and source file, resolving the
 // Schema import identifier automatically.
 func New(tracker *rewriter.Tracker, sf *ast.SourceFile, version typeparser.EffectMajorVersion) *SchemaGen {
 	return &SchemaGen{
-		Tracker:          tracker,
-		SourceFile:       sf,
-		SchemaIdentifier: typeparser.FindModuleIdentifier(sf, "Schema"),
-		Version:          version,
+		Tracker:         tracker,
+		SourceFile:      sf,
+		SchemaReference: typeparser.FindModuleReference(sf, "Schema"),
+		Version:         version,
 	}
 }
 
 // createApiPropertyAccess creates Schema.<name> (e.g., Schema.String).
 func (g *SchemaGen) createApiPropertyAccess(name string) *ast.Node {
-	return g.Tracker.NewPropertyAccessExpression(
-		g.Tracker.NewIdentifier(g.SchemaIdentifier),
-		nil,
-		g.Tracker.NewIdentifier(name),
-		ast.NodeFlagsNone,
-	)
+	return g.Tracker.NewPropertyAccessPath(g.SchemaReference.Append(name)...)
 }
 
 // createApiCall creates Schema.<name>(...args) (e.g., Schema.Array(Schema.String)).
 func (g *SchemaGen) createApiCall(name string, args []*ast.Node) *ast.Node {
 	return g.Tracker.NewCallExpression(
-		g.Tracker.NewPropertyAccessExpression(
-			g.Tracker.NewIdentifier(g.SchemaIdentifier),
-			nil,
-			g.Tracker.NewIdentifier(name),
-			ast.NodeFlagsNone,
-		),
+		g.Tracker.NewPropertyAccessPath(g.SchemaReference.Append(name)...),
 		nil, // questionDotToken
 		nil, // typeArguments
 		g.Tracker.NewNodeList(args),
@@ -369,15 +359,11 @@ func (g *SchemaGen) entityNameToDataTypeName(typeName *ast.Node) string {
 		if qn.Left == nil || qn.Right == nil {
 			return ""
 		}
-		if qn.Left.Kind != ast.KindIdentifier {
-			return ""
-		}
 		rightName := scanner.GetTextOfNode(qn.Right)
-		leftName := scanner.GetTextOfNode(qn.Left)
-		// Check if leftName is an imported module identifier for a known module
+		// Check if the left side is the imported reference to a known module
 		for _, moduleName := range []string{"Option", "Either", "Chunk", "Duration"} {
-			imported := typeparser.FindModuleIdentifier(g.SourceFile, moduleName)
-			if leftName == imported && rightName == moduleName {
+			imported := typeparser.FindModuleReference(g.SourceFile, moduleName)
+			if imported.MatchesNode(qn.Left) && rightName == moduleName {
 				return moduleName
 			}
 		}

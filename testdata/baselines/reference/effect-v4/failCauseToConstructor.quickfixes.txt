@@ -2013,7 +2013,7 @@ export const parenthesized = Effect.failCause((Cause.fail(error)))
 export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
 
 // MUST TRIGGER: namespace imports from the module entry points -> Fx.fail(error)
-export const aliasedNamespaces = Fx.fail(error)
+export const aliasedNamespaces = Effect.fail(error)
 
 // MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
 // file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))

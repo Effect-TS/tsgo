@@ -44,10 +44,9 @@ pub struct EffectMapVoidMatch {
     pub source_file: P<SourceFile>, // The source file where the diagnostic should be reported
     pub location: TextRange,        // The pre-computed error range for this match
     pub transformation: PipingFlowTransformation,
-    pub effect_module_node: Option<P<Node>>, // The Effect module identifier (e.g., "Effect" in Effect.map)
 }
 
-// go: internal/rules/effect_map_void.go:45 isVoidCallback
+// go: internal/rules/effect_map_void.go:44 isVoidCallback
 // isVoidCallback checks if a callback argument is a "void callback":
 // either an empty function (block body with zero statements) or a lazy void expression
 // (zero-param function returning void 0, undefined, or parenthesized versions).
@@ -88,7 +87,7 @@ pub(crate) fn is_void_callback(node: P<Node>) -> bool {
     false
 }
 
-// go: internal/rules/effect_map_void.go:91 AnalyzeEffectMapVoid
+// go: internal/rules/effect_map_void.go:90 AnalyzeEffectMapVoid
 // AnalyzeEffectMapVoid finds data-last and data-first Effect.map calls with void
 // callbacks that can be replaced with Effect.asVoid. Driving detection off the
 // piping-flow transformations (rather than a raw AST walk) normalizes the subject
@@ -115,16 +114,10 @@ pub fn analyze_effect_map_void(
             if !tp.is_node_reference_to_effect_module_api(transformation.callee(), "map") {
                 continue;
             }
-            let mut effect_module = None;
-            if transformation.callee().kind() == Kind::PropertyAccessExpression {
-                effect_module =
-                    Some(transformation.callee().as_property_access_expression().expression());
-            }
             matches.push(EffectMapVoidMatch {
                 source_file: sf,
                 location: ets_shim::scanner::get_error_range_for_node(sf, transformation.callee()),
                 transformation: transformation.clone(),
-                effect_module_node: effect_module,
             });
         }
     }

@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile};
+use ets_shim::ast::{self, Diagnostic, Node, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{
@@ -48,13 +48,12 @@ pub struct ProvideLayerSucceedToProvideServiceMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
     pub provide_transformation: PipingFlowTransformation,
-    pub effect_module_node: Option<P<Node>>,
     pub service_node: P<Node>,
     pub implementation_node: Option<P<Node>>,
     pub replacement_method_name: &'static str,
 }
 
-// go: internal/rules/provide_layer_succeed_to_provide_service.go:49 AnalyzeProvideLayerSucceedToProvideService
+// go: internal/rules/provide_layer_succeed_to_provide_service.go:48 AnalyzeProvideLayerSucceedToProvideService
 //
 // Rust: Go's checker argument is the parser's checker; Go ignores it, so it is dropped.
 pub fn analyze_provide_layer_succeed_to_provide_service(
@@ -94,16 +93,10 @@ pub fn analyze_provide_layer_succeed_to_provide_service(
                 continue;
             }
 
-            let mut effect_module_node = None;
-            if provide.callee().kind() == Kind::PropertyAccessExpression {
-                effect_module_node =
-                    Some(provide.callee().as_property_access_expression().expression());
-            }
             matches.push(ProvideLayerSucceedToProvideServiceMatch {
                 source_file: sf,
                 location: ets_shim::scanner::get_error_range_for_node(sf, provide.callee()),
                 provide_transformation: provide,
-                effect_module_node,
                 service_node: service,
                 implementation_node: implementation,
                 replacement_method_name: replacement,
@@ -113,7 +106,7 @@ pub fn analyze_provide_layer_succeed_to_provide_service(
     matches
 }
 
-// go: internal/rules/provide_layer_succeed_to_provide_service.go:90 inlineSingleServiceLayer
+// go: internal/rules/provide_layer_succeed_to_provide_service.go:84 inlineSingleServiceLayer
 //
 // Rust: Go's `(service, implementation, replacement, ok)` is an `Option`.
 pub(crate) fn inline_single_service_layer(

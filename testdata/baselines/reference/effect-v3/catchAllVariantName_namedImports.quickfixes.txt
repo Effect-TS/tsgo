@@ -1,0 +1,255 @@
+=== Quick Fix Inventory ===
+
+[D1] (14:44-14:52) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+  Fix 0: "Disable catchAllToMapError for this line"
+  Fix 1: "Disable catchAllToMapError for entire file"
+  Fix 2: "Replace with Effect.mapError"
+
+[D2] (15:49-15:57) TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+  Fix 0: "Disable catchToOrElseSucceed for this line"
+  Fix 1: "Disable catchToOrElseSucceed for entire file"
+  Fix 2: "Replace with Effect.orElseSucceed"
+
+[D3] (18:46-18:53) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+  Fix 0: "Disable catchAllToMapError for this line"
+  Fix 1: "Disable catchAllToMapError for entire file"
+  Fix 2: "Replace with Effect.mapError"
+
+[D4] (19:51-19:58) TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+  Fix 0: "Disable catchToOrElseSucceed for this line"
+  Fix 1: "Disable catchToOrElseSucceed for entire file"
+  Fix 2: "Replace with Effect.orElseSucceed"
+
+[D5] (23:44-23:54) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+  Fix 0: "Disable catchAllToMapError for this line"
+  Fix 1: "Disable catchAllToMapError for entire file"
+  Fix 2: "Replace with Effect.mapError"
+
+[D6] (26:46-26:61) TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+  Fix 0: "Disable catchAllToMapError for this line"
+  Fix 1: "Disable catchAllToMapError for entire file"
+  Fix 2: "Replace with Effect.mapError"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable catchAllToMapError for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable catchAllToMapError for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.mapError" ===
+
+--- file:///.src/catchAllVariantName_namedImports.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllToMapError:warning
+// @effect-diagnostics catchToOrElseSucceed:warning
+import { pipe } from "effect/Function"
+import { catchAll, catchAll as recover, fail, succeed } from "effect/Effect"
+import * as Effect from "effect/Effect"
+
+declare const program: Effect.Effect<number, string>
+
+// The message names Effect.catchAll whichever way the callee is written
+
+// Named import of catchAll
+export const namedMapError = pipe(program, Effect.mapError((error) =>error.length))
+export const namedOrElseSucceed = pipe(program, catchAll(() => succeed(0)))
+
+// Renamed import of catchAll
+export const renamedMapError = pipe(program, recover((error) => fail(error.length)))
+export const renamedOrElseSucceed = pipe(program, recover(() => succeed(0)))
+
+// Local alias of Effect.catchAll
+const catchAlias = Effect.catchAll
+export const aliasMapError = pipe(program, catchAlias((error) => Effect.fail(error.length)))
+
+// Property access, as before
+export const propertyMapError = program.pipe(Effect.catchAll((error) => Effect.fail(error.length)))
+
+
+=== [D2] Fix 0: "Disable catchToOrElseSucceed for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable catchToOrElseSucceed for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.orElseSucceed" ===
+
+--- file:///.src/catchAllVariantName_namedImports.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllToMapError:warning
+// @effect-diagnostics catchToOrElseSucceed:warning
+import { pipe } from "effect/Function"
+import { catchAll, catchAll as recover, fail, succeed } from "effect/Effect"
+import * as Effect from "effect/Effect"
+
+declare const program: Effect.Effect<number, string>
+
+// The message names Effect.catchAll whichever way the callee is written
+
+// Named import of catchAll
+export const namedMapError = pipe(program, catchAll((error) => fail(error.length)))
+export const namedOrElseSucceed = pipe(program, Effect.orElseSucceed(() => 0))
+
+// Renamed import of catchAll
+export const renamedMapError = pipe(program, recover((error) => fail(error.length)))
+export const renamedOrElseSucceed = pipe(program, recover(() => succeed(0)))
+
+// Local alias of Effect.catchAll
+const catchAlias = Effect.catchAll
+export const aliasMapError = pipe(program, catchAlias((error) => Effect.fail(error.length)))
+
+// Property access, as before
+export const propertyMapError = program.pipe(Effect.catchAll((error) => Effect.fail(error.length)))
+
+
+=== [D3] Fix 0: "Disable catchAllToMapError for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable catchAllToMapError for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.mapError" ===
+
+--- file:///.src/catchAllVariantName_namedImports.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllToMapError:warning
+// @effect-diagnostics catchToOrElseSucceed:warning
+import { pipe } from "effect/Function"
+import { catchAll, catchAll as recover, fail, succeed } from "effect/Effect"
+import * as Effect from "effect/Effect"
+
+declare const program: Effect.Effect<number, string>
+
+// The message names Effect.catchAll whichever way the callee is written
+
+// Named import of catchAll
+export const namedMapError = pipe(program, catchAll((error) => fail(error.length)))
+export const namedOrElseSucceed = pipe(program, catchAll(() => succeed(0)))
+
+// Renamed import of catchAll
+export const renamedMapError = pipe(program, Effect.mapError((error) =>error.length))
+export const renamedOrElseSucceed = pipe(program, recover(() => succeed(0)))
+
+// Local alias of Effect.catchAll
+const catchAlias = Effect.catchAll
+export const aliasMapError = pipe(program, catchAlias((error) => Effect.fail(error.length)))
+
+// Property access, as before
+export const propertyMapError = program.pipe(Effect.catchAll((error) => Effect.fail(error.length)))
+
+
+=== [D4] Fix 0: "Disable catchToOrElseSucceed for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable catchToOrElseSucceed for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.orElseSucceed" ===
+
+--- file:///.src/catchAllVariantName_namedImports.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllToMapError:warning
+// @effect-diagnostics catchToOrElseSucceed:warning
+import { pipe } from "effect/Function"
+import { catchAll, catchAll as recover, fail, succeed } from "effect/Effect"
+import * as Effect from "effect/Effect"
+
+declare const program: Effect.Effect<number, string>
+
+// The message names Effect.catchAll whichever way the callee is written
+
+// Named import of catchAll
+export const namedMapError = pipe(program, catchAll((error) => fail(error.length)))
+export const namedOrElseSucceed = pipe(program, catchAll(() => succeed(0)))
+
+// Renamed import of catchAll
+export const renamedMapError = pipe(program, recover((error) => fail(error.length)))
+export const renamedOrElseSucceed = pipe(program, Effect.orElseSucceed(() => 0))
+
+// Local alias of Effect.catchAll
+const catchAlias = Effect.catchAll
+export const aliasMapError = pipe(program, catchAlias((error) => Effect.fail(error.length)))
+
+// Property access, as before
+export const propertyMapError = program.pipe(Effect.catchAll((error) => Effect.fail(error.length)))
+
+
+=== [D5] Fix 0: "Disable catchAllToMapError for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable catchAllToMapError for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.mapError" ===
+
+--- file:///.src/catchAllVariantName_namedImports.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllToMapError:warning
+// @effect-diagnostics catchToOrElseSucceed:warning
+import { pipe } from "effect/Function"
+import { catchAll, catchAll as recover, fail, succeed } from "effect/Effect"
+import * as Effect from "effect/Effect"
+
+declare const program: Effect.Effect<number, string>
+
+// The message names Effect.catchAll whichever way the callee is written
+
+// Named import of catchAll
+export const namedMapError = pipe(program, catchAll((error) => fail(error.length)))
+export const namedOrElseSucceed = pipe(program, catchAll(() => succeed(0)))
+
+// Renamed import of catchAll
+export const renamedMapError = pipe(program, recover((error) => fail(error.length)))
+export const renamedOrElseSucceed = pipe(program, recover(() => succeed(0)))
+
+// Local alias of Effect.catchAll
+const catchAlias = Effect.catchAll
+export const aliasMapError = pipe(program, Effect.mapError((error) =>error.length))
+
+// Property access, as before
+export const propertyMapError = program.pipe(Effect.catchAll((error) => Effect.fail(error.length)))
+
+
+=== [D6] Fix 0: "Disable catchAllToMapError for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable catchAllToMapError for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.mapError" ===
+
+--- file:///.src/catchAllVariantName_namedImports.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics catchAllToMapError:warning
+// @effect-diagnostics catchToOrElseSucceed:warning
+import { pipe } from "effect/Function"
+import { catchAll, catchAll as recover, fail, succeed } from "effect/Effect"
+import * as Effect from "effect/Effect"
+
+declare const program: Effect.Effect<number, string>
+
+// The message names Effect.catchAll whichever way the callee is written
+
+// Named import of catchAll
+export const namedMapError = pipe(program, catchAll((error) => fail(error.length)))
+export const namedOrElseSucceed = pipe(program, catchAll(() => succeed(0)))
+
+// Renamed import of catchAll
+export const renamedMapError = pipe(program, recover((error) => fail(error.length)))
+export const renamedOrElseSucceed = pipe(program, recover(() => succeed(0)))
+
+// Local alias of Effect.catchAll
+const catchAlias = Effect.catchAll
+export const aliasMapError = pipe(program, catchAlias((error) => Effect.fail(error.length)))
+
+// Property access, as before
+export const propertyMapError = program.pipe(Effect.mapError((error) =>error.length))
+

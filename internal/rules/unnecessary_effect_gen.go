@@ -38,7 +38,6 @@ type UnnecessaryEffectGenMatch struct {
 	YieldedExpression *ast.Node       // The expression being yield*-ed (the replacement value)
 	ExplicitReturn    bool            // Whether the statement had an explicit return
 	SuccessIsVoid     bool            // Whether the yielded Effect's success type is void-like
-	EffectModuleNode  *ast.Node       // The Effect module identifier (for Effect.asVoid wrapping)
 }
 
 // AnalyzeUnnecessaryEffectGen finds all Effect.gen calls that contain only a single
@@ -140,7 +139,6 @@ func analyzeUnnecessaryEffectGenNode(tp *typeparser.TypeParser, _ *checker.Check
 		YieldedExpression: yieldedExpr,
 		ExplicitReturn:    explicitReturn,
 		SuccessIsVoid:     successIsVoid,
-		EffectModuleNode:  genResult.EffectModule(),
 	}
 }
 

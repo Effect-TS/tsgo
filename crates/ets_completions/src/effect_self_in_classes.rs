@@ -30,9 +30,10 @@ fn run_effect_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::Complet
         return Vec::new();
     }
 
-    let effect_identifier = ets_typeparser::find_module_identifier(ctx.source_file, "Effect");
+    let effect_reference = ets_typeparser::find_module_reference(ctx.source_file, "Effect");
+    let effect_identifier = effect_reference.string();
     let accessed_text = data.accessed_object_text();
-    let is_fully_qualified = effect_identifier == accessed_text;
+    let is_fully_qualified = effect_reference.matches_node(data.accessed_object);
     let class_name = data.class_name_text();
 
     // Compute deterministic tag key

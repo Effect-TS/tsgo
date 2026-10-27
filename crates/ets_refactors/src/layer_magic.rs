@@ -9,6 +9,7 @@ use ets_shim::checker::{Checker, Type, TypeFormatFlags};
 use ets_shim::core::{P, alloc_str};
 use ets_shim::ls::CodeAction;
 use ets_shim::lsproto;
+use ets_typeparser::ModuleReference;
 
 use crate::*;
 
@@ -26,7 +27,7 @@ pub static LAYER_MAGIC: LazyLock<Refactor> = LazyLock::new(|| Refactor {
 pub(crate) fn run_layer_magic(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let token = astnav::get_token_at_position(ctx.source_file, span_pos(ctx));
 
-    let layer_identifier = ets_typeparser::find_module_identifier(ctx.source_file, "Layer");
+    let layer_identifier = ets_typeparser::find_module_reference(ctx.source_file, "Layer");
 
     // Collect ancestor nodes from the token up to the source file.
     let mut ancestors = Vec::new();
@@ -91,7 +92,7 @@ pub(crate) fn adjusted_node(node: P<Node>) -> P<Node> {
 pub(crate) fn try_build_refactor(
     ctx: &mut Context<'_, '_>,
     node: P<Node>,
-    layer_identifier: &str,
+    layer_identifier: &ModuleReference,
 ) -> Vec<CodeAction> {
     let at_location = adjusted_node(node);
 
@@ -161,7 +162,7 @@ pub(crate) fn try_build_refactor(
 
     let missing_type_names = type_names(ctx.checker(), &magic_result.missing_output_types);
     let sf = ctx.source_file;
-    let layer_identifier = layer_identifier.to_string();
+    let layer_identifier = layer_identifier.clone();
     let action = ctx.new_refactor_action(RefactorAction {
         description: "Compose layers automatically with target output services".to_string(),
         run: Box::new(move |tracker: &mut Tracker| {
@@ -203,7 +204,7 @@ pub(crate) fn build_layer_magic_build(
     missing_type_names: &[String],
     old_node: P<Node>,
     magic_result: &LayerMagicResult,
-    layer_identifier: &str,
+    layer_identifier: &ModuleReference,
 ) {
     let nodes = &magic_result.nodes;
     if nodes.is_empty() {
@@ -216,12 +217,7 @@ pub(crate) fn build_layer_magic_build(
         receiver = tracker.deep_clone_node(Some(nodes[0].node)).unwrap();
         first_pipe_arg = 1;
     } else {
-        receiver = tracker.new_property_access_expression(
-            tracker.new_identifier(alloc_str(layer_identifier)),
-            None,
-            tracker.new_identifier("empty"),
-            NodeFlags::None,
-        );
+        receiver = tracker.new_property_access_path(&layer_identifier.append(&["empty"]));
     }
 
     let mut pipe_args = Vec::new();
@@ -236,13 +232,8 @@ pub(crate) fn build_layer_magic_build(
         };
 
         // Layer.provideMerge(expr) or Layer.provide(expr) or Layer.merge(expr)
-        let layer_id = tracker.new_identifier(alloc_str(layer_identifier));
-        let combinator_access = tracker.new_property_access_expression(
-            layer_id,
-            None,
-            tracker.new_identifier(combinator_name),
-            NodeFlags::None,
-        );
+        let combinator_access =
+            tracker.new_property_access_path(&layer_identifier.append(&[combinator_name]));
         let cloned_expr = tracker.deep_clone_node(Some(mn.node)).unwrap();
         let call = tracker.new_call_expression(
             combinator_access,
@@ -291,7 +282,7 @@ pub(crate) fn build_layer_magic_build(
     }
 }
 
-// go: internal/refactors/layer_magic.go:230 tryPrepareRefactor
+// go: internal/refactors/layer_magic.go:225 tryPrepareRefactor
 // tryPrepareRefactor tries to produce the "prepare" refactor action for the given node.
 // It flattens a layer expression into `[...] as any as Layer.Layer<T>`.
 //
@@ -302,7 +293,7 @@ pub(crate) fn build_layer_magic_build(
 pub(crate) fn try_prepare_refactor(
     ctx: &mut Context<'_, '_>,
     node: P<Node>,
-    layer_identifier: &str,
+    layer_identifier: &ModuleReference,
 ) -> Vec<CodeAction> {
     let at_location = adjusted_node(node);
 
@@ -387,7 +378,7 @@ pub(crate) fn try_prepare_refactor(
 
     let newly_introduced = type_names(c, &newly_introduced);
     let existing_before = type_names(c, &existing_before);
-    let layer_identifier = layer_identifier.to_string();
+    let layer_identifier = layer_identifier.clone();
     let action = ctx.new_refactor_action(RefactorAction {
         description: "Prepare layers for automatic composition".to_string(),
         run: Box::new(move |tracker: &mut Tracker| {
@@ -409,7 +400,7 @@ pub(crate) fn try_prepare_refactor(
     vec![action]
 }
 
-// go: internal/refactors/layer_magic.go:319 buildLayerMagicPrepare
+// go: internal/refactors/layer_magic.go:314 buildLayerMagicPrepare
 // buildLayerMagicPrepare generates: [leaf1, leaf2, ...] as any as Layer.Layer<NewTypes /* ExistingTypes */>
 //
 // Rust: Go's `ctx` is used for its source file, and `c` for printing `newlyIntroduced` and `existingBefore`,
@@ -421,7 +412,7 @@ pub(crate) fn build_layer_magic_prepare(
     layer_nodes: &[P<Node>],
     newly_introduced: &[String],
     existing_before: &[String],
-    layer_identifier: &str,
+    layer_identifier: &ModuleReference,
 ) {
     // Build array of cloned layer expressions
     let mut elements = Vec::new();
@@ -467,10 +458,7 @@ pub(crate) fn build_layer_magic_prepare(
     }
 
     // Build Layer.Layer<providesType>
-    let qualified_name = tracker.new_qualified_name(
-        tracker.new_identifier(alloc_str(layer_identifier)),
-        tracker.new_identifier("Layer"),
-    );
+    let qualified_name = tracker.new_qualified_name_path(&layer_identifier.append(&["Layer"]));
     let layer_type_ref = tracker
         .new_type_reference_node(qualified_name, Some(tracker.new_node_list(vec![provides_type])));
 
@@ -487,7 +475,7 @@ pub(crate) fn build_layer_magic_prepare(
     }
 }
 
-// go: internal/refactors/layer_magic.go:387 isAsAnyAsLayerForm
+// go: internal/refactors/layer_magic.go:382 isAsAnyAsLayerForm
 // isAsAnyAsLayerForm checks if a node is already in the `(expr as any) as Layer.Layer<T>` form.
 pub(crate) fn is_as_any_as_layer_form(node: P<Node>) -> bool {
     if node.kind() != Kind::AsExpression {
@@ -505,7 +493,7 @@ pub(crate) fn is_as_any_as_layer_form(node: P<Node>) -> bool {
     inner_as.type_().kind() == Kind::AnyKeyword
 }
 
-// go: internal/refactors/layer_magic.go:404 sortedTypeSlice
+// go: internal/refactors/layer_magic.go:399 sortedTypeSlice
 // sortedTypeSlice converts a type set to a sorted slice using TypeToString for deterministic ordering.
 //
 // Rust: the set is an insertion-ordered slice (see `try_prepare_refactor`); the sort is Go's `sort.Slice`.

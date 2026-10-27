@@ -9,12 +9,10 @@ use ets_shim::core::alloc_str;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
-use crate::*;
-
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::BRANCHING_ON_0_REASON_TAG_INSIDE_EFFECT_1_HAND_ROLLS_REASON_DISPATCH_USE_EFFECT_CATCH_REASON_OR_EFFECT_CATCH_REASONS_WHICH_RE_FAIL_UNMATCHED_REASONS_AUTOMATICALLY_EFFECT_CATCH_TAG_TO_CATCH_REASON;
 
-// go: internal/fixables/catch_tag_to_catch_reason.go:12 CatchTagToCatchReasonFix
+// go: internal/fixables/catch_tag_to_catch_reason.go:13 CatchTagToCatchReasonFix
 pub static CATCH_TAG_TO_CATCH_REASON_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "catchTagToCatchReason",
     description: "Replace hand-rolled reason dispatch with Effect.catchReason or Effect.catchReasons",
@@ -23,7 +21,7 @@ pub static CATCH_TAG_TO_CATCH_REASON_FIX: LazyLock<Fixable> = LazyLock::new(|| F
     run: run_catch_tag_to_catch_reason_fix,
 });
 
-// go: internal/fixables/catch_tag_to_catch_reason.go:22 runCatchTagToCatchReasonFix
+// go: internal/fixables/catch_tag_to_catch_reason.go:23 runCatchTagToCatchReasonFix
 //
 // Rust: the match's transformation and callee are never nil (non-optional fields), so Go's nil check drops.
 fn run_catch_tag_to_catch_reason_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
@@ -57,7 +55,7 @@ fn run_catch_tag_to_catch_reason_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActio
     Vec::new()
 }
 
-// go: internal/fixables/catch_tag_to_catch_reason.go:52 buildCatchTagToCatchReasonReplacement
+// go: internal/fixables/catch_tag_to_catch_reason.go:53 buildCatchTagToCatchReasonReplacement
 //
 // Rust: the tracker and the match's callee cannot be nil.
 fn build_catch_tag_to_catch_reason_replacement(
@@ -71,16 +69,14 @@ fn build_catch_tag_to_catch_reason_replacement(
     if m.branches.is_empty() {
         return (None, None);
     }
-    let mut receiver = None;
-    if m.callee.kind() == Kind::PropertyAccessExpression {
-        receiver = Some(m.callee.as_property_access_expression().expression());
-    }
 
     let mut method_name = "catchReason";
     if m.branches.len() > 1 {
         method_name = "catchReasons";
     }
-    let method = effect_module_method(tracker, sf, receiver, method_name);
+    let method = tracker.new_property_access_path(
+        &ets_typeparser::find_effect_module_reference(Some(sf)).append(&[method_name]),
+    );
     let mut arguments = vec![tracker.deep_clone_node(Some(outer_tag)).unwrap()];
     if m.branches.len() == 1 {
         let branch = &m.branches[0];
@@ -104,7 +100,7 @@ fn build_catch_tag_to_catch_reason_replacement(
     (Some(method), Some(tracker.new_node_list(arguments)))
 }
 
-// go: internal/fixables/catch_tag_to_catch_reason.go:87 newCatchReasonHandler
+// go: internal/fixables/catch_tag_to_catch_reason.go:83 newCatchReasonHandler
 fn new_catch_reason_handler(
     tracker: &Tracker,
     parameter_name: &str,

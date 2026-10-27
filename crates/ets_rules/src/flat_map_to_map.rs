@@ -41,12 +41,11 @@ pub struct FlatMapToMapMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
     pub callee: P<Node>,
-    pub callee_name_node: Option<P<Node>>,
     pub succeed_call_expression: P<Node>,
     pub succeed_argument: P<Node>,
 }
 
-// go: internal/rules/flat_map_to_map.go:53 AnalyzeFlatMapToMap
+// go: internal/rules/flat_map_to_map.go:52 AnalyzeFlatMapToMap
 // AnalyzeFlatMapToMap finds piping transformations whose Effect.flatMap
 // callback consists solely of an Effect.succeed call.
 //
@@ -86,16 +85,10 @@ pub fn analyze_flat_map_to_map(
                 continue;
             }
 
-            let mut callee_name = None;
-            if callee.kind() == Kind::PropertyAccessExpression {
-                callee_name = Some(callee.as_property_access_expression().name());
-            }
-
             matches.push(FlatMapToMapMatch {
                 source_file: sf,
                 location: ets_shim::scanner::get_error_range_for_node(sf, callee),
                 callee,
-                callee_name_node: callee_name,
                 succeed_call_expression: callback.expression(),
                 succeed_argument: succeed_arguments[0],
             });

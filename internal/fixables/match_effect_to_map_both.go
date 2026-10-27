@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
 )
@@ -25,7 +26,7 @@ func runMatchEffectToMapBothFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.mapBoth",
 			Run: func(tracker *rewriter.Tracker) {
-				replaceEffectMethodCallee(tracker, match.SourceFile, match.CalleeNode, match.CalleeNameNode, "mapBoth")
+				tracker.ReplaceNode(match.SourceFile, match.CalleeNode, tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(match.SourceFile).Append("mapBoth")...), nil)
 				for i := range match.HandlerResults {
 					tracker.ReplaceNode(match.SourceFile, match.HandlerResults[i], match.ConstructorArgs[i], nil)
 				}

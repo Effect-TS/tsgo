@@ -1,3 +1,5 @@
+use ets_rewriter::NodeFactoryPaths;
+use ets_typeparser::ModuleReference;
 use std::rc::Rc;
 use std::sync::LazyLock;
 
@@ -8,7 +10,7 @@ use ets_shim::ast::{
     NodeVisitorHooks, SourceFile,
 };
 use ets_shim::astnav;
-use ets_shim::core::{P, alloc_str};
+use ets_shim::core::P;
 use ets_shim::ls::CodeAction;
 use ets_shim::lsproto;
 
@@ -32,7 +34,7 @@ pub(crate) fn run_async_await_to_gen(ctx: &mut Context<'_, '_>) -> Vec<CodeActio
         return Vec::new();
     };
 
-    let effect_module_name = ets_typeparser::find_effect_module_identifier(ctx.source_file);
+    let effect_module_name = ets_typeparser::find_effect_module_reference(ctx.source_file);
 
     let sf = ctx.source_file;
     let action = ctx.new_refactor_action(RefactorAction {
@@ -162,12 +164,12 @@ pub(crate) fn find_async_function(token: Option<P<Node>>) -> Option<P<Node>> {
 pub(crate) fn transform_async_to_effect_gen(
     tracker: &Tracker,
     node: P<Node>,
-    effect_module_name: &str,
+    effect_module_name: &ModuleReference,
 ) -> Option<P<Node>> {
     let body = ets_typeparser::get_function_like_body(node)?;
 
     // Transform await expressions to yield* Effect.promise(...)
-    let module_name = effect_module_name.to_string();
+    let module_name = effect_module_name.clone();
     let transformed_body = transform_body_await_to_yield(
         tracker,
         body,
@@ -251,7 +253,7 @@ pub(crate) fn contains_await_expression(node: P<Node>) -> bool {
 pub(crate) fn build_yield_star_promise(
     tracker: &NodeFactory,
     expr: P<Node>,
-    effect_module_name: &str,
+    effect_module_name: &ModuleReference,
 ) -> P<Node> {
     // () => expr
     let arrow_fn = tracker.new_arrow_function(
@@ -265,13 +267,7 @@ pub(crate) fn build_yield_star_promise(
     );
 
     // Effect.promise(() => expr)
-    let effect_id = tracker.new_identifier(alloc_str(effect_module_name));
-    let promise_access = tracker.new_property_access_expression(
-        effect_id,
-        None,
-        tracker.new_identifier("promise"),
-        NodeFlags::None,
-    );
+    let promise_access = tracker.new_property_access_path(&effect_module_name.append(&["promise"]));
     let promise_call = tracker.new_call_expression(
         promise_access,
         None,
@@ -284,12 +280,12 @@ pub(crate) fn build_yield_star_promise(
     tracker.new_yield_expression(Some(tracker.new_token(Kind::AsteriskToken)), Some(promise_call))
 }
 
-// go: internal/refactors/async_await_to_gen.go:234 buildEffectGenCall
+// go: internal/refactors/async_await_to_gen.go:231 buildEffectGenCall
 // buildEffectGenCall builds: Effect.gen(function*() { body })
 pub(crate) fn build_effect_gen_call(
     tracker: &NodeFactory,
     body: P<Node>,
-    effect_module_name: &str,
+    effect_module_name: &ModuleReference,
 ) -> P<Node> {
     let block_body = if body.kind() == Kind::Block {
         body
@@ -312,13 +308,7 @@ pub(crate) fn build_effect_gen_call(
     );
 
     // Effect.gen(function*() { ... })
-    let effect_id = tracker.new_identifier(alloc_str(effect_module_name));
-    let gen_access = tracker.new_property_access_expression(
-        effect_id,
-        None,
-        tracker.new_identifier("gen"),
-        NodeFlags::None,
-    );
+    let gen_access = tracker.new_property_access_path(&effect_module_name.append(&["gen"]));
     tracker.new_call_expression(
         gen_access,
         None,
@@ -328,7 +318,7 @@ pub(crate) fn build_effect_gen_call(
     )
 }
 
-// go: internal/refactors/async_await_to_gen.go:270 buildNonAsyncDeclaration
+// go: internal/refactors/async_await_to_gen.go:264 buildNonAsyncDeclaration
 // buildNonAsyncDeclaration builds a new function declaration/expression/arrow
 // without the async modifier, with the given effectGenCall as the new body.
 pub(crate) fn build_non_async_declaration(
@@ -390,7 +380,7 @@ pub(crate) fn build_non_async_declaration(
     }
 }
 
-// go: internal/refactors/async_await_to_gen.go:329 getModifiersWithoutAsync
+// go: internal/refactors/async_await_to_gen.go:323 getModifiersWithoutAsync
 // getModifiersWithoutAsync returns a new modifier list with the async keyword removed.
 pub(crate) fn get_modifiers_without_async(
     tracker: &NodeFactory,
@@ -417,7 +407,7 @@ pub(crate) fn get_modifiers_without_async(
     Some(tracker.new_modifier_list(mod_nodes))
 }
 
-// go: internal/refactors/async_await_to_gen.go:359 cloneNodeList
+// go: internal/refactors/async_await_to_gen.go:353 cloneNodeList
 // cloneNodeList deep-clones a NodeList if non-nil.
 pub(crate) fn clone_node_list(
     tracker: &NodeFactory,

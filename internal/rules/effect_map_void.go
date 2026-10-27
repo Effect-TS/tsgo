@@ -33,10 +33,9 @@ var EffectMapVoid = rule.Rule{
 // EffectMapVoidMatch holds the AST nodes needed by both the diagnostic rule
 // and the quick-fix for the effectMapVoid pattern.
 type EffectMapVoidMatch struct {
-	SourceFile       *ast.SourceFile // The source file where the diagnostic should be reported
-	Location         core.TextRange  // The pre-computed error range for this match
-	Transformation   *typeparser.PipingFlowTransformation
-	EffectModuleNode *ast.Node // The Effect module identifier (e.g., "Effect" in Effect.map)
+	SourceFile     *ast.SourceFile // The source file where the diagnostic should be reported
+	Location       core.TextRange  // The pre-computed error range for this match
+	Transformation *typeparser.PipingFlowTransformation
 }
 
 // isVoidCallback checks if a callback argument is a "void callback":
@@ -104,15 +103,10 @@ func AnalyzeEffectMapVoid(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast
 			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "map") {
 				continue
 			}
-			var effectModule *ast.Node
-			if transformation.Callee().Kind == ast.KindPropertyAccessExpression {
-				effectModule = transformation.Callee().AsPropertyAccessExpression().Expression
-			}
 			matches = append(matches, EffectMapVoidMatch{
-				SourceFile:       sf,
-				Location:         scanner.GetErrorRangeForNode(sf, transformation.Callee()),
-				Transformation:   &transformation,
-				EffectModuleNode: effectModule,
+				SourceFile:     sf,
+				Location:       scanner.GetErrorRangeForNode(sf, transformation.Callee()),
+				Transformation: &transformation,
 			})
 		}
 	}

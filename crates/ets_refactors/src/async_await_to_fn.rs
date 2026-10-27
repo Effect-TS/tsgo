@@ -1,3 +1,5 @@
+use ets_rewriter::NodeFactoryPaths;
+use ets_typeparser::ModuleReference;
 use std::rc::Rc;
 use std::sync::LazyLock;
 
@@ -29,7 +31,7 @@ pub(crate) fn run_async_await_to_fn(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
         return Vec::new();
     };
 
-    let effect_module_name = ets_typeparser::find_effect_module_identifier(ctx.source_file);
+    let effect_module_name = ets_typeparser::find_effect_module_reference(ctx.source_file);
 
     let sf = ctx.source_file;
     let action = ctx.new_refactor_action(RefactorAction {
@@ -60,12 +62,12 @@ pub(crate) fn run_async_await_to_fn(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
 pub(crate) fn transform_async_to_effect_fn(
     tracker: &Tracker,
     node: P<Node>,
-    effect_module_name: &str,
+    effect_module_name: &ModuleReference,
 ) -> Option<P<Node>> {
     let body = ets_typeparser::get_function_like_body(node)?;
 
     // Transform await expressions to yield* Effect.promise(...)
-    let module_name = effect_module_name.to_string();
+    let module_name = effect_module_name.clone();
     let transformed_body = transform_body_await_to_yield(
         tracker,
         body,
@@ -91,7 +93,7 @@ pub(crate) fn build_effect_fn_call(
     tracker: &NodeFactory,
     node: P<Node>,
     body: P<Node>,
-    effect_module_name: &str,
+    effect_module_name: &ModuleReference,
     fn_name: &str,
 ) -> P<Node> {
     let block_body = if body.kind() == Kind::Block {
@@ -142,13 +144,7 @@ pub(crate) fn build_effect_fn_call(
     );
 
     // Build Effect.fn or Effect.fn("name")
-    let effect_id = tracker.new_identifier(alloc_str(effect_module_name));
-    let fn_access = tracker.new_property_access_expression(
-        effect_id,
-        None,
-        tracker.new_identifier("fn"),
-        NodeFlags::None,
-    );
+    let fn_access = tracker.new_property_access_path(&effect_module_name.append(&["fn"]));
 
     let fn_call_expr = if !fn_name.is_empty() {
         // Effect.fn("name")
@@ -175,7 +171,7 @@ pub(crate) fn build_effect_fn_call(
     )
 }
 
-// go: internal/refactors/async_await_to_fn.go:153 buildFnDeclaration
+// go: internal/refactors/async_await_to_fn.go:150 buildFnDeclaration
 // buildFnDeclaration builds the appropriate declaration wrapping the Effect.fn call.
 // For function declarations: const name = Effect.fn("name")(...)
 // For expressions/arrows: just the Effect.fn("name")(...) expression

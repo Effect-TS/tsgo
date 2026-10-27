@@ -40,7 +40,6 @@ type ProvideLayerSucceedToProvideServiceMatch struct {
 	SourceFile            *ast.SourceFile
 	Location              core.TextRange
 	ProvideTransformation *typeparser.PipingFlowTransformation
-	EffectModuleNode      *ast.Node
 	ServiceNode           *ast.Node
 	ImplementationNode    *ast.Node
 	ReplacementMethodName string
@@ -69,15 +68,10 @@ func AnalyzeProvideLayerSucceedToProvideService(tp *typeparser.TypeParser, _ *ch
 				continue
 			}
 
-			var effectModuleNode *ast.Node
-			if provide.Callee().Kind == ast.KindPropertyAccessExpression {
-				effectModuleNode = provide.Callee().AsPropertyAccessExpression().Expression
-			}
 			matches = append(matches, ProvideLayerSucceedToProvideServiceMatch{
 				SourceFile:            sf,
 				Location:              scanner.GetErrorRangeForNode(sf, provide.Callee()),
 				ProvideTransformation: &provide,
-				EffectModuleNode:      effectModuleNode,
 				ServiceNode:           service,
 				ImplementationNode:    implementation,
 				ReplacementMethodName: replacement,

@@ -31,14 +31,14 @@ func runManualMetricTapToTrackFix(ctx *fixable.Context) []ls.CodeAction {
 		// Only offer the fix when every generated reference resolves at the call site.
 		callee := match.Transformation.Callee()
 		track := effectModuleMember(ctx, match.TrackAPI)
-		trackReference := resolveModuleMember(ctx, callee, match.EffectModuleNode, typeparser.FindEffectModuleIdentifier(ctx.SourceFile), track)
+		trackReference := resolveModuleMember(ctx, callee, typeparser.FindEffectModuleReference(ctx.SourceFile), track)
 		if trackReference == nil {
 			continue
 		}
 		withConstantInput := metricModuleMember(ctx, "withConstantInput")
 		var withConstantInputReference *moduleMemberReference
 		if match.Kind == rules.ManualMetricTapToTrackConstantInput {
-			withConstantInputReference = resolveModuleMember(ctx, callee, match.MetricModuleNode, typeparser.FindModuleIdentifier(ctx.SourceFile, "Metric"), withConstantInput)
+			withConstantInputReference = resolveModuleMember(ctx, callee, typeparser.FindModuleReference(ctx.SourceFile, "Metric"), withConstantInput)
 			if withConstantInputReference == nil {
 				continue
 			}

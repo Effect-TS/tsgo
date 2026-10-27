@@ -25,7 +25,7 @@
   Fix 1: "Disable syncToSucceed for entire file"
   Fix 2: "Replace with Effect.succeed"
 
-[D6] (51:3-51:13) TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catch` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+[D6] (51:3-51:13) TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
   Fix 0: "Disable catchToOrElseSucceed for this line"
   Fix 1: "Disable catchToOrElseSucceed for entire file"
   Fix 2: "Replace with Effect.orElseSucceed"

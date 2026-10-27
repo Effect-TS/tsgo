@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{Diagnostic, Kind, Node, SourceFile};
+use ets_shim::ast::{Diagnostic, Node, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::{LazyExpressionFlags, PipingFlow, TypeParser};
@@ -44,14 +44,13 @@ pub struct MatchEffectToMatchMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
     pub callee_node: P<Node>,
-    pub callee_name_node: Option<P<Node>>,
     pub match_effect_name: &'static str,
     pub replacement_name: &'static str,
     pub handler_results: [P<Node>; 2],
     pub succeed_arguments: [P<Node>; 2],
 }
 
-// go: internal/rules/match_effect_to_match.go:48 AnalyzeMatchEffectToMatch
+// go: internal/rules/match_effect_to_match.go:47 AnalyzeMatchEffectToMatch
 //
 // Rust: Go's unused checker argument is dropped (the parser holds the checker); Go's nil parser check is the type
 // system's.
@@ -102,15 +101,10 @@ pub fn analyze_match_effect_to_match(
             else {
                 continue;
             };
-            let mut callee_name = None;
-            if transformation.callee().kind() == Kind::PropertyAccessExpression {
-                callee_name = Some(transformation.callee().as_property_access_expression().name());
-            }
             matches.push(MatchEffectToMatchMatch {
                 source_file: sf,
                 location: ets_shim::scanner::get_error_range_for_node(sf, transformation.callee()),
                 callee_node: transformation.callee(),
-                callee_name_node: callee_name,
                 match_effect_name,
                 replacement_name,
                 handler_results: [failure_result, success_result],
@@ -121,7 +115,7 @@ pub fn analyze_match_effect_to_match(
     matches
 }
 
-// go: internal/rules/match_effect_to_match.go:96 matchEffectConstructorHandler
+// go: internal/rules/match_effect_to_match.go:91 matchEffectConstructorHandler
 //
 // Rust: Go's `(result, argument, ok)` is `Option<(result, argument)>`.
 pub(crate) fn match_effect_constructor_handler(

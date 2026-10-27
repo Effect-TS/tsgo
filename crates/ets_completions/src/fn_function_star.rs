@@ -26,10 +26,10 @@ fn run_fn_function_star(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionIte
         return Vec::new();
     };
 
-    // Resolve the local Effect module identifier and compare
-    let effect_identifier = ets_typeparser::find_effect_module_identifier(ctx.source_file);
-    let accessed_text = scanner::get_text_of_node(result.accessed_object);
-    if accessed_text != effect_identifier {
+    // Compare the accessed object with the file's reference to the Effect module
+    if !ets_typeparser::find_effect_module_reference(ctx.source_file)
+        .matches_node(result.accessed_object)
+    {
         return Vec::new();
     }
 
@@ -75,7 +75,7 @@ fn run_fn_function_star(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionIte
     items
 }
 
-// go: internal/completions/fn_function_star.go:76 findEnclosingVariableName
+// go: internal/completions/fn_function_star.go:74 findEnclosingVariableName
 // findEnclosingVariableName walks up from the given node to find an enclosing
 // VariableDeclaration and returns its identifier name, or "" if not found.
 pub(crate) fn find_enclosing_variable_name(node: P<Node>) -> String {

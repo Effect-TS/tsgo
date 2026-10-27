@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -32,7 +33,7 @@ func runEffectSucceedWithVoidFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.void",
 			Run: func(tracker *rewriter.Tracker) {
-				replacementNode := effectModuleMethod(tracker, sf, match.EffectModuleNode, "void")
+				replacementNode := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(sf).Append("void")...)
 				ast.SetParentInChildren(replacementNode)
 				tracker.ReplaceNode(sf, match.CallNode, replacementNode, nil)
 			},

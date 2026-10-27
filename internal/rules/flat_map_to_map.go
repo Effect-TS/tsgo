@@ -43,7 +43,6 @@ type FlatMapToMapMatch struct {
 	SourceFile            *ast.SourceFile
 	Location              core.TextRange
 	Callee                *ast.Node
-	CalleeNameNode        *ast.Node
 	SucceedCallExpression *ast.Node
 	SucceedArgument       *ast.Node
 }
@@ -78,16 +77,10 @@ func AnalyzeFlatMapToMap(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.
 				continue
 			}
 
-			var calleeName *ast.Node
-			if callee.Kind == ast.KindPropertyAccessExpression {
-				calleeName = callee.AsPropertyAccessExpression().Name()
-			}
-
 			matches = append(matches, FlatMapToMapMatch{
 				SourceFile:            sf,
 				Location:              scanner.GetErrorRangeForNode(sf, callee),
 				Callee:                callee,
-				CalleeNameNode:        calleeName,
 				SucceedCallExpression: callback.Expression(),
 				SucceedArgument:       succeedCall.Arguments.Nodes[0],
 			})

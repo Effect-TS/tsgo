@@ -59,7 +59,7 @@ pub(crate) fn run_wrap_with_effect_gen(ctx: &mut Context<'_, '_>) -> Vec<CodeAct
         return Vec::new();
     };
 
-    let effect_module_name = ets_typeparser::find_effect_module_identifier(ctx.source_file);
+    let effect_module_name = ets_typeparser::find_effect_module_reference(ctx.source_file).string();
 
     let sf = ctx.source_file;
     let ctx_ref = &*ctx;

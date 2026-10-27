@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{Diagnostic, Kind, Node, SourceFile};
+use ets_shim::ast::{Diagnostic, Node, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::{PipingFlowTransformation, TypeParser};
@@ -45,10 +45,9 @@ pub struct MapSomeToAsSomeMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
     pub transformation: PipingFlowTransformation,
-    pub effect_module_node: Option<P<Node>>,
 }
 
-// go: internal/rules/map_some_to_as_some.go:50 AnalyzeMapSomeToAsSome
+// go: internal/rules/map_some_to_as_some.go:49 AnalyzeMapSomeToAsSome
 // AnalyzeMapSomeToAsSome finds data-last and data-first Effect.map calls whose
 // mapper is Option.some or an identity forwarder such as value => Option.some(value).
 //
@@ -75,23 +74,17 @@ pub fn analyze_map_some_to_as_some(
             {
                 continue;
             }
-            let mut effect_module_node = None;
-            if transformation.callee().kind() == Kind::PropertyAccessExpression {
-                effect_module_node =
-                    Some(transformation.callee().as_property_access_expression().expression());
-            }
             matches.push(MapSomeToAsSomeMatch {
                 source_file: sf,
                 location: ets_shim::scanner::get_error_range_for_node(sf, transformation.callee()),
                 transformation: transformation.clone(),
-                effect_module_node,
             });
         }
     }
     matches
 }
 
-// go: internal/rules/map_some_to_as_some.go:80 isOptionSomeMapper
+// go: internal/rules/map_some_to_as_some.go:74 isOptionSomeMapper
 pub(crate) fn is_option_some_mapper(tp: &mut TypeParser<'_>, node: P<Node>) -> bool {
     let (mapper, type_arguments, parameter) = tp.unwrap_identity_forwarder(node);
     if type_arguments.is_some_and(|type_arguments| !type_arguments.nodes().is_empty()) {

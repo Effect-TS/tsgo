@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{Diagnostic, Kind, Node, SourceFile};
+use ets_shim::ast::{Diagnostic, Node, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{LazyExpressionFlags, TypeParser, parse_lazy_expression};
@@ -40,12 +40,11 @@ pub struct FlatMapIgnoredParamToAndThenMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
     pub callee: P<Node>,
-    pub callee_name_node: Option<P<Node>>,
     pub callback: P<Node>,
     pub effect_value: P<Node>,
 }
 
-// go: internal/rules/flat_map_ignored_param_to_and_then.go:54 AnalyzeFlatMapIgnoredParamToAndThen
+// go: internal/rules/flat_map_ignored_param_to_and_then.go:53 AnalyzeFlatMapIgnoredParamToAndThen
 // AnalyzeFlatMapIgnoredParamToAndThen finds Effect.flatMap piping
 // transformations whose zero-parameter expression callback returns an Effect
 // value held by an already-initialized const binding.
@@ -83,16 +82,10 @@ pub fn analyze_flat_map_ignored_param_to_and_then(
                 continue;
             }
 
-            let mut callee_name = None;
-            if callee.kind() == Kind::PropertyAccessExpression {
-                callee_name = Some(callee.as_property_access_expression().name());
-            }
-
             matches.push(FlatMapIgnoredParamToAndThenMatch {
                 source_file: sf,
                 location: ets_shim::scanner::get_error_range_for_node(sf, callee),
                 callee,
-                callee_name_node: callee_name,
                 callback: callback.node(),
                 effect_value: expression,
             });

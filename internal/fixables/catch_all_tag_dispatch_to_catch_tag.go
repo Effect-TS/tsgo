@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
@@ -39,15 +40,11 @@ func buildCatchAllTagDispatchReplacement(tracker *rewriter.Tracker, sf *ast.Sour
 	if tracker == nil || match.Callee == nil || len(match.Branches) == 0 {
 		return nil, nil
 	}
-	var receiver *ast.Node
-	if match.Callee.Kind == ast.KindPropertyAccessExpression {
-		receiver = match.Callee.AsPropertyAccessExpression().Expression
-	}
 	methodName := "catchTag"
 	if len(match.Branches) > 1 {
 		methodName = "catchTags"
 	}
-	callee := effectModuleMethod(tracker, sf, receiver, methodName)
+	callee := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(sf).Append(methodName)...)
 	if len(match.Branches) == 1 {
 		branch := match.Branches[0]
 		return callee, tracker.NewNodeList([]*ast.Node{tracker.NewStringLiteral(branch.Tag, 0), newCatchTagHandler(tracker, match.ParameterName, branch)})

@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -24,11 +25,7 @@ func runCatchIfTagToCatchTagFix(ctx *fixable.Context) []ls.CodeAction {
 			continue
 		}
 		action := ctx.NewFixAction(fixable.FixAction{Description: "Replace with Effect.catchTag", Run: func(tracker *rewriter.Tracker) {
-			var receiver *ast.Node
-			if match.Transformation.Callee().Kind == ast.KindPropertyAccessExpression {
-				receiver = match.Transformation.Callee().AsPropertyAccessExpression().Expression
-			}
-			callee := effectModuleMethod(tracker, ctx.SourceFile, receiver, "catchTag")
+			callee := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(ctx.SourceFile).Append("catchTag")...)
 			arguments := tracker.NewNodeList([]*ast.Node{tracker.NewStringLiteral(match.Tag, 0), tracker.DeepCloneNode(match.Handler)})
 			tracker.ReplacePipingFlowTransformation(ctx.SourceFile, match.Transformation, rewriter.PipingFlowTransformationReplacement{Callee: callee, Arguments: arguments})
 		}})

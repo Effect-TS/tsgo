@@ -48,7 +48,6 @@ type RunOfExitToRunExitMatch struct {
 	Location           core.TextRange
 	ExitTransformation *typeparser.PipingFlowTransformation
 	RunnerCallee       *ast.Node
-	RunnerNameNode     *ast.Node
 	RunnerName         string
 	ReplacementName    string
 }
@@ -83,7 +82,6 @@ func AnalyzeRunOfExitToRunExit(tp *typeparser.TypeParser, _ *checker.Checker, sf
 				Location:           runOfExitLocation(sf, runnerTransformation.Callee(), runnerNameNode),
 				ExitTransformation: &exitTransformation,
 				RunnerCallee:       runnerCallee,
-				RunnerNameNode:     runnerNameNode,
 				RunnerName:         runnerName,
 				ReplacementName:    replacementName,
 			})
@@ -114,7 +112,6 @@ func AnalyzeRunOfExitToRunExit(tp *typeparser.TypeParser, _ *checker.Checker, sf
 								Location:           runOfExitLocation(sf, call.Expression, runnerNameNode),
 								ExitTransformation: &exitTransformation,
 								RunnerCallee:       runnerCallee,
-								RunnerNameNode:     runnerNameNode,
 								RunnerName:         runnerName,
 								ReplacementName:    replacementName,
 							})

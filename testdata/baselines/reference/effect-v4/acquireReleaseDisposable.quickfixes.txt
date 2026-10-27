@@ -288,7 +288,7 @@ export const asyncDisposable = Effect.acquireRelease(
 
 // Should trigger through an Effect namespace alias.
 const Fx = Effect
-export const aliasedModule = Fx.acquireDisposable(acquireSync)
+export const aliasedModule = Effect.acquireDisposable(acquireSync)
 
 // Should diagnose a named import and fix its usage through the Effect module.
 export const namedImport = acquireRelease(

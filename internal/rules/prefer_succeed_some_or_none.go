@@ -44,7 +44,6 @@ type PreferSucceedSomeOrNoneMatch struct {
 	Location            core.TextRange
 	Flow                *typeparser.PipingFlow
 	TransformationCount int
-	EffectModuleNode    *ast.Node
 	ReplacementName     string
 	ValueNode           *ast.Node
 	ValueTypeArguments  *ast.NodeList
@@ -100,14 +99,9 @@ func AnalyzePreferSucceedSomeOrNone(tp *typeparser.TypeParser, _ *checker.Checke
 
 func preferSucceedSomeOrNoneMatch(sf *ast.SourceFile, flow *typeparser.PipingFlow, succeedIndex int, optionInput *normalizedOptionInput) PreferSucceedSomeOrNoneMatch {
 	transformation := flow.Transformations().At(succeedIndex)
-	var effectModuleNode *ast.Node
-	if transformation.Callee().Kind == ast.KindPropertyAccessExpression {
-		effectModuleNode = transformation.Callee().AsPropertyAccessExpression().Expression
-	}
 	match := PreferSucceedSomeOrNoneMatch{
 		SourceFile:         sf,
 		Location:           scanner.GetErrorRangeForNode(sf, transformation.Callee()),
-		EffectModuleNode:   effectModuleNode,
 		ReplacementName:    optionInput.ReplacementName,
 		ValueNode:          optionInput.ValueNode,
 		ValueTypeArguments: optionInput.ValueTypeArguments,

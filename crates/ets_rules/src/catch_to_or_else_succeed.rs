@@ -47,13 +47,12 @@ pub struct CatchToOrElseSucceedMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
     pub callee: P<Node>,
-    pub callee_name_node: Option<P<Node>>,
     pub catch_method_name: String,
     pub succeed_call_expression: P<Node>,
     pub succeed_argument: P<Node>,
 }
 
-// go: internal/rules/catch_to_or_else_succeed.go:47 AnalyzeCatchToOrElseSucceed
+// go: internal/rules/catch_to_or_else_succeed.go:46 AnalyzeCatchToOrElseSucceed
 // AnalyzeCatchToOrElseSucceed finds Effect.catch callbacks that ignore the error
 // and return Effect.succeed, which can be simplified to Effect.orElseSucceed.
 //
@@ -83,11 +82,17 @@ pub fn analyze_catch_to_or_else_succeed(
             }
             let call = expr.as_call_expression();
 
-            if !tp.is_node_reference_to_effect_module_api(transformation.callee(), "catch")
-                && !tp.is_node_reference_to_effect_module_api(transformation.callee(), "catchAll")
+            // Name the catch variant the callee resolves to, however it is written.
+            let catch_method_name = if tp
+                .is_node_reference_to_effect_module_api(transformation.callee(), "catch")
             {
+                "catch".to_string()
+            } else if tp.is_node_reference_to_effect_module_api(transformation.callee(), "catchAll")
+            {
+                "catchAll".to_string()
+            } else {
                 continue;
-            }
+            };
 
             let arguments = call.arguments().nodes();
             if arguments.is_empty() {
@@ -98,20 +103,10 @@ pub fn analyze_catch_to_or_else_succeed(
                 continue;
             }
 
-            let mut callee_name_node = None;
-            let mut catch_method_name = "catch".to_string();
-            if transformation.callee().kind() == Kind::PropertyAccessExpression {
-                let prop = transformation.callee().as_property_access_expression();
-                let name = prop.name();
-                callee_name_node = Some(name);
-                catch_method_name = name.text().to_string();
-            }
-
             matches.push(CatchToOrElseSucceedMatch {
                 source_file: sf,
                 location: ets_shim::scanner::get_error_range_for_node(sf, transformation.callee()),
                 callee: transformation.callee(),
-                callee_name_node,
                 catch_method_name,
                 succeed_call_expression: expr,
                 succeed_argument: arguments[0],

@@ -1,4 +1,4 @@
-use ets_shim::ast::{Kind, SourceFile};
+use ets_shim::ast::{self, Kind, Node, SourceFile};
 use ets_shim::core::P;
 use ets_shim::scanner::get_text_of_node;
 
@@ -13,154 +13,164 @@ fn strip_specifier_quotes(text: String) -> String {
     text
 }
 
-// go: internal/typeparser/module_identifier.go:11 FindEffectModuleIdentifier
-// FindEffectModuleIdentifier finds the local name for the Effect module from imports.
-// It checks both namespace imports (import * as X from "effect/Effect") and
-// named imports (import { Effect } from "effect"), falling back to "Effect".
-pub fn find_effect_module_identifier(sf: impl Into<Option<P<SourceFile>>>) -> String {
-    let Some(sf) = sf.into() else {
-        return "Effect".to_string();
-    };
-    for &stmt in sf.statements().nodes() {
-        if stmt.kind() != Kind::ImportDeclaration {
-            continue;
-        }
-        let import_decl = stmt.as_import_declaration();
-        let Some(import_clause) = import_decl.import_clause() else {
-            continue;
-        };
-        let module_name = strip_specifier_quotes(get_text_of_node(import_decl.module_specifier()));
-
-        let clause = import_clause.as_import_clause();
-        let Some(named_bindings) = clause.named_bindings() else {
-            continue;
-        };
-
-        // Check namespace import: import * as X from "effect/Effect"
-        if module_name == "effect/Effect" && named_bindings.kind() == Kind::NamespaceImport {
-            let ns_import = named_bindings.as_namespace_import();
-            return get_text_of_node(ns_import.name());
-        }
-
-        // Check named imports: import { Effect } from "effect"
-        if module_name == "effect" && named_bindings.kind() == Kind::NamedImports {
-            let named_imports = named_bindings.as_named_imports();
-            for &elem in named_imports.elements().nodes() {
-                let spec = elem.as_import_specifier();
-                let imported_name = match spec.property_name() {
-                    Some(property_name) => get_text_of_node(property_name),
-                    None => get_text_of_node(spec.name()),
-                };
-                if imported_name == "Effect" {
-                    return get_text_of_node(spec.name());
-                }
-            }
-        }
-    }
-    "Effect".to_string()
-}
-
-// go: internal/typeparser/module_identifier.go:67 FindModuleIdentifier
-// FindModuleIdentifier resolves the imported identifier name for the given export
-// from the "effect" package. Falls back to the provided exportName if not found.
-// It checks named imports: import { ExportName as Alias } from "effect".
-pub fn find_module_identifier(sf: impl Into<Option<P<SourceFile>>>, export_name: &str) -> String {
-    let Some(sf) = sf.into() else {
-        return export_name.to_string();
-    };
-    for &stmt in sf.statements().nodes() {
-        if stmt.kind() != Kind::ImportDeclaration {
-            continue;
-        }
-        let import_decl = stmt.as_import_declaration();
-        let module_name = strip_specifier_quotes(get_text_of_node(import_decl.module_specifier()));
-
-        let Some(import_clause) = import_decl.import_clause() else {
-            continue;
-        };
-        let clause = import_clause.as_import_clause();
-        let Some(named_bindings) = clause.named_bindings() else {
-            continue;
-        };
-
-        // Check namespace import: import * as X from "effect/<exportName>"
-        if module_name == format!("effect/{export_name}")
-            && named_bindings.kind() == Kind::NamespaceImport
-        {
-            let ns_import = named_bindings.as_namespace_import();
-            return get_text_of_node(ns_import.name());
-        }
-
-        // Check named imports: import { ExportName as Alias } from "effect"
-        if module_name == "effect" && named_bindings.kind() == Kind::NamedImports {
-            let named_imports = named_bindings.as_named_imports();
-            for &elem in named_imports.elements().nodes() {
-                let spec = elem.as_import_specifier();
-                let imported_name = match spec.property_name() {
-                    Some(property_name) => get_text_of_node(property_name),
-                    None => get_text_of_node(spec.name()),
-                };
-                if imported_name == export_name {
-                    return get_text_of_node(spec.name());
-                }
-            }
-        }
-    }
-    export_name.to_string()
-}
-
-// go: internal/typeparser/module_identifier.go:129 FindModuleIdentifierForPackage
-// FindModuleIdentifierForPackage resolves the imported identifier name for the given
-// module from an arbitrary package. It checks:
-//   - Namespace imports: import * as X from "<packageName>/<moduleName>"
-//   - Named imports: import { <moduleName> as X } from "<packageName>"
+// go: internal/typeparser/module_identifier.go:13 ModuleReference
+// ModuleReference is the path of names that reaches a module from a file's
+// imports, for example ["Effect"] or ["X", "Effect"] for import * as X from "effect".
 //
-// Falls back to moduleName if not found.
-pub fn find_module_identifier_for_package(
+// Rust: a newtype over Go's `[]string`, which derefs to the names.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct ModuleReference(pub Vec<String>);
+
+impl std::ops::Deref for ModuleReference {
+    type Target = [String];
+    fn deref(&self) -> &[String] {
+        &self.0
+    }
+}
+
+/// Rust-only: Go formats a `ModuleReference` with `%s` through its `String` method.
+impl std::fmt::Display for ModuleReference {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(&self.string())
+    }
+}
+
+impl ModuleReference {
+    /// Rust-only: Go's `ModuleReference{names...}` literal.
+    pub fn of(names: &[&str]) -> ModuleReference {
+        ModuleReference(names.iter().map(|name| (*name).to_string()).collect())
+    }
+
+    // go: internal/typeparser/module_identifier.go:16 ModuleReference.String
+    // String joins the path with ".", as it is written in source code.
+    pub fn string(&self) -> String {
+        self.0.join(".")
+    }
+
+    // go: internal/typeparser/module_identifier.go:21 ModuleReference.Append
+    // Append returns a new reference that extends r with names, leaving r untouched.
+    #[must_use]
+    pub fn append(&self, names: &[&str]) -> ModuleReference {
+        let mut result = self.0.clone();
+        result.extend(names.iter().map(|name| (*name).to_string()));
+        ModuleReference(result)
+    }
+
+    // go: internal/typeparser/module_identifier.go:27 ModuleReference.MatchesNode
+    // MatchesNode reports whether node spells out the reference: an identifier, a
+    // property access chain or a qualified name with the same names.
+    pub fn matches_node(&self, node: P<Node>) -> bool {
+        let r = &self.0;
+        let mut node = node;
+        for i in (1..r.len()).rev() {
+            let name;
+            match node.kind() {
+                Kind::PropertyAccessExpression => {
+                    let access = node.as_property_access_expression();
+                    (node, name) = (access.expression(), access.name());
+                }
+                Kind::QualifiedName => {
+                    let qualified = node.as_qualified_name();
+                    (node, name) = (qualified.left(), qualified.right());
+                }
+                _ => return false,
+            }
+            if name.kind() != Kind::Identifier || name.text() != r[i] {
+                return false;
+            }
+        }
+        !r.is_empty() && node.kind() == Kind::Identifier && node.text() == r[0]
+    }
+}
+
+// go: internal/typeparser/module_identifier.go:49 FindEffectModuleReference
+// FindEffectModuleReference finds the reference to the Effect module from the
+// file's imports. See FindModuleReference.
+pub fn find_effect_module_reference(sf: impl Into<Option<P<SourceFile>>>) -> ModuleReference {
+    find_module_reference(sf, "Effect")
+}
+
+// go: internal/typeparser/module_identifier.go:55 FindModuleReference
+// FindModuleReference finds the reference to the given module of the "effect"
+// package from the file's imports. See FindModuleReferenceForPackage.
+pub fn find_module_reference(
+    sf: impl Into<Option<P<SourceFile>>>,
+    export_name: &str,
+) -> ModuleReference {
+    find_module_reference_for_package(sf, "effect", export_name)
+}
+
+// go: internal/typeparser/module_identifier.go:68 FindModuleReferenceForPackage
+// FindModuleReferenceForPackage finds the reference to the given module of a
+// package from the file's imports. It recognises:
+//   - Namespace imports: import * as X from "<packageName>/<moduleName>" → X
+//   - Named imports: import { <moduleName> as X } from "<packageName>" → X
+//   - Namespace imports of the barrel: import * as X from "<packageName>" → X.<moduleName>
+//
+// The first two forms are preferred over the barrel form. Type-only imports
+// are skipped, as they cannot be referenced from values. Falls back to
+// moduleName if not found; no import is added.
+pub fn find_module_reference_for_package(
     sf: impl Into<Option<P<SourceFile>>>,
     package_name: &str,
     module_name: &str,
-) -> String {
+) -> ModuleReference {
     let Some(sf) = sf.into() else {
-        return module_name.to_string();
+        return ModuleReference::of(&[module_name]);
     };
+    let mut barrel: Option<ModuleReference> = None;
     for &stmt in sf.statements().nodes() {
         if stmt.kind() != Kind::ImportDeclaration {
             continue;
         }
         let import_decl = stmt.as_import_declaration();
-        let specifier = strip_specifier_quotes(get_text_of_node(import_decl.module_specifier()));
-
         let Some(import_clause) = import_decl.import_clause() else {
             continue;
         };
+        let specifier = strip_specifier_quotes(get_text_of_node(import_decl.module_specifier()));
+
         let clause = import_clause.as_import_clause();
         let Some(named_bindings) = clause.named_bindings() else {
             continue;
         };
 
-        // Check namespace import: import * as X from "<packageName>/<moduleName>"
-        if specifier == format!("{package_name}/{module_name}")
-            && named_bindings.kind() == Kind::NamespaceImport
-        {
+        if named_bindings.kind() == Kind::NamespaceImport {
             let ns_import = named_bindings.as_namespace_import();
-            return get_text_of_node(ns_import.name());
+            if ast::is_part_of_type_only_import_or_export_declaration(named_bindings) {
+                continue;
+            }
+            let name = get_text_of_node(ns_import.name());
+            // import * as X from "<packageName>/<moduleName>"
+            if specifier == format!("{package_name}/{module_name}") {
+                return ModuleReference(vec![name]);
+            }
+            // import * as X from "<packageName>"
+            if specifier == package_name && barrel.is_none() {
+                barrel = Some(ModuleReference(vec![name, module_name.to_string()]));
+            }
+            continue;
         }
 
-        // Check named imports: import { <moduleName> as X } from "<packageName>"
+        // import { <moduleName> as X } from "<packageName>"
         if specifier == package_name && named_bindings.kind() == Kind::NamedImports {
             let named_imports = named_bindings.as_named_imports();
             for &elem in named_imports.elements().nodes() {
+                if ast::is_part_of_type_only_import_or_export_declaration(elem) {
+                    continue;
+                }
                 let spec = elem.as_import_specifier();
                 let imported_name = match spec.property_name() {
                     Some(property_name) => get_text_of_node(property_name),
                     None => get_text_of_node(spec.name()),
                 };
                 if imported_name == module_name {
-                    return get_text_of_node(spec.name());
+                    return ModuleReference(vec![get_text_of_node(spec.name())]);
                 }
             }
         }
     }
-    module_name.to_string()
+    if let Some(barrel) = barrel {
+        return barrel;
+    }
+    ModuleReference::of(&[module_name])
 }
