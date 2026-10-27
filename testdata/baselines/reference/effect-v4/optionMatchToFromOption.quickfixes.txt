@@ -341,7 +341,7 @@ export const dataFirst = Option.match(option, {
 })
 
 // Should trigger: handler order is irrelevant and an exact identity arrow is accepted.
-export const identityArrow = Fx.fromOption(option, () => new MissingValue("identity"))
+export const identityArrow = Effect.fromOption(option, () => new MissingValue("identity"))
 
 // Should trigger without a fix: replacing a function expression with an arrow
 // could change the meaning of arguments or this inside the failure expression.
@@ -1159,7 +1159,7 @@ export const isSomeTernary = Option.isSome(option)
   : Effect.fail(new MissingValue("isSome"))
 
 // Should trigger: isNone reverses the two branch roles.
-export const isNoneTernary = Fx.fromOption(option)
+export const isNoneTernary = Effect.fromOption(option)
 
 // Should NOT trigger: onSome transforms the value.
 export const transformedSome = Option.match(option, {

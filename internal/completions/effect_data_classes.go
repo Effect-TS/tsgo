@@ -23,9 +23,10 @@ func runEffectDataClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 		return nil
 	}
 
-	dataIdentifier := typeparser.FindModuleIdentifier(ctx.SourceFile, "Data")
+	dataReference := typeparser.FindModuleReference(ctx.SourceFile, "Data")
+	dataIdentifier := dataReference.String()
 	accessedText := data.AccessedObjectText()
-	isFullyQualified := dataIdentifier == accessedText
+	isFullyQualified := dataReference.MatchesNode(data.AccessedObject)
 	className := data.ClassNameText()
 
 	// Build replacement range from byte offsets

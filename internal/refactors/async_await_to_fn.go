@@ -28,7 +28,7 @@ func runAsyncAwaitToFn(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	effectModuleName := typeparser.FindEffectModuleIdentifier(ctx.SourceFile)
+	effectModuleName := typeparser.FindEffectModuleReference(ctx.SourceFile)
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{
 		Description: "Rewrite to Effect.fn",
@@ -54,7 +54,7 @@ func runAsyncAwaitToFn(ctx *refactor.Context) []ls.CodeAction {
 }
 
 // transformAsyncToEffectFn transforms an async function to use Effect.fn.
-func transformAsyncToEffectFn(tracker *rewriter.Tracker, node *ast.Node, effectModuleName string) *ast.Node {
+func transformAsyncToEffectFn(tracker *rewriter.Tracker, node *ast.Node, effectModuleName typeparser.ModuleReference) *ast.Node {
 	body := typeparser.GetFunctionLikeBody(node)
 	if body == nil {
 		return nil
@@ -76,7 +76,7 @@ func transformAsyncToEffectFn(tracker *rewriter.Tracker, node *ast.Node, effectM
 }
 
 // buildEffectFnCall builds: Effect.fn("name")(function*(params) { body })
-func buildEffectFnCall(tracker *rewriter.Tracker, node *ast.Node, body *ast.Node, effectModuleName string, fnName string) *ast.Node {
+func buildEffectFnCall(tracker *rewriter.Tracker, node *ast.Node, body *ast.Node, effectModuleName typeparser.ModuleReference, fnName string) *ast.Node {
 	var blockBody *ast.Node
 	if body.Kind == ast.KindBlock {
 		blockBody = body
@@ -122,10 +122,7 @@ func buildEffectFnCall(tracker *rewriter.Tracker, node *ast.Node, body *ast.Node
 	)
 
 	// Build Effect.fn or Effect.fn("name")
-	effectId := tracker.NewIdentifier(effectModuleName)
-	fnAccess := tracker.NewPropertyAccessExpression(
-		effectId, nil, tracker.NewIdentifier("fn"), ast.NodeFlagsNone,
-	)
+	fnAccess := tracker.NewPropertyAccessPath(effectModuleName.Append("fn")...)
 
 	var fnCallExpr *ast.Node
 	if fnName != "" {

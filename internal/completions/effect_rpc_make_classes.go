@@ -31,11 +31,12 @@ func runRpcMakeClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 		return nil
 	}
 
-	rpcIdentifier := typeparser.FindModuleIdentifierForPackage(ctx.SourceFile, "@effect/rpc", "Rpc")
+	rpcReference := typeparser.FindModuleReferenceForPackage(ctx.SourceFile, "@effect/rpc", "Rpc")
+	rpcIdentifier := rpcReference.String()
 	accessedText := data.AccessedObjectText()
 
 	// Only fully-qualified case (e.g., Rpc.make)
-	if rpcIdentifier != accessedText {
+	if !rpcReference.MatchesNode(data.AccessedObject) {
 		return nil
 	}
 

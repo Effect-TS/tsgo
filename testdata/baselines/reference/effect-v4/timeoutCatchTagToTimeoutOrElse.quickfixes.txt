@@ -613,7 +613,7 @@ export const curriedTimeout = Effect.catchTag(Effect.timeout(1)(task), "TimeoutE
 export const nestedOption = Effect.catchTag(Effect.asSome(Effect.timeout(task, 1)), "TimeoutError", () => Effect.succeedNone)
 export const mixed = Effect.catchTag(task.pipe(Effect.timeout(1)), "TimeoutError", () => Effect.succeed("fallback"))
 export const priorStep = innerTimeout.pipe(Effect.orDie, Effect.timeout(1), Effect.catchTag("TimeoutError", () => Effect.succeed("fallback")), Effect.asVoid)
-export const otherError = tagged.pipe(E.timeoutOrElse({
+export const otherError = tagged.pipe(Effect.timeoutOrElse({
     duration: 1,
     orElse: () => E.succeed("fallback")
 }))

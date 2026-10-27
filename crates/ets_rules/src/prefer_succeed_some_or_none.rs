@@ -51,20 +51,19 @@ pub struct PreferSucceedSomeOrNoneMatch {
     pub location: TextRange,
     pub flow: Option<PipingFlow>,
     pub transformation_count: i64,
-    pub effect_module_node: Option<P<Node>>,
     pub replacement_name: &'static str,
     pub value_node: Option<P<Node>>,
     pub value_type_arguments: Option<P<NodeList>>,
 }
 
-// go: internal/rules/prefer_succeed_some_or_none.go:53 normalizedOptionInput
+// go: internal/rules/prefer_succeed_some_or_none.go:52 normalizedOptionInput
 pub(crate) struct NormalizedOptionInput {
     pub(crate) replacement_name: &'static str,
     pub(crate) value_node: Option<P<Node>>,
     pub(crate) value_type_arguments: Option<P<NodeList>>,
 }
 
-// go: internal/rules/prefer_succeed_some_or_none.go:62 AnalyzePreferSucceedSomeOrNone
+// go: internal/rules/prefer_succeed_some_or_none.go:61 AnalyzePreferSucceedSomeOrNone
 // AnalyzePreferSucceedSomeOrNone finds piping flows in which Option.none or
 // Option.some feeds directly into Effect.succeed. This covers both nested calls
 // and pipe forms such as Option.none().pipe(Effect.succeed).
@@ -139,7 +138,7 @@ pub fn analyze_prefer_succeed_some_or_none(
     matches
 }
 
-// go: internal/rules/prefer_succeed_some_or_none.go:101 preferSucceedSomeOrNoneMatch
+// go: internal/rules/prefer_succeed_some_or_none.go:100 preferSucceedSomeOrNoneMatch
 pub(crate) fn prefer_succeed_some_or_none_match(
     sf: P<SourceFile>,
     flow: &PipingFlow,
@@ -147,17 +146,11 @@ pub(crate) fn prefer_succeed_some_or_none_match(
     option_input: &NormalizedOptionInput,
 ) -> PreferSucceedSomeOrNoneMatch {
     let transformation = flow.transformations().at(succeed_index);
-    let mut effect_module_node = None;
-    if transformation.callee().kind() == Kind::PropertyAccessExpression {
-        effect_module_node =
-            Some(transformation.callee().as_property_access_expression().expression());
-    }
     let mut m = PreferSucceedSomeOrNoneMatch {
         source_file: sf,
         location: ets_shim::scanner::get_error_range_for_node(sf, transformation.callee()),
         flow: None,
         transformation_count: 0,
-        effect_module_node,
         replacement_name: option_input.replacement_name,
         value_node: option_input.value_node,
         value_type_arguments: option_input.value_type_arguments,
@@ -172,7 +165,7 @@ pub(crate) fn prefer_succeed_some_or_none_match(
     m
 }
 
-// go: internal/rules/prefer_succeed_some_or_none.go:124 isOptionNoneCall
+// go: internal/rules/prefer_succeed_some_or_none.go:118 isOptionNoneCall
 pub(crate) fn is_option_none_call(tp: &mut TypeParser<'_>, node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;

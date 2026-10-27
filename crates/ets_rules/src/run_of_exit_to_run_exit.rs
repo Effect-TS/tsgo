@@ -50,12 +50,11 @@ pub struct RunOfExitToRunExitMatch {
     pub location: TextRange,
     pub exit_transformation: PipingFlowTransformation,
     pub runner_callee: Option<P<Node>>,
-    pub runner_name_node: Option<P<Node>>,
     pub runner_name: &'static str,
     pub replacement_name: &'static str,
 }
 
-// go: internal/rules/run_of_exit_to_run_exit.go:59 AnalyzeRunOfExitToRunExit
+// go: internal/rules/run_of_exit_to_run_exit.go:58 AnalyzeRunOfExitToRunExit
 // AnalyzeRunOfExitToRunExit finds Effect.exit immediately followed by a
 // non-Exit runner in a normalized piping flow. Adjacency is important: an
 // Effect.exit followed by another transformation is not the runner's input.
@@ -105,7 +104,6 @@ pub fn analyze_run_of_exit_to_run_exit(
                     ),
                     exit_transformation,
                     runner_callee,
-                    runner_name_node,
                     runner_name,
                     replacement_name,
                 },
@@ -156,7 +154,6 @@ pub fn analyze_run_of_exit_to_run_exit(
                                 ),
                                 exit_transformation,
                                 runner_callee,
-                                runner_name_node,
                                 runner_name,
                                 replacement_name,
                             },
@@ -178,7 +175,7 @@ pub fn analyze_run_of_exit_to_run_exit(
     matches
 }
 
-// go: internal/rules/run_of_exit_to_run_exit.go:139 appendRunOfExitMatch
+// go: internal/rules/run_of_exit_to_run_exit.go:136 appendRunOfExitMatch
 //
 // Rust: appends in place (Go returns the grown slice).
 pub(crate) fn append_run_of_exit_match(
@@ -195,7 +192,7 @@ pub(crate) fn append_run_of_exit_match(
     matches.push(candidate);
 }
 
-// go: internal/rules/run_of_exit_to_run_exit.go:148 runOfExitLocation
+// go: internal/rules/run_of_exit_to_run_exit.go:145 runOfExitLocation
 pub(crate) fn run_of_exit_location(
     sf: P<SourceFile>,
     callee: P<Node>,
@@ -208,7 +205,7 @@ pub(crate) fn run_of_exit_location(
     ets_shim::scanner::get_error_range_for_node(sf, location_node)
 }
 
-// go: internal/rules/run_of_exit_to_run_exit.go:156 runOfExitRunner
+// go: internal/rules/run_of_exit_to_run_exit.go:153 runOfExitRunner
 //
 // Rust: Go's named results `(targetNode, nameNode, runnerName, replacementName)`.
 pub(crate) fn run_of_exit_runner(

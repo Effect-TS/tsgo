@@ -213,16 +213,7 @@ func buildEffectGenToFnReplacement(tracker *rewriter.Tracker, sf *ast.SourceFile
 	)
 
 	// Build Effect.fn or Effect.fn("name")
-	// Named imports and local aliases of gen have no receiver; the user resolves the import.
-	var effectId *ast.Node
-	if genCall.EffectModule() != nil {
-		effectId = tracker.DeepCloneNode(genCall.EffectModule())
-	} else {
-		effectId = tracker.NewIdentifier(typeparser.FindEffectModuleIdentifier(sf))
-	}
-	fnAccess := tracker.NewPropertyAccessExpression(
-		effectId, nil, tracker.NewIdentifier("fn"), ast.NodeFlagsNone,
-	)
+	fnAccess := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(sf).Append("fn")...)
 
 	var fnCallExpr *ast.Node
 	if fnName != "" {

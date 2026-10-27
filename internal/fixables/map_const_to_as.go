@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -31,7 +32,7 @@ func runMapConstToAsFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.as",
 			Run: func(tracker *rewriter.Tracker) {
-				as := effectModuleMethod(tracker, ctx.SourceFile, match.EffectModuleNode, "as")
+				as := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(ctx.SourceFile).Append("as")...)
 				tracker.ReplacePipingFlowTransformation(ctx.SourceFile, match.Transformation, rewriter.PipingFlowTransformationReplacement{
 					Callee:    as,
 					Arguments: tracker.NewNodeList([]*ast.Node{tracker.DeepCloneNode(match.ConstantValue)}),

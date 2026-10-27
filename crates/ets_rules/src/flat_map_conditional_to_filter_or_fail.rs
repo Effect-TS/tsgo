@@ -10,7 +10,7 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{DispatchConditionKind, PipingFlowTransformation, TypeParser};
 
-use crate::option_match_to_from_option::{effect_module_expression, is_synchronous_function};
+use crate::option_match_to_from_option::is_synchronous_function;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static MESSAGE: &Message = &tsdiag::EFFECT_0_EXPRESSES_THIS_CONDITIONAL_VALIDATION_MORE_DIRECTLY_THAN_EFFECT_FLAT_MAP_WITH_AN_IDENTITY_EFFECT_SUCCEED_BRANCH_EFFECT_FLAT_MAP_CONDITIONAL_TO_FILTER_OR_FAIL;
@@ -50,7 +50,6 @@ pub struct FlatMapConditionalToFilterOrFailMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
     pub transformation: PipingFlowTransformation,
-    pub effect_module_node: Option<P<Node>>,
     pub parameter_node: P<Node>,
     pub predicate_node: P<Node>,
     pub fallback_node: P<Node>,
@@ -59,7 +58,7 @@ pub struct FlatMapConditionalToFilterOrFailMatch {
     pub can_fix: bool,
 }
 
-// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:59 AnalyzeFlatMapConditionalToFilterOrFail
+// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:58 AnalyzeFlatMapConditionalToFilterOrFail
 // AnalyzeFlatMapConditionalToFilterOrFail finds flatMap transformations whose
 // callback is a two-way conditional with one identity Effect.succeed branch.
 //
@@ -134,12 +133,10 @@ pub fn analyze_flat_map_conditional_to_filter_or_fail(
                 continue;
             }
 
-            let effect_module = effect_module_expression(Some(callee));
             let m = FlatMapConditionalToFilterOrFailMatch {
                 source_file: sf,
                 location: ets_shim::scanner::get_error_range_for_node(sf, callee),
                 transformation: transformation.clone(),
-                effect_module_node: effect_module,
                 parameter_node: parameter,
                 predicate_node: branch.condition().subject(),
                 fallback_node,
@@ -154,7 +151,7 @@ pub fn analyze_flat_map_conditional_to_filter_or_fail(
     matches
 }
 
-// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:137 isIdentitySucceed
+// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:134 isIdentitySucceed
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub(crate) fn is_identity_succeed(
@@ -186,7 +183,7 @@ pub(crate) fn is_identity_succeed(
     })
 }
 
-// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:156 effectFailArgument
+// go: internal/rules/flat_map_conditional_to_filter_or_fail.go:153 effectFailArgument
 pub(crate) fn effect_fail_argument(
     tp: &mut TypeParser<'_>,
     expression: Option<P<Node>>,

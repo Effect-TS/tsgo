@@ -1,3 +1,5 @@
+use ets_rewriter::NodeFactoryPaths;
+use ets_typeparser::ModuleReference;
 use std::sync::LazyLock;
 
 use ets_refactor::{Context, Refactor, RefactorAction};
@@ -107,93 +109,77 @@ pub(crate) fn create_typeof_reference(tracker: &NodeFactory, name: &str) -> P<No
 }
 
 // go: internal/refactors/make_schema_opaque.go:105 createSchemaPropertyAccess
-// createSchemaPropertyAccess creates: <schemaId>.<ns>.<member> as a property access expression.
+// createSchemaPropertyAccess creates: <schema>.<ns>.<member> as a property access expression.
 // Used in ExpressionWithTypeArguments for heritage clauses.
 pub(crate) fn create_schema_property_access(
     tracker: &NodeFactory,
-    schema_id: &str,
+    schema: &ModuleReference,
     ns: &str,
     member: &str,
 ) -> P<Node> {
-    tracker.new_property_access_expression(
-        tracker.new_property_access_expression(
-            tracker.new_identifier(alloc_str(schema_id)),
-            None,
-            tracker.new_identifier(alloc_str(ns)),
-            NodeFlags::None,
-        ),
-        None,
-        tracker.new_identifier(alloc_str(member)),
-        NodeFlags::None,
-    )
+    tracker.new_property_access_path(&schema.append(&[ns, member]))
 }
 
-// go: internal/refactors/make_schema_opaque.go:121 createSchemaQualifiedName
-// createSchemaQualifiedName creates: <schemaId>.<ns>.<member> as a qualified name.
+// go: internal/refactors/make_schema_opaque.go:111 createSchemaQualifiedName
+// createSchemaQualifiedName creates: <schema>.<ns>.<member> as a qualified name.
 // Used in TypeReferenceNode for type alias declarations.
 pub(crate) fn create_schema_qualified_name(
     tracker: &NodeFactory,
-    schema_id: &str,
+    schema: &ModuleReference,
     ns: &str,
     member: &str,
 ) -> P<Node> {
-    tracker.new_qualified_name(
-        tracker.new_qualified_name(
-            tracker.new_identifier(alloc_str(schema_id)),
-            tracker.new_identifier(alloc_str(ns)),
-        ),
-        tracker.new_identifier(alloc_str(member)),
-    )
+    tracker.new_qualified_name_path(&schema.append(&[ns, member]))
 }
 
-// go: internal/refactors/make_schema_opaque.go:133 createHeritageTypeRef
-// createHeritageTypeRef creates: <schemaId>.<ns>.<member><typeof <inferFrom>>
+// go: internal/refactors/make_schema_opaque.go:117 createHeritageTypeRef
+// createHeritageTypeRef creates: <schema>.<ns>.<member><typeof <inferFrom>>
 // as an ExpressionWithTypeArguments node for use in interface heritage clauses.
 pub(crate) fn create_heritage_type_ref(
     tracker: &NodeFactory,
-    schema_id: &str,
+    schema: &ModuleReference,
     ns: &str,
     member: &str,
     infer_from: &str,
 ) -> P<Node> {
     tracker.new_expression_with_type_arguments(
-        create_schema_property_access(tracker, schema_id, ns, member),
+        create_schema_property_access(tracker, schema, ns, member),
         Some(tracker.new_node_list(vec![create_typeof_reference(tracker, infer_from)])),
     )
 }
 
-// go: internal/refactors/make_schema_opaque.go:144 createTypeAliasTypeRef
-// createTypeAliasTypeRef creates: <schemaId>.<ns>.<member><typeof <inferFrom>>
+// go: internal/refactors/make_schema_opaque.go:128 createTypeAliasTypeRef
+// createTypeAliasTypeRef creates: <schema>.<ns>.<member><typeof <inferFrom>>
 // as a TypeReferenceNode for use in type alias declarations.
 pub(crate) fn create_type_alias_type_ref(
     tracker: &NodeFactory,
-    schema_id: &str,
+    schema: &ModuleReference,
     ns: &str,
     member: &str,
     infer_from: &str,
 ) -> P<Node> {
     tracker.new_type_reference_node(
-        create_schema_qualified_name(tracker, schema_id, ns, member),
+        create_schema_qualified_name(tracker, schema, ns, member),
         Some(tracker.new_node_list(vec![create_typeof_reference(tracker, infer_from)])),
     )
 }
 
-// go: internal/refactors/make_schema_opaque.go:153 opaqueExportModifiers
+// go: internal/refactors/make_schema_opaque.go:137 opaqueExportModifiers
 pub(crate) fn opaque_export_modifiers(tracker: &NodeFactory) -> P<ModifierList> {
     tracker.new_modifier_list(vec![tracker.new_modifier(Kind::ExportKeyword)])
 }
 
-// go: internal/refactors/make_schema_opaque.go:160 createOpaqueInterface
+// go: internal/refactors/make_schema_opaque.go:144 createOpaqueInterface
 // createOpaqueInterface creates: export interface <name> extends <heritage> { }
 pub(crate) fn create_opaque_interface(
     tracker: &NodeFactory,
     name: &str,
-    schema_id: &str,
+    schema: &ModuleReference,
     ns: &str,
     member: &str,
     infer_from: &str,
 ) -> P<Node> {
-    let heritage = create_heritage_type_ref(tracker, schema_id, ns, member, infer_from);
+    let heritage = create_heritage_type_ref(tracker, schema, ns, member, infer_from);
     let heritage_clause =
         tracker.new_heritage_clause(Kind::ExtendsKeyword, tracker.new_node_list(vec![heritage]));
     let node = tracker.new_interface_declaration(
@@ -207,17 +193,17 @@ pub(crate) fn create_opaque_interface(
     node
 }
 
-// go: internal/refactors/make_schema_opaque.go:179 createOpaqueTypeAlias
-// createOpaqueTypeAlias creates: export type <name> = <schemaId>.<ns>.<member><typeof inferFrom>
+// go: internal/refactors/make_schema_opaque.go:163 createOpaqueTypeAlias
+// createOpaqueTypeAlias creates: export type <name> = <schema>.<ns>.<member><typeof inferFrom>
 pub(crate) fn create_opaque_type_alias(
     tracker: &NodeFactory,
     name: &str,
-    schema_id: &str,
+    schema: &ModuleReference,
     ns: &str,
     member: &str,
     infer_from: &str,
 ) -> P<Node> {
-    let type_ref = create_type_alias_type_ref(tracker, schema_id, ns, member, infer_from);
+    let type_ref = create_type_alias_type_ref(tracker, schema, ns, member, infer_from);
     let node = tracker.new_type_alias_declaration(
         Some(opaque_export_modifiers(tracker)),
         tracker.new_identifier(alloc_str(name)),
@@ -228,24 +214,24 @@ pub(crate) fn create_opaque_type_alias(
     node
 }
 
-// go: internal/refactors/make_schema_opaque.go:192 createOpaqueTypeDecl
+// go: internal/refactors/make_schema_opaque.go:176 createOpaqueTypeDecl
 // createOpaqueTypeDecl creates an interface (if isObject) or type alias for the given schema property.
 pub(crate) fn create_opaque_type_decl(
     tracker: &NodeFactory,
     name: &str,
-    schema_id: &str,
+    schema: &ModuleReference,
     ns: &str,
     member: &str,
     infer_from: &str,
     is_object: bool,
 ) -> P<Node> {
     if is_object {
-        return create_opaque_interface(tracker, name, schema_id, ns, member, infer_from);
+        return create_opaque_interface(tracker, name, schema, ns, member, infer_from);
     }
-    create_opaque_type_alias(tracker, name, schema_id, ns, member, infer_from)
+    create_opaque_type_alias(tracker, name, schema, ns, member, infer_from)
 }
 
-// go: internal/refactors/make_schema_opaque.go:199 runMakeSchemaOpaque
+// go: internal/refactors/make_schema_opaque.go:183 runMakeSchemaOpaque
 pub(crate) fn run_make_schema_opaque(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let Some(info) = find_schema_variable_declaration(ctx) else {
         return Vec::new();
@@ -258,7 +244,7 @@ pub(crate) fn run_make_schema_opaque(ctx: &mut Context<'_, '_>) -> Vec<CodeActio
     let action = ctx.new_refactor_action(RefactorAction {
         description: "Make Schema opaque".to_string(),
         run: Box::new(move |tracker: &mut Tracker| {
-            let schema_id = ets_typeparser::find_module_identifier(sf, "Schema");
+            let schema = ets_typeparser::find_module_reference(sf, "Schema");
             let orig_name = info.identifier.as_identifier().text();
             let new_name = orig_name.to_string() + "_";
 
@@ -276,7 +262,7 @@ pub(crate) fn run_make_schema_opaque(ctx: &mut Context<'_, '_>) -> Vec<CodeActio
             let opaque_type = create_opaque_type_decl(
                 tracker,
                 orig_name,
-                &schema_id,
+                &schema,
                 "Schema",
                 "Type",
                 &new_name,
@@ -293,7 +279,7 @@ pub(crate) fn run_make_schema_opaque(ctx: &mut Context<'_, '_>) -> Vec<CodeActio
             let encoded_type = create_opaque_type_decl(
                 tracker,
                 &encoded_name,
-                &schema_id,
+                &schema,
                 encoded_ns,
                 "Encoded",
                 &new_name,
@@ -313,7 +299,7 @@ pub(crate) fn run_make_schema_opaque(ctx: &mut Context<'_, '_>) -> Vec<CodeActio
             let context_type = create_opaque_type_alias(
                 tracker,
                 &context_name,
-                &schema_id,
+                &schema,
                 context_ns,
                 context_member,
                 &new_name,
@@ -327,7 +313,7 @@ pub(crate) fn run_make_schema_opaque(ctx: &mut Context<'_, '_>) -> Vec<CodeActio
                 let es_type = create_opaque_type_alias(
                     tracker,
                     &encoding_services_name,
-                    &schema_id,
+                    &schema,
                     "Codec",
                     "EncodingServices",
                     &new_name,
@@ -359,10 +345,7 @@ pub(crate) fn run_make_schema_opaque(ctx: &mut Context<'_, '_>) -> Vec<CodeActio
             }
 
             let const_type = tracker.new_type_reference_node(
-                tracker.new_qualified_name(
-                    tracker.new_identifier(alloc_str(&schema_id)),
-                    tracker.new_identifier(schema_type_ns),
-                ),
+                tracker.new_qualified_name_path(&schema.append(&[schema_type_ns])),
                 Some(tracker.new_node_list(type_args)),
             );
 

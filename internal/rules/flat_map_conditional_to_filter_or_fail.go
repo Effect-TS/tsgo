@@ -45,7 +45,6 @@ type FlatMapConditionalToFilterOrFailMatch struct {
 	SourceFile          *ast.SourceFile
 	Location            core.TextRange
 	Transformation      *typeparser.PipingFlowTransformation
-	EffectModuleNode    *ast.Node
 	ParameterNode       *ast.Node
 	PredicateNode       *ast.Node
 	FallbackNode        *ast.Node
@@ -114,12 +113,10 @@ func AnalyzeFlatMapConditionalToFilterOrFail(tp *typeparser.TypeParser, c *check
 				continue
 			}
 
-			effectModule := effectModuleExpression(callee)
 			match := FlatMapConditionalToFilterOrFailMatch{
 				SourceFile:          sf,
 				Location:            scanner.GetErrorRangeForNode(sf, callee),
 				Transformation:      &transformation,
-				EffectModuleNode:    effectModule,
 				ParameterNode:       parameter,
 				PredicateNode:       branch.Condition().Subject(),
 				FallbackNode:        fallbackNode,

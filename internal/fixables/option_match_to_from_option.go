@@ -29,12 +29,10 @@ func runOptionMatchToFromOptionFix(ctx *fixable.Context) []ls.CodeAction {
 			match.Transformation == nil && (match.ReplacementNode == nil || match.OptionNode == nil) {
 			continue
 		}
-		effectModuleName := typeparser.FindEffectModuleIdentifier(ctx.SourceFile)
-
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect.fromOption",
 			Run: func(tracker *rewriter.Tracker) {
-				callee, arguments := buildFromOptionReplacement(tracker, match, effectModuleName)
+				callee, arguments := buildFromOptionReplacement(tracker, ctx.SourceFile, match)
 				if callee == nil {
 					return
 				}
@@ -61,19 +59,8 @@ func runOptionMatchToFromOptionFix(ctx *fixable.Context) []ls.CodeAction {
 	return nil
 }
 
-func buildFromOptionReplacement(tracker *rewriter.Tracker, match rules.OptionMatchToFromOptionMatch, effectModuleName string) (*ast.Node, *ast.NodeList) {
-	moduleNode := match.EffectModuleNode
-	if moduleNode == nil {
-		moduleNode = tracker.NewIdentifier(effectModuleName)
-	} else {
-		moduleNode = tracker.DeepCloneNode(moduleNode)
-	}
-	fromOption := tracker.NewPropertyAccessExpression(
-		moduleNode,
-		nil,
-		tracker.NewIdentifier("fromOption"),
-		ast.NodeFlagsNone,
-	)
+func buildFromOptionReplacement(tracker *rewriter.Tracker, sf *ast.SourceFile, match rules.OptionMatchToFromOptionMatch) (*ast.Node, *ast.NodeList) {
+	fromOption := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(sf).Append("fromOption")...)
 
 	if match.DefaultFailure {
 		return fromOption, nil

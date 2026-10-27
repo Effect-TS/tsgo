@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{Diagnostic, Kind, Node, SourceFile};
+use ets_shim::ast::{Diagnostic, Node, SourceFile};
 use ets_shim::checker::TypeFlags;
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
@@ -48,12 +48,11 @@ pub struct CatchDieToOrDieMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
     pub transformation: PipingFlowTransformation,
-    pub effect_module: Option<P<Node>>,
     pub catch_method_name: &'static str,
     pub has_type_arguments: bool,
 }
 
-// go: internal/rules/catch_die_to_or_die.go:53 AnalyzeCatchDieToOrDie
+// go: internal/rules/catch_die_to_or_die.go:52 AnalyzeCatchDieToOrDie
 // AnalyzeCatchDieToOrDie finds Effect.catch/catchAll transformations whose
 // handler is Effect.die or forwards its sole argument unchanged to Effect.die.
 //
@@ -74,7 +73,7 @@ pub fn analyze_catch_die_to_or_die(
             let callee = transformation.callee();
             let args = transformation.args();
             let method = catch_die_method(tp, Some(callee));
-            let Some((method_name, effect_module)) = method else {
+            let Some(method_name) = method else {
                 continue;
             };
             if args.len() != 1 {
@@ -95,7 +94,6 @@ pub fn analyze_catch_die_to_or_die(
                 matches.push(CatchDieToOrDieMatch {
                     source_file: sf,
                     location: ets_shim::scanner::get_error_range_for_node(sf, callee),
-                    effect_module,
                     catch_method_name: method_name,
                     has_type_arguments: has_explicit_type_arguments(Some(&transformation)),
                     transformation,
@@ -107,13 +105,13 @@ pub fn analyze_catch_die_to_or_die(
     matches
 }
 
-// go: internal/rules/catch_die_to_or_die.go:89 catchDieMethod
+// go: internal/rules/catch_die_to_or_die.go:87 catchDieMethod
 //
-// Rust: Go's `(name, effectModule, ok)` result is `Some((name, effectModule))` when ok.
+// Rust: Go's `(name, ok)` result is `Some(name)` when ok.
 pub(crate) fn catch_die_method(
     tp: &mut TypeParser<'_>,
     callee: Option<P<Node>>,
-) -> Option<(&'static str, Option<P<Node>>)> {
+) -> Option<&'static str> {
     let callee = callee?;
 
     let mut name = "catchAll";
@@ -124,9 +122,5 @@ pub(crate) fn catch_die_method(
         return None;
     }
 
-    let mut effect_module = None;
-    if callee.kind() == Kind::PropertyAccessExpression {
-        effect_module = Some(callee.as_property_access_expression().expression());
-    }
-    Some((name, effect_module))
+    Some(name)
 }

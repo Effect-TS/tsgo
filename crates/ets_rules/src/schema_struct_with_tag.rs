@@ -43,10 +43,9 @@ pub struct SchemaStructWithTagMatch {
     pub call_node: P<Node>,  // The full Schema.Struct(...) call expression
     pub tag_value: String,   // The string value extracted from Schema.Literal("...")
     pub other_properties: Vec<P<Node>>, // All property assignment nodes in the object literal except _tag
-    pub schema_expr: Option<P<Node>>,   // The expression node for the Schema part of Schema.Struct
 }
 
-// go: internal/rules/schema_struct_with_tag.go:47 AnalyzeSchemaStructWithTag
+// go: internal/rules/schema_struct_with_tag.go:46 AnalyzeSchemaStructWithTag
 // AnalyzeSchemaStructWithTag finds all Schema.Struct({ _tag: Schema.Literal("..."), ... })
 // call expressions and returns match structs for each.
 //
@@ -81,7 +80,7 @@ pub fn analyze_schema_struct_with_tag(
     matches
 }
 
-// go: internal/rules/schema_struct_with_tag.go:76 analyzeSchemaStructWithTagNode
+// go: internal/rules/schema_struct_with_tag.go:75 analyzeSchemaStructWithTagNode
 // analyzeSchemaStructWithTagNode checks a call expression for Schema.Struct({ _tag: Schema.Literal("...") }).
 pub(crate) fn analyze_schema_struct_with_tag_node(
     tp: &mut TypeParser<'_>,
@@ -157,10 +156,6 @@ pub(crate) fn analyze_schema_struct_with_tag_node(
         }
 
         // Extract the Schema expression from Schema.Struct (the left side of the property access)
-        let mut schema_expr = None;
-        if call.expression().kind() == Kind::PropertyAccessExpression {
-            schema_expr = Some(call.expression().as_property_access_expression().expression());
-        }
 
         return Some(SchemaStructWithTagMatch {
             source_file: sf,
@@ -168,7 +163,6 @@ pub(crate) fn analyze_schema_struct_with_tag_node(
             call_node: node,
             tag_value,
             other_properties: other_props,
-            schema_expr,
         });
     }
 

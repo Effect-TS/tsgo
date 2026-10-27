@@ -38,8 +38,7 @@ fn run_manual_metric_tap_to_track_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActi
         let track_reference = resolve_module_member(
             ctx,
             callee,
-            m.effect_module_node,
-            &ets_typeparser::find_effect_module_identifier(Some(source_file)),
+            &ets_typeparser::find_effect_module_reference(Some(source_file)),
             &track,
         );
         let Some(track_reference) = track_reference else {
@@ -51,8 +50,7 @@ fn run_manual_metric_tap_to_track_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActi
             with_constant_input_reference = resolve_module_member(
                 ctx,
                 callee,
-                m.metric_module_node,
-                &ets_typeparser::find_module_identifier(Some(source_file), "Metric"),
+                &ets_typeparser::find_module_reference(Some(source_file), "Metric"),
                 &with_constant_input,
             );
             if with_constant_input_reference.is_none() {
@@ -67,6 +65,7 @@ fn run_manual_metric_tap_to_track_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActi
                 let arguments =
                     tracker.new_node_list(manual_metric_track_arguments(tracker, &m, |tracker| {
                         with_constant_input_reference
+                            .as_ref()
                             .expect("resolved for a constant input")
                             .expression(tracker, &with_constant_input)
                     }));
@@ -95,7 +94,7 @@ fn run_manual_metric_tap_to_track_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeActi
     clippy::redundant_closure_for_method_calls,
     reason = "the method path is not general over the parser's lifetime"
 )]
-fn effect_module_member(name: &'static str) -> ModuleMember {
+pub(crate) fn effect_module_member(name: &'static str) -> ModuleMember {
     ModuleMember {
         name,
         is_module: Box::new(|tp, node| tp.is_expression_effect_module(node)),

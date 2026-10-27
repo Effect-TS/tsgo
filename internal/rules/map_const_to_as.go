@@ -40,11 +40,10 @@ var MapConstToAs = rule.Rule{
 
 // MapConstToAsMatch holds the nodes needed by the diagnostic and quick fix.
 type MapConstToAsMatch struct {
-	SourceFile       *ast.SourceFile
-	Location         core.TextRange
-	Transformation   *typeparser.PipingFlowTransformation
-	EffectModuleNode *ast.Node // The Effect module identifier (e.g., "Effect" in Effect.map)
-	ConstantValue    *ast.Node // The returned constant, with parentheses skipped
+	SourceFile     *ast.SourceFile
+	Location       core.TextRange
+	Transformation *typeparser.PipingFlowTransformation
+	ConstantValue  *ast.Node // The returned constant, with parentheses skipped
 }
 
 // AnalyzeMapConstToAs finds data-last and data-first Effect.map calls whose
@@ -76,16 +75,11 @@ func AnalyzeMapConstToAs(tp *typeparser.TypeParser, _ *checker.Checker, sf *ast.
 				continue
 			}
 
-			var effectModuleNode *ast.Node
-			if callee.Kind == ast.KindPropertyAccessExpression {
-				effectModuleNode = callee.AsPropertyAccessExpression().Expression
-			}
 			matches = append(matches, MapConstToAsMatch{
-				SourceFile:       sf,
-				Location:         scanner.GetErrorRangeForNode(sf, callee),
-				Transformation:   &transformation,
-				EffectModuleNode: effectModuleNode,
-				ConstantValue:    value,
+				SourceFile:     sf,
+				Location:       scanner.GetErrorRangeForNode(sf, callee),
+				Transformation: &transformation,
+				ConstantValue:  value,
 			})
 		}
 	}

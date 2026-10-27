@@ -54,14 +54,13 @@ pub struct OptionMatchToFromOptionMatch {
     pub location: TextRange,
     pub transformation: Option<PipingFlowTransformation>,
     pub replacement_node: Option<P<Node>>,
-    pub effect_module_node: Option<P<Node>>,
     pub option_node: Option<P<Node>>,
     pub failure_node: Option<P<Node>>,
     pub default_failure: bool,
     pub can_fix: bool,
 }
 
-// go: internal/rules/option_match_to_from_option.go:57 AnalyzeOptionMatchToFromOption
+// go: internal/rules/option_match_to_from_option.go:56 AnalyzeOptionMatchToFromOption
 // AnalyzeOptionMatchToFromOption finds Option.match and Option result
 // dispatches that are equivalent to Effect.fromOption.
 //
@@ -82,7 +81,7 @@ pub fn analyze_option_match_to_from_option(
     matches
 }
 
-// go: internal/rules/option_match_to_from_option.go:67 analyzeOptionMatchCalls
+// go: internal/rules/option_match_to_from_option.go:66 analyzeOptionMatchCalls
 pub(crate) fn analyze_option_match_calls(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -109,8 +108,7 @@ pub(crate) fn analyze_option_match_calls(
                 continue;
             }
 
-            let Some((failure, effect_module, can_fix)) =
-                analyze_option_match_handlers(tp, Some(*args.at(0)))
+            let Some((failure, can_fix)) = analyze_option_match_handlers(tp, Some(*args.at(0)))
             else {
                 continue;
             };
@@ -120,7 +118,6 @@ pub(crate) fn analyze_option_match_calls(
                 location: ets_shim::scanner::get_error_range_for_node(sf, callee),
                 transformation: Some(transformation.clone()),
                 replacement_node: None,
-                effect_module_node: effect_module,
                 option_node: None,
                 failure_node: failure,
                 default_failure: is_default_no_such_element_error(tp, failure),
@@ -134,13 +131,13 @@ pub(crate) fn analyze_option_match_calls(
     matches
 }
 
-// go: internal/rules/option_match_to_from_option.go:111 analyzeOptionMatchHandlers
+// go: internal/rules/option_match_to_from_option.go:109 analyzeOptionMatchHandlers
 //
-// Rust: Go's `(failure, effectModule, canFix, ok)` is an `Option` of the first three.
+// Rust: Go's `(failure, canFix, ok)` is an `Option` of the first two.
 pub(crate) fn analyze_option_match_handlers(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,
-) -> Option<(Option<P<Node>>, Option<P<Node>>, bool)> {
+) -> Option<(Option<P<Node>>, bool)> {
     let node = ast::skip_parentheses(node?);
     if node.kind() != Kind::ObjectLiteralExpression {
         return None;
@@ -178,39 +175,26 @@ pub(crate) fn analyze_option_match_handlers(
         }
     }
 
-    let succeed_module = analyze_effect_succeed_handler(tp, on_some)?;
-    let (failure, fail_module, can_fix) = analyze_effect_fail_handler(tp, on_none)?;
-    if succeed_module.is_some() {
-        return Some((failure, succeed_module, can_fix));
-    }
-    Some((failure, fail_module, can_fix))
-}
-
-// go: internal/rules/option_match_to_from_option.go:160 analyzeEffectSucceedHandler
-//
-// Rust: Go's `(*ast.Node, bool)` is an `Option` of the (nil-able) node.
-#[expect(clippy::option_option, reason = "Go's (node, ok) with a node that may be nil when ok")]
-pub(crate) fn analyze_effect_succeed_handler(
-    tp: &mut TypeParser<'_>,
-    node: Option<P<Node>>,
-) -> Option<Option<P<Node>>> {
-    let (target, type_arguments, _) = tp.unwrap_identity_forwarder(node);
-    if type_arguments.is_some_and(|type_arguments| !type_arguments.nodes().is_empty())
-        || !target
-            .is_some_and(|target| tp.is_node_reference_to_effect_module_api(target, "succeed"))
-    {
+    if !is_effect_succeed_handler(tp, on_some) {
         return None;
     }
-    Some(effect_module_expression(target))
+    analyze_effect_fail_handler(tp, on_none)
 }
 
-// go: internal/rules/option_match_to_from_option.go:168 analyzeEffectFailHandler
+// go: internal/rules/option_match_to_from_option.go:150 isEffectSucceedHandler
+pub(crate) fn is_effect_succeed_handler(tp: &mut TypeParser<'_>, node: Option<P<Node>>) -> bool {
+    let (target, type_arguments, _) = tp.unwrap_identity_forwarder(node);
+    type_arguments.is_none_or(|type_arguments| type_arguments.nodes().is_empty())
+        && target.is_some_and(|target| tp.is_node_reference_to_effect_module_api(target, "succeed"))
+}
+
+// go: internal/rules/option_match_to_from_option.go:155 analyzeEffectFailHandler
 //
-// Rust: Go's `(failure, effectModule, canFix, ok)` is an `Option` of the first three.
+// Rust: Go's `(failure, canFix, ok)` is an `Option` of the first two.
 pub(crate) fn analyze_effect_fail_handler(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,
-) -> Option<(Option<P<Node>>, Option<P<Node>>, bool)> {
+) -> Option<(Option<P<Node>>, bool)> {
     let lazy = ets_typeparser::parse_lazy_expression(node, LazyExpressionFlags::Thunk)?;
     let expression = ast::skip_parentheses(lazy.expression());
     if expression.kind() != Kind::CallExpression {
@@ -223,14 +207,10 @@ pub(crate) fn analyze_effect_fail_handler(
     {
         return None;
     }
-    Some((
-        Some(call.arguments.nodes()[0]),
-        effect_module_expression(Some(call.expression)),
-        lazy.node().kind() == Kind::ArrowFunction,
-    ))
+    Some((Some(call.arguments.nodes()[0]), lazy.node().kind() == Kind::ArrowFunction))
 }
 
-// go: internal/rules/option_match_to_from_option.go:186 isSynchronousFunction
+// go: internal/rules/option_match_to_from_option.go:173 isSynchronousFunction
 pub(crate) fn is_synchronous_function(node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;
@@ -244,24 +224,7 @@ pub(crate) fn is_synchronous_function(node: Option<P<Node>>) -> bool {
     node.kind() == Kind::ArrowFunction
 }
 
-// go: internal/rules/option_match_to_from_option.go:197 effectModuleExpression
-pub(crate) fn effect_module_expression(node: Option<P<Node>>) -> Option<P<Node>> {
-    let node = ast::skip_parentheses(node?);
-    if node.kind() != Kind::PropertyAccessExpression {
-        return None;
-    }
-    let property = node.as_property_access_expression();
-    if node.question_dot_token().is_some() {
-        return None;
-    }
-    let receiver = ast::skip_parentheses(property.expression);
-    if receiver.kind() != Kind::Identifier {
-        return None;
-    }
-    Some(receiver)
-}
-
-// go: internal/rules/option_match_to_from_option.go:213 analyzeOptionConditionals
+// go: internal/rules/option_match_to_from_option.go:184 analyzeOptionConditionals
 //
 // Rust: the checker is the parser's.
 pub(crate) fn analyze_option_conditionals(
@@ -288,7 +251,7 @@ pub(crate) fn analyze_option_conditionals(
     matches
 }
 
-// go: internal/rules/option_match_to_from_option.go:232 analyzeOptionConditional
+// go: internal/rules/option_match_to_from_option.go:203 analyzeOptionConditional
 //
 // Rust: Go's `(match, ok)` is an `Option`; the checker is the parser's.
 pub(crate) fn analyze_option_conditional(
@@ -333,18 +296,16 @@ pub(crate) fn analyze_option_conditional(
         std::mem::swap(&mut succeed_node, &mut fail_node);
     }
 
-    let mut effect_module = analyze_conditional_succeed(tp, Some(option_node), succeed_node)?;
-    let (failure, fail_module) = analyze_effect_fail_call(tp, fail_node)?;
-    if effect_module.is_none() {
-        effect_module = fail_module;
+    if !is_conditional_succeed(tp, Some(option_node), succeed_node) {
+        return None;
     }
+    let failure = analyze_effect_fail_call(tp, fail_node)?;
 
     Some(OptionMatchToFromOptionMatch {
         source_file: sf,
         location: ets_shim::scanner::get_error_range_for_node(sf, condition.expression),
         transformation: None,
         replacement_node: Some(dispatch.node()),
-        effect_module_node: effect_module,
         option_node: Some(option_node),
         failure_node: failure,
         default_failure: is_default_no_such_element_error(tp, failure),
@@ -352,30 +313,32 @@ pub(crate) fn analyze_option_conditional(
     })
 }
 
-// go: internal/rules/option_match_to_from_option.go:293 analyzeConditionalSucceed
+// go: internal/rules/option_match_to_from_option.go:259 isConditionalSucceed
 //
-// Rust: Go's `(*ast.Node, bool)` is an `Option` of the (nil-able) node; the checker is the parser's.
-#[expect(clippy::option_option, reason = "Go's (node, ok) with a node that may be nil when ok")]
-pub(crate) fn analyze_conditional_succeed(
+// Rust: the checker is the parser's.
+pub(crate) fn is_conditional_succeed(
     tp: &mut TypeParser<'_>,
     option_node: Option<P<Node>>,
     node: Option<P<Node>>,
-) -> Option<Option<P<Node>>> {
-    let expression = ast::skip_parentheses(node?);
+) -> bool {
+    let Some(node) = node else {
+        return false;
+    };
+    let expression = ast::skip_parentheses(node);
     if expression.kind() != Kind::CallExpression {
-        return None;
+        return false;
     }
     let call = expression.as_call_expression();
     if call.arguments.nodes().len() != 1
         || !expression.type_arguments().is_empty()
         || !tp.is_node_reference_to_effect_module_api(call.expression, "succeed")
     {
-        return None;
+        return false;
     }
 
     let value_node = ast::skip_parentheses(call.arguments.nodes()[0]);
     if value_node.kind() != Kind::PropertyAccessExpression {
-        return None;
+        return false;
     }
     let value = value_node.as_property_access_expression();
     if value_node.question_dot_token().is_some()
@@ -386,18 +349,19 @@ pub(crate) fn analyze_conditional_succeed(
             Some(ast::skip_parentheses(value.expression)),
         )
     {
-        return None;
+        return false;
     }
-    Some(effect_module_expression(Some(call.expression)))
+    true
 }
 
-// go: internal/rules/option_match_to_from_option.go:317 analyzeEffectFailCall
+// go: internal/rules/option_match_to_from_option.go:283 analyzeEffectFailCall
 //
-// Rust: Go's `(failure, effectModule, ok)` is an `Option` of the first two.
+// Rust: Go's `(failure, ok)` is an `Option` of the failure.
+#[expect(clippy::option_option, reason = "Go's (node, ok) with a node that may be nil when ok")]
 pub(crate) fn analyze_effect_fail_call(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,
-) -> Option<(Option<P<Node>>, Option<P<Node>>)> {
+) -> Option<Option<P<Node>>> {
     let expression = ast::skip_parentheses(node?);
     if expression.kind() != Kind::CallExpression {
         return None;
@@ -409,10 +373,10 @@ pub(crate) fn analyze_effect_fail_call(
     {
         return None;
     }
-    Some((Some(call.arguments.nodes()[0]), effect_module_expression(Some(call.expression))))
+    Some(Some(call.arguments.nodes()[0]))
 }
 
-// go: internal/rules/option_match_to_from_option.go:331 sameIdentifierReference
+// go: internal/rules/option_match_to_from_option.go:297 sameIdentifierReference
 //
 // Rust: the checker is the parser's.
 pub(crate) fn same_identifier_reference(
@@ -434,7 +398,7 @@ pub(crate) fn same_identifier_reference(
             .is_some()
 }
 
-// go: internal/rules/option_match_to_from_option.go:340 isDefaultNoSuchElementError
+// go: internal/rules/option_match_to_from_option.go:306 isDefaultNoSuchElementError
 pub(crate) fn is_default_no_such_element_error(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,

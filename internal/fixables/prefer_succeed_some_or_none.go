@@ -33,18 +33,7 @@ func runPreferSucceedSomeOrNoneFix(ctx *fixable.Context) []ls.CodeAction {
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: description,
 			Run: func(tracker *rewriter.Tracker) {
-				moduleNode := match.EffectModuleNode
-				if moduleNode == nil {
-					moduleNode = tracker.NewIdentifier(typeparser.FindEffectModuleIdentifier(ctx.SourceFile))
-				} else {
-					moduleNode = tracker.DeepCloneNode(moduleNode)
-				}
-				callee := tracker.NewPropertyAccessExpression(
-					moduleNode,
-					nil,
-					tracker.NewIdentifier(match.ReplacementName),
-					ast.NodeFlagsNone,
-				)
+				callee := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(ctx.SourceFile).Append(match.ReplacementName)...)
 				replacement := callee
 				if match.ValueNode != nil {
 					var typeArguments *ast.NodeList

@@ -368,6 +368,12 @@ Mappings that come up in these files (worked out with `ets_refactors`):
   before `new_refactor_action` / `new_fix_action` and move them in (printing does not depend on the tracker), and
   say so on the declaration (`layer_magic.rs`).
 - `action.Kind = "refactor.rewrite.effect.x"`: `action.kind = lsproto::CodeActionKind("refactor.rewrite.effect.x")`.
+- `typeparser.ModuleReference` (a `[]string` path) is the newtype `ets_typeparser::ModuleReference`, which derefs to
+  `[String]`; Go's `ref.Append(names...)` is `ref.append(&[..])` and `ref.String()` is `ref.string()`.
+  `tracker.NewPropertyAccessPath(ref...)` / `NewQualifiedNamePath(ref...)` are ported on the node factory as the
+  trait `ets_rewriter::NodeFactoryPaths` (so helpers that take `&NodeFactory` call them after `use
+  ets_rewriter::NodeFactoryPaths;`), with forwarding methods on `Tracker`; they return the node and panic on an
+  empty path instead of Go's nil, since every caller passes a module reference.
 Mappings that recur in fixables (`ets_fixables`):
 - A Go `fixable.FixAction{Run: func(tracker) {...}}` closure -> `Box::new(move |tracker| ...)` that moves the
   (owned) match in; Go's `return []ls.CodeAction{*action}` inside the match loop stays a loop with `continue`s.

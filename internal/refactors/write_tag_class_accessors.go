@@ -127,7 +127,7 @@ func runWriteTagClassAccessors(ctx *refactor.Context) []ls.CodeAction {
 		return nil
 	}
 
-	effectIdentifier := typeparser.FindEffectModuleIdentifier(ctx.SourceFile)
+	effectIdentifier := typeparser.FindEffectModuleReference(ctx.SourceFile).String()
 	classNameText := scanner.GetTextOfNode(className)
 
 	action := ctx.NewRefactorAction(refactor.RefactorAction{

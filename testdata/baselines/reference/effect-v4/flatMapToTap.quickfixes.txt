@@ -2508,7 +2508,7 @@ export const heapMutation = source.pipe(Effect.flatMap((user) => {
   user.id = "updated"
   return audit(user).pipe(Effect.as(user))
 }))
-export const namespaceAlias = source.pipe(E.tap((user) => audit(user)))
+export const namespaceAlias = source.pipe(Effect.tap((user) => audit(user)))
 const Module = Effect
 export const moduleAlias = source.pipe(Module.andThen((user) => Effect.as(audit(user), user)))
 const flatMapAlias = Effect.flatMap
@@ -2638,7 +2638,7 @@ export const heapMutation = source.pipe(Effect.flatMap((user) => {
 }))
 export const namespaceAlias = source.pipe(E.flatMap((user) => E.as(audit(user), user)))
 const Module = Effect
-export const moduleAlias = source.pipe(Module.tap((user) => audit(user)))
+export const moduleAlias = source.pipe(Effect.tap((user) => audit(user)))
 const flatMapAlias = Effect.flatMap
 export const bareAlias = source.pipe(flatMapAlias((user) => audit(user).pipe(reYield(user))))
 export const importedAlias = source.pipe(bind((user) => Effect.as(audit(user), user)))
@@ -2768,7 +2768,7 @@ export const namespaceAlias = source.pipe(E.flatMap((user) => E.as(audit(user), 
 const Module = Effect
 export const moduleAlias = source.pipe(Module.andThen((user) => Effect.as(audit(user), user)))
 const flatMapAlias = Effect.flatMap
-export const bareAlias = source.pipe(E.tap((user) => audit(user)))
+export const bareAlias = source.pipe(Effect.tap((user) => audit(user)))
 export const importedAlias = source.pipe(bind((user) => Effect.as(audit(user), user)))
 export const annotatedDataFirst = Effect.flatMap(source, (user: User) => Effect.as(audit(user), user))
 export const annotatedPipe = source.pipe(Effect.flatMap((user: User) => Effect.as(audit(user), user)))
@@ -2897,7 +2897,7 @@ const Module = Effect
 export const moduleAlias = source.pipe(Module.andThen((user) => Effect.as(audit(user), user)))
 const flatMapAlias = Effect.flatMap
 export const bareAlias = source.pipe(flatMapAlias((user) => audit(user).pipe(reYield(user))))
-export const importedAlias = source.pipe(E.tap((user) => audit(user)))
+export const importedAlias = source.pipe(Effect.tap((user) => audit(user)))
 export const annotatedDataFirst = Effect.flatMap(source, (user: User) => Effect.as(audit(user), user))
 export const annotatedPipe = source.pipe(Effect.flatMap((user: User) => Effect.as(audit(user), user)))
 

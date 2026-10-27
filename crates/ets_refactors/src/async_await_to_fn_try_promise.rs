@@ -1,3 +1,4 @@
+use ets_typeparser::ModuleReference;
 use std::cell::{Cell, RefCell};
 use std::rc::Rc;
 use std::sync::LazyLock;
@@ -30,8 +31,8 @@ pub(crate) fn run_async_await_to_fn_try_promise(ctx: &mut Context<'_, '_>) -> Ve
         return Vec::new();
     };
 
-    let effect_module_name = ets_typeparser::find_effect_module_identifier(ctx.source_file);
-    let data_module_name = ets_typeparser::find_module_identifier(ctx.source_file, "Data");
+    let effect_module_name = ets_typeparser::find_effect_module_reference(ctx.source_file);
+    let data_module_name = ets_typeparser::find_module_reference(ctx.source_file, "Data");
 
     let sf = ctx.source_file;
     let action = ctx.new_refactor_action(RefactorAction {
@@ -62,8 +63,8 @@ pub(crate) fn transform_async_to_effect_fn_try_promise(
     tracker: &mut Tracker,
     sf: P<SourceFile>,
     node: P<Node>,
-    effect_module_name: &str,
-    data_module_name: &str,
+    effect_module_name: &ModuleReference,
+    data_module_name: &ModuleReference,
 ) {
     let Some(body) = ets_typeparser::get_function_like_body(node) else {
         return;
@@ -84,8 +85,8 @@ pub(crate) fn transform_async_to_effect_fn_try_promise(
     let transformed_body = {
         let error_count = Rc::clone(&error_count);
         let error_classes = Rc::clone(&error_classes);
-        let data_module_name = data_module_name.to_string();
-        let effect_module_name = effect_module_name.to_string();
+        let data_module_name = data_module_name.clone();
+        let effect_module_name = effect_module_name.clone();
         transform_body_await_to_yield(
             tracker,
             body,

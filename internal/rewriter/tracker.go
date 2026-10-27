@@ -54,6 +54,30 @@ func (t *Tracker) NewModuleDeclaration(
 	return change.NewModuleDeclaration(t.Tracker, modifiers, keyword, name, body)
 }
 
+// NewPropertyAccessPath builds the expression a.b.c from ["a", "b", "c"].
+func (t *Tracker) NewPropertyAccessPath(names ...string) *ast.Node {
+	if len(names) == 0 {
+		return nil
+	}
+	node := t.NewIdentifier(names[0])
+	for _, name := range names[1:] {
+		node = t.NewPropertyAccessExpression(node, nil, t.NewIdentifier(name), ast.NodeFlagsNone)
+	}
+	return node
+}
+
+// NewQualifiedNamePath builds the type-position name a.b.c from ["a", "b", "c"].
+func (t *Tracker) NewQualifiedNamePath(names ...string) *ast.Node {
+	if len(names) == 0 {
+		return nil
+	}
+	node := t.NewIdentifier(names[0])
+	for _, name := range names[1:] {
+		node = t.NewQualifiedName(node, t.NewIdentifier(name))
+	}
+	return node
+}
+
 func (t *Tracker) ReplaceNode(sourceFile *ast.SourceFile, oldNode *ast.Node, newNode *ast.Node, options *change.NodeOptions) {
 	if oldNode == nil || newNode == nil {
 		return

@@ -33,21 +33,12 @@ func runSchemaStructWithTagFix(ctx *fixable.Context) []ls.CodeAction {
 		tagValue := match.TagValue
 		otherProperties := match.OtherProperties
 		callNode := match.CallNode
-		schemaExpr := match.SchemaExpr
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Rewrite as Schema.TaggedStruct",
 			Run: func(tracker *rewriter.Tracker) {
-				var schemaModule *ast.Node
-				if schemaExpr != nil {
-					schemaModule = tracker.DeepCloneNode(schemaExpr)
-				} else {
-					schemaModule = tracker.NewIdentifier(typeparser.FindModuleIdentifier(sf, "Schema"))
-				}
-				// Build Schema.TaggedStruct property access, preserving the receiver.
-				taggedStructAccess := tracker.NewPropertyAccessExpression(
-					schemaModule, nil, tracker.NewIdentifier("TaggedStruct"), ast.NodeFlagsNone,
-				)
+				// Build Schema.TaggedStruct property access from the file's Schema import.
+				taggedStructAccess := tracker.NewPropertyAccessPath(typeparser.FindModuleReference(sf, "Schema").Append("TaggedStruct")...)
 
 				// Build the tag value string literal argument
 				tagLiteral := tracker.NewStringLiteral(tagValue, ast.TokenFlagsNone)

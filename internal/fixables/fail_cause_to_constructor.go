@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -28,12 +29,22 @@ func runFailCauseToConstructorFix(ctx *fixable.Context) []ls.CodeAction {
 		if match.Flow == nil && match.LazyCauseNode == nil {
 			continue
 		}
+		// The callee is rewritten through the file's Effect import, which must
+		// reach the replacement API where the edit lands.
+		callee := match.LazyCallee
+		if match.Flow != nil {
+			callee = match.Flow.Transformations().At(match.TransformationCount - 1).Callee()
+		}
+		target := importedModuleMember(ctx, callee, typeparser.FindEffectModuleReference(sf), effectModuleMember(ctx, match.ReplacementName))
+		if target == nil {
+			continue
+		}
 
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect." + match.ReplacementName,
 			Run: func(tracker *rewriter.Tracker) {
 				if match.Flow != nil {
-					callee := effectModuleMethod(tracker, sf, match.EffectModuleNode, match.ReplacementName)
+					callee := target.expression(tracker, effectModuleMember(ctx, match.ReplacementName))
 					var typeArguments *ast.NodeList
 					if match.ValueTypeArguments != nil && len(match.ValueTypeArguments.Nodes) > 0 {
 						arguments := make([]*ast.Node, len(match.ValueTypeArguments.Nodes))
@@ -59,11 +70,7 @@ func runFailCauseToConstructorFix(ctx *fixable.Context) []ls.CodeAction {
 					value = tracker.NewParenthesizedExpression(value)
 				}
 				tracker.ReplaceNode(sf, match.LazyCauseNode, value, nil)
-				var name *ast.Node
-				if match.LazyCallee.Kind == ast.KindPropertyAccessExpression {
-					name = match.LazyCallee.AsPropertyAccessExpression().Name()
-				}
-				replaceEffectMethodCallee(tracker, sf, match.LazyCallee, name, match.ReplacementName)
+				tracker.ReplaceNode(sf, match.LazyCallee, target.expression(tracker, effectModuleMember(ctx, match.ReplacementName)), nil)
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}

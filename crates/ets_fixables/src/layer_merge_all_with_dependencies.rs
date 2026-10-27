@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_fixable::{Context, FixAction, Fixable};
 use ets_rewriter::NodeOptions;
 use ets_shim::ast::{self, Kind, NodeFlags};
-use ets_shim::core::{TextRange, alloc_str};
+use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
@@ -35,12 +35,6 @@ fn run_layer_merge_all_with_dependencies_fix(ctx: &mut Context<'_, '_>) -> Vec<C
         if m.call_node.kind() != Kind::CallExpression {
             continue;
         }
-        let call = m.call_node.as_call_expression();
-        let mut layer_module_node = None;
-        if call.expression().kind() == Kind::PropertyAccessExpression {
-            layer_module_node =
-                Some(call.expression().as_property_access_expression().expression());
-        }
 
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Move layer to Layer.provideMerge".to_string(),
@@ -65,20 +59,9 @@ fn run_layer_merge_all_with_dependencies_fix(ctx: &mut Context<'_, '_>) -> Vec<C
 
                 // Step B: Build Layer.provideMerge(providerArg) call expression
                 let cloned_provider_arg = tracker.deep_clone_node(Some(m.provider_arg)).unwrap();
-                let cloned_layer_module = match layer_module_node {
-                    None => tracker.new_identifier(alloc_str(
-                        &ets_typeparser::find_module_identifier(Some(sf), "Layer"),
-                    )),
-                    Some(layer_module_node) => {
-                        tracker.deep_clone_node(Some(layer_module_node)).unwrap()
-                    }
-                };
-
-                let provide_merge_access = tracker.new_property_access_expression(
-                    cloned_layer_module,
-                    None,
-                    tracker.new_identifier("provideMerge"),
-                    NodeFlags::None,
+                let provide_merge_access = tracker.new_property_access_path(
+                    &ets_typeparser::find_module_reference(Some(sf), "Layer")
+                        .append(&["provideMerge"]),
                 );
 
                 let provide_merge_call = tracker.new_call_expression(

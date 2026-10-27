@@ -44,16 +44,15 @@ pub static CATCH_ALL_TO_MAP_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {
 // and the quick-fix for the catchAllToMapError pattern.
 #[derive(Clone)]
 pub struct CatchAllToMapErrorMatch {
-    pub source_file: P<SourceFile>,        // The source file of the match
-    pub location: TextRange,               // The pre-computed error range for this match
-    pub callee: P<Node>,                   // The Effect.catch callee node (for diagnostic location)
-    pub callee_name_node: Option<P<Node>>, // The "catch" name node within the PropertyAccessExpression (for text replacement)
-    pub catch_method_name: String,         // The catch variant name (e.g. "catch" or "catchAll")
+    pub source_file: P<SourceFile>,    // The source file of the match
+    pub location: TextRange,           // The pre-computed error range for this match
+    pub callee: P<Node>,               // The Effect.catch callee node (for diagnostic location)
+    pub catch_method_name: String,     // The catch variant name (e.g. "catch" or "catchAll")
     pub fail_call_expression: P<Node>, // The Effect.fail(arg) call expression node (for replacement range)
     pub fail_argument: P<Node>,        // The first argument to Effect.fail (the replacement text)
 }
 
-// go: internal/rules/catch_all_to_map_error.go:47 AnalyzeCatchAllToMapError
+// go: internal/rules/catch_all_to_map_error.go:46 AnalyzeCatchAllToMapError
 // AnalyzeCatchAllToMapError finds all Effect.catch callbacks that simply wrap the
 // error with Effect.fail, which can be simplified to Effect.mapError.
 //
@@ -86,31 +85,26 @@ pub fn analyze_catch_all_to_map_error(
                 continue;
             }
 
-            if !tp.is_node_reference_to_effect_module_api(transformation.callee(), "catch")
-                && !tp.is_node_reference_to_effect_module_api(transformation.callee(), "catchAll")
+            // Name the catch variant the callee resolves to, however it is written.
+            let catch_method_name = if tp
+                .is_node_reference_to_effect_module_api(transformation.callee(), "catch")
             {
+                "catch".to_string()
+            } else if tp.is_node_reference_to_effect_module_api(transformation.callee(), "catchAll")
+            {
+                "catchAll".to_string()
+            } else {
                 continue;
-            }
+            };
 
             if !tp.is_node_reference_to_effect_module_api(call.expression(), "fail") {
                 continue;
-            }
-
-            // Extract the "catch" name node from the PropertyAccessExpression callee
-            let mut callee_name_node = None;
-            let mut catch_method_name = "catch".to_string();
-            let callee = transformation.callee();
-            if callee.kind() == Kind::PropertyAccessExpression {
-                let name = callee.as_property_access_expression().name();
-                callee_name_node = Some(name);
-                catch_method_name = name.text().to_string();
             }
 
             matches.push(CatchAllToMapErrorMatch {
                 source_file: sf,
                 location: ets_shim::scanner::get_error_range_for_node(sf, transformation.callee()),
                 callee: transformation.callee(),
-                callee_name_node,
                 catch_method_name,
                 fail_call_expression: expr,
                 fail_argument: arguments[0],

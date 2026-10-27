@@ -2,8 +2,7 @@ use std::sync::LazyLock;
 
 use ets_fixable::{Context, FixAction, Fixable};
 use ets_rewriter::PipingFlowTransformationReplacement;
-use ets_shim::ast::{self, Kind, NodeFlags};
-use ets_shim::core::alloc_str;
+use ets_shim::ast::{self, Kind};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
@@ -30,17 +29,9 @@ pub static TIMEOUT_CATCH_TAG_TO_TIMEOUT_OR_ELSE_FIX: LazyLock<Fixable> =
                 let action = ctx.new_fix_action(FixAction {
                     description: "Replace with Effect.".to_string() + m.replacement_name,
                     run: Box::new(move |t| {
-                        let effect_module = match m.effect_module {
-                            Some(effect_module) => t.deep_clone_node(Some(effect_module)).unwrap(),
-                            None => t.new_identifier(alloc_str(
-                                &ets_typeparser::find_effect_module_identifier(sf),
-                            )),
-                        };
-                        let callee = t.new_property_access_expression(
-                            effect_module,
-                            None,
-                            t.new_identifier(m.replacement_name),
-                            NodeFlags::None,
+                        let callee = t.new_property_access_path(
+                            &ets_typeparser::find_effect_module_reference(Some(sf))
+                                .append(&[m.replacement_name]),
                         );
                         let mut argument = t.deep_clone_node(Some(m.duration)).unwrap();
                         if m.replacement_name == "timeoutOrElse" {

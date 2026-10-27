@@ -26,9 +26,10 @@ fn run_effect_schema_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::
         return Vec::new();
     };
 
-    let schema_identifier = ets_typeparser::find_module_identifier(ctx.source_file, "Schema");
+    let schema_reference = ets_typeparser::find_module_reference(ctx.source_file, "Schema");
+    let schema_identifier = schema_reference.string();
     let accessed_text = data.accessed_object_text();
-    let is_fully_qualified = schema_identifier == accessed_text;
+    let is_fully_qualified = schema_reference.matches_node(data.accessed_object);
     let class_name = data.class_name_text();
 
     let version = ctx.type_parser.supported_effect_version();
@@ -200,13 +201,14 @@ fn run_effect_schema_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::
 
     // Model.Class (v4 only)
     if version == EffectMajorVersion::V4 {
-        let model_identifier = ets_typeparser::find_module_identifier_for_package(
+        let model_reference = ets_typeparser::find_module_reference_for_package(
             ctx.source_file,
             "effect/schema",
             "Model",
         );
+        let model_identifier = model_reference.string();
 
-        let is_model_fully_qualified = model_identifier == accessed_text;
+        let is_model_fully_qualified = model_reference.matches_node(data.accessed_object);
 
         if is_model_fully_qualified
             || ctx
@@ -231,7 +233,7 @@ fn run_effect_schema_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::
     items
 }
 
-// go: internal/completions/effect_schema_self_in_classes.go:159 makeCompletionItem
+// go: internal/completions/effect_schema_self_in_classes.go:161 makeCompletionItem
 // makeCompletionItem creates a CompletionItem with snippet format and a text edit.
 //
 // Rust: Go's variadic `kindOverride ...lsproto.CompletionItemKind` (only its first element is read) is an
@@ -264,7 +266,7 @@ pub(crate) fn make_completion_item(
     }
 }
 
-// go: internal/completions/effect_schema_self_in_classes.go:182 makeExtendsCompletionItem
+// go: internal/completions/effect_schema_self_in_classes.go:184 makeExtendsCompletionItem
 // makeExtendsCompletionItem creates a CompletionItem for an extends-clause completion.
 // It sets FilterText to accessedText.label so VS Code can filter correctly when the
 // replacement range covers the full "Module.Property" expression.
@@ -281,7 +283,7 @@ pub(crate) fn make_extends_completion_item(
     item
 }
 
-// go: internal/completions/effect_schema_self_in_classes.go:190 byteSpanToRange
+// go: internal/completions/effect_schema_self_in_classes.go:192 byteSpanToRange
 // byteSpanToRange converts a byte offset span to an LSP Range.
 pub(crate) fn byte_span_to_range(ctx: &Context<'_, '_>, start: u32, length: u32) -> lsproto::Range {
     let (start_line, start_char) =

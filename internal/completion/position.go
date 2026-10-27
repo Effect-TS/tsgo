@@ -93,7 +93,9 @@ func ParseDataForExtendsClassCompletion(sf *ast.SourceFile, position int) *Exten
 		return nil
 	}
 
-	if !ast.IsIdentifier(result.AccessedObject) {
+	// An identifier or a property access chain such as X.Schema, for files
+	// that import the module through the package barrel.
+	if !ast.IsEntityNameExpression(result.AccessedObject) {
 		return nil
 	}
 

@@ -41,9 +41,10 @@ fn run_context_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::Comple
     );
     let tp = &mut ctx.type_parser;
 
-    let context_identifier = ets_typeparser::find_module_identifier(ctx.source_file, "Context");
+    let context_reference = ets_typeparser::find_module_reference(ctx.source_file, "Context");
+    let context_identifier = context_reference.string();
     let accessed_text = data.accessed_object_text();
-    let is_fully_qualified = context_identifier == accessed_text;
+    let is_fully_qualified = context_reference.matches_node(data.accessed_object);
 
     if version == EffectMajorVersion::V3 {
         if !is_fully_qualified
@@ -108,7 +109,7 @@ fn run_context_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::Comple
     items
 }
 
-// go: internal/completions/context_self_in_classes.go:97 computeDeterministicKey
+// go: internal/completions/context_self_in_classes.go:98 computeDeterministicKey
 // computeDeterministicKey computes the key the deterministicKeys rule expects for a class
 // of the given target ("service", "error", or "taggedClass").
 // Falls back to the class name if keybuilder returns empty.

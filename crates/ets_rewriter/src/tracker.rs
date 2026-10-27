@@ -1,6 +1,7 @@
-use ets_shim::ast::{Kind, ModifierList, Node, SourceFile};
+use ets_shim::ast::{Kind, ModifierList, Node, NodeFactory, NodeFlags, SourceFile};
 use ets_shim::core::P;
 use ets_shim::core::TextRange;
+use ets_shim::core::alloc_str;
 use ets_shim::core::collections::OrderedMap;
 use ets_shim::ls::change;
 use ets_shim::lsproto;
@@ -96,7 +97,19 @@ impl Tracker {
         self.tracker.new_module_declaration(modifiers, keyword, name, None, body)
     }
 
-    // go: internal/rewriter/tracker.go:57 Tracker.ReplaceNode
+    /// Rust-only: `Tracker.NewPropertyAccessPath` (ported on `NodeFactoryPaths`), callable without importing the
+    /// trait.
+    pub fn new_property_access_path<S: AsRef<str>>(&self, names: &[S]) -> P<Node> {
+        NodeFactoryPaths::new_property_access_path(&*self.tracker, names)
+    }
+
+    /// Rust-only: `Tracker.NewQualifiedNamePath` (ported on `NodeFactoryPaths`), callable without importing the
+    /// trait.
+    pub fn new_qualified_name_path<S: AsRef<str>>(&self, names: &[S]) -> P<Node> {
+        NodeFactoryPaths::new_qualified_name_path(&*self.tracker, names)
+    }
+
+    // go: internal/rewriter/tracker.go:81 Tracker.ReplaceNode
     pub fn replace_node(
         &mut self,
         source_file: P<SourceFile>,
@@ -136,7 +149,7 @@ impl Tracker {
         self.tracker.replace_text_range_with_text(source_file, rng, &text);
     }
 
-    // go: internal/rewriter/tracker.go:85 Tracker.InsertNodeBefore
+    // go: internal/rewriter/tracker.go:109 Tracker.InsertNodeBefore
     pub fn insert_node_before(
         &mut self,
         source_file: P<SourceFile>,
@@ -162,7 +175,7 @@ impl Tracker {
         });
     }
 
-    // go: internal/rewriter/tracker.go:98 Tracker.flushPendingBefore
+    // go: internal/rewriter/tracker.go:122 Tracker.flushPendingBefore
     pub(crate) fn flush_pending_before(&mut self) {
         for edit in std::mem::take(&mut self.pending_before) {
             if edit.text.is_empty() {
@@ -186,7 +199,7 @@ impl Tracker {
         self.pending_before = Vec::new();
     }
 
-    // go: internal/rewriter/tracker.go:116 Tracker.consumePendingPrefix
+    // go: internal/rewriter/tracker.go:140 Tracker.consumePendingPrefix
     pub(crate) fn consume_pending_prefix(
         &mut self,
         source_file: P<SourceFile>,
@@ -211,9 +224,50 @@ impl Tracker {
         builder
     }
 
-    // go: internal/rewriter/tracker.go:133 Tracker.nodeText
+    // go: internal/rewriter/tracker.go:157 Tracker.nodeText
     pub(crate) fn node_text(&self, source_file: P<SourceFile>, node: P<Node>) -> String {
         let (text, _) = self.tracker.get_nonformatted_text(node, source_file);
         text
+    }
+}
+
+/// Rust-only: the path builders of `Tracker` only build nodes, so they are ported over the node factory, which
+/// helpers that take `&NodeFactory` (instead of the tracker) reach too.
+pub trait NodeFactoryPaths {
+    fn new_property_access_path<S: AsRef<str>>(&self, names: &[S]) -> P<Node>;
+    fn new_qualified_name_path<S: AsRef<str>>(&self, names: &[S]) -> P<Node>;
+}
+
+impl NodeFactoryPaths for NodeFactory {
+    // go: internal/rewriter/tracker.go:58 Tracker.NewPropertyAccessPath
+    // NewPropertyAccessPath builds the expression a.b.c from ["a", "b", "c"].
+    //
+    // Rust: Go returns nil for an empty path; every caller passes a module reference, which is never empty, so the
+    // Rust returns the node and panics on an empty path instead of making every caller unwrap.
+    fn new_property_access_path<S: AsRef<str>>(&self, names: &[S]) -> P<Node> {
+        assert!(!names.is_empty(), "NewPropertyAccessPath of an empty path");
+        let mut node = self.new_identifier(alloc_str(names[0].as_ref()));
+        for name in &names[1..] {
+            node = self.new_property_access_expression(
+                node,
+                None,
+                self.new_identifier(alloc_str(name.as_ref())),
+                NodeFlags::None,
+            );
+        }
+        node
+    }
+
+    // go: internal/rewriter/tracker.go:70 Tracker.NewQualifiedNamePath
+    // NewQualifiedNamePath builds the type-position name a.b.c from ["a", "b", "c"].
+    //
+    // Rust: as NewPropertyAccessPath, an empty path panics instead of returning nil.
+    fn new_qualified_name_path<S: AsRef<str>>(&self, names: &[S]) -> P<Node> {
+        assert!(!names.is_empty(), "NewQualifiedNamePath of an empty path");
+        let mut node = self.new_identifier(alloc_str(names[0].as_ref()));
+        for name in &names[1..] {
+            node = self.new_qualified_name(node, self.new_identifier(alloc_str(name.as_ref())));
+        }
+        node
     }
 }

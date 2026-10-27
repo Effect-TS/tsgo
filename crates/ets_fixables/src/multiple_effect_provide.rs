@@ -2,8 +2,8 @@ use std::sync::LazyLock;
 
 use ets_fixable::{Context, FixAction, Fixable};
 use ets_rewriter::NodeOptions;
-use ets_shim::ast::{self, Kind, NodeFlags};
-use ets_shim::core::{TextRange, alloc_str};
+use ets_shim::ast::{self, NodeFlags};
+use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 use ets_shim::scanner;
@@ -31,17 +31,6 @@ fn run_multiple_effect_provide_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction>
         if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
             continue;
         }
-        // Resolve the Effect module name, preserving import aliases
-        let mut effect_module_name = ets_typeparser::find_effect_module_identifier(sf);
-        if let Some(effect_module_node) = m.effect_module_node
-            && effect_module_node.kind() == Kind::Identifier
-        {
-            effect_module_name = scanner::get_text_of_node(effect_module_node);
-        }
-
-        // Resolve the Layer module name from the source file imports
-        let layer_module_name = ets_typeparser::find_module_identifier(sf, "Layer");
-
         // Capture loop variables for the closure
         let chunk = m.chunk;
         let layer_args = m.layer_args;
@@ -58,20 +47,11 @@ fn run_multiple_effect_provide_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction>
                 );
 
                 // Step 2: Build Effect.provide(Layer.mergeAll(arg1, arg2, ...))
-                let effect_id = tracker.new_identifier(alloc_str(&effect_module_name));
-                let provide_access = tracker.new_property_access_expression(
-                    effect_id,
-                    None,
-                    tracker.new_identifier("provide"),
-                    NodeFlags::None,
+                let provide_access = tracker.new_property_access_path(
+                    &ets_typeparser::find_effect_module_reference(Some(sf)).append(&["provide"]),
                 );
-
-                let layer_id = tracker.new_identifier(alloc_str(&layer_module_name));
-                let merge_all_access = tracker.new_property_access_expression(
-                    layer_id,
-                    None,
-                    tracker.new_identifier("mergeAll"),
-                    NodeFlags::None,
+                let merge_all_access = tracker.new_property_access_path(
+                    &ets_typeparser::find_module_reference(sf, "Layer").append(&["mergeAll"]),
                 );
 
                 // Clone all layer arguments

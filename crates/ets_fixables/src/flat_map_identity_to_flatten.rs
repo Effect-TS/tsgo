@@ -6,12 +6,10 @@ use ets_shim::ast;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
-use crate::*;
-
 /// Rust-only: the fixable's message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message = &tsdiag::EFFECT_FLATTEN_EXPRESSES_THIS_UNWRAPPING_MORE_DIRECTLY_THAN_EFFECT_FLAT_MAP_WITH_AN_IDENTITY_CALLBACK_EFFECT_FLAT_MAP_IDENTITY_TO_FLATTEN;
 
-// go: internal/fixables/flat_map_identity_to_flatten.go:12 FlatMapIdentityToFlattenFix
+// go: internal/fixables/flat_map_identity_to_flatten.go:13 FlatMapIdentityToFlattenFix
 pub static FLAT_MAP_IDENTITY_TO_FLATTEN_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "flatMapIdentityToFlatten",
     description: "Replace Effect.flatMap with an identity callback by Effect.flatten",
@@ -20,22 +18,24 @@ pub static FLAT_MAP_IDENTITY_TO_FLATTEN_FIX: LazyLock<Fixable> = LazyLock::new(|
     run: run_flat_map_identity_to_flatten_fix,
 });
 
-// go: internal/fixables/flat_map_identity_to_flatten.go:22 runFlatMapIdentityToFlattenFix
+// go: internal/fixables/flat_map_identity_to_flatten.go:23 runFlatMapIdentityToFlattenFix
 fn run_flat_map_identity_to_flatten_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_flat_map_identity_to_flatten(&mut ctx.type_parser, source_file) {
         if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
             continue;
         }
-        // Without an Effect module receiver there is no bound name to reach flatten through.
+        // Only offer the fix when the step is called through an Effect module receiver.
         if m.effect_module_node.is_none() {
             continue;
         }
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.flatten".to_string(),
             run: Box::new(move |tracker| {
-                let flatten =
-                    effect_module_method(tracker, m.source_file, m.effect_module_node, "flatten");
+                let flatten = tracker.new_property_access_path(
+                    &ets_typeparser::find_effect_module_reference(Some(m.source_file))
+                        .append(&["flatten"]),
+                );
                 ast::set_parent_in_children(flatten);
                 tracker.replace_piping_flow_transformation(
                     Some(m.source_file),

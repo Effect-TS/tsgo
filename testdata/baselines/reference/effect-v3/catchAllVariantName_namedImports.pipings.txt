@@ -1,0 +1,169 @@
+==== /.src/catchAllVariantName_namedImports.ts (12 flows) ====
+
+=== Piping Flow ===
+Location: 14:29 - 14:84
+Node: pipe(program, catchAll((error) => fail(error.length)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: catchAll
+      args: [(error) => fail(error.length)]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 14:63 - 14:82
+Node: fail(error.length)
+Node Kind: KindCallExpression
+
+Subject: error.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: fail
+      args: (constant)
+      outType: Effect<never, number, never>
+
+=== Piping Flow ===
+Location: 15:34 - 15:76
+Node: pipe(program, catchAll(() => succeed(0)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: catchAll
+      args: [() => succeed(0)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 15:63 - 15:74
+Node: succeed(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 18:31 - 18:85
+Node: pipe(program, recover((error) => fail(error.length)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: recover
+      args: [(error) => fail(error.length)]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 18:64 - 18:83
+Node: fail(error.length)
+Node Kind: KindCallExpression
+
+Subject: error.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: fail
+      args: (constant)
+      outType: Effect<never, number, never>
+
+=== Piping Flow ===
+Location: 19:36 - 19:77
+Node: pipe(program, recover(() => succeed(0)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: recover
+      args: [() => succeed(0)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 19:64 - 19:75
+Node: succeed(0)
+Node Kind: KindCallExpression
+
+Subject: 0
+Subject Type: 0
+
+Transformations (1):
+  [0] kind: call
+      callee: succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 23:29 - 23:93
+Node: pipe(program, catchAlias((error) => Effect.fail(error.length)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: catchAlias
+      args: [(error) => Effect.fail(error.length)]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 23:65 - 23:91
+Node: Effect.fail(error.length)
+Node Kind: KindCallExpression
+
+Subject: error.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, number, never>
+
+=== Piping Flow ===
+Location: 26:32 - 26:100
+Node: program.pipe(Effect.catchAll((error) => Effect.fail(error.length)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.catchAll
+      args: [(error) => Effect.fail(error.length)]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 26:72 - 26:98
+Node: Effect.fail(error.length)
+Node Kind: KindCallExpression
+
+Subject: error.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, number, never>

@@ -3,8 +3,8 @@ use std::sync::LazyLock;
 use ets_fixable::{Context, FixAction, Fixable};
 use ets_rewriter::{PipingFlowTransformationReplacement, Tracker};
 use ets_rules::OptionMatchToFromOptionMatch;
-use ets_shim::ast::{self, Kind, Node, NodeFlags, NodeList};
-use ets_shim::core::{P, alloc_str};
+use ets_shim::ast::{self, Kind, Node, NodeFlags, NodeList, SourceFile};
+use ets_shim::core::P;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
@@ -33,14 +33,11 @@ fn run_option_match_to_from_option_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAct
         {
             continue;
         }
-        let effect_module_name = ets_typeparser::find_effect_module_identifier(sf);
-
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Replace with Effect.fromOption".to_string(),
             run: Box::new(move |tracker| {
                 // Rust: Go returns early on a nil callee; `build_from_option_replacement` never returns one.
-                let (callee, arguments) =
-                    build_from_option_replacement(tracker, &m, &effect_module_name);
+                let (callee, arguments) = build_from_option_replacement(tracker, sf, &m);
                 if let Some(transformation) = &m.transformation {
                     tracker.replace_piping_flow_transformation(
                         Some(sf),
@@ -75,21 +72,14 @@ fn run_option_match_to_from_option_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAct
     Vec::new()
 }
 
-// go: internal/fixables/option_match_to_from_option.go:64 buildFromOptionReplacement
+// go: internal/fixables/option_match_to_from_option.go:62 buildFromOptionReplacement
 pub(crate) fn build_from_option_replacement(
     tracker: &Tracker,
+    sf: P<SourceFile>,
     m: &OptionMatchToFromOptionMatch,
-    effect_module_name: &str,
 ) -> (P<Node>, Option<P<NodeList>>) {
-    let module_node = match m.effect_module_node {
-        None => tracker.new_identifier(alloc_str(effect_module_name)),
-        Some(module_node) => tracker.deep_clone_node(Some(module_node)).unwrap(),
-    };
-    let from_option = tracker.new_property_access_expression(
-        module_node,
-        None,
-        tracker.new_identifier("fromOption"),
-        NodeFlags::None,
+    let from_option = tracker.new_property_access_path(
+        &ets_typeparser::find_effect_module_reference(Some(sf)).append(&["fromOption"]),
     );
 
     if m.default_failure {

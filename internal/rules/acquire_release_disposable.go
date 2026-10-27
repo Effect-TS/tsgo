@@ -44,7 +44,6 @@ type AcquireReleaseDisposableMatch struct {
 	SourceFile       *ast.SourceFile
 	Location         core.TextRange
 	CallNode         *ast.Node
-	EffectModule     *ast.Node
 	Acquire          *ast.Node
 	HasTypeArguments bool
 }
@@ -128,19 +127,10 @@ func analyzeAcquireReleaseDisposableCall(
 		return AcquireReleaseDisposableMatch{}, false
 	}
 
-	var effectModule *ast.Node
-	if call.Expression.Kind == ast.KindPropertyAccessExpression {
-		access := call.Expression.AsPropertyAccessExpression()
-		if access != nil && access.QuestionDotToken == nil {
-			effectModule = access.Expression
-		}
-	}
-
 	return AcquireReleaseDisposableMatch{
 		SourceFile:       sf,
 		Location:         scanner.GetErrorRangeForNode(sf, call.Expression),
 		CallNode:         node,
-		EffectModule:     effectModule,
 		Acquire:          call.Arguments.Nodes[0],
 		HasTypeArguments: hasCallTypeArguments(call),
 	}, true

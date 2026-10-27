@@ -36,12 +36,7 @@ func runInstanceOfSchemaFix(ctx *fixable.Context) []ls.CodeAction {
 				clonedRight := tracker.DeepCloneNode(match.RightExpr)
 
 				// Build Schema.is property access
-				schemaIsAccess := tracker.NewPropertyAccessExpression(
-					tracker.NewIdentifier(typeparser.FindModuleIdentifier(sf, "Schema")),
-					nil,
-					tracker.NewIdentifier("is"),
-					ast.NodeFlagsNone,
-				)
+				schemaIsAccess := tracker.NewPropertyAccessPath(typeparser.FindModuleReference(sf, "Schema").Append("is")...)
 
 				// Build inner call: Schema.is(right)
 				innerCall := tracker.NewCallExpression(

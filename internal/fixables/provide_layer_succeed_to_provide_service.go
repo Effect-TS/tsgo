@@ -4,6 +4,7 @@ import (
 	"github.com/effect-ts/tsgo/internal/fixable"
 	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
@@ -30,7 +31,7 @@ func runProvideLayerSucceedToProvideServiceFix(ctx *fixable.Context) []ls.CodeAc
 		if action := ctx.NewFixAction(fixable.FixAction{
 			Description: "Replace with Effect." + match.ReplacementMethodName,
 			Run: func(tracker *rewriter.Tracker) {
-				callee := effectModuleMethod(tracker, ctx.SourceFile, match.EffectModuleNode, match.ReplacementMethodName)
+				callee := tracker.NewPropertyAccessPath(typeparser.FindEffectModuleReference(ctx.SourceFile).Append(match.ReplacementMethodName)...)
 				arguments := tracker.NewNodeList([]*ast.Node{
 					tracker.DeepCloneNode(match.ServiceNode),
 					tracker.DeepCloneNode(match.ImplementationNode),

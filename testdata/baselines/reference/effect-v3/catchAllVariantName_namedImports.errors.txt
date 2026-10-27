@@ -1,0 +1,51 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/catchAllVariantName_namedImports.ts(14,44): warning TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+/.src/catchAllVariantName_namedImports.ts(15,49): warning TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+/.src/catchAllVariantName_namedImports.ts(18,46): warning TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+/.src/catchAllVariantName_namedImports.ts(19,51): warning TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+/.src/catchAllVariantName_namedImports.ts(23,44): warning TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+/.src/catchAllVariantName_namedImports.ts(26,46): warning TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+
+
+==== /.src/catchAllVariantName_namedImports.ts (6 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics catchAllToMapError:warning
+    // @effect-diagnostics catchToOrElseSucceed:warning
+    import { pipe } from "effect/Function"
+    import { catchAll, catchAll as recover, fail, succeed } from "effect/Effect"
+    import * as Effect from "effect/Effect"
+    
+    declare const program: Effect.Effect<number, string>
+    
+    // The message names Effect.catchAll whichever way the callee is written
+    
+    // Named import of catchAll
+    export const namedMapError = pipe(program, catchAll((error) => fail(error.length)))
+                                               ~~~~~~~~
+!!! warning TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+    export const namedOrElseSucceed = pipe(program, catchAll(() => succeed(0)))
+                                                    ~~~~~~~~
+!!! warning TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+    
+    // Renamed import of catchAll
+    export const renamedMapError = pipe(program, recover((error) => fail(error.length)))
+                                                 ~~~~~~~
+!!! warning TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+    export const renamedOrElseSucceed = pipe(program, recover(() => succeed(0)))
+                                                      ~~~~~~~
+!!! warning TS377095: `Effect.orElseSucceed` expresses the same recovery more directly than `Effect.catchAll` followed by `Effect.succeed`. effect(catchToOrElseSucceed)
+    
+    // Local alias of Effect.catchAll
+    const catchAlias = Effect.catchAll
+    export const aliasMapError = pipe(program, catchAlias((error) => Effect.fail(error.length)))
+                                               ~~~~~~~~~~
+!!! warning TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+    
+    // Property access, as before
+    export const propertyMapError = program.pipe(Effect.catchAll((error) => Effect.fail(error.length)))
+                                                 ~~~~~~~~~~~~~~~
+!!! warning TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
+    

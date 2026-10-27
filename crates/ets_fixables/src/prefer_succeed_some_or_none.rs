@@ -2,7 +2,6 @@ use std::sync::LazyLock;
 
 use ets_fixable::{Context, FixAction, Fixable};
 use ets_shim::ast::NodeFlags;
-use ets_shim::core::alloc_str;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
@@ -37,17 +36,9 @@ fn run_prefer_succeed_some_or_none_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAct
         if let Some(action) = ctx.new_fix_action(FixAction {
             description,
             run: Box::new(move |tracker| {
-                let module_node = match m.effect_module_node {
-                    None => tracker.new_identifier(alloc_str(
-                        &ets_typeparser::find_effect_module_identifier(sf),
-                    )),
-                    Some(module_node) => tracker.deep_clone_node(Some(module_node)).unwrap(),
-                };
-                let callee = tracker.new_property_access_expression(
-                    module_node,
-                    None,
-                    tracker.new_identifier(m.replacement_name),
-                    NodeFlags::None,
+                let callee = tracker.new_property_access_path(
+                    &ets_typeparser::find_effect_module_reference(Some(sf))
+                        .append(&[m.replacement_name]),
                 );
                 let mut replacement = callee;
                 if let Some(value_node) = m.value_node {

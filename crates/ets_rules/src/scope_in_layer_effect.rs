@@ -41,10 +41,9 @@ pub struct ScopeInLayerEffectMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange, // The pre-computed error range for this match
     pub callee: Option<P<Node>>, // The Layer constructor callee; nil for class declaration matches
-    pub method_identifier: Option<P<Node>>, // The replaceable property name (e.g., "effect" in Layer.effect); nil for classes, named imports, and local aliases
 }
 
-// go: internal/rules/scope_in_layer_effect.go:46 AnalyzeScopeInLayerEffect
+// go: internal/rules/scope_in_layer_effect.go:45 AnalyzeScopeInLayerEffect
 // AnalyzeScopeInLayerEffect finds all Layer.effect*() calls and class declarations
 // with Default layer properties where Scope is in the layer's requirements.
 //
@@ -94,7 +93,7 @@ pub fn analyze_scope_in_layer_effect(
     matches
 }
 
-// go: internal/rules/scope_in_layer_effect.go:90 matchLayerEffectCall
+// go: internal/rules/scope_in_layer_effect.go:89 matchLayerEffectCall
 // matchLayerEffectCall checks if a call expression is Layer.effect*() with Scope in RIn.
 pub(crate) fn match_layer_effect_call(
     tp: &mut TypeParser<'_>,
@@ -132,19 +131,14 @@ pub(crate) fn match_layer_effect_call(
         return None;
     }
 
-    let mut method_identifier = None;
-    if expression.kind() == Kind::PropertyAccessExpression {
-        method_identifier = Some(expression.as_property_access_expression().name());
-    }
     Some(ScopeInLayerEffectMatch {
         source_file: sf,
         location: ets_shim::scanner::get_error_range_for_node(sf, node),
         callee: Some(expression),
-        method_identifier,
     })
 }
 
-// go: internal/rules/scope_in_layer_effect.go:143 matchClassWithDefaultLayer
+// go: internal/rules/scope_in_layer_effect.go:137 matchClassWithDefaultLayer
 // matchClassWithDefaultLayer checks if a class declaration has a Default layer property with Scope in RIn.
 pub(crate) fn match_class_with_default_layer(
     tp: &mut TypeParser<'_>,
@@ -184,11 +178,10 @@ pub(crate) fn match_class_with_default_layer(
         source_file: sf,
         location: ets_shim::scanner::get_error_range_for_node(sf, node),
         callee: None,
-        method_identifier: None,
     })
 }
 
-// go: internal/rules/scope_in_layer_effect.go:197 hasScope
+// go: internal/rules/scope_in_layer_effect.go:190 hasScope
 // hasScope checks if any union member of the given type is a Scope type.
 pub(crate) fn has_scope(tp: &mut TypeParser<'_>, t: P<Type>) -> bool {
     let members = tp.unroll_union_members(t).unwrap_or_default();

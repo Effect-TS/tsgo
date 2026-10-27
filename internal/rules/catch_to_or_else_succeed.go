@@ -36,7 +36,6 @@ type CatchToOrElseSucceedMatch struct {
 	SourceFile            *ast.SourceFile
 	Location              core.TextRange
 	Callee                *ast.Node
-	CalleeNameNode        *ast.Node
 	CatchMethodName       string
 	SucceedCallExpression *ast.Node
 	SucceedArgument       *ast.Node
@@ -68,8 +67,14 @@ func AnalyzeCatchToOrElseSucceed(tp *typeparser.TypeParser, _ *checker.Checker, 
 				continue
 			}
 
-			if !tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catch") &&
-				!tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchAll") {
+			// Name the catch variant the callee resolves to, however it is written.
+			var catchMethodName string
+			switch {
+			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catch"):
+				catchMethodName = "catch"
+			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "catchAll"):
+				catchMethodName = "catchAll"
+			default:
 				continue
 			}
 
@@ -81,21 +86,11 @@ func AnalyzeCatchToOrElseSucceed(tp *typeparser.TypeParser, _ *checker.Checker, 
 				continue
 			}
 
-			var calleeNameNode *ast.Node
-			catchMethodName := "catch"
-			if transformation.Callee().Kind == ast.KindPropertyAccessExpression {
-				prop := transformation.Callee().AsPropertyAccessExpression()
-				if prop != nil && prop.Name() != nil {
-					calleeNameNode = prop.Name()
-					catchMethodName = prop.Name().Text()
-				}
-			}
 
 			matches = append(matches, CatchToOrElseSucceedMatch{
 				SourceFile:            sf,
 				Location:              scanner.GetErrorRangeForNode(sf, transformation.Callee()),
 				Callee:                transformation.Callee(),
-				CalleeNameNode:        calleeNameNode,
 				CatchMethodName:       catchMethodName,
 				SucceedCallExpression: expr,
 				SucceedArgument:       call.Arguments.Nodes[0],

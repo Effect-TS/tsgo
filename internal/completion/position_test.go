@@ -34,6 +34,21 @@ func TestParseDataForExtendsClassCompletion_AfterDot(t *testing.T) {
 	}
 }
 
+func TestParseDataForExtendsClassCompletion_BarrelNamespaceAfterDot(t *testing.T) {
+	t.Parallel()
+	// class Foo extends X.Schema.| (cursor after the dot)
+	source := `class Foo extends X.Schema.`
+	sf := parseSource(source)
+
+	data := ParseDataForExtendsClassCompletion(sf, len(source))
+	if data == nil {
+		t.Fatal("expected non-nil result for 'class Foo extends X.Schema.'")
+	}
+	if got := data.AccessedObjectText(); got != "X.Schema" {
+		t.Errorf("AccessedObjectText = %q, want %q", got, "X.Schema")
+	}
+}
+
 func TestParseDataForExtendsClassCompletion_AfterPropertyName(t *testing.T) {
 	t.Parallel()
 	// class Foo extends Schema.Class| (cursor after Class)

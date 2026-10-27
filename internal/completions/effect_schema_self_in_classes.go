@@ -24,9 +24,10 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 		return nil
 	}
 
-	schemaIdentifier := typeparser.FindModuleIdentifier(ctx.SourceFile, "Schema")
+	schemaReference := typeparser.FindModuleReference(ctx.SourceFile, "Schema")
+	schemaIdentifier := schemaReference.String()
 	accessedText := data.AccessedObjectText()
-	isFullyQualified := schemaIdentifier == accessedText
+	isFullyQualified := schemaReference.MatchesNode(data.AccessedObject)
 	className := data.ClassNameText()
 
 	tp := ctx.TypeParser
@@ -134,9 +135,10 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 
 	// Model.Class (v4 only)
 	if version == typeparser.EffectMajorV4 {
-		modelIdentifier := typeparser.FindModuleIdentifierForPackage(ctx.SourceFile, "effect/schema", "Model")
+		modelReference := typeparser.FindModuleReferenceForPackage(ctx.SourceFile, "effect/schema", "Model")
+		modelIdentifier := modelReference.String()
 
-		isModelFullyQualified := modelIdentifier == accessedText
+		isModelFullyQualified := modelReference.MatchesNode(data.AccessedObject)
 
 		if isModelFullyQualified || tp.IsNodeReferenceToEffectModelModuleApi(data.AccessedObject, "Class") {
 			var insertText string

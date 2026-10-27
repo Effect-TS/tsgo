@@ -1,14 +1,12 @@
 use std::sync::LazyLock;
 
 use ets_completion::{Completion, Context};
-use ets_shim::ast;
 use ets_shim::lsproto;
-use ets_shim::scanner;
 use ets_typeparser::EffectMajorVersion;
 
 use crate::*;
 
-// go: internal/completions/schema_brand.go:15 schemaBrand
+// go: internal/completions/schema_brand.go:13 schemaBrand
 // schemaBrand provides a `brand("varName")` completion when dot-accessing the
 // Schema identifier inside a variable declaration. V3-only.
 pub(crate) static SCHEMA_BRAND: LazyLock<Completion> = LazyLock::new(|| Completion {
@@ -17,7 +15,7 @@ pub(crate) static SCHEMA_BRAND: LazyLock<Completion> = LazyLock::new(|| Completi
     run: run_schema_brand,
 });
 
-// go: internal/completions/schema_brand.go:21 runSchemaBrand
+// go: internal/completions/schema_brand.go:19 runSchemaBrand
 fn run_schema_brand(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionItem> {
     let Some(result) =
         ets_completion::parse_accessed_expression_for_completion(ctx.source_file, ctx.position)
@@ -25,20 +23,16 @@ fn run_schema_brand(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionItem> {
         return Vec::new();
     };
 
-    if !ast::is_identifier(result.accessed_object) {
-        return Vec::new();
-    }
-
     // V3 only
     let version = ctx.type_parser.supported_effect_version();
     if version != EffectMajorVersion::V3 {
         return Vec::new();
     }
 
-    // Resolve the Schema module identifier and compare
-    let schema_identifier = ets_typeparser::find_module_identifier(ctx.source_file, "Schema");
-    let accessed_text = scanner::get_text_of_node(result.accessed_object);
-    if accessed_text != schema_identifier {
+    // Compare the accessed object with the file's reference to the Schema module
+    if !ets_typeparser::find_module_reference(ctx.source_file, "Schema")
+        .matches_node(result.accessed_object)
+    {
         return Vec::new();
     }
 

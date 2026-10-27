@@ -39,12 +39,11 @@ pub struct SyncToSucceedMatch {
     pub source_file: P<SourceFile>,
     pub location: TextRange,
     pub callee: P<Node>,
-    pub callee_name: Option<P<Node>>, // Replaceable property name; nil for named imports and local aliases.
     pub thunk: P<Node>,
     pub constant_value: P<Node>,
 }
 
-// go: internal/rules/sync_to_succeed.go:52 AnalyzeSyncToSucceed
+// go: internal/rules/sync_to_succeed.go:51 AnalyzeSyncToSucceed
 // AnalyzeSyncToSucceed finds Effect.sync thunks whose result is already stable
 // when the Effect is constructed.
 //
@@ -72,15 +71,10 @@ pub fn analyze_sync_to_succeed(
                     ets_typeparser::parse_lazy_expression(arguments[0], LazyExpressionFlags::Thunk)
                 && tp.is_expression_value_stable_at_location(lazy.expression(), node)
             {
-                let mut callee_name = None;
-                if expression.kind() == Kind::PropertyAccessExpression {
-                    callee_name = Some(expression.as_property_access_expression().name());
-                }
                 matches.push(SyncToSucceedMatch {
                     source_file: sf,
                     location: ets_shim::scanner::get_error_range_for_node(sf, expression),
                     callee: expression,
-                    callee_name,
                     thunk: lazy.node(),
                     constant_value: lazy.expression(),
                 });

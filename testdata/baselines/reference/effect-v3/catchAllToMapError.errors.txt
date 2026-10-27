@@ -6,7 +6,7 @@ Effect version: 3.19.19
 /.src/catchAllToMapError.ts(31,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
 /.src/catchAllToMapError.ts(36,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
 /.src/catchAllToMapError.ts(65,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
-/.src/catchAllToMapError.ts(71,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+/.src/catchAllToMapError.ts(71,3): suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
 
 
 ==== /.src/catchAllToMapError.ts (6 errors) ====
@@ -92,6 +92,6 @@ Effect version: 3.19.19
     export const shouldTriggerAliasedCatch = Effect.fail("error").pipe(
       catchAlias((cause) => Effect.fail(new MyErrorTagged(cause)))
       ~~~~~~~~~~
-!!! suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catch` followed by `Effect.fail`. effect(catchAllToMapError)
+!!! suggestion TS377010: `Effect.mapError` expresses the same error-type transformation more directly than `Effect.catchAll` followed by `Effect.fail`. effect(catchAllToMapError)
     )
     

@@ -39,10 +39,9 @@ var MapSomeToAsSome = rule.Rule{
 
 // MapSomeToAsSomeMatch holds the nodes needed by the diagnostic and quick fix.
 type MapSomeToAsSomeMatch struct {
-	SourceFile       *ast.SourceFile
-	Location         core.TextRange
-	Transformation   *typeparser.PipingFlowTransformation
-	EffectModuleNode *ast.Node
+	SourceFile     *ast.SourceFile
+	Location       core.TextRange
+	Transformation *typeparser.PipingFlowTransformation
 }
 
 // AnalyzeMapSomeToAsSome finds data-last and data-first Effect.map calls whose
@@ -62,15 +61,10 @@ func AnalyzeMapSomeToAsSome(tp *typeparser.TypeParser, _ *checker.Checker, sf *a
 				!isOptionSomeMapper(tp, transformation.Args().At(0)) {
 				continue
 			}
-			var effectModuleNode *ast.Node
-			if transformation.Callee().Kind == ast.KindPropertyAccessExpression {
-				effectModuleNode = transformation.Callee().AsPropertyAccessExpression().Expression
-			}
 			matches = append(matches, MapSomeToAsSomeMatch{
-				SourceFile:       sf,
-				Location:         scanner.GetErrorRangeForNode(sf, transformation.Callee()),
-				Transformation:   &transformation,
-				EffectModuleNode: effectModuleNode,
+				SourceFile:     sf,
+				Location:       scanner.GetErrorRangeForNode(sf, transformation.Callee()),
+				Transformation: &transformation,
 			})
 		}
 	}

@@ -84,7 +84,7 @@ func runRunEffectInsideEffectFix(ctx *fixable.Context) []ls.CodeAction {
 					}
 				}
 
-				effectModuleIdentifier := typeparser.FindModuleIdentifier(sf, "Effect")
+				effectModuleIdentifier := typeparser.FindModuleReference(sf, "Effect")
 				if supportedEffect == typeparser.EffectMajorV4 {
 					if servicesIdentifier == "" {
 						servicesIdentifier = "effectContext"
@@ -95,7 +95,7 @@ func runRunEffectInsideEffectFix(ctx *fixable.Context) []ls.CodeAction {
 					insertYieldedEffectModuleCall(tracker, sf, block, effectModuleIdentifier, "runtime", runtimeIdentifier)
 				}
 
-				runtimeModuleIdentifier := typeparser.FindModuleIdentifier(sf, "Runtime")
+				runtimeModuleIdentifier := typeparser.FindModuleReference(sf, "Runtime")
 				calleeTokenPos := scanner.GetTokenPosOfNode(m.CalleeNode, sf, false)
 				firstArgPos := m.CallNode.AsCallExpression().Arguments.Nodes[0].Pos()
 				tracker.DeleteRange(sf, core.NewTextRange(calleeTokenPos, firstArgPos))
@@ -128,8 +128,8 @@ func runEffectInsideEffectFixDescription(supportedEffect typeparser.EffectMajorV
 
 func runEffectInsideEffectReplacementText(
 	supportedEffect typeparser.EffectMajorVersion,
-	effectModuleIdentifier string,
-	runtimeModuleIdentifier string,
+	effectModuleIdentifier typeparser.ModuleReference,
+	runtimeModuleIdentifier typeparser.ModuleReference,
 	methodName string,
 	runtimeIdentifier string,
 	servicesIdentifier string,
@@ -144,14 +144,11 @@ func insertYieldedEffectModuleCall(
 	tracker *rewriter.Tracker,
 	sf *ast.SourceFile,
 	block *ast.Block,
-	effectModuleIdentifier string,
+	effectModuleIdentifier typeparser.ModuleReference,
 	methodName string,
 	variableName string,
 ) {
-	effectId := tracker.NewIdentifier(effectModuleIdentifier)
-	methodAccess := tracker.NewPropertyAccessExpression(
-		effectId, nil, tracker.NewIdentifier(methodName), ast.NodeFlagsNone,
-	)
+	methodAccess := tracker.NewPropertyAccessPath(effectModuleIdentifier.Append(methodName)...)
 	methodCall := tracker.NewCallExpression(
 		methodAccess,
 		nil,

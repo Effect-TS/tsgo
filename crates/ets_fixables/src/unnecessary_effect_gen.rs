@@ -6,13 +6,11 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 
-use crate::*;
-
 /// Rust-only: the fixable's diagnostic message (Go spells it out in `ErrorCodes`).
 static MESSAGE: &Message =
     &tsdiag::THIS_EFFECT_GEN_CONTAINS_A_SINGLE_RETURN_STATEMENT_EFFECT_UNNECESSARY_EFFECT_GEN;
 
-// go: internal/fixables/unnecessary_effect_gen.go:13 UnnecessaryEffectGenFix
+// go: internal/fixables/unnecessary_effect_gen.go:14 UnnecessaryEffectGenFix
 pub static UNNECESSARY_EFFECT_GEN_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "unnecessaryEffectGen",
     description: "Remove the Effect.gen, and keep the body",
@@ -21,7 +19,7 @@ pub static UNNECESSARY_EFFECT_GEN_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixa
     run: run_unnecessary_effect_gen_fix,
 });
 
-// go: internal/fixables/unnecessary_effect_gen.go:21 runUnnecessaryEffectGenFix
+// go: internal/fixables/unnecessary_effect_gen.go:22 runUnnecessaryEffectGenFix
 fn run_unnecessary_effect_gen_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let sf = ctx.source_file;
 
@@ -55,12 +53,12 @@ fn run_unnecessary_effect_gen_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> 
         }
 
         // No return + non-void success: wrap with Effect.asVoid(...)
-        let effect_module_node = m.effect_module_node;
         if let Some(action) = ctx.new_fix_action(FixAction {
             description: "Remove the Effect.gen, and keep the body".to_string(),
             run: Box::new(move |tracker| {
-                let as_void_access =
-                    effect_module_method(tracker, sf, effect_module_node, "asVoid");
+                let as_void_access = tracker.new_property_access_path(
+                    &ets_typeparser::find_effect_module_reference(Some(sf)).append(&["asVoid"]),
+                );
 
                 // Clone the yielded expression
                 let cloned_expr = tracker.deep_clone_node(Some(yielded_expression)).unwrap();

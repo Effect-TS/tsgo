@@ -31,9 +31,10 @@ func runEffectSelfInClasses(ctx *completion.Context) []*lsproto.CompletionItem {
 		return nil
 	}
 
-	effectIdentifier := typeparser.FindModuleIdentifier(ctx.SourceFile, "Effect")
+	effectReference := typeparser.FindModuleReference(ctx.SourceFile, "Effect")
+	effectIdentifier := effectReference.String()
 	accessedText := data.AccessedObjectText()
-	isFullyQualified := effectIdentifier == accessedText
+	isFullyQualified := effectReference.MatchesNode(data.AccessedObject)
 	className := data.ClassNameText()
 
 	// Compute deterministic tag key
