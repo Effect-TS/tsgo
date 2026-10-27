@@ -79,6 +79,14 @@ func (tp TypeParser) getTypeAtLocationUncached(node *ast.Node) (result *checker.
 	if t := tp.checkedExpressionType(node); t != nil {
 		return t
 	}
+	// The checker treats a never-typed spread as array-like when it checks the
+	// enclosing array literal or call, but checking the spread element on its
+	// own reports TS2488 as a side effect.
+	if node.Kind == ast.KindSpreadElement {
+		if t := tp.GetTypeAtLocation(node.Expression()); t != nil && t.Flags()&checker.TypeFlagsNever != 0 {
+			return t
+		}
+	}
 	return tp.checker.GetTypeAtLocation(node)
 }
 

@@ -15,6 +15,8 @@ mod harness;
 mod inferred_generator_contextual_type_test;
 #[cfg(test)]
 mod match_when_stability_ts2589_test;
+#[cfg(test)]
+mod never_spread_ts2488_test;
 mod quickfix_baseline;
 mod quickfix_runner;
 mod refactor_baseline;

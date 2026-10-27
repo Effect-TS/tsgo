@@ -3,7 +3,7 @@ use std::panic::AssertUnwindSafe;
 use ets_go::panics::recover as catch_unwind;
 
 use ets_shim::ast::{Kind, Node};
-use ets_shim::checker::Type;
+use ets_shim::checker::{Type, TypeFlags};
 use ets_shim::core::P;
 
 use crate::*;
@@ -36,6 +36,16 @@ impl TypeParser<'_> {
         catch_unwind(AssertUnwindSafe(|| {
             if let Some(t) = self.checked_expression_type(node) {
                 return t;
+            }
+            // The checker treats a never-typed spread as array-like when it checks the
+            // enclosing array literal or call, but checking the spread element on its
+            // own reports TS2488 as a side effect.
+            if node.kind() == Kind::SpreadElement {
+                if let Some(t) = self.get_type_at_location(node.expression()) {
+                    if t.flags().intersects(TypeFlags::Never) {
+                        return t;
+                    }
+                }
             }
             self.checker.get_type_at_location(node)
         }))
@@ -101,7 +111,7 @@ pub(crate) fn is_type_at_location_candidate(node: P<Node>) -> bool {
     true
 }
 
-// go: internal/typeparser/get_type_at_location.go:89 isInsideTypeOnlyHeritageExpression
+// go: internal/typeparser/get_type_at_location.go:97 isInsideTypeOnlyHeritageExpression
 // isInsideTypeOnlyHeritageExpression reports whether node is an
 // ExpressionWithTypeArguments or one of its identifier/property-access
 // sub-expressions inside a type-only heritage clause. The checker can
@@ -130,7 +140,7 @@ pub(crate) fn is_inside_type_only_heritage_expression(node: P<Node>) -> bool {
     false
 }
 
-// go: internal/typeparser/get_type_at_location.go:112 isTypeOnlyHeritageClause
+// go: internal/typeparser/get_type_at_location.go:120 isTypeOnlyHeritageClause
 pub(crate) fn is_type_only_heritage_clause(node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;
