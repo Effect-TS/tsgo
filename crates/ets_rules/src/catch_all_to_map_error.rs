@@ -85,22 +85,20 @@ pub fn analyze_catch_all_to_map_error(
                 continue;
             }
 
-            if !tp.is_node_reference_to_effect_module_api(transformation.callee(), "catch")
-                && !tp.is_node_reference_to_effect_module_api(transformation.callee(), "catchAll")
+            // Name the catch variant the callee resolves to, however it is written.
+            let catch_method_name = if tp
+                .is_node_reference_to_effect_module_api(transformation.callee(), "catch")
             {
+                "catch".to_string()
+            } else if tp.is_node_reference_to_effect_module_api(transformation.callee(), "catchAll")
+            {
+                "catchAll".to_string()
+            } else {
                 continue;
-            }
+            };
 
             if !tp.is_node_reference_to_effect_module_api(call.expression(), "fail") {
                 continue;
-            }
-
-            // Extract the "catch" method name from the PropertyAccessExpression callee
-            let mut catch_method_name = "catch".to_string();
-            let callee = transformation.callee();
-            if callee.kind() == Kind::PropertyAccessExpression {
-                let name = callee.as_property_access_expression().name();
-                catch_method_name = name.text().to_string();
             }
 
             matches.push(CatchAllToMapErrorMatch {

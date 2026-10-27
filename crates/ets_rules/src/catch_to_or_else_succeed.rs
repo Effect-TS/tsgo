@@ -82,11 +82,17 @@ pub fn analyze_catch_to_or_else_succeed(
             }
             let call = expr.as_call_expression();
 
-            if !tp.is_node_reference_to_effect_module_api(transformation.callee(), "catch")
-                && !tp.is_node_reference_to_effect_module_api(transformation.callee(), "catchAll")
+            // Name the catch variant the callee resolves to, however it is written.
+            let catch_method_name = if tp
+                .is_node_reference_to_effect_module_api(transformation.callee(), "catch")
             {
+                "catch".to_string()
+            } else if tp.is_node_reference_to_effect_module_api(transformation.callee(), "catchAll")
+            {
+                "catchAll".to_string()
+            } else {
                 continue;
-            }
+            };
 
             let arguments = call.arguments().nodes();
             if arguments.is_empty() {
@@ -95,13 +101,6 @@ pub fn analyze_catch_to_or_else_succeed(
 
             if !tp.is_node_reference_to_effect_module_api(call.expression(), "succeed") {
                 continue;
-            }
-
-            let mut catch_method_name = "catch".to_string();
-            if transformation.callee().kind() == Kind::PropertyAccessExpression {
-                let prop = transformation.callee().as_property_access_expression();
-                let name = prop.name();
-                catch_method_name = name.text().to_string();
             }
 
             matches.push(CatchToOrElseSucceedMatch {
