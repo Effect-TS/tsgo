@@ -70,6 +70,8 @@ func TestMapMapErrorToMapBothFixesCompile(t *testing.T) {
 				{name: "mapMapErrorToMapBoth_crossPipe.ts", matches: crossMatches, fixes: crossFixes},
 				{name: "mapMapErrorToMapBoth_curried.ts", matches: curriedMatches, fixes: curriedFixes},
 				{name: "mapMapErrorToMapBoth_boundaries.ts", matches: boundaryMatches, fixes: boundaryFixes},
+				// Computed callees have no fix: removing or replacing them would drop evaluation.
+				{name: "mapMapErrorToMapBoth_calleeExpressions.ts", matches: 4, fixes: 1},
 				{
 					name: "exactCrossPipe",
 					source: `import { Effect } from "effect"

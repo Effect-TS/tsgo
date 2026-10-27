@@ -1,3 +1,4 @@
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"

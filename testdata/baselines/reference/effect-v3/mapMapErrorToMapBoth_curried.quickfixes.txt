@@ -1,36 +1,36 @@
 === Quick Fix Inventory ===
 
-[D1] (12:33-12:48) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D1] (13:33-13:48) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
 
-[D2] (16:32-16:47) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
-  Fix 0: "Disable mapMapErrorToMapBoth for this line"
-  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
-  Fix 2: "Replace with Effect.mapBoth"
-
-[D3] (23:3-23:18) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
-  Fix 0: "Disable mapMapErrorToMapBoth for this line"
-  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
-
-[D4] (28:3-28:18) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D2] (17:32-17:47) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D5] (33:39-33:54) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D3] (24:3-24:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
 
-[D6] (38:48-38:58) TS377151: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D4] (29:3-29:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+[D5] (34:39-34:54) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
 
-[D7] (43:44-43:54) TS377151: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D6] (39:48-39:58) TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
 
-[D8] (53:37-53:52) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D7] (44:44-44:54) TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+
+[D8] (54:37-54:52) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
 
@@ -51,6 +51,7 @@ skipped by default
 === [D2] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth_curried.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Effect, pipe } from "effect"
@@ -124,6 +125,7 @@ skipped by default
 === [D4] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth_curried.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Effect, pipe } from "effect"

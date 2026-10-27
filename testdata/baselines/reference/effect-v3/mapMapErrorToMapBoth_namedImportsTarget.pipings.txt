@@ -1,7 +1,7 @@
 ==== /.src/mapMapErrorToMapBoth_namedImportsTarget.ts (2 flows) ====
 
 === Piping Flow ===
-Location: 9:31 - 9:97
+Location: 10:31 - 10:97
 Node: fetchCount.pipe(m((n) => n + 1), me((message) => message.length))
 Node Kind: KindCallExpression
 
@@ -19,7 +19,7 @@ Transformations (2):
       outType: Effect<number, number, never>
 
 === Piping Flow ===
-Location: 12:29 - 12:120
+Location: 13:29 - 13:120
 Node: fetchCount.pipe(both({ onSuccess: (n) => n + 1, onFailure: (message) => message.length }))
 Node Kind: KindCallExpression
 

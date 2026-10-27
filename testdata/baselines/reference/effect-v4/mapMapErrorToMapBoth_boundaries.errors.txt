@@ -1,15 +1,15 @@
 === Metadata ===
 Effect version: 4.0.2
 
-/.src/mapMapErrorToMapBoth_boundaries.ts(21,9): warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
-/.src/mapMapErrorToMapBoth_boundaries.ts(26,9): warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
-/.src/mapMapErrorToMapBoth_boundaries.ts(32,9): warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
-/.src/mapMapErrorToMapBoth_boundaries.ts(36,39): warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
-/.src/mapMapErrorToMapBoth_boundaries.ts(42,39): warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
-/.src/mapMapErrorToMapBoth_boundaries.ts(48,26): warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
-/.src/mapMapErrorToMapBoth_boundaries.ts(60,8): warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
-/.src/mapMapErrorToMapBoth_boundaries.ts(68,9): warning TS377151: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
-/.src/mapMapErrorToMapBoth_boundaries.ts(74,9): warning TS377151: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_boundaries.ts(21,9): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_boundaries.ts(26,9): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_boundaries.ts(32,9): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_boundaries.ts(36,39): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_boundaries.ts(42,39): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_boundaries.ts(48,26): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_boundaries.ts(60,8): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_boundaries.ts(68,9): warning TS377153: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_boundaries.ts(74,9): warning TS377153: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
 
 
 ==== /.src/mapMapErrorToMapBoth_boundaries.ts (9 errors) ====
@@ -35,14 +35,14 @@ Effect version: 4.0.2
       .pipe(record, Effect.map(makeSuccess()))
       .pipe(Effect.mapError(String))
             ~~~~~~~~~~~~~~~
-!!! warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
     
     // MUST TRIGGER: same shape with a function literal callback; the quickfix is offered
     export const precedingStepLiteral = Effect.succeed(3)
       .pipe(record, Effect.map((n) => n * multiplier))
       .pipe(Effect.mapError(String))
             ~~~~~~~~~~~~~~~
-!!! warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
     
     // MUST TRIGGER: the pair starts the first pipe, so nothing runs between the callbacks;
     // the quickfix is offered for a non-literal callback
@@ -50,13 +50,13 @@ Effect version: 4.0.2
       .pipe(Effect.map(makeSuccess()))
       .pipe(Effect.mapError(String), record)
             ~~~~~~~~~~~~~~~
-!!! warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
     
     // MUST TRIGGER (no quickfix): explicit type arguments on an empty .pipe() between the steps;
     // removing Effect.map changes its input type
     export const emptyPipeTypeArguments = Effect.mapError(
                                           ~~~~~~~~~~~~~~~
-!!! warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
       Effect.map(source, (n) => String(n)).pipe<Effect.Effect<string, string>>(),
       (message) => message.length
     )
@@ -64,7 +64,7 @@ Effect version: 4.0.2
     // MUST TRIGGER (no quickfix): explicit type arguments on the pipe call that holds the first step
     export const firstPipeTypeArguments = Effect.mapError(
                                           ~~~~~~~~~~~~~~~
-!!! warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
       pipe<Effect.Effect<number, string>, Effect.Effect<string, string>>(source, Effect.map((n) => String(n))),
       (message) => message.length
     )
@@ -72,7 +72,7 @@ Effect version: 4.0.2
     // MUST TRIGGER: an empty .pipe() without type arguments between the steps; the quickfix is offered
     export const emptyPipe = Effect.mapError(
                              ~~~~~~~~~~~~~~~
-!!! warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
       Effect.map(source, (n) => String(n)).pipe(),
       (message) => message.length
     )
@@ -86,7 +86,7 @@ Effect version: 4.0.2
       Effect.map(makeSuccess())
     ).pipe(Effect.mapError(String))
            ~~~~~~~~~~~~~~~
-!!! warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
     
     declare const makeTap: () => <A, E, R>(self: Effect.Effect<A, E, R>) => Effect.Effect<A, E, R>
     
@@ -96,7 +96,7 @@ Effect version: 4.0.2
       .pipe(Effect.mapEager((n) => n * multiplier))
       .pipe(Effect.mapErrorEager((message) => message), makeTap())
             ~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377151: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
     
     // MUST TRIGGER: function literal callbacks and the second step ends its pipe, so nothing
     // observable runs between the first step's work and the merged step; the quickfix is offered
@@ -104,5 +104,5 @@ Effect version: 4.0.2
       .pipe(record, Effect.mapEager((n) => n * multiplier))
       .pipe(Effect.mapErrorEager((message) => message))
             ~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377151: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
     

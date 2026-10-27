@@ -1,6 +1,6 @@
 === Quick Fix Inventory ===
 
-[D1] (9:65-9:67) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D1] (10:65-10:67) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
@@ -16,6 +16,7 @@ skipped by default
 === [D1] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth_namedImportsTarget.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import type { Effect } from "effect"

@@ -1,7 +1,7 @@
 ==== /.src/mapMapErrorToMapBoth_evaluationOrder.ts (2 flows) ====
 
 === Piping Flow ===
-Location: 13:26 - 16:2
+Location: 14:26 - 17:2
 Node: Effect.mapError(\n  Effect.map(Effect.succeed(3), (n) => n * multiplier),\n  makeErrorMapper()\n)
 Node Kind: KindCallExpression
 
@@ -23,7 +23,7 @@ Transformations (3):
       outType: Effect<number, number, never>
 
 === Piping Flow ===
-Location: 19:24 - 22:2
+Location: 20:24 - 23:2
 Node: Effect.succeed(3).pipe(\n  Effect.map((n) => n * multiplier),\n  Effect.mapError(makeErrorMapper())\n)
 Node Kind: KindCallExpression
 

@@ -1,10 +1,11 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/mapMapErrorToMapBoth_namedImportsTarget.ts(9,65): warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_namedImportsTarget.ts(10,65): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
 
 
 ==== /.src/mapMapErrorToMapBoth_namedImportsTarget.ts (1 errors) ====
+    // @effect-v3
     // @effect-diagnostics *:off
     // @effect-diagnostics mapMapErrorToMapBoth:warning
     import type { Effect } from "effect"
@@ -15,7 +16,7 @@ Effect version: 3.19.19
     // MUST TRIGGER: the quickfix uses the imported mapBoth binding `both`
     export const namedWithTarget = fetchCount.pipe(m((n) => n + 1), me((message) => message.length))
                                                                     ~~
-!!! warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
     
     // MUST NOT TRIGGER: already merged through the imported binding
     export const alreadyMerged = fetchCount.pipe(both({ onSuccess: (n) => n + 1, onFailure: (message) => message.length }))

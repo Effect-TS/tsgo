@@ -1,155 +1,126 @@
 === Quick Fix Inventory ===
 
-[D1] (3:24-3:30) TS2305: Module '"effect"' has no exported member 'Either'.
-  (no quick fixes)
-
-[D2] (3:44-3:47) TS2305: Module '"effect"' has no exported member 'STM'.
-  (no quick fixes)
-
-[D3] (18:3-18:18) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D1] (19:3-19:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D4] (24:3-24:13) TS377151: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D2] (25:3-25:13) TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D5] (31:3-31:18) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D3] (32:3-32:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D6] (38:3-38:13) TS377151: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D4] (39:3-39:13) TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D7] (42:32-42:42) TS377151: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D5] (43:32-43:42) TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D8] (48:39-48:54) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D6] (49:39-49:54) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D9] (57:3-57:18) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D7] (58:3-58:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D10] (64:3-64:13) TS377151: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D8] (65:3-65:13) TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D11] (70:74-70:89) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D9] (71:74-71:89) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D12] (78:3-78:18) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D10] (79:3-79:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D13] (87:3-87:18) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D11] (88:3-88:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
 
-[D14] (93:3-93:13) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
-  Fix 0: "Disable mapMapErrorToMapBoth for this line"
-  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
-  Fix 2: "Replace with Effect.mapBoth"
-
-[D15] (99:3-99:13) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D12] (94:3-94:13) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D16] (107:3-107:16) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D13] (100:3-100:13) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D17] (114:5-114:20) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D14] (108:3-108:16) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D18] (126:3-126:18) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D15] (115:5-115:20) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D19] (133:3-133:18) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D16] (127:3-127:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D20] (141:3-141:18) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D17] (134:3-134:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D21] (147:3-147:18) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D18] (142:3-142:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D22] (149:3-149:13) TS377151: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D19] (148:3-148:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D23] (197:9-197:24) TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D20] (150:3-150:13) TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D24] (200:42-200:52) TS377151: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+[D21] (198:9-198:24) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
   Fix 0: "Disable mapMapErrorToMapBoth for this line"
   Fix 1: "Disable mapMapErrorToMapBoth for entire file"
   Fix 2: "Replace with Effect.mapBoth"
 
-[D25] (220:10-220:18) TS2339: Property 'catchAll' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
-  (no quick fixes)
-
-[D26] (220:20-220:27) TS7006: Parameter 'message' implicitly has an 'any' type.
-  (no quick fixes)
-
-[D27] (226:10-226:23) TS2339: Property 'mapErrorCause' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'.
-  (no quick fixes)
-
-[D28] (226:25-226:30) TS7006: Parameter 'cause' implicitly has an 'any' type.
-  (no quick fixes)
-
-[D29] (257:15-257:16) TS7006: Parameter 'n' implicitly has an 'any' type.
-  (no quick fixes)
-
-[D30] (258:19-258:26) TS7006: Parameter 'message' implicitly has an 'any' type.
-  (no quick fixes)
-
-[D31] (264:12-264:13) TS7006: Parameter 'n' implicitly has an 'any' type.
-  (no quick fixes)
-
-[D32] (265:17-265:24) TS7006: Parameter 'message' implicitly has an 'any' type.
-  (no quick fixes)
+[D22] (201:42-201:52) TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
 
 === Quick Fix Application Results ===
 
-=== [D3] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D1] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D3] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D1] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D3] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D1] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -431,15 +402,16 @@ export const customApi = pipe(
 )
 
 
-=== [D4] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D2] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D4] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D2] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D4] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D2] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -721,15 +693,16 @@ export const customApi = pipe(
 )
 
 
-=== [D5] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D3] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D5] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D3] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D5] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D3] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -1011,15 +984,16 @@ export const customApi = pipe(
 )
 
 
-=== [D6] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D4] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D6] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D4] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D6] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D4] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -1301,15 +1275,16 @@ export const customApi = pipe(
 )
 
 
-=== [D7] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D5] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D7] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D5] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D7] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D5] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -1592,15 +1567,16 @@ export const customApi = pipe(
 )
 
 
-=== [D8] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D6] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D8] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D6] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D8] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D6] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -1883,15 +1859,16 @@ export const customApi = pipe(
 )
 
 
-=== [D9] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D7] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D9] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D7] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D9] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D7] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -2173,15 +2150,16 @@ export const customApi = pipe(
 )
 
 
-=== [D10] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D8] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D10] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D8] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D10] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D8] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -2463,15 +2441,16 @@ export const customApi = pipe(
 )
 
 
-=== [D11] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D9] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D11] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D9] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D11] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D9] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -2754,15 +2733,16 @@ export const customApi = pipe(
 )
 
 
-=== [D12] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D10] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D12] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D10] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D12] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D10] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -3044,21 +3024,22 @@ export const customApi = pipe(
 )
 
 
-=== [D13] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D11] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D13] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D11] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D14] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D12] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D14] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D12] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D14] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D12] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -3340,15 +3321,16 @@ export const customApi = pipe(
 )
 
 
-=== [D15] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D13] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D15] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D13] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D15] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D13] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -3630,15 +3612,16 @@ export const customApi = pipe(
 )
 
 
-=== [D16] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D14] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D16] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D14] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D16] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D14] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -3920,15 +3903,16 @@ export const customApi = pipe(
 )
 
 
-=== [D17] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D15] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D17] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D15] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D17] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D15] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -4210,15 +4194,16 @@ export const customApi = pipe(
 )
 
 
-=== [D18] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D16] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D18] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D16] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D18] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D16] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -4500,15 +4485,16 @@ export const customApi = pipe(
 )
 
 
-=== [D19] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D17] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D19] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D17] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D19] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D17] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -4790,15 +4776,16 @@ export const customApi = pipe(
 )
 
 
-=== [D20] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D18] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D20] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D18] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D20] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D18] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -5080,15 +5067,16 @@ export const customApi = pipe(
 )
 
 
-=== [D21] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D19] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D21] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D19] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D21] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D19] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -5370,15 +5358,16 @@ export const customApi = pipe(
 )
 
 
-=== [D22] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D20] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D22] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D20] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D22] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D20] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -5660,15 +5649,16 @@ export const customApi = pipe(
 )
 
 
-=== [D23] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D21] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D23] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D21] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D23] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D21] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"
@@ -5950,15 +5940,16 @@ export const customApi = pipe(
 )
 
 
-=== [D24] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+=== [D22] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
 skipped by default
 
-=== [D24] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+=== [D22] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
 skipped by default
 
-=== [D24] Fix 2: "Replace with Effect.mapBoth" ===
+=== [D22] Fix 2: "Replace with Effect.mapBoth" ===
 
 --- file:///.src/mapMapErrorToMapBoth.ts ---
+// @effect-v3
 // @effect-diagnostics *:off
 // @effect-diagnostics mapMapErrorToMapBoth:warning
 import { Data, Effect, Either, Exit, pipe, STM, Stream } from "effect"

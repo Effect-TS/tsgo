@@ -1,7 +1,7 @@
 ==== /.src/mapMapErrorToMapBoth_crossPipe.ts (14 flows) ====
 
 === Piping Flow ===
-Location: 5:24 - 5:54
+Location: 6:24 - 6:54
 Node: Data.TaggedError("TaskError")
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "TaskError"; } & Readonly<A>
 
 === Piping Flow ===
-Location: 12:27 - 14:66
+Location: 13:27 - 15:66
 Node: fetchCount\n  .pipe(Effect.map((n) => n > 0))\n  .pipe(Effect.mapError((message) => new TaskError({ message })))
 Node Kind: KindCallExpression
 
@@ -33,7 +33,7 @@ Transformations (2):
       outType: Effect<boolean, TaskError, never>
 
 === Piping Flow ===
-Location: 17:34 - 19:34
+Location: 18:34 - 20:34
 Node: fetchCount\n  .pipe(Effect.mapError((message) => new TaskError({ message })))\n  .pipe(Effect.map((n) => n > 0))
 Node Kind: KindCallExpression
 
@@ -51,7 +51,7 @@ Transformations (2):
       outType: Effect<boolean, TaskError, never>
 
 === Piping Flow ===
-Location: 22:32 - 30:4
+Location: 23:32 - 31:4
 Node: fetchCount\n  .pipe(\n    Effect.tap((n) => Effect.log(n)),\n    Effect.map((n) => n > 0)\n  )\n  .pipe(\n    Effect.mapError((message) => new TaskError({ message })),\n    Effect.asVoid\n  )
 Node Kind: KindCallExpression
 
@@ -77,7 +77,7 @@ Transformations (4):
       outType: Effect<void, TaskError, never>
 
 === Piping Flow ===
-Location: 24:22 - 24:36
+Location: 25:22 - 25:36
 Node: Effect.log(n)
 Node Kind: KindCallExpression
 
@@ -91,7 +91,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 33:34 - 36:2
+Location: 34:34 - 37:2
 Node: pipe(\n  pipe(fetchCount, Effect.map((n) => n > 0)),\n  Effect.mapError((message) => new TaskError({ message }))\n)
 Node Kind: KindCallExpression
 
@@ -109,7 +109,7 @@ Transformations (2):
       outType: Effect<boolean, TaskError, never>
 
 === Piping Flow ===
-Location: 39:37 - 41:2
+Location: 40:37 - 42:2
 Node: Effect.map(fetchCount, (n) => n > 0).pipe(\n  Effect.mapError((message) => new TaskError({ message }))\n)
 Node Kind: KindCallExpression
 
@@ -127,7 +127,7 @@ Transformations (2):
       outType: Effect<boolean, TaskError, never>
 
 === Piping Flow ===
-Location: 44:37 - 50:2
+Location: 45:37 - 51:2
 Node: Effect.mapError(\n  fetchCount.pipe(\n    Effect.tap((n) => Effect.log(n)),\n    Effect.map((n) => n > 0)\n  ),\n  (message) => new TaskError({ message })\n)
 Node Kind: KindCallExpression
 
@@ -149,7 +149,7 @@ Transformations (3):
       outType: Effect<boolean, TaskError, never>
 
 === Piping Flow ===
-Location: 46:22 - 46:36
+Location: 47:22 - 47:36
 Node: Effect.log(n)
 Node Kind: KindCallExpression
 
@@ -163,7 +163,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 53:23 - 55:2
+Location: 54:23 - 56:2
 Node: Effect.mapError((message: string) => new TaskError({ message }))(\n  Effect.map((n: number) => n > 0)(fetchCount)\n)
 Node Kind: KindCallExpression
 
@@ -181,7 +181,7 @@ Transformations (2):
       outType: Effect<boolean, TaskError, never>
 
 === Piping Flow ===
-Location: 58:32 - 64:2
+Location: 59:32 - 65:2
 Node: Effect.fnUntraced(\n  function*(n: number) {\n    return yield* Effect.succeed(n)\n  },\n  Effect.map((n) => n > 0),\n  Effect.mapError(() => new TaskError({ message: "never" }))\n)
 Node Kind: KindCallExpression
 
@@ -199,7 +199,7 @@ Transformations (2):
       outType: Effect<boolean, TaskError, never>
 
 === Piping Flow ===
-Location: 60:18 - 60:36
+Location: 61:18 - 61:36
 Node: Effect.succeed(n)
 Node Kind: KindCallExpression
 
@@ -213,7 +213,7 @@ Transformations (1):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 67:36 - 72:66
+Location: 68:36 - 73:66
 Node: fetchCount\n  .pipe(\n    Effect.map((n) => n > 0),\n    Effect.tap((positive) => Effect.log(positive))\n  )\n  .pipe(Effect.mapError((message) => new TaskError({ message })))
 Node Kind: KindCallExpression
 
@@ -235,7 +235,7 @@ Transformations (3):
       outType: Effect<boolean, TaskError, never>
 
 === Piping Flow ===
-Location: 70:29 - 70:50
+Location: 71:29 - 71:50
 Node: Effect.log(positive)
 Node Kind: KindCallExpression
 

@@ -106,7 +106,10 @@ func AnalyzeMapMapErrorToMapBoth(tp *typeparser.TypeParser, c *checker.Checker, 
 				FirstFailure:    a.failure,
 				First:           first,
 				Second:          second,
-				Fixable: !hasExplicitTypeArguments(&second) && !mapMapErrorPathHasTypeArguments(first, second) &&
+				// The fix removes one callee and replaces the other, so both must be
+				// entity names whose evaluation runs no code.
+				Fixable: ast.IsEntityNameExpression(first.Callee()) && ast.IsEntityNameExpression(second.Callee()) &&
+					!hasExplicitTypeArguments(&second) && !mapMapErrorPathHasTypeArguments(first, second) &&
 					mapMapErrorKeepsEvaluationOrder(first, second, a.eager),
 			})
 		}

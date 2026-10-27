@@ -1,7 +1,7 @@
 === Metadata ===
 Effect version: 4.0.2
 
-/.src/mapMapErrorToMapBoth_preview.ts(14,3): warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_preview.ts(14,3): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
 
 
 ==== /.src/mapMapErrorToMapBoth_preview.ts (1 errors) ====
@@ -20,6 +20,6 @@ Effect version: 4.0.2
       Effect.map((n) => n > 0),
       Effect.mapError((message) => new TaskError({ message }))
       ~~~~~~~~~~~~~~~
-!!! warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
     )
     

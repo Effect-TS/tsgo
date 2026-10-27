@@ -1,9 +1,9 @@
 === Metadata ===
 Effect version: 4.0.2
 
-/.src/mapMapErrorToMapBoth_namedImportsNoTarget.ts(10,59): warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
-/.src/mapMapErrorToMapBoth_namedImportsNoTarget.ts(15,3): warning TS377151: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
-/.src/mapMapErrorToMapBoth_namedImportsNoTarget.ts(22,43): warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_namedImportsNoTarget.ts(10,59): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_namedImportsNoTarget.ts(15,3): warning TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_namedImportsNoTarget.ts(22,43): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
 
 
 ==== /.src/mapMapErrorToMapBoth_namedImportsNoTarget.ts (3 errors) ====
@@ -18,14 +18,14 @@ Effect version: 4.0.2
     // no binding reaches Effect.mapBoth, and the type-only Effect import is not a value
     export const namedOnly = succeed(1).pipe(m((n) => n + 1), me(String))
                                                               ~~
-!!! warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
     
     // MUST TRIGGER (no quickfix): same, on a declared effect
     export const namedOnlyReverse = fetchCount.pipe(
       me((message) => message.length),
       m((n) => n > 0)
       ~
-!!! warning TS377151: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.mapError` + `Effect.map` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
     )
     
     // MUST TRIGGER (no quickfix): a local value named Effect is not the Effect module
@@ -34,6 +34,6 @@ Effect version: 4.0.2
       void Effect
       return fetchCount.pipe(m((n) => n + 1), me((message) => message.length))
                                               ~~
-!!! warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
     })()
     

@@ -1,0 +1,88 @@
+=== Quick Fix Inventory ===
+
+[D1] (11:3-11:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+
+[D2] (17:3-17:23) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+
+[D3] (21:36-21:56) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+
+[D4] (36:3-36:18) TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+  Fix 0: "Disable mapMapErrorToMapBoth for this line"
+  Fix 1: "Disable mapMapErrorToMapBoth for entire file"
+  Fix 2: "Replace with Effect.mapBoth"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable mapMapErrorToMapBoth for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable mapMapErrorToMapBoth for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.mapBoth" ===
+
+--- file:///.src/mapMapErrorToMapBoth_calleeExpressions.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapMapErrorToMapBoth:warning
+import { Effect } from "effect"
+
+declare const source: Effect.Effect<number, string>
+declare const getEffect: () => typeof Effect
+
+// MUST TRIGGER (no quickfix): the first callee calls getEffect(); removing the step would drop that call
+export const computedFirstCallee = source.pipe(
+  getEffect().map((n) => n + 1),
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER (no quickfix): the second callee calls getEffect(); replacing it would drop that call
+export const computedSecondCallee = source.pipe(
+  Effect.map((n) => n + 1),
+  getEffect().mapError((message) => message.length)
+)
+
+// MUST TRIGGER (no quickfix): both callees call getEffect()
+export const computedBothCallees = getEffect().mapError(
+  getEffect().map(source, (n) => n + 1),
+  (message) => message.length
+)
+
+// MUST NOT TRIGGER: an element-access callee is not resolved as an Effect API, so the pair
+// is not detected (and it would not be an entity name for the quickfix either)
+export const elementAccessCallee = source.pipe(
+  Effect["map"]((n) => n + 1),
+  Effect.mapError((message) => message.length)
+)
+
+// MUST TRIGGER: identifier and dotted-name callees; the quickfix is offered
+export const entityNameCallees = source.pipe(
+  Effect.mapBoth({
+    onSuccess: n => n + 1,
+    onFailure: message => message.length
+})
+)
+

@@ -1,12 +1,12 @@
 === Metadata ===
 Effect version: 4.0.2
 
-/.src/mapMapErrorToMapBoth_evaluationOrder.ts(19,32): warning TS377151: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
-/.src/mapMapErrorToMapBoth_evaluationOrder.ts(25,39): warning TS377151: `Effect.mapErrorEager` + `Effect.mapEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
-/.src/mapMapErrorToMapBoth_evaluationOrder.ts(31,38): warning TS377151: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
-/.src/mapMapErrorToMapBoth_evaluationOrder.ts(40,43): warning TS377151: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
-/.src/mapMapErrorToMapBoth_evaluationOrder.ts(51,3): warning TS377151: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
-/.src/mapMapErrorToMapBoth_evaluationOrder.ts(56,31): warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_evaluationOrder.ts(19,32): warning TS377153: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_evaluationOrder.ts(25,39): warning TS377153: `Effect.mapErrorEager` + `Effect.mapEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_evaluationOrder.ts(31,38): warning TS377153: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_evaluationOrder.ts(40,43): warning TS377153: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_evaluationOrder.ts(51,3): warning TS377153: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_evaluationOrder.ts(56,31): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
 
 
 ==== /.src/mapMapErrorToMapBoth_evaluationOrder.ts (6 errors) ====
@@ -30,7 +30,7 @@ Effect version: 4.0.2
     // evaluate makeErrorMapper() first (result 6)
     export const eagerNestedCall = Effect.mapErrorEager(
                                    ~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377151: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
       Effect.mapEager(Effect.succeed(3), (n) => n * multiplier),
       makeErrorMapper()
     )
@@ -38,7 +38,7 @@ Effect version: 4.0.2
     // MUST TRIGGER (no quickfix): reverse order, the inner Effect.mapErrorEager runs first on a failure
     export const eagerNestedCallReverse = Effect.mapEager(
                                           ~~~~~~~~~~~~~~~
-!!! warning TS377151: `Effect.mapErrorEager` + `Effect.mapEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.mapErrorEager` + `Effect.mapEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
       Effect.mapErrorEager(Effect.fail("boom"), (message) => message.length * multiplier),
       makeSuccessMapper()
     )
@@ -46,7 +46,7 @@ Effect version: 4.0.2
     // MUST TRIGGER (no quickfix): a mutable binding read after the inner step ran
     export const eagerNestedIdentifier = Effect.mapErrorEager(
                                          ~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377151: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
       Effect.mapEager(Effect.succeed(3), (n) => {
         errorMapper = (message) => message.length * 2
         return n
@@ -57,7 +57,7 @@ Effect version: 4.0.2
     // MUST TRIGGER: a function literal runs no code when evaluated, so the quickfix is offered
     export const eagerNestedFunctionLiteral = Effect.mapErrorEager(
                                               ~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377151: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
       Effect.mapEager(Effect.succeed(3), (n) => n * multiplier),
       (function(message: string) {
         return message.length
@@ -70,14 +70,14 @@ Effect version: 4.0.2
       Effect.mapEager((n) => n * multiplier),
       Effect.mapErrorEager(makeErrorMapper())
       ~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377151: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.mapEager` + `Effect.mapErrorEager` transform the success and failure channels one step at a time; `Effect.mapBothEager` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
     )
     
     // MUST TRIGGER: non-eager nested data-first; Effect.map does not run its callback
     // when called, so the quickfix is offered
     export const lazyNestedCall = Effect.mapError(
                                   ~~~~~~~~~~~~~~~
-!!! warning TS377151: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
       Effect.map(Effect.succeed(3), (n) => n * multiplier),
       makeErrorMapper()
     )

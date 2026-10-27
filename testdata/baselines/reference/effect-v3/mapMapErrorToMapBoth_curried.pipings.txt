@@ -1,7 +1,7 @@
 ==== /.src/mapMapErrorToMapBoth_curried.ts (8 flows) ====
 
 === Piping Flow ===
-Location: 12:32 - 12:98
+Location: 13:32 - 13:98
 Node: Effect.mapError(makeFailure())(Effect.map(makeSuccess())(source))
 Node Kind: KindCallExpression
 
@@ -19,7 +19,7 @@ Transformations (2):
       outType: Effect<number, number, never>
 
 === Piping Flow ===
-Location: 16:31 - 18:2
+Location: 17:31 - 19:2
 Node: Effect.mapError((message: string) => message.length)(\n  Effect.map((n: number) => n + 1)(source)\n)
 Node Kind: KindCallExpression
 
@@ -37,7 +37,7 @@ Transformations (2):
       outType: Effect<number, number, never>
 
 === Piping Flow ===
-Location: 22:38 - 24:2
+Location: 23:38 - 25:2
 Node: Effect.map(makeSuccess())(makeSource()).pipe(\n  Effect.mapError((message) => message.length)\n)
 Node Kind: KindCallExpression
 
@@ -55,7 +55,7 @@ Transformations (2):
       outType: Effect<number, number, never>
 
 === Piping Flow ===
-Location: 27:38 - 29:2
+Location: 28:38 - 30:2
 Node: Effect.map((n: number) => n + 1)(makeSource()).pipe(\n  Effect.mapError(makeFailure())\n)
 Node Kind: KindCallExpression
 
@@ -73,7 +73,7 @@ Transformations (2):
       outType: Effect<number, number, never>
 
 === Piping Flow ===
-Location: 33:38 - 35:2
+Location: 34:38 - 36:2
 Node: Effect.mapError((message: string) => message.length)(\n  makeSource().pipe(Effect.map(makeSuccess()))\n)
 Node Kind: KindCallExpression
 
@@ -91,7 +91,7 @@ Transformations (2):
       outType: Effect<number, number, never>
 
 === Piping Flow ===
-Location: 38:47 - 40:2
+Location: 39:47 - 41:2
 Node: Effect.map((n: number) => n + 1)<number, never>(\n  Effect.mapError((message: string) => message.length)(source)\n)
 Node Kind: KindCallExpression
 
@@ -109,7 +109,7 @@ Transformations (2):
       outType: Effect<number, number, never>
 
 === Piping Flow ===
-Location: 43:43 - 45:2
+Location: 44:43 - 46:2
 Node: Effect.map<number, number>((n) => n + 1)(\n  Effect.mapError((message: string) => message.length)(source)\n)
 Node Kind: KindCallExpression
 
@@ -127,7 +127,7 @@ Transformations (2):
       outType: Effect<number, number, never>
 
 === Piping Flow ===
-Location: 49:33 - 53:82
+Location: 50:33 - 54:82
 Node: pipe<\n  Effect.Effect<number, string>,\n  Effect.Effect<number, string>,\n  Effect.Effect<number, number>\n>(source, Effect.map((n) => n + 1), Effect.mapError((message) => message.length))
 Node Kind: KindCallExpression
 

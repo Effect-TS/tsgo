@@ -1,0 +1,57 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/mapMapErrorToMapBoth_calleeExpressions.ts(12,3): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_calleeExpressions.ts(18,3): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_calleeExpressions.ts(22,36): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+/.src/mapMapErrorToMapBoth_calleeExpressions.ts(37,3): warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+
+
+==== /.src/mapMapErrorToMapBoth_calleeExpressions.ts (4 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics mapMapErrorToMapBoth:warning
+    import { Effect } from "effect"
+    
+    declare const source: Effect.Effect<number, string>
+    declare const getEffect: () => typeof Effect
+    
+    // MUST TRIGGER (no quickfix): the first callee calls getEffect(); removing the step would drop that call
+    export const computedFirstCallee = source.pipe(
+      getEffect().map((n) => n + 1),
+      Effect.mapError((message) => message.length)
+      ~~~~~~~~~~~~~~~
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+    )
+    
+    // MUST TRIGGER (no quickfix): the second callee calls getEffect(); replacing it would drop that call
+    export const computedSecondCallee = source.pipe(
+      Effect.map((n) => n + 1),
+      getEffect().mapError((message) => message.length)
+      ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+    )
+    
+    // MUST TRIGGER (no quickfix): both callees call getEffect()
+    export const computedBothCallees = getEffect().mapError(
+                                       ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+      getEffect().map(source, (n) => n + 1),
+      (message) => message.length
+    )
+    
+    // MUST NOT TRIGGER: an element-access callee is not resolved as an Effect API, so the pair
+    // is not detected (and it would not be an entity name for the quickfix either)
+    export const elementAccessCallee = source.pipe(
+      Effect["map"]((n) => n + 1),
+      Effect.mapError((message) => message.length)
+    )
+    
+    // MUST TRIGGER: identifier and dotted-name callees; the quickfix is offered
+    export const entityNameCallees = source.pipe(
+      Effect.map((n) => n + 1),
+      Effect.mapError((message) => message.length)
+      ~~~~~~~~~~~~~~~
+!!! warning TS377153: `Effect.map` + `Effect.mapError` transform the success and failure channels one step at a time; `Effect.mapBoth` expresses both transformations in a single step. effect(mapMapErrorToMapBoth)
+    )
+    

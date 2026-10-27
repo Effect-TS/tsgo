@@ -27,7 +27,7 @@ func TestMapMapErrorToMapBothLifecycle(t *testing.T) {
 	// The diagnostic covers the second callee, Effect.mapError, of the pair.
 	at := func(category int, offset int) string {
 		start := offset + len("export const value = source.pipe(Effect.map((n) => n + 1), ")
-		return fmt.Sprintf("377151:%d:%d:%d%s", category, start, start+len("Effect.mapError"), message)
+		return fmt.Sprintf("377153:%d:%d:%d%s", category, start, start+len("Effect.mapError"), message)
 	}
 	base := len(prelude)
 	cases := []struct {
