@@ -2,4 +2,4 @@
 
 // Rust-only: the counterpart of etscore/version_generated.go, written by the same generator from
 // _packages/tsgo/package.json.
-pub const EFFECT_VERSION: &str = "0.59.0";
+pub const EFFECT_VERSION: &str = "0.60.0";
