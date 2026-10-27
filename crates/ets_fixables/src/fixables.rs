@@ -41,6 +41,7 @@ pub static ALL: LazyLock<Vec<Fixable>> = LazyLock::new(|| {
         (*MAP_SOME_TO_AS_SOME_FIX).clone(),
         (*MAP_CONST_TO_AS_FIX).clone(),
         (*MANUAL_METRIC_TAP_TO_TRACK_FIX).clone(),
+        (*FAIL_CAUSE_TO_CONSTRUCTOR_FIX).clone(),
         (*OPTION_MATCH_TO_FROM_OPTION_FIX).clone(),
         (*SYNC_TO_SUCCEED_FIX).clone(),
         (*EFFECT_SLEEP_ZERO_TO_YIELD_NOW_FIX).clone(),
@@ -84,7 +85,7 @@ pub static ALL: LazyLock<Vec<Fixable>> = LazyLock::new(|| {
     ]
 });
 
-// go: internal/fixables/fixables.go:78 ByErrorCode
+// go: internal/fixables/fixables.go:79 ByErrorCode
 // ByErrorCode finds all fixables that handle a given error code.
 pub fn by_error_code(code: i32) -> Vec<&'static Fixable> {
     let mut results = Vec::new();
@@ -96,7 +97,7 @@ pub fn by_error_code(code: i32) -> Vec<&'static Fixable> {
     results
 }
 
-// go: internal/fixables/fixables.go:89 AllErrorCodes
+// go: internal/fixables/fixables.go:90 AllErrorCodes
 // AllErrorCodes returns all unique error codes handled by any fixable.
 pub fn all_error_codes() -> Vec<i32> {
     let mut seen: FxHashSet<i32> = FxHashSet::default();
@@ -111,7 +112,7 @@ pub fn all_error_codes() -> Vec<i32> {
     codes
 }
 
-// go: internal/fixables/fixables.go:104 AllFixIDs
+// go: internal/fixables/fixables.go:105 AllFixIDs
 // AllFixIDs returns all unique fix IDs from all fixables.
 pub fn all_fix_ids() -> Vec<&'static str> {
     let mut seen: FxHashSet<&'static str> = FxHashSet::default();

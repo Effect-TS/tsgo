@@ -17,9 +17,12 @@ var effectCausePackageSourceFileDescriptor = newPackageSourceFileDescriptor(modu
 			return false
 		}
 
+		// These exports exist in both Effect v3 and v4.
 		return c.TryGetMemberInModuleExportsAndProperties("Cause", moduleSym) != nil &&
 			c.TryGetMemberInModuleExportsAndProperties("isCause", moduleSym) != nil &&
-			c.TryGetMemberInModuleExportsAndProperties("NoSuchElementError", moduleSym) != nil
+			c.TryGetMemberInModuleExportsAndProperties("fail", moduleSym) != nil &&
+			c.TryGetMemberInModuleExportsAndProperties("die", moduleSym) != nil &&
+			c.TryGetMemberInModuleExportsAndProperties("empty", moduleSym) != nil
 	},
 )
 

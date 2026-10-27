@@ -257,7 +257,36 @@ impl TypeParser<'_> {
         self.is_node_reference_to_module(node, &EFFECT_MODULE_DESCRIPTOR)
     }
 
-    // go: internal/typeparser/effect_type.go:240 TypeParser.IsNodeReferenceToEffectModuleApi
+    // go: internal/typeparser/effect_type.go:243 TypeParser.EffectModuleIdentifierAt
+    // EffectModuleIdentifierAt returns the name FindEffectModuleIdentifier picks
+    // for the Effect module when that name resolves to the Effect module at
+    // location, or "" when no such value binding is in scope there. Type-only
+    // bindings, directly or through a type-only re-export, are not values.
+    //
+    // Rust: Go's nil parser and checker checks have no counterpart (`&mut self` holds the checker).
+    pub fn effect_module_identifier_at(&mut self, location: impl Into<Option<P<Node>>>) -> String {
+        let Some(location) = location.into() else {
+            return String::new();
+        };
+        let name = find_effect_module_identifier(ets_shim::ast::get_source_file_of_node(location));
+        let local = self.checker.resolve_name_exported(&name, location, SymbolFlags::Value, false);
+        let Some(local) = local else {
+            return String::new();
+        };
+        if self.checker.get_type_only_alias_declaration_exported(local).is_some() {
+            return String::new();
+        }
+        let sym = self.resolve_aliased_symbol(Some(local));
+        let Some(sym) = sym else {
+            return String::new();
+        };
+        if !self.symbol_has_declaration_in_module_cached(sym, &EFFECT_MODULE_DESCRIPTOR) {
+            return String::new();
+        }
+        name
+    }
+
+    // go: internal/typeparser/effect_type.go:260 TypeParser.IsNodeReferenceToEffectModuleApi
     // IsNodeReferenceToEffectModuleApi reports whether node resolves to a member exported by the "effect" package.
     pub fn is_node_reference_to_effect_module_api(
         &mut self,
@@ -267,7 +296,7 @@ impl TypeParser<'_> {
         self.is_node_reference_to_module_export(node, &EFFECT_MODULE_DESCRIPTOR, member_name)
     }
 
-    // go: internal/typeparser/effect_type.go:249 TypeParser.IsNodeReferenceToEffectPackageExport
+    // go: internal/typeparser/effect_type.go:269 TypeParser.IsNodeReferenceToEffectPackageExport
     // IsNodeReferenceToEffectPackageExport reports whether node resolves to a member
     // exported by any module in the "effect" npm package. Unlike IsNodeReferenceToEffectModuleApi,
     // this does not require the source file to export the Effect type — it only checks

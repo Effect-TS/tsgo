@@ -1,0 +1,65 @@
+==== /.src/failCauseToConstructor_namedImports.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 13:21 - 13:49
+Node: failCause(causeDie(defect))
+Node Kind: KindCallExpression
+
+Subject: defect
+Subject Type: unknown
+
+Transformations (2):
+  [0] kind: call
+      callee: causeDie
+      args: (constant)
+      outType: Cause<never>
+  [1] kind: call
+      callee: failCause
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 14:21 - 14:55
+Node: pipe(error, causeFail, failCause)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (2):
+  [0] kind: pipe
+      callee: causeFail
+      args: (constant)
+      outType: Cause<Error>
+  [1] kind: pipe
+      callee: failCause
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 15:20 - 15:58
+Node: failCauseSync(() => causeFail(error))
+Node Kind: KindCallExpression
+
+Subject: () => causeFail(error)
+Subject Type: () => Cause<Error>
+
+Transformations (1):
+  [0] kind: call
+      callee: failCauseSync
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 15:40 - 15:57
+Node: causeFail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: causeFail
+      args: (constant)
+      outType: Cause<Error>

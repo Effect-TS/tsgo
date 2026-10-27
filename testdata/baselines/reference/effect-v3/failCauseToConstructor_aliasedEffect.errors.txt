@@ -1,0 +1,27 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/failCauseToConstructor_aliasedEffect.ts(11,22): warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor_aliasedEffect.ts(14,21): warning TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+
+
+==== /.src/failCauseToConstructor_aliasedEffect.ts (2 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics failCauseToConstructor:warning
+    import { fail as causeFail } from "effect/Cause"
+    import { failCause, failCauseSync } from "effect/Effect"
+    import * as Fx from "effect/Effect"
+    
+    declare const error: Error
+    
+    // MUST TRIGGER: the fallback fix uses the file's Effect namespace binding -> Fx.fail(error)
+    export const eager = failCause(causeFail(error))
+                         ~~~~~~~~~
+!!! warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: lazy form with the namespace binding -> Fx.failSync(() => error)
+    export const lazy = failCauseSync(() => causeFail(error))
+                        ~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+    

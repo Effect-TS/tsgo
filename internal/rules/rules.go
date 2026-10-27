@@ -119,6 +119,7 @@ var All = []rule.Rule{
 	MapSomeToAsSome,
 	MapConstToAs,
 	ManualMetricTapToTrack,
+	FailCauseToConstructor,
 	FlatMapToMap,
 	FlatMapToTap,
 	FlatMapIgnoredParamToAndThen,

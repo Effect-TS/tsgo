@@ -59,6 +59,7 @@
         "effectSucceedWithVoid": "suggestion",
         "errorPayloadShadowsName": "suggestion",
         "experimentalApiUsage": "warning",
+        "failCauseToConstructor": "suggestion",
         "flatMapConditionalToFilterOrFail": "suggestion",
         "flatMapIdentityToFlatten": "suggestion",
         "flatMapIgnoredParamToAndThen": "suggestion",
@@ -155,6 +156,7 @@
         "effectSucceedWithVoid": "error",
         "errorPayloadShadowsName": "error",
         "experimentalApiUsage": "error",
+        "failCauseToConstructor": "error",
         "flatMapConditionalToFilterOrFail": "error",
         "flatMapIdentityToFlatten": "error",
         "flatMapIgnoredParamToAndThen": "error",
@@ -331,6 +333,7 @@
         "effectMapVoid": "warning",
         "effectSleepZeroToYieldNow": "warning",
         "effectSucceedWithVoid": "warning",
+        "failCauseToConstructor": "warning",
         "flatMapConditionalToFilterOrFail": "warning",
         "flatMapIdentityToFlatten": "warning",
         "flatMapIgnoredParamToAndThen": "warning",
@@ -2545,6 +2548,30 @@
             "start": 56,
             "end": 81,
             "text": "`Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "failCauseToConstructor",
+      "group": "style",
+      "description": "Suggests Effect.fail/die/failSync/dieSync instead of failCause/failCauseSync wrapping a single Cause.fail/die",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377155
+      ],
+      "preview": {
+        "sourceText": "import { Cause, Effect } from \"effect\"\n\nexport const crashed = Effect.failCause(Cause.die(new Error(\"boom\")))\n",
+        "diagnostics": [
+          {
+            "start": 63,
+            "end": 79,
+            "text": "`Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)"
           }
         ]
       }

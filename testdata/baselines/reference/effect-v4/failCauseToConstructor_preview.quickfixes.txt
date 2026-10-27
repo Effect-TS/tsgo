@@ -1,0 +1,25 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:24-6:40) TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+  Fix 0: "Disable failCauseToConstructor for this line"
+  Fix 1: "Disable failCauseToConstructor for entire file"
+  Fix 2: "Replace with Effect.die"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable failCauseToConstructor for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable failCauseToConstructor for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.die" ===
+
+--- file:///.src/failCauseToConstructor_preview.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics failCauseToConstructor:warning
+import { Cause, Effect } from "effect"
+
+export const crashed = Effect.die(new Error("boom"))
+
