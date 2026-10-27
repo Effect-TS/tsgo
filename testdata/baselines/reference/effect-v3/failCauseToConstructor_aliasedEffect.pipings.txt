@@ -1,0 +1,47 @@
+==== /.src/failCauseToConstructor_aliasedEffect.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 11:21 - 11:49
+Node: failCause(causeFail(error))
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (2):
+  [0] kind: call
+      callee: causeFail
+      args: (constant)
+      outType: Cause<Error>
+  [1] kind: call
+      callee: failCause
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 14:20 - 14:58
+Node: failCauseSync(() => causeFail(error))
+Node Kind: KindCallExpression
+
+Subject: () => causeFail(error)
+Subject Type: () => Cause<Error>
+
+Transformations (1):
+  [0] kind: call
+      callee: failCauseSync
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 14:40 - 14:57
+Node: causeFail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: causeFail
+      args: (constant)
+      outType: Cause<Error>

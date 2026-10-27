@@ -1,0 +1,226 @@
+==== /.src/literalUnions.ts (8 flows) ====
+
+=== Piping Flow ===
+Location: 12:33 - 12:80
+Node: Effect.failCause(Cause.fail(cond ? "A" : "B"))
+Node Kind: KindCallExpression
+
+Subject: cond ? "A" : "B"
+Subject Type: "A" | "B"
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<string>
+  [1] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 16:32 - 16:89
+Node: Effect.failCauseSync(() => Cause.fail(cond ? "A" : "B"))
+Node Kind: KindCallExpression
+
+Subject: () => Cause.fail(cond ? "A" : "B")
+Subject Type: () => Cause<string>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCauseSync
+      args: (constant)
+      outType: Effect<never, string, never>
+
+=== Piping Flow ===
+Location: 16:59 - 16:88
+Node: Cause.fail(cond ? "A" : "B")
+Node Kind: KindCallExpression
+
+Subject: cond ? "A" : "B"
+Subject Type: "A" | "B"
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<string>
+
+=== Piping Flow ===
+Location: 17:30 - 17:89
+Node: Effect.failCauseSync(() => Cause.fail(cond ? error : "B"))
+Node Kind: KindCallExpression
+
+Subject: () => Cause.fail(cond ? error : "B")
+Subject Type: () => Cause<string | Error>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCauseSync
+      args: (constant)
+      outType: Effect<never, string | Error, never>
+
+=== Piping Flow ===
+Location: 17:57 - 17:88
+Node: Cause.fail(cond ? error : "B")
+Node Kind: KindCallExpression
+
+Subject: cond ? error : "B"
+Subject Type: "B" | Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<string | Error>
+
+=== Piping Flow ===
+Location: 20:28 - 20:74
+Node: Effect.failCauseSync(() => Cause.fail(error))
+Node Kind: KindCallExpression
+
+Subject: () => Cause.fail(error)
+Subject Type: () => Cause<Error>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.failCauseSync
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 20:55 - 20:73
+Node: Cause.fail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<Error>
+
+=== Piping Flow ===
+Location: 24:69 - 24:104
+Node: failCause(Cause.fail(Effect.name))
+Node Kind: KindCallExpression
+
+Subject: Effect.name
+Subject Type: string
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.fail
+      args: (constant)
+      outType: Cause<string>
+  [1] kind: call
+      callee: failCause
+      args: (constant)
+      outType: Effect<never, string, never>
+==== /.src/typeOnlyImport.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 11:50 - 11:78
+Node: failCause(causeFail(error))
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (2):
+  [0] kind: call
+      callee: causeFail
+      args: (constant)
+      outType: Cause<Error>
+  [1] kind: call
+      callee: failCause
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 12:49 - 12:87
+Node: failCauseSync(() => causeFail(error))
+Node Kind: KindCallExpression
+
+Subject: () => causeFail(error)
+Subject Type: () => Cause<Error>
+
+Transformations (1):
+  [0] kind: call
+      callee: failCauseSync
+      args: (constant)
+      outType: Effect<never, Error, never>
+
+=== Piping Flow ===
+Location: 12:69 - 12:86
+Node: causeFail(error)
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (1):
+  [0] kind: call
+      callee: causeFail
+      args: (constant)
+      outType: Cause<Error>
+==== /.src/typeOnlySpecifier.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:50 - 11:78
+Node: failCause(causeFail(error))
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (2):
+  [0] kind: call
+      callee: causeFail
+      args: (constant)
+      outType: Cause<Error>
+  [1] kind: call
+      callee: failCause
+      args: (constant)
+      outType: Effect<never, Error, never>
+==== /.src/typeOnlyNamespace.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:46 - 11:74
+Node: failCause(causeFail(error))
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (2):
+  [0] kind: call
+      callee: causeFail
+      args: (constant)
+      outType: Cause<Error>
+  [1] kind: call
+      callee: failCause
+      args: (constant)
+      outType: Effect<never, Error, never>
+==== /.src/reexport.ts (0 flows) ====
+==== /.src/typeOnlyReexport.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:50 - 11:78
+Node: failCause(causeFail(error))
+Node Kind: KindCallExpression
+
+Subject: error
+Subject Type: Error
+
+Transformations (2):
+  [0] kind: call
+      callee: causeFail
+      args: (constant)
+      outType: Cause<Error>
+  [1] kind: call
+      callee: failCause
+      args: (constant)
+      outType: Effect<never, Error, never>

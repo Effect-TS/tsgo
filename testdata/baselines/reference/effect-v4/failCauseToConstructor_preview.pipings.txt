@@ -1,0 +1,19 @@
+==== /.src/failCauseToConstructor_preview.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 6:23 - 6:70
+Node: Effect.failCause(Cause.die(new Error("boom")))
+Node Kind: KindCallExpression
+
+Subject: new Error("boom")
+Subject Type: Error
+
+Transformations (2):
+  [0] kind: call
+      callee: Cause.die
+      args: (constant)
+      outType: Cause<never>
+  [1] kind: call
+      callee: Effect.failCause
+      args: (constant)
+      outType: Effect<never, never, never>

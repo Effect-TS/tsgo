@@ -8,6 +8,7 @@ mod completion_test;
 mod document_symbols_runner_test;
 mod effect_fn_pipeables_test;
 mod effect_sleep_zero_to_yield_now_test;
+mod fail_cause_to_constructor_test;
 mod feature_flags_test;
 mod flat_map_identity_to_flatten_test;
 mod flat_map_to_tap_test;
@@ -96,6 +97,7 @@ fn main() {
     trials.extend(map_const_to_as_test::tests());
     trials.extend(map_map_error_to_map_both_test::tests());
     trials.extend(manual_metric_tap_to_track_test::tests());
+    trials.extend(fail_cause_to_constructor_test::tests());
 
     let conclusion = libtest_mimic::run(&args, trials);
     if !args.list {

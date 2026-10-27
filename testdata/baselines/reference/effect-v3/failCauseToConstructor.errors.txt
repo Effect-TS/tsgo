@@ -1,0 +1,251 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/failCauseToConstructor.ts(27,24): warning TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(30,24): warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(33,21): warning TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(36,31): warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(37,30): warning TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(40,28): warning TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(43,24): warning TS377155: `Effect.dieSync` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(46,26): warning TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(51,29): warning TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(56,30): warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(59,34): warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(63,29): warning TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(64,33): warning TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(69,30): warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(73,17): warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(79,24): warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(83,69): warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(86,50): warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(89,53): warning TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(92,59): warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(96,51): warning TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(99,63): warning TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(102,58): warning TS377155: `Effect.dieSync` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+/.src/failCauseToConstructor.ts(105,30): warning TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+
+
+==== /.src/failCauseToConstructor.ts (24 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics failCauseToConstructor:warning
+    import * as Cause from "effect/Cause"
+    import * as Channel from "effect/Channel"
+    import * as Effect from "effect/Effect"
+    import * as Exit from "effect/Exit"
+    import * as FiberId from "effect/FiberId"
+    import { pipe } from "effect/Function"
+    import * as Stream from "effect/Stream"
+    import { die as causeDie, fail as causeFail } from "effect/Cause"
+    import { failCause, failCauseSync } from "effect/Effect"
+    
+    class AppError {
+      readonly _tag = "AppError"
+    }
+    
+    declare const error: AppError
+    declare const defect: unknown
+    declare const cause: Cause.Cause<AppError>
+    declare const exit: Exit.Exit<number, AppError>
+    declare const compute: () => number
+    declare const makeCause: () => Cause.Cause<AppError>
+    declare const log: (message: string) => void
+    
+    // MUST TRIGGER: defect cause (issue example) -> Effect.die(new Error("boom"))
+    export const crashed = Effect.failCause(Cause.die(new Error("boom")))
+                           ~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: typed failure cause (issue example) -> Effect.fail("not found" as const)
+    export const missing = Effect.failCause(Cause.fail("not found" as const))
+                           ~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: lazy typed failure (issue example) -> Effect.failSync(() => new Error("late"))
+    export const lazy = Effect.failCauseSync(() => Cause.fail(new Error("late")))
+                        ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: identifier arguments -> Effect.fail(error) / Effect.die(defect)
+    export const failIdentifier = Effect.failCause(Cause.fail(error))
+                                  ~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+    export const dieIdentifier = Effect.failCause(Cause.die(defect))
+                                 ~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: side-effecting argument; both forms evaluate it eagerly -> Effect.die(compute())
+    export const dieComputed = Effect.failCause(Cause.die(compute()))
+                               ~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: lazy defect -> Effect.dieSync(() => new Error("late")) (v3 has Effect.dieSync)
+    export const lazyDie = Effect.failCauseSync(() => Cause.die(new Error("late")))
+                           ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.dieSync` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: block-bodied thunk with a single return -> Effect.failSync(() => error)
+    export const lazyBlock = Effect.failCauseSync(() => {
+                             ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+      return Cause.fail(error)
+    })
+    
+    // MUST TRIGGER: function-expression thunk with a single return -> Effect.failSync(function() { return error })
+    export const lazyFunction = Effect.failCauseSync(function() {
+                                ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+      return Cause.fail(error)
+    })
+    
+    // MUST TRIGGER: parenthesized inner constructor call -> Effect.fail(error)
+    export const parenthesized = Effect.failCause((Cause.fail(error)))
+                                 ~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: explicit type argument on the inner constructor -> Effect.fail<AppError | string>(error)
+    export const innerTypeArgument = Effect.failCause(Cause.fail<AppError | string>(error))
+                                     ~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: named imports resolve to the same APIs (report; the fix falls back to the
+    // file's Effect module identifier -> Effect.die(defect) / Effect.failSync(() => error))
+    export const namedImports = failCause(causeDie(defect))
+                                ~~~~~~~~~
+!!! warning TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+    export const namedImportsLazy = failCauseSync(() => causeFail(error))
+                                    ~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: const alias of the API keeps its identity (report; the fix falls back to the
+    // file's Effect module identifier -> Effect.fail(error))
+    const failCauseAlias = Effect.failCause
+    export const aliasedCallee = failCauseAlias(Cause.fail(error))
+                                 ~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: inside a generator
+    export const inGen = Effect.gen(function*() {
+      return yield* Effect.failCause(Cause.fail(error))
+                    ~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+    })
+    
+    // MUST TRIGGER: inside a pipeline callback
+    export const inPipe = pipe(
+      Effect.succeed(1),
+      Effect.flatMap(() => Effect.failCause(Cause.fail(error)))
+                           ~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+    )
+    
+    // MUST TRIGGER: nested in a function with an explicit Effect return type
+    export const withReturnType = (): Effect.Effect<never, AppError> => Effect.failCause(Cause.fail(error))
+                                                                        ~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: method-pipe form -> Effect.fail(error)
+    export const methodPipe = Cause.fail(error).pipe(Effect.failCause)
+                                                     ~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: Function.pipe form -> Effect.die(defect)
+    export const functionPipe = pipe(Cause.die(defect), Effect.failCause)
+                                                        ~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: adjacent transformations in an existing flow -> Effect.fail(error)
+    export const transformationPair = pipe(error, Cause.fail, Effect.failCause)
+                                                              ~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.fail` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCause`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: replacing the flow prefix keeps later transformations
+    // -> pipe(Effect.die(defect), Effect.asVoid)
+    export const pipePrefix = pipe(Cause.die(defect), Effect.failCause, Effect.asVoid)
+                                                      ~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.die` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCause`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: lazy thunk as the subject of a Function.pipe flow -> Effect.failSync(() => error)
+    export const lazyFunctionPipe = pipe(() => Cause.fail(error), Effect.failCauseSync)
+                                                                  ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: lazy defect thunk as the subject of a Function.pipe flow -> Effect.dieSync(() => defect)
+    export const lazyDiePipe = pipe(() => Cause.die(defect), Effect.failCauseSync)
+                                                             ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.dieSync` expresses this failure directly instead of wrapping `Cause.die` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+    
+    // MUST TRIGGER: thunk body is itself a flow ending in Cause.fail -> Effect.failSync(() => error)
+    export const lazyPipedBody = Effect.failCauseSync(() => pipe(error, Cause.fail))
+                                 ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377155: `Effect.failSync` expresses this failure directly instead of wrapping `Cause.fail` in `Effect.failCauseSync`. effect(failCauseToConstructor)
+    
+    // MUST NOT TRIGGER: already the direct APIs
+    export const directDie = Effect.die(new Error("boom"))
+    export const directFail = Effect.fail(error)
+    export const directFailSync = Effect.failSync(() => error)
+    export const directDieSync = Effect.dieSync(() => new Error("late"))
+    
+    // MUST NOT TRIGGER: forwarded cause (dominant real-world usage)
+    export const forwarded = Effect.failCause(cause)
+    export const forwardedFromExit = Exit.isFailure(exit) ? Effect.failCause(exit.cause) : Effect.void
+    
+    // MUST NOT TRIGGER: a cause stored in a variable first is a forwarded cause, not a direct call
+    const storedCause = Cause.fail(error)
+    export const fromStoredCause = Effect.failCause(storedCause)
+    
+    // MUST NOT TRIGGER: composed causes
+    export const sequential = Effect.failCause(Cause.sequential(Cause.fail(error), Cause.die(defect)))
+    export const parallelLazy = Effect.failCauseSync(() => Cause.parallel(Cause.fail(error), Cause.die(defect)))
+    
+    // MUST NOT TRIGGER: the constructed cause is transformed before being failed with
+    export const transformed = Effect.failCause(Cause.map(Cause.fail(error), (e) => e._tag))
+    
+    // MUST NOT TRIGGER: Cause.fail and Effect.failCause are not adjacent in the flow
+    export const nonAdjacent = pipe(error, Cause.fail, Cause.map((e) => e._tag), Effect.failCause)
+    
+    // MUST NOT TRIGGER: other Cause constructors have no single-call Effect equivalent here
+    export const interrupted = Effect.failCause(Cause.interrupt(FiberId.none))
+    export const emptyCause = Effect.failCause(Cause.empty)
+    
+    // MUST NOT TRIGGER: type assertion on the argument changes the inferred error type
+    export const asserted = Effect.failCause(Cause.fail(error) as Cause.Cause<AppError | string>)
+    
+    // MUST NOT TRIGGER: explicit type argument on failCause; with Cause.die it widens the
+    // error channel, which Effect.die(x) would not preserve
+    export const outerTypeArgumentDie = Effect.failCause<AppError>(Cause.die(defect))
+    export const outerTypeArgumentFail = Effect.failCause<AppError | string>(Cause.fail(error))
+    export const outerTypeArgumentPipe = pipe(Cause.die(defect), Effect.failCause<AppError>)
+    
+    // MUST NOT TRIGGER: return type annotation on the thunk pins the cause type
+    export const annotatedThunk = Effect.failCauseSync((): Cause.Cause<AppError | string> => Cause.fail(error))
+    
+    // MUST NOT TRIGGER: thunk returns a forwarded or prebuilt cause
+    export const lazyForwarded = Effect.failCauseSync(() => cause)
+    export const lazyPointFree = Effect.failCauseSync(makeCause)
+    
+    // MUST NOT TRIGGER: thunk does more than return the constructed cause
+    export const lazyMultiStatement = Effect.failCauseSync(() => {
+      log("failing")
+      return Cause.fail(error)
+    })
+    
+    // MUST NOT TRIGGER: failCause of other modules (Exit, Stream, Channel) is not Effect.failCause
+    export const exitFailCause = Exit.failCause(Cause.fail(error))
+    export const streamFailCause = Stream.failCause(Cause.die(defect))
+    export const channelFailCause = Channel.failCause(Cause.die(defect))
+    
+    // MUST NOT TRIGGER: user-defined APIs with the same names
+    const Local = {
+      failCause: <E>(c: Cause.Cause<E>) => Effect.failCause(c),
+      Cause: {
+        fail: <E>(e: E): Cause.Cause<E> => Cause.fail(e),
+        die: (d: unknown): Cause.Cause<never> => Cause.die(d)
+      }
+    }
+    export const localFailCause = Local.failCause(Cause.fail(error))
+    export const localCauseFail = Effect.failCause(Local.Cause.fail(error))
+    export const localCauseDie = Effect.failCause(Local.Cause.die(defect))
+    

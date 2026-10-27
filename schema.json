@@ -2519,6 +2519,11 @@
           "default": "off",
           "description": "Warns when a class directly extends the native Error class"
         },
+        "failCauseToConstructor": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.fail/die/failSync/dieSync instead of failCause/failCauseSync wrapping a single Cause.fail/die"
+        },
         "flatMapConditionalToFilterOrFail": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

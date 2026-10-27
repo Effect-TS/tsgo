@@ -123,6 +123,7 @@ pub static ALL: LazyLock<Vec<Rule>> = LazyLock::new(|| {
         (*MAP_SOME_TO_AS_SOME).clone(),
         (*MAP_CONST_TO_AS).clone(),
         (*MANUAL_METRIC_TAP_TO_TRACK).clone(),
+        (*FAIL_CAUSE_TO_CONSTRUCTOR).clone(),
         (*FLAT_MAP_TO_MAP).clone(),
         (*FLAT_MAP_TO_TAP).clone(),
         (*FLAT_MAP_IGNORED_PARAM_TO_AND_THEN).clone(),

@@ -34,6 +34,7 @@
     "effecttsgo/effect-succeed-with-void": "warn",
     "effecttsgo/error-payload-shadows-name": "warn",
     "effecttsgo/experimental-api-usage": "warn",
+    "effecttsgo/fail-cause-to-constructor": "warn",
     "effecttsgo/flat-map-conditional-to-filter-or-fail": "warn",
     "effecttsgo/flat-map-identity-to-flatten": "warn",
     "effecttsgo/flat-map-ignored-param-to-and-then": "warn",

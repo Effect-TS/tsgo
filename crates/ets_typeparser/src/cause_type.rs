@@ -19,14 +19,16 @@ fn is_effect_cause_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> bo
         return false;
     };
 
+    // These exports exist in both Effect v3 and v4.
     c.try_get_member_in_module_exports_and_properties("Cause", module_sym).is_some()
         && c.try_get_member_in_module_exports_and_properties("isCause", module_sym).is_some()
-        && c.try_get_member_in_module_exports_and_properties("NoSuchElementError", module_sym)
-            .is_some()
+        && c.try_get_member_in_module_exports_and_properties("fail", module_sym).is_some()
+        && c.try_get_member_in_module_exports_and_properties("die", module_sym).is_some()
+        && c.try_get_member_in_module_exports_and_properties("empty", module_sym).is_some()
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/cause_type.go:28 TypeParser.IsNodeReferenceToEffectCauseModuleApi
+    // go: internal/typeparser/cause_type.go:31 TypeParser.IsNodeReferenceToEffectCauseModuleApi
     // IsNodeReferenceToEffectCauseModuleApi reports whether node resolves to a
     // member exported by Effect's Cause module.
     pub fn is_node_reference_to_effect_cause_module_api(

@@ -2353,6 +2353,9 @@
         "effecttsgo/extends-native-error": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/fail-cause-to-constructor": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/flat-map-conditional-to-filter-or-fail": {
           "$ref": "#/definitions/RuleNoConfig"
         },

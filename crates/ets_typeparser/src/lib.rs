@@ -18,6 +18,8 @@ mod api_stability_surface_test;
 #[cfg(test)]
 mod api_stability_test;
 mod cause_type;
+#[cfg(test)]
+mod cause_type_test;
 mod checked_expression_types;
 #[cfg(test)]
 mod checked_expression_types_test;
