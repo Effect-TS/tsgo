@@ -837,6 +837,18 @@
       },
       "type": "object"
     },
+    "AwaitThenableConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "allowMixedPromiseArrays": {
+          "default": false,
+          "description": "Allow Promise aggregators such as `Promise.all` to receive mixed arrays or\niterables containing at least one potentially Promise-like value.\nInputs containing only synchronous values are still reported.",
+          "markdownDescription": "Allow Promise aggregators such as `Promise.all` to receive mixed arrays or\niterables containing at least one potentially Promise-like value.\nInputs containing only synchronous values are still reported.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "BanConfigValue": {
       "anyOf": [
         {
@@ -2414,6 +2426,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/leaking-requirements": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/map-const-to-as": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "effecttsgo/map-some-to-as-some": {
@@ -7800,7 +7815,24 @@
           ]
         },
         "typescript/await-thenable": {
-          "$ref": "#/definitions/RuleNoConfig"
+          "anyOf": [
+            {
+              "$ref": "#/definitions/RuleNoConfig"
+            },
+            {
+              "items": [
+                {
+                  "$ref": "#/definitions/AllowWarnDeny"
+                },
+                {
+                  "$ref": "#/definitions/AwaitThenableConfig"
+                }
+              ],
+              "maxItems": 2,
+              "minItems": 2,
+              "type": "array"
+            }
+          ]
         },
         "typescript/ban-ts-comment": {
           "anyOf": [
@@ -8584,6 +8616,9 @@
           "$ref": "#/definitions/RuleNoConfig"
         },
         "typescript/no-unsafe-declaration-merging": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "typescript/no-unsafe-enum-assignment": {
           "$ref": "#/definitions/RuleNoConfig"
         },
         "typescript/no-unsafe-enum-comparison": {

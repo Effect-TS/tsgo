@@ -48,6 +48,7 @@
     "effecttsgo/lazy-effect": "warn",
     "effecttsgo/lazy-promise-in-effect-sync": "warn",
     "effecttsgo/leaking-requirements": "warn",
+    "effecttsgo/map-const-to-as": "warn",
     "effecttsgo/map-some-to-as-some": "warn",
     "effecttsgo/match-effect-to-map-both": "warn",
     "effecttsgo/match-effect-to-match": "warn",

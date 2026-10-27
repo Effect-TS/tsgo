@@ -117,6 +117,7 @@ var All = []rule.Rule{
 	EffectMapFlatten,
 	AllOfMapToForEach,
 	MapSomeToAsSome,
+	MapConstToAs,
 	FlatMapToMap,
 	FlatMapToTap,
 	FlatMapIgnoredParamToAndThen,

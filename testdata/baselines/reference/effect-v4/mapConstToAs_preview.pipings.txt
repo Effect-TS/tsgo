@@ -1,0 +1,33 @@
+==== /.src/mapConstToAs_preview.ts (2 flows) ====
+
+=== Piping Flow ===
+Location: 5:58 - 5:86
+Node: Effect.succeed(name.length)
+Node Kind: KindCallExpression
+
+Subject: name.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 7:21 - 7:71
+Node: saveUser("alice").pipe(Effect.map(() => "saved"))
+Node Kind: KindCallExpression
+
+Subject: "alice"
+Subject Type: "alice"
+
+Transformations (2):
+  [0] kind: call
+      callee: saveUser
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [() => "saved"]
+      outType: Effect<string, never, never>

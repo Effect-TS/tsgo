@@ -1,0 +1,761 @@
+==== /.src/mapConstToAs.ts (52 flows) ====
+
+=== Piping Flow ===
+Location: 4:58 - 4:86
+Node: Effect.succeed(name.length)
+Node Kind: KindCallExpression
+
+Subject: name.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 5:44 - 5:62
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 18:21 - 18:71
+Node: saveUser("alice").pipe(Effect.map(() => "saved"))
+Node Kind: KindCallExpression
+
+Subject: "alice"
+Subject Type: "alice"
+
+Transformations (2):
+  [0] kind: call
+      callee: saveUser
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [() => "saved"]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 21:21 - 21:77
+Node: client.query("select 1").pipe(Effect.map(() => client))
+Node Kind: KindCallExpression
+
+Subject: "select 1"
+Subject Type: "select 1"
+
+Transformations (2):
+  [0] kind: call
+      callee: client.query
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [() => client]
+      outType: Effect<{ readonly query: (sql: string) => Effect<void, never, never>; }, never, never>
+
+=== Piping Flow ===
+Location: 24:31 - 24:75
+Node: numberEffect.pipe(Effect.map(() => status))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => status]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 27:30 - 27:69
+Node: numberEffect.pipe(Effect.map(() => 0))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => 0]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 28:30 - 28:72
+Node: numberEffect.pipe(Effect.map(() => true))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => true]
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 29:27 - 29:69
+Node: numberEffect.pipe(Effect.map(() => null))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => null]
+      outType: Effect<null, never, never>
+
+=== Piping Flow ===
+Location: 30:29 - 30:70
+Node: numberEffect.pipe(Effect.map(() => 10n))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => 10n]
+      outType: Effect<bigint, never, never>
+
+=== Piping Flow ===
+Location: 33:31 - 33:71
+Node: numberEffect.pipe(Effect.map(() => -1))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => -1]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 36:29 - 36:73
+Node: numberEffect.pipe(Effect.map(() => `done`))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => `done`]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 39:26 - 39:74
+Node: numberEffect.pipe(Effect.map(() => Phase.Done))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => Phase.Done]
+      outType: Effect<Phase, never, never>
+
+=== Piping Flow ===
+Location: 42:29 - 42:76
+Node: numberEffect.pipe(Effect.map(() => ("saved")))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => ("saved")]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 45:32 - 45:72
+Node: numberEffect.pipe(Effect.map((_) => 0))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(_) => 0]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 48:25 - 50:4
+Node: numberEffect.pipe(Effect.map(() => {\n  return "saved"\n}))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => {\n  return "saved"\n}]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 53:34 - 55:4
+Node: numberEffect.pipe(Effect.map(function() {\n  return "saved"\n}))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [function() {\n  return "saved"\n}]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 58:21 - 58:67
+Node: pipe(numberEffect, Effect.map(() => "saved"))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.map
+      args: [() => "saved"]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 61:25 - 61:65
+Node: Effect.map(numberEffect, () => "saved")
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.map
+      args: [() => "saved"]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 64:24 - 64:64
+Node: Effect.map(() => "saved")(numberEffect)
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.map
+      args: [() => "saved"]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 67:29 - 67:70
+Node: numberEffect.pipe(Fx.map(() => "saved"))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Fx.map
+      args: [() => "saved"]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 71:26 - 71:69
+Node: numberEffect.pipe(mapAlias(() => "saved"))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: mapAlias
+      args: [() => "saved"]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 75:9 - 75:53
+Node: numberEffect.pipe(Effect.map(() => status))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => status]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 79:23 - 83:2
+Node: numberEffect.pipe(\n  Effect.tap(() => Effect.void),\n  Effect.map(() => "saved"),\n  Effect.map((value) => value.length)\n)
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (3):
+  [0] kind: pipeable
+      callee: Effect.tap
+      args: [() => Effect.void]
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [() => "saved"]
+      outType: Effect<string, never, never>
+  [2] kind: pipeable
+      callee: Effect.map
+      args: [(value) => value.length]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 86:25 - 86:63
+Node: numberEffect.pipe(Effect.as("saved"))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.as
+      args: ["saved"]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 89:29 - 89:73
+Node: numberEffect.pipe(Effect.map((n) => n * 2))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n * 2]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 90:24 - 90:64
+Node: numberEffect.pipe(Effect.map((n) => n))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 93:33 - 95:2
+Node: client.query("select 1").pipe(\n  Effect.map((client) => client)\n)
+Node Kind: KindCallExpression
+
+Subject: "select 1"
+Subject Type: "select 1"
+
+Transformations (2):
+  [0] kind: call
+      callee: client.query
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(client) => client]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 98:28 - 98:97
+Node: Effect.succeed({ id: 1 }).pipe(Effect.map(({ id: _id }) => "saved"))
+Node Kind: KindCallExpression
+
+Subject: { id: 1 }
+Subject Type: { id: number; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ id: number; }, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [({ id: _id }) => "saved"]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 101:32 - 101:82
+Node: numberEffect.pipe(Effect.map((_ = 0) => "saved"))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(_ = 0) => "saved"]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 105:29 - 107:2
+Node: numberEffect.pipe(\n  Effect.map(() => ({ kind: "abort" as const, code: null }))\n)
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => ({ kind: "abort" as const, code: null })]
+      outType: Effect<{ kind: "abort"; code: null; }, never, never>
+
+=== Piping Flow ===
+Location: 108:28 - 108:75
+Node: numberEffect.pipe(Effect.map(() => [1, 2, 3]))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => [1, 2, 3]]
+      outType: Effect<number[], never, never>
+
+=== Piping Flow ===
+Location: 111:40 - 111:97
+Node: numberEffect.pipe(Effect.map(() => `status: ${status}`))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => `status: ${status}`]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 114:24 - 114:75
+Node: numberEffect.pipe(Effect.map(() => Option.none()))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => Option.none()]
+      outType: Effect<Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 115:23 - 115:72
+Node: numberEffect.pipe(Effect.map(() => new Date(0)))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => new Date(0)]
+      outType: Effect<Date, never, never>
+
+=== Piping Flow ===
+Location: 118:26 - 118:69
+Node: numberEffect.pipe(Effect.map(() => 1 + 1))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => 1 + 1]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 121:30 - 121:82
+Node: numberEffect.pipe(Effect.map(() => config.retries))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => config.retries]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 124:30 - 124:75
+Node: numberEffect.pipe(Effect.map(() => mutable))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => mutable]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 127:28 - 127:71
+Node: numberEffect.pipe(Effect.map(() => later))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => later]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 131:48 - 131:91
+Node: numberEffect.pipe(Effect.map(() => value))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => value]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 134:29 - 134:76
+Node: numberEffect.pipe(Effect.map(() => undefined))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => undefined]
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 135:24 - 135:68
+Node: numberEffect.pipe(Effect.map(() => void 0))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => void 0]
+      outType: Effect<undefined, never, never>
+
+=== Piping Flow ===
+Location: 136:30 - 136:70
+Node: numberEffect.pipe(Effect.map(() => {}))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => {}]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 139:35 - 142:4
+Node: numberEffect.pipe(Effect.map(() => {\n  mutable = "changed"\n  return "saved"\n}))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => {\n  mutable = "changed"\n  return "saved"\n}]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 146:25 - 146:70
+Node: numberEffect.pipe(Effect.map(constantSaved))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [constantSaved]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 149:25 - 149:72
+Node: Stream.make(1).pipe(Stream.map(() => "saved"))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Stream.make
+      args: (constant)
+      outType: Stream<number, never, never>
+  [1] kind: pipeable
+      callee: Stream.map
+      args: [() => "saved"]
+      outType: Stream<string, never, never>
+
+=== Piping Flow ===
+Location: 150:25 - 150:72
+Node: Option.some(1).pipe(Option.map(() => "saved"))
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<number>
+  [1] kind: pipeable
+      callee: Option.map
+      args: [() => "saved"]
+      outType: Option<string>
+
+=== Piping Flow ===
+Location: 153:24 - 153:53
+Node: [1, 2, 3].map(() => "saved")
+Node Kind: KindCallExpression
+
+Subject: () => "saved"
+Subject Type: () => string
+
+Transformations (1):
+  [0] kind: call
+      callee: [1, 2, 3].map
+      args: (constant)
+      outType: string[]
+
+=== Piping Flow ===
+Location: 161:37 - 161:91
+Node: numberEffect.pipe(Effect.map((): "saved" => "saved"))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(): "saved" => "saved"]
+      outType: Effect<"saved", never, never>
+
+=== Piping Flow ===
+Location: 165:35 - 165:91
+Node: numberEffect.pipe(Effect.map((): string | number => 1))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(): string | number => 1]
+      outType: Effect<string | number, never, never>
+
+=== Piping Flow ===
+Location: 168:39 - 170:4
+Node: numberEffect.pipe(Effect.map(function(): "saved" {\n  return "saved"\n}))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [function(): "saved" {\n  return "saved"\n}]
+      outType: Effect<"saved", never, never>
+
+=== Piping Flow ===
+Location: 173:57 - 173:102
+Node: numberEffect.pipe(Effect.map(() => "saved"))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [() => "saved"]
+      outType: Effect<"saved", never, never>
+
+=== Piping Flow ===
+Location: 176:34 - 176:88
+Node: numberEffect.pipe(Effect.map((_: number) => "saved"))
+Node Kind: KindCallExpression
+
+Subject: numberEffect
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(_: number) => "saved"]
+      outType: Effect<string, never, never>
