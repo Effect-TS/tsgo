@@ -19,11 +19,14 @@ var SchemaClassMissingBrand = rule.Rule{
 		if ctx.TypeParser.SupportedEffectVersion() != typeparser.EffectMajorV4 {
 			return nil
 		}
+		if len(ctx.Options.GetBrandedSchemaClasses()) == 0 {
+			return nil
+		}
 		var diagnostics []*ast.Diagnostic
 		var walk ast.Visitor
 		walk = func(node *ast.Node) bool {
 			if node.Kind == ast.KindClassDeclaration || node.Kind == ast.KindClassExpression {
-				if self := schemaClassMissingBrandSelf(ctx.TypeParser, node); self != nil {
+				if self := schemaClassMissingBrandSelf(ctx.TypeParser, ctx.Options, node); self != nil {
 					diagnostics = append(diagnostics, ctx.NewDiagnostic(
 						ctx.SourceFile,
 						ctx.GetErrorRange(self),
@@ -40,14 +43,14 @@ var SchemaClassMissingBrand = rule.Rule{
 	},
 }
 
-func schemaClassMissingBrandSelf(tp *typeparser.TypeParser, classNode *ast.Node) *ast.Node {
-	self, brand := schemaClassInstanceSelfAndBrand(tp, classNode)
+func schemaClassMissingBrandSelf(tp *typeparser.TypeParser, options *etscore.ResolvedEffectPluginOptions, classNode *ast.Node) *ast.Node {
+	self, brand, kind := schemaClassInstanceSelfAndBrand(tp, classNode)
 	if self == nil {
 		if result := tp.ExtendsSchemaOpaque(classNode); result != nil {
-			self, brand = result.SelfTypeNode(), result.BrandTypeNode()
+			self, brand, kind = result.SelfTypeNode(), result.BrandTypeNode(), etscore.BrandedSchemaClassOpaque
 		}
 	}
-	if brand != nil {
+	if brand != nil || !options.BrandedSchemaClassesIncludes(kind) {
 		return nil
 	}
 	return self

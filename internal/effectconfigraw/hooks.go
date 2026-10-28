@@ -2,6 +2,7 @@ package effectconfigraw
 
 import (
 	"maps"
+	"slices"
 	"strings"
 
 	"github.com/effect-ts/tsgo/etscore"
@@ -134,6 +135,9 @@ func mergeEffectOptions(target, source *etscore.EffectPluginOptions, sourcePlugi
 	if sourcePluginRaw.Has("effectFn") {
 		merged.EffectFn = append([]string(nil), source.EffectFn...)
 	}
+	if sourcePluginRaw.Has("brandedSchemaClasses") {
+		merged.BrandedSchemaClasses = slices.Clone(source.BrandedSchemaClasses)
+	}
 	if sourcePluginRaw.Has("diagnosticSeverity") {
 		merged.DiagnosticSeverity = mergeSeverityMaps(merged.DiagnosticSeverity, source.DiagnosticSeverity)
 	}
@@ -215,6 +219,7 @@ func cloneEffectOptions(source *etscore.EffectPluginOptions) *etscore.EffectPlug
 	cloned.AllowedExperimentalApis = append([]string(nil), source.AllowedExperimentalApis...)
 	cloned.AllowedDuplicatedPackages = append([]string(nil), source.AllowedDuplicatedPackages...)
 	cloned.EffectFn = append([]string(nil), source.EffectFn...)
+	cloned.BrandedSchemaClasses = slices.Clone(source.BrandedSchemaClasses)
 	cloned.DiagnosticSeverity = mergeSeverityMaps(nil, source.DiagnosticSeverity)
 	cloned.Overrides = cloneOverrides(source.Overrides)
 	cloned.NamespaceImportPackages = append([]string(nil), source.NamespaceImportPackages...)
@@ -241,6 +246,7 @@ func cloneOverrides(source []etscore.Override) []etscore.Override {
 				AllowedExperimentalApis:   cloneStringSlicePtr(override.Options.AllowedExperimentalApis),
 				AllowedDuplicatedPackages: cloneStringSlicePtr(override.Options.AllowedDuplicatedPackages),
 				EffectFn:                  cloneStringSlicePtr(override.Options.EffectFn),
+				BrandedSchemaClasses:      cloneStringSlicePtrKeepEmpty(override.Options.BrandedSchemaClasses),
 				NamespaceImportPackages:   cloneStringSlicePtr(override.Options.NamespaceImportPackages),
 				BarrelImportPackages:      cloneStringSlicePtr(override.Options.BarrelImportPackages),
 				ImportAliases:             cloneStringMapPtr(override.Options.ImportAliases),
@@ -335,6 +341,16 @@ func cloneStringSlicePtr(source *[]string) *[]string {
 		return nil
 	}
 	v := append([]string(nil), (*source)...)
+	return &v
+}
+
+// cloneStringSlicePtrKeepEmpty is like cloneStringSlicePtr but keeps an empty list non-nil,
+// for options where [] differs from unset.
+func cloneStringSlicePtrKeepEmpty(source *[]string) *[]string {
+	if source == nil {
+		return nil
+	}
+	v := slices.Clone(*source)
 	return &v
 }
 

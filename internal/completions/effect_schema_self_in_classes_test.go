@@ -1,6 +1,7 @@
 package completions_test
 
 import (
+	"slices"
 	"strings"
 	"testing"
 
@@ -234,6 +235,48 @@ func TestEffectSchemaSelfInClasses_AcceptedSnippet(t *testing.T) {
 			unbranded := strings.Replace(snippet, ", { readonly brand: unique symbol }", "", 1)
 			f.Replace(t, start, len(snippet), unbranded)
 			f.VerifyNumberOfErrorsInCurrentFile(t, 1)
+		})
+	}
+}
+
+func TestEffectSchemaSelfInClasses_BrandedSchemaClasses(t *testing.T) {
+	t.Parallel()
+	const brand = ", { readonly brand: unique symbol }"
+	for _, test := range []struct {
+		name    string
+		options string
+		branded []string
+	}{
+		{"reduced", `"brandedSchemaClasses": ["Class", "Error", "Opaque"]`, []string{"Class", "Error", "Opaque"}},
+		{"empty", `"brandedSchemaClasses": []`, nil},
+		{"override", `"brandedSchemaClasses": [], "overrides": [{ "include": ["test.ts"], "options": { "brandedSchemaClasses": ["TaggedError"] } }]`, []string{"TaggedError"}},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			config := strings.Replace(completionTestTsConfig, `"name": "@effect/language-service"`, `"name": "@effect/language-service", `+test.options, 1)
+			const source = "import { Schema } from \"effect\"\nclass Foo extends Schema."
+			content := "// @Filename: /tsconfig.json\n" + config + "\n// @Filename: /test.ts\n" + source + "/*1*/"
+			f, done := fourslash.NewFourslash(t, nil, content)
+			defer done()
+			f.GoToMarker(t, "1")
+			completions := f.GetCompletions(t, nil)
+			if completions == nil {
+				t.Fatal("missing completions")
+			}
+			for _, expected := range schemaClassCompletionCases[0].snippets {
+				item := findCompletionItem(completions.Items, expected.api+"<Foo>")
+				if item == nil || item.TextEdit == nil || item.TextEdit.TextEdit == nil {
+					t.Errorf("missing snippet text edit for %s<Foo>", expected.api)
+					continue
+				}
+				want := "Schema." + expected.newText
+				if !slices.Contains(test.branded, expected.api) {
+					want = strings.Replace(want, brand, "", 1)
+				}
+				if got := item.TextEdit.TextEdit.NewText; got != want {
+					t.Errorf("%s NewText = %q, want %q", expected.api, got, want)
+				}
+			}
 		})
 	}
 }

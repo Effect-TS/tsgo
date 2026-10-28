@@ -363,6 +363,14 @@ The npm compiler binaries load their TypeScript standard libraries from `lib.*.d
         "effectFn": [
           "span"
         ],
+        // Schema class kinds that get a nominal brand, used by schemaClassMissingBrand and the Schema class completions. (default: ["Class","TaggedClass","Error","TaggedError","Opaque"])
+        "brandedSchemaClasses": [
+          "Class",
+          "TaggedClass",
+          "Error",
+          "TaggedError",
+          "Opaque"
+        ],
         // Maps rule names to severity levels. Use {} to enable diagnostics with rule defaults. (default: {})
         "diagnosticSeverity": {},
         // Ordered per-file diagnostic option overrides. (default: [{"include":["src/**/*.ts"],"options":{"diagnosticSeverity":{"floatingEffect":"error"}}}])
