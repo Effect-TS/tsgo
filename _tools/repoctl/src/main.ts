@@ -28,7 +28,7 @@ import {
   printTypeScriptTestMatrix
 } from "./matrix.ts"
 import { comparePerformance } from "./perf.ts"
-import { prepareWorkload, runPerfCi } from "./perfCi.ts"
+import { perfCiSubject, prepareWorkload, runPerfCi } from "./perfCi.ts"
 import { writePerfReport } from "./perfReport.ts"
 import { assembleReleaseArtifacts, bundleUpstream, preparePlatformPackages } from "./packages.ts"
 import { prepareTsgolintComponent, validateOxlintComponent } from "./oxlint.ts"
@@ -343,26 +343,51 @@ const perfCompare = Command.make("compare", {
 
 const perfCi = Command.make("ci", {
   channel: Flag.String("channel"),
-  side: Flag.Literals("side", ["base", "head"]),
-  commit: Flag.String("commit"),
-  version: Flag.String("version"),
-  patchedBin: Flag.String("patched-bin"),
+  baseBin: Flag.String("base-bin").pipe(Flag.optional, Flag.withDescription("Patched compiler built from the base")),
+  baseCommit: Flag.String("base-commit").pipe(Flag.optional),
+  baseVersion: Flag.String("base-version").pipe(Flag.optional, Flag.withDescription("Base TypeScript version")),
+  headBin: Flag.String("head-bin").pipe(Flag.optional, Flag.withDescription("Patched compiler built from the head")),
+  headCommit: Flag.String("head-commit").pipe(Flag.optional),
+  headVersion: Flag.String("head-version").pipe(Flag.optional, Flag.withDescription("Head TypeScript version")),
   workloadDir: Flag.String("workload-dir"),
-  pairs: Flag.Int("pairs").pipe(Flag.withDefault(5)),
+  rounds: Flag.Int("rounds").pipe(
+    Flag.withDefault(9),
+    Flag.withDescription("Rounds of one compile per compiler; a multiple of the compiler count keeps orders balanced")
+  ),
   output: Flag.String("output")
-}, (options) => runPerfCi(options)).pipe(
-  Command.withDescription("Measure stock and Effect-patched compilers on the pinned Effect workload with all rules")
-)
+}, (options) =>
+  Effect.gen(function*() {
+    yield* runPerfCi({
+      channel: options.channel,
+      base: yield* perfCiSubject("base", {
+        bin: Option.getOrUndefined(options.baseBin),
+        commit: Option.getOrUndefined(options.baseCommit),
+        version: Option.getOrUndefined(options.baseVersion)
+      }),
+      head: yield* perfCiSubject("head", {
+        bin: Option.getOrUndefined(options.headBin),
+        commit: Option.getOrUndefined(options.headCommit),
+        version: Option.getOrUndefined(options.headVersion)
+      }),
+      workloadDir: options.workloadDir,
+      rounds: options.rounds,
+      output: options.output
+    })
+  })).pipe(
+    Command.withDescription(
+      "Measure stock, base, and head compilers interleaved on one machine on the pinned Effect workload with all rules"
+    )
+  )
 
 const perfReport = Command.make("report", {
   input: Flag.String("input"),
   output: Flag.String("output"),
   matrix: Flag.String("matrix").pipe(
     Flag.optional,
-    Flag.withDescription("Perf matrix JSON used to tell missing results apart from new or removed channels")
+    Flag.withDescription("`repoctl matrix perf` JSON used to tell missing results apart from new or removed channels")
   )
 }, ({ input, matrix, output }) => writePerfReport({ input, output, matrix: Option.getOrUndefined(matrix) })).pipe(
-  Command.withDescription("Render a markdown report from base and head perf cells")
+  Command.withDescription("Render a markdown report from per-channel perf cells")
 )
 
 const perf = Command.make("perf").pipe(
@@ -405,7 +430,7 @@ const matrixPerf = Command.make("perf", {
   baseRef: Flag.String("base-ref"),
   headRef: Flag.String("head-ref")
 }, ({ baseRef, headRef }) => printPerfMatrix(repositoryRoot, baseRef, headRef)).pipe(
-  Command.withDescription("Print the base and head perf matrix as JSON")
+  Command.withDescription("Print the perf build (channel x side) and measure (channel) matrices as JSON")
 )
 
 const matrixRelease = Command.make("release", {}, () => printReleaseMatrix(repositoryRoot)).pipe(
