@@ -237,18 +237,17 @@ index 32c6654a..807f810b 100644
                  },
                  ..Default::default()
 diff --git a/crates/tsrs_ls/src/autoimport/mod.rs b/crates/tsrs_ls/src/autoimport/mod.rs
-index 95feff14..32219df2 100644
+index b19c89f8..a0e18576 100644
 --- a/crates/tsrs_ls/src/autoimport/mod.rs
 +++ b/crates/tsrs_ls/src/autoimport/mod.rs
-@@ -12,7 +12,10 @@ pub mod util;
+@@ -12,7 +12,9 @@ pub mod util;
  pub mod view;
  
  pub use export::*;
--pub use fix::{Fix, get_import_kind_for_import_statement};
+-pub use fix::Fix;
 +pub use fix::{
-+    AutoImportFixTransformerFactory, Fix, FixTransformer, get_import_kind_for_import_statement,
-+    register_auto_import_fix_transformer,
++    AutoImportFixTransformerFactory, Fix, FixTransformer, register_auto_import_fix_transformer,
 +};
+ pub(crate) use fix::get_import_kind_for_import_statement;
  pub use import_adder::*;
  pub use index::{Index, Named};
- pub use registry::*;

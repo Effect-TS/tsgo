@@ -178,7 +178,7 @@ pub(crate) fn namespace_forwards(barrel: P<SourceFile>) -> FxHashMap<String, Str
         if !relative.starts_with("./") && !relative.starts_with("../") {
             continue;
         }
-        let name = export_clause.as_namespace_export().name;
+        let name = export_clause.as_namespace_export().name();
         if name.kind() != Kind::Identifier {
             continue;
         }

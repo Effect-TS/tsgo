@@ -10,20 +10,22 @@ Port of _patches/typescript/011-ls-codeactions.patch (tsc/internal/ls/codeaction
 - ProvideCodeActions runs the refactor providers after the quick fixes when shouldRunRefactors holds;
   shouldRunRefactors and convertRefactorToLSPCodeAction are ported as is. tsrs's `CodeActionParams::context` is
   not optional, so Go's `params.Context == nil` check is the `only == None` one.
+- tsrs generates the lsproto fields it never reads as private; `CodeActionParams::range` becomes `pub` for the
+  refactor providers' span. The crate root re-exports the code action types again (tsrs dropped that `pub use`).
 
 diff --git a/crates/tsrs_ls/src/codeactions.rs b/crates/tsrs_ls/src/codeactions.rs
-index 40e11620..7e05bd80 100644
+index b32f3744..393311b0 100644
 --- a/crates/tsrs_ls/src/codeactions.rs
 +++ b/crates/tsrs_ls/src/codeactions.rs
-@@ -47,6 +47,7 @@ pub struct CodeAction {
+@@ -45,6 +45,7 @@ pub struct CodeAction {
      pub(crate) description: String,
      pub(crate) changes: Vec<lsproto::TextEdit>,
      pub(crate) fix_id: String,
 +    pub kind: lsproto::CodeActionKind, // optional; used by refactors to specify the code action kind
-     pub fix_all_description: String,
  }
  
-@@ -105,6 +106,40 @@ fn code_fix_providers() -> &'static [&'static CodeFixProvider] {
+ impl CodeAction {
+@@ -102,6 +103,40 @@ fn code_fix_providers() -> &'static [&'static CodeFixProvider] {
      &PROVIDERS
  }
  
@@ -64,7 +66,7 @@ index 40e11620..7e05bd80 100644
  impl LanguageService {
      // codeactions.go:80
      // ProvideCodeActions returns code actions for the given range and context
-@@ -147,7 +182,10 @@ impl LanguageService {
+@@ -144,7 +179,10 @@ impl LanguageService {
                      continue;
                  };
  
@@ -76,7 +78,7 @@ index 40e11620..7e05bd80 100644
                      if !code_fix_provider_matches_lsp_diagnostic(provider, diag) {
                          continue;
                      }
-@@ -197,6 +235,32 @@ impl LanguageService {
+@@ -193,6 +231,32 @@ impl LanguageService {
              actions.extend(fix_all_actions);
          }
  
@@ -109,7 +111,7 @@ index 40e11620..7e05bd80 100644
          Ok(lsproto::CommandOrCodeActionArrayOrNull { command_or_code_action_array: Some(actions) })
      }
  
-@@ -465,6 +529,37 @@ pub fn contains_error_code(codes: &[i32], code: i32) -> bool {
+@@ -459,6 +523,37 @@ pub fn contains_error_code(codes: &[i32], code: i32) -> bool {
      codes.contains(&code)
  }
  
@@ -148,54 +150,72 @@ index 40e11620..7e05bd80 100644
  // convertToLSPCodeAction converts an internal CodeAction to an LSP CodeAction
  fn convert_to_lsp_code_action(
 diff --git a/crates/tsrs_ls/src/codeactions_fixclassincorrectlyimplementsinterface.rs b/crates/tsrs_ls/src/codeactions_fixclassincorrectlyimplementsinterface.rs
-index 88f469e3..e30c0305 100644
+index 38bfd755..cf825215 100644
 --- a/crates/tsrs_ls/src/codeactions_fixclassincorrectlyimplementsinterface.rs
 +++ b/crates/tsrs_ls/src/codeactions_fixclassincorrectlyimplementsinterface.rs
-@@ -90,6 +90,7 @@ fn get_code_actions_to_fix_class_incorrectly_implements_interface(
+@@ -88,6 +88,7 @@ fn get_code_actions_to_fix_class_incorrectly_implements_interface(
+                 .localize(&[&scanner::get_text_of_node(implemented_type_node)]),
              changes,
              fix_id: FIX_CLASS_INCORRECTLY_IMPLEMENTS_INTERFACE_FIX_ID.to_string(),
-             fix_all_description: diagnostics::IMPLEMENT_ALL_UNIMPLEMENTED_INTERFACES.localize(&[]),
 +            ..Default::default()
          });
      }
      Ok(actions)
 diff --git a/crates/tsrs_ls/src/codeactions_fixmissingtypeannotation.rs b/crates/tsrs_ls/src/codeactions_fixmissingtypeannotation.rs
-index 9f4572e1..65db7950 100644
+index a0f5e579..4268a4d1 100644
 --- a/crates/tsrs_ls/src/codeactions_fixmissingtypeannotation.rs
 +++ b/crates/tsrs_ls/src/codeactions_fixmissingtypeannotation.rs
-@@ -262,6 +262,7 @@ fn try_code_action(
+@@ -260,6 +260,7 @@ fn try_code_action(
+         description,
          changes: file_changes,
          fix_id: FIX_MISSING_TYPE_ANNOTATION_ON_EXPORTS_FIX_ID.to_string(),
-         fix_all_description: diagnostics::ADD_ALL_MISSING_TYPE_ANNOTATIONS.localize(&[]),
 +        ..Default::default()
      })
  }
  
 diff --git a/crates/tsrs_ls/src/codeactions_importfixes.rs b/crates/tsrs_ls/src/codeactions_importfixes.rs
-index 5b6c33a4..6b4251ff 100644
+index 2d7dc6dc..c05044e6 100644
 --- a/crates/tsrs_ls/src/codeactions_importfixes.rs
 +++ b/crates/tsrs_ls/src/codeactions_importfixes.rs
-@@ -100,6 +100,7 @@ fn get_import_code_actions(
-                 changes: edits,
-                 fix_id: IMPORT_FIX_ID.to_string(),
-                 fix_all_description: diagnostics::ADD_ALL_MISSING_IMPORTS.localize(&[]),
+@@ -94,7 +94,12 @@ fn get_import_code_actions(
+         );
+ 
+         if ok {
+-            Some(CodeAction { description, changes: edits, fix_id: IMPORT_FIX_ID.to_string() })
++            Some(CodeAction {
++                description,
++                changes: edits,
++                fix_id: IMPORT_FIX_ID.to_string(),
 +                ..Default::default()
-             })
++            })
          } else {
              None
+         }
 diff --git a/crates/tsrs_ls/src/lib.rs b/crates/tsrs_ls/src/lib.rs
-index 6c2f8d9d..f70202df 100644
+index 956b3a3b..993f9bed 100644
 --- a/crates/tsrs_ls/src/lib.rs
 +++ b/crates/tsrs_ls/src/lib.rs
-@@ -52,7 +52,10 @@ mod utilities;
+@@ -49,6 +49,10 @@ pub mod string_completions;
+ mod symbols;
+ mod utilities;
  mod visitedchildren;
- 
- pub use api::{ERR_NO_SOURCE_FILE, ERR_NO_TOKEN_AT_POSITION};
--pub use codeactions::{CodeAction, CodeFixContext, CodeFixProvider, CombinedCodeActions};
 +pub use codeactions::{
 +    CodeAction, CodeFixContext, CodeFixProvider, CombinedCodeActions, RefactorProvider,
 +    register_code_fix_provider, register_refactor_provider,
 +};
  pub use completions::{
-     COMPLETION_TRIGGER_CHARACTERS, CompletionItem, CompletionKind, CompletionList,
-     ERR_NEEDS_AUTO_IMPORTS, KeywordCompletionFilters, SORT_TEXT_AUTO_IMPORT_SUGGESTIONS,
+     COMPLETION_TRIGGER_CHARACTERS, CompletionItem, CompletionList, is_err_needs_auto_imports,
+ };
+diff --git a/crates/tsrs_lsproto/src/lsp_generated.rs b/crates/tsrs_lsproto/src/lsp_generated.rs
+index 9038d57d..442add5e 100644
+--- a/crates/tsrs_lsproto/src/lsp_generated.rs
++++ b/crates/tsrs_lsproto/src/lsp_generated.rs
+@@ -6826,7 +6826,7 @@ pub struct CodeActionParams {
+     pub text_document: TextDocumentIdentifier,
+ 
+     // The range for which the command was invoked.
+-    range: Range,
++    pub range: Range,
+ 
+     // Context carrying additional information.
+     pub context: CodeActionContext,

@@ -118,7 +118,7 @@ pub(crate) fn import_binding_name(
 ) -> Option<P<Node>> {
     let symbol = symbol?;
     if symbol.declarations().len() != 1
-        || ctx.checker().get_type_only_alias_declaration_exported(symbol).is_some()
+        || ctx.checker().get_type_only_alias_declaration(symbol).is_some()
     {
         return None;
     }

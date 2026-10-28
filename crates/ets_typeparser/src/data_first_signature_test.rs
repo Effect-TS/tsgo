@@ -1195,7 +1195,7 @@ fn signature_string(c: &mut ets_shim::checker::Checker, sig: Option<P<Signature>
     let Some(sig) = sig else {
         return "<nil>".to_string();
     };
-    c.signature_to_string_ex_exported(sig, None, TypeFormatFlags::WriteArrowStyleSignature, None)
+    c.signature_to_string_ex(sig, None, TypeFormatFlags::WriteArrowStyleSignature, None)
 }
 
 // go test: internal/typeparser/data_first_signature_test.go:903 findFlowByNode 5bba96255b38ad8b

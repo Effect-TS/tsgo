@@ -63,14 +63,14 @@ index 970f0b28..6796bb51 100644
          Ok(lsproto::InlayHintsOrNull { inlay_hints: Some(result) })
      }
 diff --git a/crates/tsrs_ls/src/lib.rs b/crates/tsrs_ls/src/lib.rs
-index 60467368..2c1a8a33 100644
+index c1e6f3cf..16237065 100644
 --- a/crates/tsrs_ls/src/lib.rs
 +++ b/crates/tsrs_ls/src/lib.rs
-@@ -78,6 +78,7 @@ pub use findallreferences::{
+@@ -64,6 +64,7 @@ pub use findallreferences::{
  };
  pub use host::*;
  pub use hover::{AfterQuickInfoCallback, register_after_quick_info_callback};
 +pub use inlay_hints::{AfterInlayHintsCallback, register_after_inlay_hints_callback};
  pub use jsdoc::{JSDocTagInfo, get_symbol_documentation_comment, get_symbol_jsdoc_tags};
  pub use languageservice::*;
- pub use rename::{
+ pub use rename::{RenameInfo, client_supports_document_changes, client_supports_will_rename_files};
