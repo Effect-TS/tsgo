@@ -1357,7 +1357,7 @@
     {
       "name": "runEffectInsideEffect",
       "group": "antipattern",
-      "description": "Suggests using Runtime or Effect.run*With methods instead of Effect.run* inside Effect contexts",
+      "description": "Suggests using Runtime or Effect.run*With methods instead of Effect.run* inside Effect contexts, and reports platform runMain calls there",
       "defaultSeverity": "suggestion",
       "fixable": true,
       "supportedEffect": [
@@ -1367,7 +1367,8 @@
       "codes": [
         377024,
         377025,
-        377074
+        377074,
+        377159
       ],
       "preview": {
         "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  const run = () =\u003e Effect.runSync(Effect.succeed(1))\n  return run()\n})\n",

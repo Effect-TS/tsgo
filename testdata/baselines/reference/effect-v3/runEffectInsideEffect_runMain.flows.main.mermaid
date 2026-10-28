@@ -1,0 +1,5 @@
+flowchart TB
+  0[/"type: void<br/>node: NodeRuntime.runMain#40;handler#41;"/]
+  1[/"type: Effect#lt;void, never, never#gt;<br/>node: handler"/]
+  2["type: void<br/>callee: NodeRuntime.runMain<br/>args: #91;#93;"]
+  1 -->|"kind: pipe"| 2

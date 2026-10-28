@@ -2,7 +2,7 @@
 
 # `runEffectInsideEffect`
 
-Suggests using Runtime or Effect.run*With methods instead of Effect.run* inside Effect contexts
+Suggests using Runtime or Effect.run*With methods instead of Effect.run* inside Effect contexts, and reports platform runMain calls there
 
 | Property | Value |
 | --- | --- |
@@ -10,7 +10,7 @@ Suggests using Runtime or Effect.run*With methods instead of Effect.run* inside 
 | Default severity | `suggestion` |
 | Fixable | Yes |
 | Effect versions | v3, v4 |
-| Diagnostic codes | `TS377024`, `TS377025`, `TS377074` |
+| Diagnostic codes | `TS377024`, `TS377025`, `TS377074`, `TS377159` |
 | Language Service name | `runEffectInsideEffect` |
 | Oxlint name | `effecttsgo/run-effect-inside-effect` |
 
