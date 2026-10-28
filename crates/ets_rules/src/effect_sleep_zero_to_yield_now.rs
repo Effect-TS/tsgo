@@ -20,6 +20,7 @@ pub static EFFECT_SLEEP_ZERO_TO_YIELD_NOW: LazyLock<Rule> = LazyLock::new(|| Rul
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_effect_sleep_zero_to_yield_now(ctx.type_parser, source_file);

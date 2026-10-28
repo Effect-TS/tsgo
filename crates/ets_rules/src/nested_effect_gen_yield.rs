@@ -22,6 +22,7 @@ pub static NESTED_EFFECT_GEN_YIELD: LazyLock<Rule> = LazyLock::new(|| {
         codes: vec![
             tsdiag::THIS_YIELD_ASTERISK_IS_APPLIED_TO_A_NESTED_EFFECT_GEN_THAT_CAN_BE_INLINED_IN_THE_PARENT_EFFECT_GENERATOR_CONTEXT_EFFECT_NESTED_EFFECT_GEN_YIELD.code(),
         ],
+        replaced_by: vec![],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_nested_effect_gen_yield(ctx.type_parser, ctx.source_file);
             let mut diags = Vec::with_capacity(matches.len());

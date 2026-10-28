@@ -48,7 +48,7 @@ fn test_recommended_preset() {
     }
 }
 
-// go test: internal/rules/metadata_test.go:50 TestMetadataPresetCatalog 4e421eb868c0f3c6
+// go test: internal/rules/metadata_test.go:50 TestMetadataPresetCatalog 274c9c97f4520957
 #[test]
 fn test_metadata_preset_catalog() {
     let presets = metadata_presets();
@@ -84,6 +84,14 @@ fn test_metadata_preset_catalog() {
                 );
                 continue;
             }
+            if !current.replaced_by.is_empty() {
+                assert!(
+                    severity.is_none(),
+                    "preset {preset_name:?} includes deprecated diagnostic {:?}",
+                    current.name
+                );
+                continue;
+            }
             match severity {
                 None => panic!("preset {preset_name:?} is missing diagnostic {:?}", current.name),
                 Some(&severity) => assert!(
@@ -97,7 +105,7 @@ fn test_metadata_preset_catalog() {
     }
 }
 
-// go test: internal/rules/metadata_test.go:89 metadataPresetByName af65422e2357ae76
+// go test: internal/rules/metadata_test.go:95 metadataPresetByName af65422e2357ae76
 fn metadata_preset_by_name(name: &str) -> FxHashMap<String, Severity> {
     for preset in metadata_presets() {
         if preset.name == name {

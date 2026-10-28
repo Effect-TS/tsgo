@@ -19,6 +19,7 @@ pub static MISSING_PIPEABLE_SIGNATURE: LazyLock<Rule> = LazyLock::new(|| {
         codes: vec![
             tsdiag::EXPORTED_FUNCTION_0_HAS_NO_PIPEABLE_OVERLOAD_CORRESPONDING_TO_ITS_SIGNATURE_1_EFFECT_MISSING_PIPEABLE_SIGNATURE.code(),
         ],
+        replaced_by: vec![],
         run: check_missing_pipeable_signatures,
     }
 });

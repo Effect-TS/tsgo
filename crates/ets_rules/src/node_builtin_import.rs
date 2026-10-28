@@ -357,6 +357,7 @@ pub static NODE_BUILTIN_IMPORT: LazyLock<Rule> = LazyLock::new(|| {
         default_severity: Severity::Off,
         supported_effect: vec!["v3", "v4"],
         codes: vec![tsdiag::THIS_MODULE_REFERENCE_USES_THE_2_MODULE_THE_CORRESPONDING_EFFECT_API_IS_0_FROM_1_EFFECT_NODE_BUILTIN_IMPORT.code()],
+        replaced_by: vec![],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_node_builtin_import(ctx.type_parser, ctx.source_file);
             let mut diags = Vec::with_capacity(matches.len());

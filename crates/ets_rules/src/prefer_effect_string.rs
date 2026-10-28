@@ -16,6 +16,7 @@ pub static PREFER_EFFECT_STRING: LazyLock<Rule> = LazyLock::new(|| {
         default_severity: Severity::Off,
         supported_effect: vec!["v3", "v4"],
         codes: vec![tsdiag::CONSIDER_EFFECT_SLASH_STRING_0_INSTEAD_OF_NATIVE_STRING_1_2_EFFECT_PREFER_EFFECT_STRING.code()],
+        replaced_by: vec![],
         run: run_prefer_effect_string,
     }
 });

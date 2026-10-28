@@ -17,6 +17,7 @@ pub static SCHEMA_OPAQUE_INSTANCE_MEMBER: LazyLock<Rule> = LazyLock::new(|| Rule
     default_severity: Severity::Error,
     supported_effect: vec!["v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let mut diagnostics = Vec::new();
 

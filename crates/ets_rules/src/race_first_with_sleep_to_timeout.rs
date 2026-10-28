@@ -25,6 +25,7 @@ pub static RACE_FIRST_WITH_SLEEP_TO_TIMEOUT: LazyLock<Rule> = LazyLock::new(|| R
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_race_first_with_sleep_to_timeout(ctx.type_parser, Some(source_file));

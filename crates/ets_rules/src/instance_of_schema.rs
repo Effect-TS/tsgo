@@ -19,6 +19,7 @@ pub static INSTANCE_OF_SCHEMA: LazyLock<Rule> = LazyLock::new(|| {
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![tsdiag::THIS_CODE_USES_INSTANCEOF_WITH_AN_EFFECT_SCHEMA_TYPE_SCHEMA_IS_IS_THE_SCHEMA_AWARE_RUNTIME_CHECK_FOR_THIS_CASE_EFFECT_INSTANCE_OF_SCHEMA.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let matches = analyze_instance_of_schema(ctx.type_parser, ctx.source_file);
         let mut diags = Vec::with_capacity(matches.len());

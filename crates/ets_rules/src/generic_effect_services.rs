@@ -19,6 +19,7 @@ pub static GENERIC_EFFECT_SERVICES: LazyLock<Rule> = LazyLock::new(|| {
     default_severity: Severity::Warning,
     supported_effect: vec!["v3"],
     codes: vec![tsdiag::EFFECT_SERVICES_WITH_TYPE_PARAMETERS_ARE_NOT_SUPPORTED_BECAUSE_THEY_CANNOT_BE_PROPERLY_DISCRIMINATED_AT_RUNTIME_WHICH_MAY_CAUSE_UNEXPECTED_BEHAVIOR_EFFECT_GENERIC_EFFECT_SERVICES.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         // V3-only rule
         if ctx.type_parser.supported_effect_version() != EffectMajorVersion::V3 {

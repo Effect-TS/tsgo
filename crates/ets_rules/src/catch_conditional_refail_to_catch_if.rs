@@ -24,6 +24,7 @@ pub static CATCH_CONDITIONAL_REFAIL_TO_CATCH_IF: LazyLock<Rule> = LazyLock::new(
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches =

@@ -19,6 +19,7 @@ pub static SERVICE_NOT_AS_CLASS: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Off,
     supported_effect: vec!["v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_service_not_as_class(ctx.type_parser, source_file);

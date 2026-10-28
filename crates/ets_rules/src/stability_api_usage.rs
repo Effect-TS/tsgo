@@ -26,6 +26,7 @@ pub static EXPERIMENTAL_API_USAGE: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Warning,
     supported_effect: vec!["v4"],
     codes: vec![EXPERIMENTAL_MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         run_stability_api_usage(ctx, "experimental")
     },
@@ -39,6 +40,7 @@ pub static UNSTABLE_API_USAGE: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Warning,
     supported_effect: vec!["v4"],
     codes: vec![UNSTABLE_MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         run_stability_api_usage(ctx, "unstable")
     },

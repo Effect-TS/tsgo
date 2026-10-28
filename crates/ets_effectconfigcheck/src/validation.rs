@@ -2,19 +2,20 @@
 
 use std::sync::Arc;
 
-use ets_etscore::Severity;
+use ets_etscore::{EffectPluginOptions, Severity};
+use ets_rule::Rule;
 use ets_shim::P;
 use ets_shim::ast::{self, Diagnostic, Node, SourceFile};
 use ets_shim::core::CompilerOptions;
 use ets_shim::diagnostics;
 use rustc_hash::FxHashMap;
 
-// go: internal/effectconfigcheck/validation.go:17 Register d3af5212dd47568b
+// go: internal/effectconfigcheck/validation.go:18 Register d3af5212dd47568b
 pub fn register() {
     ets_shim::tsoptions::register_validate_compiler_options_callback(Arc::new(validate));
 }
 
-// go: internal/effectconfigcheck/validation.go:21 validate 430887de3f635c6d
+// go: internal/effectconfigcheck/validation.go:22 validate 8021be12152d010b
 pub(crate) fn validate(
     options: Option<&CompilerOptions>,
     source_file: Option<P<SourceFile>>,
@@ -29,42 +30,72 @@ pub(crate) fn validate(
     let Some(config) = effect.as_deref() else {
         return Vec::new();
     };
-    let severity = config
-        .diagnostic_severity
-        .as_ref()
-        .and_then(|severities| severities.get(ets_rule::UNKNOWN_RULE_NAME_NAME))
-        .copied()
-        .unwrap_or(Severity::Warning);
-    if severity.is_off() {
+    let unknown_severity = configured_severity(config, ets_rule::UNKNOWN_RULE_NAME_NAME);
+    let deprecated_severity = configured_severity(config, ets_rule::DEPRECATED_RULE_NAME_NAME);
+    if unknown_severity.is_off() && deprecated_severity.is_off() {
         return Vec::new();
     }
 
     // Syntax is used only to locate diagnostics; validation uses the merged options.
     let plugin = effect_plugin_syntax(source_file);
     let mut result = Vec::new();
+    let mut report = |syntax: Option<P<Node>>,
+                      name: &str,
+                      severity: Severity,
+                      message: &'static diagnostics::Message,
+                      args: &[&dyn std::fmt::Display]| {
+        let node = find_property(syntax, name).and_then(|property| property.name());
+        let diagnostic =
+            ets_shim::tsoptions::create_diagnostic_for_node_in_source_file_or_compiler_diagnostic(
+                source_file,
+                node,
+                message,
+                args,
+            );
+        diagnostic.set_category(ets_directives::to_category(severity));
+        result.push(diagnostic);
+    };
     let mut check = |severities: Option<&FxHashMap<String, Severity>>, syntax: Option<P<Node>>| {
         let mut unknown: Vec<&str> = Vec::new();
+        let mut deprecated: Vec<&Rule> = Vec::new();
         for name in severities.into_iter().flat_map(FxHashMap::keys) {
-            if name != ets_rule::UNUSED_DIRECTIVE_NAME
-                && name != ets_rule::UNKNOWN_RULE_NAME_NAME
-                && ets_rule::by_name(&ets_rules::ALL, name).is_none()
+            if name == ets_rule::UNUSED_DIRECTIVE_NAME
+                || name == ets_rule::UNKNOWN_RULE_NAME_NAME
+                || name == ets_rule::DEPRECATED_RULE_NAME_NAME
             {
-                unknown.push(name);
+                continue;
+            }
+            match ets_rule::by_name(&ets_rules::ALL, name) {
+                None => unknown.push(name),
+                Some(current) if !current.replaced_by.is_empty() => deprecated.push(current),
+                Some(_) => {}
             }
         }
         // Maps have no iteration order; keep CLI output and baselines deterministic.
         unknown.sort_unstable();
-        for name in unknown {
-            let node = find_property(syntax, name).and_then(|property| property.name());
-            let diagnostic =
-                ets_shim::tsoptions::create_diagnostic_for_node_in_source_file_or_compiler_diagnostic(
-                    source_file,
-                    node,
+        deprecated.sort_unstable_by(|a, b| a.name.cmp(b.name));
+        if !unknown_severity.is_off() {
+            for name in unknown {
+                report(
+                    syntax,
+                    name,
+                    unknown_severity,
                     &diagnostics::UNKNOWN_EFFECT_DIAGNOSTIC_RULE_0_IN_DIAGNOSTIC_SEVERITY_EFFECT_UNKNOWN_RULE_NAME,
                     &[&name],
                 );
-            diagnostic.set_category(ets_directives::to_category(severity));
-            result.push(diagnostic);
+            }
+        }
+        if !deprecated_severity.is_off() {
+            for current in deprecated {
+                let replacements = format_replacements(&current.replaced_by);
+                report(
+                    syntax,
+                    current.name,
+                    deprecated_severity,
+                    &diagnostics::EFFECT_DIAGNOSTIC_RULE_0_IS_DEPRECATED_USE_1_INSTEAD_EFFECT_DEPRECATED_RULE_NAME,
+                    &[&current.name, &replacements],
+                );
+            }
         }
     };
     check(config.diagnostic_severity.as_ref(), property_value(plugin, "diagnosticSeverity"));
@@ -92,7 +123,23 @@ pub(crate) fn validate(
     result
 }
 
-// go: internal/effectconfigcheck/validation.go:81 effectPluginSyntax 229c909650d06bb7
+// go: internal/effectconfigcheck/validation.go:94 configuredSeverity 63e92e3d220e91f8
+pub(crate) fn configured_severity(config: &EffectPluginOptions, name: &str) -> Severity {
+    if let Some(&severity) =
+        config.diagnostic_severity.as_ref().and_then(|severities| severities.get(name))
+    {
+        return severity;
+    }
+    Severity::Warning
+}
+
+// go: internal/effectconfigcheck/validation.go:101 formatReplacements f34413f0aa28c1d2
+pub(crate) fn format_replacements(names: &[&str]) -> String {
+    let quoted: Vec<String> = names.iter().map(|name| format!("`{name}`")).collect();
+    quoted.join(" or ")
+}
+
+// go: internal/effectconfigcheck/validation.go:109 effectPluginSyntax 229c909650d06bb7
 pub(crate) fn effect_plugin_syntax(source_file: Option<P<SourceFile>>) -> Option<P<Node>> {
     let compiler_options =
         ets_shim::tsoptions::for_each_ts_config_prop_array(source_file, "compilerOptions", Some)?;
@@ -108,7 +155,7 @@ pub(crate) fn effect_plugin_syntax(source_file: Option<P<SourceFile>>) -> Option
     None
 }
 
-// go: internal/effectconfigcheck/validation.go:97 findProperty bcdac960da91b16c
+// go: internal/effectconfigcheck/validation.go:125 findProperty bcdac960da91b16c
 // Rust: the property assignment node (Go's `*ast.PropertyAssignment`).
 pub(crate) fn find_property(node: Option<P<Node>>, name: &str) -> Option<P<Node>> {
     let node = node?;
@@ -127,7 +174,7 @@ pub(crate) fn find_property(node: Option<P<Node>>, name: &str) -> Option<P<Node>
     result
 }
 
-// go: internal/effectconfigcheck/validation.go:111 propertyValue 8ee149fc306c6596
+// go: internal/effectconfigcheck/validation.go:139 propertyValue 8ee149fc306c6596
 pub(crate) fn property_value(node: Option<P<Node>>, name: &str) -> Option<P<Node>> {
     if let Some(property) = find_property(node, name) {
         return property.initializer();
@@ -135,7 +182,7 @@ pub(crate) fn property_value(node: Option<P<Node>>, name: &str) -> Option<P<Node
     None
 }
 
-// go: internal/effectconfigcheck/validation.go:118 arrayElements 1b02ec45521e85d3
+// go: internal/effectconfigcheck/validation.go:146 arrayElements 1b02ec45521e85d3
 pub(crate) fn array_elements(node: Option<P<Node>>) -> &'static [P<Node>] {
     if let Some(node) = node
         && ast::is_array_literal_expression(node)

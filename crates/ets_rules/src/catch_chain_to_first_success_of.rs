@@ -23,6 +23,7 @@ pub static CATCH_CHAIN_TO_FIRST_SUCCESS_OF: LazyLock<Rule> = LazyLock::new(|| Ru
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_catch_chain_to_first_success_of(ctx.type_parser, Some(source_file));

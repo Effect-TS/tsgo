@@ -23,6 +23,7 @@ pub static DETERMINISTIC_KEYS: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let (program, source_file, options) = (ctx.program, ctx.source_file, ctx.options);
         let matches = analyze_deterministic_keys(ctx.type_parser, program, source_file, options);

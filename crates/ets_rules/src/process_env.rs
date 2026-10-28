@@ -23,6 +23,7 @@ pub static PROCESS_ENV: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![PROCESS_ENV_MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_process_env(ctx, false) },
 });
 
@@ -34,6 +35,7 @@ pub static PROCESS_ENV_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![PROCESS_ENV_IN_EFFECT_MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_process_env(ctx, true) },
 });
 

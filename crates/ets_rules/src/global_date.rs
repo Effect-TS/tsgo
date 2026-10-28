@@ -19,6 +19,7 @@ pub static GLOBAL_DATE: LazyLock<Rule> = LazyLock::new(|| {
         tsdiag::THIS_CODE_USES_DATE_NOW_TIME_ACCESS_IS_REPRESENTED_THROUGH_CLOCK_FROM_EFFECT_EFFECT_GLOBAL_DATE.code(),
         tsdiag::THIS_CODE_CONSTRUCTS_NEW_DATE_DATE_VALUES_ARE_REPRESENTED_THROUGH_DATE_TIME_FROM_EFFECT_EFFECT_GLOBAL_DATE.code(),
     ],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_date(ctx, false) },
 }
 });
@@ -35,6 +36,7 @@ pub static GLOBAL_DATE_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
         tsdiag::THIS_EFFECT_CODE_USES_DATE_NOW_TIME_ACCESS_IN_EFFECT_CODE_IS_REPRESENTED_THROUGH_CLOCK_FROM_EFFECT_EFFECT_GLOBAL_DATE_IN_EFFECT.code(),
         tsdiag::THIS_EFFECT_CODE_CONSTRUCTS_NEW_DATE_DATE_VALUES_IN_EFFECT_CODE_ARE_REPRESENTED_THROUGH_DATE_TIME_FROM_EFFECT_EFFECT_GLOBAL_DATE_IN_EFFECT.code(),
     ],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_date(ctx, true) },
 }
 });

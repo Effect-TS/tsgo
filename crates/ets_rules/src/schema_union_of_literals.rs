@@ -22,6 +22,7 @@ pub static SCHEMA_UNION_OF_LITERALS: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Off,
     supported_effect: vec!["v3"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_schema_union_of_literals(ctx.type_parser, source_file);

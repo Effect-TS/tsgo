@@ -23,6 +23,7 @@ pub static MISSED_PIPEABLE_OPPORTUNITY: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let mut min_arg_count = 2;
         let effect_config = ctx.options;

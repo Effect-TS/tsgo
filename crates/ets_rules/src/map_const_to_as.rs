@@ -25,6 +25,7 @@ pub static MAP_CONST_TO_AS: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let matches = analyze_map_const_to_as(ctx.type_parser, ctx.source_file);
         let mut diags = Vec::with_capacity(matches.len());

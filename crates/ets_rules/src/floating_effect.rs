@@ -37,6 +37,7 @@ pub static FLOATING_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Error,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code(), MESSAGE_EFFECT_ABLE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_floating_effect(ctx.type_parser, source_file);

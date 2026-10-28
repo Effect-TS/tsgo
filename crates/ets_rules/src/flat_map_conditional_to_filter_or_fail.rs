@@ -25,6 +25,7 @@ pub static FLAT_MAP_CONDITIONAL_TO_FILTER_OR_FAIL: LazyLock<Rule> = LazyLock::ne
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_flat_map_conditional_to_filter_or_fail(ctx.type_parser, source_file);

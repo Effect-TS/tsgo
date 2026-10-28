@@ -24,6 +24,7 @@ pub static MISSING_EFFECT_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {
     codes: vec![
         tsdiag::MISSING_ERRORS_0_IN_THE_EXPECTED_EFFECT_TYPE_EFFECT_MISSING_EFFECT_ERROR.code(),
     ],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let matches = analyze_missing_effect_error(ctx.type_parser, ctx.source_file);
         let mut diags = Vec::with_capacity(matches.len());

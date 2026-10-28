@@ -22,6 +22,7 @@ pub static EFFECT_FN_IMPLICIT_ANY: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Error,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let options = ctx.program.options();
         if !options.get_strict_option_value(options.no_implicit_any) {

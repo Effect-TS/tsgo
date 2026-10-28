@@ -23,6 +23,7 @@ pub static EFFECT_FN_OPPORTUNITY: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let effect_config = ctx.options;
         let source_file = ctx.source_file;

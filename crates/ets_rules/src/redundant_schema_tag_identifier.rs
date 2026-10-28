@@ -20,6 +20,7 @@ pub static REDUNDANT_SCHEMA_TAG_IDENTIFIER: LazyLock<Rule> = LazyLock::new(|| Ru
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_redundant_schema_tag_identifier(ctx.type_parser, source_file);

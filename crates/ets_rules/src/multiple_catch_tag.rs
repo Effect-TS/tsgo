@@ -22,6 +22,7 @@ pub static MULTIPLE_CATCH_TAG: LazyLock<Rule> = LazyLock::new(|| {
         codes: vec![
             tsdiag::THESE_0_CONSECUTIVE_CATCH_TAG_TRANSFORMATIONS_CAN_BE_COLLAPSED_INTO_A_SINGLE_CATCH_TAGS_CALL_EFFECT_MULTIPLE_CATCH_TAG.code(),
         ],
+        replaced_by: vec![],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_multiple_catch_tag(ctx.type_parser, Some(ctx.source_file));
             let mut diags = Vec::with_capacity(matches.len());

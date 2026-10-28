@@ -23,6 +23,7 @@ pub static CATCH_REFAIL_TO_TAP_ERROR: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         if ctx.type_parser.supported_effect_version() != EffectMajorVersion::V4 {

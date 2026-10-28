@@ -18,6 +18,7 @@ pub static MISSING_STAR_IN_YIELD_EFFECT_GEN: LazyLock<Rule> = LazyLock::new(|| {
         default_severity: Severity::Error,
         supported_effect: vec!["v3", "v4"],
         codes: vec![tsdiag::INSIDE_THIS_EFFECT_GENERATOR_EFFECT_MISSING_STAR_IN_YIELD_EFFECT_GEN.code(), tsdiag::THIS_USES_YIELD_FOR_AN_EFFECT_VALUE_YIELD_ASTERISK_IS_THE_EFFECT_AWARE_FORM_IN_THIS_CONTEXT_EFFECT_MISSING_STAR_IN_YIELD_EFFECT_GEN.code()],
+        replaced_by: vec![],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_missing_star_in_yield_effect_gen(ctx.type_parser, ctx.source_file);
             let mut diags = Vec::with_capacity(matches.len());

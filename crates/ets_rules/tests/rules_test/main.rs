@@ -362,7 +362,7 @@ struct PreviewPayload {
     diagnostics: Vec<PreviewDiagnostic>, // json:"diagnostics"
 }
 
-// go test: internal/rules/rules_json_test.go:280 exportedRule 5ba335dad5b931da
+// go test: internal/rules/rules_json_test.go:280 exportedRule 51fd03f5b14d1c29
 #[derive(Clone, Debug, PartialEq, Eq)]
 struct ExportedRule {
     name: String,                    // json:"name"
@@ -372,10 +372,11 @@ struct ExportedRule {
     fixable: bool,                   // json:"fixable"
     supported_effect: Vec<String>,   // json:"supportedEffect"
     codes: Vec<i32>,                 // json:"codes"
+    replaced_by: Vec<String>,        // json:"replacedBy,omitempty"
     preview: Option<PreviewPayload>, // json:"preview,omitempty"
 }
 
-// go test: internal/rules/rules_json_test.go:291 metadataDocument 9b843e81a3ff4565
+// go test: internal/rules/rules_json_test.go:292 metadataDocument 9b843e81a3ff4565
 //
 // Rust: `rule.MetadataGroup` / `rule.MetadataPreset` hold `&'static str`; a decoded document leaks its strings
 // (tests only).
@@ -386,7 +387,7 @@ struct MetadataDocument {
     rules: Vec<ExportedRule>,     // json:"rules"
 }
 
-// go test: internal/rules/rules_json_test.go:298 buildFixableCodes 10c107a8a05019ff
+// go test: internal/rules/rules_json_test.go:299 buildFixableCodes 10c107a8a05019ff
 // buildFixableCodes returns a set of diagnostic codes that have non-disable fixables.
 fn build_fixable_codes() -> FxHashMap<i32, bool> {
     let mut result = FxHashMap::default();
@@ -401,7 +402,7 @@ fn build_fixable_codes() -> FxHashMap<i32, bool> {
     result
 }
 
-// go test: internal/rules/rules_json_test.go:312 isRuleFixable 9177b661fca7a70c
+// go test: internal/rules/rules_json_test.go:313 isRuleFixable 9177b661fca7a70c
 // isRuleFixable returns true if any of the rule's codes has a non-disable fixable.
 fn is_rule_fixable(codes: &[i32], fixable_codes: &FxHashMap<i32, bool>) -> bool {
     for code in codes {
@@ -412,7 +413,7 @@ fn is_rule_fixable(codes: &[i32], fixable_codes: &FxHashMap<i32, bool>) -> bool 
     false
 }
 
-// go test: internal/rules/rules_json_test.go:324 trimLeadingDirectives 918eeef72c90c629
+// go test: internal/rules/rules_json_test.go:325 trimLeadingDirectives 918eeef72c90c629
 // trimLeadingDirectives strips leading lines starting with "// @" from sourceText
 // and returns the trimmed text along with the number of characters removed (including newlines).
 // This matches the upstream trimLeadingDirectives logic used for preview generation.
@@ -435,7 +436,7 @@ fn trim_leading_directives(source_text: &str) -> (String, usize) {
     (lines[index..].join("\n"), removed_chars)
 }
 
-// go test: internal/rules/rules_json_test.go:344 findPreviewFile 0cc3571263fcc58c
+// go test: internal/rules/rules_json_test.go:345 findPreviewFile 0cc3571263fcc58c
 // findPreviewFile locates the preview fixture for a rule, checking v4 first then v3.
 // Returns the version, file path, and source text.
 fn find_preview_file(
@@ -455,7 +456,7 @@ fn find_preview_file(
     Err(format!("no preview file found for rule {rule_name}"))
 }
 
-// go test: internal/rules/rules_json_test.go:357 parseTestConfig 2ab75116baa2a78c
+// go test: internal/rules/rules_json_test.go:358 parseTestConfig 2ab75116baa2a78c
 // parseTestConfig extracts a @test-config JSON object from source comments.
 // Returns a map of extra config to merge into the Effect plugin options.
 //
@@ -472,7 +473,7 @@ fn parse_test_config(source_text: &str) -> Option<Vec<(String, Json)>> {
     }
 }
 
-// go test: internal/rules/rules_json_test.go:372 buildTsConfigWithTestConfig 63fbaf283175003b
+// go test: internal/rules/rules_json_test.go:373 buildTsConfigWithTestConfig 63fbaf283175003b
 // buildTsConfigWithTestConfig creates a tsconfig JSON string that merges
 // the default Effect plugin config with any @test-config overrides.
 fn build_ts_config_with_test_config(test_config: Option<&[(String, Json)]>) -> String {
@@ -511,7 +512,7 @@ impl ParseConfigHost for DefaultParseConfigHost {
     }
 }
 
-// go test: internal/rules/rules_json_test.go:397 evaluatePreview 70bd9e615b5893e2
+// go test: internal/rules/rules_json_test.go:398 evaluatePreview 70bd9e615b5893e2
 // evaluatePreview creates an in-memory program for a preview fixture and runs
 // the specified rule directly to collect diagnostics. We bypass the checker hooks
 // because preview files use "// @effect-diagnostics *:off" which causes the
@@ -754,7 +755,7 @@ fn evaluate_preview(t: &T, version: EffectVersion, source_text: &str, r: &Rule) 
     PreviewPayload { source_text: trimmed_source, diagnostics: prev_diags }
 }
 
-// go test: internal/rules/rules_json_test.go:573 parsePreviewUnits eb3117cf2008aff1
+// go test: internal/rules/rules_json_test.go:574 parsePreviewUnits eb3117cf2008aff1
 // parsePreviewUnits parses a preview file into test units.
 // Reuses the same logic as effecttest.parseTestUnits.
 //
@@ -800,13 +801,13 @@ fn parse_preview_units(content: &str, default_file_name: &str) -> Vec<PreviewUni
     units
 }
 
-// go test: internal/rules/rules_json_test.go:618 previewUnit 37144eea3489adbe
+// go test: internal/rules/rules_json_test.go:619 previewUnit 37144eea3489adbe
 struct PreviewUnit {
     name: String,
     content: String,
 }
 
-// go test: internal/rules/rules_json_test.go:623 marshalMetadataJSON 124e81f6d1fdc2a3
+// go test: internal/rules/rules_json_test.go:624 marshalMetadataJSON 3a5e211b09645093
 //
 // Rust: Go's `([]byte, error)`: the Rust encoder cannot fail, so the bytes are returned directly.
 fn marshal_metadata_json(t: &T) -> Vec<u8> {
@@ -839,6 +840,7 @@ fn marshal_metadata_json(t: &T) -> Vec<u8> {
             fixable,
             supported_effect: current.supported_effect.iter().map(|s| (*s).to_string()).collect(),
             codes,
+            replaced_by: current.replaced_by.iter().map(|s| (*s).to_string()).collect(),
             preview: Some(preview),
         });
     }
@@ -860,7 +862,7 @@ fn marshal_metadata_json(t: &T) -> Vec<u8> {
     data
 }
 
-// go test: internal/rules/rules_json_test.go:681 generateReadmeTable f96b3b7aca5cee3f
+// go test: internal/rules/rules_json_test.go:683 generateReadmeTable f96b3b7aca5cee3f
 fn generate_readme_table() -> String {
     let groups = ets_rules::metadata_groups();
 
@@ -917,7 +919,7 @@ fn generate_readme_table() -> String {
     lines.join("\n")
 }
 
-// go test: internal/rules/rules_json_test.go:737 readMetadataDocument e808a8ab54a424c5
+// go test: internal/rules/rules_json_test.go:739 readMetadataDocument e808a8ab54a424c5
 fn read_metadata_document(t: &T, root: &Path) -> MetadataDocument {
     t.helper();
     let path = root.join("_packages").join("tsgo").join("src").join("metadata.json");
@@ -931,7 +933,7 @@ fn read_metadata_document(t: &T, root: &Path) -> MetadataDocument {
     }
 }
 
-// go test: internal/rules/rules_json_test.go:751 generateMetadataDocument fa25f0b4c3508e84
+// go test: internal/rules/rules_json_test.go:753 generateMetadataDocument fa25f0b4c3508e84
 fn generate_metadata_document(t: &T) -> MetadataDocument {
     t.helper();
     let data = marshal_metadata_json(t);
@@ -941,7 +943,7 @@ fn generate_metadata_document(t: &T) -> MetadataDocument {
     }
 }
 
-// go test: internal/rules/rules_json_test.go:764 generateRuleDocs 3bed521186b61c66
+// go test: internal/rules/rules_json_test.go:766 generateRuleDocs ab7a34bf797343ef
 fn generate_rule_docs(metadata: &MetadataDocument) -> FxHashMap<String, String> {
     let mut group_names: FxHashMap<&str, &str> = FxHashMap::default();
     for group in &metadata.groups {
@@ -955,6 +957,20 @@ fn generate_rule_docs(metadata: &MetadataDocument) -> FxHashMap<String, String> 
         let mut page = String::new();
         page.push_str("<!-- This file is generated by internal/rules/rules_json_test.go. Do not edit it manually. -->\n\n");
         push_fmt(&mut page, format_args!("# `{}`\n\n{}\n\n", current.name, current.description));
+        if !current.replaced_by.is_empty() {
+            let replacements: Vec<String> = current
+                .replaced_by
+                .iter()
+                .map(|name| format!("[`{name}`]({}.md)", kebab_case(name)))
+                .collect();
+            push_fmt(
+                &mut page,
+                format_args!(
+                    "> [!WARNING]\n> This rule is deprecated. Use {} instead.\n\n",
+                    replacements.join(" and ")
+                ),
+            );
+        }
         page.push_str("| Property | Value |\n| --- | --- |\n");
         push_fmt(
             &mut page,
@@ -1013,7 +1029,7 @@ fn generate_rule_docs(metadata: &MetadataDocument) -> FxHashMap<String, String> 
     docs
 }
 
-// go test: internal/rules/rules_json_test.go:816 kebabCase f938b0bf8eff8561
+// go test: internal/rules/rules_json_test.go:825 kebabCase f938b0bf8eff8561
 fn kebab_case(value: &str) -> String {
     let bytes = value.as_bytes();
     let mut result: Vec<u8> = Vec::with_capacity(bytes.len());
@@ -1033,12 +1049,12 @@ fn kebab_case(value: &str) -> String {
     String::from_utf8(result).expect("ASCII case mapping keeps UTF-8 valid")
 }
 
-// go test: internal/rules/rules_json_test.go:834 markdownTableCell b1fb2757ff2b7b0d
+// go test: internal/rules/rules_json_test.go:843 markdownTableCell b1fb2757ff2b7b0d
 fn markdown_table_cell(value: &str) -> String {
     value.replace('\n', " ").replace('|', "\\|")
 }
 
-// go test: internal/rules/rules_json_test.go:838 annotatePreview 6c4f4b4d49898e58
+// go test: internal/rules/rules_json_test.go:847 annotatePreview 6c4f4b4d49898e58
 fn annotate_preview(
     source_text: &str,
     diagnostics: &[PreviewDiagnostic],
@@ -1126,7 +1142,7 @@ fn annotate_preview(
     result.trim_matches(['\r', '\n']).to_string()
 }
 
-// go test: internal/rules/rules_json_test.go:916 annotationPadding 1bcd377f44fe36a5
+// go test: internal/rules/rules_json_test.go:925 annotationPadding 1bcd377f44fe36a5
 fn annotation_padding(value: &str) -> String {
     let mut padding = String::new();
     for current in value.chars() {
@@ -1139,7 +1155,7 @@ fn annotation_padding(value: &str) -> String {
     padding
 }
 
-// go test: internal/rules/rules_json_test.go:928 utf16OffsetToByteIndex 6396457afed74b31
+// go test: internal/rules/rules_json_test.go:937 utf16OffsetToByteIndex 6396457afed74b31
 fn utf16_offset_to_byte_index(value: &str, offset: i64) -> usize {
     let mut units = 0;
     for (index, current) in value.char_indices() {
@@ -1154,7 +1170,7 @@ fn utf16_offset_to_byte_index(value: &str, offset: i64) -> usize {
     value.len()
 }
 
-// go test: internal/rules/rules_json_test.go:942 utf16Length 7fb0d40cbeba3233
+// go test: internal/rules/rules_json_test.go:951 utf16Length 7fb0d40cbeba3233
 fn utf16_length(value: &str) -> i64 {
     let mut units = 0;
     for current in value.chars() {
@@ -1166,7 +1182,7 @@ fn utf16_length(value: &str) -> i64 {
     units
 }
 
-// go test: internal/rules/rules_json_test.go:953 markdownCodeFence 8d84487835ff4ce7
+// go test: internal/rules/rules_json_test.go:962 markdownCodeFence 8d84487835ff4ce7
 fn markdown_code_fence(value: &str) -> String {
     let mut longest = 0;
     let mut current = 0;
@@ -1363,7 +1379,7 @@ static EFFECT_PLUGIN_OPTION_FIELDS: &[StructField] = &[
     },
 ];
 
-// go test: internal/rules/rules_json_test.go:967 generateReadmeExampleConfig 9129dabef0658011
+// go test: internal/rules/rules_json_test.go:976 generateReadmeExampleConfig 9129dabef0658011
 fn generate_readme_example_config() -> String {
     struct ReadmeEntry {
         name: String,
@@ -1413,7 +1429,7 @@ fn generate_readme_example_config() -> String {
     lines.join("\n")
 }
 
-// go test: internal/rules/rules_json_test.go:1020 readmeDefaultValue 97621bfab4a25a36
+// go test: internal/rules/rules_json_test.go:1029 readmeDefaultValue 97621bfab4a25a36
 fn readme_default_value(field: &StructField) -> Option<Json> {
     if let Some(default_value) = decode_struct_tag_json(field.schema_default) {
         return Some(default_value);
@@ -1456,7 +1472,7 @@ fn readme_default_value(field: &StructField) -> Option<Json> {
     }
 }
 
-// go test: internal/rules/rules_json_test.go:1045 decodeStructTagJSON 13723c83eebd963e
+// go test: internal/rules/rules_json_test.go:1054 decodeStructTagJSON 13723c83eebd963e
 //
 // Rust: takes the tag value (`field.Tag.Get(key)`, `None` for an absent tag) instead of the field and key.
 fn decode_struct_tag_json(value: Option<&str>) -> Option<Json> {
@@ -1468,7 +1484,7 @@ fn decode_struct_tag_json(value: Option<&str>) -> Option<Json> {
     Some(Json::from_decoded(&decoded))
 }
 
-// go test: internal/rules/rules_json_test.go:1057 jsonFieldName 632c44eff9e2e6a9
+// go test: internal/rules/rules_json_test.go:1066 jsonFieldName 632c44eff9e2e6a9
 fn json_field_name(field: &StructField) -> String {
     let tag = field.json;
     if tag.is_empty() {
@@ -1481,12 +1497,12 @@ fn json_field_name(field: &StructField) -> String {
     name.to_string()
 }
 
-// go test: internal/rules/rules_json_test.go:1069 compactJSON bbfc53f64c0f0924
+// go test: internal/rules/rules_json_test.go:1078 compactJSON bbfc53f64c0f0924
 fn compact_json(value: &Json) -> String {
     value.marshal()
 }
 
-// go test: internal/rules/rules_json_test.go:1077 indentedJSON 0d0e46983e7852dc
+// go test: internal/rules/rules_json_test.go:1086 indentedJSON 0d0e46983e7852dc
 fn indented_json(value: &Json, prefix: &str) -> String {
     let data = value.marshal_indent("", "  ");
     let mut parts: Vec<String> = data.split('\n').map(str::to_string).collect();
@@ -1499,13 +1515,13 @@ fn indented_json(value: &Json, prefix: &str) -> String {
     parts.join("\n")
 }
 
-// go test: internal/rules/rules_json_test.go:1092 readmeStartMarker 2794346749d2fb40
+// go test: internal/rules/rules_json_test.go:1101 readmeStartMarker 2794346749d2fb40
 const README_START_MARKER: &str = "<!-- diagnostics-table:start -->";
 const README_END_MARKER: &str = "<!-- diagnostics-table:end -->";
 const README_EXAMPLE_START_MARKER: &str = "<!-- example-config:start -->";
 const README_EXAMPLE_END_MARKER: &str = "<!-- example-config:end -->";
 
-// go test: internal/rules/rules_json_test.go:1099 generateReadme cf02671f61c5fa66
+// go test: internal/rules/rules_json_test.go:1108 generateReadme cf02671f61c5fa66
 fn generate_readme(committed_readme: &[u8]) -> Result<Vec<u8>, String> {
     let content = String::from_utf8_lossy(committed_readme).into_owned();
     let diagnostics_start_idx = content.find(README_START_MARKER);
@@ -1534,7 +1550,7 @@ fn generate_readme(committed_readme: &[u8]) -> Result<Vec<u8>, String> {
     Ok(content.into_bytes())
 }
 
-// go test: internal/rules/rules_json_test.go:1120 replaceReadmeSection 826bd5cc6982bbe8
+// go test: internal/rules/rules_json_test.go:1129 replaceReadmeSection 826bd5cc6982bbe8
 fn replace_readme_section(
     content: &str,
     start_marker: &str,
@@ -1784,6 +1800,12 @@ impl ExportedRule {
                 Json::Array(self.codes.iter().map(|code| Json::Number(code.to_string())).collect()),
             ),
         ];
+        if !self.replaced_by.is_empty() {
+            fields.push((
+                "replacedBy".to_string(),
+                Json::Array(self.replaced_by.iter().cloned().map(Json::String).collect()),
+            ));
+        }
         if let Some(preview) = &self.preview {
             fields.push(("preview".to_string(), preview.to_json()));
         }
@@ -1896,6 +1918,10 @@ impl MetadataDocument {
                 codes: array(r, "codes")
                     .iter()
                     .map(|c| c.as_i64().unwrap_or_default() as i32)
+                    .collect(),
+                replaced_by: array(r, "replacedBy")
+                    .iter()
+                    .map(|s| s.as_str().unwrap_or_default().to_string())
                     .collect(),
                 preview: r.get("preview").filter(|p| !p.is_null()).map(|p| PreviewPayload {
                     source_text: str_field(p, "sourceText"),

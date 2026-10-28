@@ -25,6 +25,7 @@ pub static ACQUIRE_RELEASE_DISPOSABLE: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_acquire_release_disposable(ctx.type_parser, Some(source_file));

@@ -38,6 +38,7 @@ pub static RUN_EFFECT_INSIDE_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
     codes: vec![EXISTING_CONTEXT_MESSAGE.code(), RUNTIME_MESSAGE.code(), SERVICES_MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let supported_effect = ctx.type_parser.supported_effect_version();
 
