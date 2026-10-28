@@ -7,8 +7,8 @@ flowchart TB
   5[/"type: string<br/>node: JSON.stringify#40;#123; name: #quot;John#quot; #125;#41;"/]
   6[/"type: JSON<br/>node: JSON"/]
   7[/"type: any<br/>node: MyJSON.parse#40;#quot;#123;#125;#quot;#41;"/]
-  8[/"type: #123; #40;text: string, reviver?: #40;#40;this: any, key: string, value: any#41; =#gt; any#41; #124; undefined#41;: any; #40;text: string, reviver: #40;this: any, key: string, value: any, context: #123; source?: string #124; undefined; #125;#41; =#gt; any#41;: any; #125;<br/>node: JSON.parse"/]
-  9[/"type: any<br/>node: parse#40;#quot;#123;#125;#quot;#41;"/]
+  8[["type: #40;text: string#41; =#gt; any<br/>node: #40;text: string#41; =#gt; #123;#92;n  const parse = JSON.parse#92;n  return parse#40;text#41;#92;n#125;"]]
+  9[/"type: any<br/>node: parse#40;text#41;"/]
   10((("type: Effect#lt;any, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return JSON.parse#40;#quot;#123;#125;#quot;#41;#92;n#125;#41;")))
   11[/"type: any<br/>node: JSON.parse#40;#quot;#123;#125;#quot;#41;"/]
   12((("type: Effect#lt;#40;text: string#41; =#gt; any, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;text: string#41; =#gt; JSON.parse#40;text#41;#92;n  return fn#92;n#125;#41;")))
@@ -30,6 +30,8 @@ flowchart TB
   28[/"type: string<br/>node: JSON#91;Symbol.toStringTag#93;"/]
   2 -->|"kind: potentialReturn"| 1
   4 -->|"kind: potentialReturn"| 3
+  9 -->|"kind: potentialReturn"| 8
+  9 -->|"kind: usedBy"| 8
   11 -->|"kind: potentialReturn"| 10
   11 -->|"kind: usedBy"| 10
   13 -->|"kind: potentialReturn"| 12

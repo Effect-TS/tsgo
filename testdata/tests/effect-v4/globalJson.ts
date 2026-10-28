@@ -17,8 +17,10 @@ const MyJSON = JSON
 export const aliasedJson = MyJSON.parse("{}")
 
 // Should trigger - aliased JSON.parse method
-const parse = JSON.parse
-export const aliasedParse = parse("{}")
+export const aliasedParse = (text: string) => {
+  const parse = JSON.parse
+  return parse(text)
+}
 
 // Should NOT trigger - JSON.parse inside Effect.gen
 export const parseInGen = Effect.gen(function*() {

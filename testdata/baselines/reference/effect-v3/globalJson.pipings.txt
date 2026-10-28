@@ -79,12 +79,12 @@ Transformations (1):
       outType: any
 
 === Piping Flow ===
-Location: 22:28 - 22:40
-Node: parse("{}")
+Location: 23:9 - 23:21
+Node: parse(text)
 Node Kind: KindCallExpression
 
-Subject: "{}"
-Subject Type: "{}"
+Subject: text
+Subject Type: string
 
 Transformations (1):
   [0] kind: call
@@ -93,7 +93,7 @@ Transformations (1):
       outType: any
 
 === Piping Flow ===
-Location: 25:26 - 27:3
+Location: 27:26 - 29:3
 Node: Effect.gen(function*() {\n  return JSON.parse("{}")\n})
 Node Kind: KindCallExpression
 
@@ -107,7 +107,7 @@ Transformations (1):
       outType: Effect<any, never, never>
 
 === Piping Flow ===
-Location: 26:9 - 26:26
+Location: 28:9 - 28:26
 Node: JSON.parse("{}")
 Node Kind: KindCallExpression
 
@@ -121,7 +121,7 @@ Transformations (1):
       outType: any
 
 === Piping Flow ===
-Location: 30:32 - 33:3
+Location: 32:32 - 35:3
 Node: Effect.gen(function*() {\n  const fn = (text: string) => JSON.parse(text)\n  return fn\n})
 Node Kind: KindCallExpression
 
@@ -135,7 +135,7 @@ Transformations (1):
       outType: Effect<(text: string) => any, never, never>
 
 === Piping Flow ===
-Location: 31:31 - 31:48
+Location: 33:31 - 33:48
 Node: JSON.parse(text)
 Node Kind: KindCallExpression
 
@@ -149,7 +149,7 @@ Transformations (1):
       outType: any
 
 === Piping Flow ===
-Location: 37:81 - 37:95
+Location: 39:81 - 39:95
 Node: String(value)
 Node Kind: KindCallExpression
 
@@ -163,7 +163,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 38:9 - 38:42
+Location: 40:9 - 40:42
 Node: JSON.stringify(JSON.parse(text))
 Node Kind: KindCallExpression
 

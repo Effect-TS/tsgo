@@ -16,15 +16,15 @@
   Fix 0: "Disable globalJson for this line"
   Fix 1: "Disable globalJson for entire file"
 
-[D5] (22:29-22:40) TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+[D5] (23:10-23:21) TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
   Fix 0: "Disable globalJson for this line"
   Fix 1: "Disable globalJson for entire file"
 
-[D6] (31:32-31:48) TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+[D6] (33:32-33:48) TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
   Fix 0: "Disable globalJson for this line"
   Fix 1: "Disable globalJson for entire file"
 
-[D7] (36:7-36:20) TS6133: '_shadowedJson' is declared but its value is never read.
+[D7] (38:7-38:20) TS6133: '_shadowedJson' is declared but its value is never read.
   (no quick fixes)
 
 === Quick Fix Application Results ===
