@@ -388,7 +388,7 @@ fn classification_types(
         }
     }
     let c = tp.checker();
-    let construct_signatures = c.get_construct_signatures(t);
+    let construct_signatures = c.get_signatures_of_type(t, SignatureKind::Construct);
     if let Some(&first) = construct_signatures.first() {
         // Go: `if returnType := ...; returnType != nil`; tsrs's return type is never nil.
         let return_type = c.get_return_type_of_signature(first);

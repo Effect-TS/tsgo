@@ -1181,8 +1181,8 @@ function fn() { return object.a.value.length }`,
 	defer done()
 	sym := apiStabilityTestExport(t, c, files["/.src/dep.ts"], "Root")
 	_ = c.GetDeclaredTypeOfSymbol(sym)
-	value := ast.TSGetSymbolMembers(sym)["a"]
-	functionType := c.GetTypeOfSymbol(ast.TSGetSymbolMembers(sym)["z"])
+	value := ast.TSGetSymbolTableEntry(ast.TSGetSymbolMembers(sym), "a")
+	functionType := c.GetTypeOfSymbol(ast.TSGetSymbolTableEntry(ast.TSGetSymbolMembers(sym), "z"))
 	signatures := c.GetSignaturesOfType(functionType, checker.SignatureKindCall)
 	if len(signatures) != 1 {
 		t.Fatal("signature missing")
@@ -1255,8 +1255,8 @@ function fn() { return object.a.value.length }`,
 	defer done()
 	sym := apiStabilityTestExport(t, c, files["/.src/dep.ts"], "Root")
 	_ = c.GetDeclaredTypeOfSymbol(sym)
-	value := ast.TSGetSymbolMembers(sym)["a"]
-	functionType := c.GetTypeOfSymbol(ast.TSGetSymbolMembers(sym)["z"])
+	value := ast.TSGetSymbolTableEntry(ast.TSGetSymbolMembers(sym), "a")
+	functionType := c.GetTypeOfSymbol(ast.TSGetSymbolTableEntry(ast.TSGetSymbolMembers(sym), "z"))
 	signatures := c.GetSignaturesOfType(functionType, checker.SignatureKindCall)
 	if len(signatures) != 1 {
 		t.Fatal("signature missing")

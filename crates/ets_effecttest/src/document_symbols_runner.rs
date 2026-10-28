@@ -119,7 +119,6 @@ pub fn run_effect_document_symbols_test(t: &T, version: EffectVersion, test_file
         logger: Some(logging::new_logger(Box::new(std::io::sink()))),
         npm_executor: None,
         parse_cache: None,
-        content_mapped_parse_cache: None,
     });
 
     for (file_name, content) in source_file_names.iter().zip(contents) {

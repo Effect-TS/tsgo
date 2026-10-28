@@ -53,7 +53,7 @@ func (tp *TypeParser) getNativeArrayRegistry() *nativeArrayRegistry {
 		if owner == nil {
 			return
 		}
-		for _, symbol := range checker.Checker_getMembersOfSymbol(tp.checker, owner) {
+		for _, symbol := range ast.TSGetSymbolTableEntries(checker.Checker_getMembersOfSymbol(tp.checker, owner)) {
 			if ast.TSGetSymbolFlags(symbol)&ast.SymbolFlagsValue == 0 || len(ast.TSGetSymbolDeclarations(symbol)) == 0 {
 				continue
 			}

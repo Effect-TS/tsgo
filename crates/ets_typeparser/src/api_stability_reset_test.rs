@@ -489,7 +489,7 @@ fn test_api_stability_reset_hides_previous_export() {
     });
 }
 
-// go test: internal/typeparser/api_stability_reset_test.go:143 TestApiStabilityResetSharedHitIsNotRepublished 9c465c47bee417c2
+// go test: internal/typeparser/api_stability_reset_test.go:143 TestApiStabilityResetSharedHitIsNotRepublished b120983226d27e21
 // TestApiStabilityResetSharedHitIsNotRepublished proves a later export reuses
 // a published surface after a reset: the composed result is the same, the hit
 // is recorded for settlement, it is not queued for publication again, and the

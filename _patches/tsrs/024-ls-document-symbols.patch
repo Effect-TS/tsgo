@@ -10,11 +10,11 @@ Port of _patches/typescript/024-ls-document-symbols.patch (tsc/internal/ls/symbo
   (tsrs's own symbols leave it `None`, as Go's do).
 
 diff --git a/crates/tsrs_ls/src/lib.rs b/crates/tsrs_ls/src/lib.rs
-index 6b367272..e5d99e5f 100644
+index 4f479dc0..f4ef63f9 100644
 --- a/crates/tsrs_ls/src/lib.rs
 +++ b/crates/tsrs_ls/src/lib.rs
-@@ -88,5 +88,8 @@ pub use rename::{
- };
+@@ -71,4 +71,7 @@ pub use languageservice::*;
+ pub use rename::{RenameInfo, client_supports_document_changes, client_supports_will_rename_files};
  pub use semantictokens::semantic_tokens_legend;
  pub use signaturehelp::{SIGNATURE_HELP_RETRIGGER_CHARACTERS, SIGNATURE_HELP_TRIGGER_CHARACTERS};
 -pub use symbols::provide_workspace_symbols;
@@ -22,7 +22,6 @@ index 6b367272..e5d99e5f 100644
 +    AfterDocumentSymbolsCallback, DocSym, DocSymData, provide_workspace_symbols,
 +    register_after_document_symbols_callback,
 +};
- pub use utilities::{is_in_string, range_contains_range};
 diff --git a/crates/tsrs_ls/src/symbols.rs b/crates/tsrs_ls/src/symbols.rs
 index 23200cf7..74d56b30 100644
 --- a/crates/tsrs_ls/src/symbols.rs

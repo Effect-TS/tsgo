@@ -6,7 +6,7 @@ GetDeclarationModifierFlagsFromSymbol is exported by typescript-go's checker pac
 and a member's declaration modifier flags through them. Visibility only, no behavior change.
 
 diff --git a/crates/tsrs_checker/src/checker_08.rs b/crates/tsrs_checker/src/checker_08.rs
-index f890cab4..386561ed 100644
+index 42f8f995..7b9e12fb 100644
 --- a/crates/tsrs_checker/src/checker_08.rs
 +++ b/crates/tsrs_checker/src/checker_08.rs
 @@ -1949,7 +1949,7 @@ impl Checker {
@@ -19,7 +19,7 @@ index f890cab4..386561ed 100644
              return self.get_resolved_members_or_exports_of_symbol(
                  symbol,
 diff --git a/crates/tsrs_checker/src/checker_10.rs b/crates/tsrs_checker/src/checker_10.rs
-index 73fecfa1..bae4c1b0 100644
+index 05dd8339..8fdb606b 100644
 --- a/crates/tsrs_checker/src/checker_10.rs
 +++ b/crates/tsrs_checker/src/checker_10.rs
 @@ -827,10 +827,7 @@ impl Checker {
@@ -35,18 +35,29 @@ index 73fecfa1..bae4c1b0 100644
              return Vec::new();
          };
 diff --git a/crates/tsrs_checker/src/lib.rs b/crates/tsrs_checker/src/lib.rs
-index 284ba62b..f3f2a778 100644
+index adc00109..0620c59f 100644
 --- a/crates/tsrs_checker/src/lib.rs
 +++ b/crates/tsrs_checker/src/lib.rs
-@@ -194,7 +194,8 @@ pub(crate) use printer::new_symbol_tracker_impl;
- pub use services::get_resolved_signature_for_signature_help;
- pub use utilities::{
-     compare_types, create_mode_mismatch_details, create_module_not_found_chain,
--    get_set_accessor_value_parameter, get_single_variable_of_variable_statement,
--    is_external_module_symbol, is_in_type_query, is_known_symbol, is_private_identifier_symbol,
--    is_type_any, new_diagnostic_chain_for_node, skip_alias, value_to_string,
-+    get_declaration_modifier_flags_from_symbol, get_set_accessor_value_parameter,
-+    get_single_variable_of_variable_statement, is_external_module_symbol, is_in_type_query,
-+    is_known_symbol, is_private_identifier_symbol, is_type_any, new_diagnostic_chain_for_node,
-+    skip_alias, value_to_string,
+@@ -195,7 +195,8 @@ pub(crate) use utilities::{
+     compare_types, is_private_identifier_symbol, new_diagnostic_chain_for_node,
  };
+ pub use utilities::{
+-    create_mode_mismatch_details, create_module_not_found_chain, get_set_accessor_value_parameter,
++    create_mode_mismatch_details, create_module_not_found_chain,
++    get_declaration_modifier_flags_from_symbol, get_set_accessor_value_parameter,
+     is_external_module_symbol, is_in_type_query, is_known_symbol, is_type_any, skip_alias,
+     value_to_string,
+ };
+diff --git a/crates/tsrs_checker/src/utilities.rs b/crates/tsrs_checker/src/utilities.rs
+index 84a2d687..ca4d4446 100644
+--- a/crates/tsrs_checker/src/utilities.rs
++++ b/crates/tsrs_checker/src/utilities.rs
+@@ -1150,7 +1150,7 @@ fn compare_type_mappers(
+ }
+ 
+ // utilities.go:757
+-pub(crate) fn get_declaration_modifier_flags_from_symbol(s: P<Symbol>) -> ModifierFlags {
++pub fn get_declaration_modifier_flags_from_symbol(s: P<Symbol>) -> ModifierFlags {
+     get_declaration_modifier_flags_from_symbol_ex(s, false /*isWrite*/)
+ }
+ 

@@ -93,13 +93,13 @@ pub(crate) fn init() {
 // effectFixProvider is the CodeFixProvider that handles all Effect diagnostic codes.
 // It delegates to the fixables registered in internal/fixables.
 //
-// Rust: tsrs's `CodeFixProvider` holds `'static` slices; the computed code and fix-id lists are leaked once (the
-// provider lives for the process, as Go's package variable does).
+// Rust: tsrs's `CodeFixProvider` holds a `'static` slice; the computed code list is leaked once (the provider lives
+// for the process, as Go's package variable does). tsrs has no `FixIds` field (Go never reads it), so
+// `fixables.AllFixIDs()` is not set here.
 pub(crate) static EFFECT_FIX_PROVIDER: LazyLock<ls::CodeFixProvider> =
     LazyLock::new(|| ls::CodeFixProvider {
         error_codes: Box::leak(ets_fixables::all_error_codes().into_boxed_slice()),
         get_code_actions: get_effect_code_actions,
-        fix_ids: Box::leak(ets_fixables::all_fix_ids().into_boxed_slice()),
         get_all_code_actions: None,
     });
 

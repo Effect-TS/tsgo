@@ -249,7 +249,7 @@ export declare const x: {
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:190 TestApiStabilitySafetyComputedNameDisplayAndSort 90aa941855fab67c
+// go test: internal/typeparser/api_stability_safety_test.go:190 TestApiStabilitySafetyComputedNameDisplayAndSort 8a9aa7354b22960c
 // TestApiStabilitySafetyComputedNameDisplayAndSort pins that display and sort
 // names of computed declarations never evaluate the computed expression:
 // well-known symbols and literal computed names render their own spelling,
