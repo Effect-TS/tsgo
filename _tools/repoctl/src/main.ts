@@ -21,7 +21,6 @@ import { updateFlake } from "./flake.ts"
 import { completeCheck, openPullRequestIfChanged } from "./github.ts"
 import { runLint } from "./lint.ts"
 import {
-  printGeneratedMatrix,
   printOxlintTestMatrix,
   printPerfMatrix,
   printReleaseMatrix,
@@ -422,10 +421,6 @@ const matrixTestOxlint = Command.make("test-oxlint", {}, () => printOxlintTestMa
   Command.withDescription("Print the Oxlint runtime test matrix as JSON")
 )
 
-const matrixGenerated = Command.make("generated", {}, () => printGeneratedMatrix(repositoryRoot)).pipe(
-  Command.withDescription("Print the generated branch matrix as JSON")
-)
-
 const matrixPerf = Command.make("perf", {
   baseRef: Flag.String("base-ref"),
   headRef: Flag.String("head-ref")
@@ -439,7 +434,7 @@ const matrixRelease = Command.make("release", {}, () => printReleaseMatrix(repos
 
 const matrix = Command.make("matrix").pipe(
   Command.withDescription("Generate CI matrices"),
-  Command.withSubcommands([matrixGenerated, matrixPerf, matrixRelease, matrixTestOxlint, matrixTestTypeScript])
+  Command.withSubcommands([matrixPerf, matrixRelease, matrixTestOxlint, matrixTestTypeScript])
 )
 
 const portManifestCommand = Command.make("port-manifest", {}, () => portManifest(repositoryRoot)).pipe(

@@ -1,12 +1,12 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 import {
-  buildGeneratedMatrix,
   buildOxlintTestMatrix,
   buildPerfMatrix,
   buildReleaseMatrix,
   buildTypeScriptTestMatrix
 } from "../src/matrix.ts"
+import { buildReleasePlan } from "../src/releasePlan.ts"
 import type { Upstream } from "../src/upstream.ts"
 
 const revision = "0123456789abcdef0123456789abcdef01234567"
@@ -63,30 +63,6 @@ test("combines channel labels when latest, beta and next resolve to the same com
   })
 })
 
-test("builds a component-aware generated branch matrix", () => {
-  const upstream: typeof Upstream.Type = {
-    schemaVersion: 5,
-    tags: {
-      typescript: { latest: "7.0.2", beta: "7.1.0-dev", next: "7.1.0-dev" },
-      "oxlint-tsgolint": { latest: "unused" },
-      oxlint: { latest: "unused" }
-    },
-    components: {
-      typescript: {
-        "7.0.2": { gitHead: revision, provider: "typescript-go" },
-        "7.1.0-dev": { gitHead: revision, provider: "typescript" }
-      },
-      "oxlint-tsgolint": {},
-      oxlint: {}
-    },
-    profiles: []
-  }
-
-  assert.deepEqual(buildGeneratedMatrix(upstream), {
-    include: [{ name: "latest", component: "typescript", version: "7.0.2", branch: "generated/latest" }]
-  })
-})
-
 test("builds a deduplicated matrix of compatible Oxlint component pairs", () => {
   const upstream: typeof Upstream.Type = {
     schemaVersion: 5,
@@ -137,9 +113,10 @@ test("builds a deduplicated matrix of compatible Oxlint component pairs", () => 
     ]
   })
 
-  const release = buildReleaseMatrix(upstream)
-  assert.equal(release.include.length, 32)
-  assert.deepEqual(release.include[0], {
+  // The plan in definition order; buildReleaseMatrix orders it in cache rounds.
+  const release = buildReleasePlan(upstream)
+  assert.equal(release.length, 32)
+  assert.deepEqual(release[0], {
     component: "typescript",
     version: "7.0.2",
     target: "darwin-arm64",
@@ -150,7 +127,7 @@ test("builds a deduplicated matrix of compatible Oxlint component pairs", () => 
 ,
     timeoutMinutes: 45
   })
-  assert.deepEqual(release.include.at(-1), {
+  assert.deepEqual(release.at(-1), {
     component: "oxlint",
     version: "1.77.0",
     target: "linux-arm64",
@@ -161,6 +138,44 @@ test("builds a deduplicated matrix of compatible Oxlint component pairs", () => 
 ,
     timeoutMinutes: 45
   })
+})
+
+test("tests every Oxlint and tsgolint version once instead of every known pair", () => {
+  const pair = (oxlint: string, tsgolint: string) => ({
+    name: `oxlint@${oxlint}+${tsgolint}`,
+    description: "Oxlint runtime",
+    dependencies: { oxlint, "oxlint-tsgolint": tsgolint }
+  })
+  const upstream: typeof Upstream.Type = {
+    schemaVersion: 5,
+    tags: {
+      typescript: { latest: "7.0.2", beta: "7.0.2", next: "7.0.2" },
+      "oxlint-tsgolint": { latest: "7.0.2005" },
+      oxlint: { latest: "1.90.0" }
+    },
+    components: {
+      typescript: { "7.0.2": { gitHead: revision, provider: "typescript-go" } },
+      "oxlint-tsgolint": {
+        "7.0.2004": { gitHead: revision, dependencies: { typescript: "7.0.2" } },
+        "7.0.2005": { gitHead: revision, dependencies: { typescript: "7.0.2" } }
+      },
+      oxlint: { "1.88.0": { gitHead: revision }, "1.89.0": { gitHead: revision }, "1.90.0": { gitHead: revision } }
+    },
+    profiles: [
+      pair("1.88.0", "7.0.2004"),
+      pair("1.88.0", "7.0.2005"),
+      pair("1.89.0", "7.0.2004"),
+      pair("1.89.0", "7.0.2005"),
+      pair("1.90.0", "7.0.2005")
+    ]
+  }
+
+  // The default pair first, the newer oxlint takes the older tsgolint, and the rest the newest tsgolint they support.
+  assert.deepEqual(buildOxlintTestMatrix(upstream).include.map(({ name }) => name), [
+    "oxlint (1.88.0) + oxlint-tsgolint (7.0.2005)",
+    "oxlint (1.89.0) + oxlint-tsgolint (7.0.2004)",
+    "oxlint (1.90.0) + oxlint-tsgolint (7.0.2005)"
+  ])
 })
 
 test("builds the tsrs binary once per tsrs version and tsrs platform, natively", () => {
@@ -188,7 +203,7 @@ test("builds the tsrs binary once per tsrs version and tsrs platform, natively",
     profiles: []
   }
 
-  const release = buildReleaseMatrix(upstream).include
+  const release = buildReleasePlan(upstream)
   // 2 TypeScript versions x 7 targets, independent of tsrs, then 2 tsrs versions x 5 targets.
   assert.equal(release.length, 24)
   assert.ok(release.filter((artifact) => artifact.component === "typescript").every((artifact) =>
@@ -225,6 +240,72 @@ test("builds the tsrs binary once per tsrs version and tsrs platform, natively",
   assert.equal(
     buildReleaseMatrix({ ...upstream, tags, components }).include.some((artifact) => artifact.component === "tsrs"),
     false
+  )
+})
+
+test("orders the release matrix in rounds so every cache is filled once before it is reused", () => {
+  const upstream: typeof Upstream.Type = {
+    schemaVersion: 5,
+    tags: {
+      typescript: { latest: "7.0.2", next: "7.1.0-dev" },
+      "oxlint-tsgolint": { latest: "7.0.2005" },
+      oxlint: { latest: "1.90.0" },
+      tsrs: { latest: "0.20.0-ts7.1.0-dev" }
+    },
+    components: {
+      typescript: {
+        "7.0.2": { gitHead: revision, provider: "typescript-go" },
+        "7.1.0-dev": { gitHead: revision, provider: "typescript" }
+      },
+      "oxlint-tsgolint": {
+        "7.0.2004": { gitHead: revision, dependencies: { typescript: "7.0.2" } },
+        "7.0.2005": { gitHead: revision, dependencies: { typescript: "7.0.2" } }
+      },
+      oxlint: { "1.89.0": { gitHead: revision }, "1.90.0": { gitHead: revision } },
+      tsrs: { "0.20.0-ts7.1.0-dev": { gitHead: revision, typescript: { version: "7.1.0-dev", gitHead: revision } } }
+    },
+    profiles: []
+  }
+  const label = ({ component, target, version }: { component: string; target: string; version: string }) =>
+    `${component} ${version} ${target}`
+  const release = buildReleaseMatrix(upstream).include
+
+  assert.deepEqual(release.map(label).sort(), buildReleasePlan(upstream).map(label).sort())
+  // Round 1: the first job of each cache, the longer tsrs builds first: the Rust build of each tsrs target, the Go
+  // caches of both TypeScripts, the Rust build of each oxlint target (shared by its versions).
+  assert.deepEqual(release.slice(0, 13).map(label), [
+    "tsrs 0.20.0-ts7.1.0-dev win32-x64",
+    "tsrs 0.20.0-ts7.1.0-dev darwin-arm64",
+    "tsrs 0.20.0-ts7.1.0-dev darwin-x64",
+    "tsrs 0.20.0-ts7.1.0-dev linux-x64",
+    "tsrs 0.20.0-ts7.1.0-dev linux-arm64",
+    "typescript 7.0.2 darwin-arm64",
+    "typescript 7.1.0-dev darwin-arm64",
+    "oxlint 1.89.0 darwin-arm64",
+    "oxlint 1.89.0 darwin-x64",
+    "oxlint 1.89.0 win32-x64",
+    "oxlint 1.89.0 win32-arm64",
+    "oxlint 1.89.0 linux-x64",
+    "oxlint 1.89.0 linux-arm64"
+  ])
+  // Round 2 reuses those caches: each oxlint target's second version, the TypeScripts' second targets.
+  assert.deepEqual(release.slice(13, 21).map(label), [
+    "typescript 7.0.2 darwin-x64",
+    "typescript 7.1.0-dev darwin-x64",
+    "oxlint 1.90.0 darwin-arm64",
+    "oxlint 1.90.0 darwin-x64",
+    "oxlint 1.90.0 win32-x64",
+    "oxlint 1.90.0 win32-arm64",
+    "oxlint 1.90.0 linux-x64",
+    "oxlint 1.90.0 linux-arm64"
+  ])
+  // oxlint-tsgolint restores the Go caches of its TypeScript, so it follows all 7 targets of 7.0.2.
+  const firstTsgolint = release.findIndex((artifact) => artifact.component === "oxlint-tsgolint")
+  assert.ok(firstTsgolint > 0)
+  assert.ok(
+    release.slice(firstTsgolint).every((artifact) =>
+      artifact.component !== "typescript" || artifact.version !== "7.0.2"
+    )
   )
 })
 
