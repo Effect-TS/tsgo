@@ -300,9 +300,12 @@ test("orders the release matrix in rounds so every cache is filled once before i
     "oxlint 1.90.0 linux-arm64"
   ])
   // oxlint-tsgolint restores the Go caches of its TypeScript, so it follows all 7 targets of 7.0.2.
+  const firstTsgolint = release.findIndex((artifact) => artifact.component === "oxlint-tsgolint")
+  assert.ok(firstTsgolint > 0)
   assert.ok(
-    release.findIndex((artifact) => artifact.component === "oxlint-tsgolint") >
-      release.findLastIndex((artifact) => artifact.component === "typescript" && artifact.version === "7.0.2")
+    release.slice(firstTsgolint).every((artifact) =>
+      artifact.component !== "typescript" || artifact.version !== "7.0.2"
+    )
   )
 })
 
