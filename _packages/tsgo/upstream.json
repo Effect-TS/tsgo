@@ -13,7 +13,7 @@
       "latest": "7.0.2005"
     },
     "tsrs": {
-      "latest": "0.20.1-ts7.1.0-beta"
+      "latest": "0.20.0-lint.356807bd-ts7.1.0-beta"
     }
   },
   "components": {
@@ -57,8 +57,8 @@
       }
     },
     "tsrs": {
-      "0.20.1-ts7.1.0-beta": {
-        "gitHead": "77d3cddb44540734abc33a42ccca4d3f33bee527",
+      "0.20.0-lint.356807bd-ts7.1.0-beta": {
+        "gitHead": "356807bd0ca9d1e9af415c545ad3e16972c9f348",
         "typescript": {
           "version": "7.1.0-beta",
           "gitHead": "3e9236361fa97a9e6c685f4833ac457ae2d8c50a"

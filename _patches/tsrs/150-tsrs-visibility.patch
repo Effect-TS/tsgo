@@ -18,7 +18,7 @@ the Effect crates use (`get_mapped_type_modifiers`, `is_private_identifier_symbo
 `stringutil::lower_first_char`: Go exports them and the Effect crates call them, with no public tsrs equivalent.
 
 diff --git a/crates/tsrs_ast/src/generated.rs b/crates/tsrs_ast/src/generated.rs
-index 908b8dd9..95cb359e 100644
+index 908b8dd..95cb359 100644
 --- a/crates/tsrs_ast/src/generated.rs
 +++ b/crates/tsrs_ast/src/generated.rs
 @@ -119,7 +119,7 @@ impl ClassLikeBase {
@@ -31,7 +31,7 @@ index 908b8dd9..95cb359e 100644
      }
      #[inline]
 diff --git a/crates/tsrs_checker/src/checker.rs b/crates/tsrs_checker/src/checker.rs
-index 85faaa53..35629be4 100644
+index c7bd372..7a93b83 100644
 --- a/crates/tsrs_checker/src/checker.rs
 +++ b/crates/tsrs_checker/src/checker.rs
 @@ -684,7 +684,7 @@ pub struct InferencePriority(InferencePriorityRepr);
@@ -98,24 +98,7 @@ index 85faaa53..35629be4 100644
      pub(crate) reg_exp_scanner: Option<Box<Scanner>>,
      pub(crate) pattern_for_type: FxHashMap<P<Type>, P<Node>>,
      pub(crate) lazy_member_tables:
-@@ -1375,21 +1375,21 @@ pub struct Checker {
-     pub(crate) optional_type: P<Type>,
-     pub(crate) null_type: P<Type>,
-     pub(crate) null_widening_type: P<Type>,
--    pub(crate) string_type: P<Type>,
--    pub(crate) number_type: P<Type>,
-+    pub string_type: P<Type>,
-+    pub number_type: P<Type>,
-     pub(crate) bigint_type: P<Type>,
-     pub(crate) regular_false_type: P<Type>,
-     pub(crate) false_type: P<Type>,
-     pub(crate) regular_true_type: P<Type>,
-     pub(crate) true_type: P<Type>,
--    pub(crate) boolean_type: P<Type>,
-+    pub boolean_type: P<Type>,
-     pub(crate) es_symbol_type: P<Type>,
-     pub(crate) void_type: P<Type>,
-     pub(crate) never_type: P<Type>,
+@@ -1389,7 +1389,7 @@ pub struct Checker {
      pub(crate) silent_never_type: P<Type>,
      pub(crate) implicit_never_type: P<Type>,
      pub(crate) unreachable_never_type: P<Type>,
@@ -149,21 +132,8 @@ index 85faaa53..35629be4 100644
      pub(crate) active_mappers: Vec<P<TypeMapper>>,
      pub(crate) active_type_mappers_caches: Vec<PackedMap<CacheHashKey, P<Type>>>,
      // Mappers and inference contexts `getConditionalType` made, recycled when it returns (notes/mem-recycle.md).
-diff --git a/crates/tsrs_checker/src/checker_02.rs b/crates/tsrs_checker/src/checker_02.rs
-index ea01496e..592205d5 100644
---- a/crates/tsrs_checker/src/checker_02.rs
-+++ b/crates/tsrs_checker/src/checker_02.rs
-@@ -67,7 +67,7 @@ impl Checker {
-     }
- 
-     // checker.go:2196
--    pub(crate) fn get_immediate_aliased_symbol(&mut self, symbol: P<Symbol>) -> Option<P<Symbol>> {
-+    pub fn get_immediate_aliased_symbol(&mut self, symbol: P<Symbol>) -> Option<P<Symbol>> {
-         assert!(symbol.flags().intersects(SymbolFlags::Alias), "Should only get Alias here.");
-         let links = self.alias_symbol_links.get(symbol);
-         if links.immediate_target.get().is_none() {
 diff --git a/crates/tsrs_checker/src/checker_07.rs b/crates/tsrs_checker/src/checker_07.rs
-index ba9b4d7e..7dcc03e0 100644
+index ec4b9c1..9d39612 100644
 --- a/crates/tsrs_checker/src/checker_07.rs
 +++ b/crates/tsrs_checker/src/checker_07.rs
 @@ -1743,7 +1743,7 @@ impl Checker {
@@ -175,125 +145,8 @@ index ba9b4d7e..7dcc03e0 100644
          // The following symbols are considered read-only:
          // Properties with a 'readonly' modifier
          // Variables declared with 'const'
-diff --git a/crates/tsrs_checker/src/checker_08.rs b/crates/tsrs_checker/src/checker_08.rs
-index 7b9e12fb..63c9e87b 100644
---- a/crates/tsrs_checker/src/checker_08.rs
-+++ b/crates/tsrs_checker/src/checker_08.rs
-@@ -3325,10 +3325,7 @@ impl Checker {
-     }
- 
-     // checker.go:17383
--    pub(crate) fn get_constraint_of_type_parameter(
--        &mut self,
--        type_parameter: P<Type>,
--    ) -> Option<P<Type>> {
-+    pub fn get_constraint_of_type_parameter(&mut self, type_parameter: P<Type>) -> Option<P<Type>> {
-         if self.has_non_circular_base_constraint(type_parameter) {
-             return self.get_constraint_from_type_parameter(type_parameter);
-         }
-diff --git a/crates/tsrs_checker/src/checker_09.rs b/crates/tsrs_checker/src/checker_09.rs
-index 3a16b574..5d880f0a 100644
---- a/crates/tsrs_checker/src/checker_09.rs
-+++ b/crates/tsrs_checker/src/checker_09.rs
-@@ -2745,7 +2745,7 @@ impl Checker {
- 
-     // checker.go:19231
-     #[cfg_attr(feature = "site-counts", track_caller)]
--    pub(crate) fn get_property_of_type(&mut self, t: P<Type>, name: &str) -> Option<P<Symbol>> {
-+    pub fn get_property_of_type(&mut self, t: P<Type>, name: &str) -> Option<P<Symbol>> {
-         self.get_property_of_type_ex(
-             t, name, false, /*skipObjectFunctionPropertyAugment*/
-             false, /*includeTypeOnlyMembers*/
-@@ -3094,7 +3094,7 @@ impl Checker {
-     }
- 
-     // checker.go:19318
--    pub(crate) fn get_index_infos_of_type(&mut self, t: P<Type>) -> &'static [P<IndexInfo>] {
-+    pub fn get_index_infos_of_type(&mut self, t: P<Type>) -> &'static [P<IndexInfo>] {
-         let t = self.get_reduced_apparent_type(t);
-         self.get_index_infos_of_structured_type(t)
-     }
-diff --git a/crates/tsrs_checker/src/checker_11.rs b/crates/tsrs_checker/src/checker_11.rs
-index c0bfe513..ca6eae63 100644
---- a/crates/tsrs_checker/src/checker_11.rs
-+++ b/crates/tsrs_checker/src/checker_11.rs
-@@ -945,7 +945,7 @@ pub(crate) fn is_conflicting_private_property(prop: P<Symbol>) -> bool {
- 
- impl Checker {
-     // checker.go:22289
--    pub(crate) fn get_type_arguments(&mut self, t: P<Type>) -> &'static [P<Type>] {
-+    pub fn get_type_arguments(&mut self, t: P<Type>) -> &'static [P<Type>] {
-         let d = t.as_type_reference();
-         if d.resolved_type_arguments.get().is_none() {
-             let n = d.target.get().unwrap().as_interface_type();
-@@ -3655,7 +3655,7 @@ impl Checker {
-     }
- 
-     // checker.go:23942
--    pub(crate) fn is_array_type(&self, t: P<Type>) -> bool {
-+    pub fn is_array_type(&self, t: P<Type>) -> bool {
-         t.object_flags().intersects(ObjectFlags::Reference)
-             && (t.target() == Some(self.global_array_type)
-                 || t.target() == Some(self.global_readonly_array_type))
-diff --git a/crates/tsrs_checker/src/checker_12.rs b/crates/tsrs_checker/src/checker_12.rs
-index c43209a5..dea7e00c 100644
---- a/crates/tsrs_checker/src/checker_12.rs
-+++ b/crates/tsrs_checker/src/checker_12.rs
-@@ -282,7 +282,7 @@ fn is_local_type_alias(symbol: P<Symbol>) -> bool {
- 
- impl Checker {
-     // checker.go:24131
--    pub(crate) fn get_declared_type_of_symbol(&mut self, symbol: P<Symbol>) -> P<Type> {
-+    pub fn get_declared_type_of_symbol(&mut self, symbol: P<Symbol>) -> P<Type> {
-         let mut result = self.try_get_declared_type_of_symbol(symbol);
-         if result.is_none() {
-             result = Some(self.error_type);
-@@ -3369,7 +3369,7 @@ impl Checker {
-     // circularly reference themselves and therefore cannot be subtype reduced during their declaration.
-     // For example, "type Item = string | (() => Item" is a named type that circularly references itself.
-     // checker.go:26098
--    pub(crate) fn get_union_type_ex(
-+    pub fn get_union_type_ex(
-         &mut self,
-         types: &[P<Type>],
-         union_reduction: UnionReduction,
-diff --git a/crates/tsrs_checker/src/checker_13.rs b/crates/tsrs_checker/src/checker_13.rs
-index 9fe01aa9..5921f88c 100644
---- a/crates/tsrs_checker/src/checker_13.rs
-+++ b/crates/tsrs_checker/src/checker_13.rs
-@@ -3453,7 +3453,7 @@ impl Checker {
-     }
- 
-     // checker.go:27906
--    pub(crate) fn get_base_constraint_of_type(&mut self, t: P<Type>) -> Option<P<Type>> {
-+    pub fn get_base_constraint_of_type(&mut self, t: P<Type>) -> Option<P<Type>> {
-         if t.flags().intersects(
-             TypeFlags::InstantiableNonPrimitive
-                 | TypeFlags::UnionOrIntersection
-diff --git a/crates/tsrs_checker/src/checker_14.rs b/crates/tsrs_checker/src/checker_14.rs
-index 8bcc76cf..1310d649 100644
---- a/crates/tsrs_checker/src/checker_14.rs
-+++ b/crates/tsrs_checker/src/checker_14.rs
-@@ -1703,7 +1703,7 @@ impl Checker {
- }
- 
- // checker.go:29482
--pub(crate) fn get_mapped_type_modifiers(t: P<Type>) -> MappedTypeModifiers {
-+pub fn get_mapped_type_modifiers(t: P<Type>) -> MappedTypeModifiers {
-     let declaration = t.as_mapped_type().declaration.get().unwrap().as_mapped_type_node();
-     let mut modifiers = MappedTypeModifiers::empty();
-     if let Some(readonly_token) = declaration.readonly_token {
-@@ -2237,7 +2237,7 @@ impl Checker {
-      * @returns the contextual type of an expression.
-      */
-     // checker.go:29832
--    pub(crate) fn get_contextual_type(
-+    pub fn get_contextual_type(
-         &mut self,
-         node: P<Node>,
-         context_flags: ContextFlags,
 diff --git a/crates/tsrs_checker/src/checker_15.rs b/crates/tsrs_checker/src/checker_15.rs
-index febb34ec..412db751 100644
+index 39d39b1..6357c3c 100644
 --- a/crates/tsrs_checker/src/checker_15.rs
 +++ b/crates/tsrs_checker/src/checker_15.rs
 @@ -1405,12 +1405,7 @@ impl Checker {
@@ -311,7 +164,7 @@ index febb34ec..412db751 100644
      }
  
 diff --git a/crates/tsrs_checker/src/evaluator.rs b/crates/tsrs_checker/src/evaluator.rs
-index dfc80e86..7eb345fa 100644
+index dfc80e8..7eb345f 100644
 --- a/crates/tsrs_checker/src/evaluator.rs
 +++ b/crates/tsrs_checker/src/evaluator.rs
 @@ -6,11 +6,11 @@ use crate::*;
@@ -338,7 +191,7 @@ index dfc80e86..7eb345fa 100644
      evaluate_entity: Evaluator<H>,
      outer_expressions_to_skip: ast::OuterExpressionKinds,
 diff --git a/crates/tsrs_checker/src/exports.rs b/crates/tsrs_checker/src/exports.rs
-index 3eae8de9..5ffbfdc7 100644
+index 3eae8de..5ffbfdc 100644
 --- a/crates/tsrs_checker/src/exports.rs
 +++ b/crates/tsrs_checker/src/exports.rs
 @@ -37,6 +37,11 @@ impl Checker {
@@ -369,19 +222,10 @@ index 3eae8de9..5ffbfdc7 100644
      pub fn get_type_from_type_node_exported(&mut self, node: P<Node>) -> P<Type> {
          self.get_type_from_type_node(node)
 diff --git a/crates/tsrs_checker/src/lib.rs b/crates/tsrs_checker/src/lib.rs
-index 07179b4f..86405dc1 100644
+index 6ffc87a..19ee70b 100644
 --- a/crates/tsrs_checker/src/lib.rs
 +++ b/crates/tsrs_checker/src/lib.rs
-@@ -181,7 +181,7 @@ mod services;
- pub use tsrs_astnav as astnav;
- 
- // Exported Go package-level functions (the baseline writer, the language service and the project system call them).
--pub(crate) use checker_14::get_mapped_type_modifiers;
-+pub use checker_14::get_mapped_type_modifiers;
- pub use exports::{
-     get_declaration_modifier_flags_from_symbol_exported, get_property_name_from_type_exported,
-     is_distributed_type_parameter, is_tuple_type_exported, is_tuple_type_target,
-@@ -191,14 +191,12 @@ pub use nodebuilder::{new_node_builder, new_node_builder_ex};
+@@ -192,14 +192,12 @@ pub use nodebuilder::{new_node_builder, new_node_builder_ex};
  pub use nodebuilderimpl_1::try_get_module_specifier_from_declaration;
  pub(crate) use printer::new_symbol_tracker_impl;
  pub use services::get_resolved_signature_for_signature_help;
@@ -400,7 +244,7 @@ index 07179b4f..86405dc1 100644
  // effect-tsgo: Go exports ForEachYieldExpression (typeparser.ExecutionFlow calls it).
  pub use utilities::for_each_yield_expression;
 diff --git a/crates/tsrs_checker/src/links.rs b/crates/tsrs_checker/src/links.rs
-index 5454638d..9878b40d 100644
+index 5454638..9878b40 100644
 --- a/crates/tsrs_checker/src/links.rs
 +++ b/crates/tsrs_checker/src/links.rs
 @@ -91,7 +91,7 @@ impl<K: 'static, V: 'static> LinkStore<K, V> {
@@ -422,7 +266,7 @@ index 5454638d..9878b40d 100644
          if let Some(key) = dense_link_key(id) {
              self.block_store.try_get(key)
 diff --git a/crates/tsrs_checker/src/mapper.rs b/crates/tsrs_checker/src/mapper.rs
-index 499e3985..8e026bfb 100644
+index 499e398..8e026bf 100644
 --- a/crates/tsrs_checker/src/mapper.rs
 +++ b/crates/tsrs_checker/src/mapper.rs
 @@ -292,7 +292,7 @@ impl TypeMapper {
@@ -456,18 +300,9 @@ index 499e3985..8e026bfb 100644
          return new_simple_type_mapper(sources[0], targets[0]);
      }
 diff --git a/crates/tsrs_checker/src/relater_1.rs b/crates/tsrs_checker/src/relater_1.rs
-index 1e4d3e03..342aaa88 100644
+index 8843488..ab59221 100644
 --- a/crates/tsrs_checker/src/relater_1.rs
 +++ b/crates/tsrs_checker/src/relater_1.rs
-@@ -143,7 +143,7 @@ impl Checker {
-     }
- 
-     // relater.go:149
--    pub(crate) fn is_type_assignable_to(&mut self, source: P<Type>, target: P<Type>) -> bool {
-+    pub fn is_type_assignable_to(&mut self, source: P<Type>, target: P<Type>) -> bool {
-         let relation = self.assignable_relation;
-         self.is_type_related_to(source, target, relation)
-     }
 @@ -3725,10 +3725,7 @@ impl Checker {
      }
  
@@ -481,7 +316,7 @@ index 1e4d3e03..342aaa88 100644
              return Some(self.get_type_of_symbol(this_parameter));
          }
 diff --git a/crates/tsrs_checker/src/services.rs b/crates/tsrs_checker/src/services.rs
-index 15dc8bdb..a2aeef09 100644
+index 15dc8bd..a2aeef0 100644
 --- a/crates/tsrs_checker/src/services.rs
 +++ b/crates/tsrs_checker/src/services.rs
 @@ -147,6 +147,44 @@ impl Checker {
@@ -530,7 +365,7 @@ index 15dc8bdb..a2aeef09 100644
      pub fn is_valid_property_access_exported(
          &mut self,
 diff --git a/crates/tsrs_checker/src/types.rs b/crates/tsrs_checker/src/types.rs
-index b4dcb880..a774fdf4 100644
+index f5b2cd2..088a270 100644
 --- a/crates/tsrs_checker/src/types.rs
 +++ b/crates/tsrs_checker/src/types.rs
 @@ -286,7 +286,7 @@ pub struct SignatureId(pub u32);
@@ -542,6 +377,15 @@ index b4dcb880..a774fdf4 100644
      first: Cell<Option<P<()>>>, // plain: target (P<Symbol>); synthetic: containing_type (P<Type>); tail: P<ValueSymbolLinksTail>
      second: Cell<usize>, // `P::to_bits` of: plain: mapper (P<TypeMapper>); synthetic: name_type (P<Type>) | SYNTHETIC; tail: TAIL
  }
+@@ -492,7 +492,7 @@ impl ValueSymbolLinks {
+ 
+ #[derive(Default)]
+ pub struct MappedSymbolLinks {
+-    pub(crate) key_type: Cell<Option<P<Type>>>, // Key type for mapped type member
++    pub key_type: Cell<Option<P<Type>>>, // Key type for mapped type member
+     pub(crate) synthetic_origin: Cell<Option<P<Symbol>>>, // For a property on a mapped or spread type, points back to the original property
+ }
+ 
 @@ -510,7 +510,7 @@ pub struct DeferredSymbolLinks {
  #[derive(Default)]
  pub struct AliasSymbolLinks {
@@ -655,7 +499,7 @@ index b4dcb880..a774fdf4 100644
      pub(crate) declared_members_resolved: OvCell<bool>,
  }
  embeds!(InterfaceType, type_reference, TypeReference);
-@@ -2495,11 +2495,11 @@ embeds!(InstantiationExpressionType, object_type, ObjectType);
+@@ -2507,11 +2507,11 @@ embeds!(InstantiationExpressionType, object_type, ObjectType);
  #[repr(C)]
  pub struct MappedType {
      object_type: ObjectType,
@@ -672,7 +516,7 @@ index b4dcb880..a774fdf4 100644
      pub(crate) modifiers_type: OvCell<Option<P<Type>>>,
      pub(crate) resolved_apparent_type: OvCell<Option<P<Type>>>,
      pub(crate) contains_error: Cell<bool>,
-@@ -2572,7 +2572,7 @@ embeds!(EvolvingArrayType, object_type, ObjectType);
+@@ -2584,7 +2584,7 @@ embeds!(EvolvingArrayType, object_type, ObjectType);
  #[repr(C)]
  pub struct UnionOrIntersectionType {
      structured_type: StructuredType,
@@ -681,7 +525,7 @@ index b4dcb880..a774fdf4 100644
      rare: UnionOrIntersectionRareWord,
  }
  embeds!(UnionOrIntersectionType, structured_type, StructuredType);
-@@ -2726,17 +2726,17 @@ impl UnionType {
+@@ -2738,17 +2738,17 @@ impl UnionType {
          }
      }
      #[inline]
@@ -702,7 +546,7 @@ index b4dcb880..a774fdf4 100644
          self.union_rare()?.origin.get()
      }
      #[inline]
-@@ -2831,12 +2831,12 @@ impl IntersectionType {
+@@ -2843,12 +2843,12 @@ impl IntersectionType {
  #[derive(Default)]
  pub struct TypeParameter {
      constrained_type: ConstrainedType,
@@ -718,7 +562,7 @@ index b4dcb880..a774fdf4 100644
      pub(crate) distributed_type: OvCell<Option<P<Type>>>,
  }
  embeds!(TypeParameter, constrained_type, ConstrainedType);
-@@ -2865,7 +2865,7 @@ bitflags! {
+@@ -2877,7 +2877,7 @@ bitflags! {
  #[derive(Default)]
  pub struct IndexType {
      constrained_type: ConstrainedType,
@@ -727,7 +571,7 @@ index b4dcb880..a774fdf4 100644
      pub(crate) index_flags: Cell<IndexFlags>,
  }
  embeds!(IndexType, constrained_type, ConstrainedType);
-@@ -2882,8 +2882,8 @@ impl IndexType {
+@@ -2894,8 +2894,8 @@ impl IndexType {
  #[derive(Default)]
  pub struct IndexedAccessType {
      constrained_type: ConstrainedType,
@@ -738,7 +582,7 @@ index b4dcb880..a774fdf4 100644
      pub(crate) access_flags: Cell<AccessFlags>, // Only includes AccessFlags.Persistent
  }
  embeds!(IndexedAccessType, constrained_type, ConstrainedType);
-@@ -2902,8 +2902,8 @@ impl IndexedAccessType {
+@@ -2914,8 +2914,8 @@ impl IndexedAccessType {
  #[derive(Default)]
  pub struct TemplateLiteralType {
      constrained_type: ConstrainedType,
@@ -749,7 +593,7 @@ index b4dcb880..a774fdf4 100644
  }
  embeds!(TemplateLiteralType, constrained_type, ConstrainedType);
  
-@@ -2913,7 +2913,7 @@ impl TemplateLiteralType {
+@@ -2925,7 +2925,7 @@ impl TemplateLiteralType {
          self.texts.get()
      }
      #[inline]
@@ -758,7 +602,7 @@ index b4dcb880..a774fdf4 100644
          self.types.get()
      }
  }
-@@ -2921,7 +2921,7 @@ impl TemplateLiteralType {
+@@ -2933,7 +2933,7 @@ impl TemplateLiteralType {
  #[derive(Default)]
  pub struct StringMappingType {
      constrained_type: ConstrainedType,
@@ -767,7 +611,7 @@ index b4dcb880..a774fdf4 100644
  }
  embeds!(StringMappingType, constrained_type, ConstrainedType);
  
-@@ -2935,8 +2935,8 @@ impl StringMappingType {
+@@ -2947,8 +2947,8 @@ impl StringMappingType {
  #[derive(Default)]
  pub struct SubstitutionType {
      constrained_type: ConstrainedType,
@@ -778,7 +622,7 @@ index b4dcb880..a774fdf4 100644
  }
  embeds!(SubstitutionType, constrained_type, ConstrainedType);
  
-@@ -2953,7 +2953,7 @@ impl SubstitutionType {
+@@ -2965,7 +2965,7 @@ impl SubstitutionType {
  
  #[derive(Default)]
  pub struct ConditionalRoot {
@@ -787,7 +631,7 @@ index b4dcb880..a774fdf4 100644
      pub(crate) check_type: Cell<Option<P<Type>>>,
      pub(crate) extends_type: Cell<Option<P<Type>>>,
      pub(crate) is_distributive: Cell<bool>,
-@@ -2966,11 +2966,11 @@ pub struct ConditionalRoot {
+@@ -2978,11 +2978,11 @@ pub struct ConditionalRoot {
  #[derive(Default)]
  pub struct ConditionalType {
      constrained_type: ConstrainedType,
@@ -804,7 +648,7 @@ index b4dcb880..a774fdf4 100644
      pub(crate) resolved_inferred_true_type: OvCell<Option<P<Type>>>, // The `trueType` instantiated with the `combinedMapper`, if present
      pub(crate) resolved_default_constraint: OvCell<Option<P<Type>>>,
      pub(crate) resolved_constraint_of_distributive: OvCell<Option<P<Type>>>,
-@@ -3027,7 +3027,7 @@ pub struct Signature {
+@@ -3039,7 +3039,7 @@ pub struct Signature {
      pub(crate) parameters: ThinSliceCell<P<Symbol>>,
      pub resolved_return_type: OvCell<Option<P<Type>>>,
      pub(crate) target: Cell<Option<P<Signature>>>,
@@ -813,21 +657,20 @@ index b4dcb880..a774fdf4 100644
      // Type parameters, `thisParameter`, `isolatedSignatureType`, `composite` and a resolved type predicate other
      // than the checker's `noTypePredicate` live in a tail allocated on the first non-nil write.
      // `this_parameter()` / `set_this_parameter()` & co. read nil when it is absent. `resolvedTypePredicate ==
-@@ -3256,9 +3256,9 @@ impl TypePredicate {
+@@ -3268,9 +3268,9 @@ impl TypePredicate {
  
  #[derive(Default)]
  pub struct IndexInfo {
 -    pub(crate) key_type: Cell<Option<P<Type>>>,
--    pub(crate) value_type: Cell<Option<P<Type>>>,
--    pub(crate) is_readonly: Cell<bool>,
 +    pub key_type: Cell<Option<P<Type>>>,
-+    pub value_type: Cell<Option<P<Type>>>,
+     pub value_type: Cell<Option<P<Type>>>,
+-    pub(crate) is_readonly: Cell<bool>,
 +    pub is_readonly: Cell<bool>,
      pub(crate) declaration: Cell<Option<P<Node>>>, // IndexSignatureDeclaration
      pub(crate) index_symbol: Cell<Option<P<Symbol>>>, // Synthetic property symbol for this index signature
      pub(crate) components: Cell<&'static [P<Node>]>,  // ElementWithComputedPropertyName
 diff --git a/crates/tsrs_checker/src/utilities.rs b/crates/tsrs_checker/src/utilities.rs
-index ff4057fd..d5744089 100644
+index ff4057f..d574408 100644
 --- a/crates/tsrs_checker/src/utilities.rs
 +++ b/crates/tsrs_checker/src/utilities.rs
 @@ -1429,7 +1429,7 @@ pub fn is_known_symbol(symbol: P<Symbol>) -> bool {
@@ -840,7 +683,7 @@ index ff4057fd..d5744089 100644
          return false;
      };
 diff --git a/crates/tsrs_core/src/stringutil/util.rs b/crates/tsrs_core/src/stringutil/util.rs
-index f18ae3c0..1537b8e6 100644
+index f18ae3c..1537b8e 100644
 --- a/crates/tsrs_core/src/stringutil/util.rs
 +++ b/crates/tsrs_core/src/stringutil/util.rs
 @@ -1,6 +1,6 @@
@@ -870,7 +713,7 @@ index f18ae3c0..1537b8e6 100644
      if str.len() < max_length {
          return str;
 diff --git a/crates/tsrs_ls/src/autoimport/export.rs b/crates/tsrs_ls/src/autoimport/export.rs
-index 86ff718c..4ece9554 100644
+index 86ff718..4ece955 100644
 --- a/crates/tsrs_ls/src/autoimport/export.rs
 +++ b/crates/tsrs_ls/src/autoimport/export.rs
 @@ -21,14 +21,14 @@ pub enum ModuleID {
@@ -943,7 +786,7 @@ index 86ff718c..4ece9554 100644
              return &self.local_name;
          }
 diff --git a/crates/tsrs_ls/src/autoimport/fix.rs b/crates/tsrs_ls/src/autoimport/fix.rs
-index 807f810b..47c775ce 100644
+index 807f810..47c775c 100644
 --- a/crates/tsrs_ls/src/autoimport/fix.rs
 +++ b/crates/tsrs_ls/src/autoimport/fix.rs
 @@ -38,12 +38,12 @@ pub struct NewImportBinding {
@@ -974,7 +817,7 @@ index 807f810b..47c775ce 100644
          export: &Export,
          for_jsx: bool,
 diff --git a/crates/tsrs_ls/src/change/tracker.rs b/crates/tsrs_ls/src/change/tracker.rs
-index a71d6076..96687fd8 100644
+index a71d607..96687fd 100644
 --- a/crates/tsrs_ls/src/change/tracker.rs
 +++ b/crates/tsrs_ls/src/change/tracker.rs
 @@ -23,10 +23,10 @@ use crate::spanmap::{self, Feature};
@@ -1097,7 +940,7 @@ index a71d6076..96687fd8 100644
      }
  
 diff --git a/crates/tsrs_ls/src/change/trackerimpl.rs b/crates/tsrs_ls/src/change/trackerimpl.rs
-index 575373b8..adf04382 100644
+index 575373b..adf0438 100644
 --- a/crates/tsrs_ls/src/change/trackerimpl.rs
 +++ b/crates/tsrs_ls/src/change/trackerimpl.rs
 @@ -311,7 +311,7 @@ impl Tracker {
@@ -1110,7 +953,7 @@ index 575373b8..adf04382 100644
          source_file: P<SourceFile>,
          start_node: P<Node>,
 diff --git a/crates/tsrs_ls/src/codeactions.rs b/crates/tsrs_ls/src/codeactions.rs
-index 393311b0..faf128fe 100644
+index 393311b..faf128f 100644
 --- a/crates/tsrs_ls/src/codeactions.rs
 +++ b/crates/tsrs_ls/src/codeactions.rs
 @@ -16,10 +16,10 @@ use crate::spanmap::Feature;
@@ -1158,7 +1001,7 @@ index 393311b0..faf128fe 100644
  }
  
 diff --git a/crates/tsrs_ls/src/languageservice.rs b/crates/tsrs_ls/src/languageservice.rs
-index 467db16a..a732f62e 100644
+index 467db16..a732f62 100644
 --- a/crates/tsrs_ls/src/languageservice.rs
 +++ b/crates/tsrs_ls/src/languageservice.rs
 @@ -67,7 +67,7 @@ impl LanguageService {
@@ -1171,7 +1014,7 @@ index 467db16a..a732f62e 100644
      }
  
 diff --git a/crates/tsrs_ls/src/lsconv/converters.rs b/crates/tsrs_ls/src/lsconv/converters.rs
-index 74f8ea47..fba292c1 100644
+index 74f8ea4..fba292c 100644
 --- a/crates/tsrs_ls/src/lsconv/converters.rs
 +++ b/crates/tsrs_ls/src/lsconv/converters.rs
 @@ -159,7 +159,7 @@ impl Converters {
@@ -1193,7 +1036,7 @@ index 74f8ea47..fba292c1 100644
          script: &dyn Script,
          text_range: lsproto::Range,
 diff --git a/crates/tsrs_lsp/src/lib.rs b/crates/tsrs_lsp/src/lib.rs
-index de461733..013c109e 100644
+index de46173..013c109 100644
 --- a/crates/tsrs_lsp/src/lib.rs
 +++ b/crates/tsrs_lsp/src/lib.rs
 @@ -9,6 +9,15 @@ pub mod server;
@@ -1213,7 +1056,7 @@ index de461733..013c109e 100644
      NpmInstallFunc, Reader, Server, ServerOptions, Writer, new_server, to_reader, to_writer,
  };
 diff --git a/crates/tsrs_lsproto/src/lsp_generated.rs b/crates/tsrs_lsproto/src/lsp_generated.rs
-index 442add5e..0ebd1026 100644
+index 442add5..0ebd102 100644
 --- a/crates/tsrs_lsproto/src/lsp_generated.rs
 +++ b/crates/tsrs_lsproto/src/lsp_generated.rs
 @@ -3210,7 +3210,7 @@ impl Json for InlineValueRegistrationOptions {
@@ -1993,7 +1836,7 @@ index 442add5e..0ebd1026 100644
  
  impl Json for BooleanOrClientSemanticTokensRequestFullDelta {
 diff --git a/crates/tsrs_project/src/projectcollection.rs b/crates/tsrs_project/src/projectcollection.rs
-index d4576840..7c3b6ede 100644
+index d457684..7c3b6ed 100644
 --- a/crates/tsrs_project/src/projectcollection.rs
 +++ b/crates/tsrs_project/src/projectcollection.rs
 @@ -113,7 +113,7 @@ impl ProjectCollection {
@@ -2006,7 +1849,7 @@ index d4576840..7c3b6ede 100644
          self.fill_configured_projects(&mut projects);
          projects
 diff --git a/crates/tsrs_tsoptions/src/errors.rs b/crates/tsrs_tsoptions/src/errors.rs
-index b1848088..7a2f0fea 100644
+index b184808..7a2f0fe 100644
 --- a/crates/tsrs_tsoptions/src/errors.rs
 +++ b/crates/tsrs_tsoptions/src/errors.rs
 @@ -143,7 +143,7 @@ pub fn create_diagnostic_for_node_in_source_file(

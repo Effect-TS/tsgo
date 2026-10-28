@@ -48,7 +48,9 @@ port bugs.
 - In scope: `etscore`, `etscheckerhooks`, `etsdiagnostics`, `etsexecutehooks`, `etslshooks`, `etsgoapi`,
   `etstesthooks` (only if the Rust test harness needs fourslash mounting), and every package under `internal/`,
   including `internal/effecttest` (it becomes the Rust baseline runner).
-- Not ported: `etsoxlintrunner` and the oxlint/tsgolint integration (Go-only by decision); Go tooling (`_tools/`,
+- `etsoxlintrunner` is ported (`ets_etsoxlintrunner`) for tsrs-lint, tsrs's port of tsgolint (oxc-project/tsrs#624):
+  `crates/ets_tsrs_lint` (binary `tsrs-lint`) registers the Effect rules with it as the patched tsgolint does.
+- Not ported: the rest of the oxlint/tsgolint integration (Go-only); Go tooling (`_tools/`,
   `shim/`); the TypeScript patches themselves (their tsrs counterparts live in `_patches/tsrs`, see "TypeScript:
   tsrs"); generated Go files (`// Code generated ... DO NOT EDIT.`, e.g. `etscore/version_generated.go`), whose
   Rust counterparts are generated from the same inputs (`build.rs` or the same generator).

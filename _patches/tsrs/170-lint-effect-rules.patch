@@ -1,0 +1,102 @@
+tsrs-only: tsrs-lint (crates/tsrs_lint, the Rust port of tsgolint's headless linter, oxc-project/tsrs#624) is the
+counterpart of the tsgolint binary that `_patches/tsgolint/001-effect-rules.patch` extends with the Effect rules.
+
+Go appends the generated `effectRules` to tsgolint's `allRules`. tsrs-lint's registry is a closed `match`, so this adds
+`registry::register_external_rules`: a factory consulted by `require_implemented` and `create_rule` for names the
+registry does not know. As patch 001 does for tsrs_cli, the `effect-main` feature adds main.rs to the library as a
+module whose `main` becomes public (`tsrs_lint::main`), so that crates/ets_tsrs_lint registers the Effect rules and
+then calls it. The feature is off for the `tsrs-lint` binary target, which is unchanged.
+
+diff --git a/crates/tsrs_lint/Cargo.toml b/crates/tsrs_lint/Cargo.toml
+index 56e70f4..b6f005c 100644
+--- a/crates/tsrs_lint/Cargo.toml
++++ b/crates/tsrs_lint/Cargo.toml
+@@ -23,6 +23,11 @@ regex = "1"
+ regress = "0.11.1"
+ mimalloc-safe.workspace = true
+ 
++[features]
++# effect-tsgo: the executable's `main` as a library function (`tsrs_lint::main`), for crates/ets_tsrs_lint. Off for the
++# `tsrs-lint` binary target, which keeps main.rs (and its global allocator) to itself.
++effect-main = []
++
+ [[bin]]
+ name = "tsrs-lint"
+ path = "src/main.rs"
+diff --git a/crates/tsrs_lint/src/lib.rs b/crates/tsrs_lint/src/lib.rs
+index b629fab..2f5bb23 100644
+--- a/crates/tsrs_lint/src/lib.rs
++++ b/crates/tsrs_lint/src/lib.rs
+@@ -17,6 +17,17 @@ pub mod utils;
+ 
+ mod type_matches_specifier;
+ 
++// effect-tsgo: main.rs as a module (`tsrs_lint::main`), for crates/ets_tsrs_lint, which registers the Effect rules
++// first (as effect-tsgo's patched tsgolint appends them to `allRules`). main.rs reaches the modules above as
++// `tsrs_lint`.
++#[cfg(feature = "effect-main")]
++extern crate self as tsrs_lint;
++#[cfg(feature = "effect-main")]
++#[path = "main.rs"]
++mod effect_main;
++#[cfg(feature = "effect-main")]
++pub use effect_main::main;
++
+ mod rules {
+     pub mod await_thenable;
+     pub mod consistent_return;
+diff --git a/crates/tsrs_lint/src/main.rs b/crates/tsrs_lint/src/main.rs
+index c53b3c6..ae294f1 100644
+--- a/crates/tsrs_lint/src/main.rs
++++ b/crates/tsrs_lint/src/main.rs
+@@ -11,7 +11,8 @@ use tsrs_lint::{engine, payload, protocol};
+ #[global_allocator]
+ static GLOBAL: mimalloc_safe::MiMalloc = mimalloc_safe::MiMalloc;
+ 
+-fn main() {
++// effect-tsgo: public, so that lib.rs can expose it to crates/ets_tsrs_lint (feature `effect-main`).
++pub fn main() {
+     #[cfg(all(target_os = "linux", not(miri)))]
+     tsrs_core::allocator::init_mimalloc();
+     let result = std::thread::Builder::new()
+diff --git a/crates/tsrs_lint/src/registry.rs b/crates/tsrs_lint/src/registry.rs
+index d3bf81e..f84d8b7 100644
+--- a/crates/tsrs_lint/src/registry.rs
++++ b/crates/tsrs_lint/src/registry.rs
+@@ -67,7 +67,26 @@ pub const BASELINE_RULES: &[&str] = &[
+     "use-unknown-in-catch-callback-variable",
+ ];
+ 
++// effect-tsgo: rules registered by another crate before `main` runs (crates/ets_tsrs_lint registers the Effect
++// rules), as effect-tsgo's patched tsgolint appends `effectRules` to `allRules`. The factory returns `None` for a name
++// it does not know.
++pub type ExternalRuleFactory = fn(&str) -> Option<Box<dyn crate::rule::Rule>>;
++
++static EXTERNAL_RULES: std::sync::OnceLock<ExternalRuleFactory> = std::sync::OnceLock::new();
++
++/// effect-tsgo: registers the factory of external rules; only the first registration is kept.
++pub fn register_external_rules(factory: ExternalRuleFactory) {
++    let _ = EXTERNAL_RULES.set(factory);
++}
++
++fn create_external_rule(name: &str) -> Option<Box<dyn crate::rule::Rule>> {
++    EXTERNAL_RULES.get().and_then(|factory| factory(name))
++}
++
+ pub fn require_implemented(name: &str) -> Result<(), String> {
++    if create_external_rule(name).is_some() {
++        return Ok(());
++    }
+     if matches!(
+         name,
+         "await-thenable"
+@@ -252,6 +271,9 @@ pub fn create_rule(
+             .map(|rule| Box::new(rule) as Box<dyn crate::rule::Rule>),
+         "use-unknown-in-catch-callback-variable" => Ok(Box::new(crate::rules::use_unknown_in_catch_callback_variable::UseUnknownInCatchCallbackVariable)),
+         name => {
++            if let Some(rule) = create_external_rule(name) {
++                return Ok(rule);
++            }
+             require_implemented(name)?;
+             unreachable!("registered rule factory")
+         }
