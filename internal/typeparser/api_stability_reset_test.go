@@ -155,7 +155,7 @@ export interface Second { box: Box<E>; tagged: Tagged }
 	primeApiStabilityChecker(t, c)
 
 	first := apiStabilityTestExport(t, c, sf, "First")
-	box := c.GetTypeOfSymbol(ast.TSGetSymbolMembers(first)["box"])
+	box := c.GetTypeOfSymbol(ast.TSGetSymbolTableEntry(ast.TSGetSymbolMembers(first), "box"))
 	tagged := c.GetDeclaredTypeOfSymbol(apiStabilityTestExport(t, c, sf, "Tagged"))
 	session := tp.NewApiStabilitySession()
 	if got := apiStabilityDependencyNames(session.UsedBySymbol(first)); !slices.Equal(got, []string{"E", "Tagged"}) {

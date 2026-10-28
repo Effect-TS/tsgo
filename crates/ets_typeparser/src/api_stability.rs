@@ -3663,7 +3663,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:2853 apiStabilityAnalysis.collectResolvedMemberTable cdb61df454642bac
+    // go: internal/typeparser/api_stability.go:2853 apiStabilityAnalysis.collectResolvedMemberTable d898b86a5bc6e4e3
     // collectResolvedMemberTable merges the public members of an already resolved
     // member table with the given substitution. Compiler-reserved internal entries
     // are skipped, while a late-bound computed member is traversed like any other
@@ -3926,7 +3926,7 @@ impl ApiStabilityAnalysis {
         surface
     }
 
-    // go: internal/typeparser/api_stability.go:3031 apiStabilityAnalysis.collectDeclarationSignatures e2a61fdaa2c7cfc8
+    // go: internal/typeparser/api_stability.go:3031 apiStabilityAnalysis.collectDeclarationSignatures b6eaff968ba1af56
     // collectDeclarationSignatures collects a declaration's own public call and
     // construct signatures. Construct signatures declared under the class
     // constructor member are only included when includeClassConstructors is set;
@@ -4214,7 +4214,7 @@ impl ApiStabilityAnalysis {
         self.collect_declaration_surface(tp, surface, Some(target), inspect, &base_subst);
     }
 
-    // go: internal/typeparser/api_stability.go:3233 apiStabilityAnalysis.collectClassStaticSurface 4fbb3f8f7f0c0718
+    // go: internal/typeparser/api_stability.go:3233 apiStabilityAnalysis.collectClassStaticSurface 023242b69bb95998
     // collectClassStaticSurface inspects the class static side. Its members are
     // declared on the class symbol's exports and cannot depend on class type
     // parameters. The instance side of a class value is included when the class
@@ -4522,7 +4522,7 @@ impl ApiStabilityAnalysis {
         }
     }
 
-    // go: internal/typeparser/api_stability.go:3449 apiStabilityAnalysis.collectFunctionSignatures 2c5cde883d27c750
+    // go: internal/typeparser/api_stability.go:3449 apiStabilityAnalysis.collectFunctionSignatures 7e543f6502521af4
     // collectFunctionSignatures reads the call and construct signatures of an
     // anonymous function-like type. Resolved signatures are preferred. An
     // unmaterialized surface is read from the raw declaration signatures under the
@@ -5915,7 +5915,7 @@ impl ApiStabilityAnalysis {
     }
 }
 
-// go: internal/typeparser/api_stability.go:4384 apiStabilityMemberSymbolForDeclaration 344c7d989292f2d0
+// go: internal/typeparser/api_stability.go:4384 apiStabilityMemberSymbolForDeclaration 96a28552993aa648
 // apiStabilityMemberSymbolForDeclaration returns the member symbol a
 // declaration contributes to an already resolved member table. A simply named
 // declaration is looked up by its member-table key. A computed declaration is
@@ -6989,7 +6989,7 @@ pub(crate) fn api_stability_symbol_declares_heritage(symbol: Option<P<Symbol>>) 
     false
 }
 
-// go: internal/typeparser/api_stability.go:5171 sortedSymbolTableKeys d2a94f2cbc2a9a54
+// go: internal/typeparser/api_stability.go:5171 sortedSymbolTableKeys ccbd85aba6de6f53
 // Rust: Go sorts the keys bytewise (`sort.Strings`). tsrs spells the internal-name prefix `\u{7f}` where Go uses
 // byte `0xFE`; both sort after every ASCII character, but Go's sorts after non-ASCII UTF-8 too, so the prefix byte
 // is compared as `0xFE` to keep Go's order.

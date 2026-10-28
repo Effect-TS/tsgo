@@ -17,13 +17,22 @@ func symbolFixture(shape string) string {
 		{"Flags", "SymbolFlags", "3"},
 		{"CheckFlags", "CheckFlags", "5"},
 		{"ValueDeclaration", "*Node", "node"},
-		{"Members", "SymbolTable", "SymbolTable{\"member\": parent}"},
-		{"Exports", "SymbolTable", "SymbolTable{\"export\": parent}"},
+		{"Members", "SymbolTable", "tableOf(\"member\", parent)"},
+		{"Exports", "SymbolTable", "tableOf(\"export\", parent)"},
 		{"Parent", "*Symbol", "parent"},
 		{"ExportSymbol", "*Symbol", "parent"},
 	}
 	var source, getters, values strings.Builder
-	source.WriteString("package ast\ntype Node struct{ Value int }; type SymbolFlags uint32; type CheckFlags uint32; type SymbolTable map[string]*Symbol\ntype Symbol struct {\n")
+	table := mapSymbolTable
+	if shape == "methods" {
+		source.WriteString("package ast\nimport \"iter\"\n")
+		table = insertionOrderedSymbolTable
+	} else {
+		source.WriteString("package ast\n")
+	}
+	source.WriteString("type Node struct{ Value int }; type SymbolFlags uint32; type CheckFlags uint32\n")
+	source.WriteString(table)
+	source.WriteString("type Symbol struct {\n")
 	for _, field := range fields {
 		name := field.name
 		if shape == "methods" {
@@ -39,6 +48,30 @@ func symbolFixture(shape string) string {
 	source.WriteString("func Empty() *Symbol { return &Symbol{} }\n")
 	return source.String()
 }
+
+// mapSymbolTable is the typescript-go provider's table, a map.
+const mapSymbolTable = `type SymbolTable map[string]*Symbol
+func tableOf(name string, symbol *Symbol) SymbolTable { return SymbolTable{name: symbol} }
+func SetEntry(table SymbolTable, name string, symbol *Symbol) { table[name] = symbol }
+`
+
+// insertionOrderedSymbolTable is the shape of TypeScript next's table: a pointer whose nil value reads as empty.
+const insertionOrderedSymbolTable = `type SymbolMap struct{ keys []string; symbols []*Symbol }
+type SymbolTable = *SymbolMap
+func tableOf(name string, symbol *Symbol) SymbolTable { return &SymbolMap{keys: []string{name}, symbols: []*Symbol{symbol}} }
+func SetEntry(table SymbolTable, name string, symbol *Symbol) { table.keys = append(table.keys, name); table.symbols = append(table.symbols, symbol) }
+func (m *SymbolMap) Get(name string) *Symbol {
+	if m == nil { return nil }
+	for i, key := range m.keys { if key == name { return m.symbols[i] } }
+	return nil
+}
+func (m *SymbolMap) All() iter.Seq2[string, *Symbol] {
+	return func(yield func(string, *Symbol) bool) {
+		if m == nil { return }
+		for i, key := range m.keys { if !yield(key, m.symbols[i]) { return } }
+	}
+}
+`
 
 func TestSymbolCompatibilityPreservesRawValues(t *testing.T) {
 	for _, provider := range []string{"typescript", "typescript-go"} {
@@ -77,11 +110,17 @@ func TestRawSymbolValues(t *testing.T) {
  parent:=TSGetSymbolParent(s)
  if parent==nil || TSGetSymbolExportSymbol(s)!=parent {t.Fatal("changed pointer identity")}
  members:=TSGetSymbolMembers(s); exports:=TSGetSymbolExports(s)
- if members["member"]!=parent || exports["export"]!=parent {t.Fatal("incorrect tables")}
- members["added"]=s; exports["added"]=s
- if TSGetSymbolMembers(s)["added"]!=s || TSGetSymbolExports(s)["added"]!=s {t.Fatal("copied tables")}
+ if TSGetSymbolTableEntry(members, "member")!=parent || TSGetSymbolTableEntry(exports, "export")!=parent {t.Fatal("incorrect tables")}
+ if TSGetSymbolTableEntry(members, "missing")!=nil {t.Fatal("found a missing entry")}
+ raw.SetEntry(members, "added", s); raw.SetEntry(exports, "added", s)
+ if TSGetSymbolTableEntry(TSGetSymbolMembers(s), "added")!=s || TSGetSymbolTableEntry(TSGetSymbolExports(s), "added")!=s {t.Fatal("copied tables")}
+ entries:=map[string]*raw.Symbol{}
+ for name, symbol := range TSGetSymbolTableEntries(members) { entries[name]=symbol }
+ if len(entries)!=2 || entries["member"]!=parent || entries["added"]!=s {t.Fatal("incorrect table entries")}
  empty:=raw.Empty()
  if TSGetSymbolDeclarations(empty)!=nil || TSGetSymbolMembers(empty)!=nil || TSGetSymbolExports(empty)!=nil {t.Fatal("initialized empty collections")}
+ if TSGetSymbolTableEntry(TSGetSymbolMembers(empty), "member")!=nil {t.Fatal("read from an empty table")}
+ for range TSGetSymbolTableEntries(TSGetSymbolMembers(empty)) {t.Fatal("iterated an empty table")}
  if TSGetSymbolParent(empty)!=nil || TSGetSymbolExportSymbol(empty)!=nil || TSGetSymbolValueDeclaration(empty)!=nil {t.Fatal("changed empty pointers")}
 }
 `))
@@ -162,7 +201,7 @@ func TestSameNativeSymbol(t *testing.T) {
  if TSGetSymbolParent(s)!=provider.TSGetSymbolParent(s) {t.Fatal("changed native Symbol identity")}
  if TSGetSymbolDeclarations(s)[0]!=provider.TSGetSymbolDeclarations(s)[0] {t.Fatal("changed native declaration identity")}
  TSGetSymbolMembers(s)["facade"]=s
- if provider.TSGetSymbolMembers(s)["facade"]!=s {t.Fatal("facade copied native members")}
+ if provider.TSGetSymbolTableEntry(provider.TSGetSymbolMembers(s), "facade")!=s || TSGetSymbolTableEntry(TSGetSymbolMembers(s), "facade")!=s {t.Fatal("facade copied native members")}
 }
 `))
 	command := exec.Command("go", "test", "./provider/ast/...", "./facade/ast/...")
