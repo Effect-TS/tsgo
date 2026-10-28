@@ -34,19 +34,44 @@ const perfSkippedTypeScriptVersions = (upstream: typeof Upstream.Type): Readonly
   )
 }
 
+type PerfSide = "base" | "head"
+
+interface PerfBuildEntry {
+  readonly name: string
+  readonly side: PerfSide
+  readonly ref: string
+  readonly version: string
+}
+
+interface PerfMeasureEntry {
+  readonly name: string
+  readonly base?: { readonly ref: string; readonly version: string }
+  readonly head?: { readonly ref: string; readonly version: string }
+}
+
+// build: one patched compiler per channel and side, each built with its own commit's tooling.
+// measure: one entry per channel, timing stock, base, and head on a single runner; a channel present on one side
+// only has just that side.
 export const buildPerfMatrix = (
   base: typeof Upstream.Type,
   head: typeof Upstream.Type,
   baseRef: string,
   headRef: string
-) => ({
-  include: ([["base", base, baseRef], ["head", head, headRef]] as const).flatMap(([side, upstream, ref]) => {
+) => {
+  const build: Array<PerfBuildEntry> = ([["base", base, baseRef], ["head", head, headRef]] as const).flatMap((
+    [side, upstream, ref]
+  ) => {
     const skipped = perfSkippedTypeScriptVersions(upstream)
     return buildTypeScriptTestMatrix(upstream).include
       .filter(({ version }) => !skipped.has(version))
       .map(({ name, version }) => ({ name, side, ref, version }))
   })
-})
+  const measure = new Map<string, PerfMeasureEntry>()
+  for (const { name, ref, side, version } of build) {
+    measure.set(name, { ...measure.get(name), name, [side]: { ref, version } })
+  }
+  return { build: { include: build }, measure: { include: [...measure.values()] } }
+}
 
 export const buildOxlintTestMatrix = (upstream: typeof Upstream.Type) => {
   const runtimes = new Map<string, {

@@ -1,6 +1,8 @@
+import * as Effect from "effect/Effect"
+import * as Exit from "effect/Exit"
 import assert from "node:assert/strict"
 import test from "node:test"
-import { countDiagnostics, enableAllRules, parsePerfSample } from "../src/perfCi.ts"
+import { countDiagnostics, enableAllRules, parsePerfSample, perfCiSubject, roundOrder } from "../src/perfCi.ts"
 
 test("parses a perf sample from extended diagnostics", () => {
   const output = [
@@ -56,4 +58,34 @@ test("enables every Effect rule with an idempotent textual edit", () => {
     "{ \"plugins\": [{ \"name\": \"@effect/language-service\", \"skipDisabledOptimization\": true }] }"
   )
   assert.equal(enableAllRules("{ \"compilerOptions\": {} }"), undefined)
+})
+
+test("rotates the compile order so each compiler takes each position equally often", () => {
+  const compilers = ["stock", "base", "head"] as const
+  const orders = Array.from({ length: 6 }, (_, round) => roundOrder(compilers, round).join(" "))
+  assert.deepEqual(orders, [
+    "stock base head",
+    "base head stock",
+    "head stock base",
+    "head base stock",
+    "base stock head",
+    "stock head base"
+  ])
+  for (const window of [orders.slice(0, 3), orders.slice(3)]) {
+    for (let position = 0; position < compilers.length; position++) {
+      assert.deepEqual(new Set(window.map((order) => order.split(" ")[position])), new Set(compilers))
+    }
+  }
+  assert.deepEqual(roundOrder(["head"], 3), ["head"])
+})
+
+test("requires every flag of a measured side", () => {
+  const none = { bin: undefined, commit: undefined, version: undefined }
+  assert.equal(Effect.runSync(perfCiSubject("base", none)), undefined)
+  assert.deepEqual(
+    Effect.runSync(perfCiSubject("head", { bin: "tsgo", commit: "abc", version: "7.0.2" })),
+    { bin: "tsgo", commit: "abc", version: "7.0.2" }
+  )
+  const exit = Effect.runSyncExit(perfCiSubject("base", { ...none, bin: "tsgo" }))
+  assert.ok(Exit.isFailure(exit))
 })

@@ -251,7 +251,7 @@ const typeScriptUpstream = (
 const baseRef = "1111111111111111111111111111111111111111"
 const headRef = "2222222222222222222222222222222222222222"
 
-test("builds a perf matrix with one entry per channel and side", () => {
+test("builds perf build entries per channel and side and measure entries per channel", () => {
   const base = typeScriptUpstream(
     { latest: "7.0.2", beta: "7.1.0-dev.20261007.1", next: "7.1.0-dev.20261007.1" },
     { "7.0.2": "typescript-go", "7.1.0-dev.20261007.1": "typescript" }
@@ -262,12 +262,28 @@ test("builds a perf matrix with one entry per channel and side", () => {
   )
 
   assert.deepEqual(buildPerfMatrix(base, head, baseRef, headRef), {
-    include: [
-      { name: "latest", side: "base", ref: baseRef, version: "7.0.2" },
-      { name: "beta+next", side: "base", ref: baseRef, version: "7.1.0-dev.20261007.1" },
-      { name: "latest", side: "head", ref: headRef, version: "7.0.2" },
-      { name: "beta+next", side: "head", ref: headRef, version: "7.1.0-dev.20261014.1" }
-    ]
+    build: {
+      include: [
+        { name: "latest", side: "base", ref: baseRef, version: "7.0.2" },
+        { name: "beta+next", side: "base", ref: baseRef, version: "7.1.0-dev.20261007.1" },
+        { name: "latest", side: "head", ref: headRef, version: "7.0.2" },
+        { name: "beta+next", side: "head", ref: headRef, version: "7.1.0-dev.20261014.1" }
+      ]
+    },
+    measure: {
+      include: [
+        {
+          name: "latest",
+          base: { ref: baseRef, version: "7.0.2" },
+          head: { ref: headRef, version: "7.0.2" }
+        },
+        {
+          name: "beta+next",
+          base: { ref: baseRef, version: "7.1.0-dev.20261007.1" },
+          head: { ref: headRef, version: "7.1.0-dev.20261014.1" }
+        }
+      ]
+    }
   })
 })
 
@@ -279,11 +295,20 @@ test("builds a perf matrix where a channel exists on only one side", () => {
   )
 
   assert.deepEqual(buildPerfMatrix(base, head, baseRef, headRef), {
-    include: [
-      { name: "latest+beta+next", side: "base", ref: baseRef, version: "7.0.2" },
-      { name: "latest", side: "head", ref: headRef, version: "7.0.2" },
-      { name: "beta+next", side: "head", ref: headRef, version: "7.1.0-dev.20261014.1" }
-    ]
+    build: {
+      include: [
+        { name: "latest+beta+next", side: "base", ref: baseRef, version: "7.0.2" },
+        { name: "latest", side: "head", ref: headRef, version: "7.0.2" },
+        { name: "beta+next", side: "head", ref: headRef, version: "7.1.0-dev.20261014.1" }
+      ]
+    },
+    measure: {
+      include: [
+        { name: "latest+beta+next", base: { ref: baseRef, version: "7.0.2" } },
+        { name: "latest", head: { ref: headRef, version: "7.0.2" } },
+        { name: "beta+next", head: { ref: headRef, version: "7.1.0-dev.20261014.1" } }
+      ]
+    }
   })
 })
 
@@ -323,7 +348,11 @@ test("tests and releases the TypeScript the pinned tsrs ports like any other, bu
   )
   // No npm release has its commit, so perf has no stock compiler for it.
   assert.deepEqual(
-    buildPerfMatrix(upstream, upstream, baseRef, headRef).include.map(({ name, side }) => `${side} ${name}`),
+    buildPerfMatrix(upstream, upstream, baseRef, headRef).build.include.map(({ name, side }) => `${side} ${name}`),
     ["base latest", "base next", "head latest", "head next"]
+  )
+  assert.deepEqual(
+    buildPerfMatrix(upstream, upstream, baseRef, headRef).measure.include.map(({ name }) => name),
+    ["latest", "next"]
   )
 })
