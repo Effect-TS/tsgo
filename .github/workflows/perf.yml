@@ -74,7 +74,8 @@ jobs:
     permissions:
       contents: read
     strategy:
-      fail-fast: false
+      fail-fast: true
+      max-parallel: 3
       matrix: ${{ fromJSON(needs.matrix.outputs.matrix).build }}
 
     steps:
@@ -118,7 +119,8 @@ jobs:
     permissions:
       contents: read
     strategy:
-      fail-fast: false
+      fail-fast: true
+      max-parallel: 3
       matrix: ${{ fromJSON(needs.matrix.outputs.matrix).measure }}
 
     steps:

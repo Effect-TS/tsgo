@@ -102,6 +102,7 @@ jobs:
         shell: bash
     strategy:
       fail-fast: true
+      max-parallel: 5
       matrix: ${{ fromJSON(needs.release-matrix.outputs.matrix) }}
     steps:
       - name: Configure Git for Windows

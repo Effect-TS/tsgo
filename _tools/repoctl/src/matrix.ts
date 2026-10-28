@@ -1,7 +1,8 @@
 import * as Console from "effect/Console"
 import * as Effect from "effect/Effect"
+import { compare } from "semver"
 import { runCommandString } from "./process.ts"
-import { buildReleasePlan } from "./releasePlan.ts"
+import { buildReleasePlan, type ReleaseArtifactPlan } from "./releasePlan.ts"
 import { decodeUpstream, readUpstream, type Upstream } from "./upstream.ts"
 
 export const buildTypeScriptTestMatrix = (upstream: typeof Upstream.Type) => ({
@@ -92,8 +93,37 @@ export const buildOxlintTestMatrix = (upstream: typeof Upstream.Type) => {
       runtimes.set(key, { oxlintVersion, tsgolintVersion })
     }
   }
+  // Each version is built on its own, so only the smoke test depends on the pair: test every oxlint and tsgolint
+  // version at least once instead of every known pair. Start from the default pair, then greedily add the known pair
+  // covering the most untested versions, preferring the newest oxlint and then the newest tsgolint.
+  const untested = new Set<string>()
+  for (const runtime of runtimes.values()) {
+    untested.add(`oxlint\0${runtime.oxlintVersion}`)
+    untested.add(`tsgolint\0${runtime.tsgolintVersion}`)
+  }
+  const coverage = (runtime: { readonly oxlintVersion: string; readonly tsgolintVersion: string }) =>
+    Number(untested.has(`oxlint\0${runtime.oxlintVersion}`)) +
+    Number(untested.has(`tsgolint\0${runtime.tsgolintVersion}`))
+  const candidates = [...runtimes].sort(([, left], [, right]) =>
+    compare(right.oxlintVersion, left.oxlintVersion) || compare(right.tsgolintVersion, left.tsgolintVersion)
+  )
+  const selected: Array<[string, typeof defaultRuntime]> = []
+  let next: [string, typeof defaultRuntime] | undefined = [
+    `${defaultRuntime.oxlintVersion}\0${defaultRuntime.tsgolintVersion}`,
+    defaultRuntime
+  ]
+  while (next !== undefined) {
+    selected.push(next)
+    untested.delete(`oxlint\0${next[1].oxlintVersion}`)
+    untested.delete(`tsgolint\0${next[1].tsgolintVersion}`)
+    next = candidates.reduce<[string, typeof defaultRuntime] | undefined>(
+      (best, candidate) =>
+        coverage(candidate[1]) > (best === undefined ? 0 : coverage(best[1])) ? candidate : best,
+      undefined
+    )
+  }
   return {
-    include: [...runtimes]
+    include: selected
       .sort(([left], [right]) => Buffer.compare(Buffer.from(left), Buffer.from(right)))
       .map(([, runtime]) => ({
         name: `oxlint (${runtime.oxlintVersion}) + oxlint-tsgolint (${runtime.tsgolintVersion})`,
@@ -103,18 +133,38 @@ export const buildOxlintTestMatrix = (upstream: typeof Upstream.Type) => {
   }
 }
 
-export const buildGeneratedMatrix = (upstream: typeof Upstream.Type) => ({
-  include: [{
-    name: "latest",
-    component: "typescript",
-    version: upstream.tags.typescript.latest,
-    branch: "generated/latest"
-  }]
-})
+// The cache a release job restores, and saves when no earlier job did (setup-repo): typescript, and the
+// oxlint-tsgolint builds on it, share the Go caches of their TypeScript; oxlint and tsrs the Rust build of their target.
+const releaseCacheGroup = (upstream: typeof Upstream.Type, artifact: ReleaseArtifactPlan) => {
+  switch (artifact.component) {
+    case "typescript":
+      return `go\0${artifact.version}`
+    case "oxlint-tsgolint":
+      return `go\0${upstream.components["oxlint-tsgolint"][artifact.version]?.dependencies.typescript}`
+    default:
+      return `${artifact.component}\0${artifact.target}`
+  }
+}
 
-export const buildReleaseMatrix = (upstream: typeof Upstream.Type) => ({
-  include: buildReleasePlan(upstream)
-})
+// The jobs run max-parallel at a time in matrix order, so order them in rounds: the first job of every cache group,
+// which fills its cache, comes before the second of any group, which then restores it instead of racing to save it.
+// Within a round the longer jobs (by timeout) start first.
+export const buildReleaseMatrix = (upstream: typeof Upstream.Type) => {
+  const groupSizes = new Map<string, number>()
+  const ranked = buildReleasePlan(upstream).map((artifact) => {
+    const group = releaseCacheGroup(upstream, artifact)
+    const round = groupSizes.get(group) ?? 0
+    groupSizes.set(group, round + 1)
+    return { artifact, round }
+  })
+  return {
+    include: ranked
+      .sort((left, right) =>
+        left.round - right.round || right.artifact.timeoutMinutes - left.artifact.timeoutMinutes
+      )
+      .map(({ artifact }) => artifact)
+  }
+}
 
 export const printTypeScriptTestMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {
   const upstream = yield* readUpstream(repositoryRoot)
@@ -136,11 +186,6 @@ export const printPerfMatrix = Effect.fnUntraced(function*(
 export const printOxlintTestMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {
   const upstream = yield* readUpstream(repositoryRoot)
   yield* Console.log(JSON.stringify(buildOxlintTestMatrix(upstream)))
-})
-
-export const printGeneratedMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {
-  const upstream = yield* readUpstream(repositoryRoot)
-  yield* Console.log(JSON.stringify(buildGeneratedMatrix(upstream)))
 })
 
 export const printReleaseMatrix = Effect.fnUntraced(function*(repositoryRoot: string) {
