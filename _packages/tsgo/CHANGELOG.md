@@ -1,5 +1,102 @@
 # @effect/tsgo
 
+## 0.63.0
+
+### Minor Changes
+
+- b961835: Add `failCauseToConstructor`, a style suggestion for Effect v3 and v4 that rewrites `Effect.failCause` / `Effect.failCauseSync` wrapping a single `Cause.fail` / `Cause.die` into the direct constructor:
+  
+  ```ts
+  Effect.failCause(Cause.die(new Error("boom")))   // -> Effect.die(new Error("boom"))
+  pipe(error, Cause.fail, Effect.failCause)        // -> Effect.fail(error)
+  Effect.failCauseSync(() => Cause.fail(error))    // -> Effect.failSync(() => error)
+  ```
+  
+  Piped spellings are detected through piping flows, and later steps are kept. On v3, a lazy `Cause.die` becomes `Effect.dieSync`; v4 has no `dieSync`, so it is not reported there. Forwarded, stored, composed or transformed causes, explicit `failCause<E>` type arguments, `as` assertions and annotated thunks are skipped. Lazy forms written as a `pipe(...)` subject or with a piped body are reported without a quick fix, as are lazy values whose error type would change once returned from a `failSync` thunk (such as `cond ? "A" : "B"`, which `Cause.fail` widens to `string`) and named-import calls where no value `Effect` module binding is in scope (type-only imports do not count).
+- cbf958c: Add `manualMetricTapToTrack`, an Effect v4 style suggestion with a quickfix that rewrites `Effect.tap` / `tapError` / `tapDefect` calls which only call `Metric.update` into `Effect.trackSuccesses` / `trackErrors` / `trackDefects`:
+  
+  ```ts
+  handleRequest.pipe(
+    Effect.tap((size) => Metric.update(responseSize, size)),
+    Effect.tapError(() => Metric.update(requestErrors, 1)),
+    Effect.tap(Metric.update(rpcSuccesses, 1))
+  )
+  // becomes
+  handleRequest.pipe(
+    Effect.trackSuccesses(responseSize),
+    Effect.trackErrors(requestErrors, () => 1),
+    Effect.trackSuccesses(Metric.withConstantInput(rpcSuccesses, 1))
+  )
+  ```
+  
+  Inside callbacks, only metrics that are stable at the call site (earlier `const` bindings, `declare const`, enum members) are moved, because `track*` evaluates the metric once while a tap callback re-evaluates it on every run. A computed input stays inside a mapper so it is still evaluated on every run.
+- e75ca43: Add `mapMapErrorToMapBoth` style diagnostic (default `off`, Effect v3 and v4) with a quickfix. Adjacent `Effect.map` + `Effect.mapError` steps (either order) anywhere in one piping flow are reported: in a `pipe`/`.pipe`/`Effect.fn` pipeline, across chained `.pipe(...).pipe(...)` calls, and in nested data-first, curried or mixed data-first/pipeable calls. The quickfix merges them into `Effect.mapBoth` and removes the other step, collapsing a `.pipe(...)` left without steps to its subject; on v4, `Effect.mapEager` + `Effect.mapErrorEager` suggests `Effect.mapBothEager`. The quickfix is withheld when it cannot keep behavior: a step callee that is not a plain or dotted name (such as `getEffect().map`), explicit type arguments on any call between and including the two steps (a curried application, a containing or empty `pipe`/`.pipe`), no binding in scope that reaches `mapBoth`, a rewrite that would newly start an expression statement with `(` or another token that continues the previous line, or a pair split across calls where merging would move a callback that is not a function literal, or the work of an eager first step, across other code.
+  
+  ```ts
+  // before
+  fetchCount.pipe(
+    Effect.map((n) => n > 0),
+    Effect.mapError((message) => new TaskError({ message }))
+  )
+  // also reported: fetchCount.pipe(Effect.map((n) => n > 0)).pipe(Effect.mapError(...))
+  // after
+  fetchCount.pipe(
+    Effect.mapBoth({
+      onSuccess: (n) => n > 0,
+      onFailure: (message) => new TaskError({ message })
+    })
+  )
+  ```
+
+### Patch Changes
+
+- a2751c7: `catchAllToMapError` and `catchToOrElseSucceed` now name the catch variant the callee resolves to in their message. Previously a named import, renamed import or local alias of `Effect.catchAll` was reported as `Effect.catch`:
+  
+  ```ts
+  import { catchAll } from "effect/Effect"
+  
+  pipe(program, catchAll((error) => fail(error.length)))
+  // before: ... more directly than `Effect.catch` followed by `Effect.fail`
+  // after:  ... more directly than `Effect.catchAll` followed by `Effect.fail`
+  ```
+- a2751c7: Quick fixes, refactors and completions now build references to Effect modules (`Effect`, `Layer`, `Schema`, `Data`, `Context`, ...) from the file's imports instead of reusing the receiver of the call being rewritten, and support namespace imports of the package barrel.
+  
+  ```ts
+  import * as X from "effect"
+  
+  const program = source.pipe(X.Effect.map(() => undefined))
+  // effectMapVoid quick fix:
+  const program = source.pipe(X.Effect.asVoid)
+  ```
+  
+  When the call site reaches Effect through something other than an import, the fix now uses the import:
+  
+  ```ts
+  import { Effect } from "effect"
+  const E = Effect
+  const program = source.pipe(E.map(() => undefined))
+  // quick fix now produces Effect.asVoid instead of E.asVoid
+  ```
+- 5ebba91: Perf CI: base and head are now measured on the same runner, and only when a maintainer opts in with the `perf` label. Builds still run in parallel, one job per channel and side, each with that commit's own tooling. A separate `measure` job per channel downloads both binaries and runs 9 rounds of stock, base and head compiles in a rotating order. The report's main column is now head vs base directly, flagged by a paired Wilcoxon signed-rank test (p < 0.01), with base and PR overhead over stock tsgo kept as context. `repoctl perf ci` takes `--base-bin/--base-commit/--base-version`, `--head-bin/--head-commit/--head-version` and `--rounds` instead of `--side/--commit/--version/--patched-bin/--pairs`, and writes version 2 cells:
+  
+  ```sh
+  repoctl perf ci --channel latest \
+    --base-bin ./tsgo-base --base-commit "$BASE_SHA" --base-version 7.0.2 \
+    --head-bin ./tsgo-head --head-commit "$HEAD_SHA" --head-version 7.0.2 \
+    --workload-dir /tmp/effect-workload --output perf/latest.json
+  ```
+- 611fae3: Rust port bookkeeping: each origin marker now carries the hash of the Go declaration it was last synced to, so `porting/manifest.tsv` and `porting/ported.tsv`, which caused constant merge conflicts, are gone. The `repoctl tsrs port-*` commands compute the manifest in memory, `port-check` no longer fails on a stale marker line number, and `port-ack` writes the hash (and current line) into the markers:
+  
+  ```rust
+  // go: internal/typeparser/effect_type.go:45 TypeParser.EffectType 8a9c52f8a845e081
+  ```
+- fd5ec0a: `preferSchemaOverJson`'s Effect v4 hint names `Schema.fromJsonString(Schema.Unknown)` for unknown shapes instead of `Schema.UnknownFromJsonString`, which effect marks `@internal` and leaves out of its published types:
+  
+  ```
+  Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings.
+  ```
+- 1b8a25b: Update the TypeScript next tag to [`typescript@next`](https://www.npmjs.com/package/typescript/v/7.1.0-dev.20261028.1), which ships [`TypeScript`](https://github.com/microsoft/TypeScript/commit/97aedd3b75e8e18a3cf2786ffbdb2e6c88aea23f) commit `97aedd3b75e8e18a3cf2786ffbdb2e6c88aea23f`, and the Rust port to [`tsrs@0.20.1-ts7.1.0-beta`](https://www.npmjs.com/package/tsrs/v/0.20.1-ts7.1.0-beta). Symbol tables are read through per-provider helpers, since TypeScript next replaces the map-based `SymbolTable` with an insertion-ordered one.
+
 ## 0.62.0
 
 ### Minor Changes
