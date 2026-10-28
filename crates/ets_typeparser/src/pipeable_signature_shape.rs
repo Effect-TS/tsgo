@@ -848,7 +848,7 @@ pub(crate) fn is_no_infer_alias_declaration(
     let object_type = indexed.object_type;
     let index_type = indexed.index_type;
     if object_type.kind() != Kind::TupleType
-        || object_type.as_tuple_type_node().elements.nodes().len() != 1
+        || object_type.as_tuple_type_node().elements().nodes().len() != 1
         || index_type.kind() != Kind::ConditionalType
     {
         return false;
@@ -865,7 +865,7 @@ pub(crate) fn is_no_infer_alias_declaration(
         && conditional.false_type.kind() == Kind::NeverKeyword
         && is_type_parameter_type_node(
             tp,
-            Some(object_type.as_tuple_type_node().elements.nodes()[0]),
+            Some(object_type.as_tuple_type_node().elements().nodes()[0]),
             binder,
         )
         && is_type_parameter_type_node(tp, Some(conditional.check_type), binder)

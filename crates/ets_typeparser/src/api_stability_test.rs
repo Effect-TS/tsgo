@@ -1446,7 +1446,7 @@ fn cold_root_members(t: &T, c: &mut Checker, sym: P<Symbol>) -> (P<Symbol>, Vec<
     (value, signatures)
 }
 
-// go test: internal/typeparser/api_stability_test.go:1170 TestApiStabilitySettleRecollectsMaterializedMember f7c20332595c312d
+// go test: internal/typeparser/api_stability_test.go:1170 TestApiStabilitySettleRecollectsMaterializedMember 08014a56f5d316e7
 // TestApiStabilitySettleRecollectsMaterializedMember pins the
 // P1 within one analysis: a component the guard refused while the budget was
 // exhausted can be materialized by a later ordinary read in the same collection,
@@ -1532,7 +1532,7 @@ fn test_api_stability_settle_recollects_materialized_member() {
     });
 }
 
-// go test: internal/typeparser/api_stability_test.go:1244 TestApiStabilityNaturalBudgetMaterializationRetry f9c9ffbaf0e0474d
+// go test: internal/typeparser/api_stability_test.go:1244 TestApiStabilityNaturalBudgetMaterializationRetry 5b47c9c8be0d0e16
 // TestApiStabilityNaturalBudgetMaterializationRetry reproduces the natural-budget
 // probe: the shared guard budget is exhausted by an
 // ordinary member while a later inferred return materializes a previously

@@ -215,7 +215,7 @@ func TestApiStabilitySafetyComputedNameDisplayAndSort(t *testing.T) {
 		"42":                "42",
 	}
 	seen := 0
-	for key, member := range members {
+	for key, member := range ast.TSGetSymbolTableEntries(members) {
 		wantRendered := ""
 		for prefix, rendered := range wantByKey {
 			if key == prefix || (len(key) > len(prefix) && key[:len(prefix)] == prefix) {

@@ -6,7 +6,7 @@ Port of _patches/typescript/022-ls-completions.patch (tsc/internal/ls/completion
   replaces the items with a non-empty result (creating the list if there was none), before ensureItemData.
 
 diff --git a/crates/tsrs_ls/src/completions.rs b/crates/tsrs_ls/src/completions.rs
-index 93682d84..b6a17890 100644
+index f05f07d7..455f9177 100644
 --- a/crates/tsrs_ls/src/completions.rs
 +++ b/crates/tsrs_ls/src/completions.rs
 @@ -35,6 +35,28 @@ pub fn is_err_needs_auto_imports(err: &lsproto::Error) -> bool {
@@ -61,14 +61,14 @@ index 93682d84..b6a17890 100644
              self.filter_content_mapped_auto_imports(ctx, program, file, completion_list.as_mut());
          }
 diff --git a/crates/tsrs_ls/src/lib.rs b/crates/tsrs_ls/src/lib.rs
-index 2c1a8a33..6b367272 100644
+index 16237065..4f479dc0 100644
 --- a/crates/tsrs_ls/src/lib.rs
 +++ b/crates/tsrs_ls/src/lib.rs
-@@ -56,6 +56,7 @@ pub use codeactions::{
+@@ -53,6 +53,7 @@ pub use codeactions::{
      CodeAction, CodeFixContext, CodeFixProvider, CombinedCodeActions, RefactorProvider,
      register_code_fix_provider, register_refactor_provider,
  };
 +pub use completions::{AfterCompletionCallback, register_after_completion_callback};
  pub use completions::{
-     COMPLETION_TRIGGER_CHARACTERS, CompletionItem, CompletionKind, CompletionList,
-     ERR_NEEDS_AUTO_IMPORTS, KeywordCompletionFilters, SORT_TEXT_AUTO_IMPORT_SUGGESTIONS,
+     COMPLETION_TRIGGER_CHARACTERS, CompletionItem, CompletionList, is_err_needs_auto_imports,
+ };

@@ -541,7 +541,8 @@ type extra_temporaryTypeSet struct {
   next *extra_temporaryTypeSet
 }
 type extra_temporaryPropertyCounts struct {
-  collections.OrderedMap[string, int]
+  entries []struct{name string; count int32}
+  indices map[string]int32
   next *extra_temporaryPropertyCounts
 }
 type extra_externalModuleContainerIndex struct {

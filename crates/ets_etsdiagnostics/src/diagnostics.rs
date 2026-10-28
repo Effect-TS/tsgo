@@ -234,7 +234,6 @@ pub(crate) fn collect(
         logger: None,
         npm_executor: None,
         parse_cache: None,
-        content_mapped_parse_cache: None,
     });
     let _close = CloseSession(&session);
 
@@ -336,7 +335,7 @@ pub(crate) fn collect(
             }
 
             if req.list_files {
-                let key = configured_project.as_ptr() as usize;
+                let key = Arc::as_ptr(configured_project.arc()) as usize;
                 let record = if let Some(record) = version_cache.get(&key) {
                     record.clone()
                 } else {

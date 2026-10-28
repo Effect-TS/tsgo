@@ -75,7 +75,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/native_array.go:43 TypeParser.getNativeArrayRegistry 5a76ee261b1b23d6
+    // go: internal/typeparser/native_array.go:43 TypeParser.getNativeArrayRegistry 2195515ad2e773a9
     pub(crate) fn get_native_array_registry(&mut self) -> Arc<NativeArrayRegistry> {
         if let Some(registry) = &self.links().native_array_registry {
             return Arc::clone(registry);
@@ -164,7 +164,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/native_array.go:43 TypeParser.getNativeArrayRegistry 5a76ee261b1b23d6
+// go: internal/typeparser/native_array.go:43 TypeParser.getNativeArrayRegistry 2195515ad2e773a9
 // Rust: Go's `add` closure: the members of `t`'s symbol declared only in default library files, with their roots.
 // Go ranges over the member table (a map); the result does not depend on the order, as each name is one member.
 pub(crate) fn add_native_array_members(

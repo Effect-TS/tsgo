@@ -2852,7 +2852,7 @@ func (a *apiStabilityAnalysis) collectConcreteReferenceSurface(surface *apiStabi
 // and stays inspected.
 func (a *apiStabilityAnalysis) collectResolvedMemberTable(surface *apiStabilitySurface, members ast.SymbolTable, owner *ast.Symbol, subst apiStabilitySubstitution) {
 	for _, name := range sortedSymbolTableKeys(members) {
-		member := members[name]
+		member := ast.TSGetSymbolTableEntry(members, name)
 		if member == nil || ast.TSGetSymbolFlags(member)&ast.SymbolFlagsTypeParameter != 0 || apiStabilitySymbolIsNonPublic(member) {
 			continue
 		}
@@ -3042,7 +3042,7 @@ func (a *apiStabilityAnalysis) collectDeclarationSignatures(surface *apiStabilit
 		internals = append(internals, ast.InternalSymbolNameConstructor)
 	}
 	for _, internal := range internals {
-		member := members[internal]
+		member := ast.TSGetSymbolTableEntry(members, internal)
 		if member == nil {
 			continue
 		}
@@ -3250,7 +3250,7 @@ func (a *apiStabilityAnalysis) collectClassStaticSurface(surface *apiStabilitySu
 				if name == "prototype" {
 					continue
 				}
-				member := members[name]
+				member := ast.TSGetSymbolTableEntry(members, name)
 				if member == nil || apiStabilitySymbolIsNonPublic(member) {
 					continue
 				}
@@ -3271,7 +3271,7 @@ func (a *apiStabilityAnalysis) collectClassStaticSurface(surface *apiStabilitySu
 				if name == "prototype" {
 					continue
 				}
-				member := ast.TSGetSymbolExports(symbol)[name]
+				member := ast.TSGetSymbolTableEntry(ast.TSGetSymbolExports(symbol), name)
 				if member == nil || apiStabilitySymbolIsNonPublic(member) {
 					continue
 				}
@@ -3471,7 +3471,7 @@ func (a *apiStabilityAnalysis) collectFunctionSignatures(surface *apiStabilitySu
 			internal = ast.InternalSymbolNameNew
 		}
 		symbol := source.Symbol()
-		member := ast.TSGetSymbolMembers(symbol)[internal]
+		member := ast.TSGetSymbolTableEntry(ast.TSGetSymbolMembers(symbol), internal)
 		if member == nil && kind == checker.SignatureKindCall && ast.TSGetSymbolFlags(symbol)&(ast.SymbolFlagsFunction|ast.SymbolFlagsMethod|ast.SymbolFlagsGetAccessor|ast.SymbolFlagsSetAccessor|ast.SymbolFlagsAccessor) != 0 {
 			// A function or accessor declaration keeps its call signatures on
 			// its own symbol rather than in a member table.
@@ -4387,11 +4387,11 @@ func apiStabilityMemberSymbolForDeclaration(members ast.SymbolTable, member *ast
 	}
 	if name := ast.GetNameOfDeclaration(member); name != nil {
 		if simple, ok := apiStabilitySimpleNameText(name); ok {
-			return members[simple]
+			return ast.TSGetSymbolTableEntry(members, simple)
 		}
 	}
 	for _, key := range sortedSymbolTableKeys(members) {
-		candidate := members[key]
+		candidate := ast.TSGetSymbolTableEntry(members, key)
 		if candidate == nil {
 			continue
 		}
@@ -5169,8 +5169,8 @@ func apiStabilitySymbolDeclaresHeritage(symbol *ast.Symbol) bool {
 }
 
 func sortedSymbolTableKeys(table ast.SymbolTable) []string {
-	keys := make([]string, 0, len(table))
-	for key := range table {
+	var keys []string
+	for key := range ast.TSGetSymbolTableEntries(table) {
 		keys = append(keys, key)
 	}
 	sort.Strings(keys)

@@ -32,7 +32,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/native_string.go:20 TypeParser.getNativeStringRegistry 399ebe8201f7e2e5
+    // go: internal/typeparser/native_string.go:20 TypeParser.getNativeStringRegistry 853b7e776e870ac0
     pub(crate) fn get_native_string_registry(&mut self) -> Arc<NativeStringRegistry> {
         if let Some(registry) = &self.links().native_string_registry {
             return Arc::clone(registry);
@@ -95,7 +95,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/native_string.go:20 TypeParser.getNativeStringRegistry 399ebe8201f7e2e5
+// go: internal/typeparser/native_string.go:20 TypeParser.getNativeStringRegistry 853b7e776e870ac0
 // Rust: Go's `add` closure: the members of `t`'s symbol declared only in default library files, with their roots.
 // Go ranges over the member table (a map); the result does not depend on the order, as each name is one member.
 pub(crate) fn add_native_string_members(

@@ -10,6 +10,26 @@ tsrs also moved its in-process LSP client (`lsptestutil`, the port of Go's testu
 library to its integration tests; crates/ets_fourslash drives it, so tsrs_lsp's library includes that file again as
 the `lsptestutil` module.
 
+tsrs 0.20.1 ("prepare 0.20.1", oxc-project/tsrs#823) narrowed more items and deleted unused ones. This widens the ones
+the Effect crates use (`get_mapped_type_modifiers`, `is_private_identifier_symbol`, `ClassLikeBase::type_parameters`,
+`change::new_tracker`, `create_diagnostic_for_node_in_source_file_or_compiler_diagnostic`, and the lsproto fields and
+`Method::WORKSPACE_CONFIGURATION` the fourslash client sets), and restores, verbatim from tsrs 0.20.0, the deleted
+`Checker::{get_error_type, resolve_external_module_symbol_exported, for_each_export_and_property_of_module}` and
+`stringutil::lower_first_char`: Go exports them and the Effect crates call them, with no public tsrs equivalent.
+
+diff --git a/crates/tsrs_ast/src/generated.rs b/crates/tsrs_ast/src/generated.rs
+index 908b8dd9..95cb359e 100644
+--- a/crates/tsrs_ast/src/generated.rs
++++ b/crates/tsrs_ast/src/generated.rs
+@@ -119,7 +119,7 @@ impl ClassLikeBase {
+         self.name
+     }
+     #[inline]
+-    pub(crate) fn type_parameters(&self) -> Option<P<NodeList>> {
++    pub fn type_parameters(&self) -> Option<P<NodeList>> {
+         self.type_parameters.get()
+     }
+     #[inline]
 diff --git a/crates/tsrs_checker/src/checker.rs b/crates/tsrs_checker/src/checker.rs
 index 85faaa53..35629be4 100644
 --- a/crates/tsrs_checker/src/checker.rs
@@ -143,7 +163,7 @@ index ea01496e..592205d5 100644
          let links = self.alias_symbol_links.get(symbol);
          if links.immediate_target.get().is_none() {
 diff --git a/crates/tsrs_checker/src/checker_07.rs b/crates/tsrs_checker/src/checker_07.rs
-index 5a871702..0b439b75 100644
+index ba9b4d7e..7dcc03e0 100644
 --- a/crates/tsrs_checker/src/checker_07.rs
 +++ b/crates/tsrs_checker/src/checker_07.rs
 @@ -1743,7 +1743,7 @@ impl Checker {
@@ -156,7 +176,7 @@ index 5a871702..0b439b75 100644
          // Properties with a 'readonly' modifier
          // Variables declared with 'const'
 diff --git a/crates/tsrs_checker/src/checker_08.rs b/crates/tsrs_checker/src/checker_08.rs
-index 386561ed..7f75e148 100644
+index 7b9e12fb..63c9e87b 100644
 --- a/crates/tsrs_checker/src/checker_08.rs
 +++ b/crates/tsrs_checker/src/checker_08.rs
 @@ -3325,10 +3325,7 @@ impl Checker {
@@ -172,7 +192,7 @@ index 386561ed..7f75e148 100644
              return self.get_constraint_from_type_parameter(type_parameter);
          }
 diff --git a/crates/tsrs_checker/src/checker_09.rs b/crates/tsrs_checker/src/checker_09.rs
-index 96f39217..5ef7010d 100644
+index 3a16b574..5d880f0a 100644
 --- a/crates/tsrs_checker/src/checker_09.rs
 +++ b/crates/tsrs_checker/src/checker_09.rs
 @@ -2745,7 +2745,7 @@ impl Checker {
@@ -194,10 +214,10 @@ index 96f39217..5ef7010d 100644
          self.get_index_infos_of_structured_type(t)
      }
 diff --git a/crates/tsrs_checker/src/checker_11.rs b/crates/tsrs_checker/src/checker_11.rs
-index 34b405f9..bfdf2f43 100644
+index c0bfe513..ca6eae63 100644
 --- a/crates/tsrs_checker/src/checker_11.rs
 +++ b/crates/tsrs_checker/src/checker_11.rs
-@@ -945,7 +945,7 @@ pub fn is_conflicting_private_property(prop: P<Symbol>) -> bool {
+@@ -945,7 +945,7 @@ pub(crate) fn is_conflicting_private_property(prop: P<Symbol>) -> bool {
  
  impl Checker {
      // checker.go:22289
@@ -216,10 +236,10 @@ index 34b405f9..bfdf2f43 100644
              && (t.target() == Some(self.global_array_type)
                  || t.target() == Some(self.global_readonly_array_type))
 diff --git a/crates/tsrs_checker/src/checker_12.rs b/crates/tsrs_checker/src/checker_12.rs
-index 22aaa27d..6b090580 100644
+index c43209a5..dea7e00c 100644
 --- a/crates/tsrs_checker/src/checker_12.rs
 +++ b/crates/tsrs_checker/src/checker_12.rs
-@@ -277,7 +277,7 @@ pub fn is_local_type_alias(symbol: P<Symbol>) -> bool {
+@@ -282,7 +282,7 @@ fn is_local_type_alias(symbol: P<Symbol>) -> bool {
  
  impl Checker {
      // checker.go:24131
@@ -228,7 +248,7 @@ index 22aaa27d..6b090580 100644
          let mut result = self.try_get_declared_type_of_symbol(symbol);
          if result.is_none() {
              result = Some(self.error_type);
-@@ -3364,7 +3364,7 @@ impl Checker {
+@@ -3369,7 +3369,7 @@ impl Checker {
      // circularly reference themselves and therefore cannot be subtype reduced during their declaration.
      // For example, "type Item = string | (() => Item" is a named type that circularly references itself.
      // checker.go:26098
@@ -238,10 +258,10 @@ index 22aaa27d..6b090580 100644
          types: &[P<Type>],
          union_reduction: UnionReduction,
 diff --git a/crates/tsrs_checker/src/checker_13.rs b/crates/tsrs_checker/src/checker_13.rs
-index 821301a0..ce84563b 100644
+index 9fe01aa9..5921f88c 100644
 --- a/crates/tsrs_checker/src/checker_13.rs
 +++ b/crates/tsrs_checker/src/checker_13.rs
-@@ -3462,7 +3462,7 @@ impl Checker {
+@@ -3453,7 +3453,7 @@ impl Checker {
      }
  
      // checker.go:27906
@@ -251,9 +271,18 @@ index 821301a0..ce84563b 100644
              TypeFlags::InstantiableNonPrimitive
                  | TypeFlags::UnionOrIntersection
 diff --git a/crates/tsrs_checker/src/checker_14.rs b/crates/tsrs_checker/src/checker_14.rs
-index b26ba53e..0adf382c 100644
+index 8bcc76cf..1310d649 100644
 --- a/crates/tsrs_checker/src/checker_14.rs
 +++ b/crates/tsrs_checker/src/checker_14.rs
+@@ -1703,7 +1703,7 @@ impl Checker {
+ }
+ 
+ // checker.go:29482
+-pub(crate) fn get_mapped_type_modifiers(t: P<Type>) -> MappedTypeModifiers {
++pub fn get_mapped_type_modifiers(t: P<Type>) -> MappedTypeModifiers {
+     let declaration = t.as_mapped_type().declaration.get().unwrap().as_mapped_type_node();
+     let mut modifiers = MappedTypeModifiers::empty();
+     if let Some(readonly_token) = declaration.readonly_token {
 @@ -2237,7 +2237,7 @@ impl Checker {
       * @returns the contextual type of an expression.
       */
@@ -264,7 +293,7 @@ index b26ba53e..0adf382c 100644
          node: P<Node>,
          context_flags: ContextFlags,
 diff --git a/crates/tsrs_checker/src/checker_15.rs b/crates/tsrs_checker/src/checker_15.rs
-index 42fa7d37..ec87140f 100644
+index febb34ec..412db751 100644
 --- a/crates/tsrs_checker/src/checker_15.rs
 +++ b/crates/tsrs_checker/src/checker_15.rs
 @@ -1405,12 +1405,7 @@ impl Checker {
@@ -308,24 +337,73 @@ index dfc80e86..7eb345fa 100644
      host: &mut H,
      evaluate_entity: Evaluator<H>,
      outer_expressions_to_skip: ast::OuterExpressionKinds,
+diff --git a/crates/tsrs_checker/src/exports.rs b/crates/tsrs_checker/src/exports.rs
+index 3eae8de9..5ffbfdc7 100644
+--- a/crates/tsrs_checker/src/exports.rs
++++ b/crates/tsrs_checker/src/exports.rs
+@@ -37,6 +37,11 @@ impl Checker {
+         self.any_type
+     }
+ 
++    // exports.go:36
++    pub fn get_error_type(&self) -> P<Type> {
++        self.error_type
++    }
++
+     // exports.go:40
+     pub fn get_never_type(&self) -> P<Type> {
+         self.never_type
+@@ -174,6 +179,14 @@ impl Checker {
+         )
+     }
+ 
++    // exports.go:139
++    pub fn resolve_external_module_symbol_exported(
++        &mut self,
++        module_symbol: P<Symbol>,
++    ) -> P<Symbol> {
++        self.resolve_external_module_symbol(module_symbol, false /*dontResolveAlias*/)
++    }
++
+     // exports.go:143
+     pub fn get_type_from_type_node_exported(&mut self, node: P<Node>) -> P<Type> {
+         self.get_type_from_type_node(node)
 diff --git a/crates/tsrs_checker/src/lib.rs b/crates/tsrs_checker/src/lib.rs
-index 03aabad0..06fc486b 100644
+index 07179b4f..86405dc1 100644
 --- a/crates/tsrs_checker/src/lib.rs
 +++ b/crates/tsrs_checker/src/lib.rs
-@@ -182,7 +182,7 @@ pub use tsrs_astnav as astnav;
+@@ -181,7 +181,7 @@ mod services;
+ pub use tsrs_astnav as astnav;
  
  // Exported Go package-level functions (the baseline writer, the language service and the project system call them).
- pub use checker_09::is_non_deferred_type_reference;
 -pub(crate) use checker_14::get_mapped_type_modifiers;
 +pub use checker_14::get_mapped_type_modifiers;
  pub use exports::{
      get_declaration_modifier_flags_from_symbol_exported, get_property_name_from_type_exported,
      is_distributed_type_parameter, is_tuple_type_exported, is_tuple_type_target,
+@@ -191,14 +191,12 @@ pub use nodebuilder::{new_node_builder, new_node_builder_ex};
+ pub use nodebuilderimpl_1::try_get_module_specifier_from_declaration;
+ pub(crate) use printer::new_symbol_tracker_impl;
+ pub use services::get_resolved_signature_for_signature_help;
+-pub(crate) use utilities::{
+-    compare_types, is_private_identifier_symbol, new_diagnostic_chain_for_node,
+-};
++pub(crate) use utilities::{compare_types, new_diagnostic_chain_for_node};
+ pub use utilities::{
+     create_mode_mismatch_details, create_module_not_found_chain,
+     get_declaration_modifier_flags_from_symbol, get_set_accessor_value_parameter,
+-    is_external_module_symbol, is_in_type_query, is_known_symbol, is_type_any, skip_alias,
+-    value_to_string,
++    is_external_module_symbol, is_in_type_query, is_known_symbol, is_private_identifier_symbol,
++    is_type_any, skip_alias, value_to_string,
+ };
+ // effect-tsgo: Go exports ForEachYieldExpression (typeparser.ExecutionFlow calls it).
+ pub use utilities::for_each_yield_expression;
 diff --git a/crates/tsrs_checker/src/links.rs b/crates/tsrs_checker/src/links.rs
-index 461498c3..aff144ed 100644
+index 5454638d..9878b40d 100644
 --- a/crates/tsrs_checker/src/links.rs
 +++ b/crates/tsrs_checker/src/links.rs
-@@ -89,7 +89,7 @@ impl<K: 'static, V: 'static> LinkStore<K, V> {
+@@ -91,7 +91,7 @@ impl<K: 'static, V: 'static> LinkStore<K, V> {
      }
  
      #[inline]
@@ -334,7 +412,7 @@ index 461498c3..aff144ed 100644
          match self.index(key) {
              Some(index) => Some(self.at(index)),
              None => self.parent.filter(|_| tsrs_core::sharedgraph::COMPILED_IN)?.try_get(key),
-@@ -1017,7 +1017,7 @@ impl<V: Default + LinkCopy + 'static> SymbolArenaLinkStore<V> {
+@@ -1007,7 +1007,7 @@ impl<V: Default + LinkCopy + 'static> SymbolArenaLinkStore<V> {
  
  impl<V: 'static> SymbolArenaLinkStore<V> {
      #[inline]
@@ -378,7 +456,7 @@ index 499e3985..8e026bfb 100644
          return new_simple_type_mapper(sources[0], targets[0]);
      }
 diff --git a/crates/tsrs_checker/src/relater_1.rs b/crates/tsrs_checker/src/relater_1.rs
-index 193f4238..539b4860 100644
+index 1e4d3e03..342aaa88 100644
 --- a/crates/tsrs_checker/src/relater_1.rs
 +++ b/crates/tsrs_checker/src/relater_1.rs
 @@ -143,7 +143,7 @@ impl Checker {
@@ -402,11 +480,60 @@ index 193f4238..539b4860 100644
          if let Some(this_parameter) = signature.this_parameter() {
              return Some(self.get_type_of_symbol(this_parameter));
          }
+diff --git a/crates/tsrs_checker/src/services.rs b/crates/tsrs_checker/src/services.rs
+index 15dc8bdb..a2aeef09 100644
+--- a/crates/tsrs_checker/src/services.rs
++++ b/crates/tsrs_checker/src/services.rs
+@@ -147,6 +147,44 @@ impl Checker {
+         symbols_to_array(Some(self.get_exports_of_module(symbol)))
+     }
+ 
++    // services.go:136
++    pub fn for_each_export_and_property_of_module(
++        &mut self,
++        module_symbol: P<Symbol>,
++        mut cb: impl FnMut(&mut Checker, P<Symbol>, &str),
++    ) {
++        for (key, exported_symbol) in self.get_exports_of_module(module_symbol).entries() {
++            if !is_reserved_member_name(key) {
++                cb(self, exported_symbol, key);
++            }
++        }
++
++        let export_equals =
++            self.resolve_external_module_symbol(module_symbol, false /*dontResolveAlias*/);
++        if export_equals == module_symbol {
++            return;
++        }
++
++        let type_of_symbol = self.get_type_of_symbol(export_equals);
++        if !self.should_treat_properties_of_external_module_as_exports(type_of_symbol) {
++            return;
++        }
++
++        // forEachPropertyOfType
++        let reduced_type = self.get_reduced_apparent_type(type_of_symbol);
++        if !reduced_type.flags().intersects(TypeFlags::StructuredType) {
++            return;
++        }
++        let members = self.resolve_structured_type_members(reduced_type).members();
++        if let Some(members) = members {
++            for (name, symbol) in members.entries() {
++                if self.is_named_member(symbol, name) {
++                    cb(self, symbol, name);
++                }
++            }
++        }
++    }
++
+     // services.go:165
+     pub fn is_valid_property_access_exported(
+         &mut self,
 diff --git a/crates/tsrs_checker/src/types.rs b/crates/tsrs_checker/src/types.rs
-index 20cde2fb..db4371e7 100644
+index b4dcb880..a774fdf4 100644
 --- a/crates/tsrs_checker/src/types.rs
 +++ b/crates/tsrs_checker/src/types.rs
-@@ -343,7 +343,7 @@ pub struct SignatureId(pub u32);
+@@ -286,7 +286,7 @@ pub struct SignatureId(pub u32);
  
  #[derive(Default)]
  pub struct ValueSymbolLinks {
@@ -415,7 +542,7 @@ index 20cde2fb..db4371e7 100644
      first: Cell<Option<P<()>>>, // plain: target (P<Symbol>); synthetic: containing_type (P<Type>); tail: P<ValueSymbolLinksTail>
      second: Cell<usize>, // `P::to_bits` of: plain: mapper (P<TypeMapper>); synthetic: name_type (P<Type>) | SYNTHETIC; tail: TAIL
  }
-@@ -567,7 +567,7 @@ pub struct DeferredSymbolLinks {
+@@ -510,7 +510,7 @@ pub struct DeferredSymbolLinks {
  #[derive(Default)]
  pub struct AliasSymbolLinks {
      pub(crate) immediate_target: Cell<Option<P<Symbol>>>, // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
@@ -424,7 +551,7 @@ index 20cde2fb..db4371e7 100644
      pub(crate) referenced: Cell<bool>, // True if alias symbol has been referenced as a value that can be emitted
      pub(crate) type_only_declaration: Cell<Option<P<Node>>>, // First resolved alias declaration that makes the symbol only usable in type constructs
  }
-@@ -607,7 +607,7 @@ pub struct ExportTypeLinks {
+@@ -550,7 +550,7 @@ pub struct ExportTypeLinks {
  
  #[derive(Default)]
  pub struct TypeAliasLinks {
@@ -432,8 +559,8 @@ index 20cde2fb..db4371e7 100644
 +    pub declared_type: Cell<Option<P<Type>>>,
      pub(crate) type_parameters: Cell<&'static [P<Type>]>, // Type parameters of type alias (undefined if non-generic)
      pub(crate) instantiations: GoPackedMap<CacheHashKey, P<Type>>, // Instantiations of generic type alias (undefined if non-generic)
-     pub is_constructor_declared_property: Cell<bool>,
-@@ -617,7 +617,7 @@ pub struct TypeAliasLinks {
+ }
+@@ -559,7 +559,7 @@ pub struct TypeAliasLinks {
  
  #[derive(Default)]
  pub struct DeclaredTypeLinks {
@@ -442,7 +569,7 @@ index 20cde2fb..db4371e7 100644
      pub(crate) interface_checked: Cell<bool>,
      pub(crate) index_signatures_checked: Cell<bool>,
      pub(crate) type_parameters_checked: Cell<bool>,
-@@ -848,7 +848,7 @@ pub struct RelationError {
+@@ -790,7 +790,7 @@ pub struct RelationError {
  
  #[derive(Default)]
  pub struct SourceFileLinks {
@@ -451,7 +578,7 @@ index 20cde2fb..db4371e7 100644
      pub(crate) unused_checked: Cell<bool>,
      pub(crate) external_helpers_module: Cell<Option<P<Symbol>>>,
      pub(crate) requested_external_emit_helpers: Cell<ExternalEmitHelpers>,
-@@ -1746,7 +1746,7 @@ impl Type {
+@@ -1684,7 +1684,7 @@ impl Type {
      }
  
      #[inline]
@@ -460,7 +587,7 @@ index 20cde2fb..db4371e7 100644
          let flags = self.flags.get();
          if flags.intersects(TypeFlags::Object) {
              return self.as_object_type().mapper.get();
-@@ -2095,7 +2095,7 @@ pub enum LiteralValue {
+@@ -2033,7 +2033,7 @@ pub enum LiteralValue {
  pub struct LiteralType {
      pub(crate) value: Cell<Option<LiteralValue>>, // string | jsnum.Number | bool | PseudoBigInt | nil (computed enum)
      pub(crate) fresh_type: OvCell<Option<P<Type>>>, // Fresh version of type
@@ -469,7 +596,7 @@ index 20cde2fb..db4371e7 100644
  }
  
  impl LiteralType {
-@@ -2245,7 +2245,7 @@ impl StructuredType {
+@@ -2183,7 +2183,7 @@ impl StructuredType {
      }
  
      #[inline]
@@ -478,7 +605,7 @@ index 20cde2fb..db4371e7 100644
          self.resolved.get()?.members.get()
      }
      #[inline]
-@@ -2278,7 +2278,7 @@ impl StructuredType {
+@@ -2216,7 +2216,7 @@ impl StructuredType {
          self.resolved_for_write().count_or_index_infos.set_call_signature_count(count);
      }
      #[inline]
@@ -487,7 +614,7 @@ index 20cde2fb..db4371e7 100644
          self.resolved.get().map_or(&[], |r| r.count_or_index_infos.index_infos())
      }
      #[inline]
-@@ -2286,11 +2286,11 @@ impl StructuredType {
+@@ -2224,11 +2224,11 @@ impl StructuredType {
          self.resolved_for_write().count_or_index_infos.set_index_infos(index_infos);
      }
      #[inline]
@@ -501,7 +628,7 @@ index 20cde2fb..db4371e7 100644
          &self.signatures()[self.call_signature_count()..]
      }
  }
-@@ -2354,7 +2354,7 @@ embeds!(ObjectType, structured_type, StructuredType);
+@@ -2292,7 +2292,7 @@ embeds!(ObjectType, structured_type, StructuredType);
  pub struct TypeReference {
      object_type: ObjectType,
      pub(crate) node: Cell<Option<P<Node>>>, // TypeReferenceNode | ArrayTypeNode | TupleTypeNode when deferred, else nil
@@ -510,7 +637,7 @@ index 20cde2fb..db4371e7 100644
  }
  embeds!(TypeReference, object_type, ObjectType);
  
-@@ -2432,7 +2432,7 @@ impl ReferenceInstantiations {
+@@ -2370,7 +2370,7 @@ impl ReferenceInstantiations {
  pub struct InterfaceType {
      type_reference: TypeReference,
      pub(crate) all_type_parameters: Cell<&'static [P<Type>]>, // Type parameters (outer + local + thisType)
@@ -519,7 +646,7 @@ index 20cde2fb..db4371e7 100644
      pub(crate) declared_call_signatures: OvCell<&'static [P<Signature>]>, // Declared call signatures
      pub(crate) declared_construct_signatures: OvCell<&'static [P<Signature>]>, // Declared construct signatures
      pub(crate) declared_index_infos: OvCell<&'static [P<IndexInfo>]>, // Declared index signatures
-@@ -2441,7 +2441,7 @@ pub struct InterfaceType {
+@@ -2379,7 +2379,7 @@ pub struct InterfaceType {
      pub(crate) resolved_base_constructor_type: OvCell<Option<P<Type>>>,
      pub(crate) declared_members: OvCell<Option<P<SymbolTable>>>, // Declared members
      pub(crate) instantiations: ReferenceInstantiations, // Map of type instantiations (Go: in ObjectType)
@@ -528,7 +655,7 @@ index 20cde2fb..db4371e7 100644
      pub(crate) declared_members_resolved: OvCell<bool>,
  }
  embeds!(InterfaceType, type_reference, TypeReference);
-@@ -2561,11 +2561,11 @@ embeds!(InstantiationExpressionType, object_type, ObjectType);
+@@ -2495,11 +2495,11 @@ embeds!(InstantiationExpressionType, object_type, ObjectType);
  #[repr(C)]
  pub struct MappedType {
      object_type: ObjectType,
@@ -545,7 +672,7 @@ index 20cde2fb..db4371e7 100644
      pub(crate) modifiers_type: OvCell<Option<P<Type>>>,
      pub(crate) resolved_apparent_type: OvCell<Option<P<Type>>>,
      pub(crate) contains_error: Cell<bool>,
-@@ -2638,7 +2638,7 @@ embeds!(EvolvingArrayType, object_type, ObjectType);
+@@ -2572,7 +2572,7 @@ embeds!(EvolvingArrayType, object_type, ObjectType);
  #[repr(C)]
  pub struct UnionOrIntersectionType {
      structured_type: StructuredType,
@@ -554,7 +681,7 @@ index 20cde2fb..db4371e7 100644
      rare: UnionOrIntersectionRareWord,
  }
  embeds!(UnionOrIntersectionType, structured_type, StructuredType);
-@@ -2792,17 +2792,17 @@ impl UnionType {
+@@ -2726,17 +2726,17 @@ impl UnionType {
          }
      }
      #[inline]
@@ -575,7 +702,7 @@ index 20cde2fb..db4371e7 100644
          self.union_rare()?.origin.get()
      }
      #[inline]
-@@ -2897,12 +2897,12 @@ impl IntersectionType {
+@@ -2831,12 +2831,12 @@ impl IntersectionType {
  #[derive(Default)]
  pub struct TypeParameter {
      constrained_type: ConstrainedType,
@@ -591,7 +718,7 @@ index 20cde2fb..db4371e7 100644
      pub(crate) distributed_type: OvCell<Option<P<Type>>>,
  }
  embeds!(TypeParameter, constrained_type, ConstrainedType);
-@@ -2931,7 +2931,7 @@ bitflags! {
+@@ -2865,7 +2865,7 @@ bitflags! {
  #[derive(Default)]
  pub struct IndexType {
      constrained_type: ConstrainedType,
@@ -600,7 +727,7 @@ index 20cde2fb..db4371e7 100644
      pub(crate) index_flags: Cell<IndexFlags>,
  }
  embeds!(IndexType, constrained_type, ConstrainedType);
-@@ -2948,8 +2948,8 @@ impl IndexType {
+@@ -2882,8 +2882,8 @@ impl IndexType {
  #[derive(Default)]
  pub struct IndexedAccessType {
      constrained_type: ConstrainedType,
@@ -611,7 +738,7 @@ index 20cde2fb..db4371e7 100644
      pub(crate) access_flags: Cell<AccessFlags>, // Only includes AccessFlags.Persistent
  }
  embeds!(IndexedAccessType, constrained_type, ConstrainedType);
-@@ -2968,8 +2968,8 @@ impl IndexedAccessType {
+@@ -2902,8 +2902,8 @@ impl IndexedAccessType {
  #[derive(Default)]
  pub struct TemplateLiteralType {
      constrained_type: ConstrainedType,
@@ -622,7 +749,7 @@ index 20cde2fb..db4371e7 100644
  }
  embeds!(TemplateLiteralType, constrained_type, ConstrainedType);
  
-@@ -2979,7 +2979,7 @@ impl TemplateLiteralType {
+@@ -2913,7 +2913,7 @@ impl TemplateLiteralType {
          self.texts.get()
      }
      #[inline]
@@ -631,7 +758,7 @@ index 20cde2fb..db4371e7 100644
          self.types.get()
      }
  }
-@@ -2987,7 +2987,7 @@ impl TemplateLiteralType {
+@@ -2921,7 +2921,7 @@ impl TemplateLiteralType {
  #[derive(Default)]
  pub struct StringMappingType {
      constrained_type: ConstrainedType,
@@ -640,7 +767,7 @@ index 20cde2fb..db4371e7 100644
  }
  embeds!(StringMappingType, constrained_type, ConstrainedType);
  
-@@ -3001,8 +3001,8 @@ impl StringMappingType {
+@@ -2935,8 +2935,8 @@ impl StringMappingType {
  #[derive(Default)]
  pub struct SubstitutionType {
      constrained_type: ConstrainedType,
@@ -651,7 +778,7 @@ index 20cde2fb..db4371e7 100644
  }
  embeds!(SubstitutionType, constrained_type, ConstrainedType);
  
-@@ -3019,7 +3019,7 @@ impl SubstitutionType {
+@@ -2953,7 +2953,7 @@ impl SubstitutionType {
  
  #[derive(Default)]
  pub struct ConditionalRoot {
@@ -660,7 +787,7 @@ index 20cde2fb..db4371e7 100644
      pub(crate) check_type: Cell<Option<P<Type>>>,
      pub(crate) extends_type: Cell<Option<P<Type>>>,
      pub(crate) is_distributive: Cell<bool>,
-@@ -3032,11 +3032,11 @@ pub struct ConditionalRoot {
+@@ -2966,11 +2966,11 @@ pub struct ConditionalRoot {
  #[derive(Default)]
  pub struct ConditionalType {
      constrained_type: ConstrainedType,
@@ -677,7 +804,7 @@ index 20cde2fb..db4371e7 100644
      pub(crate) resolved_inferred_true_type: OvCell<Option<P<Type>>>, // The `trueType` instantiated with the `combinedMapper`, if present
      pub(crate) resolved_default_constraint: OvCell<Option<P<Type>>>,
      pub(crate) resolved_constraint_of_distributive: OvCell<Option<P<Type>>>,
-@@ -3093,7 +3093,7 @@ pub struct Signature {
+@@ -3027,7 +3027,7 @@ pub struct Signature {
      pub(crate) parameters: ThinSliceCell<P<Symbol>>,
      pub resolved_return_type: OvCell<Option<P<Type>>>,
      pub(crate) target: Cell<Option<P<Signature>>>,
@@ -686,7 +813,7 @@ index 20cde2fb..db4371e7 100644
      // Type parameters, `thisParameter`, `isolatedSignatureType`, `composite` and a resolved type predicate other
      // than the checker's `noTypePredicate` live in a tail allocated on the first non-nil write.
      // `this_parameter()` / `set_this_parameter()` & co. read nil when it is absent. `resolvedTypePredicate ==
-@@ -3322,9 +3322,9 @@ impl TypePredicate {
+@@ -3256,9 +3256,9 @@ impl TypePredicate {
  
  #[derive(Default)]
  pub struct IndexInfo {
@@ -699,8 +826,51 @@ index 20cde2fb..db4371e7 100644
      pub(crate) declaration: Cell<Option<P<Node>>>, // IndexSignatureDeclaration
      pub(crate) index_symbol: Cell<Option<P<Symbol>>>, // Synthetic property symbol for this index signature
      pub(crate) components: Cell<&'static [P<Node>]>,  // ElementWithComputedPropertyName
+diff --git a/crates/tsrs_checker/src/utilities.rs b/crates/tsrs_checker/src/utilities.rs
+index ff4057fd..d5744089 100644
+--- a/crates/tsrs_checker/src/utilities.rs
++++ b/crates/tsrs_checker/src/utilities.rs
+@@ -1429,7 +1429,7 @@ pub fn is_known_symbol(symbol: P<Symbol>) -> bool {
+ }
+ 
+ // utilities.go:1022
+-pub(crate) fn is_private_identifier_symbol(symbol: Option<P<Symbol>>) -> bool {
++pub fn is_private_identifier_symbol(symbol: Option<P<Symbol>>) -> bool {
+     let Some(symbol) = symbol else {
+         return false;
+     };
+diff --git a/crates/tsrs_core/src/stringutil/util.rs b/crates/tsrs_core/src/stringutil/util.rs
+index f18ae3c0..1537b8e6 100644
+--- a/crates/tsrs_core/src/stringutil/util.rs
++++ b/crates/tsrs_core/src/stringutil/util.rs
+@@ -1,6 +1,6 @@
+ // Package stringutil Exports common rune utilities for parsing and emitting javascript
+ 
+-use super::rangetable::{Rune, decode_last_rune, decode_rune, push_rune};
++use super::rangetable::{Rune, decode_last_rune, decode_rune, push_rune, unicode_to_lower};
+ 
+ pub fn is_white_space_like(ch: Rune) -> bool {
+     is_white_space_single_line(ch) || is_line_break(ch)
+@@ -240,6 +240,17 @@ pub fn unquote_string(str: &str) -> String {
+     out
+ }
+ 
++pub fn lower_first_char(str: &str) -> String {
++    let (ch, size) = decode_rune(str.as_bytes());
++    if size > 0 {
++        let mut s = String::with_capacity(str.len());
++        push_rune(&mut s, unicode_to_lower(ch));
++        s.push_str(&str[size..]);
++        return s;
++    }
++    str.to_string()
++}
++
+ pub fn truncate_by_runes(str: &str, max_length: usize) -> &str {
+     if str.len() < max_length {
+         return str;
 diff --git a/crates/tsrs_ls/src/autoimport/export.rs b/crates/tsrs_ls/src/autoimport/export.rs
-index 8951c62e..07722fc4 100644
+index 86ff718c..4ece9554 100644
 --- a/crates/tsrs_ls/src/autoimport/export.rs
 +++ b/crates/tsrs_ls/src/autoimport/export.rs
 @@ -21,14 +21,14 @@ pub enum ModuleID {
@@ -804,7 +974,7 @@ index 807f810b..47c775ce 100644
          export: &Export,
          for_jsx: bool,
 diff --git a/crates/tsrs_ls/src/change/tracker.rs b/crates/tsrs_ls/src/change/tracker.rs
-index 3f4dd9c9..bffb0ecc 100644
+index a71d6076..96687fd8 100644
 --- a/crates/tsrs_ls/src/change/tracker.rs
 +++ b/crates/tsrs_ls/src/change/tracker.rs
 @@ -23,10 +23,10 @@ use crate::spanmap::{self, Feature};
@@ -843,7 +1013,16 @@ index 3f4dd9c9..bffb0ecc 100644
  
      // Go `collections.MultiMap` (random iteration order; the edits are sorted per file afterwards).
      pub(crate) changes: OrderedMap<P<SourceFile>, Vec<TrackerEdit>>,
-@@ -178,9 +178,7 @@ impl Tracker {
+@@ -124,7 +124,7 @@ pub struct DeletedNode {
+ }
+ 
+ // tracker.go:112
+-pub(crate) fn new_tracker(
++pub fn new_tracker(
+     ctx: &Context,
+     compiler_options: &CompilerOptions,
+     format_options: FormatCodeSettings,
+@@ -174,9 +174,7 @@ impl Tracker {
      // logical change atomic, and returning the result inline means a caller cannot forget to check it or
      // accidentally emit a partial, corrupting change.
      // Note: after calling this, the Tracker object must be discarded!
@@ -854,7 +1033,7 @@ index 3f4dd9c9..bffb0ecc 100644
          self.finish_delete_declarations();
          self.finish_nodes_with_insertions_at_start();
          let mut changes = self.get_text_changes_from_changes();
-@@ -333,7 +331,7 @@ impl Tracker {
+@@ -329,7 +327,7 @@ impl Tracker {
      // tracker.go:211
      // ReplaceRangeWithText replaces an LSP range with text. For a content-mapped file, the LSP range is in the
      // original document; text may be placed at any exact projection because it does not need formatting context.
@@ -863,7 +1042,7 @@ index 3f4dd9c9..bffb0ecc 100644
          &mut self,
          source_file: P<SourceFile>,
          lsproto_range: lsproto::Range,
-@@ -346,7 +344,7 @@ impl Tracker {
+@@ -342,7 +340,7 @@ impl Tracker {
      // tracker.go:217
      // ReplaceTextRangeWithText replaces textRange in sourceFile with text. For a content-mapped file, GetChanges
      // maps the range back to the original document and drops the file if the edit cannot be represented there.
@@ -872,7 +1051,7 @@ index 3f4dd9c9..bffb0ecc 100644
          &mut self,
          source_file: P<SourceFile>,
          text_range: TextRange,
-@@ -399,17 +397,12 @@ impl Tracker {
+@@ -395,17 +393,12 @@ impl Tracker {
  
      // tracker.go:236
      // InsertText inserts text at an LSP position.
@@ -892,7 +1071,7 @@ index 3f4dd9c9..bffb0ecc 100644
          &mut self,
          source_file: P<SourceFile>,
          pos: u32,
-@@ -443,7 +436,7 @@ impl Tracker {
+@@ -439,7 +432,7 @@ impl Tracker {
      }
  
      // tracker.go:253
@@ -901,7 +1080,7 @@ index 3f4dd9c9..bffb0ecc 100644
          &mut self,
          source_file: P<SourceFile>,
          after: P<Node>,
-@@ -567,13 +560,13 @@ impl Tracker {
+@@ -563,13 +556,13 @@ impl Tracker {
      // tracker.go:330
      // Delete queues a node for deletion with smart handling of list items, imports, etc.
      // The actual deletion happens in finishDeleteDeclarations during GetChanges.
@@ -918,7 +1097,7 @@ index 3f4dd9c9..bffb0ecc 100644
      }
  
 diff --git a/crates/tsrs_ls/src/change/trackerimpl.rs b/crates/tsrs_ls/src/change/trackerimpl.rs
-index 2a90d15f..06b60752 100644
+index 575373b8..adf04382 100644
 --- a/crates/tsrs_ls/src/change/trackerimpl.rs
 +++ b/crates/tsrs_ls/src/change/trackerimpl.rs
 @@ -311,7 +311,7 @@ impl Tracker {
@@ -931,10 +1110,10 @@ index 2a90d15f..06b60752 100644
          source_file: P<SourceFile>,
          start_node: P<Node>,
 diff --git a/crates/tsrs_ls/src/codeactions.rs b/crates/tsrs_ls/src/codeactions.rs
-index 7e05bd80..02b6951a 100644
+index 393311b0..faf128fe 100644
 --- a/crates/tsrs_ls/src/codeactions.rs
 +++ b/crates/tsrs_ls/src/codeactions.rs
-@@ -16,11 +16,11 @@ use crate::spanmap::Feature;
+@@ -16,10 +16,10 @@ use crate::spanmap::Feature;
  // codeactions.go:21
  // CodeFixProvider represents a provider for a specific type of code fix
  pub struct CodeFixProvider {
@@ -943,13 +1122,12 @@ index 7e05bd80..02b6951a 100644
 +    pub error_codes: &'static [i32],
 +    pub get_code_actions:
          fn(ctx: &Context, fix_context: &CodeFixContext) -> Result<Vec<CodeAction>, lsproto::Error>,
-     pub fix_ids: &'static [&'static str],
 -    pub(crate) get_all_code_actions: Option<
 +    pub get_all_code_actions: Option<
          fn(
              ctx: &Context,
              fix_context: &CodeFixContext,
-@@ -31,11 +31,11 @@ pub struct CodeFixProvider {
+@@ -30,11 +30,11 @@ pub struct CodeFixProvider {
  // codeactions.go:29
  // CodeFixContext contains the context needed to generate code fixes
  pub struct CodeFixContext<'a> {
@@ -964,9 +1142,9 @@ index 7e05bd80..02b6951a 100644
 +    pub program: &'static Program,
 +    pub ls: &'a LanguageService,
      pub(crate) diagnostic: Option<&'a lsproto::Diagnostic>,
-     pub params: Option<&'a lsproto::CodeActionParams>,
  }
-@@ -44,9 +44,9 @@ pub struct CodeFixContext<'a> {
+ 
+@@ -42,9 +42,9 @@ pub struct CodeFixContext<'a> {
  // CodeAction represents a single code action fix
  #[derive(Clone, Debug, Default)]
  pub struct CodeAction {
@@ -977,8 +1155,8 @@ index 7e05bd80..02b6951a 100644
 +    pub changes: Vec<lsproto::TextEdit>,
 +    pub fix_id: String,
      pub kind: lsproto::CodeActionKind, // optional; used by refactors to specify the code action kind
-     pub fix_all_description: String,
  }
+ 
 diff --git a/crates/tsrs_ls/src/languageservice.rs b/crates/tsrs_ls/src/languageservice.rs
 index 467db16a..a732f62e 100644
 --- a/crates/tsrs_ls/src/languageservice.rs
@@ -993,7 +1171,7 @@ index 467db16a..a732f62e 100644
      }
  
 diff --git a/crates/tsrs_ls/src/lsconv/converters.rs b/crates/tsrs_ls/src/lsconv/converters.rs
-index 8cb65ec6..5d445324 100644
+index 74f8ea47..fba292c1 100644
 --- a/crates/tsrs_ls/src/lsconv/converters.rs
 +++ b/crates/tsrs_ls/src/lsconv/converters.rs
 @@ -159,7 +159,7 @@ impl Converters {
@@ -1034,8 +1212,788 @@ index de461733..013c109e 100644
  pub use server::{
      NpmInstallFunc, Reader, Server, ServerOptions, Writer, new_server, to_reader, to_writer,
  };
+diff --git a/crates/tsrs_lsproto/src/lsp_generated.rs b/crates/tsrs_lsproto/src/lsp_generated.rs
+index 442add5e..0ebd1026 100644
+--- a/crates/tsrs_lsproto/src/lsp_generated.rs
++++ b/crates/tsrs_lsproto/src/lsp_generated.rs
+@@ -3210,7 +3210,7 @@ impl Json for InlineValueRegistrationOptions {
+ #[derive(Clone, Debug, Default, PartialEq, Eq, Hash)]
+ pub struct InlayHintParams {
+     // An optional token that a server can use to report work done progress.
+-    work_done_token: Option<IntegerOrString>,
++    pub work_done_token: Option<IntegerOrString>,
+ 
+     // The text document.
+     pub text_document: TextDocumentIdentifier,
+@@ -6816,11 +6816,11 @@ impl Json for DocumentSymbolRegistrationOptions {
+ #[derive(Clone, Debug, Default, PartialEq, Eq, Hash)]
+ pub struct CodeActionParams {
+     // An optional token that a server can use to report work done progress.
+-    work_done_token: Option<IntegerOrString>,
++    pub work_done_token: Option<IntegerOrString>,
+ 
+     // An optional token that a server can use to report partial results (e.g. streaming) to
+     // the client.
+-    partial_result_token: Option<IntegerOrString>,
++    pub partial_result_token: Option<IntegerOrString>,
+ 
+     // The document in which the command was invoked.
+     pub text_document: TextDocumentIdentifier,
+@@ -13315,7 +13315,7 @@ pub struct CodeActionContext {
+     // The reason why code actions were requested.
+     //
+     // Since: 3.17.0
+-    trigger_kind: Option<CodeActionTriggerKind>,
++    pub trigger_kind: Option<CodeActionTriggerKind>,
+ }
+ 
+ impl Json for CodeActionContext {
+@@ -15685,133 +15685,133 @@ impl Json for WorkspaceClientCapabilities {
+ #[derive(Clone, Debug, Default, PartialEq, Eq, Hash)]
+ pub struct TextDocumentClientCapabilities {
+     // Defines which synchronization capabilities the client supports.
+-    synchronization: Option<TextDocumentSyncClientCapabilities>,
++    pub synchronization: Option<TextDocumentSyncClientCapabilities>,
+ 
+     // Defines which filters the client supports.
+     //
+     // Since: 3.18.0
+-    filters: Option<TextDocumentFilterClientCapabilities>,
++    pub filters: Option<TextDocumentFilterClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/completion` request.
+-    completion: Option<CompletionClientCapabilities>,
++    pub completion: Option<CompletionClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/hover` request.
+-    hover: Option<HoverClientCapabilities>,
++    pub hover: Option<HoverClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/signatureHelp` request.
+-    signature_help: Option<SignatureHelpClientCapabilities>,
++    pub signature_help: Option<SignatureHelpClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/declaration` request.
+     //
+     // Since: 3.14.0
+-    declaration: Option<DeclarationClientCapabilities>,
++    pub declaration: Option<DeclarationClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/definition` request.
+-    definition: Option<DefinitionClientCapabilities>,
++    pub definition: Option<DefinitionClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/typeDefinition` request.
+     //
+     // Since: 3.6.0
+-    type_definition: Option<TypeDefinitionClientCapabilities>,
++    pub type_definition: Option<TypeDefinitionClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/implementation` request.
+     //
+     // Since: 3.6.0
+-    implementation: Option<ImplementationClientCapabilities>,
++    pub implementation: Option<ImplementationClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/references` request.
+-    references: Option<ReferenceClientCapabilities>,
++    pub references: Option<ReferenceClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/documentHighlight` request.
+-    document_highlight: Option<DocumentHighlightClientCapabilities>,
++    pub document_highlight: Option<DocumentHighlightClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/documentSymbol` request.
+-    document_symbol: Option<DocumentSymbolClientCapabilities>,
++    pub document_symbol: Option<DocumentSymbolClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/codeAction` request.
+-    code_action: Option<CodeActionClientCapabilities>,
++    pub code_action: Option<CodeActionClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/codeLens` request.
+-    code_lens: Option<CodeLensClientCapabilities>,
++    pub code_lens: Option<CodeLensClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/documentLink` request.
+-    document_link: Option<DocumentLinkClientCapabilities>,
++    pub document_link: Option<DocumentLinkClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/documentColor` and the
+     // `textDocument/colorPresentation` request.
+     //
+     // Since: 3.6.0
+-    color_provider: Option<DocumentColorClientCapabilities>,
++    pub color_provider: Option<DocumentColorClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/formatting` request.
+-    formatting: Option<DocumentFormattingClientCapabilities>,
++    pub formatting: Option<DocumentFormattingClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/rangeFormatting` request.
+-    range_formatting: Option<DocumentRangeFormattingClientCapabilities>,
++    pub range_formatting: Option<DocumentRangeFormattingClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/onTypeFormatting` request.
+-    on_type_formatting: Option<DocumentOnTypeFormattingClientCapabilities>,
++    pub on_type_formatting: Option<DocumentOnTypeFormattingClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/rename` request.
+-    rename: Option<RenameClientCapabilities>,
++    pub rename: Option<RenameClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/foldingRange` request.
+     //
+     // Since: 3.10.0
+-    folding_range: Option<FoldingRangeClientCapabilities>,
++    pub folding_range: Option<FoldingRangeClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/selectionRange` request.
+     //
+     // Since: 3.15.0
+-    selection_range: Option<SelectionRangeClientCapabilities>,
++    pub selection_range: Option<SelectionRangeClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/publishDiagnostics` notification.
+-    publish_diagnostics: Option<PublishDiagnosticsClientCapabilities>,
++    pub publish_diagnostics: Option<PublishDiagnosticsClientCapabilities>,
+ 
+     // Capabilities specific to the various call hierarchy requests.
+     //
+     // Since: 3.16.0
+-    call_hierarchy: Option<CallHierarchyClientCapabilities>,
++    pub call_hierarchy: Option<CallHierarchyClientCapabilities>,
+ 
+     // Capabilities specific to the various semantic token request.
+     //
+     // Since: 3.16.0
+-    semantic_tokens: Option<SemanticTokensClientCapabilities>,
++    pub semantic_tokens: Option<SemanticTokensClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/linkedEditingRange` request.
+     //
+     // Since: 3.16.0
+-    linked_editing_range: Option<LinkedEditingRangeClientCapabilities>,
++    pub linked_editing_range: Option<LinkedEditingRangeClientCapabilities>,
+ 
+     // Client capabilities specific to the `textDocument/moniker` request.
+     //
+     // Since: 3.16.0
+-    moniker: Option<MonikerClientCapabilities>,
++    pub moniker: Option<MonikerClientCapabilities>,
+ 
+     // Capabilities specific to the various type hierarchy requests.
+     //
+     // Since: 3.17.0
+-    type_hierarchy: Option<TypeHierarchyClientCapabilities>,
++    pub type_hierarchy: Option<TypeHierarchyClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/inlineValue` request.
+     //
+     // Since: 3.17.0
+-    inline_value: Option<InlineValueClientCapabilities>,
++    pub inline_value: Option<InlineValueClientCapabilities>,
+ 
+     // Capabilities specific to the `textDocument/inlayHint` request.
+     //
+     // Since: 3.17.0
+-    inlay_hint: Option<InlayHintClientCapabilities>,
++    pub inlay_hint: Option<InlayHintClientCapabilities>,
+ 
+     // Capabilities specific to the diagnostic pull model.
+     //
+     // Since: 3.17.0
+-    diagnostic: Option<DiagnosticClientCapabilities>,
++    pub diagnostic: Option<DiagnosticClientCapabilities>,
+ 
+     // Client capabilities specific to inline completions.
+     //
+     // Since: 3.18.0
+-    inline_completion: Option<InlineCompletionClientCapabilities>,
++    pub inline_completion: Option<InlineCompletionClientCapabilities>,
+ }
+ 
+ impl Json for TextDocumentClientCapabilities {
+@@ -16035,17 +16035,17 @@ pub struct GeneralClientCapabilities {
+     // anymore since the information is outdated).
+     //
+     // Since: 3.17.0
+-    stale_request_support: Option<StaleRequestSupportOptions>,
++    pub stale_request_support: Option<StaleRequestSupportOptions>,
+ 
+     // Client capabilities specific to regular expressions.
+     //
+     // Since: 3.16.0
+-    regular_expressions: Option<RegularExpressionsClientCapabilities>,
++    pub regular_expressions: Option<RegularExpressionsClientCapabilities>,
+ 
+     // Client capabilities specific to the client's markdown parser.
+     //
+     // Since: 3.16.0
+-    markdown: Option<MarkdownClientCapabilities>,
++    pub markdown: Option<MarkdownClientCapabilities>,
+ 
+     // The position encodings supported by the client. Client and server
+     // have to agree on the same position encoding to ensure that offsets
+@@ -16065,7 +16065,7 @@ pub struct GeneralClientCapabilities {
+     // side.
+     //
+     // Since: 3.17.0
+-    position_encodings: Option<Vec<PositionEncodingKind>>,
++    pub position_encodings: Option<Vec<PositionEncodingKind>>,
+ }
+ 
+ impl Json for GeneralClientCapabilities {
+@@ -16619,25 +16619,25 @@ impl Json for CodeLensWorkspaceClientCapabilities {
+ #[derive(Clone, Debug, Default, PartialEq, Copy, Eq, Hash)]
+ pub struct FileOperationClientCapabilities {
+     // Whether the client supports dynamic registration for file requests/notifications.
+-    dynamic_registration: Option<bool>,
++    pub dynamic_registration: Option<bool>,
+ 
+     // The client has support for sending didCreateFiles notifications.
+-    did_create: Option<bool>,
++    pub did_create: Option<bool>,
+ 
+     // The client has support for sending willCreateFiles requests.
+-    will_create: Option<bool>,
++    pub will_create: Option<bool>,
+ 
+     // The client has support for sending didRenameFiles notifications.
+-    did_rename: Option<bool>,
++    pub did_rename: Option<bool>,
+ 
+     // The client has support for sending willRenameFiles requests.
+-    will_rename: Option<bool>,
++    pub will_rename: Option<bool>,
+ 
+     // The client has support for sending didDeleteFiles notifications.
+-    did_delete: Option<bool>,
++    pub did_delete: Option<bool>,
+ 
+     // The client has support for sending willDeleteFiles requests.
+-    will_delete: Option<bool>,
++    pub will_delete: Option<bool>,
+ }
+ 
+ impl Json for FileOperationClientCapabilities {
+@@ -16974,31 +16974,31 @@ impl Json for TextDocumentFilterClientCapabilities {
+ #[derive(Clone, Debug, Default, PartialEq, Eq, Hash)]
+ pub struct CompletionClientCapabilities {
+     // Whether completion supports dynamic registration.
+-    dynamic_registration: Option<bool>,
++    pub dynamic_registration: Option<bool>,
+ 
+     // The client supports the following `CompletionItem` specific
+     // capabilities.
+-    completion_item: Option<ClientCompletionItemOptions>,
++    pub completion_item: Option<ClientCompletionItemOptions>,
+ 
+     // The client supports the following completion item kinds.
+-    completion_item_kind: Option<ClientCompletionItemOptionsKind>,
++    pub completion_item_kind: Option<ClientCompletionItemOptionsKind>,
+ 
+     // Defines how the client handles whitespace and indentation
+     // when accepting a completion item that uses multi line
+     // text in either `insertText` or `textEdit`.
+     //
+     // Since: 3.17.0
+-    insert_text_mode: Option<InsertTextMode>,
++    pub insert_text_mode: Option<InsertTextMode>,
+ 
+     // The client supports to send additional context information for a
+     // `textDocument/completion` request.
+-    context_support: Option<bool>,
++    pub context_support: Option<bool>,
+ 
+     // The client supports the following `CompletionList` specific
+     // capabilities.
+     //
+     // Since: 3.17.0
+-    completion_list: Option<CompletionListCapabilities>,
++    pub completion_list: Option<CompletionListCapabilities>,
+ }
+ 
+ impl Json for CompletionClientCapabilities {
+@@ -17051,11 +17051,11 @@ impl Json for CompletionClientCapabilities {
+ #[derive(Clone, Debug, Default, PartialEq, Eq, Hash)]
+ pub struct HoverClientCapabilities {
+     // Whether hover supports dynamic registration.
+-    dynamic_registration: Option<bool>,
++    pub dynamic_registration: Option<bool>,
+ 
+     // Client supports the following content formats for the content
+     // property. The order describes the preferred format of the client.
+-    content_format: Option<Vec<MarkupKind>>,
++    pub content_format: Option<Vec<MarkupKind>>,
+ }
+ 
+ impl Json for HoverClientCapabilities {
+@@ -17093,11 +17093,11 @@ impl Json for HoverClientCapabilities {
+ #[derive(Clone, Debug, Default, PartialEq, Eq, Hash)]
+ pub struct SignatureHelpClientCapabilities {
+     // Whether signature help supports dynamic registration.
+-    dynamic_registration: Option<bool>,
++    pub dynamic_registration: Option<bool>,
+ 
+     // The client supports the following `SignatureInformation`
+     // specific properties.
+-    signature_information: Option<ClientSignatureInformationOptions>,
++    pub signature_information: Option<ClientSignatureInformationOptions>,
+ 
+     // The client supports to send additional context information for a
+     // `textDocument/signatureHelp` request. A client that opts into
+@@ -17105,7 +17105,7 @@ pub struct SignatureHelpClientCapabilities {
+     // `SignatureHelpOptions`.
+     //
+     // Since: 3.15.0
+-    context_support: Option<bool>,
++    pub context_support: Option<bool>,
+ }
+ 
+ impl Json for SignatureHelpClientCapabilities {
+@@ -17190,12 +17190,12 @@ impl Json for DeclarationClientCapabilities {
+ #[derive(Clone, Debug, Default, PartialEq, Copy, Eq, Hash)]
+ pub struct DefinitionClientCapabilities {
+     // Whether definition supports dynamic registration.
+-    dynamic_registration: Option<bool>,
++    pub dynamic_registration: Option<bool>,
+ 
+     // The client supports additional metadata in the form of definition links.
+     //
+     // Since: 3.14.0
+-    link_support: Option<bool>,
++    pub link_support: Option<bool>,
+ }
+ 
+ impl Json for DefinitionClientCapabilities {
+@@ -17235,12 +17235,12 @@ pub struct TypeDefinitionClientCapabilities {
+     // Whether implementation supports dynamic registration. If this is set to `true`
+     // the client supports the new `TypeDefinitionRegistrationOptions` return value
+     // for the corresponding server capability as well.
+-    dynamic_registration: Option<bool>,
++    pub dynamic_registration: Option<bool>,
+ 
+     // The client supports additional metadata in the form of definition links.
+     //
+     // Since 3.14.0
+-    link_support: Option<bool>,
++    pub link_support: Option<bool>,
+ }
+ 
+ impl Json for TypeDefinitionClientCapabilities {
+@@ -17280,12 +17280,12 @@ pub struct ImplementationClientCapabilities {
+     // Whether implementation supports dynamic registration. If this is set to `true`
+     // the client supports the new `ImplementationRegistrationOptions` return value
+     // for the corresponding server capability as well.
+-    dynamic_registration: Option<bool>,
++    pub dynamic_registration: Option<bool>,
+ 
+     // The client supports additional metadata in the form of definition links.
+     //
+     // Since: 3.14.0
+-    link_support: Option<bool>,
++    pub link_support: Option<bool>,
+ }
+ 
+ impl Json for ImplementationClientCapabilities {
+@@ -17385,27 +17385,27 @@ impl Json for DocumentHighlightClientCapabilities {
+ #[derive(Clone, Debug, Default, PartialEq, Eq, Hash)]
+ pub struct DocumentSymbolClientCapabilities {
+     // Whether document symbol supports dynamic registration.
+-    dynamic_registration: Option<bool>,
++    pub dynamic_registration: Option<bool>,
+ 
+     // Specific capabilities for the `SymbolKind` in the
+     // `textDocument/documentSymbol` request.
+-    symbol_kind: Option<ClientSymbolKindOptions>,
++    pub symbol_kind: Option<ClientSymbolKindOptions>,
+ 
+     // The client supports hierarchical document symbols.
+-    hierarchical_document_symbol_support: Option<bool>,
++    pub hierarchical_document_symbol_support: Option<bool>,
+ 
+     // The client supports tags on `SymbolInformation`. Tags are supported on
+     // `DocumentSymbol` if `hierarchicalDocumentSymbolSupport` is set to true.
+     // Clients supporting tags have to handle unknown tags gracefully.
+     //
+     // Since: 3.16.0
+-    tag_support: Option<ClientSymbolTagOptions>,
++    pub tag_support: Option<ClientSymbolTagOptions>,
+ 
+     // The client supports an additional label presented in the UI when
+     // registering a document symbol provider.
+     //
+     // Since: 3.16.0
+-    label_support: Option<bool>,
++    pub label_support: Option<bool>,
+ }
+ 
+ impl Json for DocumentSymbolClientCapabilities {
+@@ -17869,27 +17869,27 @@ pub struct FoldingRangeClientCapabilities {
+     // providers. If this is set to `true` the client supports the new
+     // `FoldingRangeRegistrationOptions` return value for the corresponding
+     // server capability as well.
+-    dynamic_registration: Option<bool>,
++    pub dynamic_registration: Option<bool>,
+ 
+     // The maximum number of folding ranges that the client prefers to receive
+     // per document. The value serves as a hint, servers are free to follow the
+     // limit.
+-    range_limit: Option<u32>,
++    pub range_limit: Option<u32>,
+ 
+     // If set, the client signals that it only supports folding complete lines.
+     // If set, client will ignore specified `startCharacter` and `endCharacter`
+     // properties in a FoldingRange.
+-    line_folding_only: Option<bool>,
++    pub line_folding_only: Option<bool>,
+ 
+     // Specific options for the folding range kind.
+     //
+     // Since: 3.17.0
+-    folding_range_kind: Option<ClientFoldingRangeKindOptions>,
++    pub folding_range_kind: Option<ClientFoldingRangeKindOptions>,
+ 
+     // Specific options for the folding range.
+     //
+     // Since: 3.17.0
+-    folding_range: Option<ClientFoldingRangeOptions>,
++    pub folding_range: Option<ClientFoldingRangeOptions>,
+ }
+ 
+ impl Json for FoldingRangeClientCapabilities {
+@@ -17971,31 +17971,31 @@ impl Json for SelectionRangeClientCapabilities {
+ #[derive(Clone, Debug, Default, PartialEq, Eq, Hash)]
+ pub struct PublishDiagnosticsClientCapabilities {
+     // Whether the clients accepts diagnostics with related information.
+-    related_information: Option<bool>,
++    pub related_information: Option<bool>,
+ 
+     // Client supports the tag property to provide meta data about a diagnostic.
+     // Clients supporting tags have to handle unknown tags gracefully.
+     //
+     // Since: 3.15.0
+-    tag_support: Option<ClientDiagnosticsTagOptions>,
++    pub tag_support: Option<ClientDiagnosticsTagOptions>,
+ 
+     // Client supports a codeDescription property
+     //
+     // Since: 3.16.0
+-    code_description_support: Option<bool>,
++    pub code_description_support: Option<bool>,
+ 
+     // Whether code action supports the `data` property which is
+     // preserved between a `textDocument/publishDiagnostics` and
+     // `textDocument/codeAction` request.
+     //
+     // Since: 3.16.0
+-    data_support: Option<bool>,
++    pub data_support: Option<bool>,
+ 
+     // Whether the client interprets the version property of the
+     // `textDocument/publishDiagnostics` notification's parameter.
+     //
+     // Since: 3.15.0
+-    version_support: Option<bool>,
++    pub version_support: Option<bool>,
+ }
+ 
+ impl Json for PublishDiagnosticsClientCapabilities {
+@@ -18080,7 +18080,7 @@ pub struct SemanticTokensClientCapabilities {
+     // Whether implementation supports dynamic registration. If this is set to `true`
+     // the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
+     // return value for the corresponding server capability as well.
+-    dynamic_registration: Option<bool>,
++    pub dynamic_registration: Option<bool>,
+ 
+     // Which requests the client supports and might send to the server
+     // depending on the server's capability. Please note that clients might not
+@@ -18090,22 +18090,22 @@ pub struct SemanticTokensClientCapabilities {
+     // `request.range` are both set to true but the server only provides a
+     // range provider the client might not render a minimap correctly or might
+     // even decide to not show any semantic tokens at all.
+-    requests: ClientSemanticTokensRequestOptions,
++    pub requests: ClientSemanticTokensRequestOptions,
+ 
+     // The token types that the client supports.
+-    token_types: Vec<String>,
++    pub token_types: Vec<String>,
+ 
+     // The token modifiers that the client supports.
+-    token_modifiers: Vec<String>,
++    pub token_modifiers: Vec<String>,
+ 
+     // The token formats the clients supports.
+-    formats: Vec<TokenFormat>,
++    pub formats: Vec<TokenFormat>,
+ 
+     // Whether the client supports tokens that can overlap each other.
+-    overlapping_token_support: Option<bool>,
++    pub overlapping_token_support: Option<bool>,
+ 
+     // Whether the client supports tokens that can span multiple lines.
+-    multiline_token_support: Option<bool>,
++    pub multiline_token_support: Option<bool>,
+ 
+     // Whether the client allows the server to actively cancel a
+     // semantic token request, e.g. supports returning
+@@ -18113,7 +18113,7 @@ pub struct SemanticTokensClientCapabilities {
+     // needs to retrigger the request.
+     //
+     // Since: 3.17.0
+-    server_cancel_support: Option<bool>,
++    pub server_cancel_support: Option<bool>,
+ 
+     // Whether the client uses semantic tokens to augment existing
+     // syntax tokens. If set to `true` client side created syntax
+@@ -18125,7 +18125,7 @@ pub struct SemanticTokensClientCapabilities {
+     // specified.
+     //
+     // Since: 3.17.0
+-    augments_syntax_tokens: Option<bool>,
++    pub augments_syntax_tokens: Option<bool>,
+ }
+ 
+ impl Json for SemanticTokensClientCapabilities {
+@@ -18383,38 +18383,38 @@ impl Json for InlayHintClientCapabilities {
+ #[derive(Clone, Debug, Default, PartialEq, Eq, Hash)]
+ pub struct DiagnosticClientCapabilities {
+     // Whether the clients accepts diagnostics with related information.
+-    related_information: Option<bool>,
++    pub related_information: Option<bool>,
+ 
+     // Client supports the tag property to provide meta data about a diagnostic.
+     // Clients supporting tags have to handle unknown tags gracefully.
+     //
+     // Since: 3.15.0
+-    tag_support: Option<ClientDiagnosticsTagOptions>,
++    pub tag_support: Option<ClientDiagnosticsTagOptions>,
+ 
+     // Client supports a codeDescription property
+     //
+     // Since: 3.16.0
+-    code_description_support: Option<bool>,
++    pub code_description_support: Option<bool>,
+ 
+     // Whether code action supports the `data` property which is
+     // preserved between a `textDocument/publishDiagnostics` and
+     // `textDocument/codeAction` request.
+     //
+     // Since: 3.16.0
+-    data_support: Option<bool>,
++    pub data_support: Option<bool>,
+ 
+     // Whether implementation supports dynamic registration. If this is set to `true`
+     // the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
+     // return value for the corresponding server capability as well.
+-    dynamic_registration: Option<bool>,
++    pub dynamic_registration: Option<bool>,
+ 
+     // Whether the clients supports related documents for document diagnostic pulls.
+-    related_document_support: Option<bool>,
++    pub related_document_support: Option<bool>,
+ 
+     // Whether the client supports `MarkupContent` in diagnostic messages.
+     //
+     // Since: 3.18.0
+-    markup_message_support: Option<bool>,
++    pub markup_message_support: Option<bool>,
+ }
+ 
+ impl Json for DiagnosticClientCapabilities {
+@@ -19038,20 +19038,20 @@ pub struct ClientCompletionItemOptions {
+     // and `${3:foo}`. `$0` defines the final tab stop, it defaults to
+     // the end of the snippet. Placeholders with equal identifiers are linked,
+     // that is typing in one will update others too.
+-    snippet_support: Option<bool>,
++    pub snippet_support: Option<bool>,
+ 
+     // Client supports commit characters on a completion item.
+-    commit_characters_support: Option<bool>,
++    pub commit_characters_support: Option<bool>,
+ 
+     // Client supports the following content formats for the documentation
+     // property. The order describes the preferred format of the client.
+-    documentation_format: Option<Vec<MarkupKind>>,
++    pub documentation_format: Option<Vec<MarkupKind>>,
+ 
+     // Client supports the deprecated property on a completion item.
+-    deprecated_support: Option<bool>,
++    pub deprecated_support: Option<bool>,
+ 
+     // Client supports the preselect property on a completion item.
+-    preselect_support: Option<bool>,
++    pub preselect_support: Option<bool>,
+ 
+     // Client supports the tag property on a completion item. Clients supporting
+     // tags have to handle unknown tags gracefully. Clients especially need to
+@@ -19059,33 +19059,33 @@ pub struct ClientCompletionItemOptions {
+     // a resolve call.
+     //
+     // Since: 3.15.0
+-    tag_support: Option<CompletionItemTagOptions>,
++    pub tag_support: Option<CompletionItemTagOptions>,
+ 
+     // Client support insert replace edit to control different behavior if a
+     // completion item is inserted in the text or should replace text.
+     //
+     // Since: 3.16.0
+-    insert_replace_support: Option<bool>,
++    pub insert_replace_support: Option<bool>,
+ 
+     // Indicates which properties a client can resolve lazily on a completion
+     // item. Before version 3.16.0 only the predefined properties `documentation`
+     // and `details` could be resolved lazily.
+     //
+     // Since: 3.16.0
+-    resolve_support: Option<ClientCompletionItemResolveOptions>,
++    pub resolve_support: Option<ClientCompletionItemResolveOptions>,
+ 
+     // The client supports the `insertTextMode` property on
+     // a completion item to override the whitespace handling mode
+     // as defined by the client (see `insertTextMode`).
+     //
+     // Since: 3.16.0
+-    insert_text_mode_support: Option<ClientCompletionItemInsertTextModeOptions>,
++    pub insert_text_mode_support: Option<ClientCompletionItemInsertTextModeOptions>,
+ 
+     // The client has support for completion item label
+     // details (see also `CompletionItemLabelDetails`).
+     //
+     // Since: 3.17.0
+-    label_details_support: Option<bool>,
++    pub label_details_support: Option<bool>,
+ }
+ 
+ impl Json for ClientCompletionItemOptions {
+@@ -19203,7 +19203,7 @@ pub struct CompletionListCapabilities {
+     // no properties are supported.
+     //
+     // Since: 3.17.0
+-    item_defaults: Option<Vec<String>>,
++    pub item_defaults: Option<Vec<String>>,
+ 
+     // Specifies whether the client supports `CompletionList.applyKind` to
+     // indicate how supported values from `completionList.itemDefaults`
+@@ -19216,7 +19216,7 @@ pub struct CompletionListCapabilities {
+     // defined in `CompletionList.applyKind`.
+     //
+     // Since: 3.18.0
+-    apply_kind_support: Option<bool>,
++    pub apply_kind_support: Option<bool>,
+ }
+ 
+ impl Json for CompletionListCapabilities {
+@@ -19255,23 +19255,23 @@ impl Json for CompletionListCapabilities {
+ pub struct ClientSignatureInformationOptions {
+     // Client supports the following content formats for the documentation
+     // property. The order describes the preferred format of the client.
+-    documentation_format: Option<Vec<MarkupKind>>,
++    pub documentation_format: Option<Vec<MarkupKind>>,
+ 
+     // Client capabilities specific to parameter information.
+-    parameter_information: Option<ClientSignatureParameterInformationOptions>,
++    pub parameter_information: Option<ClientSignatureParameterInformationOptions>,
+ 
+     // The client supports the `activeParameter` property on `SignatureInformation`
+     // literal.
+     //
+     // Since: 3.16.0
+-    active_parameter_support: Option<bool>,
++    pub active_parameter_support: Option<bool>,
+ 
+     // The client supports the `activeParameter` property on
+     // `SignatureHelp`/`SignatureInformation` being set to `null` to
+     // indicate that no parameter should be active.
+     //
+     // Since: 3.18.0
+-    no_active_parameter_support: Option<bool>,
++    pub no_active_parameter_support: Option<bool>,
+ }
+ 
+ impl Json for ClientSignatureInformationOptions {
+@@ -19457,7 +19457,7 @@ pub struct ClientFoldingRangeKindOptions {
+     // property exists the client also guarantees that it will
+     // handle values outside its set gracefully and falls back
+     // to a default value when unknown.
+-    value_set: Option<Vec<FoldingRangeKind>>,
++    pub value_set: Option<Vec<FoldingRangeKind>>,
+ }
+ 
+ impl Json for ClientFoldingRangeKindOptions {
+@@ -19491,7 +19491,7 @@ pub struct ClientFoldingRangeOptions {
+     // folding ranges to display custom labels instead of the default text.
+     //
+     // Since: 3.17.0
+-    collapsed_text: Option<bool>,
++    pub collapsed_text: Option<bool>,
+ }
+ 
+ impl Json for ClientFoldingRangeOptions {
+@@ -19587,11 +19587,11 @@ impl Json for DiagnosticsCapabilities {
+ pub struct ClientSemanticTokensRequestOptions {
+     // The client will send the `textDocument/semanticTokens/range` request if
+     // the server provides a corresponding handler.
+-    range: Option<BooleanOrEmptyObject>,
++    pub range: Option<BooleanOrEmptyObject>,
+ 
+     // The client will send the `textDocument/semanticTokens/full` request if
+     // the server provides a corresponding handler.
+-    full: Option<BooleanOrClientSemanticTokensRequestFullDelta>,
++    pub full: Option<BooleanOrClientSemanticTokensRequestFullDelta>,
+ }
+ 
+ impl Json for ClientSemanticTokensRequestOptions {
+@@ -19800,7 +19800,7 @@ pub struct ClientSignatureParameterInformationOptions {
+     // simple label string.
+     //
+     // Since: 3.14.0
+-    label_offset_support: Option<bool>,
++    pub label_offset_support: Option<bool>,
+ }
+ 
+ impl Json for ClientSignatureParameterInformationOptions {
+@@ -19868,7 +19868,7 @@ impl Json for ClientCodeActionKindOptions {
+ #[derive(Clone, Debug, Default, PartialEq, Eq, Hash)]
+ pub struct ClientDiagnosticsTagOptions {
+     // The tags supported by the client.
+-    value_set: Vec<DiagnosticTag>,
++    pub value_set: Vec<DiagnosticTag>,
+ }
+ 
+ impl Json for ClientDiagnosticsTagOptions {
+@@ -20279,7 +20279,7 @@ impl Json for ExperimentalServerCapabilities {
+ #[derive(Clone, Debug, Default, PartialEq, Copy, Eq, Hash)]
+ pub struct ExperimentalClientCapabilities {
+     // The client supports hover verbosityLevel requests and canIncreaseVerbosity responses.
+-    hover_verbosity_level: Option<bool>,
++    pub hover_verbosity_level: Option<bool>,
+ }
+ 
+ impl Json for ExperimentalClientCapabilities {
+@@ -24465,7 +24465,7 @@ impl Method {
+     // event. If the server still needs to react to configuration changes (since the server caches the
+     // result of `workspace/configuration` requests) the server should register for an empty configuration
+     // change event and empty the cache if such an event is received.
+-    const WORKSPACE_CONFIGURATION: Method = Method("workspace/configuration");
++    pub const WORKSPACE_CONFIGURATION: Method = Method("workspace/configuration");
+     // A request to list all color symbols found in a given text document. The request's
+     // parameter is of type DocumentColorParams the
+     // response is of type ColorInformation[] or a Thenable
+@@ -28263,8 +28263,8 @@ impl Json for WorkspaceFolderOrURI {
+ 
+ #[derive(Clone, Debug, Default, PartialEq, Copy, Eq, Hash)]
+ pub struct BooleanOrClientSemanticTokensRequestFullDelta {
+-    boolean: Option<bool>,
+-    client_semantic_tokens_request_full_delta: Option<ClientSemanticTokensRequestFullDelta>,
++    pub boolean: Option<bool>,
++    pub client_semantic_tokens_request_full_delta: Option<ClientSemanticTokensRequestFullDelta>,
+ }
+ 
+ impl Json for BooleanOrClientSemanticTokensRequestFullDelta {
 diff --git a/crates/tsrs_project/src/projectcollection.rs b/crates/tsrs_project/src/projectcollection.rs
-index 18e5736d..c132e69e 100644
+index d4576840..7c3b6ede 100644
 --- a/crates/tsrs_project/src/projectcollection.rs
 +++ b/crates/tsrs_project/src/projectcollection.rs
 @@ -113,7 +113,7 @@ impl ProjectCollection {
@@ -1047,3 +2005,16 @@ index 18e5736d..c132e69e 100644
          let mut projects = Vec::with_capacity(self.configured_projects.len());
          self.fill_configured_projects(&mut projects);
          projects
+diff --git a/crates/tsrs_tsoptions/src/errors.rs b/crates/tsrs_tsoptions/src/errors.rs
+index b1848088..7a2f0fea 100644
+--- a/crates/tsrs_tsoptions/src/errors.rs
++++ b/crates/tsrs_tsoptions/src/errors.rs
+@@ -143,7 +143,7 @@ pub fn create_diagnostic_for_node_in_source_file(
+     )
+ }
+ 
+-pub(crate) fn create_diagnostic_for_node_in_source_file_or_compiler_diagnostic(
++pub fn create_diagnostic_for_node_in_source_file_or_compiler_diagnostic(
+     source_file: Option<P<SourceFile>>,
+     node: Option<P<Node>>,
+     message: &'static Message,
