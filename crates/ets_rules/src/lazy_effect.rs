@@ -19,6 +19,7 @@ pub static LAZY_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
     codes: vec![
         tsdiag::X_0_RETURNS_A_LAZY_1_1_IS_ALREADY_LAZY_SO_WRAPPING_IT_IN_A_ZERO_ARGUMENT_FUNCTION_ADDS_UNNECESSARY_INDIRECTION_EFFECT_LAZY_EFFECT.code(),
     ],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         if !ctx.type_parser.detect_effect_version_string().starts_with("4.") {
             return Vec::new();

@@ -2,7 +2,10 @@
 
 # `preferSchemaOverJson`
 
-Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify
+Deprecated: use globalJsonInEffect and globalJson instead. Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify inside Effect code
+
+> [!WARNING]
+> This rule is deprecated. Use [`globalJsonInEffect`](global-json-in-effect.md) and [`globalJson`](global-json.md) instead.
 
 | Property | Value |
 | --- | --- |

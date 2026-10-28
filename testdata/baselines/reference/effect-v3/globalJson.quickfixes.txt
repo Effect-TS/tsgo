@@ -1,0 +1,66 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:75-8:91) TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+  Fix 0: "Disable globalJson for this line"
+  Fix 1: "Disable globalJson for entire file"
+
+[D2] (11:83-11:99) TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+  Fix 0: "Disable globalJson for this line"
+  Fix 1: "Disable globalJson for entire file"
+
+[D3] (14:27-14:59) TS377156: This code uses `JSON.stringify`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+  Fix 0: "Disable globalJson for this line"
+  Fix 1: "Disable globalJson for entire file"
+
+[D4] (18:28-18:46) TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+  Fix 0: "Disable globalJson for this line"
+  Fix 1: "Disable globalJson for entire file"
+
+[D5] (23:10-23:21) TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+  Fix 0: "Disable globalJson for this line"
+  Fix 1: "Disable globalJson for entire file"
+
+[D6] (33:32-33:48) TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+  Fix 0: "Disable globalJson for this line"
+  Fix 1: "Disable globalJson for entire file"
+
+[D7] (38:7-38:20) TS6133: '_shadowedJson' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable globalJson for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable globalJson for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable globalJson for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable globalJson for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable globalJson for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable globalJson for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable globalJson for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable globalJson for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable globalJson for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable globalJson for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable globalJson for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable globalJson for entire file" ===
+skipped by default

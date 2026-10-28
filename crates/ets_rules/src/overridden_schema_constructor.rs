@@ -17,6 +17,7 @@ pub static OVERRIDDEN_SCHEMA_CONSTRUCTOR: LazyLock<Rule> = LazyLock::new(|| {
         default_severity: Severity::Error,
         supported_effect: vec!["v3", "v4"],
         codes: vec![tsdiag::THIS_SCHEMA_SUBCLASS_DEFINES_ITS_OWN_CONSTRUCTOR_FOR_SCHEMA_CLASSES_CONSTRUCTOR_OVERRIDES_BREAK_DECODING_BEHAVIOR_FOR_THE_CLASS_SHAPE_CUSTOM_CONSTRUCTION_CAN_BE_EXPRESSED_THROUGH_A_STATIC_NEW_METHOD_INSTEAD_EFFECT_OVERRIDDEN_SCHEMA_CONSTRUCTOR.code()],
+        replaced_by: vec![],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_overridden_schema_constructor(ctx.type_parser, ctx.source_file);
             let mut diags = Vec::with_capacity(matches.len());

@@ -19,6 +19,7 @@ pub static GLOBAL_ERROR_IN_EFFECT_FAILURE: LazyLock<Rule> = LazyLock::new(|| {
     default_severity: Severity::Warning,
     supported_effect: vec!["v3", "v4"],
     codes: vec![tsdiag::GLOBAL_ERROR_LOSES_TYPE_SAFETY_AS_UNTAGGED_ERRORS_MERGE_TOGETHER_IN_THE_EFFECT_FAILURE_CHANNEL_CONSIDER_USING_A_TAGGED_ERROR_AND_OPTIONALLY_WRAPPING_THE_ORIGINAL_IN_A_CAUSE_PROPERTY_EFFECT_GLOBAL_ERROR_IN_EFFECT_FAILURE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let mut diags = Vec::new();
 

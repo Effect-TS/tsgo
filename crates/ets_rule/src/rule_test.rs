@@ -19,6 +19,7 @@ fn rule(name: &'static str, description: &'static str) -> Rule {
         default_severity: Severity::Off,
         supported_effect: Vec::new(),
         codes: Vec::new(),
+        replaced_by: vec![],
         run: dummy_run,
     }
 }

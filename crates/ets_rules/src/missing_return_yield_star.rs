@@ -21,6 +21,7 @@ pub static MISSING_RETURN_YIELD_STAR: LazyLock<Rule> = LazyLock::new(|| {
         default_severity: Severity::Error,
         supported_effect: vec!["v3", "v4"],
         codes: vec![tsdiag::THIS_EFFECT_NEVER_SUCCEEDS_USING_RETURN_YIELD_ASTERISK_PRESERVES_A_DEFINITIVE_GENERATOR_EXIT_POINT_FOR_TYPE_NARROWING_AND_TOOLING_SUPPORT_EFFECT_MISSING_RETURN_YIELD_STAR.code()],
+        replaced_by: vec![],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_missing_return_yield_star(ctx.type_parser, ctx.source_file);
             let mut diags = Vec::with_capacity(matches.len());

@@ -21,6 +21,7 @@ pub static FLAT_MAP_IGNORED_PARAM_TO_AND_THEN: LazyLock<Rule> = LazyLock::new(||
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_flat_map_ignored_param_to_and_then(ctx.type_parser, source_file);

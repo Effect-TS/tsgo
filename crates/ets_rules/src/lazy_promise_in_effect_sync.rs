@@ -19,6 +19,7 @@ pub static LAZY_PROMISE_IN_EFFECT_SYNC: LazyLock<Rule> = LazyLock::new(|| {
     codes: vec![
         tsdiag::THIS_EFFECT_SYNC_THUNK_RETURNS_A_PROMISE_USE_EFFECT_PROMISE_OR_EFFECT_TRY_PROMISE_TO_REPRESENT_ASYNC_WORK_EFFECT_LAZY_PROMISE_IN_EFFECT_SYNC.code(),
     ],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let mut diags = Vec::new();
 

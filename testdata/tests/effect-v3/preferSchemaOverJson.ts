@@ -57,8 +57,14 @@ export const nestedFunctionInGen = Effect.gen(function*() {
   return parseFn()
 })
 
-// Should NOT trigger - JSON.parse not as direct expression in Effect.try
+// Should trigger - JSON.parse in an Effect.try block body
 export const notDirectExpression = Effect.try(() => {
   const parsed = JSON.parse("{\"indirect\":true}")
   return parsed.indirect
+})
+
+// Should NOT trigger - shadowed JSON
+export const shadowedJson = Effect.gen(function*() {
+  const JSON = { parse: (value: string) => value }
+  return JSON.parse("{}")
 })

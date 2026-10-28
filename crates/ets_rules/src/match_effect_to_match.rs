@@ -21,6 +21,7 @@ pub static MATCH_EFFECT_TO_MATCH: LazyLock<Rule> = LazyLock::new(|| {
     codes: vec![
         tsdiag::EFFECT_0_EXPRESSES_THIS_NON_EFFECTFUL_FOLD_MORE_DIRECTLY_THAN_EFFECT_1_WITH_EFFECT_SUCCEED_HANDLERS_EFFECT_MATCH_EFFECT_TO_MATCH.code(),
     ],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let matches = analyze_match_effect_to_match(ctx.type_parser, Some(ctx.source_file));
         let mut diagnostics = Vec::with_capacity(matches.len());

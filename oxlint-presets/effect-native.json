@@ -17,6 +17,8 @@
     "effecttsgo/global-date-in-effect": "warn",
     "effecttsgo/global-fetch": "warn",
     "effecttsgo/global-fetch-in-effect": "warn",
+    "effecttsgo/global-json": "warn",
+    "effecttsgo/global-json-in-effect": "warn",
     "effecttsgo/global-random": "warn",
     "effecttsgo/global-random-in-effect": "warn",
     "effecttsgo/global-timers": "warn",
@@ -27,7 +29,6 @@
     "effecttsgo/prefer-effect-array": "warn",
     "effecttsgo/prefer-effect-record": "warn",
     "effecttsgo/prefer-effect-string": "warn",
-    "effecttsgo/prefer-schema-over-json": "warn",
     "effecttsgo/process-env": "warn",
     "effecttsgo/process-env-in-effect": "warn",
     "effecttsgo/schema-sync": "warn"

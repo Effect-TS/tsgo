@@ -24,6 +24,7 @@ pub static LAYER_MERGE_ALL_WITH_DEPENDENCIES: LazyLock<Rule> = LazyLock::new(|| 
     default_severity: Severity::Warning,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let matches = analyze_layer_merge_all_with_dependencies(ctx.type_parser, ctx.source_file);
         let mut diags = Vec::with_capacity(matches.len());

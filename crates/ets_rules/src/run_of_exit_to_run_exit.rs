@@ -22,6 +22,7 @@ pub static RUN_OF_EXIT_TO_RUN_EXIT: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_run_of_exit_to_run_exit(ctx.type_parser, Some(source_file));

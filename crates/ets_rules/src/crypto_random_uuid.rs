@@ -21,6 +21,7 @@ pub static CRYPTO_RANDOM_UUID: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Off,
     supported_effect: vec!["v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_crypto_random_uuid(ctx, false) },
 });
 
@@ -32,6 +33,7 @@ pub static CRYPTO_RANDOM_UUID_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule 
     default_severity: Severity::Off,
     supported_effect: vec!["v4"],
     codes: vec![MESSAGE_IN_EFFECT.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_crypto_random_uuid(ctx, true) },
 });
 

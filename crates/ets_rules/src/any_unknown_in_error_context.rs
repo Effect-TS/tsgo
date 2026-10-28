@@ -19,6 +19,7 @@ pub static ANY_UNKNOWN_IN_ERROR_CONTEXT: LazyLock<Rule> = LazyLock::new(|| Rule 
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![tsdiag::X_0_EFFECT_ANY_UNKNOWN_IN_ERROR_CONTEXT.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         struct MatchEntry {
             node: P<Node>,

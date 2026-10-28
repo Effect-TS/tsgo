@@ -1,0 +1,69 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/globalJson.ts(8,75): warning TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+/.src/globalJson.ts(11,83): warning TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+/.src/globalJson.ts(14,27): warning TS377156: This code uses `JSON.stringify`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+/.src/globalJson.ts(18,28): warning TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+/.src/globalJson.ts(23,10): warning TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+/.src/globalJson.ts(33,32): warning TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+
+
+==== /.src/globalJson.ts (6 errors) ====
+    // @effect-v3
+    // @effect-diagnostics globalJson:warning
+    import { Effect, Schema } from "effect"
+    
+    const User = Schema.Struct({ name: Schema.String })
+    
+    // Should trigger - JSON.parse feeding a Schema decoder outside Effect
+    export const parseUser = (text: string) => Schema.decodeUnknownSync(User)(JSON.parse(text))
+                                                                              ~~~~~~~~~~~~~~~~
+!!! warning TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+    
+    // Should trigger - JSON.parse throws instead of returning a failed result
+    export const parseUserEither = (text: string) => Schema.decodeUnknownEither(User)(JSON.parse(text))
+                                                                                      ~~~~~~~~~~~~~~~~
+!!! warning TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+    
+    // Should trigger - JSON.stringify at module level
+    export const serialized = JSON.stringify({ name: "John" })
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377156: This code uses `JSON.stringify`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+    
+    // Should trigger - aliased JSON
+    const MyJSON = JSON
+    export const aliasedJson = MyJSON.parse("{}")
+                               ~~~~~~~~~~~~~~~~~~
+!!! warning TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+    
+    // Should trigger - aliased JSON.parse method
+    export const aliasedParse = (text: string) => {
+      const parse = JSON.parse
+      return parse(text)
+             ~~~~~~~~~~~
+!!! warning TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+    }
+    
+    // Should NOT trigger - JSON.parse inside Effect.gen
+    export const parseInGen = Effect.gen(function*() {
+      return JSON.parse("{}")
+    })
+    
+    // Should trigger - JSON.parse inside nested arrow in generator
+    export const nestedArrowInGen = Effect.gen(function*() {
+      const fn = (text: string) => JSON.parse(text)
+                                   ~~~~~~~~~~~~~~~~
+!!! warning TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+      return fn
+    })
+    
+    // Should NOT trigger - shadowed JSON
+    const _shadowedJson = (text: string) => {
+      const JSON = { parse: (value: string) => value, stringify: (value: unknown) => String(value) }
+      return JSON.stringify(JSON.parse(text))
+    }
+    
+    // Should NOT trigger - other JSON members
+    export const toStringTag = JSON[Symbol.toStringTag]
+    

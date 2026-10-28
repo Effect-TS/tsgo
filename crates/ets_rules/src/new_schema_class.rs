@@ -20,6 +20,7 @@ pub static NEW_SCHEMA_CLASS: LazyLock<Rule> = LazyLock::new(|| {
         default_severity: Severity::Off,
         supported_effect: vec!["v4"],
         codes: vec![tsdiag::THIS_SCHEMA_CLASS_IS_CONSTRUCTED_WITH_NEW_0_MAKE_CAN_BE_USED_TO_CONSTRUCT_THE_SCHEMA_CLASS_INSTANCE_EFFECT_NEW_SCHEMA_CLASS.code()],
+        replaced_by: vec![],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_new_schema_class(ctx.type_parser, ctx.source_file);
             let mut diags = Vec::with_capacity(matches.len());

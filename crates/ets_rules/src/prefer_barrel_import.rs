@@ -16,6 +16,7 @@ pub static PREFER_BARREL_IMPORT: LazyLock<Rule> = LazyLock::new(|| {
         default_severity: Severity::Off,
         supported_effect: vec!["v3", "v4"],
         codes: vec![tsdiag::X_0_IS_IMPORTED_DIRECTLY_BUT_BARREL_IMPORT_PACKAGES_EXPECTS_NAMED_IMPORTS_FROM_THE_BARREL_1_USE_2_INSTEAD_EFFECT_PREFER_BARREL_IMPORT.code()],
+        replaced_by: vec![],
         run: run_prefer_barrel_import,
     }
 });

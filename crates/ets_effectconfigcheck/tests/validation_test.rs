@@ -6,7 +6,7 @@ use ets_shim::ast::Diagnostic;
 use ets_shim::compiler::ProgramOptions;
 use ets_shim::core::tspath;
 use ets_shim::core::{CompilerOptions, Tristate};
-use ets_shim::diagnostics::Category;
+use ets_shim::diagnostics::{self, Category};
 use ets_shim::tsoptions::{
     ExtendedConfigCache, ParseConfigHost, ParsedCommandLine,
     new_tsconfig_source_file_from_file_path, parse_json_source_file_config_file_content,
@@ -73,11 +73,27 @@ fn config(options: &str, extra: &str) -> String {
     )
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:46 unknownDiagnostics f16515b18f91acb2
+// go test: internal/effectconfigcheck/validation_test.go:46 unknownDiagnostics b5d9d8dd701e7ed1
 fn unknown_diagnostics(config: &ParsedCommandLine) -> Vec<P<Diagnostic>> {
+    diagnostics_with_code(
+        config,
+        diagnostics::UNKNOWN_EFFECT_DIAGNOSTIC_RULE_0_IN_DIAGNOSTIC_SEVERITY_EFFECT_UNKNOWN_RULE_NAME.code(),
+    )
+}
+
+// go test: internal/effectconfigcheck/validation_test.go:50 deprecatedDiagnostics dfc461d82e0f14f4
+fn deprecated_diagnostics(config: &ParsedCommandLine) -> Vec<P<Diagnostic>> {
+    diagnostics_with_code(
+        config,
+        diagnostics::EFFECT_DIAGNOSTIC_RULE_0_IS_DEPRECATED_USE_1_INSTEAD_EFFECT_DEPRECATED_RULE_NAME.code(),
+    )
+}
+
+// go test: internal/effectconfigcheck/validation_test.go:54 diagnosticsWithCode 8ce5e98b272c08f4
+fn diagnostics_with_code(config: &ParsedCommandLine, code: i32) -> Vec<P<Diagnostic>> {
     let mut result = Vec::new();
     for &diagnostic in &config.errors {
-        if diagnostic.code() == 377_134 {
+        if diagnostic.code() == code {
             result.push(diagnostic);
         }
     }
@@ -95,7 +111,7 @@ fn extended_config_cache() -> ets_shim::execute::tsc::ExtendedConfigCache {
     ets_shim::execute::tsc::ExtendedConfigCache::default()
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:56 TestUnknownRuleNames 489e1be29e060404
+// go test: internal/effectconfigcheck/validation_test.go:64 TestUnknownRuleNames 452911343bceea8e
 #[test]
 fn test_unknown_rule_names() {
     for (name, options, count, category) in [
@@ -108,7 +124,7 @@ fn test_unknown_rule_names() {
         ),
         (
             "known names",
-            r#""diagnosticSeverity":{"floatingEffect":"error","unusedDirective":"warning","unknownRuleName":"warning"}"#,
+            r#""diagnosticSeverity":{"floatingEffect":"error","unusedDirective":"warning","unknownRuleName":"warning","deprecatedRuleName":"warning","preferSchemaOverJson":"warning"}"#,
             0,
             Category::Warning,
         ),
@@ -128,6 +144,12 @@ fn test_unknown_rule_names() {
             "off",
             r#""diagnosticSeverity":{"floatingEfect":"error","unknownRuleName":"off"}"#,
             0,
+            Category::Warning,
+        ),
+        (
+            "deprecatedRuleName off",
+            r#""diagnosticSeverity":{"floatingEfect":"error","deprecatedRuleName":"off"}"#,
+            1,
             Category::Warning,
         ),
         (
@@ -170,7 +192,153 @@ fn test_unknown_rule_names() {
     }
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:96 TestUnknownRuleNamesExtends cb950712265e3b29
+// go test: internal/effectconfigcheck/validation_test.go:105 TestDeprecatedRuleNames f04b431363bfda75
+#[test]
+fn test_deprecated_rule_names() {
+    for (name, options, count, category) in [
+        (
+            "deprecated",
+            r#""diagnosticSeverity":{"preferSchemaOverJson":"warning"}"#,
+            1,
+            Category::Warning,
+        ),
+        (
+            "deprecated disabled rule still reported",
+            r#""diagnosticSeverity":{"preferSchemaOverJson":"off"}"#,
+            1,
+            Category::Warning,
+        ),
+        (
+            "replacements",
+            r#""diagnosticSeverity":{"globalJson":"warning","globalJsonInEffect":"warning"}"#,
+            0,
+            Category::Warning,
+        ),
+        (
+            "error",
+            r#""diagnosticSeverity":{"preferSchemaOverJson":"warning","deprecatedRuleName":"error"}"#,
+            1,
+            Category::Error,
+        ),
+        (
+            "off",
+            r#""diagnosticSeverity":{"preferSchemaOverJson":"warning","deprecatedRuleName":"off"}"#,
+            0,
+            Category::Warning,
+        ),
+        (
+            "unknownRuleName off",
+            r#""diagnosticSeverity":{"preferSchemaOverJson":"warning","unknownRuleName":"off"}"#,
+            1,
+            Category::Warning,
+        ),
+        (
+            "disabled",
+            r#""diagnostics":false,"diagnosticSeverity":{"preferSchemaOverJson":"warning"}"#,
+            0,
+            Category::Warning,
+        ),
+        (
+            "override",
+            r#""overrides":[{"options":{"diagnosticSeverity":{"preferSchemaOverJson":"warning"}}}]"#,
+            1,
+            Category::Warning,
+        ),
+        (
+            "severity and override",
+            r#""diagnosticSeverity":{"preferSchemaOverJson":"warning"},"overrides":[{"options":{"diagnosticSeverity":{"preferSchemaOverJson":"off"}}}]"#,
+            2,
+            Category::Warning,
+        ),
+    ] {
+        let host = new_host(&[("/tsconfig.json", &config(options, ""))]);
+        let parsed = parse(host, "/tsconfig.json", None);
+        let got = deprecated_diagnostics(&parsed);
+        assert_eq!(
+            got.len(),
+            count,
+            "{name}: want {count} warnings, got {}: {:?}",
+            got.len(),
+            parsed.errors.iter().map(|d| d.localize()).collect::<Vec<_>>()
+        );
+        assert!(
+            unknown_diagnostics(&parsed).is_empty(),
+            "{name}: deprecated rule reported as unknown: {:?}",
+            parsed.errors.iter().map(|d| d.localize()).collect::<Vec<_>>()
+        );
+        for diagnostic in got {
+            assert_eq!(diagnostic.category(), category, "{name}: wrong category");
+            assert!(
+                diagnostic.file().is_some_and(|file| file.file_name() == "/tsconfig.json"),
+                "{name}: missing local config location"
+            );
+            assert_eq!(
+                underline(diagnostic),
+                r#""preferSchemaOverJson""#,
+                "{name}: wrong underline"
+            );
+            let args = diagnostic.message_args();
+            assert!(
+                args.len() == 2
+                    && args[0] == "preferSchemaOverJson"
+                    && args[1] == "`globalJsonInEffect` or `globalJson`",
+                "{name}: wrong message arguments: {args:?}"
+            );
+        }
+    }
+}
+
+// go test: internal/effectconfigcheck/validation_test.go:151 TestDeprecatedRuleNamesExtends 9112fd26c73f659d
+#[test]
+fn test_deprecated_rule_names_extends() {
+    for (name, base, child, count, category, local) in [
+        (
+            "inherited key",
+            r#""diagnosticSeverity":{"preferSchemaOverJson":"warning"}"#,
+            r#""diagnosticSeverity":{}"#,
+            1,
+            Category::Warning,
+            false,
+        ),
+        (
+            "child silences base",
+            r#""diagnosticSeverity":{"preferSchemaOverJson":"warning"}"#,
+            r#""diagnosticSeverity":{"deprecatedRuleName":"off"}"#,
+            0,
+            Category::Warning,
+            false,
+        ),
+        (
+            "base raises child",
+            r#""diagnosticSeverity":{"deprecatedRuleName":"error"}"#,
+            r#""diagnosticSeverity":{"preferSchemaOverJson":"warning"}"#,
+            1,
+            Category::Error,
+            true,
+        ),
+    ] {
+        let host = new_host(&[
+            ("/base.json", &config(base, "")),
+            ("/tsconfig.json", &config(child, r#","extends":"./base.json""#)),
+        ]);
+        let cache = extended_config_cache();
+        let parsed = parse(host, "/tsconfig.json", Some(&cache));
+        let got = deprecated_diagnostics(&parsed);
+        assert_eq!(
+            got.len(),
+            count,
+            "{name}: want {count} warnings, got {}: {:?}",
+            got.len(),
+            parsed.errors.iter().map(|d| d.localize()).collect::<Vec<_>>()
+        );
+        for d in got {
+            assert_eq!(d.category(), category, "{name}: wrong category");
+            assert_eq!(d.file().is_some(), local, "{name}: wrong inherited/local location");
+        }
+    }
+}
+
+// go test: internal/effectconfigcheck/validation_test.go:186 TestUnknownRuleNamesExtends cb950712265e3b29
 #[test]
 fn test_unknown_rule_names_extends() {
     for (name, base, child, count, category, local) in [
@@ -247,7 +415,7 @@ fn test_unknown_rule_names_extends() {
     }
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:136 TestEffectPluginInheritance 1a65f2b80fbdc197
+// go test: internal/effectconfigcheck/validation_test.go:226 TestEffectPluginInheritance 1a65f2b80fbdc197
 #[test]
 fn test_effect_plugin_inheritance() {
     let base = config(r#""diagnostics":false"#, "");
@@ -299,7 +467,7 @@ fn test_effect_plugin_inheritance() {
     }
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:194 TestInheritedOverridesUseLocalSyntaxOnly 57ea5abcd4c79e92
+// go test: internal/effectconfigcheck/validation_test.go:284 TestInheritedOverridesUseLocalSyntaxOnly 57ea5abcd4c79e92
 #[test]
 fn test_inherited_overrides_use_local_syntax_only() {
     let host = new_host(&[
@@ -328,7 +496,7 @@ fn test_inherited_overrides_use_local_syntax_only() {
     assert_eq!(underline(got[1]), r#""localTypo""#, "wrong local underline");
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:215 TestUnknownRuleNamesJSONAPI 512ddd9baf6a637e
+// go test: internal/effectconfigcheck/validation_test.go:305 TestUnknownRuleNamesJSONAPI 512ddd9baf6a637e
 #[test]
 fn test_unknown_rule_names_json_api() {
     // Use the compiler's JSON representation, which both providers accept.
@@ -355,7 +523,7 @@ fn test_unknown_rule_names_json_api() {
     );
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:229 TestProjectReferencesAndSharedExtends 44252f2a0210ea18
+// go test: internal/effectconfigcheck/validation_test.go:319 TestProjectReferencesAndSharedExtends 44252f2a0210ea18
 #[test]
 fn test_project_references_and_shared_extends() {
     let host = new_host(&[
@@ -422,7 +590,7 @@ fn test_project_references_and_shared_extends() {
     assert!(got.len() == 1 && got[0].category() == Category::Warning, "cached severity leaked");
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:278 TestMultipleExtendsAndExistingOptions 0e777470169add38
+// go test: internal/effectconfigcheck/validation_test.go:368 TestMultipleExtendsAndExistingOptions 0e777470169add38
 #[test]
 fn test_multiple_extends_and_existing_options() {
     let host = new_host(&[
@@ -467,7 +635,7 @@ fn test_multiple_extends_and_existing_options() {
     );
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:299 TestOtherPluginsAndCompilerErrors 235be75931db41d9
+// go test: internal/effectconfigcheck/validation_test.go:389 TestOtherPluginsAndCompilerErrors 235be75931db41d9
 #[test]
 fn test_other_plugins_and_compiler_errors() {
     let host = new_host(&[(
@@ -484,7 +652,7 @@ fn test_other_plugins_and_compiler_errors() {
     );
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:313 TestUnknownRuleNamesDeterministicOrder 8d2d51201ffb4f0f
+// go test: internal/effectconfigcheck/validation_test.go:403 TestUnknownRuleNamesDeterministicOrder 8d2d51201ffb4f0f
 #[test]
 fn test_unknown_rule_names_deterministic_order() {
     let host = new_host(&[(

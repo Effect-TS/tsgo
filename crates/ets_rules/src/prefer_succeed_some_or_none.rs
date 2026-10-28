@@ -24,6 +24,7 @@ pub static PREFER_SUCCEED_SOME_OR_NONE: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_prefer_succeed_some_or_none(ctx.type_parser, Some(source_file));

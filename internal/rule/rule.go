@@ -31,6 +31,10 @@ type Rule struct {
 	// This is used to build the code-to-rule mapping for codefixes and other lookups.
 	Codes []int32
 
+	// ReplacedBy marks the rule as deprecated and names the rules that replace it.
+	// Configuring a deprecated rule reports deprecatedRuleName on the tsconfig key.
+	ReplacedBy []string
+
 	// Run executes the rule against a source file and returns diagnostics.
 	// It should NOT attach diagnostics to the checker - just return them.
 	// The hook will handle directive processing, severity transformation, and emission.
@@ -39,8 +43,9 @@ type Rule struct {
 
 // Configurable diagnostics that run outside the source-file rule registry.
 const (
-	UnusedDirectiveName = "unusedDirective"
-	UnknownRuleNameName = "unknownRuleName"
+	UnusedDirectiveName    = "unusedDirective"
+	UnknownRuleNameName    = "unknownRuleName"
+	DeprecatedRuleNameName = "deprecatedRuleName"
 )
 
 // ByName finds a rule by name in a slice. Returns nil if not found.

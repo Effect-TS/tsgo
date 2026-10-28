@@ -22,6 +22,7 @@ pub static PROVIDE_LAYER_SUCCEED_TO_PROVIDE_SERVICE: LazyLock<Rule> = LazyLock::
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches =

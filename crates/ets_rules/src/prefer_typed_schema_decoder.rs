@@ -38,6 +38,7 @@ pub static PREFER_TYPED_SCHEMA_DECODER: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_prefer_typed_schema_decoder(ctx.type_parser, source_file);

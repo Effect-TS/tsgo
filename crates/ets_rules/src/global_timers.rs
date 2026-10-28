@@ -37,6 +37,7 @@ pub static GLOBAL_TIMERS: LazyLock<Rule> = LazyLock::new(|| {
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![tsdiag::THIS_CODE_USES_1_THE_CORRESPONDING_EFFECT_TIMER_API_IS_0_FROM_EFFECT_EFFECT_GLOBAL_TIMERS.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_timers(ctx, false) },
 }
 });
@@ -50,6 +51,7 @@ pub static GLOBAL_TIMERS_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![tsdiag::THIS_EFFECT_CODE_USES_1_THE_CORRESPONDING_TIMER_API_IN_THIS_CONTEXT_IS_0_FROM_EFFECT_EFFECT_GLOBAL_TIMERS_IN_EFFECT.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_timers(ctx, true) },
 }
 });

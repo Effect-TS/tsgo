@@ -23,6 +23,7 @@ pub static MISSING_LAYER_CONTEXT: LazyLock<Rule> = LazyLock::new(|| Rule {
     codes: vec![
         tsdiag::MISSING_0_IN_THE_EXPECTED_LAYER_CONTEXT_EFFECT_MISSING_LAYER_CONTEXT.code(),
     ],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let mut diags = Vec::new();
 

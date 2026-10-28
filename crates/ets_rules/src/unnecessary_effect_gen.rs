@@ -21,6 +21,7 @@ pub static UNNECESSARY_EFFECT_GEN: LazyLock<Rule> = LazyLock::new(|| Rule {
         tsdiag::THIS_EFFECT_GEN_CONTAINS_A_SINGLE_RETURN_STATEMENT_EFFECT_UNNECESSARY_EFFECT_GEN
             .code(),
     ],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_unnecessary_effect_gen(ctx.type_parser, source_file);

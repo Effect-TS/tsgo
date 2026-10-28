@@ -21,6 +21,7 @@ pub static SCHEMA_SYNC: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let mut methods = SYNC_TO_EFFECT_METHOD_V3;
         if ctx.type_parser.supported_effect_version() == EffectMajorVersion::V4 {

@@ -15,6 +15,7 @@ pub static NEW_PROMISE: LazyLock<Rule> = LazyLock::new(|| {
         default_severity: Severity::Off,
         supported_effect: vec!["v3", "v4"],
         codes: vec![tsdiag::THIS_CODE_CONSTRUCTS_NEW_PROMISE_PREFER_EFFECT_AP_IS_SUCH_AS_EFFECT_ASYNC_EFFECT_PROMISE_OR_EFFECT_TRY_PROMISE_INSTEAD_OF_MANUAL_PROMISE_CONSTRUCTION_EFFECT_NEW_PROMISE.code()],
+        replaced_by: vec![],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let Some(promise_symbol) =
                 ctx.checker().resolve_name_exported("Promise", None, SymbolFlags::Value, false)

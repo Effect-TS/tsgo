@@ -27,6 +27,7 @@ pub static TIMEOUT_CATCH_TAG_TO_TIMEOUT_OR_ELSE: LazyLock<Rule> = LazyLock::new(
         tsdiag::USE_EFFECT_0_TO_HANDLE_THIS_TIMEOUT_DIRECTLY_EFFECT_TIMEOUT_CATCH_TAG_TO_TIMEOUT_OR_ELSE
             .code(),
     ],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let mut diagnostics = Vec::new();
         let source_file = ctx.source_file;

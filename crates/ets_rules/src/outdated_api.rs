@@ -23,6 +23,7 @@ pub static OUTDATED_API: LazyLock<Rule> = LazyLock::new(|| {
             tsdiag::THIS_PROJECT_TARGETS_EFFECT_V4_BUT_THIS_CODE_USES_THE_EFFECT_V3_API_0_THE_REFERENCED_API_BELONGS_TO_THE_V3_SURFACE_RATHER_THAN_THE_CONFIGURED_V4_SURFACE_1_EFFECT_OUTDATED_API.code(),
             tsdiag::THIS_PROJECT_TARGETS_EFFECT_V4_BUT_THIS_CODE_USES_EFFECT_V3_AP_IS_THE_REFERENCED_API_BELONGS_TO_THE_V3_SURFACE_RATHER_THAN_THE_CONFIGURED_V4_SURFACE_EFFECT_OUTDATED_API.code(),
         ],
+        replaced_by: vec![],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             let matches = analyze_outdated_api(ctx.type_parser, ctx.source_file);
             if matches.is_empty() {

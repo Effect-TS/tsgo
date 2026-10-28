@@ -21,6 +21,7 @@ pub static SCHEMA_CLASS_MISSING_BRAND: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         if ctx.type_parser.supported_effect_version() != EffectMajorVersion::V4 {
             return Vec::new();

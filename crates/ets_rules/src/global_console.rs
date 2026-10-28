@@ -28,6 +28,7 @@ pub static GLOBAL_CONSOLE: LazyLock<Rule> = LazyLock::new(|| {
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![tsdiag::THIS_CODE_USES_CONSOLE_1_THE_CORRESPONDING_EFFECT_LOGGING_API_IS_0_EFFECT_GLOBAL_CONSOLE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_console(ctx, false) },
 }
 });
@@ -41,6 +42,7 @@ pub static GLOBAL_CONSOLE_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![tsdiag::THIS_EFFECT_CODE_USES_CONSOLE_1_LOGGING_IN_EFFECT_CODE_IS_REPRESENTED_THROUGH_0_EFFECT_GLOBAL_CONSOLE_IN_EFFECT.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_console(ctx, true) },
 }
 });

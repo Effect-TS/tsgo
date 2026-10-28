@@ -19,6 +19,7 @@ pub static PREFER_EFFECT_ARRAY: LazyLock<Rule> = LazyLock::new(|| Rule {
         tsdiag::CONSIDER_EFFECT_SLASH_ARRAY_0_INSTEAD_OF_NATIVE_ARRAY_1_2_EFFECT_PREFER_EFFECT_ARRAY
             .code(),
     ],
+    replaced_by: vec![],
     run: run_prefer_effect_array,
 });
 

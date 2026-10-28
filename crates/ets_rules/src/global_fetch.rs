@@ -16,6 +16,7 @@ pub static GLOBAL_FETCH: LazyLock<Rule> = LazyLock::new(|| {
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![tsdiag::THIS_CODE_USES_THE_GLOBAL_FETCH_FUNCTION_HTTP_REQUESTS_ARE_REPRESENTED_THROUGH_HTTP_CLIENT_FROM_0_EFFECT_GLOBAL_FETCH.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_fetch(ctx, false) },
 }
 });
@@ -29,6 +30,7 @@ pub static GLOBAL_FETCH_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![tsdiag::THIS_EFFECT_CODE_CALLS_THE_GLOBAL_FETCH_FUNCTION_HTTP_REQUESTS_IN_EFFECT_CODE_ARE_REPRESENTED_THROUGH_HTTP_CLIENT_FROM_0_EFFECT_GLOBAL_FETCH_IN_EFFECT.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_fetch(ctx, true) },
 }
 });

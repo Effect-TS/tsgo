@@ -22,6 +22,7 @@ pub static CATCH_TO_OR_ELSE_SUCCEED: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_catch_to_or_else_succeed(ctx.type_parser, source_file);

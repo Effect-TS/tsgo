@@ -56,6 +56,8 @@ var All = []rule.Rule{
 	GlobalConsoleInEffect,
 	GlobalDate,
 	GlobalDateInEffect,
+	GlobalJson,
+	GlobalJsonInEffect,
 	GlobalRandom,
 	GlobalRandomInEffect,
 	PreferEffectArray,

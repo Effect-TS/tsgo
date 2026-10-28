@@ -29,6 +29,7 @@ pub static DUPLICATE_PACKAGE: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Warning,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let options = ctx.options;
         let entries = compute_duplicate_package_diags(ctx.type_parser, options);

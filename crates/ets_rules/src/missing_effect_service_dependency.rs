@@ -25,6 +25,7 @@ pub static MISSING_EFFECT_SERVICE_DEPENDENCY: LazyLock<Rule> = LazyLock::new(|| 
         tsdiag::SERVICE_0_IS_REQUIRED_BUT_NOT_PROVIDED_BY_DEPENDENCIES_EFFECT_MISSING_EFFECT_SERVICE_DEPENDENCY.code(),
         tsdiag::SERVICES_0_ARE_REQUIRED_BUT_NOT_PROVIDED_BY_DEPENDENCIES_EFFECT_MISSING_EFFECT_SERVICE_DEPENDENCY.code(),
     ],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         // V3-only rule
         if ctx.type_parser.supported_effect_version() != EffectMajorVersion::V3 {

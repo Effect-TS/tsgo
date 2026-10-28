@@ -20,6 +20,7 @@ pub static UNNECESSARY_PIPE: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
     codes: vec![tsdiag::THIS_PIPE_CALL_CONTAINS_NO_ARGUMENTS_EFFECT_UNNECESSARY_PIPE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_unnecessary_pipe(ctx.type_parser, source_file);

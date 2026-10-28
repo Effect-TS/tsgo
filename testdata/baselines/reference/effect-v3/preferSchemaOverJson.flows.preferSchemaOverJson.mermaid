@@ -37,6 +37,12 @@ flowchart TB
   35[/"type: Effect#lt;any, UnknownException, never#gt;<br/>node: Effect.try#40;#40;#41; =#gt; #123;#92;n  const parsed = JSON.parse#40;#quot;#123;#92;#quot;indirect#92;#quot;:true#125;#quot;#41;#92;n  return parsed.indirect#92;n#125;#41;"/]
   36[["type: #40;#41; =#gt; any<br/>node: #40;#41; =#gt; #123;#92;n  const parsed = JSON.parse#40;#quot;#123;#92;#quot;indirect#92;#quot;:true#125;#quot;#41;#92;n  return parsed.indirect#92;n#125;"]]
   37[/"type: any<br/>node: parsed.indirect"/]
+  38((("type: Effect#lt;string, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const JSON = #123; parse: #40;value: string#41; =#gt; value #125;#92;n  return JSON.parse#40;#quot;#123;#125;#quot;#41;#92;n#125;#41;")))
+  39[/"type: #quot;#123;#125;#quot;<br/>node: #quot;#123;#125;#quot;"/]
+  40["type: string<br/>callee: JSON.parse<br/>args: #91;#93;"]
+  41[/"type: #40;value: string#41; =#gt; string<br/>node: JSON.parse"/]
+  42[["type: #40;value: string#41; =#gt; string<br/>node: #40;value: string#41; =#gt; value"]]
+  43[/"type: string<br/>node: value"/]
   2 -->|"kind: potentialReturn"| 1
   1 -->|"kind: usedBy"| 0
   5 -->|"kind: potentialReturn"| 4
@@ -71,3 +77,9 @@ flowchart TB
   37 -->|"kind: potentialReturn"| 36
   37 -->|"kind: usedBy"| 36
   36 -->|"kind: usedBy"| 35
+  39 -->|"kind: pipe"| 40
+  41 -->|"kind: transformCallee"| 40
+  40 -->|"kind: potentialReturn"| 38
+  43 -->|"kind: potentialReturn"| 42
+  42 -->|"kind: usedBy"| 38
+  40 -->|"kind: usedBy"| 38

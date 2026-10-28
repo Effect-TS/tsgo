@@ -18,6 +18,7 @@ pub static ABORT_CONTROLLER_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let Some(abort_controller_symbol) =
             ctx.checker().resolve_name_exported("AbortController", None, SymbolFlags::Value, false)

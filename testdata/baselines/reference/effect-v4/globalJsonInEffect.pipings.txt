@@ -1,0 +1,239 @@
+==== /.src/globalJsonInEffect.ts (17 flows) ====
+
+=== Piping Flow ===
+Location: 4:13 - 4:52
+Node: Schema.Struct({ name: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { name: Schema.String }
+Subject Type: { name: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly name: String; }>
+
+=== Piping Flow ===
+Location: 7:48 - 11:5
+Node: Effect.gen(function*() {\n    const json = JSON.parse(text)\n    return yield* Schema.decodeUnknownEffect(User)(json)\n  })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n    const json = JSON.parse(text)\n    return yield* Schema.decodeUnknownEffect(User)(json)\n  }
+Subject Type: () => Generator<Effect<{ readonly name: string; }, SchemaError, never>, { readonly name: string; }, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<{ readonly name: string; }, SchemaError, never>
+
+=== Piping Flow ===
+Location: 9:17 - 9:34
+Node: JSON.parse(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 10:18 - 10:57
+Node: Schema.decodeUnknownEffect(User)(json)
+Node Kind: KindCallExpression
+
+Subject: json
+Subject Type: any
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.decodeUnknownEffect(User)
+      args: (constant)
+      outType: Effect<{ readonly name: string; }, SchemaError, never>
+
+=== Piping Flow ===
+Location: 14:30 - 17:3
+Node: Effect.gen(function*() {\n  const data = yield* Effect.succeed({ name: "Test" })\n  return JSON.stringify(data)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const data = yield* Effect.succeed({ name: "Test" })\n  return JSON.stringify(data)\n}
+Subject Type: () => Generator<Effect<{ name: string; }, never, never>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 15:22 - 15:55
+Node: Effect.succeed({ name: "Test" })
+Node Kind: KindCallExpression
+
+Subject: { name: "Test" }
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 16:9 - 16:30
+Node: JSON.stringify(data)
+Node Kind: KindCallExpression
+
+Subject: data
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.stringify
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 20:25 - 22:3
+Node: Effect.fn("parseInFn")(function*(text: string) {\n  return JSON.parse(text)\n})
+Node Kind: KindCallExpression
+
+Subject: function*(text: string) {\n  return JSON.parse(text)\n}
+Subject Type: (text: string) => Generator<never, any, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("parseInFn")
+      args: (constant)
+      outType: (text: string) => Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 21:9 - 21:26
+Node: JSON.parse(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 25:27 - 28:3
+Node: Effect.gen(function*() {\n  const MyJSON = JSON\n  return MyJSON.parse("{}")\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const MyJSON = JSON\n  return MyJSON.parse("{}")\n}
+Subject Type: () => Generator<never, any, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 27:9 - 27:28
+Node: MyJSON.parse("{}")
+Node Kind: KindCallExpression
+
+Subject: "{}"
+Subject Type: "{}"
+
+Transformations (1):
+  [0] kind: call
+      callee: MyJSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 31:21 - 31:38
+Node: JSON.parse("{}")
+Node Kind: KindCallExpression
+
+Subject: "{}"
+Subject Type: "{}"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 34:37 - 34:54
+Node: JSON.parse(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 37:32 - 40:3
+Node: Effect.gen(function*() {\n  const fn = (text: string) => JSON.parse(text)\n  return fn\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const fn = (text: string) => JSON.parse(text)\n  return fn\n}
+Subject Type: () => Generator<never, (text: string) => any, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<(text: string) => any, never, never>
+
+=== Piping Flow ===
+Location: 38:31 - 38:48
+Node: JSON.parse(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 43:28 - 46:3
+Node: Effect.gen(function*() {\n  const JSON = { parse: (value: string) => value }\n  return JSON.parse("{}")\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const JSON = { parse: (value: string) => value }\n  return JSON.parse("{}")\n}
+Subject Type: () => Generator<never, string, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 45:9 - 45:26
+Node: JSON.parse("{}")
+Node Kind: KindCallExpression
+
+Subject: "{}"
+Subject Type: "{}"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: string

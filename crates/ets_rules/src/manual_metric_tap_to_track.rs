@@ -25,6 +25,7 @@ pub static MANUAL_METRIC_TAP_TO_TRACK: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let matches = analyze_manual_metric_tap_to_track(ctx.type_parser, ctx.source_file);
         let mut diags = Vec::with_capacity(matches.len());

@@ -19,6 +19,7 @@ pub static PREFER_EFFECT_RECORD: LazyLock<Rule> = LazyLock::new(|| Rule {
         tsdiag::CONSIDER_EFFECT_SLASH_RECORD_0_INSTEAD_OF_NATIVE_1_2_EFFECT_PREFER_EFFECT_RECORD
             .code(),
     ],
+    replaced_by: vec![],
     run: run_prefer_effect_record,
 });
 

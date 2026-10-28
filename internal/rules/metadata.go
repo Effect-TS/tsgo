@@ -62,7 +62,9 @@ func MetadataPresets() []rule.MetadataPreset {
 func buildGroupPreset(group string, severity etscore.Severity) map[string]etscore.Severity {
 	preset := make(map[string]etscore.Severity)
 	for _, current := range All {
-		if current.Group == group {
+		// Deprecated rules duplicate their replacements and would make the
+		// written configuration report deprecatedRuleName.
+		if current.Group == group && len(current.ReplacedBy) == 0 {
 			preset[current.Name] = severity
 		}
 	}

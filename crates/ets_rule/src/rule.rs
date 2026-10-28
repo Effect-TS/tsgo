@@ -6,7 +6,7 @@ use ets_shim::ast::Diagnostic;
 
 use crate::*;
 
-// go: internal/rule/rule.go:12 Rule 7a0e1113baca354a
+// go: internal/rule/rule.go:12 Rule 724e73f842939b31
 // Rule defines a diagnostic rule with its metadata and check function.
 //
 // Rust: rules are package-level variables (`LazyLock` statics, copied into `ets_rules::ALL` as Go's `All` copies
@@ -35,25 +35,31 @@ pub struct Rule {
     // This is used to build the code-to-rule mapping for codefixes and other lookups.
     pub codes: Vec<i32>,
 
+    // ReplacedBy marks the rule as deprecated and names the rules that replace it.
+    // Configuring a deprecated rule reports deprecatedRuleName on the tsconfig key.
+    pub replaced_by: Vec<&'static str>,
+
     // Run executes the rule against a source file and returns diagnostics.
     // It should NOT attach diagnostics to the checker - just return them.
     // The hook will handle directive processing, severity transformation, and emission.
     pub run: fn(&mut Context<'_, '_>) -> Vec<P<Diagnostic>>,
 }
 
-// go: internal/rule/rule.go:41 UnusedDirectiveName bb208445b89b6bc1
+// go: internal/rule/rule.go:45 UnusedDirectiveName 6938e3e06f4adc21
 // Configurable diagnostics that run outside the source-file rule registry.
 pub const UNUSED_DIRECTIVE_NAME: &str = "unusedDirective";
-// go: internal/rule/rule.go:41 UnusedDirectiveName bb208445b89b6bc1
+// go: internal/rule/rule.go:45 UnusedDirectiveName 6938e3e06f4adc21
 pub const UNKNOWN_RULE_NAME_NAME: &str = "unknownRuleName";
+// go: internal/rule/rule.go:45 UnusedDirectiveName 6938e3e06f4adc21
+pub const DEPRECATED_RULE_NAME_NAME: &str = "deprecatedRuleName";
 
-// go: internal/rule/rule.go:47 ByName 956bd056970c15db
+// go: internal/rule/rule.go:52 ByName 956bd056970c15db
 // ByName finds a rule by name in a slice. Returns nil if not found.
 pub fn by_name<'a>(rules: &'a [Rule], name: &str) -> Option<&'a Rule> {
     rules.iter().find(|r| r.name == name)
 }
 
-// go: internal/rule/rule.go:57 AllCodes be7801259f23c9f3
+// go: internal/rule/rule.go:62 AllCodes be7801259f23c9f3
 // AllCodes returns all diagnostic codes from the given rules.
 pub fn all_codes(rules: &[Rule]) -> Vec<i32> {
     let mut codes = Vec::new();
@@ -63,7 +69,7 @@ pub fn all_codes(rules: &[Rule]) -> Vec<i32> {
     codes
 }
 
-// go: internal/rule/rule.go:67 CodeToRuleName 15b52b1b564368ca
+// go: internal/rule/rule.go:72 CodeToRuleName 15b52b1b564368ca
 // CodeToRuleName returns the rule name for a diagnostic code.
 // Returns empty string if the code is not found in any rule.
 pub fn code_to_rule_name(rules: &[Rule], code: i32) -> &'static str {
@@ -75,7 +81,7 @@ pub fn code_to_rule_name(rules: &[Rule], code: i32) -> &'static str {
     ""
 }
 
-// go: internal/rule/rule.go:77 IsEffectCode e705d9000ba76326
+// go: internal/rule/rule.go:82 IsEffectCode e705d9000ba76326
 // IsEffectCode returns true if code is in the Effect diagnostic range (377000-377999).
 pub fn is_effect_code(code: i32) -> bool {
     (377_000..=377_999).contains(&code)

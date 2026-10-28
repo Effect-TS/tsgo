@@ -31,6 +31,7 @@ pub static API_STABILITY_LEAK: LazyLock<Rule> = LazyLock::new(|| Rule {
         tsdiag::X_0_EXPOSES_1_AN_2_API_EFFECT_API_STABILITY_LEAK.code(),
         tsdiag::X_0_IS_DECLARED_1_HERE_EFFECT_API_STABILITY_LEAK.code(),
     ],
+    replaced_by: vec![],
     run: check_api_stability_leaks,
 });
 

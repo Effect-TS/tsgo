@@ -1,0 +1,58 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/globalJsonInEffect_thunks.ts(6,46): warning TS377157: This Effect code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJsonInEffect)
+/.src/globalJsonInEffect_thunks.ts(9,14): warning TS377157: This Effect code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJsonInEffect)
+/.src/globalJsonInEffect_thunks.ts(14,14): warning TS377157: This Effect code uses `JSON.stringify`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJsonInEffect)
+/.src/globalJsonInEffect_thunks.ts(20,20): warning TS377157: This Effect code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJsonInEffect)
+/.src/globalJsonInEffect_thunks.ts(26,64): warning TS377157: This Effect code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJsonInEffect)
+/.src/globalJsonInEffect_thunks.ts(29,20): warning TS377157: This Effect code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJsonInEffect)
+
+
+==== /.src/globalJsonInEffect_thunks.ts (6 errors) ====
+    // @effect-diagnostics globalJsonInEffect:warning
+    import { Data, Effect } from "effect"
+    
+    class ExampleError extends Data.TaggedError("ExampleError")<{}> {}
+    
+    export const parseInSync = Effect.sync(() => JSON.parse("{}"))
+                                                 ~~~~~~~~~~~~~~~~
+!!! warning TS377157: This Effect code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJsonInEffect)
+    
+    export const parseInTryObject = Effect.try({
+      try: () => JSON.parse("{}"),
+                 ~~~~~~~~~~~~~~~~
+!!! warning TS377157: This Effect code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJsonInEffect)
+      catch: () => new ExampleError()
+    })
+    
+    export const stringifyInTryObject = Effect.try({
+      try: () => JSON.stringify({ name: "Alice" }),
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377157: This Effect code uses `JSON.stringify`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJsonInEffect)
+      catch: () => new ExampleError()
+    })
+    
+    export const parseInTryObjectBlock = Effect.try({
+      try: () => {
+        const parsed = JSON.parse("{}")
+                       ~~~~~~~~~~~~~~~~
+!!! warning TS377157: This Effect code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJsonInEffect)
+        return parsed
+      },
+      catch: () => new ExampleError()
+    })
+    
+    export const parseInTryPromise = Effect.tryPromise(async () => JSON.parse("{}"))
+                                                                   ~~~~~~~~~~~~~~~~
+!!! warning TS377157: This Effect code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJsonInEffect)
+    
+    export const parseInTryPromiseObject = Effect.tryPromise({
+      try: async () => JSON.parse("{}"),
+                       ~~~~~~~~~~~~~~~~
+!!! warning TS377157: This Effect code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJsonInEffect)
+      catch: () => new ExampleError()
+    })
+    
+    export const shouldNotTriggerReturnedFunction = Effect.sync(() => () => JSON.parse("{}"))
+    

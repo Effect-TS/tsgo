@@ -21,6 +21,7 @@ pub static UNNECESSARY_FAIL_YIELDABLE_ERROR: LazyLock<Rule> = LazyLock::new(|| R
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_unnecessary_fail_yieldable_error(ctx.type_parser, source_file);

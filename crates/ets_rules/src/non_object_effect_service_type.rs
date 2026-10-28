@@ -22,6 +22,7 @@ pub static NON_OBJECT_EFFECT_SERVICE_TYPE: LazyLock<Rule> = LazyLock::new(|| {
         codes: vec![
             tsdiag::EFFECT_SERVICE_IS_DECLARED_WITH_A_PRIMITIVE_SERVICE_TYPE_EFFECT_SERVICE_MODELS_OBJECT_SHAPED_SERVICES_PRIMITIVE_VALUES_USE_CONTEXT_TAG_OR_EFFECT_TAG_DIRECTLY_EFFECT_NON_OBJECT_EFFECT_SERVICE_TYPE.code(),
         ],
+        replaced_by: vec![],
         run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
             // V3-only rule
             if ctx.type_parser.supported_effect_version() != EffectMajorVersion::V3 {

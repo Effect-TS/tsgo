@@ -2604,6 +2604,16 @@
           "default": "off",
           "description": "Warns when using the global fetch function inside Effect generators instead of the Effect HTTP client"
         },
+        "globalJson": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when using JSON.parse or JSON.stringify outside Effect generators instead of Effect Schema"
+        },
+        "globalJsonInEffect": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Warns when using JSON.parse or JSON.stringify inside Effect generators instead of Effect Schema"
+        },
         "globalRandom": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
@@ -2807,7 +2817,7 @@
         "preferSchemaOverJson": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "off",
-          "description": "Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify"
+          "description": "Deprecated: use globalJsonInEffect and globalJson instead. Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify inside Effect code"
         },
         "preferSchemaTaggedError": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",

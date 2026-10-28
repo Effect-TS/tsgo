@@ -77,6 +77,12 @@ func TestMetadataPresetCatalog(t *testing.T) {
 				}
 				continue
 			}
+			if len(current.ReplacedBy) > 0 {
+				if included {
+					t.Errorf("preset %q includes deprecated diagnostic %q", presetName, current.Name)
+				}
+				continue
+			}
 			if !included {
 				t.Errorf("preset %q is missing diagnostic %q", presetName, current.Name)
 			} else if severity != etscore.SeverityWarning {

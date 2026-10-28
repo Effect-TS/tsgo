@@ -44,9 +44,17 @@ func config(options string, extra string) string {
 }
 
 func unknownDiagnostics(config *tsoptions.ParsedCommandLine) []*ast.Diagnostic {
+	return diagnosticsWithCode(config, diagnostics.Unknown_Effect_diagnostic_rule_0_in_diagnosticSeverity_effect_unknownRuleName.Code())
+}
+
+func deprecatedDiagnostics(config *tsoptions.ParsedCommandLine) []*ast.Diagnostic {
+	return diagnosticsWithCode(config, diagnostics.Effect_diagnostic_rule_0_is_deprecated_use_1_instead_effect_deprecatedRuleName.Code())
+}
+
+func diagnosticsWithCode(config *tsoptions.ParsedCommandLine, code int32) []*ast.Diagnostic {
 	var result []*ast.Diagnostic
 	for _, diagnostic := range config.Errors {
-		if diagnostic.Code() == 377134 {
+		if diagnostic.Code() == code {
 			result = append(result, diagnostic)
 		}
 	}
@@ -62,10 +70,11 @@ func TestUnknownRuleNames(t *testing.T) {
 	}{
 		{"typo", `"diagnosticSeverity":{"floatingEfect":"error"}`, 1, diagnostics.CategoryWarning},
 		{"unknown disabled rule still invalid", `"diagnosticSeverity":{"floatingEfect":"off"}`, 1, diagnostics.CategoryWarning},
-		{"known names", `"diagnosticSeverity":{"floatingEffect":"error","unusedDirective":"warning","unknownRuleName":"warning"}`, 0, diagnostics.CategoryWarning},
+		{"known names", `"diagnosticSeverity":{"floatingEffect":"error","unusedDirective":"warning","unknownRuleName":"warning","deprecatedRuleName":"warning","preferSchemaOverJson":"warning"}`, 0, diagnostics.CategoryWarning},
 		{"error", `"diagnosticSeverity":{"floatingEfect":"error","unknownRuleName":"error"}`, 1, diagnostics.CategoryError},
 		{"suggestion", `"diagnosticSeverity":{"floatingEfect":"error","unknownRuleName":"suggestion"}`, 1, diagnostics.CategorySuggestion},
 		{"off", `"diagnosticSeverity":{"floatingEfect":"error","unknownRuleName":"off"}`, 0, diagnostics.CategoryWarning},
+		{"deprecatedRuleName off", `"diagnosticSeverity":{"floatingEfect":"error","deprecatedRuleName":"off"}`, 1, diagnostics.CategoryWarning},
 		{"disabled", `"diagnostics":false,"diagnosticSeverity":{"floatingEfect":"error"}`, 0, diagnostics.CategoryWarning},
 		{"null", `"diagnosticSeverity":null,"overrides":[{"options":{"diagnosticSeverity":{"floatingEfect":"error"}}}]`, 0, diagnostics.CategoryWarning},
 		{"override", `"overrides":[null,{"options":{"diagnosticSeverity":{"floatingEfect":"error"}}}]`, 1, diagnostics.CategoryWarning},
@@ -87,6 +96,87 @@ func TestUnknownRuleNames(t *testing.T) {
 				}
 				if text := diagnostic.File().Text()[diagnostic.Pos():diagnostic.End()]; text != `"floatingEfect"` {
 					t.Fatalf("wrong underline: %q", text)
+				}
+			}
+		})
+	}
+}
+
+func TestDeprecatedRuleNames(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		name, options string
+		count         int
+		category      diagnostics.Category
+	}{
+		{"deprecated", `"diagnosticSeverity":{"preferSchemaOverJson":"warning"}`, 1, diagnostics.CategoryWarning},
+		{"deprecated disabled rule still reported", `"diagnosticSeverity":{"preferSchemaOverJson":"off"}`, 1, diagnostics.CategoryWarning},
+		{"replacements", `"diagnosticSeverity":{"globalJson":"warning","globalJsonInEffect":"warning"}`, 0, diagnostics.CategoryWarning},
+		{"error", `"diagnosticSeverity":{"preferSchemaOverJson":"warning","deprecatedRuleName":"error"}`, 1, diagnostics.CategoryError},
+		{"off", `"diagnosticSeverity":{"preferSchemaOverJson":"warning","deprecatedRuleName":"off"}`, 0, diagnostics.CategoryWarning},
+		{"unknownRuleName off", `"diagnosticSeverity":{"preferSchemaOverJson":"warning","unknownRuleName":"off"}`, 1, diagnostics.CategoryWarning},
+		{"disabled", `"diagnostics":false,"diagnosticSeverity":{"preferSchemaOverJson":"warning"}`, 0, diagnostics.CategoryWarning},
+		{"override", `"overrides":[{"options":{"diagnosticSeverity":{"preferSchemaOverJson":"warning"}}}]`, 1, diagnostics.CategoryWarning},
+		{"severity and override", `"diagnosticSeverity":{"preferSchemaOverJson":"warning"},"overrides":[{"options":{"diagnosticSeverity":{"preferSchemaOverJson":"off"}}}]`, 2, diagnostics.CategoryWarning},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			host := newHost(map[string]string{"/tsconfig.json": config(tt.options, "")})
+			parsed := parse(t, host, "/tsconfig.json", nil)
+			got := deprecatedDiagnostics(parsed)
+			if len(got) != tt.count {
+				t.Fatalf("want %d warnings, got %d: %v", tt.count, len(got), parsed.Errors)
+			}
+			if len(unknownDiagnostics(parsed)) != 0 {
+				t.Fatalf("deprecated rule reported as unknown: %v", parsed.Errors)
+			}
+			for _, diagnostic := range got {
+				if diagnostic.Category() != tt.category {
+					t.Fatalf("wrong category: %v", diagnostic.Category())
+				}
+				if diagnostic.File() == nil || diagnostic.File().FileName() != "/tsconfig.json" {
+					t.Fatal("missing local config location")
+				}
+				if text := diagnostic.File().Text()[diagnostic.Pos():diagnostic.End()]; text != `"preferSchemaOverJson"` {
+					t.Fatalf("wrong underline: %q", text)
+				}
+				if args := diagnostic.MessageArgs(); len(args) != 2 || args[0] != "preferSchemaOverJson" || args[1] != "`globalJsonInEffect` or `globalJson`" {
+					t.Fatalf("wrong message arguments: %v", args)
+				}
+			}
+		})
+	}
+}
+
+func TestDeprecatedRuleNamesExtends(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		name, base, child string
+		count             int
+		category          diagnostics.Category
+		local             bool
+	}{
+		{"inherited key", `"diagnosticSeverity":{"preferSchemaOverJson":"warning"}`, `"diagnosticSeverity":{}`, 1, diagnostics.CategoryWarning, false},
+		{"child silences base", `"diagnosticSeverity":{"preferSchemaOverJson":"warning"}`, `"diagnosticSeverity":{"deprecatedRuleName":"off"}`, 0, diagnostics.CategoryWarning, false},
+		{"base raises child", `"diagnosticSeverity":{"deprecatedRuleName":"error"}`, `"diagnosticSeverity":{"preferSchemaOverJson":"warning"}`, 1, diagnostics.CategoryError, true},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			host := newHost(map[string]string{
+				"/base.json":     config(tt.base, ""),
+				"/tsconfig.json": config(tt.child, `,"extends":"./base.json"`),
+			})
+			parsed := parse(t, host, "/tsconfig.json", &tsc.ExtendedConfigCache{})
+			got := deprecatedDiagnostics(parsed)
+			if len(got) != tt.count {
+				t.Fatalf("want %d warnings, got %d: %v", tt.count, len(got), parsed.Errors)
+			}
+			for _, d := range got {
+				if d.Category() != tt.category {
+					t.Fatalf("wrong category: %v", d.Category())
+				}
+				if (d.File() != nil) != tt.local {
+					t.Fatalf("wrong inherited/local location: %v", d.File())
 				}
 			}
 		})

@@ -63,6 +63,7 @@ pub static FLOATING_EFFECT_IN_VITEST: LazyLock<Rule> = LazyLock::new(|| Rule {
     default_severity: Severity::Error,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let mut diags = Vec::new();
 

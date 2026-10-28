@@ -79,18 +79,20 @@ pub fn metadata_presets() -> Vec<MetadataPreset> {
     ]
 }
 
-// go: internal/rules/metadata.go:62 buildGroupPreset 9f5511052fb1678c
+// go: internal/rules/metadata.go:62 buildGroupPreset 18223ae28c98d174
 pub(crate) fn build_group_preset(group: &str, severity: Severity) -> FxHashMap<String, Severity> {
     let mut preset = FxHashMap::default();
     for current in ALL.iter() {
-        if current.group == group {
+        // Deprecated rules duplicate their replacements and would make the
+        // written configuration report deprecatedRuleName.
+        if current.group == group && current.replaced_by.is_empty() {
             preset.insert(current.name.to_string(), severity);
         }
     }
     preset
 }
 
-// go: internal/rules/metadata.go:72 buildStrictPreset 44def83207a81ae1
+// go: internal/rules/metadata.go:74 buildStrictPreset 44def83207a81ae1
 pub(crate) fn build_strict_preset() -> FxHashMap<String, Severity> {
     let mut preset = build_default_preset();
     for severity in preset.values_mut() {
@@ -99,7 +101,7 @@ pub(crate) fn build_strict_preset() -> FxHashMap<String, Severity> {
     preset
 }
 
-// go: internal/rules/metadata.go:80 buildDefaultPreset 2ee9dffa4274ca30
+// go: internal/rules/metadata.go:82 buildDefaultPreset 2ee9dffa4274ca30
 pub(crate) fn build_default_preset() -> FxHashMap<String, Severity> {
     let mut preset = FxHashMap::default();
     for current in ALL.iter() {

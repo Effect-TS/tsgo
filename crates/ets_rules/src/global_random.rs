@@ -16,6 +16,7 @@ pub static GLOBAL_RANDOM: LazyLock<Rule> = LazyLock::new(|| {
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![tsdiag::THIS_CODE_USES_MATH_RANDOM_RANDOMNESS_IS_REPRESENTED_THROUGH_THE_EFFECT_RANDOM_SERVICE_EFFECT_GLOBAL_RANDOM.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_random(ctx, false) },
 }
 });
@@ -29,6 +30,7 @@ pub static GLOBAL_RANDOM_IN_EFFECT: LazyLock<Rule> = LazyLock::new(|| {
     default_severity: Severity::Off,
     supported_effect: vec!["v3", "v4"],
     codes: vec![tsdiag::THIS_EFFECT_CODE_USES_MATH_RANDOM_RANDOMNESS_IS_REPRESENTED_THROUGH_THE_EFFECT_RANDOM_SERVICE_EFFECT_GLOBAL_RANDOM_IN_EFFECT.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> { run_global_random(ctx, true) },
 }
 });

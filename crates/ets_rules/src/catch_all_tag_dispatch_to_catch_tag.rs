@@ -23,6 +23,7 @@ pub static CATCH_ALL_TAG_DISPATCH_TO_CATCH_TAG: LazyLock<Rule> = LazyLock::new(|
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
     codes: vec![MESSAGE.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches =

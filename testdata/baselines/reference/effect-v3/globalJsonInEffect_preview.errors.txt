@@ -1,0 +1,19 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/globalJsonInEffect_preview.ts(8,10): warning TS377157: This Effect code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJsonInEffect)
+
+
+==== /.src/globalJsonInEffect_preview.ts (1 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics globalJsonInEffect:warning
+    import { Effect } from "effect"
+    
+    export const preview = Effect.gen(function*() {
+      const text = yield* Effect.succeed('{"ok":true}')
+      return JSON.parse(text)
+             ~~~~~~~~~~~~~~~~
+!!! warning TS377157: This Effect code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJsonInEffect)
+    })
+    

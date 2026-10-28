@@ -3,6 +3,7 @@ package effectconfigcheck
 
 import (
 	"slices"
+	"strings"
 
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/directives"
@@ -23,38 +24,50 @@ func validate(options *core.CompilerOptions, sourceFile *ast.SourceFile) []*ast.
 		return nil
 	}
 	config := options.Effect
-	severity, configured := config.DiagnosticSeverity[rule.UnknownRuleNameName]
-	if !configured {
-		severity = etscore.SeverityWarning
-	}
-	if severity.IsOff() {
+	unknownSeverity := configuredSeverity(config, rule.UnknownRuleNameName)
+	deprecatedSeverity := configuredSeverity(config, rule.DeprecatedRuleNameName)
+	if unknownSeverity.IsOff() && deprecatedSeverity.IsOff() {
 		return nil
 	}
 
 	// Syntax is used only to locate diagnostics; validation uses the merged options.
 	plugin := effectPluginSyntax(sourceFile)
 	var result []*ast.Diagnostic
+	report := func(syntax *ast.Node, name string, severity etscore.Severity, message *diagnostics.Message, args ...any) {
+		var node *ast.Node
+		if property := findProperty(syntax, name); property != nil {
+			node = property.Name()
+		}
+		diagnostic := tsoptions.CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, message, args...)
+		diagnostic.SetCategory(directives.ToCategory(severity))
+		result = append(result, diagnostic)
+	}
 	check := func(severities map[string]etscore.Severity, syntax *ast.Node) {
 		var unknown []string
+		var deprecated []*rule.Rule
 		for name := range severities {
-			if name != rule.UnusedDirectiveName && name != rule.UnknownRuleNameName && rule.ByName(rules.All, name) == nil {
+			if name == rule.UnusedDirectiveName || name == rule.UnknownRuleNameName || name == rule.DeprecatedRuleNameName {
+				continue
+			}
+			switch current := rule.ByName(rules.All, name); {
+			case current == nil:
 				unknown = append(unknown, name)
+			case len(current.ReplacedBy) > 0:
+				deprecated = append(deprecated, current)
 			}
 		}
 		// Maps have no iteration order; keep CLI output and baselines deterministic.
 		slices.Sort(unknown)
-		for _, name := range unknown {
-			var node *ast.Node
-			if property := findProperty(syntax, name); property != nil {
-				node = property.Name()
+		slices.SortFunc(deprecated, func(a, b *rule.Rule) int { return strings.Compare(a.Name, b.Name) })
+		if !unknownSeverity.IsOff() {
+			for _, name := range unknown {
+				report(syntax, name, unknownSeverity, diagnostics.Unknown_Effect_diagnostic_rule_0_in_diagnosticSeverity_effect_unknownRuleName, name)
 			}
-			diagnostic := tsoptions.CreateDiagnosticForNodeInSourceFileOrCompilerDiagnostic(
-				sourceFile, node,
-				diagnostics.Unknown_Effect_diagnostic_rule_0_in_diagnosticSeverity_effect_unknownRuleName,
-				name,
-			)
-			diagnostic.SetCategory(directives.ToCategory(severity))
-			result = append(result, diagnostic)
+		}
+		if !deprecatedSeverity.IsOff() {
+			for _, current := range deprecated {
+				report(syntax, current.Name, deprecatedSeverity, diagnostics.Effect_diagnostic_rule_0_is_deprecated_use_1_instead_effect_deprecatedRuleName, current.Name, formatReplacements(current.ReplacedBy))
+			}
 		}
 	}
 	check(config.DiagnosticSeverity, propertyValue(plugin, "diagnosticSeverity"))
@@ -76,6 +89,21 @@ func validate(options *core.CompilerOptions, sourceFile *ast.SourceFile) []*ast.
 		check(override.Options.DiagnosticSeverity, syntax)
 	}
 	return result
+}
+
+func configuredSeverity(config *etscore.EffectPluginOptions, name string) etscore.Severity {
+	if severity, configured := config.DiagnosticSeverity[name]; configured {
+		return severity
+	}
+	return etscore.SeverityWarning
+}
+
+func formatReplacements(names []string) string {
+	quoted := make([]string, len(names))
+	for i, name := range names {
+		quoted[i] = "`" + name + "`"
+	}
+	return strings.Join(quoted, " or ")
 }
 
 func effectPluginSyntax(sourceFile *ast.SourceFile) *ast.Node {

@@ -2404,6 +2404,12 @@
         "effecttsgo/global-fetch-in-effect": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/global-json": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
+        "effecttsgo/global-json-in-effect": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/global-random": {
           "$ref": "#/definitions/RuleNoConfig"
         },

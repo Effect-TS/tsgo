@@ -27,6 +27,7 @@ pub static MISSING_EFFECT_CONTEXT: LazyLock<Rule> = LazyLock::new(|| {
     default_severity: Severity::Error,
     supported_effect: vec!["v3", "v4"],
     codes: vec![tsdiag::THIS_EFFECT_REQUIRES_A_SERVICE_THAT_IS_MISSING_FROM_THE_EXPECTED_EFFECT_CONTEXT_COLON_0_EFFECT_MISSING_EFFECT_CONTEXT.code()],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let mut diags = Vec::new();
 

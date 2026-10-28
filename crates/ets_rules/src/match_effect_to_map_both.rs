@@ -23,6 +23,7 @@ pub static MATCH_EFFECT_TO_MAP_BOTH: LazyLock<Rule> = LazyLock::new(|| {
     codes: vec![
         tsdiag::EFFECT_MAP_BOTH_EXPRESSES_THESE_FAILURE_AND_SUCCESS_TRANSFORMATIONS_MORE_DIRECTLY_THAN_EFFECT_MATCH_EFFECT_EFFECT_MATCH_EFFECT_TO_MAP_BOTH.code(),
     ],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let matches = analyze_match_effect_to_map_both(ctx.type_parser, Some(ctx.source_file));
         let mut diagnostics = Vec::with_capacity(matches.len());

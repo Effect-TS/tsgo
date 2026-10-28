@@ -83,3 +83,9 @@ Effect version: 4.0.2
       return parseFn()
     })
     
+    // Should NOT trigger - shadowed JSON
+    export const shadowedJson = Effect.gen(function*() {
+      const JSON = { parse: (value: string) => value }
+      return JSON.parse("{}")
+    })
+    

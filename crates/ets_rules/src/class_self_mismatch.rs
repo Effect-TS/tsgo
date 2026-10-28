@@ -23,6 +23,7 @@ pub static CLASS_SELF_MISMATCH: LazyLock<Rule> = LazyLock::new(|| Rule {
         tsdiag::THE_SELF_TYPE_PARAMETER_FOR_THIS_CLASS_SHOULD_BE_0_EFFECT_CLASS_SELF_MISMATCH
             .code(),
     ],
+    replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let source_file = ctx.source_file;
         let matches = analyze_class_self_mismatch(ctx.type_parser, source_file);
