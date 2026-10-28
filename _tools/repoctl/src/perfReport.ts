@@ -5,7 +5,7 @@ import * as FileSystem from "effect/FileSystem"
 import * as Path from "effect/Path"
 import * as Schema from "effect/Schema"
 import { median } from "./perf.ts"
-import { type PerfCell, PerfCellFromString, type PerfPair, type PerfSample, PerfSide } from "./perfCi.ts"
+import { type PerfCell, PerfCellFromString, type PerfSample, type PerfSide } from "./perfCi.ts"
 
 export const perfReportMarker = "<!-- effect-tsgo-perf -->"
 
@@ -20,47 +20,50 @@ export class PerfReportError extends Data.TaggedError("PerfReportError")<{
   }
 }
 
+const PerfMatrixSubject = Schema.Struct({ version: Schema.NonEmptyString })
+
+// The measure half of `repoctl matrix perf`: one entry per channel, with the sides it builds.
 export const PerfMatrix = Schema.Struct({
-  include: Schema.Array(Schema.Struct({
-    name: Schema.NonEmptyString,
-    side: PerfSide,
-    version: Schema.NonEmptyString
-  }))
+  measure: Schema.Struct({
+    include: Schema.Array(Schema.Struct({
+      name: Schema.NonEmptyString,
+      base: Schema.optionalKey(PerfMatrixSubject),
+      head: Schema.optionalKey(PerfMatrixSubject)
+    }))
+  })
 })
-export type PerfMatrixEntry = (typeof PerfMatrix.Type)["include"][number]
+export type PerfMatrixEntry = (typeof PerfMatrix.Type)["measure"]["include"][number]
 
 const PerfMatrixFromString = Schema.fromJsonString(PerfMatrix)
 
-export const mannWhitneyUTwoSided = (a: ReadonlyArray<number>, b: ReadonlyArray<number>): number => {
-  if (a.length === 0 || b.length === 0) return 1
-  const combined = [
-    ...a.map((value) => ({ value, fromA: true })),
-    ...b.map((value) => ({ value, fromA: false }))
-  ].sort((left, right) => left.value - right.value)
+// Exact two-sided Wilcoxon signed-rank test of paired differences against zero; zero differences are dropped and
+// tied magnitudes get midranks.
+export const wilcoxonSignedRankTwoSided = (differences: ReadonlyArray<number>): number => {
+  const nonZero = differences
+    .filter((difference) => difference !== 0)
+    .map((difference) => ({ magnitude: Math.abs(difference), positive: difference > 0 }))
+    .sort((left, right) => left.magnitude - right.magnitude)
+  if (nonZero.length === 0) return 1
   // Midranks are doubled so that tied ranks stay integral in the rank-sum DP below.
   const doubledRanks: Array<number> = []
-  for (let start = 0; start < combined.length;) {
+  for (let start = 0; start < nonZero.length;) {
     let end = start
-    while (end + 1 < combined.length && combined[end + 1]!.value === combined[start]!.value) end++
+    while (end + 1 < nonZero.length && nonZero[end + 1]!.magnitude === nonZero[start]!.magnitude) end++
     for (let index = start; index <= end; index++) doubledRanks[index] = start + end + 2
     start = end + 1
   }
-  const observed = combined.reduce((sum, entry, index) => entry.fromA ? sum + doubledRanks[index]! : sum, 0)
+  const observed = nonZero.reduce((sum, entry, index) => entry.positive ? sum + doubledRanks[index]! : sum, 0)
   const maxSum = doubledRanks.reduce((sum, rank) => sum + rank, 0)
-  const ways = Array.from({ length: a.length + 1 }, () => new Array<number>(maxSum + 1).fill(0))
-  ways[0]![0] = 1
+  // Under the null hypothesis each rank is positive with probability 1/2: count the sign assignments per sum.
+  const ways = new Array<number>(maxSum + 1).fill(0)
+  ways[0] = 1
   for (const rank of doubledRanks) {
-    for (let size = a.length; size >= 1; size--) {
-      const previous = ways[size - 1]!
-      const current = ways[size]!
-      for (let sum = maxSum; sum >= rank; sum--) current[sum]! += previous[sum - rank]!
-    }
+    for (let sum = maxSum; sum >= rank; sum--) ways[sum]! += ways[sum - rank]!
   }
-  const distribution = ways[a.length]!
   let total = 0
   let lower = 0
   let upper = 0
-  distribution.forEach((count, sum) => {
+  ways.forEach((count, sum) => {
     total += count
     if (sum <= observed) lower += count
     if (sum >= observed) upper += count
@@ -73,37 +76,30 @@ type MetricKind = "count" | "counter" | "ratio"
 interface MetricDefinition {
   readonly label: string
   readonly kind: MetricKind
-  readonly value: (pair: PerfPair) => number
+  readonly value: (sample: PerfSample) => number
 }
 
-const relativePercent = (patched: number, stock: number) => 100 * (patched / stock - 1)
-
 const metrics: ReadonlyArray<MetricDefinition> = [
-  { label: "Errors", kind: "count", value: (pair) => pair.patched.errors },
-  { label: "Warnings", kind: "count", value: (pair) => pair.patched.warnings },
-  { label: "Symbols over stock", kind: "counter", value: (pair) => pair.patched.symbols - pair.stock.symbols },
-  { label: "Types over stock", kind: "counter", value: (pair) => pair.patched.types - pair.stock.types },
-  {
-    label: "Instantiations over stock",
-    kind: "counter",
-    value: (pair) => pair.patched.instantiations - pair.stock.instantiations
-  },
-  {
-    label: "Memory allocs over stock",
-    kind: "ratio",
-    value: (pair) => relativePercent(pair.patched.memoryAllocs, pair.stock.memoryAllocs)
-  },
-  {
-    label: "Check time over stock",
-    kind: "ratio",
-    value: (pair) => relativePercent(pair.patched.checkTimeSeconds, pair.stock.checkTimeSeconds)
-  },
-  {
-    label: "Total time over stock",
-    kind: "ratio",
-    value: (pair) => relativePercent(pair.patched.totalTimeSeconds, pair.stock.totalTimeSeconds)
-  }
+  { label: "Errors", kind: "count", value: (sample) => sample.errors },
+  { label: "Warnings", kind: "count", value: (sample) => sample.warnings },
+  { label: "Symbols", kind: "counter", value: (sample) => sample.symbols },
+  { label: "Types", kind: "counter", value: (sample) => sample.types },
+  { label: "Instantiations", kind: "counter", value: (sample) => sample.instantiations },
+  { label: "Memory allocs", kind: "ratio", value: (sample) => sample.memoryAllocs },
+  { label: "Check time", kind: "ratio", value: (sample) => sample.checkTimeSeconds },
+  { label: "Total time", kind: "ratio", value: (sample) => sample.totalTimeSeconds }
 ]
+
+// Counts are the subject's own; counters subject − reference; allocs and times subject / reference − 1 in percent.
+const compare = (metric: MetricDefinition, subject: PerfSample, reference: PerfSample) => {
+  const value = metric.value(subject)
+  if (metric.kind === "count") return value
+  const referenceValue = metric.value(reference)
+  return metric.kind === "counter" ? value - referenceValue : 100 * (value / referenceValue - 1)
+}
+
+const difference = (metric: MetricDefinition, head: PerfSample, base: PerfSample) =>
+  metric.kind === "ratio" ? compare(metric, head, base) : metric.value(head) - metric.value(base)
 
 interface Summary {
   readonly values: ReadonlyArray<number>
@@ -135,17 +131,17 @@ const formatSignedFixed = (value: number, digits: number) => {
 const escapeHtml = (text: string) =>
   text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"", "&quot;")
 
-const formatSummary = (kind: MetricKind, summary: Summary) => {
+// Counts are absolute and counters relative, both median ±half-range; ratios are percentages, median (min to max).
+const formatSummary = (kind: MetricKind, summary: Summary, digits: number) => {
   if (kind === "ratio") {
-    return `${formatSignedFixed(summary.median, 1)}% (${fixed(summary.min, 1)} to ${fixed(summary.max, 1)})`
+    return `${formatSignedFixed(summary.median, digits)}% (${fixed(summary.min, digits)} to ${
+      fixed(summary.max, digits)
+    })`
   }
   const spread = Math.ceil((summary.max - summary.min) / 2)
   const value = kind === "counter" ? formatSignedCount(summary.median) : formatCount(summary.median)
   return spread === 0 ? value : `${value} (±${formatCount(spread)})`
 }
-
-const formatExtreme = (kind: MetricKind, value: number) =>
-  kind === "ratio" ? `${formatSignedFixed(value, 1)}%` : kind === "counter" ? formatSignedCount(value) : formatCount(value)
 
 const direction = (delta: number) => delta < 0 ? "🟩" : "🔻"
 
@@ -155,24 +151,22 @@ interface Delta {
   readonly pValue?: number
 }
 
-const compareSummaries = (kind: MetricKind, base: Summary, head: Summary): Delta => {
-  const delta = head.median - base.median
-  if (kind === "ratio") {
-    const pValue = mannWhitneyUTwoSided(head.values, base.values)
-    return pValue < significanceLevel
-      ? { text: `${direction(delta)} ${formatSignedFixed(delta, 1)} pts`, flagged: true, pValue }
-      : { text: "~", flagged: false, pValue }
+// Counters, allocs, and times are flagged on the paired test (counters jitter by a few symbols between runs of one
+// binary); counts are shown when every round moves the same way, never flagged.
+const judge = (kind: MetricKind, differences: Summary, baseOverhead: Summary | undefined): Delta => {
+  const delta = differences.median
+  if (kind === "count") {
+    return differences.min <= 0 && differences.max >= 0
+      ? { text: "~", flagged: false }
+      : { text: formatSignedCount(delta), flagged: false }
   }
-  if (head.min <= base.max && base.min <= head.max) return { text: "~", flagged: false }
-  const percent = base.median === 0 ? "" : ` (${formatSignedFixed(delta / Math.abs(base.median) * 100, 2)}%)`
-  return kind === "counter"
-    ? { text: `${direction(delta)} ${formatSignedCount(delta)}${percent}`, flagged: true }
-    : { text: `${formatSignedCount(delta)}${percent}`, flagged: false }
-}
-
-const sampleCount = (base: PerfCell | undefined, head: PerfCell | undefined) => {
-  const counts = [base, head].flatMap((cell) => cell === undefined ? [] : [cell.pairs.length])
-  return counts.length === 2 && counts[0] !== counts[1] ? counts.join("/") : String(counts[0])
+  const pValue = wilcoxonSignedRankTwoSided(differences.values)
+  if (pValue >= significanceLevel) return { text: "~", flagged: false, pValue }
+  if (kind === "ratio") return { text: `${direction(delta)} ${formatSignedFixed(delta, 2)}%`, flagged: true, pValue }
+  const percent = baseOverhead === undefined || baseOverhead.median === 0
+    ? ""
+    : ` (${formatSignedFixed(delta / Math.abs(baseOverhead.median) * 100, 2)}%)`
+  return { text: `${direction(delta)} ${formatSignedCount(delta)}${percent}`, flagged: true, pValue }
 }
 
 const channelOrder = (channel: string) => channel === "latest" ? 0 : channel === "beta" ? 1 : channel === "next" ? 2 : 3
@@ -185,60 +179,89 @@ const sortChannels = (channels: Iterable<string>) =>
 const cell = (content: string, align?: "right") =>
   `<td${align === undefined ? "" : ` align=${align}`}><sub>${content}</sub></td>`
 
+const columns = 6
+
 interface FlaggedRow {
   readonly channel: string
   readonly metric: string
   readonly delta: string
 }
 
+// The patched sample of a side and the stock sample of its own TypeScript version, per round.
+const sideSamples = (entry: PerfCell, side: PerfSide) => {
+  if (entry[side] === undefined) return undefined
+  return entry.rounds.map((round, index) => {
+    const patched = round[side]
+    if (patched === undefined) {
+      throw new PerfReportError({ reason: `channel ${entry.channel} round ${index + 1} has no ${side} sample` })
+    }
+    return { patched, stock: side === "base" ? round.baseStock ?? round.stock : round.stock }
+  })
+}
+
 const renderChannel = (
   channel: string,
-  base: PerfCell | undefined,
-  head: PerfCell | undefined,
-  expected: ReadonlyMap<string, string> | undefined,
+  entry: PerfCell | undefined,
+  expected: PerfMatrixEntry | undefined,
   flagged: Array<FlaggedRow>,
   missing: Array<string>
 ) => {
   const notes: Array<string> = []
-  const isExpected = (side: PerfSide) => expected?.has(`${channel}\0${side}`) ?? false
-  for (const [side, value] of [["base", base], ["head", head]] as const) {
-    if (value === undefined && isExpected(side)) {
-      missing.push(`${channel} · ${side}`)
-      notes.push(`⚠️ ${side} result missing`)
+  if (entry === undefined && expected !== undefined) {
+    missing.push(channel)
+    notes.push("⚠️ result missing")
+  }
+  if (entry !== undefined) {
+    for (const side of ["base", "head"] as const) {
+      if (entry[side] === undefined && expected?.[side] !== undefined) {
+        missing.push(`${channel} · ${side}`)
+        notes.push(`⚠️ ${side} result missing`)
+      }
     }
+    if (entry.base === undefined && expected?.base === undefined) notes.push("new in this PR")
+    if (entry.head === undefined && expected?.head === undefined) notes.push("removed in this PR")
   }
-  if (base === undefined && head !== undefined && !isExpected("base")) notes.push("new in this PR")
-  if (head === undefined && base !== undefined && !isExpected("head")) notes.push("removed in this PR")
-  const version = base !== undefined && head !== undefined && base.typescriptVersion !== head.typescriptVersion
-    ? `${base.typescriptVersion} → ${head.typescriptVersion}`
-    : (head ?? base)?.typescriptVersion ?? expected?.get(`${channel}\0head`) ?? expected?.get(`${channel}\0base`) ??
+  const changed = entry?.base !== undefined && entry.head !== undefined &&
+    entry.base.typescriptVersion !== entry.head.typescriptVersion
+  const version = changed
+    ? `${entry.base!.typescriptVersion} → ${entry.head!.typescriptVersion}`
+    : (entry?.head ?? entry?.base)?.typescriptVersion ?? expected?.head?.version ?? expected?.base?.version ??
       "unknown version"
-  if (base !== undefined && head !== undefined && base.typescriptVersion !== head.typescriptVersion) {
-    notes.push("compiler changed")
-  }
+  if (changed) notes.push("compiler changed")
   const title = [escapeHtml(channel), escapeHtml(version), "effect (all rules)", ...notes].join(" · ")
-  const rows = [`<tr><th align=left colspan="7"><sub>${title}</sub></th></tr>`]
-  if (base === undefined && head === undefined) return rows
+  const rows = [`<tr><th align=left colspan="${columns}"><sub>${title}</sub></th></tr>`]
+  if (entry === undefined) return rows
 
-  const count = sampleCount(base, head)
+  const base = sideSamples(entry, "base")
+  const head = sideSamples(entry, "head")
+  const count = entry.rounds.length
   for (const metric of metrics) {
-    const baseSummary = base === undefined ? undefined : summarize(base.pairs.map(metric.value))
-    const headSummary = head === undefined ? undefined : summarize(head.pairs.map(metric.value))
-    const delta = baseSummary === undefined || headSummary === undefined
+    const overhead = (samples: typeof base) =>
+      samples === undefined
+        ? undefined
+        : summarize(samples.map(({ patched, stock }) => compare(metric, patched, stock)))
+    const baseOverhead = overhead(base)
+    const headOverhead = overhead(head)
+    const differences = base === undefined || head === undefined
       ? undefined
-      : compareSummaries(metric.kind, baseSummary, headSummary)
+      : summarize(head.map((sample, index) => difference(metric, sample.patched, base[index]!.patched)))
+    const delta = differences === undefined ? undefined : judge(metric.kind, differences, baseOverhead)
     if (delta?.flagged === true) flagged.push({ channel, metric: metric.label, delta: delta.text })
-    const pValue = metric.kind === "ratio"
-      ? `${delta?.pValue === undefined ? "" : `p=${delta.pValue.toFixed(3)} `}n=${count}`
-      : `counter, n=${count}`
+    const pValue = metric.kind === "count"
+      ? `count, n=${count}`
+      : `${delta?.pValue === undefined ? "" : `p=${delta.pValue.toFixed(3)} `}n=${count}`
     rows.push([
       "<tr>",
       cell(metric.label),
-      cell(baseSummary === undefined ? "—" : formatSummary(metric.kind, baseSummary), "right"),
-      cell(headSummary === undefined ? "—" : formatSummary(metric.kind, headSummary), "right"),
+      cell(baseOverhead === undefined ? "—" : formatSummary(metric.kind, baseOverhead, 1), "right"),
+      cell(headOverhead === undefined ? "—" : formatSummary(metric.kind, headOverhead, 1), "right"),
+      cell(
+        differences === undefined
+          ? "—"
+          : formatSummary(metric.kind === "count" ? "counter" : metric.kind, differences, 2),
+        "right"
+      ),
       cell(delta?.text ?? "—", "right"),
-      cell(headSummary === undefined ? "—" : formatExtreme(metric.kind, headSummary.min), "right"),
-      cell(headSummary === undefined ? "—" : formatExtreme(metric.kind, headSummary.max), "right"),
       cell(pValue),
       "</tr>"
     ].join(""))
@@ -246,17 +269,17 @@ const renderChannel = (
   return rows
 }
 
-const formatStockCounters = (cells: ReadonlyArray<PerfCell>) => {
+const formatStockCounters = (entry: PerfCell) => {
   const samplesByVersion = new Map<string, Array<PerfSample>>()
-  for (const cell of cells) {
-    const samples = samplesByVersion.get(cell.typescriptVersion) ?? []
-    samples.push(...cell.pairs.map((pair) => pair.stock))
-    samplesByVersion.set(cell.typescriptVersion, samples)
-  }
+  const add = (version: string, samples: ReadonlyArray<PerfSample>) =>
+    samplesByVersion.set(version, [...(samplesByVersion.get(version) ?? []), ...samples])
+  add((entry.head ?? entry.base)!.typescriptVersion, entry.rounds.map((round) => round.stock))
+  const baseStock = entry.rounds.flatMap((round) => round.baseStock === undefined ? [] : [round.baseStock])
+  if (entry.base !== undefined && baseStock.length > 0) add(entry.base.typescriptVersion, baseStock)
   return [...samplesByVersion.entries()]
     .map(([version, samples]) => {
       const counter = (name: "symbols" | "types" | "instantiations") =>
-        formatSummary("count", summarize(samples.map((sample) => sample[name])))
+        formatSummary("count", summarize(samples.map((sample) => sample[name])), 1)
       return `\`${version}\` symbols ${counter("symbols")} · types ${counter("types")} · ` +
         `instantiations ${counter("instantiations")}`
     })
@@ -269,18 +292,18 @@ export const renderPerfReport = (
   cells: ReadonlyArray<PerfCell>,
   expected?: ReadonlyArray<PerfMatrixEntry>
 ): string => {
-  const bySide = new Map<string, PerfCell>()
+  const byChannel = new Map<string, PerfCell>()
   for (const entry of cells) {
-    const key = `${entry.channel}\0${entry.side}`
-    if (bySide.has(key)) {
-      throw new PerfReportError({ reason: `duplicate ${entry.side} result for channel ${entry.channel}` })
+    if (entry.base === undefined && entry.head === undefined) {
+      throw new PerfReportError({ reason: `channel ${entry.channel} has neither a base nor a head result` })
     }
-    bySide.set(key, entry)
+    if (byChannel.has(entry.channel)) {
+      throw new PerfReportError({ reason: `duplicate result for channel ${entry.channel}` })
+    }
+    byChannel.set(entry.channel, entry)
   }
-  const expectedKeys = expected === undefined
-    ? undefined
-    : new Map(expected.map((entry) => [`${entry.name}\0${entry.side}`, entry.version]))
-  const channels = sortChannels([...cells.map((entry) => entry.channel), ...(expected ?? []).map((entry) => entry.name)])
+  const expectedByChannel = new Map((expected ?? []).map((entry) => [entry.name, entry]))
+  const channels = sortChannels([...byChannel.keys(), ...expectedByChannel.keys()])
   if (channels.length === 0) {
     throw new PerfReportError({ reason: "no perf results to report" })
   }
@@ -290,16 +313,14 @@ export const renderPerfReport = (
   const rows: Array<string> = []
   const stockLines: Array<string> = []
   for (const channel of channels) {
-    const base = bySide.get(`${channel}\0base`)
-    const head = bySide.get(`${channel}\0head`)
-    rows.push(...renderChannel(channel, base, head, expectedKeys, flagged, missing))
-    const measured = [base, head].flatMap((entry) => entry === undefined ? [] : [entry])
-    if (measured.length > 0) stockLines.push(`- Stock counters, ${channel}: ${formatStockCounters(measured)}`)
+    const entry = byChannel.get(channel)
+    rows.push(...renderChannel(channel, entry, expectedByChannel.get(channel), flagged, missing))
+    if (entry !== undefined) stockLines.push(`- Stock counters, ${channel}: ${formatStockCounters(entry)}`)
   }
 
   const verdict = flagged.length === 0
-    ? "**Effect perf vs stock tsgo: no significant change**"
-    : `**Effect perf vs stock tsgo: ${flagged.length} flagged row${flagged.length === 1 ? "" : "s"}**`
+    ? "**Effect perf, PR vs base: no significant change**"
+    : `**Effect perf, PR vs base: ${flagged.length} flagged row${flagged.length === 1 ? "" : "s"}**`
   const summary = [
     perfReportMarker,
     verdict,
@@ -308,11 +329,12 @@ export const renderPerfReport = (
     ""
   ]
 
-  const pairCounts = cells.map((entry) => entry.pairs.length)
-  const minPairs = Math.min(...pairCounts)
-  const maxPairs = Math.max(...pairCounts)
+  const roundCounts = cells.map((entry) => entry.rounds.length)
+  const minRounds = Math.min(...roundCounts)
+  const maxRounds = Math.max(...roundCounts)
   const commits = (side: PerfSide) =>
-    distinct(cells.filter((entry) => entry.side === side).map((entry) => `\`${entry.commit}\``)).join(", ") || "—"
+    distinct(cells.flatMap((entry) => entry[side] === undefined ? [] : [`\`${entry[side].commit}\``])).join(", ") ||
+    "—"
   const workloads = distinct(cells.map((entry) =>
     `\`${entry.workload.repository}@${entry.workload.revision}\`${
       entry.workload.allRules ? " with every Effect rule executing (`skipDisabledOptimization: true`)" : ""
@@ -321,18 +343,26 @@ export const renderPerfReport = (
   const footer = [
     ...stockLines,
     `- Workload: ${workloads.join(", ")}`,
-    `- Pairs per side: ${minPairs === maxPairs ? minPairs : `${minPairs}–${maxPairs}`}, alternating stock-first and patched-first`,
+    ...(cells.length === 0 ? [] : [
+      `- Rounds per channel: ${minRounds === maxRounds ? minRounds : `${minRounds}–${maxRounds}`}, each compiling ` +
+      "stock, base, and PR once on the same runner, rotating the order so each compiler runs in each position " +
+      "equally often (a channel whose TypeScript changed also compiles the base's stock)"
+    ]),
     `- Commits: base ${commits("base")} · head ${commits("head")}`,
-    "- Counters are patched − stock per pair (median ±half-range); allocs and times are patched / stock − 1 per pair, " +
-    `median (min to max). Time and alloc deltas are flagged only when the exact two-sided Mann-Whitney U p < ${significanceLevel}.`
+    "- PR vs base is paired per round: PR − base for counts and counters (median ±half-range), PR / base − 1 for " +
+    "allocs and times (median (min to max)). Counter, alloc, and time deltas are flagged only when the exact " +
+    `two-sided Wilcoxon signed-rank p < ${significanceLevel}, which needs at least 8 rounds.`,
+    "- The vs stock columns give context, each patched compiler against the stock compile of the same round: " +
+    "errors and warnings are the patched compiler's own counts, counters patched − stock (median ±half-range), " +
+    "allocs and times patched / stock − 1 (median (min to max))."
   ]
 
   const details = [
     "<details><summary>Details</summary>",
     "",
     "<table>",
-    "<thead><tr><th><sub>Metric</sub></th><th><sub>base</sub></th><th><sub>pr</sub></th><th><sub>Delta</sub></th>" +
-    "<th><sub>Best</sub></th><th><sub>Worst</sub></th><th><sub>p-value</sub></th></tr></thead>",
+    "<thead><tr><th><sub>Metric</sub></th><th><sub>base vs stock</sub></th><th><sub>PR vs stock</sub></th>" +
+    "<th><sub>PR vs base</sub></th><th><sub>Delta</sub></th><th><sub>p-value</sub></th></tr></thead>",
     "<tbody>",
     ...rows,
     "</tbody>",
@@ -377,7 +407,7 @@ export const writePerfReport = Effect.fnUntraced(function*(options: PerfReportOp
   }
   const expected = options.matrix === undefined
     ? undefined
-    : (yield* decodeFile(PerfMatrixFromString, path.resolve(options.matrix))).include
+    : (yield* decodeFile(PerfMatrixFromString, path.resolve(options.matrix))).measure.include
   const report = yield* Effect.try({
     try: () => renderPerfReport(cells, expected),
     catch: (error) => error instanceof PerfReportError ? error : new PerfReportError({ reason: String(error) })
