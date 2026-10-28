@@ -622,5 +622,9 @@
     "This Effect code uses `JSON.{0}`, which throws instead of failing with a typed error. {1} effect(globalJsonInEffect)": {
         "category": "Warning",
         "code": 377157
+    },
+    "Effect diagnostic rule `{0}` is deprecated; use {1} instead. effect(deprecatedRuleName)": {
+        "category": "Warning",
+        "code": 377158
     }
 }

@@ -306,7 +306,6 @@
         "preferEffectArray": "warning",
         "preferEffectRecord": "warning",
         "preferEffectString": "warning",
-        "preferSchemaOverJson": "warning",
         "processEnv": "warning",
         "processEnvInEffect": "warning",
         "schemaSync": "warning"
@@ -2068,6 +2067,10 @@
       ],
       "codes": [
         377026
+      ],
+      "replacedBy": [
+        "globalJsonInEffect",
+        "globalJson"
       ],
       "preview": {
         "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  const text = yield* Effect.succeed('{\"ok\":true}')\n  return JSON.parse(text)\n})\n",

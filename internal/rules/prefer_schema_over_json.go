@@ -19,6 +19,7 @@ var PreferSchemaOverJson = rule.Rule{
 	DefaultSeverity: etscore.SeverityOff,
 	SupportedEffect: []string{"v3", "v4"},
 	Codes:           []int32{tsdiag.This_code_uses_JSON_parse_or_JSON_stringify_0_effect_preferSchemaOverJson.Code()},
+	ReplacedBy:      []string{"globalJsonInEffect", "globalJson"},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		recommendation := globalJsonRecommendation(ctx.TypeParser.SupportedEffectVersion() == typeparser.EffectMajorV4)
 		var diags []*ast.Diagnostic

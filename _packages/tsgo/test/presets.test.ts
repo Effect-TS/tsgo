@@ -62,7 +62,8 @@ describe("diagnostic presets", () => {
 
     expect(merged.globalFetch).toBe("error")
     expect(merged.extendsNativeError).toBe("warning")
-    expect(merged.preferSchemaOverJson).toBe("warning")
+    expect(merged.globalJsonInEffect).toBe("warning")
+    expect(merged.preferSchemaOverJson).toBeUndefined()
   })
 
   it("normalizes existing diagnostic keys before applying presets", () => {
