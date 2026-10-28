@@ -27,7 +27,7 @@ pub trait AnyValue: Sized {
     fn as_string_any_map(&self) -> Option<Vec<(&str, &Self)>>;
 }
 
-// go: etscore/options_parser.go:12 ParseFromPlugins 35702843286ae20f
+// go: etscore/options_parser.go:12 ParseFromPlugins bc02ffb31a6dbb21
 // ParseFromPlugins parses the @effect/language-service plugin config from the plugins array.
 // The plugins parameter is the value of compilerOptions.plugins from tsconfig.json.
 // Returns nil if the plugin is not configured or if diagnosticSeverity is explicitly set to null.
@@ -214,6 +214,13 @@ pub fn parse_from_plugins<V: AnyValue>(value: &V) -> Option<EffectPluginOptions>
             }
         }
 
+        // Parse brandedSchemaClasses (default: nil, GetBrandedSchemaClasses() returns all kinds; [] means none)
+        if let Some(val) = get_plugin_value("brandedSchemaClasses") {
+            if let Some(kinds) = parse_string_array_strict(val) {
+                result.branded_schema_classes = Some(kinds);
+            }
+        }
+
         if let Some(val) = get_plugin_value("allowedUnstableApis") {
             if let Some(apis) = parse_string_array_strict(val) {
                 result.allowed_unstable_apis = Some(apis);
@@ -284,7 +291,7 @@ fn go_int_from_float64(f: f64) -> i64 {
     f as i64
 }
 
-// go: etscore/options_parser.go:264 parseTopLevelNamedReexports b40c293655847cbf
+// go: etscore/options_parser.go:271 parseTopLevelNamedReexports b40c293655847cbf
 pub(crate) fn parse_top_level_named_reexports<V: AnyValue>(
     value: &V,
 ) -> Option<TopLevelNamedReexportsMode> {
@@ -296,7 +303,7 @@ pub(crate) fn parse_top_level_named_reexports<V: AnyValue>(
     None
 }
 
-// go: etscore/options_parser.go:276 parseNormalizedStringArrayStrict d041452ce54a2a77
+// go: etscore/options_parser.go:283 parseNormalizedStringArrayStrict d041452ce54a2a77
 pub(crate) fn parse_normalized_string_array_strict<V: AnyValue>(value: &V) -> Option<Vec<String>> {
     let arr = value.as_slice()?;
     let mut result = Vec::with_capacity(arr.len());
@@ -310,7 +317,7 @@ pub(crate) fn parse_normalized_string_array_strict<V: AnyValue>(value: &V) -> Op
     Some(result)
 }
 
-// go: etscore/options_parser.go:294 parseNormalizedStringMapStrict d6a5c7eee50029a3
+// go: etscore/options_parser.go:301 parseNormalizedStringMapStrict d6a5c7eee50029a3
 // Rust: Go's two map cases (`*collections.OrderedMap[string, any]`, `map[string]any`) iterate the same way here
 // (`AnyValue::as_string_any_map`).
 pub(crate) fn parse_normalized_string_map_strict<V: AnyValue>(
@@ -328,7 +335,7 @@ pub(crate) fn parse_normalized_string_map_strict<V: AnyValue>(
     Some(result)
 }
 
-// go: etscore/options_parser.go:323 parseOverrides ca04710071effd3f
+// go: etscore/options_parser.go:330 parseOverrides ca04710071effd3f
 pub(crate) fn parse_overrides<V: AnyValue>(value: &V) -> Option<Vec<Override>> {
     let arr = value.as_slice()?;
 
@@ -355,7 +362,7 @@ pub(crate) fn parse_overrides<V: AnyValue>(value: &V) -> Option<Vec<Override>> {
     Some(result)
 }
 
-// go: etscore/options_parser.go:353 parseOverrideOptions 5135ef96cc815d73
+// go: etscore/options_parser.go:360 parseOverrideOptions 34ff8df206fd0710
 pub(crate) fn parse_override_options<V: AnyValue>(value: &V) -> OverrideOptions {
     let mut result = OverrideOptions::default();
     let Some(options_map) = as_string_any_map(value) else {
@@ -404,6 +411,11 @@ pub(crate) fn parse_override_options<V: AnyValue>(value: &V) -> OverrideOptions 
             result.effect_fn = Some(variants);
         }
     }
+    if let Some(value) = options_map("brandedSchemaClasses") {
+        if let Some(kinds) = parse_string_array_strict(value) {
+            result.branded_schema_classes = Some(kinds);
+        }
+    }
     if let Some(value) = options_map("namespaceImportPackages") {
         if let Some(pkgs) = parse_normalized_string_array_strict(value) {
             result.namespace_import_packages = Some(pkgs);
@@ -428,7 +440,7 @@ pub(crate) fn parse_override_options<V: AnyValue>(value: &V) -> OverrideOptions 
     result
 }
 
-// go: etscore/options_parser.go:425 parseStringArrayStrict b8422baac38eb927
+// go: etscore/options_parser.go:437 parseStringArrayStrict b8422baac38eb927
 pub(crate) fn parse_string_array_strict<V: AnyValue>(value: &V) -> Option<Vec<String>> {
     let arr = value.as_slice()?;
     let mut result = Vec::with_capacity(arr.len());
@@ -439,7 +451,7 @@ pub(crate) fn parse_string_array_strict<V: AnyValue>(value: &V) -> Option<Vec<St
     Some(result)
 }
 
-// go: etscore/options_parser.go:441 parseStringArrayLossy b5c4a69aed313fe3
+// go: etscore/options_parser.go:453 parseStringArrayLossy b5c4a69aed313fe3
 pub(crate) fn parse_string_array_lossy<V: AnyValue>(value: &V) -> Option<Vec<String>> {
     let arr = value.as_slice()?;
     let mut result = Vec::with_capacity(arr.len());
@@ -451,7 +463,7 @@ pub(crate) fn parse_string_array_lossy<V: AnyValue>(value: &V) -> Option<Vec<Str
     Some(result)
 }
 
-// go: etscore/options_parser.go:455 asStringAnyMap ca3f30cd2c75356f
+// go: etscore/options_parser.go:467 asStringAnyMap ca3f30cd2c75356f
 // Rust: the getter answers Go's `(val, exists)` as `Option<&V>`.
 pub(crate) fn as_string_any_map<'a, V: AnyValue>(
     value: &'a V,
@@ -462,7 +474,7 @@ pub(crate) fn as_string_any_map<'a, V: AnyValue>(
     })
 }
 
-// go: etscore/options_parser.go:470 parseDiagnosticSeverityMap a19bb20bf6af0aab
+// go: etscore/options_parser.go:482 parseDiagnosticSeverityMap a19bb20bf6af0aab
 // parseDiagnosticSeverityMap converts a plugin rule configuration map to map[string]Severity.
 pub(crate) fn parse_diagnostic_severity_map<V: AnyValue>(value: &V) -> FxHashMap<String, Severity> {
     let mut result = FxHashMap::default();
@@ -476,7 +488,7 @@ pub(crate) fn parse_diagnostic_severity_map<V: AnyValue>(value: &V) -> FxHashMap
     result
 }
 
-// go: etscore/options_parser.go:490 parseKeyPatterns e496c3e6205ed4ac
+// go: etscore/options_parser.go:502 parseKeyPatterns e496c3e6205ed4ac
 // parseKeyPatterns converts a JSON array of key pattern objects to []KeyPattern.
 // Rust: `None` is Go's nil slice (no object in the array).
 pub(crate) fn parse_key_patterns<V: AnyValue>(arr: &[V]) -> Option<Vec<KeyPattern>> {

@@ -16,7 +16,7 @@ pub(crate) struct SchemaClassCompletionCase {
     snippets: &'static [Snippet],
 }
 
-// go test: internal/completions/effect_schema_self_in_classes_test.go:14 schemaClassCompletionCases 05add3c6f7aa2a37
+// go test: internal/completions/effect_schema_self_in_classes_test.go:15 schemaClassCompletionCases 05add3c6f7aa2a37
 static SCHEMA_CLASS_COMPLETION_CASES: &[SchemaClassCompletionCase] = &[
     SchemaClassCompletionCase {
         version: "v4",
@@ -56,7 +56,7 @@ static SCHEMA_CLASS_COMPLETION_CASES: &[SchemaClassCompletionCase] = &[
     },
 ];
 
-// go test: internal/completions/effect_schema_self_in_classes_test.go:50 schemaClassCompletionItems d3b7726a6c38e378
+// go test: internal/completions/effect_schema_self_in_classes_test.go:51 schemaClassCompletionItems d3b7726a6c38e378
 fn schema_class_completion_items(
     t: &T,
     source: &str,
@@ -73,7 +73,7 @@ fn has_text_edit(item: Option<&lsproto::CompletionItem>) -> bool {
     item.is_some_and(|item| item.text_edit.as_ref().is_some_and(|e| e.text_edit.is_some()))
 }
 
-// go test: internal/completions/effect_schema_self_in_classes_test.go:57 TestEffectSchemaSelfInClasses_ModuleImports 43b3d6c1357c0135
+// go test: internal/completions/effect_schema_self_in_classes_test.go:58 TestEffectSchemaSelfInClasses_ModuleImports 43b3d6c1357c0135
 #[test]
 fn test_effect_schema_self_in_classes_module_imports() {
     go_test(|t| {
@@ -156,7 +156,7 @@ fn test_effect_schema_self_in_classes_module_imports() {
     });
 }
 
-// go test: internal/completions/effect_schema_self_in_classes_test.go:98 TestEffectSchemaSelfInClasses_DirectImports 2a695a839c6452b8
+// go test: internal/completions/effect_schema_self_in_classes_test.go:99 TestEffectSchemaSelfInClasses_DirectImports 2a695a839c6452b8
 #[test]
 fn test_effect_schema_self_in_classes_direct_imports() {
     go_test(|t| {
@@ -191,7 +191,7 @@ fn test_effect_schema_self_in_classes_direct_imports() {
     });
 }
 
-// go test: internal/completions/effect_schema_self_in_classes_test.go:121 TestEffectSchemaSelfInClasses_MetadataAndRange 5e08bc5b89ae1369
+// go test: internal/completions/effect_schema_self_in_classes_test.go:122 TestEffectSchemaSelfInClasses_MetadataAndRange 5e08bc5b89ae1369
 #[test]
 fn test_effect_schema_self_in_classes_metadata_and_range() {
     go_test(|t| {
@@ -238,7 +238,7 @@ const after = 1"#;
     });
 }
 
-// go test: internal/completions/effect_schema_self_in_classes_test.go:159 TestEffectSchemaSelfInClasses_ModelUnchanged ae05004428c89881
+// go test: internal/completions/effect_schema_self_in_classes_test.go:160 TestEffectSchemaSelfInClasses_ModelUnchanged ae05004428c89881
 #[test]
 fn test_effect_schema_self_in_classes_model_unchanged() {
     go_test(|t| {
@@ -269,7 +269,7 @@ fn test_effect_schema_self_in_classes_model_unchanged() {
     });
 }
 
-// go test: internal/completions/effect_schema_self_in_classes_test.go:179 TestEffectSchemaSelfInClasses_OutsideSchemaExtends ebdf0b57e71917df
+// go test: internal/completions/effect_schema_self_in_classes_test.go:180 TestEffectSchemaSelfInClasses_OutsideSchemaExtends ebdf0b57e71917df
 #[test]
 fn test_effect_schema_self_in_classes_outside_schema_extends() {
     go_test(|t| {
@@ -300,7 +300,7 @@ class Foo extends Local."#,
     });
 }
 
-// go test: internal/completions/effect_schema_self_in_classes_test.go:204 TestEffectSchemaSelfInClasses_AcceptedSnippet 976744b9a8b64b8e
+// go test: internal/completions/effect_schema_self_in_classes_test.go:205 TestEffectSchemaSelfInClasses_AcceptedSnippet 976744b9a8b64b8e
 #[test]
 fn test_effect_schema_self_in_classes_accepted_snippet() {
     go_test(|t| {
@@ -341,6 +341,69 @@ fn test_effect_schema_self_in_classes_accepted_snippet() {
                 let unbranded = snippet.replacen(", { readonly brand: unique symbol }", "", 1);
                 f.replace(t, start, snippet.len() as i64, &unbranded);
                 f.verify_number_of_errors_in_current_file(t, 1);
+                f.done(t);
+            });
+        }
+    });
+}
+
+// go test: internal/completions/effect_schema_self_in_classes_test.go:242 TestEffectSchemaSelfInClasses_BrandedSchemaClasses 6078c77b3f122468
+#[test]
+fn test_effect_schema_self_in_classes_branded_schema_classes() {
+    go_test(|t| {
+        t.parallel();
+        const BRAND: &str = ", { readonly brand: unique symbol }";
+        /// Rust-only: an element of Go's anonymous test case struct slice.
+        struct Case {
+            name: &'static str,
+            options: &'static str,
+            branded: &'static [&'static str],
+        }
+        for test in [
+            Case {
+                name: "reduced",
+                options: r#""brandedSchemaClasses": ["Class", "Error", "Opaque"]"#,
+                branded: &["Class", "Error", "Opaque"],
+            },
+            Case { name: "empty", options: r#""brandedSchemaClasses": []"#, branded: &[] },
+            Case {
+                name: "override",
+                options: r#""brandedSchemaClasses": [], "overrides": [{ "include": ["test.ts"], "options": { "brandedSchemaClasses": ["TaggedError"] } }]"#,
+                branded: &["TaggedError"],
+            },
+        ] {
+            t.run(test.name, |t| {
+                t.parallel();
+                let config = COMPLETION_TEST_TS_CONFIG.replacen(
+                    r#""name": "@effect/language-service""#,
+                    &format!(r#""name": "@effect/language-service", {}"#, test.options),
+                    1,
+                );
+                const SOURCE: &str = "import { Schema } from \"effect\"\nclass Foo extends Schema.";
+                let content = format!(
+                    "// @Filename: /tsconfig.json\n{config}\n// @Filename: /test.ts\n{SOURCE}/*1*/"
+                );
+                let mut f = ets_fourslash::new_fourslash(t, None, &content);
+                f.go_to_marker(t, "1");
+                let Some(completions) = f.get_completions(t, None) else {
+                    t.fatal("missing completions");
+                };
+                for expected in SCHEMA_CLASS_COMPLETION_CASES[0].snippets {
+                    let item =
+                        find_completion_item(&completions.items, &format!("{}<Foo>", expected.api));
+                    if !has_text_edit(item) {
+                        t.error(format!("missing snippet text edit for {}<Foo>", expected.api));
+                        continue;
+                    }
+                    let mut want = format!("Schema.{}", expected.new_text);
+                    if !test.branded.contains(&expected.api) {
+                        want = want.replacen(BRAND, "", 1);
+                    }
+                    let got = new_text(item.unwrap());
+                    if got != want {
+                        t.error(format!("{} NewText = {got:?}, want {want:?}", expected.api));
+                    }
+                }
                 f.done(t);
             });
         }

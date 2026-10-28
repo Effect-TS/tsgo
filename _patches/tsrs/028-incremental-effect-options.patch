@@ -98,10 +98,10 @@ index 7f5772e8..9fa2f637 100644
  
 diff --git a/crates/tsrs_incremental/src/buildinfoeffect.rs b/crates/tsrs_incremental/src/buildinfoeffect.rs
 new file mode 100644
-index 00000000..41e0b9b3
+index 00000000..fbb8a22f
 --- /dev/null
 +++ b/crates/tsrs_incremental/src/buildinfoeffect.rs
-@@ -0,0 +1,306 @@
+@@ -0,0 +1,310 @@
 +// effect-tsgo patch 028: the `effect` member of the build info, Go's encoding/json of `*etscore.EffectPluginOptions`
 +// through its `json:` struct tags. Every field is `omitzero` but KeyPattern's: a false, zero or empty-string value and
 +// a nil slice, map or pointer are omitted, while an empty non-nil slice or map is written as `[]` / `{}`. Members are
@@ -149,6 +149,7 @@ index 00000000..41e0b9b3
 +    o.opt("allowedExperimentalApis", options.allowed_experimental_apis.as_deref(), strings);
 +    o.opt("allowedDuplicatedPackages", options.allowed_duplicated_packages.as_deref(), strings);
 +    o.opt("effectFn", options.effect_fn.as_deref(), strings);
++    o.opt("brandedSchemaClasses", options.branded_schema_classes.as_deref(), strings);
 +    o.opt("diagnosticSeverity", options.diagnostic_severity.as_ref(), severity_map);
 +    o.opt("overrides", options.overrides.as_deref(), |overrides| {
 +        Value::Array(overrides.iter().map(marshal_override).collect())
@@ -189,6 +190,7 @@ index 00000000..41e0b9b3
 +        allowed_experimental_apis: get_opt(o, "allowedExperimentalApis", as_strings)?,
 +        allowed_duplicated_packages: get_opt(o, "allowedDuplicatedPackages", as_strings)?,
 +        effect_fn: get_opt(o, "effectFn", as_strings)?,
++        branded_schema_classes: get_opt(o, "brandedSchemaClasses", as_strings)?,
 +        diagnostic_severity: get_opt(o, "diagnosticSeverity", as_severity_map)?,
 +        overrides: get_opt(o, "overrides", |v| {
 +            array(v, "overrides")?.iter().map(unmarshal_override).collect()
@@ -225,6 +227,7 @@ index 00000000..41e0b9b3
 +    m.opt("allowedExperimentalApis", o.allowed_experimental_apis.as_deref(), strings);
 +    m.opt("allowedDuplicatedPackages", o.allowed_duplicated_packages.as_deref(), strings);
 +    m.opt("effectFn", o.effect_fn.as_deref(), strings);
++    m.opt("brandedSchemaClasses", o.branded_schema_classes.as_deref(), strings);
 +    m.opt("namespaceImportPackages", o.namespace_import_packages.as_deref(), strings);
 +    m.opt("barrelImportPackages", o.barrel_import_packages.as_deref(), strings);
 +    m.opt("importAliases", o.import_aliases.as_ref(), string_map);
@@ -245,6 +248,7 @@ index 00000000..41e0b9b3
 +        allowed_experimental_apis: get_opt(o, "allowedExperimentalApis", as_strings)?,
 +        allowed_duplicated_packages: get_opt(o, "allowedDuplicatedPackages", as_strings)?,
 +        effect_fn: get_opt(o, "effectFn", as_strings)?,
++        branded_schema_classes: get_opt(o, "brandedSchemaClasses", as_strings)?,
 +        namespace_import_packages: get_opt(o, "namespaceImportPackages", as_strings)?,
 +        barrel_import_packages: get_opt(o, "barrelImportPackages", as_strings)?,
 +        import_aliases: get_opt(o, "importAliases", as_string_map)?,
