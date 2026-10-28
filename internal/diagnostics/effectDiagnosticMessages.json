@@ -626,5 +626,9 @@
     "Effect diagnostic rule `{0}` is deprecated; use {1} instead. effect(deprecatedRuleName)": {
         "category": "Warning",
         "code": 377158
+    },
+    "This type alias unions Schema `.{0}` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)": {
+        "category": "Suggestion",
+        "code": 377159
     }
 }

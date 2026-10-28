@@ -1,0 +1,253 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:71-4:77) TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+  Fix 0: "Disable schemaNumber for this line"
+  Fix 1: "Disable schemaNumber for entire file"
+  Fix 2: "Replace with Schema.Finite"
+
+[D2] (5:69-5:75) TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+  Fix 0: "Disable schemaNumber for this line"
+  Fix 1: "Disable schemaNumber for entire file"
+  Fix 2: "Replace with Schema.Finite"
+
+[D3] (9:13-9:18) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+  Fix 0: "Disable typeUnionToSchemaUnion for this line"
+  Fix 1: "Disable typeUnionToSchemaUnion for entire file"
+  Fix 2: "Convert to Schema.Union"
+
+[D4] (12:6-12:15) TS6196: 'Primitive' is declared but never used.
+  (no quick fixes)
+
+[D5] (12:6-12:15) TS377159: This type alias unions Schema `.Encoded` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+  Fix 0: "Disable typeUnionToSchemaUnion for this line"
+  Fix 1: "Disable typeUnionToSchemaUnion for entire file"
+  Fix 2: "Convert to Schema.Union"
+
+[D6] (16:6-16:17) TS6196: 'HelperShape' is declared but never used.
+  (no quick fixes)
+
+[D7] (16:6-16:17) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+  Fix 0: "Disable typeUnionToSchemaUnion for this line"
+  Fix 1: "Disable typeUnionToSchemaUnion for entire file"
+  Fix 2: "Convert to Schema.Union"
+
+[D8] (20:6-20:24) TS6196: 'HelperShapeEncoded' is declared but never used.
+  (no quick fixes)
+
+[D9] (20:6-20:24) TS377159: This type alias unions Schema `.Encoded` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+  Fix 0: "Disable typeUnionToSchemaUnion for this line"
+  Fix 1: "Disable typeUnionToSchemaUnion for entire file"
+  Fix 2: "Convert to Schema.Union"
+
+[D10] (23:6-23:11) TS6196: 'Mixed' is declared but never used.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable schemaNumber for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable schemaNumber for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Schema.Finite" ===
+
+--- file:///.src/typeUnionToSchemaUnion_aliasedImport.ts ---
+// @effect-diagnostics typeUnionToSchemaUnion:warning
+import * as S from "effect/Schema"
+
+export const Circle = S.Struct({ kind: S.Literal("circle"), radius: S.Finite })
+export const Square = S.Struct({ kind: S.Literal("square"), side: S.Number })
+
+// MUST TRIGGER - the fix reuses the in-scope `S` namespace import
+// (`export const Shape = S.Union([Circle, Square])`) and adds no new import
+export type Shape = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - members accessed through the aliased namespace; the fix reuses `S`
+type Primitive = typeof S.String.Encoded | typeof S.Boolean.Encoded
+
+// MUST TRIGGER - `Schema.Schema.Type` reached through the aliased namespace; the fix
+// uses `S.Union([Circle, Square])`
+type HelperShape = S.Schema.Type<typeof Circle> | S.Schema.Type<typeof Square>
+
+// MUST TRIGGER - `Schema.Codec.Encoded` reached through the aliased namespace; the fix
+// uses `S.Union([Circle, Square])` and the alias becomes `typeof HelperShapeEncoded.Encoded`
+type HelperShapeEncoded = S.Codec.Encoded<typeof Circle> | S.Codec.Encoded<typeof Square>
+
+// MUST NOT TRIGGER - mixed `.Type` and `.Encoded`
+type Mixed = typeof S.String.Type | typeof S.Boolean.Encoded
+
+
+=== [D2] Fix 0: "Disable schemaNumber for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable schemaNumber for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Schema.Finite" ===
+
+--- file:///.src/typeUnionToSchemaUnion_aliasedImport.ts ---
+// @effect-diagnostics typeUnionToSchemaUnion:warning
+import * as S from "effect/Schema"
+
+export const Circle = S.Struct({ kind: S.Literal("circle"), radius: S.Number })
+export const Square = S.Struct({ kind: S.Literal("square"), side: S.Finite })
+
+// MUST TRIGGER - the fix reuses the in-scope `S` namespace import
+// (`export const Shape = S.Union([Circle, Square])`) and adds no new import
+export type Shape = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - members accessed through the aliased namespace; the fix reuses `S`
+type Primitive = typeof S.String.Encoded | typeof S.Boolean.Encoded
+
+// MUST TRIGGER - `Schema.Schema.Type` reached through the aliased namespace; the fix
+// uses `S.Union([Circle, Square])`
+type HelperShape = S.Schema.Type<typeof Circle> | S.Schema.Type<typeof Square>
+
+// MUST TRIGGER - `Schema.Codec.Encoded` reached through the aliased namespace; the fix
+// uses `S.Union([Circle, Square])` and the alias becomes `typeof HelperShapeEncoded.Encoded`
+type HelperShapeEncoded = S.Codec.Encoded<typeof Circle> | S.Codec.Encoded<typeof Square>
+
+// MUST NOT TRIGGER - mixed `.Type` and `.Encoded`
+type Mixed = typeof S.String.Type | typeof S.Boolean.Encoded
+
+
+=== [D3] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Convert to Schema.Union" ===
+
+--- file:///.src/typeUnionToSchemaUnion_aliasedImport.ts ---
+// @effect-diagnostics typeUnionToSchemaUnion:warning
+import * as S from "effect/Schema"
+
+export const Circle = S.Struct({ kind: S.Literal("circle"), radius: S.Number })
+export const Square = S.Struct({ kind: S.Literal("square"), side: S.Number })
+
+// MUST TRIGGER - the fix reuses the in-scope `S` namespace import
+// (`export const Shape = S.Union([Circle, Square])`) and adds no new import
+export const Shape = S.Union([Circle, Square]);
+export type Shape = typeof Shape.Type
+
+// MUST TRIGGER - members accessed through the aliased namespace; the fix reuses `S`
+type Primitive = typeof S.String.Encoded | typeof S.Boolean.Encoded
+
+// MUST TRIGGER - `Schema.Schema.Type` reached through the aliased namespace; the fix
+// uses `S.Union([Circle, Square])`
+type HelperShape = S.Schema.Type<typeof Circle> | S.Schema.Type<typeof Square>
+
+// MUST TRIGGER - `Schema.Codec.Encoded` reached through the aliased namespace; the fix
+// uses `S.Union([Circle, Square])` and the alias becomes `typeof HelperShapeEncoded.Encoded`
+type HelperShapeEncoded = S.Codec.Encoded<typeof Circle> | S.Codec.Encoded<typeof Square>
+
+// MUST NOT TRIGGER - mixed `.Type` and `.Encoded`
+type Mixed = typeof S.String.Type | typeof S.Boolean.Encoded
+
+
+=== [D5] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Convert to Schema.Union" ===
+
+--- file:///.src/typeUnionToSchemaUnion_aliasedImport.ts ---
+// @effect-diagnostics typeUnionToSchemaUnion:warning
+import * as S from "effect/Schema"
+
+export const Circle = S.Struct({ kind: S.Literal("circle"), radius: S.Number })
+export const Square = S.Struct({ kind: S.Literal("square"), side: S.Number })
+
+// MUST TRIGGER - the fix reuses the in-scope `S` namespace import
+// (`export const Shape = S.Union([Circle, Square])`) and adds no new import
+export type Shape = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - members accessed through the aliased namespace; the fix reuses `S`
+const Primitive = S.Union([S.String, S.Boolean]);
+type Primitive = typeof Primitive.Encoded
+
+// MUST TRIGGER - `Schema.Schema.Type` reached through the aliased namespace; the fix
+// uses `S.Union([Circle, Square])`
+type HelperShape = S.Schema.Type<typeof Circle> | S.Schema.Type<typeof Square>
+
+// MUST TRIGGER - `Schema.Codec.Encoded` reached through the aliased namespace; the fix
+// uses `S.Union([Circle, Square])` and the alias becomes `typeof HelperShapeEncoded.Encoded`
+type HelperShapeEncoded = S.Codec.Encoded<typeof Circle> | S.Codec.Encoded<typeof Square>
+
+// MUST NOT TRIGGER - mixed `.Type` and `.Encoded`
+type Mixed = typeof S.String.Type | typeof S.Boolean.Encoded
+
+
+=== [D7] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Convert to Schema.Union" ===
+
+--- file:///.src/typeUnionToSchemaUnion_aliasedImport.ts ---
+// @effect-diagnostics typeUnionToSchemaUnion:warning
+import * as S from "effect/Schema"
+
+export const Circle = S.Struct({ kind: S.Literal("circle"), radius: S.Number })
+export const Square = S.Struct({ kind: S.Literal("square"), side: S.Number })
+
+// MUST TRIGGER - the fix reuses the in-scope `S` namespace import
+// (`export const Shape = S.Union([Circle, Square])`) and adds no new import
+export type Shape = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - members accessed through the aliased namespace; the fix reuses `S`
+type Primitive = typeof S.String.Encoded | typeof S.Boolean.Encoded
+
+// MUST TRIGGER - `Schema.Schema.Type` reached through the aliased namespace; the fix
+// uses `S.Union([Circle, Square])`
+const HelperShape = S.Union([Circle, Square]);
+type HelperShape = typeof HelperShape.Type
+
+// MUST TRIGGER - `Schema.Codec.Encoded` reached through the aliased namespace; the fix
+// uses `S.Union([Circle, Square])` and the alias becomes `typeof HelperShapeEncoded.Encoded`
+type HelperShapeEncoded = S.Codec.Encoded<typeof Circle> | S.Codec.Encoded<typeof Square>
+
+// MUST NOT TRIGGER - mixed `.Type` and `.Encoded`
+type Mixed = typeof S.String.Type | typeof S.Boolean.Encoded
+
+
+=== [D9] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Convert to Schema.Union" ===
+
+--- file:///.src/typeUnionToSchemaUnion_aliasedImport.ts ---
+// @effect-diagnostics typeUnionToSchemaUnion:warning
+import * as S from "effect/Schema"
+
+export const Circle = S.Struct({ kind: S.Literal("circle"), radius: S.Number })
+export const Square = S.Struct({ kind: S.Literal("square"), side: S.Number })
+
+// MUST TRIGGER - the fix reuses the in-scope `S` namespace import
+// (`export const Shape = S.Union([Circle, Square])`) and adds no new import
+export type Shape = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - members accessed through the aliased namespace; the fix reuses `S`
+type Primitive = typeof S.String.Encoded | typeof S.Boolean.Encoded
+
+// MUST TRIGGER - `Schema.Schema.Type` reached through the aliased namespace; the fix
+// uses `S.Union([Circle, Square])`
+type HelperShape = S.Schema.Type<typeof Circle> | S.Schema.Type<typeof Square>
+
+// MUST TRIGGER - `Schema.Codec.Encoded` reached through the aliased namespace; the fix
+// uses `S.Union([Circle, Square])` and the alias becomes `typeof HelperShapeEncoded.Encoded`
+const HelperShapeEncoded = S.Union([Circle, Square]);
+type HelperShapeEncoded = typeof HelperShapeEncoded.Encoded
+
+// MUST NOT TRIGGER - mixed `.Type` and `.Encoded`
+type Mixed = typeof S.String.Type | typeof S.Boolean.Encoded
+

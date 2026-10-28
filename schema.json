@@ -3001,6 +3001,11 @@
           "default": "suggestion",
           "description": "Discourages try/catch in Effect generators in favor of Effect error handling"
         },
+        "typeUnionToSchemaUnion": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "off",
+          "description": "Suggests composing unions of Schema .Type/.Encoded types with Schema.Union and deriving the type from it"
+        },
         "unknownInEffectCatch": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",

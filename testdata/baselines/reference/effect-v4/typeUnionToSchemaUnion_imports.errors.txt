@@ -1,0 +1,40 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/schemas.ts(3,86): suggestion TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+/.src/schemas.ts(4,84): suggestion TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+/.src/test.ts(6,13): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+/.src/test.ts(9,6): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+
+
+==== /.src/schemas.ts (2 errors) ====
+    import { Schema } from "effect"
+    
+    export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Number })
+                                                                                         ~~~~~~
+!!! suggestion TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+    export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
+                                                                                       ~~~~~~
+!!! suggestion TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+    export const Shape = Schema.Union([Circle, Square])
+    
+
+==== /.src/test.ts (2 errors) ====
+    // @effect-diagnostics typeUnionToSchemaUnion:warning
+    import { Circle, Shape, Square } from "./schemas"
+    
+    // MUST TRIGGER - members are imported and no Schema module is imported here: the fix
+    // uses the `FindModuleReference` fallback `Schema` reference and adds no import
+    export type Figure = typeof Circle.Type | typeof Square.Type
+                ~~~~~~
+!!! warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+    
+    // MUST TRIGGER, no fix offered - `Hexagon` is declared after the alias in this file
+    type Polygon = typeof Square.Type | typeof Hexagon.Type
+         ~~~~~~~
+!!! warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+    const Hexagon = Square
+    
+    // MUST NOT TRIGGER - already derived from the imported Schema.Union
+    type DerivedShape = typeof Shape.Type
+    

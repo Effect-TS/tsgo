@@ -1,0 +1,50 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:13-7:19) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+  Fix 0: "Disable typeUnionToSchemaUnion for this line"
+  Fix 1: "Disable typeUnionToSchemaUnion for entire file"
+  Fix 2: "Convert to Schema.Union"
+
+[D2] (10:6-10:13) TS6196: 'Polygon' is declared but never used.
+  (no quick fixes)
+
+[D3] (10:6-10:13) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+  Fix 0: "Disable typeUnionToSchemaUnion for this line"
+  Fix 1: "Disable typeUnionToSchemaUnion for entire file"
+
+[D4] (14:6-14:18) TS6196: 'DerivedShape' is declared but never used.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to Schema.Union" ===
+
+--- file:///.src/test.ts ---
+// @effect-v3
+// @effect-diagnostics typeUnionToSchemaUnion:warning
+import { Circle, Shape, Square } from "./schemas"
+
+// MUST TRIGGER - members are imported and no Schema module is imported here: the fix
+// uses the `FindModuleReference` fallback `Schema` reference and adds no import
+export const Figure = Schema.Union(Circle, Square);
+export type Figure = typeof Figure.Type
+
+// MUST TRIGGER, no fix offered - `Hexagon` is declared after the alias in this file
+type Polygon = typeof Square.Type | typeof Hexagon.Type
+const Hexagon = Square
+
+// MUST NOT TRIGGER - already derived from the imported Schema.Union
+type DerivedShape = typeof Shape.Type
+
+
+=== [D3] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
+skipped by default

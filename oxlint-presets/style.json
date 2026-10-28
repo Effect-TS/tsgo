@@ -63,6 +63,7 @@
     "effecttsgo/strict-boolean-expressions": "warn",
     "effecttsgo/sync-to-succeed": "warn",
     "effecttsgo/timeout-catch-tag-to-timeout-or-else": "warn",
+    "effecttsgo/type-union-to-schema-union": "warn",
     "effecttsgo/unnecessary-arrow-block": "warn",
     "effecttsgo/unnecessary-effect-gen": "warn",
     "effecttsgo/unnecessary-fail-yieldable-error": "warn",

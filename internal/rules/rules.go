@@ -99,6 +99,7 @@ var All = []rule.Rule{
 	UnnecessaryArrowBlock,
 	UnnecessaryTypeofType,
 	PreferSchemaTypeProperty,
+	TypeUnionToSchemaUnion,
 	PreferSchemaTaggedError,
 	ErrorPayloadShadowsName,
 	InstanceOfSchema,
