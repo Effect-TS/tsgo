@@ -1366,6 +1366,12 @@ static EFFECT_PLUGIN_OPTION_FIELDS: &[StructField] = &[
         schema_default: Some("[\"span\"]"),
     },
     StructField {
+        name: "BrandedSchemaClasses",
+        json: "brandedSchemaClasses,omitzero",
+        schema_description: "Schema class kinds that get a nominal brand, used by schemaClassMissingBrand and the Schema class completions.",
+        schema_default: Some("[\"Class\",\"TaggedClass\",\"Error\",\"TaggedError\",\"Opaque\"]"),
+    },
+    StructField {
         name: "DiagnosticSeverity",
         json: "diagnosticSeverity,omitzero",
         schema_description: "Maps rule names to severity levels. Use {} to enable diagnostics with rule defaults.",

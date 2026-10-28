@@ -1564,6 +1564,28 @@
                                 },
                                 "type": "array"
                               },
+                              "brandedSchemaClasses": {
+                                "default": [
+                                  "Class",
+                                  "TaggedClass",
+                                  "Error",
+                                  "TaggedError",
+                                  "Opaque"
+                                ],
+                                "description": "Schema class kinds that get a nominal brand, used by schemaClassMissingBrand and the Schema class completions.",
+                                "items": {
+                                  "enum": [
+                                    "Class",
+                                    "TaggedClass",
+                                    "Error",
+                                    "TaggedError",
+                                    "Opaque"
+                                  ],
+                                  "type": "string"
+                                },
+                                "type": "array",
+                                "uniqueItems": true
+                              },
                               "completions": {
                                 "default": true,
                                 "description": "Controls Effect completions.",
@@ -3100,6 +3122,28 @@
           },
           "type": "array"
         },
+        "brandedSchemaClasses": {
+          "default": [
+            "Class",
+            "TaggedClass",
+            "Error",
+            "TaggedError",
+            "Opaque"
+          ],
+          "description": "Schema class kinds that get a nominal brand, used by schemaClassMissingBrand and the Schema class completions.",
+          "items": {
+            "enum": [
+              "Class",
+              "TaggedClass",
+              "Error",
+              "TaggedError",
+              "Opaque"
+            ],
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
         "completions": {
           "default": true,
           "description": "Controls Effect completions.",
@@ -3322,6 +3366,21 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "brandedSchemaClasses": {
+          "description": "Scoped override for the Schema class kinds that get a nominal brand.",
+          "items": {
+            "enum": [
+              "Class",
+              "TaggedClass",
+              "Error",
+              "TaggedError",
+              "Opaque"
+            ],
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
         },
         "diagnosticSeverity": {
           "$ref": "#/definitions/effectLanguageServicePluginDiagnosticSeverityDefinition",

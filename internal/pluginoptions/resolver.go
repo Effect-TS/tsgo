@@ -2,6 +2,7 @@ package pluginoptions
 
 import (
 	"maps"
+	"slices"
 
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/microsoft/TypeScript/tsc/shim/tspath"
@@ -113,6 +114,9 @@ func applyOverride(target *etscore.ResolvedEffectPluginOptions, override etscore
 	if override.Options.EffectFn != nil {
 		target.EffectFn = append([]string(nil), (*override.Options.EffectFn)...)
 	}
+	if override.Options.BrandedSchemaClasses != nil {
+		target.BrandedSchemaClasses = slices.Clone(*override.Options.BrandedSchemaClasses)
+	}
 	if override.Options.NamespaceImportPackages != nil {
 		target.NamespaceImportPackages = append([]string(nil), (*override.Options.NamespaceImportPackages)...)
 	}
@@ -144,6 +148,7 @@ func cloneOptions(config *etscore.EffectPluginOptions) *etscore.ResolvedEffectPl
 		AllowedExperimentalApis:   append([]string(nil), config.AllowedExperimentalApis...),
 		AllowedDuplicatedPackages: append([]string(nil), config.AllowedDuplicatedPackages...),
 		EffectFn:                  append([]string(nil), config.EffectFn...),
+		BrandedSchemaClasses:      slices.Clone(config.BrandedSchemaClasses),
 	}
 
 	return &cloned

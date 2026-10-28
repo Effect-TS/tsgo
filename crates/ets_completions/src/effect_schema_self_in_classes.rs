@@ -1,13 +1,18 @@
 use std::sync::LazyLock;
 
 use ets_completion::{Completion, Context};
+use ets_etscore::{
+    BRANDED_SCHEMA_CLASS_CLASS, BRANDED_SCHEMA_CLASS_ERROR, BRANDED_SCHEMA_CLASS_OPAQUE,
+    BRANDED_SCHEMA_CLASS_TAGGED_CLASS, BRANDED_SCHEMA_CLASS_TAGGED_ERROR,
+    ResolvedEffectPluginOptions,
+};
 use ets_shim::lsproto;
 use ets_shim::scanner;
 use ets_typeparser::EffectMajorVersion;
 
 use crate::*;
 
-// go: internal/completions/effect_schema_self_in_classes.go:15 effectSchemaSelfInClasses e2a80dad4e0246c1
+// go: internal/completions/effect_schema_self_in_classes.go:18 effectSchemaSelfInClasses e2a80dad4e0246c1
 // effectSchemaSelfInClasses provides completion items for Schema/Model class constructors
 // when the cursor is in the extends clause of a class declaration.
 // For example, typing `class Foo extends Schema.|` will suggest `Class<Foo>`, `TaggedClass<Foo>`, etc.
@@ -18,7 +23,7 @@ pub(crate) static EFFECT_SCHEMA_SELF_IN_CLASSES: LazyLock<Completion> =
         run: run_effect_schema_self_in_classes,
     });
 
-// go: internal/completions/effect_schema_self_in_classes.go:21 runEffectSchemaSelfInClasses ed8a4bf9364d1a53
+// go: internal/completions/effect_schema_self_in_classes.go:24 runEffectSchemaSelfInClasses 11ef76b317f87877
 fn run_effect_schema_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::CompletionItem> {
     let Some(data) =
         ets_completion::parse_data_for_extends_class_completion(ctx.source_file, ctx.position)
@@ -33,10 +38,26 @@ fn run_effect_schema_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::
     let class_name = data.class_name_text();
 
     let version = ctx.type_parser.supported_effect_version();
-    let mut schema_type_args = class_name.clone();
-    if version == EffectMajorVersion::V4 {
-        schema_type_args += ", { readonly brand: unique symbol }";
-    }
+    let resolved_options = ctx.program.options().effect.get().and_then(|effect_config| {
+        ets_pluginoptions::resolve_effect_plugin_options_for_source_file(
+            Some(&effect_config),
+            ctx.source_file.file_name(),
+            &ctx.program.options().config_file_path,
+            ctx.program.use_case_sensitive_file_names(),
+        )
+    });
+    // schemaTypeArgs returns the Self type argument, followed by a brand in v4 when the kind is branded.
+    let schema_type_args = |kind: &str| -> String {
+        if version == EffectMajorVersion::V4
+            && ResolvedEffectPluginOptions::branded_schema_classes_includes(
+                resolved_options.as_ref(),
+                kind,
+            )
+        {
+            return format!("{class_name}, {{ readonly brand: unique symbol }}");
+        }
+        class_name.clone()
+    };
 
     // Build replacement range from byte offsets
     let replacement_range =
@@ -51,6 +72,7 @@ fn run_effect_schema_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::
             .type_parser
             .is_node_reference_to_effect_schema_module_api(data.accessed_object, "Class")
     {
+        let schema_type_args = schema_type_args(BRANDED_SCHEMA_CLASS_CLASS);
         let insert_text = if is_fully_qualified {
             format!(
                 r#"{schema_identifier}.Class<{schema_type_args}>("{class_name}")({{${{0}}}}){{}}"#
@@ -80,6 +102,7 @@ fn run_effect_schema_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::
             &class_name,
             "error",
         );
+        let schema_type_args = schema_type_args(BRANDED_SCHEMA_CLASS_TAGGED_ERROR);
         let insert_text = if is_fully_qualified {
             format!(
                 r#"{schema_identifier}.TaggedError<{schema_type_args}>()("{error_key}", {{${{0}}}}){{}}"#
@@ -109,6 +132,7 @@ fn run_effect_schema_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::
             &class_name,
             "taggedClass",
         );
+        let schema_type_args = schema_type_args(BRANDED_SCHEMA_CLASS_TAGGED_CLASS);
         let insert_text = if is_fully_qualified {
             format!(
                 r#"{schema_identifier}.TaggedClass<{schema_type_args}>()("{tag_key}", {{${{0}}}}){{}}"#
@@ -164,6 +188,7 @@ fn run_effect_schema_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::
                 .type_parser
                 .is_node_reference_to_effect_schema_module_api(data.accessed_object, "Error")
         {
+            let schema_type_args = schema_type_args(BRANDED_SCHEMA_CLASS_ERROR);
             let insert_text = if is_fully_qualified {
                 format!(
                     r#"{schema_identifier}.Error<{schema_type_args}>("{class_name}")({{${{0}}}}){{}}"#
@@ -184,6 +209,7 @@ fn run_effect_schema_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::
                 .type_parser
                 .is_node_reference_to_effect_schema_module_api(data.accessed_object, "Opaque")
         {
+            let schema_type_args = schema_type_args(BRANDED_SCHEMA_CLASS_OPAQUE);
             let insert_text = if is_fully_qualified {
                 format!(r"{schema_identifier}.Opaque<{schema_type_args}>()(${{0}}){{}}")
             } else {
@@ -233,7 +259,7 @@ fn run_effect_schema_self_in_classes(ctx: &mut Context<'_, '_>) -> Vec<lsproto::
     items
 }
 
-// go: internal/completions/effect_schema_self_in_classes.go:161 makeCompletionItem ea64337443f0ca3b
+// go: internal/completions/effect_schema_self_in_classes.go:176 makeCompletionItem ea64337443f0ca3b
 // makeCompletionItem creates a CompletionItem with snippet format and a text edit.
 //
 // Rust: Go's variadic `kindOverride ...lsproto.CompletionItemKind` (only its first element is read) is an
@@ -266,7 +292,7 @@ pub(crate) fn make_completion_item(
     }
 }
 
-// go: internal/completions/effect_schema_self_in_classes.go:184 makeExtendsCompletionItem 8038343e7dee1181
+// go: internal/completions/effect_schema_self_in_classes.go:199 makeExtendsCompletionItem 8038343e7dee1181
 // makeExtendsCompletionItem creates a CompletionItem for an extends-clause completion.
 // It sets FilterText to accessedText.label so VS Code can filter correctly when the
 // replacement range covers the full "Module.Property" expression.
@@ -283,7 +309,7 @@ pub(crate) fn make_extends_completion_item(
     item
 }
 
-// go: internal/completions/effect_schema_self_in_classes.go:192 byteSpanToRange af9827399dde439e
+// go: internal/completions/effect_schema_self_in_classes.go:207 byteSpanToRange af9827399dde439e
 // byteSpanToRange converts a byte offset span to an LSP Range.
 pub(crate) fn byte_span_to_range(ctx: &Context<'_, '_>, start: u32, length: u32) -> lsproto::Range {
     let (start_line, start_char) =

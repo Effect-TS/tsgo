@@ -35,7 +35,7 @@ var SchemaClassObjectLiteral = rule.Rule{
 			classes[symbol] = false
 			for _, declaration := range ast.TSGetSymbolDeclarations(symbol) {
 				if declaration.Kind == ast.KindClassDeclaration || declaration.Kind == ast.KindClassExpression {
-					if self, _ := schemaClassInstanceSelfAndBrand(ctx.TypeParser, declaration); self != nil {
+					if self, _, _ := schemaClassInstanceSelfAndBrand(ctx.TypeParser, declaration); self != nil {
 						classes[symbol] = true
 						return true
 					}

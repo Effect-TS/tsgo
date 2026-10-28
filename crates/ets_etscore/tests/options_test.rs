@@ -1,8 +1,9 @@
 // Port of etscore/options_test.go (package etscore_test).
 
 use ets_etscore::{
-    AnyValue, EFFECT_PLUGIN_NAME, EffectPluginOptions, Override, OverrideOptions, Severity,
-    TopLevelNamedReexportsMode, parse_from_plugins,
+    AnyValue, DEFAULT_BRANDED_SCHEMA_CLASSES, EFFECT_PLUGIN_NAME, EffectPluginOptions, Override,
+    OverrideOptions, ResolvedEffectPluginOptions, Severity, TopLevelNamedReexportsMode,
+    parse_from_plugins,
 };
 use ets_go::sprintf;
 use rustc_hash::FxHashMap;
@@ -1260,6 +1261,79 @@ fn test_parse_from_plugins_allowed_experimental_apis() {
                 != Some(string_vec(&["effect/http", "effect/rpc/Client#make"]))
         }) {
             t.fatal(sprintf!("unexpected options: %+v", format!("{opts:?}")));
+        }
+    });
+}
+
+// go test: etscore/options_test.go:783 TestParseFromPlugins_BrandedSchemaClasses 8c67bd9ac81e1271
+#[test]
+fn test_parse_from_plugins_branded_schema_classes() {
+    ets_go::testing::run(|t| {
+        let resolve = |pairs: Vec<(&str, Any)>| -> Option<ResolvedEffectPluginOptions> {
+            let mut pairs = pairs;
+            pairs.insert(0, ("name", s(EFFECT_PLUGIN_NAME)));
+            let Some(opts) = parse_from_plugins(&make_plugins(vec![make_plugin_map(pairs)])) else {
+                t.fatal("expected non-nil options");
+            };
+            ets_pluginoptions::resolve_effect_plugin_options_for_source_file(
+                Some(&opts),
+                "/repo/src/example.ts",
+                "/repo/tsconfig.json",
+                true,
+            )
+        };
+
+        let default = resolve(vec![]);
+        let got = ResolvedEffectPluginOptions::get_branded_schema_classes(default.as_ref());
+        if got != DEFAULT_BRANDED_SCHEMA_CLASSES.as_slice() {
+            t.error(sprintf!(
+                "default GetBrandedSchemaClasses() = %v, want %v",
+                format!("{got:?}"),
+                format!("{:?}", *DEFAULT_BRANDED_SCHEMA_CLASSES)
+            ));
+        }
+
+        let reduced = resolve(vec![("brandedSchemaClasses", strs(&["Class", "Opaque"]))]);
+        let includes = |kind| {
+            ResolvedEffectPluginOptions::branded_schema_classes_includes(reduced.as_ref(), kind)
+        };
+        if !includes("Class") || !includes("Opaque") || includes("TaggedError") {
+            t.error(sprintf!(
+                "reduced GetBrandedSchemaClasses() = %v, want [Class Opaque]",
+                format!(
+                    "{:?}",
+                    ResolvedEffectPluginOptions::get_branded_schema_classes(reduced.as_ref())
+                )
+            ));
+        }
+
+        let empty = resolve(vec![("brandedSchemaClasses", Any::Slice(vec![]))]);
+        if empty.as_ref().is_none_or(|e| e.branded_schema_classes != Some(vec![])) {
+            t.error(sprintf!(
+                "empty GetBrandedSchemaClasses() = %#v, want empty non-default list",
+                format!("{empty:?}")
+            ));
+        }
+
+        let overridden = resolve(vec![
+            ("brandedSchemaClasses", Any::Slice(vec![])),
+            (
+                "overrides",
+                Any::Slice(vec![make_plugin_map(vec![
+                    ("include", strs(&["src/**/*.ts"])),
+                    (
+                        "options",
+                        make_plugin_map(vec![("brandedSchemaClasses", strs(&["TaggedClass"]))]),
+                    ),
+                ])]),
+            ),
+        ]);
+        let got = ResolvedEffectPluginOptions::get_branded_schema_classes(overridden.as_ref());
+        if got != string_vec(&["TaggedClass"]).as_slice() {
+            t.error(sprintf!(
+                "overridden GetBrandedSchemaClasses() = %v, want [TaggedClass]",
+                format!("{got:?}")
+            ));
         }
     });
 }

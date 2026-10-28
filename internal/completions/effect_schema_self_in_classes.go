@@ -3,10 +3,13 @@ package completions
 import (
 	"fmt"
 
+	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/completion"
+	"github.com/effect-ts/tsgo/internal/pluginoptions"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 	"github.com/microsoft/TypeScript/tsc/shim/scanner"
+	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 )
 
 // effectSchemaSelfInClasses provides completion items for Schema/Model class constructors
@@ -33,9 +36,21 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 	tp := ctx.TypeParser
 
 	version := tp.SupportedEffectVersion()
-	schemaTypeArgs := className
-	if version == typeparser.EffectMajorV4 {
-		schemaTypeArgs += ", { readonly brand: unique symbol }"
+	var resolvedOptions *etscore.ResolvedEffectPluginOptions
+	if effectConfig := ctx.Program.Options().Effect; effectConfig != nil {
+		resolvedOptions = pluginoptions.ResolveEffectPluginOptionsForSourceFile(
+			effectConfig,
+			ctx.SourceFile.FileName(),
+			ctx.Program.Options().ConfigFilePath,
+			tspath.UseCaseSensitiveFileNames(ctx.Program),
+		)
+	}
+	// schemaTypeArgs returns the Self type argument, followed by a brand in v4 when the kind is branded.
+	schemaTypeArgs := func(kind string) string {
+		if version == typeparser.EffectMajorV4 && resolvedOptions.BrandedSchemaClassesIncludes(kind) {
+			return className + ", { readonly brand: unique symbol }"
+		}
+		return className
 	}
 
 	// Build replacement range from byte offsets
@@ -48,9 +63,9 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 	if isFullyQualified || tp.IsNodeReferenceToEffectSchemaModuleApi(data.AccessedObject, "Class") {
 		var insertText string
 		if isFullyQualified {
-			insertText = fmt.Sprintf(`%s.Class<%s>("%s")({${0}}){}`, schemaIdentifier, schemaTypeArgs, className)
+			insertText = fmt.Sprintf(`%s.Class<%s>("%s")({${0}}){}`, schemaIdentifier, schemaTypeArgs(etscore.BrandedSchemaClassClass), className)
 		} else {
-			insertText = fmt.Sprintf(`Class<%s>("%s")({${0}}){}`, schemaTypeArgs, className)
+			insertText = fmt.Sprintf(`Class<%s>("%s")({${0}}){}`, schemaTypeArgs(etscore.BrandedSchemaClassClass), className)
 		}
 		items = append(items, makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf("Class<%s>", className),
@@ -63,9 +78,9 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 		errorKey := computeDeterministicKey(ctx.Program, tp, ctx.SourceFile, className, "error")
 		var insertText string
 		if isFullyQualified {
-			insertText = fmt.Sprintf(`%s.TaggedError<%s>()("%s", {${0}}){}`, schemaIdentifier, schemaTypeArgs, errorKey)
+			insertText = fmt.Sprintf(`%s.TaggedError<%s>()("%s", {${0}}){}`, schemaIdentifier, schemaTypeArgs(etscore.BrandedSchemaClassTaggedError), errorKey)
 		} else {
-			insertText = fmt.Sprintf(`TaggedError<%s>()("%s", {${0}}){}`, schemaTypeArgs, errorKey)
+			insertText = fmt.Sprintf(`TaggedError<%s>()("%s", {${0}}){}`, schemaTypeArgs(etscore.BrandedSchemaClassTaggedError), errorKey)
 		}
 		items = append(items, makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf("TaggedError<%s>", className),
@@ -78,9 +93,9 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 		tagKey := computeDeterministicKey(ctx.Program, tp, ctx.SourceFile, className, "taggedClass")
 		var insertText string
 		if isFullyQualified {
-			insertText = fmt.Sprintf(`%s.TaggedClass<%s>()("%s", {${0}}){}`, schemaIdentifier, schemaTypeArgs, tagKey)
+			insertText = fmt.Sprintf(`%s.TaggedClass<%s>()("%s", {${0}}){}`, schemaIdentifier, schemaTypeArgs(etscore.BrandedSchemaClassTaggedClass), tagKey)
 		} else {
-			insertText = fmt.Sprintf(`TaggedClass<%s>()("%s", {${0}}){}`, schemaTypeArgs, tagKey)
+			insertText = fmt.Sprintf(`TaggedClass<%s>()("%s", {${0}}){}`, schemaTypeArgs(etscore.BrandedSchemaClassTaggedClass), tagKey)
 		}
 		items = append(items, makeExtendsCompletionItem(accessedText,
 			fmt.Sprintf("TaggedClass<%s>", className),
@@ -110,9 +125,9 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 		if isFullyQualified || tp.IsNodeReferenceToEffectSchemaModuleApi(data.AccessedObject, "Error") {
 			var insertText string
 			if isFullyQualified {
-				insertText = fmt.Sprintf(`%s.Error<%s>("%s")({${0}}){}`, schemaIdentifier, schemaTypeArgs, className)
+				insertText = fmt.Sprintf(`%s.Error<%s>("%s")({${0}}){}`, schemaIdentifier, schemaTypeArgs(etscore.BrandedSchemaClassError), className)
 			} else {
-				insertText = fmt.Sprintf(`Error<%s>("%s")({${0}}){}`, schemaTypeArgs, className)
+				insertText = fmt.Sprintf(`Error<%s>("%s")({${0}}){}`, schemaTypeArgs(etscore.BrandedSchemaClassError), className)
 			}
 			items = append(items, makeExtendsCompletionItem(accessedText,
 				fmt.Sprintf("Error<%s>", className),
@@ -122,9 +137,9 @@ func runEffectSchemaSelfInClasses(ctx *completion.Context) []*lsproto.Completion
 		if isFullyQualified || tp.IsNodeReferenceToEffectSchemaModuleApi(data.AccessedObject, "Opaque") {
 			var insertText string
 			if isFullyQualified {
-				insertText = fmt.Sprintf(`%s.Opaque<%s>()(${0}){}`, schemaIdentifier, schemaTypeArgs)
+				insertText = fmt.Sprintf(`%s.Opaque<%s>()(${0}){}`, schemaIdentifier, schemaTypeArgs(etscore.BrandedSchemaClassOpaque))
 			} else {
-				insertText = fmt.Sprintf(`Opaque<%s>()(${0}){}`, schemaTypeArgs)
+				insertText = fmt.Sprintf(`Opaque<%s>()(${0}){}`, schemaTypeArgs(etscore.BrandedSchemaClassOpaque))
 			}
 			items = append(items, makeExtendsCompletionItem(accessedText,
 				fmt.Sprintf("Opaque<%s>", className),

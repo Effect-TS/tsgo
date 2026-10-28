@@ -203,6 +203,13 @@ func ParseFromPlugins(value any) *EffectPluginOptions {
 			}
 		}
 
+		// Parse brandedSchemaClasses (default: nil, GetBrandedSchemaClasses() returns all kinds; [] means none)
+		if val, exists := getPluginValue("brandedSchemaClasses"); exists {
+			if kinds, ok := parseStringArrayStrict(val); ok {
+				result.BrandedSchemaClasses = kinds
+			}
+		}
+
 		if val, exists := getPluginValue("allowedUnstableApis"); exists {
 			if apis, ok := parseStringArrayStrict(val); ok {
 				result.AllowedUnstableApis = apis
@@ -396,6 +403,11 @@ func parseOverrideOptions(value any) OverrideOptions {
 	if value, exists := optionsMap("effectFn"); exists {
 		if variants, ok := parseStringArrayStrict(value); ok {
 			result.EffectFn = &variants
+		}
+	}
+	if value, exists := optionsMap("brandedSchemaClasses"); exists {
+		if kinds, ok := parseStringArrayStrict(value); ok {
+			result.BrandedSchemaClasses = &kinds
 		}
 	}
 	if value, exists := optionsMap("namespaceImportPackages"); exists {

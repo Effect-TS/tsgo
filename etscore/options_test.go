@@ -779,3 +779,39 @@ func TestParseFromPlugins_AllowedExperimentalApis(t *testing.T) {
 		t.Fatalf("unexpected options: %+v", opts)
 	}
 }
+
+func TestParseFromPlugins_BrandedSchemaClasses(t *testing.T) {
+	resolve := func(pairs ...any) *etscore.ResolvedEffectPluginOptions {
+		t.Helper()
+		opts := etscore.ParseFromPlugins(makePlugins(makePluginMap(append([]any{"name", etscore.EffectPluginName}, pairs...)...)))
+		if opts == nil {
+			t.Fatal("expected non-nil options")
+		}
+		return pluginoptions.ResolveEffectPluginOptionsForSourceFile(opts, "/repo/src/example.ts", "/repo/tsconfig.json", true)
+	}
+
+	if got := resolve().GetBrandedSchemaClasses(); !reflect.DeepEqual(got, etscore.DefaultBrandedSchemaClasses) {
+		t.Errorf("default GetBrandedSchemaClasses() = %v, want %v", got, etscore.DefaultBrandedSchemaClasses)
+	}
+
+	reduced := resolve("brandedSchemaClasses", []any{"Class", "Opaque"})
+	if !reduced.BrandedSchemaClassesIncludes("Class") || !reduced.BrandedSchemaClassesIncludes("Opaque") || reduced.BrandedSchemaClassesIncludes("TaggedError") {
+		t.Errorf("reduced GetBrandedSchemaClasses() = %v, want [Class Opaque]", reduced.GetBrandedSchemaClasses())
+	}
+
+	empty := resolve("brandedSchemaClasses", []any{})
+	if got := empty.GetBrandedSchemaClasses(); got == nil || len(got) != 0 {
+		t.Errorf("empty GetBrandedSchemaClasses() = %#v, want empty non-default list", got)
+	}
+
+	overridden := resolve(
+		"brandedSchemaClasses", []any{},
+		"overrides", []any{makePluginMap(
+			"include", []any{"src/**/*.ts"},
+			"options", makePluginMap("brandedSchemaClasses", []any{"TaggedClass"}),
+		)},
+	)
+	if got := overridden.GetBrandedSchemaClasses(); !reflect.DeepEqual(got, []string{"TaggedClass"}) {
+		t.Errorf("overridden GetBrandedSchemaClasses() = %v, want [TaggedClass]", got)
+	}
+}

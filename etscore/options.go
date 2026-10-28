@@ -1,6 +1,9 @@
 package etscore
 
-import "strings"
+import (
+	"slices"
+	"strings"
+)
 
 // KeyPattern defines a key pattern configuration for the deterministicKeys rule.
 type KeyPattern struct {
@@ -114,6 +117,11 @@ type EffectPluginOptions struct {
 	// Default (when empty/nil): ["span"].
 	EffectFn []string `json:"effectFn,omitzero" schema_description:"Controls which effectFnOpportunity quickfix variants are offered." schema_default:"[\"span\"]" schema_items_type:"string" schema_items_enum:"[\"span\",\"untraced\",\"no-span\",\"inferred-span\",\"suggested-span\"]" schema_unique_items:"true"`
 
+	// BrandedSchemaClasses controls which Schema class kinds get a nominal brand.
+	// Valid values: "Class", "TaggedClass", "Error", "TaggedError", "Opaque".
+	// Default (when nil): all five. An empty list disables the brand for every kind.
+	BrandedSchemaClasses []string `json:"brandedSchemaClasses,omitzero" schema_description:"Schema class kinds that get a nominal brand, used by schemaClassMissingBrand and the Schema class completions." schema_default:"[\"Class\",\"TaggedClass\",\"Error\",\"TaggedError\",\"Opaque\"]" schema_items_type:"string" schema_items_enum:"[\"Class\",\"TaggedClass\",\"Error\",\"TaggedError\",\"Opaque\"]" schema_unique_items:"true"`
+
 	// DiagnosticSeverity maps rule names to severity levels.
 	// If nil, diagnostics are explicitly disabled.
 	// If empty map {}, diagnostics are enabled with defaults.
@@ -137,6 +145,7 @@ type ResolvedEffectPluginOptions struct {
 	AllowedUnstableApis       []string
 	AllowedExperimentalApis   []string
 	EffectFn                  []string
+	BrandedSchemaClasses      []string
 }
 
 // EffectPluginDiagnosticsOptions is a compatibility alias for the resolved
@@ -160,6 +169,7 @@ type OverrideOptions struct {
 	AllowedExperimentalApis   *[]string                   `json:"allowedExperimentalApis,omitzero" schema_description:"Scoped allow-list for experimentalApiUsage." schema_items_type:"string"`
 	AllowedDuplicatedPackages *[]string                   `json:"allowedDuplicatedPackages,omitzero" schema_description:"Scoped allow-list for duplicatePackage." schema_items_type:"string"`
 	EffectFn                  *[]string                   `json:"effectFn,omitzero" schema_description:"Scoped override for effectFn quickfix variants." schema_items_type:"string" schema_items_enum:"[\"span\",\"untraced\",\"no-span\",\"inferred-span\",\"suggested-span\"]" schema_unique_items:"true"`
+	BrandedSchemaClasses      *[]string                   `json:"brandedSchemaClasses,omitzero" schema_description:"Scoped override for the Schema class kinds that get a nominal brand." schema_items_type:"string" schema_items_enum:"[\"Class\",\"TaggedClass\",\"Error\",\"TaggedError\",\"Opaque\"]" schema_unique_items:"true"`
 	NamespaceImportPackages   *[]string                   `json:"namespaceImportPackages,omitzero" schema_description:"Scoped package names that should prefer namespace imports." schema_items_type:"string"`
 	BarrelImportPackages      *[]string                   `json:"barrelImportPackages,omitzero" schema_description:"Scoped package names that should prefer barrel named imports." schema_items_type:"string"`
 	ImportAliases             *map[string]string          `json:"importAliases,omitzero" schema_description:"Scoped package-level import aliases keyed by package name." schema_additional_properties_type:"string"`
@@ -186,6 +196,24 @@ const (
 // DefaultEffectFn is the default effectFn configuration.
 var DefaultEffectFn = []string{EffectFnSpan}
 
+// BrandedSchemaClasses kind constants, named after the Schema API.
+const (
+	BrandedSchemaClassClass       = "Class"
+	BrandedSchemaClassTaggedClass = "TaggedClass"
+	BrandedSchemaClassError       = "Error"
+	BrandedSchemaClassTaggedError = "TaggedError"
+	BrandedSchemaClassOpaque      = "Opaque"
+)
+
+// DefaultBrandedSchemaClasses is the default brandedSchemaClasses configuration.
+var DefaultBrandedSchemaClasses = []string{
+	BrandedSchemaClassClass,
+	BrandedSchemaClassTaggedClass,
+	BrandedSchemaClassError,
+	BrandedSchemaClassTaggedError,
+	BrandedSchemaClassOpaque,
+}
+
 // DiagnosticsEnabled reports whether Effect diagnostics are enabled for the
 // parsed config in the current program.
 func DiagnosticsEnabled(config *EffectPluginOptions) bool {
@@ -208,6 +236,20 @@ func (e *ResolvedEffectPluginOptions) EffectFnIncludes(variant string) bool {
 		}
 	}
 	return false
+}
+
+// GetBrandedSchemaClasses returns the configured branded Schema class kinds, or all kinds when unset.
+// Unlike effectFn, an explicitly empty list is kept and means no kind is branded.
+func (e *ResolvedEffectPluginOptions) GetBrandedSchemaClasses() []string {
+	if e == nil || e.BrandedSchemaClasses == nil {
+		return DefaultBrandedSchemaClasses
+	}
+	return e.BrandedSchemaClasses
+}
+
+// BrandedSchemaClassesIncludes checks if a Schema class kind is in the configured (or default) list.
+func (e *ResolvedEffectPluginOptions) BrandedSchemaClassesIncludes(kind string) bool {
+	return slices.Contains(e.GetBrandedSchemaClasses(), kind)
 }
 
 func (e *EffectPluginOptions) GetRefactorsEnabled() bool {

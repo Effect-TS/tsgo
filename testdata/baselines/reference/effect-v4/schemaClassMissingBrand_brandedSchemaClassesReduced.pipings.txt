@@ -1,0 +1,61 @@
+==== /.src/schemaClassMissingBrand_brandedSchemaClassesReduced.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 4:32 - 4:97
+Node: Schema.Class<ClassPlain>("ClassPlain")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<ClassPlain>("ClassPlain")
+      args: (constant)
+      outType: Class<ClassPlain, Struct<{ readonly value: String; }>, {}>
+
+=== Piping Flow ===
+Location: 6:32 - 6:97
+Node: Schema.Error<ErrorPlain>("ErrorPlain")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Error<ErrorPlain>("ErrorPlain")
+      args: (constant)
+      outType: Class<ErrorPlain, Struct<{ readonly value: String; }>, YieldableError>
+
+=== Piping Flow ===
+Location: 8:33 - 8:103
+Node: Schema.Opaque<OpaquePlain>()(Schema.Struct({ value: Schema.String }))
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (2):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ readonly value: String; }>
+  [1] kind: call
+      callee: Schema.Opaque<OpaquePlain>()
+      args: (constant)
+      outType: Opaque<OpaquePlain, Struct<{ readonly value: String; }>, {}> & Omit<Struct<{ readonly value: String; }>, keyof Top>
+
+=== Piping Flow ===
+Location: 10:34 - 10:138
+Node: Schema.Class<ClassBranded, { readonly brand: unique symbol }>("ClassBranded")({ value: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { value: Schema.String }
+Subject Type: { value: String; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<ClassBranded, { readonly brand: unique symbol }>("ClassBranded")
+      args: (constant)
+      outType: Class<ClassBranded, Struct<{ readonly value: String; }>, { readonly brand: unique symbol; }>
