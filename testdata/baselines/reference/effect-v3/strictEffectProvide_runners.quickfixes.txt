@@ -1,0 +1,343 @@
+=== Quick Fix Inventory ===
+
+[D1] (1:1-1:1) TS377053: This project targets Effect v4, but this code uses Effect v3 APIs. The referenced API belongs to the v3 surface rather than the configured v4 surface. effect(outdatedApi)
+  Fix 0: "Disable outdatedApi for this line"
+  Fix 1: "Disable outdatedApi for entire file"
+
+[D2] (4:40-4:47) TS2551: Property 'Service' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'. Did you mean 'service'?
+  (no quick fixes)
+
+[D3] (4:40-4:47) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `Service`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use Context.Service instead of Effect.Service. effect(outdatedApi)
+  Fix 0: "Disable outdatedApi for this line"
+  Fix 1: "Disable outdatedApi for entire file"
+
+[D4] (8:40-8:47) TS2551: Property 'Service' does not exist on type 'typeof import("/node_modules/effect/dist/Effect")'. Did you mean 'service'?
+  (no quick fixes)
+
+[D5] (8:40-8:47) TS377052: This project targets Effect v4, but this code uses the Effect v3 API `Service`. The referenced API belongs to the v3 surface rather than the configured v4 surface. Use Context.Service instead of Effect.Service. effect(outdatedApi)
+  Fix 0: "Disable outdatedApi for this line"
+  Fix 1: "Disable outdatedApi for entire file"
+
+[D6] (12:51-12:58) TS2339: Property 'Default' does not exist on type 'typeof MyService1'.
+  (no quick fixes)
+
+[D7] (12:71-12:78) TS2339: Property 'Default' does not exist on type 'typeof MyService2'.
+  (no quick fixes)
+
+[D8] (15:27-15:37) TS2488: Type 'typeof MyService1' must have a '[Symbol.iterator]()' method that returns an iterator.
+  (no quick fixes)
+
+[D9] (16:27-16:37) TS2488: Type 'typeof MyService2' must have a '[Symbol.iterator]()' method that returns an iterator.
+  (no quick fixes)
+
+[D10] (11:19-11:57) TS2345: Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
+  Type 'any' is not assignable to type 'never'.
+  (no quick fixes)
+
+[D11] (11:19-11:57) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
+  Fix 0: "Disable missingEffectContext for this line"
+  Fix 1: "Disable missingEffectContext for entire file"
+
+[D12] (12:16-12:70) TS2345: Argument of type 'Effect<void, any, any>' is not assignable to parameter of type 'Effect<void, any, never>'.
+  Type 'any' is not assignable to type 'never'.
+  (no quick fixes)
+
+[D13] (12:16-12:70) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
+  Fix 0: "Disable missingEffectContext for this line"
+  Fix 1: "Disable missingEffectContext for entire file"
+
+[D14] (15:16-15:49) TS2345: Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
+  Type 'any' is not assignable to type 'never'.
+  (no quick fixes)
+
+[D15] (15:16-15:49) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
+  Fix 0: "Disable missingEffectContext for this line"
+  Fix 1: "Disable missingEffectContext for entire file"
+
+[D16] (16:21-16:54) TS2345: Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
+  Type 'any' is not assignable to type 'never'.
+  (no quick fixes)
+
+[D17] (16:21-16:54) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
+  Fix 0: "Disable missingEffectContext for this line"
+  Fix 1: "Disable missingEffectContext for entire file"
+
+[D18] (17:23-17:56) TS2345: Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
+  Type 'any' is not assignable to type 'never'.
+  (no quick fixes)
+
+[D19] (17:23-17:56) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
+  Fix 0: "Disable missingEffectContext for this line"
+  Fix 1: "Disable missingEffectContext for entire file"
+
+[D20] (18:20-18:53) TS2345: Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
+  Type 'any' is not assignable to type 'never'.
+  (no quick fixes)
+
+[D21] (18:20-18:53) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
+  Fix 0: "Disable missingEffectContext for this line"
+  Fix 1: "Disable missingEffectContext for entire file"
+
+[D22] (19:21-19:54) TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
+      Type 'any' is not assignable to type 'never'.
+  (no quick fixes)
+
+[D23] (19:21-19:54) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
+  Fix 0: "Disable missingEffectContext for this line"
+  Fix 1: "Disable missingEffectContext for entire file"
+
+[D24] (20:24-20:62) TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
+      Type 'any' is not assignable to type 'never'.
+  (no quick fixes)
+
+[D25] (20:24-20:62) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
+  Fix 0: "Disable missingEffectContext for this line"
+  Fix 1: "Disable missingEffectContext for entire file"
+
+[D26] (21:11-21:44) TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
+      Type 'any' is not assignable to type 'never'.
+  (no quick fixes)
+
+[D27] (21:11-21:44) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
+  Fix 0: "Disable missingEffectContext for this line"
+  Fix 1: "Disable missingEffectContext for entire file"
+
+[D28] (24:14-24:38) TS2345: Argument of type '<A, E, R>(self: Effect<A, E, R>) => Effect<A, any, any>' is not assignable to parameter of type '(_: Effect<any, unknown, unknown>) => Effect<unknown, unknown, never>'.
+  Type 'Effect<any, any, any>' is not assignable to type 'Effect<unknown, unknown, never>'.
+    Type 'any' is not assignable to type 'never'.
+  (no quick fixes)
+
+[D29] (24:14-24:38) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
+  Fix 0: "Disable missingEffectContext for this line"
+  Fix 1: "Disable missingEffectContext for entire file"
+
+[D30] (25:40-25:91) TS2345: Argument of type '<E, A>(effect: Effect<A, E, never>) => void' is not assignable to parameter of type '(_: Effect<any, any, any>) => void'.
+  Types of parameters 'effect' and '_' are incompatible.
+    Type 'Effect<any, any, any>' is not assignable to type 'Effect<any, any, never>'.
+      Type 'any' is not assignable to type 'never'.
+  (no quick fixes)
+
+[D31] (25:40-25:91) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
+  Fix 0: "Disable missingEffectContext for this line"
+  Fix 1: "Disable missingEffectContext for entire file"
+
+[D32] (26:41-26:58) TS2345: Argument of type '<A, E>(effect: Effect<A, E, never>, options?: RunOptions | undefined) => Promise<A>' is not assignable to parameter of type '(b: Effect<any, any, any>) => Promise<any>'.
+  Types of parameters 'effect' and 'b' are incompatible.
+    Type 'Effect<any, any, any>' is not assignable to type 'Effect<any, any, never>'.
+      Type 'any' is not assignable to type 'never'.
+  (no quick fixes)
+
+[D33] (26:41-26:58) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
+  Fix 0: "Disable missingEffectContext for this line"
+  Fix 1: "Disable missingEffectContext for entire file"
+
+[D34] (29:37-29:61) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+[D35] (30:18-30:51) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+[D36] (31:19-31:27) TS2345: Argument of type 'Effect<any, any, any>' is not assignable to parameter of type 'Effect<any, any, never>'.
+  Type 'any' is not assignable to type 'never'.
+  (no quick fixes)
+
+[D37] (31:19-31:27) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
+  Fix 0: "Disable missingEffectContext for this line"
+  Fix 1: "Disable missingEffectContext for entire file"
+
+[D38] (34:67-34:91) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+[D39] (35:43-35:76) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+[D40] (38:19-38:72) TS2345: Argument of type 'Effect<void, any, any>' is not assignable to parameter of type 'Effect<void, any, never>'.
+  Type 'any' is not assignable to type 'never'.
+  (no quick fixes)
+
+[D41] (38:19-38:72) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
+  Fix 0: "Disable missingEffectContext for this line"
+  Fix 1: "Disable missingEffectContext for entire file"
+
+[D42] (38:32-38:56) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+[D43] (39:14-39:38) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+[D44] (39:40-39:53) TS2345: Argument of type '<A, E, R>(self: Effect<A, E, R>) => Effect<void, E, R>' is not assignable to parameter of type '(_: Effect<any, any, any>) => Effect<unknown, unknown, never>'.
+  Type 'Effect<void, any, any>' is not assignable to type 'Effect<unknown, unknown, never>'.
+    Type 'any' is not assignable to type 'never'.
+  (no quick fixes)
+
+[D45] (39:40-39:53) TS377004: This Effect requires a service that is missing from the expected Effect context: `any`. effect(missingEffectContext)
+  Fix 0: "Disable missingEffectContext for this line"
+  Fix 1: "Disable missingEffectContext for entire file"
+
+[D46] (42:43-42:76) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable outdatedApi for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable outdatedApi for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable outdatedApi for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable outdatedApi for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable outdatedApi for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable outdatedApi for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable missingEffectContext for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable missingEffectContext for entire file" ===
+skipped by default
+
+=== [D13] Fix 0: "Disable missingEffectContext for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable missingEffectContext for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable missingEffectContext for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable missingEffectContext for entire file" ===
+skipped by default
+
+=== [D17] Fix 0: "Disable missingEffectContext for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable missingEffectContext for entire file" ===
+skipped by default
+
+=== [D19] Fix 0: "Disable missingEffectContext for this line" ===
+skipped by default
+
+=== [D19] Fix 1: "Disable missingEffectContext for entire file" ===
+skipped by default
+
+=== [D21] Fix 0: "Disable missingEffectContext for this line" ===
+skipped by default
+
+=== [D21] Fix 1: "Disable missingEffectContext for entire file" ===
+skipped by default
+
+=== [D23] Fix 0: "Disable missingEffectContext for this line" ===
+skipped by default
+
+=== [D23] Fix 1: "Disable missingEffectContext for entire file" ===
+skipped by default
+
+=== [D25] Fix 0: "Disable missingEffectContext for this line" ===
+skipped by default
+
+=== [D25] Fix 1: "Disable missingEffectContext for entire file" ===
+skipped by default
+
+=== [D27] Fix 0: "Disable missingEffectContext for this line" ===
+skipped by default
+
+=== [D27] Fix 1: "Disable missingEffectContext for entire file" ===
+skipped by default
+
+=== [D29] Fix 0: "Disable missingEffectContext for this line" ===
+skipped by default
+
+=== [D29] Fix 1: "Disable missingEffectContext for entire file" ===
+skipped by default
+
+=== [D31] Fix 0: "Disable missingEffectContext for this line" ===
+skipped by default
+
+=== [D31] Fix 1: "Disable missingEffectContext for entire file" ===
+skipped by default
+
+=== [D33] Fix 0: "Disable missingEffectContext for this line" ===
+skipped by default
+
+=== [D33] Fix 1: "Disable missingEffectContext for entire file" ===
+skipped by default
+
+=== [D34] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D34] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D35] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D35] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D37] Fix 0: "Disable missingEffectContext for this line" ===
+skipped by default
+
+=== [D37] Fix 1: "Disable missingEffectContext for entire file" ===
+skipped by default
+
+=== [D38] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D38] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D39] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D39] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D41] Fix 0: "Disable missingEffectContext for this line" ===
+skipped by default
+
+=== [D41] Fix 1: "Disable missingEffectContext for entire file" ===
+skipped by default
+
+=== [D42] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D42] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D43] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D43] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D45] Fix 0: "Disable missingEffectContext for this line" ===
+skipped by default
+
+=== [D45] Fix 1: "Disable missingEffectContext for entire file" ===
+skipped by default
+
+=== [D46] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D46] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default

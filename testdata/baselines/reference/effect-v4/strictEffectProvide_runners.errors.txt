@@ -1,0 +1,94 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/main.ts(29,37): warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+/.src/main.ts(30,18): warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+/.src/main.ts(34,67): warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+/.src/main.ts(35,43): warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+/.src/main.ts(38,32): warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+/.src/main.ts(39,14): warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+/.src/main.ts(42,43): warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+
+
+==== /.src/services.ts (0 errors) ====
+    import { Context, Effect, Layer } from "effect"
+    
+    export class MyService1 extends Context.Service<MyService1>()("MyService1", {
+      make: Effect.succeed({ value: 1 })
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    
+    export class MyService2 extends Context.Service<MyService2>()("MyService2", {
+      make: Effect.succeed({ value: 2 })
+    }) {
+      static Default = Layer.effect(this, this.make)
+    }
+    
+    export const AppLayer = Layer.mergeAll(MyService1.Default, MyService2.Default)
+    
+    export const program = Effect.gen(function*() {
+      const service1 = yield* MyService1
+      const service2 = yield* MyService2
+      return service1.value + service2.value
+    })
+    
+
+==== /.src/main.ts (7 errors) ====
+    // @effect-diagnostics strictEffectProvide:warning
+    import { BrowserRuntime } from "@effect/platform-browser"
+    import { BunRuntime } from "@effect/platform-bun"
+    import { NodeRuntime } from "@effect/platform-node"
+    import { runMain as startMain } from "@effect/platform-node/NodeRuntime"
+    import { Effect } from "effect"
+    import { pipe } from "effect/Function"
+    import { AppLayer, program } from "./services"
+    
+    // Should NOT report: the pipe ending with the provide is the runner's argument
+    Effect.runPromise(program.pipe(Effect.provide(AppLayer)))
+    Effect.runFork(pipe(program, Effect.asVoid, Effect.provide(AppLayer)))
+    
+    // Should NOT report: the provide call is the runner's argument
+    Effect.runSync(Effect.provide(program, AppLayer))
+    Effect.runSyncExit((Effect.provide(program, AppLayer)))
+    Effect.runPromiseExit(Effect.provide(AppLayer)(program))
+    Effect.runCallback(Effect.provide(program, AppLayer))
+    NodeRuntime.runMain(Effect.provide(program, AppLayer))
+    BrowserRuntime.runMain(program.pipe(Effect.provide(AppLayer)))
+    startMain(Effect.provide(program, AppLayer))
+    
+    // Should NOT report: the runner is the next step of the same pipe
+    program.pipe(Effect.provide(AppLayer), NodeRuntime.runMain)
+    program.pipe(Effect.provide(AppLayer), BunRuntime.runMain({ disableErrorReporting: true }))
+    pipe(program, Effect.provide(AppLayer), Effect.runPromise)
+    
+    // Should report: the result is only bound to a variable
+    export const handler = program.pipe(Effect.provide(AppLayer))
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+    const provided = Effect.provide(program, AppLayer)
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+    Effect.runPromise(provided)
+    
+    // Should report: a handler that is not passed to a runner
+    export const handle = (id: number) => program.pipe(Effect.as(id), Effect.provide(AppLayer))
+                                                                      ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+    export const inEffect = Effect.sync(() => Effect.provide(program, AppLayer))
+                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+    
+    // Should report: another step follows the provide before the runner
+    Effect.runPromise(program.pipe(Effect.provide(AppLayer), Effect.asVoid))
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+    program.pipe(Effect.provide(AppLayer), Effect.asVoid, NodeRuntime.runMain)
+                 ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+    
+    // Should report: the Effect is not the runner's argument
+    Effect.runPromise(Effect.void).then(() => Effect.provide(program, AppLayer))
+                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+    

@@ -1,0 +1,12 @@
+flowchart TB
+  0[/"type: Class#lt;MyService1, #quot;MyService1#quot;, #123; readonly succeed: #123; readonly value: 1; #125;; #125;#gt;<br/>node: Effect.Service#lt;MyService1#gt;#40;#41;#40;#quot;MyService1#quot;, #123;#92;n  succeed: #123; value: 1 #125;#92;n#125;#41;"/]
+  1[/"type: Class#lt;MyService2, #quot;MyService2#quot;, #123; readonly succeed: #123; readonly value: 2; #125;; #125;#gt;<br/>node: Effect.Service#lt;MyService2#gt;#40;#41;#40;#quot;MyService2#quot;, #123;#92;n  succeed: #123; value: 2 #125;#92;n#125;#41;"/]
+  2[/"type: Layer#lt;MyService1 #124; MyService2, never, never#gt;<br/>node: Layer.mergeAll#40;MyService1.Default, MyService2.Default#41;"/]
+  3((("type: Effect#lt;number, never, MyService1 #124; MyService2#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const service1 = yield* MyService1#92;n  const service2 = yield* MyService2#92;n  return service1.value + service2.value#92;n#125;#41;")))
+  4[/"type: number<br/>node: service1.value + service2.value"/]
+  5[/"type: typeof MyService1<br/>node: MyService1"/]
+  6[/"type: typeof MyService2<br/>node: MyService2"/]
+  4 -->|"kind: potentialReturn"| 3
+  5 -->|"kind: yieldable"| 3
+  6 -->|"kind: yieldable"| 3
+  4 -->|"kind: usedBy"| 3

@@ -1,0 +1,38 @@
+flowchart TB
+  0[/"type: ServiceClass#lt;MyService1, #quot;MyService1#quot;, #123; value: number; #125;#gt; #amp; #123; readonly make: Effect#lt;#123; value: number; #125;, never, never#gt;; #125;<br/>node: Context.Service#lt;MyService1#gt;#40;#41;#40;#quot;MyService1#quot;, #123;#92;n  make: Effect.succeed#40;#123; value: 1 #125;#41;#92;n#125;#41;"/]
+  1[/"type: #123; value: number; #125;<br/>node: #123; value: 1 #125;"/]
+  2["type: Effect#lt;#123; value: number; #125;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  3[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  4[/"type: Effect#lt;#123; value: number; #125;, never, never#gt;<br/>node: this.make"/]
+  5["type: Layer#lt;MyService1, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  6[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  7[/"type: typeof MyService1<br/>node: this"/]
+  8[/"type: ServiceClass#lt;MyService2, #quot;MyService2#quot;, #123; value: number; #125;#gt; #amp; #123; readonly make: Effect#lt;#123; value: number; #125;, never, never#gt;; #125;<br/>node: Context.Service#lt;MyService2#gt;#40;#41;#40;#quot;MyService2#quot;, #123;#92;n  make: Effect.succeed#40;#123; value: 2 #125;#41;#92;n#125;#41;"/]
+  9[/"type: #123; value: number; #125;<br/>node: #123; value: 2 #125;"/]
+  10["type: Effect#lt;#123; value: number; #125;, never, never#gt;<br/>callee: Effect.succeed<br/>args: #91;#93;"]
+  11[/"type: #lt;A#gt;#40;value: A#41; =#gt; Effect#lt;A, never, never#gt;<br/>node: Effect.succeed"/]
+  12[/"type: Effect#lt;#123; value: number; #125;, never, never#gt;<br/>node: this.make"/]
+  13["type: Layer#lt;MyService2, never, never#gt;<br/>callee: <br/>args: #91;#93;"]
+  14[/"type: #123; #lt;I, S#gt;#40;service: Key#lt;I, S#gt;#41;: #lt;E, R#gt;#40;effect: Effect#lt;S, E, R#gt;#41; =#gt; Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #lt;I, S, E, R#gt;#40;service: Key#lt;I, S#gt;, effect: Effect#lt;NoInfer#lt;S#gt;, E, R#gt;#41;: Layer#lt;I, E, Exclude#lt;R, Scope#gt;#gt;; #125;<br/>node: Layer.effect"/]
+  15[/"type: typeof MyService2<br/>node: this"/]
+  16[/"type: Layer#lt;MyService1 #124; MyService2, never, never#gt;<br/>node: Layer.mergeAll#40;MyService1.Default, MyService2.Default#41;"/]
+  17((("type: Effect#lt;number, never, MyService1 #124; MyService2#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const service1 = yield* MyService1#92;n  const service2 = yield* MyService2#92;n  return service1.value + service2.value#92;n#125;#41;")))
+  18[/"type: number<br/>node: service1.value + service2.value"/]
+  19[/"type: typeof MyService1<br/>node: MyService1"/]
+  20[/"type: typeof MyService2<br/>node: MyService2"/]
+  1 -->|"kind: pipe"| 2
+  3 -->|"kind: transformCallee"| 2
+  2 -->|"kind: usedBy"| 0
+  4 -->|"kind: pipe"| 5
+  6 -->|"kind: transformCallee"| 4
+  7 -->|"kind: transformArg"| 4
+  9 -->|"kind: pipe"| 10
+  11 -->|"kind: transformCallee"| 10
+  10 -->|"kind: usedBy"| 8
+  12 -->|"kind: pipe"| 13
+  14 -->|"kind: transformCallee"| 12
+  15 -->|"kind: transformArg"| 12
+  18 -->|"kind: potentialReturn"| 17
+  19 -->|"kind: yieldable"| 17
+  20 -->|"kind: yieldable"| 17
+  18 -->|"kind: usedBy"| 17

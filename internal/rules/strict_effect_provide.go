@@ -3,12 +3,13 @@ package rules
 import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 )
 
-// StrictEffectProvide warns when Effect.provide is called with a Layer argument.
-// This rule is disabled by default.
+// StrictEffectProvide warns when Effect.provide is called with a Layer argument,
+// unless the provided Effect goes straight into a runner. This rule is disabled by default.
 var StrictEffectProvide = rule.Rule{
 	Name:            "strictEffectProvide",
 	Group:           "antipattern",
@@ -71,10 +72,74 @@ func checkEffectProvideWithLayer(ctx *rule.Context, node *ast.Node) *ast.Diagnos
 			continue
 		}
 		if ctx.TypeParser.LayerType(argType) != nil {
+			// Providing layers right before running the Effect is what an entry point does
+			if isEffectProvidePassedToRunner(ctx.TypeParser, node) {
+				return nil
+			}
 			// Found a Layer argument — emit diagnostic on the call expression
 			return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(node), tsdiag.Effect_provide_with_a_Layer_should_only_be_used_at_application_entry_points_If_this_is_an_entry_point_you_can_safely_disable_this_diagnostic_Otherwise_using_Effect_provide_may_break_scope_lifetimes_Compose_all_layers_at_your_entry_point_and_provide_them_at_once_effect_strictEffectProvide, nil)
 		}
 	}
 
 	return nil
+}
+
+// isEffectProvidePassedToRunner reports whether the Effect returned by a provide call goes straight
+// into a runner: the provide call, or the pipe ending with it, is the runner's argument, or the
+// runner is the next step of the same pipe.
+func isEffectProvidePassedToRunner(tp *typeparser.TypeParser, node *ast.Node) bool {
+	expr := skipOuterParentheses(node)
+	// A data-last provide applied to its Effect, as in Effect.provide(layer)(program)
+	if expr.Parent != nil && expr.Parent.Kind == ast.KindCallExpression && expr.Parent.AsCallExpression().Expression == expr {
+		expr = skipOuterParentheses(expr.Parent)
+	}
+	if expr.Parent != nil && expr.Parent.Kind == ast.KindCallExpression {
+		if pipe := tp.ParsePipeCall(expr.Parent); pipe != nil {
+			args := pipe.Args()
+			for i := range args.Len() {
+				if args.At(i) != expr {
+					continue
+				}
+				if i+1 < args.Len() {
+					return isEffectRunnerPipeStep(tp, args.At(i+1))
+				}
+				expr = skipOuterParentheses(pipe.Node().AsNode())
+				break
+			}
+		}
+	}
+
+	parent := expr.Parent
+	if parent == nil || parent.Kind != ast.KindCallExpression {
+		return false
+	}
+	call := parent.AsCallExpression()
+	if call.Arguments == nil || len(call.Arguments.Nodes) == 0 || call.Arguments.Nodes[0] != expr {
+		return false
+	}
+	return isEffectRunner(tp, call.Expression)
+}
+
+// isEffectRunnerPipeStep reports whether a pipe step runs the Effect: a runner, or a platform
+// runMain applied to its options.
+func isEffectRunnerPipeStep(tp *typeparser.TypeParser, step *ast.Node) bool {
+	step = ast.SkipParentheses(step)
+	if isEffectRunner(tp, step) {
+		return true
+	}
+	return step.Kind == ast.KindCallExpression &&
+		tp.IsNodeReferenceToPlatformRuntimeApi(step.AsCallExpression().Expression, platformRunMainApi)
+}
+
+// isEffectRunner reports whether node references one of the Effect.run* APIs or a platform runMain.
+func isEffectRunner(tp *typeparser.TypeParser, node *ast.Node) bool {
+	return matchRunEffectApi(tp, nil, node) != "" || tp.IsNodeReferenceToPlatformRuntimeApi(node, platformRunMainApi)
+}
+
+// skipOuterParentheses returns the outermost parenthesized expression wrapping node, or node itself.
+func skipOuterParentheses(node *ast.Node) *ast.Node {
+	for node.Parent != nil && node.Parent.Kind == ast.KindParenthesizedExpression {
+		node = node.Parent
+	}
+	return node
 }
