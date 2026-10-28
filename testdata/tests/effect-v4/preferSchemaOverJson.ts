@@ -49,3 +49,9 @@ export const nestedFunctionInGen = Effect.gen(function*() {
   //                    ^- this is inside a nested function, should NOT trigger
   return parseFn()
 })
+
+// Should NOT trigger - shadowed JSON
+export const shadowedJson = Effect.gen(function*() {
+  const JSON = { parse: (value: string) => value }
+  return JSON.parse("{}")
+})

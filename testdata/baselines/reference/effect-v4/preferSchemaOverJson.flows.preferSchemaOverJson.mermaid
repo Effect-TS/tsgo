@@ -28,6 +28,12 @@ flowchart TB
   26[/"type: any<br/>node: parseFn#40;#41;"/]
   27[["type: #40;#41; =#gt; any<br/>node: #40;#41; =#gt; JSON.parse#40;#quot;#123;#92;#quot;nested#92;#quot;:true#125;#quot;#41;"]]
   28[/"type: any<br/>node: JSON.parse#40;#quot;#123;#92;#quot;nested#92;#quot;:true#125;#quot;#41;"/]
+  29((("type: Effect#lt;string, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const JSON = #123; parse: #40;value: string#41; =#gt; value #125;#92;n  return JSON.parse#40;#quot;#123;#125;#quot;#41;#92;n#125;#41;")))
+  30[/"type: #quot;#123;#125;#quot;<br/>node: #quot;#123;#125;#quot;"/]
+  31["type: string<br/>callee: JSON.parse<br/>args: #91;#93;"]
+  32[/"type: #40;value: string#41; =#gt; string<br/>node: JSON.parse"/]
+  33[["type: #40;value: string#41; =#gt; string<br/>node: #40;value: string#41; =#gt; value"]]
+  34[/"type: string<br/>node: value"/]
   2 -->|"kind: potentialReturn"| 1
   1 -->|"kind: usedBy"| 0
   4 -->|"kind: potentialReturn"| 3
@@ -55,3 +61,9 @@ flowchart TB
   28 -->|"kind: potentialReturn"| 27
   27 -->|"kind: usedBy"| 25
   26 -->|"kind: usedBy"| 25
+  30 -->|"kind: pipe"| 31
+  32 -->|"kind: transformCallee"| 31
+  31 -->|"kind: potentialReturn"| 29
+  34 -->|"kind: potentialReturn"| 33
+  33 -->|"kind: usedBy"| 29
+  31 -->|"kind: usedBy"| 29

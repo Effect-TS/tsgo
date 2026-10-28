@@ -614,5 +614,13 @@
     "`Effect.{0}` expresses this failure directly instead of wrapping `Cause.{2}` in `Effect.{1}`. effect(failCauseToConstructor)": {
         "category": "Suggestion",
         "code": 377155
+    },
+    "This code uses `JSON.{0}`, which throws instead of failing with a typed error. {1} effect(globalJson)": {
+        "category": "Warning",
+        "code": 377156
+    },
+    "This Effect code uses `JSON.{0}`, which throws instead of failing with a typed error. {1} effect(globalJsonInEffect)": {
+        "category": "Warning",
+        "code": 377157
     }
 }

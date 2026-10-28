@@ -1,0 +1,66 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:75-7:91) TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJson)
+  Fix 0: "Disable globalJson for this line"
+  Fix 1: "Disable globalJson for entire file"
+
+[D2] (10:83-10:99) TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJson)
+  Fix 0: "Disable globalJson for this line"
+  Fix 1: "Disable globalJson for entire file"
+
+[D3] (13:27-13:59) TS377156: This code uses `JSON.stringify`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJson)
+  Fix 0: "Disable globalJson for this line"
+  Fix 1: "Disable globalJson for entire file"
+
+[D4] (17:28-17:46) TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJson)
+  Fix 0: "Disable globalJson for this line"
+  Fix 1: "Disable globalJson for entire file"
+
+[D5] (21:29-21:40) TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJson)
+  Fix 0: "Disable globalJson for this line"
+  Fix 1: "Disable globalJson for entire file"
+
+[D6] (30:32-30:48) TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJson)
+  Fix 0: "Disable globalJson for this line"
+  Fix 1: "Disable globalJson for entire file"
+
+[D7] (35:7-35:20) TS6133: '_shadowedJson' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable globalJson for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable globalJson for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable globalJson for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable globalJson for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable globalJson for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable globalJson for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable globalJson for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable globalJson for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable globalJson for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable globalJson for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable globalJson for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable globalJson for entire file" ===
+skipped by default

@@ -1,0 +1,211 @@
+==== /.src/globalJsonInEffect_thunks.ts (15 flows) ====
+
+=== Piping Flow ===
+Location: 4:27 - 4:60
+Node: Data.TaggedError("ExampleError")
+Node Kind: KindCallExpression
+
+Subject: "ExampleError"
+Subject Type: "ExampleError"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: VoidIfEmpty<{ readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }>) => YieldableError & { readonly _tag: "ExampleError"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 6:27 - 6:63
+Node: Effect.sync(() => JSON.parse("{}"))
+Node Kind: KindCallExpression
+
+Subject: () => JSON.parse("{}")
+Subject Type: () => any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 6:45 - 6:62
+Node: JSON.parse("{}")
+Node Kind: KindCallExpression
+
+Subject: "{}"
+Subject Type: "{}"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 8:32 - 11:3
+Node: Effect.try({\n  try: () => JSON.parse("{}"),\n  catch: () => new ExampleError()\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => JSON.parse("{}"),\n  catch: () => new ExampleError()\n}
+Subject Type: { try: () => any; catch: () => ExampleError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<any, ExampleError, never>
+
+=== Piping Flow ===
+Location: 9:13 - 9:30
+Node: JSON.parse("{}")
+Node Kind: KindCallExpression
+
+Subject: "{}"
+Subject Type: "{}"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 13:36 - 16:3
+Node: Effect.try({\n  try: () => JSON.stringify({ name: "Alice" }),\n  catch: () => new ExampleError()\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => JSON.stringify({ name: "Alice" }),\n  catch: () => new ExampleError()\n}
+Subject Type: { try: () => string; catch: () => ExampleError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<string, ExampleError, never>
+
+=== Piping Flow ===
+Location: 14:13 - 14:47
+Node: JSON.stringify({ name: "Alice" })
+Node Kind: KindCallExpression
+
+Subject: { name: "Alice" }
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.stringify
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 18:37 - 24:3
+Node: Effect.try({\n  try: () => {\n    const parsed = JSON.parse("{}")\n    return parsed\n  },\n  catch: () => new ExampleError()\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: () => {\n    const parsed = JSON.parse("{}")\n    return parsed\n  },\n  catch: () => new ExampleError()\n}
+Subject Type: { try: () => any; catch: () => ExampleError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.try
+      args: (constant)
+      outType: Effect<any, ExampleError, never>
+
+=== Piping Flow ===
+Location: 20:19 - 20:36
+Node: JSON.parse("{}")
+Node Kind: KindCallExpression
+
+Subject: "{}"
+Subject Type: "{}"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 26:33 - 26:81
+Node: Effect.tryPromise(async () => JSON.parse("{}"))
+Node Kind: KindCallExpression
+
+Subject: async () => JSON.parse("{}")
+Subject Type: () => Promise<any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<any, UnknownError, never>
+
+=== Piping Flow ===
+Location: 26:63 - 26:80
+Node: JSON.parse("{}")
+Node Kind: KindCallExpression
+
+Subject: "{}"
+Subject Type: "{}"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 28:39 - 31:3
+Node: Effect.tryPromise({\n  try: async () => JSON.parse("{}"),\n  catch: () => new ExampleError()\n})
+Node Kind: KindCallExpression
+
+Subject: {\n  try: async () => JSON.parse("{}"),\n  catch: () => new ExampleError()\n}
+Subject Type: { try: () => Promise<any>; catch: () => ExampleError; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tryPromise
+      args: (constant)
+      outType: Effect<any, ExampleError, never>
+
+=== Piping Flow ===
+Location: 29:19 - 29:36
+Node: JSON.parse("{}")
+Node Kind: KindCallExpression
+
+Subject: "{}"
+Subject Type: "{}"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 33:48 - 33:90
+Node: Effect.sync(() => () => JSON.parse("{}"))
+Node Kind: KindCallExpression
+
+Subject: () => () => JSON.parse("{}")
+Subject Type: () => () => any
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<() => any, never, never>
+
+=== Piping Flow ===
+Location: 33:72 - 33:89
+Node: JSON.parse("{}")
+Node Kind: KindCallExpression
+
+Subject: "{}"
+Subject Type: "{}"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any

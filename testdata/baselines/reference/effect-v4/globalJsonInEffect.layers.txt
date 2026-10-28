@@ -1,0 +1,1 @@
+==== /.src/globalJsonInEffect.ts (0 layer exports) ====

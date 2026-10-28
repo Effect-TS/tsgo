@@ -1,0 +1,13 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:75-7:91) TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJson)
+  Fix 0: "Disable globalJson for this line"
+  Fix 1: "Disable globalJson for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable globalJson for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable globalJson for entire file" ===
+skipped by default

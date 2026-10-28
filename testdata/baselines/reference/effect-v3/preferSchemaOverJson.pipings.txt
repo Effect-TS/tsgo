@@ -1,4 +1,4 @@
-==== /.src/preferSchemaOverJson.ts (21 flows) ====
+==== /.src/preferSchemaOverJson.ts (23 flows) ====
 
 === Piping Flow ===
 Location: 6:27 - 6:79
@@ -293,3 +293,31 @@ Transformations (1):
       callee: JSON.parse
       args: (constant)
       outType: any
+
+=== Piping Flow ===
+Location: 67:28 - 70:3
+Node: Effect.gen(function*() {\n  const JSON = { parse: (value: string) => value }\n  return JSON.parse("{}")\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const JSON = { parse: (value: string) => value }\n  return JSON.parse("{}")\n}
+Subject Type: () => Generator<never, string, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 69:9 - 69:26
+Node: JSON.parse("{}")
+Node Kind: KindCallExpression
+
+Subject: "{}"
+Subject Type: "{}"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: string

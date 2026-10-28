@@ -1,0 +1,181 @@
+==== /.src/globalJson.ts (12 flows) ====
+
+=== Piping Flow ===
+Location: 5:13 - 5:52
+Node: Schema.Struct({ name: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { name: Schema.String }
+Subject Type: { name: typeof String$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ name: typeof String$; }>
+
+=== Piping Flow ===
+Location: 8:43 - 8:92
+Node: Schema.decodeUnknownSync(User)(JSON.parse(text))
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (2):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+  [1] kind: call
+      callee: Schema.decodeUnknownSync(User)
+      args: (constant)
+      outType: { readonly name: string; }
+
+=== Piping Flow ===
+Location: 11:49 - 11:100
+Node: Schema.decodeUnknownEither(User)(JSON.parse(text))
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (2):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+  [1] kind: call
+      callee: Schema.decodeUnknownEither(User)
+      args: (constant)
+      outType: Either<{ readonly name: string; }, ParseError>
+
+=== Piping Flow ===
+Location: 14:26 - 14:59
+Node: JSON.stringify({ name: "John" })
+Node Kind: KindCallExpression
+
+Subject: { name: "John" }
+Subject Type: { name: string; }
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.stringify
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 18:27 - 18:46
+Node: MyJSON.parse("{}")
+Node Kind: KindCallExpression
+
+Subject: "{}"
+Subject Type: "{}"
+
+Transformations (1):
+  [0] kind: call
+      callee: MyJSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 22:28 - 22:40
+Node: parse("{}")
+Node Kind: KindCallExpression
+
+Subject: "{}"
+Subject Type: "{}"
+
+Transformations (1):
+  [0] kind: call
+      callee: parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 25:26 - 27:3
+Node: Effect.gen(function*() {\n  return JSON.parse("{}")\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  return JSON.parse("{}")\n}
+Subject Type: () => Generator<never, any, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<any, never, never>
+
+=== Piping Flow ===
+Location: 26:9 - 26:26
+Node: JSON.parse("{}")
+Node Kind: KindCallExpression
+
+Subject: "{}"
+Subject Type: "{}"
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 30:32 - 33:3
+Node: Effect.gen(function*() {\n  const fn = (text: string) => JSON.parse(text)\n  return fn\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const fn = (text: string) => JSON.parse(text)\n  return fn\n}
+Subject Type: () => Generator<never, (text: string) => any, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<(text: string) => any, never, never>
+
+=== Piping Flow ===
+Location: 31:31 - 31:48
+Node: JSON.parse(text)
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: any
+
+=== Piping Flow ===
+Location: 37:81 - 37:95
+Node: String(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: unknown
+
+Transformations (1):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string
+
+=== Piping Flow ===
+Location: 38:9 - 38:42
+Node: JSON.stringify(JSON.parse(text))
+Node Kind: KindCallExpression
+
+Subject: text
+Subject Type: string
+
+Transformations (2):
+  [0] kind: call
+      callee: JSON.parse
+      args: (constant)
+      outType: string
+  [1] kind: call
+      callee: JSON.stringify
+      args: (constant)
+      outType: string

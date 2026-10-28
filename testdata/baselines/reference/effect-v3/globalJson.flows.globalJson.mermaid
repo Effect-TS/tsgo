@@ -1,0 +1,50 @@
+flowchart TB
+  0[/"type: Struct#lt;#123; name: typeof String$; #125;#gt;<br/>node: Schema.Struct#40;#123; name: Schema.String #125;#41;"/]
+  1[["type: #40;text: string#41; =#gt; #123; readonly name: string; #125;<br/>node: #40;text: string#41; =#gt; Schema.decodeUnknownSync#40;User#41;#40;JSON.parse#40;text#41;#41;"]]
+  2[/"type: #123; readonly name: string; #125;<br/>node: Schema.decodeUnknownSync#40;User#41;#40;JSON.parse#40;text#41;#41;"/]
+  3[["type: #40;text: string#41; =#gt; Either#lt;#123; readonly name: string; #125;, ParseError#gt;<br/>node: #40;text: string#41; =#gt; Schema.decodeUnknownEither#40;User#41;#40;JSON.parse#40;text#41;#41;"]]
+  4[/"type: Either#lt;#123; readonly name: string; #125;, ParseError#gt;<br/>node: Schema.decodeUnknownEither#40;User#41;#40;JSON.parse#40;text#41;#41;"/]
+  5[/"type: string<br/>node: JSON.stringify#40;#123; name: #quot;John#quot; #125;#41;"/]
+  6[/"type: JSON<br/>node: JSON"/]
+  7[/"type: any<br/>node: MyJSON.parse#40;#quot;#123;#125;#quot;#41;"/]
+  8[/"type: #123; #40;text: string, reviver?: #40;#40;this: any, key: string, value: any#41; =#gt; any#41; #124; undefined#41;: any; #40;text: string, reviver: #40;this: any, key: string, value: any, context: #123; source?: string #124; undefined; #125;#41; =#gt; any#41;: any; #125;<br/>node: JSON.parse"/]
+  9[/"type: any<br/>node: parse#40;#quot;#123;#125;#quot;#41;"/]
+  10((("type: Effect#lt;any, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  return JSON.parse#40;#quot;#123;#125;#quot;#41;#92;n#125;#41;")))
+  11[/"type: any<br/>node: JSON.parse#40;#quot;#123;#125;#quot;#41;"/]
+  12((("type: Effect#lt;#40;text: string#41; =#gt; any, never, never#gt;<br/>node: Effect.gen#40;function*#40;#41; #123;#92;n  const fn = #40;text: string#41; =#gt; JSON.parse#40;text#41;#92;n  return fn#92;n#125;#41;")))
+  13[/"type: #40;text: string#41; =#gt; any<br/>node: fn"/]
+  14[["type: #40;text: string#41; =#gt; any<br/>node: #40;text: string#41; =#gt; JSON.parse#40;text#41;"]]
+  15[/"type: any<br/>node: JSON.parse#40;text#41;"/]
+  16[["type: #40;text: string#41; =#gt; string<br/>node: #40;text: string#41; =#gt; #123;#92;n  const JSON = #123; parse: #40;value: string#41; =#gt; value, stringify: #40;value: unknown#41; =#gt; String#40;value#41; #125;#92;n  return JSON.stringify#40;JSON.parse#40;text#41;#41;#92;n#125;"]]
+  17[/"type: string<br/>node: text"/]
+  18["type: string<br/>callee: JSON.parse<br/>args: #91;#93;"]
+  19[/"type: #40;value: string#41; =#gt; string<br/>node: JSON.parse"/]
+  20["type: string<br/>callee: JSON.stringify<br/>args: #91;#93;"]
+  21[/"type: #40;value: unknown#41; =#gt; string<br/>node: JSON.stringify"/]
+  22[["type: #40;value: string#41; =#gt; string<br/>node: #40;value: string#41; =#gt; value"]]
+  23[/"type: string<br/>node: value"/]
+  24[["type: #40;value: unknown#41; =#gt; string<br/>node: #40;value: unknown#41; =#gt; String#40;value#41;"]]
+  25[/"type: unknown<br/>node: value"/]
+  26["type: string<br/>callee: String<br/>args: #91;#93;"]
+  27[/"type: StringConstructor<br/>node: String"/]
+  28[/"type: string<br/>node: JSON#91;Symbol.toStringTag#93;"/]
+  2 -->|"kind: potentialReturn"| 1
+  4 -->|"kind: potentialReturn"| 3
+  11 -->|"kind: potentialReturn"| 10
+  11 -->|"kind: usedBy"| 10
+  13 -->|"kind: potentialReturn"| 12
+  15 -->|"kind: potentialReturn"| 14
+  14 -->|"kind: usedBy"| 12
+  13 -->|"kind: usedBy"| 12
+  17 -->|"kind: pipe"| 18
+  19 -->|"kind: transformCallee"| 18
+  18 -->|"kind: pipe"| 20
+  21 -->|"kind: transformCallee"| 20
+  20 -->|"kind: potentialReturn"| 16
+  23 -->|"kind: potentialReturn"| 22
+  22 -->|"kind: usedBy"| 16
+  25 -->|"kind: pipe"| 26
+  27 -->|"kind: transformCallee"| 26
+  26 -->|"kind: potentialReturn"| 24
+  24 -->|"kind: usedBy"| 16
+  20 -->|"kind: usedBy"| 16

@@ -1,0 +1,49 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:18-9:34) TS377157: This Effect code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJsonInEffect)
+  Fix 0: "Disable globalJsonInEffect for this line"
+  Fix 1: "Disable globalJsonInEffect for entire file"
+
+[D2] (16:10-16:30) TS377157: This Effect code uses `JSON.stringify`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJsonInEffect)
+  Fix 0: "Disable globalJsonInEffect for this line"
+  Fix 1: "Disable globalJsonInEffect for entire file"
+
+[D3] (21:10-21:26) TS377157: This Effect code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJsonInEffect)
+  Fix 0: "Disable globalJsonInEffect for this line"
+  Fix 1: "Disable globalJsonInEffect for entire file"
+
+[D4] (27:10-27:28) TS377157: This Effect code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJsonInEffect)
+  Fix 0: "Disable globalJsonInEffect for this line"
+  Fix 1: "Disable globalJsonInEffect for entire file"
+
+[D5] (31:7-31:19) TS6133: '_moduleLevel' is declared but its value is never read.
+  (no quick fixes)
+
+[D6] (34:7-34:17) TS6133: '_regularFn' is declared but its value is never read.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable globalJsonInEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable globalJsonInEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable globalJsonInEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable globalJsonInEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable globalJsonInEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable globalJsonInEffect for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable globalJsonInEffect for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable globalJsonInEffect for entire file" ===
+skipped by default

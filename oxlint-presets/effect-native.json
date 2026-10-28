@@ -17,6 +17,8 @@
     "effecttsgo/global-date-in-effect": "warn",
     "effecttsgo/global-fetch": "warn",
     "effecttsgo/global-fetch-in-effect": "warn",
+    "effecttsgo/global-json": "warn",
+    "effecttsgo/global-json-in-effect": "warn",
     "effecttsgo/global-random": "warn",
     "effecttsgo/global-random-in-effect": "warn",
     "effecttsgo/global-timers": "warn",

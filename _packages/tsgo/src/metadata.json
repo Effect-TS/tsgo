@@ -294,6 +294,8 @@
         "globalDateInEffect": "warning",
         "globalFetch": "warning",
         "globalFetchInEffect": "warning",
+        "globalJson": "warning",
+        "globalJsonInEffect": "warning",
         "globalRandom": "warning",
         "globalRandomInEffect": "warning",
         "globalTimers": "warning",
@@ -1762,6 +1764,54 @@
       }
     },
     {
+      "name": "globalJson",
+      "group": "effectNative",
+      "description": "Warns when using JSON.parse or JSON.stringify outside Effect generators instead of Effect Schema",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377156
+      ],
+      "preview": {
+        "sourceText": "import { Schema } from \"effect\"\n\nconst User = Schema.Struct({ name: Schema.String })\n\nexport const parseUser = (text: string) =\u003e Schema.decodeUnknownSync(User)(JSON.parse(text))\n",
+        "diagnostics": [
+          {
+            "start": 160,
+            "end": 176,
+            "text": "This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJson)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "globalJsonInEffect",
+      "group": "effectNative",
+      "description": "Warns when using JSON.parse or JSON.stringify inside Effect generators instead of Effect Schema",
+      "defaultSeverity": "off",
+      "fixable": false,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377157
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const preview = Effect.gen(function*() {\n  const text = yield* Effect.succeed('{\"ok\":true}')\n  return JSON.parse(text)\n})\n",
+        "diagnostics": [
+          {
+            "start": 142,
+            "end": 158,
+            "text": "This Effect code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.fromJsonString(Schema.Unknown)` for unknown shapes, `Schema.fromJsonString(schema)` for known ones, or `Schema.toCodecJson(schema)` when working with JSON values instead of strings. effect(globalJsonInEffect)"
+          }
+        ]
+      }
+    },
+    {
       "name": "globalRandom",
       "group": "effectNative",
       "description": "Warns when using Math.random() outside Effect generators instead of the Random service",
@@ -2009,7 +2059,7 @@
     {
       "name": "preferSchemaOverJson",
       "group": "effectNative",
-      "description": "Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify",
+      "description": "Deprecated: use globalJsonInEffect and globalJson instead. Suggests using Effect Schema for JSON operations instead of JSON.parse/JSON.stringify inside Effect code",
       "defaultSeverity": "off",
       "fixable": false,
       "supportedEffect": [

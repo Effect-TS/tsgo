@@ -1,0 +1,18 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/globalJson_preview.ts(8,75): warning TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+
+
+==== /.src/globalJson_preview.ts (1 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics globalJson:warning
+    import { Schema } from "effect"
+    
+    const User = Schema.Struct({ name: Schema.String })
+    
+    export const parseUser = (text: string) => Schema.decodeUnknownSync(User)(JSON.parse(text))
+                                                                              ~~~~~~~~~~~~~~~~
+!!! warning TS377156: This code uses `JSON.parse`, which throws instead of failing with a typed error. Use `Schema.parseJson(Schema.Unknown)` for unknown shapes or `Schema.parseJson(schema)` for known ones. effect(globalJson)
+    
