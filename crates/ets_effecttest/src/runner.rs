@@ -142,7 +142,7 @@ pub const DEFAULT_TS_CONFIG: &str = r#"{
 //
 // Rust: the Effect diagnostics come from the hook crates `init_hooks` registers (`etscheckerhooks`). Go's
 // `harnessutil.NewOutputRecorderFS` is left out: it records emitted files and this runner emits nothing.
-// Freeing the program at the end is Rust-only (Go's `runtime.GC` in `ReleaseProgram`).
+// Freeing the program at the end is Rust-only (Go leaves it to the GC).
 pub fn run_effect_test(t: &T, version: EffectVersion, test_file: &Path) {
     init_hooks();
     acquire_program();
