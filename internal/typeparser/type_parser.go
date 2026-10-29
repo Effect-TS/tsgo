@@ -105,7 +105,6 @@ type EffectLinks struct {
 	EffectFnCall             core.LinkStore[*ast.Node, *EffectFnCallResult]
 	ParseEffectFnOpportunity core.LinkStore[*ast.Node, *EffectFnOpportunityResult]
 	ParsePipeCall            core.LinkStore[*ast.Node, *ParsedPipeCallResult]
-	ExecutionFlow            core.LinkStore[*ast.SourceFile, *ExecutionFlow]
 
 	discoverPackagesComputed    bool
 	discoverPackagesValue       []DiscoveredPackage

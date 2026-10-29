@@ -1,2 +1,0 @@
-/.src/api.ts -> stabilityApiUsageImports.flows.api.mermaid
-/.src/consumer.ts -> stabilityApiUsageImports.flows.consumer.mermaid

@@ -1,3 +1,0 @@
-/.src/package.json -> deterministicKeys_custom.flows.package.mermaid
-/.src/utils.ts -> deterministicKeys_custom.flows.utils.mermaid
-/.src/test.ts -> deterministicKeys_custom.flows.test.mermaid

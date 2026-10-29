@@ -1,1 +1,0 @@
-/.src/newPromise.ts -> newPromise.flows.newPromise.mermaid

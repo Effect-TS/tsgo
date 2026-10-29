@@ -1,1 +1,0 @@
-/.src/globalJson.ts -> globalJson.flows.globalJson.mermaid

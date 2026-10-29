@@ -1,1 +1,0 @@
-/.src/catchToIgnore.ts -> catchToIgnore.flows.catchToIgnore.mermaid
