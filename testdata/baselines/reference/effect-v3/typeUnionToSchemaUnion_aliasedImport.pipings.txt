@@ -1,0 +1,57 @@
+==== /.src/typeUnionToSchemaUnion_aliasedImport.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 5:22 - 5:80
+Node: S.Struct({ kind: S.Literal("circle"), radius: S.Number })
+Node Kind: KindCallExpression
+
+Subject: { kind: S.Literal("circle"), radius: S.Number }
+Subject Type: { kind: Literal<["circle"]>; radius: typeof Number$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: S.Struct
+      args: (constant)
+      outType: Struct<{ kind: Literal<["circle"]>; radius: typeof Number$; }>
+
+=== Piping Flow ===
+Location: 5:39 - 5:59
+Node: S.Literal("circle")
+Node Kind: KindCallExpression
+
+Subject: "circle"
+Subject Type: "circle"
+
+Transformations (1):
+  [0] kind: call
+      callee: S.Literal
+      args: (constant)
+      outType: Literal<["circle"]>
+
+=== Piping Flow ===
+Location: 6:22 - 6:78
+Node: S.Struct({ kind: S.Literal("square"), side: S.Number })
+Node Kind: KindCallExpression
+
+Subject: { kind: S.Literal("square"), side: S.Number }
+Subject Type: { kind: Literal<["square"]>; side: typeof Number$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: S.Struct
+      args: (constant)
+      outType: Struct<{ kind: Literal<["square"]>; side: typeof Number$; }>
+
+=== Piping Flow ===
+Location: 6:39 - 6:59
+Node: S.Literal("square")
+Node Kind: KindCallExpression
+
+Subject: "square"
+Subject Type: "square"
+
+Transformations (1):
+  [0] kind: call
+      callee: S.Literal
+      args: (constant)
+      outType: Literal<["square"]>

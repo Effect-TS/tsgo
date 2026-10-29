@@ -1,0 +1,183 @@
+==== /.src/typeUnionToSchemaUnion.ts (13 flows) ====
+
+=== Piping Flow ===
+Location: 5:22 - 5:95
+Node: Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Number })
+Node Kind: KindCallExpression
+
+Subject: { kind: Schema.Literal("circle"), radius: Schema.Number }
+Subject Type: { kind: Literal<["circle"]>; radius: typeof Number$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ kind: Literal<["circle"]>; radius: typeof Number$; }>
+
+=== Piping Flow ===
+Location: 5:44 - 5:69
+Node: Schema.Literal("circle")
+Node Kind: KindCallExpression
+
+Subject: "circle"
+Subject Type: "circle"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<["circle"]>
+
+=== Piping Flow ===
+Location: 6:22 - 6:93
+Node: Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
+Node Kind: KindCallExpression
+
+Subject: { kind: Schema.Literal("square"), side: Schema.Number }
+Subject Type: { kind: Literal<["square"]>; side: typeof Number$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ kind: Literal<["square"]>; side: typeof Number$; }>
+
+=== Piping Flow ===
+Location: 6:44 - 6:69
+Node: Schema.Literal("square")
+Node Kind: KindCallExpression
+
+Subject: "square"
+Subject Type: "square"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<["square"]>
+
+=== Piping Flow ===
+Location: 7:24 - 7:97
+Node: Schema.Struct({ kind: Schema.Literal("triangle"), base: Schema.Number })
+Node Kind: KindCallExpression
+
+Subject: { kind: Schema.Literal("triangle"), base: Schema.Number }
+Subject Type: { kind: Literal<["triangle"]>; base: typeof Number$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ kind: Literal<["triangle"]>; base: typeof Number$; }>
+
+=== Piping Flow ===
+Location: 7:46 - 7:73
+Node: Schema.Literal("triangle")
+Node Kind: KindCallExpression
+
+Subject: "triangle"
+Subject Type: "triangle"
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Literal
+      args: (constant)
+      outType: Literal<["triangle"]>
+
+=== Piping Flow ===
+Location: 31:21 - 31:77
+Node: Schema.Class<Person>("Person")({ name: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { name: Schema.String }
+Subject Type: { name: typeof String$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<Person>("Person")
+      args: (constant)
+      outType: Class<Person, { name: typeof String$; }, Encoded<{ name: typeof String$; }>, never, { readonly name: string; }, {}, {}>
+
+=== Piping Flow ===
+Location: 32:20 - 32:76
+Node: Schema.Class<Robot>("Robot")({ serial: Schema.Number })
+Node Kind: KindCallExpression
+
+Subject: { serial: Schema.Number }
+Subject Type: { serial: typeof Number$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Class<Robot>("Robot")
+      args: (constant)
+      outType: Class<Robot, { serial: typeof Number$; }, Encoded<{ serial: typeof Number$; }>, never, { readonly serial: number; }, {}, {}>
+
+=== Piping Flow ===
+Location: 37:21 - 37:61
+Node: Schema.Struct({ meow: Schema.Boolean })
+Node Kind: KindCallExpression
+
+Subject: { meow: Schema.Boolean }
+Subject Type: { meow: typeof Boolean$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ meow: typeof Boolean$; }>
+
+=== Piping Flow ===
+Location: 38:21 - 38:61
+Node: Schema.Struct({ bark: Schema.Boolean })
+Node Kind: KindCallExpression
+
+Subject: { bark: Schema.Boolean }
+Subject Type: { bark: typeof Boolean$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ bark: typeof Boolean$; }>
+
+=== Piping Flow ===
+Location: 45:21 - 45:57
+Node: Schema.Struct({ a: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { a: Schema.String }
+Subject Type: { a: typeof String$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ a: typeof String$; }>
+
+=== Piping Flow ===
+Location: 46:21 - 46:57
+Node: Schema.Struct({ b: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { b: Schema.String }
+Subject Type: { b: typeof String$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ b: typeof String$; }>
+
+=== Piping Flow ===
+Location: 50:14 - 50:50
+Node: Schema.Struct({ d: Schema.String })
+Node Kind: KindCallExpression
+
+Subject: { d: Schema.String }
+Subject Type: { d: typeof String$; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Schema.Struct
+      args: (constant)
+      outType: Struct<{ d: typeof String$; }>

@@ -1,0 +1,28 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:13-8:18) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+  Fix 0: "Disable typeUnionToSchemaUnion for this line"
+  Fix 1: "Disable typeUnionToSchemaUnion for entire file"
+  Fix 2: "Convert to Schema.Union"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to Schema.Union" ===
+
+--- file:///.src/typeUnionToSchemaUnion_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics typeUnionToSchemaUnion:warning
+import { Schema } from "effect"
+
+export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Number })
+export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
+
+export const Shape = Schema.Union([Circle, Square]);
+export type Shape = typeof Shape.Type
+

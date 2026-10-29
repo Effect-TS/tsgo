@@ -52,7 +52,7 @@ pub struct PreferSchemaTypePropertyMatch {
 }
 
 // go: internal/rules/prefer_schema_type_property.go:44 schemaPropertyHelperNamespaces 1b4d5712dc4b0d0c
-static SCHEMA_PROPERTY_HELPER_NAMESPACES: LazyLock<
+pub(crate) static SCHEMA_PROPERTY_HELPER_NAMESPACES: LazyLock<
     FxHashMap<&'static str, &'static [&'static str]>,
 > = LazyLock::new(|| {
     FxHashMap::from_iter([

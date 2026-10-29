@@ -1,0 +1,19 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/typeUnionToSchemaUnion_preview.ts(9,13): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+
+
+==== /.src/typeUnionToSchemaUnion_preview.ts (1 errors) ====
+    // @effect-v3
+    // @effect-diagnostics *:off
+    // @effect-diagnostics typeUnionToSchemaUnion:warning
+    import { Schema } from "effect"
+    
+    export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Number })
+    export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
+    
+    export type Shape = typeof Circle.Type | typeof Square.Type
+                ~~~~~
+!!! warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+    

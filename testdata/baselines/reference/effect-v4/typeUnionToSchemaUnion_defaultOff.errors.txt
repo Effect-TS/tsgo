@@ -1,0 +1,21 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/typeUnionToSchemaUnion_defaultOff.ts(4,86): suggestion TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+/.src/typeUnionToSchemaUnion_defaultOff.ts(5,84): suggestion TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+
+
+==== /.src/typeUnionToSchemaUnion_defaultOff.ts (2 errors) ====
+    // @effect-v4
+    import { Schema } from "effect"
+    
+    export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Number })
+                                                                                         ~~~~~~
+!!! suggestion TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+    export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
+                                                                                       ~~~~~~
+!!! suggestion TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+    
+    // MUST NOT TRIGGER - the rule is off by default and this file does not enable it
+    export type Shape = typeof Circle.Type | typeof Square.Type
+    

@@ -2629,6 +2629,9 @@
         "effecttsgo/try-catch-in-effect-gen": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/type-union-to-schema-union": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/unknown-in-effect-catch": {
           "$ref": "#/definitions/RuleNoConfig"
         },
