@@ -17,6 +17,7 @@ use ets_shim::vfs::vfstest::MapFile;
 use ets_shim::vfs::{FS, bundled, vfstest};
 use regex::Regex;
 
+use crate::sharedfs::{get_shared_packages, new_overlay_fs};
 use crate::*;
 
 // go test: internal/effecttest/runner.go:30 TestCasesDir fc67156a98ca53d0
@@ -137,12 +138,12 @@ pub const DEFAULT_TS_CONFIG: &str = r#"{
   }
 }"#;
 
-// go test: internal/effecttest/runner.go:133 RunEffectTest 9f849cbdd956e37d
+// go test: internal/effecttest/runner.go:133 RunEffectTest 44d084c777c0dd1a
 // RunEffectTest executes a single Effect diagnostic test case for the given version.
 //
 // Rust: the Effect diagnostics come from the hook crates `init_hooks` registers (`etscheckerhooks`). Go's
 // `harnessutil.NewOutputRecorderFS` is left out: it records emitted files and this runner emits nothing.
-// Freeing the program at the end is Rust-only (Go's `runtime.GC` in `ReleaseProgram`).
+// Freeing the program at the end is Rust-only (Go leaves it to the GC).
 pub fn run_effect_test(t: &T, version: EffectVersion, test_file: &Path) {
     init_hooks();
     acquire_program();
@@ -161,15 +162,12 @@ pub fn run_effect_test(t: &T, version: EffectVersion, test_file: &Path) {
     // Create the test filesystem
     let mut testfs = ets_bundledeffect::TestFS::default();
 
-    // Mount Effect package
-    if let Err(err) = ets_bundledeffect::mount_effect(version, &mut testfs) {
-        t.fatal(format!("Failed to mount Effect: {err}"));
-    }
-    if content.contains("vitest") {
-        if let Err(err) = ets_bundledeffect::mount_vitest(version, &mut testfs) {
-            t.fatal(format!("Failed to mount Vitest: {err}"));
-        }
-    }
+    // Effect (and Vitest) packages come from a VFS shared by all tests
+    let shared = match get_shared_packages(version, content.contains("vitest")) {
+        Ok(shared) => shared,
+        Err(err) => t.fatal(format!("Failed to mount Effect: {err}")),
+    };
+    testfs.insert("/.src/package.json".to_string(), MapFile::from(shared.package_json.as_slice()));
 
     // Current directory for the test
     let current_directory = "/.src";
@@ -221,7 +219,7 @@ pub fn run_effect_test(t: &T, version: EffectVersion, test_file: &Path) {
     }
 
     // Create VFS
-    let fs = vfstest::from_map(testfs, true);
+    let fs = new_overlay_fs(vfstest::from_map(testfs, true), shared);
     let fs: Arc<dyn FS> = Arc::new(bundled::wrap_fs(fs));
 
     // Setup compiler options

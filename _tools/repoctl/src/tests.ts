@@ -8,7 +8,12 @@ export const runTests = Effect.fnUntraced(function*(repositoryRoot: string) {
   const path = yield* Path.Path
   yield* ensureEffectFixtures(repositoryRoot)
   yield* Console.log("Running Go tests")
-  yield* runCommand("go", repositoryRoot, ["test", "-timeout", "20m", "./..."], false, { CGO_ENABLED: "0" })
+  // A soft heap limit per test binary keeps the parallel packages within a standard CI runner's memory
+  // without forcing a full GC after every program.
+  yield* runCommand("go", repositoryRoot, ["test", "-timeout", "20m", "./..."], false, {
+    CGO_ENABLED: "0",
+    GOMEMLIMIT: process.env.GOMEMLIMIT ?? "2GiB"
+  })
   yield* Console.log("Running shim generator tests")
   yield* runCommand("go", path.join(repositoryRoot, "_tools", "gen_shims"), ["test", "./..."], false, {
     CGO_ENABLED: "0",

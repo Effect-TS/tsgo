@@ -25,12 +25,10 @@ func maxConcurrentPrograms() int {
 // AcquireProgram acquires a slot from the program semaphore.
 func AcquireProgram() { programSemaphore <- struct{}{} }
 
-// ReleaseProgram releases a slot back to the program semaphore, clears
-// per-program caches to allow GC of the program, and triggers GC.
-func ReleaseProgram() {
-	<-programSemaphore
-	runtime.GC()
-}
+// ReleaseProgram releases a slot back to the program semaphore. It does not
+// force a GC: a full mark of the shared AST caches after every program costs
+// more than the tests themselves; `repoctl test` bounds the heap with GOMEMLIMIT.
+func ReleaseProgram() { <-programSemaphore }
 
 // astCacheKey combines EffectVersion and filename to avoid cross-version
 // collisions (V3 and V4 mount different package contents at the same VFS paths).

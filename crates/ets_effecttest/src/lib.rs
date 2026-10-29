@@ -22,6 +22,7 @@ mod quickfix_runner;
 mod refactor_baseline;
 mod refactor_runner;
 mod runner;
+mod sharedfs;
 mod vfs;
 
 pub use baseline::*;

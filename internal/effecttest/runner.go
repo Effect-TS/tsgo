@@ -147,15 +147,12 @@ func RunEffectTest(t *testing.T, version bundledeffect.EffectVersion, testFile s
 	// Create the test filesystem
 	testfs := make(map[string]any)
 
-	// Mount Effect package
-	if err := bundledeffect.MountEffect(version, testfs); err != nil {
+	// Effect (and Vitest) packages come from a VFS shared by all tests
+	shared, err := getSharedPackages(version, strings.Contains(string(content), "vitest"))
+	if err != nil {
 		t.Fatal("Failed to mount Effect:", err)
 	}
-	if strings.Contains(string(content), "vitest") {
-		if err := bundledeffect.MountVitest(version, testfs); err != nil {
-			t.Fatal("Failed to mount Vitest:", err)
-		}
-	}
+	testfs["/.src/package.json"] = &fstest.MapFile{Data: shared.packageJSON}
 
 	// Current directory for the test
 	currentDirectory := "/.src"
@@ -216,7 +213,7 @@ func RunEffectTest(t *testing.T, version bundledeffect.EffectVersion, testFile s
 	}
 
 	// Create VFS
-	fs := vfstest.FromMap(testfs, tspath.CaseSensitive)
+	fs := newOverlayFS(vfstest.FromMap(testfs, tspath.CaseSensitive), shared)
 	fs = bundled.WrapFS(fs)
 	fs = harnessutil.NewOutputRecorderFS(fs)
 

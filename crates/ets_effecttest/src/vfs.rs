@@ -42,11 +42,12 @@ pub fn acquire_program() {
     *used += 1;
 }
 
-// go test: internal/effecttest/vfs.go:30 ReleaseProgram 8e5d3ce2788ebe54
-// ReleaseProgram releases a slot back to the program semaphore, clears
-// per-program caches to allow GC of the program, and triggers GC.
+// go test: internal/effecttest/vfs.go:31 ReleaseProgram 81973f951d0b64f2
+// ReleaseProgram releases a slot back to the program semaphore. It does not
+// force a GC: a full mark of the shared AST caches after every program costs
+// more than the tests themselves; `repoctl test` bounds the heap with GOMEMLIMIT.
 //
-// Rust: there is no GC to trigger; `run_effect_test` frees its program itself (`release_test_program`).
+// Rust: there is no GC; `run_effect_test` frees its program itself (`release_test_program`).
 pub fn release_program() {
     let (used, freed) = &*PROGRAM_SEMAPHORE;
     *used.lock() -= 1;
@@ -62,7 +63,7 @@ impl Drop for ReleaseProgramOnDrop {
     }
 }
 
-// go test: internal/effecttest/vfs.go:37 astCacheKey bb0d3972b9a8dcdf
+// go test: internal/effecttest/vfs.go:35 astCacheKey bb0d3972b9a8dcdf
 // astCacheKey combines EffectVersion and filename to avoid cross-version
 // collisions (V3 and V4 mount different package contents at the same VFS paths).
 #[derive(Clone, PartialEq, Eq, Hash)]
@@ -80,7 +81,7 @@ pub(crate) struct CachedSourceFile {
     pub(crate) _region: Region,
 }
 
-// go test: internal/effecttest/vfs.go:47 parsedASTCache 369ca7a491a0073c
+// go test: internal/effecttest/vfs.go:45 parsedASTCache 369ca7a491a0073c
 // parsedASTCache caches parsed ASTs for node_modules package files.
 // These files are identical across all tests of the same EffectVersion,
 // so parsing them once and reusing the ASTs across programs saves
@@ -89,14 +90,14 @@ pub(crate) struct CachedSourceFile {
 pub(crate) static PARSED_AST_CACHE: LazyLock<Mutex<FxHashMap<AstCacheKey, CachedSourceFile>>> =
     LazyLock::new(Mutex::default);
 
-// go test: internal/effecttest/vfs.go:52 parsedLibCache 29383b23c0a1dd90
+// go test: internal/effecttest/vfs.go:50 parsedLibCache 29383b23c0a1dd90
 // parsedLibCache caches parsed ASTs for bundled lib files (e.g. lib.es2022.d.ts).
 // Lib files are version-independent and identical across all tests, so they
 // are keyed by filename only. There are ~108 lib files, so this cache is bounded.
 pub(crate) static PARSED_LIB_CACHE: LazyLock<Mutex<FxHashMap<String, CachedSourceFile>>> =
     LazyLock::new(Mutex::default);
 
-// go test: internal/effecttest/vfs.go:57 cachingCompilerHost 874ec65a1e516a86
+// go test: internal/effecttest/vfs.go:55 cachingCompilerHost 874ec65a1e516a86
 // cachingCompilerHost wraps a CompilerHost and caches GetSourceFile results
 // for files under /node_modules/ and bundled lib files. Test-specific files
 // are not cached.
@@ -141,7 +142,7 @@ impl CompilerHost for CachingCompilerHost {
         self.compiler_host.trace(msg, args);
     }
 
-    // go test: internal/effecttest/vfs.go:62 cachingCompilerHost.GetSourceFile 1ed6382c65ba4469
+    // go test: internal/effecttest/vfs.go:60 cachingCompilerHost.GetSourceFile 1ed6382c65ba4469
     //
     // Rust: Go's `sync.Map` lets two tests that miss at once both parse and store (the later store wins); here the
     // first stored file wins and both return it, so a returned file is always the one the cache keeps alive.
