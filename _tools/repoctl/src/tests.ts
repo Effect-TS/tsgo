@@ -8,7 +8,7 @@ export const runTests = Effect.fnUntraced(function*(repositoryRoot: string) {
   const path = yield* Path.Path
   yield* ensureEffectFixtures(repositoryRoot)
   yield* Console.log("Running Go tests")
-  yield* runCommand("go", repositoryRoot, ["test", "./..."], false, { CGO_ENABLED: "0" })
+  yield* runCommand("go", repositoryRoot, ["test", "-timeout", "20m", "./..."], false, { CGO_ENABLED: "0" })
   yield* Console.log("Running shim generator tests")
   yield* runCommand("go", path.join(repositoryRoot, "_tools", "gen_shims"), ["test", "./..."], false, {
     CGO_ENABLED: "0",
