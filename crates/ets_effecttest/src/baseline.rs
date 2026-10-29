@@ -439,7 +439,7 @@ pub fn do_layer_graph_baseline(
     run_effect_baseline(t, &format!("{baseline_name}.layers.txt"), &content, subfolder);
 }
 
-// go test: internal/effecttest/baseline.go:340 generateLayerGraphBaseline 1c704f9945be0c79
+// go test: internal/effecttest/baseline.go:340 generateLayerGraphBaseline 5a19f6b9c8efba69
 // generateLayerGraphBaseline creates a layer graph baseline string.
 //
 // Rust: Go's checker argument of the layergraph functions is the parser's checker (`tp.checker()`).
@@ -492,8 +492,7 @@ pub(crate) fn generate_layer_graph_baseline(
                 if vd.name().kind() != Kind::Identifier {
                     continue;
                 }
-                let t = tp.get_type_at_location(initializer);
-                if !tp.is_layer_type(t) {
+                if tp.layer_type_at_location(initializer).is_none() {
                     continue;
                 }
                 exports.push(LayerExport { name: vd.name().text().to_string(), initializer });
@@ -551,7 +550,7 @@ pub(crate) fn generate_layer_graph_baseline(
     sb
 }
 
-// go test: internal/effecttest/baseline.go:442 runEffectBaseline c9b502bf33c93383
+// go test: internal/effecttest/baseline.go:441 runEffectBaseline c9b502bf33c93383
 // runEffectBaseline compares actual output with reference baseline.
 // It only writes to the filesystem when the actual content differs from the
 // reference (or when the reference doesn't exist yet), so that Go's test

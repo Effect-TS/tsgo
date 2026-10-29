@@ -66,7 +66,9 @@ func (tp *TypeParser) ContextTag(t *checker.Type) *Service {
 	})
 }
 
-// IsContextTag returns true if the type has the Context.Tag variance struct.
-func (tp *TypeParser) IsContextTag(t *checker.Type) bool {
-	return tp.ContextTag(t) != nil
+// ContextTagAtLocation parses the type of node as a v3 Context.Tag type.
+// Returns nil if the type is not a v3 Context.Tag, without computing the type
+// when nodeCannotBeEffectLibraryType rules node out.
+func (tp *TypeParser) ContextTagAtLocation(node *ast.Node) *Service {
+	return tp.ContextTag(tp.effectLibraryTypeAtLocation(node))
 }

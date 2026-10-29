@@ -54,14 +54,14 @@ func AnalyzeUnsafeEffectTypeAssertion(tp *typeparser.TypeParser, c *checker.Chec
 	}
 
 	var matches []UnsafeEffectTypeAssertionMatch
-	parseEffectStreamOrLayer := func(t *checker.Type) (e *checker.Type, r *checker.Type, ok bool) {
-		if effect := tp.EffectType(t); effect != nil {
+	parseEffectStreamOrLayer := func(node *ast.Node) (e *checker.Type, r *checker.Type, ok bool) {
+		if effect := tp.EffectTypeAtLocation(node); effect != nil {
 			return effect.E(), effect.R(), true
 		}
-		if stream := tp.StreamType(t); stream != nil {
+		if stream := tp.StreamTypeAtLocation(node); stream != nil {
 			return stream.E(), stream.R(), true
 		}
-		if layer := tp.LayerType(t); layer != nil {
+		if layer := tp.LayerTypeAtLocation(node); layer != nil {
 			return layer.E(), layer.RIn(), true
 		}
 		return nil, nil, false
@@ -83,22 +83,12 @@ func AnalyzeUnsafeEffectTypeAssertion(tp *typeparser.TypeParser, c *checker.Chec
 		}
 
 		expr := node.Expression()
-		if expr == nil || tp.NodeCannotBeEffectLibraryType(expr) {
-			continue
-		}
-
-		originalType := tp.GetTypeAtLocation(expr)
-		assertedType := tp.GetTypeAtLocation(node)
-		if originalType == nil || assertedType == nil {
-			continue
-		}
-
-		originalE, originalR, ok := parseEffectStreamOrLayer(originalType)
+		originalE, originalR, ok := parseEffectStreamOrLayer(expr)
 		if !ok {
 			continue
 		}
 
-		assertedE, assertedR, ok := parseEffectStreamOrLayer(assertedType)
+		assertedE, assertedR, ok := parseEffectStreamOrLayer(node)
 		if !ok {
 			continue
 		}

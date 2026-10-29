@@ -207,7 +207,7 @@ func rootLayerProvidesTypes(tp *typeparser.TypeParser, c *checker.Checker, layer
 	if c == nil || layerNode == nil {
 		return nil
 	}
-	layerType := tp.LayerType(tp.GetTypeAtLocation(layerNode))
+	layerType := tp.LayerTypeAtLocation(layerNode)
 	if layerType == nil {
 		return nil
 	}

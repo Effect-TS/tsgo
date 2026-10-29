@@ -70,7 +70,7 @@ var EffectInVoidSuccess = rule.Rule{
 // or nil if none are found. This mirrors the Nano.firstSuccessOf pattern in the TS reference.
 func findFirstStrictEffect(tp *typeparser.TypeParser, _ *checker.Checker, types []*checker.Type) *checker.Type {
 	for _, t := range types {
-		if tp.StrictIsEffectType(t) {
+		if tp.StrictEffectType(t) != nil {
 			return t
 		}
 	}

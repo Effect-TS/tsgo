@@ -16,7 +16,7 @@ use crate::*;
 pub(crate) static STRICT_EFFECT_TYPE_NAMES: &[&str] = &["Effect"];
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/could_be_strict_effect.go:30 TypeParser.NodeCouldBeStrictEffect 44eadf626057189a
+    // go: internal/typeparser/could_be_strict_effect.go:30 TypeParser.NodeCouldBeStrictEffect f44d82fd28597780
     // NodeCouldBeStrictEffect reports whether node's flow type could possibly be
     // a strict Effect type (a type whose symbol is named "Effect", see
     // StrictEffectType). For reference nodes (identifiers and property accesses)
@@ -166,10 +166,10 @@ pub(crate) fn could_be(
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/could_be_strict_effect.go:158 TypeParser.NodeCouldBeEffect b915c7357502d590
+    // go: internal/typeparser/could_be_strict_effect.go:158 TypeParser.NodeCouldBeEffect 2e711acb1718817e
     // NodeCouldBeEffect reports whether node's type could possibly be an Effect
     // type as recognized by EffectType. Only calls are inspected beyond the
-    // syntactic NodeCannotBeEffectLibraryType check: a call's type is its
+    // syntactic nodeCannotBeEffectLibraryType check: a call's type is its
     // resolved signature's return type and is never narrowed, while a reference
     // can be narrowed by a type guard such as Effect.isEffect into an Effect
     // whatever its declared type. Only v4 identifies Effects by a single

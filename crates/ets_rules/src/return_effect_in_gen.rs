@@ -78,7 +78,7 @@ pub fn analyze_return_effect_in_gen(
     matches
 }
 
-// go: internal/rules/return_effect_in_gen.go:72 checkReturnEffectInGenScope 27877a387b01e955
+// go: internal/rules/return_effect_in_gen.go:72 checkReturnEffectInGenScope 769da6b29c82c1c6
 // checkReturnEffectInGenScope checks if a return statement inside an Effect generator
 // is returning an Effect-able type (which would cause nested Effect<Effect<...>>).
 //
@@ -98,17 +98,5 @@ pub(crate) fn check_return_effect_in_gen_scope(tp: &mut TypeParser<'_>, n: P<Nod
         return false;
     }
 
-    if tp.node_cannot_be_effect_library_type(expression) {
-        return false;
-    }
-
-    let Some(t) = tp.get_type_at_location(expression) else {
-        return false;
-    };
-
-    if !tp.strict_is_effect_type(t) {
-        return false;
-    }
-
-    true
+    tp.strict_effect_type_at_location(expression).is_some()
 }

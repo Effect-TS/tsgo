@@ -85,14 +85,12 @@ func AnalyzeNewSchemaClass(tp *typeparser.TypeParser, c *checker.Checker, sf *as
 }
 
 func isV4SchemaClassExpression(tp *typeparser.TypeParser, c *checker.Checker, expr *ast.Node) bool {
-	if tp == nil || c == nil || expr == nil || tp.NodeCannotBeEffectLibraryType(expr) {
+	if tp == nil || c == nil || tp.EffectSchemaTypesAtLocation(expr) == nil {
 		return false
 	}
 
+	// Cached by EffectSchemaTypesAtLocation.
 	t := tp.GetTypeAtLocation(expr)
-	if t == nil || !tp.IsSchemaType(t) {
-		return false
-	}
 
 	if len(c.GetSignaturesOfType(t, checker.SignatureKindConstruct)) == 0 {
 		return false

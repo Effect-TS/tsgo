@@ -54,7 +54,7 @@ pub struct ProvideLayerSucceedToProvideServiceMatch {
     pub replacement_method_name: &'static str,
 }
 
-// go: internal/rules/provide_layer_succeed_to_provide_service.go:48 AnalyzeProvideLayerSucceedToProvideService ce9f692f330accb7
+// go: internal/rules/provide_layer_succeed_to_provide_service.go:48 AnalyzeProvideLayerSucceedToProvideService 4a75a6b494388776
 //
 // Rust: Go's checker argument is the parser's checker; Go ignores it, so it is dropped.
 pub fn analyze_provide_layer_succeed_to_provide_service(
@@ -84,12 +84,8 @@ pub fn analyze_provide_layer_succeed_to_provide_service(
             else {
                 continue;
             };
-            if tp.node_cannot_be_effect_library_type(service) {
-                continue;
-            }
-            let service_type = tp.get_type_at_location(service);
-            if service_type.is_none()
-                || (!tp.is_service_type(service_type) && !tp.is_context_tag(service_type))
+            if tp.service_type_at_location(service).is_none()
+                && tp.context_tag_at_location(service).is_none()
             {
                 continue;
             }
@@ -107,7 +103,7 @@ pub fn analyze_provide_layer_succeed_to_provide_service(
     matches
 }
 
-// go: internal/rules/provide_layer_succeed_to_provide_service.go:84 inlineSingleServiceLayer 9bfb76915b16917d
+// go: internal/rules/provide_layer_succeed_to_provide_service.go:80 inlineSingleServiceLayer 9bfb76915b16917d
 //
 // Rust: Go's `(service, implementation, replacement, ok)` is an `Option`.
 pub(crate) fn inline_single_service_layer(

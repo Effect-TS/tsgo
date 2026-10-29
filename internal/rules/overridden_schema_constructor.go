@@ -85,8 +85,7 @@ func checkOverriddenSchemaConstructor(tp *typeparser.TypeParser, _ *checker.Chec
 			continue
 		}
 		expr := elem.AsExpressionWithTypeArguments().Expression
-		t := tp.GetTypeAtLocation(expr)
-		if t != nil && tp.IsSchemaType(t) {
+		if tp.EffectSchemaTypesAtLocation(expr) != nil {
 			extendsSchema = true
 			break
 		}

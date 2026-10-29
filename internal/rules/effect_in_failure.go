@@ -73,12 +73,7 @@ var EffectInFailure = rule.Rule{
 				continue
 			}
 
-			nodeType := ctx.TypeParser.GetTypeAtLocation(node)
-			if nodeType == nil {
-				continue
-			}
-
-			effect := ctx.TypeParser.StrictEffectType(nodeType)
+			effect := ctx.TypeParser.StrictEffectTypeAtLocation(node)
 			if effect == nil {
 				continue
 			}

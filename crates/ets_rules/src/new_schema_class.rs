@@ -99,26 +99,21 @@ pub fn analyze_new_schema_class(
     matches
 }
 
-// go: internal/rules/new_schema_class.go:87 isV4SchemaClassExpression 3ba74497fd0b6fe2
+// go: internal/rules/new_schema_class.go:87 isV4SchemaClassExpression 2c8bebd375b3fe57
 //
 // Rust: the checker is the parser's.
 pub(crate) fn is_v4_schema_class_expression(
     tp: &mut TypeParser<'_>,
     expr: Option<P<Node>>,
 ) -> bool {
-    let Some(expr) = expr else {
-        return false;
-    };
-    if tp.node_cannot_be_effect_library_type(expr) {
+    if tp.effect_schema_types_at_location(expr).is_none() {
         return false;
     }
 
+    // Cached by EffectSchemaTypesAtLocation.
     let Some(t) = tp.get_type_at_location(expr) else {
         return false;
     };
-    if !tp.is_schema_type(t) {
-        return false;
-    }
 
     if tp.checker().get_signatures_of_type(t, SignatureKind::Construct).is_empty() {
         return false;

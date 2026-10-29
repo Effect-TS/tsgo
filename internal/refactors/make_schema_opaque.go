@@ -70,12 +70,7 @@ func findSchemaVariableDeclaration(ctx *refactor.Context, _ *checker.Checker) *s
 		}
 
 		// Check the initializer's type is a Schema type
-		initType := ctx.TypeParser.GetTypeAtLocation(varDecl.Initializer)
-		if initType == nil {
-			continue
-		}
-
-		schemaTypes := ctx.TypeParser.EffectSchemaTypes(initType)
+		schemaTypes := ctx.TypeParser.EffectSchemaTypesAtLocation(varDecl.Initializer)
 		if schemaTypes == nil {
 			continue
 		}

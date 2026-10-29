@@ -69,14 +69,11 @@ var AnyUnknownInErrorContext = rule.Rule{
 			// Effect or Layer type annotation, skip it entirely (user intentionally typed it)
 			if node.Kind == ast.KindParameter || node.Kind == ast.KindPropertyDeclaration || node.Kind == ast.KindVariableDeclaration {
 				if typeNode := node.Type(); typeNode != nil {
-					annotationType := ctx.TypeParser.GetTypeAtLocation(typeNode)
-					if annotationType != nil {
-						if ctx.TypeParser.StrictEffectType(annotationType) != nil {
-							continue
-						}
-						if ctx.TypeParser.LayerType(annotationType) != nil {
-							continue
-						}
+					if ctx.TypeParser.StrictEffectTypeAtLocation(typeNode) != nil {
+						continue
+					}
+					if ctx.TypeParser.LayerTypeAtLocation(typeNode) != nil {
+						continue
 					}
 				}
 			}
@@ -88,33 +85,28 @@ var AnyUnknownInErrorContext = rule.Rule{
 				continue
 			}
 
-			// Only Effect and Layer types are inspected below.
-			if ctx.TypeParser.NodeCannotBeEffectLibraryType(node) {
-				continue
-			}
-
-			// For call expressions, use the resolved signature's return type
+			// For call expressions, use the resolved signature's return type.
+			// Try strict Effect type first, then Layer type
 			var sig *checker.Signature
 			if node.Kind == ast.KindCallExpression {
 				sig = ctx.Checker.GetResolvedSignature(node)
 			}
-			var t *checker.Type
+			var eff *typeparser.Effect
+			var layer *typeparser.Layer
 			if sig != nil {
-				t = ctx.Checker.GetReturnTypeOfSignature(sig)
-			} else {
-				t = ctx.TypeParser.GetTypeAtLocation(node)
+				t := ctx.Checker.GetReturnTypeOfSignature(sig)
+				if eff = ctx.TypeParser.StrictEffectType(t); eff == nil {
+					layer = ctx.TypeParser.LayerType(t)
+				}
+			} else if eff = ctx.TypeParser.StrictEffectTypeAtLocation(node); eff == nil {
+				layer = ctx.TypeParser.LayerTypeAtLocation(node)
 			}
 
-			if t == nil {
-				continue
-			}
-
-			// Try strict Effect type first, then Layer type
 			var eType, rType *checker.Type
-			if eff := ctx.TypeParser.StrictEffectType(t); eff != nil {
+			if eff != nil {
 				eType = eff.E()
 				rType = eff.R()
-			} else if layer := ctx.TypeParser.LayerType(t); layer != nil {
+			} else if layer != nil {
 				eType = layer.E()
 				rType = layer.RIn()
 			}

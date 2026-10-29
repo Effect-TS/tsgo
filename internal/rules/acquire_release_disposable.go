@@ -118,7 +118,7 @@ func analyzeAcquireReleaseDisposableCall(
 		return AcquireReleaseDisposableMatch{}, false
 	}
 
-	result := tp.StrictEffectType(tp.GetTypeAtLocation(node))
+	result := tp.StrictEffectTypeAtLocation(node)
 	if result == nil || !isDefinitelyDisposable(tp, c, result.A(), disposable) {
 		return AcquireReleaseDisposableMatch{}, false
 	}

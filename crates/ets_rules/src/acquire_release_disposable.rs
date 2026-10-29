@@ -116,7 +116,7 @@ pub(crate) fn global_disposable_union(tp: &mut TypeParser<'_>) -> Option<P<Type>
     Some(c.get_union_type_ex_exported(&types, UnionReduction::None))
 }
 
-// go: internal/rules/acquire_release_disposable.go:104 analyzeAcquireReleaseDisposableCall f76adc225a44bdd6
+// go: internal/rules/acquire_release_disposable.go:104 analyzeAcquireReleaseDisposableCall 49510c97b70155cf
 pub(crate) fn analyze_acquire_release_disposable_call(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -137,8 +137,7 @@ pub(crate) fn analyze_acquire_release_disposable_call(
         return None;
     }
 
-    let node_type = tp.get_type_at_location(node);
-    let result = tp.strict_effect_type(node_type)?;
+    let result = tp.strict_effect_type_at_location(node)?;
     if !is_definitely_disposable(tp, Some(result.a()), Some(disposable)) {
         return None;
     }

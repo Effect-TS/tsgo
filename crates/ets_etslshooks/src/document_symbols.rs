@@ -112,7 +112,7 @@ fn collect_layer_document_symbols(
     symbols
 }
 
-// go: etslshooks/document_symbols.go:89 collectServiceDocumentSymbols 608636eef673d448
+// go: etslshooks/document_symbols.go:89 collectServiceDocumentSymbols 33f36ff464824ceb
 fn collect_service_document_symbols(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -134,8 +134,7 @@ fn collect_service_document_symbols(
                 }
                 return false;
             }
-            let t = tp.get_type_at_location(current);
-            if tp.is_layer_type(t) {
+            if tp.layer_type_at_location(current).is_some() {
                 return false;
             }
         }
@@ -148,7 +147,7 @@ fn collect_service_document_symbols(
     symbols
 }
 
-// go: etslshooks/document_symbols.go:118 collectErrorDocumentSymbols 61360a66e474f675
+// go: etslshooks/document_symbols.go:117 collectErrorDocumentSymbols 61360a66e474f675
 fn collect_error_document_symbols(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -180,7 +179,7 @@ fn collect_error_document_symbols(
     symbols
 }
 
-// go: etslshooks/document_symbols.go:143 collectSchemaDocumentSymbols 86039115b1a4bc77
+// go: etslshooks/document_symbols.go:142 collectSchemaDocumentSymbols 86039115b1a4bc77
 fn collect_schema_document_symbols(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -212,7 +211,7 @@ fn collect_schema_document_symbols(
     symbols
 }
 
-// go: etslshooks/document_symbols.go:168 newSyntheticNamespaceSymbol de027ea42ef8cfa8
+// go: etslshooks/document_symbols.go:167 newSyntheticNamespaceSymbol de027ea42ef8cfa8
 fn new_synthetic_namespace_symbol(name: &str) -> DocSym {
     let children: Vec<DocSym> = Vec::new();
     let zero = lsproto::Position::default();
@@ -226,7 +225,7 @@ fn new_synthetic_namespace_symbol(name: &str) -> DocSym {
     }))
 }
 
-// go: etslshooks/document_symbols.go:186 newNamedDocumentSymbol b527c8086fe4660b
+// go: etslshooks/document_symbols.go:185 newNamedDocumentSymbol b527c8086fe4660b
 fn new_named_document_symbol(
     sf: P<SourceFile>,
     lang_service: &LanguageService,
@@ -270,7 +269,7 @@ fn new_named_document_symbol(
 /// checker is the parser's).
 type DetailFn = fn(&mut TypeParser<'_>, P<Node>) -> Option<String>;
 
-// go: etslshooks/document_symbols.go:229 newEffectDocumentSymbol 9144470f07ffe656
+// go: etslshooks/document_symbols.go:228 newEffectDocumentSymbol 9144470f07ffe656
 fn new_effect_document_symbol(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -297,7 +296,7 @@ fn new_effect_document_symbol(
     symbol
 }
 
-// go: etslshooks/document_symbols.go:249 layerSymbolDetail 2f19f907581f7cd0
+// go: etslshooks/document_symbols.go:248 layerSymbolDetail 2f19f907581f7cd0
 fn layer_symbol_detail(tp: &mut TypeParser<'_>, node: P<Node>) -> Option<String> {
     let (type_check_node, types) = classification_types(tp, Some(node));
     for t in types {
@@ -329,7 +328,7 @@ fn layer_symbol_detail(tp: &mut TypeParser<'_>, node: P<Node>) -> Option<String>
     None
 }
 
-// go: etslshooks/document_symbols.go:265 resolveLayerDisplayNode 8fa756157354423a
+// go: etslshooks/document_symbols.go:264 resolveLayerDisplayNode 8fa756157354423a
 fn resolve_layer_display_node(node: P<Node>) -> P<Node> {
     let Some(parent) = node.parent() else {
         return node;
@@ -345,7 +344,7 @@ fn resolve_layer_display_node(node: P<Node>) -> P<Node> {
     }
 }
 
-// go: etslshooks/document_symbols.go:282 resolveServiceDisplayNode db43abc940c41ba3
+// go: etslshooks/document_symbols.go:281 resolveServiceDisplayNode db43abc940c41ba3
 fn resolve_service_display_node(node: P<Node>) -> P<Node> {
     let mut current = Some(node);
     while let Some(c) = current {
@@ -360,7 +359,7 @@ fn resolve_service_display_node(node: P<Node>) -> P<Node> {
     node
 }
 
-// go: etslshooks/document_symbols.go:294 classificationTypes 73814d33112ae2d4
+// go: etslshooks/document_symbols.go:293 classificationTypes 73814d33112ae2d4
 //
 // Rust: Go's checker parameter is the parser's (`tp.checker()`).
 fn classification_types(
@@ -402,27 +401,27 @@ fn classification_types(
     (Some(node), types)
 }
 
-// go: etslshooks/document_symbols.go:325 isLayerDeclaration 18a7196d2417b8d6
+// go: etslshooks/document_symbols.go:324 isLayerDeclaration cfa9a2c23f0bcde6
 fn is_layer_declaration(tp: &mut TypeParser<'_>, node: P<Node>) -> bool {
     let (_, types) = classification_types(tp, Some(node));
-    types.into_iter().any(|t| tp.is_layer_type(t))
+    types.into_iter().any(|t| tp.layer_type(t).is_some())
 }
 
-// go: etslshooks/document_symbols.go:330 isServiceDeclaration cae8960f4a688302
+// go: etslshooks/document_symbols.go:331 isServiceDeclaration 3a2f0a40a59c257e
 fn is_service_declaration(tp: &mut TypeParser<'_>, node: Option<P<Node>>) -> bool {
     if node.is_none() {
         return false;
     }
     let (_, types) = classification_types(tp, node);
     for t in types {
-        if tp.is_service_type(t) || tp.is_context_tag(t) {
+        if tp.service_type(t).is_some() || tp.context_tag(t).is_some() {
             return true;
         }
     }
     false
 }
 
-// go: etslshooks/document_symbols.go:343 isErrorDeclaration cee7212759dd777e
+// go: etslshooks/document_symbols.go:344 isErrorDeclaration 8df11fe412689b48
 fn is_error_declaration(tp: &mut TypeParser<'_>, node: Option<P<Node>>) -> bool {
     let Some(n) = node else {
         return false;
@@ -432,10 +431,10 @@ fn is_error_declaration(tp: &mut TypeParser<'_>, node: Option<P<Node>>) -> bool 
         _ => return false,
     }
     let (_, types) = classification_types(tp, node);
-    types.into_iter().any(|t| tp.is_yieldable_error_type(t))
+    types.into_iter().any(|t| tp.yieldable_error_type(t).is_some())
 }
 
-// go: etslshooks/document_symbols.go:356 isSchemaDeclaration cfb9c06e1cb9cb92
+// go: etslshooks/document_symbols.go:359 isSchemaDeclaration 541bf2266a1af32d
 fn is_schema_declaration(tp: &mut TypeParser<'_>, node: Option<P<Node>>) -> bool {
     let Some(n) = node else {
         return false;
@@ -445,10 +444,10 @@ fn is_schema_declaration(tp: &mut TypeParser<'_>, node: Option<P<Node>>) -> bool
         _ => return false,
     }
     let (_, types) = classification_types(tp, node);
-    types.into_iter().any(|t| tp.is_schema_type(t))
+    types.into_iter().any(|t| tp.effect_schema_types(t).is_some())
 }
 
-// go: etslshooks/document_symbols.go:369 resolveErrorDisplayNode 716dcace5ef517a8
+// go: etslshooks/document_symbols.go:374 resolveErrorDisplayNode 716dcace5ef517a8
 fn resolve_error_display_node(node: P<Node>) -> P<Node> {
     let mut current = Some(node);
     while let Some(c) = current {
@@ -463,7 +462,7 @@ fn resolve_error_display_node(node: P<Node>) -> P<Node> {
     node
 }
 
-// go: etslshooks/document_symbols.go:381 resolveSchemaDisplayNode d49be0e54959b39c
+// go: etslshooks/document_symbols.go:386 resolveSchemaDisplayNode d49be0e54959b39c
 fn resolve_schema_display_node(node: P<Node>) -> P<Node> {
     let mut current = Some(node);
     while let Some(c) = current {
@@ -478,7 +477,7 @@ fn resolve_schema_display_node(node: P<Node>) -> P<Node> {
     node
 }
 
-// go: etslshooks/document_symbols.go:393 isEffectSymbolDeclaration bd103d2d7256d1e9
+// go: etslshooks/document_symbols.go:398 isEffectSymbolDeclaration bd103d2d7256d1e9
 fn is_effect_symbol_declaration(node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;
@@ -500,7 +499,7 @@ fn is_effect_symbol_declaration(node: Option<P<Node>>) -> bool {
     true
 }
 
-// go: etslshooks/document_symbols.go:412 layerSymbolName 0ba5092338aef924
+// go: etslshooks/document_symbols.go:417 layerSymbolName 0ba5092338aef924
 //
 // Rust: Go's `scanner.GetTextOfNode(nil)` (a class expression without a name) panics; here it is `""`. Go's
 // `text[:77]` cuts bytes; a cut inside a multi-byte character keeps the character's leading bytes in Go and writes
@@ -536,7 +535,7 @@ fn layer_symbol_name(sf: P<SourceFile>, node: P<Node>) -> String {
     text.to_string()
 }
 
-// go: etslshooks/document_symbols.go:440 layerSymbolKind fc657294832b31ed
+// go: etslshooks/document_symbols.go:445 layerSymbolKind fc657294832b31ed
 fn layer_symbol_kind(node: P<Node>) -> lsproto::SymbolKind {
     match node.kind() {
         Kind::VariableDeclaration | Kind::BindingElement => lsproto::SymbolKind::VARIABLE,

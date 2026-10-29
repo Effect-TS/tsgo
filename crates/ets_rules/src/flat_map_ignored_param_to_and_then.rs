@@ -45,7 +45,7 @@ pub struct FlatMapIgnoredParamToAndThenMatch {
     pub effect_value: P<Node>,
 }
 
-// go: internal/rules/flat_map_ignored_param_to_and_then.go:53 AnalyzeFlatMapIgnoredParamToAndThen 4325680290c2aaf3
+// go: internal/rules/flat_map_ignored_param_to_and_then.go:53 AnalyzeFlatMapIgnoredParamToAndThen fdfc52d09890a2c4
 // AnalyzeFlatMapIgnoredParamToAndThen finds Effect.flatMap piping
 // transformations whose zero-parameter expression callback returns an Effect
 // value held by an already-initialized const binding.
@@ -73,13 +73,9 @@ pub fn analyze_flat_map_ignored_param_to_and_then(
                 continue;
             };
             let expression = callback.expression();
-            if tp.node_cannot_be_effect_library_type(expression)
-                || !tp.is_expression_value_stable_at_location(expression, callee)
+            if !tp.is_expression_value_stable_at_location(expression, callee)
+                || tp.effect_type_at_location(expression).is_none()
             {
-                continue;
-            }
-            let t = tp.get_type_at_location(expression);
-            if tp.effect_type(t).is_none() {
                 continue;
             }
 

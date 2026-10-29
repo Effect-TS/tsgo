@@ -388,8 +388,7 @@ func generateLayerGraphBaseline(
 				if vd.Name().Kind != ast.KindIdentifier {
 					continue
 				}
-				t := tp.GetTypeAtLocation(vd.Initializer)
-				if !tp.IsLayerType(t) {
+				if tp.LayerTypeAtLocation(vd.Initializer) == nil {
 					continue
 				}
 				exports = append(exports, layerExport{

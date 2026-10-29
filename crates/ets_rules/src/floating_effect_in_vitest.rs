@@ -228,7 +228,7 @@ pub(crate) fn vitest_callback_returns_effect(tp: &mut TypeParser<'_>, callback: 
     false
 }
 
-// go: internal/rules/floating_effect_in_vitest.go:222 vitestReturnTypeContainsEffect a1d0a9b434d8425f
+// go: internal/rules/floating_effect_in_vitest.go:222 vitestReturnTypeContainsEffect d1d8e0e6597e9e86
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 #[expect(
@@ -242,7 +242,7 @@ pub(crate) fn vitest_return_type_contains_effect(
     depth: i64,
 ) -> bool {
     for member in tp.unroll_union_members(return_type).unwrap_or_default() {
-        if tp.strict_is_effect_type(member) {
+        if tp.strict_effect_type(member).is_some() {
             return true;
         }
         if depth == 0 && tp.promise_type(member).is_some() {

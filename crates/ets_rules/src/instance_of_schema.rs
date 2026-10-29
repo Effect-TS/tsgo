@@ -49,7 +49,7 @@ pub struct InstanceOfSchemaMatch {
     pub right_expr: P<Node>, // Right operand of instanceof (the schema type reference)
 }
 
-// go: internal/rules/instance_of_schema.go:45 AnalyzeInstanceOfSchema 2be9e7a9077716c1
+// go: internal/rules/instance_of_schema.go:45 AnalyzeInstanceOfSchema 0a719750e5d69ad4
 // AnalyzeInstanceOfSchema finds all `value instanceof SchemaClass` expressions
 // where the right-hand side is an Effect Schema type.
 //
@@ -71,10 +71,7 @@ pub fn analyze_instance_of_schema(
         if ast::is_instance_of_expression(node) {
             let bin_expr = node.as_binary_expression();
             let right_expr = bin_expr.right();
-            let right_type = tp.get_type_at_location(right_expr);
-            if let Some(right_type) = right_type
-                && tp.is_schema_type(right_type)
-            {
+            if tp.effect_schema_types_at_location(right_expr).is_some() {
                 matches.push(InstanceOfSchemaMatch {
                     source_file: sf,
                     location: ets_shim::scanner::get_error_range_for_node(sf, node),

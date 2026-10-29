@@ -225,7 +225,7 @@ func afterQuickInfo(program checker.Program, c *checker.Checker, sf *ast.SourceF
 	// Layer extends Effect in V4, so this check must come before the Effect check.
 	// Only activate layer hover enrichment when the cursor is on the name of the declaration,
 	// not on arbitrary nodes within the initializer expression.
-	if tp.IsLayerType(t) && isDeclarationName(node) {
+	if tp.LayerType(t) != nil && isDeclarationName(node) {
 		documentation = formatLayerHover(tp, c, sf, node, t, documentation, isMarkdown, effectConfig)
 		return quickInfo, documentation, nil
 	}

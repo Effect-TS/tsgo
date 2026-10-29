@@ -17,7 +17,7 @@ pub static WRAP_WITH_EFFECT_GEN: LazyLock<Refactor> = LazyLock::new(|| Refactor 
     run: run_wrap_with_effect_gen,
 });
 
-// go: internal/refactors/wrap_with_effect_gen.go:20 runWrapWithEffectGen 75174289a9e18e91
+// go: internal/refactors/wrap_with_effect_gen.go:20 runWrapWithEffectGen 010b0468fb0d00ed
 pub(crate) fn run_wrap_with_effect_gen(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let token = astnav::get_token_at_position(ctx.source_file, span_pos(ctx));
 
@@ -41,10 +41,7 @@ pub(crate) fn run_wrap_with_effect_gen(ctx: &mut Context<'_, '_>) -> Vec<CodeAct
             }
         }
 
-        let Some(node_type) = ctx.type_parser.get_type_at_location(node) else {
-            continue;
-        };
-        if !ctx.type_parser.strict_is_effect_type(node_type) {
+        if ctx.type_parser.strict_effect_type_at_location(node).is_none() {
             continue;
         }
         if ctx.type_parser.effect_gen_call(node).is_some() {
@@ -88,7 +85,7 @@ pub(crate) fn run_wrap_with_effect_gen(ctx: &mut Context<'_, '_>) -> Vec<CodeAct
     vec![action]
 }
 
-// go: internal/refactors/wrap_with_effect_gen.go:86 isInHeritageClause 976af23f63d008b2
+// go: internal/refactors/wrap_with_effect_gen.go:82 isInHeritageClause 976af23f63d008b2
 // isInHeritageClause checks if a node is inside a heritage clause (extends/implements).
 pub(crate) fn is_in_heritage_clause(node: P<Node>) -> bool {
     for parent in std::iter::successors(node.parent(), |n| n.parent()) {

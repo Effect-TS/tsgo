@@ -10,6 +10,7 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{DispatchConditionKind, PipingFlowTransformation, TypeParser};
 
+use crate::catch_tag_to_catch_reason::is_effect_expression;
 use crate::option_match_to_from_option::is_synchronous_function;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
@@ -202,17 +203,4 @@ pub(crate) fn effect_fail_argument(
         return None;
     }
     Some(arguments[0])
-}
-
-/// Rust-only, temporary: a copy of `internal/rules/catch_tag_to_catch_reason.go` `isEffectExpression`, whose file
-/// another rule batch ports. Delete it (and use the crate-level port) when that file lands.
-fn is_effect_expression(tp: &mut TypeParser<'_>, expression: Option<P<Node>>) -> bool {
-    let Some(expression) = expression else {
-        return false;
-    };
-    if tp.node_cannot_be_effect_library_type(expression) {
-        return false;
-    }
-    let t = tp.get_type_at_location(expression);
-    tp.effect_type(t).is_some()
 }

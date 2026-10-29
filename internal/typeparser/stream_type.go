@@ -1,6 +1,9 @@
 package typeparser
 
-import "github.com/microsoft/TypeScript/tsc/shim/checker"
+import (
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
+)
 
 // StreamTypeId is the property key for Stream's variance struct.
 const StreamTypeId = "~effect/Stream"
@@ -22,4 +25,11 @@ func (tp *TypeParser) StreamType(t *checker.Type) *Effect {
 		}
 		return tp.parseVarianceStruct(varianceStructType)
 	})
+}
+
+// StreamTypeAtLocation parses the type of node as a Stream type.
+// Returns nil if the type is not a Stream, without computing the type when
+// nodeCannotBeEffectLibraryType rules node out.
+func (tp *TypeParser) StreamTypeAtLocation(node *ast.Node) *Effect {
+	return tp.StreamType(tp.effectLibraryTypeAtLocation(node))
 }

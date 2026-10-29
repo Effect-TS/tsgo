@@ -152,20 +152,16 @@ pub(crate) fn has_explicit_promise_effect_context(tp: &mut TypeParser<'_>, node:
     false
 }
 
-// go: internal/rules/promise_in_effect_success.go:133 isExplicitPromiseEffectType 11868c113302fe43
+// go: internal/rules/promise_in_effect_success.go:133 isExplicitPromiseEffectType 28990f96dbea0633
 pub(crate) fn is_explicit_promise_effect_type(
     tp: &mut TypeParser<'_>,
     type_node: Option<P<Node>>,
 ) -> bool {
-    let Some(type_node) = type_node else {
-        return false;
-    };
-    let t = tp.get_type_at_location(type_node);
-    let effect = tp.strict_effect_type(t);
+    let effect = tp.strict_effect_type_at_location(type_node);
     effect.is_some_and(|effect| type_contains_promise(tp, Some(effect.a())))
 }
 
-// go: internal/rules/promise_in_effect_success.go:141 hasExplicitPromiseEffectReturn 1a2183f2ad0ee1bb
+// go: internal/rules/promise_in_effect_success.go:138 hasExplicitPromiseEffectReturn 1a2183f2ad0ee1bb
 //
 // Rust: the checker is the parser's.
 pub(crate) fn has_explicit_promise_effect_return(
@@ -203,7 +199,7 @@ pub(crate) fn has_explicit_promise_effect_return(
     false
 }
 
-// go: internal/rules/promise_in_effect_success.go:168 typeContainsPromise 2d88b981425a9e66
+// go: internal/rules/promise_in_effect_success.go:165 typeContainsPromise 2d88b981425a9e66
 pub(crate) fn type_contains_promise(tp: &mut TypeParser<'_>, t: Option<P<Type>>) -> bool {
     for member in tp.unroll_union_members(t).unwrap_or_default() {
         if tp.promise_type(member).is_some() {
@@ -213,12 +209,12 @@ pub(crate) fn type_contains_promise(tp: &mut TypeParser<'_>, t: Option<P<Type>>)
     false
 }
 
-// go: internal/rules/promise_in_effect_success.go:179 explicitPromiseSuccessApis b5ecd7089891d36e
+// go: internal/rules/promise_in_effect_success.go:176 explicitPromiseSuccessApis b5ecd7089891d36e
 // explicitPromiseSuccessApis lists the Effect APIs whose explicit type
 // arguments annotate the success channel directly.
 pub(crate) static EXPLICIT_PROMISE_SUCCESS_APIS: &[&str] = &["succeed", "as", "map", "zipWith"];
 
-// go: internal/rules/promise_in_effect_success.go:188 hasExplicitPromiseSuccessTypeArguments 8547e54866ab2dd0
+// go: internal/rules/promise_in_effect_success.go:185 hasExplicitPromiseSuccessTypeArguments 8547e54866ab2dd0
 // hasExplicitPromiseSuccessTypeArguments reports whether the promise in the
 // success channel was written explicitly through type arguments on the node
 // itself or on a transformation of the piping flow rooted at the node.
@@ -251,7 +247,7 @@ pub(crate) fn has_explicit_promise_success_type_arguments(
     false
 }
 
-// go: internal/rules/promise_in_effect_success.go:210 isExplicitPromiseSuccessTransformation 81a09532d280412e
+// go: internal/rules/promise_in_effect_success.go:207 isExplicitPromiseSuccessTransformation 81a09532d280412e
 // isExplicitPromiseSuccessTransformation reports whether a piping transformation
 // applies one of the explicit promise-success APIs with explicit type arguments.
 // Callees may be wrapped in parentheses or curried (e.g. Effect.as<...>(value)).
@@ -272,7 +268,7 @@ pub(crate) fn is_explicit_promise_success_transformation(
     is_explicit_promise_success_api(tp, callee)
 }
 
-// go: internal/rules/promise_in_effect_success.go:224 isExplicitPromiseSuccessApi 2ac1458b0d2b40f9
+// go: internal/rules/promise_in_effect_success.go:221 isExplicitPromiseSuccessApi 2ac1458b0d2b40f9
 pub(crate) fn is_explicit_promise_success_api(tp: &mut TypeParser<'_>, node: P<Node>) -> bool {
     for name in EXPLICIT_PROMISE_SUCCESS_APIS {
         if tp.is_node_reference_to_effect_module_api(node, name) {
@@ -282,7 +278,7 @@ pub(crate) fn is_explicit_promise_success_api(tp: &mut TypeParser<'_>, node: P<N
     false
 }
 
-// go: internal/rules/promise_in_effect_success.go:233 isEffectSyncCall bc7201984377b1f2
+// go: internal/rules/promise_in_effect_success.go:230 isEffectSyncCall bc7201984377b1f2
 pub(crate) fn is_effect_sync_call(tp: &mut TypeParser<'_>, node: Option<P<Node>>) -> bool {
     let Some(node) = node else {
         return false;

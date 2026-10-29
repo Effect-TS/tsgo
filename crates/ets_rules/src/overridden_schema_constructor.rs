@@ -73,7 +73,7 @@ pub fn analyze_overridden_schema_constructor(
     matches
 }
 
-// go: internal/rules/overridden_schema_constructor.go:68 checkOverriddenSchemaConstructor 361d8769e4883e1c
+// go: internal/rules/overridden_schema_constructor.go:68 checkOverriddenSchemaConstructor cf5ea392a0b4ca59
 //
 // Rust: Go's (ignored) checker argument is dropped.
 pub(crate) fn check_overridden_schema_constructor(
@@ -96,10 +96,7 @@ pub(crate) fn check_overridden_schema_constructor(
             continue;
         }
         let expr = elem.as_expression_with_type_arguments().expression;
-        let t = tp.get_type_at_location(expr);
-        if let Some(t) = t
-            && tp.is_schema_type(t)
-        {
+        if tp.effect_schema_types_at_location(expr).is_some() {
             extends_schema = true;
             break;
         }
@@ -127,7 +124,7 @@ pub(crate) fn check_overridden_schema_constructor(
     None
 }
 
-// go: internal/rules/overridden_schema_constructor.go:120 isAllowedConstructor d144bcab2e4795ea
+// go: internal/rules/overridden_schema_constructor.go:119 isAllowedConstructor d144bcab2e4795ea
 // isAllowedConstructor checks if a constructor is a passthrough that simply forwards
 // exactly 2 parameters to super(). This pattern is used internally by Schema and is allowed.
 pub(crate) fn is_allowed_constructor(ctor_node: P<Node>) -> bool {

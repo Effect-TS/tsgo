@@ -12,25 +12,25 @@ type sourceFileProgram interface {
 	SourceFiles() []*ast.SourceFile
 }
 
-// IsYieldableErrorType reports whether the given type is assignable to Cause.YieldableError
-// from the "effect" package. Returns false for never and any types.
-func (tp *TypeParser) IsYieldableErrorType(t *checker.Type) bool {
+// YieldableErrorType returns t itself when it is assignable to Cause.YieldableError
+// from the "effect" package, or nil otherwise. Returns nil for never and any types.
+func (tp *TypeParser) YieldableErrorType(t *checker.Type) *checker.Type {
 	if tp == nil || tp.checker == nil || t == nil {
-		return false
+		return nil
 	}
-	return Cached(&tp.links.IsYieldableErrorType, t, func() bool {
+	return Cached(&tp.links.YieldableErrorType, t, func() *checker.Type {
 		// never is assignable to everything, so we need to exclude it
 		if t.Flags()&checker.TypeFlagsNever != 0 {
-			return false
+			return nil
 		}
 		// any is assignable to everything, so we need to exclude it
 		if t.Flags()&checker.TypeFlagsAny != 0 {
-			return false
+			return nil
 		}
 
 		prog, ok := tp.program.(sourceFileProgram)
 		if !ok || prog == nil {
-			return false
+			return nil
 		}
 
 		for _, sf := range prog.SourceFiles() {
@@ -76,10 +76,10 @@ func (tp *TypeParser) IsYieldableErrorType(t *checker.Type) bool {
 			}
 
 			if checker.Checker_isTypeAssignableTo(tp.checker, t, yieldableErrorType) {
-				return true
+				return t
 			}
 		}
 
-		return false
+		return nil
 	})
 }

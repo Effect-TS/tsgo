@@ -4,16 +4,17 @@ import (
 	"strings"
 
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
-// NodeCannotBeEffectLibraryType reports whether node is an expression whose
+// nodeCannotBeEffectLibraryType reports whether node is an expression whose
 // type can never be an Effect library data type such as Effect, Stream or
 // Layer. Literals, functions, and operators that always produce a primitive
 // have no properties that could match. The `undefined` identifier is left out
 // because a local binding can shadow it. Object literals are only ruled out in
 // v4, where those types carry a "~effect/..." key; v3 detection is structural
 // and could match a plain object literal.
-func (tp *TypeParser) NodeCannotBeEffectLibraryType(node *ast.Node) bool {
+func (tp *TypeParser) nodeCannotBeEffectLibraryType(node *ast.Node) bool {
 	switch node.Kind {
 	case ast.KindArrayLiteralExpression, ast.KindArrowFunction, ast.KindFunctionExpression,
 		ast.KindNumericLiteral, ast.KindBigIntLiteral, ast.KindTemplateExpression, ast.KindNoSubstitutionTemplateLiteral,
@@ -36,4 +37,13 @@ func (tp *TypeParser) NodeCannotBeEffectLibraryType(node *ast.Node) bool {
 		return true
 	}
 	return false
+}
+
+// effectLibraryTypeAtLocation returns the type of node, or nil without asking
+// the checker when nodeCannotBeEffectLibraryType rules node out.
+func (tp *TypeParser) effectLibraryTypeAtLocation(node *ast.Node) *checker.Type {
+	if tp == nil || node == nil || tp.nodeCannotBeEffectLibraryType(node) {
+		return nil
+	}
+	return tp.GetTypeAtLocation(node)
 }

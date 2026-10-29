@@ -38,9 +38,9 @@ fn find_native_array_access(t: &T, sf: P<SourceFile>, text: &str) -> P<Node> {
 /// Rust-only: Go's method values `tp.IsNativeArrayMethodReference` / `tp.IsNativeArrayConstructorMethodReference`.
 type NativeArrayQuery = fn(&mut TypeParser<'_>, P<Node>, &str) -> bool;
 
-// go test: internal/typeparser/native_array_test.go:37 TestIsArrayType a7ee9ded6b677633
+// go test: internal/typeparser/native_array_test.go:37 TestArrayType 796302320a7aa2fd
 #[test]
-fn test_is_array_type() {
+fn test_array_type() {
     run(|t| {
         t.parallel();
         let (mut compiled, sf) = compile_and_get_checker_and_source_file_internal(
@@ -76,18 +76,28 @@ function constrained<T extends readonly number[]>(generic: T) {}
             ("generic", false),
         ] {
             let typ = tp.get_type_at_location(find_identifier_by_text(t, sf, name, 0));
-            let got = tp.is_array_type(typ);
+            let element = tp.array_type(typ);
+            let got = element.is_some();
             if got != want {
-                t.error(sprintf!("IsArrayType(%s) = %v, want %v", name, got, want));
+                t.error(sprintf!("ArrayType(%s) != nil = %v, want %v", name, got, want));
+            }
+            if let Some(element) = element
+                && tp.checker.type_to_string_exported(element) != "number"
+            {
+                t.error(sprintf!(
+                    "ArrayType(%s) = %s, want number",
+                    name,
+                    tp.checker.type_to_string_exported(element)
+                ));
             }
         }
-        if tp.is_array_type(None) {
-            t.error("IsArrayType(nil) = true");
+        if tp.array_type(None).is_some() {
+            t.error("ArrayType(nil) != nil");
         }
     });
 }
 
-// go test: internal/typeparser/native_array_test.go:74 TestNativeArrayMethodReference ca6f8a5d948f35e9
+// go test: internal/typeparser/native_array_test.go:78 TestNativeArrayMethodReference ca6f8a5d948f35e9
 #[test]
 fn test_native_array_method_reference() {
     run(|t| {
@@ -208,7 +218,7 @@ alias;
     });
 }
 
-// go test: internal/typeparser/native_array_test.go:182 TestNativeArrayAugmentation e6f7fcee7b6999aa
+// go test: internal/typeparser/native_array_test.go:186 TestNativeArrayAugmentation e6f7fcee7b6999aa
 #[test]
 fn test_native_array_augmentation() {
     run(|t| {
@@ -257,7 +267,7 @@ Array.of;
     });
 }
 
-// go test: internal/typeparser/native_array_test.go:217 TestNativeArrayInheritedAugmentation da9e5cff5c291c74
+// go test: internal/typeparser/native_array_test.go:221 TestNativeArrayInheritedAugmentation da9e5cff5c291c74
 #[test]
 fn test_native_array_inherited_augmentation() {
     run(|t| {
@@ -283,7 +293,7 @@ Array.isArray;
     });
 }
 
-// go test: internal/typeparser/native_array_test.go:236 TestNativeArrayNoLib 2956fd55fad909e3
+// go test: internal/typeparser/native_array_test.go:240 TestNativeArrayNoLib 2956fd55fad909e3
 // Rust: Go's last check (`len(tp.links.nativeArrayRegistry.instance) != 0 || len(...constructor) != 0`, "noLib
 // registry contains canonical members") is left out: the registry's fields are private to `native_array`.
 #[test]
@@ -323,7 +333,7 @@ Array.isArray;
     });
 }
 
-// go test: internal/typeparser/native_array_test.go:269 TestNativeArrayCheckerCache 01c131f451afa69d
+// go test: internal/typeparser/native_array_test.go:273 TestNativeArrayCheckerCache 4b92a9f197fd0290
 // Rust: a parser borrows its checker mutably, so `tp` and `second` (both `new_type_parser` over the same checker,
 // as in Go) are re-created for each use; they share the checker's links. Go compares the cached member pointers;
 // they come from one links store, so the values are compared. The member's fields are private to `native_array`,
@@ -350,8 +360,8 @@ custom.map;
         {
             let mut tp = compiled.type_parser();
             let typ = tp.get_type_at_location(find_identifier_by_text(t, first, "values", 0));
-            if !tp.is_array_type(typ) || tp.links().native_array_registry.is_some() {
-                t.fatal("IsArrayType changed reference registry initialization");
+            if tp.array_type(typ).is_none() || tp.links().native_array_registry.is_some() {
+                t.fatal("ArrayType changed reference registry initialization");
             }
         }
         for access in ["values.map", "custom.map"] {

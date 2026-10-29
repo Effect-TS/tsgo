@@ -52,7 +52,7 @@ pub struct UnsafeEffectTypeAssertionMatch {
     pub channels: Vec<UnsafeEffectTypeAssertionChannel>,
 }
 
-// go: internal/rules/unsafe_effect_type_assertion.go:51 AnalyzeUnsafeEffectTypeAssertion 3114dd5858d77025
+// go: internal/rules/unsafe_effect_type_assertion.go:51 AnalyzeUnsafeEffectTypeAssertion 0a3580f37aabafc8
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`); the parser and checker are never nil.
 pub fn analyze_unsafe_effect_type_assertion(
@@ -67,15 +67,15 @@ pub fn analyze_unsafe_effect_type_assertion(
     // Rust: Go's `parseEffectStreamOrLayer` closure is a nested function; `(e, r, ok)` is an `Option`.
     fn parse_effect_stream_or_layer(
         tp: &mut TypeParser<'_>,
-        t: P<Type>,
+        node: P<Node>,
     ) -> Option<(P<Type>, P<Type>)> {
-        if let Some(effect) = tp.effect_type(t) {
+        if let Some(effect) = tp.effect_type_at_location(node) {
             return Some((effect.e(), effect.r()));
         }
-        if let Some(stream) = tp.stream_type(t) {
+        if let Some(stream) = tp.stream_type_at_location(node) {
             return Some((stream.e(), stream.r()));
         }
-        if let Some(layer) = tp.layer_type(t) {
+        if let Some(layer) = tp.layer_type_at_location(node) {
             return Some((layer.e(), layer.r_in()));
         }
         None
@@ -99,21 +99,11 @@ pub fn analyze_unsafe_effect_type_assertion(
         let Some(expr) = node.expression() else {
             continue;
         };
-        if tp.node_cannot_be_effect_library_type(expr) {
-            continue;
-        }
-
-        let original_type = tp.get_type_at_location(expr);
-        let asserted_type = tp.get_type_at_location(node);
-        let (Some(original_type), Some(asserted_type)) = (original_type, asserted_type) else {
+        let Some((original_e, original_r)) = parse_effect_stream_or_layer(tp, expr) else {
             continue;
         };
 
-        let Some((original_e, original_r)) = parse_effect_stream_or_layer(tp, original_type) else {
-            continue;
-        };
-
-        let Some((asserted_e, asserted_r)) = parse_effect_stream_or_layer(tp, asserted_type) else {
+        let Some((asserted_e, asserted_r)) = parse_effect_stream_or_layer(tp, node) else {
             continue;
         };
 
@@ -158,12 +148,12 @@ pub fn analyze_unsafe_effect_type_assertion(
     matches
 }
 
-// go: internal/rules/unsafe_effect_type_assertion.go:143 isAnyType c8a188e72b87a725
+// go: internal/rules/unsafe_effect_type_assertion.go:133 isAnyType c8a188e72b87a725
 pub(crate) fn is_any_type(t: Option<P<Type>>) -> bool {
     t.is_some_and(|t| t.flags().intersects(TypeFlags::Any))
 }
 
-// go: internal/rules/unsafe_effect_type_assertion.go:147 unsafeEffectTypeAssertionRelatedInformation 8fa0f1b20fb7c26e
+// go: internal/rules/unsafe_effect_type_assertion.go:137 unsafeEffectTypeAssertionRelatedInformation 8fa0f1b20fb7c26e
 pub(crate) fn unsafe_effect_type_assertion_related_information(
     ctx: Option<&Context<'_, '_>>,
     m: &UnsafeEffectTypeAssertionMatch,

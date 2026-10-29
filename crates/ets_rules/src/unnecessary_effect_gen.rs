@@ -84,7 +84,7 @@ pub fn analyze_unnecessary_effect_gen(
     matches
 }
 
-// go: internal/rules/unnecessary_effect_gen.go:68 analyzeUnnecessaryEffectGenNode c8eb0b1f4e52b9f8
+// go: internal/rules/unnecessary_effect_gen.go:68 analyzeUnnecessaryEffectGenNode da05dbdef3a18943
 pub(crate) fn analyze_unnecessary_effect_gen_node(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -129,13 +129,7 @@ pub(crate) fn analyze_unnecessary_effect_gen_node(
 
     // Determine if the success type is void-like
     let mut success_is_void = false;
-    let mut t = None;
-    if !tp.node_cannot_be_effect_library_type(yielded_expr) {
-        t = tp.get_type_at_location(yielded_expr);
-    }
-    if let Some(t) = t
-        && let Some(effect) = tp.effect_type(t)
-    {
+    if let Some(effect) = tp.effect_type_at_location(yielded_expr) {
         success_is_void = effect.a().flags().intersects(TypeFlags::VoidLike);
     }
 
@@ -149,7 +143,7 @@ pub(crate) fn analyze_unnecessary_effect_gen_node(
     })
 }
 
-// go: internal/rules/unnecessary_effect_gen.go:145 isYieldStarExpression d06aa13bfcca8545
+// go: internal/rules/unnecessary_effect_gen.go:138 isYieldStarExpression d06aa13bfcca8545
 pub(crate) fn is_yield_star_expression(expr: P<Node>) -> bool {
     expr.as_yield_expression().asterisk_token().is_some()
 }

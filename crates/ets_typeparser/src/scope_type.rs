@@ -9,33 +9,30 @@ use crate::*;
 pub const SCOPE_TYPE_ID: &str = "~effect/Scope";
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/scope_type.go:17 TypeParser.IsScopeType 31a0d40b69a7cdb0
-    // IsScopeType returns true if the type is an Effect Scope type.
+    // go: internal/typeparser/scope_type.go:17 TypeParser.ScopeType cde065da3b7d7bb0
+    // ScopeType returns t itself when it is an Effect Scope type, or nil otherwise.
     // For v4, this checks for the "~effect/Scope" computed property.
     // For v3/unknown, this checks that the type is "pipeable" (has a callable pipe property)
     // and that any required non-optional property's symbol name contains "ScopeTypeId".
-    pub fn is_scope_type(&mut self, t: impl Into<Option<P<Type>>>) -> bool {
-        let Some(t) = t.into() else {
-            return false;
-        };
+    pub fn scope_type(&mut self, t: impl Into<Option<P<Type>>>) -> Option<P<Type>> {
+        let t = t.into()?;
         cached(
             self,
-            |l| &mut l.is_scope_type,
+            |l| &mut l.scope_type,
             t,
             |tp| {
                 let version = tp.detect_effect_version();
                 if version == EffectMajorVersion::V4 {
-                    return tp.get_type_of_property_by_name(t, SCOPE_TYPE_ID).is_some();
+                    tp.get_type_of_property_by_name(t, SCOPE_TYPE_ID)?;
+                    return Some(t);
                 }
 
                 // v3 / unknown: check that the type is "pipeable"
-                let Some(pipe_type) = tp.get_type_of_property_by_name(t, "pipe") else {
-                    return false;
-                };
+                let pipe_type = tp.get_type_of_property_by_name(t, "pipe")?;
                 let signatures =
                     tp.checker.get_signatures_of_type_exported(pipe_type, SignatureKind::Call);
                 if signatures.is_empty() {
-                    return false;
+                    return None;
                 }
 
                 // Check if any required non-optional property's symbol name contains "ScopeTypeId"
@@ -50,11 +47,11 @@ impl TypeParser<'_> {
                         continue;
                     }
                     if prop.name().contains("ScopeTypeId") {
-                        return true;
+                        return Some(t);
                     }
                 }
 
-                false
+                None
             },
         )
     }

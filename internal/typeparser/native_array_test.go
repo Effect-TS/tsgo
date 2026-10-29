@@ -34,9 +34,9 @@ func findNativeArrayAccess(t testing.TB, sf *ast.SourceFile, text string) *ast.N
 	return found
 }
 
-func TestIsArrayType(t *testing.T) {
+func TestArrayType(t *testing.T) {
 	t.Parallel()
-	_, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `
+	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `
 type Numbers = number[];
 declare const mutable: number[];
 declare const readonly: readonly number[];
@@ -62,12 +62,16 @@ function constrained<T extends readonly number[]>(generic: T) {}
 		{"inherited", false}, {"generic", false},
 	} {
 		typ := tp.GetTypeAtLocation(findIdentifierByText(t, sf, tc.name, 0))
-		if got := tp.IsArrayType(typ); got != tc.want {
-			t.Errorf("IsArrayType(%s) = %v, want %v", tc.name, got, tc.want)
+		element := tp.ArrayType(typ)
+		if got := element != nil; got != tc.want {
+			t.Errorf("ArrayType(%s) != nil = %v, want %v", tc.name, got, tc.want)
+		}
+		if element != nil && c.TypeToString(element) != "number" {
+			t.Errorf("ArrayType(%s) = %s, want number", tc.name, c.TypeToString(element))
 		}
 	}
-	if tp.IsArrayType(nil) {
-		t.Error("IsArrayType(nil) = true")
+	if tp.ArrayType(nil) != nil {
+		t.Error("ArrayType(nil) != nil")
 	}
 }
 
@@ -281,8 +285,8 @@ custom.map;
 	if tp.links.nativeArrayRegistry != nil {
 		t.Fatal("registry was built before a reference query")
 	}
-	if !tp.IsArrayType(tp.GetTypeAtLocation(findIdentifierByText(t, files["/.src/first.ts"], "values", 0))) || tp.links.nativeArrayRegistry != nil {
-		t.Fatal("IsArrayType changed reference registry initialization")
+	if tp.ArrayType(tp.GetTypeAtLocation(findIdentifierByText(t, files["/.src/first.ts"], "values", 0))) == nil || tp.links.nativeArrayRegistry != nil {
+		t.Fatal("ArrayType changed reference registry initialization")
 	}
 	second := NewTypeParser(c.Program(), c)
 	for _, access := range []string{"values.map", "custom.map"} {

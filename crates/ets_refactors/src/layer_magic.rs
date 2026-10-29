@@ -80,7 +80,7 @@ pub(crate) fn adjusted_node(node: P<Node>) -> P<Node> {
     node
 }
 
-// go: internal/refactors/layer_magic.go:80 tryBuildRefactor 99ace6e1e5dee25c
+// go: internal/refactors/layer_magic.go:80 tryBuildRefactor fbe01b7e6d6b17d4
 // tryBuildRefactor tries to produce the "build" refactor action for the given node.
 // It detects the `(expr as any) as Layer.Layer<ROut>` pattern.
 //
@@ -117,10 +117,7 @@ pub(crate) fn try_build_refactor(
     }
 
     // Parse the outer type as a Layer type to get ROut
-    let Some(outer_type) = ctx.type_parser.get_type_at_location(outer_type) else {
-        return Vec::new();
-    };
-    let Some(layer) = ctx.type_parser.layer_type(outer_type) else {
+    let Some(layer) = ctx.type_parser.layer_type_at_location(outer_type) else {
         return Vec::new();
     };
 
@@ -192,7 +189,7 @@ fn type_names(c: &mut Checker, types: &[P<Type>]) -> Vec<String> {
         .collect()
 }
 
-// go: internal/refactors/layer_magic.go:155 buildLayerMagicBuild 4adfdbf48e86808d
+// go: internal/refactors/layer_magic.go:151 buildLayerMagicBuild 4adfdbf48e86808d
 // buildLayerMagicBuild generates a pipe from the first requested output layer, or Layer.empty
 // when the first layer does not provide a requested output.
 //
@@ -282,7 +279,7 @@ pub(crate) fn build_layer_magic_build(
     }
 }
 
-// go: internal/refactors/layer_magic.go:225 tryPrepareRefactor c7677554b607eff1
+// go: internal/refactors/layer_magic.go:221 tryPrepareRefactor 635329e2566094f8
 // tryPrepareRefactor tries to produce the "prepare" refactor action for the given node.
 // It flattens a layer expression into `[...] as any as Layer.Layer<T>`.
 //
@@ -353,11 +350,8 @@ pub(crate) fn try_prepare_refactor(
     }
 
     // Parse the expression's current type as a Layer to find "previously provided" types
-    let expr_type = ctx.type_parser.get_type_at_location(at_location);
     let mut previously_provided = None;
-    if let Some(expr_type) = expr_type
-        && let Some(parsed_layer) = ctx.type_parser.layer_type(expr_type)
-    {
+    if let Some(parsed_layer) = ctx.type_parser.layer_type_at_location(at_location) {
         previously_provided = Some(parsed_layer.r_out());
     }
 
@@ -400,7 +394,7 @@ pub(crate) fn try_prepare_refactor(
     vec![action]
 }
 
-// go: internal/refactors/layer_magic.go:314 buildLayerMagicPrepare 13661bf984b27139
+// go: internal/refactors/layer_magic.go:306 buildLayerMagicPrepare 13661bf984b27139
 // buildLayerMagicPrepare generates: [leaf1, leaf2, ...] as any as Layer.Layer<NewTypes /* ExistingTypes */>
 //
 // Rust: Go's `ctx` is used for its source file, and `c` for printing `newlyIntroduced` and `existingBefore`,
@@ -475,7 +469,7 @@ pub(crate) fn build_layer_magic_prepare(
     }
 }
 
-// go: internal/refactors/layer_magic.go:382 isAsAnyAsLayerForm 648cf73415fbd888
+// go: internal/refactors/layer_magic.go:374 isAsAnyAsLayerForm 648cf73415fbd888
 // isAsAnyAsLayerForm checks if a node is already in the `(expr as any) as Layer.Layer<T>` form.
 pub(crate) fn is_as_any_as_layer_form(node: P<Node>) -> bool {
     if node.kind() != Kind::AsExpression {
@@ -493,7 +487,7 @@ pub(crate) fn is_as_any_as_layer_form(node: P<Node>) -> bool {
     inner_as.type_().kind() == Kind::AnyKeyword
 }
 
-// go: internal/refactors/layer_magic.go:399 sortedTypeSlice 96c65de830a8f01c
+// go: internal/refactors/layer_magic.go:391 sortedTypeSlice 96c65de830a8f01c
 // sortedTypeSlice converts a type set to a sorted slice using TypeToString for deterministic ordering.
 //
 // Rust: the set is an insertion-ordered slice (see `try_prepare_refactor`); the sort is Go's `sort.Slice`.

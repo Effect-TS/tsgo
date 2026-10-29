@@ -103,8 +103,7 @@ func collectServiceDocumentSymbols(tp *typeparser.TypeParser, c *checker.Checker
 				}
 				return false
 			}
-			t := tp.GetTypeAtLocation(current)
-			if tp.IsLayerType(t) {
+			if tp.LayerTypeAtLocation(current) != nil {
 				return false
 			}
 		}
@@ -324,7 +323,9 @@ func classificationTypes(tp *typeparser.TypeParser, c *checker.Checker, node *as
 
 func isLayerDeclaration(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node) bool {
 	_, types := classificationTypes(tp, c, node)
-	return slices.ContainsFunc(types, tp.IsLayerType)
+	return slices.ContainsFunc(types, func(t *checker.Type) bool {
+		return tp.LayerType(t) != nil
+	})
 }
 
 func isServiceDeclaration(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node) bool {
@@ -333,7 +334,7 @@ func isServiceDeclaration(tp *typeparser.TypeParser, c *checker.Checker, node *a
 	}
 	_, types := classificationTypes(tp, c, node)
 	for _, t := range types {
-		if tp.IsServiceType(t) || tp.IsContextTag(t) {
+		if tp.ServiceType(t) != nil || tp.ContextTag(t) != nil {
 			return true
 		}
 	}
@@ -350,7 +351,9 @@ func isErrorDeclaration(tp *typeparser.TypeParser, c *checker.Checker, node *ast
 		return false
 	}
 	_, types := classificationTypes(tp, c, node)
-	return slices.ContainsFunc(types, tp.IsYieldableErrorType)
+	return slices.ContainsFunc(types, func(t *checker.Type) bool {
+		return tp.YieldableErrorType(t) != nil
+	})
 }
 
 func isSchemaDeclaration(tp *typeparser.TypeParser, c *checker.Checker, node *ast.Node) bool {
@@ -363,7 +366,9 @@ func isSchemaDeclaration(tp *typeparser.TypeParser, c *checker.Checker, node *as
 		return false
 	}
 	_, types := classificationTypes(tp, c, node)
-	return slices.ContainsFunc(types, tp.IsSchemaType)
+	return slices.ContainsFunc(types, func(t *checker.Type) bool {
+		return tp.EffectSchemaTypes(t) != nil
+	})
 }
 
 func resolveErrorDisplayNode(node *ast.Node) *ast.Node {

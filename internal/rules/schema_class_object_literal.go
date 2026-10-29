@@ -106,7 +106,7 @@ func schemaClassObjectLiteralInV4Constructor(ctx *rule.Context, node *ast.Node) 
 				}
 				expression = access.Expression
 			}
-			return ctx.TypeParser.IsSchemaType(ctx.TypeParser.GetTypeAtLocation(expression))
+			return ctx.TypeParser.EffectSchemaTypesAtLocation(expression) != nil
 		default:
 			return false
 		}

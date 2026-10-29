@@ -1,4 +1,4 @@
-use ets_shim::ast::{Symbol, SymbolFlags};
+use ets_shim::ast::{Node, Symbol, SymbolFlags};
 use ets_shim::checker::Type;
 use ets_shim::core::P;
 
@@ -61,9 +61,12 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/context_tag.go:70 TypeParser.IsContextTag ce2c3f4928b6e37a
-    // IsContextTag returns true if the type has the Context.Tag variance struct.
-    pub fn is_context_tag(&mut self, t: impl Into<Option<P<Type>>>) -> bool {
-        self.context_tag(t).is_some()
+    // go: internal/typeparser/context_tag.go:72 TypeParser.ContextTagAtLocation 958720fe131b614c
+    // ContextTagAtLocation parses the type of node as a v3 Context.Tag type.
+    // Returns nil if the type is not a v3 Context.Tag, without computing the type
+    // when nodeCannotBeEffectLibraryType rules node out.
+    pub fn context_tag_at_location(&mut self, node: impl Into<Option<P<Node>>>) -> Option<Service> {
+        let t = self.effect_library_type_at_location(node);
+        self.context_tag(t)
     }
 }

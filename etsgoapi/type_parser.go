@@ -136,7 +136,7 @@ func (tp *TypeParser) IsYieldableErrorType(t *checker.Type) bool {
 	if tp == nil || tp.inner == nil {
 		return false
 	}
-	return tp.inner.IsYieldableErrorType(t)
+	return tp.inner.YieldableErrorType(t) != nil
 }
 
 func effectFromInternal(effect *typeparser.Effect) *Effect {

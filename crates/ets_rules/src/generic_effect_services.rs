@@ -7,7 +7,7 @@ use ets_shim::ast::{Diagnostic, Kind, Node};
 use ets_shim::diagnostics as tsdiag;
 use ets_typeparser::EffectMajorVersion;
 
-// go: internal/rules/generic_effect_services.go:14 GenericEffectServices 6d3c07b7c5ddee8a
+// go: internal/rules/generic_effect_services.go:14 GenericEffectServices aa96b74a5b0468b4
 // GenericEffectServices detects Effect Service class declarations that have type
 // parameters (generics), which cannot be properly discriminated at runtime.
 // This is a V3-only rule.
@@ -44,9 +44,7 @@ pub static GENERIC_EFFECT_SERVICES: LazyLock<Rule> = LazyLock::new(|| {
                     && let Some(class_sym) = ctx.type_parser.get_symbol_at_location(name)
                 {
                     let class_type = ctx.checker().get_type_of_symbol_at_location(class_sym, Some(node));
-                    if let Some(class_type) = class_type
-                        && ctx.type_parser.is_context_tag(class_type)
-                    {
+                    if ctx.type_parser.context_tag(class_type).is_some() {
                         diags.push(ctx.new_diagnostic(
                             ctx.source_file,
                             ctx.get_error_range(name),

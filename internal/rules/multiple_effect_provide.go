@@ -102,17 +102,7 @@ func AnalyzeMultipleEffectProvide(tp *typeparser.TypeParser, _ *checker.Checker,
 
 			// Check if the first argument is a Layer type
 			arg := transformation.Args().At(0)
-			if tp.NodeCannotBeEffectLibraryType(arg) {
-				finalizeChunk()
-				continue
-			}
-			argType := tp.GetTypeAtLocation(arg)
-			if argType == nil {
-				finalizeChunk()
-				continue
-			}
-
-			if tp.LayerType(argType) == nil {
+			if tp.LayerTypeAtLocation(arg) == nil {
 				// provide call but not with a Layer argument — breaks the chain
 				finalizeChunk()
 				continue

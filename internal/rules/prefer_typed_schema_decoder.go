@@ -117,15 +117,12 @@ func analyzeTypedSchemaDecoderApplication(tp *typeparser.TypeParser, c *checker.
 	if nameNode == nil {
 		return nil
 	}
-	if tp.NodeCannotBeEffectLibraryType(schema) {
-		return nil
-	}
 	unknownName, typedName := matchUnknownSchemaDecoder(tp, callee)
 	if unknownName == "" {
 		return nil
 	}
 
-	schemaType := tp.EffectSchemaTypes(tp.GetTypeAtLocation(schema))
+	schemaType := tp.EffectSchemaTypesAtLocation(schema)
 	if schemaType == nil || schemaType.E() == nil {
 		return nil
 	}

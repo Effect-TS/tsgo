@@ -1,10 +1,11 @@
+use ets_shim::ast::{Kind, Node};
 use ets_shim::checker::{SignatureKind, Type};
 use ets_shim::core::P;
 
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/effect_yieldable_type.go:11 TypeParser.EffectYieldableType ee42924e453a226a
+    // go: internal/typeparser/effect_yieldable_type.go:14 TypeParser.EffectYieldableType ee42924e453a226a
     // EffectYieldableType resolves both plain Effect types and yieldable wrappers
     // that implement the asEffect() protocol.
     // For v3: delegates directly to EffectType (v3 models yieldable through Effect subtyping).
@@ -46,5 +47,25 @@ impl TypeParser<'_> {
                 None
             },
         )
+    }
+
+    // go: internal/typeparser/effect_yieldable_type.go:58 TypeParser.EffectYieldableTypeAtLocation a2302439be0ac988
+    // EffectYieldableTypeAtLocation resolves the type of node as an Effect or a
+    // yieldable wrapper (see EffectYieldableType). Returns nil if the type is
+    // neither, without computing the type when nodeCannotBeEffectLibraryType rules
+    // node out. Object literals are never ruled out: in v4 an object literal with
+    // an asEffect member is yieldable without any "~effect/..." key.
+    pub fn effect_yieldable_type_at_location(
+        &mut self,
+        node: impl Into<Option<P<Node>>>,
+    ) -> Option<Effect> {
+        let node = node.into()?;
+        if node.kind() != Kind::ObjectLiteralExpression
+            && self.node_cannot_be_effect_library_type(node)
+        {
+            return None;
+        }
+        let t = self.get_type_at_location(node);
+        self.effect_yieldable_type(t)
     }
 }

@@ -176,10 +176,10 @@ impl TypeParser<'_> {
         self.inner.unroll_union_members(t)
     }
 
-    // go: etsgoapi/type_parser.go:135 TypeParser.IsYieldableErrorType a3f27b0d1c29b9db
+    // go: etsgoapi/type_parser.go:135 TypeParser.IsYieldableErrorType 3aa510331947ff0d
     // IsYieldableErrorType reports whether the given type is assignable to Cause.YieldableError.
     pub fn is_yieldable_error_type(&mut self, t: impl Into<Option<P<Type>>>) -> bool {
-        self.inner.is_yieldable_error_type(t)
+        self.inner.yieldable_error_type(t).is_some()
     }
 }
 

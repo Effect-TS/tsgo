@@ -42,7 +42,7 @@ pub static GLOBAL_ERROR_IN_EFFECT_FAILURE: LazyLock<Rule> = LazyLock::new(|| {
 }
 });
 
-// go: internal/rules/global_error_in_effect_failure.go:47 checkGlobalErrorInEffectFailure d439a8dc1eaff994
+// go: internal/rules/global_error_in_effect_failure.go:47 checkGlobalErrorInEffectFailure 1a7a0fcb4f0a592e
 // checkGlobalErrorInEffectFailure checks a single new expression for the global-error-in-failure pattern.
 pub(crate) fn check_global_error_in_effect_failure(
     ctx: &mut Context<'_, '_>,
@@ -59,14 +59,7 @@ pub(crate) fn check_global_error_in_effect_failure(
     // Walk up the parent chain to find an enclosing Effect type
     let tp = &mut *ctx.type_parser;
     let ancestor = ast::find_ancestor_or_quit(node.parent(), |current| {
-        if tp.node_cannot_be_effect_library_type(current) {
-            return FindAncestorResult::False;
-        }
-        let Some(current_type) = tp.get_type_at_location(current) else {
-            return FindAncestorResult::False;
-        };
-
-        let Some(effect_type) = tp.effect_type(current_type) else {
+        let Some(effect_type) = tp.effect_type_at_location(current) else {
             return FindAncestorResult::False;
         };
 

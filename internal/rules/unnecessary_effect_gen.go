@@ -121,15 +121,8 @@ func analyzeUnnecessaryEffectGenNode(tp *typeparser.TypeParser, _ *checker.Check
 
 	// Determine if the success type is void-like
 	successIsVoid := false
-	var t *checker.Type
-	if !tp.NodeCannotBeEffectLibraryType(yieldedExpr) {
-		t = tp.GetTypeAtLocation(yieldedExpr)
-	}
-	if t != nil {
-		effect := tp.EffectType(t)
-		if effect != nil && effect.A() != nil {
-			successIsVoid = effect.A().Flags()&checker.TypeFlagsVoidLike != 0
-		}
+	if effect := tp.EffectTypeAtLocation(yieldedExpr); effect != nil && effect.A() != nil {
+		successIsVoid = effect.A().Flags()&checker.TypeFlagsVoidLike != 0
 	}
 
 	return &UnnecessaryEffectGenMatch{

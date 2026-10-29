@@ -827,7 +827,7 @@ impl TypeParser<'_> {
         String::new()
     }
 
-    // go: internal/typeparser/effect_fn_opportunity.go:754 TypeParser.tryMatchOfInference 80ea3f8360ab9cd6
+    // go: internal/typeparser/effect_fn_opportunity.go:754 TypeParser.tryMatchOfInference 044d5078d01686c0
     // tryMatchOfInference checks if an object literal is the first argument to a Service.of({ ... }) call,
     // where the service expression is a ContextTag or ServiceType.
     // Returns the service tag text or empty string.
@@ -863,7 +863,9 @@ impl TypeParser<'_> {
         let Some(service_tag_type) = self.get_type_at_location(service_tag_expression) else {
             return String::new();
         };
-        if !self.is_context_tag(service_tag_type) && !self.is_service_type(service_tag_type) {
+        if self.context_tag(service_tag_type).is_none()
+            && self.service_type(service_tag_type).is_none()
+        {
             return String::new();
         }
         layer_service_name_from_expression(service_tag_expression)

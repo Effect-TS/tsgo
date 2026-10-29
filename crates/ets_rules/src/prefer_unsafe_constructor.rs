@@ -100,7 +100,7 @@ pub fn analyze_prefer_unsafe_constructor(
     matches
 }
 
-// go: internal/rules/prefer_unsafe_constructor.go:81 analyzePreferUnsafeConstructorNode ee4b415f1a285a28
+// go: internal/rules/prefer_unsafe_constructor.go:81 analyzePreferUnsafeConstructorNode dc0d973c6645b1ac
 // analyzePreferUnsafeConstructorNode checks a single call expression for the
 // Effect.runSync(<effect constructor>()) pattern with a matching *Unsafe sibling.
 //
@@ -145,8 +145,7 @@ pub(crate) fn analyze_prefer_unsafe_constructor_node(
 
     // The constructor call must produce an `Effect<A, never, never>`: a fallible or
     // service-requiring effect has no behavior-preserving synchronous replacement.
-    let inner_type = tp.get_type_at_location(inner);
-    let eff = tp.effect_type(inner_type)?;
+    let eff = tp.effect_type_at_location(inner)?;
     if !eff.e().flags().intersects(TypeFlags::Never) {
         return None;
     }

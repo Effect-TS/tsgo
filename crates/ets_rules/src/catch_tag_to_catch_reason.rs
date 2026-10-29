@@ -454,19 +454,12 @@ pub(crate) fn unique_catch_reason_parameter_name(
     }
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:387 isEffectExpression bb40206f2df238d2
+// go: internal/rules/catch_tag_to_catch_reason.go:387 isEffectExpression b7a91be637846585
 pub(crate) fn is_effect_expression(tp: &mut TypeParser<'_>, expression: Option<P<Node>>) -> bool {
-    let Some(expression) = expression else {
-        return false;
-    };
-    if tp.node_cannot_be_effect_library_type(expression) {
-        return false;
-    }
-    let t = tp.get_type_at_location(expression);
-    tp.effect_type(t).is_some()
+    tp.effect_type_at_location(expression).is_some()
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:392 catchTagsPropertyName d37709e4bd52b4db
+// go: internal/rules/catch_tag_to_catch_reason.go:391 catchTagsPropertyName d37709e4bd52b4db
 pub(crate) fn catch_tags_property_name(name: Option<P<Node>>) -> Option<String> {
     let name = name?;
     match name.kind() {
@@ -476,7 +469,7 @@ pub(crate) fn catch_tags_property_name(name: Option<P<Node>>) -> Option<String> 
     }
 }
 
-// go: internal/rules/catch_tag_to_catch_reason.go:406 sameCatchReasonSymbol 8011d80abd7bf5f0
+// go: internal/rules/catch_tag_to_catch_reason.go:405 sameCatchReasonSymbol 8011d80abd7bf5f0
 pub(crate) fn same_catch_reason_symbol(
     tp: &mut TypeParser<'_>,
     node: Option<P<Node>>,

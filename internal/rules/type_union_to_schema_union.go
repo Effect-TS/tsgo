@@ -120,7 +120,7 @@ func analyzeTypeUnionToSchemaUnionAlias(tp *typeparser.TypeParser, c *checker.Ch
 		if symbol == nil {
 			return nil
 		}
-		if !tp.IsSchemaType(c.GetTypeOfSymbolAtLocation(symbol, leaf.name)) {
+		if tp.EffectSchemaTypes(c.GetTypeOfSymbolAtLocation(symbol, leaf.name)) == nil {
 			return nil
 		}
 		members[i] = TypeUnionToSchemaUnionMember{Name: leaf.name, Symbol: symbol}
