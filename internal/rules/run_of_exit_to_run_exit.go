@@ -77,7 +77,7 @@ func AnalyzeRunOfExitToRunExit(tp *typeparser.TypeParser, _ *checker.Checker, sf
 			runnerTransformation := flow.Transformations().At(sequence.Start() + 1)
 			runnerCallee, runnerNameNode, runnerName, replacementName := runOfExitRunner(tp, runnerTransformation.Callee())
 
-			matches = appendRunOfExitMatch(matches, RunOfExitToRunExitMatch{
+			matches = append(matches, RunOfExitToRunExitMatch{
 				SourceFile:         sf,
 				Location:           runOfExitLocation(sf, runnerTransformation.Callee(), runnerNameNode),
 				ExitTransformation: &exitTransformation,
@@ -88,58 +88,10 @@ func AnalyzeRunOfExitToRunExit(tp *typeparser.TypeParser, _ *checker.Checker, sf
 		}
 	}
 
-	// Non-dual runners with RunOptions are not piping-flow transformations,
-	// because their effect parameter is one of multiple arguments. Inspect the
-	// runner call itself, then still use a piping flow for its effect argument so
-	// direct Effect.exit calls and pipe tails share the same matching logic.
-	var walk func(*ast.Node)
-	walk = func(node *ast.Node) {
-		if node == nil {
-			return
-		}
-		if node.Kind == ast.KindCallExpression {
-			call := node.AsCallExpression()
-			if call != nil && call.Expression != nil && call.Arguments != nil && len(call.Arguments.Nodes) > 0 {
-				runnerCallee, runnerNameNode, runnerName, replacementName := runOfExitRunner(tp, call.Expression)
-				if runnerName != "" {
-					argumentFlow := tp.LongestPipingFlowAt(call.Arguments.Nodes[0], false)
-					if argumentFlow != nil && argumentFlow.Transformations().Len() > 0 {
-						exitTransformation := argumentFlow.Transformations().At(argumentFlow.Transformations().Len() - 1)
-						if exitTransformation.Callee() != nil && exitTransformation.Args().Len() == 0 &&
-							tp.IsNodeReferenceToEffectModuleApi(exitTransformation.Callee(), "exit") {
-							matches = appendRunOfExitMatch(matches, RunOfExitToRunExitMatch{
-								SourceFile:         sf,
-								Location:           runOfExitLocation(sf, call.Expression, runnerNameNode),
-								ExitTransformation: &exitTransformation,
-								RunnerCallee:       runnerCallee,
-								RunnerName:         runnerName,
-								ReplacementName:    replacementName,
-							})
-						}
-					}
-				}
-			}
-		}
-		node.ForEachChild(func(child *ast.Node) bool {
-			walk(child)
-			return false
-		})
-	}
-	walk(sf.AsNode())
-
 	sort.Slice(matches, func(i, j int) bool {
 		return matches[i].Location.Pos() < matches[j].Location.Pos()
 	})
 	return matches
-}
-
-func appendRunOfExitMatch(matches []RunOfExitToRunExitMatch, candidate RunOfExitToRunExitMatch) []RunOfExitToRunExitMatch {
-	for _, match := range matches {
-		if match.Location.Pos() == candidate.Location.Pos() && match.Location.End() == candidate.Location.End() {
-			return matches
-		}
-	}
-	return append(matches, candidate)
 }
 
 func runOfExitLocation(sf *ast.SourceFile, callee, nameNode *ast.Node) core.TextRange {

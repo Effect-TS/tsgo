@@ -31,6 +31,9 @@ export const named = decodeUnknownSync(Person)(person)
 
 // Application options do not prevent recognizing the decoder application.
 export const withOptions = Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] }, { errors: "all" })
+export const withApplicationOptions = Schema.decodeUnknownSync(Person)(person, { errors: "all" })
+export const withFactoryOptions = Schema.decodeUnknownSync(Person, { errors: "all" })(person)
+export const pipedWithFactoryOptions = pipe(person, Schema.decodeUnknownSync(Person, { errors: "all" }))
 
 declare const unknownInput: unknown
 declare const anyInput: any

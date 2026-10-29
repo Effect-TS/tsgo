@@ -73,6 +73,9 @@ func AnalyzeRaceFirstWithSleepToTimeout(tp *typeparser.TypeParser, c *checker.Ch
 				}
 
 			case tp.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "raceAllFirst"):
+				if transformation.Args().Len() != 0 {
+					continue
+				}
 				input := flow.CopyPrefix(i)
 				if input == nil || input.Subject().Node() == nil {
 					continue

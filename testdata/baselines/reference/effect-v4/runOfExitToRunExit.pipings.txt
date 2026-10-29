@@ -1,4 +1,4 @@
-==== /.src/runOfExitToRunExit.ts (26 flows) ====
+==== /.src/runOfExitToRunExit.ts (24 flows) ====
 
 === Piping Flow ===
 Location: 8:29 - 8:69
@@ -19,18 +19,22 @@ Transformations (2):
       outType: Promise<Exit<number, Error>>
 
 === Piping Flow ===
-Location: 9:55 - 9:75
-Node: Effect.exit(program)
+Location: 9:36 - 9:88
+Node: Effect.runPromise(Effect.exit(program), { signal })
 Node Kind: KindCallExpression
 
 Subject: program
 Subject Type: Effect<number, Error, never>
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: Effect.exit
       args: (constant)
       outType: Effect<Exit<number, Error>, never, never>
+  [1] kind: callWithOptionals
+      callee: Effect.runPromise
+      args: [{ signal }]
+      outType: Promise<Exit<number, Error>>
 
 === Piping Flow ===
 Location: 12:34 - 15:3
@@ -131,32 +135,22 @@ Transformations (2):
       outType: Promise<Exit<number, Error>>
 
 === Piping Flow ===
-Location: 30:27 - 30:58
-Node: Effect.runPromiseWith(context)
-Node Kind: KindCallExpression
-
-Subject: context
-Subject Type: Context<never>
-
-Transformations (1):
-  [0] kind: call
-      callee: Effect.runPromiseWith
-      args: (constant)
-      outType: <A, E>(effect: Effect<A, E, never>, options?: RunOptions | undefined) => Promise<A>
-
-=== Piping Flow ===
-Location: 30:59 - 30:79
-Node: Effect.exit(program)
+Location: 30:27 - 30:92
+Node: Effect.runPromiseWith(context)(Effect.exit(program), { signal })
 Node Kind: KindCallExpression
 
 Subject: program
 Subject Type: Effect<number, Error, never>
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: Effect.exit
       args: (constant)
       outType: Effect<Exit<number, Error>, never, never>
+  [1] kind: callWithOptionals
+      callee: Effect.runPromiseWith(context)
+      args: [{ signal }]
+      outType: Promise<Exit<number, Error>>
 
 === Piping Flow ===
 Location: 31:31 - 31:89
@@ -177,32 +171,22 @@ Transformations (2):
       outType: Promise<Exit<number, Error>>
 
 === Piping Flow ===
-Location: 33:34 - 33:58
-Node: runPromiseWith(context)
-Node Kind: KindCallExpression
-
-Subject: context
-Subject Type: Context<never>
-
-Transformations (1):
-  [0] kind: call
-      callee: runPromiseWith
-      args: (constant)
-      outType: <A, E>(effect: Effect<A, E, never>, options?: RunOptions | undefined) => Promise<A>
-
-=== Piping Flow ===
-Location: 33:59 - 33:79
-Node: Effect.exit(program)
+Location: 33:34 - 33:92
+Node: runPromiseWith(context)(Effect.exit(program), { signal })
 Node Kind: KindCallExpression
 
 Subject: program
 Subject Type: Effect<number, Error, never>
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: Effect.exit
       args: (constant)
       outType: Effect<Exit<number, Error>, never, never>
+  [1] kind: callWithOptionals
+      callee: runPromiseWith(context)
+      args: [{ signal }]
+      outType: Promise<Exit<number, Error>>
 
 === Piping Flow ===
 Location: 36:21 - 36:55

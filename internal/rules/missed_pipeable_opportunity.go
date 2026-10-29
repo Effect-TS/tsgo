@@ -53,6 +53,7 @@ type MissedPipeableOpportunityMatch struct {
 	PipeableStartIndex      int
 	PipeableTransformations []typeparser.PipingFlowTransformation
 	Flow                    *typeparser.PipingFlow
+	Node                    *ast.Node // The expression replaced by the fix; may be inner to Flow.Node()
 	SubjectText             string
 	AfterTransformations    readonly.Slice[typeparser.PipingFlowTransformation]
 }
@@ -69,18 +70,13 @@ func AnalyzeMissedPipeableOpportunity(tp *typeparser.TypeParser, c *checker.Chec
 			continue
 		}
 
-		// Skip if final output type is callable (has call signatures)
-		lastTransformation := flow.Transformations().At(flow.Transformations().Len() - 1)
-		if lastTransformation.OutType() != nil {
-			callSigs := c.GetSignaturesOfType(lastTransformation.OutType(), checker.SignatureKindCall)
-			if len(callSigs) > 0 {
-				continue
-			}
+		reportedCount, reportedNode := reportableTransformationCount(c, flow)
+		if reportedNode == nil {
+			continue
 		}
 
-		transformationCount := flow.Transformations().Len()
 		runs := safelyPipeableRuns(tp, flow)
-		for firstPipeableIndex := 0; firstPipeableIndex <= transformationCount; firstPipeableIndex++ {
+		for firstPipeableIndex := 0; firstPipeableIndex <= reportedCount; firstPipeableIndex++ {
 			run := runs[firstPipeableIndex]
 			if run.callCount < minArgCount || !isPipeableAtIndex(tp, flow, firstPipeableIndex) {
 				continue
@@ -91,14 +87,14 @@ func AnalyzeMissedPipeableOpportunity(tp *typeparser.TypeParser, c *checker.Chec
 			}
 			pipeableEndIndex := firstPipeableIndex + len(pipeableTransformations)
 
-			// Get subject text for the diagnostic message
-			subjectText := getSubjectText(c, sf, flow, firstPipeableIndex)
+			subjectText := trimmedNodeText(sf, flow.TransformationInputNode(firstPipeableIndex))
 
-			afterTransformations := flow.Transformations().Slice(pipeableEndIndex, flow.Transformations().Len())
+			afterTransformations := flow.Transformations().Slice(pipeableEndIndex, reportedCount)
 
 			matches = append(matches, MissedPipeableOpportunityMatch{
 				SourceFile:              sf,
-				Location:                scanner.GetErrorRangeForNode(sf, flow.Node()),
+				Location:                scanner.GetErrorRangeForNode(sf, reportedNode),
+				Node:                    reportedNode,
 				PipeableStartIndex:      firstPipeableIndex,
 				PipeableTransformations: pipeableTransformations,
 				Flow:                    flow,
@@ -124,7 +120,7 @@ func safelyPipeableRuns(tp *typeparser.TypeParser, flow *typeparser.PipingFlow) 
 	runs := make([]safelyPipeableRun, transformationCount+1)
 	for i := transformationCount - 1; i >= 0; i-- {
 		t := flow.Transformations().At(i)
-		if !tp.IsSafelyPipeableCallee(t.Callee()) {
+		if t.Kind() == typeparser.TransformationKindCallWithOptionals || !tp.IsSafelyPipeableCallee(t.Callee()) {
 			continue
 		}
 		runs[i] = safelyPipeableRun{length: runs[i+1].length + 1, callCount: runs[i+1].callCount}
@@ -156,30 +152,32 @@ func isPipeableAtIndex(tp *typeparser.TypeParser, flow *typeparser.PipingFlow, i
 	return tp.IsPipeableType(t.OutType())
 }
 
-// getSubjectText extracts the subject text for the diagnostic message.
-// If the pipeable segment starts at index 0, uses the subject node text directly.
-// Otherwise, traverses the flow node to find the node at the right depth.
-func getSubjectText(_ *checker.Checker, sf *ast.SourceFile, flow *typeparser.PipingFlow, firstPipeableIndex int) string {
-	if firstPipeableIndex == 0 {
-		return trimmedNodeText(sf, flow.Subject().Node())
-	}
-
-	// Traverse from flow.node into arguments to find the node at the right depth
-	current := flow.Node()
-	for i := flow.Transformations().Len(); i > firstPipeableIndex; i-- {
-		t := flow.Transformations().At(i - 1)
-		if t.Kind() == typeparser.TransformationKindCall && ast.IsCallExpression(current) {
-			call := current.AsCallExpression()
-			if call.Arguments != nil && len(call.Arguments.Nodes) > 0 {
-				current = call.Arguments.Nodes[0]
-			} else {
-				return ""
-			}
-		} else {
-			return ""
+// reportableTransformationCount returns how many leading transformations of
+// the flow may be reported, and the expression they produce. Flows whose
+// output is callable are not reported; when that output comes after a
+// callWithOptionals step, the flow is cut before that step instead, as it
+// cannot join a pipe anyway. It returns a nil node when nothing is reportable.
+func reportableTransformationCount(c *checker.Checker, flow *typeparser.PipingFlow) (int, *ast.Node) {
+	count := flow.Transformations().Len()
+	node := flow.Node()
+	for count > 0 {
+		outType := flow.Transformations().At(count - 1).OutType()
+		if outType == nil || len(c.GetSignaturesOfType(outType, checker.SignatureKindCall)) == 0 {
+			return count, node
+		}
+		count--
+		for count >= 0 && flow.Transformations().At(count).Kind() != typeparser.TransformationKindCallWithOptionals {
+			count--
+		}
+		if count < 0 {
+			return 0, nil
+		}
+		node = flow.TransformationInputNode(count)
+		if node == nil {
+			return 0, nil
 		}
 	}
-	return trimmedNodeText(sf, current)
+	return 0, nil
 }
 
 // trimmedNodeText extracts the source text of a node, trimmed of leading trivia.

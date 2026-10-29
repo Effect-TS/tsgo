@@ -85,3 +85,8 @@ export const threeWayRaceAllFirst = Effect.raceAllFirst([
   other,
   Effect.sleep("1 second")
 ])
+
+// Should not report when raceAllFirst carries behavior timeoutOrElse cannot preserve.
+export const raceAllFirstWithOptions = Effect.raceAllFirst([work, Effect.sleep("1 second")], {
+  onWinner: () => {}
+})

@@ -1,4 +1,4 @@
-==== /.src/raceFirstWithSleepToTimeout.ts (31 flows) ====
+==== /.src/raceFirstWithSleepToTimeout.ts (33 flows) ====
 
 === Piping Flow ===
 Location: 10:29 - 15:2
@@ -462,6 +462,34 @@ Transformations (1):
 
 === Piping Flow ===
 Location: 85:9 - 86:27
+Node: Effect.sleep("1 second")
+Node Kind: KindCallExpression
+
+Subject: "1 second"
+Subject Type: "1 second"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sleep
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 90:39 - 92:3
+Node: Effect.raceAllFirst([work, Effect.sleep("1 second")], {\n  onWinner: () => {}\n})
+Node Kind: KindCallExpression
+
+Subject: [work, Effect.sleep("1 second")]
+Subject Type: (Effect<void, never, never> | Effect<string, Error, never>)[]
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.raceAllFirst
+      args: [{\n  onWinner: () => {}\n}]
+      outType: Effect<void | string, Error, never>
+
+=== Piping Flow ===
+Location: 90:66 - 90:91
 Node: Effect.sleep("1 second")
 Node Kind: KindCallExpression
 

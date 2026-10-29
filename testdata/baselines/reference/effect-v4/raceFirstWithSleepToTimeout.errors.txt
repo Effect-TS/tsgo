@@ -110,3 +110,8 @@ Effect version: 4.0.2
       Effect.sleep("1 second")
     ])
     
+    // Should not report when raceAllFirst carries behavior timeoutOrElse cannot preserve.
+    export const raceAllFirstWithOptions = Effect.raceAllFirst([work, Effect.sleep("1 second")], {
+      onWinner: () => {}
+    })
+    
