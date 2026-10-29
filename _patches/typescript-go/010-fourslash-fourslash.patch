@@ -1,5 +1,5 @@
 diff --git a/internal/fourslash/fourslash.go b/internal/fourslash/fourslash.go
-index d1087aabdf..803535aedc 100644
+index dcd76dbe..4e001ae2 100644
 --- a/internal/fourslash/fourslash.go
 +++ b/internal/fourslash/fourslash.go
 @@ -41,6 +41,16 @@ import (
@@ -19,7 +19,7 @@ index d1087aabdf..803535aedc 100644
  type FourslashTest struct {
  	client *lsptestutil.LSPClient
  	vfs    vfs.FS
-@@ -155,6 +165,11 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
+@@ -156,6 +166,11 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
  		testfs[filePath] = vfstest.Symlink(tspath.GetNormalizedAbsolutePath(target, rootDir))
  	}
  
@@ -31,7 +31,7 @@ index d1087aabdf..803535aedc 100644
  	// !!! use default compiler options for inferred project as base
  	compilerOptions := &core.CompilerOptions{
  		SkipDefaultLibCheck: core.TSTrue,
-@@ -5586,6 +5601,383 @@ func (f *FourslashTest) VerifyErrorExistsBeforeMarker(t *testing.T, markerName s
+@@ -5776,6 +5791,350 @@ func (f *FourslashTest) VerifyErrorExistsBeforeMarker(t *testing.T, markerName s
  	t.Fatalf("Expected error before marker '%s' but none was found", markerName)
  }
  
@@ -186,73 +186,40 @@ index d1087aabdf..803535aedc 100644
 +		return strings.Compare(string(a), string(b))
 +	})
 +
-+	// Save original state and apply edits per file
-+	type fileEditState struct {
-+		uri             lsproto.DocumentUri
-+		fileName        string
-+		originalContent string
-+		edits           []*lsproto.TextEdit
-+	}
-+	var editStates []fileEditState
-+
++	// Compute the edited content locally without notifying the server, so the
++	// server snapshot (and its program and checker) stays valid across fixes.
 +	for _, uri := range uris {
-+		edits := (*action.Edit.Changes)[uri]
 +		fileName := uri.FileName()
 +		script := f.getScriptInfo(fileName)
-+
-+		beforeContent := ""
-+		created := false
-+		if script == nil {
-+			created = true
-+		} else {
-+			beforeContent = script.content
-+		}
-+
-+		// Save state for undo
-+		editStates = append(editStates, fileEditState{
-+			uri:             uri,
-+			fileName:        fileName,
-+			originalContent: beforeContent,
-+			edits:           edits,
-+		})
-+
-+		// Apply edits
-+		savedActive := f.activeFilename
-+		f.activeFilename = fileName
-+
-+		if script == nil {
-+			// File doesn't exist yet - create it with empty content
++		created := script == nil
++		if created {
 +			script = newScriptInfo(fileName, "")
-+			f.scriptInfos[fileName] = script
 +		}
-+
-+		f.applyTextEdits(t, edits)
-+		f.activeFilename = savedActive
-+
-+		afterContent := f.getScriptInfo(fileName).content
-+
 +		result.Changes = append(result.Changes, FileChange{
 +			URI:     uri,
-+			Before:  beforeContent,
-+			After:   afterContent,
++			Before:  script.content,
++			After:   f.applyTextEditsToContent(script, (*action.Edit.Changes)[uri]),
 +			Created: created,
 +		})
 +	}
 +
-+	// Undo all changes in reverse order, notifying the LSP server
-+	for i := len(editStates) - 1; i >= 0; i-- {
-+		state := editStates[i]
-+		script := f.getScriptInfo(state.fileName)
-+		if state.originalContent == "" && script != nil {
-+			// File was created - remove it
-+			delete(f.scriptInfos, state.fileName)
-+		} else if script != nil {
-+			// Restore original content via editScript so the server is notified
-+			f.editScript(t, state.fileName, core.TextChange{TextRange: core.NewTextRange(0, len(script.content)), NewText: state.originalContent})
-+		}
-+	}
-+
 +	return result
++}
++
++// applyTextEditsToContent returns the content of script with edits applied,
++// leaving the script, the VFS and the server untouched.
++func (f *FourslashTest) applyTextEditsToContent(script *scriptInfo, edits []*lsproto.TextEdit) string {
++	sorted := slices.Clone(edits)
++	slices.SortFunc(sorted, func(a, b *lsproto.TextEdit) int {
++		return int(f.converters.LineAndCharacterToPosition(script, a.Range.Start)) - int(f.converters.LineAndCharacterToPosition(script, b.Range.Start))
++	})
++	content := script.content
++	for _, edit := range slices.Backward(sorted) {
++		start := int(f.converters.LineAndCharacterToPosition(script, edit.Range.Start))
++		end := int(f.converters.LineAndCharacterToPosition(script, edit.Range.End))
++		content = content[:start] + edit.NewText + content[end:]
++	}
++	return content
 +}
 +
 +// RefactorActionInfo holds information about a single refactor code action.
