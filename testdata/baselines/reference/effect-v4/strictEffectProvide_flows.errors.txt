@@ -7,11 +7,10 @@ Effect version: 4.0.2
 /.src/strictEffectProvide_flows.ts(27,37): warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
 /.src/strictEffectProvide_flows.ts(30,24): suggestion TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
 /.src/strictEffectProvide_flows.ts(30,57): warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
-/.src/strictEffectProvide_flows.ts(34,34): warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
 /.src/strictEffectProvide_flows.ts(41,37): warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
 
 
-==== /.src/strictEffectProvide_flows.ts (8 errors) ====
+==== /.src/strictEffectProvide_flows.ts (7 errors) ====
     // @effect-diagnostics strictEffectProvide:warning
     import { Context, Effect, Layer, pipe } from "effect"
     import { provide as provideIt } from "effect/Effect"
@@ -55,11 +54,9 @@ Effect version: 4.0.2
                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
     
-    // Should report: provide inside a runner call (no entry point exception)
+    // Should NOT report: the provided Effect goes straight into a runner
     export const runner = (signal: AbortSignal) =>
       Effect.runPromise(program.pipe(Effect.provide(MyService1.Default)), { signal })
-                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! warning TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
     
     // Should NOT report: standalone Effect.provide is not applied to an effect
     export const withLive = Effect.provide(MyService1.Default)

@@ -25,11 +25,7 @@
   Fix 0: "Disable strictEffectProvide for this line"
   Fix 1: "Disable strictEffectProvide for entire file"
 
-[D7] (34:34-34:68) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
-  Fix 0: "Disable strictEffectProvide for this line"
-  Fix 1: "Disable strictEffectProvide for entire file"
-
-[D8] (41:37-41:97) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+[D7] (41:37-41:97) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
   Fix 0: "Disable strictEffectProvide for this line"
   Fix 1: "Disable strictEffectProvide for entire file"
 
@@ -99,7 +95,7 @@ export const aliased = program.pipe(provideIt(MyService1.Default))
 // Should report once: nested chained pipes
 export const chained = program.pipe(Effect.asVoid, Effect.provide(MyService1.Default))
 
-// Should report: provide inside a runner call (no entry point exception)
+// Should NOT report: the provided Effect goes straight into a runner
 export const runner = (signal: AbortSignal) =>
   Effect.runPromise(program.pipe(Effect.provide(MyService1.Default)), { signal })
 
@@ -121,10 +117,4 @@ skipped by default
 skipped by default
 
 === [D7] Fix 1: "Disable strictEffectProvide for entire file" ===
-skipped by default
-
-=== [D8] Fix 0: "Disable strictEffectProvide for this line" ===
-skipped by default
-
-=== [D8] Fix 1: "Disable strictEffectProvide for entire file" ===
 skipped by default
