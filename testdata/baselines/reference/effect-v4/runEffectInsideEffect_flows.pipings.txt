@@ -1,4 +1,4 @@
-==== /.src/runEffectInsideEffect_flows.ts (16 flows) ====
+==== /.src/runEffectInsideEffect_flows.ts (19 flows) ====
 
 === Piping Flow ===
 Location: 3:13 - 3:31
@@ -187,7 +187,49 @@ Transformations (1):
       outType: Fiber<number, never>
 
 === Piping Flow ===
-Location: 26:29 - 28:2
+Location: 26:39 - 30:3
+Node: Effect.gen(function*() {\n  yield* Effect.log("starting")\n  const run = () => Effect.runPromise(task, {})\n  return run\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.log("starting")\n  const run = () => Effect.runPromise(task, {})\n  return run\n}
+Subject Type: () => Generator<Effect<void, never, never>, () => Promise<number>, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<() => Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 27:9 - 27:32
+Node: Effect.log("starting")
+Node Kind: KindCallExpression
+
+Subject: "starting"
+Subject Type: "starting"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 28:20 - 28:48
+Node: Effect.runPromise(task, {})
+Node Kind: KindCallExpression
+
+Subject: task
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.runPromise
+      args: [{}]
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 32:29 - 34:2
 Node: Effect.succeed(1).pipe(\n  Effect.map(() => Effect.runSync(task))\n)
 Node Kind: KindCallExpression
 
@@ -205,7 +247,7 @@ Transformations (2):
       outType: Effect<number, never, never>
 
 === Piping Flow ===
-Location: 27:19 - 27:40
+Location: 33:19 - 33:40
 Node: Effect.runSync(task)
 Node Kind: KindCallExpression
 
@@ -219,7 +261,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 30:28 - 30:57
+Location: 36:28 - 36:57
 Node: task.pipe(Effect.runPromise)
 Node Kind: KindCallExpression
 

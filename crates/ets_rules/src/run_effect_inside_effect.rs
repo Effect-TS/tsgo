@@ -10,8 +10,7 @@ use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::scanner::get_source_text_of_node_from_source_file;
 use ets_typeparser::{
-    EffectContextFlags, EffectMajorVersion, PipingFlowTransformation, TransformationKind,
-    TypeParser,
+    EffectContextFlags, EffectMajorVersion, PipingFlowTransformation, TypeParser,
 };
 
 /// Rust-only: the rule's message (Go spells it out at each use).
@@ -100,24 +99,25 @@ pub static RUN_EFFECT_INSIDE_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/run_effect_inside_effect.go:57 RunEffectInsideEffectMatch 7551b15b0d0ca86d
+// go: internal/rules/run_effect_inside_effect.go:57 RunEffectInsideEffectMatch bd5f911aa69d6d1b
 // RunEffectInsideEffectMatch holds the diagnostic and AST nodes needed by both the
 // diagnostic rule and the quick-fix for the runEffectInsideEffect pattern.
 //
-// Rust: Go's `*ast.FunctionExpression` is its node, and its nil is `None`.
+// Rust: Go's `*ast.FunctionExpression` is its node, and its nil is `None`. Go's never-nil transformation
+// pointer is an owned clone.
 #[derive(Clone)]
 pub struct RunEffectInsideEffectMatch {
     pub source_file: P<SourceFile>, // The source file where this match was found
     pub location: TextRange,        // Pre-computed error range (on the callee expression)
-    pub call_node: Option<P<Node>>, // The full call expression node (e.g., Effect.runPromise(check)), None in pipe position
     pub callee_node: P<Node>,       // The callee expression (e.g., Effect.runPromise)
+    pub transformation: PipingFlowTransformation, // The piping flow step that runs the Effect
     pub method_name: &'static str,  // The matched run API name (e.g., "runPromise")
     pub is_platform_run_main: bool, // True for NodeRuntime.runMain and the other platform runMain APIs
     pub is_nested_scope: bool, // True when call is in a nested scope rather than direct generator scope
     pub generator_function: Option<P<Node>>, // The enclosing Effect generator function, None for a platform runMain
 }
 
-// go: internal/rules/run_effect_inside_effect.go:70 AnalyzeRunEffectInsideEffect b1529427e959602b
+// go: internal/rules/run_effect_inside_effect.go:70 AnalyzeRunEffectInsideEffect 548171eab8c62b45
 // AnalyzeRunEffectInsideEffect finds all Effect.run* and platform runMain steps of the piping flows
 // that run inside an Effect, returning matches with structured data for both diagnostics and quick-fixes.
 //
@@ -155,8 +155,8 @@ pub fn analyze_run_effect_inside_effect(
             let mut m = RunEffectInsideEffectMatch {
                 source_file: sf,
                 location: ets_shim::scanner::get_error_range_for_node(sf, callee),
-                call_node: run_effect_inside_effect_call_node(transformation),
                 callee_node: callee,
+                transformation: transformation.clone(),
                 method_name,
                 is_platform_run_main,
                 is_nested_scope: false,
@@ -228,21 +228,7 @@ fn resolve_run_effect_inside_effect_flow_context(
     flow_context
 }
 
-// go: internal/rules/run_effect_inside_effect.go:150 runEffectInsideEffectCallNode 19c782a709125a2a
-// runEffectInsideEffectCallNode returns the call that passes the Effect as the first argument of the
-// step, or nil when the step sits in pipe position.
-fn run_effect_inside_effect_call_node(
-    transformation: &PipingFlowTransformation,
-) -> Option<P<Node>> {
-    match transformation.kind() {
-        TransformationKind::Call
-        | TransformationKind::CallWithOptionals
-        | TransformationKind::DataFirst => transformation.callee().parent(),
-        _ => None,
-    }
-}
-
-// go: internal/rules/run_effect_inside_effect.go:160 matchRunEffectApi eeef31b0776d262d
+// go: internal/rules/run_effect_inside_effect.go:150 matchRunEffectApi eeef31b0776d262d
 // matchRunEffectApi checks if the node references one of the Effect.run* APIs and returns the method name.
 // Returns empty string if no match.
 //
@@ -256,7 +242,7 @@ pub(crate) fn match_run_effect_api(tp: &mut TypeParser<'_>, node: P<Node>) -> &'
     ""
 }
 
-// go: internal/rules/run_effect_inside_effect.go:171 isInsideEffectContext 232e99a24cd200c8
+// go: internal/rules/run_effect_inside_effect.go:161 isInsideEffectContext 232e99a24cd200c8
 // isInsideEffectContext reports whether node or one of its ancestors runs inside an Effect,
 // such as an Effect.gen body or an Effect.sync thunk.
 fn is_inside_effect_context(tp: &mut TypeParser<'_>, node: P<Node>) -> bool {

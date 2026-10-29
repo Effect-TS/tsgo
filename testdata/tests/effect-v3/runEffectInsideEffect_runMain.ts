@@ -38,6 +38,7 @@ export declare const runMain: {
 }
 
 // @filename: main.ts
+// @effect-v3
 import { BrowserRuntime } from "@effect/platform-browser"
 import { BunRuntime } from "@effect/platform-bun"
 import { NodeRuntime as Runtime } from "@effect/platform-node"

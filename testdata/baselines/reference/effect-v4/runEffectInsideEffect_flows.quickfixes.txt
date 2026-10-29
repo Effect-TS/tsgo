@@ -15,6 +15,12 @@
 [D4] (22:31-22:45) TS377074: `Effect.runFork` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runForkWith`. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
+  Fix 2: "Use the current services to run the Effect"
+
+[D5] (28:21-28:38) TS377074: `Effect.runPromise` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runPromiseWith`. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+  Fix 2: "Use the current services to run the Effect"
 
 === Quick Fix Application Results ===
 
@@ -41,3 +47,95 @@ skipped by default
 
 === [D4] Fix 1: "Disable runEffectInsideEffect for entire file" ===
 skipped by default
+
+=== [D4] Fix 2: "Use the current services to run the Effect" ===
+
+--- file:///.src/runEffectInsideEffect_flows.ts ---
+import { Effect, pipe } from "effect"
+
+const task = Effect.succeed(1)
+
+export const withOptions = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  Effect.runPromise(task, {})
+})
+
+export const inPipeMethod = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  task.pipe(Effect.asVoid, Effect.runSync)
+})
+
+export const inPipeFunction = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  pipe(task, Effect.runPromise)
+})
+
+export const inNestedPipe = Effect.gen(function*() {
+const effectContext = yield* Effect.context<never>();
+
+  yield* Effect.log("starting")
+  const run = () => task.pipe(Effect.runForkWith(effectContext))
+  return run
+})
+
+export const inNestedCallWithOptions = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  const run = () => Effect.runPromise(task, {})
+  return run
+})
+
+export const inMapCallback = Effect.succeed(1).pipe(
+  Effect.map(() => Effect.runSync(task))
+)
+
+export const atEntryPoint = task.pipe(Effect.runPromise)
+
+
+=== [D5] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Use the current services to run the Effect" ===
+
+--- file:///.src/runEffectInsideEffect_flows.ts ---
+import { Effect, pipe } from "effect"
+
+const task = Effect.succeed(1)
+
+export const withOptions = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  Effect.runPromise(task, {})
+})
+
+export const inPipeMethod = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  task.pipe(Effect.asVoid, Effect.runSync)
+})
+
+export const inPipeFunction = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  pipe(task, Effect.runPromise)
+})
+
+export const inNestedPipe = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  const run = () => task.pipe(Effect.runFork)
+  return run
+})
+
+export const inNestedCallWithOptions = Effect.gen(function*() {
+const effectContext = yield* Effect.context<never>();
+
+  yield* Effect.log("starting")
+  const run = () => Effect.runPromiseWith(effectContext)(task, {})
+  return run
+})
+
+export const inMapCallback = Effect.succeed(1).pipe(
+  Effect.map(() => Effect.runSync(task))
+)
+
+export const atEntryPoint = task.pipe(Effect.runPromise)
+

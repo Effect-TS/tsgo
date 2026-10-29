@@ -1,7 +1,7 @@
 ==== /.src/main.ts (26 flows) ====
 
 === Piping Flow ===
-Location: 7:14 - 7:36
+Location: 8:14 - 8:36
 Node: Effect.log("serving")
 Node Kind: KindCallExpression
 
@@ -15,7 +15,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 9:22 - 11:3
+Location: 10:22 - 12:3
 Node: Effect.sync(() => {\n  Runtime.runMain(serve)\n})
 Node Kind: KindCallExpression
 
@@ -29,7 +29,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 9:42 - 10:25
+Location: 10:42 - 11:25
 Node: Runtime.runMain(serve)
 Node Kind: KindCallExpression
 
@@ -43,7 +43,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 13:21 - 16:3
+Location: 14:21 - 17:3
 Node: Effect.gen(function*() {\n  yield* Effect.log("starting")\n  BunRuntime.runMain(serve)\n})
 Node Kind: KindCallExpression
 
@@ -57,7 +57,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 14:9 - 14:32
+Location: 15:9 - 15:32
 Node: Effect.log("starting")
 Node Kind: KindCallExpression
 
@@ -71,7 +71,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 14:32 - 15:28
+Location: 15:32 - 16:28
 Node: BunRuntime.runMain(serve)
 Node Kind: KindCallExpression
 
@@ -85,7 +85,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 18:26 - 21:3
+Location: 19:26 - 22:3
 Node: Effect.gen(function*() {\n  yield* Effect.log("starting")\n  return () => BrowserRuntime.runMain(serve)\n})
 Node Kind: KindCallExpression
 
@@ -99,7 +99,7 @@ Transformations (1):
       outType: Effect<() => void, never, never>
 
 === Piping Flow ===
-Location: 19:9 - 19:32
+Location: 20:9 - 20:32
 Node: Effect.log("starting")
 Node Kind: KindCallExpression
 
@@ -113,7 +113,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 20:15 - 20:45
+Location: 21:15 - 21:45
 Node: BrowserRuntime.runMain(serve)
 Node Kind: KindCallExpression
 
@@ -127,7 +127,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 23:20 - 26:3
+Location: 24:20 - 27:3
 Node: Effect.fn("inFn")(function*() {\n  yield* Effect.log("starting")\n  startMain(serve)\n})
 Node Kind: KindCallExpression
 
@@ -141,7 +141,7 @@ Transformations (1):
       outType: () => Effect<void, never, never>
 
 === Piping Flow ===
-Location: 24:9 - 24:32
+Location: 25:9 - 25:32
 Node: Effect.log("starting")
 Node Kind: KindCallExpression
 
@@ -155,7 +155,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 24:32 - 25:19
+Location: 25:32 - 26:19
 Node: startMain(serve)
 Node Kind: KindCallExpression
 
@@ -169,7 +169,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 28:22 - 31:3
+Location: 29:22 - 32:3
 Node: Effect.gen(function*() {\n  yield* Effect.log("starting")\n  serve.pipe(Runtime.runMain)\n})
 Node Kind: KindCallExpression
 
@@ -183,7 +183,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 29:9 - 29:32
+Location: 30:9 - 30:32
 Node: Effect.log("starting")
 Node Kind: KindCallExpression
 
@@ -197,7 +197,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 29:32 - 30:30
+Location: 30:32 - 31:30
 Node: serve.pipe(Runtime.runMain)
 Node Kind: KindCallExpression
 
@@ -211,7 +211,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 33:27 - 36:3
+Location: 34:27 - 37:3
 Node: Effect.gen(function*() {\n  yield* Effect.log("starting")\n  Runtime.runMain(serve, { disableErrorReporting: true })\n})
 Node Kind: KindCallExpression
 
@@ -225,7 +225,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 34:9 - 34:32
+Location: 35:9 - 35:32
 Node: Effect.log("starting")
 Node Kind: KindCallExpression
 
@@ -239,7 +239,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 34:32 - 35:58
+Location: 35:32 - 36:58
 Node: Runtime.runMain(serve, { disableErrorReporting: true })
 Node Kind: KindCallExpression
 
@@ -253,7 +253,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 38:30 - 41:3
+Location: 39:30 - 42:3
 Node: Effect.gen(function*() {\n  yield* Effect.log("starting")\n  pipe(serve, BunRuntime.runMain)\n})
 Node Kind: KindCallExpression
 
@@ -267,7 +267,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 39:9 - 39:32
+Location: 40:9 - 40:32
 Node: Effect.log("starting")
 Node Kind: KindCallExpression
 
@@ -281,7 +281,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 39:32 - 40:34
+Location: 40:32 - 41:34
 Node: pipe(serve, BunRuntime.runMain)
 Node Kind: KindCallExpression
 
@@ -295,7 +295,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 45:27 - 48:3
+Location: 46:27 - 49:3
 Node: Effect.gen(function*() {\n  yield* Effect.log("starting")\n  local.runMain(serve)\n})
 Node Kind: KindCallExpression
 
@@ -309,7 +309,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 46:9 - 46:32
+Location: 47:9 - 47:32
 Node: Effect.log("starting")
 Node Kind: KindCallExpression
 
@@ -323,7 +323,7 @@ Transformations (1):
       outType: Effect<void, never, never>
 
 === Piping Flow ===
-Location: 46:32 - 47:23
+Location: 47:32 - 48:23
 Node: local.runMain(serve)
 Node Kind: KindCallExpression
 
@@ -337,7 +337,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 50:29 - 50:52
+Location: 51:29 - 51:52
 Node: Runtime.runMain(serve)
 Node Kind: KindCallExpression
 
@@ -351,7 +351,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 50:52 - 52:23
+Location: 51:52 - 53:23
 Node: Runtime.runMain(serve)
 Node Kind: KindCallExpression
 

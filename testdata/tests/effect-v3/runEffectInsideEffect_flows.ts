@@ -1,3 +1,4 @@
+// @effect-v3
 import { Effect, pipe } from "effect"
 
 const task = Effect.succeed(1)
@@ -20,6 +21,12 @@ export const inPipeFunction = Effect.gen(function*() {
 export const inNestedPipe = Effect.gen(function*() {
   yield* Effect.log("starting")
   const run = () => task.pipe(Effect.runFork)
+  return run
+})
+
+export const inNestedCallWithOptions = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  const run = () => Effect.runPromise(task, {})
   return run
 })
 

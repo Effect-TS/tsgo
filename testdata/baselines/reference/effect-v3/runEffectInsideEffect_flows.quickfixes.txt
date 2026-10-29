@@ -1,20 +1,26 @@
 === Quick Fix Inventory ===
 
-[D1] (7:3-7:20) TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+[D1] (8:3-8:20) TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
 
-[D2] (12:28-12:42) TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+[D2] (13:28-13:42) TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
 
-[D3] (17:14-17:31) TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+[D3] (18:14-18:31) TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
 
-[D4] (22:31-22:45) TS377074: `Effect.runFork` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runForkWith`. effect(runEffectInsideEffect)
+[D4] (23:31-23:45) TS377025: `Effect.runFork` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runFork`. effect(runEffectInsideEffect)
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
+  Fix 2: "Use a runtime to run the Effect"
+
+[D5] (29:21-29:38) TS377025: `Effect.runPromise` is called inside an Effect with a separate runtime invocation. In this context, run child Effects with the surrounding runtime, which can be accessed through `Effect.runtime` and `Runtime.runPromise`. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+  Fix 2: "Use a runtime to run the Effect"
 
 === Quick Fix Application Results ===
 
@@ -41,3 +47,97 @@ skipped by default
 
 === [D4] Fix 1: "Disable runEffectInsideEffect for entire file" ===
 skipped by default
+
+=== [D4] Fix 2: "Use a runtime to run the Effect" ===
+
+--- file:///.src/runEffectInsideEffect_flows.ts ---
+// @effect-v3
+import { Effect, pipe } from "effect"
+
+const task = Effect.succeed(1)
+
+export const withOptions = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  Effect.runPromise(task, {})
+})
+
+export const inPipeMethod = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  task.pipe(Effect.asVoid, Effect.runSync)
+})
+
+export const inPipeFunction = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  pipe(task, Effect.runPromise)
+})
+
+export const inNestedPipe = Effect.gen(function*() {
+const effectRuntime = yield* Effect.runtime<never>();
+
+  yield* Effect.log("starting")
+  const run = () => task.pipe(Runtime.runFork(effectRuntime))
+  return run
+})
+
+export const inNestedCallWithOptions = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  const run = () => Effect.runPromise(task, {})
+  return run
+})
+
+export const inMapCallback = Effect.succeed(1).pipe(
+  Effect.map(() => Effect.runSync(task))
+)
+
+export const atEntryPoint = task.pipe(Effect.runPromise)
+
+
+=== [D5] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Use a runtime to run the Effect" ===
+
+--- file:///.src/runEffectInsideEffect_flows.ts ---
+// @effect-v3
+import { Effect, pipe } from "effect"
+
+const task = Effect.succeed(1)
+
+export const withOptions = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  Effect.runPromise(task, {})
+})
+
+export const inPipeMethod = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  task.pipe(Effect.asVoid, Effect.runSync)
+})
+
+export const inPipeFunction = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  pipe(task, Effect.runPromise)
+})
+
+export const inNestedPipe = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  const run = () => task.pipe(Effect.runFork)
+  return run
+})
+
+export const inNestedCallWithOptions = Effect.gen(function*() {
+const effectRuntime = yield* Effect.runtime<never>();
+
+  yield* Effect.log("starting")
+  const run = () => Runtime.runPromise(effectRuntime)(task, {})
+  return run
+})
+
+export const inMapCallback = Effect.succeed(1).pipe(
+  Effect.map(() => Effect.runSync(task))
+)
+
+export const atEntryPoint = task.pipe(Effect.runPromise)
+

@@ -67,7 +67,7 @@ const effectRuntime = yield* Effect.runtime<never>();
 
   yield* Effect.void
   setTimeout(() => {
-    Runtime.runPromise(effectRuntime, child)
+    Runtime.runPromise(effectRuntime)(child)
     Effect.runPromiseExit(child)
     Effect.runSync(child)
     Effect.runSyncExit(child)
@@ -101,7 +101,7 @@ const effectRuntime = yield* Effect.runtime<never>();
   yield* Effect.void
   setTimeout(() => {
     Effect.runPromise(child)
-    Runtime.runPromiseExit(effectRuntime, child)
+    Runtime.runPromiseExit(effectRuntime)(child)
     Effect.runSync(child)
     Effect.runSyncExit(child)
   }, 0)
@@ -135,7 +135,7 @@ const effectRuntime = yield* Effect.runtime<never>();
   setTimeout(() => {
     Effect.runPromise(child)
     Effect.runPromiseExit(child)
-    Runtime.runSync(effectRuntime, child)
+    Runtime.runSync(effectRuntime)(child)
     Effect.runSyncExit(child)
   }, 0)
 })
@@ -169,7 +169,7 @@ const effectRuntime = yield* Effect.runtime<never>();
     Effect.runPromise(child)
     Effect.runPromiseExit(child)
     Effect.runSync(child)
-    Runtime.runSyncExit(effectRuntime, child)
+    Runtime.runSyncExit(effectRuntime)(child)
   }, 0)
 })
 

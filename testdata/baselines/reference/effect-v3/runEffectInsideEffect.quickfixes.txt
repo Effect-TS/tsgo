@@ -50,7 +50,7 @@ const effectRuntime = yield* Effect.runtime<never>();
       try: () => fetch(event.data as string),
       catch: (e) => new DebuggerError({ cause: e })
     })
-    Runtime.runPromise(effectRuntime, check)
+    Runtime.runPromise(effectRuntime)(check)
     //        ^- no runPromise, use a runtime instead
   }
 })

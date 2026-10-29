@@ -23,6 +23,12 @@ export const inNestedPipe = Effect.gen(function*() {
   return run
 })
 
+export const inNestedCallWithOptions = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  const run = () => Effect.runPromise(task, {})
+  return run
+})
+
 export const inMapCallback = Effect.succeed(1).pipe(
   Effect.map(() => Effect.runSync(task))
 )

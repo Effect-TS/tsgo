@@ -1,16 +1,17 @@
 === Metadata ===
 Effect version: 3.19.19
 
-/.src/main.ts(10,3): suggestion TS377160: `Runtime.runMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `Runtime.runMain` once at the application entry point. effect(runEffectInsideEffect)
-/.src/main.ts(15,3): suggestion TS377160: `BunRuntime.runMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `BunRuntime.runMain` once at the application entry point. effect(runEffectInsideEffect)
-/.src/main.ts(20,16): suggestion TS377160: `BrowserRuntime.runMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `BrowserRuntime.runMain` once at the application entry point. effect(runEffectInsideEffect)
-/.src/main.ts(25,3): suggestion TS377160: `startMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `startMain` once at the application entry point. effect(runEffectInsideEffect)
-/.src/main.ts(30,14): suggestion TS377160: `Runtime.runMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `Runtime.runMain` once at the application entry point. effect(runEffectInsideEffect)
-/.src/main.ts(35,3): suggestion TS377160: `Runtime.runMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `Runtime.runMain` once at the application entry point. effect(runEffectInsideEffect)
-/.src/main.ts(40,15): suggestion TS377160: `BunRuntime.runMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `BunRuntime.runMain` once at the application entry point. effect(runEffectInsideEffect)
+/.src/main.ts(11,3): suggestion TS377160: `Runtime.runMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `Runtime.runMain` once at the application entry point. effect(runEffectInsideEffect)
+/.src/main.ts(16,3): suggestion TS377160: `BunRuntime.runMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `BunRuntime.runMain` once at the application entry point. effect(runEffectInsideEffect)
+/.src/main.ts(21,16): suggestion TS377160: `BrowserRuntime.runMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `BrowserRuntime.runMain` once at the application entry point. effect(runEffectInsideEffect)
+/.src/main.ts(26,3): suggestion TS377160: `startMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `startMain` once at the application entry point. effect(runEffectInsideEffect)
+/.src/main.ts(31,14): suggestion TS377160: `Runtime.runMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `Runtime.runMain` once at the application entry point. effect(runEffectInsideEffect)
+/.src/main.ts(36,3): suggestion TS377160: `Runtime.runMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `Runtime.runMain` once at the application entry point. effect(runEffectInsideEffect)
+/.src/main.ts(41,15): suggestion TS377160: `BunRuntime.runMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `BunRuntime.runMain` once at the application entry point. effect(runEffectInsideEffect)
 
 
 ==== /.src/main.ts (7 errors) ====
+    // @effect-v3
     import { BrowserRuntime } from "@effect/platform-browser"
     import { BunRuntime } from "@effect/platform-bun"
     import { NodeRuntime as Runtime } from "@effect/platform-node"
