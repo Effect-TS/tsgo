@@ -10,7 +10,7 @@ Suggests using Runtime or Effect.run*With methods instead of Effect.run* inside 
 | Default severity | `suggestion` |
 | Fixable | Yes |
 | Effect versions | v3, v4 |
-| Diagnostic codes | `TS377024`, `TS377025`, `TS377074` |
+| Diagnostic codes | `TS377024`, `TS377025`, `TS377074`, `TS377160` |
 | Language Service name | `runEffectInsideEffect` |
 | Oxlint name | `effecttsgo/run-effect-inside-effect` |
 

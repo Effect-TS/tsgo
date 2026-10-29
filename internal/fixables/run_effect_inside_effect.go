@@ -1,16 +1,14 @@
 package fixables
 
 import (
-	"fmt"
-
 	"github.com/effect-ts/tsgo/internal/fixable"
+	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/effect-ts/tsgo/internal/rules"
 	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 	"github.com/microsoft/TypeScript/tsc/shim/ls"
-	"github.com/effect-ts/tsgo/internal/rewriter"
 	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
@@ -34,7 +32,7 @@ func runRunEffectInsideEffectFix(ctx *fixable.Context) []ls.CodeAction {
 
 	matches := rules.AnalyzeRunEffectInsideEffect(ctx.TypeParser, c, sf)
 	for _, match := range matches {
-		if !match.IsNestedScope {
+		if !match.IsNestedScope || match.IsPlatformRunMain {
 			continue
 		}
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {
@@ -96,19 +94,15 @@ func runRunEffectInsideEffectFix(ctx *fixable.Context) []ls.CodeAction {
 				}
 
 				runtimeModuleIdentifier := typeparser.FindModuleReference(sf, "Runtime")
-				calleeTokenPos := scanner.GetTokenPosOfNode(m.CalleeNode, sf, false)
-				firstArgPos := m.CallNode.AsCallExpression().Arguments.Nodes[0].Pos()
-				tracker.DeleteRange(sf, core.NewTextRange(calleeTokenPos, firstArgPos))
-
-				replacementText := runEffectInsideEffectReplacementText(
+				tracker.ReplacePipingFlowTransformation(sf, m.Transformation, runEffectInsideEffectReplacement(
+					tracker,
 					supportedEffect,
 					effectModuleIdentifier,
 					runtimeModuleIdentifier,
 					m.MethodName,
 					runtimeIdentifier,
 					servicesIdentifier,
-				)
-				tracker.InsertText(sf, ctx.BytePosToLSPPosition(firstArgPos), replacementText)
+				))
 			},
 		}); action != nil {
 			return []ls.CodeAction{*action}
@@ -126,18 +120,27 @@ func runEffectInsideEffectFixDescription(supportedEffect typeparser.EffectMajorV
 	return "Use a runtime to run the Effect"
 }
 
-func runEffectInsideEffectReplacementText(
+// runEffectInsideEffectReplacement builds the curried runner that replaces the step,
+// such as Effect.runForkWith(effectContext) or Runtime.runFork(effectRuntime).
+func runEffectInsideEffectReplacement(
+	tracker *rewriter.Tracker,
 	supportedEffect typeparser.EffectMajorVersion,
 	effectModuleIdentifier typeparser.ModuleReference,
 	runtimeModuleIdentifier typeparser.ModuleReference,
 	methodName string,
 	runtimeIdentifier string,
 	servicesIdentifier string,
-) string {
+) rewriter.PipingFlowTransformationReplacement {
 	if supportedEffect == typeparser.EffectMajorV4 {
-		return fmt.Sprintf("%s.%sWith(%s)(", effectModuleIdentifier, methodName, servicesIdentifier)
+		return rewriter.PipingFlowTransformationReplacement{
+			Callee:    tracker.NewPropertyAccessPath(effectModuleIdentifier.Append(methodName + "With")...),
+			Arguments: tracker.NewNodeList([]*ast.Node{tracker.NewIdentifier(servicesIdentifier)}),
+		}
 	}
-	return fmt.Sprintf("%s.%s(%s, ", runtimeModuleIdentifier, methodName, runtimeIdentifier)
+	return rewriter.PipingFlowTransformationReplacement{
+		Callee:    tracker.NewPropertyAccessPath(runtimeModuleIdentifier.Append(methodName)...),
+		Arguments: tracker.NewNodeList([]*ast.Node{tracker.NewIdentifier(runtimeIdentifier)}),
+	}
 }
 
 func insertYieldedEffectModuleCall(

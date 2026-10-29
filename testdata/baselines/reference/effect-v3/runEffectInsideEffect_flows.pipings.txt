@@ -1,0 +1,275 @@
+==== /.src/runEffectInsideEffect_flows.ts (19 flows) ====
+
+=== Piping Flow ===
+Location: 4:13 - 4:31
+Node: Effect.succeed(1)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 6:27 - 9:3
+Node: Effect.gen(function*() {\n  yield* Effect.log("starting")\n  Effect.runPromise(task, {})\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.log("starting")\n  Effect.runPromise(task, {})\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 7:9 - 7:32
+Node: Effect.log("starting")
+Node Kind: KindCallExpression
+
+Subject: "starting"
+Subject Type: "starting"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 7:32 - 8:30
+Node: Effect.runPromise(task, {})
+Node Kind: KindCallExpression
+
+Subject: task
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.runPromise
+      args: [{}]
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 11:28 - 14:3
+Node: Effect.gen(function*() {\n  yield* Effect.log("starting")\n  task.pipe(Effect.asVoid, Effect.runSync)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.log("starting")\n  task.pipe(Effect.asVoid, Effect.runSync)\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 12:9 - 12:32
+Node: Effect.log("starting")
+Node Kind: KindCallExpression
+
+Subject: "starting"
+Subject Type: "starting"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 12:32 - 13:43
+Node: task.pipe(Effect.asVoid, Effect.runSync)
+Node Kind: KindCallExpression
+
+Subject: task
+Subject Type: Effect<number, never, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.runSync
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 16:30 - 19:3
+Node: Effect.gen(function*() {\n  yield* Effect.log("starting")\n  pipe(task, Effect.runPromise)\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.log("starting")\n  pipe(task, Effect.runPromise)\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 17:9 - 17:32
+Node: Effect.log("starting")
+Node Kind: KindCallExpression
+
+Subject: "starting"
+Subject Type: "starting"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 17:32 - 18:32
+Node: pipe(task, Effect.runPromise)
+Node Kind: KindCallExpression
+
+Subject: task
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 21:28 - 25:3
+Node: Effect.gen(function*() {\n  yield* Effect.log("starting")\n  const run = () => task.pipe(Effect.runFork)\n  return run\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.log("starting")\n  const run = () => task.pipe(Effect.runFork)\n  return run\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>>, () => RuntimeFiber<number, never>, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<() => RuntimeFiber<number, never>, never, never>
+
+=== Piping Flow ===
+Location: 22:9 - 22:32
+Node: Effect.log("starting")
+Node Kind: KindCallExpression
+
+Subject: "starting"
+Subject Type: "starting"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 23:20 - 23:46
+Node: task.pipe(Effect.runFork)
+Node Kind: KindCallExpression
+
+Subject: task
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.runFork
+      args: (constant)
+      outType: RuntimeFiber<number, never>
+
+=== Piping Flow ===
+Location: 27:39 - 31:3
+Node: Effect.gen(function*() {\n  yield* Effect.log("starting")\n  const run = () => Effect.runPromise(task, {})\n  return run\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.log("starting")\n  const run = () => Effect.runPromise(task, {})\n  return run\n}
+Subject Type: () => Generator<YieldWrap<Effect<void, never, never>>, () => Promise<number>, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<() => Promise<number>, never, never>
+
+=== Piping Flow ===
+Location: 28:9 - 28:32
+Node: Effect.log("starting")
+Node Kind: KindCallExpression
+
+Subject: "starting"
+Subject Type: "starting"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 29:20 - 29:48
+Node: Effect.runPromise(task, {})
+Node Kind: KindCallExpression
+
+Subject: task
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Effect.runPromise
+      args: [{}]
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 33:29 - 35:2
+Node: Effect.succeed(1).pipe(\n  Effect.map(() => Effect.runSync(task))\n)
+Node Kind: KindCallExpression
+
+Subject: 1
+Subject Type: 1
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [() => Effect.runSync(task)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 34:19 - 34:40
+Node: Effect.runSync(task)
+Node Kind: KindCallExpression
+
+Subject: task
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.runSync
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 37:28 - 37:57
+Node: task.pipe(Effect.runPromise)
+Node Kind: KindCallExpression
+
+Subject: task
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.runPromise
+      args: (constant)
+      outType: Promise<number>

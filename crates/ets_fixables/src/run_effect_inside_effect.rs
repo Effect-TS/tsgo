@@ -1,9 +1,9 @@
 use std::sync::LazyLock;
 
 use ets_fixable::{Context, FixAction, Fixable};
-use ets_rewriter::{NodeOptions, Tracker};
+use ets_rewriter::{NodeOptions, PipingFlowTransformationReplacement, Tracker};
 use ets_shim::ast::{self, Kind, Node, NodeFlags, SourceFile};
-use ets_shim::core::{P, TextRange, alloc_str};
+use ets_shim::core::{P, alloc_str};
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::ls::CodeAction;
 use ets_shim::scanner;
@@ -16,7 +16,7 @@ static RUNTIME_MESSAGE: &Message = &tsdiag::X_0_IS_CALLED_INSIDE_AN_EFFECT_WITH_
 /// Rust-only: the fixable's services diagnostic message (Go spells it out in `ErrorCodes`).
 static SERVICES_MESSAGE: &Message = &tsdiag::X_0_IS_CALLED_INSIDE_AN_EFFECT_WITH_A_SEPARATE_SERVICES_INVOCATION_IN_THIS_CONTEXT_CHILD_EFFECTS_RUN_WITH_THE_SURROUNDING_SERVICES_WHICH_CAN_BE_ACCESSED_THROUGH_EFFECT_CONTEXT_AND_EFFECT_1_WITH_EFFECT_RUN_EFFECT_INSIDE_EFFECT;
 
-// go: internal/fixables/run_effect_inside_effect.go:17 RunEffectInsideEffectFix 923a3c1c74b5d4d6
+// go: internal/fixables/run_effect_inside_effect.go:15 RunEffectInsideEffectFix 923a3c1c74b5d4d6
 pub static RUN_EFFECT_INSIDE_EFFECT_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixable {
     name: "runEffectInsideEffect",
     description: "Use the current services or a runtime to run the Effect",
@@ -25,7 +25,7 @@ pub static RUN_EFFECT_INSIDE_EFFECT_FIX: LazyLock<Fixable> = LazyLock::new(|| Fi
     run: run_run_effect_inside_effect_fix,
 });
 
-// go: internal/fixables/run_effect_inside_effect.go:28 runRunEffectInsideEffectFix ae2902c368b85258
+// go: internal/fixables/run_effect_inside_effect.go:26 runRunEffectInsideEffectFix b9f6fe8de6b6962b
 //
 // Rust: Go's edit closure scans the generator's statements with the type parser before it edits anything. The
 // parser is borrowed mutably by the context, which `new_fix_action` borrows, so the scan (which reads only the
@@ -38,14 +38,14 @@ fn run_run_effect_inside_effect_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
 
     let matches = ets_rules::analyze_run_effect_inside_effect(&mut ctx.type_parser, sf);
     for m in matches {
-        if !m.is_nested_scope {
+        if !m.is_nested_scope || m.is_platform_run_main {
             continue;
         }
         if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
             continue;
         }
 
-        let gen_fn = m.generator_function;
+        let gen_fn = m.generator_function.unwrap();
         let block_node = gen_fn.body().unwrap();
         let block = block_node.as_block();
 
@@ -126,13 +126,8 @@ fn run_run_effect_inside_effect_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
 
                 let runtime_module_identifier =
                     ets_typeparser::find_module_reference(sf, "Runtime");
-                let callee_token_pos = scanner::get_token_pos_of_node(m.callee_node, sf, false);
-                let first_arg_pos = m.call_node.as_call_expression().arguments().nodes()[0]
-                    .pos()
-                    .expect_source("a parsed call argument");
-                tracker.delete_range(sf, TextRange::new(callee_token_pos, first_arg_pos));
-
-                let replacement_text = run_effect_inside_effect_replacement_text(
+                let replacement = run_effect_inside_effect_replacement(
+                    tracker,
                     supported_effect,
                     &effect_module_identifier,
                     &runtime_module_identifier,
@@ -140,10 +135,10 @@ fn run_run_effect_inside_effect_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
                     &runtime_identifier,
                     &services_identifier,
                 );
-                tracker.insert_text(
-                    sf,
-                    ctx_ref.byte_pos_to_lsp_position(first_arg_pos),
-                    &replacement_text,
+                tracker.replace_piping_flow_transformation(
+                    Some(sf),
+                    Some(&m.transformation),
+                    replacement,
                 );
             }),
         }) {
@@ -155,7 +150,7 @@ fn run_run_effect_inside_effect_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
     Vec::new()
 }
 
-// go: internal/fixables/run_effect_inside_effect.go:122 runEffectInsideEffectFixDescription d8ecd72356c650f0
+// go: internal/fixables/run_effect_inside_effect.go:116 runEffectInsideEffectFixDescription d8ecd72356c650f0
 pub(crate) fn run_effect_inside_effect_fix_description(
     supported_effect: EffectMajorVersion,
 ) -> &'static str {
@@ -165,22 +160,42 @@ pub(crate) fn run_effect_inside_effect_fix_description(
     "Use a runtime to run the Effect"
 }
 
-// go: internal/fixables/run_effect_inside_effect.go:129 runEffectInsideEffectReplacementText 5c9fdfae68171564
-pub(crate) fn run_effect_inside_effect_replacement_text(
+// go: internal/fixables/run_effect_inside_effect.go:125 runEffectInsideEffectReplacement e8605adad71e5f55
+// runEffectInsideEffectReplacement builds the curried runner that replaces the step,
+// such as Effect.runForkWith(effectContext) or Runtime.runFork(effectRuntime).
+pub(crate) fn run_effect_inside_effect_replacement(
+    tracker: &Tracker,
     supported_effect: EffectMajorVersion,
     effect_module_identifier: &ModuleReference,
     runtime_module_identifier: &ModuleReference,
     method_name: &str,
     runtime_identifier: &str,
     services_identifier: &str,
-) -> String {
+) -> PipingFlowTransformationReplacement {
     if supported_effect == EffectMajorVersion::V4 {
-        return format!("{effect_module_identifier}.{method_name}With({services_identifier})(");
+        let with_name = format!("{method_name}With");
+        return PipingFlowTransformationReplacement {
+            callee: Some(
+                tracker.new_property_access_path(&effect_module_identifier.append(&[&with_name])),
+            ),
+            type_arguments: None,
+            arguments: Some(
+                tracker.new_node_list(vec![tracker.new_identifier(alloc_str(services_identifier))]),
+            ),
+        };
     }
-    format!("{runtime_module_identifier}.{method_name}({runtime_identifier}, ")
+    PipingFlowTransformationReplacement {
+        callee: Some(
+            tracker.new_property_access_path(&runtime_module_identifier.append(&[method_name])),
+        ),
+        type_arguments: None,
+        arguments: Some(
+            tracker.new_node_list(vec![tracker.new_identifier(alloc_str(runtime_identifier))]),
+        ),
+    }
 }
 
-// go: internal/fixables/run_effect_inside_effect.go:143 insertYieldedEffectModuleCall 49b9117f1fa0900e
+// go: internal/fixables/run_effect_inside_effect.go:146 insertYieldedEffectModuleCall 49b9117f1fa0900e
 //
 // Rust: `block` is the block node (Go: its `*ast.Block`).
 pub(crate) fn insert_yielded_effect_module_call(

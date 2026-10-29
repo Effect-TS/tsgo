@@ -374,10 +374,11 @@ impl Tracker {
         }
     }
 
-    // go: internal/rewriter/piping_flow.go:287 Tracker.ReplacePipingFlowTransformation 8f3a34a889e2f637
+    // go: internal/rewriter/piping_flow.go:288 Tracker.ReplacePipingFlowTransformation 5e90f24f36b631e5
     // ReplacePipingFlowTransformation replaces a transformation while preserving
     // how its input is applied in source: as a pipe argument, a data-first or
-    // data-last argument, or a unary/curried application.
+    // data-last argument, or a unary/curried application. A call with optional
+    // arguments keeps them after the input.
     //
     // Rust: Go's `AsCallExpression` panics on another kind, as tsrs's does; tsrs's call arguments are never nil.
     pub fn replace_piping_flow_transformation(
@@ -472,12 +473,33 @@ impl Tracker {
                 true
             }
 
-            // Go: the switch has no case for the other kinds, which return false.
-            TransformationKind::CallWithOptionals => false,
+            TransformationKind::CallWithOptionals => {
+                let call = transformation_node.as_call_expression();
+                if call.arguments().nodes().len() < 2 {
+                    return false;
+                }
+                let operator = self.piping_flow_operator(replacement);
+                let f = &self.tracker.node_factory;
+                let replacement_node = f.new_call_expression(
+                    operator,
+                    None,
+                    None,
+                    clone_node_list(f, Some(call.arguments())).unwrap(),
+                    NodeFlags::None,
+                );
+                ast::set_parent_in_children(replacement_node);
+                self.replace_node(
+                    source_file,
+                    Some(transformation_node),
+                    Some(replacement_node),
+                    None,
+                );
+                true
+            }
         }
     }
 
-    // go: internal/rewriter/piping_flow.go:358 Tracker.pipingFlowOperator 0acac1ed78187157
+    // go: internal/rewriter/piping_flow.go:375 Tracker.pipingFlowOperator 0acac1ed78187157
     pub(crate) fn piping_flow_operator(
         &self,
         replacement: PipingFlowTransformationReplacement,
@@ -486,7 +508,7 @@ impl Tracker {
     }
 }
 
-// go: internal/rewriter/piping_flow.go:358 Tracker.pipingFlowOperator 0acac1ed78187157
+// go: internal/rewriter/piping_flow.go:375 Tracker.pipingFlowOperator 0acac1ed78187157
 // Rust: the body over the tracker's factory, so that the visitor of `collapse_piping_flow_transformations` (a
 // `'static` closure, which cannot borrow the tracker) can call it. Callers check that the callee is set, as Go's
 // do. tsrs's call expressions always have an argument list: Go's nil `Arguments` next to type arguments is an
@@ -508,7 +530,7 @@ pub(crate) fn piping_flow_operator(
     )
 }
 
-// go: internal/rewriter/piping_flow.go:371 cloneNodeListNodes 795bf81e125deeb7
+// go: internal/rewriter/piping_flow.go:388 cloneNodeListNodes 795bf81e125deeb7
 // Rust: takes the tracker's factory (Go: the tracker, for its embedded factory); nil and empty are one `Vec`.
 pub(crate) fn clone_node_list_nodes(f: &NodeFactory, list: Option<P<NodeList>>) -> Vec<P<Node>> {
     let Some(list) = list else {
@@ -517,7 +539,7 @@ pub(crate) fn clone_node_list_nodes(f: &NodeFactory, list: Option<P<NodeList>>) 
     list.nodes().iter().map(|&node| f.deep_clone_node(Some(node)).unwrap()).collect()
 }
 
-// go: internal/rewriter/piping_flow.go:382 cloneNodeListNodesFrom 5397691c927fff14
+// go: internal/rewriter/piping_flow.go:399 cloneNodeListNodesFrom 5397691c927fff14
 pub(crate) fn clone_node_list_nodes_from(
     f: &NodeFactory,
     list: Option<P<NodeList>>,
@@ -535,14 +557,14 @@ pub(crate) fn clone_node_list_nodes_from(
         .collect()
 }
 
-// go: internal/rewriter/piping_flow.go:393 cloneNodeList a65c5a709c756d5b
+// go: internal/rewriter/piping_flow.go:410 cloneNodeList a65c5a709c756d5b
 pub(crate) fn clone_node_list(f: &NodeFactory, list: Option<P<NodeList>>) -> Option<P<NodeList>> {
     let list = list?;
     Some(f.new_node_list(clone_node_list_nodes(f, Some(list))))
 }
 
 impl Tracker {
-    // go: internal/rewriter/piping_flow.go:403 Tracker.CollapsePipingFlowTransformations ccedb96f40529b25
+    // go: internal/rewriter/piping_flow.go:420 Tracker.CollapsePipingFlowTransformations ccedb96f40529b25
     // CollapsePipingFlowTransformations replaces an inclusive range of adjacent
     // steps with one operator at the last step. Nested applications are rewritten
     // together so removing an input step cannot overlap the replacement edit.
@@ -682,7 +704,7 @@ impl Tracker {
     }
 }
 
-// go: internal/rewriter/piping_flow.go:488 isPipingFlowArgument e95d8061c1653ef2
+// go: internal/rewriter/piping_flow.go:505 isPipingFlowArgument e95d8061c1653ef2
 pub(crate) fn is_piping_flow_argument(kind: TransformationKind) -> bool {
     matches!(
         kind,
@@ -693,7 +715,7 @@ pub(crate) fn is_piping_flow_argument(kind: TransformationKind) -> bool {
     )
 }
 
-// go: internal/rewriter/piping_flow.go:496 nodeWithin baedec3b3d887301
+// go: internal/rewriter/piping_flow.go:513 nodeWithin baedec3b3d887301
 pub(crate) fn node_within(node: Option<P<Node>>, ancestor: P<Node>) -> bool {
     let mut node = node;
     while let Some(n) = node {

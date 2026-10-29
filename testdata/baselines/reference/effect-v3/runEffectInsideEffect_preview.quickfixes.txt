@@ -24,7 +24,7 @@ import { Effect } from "effect"
 export const preview = Effect.gen(function*() {
 const effectRuntime = yield* Effect.runtime<never>();
 
-  const run = () => Runtime.runSync(effectRuntime, Effect.succeed(1))
+  const run = () => Runtime.runSync(effectRuntime)(Effect.succeed(1))
   return run()
 })
 

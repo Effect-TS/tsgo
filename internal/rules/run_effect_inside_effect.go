@@ -27,6 +27,7 @@ var RunEffectInsideEffect = rule.Rule{
 		tsdiag.X_0_is_called_inside_an_existing_Effect_context_Here_the_inner_Effect_can_be_used_directly_effect_runEffectInsideEffect.Code(),
 		tsdiag.X_0_is_called_inside_an_Effect_with_a_separate_runtime_invocation_In_this_context_run_child_Effects_with_the_surrounding_runtime_which_can_be_accessed_through_Effect_runtime_and_Runtime_1_effect_runEffectInsideEffect.Code(),
 		tsdiag.X_0_is_called_inside_an_Effect_with_a_separate_services_invocation_In_this_context_child_Effects_run_with_the_surrounding_services_which_can_be_accessed_through_Effect_context_and_Effect_1_With_effect_runEffectInsideEffect.Code(),
+		tsdiag.X_0_is_called_inside_an_existing_Effect_context_and_starts_a_separate_root_runtime_that_the_surrounding_Effect_does_not_own_Return_the_Effect_instead_and_call_0_once_at_the_application_entry_point_effect_runEffectInsideEffect.Code(),
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		supportedEffect := ctx.TypeParser.SupportedEffectVersion()
@@ -35,7 +36,9 @@ var RunEffectInsideEffect = rule.Rule{
 		diags := make([]*ast.Diagnostic, 0, len(matches))
 		for _, m := range matches {
 			calleeText := scanner.GetSourceTextOfNodeFromSourceFile(m.SourceFile, m.CalleeNode, false)
-			if m.IsNestedScope {
+			if m.IsPlatformRunMain {
+				diags = append(diags, ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.X_0_is_called_inside_an_existing_Effect_context_and_starts_a_separate_root_runtime_that_the_surrounding_Effect_does_not_own_Return_the_Effect_instead_and_call_0_once_at_the_application_entry_point_effect_runEffectInsideEffect, nil, calleeText))
+			} else if m.IsNestedScope {
 				if supportedEffect == typeparser.EffectMajorV4 {
 					diags = append(diags, ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.X_0_is_called_inside_an_Effect_with_a_separate_services_invocation_In_this_context_child_Effects_run_with_the_surrounding_services_which_can_be_accessed_through_Effect_context_and_Effect_1_With_effect_runEffectInsideEffect, nil, calleeText, m.MethodName))
 				} else {
@@ -52,59 +55,71 @@ var RunEffectInsideEffect = rule.Rule{
 // RunEffectInsideEffectMatch holds the diagnostic and AST nodes needed by both the
 // diagnostic rule and the quick-fix for the runEffectInsideEffect pattern.
 type RunEffectInsideEffectMatch struct {
-	SourceFile        *ast.SourceFile         // The source file where this match was found
-	Location          core.TextRange          // Pre-computed error range (on the callee expression)
-	CallNode          *ast.Node               // The full call expression node (e.g., Effect.runPromise(check))
-	CalleeNode        *ast.Node               // The callee expression (e.g., Effect.runPromise)
-	MethodName        string                  // The matched run API name (e.g., "runPromise")
-	IsNestedScope     bool                    // True when call is in a nested scope rather than direct generator scope
-	GeneratorFunction *ast.FunctionExpression // The enclosing Effect generator function
+	SourceFile        *ast.SourceFile                      // The source file where this match was found
+	Location          core.TextRange                       // Pre-computed error range (on the callee expression)
+	CalleeNode        *ast.Node                            // The callee expression (e.g., Effect.runPromise)
+	Transformation    *typeparser.PipingFlowTransformation // The piping flow step that runs the Effect
+	MethodName        string                               // The matched run API name (e.g., "runPromise")
+	IsPlatformRunMain bool                                 // True for NodeRuntime.runMain and the other platform runMain APIs
+	IsNestedScope     bool                                 // True when call is in a nested scope rather than direct generator scope
+	GeneratorFunction *ast.FunctionExpression              // The enclosing Effect generator function, nil for a platform runMain
 }
 
-// AnalyzeRunEffectInsideEffect finds all Effect.run* calls inside Effect generators,
-// returning matches with structured data for both diagnostics and quick-fixes.
+// AnalyzeRunEffectInsideEffect finds all Effect.run* and platform runMain steps of the piping flows
+// that run inside an Effect, returning matches with structured data for both diagnostics and quick-fixes.
 func AnalyzeRunEffectInsideEffect(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []RunEffectInsideEffectMatch {
 	var matches []RunEffectInsideEffectMatch
-
-	var walk ast.Visitor
-	walk = func(n *ast.Node) bool {
-		if n == nil {
-			return false
-		}
-
-		if n.Kind == ast.KindCallExpression {
-			if m, ok := analyzeRunEffectInsideEffectNode(tp, c, sf, n); ok {
-				matches = append(matches, m)
+	for _, flow := range tp.PipingFlows(sf, true).All() {
+		var flowContext *runEffectInsideEffectFlowContext
+		for _, transformation := range flow.Transformations().All() {
+			callee := transformation.Callee()
+			if callee == nil {
+				continue
 			}
+			isPlatformRunMain := tp.IsNodeReferenceToPlatformRuntimeApi(callee, "runMain")
+			methodName := "runMain"
+			if !isPlatformRunMain {
+				methodName = matchRunEffectApi(tp, c, callee)
+				if methodName == "" {
+					continue
+				}
+			}
+
+			if flowContext == nil {
+				flowContext = resolveRunEffectInsideEffectFlowContext(tp, flow.Node())
+			}
+			if isPlatformRunMain && !flowContext.inEffect || !isPlatformRunMain && flowContext.generatorFunction == nil {
+				continue
+			}
+
+			m := RunEffectInsideEffectMatch{
+				SourceFile:        sf,
+				Location:          scanner.GetErrorRangeForNode(sf, callee),
+				CalleeNode:        callee,
+				Transformation:    &transformation,
+				MethodName:        methodName,
+				IsPlatformRunMain: isPlatformRunMain,
+			}
+			if !isPlatformRunMain {
+				m.IsNestedScope = flowContext.isNestedScope
+				m.GeneratorFunction = flowContext.generatorFunction
+			}
+			matches = append(matches, m)
 		}
-
-		n.ForEachChild(walk)
-		return false
 	}
-
-	walk(sf.AsNode())
 	return matches
 }
 
-// analyzeRunEffectInsideEffectNode checks a single call expression for Effect.run* inside an Effect generator.
-func analyzeRunEffectInsideEffectNode(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, node *ast.Node) (RunEffectInsideEffectMatch, bool) {
-	if node.Kind != ast.KindCallExpression {
-		return RunEffectInsideEffectMatch{}, false
-	}
-	call := node.AsCallExpression()
+// runEffectInsideEffectFlowContext is the Effect context of a piping flow, shared by all its steps.
+type runEffectInsideEffectFlowContext struct {
+	inEffect          bool                    // True when the flow runs inside an Effect, such as an Effect.sync thunk
+	generatorFunction *ast.FunctionExpression // The enclosing Effect generator function with at least one statement, or nil
+	isNestedScope     bool                    // True when the flow is in a nested scope rather than direct generator scope
+}
 
-	// Must have at least one argument (matching the TS reference: node.arguments.length === 0 => continue)
-	if call.Arguments == nil || len(call.Arguments.Nodes) == 0 {
-		return RunEffectInsideEffectMatch{}, false
-	}
-
-	callee := call.Expression
-
-	// Check if the callee is one of the Effect.run* APIs
-	methodName := matchRunEffectApi(tp, c, callee)
-	if methodName == "" {
-		return RunEffectInsideEffectMatch{}, false
-	}
+// resolveRunEffectInsideEffectFlowContext resolves the Effect context of the flow rooted at node.
+func resolveRunEffectInsideEffectFlowContext(tp *typeparser.TypeParser, node *ast.Node) *runEffectInsideEffectFlowContext {
+	flowContext := &runEffectInsideEffectFlowContext{inEffect: isInsideEffectContext(tp, node)}
 
 	genFn := tp.GetEffectYieldGeneratorFunction(node)
 	if genFn == nil {
@@ -117,30 +132,17 @@ func analyzeRunEffectInsideEffectNode(tp *typeparser.TypeParser, c *checker.Chec
 			}
 		}
 	}
-	if genFn == nil {
-		return RunEffectInsideEffectMatch{}, false
-	}
-
-	// Check that the generator body has at least one statement
-	if genFn.Body == nil || genFn.Body.Kind != ast.KindBlock {
-		return RunEffectInsideEffectMatch{}, false
+	if genFn == nil || genFn.Body == nil || genFn.Body.Kind != ast.KindBlock {
+		return flowContext
 	}
 	block := genFn.Body.AsBlock()
 	if block.Statements == nil || len(block.Statements.Nodes) == 0 {
-		return RunEffectInsideEffectMatch{}, false
+		return flowContext
 	}
 
-	isNestedScope := ast.GetContainingFunction(node) != genFn.AsNode()
-
-	return RunEffectInsideEffectMatch{
-		SourceFile:        sf,
-		Location:          scanner.GetErrorRangeForNode(sf, callee),
-		CallNode:          node,
-		CalleeNode:        callee,
-		MethodName:        methodName,
-		IsNestedScope:     isNestedScope,
-		GeneratorFunction: genFn,
-	}, true
+	flowContext.generatorFunction = genFn
+	flowContext.isNestedScope = ast.GetContainingFunction(node) != genFn.AsNode()
+	return flowContext
 }
 
 // matchRunEffectApi checks if the node references one of the Effect.run* APIs and returns the method name.
@@ -152,4 +154,15 @@ func matchRunEffectApi(tp *typeparser.TypeParser, _ *checker.Checker, node *ast.
 		}
 	}
 	return ""
+}
+
+// isInsideEffectContext reports whether node or one of its ancestors runs inside an Effect,
+// such as an Effect.gen body or an Effect.sync thunk.
+func isInsideEffectContext(tp *typeparser.TypeParser, node *ast.Node) bool {
+	for current := node; current != nil; current = current.Parent {
+		if tp.GetEffectContextFlags(current) != typeparser.EffectContextFlagNone {
+			return true
+		}
+	}
+	return false
 }

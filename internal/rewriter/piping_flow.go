@@ -283,7 +283,8 @@ func (t *Tracker) RemoveTrailingPipingFlowTransformation(sf *ast.SourceFile, flo
 
 // ReplacePipingFlowTransformation replaces a transformation while preserving
 // how its input is applied in source: as a pipe argument, a data-first or
-// data-last argument, or a unary/curried application.
+// data-last argument, or a unary/curried application. A call with optional
+// arguments keeps them after the input.
 func (t *Tracker) ReplacePipingFlowTransformation(
 	sourceFile *ast.SourceFile,
 	transformation *typeparser.PipingFlowTransformation,
@@ -345,6 +346,22 @@ func (t *Tracker) ReplacePipingFlowTransformation(
 			nil,
 			nil,
 			t.NewNodeList([]*ast.Node{t.DeepCloneNode(call.Arguments.Nodes[0])}),
+			ast.NodeFlagsNone,
+		)
+		ast.SetParentInChildren(replacementNode)
+		t.ReplaceNode(sourceFile, transformationNode, replacementNode, nil)
+		return true
+
+	case typeparser.TransformationKindCallWithOptionals:
+		call := transformationNode.AsCallExpression()
+		if call == nil || call.Arguments == nil || len(call.Arguments.Nodes) < 2 {
+			return false
+		}
+		replacementNode := t.NewCallExpression(
+			t.pipingFlowOperator(replacement),
+			nil,
+			nil,
+			cloneNodeList(t, call.Arguments),
 			ast.NodeFlagsNone,
 		)
 		ast.SetParentInChildren(replacementNode)
