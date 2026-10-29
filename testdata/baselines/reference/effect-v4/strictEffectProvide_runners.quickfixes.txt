@@ -1,0 +1,83 @@
+=== Quick Fix Inventory ===
+
+[D1] (29:37-29:61) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+[D2] (30:18-30:51) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+[D3] (34:32-34:56) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+[D4] (35:14-35:38) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+[D5] (38:43-38:76) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+[D6] (39:43-39:76) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+[D7] (43:38-43:62) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+[D8] (44:47-44:80) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default

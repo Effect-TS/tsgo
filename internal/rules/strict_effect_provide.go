@@ -8,8 +8,8 @@ import (
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 )
 
-// StrictEffectProvide warns when Effect.provide is called with a Layer argument.
-// This rule is disabled by default.
+// StrictEffectProvide warns when Effect.provide is called with a Layer argument,
+// unless the next step of the flow runs the Effect. This rule is disabled by default.
 var StrictEffectProvide = rule.Rule{
 	Name:            "strictEffectProvide",
 	Group:           "antipattern",
@@ -20,8 +20,13 @@ var StrictEffectProvide = rule.Rule{
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
 		for _, flow := range ctx.TypeParser.PipingFlows(ctx.SourceFile, true).All() {
-			for _, transformation := range flow.Transformations().All() {
+			transformations := flow.Transformations()
+			for index, transformation := range transformations.All() {
 				if !isEffectProvideWithLayer(ctx, transformation) {
+					continue
+				}
+				// Providing layers right before running the Effect is what an entry point does
+				if index+1 < transformations.Len() && isEntryPointRunner(ctx.TypeParser, transformations.At(index+1).Callee()) {
 					continue
 				}
 				if node := transformationApplicationNode(&transformation); node != nil {
@@ -48,4 +53,17 @@ func isEffectProvideWithLayer(ctx *rule.Context, transformation typeparser.Pipin
 		}
 	}
 	return false
+}
+
+// entryPointRunnerApis lists the Effect module APIs that run an Effect at an entry point.
+var entryPointRunnerApis = []string{"runPromise", "runSync", "runFork", "runPromiseExit", "runSyncExit", "runCallback"}
+
+// isEntryPointRunner reports whether node references an Effect.run* API or a platform runMain.
+func isEntryPointRunner(tp *typeparser.TypeParser, node *ast.Node) bool {
+	for _, name := range entryPointRunnerApis {
+		if tp.IsNodeReferenceToEffectModuleApi(node, name) {
+			return true
+		}
+	}
+	return tp.IsNodeReferenceToPlatformRuntimeApi(node, "runMain")
 }

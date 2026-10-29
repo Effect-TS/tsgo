@@ -132,6 +132,7 @@ mod piping_flow_input_type_test;
 mod piping_flow_sequence_test;
 #[cfg(test)]
 mod piping_flow_shape_test;
+mod platform_runtime_api;
 mod predicate_type;
 #[cfg(test)]
 mod predicate_type_test;

@@ -29,7 +29,7 @@ export const aliased = program.pipe(provideIt(MyService1.Default))
 // Should report once: nested chained pipes
 export const chained = program.pipe(Effect.asVoid).pipe(Effect.provide(MyService1.Default))
 
-// Should report: provide inside a runner call (no entry point exception)
+// Should NOT report: the provided Effect goes straight into a runner
 export const runner = (signal: AbortSignal) =>
   Effect.runPromise(program.pipe(Effect.provide(MyService1.Default)), { signal })
 

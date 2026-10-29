@@ -36,6 +36,9 @@ const (
 	moduleDescriptorEffectVitest
 	moduleDescriptorFunction
 	moduleDescriptorMetric
+	moduleDescriptorPlatformNode
+	moduleDescriptorPlatformBun
+	moduleDescriptorPlatformBrowser
 	moduleDescriptorCount
 )
 
