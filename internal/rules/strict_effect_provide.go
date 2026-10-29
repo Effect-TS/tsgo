@@ -3,6 +3,7 @@ package rules
 import (
 	"github.com/effect-ts/tsgo/etscore"
 	"github.com/effect-ts/tsgo/internal/rule"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	tsdiag "github.com/microsoft/TypeScript/tsc/shim/diagnostics"
 )
@@ -18,63 +19,33 @@ var StrictEffectProvide = rule.Rule{
 	Codes:           []int32{tsdiag.Effect_provide_with_a_Layer_should_only_be_used_at_application_entry_points_If_this_is_an_entry_point_you_can_safely_disable_this_diagnostic_Otherwise_using_Effect_provide_may_break_scope_lifetimes_Compose_all_layers_at_your_entry_point_and_provide_them_at_once_effect_strictEffectProvide.Code()},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		var diags []*ast.Diagnostic
-
-		// Stack-based traversal
-		nodeToVisit := make([]*ast.Node, 0)
-		pushChild := func(child *ast.Node) bool {
-			nodeToVisit = append(nodeToVisit, child)
-			return false
-		}
-		ctx.SourceFile.AsNode().ForEachChild(pushChild)
-
-		for len(nodeToVisit) > 0 {
-			node := nodeToVisit[len(nodeToVisit)-1]
-			nodeToVisit = nodeToVisit[:len(nodeToVisit)-1]
-
-			if node.Kind == ast.KindCallExpression {
-				if diag := checkEffectProvideWithLayer(ctx, node); diag != nil {
-					diags = append(diags, diag)
+		for _, flow := range ctx.TypeParser.PipingFlows(ctx.SourceFile, true).All() {
+			for _, transformation := range flow.Transformations().All() {
+				if !isEffectProvideWithLayer(ctx, transformation) {
+					continue
+				}
+				if node := transformationApplicationNode(&transformation); node != nil {
+					diags = append(diags, ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(node), tsdiag.Effect_provide_with_a_Layer_should_only_be_used_at_application_entry_points_If_this_is_an_entry_point_you_can_safely_disable_this_diagnostic_Otherwise_using_Effect_provide_may_break_scope_lifetimes_Compose_all_layers_at_your_entry_point_and_provide_them_at_once_effect_strictEffectProvide, nil))
 				}
 			}
-
-			// Enqueue children
-			node.ForEachChild(pushChild)
 		}
-
 		return diags
 	},
 }
 
-// checkEffectProvideWithLayer checks if a call expression is Effect.provide(...) with a Layer argument.
-func checkEffectProvideWithLayer(ctx *rule.Context, node *ast.Node) *ast.Diagnostic {
-	if node.Kind != ast.KindCallExpression {
-		return nil
+// isEffectProvideWithLayer checks if a transformation is Effect.provide(...) with a Layer argument.
+func isEffectProvideWithLayer(ctx *rule.Context, transformation typeparser.PipingFlowTransformation) bool {
+	if transformation.Args().Len() == 0 || !ctx.TypeParser.IsNodeReferenceToEffectModuleApi(transformation.Callee(), "provide") {
+		return false
 	}
-	call := node.AsCallExpression()
-	args := call.Arguments
-	if args == nil || len(args.Nodes) == 0 {
-		return nil
-	}
-
-	// Check if the expression references Effect.provide
-	if !ctx.TypeParser.IsNodeReferenceToEffectModuleApi(call.Expression, "provide") {
-		return nil
-	}
-
-	// Check if any argument is a Layer type
-	for _, arg := range args.Nodes {
+	for _, arg := range transformation.Args().All() {
 		if ctx.TypeParser.NodeCannotBeEffectLibraryType(arg) {
 			continue
 		}
 		argType := ctx.TypeParser.GetTypeAtLocation(arg)
-		if argType == nil {
-			continue
-		}
-		if ctx.TypeParser.LayerType(argType) != nil {
-			// Found a Layer argument — emit diagnostic on the call expression
-			return ctx.NewDiagnostic(ctx.SourceFile, ctx.GetErrorRange(node), tsdiag.Effect_provide_with_a_Layer_should_only_be_used_at_application_entry_points_If_this_is_an_entry_point_you_can_safely_disable_this_diagnostic_Otherwise_using_Effect_provide_may_break_scope_lifetimes_Compose_all_layers_at_your_entry_point_and_provide_them_at_once_effect_strictEffectProvide, nil)
+		if argType != nil && ctx.TypeParser.LayerType(argType) != nil {
+			return true
 		}
 	}
-
-	return nil
+	return false
 }

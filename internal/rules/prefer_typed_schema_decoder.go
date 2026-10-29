@@ -66,48 +66,17 @@ func AnalyzePreferTypedSchemaDecoder(tp *typeparser.TypeParser, c *checker.Check
 	}
 
 	var matches []PreferTypedSchemaDecoderMatch
-	handledDecoderNames := make(map[*ast.Node]struct{})
-
 	for _, flow := range tp.PipingFlows(sf, false).All() {
 		for i, transformation := range flow.Transformations().All() {
 			callee, schema := schemaDecoderTransformation(transformation)
 			if callee == nil || schema == nil {
 				continue
 			}
-			var inputNode *ast.Node
-			if i == 0 {
-				inputNode = flow.Subject().Node()
-			}
-			if match := analyzeTypedSchemaDecoderApplication(tp, c, sf, callee, schema, inputNode, flow.TransformationInputType(i)); match != nil {
+			if match := analyzeTypedSchemaDecoderApplication(tp, c, sf, callee, schema, flow.TransformationInputNode(i), flow.TransformationInputType(i)); match != nil {
 				matches = append(matches, *match)
-				handledDecoderNames[match.DecoderName] = struct{}{}
 			}
 		}
 	}
-
-	var walk ast.Visitor
-	walk = func(node *ast.Node) bool {
-		if node == nil {
-			return false
-		}
-		if node.Kind == ast.KindCallExpression {
-			call := node.AsCallExpression()
-			if call.Arguments != nil && len(call.Arguments.Nodes) > 0 && call.Expression != nil && call.Expression.Kind == ast.KindCallExpression {
-				factory := call.Expression.AsCallExpression()
-				if factory.Arguments != nil && len(factory.Arguments.Nodes) > 0 {
-					if match := analyzeTypedSchemaDecoderApplication(tp, c, sf, factory.Expression, factory.Arguments.Nodes[0], call.Arguments.Nodes[0], nil); match != nil {
-						if _, handled := handledDecoderNames[match.DecoderName]; !handled {
-							matches = append(matches, *match)
-							handledDecoderNames[match.DecoderName] = struct{}{}
-						}
-					}
-				}
-			}
-		}
-		node.ForEachChild(walk)
-		return false
-	}
-	walk(sf.AsNode())
 	sort.Slice(matches, func(i, j int) bool {
 		return matches[i].Location.Pos() < matches[j].Location.Pos()
 	})
@@ -115,11 +84,32 @@ func AnalyzePreferTypedSchemaDecoder(tp *typeparser.TypeParser, c *checker.Check
 	return matches
 }
 
+// schemaDecoderTransformation returns the decoder callee and the schema it was
+// built from: the first pipeable argument, or the first argument of a decoder
+// factory applied directly as in Schema.decodeUnknownSync(Person)(input).
 func schemaDecoderTransformation(transformation typeparser.PipingFlowTransformation) (callee *ast.Node, schema *ast.Node) {
-	if transformation.Callee() == nil || transformation.Args().Len() == 0 {
+	if transformation.Callee() == nil {
 		return nil, nil
 	}
-	return transformation.Callee(), transformation.Args().At(0)
+	switch transformation.Kind() {
+	case typeparser.TransformationKindPipe, typeparser.TransformationKindPipeable,
+		typeparser.TransformationKindDataFirst, typeparser.TransformationKindDataLast:
+		if transformation.Args().Len() > 0 {
+			return transformation.Callee(), transformation.Args().At(0)
+		}
+	case typeparser.TransformationKindCall, typeparser.TransformationKindCallWithOptionals:
+		// Decomposed curried pipeables expose their factory arguments as args.
+		if transformation.Kind() == typeparser.TransformationKindCall && transformation.Args().Len() > 0 {
+			return transformation.Callee(), transformation.Args().At(0)
+		}
+		if transformation.Callee().Kind == ast.KindCallExpression {
+			factory := transformation.Callee().AsCallExpression()
+			if factory.Expression != nil && factory.Arguments != nil && len(factory.Arguments.Nodes) > 0 {
+				return factory.Expression, factory.Arguments.Nodes[0]
+			}
+		}
+	}
+	return nil, nil
 }
 
 func analyzeTypedSchemaDecoderApplication(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile, callee, schema, inputNode *ast.Node, inputType *checker.Type) *PreferTypedSchemaDecoderMatch {

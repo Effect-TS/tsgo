@@ -59,7 +59,7 @@ fn run_missed_pipeable_opportunity_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAct
     Vec::new()
 }
 
-// go: internal/fixables/missed_pipeable_opportunity.go:59 buildMissedPipeableReplacement 937637545a6821fd
+// go: internal/fixables/missed_pipeable_opportunity.go:59 buildMissedPipeableReplacement a5c287105552e96c
 // buildMissedPipeableReplacement builds the .pipe() replacement and applies it via tracker.ReplaceNode.
 fn build_missed_pipeable_replacement(
     tracker: &mut Tracker,
@@ -68,18 +68,12 @@ fn build_missed_pipeable_replacement(
 ) {
     let flow = &m.flow;
 
-    // Build the subject node for the pipe call
-    let subject_node;
-    if m.pipeable_start_index == 0 {
-        subject_node = tracker.deep_clone_node(flow.subject().node());
-    } else {
-        // Need to find the original subject node at the right depth in the AST
-        subject_node = find_subject_node_at_depth(tracker, flow, m.pipeable_start_index);
-        if subject_node.is_none() {
-            return;
-        }
-    }
-    let subject_node = subject_node.unwrap();
+    let Some(subject_input) =
+        PipingFlow::transformation_input_node(Some(flow), m.pipeable_start_index)
+    else {
+        return;
+    };
+    let subject_node = tracker.deep_clone_node(Some(subject_input)).unwrap();
 
     // Build pipe arguments from transformations
     let mut pipe_args = Vec::with_capacity(m.pipeable_transformations.len());
@@ -129,41 +123,13 @@ fn build_missed_pipeable_replacement(
     };
 
     ast::set_parent_in_children(replacement_node);
-    tracker.replace_node(sf, Some(flow.node()), Some(replacement_node), None);
+    tracker.replace_node(sf, Some(m.node), Some(replacement_node), None);
 }
 
-// go: internal/fixables/missed_pipeable_opportunity.go:111 findSubjectNodeAtDepth 60e973de598c3cb7
-// findSubjectNodeAtDepth traverses the flow node into arguments to find the subject at the right depth,
-// then deep-clones it.
-//
-// Rust: tsrs's call arguments are never nil, so Go's nil check is the empty check.
-fn find_subject_node_at_depth(
-    tracker: &Tracker,
-    flow: &PipingFlow,
-    first_pipeable_index: i64,
-) -> Option<P<Node>> {
-    let mut current = flow.node();
-    let mut i = flow.transformations().len();
-    while i > first_pipeable_index {
-        let t = flow.transformations().at(i - 1);
-        if t.kind() == TransformationKind::Call && ast::is_call_expression(current) {
-            let call = current.as_call_expression();
-            if !call.arguments().nodes().is_empty() {
-                current = call.arguments().nodes()[0];
-            } else {
-                return None;
-            }
-        } else {
-            return None;
-        }
-        i -= 1;
-    }
-    tracker.deep_clone_node(Some(current))
-}
-
-// go: internal/fixables/missed_pipeable_opportunity.go:133 wrapWithAfterTransformations 033b929e9ae297c5
+// go: internal/fixables/missed_pipeable_opportunity.go:108 wrapWithAfterTransformations 8209e8af6acc01ea
 // wrapWithAfterTransformations wraps an inner node with the "after" transformations.
 // For "call" kind: callee(innerNode)
+// For "callWithOptionals" kind: callee(innerNode, args...)
 // For "pipe"/"pipeable" kind with args: callee(args...)(innerNode) (curried)
 // For "pipe"/"pipeable" kind without args: callee(innerNode)
 fn wrap_with_after_transformations(
@@ -181,46 +147,62 @@ fn wrap_with_after_transformations(
 
         let cloned_callee = tracker.deep_clone_node(Some(t.callee())).unwrap();
 
-        if t.kind() == TransformationKind::Call {
-            // Single-arg call: callee(result)
-            result = tracker.new_call_expression(
-                cloned_callee,
-                None,
-                None,
-                tracker.new_node_list(vec![result]),
-                NodeFlags::None,
-            );
-        } else {
-            // Pipe or pipeable transformation
-            if t.args().len() > 0 {
-                // Curried form: callee(args...)(result)
-                let mut cloned_args = Vec::with_capacity(t.args().len() as usize);
+        match t.kind() {
+            TransformationKind::Call => {
+                // Single-arg call: callee(result)
+                result = tracker.new_call_expression(
+                    cloned_callee,
+                    None,
+                    None,
+                    tracker.new_node_list(vec![result]),
+                    NodeFlags::None,
+                );
+            }
+            TransformationKind::CallWithOptionals => {
+                let mut call_args = vec![result];
                 for (_, &a) in t.args().all() {
-                    cloned_args.push(tracker.deep_clone_node(Some(a)).unwrap());
+                    call_args.push(tracker.deep_clone_node(Some(a)).unwrap());
                 }
-                let curried_call = tracker.new_call_expression(
-                    cloned_callee,
-                    None,
-                    None,
-                    tracker.new_node_list(cloned_args),
-                    NodeFlags::None,
-                );
-                result = tracker.new_call_expression(
-                    curried_call,
-                    None,
-                    None,
-                    tracker.new_node_list(vec![result]),
-                    NodeFlags::None,
-                );
-            } else {
-                // Constant: callee(result)
                 result = tracker.new_call_expression(
                     cloned_callee,
                     None,
                     None,
-                    tracker.new_node_list(vec![result]),
+                    tracker.new_node_list(call_args),
                     NodeFlags::None,
                 );
+            }
+            _ => {
+                // Pipe or pipeable transformation
+                if t.args().len() > 0 {
+                    // Curried form: callee(args...)(result)
+                    let mut cloned_args = Vec::with_capacity(t.args().len() as usize);
+                    for (_, &a) in t.args().all() {
+                        cloned_args.push(tracker.deep_clone_node(Some(a)).unwrap());
+                    }
+                    let curried_call = tracker.new_call_expression(
+                        cloned_callee,
+                        None,
+                        None,
+                        tracker.new_node_list(cloned_args),
+                        NodeFlags::None,
+                    );
+                    result = tracker.new_call_expression(
+                        curried_call,
+                        None,
+                        None,
+                        tracker.new_node_list(vec![result]),
+                        NodeFlags::None,
+                    );
+                } else {
+                    // Constant: callee(result)
+                    result = tracker.new_call_expression(
+                        cloned_callee,
+                        None,
+                        None,
+                        tracker.new_node_list(vec![result]),
+                        NodeFlags::None,
+                    );
+                }
             }
         }
     }

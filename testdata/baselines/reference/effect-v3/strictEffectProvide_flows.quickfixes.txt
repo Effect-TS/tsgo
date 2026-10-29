@@ -1,0 +1,117 @@
+=== Quick Fix Inventory ===
+
+[D1] (16:24-16:58) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+[D2] (19:43-19:77) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+[D3] (24:4-24:38) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+[D4] (27:37-27:66) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+[D5] (30:24-30:92) TS377015: This expression contains chained `pipe` calls that can be simplified to a single `pipe` call. effect(unnecessaryPipeChain)
+  Fix 0: "Disable unnecessaryPipeChain for this line"
+  Fix 1: "Disable unnecessaryPipeChain for entire file"
+  Fix 2: "Rewrite as single pipe call"
+
+[D6] (30:57-30:91) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+[D7] (34:34-34:68) TS377032: Effect.provide with a Layer should only be used at application entry points. If this is an entry point, you can safely disable this diagnostic. Otherwise, using Effect.provide may break scope lifetimes. Compose all layers at your entry point and provide them at once. effect(strictEffectProvide)
+  Fix 0: "Disable strictEffectProvide for this line"
+  Fix 1: "Disable strictEffectProvide for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable unnecessaryPipeChain for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable unnecessaryPipeChain for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Rewrite as single pipe call" ===
+
+--- file:///.src/strictEffectProvide_flows.ts ---
+// @effect-v3
+// @effect-diagnostics strictEffectProvide:warning
+import * as Effect from "effect/Effect"
+import { provide as provideIt } from "effect/Effect"
+import { pipe } from "effect/Function"
+
+class MyService1 extends Effect.Service<MyService1>()("MyService1", {
+  succeed: { value: 1 }
+}) {}
+
+const program = Effect.gen(function*() {
+  return (yield* MyService1).value
+})
+
+// Should report: curried Effect.provide applied to the program
+export const curried = Effect.provide(MyService1.Default)(program)
+
+// Should report: pipe function from effect
+export const pipeFunction = pipe(program, Effect.provide(MyService1.Default))
+
+// Should report once: Effect.fn pipeline argument
+export const effectFn = Effect.fn(function*() {
+  return (yield* MyService1).value
+}, Effect.provide(MyService1.Default))
+
+// Should report: aliased import of Effect.provide
+export const aliased = program.pipe(provideIt(MyService1.Default))
+
+// Should report once: nested chained pipes
+export const chained = program.pipe(Effect.asVoid, Effect.provide(MyService1.Default))
+
+// Should report: provide inside a runner call (no entry point exception)
+export const runner = (signal: AbortSignal) =>
+  Effect.runPromise(program.pipe(Effect.provide(MyService1.Default)), { signal })
+
+// Should NOT report: standalone Effect.provide is not applied to an effect
+export const withLive = Effect.provide(MyService1.Default)
+export const appliedWithLive = program.pipe(withLive)
+
+
+=== [D6] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable strictEffectProvide for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable strictEffectProvide for entire file" ===
+skipped by default

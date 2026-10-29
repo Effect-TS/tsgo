@@ -10,7 +10,7 @@ use ets_shim::core::P;
 use crate::*;
 
 // go: internal/typeparser/piping_flow.go:14 TransformationKind 86f1e2de9ad6224c
-// go: internal/typeparser/piping_flow.go:16 TransformationKindPipe cd853bdc5982d1de
+// go: internal/typeparser/piping_flow.go:16 TransformationKindPipe 79479a81e5dc5134
 // TransformationKind represents how a transformation was expressed in source code.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub enum TransformationKind {
@@ -19,6 +19,10 @@ pub enum TransformationKind {
     DataFirst,
     DataLast,
     Call,
+    // TransformationKindCallWithOptionals is callee(subject, args...) where the
+    // callee has a single call signature whose only required parameter is the
+    // subject. Unlike dataFirst, it has no pipeable counterpart.
+    CallWithOptionals,
     EffectFn,
     EffectFnUntraced,
 }
@@ -33,13 +37,14 @@ impl TransformationKind {
             TransformationKind::DataFirst => "dataFirst",
             TransformationKind::DataLast => "dataLast",
             TransformationKind::Call => "call",
+            TransformationKind::CallWithOptionals => "callWithOptionals",
             TransformationKind::EffectFn => "effectFn",
             TransformationKind::EffectFnUntraced => "effectFnUntraced",
         }
     }
 }
 
-// go: internal/typeparser/piping_flow.go:27 PipingFlowTransformation 2f9c76c4d0d83efc
+// go: internal/typeparser/piping_flow.go:31 PipingFlowTransformation ca958bb3a57a41d9
 // PipingFlowTransformation represents a single transformation step in a piping flow.
 #[derive(Clone)]
 pub struct PipingFlowTransformation {
@@ -51,34 +56,34 @@ pub struct PipingFlowTransformation {
 }
 
 impl PipingFlowTransformation {
-    // go: internal/typeparser/piping_flow.go:35 PipingFlowTransformation.Kind 654f103dfd4c5533
+    // go: internal/typeparser/piping_flow.go:39 PipingFlowTransformation.Kind 654f103dfd4c5533
     pub fn kind(&self) -> TransformationKind {
         self.kind
     }
 
-    // go: internal/typeparser/piping_flow.go:37 PipingFlowTransformation.Callee aa04011c87df5430
+    // go: internal/typeparser/piping_flow.go:41 PipingFlowTransformation.Callee aa04011c87df5430
     pub fn callee(&self) -> P<Node> {
         self.callee
     }
 
-    // go: internal/typeparser/piping_flow.go:39 PipingFlowTransformation.TypeArguments b6c98c8896fa8a73
+    // go: internal/typeparser/piping_flow.go:43 PipingFlowTransformation.TypeArguments b6c98c8896fa8a73
     pub fn type_arguments(&self) -> Option<P<NodeList>> {
         self.type_arguments
     }
 
-    // go: internal/typeparser/piping_flow.go:41 PipingFlowTransformation.Args 82ed56773418ef8a
+    // go: internal/typeparser/piping_flow.go:45 PipingFlowTransformation.Args 82ed56773418ef8a
     pub fn args(&self) -> Slice<'_, P<Node>> {
         ets_readonly::new(self.args.as_deref())
     }
 
-    // go: internal/typeparser/piping_flow.go:43 PipingFlowTransformation.OutType 5d629b8e81f85d58
+    // go: internal/typeparser/piping_flow.go:47 PipingFlowTransformation.OutType 5d629b8e81f85d58
     // Rust: the lazy resolves through `tp` (see `Lazy`).
     pub fn out_type(&self, tp: &mut TypeParser<'_>) -> Option<P<Type>> {
         Lazy::get(self.out_type.as_ref(), tp)
     }
 }
 
-// go: internal/typeparser/piping_flow.go:46 PipingFlowSubject 1b53bd6aee29e242
+// go: internal/typeparser/piping_flow.go:50 PipingFlowSubject 9556c45b29d35eb3
 // PipingFlowSubject is the starting expression of a piping flow.
 #[derive(Clone, Default)]
 pub struct PipingFlowSubject {
@@ -87,19 +92,19 @@ pub struct PipingFlowSubject {
 }
 
 impl PipingFlowSubject {
-    // go: internal/typeparser/piping_flow.go:51 PipingFlowSubject.Node 81554329dcf48028
+    // go: internal/typeparser/piping_flow.go:55 PipingFlowSubject.Node 81554329dcf48028
     pub fn node(&self) -> Option<P<Node>> {
         self.node
     }
 
-    // go: internal/typeparser/piping_flow.go:53 PipingFlowSubject.OutType 979a0d6fe8942f74
+    // go: internal/typeparser/piping_flow.go:57 PipingFlowSubject.OutType 979a0d6fe8942f74
     // Rust: the lazy resolves through `tp` (see `Lazy`).
     pub fn out_type(&self, tp: &mut TypeParser<'_>) -> Option<P<Type>> {
         Lazy::get(self.out_type.as_ref(), tp)
     }
 }
 
-// go: internal/typeparser/piping_flow.go:57 PartialPipingFlow 651d29dee2527fa9
+// go: internal/typeparser/piping_flow.go:61 PartialPipingFlow 651d29dee2527fa9
 // PartialPipingFlow represents a logical piping flow that may not correspond to
 // a complete source expression, such as a prefix of a pipe call.
 #[derive(Clone, Default)]
@@ -109,17 +114,17 @@ pub struct PartialPipingFlow {
 }
 
 impl PartialPipingFlow {
-    // go: internal/typeparser/piping_flow.go:62 PartialPipingFlow.Subject 516d995853ff36ae
+    // go: internal/typeparser/piping_flow.go:66 PartialPipingFlow.Subject 516d995853ff36ae
     pub fn subject(&self) -> PipingFlowSubject {
         self.subject.clone()
     }
 
-    // go: internal/typeparser/piping_flow.go:64 PartialPipingFlow.Transformations bf1608fc66833601
+    // go: internal/typeparser/piping_flow.go:68 PartialPipingFlow.Transformations bf1608fc66833601
     pub fn transformations(&self) -> Slice<'_, PipingFlowTransformation> {
         ets_readonly::new(&self.transformations[..])
     }
 
-    // go: internal/typeparser/piping_flow.go:71 PartialPipingFlow.MatchesPrefix 8d1c4edcd83ec52b
+    // go: internal/typeparser/piping_flow.go:75 PartialPipingFlow.MatchesPrefix 8d1c4edcd83ec52b
     // MatchesPrefix checks the subject and leading transformations, allowing extra
     // steps afterward. With no transformation predicates it checks only the subject.
     // A nil flow returns false. Predicates receive local copies.
@@ -135,7 +140,7 @@ impl PartialPipingFlow {
         Self::matches_shape(this, tp, false, subject, transformations)
     }
 
-    // go: internal/typeparser/piping_flow.go:78 PartialPipingFlow.MatchesExactly c64e09ecddf0070b
+    // go: internal/typeparser/piping_flow.go:82 PartialPipingFlow.MatchesExactly c64e09ecddf0070b
     // MatchesExactly checks the subject and all transformations. The number of
     // transformations must equal the number of transformation predicates.
     // A nil flow returns false. Predicates receive local copies.
@@ -148,7 +153,7 @@ impl PartialPipingFlow {
         Self::matches_shape(this, tp, true, subject, transformations)
     }
 
-    // go: internal/typeparser/piping_flow.go:82 PartialPipingFlow.matchesShape 459aef855368b632
+    // go: internal/typeparser/piping_flow.go:86 PartialPipingFlow.matchesShape 459aef855368b632
     pub(crate) fn matches_shape(
         this: Option<&Self>,
         tp: &mut TypeParser<'_>,
@@ -184,7 +189,7 @@ pub type SubjectPredicate<'p> = &'p dyn Fn(&mut TypeParser<'_>, &PipingFlowSubje
 pub type TransformationPredicate<'p> =
     &'p dyn Fn(&mut TypeParser<'_>, &PipingFlowTransformation) -> bool;
 
-// go: internal/typeparser/piping_flow.go:100 TransformationSequenceMatch 42e59ed5a92a10d8
+// go: internal/typeparser/piping_flow.go:104 TransformationSequenceMatch 42e59ed5a92a10d8
 // TransformationSequenceMatch identifies consecutive steps in a piping flow.
 // Transformations is a read-only view into the original flow's slice.
 #[derive(Clone, Copy)]
@@ -194,19 +199,19 @@ pub struct TransformationSequenceMatch<'a> {
 }
 
 impl<'a> TransformationSequenceMatch<'a> {
-    // go: internal/typeparser/piping_flow.go:105 TransformationSequenceMatch.Start 6c360b527bb3b1f9
+    // go: internal/typeparser/piping_flow.go:109 TransformationSequenceMatch.Start 6c360b527bb3b1f9
     pub fn start(&self) -> i64 {
         self.start
     }
 
-    // go: internal/typeparser/piping_flow.go:107 TransformationSequenceMatch.Transformations 5a255c6982e3d48a
+    // go: internal/typeparser/piping_flow.go:111 TransformationSequenceMatch.Transformations 5a255c6982e3d48a
     pub fn transformations(&self) -> Slice<'a, PipingFlowTransformation> {
         ets_readonly::new(self.transformations)
     }
 }
 
 impl PartialPipingFlow {
-    // go: internal/typeparser/piping_flow.go:114 PartialPipingFlow.FindTransformationSequences ef09008b07d37d6d
+    // go: internal/typeparser/piping_flow.go:118 PartialPipingFlow.FindTransformationSequences ef09008b07d37d6d
     // FindTransformationSequences returns all consecutive matches in source order,
     // including overlaps. The view is nil for a nil flow, no predicates, or no match.
     // Predicates receive local copies and must not depend on earlier calls.
@@ -242,7 +247,7 @@ impl PartialPipingFlow {
         matches
     }
 
-    // go: internal/typeparser/piping_flow.go:139 PartialPipingFlow.CopyPrefix 09d55fa1ba62eea3
+    // go: internal/typeparser/piping_flow.go:143 PartialPipingFlow.CopyPrefix 09d55fa1ba62eea3
     // CopyPrefix returns a copy containing the first transformationCount
     // transformations. It returns nil when transformationCount is out of bounds.
     pub fn copy_prefix(
@@ -257,7 +262,7 @@ impl PartialPipingFlow {
         Some(PartialPipingFlow { subject: flow.subject.clone(), transformations })
     }
 
-    // go: internal/typeparser/piping_flow.go:153 PartialPipingFlow.TransformationInputType 9c1cab5e403fae6d
+    // go: internal/typeparser/piping_flow.go:157 PartialPipingFlow.TransformationInputType 9c1cab5e403fae6d
     // TransformationInputType returns the type immediately before the indexed step.
     // Missing types and indices outside the flow return nil.
     //
@@ -277,7 +282,7 @@ impl PartialPipingFlow {
         flow.transformations[index as usize - 1].out_type(tp)
     }
 
-    // go: internal/typeparser/piping_flow.go:166 PartialPipingFlow.TransformationInputNode 7e5a5068ada204ca
+    // go: internal/typeparser/piping_flow.go:170 PartialPipingFlow.TransformationInputNode a4a6c4f5ba5771b1
     // TransformationInputNode returns the standalone source expression that feeds
     // the transformation at index, when that expression is represented directly
     // in the syntax tree.
@@ -301,7 +306,7 @@ impl PartialPipingFlow {
                         return Some(arguments[0]);
                     }
                 }
-                TransformationKind::DataFirst => {
+                TransformationKind::DataFirst | TransformationKind::CallWithOptionals => {
                     if let Some(&first) = arguments.first() {
                         return Some(first);
                     }
@@ -321,7 +326,7 @@ impl PartialPipingFlow {
     }
 }
 
-// go: internal/typeparser/piping_flow.go:201 appliedCallOf e34de1eb07fa1079
+// go: internal/typeparser/piping_flow.go:205 appliedCallOf e34de1eb07fa1079
 // appliedCallOf walks out of callee positions, returning the outermost call
 // that applies the given call's result to its subject.
 pub(crate) fn applied_call_of(call: Option<P<Node>>) -> Option<P<Node>> {
@@ -337,7 +342,7 @@ pub(crate) fn applied_call_of(call: Option<P<Node>>) -> Option<P<Node>> {
     Some(current)
 }
 
-// go: internal/typeparser/piping_flow.go:219 pipingFlowTransformationCall 2d2a7af555bfbae2
+// go: internal/typeparser/piping_flow.go:223 pipingFlowTransformationCall 2d2a7af555bfbae2
 pub(crate) fn piping_flow_transformation_call(
     transformation: Option<&PipingFlowTransformation>,
 ) -> Option<P<Node>> {
@@ -352,7 +357,7 @@ pub(crate) fn piping_flow_transformation_call(
     Some(parent)
 }
 
-// go: internal/typeparser/piping_flow.go:232 PipingFlow 0aad216fa8e62a33
+// go: internal/typeparser/piping_flow.go:236 PipingFlow 0aad216fa8e62a33
 // PipingFlow represents a complete piping flow rooted at a source expression.
 #[derive(Clone)]
 pub struct PipingFlow {
@@ -361,27 +366,27 @@ pub struct PipingFlow {
 }
 
 impl PipingFlow {
-    // go: internal/typeparser/piping_flow.go:237 PipingFlow.Node defc885b023f0ac0
+    // go: internal/typeparser/piping_flow.go:241 PipingFlow.Node defc885b023f0ac0
     pub fn node(&self) -> P<Node> {
         self.node
     }
 
-    // go: internal/typeparser/piping_flow.go:239 PipingFlow.Partial da0a5c36cba50e53
+    // go: internal/typeparser/piping_flow.go:243 PipingFlow.Partial da0a5c36cba50e53
     pub fn partial(&self) -> PartialPipingFlow {
         self.partial.clone()
     }
 
-    // go: internal/typeparser/piping_flow.go:241 PipingFlow.Subject 225a465cefaa1235
+    // go: internal/typeparser/piping_flow.go:245 PipingFlow.Subject 225a465cefaa1235
     pub fn subject(&self) -> PipingFlowSubject {
         self.partial.subject.clone()
     }
 
-    // go: internal/typeparser/piping_flow.go:243 PipingFlow.Transformations 5ccef62cc9eb92e5
+    // go: internal/typeparser/piping_flow.go:247 PipingFlow.Transformations 5ccef62cc9eb92e5
     pub fn transformations(&self) -> Slice<'_, PipingFlowTransformation> {
         ets_readonly::new(&self.partial.transformations[..])
     }
 
-    // go: internal/typeparser/piping_flow.go:249 PipingFlow.MatchesPrefix 4f69b1408bebe5fe
+    // go: internal/typeparser/piping_flow.go:253 PipingFlow.MatchesPrefix 4f69b1408bebe5fe
     // MatchesPrefix checks the subject and leading transformations, allowing extra steps.
     // It is defined explicitly to support a nil *PipingFlow.
     pub fn matches_prefix(
@@ -396,7 +401,7 @@ impl PipingFlow {
         PartialPipingFlow::matches_prefix(Some(&flow.partial), tp, subject, transformations)
     }
 
-    // go: internal/typeparser/piping_flow.go:258 PipingFlow.MatchesExactly 2580e5be554489e4
+    // go: internal/typeparser/piping_flow.go:262 PipingFlow.MatchesExactly 2580e5be554489e4
     // MatchesExactly checks the subject and all transformations, requiring an exact length.
     // It is defined explicitly to support a nil *PipingFlow.
     pub fn matches_exactly(
@@ -411,7 +416,7 @@ impl PipingFlow {
         PartialPipingFlow::matches_exactly(Some(&flow.partial), tp, subject, transformations)
     }
 
-    // go: internal/typeparser/piping_flow.go:267 PipingFlow.FindTransformationSequences e414340c1c9b6c0e
+    // go: internal/typeparser/piping_flow.go:271 PipingFlow.FindTransformationSequences e414340c1c9b6c0e
     // FindTransformationSequences returns all consecutive matches, including overlaps.
     // It is defined explicitly to support a nil *PipingFlow.
     pub fn find_transformation_sequences<'a>(
@@ -423,7 +428,7 @@ impl PipingFlow {
         PartialPipingFlow::find_transformation_sequences(Some(&flow.partial), tp, predicates)
     }
 
-    // go: internal/typeparser/piping_flow.go:276 PipingFlow.CopyPrefix 6753a2854f641da4
+    // go: internal/typeparser/piping_flow.go:280 PipingFlow.CopyPrefix 6753a2854f641da4
     // CopyPrefix returns a partial copy containing the first transformationCount
     // transformations. It is defined explicitly to support a nil *PipingFlow.
     pub fn copy_prefix(
@@ -434,7 +439,7 @@ impl PipingFlow {
         PartialPipingFlow::copy_prefix(Some(&flow.partial), transformation_count)
     }
 
-    // go: internal/typeparser/piping_flow.go:284 PipingFlow.TransformationInputType bd902de0f3b75b6d
+    // go: internal/typeparser/piping_flow.go:288 PipingFlow.TransformationInputType bd902de0f3b75b6d
     // TransformationInputType returns the type immediately before the indexed step.
     pub fn transformation_input_type(
         this: Option<&Self>,
@@ -445,7 +450,7 @@ impl PipingFlow {
         PartialPipingFlow::transformation_input_type(Some(&flow.partial), tp, index)
     }
 
-    // go: internal/typeparser/piping_flow.go:293 PipingFlow.TransformationInputNode a0a205da38f7dab1
+    // go: internal/typeparser/piping_flow.go:297 PipingFlow.TransformationInputNode a0a205da38f7dab1
     // TransformationInputNode returns the source expression that feeds the
     // transformation at index.
     pub fn transformation_input_node(this: Option<&Self>, index: i64) -> Option<P<Node>> {
@@ -454,7 +459,7 @@ impl PipingFlow {
     }
 }
 
-// go: internal/typeparser/piping_flow.go:301 ParsedPipeCallResult 1bd698470b04f494
+// go: internal/typeparser/piping_flow.go:305 ParsedPipeCallResult 1bd698470b04f494
 // ParsedPipeCallResult is the result of parsing a pipe or pipeable call.
 pub struct ParsedPipeCallResult {
     pub(crate) node: P<Node>,
@@ -466,41 +471,41 @@ pub struct ParsedPipeCallResult {
 }
 
 impl ParsedPipeCallResult {
-    // go: internal/typeparser/piping_flow.go:310 ParsedPipeCallResult.Node 903fc35fc08da0ec
+    // go: internal/typeparser/piping_flow.go:314 ParsedPipeCallResult.Node 903fc35fc08da0ec
     // Rust: the call expression node (Go's `*ast.CallExpression`).
     pub fn node(&self) -> P<Node> {
         self.node
     }
 
-    // go: internal/typeparser/piping_flow.go:312 ParsedPipeCallResult.Subject 79e43e235e75952e
+    // go: internal/typeparser/piping_flow.go:316 ParsedPipeCallResult.Subject 79e43e235e75952e
     pub fn subject(&self) -> P<Node> {
         self.subject
     }
 
-    // go: internal/typeparser/piping_flow.go:314 ParsedPipeCallResult.Args 90daf93d2aa684be
+    // go: internal/typeparser/piping_flow.go:318 ParsedPipeCallResult.Args 90daf93d2aa684be
     pub fn args(&self) -> Slice<'_, P<Node>> {
         ets_readonly::new(self.args)
     }
 
-    // go: internal/typeparser/piping_flow.go:316 ParsedPipeCallResult.Kind ad85fdfa5471c892
+    // go: internal/typeparser/piping_flow.go:320 ParsedPipeCallResult.Kind ad85fdfa5471c892
     pub fn kind(&self) -> TransformationKind {
         self.kind
     }
 
-    // go: internal/typeparser/piping_flow.go:318 ParsedPipeCallResult.SubjectType 976496d5ede6793c
+    // go: internal/typeparser/piping_flow.go:322 ParsedPipeCallResult.SubjectType 976496d5ede6793c
     // Rust: the lazy resolves through `tp` (see `Lazy`).
     pub fn subject_type(&self, tp: &mut TypeParser<'_>) -> Option<P<Type>> {
         Lazy::get(Some(&self.subject_type), tp)
     }
 
-    // go: internal/typeparser/piping_flow.go:320 ParsedPipeCallResult.ArgsOutType fe27aa7ca94e7232
+    // go: internal/typeparser/piping_flow.go:324 ParsedPipeCallResult.ArgsOutType fe27aa7ca94e7232
     // Rust: the lazy resolves through `tp` (see `Lazy`); Go's view of the resolved slice is a copy of it.
     pub fn args_out_type(&self, tp: &mut TypeParser<'_>) -> Vec<Option<P<Type>>> {
         Lazy::get(Some(&self.args_out_type), tp)
     }
 }
 
-// go: internal/typeparser/piping_flow.go:325 parsedSingleArgCallResult 4b1611a2642d753f
+// go: internal/typeparser/piping_flow.go:329 parsedSingleArgCallResult 4b1611a2642d753f
 // parsedSingleArgCallResult is the internal result of parsing a single-argument call.
 pub(crate) struct ParsedSingleArgCallResult {
     node: P<Node>,               // the applied call
@@ -510,7 +515,15 @@ pub(crate) struct ParsedSingleArgCallResult {
     subject: P<Node>,
 }
 
-// go: internal/typeparser/piping_flow.go:524 parsedEffectFnCallResult e4c724ad6f9a6bde
+// go: internal/typeparser/piping_flow.go:464 parsedCallWithOptionalsResult bda7e0ea45078428
+// parsedCallWithOptionalsResult is the internal result of parsing a
+// callee(subject, optionals...) call.
+pub(crate) struct ParsedCallWithOptionalsResult {
+    subject: P<Node>,
+    args: Vec<P<Node>>,
+}
+
+// go: internal/typeparser/piping_flow.go:568 parsedEffectFnCallResult e4c724ad6f9a6bde
 // parsedEffectFnCallResult is the internal result of parsing an Effect.fn or Effect.fnUntraced call
 // with trailing transformation arguments.
 pub(crate) struct ParsedEffectFnCallResult {
@@ -522,7 +535,7 @@ pub(crate) struct ParsedEffectFnCallResult {
     kind: TransformationKind,    // effectFn or effectFnUntraced
 }
 
-// go: internal/typeparser/piping_flow.go:562 workItem 3e0a3d36c69e4595
+// go: internal/typeparser/piping_flow.go:606 workItem 3e0a3d36c69e4595
 // workItem represents a node to process in the PipingFlows work queue.
 pub(crate) struct WorkItem {
     node: P<Node>,
@@ -538,7 +551,7 @@ fn enqueue_children(queue: &mut Vec<WorkItem>, node: P<Node>) {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/piping_flow.go:335 TypeParser.ParsePipeCall 5a97e6314fb3f1cb
+    // go: internal/typeparser/piping_flow.go:339 TypeParser.ParsePipeCall 5a97e6314fb3f1cb
     // ParsePipeCall detects pipe() and .pipe() call patterns.
     // Returns nil when the node is not a recognized pipe call.
     pub fn parse_pipe_call(
@@ -615,7 +628,7 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/piping_flow.go:396 TypeParser.buildParsedPipeCallResult bb8da395f1f2783d
+    // go: internal/typeparser/piping_flow.go:400 TypeParser.buildParsedPipeCallResult bb8da395f1f2783d
     pub(crate) fn build_parsed_pipe_call_result(
         &self,
         call: P<Node>,
@@ -634,7 +647,7 @@ impl TypeParser<'_> {
         })
     }
 
-    // go: internal/typeparser/piping_flow.go:412 TypeParser.buildPipeArgsOutType f0ef335404baa86e
+    // go: internal/typeparser/piping_flow.go:416 TypeParser.buildPipeArgsOutType f0ef335404baa86e
     pub(crate) fn build_pipe_args_out_type(
         &mut self,
         call: P<Node>,
@@ -653,7 +666,7 @@ impl TypeParser<'_> {
         out_types
     }
 
-    // go: internal/typeparser/piping_flow.go:429 TypeParser.parseSingleArgCall aa8bd49e7eaca65a
+    // go: internal/typeparser/piping_flow.go:433 TypeParser.parseSingleArgCall aa8bd49e7eaca65a
     // parseSingleArgCall detects single-argument call patterns like f(arg).
     // Returns nil when the node is not a single-argument call.
     pub(crate) fn parse_single_arg_call(
@@ -687,7 +700,48 @@ impl TypeParser<'_> {
         Some(result)
     }
 
-    // go: internal/typeparser/piping_flow.go:460 TypeParser.decomposeCurriedPipeable c6f76541985927f9
+    // go: internal/typeparser/piping_flow.go:473 TypeParser.parseCallWithOptionals a7b6774eab03c0db
+    // parseCallWithOptionals detects calls with at least one optional argument
+    // whose callee has exactly one call signature, with exactly one required
+    // parameter and no rest parameter. Calls with only the subject are left to
+    // parseSingleArgCall.
+    //
+    // Rust: the receiver, the checker and a call's expression are never nil.
+    pub(crate) fn parse_call_with_optionals(
+        &mut self,
+        node: P<Node>,
+    ) -> Option<ParsedCallWithOptionalsResult> {
+        if node.kind() != Kind::CallExpression {
+            return None;
+        }
+        let call = node.as_call_expression();
+        let arguments = call.arguments().nodes();
+        if arguments.len() < 2 {
+            return None;
+        }
+        for &arg in arguments {
+            if arg.kind() == Kind::SpreadElement {
+                return None;
+            }
+        }
+
+        let callee_type = self.get_type_at_location(call.expression())?;
+        if self.checker.get_signatures_of_type_exported(callee_type, SignatureKind::Call).len() != 1
+        {
+            return None;
+        }
+        // Go: GetResolvedSignature never returns nil.
+        let signature = self.checker.get_resolved_signature_exported(node);
+        if signature.min_argument_count() != 1
+            || signature.has_rest_parameter()
+            || arguments.len() > signature.parameters().len()
+        {
+            return None;
+        }
+        Some(ParsedCallWithOptionalsResult { subject: arguments[0], args: arguments[1..].to_vec() })
+    }
+
+    // go: internal/typeparser/piping_flow.go:504 TypeParser.decomposeCurriedPipeable c6f76541985927f9
     // decomposeCurriedPipeable exposes the factory arguments only when the inner
     // call is the pipeable counterpart of a data-first overload of the same symbol.
     pub(crate) fn decompose_curried_pipeable(&mut self, result: &mut ParsedSingleArgCallResult) {
@@ -761,7 +815,7 @@ impl TypeParser<'_> {
         }
     }
 
-    // go: internal/typeparser/piping_flow.go:535 TypeParser.parseEffectFnCall d52ec751a9f44bce
+    // go: internal/typeparser/piping_flow.go:579 TypeParser.parseEffectFnCall d52ec751a9f44bce
     // parseEffectFnCall detects Effect.fn-family calls with trailing transformation arguments.
     // It reuses the dedicated Effect.fn parsers and only adapts their results for piping-flow analysis.
     pub(crate) fn parse_effect_fn_call(
@@ -799,7 +853,7 @@ impl TypeParser<'_> {
         None
     }
 
-    // go: internal/typeparser/piping_flow.go:569 TypeParser.PipingFlows 3f2a1b11ce9d79ea
+    // go: internal/typeparser/piping_flow.go:613 TypeParser.PipingFlows a33345a2478b8ffb
     // PipingFlows returns all piping flows found in a source file, sorted by source position.
     // Each source transformation occurrence belongs to at most one returned flow.
     //
@@ -953,6 +1007,43 @@ impl TypeParser<'_> {
                         continue;
                     }
 
+                    if let Some(optionals_result) = tp.parse_call_with_optionals(node) {
+                        let callee = node.as_call_expression().expression();
+                        let transformation = PipingFlowTransformation {
+                            kind: TransformationKind::CallWithOptionals,
+                            callee,
+                            type_arguments: piping_flow_type_arguments(node, callee),
+                            args: Some(optionals_result.args.clone()),
+                            out_type: Some(tp.lazy_call_return_type(node)),
+                        };
+
+                        if let Some(mut parent) = parent_flow {
+                            parent.partial.transformations.insert(0, transformation);
+                            queue.push(WorkItem {
+                                node: optionals_result.subject,
+                                parent_flow: Some(parent),
+                            });
+                        } else {
+                            let new_flow = PipingFlow {
+                                node,
+                                partial: PartialPipingFlow {
+                                    subject: PipingFlowSubject::default(),
+                                    transformations: vec![transformation],
+                                },
+                            };
+                            queue.push(WorkItem {
+                                node: optionals_result.subject,
+                                parent_flow: Some(Box::new(new_flow)),
+                            });
+                        }
+
+                        enqueue_children(&mut queue, callee);
+                        for &arg in &optionals_result.args {
+                            enqueue_children(&mut queue, arg);
+                        }
+                        continue;
+                    }
+
                     // Try single-arg call
                     if let Some(single_result) = tp.parse_single_arg_call(node) {
                         let transformation = PipingFlowTransformation {
@@ -1027,7 +1118,7 @@ impl TypeParser<'_> {
         })
     }
 
-    // go: internal/typeparser/piping_flow.go:786 TypeParser.LongestPipingFlowAt 2d7492d6628f5fe1
+    // go: internal/typeparser/piping_flow.go:863 TypeParser.LongestPipingFlowAt 2e84bc6a64f6d80f
     // LongestPipingFlowAt returns the longest normalized piping flow rooted at node.
     // Unlike PipingFlows, which discovers complete flows across a source file, this
     // method can start at an expression nested inside another flow without returning
@@ -1078,6 +1169,20 @@ impl TypeParser<'_> {
             return Some(flow);
         }
 
+        if let Some(result) = self.parse_call_with_optionals(node) {
+            let mut flow = self.piping_flow_subject_at(result.subject, include_effect_fn);
+            let callee = node.as_call_expression().expression();
+            flow.node = node;
+            flow.partial.transformations.push(PipingFlowTransformation {
+                kind: TransformationKind::CallWithOptionals,
+                callee,
+                type_arguments: piping_flow_type_arguments(node, callee),
+                args: Some(result.args),
+                out_type: Some(self.lazy_call_return_type(node)),
+            });
+            return Some(flow);
+        }
+
         if let Some(result) = self.parse_single_arg_call(node) {
             let mut flow = self.piping_flow_subject_at(result.subject, include_effect_fn);
             flow.node = node;
@@ -1106,7 +1211,7 @@ impl TypeParser<'_> {
         })
     }
 
-    // go: internal/typeparser/piping_flow.go:856 TypeParser.pipingFlowSubjectAt 292214e8d471e9d3
+    // go: internal/typeparser/piping_flow.go:947 TypeParser.pipingFlowSubjectAt 292214e8d471e9d3
     pub(crate) fn piping_flow_subject_at(
         &mut self,
         node: P<Node>,
@@ -1127,7 +1232,7 @@ impl TypeParser<'_> {
         }
     }
 
-    // go: internal/typeparser/piping_flow.go:872 TypeParser.buildPipeTransformations d4bae32887740224
+    // go: internal/typeparser/piping_flow.go:963 TypeParser.buildPipeTransformations d4bae32887740224
     // buildPipeTransformations builds PipingFlowTransformation slices from pipe call arguments.
     #[expect(
         clippy::unused_self,
@@ -1175,7 +1280,7 @@ impl TypeParser<'_> {
         transformations
     }
 
-    // go: internal/typeparser/piping_flow.go:914 TypeParser.buildEffectFnTransformations 2a27058e0df45ca0
+    // go: internal/typeparser/piping_flow.go:1005 TypeParser.buildEffectFnTransformations 2a27058e0df45ca0
     // buildEffectFnTransformations builds PipingFlowTransformation slices from Effect.fn trailing arguments.
     // It also returns the subject type (from the first transformation's input parameter type).
     #[expect(
@@ -1226,7 +1331,7 @@ impl TypeParser<'_> {
         (transformations, subject_type)
     }
 
-    // go: internal/typeparser/piping_flow.go:955 TypeParser.effectFnSubjectType cc1619dbecdc1047
+    // go: internal/typeparser/piping_flow.go:1046 TypeParser.effectFnSubjectType cc1619dbecdc1047
     // effectFnSubjectType is the first parameter type of the contextual signature
     // of the first trailing transformation.
     //
@@ -1255,7 +1360,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/piping_flow.go:975 callTypeArguments 9918c7ce636290a7
+// go: internal/typeparser/piping_flow.go:1066 callTypeArguments 9918c7ce636290a7
 pub(crate) fn call_type_arguments(node: P<Node>) -> Option<P<NodeList>> {
     // Parenthesized call arguments (e.g. pipe(x, (Effect.as<...>(v)))) keep the
     // type arguments of the wrapped call.
@@ -1266,7 +1371,7 @@ pub(crate) fn call_type_arguments(node: P<Node>) -> Option<P<NodeList>> {
     node.as_call_expression().type_arguments()
 }
 
-// go: internal/typeparser/piping_flow.go:985 pipingFlowTypeArguments 14420671cde7b020
+// go: internal/typeparser/piping_flow.go:1076 pipingFlowTypeArguments 14420671cde7b020
 pub(crate) fn piping_flow_type_arguments(node: P<Node>, callee: P<Node>) -> Option<P<NodeList>> {
     if let Some(type_arguments) = call_type_arguments(node) {
         return Some(type_arguments);

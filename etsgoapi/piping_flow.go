@@ -1,8 +1,8 @@
 package etsgoapi
 
 import (
-	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/effect-ts/tsgo/internal/readonly"
+	"github.com/effect-ts/tsgo/internal/typeparser"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
@@ -11,13 +11,14 @@ import (
 type TransformationKind string
 
 const (
-	TransformationKindPipe             = TransformationKind(typeparser.TransformationKindPipe)
-	TransformationKindPipeable         = TransformationKind(typeparser.TransformationKindPipeable)
-	TransformationKindDataFirst        = TransformationKind(typeparser.TransformationKindDataFirst)
-	TransformationKindDataLast         = TransformationKind(typeparser.TransformationKindDataLast)
-	TransformationKindCall             = TransformationKind(typeparser.TransformationKindCall)
-	TransformationKindEffectFn         = TransformationKind(typeparser.TransformationKindEffectFn)
-	TransformationKindEffectFnUntraced = TransformationKind(typeparser.TransformationKindEffectFnUntraced)
+	TransformationKindPipe              = TransformationKind(typeparser.TransformationKindPipe)
+	TransformationKindPipeable          = TransformationKind(typeparser.TransformationKindPipeable)
+	TransformationKindDataFirst         = TransformationKind(typeparser.TransformationKindDataFirst)
+	TransformationKindDataLast          = TransformationKind(typeparser.TransformationKindDataLast)
+	TransformationKindCall              = TransformationKind(typeparser.TransformationKindCall)
+	TransformationKindCallWithOptionals = TransformationKind(typeparser.TransformationKindCallWithOptionals)
+	TransformationKindEffectFn          = TransformationKind(typeparser.TransformationKindEffectFn)
+	TransformationKindEffectFnUntraced  = TransformationKind(typeparser.TransformationKindEffectFnUntraced)
 )
 
 // PipingFlowTransformation represents a single transformation step in a piping flow.

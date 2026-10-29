@@ -118,6 +118,29 @@ export const live = Layer.succeed(MyService, make)
 	}
 }
 
+func TestPipingFlows_CallWithOptionals(t *testing.T) {
+	t.Parallel()
+
+	source := `
+import { Effect } from "effect"
+
+declare const program: Effect.Effect<number>
+declare const signal: AbortSignal
+
+export const run = Effect.runPromise(program, { signal })
+`
+
+	_, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, source)
+	defer done()
+
+	flows := tp.PipingFlows(sf, false)
+	runFlow := findFlowByNode(t, sf, flows, findVariableInitializerCallByName(t, sf, "run").AsNode())
+	assertSingleTransformation(t, sf, runFlow, TransformationKindCallWithOptionals, "Effect.runPromise", []string{"{ signal }"})
+	if got := stripWhitespace(ReconstructPipingFlow(sf, &runFlow.partial.subject, ptrTransformations(runFlow.partial.transformations))); got != stripWhitespace("Effect.runPromise(program, { signal })") {
+		t.Fatalf("run reconstructed flow = %q", got)
+	}
+}
+
 func TestPipingFlows_TypeArguments(t *testing.T) {
 	t.Parallel()
 

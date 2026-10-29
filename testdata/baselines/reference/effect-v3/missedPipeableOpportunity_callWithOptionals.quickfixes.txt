@@ -1,0 +1,105 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:38-10:105) TS377050: This nested call structure has a pipeable form. `program.pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+  Fix 0: "Disable missedPipeableOpportunity for this line"
+  Fix 1: "Disable missedPipeableOpportunity for entire file"
+  Fix 2: "Convert to pipe style"
+
+[D2] (14:46-14:104) TS377050: This nested call structure has a pipeable form. `program.pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+  Fix 0: "Disable missedPipeableOpportunity for this line"
+  Fix 1: "Disable missedPipeableOpportunity for entire file"
+  Fix 2: "Convert to pipe style"
+
+[D3] (18:58-18:94) TS377050: This nested call structure has a pipeable form. `program.pipe(...)` represents the same call sequence in pipe style and may be easier to read. effect(missedPipeableOpportunity)
+  Fix 0: "Disable missedPipeableOpportunity for this line"
+  Fix 1: "Disable missedPipeableOpportunity for entire file"
+  Fix 2: "Convert to pipe style"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable missedPipeableOpportunity for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable missedPipeableOpportunity for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Convert to pipe style" ===
+
+--- file:///.src/missedPipeableOpportunity_callWithOptionals.ts ---
+// @effect-diagnostics missedPipeableOpportunity:warning
+import { identity } from "effect"
+import * as Effect from "effect/Effect"
+
+declare const signal: AbortSignal
+const program = Effect.succeed(42)
+
+// should trigger, the runner keeps its options outside of the pipe
+// Effect.runPromise(program.pipe(Effect.orDie, Effect.asVoid), { signal })
+export const runPromiseWithOptions = Effect.runPromise(program.pipe(Effect.orDie, Effect.asVoid), { signal })
+
+// should trigger
+// Effect.runPromise(program.pipe(identity, identity), { signal })
+export const runPromiseIdentityWithOptions = Effect.runPromise(identity(identity(program)), { signal })
+
+// should trigger on the inner calls, even if the runner returns a function
+// Effect.runCallback(program.pipe(Effect.orDie, Effect.asVoid), { onExit: () => {} })
+export const runCallbackWithOptions = Effect.runCallback(Effect.asVoid(Effect.orDie(program)), { onExit: () => {} })
+
+
+=== [D2] Fix 0: "Disable missedPipeableOpportunity for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable missedPipeableOpportunity for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Convert to pipe style" ===
+
+--- file:///.src/missedPipeableOpportunity_callWithOptionals.ts ---
+// @effect-diagnostics missedPipeableOpportunity:warning
+import { identity } from "effect"
+import * as Effect from "effect/Effect"
+
+declare const signal: AbortSignal
+const program = Effect.succeed(42)
+
+// should trigger, the runner keeps its options outside of the pipe
+// Effect.runPromise(program.pipe(Effect.orDie, Effect.asVoid), { signal })
+export const runPromiseWithOptions = Effect.runPromise(Effect.asVoid(Effect.orDie(program)), { signal })
+
+// should trigger
+// Effect.runPromise(program.pipe(identity, identity), { signal })
+export const runPromiseIdentityWithOptions = Effect.runPromise(program.pipe(identity, identity), { signal })
+
+// should trigger on the inner calls, even if the runner returns a function
+// Effect.runCallback(program.pipe(Effect.orDie, Effect.asVoid), { onExit: () => {} })
+export const runCallbackWithOptions = Effect.runCallback(Effect.asVoid(Effect.orDie(program)), { onExit: () => {} })
+
+
+=== [D3] Fix 0: "Disable missedPipeableOpportunity for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable missedPipeableOpportunity for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Convert to pipe style" ===
+
+--- file:///.src/missedPipeableOpportunity_callWithOptionals.ts ---
+// @effect-diagnostics missedPipeableOpportunity:warning
+import { identity } from "effect"
+import * as Effect from "effect/Effect"
+
+declare const signal: AbortSignal
+const program = Effect.succeed(42)
+
+// should trigger, the runner keeps its options outside of the pipe
+// Effect.runPromise(program.pipe(Effect.orDie, Effect.asVoid), { signal })
+export const runPromiseWithOptions = Effect.runPromise(Effect.asVoid(Effect.orDie(program)), { signal })
+
+// should trigger
+// Effect.runPromise(program.pipe(identity, identity), { signal })
+export const runPromiseIdentityWithOptions = Effect.runPromise(identity(identity(program)), { signal })
+
+// should trigger on the inner calls, even if the runner returns a function
+// Effect.runCallback(program.pipe(Effect.orDie, Effect.asVoid), { onExit: () => {} })
+export const runCallbackWithOptions = Effect.runCallback(program.pipe(Effect.orDie, Effect.asVoid), { onExit: () => {} })
+

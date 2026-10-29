@@ -1,0 +1,81 @@
+==== /.src/missedPipeableOpportunity_callWithOptionals.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 6:16 - 6:35
+Node: Effect.succeed(42)
+Node Kind: KindCallExpression
+
+Subject: 42
+Subject Type: 42
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 10:37 - 10:105
+Node: Effect.runPromise(Effect.asVoid(Effect.orDie(program)), { signal })
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, never, never>
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: call
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+  [2] kind: callWithOptionals
+      callee: Effect.runPromise
+      args: [{ signal }]
+      outType: Promise<void>
+
+=== Piping Flow ===
+Location: 14:45 - 14:104
+Node: Effect.runPromise(identity(identity(program)), { signal })
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, never, never>
+
+Transformations (3):
+  [0] kind: call
+      callee: identity
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: call
+      callee: identity
+      args: (constant)
+      outType: Effect<number, never, never>
+  [2] kind: callWithOptionals
+      callee: Effect.runPromise
+      args: [{ signal }]
+      outType: Promise<number>
+
+=== Piping Flow ===
+Location: 18:38 - 18:117
+Node: Effect.runCallback(Effect.asVoid(Effect.orDie(program)), { onExit: () => {} })
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<number, never, never>
+
+Transformations (3):
+  [0] kind: call
+      callee: Effect.orDie
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: call
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, never, never>
+  [2] kind: callWithOptionals
+      callee: Effect.runCallback
+      args: [{ onExit: () => {} }]
+      outType: (interruptor?: number | undefined) => void

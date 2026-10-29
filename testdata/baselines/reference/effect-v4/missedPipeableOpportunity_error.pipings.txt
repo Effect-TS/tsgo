@@ -1,4 +1,4 @@
-==== /.src/missedPipeableOpportunity_error.ts (9 flows) ====
+==== /.src/missedPipeableOpportunity_error.ts (8 flows) ====
 
 === Piping Flow ===
 Location: 5:17 - 8:3
@@ -59,28 +59,22 @@ Location: 14:48 - 17:2
 Node: pipe(\n  Schedule.exponential(Duration.millis(10), 4),\n  Schedule.while(_ => Duration.isLessThanOrEqualTo(Duration.seconds(10))(_.duration)) // should not report\n)
 Node Kind: KindCallExpression
 
-Subject: Schedule.exponential(Duration.millis(10), 4)
-Subject Type: Schedule<Duration, unknown, never, never>
-
-Transformations (1):
-  [0] kind: pipe
-      callee: Schedule.while
-      args: [_ => Duration.isLessThanOrEqualTo(Duration.seconds(10))(_.duration)]
-      outType: Schedule<Duration, unknown, never, never>
-
-=== Piping Flow ===
-Location: 15:24 - 15:43
-Node: Duration.millis(10)
-Node Kind: KindCallExpression
-
 Subject: 10
 Subject Type: 10
 
-Transformations (1):
+Transformations (3):
   [0] kind: call
       callee: Duration.millis
       args: (constant)
       outType: Duration
+  [1] kind: callWithOptionals
+      callee: Schedule.exponential
+      args: [4]
+      outType: Schedule<Duration, unknown, never, never>
+  [2] kind: pipe
+      callee: Schedule.while
+      args: [_ => Duration.isLessThanOrEqualTo(Duration.seconds(10))(_.duration)]
+      outType: Schedule<Duration, unknown, never, never>
 
 === Piping Flow ===
 Location: 16:22 - 16:85

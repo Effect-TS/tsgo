@@ -37,18 +37,22 @@ Transformations (2):
       outType: Effect<string[], never, never>
 
 === Piping Flow ===
-Location: 15:39 - 16:68
-Node: values.map((value, index) => Effect.succeed(`${index}:${value}`))
+Location: 15:27 - 18:2
+Node: Effect.all(\n  values.map((value, index) => Effect.succeed(`${index}:${value}`)),\n  { concurrency: 2, discard: true }\n)
 Node Kind: KindCallExpression
 
 Subject: (value, index) => Effect.succeed(`${index}:${value}`)
 Subject Type: (value: number, index: number) => Effect<string, never, never>
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: values.map
       args: (constant)
       outType: Effect<string, never, never>[]
+  [1] kind: callWithOptionals
+      callee: Effect.all
+      args: [{ concurrency: 2, discard: true }]
+      outType: Effect<void, never, never>
 
 === Piping Flow ===
 Location: 16:31 - 16:67
@@ -143,32 +147,40 @@ Transformations (2):
       outType: Effect<string, never, never>
 
 === Piping Flow ===
-Location: 35:38 - 35:59
-Node: values.map(effectful)
+Location: 35:26 - 35:80
+Node: Effect.all(values.map(effectful), { mode: "either" })
 Node Kind: KindCallExpression
 
 Subject: effectful
 Subject Type: (value: number, index: number) => Effect<string, never, never>
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: values.map
       args: (constant)
       outType: Effect<string, never, never>[]
+  [1] kind: callWithOptionals
+      callee: Effect.all
+      args: [{ mode: "either" }]
+      outType: Effect<Either<string, never>[], never, never>
 
 === Piping Flow ===
-Location: 37:40 - 37:61
-Node: values.map(effectful)
+Location: 37:28 - 37:79
+Node: Effect.all(values.map(effectful), validateOptions)
 Node Kind: KindCallExpression
 
 Subject: effectful
 Subject Type: (value: number, index: number) => Effect<string, never, never>
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: values.map
       args: (constant)
       outType: Effect<string, never, never>[]
+  [1] kind: callWithOptionals
+      callee: Effect.all
+      args: [validateOptions]
+      outType: Effect<string[], Option<never>[], never>
 
 === Piping Flow ===
 Location: 44:22 - 44:85

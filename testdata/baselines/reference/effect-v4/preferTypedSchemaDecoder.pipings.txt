@@ -1,4 +1,4 @@
-==== /.src/preferTypedSchemaDecoder.ts (26 flows) ====
+==== /.src/preferTypedSchemaDecoder.ts (29 flows) ====
 
 === Piping Flow ===
 Location: 8:15 - 11:3
@@ -169,21 +169,63 @@ Transformations (1):
       outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
 
 === Piping Flow ===
-Location: 33:27 - 33:60
-Node: Schema.decodeUnknownSync(Person)
+Location: 33:27 - 33:117
+Node: Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1, 2] }, { errors: "all" })
 Node Kind: KindCallExpression
 
-Subject: Person
-Subject Type: Struct<{ readonly name: String; readonly coordinates: Tuple<readonly [Number, Number]>; }>
+Subject: { name: "Ada", coordinates: [1, 2] }
+Subject Type: { name: string; coordinates: number[]; }
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Schema.decodeUnknownSync(Person)
+      args: [{ errors: "all" }]
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 34:38 - 34:98
+Node: Schema.decodeUnknownSync(Person)(person, { errors: "all" })
+Node Kind: KindCallExpression
+
+Subject: person
+Subject Type: { name: string; coordinates: [number, number]; }
+
+Transformations (1):
+  [0] kind: callWithOptionals
+      callee: Schema.decodeUnknownSync(Person)
+      args: [{ errors: "all" }]
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 35:34 - 35:94
+Node: Schema.decodeUnknownSync(Person, { errors: "all" })(person)
+Node Kind: KindCallExpression
+
+Subject: person
+Subject Type: { name: string; coordinates: [number, number]; }
 
 Transformations (1):
   [0] kind: call
-      callee: Schema.decodeUnknownSync
+      callee: Schema.decodeUnknownSync(Person, { errors: "all" })
       args: (constant)
-      outType: (input: unknown, options?: ParseOptions | undefined) => { readonly name: string; readonly coordinates: readonly [number, number]; }
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
 
 === Piping Flow ===
-Location: 37:52 - 40:47
+Location: 36:39 - 36:105
+Node: pipe(person, Schema.decodeUnknownSync(Person, { errors: "all" }))
+Node Kind: KindCallExpression
+
+Subject: person
+Subject Type: { name: string; coordinates: [number, number]; }
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Schema.decodeUnknownSync
+      args: [Person, { errors: "all" }]
+      outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
+
+=== Piping Flow ===
+Location: 40:52 - 43:47
 Node: Schema.decodeUnknownSync(Person)(unknownInput)
 Node Kind: KindCallExpression
 
@@ -197,7 +239,7 @@ Transformations (1):
       outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
 
 === Piping Flow ===
-Location: 40:47 - 41:43
+Location: 43:47 - 44:43
 Node: Schema.decodeUnknownSync(Person)(anyInput)
 Node Kind: KindCallExpression
 
@@ -211,7 +253,7 @@ Transformations (1):
       outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
 
 === Piping Flow ===
-Location: 41:43 - 42:45
+Location: 44:43 - 45:45
 Node: Schema.decodeUnknownSync(Person)(wrongInput)
 Node Kind: KindCallExpression
 
@@ -225,7 +267,7 @@ Transformations (1):
       outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
 
 === Piping Flow ===
-Location: 42:45 - 43:67
+Location: 45:45 - 46:67
 Node: Schema.decodeUnknownSync(Person)({ name: 1, coordinates: [1, 2] })
 Node Kind: KindCallExpression
 
@@ -239,7 +281,7 @@ Transformations (1):
       outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
 
 === Piping Flow ===
-Location: 43:67 - 44:50
+Location: 46:67 - 47:50
 Node: Schema.decodeUnknownSync(Person)({ name: "Ada" })
 Node Kind: KindCallExpression
 
@@ -253,7 +295,7 @@ Transformations (1):
       outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
 
 === Piping Flow ===
-Location: 44:50 - 45:68
+Location: 47:50 - 48:68
 Node: Schema.decodeUnknownSync(Person)({ name: "Ada", coordinates: [1] })
 Node Kind: KindCallExpression
 
@@ -267,7 +309,7 @@ Transformations (1):
       outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
 
 === Piping Flow ===
-Location: 48:9 - 48:49
+Location: 51:9 - 51:49
 Node: Schema.decodeUnknownSync(Person)(input)
 Node Kind: KindCallExpression
 
@@ -281,7 +323,7 @@ Transformations (1):
       outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
 
 === Piping Flow ===
-Location: 52:9 - 52:49
+Location: 55:9 - 55:49
 Node: Schema.decodeUnknownSync(Person)(input)
 Node Kind: KindCallExpression
 
@@ -295,7 +337,7 @@ Transformations (1):
       outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
 
 === Piping Flow ===
-Location: 53:2 - 55:22
+Location: 56:2 - 58:22
 Node: decodeGeneric(person)
 Node Kind: KindCallExpression
 
@@ -309,7 +351,7 @@ Transformations (1):
       outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
 
 === Piping Flow ===
-Location: 55:22 - 56:28
+Location: 58:22 - 59:28
 Node: decodeNestedGeneric(person)
 Node Kind: KindCallExpression
 
@@ -323,7 +365,7 @@ Transformations (1):
       outType: { readonly name: string; readonly coordinates: readonly [number, number]; }
 
 === Piping Flow ===
-Location: 59:20 - 59:59
+Location: 62:20 - 62:59
 Node: Schema.Struct({ name: Schema.String })
 Node Kind: KindCallExpression
 
@@ -337,7 +379,7 @@ Transformations (1):
       outType: Struct<{ readonly name: String; }>
 
 === Piping Flow ===
-Location: 65:23 - 65:82
+Location: 68:23 - 68:82
 Node: Schema.decodeUnknownEffect(NamedPerson)(makeFields("Ada"))
 Node Kind: KindCallExpression
 
@@ -355,7 +397,7 @@ Transformations (2):
       outType: Effect<{ readonly name: string; }, SchemaError, never>
 
 === Piping Flow ===
-Location: 67:35 - 67:100
+Location: 70:35 - 70:100
 Node: pipe("Ada", makeFields, Schema.decodeUnknownEffect(NamedPerson))
 Node Kind: KindCallExpression
 

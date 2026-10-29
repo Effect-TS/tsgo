@@ -15,15 +15,19 @@ Transformations (1):
       outType: optionalKeyLambda
 
 === Piping Flow ===
-Location: 33:86 - 33:119
-Node: SchemaAST.optionalKey(schema.ast)
+Location: 33:73 - 33:132
+Node: Schema.make(SchemaAST.optionalKey(schema.ast), { schema })
 Node Kind: KindCallExpression
 
 Subject: schema.ast
 Subject Type: AST
 
-Transformations (1):
+Transformations (2):
   [0] kind: call
       callee: SchemaAST.optionalKey
       args: (constant)
       outType: AST
+  [1] kind: callWithOptionals
+      callee: Schema.make
+      args: [{ schema }]
+      outType: optionalKey<Top>

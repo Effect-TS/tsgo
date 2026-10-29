@@ -58,10 +58,18 @@ func ReconstructPipingFlow(sf *ast.SourceFile, subject *PipingFlowSubject, trans
 
 		calleeText := nodeText(sf, t.callee)
 
-		if t.kind == TransformationKindCall {
+		switch t.kind {
+		case TransformationKindCall:
 			// Single-arg call: callee(result)
 			result = calleeText + "(" + result + ")"
-		} else {
+		case TransformationKindCallWithOptionals:
+			var argsText strings.Builder
+			for _, arg := range t.args {
+				argsText.WriteString(", ")
+				argsText.WriteString(nodeText(sf, arg))
+			}
+			result = calleeText + "(" + result + argsText.String() + ")"
+		default:
 			// Pipe or pipeable: apply the transformation
 			if len(t.args) > 0 {
 				// Curried form: callee(args...)(result)

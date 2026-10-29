@@ -3,7 +3,7 @@ use std::sync::LazyLock;
 use ets_etscore::{ResolvedEffectPluginOptions, Severity};
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{self, Diagnostic, Node, SourceFile};
+use ets_shim::ast::{Diagnostic, Node, SourceFile};
 use ets_shim::checker::SignatureKind;
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
@@ -47,7 +47,7 @@ pub static MISSED_PIPEABLE_OPPORTUNITY: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/missed_pipeable_opportunity.go:50 MissedPipeableOpportunityMatch 694ebc31095f1e5d
+// go: internal/rules/missed_pipeable_opportunity.go:50 MissedPipeableOpportunityMatch b4984fecfc72d98f
 // MissedPipeableOpportunityMatch holds the parsed result needed by both the diagnostic rule
 // and the quick-fix for the missedPipeableOpportunity pattern.
 //
@@ -60,11 +60,12 @@ pub struct MissedPipeableOpportunityMatch {
     pub pipeable_start_index: i64,
     pub pipeable_transformations: Vec<PipingFlowTransformation>,
     pub flow: PipingFlow,
+    pub node: P<Node>, // The expression replaced by the fix; may be inner to Flow.Node()
     pub subject_text: String,
     pub after_transformations: Option<Vec<PipingFlowTransformation>>,
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:61 AnalyzeMissedPipeableOpportunity d26849fe1b7bce8b
+// go: internal/rules/missed_pipeable_opportunity.go:62 AnalyzeMissedPipeableOpportunity 5e4a6184ad3ab7fe
 // AnalyzeMissedPipeableOpportunity finds all nested call chains that can be converted to .pipe() style.
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
@@ -83,18 +84,13 @@ pub fn analyze_missed_pipeable_opportunity(
             continue;
         }
 
-        // Skip if final output type is callable (has call signatures)
-        let last_transformation = flow.transformations().at(flow.transformations().len() - 1);
-        if let Some(out_type) = last_transformation.out_type(tp) {
-            let call_sigs = tp.checker().get_signatures_of_type(out_type, SignatureKind::Call);
-            if !call_sigs.is_empty() {
-                continue;
-            }
-        }
+        let (reported_count, reported_node) = reportable_transformation_count(tp, flow);
+        let Some(reported_node) = reported_node else {
+            continue;
+        };
 
-        let transformation_count = flow.transformations().len();
         let runs = safely_pipeable_runs(tp, flow);
-        for first_pipeable_index in 0..=transformation_count {
+        for first_pipeable_index in 0..=reported_count {
             let run = runs[first_pipeable_index as usize];
             if run.call_count < min_arg_count
                 || !is_pipeable_at_index(tp, flow, first_pipeable_index)
@@ -107,17 +103,18 @@ pub fn analyze_missed_pipeable_opportunity(
             }
             let pipeable_end_index = first_pipeable_index + pipeable_transformations.len() as i64;
 
-            // Get subject text for the diagnostic message
-            let subject_text = get_subject_text(Some(sf), flow, first_pipeable_index);
+            let subject_text = trimmed_node_text(
+                Some(sf),
+                PipingFlow::transformation_input_node(Some(flow), first_pipeable_index),
+            );
 
-            let after_transformations = flow
-                .transformations()
-                .slice(pipeable_end_index, flow.transformations().len())
-                .copy();
+            let after_transformations =
+                flow.transformations().slice(pipeable_end_index, reported_count).copy();
 
             matches.push(MissedPipeableOpportunityMatch {
                 source_file: sf,
-                location: ets_shim::scanner::get_error_range_for_node(sf, flow.node()),
+                location: ets_shim::scanner::get_error_range_for_node(sf, reported_node),
+                node: reported_node,
                 pipeable_start_index: first_pipeable_index,
                 pipeable_transformations,
                 flow: flow.clone(),
@@ -133,14 +130,14 @@ pub fn analyze_missed_pipeable_opportunity(
     matches
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:117 safelyPipeableRun 8da24950a3b99dec
+// go: internal/rules/missed_pipeable_opportunity.go:113 safelyPipeableRun 8da24950a3b99dec
 #[derive(Clone, Copy, Default)]
 pub(crate) struct SafelyPipeableRun {
     pub(crate) length: i64,
     pub(crate) call_count: i64,
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:122 safelyPipeableRuns 98f5683b7e1b2f1b
+// go: internal/rules/missed_pipeable_opportunity.go:118 safelyPipeableRuns b3cfca200a4bd664
 pub(crate) fn safely_pipeable_runs(
     tp: &mut TypeParser<'_>,
     flow: &PipingFlow,
@@ -150,7 +147,9 @@ pub(crate) fn safely_pipeable_runs(
     let mut i = transformation_count - 1;
     while i >= 0 {
         let t = flow.transformations().at(i);
-        if !tp.is_safely_pipeable_callee(t.callee()) {
+        if t.kind() == TransformationKind::CallWithOptionals
+            || !tp.is_safely_pipeable_callee(t.callee())
+        {
             i -= 1;
             continue;
         }
@@ -165,7 +164,7 @@ pub(crate) fn safely_pipeable_runs(
     runs
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:140 isPipeableAtIndex 933d04bdf025ee66
+// go: internal/rules/missed_pipeable_opportunity.go:136 isPipeableAtIndex 933d04bdf025ee66
 // isPipeableAtIndex checks if the type at a given index in a flow is pipeable.
 // Index 0 = subject, index > 0 = transformations[index - 1].outType
 pub(crate) fn is_pipeable_at_index(tp: &mut TypeParser<'_>, flow: &PipingFlow, index: i64) -> bool {
@@ -186,43 +185,45 @@ pub(crate) fn is_pipeable_at_index(tp: &mut TypeParser<'_>, flow: &PipingFlow, i
     tp.is_pipeable_type(out_type)
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:162 getSubjectText 2f4d633f0079d4a1
-// getSubjectText extracts the subject text for the diagnostic message.
-// If the pipeable segment starts at index 0, uses the subject node text directly.
-// Otherwise, traverses the flow node to find the node at the right depth.
+// go: internal/rules/missed_pipeable_opportunity.go:160 reportableTransformationCount 9db8b89b91246414
+// reportableTransformationCount returns how many leading transformations of
+// the flow may be reported, and the expression they produce. Flows whose
+// output is callable are not reported; when that output comes after a
+// callWithOptionals step, the flow is cut before that step instead, as it
+// cannot join a pipe anyway. It returns a nil node when nothing is reportable.
 //
-// Rust: Go's unused checker argument is dropped.
-pub(crate) fn get_subject_text(
-    sf: Option<P<SourceFile>>,
+// Rust: Go's checker argument is the parser's checker (`tp.checker()`).
+pub(crate) fn reportable_transformation_count(
+    tp: &mut TypeParser<'_>,
     flow: &PipingFlow,
-    first_pipeable_index: i64,
-) -> String {
-    if first_pipeable_index == 0 {
-        return trimmed_node_text(sf, flow.subject().node());
-    }
-
-    // Traverse from flow.node into arguments to find the node at the right depth
-    let mut current = flow.node();
-    let mut i = flow.transformations().len();
-    while i > first_pipeable_index {
-        let t = flow.transformations().at(i - 1);
-        if t.kind() == TransformationKind::Call && ast::is_call_expression(current) {
-            let call = current.as_call_expression();
-            let arguments = call.arguments().nodes();
-            if !arguments.is_empty() {
-                current = arguments[0];
-            } else {
-                return String::new();
-            }
-        } else {
-            return String::new();
+) -> (i64, Option<P<Node>>) {
+    let mut count = flow.transformations().len();
+    let mut node = flow.node();
+    while count > 0 {
+        let out_type = flow.transformations().at(count - 1).out_type(tp);
+        if out_type.is_none_or(|out_type| {
+            tp.checker().get_signatures_of_type(out_type, SignatureKind::Call).is_empty()
+        }) {
+            return (count, Some(node));
         }
-        i -= 1;
+        count -= 1;
+        while count >= 0
+            && flow.transformations().at(count).kind() != TransformationKind::CallWithOptionals
+        {
+            count -= 1;
+        }
+        if count < 0 {
+            return (0, None);
+        }
+        let Some(input) = PipingFlow::transformation_input_node(Some(flow), count) else {
+            return (0, None);
+        };
+        node = input;
     }
-    trimmed_node_text(sf, Some(current))
+    (0, None)
 }
 
-// go: internal/rules/missed_pipeable_opportunity.go:186 trimmedNodeText fbfa3a4a1c8bc526
+// go: internal/rules/missed_pipeable_opportunity.go:184 trimmedNodeText fbfa3a4a1c8bc526
 // trimmedNodeText extracts the source text of a node, trimmed of leading trivia.
 pub(crate) fn trimmed_node_text(sf: Option<P<SourceFile>>, node: Option<P<Node>>) -> String {
     let (Some(node), Some(sf)) = (node, sf) else {

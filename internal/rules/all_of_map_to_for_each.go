@@ -61,26 +61,20 @@ type AllOfMapToForEachMatch struct {
 func AnalyzeAllOfMapToForEach(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []AllOfMapToForEachMatch {
 	var matches []AllOfMapToForEachMatch
 
-	// Direct data-first calls: Effect.all(xs.map(f), options?)
-	var walk ast.Visitor
-	walk = func(node *ast.Node) bool {
-		if node == nil {
-			return false
-		}
-
-		if match, ok := analyzeAllOfMapToForEachCall(tp, c, sf, node); ok {
-			matches = append(matches, match)
-		}
-
-		node.ForEachChild(walk)
-		return false
-	}
-
-	walk(sf.AsNode())
-
-	// Data-last Effect.all references inside piping flows. A bare reference is
-	// invisible to the call walk above because it never appears as a call.
 	for _, flow := range tp.PipingFlows(sf, true).All() {
+		// Direct calls: Effect.all(xs.map(f), options?)
+		for _, transformation := range flow.Transformations().All() {
+			if transformation.Kind() != typeparser.TransformationKindCall && transformation.Kind() != typeparser.TransformationKindCallWithOptionals {
+				continue
+			}
+			if callNode := transformationApplicationNode(&transformation); callNode != nil {
+				if match, ok := analyzeAllOfMapToForEachCall(tp, c, sf, callNode); ok {
+					matches = append(matches, match)
+				}
+			}
+		}
+
+		// Data-last Effect.all references, e.g. pipe(xs.map(f), Effect.all).
 		sequences := flow.FindTransformationSequences(
 			func(typeparser.PipingFlowTransformation) bool { return true },
 			func(transformation typeparser.PipingFlowTransformation) bool {

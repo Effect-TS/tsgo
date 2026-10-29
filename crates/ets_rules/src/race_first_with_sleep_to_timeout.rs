@@ -44,7 +44,7 @@ pub struct RaceFirstWithSleepToTimeoutMatch {
     pub location: TextRange,
 }
 
-// go: internal/rules/race_first_with_sleep_to_timeout.go:48 AnalyzeRaceFirstWithSleepToTimeout 0bdd7f3eaeeb4520
+// go: internal/rules/race_first_with_sleep_to_timeout.go:48 AnalyzeRaceFirstWithSleepToTimeout 21fe4e60929131e3
 // AnalyzeRaceFirstWithSleepToTimeout finds Effect.raceFirst calls, and
 // two-element literal Effect.raceAllFirst calls, with exactly one timer arm.
 //
@@ -83,6 +83,9 @@ pub fn analyze_race_first_with_sleep_to_timeout(
             } else if tp
                 .is_node_reference_to_effect_module_api(transformation.callee(), "raceAllFirst")
             {
+                if transformation.args().len() != 0 {
+                    continue;
+                }
                 let input = PipingFlow::copy_prefix(Some(flow), i);
                 let Some(subject_node) = input.as_ref().and_then(|input| input.subject().node())
                 else {
@@ -119,7 +122,7 @@ pub fn analyze_race_first_with_sleep_to_timeout(
     matches
 }
 
-// go: internal/rules/race_first_with_sleep_to_timeout.go:109 isRaceFirstTimerFlow 7adc1b90056ae470
+// go: internal/rules/race_first_with_sleep_to_timeout.go:112 isRaceFirstTimerFlow 7adc1b90056ae470
 pub(crate) fn is_race_first_timer_flow(
     tp: &mut TypeParser<'_>,
     flow: Option<&PartialPipingFlow>,
@@ -150,7 +153,7 @@ pub(crate) fn is_race_first_timer_flow(
     false
 }
 
-// go: internal/rules/race_first_with_sleep_to_timeout.go:129 timerTrailingTransformations ca2a0738ea4d10d2
+// go: internal/rules/race_first_with_sleep_to_timeout.go:132 timerTrailingTransformations ca2a0738ea4d10d2
 pub(crate) fn timer_trailing_transformations(
     tp: &mut TypeParser<'_>,
     transformations: Slice<'_, PipingFlowTransformation>,

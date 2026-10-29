@@ -21,7 +21,7 @@ pub(crate) fn node_text(sf: Option<P<SourceFile>>, node: Option<P<Node>>) -> Str
     String::new()
 }
 
-// go: internal/typeparser/reconstruct.go:31 ReconstructPipingFlow 1d015cd11dce391f
+// go: internal/typeparser/reconstruct.go:31 ReconstructPipingFlow f1b61ca39b95a8d6
 // ReconstructPipingFlow reconstructs a piping flow into a string expression
 // by applying transformations sequentially.
 // For example: subject with transformations [f, g] becomes "g(f(subject))".
@@ -66,25 +66,36 @@ pub fn reconstruct_piping_flow(
 
         let callee_text = node_text(Some(sf), Some(t.callee));
 
-        if t.kind == TransformationKind::Call {
-            // Single-arg call: callee(result)
-            result = callee_text + "(" + &result + ")";
-        } else {
-            // Pipe or pipeable: apply the transformation
-            let args = t.args.as_deref().unwrap_or_default();
-            if !args.is_empty() {
-                // Curried form: callee(args...)(result)
+        match t.kind {
+            TransformationKind::Call => {
+                // Single-arg call: callee(result)
+                result = callee_text + "(" + &result + ")";
+            }
+            TransformationKind::CallWithOptionals => {
                 let mut args_text = String::new();
-                for (i, &arg) in args.iter().enumerate() {
-                    if i > 0 {
-                        args_text.push_str(", ");
-                    }
+                for &arg in t.args.as_deref().unwrap_or_default() {
+                    args_text.push_str(", ");
                     args_text.push_str(&node_text(Some(sf), Some(arg)));
                 }
-                result = callee_text + "(" + &args_text + ")(" + &result + ")";
-            } else {
-                // Constant: callee(result)
-                result = callee_text + "(" + &result + ")";
+                result = callee_text + "(" + &result + &args_text + ")";
+            }
+            _ => {
+                // Pipe or pipeable: apply the transformation
+                let args = t.args.as_deref().unwrap_or_default();
+                if !args.is_empty() {
+                    // Curried form: callee(args...)(result)
+                    let mut args_text = String::new();
+                    for (i, &arg) in args.iter().enumerate() {
+                        if i > 0 {
+                            args_text.push_str(", ");
+                        }
+                        args_text.push_str(&node_text(Some(sf), Some(arg)));
+                    }
+                    result = callee_text + "(" + &args_text + ")(" + &result + ")";
+                } else {
+                    // Constant: callee(result)
+                    result = callee_text + "(" + &result + ")";
+                }
             }
         }
     }

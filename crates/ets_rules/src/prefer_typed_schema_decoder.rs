@@ -7,7 +7,9 @@ use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile};
 use ets_shim::checker::{CheckMode, Checker, ObjectFlags, Type, TypeFlags};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
-use ets_typeparser::{EffectMajorVersion, PipingFlow, PipingFlowTransformation, TypeParser};
+use ets_typeparser::{
+    EffectMajorVersion, PipingFlow, PipingFlowTransformation, TransformationKind, TypeParser,
+};
 use rustc_hash::FxHashSet;
 
 /// Rust-only: the rule's message (Go spells it out at each use).
@@ -66,7 +68,7 @@ pub struct PreferTypedSchemaDecoderMatch {
     pub typed_name: &'static str,
 }
 
-// go: internal/rules/prefer_typed_schema_decoder.go:63 AnalyzePreferTypedSchemaDecoder c2518d611cbb7037
+// go: internal/rules/prefer_typed_schema_decoder.go:63 AnalyzePreferTypedSchemaDecoder ca05f1f33763b42e
 // AnalyzePreferTypedSchemaDecoder finds unknown-input decoder applications whose
 // input is statically accepted by the schema's Encoded type.
 //
@@ -80,80 +82,64 @@ pub fn analyze_prefer_typed_schema_decoder(
     }
 
     let mut matches = Vec::new();
-    let mut handled_decoder_names: FxHashSet<P<Node>> = FxHashSet::default();
-
     let flows = tp.piping_flows(sf, false);
     for flow in flows.iter().flat_map(|flows| flows.iter()) {
         for (i, transformation) in flow.transformations().all() {
             let (Some(callee), Some(schema)) = schema_decoder_transformation(transformation) else {
                 continue;
             };
-            let mut input_node = None;
-            if i == 0 {
-                input_node = flow.subject().node();
-            }
+            let input_node = PipingFlow::transformation_input_node(Some(flow), i);
             let input_type = PipingFlow::transformation_input_type(Some(flow), tp, i);
             if let Some(m) = analyze_typed_schema_decoder_application(
                 tp, sf, callee, schema, input_node, input_type,
             ) {
-                handled_decoder_names.insert(m.decoder_name);
                 matches.push(m);
             }
         }
     }
-
-    // Rust: Go's recursive `walk` closure is a nested function.
-    fn walk(
-        tp: &mut TypeParser<'_>,
-        sf: P<SourceFile>,
-        node: P<Node>,
-        matches: &mut Vec<PreferTypedSchemaDecoderMatch>,
-        handled_decoder_names: &mut FxHashSet<P<Node>>,
-    ) -> bool {
-        if node.kind() == Kind::CallExpression {
-            let call = node.as_call_expression();
-            let arguments = call.arguments().nodes();
-            if !arguments.is_empty() && call.expression().kind() == Kind::CallExpression {
-                let factory = call.expression().as_call_expression();
-                let factory_arguments = factory.arguments().nodes();
-                if !factory_arguments.is_empty()
-                    && let Some(m) = analyze_typed_schema_decoder_application(
-                        tp,
-                        sf,
-                        factory.expression(),
-                        factory_arguments[0],
-                        Some(arguments[0]),
-                        None,
-                    )
-                    && !handled_decoder_names.contains(&m.decoder_name)
-                {
-                    handled_decoder_names.insert(m.decoder_name);
-                    matches.push(m);
-                }
-            }
-        }
-        node.for_each_child(&mut |child| walk(tp, sf, child, matches, handled_decoder_names));
-        false
-    }
-    walk(tp, sf, sf.as_node(), &mut matches, &mut handled_decoder_names);
-    // Rust: Go's `sort.Slice` is unstable; the keys are unique (each decoder name node is matched once, and two
-    // name nodes never start at the same position), so a stable sort gives the same order.
-    matches.sort_by_key(|m| m.location.pos());
+    ets_go::sort::slice(&mut matches, |a, b| a.location.pos() < b.location.pos());
 
     matches
 }
 
-// go: internal/rules/prefer_typed_schema_decoder.go:118 schemaDecoderTransformation e4eb87d05b5cfa29
+// go: internal/rules/prefer_typed_schema_decoder.go:90 schemaDecoderTransformation 4c8a04f33a8e8764
+// schemaDecoderTransformation returns the decoder callee and the schema it was
+// built from: the first pipeable argument, or the first argument of a decoder
+// factory applied directly as in Schema.decodeUnknownSync(Person)(input).
+//
+// Rust: a transformation's callee and a call's expression and arguments are never nil.
 pub(crate) fn schema_decoder_transformation(
     transformation: &PipingFlowTransformation,
 ) -> (Option<P<Node>>, Option<P<Node>>) {
-    if transformation.args().len() == 0 {
-        return (None, None);
+    match transformation.kind() {
+        TransformationKind::Pipe
+        | TransformationKind::Pipeable
+        | TransformationKind::DataFirst
+        | TransformationKind::DataLast => {
+            if transformation.args().len() > 0 {
+                return (Some(transformation.callee()), Some(*transformation.args().at(0)));
+            }
+        }
+        TransformationKind::Call | TransformationKind::CallWithOptionals => {
+            // Decomposed curried pipeables expose their factory arguments as args.
+            if transformation.kind() == TransformationKind::Call && transformation.args().len() > 0
+            {
+                return (Some(transformation.callee()), Some(*transformation.args().at(0)));
+            }
+            if transformation.callee().kind() == Kind::CallExpression {
+                let factory = transformation.callee().as_call_expression();
+                let factory_arguments = factory.arguments().nodes();
+                if !factory_arguments.is_empty() {
+                    return (Some(factory.expression()), Some(factory_arguments[0]));
+                }
+            }
+        }
+        _ => {}
     }
-    (Some(transformation.callee()), Some(*transformation.args().at(0)))
+    (None, None)
 }
 
-// go: internal/rules/prefer_typed_schema_decoder.go:125 analyzeTypedSchemaDecoderApplication c780b0564a57a3d1
+// go: internal/rules/prefer_typed_schema_decoder.go:115 analyzeTypedSchemaDecoderApplication c780b0564a57a3d1
 pub(crate) fn analyze_typed_schema_decoder_application(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -218,7 +204,7 @@ pub(crate) fn analyze_typed_schema_decoder_application(
     })
 }
 
-// go: internal/rules/prefer_typed_schema_decoder.go:168 containsUnresolvedTypeVariable 45165762788695ff
+// go: internal/rules/prefer_typed_schema_decoder.go:158 containsUnresolvedTypeVariable 45165762788695ff
 pub(crate) fn contains_unresolved_type_variable(
     c: &mut Checker,
     t: Option<P<Type>>,
@@ -262,7 +248,7 @@ pub(crate) fn contains_unresolved_type_variable(
     false
 }
 
-// go: internal/rules/prefer_typed_schema_decoder.go:203 matchUnknownSchemaDecoder 5fbde6c52cc7a4b5
+// go: internal/rules/prefer_typed_schema_decoder.go:193 matchUnknownSchemaDecoder 5fbde6c52cc7a4b5
 pub(crate) fn match_unknown_schema_decoder(
     tp: &mut TypeParser<'_>,
     callee: P<Node>,
@@ -277,7 +263,7 @@ pub(crate) fn match_unknown_schema_decoder(
     ("", "")
 }
 
-// go: internal/rules/prefer_typed_schema_decoder.go:213 schemaDecoderNameNode 683e71467efadd80
+// go: internal/rules/prefer_typed_schema_decoder.go:203 schemaDecoderNameNode 683e71467efadd80
 pub(crate) fn schema_decoder_name_node(callee: Option<P<Node>>) -> Option<P<Node>> {
     let callee = callee?;
     if callee.kind() == Kind::PropertyAccessExpression {
