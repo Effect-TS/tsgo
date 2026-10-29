@@ -137,7 +137,7 @@ pub const DEFAULT_TS_CONFIG: &str = r#"{
   }
 }"#;
 
-// go test: internal/effecttest/runner.go:133 RunEffectTest 3e2e65a6bec78c05
+// go test: internal/effecttest/runner.go:133 RunEffectTest 9f849cbdd956e37d
 // RunEffectTest executes a single Effect diagnostic test case for the given version.
 //
 // Rust: the Effect diagnostics come from the hook crates `init_hooks` registers (`etscheckerhooks`). Go's
@@ -386,20 +386,6 @@ pub fn run_effect_test(t: &T, version: EffectVersion, test_file: &Path) {
     t.run("layers", |t| {
         let mut c = program.get_type_checker(&ctx);
         do_layer_graph_baseline(
-            t,
-            &baseline_name,
-            program,
-            &mut c,
-            &input_files,
-            |file_name: &str| program.get_source_file(file_name),
-            baseline_subfolder,
-        );
-    });
-
-    // Generate execution flow baseline
-    t.run("flows", |t| {
-        let mut c = program.get_type_checker(&ctx);
-        do_execution_flow_baseline(
             t,
             &baseline_name,
             program,

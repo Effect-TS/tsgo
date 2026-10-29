@@ -19,7 +19,6 @@ ets_etslshooks.workspace = true
 ets_etstesthooks.workspace = true
 ets_fourslash.workspace = true
 ets_go.workspace = true
-ets_graph.workspace = true
 ets_layergraph.workspace = true
 ets_readonly.workspace = true
 ets_shim.workspace = true

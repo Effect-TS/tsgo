@@ -1,29 +1,25 @@
-use std::cell::RefCell;
 use std::fmt::Write;
 use std::path::PathBuf;
 
 use ets_etscore::EffectPluginOptions;
 use ets_go::testing::T;
-use ets_graph::MermaidOptions;
 use ets_layergraph::ExtractLayerGraphOptions;
 use ets_shim::ast::{Diagnostic, Kind, ModifierFlags, Node, SourceFile};
+use ets_shim::checker::Checker;
 use ets_shim::checker::types::TypeFormatFlags;
-use ets_shim::checker::{Checker, Type};
 use ets_shim::compiler::Program;
 use ets_shim::core::P;
 use ets_shim::diagnostics::Category;
-use ets_typeparser::{ExecutionLink, ExecutionNode, ExecutionNodeKind, TypeParser};
-use rustc_hash::FxHashMap;
 
 use crate::*;
 
-// go test: internal/effecttest/baseline.go:27 TestDataPath 042a515cb6c2e99c
+// go test: internal/effecttest/baseline.go:26 TestDataPath 042a515cb6c2e99c
 // TestDataPath returns the path to our testdata directory.
 pub fn test_data_path() -> PathBuf {
     ets_bundledeffect::effect_ts_go_root_path().join("testdata")
 }
 
-// go test: internal/effecttest/baseline.go:32 BaselineLocalPath 000211a0e181e916
+// go test: internal/effecttest/baseline.go:31 BaselineLocalPath 000211a0e181e916
 // BaselineLocalPath returns the path to write local baselines.
 //
 // Rust: `local-rs` instead of Go's `local`, so the two runners never overwrite each other's actual output (both
@@ -32,13 +28,13 @@ pub fn baseline_local_path(subfolder: &str) -> PathBuf {
     test_data_path().join("baselines").join("local-rs").join(subfolder)
 }
 
-// go test: internal/effecttest/baseline.go:37 BaselineReferencePath 1cfe123f94b3dba0
+// go test: internal/effecttest/baseline.go:36 BaselineReferencePath 1cfe123f94b3dba0
 // BaselineReferencePath returns the path to reference baselines.
 pub fn baseline_reference_path(subfolder: &str) -> PathBuf {
     test_data_path().join("baselines").join("reference").join(subfolder)
 }
 
-// go test: internal/effecttest/baseline.go:43 DoEffectErrorBaseline bb32a9b1ee3610b8
+// go test: internal/effecttest/baseline.go:42 DoEffectErrorBaseline bb32a9b1ee3610b8
 // DoEffectErrorBaseline generates an error baseline for Effect tests.
 // This writes to our testdata directory instead of typescript-go's.
 pub fn do_effect_error_baseline(
@@ -57,7 +53,7 @@ pub fn do_effect_error_baseline(
     run_effect_baseline(t, &format!("{baseline_name}.errors.txt"), &baseline_content, subfolder);
 }
 
-// go test: internal/effecttest/baseline.go:60 nonWhitespace 0138c44ce6931657
+// go test: internal/effecttest/baseline.go:59 nonWhitespace 0138c44ce6931657
 // nonWhitespace matches non-whitespace characters for preserving indentation in squiggles.
 //
 // Rust: Go's `nonWhitespace.ReplaceAllString(s, " ")` over a byte prefix of a line (which Go may cut inside a
@@ -89,7 +85,7 @@ fn diag_end(diag: P<Diagnostic>) -> i64 {
     diag.end().map_or(-1, i64::from)
 }
 
-// go test: internal/effecttest/baseline.go:63 generateErrorBaseline 19301afa68f659e8
+// go test: internal/effecttest/baseline.go:62 generateErrorBaseline 19301afa68f659e8
 // generateErrorBaseline creates an error baseline string matching the TypeScript harness format.
 pub(crate) fn generate_error_baseline(
     effect_version: &str,
@@ -242,7 +238,7 @@ pub(crate) fn generate_error_baseline(
     sb
 }
 
-// go test: internal/effecttest/baseline.go:193 normalizeEffectVersionForBaseline 3d34a0a95171215d
+// go test: internal/effecttest/baseline.go:192 normalizeEffectVersionForBaseline 3d34a0a95171215d
 pub(crate) fn normalize_effect_version_for_baseline(version: &str) -> &str {
     match version.split_once('-') {
         Some((base, _)) => base,
@@ -250,7 +246,7 @@ pub(crate) fn normalize_effect_version_for_baseline(version: &str) -> &str {
     }
 }
 
-// go test: internal/effecttest/baseline.go:201 appendRelatedDiagnostics b34248e3d7c0813e
+// go test: internal/effecttest/baseline.go:200 appendRelatedDiagnostics b34248e3d7c0813e
 pub(crate) fn append_related_diagnostics(sb: &mut String, related: &[P<Diagnostic>], depth: usize) {
     let indent = "  ".repeat(depth);
     for &info in related {
@@ -275,7 +271,7 @@ pub(crate) fn append_related_diagnostics(sb: &mut String, related: &[P<Diagnosti
     }
 }
 
-// go test: internal/effecttest/baseline.go:214 categoryToString 1e6e9fd4c7026e60
+// go test: internal/effecttest/baseline.go:213 categoryToString 1e6e9fd4c7026e60
 // categoryToString converts a diagnostic category to its lowercase string representation.
 pub(crate) fn category_to_string(category: Category) -> &'static str {
     match category {
@@ -286,7 +282,7 @@ pub(crate) fn category_to_string(category: Category) -> &'static str {
     }
 }
 
-// go test: internal/effecttest/baseline.go:230 DoPipingFlowBaseline 8d0db17ff883a5d8
+// go test: internal/effecttest/baseline.go:229 DoPipingFlowBaseline 8d0db17ff883a5d8
 // DoPipingFlowBaseline generates a .pipings.txt baseline for Effect tests.
 //
 // Rust: Go passes the checker alone (`c.Program()` is its program); the program is passed next to it.
@@ -303,7 +299,7 @@ pub fn do_piping_flow_baseline(
     run_effect_baseline(t, &format!("{baseline_name}.pipings.txt"), &content, subfolder);
 }
 
-// go test: internal/effecttest/baseline.go:243 generatePipingFlowBaseline 13a1db136601c1ea
+// go test: internal/effecttest/baseline.go:242 generatePipingFlowBaseline 13a1db136601c1ea
 // generatePipingFlowBaseline creates a piping flow baseline string.
 pub(crate) fn generate_piping_flow_baseline(
     program: &'static Program,
@@ -419,208 +415,14 @@ pub(crate) fn generate_piping_flow_baseline(
     sb
 }
 
-// go test: internal/effecttest/baseline.go:322 DoExecutionFlowBaseline fec3a987df312cd1
-// DoExecutionFlowBaseline generates a .flows.txt index baseline and per-source
-// Mermaid baselines for Effect tests.
-//
-// Rust: Go passes the checker alone (`c.Program()` is its program); the program is passed next to it.
-pub fn do_execution_flow_baseline(
-    t: &T,
-    baseline_name: &str,
-    program: &'static Program,
-    c: &mut Checker,
-    input_files: &[TestFile],
-    source_file_getter: impl Fn(&str) -> Option<P<SourceFile>>,
-    subfolder: &str,
-) {
-    let (index_content, mermaid_files) = generate_execution_flow_baseline(
-        program,
-        c,
-        baseline_name,
-        input_files,
-        source_file_getter,
-    );
-    run_effect_baseline(t, &format!("{baseline_name}.flows.txt"), &index_content, subfolder);
-    for mermaid_file in &mermaid_files {
-        run_effect_baseline(t, &mermaid_file.file_name, &mermaid_file.content, subfolder);
-    }
-}
-
-// go test: internal/effecttest/baseline.go:337 executionFlowMermaidBaseline ebe8f6fd3086558f
-pub(crate) struct ExecutionFlowMermaidBaseline {
-    file_name: String,
-    content: String,
-}
-
-// go test: internal/effecttest/baseline.go:342 generateExecutionFlowBaseline eccb423da9b7ff64
-//
-// Rust: the Mermaid label callbacks need the parser (an `ExecutionNode`'s type is resolved lazily through it), and
-// `MermaidOptions` takes `Fn` callbacks, so the parser is shared with them through a `RefCell`.
-pub(crate) fn generate_execution_flow_baseline(
-    program: &'static Program,
-    c: &mut Checker,
-    baseline_name: &str,
-    input_files: &[TestFile],
-    source_file_getter: impl Fn(&str) -> Option<P<SourceFile>>,
-) -> (String, Vec<ExecutionFlowMermaidBaseline>) {
-    let mut index = String::new();
-    let tp = RefCell::new(ets_typeparser::new_type_parser(program, c));
-    let mut mermaid_files: Vec<ExecutionFlowMermaidBaseline> = Vec::new();
-    let mut used_names: FxHashMap<String, i64> = FxHashMap::default();
-
-    for file in input_files {
-        let Some(sf) = source_file_getter(&file.unit_name) else {
-            continue;
-        };
-
-        let flow = tp.borrow_mut().execution_flow(sf);
-        let Some(flow) = flow else {
-            continue;
-        };
-        let file_name =
-            next_execution_flow_mermaid_file_name(baseline_name, sf.file_name(), &mut used_names);
-        mermaid_files.push(ExecutionFlowMermaidBaseline {
-            file_name: file_name.clone(),
-            content: flow.to_mermaid(MermaidOptions {
-                node_label: Box::new(|node: &ExecutionNode| {
-                    format_execution_flow_node_label(&mut tp.borrow_mut(), sf, node)
-                }),
-                node_shape: Some(Box::new(|node: &ExecutionNode| {
-                    let (open, close) = match node.kind() {
-                        ExecutionNodeKind::LogicMerge => ("(((", ")))"),
-                        ExecutionNodeKind::Value => ("[/", "/]"),
-                        ExecutionNodeKind::Function => ("[[", "]]"),
-                        ExecutionNodeKind::Transform => ("[", "]"),
-                    };
-                    (open.to_string(), close.to_string())
-                })),
-                edge_label: Box::new(|edge: &ExecutionLink| {
-                    format_execution_flow_edge_label(sf, edge)
-                }),
-                edge_shape: None,
-                direction: String::new(),
-            }),
-        });
-        index.push_str(sf.file_name());
-        index.push_str(" -> ");
-        index.push_str(&file_name);
-        index.push('\n');
-    }
-
-    (index, mermaid_files)
-}
-
-// go test: internal/effecttest/baseline.go:395 nextExecutionFlowMermaidFileName 506a391d8b3327c0
-pub(crate) fn next_execution_flow_mermaid_file_name(
-    baseline_name: &str,
-    source_file_name: &str,
-    used_names: &mut FxHashMap<String, i64>,
-) -> String {
-    let base = ets_go::path::base(source_file_name);
-    let ext = ets_go::path::ext(base);
-    let mut base = base.strip_suffix(ext).unwrap_or(base).to_string();
-    if base.is_empty() {
-        base = "source".to_string();
-    }
-
-    let count = used_names.get(&base).copied().unwrap_or(0);
-    used_names.insert(base.clone(), count + 1);
-    if count > 0 {
-        base = format!("{base}{count}");
-    }
-
-    format!("{baseline_name}.flows.{base}.mermaid")
-}
-
-// go test: internal/effecttest/baseline.go:412 formatExecutionFlowNodeLabel b76f37614d4ec966
-//
-// Rust: Go's checker argument is the parser's checker (`tp.checker()`); the parser also resolves the node's lazy
-// type (`ExecutionNode::type_`).
-pub(crate) fn format_execution_flow_node_label(
-    tp: &mut TypeParser<'_>,
-    sf: P<SourceFile>,
-    node: &ExecutionNode,
-) -> String {
-    let mut lines: Vec<String> = Vec::new();
-    match node.kind() {
-        ExecutionNodeKind::Value => {
-            let typ = node.type_(tp);
-            lines.push("type: ".to_string() + &format_execution_type(tp.checker(), typ));
-            lines.push(
-                "node: ".to_string() + &format_execution_source_node(Some(sf), Some(node.node())),
-            );
-            return lines.join("\n");
-        }
-        ExecutionNodeKind::LogicMerge => {
-            let typ = node.type_(tp);
-            lines.push("type: ".to_string() + &format_execution_type(tp.checker(), typ));
-            lines.push(
-                "node: ".to_string() + &format_execution_source_node(Some(sf), Some(node.node())),
-            );
-            return lines.join("\n");
-        }
-        ExecutionNodeKind::Function => {
-            let typ = node.type_(tp);
-            lines.push("type: ".to_string() + &format_execution_type(tp.checker(), typ));
-            lines.push(
-                "node: ".to_string() + &format_execution_source_node(Some(sf), Some(node.node())),
-            );
-            return lines.join("\n");
-        }
-        ExecutionNodeKind::Transform => {
-            let typ = node.type_(tp);
-            lines.push("type: ".to_string() + &format_execution_type(tp.checker(), typ));
-            lines.push(
-                "callee: ".to_string() + &format_execution_source_node(Some(sf), node.callee()),
-            );
-        }
-    }
-
-    let mut args = "[]".to_string();
-    if node.args().len() > 0 {
-        let mut parts: Vec<String> = Vec::with_capacity(node.args().len() as usize);
-        for (_, &arg) in node.args().all() {
-            parts.push(format_execution_source_node(Some(sf), Some(arg)));
-        }
-        args = format!("[{}]", parts.join(", "));
-    }
-    lines.push("args: ".to_string() + &args);
-    lines.join("\n")
-}
-
-// go test: internal/effecttest/baseline.go:444 formatExecutionFlowEdgeLabel d85bda6f8e4f5f83
-pub(crate) fn format_execution_flow_edge_label(_sf: P<SourceFile>, edge: &ExecutionLink) -> String {
-    let lines = ["kind: ".to_string() + edge.kind().as_str()];
-    lines.join("\n")
-}
-
-// go test: internal/effecttest/baseline.go:450 formatExecutionType 14978c8dd7c77e67
-pub(crate) fn format_execution_type(c: &mut Checker, typ: Option<P<Type>>) -> String {
-    let Some(typ) = typ else {
-        return String::new();
-    };
-    c.type_to_string_ex(typ, None, TypeFormatFlags::NoTruncation, None)
-}
-
-// go test: internal/effecttest/baseline.go:457 formatExecutionSourceNode d1adfee6d52a7dd4
-pub(crate) fn format_execution_source_node(
-    sf: Option<P<SourceFile>>,
-    node: Option<P<Node>>,
-) -> String {
-    let (Some(sf), Some(node)) = (sf, node) else {
-        return String::new();
-    };
-    escape_newlines(&ets_shim::scanner::get_source_text_of_node_from_source_file(sf, node, false))
-}
-
-// go test: internal/effecttest/baseline.go:465 escapeNewlines 581540f2cb48fd87
+// go test: internal/effecttest/baseline.go:320 escapeNewlines 581540f2cb48fd87
 // escapeNewlines replaces newlines with \n for baseline display.
 pub(crate) fn escape_newlines(s: &str) -> String {
     let s = s.replace("\r\n", "\\n");
     s.replace('\n', "\\n")
 }
 
-// go test: internal/effecttest/baseline.go:472 DoLayerGraphBaseline ad9a05973d3da964
+// go test: internal/effecttest/baseline.go:327 DoLayerGraphBaseline ad9a05973d3da964
 // DoLayerGraphBaseline generates a .layers.txt baseline for Effect tests.
 //
 // Rust: Go passes the checker alone (`c.Program()` is its program); the program is passed next to it.
@@ -637,7 +439,7 @@ pub fn do_layer_graph_baseline(
     run_effect_baseline(t, &format!("{baseline_name}.layers.txt"), &content, subfolder);
 }
 
-// go test: internal/effecttest/baseline.go:485 generateLayerGraphBaseline 1c704f9945be0c79
+// go test: internal/effecttest/baseline.go:340 generateLayerGraphBaseline 1c704f9945be0c79
 // generateLayerGraphBaseline creates a layer graph baseline string.
 //
 // Rust: Go's checker argument of the layergraph functions is the parser's checker (`tp.checker()`).
@@ -749,7 +551,7 @@ pub(crate) fn generate_layer_graph_baseline(
     sb
 }
 
-// go test: internal/effecttest/baseline.go:587 runEffectBaseline c9b502bf33c93383
+// go test: internal/effecttest/baseline.go:442 runEffectBaseline c9b502bf33c93383
 // runEffectBaseline compares actual output with reference baseline.
 // It only writes to the filesystem when the actual content differs from the
 // reference (or when the reference doesn't exist yet), so that Go's test

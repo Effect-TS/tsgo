@@ -51,7 +51,6 @@ mod effect_type;
 #[cfg(test)]
 mod effect_type_test;
 mod effect_yieldable_type;
-mod execution_flow;
 mod expected_and_real_type;
 #[cfg(test)]
 mod expected_and_real_type_test;
@@ -186,7 +185,6 @@ pub use effect_fn::*;
 pub use effect_fn_opportunity::*;
 pub use effect_gen::*;
 pub use effect_type::*;
-pub use execution_flow::*;
 pub use expected_and_real_type::*;
 pub use extends_context_service::*;
 pub use extends_context_tag::*;
@@ -200,7 +198,6 @@ pub use extends_schema_opaque::*;
 pub use extends_schema_tagged::*;
 pub use extends_sql_model_class::*;
 pub use function_node::*;
-pub(crate) use get_type_at_location::*;
 
 pub use layer_type::*;
 pub use lazy::*;
