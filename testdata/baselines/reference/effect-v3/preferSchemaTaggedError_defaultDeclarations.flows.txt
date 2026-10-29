@@ -1,2 +1,0 @@
-/.src/anonymousDefault.ts -> preferSchemaTaggedError_defaultDeclarations.flows.anonymousDefault.mermaid
-/.src/namedDefault.ts -> preferSchemaTaggedError_defaultDeclarations.flows.namedDefault.mermaid

@@ -393,7 +393,6 @@ dependencies = [
  "ets_etstesthooks",
  "ets_fourslash",
  "ets_go",
- "ets_graph",
  "ets_layergraph",
  "ets_readonly",
  "ets_shim",
@@ -750,7 +749,6 @@ name = "ets_typeparser"
 version = "0.0.0"
 dependencies = [
  "ets_go",
- "ets_graph",
  "ets_importstyle",
  "ets_readonly",
  "ets_shim",

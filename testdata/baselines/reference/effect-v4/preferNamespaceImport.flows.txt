@@ -1,2 +1,0 @@
-/.src/package.json -> preferNamespaceImport.flows.package.mermaid
-/.src/test.ts -> preferNamespaceImport.flows.test.mermaid

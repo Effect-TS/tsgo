@@ -64,17 +64,15 @@ pub fn reference_files(subfolder: &str) -> Vec<String> {
         .clone()
 }
 
-/// The reference baselines `RunEffectTest` writes for the case `baseline_name`: `.errors.txt`, `.pipings.txt`,
-/// `.layers.txt`, `.flows.txt` and the `.flows.<source>.mermaid` files.
+/// The reference baselines `RunEffectTest` writes for the case `baseline_name`: `.errors.txt`, `.pipings.txt`
+/// and `.layers.txt`.
 pub fn diagnostics_runner_outputs(subfolder: &str, baseline_name: &str) -> Vec<String> {
     let prefix = format!("{baseline_name}.");
     reference_files(subfolder)
         .into_iter()
         .filter(|name| {
-            name.strip_prefix(&prefix).is_some_and(|suffix| {
-                matches!(suffix, "errors.txt" | "pipings.txt" | "layers.txt" | "flows.txt")
-                    || (suffix.starts_with("flows.") && suffix.ends_with(".mermaid"))
-            })
+            name.strip_prefix(&prefix)
+                .is_some_and(|suffix| matches!(suffix, "errors.txt" | "pipings.txt" | "layers.txt"))
         })
         .map(|name| format!("{subfolder}/{name}"))
         .collect()

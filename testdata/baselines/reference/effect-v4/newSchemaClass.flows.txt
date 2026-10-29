@@ -1,1 +1,0 @@
-/.src/newSchemaClass.ts -> newSchemaClass.flows.newSchemaClass.mermaid

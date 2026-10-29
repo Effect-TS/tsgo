@@ -1,1 +1,0 @@
-/.src/globalFetch.ts -> globalFetch.flows.globalFetch.mermaid

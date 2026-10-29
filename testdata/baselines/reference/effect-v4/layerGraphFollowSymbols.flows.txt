@@ -1,2 +1,0 @@
-/.src/simple.ts -> layerGraphFollowSymbols.flows.simple.mermaid
-/.src/followSymbols.ts -> layerGraphFollowSymbols.flows.followSymbols.mermaid

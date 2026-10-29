@@ -1,1 +1,0 @@
-/.src/interfaceExtendsIssue.ts -> interfaceExtendsIssue.flows.interfaceExtendsIssue.mermaid

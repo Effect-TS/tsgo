@@ -1,1 +1,0 @@
-/.src/test.ts -> pluginDisabled.flows.test.mermaid

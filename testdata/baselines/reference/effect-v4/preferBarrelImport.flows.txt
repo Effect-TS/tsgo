@@ -1,2 +1,0 @@
-/.src/package.json -> preferBarrelImport.flows.package.mermaid
-/.src/test.ts -> preferBarrelImport.flows.test.mermaid
