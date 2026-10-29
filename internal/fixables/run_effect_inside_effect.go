@@ -34,7 +34,7 @@ func runRunEffectInsideEffectFix(ctx *fixable.Context) []ls.CodeAction {
 
 	matches := rules.AnalyzeRunEffectInsideEffect(ctx.TypeParser, c, sf)
 	for _, match := range matches {
-		if !match.IsNestedScope || match.IsPlatformRunMain {
+		if !match.IsNestedScope || match.IsPlatformRunMain || match.CallNode == nil {
 			continue
 		}
 		if !match.Location.Intersects(ctx.Span) && !ctx.Span.ContainedBy(match.Location) {

@@ -16,6 +16,18 @@
   Fix 0: "Disable runEffectInsideEffect for this line"
   Fix 1: "Disable runEffectInsideEffect for entire file"
 
+[D5] (30:14-30:29) TS377160: `Runtime.runMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `Runtime.runMain` once at the application entry point. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+
+[D6] (35:3-35:18) TS377160: `Runtime.runMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `Runtime.runMain` once at the application entry point. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+
+[D7] (40:15-40:33) TS377160: `BunRuntime.runMain` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `BunRuntime.runMain` once at the application entry point. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable runEffectInsideEffect for this line" ===
@@ -40,4 +52,22 @@ skipped by default
 skipped by default
 
 === [D4] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default
+
+=== [D5] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default
+
+=== [D6] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable runEffectInsideEffect for entire file" ===
 skipped by default

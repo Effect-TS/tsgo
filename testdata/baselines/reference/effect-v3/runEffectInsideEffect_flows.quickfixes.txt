@@ -1,0 +1,43 @@
+=== Quick Fix Inventory ===
+
+[D1] (7:3-7:20) TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+
+[D2] (12:28-12:42) TS377024: `Effect.runSync` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+
+[D3] (17:14-17:31) TS377024: `Effect.runPromise` is called inside an existing Effect context. Here, the inner Effect can be used directly. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+
+[D4] (22:31-22:45) TS377074: `Effect.runFork` is called inside an Effect with a separate services invocation. In this context, child Effects run with the surrounding services, which can be accessed through `Effect.context` and `Effect.runForkWith`. effect(runEffectInsideEffect)
+  Fix 0: "Disable runEffectInsideEffect for this line"
+  Fix 1: "Disable runEffectInsideEffect for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default
+
+=== [D2] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default
+
+=== [D3] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default
+
+=== [D4] Fix 0: "Disable runEffectInsideEffect for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable runEffectInsideEffect for entire file" ===
+skipped by default

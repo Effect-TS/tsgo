@@ -25,7 +25,7 @@ pub static RUN_EFFECT_INSIDE_EFFECT_FIX: LazyLock<Fixable> = LazyLock::new(|| Fi
     run: run_run_effect_inside_effect_fix,
 });
 
-// go: internal/fixables/run_effect_inside_effect.go:28 runRunEffectInsideEffectFix 8655a194ba68d43c
+// go: internal/fixables/run_effect_inside_effect.go:28 runRunEffectInsideEffectFix 8d7ec26e5fe5c393
 //
 // Rust: Go's edit closure scans the generator's statements with the type parser before it edits anything. The
 // parser is borrowed mutably by the context, which `new_fix_action` borrows, so the scan (which reads only the
@@ -38,7 +38,7 @@ fn run_run_effect_inside_effect_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
 
     let matches = ets_rules::analyze_run_effect_inside_effect(&mut ctx.type_parser, sf);
     for m in matches {
-        if !m.is_nested_scope || m.is_platform_run_main {
+        if !m.is_nested_scope || m.is_platform_run_main || m.call_node.is_none() {
             continue;
         }
         if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
@@ -127,9 +127,10 @@ fn run_run_effect_inside_effect_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
                 let runtime_module_identifier =
                     ets_typeparser::find_module_reference(sf, "Runtime");
                 let callee_token_pos = scanner::get_token_pos_of_node(m.callee_node, sf, false);
-                let first_arg_pos = m.call_node.as_call_expression().arguments().nodes()[0]
-                    .pos()
-                    .expect_source("a parsed call argument");
+                let first_arg_pos = m.call_node.unwrap().as_call_expression().arguments().nodes()
+                    [0]
+                .pos()
+                .expect_source("a parsed call argument");
                 tracker.delete_range(sf, TextRange::new(callee_token_pos, first_arg_pos));
 
                 let replacement_text = run_effect_inside_effect_replacement_text(

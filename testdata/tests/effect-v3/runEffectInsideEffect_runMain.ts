@@ -42,7 +42,7 @@ import { BrowserRuntime } from "@effect/platform-browser"
 import { BunRuntime } from "@effect/platform-bun"
 import { NodeRuntime as Runtime } from "@effect/platform-node"
 import { runMain as startMain } from "@effect/platform-node/NodeRuntime"
-import { Effect } from "effect"
+import { Effect, pipe } from "effect"
 
 const serve = Effect.log("serving")
 
@@ -68,6 +68,16 @@ export const inFn = Effect.fn("inFn")(function*() {
 export const inPipe = Effect.gen(function*() {
   yield* Effect.log("starting")
   serve.pipe(Runtime.runMain)
+})
+
+export const withOptions = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  Runtime.runMain(serve, { disableErrorReporting: true })
+})
+
+export const inPipeFunction = Effect.gen(function*() {
+  yield* Effect.log("starting")
+  pipe(serve, BunRuntime.runMain)
 })
 
 const local = { runMain: (_: Effect.Effect<void>) => {} }

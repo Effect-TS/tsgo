@@ -9,7 +9,10 @@ use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile};
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_shim::scanner::get_source_text_of_node_from_source_file;
-use ets_typeparser::{EffectContextFlags, EffectMajorVersion, TypeParser};
+use ets_typeparser::{
+    EffectContextFlags, EffectMajorVersion, PipingFlowTransformation, TransformationKind,
+    TypeParser,
+};
 
 /// Rust-only: the rule's message (Go spells it out at each use).
 static EXISTING_CONTEXT_MESSAGE: &Message =
@@ -97,7 +100,7 @@ pub static RUN_EFFECT_INSIDE_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/run_effect_inside_effect.go:57 RunEffectInsideEffectMatch a3f9aa0b9ff527c9
+// go: internal/rules/run_effect_inside_effect.go:57 RunEffectInsideEffectMatch 7551b15b0d0ca86d
 // RunEffectInsideEffectMatch holds the diagnostic and AST nodes needed by both the
 // diagnostic rule and the quick-fix for the runEffectInsideEffect pattern.
 //
@@ -106,88 +109,93 @@ pub static RUN_EFFECT_INSIDE_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
 pub struct RunEffectInsideEffectMatch {
     pub source_file: P<SourceFile>, // The source file where this match was found
     pub location: TextRange,        // Pre-computed error range (on the callee expression)
-    pub call_node: P<Node>, // The full call expression node (e.g., Effect.runPromise(check))
-    pub callee_node: P<Node>, // The callee expression (e.g., Effect.runPromise)
-    pub method_name: &'static str, // The matched run API name (e.g., "runPromise")
+    pub call_node: Option<P<Node>>, // The full call expression node (e.g., Effect.runPromise(check)), None in pipe position
+    pub callee_node: P<Node>,       // The callee expression (e.g., Effect.runPromise)
+    pub method_name: &'static str,  // The matched run API name (e.g., "runPromise")
     pub is_platform_run_main: bool, // True for NodeRuntime.runMain and the other platform runMain APIs
     pub is_nested_scope: bool, // True when call is in a nested scope rather than direct generator scope
     pub generator_function: Option<P<Node>>, // The enclosing Effect generator function, None for a platform runMain
 }
 
-// go: internal/rules/run_effect_inside_effect.go:70 AnalyzeRunEffectInsideEffect 96865eebeae4b9db
-// AnalyzeRunEffectInsideEffect finds all Effect.run* calls inside Effect generators,
-// returning matches with structured data for both diagnostics and quick-fixes.
+// go: internal/rules/run_effect_inside_effect.go:70 AnalyzeRunEffectInsideEffect b1529427e959602b
+// AnalyzeRunEffectInsideEffect finds all Effect.run* and platform runMain steps of the piping flows
+// that run inside an Effect, returning matches with structured data for both diagnostics and quick-fixes.
 //
-// Rust: Go's checker argument is the parser's checker; its callees ignore it, so it is dropped.
+// Rust: Go's checker argument is the parser's checker; its callees ignore it, so it is dropped. A transformation
+// callee is never nil in tsrs, so Go's nil check drops.
 pub fn analyze_run_effect_inside_effect(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
 ) -> Vec<RunEffectInsideEffectMatch> {
     let mut matches = Vec::new();
+    let flows = tp.piping_flows(sf, true);
+    for flow in flows.as_deref().unwrap_or_default() {
+        let mut flow_context: Option<RunEffectInsideEffectFlowContext> = None;
+        for (_, transformation) in flow.transformations().all() {
+            let callee = transformation.callee();
+            let is_platform_run_main =
+                tp.is_node_reference_to_platform_runtime_api(callee, "runMain");
+            let mut method_name = "runMain";
+            if !is_platform_run_main {
+                method_name = match_run_effect_api(tp, callee);
+                if method_name.is_empty() {
+                    continue;
+                }
+            }
 
-    // Rust: Go's recursive `walk` closure is a nested function.
-    fn walk(
-        tp: &mut TypeParser<'_>,
-        sf: P<SourceFile>,
-        n: P<Node>,
-        matches: &mut Vec<RunEffectInsideEffectMatch>,
-    ) -> bool {
-        if n.kind() == Kind::CallExpression
-            && let Some(m) = analyze_run_effect_inside_effect_node(tp, sf, n)
-        {
+            let flow_context = *flow_context.get_or_insert_with(|| {
+                resolve_run_effect_inside_effect_flow_context(tp, flow.node())
+            });
+            if is_platform_run_main && !flow_context.in_effect
+                || !is_platform_run_main && flow_context.generator_function.is_none()
+            {
+                continue;
+            }
+
+            let mut m = RunEffectInsideEffectMatch {
+                source_file: sf,
+                location: ets_shim::scanner::get_error_range_for_node(sf, callee),
+                call_node: run_effect_inside_effect_call_node(transformation),
+                callee_node: callee,
+                method_name,
+                is_platform_run_main,
+                is_nested_scope: false,
+                generator_function: None,
+            };
+            if !is_platform_run_main {
+                m.is_nested_scope = flow_context.is_nested_scope;
+                m.generator_function = flow_context.generator_function;
+            }
             matches.push(m);
         }
-
-        n.for_each_child(&mut |child| walk(tp, sf, child, matches));
-        false
     }
-
-    walk(tp, sf, sf.as_node(), &mut matches);
     matches
 }
 
-// go: internal/rules/run_effect_inside_effect.go:94 analyzeRunEffectInsideEffectNode 337a4283a92e59bf
-// analyzeRunEffectInsideEffectNode checks a single call expression for Effect.run* inside an Effect generator.
+// go: internal/rules/run_effect_inside_effect.go:114 runEffectInsideEffectFlowContext 5831426dac92c1a9
+// runEffectInsideEffectFlowContext is the Effect context of a piping flow, shared by all its steps.
 //
-// Rust: `(match, ok)` is an `Option`; Go's unused checker parameter is dropped.
-pub(crate) fn analyze_run_effect_inside_effect_node(
+// Rust: Go's `*ast.FunctionExpression` is its node, and its nil is `None`.
+#[derive(Clone, Copy)]
+struct RunEffectInsideEffectFlowContext {
+    in_effect: bool, // True when the flow runs inside an Effect, such as an Effect.sync thunk
+    generator_function: Option<P<Node>>, // The enclosing Effect generator function with at least one statement, or None
+    is_nested_scope: bool, // True when the flow is in a nested scope rather than direct generator scope
+}
+
+// go: internal/rules/run_effect_inside_effect.go:121 resolveRunEffectInsideEffectFlowContext e384e52b0d2df94e
+// resolveRunEffectInsideEffectFlowContext resolves the Effect context of the flow rooted at node.
+//
+// Rust: Go returns a pointer for its lazily filled local; the context is `Copy`, so it returns the value.
+fn resolve_run_effect_inside_effect_flow_context(
     tp: &mut TypeParser<'_>,
-    sf: P<SourceFile>,
     node: P<Node>,
-) -> Option<RunEffectInsideEffectMatch> {
-    if node.kind() != Kind::CallExpression {
-        return None;
-    }
-    let call = node.as_call_expression();
-
-    // Must have at least one argument (matching the TS reference: node.arguments.length === 0 => continue)
-    if call.arguments().nodes().is_empty() {
-        return None;
-    }
-
-    let callee = call.expression();
-
-    if tp.is_node_reference_to_platform_runtime_api(callee, "runMain") {
-        if !is_inside_effect_context(tp, node) {
-            return None;
-        }
-        return Some(RunEffectInsideEffectMatch {
-            source_file: sf,
-            location: ets_shim::scanner::get_error_range_for_node(sf, callee),
-            call_node: node,
-            callee_node: callee,
-            method_name: "runMain",
-            is_platform_run_main: true,
-            is_nested_scope: false,
-            generator_function: None,
-        });
-    }
-
-    // Check if the callee is one of the Effect.run* APIs
-    let method_name = match_run_effect_api(tp, callee);
-    if method_name.is_empty() {
-        return None;
-    }
+) -> RunEffectInsideEffectFlowContext {
+    let mut flow_context = RunEffectInsideEffectFlowContext {
+        in_effect: is_inside_effect_context(tp, node),
+        generator_function: None,
+        is_nested_scope: false,
+    };
 
     let mut gen_fn = tp.get_effect_yield_generator_function(node);
     if gen_fn.is_none() {
@@ -202,33 +210,39 @@ pub(crate) fn analyze_run_effect_inside_effect_node(
             current = c.parent();
         }
     }
-    let gen_fn = gen_fn?;
-
-    // Check that the generator body has at least one statement
-    let body = gen_fn.as_function_expression().body()?;
+    let Some(gen_fn) = gen_fn else {
+        return flow_context;
+    };
+    let Some(body) = gen_fn.as_function_expression().body() else {
+        return flow_context;
+    };
     if body.kind() != Kind::Block {
-        return None;
+        return flow_context;
     }
-    let block = body.as_block();
-    if block.statements().nodes().is_empty() {
-        return None;
+    if body.as_block().statements().nodes().is_empty() {
+        return flow_context;
     }
 
-    let is_nested_scope = ast::get_containing_function(node) != Some(gen_fn);
-
-    Some(RunEffectInsideEffectMatch {
-        source_file: sf,
-        location: ets_shim::scanner::get_error_range_for_node(sf, callee),
-        call_node: node,
-        callee_node: callee,
-        method_name,
-        is_platform_run_main: false,
-        is_nested_scope,
-        generator_function: Some(gen_fn),
-    })
+    flow_context.generator_function = Some(gen_fn);
+    flow_context.is_nested_scope = ast::get_containing_function(node) != Some(gen_fn);
+    flow_context
 }
 
-// go: internal/rules/run_effect_inside_effect.go:166 matchRunEffectApi eeef31b0776d262d
+// go: internal/rules/run_effect_inside_effect.go:150 runEffectInsideEffectCallNode 19c782a709125a2a
+// runEffectInsideEffectCallNode returns the call that passes the Effect as the first argument of the
+// step, or nil when the step sits in pipe position.
+fn run_effect_inside_effect_call_node(
+    transformation: &PipingFlowTransformation,
+) -> Option<P<Node>> {
+    match transformation.kind() {
+        TransformationKind::Call
+        | TransformationKind::CallWithOptionals
+        | TransformationKind::DataFirst => transformation.callee().parent(),
+        _ => None,
+    }
+}
+
+// go: internal/rules/run_effect_inside_effect.go:160 matchRunEffectApi eeef31b0776d262d
 // matchRunEffectApi checks if the node references one of the Effect.run* APIs and returns the method name.
 // Returns empty string if no match.
 //
@@ -242,7 +256,7 @@ pub(crate) fn match_run_effect_api(tp: &mut TypeParser<'_>, node: P<Node>) -> &'
     ""
 }
 
-// go: internal/rules/run_effect_inside_effect.go:177 isInsideEffectContext 232e99a24cd200c8
+// go: internal/rules/run_effect_inside_effect.go:171 isInsideEffectContext 232e99a24cd200c8
 // isInsideEffectContext reports whether node or one of its ancestors runs inside an Effect,
 // such as an Effect.gen body or an Effect.sync thunk.
 fn is_inside_effect_context(tp: &mut TypeParser<'_>, node: P<Node>) -> bool {
