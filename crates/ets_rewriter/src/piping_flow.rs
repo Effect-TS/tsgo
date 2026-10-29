@@ -471,6 +471,9 @@ impl Tracker {
                 );
                 true
             }
+
+            // Go: the switch has no case for the other kinds, which return false.
+            TransformationKind::CallWithOptionals => false,
         }
     }
 

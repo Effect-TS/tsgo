@@ -124,6 +124,9 @@ pub(crate) fn remove_piping_flow_transformation(
             }
             false
         }
+
+        // Go: the switch has no case for the other kinds, which return false.
+        TransformationKind::CallWithOptionals => false,
     }
 }
 

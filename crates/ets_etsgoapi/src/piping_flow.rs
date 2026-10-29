@@ -6,7 +6,7 @@ use ets_shim::core::P;
 use crate::*;
 
 // go: etsgoapi/piping_flow.go:11 TransformationKind 86f1e2de9ad6224c
-// go: etsgoapi/piping_flow.go:13 TransformationKindPipe 85c20a6a52703fdf
+// go: etsgoapi/piping_flow.go:13 TransformationKindPipe f7961622152e0ba4
 // TransformationKind represents how a transformation was expressed in source code.
 //
 // Rust: Go's `type TransformationKind string` takes its constants from the type parser's; only those are ever
@@ -18,6 +18,7 @@ pub enum TransformationKind {
     DataFirst,
     DataLast,
     Call,
+    CallWithOptionals,
     EffectFn,
     EffectFnUntraced,
 }
@@ -31,6 +32,7 @@ impl TransformationKind {
             TransformationKind::DataFirst => "dataFirst",
             TransformationKind::DataLast => "dataLast",
             TransformationKind::Call => "call",
+            TransformationKind::CallWithOptionals => "callWithOptionals",
             TransformationKind::EffectFn => "effectFn",
             TransformationKind::EffectFnUntraced => "effectFnUntraced",
         }
@@ -46,6 +48,9 @@ impl From<ets_typeparser::TransformationKind> for TransformationKind {
             ets_typeparser::TransformationKind::DataFirst => TransformationKind::DataFirst,
             ets_typeparser::TransformationKind::DataLast => TransformationKind::DataLast,
             ets_typeparser::TransformationKind::Call => TransformationKind::Call,
+            ets_typeparser::TransformationKind::CallWithOptionals => {
+                TransformationKind::CallWithOptionals
+            }
             ets_typeparser::TransformationKind::EffectFn => TransformationKind::EffectFn,
             ets_typeparser::TransformationKind::EffectFnUntraced => {
                 TransformationKind::EffectFnUntraced
@@ -54,7 +59,7 @@ impl From<ets_typeparser::TransformationKind> for TransformationKind {
     }
 }
 
-// go: etsgoapi/piping_flow.go:24 PipingFlowTransformation 5e311955defb8c36
+// go: etsgoapi/piping_flow.go:25 PipingFlowTransformation 5e311955defb8c36
 // PipingFlowTransformation represents a single transformation step in a piping flow.
 //
 // Rust: Go's `args` view shares the type parser's slice; here it is a copy (`None` is Go's nil slice).
@@ -68,33 +73,33 @@ pub struct PipingFlowTransformation {
 }
 
 impl PipingFlowTransformation {
-    // go: etsgoapi/piping_flow.go:32 PipingFlowTransformation.Kind 654f103dfd4c5533
+    // go: etsgoapi/piping_flow.go:33 PipingFlowTransformation.Kind 654f103dfd4c5533
     pub fn kind(&self) -> TransformationKind {
         self.kind
     }
 
-    // go: etsgoapi/piping_flow.go:34 PipingFlowTransformation.Callee aa04011c87df5430
+    // go: etsgoapi/piping_flow.go:35 PipingFlowTransformation.Callee aa04011c87df5430
     pub fn callee(&self) -> P<Node> {
         self.callee
     }
 
-    // go: etsgoapi/piping_flow.go:36 PipingFlowTransformation.TypeArguments b6c98c8896fa8a73
+    // go: etsgoapi/piping_flow.go:37 PipingFlowTransformation.TypeArguments b6c98c8896fa8a73
     pub fn type_arguments(&self) -> Option<P<NodeList>> {
         self.type_arguments
     }
 
-    // go: etsgoapi/piping_flow.go:38 PipingFlowTransformation.Args 970cda71934ca396
+    // go: etsgoapi/piping_flow.go:39 PipingFlowTransformation.Args 970cda71934ca396
     pub fn args(&self) -> Slice<'_, P<Node>> {
         ets_readonly::new(self.args.as_deref())
     }
 
-    // go: etsgoapi/piping_flow.go:40 PipingFlowTransformation.OutType 2316ca939486c835
+    // go: etsgoapi/piping_flow.go:41 PipingFlowTransformation.OutType 2316ca939486c835
     pub fn out_type(&self) -> Option<P<Type>> {
         self.out_type
     }
 }
 
-// go: etsgoapi/piping_flow.go:43 PipingFlowSubject fd48d20a798cc607
+// go: etsgoapi/piping_flow.go:44 PipingFlowSubject fd48d20a798cc607
 // PipingFlowSubject is the starting expression of a piping flow.
 #[derive(Clone, Copy, Debug)]
 pub struct PipingFlowSubject {
@@ -103,18 +108,18 @@ pub struct PipingFlowSubject {
 }
 
 impl PipingFlowSubject {
-    // go: etsgoapi/piping_flow.go:48 PipingFlowSubject.Node 81554329dcf48028
+    // go: etsgoapi/piping_flow.go:49 PipingFlowSubject.Node 81554329dcf48028
     pub fn node(self) -> Option<P<Node>> {
         self.node
     }
 
-    // go: etsgoapi/piping_flow.go:50 PipingFlowSubject.OutType f0e7bcd8b097f8cf
+    // go: etsgoapi/piping_flow.go:51 PipingFlowSubject.OutType f0e7bcd8b097f8cf
     pub fn out_type(self) -> Option<P<Type>> {
         self.out_type
     }
 }
 
-// go: etsgoapi/piping_flow.go:53 PipingFlow 5135d86798932da3
+// go: etsgoapi/piping_flow.go:54 PipingFlow 5135d86798932da3
 // PipingFlow represents a complete piping flow: a subject followed by transformations.
 #[derive(Clone, Debug)]
 pub struct PipingFlow {
@@ -124,24 +129,24 @@ pub struct PipingFlow {
 }
 
 impl PipingFlow {
-    // go: etsgoapi/piping_flow.go:59 PipingFlow.Node defc885b023f0ac0
+    // go: etsgoapi/piping_flow.go:60 PipingFlow.Node defc885b023f0ac0
     pub fn node(&self) -> P<Node> {
         self.node
     }
 
-    // go: etsgoapi/piping_flow.go:61 PipingFlow.Subject 87558c441ab0c8d8
+    // go: etsgoapi/piping_flow.go:62 PipingFlow.Subject 87558c441ab0c8d8
     pub fn subject(&self) -> PipingFlowSubject {
         self.subject
     }
 
-    // go: etsgoapi/piping_flow.go:63 PipingFlow.Transformations 6bdc9ca3e20415a1
+    // go: etsgoapi/piping_flow.go:64 PipingFlow.Transformations 6bdc9ca3e20415a1
     pub fn transformations(&self) -> Slice<'_, PipingFlowTransformation> {
         ets_readonly::new(&self.transformations[..])
     }
 }
 
 impl TypeParser<'_> {
-    // go: etsgoapi/piping_flow.go:71 TypeParser.PipingFlows e2fc085ca5acae39
+    // go: etsgoapi/piping_flow.go:72 TypeParser.PipingFlows e2fc085ca5acae39
     // PipingFlows returns all piping flows found in a source file, sorted by source position.
     // Each source transformation occurrence belongs to at most one returned flow.
     // When includeEffectFn is true, Effect.fn / Effect.fnUntraced calls carrying trailing
@@ -161,7 +166,7 @@ impl TypeParser<'_> {
 }
 
 impl TypeParser<'_> {
-    // go: etsgoapi/piping_flow.go:80 TypeParser.LongestPipingFlowAt ebe71a48e9a714b3
+    // go: etsgoapi/piping_flow.go:81 TypeParser.LongestPipingFlowAt ebe71a48e9a714b3
     // LongestPipingFlowAt returns the longest normalized piping flow rooted at node,
     // without returning a larger flow that merely encloses node.
     pub fn longest_piping_flow_at(
@@ -174,7 +179,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: etsgoapi/piping_flow.go:87 pipingFlowsFromInternal c03a85c3a1a0f154
+// go: etsgoapi/piping_flow.go:88 pipingFlowsFromInternal c03a85c3a1a0f154
 // Rust: the parser resolves the flows' lazy types (Go's lazies capture it).
 pub(crate) fn piping_flows_from_internal(
     tp: &mut ets_typeparser::TypeParser<'_>,
@@ -192,7 +197,7 @@ pub(crate) fn piping_flows_from_internal(
     Some(result)
 }
 
-// go: etsgoapi/piping_flow.go:100 pipingFlowFromInternal 728fa18c7c16257f
+// go: etsgoapi/piping_flow.go:101 pipingFlowFromInternal 728fa18c7c16257f
 // Rust: the parser resolves the flow's lazy types: each transformation's, in order, then the subject's.
 pub(crate) fn piping_flow_from_internal(
     tp: &mut ets_typeparser::TypeParser<'_>,
@@ -220,7 +225,7 @@ pub(crate) fn piping_flow_from_internal(
 }
 
 impl PipingFlow {
-    // go: etsgoapi/piping_flow.go:128 PipingFlow.TransformationInputType 161fea662f4bb5aa
+    // go: etsgoapi/piping_flow.go:129 PipingFlow.TransformationInputType 161fea662f4bb5aa
     // TransformationInputType returns the type immediately before the indexed step.
     // Missing types and indices outside the flow return nil.
     //

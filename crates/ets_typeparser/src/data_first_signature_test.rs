@@ -166,7 +166,52 @@ export const live = Layer.succeed(MyService, make)
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:121 TestPipingFlows_TypeArguments 61662b53d3dd6787
+// go test: internal/typeparser/data_first_signature_test.go:121 TestPipingFlows_CallWithOptionals ad6516d05773e99e
+#[test]
+fn test_piping_flows_call_with_optionals() {
+    run(|t| {
+        t.parallel();
+
+        let source = r#"
+import { Effect } from "effect"
+
+declare const program: Effect.Effect<number>
+declare const signal: AbortSignal
+
+export const run = Effect.runPromise(program, { signal })
+"#;
+
+        let (mut compiled, sf) =
+            compile_and_get_checker_and_source_file_with_effect_v4_internal(t, source);
+        let mut tp = compiled.type_parser();
+
+        let flows = tp.piping_flows(sf, false);
+        let run_flow = find_flow_by_node(
+            t,
+            sf,
+            flows.as_deref(),
+            find_variable_initializer_call_by_name(t, sf, "run"),
+        );
+        assert_single_transformation(
+            t,
+            sf,
+            Some(run_flow),
+            TransformationKind::CallWithOptionals,
+            "Effect.runPromise",
+            &["{ signal }"],
+        );
+        let got = strip_whitespace(&reconstruct_piping_flow(
+            sf,
+            Some(&run_flow.partial.subject),
+            &ptr_transformations(&run_flow.partial.transformations),
+        ));
+        if got != strip_whitespace("Effect.runPromise(program, { signal })") {
+            t.fatal(sprintf!("run reconstructed flow = %q", got));
+        }
+    });
+}
+
+// go test: internal/typeparser/data_first_signature_test.go:144 TestPipingFlows_TypeArguments 61662b53d3dd6787
 #[test]
 fn test_piping_flows_type_arguments() {
     run(|t| {
@@ -226,7 +271,7 @@ export const called = identity<string>("value")
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:168 TestPipingFlows_DecomposesOnlyCurriedPipeableOverloads 5c5976e1c9f2ddd2
+// go test: internal/typeparser/data_first_signature_test.go:191 TestPipingFlows_DecomposesOnlyCurriedPipeableOverloads 5c5976e1c9f2ddd2
 #[test]
 fn test_piping_flows_decomposes_only_curried_pipeable_overloads() {
     run(|t| {
@@ -279,7 +324,7 @@ export const named = Effect.fn("named")(function*() {
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:203 TestPipingFlows_TransformationOccurrencesAreUnique 8f7bcdcc6824aaf2
+// go test: internal/typeparser/data_first_signature_test.go:226 TestPipingFlows_TransformationOccurrencesAreUnique 8f7bcdcc6824aaf2
 #[test]
 fn test_piping_flows_transformation_occurrences_are_unique() {
     run(|t| {
@@ -329,7 +374,7 @@ export const effectFn = Effect.fn(
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:247 TestPipingFlows_SkipsParentheses 298eb93c7c829715
+// go test: internal/typeparser/data_first_signature_test.go:270 TestPipingFlows_SkipsParentheses 298eb93c7c829715
 #[test]
 fn test_piping_flows_skips_parentheses() {
     run(|t| {
@@ -390,7 +435,7 @@ export const none = Effect.succeed(((Option.none())))
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:283 TestLongestPipingFlowAt_ReturnsLongestNestedFlow e9363406bdee1ac2
+// go test: internal/typeparser/data_first_signature_test.go:306 TestLongestPipingFlowAt_ReturnsLongestNestedFlow e9363406bdee1ac2
 #[test]
 fn test_longest_piping_flow_at_returns_longest_nested_flow() {
     run(|t| {
@@ -505,7 +550,7 @@ export const pipeable = Effect.raceFirst(
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:371 transformationCallees 67a545e417da150a
+// go test: internal/typeparser/data_first_signature_test.go:394 transformationCallees 67a545e417da150a
 fn transformation_callees(sf: P<SourceFile>, flow: &PipingFlow) -> Vec<String> {
     let mut result = Vec::with_capacity(flow.partial.transformations.len());
     for transformation in &flow.partial.transformations {
@@ -514,7 +559,7 @@ fn transformation_callees(sf: P<SourceFile>, flow: &PipingFlow) -> Vec<String> {
     result
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:379 TestDataFirstOrLastCall_OptionMatchV4 0a5fe90f14bd591e
+// go test: internal/typeparser/data_first_signature_test.go:402 TestDataFirstOrLastCall_OptionMatchV4 0a5fe90f14bd591e
 #[test]
 fn test_data_first_or_last_call_option_match_v4() {
     run(|t| {
@@ -576,7 +621,7 @@ export const result = Option.match(value, {
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:424 TestDataFirstOrLastCall_AlphaEquivalentOverloads 7cbab7d4c8b289e9
+// go test: internal/typeparser/data_first_signature_test.go:447 TestDataFirstOrLastCall_AlphaEquivalentOverloads 7cbab7d4c8b289e9
 #[test]
 fn test_data_first_or_last_call_alpha_equivalent_overloads() {
     run(|t| {
@@ -677,7 +722,7 @@ export const optionalSubjectResult = optionalSubject(box, 1)
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:518 TestDataFirstOrLastCall_CallableAlias 822c0cf656633663
+// go test: internal/typeparser/data_first_signature_test.go:541 TestDataFirstOrLastCall_CallableAlias 822c0cf656633663
 #[test]
 fn test_data_first_or_last_call_callable_alias() {
     run(|t| {
@@ -705,7 +750,7 @@ export const result = operation(\"value\", 1)
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:543 TestDataFirstOrLastCall_InferredParameterTypes 9067a1ab8a7b5fdc
+// go test: internal/typeparser/data_first_signature_test.go:566 TestDataFirstOrLastCall_InferredParameterTypes 9067a1ab8a7b5fdc
 #[test]
 fn test_data_first_or_last_call_inferred_parameter_types() {
     run(|t| {
@@ -728,7 +773,7 @@ export const result = operation(\"value\", 1)
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:562 TestPipeableSignatureShapeWithoutExplicitDeclarations 845260f6589de5ca
+// go test: internal/typeparser/data_first_signature_test.go:585 TestPipeableSignatureShapeWithoutExplicitDeclarations 845260f6589de5ca
 #[test]
 fn test_pipeable_signature_shape_without_explicit_declarations() {
     run(|t| {
@@ -789,7 +834,7 @@ export const result = operation("value", 1)
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:599 TestPipeableSignatureShapeDoesNotInstantiateTypes 9a3bebf0ab064059
+// go test: internal/typeparser/data_first_signature_test.go:622 TestPipeableSignatureShapeDoesNotInstantiateTypes 9a3bebf0ab064059
 #[test]
 fn test_pipeable_signature_shape_does_not_instantiate_types() {
     run(|t| {
@@ -856,7 +901,7 @@ export const result = operation(box, String)
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:649 TestPipeableSignatureShapeFailsClosedAtDepthBudget fd013309b1aaec27
+// go test: internal/typeparser/data_first_signature_test.go:672 TestPipeableSignatureShapeFailsClosedAtDepthBudget fd013309b1aaec27
 #[test]
 fn test_pipeable_signature_shape_fails_closed_at_depth_budget() {
     run(|t| {
@@ -884,7 +929,7 @@ export const result = operation(value, 1)
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:671 TestDataFirstOrLastCall_RealAlphaEquivalentEffectApis ea3726c385e3ed47
+// go test: internal/typeparser/data_first_signature_test.go:694 TestDataFirstOrLastCall_RealAlphaEquivalentEffectApis ea3726c385e3ed47
 #[test]
 fn test_data_first_or_last_call_real_alpha_equivalent_effect_apis() {
     run(|t| {
@@ -931,7 +976,7 @@ export const exitMatch = Exit.match(exit, {
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:710 TestParseDataFirstCallAsPipeable_CatchAllV3 73d496e5f875de72
+// go test: internal/typeparser/data_first_signature_test.go:733 TestParseDataFirstCallAsPipeable_CatchAllV3 73d496e5f875de72
 #[test]
 fn test_parse_data_first_call_as_pipeable_catch_all_v3() {
     run(|t| {
@@ -999,7 +1044,7 @@ export const shouldReportDataFirst = Effect.catchAll(
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:753 TestDataFirstOrLastCallRejectsDifferentReturnOrigins 0ef7ff0d8f312b55
+// go test: internal/typeparser/data_first_signature_test.go:776 TestDataFirstOrLastCallRejectsDifferentReturnOrigins 0ef7ff0d8f312b55
 #[test]
 fn test_data_first_or_last_call_rejects_different_return_origins() {
     run(|t| {
@@ -1025,7 +1070,7 @@ const result = operation(\"value\", 2)
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:775 TestDataFirstOrLastCallRejectsIncompatibleSubject fdda1f9a370eebba
+// go test: internal/typeparser/data_first_signature_test.go:798 TestDataFirstOrLastCallRejectsIncompatibleSubject fdda1f9a370eebba
 #[test]
 fn test_data_first_or_last_call_rejects_incompatible_subject() {
     run(|t| {
@@ -1050,7 +1095,7 @@ const result = operation(\"value\", 2)
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:796 TestDataFirstOrLastCallRejectsAmbiguousSubjectIndex 0a7c93e93014a057
+// go test: internal/typeparser/data_first_signature_test.go:819 TestDataFirstOrLastCallRejectsAmbiguousSubjectIndex 0a7c93e93014a057
 #[test]
 fn test_data_first_or_last_call_rejects_ambiguous_subject_index() {
     run(|t| {
@@ -1073,7 +1118,7 @@ const result = operation(1, 2)
     });
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:815 logDerivedPipeableSignatureComparison 701eb555b83ffaab
+// go test: internal/typeparser/data_first_signature_test.go:838 logDerivedPipeableSignatureComparison 701eb555b83ffaab
 // Rust: Go's nil parser and checker cannot occur (references); `c` is `tp.checker`.
 fn log_derived_pipeable_signature_comparison(
     t: &T,
@@ -1189,7 +1234,7 @@ fn log_derived_pipeable_signature_comparison(
     }
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:896 signatureString 8700f8d5e4823920
+// go test: internal/typeparser/data_first_signature_test.go:919 signatureString 8700f8d5e4823920
 // Rust: Go's nil checker cannot occur (a reference).
 fn signature_string(c: &mut ets_shim::checker::Checker, sig: Option<P<Signature>>) -> String {
     let Some(sig) = sig else {
@@ -1198,7 +1243,7 @@ fn signature_string(c: &mut ets_shim::checker::Checker, sig: Option<P<Signature>
     c.signature_to_string_ex(sig, None, TypeFormatFlags::WriteArrowStyleSignature, None)
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:903 findFlowByNode 5bba96255b38ad8b
+// go test: internal/typeparser/data_first_signature_test.go:926 findFlowByNode 5bba96255b38ad8b
 // Rust: Go's read-only view of the cached flows is the cached slice (`None` is a nil view).
 fn find_flow_by_node<'a>(
     t: &T,
@@ -1215,7 +1260,7 @@ fn find_flow_by_node<'a>(
     t.fatal(sprintf!("flow for node %q not found", node_text(Some(sf), Some(node))));
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:914 assertSingleTransformation dbf445bf1976d331
+// go test: internal/typeparser/data_first_signature_test.go:937 assertSingleTransformation dbf445bf1976d331
 fn assert_single_transformation(
     t: &T,
     sf: P<SourceFile>,
@@ -1254,7 +1299,7 @@ fn assert_single_transformation(
     }
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:940 ptrTransformations c923db2080feb122
+// go test: internal/typeparser/data_first_signature_test.go:963 ptrTransformations c923db2080feb122
 fn ptr_transformations(input: &[PipingFlowTransformation]) -> Vec<&PipingFlowTransformation> {
     let mut result = Vec::with_capacity(input.len());
     for transformation in input {
@@ -1263,12 +1308,12 @@ fn ptr_transformations(input: &[PipingFlowTransformation]) -> Vec<&PipingFlowTra
     result
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:948 stripWhitespace d9ea03cd56544e5c
+// go test: internal/typeparser/data_first_signature_test.go:971 stripWhitespace d9ea03cd56544e5c
 fn strip_whitespace(s: &str) -> String {
     s.split_whitespace().collect::<Vec<_>>().join("")
 }
 
-// go test: internal/typeparser/data_first_signature_test.go:952 findVariableInitializerCallByName ffa704a956d7c8a1
+// go test: internal/typeparser/data_first_signature_test.go:975 findVariableInitializerCallByName ffa704a956d7c8a1
 // Rust: the call expression node (Go's `*ast.CallExpression`).
 fn find_variable_initializer_call_by_name(t: &T, sf: P<SourceFile>, name: &str) -> P<Node> {
     t.helper();

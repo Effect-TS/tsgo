@@ -51,7 +51,7 @@ pub struct AllOfMapToForEachMatch {
     pub can_fix: bool,
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:61 AnalyzeAllOfMapToForEach 090d0c0e07d47173
+// go: internal/rules/all_of_map_to_for_each.go:61 AnalyzeAllOfMapToForEach f8945c590573f832
 // AnalyzeAllOfMapToForEach finds Effect.all over an effectful Array#map whose
 // receiver is array-like, in both the direct data-first form and the data-last
 // form expressed through piping flows (e.g. pipe(xs.map(f), Effect.all)).
@@ -63,28 +63,23 @@ pub fn analyze_all_of_map_to_for_each(
 ) -> Vec<AllOfMapToForEachMatch> {
     let mut matches = Vec::new();
 
-    // Direct data-first calls: Effect.all(xs.map(f), options?)
-    // Rust: Go's recursive `walk` closure is a nested function.
-    fn walk(
-        tp: &mut TypeParser<'_>,
-        sf: P<SourceFile>,
-        node: P<Node>,
-        matches: &mut Vec<AllOfMapToForEachMatch>,
-    ) -> bool {
-        if let Some(m) = analyze_all_of_map_to_for_each_call(tp, sf, node) {
-            matches.push(m);
-        }
-
-        node.for_each_child(&mut |child| walk(tp, sf, child, matches));
-        false
-    }
-
-    walk(tp, sf, sf.as_node(), &mut matches);
-
-    // Data-last Effect.all references inside piping flows. A bare reference is
-    // invisible to the call walk above because it never appears as a call.
     let flows = tp.piping_flows(sf, true);
     for flow in flows.as_deref().unwrap_or_default() {
+        // Direct calls: Effect.all(xs.map(f), options?)
+        for (_, transformation) in flow.transformations().all() {
+            if transformation.kind() != TransformationKind::Call
+                && transformation.kind() != TransformationKind::CallWithOptionals
+            {
+                continue;
+            }
+            if let Some(call_node) = transformation_application_node(Some(transformation))
+                && let Some(m) = analyze_all_of_map_to_for_each_call(tp, sf, call_node)
+            {
+                matches.push(m);
+            }
+        }
+
+        // Data-last Effect.all references, e.g. pipe(xs.map(f), Effect.all).
         let sequences = PipingFlow::find_transformation_sequences(
             Some(flow),
             tp,
@@ -121,7 +116,7 @@ pub fn analyze_all_of_map_to_for_each(
     matches
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:110 transformationApplicationNode 1ea2e5b5ff68153d
+// go: internal/rules/all_of_map_to_for_each.go:104 transformationApplicationNode 1ea2e5b5ff68153d
 // transformationApplicationNode returns the call expression that applies the
 // transformation's callee, when that application is represented in the tree.
 // Bare pipeable references have no application of their own and return nil.
@@ -140,7 +135,7 @@ pub(crate) fn transformation_application_node(
     Some(parent)
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:122 analyzeAllOfMapToForEachCall 9e8b1e4ff76cd8be
+// go: internal/rules/all_of_map_to_for_each.go:116 analyzeAllOfMapToForEachCall 9e8b1e4ff76cd8be
 pub(crate) fn analyze_all_of_map_to_for_each_call(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -177,7 +172,7 @@ pub(crate) fn analyze_all_of_map_to_for_each_call(
     Some(m)
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:149 analyzeAllOfMapToForEachReceiver b3974ba14cee2b48
+// go: internal/rules/all_of_map_to_for_each.go:143 analyzeAllOfMapToForEachReceiver b3974ba14cee2b48
 // analyzeAllOfMapToForEachReceiver validates the xs.map(f) shape feeding an
 // Effect.all node and assembles the match.
 pub(crate) fn analyze_all_of_map_to_for_each_receiver(
@@ -236,7 +231,7 @@ pub(crate) fn analyze_all_of_map_to_for_each_receiver(
     })
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:199 containsSpreadElement 5bbb24f7dcb59299
+// go: internal/rules/all_of_map_to_for_each.go:193 containsSpreadElement 5bbb24f7dcb59299
 pub(crate) fn contains_spread_element(nodes: &[P<Node>]) -> bool {
     for node in nodes {
         if node.kind() == Kind::SpreadElement {
@@ -246,7 +241,7 @@ pub(crate) fn contains_spread_element(nodes: &[P<Node>]) -> bool {
     false
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:208 hasCallTypeArguments 26b3e9eb8b75eeae
+// go: internal/rules/all_of_map_to_for_each.go:202 hasCallTypeArguments 26b3e9eb8b75eeae
 pub(crate) fn has_call_type_arguments(call: Option<&CallExpression>) -> bool {
     call.is_some_and(|call| call.type_arguments().is_some_and(|t| !t.nodes().is_empty()))
 }
