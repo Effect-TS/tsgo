@@ -7,7 +7,7 @@ use ets_shim::vfs::{Entries, FS, FileInfo, vfstest};
 use parking_lot::Mutex;
 use rustc_hash::{FxHashMap, FxHashSet};
 
-// go test: internal/effecttest/sharedfs.go:18 sharedPackages 6621c7d8c6ceabcd
+// go test: internal/effecttest/sharedfs.go:19 sharedPackages 6621c7d8c6ceabcd
 // sharedPackages is a read-only VFS of the packages MountEffect (and
 // MountVitest) mount, built once per version and shared by every test, so a
 // test does not copy, sort and re-index thousands of package files.
@@ -20,7 +20,7 @@ pub(crate) struct SharedPackages {
     pub(crate) package_json: Vec<u8>,
 }
 
-// go test: internal/effecttest/sharedfs.go:25 sharedPackagesKey 5e0ad5d07e9d6367
+// go test: internal/effecttest/sharedfs.go:26 sharedPackagesKey 5e0ad5d07e9d6367
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
 struct SharedPackagesKey {
     version: EffectVersion,
@@ -29,13 +29,13 @@ struct SharedPackagesKey {
 
 type SharedPackagesResult = Result<Arc<SharedPackages>, Error>;
 
-// go test: internal/effecttest/sharedfs.go:30 sharedPackagesCache 8d3b3f87a75e510d
+// go test: internal/effecttest/sharedfs.go:31 sharedPackagesCache 8d3b3f87a75e510d
 // Rust: Go's `sync.Map` of `sync.OnceValues` loaders; a loader is a shared `OnceLock`.
 static SHARED_PACKAGES_CACHE: LazyLock<
     Mutex<FxHashMap<SharedPackagesKey, Arc<OnceLock<SharedPackagesResult>>>>,
 > = LazyLock::new(Mutex::default);
 
-// go test: internal/effecttest/sharedfs.go:32 getSharedPackages d33dbf34e3c11243
+// go test: internal/effecttest/sharedfs.go:33 getSharedPackages d33dbf34e3c11243
 pub(crate) fn get_shared_packages(version: EffectVersion, vitest: bool) -> SharedPackagesResult {
     let key = SharedPackagesKey { version, vitest };
     let load = {
@@ -64,7 +64,7 @@ pub(crate) fn get_shared_packages(version: EffectVersion, vitest: bool) -> Share
     .clone()
 }
 
-// go test: internal/effecttest/sharedfs.go:63 overlayFS ab70ae2df70b6a07
+// go test: internal/effecttest/sharedfs.go:64 overlayFS ab70ae2df70b6a07
 // overlayFS layers a test's own files over the shared packages. The test's
 // files win; directory listings merge both layers, since tests add their own
 // packages (and files) under /node_modules. Writes go to the test's layer.
@@ -73,19 +73,24 @@ pub(crate) struct OverlayFS<U: FS> {
     shared: Arc<SharedPackages>,
 }
 
-// go test: internal/effecttest/sharedfs.go:68 newOverlayFS 7b2a31a9fca7801b
+// go test: internal/effecttest/sharedfs.go:69 newOverlayFS 7b2a31a9fca7801b
 pub(crate) fn new_overlay_fs<U: FS>(upper: U, shared: Arc<SharedPackages>) -> OverlayFS<U> {
     OverlayFS { upper, shared }
 }
 
 impl<U: FS> FS for OverlayFS<U> {
-    // go test: internal/effecttest/sharedfs.go:72 overlayFS.CaseSensitivity 69398a1557c61b4b
-    // Rust: tsrs names it `use_case_sensitive_file_names`.
+    // go test: internal/effecttest/sharedfs.go:76 overlayFS.CaseSensitivity 278339259a7ec5b7
+    // go test: internal/effecttest/sharedfs.go:78 overlayFS.UseCaseSensitiveFileNames 836408c396060d13
+    // CaseSensitivity and UseCaseSensitiveFileNames are the vfs.FS case
+    // sensitivity of the TypeScript and the legacy typescript-go providers. Test
+    // VFSs are always case-sensitive.
+    //
+    // Rust: tsrs's `FS` has the one method `use_case_sensitive_file_names`.
     fn use_case_sensitive_file_names(&self) -> bool {
-        self.upper.use_case_sensitive_file_names()
+        true
     }
 
-    // go test: internal/effecttest/sharedfs.go:74 overlayFS.FileExists 7a095b0684930e2c
+    // go test: internal/effecttest/sharedfs.go:92 overlayFS.FileExists 7a095b0684930e2c
     fn file_exists(&self, path: &str) -> bool {
         if self.upper.file_exists(path) {
             return true;
@@ -93,7 +98,7 @@ impl<U: FS> FS for OverlayFS<U> {
         self.shared.contents.contains_key(path)
     }
 
-    // go test: internal/effecttest/sharedfs.go:82 overlayFS.ReadFile 85e571ddb44569f2
+    // go test: internal/effecttest/sharedfs.go:100 overlayFS.ReadFile 85e571ddb44569f2
     fn read_file(&self, path: &str) -> Option<String> {
         if let Some(contents) = self.upper.read_file(path) {
             return Some(contents);
@@ -101,32 +106,32 @@ impl<U: FS> FS for OverlayFS<U> {
         self.shared.contents.get(path).cloned()
     }
 
-    // go test: internal/effecttest/sharedfs.go:90 overlayFS.WriteFile e43701c1aa6e32ea
+    // go test: internal/effecttest/sharedfs.go:108 overlayFS.WriteFile e43701c1aa6e32ea
     fn write_file(&self, path: &str, data: &str) -> Result<(), String> {
         self.upper.write_file(path, data)
     }
 
-    // go test: internal/effecttest/sharedfs.go:94 overlayFS.AppendFile 602ffce1a7a8516a
+    // go test: internal/effecttest/sharedfs.go:112 overlayFS.AppendFile 602ffce1a7a8516a
     fn append_file(&self, path: &str, data: &str) -> Result<(), String> {
         self.upper.append_file(path, data)
     }
 
-    // go test: internal/effecttest/sharedfs.go:98 overlayFS.Remove 8c6d5339aa9eb920
+    // go test: internal/effecttest/sharedfs.go:116 overlayFS.Remove 8c6d5339aa9eb920
     fn remove(&self, path: &str) -> Result<(), String> {
         self.upper.remove(path)
     }
 
-    // go test: internal/effecttest/sharedfs.go:100 overlayFS.Chtimes 19620c061860aa55
+    // go test: internal/effecttest/sharedfs.go:118 overlayFS.Chtimes 19620c061860aa55
     fn chtimes(&self, path: &str, a_time: SystemTime, m_time: SystemTime) -> Result<(), String> {
         self.upper.chtimes(path, a_time, m_time)
     }
 
-    // go test: internal/effecttest/sharedfs.go:104 overlayFS.DirectoryExists b92c8cdd5be8a30f
+    // go test: internal/effecttest/sharedfs.go:122 overlayFS.DirectoryExists b92c8cdd5be8a30f
     fn directory_exists(&self, path: &str) -> bool {
         self.upper.directory_exists(path) || self.shared.fs.directory_exists(path)
     }
 
-    // go test: internal/effecttest/sharedfs.go:108 overlayFS.GetAccessibleEntries 09f2d5caa940ed8d
+    // go test: internal/effecttest/sharedfs.go:126 overlayFS.GetAccessibleEntries 09f2d5caa940ed8d
     fn get_accessible_entries(&self, path: &str) -> Entries {
         if !self.shared.fs.directory_exists(path) {
             return self.upper.get_accessible_entries(path);
@@ -151,7 +156,7 @@ impl<U: FS> FS for OverlayFS<U> {
         }
     }
 
-    // go test: internal/effecttest/sharedfs.go:139 overlayFS.Stat 49ad60ac251c9365
+    // go test: internal/effecttest/sharedfs.go:157 overlayFS.Stat 49ad60ac251c9365
     fn stat(&self, path: &str) -> Option<FileInfo> {
         if let Some(info) = self.upper.stat(path) {
             return Some(info);
@@ -159,7 +164,7 @@ impl<U: FS> FS for OverlayFS<U> {
         self.shared.fs.stat(path)
     }
 
-    // go test: internal/effecttest/sharedfs.go:146 overlayFS.Realpath 303abab4e9d5a3aa
+    // go test: internal/effecttest/sharedfs.go:164 overlayFS.Realpath 303abab4e9d5a3aa
     fn realpath(&self, path: &str) -> String {
         if self.upper.stat(path).is_some() {
             return self.upper.realpath(path);
@@ -168,7 +173,7 @@ impl<U: FS> FS for OverlayFS<U> {
     }
 }
 
-// go test: internal/effecttest/sharedfs.go:133 mergeNames bd195af016ccc50a
+// go test: internal/effecttest/sharedfs.go:151 mergeNames bd195af016ccc50a
 fn merge_names(a: Vec<String>, b: Vec<String>) -> Vec<String> {
     let mut merged = [a, b].concat();
     merged.sort();

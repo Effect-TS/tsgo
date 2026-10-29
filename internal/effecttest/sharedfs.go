@@ -1,6 +1,7 @@
 package effecttest
 
 import (
+	"errors"
 	"slices"
 	"sync"
 	"testing/fstest"
@@ -69,7 +70,24 @@ func newOverlayFS(upper vfs.FS, shared *sharedPackages) vfs.FS {
 	return &overlayFS{upper: upper, shared: shared}
 }
 
-func (o *overlayFS) CaseSensitivity() tspath.CaseSensitivity { return o.upper.CaseSensitivity() }
+// CaseSensitivity and UseCaseSensitiveFileNames are the vfs.FS case
+// sensitivity of the TypeScript and the legacy typescript-go providers. Test
+// VFSs are always case-sensitive.
+func (o *overlayFS) CaseSensitivity() tspath.CaseSensitivity { return tspath.CaseSensitive }
+
+func (o *overlayFS) UseCaseSensitiveFileNames() bool { return true }
+
+// WalkDir is part of the legacy typescript-go vfs.FS only. It walks the
+// test's own files: the shared packages live under /node_modules, which
+// config file matching skips.
+func (o *overlayFS) WalkDir(root tspath.RootedPath, walkFn vfs.WalkDirFunc) error {
+	if walker, ok := o.upper.(interface {
+		WalkDir(root tspath.RootedPath, walkFn vfs.WalkDirFunc) error
+	}); ok {
+		return walker.WalkDir(root, walkFn)
+	}
+	return errors.ErrUnsupported
+}
 
 func (o *overlayFS) FileExists(path tspath.RootedFilePath) bool {
 	if o.upper.FileExists(path) {
