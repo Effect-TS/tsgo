@@ -10,28 +10,31 @@ import (
 // ScopeTypeId is the property key for Scope's variance struct.
 const ScopeTypeId = "~effect/Scope"
 
-// IsScopeType returns true if the type is an Effect Scope type.
+// ScopeType returns t itself when it is an Effect Scope type, or nil otherwise.
 // For v4, this checks for the "~effect/Scope" computed property.
 // For v3/unknown, this checks that the type is "pipeable" (has a callable pipe property)
 // and that any required non-optional property's symbol name contains "ScopeTypeId".
-func (tp *TypeParser) IsScopeType(t *checker.Type) bool {
+func (tp *TypeParser) ScopeType(t *checker.Type) *checker.Type {
 	if tp == nil || tp.checker == nil || t == nil {
-		return false
+		return nil
 	}
-	return Cached(&tp.links.IsScopeType, t, func() bool {
+	return Cached(&tp.links.ScopeType, t, func() *checker.Type {
 		version := tp.DetectEffectVersion()
 		if version == EffectMajorV4 {
-			return tp.GetTypeOfPropertyByName(t, ScopeTypeId) != nil
+			if tp.GetTypeOfPropertyByName(t, ScopeTypeId) == nil {
+				return nil
+			}
+			return t
 		}
 
 		// v3 / unknown: check that the type is "pipeable"
 		pipeType := tp.GetTypeOfPropertyByName(t, "pipe")
 		if pipeType == nil {
-			return false
+			return nil
 		}
 		signatures := tp.checker.GetSignaturesOfType(pipeType, checker.SignatureKindCall)
 		if len(signatures) == 0 {
-			return false
+			return nil
 		}
 
 		// Check if any required non-optional property's symbol name contains "ScopeTypeId"
@@ -49,10 +52,10 @@ func (tp *TypeParser) IsScopeType(t *checker.Type) bool {
 				continue
 			}
 			if strings.Contains(ast.TSGetSymbolName(prop), "ScopeTypeId") {
-				return true
+				return t
 			}
 		}
 
-		return false
+		return nil
 	})
 }

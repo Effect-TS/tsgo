@@ -118,10 +118,10 @@ func checkOutdatedApiPropertyAccess(tp *typeparser.TypeParser, c *checker.Checke
 		return nil
 	}
 
-	// Get the type of the expression (left side of the property access)
+	// Verify the expression (left side of the property access) references the
+	// Effect module, before computing its type.
 	expr := prop.Expression
-	// Literals and functions never reference the Effect module.
-	if expr == nil || tp.NodeCannotBeEffectLibraryType(expr) {
+	if !tp.IsExpressionEffectModule(expr) {
 		return nil
 	}
 
@@ -133,11 +133,6 @@ func checkOutdatedApiPropertyAccess(tp *typeparser.TypeParser, c *checker.Checke
 	// Only report if the property does NOT exist on the target type
 	// (confirming it's a v3-only API)
 	if c.GetPropertyOfType(targetType, identifierName) != nil {
-		return nil
-	}
-
-	// Verify the expression references the Effect module
-	if !tp.IsExpressionEffectModule(expr) {
 		return nil
 	}
 

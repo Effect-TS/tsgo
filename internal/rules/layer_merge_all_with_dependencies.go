@@ -104,15 +104,7 @@ func analyzeLayerMergeAllCall(tp *typeparser.TypeParser, c *checker.Checker, sf 
 	actuallyProvidedMap := make(map[*checker.Type]*ast.Node)
 
 	for _, arg := range args.Nodes {
-		if tp.NodeCannotBeEffectLibraryType(arg) {
-			continue
-		}
-		argType := tp.GetTypeAtLocation(arg)
-		if argType == nil {
-			continue
-		}
-
-		layer := tp.LayerType(argType)
+		layer := tp.LayerTypeAtLocation(arg)
 		if layer == nil {
 			continue
 		}

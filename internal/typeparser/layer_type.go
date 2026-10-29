@@ -113,9 +113,11 @@ func (tp *TypeParser) LayerType(t *checker.Type) *Layer {
 	})
 }
 
-// IsLayerType returns true if the type has the Layer variance struct.
-func (tp *TypeParser) IsLayerType(t *checker.Type) bool {
-	return tp.LayerType(t) != nil
+// LayerTypeAtLocation parses the type of node as a Layer type.
+// Returns nil if the type is not a Layer, without computing the type when
+// nodeCannotBeEffectLibraryType rules node out.
+func (tp *TypeParser) LayerTypeAtLocation(node *ast.Node) *Layer {
+	return tp.LayerType(tp.effectLibraryTypeAtLocation(node))
 }
 
 func isLayerTypeSourceFile(tp *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {

@@ -45,7 +45,7 @@ pub struct UnnecessaryFailYieldableErrorMatch {
     pub fail_argument: P<Node>,     // The first argument to Effect.fail (the replacement text)
 }
 
-// go: internal/rules/unnecessary_fail_yieldable_error.go:45 AnalyzeUnnecessaryFailYieldableError 850ef485c0a4af87
+// go: internal/rules/unnecessary_fail_yieldable_error.go:45 AnalyzeUnnecessaryFailYieldableError 7dfad8e93a4a16ab
 // AnalyzeUnnecessaryFailYieldableError finds all yield* Effect.fail(...) calls
 // where the argument is a yieldable error type that can be yielded directly.
 //
@@ -77,9 +77,7 @@ pub fn analyze_unnecessary_fail_yieldable_error(
                 {
                     let arg = arguments[0];
                     let arg_type = tp.get_type_at_location(arg);
-                    if let Some(arg_type) = arg_type
-                        && tp.is_yieldable_error_type(arg_type)
-                    {
+                    if tp.yieldable_error_type(arg_type).is_some() {
                         matches.push(UnnecessaryFailYieldableErrorMatch {
                             source_file: sf,
                             location: ets_shim::scanner::get_error_range_for_node(sf, n),

@@ -131,10 +131,7 @@ func hasExplicitPromiseEffectContext(tp *typeparser.TypeParser, c *checker.Check
 }
 
 func isExplicitPromiseEffectType(tp *typeparser.TypeParser, typeNode *ast.Node) bool {
-	if typeNode == nil {
-		return false
-	}
-	effect := tp.StrictEffectType(tp.GetTypeAtLocation(typeNode))
+	effect := tp.StrictEffectTypeAtLocation(typeNode)
 	return effect != nil && typeContainsPromise(tp, effect.A())
 }
 

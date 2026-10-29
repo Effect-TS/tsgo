@@ -46,7 +46,7 @@ impl TypeParser<'_> {
 // go: internal/typeparser/type_parser.go:19 denseNodeStore e1e5b8a5ab011678
 pub type DenseNodeStore<V> = FxHashMap<P<Node>, V>;
 
-// go: internal/typeparser/type_parser.go:23 EffectLinks e0e826028fd76877
+// go: internal/typeparser/type_parser.go:23 EffectLinks 8d56369a0fd73a22
 // EffectLinks holds per-checker cached type-parser results.
 // One instance is lazily created per Checker and cached on TypeParser.
 //
@@ -83,12 +83,12 @@ pub struct EffectLinks {
     pub service_type: FxHashMap<P<Type>, Option<Service>>,
     pub context_tag: FxHashMap<P<Type>, Option<Service>>,
     pub effect_schema_types: FxHashMap<P<Type>, Option<SchemaTypes>>,
-    pub is_scope_type: FxHashMap<P<Type>, bool>,
+    pub scope_type: FxHashMap<P<Type>, Option<P<Type>>>,
     pub is_pipeable_type: FxHashMap<P<Type>, bool>,
     pub global_interface_has_pipe: FxHashMap<String, bool>,
     pub promise_type: FxHashMap<P<Type>, Option<P<Type>>>,
     pub is_global_error_type: FxHashMap<P<Type>, bool>,
-    pub is_yieldable_error_type: FxHashMap<P<Type>, bool>,
+    pub yieldable_error_type: FxHashMap<P<Type>, Option<P<Type>>>,
     pub(crate) module_export_identities: FxHashMap<P<Symbol>, Arc<[ModuleExportIdentity]>>,
     pub(crate) module_export_filter: FxHashMap<P<Symbol>, ModuleExportFilter>,
     pub(crate) module_export_names: FxHashMap<P<SourceFile>, ModuleExportNames>,

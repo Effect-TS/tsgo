@@ -14,14 +14,6 @@ var effectSchemaParserModuleDescriptor = newPackageSourceFileDescriptor(moduleDe
 // SchemaTypeId is the property key for Schema's variance struct.
 const SchemaTypeId = "~effect/Schema/Schema"
 
-// IsSchemaType returns true if the type is a Schema type (v4 or v3).
-func (tp *TypeParser) IsSchemaType(t *checker.Type) bool {
-	if tp == nil {
-		return false
-	}
-	return tp.EffectSchemaTypes(t) != nil
-}
-
 // SchemaTypes holds the A (Type) and E (Encoded) types extracted from a Schema type.
 type SchemaTypes struct {
 	a *checker.Type
@@ -85,6 +77,15 @@ func (tp *TypeParser) EffectSchemaTypes(t *checker.Type) *SchemaTypes {
 	})
 }
 
+// EffectSchemaTypesAtLocation extracts the A (Type) and E (Encoded) types from
+// the type of node. Returns nil if the type is not a recognized Schema type,
+// without computing the type when nodeCannotBeEffectLibraryType rules node
+// out: a v4 Schema carries the "~effect/Schema/Schema" key and a v3 Schema an
+// "ast" property and a variance struct, which such nodes never have.
+func (tp *TypeParser) EffectSchemaTypesAtLocation(node *ast.Node) *SchemaTypes {
+	return tp.EffectSchemaTypes(tp.effectLibraryTypeAtLocation(node))
+}
+
 func isSchemaTypeSourceFile(tp *TypeParser, c *checker.Checker, sf *ast.SourceFile) bool {
 	if c == nil || sf == nil {
 		return false
@@ -105,7 +106,7 @@ func isSchemaTypeSourceFile(tp *TypeParser, c *checker.Checker, sf *ast.SourceFi
 		return false
 	}
 
-	return tp.IsSchemaType(schemaType)
+	return tp.EffectSchemaTypes(schemaType) != nil
 }
 
 // IsNodeReferenceToEffectSchemaModuleApi reports whether node resolves to a member

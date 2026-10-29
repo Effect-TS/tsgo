@@ -139,7 +139,7 @@ pub(crate) fn schema_decoder_transformation(
     (None, None)
 }
 
-// go: internal/rules/prefer_typed_schema_decoder.go:115 analyzeTypedSchemaDecoderApplication c780b0564a57a3d1
+// go: internal/rules/prefer_typed_schema_decoder.go:115 analyzeTypedSchemaDecoderApplication f6ee8262104c1c65
 pub(crate) fn analyze_typed_schema_decoder_application(
     tp: &mut TypeParser<'_>,
     sf: P<SourceFile>,
@@ -149,16 +149,12 @@ pub(crate) fn analyze_typed_schema_decoder_application(
     input_type: Option<P<Type>>,
 ) -> Option<PreferTypedSchemaDecoderMatch> {
     let name_node = schema_decoder_name_node(Some(callee))?;
-    if tp.node_cannot_be_effect_library_type(schema) {
-        return None;
-    }
     let (unknown_name, typed_name) = match_unknown_schema_decoder(tp, callee);
     if unknown_name.is_empty() {
         return None;
     }
 
-    let schema_at_location = tp.get_type_at_location(schema);
-    let schema_type = tp.effect_schema_types(schema_at_location)?;
+    let schema_type = tp.effect_schema_types_at_location(schema)?;
     let encoded = schema_type.e();
     let mut input_type = input_type;
     if input_type.is_none()
@@ -204,7 +200,7 @@ pub(crate) fn analyze_typed_schema_decoder_application(
     })
 }
 
-// go: internal/rules/prefer_typed_schema_decoder.go:158 containsUnresolvedTypeVariable 45165762788695ff
+// go: internal/rules/prefer_typed_schema_decoder.go:155 containsUnresolvedTypeVariable 45165762788695ff
 pub(crate) fn contains_unresolved_type_variable(
     c: &mut Checker,
     t: Option<P<Type>>,
@@ -248,7 +244,7 @@ pub(crate) fn contains_unresolved_type_variable(
     false
 }
 
-// go: internal/rules/prefer_typed_schema_decoder.go:193 matchUnknownSchemaDecoder 5fbde6c52cc7a4b5
+// go: internal/rules/prefer_typed_schema_decoder.go:190 matchUnknownSchemaDecoder 5fbde6c52cc7a4b5
 pub(crate) fn match_unknown_schema_decoder(
     tp: &mut TypeParser<'_>,
     callee: P<Node>,
@@ -263,7 +259,7 @@ pub(crate) fn match_unknown_schema_decoder(
     ("", "")
 }
 
-// go: internal/rules/prefer_typed_schema_decoder.go:203 schemaDecoderNameNode 683e71467efadd80
+// go: internal/rules/prefer_typed_schema_decoder.go:200 schemaDecoderNameNode 683e71467efadd80
 pub(crate) fn schema_decoder_name_node(callee: Option<P<Node>>) -> Option<P<Node>> {
     let callee = callee?;
     if callee.kind() == Kind::PropertyAccessExpression {

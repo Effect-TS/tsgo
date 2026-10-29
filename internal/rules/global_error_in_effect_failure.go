@@ -58,15 +58,7 @@ func checkGlobalErrorInEffectFailure(ctx *rule.Context, node *ast.Node) *ast.Dia
 
 	// Walk up the parent chain to find an enclosing Effect type
 	ancestor := ast.FindAncestorOrQuit(node.Parent, func(current *ast.Node) ast.FindAncestorResult {
-		if ctx.TypeParser.NodeCannotBeEffectLibraryType(current) {
-			return ast.FindAncestorFalse
-		}
-		currentType := ctx.TypeParser.GetTypeAtLocation(current)
-		if currentType == nil {
-			return ast.FindAncestorFalse
-		}
-
-		effectType := ctx.TypeParser.EffectType(currentType)
+		effectType := ctx.TypeParser.EffectTypeAtLocation(current)
 		if effectType == nil {
 			return ast.FindAncestorFalse
 		}

@@ -41,11 +41,7 @@ func runWrapWithEffectGen(ctx *refactor.Context) []ls.CodeAction {
 			}
 		}
 
-		nodeType := ctx.TypeParser.GetTypeAtLocation(node)
-		if nodeType == nil {
-			continue
-		}
-		if !ctx.TypeParser.StrictIsEffectType(nodeType) {
+		if ctx.TypeParser.StrictEffectTypeAtLocation(node) == nil {
 			continue
 		}
 		if ctx.TypeParser.EffectGenCall(node) != nil {

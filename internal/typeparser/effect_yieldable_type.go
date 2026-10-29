@@ -1,6 +1,9 @@
 package typeparser
 
-import "github.com/microsoft/TypeScript/tsc/shim/checker"
+import (
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
+)
 
 // EffectYieldableType resolves both plain Effect types and yieldable wrappers
 // that implement the asEffect() protocol.
@@ -45,4 +48,16 @@ func (tp *TypeParser) EffectYieldableType(t *checker.Type) *Effect {
 
 		return nil
 	})
+}
+
+// EffectYieldableTypeAtLocation resolves the type of node as an Effect or a
+// yieldable wrapper (see EffectYieldableType). Returns nil if the type is
+// neither, without computing the type when nodeCannotBeEffectLibraryType rules
+// node out. Object literals are never ruled out: in v4 an object literal with
+// an asEffect member is yieldable without any "~effect/..." key.
+func (tp *TypeParser) EffectYieldableTypeAtLocation(node *ast.Node) *Effect {
+	if tp == nil || node == nil || (node.Kind != ast.KindObjectLiteralExpression && tp.nodeCannotBeEffectLibraryType(node)) {
+		return nil
+	}
+	return tp.EffectYieldableType(tp.GetTypeAtLocation(node))
 }

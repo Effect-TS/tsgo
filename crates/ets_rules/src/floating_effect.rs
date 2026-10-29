@@ -106,7 +106,7 @@ pub fn analyze_floating_effect(
     matches
 }
 
-// go: internal/rules/floating_effect.go:90 detectFloatingEffect 9206a9c3a64f43c4
+// go: internal/rules/floating_effect.go:90 detectFloatingEffect 44a80d935048c27f
 // detectFloatingEffect checks if a node is an expression statement containing an Effect type
 // that is neither yielded nor assigned. Returns nil if the node should not be reported,
 // or a result with type info for selecting the appropriate diagnostic message.
@@ -131,38 +131,35 @@ pub(crate) fn detect_floating_effect(
         return None;
     }
 
-    if tp.node_cannot_be_effect_library_type(expr) {
+    let has_effect_type_id = tp.has_effect_type_id_at_location(expr);
+    if !has_effect_type_id && tp.stream_type_at_location(expr).is_none() {
         return None;
     }
 
-    // Get the type of the expression
+    // Cached by the AtLocation parsers above, which only succeed on a type.
     let t = tp.get_type_at_location(expr)?;
 
-    if tp.has_effect_type_id(t) {
+    if has_effect_type_id {
         // Full Effect validation.
-        if !tp.is_effect_type(t) {
-            return None;
-        }
+        tp.effect_type(t)?;
 
         // Exclude Fiber types (considered valid floating operations)
-        if tp.is_fiber_type(t) {
+        if tp.fiber_type(t).is_some() {
             return None;
         }
 
         // Exclude Effect subtypes (Exit, Option, Either, Pool, etc.)
-        if tp.is_effect_subtype(t) {
+        if tp.effect_subtype(t).is_some() {
             return None;
         }
-    } else if tp.stream_type(t).is_none() {
-        return None;
     }
 
     // Determine if this is strictly an Effect or an Effect-able type
-    let is_strict = tp.strict_is_effect_type(t);
+    let is_strict = tp.strict_effect_type(t).is_some();
     Some(FloatingEffectResult { is_strict, expr_type: t })
 }
 
-// go: internal/rules/floating_effect.go:146 isAssignmentExpression ad3ba8d34dd2ba22
+// go: internal/rules/floating_effect.go:142 isAssignmentExpression ad3ba8d34dd2ba22
 // isAssignmentExpression checks if an expression is an assignment (=, ??=, &&=, ||=).
 pub(crate) fn is_assignment_expression(node: Option<P<Node>>) -> bool {
     let Some(node) = node else {

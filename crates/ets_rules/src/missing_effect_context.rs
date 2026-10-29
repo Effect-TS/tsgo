@@ -245,18 +245,14 @@ pub(crate) fn find_related_layer_provider_diagnostics(
     related
 }
 
-// go: internal/rules/missing_effect_context.go:206 rootLayerProvidesTypes daa168f985a53e0f
+// go: internal/rules/missing_effect_context.go:206 rootLayerProvidesTypes 45b7004789bc31ae
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`).
 pub(crate) fn root_layer_provides_types(
     tp: &mut TypeParser<'_>,
     layer_node: Option<P<Node>>,
 ) -> Vec<P<Type>> {
-    let Some(layer_node) = layer_node else {
-        return Vec::new();
-    };
-    let layer_node_type = tp.get_type_at_location(layer_node);
-    let Some(layer_type) = tp.layer_type(layer_node_type) else {
+    let Some(layer_type) = tp.layer_type_at_location(layer_node) else {
         return Vec::new();
     };
     tp.unroll_union_members(layer_type.r_out()).unwrap_or_default()

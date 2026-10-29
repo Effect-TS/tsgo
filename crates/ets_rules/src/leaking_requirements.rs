@@ -243,7 +243,7 @@ pub(crate) fn has_expected_leaking_comment(
     false
 }
 
-// go: internal/rules/leaking_requirements.go:208 parseLeakedRequirements 1661b8680045a6a2
+// go: internal/rules/leaking_requirements.go:208 parseLeakedRequirements 373738beeb8e320d
 // parseLeakedRequirements analyzes the service shape to find requirement types that
 // are shared across all effect-typed members. This is the "leaking requirements" heuristic.
 //
@@ -269,7 +269,7 @@ pub(crate) fn parse_leaked_requirements(
             return true;
         }
         // Exclude Scope types
-        if tp.is_scope_type(t) {
+        if tp.scope_type(t).is_some() {
             return true;
         }
         false

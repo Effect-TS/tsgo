@@ -43,7 +43,7 @@ pub struct MultipleEffectProvideMatch {
     pub layer_args: Vec<P<Node>>, // The layer argument nodes from each Effect.provide(layer) call
 }
 
-// go: internal/rules/multiple_effect_provide.go:45 AnalyzeMultipleEffectProvide 1ff3c9f522c7ff02
+// go: internal/rules/multiple_effect_provide.go:45 AnalyzeMultipleEffectProvide e1fab5aa13e5bd78
 // AnalyzeMultipleEffectProvide finds all consecutive Effect.provide call chains
 // with Layer-typed arguments within piping flows.
 //
@@ -126,16 +126,7 @@ pub fn analyze_multiple_effect_provide(
 
             // Check if the first argument is a Layer type
             let arg = *transformation.args().at(0);
-            if tp.node_cannot_be_effect_library_type(arg) {
-                finalize!();
-                continue;
-            }
-            let Some(arg_type) = tp.get_type_at_location(arg) else {
-                finalize!();
-                continue;
-            };
-
-            if tp.layer_type(arg_type).is_none() {
+            if tp.layer_type_at_location(arg).is_none() {
                 // provide call but not with a Layer argument — breaks the chain
                 finalize!();
                 continue;

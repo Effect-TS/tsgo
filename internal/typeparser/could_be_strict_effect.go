@@ -32,7 +32,7 @@ func (tp *TypeParser) NodeCouldBeStrictEffect(node *ast.Node) bool {
 		return true
 	}
 	// An object literal's type is anonymous, so it is never named "Effect".
-	if node.Kind == ast.KindObjectLiteralExpression || tp.NodeCannotBeEffectLibraryType(node) {
+	if node.Kind == ast.KindObjectLiteralExpression || tp.nodeCannotBeEffectLibraryType(node) {
 		return false
 	}
 	if node.Kind == ast.KindCallExpression {
@@ -150,7 +150,7 @@ func couldBe(t *checker.Type, depth int, objectCouldMatch func(*checker.Type) bo
 
 // NodeCouldBeEffect reports whether node's type could possibly be an Effect
 // type as recognized by EffectType. Only calls are inspected beyond the
-// syntactic NodeCannotBeEffectLibraryType check: a call's type is its
+// syntactic nodeCannotBeEffectLibraryType check: a call's type is its
 // resolved signature's return type and is never narrowed, while a reference
 // can be narrowed by a type guard such as Effect.isEffect into an Effect
 // whatever its declared type. Only v4 identifies Effects by a single
@@ -159,7 +159,7 @@ func (tp *TypeParser) NodeCouldBeEffect(node *ast.Node) (result bool) {
 	if tp == nil || tp.checker == nil || node == nil {
 		return true
 	}
-	if tp.NodeCannotBeEffectLibraryType(node) {
+	if tp.nodeCannotBeEffectLibraryType(node) {
 		return false
 	}
 	if node.Kind != ast.KindCallExpression || tp.DetectEffectVersion() != EffectMajorV4 {

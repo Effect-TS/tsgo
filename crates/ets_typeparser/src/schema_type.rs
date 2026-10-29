@@ -32,15 +32,7 @@ pub(crate) static EFFECT_SCHEMA_PARSER_MODULE_DESCRIPTOR: PackageSourceFileDescr
 // SchemaTypeId is the property key for Schema's variance struct.
 pub const SCHEMA_TYPE_ID: &str = "~effect/Schema/Schema";
 
-impl TypeParser<'_> {
-    // go: internal/typeparser/schema_type.go:18 TypeParser.IsSchemaType 79b8576d1195283f
-    // IsSchemaType returns true if the type is a Schema type (v4 or v3).
-    pub fn is_schema_type(&mut self, t: impl Into<Option<P<Type>>>) -> bool {
-        self.effect_schema_types(t).is_some()
-    }
-}
-
-// go: internal/typeparser/schema_type.go:26 SchemaTypes 1f2048da43e858ed
+// go: internal/typeparser/schema_type.go:18 SchemaTypes 1f2048da43e858ed
 // SchemaTypes holds the A (Type) and E (Encoded) types extracted from a Schema type.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct SchemaTypes {
@@ -49,19 +41,19 @@ pub struct SchemaTypes {
 }
 
 impl SchemaTypes {
-    // go: internal/typeparser/schema_type.go:31 SchemaTypes.A 5b0a10134d57f4f6
+    // go: internal/typeparser/schema_type.go:23 SchemaTypes.A 5b0a10134d57f4f6
     pub fn a(self) -> P<Type> {
         self.a
     }
 
-    // go: internal/typeparser/schema_type.go:33 SchemaTypes.E 3c1b123807fd1e45
+    // go: internal/typeparser/schema_type.go:25 SchemaTypes.E 3c1b123807fd1e45
     pub fn e(self) -> P<Type> {
         self.e
     }
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/schema_type.go:37 TypeParser.EffectSchemaTypes f47d39cdfb718336
+    // go: internal/typeparser/schema_type.go:29 TypeParser.EffectSchemaTypes f47d39cdfb718336
     // EffectSchemaTypes extracts the A (Type) and E (Encoded) types from a Schema type.
     // Returns nil if the type is not a recognized Schema type or types cannot be extracted.
     pub fn effect_schema_types(&mut self, t: impl Into<Option<P<Type>>>) -> Option<SchemaTypes> {
@@ -112,9 +104,23 @@ impl TypeParser<'_> {
             },
         )
     }
+
+    // go: internal/typeparser/schema_type.go:85 TypeParser.EffectSchemaTypesAtLocation 79ab0a25891554b2
+    // EffectSchemaTypesAtLocation extracts the A (Type) and E (Encoded) types from
+    // the type of node. Returns nil if the type is not a recognized Schema type,
+    // without computing the type when nodeCannotBeEffectLibraryType rules node
+    // out: a v4 Schema carries the "~effect/Schema/Schema" key and a v3 Schema an
+    // "ast" property and a variance struct, which such nodes never have.
+    pub fn effect_schema_types_at_location(
+        &mut self,
+        node: impl Into<Option<P<Node>>>,
+    ) -> Option<SchemaTypes> {
+        let t = self.effect_library_type_at_location(node);
+        self.effect_schema_types(t)
+    }
 }
 
-// go: internal/typeparser/schema_type.go:88 isSchemaTypeSourceFile 3dfe87cd7693bbc6
+// go: internal/typeparser/schema_type.go:89 isSchemaTypeSourceFile 4e3357633b6e0a6b
 // Rust: Go's `c` argument is `tp.checker`.
 pub(crate) fn is_schema_type_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> bool {
     let Some(module_sym) = get_symbol_of_declaration(tp.checker, sf.as_node()) else {
@@ -129,11 +135,11 @@ pub(crate) fn is_schema_type_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFi
 
     let schema_type = tp.checker.get_declared_type_of_symbol_exported(schema_sym);
 
-    tp.is_schema_type(schema_type)
+    tp.effect_schema_types(schema_type).is_some()
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/schema_type.go:113 TypeParser.IsNodeReferenceToEffectSchemaModuleApi 64965c3c38021dd9
+    // go: internal/typeparser/schema_type.go:114 TypeParser.IsNodeReferenceToEffectSchemaModuleApi 64965c3c38021dd9
     // IsNodeReferenceToEffectSchemaModuleApi reports whether node resolves to a member
     // exported by the "effect" package from a module that exports the Schema type.
     pub fn is_node_reference_to_effect_schema_module_api(
@@ -145,7 +151,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/schema_type.go:117 isParseResultSourceFile 89f80809954a910f
+// go: internal/typeparser/schema_type.go:118 isParseResultSourceFile 89f80809954a910f
 pub(crate) fn is_parse_result_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> bool {
     let c = &mut *tp.checker;
     let Some(module_sym) = get_symbol_of_declaration(c, sf.as_node()) else {
@@ -171,7 +177,7 @@ pub(crate) fn is_parse_result_source_file(tp: &mut TypeParser<'_>, sf: P<SourceF
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/schema_type.go:147 TypeParser.IsNodeReferenceToEffectParseResultModuleApi 20d5b833d5c4738e
+    // go: internal/typeparser/schema_type.go:148 TypeParser.IsNodeReferenceToEffectParseResultModuleApi 20d5b833d5c4738e
     // IsNodeReferenceToEffectParseResultModuleApi reports whether node resolves to a member
     // exported by the "effect" package from a module that exports the ParseResult type (V3).
     pub fn is_node_reference_to_effect_parse_result_module_api(
@@ -187,7 +193,7 @@ impl TypeParser<'_> {
     }
 }
 
-// go: internal/typeparser/schema_type.go:151 isSchemaParserSourceFile 92c25094c1875239
+// go: internal/typeparser/schema_type.go:152 isSchemaParserSourceFile 92c25094c1875239
 pub(crate) fn is_schema_parser_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> bool {
     let c = &mut *tp.checker;
     let Some(module_sym) = get_symbol_of_declaration(c, sf.as_node()) else {
@@ -208,7 +214,7 @@ pub(crate) fn is_schema_parser_source_file(tp: &mut TypeParser<'_>, sf: P<Source
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/schema_type.go:176 TypeParser.IsNodeReferenceToEffectSchemaParserModuleApi 8a25422c409a5471
+    // go: internal/typeparser/schema_type.go:177 TypeParser.IsNodeReferenceToEffectSchemaParserModuleApi 8a25422c409a5471
     // IsNodeReferenceToEffectSchemaParserModuleApi reports whether node resolves to a member
     // exported by the "effect" package from a module that exports the SchemaParser type (V4).
     pub fn is_node_reference_to_effect_schema_parser_module_api(

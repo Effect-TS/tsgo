@@ -19,27 +19,25 @@ impl SourceFileProgram for Program {
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/yieldable_error.go:17 TypeParser.IsYieldableErrorType ca0a32114f37016e
-    // IsYieldableErrorType reports whether the given type is assignable to Cause.YieldableError
-    // from the "effect" package. Returns false for never and any types.
+    // go: internal/typeparser/yieldable_error.go:17 TypeParser.YieldableErrorType b7a95736585cb324
+    // YieldableErrorType returns t itself when it is assignable to Cause.YieldableError
+    // from the "effect" package, or nil otherwise. Returns nil for never and any types.
     //
     // Rust: Go's assertion to `sourceFileProgram` succeeds for the compiler program (see `TypeParser`).
-    pub fn is_yieldable_error_type(&mut self, t: impl Into<Option<P<Type>>>) -> bool {
-        let Some(t) = t.into() else {
-            return false;
-        };
+    pub fn yieldable_error_type(&mut self, t: impl Into<Option<P<Type>>>) -> Option<P<Type>> {
+        let t = t.into()?;
         cached(
             self,
-            |l| &mut l.is_yieldable_error_type,
+            |l| &mut l.yieldable_error_type,
             t,
             |tp| {
                 // never is assignable to everything, so we need to exclude it
                 if t.flags().intersects(TypeFlags::Never) {
-                    return false;
+                    return None;
                 }
                 // any is assignable to everything, so we need to exclude it
                 if t.flags().intersects(TypeFlags::Any) {
-                    return false;
+                    return None;
                 }
 
                 let prog: &dyn SourceFileProgram = tp.program;
@@ -89,11 +87,11 @@ impl TypeParser<'_> {
                         tp.checker.get_declared_type_of_symbol_exported(export_sym);
 
                     if tp.checker.is_type_assignable_to(t, yieldable_error_type) {
-                        return true;
+                        return Some(t);
                     }
                 }
 
-                false
+                None
             },
         )
     }

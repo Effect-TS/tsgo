@@ -1,6 +1,9 @@
 package typeparser
 
-import "github.com/microsoft/TypeScript/tsc/shim/checker"
+import (
+	"github.com/microsoft/TypeScript/tsc/shim/ast"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
+)
 
 // ServiceTypeId is the property key for the newer Context.Service variance struct.
 const ServiceTypeId = "~effect/Context/Service"
@@ -61,7 +64,10 @@ func (tp *TypeParser) ServiceType(t *checker.Type) *Service {
 	})
 }
 
-// IsServiceType returns true if the type has the Service variance struct.
-func (tp *TypeParser) IsServiceType(t *checker.Type) bool {
-	return tp.ServiceType(t) != nil
+// ServiceTypeAtLocation parses the type of node as a v4 service type.
+// Returns nil if the type is not a v4 service, without computing the type when
+// nodeCannotBeEffectLibraryType rules node out: a service carries the
+// "~effect/Context/Service" key, which such nodes never have.
+func (tp *TypeParser) ServiceTypeAtLocation(node *ast.Node) *Service {
+	return tp.ServiceType(tp.effectLibraryTypeAtLocation(node))
 }

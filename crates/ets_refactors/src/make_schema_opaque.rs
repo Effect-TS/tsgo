@@ -34,7 +34,7 @@ pub(crate) struct SchemaVarInfo {
     pub(crate) schema_types: SchemaTypes,
 }
 
-// go: internal/refactors/make_schema_opaque.go:31 findSchemaVariableDeclaration 26e2735a4c4b5bc0
+// go: internal/refactors/make_schema_opaque.go:31 findSchemaVariableDeclaration dff76be051e26790
 // findSchemaVariableDeclaration walks the ancestor chain from the cursor to find a
 // VariableDeclaration whose initializer has a Schema type. Returns nil if not found.
 //
@@ -82,11 +82,8 @@ pub(crate) fn find_schema_variable_declaration(ctx: &mut Context<'_, '_>) -> Opt
         };
 
         // Check the initializer's type is a Schema type
-        let Some(init_type) = ctx.type_parser.get_type_at_location(initializer) else {
-            continue;
-        };
-
-        let Some(schema_types) = ctx.type_parser.effect_schema_types(init_type) else {
+        let Some(schema_types) = ctx.type_parser.effect_schema_types_at_location(initializer)
+        else {
             continue;
         };
 
@@ -102,13 +99,13 @@ pub(crate) fn find_schema_variable_declaration(ctx: &mut Context<'_, '_>) -> Opt
     None
 }
 
-// go: internal/refactors/make_schema_opaque.go:96 createTypeofReference cfe7639f06228057
+// go: internal/refactors/make_schema_opaque.go:91 createTypeofReference cfe7639f06228057
 // createTypeofReference creates: typeof <name>
 pub(crate) fn create_typeof_reference(tracker: &NodeFactory, name: &str) -> P<Node> {
     tracker.new_type_query_node(tracker.new_identifier(alloc_str(name)), None)
 }
 
-// go: internal/refactors/make_schema_opaque.go:105 createSchemaPropertyAccess aad7d623fe590caa
+// go: internal/refactors/make_schema_opaque.go:100 createSchemaPropertyAccess aad7d623fe590caa
 // createSchemaPropertyAccess creates: <schema>.<ns>.<member> as a property access expression.
 // Used in ExpressionWithTypeArguments for heritage clauses.
 pub(crate) fn create_schema_property_access(
@@ -120,7 +117,7 @@ pub(crate) fn create_schema_property_access(
     tracker.new_property_access_path(&schema.append(&[ns, member]))
 }
 
-// go: internal/refactors/make_schema_opaque.go:111 createSchemaQualifiedName 53a5090f5771de64
+// go: internal/refactors/make_schema_opaque.go:106 createSchemaQualifiedName 53a5090f5771de64
 // createSchemaQualifiedName creates: <schema>.<ns>.<member> as a qualified name.
 // Used in TypeReferenceNode for type alias declarations.
 pub(crate) fn create_schema_qualified_name(
@@ -132,7 +129,7 @@ pub(crate) fn create_schema_qualified_name(
     tracker.new_qualified_name_path(&schema.append(&[ns, member]))
 }
 
-// go: internal/refactors/make_schema_opaque.go:117 createHeritageTypeRef e80a2b75da79610b
+// go: internal/refactors/make_schema_opaque.go:112 createHeritageTypeRef e80a2b75da79610b
 // createHeritageTypeRef creates: <schema>.<ns>.<member><typeof <inferFrom>>
 // as an ExpressionWithTypeArguments node for use in interface heritage clauses.
 pub(crate) fn create_heritage_type_ref(
@@ -148,7 +145,7 @@ pub(crate) fn create_heritage_type_ref(
     )
 }
 
-// go: internal/refactors/make_schema_opaque.go:128 createTypeAliasTypeRef 08372f5fe97f4d03
+// go: internal/refactors/make_schema_opaque.go:123 createTypeAliasTypeRef 08372f5fe97f4d03
 // createTypeAliasTypeRef creates: <schema>.<ns>.<member><typeof <inferFrom>>
 // as a TypeReferenceNode for use in type alias declarations.
 pub(crate) fn create_type_alias_type_ref(
@@ -164,12 +161,12 @@ pub(crate) fn create_type_alias_type_ref(
     )
 }
 
-// go: internal/refactors/make_schema_opaque.go:137 opaqueExportModifiers 384fe6b63efed872
+// go: internal/refactors/make_schema_opaque.go:132 opaqueExportModifiers 384fe6b63efed872
 pub(crate) fn opaque_export_modifiers(tracker: &NodeFactory) -> P<ModifierList> {
     tracker.new_modifier_list(vec![tracker.new_modifier(Kind::ExportKeyword)])
 }
 
-// go: internal/refactors/make_schema_opaque.go:144 createOpaqueInterface 7f6ce3b774680cec
+// go: internal/refactors/make_schema_opaque.go:139 createOpaqueInterface 7f6ce3b774680cec
 // createOpaqueInterface creates: export interface <name> extends <heritage> { }
 pub(crate) fn create_opaque_interface(
     tracker: &NodeFactory,
@@ -193,7 +190,7 @@ pub(crate) fn create_opaque_interface(
     node
 }
 
-// go: internal/refactors/make_schema_opaque.go:163 createOpaqueTypeAlias 0c019c0999b793fa
+// go: internal/refactors/make_schema_opaque.go:158 createOpaqueTypeAlias 0c019c0999b793fa
 // createOpaqueTypeAlias creates: export type <name> = <schema>.<ns>.<member><typeof inferFrom>
 pub(crate) fn create_opaque_type_alias(
     tracker: &NodeFactory,
@@ -214,7 +211,7 @@ pub(crate) fn create_opaque_type_alias(
     node
 }
 
-// go: internal/refactors/make_schema_opaque.go:176 createOpaqueTypeDecl 990487856882867c
+// go: internal/refactors/make_schema_opaque.go:171 createOpaqueTypeDecl 990487856882867c
 // createOpaqueTypeDecl creates an interface (if isObject) or type alias for the given schema property.
 pub(crate) fn create_opaque_type_decl(
     tracker: &NodeFactory,
@@ -231,7 +228,7 @@ pub(crate) fn create_opaque_type_decl(
     create_opaque_type_alias(tracker, name, schema, ns, member, infer_from)
 }
 
-// go: internal/refactors/make_schema_opaque.go:183 runMakeSchemaOpaque 4bb618943654d851
+// go: internal/refactors/make_schema_opaque.go:178 runMakeSchemaOpaque 4bb618943654d851
 pub(crate) fn run_make_schema_opaque(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let Some(info) = find_schema_variable_declaration(ctx) else {
         return Vec::new();

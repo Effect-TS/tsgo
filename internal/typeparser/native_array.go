@@ -22,10 +22,14 @@ type nativeArrayRegistry struct {
 	constructor map[string][]*ast.Symbol
 }
 
-// IsArrayType recognizes mutable and readonly arrays, but not tuples.
-// It does not normalize unions or type parameter constraints.
-func (tp *TypeParser) IsArrayType(t *checker.Type) bool {
-	return t != nil && checker.Checker_isArrayType(tp.checker, t)
+// ArrayType returns the element type of a mutable or readonly array, or nil
+// when t is not an array. Tuples are not arrays. It does not normalize unions
+// or type parameter constraints.
+func (tp *TypeParser) ArrayType(t *checker.Type) *checker.Type {
+	if t == nil {
+		return nil
+	}
+	return tp.checker.GetElementTypeOfArrayType(t)
 }
 
 // IsNativeArrayMethodReference compares the reference's roots with the named

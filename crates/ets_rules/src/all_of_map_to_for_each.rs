@@ -172,7 +172,7 @@ pub(crate) fn analyze_all_of_map_to_for_each_call(
     Some(m)
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:143 analyzeAllOfMapToForEachReceiver b3974ba14cee2b48
+// go: internal/rules/all_of_map_to_for_each.go:143 analyzeAllOfMapToForEachReceiver 596489fb76dd3f98
 // analyzeAllOfMapToForEachReceiver validates the xs.map(f) shape feeding an
 // Effect.all node and assembles the match.
 pub(crate) fn analyze_all_of_map_to_for_each_receiver(
@@ -200,10 +200,7 @@ pub(crate) fn analyze_all_of_map_to_for_each_receiver(
     }
 
     let receiver_type = tp.get_type_at_location(map_access.expression());
-    let is_array_receiver = tp.is_array_type(receiver_type);
-    if !is_array_receiver {
-        return None;
-    }
+    tp.array_type(receiver_type)?;
 
     let callback = map_call.arguments().nodes()[0];
     let map_result_type = tp.get_type_at_location(map_node)?;
@@ -231,7 +228,7 @@ pub(crate) fn analyze_all_of_map_to_for_each_receiver(
     })
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:193 containsSpreadElement 5bbb24f7dcb59299
+// go: internal/rules/all_of_map_to_for_each.go:192 containsSpreadElement 5bbb24f7dcb59299
 pub(crate) fn contains_spread_element(nodes: &[P<Node>]) -> bool {
     for node in nodes {
         if node.kind() == Kind::SpreadElement {
@@ -241,7 +238,7 @@ pub(crate) fn contains_spread_element(nodes: &[P<Node>]) -> bool {
     false
 }
 
-// go: internal/rules/all_of_map_to_for_each.go:202 hasCallTypeArguments 26b3e9eb8b75eeae
+// go: internal/rules/all_of_map_to_for_each.go:201 hasCallTypeArguments 26b3e9eb8b75eeae
 pub(crate) fn has_call_type_arguments(call: Option<&CallExpression>) -> bool {
     call.is_some_and(|call| call.type_arguments().is_some_and(|t| !t.nodes().is_empty()))
 }

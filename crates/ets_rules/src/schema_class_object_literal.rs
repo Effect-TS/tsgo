@@ -120,7 +120,7 @@ pub static SCHEMA_CLASS_OBJECT_LITERAL: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/schema_class_object_literal.go:83 schemaClassObjectLiteralInV4Constructor 20e511cb40ed9a41
+// go: internal/rules/schema_class_object_literal.go:83 schemaClassObjectLiteralInV4Constructor 7d63c2c426fb86c1
 pub(crate) fn schema_class_object_literal_in_v4_constructor(
     ctx: &mut Context<'_, '_>,
     node: P<Node>,
@@ -155,8 +155,7 @@ pub(crate) fn schema_class_object_literal_in_v4_constructor(
                     }
                     expression = access.expression();
                 }
-                let t = ctx.type_parser.get_type_at_location(expression);
-                return ctx.type_parser.is_schema_type(t);
+                return ctx.type_parser.effect_schema_types_at_location(expression).is_some();
             }
             _ => return false,
         }

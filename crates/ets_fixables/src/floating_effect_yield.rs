@@ -22,7 +22,7 @@ pub static FLOATING_EFFECT_YIELD_FIX: LazyLock<Fixable> = LazyLock::new(|| Fixab
     run: run_floating_effect_yield_fix,
 });
 
-// go: internal/fixables/floating_effect_yield.go:25 runFloatingEffectYieldFix 09a2ed3d2fe38b11
+// go: internal/fixables/floating_effect_yield.go:25 runFloatingEffectYieldFix 56d1bb9284363981
 fn run_floating_effect_yield_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
     let source_file = ctx.source_file;
     for m in ets_rules::analyze_floating_effect(&mut ctx.type_parser, source_file) {
@@ -36,8 +36,7 @@ fn run_floating_effect_yield_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction> {
         {
             return Vec::new();
         }
-        let expr_type = ctx.type_parser.get_type_at_location(m.expression);
-        if ctx.type_parser.effect_yieldable_type(expr_type).is_none() {
+        if ctx.type_parser.effect_yieldable_type_at_location(m.expression).is_none() {
             return Vec::new();
         }
 

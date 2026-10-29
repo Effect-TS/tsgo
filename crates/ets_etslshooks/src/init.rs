@@ -220,7 +220,7 @@ fn after_completion(
     items
 }
 
-// go: etslshooks/init.go:181 afterQuickInfo 16c695e2a1974efd
+// go: etslshooks/init.go:181 afterQuickInfo f8faba341085240d
 // afterQuickInfo is called after building hover quickInfo and documentation.
 // It allows Effect to enrich hover responses with Effect-specific information.
 fn after_quick_info(
@@ -295,7 +295,7 @@ fn after_quick_info(
     // Layer extends Effect in V4, so this check must come before the Effect check.
     // Only activate layer hover enrichment when the cursor is on the name of the declaration,
     // not on arbitrary nodes within the initializer expression.
-    if tp.is_layer_type(t) && is_declaration_name(node) {
+    if tp.layer_type(t).is_some() && is_declaration_name(node) {
         let documentation =
             format_layer_hover(&mut tp, sf, node, t, &documentation, is_markdown, &effect_config);
         return (quick_info, documentation, None);

@@ -9,7 +9,7 @@ use ets_shim::ast::{self, Diagnostic, Kind, Node};
 use ets_shim::checker::{Signature, Type, TypeFlags};
 use ets_shim::diagnostics as tsdiag;
 
-// go: internal/rules/any_unknown_in_error_context.go:18 AnyUnknownInErrorContext 83c208542ba3dbc0
+// go: internal/rules/any_unknown_in_error_context.go:18 AnyUnknownInErrorContext be5eb0d55ec9b5e3
 // AnyUnknownInErrorContext detects 'any' or 'unknown' types in the error (E) or
 // requirements (R) channels of Effect and Layer types.
 pub static ANY_UNKNOWN_IN_ERROR_CONTEXT: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -68,14 +68,11 @@ pub static ANY_UNKNOWN_IN_ERROR_CONTEXT: LazyLock<Rule> = LazyLock::new(|| Rule 
                 || node.kind() == Kind::VariableDeclaration
             {
                 if let Some(type_node) = node.type_node() {
-                    let annotation_type = ctx.type_parser.get_type_at_location(type_node);
-                    if let Some(annotation_type) = annotation_type {
-                        if ctx.type_parser.strict_effect_type(annotation_type).is_some() {
-                            continue;
-                        }
-                        if ctx.type_parser.layer_type(annotation_type).is_some() {
-                            continue;
-                        }
+                    if ctx.type_parser.strict_effect_type_at_location(type_node).is_some() {
+                        continue;
+                    }
+                    if ctx.type_parser.layer_type_at_location(type_node).is_some() {
+                        continue;
                     }
                 }
             }
@@ -90,33 +87,32 @@ pub static ANY_UNKNOWN_IN_ERROR_CONTEXT: LazyLock<Rule> = LazyLock::new(|| Rule 
                 continue;
             }
 
-            // Only Effect and Layer types are inspected below.
-            if ctx.type_parser.node_cannot_be_effect_library_type(node) {
-                continue;
-            }
-
-            // For call expressions, use the resolved signature's return type
+            // For call expressions, use the resolved signature's return type.
+            // Try strict Effect type first, then Layer type
             let mut sig: Option<P<Signature>> = None;
             if node.kind() == Kind::CallExpression {
                 sig = Some(ctx.checker().get_resolved_signature_exported(node));
             }
-            let t: Option<P<Type>> = if let Some(sig) = sig {
-                Some(ctx.checker().get_return_type_of_signature_exported(sig))
+            // Rust: Go's `eff`/`layer` assignments are one `(eff, layer)` binding.
+            let (eff, layer) = if let Some(sig) = sig {
+                let t = ctx.checker().get_return_type_of_signature_exported(sig);
+                match ctx.type_parser.strict_effect_type(t) {
+                    Some(eff) => (Some(eff), None),
+                    None => (None, ctx.type_parser.layer_type(t)),
+                }
             } else {
-                ctx.type_parser.get_type_at_location(node)
+                match ctx.type_parser.strict_effect_type_at_location(node) {
+                    Some(eff) => (Some(eff), None),
+                    None => (None, ctx.type_parser.layer_type_at_location(node)),
+                }
             };
 
-            let Some(t) = t else {
-                continue;
-            };
-
-            // Try strict Effect type first, then Layer type
             let mut e_type: Option<P<Type>> = None;
             let mut r_type: Option<P<Type>> = None;
-            if let Some(eff) = ctx.type_parser.strict_effect_type(t) {
+            if let Some(eff) = eff {
                 e_type = Some(eff.e());
                 r_type = Some(eff.r());
-            } else if let Some(layer) = ctx.type_parser.layer_type(t) {
+            } else if let Some(layer) = layer {
                 e_type = Some(layer.e());
                 r_type = Some(layer.r_in());
             }
@@ -208,7 +204,7 @@ pub static ANY_UNKNOWN_IN_ERROR_CONTEXT: LazyLock<Rule> = LazyLock::new(|| Rule 
     },
 });
 
-// go: internal/rules/any_unknown_in_error_context.go:197 anyUnknownChannels 012a7bb33777ba45
+// go: internal/rules/any_unknown_in_error_context.go:189 anyUnknownChannels 012a7bb33777ba45
 // anyUnknownChannels holds TypeFlagsAny or TypeFlagsUnknown for each channel
 // that has one, and zero for a channel that has neither.
 #[derive(Clone, Copy)]
@@ -218,7 +214,7 @@ pub(crate) struct AnyUnknownChannels {
 }
 
 impl AnyUnknownChannels {
-    // go: internal/rules/any_unknown_in_error_context.go:204 anyUnknownChannels.covers c0ec76d0a0b919ef
+    // go: internal/rules/any_unknown_in_error_context.go:196 anyUnknownChannels.covers c0ec76d0a0b919ef
     // covers reports whether c flags every channel that other flags, with the
     // same any or unknown.
     pub(crate) fn covers(self, other: AnyUnknownChannels) -> bool {

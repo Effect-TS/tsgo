@@ -56,7 +56,7 @@ pub static STRICT_EFFECT_PROVIDE: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/strict_effect_provide.go:42 isEffectProvideWithLayer 174a287f6af1fe32
+// go: internal/rules/strict_effect_provide.go:42 isEffectProvideWithLayer 4006f4af616c37d5
 // isEffectProvideWithLayer checks if a transformation is Effect.provide(...) with a Layer argument.
 pub(crate) fn is_effect_provide_with_layer(
     ctx: &mut Context<'_, '_>,
@@ -70,25 +70,19 @@ pub(crate) fn is_effect_provide_with_layer(
         return false;
     }
     for (_, &arg) in transformation.args().all() {
-        if ctx.type_parser.node_cannot_be_effect_library_type(arg) {
-            continue;
-        }
-        let arg_type = ctx.type_parser.get_type_at_location(arg);
-        if let Some(arg_type) = arg_type
-            && ctx.type_parser.layer_type(arg_type).is_some()
-        {
+        if ctx.type_parser.layer_type_at_location(arg).is_some() {
             return true;
         }
     }
     false
 }
 
-// go: internal/rules/strict_effect_provide.go:59 entryPointRunnerApis 2eefb458cdf3e6e7
+// go: internal/rules/strict_effect_provide.go:55 entryPointRunnerApis 2eefb458cdf3e6e7
 // entryPointRunnerApis lists the Effect module APIs that run an Effect at an entry point.
 static ENTRY_POINT_RUNNER_APIS: &[&str] =
     &["runPromise", "runSync", "runFork", "runPromiseExit", "runSyncExit", "runCallback"];
 
-// go: internal/rules/strict_effect_provide.go:62 isEntryPointRunner 52109102679aca48
+// go: internal/rules/strict_effect_provide.go:58 isEntryPointRunner 52109102679aca48
 // isEntryPointRunner reports whether node references an Effect.run* API or a platform runMain.
 fn is_entry_point_runner(tp: &mut TypeParser<'_>, node: P<Node>) -> bool {
     for name in ENTRY_POINT_RUNNER_APIS {

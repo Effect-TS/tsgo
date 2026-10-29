@@ -197,7 +197,7 @@ pub(crate) fn check_lazy_effect_service(
     diags
 }
 
-// go: internal/rules/lazy_effect.go:179 lazyEffectLikeTypeName 61e85171bab09a03
+// go: internal/rules/lazy_effect.go:179 lazyEffectLikeTypeName 9067472c1f37c7a2
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`); `(name, ok)` is `Option<name>`.
 pub(crate) fn lazy_effect_like_type_name(
@@ -221,7 +221,7 @@ pub(crate) fn lazy_effect_like_type_name(
 
     let return_type = tp.checker().get_return_type_of_signature(sig);
 
-    if tp.strict_is_effect_type(return_type) {
+    if tp.strict_effect_type(return_type).is_some() {
         return Some("Effect");
     }
     if tp.layer_type(return_type).is_some() {

@@ -222,7 +222,7 @@ func parseLeakedRequirements(tp *typeparser.TypeParser, c *checker.Checker, serv
 			return true
 		}
 		// Exclude Scope types
-		if tp.IsScopeType(t) {
+		if tp.ScopeType(t) != nil {
 			return true
 		}
 		return false

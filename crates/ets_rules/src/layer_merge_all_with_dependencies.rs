@@ -99,7 +99,7 @@ pub(crate) struct LayerInfo {
     pub(crate) requirements_type: P<Type>,
 }
 
-// go: internal/rules/layer_merge_all_with_dependencies.go:85 analyzeLayerMergeAllCall a5b28d432dd76ea0
+// go: internal/rules/layer_merge_all_with_dependencies.go:85 analyzeLayerMergeAllCall 1ba042d3d387494b
 // analyzeLayerMergeAllCall checks a call expression for Layer.mergeAll interdependencies.
 //
 // Rust: Go's checker argument is the parser's checker (`tp.checker()`). Go ranges over `actuallyProvidedMap` (a
@@ -134,14 +134,7 @@ pub(crate) fn analyze_layer_merge_all_call(
     let mut actually_provided_map: Vec<(P<Type>, P<Node>)> = Vec::new();
 
     for &arg in args {
-        if tp.node_cannot_be_effect_library_type(arg) {
-            continue;
-        }
-        let Some(arg_type) = tp.get_type_at_location(arg) else {
-            continue;
-        };
-
-        let Some(layer) = tp.layer_type(arg_type) else {
+        let Some(layer) = tp.layer_type_at_location(arg) else {
             continue;
         };
 

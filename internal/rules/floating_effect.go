@@ -105,37 +105,33 @@ func detectFloatingEffect(tp *typeparser.TypeParser, _ *checker.Checker, node *a
 		return nil
 	}
 
-	if tp.NodeCannotBeEffectLibraryType(expr) {
+	hasEffectTypeId := tp.HasEffectTypeIdAtLocation(expr)
+	if !hasEffectTypeId && tp.StreamTypeAtLocation(expr) == nil {
 		return nil
 	}
 
-	// Get the type of the expression
+	// Cached by the AtLocation parsers above, which only succeed on a type.
 	t := tp.GetTypeAtLocation(expr)
-	if t == nil {
-		return nil
-	}
 
-	if tp.HasEffectTypeId(t) {
+	if hasEffectTypeId {
 		// Full Effect validation.
-		if !tp.IsEffectType(t) {
+		if tp.EffectType(t) == nil {
 			return nil
 		}
 
 		// Exclude Fiber types (considered valid floating operations)
-		if tp.IsFiberType(t) {
+		if tp.FiberType(t) != nil {
 			return nil
 		}
 
 		// Exclude Effect subtypes (Exit, Option, Either, Pool, etc.)
-		if tp.IsEffectSubtype(t) {
+		if tp.EffectSubtype(t) != nil {
 			return nil
 		}
-	} else if tp.StreamType(t) == nil {
-		return nil
 	}
 
 	// Determine if this is strictly an Effect or an Effect-able type
-	isStrict := tp.StrictIsEffectType(t)
+	isStrict := tp.StrictEffectType(t) != nil
 	return &floatingEffectResult{
 		isStrict: isStrict,
 		exprType: t,

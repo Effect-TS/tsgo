@@ -80,7 +80,7 @@ pub static EFFECT_IN_VOID_SUCCESS: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/effect_in_void_success.go:71 findFirstStrictEffect 34adecb62e659184
+// go: internal/rules/effect_in_void_success.go:71 findFirstStrictEffect fb07da23c27e3275
 // findFirstStrictEffect returns the first type in the slice that is strictly an Effect type,
 // or nil if none are found. This mirrors the Nano.firstSuccessOf pattern in the TS reference.
 //
@@ -91,7 +91,7 @@ pub(crate) fn find_first_strict_effect(
     types: &[P<Type>],
 ) -> Option<P<Type>> {
     for &t in types {
-        if tp.strict_is_effect_type(t) {
+        if tp.strict_effect_type(t).is_some() {
             return Some(t);
         }
     }

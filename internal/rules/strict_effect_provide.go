@@ -44,11 +44,7 @@ func isEffectProvideWithLayer(ctx *rule.Context, transformation typeparser.Pipin
 		return false
 	}
 	for _, arg := range transformation.Args().All() {
-		if ctx.TypeParser.NodeCannotBeEffectLibraryType(arg) {
-			continue
-		}
-		argType := ctx.TypeParser.GetTypeAtLocation(arg)
-		if argType != nil && ctx.TypeParser.LayerType(argType) != nil {
+		if ctx.TypeParser.LayerTypeAtLocation(arg) != nil {
 			return true
 		}
 	}

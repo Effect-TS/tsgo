@@ -94,7 +94,7 @@ pub fn analyze_scope_in_layer_effect(
     matches
 }
 
-// go: internal/rules/scope_in_layer_effect.go:89 matchLayerEffectCall b953a794f3c17da4
+// go: internal/rules/scope_in_layer_effect.go:89 matchLayerEffectCall 9baa360a8f04d61f
 // matchLayerEffectCall checks if a call expression is Layer.effect*() with Scope in RIn.
 pub(crate) fn match_layer_effect_call(
     tp: &mut TypeParser<'_>,
@@ -121,11 +121,8 @@ pub(crate) fn match_layer_effect_call(
         return None;
     }
 
-    // Get the return type of the call
-    let t = tp.get_type_at_location(node)?;
-
-    // Parse as Layer type
-    let layer = tp.layer_type(t)?;
+    // Parse the return type of the call as a Layer type
+    let layer = tp.layer_type_at_location(node)?;
 
     // Check if RIn contains a Scope type
     if !has_scope(tp, layer.r_in()) {
@@ -139,7 +136,7 @@ pub(crate) fn match_layer_effect_call(
     })
 }
 
-// go: internal/rules/scope_in_layer_effect.go:137 matchClassWithDefaultLayer 55b7f0099c3e491f
+// go: internal/rules/scope_in_layer_effect.go:131 matchClassWithDefaultLayer 55b7f0099c3e491f
 // matchClassWithDefaultLayer checks if a class declaration has a Default layer property with Scope in RIn.
 pub(crate) fn match_class_with_default_layer(
     tp: &mut TypeParser<'_>,
@@ -182,9 +179,9 @@ pub(crate) fn match_class_with_default_layer(
     })
 }
 
-// go: internal/rules/scope_in_layer_effect.go:190 hasScope f6387e5a60f84fae
+// go: internal/rules/scope_in_layer_effect.go:184 hasScope aa2faccd65c6e6a1
 // hasScope checks if any union member of the given type is a Scope type.
 pub(crate) fn has_scope(tp: &mut TypeParser<'_>, t: P<Type>) -> bool {
     let members = tp.unroll_union_members(t).unwrap_or_default();
-    members.into_iter().any(|member| tp.is_scope_type(member))
+    members.into_iter().any(|member| tp.scope_type(member).is_some())
 }

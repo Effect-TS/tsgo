@@ -98,7 +98,7 @@ pub(crate) struct TypeUnionToSchemaUnionLeaf {
     helper_name: Option<P<Node>>,
 }
 
-// go: internal/rules/type_union_to_schema_union.go:82 analyzeTypeUnionToSchemaUnionAlias e623f0c75589ae61
+// go: internal/rules/type_union_to_schema_union.go:82 analyzeTypeUnionToSchemaUnionAlias 8bb6cc1ab85d068b
 // Rust: Go's `alias == nil` check drops (the kind was checked by the caller).
 pub(crate) fn analyze_type_union_to_schema_union_alias(
     tp: &mut TypeParser<'_>,
@@ -144,9 +144,7 @@ pub(crate) fn analyze_type_union_to_schema_union_alias(
         }
         let symbol = tp.get_symbol_at_location(leaf.name)?;
         let t = tp.checker().get_type_of_symbol_at_location(symbol, Some(leaf.name));
-        if !tp.is_schema_type(t) {
-            return None;
-        }
+        tp.effect_schema_types(t)?;
         members.push(TypeUnionToSchemaUnionMember { name: leaf.name, symbol });
     }
 

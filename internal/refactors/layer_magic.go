@@ -100,11 +100,7 @@ func tryBuildRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *check
 	}
 
 	// Parse the outer type as a Layer type to get ROut
-	outerType := tp.GetTypeAtLocation(outerAs.Type)
-	if outerType == nil {
-		return nil
-	}
-	layer := tp.LayerType(outerType)
+	layer := tp.LayerTypeAtLocation(outerAs.Type)
 	if layer == nil {
 		return nil
 	}
@@ -276,13 +272,9 @@ func tryPrepareRefactor(ctx *refactor.Context, tp *typeparser.TypeParser, c *che
 	}
 
 	// Parse the expression's current type as a Layer to find "previously provided" types
-	exprType := tp.GetTypeAtLocation(atLocation)
 	var previouslyProvided *checker.Type
-	if exprType != nil {
-		parsedLayer := tp.LayerType(exprType)
-		if parsedLayer != nil {
-			previouslyProvided = parsedLayer.ROut()
-		}
+	if parsedLayer := tp.LayerTypeAtLocation(atLocation); parsedLayer != nil {
+		previouslyProvided = parsedLayer.ROut()
 	}
 
 	// Partition types into newlyIntroduced and existingBefore

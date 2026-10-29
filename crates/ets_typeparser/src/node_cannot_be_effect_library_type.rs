@@ -1,18 +1,19 @@
 use ets_shim::ast::{Kind, Node};
+use ets_shim::checker::Type;
 use ets_shim::core::P;
 
 use crate::*;
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/node_cannot_be_effect_library_type.go:16 TypeParser.NodeCannotBeEffectLibraryType 4123650ef8c35c6b
-    // NodeCannotBeEffectLibraryType reports whether node is an expression whose
+    // go: internal/typeparser/node_cannot_be_effect_library_type.go:17 TypeParser.nodeCannotBeEffectLibraryType 6fac2da83ea0f896
+    // nodeCannotBeEffectLibraryType reports whether node is an expression whose
     // type can never be an Effect library data type such as Effect, Stream or
     // Layer. Literals, functions, and operators that always produce a primitive
     // have no properties that could match. The `undefined` identifier is left out
     // because a local binding can shadow it. Object literals are only ruled out in
     // v4, where those types carry a "~effect/..." key; v3 detection is structural
     // and could match a plain object literal.
-    pub fn node_cannot_be_effect_library_type(&mut self, node: P<Node>) -> bool {
+    pub(crate) fn node_cannot_be_effect_library_type(&mut self, node: P<Node>) -> bool {
         match node.kind() {
             Kind::ArrayLiteralExpression
             | Kind::ArrowFunction
@@ -50,5 +51,19 @@ impl TypeParser<'_> {
             }
             _ => false,
         }
+    }
+
+    // go: internal/typeparser/node_cannot_be_effect_library_type.go:44 TypeParser.effectLibraryTypeAtLocation 42be3a6a4c51c666
+    // effectLibraryTypeAtLocation returns the type of node, or nil without asking
+    // the checker when nodeCannotBeEffectLibraryType rules node out.
+    pub(crate) fn effect_library_type_at_location(
+        &mut self,
+        node: impl Into<Option<P<Node>>>,
+    ) -> Option<P<Type>> {
+        let node = node.into()?;
+        if self.node_cannot_be_effect_library_type(node) {
+            return None;
+        }
+        self.get_type_at_location(node)
     }
 }

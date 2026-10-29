@@ -84,18 +84,5 @@ func checkReturnEffectInGenScope(tp *typeparser.TypeParser, _ *checker.Checker, 
 		return false
 	}
 
-	if tp.NodeCannotBeEffectLibraryType(returnStmt.Expression) {
-		return false
-	}
-
-	t := tp.GetTypeAtLocation(returnStmt.Expression)
-	if t == nil {
-		return false
-	}
-
-	if !tp.StrictIsEffectType(t) {
-		return false
-	}
-
-	return true
+	return tp.StrictEffectTypeAtLocation(returnStmt.Expression) != nil
 }

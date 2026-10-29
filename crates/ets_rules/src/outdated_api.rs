@@ -99,7 +99,7 @@ pub fn analyze_outdated_api(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> Vec<O
     matches
 }
 
-// go: internal/rules/outdated_api.go:95 checkOutdatedApiPropertyAccess 9cfeda7d7408086c
+// go: internal/rules/outdated_api.go:95 checkOutdatedApiPropertyAccess cad5bdfb83598493
 //
 // Rust: the checker is the parser's.
 pub(crate) fn check_outdated_api_property_access(
@@ -124,9 +124,10 @@ pub(crate) fn check_outdated_api_property_access(
     }
 
     // Get the type of the expression (left side of the property access)
+    // Verify the expression (left side of the property access) references the
+    // Effect module, before computing its type.
     let expr = prop.expression;
-    // Literals and functions never reference the Effect module.
-    if tp.node_cannot_be_effect_library_type(expr) {
+    if !tp.is_expression_effect_module(expr) {
         return None;
     }
 
@@ -135,11 +136,6 @@ pub(crate) fn check_outdated_api_property_access(
     // Only report if the property does NOT exist on the target type
     // (confirming it's a v3-only API)
     if tp.checker().get_property_of_type(target_type, identifier_name).is_some() {
-        return None;
-    }
-
-    // Verify the expression references the Effect module
-    if !tp.is_expression_effect_module(expr) {
         return None;
     }
 
@@ -152,7 +148,7 @@ pub(crate) fn check_outdated_api_property_access(
     })
 }
 
-// go: internal/rules/outdated_api.go:153 migrationHintText 9688d29085592404
+// go: internal/rules/outdated_api.go:148 migrationHintText 9688d29085592404
 pub(crate) fn migration_hint_text(m: &Migration) -> String {
     match m.tag {
         MigrationTag::Removed => m.alternative_pattern.to_string(),

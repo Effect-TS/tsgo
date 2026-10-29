@@ -95,7 +95,7 @@ pub fn analyze_missing_return_yield_star(
     matches
 }
 
-// go: internal/rules/missing_return_yield_star.go:80 shouldReportMissingReturnYieldStar 3c32943237704a26
+// go: internal/rules/missing_return_yield_star.go:80 shouldReportMissingReturnYieldStar b66b87094ce39c34
 //
 // Rust: Go's checker argument is the parser's checker (never nil), so it is dropped.
 pub(crate) fn should_report_missing_return_yield_star(
@@ -112,10 +112,7 @@ pub(crate) fn should_report_missing_return_yield_star(
         return false;
     }
 
-    let Some(t) = tp.get_type_at_location(expr) else {
-        return false;
-    };
-    let Some(effect) = tp.effect_yieldable_type(t) else {
+    let Some(effect) = tp.effect_yieldable_type_at_location(expr) else {
         return false;
     };
     effect.a().flags().intersects(TypeFlags::Never)

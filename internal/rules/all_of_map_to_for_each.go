@@ -163,8 +163,7 @@ func analyzeAllOfMapToForEachReceiver(
 	}
 
 	receiverType := tp.GetTypeAtLocation(mapAccess.Expression)
-	isArrayReceiver := tp.IsArrayType(receiverType)
-	if !isArrayReceiver {
+	if tp.ArrayType(receiverType) == nil {
 		return AllOfMapToForEachMatch{}, false
 	}
 

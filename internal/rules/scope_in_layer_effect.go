@@ -109,14 +109,8 @@ func matchLayerEffectCall(tp *typeparser.TypeParser, sf *ast.SourceFile, node *a
 		return nil
 	}
 
-	// Get the return type of the call
-	t := tp.GetTypeAtLocation(node)
-	if t == nil {
-		return nil
-	}
-
-	// Parse as Layer type
-	layer := tp.LayerType(t)
+	// Parse the return type of the call as a Layer type
+	layer := tp.LayerTypeAtLocation(node)
 	if layer == nil {
 		return nil
 	}
@@ -189,5 +183,7 @@ func matchClassWithDefaultLayer(tp *typeparser.TypeParser, c *checker.Checker, s
 // hasScope checks if any union member of the given type is a Scope type.
 func hasScope(tp *typeparser.TypeParser, t *checker.Type) bool {
 	members := tp.UnrollUnionMembers(t)
-	return slices.ContainsFunc(members, tp.IsScopeType)
+	return slices.ContainsFunc(members, func(member *checker.Type) bool {
+		return tp.ScopeType(member) != nil
+	})
 }

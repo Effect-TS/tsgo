@@ -60,7 +60,7 @@ func AnalyzeUnnecessaryFailYieldableError(tp *typeparser.TypeParser, _ *checker.
 					if call.Expression != nil && tp.IsNodeReferenceToEffectModuleApi(call.Expression, "fail") {
 						arg := call.Arguments.Nodes[0]
 						argType := tp.GetTypeAtLocation(arg)
-						if argType != nil && tp.IsYieldableErrorType(argType) {
+						if tp.YieldableErrorType(argType) != nil {
 							matches = append(matches, UnnecessaryFailYieldableErrorMatch{
 								SourceFile:   sf,
 								Location:     scanner.GetErrorRangeForNode(sf, n),

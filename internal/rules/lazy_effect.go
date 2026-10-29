@@ -199,7 +199,7 @@ func lazyEffectLikeTypeName(c *checker.Checker, tp *typeparser.TypeParser, t *ch
 		return "", false
 	}
 
-	if tp.StrictIsEffectType(returnType) {
+	if tp.StrictEffectType(returnType) != nil {
 		return "Effect", true
 	}
 	if tp.LayerType(returnType) != nil {

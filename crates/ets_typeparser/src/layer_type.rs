@@ -116,14 +116,17 @@ impl TypeParser<'_> {
         )
     }
 
-    // go: internal/typeparser/layer_type.go:117 TypeParser.IsLayerType 25c7e6f3e34586ce
-    // IsLayerType returns true if the type has the Layer variance struct.
-    pub fn is_layer_type(&mut self, t: impl Into<Option<P<Type>>>) -> bool {
-        self.layer_type(t).is_some()
+    // go: internal/typeparser/layer_type.go:119 TypeParser.LayerTypeAtLocation 1ec60702adbf8c92
+    // LayerTypeAtLocation parses the type of node as a Layer type.
+    // Returns nil if the type is not a Layer, without computing the type when
+    // nodeCannotBeEffectLibraryType rules node out.
+    pub fn layer_type_at_location(&mut self, node: impl Into<Option<P<Node>>>) -> Option<Layer> {
+        let t = self.effect_library_type_at_location(node);
+        self.layer_type(t)
     }
 }
 
-// go: internal/typeparser/layer_type.go:121 isLayerTypeSourceFile e62644f8d31e8e3d
+// go: internal/typeparser/layer_type.go:123 isLayerTypeSourceFile e62644f8d31e8e3d
 // Rust: Go's `c` argument is `tp.checker`.
 pub(crate) fn is_layer_type_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFile>) -> bool {
     let Some(module_sym) = get_symbol_of_declaration(tp.checker, sf.as_node()) else {
@@ -142,7 +145,7 @@ pub(crate) fn is_layer_type_source_file(tp: &mut TypeParser<'_>, sf: P<SourceFil
 }
 
 impl TypeParser<'_> {
-    // go: internal/typeparser/layer_type.go:146 TypeParser.IsNodeReferenceToEffectLayerModuleApi ce310a86eb9eca49
+    // go: internal/typeparser/layer_type.go:148 TypeParser.IsNodeReferenceToEffectLayerModuleApi ce310a86eb9eca49
     // IsNodeReferenceToEffectLayerModuleApi reports whether node resolves to a member
     // exported by the "effect" package from a module that exports the Layer type.
     pub fn is_node_reference_to_effect_layer_module_api(
