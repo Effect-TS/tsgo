@@ -23,12 +23,16 @@ static RUNTIME_MESSAGE: &Message =
 static SERVICES_MESSAGE: &Message =
     &tsdiag::X_0_IS_CALLED_INSIDE_AN_EFFECT_WITH_A_SEPARATE_SERVICES_INVOCATION_IN_THIS_CONTEXT_CHILD_EFFECTS_RUN_WITH_THE_SURROUNDING_SERVICES_WHICH_CAN_BE_ACCESSED_THROUGH_EFFECT_CONTEXT_AND_EFFECT_1_WITH_EFFECT_RUN_EFFECT_INSIDE_EFFECT;
 
+/// Rust-only: the rule's message (Go spells it out at each use).
+static PLATFORM_RUN_MAIN_MESSAGE: &Message =
+    &tsdiag::X_0_IS_CALLED_INSIDE_AN_EXISTING_EFFECT_CONTEXT_AND_STARTS_A_SEPARATE_ROOT_RUNTIME_THAT_THE_SURROUNDING_EFFECT_DOES_NOT_OWN_RETURN_THE_EFFECT_INSTEAD_AND_CALL_0_ONCE_AT_THE_APPLICATION_ENTRY_POINT_EFFECT_RUN_EFFECT_INSIDE_EFFECT;
+
 // go: internal/rules/run_effect_inside_effect.go:16 runEffectApis 46156d4d0e340906
 // runEffectApis lists the Effect module run APIs that should not be called inside Effect generators.
 pub(crate) static RUN_EFFECT_APIS: &[&str] =
     &["runSync", "runSyncExit", "runPromise", "runPromiseExit", "runFork", "runCallback"];
 
-// go: internal/rules/run_effect_inside_effect.go:20 RunEffectInsideEffect 63e4e235296474ae
+// go: internal/rules/run_effect_inside_effect.go:20 RunEffectInsideEffect 79fe3f0bd785833b
 // RunEffectInsideEffect detects calls to the runEffectApis inside Effect generator contexts
 // and suggests alternatives.
 pub static RUN_EFFECT_INSIDE_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
@@ -37,7 +41,12 @@ pub static RUN_EFFECT_INSIDE_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     description: "Suggests using Runtime or Effect.run*With methods instead of Effect.run* inside Effect contexts",
     default_severity: Severity::Suggestion,
     supported_effect: vec!["v3", "v4"],
-    codes: vec![EXISTING_CONTEXT_MESSAGE.code(), RUNTIME_MESSAGE.code(), SERVICES_MESSAGE.code()],
+    codes: vec![
+        EXISTING_CONTEXT_MESSAGE.code(),
+        RUNTIME_MESSAGE.code(),
+        SERVICES_MESSAGE.code(),
+        PLATFORM_RUN_MAIN_MESSAGE.code(),
+    ],
     replaced_by: vec![],
     run: |ctx: &mut Context<'_, '_>| -> Vec<P<Diagnostic>> {
         let supported_effect = ctx.type_parser.supported_effect_version();
@@ -48,7 +57,15 @@ pub static RUN_EFFECT_INSIDE_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
         for m in &matches {
             let callee_text =
                 get_source_text_of_node_from_source_file(m.source_file, m.callee_node, false);
-            if m.is_nested_scope {
+            if m.is_platform_run_main {
+                diags.push(ctx.new_diagnostic(
+                    m.source_file,
+                    m.location,
+                    PLATFORM_RUN_MAIN_MESSAGE,
+                    &[],
+                    &[&callee_text],
+                ));
+            } else if m.is_nested_scope {
                 if supported_effect == EffectMajorVersion::V4 {
                     diags.push(ctx.new_diagnostic(
                         m.source_file,
@@ -80,11 +97,11 @@ pub static RUN_EFFECT_INSIDE_EFFECT: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/run_effect_inside_effect.go:54 RunEffectInsideEffectMatch 4f70589c93ddb0fb
+// go: internal/rules/run_effect_inside_effect.go:57 RunEffectInsideEffectMatch a3f9aa0b9ff527c9
 // RunEffectInsideEffectMatch holds the diagnostic and AST nodes needed by both the
 // diagnostic rule and the quick-fix for the runEffectInsideEffect pattern.
 //
-// Rust: Go's `*ast.FunctionExpression` is its node.
+// Rust: Go's `*ast.FunctionExpression` is its node, and its nil is `None`.
 #[derive(Clone)]
 pub struct RunEffectInsideEffectMatch {
     pub source_file: P<SourceFile>, // The source file where this match was found
@@ -92,11 +109,12 @@ pub struct RunEffectInsideEffectMatch {
     pub call_node: P<Node>, // The full call expression node (e.g., Effect.runPromise(check))
     pub callee_node: P<Node>, // The callee expression (e.g., Effect.runPromise)
     pub method_name: &'static str, // The matched run API name (e.g., "runPromise")
+    pub is_platform_run_main: bool, // True for NodeRuntime.runMain and the other platform runMain APIs
     pub is_nested_scope: bool, // True when call is in a nested scope rather than direct generator scope
-    pub generator_function: P<Node>, // The enclosing Effect generator function
+    pub generator_function: Option<P<Node>>, // The enclosing Effect generator function, None for a platform runMain
 }
 
-// go: internal/rules/run_effect_inside_effect.go:66 AnalyzeRunEffectInsideEffect 96865eebeae4b9db
+// go: internal/rules/run_effect_inside_effect.go:70 AnalyzeRunEffectInsideEffect 96865eebeae4b9db
 // AnalyzeRunEffectInsideEffect finds all Effect.run* calls inside Effect generators,
 // returning matches with structured data for both diagnostics and quick-fixes.
 //
@@ -128,7 +146,7 @@ pub fn analyze_run_effect_inside_effect(
     matches
 }
 
-// go: internal/rules/run_effect_inside_effect.go:90 analyzeRunEffectInsideEffectNode b73babffcba4a7d8
+// go: internal/rules/run_effect_inside_effect.go:94 analyzeRunEffectInsideEffectNode 337a4283a92e59bf
 // analyzeRunEffectInsideEffectNode checks a single call expression for Effect.run* inside an Effect generator.
 //
 // Rust: `(match, ok)` is an `Option`; Go's unused checker parameter is dropped.
@@ -148,6 +166,22 @@ pub(crate) fn analyze_run_effect_inside_effect_node(
     }
 
     let callee = call.expression();
+
+    if tp.is_node_reference_to_platform_runtime_api(callee, "runMain") {
+        if !is_inside_effect_context(tp, node) {
+            return None;
+        }
+        return Some(RunEffectInsideEffectMatch {
+            source_file: sf,
+            location: ets_shim::scanner::get_error_range_for_node(sf, callee),
+            call_node: node,
+            callee_node: callee,
+            method_name: "runMain",
+            is_platform_run_main: true,
+            is_nested_scope: false,
+            generator_function: None,
+        });
+    }
 
     // Check if the callee is one of the Effect.run* APIs
     let method_name = match_run_effect_api(tp, callee);
@@ -188,12 +222,13 @@ pub(crate) fn analyze_run_effect_inside_effect_node(
         call_node: node,
         callee_node: callee,
         method_name,
+        is_platform_run_main: false,
         is_nested_scope,
-        generator_function: gen_fn,
+        generator_function: Some(gen_fn),
     })
 }
 
-// go: internal/rules/run_effect_inside_effect.go:148 matchRunEffectApi eeef31b0776d262d
+// go: internal/rules/run_effect_inside_effect.go:166 matchRunEffectApi eeef31b0776d262d
 // matchRunEffectApi checks if the node references one of the Effect.run* APIs and returns the method name.
 // Returns empty string if no match.
 //
@@ -205,4 +240,18 @@ pub(crate) fn match_run_effect_api(tp: &mut TypeParser<'_>, node: P<Node>) -> &'
         }
     }
     ""
+}
+
+// go: internal/rules/run_effect_inside_effect.go:177 isInsideEffectContext 232e99a24cd200c8
+// isInsideEffectContext reports whether node or one of its ancestors runs inside an Effect,
+// such as an Effect.gen body or an Effect.sync thunk.
+fn is_inside_effect_context(tp: &mut TypeParser<'_>, node: P<Node>) -> bool {
+    let mut current = Some(node);
+    while let Some(c) = current {
+        if tp.get_effect_context_flags(c) != EffectContextFlags::None {
+            return true;
+        }
+        current = c.parent();
+    }
+    false
 }

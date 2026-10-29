@@ -25,7 +25,7 @@ pub static RUN_EFFECT_INSIDE_EFFECT_FIX: LazyLock<Fixable> = LazyLock::new(|| Fi
     run: run_run_effect_inside_effect_fix,
 });
 
-// go: internal/fixables/run_effect_inside_effect.go:28 runRunEffectInsideEffectFix ae2902c368b85258
+// go: internal/fixables/run_effect_inside_effect.go:28 runRunEffectInsideEffectFix 8655a194ba68d43c
 //
 // Rust: Go's edit closure scans the generator's statements with the type parser before it edits anything. The
 // parser is borrowed mutably by the context, which `new_fix_action` borrows, so the scan (which reads only the
@@ -38,14 +38,14 @@ fn run_run_effect_inside_effect_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
 
     let matches = ets_rules::analyze_run_effect_inside_effect(&mut ctx.type_parser, sf);
     for m in matches {
-        if !m.is_nested_scope {
+        if !m.is_nested_scope || m.is_platform_run_main {
             continue;
         }
         if !m.location.intersects(ctx.span) && !ctx.span.contained_by(m.location) {
             continue;
         }
 
-        let gen_fn = m.generator_function;
+        let gen_fn = m.generator_function.unwrap();
         let block_node = gen_fn.body().unwrap();
         let block = block_node.as_block();
 

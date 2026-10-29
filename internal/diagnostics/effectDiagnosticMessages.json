@@ -107,6 +107,10 @@
         "category": "Suggestion",
         "code": 377074
     },
+    "`{0}` is called inside an existing Effect context and starts a separate root runtime that the surrounding Effect does not own. Return the Effect instead and call `{0}` once at the application entry point. effect(runEffectInsideEffect)": {
+        "category": "Suggestion",
+        "code": 377160
+    },
     "This type assertion unsafely narrows the error or requirements channels. effect(unsafeEffectTypeAssertion)": {
         "category": "Warning",
         "code": 377075

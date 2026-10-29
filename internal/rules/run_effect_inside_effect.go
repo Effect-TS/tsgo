@@ -27,6 +27,7 @@ var RunEffectInsideEffect = rule.Rule{
 		tsdiag.X_0_is_called_inside_an_existing_Effect_context_Here_the_inner_Effect_can_be_used_directly_effect_runEffectInsideEffect.Code(),
 		tsdiag.X_0_is_called_inside_an_Effect_with_a_separate_runtime_invocation_In_this_context_run_child_Effects_with_the_surrounding_runtime_which_can_be_accessed_through_Effect_runtime_and_Runtime_1_effect_runEffectInsideEffect.Code(),
 		tsdiag.X_0_is_called_inside_an_Effect_with_a_separate_services_invocation_In_this_context_child_Effects_run_with_the_surrounding_services_which_can_be_accessed_through_Effect_context_and_Effect_1_With_effect_runEffectInsideEffect.Code(),
+		tsdiag.X_0_is_called_inside_an_existing_Effect_context_and_starts_a_separate_root_runtime_that_the_surrounding_Effect_does_not_own_Return_the_Effect_instead_and_call_0_once_at_the_application_entry_point_effect_runEffectInsideEffect.Code(),
 	},
 	Run: func(ctx *rule.Context) []*ast.Diagnostic {
 		supportedEffect := ctx.TypeParser.SupportedEffectVersion()
@@ -35,7 +36,9 @@ var RunEffectInsideEffect = rule.Rule{
 		diags := make([]*ast.Diagnostic, 0, len(matches))
 		for _, m := range matches {
 			calleeText := scanner.GetSourceTextOfNodeFromSourceFile(m.SourceFile, m.CalleeNode, false)
-			if m.IsNestedScope {
+			if m.IsPlatformRunMain {
+				diags = append(diags, ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.X_0_is_called_inside_an_existing_Effect_context_and_starts_a_separate_root_runtime_that_the_surrounding_Effect_does_not_own_Return_the_Effect_instead_and_call_0_once_at_the_application_entry_point_effect_runEffectInsideEffect, nil, calleeText))
+			} else if m.IsNestedScope {
 				if supportedEffect == typeparser.EffectMajorV4 {
 					diags = append(diags, ctx.NewDiagnostic(m.SourceFile, m.Location, tsdiag.X_0_is_called_inside_an_Effect_with_a_separate_services_invocation_In_this_context_child_Effects_run_with_the_surrounding_services_which_can_be_accessed_through_Effect_context_and_Effect_1_With_effect_runEffectInsideEffect, nil, calleeText, m.MethodName))
 				} else {
@@ -57,8 +60,9 @@ type RunEffectInsideEffectMatch struct {
 	CallNode          *ast.Node               // The full call expression node (e.g., Effect.runPromise(check))
 	CalleeNode        *ast.Node               // The callee expression (e.g., Effect.runPromise)
 	MethodName        string                  // The matched run API name (e.g., "runPromise")
+	IsPlatformRunMain bool                    // True for NodeRuntime.runMain and the other platform runMain APIs
 	IsNestedScope     bool                    // True when call is in a nested scope rather than direct generator scope
-	GeneratorFunction *ast.FunctionExpression // The enclosing Effect generator function
+	GeneratorFunction *ast.FunctionExpression // The enclosing Effect generator function, nil for a platform runMain
 }
 
 // AnalyzeRunEffectInsideEffect finds all Effect.run* calls inside Effect generators,
@@ -99,6 +103,20 @@ func analyzeRunEffectInsideEffectNode(tp *typeparser.TypeParser, c *checker.Chec
 	}
 
 	callee := call.Expression
+
+	if tp.IsNodeReferenceToPlatformRuntimeApi(callee, "runMain") {
+		if !isInsideEffectContext(tp, node) {
+			return RunEffectInsideEffectMatch{}, false
+		}
+		return RunEffectInsideEffectMatch{
+			SourceFile:        sf,
+			Location:          scanner.GetErrorRangeForNode(sf, callee),
+			CallNode:          node,
+			CalleeNode:        callee,
+			MethodName:        "runMain",
+			IsPlatformRunMain: true,
+		}, true
+	}
 
 	// Check if the callee is one of the Effect.run* APIs
 	methodName := matchRunEffectApi(tp, c, callee)
@@ -152,4 +170,15 @@ func matchRunEffectApi(tp *typeparser.TypeParser, _ *checker.Checker, node *ast.
 		}
 	}
 	return ""
+}
+
+// isInsideEffectContext reports whether node or one of its ancestors runs inside an Effect,
+// such as an Effect.gen body or an Effect.sync thunk.
+func isInsideEffectContext(tp *typeparser.TypeParser, node *ast.Node) bool {
+	for current := node; current != nil; current = current.Parent {
+		if tp.GetEffectContextFlags(current) != typeparser.EffectContextFlagNone {
+			return true
+		}
+	}
+	return false
 }
