@@ -20,6 +20,7 @@ var All = []rule.Rule{
 	CatchUnfailableEffect,
 	CatchDieToOrDie,
 	TimeoutCatchTagToTimeoutOrElse,
+	MapSomeCatchNoSuchElement,
 	CatchAllToMapError,
 	CatchRefailToTapError,
 	CatchAllTagDispatchToCatchTag,

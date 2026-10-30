@@ -1,0 +1,103 @@
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics mapSomeCatchNoSuchElement:warning
+import { Cause, Data, Effect, Option } from "effect"
+
+class NotFound extends Data.TaggedError("NotFound")<{}> {}
+interface Service {
+  readonly _: unique symbol
+}
+
+declare const lookup: Effect.Effect<string, Cause.NoSuchElementError>
+declare const lookupAny: Effect.Effect<any, Cause.NoSuchElementError>
+declare const lookupRecord: Effect.Effect<{ readonly value: string }, Cause.NoSuchElementError>
+
+// MUST TRIGGER: annotations that restate the inferred types do not change the result
+export const sameHandlerAnnotation = lookup.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", (): Effect.Effect<Option.Option<never>> => Effect.succeedNone)
+)
+export const sameMapperAnnotation = lookup.pipe(
+  Effect.map((value): Option.Option<string> => Option.some(value)),
+  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+)
+export const handlerParameterAnnotation = lookup.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", (_error: Cause.NoSuchElementError) => Effect.succeedNone)
+)
+export const anyInputAnyAnnotation = lookupAny.pipe(
+  Effect.map((value): Option.Option<any> => Option.some(value)),
+  Effect.catchTag("NoSuchElementError", (): Effect.Effect<Option.Option<any>> => Effect.succeedNone)
+)
+
+// MUST NOT TRIGGER: a handler return annotation widens the success type, which
+// Effect.catchNoSuchElement would narrow back to Option<string>
+export const widenedHandlerSuccess = lookup.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", (): Effect.Effect<Option.Option<string | number>> => Effect.succeedNone)
+)
+export const widenedSucceedNone: Effect.Effect<Option.Option<string | number>> = widenedHandlerSuccess
+export const acceptsWidened = widenedHandlerSuccess.pipe(
+  Effect.map((option) => option.pipe(Option.orElse(() => Option.some(42))))
+)
+
+// MUST NOT TRIGGER: a mapper return annotation widens the success type
+export const widenedMapperSuccess = lookup.pipe(
+  Effect.map((value): Option.Option<string | number> => Option.some(value)),
+  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+)
+export const widenedFunctionMapper = lookup.pipe(
+  Effect.map(function(value): Option.Option<string | number> {
+    return Option.some(value)
+  }),
+  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+)
+
+// MUST NOT TRIGGER: a handler return annotation widens the error or requirement channel
+export const widenedHandlerError = lookup.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", (): Effect.Effect<Option.Option<never>, NotFound> => Effect.succeedNone)
+)
+export const widenedHandlerRequirement = lookup.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", (): Effect.Effect<Option.Option<never>, never, Service> => Effect.succeedNone)
+)
+
+// MUST NOT TRIGGER: type assertions inside the handler widen the success type
+export const castSucceedNone = lookup.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone as Effect.Effect<Option.Option<string | number>>)
+)
+export const castOptionNone = lookup.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", () => Effect.succeed(Option.none() as Option.Option<number>))
+)
+
+// MUST NOT TRIGGER: any is assignable both ways but is not the input type, and
+// Effect.catchNoSuchElement would replace it with the concrete one
+export const anyHandlerSuccess = lookup.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", (): Effect.Effect<Option.Option<any>> => Effect.succeedNone)
+)
+export const anyHandlerSuccessUse = anyHandlerSuccess.pipe(Effect.map(Option.map((value) => value.toFixed())))
+export const anyMapperSuccess = lookup.pipe(
+  Effect.map((value): Option.Option<any> => Option.some(value)),
+  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+)
+export const anyNestedSuccess = lookupRecord.pipe(
+  Effect.map((value): Option.Option<{ readonly value: any }> => Option.some(value)),
+  Effect.catchTag("NoSuchElementError", () => Effect.succeedNone)
+)
+export const anyWholeSuccess = lookup.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", (): Effect.Effect<any> => Effect.succeedNone)
+)
+export const anyHandlerError = lookup.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", (): Effect.Effect<Option.Option<never>, any> => Effect.succeedNone)
+)
+export const anyHandlerErrorUse: Effect.Effect<Option.Option<string>, NotFound> = anyHandlerError
+export const anyHandlerRequirement = lookup.pipe(
+  Effect.asSome,
+  Effect.catchTag("NoSuchElementError", (): Effect.Effect<Option.Option<never>, never, any> => Effect.succeedNone)
+)
