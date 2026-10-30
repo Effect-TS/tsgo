@@ -36,7 +36,6 @@ type EffectSucceedConstantMatch struct {
 	Location   core.TextRange         // The pre-computed error range for this match
 	Flow       *typeparser.PipingFlow // The flow whose subject and first step are replaced
 	Member     string                 // The Effect constant that replaces them: "void" or "undefined"
-	Rewritable bool                   // False when replacing the step would drop a side effect of the callee
 }
 
 // isVoidExpression checks if a node is `undefined`, `void 0`, or a parenthesized version of either.
@@ -77,11 +76,10 @@ func filterEffectSucceedConstantMatches(matches []EffectSucceedConstantMatch, me
 }
 
 // analyzeEffectSucceedConstant finds piping flows whose subject is the constant `undefined`
-// or `void 0`, possibly parenthesized, and whose first step is Effect.succeed, as a direct call
-// or as a pipe step. The step's success type picks the replacement: void gets Effect.void,
-// undefined gets Effect.undefined in Effect v4 and Effect.void in v3, which has no
-// Effect.undefined. Any other success type, such as an explicit <number | undefined>, is
-// left alone.
+// or `void 0`, possibly parenthesized, and whose first step is Effect.succeed. The step's
+// success type picks the replacement: void gets Effect.void, undefined gets Effect.undefined
+// in Effect v4 and Effect.void in v3, which has no Effect.undefined. Any other success type,
+// such as an explicit <number | undefined>, is left alone.
 func analyzeEffectSucceedConstant(tp *typeparser.TypeParser, sf *ast.SourceFile) []EffectSucceedConstantMatch {
 	if tp == nil || sf == nil {
 		return nil
@@ -93,8 +91,7 @@ func analyzeEffectSucceedConstant(tp *typeparser.TypeParser, sf *ast.SourceFile)
 		if !flow.MatchesPrefix(
 			func(subject typeparser.PipingFlowSubject) bool { return isUndefinedConstant(tp, subject.Node()) },
 			func(transformation typeparser.PipingFlowTransformation) bool {
-				if !isReplaceableSucceedStep(transformation.Kind()) || transformation.Callee() == nil ||
-					transformation.Args().Len() != 0 ||
+				if transformation.Callee() == nil || transformation.Args().Len() != 0 ||
 					!tp.IsNodeReferenceToEffectModuleApi(unwrapZeroDurationExpression(transformation.Callee()), "succeed") {
 					return false
 				}
@@ -111,7 +108,6 @@ func analyzeEffectSucceedConstant(tp *typeparser.TypeParser, sf *ast.SourceFile)
 			Location:   scanner.GetErrorRangeForNode(sf, callee),
 			Flow:       flow,
 			Member:     member,
-			Rewritable: canRewriteSucceedCallee(tp, callee),
 		})
 	}
 	return matches
@@ -144,27 +140,4 @@ func effectSucceedConstantMember(tp *typeparser.TypeParser, effect *typeparser.E
 		return "void"
 	}
 	return ""
-}
-
-// isReplaceableSucceedStep reports whether an Effect.succeed step of this kind applies to the
-// flow subject: a direct call or a pipe step.
-func isReplaceableSucceedStep(kind typeparser.TransformationKind) bool {
-	return kind == typeparser.TransformationKindCall || kind == typeparser.TransformationKindPipe
-}
-
-// canRewriteSucceedCallee reports whether dropping the callee keeps the program's behaviour:
-// an identifier, or a property access on an identifier or an imported module.
-func canRewriteSucceedCallee(tp *typeparser.TypeParser, expr *ast.Node) bool {
-	callee := unwrapZeroDurationExpression(expr)
-	switch callee.Kind {
-	case ast.KindIdentifier:
-		return true
-	case ast.KindPropertyAccessExpression:
-		if callee.Flags&ast.NodeFlagsOptionalChain != 0 {
-			return false
-		}
-		receiver := callee.AsPropertyAccessExpression().Expression
-		return unwrapZeroDurationExpression(receiver).Kind == ast.KindIdentifier || isImportedModuleReceiver(tp, receiver)
-	}
-	return false
 }

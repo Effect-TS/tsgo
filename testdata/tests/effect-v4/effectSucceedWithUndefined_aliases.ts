@@ -34,11 +34,11 @@ export const namedImportAlias = renamedSucceedAlias(undefined)
 const moduleAlias = E
 export const constantModuleAlias = moduleAlias.succeed(undefined)
 
-// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the getter's side effect
+// MUST TRIGGER: the getter receiver is dropped with the callee -> E.undefined
 const effectGetter = { get module() { console.log("evaluated"); return E } }
 export const getterReceiver = effectGetter.module.succeed(undefined)
 
-// MUST TRIGGER, diagnostic only: NO replacement quickfix, rewriting would drop the call's side effect
+// MUST TRIGGER: the called receiver is dropped with the callee -> E.undefined
 const getEffect = () => { console.log("evaluated"); return E }
 export const calledReceiver = getEffect().succeed(undefined)
 

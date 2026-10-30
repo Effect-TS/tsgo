@@ -26,11 +26,10 @@ fn run_effect_succeed_with_void_fix(ctx: &mut Context<'_, '_>) -> Vec<CodeAction
     run_effect_succeed_constant_fix(ctx, matches, "void")
 }
 
-// go: internal/fixables/effect_succeed_with_void.go:29 runEffectSucceedConstantFix 62218fd688e1c77e
+// go: internal/fixables/effect_succeed_with_void.go:28 runEffectSucceedConstantFix ddd985586878cb29
 // runEffectSucceedConstantFix replaces the constant subject and the Effect.succeed step of a
-// match with Effect.<memberName>, keeping any later steps. The fix is offered only when the
-// step can be dropped without losing a side effect and a reference to the constant resolves
-// at the call site.
+// match with Effect.<memberName>, keeping any later steps. The fix is offered only when a
+// reference to the constant resolves at the call site.
 //
 // Rust: the fix action's closure owns its `moduleMember` (its predicates are boxed and not `Clone`), so the loop
 // builds a second one, equal to `member`, for it.
@@ -43,8 +42,7 @@ pub(crate) fn run_effect_succeed_constant_fix(
     let member = effect_module_member(member_name);
     for m in matches {
         let diag_range = m.location;
-        if !m.rewritable || (!diag_range.intersects(ctx.span) && !ctx.span.contained_by(diag_range))
-        {
+        if !diag_range.intersects(ctx.span) && !ctx.span.contained_by(diag_range) {
             continue;
         }
         let reference = resolve_module_member(

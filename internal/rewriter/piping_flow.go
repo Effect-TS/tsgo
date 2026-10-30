@@ -20,7 +20,9 @@ type PipingFlowTransformationReplacement struct {
 
 // ReplacePipingFlowPrefix replaces the subject and the requested leading
 // transformations with a complete replacement expression while retaining any
-// transformations that follow the prefix.
+// transformations that follow the prefix. It edits nothing and returns false
+// when the prefix ends in an Effect.fn step, whose subject is a function body
+// rather than an expression.
 func (t *Tracker) ReplacePipingFlowPrefix(
 	sourceFile *ast.SourceFile,
 	flow *typeparser.PipingFlow,
@@ -38,7 +40,8 @@ func (t *Tracker) ReplacePipingFlowPrefix(
 	switch last.Kind() {
 	case typeparser.TransformationKindCall,
 		typeparser.TransformationKindDataFirst,
-		typeparser.TransformationKindDataLast:
+		typeparser.TransformationKindDataLast,
+		typeparser.TransformationKindCallWithOptionals:
 		target = transformationNode
 	case typeparser.TransformationKindPipe:
 		return t.replaceFunctionPipePrefix(sourceFile, transformationNode, replacementSubject)

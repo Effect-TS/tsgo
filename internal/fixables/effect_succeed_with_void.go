@@ -23,15 +23,14 @@ func runEffectSucceedWithVoidFix(ctx *fixable.Context) []ls.CodeAction {
 }
 
 // runEffectSucceedConstantFix replaces the constant subject and the Effect.succeed step of a
-// match with Effect.<memberName>, keeping any later steps. The fix is offered only when the
-// step can be dropped without losing a side effect and a reference to the constant resolves
-// at the call site.
+// match with Effect.<memberName>, keeping any later steps. The fix is offered only when a
+// reference to the constant resolves at the call site.
 func runEffectSucceedConstantFix(ctx *fixable.Context, matches []rules.EffectSucceedConstantMatch, memberName string) []ls.CodeAction {
 	sf := ctx.SourceFile
 	member := effectModuleMember(ctx, memberName)
 	for _, match := range matches {
 		diagRange := match.Location
-		if !match.Rewritable || (!diagRange.Intersects(ctx.Span) && !ctx.Span.ContainedBy(diagRange)) {
+		if !diagRange.Intersects(ctx.Span) && !ctx.Span.ContainedBy(diagRange) {
 			continue
 		}
 		reference := resolveModuleMember(ctx, match.Flow.Node(), typeparser.FindEffectModuleReference(sf), member)

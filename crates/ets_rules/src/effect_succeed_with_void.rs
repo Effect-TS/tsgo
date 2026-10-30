@@ -4,13 +4,12 @@ use std::sync::LazyLock;
 use ets_etscore::Severity;
 use ets_rule::{Context, Rule};
 use ets_shim::P;
-use ets_shim::ast::{self, Diagnostic, Kind, Node, NodeFlags, SourceFile};
+use ets_shim::ast::{self, Diagnostic, Kind, Node, SourceFile};
 use ets_shim::checker::TypeFlags;
 use ets_shim::core::TextRange;
 use ets_shim::diagnostics::{self as tsdiag, Message};
 use ets_typeparser::{
-    Effect, EffectMajorVersion, PipingFlow, PipingFlowSubject, PipingFlowTransformation,
-    TransformationKind, TypeParser,
+    Effect, EffectMajorVersion, PipingFlow, PipingFlowSubject, PipingFlowTransformation, TypeParser,
 };
 
 use crate::*;
@@ -39,7 +38,7 @@ pub static EFFECT_SUCCEED_WITH_VOID: LazyLock<Rule> = LazyLock::new(|| Rule {
     },
 });
 
-// go: internal/rules/effect_succeed_with_void.go:34 EffectSucceedConstantMatch 36ff4781e8c74b52
+// go: internal/rules/effect_succeed_with_void.go:34 EffectSucceedConstantMatch e7be248bf9c68d74
 // EffectSucceedConstantMatch holds the nodes needed by the effectSucceedWithVoid and
 // effectSucceedWithUndefined diagnostics and their quick-fixes.
 //
@@ -50,10 +49,9 @@ pub struct EffectSucceedConstantMatch {
     pub location: TextRange,        // The pre-computed error range for this match
     pub flow: PipingFlow,           // The flow whose subject and first step are replaced
     pub member: &'static str,       // The Effect constant that replaces them: "void" or "undefined"
-    pub rewritable: bool, // False when replacing the step would drop a side effect of the callee
 }
 
-// go: internal/rules/effect_succeed_with_void.go:43 isVoidExpression 5e71e29c88500c9e
+// go: internal/rules/effect_succeed_with_void.go:42 isVoidExpression 5e71e29c88500c9e
 // isVoidExpression checks if a node is `undefined`, `void 0`, or a parenthesized version of either.
 //
 // Rust: Go dereferences the node without a nil check; a nil node is `None` and is not a void expression.
@@ -82,7 +80,7 @@ pub(crate) fn is_void_expression(node: Option<P<Node>>) -> bool {
     false
 }
 
-// go: internal/rules/effect_succeed_with_void.go:65 AnalyzeEffectSucceedWithVoid 2dab0d593bd965da
+// go: internal/rules/effect_succeed_with_void.go:64 AnalyzeEffectSucceedWithVoid 2dab0d593bd965da
 // AnalyzeEffectSucceedWithVoid finds Effect.succeed(undefined) and Effect.succeed(void 0)
 // steps that Effect.void replaces.
 //
@@ -94,7 +92,7 @@ pub fn analyze_effect_succeed_with_void(
     filter_effect_succeed_constant_matches(analyze_effect_succeed_constant(tp, Some(sf)), "void")
 }
 
-// go: internal/rules/effect_succeed_with_void.go:69 filterEffectSucceedConstantMatches 2cabda7db0baff6f
+// go: internal/rules/effect_succeed_with_void.go:68 filterEffectSucceedConstantMatches 2cabda7db0baff6f
 pub(crate) fn filter_effect_succeed_constant_matches(
     matches: Vec<EffectSucceedConstantMatch>,
     member: &str,
@@ -108,13 +106,12 @@ pub(crate) fn filter_effect_succeed_constant_matches(
     result
 }
 
-// go: internal/rules/effect_succeed_with_void.go:85 analyzeEffectSucceedConstant 4174182138fc9261
+// go: internal/rules/effect_succeed_with_void.go:83 analyzeEffectSucceedConstant dd93585c9d03a7d0
 // analyzeEffectSucceedConstant finds piping flows whose subject is the constant `undefined`
-// or `void 0`, possibly parenthesized, and whose first step is Effect.succeed, as a direct call
-// or as a pipe step. The step's success type picks the replacement: void gets Effect.void,
-// undefined gets Effect.undefined in Effect v4 and Effect.void in v3, which has no
-// Effect.undefined. Any other success type, such as an explicit <number | undefined>, is
-// left alone.
+// or `void 0`, possibly parenthesized, and whose first step is Effect.succeed. The step's
+// success type picks the replacement: void gets Effect.void, undefined gets Effect.undefined
+// in Effect v4 and Effect.void in v3, which has no Effect.undefined. Any other success type,
+// such as an explicit <number | undefined>, is left alone.
 //
 // Rust: Go's nil parser check has no counterpart (the parser is a reference). The flow predicates are `Fn`, so
 // the `member` they set is a `Cell`.
@@ -137,8 +134,7 @@ pub(crate) fn analyze_effect_succeed_constant(
                 is_undefined_constant(tp, subject.node())
             },
             &[&|tp: &mut TypeParser<'_>, transformation: &PipingFlowTransformation| {
-                if !is_replaceable_succeed_step(transformation.kind())
-                    || transformation.args().len() != 0
+                if transformation.args().len() != 0
                     || !tp.is_node_reference_to_effect_module_api(
                         unwrap_zero_duration_expression(transformation.callee()),
                         "succeed",
@@ -161,13 +157,12 @@ pub(crate) fn analyze_effect_succeed_constant(
             location: ets_shim::scanner::get_error_range_for_node(sf, callee),
             flow: flow.clone(),
             member: member.get(),
-            rewritable: can_rewrite_succeed_callee(tp, callee),
         });
     }
     matches
 }
 
-// go: internal/rules/effect_succeed_with_void.go:122 isUndefinedConstant 902ac5bfa2565b9b
+// go: internal/rules/effect_succeed_with_void.go:118 isUndefinedConstant 902ac5bfa2565b9b
 // isUndefinedConstant checks if a node is `undefined` or `void 0`, possibly parenthesized,
 // where `undefined` must resolve to the global.
 pub(crate) fn is_undefined_constant(tp: &mut TypeParser<'_>, node: Option<P<Node>>) -> bool {
@@ -182,7 +177,7 @@ pub(crate) fn is_undefined_constant(tp: &mut TypeParser<'_>, node: Option<P<Node
     node.kind() != Kind::Identifier || tp.is_expression_value_stable_at_location(node, node)
 }
 
-// go: internal/rules/effect_succeed_with_void.go:133 effectSucceedConstantMember 0e6ad44e462e5149
+// go: internal/rules/effect_succeed_with_void.go:129 effectSucceedConstantMember 0e6ad44e462e5149
 // effectSucceedConstantMember returns the Effect constant with the same type as an
 // Effect.succeed result, or "" when there is none.
 //
@@ -204,31 +199,4 @@ pub(crate) fn effect_succeed_constant_member(
         return "void";
     }
     ""
-}
-
-// go: internal/rules/effect_succeed_with_void.go:151 isReplaceableSucceedStep 475162aef7b80183
-// isReplaceableSucceedStep reports whether an Effect.succeed step of this kind applies to the
-// flow subject: a direct call or a pipe step.
-pub(crate) fn is_replaceable_succeed_step(kind: TransformationKind) -> bool {
-    kind == TransformationKind::Call || kind == TransformationKind::Pipe
-}
-
-// go: internal/rules/effect_succeed_with_void.go:157 canRewriteSucceedCallee 0a90df679e39347e
-// canRewriteSucceedCallee reports whether dropping the callee keeps the program's behaviour:
-// an identifier, or a property access on an identifier or an imported module.
-pub(crate) fn can_rewrite_succeed_callee(tp: &mut TypeParser<'_>, expr: P<Node>) -> bool {
-    let callee = unwrap_zero_duration_expression(expr);
-    match callee.kind() {
-        Kind::Identifier => return true,
-        Kind::PropertyAccessExpression => {
-            if callee.flags().intersects(NodeFlags::OptionalChain) {
-                return false;
-            }
-            let receiver = callee.as_property_access_expression().expression();
-            return unwrap_zero_duration_expression(receiver).kind() == Kind::Identifier
-                || is_imported_module_receiver(tp, receiver);
-        }
-        _ => {}
-    }
-    false
 }
