@@ -1,0 +1,42 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:38-10:46) TS2345: Argument of type '() => Generator<Effect.Effect<string, never, never>, unknown[], unknown>' is not assignable to parameter of type '(resume: Adapter) => Generator<YieldWrap<Effect<any, any, any>>, unknown[], never>'.
+  Type 'Generator<Effect<string, never, never>, unknown[], unknown>' is not assignable to type 'Generator<YieldWrap<Effect<any, any, any>>, unknown[], never>'.
+    The types returned by 'next(...)' are incompatible between these types.
+      Type 'IteratorResult<Effect<string, never, never>, unknown[]>' is not assignable to type 'IteratorResult<YieldWrap<Effect<any, any, any>>, unknown[]>'.
+        Type 'IteratorYieldResult<Effect<string, never, never>>' is not assignable to type 'IteratorResult<YieldWrap<Effect<any, any, any>>, unknown[]>'.
+          Type 'IteratorYieldResult<Effect<string, never, never>>' is not assignable to type 'IteratorYieldResult<YieldWrap<Effect<any, any, any>>>'.
+            Type 'Effect<string, never, never>' is missing the following properties from type 'YieldWrap<Effect<any, any, any>>': #private, [YieldWrapTypeId]
+  (no quick fixes)
+
+[D2] (12:38-12:43) TS377008: This uses `yield` for an `Effect` value. `yield*` is the Effect-aware form in this context. effect(missingStarInYieldEffectGen)
+  Fix 0: "Disable missingStarInYieldEffectGen for this line"
+  Fix 1: "Disable missingStarInYieldEffectGen for entire file"
+  Fix 2: "Replace yield with yield*"
+
+=== Quick Fix Application Results ===
+
+=== [D2] Fix 0: "Disable missingStarInYieldEffectGen for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable missingStarInYieldEffectGen for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace yield with yield*" ===
+
+--- file:///.src/forLoopPushToForEach_plainYield.ts ---
+// @effect-v3
+import { Effect } from "effect"
+
+declare const items: ReadonlyArray<number>
+declare const processItem: (item: number) => Effect.Effect<string>
+
+// MUST NOT TRIGGER: plain yield instead of yield*. Kept apart from the shapes
+// fixture because a plain yield of an Effect does not type-check.
+// MUST NOT TRIGGER: plain yield instead of yield*.
+export const plainYield = Effect.gen(function*() {
+  const out: Array<unknown> = []
+  for (const item of items) out.push(yield* processItem(item))
+  return out
+})
+

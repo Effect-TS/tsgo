@@ -32,6 +32,7 @@
     "effecttsgo/flat-map-ignored-param-to-and-then": "warn",
     "effecttsgo/flat-map-to-map": "warn",
     "effecttsgo/flat-map-to-tap": "warn",
+    "effecttsgo/for-loop-push-to-for-each": "warn",
     "effecttsgo/manual-metric-tap-to-track": "warn",
     "effecttsgo/map-const-to-as": "warn",
     "effecttsgo/map-map-error-to-map-both": "warn",

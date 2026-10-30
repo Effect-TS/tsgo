@@ -1,0 +1,43 @@
+==== /.src/forLoopPushToForEach_strict.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 8:23 - 14:3
+Node: Effect.gen(function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* processItem(item))\n  }\n  return results\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const results = []\n  for (const item of items) {\n    results.push(yield* processItem(item))\n  }\n  return results\n}
+Subject Type: () => Generator<Effect<string, never, never>, string[], any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string[], never, never>
+
+=== Piping Flow ===
+Location: 10:30 - 11:43
+Node: results.push(yield* processItem(item))
+Node Kind: KindCallExpression
+
+Subject: yield* processItem(item)
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: results.push
+      args: (constant)
+      outType: number
+
+=== Piping Flow ===
+Location: 11:24 - 11:42
+Node: processItem(item)
+Node Kind: KindCallExpression
+
+Subject: item
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: processItem
+      args: (constant)
+      outType: Effect<string, never, never>

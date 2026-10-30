@@ -1,0 +1,30 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/forLoopPushToForEach_strict.ts(10,3): suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {"compilerOptions":{"strict":true,"plugins":[{"name":"@effect/language-service"}]}}
+    
+
+==== /.src/forLoopPushToForEach_strict.ts (1 errors) ====
+    import { Effect } from "effect"
+    
+    declare const items: ReadonlyArray<number>
+    declare const processItem: (item: number) => Effect.Effect<string>
+    
+    // MUST TRIGGER: under strict the accumulator is an evolving array.
+    // fix: const results = yield* Effect.forEach(items, processItem)
+    export const program = Effect.gen(function*() {
+      const results = []
+      for (const item of items) {
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        results.push(yield* processItem(item))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      }
+    ~~~
+!!! suggestion TS377170: `Effect.forEach` expresses this for-of loop that pushes yielded results into an accumulator more directly, and makes ordering and concurrency explicit. effect(forLoopPushToForEach)
+      return results
+    })
+    
