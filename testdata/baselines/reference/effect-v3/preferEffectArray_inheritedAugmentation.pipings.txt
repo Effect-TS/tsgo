@@ -1,0 +1,15 @@
+==== /.src/preferEffectArray_inheritedAugmentation.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 6:2 - 7:18
+Node: Array.isArray([])
+Node Kind: KindCallExpression
+
+Subject: []
+Subject Type: never[]
+
+Transformations (1):
+  [0] kind: call
+      callee: Array.isArray
+      args: (constant)
+      outType: boolean

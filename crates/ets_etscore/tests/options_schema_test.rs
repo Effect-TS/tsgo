@@ -252,45 +252,49 @@ struct DiagnosticRuleSchema {
     default_severity: Severity,
 }
 
-// go test: etscore/options_schema_test.go:25 TestGenerateTSConfigSchemaMatchesReference 429d543952b992e8
+// go test: etscore/options_schema_test.go:25 TestGenerateTSConfigSchemaMatchesReference 140cd5e757c023cb
 #[test]
 fn test_generate_tsconfig_schema_matches_reference() {
     ets_go::testing::run(|t| {
-        let root = repo_root(t);
         let actual = match generate_tsconfig_schema() {
             Ok(actual) => actual,
             Err(err) => t.fatal(sprintf!("generateTSConfigSchema() error = %v", err)),
         };
-
-        // Rust: the Rust runner writes its local copy to `local-rs/` (Go's is `local/`), and never updates the
-        // reference: Go's `UPDATE_TSCONFIG_SCHEMA=1` branch is left out (the Go test owns schema.json).
-        let local_path =
-            root.join("testdata").join("baselines").join("local-rs").join("schema.json");
-        let reference_path = root.join("schema.json");
-
-        write_if_changed(t, &local_path, &actual);
-
-        let expected = match std::fs::read(&reference_path) {
-            Ok(expected) => expected,
-            Err(err) => t.fatal(sprintf!(
-                "failed to read reference schema %q: %v",
-                reference_path.display().to_string(),
-                err.to_string()
-            )),
-        };
-        if actual == expected {
-            return;
-        }
-
-        let diff = diff_text(
-            &reference_path.display().to_string(),
-            &local_path.display().to_string(),
-            &String::from_utf8_lossy(&expected),
-            &String::from_utf8_lossy(&actual),
-        );
-        let diff_lines: Vec<String> = diff.split('\n').map(|line| format!("  {line}")).collect();
-        t.fatal(sprintf!("schema.json is out of date:\n%s", diff_lines.join("\n")));
+        assert_matches_reference(t, "schema.json", &actual, "UPDATE_TSCONFIG_SCHEMA");
     });
+}
+
+// go test: etscore/options_schema_test.go:33 assertMatchesReference 8a2aaa513ad378da
+// Rust: the Rust runner writes its local copy to `local-rs/` (Go's is `local/`), and never updates the
+// reference: Go's `updateEnv` branch is left out (the Go test owns the reference).
+fn assert_matches_reference(t: &T, name: &str, actual: &[u8], _update_env: &str) {
+    t.helper();
+    let root = repo_root();
+    let local_path = root.join("testdata").join("baselines").join("local-rs").join(name);
+    let reference_path = root.join(name);
+
+    write_if_changed(t, &local_path, actual);
+
+    let expected = match std::fs::read(&reference_path) {
+        Ok(expected) => expected,
+        Err(err) => t.fatal(sprintf!(
+            "failed to read reference schema %q: %v",
+            reference_path.display().to_string(),
+            err.to_string()
+        )),
+    };
+    if actual == expected {
+        return;
+    }
+
+    let diff = diff_text(
+        &reference_path.display().to_string(),
+        &local_path.display().to_string(),
+        &String::from_utf8_lossy(&expected),
+        &String::from_utf8_lossy(actual),
+    );
+    let diff_lines: Vec<String> = diff.split('\n').map(|line| format!("  {line}")).collect();
+    t.fatal(sprintf!("%s is out of date:\n%s", name, diff_lines.join("\n")));
 }
 
 /// Rust-only: Go's `baseline.DiffText(oldName, newName, expected, actual)`, as `ets_effecttest::diff_text`
@@ -302,20 +306,18 @@ fn diff_text(old_name: &str, new_name: &str, expected: &str, actual: &str) -> St
         .to_string()
 }
 
-// go test: etscore/options_schema_test.go:57 repoRoot ad6869341b512b52
+// go test: etscore/options_schema_test.go:61 repoRoot edff299b3ea0d8e7
 // Rust: Go's `runtime.Caller(0)` file is etscore/options_schema_test.go; the repository root is two levels up
 // from this crate's manifest directory.
-fn repo_root(t: &T) -> PathBuf {
-    t.helper();
-
+fn repo_root() -> PathBuf {
     let manifest_dir = Path::new(env!("CARGO_MANIFEST_DIR"));
     match manifest_dir.parent().and_then(Path::parent) {
         Some(root) => root.to_path_buf(),
-        None => t.fatal("failed to resolve caller path"),
+        None => panic!("failed to resolve caller path"),
     }
 }
 
-// go test: etscore/options_schema_test.go:67 schemaRules 975bc927c0316359
+// go test: etscore/options_schema_test.go:69 schemaRules 975bc927c0316359
 fn schema_rules() -> Vec<DiagnosticRuleSchema> {
     let mut result = Vec::with_capacity(ets_rules::ALL.len());
     for rule in ets_rules::ALL.iter() {
@@ -328,9 +330,9 @@ fn schema_rules() -> Vec<DiagnosticRuleSchema> {
     result
 }
 
-// go test: etscore/options_schema_test.go:79 generateTSConfigSchema ce9557ff0611fb76
+// go test: etscore/options_schema_test.go:81 generateTSConfigSchema 2c206f4fa208afb9
 fn generate_tsconfig_schema() -> Result<Vec<u8>, String> {
-    let root = repo_root_for_generation();
+    let root = repo_root();
     let base_schema_path = root.join("_tools").join("tsconfig-base-schema.json");
     let base_schema_content =
         std::fs::read_to_string(&base_schema_path).map_err(|err| err.to_string())?;
@@ -403,7 +405,7 @@ fn generate_tsconfig_schema() -> Result<Vec<u8>, String> {
     Ok(output)
 }
 
-// go test: etscore/options_schema_test.go:144 effectLanguageServicePluginSchema f683771855d4adc5
+// go test: etscore/options_schema_test.go:146 effectLanguageServicePluginSchema f683771855d4adc5
 fn effect_language_service_plugin_schema() -> Map {
     let options_schema = effect_language_service_plugin_options_schema();
     let properties =
@@ -426,7 +428,7 @@ fn effect_language_service_plugin_schema() -> Map {
     schema
 }
 
-// go test: etscore/options_schema_test.go:161 effectLanguageServicePluginOptionsSchema d966a202db54672e
+// go test: etscore/options_schema_test.go:163 effectLanguageServicePluginOptionsSchema d966a202db54672e
 fn effect_language_service_plugin_options_schema() -> Map {
     let schema = reflected_schema_for_struct(&EffectPluginOptions::TYPE);
     let properties = get_map(&schema, "properties").expect("map[string]any");
@@ -504,7 +506,7 @@ fn effect_language_service_plugin_options_schema() -> Map {
     schema
 }
 
-// go test: etscore/options_schema_test.go:187 effectLanguageServicePluginOverrideSchema 720a8d76c0744470
+// go test: etscore/options_schema_test.go:189 effectLanguageServicePluginOverrideSchema 720a8d76c0744470
 fn effect_language_service_plugin_override_schema() -> Map {
     let schema = reflected_schema_for_struct(&Override::TYPE);
     let properties = get_map(&schema, "properties").expect("map[string]any");
@@ -528,7 +530,7 @@ fn effect_language_service_plugin_override_schema() -> Map {
     schema
 }
 
-// go test: etscore/options_schema_test.go:197 effectLanguageServicePluginOverrideOptionsSchema 1deab256a280fa0b
+// go test: etscore/options_schema_test.go:199 effectLanguageServicePluginOverrideOptionsSchema 1deab256a280fa0b
 fn effect_language_service_plugin_override_options_schema() -> Map {
     let schema = reflected_schema_for_struct(&OverrideOptions::TYPE);
     let properties = get_map(&schema, "properties").expect("map[string]any");
@@ -580,7 +582,7 @@ fn effect_language_service_plugin_override_options_schema() -> Map {
     schema
 }
 
-// go test: etscore/options_schema_test.go:214 diagnosticSeveritySchema c4b1ef40abf5d101
+// go test: etscore/options_schema_test.go:216 diagnosticSeveritySchema c4b1ef40abf5d101
 fn diagnostic_severity_schema() -> Map {
     let properties = map_of(vec![]);
     for rule in schema_rules() {
@@ -628,7 +630,7 @@ fn diagnostic_severity_schema() -> Map {
     ])
 }
 
-// go test: etscore/options_schema_test.go:240 severitySchema fa38718a4a13bb14
+// go test: etscore/options_schema_test.go:242 severitySchema fa38718a4a13bb14
 fn severity_schema() -> Map {
     map_of(vec![
         ("type", Any::String("string".to_string())),
@@ -645,7 +647,7 @@ fn severity_schema() -> Map {
     ])
 }
 
-// go test: etscore/options_schema_test.go:253 otherPluginSchema ff17bae3ed7eb168
+// go test: etscore/options_schema_test.go:255 otherPluginSchema ff17bae3ed7eb168
 fn other_plugin_schema(existing: &Map) -> Map {
     let schema = clone_json(existing);
     let properties = get_map(&schema, "properties").unwrap_or_else(|| {
@@ -667,7 +669,7 @@ fn other_plugin_schema(existing: &Map) -> Map {
     schema
 }
 
-// go test: etscore/options_schema_test.go:276 reflectedSchemaForStruct 85d4ae2f2e8f3781
+// go test: etscore/options_schema_test.go:278 reflectedSchemaForStruct 85d4ae2f2e8f3781
 fn reflected_schema_for_struct(typ: &StructType) -> Map {
     let properties = map_of(vec![]);
     for i in 0..typ.num_field() {
@@ -686,7 +688,7 @@ fn reflected_schema_for_struct(typ: &StructType) -> Map {
     ])
 }
 
-// go test: etscore/options_schema_test.go:294 cloneProperties 1f4eb1c503dde789
+// go test: etscore/options_schema_test.go:296 cloneProperties 1f4eb1c503dde789
 fn clone_properties(properties: &Map) -> Map {
     let mut cloned = BTreeMap::new();
     for (key, value) in properties.borrow().iter() {
@@ -695,7 +697,7 @@ fn clone_properties(properties: &Map) -> Map {
     Rc::new(RefCell::new(cloned))
 }
 
-// go test: etscore/options_schema_test.go:302 cloneJSON 29c69e616cdf56e7
+// go test: etscore/options_schema_test.go:304 cloneJSON 29c69e616cdf56e7
 // Rust: Go's generic `cloneJSON[T]` is only instantiated with `map[string]any`.
 fn clone_json(value: &Map) -> Map {
     let data = marshal_indent(&Any::Map(Rc::clone(value)), "", "");
@@ -705,7 +707,7 @@ fn clone_json(value: &Map) -> Map {
     }
 }
 
-// go test: etscore/options_schema_test.go:314 reflectedSchemaForField 2a6dfa82d5aa03e4
+// go test: etscore/options_schema_test.go:316 reflectedSchemaForField 2a6dfa82d5aa03e4
 fn reflected_schema_for_field(field: &StructField) -> Map {
     let schema = map_of(vec![]);
     let mut field_type = field.typ;
@@ -765,7 +767,7 @@ fn reflected_schema_for_field(field: &StructField) -> Map {
     schema
 }
 
-// go test: etscore/options_schema_test.go:367 decodeJSONTag 6c7214615e166ea4
+// go test: etscore/options_schema_test.go:369 decodeJSONTag 6c7214615e166ea4
 // Rust: Go's nil `any` (an absent tag, or a tag that decodes to `null`) is `None`.
 fn decode_json_tag(field: &StructField, key: &str) -> Option<Any> {
     let value = field.tag.get(key);
@@ -779,7 +781,7 @@ fn decode_json_tag(field: &StructField, key: &str) -> Option<Any> {
     }
 }
 
-// go test: etscore/options_schema_test.go:379 jsonFieldName 632c44eff9e2e6a9
+// go test: etscore/options_schema_test.go:381 jsonFieldName 632c44eff9e2e6a9
 fn json_field_name(field: &StructField) -> String {
     let tag = field.tag.get("json");
     if tag.is_empty() {
@@ -792,7 +794,7 @@ fn json_field_name(field: &StructField) -> String {
     name.to_string()
 }
 
-// go test: etscore/options_schema_test.go:391 structFieldTag c394c05e48e11e7e
+// go test: etscore/options_schema_test.go:393 structFieldTag c394c05e48e11e7e
 fn struct_field_tag(typ: &StructType, field_name: &str, tag_name: &str) -> String {
     let Some(field) = typ.field_by_name(field_name) else {
         panic!("missing field: {field_name}");
@@ -800,17 +802,7 @@ fn struct_field_tag(typ: &StructType, field_name: &str, tag_name: &str) -> Strin
     field.tag.get(tag_name)
 }
 
-// go test: etscore/options_schema_test.go:399 repoRootForGeneration 820257fe354a11e8
-// Rust: as `repo_root`, two levels up from this crate's manifest directory.
-fn repo_root_for_generation() -> PathBuf {
-    let manifest_dir = Path::new(env!("CARGO_MANIFEST_DIR"));
-    match manifest_dir.parent().and_then(Path::parent) {
-        Some(root) => root.to_path_buf(),
-        None => panic!("failed to resolve caller path"),
-    }
-}
-
-// go test: etscore/options_schema_test.go:407 nestedObject b099684ed3fa731f
+// go test: etscore/options_schema_test.go:401 nestedObject b099684ed3fa731f
 fn nested_object(root: &Map, keys: &[&str]) -> Result<Map, String> {
     let mut current = Rc::clone(root);
     for key in keys {
@@ -822,7 +814,7 @@ fn nested_object(root: &Map, keys: &[&str]) -> Result<Map, String> {
     Ok(current)
 }
 
-// go test: etscore/options_schema_test.go:419 schemaVariantWithObjectField 99c7ecc87d5b4cac
+// go test: etscore/options_schema_test.go:413 schemaVariantWithObjectField 99c7ecc87d5b4cac
 fn schema_variant_with_object_field(root: &Map, field: &str) -> Result<Map, String> {
     if get_map(root, field).is_some() {
         return Ok(Rc::clone(root));
@@ -840,74 +832,7 @@ fn schema_variant_with_object_field(root: &Map, field: &str) -> Result<Map, Stri
     Err(sprintf!("object field %q not found", field))
 }
 
-// go test: etscore/options_schema_test.go:437 TestSchemaVariantWithObjectField 6dabccc7c435b40e
-#[test]
-fn test_schema_variant_with_object_field() {
-    ets_go::testing::run(|t| {
-        t.run("direct field", |t| {
-            let field = object(vec![("value", Any::Bool(true))]);
-            let variant = match schema_variant_with_object_field(
-                &map_of(vec![("properties", field.clone())]),
-                "properties",
-            ) {
-                Ok(variant) => variant,
-                Err(err) => t.fatal(err),
-            };
-            let properties = variant.borrow().get("properties").cloned();
-            if properties.as_ref() != Some(&field) {
-                t.fatal(sprintf!(
-                    "properties = %#v, want %#v",
-                    format!("{properties:?}"),
-                    format!("{field:?}")
-                ));
-            }
-        });
-
-        t.run("anyOf field", |t| {
-            let field = object(vec![("value", Any::Bool(true))]);
-            let variant = match schema_variant_with_object_field(
-                &map_of(vec![(
-                    "anyOf",
-                    Any::Slice(vec![
-                        object(vec![("type", Any::String("null".to_string()))]),
-                        object(vec![
-                            ("type", Any::String("object".to_string())),
-                            ("properties", field.clone()),
-                        ]),
-                    ]),
-                )]),
-                "properties",
-            ) {
-                Ok(variant) => variant,
-                Err(err) => t.fatal(err),
-            };
-            let properties = variant.borrow().get("properties").cloned();
-            if properties.as_ref() != Some(&field) {
-                t.fatal(sprintf!(
-                    "properties = %#v, want %#v",
-                    format!("{properties:?}"),
-                    format!("{field:?}")
-                ));
-            }
-        });
-
-        t.run("missing field", |t| {
-            if schema_variant_with_object_field(
-                &map_of(vec![(
-                    "anyOf",
-                    Any::Slice(vec![object(vec![("type", Any::String("null".to_string()))])]),
-                )]),
-                "properties",
-            )
-            .is_ok()
-            {
-                t.fatal("expected an error");
-            }
-        });
-    });
-}
-
-// go test: etscore/options_schema_test.go:475 writeIfChanged 1a8b568e399df379
+// go test: etscore/options_schema_test.go:431 writeIfChanged 1a8b568e399df379
 fn write_if_changed(t: &T, path: &Path, content: &[u8]) {
     t.helper();
 

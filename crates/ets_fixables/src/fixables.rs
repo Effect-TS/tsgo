@@ -12,7 +12,7 @@ use crate::*;
 // All is the list of all code fix providers.
 // Add new fixables here explicitly - no init() magic.
 //
-// Rust: Go's whole list, in Go's order; the fixables not ported yet are the commented-out entries (docs/PORTING.md,
+// Rust: Go's whole list, in Go's order; the fixables not ported yet are the commented-out entries (porting/PORTING.md,
 // "Porting a fixable, refactor or completion"). Uncomment an entry in place when its fixable lands.
 pub static ALL: LazyLock<Vec<Fixable>> = LazyLock::new(|| {
     vec![

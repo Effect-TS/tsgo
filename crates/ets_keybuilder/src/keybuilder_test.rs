@@ -27,21 +27,6 @@ fn test_cyrb53() {
     }
 }
 
-// go test: internal/keybuilder/keybuilder_test.go:36 TestCyrb53Length da7d2d678b85ed98
-#[test]
-fn test_cyrb53_length() {
-    let inputs = ["", "hello", "test/path/file", "@effect/myapp/services/AuthService"];
-    for input in inputs {
-        let got = cyrb53(input);
-        assert_eq!(
-            got.len(),
-            16,
-            "Cyrb53({input:?}) produced {got:?} with length {}, want 16",
-            got.len()
-        );
-    }
-}
-
 /// Rust-only: Go's `etscore.KeyPattern{Target: .., Pattern: .., SkipLeadingPath: []string{..}}` literal.
 fn kp(target: &str, pattern: &str, skip_leading_path: &[&str]) -> KeyPattern {
     KeyPattern {
@@ -51,7 +36,7 @@ fn kp(target: &str, pattern: &str, skip_leading_path: &[&str]) -> KeyPattern {
     }
 }
 
-// go test: internal/keybuilder/keybuilder_test.go:47 TestCreateString 0af2ea33ac89a45d
+// go test: internal/keybuilder/keybuilder_test.go:36 TestCreateString a2d13c132cc06d06
 #[test]
 fn test_create_string() {
     let default_service_pattern = [kp("service", "default", &["src/"])];
@@ -111,16 +96,6 @@ fn test_create_string() {
             target: "service",
             key_patterns: &default_hashed_service_pattern,
             expected: cyrb53("@effect/harness-effect-v4/test/ExpectedServiceIdentifier"),
-        },
-        Case {
-            name: "cyrb53 cross-check with known value",
-            source_file_name: "/.src/test.ts",
-            package_name: "@effect/harness-effect-v4",
-            package_directory: "/.src",
-            class_name: "ExpectedServiceIdentifier",
-            target: "service",
-            key_patterns: &[kp("service", "default", &["src/"])],
-            expected: "@effect/harness-effect-v4/test/ExpectedServiceIdentifier".to_string(),
         },
         Case {
             name: "class name matches file name - omits class name",

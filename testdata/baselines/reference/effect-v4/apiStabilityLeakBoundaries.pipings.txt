@@ -1,0 +1,15 @@
+==== /.src/apiStabilityLeakBoundaries.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 141:22 - 141:57
+Node: super(y as unknown as FixOwnCtorE)
+Node Kind: KindCallExpression
+
+Subject: y as unknown as FixOwnCtorE
+Subject Type: FixOwnCtorE
+
+Transformations (1):
+  [0] kind: call
+      callee: super
+      args: (constant)
+      outType: FixOwnCtorBase

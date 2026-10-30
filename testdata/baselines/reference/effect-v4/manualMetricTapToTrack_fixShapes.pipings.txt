@@ -1,0 +1,481 @@
+==== /.src/forms.ts (22 flows) ====
+
+=== Piping Flow ===
+Location: 5:21 - 5:51
+Node: Metric.gauge("response_size")
+Node Kind: KindCallExpression
+
+Subject: "response_size"
+Subject Type: "response_size"
+
+Transformations (1):
+  [0] kind: call
+      callee: Metric.gauge
+      args: (constant)
+      outType: Gauge<number>
+
+=== Piping Flow ===
+Location: 6:18 - 6:46
+Node: Metric.counter("successes")
+Node Kind: KindCallExpression
+
+Subject: "successes"
+Subject Type: "successes"
+
+Transformations (1):
+  [0] kind: call
+      callee: Metric.counter
+      args: (constant)
+      outType: Counter<number>
+
+=== Piping Flow ===
+Location: 7:18 - 7:45
+Node: Metric.gauge("user_count")
+Node Kind: KindCallExpression
+
+Subject: "user_count"
+Subject Type: "user_count"
+
+Transformations (1):
+  [0] kind: call
+      callee: Metric.gauge
+      args: (constant)
+      outType: Gauge<number>
+
+=== Piping Flow ===
+Location: 8:14 - 8:36
+Node: Metric.gauge("calls")
+Node Kind: KindCallExpression
+
+Subject: "calls"
+Subject Type: "calls"
+
+Transformations (1):
+  [0] kind: call
+      callee: Metric.gauge
+      args: (constant)
+      outType: Gauge<number>
+
+=== Piping Flow ===
+Location: 9:14 - 9:36
+Node: Metric.gauge("sizes")
+Node Kind: KindCallExpression
+
+Subject: "sizes"
+Subject Type: "sizes"
+
+Transformations (1):
+  [0] kind: call
+      callee: Metric.gauge
+      args: (constant)
+      outType: Gauge<number>
+
+=== Piping Flow ===
+Location: 10:22 - 10:55
+Node: Metric.counter("request_errors")
+Node Kind: KindCallExpression
+
+Subject: "request_errors"
+Subject Type: "request_errors"
+
+Transformations (1):
+  [0] kind: call
+      callee: Metric.counter
+      args: (constant)
+      outType: Counter<number>
+
+=== Piping Flow ===
+Location: 18:33 - 18:97
+Node: Effect.tap(source, (size) => Metric.update(responseSize, size))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.tap
+      args: [(size) => Metric.update(responseSize, size)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 18:62 - 18:96
+Node: Metric.update(responseSize, size)
+Node Kind: KindCallExpression
+
+Subject: responseSize
+Subject Type: Gauge<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Metric.update
+      args: [size]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 22:31 - 22:79
+Node: Effect.tap(source, Metric.update(successes, 1))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.tap
+      args: [Metric.update(successes, 1)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 22:50 - 22:78
+Node: Metric.update(successes, 1)
+Node Kind: KindCallExpression
+
+Subject: successes
+Subject Type: Counter<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Metric.update
+      args: [1]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 26:33 - 26:84
+Node: source.pipe(Effect.tap(updateAlias(successes, 1)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.tap
+      args: [updateAlias(successes, 1)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 26:57 - 26:82
+Node: updateAlias(successes, 1)
+Node Kind: KindCallExpression
+
+Subject: successes
+Subject Type: Counter<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: updateAlias
+      args: [1]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 29:34 - 29:107
+Node: users.pipe(Effect.tap(({ length }) => Metric.update(userCount, length)))
+Node Kind: KindCallExpression
+
+Subject: users
+Subject Type: Effect<readonly string[], never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.tap
+      args: [({ length }) => Metric.update(userCount, length)]
+      outType: Effect<readonly string[], never, never>
+
+=== Piping Flow ===
+Location: 29:72 - 29:105
+Node: Metric.update(userCount, length)
+Node Kind: KindCallExpression
+
+Subject: userCount
+Subject Type: Gauge<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Metric.update
+      args: [length]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 33:35 - 33:122
+Node: source.pipe(Effect.tap((...args: Array<number>) => Metric.update(calls, args.length)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.tap
+      args: [(...args: Array<number>) => Metric.update(calls, args.length)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 33:86 - 33:120
+Node: Metric.update(calls, args.length)
+Node Kind: KindCallExpression
+
+Subject: calls
+Subject Type: Gauge<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Metric.update
+      args: [args.length]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 36:38 - 36:104
+Node: source.pipe(Effect.tap((size = 0) => Metric.update(sizes, size)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.tap
+      args: [(size = 0) => Metric.update(sizes, size)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 36:75 - 36:102
+Node: Metric.update(sizes, size)
+Node Kind: KindCallExpression
+
+Subject: sizes
+Subject Type: Gauge<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Metric.update
+      args: [size]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 39:23 - 44:2
+Node: Effect.fn("handler")(\n  function*(id: string) {\n    return id.length\n  },\n  Effect.tap((size) => Metric.update(responseSize, size))\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.fn("handler")(\n  function*(id: string) {\n    return id.length\n  },\n  Effect.tap((size) => Metric.update(responseSize, size))\n)
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: effectFn
+      callee: Effect.tap
+      args: [(size) => Metric.update(responseSize, size)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 43:23 - 43:57
+Node: Metric.update(responseSize, size)
+Node Kind: KindCallExpression
+
+Subject: responseSize
+Subject Type: Gauge<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Metric.update
+      args: [size]
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 48:31 - 48:95
+Node: Effect.tapError(() => Metric.update(requestErrors, 1))(failing)
+Node Kind: KindCallExpression
+
+Subject: failing
+Subject Type: Effect<number, Error, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.tapError
+      args: [() => Metric.update(requestErrors, 1)]
+      outType: Effect<number, unknown, never>
+
+=== Piping Flow ===
+Location: 48:53 - 48:85
+Node: Metric.update(requestErrors, 1)
+Node Kind: KindCallExpression
+
+Subject: requestErrors
+Subject Type: Counter<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Metric.update
+      args: [1]
+      outType: Effect<void, never, never>
+==== /.src/tapAlias.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 6:21 - 6:51
+Node: Metric.gauge("response_size")
+Node Kind: KindCallExpression
+
+Subject: "response_size"
+Subject Type: "response_size"
+
+Transformations (1):
+  [0] kind: call
+      callee: Metric.gauge
+      args: (constant)
+      outType: Gauge<number>
+
+=== Piping Flow ===
+Location: 13:21 - 13:88
+Node: source.pipe(tapAlias((size) => Metric.update(responseSize, size)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: tapAlias
+      args: [(size) => Metric.update(responseSize, size)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 13:52 - 13:86
+Node: Metric.update(responseSize, size)
+Node Kind: KindCallExpression
+
+Subject: responseSize
+Subject Type: Gauge<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Metric.update
+      args: [size]
+      outType: Effect<void, never, never>
+==== /.src/namespaceMetric.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 6:18 - 6:41
+Node: M.counter("successes")
+Node Kind: KindCallExpression
+
+Subject: "successes"
+Subject Type: "successes"
+
+Transformations (1):
+  [0] kind: call
+      callee: M.counter
+      args: (constant)
+      outType: Counter<number>
+
+=== Piping Flow ===
+Location: 12:21 - 12:69
+Node: source.pipe(Effect.tap(M.update(successes, 1)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.tap
+      args: [M.update(successes, 1)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 12:45 - 12:67
+Node: M.update(successes, 1)
+Node Kind: KindCallExpression
+
+Subject: successes
+Subject Type: Counter<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: M.update
+      args: [1]
+      outType: Effect<void, never, never>
+==== /.src/memberImports.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 7:18 - 7:39
+Node: counter("successes")
+Node Kind: KindCallExpression
+
+Subject: "successes"
+Subject Type: "successes"
+
+Transformations (1):
+  [0] kind: call
+      callee: counter
+      args: (constant)
+      outType: Counter<number>
+
+=== Piping Flow ===
+Location: 13:21 - 13:60
+Node: source.pipe(tap(update(successes, 1)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: tap
+      args: [update(successes, 1)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 13:38 - 13:58
+Node: update(successes, 1)
+Node Kind: KindCallExpression
+
+Subject: successes
+Subject Type: Counter<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: update
+      args: [1]
+      outType: Effect<void, never, never>
+==== /.src/noMetricTarget.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 6:18 - 6:39
+Node: counter("successes")
+Node Kind: KindCallExpression
+
+Subject: "successes"
+Subject Type: "successes"
+
+Transformations (1):
+  [0] kind: call
+      callee: counter
+      args: (constant)
+      outType: Counter<number>
+
+=== Piping Flow ===
+Location: 11:21 - 11:67
+Node: source.pipe(Effect.tap(update(successes, 1)))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.tap
+      args: [update(successes, 1)]
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 11:45 - 11:65
+Node: update(successes, 1)
+Node Kind: KindCallExpression
+
+Subject: successes
+Subject Type: Counter<number>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: update
+      args: [1]
+      outType: Effect<void, never, never>

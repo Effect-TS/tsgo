@@ -281,7 +281,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 56:44 - 57:20
+Location: 57:44 - 58:20
 Node: mixed.includes("h")
 Node Kind: KindCallExpression
 
@@ -295,7 +295,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 57:20 - 58:15
+Location: 58:20 - 59:15
 Node: mixed.slice(1)
 Node Kind: KindCallExpression
 
@@ -309,7 +309,7 @@ Transformations (1):
       outType: string | string[]
 
 === Piping Flow ===
-Location: 62:2 - 62:25
+Location: 63:2 - 63:25
 Node: [value].map(value.trim)
 Node Kind: KindCallExpression
 
@@ -323,7 +323,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 62:25 - 63:34
+Location: 63:25 - 64:34
 Node: String.prototype.trim.call(value)
 Node Kind: KindCallExpression
 
@@ -337,7 +337,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 63:34 - 64:16
+Location: 64:34 - 65:16
 Node: value.substr(1)
 Node Kind: KindCallExpression
 
@@ -351,7 +351,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 65:17 - 66:19
+Location: 66:17 - 67:19
 Node: value.anchor("id")
 Node Kind: KindCallExpression
 
@@ -365,7 +365,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 71:13 - 72:24
+Location: 72:13 - 73:24
 Node: String.fromCharCode(65)
 Node Kind: KindCallExpression
 
@@ -379,7 +379,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 72:24 - 73:25
+Location: 73:24 - 74:25
 Node: String.fromCodePoint(65)
 Node Kind: KindCallExpression
 
@@ -393,7 +393,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 85:23 - 86:16
+Location: 86:23 - 87:16
 Node: Str.trim(value)
 Node Kind: KindCallExpression
 

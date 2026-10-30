@@ -9,6 +9,7 @@ const data = { a: 1, b: "two" }
 const pairs: Array<[string | symbol, number]> = [["a", 1], [Symbol.for("b"), 2]]
 Object.keys(data)
 const nativeKeys = Object.keys
+const bracketKeys = Object["keys"]
 Object.values(data)
 const nativeValues = Object.values
 Object.entries(data)
@@ -36,6 +37,7 @@ Native.entries(data)
 NativeObject.keys(data)
 globalThis.Object.hasOwn(data, "a")
 function constrained<T extends ObjectConstructor>(native: T) { return native["keys"](data) }
+function constrainedReference<T extends ObjectConstructor>(native: T) { return native["keys"] }
 function constrainedInstance<T extends object>(value: T) { return value.hasOwnProperty("a") }
 class Inherited {}
 new Inherited().hasOwnProperty("a")

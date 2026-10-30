@@ -3,78 +3,9 @@ package typeparser
 import (
 	"testing"
 
-	"github.com/effect-ts/tsgo/internal/bundledeffect"
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
-
-func TestServiceType_V4ServiceShape(t *testing.T) {
-	t.Parallel()
-	if err := bundledeffect.EnsurePackageInstalled(bundledeffect.EffectV4, "effect"); err != nil {
-		t.Skip("Effect v4 not installed:", err)
-	}
-
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV4Internal(t, `
-import { Context } from "effect"
-
-export class UserRepo extends Context.Service<UserRepo, { readonly find: () => string }>()("UserRepo") {}
-`)
-	defer done()
-
-	_, classType := findClassTypeByName(t, c, sf, "UserRepo")
-	if classType == nil {
-		t.Fatal("expected class type")
-	}
-
-	service := tp.ServiceType(classType)
-	if service == nil {
-		t.Fatal("expected v4 service type to parse")
-		return
-	}
-	if service.identifier == nil {
-		t.Fatal("expected service identifier type")
-	}
-	if service.shape == nil {
-		t.Fatal("expected service shape type")
-	}
-	if tp.ContextTag(classType) != nil {
-		t.Fatal("expected v4 service not to parse as Context.Tag")
-	}
-}
-
-func TestContextTag_V3LegacyShape(t *testing.T) {
-	t.Parallel()
-	if err := bundledeffect.EnsurePackageInstalled(bundledeffect.EffectV3, "effect"); err != nil {
-		t.Skip("Effect v3 not installed:", err)
-	}
-
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV3Internal(t, `
-import { Context } from "effect"
-
-export class Config extends Context.Tag("Config")<Config, { readonly port: number }>() {}
-`)
-	defer done()
-
-	_, classType := findClassTypeByName(t, c, sf, "Config")
-	if classType == nil {
-		t.Fatal("expected class type")
-	}
-
-	contextTag := tp.ContextTag(classType)
-	if contextTag == nil {
-		t.Fatal("expected v3 Context.Tag type to parse")
-		return
-	}
-	if contextTag.identifier == nil {
-		t.Fatal("expected context tag identifier type")
-	}
-	if contextTag.shape == nil {
-		t.Fatal("expected context tag shape type")
-	}
-	if tp.ServiceType(classType) != nil {
-		t.Fatal("expected v3 Context.Tag not to parse as a v4 service type")
-	}
-}
 
 func findClassTypeByName(t *testing.T, c *checker.Checker, sf *ast.SourceFile, className string) (*ast.Node, *checker.Type) {
 	t.Helper()

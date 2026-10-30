@@ -1,44 +1,18 @@
 use std::sync::Arc;
 
 use ets_go::sprintf;
-use ets_go::testing::T;
-use ets_shim::ast::{Kind, Node, SourceFile};
-use ets_shim::core::{CompilerOptions, P, ScriptTarget, Tristate};
-use ets_shim::vfs::vfstest::MapFile;
+use ets_shim::ast::Node;
+use ets_shim::core::P;
 
 use crate::helpers_test::*;
+use crate::native_array_test::{compile_no_lib_source, find_member_access};
 use crate::native_string_test::same_arc;
 use crate::*;
-
-// go test: internal/typeparser/native_object_test.go:17 findNativeObjectAccess 87ac6b1424939145
-fn find_native_object_access(t: &T, sf: P<SourceFile>, text: &str) -> P<Node> {
-    t.helper();
-    fn walk(sf: P<SourceFile>, node: P<Node>, text: &str, found: &mut Option<P<Node>>) -> bool {
-        if node.kind() == Kind::PropertyAccessExpression
-            || node.kind() == Kind::ElementAccessExpression
-        {
-            let pos = node.pos().source_offset().expect("a parsed node has a position") as usize;
-            let end = node.end().source_offset().expect("a parsed node has a position") as usize;
-            if sf.text()[pos..end].trim() == text {
-                *found = Some(node);
-                return false;
-            }
-        }
-        node.for_each_child(&mut |child| walk(sf, child, text, found));
-        false
-    }
-    let mut found = None;
-    walk(sf, sf.as_node(), text, &mut found);
-    let Some(found) = found else {
-        t.fatal(sprintf!("member access %q not found", text));
-    };
-    found
-}
 
 /// Rust-only: Go's method values `tp.IsNativeObjectMethodReference` / `tp.IsNativeObjectConstructorMethodReference`.
 type NativeObjectQuery = fn(&mut TypeParser<'_>, P<Node>, &str) -> bool;
 
-// go test: internal/typeparser/native_object_test.go:37 TestNativeObjectMethodReference 8a3d95b36370a0c4
+// go test: internal/typeparser/native_object_test.go:5 TestNativeObjectMethodReference f2416e8fd0675494
 #[test]
 fn test_native_object_method_reference() {
     run(|t| {
@@ -167,7 +141,7 @@ alias;
             ("arrays.entries", "entries", true, false),
             ("map.keys", "keys", true, false),
         ] {
-            let node = find_native_object_access(t, sf, access);
+            let node = find_member_access(t, sf, access);
             let (mut query, mut other_namespace): (NativeObjectQuery, NativeObjectQuery) = (
                 |tp, node, name| tp.is_native_object_method_reference(node, name),
                 |tp, node, name| tp.is_native_object_constructor_method_reference(node, name),
@@ -199,28 +173,25 @@ alias;
                 "keys",
             )
             || tp.is_native_object_constructor_method_reference(
-                find_native_object_access(t, sf, "Native.keys"),
+                find_member_access(t, sf, "Native.keys"),
                 "",
             )
         {
             t.error("unsupported reference matched a native Object method");
         }
-        if !tp.is_native_array_method_reference(
-            find_native_object_access(t, sf, "arrays.keys"),
-            "keys",
-        ) || tp.is_native_array_method_reference(
-            find_native_object_access(t, sf, "Native.keys"),
-            "keys",
-        ) || tp.is_native_array_constructor_method_reference(
-            find_native_object_access(t, sf, "Native.keys"),
-            "keys",
-        ) {
+        if !tp.is_native_array_method_reference(find_member_access(t, sf, "arrays.keys"), "keys")
+            || tp.is_native_array_method_reference(find_member_access(t, sf, "Native.keys"), "keys")
+            || tp.is_native_array_constructor_method_reference(
+                find_member_access(t, sf, "Native.keys"),
+                "keys",
+            )
+        {
             t.error("Object recognition changed Array classification");
         }
     });
 }
 
-// go test: internal/typeparser/native_object_test.go:192 TestNativeObjectAugmentation 7d8781a8b351afd1
+// go test: internal/typeparser/native_object_test.go:160 TestNativeObjectAugmentation 93b7e4758842bfde
 #[test]
 fn test_native_object_augmentation() {
     run(|t| {
@@ -242,22 +213,22 @@ Object.prototype.isPrototypeOf;
         );
         let mut tp = compiled.type_parser();
         if tp.is_native_object_constructor_method_reference(
-            find_native_object_access(t, sf, "Object.keys"),
+            find_member_access(t, sf, "Object.keys"),
             "keys",
         ) || !tp.is_native_object_constructor_method_reference(
-            find_native_object_access(t, sf, "Object.values"),
+            find_member_access(t, sf, "Object.values"),
             "values",
         ) || !tp.is_native_object_constructor_method_reference(
-            find_native_object_access(t, sf, "Object.hasOwn"),
+            find_member_access(t, sf, "Object.hasOwn"),
             "hasOwn",
         ) {
             t.error("constructor augmentation affected the wrong members");
         }
         if tp.is_native_object_method_reference(
-            find_native_object_access(t, sf, "Object.prototype.hasOwnProperty"),
+            find_member_access(t, sf, "Object.prototype.hasOwnProperty"),
             "hasOwnProperty",
         ) || !tp.is_native_object_method_reference(
-            find_native_object_access(t, sf, "Object.prototype.isPrototypeOf"),
+            find_member_access(t, sf, "Object.prototype.isPrototypeOf"),
             "isPrototypeOf",
         ) {
             t.error("instance augmentation affected the wrong members");
@@ -265,7 +236,7 @@ Object.prototype.isPrototypeOf;
     });
 }
 
-// go test: internal/typeparser/native_object_test.go:218 TestNativeObjectInheritedAugmentation 737484da42d6ba90
+// go test: internal/typeparser/native_object_test.go:186 TestNativeObjectInheritedAugmentation c3c8ecea8a6a8453
 #[test]
 fn test_native_object_inherited_augmentation() {
     run(|t| {
@@ -279,7 +250,7 @@ Object.keys;
 "#,
         );
         let mut tp = compiled.type_parser();
-        let node = find_native_object_access(t, sf, "Object.keys");
+        let node = find_member_access(t, sf, "Object.keys");
         if !tp.is_native_object_constructor_method_reference(node, "keys")
             || tp.is_native_object_method_reference(node, "keys")
         {
@@ -288,7 +259,7 @@ Object.keys;
     });
 }
 
-// go test: internal/typeparser/native_object_test.go:232 TestNativeObjectNoLib 7785ade68d795f07
+// go test: internal/typeparser/native_object_test.go:200 TestNativeObjectNoLib 418b7cf2a890cbd7
 // Rust: Go's last check (`len(tp.links.nativeObjectRegistry.instance) != 0 || len(...constructor) != 0`, "noLib
 // registry contains canonical members") is left out: the registry's fields are private to `native_object`.
 #[test]
@@ -302,25 +273,13 @@ declare const Object: ObjectConstructor;
 Object.keys;
 Object.prototype.hasOwnProperty;
 ";
-        let mut testfs = TestFS::default();
-        testfs.insert("/.src/test.ts".to_string(), MapFile::from(source));
-        let mut compiled = new_compiled(
-            testfs,
-            CompilerOptions {
-                no_lib: Tristate::True,
-                target: ScriptTarget::ES_NEXT,
-                strict: Tristate::True,
-                ..Default::default()
-            },
-            vec!["/.src/test.ts".to_string()],
-        );
-        let sf = compiled.program.get_source_file("/.src/test.ts").expect("the root file");
+        let (mut compiled, sf) = compile_no_lib_source(t, source);
         let mut tp = compiled.type_parser();
         if tp.is_native_object_constructor_method_reference(
-            find_native_object_access(t, sf, "Object.keys"),
+            find_member_access(t, sf, "Object.keys"),
             "keys",
         ) || tp.is_native_object_method_reference(
-            find_native_object_access(t, sf, "Object.prototype.hasOwnProperty"),
+            find_member_access(t, sf, "Object.prototype.hasOwnProperty"),
             "hasOwnProperty",
         ) {
             t.error("noLib user declarations matched native Object members");
@@ -328,7 +287,7 @@ Object.prototype.hasOwnProperty;
     });
 }
 
-// go test: internal/typeparser/native_object_test.go:264 TestNativeObjectCheckerCache f1d5ceaf36dd51bb
+// go test: internal/typeparser/native_object_test.go:220 TestNativeObjectCheckerCache a855684f8befec24
 // Rust: a parser borrows its checker mutably, so `tp` and `second` (both `new_type_parser` over the same checker,
 // as in Go) are re-created for each use; they share the checker's links. Go compares the cached member pointers;
 // they come from one links store, so the values are compared. The member's fields are private to `native_object`,
@@ -352,7 +311,7 @@ custom.keys;
             t.fatal("registry was built before a reference query");
         }
         for access in ["Object.keys", "custom.keys"] {
-            let node = find_native_object_access(t, first, access);
+            let node = find_member_access(t, first, access);
             let want = access == "Object.keys";
             let mut tp = compiled.type_parser();
             let got = tp.is_native_object_constructor_method_reference(node, "keys");
@@ -385,7 +344,7 @@ custom.keys;
         let registry = tp_links.lock().native_object_registry.clone();
         let mut second = compiled.type_parser();
         if !second.is_native_object_constructor_method_reference(
-            find_native_object_access(t, files["/.src/second.ts"], "Object.keys"),
+            find_member_access(t, files["/.src/second.ts"], "Object.keys"),
             "keys",
         ) || !same_arc(second.links().native_object_registry.as_ref(), registry.as_ref())
         {
@@ -394,16 +353,18 @@ custom.keys;
         let (mut other_compiled, other_file) =
             compile_and_get_checker_and_source_file_internal(t, source);
         let mut other = other_compiled.type_parser();
-        let first_symbol = compiled
-            .type_parser()
-            .get_symbol_at_location(find_native_object_access(t, first, "Object.keys"));
+        let first_symbol = compiled.type_parser().get_symbol_at_location(find_member_access(
+            t,
+            first,
+            "Object.keys",
+        ));
         if Arc::ptr_eq(&other.links, &tp_links)
             || other.links().native_object_registry.is_some()
             || first_symbol.is_some_and(|s| other.links().native_object_member.contains_key(&s))
         {
             t.fatal("separate checker inherited native Object cache entries");
         }
-        let other_node = find_native_object_access(t, other_file, "Object.keys");
+        let other_node = find_member_access(t, other_file, "Object.keys");
         if !other.is_native_object_constructor_method_reference(other_node, "keys")
             || same_arc(other.links().native_object_registry.as_ref(), registry.as_ref())
             || other.get_symbol_at_location(other_node) == first_symbol

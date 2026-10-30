@@ -11,38 +11,6 @@ import (
 	_ "github.com/effect-ts/tsgo/etstesthooks"
 )
 
-func TestEffectDiagnosticsDisabled(t *testing.T) {
-	t.Parallel()
-
-	const content = `// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "strict": true,
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "diagnostics": false,
-        "diagnosticSeverity": {
-          "floatingEffect": "error"
-        }
-      }
-    ]
-  }
-}
-// @Filename: /test.ts
-import { Effect } from "effect"
-
-Effect.succeed(1)`
-
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	defer done()
-
-	f.VerifyDiagnostics(t, nil)
-}
-
 func TestEffectRefactorsDisabled(t *testing.T) {
 	t.Parallel()
 
@@ -71,7 +39,7 @@ export const program = () =>
     return a + b
   })|]`
 
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil, content)
 	defer done()
 
 	ranges := f.Ranges()
@@ -119,7 +87,7 @@ import { Effect } from "effect"
 
 Effect.succeed(1)`
 
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil, content)
 	defer done()
 
 	f.VerifyDiagnostics(t, nil)
@@ -160,7 +128,7 @@ import { identity, Schema } from "effect"
 const User = Schema.Struct({ id: Schema.Number })
 export const preview = identity(identity(Schema.decodeEffect(User)({ id: 1 })))`
 
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil, content)
 	defer done()
 
 	f.VerifyDiagnostics(t, nil)
@@ -212,7 +180,7 @@ import { Effect } from "effect"
 
 Effect.succeed(1)`
 
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil, content)
 	defer done()
 
 	f.VerifyDiagnostics(t, nil)
@@ -255,7 +223,7 @@ import { Effect } from "effect"
 
 [|Effect.succeed(1)|]`
 
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f, done := fourslash.NewFourslash(t, nil, content)
 	defer done()
 
 	ranges := f.Ranges()

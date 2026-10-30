@@ -1,0 +1,131 @@
+=== Refactor Inventory ===
+
+[R1] selection: "21:14-21:28"
+  Refactor 0: "Wrap with pipe" (refactor.rewrite.effect.wrapWithPipe)
+  Refactor 1: "Toggle type annotation" (refactor.rewrite.effect.toggleTypeAnnotation)
+  Refactor 2: "Toggle lazy const" (refactor.rewrite.effect.toggleLazyConst)
+  Refactor 3: "Compose layers automatically with target output services" (refactor.rewrite.effect.layerMagicBuild)
+
+[R2] selection: "empty (0:0-0:0)"
+  (no refactors)
+
+=== Refactor Application Results ===
+
+=== [R1] Refactor 0: "Wrap with pipe" ===
+
+--- file:///.src/layerMagic_buildUnrelatedOrder.ts ---
+// refactor: 21:14-21:28
+import { Effect, Layer, Context } from "effect"
+
+class External extends Context.Service<External>()("External", {
+  make: Effect.succeed({})
+}) {}
+class OnlyProvides extends Context.Service<OnlyProvides>()("OnlyProvides", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class ProvidesAndRequires extends Context.Service<ProvidesAndRequires>()("ProvidesAndRequires", {
+  make: Effect.as(External, {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+const NeitherLayer = Layer.effectDiscard(Effect.void)
+const OnlyRequiresLayer = Layer.effectDiscard(External)
+
+export const pipe(unrelatedOrder) = [
+  NeitherLayer,
+  OnlyRequiresLayer,
+  OnlyProvides.Default,
+  ProvidesAndRequires.Default
+] as any as Layer.Layer<OnlyProvides | ProvidesAndRequires>
+
+
+=== [R1] Refactor 1: "Toggle type annotation" ===
+
+--- file:///.src/layerMagic_buildUnrelatedOrder.ts ---
+// refactor: 21:14-21:28
+import { Effect, Layer, Context } from "effect"
+
+class External extends Context.Service<External>()("External", {
+  make: Effect.succeed({})
+}) {}
+class OnlyProvides extends Context.Service<OnlyProvides>()("OnlyProvides", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class ProvidesAndRequires extends Context.Service<ProvidesAndRequires>()("ProvidesAndRequires", {
+  make: Effect.as(External, {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+const NeitherLayer = Layer.effectDiscard(Effect.void)
+const OnlyRequiresLayer = Layer.effectDiscard(External)
+
+export const unrelatedOrder: Layer.Layer<OnlyProvides | ProvidesAndRequires, never, never> = [
+  NeitherLayer,
+  OnlyRequiresLayer,
+  OnlyProvides.Default,
+  ProvidesAndRequires.Default
+] as any as Layer.Layer<OnlyProvides | ProvidesAndRequires>
+
+
+=== [R1] Refactor 2: "Toggle lazy const" ===
+
+--- file:///.src/layerMagic_buildUnrelatedOrder.ts ---
+// refactor: 21:14-21:28
+import { Effect, Layer, Context } from "effect"
+
+class External extends Context.Service<External>()("External", {
+  make: Effect.succeed({})
+}) {}
+class OnlyProvides extends Context.Service<OnlyProvides>()("OnlyProvides", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class ProvidesAndRequires extends Context.Service<ProvidesAndRequires>()("ProvidesAndRequires", {
+  make: Effect.as(External, {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+const NeitherLayer = Layer.effectDiscard(Effect.void)
+const OnlyRequiresLayer = Layer.effectDiscard(External)
+
+export const unrelatedOrder = () => [
+  NeitherLayer,
+  OnlyRequiresLayer,
+  OnlyProvides.Default,
+  ProvidesAndRequires.Default
+] as any as Layer.Layer<OnlyProvides | ProvidesAndRequires>
+
+
+=== [R1] Refactor 3: "Compose layers automatically with target output services" ===
+
+--- file:///.src/layerMagic_buildUnrelatedOrder.ts ---
+// refactor: 21:14-21:28
+import { Effect, Layer, Context } from "effect"
+
+class External extends Context.Service<External>()("External", {
+  make: Effect.succeed({})
+}) {}
+class OnlyProvides extends Context.Service<OnlyProvides>()("OnlyProvides", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+class ProvidesAndRequires extends Context.Service<ProvidesAndRequires>()("ProvidesAndRequires", {
+  make: Effect.as(External, {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+const NeitherLayer = Layer.effectDiscard(Effect.void)
+const OnlyRequiresLayer = Layer.effectDiscard(External)
+
+export const unrelatedOrder = ProvidesAndRequires.Default.pipe(Layer.provideMerge(OnlyProvides.Default), Layer.provide(NeitherLayer), Layer.provide(OnlyRequiresLayer));
+

@@ -26,39 +26,25 @@ const completionTestTsConfig = `{
   }
 }`
 
+const harnessPackageJSON = `{ "name": "@effect/harness-effect-v4" }`
+
 func completionItemsAt(t *testing.T, source string, position int) []*lsproto.CompletionItem {
 	t.Helper()
-
-	if position < 0 || position > len(source) {
-		t.Fatalf("invalid completion position %d for source length %d", position, len(source))
-	}
-
-	sourceWithMarker := source[:position] + "/*1*/" + source[position:]
-	content := "// @Filename: /tsconfig.json\n" + completionTestTsConfig + "\n" +
-		"// @Filename: /test.ts\n" + sourceWithMarker
-
-	f, done := fourslash.NewFourslash(t, nil, content)
-	defer done()
-
-	f.GoToMarker(t, "1")
-	completions := f.GetCompletions(t, nil)
-	if completions == nil {
-		return nil
-	}
-	return completions.Items
+	return completionItemsIn(t, completionTestTsConfig, "", source, position)
 }
 
-func completionItemsAtWithPackageJSON(t *testing.T, packageJSON string, source string, position int) []*lsproto.CompletionItem {
+func completionItemsIn(t *testing.T, tsconfig string, packageJSON string, source string, position int) []*lsproto.CompletionItem {
 	t.Helper()
 
 	if position < 0 || position > len(source) {
 		t.Fatalf("invalid completion position %d for source length %d", position, len(source))
 	}
 
-	sourceWithMarker := source[:position] + "/*1*/" + source[position:]
-	content := "// @Filename: /tsconfig.json\n" + completionTestTsConfig + "\n" +
-		"// @Filename: /package.json\n" + packageJSON + "\n" +
-		"// @Filename: /test.ts\n" + sourceWithMarker
+	content := "// @Filename: /tsconfig.json\n" + tsconfig + "\n"
+	if packageJSON != "" {
+		content += "// @Filename: /package.json\n" + packageJSON + "\n"
+	}
+	content += "// @Filename: /test.ts\n" + source[:position] + "/*1*/" + source[position:]
 
 	f, done := fourslash.NewFourslash(t, nil, content)
 	defer done()
@@ -103,75 +89,52 @@ func fnFunctionStarItems(t *testing.T, source string, position int) []*lsproto.C
 	})
 }
 
-func effectJsdocCommentItems(t *testing.T, source string, position int) []*lsproto.CompletionItem {
+func labeledItems(t *testing.T, source string, position int, labels ...string) []*lsproto.CompletionItem {
 	t.Helper()
 	return filterCompletionItems(completionItemsAt(t, source, position), func(item *lsproto.CompletionItem) bool {
-		return item.Label == "@effect-identifier"
+		return slices.Contains(labels, item.Label)
 	})
 }
 
-func effectCodegensCommentItems(t *testing.T, source string, position int) []*lsproto.CompletionItem {
+func runCommentDirectiveTriggerCases(t *testing.T, labels ...string) {
 	t.Helper()
-	return filterCompletionItems(completionItemsAt(t, source, position), func(item *lsproto.CompletionItem) bool {
-		return item.Label == "@effect-codegens"
-	})
-}
-
-func effectDiagnosticsCommentItems(t *testing.T, source string, position int) []*lsproto.CompletionItem {
-	t.Helper()
-	return filterCompletionItems(completionItemsAt(t, source, position), func(item *lsproto.CompletionItem) bool {
-		return item.Label == "@effect-diagnostics" || item.Label == "@effect-diagnostics-next-line"
-	})
-}
-
-func durationInputItems(t *testing.T, source string, position int) []*lsproto.CompletionItem {
-	t.Helper()
-	return filterCompletionItems(completionItemsAt(t, source, position), func(item *lsproto.CompletionItem) bool {
-		return slices.Contains([]string{"nanos", "micros", "millis", "seconds", "minutes", "hours", "days", "weeks"}, item.Label)
-	})
-}
-
-func effectSelfInClassesItems(t *testing.T, source string, position int) []*lsproto.CompletionItem {
-	t.Helper()
-	return filterCompletionItems(completionItemsAt(t, source, position), func(item *lsproto.CompletionItem) bool {
-		return strings.HasPrefix(item.Label, "Service<") || strings.HasPrefix(item.Label, `Tag("`)
-	})
-}
-
-func contextSelfInClassesItems(t *testing.T, source string, position int) []*lsproto.CompletionItem {
-	t.Helper()
-	return filterCompletionItems(completionItemsAt(t, source, position), func(item *lsproto.CompletionItem) bool {
-		return strings.HasPrefix(item.Label, `Tag("`)
-	})
-}
-
-func contextSelfInClassesItemsWithPackageJSON(t *testing.T, source string, position int) []*lsproto.CompletionItem {
-	t.Helper()
-	const packageJSON = `{
-	  "name": "@effect/harness-effect-v4"
-	}`
-	return filterCompletionItems(completionItemsAtWithPackageJSON(t, packageJSON, source, position), func(item *lsproto.CompletionItem) bool {
-		return strings.HasPrefix(item.Label, `Tag("`) || strings.HasPrefix(item.Label, "Service<")
-	})
-}
-
-func effectSQLModelSelfInClassesItems(t *testing.T, source string, position int) []*lsproto.CompletionItem {
-	t.Helper()
-	return filterCompletionItems(completionItemsAt(t, source, position), func(item *lsproto.CompletionItem) bool {
-		return strings.HasPrefix(item.Label, "Class<")
-	})
-}
-
-func rpcMakeClassesItems(t *testing.T, source string, position int) []*lsproto.CompletionItem {
-	t.Helper()
-	return filterCompletionItems(completionItemsAt(t, source, position), func(item *lsproto.CompletionItem) bool {
-		return strings.HasPrefix(item.Label, `make("`)
-	})
-}
-
-func schemaBrandItems(t *testing.T, source string, position int) []*lsproto.CompletionItem {
-	t.Helper()
-	return filterCompletionItems(completionItemsAt(t, source, position), func(item *lsproto.CompletionItem) bool {
-		return strings.HasPrefix(item.Label, `brand("`)
-	})
+	for _, tc := range []struct {
+		name    string
+		source  string
+		trigger bool
+	}{
+		{"line comment", "// @", true},
+		{"block comment", "/* @", true},
+		{"jsdoc comment", "/** @", true},
+		{"extra whitespace", "//  @  ", true},
+		{"second line", "const x = 1\n// @", true},
+		{"no at sign", "// some comment without at", false},
+		{"at outside comment", "const x = @", false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			items := labeledItems(t, tc.source, len(tc.source), labels...)
+			if !tc.trigger {
+				if items != nil {
+					t.Errorf("expected no items for %q, got %d", tc.source, len(items))
+				}
+				return
+			}
+			if len(items) != len(labels) {
+				t.Fatalf("expected %d items for %q, got %d", len(labels), tc.source, len(items))
+			}
+			at := strings.LastIndex(tc.source, "@")
+			wantLine := strings.Count(tc.source[:at], "\n")
+			wantCharacter := at - (strings.LastIndex(tc.source[:at], "\n") + 1)
+			for i, item := range items {
+				if item.Label != labels[i] {
+					t.Errorf("item[%d].Label = %q, want %q", i, item.Label, labels[i])
+				}
+				start := item.TextEdit.TextEdit.Range.Start
+				if int(start.Line) != wantLine || int(start.Character) != wantCharacter {
+					t.Errorf("item[%d] replacement starts at %d:%d, want %d:%d", i, start.Line, start.Character, wantLine, wantCharacter)
+				}
+			}
+		})
+	}
 }

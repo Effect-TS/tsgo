@@ -6,7 +6,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/ast"
 	"github.com/microsoft/TypeScript/tsc/shim/core"
 	"github.com/microsoft/TypeScript/tsc/shim/parser"
-	"github.com/microsoft/TypeScript/tsc/shim/scanner"
 )
 
 func parseSource(source string) *ast.SourceFile {
@@ -15,122 +14,52 @@ func parseSource(source string) *ast.SourceFile {
 	}, source, core.ScriptKindTS)
 }
 
-func TestParseDataForExtendsClassCompletion_AfterDot(t *testing.T) {
+func TestParseDataForExtendsClassCompletion(t *testing.T) {
 	t.Parallel()
-	// class Foo extends Schema.| (cursor after the dot)
-	source := `class Foo extends Schema.`
-	sf := parseSource(source)
-	pos := len(source)
-
-	data := ParseDataForExtendsClassCompletion(sf, pos)
-	if data == nil {
-		t.Fatal("expected non-nil result for 'class Foo extends Schema.'")
-	}
-	if got := data.AccessedObjectText(); got != "Schema" {
-		t.Errorf("AccessedObjectText = %q, want %q", got, "Schema")
-	}
-	if got := data.ClassNameText(); got != "Foo" {
-		t.Errorf("ClassNameText = %q, want %q", got, "Foo")
+	for _, tc := range []struct {
+		source       string
+		wantObject   string
+		wantReplaced string
+	}{
+		{`class Foo extends Schema.`, "Schema", "Schema."},
+		{`class Foo extends X.Schema.`, "X.Schema", "X.Schema."},
+		{`class Foo extends Schema.Class`, "Schema", "Schema.Class"},
+		{`class Foo extends Schema`, "Schema", "Schema"},
+	} {
+		t.Run(tc.source, func(t *testing.T) {
+			t.Parallel()
+			data := ParseDataForExtendsClassCompletion(parseSource(tc.source), len(tc.source))
+			if data == nil {
+				t.Fatalf("expected non-nil result for %q", tc.source)
+			}
+			if got := data.AccessedObjectText(); got != tc.wantObject {
+				t.Errorf("AccessedObjectText = %q, want %q", got, tc.wantObject)
+			}
+			if got := data.ClassNameText(); got != "Foo" {
+				t.Errorf("ClassNameText = %q, want %q", got, "Foo")
+			}
+			if got := tc.source[data.ReplacementStart : data.ReplacementStart+data.ReplacementLength]; got != tc.wantReplaced {
+				t.Errorf("replacement span covers %q, want %q", got, tc.wantReplaced)
+			}
+		})
 	}
 }
 
-func TestParseDataForExtendsClassCompletion_BarrelNamespaceAfterDot(t *testing.T) {
+func TestParseDataForExtendsClassCompletion_Rejected(t *testing.T) {
 	t.Parallel()
-	// class Foo extends X.Schema.| (cursor after the dot)
-	source := `class Foo extends X.Schema.`
-	sf := parseSource(source)
-
-	data := ParseDataForExtendsClassCompletion(sf, len(source))
-	if data == nil {
-		t.Fatal("expected non-nil result for 'class Foo extends X.Schema.'")
-	}
-	if got := data.AccessedObjectText(); got != "X.Schema" {
-		t.Errorf("AccessedObjectText = %q, want %q", got, "X.Schema")
-	}
-}
-
-func TestParseDataForExtendsClassCompletion_AfterPropertyName(t *testing.T) {
-	t.Parallel()
-	// class Foo extends Schema.Class| (cursor after Class)
-	source := `class Foo extends Schema.Class`
-	sf := parseSource(source)
-	pos := len(source)
-
-	data := ParseDataForExtendsClassCompletion(sf, pos)
-	if data == nil {
-		t.Fatal("expected non-nil result for 'class Foo extends Schema.Class'")
-	}
-	if got := data.AccessedObjectText(); got != "Schema" {
-		t.Errorf("AccessedObjectText = %q, want %q", got, "Schema")
-	}
-	if got := data.ClassNameText(); got != "Foo" {
-		t.Errorf("ClassNameText = %q, want %q", got, "Foo")
-	}
-}
-
-func TestParseDataForExtendsClassCompletion_StandaloneIdentifier(t *testing.T) {
-	t.Parallel()
-	// class Foo extends Schema| (cursor after standalone identifier)
-	source := `class Foo extends Schema`
-	sf := parseSource(source)
-	pos := len(source)
-
-	data := ParseDataForExtendsClassCompletion(sf, pos)
-	if data == nil {
-		t.Fatal("expected non-nil result for 'class Foo extends Schema'")
-	} else {
-		if got := scanner.GetTextOfNode(data.AccessedObject); got != "Schema" {
-			t.Errorf("AccessedObject text = %q, want %q", got, "Schema")
-		}
-		if got := data.ClassNameText(); got != "Foo" {
-			t.Errorf("ClassNameText = %q, want %q", got, "Foo")
-		}
-	}
-}
-
-func TestParseDataForExtendsClassCompletion_NonClassContext(t *testing.T) {
-	t.Parallel()
-	// Not in a class extends clause
-	source := `const x = Schema.Class`
-	sf := parseSource(source)
-	pos := len(source)
-
-	data := ParseDataForExtendsClassCompletion(sf, pos)
-	if data != nil {
-		t.Error("expected nil result for non-class context")
-	}
-}
-
-func TestParseDataForExtendsClassCompletion_InsideImportDeclaration(t *testing.T) {
-	t.Parallel()
-	source := `import { Schema } from "effect"`
-	sf := parseSource(source)
-	// Position after "Schema" inside the import
-	pos := len(`import { Schema`)
-
-	data := ParseDataForExtendsClassCompletion(sf, pos)
-	if data != nil {
-		t.Error("expected nil result for position inside import declaration")
-	}
-}
-
-func TestParseDataForExtendsClassCompletion_ReplacementSpan(t *testing.T) {
-	t.Parallel()
-	source := `class Foo extends Schema.Class`
-	sf := parseSource(source)
-	pos := len(source)
-
-	data := ParseDataForExtendsClassCompletion(sf, pos)
-	if data == nil {
-		t.Fatal("expected non-nil result")
-	} else {
-		// The replacement span should cover "Schema.Class"
-		if data.ReplacementLength <= 0 {
-			t.Errorf("expected positive ReplacementLength, got %d", data.ReplacementLength)
-		}
-		replaced := source[data.ReplacementStart : data.ReplacementStart+data.ReplacementLength]
-		if replaced != "Schema.Class" {
-			t.Errorf("replacement span covers %q, want %q", replaced, "Schema.Class")
-		}
+	for _, tc := range []struct {
+		name     string
+		source   string
+		position int
+	}{
+		{"non-class context", `const x = Schema.Class`, len(`const x = Schema.Class`)},
+		{"inside import declaration", `import { Schema } from "effect"`, len(`import { Schema`)},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			if data := ParseDataForExtendsClassCompletion(parseSource(tc.source), tc.position); data != nil {
+				t.Errorf("expected nil result for %q at %d", tc.source, tc.position)
+			}
+		})
 	}
 }

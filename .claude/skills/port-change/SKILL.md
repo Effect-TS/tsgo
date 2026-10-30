@@ -6,7 +6,7 @@ description: Mirror the Go changes of the current branch (vs origin/main) into t
 # Port the Go changes of this branch to Rust
 
 The port is complete, so every PR that changes in-scope Go code (code or tests) must update the Rust port in the
-same PR (`docs/TSRS_PORT.md`, "Parity policy"); `pnpm check` fails otherwise. This skill does that for the current branch. Read `docs/PORTING.md` first if you haven't in this session.
+same PR (`porting/TSRS_PORT.md`, "Parity policy"); `pnpm check` fails otherwise. This skill does that for the current branch. Read `porting/PORTING.md` first if you haven't in this session.
 
 ## 1. Find what changed
 
@@ -51,7 +51,7 @@ For each changed declaration:
    several markers, update every item that carries one.
 3. Apply the same change, faithfully: same control flow, same order, same message texts. Don't re-port from
    scratch unless the Go declaration was rewritten, and don't "improve" neighboring code.
-4. If the change needs a tsrs API that `ets_shim` doesn't expose, follow `docs/PORTING.md`, "API gaps: a tsrs patch
+4. If the change needs a tsrs API that `ets_shim` doesn't expose, follow `porting/PORTING.md`, "API gaps: a tsrs patch
    or Rust-only code?".
 
 Then:
@@ -87,5 +87,5 @@ cargo test -p ets_effecttest                    # baselines
 - Anything not mirrored, and why (a missing tsrs patch, a suspected TypeScript-version difference with its
   evidence).
 - Commit the Rust changes on the same branch as the Go change: `git add crates/ porting/ _patches/tsrs/
-  _patches/typescript-*/ docs/`
+  _patches/typescript-*/`
   (only what you changed), message `port: mirror <short Go change summary>`.

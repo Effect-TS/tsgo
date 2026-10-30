@@ -1,0 +1,109 @@
+==== /.src/forwardDep.ts (0 flows) ====
+==== /.src/exportedEDep.ts (0 flows) ====
+==== /.src/barrelTsDep.ts (0 flows) ====
+==== /.src/barrelTs.ts (0 flows) ====
+==== /.src/barrelDtsDep.d.ts (0 flows) ====
+==== /.src/barrelDts.ts (0 flows) ====
+==== /.src/starDtsDep.d.ts (0 flows) ====
+==== /.src/starDts.ts (0 flows) ====
+==== /.src/nestedNamespaceBarrel.ts (0 flows) ====
+==== /.src/nestedNamespace.ts (0 flows) ====
+==== /.src/namespaceOwnMember.ts (0 flows) ====
+==== /.src/experimentalOnlyDep.ts (0 flows) ====
+==== /.src/importedCallableDep.ts (0 flows) ====
+==== /.src/importedCallable.ts (0 flows) ====
+==== /.src/importedAliasDep.ts (0 flows) ====
+==== /.src/importedAlias.ts (0 flows) ====
+==== /.src/namespaceCycle.ts (0 flows) ====
+==== /.src/namespaceCycleBarrel.ts (0 flows) ====
+==== /.src/aliasCycle.ts (0 flows) ====
+==== /.src/aliasCycleDep.ts (0 flows) ====
+==== /.src/unstableDep.ts (0 flows) ====
+==== /.src/namespaceUnstable.ts (0 flows) ====
+==== /.src/starExperimental.ts (0 flows) ====
+==== /.src/starUnstable.ts (0 flows) ====
+==== /.src/unstableLeakyDep.ts (0 flows) ====
+==== /.src/stableOverUnstable.ts (0 flows) ====
+==== /.src/matrixDep.d.ts (0 flows) ====
+==== /.src/namedStable.ts (0 flows) ====
+==== /.src/namedUnstable.ts (0 flows) ====
+==== /.src/namedExperimental.ts (0 flows) ====
+==== /.src/namedAbsent.ts (0 flows) ====
+==== /.src/starStable.ts (0 flows) ====
+==== /.src/starUnstableCeiling.ts (0 flows) ====
+==== /.src/starExperimentalCeiling.ts (0 flows) ====
+==== /.src/starAbsent.ts (0 flows) ====
+==== /.src/namespaceStable.ts (0 flows) ====
+==== /.src/namespaceUnstableCeiling.ts (0 flows) ====
+==== /.src/namespaceExperimentalCeiling.ts (0 flows) ====
+==== /.src/namespaceAbsent.ts (0 flows) ====
+==== /.src/inferredFunctionDep.ts (0 flows) ====
+==== /.src/inferredGenericClosureDep.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:17 - 5:25
+Node: make(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: E
+
+Transformations (1):
+  [0] kind: call
+      callee: make
+      args: (constant)
+      outType: () => { v: E; }
+==== /.src/inferredDirectClosureDep.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:17 - 5:25
+Node: make(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: E
+
+Transformations (1):
+  [0] kind: call
+      callee: make
+      args: (constant)
+      outType: () => E
+==== /.src/inferredFunctionNamed.ts (0 flows) ====
+==== /.src/inferredFunctionStar.ts (0 flows) ====
+==== /.src/inferredFunctionNamespace.ts (0 flows) ====
+==== /.src/inferredGenericClosureNamed.ts (0 flows) ====
+==== /.src/inferredGenericClosureStar.ts (0 flows) ====
+==== /.src/inferredGenericClosureNamespace.ts (0 flows) ====
+==== /.src/inferredDirectClosureNamed.ts (0 flows) ====
+==== /.src/inferredDirectClosureStar.ts (0 flows) ====
+==== /.src/inferredDirectClosureNamespace.ts (0 flows) ====
+==== /.src/objectAccessorDep.ts (0 flows) ====
+==== /.src/objectAccessorNamed.ts (0 flows) ====
+==== /.src/objectAccessorStar.ts (0 flows) ====
+==== /.src/objectAccessorNamespace.ts (0 flows) ====
+==== /.src/classAccessorDep.ts (0 flows) ====
+==== /.src/classAccessor.ts (0 flows) ====
+==== /.src/genericClosureAccessorDep.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 5:17 - 5:25
+Node: make(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: E
+
+Transformations (1):
+  [0] kind: call
+      callee: make
+      args: (constant)
+      outType: { readonly v: E; }
+==== /.src/genericClosureAccessor.ts (0 flows) ====
+==== /.src/setterDep.ts (0 flows) ====
+==== /.src/setter.ts (0 flows) ====
+==== /.src/accessorNameErrorDep.ts (0 flows) ====
+==== /.src/accessorNameError.ts (0 flows) ====
+==== /.src/annotatedAccessorErrorDep.ts (0 flows) ====
+==== /.src/annotatedAccessorError.ts (0 flows) ====
+==== /.src/setterBodyErrorDep.ts (0 flows) ====
+==== /.src/setterBodyError.ts (0 flows) ====

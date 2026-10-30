@@ -11,8 +11,18 @@ import (
 	_ "github.com/effect-ts/tsgo/etstesthooks"
 )
 
-func findCompletionLabel(items []*lsproto.CompletionItem, label string) bool {
-	return findCompletionItem(items, label) != nil
+func completionItemsAtMarker(t *testing.T, content string) []*lsproto.CompletionItem {
+	t.Helper()
+
+	f, done := fourslash.NewFourslash(t, nil, content)
+	defer done()
+
+	f.GoToMarker(t, "1")
+	completions := f.GetCompletions(t, nil)
+	if completions == nil {
+		t.Fatal("completions is nil")
+	}
+	return completions.Items
 }
 
 func findCompletionItem(items []*lsproto.CompletionItem, label string) *lsproto.CompletionItem {
@@ -24,74 +34,12 @@ func findCompletionItem(items []*lsproto.CompletionItem, label string) *lsproto.
 	return nil
 }
 
-func TestEffectCompletionExtendsServiceMap(t *testing.T) {
-	t.Parallel()
-
-	const content = `// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "strict": true,
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "plugins": [
-      {
-        "name": "@effect/language-service"
-      }
-    ]
-  }
-}
-// @Filename: /test.ts
-import * as Context from "effect/Context"
-class MyService extends Context./*1*/`
-
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	defer done()
-
-	f.GoToMarker(t, "1")
-	completions := f.GetCompletions(t, nil)
-	if completions == nil {
-		t.Fatal("completions is nil")
-	} else {
-		if !findCompletionLabel(completions.Items, "Service<MyService, {}>") {
-			t.Error("expected 'Service<MyService, {}>' completion")
-		}
-		if !findCompletionLabel(completions.Items, "Service<MyService>({ make })") {
-			t.Error("expected 'Service<MyService>({ make })' completion")
-		}
-	}
-}
-
 func TestEffectCompletionExtendsBarrelNamespace(t *testing.T) {
 	t.Parallel()
 
-	const content = `// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "strict": true,
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "plugins": [
-      {
-        "name": "@effect/language-service"
-      }
-    ]
-  }
-}
-// @Filename: /test.ts
-import * as X from "effect"
-class MyService extends X.Context./*1*/`
-
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	defer done()
-
-	f.GoToMarker(t, "1")
-	completions := f.GetCompletions(t, nil)
-	if completions == nil {
-		t.Fatal("completions is nil")
-	}
-	item := findCompletionItem(completions.Items, "Service<MyService, {}>")
+	items := completionItemsAtMarker(t, pluginTestContent("", `import * as X from "effect"
+class MyService extends X.Context./*1*/`))
+	item := findCompletionItem(items, "Service<MyService, {}>")
 	if item == nil {
 		t.Fatal("expected 'Service<MyService, {}>' completion")
 	}
@@ -100,85 +48,15 @@ class MyService extends X.Context./*1*/`
 	}
 }
 
-func TestEffectCompletionExtendsSchema(t *testing.T) {
-	t.Parallel()
-
-	const content = `// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "strict": true,
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "plugins": [
-      {
-        "name": "@effect/language-service"
-      }
-    ]
-  }
-}
-// @Filename: /test.ts
-import { Schema } from "effect"
-class Foo extends Schema./*1*/`
-
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	defer done()
-
-	f.GoToMarker(t, "1")
-	completions := f.GetCompletions(t, nil)
-	if completions == nil {
-		t.Fatal("completions is nil")
-	} else {
-		if !findCompletionLabel(completions.Items, "Class<Foo>") {
-			t.Error("expected 'Class<Foo>' completion")
-		}
-		if !findCompletionLabel(completions.Items, "TaggedClass<Foo>") {
-			t.Error("expected 'TaggedClass<Foo>' completion")
-		}
-		if !findCompletionLabel(completions.Items, "TaggedError<Foo>") {
-			t.Error("expected 'TaggedError<Foo>' completion")
-		}
-		if !findCompletionLabel(completions.Items, "Error<Foo>") {
-			t.Error("expected 'Error<Foo>' completion")
-		}
-	}
-}
-
 func TestEffectCompletionDisabled(t *testing.T) {
 	t.Parallel()
 
-	const content = `// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "strict": true,
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "completions": false
-      }
-    ]
-  }
-}
-// @Filename: /test.ts
-import * as Context from "effect/Context"
-class MyService extends Context./*1*/`
-
-	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
-	defer done()
-
-	f.GoToMarker(t, "1")
-	completions := f.GetCompletions(t, nil)
-	if completions == nil {
-		t.Fatal("completions is nil")
-		return
-	}
-	if findCompletionLabel(completions.Items, "Service<MyService, {}>") {
-		t.Error("did not expect Effect completion when completions=false")
-	}
-	if findCompletionLabel(completions.Items, "Service<MyService>({ make })") {
-		t.Error("did not expect Effect completion when completions=false")
+	items := completionItemsAtMarker(t, pluginTestContent(`,
+        "completions": false`, `import * as Context from "effect/Context"
+class MyService extends Context./*1*/`))
+	for _, label := range []string{"Service<MyService, {}>", "Service<MyService>({ make })"} {
+		if findCompletionItem(items, label) != nil {
+			t.Errorf("did not expect Effect completion %q when completions=false", label)
+		}
 	}
 }

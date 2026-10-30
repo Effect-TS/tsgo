@@ -6,6 +6,7 @@ use ets_etscore::{
     parse_from_plugins,
 };
 use ets_go::sprintf;
+use ets_go::testing::T;
 use rustc_hash::FxHashMap;
 
 /// Rust-only: the Go `any` values these tests build (`*collections.OrderedMap[string, any]`, `[]any`, `float64`,
@@ -85,8 +86,7 @@ fn string_map(entries: &[(&str, &str)]) -> FxHashMap<String, String> {
     entries.iter().map(|(k, v)| ((*k).to_string(), (*v).to_string())).collect()
 }
 
-// go test: etscore/options_test.go:13 makePluginMap 70311bc4e7db18cc
-// makePluginMap creates an *OrderedMap for testing with the given key-value pairs.
+// go test: etscore/options_test.go:12 makePluginMap 791bab80392447c5
 fn make_plugin_map(pairs: Vec<(&str, Any)>) -> Any {
     let mut m: Vec<(String, Any)> = Vec::new();
     for (key, value) in pairs {
@@ -100,31 +100,12 @@ fn make_plugin_map(pairs: Vec<(&str, Any)>) -> Any {
     Any::OrderedMap(m)
 }
 
-// go test: etscore/options_test.go:22 makePlugins 228ef9913d1fd74a
-// makePlugins wraps plugin maps into the []any structure expected by ParseFromPlugins.
+// go test: etscore/options_test.go:20 makePlugins 04294b20c846fc11
 fn make_plugins(maps: Vec<Any>) -> Any {
     Any::Slice(maps)
 }
 
-// go test: etscore/options_test.go:30 TestParseFromPlugins_ExitCodeDefaults 56d400f9859c883d
-#[test]
-fn test_parse_from_plugins_exit_code_defaults() {
-    ets_go::testing::run(|t| {
-        // Plugin with just the name — no exit-code keys present
-        let plugins = make_plugins(vec![make_plugin_map(vec![("name", s(EFFECT_PLUGIN_NAME))])]);
-        let Some(opts) = parse_from_plugins(&plugins) else {
-            t.fatal("expected non-nil options");
-        };
-        if !opts.ignore_effect_suggestions_in_tsc_exit_code {
-            t.error("expected IgnoreEffectSuggestionsInTscExitCode to default to true");
-        }
-        if opts.ignore_effect_warnings_in_tsc_exit_code {
-            t.error("expected IgnoreEffectWarningsInTscExitCode to default to false");
-        }
-    });
-}
-
-// go test: etscore/options_test.go:45 TestParseFromPlugins_Overrides bc120282b40a3354
+// go test: etscore/options_test.go:28 TestParseFromPlugins_Overrides bc120282b40a3354
 #[test]
 fn test_parse_from_plugins_overrides() {
     ets_go::testing::run(|t| {
@@ -225,7 +206,7 @@ fn test_parse_from_plugins_overrides() {
     });
 }
 
-// go test: etscore/options_test.go:100 TestResolveForFile_AppliesMatchingScopesInOrder 1c9841dcb2e88df1
+// go test: etscore/options_test.go:83 TestResolveForFile_AppliesMatchingScopesInOrder 1c9841dcb2e88df1
 #[test]
 fn test_resolve_for_file_applies_matching_scopes_in_order() {
     ets_go::testing::run(|t| {
@@ -284,7 +265,7 @@ fn test_resolve_for_file_applies_matching_scopes_in_order() {
     });
 }
 
-// go test: etscore/options_test.go:132 TestParseFromPlugins_OverrideImportStyle 988a8cbfdc510d04
+// go test: etscore/options_test.go:115 TestParseFromPlugins_OverrideImportStyle 988a8cbfdc510d04
 #[test]
 fn test_parse_from_plugins_override_import_style() {
     ets_go::testing::run(|t| {
@@ -344,7 +325,7 @@ fn test_parse_from_plugins_override_import_style() {
     });
 }
 
-// go test: etscore/options_test.go:167 TestResolveForFile_OverridesImportStyle d71c2b39a26659d6
+// go test: etscore/options_test.go:150 TestResolveForFile_OverridesImportStyle d71c2b39a26659d6
 #[test]
 fn test_resolve_for_file_overrides_import_style() {
     ets_go::testing::run(|t| {
@@ -430,7 +411,7 @@ fn test_resolve_for_file_overrides_import_style() {
     });
 }
 
-// go test: etscore/options_test.go:215 TestResolveForFile_ExcludeOnlyAffectsCurrentScope d7035cbd5c198e73
+// go test: etscore/options_test.go:198 TestResolveForFile_ExcludeOnlyAffectsCurrentScope d7035cbd5c198e73
 #[test]
 fn test_resolve_for_file_exclude_only_affects_current_scope() {
     ets_go::testing::run(|t| {
@@ -475,207 +456,150 @@ fn test_resolve_for_file_exclude_only_affects_current_scope() {
     });
 }
 
-// go test: etscore/options_test.go:241 intPtr 5a9dc238a4837eb5
+// go test: etscore/options_test.go:224 intPtr 5a9dc238a4837eb5
 fn int_ptr(value: i64) -> i64 {
     value
 }
 
-// go test: etscore/options_test.go:245 TestParseFromPlugins_ExitCodeExplicitTrue 5fc34a4c002b8bdb
+// go test: etscore/options_test.go:228 parseNameOnlyPlugin 76eec2bff8d255c7
+fn parse_name_only_plugin(t: &T, pairs: Vec<(&str, Any)>) -> EffectPluginOptions {
+    t.helper();
+    let mut all = vec![("name", s(EFFECT_PLUGIN_NAME))];
+    all.extend(pairs);
+    let Some(opts) = parse_from_plugins(&make_plugins(vec![make_plugin_map(all)])) else {
+        t.fatal("expected non-nil options");
+    };
+    opts
+}
+
+// go test: etscore/options_test.go:237 TestParseFromPlugins_BooleanOptions 0bef9b530b081bc9
 #[test]
-fn test_parse_from_plugins_exit_code_explicit_true() {
+fn test_parse_from_plugins_boolean_options() {
     ets_go::testing::run(|t| {
-        let plugins = make_plugins(vec![make_plugin_map(vec![
-            ("name", s(EFFECT_PLUGIN_NAME)),
-            ("ignoreEffectSuggestionsInTscExitCode", Any::Bool(true)),
-            ("ignoreEffectWarningsInTscExitCode", Any::Bool(true)),
-        ])]);
-        let Some(opts) = parse_from_plugins(&plugins) else {
-            t.fatal("expected non-nil options");
-        };
-        if !opts.ignore_effect_suggestions_in_tsc_exit_code {
-            t.error("expected IgnoreEffectSuggestionsInTscExitCode to be true");
-        }
-        if !opts.ignore_effect_warnings_in_tsc_exit_code {
-            t.error("expected IgnoreEffectWarningsInTscExitCode to be true");
+        type Field = fn(&EffectPluginOptions) -> bool;
+        let tests: &[(&str, Field, bool)] = &[
+            ("refactors", |o| o.refactors, true),
+            ("diagnostics", |o| o.diagnostics, true),
+            ("includeSuggestionsInTsc", |o| o.include_suggestions_in_tsc, true),
+            ("quickinfo", |o| o.quickinfo, true),
+            ("completions", |o| o.completions, true),
+            ("goto", |o| o.goto, true),
+            ("renames", |o| o.renames, true),
+            (
+                "ignoreEffectSuggestionsInTscExitCode",
+                |o| o.ignore_effect_suggestions_in_tsc_exit_code,
+                true,
+            ),
+            (
+                "ignoreEffectWarningsInTscExitCode",
+                |o| o.ignore_effect_warnings_in_tsc_exit_code,
+                false,
+            ),
+            ("noExternal", |o| o.no_external, false),
+        ];
+        for &(key, field, default_val) in tests {
+            t.run(key, |t| {
+                let cases: Vec<(&str, Vec<(&str, Any)>, bool)> = vec![
+                    ("omitted", vec![], default_val),
+                    ("true", vec![(key, Any::Bool(true))], true),
+                    ("false", vec![(key, Any::Bool(false))], false),
+                    ("non-boolean", vec![(key, s("yes"))], default_val),
+                ];
+                for (name, pairs, want) in cases {
+                    let got = field(&parse_name_only_plugin(t, pairs));
+                    if got != want {
+                        t.error(format!("{name} {key} = {got}, want {want}"));
+                    }
+                }
+            });
         }
     });
 }
 
-// go test: etscore/options_test.go:263 TestParseFromPlugins_ExitCodeExplicitFalse 5dc90794f749a36c
+// go test: etscore/options_test.go:273 TestParseFromPlugins_ValueOptions 7f762addc919d5fd
 #[test]
-fn test_parse_from_plugins_exit_code_explicit_false() {
+fn test_parse_from_plugins_value_options() {
     ets_go::testing::run(|t| {
-        let plugins = make_plugins(vec![make_plugin_map(vec![
-            ("name", s(EFFECT_PLUGIN_NAME)),
-            ("ignoreEffectSuggestionsInTscExitCode", Any::Bool(false)),
-            ("ignoreEffectWarningsInTscExitCode", Any::Bool(false)),
-        ])]);
-        let Some(opts) = parse_from_plugins(&plugins) else {
-            t.fatal("expected non-nil options");
-        };
-        if opts.ignore_effect_suggestions_in_tsc_exit_code {
-            t.error("expected IgnoreEffectSuggestionsInTscExitCode to be false");
+        let defaults = parse_name_only_plugin(t, vec![]);
+        if !defaults.mermaid_provider.is_empty()
+            || defaults.layer_graph_follow_depth != 0
+            || defaults.allowed_duplicated_packages.is_some()
+        {
+            t.error(sprintf!(
+                "unexpected defaults: MermaidProvider=%q LayerGraphFollowDepth=%d AllowedDuplicatedPackages=%v",
+                defaults.mermaid_provider,
+                defaults.layer_graph_follow_depth,
+                defaults.allowed_duplicated_packages.clone().unwrap_or_default()
+            ));
         }
-        if opts.ignore_effect_warnings_in_tsc_exit_code {
-            t.error("expected IgnoreEffectWarningsInTscExitCode to be false");
+
+        let opts = parse_name_only_plugin(
+            t,
+            vec![
+                ("mermaidProvider", s("mermaid.com")),
+                ("layerGraphFollowDepth", Any::Float64(2.0)),
+                ("allowedDuplicatedPackages", strs(&["effect", "@effect/platform"])),
+                ("allowedUnstableApis", strs(&["effect/http", "effect/rpc/Client#make"])),
+                ("allowedExperimentalApis", strs(&["effect/http", "effect/rpc/Client#make"])),
+            ],
+        );
+        if opts.mermaid_provider != "mermaid.com" {
+            t.error(sprintf!(
+                "MermaidProvider = %q, want %q",
+                opts.mermaid_provider,
+                "mermaid.com"
+            ));
+        }
+        if opts.layer_graph_follow_depth != 2 {
+            t.error(sprintf!("LayerGraphFollowDepth = %d, want 2", opts.layer_graph_follow_depth));
+        }
+        let want = string_vec(&["effect", "@effect/platform"]);
+        if opts.allowed_duplicated_packages.as_ref() != Some(&want) {
+            t.error(sprintf!(
+                "AllowedDuplicatedPackages = %v, want %v",
+                opts.allowed_duplicated_packages.clone().unwrap_or_default(),
+                want
+            ));
+        }
+        let want = string_vec(&["effect/http", "effect/rpc/Client#make"]);
+        if opts.allowed_unstable_apis.as_ref() != Some(&want) {
+            t.error(sprintf!(
+                "AllowedUnstableApis = %v, want %v",
+                opts.allowed_unstable_apis.clone().unwrap_or_default(),
+                want
+            ));
+        }
+        let want = string_vec(&["effect/http", "effect/rpc/Client#make"]);
+        if opts.allowed_experimental_apis.as_ref() != Some(&want) {
+            t.error(sprintf!(
+                "AllowedExperimentalApis = %v, want %v",
+                opts.allowed_experimental_apis.unwrap_or_default(),
+                want
+            ));
         }
     });
 }
 
-// go test: etscore/options_test.go:281 TestParseFromPlugins_ExitCodeNonBooleanFallsBackToDefault 64c32a6373e1c311
+// go test: etscore/options_test.go:304 TestNilOptionsGetters 930a0132d3a79c14
 #[test]
-fn test_parse_from_plugins_exit_code_non_boolean_falls_back_to_default() {
-    ets_go::testing::run(|t| {
-        // Non-boolean values should fall back to defaults
-        let plugins = make_plugins(vec![make_plugin_map(vec![
-            ("name", s(EFFECT_PLUGIN_NAME)),
-            ("ignoreEffectSuggestionsInTscExitCode", s("yes")),
-            ("ignoreEffectWarningsInTscExitCode", Any::Int(42)),
-        ])]);
-        let Some(opts) = parse_from_plugins(&plugins) else {
-            t.fatal("expected non-nil options");
-        };
-        if !opts.ignore_effect_suggestions_in_tsc_exit_code {
-            t.error("expected IgnoreEffectSuggestionsInTscExitCode to default to true for non-boolean value");
-        }
-        if opts.ignore_effect_warnings_in_tsc_exit_code {
-            t.error("expected IgnoreEffectWarningsInTscExitCode to default to false for non-boolean value");
-        }
-    });
-}
-
-// go test: etscore/options_test.go:300 TestParseFromPlugins_IncludeSuggestionsInTscDefault 93da522070f1e979
-#[test]
-fn test_parse_from_plugins_include_suggestions_in_tsc_default() {
-    ets_go::testing::run(|t| {
-        let plugins = make_plugins(vec![make_plugin_map(vec![("name", s(EFFECT_PLUGIN_NAME))])]);
-        let Some(opts) = parse_from_plugins(&plugins) else {
-            t.fatal("expected non-nil options");
-        };
-        if !opts.include_suggestions_in_tsc {
-            t.error("expected IncludeSuggestionsInTsc to default to true");
-        }
-        if !opts.refactors {
-            t.error("expected Refactors to default to true");
-        }
-        if !opts.diagnostics {
-            t.error("expected Diagnostics to default to true");
-        }
-        if !opts.quickinfo {
-            t.error("expected Quickinfo to default to true");
-        }
-        if !opts.completions {
-            t.error("expected Completions to default to true");
-        }
-        if !opts.goto {
-            t.error("expected Goto to default to true");
-        }
-        if !opts.renames {
-            t.error("expected Renames to default to true");
-        }
-    });
-}
-
-// go test: etscore/options_test.go:329 TestParseFromPlugins_FeatureFlagsExplicitFalse a5e704bb57446caf
-#[test]
-fn test_parse_from_plugins_feature_flags_explicit_false() {
-    ets_go::testing::run(|t| {
-        let plugins = make_plugins(vec![make_plugin_map(vec![
-            ("name", s(EFFECT_PLUGIN_NAME)),
-            ("refactors", Any::Bool(false)),
-            ("diagnostics", Any::Bool(false)),
-            ("quickinfo", Any::Bool(false)),
-            ("completions", Any::Bool(false)),
-            ("goto", Any::Bool(false)),
-            ("renames", Any::Bool(false)),
-        ])]);
-        let Some(opts) = parse_from_plugins(&plugins) else {
-            t.fatal("expected non-nil options");
-        };
-        if opts.refactors {
-            t.error("expected Refactors to be false");
-        }
-        if opts.diagnostics {
-            t.error("expected Diagnostics to be false");
-        }
-        if opts.quickinfo {
-            t.error("expected Quickinfo to be false");
-        }
-        if opts.completions {
-            t.error("expected Completions to be false");
-        }
-        if opts.goto {
-            t.error("expected Goto to be false");
-        }
-        if opts.renames {
-            t.error("expected Renames to be false");
-        }
-    });
-}
-
-// go test: etscore/options_test.go:363 TestParseFromPlugins_IncludeSuggestionsInTscExplicitTrue d8e6b192a61c67e0
-#[test]
-fn test_parse_from_plugins_include_suggestions_in_tsc_explicit_true() {
-    ets_go::testing::run(|t| {
-        let plugins = make_plugins(vec![make_plugin_map(vec![
-            ("name", s(EFFECT_PLUGIN_NAME)),
-            ("includeSuggestionsInTsc", Any::Bool(true)),
-        ])]);
-        let Some(opts) = parse_from_plugins(&plugins) else {
-            t.fatal("expected non-nil options");
-        };
-        if !opts.include_suggestions_in_tsc {
-            t.error("expected IncludeSuggestionsInTsc to be true");
-        }
-    });
-}
-
-// go test: etscore/options_test.go:377 TestParseFromPlugins_IncludeSuggestionsInTscExplicitFalse a9a32b010e84562d
-#[test]
-fn test_parse_from_plugins_include_suggestions_in_tsc_explicit_false() {
-    ets_go::testing::run(|t| {
-        let plugins = make_plugins(vec![make_plugin_map(vec![
-            ("name", s(EFFECT_PLUGIN_NAME)),
-            ("includeSuggestionsInTsc", Any::Bool(false)),
-        ])]);
-        let Some(opts) = parse_from_plugins(&plugins) else {
-            t.fatal("expected non-nil options");
-        };
-        if opts.include_suggestions_in_tsc {
-            t.error("expected IncludeSuggestionsInTsc to be false");
-        }
-    });
-}
-
-// go test: etscore/options_test.go:391 TestParseFromPlugins_IncludeSuggestionsInTscNonBooleanFallback dd551d56ee2e31b1
-#[test]
-fn test_parse_from_plugins_include_suggestions_in_tsc_non_boolean_fallback() {
-    ets_go::testing::run(|t| {
-        let plugins = make_plugins(vec![make_plugin_map(vec![
-            ("name", s(EFFECT_PLUGIN_NAME)),
-            ("includeSuggestionsInTsc", s("yes")),
-        ])]);
-        let Some(opts) = parse_from_plugins(&plugins) else {
-            t.fatal("expected non-nil options");
-        };
-        if !opts.include_suggestions_in_tsc {
-            t.error("expected IncludeSuggestionsInTsc to default to true for non-boolean value");
-        }
-    });
-}
-
-// go test: etscore/options_test.go:405 TestGetIncludeSuggestionsInTsc_NilReceiver 4221e0348dbf27ba
-#[test]
-fn test_get_include_suggestions_in_tsc_nil_receiver() {
+fn test_nil_options_getters() {
     ets_go::testing::run(|t| {
         let opts: Option<&EffectPluginOptions> = None;
         if !EffectPluginOptions::get_include_suggestions_in_tsc(opts) {
             t.error("expected GetIncludeSuggestionsInTsc() on nil to return true");
         }
+        let got = EffectPluginOptions::get_mermaid_base_url(opts);
+        if got != "https://mermaid.live/edit#" {
+            t.error(sprintf!("GetMermaidBaseURL() on nil = %q, want default", got));
+        }
+        let got = EffectPluginOptions::get_layer_graph_follow_depth(opts);
+        if got != 0 {
+            t.error(sprintf!("GetLayerGraphFollowDepth() on nil = %d, want 0", got));
+        }
     });
 }
 
-// go test: etscore/options_test.go:412 TestGetMermaidBaseURL bca0980f553d6cf9
+// go test: etscore/options_test.go:317 TestGetMermaidBaseURL bca0980f553d6cf9
 #[test]
 fn test_get_mermaid_base_url() {
     ets_go::testing::run(|t| {
@@ -704,579 +628,176 @@ fn test_get_mermaid_base_url() {
     });
 }
 
-// go test: etscore/options_test.go:433 TestGetMermaidBaseURL_Nil 6c14dc7518092e9e
+// go test: etscore/options_test.go:338 assertImportStyle d1ebf9396626d320
+fn assert_import_style(
+    t: &T,
+    opts: Option<&EffectPluginOptions>,
+    namespace: &[String],
+    barrel: &[String],
+    aliases: &FxHashMap<String, String>,
+    mode: &TopLevelNamedReexportsMode,
+) {
+    t.helper();
+    let got = EffectPluginOptions::get_namespace_import_packages(opts);
+    if got != namespace && (!got.is_empty() || !namespace.is_empty()) {
+        t.error(sprintf!("GetNamespaceImportPackages() = %v, want %v", got, namespace.to_vec()));
+    }
+    let got = EffectPluginOptions::get_barrel_import_packages(opts);
+    if got != barrel && (!got.is_empty() || !barrel.is_empty()) {
+        t.error(sprintf!("GetBarrelImportPackages() = %v, want %v", got, barrel.to_vec()));
+    }
+    let got = EffectPluginOptions::get_import_aliases(opts);
+    if got != *aliases && (!got.is_empty() || !aliases.is_empty()) {
+        t.error(sprintf!(
+            "GetImportAliases() = %v, want %v",
+            format!("{got:?}"),
+            format!("{aliases:?}")
+        ));
+    }
+    let got = EffectPluginOptions::get_top_level_named_reexports(opts);
+    if got != *mode {
+        t.error(sprintf!(
+            "GetTopLevelNamedReexports() = %q, want %q",
+            got.0.as_ref(),
+            mode.0.as_ref()
+        ));
+    }
+}
+
+// go test: etscore/options_test.go:354 TestAutoImportStyleFallsBackToDefaults e7273bbb2266c073
 #[test]
-fn test_get_mermaid_base_url_nil() {
+fn test_auto_import_style_falls_back_to_defaults() {
     ets_go::testing::run(|t| {
-        let opts: Option<&EffectPluginOptions> = None;
-        let got = EffectPluginOptions::get_mermaid_base_url(opts);
-        if got != "https://mermaid.live/edit#" {
-            t.error(sprintf!("GetMermaidBaseURL() on nil = %q, want default", got));
+        type Opts = fn(&T) -> Option<EffectPluginOptions>;
+        let tests: &[(&str, Opts)] = &[
+            ("nil receiver", |_| None),
+            ("zero options", |_| Some(EffectPluginOptions::default())),
+            ("invalid mode", |_| {
+                Some(EffectPluginOptions {
+                    top_level_named_reexports: TopLevelNamedReexportsMode("invalid".into()),
+                    ..Default::default()
+                })
+            }),
+            ("name-only plugin", |t| Some(parse_name_only_plugin(t, vec![]))),
+            ("mixed or invalid values", |t| {
+                Some(parse_name_only_plugin(
+                    t,
+                    vec![
+                        ("namespaceImportPackages", Any::Slice(vec![s("effect"), Any::Int(1)])),
+                        ("barrelImportPackages", s("not-an-array")),
+                        (
+                            "importAliases",
+                            make_plugin_map(vec![
+                                ("effect", s("E")),
+                                ("@effect/platform", Any::Int(1)),
+                            ]),
+                        ),
+                        ("topLevelNamedReexports", s("invalid")),
+                    ],
+                ))
+            }),
+            ("wrong types", |t| {
+                Some(parse_name_only_plugin(
+                    t,
+                    vec![
+                        ("namespaceImportPackages", Any::Int(42)),
+                        ("barrelImportPackages", Any::Int(42)),
+                        ("importAliases", s("not-a-map")),
+                        ("topLevelNamedReexports", Any::Int(42)),
+                    ],
+                ))
+            }),
+        ];
+        for &(name, opts) in tests {
+            t.run(name, |t| {
+                assert_import_style(
+                    t,
+                    opts(t).as_ref(),
+                    &[],
+                    &[],
+                    &FxHashMap::default(),
+                    &TopLevelNamedReexportsMode::Ignore,
+                );
+            });
         }
     });
 }
 
-// go test: etscore/options_test.go:440 TestGetLayerGraphFollowDepth bd7784769f8e86cf
-#[test]
-fn test_get_layer_graph_follow_depth() {
-    ets_go::testing::run(|t| {
-        // Default (zero value)
-        let mut opts = EffectPluginOptions::default();
-        let got = EffectPluginOptions::get_layer_graph_follow_depth(Some(&opts));
-        if got != 0 {
-            t.error(sprintf!("GetLayerGraphFollowDepth() = %d, want 0", got));
-        }
-
-        // Non-zero
-        opts.layer_graph_follow_depth = 3;
-        let got = EffectPluginOptions::get_layer_graph_follow_depth(Some(&opts));
-        if got != 3 {
-            t.error(sprintf!("GetLayerGraphFollowDepth() = %d, want 3", got));
-        }
-
-        // Nil receiver
-        let nil_opts: Option<&EffectPluginOptions> = None;
-        let got = EffectPluginOptions::get_layer_graph_follow_depth(nil_opts);
-        if got != 0 {
-            t.error(sprintf!("GetLayerGraphFollowDepth() on nil = %d, want 0", got));
-        }
-    });
-}
-
-// go test: etscore/options_test.go:460 TestParseFromPlugins_MermaidProvider 21d7f846eb0fca07
-#[test]
-fn test_parse_from_plugins_mermaid_provider() {
-    ets_go::testing::run(|t| {
-        let plugins = make_plugins(vec![make_plugin_map(vec![
-            ("name", s(EFFECT_PLUGIN_NAME)),
-            ("mermaidProvider", s("mermaid.com")),
-        ])]);
-        let Some(opts) = parse_from_plugins(&plugins) else {
-            t.fatal("expected non-nil options");
-        };
-        if opts.mermaid_provider != "mermaid.com" {
-            t.error(sprintf!(
-                "MermaidProvider = %q, want %q",
-                opts.mermaid_provider,
-                "mermaid.com"
-            ));
-        }
-    });
-}
-
-// go test: etscore/options_test.go:474 TestParseFromPlugins_NoExternal e16492a1169c108e
-#[test]
-fn test_parse_from_plugins_no_external() {
-    ets_go::testing::run(|t| {
-        let plugins = make_plugins(vec![make_plugin_map(vec![
-            ("name", s(EFFECT_PLUGIN_NAME)),
-            ("noExternal", Any::Bool(true)),
-        ])]);
-        let Some(opts) = parse_from_plugins(&plugins) else {
-            t.fatal("expected non-nil options");
-        };
-        if !opts.no_external {
-            t.error("expected NoExternal to be true");
-        }
-    });
-}
-
-// go test: etscore/options_test.go:488 TestParseFromPlugins_LayerGraphFollowDepth 4cdbe99c7d1d78a6
-#[test]
-fn test_parse_from_plugins_layer_graph_follow_depth() {
-    ets_go::testing::run(|t| {
-        let plugins = make_plugins(vec![make_plugin_map(vec![
-            ("name", s(EFFECT_PLUGIN_NAME)),
-            ("layerGraphFollowDepth", Any::Float64(2.0)),
-        ])]);
-        let Some(opts) = parse_from_plugins(&plugins) else {
-            t.fatal("expected non-nil options");
-        };
-        if opts.layer_graph_follow_depth != 2 {
-            t.error(sprintf!("LayerGraphFollowDepth = %d, want 2", opts.layer_graph_follow_depth));
-        }
-    });
-}
-
-// go test: etscore/options_test.go:502 TestParseFromPlugins_NewOptionsDefaults 4710ca7fac454c1d
-#[test]
-fn test_parse_from_plugins_new_options_defaults() {
-    ets_go::testing::run(|t| {
-        // Plugin with just the name — new options should have zero-value defaults
-        let plugins = make_plugins(vec![make_plugin_map(vec![("name", s(EFFECT_PLUGIN_NAME))])]);
-        let Some(opts) = parse_from_plugins(&plugins) else {
-            t.fatal("expected non-nil options");
-        };
-        if !opts.mermaid_provider.is_empty() {
-            t.error(sprintf!("MermaidProvider = %q, want empty", opts.mermaid_provider));
-        }
-        if opts.no_external {
-            t.error("expected NoExternal to default to false");
-        }
-        if opts.layer_graph_follow_depth != 0 {
-            t.error(sprintf!("LayerGraphFollowDepth = %d, want 0", opts.layer_graph_follow_depth));
-        }
-        if let Some(allowed) = &opts.allowed_duplicated_packages {
-            t.error(sprintf!("AllowedDuplicatedPackages = %v, want nil", allowed));
-        }
-    });
-}
-
-// go test: etscore/options_test.go:523 TestParseFromPlugins_AllowedDuplicatedPackages 36bdb57c9556fbc2
-#[test]
-fn test_parse_from_plugins_allowed_duplicated_packages() {
-    ets_go::testing::run(|t| {
-        let plugins = make_plugins(vec![make_plugin_map(vec![
-            ("name", s(EFFECT_PLUGIN_NAME)),
-            ("allowedDuplicatedPackages", strs(&["effect", "@effect/platform"])),
-        ])]);
-        let Some(opts) = parse_from_plugins(&plugins) else {
-            t.fatal("expected non-nil options");
-        };
-        let got = opts.allowed_duplicated_packages.unwrap_or_default();
-        if got.len() != 2 {
-            t.fatal(sprintf!("AllowedDuplicatedPackages length = %d, want 2", got.len()));
-        }
-        if got[0] != "effect" {
-            t.error(sprintf!("AllowedDuplicatedPackages[0] = %q, want %q", got[0], "effect"));
-        }
-        if got[1] != "@effect/platform" {
-            t.error(sprintf!(
-                "AllowedDuplicatedPackages[1] = %q, want %q",
-                got[1],
-                "@effect/platform"
-            ));
-        }
-    });
-}
-
-// go test: etscore/options_test.go:544 TestAutoImportStyleDefaults 0246f3db57a4128c
-#[test]
-fn test_auto_import_style_defaults() {
-    ets_go::testing::run(|t| {
-        let opts = EffectPluginOptions::default();
-
-        let got = EffectPluginOptions::get_namespace_import_packages(Some(&opts));
-        if !got.is_empty() {
-            t.error(sprintf!("GetNamespaceImportPackages() = %v, want empty list", got));
-        }
-        let got = EffectPluginOptions::get_barrel_import_packages(Some(&opts));
-        if !got.is_empty() {
-            t.error(sprintf!("GetBarrelImportPackages() = %v, want empty list", got));
-        }
-        let got = EffectPluginOptions::get_import_aliases(Some(&opts));
-        if !got.is_empty() {
-            t.error(sprintf!("GetImportAliases() = %v, want empty map", format!("{got:?}")));
-        }
-        let got = EffectPluginOptions::get_top_level_named_reexports(Some(&opts));
-        if got != TopLevelNamedReexportsMode::Ignore {
-            t.error(sprintf!(
-                "GetTopLevelNamedReexports() = %q, want %q",
-                got.0.as_ref(),
-                "ignore"
-            ));
-        }
-    });
-}
-
-// go test: etscore/options_test.go:561 TestAutoImportStyleNormalization 63ca2f760a58c0c1
+// go test: etscore/options_test.go:388 TestAutoImportStyleNormalization 97482aab14563609
 #[test]
 fn test_auto_import_style_normalization() {
     ets_go::testing::run(|t| {
-        let opts = EffectPluginOptions {
-            namespace_import_packages: Some(string_vec(&["Effect", " @Effect/Platform ", ""])),
-            barrel_import_packages: Some(string_vec(&["@Effect/Schema", " EFFECT/SQL "])),
-            import_aliases: Some(string_map(&[
-                ("Effect", "E"),
-                (" @Effect/Platform ", "Platform"),
-                ("", "Invalid"),
-            ])),
-            top_level_named_reexports: TopLevelNamedReexportsMode("FOLLOW".into()),
-            ..Default::default()
-        };
+        let namespace = string_vec(&["effect", "@effect/platform"]);
+        let barrel = string_vec(&["@effect/schema", "effect/sql"]);
+        let aliases = string_map(&[("effect", "E"), ("@effect/platform", "Platform")]);
 
-        let (got, want) = (
-            EffectPluginOptions::get_namespace_import_packages(Some(&opts)),
-            string_vec(&["effect", "@effect/platform"]),
+        assert_import_style(
+            t,
+            Some(&EffectPluginOptions {
+                namespace_import_packages: Some(string_vec(&["Effect", " @Effect/Platform ", ""])),
+                barrel_import_packages: Some(string_vec(&["@Effect/Schema", " EFFECT/SQL "])),
+                import_aliases: Some(string_map(&[
+                    ("Effect", "E"),
+                    (" @Effect/Platform ", "Platform"),
+                    ("", "Invalid"),
+                ])),
+                top_level_named_reexports: TopLevelNamedReexportsMode("FOLLOW".into()),
+                ..Default::default()
+            }),
+            &namespace,
+            &barrel,
+            &aliases,
+            &TopLevelNamedReexportsMode::Follow,
         );
-        if got != want {
-            t.error(sprintf!("GetNamespaceImportPackages() = %v, want %v", got, want));
-        }
-        let (got, want) = (
-            EffectPluginOptions::get_barrel_import_packages(Some(&opts)),
-            string_vec(&["@effect/schema", "effect/sql"]),
-        );
-        if got != want {
-            t.error(sprintf!("GetBarrelImportPackages() = %v, want %v", got, want));
-        }
-        let (got, want) = (
-            EffectPluginOptions::get_import_aliases(Some(&opts)),
-            string_map(&[("effect", "E"), ("@effect/platform", "Platform")]),
-        );
-        if got != want {
-            t.error(sprintf!(
-                "GetImportAliases() = %v, want %v",
-                format!("{got:?}"),
-                format!("{want:?}")
-            ));
-        }
-        let got = EffectPluginOptions::get_top_level_named_reexports(Some(&opts));
-        if got != TopLevelNamedReexportsMode::Follow {
-            t.error(sprintf!(
-                "GetTopLevelNamedReexports() = %q, want %q",
-                got.0.as_ref(),
-                "follow"
-            ));
-        }
-    });
-}
 
-// go test: etscore/options_test.go:587 TestTopLevelNamedReexportsInvalidFallback da3d27566cd1b184
-#[test]
-fn test_top_level_named_reexports_invalid_fallback() {
-    ets_go::testing::run(|t| {
-        let opts = EffectPluginOptions {
-            top_level_named_reexports: TopLevelNamedReexportsMode("invalid".into()),
-            ..Default::default()
-        };
-        let got = EffectPluginOptions::get_top_level_named_reexports(Some(&opts));
+        assert_import_style(
+            t,
+            Some(&parse_name_only_plugin(
+                t,
+                vec![
+                    (
+                        "namespaceImportPackages",
+                        strs(&["  ", "Effect", "\t", " @Effect/Platform "]),
+                    ),
+                    ("barrelImportPackages", strs(&["", "@Effect/Schema", " EFFECT/SQL "])),
+                    (
+                        "importAliases",
+                        make_plugin_map(vec![
+                            ("", s("Ignored")),
+                            (" ", s("AlsoIgnored")),
+                            ("Effect", s("E")),
+                            (" @Effect/Platform ", s("Platform")),
+                        ]),
+                    ),
+                    ("topLevelNamedReexports", s("FOLLOW")),
+                ],
+            )),
+            &namespace,
+            &barrel,
+            &aliases,
+            &TopLevelNamedReexportsMode::Follow,
+        );
+
+        let got = parse_name_only_plugin(t, vec![("topLevelNamedReexports", s("IGNORE"))])
+            .top_level_named_reexports;
         if got != TopLevelNamedReexportsMode::Ignore {
-            t.error(sprintf!(
-                "GetTopLevelNamedReexports() = %q, want %q",
-                got.0.as_ref(),
-                "ignore"
-            ));
-        }
-    });
-}
-
-// go test: etscore/options_test.go:594 TestParseFromPlugins_AutoImportStyleDefaults 0f2ff8e275cf69cb
-#[test]
-fn test_parse_from_plugins_auto_import_style_defaults() {
-    ets_go::testing::run(|t| {
-        let plugins = make_plugins(vec![make_plugin_map(vec![("name", s(EFFECT_PLUGIN_NAME))])]);
-        let opts = parse_from_plugins(&plugins);
-        if opts.is_none() {
-            t.fatal("expected non-nil options");
-        }
-        let opts = opts.as_ref();
-
-        let got = EffectPluginOptions::get_namespace_import_packages(opts);
-        if !got.is_empty() {
-            t.error(sprintf!("GetNamespaceImportPackages() = %v, want empty list", got));
-        }
-        let got = EffectPluginOptions::get_barrel_import_packages(opts);
-        if !got.is_empty() {
-            t.error(sprintf!("GetBarrelImportPackages() = %v, want empty list", got));
-        }
-        let got = EffectPluginOptions::get_import_aliases(opts);
-        if !got.is_empty() {
-            t.error(sprintf!("GetImportAliases() = %v, want empty map", format!("{got:?}")));
-        }
-        let got = EffectPluginOptions::get_top_level_named_reexports(opts);
-        if got != TopLevelNamedReexportsMode::Ignore {
-            t.error(sprintf!(
-                "GetTopLevelNamedReexports() = %q, want %q",
-                got.0.as_ref(),
-                "ignore"
-            ));
-        }
-    });
-}
-
-// go test: etscore/options_test.go:615 TestParseFromPlugins_AutoImportStyleValidValues 16573f1de8b2de1c
-#[test]
-fn test_parse_from_plugins_auto_import_style_valid_values() {
-    ets_go::testing::run(|t| {
-        let plugins = make_plugins(vec![make_plugin_map(vec![
-            ("name", s(EFFECT_PLUGIN_NAME)),
-            ("namespaceImportPackages", strs(&["Effect", " @Effect/Platform "])),
-            ("barrelImportPackages", strs(&["@Effect/Schema", " EFFECT/SQL "])),
-            (
-                "importAliases",
-                make_plugin_map(vec![("Effect", s("E")), (" @Effect/Platform ", s("Platform"))]),
-            ),
-            ("topLevelNamedReexports", s("FOLLOW")),
-        ])]);
-        let opts = parse_from_plugins(&plugins);
-        if opts.is_none() {
-            t.fatal("expected non-nil options");
-        }
-        let opts = opts.as_ref();
-
-        let (got, want) = (
-            EffectPluginOptions::get_namespace_import_packages(opts),
-            string_vec(&["effect", "@effect/platform"]),
-        );
-        if got != want {
-            t.error(sprintf!("GetNamespaceImportPackages() = %v, want %v", got, want));
-        }
-        let (got, want) = (
-            EffectPluginOptions::get_barrel_import_packages(opts),
-            string_vec(&["@effect/schema", "effect/sql"]),
-        );
-        if got != want {
-            t.error(sprintf!("GetBarrelImportPackages() = %v, want %v", got, want));
-        }
-        let (got, want) = (
-            EffectPluginOptions::get_import_aliases(opts),
-            string_map(&[("effect", "E"), ("@effect/platform", "Platform")]),
-        );
-        if got != want {
-            t.error(sprintf!(
-                "GetImportAliases() = %v, want %v",
-                format!("{got:?}"),
-                format!("{want:?}")
-            ));
-        }
-        let got = EffectPluginOptions::get_top_level_named_reexports(opts);
-        if got != TopLevelNamedReexportsMode::Follow {
-            t.error(sprintf!(
-                "GetTopLevelNamedReexports() = %q, want %q",
-                got.0.as_ref(),
-                "follow"
-            ));
-        }
-    });
-}
-
-// go test: etscore/options_test.go:645 TestParseFromPlugins_AutoImportStyleInvalidFallback 4385cb52d8b8c9ee
-#[test]
-fn test_parse_from_plugins_auto_import_style_invalid_fallback() {
-    ets_go::testing::run(|t| {
-        let plugins = make_plugins(vec![make_plugin_map(vec![
-            ("name", s(EFFECT_PLUGIN_NAME)),
-            ("namespaceImportPackages", Any::Slice(vec![s("effect"), Any::Int(1)])),
-            ("barrelImportPackages", s("not-an-array")),
-            (
-                "importAliases",
-                make_plugin_map(vec![("effect", s("E")), ("@effect/platform", Any::Int(1))]),
-            ),
-            ("topLevelNamedReexports", s("invalid")),
-        ])]);
-        let opts = parse_from_plugins(&plugins);
-        if opts.is_none() {
-            t.fatal("expected non-nil options");
-        }
-        let opts = opts.as_ref();
-
-        let got = EffectPluginOptions::get_namespace_import_packages(opts);
-        if !got.is_empty() {
-            t.error(sprintf!(
-                "GetNamespaceImportPackages() = %v, want empty list for mixed array fallback",
-                got
-            ));
-        }
-        let got = EffectPluginOptions::get_barrel_import_packages(opts);
-        if !got.is_empty() {
-            t.error(sprintf!(
-                "GetBarrelImportPackages() = %v, want empty list for wrong-type fallback",
-                got
-            ));
-        }
-        let got = EffectPluginOptions::get_import_aliases(opts);
-        if !got.is_empty() {
-            t.error(sprintf!(
-                "GetImportAliases() = %v, want empty map for mixed map fallback",
-                format!("{got:?}")
-            ));
-        }
-        let got = EffectPluginOptions::get_top_level_named_reexports(opts);
-        if got != TopLevelNamedReexportsMode::Ignore {
-            t.error(sprintf!(
-                "GetTopLevelNamedReexports() = %q, want %q for invalid enum fallback",
-                got.0.as_ref(),
-                "ignore"
-            ));
-        }
-    });
-}
-
-// go test: etscore/options_test.go:675 TestParseFromPlugins_AutoImportStyleWrongTypes db8309d340eb3794
-#[test]
-fn test_parse_from_plugins_auto_import_style_wrong_types() {
-    ets_go::testing::run(|t| {
-        // All fields have completely wrong types (not arrays/maps/strings)
-        let plugins = make_plugins(vec![make_plugin_map(vec![
-            ("name", s(EFFECT_PLUGIN_NAME)),
-            ("namespaceImportPackages", Any::Int(42)),
-            ("barrelImportPackages", Any::Int(42)),
-            ("importAliases", s("not-a-map")),
-            ("topLevelNamedReexports", Any::Int(42)),
-        ])]);
-        let Some(opts) = parse_from_plugins(&plugins) else {
-            t.fatal("expected non-nil options");
-        };
-
-        if let Some(got) = &opts.namespace_import_packages {
-            t.error(sprintf!(
-                "NamespaceImportPackages = %v, want nil for wrong-type fallback",
-                got
-            ));
-        }
-        if let Some(got) = &opts.barrel_import_packages {
-            t.error(sprintf!("BarrelImportPackages = %v, want nil for wrong-type fallback", got));
-        }
-        if let Some(got) = &opts.import_aliases {
-            t.error(sprintf!(
-                "ImportAliases = %v, want nil for wrong-type fallback",
-                format!("{got:?}")
-            ));
-        }
-        if !opts.top_level_named_reexports.0.is_empty() {
-            t.error(sprintf!(
-                "TopLevelNamedReexports = %q, want empty string for non-string fallback",
-                opts.top_level_named_reexports.0.as_ref()
-            ));
-        }
-    });
-}
-
-// go test: etscore/options_test.go:703 TestParseFromPlugins_TopLevelNamedReexportsIgnoreCase 59ba56cdeb4ad819
-#[test]
-fn test_parse_from_plugins_top_level_named_reexports_ignore_case() {
-    ets_go::testing::run(|t| {
-        let plugins = make_plugins(vec![make_plugin_map(vec![
-            ("name", s(EFFECT_PLUGIN_NAME)),
-            ("topLevelNamedReexports", s("IGNORE")),
-        ])]);
-        let Some(opts) = parse_from_plugins(&plugins) else {
-            t.fatal("expected non-nil options");
-        };
-        if opts.top_level_named_reexports.0 != "ignore" {
             t.error(sprintf!(
                 "TopLevelNamedReexports = %q, want %q (case-insensitive)",
-                opts.top_level_named_reexports.0.as_ref(),
-                "ignore"
-            ));
-        }
-    });
-}
-
-// go test: etscore/options_test.go:717 TestAutoImportStyleGetters_NilReceiver 25cbcda4c8a64dec
-#[test]
-fn test_auto_import_style_getters_nil_receiver() {
-    ets_go::testing::run(|t| {
-        let opts: Option<&EffectPluginOptions> = None;
-
-        let got = EffectPluginOptions::get_namespace_import_packages(opts);
-        if !got.is_empty() {
-            t.error(sprintf!("GetNamespaceImportPackages() on nil = %v, want empty list", got));
-        }
-        let got = EffectPluginOptions::get_barrel_import_packages(opts);
-        if !got.is_empty() {
-            t.error(sprintf!("GetBarrelImportPackages() on nil = %v, want empty list", got));
-        }
-        let got = EffectPluginOptions::get_import_aliases(opts);
-        if !got.is_empty() {
-            t.error(sprintf!("GetImportAliases() on nil = %v, want empty map", format!("{got:?}")));
-        }
-        let got = EffectPluginOptions::get_top_level_named_reexports(opts);
-        if got != TopLevelNamedReexportsMode::Ignore {
-            t.error(sprintf!(
-                "GetTopLevelNamedReexports() on nil = %q, want %q",
                 got.0.as_ref(),
-                "ignore"
+                TopLevelNamedReexportsMode::Ignore.0.as_ref()
             ));
         }
     });
 }
 
-// go test: etscore/options_test.go:734 TestParseFromPlugins_AutoImportStyleNormalizationDropsEmptyEntries 7bf5f186a7cf9f23
-#[test]
-fn test_parse_from_plugins_auto_import_style_normalization_drops_empty_entries() {
-    ets_go::testing::run(|t| {
-        let plugins = make_plugins(vec![make_plugin_map(vec![
-            ("name", s(EFFECT_PLUGIN_NAME)),
-            ("namespaceImportPackages", strs(&["  ", "Effect", "\t"])),
-            ("barrelImportPackages", strs(&["", " @Effect/Schema "])),
-            (
-                "importAliases",
-                make_plugin_map(vec![
-                    ("", s("Ignored")),
-                    (" ", s("AlsoIgnored")),
-                    (" Effect ", s("E")),
-                ]),
-            ),
-        ])]);
-        let opts = parse_from_plugins(&plugins);
-        if opts.is_none() {
-            t.fatal("expected non-nil options");
-        }
-        let opts = opts.as_ref();
-
-        let (got, want) =
-            (EffectPluginOptions::get_namespace_import_packages(opts), string_vec(&["effect"]));
-        if got != want {
-            t.error(sprintf!("GetNamespaceImportPackages() = %v, want %v", got, want));
-        }
-        let (got, want) = (
-            EffectPluginOptions::get_barrel_import_packages(opts),
-            string_vec(&["@effect/schema"]),
-        );
-        if got != want {
-            t.error(sprintf!("GetBarrelImportPackages() = %v, want %v", got, want));
-        }
-        let (got, want) =
-            (EffectPluginOptions::get_import_aliases(opts), string_map(&[("effect", "E")]));
-        if got != want {
-            t.error(sprintf!(
-                "GetImportAliases() = %v, want %v",
-                format!("{got:?}"),
-                format!("{want:?}")
-            ));
-        }
-    });
-}
-
-// go test: etscore/options_test.go:761 TestParseFromPlugins_AllowedUnstableApis 4f30b8c487065128
-#[test]
-fn test_parse_from_plugins_allowed_unstable_apis() {
-    ets_go::testing::run(|t| {
-        let plugins = make_plugins(vec![make_plugin_map(vec![
-            ("name", s(EFFECT_PLUGIN_NAME)),
-            ("allowedUnstableApis", strs(&["effect/http", "effect/rpc/Client#make"])),
-        ])]);
-        let opts = parse_from_plugins(&plugins);
-        if opts.as_ref().is_none_or(|opts| {
-            opts.allowed_unstable_apis
-                != Some(string_vec(&["effect/http", "effect/rpc/Client#make"]))
-        }) {
-            t.fatal(sprintf!("unexpected options: %+v", format!("{opts:?}")));
-        }
-    });
-}
-
-// go test: etscore/options_test.go:772 TestParseFromPlugins_AllowedExperimentalApis c363cfc92a0515f5
-#[test]
-fn test_parse_from_plugins_allowed_experimental_apis() {
-    ets_go::testing::run(|t| {
-        let plugins = make_plugins(vec![make_plugin_map(vec![
-            ("name", s(EFFECT_PLUGIN_NAME)),
-            ("allowedExperimentalApis", strs(&["effect/http", "effect/rpc/Client#make"])),
-        ])]);
-        let opts = parse_from_plugins(&plugins);
-        if opts.as_ref().is_none_or(|opts| {
-            opts.allowed_experimental_apis
-                != Some(string_vec(&["effect/http", "effect/rpc/Client#make"]))
-        }) {
-            t.fatal(sprintf!("unexpected options: %+v", format!("{opts:?}")));
-        }
-    });
-}
-
-// go test: etscore/options_test.go:783 TestParseFromPlugins_BrandedSchemaClasses 8c67bd9ac81e1271
+// go test: etscore/options_test.go:421 TestParseFromPlugins_BrandedSchemaClasses cce7ddb1586670f4
 #[test]
 fn test_parse_from_plugins_branded_schema_classes() {
     ets_go::testing::run(|t| {
         let resolve = |pairs: Vec<(&str, Any)>| -> Option<ResolvedEffectPluginOptions> {
-            let mut pairs = pairs;
-            pairs.insert(0, ("name", s(EFFECT_PLUGIN_NAME)));
-            let Some(opts) = parse_from_plugins(&make_plugins(vec![make_plugin_map(pairs)])) else {
-                t.fatal("expected non-nil options");
-            };
+            t.helper();
             ets_pluginoptions::resolve_effect_plugin_options_for_source_file(
-                Some(&opts),
+                Some(&parse_name_only_plugin(t, pairs)),
                 "/repo/src/example.ts",
                 "/repo/tsconfig.json",
                 true,

@@ -1,0 +1,57 @@
+==== /.src/unusedDirective_wildcard.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 3:23 - 10:3
+Node: Effect.gen(function*() {\n  // @effect-diagnostics-next-line *:off\n  yield* Effect.log("wildcard next-line directives are never reported as unused")\n  // @effect-diagnostics-next-line floatingEffect:off\n  yield* Effect.log("unused rule next-line directive")\n  // @effect-diagnostics-next-line floatingEffect:off\n  Effect.log("used rule next-line directive")\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  // @effect-diagnostics-next-line *:off\n  yield* Effect.log("wildcard next-line directives are never reported as unused")\n  // @effect-diagnostics-next-line floatingEffect:off\n  yield* Effect.log("unused rule next-line directive")\n  // @effect-diagnostics-next-line floatingEffect:off\n  Effect.log("used rule next-line directive")\n}
+Subject Type: () => Generator<Effect<void, never, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 5:9 - 5:82
+Node: Effect.log("wildcard next-line directives are never reported as unused")
+Node Kind: KindCallExpression
+
+Subject: "wildcard next-line directives are never reported as unused"
+Subject Type: "wildcard next-line directives are never reported as unused"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 7:9 - 7:55
+Node: Effect.log("unused rule next-line directive")
+Node Kind: KindCallExpression
+
+Subject: "unused rule next-line directive"
+Subject Type: "unused rule next-line directive"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 7:55 - 9:46
+Node: Effect.log("used rule next-line directive")
+Node Kind: KindCallExpression
+
+Subject: "used rule next-line directive"
+Subject Type: "used rule next-line directive"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>

@@ -1,0 +1,15 @@
+==== /.src/preferEffectRecord_inheritedAugmentation.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 6:2 - 7:22
+Node: Object.keys({ a: 1 })
+Node Kind: KindCallExpression
+
+Subject: { a: 1 }
+Subject Type: { a: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Object.keys
+      args: (constant)
+      outType: string[]

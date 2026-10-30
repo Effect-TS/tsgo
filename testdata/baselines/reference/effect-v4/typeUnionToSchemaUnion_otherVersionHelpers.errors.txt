@@ -1,0 +1,33 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/typeUnionToSchemaUnion_otherVersionHelpers.ts(4,86): suggestion TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+/.src/typeUnionToSchemaUnion_otherVersionHelpers.ts(5,84): suggestion TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+/.src/typeUnionToSchemaUnion_otherVersionHelpers.ts(8,45): error TS2694: Namespace '"/node_modules/effect/dist/Schema".Schema' has no exported member 'Encoded'.
+/.src/typeUnionToSchemaUnion_otherVersionHelpers.ts(11,43): error TS2694: Namespace '"/node_modules/effect/dist/Schema".Schema' has no exported member 'Context'.
+/.src/typeUnionToSchemaUnion_otherVersionHelpers.ts(11,82): error TS2694: Namespace '"/node_modules/effect/dist/Schema".Schema' has no exported member 'Context'.
+
+
+==== /.src/typeUnionToSchemaUnion_otherVersionHelpers.ts (5 errors) ====
+    // @effect-diagnostics typeUnionToSchemaUnion:warning
+    import { Schema } from "effect"
+    
+    export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Number })
+                                                                                         ~~~~~~
+!!! suggestion TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+    export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
+                                                                                       ~~~~~~
+!!! suggestion TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+    
+    // MUST NOT TRIGGER - `Schema.Schema.Encoded` is the v3 Encoded helper and does not exist in Effect v4
+    export type V3EncodedHelper = Schema.Schema.Encoded<typeof Circle> | typeof Square.Encoded
+                                                ~~~~~~~
+!!! error TS2694: Namespace '"/node_modules/effect/dist/Schema".Schema' has no exported member 'Encoded'.
+    
+    // MUST NOT TRIGGER - `Schema.Schema.Context` does not exist in Effect v4 and is not an accepted member form
+    export type HelperContext = Schema.Schema.Context<typeof Circle> | Schema.Schema.Context<typeof Square>
+                                              ~~~~~~~
+!!! error TS2694: Namespace '"/node_modules/effect/dist/Schema".Schema' has no exported member 'Context'.
+                                                                                     ~~~~~~~
+!!! error TS2694: Namespace '"/node_modules/effect/dist/Schema".Schema' has no exported member 'Context'.
+    

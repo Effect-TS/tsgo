@@ -1,0 +1,37 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/issue916_neverSpread_ts2488.ts(5,8): error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "strict": true,
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "diagnosticSeverity": {
+              "promiseInEffectSuccess": "error"
+            }
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/package.json (0 errors) ====
+    { "type": "module" }
+    
+
+==== /.src/issue916_neverSpread_ts2488.ts (1 errors) ====
+    declare function g(...values: Array<number>): void
+    
+    export function f() {
+      const rows = [1] as never;
+      g(...rows);
+           ~~~~
+!!! error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
+      return [...rows];
+    }
+    

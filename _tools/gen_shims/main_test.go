@@ -180,15 +180,7 @@ replace example.com/unrelated => ../unrelated
 	if err != nil {
 		t.Fatal(err)
 	}
-	workFile, err := modfile.ParseWork("go.work", got, nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-	uses := make([]string, len(workFile.Use))
-	for index, use := range workFile.Use {
-		uses[index] = use.Path
-	}
-	wantUses := []string{
+	assertGoWork(t, got, []string{
 		".",
 		"./etscore",
 		"../shim",
@@ -198,35 +190,71 @@ replace example.com/unrelated => ../unrelated
 		"./shim/ls/change",
 		"./shim/_backport/ls/change",
 		"./typescript-go",
+	}, []string{
+		"example.com/sibling-shim => ../shim",
+		"example.com/unrelated => ../unrelated",
+		"github.com/microsoft/typescript-go v0.0.0 => ./typescript-go",
+		"github.com/microsoft/typescript-go/shim/api v0.0.0 => ./shim/api",
+		"github.com/microsoft/TypeScript/tsc/shim/api v0.0.0 => ./shim/_backport/api",
+		"github.com/microsoft/typescript-go/shim/ls/change v0.0.0 => ./shim/ls/change",
+		"github.com/microsoft/TypeScript/tsc/shim/ls/change v0.0.0 => ./shim/_backport/ls/change",
+	})
+}
+
+func assertGoWork(t *testing.T, data []byte, wantUses, wantReplaces []string) {
+	t.Helper()
+	workFile, err := modfile.ParseWork("go.work", data, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	uses := make([]string, len(workFile.Use))
+	for index, use := range workFile.Use {
+		uses[index] = use.Path
 	}
 	if !reflect.DeepEqual(uses, wantUses) {
-		t.Fatalf("go.work uses = %v, want %v", uses, wantUses)
+		t.Errorf("go.work uses = %v, want %v", uses, wantUses)
 	}
-	if len(workFile.Replace) != 7 ||
-		workFile.Replace[0].Old.Path != "example.com/sibling-shim" || workFile.Replace[0].New.Path != "../shim" ||
-		workFile.Replace[1].Old.Path != "example.com/unrelated" || workFile.Replace[1].New.Path != "../unrelated" ||
-		workFile.Replace[2].Old.Path != "github.com/microsoft/typescript-go" ||
-		workFile.Replace[2].Old.Version != "v0.0.0" || workFile.Replace[2].New.Path != "./typescript-go" ||
-		workFile.Replace[3].Old.Path != "github.com/microsoft/typescript-go/shim/api" ||
-		workFile.Replace[3].New.Path != "./shim/api" ||
-		workFile.Replace[4].Old.Path != "github.com/microsoft/TypeScript/tsc/shim/api" ||
-		workFile.Replace[4].New.Path != "./shim/_backport/api" ||
-		workFile.Replace[5].Old.Path != "github.com/microsoft/typescript-go/shim/ls/change" ||
-		workFile.Replace[5].New.Path != "./shim/ls/change" ||
-		workFile.Replace[6].Old.Path != "github.com/microsoft/TypeScript/tsc/shim/ls/change" ||
-		workFile.Replace[6].New.Path != "./shim/_backport/ls/change" {
-		t.Fatalf("go.work replacements = %#v, want preserved, provider, and backport replacements", workFile.Replace)
+	replaces := make([]string, len(workFile.Replace))
+	for index, replace := range workFile.Replace {
+		replaces[index] = strings.TrimSpace(replace.Old.Path+" "+replace.Old.Version) + " => " + replace.New.Path
+	}
+	if !reflect.DeepEqual(replaces, wantReplaces) {
+		t.Errorf("go.work replacements = %q, want %q", replaces, wantReplaces)
 	}
 }
 
-func TestLoadShimInputsRejectsUnknownOverlayPackage(t *testing.T) {
-	base := t.TempDir()
-	overlay := t.TempDir()
-	writeTestFile(t, filepath.Join(overlay, "unknown", "extra-shim.json"), []byte(`{"ExtraFunctions":["f"]}`))
-
-	_, err := loadShimInputs(base, []string{overlay})
-	if err == nil || !strings.Contains(err.Error(), "unknown package path") {
-		t.Fatalf("loadShimInputs() error = %v, want unknown package path", err)
+func TestLoadShimInputsRejectsInvalidOverlay(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		base    map[string]string
+		overlay map[string]string
+		want    string
+	}{
+		{
+			name:    "unknown package",
+			overlay: map[string]string{"unknown/extra-shim.json": `{"ExtraFunctions":["f"]}`},
+			want:    "unknown package path",
+		},
+		{
+			name:    "helper conflict",
+			base:    map[string]string{"checker/helper.go": "package checker\n\nconst value = 1\n"},
+			overlay: map[string]string{"checker/helper.go": "package checker\n\nconst value = 2\n"},
+			want:    "conflicting handwritten shim helper",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			base := t.TempDir()
+			overlay := t.TempDir()
+			for root, files := range map[string]map[string]string{base: tc.base, overlay: tc.overlay} {
+				for relative, content := range files {
+					writeTestFile(t, filepath.Join(root, filepath.FromSlash(relative)), []byte(content))
+				}
+			}
+			_, err := loadShimInputs(base, []string{overlay})
+			if err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("loadShimInputs() error = %v, want %s", err, tc.want)
+			}
+		})
 	}
 }
 
@@ -241,18 +269,6 @@ func TestLoadShimInputsPreservesCanonicalBaseOrder(t *testing.T) {
 	want := []string{"z", "a"}
 	if got := inputs.extra["checker"].ExtraFunctions; !reflect.DeepEqual(got, want) {
 		t.Fatalf("base ExtraFunctions = %v, want %v", got, want)
-	}
-}
-
-func TestLoadShimInputsRejectsHelperConflict(t *testing.T) {
-	base := t.TempDir()
-	overlay := t.TempDir()
-	writeTestFile(t, filepath.Join(base, "checker", "helper.go"), []byte("package checker\n\nconst value = 1\n"))
-	writeTestFile(t, filepath.Join(overlay, "checker", "helper.go"), []byte("package checker\n\nconst value = 2\n"))
-
-	_, err := loadShimInputs(base, []string{overlay})
-	if err == nil || !strings.Contains(err.Error(), "conflicting handwritten shim helper") {
-		t.Fatalf("loadShimInputs() error = %v, want helper conflict", err)
 	}
 }
 
@@ -341,35 +357,6 @@ func TestPreparePackageLoadUsesStablePaths(t *testing.T) {
 	}
 }
 
-func TestRewriteImportPrefixPreservesLinknameTargets(t *testing.T) {
-	source := []byte(`package ast
-
-import "github.com/microsoft/TypeScript/tsc/internal/ast"
-import _ "unsafe"
-
-type Node = ast.Node
-
-//go:linkname CanHaveDecorators github.com/microsoft/TypeScript/tsc/internal/ast.CanHaveDecorators
-func CanHaveDecorators(node *ast.Node) bool
-`)
-
-	got, err := rewriteImportPrefix(
-		source,
-		"github.com/microsoft/TypeScript/tsc/internal/",
-		"github.com/microsoft/TypeScript/tsc/shim/",
-	)
-	if err != nil {
-		t.Fatal(err)
-	}
-	text := string(got)
-	if !strings.Contains(text, `"github.com/microsoft/TypeScript/tsc/shim/ast"`) {
-		t.Fatalf("rewritten source does not import provider shim:\n%s", text)
-	}
-	if !strings.Contains(text, "//go:linkname CanHaveDecorators github.com/microsoft/TypeScript/tsc/internal/ast.CanHaveDecorators") {
-		t.Fatalf("rewritten source changed linkname target:\n%s", text)
-	}
-}
-
 func TestGenerateBackportReexportsProviderShims(t *testing.T) {
 	providerRoot := filepath.Join(t.TempDir(), "shim")
 	backportRoot := filepath.Join(providerRoot, "_backport")
@@ -455,38 +442,19 @@ use (
 	if err != nil {
 		t.Fatal(err)
 	}
-	workFile, err := modfile.ParseWork("go.work", got, nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-	uses := make([]string, len(workFile.Use))
-	for index, use := range workFile.Use {
-		uses[index] = use.Path
-	}
-	want := []string{".", "./etscore", "./shim/ast", "./typescript/tsc"}
-	if !reflect.DeepEqual(uses, want) {
-		t.Fatalf("go.work uses = %v, want %v", uses, want)
-	}
-	if len(workFile.Replace) != 2 ||
-		workFile.Replace[0].Old.Path != "github.com/microsoft/TypeScript/tsc" ||
-		workFile.Replace[0].Old.Version != "v0.0.0" || workFile.Replace[0].New.Path != "./typescript/tsc" ||
-		workFile.Replace[1].Old.Path != "github.com/microsoft/TypeScript/tsc/shim/ast" ||
-		workFile.Replace[1].Old.Version != "v0.0.0" || workFile.Replace[1].New.Path != "./shim/ast" {
-		t.Fatalf("go.work replacements = %#v, want compiler and provider shim replacements", workFile.Replace)
-	}
+	assertGoWork(t, got, []string{".", "./etscore", "./shim/ast", "./typescript/tsc"}, []string{
+		"github.com/microsoft/TypeScript/tsc v0.0.0 => ./typescript/tsc",
+		"github.com/microsoft/TypeScript/tsc/shim/ast v0.0.0 => ./shim/ast",
+	})
 }
 
 func TestGitInputDigestTracksRelevantRepositoryState(t *testing.T) {
 	repositoryRoot := t.TempDir()
-	runGitTest(t, repositoryRoot, "init")
-	runGitTest(t, repositoryRoot, "config", "user.email", "test@example.com")
-	runGitTest(t, repositoryRoot, "config", "user.name", "Test")
 	writeTestFile(t, filepath.Join(repositoryRoot, "main.go"), []byte("package main\n"))
 	writeTestFile(t, filepath.Join(repositoryRoot, "config", "extra-shim.json"), []byte("{}\n"))
 	writeTestFile(t, filepath.Join(repositoryRoot, ".gitignore"), []byte("config/ignored.go\n"))
 	writeTestFile(t, filepath.Join(repositoryRoot, "unrelated.txt"), []byte("initial\n"))
-	runGitTest(t, repositoryRoot, "add", ".")
-	runGitTest(t, repositoryRoot, "commit", "-m", "initial")
+	initGitTestRepo(t, repositoryRoot)
 
 	inputs := []gitInput{{root: repositoryRoot, paths: []string{"main.go", "config"}}}
 	initial, err := gitInputDigest(inputs)
@@ -533,25 +501,17 @@ func TestGitInputDigestTracksRelevantRepositoryState(t *testing.T) {
 
 func TestShimInputDigestIncludesProviderOverlays(t *testing.T) {
 	repositoryRoot := t.TempDir()
-	runGitTest(t, repositoryRoot, "init")
-	runGitTest(t, repositoryRoot, "config", "user.email", "test@example.com")
-	runGitTest(t, repositoryRoot, "config", "user.name", "Test")
 	writeTestFile(t, filepath.Join(repositoryRoot, "_tools", "gen_shims", "main.go"), []byte("package main\n"))
 	writeTestFile(
 		t,
 		filepath.Join(repositoryRoot, "_tools", "gen_shims", "providers", "typescript", "checker", "integration.go"),
 		[]byte("package checker\n"),
 	)
-	runGitTest(t, repositoryRoot, "add", ".")
-	runGitTest(t, repositoryRoot, "commit", "-m", "initial")
+	initGitTestRepo(t, repositoryRoot)
 
 	sourceRoot := t.TempDir()
-	runGitTest(t, sourceRoot, "init")
-	runGitTest(t, sourceRoot, "config", "user.email", "test@example.com")
-	runGitTest(t, sourceRoot, "config", "user.name", "Test")
 	writeTestFile(t, filepath.Join(sourceRoot, "go.mod"), []byte("module example\n"))
-	runGitTest(t, sourceRoot, "add", ".")
-	runGitTest(t, sourceRoot, "commit", "-m", "initial")
+	initGitTestRepo(t, sourceRoot)
 
 	digest := func() string {
 		t.Helper()
@@ -613,6 +573,15 @@ func TestShimCacheIgnoresIncompleteEntry(t *testing.T) {
 	if hit {
 		t.Fatal("restoreShimCache() hit incomplete entry")
 	}
+}
+
+func initGitTestRepo(t *testing.T, directory string) {
+	t.Helper()
+	runGitTest(t, directory, "init")
+	runGitTest(t, directory, "config", "user.email", "test@example.com")
+	runGitTest(t, directory, "config", "user.name", "Test")
+	runGitTest(t, directory, "add", ".")
+	runGitTest(t, directory, "commit", "-m", "initial")
 }
 
 func runGitTest(t *testing.T, directory string, arguments ...string) {

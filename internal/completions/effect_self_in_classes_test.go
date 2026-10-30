@@ -1,67 +1,76 @@
 package completions_test
 
 import (
+	"strings"
 	"testing"
+
+	"github.com/microsoft/TypeScript/tsc/shim/lsp/lsproto"
 )
 
-func TestEffectSelfInClasses_NotInExtendsClause(t *testing.T) {
-	t.Parallel()
-	// Cursor in a variable declaration, not a class extends clause
-	source := `import * as Effect from "effect/Effect"
-const x = Effect.Service`
-	items := effectSelfInClassesItems(t, source, len(source))
-	if items != nil {
-		t.Errorf("expected nil for cursor not in extends clause, got %d items", len(items))
-	}
+func selfInClassesItems(t *testing.T, source string, position int) []*lsproto.CompletionItem {
+	t.Helper()
+	return filterCompletionItems(completionItemsAt(t, source, position), func(item *lsproto.CompletionItem) bool {
+		for _, prefix := range []string{"Service<", `Tag("`, "Class<", `make("`} {
+			if strings.HasPrefix(item.Label, prefix) {
+				return true
+			}
+		}
+		return false
+	})
 }
 
-func TestEffectSelfInClasses_NotInClass(t *testing.T) {
+func TestSelfInClassesCompletions_OnlyInNamedClassExtends(t *testing.T) {
 	t.Parallel()
-	// Cursor after a standalone identifier that is not in any class
-	source := `import * as Effect from "effect/Effect"
-const x = Effect.`
-	items := effectSelfInClassesItems(t, source, len(source))
-	if items != nil {
-		t.Errorf("expected nil for cursor not in class, got %d items", len(items))
-	}
-}
 
-func TestEffectSelfInClasses_EmptySource(t *testing.T) {
-	t.Parallel()
-	source := ``
-	items := effectSelfInClassesItems(t, source, 0)
-	if items != nil {
-		t.Errorf("expected nil for empty source, got %d items", len(items))
+	type testCase struct {
+		name     string
+		source   string
+		position int
+		want     bool
 	}
-}
-
-func TestEffectSelfInClasses_InsideImportDeclaration(t *testing.T) {
-	t.Parallel()
-	// Cursor inside an import declaration should not trigger completion
-	source := `import { Effect } from "effect"`
-	pos := len(`import { Effect`)
-	items := effectSelfInClassesItems(t, source, pos)
-	if items != nil {
-		t.Errorf("expected nil for cursor inside import declaration, got %d items", len(items))
+	cases := []testCase{
+		{name: "empty source", source: ""},
+		{name: "interface extends", source: `interface Foo extends Bar`},
 	}
-}
-
-func TestEffectSelfInClasses_InterfaceNotClass(t *testing.T) {
-	t.Parallel()
-	// Interface extends clause, not a class
-	source := `interface Foo extends Bar`
-	items := effectSelfInClassesItems(t, source, len(source))
-	if items != nil {
-		t.Errorf("expected nil for interface extends (not class), got %d items", len(items))
+	for _, provider := range []struct {
+		name          string
+		directive     string
+		namespaceImp  string
+		access        string
+		namedImport   string
+		importedIdent string
+	}{
+		{"effect", "// @effect-v3\n", `import * as Effect from "effect/Effect"`, "Effect.Service", `import { Effect } from "effect"`, "Effect"},
+		{"context", "", `import * as Context from "effect/Context"`, "Context.Tag", `import { Context } from "effect"`, "Context"},
+		{"sqlModel", "", `import * as Model from "@effect/sql/Model"`, "Model.Class", `import { Model } from "@effect/sql"`, "Model"},
+		{"rpc", "// @effect-v3\n", `import * as Rpc from "@effect/rpc/Rpc"`, "Rpc.make", `import { Rpc } from "@effect/rpc"`, "Rpc"},
+	} {
+		namespace := provider.access[:strings.Index(provider.access, ".")+1]
+		header := provider.directive + provider.namespaceImp
+		namedImport := provider.directive + provider.namedImport
+		cases = append(cases,
+			testCase{name: provider.name + "/named class extends", source: header + "\nclass Foo extends " + provider.access, want: true},
+			testCase{name: provider.name + "/variable initializer", source: header + "\nconst x = " + provider.access},
+			testCase{name: provider.name + "/member access outside class", source: header + "\nconst x = " + namespace},
+			testCase{name: provider.name + "/anonymous class", source: header + "\nconst x = class extends " + provider.access},
+			testCase{name: provider.name + "/inside import declaration", source: namedImport, position: strings.Index(namedImport, provider.importedIdent) + len(provider.importedIdent)},
+		)
 	}
-}
 
-func TestEffectSelfInClasses_AnonymousClass(t *testing.T) {
-	t.Parallel()
-	// Anonymous class has no name — should return nil
-	source := `const x = class extends Effect.Service`
-	items := effectSelfInClassesItems(t, source, len(source))
-	if items != nil {
-		t.Errorf("expected nil for anonymous class (no name), got %d items", len(items))
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			position := tc.position
+			if position == 0 {
+				position = len(tc.source)
+			}
+			items := selfInClassesItems(t, tc.source, position)
+			if tc.want && len(items) == 0 {
+				t.Errorf("expected self-in-classes completions for %q", tc.source)
+			}
+			if !tc.want && items != nil {
+				t.Errorf("expected no self-in-classes completions for %q, got %d items", tc.source, len(items))
+			}
+		})
 	}
 }

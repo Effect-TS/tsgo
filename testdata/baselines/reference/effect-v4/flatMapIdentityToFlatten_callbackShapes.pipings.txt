@@ -1,0 +1,211 @@
+==== /.src/flatMapIdentityToFlatten_callbackShapes.ts (15 flows) ====
+
+=== Piping Flow ===
+Location: 9:21 - 9:67
+Node: source.pipe(Effect.flatMap((inner) => inner))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(inner) => inner]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 12:23 - 12:101
+Node: source.pipe(Effect.flatMap((inner: Effect.Effect<string, unknown>) => inner))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(inner: Effect.Effect<string, unknown>) => inner]
+      outType: Effect<string, unknown, never>
+
+=== Piping Flow ===
+Location: 15:29 - 15:112
+Node: source.pipe(Effect.flatMap<Effect.Effect<string>, string, never, never>(identity))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [identity]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 19:29 - 19:81
+Node: source.pipe(Effect.flatMap(async (inner) => inner))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [async (inner) => inner]
+      outType: Effect<unknown, unknown, unknown>
+
+=== Piping Flow ===
+Location: 22:29 - 22:92
+Node: source.pipe(Effect.flatMap((inner, _extra?: number) => inner))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(inner, _extra?: number) => inner]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 26:29 - 26:103
+Node: source.pipe(Effect.flatMap((...inner: [Effect.Effect<string>]) => inner))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(...inner: [Effect.Effect<string>]) => inner]
+      outType: Effect<unknown, unknown, unknown>
+
+=== Piping Flow ===
+Location: 29:27 - 29:84
+Node: source.pipe(Effect.flatMap((inner = fallback) => inner))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(inner = fallback) => inner]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 33:33 - 33:103
+Node: source.pipe(Effect.flatMap((inner?: Effect.Effect<string>) => inner))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [(inner?: Effect.Effect<string>) => inner]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 37:28 - 37:78
+Node: source.pipe(Effect.flatMap(({ pipe }) => pipe()))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [({ pipe }) => pipe()]
+      outType: Effect<unknown, unknown, unknown>
+
+=== Piping Flow ===
+Location: 41:31 - 41:77
+Node: source.pipe(Effect.flatMap(Channel.identity))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [Channel.identity]
+      outType: Effect<unknown, unknown, unknown>
+
+=== Piping Flow ===
+Location: 45:32 - 45:65
+Node: Effect.flatMap(identity)(source)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.flatMap(identity)
+      args: (constant)
+      outType: Effect<unknown, unknown, unknown>
+
+=== Piping Flow ===
+Location: 49:31 - 49:71
+Node: source.pipe(Effect.flatMap(exactAlias))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [exactAlias]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 53:39 - 53:107
+Node: source.pipe(Effect.flatMap(async function(inner) { return inner }))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [async function(inner) { return inner }]
+      outType: Effect<unknown, unknown, unknown>
+
+=== Piping Flow ===
+Location: 57:43 - 57:106
+Node: source.pipe(Effect.flatMap(function*(inner) { return inner }))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [function*(inner) { return inner }]
+      outType: Effect<unknown, unknown, unknown>
+
+=== Piping Flow ===
+Location: 60:39 - 60:133
+Node: source.pipe(Effect.flatMap(function(inner: Effect.Effect<string, unknown>) { return inner }))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<Effect<string, never, never>, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.flatMap
+      args: [function(inner: Effect.Effect<string, unknown>) { return inner }]
+      outType: Effect<string, unknown, never>

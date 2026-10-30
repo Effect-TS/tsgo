@@ -1,38 +1,6 @@
 package typeparser
 
-import (
-	"strings"
-	"testing"
-	"testing/fstest"
-
-	"github.com/microsoft/TypeScript/tsc/shim/ast"
-	"github.com/microsoft/TypeScript/tsc/shim/bundled"
-	"github.com/microsoft/TypeScript/tsc/shim/compiler"
-	"github.com/microsoft/TypeScript/tsc/shim/core"
-	"github.com/microsoft/TypeScript/tsc/shim/tsoptions"
-	"github.com/microsoft/TypeScript/tsc/shim/tspath"
-	"github.com/microsoft/TypeScript/tsc/shim/vfs/vfstest"
-)
-
-func findNativeStringAccess(t testing.TB, sf *ast.SourceFile, text string) *ast.Node {
-	t.Helper()
-	var found *ast.Node
-	var walk ast.Visitor
-	walk = func(node *ast.Node) bool {
-		if (node.Kind == ast.KindPropertyAccessExpression || node.Kind == ast.KindElementAccessExpression) &&
-			strings.TrimSpace(sf.Text()[node.Pos():node.End()]) == text {
-			found = node
-			return false
-		}
-		node.ForEachChild(walk)
-		return false
-	}
-	walk(sf.AsNode())
-	if found == nil {
-		t.Fatalf("member access %q not found", text)
-	}
-	return found
-}
+import "testing"
 
 func TestNativeStringMethodReference(t *testing.T) {
 	t.Parallel()
@@ -86,7 +54,7 @@ alias;
 		{"value[key]", "trim", false},
 		{"String.fromCharCode", "fromCharCode", false},
 	} {
-		node := findNativeStringAccess(t, sf, tc.access)
+		node := findMemberAccess(t, sf, tc.access)
 		if tp.IsNativeStringMethodReference(node, "unknownMethod") {
 			t.Errorf("%s matched an unknown method before classification", tc.access)
 		}
@@ -102,7 +70,7 @@ alias;
 	}
 	if tp.IsNativeStringMethodReference(nil, "trim") ||
 		tp.IsNativeStringMethodReference(findIdentifierByText(t, sf, "alias", 1), "trim") ||
-		tp.IsNativeStringMethodReference(findNativeStringAccess(t, sf, "value.trim"), "") {
+		tp.IsNativeStringMethodReference(findMemberAccess(t, sf, "value.trim"), "") {
 		t.Error("unsupported reference matched a native String method")
 	}
 }
@@ -119,11 +87,11 @@ value.toUpperCase;
 `)
 	defer done()
 	for _, access := range []string{"value.trim", "value[\"trim\"]"} {
-		if tp.IsNativeStringMethodReference(findNativeStringAccess(t, sf, access), "trim") {
+		if tp.IsNativeStringMethodReference(findMemberAccess(t, sf, access), "trim") {
 			t.Errorf("augmented member %s matched", access)
 		}
 	}
-	if !tp.IsNativeStringMethodReference(findNativeStringAccess(t, sf, "value.toUpperCase"), "toUpperCase") {
+	if !tp.IsNativeStringMethodReference(findMemberAccess(t, sf, "value.toUpperCase"), "toUpperCase") {
 		t.Error("unaugmented member did not match")
 	}
 }
@@ -135,21 +103,9 @@ interface String { trim(): string; }
 declare const value: string;
 value.trim;
 `
-	fs := bundled.WrapFS(vfstest.FromMap(map[string]any{
-		"/.src/test.ts": &fstest.MapFile{Data: []byte(source)},
-	}, tspath.CaseSensitive))
-	program := compiler.NewProgram(compiler.ProgramOptions{
-		Config: tsoptions.NewParsedCommandLine(&core.CompilerOptions{
-			NoLib: core.TSTrue, Target: core.ScriptTargetESNext, Strict: core.TSTrue,
-		}, []tspath.RootedFilePath{"/.src/test.ts"}, nil, "/", tspath.CaseSensitive),
-		Host:           compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil),
-		SingleThreaded: core.TSTrue,
-	})
-	c, done := program.GetTypeChecker(t.Context())
+	tp, sf, done := compileNoLibSource(t, source)
 	defer done()
-	tp := NewTypeParser(program, c)
-	sf := program.GetSourceFile("/.src/test.ts")
-	if tp.IsNativeStringMethodReference(findNativeStringAccess(t, sf, "value.trim"), "trim") {
+	if tp.IsNativeStringMethodReference(findMemberAccess(t, sf, "value.trim"), "trim") {
 		t.Error("noLib user declarations matched native String members")
 	}
 	if len(tp.links.nativeStringRegistry.instance) != 0 {
@@ -174,7 +130,7 @@ custom.trim;
 	}
 	second := NewTypeParser(c.Program(), c)
 	for _, access := range []string{"values.trim", "custom.trim"} {
-		node := findNativeStringAccess(t, files["/.src/first.ts"], access)
+		node := findMemberAccess(t, files["/.src/first.ts"], access)
 		want := access == "values.trim"
 		if got := tp.IsNativeStringMethodReference(node, "trim"); got != want {
 			t.Fatalf("first parser %s = %v, want %v", access, got, want)
@@ -193,16 +149,16 @@ custom.trim;
 		}
 	}
 	registry := tp.links.nativeStringRegistry
-	if !second.IsNativeStringMethodReference(findNativeStringAccess(t, files["/.src/second.ts"], "values.trim"), "trim") || second.links.nativeStringRegistry != registry {
+	if !second.IsNativeStringMethodReference(findMemberAccess(t, files["/.src/second.ts"], "values.trim"), "trim") || second.links.nativeStringRegistry != registry {
 		t.Fatal("second source file did not reuse the canonical registry")
 	}
 	_, other, otherFile, otherDone := compileAndGetCheckerAndSourceFileInternal(t, source)
 	defer otherDone()
-	firstSymbol := tp.GetSymbolAtLocation(findNativeStringAccess(t, files["/.src/first.ts"], "values.trim"))
+	firstSymbol := tp.GetSymbolAtLocation(findMemberAccess(t, files["/.src/first.ts"], "values.trim"))
 	if other.links == tp.links || other.links.nativeStringRegistry != nil || other.links.nativeStringMember.TryGet(firstSymbol) != nil {
 		t.Fatal("separate checker inherited native String cache entries")
 	}
-	otherNode := findNativeStringAccess(t, otherFile, "values.trim")
+	otherNode := findMemberAccess(t, otherFile, "values.trim")
 	if !other.IsNativeStringMethodReference(otherNode, "trim") || other.links.nativeStringRegistry == registry || other.GetSymbolAtLocation(otherNode) == firstSymbol {
 		t.Fatal("separate checker did not build its own native String cache")
 	}

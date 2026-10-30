@@ -6,7 +6,7 @@ use serde_json::Value;
 use crate::*;
 
 // Rust: the fixtures are read in place from etsdiagnostics/testdata. Go's test package imports etscheckerhooks,
-// whose `init()` registers the Effect checker hooks: `run_request` calls `ets_etscheckerhooks::init()`. The tests
+// whose `init()` registers the Effect checker hooks: `run_raw` calls `ets_etscheckerhooks::init()`. The tests
 // that need rules not ported yet wait for them (see their `#[ignore]`).
 
 /// Rust-only: Go's `filepath.Abs("testdata/<name>")` in the etsdiagnostics package directory.
@@ -44,7 +44,7 @@ fn marshal_request(req: &Request) -> String {
 }
 
 /// Rust-only: `Run` with byte buffers for stdout and stderr.
-fn run_request(request: &str) -> (i32, String, String) {
+fn run_raw(request: &str) -> (i32, String, String) {
     ets_etscheckerhooks::init();
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
@@ -190,26 +190,30 @@ fn test_write_files_block() {
     );
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:110 TestRunJSON b4fc29510478388c
+// go test: etsdiagnostics/diagnostics_test.go:110 runRequest b23b04ca17153898
+fn run_request(req: &Request) -> String {
+    let (status, stdout, stderr) = run_raw(&marshal_request(req));
+    assert_eq!(status, 1, "unexpected status {status}; stderr:\n{stderr}");
+    stdout
+}
+
+// go test: etsdiagnostics/diagnostics_test.go:124 runNativeDiagnosticsJSON 794d456f8e27c06c
+fn run_native_diagnostics_json(mut req: Request) -> Value {
+    req.cwd = testdata_dir("native-diagnostics");
+    req.format = "json".into();
+    let stdout = run_request(&req);
+    serde_json::from_str(&stdout)
+        .unwrap_or_else(|err| panic!("invalid JSON output: {err}\n{stdout}"))
+}
+
+// go test: etsdiagnostics/diagnostics_test.go:140 TestRunJSON 58d1cb19537a2ae6
 #[test]
 fn test_run_json() {
-    let cwd = testdata_dir("native-diagnostics");
-    for (name, mut req) in [
-        (
-            "project",
-            Request {
-                project: "tsconfig.json".into(),
-                format: "json".into(),
-                ..Default::default()
-            },
-        ),
-        ("file", Request { file: "main.ts".into(), format: "json".into(), ..Default::default() }),
+    for (name, req) in [
+        ("project", Request { project: "tsconfig.json".into(), ..Default::default() }),
+        ("file", Request { file: "main.ts".into(), ..Default::default() }),
     ] {
-        req.cwd.clone_from(&cwd);
-        let (status, stdout, stderr) = run_request(&marshal_request(&req));
-        assert_eq!(status, 1, "{name}: unexpected status {status}; stderr:\n{stderr}");
-        let output: Value = serde_json::from_str(&stdout)
-            .unwrap_or_else(|err| panic!("{name}: invalid JSON output: {err}\n{stdout}"));
+        let output = run_native_diagnostics_json(req);
         let diagnostics = output["diagnostics"].as_array().expect("diagnostics");
         assert_eq!(
             diagnostics.len(),
@@ -237,22 +241,16 @@ fn test_run_json() {
     }
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:154 TestRunProjectJSONListFiles ac4829244c39627d
+// go test: etsdiagnostics/diagnostics_test.go:167 TestRunProjectJSONListFiles 50afdea2e0592686
 #[test]
 fn test_run_project_json_list_files() {
-    let req = Request {
-        cwd: testdata_dir("native-diagnostics"),
+    let output = run_native_diagnostics_json(Request {
         project: "tsconfig.json".into(),
-        format: "json".into(),
         list_files: true,
         ..Default::default()
-    };
-    let (status, stdout, stderr) = run_request(&marshal_request(&req));
-    assert_eq!(status, 1, "unexpected status {status}; stderr:\n{stderr}");
-    let output: Value = serde_json::from_str(&stdout)
-        .unwrap_or_else(|err| panic!("invalid JSON output: {err}\n{stdout}"));
+    });
     let files = output["files"].as_array().cloned().unwrap_or_default();
-    assert!(!files.is_empty(), "expected at least one file entry:\n{stdout}");
+    assert!(!files.is_empty(), "expected at least one file entry: {output}");
     for entry in &files {
         let file = entry["file"].as_str().unwrap_or_default();
         assert!(!file.is_empty(), "empty file name in entry: {entry}");
@@ -268,7 +266,7 @@ fn test_run_project_json_list_files() {
     }
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:192 missingEffectContextSource 0ca3e626270545c9
+// go test: etsdiagnostics/diagnostics_test.go:187 missingEffectContextSource 0ca3e626270545c9
 const MISSING_EFFECT_CONTEXT_SOURCE: &str = r#"import { Context, Effect, Layer } from "effect"
 
 class Db extends Context.Service<Db>()("Db", { make: Effect.succeed({}) }) {
@@ -303,7 +301,7 @@ impl Drop for TempDir {
     }
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:217 writeEffectV4Project 11af852ef4277224
+// go test: etsdiagnostics/diagnostics_test.go:212 writeEffectV4Project 11af852ef4277224
 // Rust: returns the temporary directory too (Go's `t.TempDir` is removed by the test framework).
 fn write_effect_v4_project(source: &str) -> (TempDir, String) {
     let mut files = ets_bundledeffect::TestFS::default();
@@ -341,21 +339,19 @@ fn write_effect_v4_project(source: &str) -> (TempDir, String) {
     (root, cwd)
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:245 runMissingEffectContext 4cffb1cdfb6bcc13
+// go test: etsdiagnostics/diagnostics_test.go:240 runMissingEffectContext 7ded859c4bfd6209
 fn run_missing_effect_context(format: &str) -> (TempDir, String, String) {
     let (root, cwd) = write_effect_v4_project(MISSING_EFFECT_CONTEXT_SOURCE);
-    let req = Request {
+    let stdout = run_request(&Request {
         cwd: cwd.clone(),
         project: "tsconfig.json".into(),
         format: format.into(),
         ..Default::default()
-    };
-    let (status, stdout, stderr) = run_request(&marshal_request(&req));
-    assert_eq!(status, 1, "unexpected status {status}; stderr:\n{stderr}");
+    });
     (root, stdout, PathBuf::from(cwd).join("main.ts").to_string_lossy().into_owned())
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:260 TestRunJSONReportsRelatedInformation 93693d724b324073
+// go test: etsdiagnostics/diagnostics_test.go:247 TestRunJSONReportsRelatedInformation 93693d724b324073
 #[test]
 #[ignore = "needs the missingEffectContext rule (Phase 4)"]
 fn test_run_json_reports_related_information() {
@@ -383,7 +379,7 @@ fn test_run_json_reports_related_information() {
     assert_eq!(got, &want, "unexpected relatedInformation");
 }
 
-// go test: etsdiagnostics/diagnostics_test.go:294 TestRunPrettyReportsRelatedInformation 68d5633ea68ee186
+// go test: etsdiagnostics/diagnostics_test.go:281 TestRunPrettyReportsRelatedInformation 68d5633ea68ee186
 #[test]
 #[ignore = "needs the missingEffectContext rule (Phase 4)"]
 fn test_run_pretty_reports_related_information() {
@@ -506,13 +502,13 @@ fn run_reports_files_without_plugin() {
         format: "text".into(),
         ..Default::default()
     };
-    let (status, stdout, stderr) = run_request(&marshal_request(&req));
+    let (status, stdout, stderr) = run_raw(&marshal_request(&req));
     assert_eq!(status, 0, "unexpected status {status}; stderr:\n{stderr}");
     assert_eq!(
         stdout,
         "Checked 0 files out of 1 files. \nSkipped 1 files because their tsconfig does not enable the @effect/language-service plugin.\n0 errors, 0 warnings and 0 messages.\n"
     );
-    let (status, _, stderr) = run_request(r#"{"format":"json"}"#);
+    let (status, _, stderr) = run_raw(r#"{"format":"json"}"#);
     assert_eq!(status, 2);
     assert_eq!(stderr, "diagnostics request is missing cwd\n");
 }

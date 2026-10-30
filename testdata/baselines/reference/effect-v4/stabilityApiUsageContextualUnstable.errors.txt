@@ -1,0 +1,901 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/ambiguousUnion.ts(11,71): warning TS377136: `effect-v4-tests/ambiguousUnion` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/annotatedGeneratorConstraint.ts(11,133): warning TS377136: `effect-v4-tests/annotatedGeneratorConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/annotatedInnerGeneratorConstraint.ts(11,162): warning TS377136: `effect-v4-tests/annotatedInnerGeneratorConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/argument.ts(11,5): warning TS377136: `effect-v4-tests/argument` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/arrayConstraint.ts(11,76): warning TS377136: `effect-v4-tests/arrayConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/arrayElement.ts(11,32): warning TS377136: `effect-v4-tests/arrayElement` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/arrowConstraint.ts(11,91): warning TS377136: `effect-v4-tests/arrowConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/assignment.ts(11,34): warning TS377136: `effect-v4-tests/assignment` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/callbackReturnInference.ts(11,105): warning TS377136: `effect-v4-tests/callbackReturnInference` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/computedLiteralKey.ts(11,5): warning TS377136: `effect-v4-tests/computedLiteralKey` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/constrainedReturnTypeInference.ts(11,139): warning TS377136: `effect-v4-tests/constrainedReturnTypeInference` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/constraintUsingInference.ts(11,132): warning TS377136: `effect-v4-tests/constraintUsingInference` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/constraintWithoutProperty.ts(11,81): error TS2353: Object literal may only specify known properties, and 'test' does not exist in type '{ other?: number | undefined; }'.
+/.src/constructorConstraint.ts(11,75): warning TS377136: `effect-v4-tests/constructorConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/defaultTypeArgument.ts(11,132): warning TS377136: `effect-v4-tests/defaultTypeArgument` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/experimentalUnionBranch.ts(11,138): warning TS377136: `effect-v4-tests/experimentalUnionBranch` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/explicitOuterTypeArguments.ts(11,149): warning TS377136: `effect-v4-tests/explicitOuterTypeArguments` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/fixedTupleSpread.ts(11,132): warning TS377136: `effect-v4-tests/fixedTupleSpread` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/fixedTupleSpreads.ts(11,193): warning TS377136: `effect-v4-tests/fixedTupleSpreads` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/generatorContextualProperty.ts(11,32): warning TS377136: `effect-v4-tests/generatorContextualProperty` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/generatorDeclarationConstraint.ts(11,91): warning TS377136: `effect-v4-tests/generatorDeclarationConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/generatorMethodConstraint.ts(11,92): warning TS377136: `effect-v4-tests/generatorMethodConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/genericConstraint.ts(11,73): warning TS377136: `effect-v4-tests/genericConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/inferredGeneratorConstraint.ts(11,100): warning TS377136: `effect-v4-tests/inferredGeneratorConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/inherited.ts(11,62): warning TS377136: `effect-v4-tests/inherited` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/method.ts(14,44): warning TS377136: `effect-v4-tests/method` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/nested.ts(11,49): warning TS377136: `effect-v4-tests/nested` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/nestedConstraint.ts(11,93): warning TS377136: `effect-v4-tests/nestedConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/nestedFunctionConstraint.ts(11,119): warning TS377136: `effect-v4-tests/nestedFunctionConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/nestedGenericCall.ts(11,109): warning TS377136: `effect-v4-tests/nestedGenericCall` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/ordinaryFunctionConstraint.ts(11,90): warning TS377136: `effect-v4-tests/ordinaryFunctionConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/propertyAccess.ts(11,45): warning TS377136: `effect-v4-tests/propertyAccess` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/quotedKey.ts(11,5): warning TS377136: `effect-v4-tests/quotedKey` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/restConstraint.ts(11,94): warning TS377136: `effect-v4-tests/restConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/return.ts(11,40): warning TS377136: `effect-v4-tests/return` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/returnTypeInference.ts(11,135): warning TS377136: `effect-v4-tests/returnTypeInference` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/satisfies.ts(11,17): warning TS377136: `effect-v4-tests/satisfies` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/shorthand.ts(11,22): warning TS377136: `effect-v4-tests/shorthand` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/taggedTemplateConstraint.ts(11,90): warning TS377136: `effect-v4-tests/taggedTemplateConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/typedVariable.ts(11,29): warning TS377136: `effect-v4-tests/typedVariable` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/unionDeduplication.ts(11,102): warning TS377136: `effect-v4-tests/unionDeduplication` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+/.src/valueReference.ts(12,31): warning TS377136: `effect-v4-tests/valueReference` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+
+
+==== /.src/argument.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    x({ test: 42 })
+        ~~~~
+!!! warning TS377136: `effect-v4-tests/argument` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/shorthand.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    const test = 42; x({ test })
+                         ~~~~
+!!! warning TS377136: `effect-v4-tests/shorthand` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/quotedKey.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    x({ "test": 42 })
+        ~~~~~~
+!!! warning TS377136: `effect-v4-tests/quotedKey` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/computedLiteralKey.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    x({ ["test"]: 42 })
+        ~~~~~~~~
+!!! warning TS377136: `effect-v4-tests/computedLiteralKey` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/typedVariable.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    const value: Reportable = { test: 42 }
+                                ~~~~
+!!! warning TS377136: `effect-v4-tests/typedVariable` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/assignment.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    let value: Reportable; value = { test: 42 }
+                                     ~~~~
+!!! warning TS377136: `effect-v4-tests/assignment` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/satisfies.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    const value = { test: 42 } satisfies Reportable
+                    ~~~~
+!!! warning TS377136: `effect-v4-tests/satisfies` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/return.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    function make(): Reportable { return { test: 42 } }
+                                           ~~~~
+!!! warning TS377136: `effect-v4-tests/return` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/nested.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    const value: { inner: Reportable } = { inner: { test: 42 } }
+                                                    ~~~~
+!!! warning TS377136: `effect-v4-tests/nested` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/arrayElement.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    const value: Reportable[] = [{ test: 42 }]
+                                   ~~~~
+!!! warning TS377136: `effect-v4-tests/arrayElement` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/genericConstraint.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function generic<T extends Reportable>(arg: T): void; generic({ test: 42 })
+                                                                            ~~~~
+!!! warning TS377136: `effect-v4-tests/genericConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/generatorContextualProperty.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    const gen = function* () { x({ test: 42 }) }
+                                   ~~~~
+!!! warning TS377136: `effect-v4-tests/generatorContextualProperty` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/inferredGeneratorConstraint.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function generic<T extends Reportable>(arg: T): void; const gen = function* () { generic({ test: 42 }) }
+                                                                                                       ~~~~
+!!! warning TS377136: `effect-v4-tests/inferredGeneratorConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/nestedFunctionConstraint.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function generic<T extends Reportable>(arg: T): void; const gen = function* () { function inner() { generic({ test: 42 }) } }
+                                                                                                                          ~~~~
+!!! warning TS377136: `effect-v4-tests/nestedFunctionConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/annotatedInnerGeneratorConstraint.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function generic<T extends Reportable>(arg: T): void; const gen = function* () { const inner = function* (): Generator<never, void, unknown> { generic({ test: 42 }) } }
+                                                                                                                                                                     ~~~~
+!!! warning TS377136: `effect-v4-tests/annotatedInnerGeneratorConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/annotatedGeneratorConstraint.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function generic<T extends Reportable>(arg: T): void; const gen = function* (): Generator<never, void, unknown> { generic({ test: 42 }) }
+                                                                                                                                        ~~~~
+!!! warning TS377136: `effect-v4-tests/annotatedGeneratorConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/generatorDeclarationConstraint.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function generic<T extends Reportable>(arg: T): void; function* gen() { generic({ test: 42 }) }
+                                                                                              ~~~~
+!!! warning TS377136: `effect-v4-tests/generatorDeclarationConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/generatorMethodConstraint.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function generic<T extends Reportable>(arg: T): void; class C { *gen() { generic({ test: 42 }) } }
+                                                                                               ~~~~
+!!! warning TS377136: `effect-v4-tests/generatorMethodConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/ordinaryFunctionConstraint.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function generic<T extends Reportable>(arg: T): void; function gen() { generic({ test: 42 }) }
+                                                                                             ~~~~
+!!! warning TS377136: `effect-v4-tests/ordinaryFunctionConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/arrowConstraint.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function generic<T extends Reportable>(arg: T): void; const gen = () => generic({ test: 42 })
+                                                                                              ~~~~
+!!! warning TS377136: `effect-v4-tests/arrowConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/nestedConstraint.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function generic<T extends { inner: Reportable }>(arg: T): void; generic({ inner: { test: 42 } })
+                                                                                                ~~~~
+!!! warning TS377136: `effect-v4-tests/nestedConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/arrayConstraint.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function generic<T extends Reportable[]>(arg: T): void; generic([{ test: 42 }])
+                                                                               ~~~~
+!!! warning TS377136: `effect-v4-tests/arrayConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/restConstraint.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function generic<T extends Reportable>(...args: T[]): void; generic({ stable: 1 }, { test: 42 })
+                                                                                                 ~~~~
+!!! warning TS377136: `effect-v4-tests/restConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/constructorConstraint.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare class Box<T extends Reportable> { constructor(arg: T) } new Box({ test: 42 })
+                                                                              ~~~~
+!!! warning TS377136: `effect-v4-tests/constructorConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/constraintUsingInference.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function generic<A, T extends Partial<A>>(a: A, arg: T): void; declare const reportable: Reportable; generic(reportable, { test: 42 })
+                                                                                                                                       ~~~~
+!!! warning TS377136: `effect-v4-tests/constraintUsingInference` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/constraintWithoutProperty.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function generic<T extends { other?: number }>(arg: T): void; generic({ test: 42 })
+                                                                                    ~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'test' does not exist in type '{ other?: number | undefined; }'.
+    export {}
+    
+
+==== /.src/unconstrainedAlternative.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function generic<T, U extends Reportable>(arg: T | U): void; generic({ test: 42 })
+    export {}
+    
+
+==== /.src/fixedTupleSpread.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function generic<T extends Reportable>(prefix: string, arg: T): void; declare const prefix: [string]; generic(...prefix, { test: 42 })
+                                                                                                                                       ~~~~
+!!! warning TS377136: `effect-v4-tests/fixedTupleSpread` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/fixedTupleSpreads.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function generic<T extends Reportable>(a: string, b: number, c: boolean, arg: T): void; declare const ab: readonly [string, number]; declare const c: [boolean]; generic(...ab, ...c, { test: 42 })
+                                                                                                                                                                                                    ~~~~
+!!! warning TS377136: `effect-v4-tests/fixedTupleSpreads` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/returnTypeInference.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    interface Box<A> { readonly value: A } declare function succeed<A>(a: A): Box<A>; function make(): Box<Reportable> { return succeed({ test: 42 }) }
+                                                                                                                                          ~~~~
+!!! warning TS377136: `effect-v4-tests/returnTypeInference` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/constrainedReturnTypeInference.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    interface Box<A> { readonly value: A } declare function succeed<A extends object>(a: A): Box<A>; const value: Box<Reportable> = succeed({ test: 42 })
+                                                                                                                                              ~~~~
+!!! warning TS377136: `effect-v4-tests/constrainedReturnTypeInference` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/callbackReturnInference.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function map<A, B>(as: A[], f: (a: A) => B): B[]; const value: Reportable[] = map([1], () => ({ test: 42 }))
+                                                                                                            ~~~~
+!!! warning TS377136: `effect-v4-tests/callbackReturnInference` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/defaultTypeArgument.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    interface Plain { readonly test?: number } declare function withDefault<T extends Plain = Reportable>(arg: T): void; withDefault({ test: 42 })
+                                                                                                                                       ~~~~
+!!! warning TS377136: `effect-v4-tests/defaultTypeArgument` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/taggedTemplateConstraint.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function tag<T extends Reportable>(s: TemplateStringsArray, v: T): void; tag`${{ test: 42 }}`
+                                                                                             ~~~~
+!!! warning TS377136: `effect-v4-tests/taggedTemplateConstraint` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/explicitOuterTypeArguments.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function ref<T>(key: string, o: { make: () => T }): T; declare function constant<A>(a: A): () => A; ref<Reportable>("k", { make: constant({ test: 42 }) })
+                                                                                                                                                        ~~~~
+!!! warning TS377136: `effect-v4-tests/explicitOuterTypeArguments` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/nestedGenericCall.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function id<X>(x: X): X; declare function generic<T extends Reportable>(arg: T): void; generic(id({ test: 42 }))
+                                                                                                                ~~~~
+!!! warning TS377136: `effect-v4-tests/nestedGenericCall` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/genericOwnDeclaration.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function generic<T>(arg: T): void; generic({
+    /** @stability unstable */
+    test: 42 })
+    export {}
+    
+
+==== /.src/inherited.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    interface Child extends Reportable {} const value: Child = { test: 42 }
+                                                                 ~~~~
+!!! warning TS377136: `effect-v4-tests/inherited` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/propertyAccess.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    declare function make(): Reportable; make().test
+                                                ~~~~
+!!! warning TS377136: `effect-v4-tests/propertyAccess` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/valueReference.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    /** @stability unstable */
+    const value = 42; x({ stable: value })
+                                  ~~~~~
+!!! warning TS377136: `effect-v4-tests/valueReference` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/stableProperty.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    x({ stable: 42 })
+    export {}
+    
+
+==== /.src/omittedProperty.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    x({})
+    export {}
+    
+
+==== /.src/untypedLiteral.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    const value = { test: 42 }; x(value)
+    export {}
+    
+
+==== /.src/untypedShorthand.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    const test = 42; const value = { test }; x(value)
+    export {}
+    
+
+==== /.src/spread.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    const value = { test: 42 }; x({ ...value })
+    export {}
+    
+
+==== /.src/differentProperty.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    const value: { test?: number } = { test: 42 }
+    export {}
+    
+
+==== /.src/stableUnionBranch.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    type Choice = (Reportable & { kind: "experimental" }) | { kind: "stable"; test?: number }; const value: Choice = { kind: "stable", test: 42 }
+    export {}
+    
+
+==== /.src/experimentalUnionBranch.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    type Choice = (Reportable & { kind: "experimental" }) | { kind: "stable"; test?: number }; const value: Choice = { kind: "experimental", test: 42 }
+                                                                                                                                             ~~~~
+!!! warning TS377136: `effect-v4-tests/experimentalUnionBranch` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/ambiguousUnion.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    type Choice = Reportable | { test?: string }; const value: Choice = { test: 42 }
+                                                                          ~~~~
+!!! warning TS377136: `effect-v4-tests/ambiguousUnion` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/unionDeduplication.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    type Choice = (Reportable & { kind?: "a" }) | (Reportable & { kind?: "b" }); const value: Choice = { test: 42 }
+                                                                                                         ~~~~
+!!! warning TS377136: `effect-v4-tests/unionDeduplication` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    
+
+==== /.src/method.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics experimentalApiUsage:warning unstableApiUsage:warning
+    /** @stability stable */
+    interface Reportable {
+      /** @stability unstable */
+      readonly test?: number
+      stable?: number
+    }
+    /** @stability stable */
+    declare function x(arg: Reportable): void
+    /** @stability stable */
+    interface Methods {
+    /** @stability unstable */
+    test(): number }; const value: Methods = { test() { return 42 } }
+                                               ~~~~
+!!! warning TS377136: `effect-v4-tests/method` is an unstable API. Breaking changes may happen between versions. effect(unstableApiUsage)
+    export {}
+    

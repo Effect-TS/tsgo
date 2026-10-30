@@ -503,7 +503,7 @@ fn is_effect_symbol_declaration(node: Option<P<Node>>) -> bool {
 //
 // Rust: Go's `scanner.GetTextOfNode(nil)` (a class expression without a name) panics; here it is `""`. Go's
 // `text[:77]` cuts bytes; a cut inside a multi-byte character keeps the character's leading bytes in Go and writes
-// U+FFFD here (`docs/DIVERGENCES.md`, the layergraph truncation row).
+// U+FFFD here (`porting/DIVERGENCES.md`, the layergraph truncation row).
 fn layer_symbol_name(sf: P<SourceFile>, node: P<Node>) -> String {
     let text_of = |n: Option<P<Node>>| n.map(scanner::get_text_of_node).unwrap_or_default();
     if node.kind() == Kind::PropertyDeclaration {

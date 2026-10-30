@@ -1,0 +1,155 @@
+==== /.src/floatingEffect_directivePrecedence.ts (11 flows) ====
+
+=== Piping Flow ===
+Location: 1:32 - 4:26
+Node: Effect.succeed("default")
+Node Kind: KindCallExpression
+
+Subject: "default"
+Subject Type: "default"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 4:26 - 7:30
+Node: Effect.succeed("section off")
+Node Kind: KindCallExpression
+
+Subject: "section off"
+Subject Type: "section off"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 7:30 - 9:56
+Node: Effect.succeed("next-line error overrides the section")
+Node Kind: KindCallExpression
+
+Subject: "next-line error overrides the section"
+Subject Type: "next-line error overrides the section"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 9:56 - 10:66
+Node: Effect.succeed("section off again after the next-line directive")
+Node Kind: KindCallExpression
+
+Subject: "section off again after the next-line directive"
+Subject Type: "section off again after the next-line directive"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 10:66 - 13:62
+Node: Effect.succeed("other rule section keeps floatingEffect off")
+Node Kind: KindCallExpression
+
+Subject: "other rule section keeps floatingEffect off"
+Subject Type: "other rule section keeps floatingEffect off"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 13:62 - 16:56
+Node: Effect.succeed("case-insensitive section sets warning")
+Node Kind: KindCallExpression
+
+Subject: "case-insensitive section sets warning"
+Subject Type: "case-insensitive section sets warning"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 16:56 - 19:41
+Node: Effect.succeed("wildcard next-line off")
+Node Kind: KindCallExpression
+
+Subject: "wildcard next-line off"
+Subject Type: "wildcard next-line off"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 19:41 - 20:71
+Node: Effect.succeed("warning again after the wildcard next-line directive")
+Node Kind: KindCallExpression
+
+Subject: "warning again after the wildcard next-line directive"
+Subject Type: "warning again after the wildcard next-line directive"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 20:71 - 23:34
+Node: Effect.succeed("message section")
+Node Kind: KindCallExpression
+
+Subject: "message section"
+Subject Type: "message section"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 23:34 - 27:75
+Node: Effect.succeed("rule section after wildcard off re-enables as suggestion")
+Node Kind: KindCallExpression
+
+Subject: "rule section after wildcard off re-enables as suggestion"
+Subject Type: "rule section after wildcard off re-enables as suggestion"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 27:75 - 30:62
+Node: Effect.succeed("wildcard section overrides the rule section")
+Node Kind: KindCallExpression
+
+Subject: "wildcard section overrides the rule section"
+Subject Type: "wildcard section overrides the rule section"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>

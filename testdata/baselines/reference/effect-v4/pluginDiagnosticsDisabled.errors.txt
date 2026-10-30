@@ -1,0 +1,27 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "strict": true,
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "diagnostics": false,
+            "diagnosticSeverity": {
+              "floatingEffect": "error"
+            }
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/pluginDiagnosticsDisabled.ts (0 errors) ====
+    import { Effect } from "effect"
+    
+    Effect.succeed(1)
+    

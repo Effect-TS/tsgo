@@ -1,0 +1,127 @@
+==== /.src/forms.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 9:25 - 9:148
+Node: source.pipe(Effect.tap(() => Effect.void), Effect.map((n) => n + 1)).pipe(Effect.mapError((e) => e.length), Effect.asVoid)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (4):
+  [0] kind: pipeable
+      callee: Effect.tap
+      args: [() => Effect.void]
+      outType: Effect<number, string, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, string, never>
+  [2] kind: pipeable
+      callee: Effect.mapError
+      args: [(e) => e.length]
+      outType: Effect<number, number, never>
+  [3] kind: pipeable
+      callee: Effect.asVoid
+      args: (constant)
+      outType: Effect<void, number, never>
+
+=== Piping Flow ===
+Location: 13:27 - 13:104
+Node: source.pipe(Effect.mapError((e) => e.length)).pipe(Effect.map((n) => n + 1))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.mapError
+      args: [(e) => e.length]
+      outType: Effect<number, number, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 17:28 - 17:100
+Node: source.pipe(Effect.mapError((e) => e.length), Effect.map((n) => n + 1))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.mapError
+      args: [(e) => e.length]
+      outType: Effect<number, number, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 20:25 - 20:92
+Node: Effect.map(Effect.mapError(source, (e) => e.length), (n) => n + 1)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.mapError
+      args: [(e) => e.length]
+      outType: Effect<number, number, never>
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, number, never>
+==== /.src/namedImportTarget.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 9:21 - 9:79
+Node: source.pipe(map((n) => n + 1), mapError((e) => e.length))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: map
+      args: [(n) => n + 1]
+      outType: Effect<number, string, never>
+  [1] kind: pipeable
+      callee: mapError
+      args: [(e) => e.length]
+      outType: Effect<number, number, never>
+==== /.src/namespaceImport.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 9:21 - 9:114
+Node: source.pipe(E.tap(() => E.void), E.map((n) => n + 1), E.mapError((e) => e.length), E.asVoid)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (4):
+  [0] kind: pipeable
+      callee: E.tap
+      args: [() => E.void]
+      outType: Effect<number, string, never>
+  [1] kind: pipeable
+      callee: E.map
+      args: [(n) => n + 1]
+      outType: Effect<number, string, never>
+  [2] kind: pipeable
+      callee: E.mapError
+      args: [(e) => e.length]
+      outType: Effect<number, number, never>
+  [3] kind: pipeable
+      callee: E.asVoid
+      args: (constant)
+      outType: Effect<void, number, never>

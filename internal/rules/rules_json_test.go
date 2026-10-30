@@ -36,7 +36,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 	"github.com/microsoft/TypeScript/tsc/shim/vfs/vfstest"
 
-	// Import etscheckerhooks to register Effect diagnostic callbacks
 	_ "github.com/effect-ts/tsgo/etscheckerhooks"
 )
 
@@ -227,7 +226,7 @@ func TestMarkdownCodeFence(t *testing.T) {
 	}
 }
 
-func TestUpdateRuleDocs(t *testing.T) { //nolint:paralleltest // Updates shared generated files.
+func TestUpdateRuleDocs(t *testing.T) { //nolint:paralleltest
 	if os.Getenv("UPDATE_RULE_DOCS") == "" {
 		t.Skip("set UPDATE_RULE_DOCS=1 to regenerate docs/rules")
 	}
@@ -295,7 +294,6 @@ type metadataDocument struct {
 	Rules   []exportedRule        `json:"rules"`
 }
 
-// buildFixableCodes returns a set of diagnostic codes that have non-disable fixables.
 func buildFixableCodes() map[int32]bool {
 	result := make(map[int32]bool)
 	for _, f := range fixables.All {
@@ -309,7 +307,6 @@ func buildFixableCodes() map[int32]bool {
 	return result
 }
 
-// isRuleFixable returns true if any of the rule's codes has a non-disable fixable.
 func isRuleFixable(codes []int32, fixableCodes map[int32]bool) bool {
 	for _, code := range codes {
 		if fixableCodes[code] {
@@ -319,9 +316,6 @@ func isRuleFixable(codes []int32, fixableCodes map[int32]bool) bool {
 	return false
 }
 
-// trimLeadingDirectives strips leading lines starting with "// @" from sourceText
-// and returns the trimmed text along with the number of characters removed (including newlines).
-// This matches the upstream trimLeadingDirectives logic used for preview generation.
 func trimLeadingDirectives(sourceText string) (trimmed string, removedChars int) {
 	lines := strings.Split(sourceText, "\n")
 	index := 0
@@ -332,7 +326,7 @@ func trimLeadingDirectives(sourceText string) (trimmed string, removedChars int)
 		}
 		removedChars += len(lines[index])
 		if index < len(lines)-1 {
-			removedChars++ // newline character
+			removedChars++
 		}
 		index++
 	}
@@ -340,8 +334,6 @@ func trimLeadingDirectives(sourceText string) (trimmed string, removedChars int)
 	return strings.Join(lines[index:], "\n"), removedChars
 }
 
-// findPreviewFile locates the preview fixture for a rule, checking v4 first then v3.
-// Returns the version, file path, and source text.
 func findPreviewFile(root string, ruleName string) (bundledeffect.EffectVersion, string, string, error) {
 	for _, version := range []bundledeffect.EffectVersion{bundledeffect.EffectV4, bundledeffect.EffectV3} {
 		filePath := filepath.Join(root, "testdata", "tests", string(version), ruleName+"_preview.ts")
@@ -353,8 +345,6 @@ func findPreviewFile(root string, ruleName string) (bundledeffect.EffectVersion,
 	return "", "", "", fmt.Errorf("no preview file found for rule %s", ruleName)
 }
 
-// parseTestConfig extracts a @test-config JSON object from source comments.
-// Returns a map of extra config to merge into the Effect plugin options.
 func parseTestConfig(sourceText string) map[string]any {
 	re := regexp.MustCompile(`//\s*@test-config\s+(.+)`)
 	match := re.FindStringSubmatch(sourceText)
@@ -368,8 +358,6 @@ func parseTestConfig(sourceText string) map[string]any {
 	return config
 }
 
-// buildTsConfigWithTestConfig creates a tsconfig JSON string that merges
-// the default Effect plugin config with any @test-config overrides.
 func buildTsConfigWithTestConfig(testConfig map[string]any) string {
 	plugin := map[string]any{
 		"name":                            "@effect/language-service",
@@ -391,21 +379,19 @@ func buildTsConfigWithTestConfig(testConfig map[string]any) string {
 	return string(data)
 }
 
-// evaluatePreview creates an in-memory program for a preview fixture and runs
-// the specified rule directly to collect diagnostics. We bypass the checker hooks
-// because preview files use "// @effect-diagnostics *:off" which causes the
-// hook to early-return. Instead, we run the rule directly via rule.Run().
-func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceText string, r *rule.Rule) *previewPayload {
+func forceFullTypeCheck(ctx context.Context, program *compiler.Program) {
+	_ = program.GetSemanticDiagnostics(ctx, nil)
+}
+
+func evaluatePreviewWithoutHooks(t *testing.T, version bundledeffect.EffectVersion, sourceText string, r *rule.Rule) *previewPayload {
 	t.Helper()
 
 	effecttest.AcquireProgram()
 	defer effecttest.ReleaseProgram()
 
-	// Parse test units (handles @filename directives for multi-file tests)
 	defaultFileName := "preview.ts"
 	units := parsePreviewUnits(sourceText, defaultFileName)
 
-	// Create VFS
 	testfs := make(map[string]any)
 	if err := bundledeffect.MountEffect(version, testfs); err != nil {
 		t.Fatalf("mount effect for preview: %v", err)
@@ -418,7 +404,6 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 
 	currentDirectory := "/.src"
 
-	// Add test files to VFS
 	var programFileNames []tspath.RootedFilePath
 
 	for _, unit := range units {
@@ -432,7 +417,6 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 		programFileNames = append(programFileNames, tspath.RootedFilePath(unitName))
 	}
 
-	// Inject tsconfig with optional @test-config overrides
 	testConfig := parseTestConfig(sourceText)
 	var tsConfigContent string
 	if testConfig != nil {
@@ -450,11 +434,9 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 		SourceFile: configJSON,
 	}
 
-	// Create VFS
 	fs := vfstest.FromMap(testfs, tspath.CaseSensitive)
 	fs = bundled.WrapFS(fs)
 
-	// Setup compiler options
 	compilerOptions := &core.CompilerOptions{
 		NewLine:                      core.NewLineKindLF,
 		SkipDefaultLibCheck:          core.TSTrue,
@@ -466,7 +448,6 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 		AllowSyntheticDefaultImports: core.TSTrue,
 	}
 
-	// Parse tsconfig
 	configDir := tspath.GetDirectoryPath("tsconfig.json")
 	configDir = tspath.GetNormalizedAbsolutePath(configDir, tspath.RootedDirectoryPath(currentDirectory))
 	parsedConfig := tsoptions.ParseJsonSourceFileConfigFileContent(tsConfigFile, tsoptions.NewDefaultParseConfigHost(fs), tspath.RootedDirectoryPath(configDir), nil, nil, nil, nil)
@@ -486,10 +467,8 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 		compilerOptions = parsedConfig.CompilerOptions()
 	}
 
-	// Create compiler host
 	host := compiler.NewCompilerHost(fs, bundled.LibPath(), nil, nil, nil)
 
-	// Create program
 	programConfig := tsoptions.NewParsedCommandLine(compilerOptions, programFileNames, nil, "/", tspath.CaseSensitive)
 	programConfig.ConfigFile = parsedConfig.ConfigFile
 	program := compiler.NewProgram(compiler.ProgramOptions{
@@ -498,14 +477,9 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 		SingleThreaded: core.TSTrue,
 	})
 
-	// Force full type-checking by calling GetSemanticDiagnostics first.
-	// This ensures the checker processes all files, populating relation errors
-	// and other type data needed by rules. The checker hooks won't emit Effect
-	// diagnostics due to the *:off directive, but the type info will be available.
 	ctx := context.Background()
-	_ = program.GetSemanticDiagnostics(ctx, nil)
+	forceFullTypeCheck(ctx, program)
 
-	// Now get the type checker and run the rule directly against each source file
 	c, done := program.GetTypeChecker(ctx)
 	defer done()
 
@@ -536,16 +510,13 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 		}
 	}
 
-	// Sort by start position
 	sort.Slice(ruleDiags, func(i, j int) bool {
 		return ruleDiags[i].Start < ruleDiags[j].Start
 	})
 
-	// Trim leading directives from source text
 	trimmedSource, removedChars := trimLeadingDirectives(sourceText)
 	removedUnits := utf16Length(sourceText[:removedChars])
 
-	// Build preview diagnostics with adjusted offsets
 	prevDiags := make([]previewDiagnostic, 0, len(ruleDiags))
 	for _, d := range ruleDiags {
 		start := d.Start - removedUnits
@@ -569,8 +540,6 @@ func evaluatePreview(t *testing.T, version bundledeffect.EffectVersion, sourceTe
 	}
 }
 
-// parsePreviewUnits parses a preview file into test units.
-// Reuses the same logic as effecttest.parseTestUnits.
 func parsePreviewUnits(content string, defaultFileName string) []previewUnit {
 	lines := strings.Split(content, "\n")
 
@@ -636,13 +605,12 @@ func marshalMetadataJSON(t *testing.T) ([]byte, error) {
 		slices.Sort(codes)
 		fixable := isRuleFixable(codes, fixableCodes)
 
-		// Find and evaluate preview file
 		version, _, sourceText, err := findPreviewFile(root, current.Name)
 		if err != nil {
 			t.Fatalf("%v", err)
 		}
 
-		preview := evaluatePreview(t, version, sourceText, current)
+		preview := evaluatePreviewWithoutHooks(t, version, sourceText, current)
 
 		exported = append(exported, exportedRule{
 			Name:            current.Name,

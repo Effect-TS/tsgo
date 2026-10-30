@@ -5,7 +5,7 @@ use rustc_hash::FxHashMap;
 // go: internal/rules/outdated_api_db.go:4 MigrationTag 2f33759c99f78a5f
 // MigrationTag identifies the type of migration for an API.
 //
-// Rust: Go's string type used only through its constants is an enum with `as_str()` (docs/PORTING.md).
+// Rust: Go's string type used only through its constants is an enum with `as_str()` (porting/PORTING.md).
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug, Default)]
 pub enum MigrationTag {
     // go: internal/rules/outdated_api_db.go:6 MigrationTagUnchanged b7874f131b865971

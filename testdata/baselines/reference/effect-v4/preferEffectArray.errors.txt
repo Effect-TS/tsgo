@@ -39,24 +39,30 @@ Effect version: 4.0.2
 /.src/preferEffectArray.ts(47,15): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
 /.src/preferEffectArray.ts(49,10): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
 /.src/preferEffectArray.ts(50,17): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-/.src/preferEffectArray.ts(53,7): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-/.src/preferEffectArray.ts(55,11): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-/.src/preferEffectArray.ts(56,12): warning TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
-/.src/preferEffectArray.ts(57,4): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-/.src/preferEffectArray.ts(58,4): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-/.src/preferEffectArray.ts(59,20): warning TS377140: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-/.src/preferEffectArray.ts(60,15): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-/.src/preferEffectArray.ts(61,7): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-/.src/preferEffectArray.ts(62,17): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-/.src/preferEffectArray.ts(64,13): warning TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
-/.src/preferEffectArray.ts(65,7): warning TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
-/.src/preferEffectArray.ts(66,18): warning TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
-/.src/preferEffectArray.ts(68,17): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-/.src/preferEffectArray.ts(69,18): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
-/.src/preferEffectArray.ts(74,13): warning TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+/.src/preferEffectArray.ts(53,17): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(62,7): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(64,11): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(65,12): warning TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+/.src/preferEffectArray.ts(66,4): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(67,4): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(68,4): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(69,4): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(70,4): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(71,20): warning TS377140: Consider effect/Array.findFirst instead of native Array.find. Returns Option, with None replacing undefined; the callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(72,15): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(73,7): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(74,17): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(76,13): warning TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+/.src/preferEffectArray.ts(77,7): warning TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+/.src/preferEffectArray.ts(78,18): warning TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+/.src/preferEffectArray.ts(80,17): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(81,18): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+/.src/preferEffectArray.ts(86,10): warning TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+/.src/preferEffectArray.ts(89,13): warning TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
+/.src/preferEffectArray.ts(142,9): warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
 
 
-==== /.src/preferEffectArray.ts (52 errors) ====
+==== /.src/preferEffectArray.ts (58 errors) ====
     // @effect-diagnostics *:off
     // @effect-diagnostics preferEffectArray:warning
     import * as A from "effect/Array"
@@ -182,6 +188,17 @@ Effect version: 4.0.2
                     ~~~
 !!! warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
     }
+    function constrainedReference<T extends readonly number[]>(values: T) {
+      return values["map"]
+                    ~~~~~
+!!! warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    }
+    function constrainedCustom<T extends { map: (f: (n: number) => number) => number[] }>(values: T) {
+      return values["map"]
+    }
+    function constrainedMixed<T extends readonly number[] | { map: (f: (n: number) => number) => number[] }>(values: T) {
+      return values["map"]
+    }
     declare const union: number[] | readonly string[]
     union.map(value => String(value))
           ~~~
@@ -197,6 +214,15 @@ Effect version: 4.0.2
        ~~~
 !!! warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
     xs["map"](n => n + 1)
+       ~~~~~
+!!! warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    xs.m\u0061p(n => n + 1)
+       ~~~~~~~~
+!!! warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    xs["m\u0061p"](n => n + 1)
+       ~~~~~~~~~~
+!!! warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
+    xs[`map`](n => n + 1)
        ~~~~~
 !!! warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
     const bracket = xs["find"]
@@ -230,6 +256,11 @@ Effect version: 4.0.2
 !!! warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
     alias.call(xs, n => n + 1)
     const { map: destructured } = xs
+    type Remapped = { [K in keyof number[] as K extends "filter" ? "map" : never]: number[][K] }
+    declare const remapped: Remapped
+    remapped.map
+             ~~~
+!!! warning TS377140: Consider effect/Array.filter instead of native Array.filter. The callback type accepts (value, index), with no array parameter or thisArg; sparse-array holes are visited. effect(preferEffectArray)
     destructured.call(xs, n => n + 1)
     export const insideEffect = Effect.gen(function*() {
       return xs.filter(n => n > 1)
@@ -285,6 +316,11 @@ Effect version: 4.0.2
     }
     xs.map = native_map
     xs["filter"] = native_filter
+    declare const partial: Partial<Pick<number[], "map">>
+    delete (partial.map)
+    partial.map
+            ~~~
+!!! warning TS377140: Consider effect/Array.map instead of native Array.map. The callback type accepts (value, index), with no array parameter or thisArg. effect(preferEffectArray)
     ;({ value: xs.map } = { value: native_map })
     type MapType = typeof xs.map
     type BracketType = typeof xs["filter"]

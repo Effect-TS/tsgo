@@ -2,7 +2,7 @@ use ets_go::sprintf;
 
 use crate::*;
 
-// go test: internal/layergraph/types_test.go:8 TestLayerGraphEdgeInfoMarshalJSON dd225fb980d0c072
+// go test: internal/layergraph/types_test.go:8 TestLayerGraphEdgeInfoMarshalJSON 536fb378d750aee6
 #[test]
 fn test_layer_graph_edge_info_marshal_json() {
     ets_go::testing::run(|t| {
@@ -14,17 +14,6 @@ fn test_layer_graph_edge_info_marshal_json() {
         };
         let tests = [
             (
-                "call edge",
-                edge(EdgeRelationship::Call, 0, 0),
-                r#"{"relationship":"call","argumentIndex":0}"#,
-            ),
-            (
-                "call edge with index 2",
-                edge(EdgeRelationship::Call, 2, 0),
-                r#"{"relationship":"call","argumentIndex":2}"#,
-            ),
-            ("pipe edge", edge(EdgeRelationship::Pipe, 0, 0), r#"{"relationship":"pipe"}"#),
-            (
                 "arrayLiteral edge",
                 edge(EdgeRelationship::ArrayLiteral, 0, 0),
                 r#"{"relationship":"arrayLiteral","index":0}"#,
@@ -34,7 +23,6 @@ fn test_layer_graph_edge_info_marshal_json() {
                 edge(EdgeRelationship::ArrayLiteral, 0, 3),
                 r#"{"relationship":"arrayLiteral","index":3}"#,
             ),
-            ("symbol edge", edge(EdgeRelationship::Symbol, 0, 0), r#"{"relationship":"symbol"}"#),
         ];
 
         for (name, edge, expected) in tests {

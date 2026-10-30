@@ -9,7 +9,7 @@ use regex::Regex;
 
 use crate::run_case;
 
-/// Rust-only: `docs/DIVERGENCES.md`, `layergraph.EncodeMermaidURL`: the `pako:` fragment of a Mermaid link holds
+/// Rust-only: `porting/DIVERGENCES.md`, `layergraph.EncodeMermaidURL`: the `pako:` fragment of a Mermaid link holds
 /// zlib-compressed bytes that differ from Go's (an equally valid deflate encoding of the same payload). Hover
 /// expectations with such links are compared after replacing each fragment with its decompressed payload, as the
 /// layergraph tests compare the decoded roundtrip.
@@ -75,12 +75,9 @@ fn verify_quick_info_at_decoded(
     );
 }
 
-// go test: internal/effecttest/hover_test.go:12 TestEffectHoverYieldStar 6e6963d67aa46404
-fn test_effect_hover_yield_star(t: &T) {
-    ets_effecttest::init_hooks();
-    t.parallel();
-
-    let content = r#"// @Filename: /tsconfig.json
+// go test: internal/effecttest/hover_test.go:12 pluginTestContent 970991a901975fc8
+pub(crate) fn plugin_test_content(plugin_options: &str, source: &str) -> String {
+    r#"// @Filename: /tsconfig.json
 {
   "compilerOptions": {
     "strict": true,
@@ -89,18 +86,75 @@ fn test_effect_hover_yield_star(t: &T) {
     "moduleResolution": "NodeNext",
     "plugins": [
       {
-        "name": "@effect/language-service"
+        "name": "@effect/language-service""#
+        .to_string()
+        + plugin_options
+        + r"
       }
     ]
   }
 }
 // @Filename: /test.ts
-import { Config, Effect } from "effect"
+" + source
+}
+
+// go test: internal/effecttest/hover_test.go:31 hoverLayerSource 4c5bbdbaf675a09a
+const HOVER_LAYER_SOURCE: &str = r#"import { Effect, Layer, Context } from "effect"
+
+class Database extends Context.Service<Database>()("Database", {
+  make: Effect.succeed({})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+class Cache extends Context.Service<Cache>()("Cache", {
+  make: Effect.as(Database, {})
+}) {
+  static Default = Layer.effect(this, this.make)
+}
+
+const /*1*/app = Cache.Default.pipe(Layer.provide(Database.Default))"#;
+
+// go test: internal/effecttest/hover_test.go:47 hoverLayerSummary 56b586bd7b9f14b9
+const HOVER_LAYER_SUMMARY: &str =
+    "```\n/**\n * - Cache provided at ln 15 col 12 by `Cache.Default`\n */\n```\n";
+
+// go test: internal/effecttest/hover_test.go:49 hoverLayerMermaidPayloads 59bb42bd945a767f
+const HOVER_LAYER_MERMAID_PAYLOADS: &str = "#pako:eNqckk9T8jAQxr_KTk7vewCaRDxwVI4eHMdbw5SlBGGMaU1bkXH87k7_UFLspKm3bffJk83v2S8SJ1tJFmSnkmO8R5PD853QAFmxeTGY7iGAUJD1EnPcYCanS7nDQuWiCAIeb8ysKmT9mb2hUvWPSGmgc4gTBTfzqG7PrP5akJXQAPZF0dFgGgoCba_TTU3ycdjKDMLHpmpVYLWjIBTkPK7lJPW2Nc1PStqOWW6SV7nQiZZCd8RnaTka7A5KLXKDOkvRSJ33SK6cGp9G0mvQvpBWoB_wJM20mezfNfb_I7hz6sedOrlTN3fa5X6P8d4JnfpDp8PQ6TB06obOKujV2H9Ybcr8EDMnYhYZ-V4cTIn4qalWF8SXtvdqX478pty52JktG5kt88-WDWfLhrNl7mx5lS2m6YhEb_0C5c5AuZsrH8mV-3Plw1z5MFfea0BhMp18QlDV1hPK3zWozsaUMt4vs0-T758BALHyJsk";
+
+// go test: internal/effecttest/hover_test.go:51 hoverLayerOutlinePayload c8de3fd054ce4d02
+const HOVER_LAYER_OUTLINE_PAYLOAD: &str = "#pako:eNqqVkrOT0lVslJKy8kvT85ILCpRCHGJyVNQMIiOUXJJLElMSixO1XNJTUsszSmJUYoFSRlGxyg5JyZnYIgr6OrGlBoYGKcqGCjVAgYAQH8cUg";
+
+// go test: internal/effecttest/hover_test.go:53 hoverLayerLinks a9c2d64a33f76038
+fn hover_layer_links(base_url: &str) -> String {
+    "[Show full graph](".to_string()
+        + base_url
+        + HOVER_LAYER_MERMAID_PAYLOADS
+        + ") - [Show outline]("
+        + base_url
+        + HOVER_LAYER_OUTLINE_PAYLOAD
+        + ")\n\n"
+}
+
+// go test: internal/effecttest/hover_test.go:57 hoverEffectTypeParams 0cc32dfb30c03ed5
+const HOVER_EFFECT_TYPE_PARAMS: &str = "```ts\n/* Effect Type Parameters */\ntype Success = string\ntype Failure = Error\ntype Requirements = never\n```\n";
+
+// go test: internal/effecttest/hover_test.go:59 TestEffectHoverYieldStar 59fb771c5e4785eb
+fn test_effect_hover_yield_star(t: &T) {
+    ets_effecttest::init_hooks();
+    t.parallel();
+
+    let mut f = ets_fourslash::new_fourslash(
+        t,
+        None,
+        &plugin_test_content(
+            "",
+            r#"import { Config, Effect } from "effect"
 const program = Effect.gen(function*() {
   const token = /*yield*/yield/*asterisk*/*/*space*/ Config.Redacted("WEBHOOK_TOKEN")
-})"#;
-
-    let mut f = ets_fourslash::new_fourslash(t, None /*capabilities*/, content);
+})"#,
+        ),
+    );
 
     for marker in ["yield", "asterisk", "space"] {
         f.verify_quick_info_at(
@@ -113,297 +167,124 @@ const program = Effect.gen(function*() {
     f.done(t);
 }
 
-// go test: internal/effecttest/hover_test.go:46 TestEffectHoverTypeArgs 7fe01745eab63e4b
+// go test: internal/effecttest/hover_test.go:76 TestEffectHoverTypeArgs 60112e05ae04920a
 fn test_effect_hover_type_args(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
 
-    let content = r#"// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "strict": true,
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "plugins": [
-      {
-        "name": "@effect/language-service"
-      }
-    ]
-  }
-}
-// @Filename: /test.ts
-import { Effect } from "effect"
+    let mut f = ets_fourslash::new_fourslash(
+        t,
+        None,
+        &plugin_test_content(
+            "",
+            r#"import { Effect } from "effect"
 declare const /*1*/myEffect: Effect.Effect<string, Error, never>
-declare const /*2*/notAnEffect: string"#;
+declare const /*2*/notAnEffect: string"#,
+        ),
+    );
 
-    let mut f = ets_fourslash::new_fourslash(t, None /*capabilities*/, content);
-
-    // Hover over an Effect-typed variable should include type parameters
     f.verify_quick_info_at(
         t,
         "1",
         "const myEffect: Effect.Effect<string, Error, never>",
-        "```ts\n/* Effect Type Parameters */\ntype Success = string\ntype Failure = Error\ntype Requirements = never\n```\n",
+        HOVER_EFFECT_TYPE_PARAMS,
     );
 
-    // Hover over a non-Effect-typed variable should have no documentation
     f.verify_quick_info_at(t, "2", "const notAnEffect: string", "");
     f.done(t);
 }
 
-// go test: internal/effecttest/hover_test.go:84 TestEffectHoverLayerQuickInfo 624eb1314739d309
-fn test_effect_hover_layer_quick_info(t: &T) {
-    ets_effecttest::init_hooks();
-    t.parallel();
-
-    let content = r#"// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "strict": true,
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "plugins": [
-      {
-        "name": "@effect/language-service"
-      }
-    ]
-  }
-}
-// @Filename: /test.ts
-import { Effect, Layer, Context } from "effect"
-
-class Database extends Context.Service<Database>()("Database", {
-  make: Effect.succeed({})
-}) {
-  static Default = Layer.effect(this, this.make)
-}
-
-class Cache extends Context.Service<Cache>()("Cache", {
-  make: Effect.as(Database, {})
-}) {
-  static Default = Layer.effect(this, this.make)
-}
-
-const /*1*/app = Cache.Default.pipe(Layer.provide(Database.Default))
-declare const /*2*/myEffect: Effect.Effect<string, Error, never>"#;
-
-    let mut f = ets_fourslash::new_fourslash(t, None /*capabilities*/, content);
-
-    // Hover over a Layer-typed variable should show providers/requirers summary,
-    // Mermaid diagram links, and Layer type parameters
-    // Rust-only: Mermaid links compared decoded (docs/DIVERGENCES.md).
-    verify_quick_info_at_decoded(
-        &mut f,
-        t,
-        "1",
-        "const app: Layer.Layer<Cache, never, never>",
-        concat!(
-            "```\n/**\n * - Cache provided at ln 15 col 12 by `Cache.Default`\n */\n```\n",
-            "[Show full graph](https://mermaid.live/edit#pako:eNqckk9T8jAQxr_KTk7vewCaRDxwVI4eHMdbw5SlBGGMaU1bkXH87k7_UFLspKm3bffJk83v2S8SJ1tJFmSnkmO8R5PD853QAFmxeTGY7iGAUJD1EnPcYCanS7nDQuWiCAIeb8ysKmT9mb2hUvWPSGmgc4gTBTfzqG7PrP5akJXQAPZF0dFgGgoCba_TTU3ycdjKDMLHpmpVYLWjIBTkPK7lJPW2Nc1PStqOWW6SV7nQiZZCd8RnaTka7A5KLXKDOkvRSJ33SK6cGp9G0mvQvpBWoB_wJM20mezfNfb_I7hz6sedOrlTN3fa5X6P8d4JnfpDp8PQ6TB06obOKujV2H9Ybcr8EDMnYhYZ-V4cTIn4qalWF8SXtvdqX478pty52JktG5kt88-WDWfLhrNl7mx5lS2m6YhEb_0C5c5AuZsrH8mV-3Plw1z5MFfea0BhMp18QlDV1hPK3zWozsaUMt4vs0-T758BALHyJsk) - [Show outline](https://mermaid.live/edit#pako:eNqqVkrOT0lVslJKy8kvT85ILCpRCHGJyVNQMIiOUXJJLElMSixO1XNJTUsszSmJUYoFSRlGxyg5JyZnYIgr6OrGlBoYGKcqGCjVAgYAQH8cUg)\n\n"
-        ),
-    );
-
-    // Hover over a plain Effect-typed variable should show Effect type parameters (not Layer)
-    f.verify_quick_info_at(
-        t,
-        "2",
-        "const myEffect: Effect.Effect<string, Error, never>",
-        "```ts\n/* Effect Type Parameters */\ntype Success = string\ntype Failure = Error\ntype Requirements = never\n```\n",
-    );
-    f.done(t);
-}
-
-// go test: internal/effecttest/hover_test.go:137 TestEffectHoverLayerNoExternal 1b778a70226ddcaa
-fn test_effect_hover_layer_no_external(t: &T) {
-    ets_effecttest::init_hooks();
-    t.parallel();
-
-    let content = r#"// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "strict": true,
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "noExternal": true
-      }
-    ]
-  }
-}
-// @Filename: /test.ts
-import { Effect, Layer, Context } from "effect"
-
-class Database extends Context.Service<Database>()("Database", {
-  make: Effect.succeed({})
-}) {
-  static Default = Layer.effect(this, this.make)
-}
-
-class Cache extends Context.Service<Cache>()("Cache", {
-  make: Effect.as(Database, {})
-}) {
-  static Default = Layer.effect(this, this.make)
-}
-
-const /*1*/app = Cache.Default.pipe(Layer.provide(Database.Default))"#;
-
-    let mut f = ets_fourslash::new_fourslash(t, None /*capabilities*/, content);
-
-    // With noExternal=true, hover should show summary and type params but no Mermaid links
-    f.verify_quick_info_at(
-        t,
-        "1",
-        "const app: Layer.Layer<Cache, never, never>",
-        "```\n/**\n * - Cache provided at ln 15 col 12 by `Cache.Default`\n */\n```\n",
-    );
-    f.done(t);
-}
-
-// go test: internal/effecttest/hover_test.go:182 TestEffectHoverLayerNameOnly 1b33fb1f4c62a893
-fn test_effect_hover_layer_name_only(t: &T) {
-    ets_effecttest::init_hooks();
-    t.parallel();
-
-    let content = r#"// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "strict": true,
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "plugins": [
-      {
-        "name": "@effect/language-service"
-      }
-    ]
-  }
-}
-// @Filename: /test.ts
-import { Effect, Layer, Context } from "effect"
-
-class Database extends Context.Service<Database>()("Database", {
-  make: Effect.succeed({})
-}) {
-  static Default = Layer.effect(this, this.make)
-}
-
-class Cache extends Context.Service<Cache>()("Cache", {
-  make: Effect.as(Database, {})
-}) {
-  static Default = Layer.effect(this, this.make)
-}
-
-const /*1*/app = Cache.Default.pipe(Layer.provide(Database.Default))
-const app2 = /*2*/app"#;
-
-    let mut f = ets_fourslash::new_fourslash(t, None /*capabilities*/, content);
-
-    // Marker 1: on the variable name — should show full Layer hover enrichment
-    // Rust-only: Mermaid links compared decoded (docs/DIVERGENCES.md).
-    verify_quick_info_at_decoded(
-        &mut f,
-        t,
-        "1",
-        "const app: Layer.Layer<Cache, never, never>",
-        concat!(
-            "```\n/**\n * - Cache provided at ln 15 col 12 by `Cache.Default`\n */\n```\n",
-            "[Show full graph](https://mermaid.live/edit#pako:eNqckk9T8jAQxr_KTk7vewCaRDxwVI4eHMdbw5SlBGGMaU1bkXH87k7_UFLspKm3bffJk83v2S8SJ1tJFmSnkmO8R5PD853QAFmxeTGY7iGAUJD1EnPcYCanS7nDQuWiCAIeb8ysKmT9mb2hUvWPSGmgc4gTBTfzqG7PrP5akJXQAPZF0dFgGgoCba_TTU3ycdjKDMLHpmpVYLWjIBTkPK7lJPW2Nc1PStqOWW6SV7nQiZZCd8RnaTka7A5KLXKDOkvRSJ33SK6cGp9G0mvQvpBWoB_wJM20mezfNfb_I7hz6sedOrlTN3fa5X6P8d4JnfpDp8PQ6TB06obOKujV2H9Ybcr8EDMnYhYZ-V4cTIn4qalWF8SXtvdqX478pty52JktG5kt88-WDWfLhrNl7mx5lS2m6YhEb_0C5c5AuZsrH8mV-3Plw1z5MFfea0BhMp18QlDV1hPK3zWozsaUMt4vs0-T758BALHyJsk) - [Show outline](https://mermaid.live/edit#pako:eNqqVkrOT0lVslJKy8kvT85ILCpRCHGJyVNQMIiOUXJJLElMSixO1XNJTUsszSmJUYoFSRlGxyg5JyZnYIgr6OrGlBoYGKcqGCjVAgYAQH8cUg)\n\n"
-        ),
-    );
-
-    // Marker 2: on a reference to `app` in the initializer of another variable declaration.
-    // The node's parent is the VariableDeclaration of `app2`, but the node itself is NOT
-    // the declaration name. Layer hover enrichment should NOT activate — the hover shows
-    // only the standard quickInfo type signature without providers/requirers or Mermaid links.
-    f.verify_quick_info_at(t, "2", "const app: Layer.Layer<Cache, never, never>", "");
-    f.done(t);
-}
-
-// go test: internal/effecttest/hover_test.go:237 TestEffectHoverDisabled 0d291a1e070a409f
+// go test: internal/effecttest/hover_test.go:89 TestEffectHoverDisabled 3c728a6c8fcd4d88
 fn test_effect_hover_disabled(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
 
-    let content = r#"// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "strict": true,
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "quickinfo": false
-      }
-    ]
-  }
-}
-// @Filename: /test.ts
-import { Effect } from "effect"
-declare const /*1*/myEffect: Effect.Effect<string, Error, never>"#;
-
-    let mut f = ets_fourslash::new_fourslash(t, None /*capabilities*/, content);
+    let mut f = ets_fourslash::new_fourslash(
+        t,
+        None,
+        &plugin_test_content(
+            r#",
+        "quickinfo": false"#,
+            r#"import { Effect } from "effect"
+declare const /*1*/myEffect: Effect.Effect<string, Error, never>"#,
+        ),
+    );
 
     f.verify_quick_info_at(t, "1", "const myEffect: Effect.Effect<string, Error, never>", "");
     f.done(t);
 }
 
-// go test: internal/effecttest/hover_test.go:268 TestEffectHoverLayerMermaidProvider 84cf698925ffcb60
-fn test_effect_hover_layer_mermaid_provider(t: &T) {
+// go test: internal/effecttest/hover_test.go:100 TestEffectHoverLayerQuickInfo 874d3f7b9646eb65
+fn test_effect_hover_layer_quick_info(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
 
-    let content = r#"// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "strict": true,
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "mermaidProvider": "mermaid.com"
-      }
-    ]
-  }
-}
-// @Filename: /test.ts
-import { Effect, Layer, Context } from "effect"
+    let mut f = ets_fourslash::new_fourslash(
+        t,
+        None,
+        &plugin_test_content("", &(HOVER_LAYER_SOURCE.to_string() + "\nconst app2 = /*2*/app")),
+    );
 
-class Database extends Context.Service<Database>()("Database", {
-  make: Effect.succeed({})
-}) {
-  static Default = Layer.effect(this, this.make)
-}
-
-class Cache extends Context.Service<Cache>()("Cache", {
-  make: Effect.as(Database, {})
-}) {
-  static Default = Layer.effect(this, this.make)
-}
-
-const /*1*/app = Cache.Default.pipe(Layer.provide(Database.Default))"#;
-
-    let mut f = ets_fourslash::new_fourslash(t, None /*capabilities*/, content);
-
-    // With mermaidProvider="mermaid.com", links should use mermaidchart.com URL
-    // Rust-only: Mermaid links compared decoded (docs/DIVERGENCES.md).
+    // Rust-only: Mermaid links compared decoded (porting/DIVERGENCES.md).
     verify_quick_info_at_decoded(
         &mut f,
         t,
         "1",
         "const app: Layer.Layer<Cache, never, never>",
-        concat!(
-            "```\n/**\n * - Cache provided at ln 15 col 12 by `Cache.Default`\n */\n```\n",
-            "[Show full graph](https://www.mermaidchart.com/play#pako:eNqckk9T8jAQxr_KTk7vewCaRDxwVI4eHMdbw5SlBGGMaU1bkXH87k7_UFLspKm3bffJk83v2S8SJ1tJFmSnkmO8R5PD853QAFmxeTGY7iGAUJD1EnPcYCanS7nDQuWiCAIeb8ysKmT9mb2hUvWPSGmgc4gTBTfzqG7PrP5akJXQAPZF0dFgGgoCba_TTU3ycdjKDMLHpmpVYLWjIBTkPK7lJPW2Nc1PStqOWW6SV7nQiZZCd8RnaTka7A5KLXKDOkvRSJ33SK6cGp9G0mvQvpBWoB_wJM20mezfNfb_I7hz6sedOrlTN3fa5X6P8d4JnfpDp8PQ6TB06obOKujV2H9Ybcr8EDMnYhYZ-V4cTIn4qalWF8SXtvdqX478pty52JktG5kt88-WDWfLhrNl7mx5lS2m6YhEb_0C5c5AuZsrH8mV-3Plw1z5MFfea0BhMp18QlDV1hPK3zWozsaUMt4vs0-T758BALHyJsk) - [Show outline](https://www.mermaidchart.com/play#pako:eNqqVkrOT0lVslJKy8kvT85ILCpRCHGJyVNQMIiOUXJJLElMSixO1XNJTUsszSmJUYoFSRlGxyg5JyZnYIgr6OrGlBoYGKcqGCjVAgYAQH8cUg)\n\n"
+        &(HOVER_LAYER_SUMMARY.to_string() + &hover_layer_links("https://mermaid.live/edit")),
+    );
+
+    f.verify_quick_info_at(t, "2", "const app: Layer.Layer<Cache, never, never>", "");
+    f.done(t);
+}
+
+// go test: internal/effecttest/hover_test.go:111 TestEffectHoverLayerNoExternal 3feb66928aa16674
+fn test_effect_hover_layer_no_external(t: &T) {
+    ets_effecttest::init_hooks();
+    t.parallel();
+
+    let mut f = ets_fourslash::new_fourslash(
+        t,
+        None,
+        &plugin_test_content(
+            r#",
+        "noExternal": true"#,
+            HOVER_LAYER_SOURCE,
         ),
+    );
+
+    f.verify_quick_info_at(
+        t,
+        "1",
+        "const app: Layer.Layer<Cache, never, never>",
+        HOVER_LAYER_SUMMARY,
+    );
+    f.done(t);
+}
+
+// go test: internal/effecttest/hover_test.go:121 TestEffectHoverLayerMermaidProvider 22d9f38e9c1c4832
+fn test_effect_hover_layer_mermaid_provider(t: &T) {
+    ets_effecttest::init_hooks();
+    t.parallel();
+
+    let mut f = ets_fourslash::new_fourslash(
+        t,
+        None,
+        &plugin_test_content(
+            r#",
+        "mermaidProvider": "mermaid.com""#,
+            HOVER_LAYER_SOURCE,
+        ),
+    );
+
+    // Rust-only: Mermaid links compared decoded (porting/DIVERGENCES.md).
+    verify_quick_info_at_decoded(
+        &mut f,
+        t,
+        "1",
+        "const app: Layer.Layer<Cache, never, never>",
+        &(HOVER_LAYER_SUMMARY.to_string()
+            + &hover_layer_links("https://www.mermaidchart.com/play")),
     );
     f.done(t);
 }
@@ -413,10 +294,9 @@ pub(crate) fn tests() -> Vec<Trial> {
     vec![
         run_case("TestEffectHoverYieldStar".to_string(), test_effect_hover_yield_star),
         run_case("TestEffectHoverTypeArgs".to_string(), test_effect_hover_type_args),
+        run_case("TestEffectHoverDisabled".to_string(), test_effect_hover_disabled),
         run_case("TestEffectHoverLayerQuickInfo".to_string(), test_effect_hover_layer_quick_info),
         run_case("TestEffectHoverLayerNoExternal".to_string(), test_effect_hover_layer_no_external),
-        run_case("TestEffectHoverLayerNameOnly".to_string(), test_effect_hover_layer_name_only),
-        run_case("TestEffectHoverDisabled".to_string(), test_effect_hover_disabled),
         run_case(
             "TestEffectHoverLayerMermaidProvider".to_string(),
             test_effect_hover_layer_mermaid_provider,

@@ -1,0 +1,9 @@
+// @effect-v3
+// @effect-diagnostics typeUnionToSchemaUnion:warning
+import { Schema } from "effect"
+
+export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Number })
+export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
+
+// MUST NOT TRIGGER - `Schema.Codec.Encoded` is the v4 Encoded helper and does not exist in Effect v3
+export type V4EncodedHelper = Schema.Codec.Encoded<typeof Circle> | typeof Square.Encoded

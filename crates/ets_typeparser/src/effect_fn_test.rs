@@ -36,47 +36,18 @@ fn find_first_effect_fn_call(
     result
 }
 
-// go test: internal/typeparser/effect_fn_test.go:34 compileEffectFnTest 37654c0fbfbd670a
-// Rust: the parser borrows the returned `Compiled` (`compiled.type_parser()`); dropping it is Go's `done`.
-fn compile_effect_fn_test(
-    t: &T,
-    version: EffectVersion,
-    source: &str,
-) -> (Compiled, P<SourceFile>) {
-    t.helper();
-    compile_and_get_checker_and_source_file_with_effect_version_internal(t, version, source)
-}
-
-// go test: internal/typeparser/effect_fn_test.go:40 assertEffectFnFunctionReturnType ad94ba9692fa595f
-// Rust: Go's `parsed.functionReturnType == nil` checks the lazy itself, which Rust's field cannot be; a nil
-// resolved type (which Go would hand to TypeToString) fails with the same message.
-fn assert_effect_fn_function_return_type(t: &T, version: EffectVersion, source: &str, want: &str) {
-    t.helper();
-    let (mut compiled, sf) =
-        compile_and_get_checker_and_source_file_with_effect_version_internal(t, version, source);
-    let mut tp = compiled.type_parser();
-
-    let parsed = find_first_effect_fn_call(t, &mut tp, sf);
-    let Some(function_return_type) = parsed.function_return_type(&mut tp) else {
-        t.fatal("expected FunctionReturnType");
-    };
-    let got = type_string(&mut tp, function_return_type);
-    if got != want {
-        t.fatal(sprintf!("FunctionReturnType = %q", got));
-    }
-}
-
-// go test: internal/typeparser/effect_fn_test.go:54 TestEffectFnCall_ConstantAlias 80fe923276a4ce15
+// go test: internal/typeparser/effect_fn_test.go:34 TestEffectFnCall_ConstantAlias f1b7aba21c521a57
 #[test]
 fn test_effect_fn_call_constant_alias() {
     run(|t| {
         t.parallel();
 
         for version in [EFFECT_V3, EFFECT_V4] {
-            let (mut compiled, sf) = compile_effect_fn_test(
-                t,
-                version,
-                r#"
+            let (mut compiled, sf) =
+                compile_and_get_checker_and_source_file_with_effect_version_internal(
+                    t,
+                    version,
+                    r#"
 import { Effect } from "effect"
 
 const fn = Effect.fn
@@ -84,7 +55,7 @@ export const make = fn(function*() {
   return 1
 })
 "#,
-            );
+                );
             let mut tp = compiled.type_parser();
             let parsed = find_first_effect_fn_call(t, &mut tp, sf);
             if parsed.effect_module.is_some() {
@@ -96,31 +67,40 @@ export const make = fn(function*() {
     });
 }
 
-// go test: internal/typeparser/effect_fn_test.go:75 TestEffectFnCall_FunctionReturnType_NoPipe dad67a55c92ff0b5
+// go test: internal/typeparser/effect_fn_test.go:55 TestEffectFnCall_FunctionReturnType d4bef6d4b0ecb743
 #[test]
-fn test_effect_fn_call_function_return_type_no_pipe() {
+fn test_effect_fn_call_function_return_type() {
     run(|t| {
         t.parallel();
 
-        let source = r#"
+        struct Case {
+            name: &'static str,
+            versions: &'static [EffectVersion],
+            source: &'static str,
+            want: &'static str,
+            want_trace: bool,
+            want_options: bool,
+        }
+        const BOTH_VERSIONS: &[EffectVersion] = &[EFFECT_V4, EFFECT_V3];
+        let tests = [
+            Case {
+                name: "NoPipe",
+                versions: BOTH_VERSIONS,
+                source: r#"
 import { Effect } from "effect"
 
 export const make = Effect.fn(function*(n: number) {
   return n + 1
 })
-"#;
-        assert_effect_fn_function_return_type(t, EFFECT_V4, source, "Effect<number, never, never>");
-        assert_effect_fn_function_return_type(t, EFFECT_V3, source, "Effect<number, never, never>");
-    });
-}
-
-// go test: internal/typeparser/effect_fn_test.go:89 TestEffectFnCall_FunctionReturnType_FirstPipeInput 3aa9bfb41ec482cb
-#[test]
-fn test_effect_fn_call_function_return_type_first_pipe_input() {
-    run(|t| {
-        t.parallel();
-
-        let source = r#"
+"#,
+                want: "Effect<number, never, never>",
+                want_trace: false,
+                want_options: false,
+            },
+            Case {
+                name: "FirstPipeInput",
+                versions: BOTH_VERSIONS,
+                source: r#"
 import { Effect } from "effect"
 
 export const make = Effect.fn(
@@ -129,19 +109,15 @@ export const make = Effect.fn(
   },
   Effect.map((n) => n.toString())
 )
-"#;
-        assert_effect_fn_function_return_type(t, EFFECT_V4, source, "Effect<number, never, never>");
-        assert_effect_fn_function_return_type(t, EFFECT_V3, source, "Effect<number, never, never>");
-    });
-}
-
-// go test: internal/typeparser/effect_fn_test.go:106 TestEffectFnCall_FunctionReturnType_Generic b5deb32ee2904f85
-#[test]
-fn test_effect_fn_call_function_return_type_generic() {
-    run(|t| {
-        t.parallel();
-
-        let source = r#"
+"#,
+                want: "Effect<number, never, never>",
+                want_trace: false,
+                want_options: false,
+            },
+            Case {
+                name: "Generic",
+                versions: BOTH_VERSIONS,
+                source: r#"
 import { Effect } from "effect"
 
 export const make = Effect.fn(
@@ -150,37 +126,29 @@ export const make = Effect.fn(
   },
   Effect.map((a) => [a] as const)
 )
-"#;
-        assert_effect_fn_function_return_type(t, EFFECT_V4, source, "Effect<A, never, never>");
-        assert_effect_fn_function_return_type(t, EFFECT_V3, source, "Effect<A, never, never>");
-    });
-}
-
-// go test: internal/typeparser/effect_fn_test.go:123 TestEffectFnCall_FunctionReturnType_GenericNoPipe 331a9112b6a4cdc8
-#[test]
-fn test_effect_fn_call_function_return_type_generic_no_pipe() {
-    run(|t| {
-        t.parallel();
-
-        let source = r#"
+"#,
+                want: "Effect<A, never, never>",
+                want_trace: false,
+                want_options: false,
+            },
+            Case {
+                name: "GenericNoPipe",
+                versions: BOTH_VERSIONS,
+                source: r#"
 import { Effect } from "effect"
 
 export const make = Effect.fn(function*<A>(a: A) {
   return a
 })
-"#;
-        assert_effect_fn_function_return_type(t, EFFECT_V4, source, "Effect<A, never, never>");
-        assert_effect_fn_function_return_type(t, EFFECT_V3, source, "Effect<A, never, never>");
-    });
-}
-
-// go test: internal/typeparser/effect_fn_test.go:137 TestEffectFnCall_FunctionReturnType_ConstrainedGeneric 52250c1786c59125
-#[test]
-fn test_effect_fn_call_function_return_type_constrained_generic() {
-    run(|t| {
-        t.parallel();
-
-        let source = r#"
+"#,
+                want: "Effect<A, never, never>",
+                want_trace: false,
+                want_options: false,
+            },
+            Case {
+                name: "ConstrainedGeneric",
+                versions: BOTH_VERSIONS,
+                source: r#"
 import { Effect } from "effect"
 
 export const make = Effect.fn(
@@ -189,19 +157,15 @@ export const make = Effect.fn(
   },
   Effect.tap((a) => Effect.log(a.id))
 )
-"#;
-        assert_effect_fn_function_return_type(t, EFFECT_V4, source, "Effect<A, never, never>");
-        assert_effect_fn_function_return_type(t, EFFECT_V3, source, "Effect<A, never, never>");
-    });
-}
-
-// go test: internal/typeparser/effect_fn_test.go:154 TestEffectFnCall_FunctionReturnType_NamedSpan f7b4540b3cf23d99
-#[test]
-fn test_effect_fn_call_function_return_type_named_span() {
-    run(|t| {
-        t.parallel();
-
-        let source = r#"
+"#,
+                want: "Effect<A, never, never>",
+                want_trace: false,
+                want_options: false,
+            },
+            Case {
+                name: "NamedSpan",
+                versions: BOTH_VERSIONS,
+                source: r#"
 import { Effect } from "effect"
 
 export const make = Effect.fn(
@@ -212,38 +176,15 @@ export const make = Effect.fn(
   },
   Effect.map((n) => n.toString())
 )
-"#;
-        for version in [EFFECT_V4, EFFECT_V3] {
-            let (mut compiled, sf) =
-                compile_and_get_checker_and_source_file_with_effect_version_internal(
-                    t, version, source,
-                );
-            let mut tp = compiled.type_parser();
-            let parsed = find_first_effect_fn_call(t, &mut tp, sf);
-            if parsed.trace_expression.is_none() {
-                t.fatal("expected TraceExpression");
-            }
-            // Rust: see assert_effect_fn_function_return_type for the lazy's nil check.
-            let Some(function_return_type) = parsed.function_return_type(&mut tp) else {
-                t.fatal("expected FunctionReturnType");
-            };
-            let got = type_string(&mut tp, function_return_type);
-            if got != "Effect<number, never, never>" {
-                t.fatal(sprintf!("FunctionReturnType = %q", got));
-            }
-        }
-    });
-}
-
-// go test: internal/typeparser/effect_fn_test.go:188 TestEffectFnCall_FunctionReturnType_SelfObject 5897419a257fb1f6
-#[test]
-fn test_effect_fn_call_function_return_type_self_object() {
-    run(|t| {
-        t.parallel();
-
-        let (mut compiled, sf) = compile_and_get_checker_and_source_file_with_effect_v4_internal(
-            t,
-            r#"
+"#,
+                want: "Effect<number, never, never>",
+                want_trace: true,
+                want_options: false,
+            },
+            Case {
+                name: "SelfObject",
+                versions: &[EFFECT_V4],
+                source: r#"
 import { Effect } from "effect"
 
 const self = {
@@ -258,20 +199,60 @@ export const make = Effect.fn(
   Effect.map((value) => value.length)
 )
 "#,
-        );
-        let mut tp = compiled.type_parser();
+                want: "Effect<string, never, never>",
+                want_trace: false,
+                want_options: true,
+            },
+        ];
 
-        let parsed = find_first_effect_fn_call(t, &mut tp, sf);
-        if parsed.options_node.is_none() {
-            t.fatal("expected OptionsNode");
-        }
-        // Rust: see assert_effect_fn_function_return_type for the lazy's nil check.
-        let Some(function_return_type) = parsed.function_return_type(&mut tp) else {
-            t.fatal("expected FunctionReturnType");
-        };
-        let got = type_string(&mut tp, function_return_type);
-        if got != "Effect<string, never, never>" {
-            t.fatal(sprintf!("FunctionReturnType = %q", got));
+        for tt in &tests {
+            for &version in tt.versions {
+                let (mut compiled, sf) =
+                    compile_and_get_checker_and_source_file_with_effect_version_internal(
+                        t, version, tt.source,
+                    );
+                let mut tp = compiled.type_parser();
+                let parsed = find_first_effect_fn_call(t, &mut tp, sf);
+                let got = parsed.trace_expression.is_some();
+                if got != tt.want_trace {
+                    t.error(sprintf!(
+                        "%s/%s: has trace expression = %v, want %v",
+                        tt.name,
+                        version,
+                        got,
+                        tt.want_trace
+                    ));
+                }
+                let got = parsed.options_node.is_some();
+                if got != tt.want_options {
+                    t.error(sprintf!(
+                        "%s/%s: has options node = %v, want %v",
+                        tt.name,
+                        version,
+                        got,
+                        tt.want_options
+                    ));
+                }
+                // Rust: Go's `parsed.functionReturnType == nil` checks the lazy itself, which Rust's field cannot
+                // be; a nil resolved type (which Go would hand to TypeToString) fails with the same message.
+                match parsed.function_return_type(&mut tp) {
+                    None => {
+                        t.error(sprintf!("%s/%s: expected FunctionReturnType", tt.name, version));
+                    }
+                    Some(function_return_type) => {
+                        let got = type_string(&mut tp, function_return_type);
+                        if got != tt.want {
+                            t.error(sprintf!(
+                                "%s/%s: FunctionReturnType = %q, want %q",
+                                tt.name,
+                                version,
+                                got,
+                                tt.want
+                            ));
+                        }
+                    }
+                }
+            }
         }
     });
 }

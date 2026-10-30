@@ -106,7 +106,7 @@ pub fn analyze_deterministic_keys(
 // deterministicKeyMatch holds the matched key info from a class declaration.
 //
 // Rust: Go's `deterministicKeyMatch` and `DeterministicKeyMatch` clash after capitalization; the exported one is
-// `DeterministicKeyMatchExported` (docs/PORTING.md, "Naming").
+// `DeterministicKeyMatchExported` (porting/PORTING.md, "Naming").
 pub(crate) struct DeterministicKeyMatch {
     pub(crate) class_name: Option<P<Node>>,
     pub(crate) key_string_literal: Option<P<Node>>,

@@ -35,7 +35,7 @@ fn init() {
 pub(crate) type TestFS = FxHashMap<String, MapFile>;
 
 /// Rust-only: a checker and the program it belongs to (Go returns the checker and reads `c.Program()`), with what
-/// the program allocated, so that dropping it frees the program as Go's GC does (`docs/TSRS_API.md`, "The API
+/// the program allocated, so that dropping it frees the program as Go's GC does (`porting/TSRS_API.md`, "The API
 /// path", step 6). The checker handle is dropped first (Go's `done`), then the program with its checkers (and
 /// their `EffectLinks`), then its regions.
 pub(crate) struct Compiled {
@@ -147,9 +147,7 @@ pub(crate) fn compile_and_get_checker_and_source_files_internal(
     (compiled, source_files)
 }
 
-// go test: internal/typeparser/helpers_test.go:69 compileAndGetCheckerAndSourceFileInternal ead6360c85b7fffc
-// compileAndGetCheckerAndSourceFileInternal is a copy of compileAndGetCheckerAndSourceFile
-// for use in internal (package typeparser) tests that need access to unexported helpers.
+// go test: internal/typeparser/helpers_test.go:67 compileAndGetCheckerAndSourceFileInternal b4079d26a7ebc3d6
 pub(crate) fn compile_and_get_checker_and_source_file_internal(
     t: &T,
     source: &str,
@@ -267,7 +265,7 @@ pub(crate) fn mount_effect(version: EffectVersion, testfs: &mut TestFS) -> Resul
     Ok(())
 }
 
-// go test: internal/typeparser/helpers_test.go:109 compileAndGetCheckerAndSourceFileWithEffectV4Internal f847741f4e78a343
+// go test: internal/typeparser/helpers_test.go:107 compileAndGetCheckerAndSourceFileWithEffectV4Internal f847741f4e78a343
 pub(crate) fn compile_and_get_checker_and_source_file_with_effect_v4_internal(
     t: &T,
     source: &str,
@@ -275,7 +273,7 @@ pub(crate) fn compile_and_get_checker_and_source_file_with_effect_v4_internal(
     compile_and_get_checker_and_source_file_with_effect_version_internal(t, EFFECT_V4, source)
 }
 
-// go test: internal/typeparser/helpers_test.go:113 compileAndGetCheckerAndSourceFileWithEffectV3Internal 9a882273dab795a8
+// go test: internal/typeparser/helpers_test.go:111 compileAndGetCheckerAndSourceFileWithEffectV3Internal 9a882273dab795a8
 pub(crate) fn compile_and_get_checker_and_source_file_with_effect_v3_internal(
     t: &T,
     source: &str,
@@ -283,7 +281,7 @@ pub(crate) fn compile_and_get_checker_and_source_file_with_effect_v3_internal(
     compile_and_get_checker_and_source_file_with_effect_version_internal(t, EFFECT_V3, source)
 }
 
-// go test: internal/typeparser/helpers_test.go:117 compileAndGetCheckerAndSourceFileWithEffectVersionInternal e3bc086beeefc6c0
+// go test: internal/typeparser/helpers_test.go:115 compileAndGetCheckerAndSourceFileWithEffectVersionInternal e3bc086beeefc6c0
 pub(crate) fn compile_and_get_checker_and_source_file_with_effect_version_internal(
     t: &T,
     version: EffectVersion,
@@ -304,7 +302,7 @@ pub(crate) fn compile_and_get_checker_and_source_file_with_effect_version_intern
     (compiled, sf)
 }
 
-// go test: internal/typeparser/helpers_test.go:160 findIdentifierByText aee8d87e464c7b18
+// go test: internal/typeparser/helpers_test.go:158 findIdentifierByText aee8d87e464c7b18
 pub(crate) fn find_identifier_by_text(
     t: &T,
     sf: P<SourceFile>,
@@ -345,9 +343,7 @@ pub(crate) fn find_identifier_by_text(
     found
 }
 
-// go test: internal/typeparser/helpers_test.go:196 getFirstVariableDeclarationType a8dd86bf1e4230db
-// getFirstVariableDeclarationType finds the first variable declaration in the source file
-// and returns its type and the declaration node (for use as atLocation).
+// go test: internal/typeparser/helpers_test.go:192 getFirstVariableDeclarationType 2304888a4125584f
 fn get_first_variable_declaration_type(
     t: &T,
     tp: &mut TypeParser<'_>,
@@ -381,160 +377,104 @@ pub(crate) fn type_string(tp: &mut TypeParser<'_>, t: P<Type>) -> String {
     tp.checker().type_to_string_exported(t)
 }
 
-// go test: internal/typeparser/helpers_test.go:224 TestExtractCovariantType_RejectsGenericSignature 61d7e6c3e2cfab87
+// go test: internal/typeparser/helpers_test.go:220 TestExtractVarianceTypesRejectGenericSignatures 77e69d77421076d4
 #[test]
-fn test_extract_covariant_type_rejects_generic_signature() {
+fn test_extract_variance_types_reject_generic_signatures() {
+    type Extract = fn(&mut TypeParser<'_>, Option<P<Type>>, &str) -> Option<P<Type>>;
+
     run(|t| {
         t.parallel();
 
-        let source = "declare const test: { prop: <T>() => T }";
-
-        let (mut compiled, sf) = compile_and_get_checker_and_source_file_internal(t, source);
+        let (mut compiled, sf) = compile_and_get_checker_and_source_file_internal(
+            t,
+            "declare const test: {
+  covariant: () => string
+  genericCovariant: <T>() => T
+  contravariant: (_: string) => void
+  genericContravariant: <T>(_: T) => void
+  invariant: (_: string) => string
+  genericInvariant: <T>(_: T) => T
+}",
+        );
         let mut tp = compiled.type_parser();
 
         let (typ, _) = get_first_variable_declaration_type(t, &mut tp, sf);
 
-        let result = tp.extract_covariant_type(typ, "prop");
-        if let Some(result) = result {
-            t.error(ets_go::sprintf!(
-                "expected nil for generic covariant signature, got %s",
-                type_string(&mut tp, result)
-            ));
+        let cases: [(&str, Extract, &str); 6] = [
+            (
+                "covariant",
+                |tp: &mut TypeParser<'_>, typ, prop: &str| tp.extract_covariant_type(typ, prop),
+                "string",
+            ),
+            (
+                "genericCovariant",
+                |tp: &mut TypeParser<'_>, typ, prop: &str| tp.extract_covariant_type(typ, prop),
+                "",
+            ),
+            (
+                "contravariant",
+                |tp: &mut TypeParser<'_>, typ, prop: &str| tp.extract_contravariant_type(typ, prop),
+                "string",
+            ),
+            (
+                "genericContravariant",
+                |tp: &mut TypeParser<'_>, typ, prop: &str| tp.extract_contravariant_type(typ, prop),
+                "",
+            ),
+            (
+                "invariant",
+                |tp: &mut TypeParser<'_>, typ, prop: &str| tp.extract_invariant_type(typ, prop),
+                "string",
+            ),
+            (
+                "genericInvariant",
+                |tp: &mut TypeParser<'_>, typ, prop: &str| tp.extract_invariant_type(typ, prop),
+                "",
+            ),
+        ];
+        for (prop, extract, want) in cases {
+            let result = extract(&mut tp, typ, prop);
+            match result {
+                Some(result) if want.is_empty() => {
+                    t.error(ets_go::sprintf!(
+                        "%s: expected nil for generic signature, got %s",
+                        prop,
+                        type_string(&mut tp, result)
+                    ));
+                }
+                None if !want.is_empty() => {
+                    t.error(ets_go::sprintf!("%s: expected %q, got nil", prop, want));
+                }
+                Some(result) if type_string(&mut tp, result) != want => {
+                    t.error(ets_go::sprintf!(
+                        "%s: expected %q, got %q",
+                        prop,
+                        want,
+                        type_string(&mut tp, result)
+                    ));
+                }
+                _ => {}
+            }
         }
     });
 }
 
-// go test: internal/typeparser/helpers_test.go:240 TestExtractContravariantType_RejectsGenericSignature bebbb6f66b8fcc11
+// go test: internal/typeparser/helpers_test.go:259 TestGetSymbolIfSameReferenceWithinModule 08bafdf075ee7d8c
 #[test]
-fn test_extract_contravariant_type_rejects_generic_signature() {
+fn test_get_symbol_if_same_reference_within_module() {
     run(|t| {
         t.parallel();
 
-        let source = "declare const test: { prop: <T>(_: T) => void }";
-
-        let (mut compiled, sf) = compile_and_get_checker_and_source_file_internal(t, source);
+        let (mut compiled, sf) = compile_and_get_checker_and_source_file_internal(
+            t,
+            "export const Foo = 1\nexport const Bar = 2",
+        );
         let mut tp = compiled.type_parser();
 
-        let (typ, _) = get_first_variable_declaration_type(t, &mut tp, sf);
-
-        let result = tp.extract_contravariant_type(typ, "prop");
-        if let Some(result) = result {
-            t.error(ets_go::sprintf!(
-                "expected nil for generic contravariant signature, got %s",
-                type_string(&mut tp, result)
-            ));
-        }
-    });
-}
-
-// go test: internal/typeparser/helpers_test.go:256 TestExtractCovariantType_AcceptsNonGenericSignature 978435398d81b2e0
-#[test]
-fn test_extract_covariant_type_accepts_non_generic_signature() {
-    run(|t| {
-        t.parallel();
-
-        let source = "declare const test: { prop: () => string }";
-
-        let (mut compiled, sf) = compile_and_get_checker_and_source_file_internal(t, source);
-        let mut tp = compiled.type_parser();
-
-        let (typ, _) = get_first_variable_declaration_type(t, &mut tp, sf);
-
-        let Some(result) = tp.extract_covariant_type(typ, "prop") else {
-            t.fatal("expected non-nil result for non-generic covariant signature");
-        };
-
-        let result_str = type_string(&mut tp, result);
-        if result_str != "string" {
-            t.error(ets_go::sprintf!("expected return type 'string', got %q", result_str));
-        }
-    });
-}
-
-// go test: internal/typeparser/helpers_test.go:277 TestExtractInvariantType_RejectsGenericSignature 765bea23bdb06907
-#[test]
-fn test_extract_invariant_type_rejects_generic_signature() {
-    run(|t| {
-        t.parallel();
-
-        let source = "declare const test: { prop: <T>(_: T) => T }";
-
-        let (mut compiled, sf) = compile_and_get_checker_and_source_file_internal(t, source);
-        let mut tp = compiled.type_parser();
-
-        let (typ, _) = get_first_variable_declaration_type(t, &mut tp, sf);
-
-        let result = tp.extract_invariant_type(typ, "prop");
-        if let Some(result) = result {
-            t.error(ets_go::sprintf!(
-                "expected nil for generic invariant signature, got %s",
-                type_string(&mut tp, result)
-            ));
-        }
-    });
-}
-
-// go test: internal/typeparser/helpers_test.go:293 TestExtractInvariantType_AcceptsNonGenericSignature 7f475d4493c94044
-#[test]
-fn test_extract_invariant_type_accepts_non_generic_signature() {
-    run(|t| {
-        t.parallel();
-
-        let source = "declare const test: { prop: (_: string) => string }";
-
-        let (mut compiled, sf) = compile_and_get_checker_and_source_file_internal(t, source);
-        let mut tp = compiled.type_parser();
-
-        let (typ, _) = get_first_variable_declaration_type(t, &mut tp, sf);
-
-        let Some(result) = tp.extract_invariant_type(typ, "prop") else {
-            t.fatal("expected non-nil result for non-generic invariant signature");
-        };
-
-        let result_str = type_string(&mut tp, result);
-        if result_str != "string" {
-            t.error(ets_go::sprintf!("expected return type 'string', got %q", result_str));
-        }
-    });
-}
-
-// go test: internal/typeparser/helpers_test.go:314 TestExtractContravariantType_AcceptsNonGenericSignature 1d875b6ab6b3d615
-#[test]
-fn test_extract_contravariant_type_accepts_non_generic_signature() {
-    run(|t| {
-        t.parallel();
-
-        let source = "declare const test: { prop: (_: string) => void }";
-
-        let (mut compiled, sf) = compile_and_get_checker_and_source_file_internal(t, source);
-        let mut tp = compiled.type_parser();
-
-        let (typ, _) = get_first_variable_declaration_type(t, &mut tp, sf);
-
-        let Some(result) = tp.extract_contravariant_type(typ, "prop") else {
-            t.fatal("expected non-nil result for non-generic contravariant signature");
-        };
-
-        let result_str = type_string(&mut tp, result);
-        if result_str != "string" {
-            t.error(ets_go::sprintf!("expected parameter type 'string', got %q", result_str));
-        }
-    });
-}
-
-// go test: internal/typeparser/helpers_test.go:335 TestGetSymbolIfSameReference_UsesCanonicalExportSymbol 29cfa5202f971ce8
-#[test]
-fn test_get_symbol_if_same_reference_uses_canonical_export_symbol() {
-    run(|t| {
-        t.parallel();
-
-        let (mut compiled, sf) =
-            compile_and_get_checker_and_source_file_internal(t, "export const Foo = 1");
-        let mut tp = compiled.type_parser();
-
-        let Some(local_foo) = tp.get_symbol_at_location(find_identifier_by_text(t, sf, "Foo", 0))
-        else {
-            t.fatal("expected local Foo symbol");
+        let local_foo = tp.get_symbol_at_location(find_identifier_by_text(t, sf, "Foo", 0));
+        let bar = tp.get_symbol_at_location(find_identifier_by_text(t, sf, "Bar", 0));
+        let (Some(local_foo), Some(bar)) = (local_foo, bar) else {
+            t.fatal("expected Foo and Bar symbols");
         };
 
         let Some(module_sym) = get_symbol_of_declaration(tp.checker, sf.as_node()) else {
@@ -550,10 +490,13 @@ fn test_get_symbol_if_same_reference_uses_canonical_export_symbol() {
         if get_symbol_if_same_reference(tp.checker, Some(local_foo), Some(export_foo)).is_none() {
             t.fatal("expected local and exported Foo symbols to match");
         }
+        if get_symbol_if_same_reference(tp.checker, Some(local_foo), Some(bar)).is_some() {
+            t.fatal("expected different exports not to match");
+        }
     });
 }
 
-// go test: internal/typeparser/helpers_test.go:361 TestGetSymbolIfSameReference_ResolvesImportAliases 9141069b2f36a790
+// go test: internal/typeparser/helpers_test.go:290 TestGetSymbolIfSameReference_ResolvesImportAliases 9141069b2f36a790
 #[test]
 fn test_get_symbol_if_same_reference_resolves_import_aliases() {
     run(|t| {
@@ -592,30 +535,6 @@ fn test_get_symbol_if_same_reference_resolves_import_aliases() {
         }
         if get_symbol_if_same_reference(tp.checker, Some(bar), Some(export_foo)).is_none() {
             t.fatal("expected symbol comparison to be symmetric");
-        }
-    });
-}
-
-// go test: internal/typeparser/helpers_test.go:401 TestGetSymbolIfSameReference_DoesNotMatchDifferentExports e7545da97325c0e0
-#[test]
-fn test_get_symbol_if_same_reference_does_not_match_different_exports() {
-    run(|t| {
-        t.parallel();
-
-        let (mut compiled, sf) = compile_and_get_checker_and_source_file_internal(
-            t,
-            "export const Foo = 1\nexport const Bar = 2",
-        );
-        let mut tp = compiled.type_parser();
-
-        let foo = tp.get_symbol_at_location(find_identifier_by_text(t, sf, "Foo", 0));
-        let bar = tp.get_symbol_at_location(find_identifier_by_text(t, sf, "Bar", 0));
-        if foo.is_none() || bar.is_none() {
-            t.fatal("expected Foo and Bar symbols");
-        }
-
-        if get_symbol_if_same_reference(tp.checker, foo, bar).is_some() {
-            t.fatal("expected different exports not to match");
         }
     });
 }

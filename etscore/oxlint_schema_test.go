@@ -16,39 +16,15 @@ import (
 )
 
 func TestGenerateOxlintSchemaMatchesReference(t *testing.T) {
-	root := repoRoot(t)
 	actual, err := generateOxlintSchema()
 	if err != nil {
 		t.Fatalf("generateOxlintSchema() error = %v", err)
 	}
-
-	localPath := filepath.Join(root, "testdata", "baselines", "local", "oxlint-schema.json")
-	referencePath := filepath.Join(root, "oxlint-schema.json")
-
-	writeIfChanged(t, localPath, actual)
-	if os.Getenv("UPDATE_OXLINT_SCHEMA") == "1" {
-		writeIfChanged(t, referencePath, actual)
-		return
-	}
-
-	expected, err := os.ReadFile(referencePath)
-	if err != nil {
-		t.Fatalf("failed to read reference schema %q: %v", referencePath, err)
-	}
-	if bytes.Equal(actual, expected) {
-		return
-	}
-
-	diff := baseline.DiffText(referencePath, localPath, string(expected), string(actual))
-	diffLines := strings.Split(diff, "\n")
-	for i := range diffLines {
-		diffLines[i] = "  " + diffLines[i]
-	}
-	t.Fatalf("oxlint-schema.json is out of date:\n%s", strings.Join(diffLines, "\n"))
+	assertMatchesReference(t, "oxlint-schema.json", actual, "UPDATE_OXLINT_SCHEMA")
 }
 
 func TestGenerateOxlintPresetsMatchReferences(t *testing.T) {
-	root := repoRoot(t)
+	root := repoRoot()
 	presets, err := generateOxlintPresets()
 	if err != nil {
 		t.Fatalf("generateOxlintPresets() error = %v", err)
@@ -168,7 +144,7 @@ func oxlintSeverity(severity etscore.Severity) string {
 }
 
 func generateOxlintSchema() ([]byte, error) {
-	root := repoRootForGeneration()
+	root := repoRoot()
 	baseSchemaContent, err := os.ReadFile(filepath.Join(root, "_tools", "oxlint-configuration-base-schema.json"))
 	if err != nil {
 		return nil, err

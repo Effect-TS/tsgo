@@ -64,8 +64,6 @@ func compileAndGetCheckerAndSourceFilesInternal(t testing.TB, sources map[string
 	return c, NewTypeParser(c.Program(), c), sourceFiles, done
 }
 
-// compileAndGetCheckerAndSourceFileInternal is a copy of compileAndGetCheckerAndSourceFile
-// for use in internal (package typeparser) tests that need access to unexported helpers.
 func compileAndGetCheckerAndSourceFileInternal(t *testing.T, source string) (*checker.Checker, *TypeParser, *ast.SourceFile, func()) {
 	t.Helper()
 
@@ -191,8 +189,6 @@ func findIdentifierByText(t testing.TB, sf *ast.SourceFile, text string, occurre
 	return found
 }
 
-// getFirstVariableDeclarationType finds the first variable declaration in the source file
-// and returns its type and the declaration node (for use as atLocation).
 func getFirstVariableDeclarationType(t *testing.T, tp *TypeParser, sf *ast.SourceFile) (*checker.Type, *ast.Node) {
 	t.Helper()
 
@@ -221,126 +217,56 @@ func getFirstVariableDeclarationType(t *testing.T, tp *TypeParser, sf *ast.Sourc
 	return nil, nil
 }
 
-func TestExtractCovariantType_RejectsGenericSignature(t *testing.T) {
+func TestExtractVarianceTypesRejectGenericSignatures(t *testing.T) {
 	t.Parallel()
 
-	source := `declare const test: { prop: <T>() => T }`
-
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
+	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `declare const test: {
+  covariant: () => string
+  genericCovariant: <T>() => T
+  contravariant: (_: string) => void
+  genericContravariant: <T>(_: T) => void
+  invariant: (_: string) => string
+  genericInvariant: <T>(_: T) => T
+}`)
 	defer done()
 
 	typ, _ := getFirstVariableDeclarationType(t, tp, sf)
 
-	result := tp.extractCovariantType(typ, "prop")
-	if result != nil {
-		t.Errorf("expected nil for generic covariant signature, got %s", c.TypeToString(result))
+	for _, tc := range []struct {
+		prop    string
+		extract func(*checker.Type, string) *checker.Type
+		want    string
+	}{
+		{"covariant", tp.extractCovariantType, "string"},
+		{"genericCovariant", tp.extractCovariantType, ""},
+		{"contravariant", tp.extractContravariantType, "string"},
+		{"genericContravariant", tp.extractContravariantType, ""},
+		{"invariant", tp.extractInvariantType, "string"},
+		{"genericInvariant", tp.extractInvariantType, ""},
+	} {
+		result := tc.extract(typ, tc.prop)
+		switch {
+		case tc.want == "" && result != nil:
+			t.Errorf("%s: expected nil for generic signature, got %s", tc.prop, c.TypeToString(result))
+		case tc.want != "" && result == nil:
+			t.Errorf("%s: expected %q, got nil", tc.prop, tc.want)
+		case tc.want != "" && c.TypeToString(result) != tc.want:
+			t.Errorf("%s: expected %q, got %q", tc.prop, tc.want, c.TypeToString(result))
+		}
 	}
 }
 
-func TestExtractContravariantType_RejectsGenericSignature(t *testing.T) {
+func TestGetSymbolIfSameReferenceWithinModule(t *testing.T) {
 	t.Parallel()
 
-	source := `declare const test: { prop: <T>(_: T) => void }`
-
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
-	defer done()
-
-	typ, _ := getFirstVariableDeclarationType(t, tp, sf)
-
-	result := tp.extractContravariantType(typ, "prop")
-	if result != nil {
-		t.Errorf("expected nil for generic contravariant signature, got %s", c.TypeToString(result))
-	}
-}
-
-func TestExtractCovariantType_AcceptsNonGenericSignature(t *testing.T) {
-	t.Parallel()
-
-	source := `declare const test: { prop: () => string }`
-
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
-	defer done()
-
-	typ, _ := getFirstVariableDeclarationType(t, tp, sf)
-
-	result := tp.extractCovariantType(typ, "prop")
-	if result == nil {
-		t.Fatal("expected non-nil result for non-generic covariant signature")
-	}
-
-	resultStr := c.TypeToString(result)
-	if resultStr != "string" {
-		t.Errorf("expected return type 'string', got %q", resultStr)
-	}
-}
-
-func TestExtractInvariantType_RejectsGenericSignature(t *testing.T) {
-	t.Parallel()
-
-	source := `declare const test: { prop: <T>(_: T) => T }`
-
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
-	defer done()
-
-	typ, _ := getFirstVariableDeclarationType(t, tp, sf)
-
-	result := tp.extractInvariantType(typ, "prop")
-	if result != nil {
-		t.Errorf("expected nil for generic invariant signature, got %s", c.TypeToString(result))
-	}
-}
-
-func TestExtractInvariantType_AcceptsNonGenericSignature(t *testing.T) {
-	t.Parallel()
-
-	source := `declare const test: { prop: (_: string) => string }`
-
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
-	defer done()
-
-	typ, _ := getFirstVariableDeclarationType(t, tp, sf)
-
-	result := tp.extractInvariantType(typ, "prop")
-	if result == nil {
-		t.Fatal("expected non-nil result for non-generic invariant signature")
-	}
-
-	resultStr := c.TypeToString(result)
-	if resultStr != "string" {
-		t.Errorf("expected return type 'string', got %q", resultStr)
-	}
-}
-
-func TestExtractContravariantType_AcceptsNonGenericSignature(t *testing.T) {
-	t.Parallel()
-
-	source := `declare const test: { prop: (_: string) => void }`
-
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, source)
-	defer done()
-
-	typ, _ := getFirstVariableDeclarationType(t, tp, sf)
-
-	result := tp.extractContravariantType(typ, "prop")
-	if result == nil {
-		t.Fatal("expected non-nil result for non-generic contravariant signature")
-	}
-
-	resultStr := c.TypeToString(result)
-	if resultStr != "string" {
-		t.Errorf("expected parameter type 'string', got %q", resultStr)
-	}
-}
-
-func TestGetSymbolIfSameReference_UsesCanonicalExportSymbol(t *testing.T) {
-	t.Parallel()
-
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `export const Foo = 1`)
+	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `export const Foo = 1
+export const Bar = 2`)
 	defer done()
 
 	localFoo := tp.GetSymbolAtLocation(findIdentifierByText(t, sf, "Foo", 0))
-	if localFoo == nil {
-		t.Fatal("expected local Foo symbol")
+	bar := tp.GetSymbolAtLocation(findIdentifierByText(t, sf, "Bar", 0))
+	if localFoo == nil || bar == nil {
+		t.Fatal("expected Foo and Bar symbols")
 	}
 
 	moduleSym := checker.Checker_getSymbolOfDeclaration(c, sf.AsNode())
@@ -355,6 +281,9 @@ func TestGetSymbolIfSameReference_UsesCanonicalExportSymbol(t *testing.T) {
 
 	if checker.Checker_getSymbolIfSameReference(c, localFoo, exportFoo) == nil {
 		t.Fatal("expected local and exported Foo symbols to match")
+	}
+	if checker.Checker_getSymbolIfSameReference(c, localFoo, bar) != nil {
+		t.Fatal("expected different exports not to match")
 	}
 }
 
@@ -395,23 +324,5 @@ const value = Bar`,
 	}
 	if checker.Checker_getSymbolIfSameReference(c, bar, exportFoo) == nil {
 		t.Fatal("expected symbol comparison to be symmetric")
-	}
-}
-
-func TestGetSymbolIfSameReference_DoesNotMatchDifferentExports(t *testing.T) {
-	t.Parallel()
-
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileInternal(t, `export const Foo = 1
-export const Bar = 2`)
-	defer done()
-
-	foo := tp.GetSymbolAtLocation(findIdentifierByText(t, sf, "Foo", 0))
-	bar := tp.GetSymbolAtLocation(findIdentifierByText(t, sf, "Bar", 0))
-	if foo == nil || bar == nil {
-		t.Fatal("expected Foo and Bar symbols")
-	}
-
-	if checker.Checker_getSymbolIfSameReference(c, foo, bar) != nil {
-		t.Fatal("expected different exports not to match")
 	}
 }

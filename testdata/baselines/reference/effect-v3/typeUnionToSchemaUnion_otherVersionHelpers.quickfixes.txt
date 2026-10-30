@@ -1,0 +1,7 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:38-9:43) TS2694: Namespace '"/node_modules/effect/dist/dts/Schema"' has no exported member 'Codec'.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+(no quick fixes to apply)

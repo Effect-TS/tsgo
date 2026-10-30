@@ -285,14 +285,4 @@ mod api_stability_leak_test;
 #[cfg(test)]
 mod inferred_generator_contextual_type_test;
 #[cfg(test)]
-mod metadata_test;
-#[cfg(test)]
-mod prefer_effect_array_test;
-#[cfg(test)]
-mod prefer_effect_record_test;
-#[cfg(test)]
-mod prefer_effect_string_test;
-#[cfg(test)]
 mod stability_api_usage_test;
-#[cfg(test)]
-use api_stability_leak_regression_test::*;

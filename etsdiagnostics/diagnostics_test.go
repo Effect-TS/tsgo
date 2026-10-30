@@ -107,33 +107,46 @@ func TestWriteFilesBlock(t *testing.T) {
 	}
 }
 
-func TestRunJSON(t *testing.T) {
-	t.Parallel()
+func runRequest(t *testing.T, req request) string {
+	t.Helper()
+	encoded, err := json.Marshal(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	if status := Run(context.Background(), []string{string(encoded)}, &stdout, &stderr); status != 1 {
+		t.Fatalf("unexpected status %d; stderr:\n%s", status, stderr.String())
+	}
+	return stdout.String()
+}
 
+func runNativeDiagnosticsJSON(t *testing.T, req request) jsonOutput {
+	t.Helper()
 	cwd, err := filepath.Abs("testdata/native-diagnostics")
 	if err != nil {
 		t.Fatal(err)
 	}
+	req.CWD = cwd
+	req.Format = "json"
+	stdout := runRequest(t, req)
+	var output jsonOutput
+	if err := json.Unmarshal([]byte(stdout), &output); err != nil {
+		t.Fatalf("invalid JSON output: %v\n%s", err, stdout)
+	}
+	return output
+}
+
+func TestRunJSON(t *testing.T) {
+	t.Parallel()
+
 	for name, req := range map[string]request{
-		"project": {Project: "tsconfig.json", Format: "json"},
-		"file":    {File: "main.ts", Format: "json"},
+		"project": {Project: "tsconfig.json"},
+		"file":    {File: "main.ts"},
 	} {
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			req.CWD = cwd
-			request, err := json.Marshal(req)
-			if err != nil {
-				t.Fatal(err)
-			}
-			var stdout bytes.Buffer
-			var stderr bytes.Buffer
-			if status := Run(context.Background(), []string{string(request)}, &stdout, &stderr); status != 1 {
-				t.Fatalf("unexpected status %d; stderr:\n%s", status, stderr.String())
-			}
-			var output jsonOutput
-			if err := json.Unmarshal(stdout.Bytes(), &output); err != nil {
-				t.Fatalf("invalid JSON output: %v\n%s", err, stdout.String())
-			}
+			output := runNativeDiagnosticsJSON(t, req)
 			if len(output.Diagnostics) != 1 {
 				t.Fatalf("expected one diagnostic, got %d", len(output.Diagnostics))
 			}
@@ -154,27 +167,9 @@ func TestRunJSON(t *testing.T) {
 func TestRunProjectJSONListFiles(t *testing.T) {
 	t.Parallel()
 
-	cwd, err := filepath.Abs("testdata/native-diagnostics")
-	if err != nil {
-		t.Fatal(err)
-	}
-	request, err := json.Marshal(request{
-		CWD: cwd, Project: "tsconfig.json", Format: "json", ListFiles: true,
-	})
-	if err != nil {
-		t.Fatal(err)
-	}
-	var stdout bytes.Buffer
-	var stderr bytes.Buffer
-	if status := Run(context.Background(), []string{string(request)}, &stdout, &stderr); status != 1 {
-		t.Fatalf("unexpected status %d; stderr:\n%s", status, stderr.String())
-	}
-	var output jsonOutput
-	if err := json.Unmarshal(stdout.Bytes(), &output); err != nil {
-		t.Fatalf("invalid JSON output: %v\n%s", err, stdout.String())
-	}
+	output := runNativeDiagnosticsJSON(t, request{Project: "tsconfig.json", ListFiles: true})
 	if len(output.Files) == 0 {
-		t.Fatalf("expected at least one file entry:\n%s", stdout.String())
+		t.Fatalf("expected at least one file entry: %#v", output)
 	}
 	for _, entry := range output.Files {
 		if entry.File == "" {
@@ -245,16 +240,8 @@ func writeEffectV4Project(t *testing.T, source string) string {
 func runMissingEffectContext(t *testing.T, format string) (string, string) {
 	t.Helper()
 	cwd := writeEffectV4Project(t, missingEffectContextSource)
-	request, err := json.Marshal(request{CWD: cwd, Project: "tsconfig.json", Format: format})
-	if err != nil {
-		t.Fatal(err)
-	}
-	var stdout bytes.Buffer
-	var stderr bytes.Buffer
-	if status := Run(context.Background(), []string{string(request)}, &stdout, &stderr); status != 1 {
-		t.Fatalf("unexpected status %d; stderr:\n%s", status, stderr.String())
-	}
-	return stdout.String(), filepath.Join(cwd, "main.ts")
+	stdout := runRequest(t, request{CWD: cwd, Project: "tsconfig.json", Format: format})
+	return stdout, filepath.Join(cwd, "main.ts")
 }
 
 func TestRunJSONReportsRelatedInformation(t *testing.T) {

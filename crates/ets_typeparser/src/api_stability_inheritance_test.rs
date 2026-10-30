@@ -4,7 +4,7 @@ use crate::api_stability_test::*;
 use crate::helpers_test::*;
 use crate::*;
 
-// go test: internal/typeparser/api_stability_inheritance_test.go:5 TestApiStabilityInheritanceMinimumAndCacheIsolation b00710b4dc7c1596
+// go test: internal/typeparser/api_stability_inheritance_test.go:5 TestApiStabilityInheritanceMinimumAndCacheIsolation 50486eae4ac285e9
 #[test]
 fn test_api_stability_inheritance_minimum_and_cache_isolation() {
     run(|t| {
@@ -33,8 +33,6 @@ export function direct(e: Reportable) {}
                 }
                 let mut tp = compiled.type_parser();
                 let sf = files["/.src/test.ts"];
-                // Repeat with opposite root orders so neither shared surfaces nor an
-                // analysis-local result can erase a directly exposed dependency.
                 for order in [
                     ["augmented", "Expanded", "direct", "Ordinary"],
                     ["Ordinary", "direct", "Expanded", "augmented"],
@@ -61,8 +59,6 @@ export function direct(e: Reportable) {}
                             ));
                         }
                         if name == "Expanded" {
-                            // Also inspect its represented type after the compiler has
-                            // flattened the inherited member table.
                             let typ = tp.checker.get_declared_type_of_symbol_exported(symbol);
                             tp.checker.get_properties_of_type_exported(typ);
                             let used = tp.api_stability_used_by_type(typ);

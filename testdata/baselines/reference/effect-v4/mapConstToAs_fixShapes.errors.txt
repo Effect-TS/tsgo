@@ -1,0 +1,54 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/aliasFallback.ts(10,34): warning TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/forms.ts(10,26): warning TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/forms.ts(13,32): warning TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+/.src/forms.ts(18,3): warning TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+
+
+==== /.src/forms.ts (3 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics mapConstToAs:warning
+    import { Effect } from "effect"
+    
+    enum Phase { Done = "done" }
+    
+    declare const source: Effect.Effect<number>
+    
+    // MUST TRIGGER: data-first form -> Effect.as(source, "saved")
+    export const dataFirst = Effect.map(source, () => "saved")
+                             ~~~~~~~~~~
+!!! warning TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+    
+    // MUST TRIGGER: data-last form applied directly -> Effect.as(-1)(source)
+    export const dataLastApplied = Effect.map(() => -1)(source)
+                                   ~~~~~~~~~~
+!!! warning TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+    
+    // MUST TRIGGER: block body returning an enum member inside a longer pipe -> Effect.as(Phase.Done)
+    export const blockReturnInPipe = source.pipe(
+      Effect.tap(() => Effect.void),
+      Effect.map((_) => {
+      ~~~~~~~~~~
+!!! warning TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+        return Phase.Done
+      }),
+      Effect.map((phase) => phase.length)
+    )
+    
+
+==== /.src/aliasFallback.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics mapConstToAs:warning
+    import * as Fx from "effect/Effect"
+    
+    declare const source: Fx.Effect<number>
+    const mapAlias = Fx.map
+    
+    // MUST TRIGGER: an aliased map; the fix reaches the Effect module through its namespace import
+    // -> Fx.as("saved")
+    export const value = source.pipe(mapAlias(() => "saved"))
+                                     ~~~~~~~~
+!!! warning TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+    

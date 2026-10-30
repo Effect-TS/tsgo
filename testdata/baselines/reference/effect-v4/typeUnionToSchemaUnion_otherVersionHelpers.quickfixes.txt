@@ -1,0 +1,66 @@
+=== Quick Fix Inventory ===
+
+[D1] (4:86-4:92) TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+  Fix 0: "Disable schemaNumber for this line"
+  Fix 1: "Disable schemaNumber for entire file"
+  Fix 2: "Replace with Schema.Finite"
+
+[D2] (5:84-5:90) TS377098: This Schema number API accepts `NaN`, `Infinity`, and `-Infinity`. Use `Schema.Finite` for finite domain numbers. If non-finite values are intentional, disable this diagnostic for that line. effect(schemaNumber)
+  Fix 0: "Disable schemaNumber for this line"
+  Fix 1: "Disable schemaNumber for entire file"
+  Fix 2: "Replace with Schema.Finite"
+
+[D3] (8:45-8:52) TS2694: Namespace '"/node_modules/effect/dist/Schema".Schema' has no exported member 'Encoded'.
+  (no quick fixes)
+
+[D4] (11:43-11:50) TS2694: Namespace '"/node_modules/effect/dist/Schema".Schema' has no exported member 'Context'.
+  (no quick fixes)
+
+[D5] (11:82-11:89) TS2694: Namespace '"/node_modules/effect/dist/Schema".Schema' has no exported member 'Context'.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable schemaNumber for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable schemaNumber for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Schema.Finite" ===
+
+--- file:///.src/typeUnionToSchemaUnion_otherVersionHelpers.ts ---
+// @effect-diagnostics typeUnionToSchemaUnion:warning
+import { Schema } from "effect"
+
+export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Finite })
+export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
+
+// MUST NOT TRIGGER - `Schema.Schema.Encoded` is the v3 Encoded helper and does not exist in Effect v4
+export type V3EncodedHelper = Schema.Schema.Encoded<typeof Circle> | typeof Square.Encoded
+
+// MUST NOT TRIGGER - `Schema.Schema.Context` does not exist in Effect v4 and is not an accepted member form
+export type HelperContext = Schema.Schema.Context<typeof Circle> | Schema.Schema.Context<typeof Square>
+
+
+=== [D2] Fix 0: "Disable schemaNumber for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable schemaNumber for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Schema.Finite" ===
+
+--- file:///.src/typeUnionToSchemaUnion_otherVersionHelpers.ts ---
+// @effect-diagnostics typeUnionToSchemaUnion:warning
+import { Schema } from "effect"
+
+export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Number })
+export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Finite })
+
+// MUST NOT TRIGGER - `Schema.Schema.Encoded` is the v3 Encoded helper and does not exist in Effect v4
+export type V3EncodedHelper = Schema.Schema.Encoded<typeof Circle> | typeof Square.Encoded
+
+// MUST NOT TRIGGER - `Schema.Schema.Context` does not exist in Effect v4 and is not an accepted member form
+export type HelperContext = Schema.Schema.Context<typeof Circle> | Schema.Schema.Context<typeof Square>
+

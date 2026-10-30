@@ -6,17 +6,10 @@ use crate::api_stability_test::*;
 use crate::helpers_test::*;
 use crate::*;
 
-// go test: internal/typeparser/api_stability_safety_test.go:14 apiStabilityRecursiveAlias 62000c179e8e32ba
-// apiStabilityRecursiveAlias is the self-expanding alias the safety probes
-// use: any speculative resolution of an application trips the checker's depth
-// guard, so a guard that approves it would add TS2589.
+// go test: internal/typeparser/api_stability_safety_test.go:11 apiStabilityRecursiveAlias f2ab8274801e950f
 const API_STABILITY_RECURSIVE_ALIAS: &str = "type Deep<T> = T extends string ? Deep<T> : T\n";
 
-// go test: internal/typeparser/api_stability_safety_test.go:20 TestApiStabilitySafetyCompoundOperands 3d7d9586b777f2fb
-// TestApiStabilitySafetyCompoundOperands pins that anonymous compound
-// conditional operands whose raw structure mentions a substituted parameter are
-// refused without asking the compiler relation. The guard performs no checker
-// instantiation, adds no global diagnostic, and leaves no symbol surface.
+// go test: internal/typeparser/api_stability_safety_test.go:13 TestApiStabilitySafetyCompoundOperands 6916c9793170307c
 #[test]
 fn test_api_stability_safety_compound_operands() {
     run(|t| {
@@ -100,11 +93,7 @@ export declare const x: Select<F>",
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:90 TestApiStabilitySafetyDeferredCompoundStaysSafe 9871921b36059250
-// TestApiStabilitySafetyDeferredCompoundStaysSafe pins that an anonymous
-// operand that mentions an unbound parameter keeps the conditional deferred:
-// no relation is asked, no checker instantiation happens, and no diagnostic or
-// dependency is fabricated.
+// go test: internal/typeparser/api_stability_safety_test.go:79 TestApiStabilitySafetyDeferredCompoundStaysSafe a007e0225ec67cbe
 #[test]
 fn test_api_stability_safety_deferred_compound_stays_safe() {
     run(|t| {
@@ -143,11 +132,7 @@ export interface X<T> { v: Select<T> }",
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:118 TestApiStabilitySafetyStructuralConditionalStaysSelectable fb128495bf3deea3
-// TestApiStabilitySafetyStructuralConditionalStaysSelectable pins that a
-// concrete structural conditional with no substituted parameters is still
-// resolved through the compiler relation, keeping the structural leak surfaces
-// covered and complete.
+// go test: internal/typeparser/api_stability_safety_test.go:103 TestApiStabilitySafetyStructuralConditionalStaysSelectable 5f737ca9c0f77c35
 #[test]
 fn test_api_stability_safety_structural_conditional_stays_selectable() {
     run(|t| {
@@ -185,13 +170,7 @@ export declare const x: Holder<{ value: string }>",
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:147 TestApiStabilitySafetyTypeLiteralComputedMembers cedfc9968d2ff054
-// TestApiStabilitySafetyTypeLiteralComputedMembers pins the production crash
-// fix on the type-literal provenance walk: computed property and method names
-// are paired by declaration identity with their concrete represented member,
-// so an erased experimental alias written in a computed member annotation is
-// still reported for well-known symbol, string-literal computed property and
-// computed method positions, and no computed name is ever asked for its text.
+// go test: internal/typeparser/api_stability_safety_test.go:126 TestApiStabilitySafetyTypeLiteralComputedMembers 8bf2196906312ea0
 #[test]
 fn test_api_stability_safety_type_literal_computed_members() {
     run(|t| {
@@ -249,12 +228,7 @@ export declare const x: {
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:190 TestApiStabilitySafetyComputedNameDisplayAndSort 8a9aa7354b22960c
-// TestApiStabilitySafetyComputedNameDisplayAndSort pins that display and sort
-// names of computed declarations never evaluate the computed expression:
-// well-known symbols and literal computed names render their own spelling,
-// checker-internal late-bound names never leak, and every computed declaration
-// sorts without panicking.
+// go test: internal/typeparser/api_stability_safety_test.go:164 TestApiStabilitySafetyComputedNameDisplayAndSort c1f62ce870d1f9b3
 #[test]
 fn test_api_stability_safety_computed_name_display_and_sort() {
     run(|t| {
@@ -335,8 +309,6 @@ fn test_api_stability_safety_computed_name_display_and_sort() {
             ));
         }
 
-        // Declaration-only findings (a signature or an unresolved member) must also
-        // render and sort without touching the computed expression.
         let alias = files["/.src/test.ts"].statements().nodes()[0]
             .as_variable_statement()
             .declaration_list()
@@ -377,11 +349,7 @@ fn test_api_stability_safety_computed_name_display_and_sort() {
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:265 TestApiStabilitySafetyMaterializedReferenceSkipsGuard b1844cf750716034
-// TestApiStabilitySafetyMaterializedReferenceSkipsGuard pins the
-// materialization-first guard path: when the checker already resolved a
-// reference's member table, signatures and index infos, collecting its concrete
-// surface must not consume any safety work.
+// go test: internal/typeparser/api_stability_safety_test.go:233 TestApiStabilitySafetyMaterializedReferenceSkipsGuard 14c370ae0e7a2aba
 #[test]
 fn test_api_stability_safety_materialized_reference_skips_guard() {
     run(|t| {
@@ -421,10 +389,7 @@ fn test_api_stability_safety_materialized_reference_skips_guard() {
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:293 TestApiStabilitySafetySafeVerdictIsReused c18ad9472304a31b
-// TestApiStabilitySafetySafeVerdictIsReused pins the per-analysis completed
-// Safe memo: a second identical guard request must reuse the verdict without
-// consuming more shared safety budget.
+// go test: internal/typeparser/api_stability_safety_test.go:258 TestApiStabilitySafetySafeVerdictIsReused 3ade29fcadebbe45
 #[test]
 fn test_api_stability_safety_safe_verdict_is_reused() {
     run(|t| {
@@ -473,11 +438,7 @@ fn test_api_stability_safety_safe_verdict_is_reused() {
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:328 TestApiStabilitySafetyPostBudgetRefusalIsCheap 503ce8cbdac6d9c6
-// TestApiStabilitySafetyPostBudgetRefusalIsCheap pins the exhaustion refusal:
-// once the shared budget is exhausted a guard request is refused without
-// allocating scan state or consuming more budget, and no Safe verdict is
-// published.
+// go test: internal/typeparser/api_stability_safety_test.go:289 TestApiStabilitySafetyPostBudgetRefusalIsCheap 075a95337fd9e0d8
 #[test]
 fn test_api_stability_safety_post_budget_refusal_is_cheap() {
     run(|t| {
@@ -520,14 +481,7 @@ fn test_api_stability_safety_post_budget_refusal_is_cheap() {
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:361 TestApiStabilitySafetySettleSkipsBlockedRecollectionAfterExhaustion 9d23a61f645d1d62
-// TestApiStabilitySafetySettleSkipsBlockedRecollectionAfterExhaustion pins
-// that an exhausted analysis does not re-walk a blocked surface when no
-// analysis read advanced the materialization epoch since it was collected and
-// no earlier settle round advanced any surface: such a result provably cannot
-// advance, stays blocked, and the recollection consumes no budget. A later
-// read or settle advancement forces the recollection
-// (TestApiStabilitySettleRecollectsMaterializedMember).
+// go test: internal/typeparser/api_stability_safety_test.go:315 TestApiStabilitySafetySettleSkipsBlockedRecollectionAfterExhaustion 859632343cc69313
 #[test]
 fn test_api_stability_safety_settle_skips_blocked_recollection_after_exhaustion() {
     run(|t| {
@@ -569,10 +523,7 @@ fn test_api_stability_safety_settle_skips_blocked_recollection_after_exhaustion(
     });
 }
 
-// go test: internal/typeparser/api_stability_safety_test.go:389 TestApiStabilitySafetyTypeNameLookupCacheIsIdentitySafe 5deb025168cc2652
-// TestApiStabilitySafetyTypeNameLookupCacheIsIdentitySafe pins that successful
-// raw type-name symbol lookups are cached by AST identity within one analysis
-// and that the cache stores only the symbol lookup.
+// go test: internal/typeparser/api_stability_safety_test.go:340 TestApiStabilitySafetyTypeNameLookupCacheIsIdentitySafe 082d4934f274d6dc
 #[test]
 fn test_api_stability_safety_type_name_lookup_cache_is_identity_safe() {
     run(|t| {

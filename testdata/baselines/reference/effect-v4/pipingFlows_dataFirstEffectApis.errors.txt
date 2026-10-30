@@ -1,0 +1,33 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/pipingFlows_dataFirstEffectApis.ts(8,21): suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+/.src/pipingFlows_dataFirstEffectApis.ts(9,21): suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+
+
+==== /.src/pipingFlows_dataFirstEffectApis.ts (2 errors) ====
+    import { Effect, Exit, Option, Result, UndefinedOr } from "effect"
+    
+    declare const option: Option.Option<number>
+    declare const result: Result.Result<number, string>
+    declare const maybe: number | undefined
+    declare const exit: Exit.Exit<number, string>
+    
+    export const some = Effect.succeed(((Option.some(1))))
+                        ~~~~~~~~~~~~~~
+!!! suggestion TS377117: `Effect.succeedSome` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+    export const none = Effect.succeed(((Option.none())))
+                        ~~~~~~~~~~~~~~
+!!! suggestion TS377117: `Effect.succeedNone` expresses this Option success value directly. effect(preferSucceedSomeOrNone)
+    
+    export const optionGetOrElse = Option.getOrElse(option, () => "none")
+    export const resultMatch = Result.match(result, {
+      onFailure: (error) => error.length,
+      onSuccess: (value) => value
+    })
+    export const undefinedOrMap = UndefinedOr.map(maybe, (value) => String(value))
+    export const exitMatch = Exit.match(exit, {
+      onFailure: (cause) => String(cause),
+      onSuccess: (value) => value
+    })
+    

@@ -1,4 +1,4 @@
-//! Rust-only: `ALL` is exactly Go's `All`, in order (docs/PORTING.md, "Porting a fixable, refactor or
+//! Rust-only: `ALL` is exactly Go's `All`, in order (porting/PORTING.md, "Porting a fixable, refactor or
 //! completion").
 
 use crate::*;

@@ -29,6 +29,8 @@ const (
 	testDescriptorSourceFile = moduleDescriptorCount + iota
 	testDescriptorAnyFile
 	testDescriptorOtherFile
+	testDescriptorRenamedFile
+	testDescriptorCjsFile
 )
 
 func moduleExportReferenceSources() map[string]string {
@@ -66,26 +68,51 @@ export = api`,
 	}
 }
 
-func TestIsNodeReferenceToModuleExport_ConstantAliases(t *testing.T) {
+func TestIsNodeReferenceToModuleExport(t *testing.T) {
 	t.Parallel()
 
 	tp, sourceFiles, done := moduleExportReferenceFixture(t)
 	defer done()
 
-	desc := newPackageSourceFileDescriptor(testDescriptorSourceFile, "cache-fixture", sourceFileNameMatcher("/source.d.ts", nil))
-	main := sourceFiles["/.src/main.ts"]
-	constantAliasDeclaration := findIdentifierByText(t, main, "rootFooAlias2", 0)
-	constantAlias := findIdentifierByText(t, main, "rootFooAlias2", 1)
-	mutableAlias := findIdentifierByText(t, main, "mutableFooAlias", 2)
-
-	if tp.IsNodeReferenceToModuleExport(constantAliasDeclaration, desc, "Foo") {
-		t.Fatal("expected a constant alias declaration name not to match the Foo export")
+	sourceDesc := newPackageSourceFileDescriptor(testDescriptorSourceFile, "cache-fixture", sourceFileNameMatcher("/source.d.ts", nil))
+	anyDesc := newPackageSourceFileDescriptor(testDescriptorAnyFile, "cache-fixture", nil)
+	renamedDesc := newPackageSourceFileDescriptor(testDescriptorRenamedFile, "cache-fixture", sourceFileNameMatcher("/renamed.d.ts", nil))
+	cjsDesc := newPackageSourceFileDescriptor(testDescriptorCjsFile, "cjs-fixture", nil)
+	for _, tc := range []struct {
+		name       string
+		file       string
+		identifier string
+		occurrence int
+		desc       packageSourceFileDescriptor
+		member     string
+		want       bool
+	}{
+		{"constant alias declaration name", "/.src/main.ts", "rootFooAlias2", 0, sourceDesc, "Foo", false},
+		{"constant alias chain", "/.src/main.ts", "rootFooAlias2", 1, sourceDesc, "Foo", true},
+		{"mutable alias", "/.src/main.ts", "mutableFooAlias", 2, sourceDesc, "Foo", false},
+		{"aliased reexport", "/.src/main.ts", "RootFoo", 1, sourceDesc, "Foo", true},
+		{"aliased reexport other member", "/.src/main.ts", "RootFoo", 1, sourceDesc, "Bar", false},
+		{"reexport", "/.src/main.ts", "Bar", 1, sourceDesc, "Bar", true},
+		{"root package version", "/.src/main.ts", "RootFoo", 1, anyDesc, "Foo", true},
+		{"nested package version", "/packages/consumer/main.ts", "NestedFoo", 1, anyDesc, "Foo", true},
+		{"Base as Base", "/.src/renamed.ts", "Base", 1, renamedDesc, "Base", true},
+		{"Base as Renamed", "/.src/renamed.ts", "Base", 1, renamedDesc, "Renamed", true},
+		{"Base as Foo", "/.src/renamed.ts", "Base", 1, renamedDesc, "Foo", false},
+		{"Renamed as Base", "/.src/renamed.ts", "Renamed", 1, renamedDesc, "Base", true},
+		{"Renamed as Renamed", "/.src/renamed.ts", "Renamed", 1, renamedDesc, "Renamed", true},
+		{"Renamed as Foo", "/.src/renamed.ts", "Renamed", 1, renamedDesc, "Foo", false},
+		{"export= member", "/.src/cjs.ts", "run", 0, cjsDesc, "run", true},
+		{"export= other member", "/.src/cjs.ts", "run", 0, cjsDesc, "stop", false},
+	} {
+		node := findIdentifierByText(t, sourceFiles[tc.file], tc.identifier, tc.occurrence)
+		if got := tp.IsNodeReferenceToModuleExport(node, tc.desc, tc.member); got != tc.want {
+			t.Errorf("%s: got %v, want %v", tc.name, got, tc.want)
+		}
 	}
-	if !tp.IsNodeReferenceToModuleExport(constantAlias, desc, "Foo") {
-		t.Fatal("expected a constant alias chain to match the Foo export")
-	}
-	if tp.IsNodeReferenceToModuleExport(mutableAlias, desc, "Foo") {
-		t.Fatal("expected a mutable alias not to match the Foo export")
+	rootFoo := findIdentifierByText(t, sourceFiles["/.src/main.ts"], "RootFoo", 1)
+	nestedFoo := findIdentifierByText(t, sourceFiles["/packages/consumer/main.ts"], "NestedFoo", 1)
+	if tp.ReferenceSymbolAtNode(rootFoo) == tp.ReferenceSymbolAtNode(nestedFoo) {
+		t.Fatal("expected duplicate package versions to resolve to distinct symbols")
 	}
 }
 
@@ -102,49 +129,6 @@ func sourceFileNameMatcher(suffix string, calls *int) func(*TypeParser, *checker
 			(*calls)++
 		}
 		return strings.HasSuffix(string(sf.FileName()), suffix)
-	}
-}
-
-func TestIsNodeReferenceToModuleExport_AliasesAndReexports(t *testing.T) {
-	t.Parallel()
-
-	tp, sourceFiles, done := moduleExportReferenceFixture(t)
-	defer done()
-
-	desc := newPackageSourceFileDescriptor(testDescriptorSourceFile, "cache-fixture", sourceFileNameMatcher("/source.d.ts", nil))
-	main := sourceFiles["/.src/main.ts"]
-	rootFoo := findIdentifierByText(t, main, "RootFoo", 1)
-	rootBar := findIdentifierByText(t, main, "Bar", 1)
-
-	if !tp.IsNodeReferenceToModuleExport(rootFoo, desc, "Foo") {
-		t.Fatal("expected aliased Foo reference through a reexport to match")
-	}
-	if tp.IsNodeReferenceToModuleExport(rootFoo, desc, "Bar") {
-		t.Fatal("expected Foo reference not to match the Bar export")
-	}
-	if !tp.IsNodeReferenceToModuleExport(rootBar, desc, "Bar") {
-		t.Fatal("expected Bar reference through a reexport to match")
-	}
-}
-
-func TestIsNodeReferenceToModuleExport_DuplicatePackageVersions(t *testing.T) {
-	t.Parallel()
-
-	tp, sourceFiles, done := moduleExportReferenceFixture(t)
-	defer done()
-
-	desc := newPackageSourceFileDescriptor(testDescriptorAnyFile, "cache-fixture", nil)
-	rootFoo := findIdentifierByText(t, sourceFiles["/.src/main.ts"], "RootFoo", 1)
-	nestedFoo := findIdentifierByText(t, sourceFiles["/packages/consumer/main.ts"], "NestedFoo", 1)
-
-	if !tp.IsNodeReferenceToModuleExport(rootFoo, desc, "Foo") {
-		t.Fatal("expected Foo from the root package version to match")
-	}
-	if !tp.IsNodeReferenceToModuleExport(nestedFoo, desc, "Foo") {
-		t.Fatal("expected Foo from the nested package version to match independently")
-	}
-	if tp.ReferenceSymbolAtNode(rootFoo) == tp.ReferenceSymbolAtNode(nestedFoo) {
-		t.Fatal("expected duplicate package versions to resolve to distinct symbols")
 	}
 }
 
@@ -180,47 +164,6 @@ func TestIsNodeReferenceToModuleExport_CachesBySymbolDescriptorAndMember(t *test
 	}
 }
 
-func TestIsNodeReferenceToModuleExport_SymbolExportedUnderTwoNames(t *testing.T) {
-	t.Parallel()
-
-	tp, sourceFiles, done := moduleExportReferenceFixture(t)
-	defer done()
-
-	desc := newPackageSourceFileDescriptor(testDescriptorSourceFile, "cache-fixture", sourceFileNameMatcher("/renamed.d.ts", nil))
-	renamed := sourceFiles["/.src/renamed.ts"]
-	for _, node := range []*ast.Node{findIdentifierByText(t, renamed, "Base", 1), findIdentifierByText(t, renamed, "Renamed", 1)} {
-		for _, member := range []string{"Base", "Renamed"} {
-			if !tp.IsNodeReferenceToModuleExport(node, desc, member) {
-				t.Fatalf("expected %s to match the %s export of the same declaration", node.Text(), member)
-			}
-		}
-		if tp.IsNodeReferenceToModuleExport(node, desc, "Foo") {
-			t.Fatalf("expected %s not to match the Foo export", node.Text())
-		}
-	}
-}
-
-func TestIsNodeReferenceToModuleExport_ExportEqualsMembers(t *testing.T) {
-	t.Parallel()
-
-	tp, sourceFiles, done := moduleExportReferenceFixture(t)
-	defer done()
-
-	desc := newPackageSourceFileDescriptor(testDescriptorAnyFile, "cjs-fixture", nil)
-	run := findIdentifierByText(t, sourceFiles["/.src/cjs.ts"], "run", 0)
-
-	if !tp.IsNodeReferenceToModuleExport(run, desc, "run") {
-		t.Fatal("expected a member of an export= value to match its name")
-	}
-	if tp.IsNodeReferenceToModuleExport(run, desc, "stop") {
-		t.Fatal("expected run not to match the stop member")
-	}
-}
-
-// compileFixturesWithJS compiles every .ts, .tsx and .js source outside
-// node_modules as a root file, with JS checking and JSX enabled. When version
-// is not empty the bundled Effect package is mounted too. Source files are
-// returned sorted by name.
 func compileFixturesWithJS(t testing.TB, version bundledeffect.EffectVersion, sources map[string]string) (*TypeParser, []*ast.SourceFile, func()) {
 	t.Helper()
 

@@ -1,0 +1,28 @@
+=== Metadata ===
+Effect version: unknown
+
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [
+          {
+            "name": "@effect/language-service",
+            "diagnosticSeverity": {
+              "anyUnknownInErrorContext": "error",
+              "effectInFailure": "error"
+            }
+          }
+        ]
+      }
+    }
+    
+
+==== /.src/taggedTemplateSymbolInterpolation_ts2731.ts (0 errors) ====
+    const self: unique symbol = Symbol("self")
+    function sql(strings: TemplateStringsArray, ...args: Array<unknown>): string {
+      return strings.join("?") + args.length
+    }
+    export const q = sql`(${self}) < 1`
+    

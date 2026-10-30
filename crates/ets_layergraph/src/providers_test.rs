@@ -11,9 +11,7 @@ use crate::magic_test::{Fixture, run};
 use crate::providers::walk_leaves_matching;
 use crate::*;
 
-// go test: internal/layergraph/providers_test.go:12 makeNodeInfo 1ab0fda115e9d07d
-// makeNodeInfo creates a minimal LayerGraphNodeInfo for testing walkLeavesMatching.
-// When hasTag is true, Provides gets a non-empty slice so the predicate matches.
+// go test: internal/layergraph/providers_test.go:10 makeNodeInfo 0a3fb8513a3affaa
 fn make_node_info(fx: &Fixture, has_tag: bool) -> LayerGraphNodeInfo {
     let node = fx.calls[0];
     let mut info = LayerGraphNodeInfo {
@@ -30,8 +28,7 @@ fn make_node_info(fx: &Fixture, has_tag: bool) -> LayerGraphNodeInfo {
     info
 }
 
-// go test: internal/layergraph/providers_test.go:21 tagPredicate 2005249faa6d78f1
-// tagPredicate returns true for nodes where Provides is non-empty.
+// go test: internal/layergraph/providers_test.go:18 tagPredicate 91ab418acef51020
 fn tag_predicate(node: &LayerGraphNodeInfo) -> bool {
     !node.provides.is_empty()
 }
@@ -54,7 +51,7 @@ fn expect_len(t: &T, result: &[LayerGraphNodeInfo], expected: usize, message: &s
     }
 }
 
-// go test: internal/layergraph/providers_test.go:25 TestWalkLeavesMatching 0d6c09fff38d8b67
+// go test: internal/layergraph/providers_test.go:22 TestWalkLeavesMatching b4bd46b905a142a5
 #[test]
 fn test_walk_leaves_matching() {
     run(|t| {
@@ -81,8 +78,6 @@ fn test_walk_leaves_matching() {
 
         t.run("linear chain, all match, emits deepest", |t| {
             t.parallel();
-            // root(match) -> middle(match) -> leaf(match)
-            // Should emit only the leaf (deepest match).
             let mut g = ets_graph::new::<LayerGraphNodeInfo, LayerGraphEdgeInfo>();
             let root = g.add_node(make_node_info(&fx, true));
             let middle = g.add_node(make_node_info(&fx, true));
@@ -96,8 +91,6 @@ fn test_walk_leaves_matching() {
 
         t.run("linear chain, only root matches", |t| {
             t.parallel();
-            // root(match) -> middle(no) -> leaf(no)
-            // root's outgoing neighbor (middle) doesn't match, so root is emitted.
             let mut g = ets_graph::new::<LayerGraphNodeInfo, LayerGraphEdgeInfo>();
             let root = g.add_node(make_node_info(&fx, true));
             let middle = g.add_node(make_node_info(&fx, false));
@@ -111,8 +104,6 @@ fn test_walk_leaves_matching() {
 
         t.run("branching graph, multiple leaves match", |t| {
             t.parallel();
-            // root(match) -> left(match), root -> right(match)
-            // left and right are both leaf matches (no outgoing matching neighbors).
             let mut g = ets_graph::new::<LayerGraphNodeInfo, LayerGraphEdgeInfo>();
             let root = g.add_node(make_node_info(&fx, true));
             let left = g.add_node(make_node_info(&fx, true));
@@ -137,8 +128,6 @@ fn test_walk_leaves_matching() {
 
         t.run("diamond graph, all match, emits only sink", |t| {
             t.parallel();
-            // A(match) -> B(match), A -> C(match), B -> D(match), C -> D(match)
-            // D is the deepest leaf match. Should only emit D.
             let mut g = ets_graph::new::<LayerGraphNodeInfo, LayerGraphEdgeInfo>();
             let a = g.add_node(make_node_info(&fx, true));
             let b = g.add_node(make_node_info(&fx, true));

@@ -37,7 +37,7 @@ pub fn min_visible_severity(effect_config: Option<&EffectPluginOptions>) -> Seve
 /// Rust-only: the concrete compiler program behind a `checker.Program`.
 ///
 /// Go's `typeparser.NewTypeParser(program, c)` takes the `checker.Program` and type-asserts the capabilities it
-/// needs; `ets_typeparser::TypeParser` holds the concrete `compiler.Program` (`docs/TSRS_API.md`, "Gaps"). The
+/// needs; `ets_typeparser::TypeParser` holds the concrete `compiler.Program` (`porting/TSRS_API.md`, "Gaps"). The
 /// checker hooks and the other callers run on compiler programs (the after-check callback fires from a compiler
 /// program's checkers), so the downcast (tsrs patch 002: `Program: Any`) always succeeds.
 pub fn compiler_program(program: &'static dyn Program) -> &'static ets_shim::compiler::Program {

@@ -1,0 +1,58 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/floatingEffect_directivePrecedence.ts(4,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/floatingEffect_directivePrecedence.ts(9,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/floatingEffect_directivePrecedence.ts(16,1): warning TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/floatingEffect_directivePrecedence.ts(20,1): warning TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/floatingEffect_directivePrecedence.ts(23,1): message TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/floatingEffect_directivePrecedence.ts(27,1): suggestion TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+/.src/floatingEffect_directivePrecedence.ts(30,1): error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+
+
+==== /.src/floatingEffect_directivePrecedence.ts (7 errors) ====
+    import { Effect } from "effect"
+    
+    // reported as error: no directive applies yet
+    Effect.succeed("default")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    
+    // @effect-diagnostics floatingEffect:off
+    Effect.succeed("section off")
+    // @effect-diagnostics-next-line floatingEffect:error
+    Effect.succeed("next-line error overrides the section")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    Effect.succeed("section off again after the next-line directive")
+    
+    // @effect-diagnostics unnecessaryEffectGen:warning
+    Effect.succeed("other rule section keeps floatingEffect off")
+    
+    // @effect-diagnostics FLOATINGEFFECT:warning
+    Effect.succeed("case-insensitive section sets warning")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    
+    // @effect-diagnostics-next-line *:off
+    Effect.succeed("wildcard next-line off")
+    Effect.succeed("warning again after the wildcard next-line directive")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    
+    // @effect-diagnostics floatingEffect:message
+    Effect.succeed("message section")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! message TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    
+    // @effect-diagnostics *:off
+    // @effect-diagnostics floatingEffect:suggestion
+    Effect.succeed("rule section after wildcard off re-enables as suggestion")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    
+    // @effect-diagnostics *:error
+    Effect.succeed("wildcard section overrides the rule section")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS377001: This Effect value is neither yielded nor used in an assignment. effect(floatingEffect)
+    

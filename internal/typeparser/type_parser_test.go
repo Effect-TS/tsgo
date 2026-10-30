@@ -54,16 +54,23 @@ func TestCachedCachesNegativeValues(t *testing.T) {
 	})
 }
 
+func withGlobalNodeId(node *ast.Node) *ast.Node {
+	ast.GetNodeId(node)
+	return node
+}
+
+func withGlobalSymbolId(symbol *ast.Symbol) *ast.Symbol {
+	ast.GetSymbolId(symbol)
+	return symbol
+}
+
 func TestCachedNodeCachesPerNode(t *testing.T) {
 	t.Parallel()
 
 	factory := ast.NewNodeFactory(ast.NodeFactoryHooks{})
 	first := factory.NewIdentifier("first")
 	second := factory.NewIdentifier("second")
-	// A node that already has an id from the global counter, as nodes queried
-	// through other compiler paths do.
-	numbered := factory.NewIdentifier("numbered")
-	ast.GetNodeId(numbered)
+	numbered := withGlobalNodeId(factory.NewIdentifier("numbered"))
 
 	var store checker.NodeLinkStore[*string]
 	calls := 0
@@ -105,10 +112,7 @@ func TestSymbolLinkStoreKeepsOneSlotPerSymbol(t *testing.T) {
 	t.Parallel()
 
 	first, second := new(ast.Symbol), new(ast.Symbol)
-	// A symbol that already has an id from the global counter, as symbols
-	// numbered by symbol accessibility or the node builder do.
-	numbered := new(ast.Symbol)
-	ast.GetSymbolId(numbered)
+	numbered := withGlobalSymbolId(new(ast.Symbol))
 
 	var store checker.SymbolLinkStore[string]
 	if store.TryGet(first) != nil {

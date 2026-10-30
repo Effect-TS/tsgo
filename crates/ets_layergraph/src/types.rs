@@ -21,7 +21,7 @@ pub struct LayerGraphNodeInfo {
 // go: internal/layergraph/types.go:27 EdgeRelationshipCall c46bd37125abb265
 // EdgeRelationship is the type of relationship between two nodes in the layer graph.
 //
-// Rust: Go's `type EdgeRelationship string` is only used through its constants (docs/PORTING.md, "Naming").
+// Rust: Go's `type EdgeRelationship string` is only used through its constants (porting/PORTING.md, "Naming").
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum EdgeRelationship {
     Call,

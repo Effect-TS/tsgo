@@ -8,7 +8,7 @@ use crate::*;
 // All is the list of all diagnostic rules.
 // Add new rules here explicitly - no init() magic.
 //
-// Rust: Go's whole list, in Go's order; the rules not ported yet are the commented-out entries (docs/PORTING.md,
+// Rust: Go's whole list, in Go's order; the rules not ported yet are the commented-out entries (porting/PORTING.md,
 // "Adding a rule to ets_rules"). `rules_test.rs` checks the order against rules.go.
 pub static ALL: LazyLock<Vec<Rule>> = LazyLock::new(|| {
     vec![

@@ -16,7 +16,7 @@ pub type EdgeIndex = i64;
 // Direction specifies the direction of traversal or query.
 //
 // Rust: Go's `type Direction string` with its two constants. Only the constants are ever passed, so the type is
-// the enum of them (docs/PORTING.md, "Naming"); Go's empty `Direction` (a zero `TraversalConfig`) is `None` there.
+// the enum of them (porting/PORTING.md, "Naming"); Go's empty `Direction` (a zero `TraversalConfig`) is `None` there.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Direction {
     // Outgoing follows edges from source to target.

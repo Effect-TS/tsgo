@@ -1,7 +1,7 @@
 # path	name	reason  (Go declarations deliberately not ported, one per line, tab-separated; hand-written)
-internal/rules/stability_api_usage_test.go	BenchmarkStabilityApiUsageContextualProperties	benchmark: ported only when a performance claim needs it (docs/PORTING.md, "What not to port")
-internal/rules/timeout_catch_tag_to_timeout_or_else_benchmark_test.go	BenchmarkTimeoutRule	benchmark: ported only when a performance claim needs it (docs/PORTING.md, "What not to port")
-internal/rules/timeout_catch_tag_to_timeout_or_else_benchmark_test.go	benchmarkTimeoutFixture	benchmark fixture of BenchmarkTimeoutRule: ported only when a performance claim needs it (docs/PORTING.md, "What not to port")
-internal/rules/timeout_catch_tag_to_timeout_or_else_benchmark_test.go	benchmarkTimeoutMatches	benchmark sink of BenchmarkTimeoutRule: ported only when a performance claim needs it (docs/PORTING.md, "What not to port")
-internal/typeparser/module_export_reference_test.go	BenchmarkIsNodeReferenceToModuleExport	benchmark: ported only when a performance claim needs it (docs/PORTING.md, "What not to port")
+internal/rules/stability_api_usage_test.go	BenchmarkStabilityApiUsageContextualProperties	benchmark: ported only when a performance claim needs it (porting/PORTING.md, "What not to port")
+internal/rules/timeout_catch_tag_to_timeout_or_else_benchmark_test.go	BenchmarkTimeoutRule	benchmark: ported only when a performance claim needs it (porting/PORTING.md, "What not to port")
+internal/rules/timeout_catch_tag_to_timeout_or_else_benchmark_test.go	benchmarkTimeoutFixture	benchmark fixture of BenchmarkTimeoutRule: ported only when a performance claim needs it (porting/PORTING.md, "What not to port")
+internal/rules/timeout_catch_tag_to_timeout_or_else_benchmark_test.go	benchmarkTimeoutMatches	benchmark sink of BenchmarkTimeoutRule: ported only when a performance claim needs it (porting/PORTING.md, "What not to port")
+internal/typeparser/module_export_reference_test.go	BenchmarkIsNodeReferenceToModuleExport	benchmark: ported only when a performance claim needs it (porting/PORTING.md, "What not to port")
 internal/effecttest/sharedfs.go	overlayFS.WalkDir	part of the legacy typescript-go vfs.FS only; tsrs's FS has no WalkDir method

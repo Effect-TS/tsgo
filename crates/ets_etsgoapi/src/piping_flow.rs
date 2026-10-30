@@ -10,7 +10,7 @@ use crate::*;
 // TransformationKind represents how a transformation was expressed in source code.
 //
 // Rust: Go's `type TransformationKind string` takes its constants from the type parser's; only those are ever
-// stored (docs/PORTING.md, "Naming"). `as_str` is the Go string value.
+// stored (porting/PORTING.md, "Naming"). `as_str` is the Go string value.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub enum TransformationKind {
     Pipe,

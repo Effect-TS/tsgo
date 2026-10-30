@@ -1,0 +1,7 @@
+=== Quick Fix Inventory ===
+
+[D1] (5:8-5:12) TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+(no quick fixes to apply)

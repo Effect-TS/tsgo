@@ -1,0 +1,25 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/main.ts(3,14): error TS377055: This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)
+
+
+==== /.src/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "plugins": [{
+          "name": "@effect/language-service",
+          "diagnosticSeverity": { "extendsNativeError": "error" }
+        }]
+      }
+    }
+    
+
+==== /.src/main.ts (1 errors) ====
+    import { ExternalProblem } from "problem"
+    
+    export class LocalProblem extends Error {}
+                 ~~~~~~~~~~~~
+!!! error TS377055: This class extends the native `Error` type directly. Untagged native errors lose distinction in the Effect failure channel. effect(extendsNativeError)
+    export const value = ExternalProblem
+    

@@ -13,8 +13,28 @@ use libtest_mimic::Trial;
 
 use crate::run_case;
 
-/// Rust-only: the `&lsutil.UserPreferences{...}` every test of the file passes.
-fn completion_preferences() -> UserPreferences {
+// go test: internal/effecttest/autoimport_style_consistency_test.go:18 autoImportStyleContent 87d7e43661c59cdf
+fn auto_import_style_content(plugin_options: &str, files: &str) -> String {
+    r#"// @Filename: /tsconfig.json
+{
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        "#
+    .to_string()
+        + plugin_options
+        + r"
+      }
+    ]
+  }
+}
+// @effect-v4
+" + files
+}
+
+// go test: internal/effecttest/autoimport_style_consistency_test.go:34 autoImportStylePreferences 7bad6240e8d36348
+fn auto_import_style_preferences() -> UserPreferences {
     UserPreferences {
         include_completions_for_module_exports: Tristate::True,
         include_completions_for_import_statements: Tristate::True,
@@ -22,31 +42,22 @@ fn completion_preferences() -> UserPreferences {
     }
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:18 TestAutoImportEffectStyleConsistency_namespace 643a8b3beb0162e1
+// go test: internal/effecttest/autoimport_style_consistency_test.go:41 TestAutoImportEffectStyleConsistency_namespace ec3ed0fa60c57f4b
 fn test_auto_import_effect_style_consistency_namespace(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
-    let content = r#"// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "namespaceImportPackages": ["EFFECT"]
-      }
-    ]
-  }
-}
-// @effect-v4
-// @Filename: /mainCompletion.ts
+    let content = auto_import_style_content(
+        r#""namespaceImportPackages": ["EFFECT"]"#,
+        r"// @Filename: /mainCompletion.ts
 runPromiseExit/*completion*/();
 // @Filename: /mainFix.ts
 runPromiseExit/*fix*/();
-"#;
+",
+    );
 
-    let mut f = ets_fourslash::new_fourslash(t, None /*capabilities*/, content);
+    let mut f = ets_fourslash::new_fourslash(t, None, &content);
 
-    let preferences = completion_preferences();
+    let preferences = auto_import_style_preferences();
     let completion = "completion";
 
     f.verify_apply_code_action_from_completion(
@@ -79,31 +90,22 @@ Effect.runPromiseExit();
     f.done(t);
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:64 TestAutoImportEffectStyleConsistency_namespaceReexport 13979f22ac448831
+// go test: internal/effecttest/autoimport_style_consistency_test.go:72 TestAutoImportEffectStyleConsistency_namespaceReexport 4e658b379c7da422
 fn test_auto_import_effect_style_consistency_namespace_reexport(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
-    let content = r#"// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "namespaceImportPackages": ["effect"]
-      }
-    ]
-  }
-}
-// @effect-v4
-// @Filename: /mainCompletion.ts
+    let content = auto_import_style_content(
+        r#""namespaceImportPackages": ["effect"]"#,
+        r"// @Filename: /mainCompletion.ts
 const completion = Effect/*completion*/;
 // @Filename: /mainFix.ts
 const fix = Effect/*fix*/;
-"#;
+",
+    );
 
-    let mut f = ets_fourslash::new_fourslash(t, None /*capabilities*/, content);
+    let mut f = ets_fourslash::new_fourslash(t, None, &content);
 
-    let preferences = completion_preferences();
+    let preferences = auto_import_style_preferences();
     let completion = "completion";
 
     f.verify_apply_code_action_from_completion(
@@ -128,34 +130,20 @@ const completion = Effect;"#
     f.done(t);
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:106 TestAutoImportEffectStyleConsistency_barrel bca108f082634664
+// go test: internal/effecttest/autoimport_style_consistency_test.go:99 TestAutoImportEffectStyleConsistency_barrel d2acf0caa093d5de
 fn test_auto_import_effect_style_consistency_barrel(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
-    let content = r#"// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "barrelImportPackages": ["EFFECT"]
-      }
-    ]
-  }
-}
-// @effect-v4
-// @Filename: /mainCompletion.ts
-succeed/*completion*/(1);
-// @Filename: /mainFix.ts
+    let content = auto_import_style_content(
+        r#""barrelImportPackages": ["EFFECT"]"#,
+        r"// @Filename: /mainFix.ts
 succeed/*fix*/(1);
-"#;
+",
+    );
 
-    let mut f = ets_fourslash::new_fourslash(t, None /*capabilities*/, content);
+    let mut f = ets_fourslash::new_fourslash(t, None, &content);
 
-    let preferences = completion_preferences();
-    f.go_to_marker(t, "fix");
-    // Barrel imports preserve the namespace-qualified call shape and use the
-    // public group barrel for nested modules.
+    let preferences = auto_import_style_preferences();
     verify_import_fix_contents_unordered(
         t,
         &mut f,
@@ -182,7 +170,7 @@ succeed/*fix*/(1);
     f.done(t);
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:154 verifyImportFixContentsUnordered 525c442a32bf8ca8
+// go test: internal/effecttest/autoimport_style_consistency_test.go:127 verifyImportFixContentsUnordered 525c442a32bf8ca8
 // Rust: Go's `client.NextID()` + `client.SendRequestWorker` + `UnmarshalResult` is the client's `send_request`; a
 // result that does not decode is Go's unmarshal error.
 fn verify_import_fix_contents_unordered(
@@ -266,7 +254,7 @@ fn verify_import_fix_contents_unordered(
     }
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:225 applyTextEdits d9285a3c84c58169
+// go test: internal/effecttest/autoimport_style_consistency_test.go:198 applyTextEdits d9285a3c84c58169
 fn apply_text_edits(
     original: &str,
     line_map: &Arc<LSPLineMap>,
@@ -300,7 +288,7 @@ fn apply_text_edits(
     content
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:253 lspPositionToOffset e061a58f31030520
+// go test: internal/effecttest/autoimport_style_consistency_test.go:226 lspPositionToOffset e061a58f31030520
 fn lsp_position_to_offset(text: &str, line_map: &LSPLineMap, mut pos: lsproto::Position) -> usize {
     let line_start = line_map.line_starts[pos.line as usize] as usize;
     let line_text = &text[line_start..];
@@ -316,38 +304,21 @@ fn lsp_position_to_offset(text: &str, line_map: &LSPLineMap, mut pos: lsproto::P
     text.len()
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:268 TestAutoImportEffectStyleConsistency_topLevelNamedReexportsIgnore 8abda8a0d578fb81
+// go test: internal/effecttest/autoimport_style_consistency_test.go:241 TestAutoImportEffectStyleConsistency_topLevelNamedReexportsIgnore 138f62402c7c3ebf
 fn test_auto_import_effect_style_consistency_top_level_named_reexports_ignore(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
-    let content = r#"// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "namespaceImportPackages": ["effect"],
-        "topLevelNamedReexports": "ignore"
-      }
-    ]
-  }
-}
-// @effect-v4
-// @Filename: /mainCompletion.ts
-succeed/*completion*/(1);
-// @Filename: /mainFix.ts
+    let content = auto_import_style_content(
+        r#""namespaceImportPackages": ["effect"], "topLevelNamedReexports": "ignore""#,
+        r"// @Filename: /mainFix.ts
 succeed/*fix*/(1);
-"#;
+",
+    );
 
-    let mut f = ets_fourslash::new_fourslash(t, None /*capabilities*/, content);
+    let mut f = ets_fourslash::new_fourslash(t, None, &content);
 
-    let preferences = completion_preferences();
-    let completion = "completion";
-    let _ = completion;
-
+    let preferences = auto_import_style_preferences();
     f.go_to_marker(t, "fix");
-    // With the real effect-v4 package mounted, succeed is surfaced from multiple
-    // namespace modules rather than as a direct named import from "effect".
     f.verify_import_fix_at_position(
         t,
         &[
@@ -371,35 +342,21 @@ succeed/*fix*/(1);
     f.done(t);
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:320 TestAutoImportEffectStyleConsistency_topLevelNamedReexportsFollow 78a2684ba6a70b16
+// go test: internal/effecttest/autoimport_style_consistency_test.go:270 TestAutoImportEffectStyleConsistency_topLevelNamedReexportsFollow af34a86dccf0d9c4
 fn test_auto_import_effect_style_consistency_top_level_named_reexports_follow(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
-    let content = r#"// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "namespaceImportPackages": ["effect"],
-        "topLevelNamedReexports": "follow"
-      }
-    ]
-  }
-}
-// @effect-v4
-// @Filename: /mainCompletion.ts
-runPromiseExit/*completion*/();
-// @Filename: /mainFix.ts
+    let content = auto_import_style_content(
+        r#""namespaceImportPackages": ["effect"], "topLevelNamedReexports": "follow""#,
+        r"// @Filename: /mainFix.ts
 runPromiseExit/*fix*/();
-"#;
+",
+    );
 
-    let mut f = ets_fourslash::new_fourslash(t, None /*capabilities*/, content);
+    let mut f = ets_fourslash::new_fourslash(t, None, &content);
 
-    let preferences = completion_preferences();
+    let preferences = auto_import_style_preferences();
 
-    // With topLevelNamedReexports="follow", the reexport from "effect" is suppressed,
-    // leaving only the direct namespace import from "effect/Effect".
     f.go_to_marker(t, "fix");
     f.verify_import_fix_at_position(
         t,
@@ -412,31 +369,22 @@ Effect.runPromiseExit();
     f.done(t);
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:358 TestAutoImportEffectStyleConsistency_testClockWithNamespace b1398735b44f3a2a
+// go test: internal/effecttest/autoimport_style_consistency_test.go:288 TestAutoImportEffectStyleConsistency_testClockWithNamespace ccc8bc48b11af623
 fn test_auto_import_effect_style_consistency_test_clock_with_namespace(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
-    let content = r#"// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "namespaceImportPackages": ["effect"]
-      }
-    ]
-  }
-}
-// @effect-v4
-// @Filename: /mainCompletion.ts
+    let content = auto_import_style_content(
+        r#""namespaceImportPackages": ["effect"]"#,
+        r"// @Filename: /mainCompletion.ts
 testClockWith/*completion*/(() => undefined as any);
 // @Filename: /mainFix.ts
 testClockWith/*fix*/(() => undefined as any);
-"#;
+",
+    );
 
-    let mut f = ets_fourslash::new_fourslash(t, None /*capabilities*/, content);
+    let mut f = ets_fourslash::new_fourslash(t, None, &content);
 
-    let preferences = completion_preferences();
+    let preferences = auto_import_style_preferences();
     let completion = "completion";
 
     f.verify_apply_code_action_from_completion(
@@ -469,34 +417,25 @@ TestClock.testClockWith(() => undefined as any);
     f.done(t);
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:404 TestAutoImportEffectStyleConsistency_testClockWithNamespaceAlongsideNamedImport 8bd8f758e50c359f
+// go test: internal/effecttest/autoimport_style_consistency_test.go:319 TestAutoImportEffectStyleConsistency_testClockWithNamespaceAlongsideNamedImport 77e398b472d2e2bd
 fn test_auto_import_effect_style_consistency_test_clock_with_namespace_alongside_named_import(
     t: &T,
 ) {
     ets_effecttest::init_hooks();
     t.parallel();
-    let content = r#"// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "namespaceImportPackages": ["effect"]
-      }
-    ]
-  }
-}
-// @effect-v4
-// @Filename: /mainFix.ts
+    let content = auto_import_style_content(
+        r#""namespaceImportPackages": ["effect"]"#,
+        r#"// @Filename: /mainFix.ts
 import { adjust } from "effect/testing/TestClock"
 
 void adjust
 testClockWith/*fix*/(() => undefined as any);
-"#;
+"#,
+    );
 
-    let mut f = ets_fourslash::new_fourslash(t, None /*capabilities*/, content);
+    let mut f = ets_fourslash::new_fourslash(t, None, &content);
 
-    let preferences = completion_preferences();
+    let preferences = auto_import_style_preferences();
 
     f.go_to_marker(t, "fix");
     f.verify_import_fix_at_position(
@@ -512,32 +451,23 @@ TestClock.testClockWith(() => undefined as any);
     f.done(t);
 }
 
-// go test: internal/effecttest/autoimport_style_consistency_test.go:442 TestAutoImportEffectStyleConsistency_testClockWithUsesExistingNamespaceImport ddfb8721cbe91a7c
+// go test: internal/effecttest/autoimport_style_consistency_test.go:342 TestAutoImportEffectStyleConsistency_testClockWithUsesExistingNamespaceImport 0a0fb40e4756aa08
 fn test_auto_import_effect_style_consistency_test_clock_with_uses_existing_namespace_import(t: &T) {
     ets_effecttest::init_hooks();
     t.parallel();
-    let content = r#"// @Filename: /tsconfig.json
-{
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "namespaceImportPackages": ["effect"]
-      }
-    ]
-  }
-}
-// @effect-v4
-// @Filename: /mainFix.ts
+    let content = auto_import_style_content(
+        r#""namespaceImportPackages": ["effect"]"#,
+        r#"// @Filename: /mainFix.ts
 import * as TestClock from "effect/testing/TestClock";
 
 void TestClock.adjust
 testClockWith/*fix*/(() => undefined as any);
-"#;
+"#,
+    );
 
-    let mut f = ets_fourslash::new_fourslash(t, None /*capabilities*/, content);
+    let mut f = ets_fourslash::new_fourslash(t, None, &content);
 
-    let preferences = completion_preferences();
+    let preferences = auto_import_style_preferences();
 
     f.go_to_marker(t, "fix");
     f.verify_import_fix_at_position(

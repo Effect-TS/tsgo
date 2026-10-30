@@ -6,7 +6,7 @@ use rustc_hash::FxHashMap;
 
 use crate::*;
 
-// Rust: Go's `tspath.RootedFilePath` keys and arguments are plain file names (docs/TSRS_API.md).
+// Rust: Go's `tspath.RootedFilePath` keys and arguments are plain file names (porting/TSRS_API.md).
 
 // go: internal/importstyle/barrel.go:15 ProgramFiles fce288ffd5ed4798
 // ProgramFiles is the part of a program barrels are read from.

@@ -13,22 +13,24 @@ Effect version: 3.19.19
 /.src/typeUnionToSchemaUnion.ts(40,6): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
 /.src/typeUnionToSchemaUnion.ts(44,13): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
 /.src/typeUnionToSchemaUnion.ts(49,6): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
-/.src/typeUnionToSchemaUnion.ts(54,13): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
-/.src/typeUnionToSchemaUnion.ts(59,6): warning TS377159: This type alias unions Schema `.Encoded` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
-/.src/typeUnionToSchemaUnion.ts(63,15): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
-/.src/typeUnionToSchemaUnion.ts(68,8): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
-/.src/typeUnionToSchemaUnion.ts(75,6): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
-/.src/typeUnionToSchemaUnion.ts(79,6): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
-/.src/typeUnionToSchemaUnion.ts(83,6): warning TS377159: This type alias unions Schema `.Encoded` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
-/.src/typeUnionToSchemaUnion.ts(87,6): warning TS377159: This type alias unions Schema `.Encoded` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
-/.src/typeUnionToSchemaUnion.ts(90,6): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
-/.src/typeUnionToSchemaUnion.ts(94,40): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
-/.src/typeUnionToSchemaUnion.ts(97,38): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
-/.src/typeUnionToSchemaUnion.ts(100,32): warning TS377159: This type alias unions Schema `.Encoded` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
-/.src/typeUnionToSchemaUnion.ts(103,19): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+/.src/typeUnionToSchemaUnion.ts(53,6): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+/.src/typeUnionToSchemaUnion.ts(61,13): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+/.src/typeUnionToSchemaUnion.ts(66,6): warning TS377159: This type alias unions Schema `.Encoded` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+/.src/typeUnionToSchemaUnion.ts(70,15): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+/.src/typeUnionToSchemaUnion.ts(75,8): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+/.src/typeUnionToSchemaUnion.ts(82,6): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+/.src/typeUnionToSchemaUnion.ts(86,6): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+/.src/typeUnionToSchemaUnion.ts(90,6): warning TS377159: This type alias unions Schema `.Encoded` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+/.src/typeUnionToSchemaUnion.ts(94,6): warning TS377159: This type alias unions Schema `.Encoded` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+/.src/typeUnionToSchemaUnion.ts(97,6): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+/.src/typeUnionToSchemaUnion.ts(101,40): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+/.src/typeUnionToSchemaUnion.ts(104,38): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+/.src/typeUnionToSchemaUnion.ts(107,32): warning TS377159: This type alias unions Schema `.Encoded` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+/.src/typeUnionToSchemaUnion.ts(110,19): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+/.src/typeUnionToSchemaUnion.ts(114,6): warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
 
 
-==== /.src/typeUnionToSchemaUnion.ts (25 errors) ====
+==== /.src/typeUnionToSchemaUnion.ts (27 errors) ====
     // @effect-v3
     // @effect-diagnostics typeUnionToSchemaUnion:warning
     import { Schema } from "effect"
@@ -103,6 +105,15 @@ Effect version: 3.19.19
          ~~~~~~~~
 !!! warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
     const LateD = Schema.Struct({ d: Schema.String })
+    
+    // MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+    type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+         ~~~~~~~~~~~~~
+!!! warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+    namespace LateModels {
+      export const A = Schema.String
+      export const B = Schema.Boolean
+    }
     
     // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
     export const Pair = [Circle, Square] as const
@@ -181,6 +192,12 @@ Effect version: 3.19.19
     // MUST TRIGGER - a block comment precedes the alias on the same line
     /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
                       ~~~~~~~~~
+!!! warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+    
+    // MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+    /** Either a circle or a square */
+    type Documented = typeof Circle.Type | typeof Square.Type
+         ~~~~~~~~~~
 !!! warning TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
     
     // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union

@@ -280,36 +280,6 @@ func sameSymbolReference(c *checker.Checker, left *ast.Symbol, right *ast.Symbol
 	return left != nil && right != nil && checker.Checker_getSymbolIfSameReference(c, left, right) != nil
 }
 
-// DerivePipeableSignatureFromDataFirst removes the subject parameter from a
-// data-first signature and moves it to a unary function in the return type.
-func DerivePipeableSignatureFromDataFirst(c *checker.Checker, sig *checker.Signature, subjectIndex int) *checker.Signature {
-	if c == nil || sig == nil {
-		return nil
-	}
-	params := sig.Parameters()
-	if subjectIndex < 0 || subjectIndex >= len(params) {
-		return nil
-	}
-	subject := params[subjectIndex]
-	if subject == nil {
-		return nil
-	}
-
-	outerParams := make([]*ast.Symbol, 0, len(params)-1)
-	for i, param := range params {
-		if i == subjectIndex {
-			continue
-		}
-		outerParams = append(outerParams, param)
-	}
-
-	innerFnType := checker.Checker_newFunctionType(c, nil, nil, []*ast.Symbol{subject}, c.GetReturnTypeOfSignature(sig))
-	if innerFnType == nil {
-		return nil
-	}
-	return checker.Checker_newCallSignature(c, sig.TypeParameters(), sig.ThisParameter(), outerParams, innerFnType)
-}
-
 func isLikelySelfParameter(sym *ast.Symbol) bool {
 	if sym == nil {
 		return false

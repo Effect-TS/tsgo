@@ -1,0 +1,83 @@
+interface Box<A> { readonly value: A }
+interface Pair<A, B> { readonly left: A; readonly right: B }
+
+declare function reordered<A, B, C = B>(self: Box<A>, options: {
+  readonly onEmpty: () => B
+  readonly onValue: (value: A) => C
+}): B | C
+declare function reordered<B, A, C = B>(options: {
+  readonly onValue: (value: A) => C
+  readonly onEmpty: () => B
+}): (self: Box<A>) => C | B
+
+declare function moved<A>(self: Box<A>, index: number): A
+declare function moved(index: number): <Value>(self: Box<Value>) => Value
+
+declare function mapped<A extends object, N extends string, B>(self: A, name: N, value: B): {
+  [K in N | keyof A]: K extends keyof A ? A[K] : B
+}
+declare function mapped<N extends string, A extends object, B>(name: N, value: B): (self: A) => {
+  [K in N | keyof A]: K extends keyof A ? A[K] : B
+}
+
+type Pipeable = (self: string) => number
+declare function callableAlias(self: string, size: number): number
+declare function callableAlias(size: number): Pipeable
+
+declare function inferredParameters(self: string, size): number
+declare function inferredParameters(size): (self: string) => number
+
+declare function distinctRoles<A, B>(self: Box<A>, f: (value: A) => B): Pair<A, B>
+declare function distinctRoles<A, B>(f: (value: B) => A): (self: Box<A>) => Pair<A, B>
+
+declare function differentBinders<T>(self: Box<T>, f: (value: T) => T): T | T
+declare function differentBinders<U, V>(f: (value: U) => V): (self: Box<U>) => U | V
+
+namespace Left { export interface Same<A> { readonly value: A } }
+namespace Right { export interface Same<A> { readonly value: A } }
+declare function differentSymbols<A>(self: Left.Same<A>, size: number): A
+declare function differentSymbols<A>(size: number): (self: Right.Same<A>) => A
+
+declare function differentDefault<A, B = A>(self: Box<A>, f: (value: A) => B): B
+declare function differentDefault<A, B = string>(f: (value: A) => B): (self: Box<A>) => B
+
+declare function differentReadonly<A, B>(self: Box<A>, options: { readonly f: (value: A) => B }): B
+declare function differentReadonly<A, B>(options: { f: (value: A) => B }): (self: Box<A>) => B
+
+declare function optionalSubject<A>(self: Box<A>, size: number): A
+declare function optionalSubject(size: number): <A>(self?: Box<A>) => A
+
+type DataFirstResult<T> = { readonly dataFirst: T }
+type DataLastResult<T> = { readonly dataLast: T }
+declare function differentReturnOrigins<T>(self: T, size: number): DataFirstResult<T>
+declare function differentReturnOrigins(size: number): <T>(self: T) => DataLastResult<T>
+
+type Result = { readonly value: string }
+declare function incompatibleSubject(self: string, size: number): Result
+declare function incompatibleSubject(size: number): (self: boolean) => Result
+
+declare function ambiguousSubject<A>(first: A, second: A): A
+declare function ambiguousSubject<A>(second: A): (first: A) => A
+
+declare const box: Box<number>
+declare const left: Left.Same<number>
+declare const object: { readonly a: number }
+
+export const reorderedResult = reordered(box, {
+  onEmpty: () => "empty",
+  onValue: (value) => value
+})
+export const movedResult = moved(box, 0)
+export const mappedResult = mapped(object, "b", true)
+export const callableAliasResult = callableAlias("value", 1)
+export const inferredParametersResult = inferredParameters("value", 1)
+
+export const distinctRolesResult = distinctRoles(box, String)
+export const differentBindersResult = differentBinders(box, (value) => value)
+export const differentSymbolsResult = differentSymbols(left, 1)
+export const differentDefaultResult = differentDefault(box, String)
+export const differentReadonlyResult = differentReadonly(box, { f: String })
+export const optionalSubjectResult = optionalSubject(box, 1)
+export const differentReturnOriginsResult = differentReturnOrigins("value", 2)
+export const incompatibleSubjectResult = incompatibleSubject("value", 2)
+export const ambiguousSubjectResult = ambiguousSubject(1, 2)

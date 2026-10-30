@@ -76,171 +76,186 @@
   Fix 0: "Disable typeUnionToSchemaUnion for this line"
   Fix 1: "Disable typeUnionToSchemaUnion for entire file"
 
-[D19] (54:13-54:17) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+[D19] (53:6-53:19) TS6196: 'LateQualified' is declared but never used.
+  (no quick fixes)
+
+[D20] (53:6-53:19) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+  Fix 0: "Disable typeUnionToSchemaUnion for this line"
+  Fix 1: "Disable typeUnionToSchemaUnion for entire file"
+
+[D21] (61:13-61:17) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
   Fix 0: "Disable typeUnionToSchemaUnion for this line"
   Fix 1: "Disable typeUnionToSchemaUnion for entire file"
   Fix 2: "Convert to Schema.Union"
 
-[D20] (57:7-57:10) TS6133: 'Duo' is declared but its value is never read.
+[D22] (64:7-64:10) TS6133: 'Duo' is declared but its value is never read.
   (no quick fixes)
 
-[D21] (58:7-58:16) TS6133: 'DuoSchema' is declared but its value is never read.
+[D23] (65:7-65:16) TS6133: 'DuoSchema' is declared but its value is never read.
   (no quick fixes)
 
-[D22] (59:6-59:9) TS6196: 'Duo' is declared but never used.
+[D24] (66:6-66:9) TS6196: 'Duo' is declared but never used.
   (no quick fixes)
 
-[D23] (59:6-59:9) TS377159: This type alias unions Schema `.Encoded` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+[D25] (66:6-66:9) TS377159: This type alias unions Schema `.Encoded` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
   Fix 0: "Disable typeUnionToSchemaUnion for this line"
   Fix 1: "Disable typeUnionToSchemaUnion for entire file"
   Fix 2: "Convert to Schema.Union"
 
-[D24] (62:11-62:17) TS6133: 'Shapes' is declared but its value is never read.
+[D26] (69:11-69:17) TS6133: 'Shapes' is declared but its value is never read.
   (no quick fixes)
 
-[D25] (63:15-63:18) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+[D27] (70:15-70:18) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
   Fix 0: "Disable typeUnionToSchemaUnion for this line"
   Fix 1: "Disable typeUnionToSchemaUnion for entire file"
   Fix 2: "Convert to Schema.Union"
 
-[D26] (68:8-68:13) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+[D28] (75:8-75:13) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
   Fix 0: "Disable typeUnionToSchemaUnion for this line"
   Fix 1: "Disable typeUnionToSchemaUnion for entire file"
   Fix 2: "Convert to Schema.Union"
 
-[D27] (75:6-75:17) TS6196: 'HelperShape' is declared but never used.
+[D29] (82:6-82:17) TS6196: 'HelperShape' is declared but never used.
   (no quick fixes)
 
-[D28] (75:6-75:17) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+[D30] (82:6-82:17) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
   Fix 0: "Disable typeUnionToSchemaUnion for this line"
   Fix 1: "Disable typeUnionToSchemaUnion for entire file"
   Fix 2: "Convert to Schema.Union"
 
-[D29] (79:6-79:16) TS6196: 'MixedForms' is declared but never used.
+[D31] (86:6-86:16) TS6196: 'MixedForms' is declared but never used.
   (no quick fixes)
 
-[D30] (79:6-79:16) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+[D32] (86:6-86:16) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
   Fix 0: "Disable typeUnionToSchemaUnion for this line"
   Fix 1: "Disable typeUnionToSchemaUnion for entire file"
   Fix 2: "Convert to Schema.Union"
 
-[D31] (83:6-83:24) TS6196: 'HelperShapeEncoded' is declared but never used.
+[D33] (90:6-90:24) TS6196: 'HelperShapeEncoded' is declared but never used.
   (no quick fixes)
 
-[D32] (83:6-83:24) TS377159: This type alias unions Schema `.Encoded` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+[D34] (90:6-90:24) TS377159: This type alias unions Schema `.Encoded` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
   Fix 0: "Disable typeUnionToSchemaUnion for this line"
   Fix 1: "Disable typeUnionToSchemaUnion for entire file"
   Fix 2: "Convert to Schema.Union"
 
-[D33] (87:6-87:23) TS6196: 'MixedFormsEncoded' is declared but never used.
+[D35] (94:6-94:23) TS6196: 'MixedFormsEncoded' is declared but never used.
   (no quick fixes)
 
-[D34] (87:6-87:23) TS377159: This type alias unions Schema `.Encoded` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+[D36] (94:6-94:23) TS377159: This type alias unions Schema `.Encoded` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
   Fix 0: "Disable typeUnionToSchemaUnion for this line"
   Fix 1: "Disable typeUnionToSchemaUnion for entire file"
   Fix 2: "Convert to Schema.Union"
 
-[D35] (90:6-90:21) TS6196: 'HelperPrimitive' is declared but never used.
+[D37] (97:6-97:21) TS6196: 'HelperPrimitive' is declared but never used.
   (no quick fixes)
 
-[D36] (90:6-90:21) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+[D38] (97:6-97:21) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
   Fix 0: "Disable typeUnionToSchemaUnion for this line"
   Fix 1: "Disable typeUnionToSchemaUnion for entire file"
   Fix 2: "Convert to Schema.Union"
 
-[D37] (94:40-94:50) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+[D39] (101:40-101:50) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
   Fix 0: "Disable typeUnionToSchemaUnion for this line"
   Fix 1: "Disable typeUnionToSchemaUnion for entire file"
   Fix 2: "Convert to Schema.Union"
 
-[D38] (97:11-97:23) TS6133: 'InlineShapes' is declared but its value is never read.
+[D40] (104:11-104:23) TS6133: 'InlineShapes' is declared but its value is never read.
   (no quick fixes)
 
-[D39] (97:38-97:41) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+[D41] (104:38-104:41) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
   Fix 0: "Disable typeUnionToSchemaUnion for this line"
   Fix 1: "Disable typeUnionToSchemaUnion for entire file"
   Fix 2: "Convert to Schema.Union"
 
-[D40] (100:7-100:21) TS6133: 'sameLineBefore' is declared but its value is never read.
+[D42] (107:7-107:21) TS6133: 'sameLineBefore' is declared but its value is never read.
   (no quick fixes)
 
-[D41] (100:32-100:40) TS6196: 'SameLine' is declared but never used.
+[D43] (107:32-107:40) TS6196: 'SameLine' is declared but never used.
   (no quick fixes)
 
-[D42] (100:32-100:40) TS377159: This type alias unions Schema `.Encoded` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+[D44] (107:32-107:40) TS377159: This type alias unions Schema `.Encoded` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
   Fix 0: "Disable typeUnionToSchemaUnion for this line"
   Fix 1: "Disable typeUnionToSchemaUnion for entire file"
   Fix 2: "Convert to Schema.Union"
 
-[D43] (103:19-103:28) TS6196: 'Commented' is declared but never used.
+[D45] (110:19-110:28) TS6196: 'Commented' is declared but never used.
   (no quick fixes)
 
-[D44] (103:19-103:28) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+[D46] (110:19-110:28) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
   Fix 0: "Disable typeUnionToSchemaUnion for this line"
   Fix 1: "Disable typeUnionToSchemaUnion for entire file"
   Fix 2: "Convert to Schema.Union"
 
-[D45] (110:6-110:16) TS6196: 'OnlyCircle' is declared but never used.
+[D47] (114:6-114:16) TS6196: 'Documented' is declared but never used.
   (no quick fixes)
 
-[D46] (113:6-113:22) TS6196: 'OnlyCircleParens' is declared but never used.
+[D48] (114:6-114:16) TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+  Fix 0: "Disable typeUnionToSchemaUnion for this line"
+  Fix 1: "Disable typeUnionToSchemaUnion for entire file"
+  Fix 2: "Convert to Schema.Union"
+
+[D49] (121:6-121:16) TS6196: 'OnlyCircle' is declared but never used.
   (no quick fixes)
 
-[D47] (116:6-116:11) TS6196: 'Mixed' is declared but never used.
+[D50] (124:6-124:22) TS6196: 'OnlyCircleParens' is declared but never used.
   (no quick fixes)
 
-[D48] (119:6-119:26) TS6196: 'MixedFormsMixedSides' is declared but never used.
+[D51] (127:6-127:11) TS6196: 'Mixed' is declared but never used.
   (no quick fixes)
 
-[D49] (122:6-122:19) TS6196: 'HelperContext' is declared but never used.
+[D52] (130:6-130:26) TS6196: 'MixedFormsMixedSides' is declared but never used.
   (no quick fixes)
 
-[D50] (131:6-131:21) TS6196: 'UnrelatedHelper' is declared but never used.
+[D53] (133:6-133:19) TS6196: 'HelperContext' is declared but never used.
   (no quick fixes)
 
-[D51] (134:6-134:16) TS6196: 'HelperFake' is declared but never used.
+[D54] (142:6-142:21) TS6196: 'UnrelatedHelper' is declared but never used.
   (no quick fixes)
 
-[D52] (137:6-137:14) TS6196: 'Nullable' is declared but never used.
+[D55] (145:6-145:16) TS6196: 'HelperFake' is declared but never used.
   (no quick fixes)
 
-[D53] (140:6-140:17) TS6196: 'WithLiteral' is declared but never used.
+[D56] (148:6-148:14) TS6196: 'Nullable' is declared but never used.
   (no quick fixes)
 
-[D54] (146:6-146:19) TS6196: 'WithInterface' is declared but never used.
+[D57] (151:6-151:17) TS6196: 'WithLiteral' is declared but never used.
   (no quick fixes)
 
-[D55] (151:6-151:16) TS6196: 'ViaAliases' is declared but never used.
+[D58] (157:6-157:19) TS6196: 'WithInterface' is declared but never used.
   (no quick fixes)
 
-[D56] (154:6-154:18) TS6196: 'SchemaValues' is declared but never used.
+[D59] (162:6-162:16) TS6196: 'ViaAliases' is declared but never used.
   (no quick fixes)
 
-[D57] (157:6-157:13) TS6196: 'Indexed' is declared but never used.
+[D60] (165:6-165:18) TS6196: 'SchemaValues' is declared but never used.
   (no quick fixes)
 
-[D58] (160:6-160:14) TS6196: 'Services' is declared but never used.
+[D61] (168:6-168:13) TS6196: 'Indexed' is declared but never used.
   (no quick fixes)
 
-[D59] (163:6-163:10) TS6196: 'Both' is declared but never used.
+[D62] (171:6-171:14) TS6196: 'Services' is declared but never used.
   (no quick fixes)
 
-[D60] (166:6-166:15) TS6196: 'ShapeList' is declared but never used.
+[D63] (174:6-174:10) TS6196: 'Both' is declared but never used.
   (no quick fixes)
 
-[D61] (167:6-167:17) TS6196: 'ShapeHolder' is declared but never used.
+[D64] (177:6-177:15) TS6196: 'ShapeList' is declared but never used.
   (no quick fixes)
 
-[D62] (170:6-170:13) TS6196: 'Generic' is declared but never used.
+[D65] (178:6-178:17) TS6196: 'ShapeHolder' is declared but never used.
   (no quick fixes)
 
-[D63] (187:6-187:10) TS6196: 'Fake' is declared but never used.
+[D66] (181:6-181:13) TS6196: 'Generic' is declared but never used.
   (no quick fixes)
 
-[D64] (189:6-189:17) TS6196: 'FakeObjects' is declared but never used.
+[D67] (198:6-198:10) TS6196: 'Fake' is declared but never used.
   (no quick fixes)
 
-[D65] (192:6-192:14) TS6196: 'HalfFake' is declared but never used.
+[D68] (200:6-200:17) TS6196: 'FakeObjects' is declared but never used.
+  (no quick fixes)
+
+[D69] (203:6-203:14) TS6196: 'HalfFake' is declared but never used.
   (no quick fixes)
 
 === Quick Fix Application Results ===
@@ -306,6 +321,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -358,6 +380,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -510,6 +536,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -562,6 +595,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -714,6 +751,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -766,6 +810,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -918,6 +966,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -970,6 +1025,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -1121,6 +1180,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -1173,6 +1239,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -1325,6 +1395,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -1377,6 +1454,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -1529,6 +1610,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -1581,6 +1669,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -1732,6 +1824,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -1784,6 +1883,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -1935,6 +2038,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -1987,6 +2097,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -2139,6 +2253,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -2191,6 +2312,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -2294,13 +2419,19 @@ skipped by default
 === [D18] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
 skipped by default
 
-=== [D19] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
+=== [D20] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
 skipped by default
 
-=== [D19] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
+=== [D20] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
 skipped by default
 
-=== [D19] Fix 2: "Convert to Schema.Union" ===
+=== [D21] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
+skipped by default
+
+=== [D21] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
+skipped by default
+
+=== [D21] Fix 2: "Convert to Schema.Union" ===
 
 --- file:///.src/typeUnionToSchemaUnion.ts ---
 // @effect-v3
@@ -2353,6 +2484,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 // MUST TRIGGER, no fix offered - one member is declared earlier and one (`LateD`) later
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
+
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
 
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
@@ -2408,209 +2546,9 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
 
-// MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
-export const Shape2 = Schema.Union(Circle, Square)
-export type Shape2 = typeof Shape2.Type
-
-// MUST NOT TRIGGER - a single `typeof S.Type` member is not a union
-type OnlyCircle = typeof Circle.Type
-
-// MUST NOT TRIGGER - parentheses around a single member do not make a union
-type OnlyCircleParens = (typeof Circle.Type)
-
-// MUST NOT TRIGGER - mixed `.Type` and `.Encoded`
-type Mixed = typeof Circle.Type | typeof Square.Encoded
-
-// MUST NOT TRIGGER - mixed member forms that extract different sides
-type MixedFormsMixedSides = typeof Circle.Type | Schema.Schema.Encoded<typeof Square>
-
-// MUST NOT TRIGGER - `Schema.Schema.Context<typeof S>` is not an accepted member form
-type HelperContext = Schema.Schema.Context<typeof Circle> | Schema.Schema.Context<typeof Square>
-
-// MUST NOT TRIGGER - `Schema.Schema.Type` from an unrelated local namespace is not the
-// Effect helper (here it returns the schema itself, not its Type)
-declare namespace LocalSchema {
-  namespace Schema {
-    type Type<T> = T
-  }
-}
-type UnrelatedHelper = LocalSchema.Schema.Type<typeof Circle> | LocalSchema.Schema.Type<typeof Square>
-
-// MUST NOT TRIGGER - `Schema.Schema.Type` applied to a non-schema value
-type HelperFake = Schema.Schema.Type<typeof NotSchemaA> | Schema.Schema.Type<typeof NotSchemaB>
-
-// MUST NOT TRIGGER - `| null` is not a schema member
-type Nullable = typeof Circle.Type | typeof Square.Type | null
-
-// MUST NOT TRIGGER - literal member
-type WithLiteral = typeof Circle.Type | typeof Square.Type | "none"
-
-// MUST NOT TRIGGER - interface member
-interface Extra {
-  readonly kind: "extra"
-}
-type WithInterface = typeof Circle.Type | Extra
-
-// MUST NOT TRIGGER - union of type references that happen to resolve to schema types
-type CircleType = typeof Circle.Type
-type SquareType = typeof Square.Type
-type ViaAliases = CircleType | SquareType
-
-// MUST NOT TRIGGER - union of the schemas themselves, not their extracted types
-type SchemaValues = typeof Circle | typeof Square
-
-// MUST NOT TRIGGER - indexed access is another member form
-type Indexed = (typeof Circle)["Type"] | (typeof Square)["Type"]
-
-// MUST NOT TRIGGER - other schema properties
-type Services = typeof Circle.Context | typeof Square.Context
-
-// MUST NOT TRIGGER - intersection, not a union
-type Both = typeof Circle.Type & typeof Square.Type
-
-// MUST NOT TRIGGER - the union is nested inside another type, not the alias right-hand side
-type ShapeList = Array<typeof Circle.Type | typeof Square.Type>
-type ShapeHolder = { readonly shape: typeof Circle.Type | typeof Square.Type }
-
-// MUST NOT TRIGGER - generic alias
-type Generic<_T> = typeof Circle.Type | typeof Square.Type
-
-// MUST NOT TRIGGER - ambient context
-declare namespace Ambient {
-  type AmbientShape = typeof Circle.Type | typeof Square.Type
-}
-
-// MUST NOT TRIGGER - `Type` / `Encoded` statics on non-schema values (detection is
-// checker-based, not name-based)
-class NotSchemaA {
-  static Type = "a" as const
-  static Encoded = 1
-}
-class NotSchemaB {
-  static Type = "b" as const
-  static Encoded = 2
-}
-type Fake = typeof NotSchemaA.Type | typeof NotSchemaB.Type
-const FakeObject = { Type: "x" as const, Encoded: 0 }
-type FakeObjects = typeof FakeObject.Type | typeof NotSchemaA.Type
-
-// MUST NOT TRIGGER - one schema member and one non-schema member
-type HalfFake = typeof Circle.Type | typeof NotSchemaA.Type
-
-
-=== [D23] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
-skipped by default
-
-=== [D23] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
-skipped by default
-
-=== [D23] Fix 2: "Convert to Schema.Union" ===
-
---- file:///.src/typeUnionToSchemaUnion.ts ---
-// @effect-v3
-// @effect-diagnostics typeUnionToSchemaUnion:warning
-import { Schema } from "effect"
-
-export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Number })
-export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
-export const Triangle = Schema.Struct({ kind: Schema.Literal("triangle"), base: Schema.Number })
-
-// MUST TRIGGER - exported union of `typeof S.Type`; the fix keeps `export` and
-// inserts `export const Shape = Schema.Union(Circle, Square)` just before the alias
-export type Shape = typeof Circle.Type | typeof Square.Type
-
-// MUST TRIGGER - union of `typeof S.Encoded`; the fixed alias uses `.Encoded`
-export type ShapeEncoded = typeof Circle.Encoded | typeof Square.Encoded
-
-// MUST TRIGGER - non-exported alias with three members; the fix inserts a non-exported const
-type AnyShape = typeof Circle.Type | typeof Square.Type | typeof Triangle.Type
-
-// MUST TRIGGER - nested parenthesized unions are flattened into a single Schema.Union
-type FlatShape = (typeof Circle.Type | typeof Square.Type) | (typeof Triangle.Type)
-
-// MUST TRIGGER - leading `|` and parenthesized members
-type LeadingPipe =
-  | (typeof Circle.Encoded)
-  | typeof Square.Encoded
-
-// MUST TRIGGER - members are property-access expressions on the Schema module
-type Primitive = typeof Schema.String.Type | typeof Schema.Number.Type
-
-// MUST TRIGGER - members are Schema classes
-class Person extends Schema.Class<Person>("Person")({ name: Schema.String }) {}
-class Robot extends Schema.Class<Robot>("Robot")({ serial: Schema.Number }) {}
-export type Being = typeof Person.Type | typeof Robot.Type
-
-// MUST TRIGGER - members are qualified through a local namespace
-namespace Models {
-  export const Cat = Schema.Struct({ meow: Schema.Boolean })
-  export const Dog = Schema.Struct({ bark: Schema.Boolean })
-}
-type Pet = typeof Models.Cat.Type | typeof Models.Dog.Type
-
-// MUST TRIGGER, no fix offered - the alias is declared before its member schemas;
-// a const inserted before the alias would fail with TS2448 (used before declaration)
-export type Late = typeof LateA.Type | typeof LateB.Type
-export const LateA = Schema.Struct({ a: Schema.String })
-export const LateB = Schema.Struct({ b: Schema.String })
-
-// MUST TRIGGER, no fix offered - one member is declared earlier and one (`LateD`) later
-type HalfLate = typeof Circle.Type | typeof LateD.Type
-const LateD = Schema.Struct({ d: Schema.String })
-
-// MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
-export const Pair = [Circle, Square] as const
-export type Pair = typeof Circle.Type | typeof Square.Type
-
-// MUST TRIGGER - both `Duo` and `DuoSchema` already exist, so the fix names the schema `DuoSchema2`
-const Duo = "duo"
-const DuoSchema = "duoSchema"
-const DuoSchema2 = Schema.Union(Circle, Square);
-type Duo = typeof DuoSchema2.Encoded
-
-// MUST TRIGGER - non-ambient namespace: the fix inserts `export const Any` inside the namespace
-namespace Shapes {
-  export type Any = typeof Circle.Type | typeof Square.Type
-}
-
-// MUST TRIGGER - type alias local to a function body
-export const localAlias = () => {
-  type Local = typeof Circle.Type | typeof Square.Type
-  const value: Local = { kind: "circle", radius: 1 }
-  return value
-}
-
-// MUST TRIGGER - union of `Schema.Schema.Type<typeof S>` members; the fix uses
-// `Schema.Union(Circle, Square)` and the alias becomes `typeof HelperShape.Type`
-type HelperShape = Schema.Schema.Type<typeof Circle> | Schema.Schema.Type<typeof Square>
-
-// MUST TRIGGER - `typeof S.Type` and `Schema.Schema.Type<typeof S>` mixed: both extract
-// the Type side, so the fix uses `Schema.Union(Circle, Square, Triangle)`
-type MixedForms = typeof Circle.Type | Schema.Schema.Type<typeof Square> | typeof Triangle.Type
-
-// MUST TRIGGER - union of `Schema.Schema.Encoded<typeof S>` members; the alias becomes
-// `typeof HelperShapeEncoded.Encoded`
-type HelperShapeEncoded = Schema.Schema.Encoded<typeof Circle> | Schema.Schema.Encoded<typeof Square>
-
-// MUST TRIGGER - `typeof S.Encoded` and `Schema.Schema.Encoded<typeof S>` mixed: both
-// extract the Encoded side
-type MixedFormsEncoded = Schema.Schema.Encoded<typeof Circle> | typeof Square.Encoded
-
-// MUST TRIGGER - `Schema.Schema.Type` with a qualified, non-local member expression
-type HelperPrimitive = Schema.Schema.Type<typeof Schema.String> | Schema.Schema.Type<typeof Schema.Number>
-
-// MUST TRIGGER - the alias does not start its line (inline function body); the fix
-// inserts the const inline, right before the alias, without duplicating the line prefix
-export const inlineBody = () => { type InlineBody = typeof Circle.Type | typeof Square.Type; return [] as Array<InlineBody> }
-
-// MUST TRIGGER - inline namespace body; the const is inserted inline before the alias
-namespace InlineShapes { export type Any = typeof Circle.Type | typeof Square.Type }
-
-// MUST TRIGGER - another statement precedes the alias on the same line
-const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.Encoded
-
-// MUST TRIGGER - a block comment precedes the alias on the same line
-/* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -2762,6 +2700,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -2769,12 +2714,12 @@ export type Pair = typeof Circle.Type | typeof Square.Type
 // MUST TRIGGER - both `Duo` and `DuoSchema` already exist, so the fix names the schema `DuoSchema2`
 const Duo = "duo"
 const DuoSchema = "duoSchema"
-type Duo = typeof Circle.Encoded | typeof Square.Encoded
+const DuoSchema2 = Schema.Union(Circle, Square);
+type Duo = typeof DuoSchema2.Encoded
 
 // MUST TRIGGER - non-ambient namespace: the fix inserts `export const Any` inside the namespace
 namespace Shapes {
-  export const Any = Schema.Union(Circle, Square);
-  export type Any = typeof Any.Type
+  export type Any = typeof Circle.Type | typeof Square.Type
 }
 
 // MUST TRIGGER - type alias local to a function body
@@ -2815,6 +2760,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -2906,13 +2855,13 @@ type FakeObjects = typeof FakeObject.Type | typeof NotSchemaA.Type
 type HalfFake = typeof Circle.Type | typeof NotSchemaA.Type
 
 
-=== [D26] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
+=== [D27] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
 skipped by default
 
-=== [D26] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
+=== [D27] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
 skipped by default
 
-=== [D26] Fix 2: "Convert to Schema.Union" ===
+=== [D27] Fix 2: "Convert to Schema.Union" ===
 
 --- file:///.src/typeUnionToSchemaUnion.ts ---
 // @effect-v3
@@ -2966,6 +2915,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -2977,13 +2933,13 @@ type Duo = typeof Circle.Encoded | typeof Square.Encoded
 
 // MUST TRIGGER - non-ambient namespace: the fix inserts `export const Any` inside the namespace
 namespace Shapes {
-  export type Any = typeof Circle.Type | typeof Square.Type
+  export const Any = Schema.Union(Circle, Square);
+  export type Any = typeof Any.Type
 }
 
 // MUST TRIGGER - type alias local to a function body
 export const localAlias = () => {
-  const Local = Schema.Union(Circle, Square);
-  type Local = typeof Local.Type
+  type Local = typeof Circle.Type | typeof Square.Type
   const value: Local = { kind: "circle", radius: 1 }
   return value
 }
@@ -3019,6 +2975,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -3170,6 +3130,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -3186,15 +3153,15 @@ namespace Shapes {
 
 // MUST TRIGGER - type alias local to a function body
 export const localAlias = () => {
-  type Local = typeof Circle.Type | typeof Square.Type
+  const Local = Schema.Union(Circle, Square);
+  type Local = typeof Local.Type
   const value: Local = { kind: "circle", radius: 1 }
   return value
 }
 
 // MUST TRIGGER - union of `Schema.Schema.Type<typeof S>` members; the fix uses
 // `Schema.Union(Circle, Square)` and the alias becomes `typeof HelperShape.Type`
-const HelperShape = Schema.Union(Circle, Square);
-type HelperShape = typeof HelperShape.Type
+type HelperShape = Schema.Schema.Type<typeof Circle> | Schema.Schema.Type<typeof Square>
 
 // MUST TRIGGER - `typeof S.Type` and `Schema.Schema.Type<typeof S>` mixed: both extract
 // the Type side, so the fix uses `Schema.Union(Circle, Square, Triangle)`
@@ -3223,6 +3190,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -3374,6 +3345,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -3397,12 +3375,12 @@ export const localAlias = () => {
 
 // MUST TRIGGER - union of `Schema.Schema.Type<typeof S>` members; the fix uses
 // `Schema.Union(Circle, Square)` and the alias becomes `typeof HelperShape.Type`
-type HelperShape = Schema.Schema.Type<typeof Circle> | Schema.Schema.Type<typeof Square>
+const HelperShape = Schema.Union(Circle, Square);
+type HelperShape = typeof HelperShape.Type
 
 // MUST TRIGGER - `typeof S.Type` and `Schema.Schema.Type<typeof S>` mixed: both extract
 // the Type side, so the fix uses `Schema.Union(Circle, Square, Triangle)`
-const MixedForms = Schema.Union(Circle, Square, Triangle);
-type MixedForms = typeof MixedForms.Type
+type MixedForms = typeof Circle.Type | Schema.Schema.Type<typeof Square> | typeof Triangle.Type
 
 // MUST TRIGGER - union of `Schema.Schema.Encoded<typeof S>` members; the alias becomes
 // `typeof HelperShapeEncoded.Encoded`
@@ -3427,6 +3405,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -3578,6 +3560,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -3605,12 +3594,12 @@ type HelperShape = Schema.Schema.Type<typeof Circle> | Schema.Schema.Type<typeof
 
 // MUST TRIGGER - `typeof S.Type` and `Schema.Schema.Type<typeof S>` mixed: both extract
 // the Type side, so the fix uses `Schema.Union(Circle, Square, Triangle)`
-type MixedForms = typeof Circle.Type | Schema.Schema.Type<typeof Square> | typeof Triangle.Type
+const MixedForms = Schema.Union(Circle, Square, Triangle);
+type MixedForms = typeof MixedForms.Type
 
 // MUST TRIGGER - union of `Schema.Schema.Encoded<typeof S>` members; the alias becomes
 // `typeof HelperShapeEncoded.Encoded`
-const HelperShapeEncoded = Schema.Union(Circle, Square);
-type HelperShapeEncoded = typeof HelperShapeEncoded.Encoded
+type HelperShapeEncoded = Schema.Schema.Encoded<typeof Circle> | Schema.Schema.Encoded<typeof Square>
 
 // MUST TRIGGER - `typeof S.Encoded` and `Schema.Schema.Encoded<typeof S>` mixed: both
 // extract the Encoded side
@@ -3631,6 +3620,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -3782,6 +3775,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -3813,12 +3813,12 @@ type MixedForms = typeof Circle.Type | Schema.Schema.Type<typeof Square> | typeo
 
 // MUST TRIGGER - union of `Schema.Schema.Encoded<typeof S>` members; the alias becomes
 // `typeof HelperShapeEncoded.Encoded`
-type HelperShapeEncoded = Schema.Schema.Encoded<typeof Circle> | Schema.Schema.Encoded<typeof Square>
+const HelperShapeEncoded = Schema.Union(Circle, Square);
+type HelperShapeEncoded = typeof HelperShapeEncoded.Encoded
 
 // MUST TRIGGER - `typeof S.Encoded` and `Schema.Schema.Encoded<typeof S>` mixed: both
 // extract the Encoded side
-const MixedFormsEncoded = Schema.Union(Circle, Square);
-type MixedFormsEncoded = typeof MixedFormsEncoded.Encoded
+type MixedFormsEncoded = Schema.Schema.Encoded<typeof Circle> | typeof Square.Encoded
 
 // MUST TRIGGER - `Schema.Schema.Type` with a qualified, non-local member expression
 type HelperPrimitive = Schema.Schema.Type<typeof Schema.String> | Schema.Schema.Type<typeof Schema.Number>
@@ -3835,6 +3835,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -3986,6 +3990,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -4021,11 +4032,11 @@ type HelperShapeEncoded = Schema.Schema.Encoded<typeof Circle> | Schema.Schema.E
 
 // MUST TRIGGER - `typeof S.Encoded` and `Schema.Schema.Encoded<typeof S>` mixed: both
 // extract the Encoded side
-type MixedFormsEncoded = Schema.Schema.Encoded<typeof Circle> | typeof Square.Encoded
+const MixedFormsEncoded = Schema.Union(Circle, Square);
+type MixedFormsEncoded = typeof MixedFormsEncoded.Encoded
 
 // MUST TRIGGER - `Schema.Schema.Type` with a qualified, non-local member expression
-const HelperPrimitive = Schema.Union(Schema.String, Schema.Number);
-type HelperPrimitive = typeof HelperPrimitive.Type
+type HelperPrimitive = Schema.Schema.Type<typeof Schema.String> | Schema.Schema.Type<typeof Schema.Number>
 
 // MUST TRIGGER - the alias does not start its line (inline function body); the fix
 // inserts the const inline, right before the alias, without duplicating the line prefix
@@ -4039,6 +4050,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -4130,13 +4145,13 @@ type FakeObjects = typeof FakeObject.Type | typeof NotSchemaA.Type
 type HalfFake = typeof Circle.Type | typeof NotSchemaA.Type
 
 
-=== [D37] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
+=== [D38] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
 skipped by default
 
-=== [D37] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
+=== [D38] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
 skipped by default
 
-=== [D37] Fix 2: "Convert to Schema.Union" ===
+=== [D38] Fix 2: "Convert to Schema.Union" ===
 
 --- file:///.src/typeUnionToSchemaUnion.ts ---
 // @effect-v3
@@ -4190,6 +4205,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -4228,11 +4250,12 @@ type HelperShapeEncoded = Schema.Schema.Encoded<typeof Circle> | Schema.Schema.E
 type MixedFormsEncoded = Schema.Schema.Encoded<typeof Circle> | typeof Square.Encoded
 
 // MUST TRIGGER - `Schema.Schema.Type` with a qualified, non-local member expression
-type HelperPrimitive = Schema.Schema.Type<typeof Schema.String> | Schema.Schema.Type<typeof Schema.Number>
+const HelperPrimitive = Schema.Union(Schema.String, Schema.Number);
+type HelperPrimitive = typeof HelperPrimitive.Type
 
 // MUST TRIGGER - the alias does not start its line (inline function body); the fix
 // inserts the const inline, right before the alias, without duplicating the line prefix
-export const inlineBody = () => { const InlineBody = Schema.Union(Circle, Square); type InlineBody = typeof InlineBody.Type; return [] as Array<InlineBody> }
+export const inlineBody = () => { type InlineBody = typeof Circle.Type | typeof Square.Type; return [] as Array<InlineBody> }
 
 // MUST TRIGGER - inline namespace body; the const is inserted inline before the alias
 namespace InlineShapes { export type Any = typeof Circle.Type | typeof Square.Type }
@@ -4242,6 +4265,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -4393,6 +4420,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -4435,16 +4469,20 @@ type HelperPrimitive = Schema.Schema.Type<typeof Schema.String> | Schema.Schema.
 
 // MUST TRIGGER - the alias does not start its line (inline function body); the fix
 // inserts the const inline, right before the alias, without duplicating the line prefix
-export const inlineBody = () => { type InlineBody = typeof Circle.Type | typeof Square.Type; return [] as Array<InlineBody> }
+export const inlineBody = () => { const InlineBody = Schema.Union(Circle, Square); type InlineBody = typeof InlineBody.Type; return [] as Array<InlineBody> }
 
 // MUST TRIGGER - inline namespace body; the const is inserted inline before the alias
-namespace InlineShapes { export const Any = Schema.Union(Circle, Square); export type Any = typeof Any.Type }
+namespace InlineShapes { export type Any = typeof Circle.Type | typeof Square.Type }
 
 // MUST TRIGGER - another statement precedes the alias on the same line
 const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.Encoded
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -4536,13 +4574,13 @@ type FakeObjects = typeof FakeObject.Type | typeof NotSchemaA.Type
 type HalfFake = typeof Circle.Type | typeof NotSchemaA.Type
 
 
-=== [D42] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
+=== [D41] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
 skipped by default
 
-=== [D42] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
+=== [D41] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
 skipped by default
 
-=== [D42] Fix 2: "Convert to Schema.Union" ===
+=== [D41] Fix 2: "Convert to Schema.Union" ===
 
 --- file:///.src/typeUnionToSchemaUnion.ts ---
 // @effect-v3
@@ -4596,6 +4634,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -4641,13 +4686,17 @@ type HelperPrimitive = Schema.Schema.Type<typeof Schema.String> | Schema.Schema.
 export const inlineBody = () => { type InlineBody = typeof Circle.Type | typeof Square.Type; return [] as Array<InlineBody> }
 
 // MUST TRIGGER - inline namespace body; the const is inserted inline before the alias
-namespace InlineShapes { export type Any = typeof Circle.Type | typeof Square.Type }
+namespace InlineShapes { export const Any = Schema.Union(Circle, Square); export type Any = typeof Any.Type }
 
 // MUST TRIGGER - another statement precedes the alias on the same line
-const sameLineBefore = 1; const SameLine = Schema.Union(Circle, Square); type SameLine = typeof SameLine.Encoded
+const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.Encoded
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)
@@ -4799,6 +4848,227 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
+// MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
+export const Pair = [Circle, Square] as const
+export type Pair = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - both `Duo` and `DuoSchema` already exist, so the fix names the schema `DuoSchema2`
+const Duo = "duo"
+const DuoSchema = "duoSchema"
+type Duo = typeof Circle.Encoded | typeof Square.Encoded
+
+// MUST TRIGGER - non-ambient namespace: the fix inserts `export const Any` inside the namespace
+namespace Shapes {
+  export type Any = typeof Circle.Type | typeof Square.Type
+}
+
+// MUST TRIGGER - type alias local to a function body
+export const localAlias = () => {
+  type Local = typeof Circle.Type | typeof Square.Type
+  const value: Local = { kind: "circle", radius: 1 }
+  return value
+}
+
+// MUST TRIGGER - union of `Schema.Schema.Type<typeof S>` members; the fix uses
+// `Schema.Union(Circle, Square)` and the alias becomes `typeof HelperShape.Type`
+type HelperShape = Schema.Schema.Type<typeof Circle> | Schema.Schema.Type<typeof Square>
+
+// MUST TRIGGER - `typeof S.Type` and `Schema.Schema.Type<typeof S>` mixed: both extract
+// the Type side, so the fix uses `Schema.Union(Circle, Square, Triangle)`
+type MixedForms = typeof Circle.Type | Schema.Schema.Type<typeof Square> | typeof Triangle.Type
+
+// MUST TRIGGER - union of `Schema.Schema.Encoded<typeof S>` members; the alias becomes
+// `typeof HelperShapeEncoded.Encoded`
+type HelperShapeEncoded = Schema.Schema.Encoded<typeof Circle> | Schema.Schema.Encoded<typeof Square>
+
+// MUST TRIGGER - `typeof S.Encoded` and `Schema.Schema.Encoded<typeof S>` mixed: both
+// extract the Encoded side
+type MixedFormsEncoded = Schema.Schema.Encoded<typeof Circle> | typeof Square.Encoded
+
+// MUST TRIGGER - `Schema.Schema.Type` with a qualified, non-local member expression
+type HelperPrimitive = Schema.Schema.Type<typeof Schema.String> | Schema.Schema.Type<typeof Schema.Number>
+
+// MUST TRIGGER - the alias does not start its line (inline function body); the fix
+// inserts the const inline, right before the alias, without duplicating the line prefix
+export const inlineBody = () => { type InlineBody = typeof Circle.Type | typeof Square.Type; return [] as Array<InlineBody> }
+
+// MUST TRIGGER - inline namespace body; the const is inserted inline before the alias
+namespace InlineShapes { export type Any = typeof Circle.Type | typeof Square.Type }
+
+// MUST TRIGGER - another statement precedes the alias on the same line
+const sameLineBefore = 1; const SameLine = Schema.Union(Circle, Square); type SameLine = typeof SameLine.Encoded
+
+// MUST TRIGGER - a block comment precedes the alias on the same line
+/* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
+
+// MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
+export const Shape2 = Schema.Union(Circle, Square)
+export type Shape2 = typeof Shape2.Type
+
+// MUST NOT TRIGGER - a single `typeof S.Type` member is not a union
+type OnlyCircle = typeof Circle.Type
+
+// MUST NOT TRIGGER - parentheses around a single member do not make a union
+type OnlyCircleParens = (typeof Circle.Type)
+
+// MUST NOT TRIGGER - mixed `.Type` and `.Encoded`
+type Mixed = typeof Circle.Type | typeof Square.Encoded
+
+// MUST NOT TRIGGER - mixed member forms that extract different sides
+type MixedFormsMixedSides = typeof Circle.Type | Schema.Schema.Encoded<typeof Square>
+
+// MUST NOT TRIGGER - `Schema.Schema.Context<typeof S>` is not an accepted member form
+type HelperContext = Schema.Schema.Context<typeof Circle> | Schema.Schema.Context<typeof Square>
+
+// MUST NOT TRIGGER - `Schema.Schema.Type` from an unrelated local namespace is not the
+// Effect helper (here it returns the schema itself, not its Type)
+declare namespace LocalSchema {
+  namespace Schema {
+    type Type<T> = T
+  }
+}
+type UnrelatedHelper = LocalSchema.Schema.Type<typeof Circle> | LocalSchema.Schema.Type<typeof Square>
+
+// MUST NOT TRIGGER - `Schema.Schema.Type` applied to a non-schema value
+type HelperFake = Schema.Schema.Type<typeof NotSchemaA> | Schema.Schema.Type<typeof NotSchemaB>
+
+// MUST NOT TRIGGER - `| null` is not a schema member
+type Nullable = typeof Circle.Type | typeof Square.Type | null
+
+// MUST NOT TRIGGER - literal member
+type WithLiteral = typeof Circle.Type | typeof Square.Type | "none"
+
+// MUST NOT TRIGGER - interface member
+interface Extra {
+  readonly kind: "extra"
+}
+type WithInterface = typeof Circle.Type | Extra
+
+// MUST NOT TRIGGER - union of type references that happen to resolve to schema types
+type CircleType = typeof Circle.Type
+type SquareType = typeof Square.Type
+type ViaAliases = CircleType | SquareType
+
+// MUST NOT TRIGGER - union of the schemas themselves, not their extracted types
+type SchemaValues = typeof Circle | typeof Square
+
+// MUST NOT TRIGGER - indexed access is another member form
+type Indexed = (typeof Circle)["Type"] | (typeof Square)["Type"]
+
+// MUST NOT TRIGGER - other schema properties
+type Services = typeof Circle.Context | typeof Square.Context
+
+// MUST NOT TRIGGER - intersection, not a union
+type Both = typeof Circle.Type & typeof Square.Type
+
+// MUST NOT TRIGGER - the union is nested inside another type, not the alias right-hand side
+type ShapeList = Array<typeof Circle.Type | typeof Square.Type>
+type ShapeHolder = { readonly shape: typeof Circle.Type | typeof Square.Type }
+
+// MUST NOT TRIGGER - generic alias
+type Generic<_T> = typeof Circle.Type | typeof Square.Type
+
+// MUST NOT TRIGGER - ambient context
+declare namespace Ambient {
+  type AmbientShape = typeof Circle.Type | typeof Square.Type
+}
+
+// MUST NOT TRIGGER - `Type` / `Encoded` statics on non-schema values (detection is
+// checker-based, not name-based)
+class NotSchemaA {
+  static Type = "a" as const
+  static Encoded = 1
+}
+class NotSchemaB {
+  static Type = "b" as const
+  static Encoded = 2
+}
+type Fake = typeof NotSchemaA.Type | typeof NotSchemaB.Type
+const FakeObject = { Type: "x" as const, Encoded: 0 }
+type FakeObjects = typeof FakeObject.Type | typeof NotSchemaA.Type
+
+// MUST NOT TRIGGER - one schema member and one non-schema member
+type HalfFake = typeof Circle.Type | typeof NotSchemaA.Type
+
+
+=== [D46] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
+skipped by default
+
+=== [D46] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
+skipped by default
+
+=== [D46] Fix 2: "Convert to Schema.Union" ===
+
+--- file:///.src/typeUnionToSchemaUnion.ts ---
+// @effect-v3
+// @effect-diagnostics typeUnionToSchemaUnion:warning
+import { Schema } from "effect"
+
+export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Number })
+export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
+export const Triangle = Schema.Struct({ kind: Schema.Literal("triangle"), base: Schema.Number })
+
+// MUST TRIGGER - exported union of `typeof S.Type`; the fix keeps `export` and
+// inserts `export const Shape = Schema.Union(Circle, Square)` just before the alias
+export type Shape = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - union of `typeof S.Encoded`; the fixed alias uses `.Encoded`
+export type ShapeEncoded = typeof Circle.Encoded | typeof Square.Encoded
+
+// MUST TRIGGER - non-exported alias with three members; the fix inserts a non-exported const
+type AnyShape = typeof Circle.Type | typeof Square.Type | typeof Triangle.Type
+
+// MUST TRIGGER - nested parenthesized unions are flattened into a single Schema.Union
+type FlatShape = (typeof Circle.Type | typeof Square.Type) | (typeof Triangle.Type)
+
+// MUST TRIGGER - leading `|` and parenthesized members
+type LeadingPipe =
+  | (typeof Circle.Encoded)
+  | typeof Square.Encoded
+
+// MUST TRIGGER - members are property-access expressions on the Schema module
+type Primitive = typeof Schema.String.Type | typeof Schema.Number.Type
+
+// MUST TRIGGER - members are Schema classes
+class Person extends Schema.Class<Person>("Person")({ name: Schema.String }) {}
+class Robot extends Schema.Class<Robot>("Robot")({ serial: Schema.Number }) {}
+export type Being = typeof Person.Type | typeof Robot.Type
+
+// MUST TRIGGER - members are qualified through a local namespace
+namespace Models {
+  export const Cat = Schema.Struct({ meow: Schema.Boolean })
+  export const Dog = Schema.Struct({ bark: Schema.Boolean })
+}
+type Pet = typeof Models.Cat.Type | typeof Models.Dog.Type
+
+// MUST TRIGGER, no fix offered - the alias is declared before its member schemas;
+// a const inserted before the alias would fail with TS2448 (used before declaration)
+export type Late = typeof LateA.Type | typeof LateB.Type
+export const LateA = Schema.Struct({ a: Schema.String })
+export const LateB = Schema.Struct({ b: Schema.String })
+
+// MUST TRIGGER, no fix offered - one member is declared earlier and one (`LateD`) later
+type HalfLate = typeof Circle.Type | typeof LateD.Type
+const LateD = Schema.Struct({ d: Schema.String })
+
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -4851,6 +5121,225 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ const Commented = Schema.Union(Circle, Square); type Commented = typeof Commented.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
+
+// MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
+export const Shape2 = Schema.Union(Circle, Square)
+export type Shape2 = typeof Shape2.Type
+
+// MUST NOT TRIGGER - a single `typeof S.Type` member is not a union
+type OnlyCircle = typeof Circle.Type
+
+// MUST NOT TRIGGER - parentheses around a single member do not make a union
+type OnlyCircleParens = (typeof Circle.Type)
+
+// MUST NOT TRIGGER - mixed `.Type` and `.Encoded`
+type Mixed = typeof Circle.Type | typeof Square.Encoded
+
+// MUST NOT TRIGGER - mixed member forms that extract different sides
+type MixedFormsMixedSides = typeof Circle.Type | Schema.Schema.Encoded<typeof Square>
+
+// MUST NOT TRIGGER - `Schema.Schema.Context<typeof S>` is not an accepted member form
+type HelperContext = Schema.Schema.Context<typeof Circle> | Schema.Schema.Context<typeof Square>
+
+// MUST NOT TRIGGER - `Schema.Schema.Type` from an unrelated local namespace is not the
+// Effect helper (here it returns the schema itself, not its Type)
+declare namespace LocalSchema {
+  namespace Schema {
+    type Type<T> = T
+  }
+}
+type UnrelatedHelper = LocalSchema.Schema.Type<typeof Circle> | LocalSchema.Schema.Type<typeof Square>
+
+// MUST NOT TRIGGER - `Schema.Schema.Type` applied to a non-schema value
+type HelperFake = Schema.Schema.Type<typeof NotSchemaA> | Schema.Schema.Type<typeof NotSchemaB>
+
+// MUST NOT TRIGGER - `| null` is not a schema member
+type Nullable = typeof Circle.Type | typeof Square.Type | null
+
+// MUST NOT TRIGGER - literal member
+type WithLiteral = typeof Circle.Type | typeof Square.Type | "none"
+
+// MUST NOT TRIGGER - interface member
+interface Extra {
+  readonly kind: "extra"
+}
+type WithInterface = typeof Circle.Type | Extra
+
+// MUST NOT TRIGGER - union of type references that happen to resolve to schema types
+type CircleType = typeof Circle.Type
+type SquareType = typeof Square.Type
+type ViaAliases = CircleType | SquareType
+
+// MUST NOT TRIGGER - union of the schemas themselves, not their extracted types
+type SchemaValues = typeof Circle | typeof Square
+
+// MUST NOT TRIGGER - indexed access is another member form
+type Indexed = (typeof Circle)["Type"] | (typeof Square)["Type"]
+
+// MUST NOT TRIGGER - other schema properties
+type Services = typeof Circle.Context | typeof Square.Context
+
+// MUST NOT TRIGGER - intersection, not a union
+type Both = typeof Circle.Type & typeof Square.Type
+
+// MUST NOT TRIGGER - the union is nested inside another type, not the alias right-hand side
+type ShapeList = Array<typeof Circle.Type | typeof Square.Type>
+type ShapeHolder = { readonly shape: typeof Circle.Type | typeof Square.Type }
+
+// MUST NOT TRIGGER - generic alias
+type Generic<_T> = typeof Circle.Type | typeof Square.Type
+
+// MUST NOT TRIGGER - ambient context
+declare namespace Ambient {
+  type AmbientShape = typeof Circle.Type | typeof Square.Type
+}
+
+// MUST NOT TRIGGER - `Type` / `Encoded` statics on non-schema values (detection is
+// checker-based, not name-based)
+class NotSchemaA {
+  static Type = "a" as const
+  static Encoded = 1
+}
+class NotSchemaB {
+  static Type = "b" as const
+  static Encoded = 2
+}
+type Fake = typeof NotSchemaA.Type | typeof NotSchemaB.Type
+const FakeObject = { Type: "x" as const, Encoded: 0 }
+type FakeObjects = typeof FakeObject.Type | typeof NotSchemaA.Type
+
+// MUST NOT TRIGGER - one schema member and one non-schema member
+type HalfFake = typeof Circle.Type | typeof NotSchemaA.Type
+
+
+=== [D48] Fix 0: "Disable typeUnionToSchemaUnion for this line" ===
+skipped by default
+
+=== [D48] Fix 1: "Disable typeUnionToSchemaUnion for entire file" ===
+skipped by default
+
+=== [D48] Fix 2: "Convert to Schema.Union" ===
+
+--- file:///.src/typeUnionToSchemaUnion.ts ---
+// @effect-v3
+// @effect-diagnostics typeUnionToSchemaUnion:warning
+import { Schema } from "effect"
+
+export const Circle = Schema.Struct({ kind: Schema.Literal("circle"), radius: Schema.Number })
+export const Square = Schema.Struct({ kind: Schema.Literal("square"), side: Schema.Number })
+export const Triangle = Schema.Struct({ kind: Schema.Literal("triangle"), base: Schema.Number })
+
+// MUST TRIGGER - exported union of `typeof S.Type`; the fix keeps `export` and
+// inserts `export const Shape = Schema.Union(Circle, Square)` just before the alias
+export type Shape = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - union of `typeof S.Encoded`; the fixed alias uses `.Encoded`
+export type ShapeEncoded = typeof Circle.Encoded | typeof Square.Encoded
+
+// MUST TRIGGER - non-exported alias with three members; the fix inserts a non-exported const
+type AnyShape = typeof Circle.Type | typeof Square.Type | typeof Triangle.Type
+
+// MUST TRIGGER - nested parenthesized unions are flattened into a single Schema.Union
+type FlatShape = (typeof Circle.Type | typeof Square.Type) | (typeof Triangle.Type)
+
+// MUST TRIGGER - leading `|` and parenthesized members
+type LeadingPipe =
+  | (typeof Circle.Encoded)
+  | typeof Square.Encoded
+
+// MUST TRIGGER - members are property-access expressions on the Schema module
+type Primitive = typeof Schema.String.Type | typeof Schema.Number.Type
+
+// MUST TRIGGER - members are Schema classes
+class Person extends Schema.Class<Person>("Person")({ name: Schema.String }) {}
+class Robot extends Schema.Class<Robot>("Robot")({ serial: Schema.Number }) {}
+export type Being = typeof Person.Type | typeof Robot.Type
+
+// MUST TRIGGER - members are qualified through a local namespace
+namespace Models {
+  export const Cat = Schema.Struct({ meow: Schema.Boolean })
+  export const Dog = Schema.Struct({ bark: Schema.Boolean })
+}
+type Pet = typeof Models.Cat.Type | typeof Models.Dog.Type
+
+// MUST TRIGGER, no fix offered - the alias is declared before its member schemas;
+// a const inserted before the alias would fail with TS2448 (used before declaration)
+export type Late = typeof LateA.Type | typeof LateB.Type
+export const LateA = Schema.Struct({ a: Schema.String })
+export const LateB = Schema.Struct({ b: Schema.String })
+
+// MUST TRIGGER, no fix offered - one member is declared earlier and one (`LateD`) later
+type HalfLate = typeof Circle.Type | typeof LateD.Type
+const LateD = Schema.Struct({ d: Schema.String })
+
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
+// MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
+export const Pair = [Circle, Square] as const
+export type Pair = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - both `Duo` and `DuoSchema` already exist, so the fix names the schema `DuoSchema2`
+const Duo = "duo"
+const DuoSchema = "duoSchema"
+type Duo = typeof Circle.Encoded | typeof Square.Encoded
+
+// MUST TRIGGER - non-ambient namespace: the fix inserts `export const Any` inside the namespace
+namespace Shapes {
+  export type Any = typeof Circle.Type | typeof Square.Type
+}
+
+// MUST TRIGGER - type alias local to a function body
+export const localAlias = () => {
+  type Local = typeof Circle.Type | typeof Square.Type
+  const value: Local = { kind: "circle", radius: 1 }
+  return value
+}
+
+// MUST TRIGGER - union of `Schema.Schema.Type<typeof S>` members; the fix uses
+// `Schema.Union(Circle, Square)` and the alias becomes `typeof HelperShape.Type`
+type HelperShape = Schema.Schema.Type<typeof Circle> | Schema.Schema.Type<typeof Square>
+
+// MUST TRIGGER - `typeof S.Type` and `Schema.Schema.Type<typeof S>` mixed: both extract
+// the Type side, so the fix uses `Schema.Union(Circle, Square, Triangle)`
+type MixedForms = typeof Circle.Type | Schema.Schema.Type<typeof Square> | typeof Triangle.Type
+
+// MUST TRIGGER - union of `Schema.Schema.Encoded<typeof S>` members; the alias becomes
+// `typeof HelperShapeEncoded.Encoded`
+type HelperShapeEncoded = Schema.Schema.Encoded<typeof Circle> | Schema.Schema.Encoded<typeof Square>
+
+// MUST TRIGGER - `typeof S.Encoded` and `Schema.Schema.Encoded<typeof S>` mixed: both
+// extract the Encoded side
+type MixedFormsEncoded = Schema.Schema.Encoded<typeof Circle> | typeof Square.Encoded
+
+// MUST TRIGGER - `Schema.Schema.Type` with a qualified, non-local member expression
+type HelperPrimitive = Schema.Schema.Type<typeof Schema.String> | Schema.Schema.Type<typeof Schema.Number>
+
+// MUST TRIGGER - the alias does not start its line (inline function body); the fix
+// inserts the const inline, right before the alias, without duplicating the line prefix
+export const inlineBody = () => { type InlineBody = typeof Circle.Type | typeof Square.Type; return [] as Array<InlineBody> }
+
+// MUST TRIGGER - inline namespace body; the const is inserted inline before the alias
+namespace InlineShapes { export type Any = typeof Circle.Type | typeof Square.Type }
+
+// MUST TRIGGER - another statement precedes the alias on the same line
+const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.Encoded
+
+// MUST TRIGGER - a block comment precedes the alias on the same line
+/* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+const Documented = Schema.Union(Circle, Square);
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Documented.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)

@@ -7,9 +7,7 @@ use rustc_hash::FxHashMap;
 use crate::helpers_test::*;
 use crate::module_export_reference_test::kind_string;
 
-// go test: internal/typeparser/could_be_strict_effect_test.go:14 findIdentifierByName 8cc587233a0530b5
-// findIdentifierByName returns the first identifier node with the given text
-// that is not a declaration name.
+// go test: internal/typeparser/could_be_strict_effect_test.go:12 findIdentifierByName 067b97eb22adfe81
 fn find_identifier_by_name(t: &T, sf: P<SourceFile>, name: &str) -> P<Node> {
     t.helper();
     fn visit(node: P<Node>, name: &str, found: &mut Option<P<Node>>) -> bool {
@@ -51,7 +49,7 @@ fn find_kind(t: &T, sf: P<SourceFile>, kind: Kind) -> P<Node> {
     found
 }
 
-// go test: internal/typeparser/could_be_strict_effect_test.go:36 TestNodeCouldBeStrictEffect 310dff17706bab73
+// go test: internal/typeparser/could_be_strict_effect_test.go:34 TestNodeCouldBeStrictEffect 1cdd0fe897e192ed
 // Rust: Go's nil-receiver check (`nilTp.NodeCouldBeStrictEffect(nil)`) is left out: the Rust method takes `&mut self`,
 // so there is no nil parser to call it on.
 #[test]
@@ -75,8 +73,22 @@ const aUnionWithoutEffect: string | number | boolean = "x"
 interface Plain { readonly value: number }
 const aPlainObject: Plain = { value: 1 }
 const anObjectKeyword: object = { value: 1 }
+const aLiteralUnion: "lita" | "litb" | "litc" | "litd" = "lita"
 function generic<T>(param: T): T { return param }
+declare function makesEffect(): Effect.Effect<number>
+declare function makesString(): string
+declare function makesUnion(flag: boolean): Effect.Effect<number> | undefined
+declare function makesAny(): any
+declare const maybe: { makesEffect(): Effect.Effect<number> } | undefined
 
+export const calls = [
+	makesEffect(),
+	makesString(),
+	makesUnion(true),
+	makesAny(),
+	generic("x"),
+	maybe?.makesEffect(),
+]
 export const uses = [
 	anEffect,
 	aString,
@@ -87,6 +99,7 @@ export const uses = [
 	aUnionWithoutEffect,
 	aPlainObject,
 	anObjectKeyword,
+	aLiteralUnion,
 ]
 export function inner<T>(param: T) { return [param] }
 export const either = anAny || anEffect
@@ -96,23 +109,19 @@ export const either = anAny || anEffect
         let mut tp = compiled.type_parser();
 
         let tests = [
-            // Conclusive negatives: the declared type can never flow-narrow into
-            // a type whose symbol is named "Effect".
             ("aString", false),
             ("aNumber", false),
             ("aUnionWithoutEffect", false),
             ("aPlainObject", false),
-            // Effect references and everything inconclusive must stay true.
+            ("aLiteralUnion", false),
             ("anEffect", true),
             ("anAny", true),
             ("anUnknown", true),
             ("aUnionWithEffect", true),
-            ("anObjectKeyword", true), // the object keyword type has no symbol
-            ("param", true),           // type parameters can instantiate to anything
+            ("anObjectKeyword", true),
+            ("param", true),
         ];
 
-        // Subtests deliberately avoided: all cases share one checker, which is
-        // not safe for the parallel subtests the tparallel linter would require.
         for (identifier, expected) in tests {
             let node = find_identifier_by_name(t, sf, identifier);
             let got = tp.node_could_be_strict_effect(node);
@@ -120,6 +129,27 @@ export const either = anAny || anEffect
                 t.error(sprintf!(
                     "NodeCouldBeStrictEffect(%s) = %v, want %v",
                     identifier,
+                    got,
+                    expected
+                ));
+            }
+        }
+
+        let calls = [
+            ("makesString", false),
+            ("makesEffect", true),
+            ("makesUnion", true),
+            ("makesAny", true),
+            ("generic", false),
+            ("maybe?.makesEffect", true),
+        ];
+        for (callee, expected) in calls {
+            let call = find_call_by_callee_name(t, sf, callee);
+            let got = tp.node_could_be_strict_effect(call);
+            if got != expected {
+                t.error(sprintf!(
+                    "NodeCouldBeStrictEffect(call %s) = %v, want %v",
+                    callee,
                     got,
                     expected
                 ));
@@ -136,49 +166,13 @@ export const either = anAny || anEffect
             t.error("other non-reference, non-call node kinds must not be ruled out");
         }
 
-        // Nil receiver and nil node stay conservative.
         if !tp.node_could_be_strict_effect(None) {
             t.error("nil node must not be ruled out");
         }
     });
 }
 
-// go test: internal/typeparser/could_be_strict_effect_test.go:138 TestCouldBeStrictEffectDeepUnionStaysConservative 2030097021079744
-#[test]
-fn test_could_be_strict_effect_deep_union_stays_conservative() {
-    run(|t| {
-        t.parallel();
-        if let Err(err) = ensure_package_installed(EFFECT_V4, "effect") {
-            t.skip(sprintf!("Effect v4 not installed: %v", err));
-        }
-
-        // A union nested beyond the recursion depth limit must return true even
-        // though every member is a primitive literal.
-        let mut members = Vec::with_capacity(40);
-        for s in ["a", "b", "c", "d", "e", "f", "g", "h"] {
-            members.push(format!("\"lit{s}\""));
-        }
-        let source = format!(
-            "\ntype Deep = {}\nconst deepValue: Deep = \"lita\"\nexport const use = [deepValue]\n",
-            members.join(" | ")
-        );
-        let (mut compiled, sf) =
-            compile_and_get_checker_and_source_file_with_effect_v4_internal(t, &source);
-        let mut tp = compiled.type_parser();
-
-        let node = find_identifier_by_name(t, sf, "deepValue");
-        // Literal unions are flat, so this exercises the union walk; whatever the
-        // nesting, the answer may be false only when provably safe — a flat
-        // primitive union is provably safe.
-        if tp.node_could_be_strict_effect(node) {
-            t.error("flat primitive literal union should be conclusively non-Effect");
-        }
-    });
-}
-
-// go test: internal/typeparser/could_be_strict_effect_test.go:169 findCallByCalleeName 6cbd3846c9f057d4
-// findCallByCalleeName returns the first call expression whose callee text
-// contains the given substring.
+// go test: internal/typeparser/could_be_strict_effect_test.go:164 findCallByCalleeName 37a53190eba694c6
 fn find_call_by_callee_name(t: &T, sf: P<SourceFile>, callee: &str) -> P<Node> {
     t.helper();
     fn visit(node: P<Node>, callee: &str, found: &mut Option<P<Node>>) -> bool {
@@ -203,69 +197,7 @@ fn find_call_by_callee_name(t: &T, sf: P<SourceFile>, callee: &str) -> P<Node> {
     found
 }
 
-// go test: internal/typeparser/could_be_strict_effect_test.go:194 TestCallCouldReturnStrictEffect 8426dd4f413b12ba
-#[test]
-fn test_call_could_return_strict_effect() {
-    run(|t| {
-        t.parallel();
-        if let Err(err) = ensure_package_installed(EFFECT_V4, "effect") {
-            t.skip(sprintf!("Effect v4 not installed: %v", err));
-        }
-
-        let source = r#"
-import { Effect } from "effect"
-
-declare function makesEffect(): Effect.Effect<number>
-declare function makesString(): string
-declare function makesUnion(flag: boolean): Effect.Effect<number> | undefined
-declare function makesAny(): any
-declare function generic<T>(value: T): T
-declare const maybe: { makesEffect(): Effect.Effect<number> } | undefined
-
-export const uses = [
-	makesEffect(),
-	makesString(),
-	makesUnion(true),
-	makesAny(),
-	generic("x"),
-	maybe?.makesEffect(),
-]
-"#;
-        let (mut compiled, sf) =
-            compile_and_get_checker_and_source_file_with_effect_v4_internal(t, source);
-        let mut tp = compiled.type_parser();
-
-        // Subtests deliberately avoided: all cases share one checker, which is
-        // not safe for the parallel subtests the tparallel linter would require.
-        let tests = [
-            // Conclusive negative: the declared return type can never be Effect.
-            ("makesString", false),
-            // Effect-returning calls and every inconclusive case stay true.
-            ("makesEffect", true),
-            ("makesUnion", true), // union containing Effect
-            ("makesAny", true),   // any return
-            // The resolved signature is instantiated, so generic("x") conclusively
-            // returns the primitive literal "x" and is ruled out.
-            ("generic", false),
-            ("maybe?.makesEffect", true), // optional chain: Effect | undefined union
-        ];
-
-        for (callee, expected) in tests {
-            let call = find_call_by_callee_name(t, sf, callee);
-            let got = tp.node_could_be_strict_effect(call);
-            if got != expected {
-                t.error(sprintf!(
-                    "NodeCouldBeStrictEffect(call %s) = %v, want %v",
-                    callee,
-                    got,
-                    expected
-                ));
-            }
-        }
-    });
-}
-
-// go test: internal/typeparser/could_be_strict_effect_test.go:248 TestNodeCouldBeEffect 73c1814f797dae81
+// go test: internal/typeparser/could_be_strict_effect_test.go:189 TestNodeCouldBeEffect f41bd797d943a2c9
 #[test]
 fn test_node_could_be_effect() {
     run(|t| {
@@ -299,8 +231,6 @@ export const literals = {
         let mut tp = compiled.type_parser();
 
         let identifiers = [
-            // References are never ruled out: a type guard can narrow any
-            // declared type into an Effect.
             ("aSubtype", true),
             ("anEffect", true),
             ("anUnknown", true),

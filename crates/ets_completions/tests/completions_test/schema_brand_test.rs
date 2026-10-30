@@ -1,79 +1,53 @@
 use crate::*;
 
-// go test: internal/completions/schema_brand_test.go:7 TestSchemaBrand_EmptySource 86407bd69e74b62d
+// go test: internal/completions/schema_brand_test.go:10 TestSchemaBrand 87c3d2fd79d07944
 #[test]
-fn test_schema_brand_empty_source() {
+fn test_schema_brand() {
     go_test(|t| {
         t.parallel();
-        let source = "";
-        let items = schema_brand_items(t, source, 0);
-        if !items.is_empty() {
-            t.error(format!("expected nil for empty source, got {} items", items.len()));
-        }
-    });
-}
-
-// go test: internal/completions/schema_brand_test.go:16 TestSchemaBrand_CursorAtStartOfFile cb65439585fcb84d
-#[test]
-fn test_schema_brand_cursor_at_start_of_file() {
-    go_test(|t| {
-        t.parallel();
-        let source = "const x = 1";
-        let items = schema_brand_items(t, source, 0);
-        if !items.is_empty() {
-            t.error(format!("expected nil for cursor at start of file, got {} items", items.len()));
-        }
-    });
-}
-
-// go test: internal/completions/schema_brand_test.go:25 TestSchemaBrand_InsideImportDeclaration 07df99530a975807
-#[test]
-fn test_schema_brand_inside_import_declaration() {
-    go_test(|t| {
-        t.parallel();
-        // Cursor inside an import declaration should not trigger completion
-        let source = r#"import { Schema } from "effect""#;
-        let pos = "import { Schema".len();
-        let items = schema_brand_items(t, source, pos);
-        if !items.is_empty() {
-            t.error(format!(
-                "expected nil for cursor inside import declaration, got {} items",
-                items.len()
-            ));
-        }
-    });
-}
-
-// go test: internal/completions/schema_brand_test.go:36 TestSchemaBrand_CursorAfterNumber a7c29bd0ebb695ba
-#[test]
-fn test_schema_brand_cursor_after_number() {
-    go_test(|t| {
-        t.parallel();
-        // Cursor after a non-identifier token — ParseAccessedExpressionForCompletion returns nil
-        let source = "const x = 42";
-        let items = schema_brand_items(t, source, source.len());
-        if !items.is_empty() {
-            t.error(format!(
-                "expected nil for cursor after number literal, got {} items",
-                items.len()
-            ));
-        }
-    });
-}
-
-// go test: internal/completions/schema_brand_test.go:46 TestSchemaBrand_CursorAfterString 8af6a3bc1e7cdaf4
-#[test]
-fn test_schema_brand_cursor_after_string() {
-    go_test(|t| {
-        t.parallel();
-        // Cursor after a string literal — not a dot-access or identifier
-        let source = r#"const x = "hello""#;
-        let items = schema_brand_items(t, source, source.len());
-        if !items.is_empty() {
-            t.error(format!(
-                "expected nil for cursor after string literal, got {} items",
-                items.len()
-            ));
+        const V3_SCHEMA: &str = "// @effect-v3\nimport { Schema } from \"effect\"\n";
+        for (name, source, cursor, want) in [
+            (
+                "v3 variable declaration",
+                format!("{V3_SCHEMA}const UserId = Schema."),
+                "",
+                r#"brand("UserId")"#,
+            ),
+            (
+                "v4 is unsupported",
+                "import { Schema } from \"effect\"\nconst UserId = Schema.".to_string(),
+                "",
+                "",
+            ),
+            ("outside variable declaration", format!("{V3_SCHEMA}Schema."), "", ""),
+            ("inside import declaration", V3_SCHEMA.to_string(), "import { Schema", ""),
+            ("after number literal", format!("{V3_SCHEMA}const x = 42"), "", ""),
+            ("after string literal", format!(r#"{V3_SCHEMA}const x = "hello""#), "", ""),
+            ("empty source", String::new(), "", ""),
+        ] {
+            t.run(name, |t| {
+                t.parallel();
+                let mut position = source.len();
+                if !cursor.is_empty() {
+                    position = source.find(cursor).unwrap() + cursor.len();
+                }
+                let items =
+                    filter_completion_items(completion_items_at(t, &source, position), |item| {
+                        item.label.starts_with(r#"brand(""#)
+                    });
+                if want.is_empty() {
+                    if !items.is_empty() {
+                        t.error(format!(
+                            "expected no brand completions, got {} items",
+                            items.len()
+                        ));
+                    }
+                    return;
+                }
+                if items.len() != 1 || items[0].label != want {
+                    t.fatal(format!("expected single {want:?} completion, got {items:?}"));
+                }
+            });
         }
     });
 }

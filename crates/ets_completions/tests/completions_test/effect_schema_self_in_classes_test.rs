@@ -347,7 +347,7 @@ fn test_effect_schema_self_in_classes_accepted_snippet() {
     });
 }
 
-// go test: internal/completions/effect_schema_self_in_classes_test.go:242 TestEffectSchemaSelfInClasses_BrandedSchemaClasses 6078c77b3f122468
+// go test: internal/completions/effect_schema_self_in_classes_test.go:242 TestEffectSchemaSelfInClasses_BrandedSchemaClasses 71125da6a3714a62
 #[test]
 fn test_effect_schema_self_in_classes_branded_schema_classes() {
     go_test(|t| {
@@ -380,17 +380,9 @@ fn test_effect_schema_self_in_classes_branded_schema_classes() {
                     1,
                 );
                 const SOURCE: &str = "import { Schema } from \"effect\"\nclass Foo extends Schema.";
-                let content = format!(
-                    "// @Filename: /tsconfig.json\n{config}\n// @Filename: /test.ts\n{SOURCE}/*1*/"
-                );
-                let mut f = ets_fourslash::new_fourslash(t, None, &content);
-                f.go_to_marker(t, "1");
-                let Some(completions) = f.get_completions(t, None) else {
-                    t.fatal("missing completions");
-                };
+                let items = completion_items_in(t, &config, "", SOURCE, SOURCE.len());
                 for expected in SCHEMA_CLASS_COMPLETION_CASES[0].snippets {
-                    let item =
-                        find_completion_item(&completions.items, &format!("{}<Foo>", expected.api));
+                    let item = find_completion_item(&items, &format!("{}<Foo>", expected.api));
                     if !has_text_edit(item) {
                         t.error(format!("missing snippet text edit for {}<Foo>", expected.api));
                         continue;
@@ -404,7 +396,6 @@ fn test_effect_schema_self_in_classes_branded_schema_classes() {
                         t.error(format!("{} NewText = {got:?}, want {want:?}", expected.api));
                     }
                 }
-                f.done(t);
             });
         }
     });

@@ -58,134 +58,7 @@ fn test_effect_in_failure_can_trigger_plugin_only_ts2589() {
     });
 }
 
-// go test: internal/effecttest/effect_in_failure_ts2589_test.go:43 TestTaggedTemplateSymbolInterpolationDoesNotReportTS2731 6f9e8c79f614ce6d
-#[test]
-fn test_tagged_template_symbol_interpolation_does_not_report_ts2731() {
-    on_checker_stack(|| {
-        ets_go::testing::run(|t| {
-            t.parallel();
-
-            for rule in ["anyUnknownInErrorContext", "effectInFailure"] {
-                t.run(rule, |t| {
-                    t.parallel();
-
-                    let diagnostics = collect_diagnostic_strings_from_content(
-                        t,
-                        &build_tagged_template_symbol_case(rule),
-                    );
-                    if has_diagnostic_code(&diagnostics, "TS2731:") {
-                        t.fatal(format!(
-                            "did not expect TS2731 with {rule} enabled, got {diagnostics:?}"
-                        ));
-                    }
-                });
-            }
-        });
-    });
-}
-
-// go test: internal/effecttest/effect_in_failure_ts2589_test.go:58 buildTaggedTemplateSymbolCase 8af525704ae60c98
-fn build_tagged_template_symbol_case(rule: &str) -> String {
-    r#"// @filename: tsconfig.json
-{
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "@effect/language-service",
-        "diagnosticSeverity": {
-          ""#
-    .to_string()
-        + rule
-        + r#"": "error"
-        }
-      }
-    ]
-  }
-}
-
-// @filename: test.ts
-const self: unique symbol = Symbol("self")
-function sql(strings: TemplateStringsArray, ...args: Array<unknown>): string {
-  return strings.join("?") + args.length
-}
-export const q = sql"#
-        + "`(${self}) < 1`"
-        + "\n"
-}
-
-// go test: internal/effecttest/effect_in_failure_ts2589_test.go:82 TestIssue362RemedaChunkDoesNotReportExcessiveTypeDepth 98e72f2a550dc4c1
-#[test]
-fn test_issue362_remeda_chunk_does_not_report_excessive_type_depth() {
-    on_checker_stack(|| {
-        ets_go::testing::run(|t| {
-            t.parallel();
-
-            let with_plugin =
-                collect_diagnostic_strings_from_content(t, &build_issue362_remeda_chunk_case(true));
-            let without_plugin = collect_diagnostic_strings_from_content(
-                t,
-                &build_issue362_remeda_chunk_case(false),
-            );
-
-            for prefix in ["TS2321:", "TS2589:"] {
-                if has_diagnostic_code(&without_plugin, prefix) {
-                    t.fatal(format!(
-                        "did not expect {prefix} without plugin, got {without_plugin:?}"
-                    ));
-                }
-                if has_diagnostic_code(&with_plugin, prefix) {
-                    t.fatal(format!(
-                        "did not expect plugin to introduce {prefix}, got {with_plugin:?}"
-                    ));
-                }
-            }
-        });
-    });
-}
-
-// go test: internal/effecttest/effect_in_failure_ts2589_test.go:98 buildIssue362RemedaChunkCase 3ea76904785d1d06
-fn build_issue362_remeda_chunk_case(plugin_enabled: bool) -> String {
-    let mut plugin_config = "{}";
-    if plugin_enabled {
-        plugin_config = r#"{
-  "compilerOptions": {
-    "plugins": [
-      {
-        "name": "@effect/language-service"
-      }
-    ]
-  }
-}"#;
-    }
-
-    "// @filename: tsconfig.json\n".to_string()
-        + plugin_config
-        + r"
-
-// @filename: test.ts
-type IsAny<T> = 0 extends 1 & NoInfer<T> ? true : false
-type IsNever<T> = [T] extends [never] ? true : false
-type If<Type extends boolean, Then, Else> = IsNever<Type> extends true ? Else : Type extends true ? Then : Else
-type IsNegative<T extends number> = T extends 0 ? false : "
-        + "`${T}`"
-        + " extends "
-        + "`-${string}`"
-        + r#" ? true : false
-type TupleOf<Length extends number, Fill = unknown> = If<IsAny<Length>, Fill[], If<IsNever<Length>, [], _TupleOf<If<IsNegative<Length>, 0, Length>, Fill, []>>>
-type _TupleOf<Length extends number, Fill, Accumulator extends readonly unknown[]> = number extends Length ? Fill[] : Length extends Accumulator["length"] ? Accumulator : _TupleOf<Length, Fill, [...Accumulator, Fill]>
-type IntRange<From extends number, To extends number, List extends unknown[] = TupleOf<From, never>, End extends unknown[] = TupleOf<To>> = List["length"] extends To ? Exclude<List[number], never> : IntRange<From, To, [...List, List["length"]], End>
-type IntRangeInclusive<From extends number, To extends number> = IntRange<From, To> | To
-type NTuple<T, N extends number, Result extends unknown[] = []> = Result["length"] extends N ? Result : NTuple<T, N, [...Result, T]>
-type Chunk<T extends readonly unknown[], N extends number> = T extends readonly [] ? [] : NTuple<T[number], N>[] | { [K in IntRangeInclusive<1, N>]: NTuple<T[number], K> }[IntRangeInclusive<1, N>]
-
-declare function chunk<T extends readonly unknown[], N extends number>(array: T, size: N): Chunk<T, N>
-declare function chunk<N extends number>(size: N): <T extends readonly unknown[]>(array: T) => Chunk<T, N>
-declare const items: Array<string>
-const result = chunk(items, 2)
-"#
-}
-
-// go test: internal/effecttest/effect_in_failure_ts2589_test.go:134 buildEffectInFailureTS2589Case 78a303b7abce08bb
+// go test: internal/effecttest/effect_in_failure_ts2589_test.go:43 buildEffectInFailureTS2589Case 78a303b7abce08bb
 pub(crate) fn build_effect_in_failure_ts2589_case(mode: &str) -> String {
     let mut plugin_config = "{}";
     match mode {
@@ -242,7 +115,7 @@ pub(crate) fn build_effect_in_failure_ts2589_case(mode: &str) -> String {
     sb
 }
 
-// go test: internal/effecttest/effect_in_failure_ts2589_test.go:187 hasDiagnosticCode 8f5e61018428e3f0
+// go test: internal/effecttest/effect_in_failure_ts2589_test.go:96 hasDiagnosticCode 8f5e61018428e3f0
 pub(crate) fn has_diagnostic_code(diags: &[String], prefix: &str) -> bool {
     for diag in diags {
         if diag.contains(prefix) {
@@ -252,7 +125,7 @@ pub(crate) fn has_diagnostic_code(diags: &[String], prefix: &str) -> bool {
     false
 }
 
-// go test: internal/effecttest/effect_in_failure_ts2589_test.go:196 collectDiagnosticStringsFromContent 4cf57b2755ecc502
+// go test: internal/effecttest/effect_in_failure_ts2589_test.go:105 collectDiagnosticStringsFromContent 4cf57b2755ecc502
 //
 // Rust: as in `run_effect_test`, the Effect hooks are registered first (Go's blank import of `etscheckerhooks`), and
 // the program and what the case allocates are freed at the end (Go: the GC).
@@ -398,7 +271,7 @@ pub(crate) fn collect_diagnostic_strings_from_content(t: &T, content: &str) -> V
     results
 }
 
-// go test: internal/effecttest/effect_in_failure_ts2589_test.go:292 isHarnessConfigFile c881aaa284ec9a04
+// go test: internal/effecttest/effect_in_failure_ts2589_test.go:201 isHarnessConfigFile c881aaa284ec9a04
 pub(crate) fn is_harness_config_file(file_name: &str) -> bool {
     file_name.ends_with("/tsconfig.json") || file_name == "tsconfig.json"
 }

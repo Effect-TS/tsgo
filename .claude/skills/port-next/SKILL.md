@@ -7,7 +7,7 @@ description: Orchestrate a round of Rust porting work - pick the Go packages tha
 
 You coordinate; `port-package` agents do the porting.
 
-The initial port is complete (`docs/TSRS_PORT.md`, Phase 4 done): `require_new = true`, there is no baseline
+The initial port is complete (`porting/TSRS_PORT.md`, Phase 4 done): `require_new = true`, there is no baseline
 allowlist, and every PR that changes in-scope Go code updates the Rust port in the same PR (`port-change`). A
 round is therefore only needed for a large addition ported in parallel, all of it landing with (or right before
 merging) the Go change that adds it; `repoctl tsrs port-check` and the baseline runner must pass on `main` at all times.
@@ -18,7 +18,7 @@ Each round:
 
 1. On an up-to-date `main` (after `pnpm exec repoctl submodules setup --component tsrs`; `pnpm setup-repo` removes `tsrs/`): `pnpm exec repoctl tsrs port-check`, `cargo clippy --all-targets
    -- -D warnings` and `cargo test` must pass. If they don't, fixing that is the round.
-2. Read `docs/TSRS_PORT.md`, "Phases". Phase 3 packages (core: `etscore`, `typeparser`, the rule framework,
+2. Read `porting/TSRS_PORT.md`, "Phases". Phase 3 packages (core: `etscore`, `typeparser`, the rule framework,
    `rulerunner`, `etscheckerhooks`) are ported one at a time and reviewed carefully; fan-out (phase 4) starts only
    when they are done.
 3. `pnpm exec repoctl tsrs port-ready` lists packages whose imports are all ported, largest first. Choose up to N
@@ -46,11 +46,11 @@ For each finished agent:
 1. Read its report and its diff. Reject (send back with reasons) work that:
    - leaves a `todo!()` or an unported declaration in its range without a `skipped.tsv` reason;
    - changes the Go control flow, order of operations or message texts;
-   - drops or weakens a ported test, changes an expectation without a `docs/DIVERGENCES.md` entry with evidence, or
+   - drops or weakens a ported test, changes an expectation without a `porting/DIVERGENCES.md` entry with evidence, or
      leaves a baseline mismatch;
    - depends on a `tsrs_*` crate directly, or edits `tsrs/` / `crates/ets_shim/`;
    - acks declarations it did not port;
-   - makes a mapping decision that contradicts `docs/PORTING.md`, or a new one without recording it there.
+   - makes a mapping decision that contradicts `porting/PORTING.md`, or a new one without recording it there.
 2. Spot-check at least three non-trivial functions against the Go source, side by side.
 3. Rebase onto `main` and rerun `pnpm exec repoctl tsrs port-check`, `cargo clippy --all-targets -- -D warnings` and
    `cargo test` (including the baseline runner) for the whole workspace. Merge only when green. Never force-push

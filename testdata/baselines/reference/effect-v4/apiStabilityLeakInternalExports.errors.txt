@@ -1,0 +1,754 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/cyclicPublic.ts(3,1): warning TS377137: `effect-v4-tests/cyclicPublic#CyclicPublic` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/importDefaultPublic.ts(4,16): warning TS377137: `effect-v4-tests/importDefaultPublic#default` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/importEqualsCrossFile.ts(5,15): warning TS377137: `effect-v4-tests/importEqualsCrossFile#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/importEqualsLocal.ts(12,15): warning TS377137: `effect-v4-tests/importEqualsLocal#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/importEqualsLocal.ts(13,19): warning TS377137: `effect-v4-tests/importEqualsLocal#NormalAlias` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/importEqualsLocal.ts(18,15): warning TS377137: `effect-v4-tests/importEqualsLocal#ChainShown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/importEqualsLocal.ts(19,18): warning TS377137: `effect-v4-tests/importEqualsLocal#Outer` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/importEqualsLocal.ts(25,15): warning TS377137: `effect-v4-tests/importEqualsLocal#DottedShown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/importEqualsNamespaceImport.ts(5,15): warning TS377137: `effect-v4-tests/importEqualsNamespaceImport#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/importEqualsRequire.ts(5,15): warning TS377137: `effect-v4-tests/importEqualsRequire#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/importEqualsWholeModulePublic.ts(4,15): warning TS377137: `effect-v4-tests/importEqualsWholeModulePublic#Api` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/importMerged.ts(4,10): warning TS377137: `effect-v4-tests/importMerged#Merged` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/importNamed.ts(6,10): warning TS377137: `effect-v4-tests/importNamed#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/local.ts(11,22): warning TS377137: `effect-v4-tests/local#shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/local.ts(24,17): warning TS377137: `effect-v4-tests/local#overloaded` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/local.ts(37,18): warning TS377137: `effect-v4-tests/local#Merged` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/local.ts(46,18): warning TS377137: `effect-v4-tests/local#Prose` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/local.ts(53,18): warning TS377137: `effect-v4-tests/local#PublicSurface` exposes `InternalE`, an experimental API. effect(apiStabilityLeak)
+/.src/local.ts(54,18): warning TS377137: `effect-v4-tests/local#PublicOther` exposes `InternalU`, an unstable API. effect(apiStabilityLeak)
+/.src/local.ts(59,22): warning TS377137: `effect-v4-tests/local#zShown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/local.ts(60,22): warning TS377137: `effect-v4-tests/local#aShown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/namedInternalTarget.ts(4,10): warning TS377137: `effect-v4-tests/namedInternalTarget#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/namespaceForwarded.ts(3,13): warning TS377137: `effect-v4-tests/namespaceForwarded#api` exposes `F`, an experimental API. effect(apiStabilityLeak)
+/.src/namespaceInternalMembers.ts(4,13): warning TS377137: `effect-v4-tests/namespaceInternalMembers#api` exposes `F`, an experimental API. effect(apiStabilityLeak)
+/.src/namespaces.ts(14,18): warning TS377137: `effect-v4-tests/namespaces#ApiPeer` exposes `F`, an experimental API. effect(apiStabilityLeak)
+/.src/namespaces.ts(24,18): warning TS377137: `effect-v4-tests/namespaces#ApiMerged` exposes `F`, an experimental API. effect(apiStabilityLeak)
+/.src/namespaces.ts(31,18): warning TS377137: `effect-v4-tests/namespaces#Outer` exposes `F`, an experimental API. effect(apiStabilityLeak)
+/.src/namespaces.ts(41,10): warning TS377137: `effect-v4-tests/namespaces#Ambient` exposes `F`, an experimental API. effect(apiStabilityLeak)
+/.src/orderInternalFirst.ts(7,18): warning TS377137: `effect-v4-tests/orderInternalFirst#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/orderPublicFirst.ts(5,18): warning TS377137: `effect-v4-tests/orderPublicFirst#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/precedencePublicForward.ts(3,10): warning TS377137: `effect-v4-tests/precedencePublicForward#Leaky` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/precedencePublicLocal.ts(6,18): warning TS377137: `effect-v4-tests/precedencePublicLocal#Leaky` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/specifierTagged.ts(6,3): warning TS377137: `effect-v4-tests/specifierTagged#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/starInternalTarget.ts(3,1): warning TS377137: `effect-v4-tests/starInternalTarget#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+
+
+==== /.src/leakyDep.ts (0 errors) ====
+    /** @stability experimental */
+    interface E { value: string }
+    export interface Leaky { value: E }
+    
+
+==== /.src/hiddenDep.ts (0 errors) ====
+    /** @stability experimental */
+    interface E { value: string }
+    /** @internal */
+    export interface Hidden { value: E }
+    export interface Shown { value: E }
+    
+
+==== /.src/internalLeakyDep.ts (0 errors) ====
+    /** @stability experimental */
+    interface E { value: string }
+    /** @internal */
+    export interface Leaky { value: E }
+    
+
+==== /.src/pairDep.ts (0 errors) ====
+    /** @stability experimental */
+    interface E { value: string }
+    export interface Hidden { value: E }
+    export interface Shown { value: E }
+    
+
+==== /.src/twoLeakyDep.ts (0 errors) ====
+    /** @stability experimental */
+    interface E { value: string }
+    export interface LeakyOne { value: E }
+    export interface LeakyTwo { value: E }
+    
+
+==== /.src/leakyStarBarrel.ts (0 errors) ====
+    export * from "./leakyDep"
+    
+
+==== /.src/local.ts (8 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @stability experimental */
+    interface E { value: string }
+    declare const e: E
+    
+    // An export whose own declaration is tagged `@internal` is not checked, across
+    // declaration kinds, while its public peers still are.
+    /** @internal */
+    export declare const hidden: E
+    export declare const shown: E
+                         ~~~~~
+!!! warning TS377137: `effect-v4-tests/local#shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/local.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    /** @internal */
+    export const hiddenVar: E = e
+    /** @internal */
+    export declare function hiddenFunction(): E
+    /** @internal */
+    export interface HiddenInterface { value: E }
+    /** @internal */
+    export type HiddenType = { value: E }
+    /** @internal */
+    export declare class HiddenClass { value: E }
+    
+    // Public overloads stay checked when only the implementation is internal.
+    export function overloaded(x: E): E
+                    ~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/local#overloaded` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/local.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export function overloaded(x: string): string
+    /** @internal */
+    export function overloaded(x: E | string): E | string {
+      return x as E
+    }
+    /** @internal */
+    export declare function gated(x: E): E
+    /** @internal */
+    export declare function gated(x: string): string
+    
+    // Merged declarations are internal only when every declaration is.
+    /** @internal */
+    export interface Merged { a: E }
+                     ~~~~~~
+!!! warning TS377137: `effect-v4-tests/local#Merged` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/local.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export interface Merged { b: string }
+    /** @internal */
+    export interface MergedHidden { a: E }
+    /** @internal */
+    export interface MergedHidden { b: string }
+    
+    // Prose is not a tag.
+    /** This representation is internalized and @internally tracked. */
+    export interface Prose { value: E }
+                     ~~~~~
+!!! warning TS377137: `effect-v4-tests/local#Prose` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/local.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+    // A public signature exposing an internal type still reports.
+    /** @internal @stability experimental */
+    interface InternalE { value: string }
+    /** @internal @stability unstable */
+    export interface InternalU { value: string }
+    export interface PublicSurface { value: InternalE }
+                     ~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/local#PublicSurface` exposes `InternalE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/local.ts(50,11): `InternalE` is declared experimental here. effect(apiStabilityLeak)
+    export interface PublicOther { value: InternalU }
+                     ~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/local#PublicOther` exposes `InternalU`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/local.ts(52,18): `InternalU` is declared unstable here. effect(apiStabilityLeak)
+    
+    // Internal exports never poison public peers, whichever is visited first.
+    /** @internal */
+    export declare const aHidden: E
+    export declare const zShown: E
+                         ~~~~~~
+!!! warning TS377137: `effect-v4-tests/local#zShown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/local.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export declare const aShown: E
+                         ~~~~~~
+!!! warning TS377137: `effect-v4-tests/local#aShown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/local.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    /** @internal */
+    export declare const zHidden: E
+    
+
+==== /.src/defaultFunction.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @stability experimental */
+    interface E { value: string }
+    /** @internal */
+    export default function hiddenDefault(): E {
+      return undefined as unknown as E
+    }
+    
+
+==== /.src/defaultAssignment.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @stability experimental */
+    interface E { value: string }
+    declare const e: E
+    /** @internal */
+    export default e
+    
+
+==== /.src/namedTagged.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @internal */
+    export { Leaky } from "./leakyDep"
+    
+
+==== /.src/namedInternalTarget.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    export { Hidden } from "./hiddenDep"
+    export { Shown } from "./hiddenDep"
+             ~~~~~
+!!! warning TS377137: `effect-v4-tests/namedInternalTarget#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/hiddenDep.ts(2,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/namedTaggedMany.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @internal */
+    export { LeakyOne, LeakyTwo } from "./twoLeakyDep"
+    
+
+==== /.src/specifierTagged.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    export {
+      /** @internal */
+      Hidden,
+      Shown
+      ~~~~~
+!!! warning TS377137: `effect-v4-tests/specifierTagged#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/pairDep.ts(2,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    } from "./pairDep"
+    
+
+==== /.src/starTagged.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @internal */
+    export * from "./leakyDep"
+    
+
+==== /.src/starInternalTarget.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    export * from "./hiddenDep"
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/starInternalTarget#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/hiddenDep.ts(2,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/namespaceTagged.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @internal */
+    export * as api from "./leakyDep"
+    
+
+==== /.src/nsHiddenDep.ts (0 errors) ====
+    /** @stability experimental */
+    interface E { value: string }
+    /** @stability experimental */
+    interface F { value: string }
+    /** @internal */
+    export interface Hidden { value: E }
+    /** @internal @stability experimental */
+    export interface HiddenTagged { value: string }
+    export interface Shown { value: F }
+    
+
+==== /.src/namespaceInternalMembers.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    // Only `F` is reported: internal members are not walked.
+    export * as api from "./nsHiddenDep"
+                ~~~
+!!! warning TS377137: `effect-v4-tests/namespaceInternalMembers#api` exposes `F`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/nsHiddenDep.ts(4,11): `F` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/internalLeakyBarrel.ts (0 errors) ====
+    export { Leaky } from "./internalLeakyDep"
+    
+
+==== /.src/chainInternalTarget.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    export { Leaky } from "./internalLeakyBarrel"
+    
+
+==== /.src/taggedLeakyBarrel.ts (0 errors) ====
+    /** @internal */
+    export { Leaky } from "./leakyDep"
+    
+
+==== /.src/chainInternalBarrel.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    export { Leaky } from "./taggedLeakyBarrel"
+    
+
+==== /.src/cyclicInternal.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @stability experimental */
+    interface E { value: string }
+    /** @internal */
+    export interface Cyclic { value: E }
+    export * from "./cyclicInternalDep"
+    
+
+==== /.src/cyclicInternalDep.ts (0 errors) ====
+    export * from "./cyclicInternal"
+    
+
+==== /.src/cyclicPublic.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    export * from "./cyclicPublicDep"
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/cyclicPublic#CyclicPublic` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/cyclicPublicDep.ts(3,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/cyclicPublicDep.ts (0 errors) ====
+    export * from "./cyclicPublic"
+    /** @stability experimental */
+    interface E { value: string }
+    export interface CyclicPublic { value: E }
+    
+
+==== /.src/orderInternalFirst.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @stability experimental */
+    interface E { value: string }
+    /** @internal */
+    export interface Hidden { value: E }
+    export interface Shown { value: E }
+                     ~~~~~
+!!! warning TS377137: `effect-v4-tests/orderInternalFirst#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/orderInternalFirst.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export * from "./orderInternalFirstDep"
+    
+
+==== /.src/orderInternalFirstDep.ts (0 errors) ====
+    export * from "./orderInternalFirst"
+    
+
+==== /.src/orderPublicFirst.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @stability experimental */
+    interface E { value: string }
+    export interface Shown { value: E }
+                     ~~~~~
+!!! warning TS377137: `effect-v4-tests/orderPublicFirst#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/orderPublicFirst.ts(4,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    /** @internal */
+    export interface Hidden { value: E }
+    export * from "./orderPublicFirstDep"
+    
+
+==== /.src/orderPublicFirstDep.ts (0 errors) ====
+    export * from "./orderPublicFirst"
+    
+
+==== /.src/precedenceNamed.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    // An explicit `@internal` export wins over a redundant star forward.
+    /** @internal */
+    export { Leaky } from "./leakyDep"
+    export * from "./leakyDep"
+    
+
+==== /.src/precedenceLocal.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @stability experimental */
+    interface E { value: string }
+    /** @internal */
+    export interface Leaky { value: E }
+    export * from "./precedenceLocalDep"
+    
+
+==== /.src/precedenceLocalDep.ts (0 errors) ====
+    export { Leaky } from "./precedenceLocal"
+    
+
+==== /.src/precedenceSpecifier.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    export {
+      /** @internal */
+      Leaky
+    } from "./leakyDep"
+    export * from "./leakyDep"
+    
+
+==== /.src/precedenceStarChain.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @internal */
+    export { Leaky } from "./leakyDep"
+    export * from "./leakyStarBarrel"
+    
+
+==== /.src/precedencePublicLocal.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    // A public explicit export stays checked even when a redundant star is internal.
+    /** @stability experimental */
+    interface E { value: string }
+    export interface Leaky { value: E }
+                     ~~~~~
+!!! warning TS377137: `effect-v4-tests/precedencePublicLocal#Leaky` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/precedencePublicLocal.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    /** @internal */
+    export * from "./precedencePublicLocalDep"
+    
+
+==== /.src/precedencePublicLocalDep.ts (0 errors) ====
+    export * from "./precedencePublicLocal"
+    
+
+==== /.src/precedencePublicForward.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    export { Leaky } from "./leakyDep"
+             ~~~~~
+!!! warning TS377137: `effect-v4-tests/precedencePublicForward#Leaky` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/leakyDep.ts(2,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    /** @internal */
+    export * from "./leakyStarBarrel"
+    
+
+==== /.src/precedenceUntaggedStarChain.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    /** @stability experimental */
+    interface E { value: string }
+    /** @internal */
+    export interface Leaky { value: E }
+    export * from "./precedenceUntaggedStarChainOther"
+    
+
+==== /.src/precedenceUntaggedStarChainOther.ts (0 errors) ====
+    export * from "./precedenceUntaggedStarChainDep"
+    
+
+==== /.src/precedenceUntaggedStarChainDep.ts (0 errors) ====
+    export { Leaky } from "./precedenceUntaggedStarChain"
+    
+
+==== /.src/namespaces.ts (4 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    // Declared namespaces filter their `@internal` members like namespace
+    // re-exports, while public members are still walked.
+    /** @stability experimental */
+    interface E { value: string }
+    /** @stability experimental */
+    interface F { value: string }
+    export namespace ApiFiltered {
+      /** @internal */
+      export interface Hidden { value: E }
+      export interface Shown { value: string }
+    }
+    export namespace ApiPeer {
+                     ~~~~~~~
+!!! warning TS377137: `effect-v4-tests/namespaces#ApiPeer` exposes `F`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/namespaces.ts(8,11): `F` is declared experimental here. effect(apiStabilityLeak)
+      /** @internal */
+      export interface Hidden { value: E }
+      export interface Shown { value: F }
+    }
+    export namespace ApiConstant {
+      export const safe = "ok"
+      /** @internal */
+      export interface Hidden { value: E }
+    }
+    export namespace ApiMerged {
+                     ~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/namespaces#ApiMerged` exposes `F`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/namespaces.ts(8,11): `F` is declared experimental here. effect(apiStabilityLeak)
+      /** @internal */
+      export interface Hidden { value: E }
+    }
+    export namespace ApiMerged {
+      export interface Shown { value: F }
+    }
+    export namespace Outer.Inner {
+                     ~~~~~
+!!! warning TS377137: `effect-v4-tests/namespaces#Outer` exposes `F`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/namespaces.ts(8,11): `F` is declared experimental here. effect(apiStabilityLeak)
+      /** @internal */
+      export interface Hidden { value: E }
+      export interface Shown { value: F }
+    }
+    declare namespace Ambient {
+      /** @internal */
+      export interface Hidden { value: E }
+      export interface Shown { value: F }
+    }
+    export { Ambient }
+             ~~~~~~~
+!!! warning TS377137: `effect-v4-tests/namespaces#Ambient` exposes `F`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/namespaces.ts(8,11): `F` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/nestedNamespaceDep.ts (0 errors) ====
+    /** @stability experimental */
+    interface E { value: string }
+    /** @stability experimental */
+    interface F { value: string }
+    export namespace Nested {
+      /** @internal */
+      export interface Hidden { value: E }
+      export interface Shown { value: F }
+    }
+    
+
+==== /.src/namespaceForwarded.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    export * as api from "./nestedNamespaceDep"
+                ~~~
+!!! warning TS377137: `effect-v4-tests/namespaceForwarded#api` exposes `F`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/nestedNamespaceDep.ts(4,11): `F` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/hiddenDefaultDep.ts (0 errors) ====
+    /** @stability experimental */
+    interface E { value: string }
+    /** @internal */
+    export default function hidden(): E { return null as unknown as E }
+    
+
+==== /.src/shownDefaultDep.ts (0 errors) ====
+    /** @stability experimental */
+    interface E { value: string }
+    export default function shown(): E { return null as unknown as E }
+    
+
+==== /.src/hiddenFunctionDep.ts (0 errors) ====
+    /** @stability experimental */
+    interface E { value: string }
+    /** @internal */
+    export function Hidden(): E { return null as unknown as E }
+    
+
+==== /.src/hiddenBarrel.ts (0 errors) ====
+    export { Hidden } from "./hiddenDep"
+    
+
+==== /.src/hiddenLocalReexportDep.ts (0 errors) ====
+    /** @stability experimental */
+    interface E { value: string }
+    /** @internal */
+    interface Hidden { value: E }
+    export { Hidden }
+    
+
+==== /.src/mergedDep.ts (0 errors) ====
+    /** @stability experimental */
+    interface E { value: string }
+    /** @internal */
+    export interface Merged { a: E }
+    export interface Merged { b: string }
+    
+
+==== /.src/importNamed.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    // Import-then-export aliases follow the import target's `@internal` tag.
+    import { Hidden, Shown } from "./hiddenDep"
+    export { Hidden }
+    export { Shown }
+             ~~~~~
+!!! warning TS377137: `effect-v4-tests/importNamed#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/hiddenDep.ts(2,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/importRenamed.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    import { Hidden as Alias } from "./hiddenDep"
+    export { Alias }
+    
+
+==== /.src/importDefault.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    import Hidden from "./hiddenDefaultDep"
+    export default Hidden
+    
+
+==== /.src/importDefaultPublic.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    import Shown from "./shownDefaultDep"
+    export default Shown
+                   ~~~~~
+!!! warning TS377137: `effect-v4-tests/importDefaultPublic#default` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/shownDefaultDep.ts(2,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/importNamedAsDefault.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    import { Hidden } from "./hiddenFunctionDep"
+    export default Hidden
+    
+
+==== /.src/importBarrel.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    import { Hidden } from "./hiddenBarrel"
+    export { Hidden }
+    
+
+==== /.src/importUntaggedReexport.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    import { Hidden } from "./hiddenLocalReexportDep"
+    export { Hidden }
+    
+
+==== /.src/importMerged.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    import { Merged } from "./mergedDep"
+    export { Merged }
+             ~~~~~~
+!!! warning TS377137: `effect-v4-tests/importMerged#Merged` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/mergedDep.ts(2,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/importNamespace.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    import * as ns from "./internalLeakyDep"
+    export { ns }
+    
+
+==== /.src/importTaggedExport.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    import { Shown } from "./hiddenDep"
+    /** @internal */
+    export { Shown }
+    
+
+==== /.src/importEqualsLocal.ts (5 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    // `export import X = ...` aliases follow the target named by their reference.
+    /** @stability experimental */
+    interface E { value: string }
+    namespace Impl {
+      /** @internal */
+      export interface Hidden { value: E }
+      export interface Shown { value: E }
+    }
+    export import Hidden = Impl.Hidden
+    export import Shown = Impl.Shown
+                  ~~~~~
+!!! warning TS377137: `effect-v4-tests/importEqualsLocal#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/importEqualsLocal.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export { Shown as NormalAlias }
+                      ~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/importEqualsLocal#NormalAlias` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/importEqualsLocal.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    /** @internal */
+    export import TaggedAlias = Impl.Shown
+    import Alias = Impl
+    export import ChainHidden = Alias.Hidden
+    export import ChainShown = Alias.Shown
+                  ~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/importEqualsLocal#ChainShown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/importEqualsLocal.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export namespace Outer.Inner {
+                     ~~~~~
+!!! warning TS377137: `effect-v4-tests/importEqualsLocal#Outer` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/importEqualsLocal.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+      /** @internal */
+      export interface Hidden { value: E }
+      export interface Shown { value: E }
+    }
+    export import DottedHidden = Outer.Inner.Hidden
+    export import DottedShown = Outer.Inner.Shown
+                  ~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/importEqualsLocal#DottedShown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/importEqualsLocal.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/implNamespaceDep.ts (0 errors) ====
+    /** @stability experimental */
+    interface E { value: string }
+    export namespace Impl {
+      /** @internal */
+      export interface Hidden { value: E }
+      export interface Shown { value: E }
+    }
+    
+
+==== /.src/importEqualsCrossFile.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    import { Impl } from "./implNamespaceDep"
+    export import Hidden = Impl.Hidden
+    export import Shown = Impl.Shown
+                  ~~~~~
+!!! warning TS377137: `effect-v4-tests/importEqualsCrossFile#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/implNamespaceDep.ts(2,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/importEqualsNamespaceImport.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    import * as Dep from "./hiddenDep"
+    export import Hidden = Dep.Hidden
+    export import Shown = Dep.Shown
+                  ~~~~~
+!!! warning TS377137: `effect-v4-tests/importEqualsNamespaceImport#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/hiddenDep.ts(2,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/importEqualsRequire.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    import Dep = require("./hiddenDep")
+    export import Hidden = Dep.Hidden
+    export import Shown = Dep.Shown
+                  ~~~~~
+!!! warning TS377137: `effect-v4-tests/importEqualsRequire#Shown` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/hiddenDep.ts(2,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+
+==== /.src/internalSafeDep.ts (0 errors) ====
+    /** @stability experimental */
+    interface E { value: string }
+    /** @internal */
+    export interface Hidden { value: E }
+    export interface Safe { value: string }
+    
+
+==== /.src/importEqualsWholeModule.ts (0 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    import Dep = require("./internalSafeDep")
+    export import Api = Dep
+    
+
+==== /.src/importEqualsWholeModulePublic.ts (1 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    import Dep = require("./hiddenDep")
+    export import Api = Dep
+                  ~~~
+!!! warning TS377137: `effect-v4-tests/importEqualsWholeModulePublic#Api` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/hiddenDep.ts(2,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    

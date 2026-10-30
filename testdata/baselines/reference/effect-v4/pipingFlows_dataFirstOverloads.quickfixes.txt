@@ -1,0 +1,10 @@
+=== Quick Fix Inventory ===
+
+[D1] (27:51-27:55) TS7006: Parameter 'size' implicitly has an 'any' type.
+  (no quick fixes)
+
+[D2] (28:37-28:41) TS7006: Parameter 'size' implicitly has an 'any' type.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+(no quick fixes to apply)

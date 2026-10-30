@@ -1,0 +1,15 @@
+==== /.src/effectSucceedWithUndefined_namedUndefinedImport.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 6:22 - 6:41
+Node: succeed(undefined)
+Node Kind: KindCallExpression
+
+Subject: undefined
+Subject Type: undefined
+
+Transformations (1):
+  [0] kind: call
+      callee: succeed
+      args: (constant)
+      outType: Effect<undefined, never, never>

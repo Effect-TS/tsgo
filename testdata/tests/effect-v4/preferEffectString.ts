@@ -38,6 +38,7 @@ value.trimRight()
 
 value["trim"]()
 value[`trim`]()
+value.tr\u0069m()
 ;(value.trim)()
 value.trim?.()
 declare const optional: string | undefined

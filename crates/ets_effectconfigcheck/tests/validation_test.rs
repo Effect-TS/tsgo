@@ -30,7 +30,7 @@ impl ParseConfigHost for ParseHost {
 }
 
 // go test: internal/effectconfigcheck/validation_test.go:24 newHost 491665c7ddc49098
-// Rust: the host is leaked (tsrs takes `&'static dyn ParseConfigHost`; docs/TSRS_API.md, "Gaps"). The test package
+// Rust: the host is leaked (tsrs takes `&'static dyn ParseConfigHost`; porting/TSRS_API.md, "Gaps"). The test package
 // imports etscheckerhooks, whose `init` registers the callbacks: `ets_etscheckerhooks::init()` here.
 fn new_host(files: &[(&str, &str)]) -> &'static ParseHost {
     ets_etscheckerhooks::init();
@@ -496,10 +496,9 @@ fn test_inherited_overrides_use_local_syntax_only() {
     assert_eq!(underline(got[1]), r#""localTypo""#, "wrong local underline");
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:305 TestUnknownRuleNamesJSONAPI 512ddd9baf6a637e
+// go test: internal/effectconfigcheck/validation_test.go:305 TestUnknownRuleNamesJSONAPI ae2ae8e0d62a3b6e
 #[test]
 fn test_unknown_rule_names_json_api() {
-    // Use the compiler's JSON representation, which both providers accept.
     let (raw, errors) = ets_shim::tsoptions::parse_config_file_text_to_json(
         "/tsconfig.json",
         tspath::to_path("/tsconfig.json", "", true),
@@ -523,7 +522,7 @@ fn test_unknown_rule_names_json_api() {
     );
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:319 TestProjectReferencesAndSharedExtends 44252f2a0210ea18
+// go test: internal/effectconfigcheck/validation_test.go:318 TestProjectReferencesAndSharedExtends d17dfbfd0fa8dae9
 #[test]
 fn test_project_references_and_shared_extends() {
     let host = new_host(&[
@@ -585,12 +584,14 @@ fn test_project_references_and_shared_extends() {
             got.iter().map(|d| d.localize()).collect::<Vec<_>>()
         );
     }
-    // Parsing the base through the same cache must not reuse a child's severity.
     let got = unknown_diagnostics(&parse(host, "/base.json", Some(&*cache)));
-    assert!(got.len() == 1 && got[0].category() == Category::Warning, "cached severity leaked");
+    assert!(
+        got.len() == 1 && got[0].category() == Category::Warning,
+        "base does not reuse child severity: cached severity leaked"
+    );
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:368 TestMultipleExtendsAndExistingOptions 0e777470169add38
+// go test: internal/effectconfigcheck/validation_test.go:369 TestMultipleExtendsAndExistingOptions 0e777470169add38
 #[test]
 fn test_multiple_extends_and_existing_options() {
     let host = new_host(&[
@@ -635,7 +636,7 @@ fn test_multiple_extends_and_existing_options() {
     );
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:389 TestOtherPluginsAndCompilerErrors 235be75931db41d9
+// go test: internal/effectconfigcheck/validation_test.go:390 TestOtherPluginsAndCompilerErrors 235be75931db41d9
 #[test]
 fn test_other_plugins_and_compiler_errors() {
     let host = new_host(&[(
@@ -652,7 +653,7 @@ fn test_other_plugins_and_compiler_errors() {
     );
 }
 
-// go test: internal/effectconfigcheck/validation_test.go:403 TestUnknownRuleNamesDeterministicOrder 8d2d51201ffb4f0f
+// go test: internal/effectconfigcheck/validation_test.go:404 TestUnknownRuleNamesDeterministicOrder 8d2d51201ffb4f0f
 #[test]
 fn test_unknown_rule_names_deterministic_order() {
     let host = new_host(&[(

@@ -1,0 +1,43 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/effectSucceedWithUndefined_callShapes.ts(6,54): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_callShapes.ts(9,33): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_callShapes.ts(12,57): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_callShapes.ts(15,73): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+/.src/effectSucceedWithUndefined_callShapes.ts(18,78): suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+
+
+==== /.src/effectSucceedWithUndefined_callShapes.ts (5 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics effectSucceedWithUndefined:suggestion
+    import { Effect, pipe } from "effect"
+    
+    // MUST TRIGGER: data-first argument -> Effect.andThen(Effect.void, Effect.undefined)
+    export const dataFirst = Effect.andThen(Effect.void, Effect.succeed(undefined))
+                                                         ~~~~~~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST TRIGGER: pipe subject -> pipe(Effect.undefined, Effect.as(1))
+    export const pipeSubject = pipe(Effect.succeed(undefined), Effect.as(1))
+                                    ~~~~~~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST TRIGGER: inside an Effect.fn body -> Effect.undefined
+    export const fn = Effect.fn(function*() { return yield* Effect.succeed(undefined) })
+                                                            ~~~~~~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST TRIGGER: inside an Effect.fnUntraced body -> Effect.undefined
+    export const fnUntraced = Effect.fnUntraced(function*() { return yield* Effect.succeed(undefined) })
+                                                                            ~~~~~~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST TRIGGER: point-free pipe as a data-first argument -> Effect.undefined
+    export const pointFreeArgument = Effect.andThen(Effect.void, pipe(undefined, Effect.succeed))
+                                                                                 ~~~~~~~~~~~~~~
+!!! suggestion TS377162: `Effect.undefined` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithUndefined)
+    
+    // MUST NOT TRIGGER: an undefined-typed parameter named `undefined` still shadows the global
+    export const shadowedUndefinedType = (undefined: undefined) => Effect.succeed(undefined)
+    

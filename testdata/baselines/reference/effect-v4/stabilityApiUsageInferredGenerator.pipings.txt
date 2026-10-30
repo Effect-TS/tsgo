@@ -1,0 +1,111 @@
+==== /.src/stabilityApiUsageInferredGenerator.ts (7 flows) ====
+
+=== Piping Flow ===
+Location: 8:17 - 8:82
+Node: Effect.fail<{ readonly _tag: "NotFound" }>({ _tag: "NotFound" })
+Node Kind: KindCallExpression
+
+Subject: { _tag: "NotFound" }
+Subject Type: { _tag: "NotFound"; }
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fail
+      args: (constant)
+      outType: Effect<never, { readonly _tag: "NotFound"; }, never>
+
+=== Piping Flow ===
+Location: 10:33 - 16:5
+Node: Effect.gen(function* () {\n    return yield* readFile.pipe(\n      Effect.catchTags({ NotFound: () => Effect.succeed("{}") }),\n      Effect.flatMap(decode<A>()),\n    );\n  })
+Node Kind: KindCallExpression
+
+Subject: function* () {\n    return yield* readFile.pipe(\n      Effect.catchTags({ NotFound: () => Effect.succeed("{}") }),\n      Effect.flatMap(decode<A>()),\n    );\n  }
+Subject Type: () => Generator<Effect<A, never, never>, A, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<A, never, never>
+
+=== Piping Flow ===
+Location: 12:18 - 15:6
+Node: readFile.pipe(\n      Effect.catchTags({ NotFound: () => Effect.succeed("{}") }),\n      Effect.flatMap(decode<A>()),\n    )
+Node Kind: KindCallExpression
+
+Subject: readFile
+Subject Type: Effect<never, { readonly _tag: "NotFound"; }, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.catchTags
+      args: [{ NotFound: () => Effect.succeed("{}") }]
+      outType: Effect<string, never, never>
+  [1] kind: pipeable
+      callee: Effect.flatMap
+      args: [decode<A>()]
+      outType: Effect<A, never, never>
+
+=== Piping Flow ===
+Location: 13:41 - 13:62
+Node: Effect.succeed("{}")
+Node Kind: KindCallExpression
+
+Subject: "{}"
+Subject Type: "{}"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 23:30 - 33:5
+Node: Effect.gen(function* () {\n    return new Tool({\n      annotations: {\n        ...Option.some("test").pipe(\n          Option.map((title) => ({ title })),\n          Option.getOrUndefined,\n        ),\n      },\n    });\n  })
+Node Kind: KindCallExpression
+
+Subject: function* () {\n    return new Tool({\n      annotations: {\n        ...Option.some("test").pipe(\n          Option.map((title) => ({ title })),\n          Option.getOrUndefined,\n        ),\n      },\n    });\n  }
+Subject Type: () => Generator<never, Tool, never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<Tool, never, never>
+
+=== Piping Flow ===
+Location: 27:12 - 30:10
+Node: Option.some("test").pipe(\n          Option.map((title) => ({ title })),\n          Option.getOrUndefined,\n        )
+Node Kind: KindCallExpression
+
+Subject: "test"
+Subject Type: "test"
+
+Transformations (3):
+  [0] kind: call
+      callee: Option.some
+      args: (constant)
+      outType: Option<string>
+  [1] kind: pipeable
+      callee: Option.map
+      args: [(title) => ({ title })]
+      outType: Option<{ title: string; }>
+  [2] kind: pipeable
+      callee: Option.getOrUndefined
+      args: (constant)
+      outType: { title: string; } | undefined
+
+=== Piping Flow ===
+Location: 42:41 - 43:43
+Node: accept({ experimental: 1, unstable: 2 })
+Node Kind: KindCallExpression
+
+Subject: { experimental: 1, unstable: 2 }
+Subject Type: { experimental: number; unstable: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: accept
+      args: (constant)
+      outType: void

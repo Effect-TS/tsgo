@@ -111,7 +111,7 @@ func TestSymbolAccessMatchesCompatibilityHelpers(t *testing.T) {
 			found := map[string]bool{}
 			for _, decl := range file.Decls {
 				helper, ok := decl.(*ast.FuncDecl)
-				if !ok || !strings.HasPrefix(helper.Name.Name, "TSGetSymbol") || !takesSymbol(helper) {
+				if !ok || !strings.HasPrefix(helper.Name.Name, "TSGetSymbol") || !isSymbolPointerGetter(helper) {
 					continue
 				}
 				member := strings.TrimPrefix(helper.Name.Name, "TSGetSymbol")
@@ -129,9 +129,7 @@ func TestSymbolAccessMatchesCompatibilityHelpers(t *testing.T) {
 	}
 }
 
-// takesSymbol reports whether helper is a Symbol getter (its parameter is a *Symbol); the TSGetSymbolTable helpers
-// take a SymbolTable instead.
-func takesSymbol(helper *ast.FuncDecl) bool {
+func isSymbolPointerGetter(helper *ast.FuncDecl) bool {
 	params := helper.Type.Params.List
 	if len(params) != 1 {
 		return false

@@ -1,6 +1,6 @@
 //! Rust-only: the effect-tsgo shim accessors the API-stability analysis calls that tsrs does not offer
 //! (`_tools/gen_shims/providers/typescript/checker/integration.go`). Each helper is a cached-field peek over public
-//! tsrs state, as the Go function is; none resolves or instantiates anything (`docs/TSRS_API.md`, "Gaps").
+//! tsrs state, as the Go function is; none resolves or instantiates anything (`porting/TSRS_API.md`, "Gaps").
 
 use ets_shim::ast::{CheckFlags, Kind, Node, Symbol, SymbolFlags, SymbolTable};
 use ets_shim::checker::{

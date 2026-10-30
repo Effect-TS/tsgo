@@ -1,0 +1,475 @@
+==== /.src/argument.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 10:42 - 11:16
+Node: x({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: x
+      args: (constant)
+      outType: void
+==== /.src/shorthand.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:17 - 11:29
+Node: x({ test })
+Node Kind: KindCallExpression
+
+Subject: { test }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: x
+      args: (constant)
+      outType: void
+==== /.src/quotedKey.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 10:42 - 11:18
+Node: x({ "test": 42 })
+Node Kind: KindCallExpression
+
+Subject: { "test": 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: x
+      args: (constant)
+      outType: void
+==== /.src/computedLiteralKey.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 10:42 - 11:20
+Node: x({ ["test"]: 42 })
+Node Kind: KindCallExpression
+
+Subject: { ["test"]: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: x
+      args: (constant)
+      outType: void
+==== /.src/typedVariable.ts (0 flows) ====
+==== /.src/assignment.ts (0 flows) ====
+==== /.src/satisfies.ts (0 flows) ====
+==== /.src/return.ts (0 flows) ====
+==== /.src/nested.ts (0 flows) ====
+==== /.src/arrayElement.ts (0 flows) ====
+==== /.src/genericConstraint.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:62 - 11:84
+Node: generic({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: generic
+      args: (constant)
+      outType: void
+==== /.src/generatorContextualProperty.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:27 - 11:43
+Node: x({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: x
+      args: (constant)
+      outType: void
+==== /.src/inferredGeneratorConstraint.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:89 - 11:111
+Node: generic({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: generic
+      args: (constant)
+      outType: void
+==== /.src/nestedFunctionConstraint.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:108 - 11:130
+Node: generic({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: generic
+      args: (constant)
+      outType: void
+==== /.src/annotatedInnerGeneratorConstraint.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:151 - 11:173
+Node: generic({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: generic
+      args: (constant)
+      outType: void
+==== /.src/annotatedGeneratorConstraint.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:122 - 11:144
+Node: generic({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: generic
+      args: (constant)
+      outType: void
+==== /.src/generatorDeclarationConstraint.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:80 - 11:102
+Node: generic({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: generic
+      args: (constant)
+      outType: void
+==== /.src/generatorMethodConstraint.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:81 - 11:103
+Node: generic({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: generic
+      args: (constant)
+      outType: void
+==== /.src/ordinaryFunctionConstraint.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:79 - 11:101
+Node: generic({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: generic
+      args: (constant)
+      outType: void
+==== /.src/arrowConstraint.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:80 - 11:102
+Node: generic({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: generic
+      args: (constant)
+      outType: void
+==== /.src/nestedConstraint.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:73 - 11:106
+Node: generic({ inner: { test: 42 } })
+Node Kind: KindCallExpression
+
+Subject: { inner: { test: 42 } }
+Subject Type: { inner: { test: number; }; }
+
+Transformations (1):
+  [0] kind: call
+      callee: generic
+      args: (constant)
+      outType: void
+==== /.src/arrayConstraint.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:64 - 11:88
+Node: generic([{ test: 42 }])
+Node Kind: KindCallExpression
+
+Subject: [{ test: 42 }]
+Subject Type: { test: number; }[]
+
+Transformations (1):
+  [0] kind: call
+      callee: generic
+      args: (constant)
+      outType: void
+==== /.src/restConstraint.ts (0 flows) ====
+==== /.src/constructorConstraint.ts (0 flows) ====
+==== /.src/constraintUsingInference.ts (0 flows) ====
+==== /.src/constraintWithoutProperty.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:70 - 11:92
+Node: generic({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: generic
+      args: (constant)
+      outType: void
+==== /.src/unconstrainedAlternative.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:69 - 11:91
+Node: generic({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: generic
+      args: (constant)
+      outType: void
+==== /.src/fixedTupleSpread.ts (0 flows) ====
+==== /.src/fixedTupleSpreads.ts (0 flows) ====
+==== /.src/returnTypeInference.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:124 - 11:146
+Node: succeed({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: succeed
+      args: (constant)
+      outType: Box<{ test: number; }>
+==== /.src/constrainedReturnTypeInference.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:128 - 11:150
+Node: succeed({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: succeed
+      args: (constant)
+      outType: Box<{ test: number; }>
+==== /.src/callbackReturnInference.ts (0 flows) ====
+==== /.src/defaultTypeArgument.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:117 - 11:143
+Node: withDefault({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: withDefault
+      args: (constant)
+      outType: void
+==== /.src/taggedTemplateConstraint.ts (0 flows) ====
+==== /.src/explicitOuterTypeArguments.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:137 - 11:160
+Node: constant({ test: 42 })
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: constant
+      args: (constant)
+      outType: () => { test: number; }
+==== /.src/nestedGenericCall.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:95 - 11:121
+Node: generic(id({ test: 42 }))
+Node Kind: KindCallExpression
+
+Subject: { test: 42 }
+Subject Type: { test: number; }
+
+Transformations (2):
+  [0] kind: call
+      callee: id
+      args: (constant)
+      outType: { test: number; }
+  [1] kind: call
+      callee: generic
+      args: (constant)
+      outType: void
+==== /.src/genericOwnDeclaration.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:43 - 13:12
+Node: generic({\n/** @stability experimental */\ntest: 42 })
+Node Kind: KindCallExpression
+
+Subject: {\n/** @stability experimental */\ntest: 42 }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: generic
+      args: (constant)
+      outType: void
+==== /.src/inherited.ts (0 flows) ====
+==== /.src/propertyAccess.ts (0 flows) ====
+==== /.src/valueReference.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 12:18 - 12:39
+Node: x({ stable: value })
+Node Kind: KindCallExpression
+
+Subject: { stable: value }
+Subject Type: { stable: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: x
+      args: (constant)
+      outType: void
+==== /.src/stableProperty.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 10:42 - 11:18
+Node: x({ stable: 42 })
+Node Kind: KindCallExpression
+
+Subject: { stable: 42 }
+Subject Type: { stable: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: x
+      args: (constant)
+      outType: void
+==== /.src/omittedProperty.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 10:42 - 11:6
+Node: x({})
+Node Kind: KindCallExpression
+
+Subject: {}
+Subject Type: {}
+
+Transformations (1):
+  [0] kind: call
+      callee: x
+      args: (constant)
+      outType: void
+==== /.src/untypedLiteral.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:28 - 11:37
+Node: x(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: x
+      args: (constant)
+      outType: void
+==== /.src/untypedShorthand.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:41 - 11:50
+Node: x(value)
+Node Kind: KindCallExpression
+
+Subject: value
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: x
+      args: (constant)
+      outType: void
+==== /.src/spread.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 11:28 - 11:44
+Node: x({ ...value })
+Node Kind: KindCallExpression
+
+Subject: { ...value }
+Subject Type: { test: number; }
+
+Transformations (1):
+  [0] kind: call
+      callee: x
+      args: (constant)
+      outType: void
+==== /.src/differentProperty.ts (0 flows) ====
+==== /.src/stableUnionBranch.ts (0 flows) ====
+==== /.src/experimentalUnionBranch.ts (0 flows) ====
+==== /.src/ambiguousUnion.ts (0 flows) ====
+==== /.src/unionDeduplication.ts (0 flows) ====
+==== /.src/method.ts (0 flows) ====

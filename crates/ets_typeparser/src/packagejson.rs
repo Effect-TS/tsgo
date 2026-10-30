@@ -9,7 +9,7 @@ use ets_shim::module::packagejson::{InfoCacheEntry, PackageJson};
 use crate::*;
 
 // go: internal/typeparser/packagejson.go:10 packageJsonProgram ad8c5cb98911ab68
-// Rust: Go's `tspath.PathKey` and `tspath.RootedFilePath` are tsrs's `Path` and a plain file name (docs/TSRS_API.md).
+// Rust: Go's `tspath.PathKey` and `tspath.RootedFilePath` are tsrs's `Path` and a plain file name (porting/TSRS_API.md).
 pub(crate) trait PackageJsonProgram {
     fn get_source_file_meta_data(&self, path: &Path) -> SourceFileMetaData;
     fn get_package_json_info(&self, pkg_json_path: &str) -> Option<P<InfoCacheEntry>>;

@@ -49,6 +49,13 @@ export const LateB = Schema.Struct({ b: Schema.String })
 type HalfLate = typeof Circle.Type | typeof LateD.Type
 const LateD = Schema.Struct({ d: Schema.String })
 
+// MUST TRIGGER, no fix offered - the members are qualified through a namespace declared after the alias
+type LateQualified = typeof LateModels.A.Type | typeof LateModels.B.Type
+namespace LateModels {
+  export const A = Schema.String
+  export const B = Schema.Boolean
+}
+
 // MUST TRIGGER - a value named `Pair` already exists, so the fix names the schema `PairSchema`
 export const Pair = [Circle, Square] as const
 export type Pair = typeof Circle.Type | typeof Square.Type
@@ -101,6 +108,10 @@ const sameLineBefore = 1; type SameLine = typeof Circle.Encoded | typeof Square.
 
 // MUST TRIGGER - a block comment precedes the alias on the same line
 /* shapes */ type Commented = typeof Circle.Type | typeof Square.Type
+
+// MUST TRIGGER - the fix inserts the const before the JSDoc, which stays attached to the alias
+/** Either a circle or a square */
+type Documented = typeof Circle.Type | typeof Square.Type
 
 // MUST NOT TRIGGER - the recommended form: the type is derived from a Schema.Union
 export const Shape2 = Schema.Union(Circle, Square)

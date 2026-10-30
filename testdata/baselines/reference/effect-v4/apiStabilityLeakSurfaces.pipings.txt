@@ -1,0 +1,70 @@
+==== /.src/computed.ts (0 flows) ====
+==== /.src/defaultArrow.ts (0 flows) ====
+==== /.src/inferred.ts (4 flows) ====
+
+=== Piping Flow ===
+Location: 20:29 - 20:50
+Node: makeObjectClosure(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: E
+
+Transformations (1):
+  [0] kind: call
+      callee: makeObjectClosure
+      args: (constant)
+      outType: () => { v: E; }
+
+=== Piping Flow ===
+Location: 22:29 - 22:50
+Node: makeDirectClosure(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: E
+
+Transformations (1):
+  [0] kind: call
+      callee: makeDirectClosure
+      args: (constant)
+      outType: () => E
+
+=== Piping Flow ===
+Location: 24:29 - 24:50
+Node: makeNestedClosure(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: E
+
+Transformations (1):
+  [0] kind: call
+      callee: makeNestedClosure
+      args: (constant)
+      outType: () => () => E
+
+=== Piping Flow ===
+Location: 26:31 - 26:54
+Node: makePropertyClosure(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: E
+
+Transformations (1):
+  [0] kind: call
+      callee: makePropertyClosure
+      args: (constant)
+      outType: { f: () => E; }
+==== /.src/bareBinderCleanFirst.ts (0 flows) ====
+==== /.src/signatures.ts (0 flows) ====
+==== /.src/cycleAFirst.ts (0 flows) ====
+==== /.src/cycleZFirst.ts (0 flows) ====
+==== /.src/conditionalReturns.ts (0 flows) ====
+==== /.src/conditionalMembers.ts (0 flows) ====
+==== /.src/indexedRepresented.ts (0 flows) ====
+==== /.src/indexedLazy.ts (0 flows) ====
+==== /.src/shallowNamed.ts (0 flows) ====
+==== /.src/shallowTagged.ts (0 flows) ====
+==== /.src/relatedOverload.ts (0 flows) ====

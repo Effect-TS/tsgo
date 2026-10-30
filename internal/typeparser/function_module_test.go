@@ -7,12 +7,10 @@ import (
 )
 
 type functionReferenceCase struct {
-	name   string
-	member string
-	want   bool
-	// viaVariable marks references that only reach the export through a local
-	// variable, which the direct variant must reject.
-	viaVariable bool
+	name             string
+	member           string
+	want             bool
+	viaLocalVariable bool
 }
 
 func TestIsNodeReferenceToEffectFunctionModuleApi(t *testing.T) {
@@ -49,8 +47,8 @@ func TestIsNodeReferenceToEffectFunctionModuleApi(t *testing.T) {
 				{name: "channel", member: "identity"},
 				{name: "local", member: "identity"},
 				{name: "lookalike", member: "identity"},
-				{name: "viaAlias", member: "identity", want: true, viaVariable: true},
-				{name: "viaTypedAlias", member: "identity", want: true, viaVariable: true},
+				{name: "viaAlias", member: "identity", want: true, viaLocalVariable: true},
+				{name: "viaTypedAlias", member: "identity", want: true, viaLocalVariable: true},
 			}
 			if version == bundledeffect.EffectV3 {
 				source += `
@@ -70,7 +68,7 @@ func TestIsNodeReferenceToEffectFunctionModuleApi(t *testing.T) {
 				if got := tp.IsNodeReferenceToEffectFunctionModuleApi(GetFunctionLikeBody(function), tt.member); got != tt.want {
 					t.Errorf("%s as %s = %v, want %v", tt.name, tt.member, got, tt.want)
 				}
-				wantDirect := tt.want && !tt.viaVariable
+				wantDirect := tt.want && !tt.viaLocalVariable
 				if got := tp.IsNodeDirectReferenceToEffectFunctionModuleApi(GetFunctionLikeBody(function), tt.member); got != wantDirect {
 					t.Errorf("%s as direct %s = %v, want %v", tt.name, tt.member, got, wantDirect)
 				}

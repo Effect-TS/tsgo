@@ -1,0 +1,55 @@
+==== /.src/mapMapErrorToMapBoth_spread.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 9:32 - 9:106
+Node: Effect.map(Effect.mapError(source, (e) => e.length).pipe(), (n) => n + 1)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: dataFirst
+      callee: Effect.mapError
+      args: [(e) => e.length]
+      outType: Effect<number, number, never>
+  [1] kind: dataFirst
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 12:30 - 12:102
+Node: source.pipe(Effect.map(...callbacks), Effect.mapError((e) => e.length))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [...callbacks]
+      outType: Effect<number, string, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(e) => e.length]
+      outType: Effect<number, number, never>
+
+=== Piping Flow ===
+Location: 16:32 - 16:104
+Node: source.pipe(Effect.map((n) => n + 1), Effect.mapError((e) => e.length))
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(n) => n + 1]
+      outType: Effect<number, string, never>
+  [1] kind: pipeable
+      callee: Effect.mapError
+      args: [(e) => e.length]
+      outType: Effect<number, number, never>

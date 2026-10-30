@@ -8,13 +8,7 @@ use crate::api_stability_test::*;
 use crate::helpers_test::*;
 use crate::*;
 
-// go test: internal/typeparser/api_stability_reset_test.go:16 apiStabilityAnalysisDiff e8f80477167b4847
-// apiStabilityAnalysisDiff names the fields of two analyses that differ,
-// treating a nil and an empty map or slice as equal. Only one side may hold a
-// non-empty collection, so it compares a used analysis against a fresh one. A
-// field of a kind it does not know fails the test, so a new field forces a
-// decision about reset.
-//
+// go test: internal/typeparser/api_stability_reset_test.go:11 apiStabilityAnalysisDiff db29ffebc4ef52c3
 // Rust: Go walks the fields with reflection; here both analyses are destructured without `..`, so a new field
 // fails to compile until it is listed. Go's `tp` field is not stored on the Rust analysis. Names are Go's.
 fn api_stability_analysis_diff(
@@ -354,7 +348,7 @@ fn api_stability_analysis_diff(
     diff
 }
 
-// go test: internal/typeparser/api_stability_reset_test.go:29 apiStabilityValuesEqual 176c1eb48c4a9148
+// go test: internal/typeparser/api_stability_reset_test.go:24 apiStabilityValuesEqual 176c1eb48c4a9148
 // Rust: Go's reflective comparison of one collection field (map or slice): only one side may be non-empty, and the
 // field is equal when both are empty. Integer fields are compared directly in `api_stability_analysis_diff`.
 fn api_stability_values_equal(t: &T, path: &str, got: usize, want: usize) -> bool {
@@ -365,7 +359,7 @@ fn api_stability_values_equal(t: &T, path: &str, got: usize, want: usize) -> boo
     got == 0 && want == 0
 }
 
-// go test: internal/typeparser/api_stability_reset_test.go:54 apiStabilityResetSource 3bc65979fd0024c9
+// go test: internal/typeparser/api_stability_reset_test.go:49 apiStabilityResetSource 3bc65979fd0024c9
 const API_STABILITY_RESET_SOURCE: &str = "/** @stability experimental */
 interface E { value: string }
 /** @stability unstable */
@@ -386,9 +380,7 @@ declare global { interface Error extends Reportable {} }
 export function augmented(e: Error) {}
 ";
 
-// go test: internal/typeparser/api_stability_reset_test.go:76 TestApiStabilityResetMatchesFreshAnalysis 91a9bd4d0276c5b5
-// TestApiStabilityResetMatchesFreshAnalysis proves a reset analysis is
-// indistinguishable from a new one after a query that fills its tables.
+// go test: internal/typeparser/api_stability_reset_test.go:69 TestApiStabilityResetMatchesFreshAnalysis 1316647049d06d67
 #[test]
 fn test_api_stability_reset_matches_fresh_analysis() {
     run(|t| {
@@ -446,10 +438,7 @@ fn test_api_stability_reset_matches_fresh_analysis() {
     });
 }
 
-// go test: internal/typeparser/api_stability_reset_test.go:110 TestApiStabilityResetHidesPreviousExport 71102a6a6f42e946
-// TestApiStabilityResetHidesPreviousExport proves no state of one export
-// reaches the next one: an exhausted budget and a stale result stored for the
-// next root are both discarded by Reset.
+// go test: internal/typeparser/api_stability_reset_test.go:100 TestApiStabilityResetHidesPreviousExport 3a582306ac263af9
 #[test]
 fn test_api_stability_reset_hides_previous_export() {
     run(|t| {
@@ -489,11 +478,7 @@ fn test_api_stability_reset_hides_previous_export() {
     });
 }
 
-// go test: internal/typeparser/api_stability_reset_test.go:143 TestApiStabilityResetSharedHitIsNotRepublished b120983226d27e21
-// TestApiStabilityResetSharedHitIsNotRepublished proves a later export reuses
-// a published surface after a reset: the composed result is the same, the hit
-// is recorded for settlement, it is not queued for publication again, and the
-// snapshot keeps the findings it was published with.
+// go test: internal/typeparser/api_stability_reset_test.go:129 TestApiStabilityResetSharedHitIsNotRepublished ba5aa95f44d9d2e5
 #[test]
 fn test_api_stability_reset_shared_hit_is_not_republished() {
     run(|t| {

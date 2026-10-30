@@ -199,10 +199,7 @@ export class K {
 }
 `
 
-// effectContextReference is the analysis that stored an entry for every node.
-// It is kept here to prove that storing only the entries that differ from the
-// parent's answers identically for every node.
-func effectContextReference(tp *TypeParser, sf *ast.SourceFile) (func(*ast.Node) EffectContextFlags, func(*ast.Node) *ast.FunctionExpression) {
+func denseEffectContextReference(tp *TypeParser, sf *ast.SourceFile) (func(*ast.Node) EffectContextFlags, func(*ast.Node) *ast.FunctionExpression) {
 	var flagsStore core.LinkStore[*ast.Node, EffectContextFlags]
 	var generatorStore core.LinkStore[*ast.Node, *ast.FunctionExpression]
 
@@ -363,8 +360,6 @@ func effectContextReference(tp *TypeParser, sf *ast.SourceFile) (func(*ast.Node)
 	return flagsOf, generatorOf
 }
 
-// allEffectContextNodes returns every node reachable from the source file,
-// JSDoc nodes included, which the analysis does not visit.
 func allEffectContextNodes(sf *ast.SourceFile) []*ast.Node {
 	var nodes []*ast.Node
 	var visit ast.Visitor
@@ -382,10 +377,6 @@ type effectContextComparison struct {
 	generators                              map[*ast.FunctionExpression]bool
 }
 
-// compareEffectContext checks every node of every file against the reference
-// analysis. Odd files are queried bottom-up and every third file asks for the
-// generator function first, so the first query of a file is often neither the
-// source file nor a flags query.
 func compareEffectContext(t *testing.T, tp *TypeParser, sourceFiles []*ast.SourceFile) effectContextComparison {
 	t.Helper()
 	result := effectContextComparison{generators: map[*ast.FunctionExpression]bool{}}
@@ -396,6 +387,11 @@ func compareEffectContext(t *testing.T, tp *TypeParser, sourceFiles []*ast.Sourc
 		}
 		var wantFlags func(*ast.Node) EffectContextFlags
 		var wantGenerator func(*ast.Node) *ast.FunctionExpression
+		referenceAfterFirstQuery := func() {
+			if wantFlags == nil {
+				wantFlags, wantGenerator = denseEffectContextReference(tp, sf)
+			}
+		}
 		mismatches := 0
 		for _, node := range nodes {
 			var gotFlags EffectContextFlags
@@ -407,10 +403,7 @@ func compareEffectContext(t *testing.T, tp *TypeParser, sourceFiles []*ast.Sourc
 				gotFlags = tp.GetEffectContextFlags(node)
 				gotGenerator = tp.GetEffectYieldGeneratorFunction(node)
 			}
-			if wantFlags == nil {
-				// after the first query, so the file is analyzed lazily by the getters
-				wantFlags, wantGenerator = effectContextReference(tp, sf)
-			}
+			referenceAfterFirstQuery()
 			if want := wantFlags(node); gotFlags != want || gotGenerator != wantGenerator(node) {
 				mismatches++
 				if mismatches <= 10 {

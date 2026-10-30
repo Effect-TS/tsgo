@@ -1,7 +1,5 @@
 // Ported from effect-tsgo's internal/typeparser/api_stability_surface_test.go (see helpers_test.rs).
 
-use std::sync::Arc;
-
 use ets_go::testing::T;
 use ets_shim::ast::{SourceFile, Symbol};
 use ets_shim::checker::{Signature, Type};
@@ -39,11 +37,12 @@ fn names(used: &ApiStabilityUsed) -> String {
     format!("{:?}", api_stability_dependency_names(used))
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:13 assertApiStabilitySurfaceExcludesOwnTag 977126e9371edff5
-// assertApiStabilitySurfaceExcludesOwnTag asserts that a surface result carries
-// none of the root's own findings. name is the display name the root's own tag
-// would report under; other names are legitimate child dependencies.
-fn assert_api_stability_surface_excludes_own_tag(t: &T, used: &ApiStabilityUsed, name: &str) {
+// go test: internal/typeparser/api_stability_surface_test.go:10 assertApiStabilitySurfaceExcludesOwnTag 6902dd7861d46d45
+pub(crate) fn assert_api_stability_surface_excludes_own_tag(
+    t: &T,
+    used: &ApiStabilityUsed,
+    name: &str,
+) {
     t.helper();
     for dependency in &used.dependencies {
         if api_stability_dependency_name(dependency) == name {
@@ -55,14 +54,7 @@ fn assert_api_stability_surface_excludes_own_tag(t: &T, used: &ApiStabilityUsed,
     }
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:29 TestApiStabilityRootTagIsExcludedFromResult 05e54f5c4669164b
-// TestApiStabilityRootTagIsExcludedFromResult pins the
-// declared-versus-surface split for every root kind: declared stability
-// is the component's own tag, while the surface result is the minimum
-// guaranteed stability of the component's exposed children and excludes the
-// root's own tag. The declared accessors keep returning the own tag with its
-// declaration provenance, and the traversal still descends through a tagged
-// root, so a tagged root's children keep being reported.
+// go test: internal/typeparser/api_stability_surface_test.go:19 TestApiStabilityRootTagIsExcludedFromResult 69ac81f3b782cc51
 #[test]
 fn test_api_stability_root_tag_is_excluded_from_result() {
     run(|t| {
@@ -105,8 +97,6 @@ export type TaggedAliasLeaky = { value: E }
         let mut tp = compiled.type_parser();
         let mut session = tp.new_api_stability_session();
 
-        // The declared accessors keep the own tag and its provenance for every root
-        // kind. This read never triggers the computed surface.
         let tagged_root = export_of(t, &mut tp, test_file, "TaggedRoot");
         let tagged_root_declared = tp.declared_api_stability_of_symbol(tagged_root);
         if tagged_root_declared.level != ApiStabilityLevel::Unstable
@@ -165,8 +155,6 @@ export type TaggedAliasLeaky = { value: E }
             }
         }
 
-        // A tagged function's own declaration tag is recorded as a signature
-        // finding; it is still the root's own tag and stays excluded.
         let tagged_fn = export_of(t, &mut tp, test_file, "taggedFn");
         let signature = api_stability_test_signatures(t, tp.checker, Some(tagged_fn))[0];
         let fn_declared = tp.declared_api_stability_of_signature(signature);
@@ -188,8 +176,6 @@ export type TaggedAliasLeaky = { value: E }
             ));
         }
 
-        // The tagged root's children are still checked: the traversal never stops
-        // at the root tag.
         let with_child = used_by_name(t, &mut session, &mut tp, test_file, "TaggedRootWithChild");
         if with_child.incomplete
             || with_child.minimum != ApiStabilityLevel::Experimental
@@ -229,8 +215,6 @@ export type TaggedAliasLeaky = { value: E }
         }
         assert_api_stability_surface_excludes_own_tag(t, &alias_leaky, "TaggedAliasLeaky");
 
-        // A represented type keeps its own symbol's tag excluded while its children
-        // still contribute.
         let alias_symbol = export_of(t, &mut tp, test_file, "TaggedAliasLeaky");
         let alias_declared = tp.checker.get_declared_type_of_symbol_exported(alias_symbol);
         let alias_type = session.used_by_type(&mut tp, alias_declared);
@@ -248,13 +232,7 @@ export type TaggedAliasLeaky = { value: E }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:161 TestApiStabilityRootExclusionIsAResultConversion 0597cc514375eaa8
-// TestApiStabilityRootExclusionIsAResultConversion proves
-// the exclusion belongs to the result conversion and not to the stored
-// surface: the stored surface always keeps its own tag, so the same concrete
-// type reached as a root excludes it while the same type reached as a child of
-// another root contributes it. The assertions run in the same session in both
-// query orders.
+// go test: internal/typeparser/api_stability_surface_test.go:137 TestApiStabilityRootExclusionIsAResultConversion 5bde309bfc5640e8
 #[test]
 fn test_api_stability_root_exclusion_is_a_result_conversion() {
     run(|t| {
@@ -317,15 +295,11 @@ export interface Holder { shared: Shared }
                 }
             };
 
-        // Root first, then child: the cached root surface still contributes when
-        // reached as a child.
         let mut child_last = tp.new_api_stability_session();
         check_shared(t, &mut child_last, &mut tp, "shared-first");
         check_holder(t, &mut child_last, &mut tp, "shared-first");
         check_shared(t, &mut child_last, &mut tp, "shared-first-repeat");
 
-        // Child first, then root: the cached child does not leak into the root
-        // result.
         let mut root_last = tp.new_api_stability_session();
         check_holder(t, &mut root_last, &mut tp, "child-first");
         check_shared(t, &mut root_last, &mut tp, "child-first");
@@ -333,13 +307,7 @@ export interface Holder { shared: Shared }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:222 TestApiStabilityAliasRootVersusConcreteIdentity 9b13cd6db0aa537e
-// TestApiStabilityAliasRootVersusConcreteIdentity pins the
-// alias treatment: a tagged alias root excludes its own tag but the concrete
-// underlying identity it resolves to stays an exposed child. A non-generic
-// alias to an interface is represented by the compiler as the interface type
-// itself, so the type-level query excludes the interface's own tag, exactly
-// like querying the interface symbol directly.
+// go test: internal/typeparser/api_stability_surface_test.go:188 TestApiStabilityAliasRootVersusConcreteIdentity a21ce11000e53434
 #[test]
 fn test_api_stability_alias_root_versus_concrete_identity() {
     run(|t| {
@@ -386,8 +354,6 @@ export type TaggedAliasToConcrete = Concrete
             ));
         }
 
-        // An untagged alias exposes the concrete identity as a child: the alias's
-        // own tag is absent, so nothing is excluded beyond the alias itself.
         let plain = export_of(t, &mut tp, test_file, "AliasToConcrete");
         let plain_used = session.used_by_symbol(&mut tp, plain);
         if plain_used.incomplete
@@ -401,8 +367,6 @@ export type TaggedAliasToConcrete = Concrete
             ));
         }
 
-        // A tagged alias excludes its own tag and keeps the concrete identity as a
-        // child.
         let tagged_alias = export_of(t, &mut tp, test_file, "TaggedAliasToConcrete");
         let tagged_alias_used = session.used_by_symbol(&mut tp, tagged_alias);
         if tagged_alias_used.incomplete
@@ -423,8 +387,7 @@ export type TaggedAliasToConcrete = Concrete
 
         // The compiler represents `TaggedAliasToConcrete` as `Concrete`'s own type,
         // so the type-level query sees `Concrete` as the root identity and excludes
-        // it. The alias symbol is not part of the type object; callers that want
-        // the alias surface query the alias symbol, which is what the rule does.
+        // it. The alias symbol is not part of the type object.
         let tagged_alias_declared = tp.checker.get_declared_type_of_symbol_exported(tagged_alias);
         let tagged_alias_type = session.used_by_type(&mut tp, tagged_alias_declared);
         if tagged_alias_type.incomplete
@@ -440,13 +403,7 @@ export type TaggedAliasToConcrete = Concrete
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:282 TestApiStabilityOverloadTagsStayDistinct ba351542310d3a67
-// TestApiStabilityOverloadTagsStayDistinct pins the
-// overload treatment: the root symbol's own tag is exactly the declared tag the
-// symbol-level declared accessor reports, so a tagged overload of that same
-// declaration is excluded from the symbol surface. A tagged overload carrying
-// another declaration keeps contributing as an exposed child, and each
-// signature's own tag stays excluded from that signature's surface.
+// go test: internal/typeparser/api_stability_surface_test.go:237 TestApiStabilityOverloadTagsStayDistinct 70af57d072a1abdc
 #[test]
 fn test_api_stability_overload_tags_stay_distinct() {
     run(|t| {
@@ -495,8 +452,6 @@ export function other(x: string | number): string | number { return "" }
             t.fatal(format!("overload tags collapsed: {}/{}", lv(first), lv(second)));
         }
 
-        // The unstable overload is the declared own tag and is excluded; the
-        // experimental overload is another declaration and contributes as a child.
         let mixed_used = session.used_by_symbol(&mut tp, mixed);
         if mixed_used.incomplete || mixed_used.minimum != ApiStabilityLevel::Experimental {
             t.fatal(format!(
@@ -527,8 +482,6 @@ export function other(x: string | number): string | number { return "" }
             ));
         }
 
-        // Each overload's own tag is excluded from its own signature surface; the
-        // stable parameter/return types expose nothing.
         for (index, &signature) in signatures.iter().enumerate() {
             let used = session.used_by_signature(&mut tp, signature);
             if used.incomplete
@@ -543,8 +496,6 @@ export function other(x: string | number): string | number { return "" }
             }
         }
 
-        // When the symbol-level declared tag is the only tagged own declaration,
-        // the whole symbol surface has no child findings.
         let other = export_of(t, &mut tp, test_file, "other");
         let declared = tp.declared_api_stability_of_symbol(other);
         if declared.level != ApiStabilityLevel::Experimental {
@@ -585,13 +536,7 @@ fn require_quiet(t: &T, used: &ApiStabilityUsed, message: &str) {
     }
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:366 TestApiStabilityExplicitStableBoundaries bb2169d761725412
-// TestApiStabilityExplicitStableBoundaries pins the child
-// rules: an absent tag and an explicit stable tag are both effective stable at
-// the export ceiling while staying distinct in the declared lookup, a named
-// reference reached inside a surface stays shallow (no recursive member
-// explosion), an explicit tag is a boundary for the component's internal
-// surface, and independently exposed generic arguments are never hidden.
+// go test: internal/typeparser/api_stability_surface_test.go:309 TestApiStabilityExplicitStableBoundaries 37a8c9dfb16ab14b
 #[test]
 fn test_api_stability_explicit_stable_boundaries() {
     run(|t| {
@@ -622,7 +567,6 @@ export interface RootWithPlainHidden { box: PlainHidden }
         let mut tp = compiled.type_parser();
         let mut session = tp.new_api_stability_session();
 
-        // Explicit stable stays distinct from an absent tag in the declared lookup.
         let stable_box = export_of(t, &mut tp, test_file, "StableBox");
         let stable_declared = tp.declared_api_stability_of_symbol(stable_box);
         if stable_declared.level != ApiStabilityLevel::Stable
@@ -637,8 +581,6 @@ export interface RootWithPlainHidden { box: PlainHidden }
             t.fatal(format!("absent tag should be stable without provenance: {plain_declared:?}"));
         }
 
-        // A tagged stable child must not hide an independently exposed generic
-        // argument.
         let stable_box_root =
             used_by_name(t, &mut session, &mut tp, test_file, "RootWithStableBox");
         require_exposes(
@@ -657,8 +599,6 @@ export interface RootWithPlainHidden { box: PlainHidden }
             "RootWithPlainBox should expose the PlainBox type argument E",
         );
 
-        // A directly exported component is expanded: its own members are part of
-        // its root surface.
         let stable_hidden = used_by_name(t, &mut session, &mut tp, test_file, "StableHidden");
         require_exposes(
             t,
@@ -668,12 +608,6 @@ export interface RootWithPlainHidden { box: PlainHidden }
             "StableHidden as a root should expand and expose E",
         );
 
-        // On the member route both the tagged and the untagged component stay
-        // quiet: a plain member type already uses the shallow named-reference
-        // boundary, so its own members are never expanded. The explicit tag is a
-        // real boundary on the routes the shallow boundary would still inspect
-        // (call/construct signatures and heritage); those differentials are pinned
-        // in TestApiStabilityChildBoundaryDifferentials.
         let stable_hidden_root =
             used_by_name(t, &mut session, &mut tp, test_file, "RootWithStableHidden");
         require_quiet(
@@ -691,11 +625,7 @@ export interface RootWithPlainHidden { box: PlainHidden }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:442 TestApiStabilityChildrenStillChecked 4148f839e777d5de
-// TestApiStabilityChildrenStillChecked pins that the
-// root-excluding split keeps the currently represented obligations checked:
-// generic parameters, constraints, inferred anonymous nested returns and
-// signature components still expose their dependencies under a tagged root.
+// go test: internal/typeparser/api_stability_surface_test.go:370 TestApiStabilityChildrenStillChecked 4cc4ef637558119c
 #[test]
 fn test_api_stability_children_still_checked() {
     run(|t| {
@@ -771,162 +701,7 @@ export interface TaggedConstrained<T extends E> { value: T }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:502 TestApiStabilityIncompleteAndCyclesKeepExclusion 0627b529e90b059e
-// TestApiStabilityIncompleteAndCyclesKeepExclusion pins
-// that an incomplete or cycle-settled result still excludes the root's own tag
-// and keeps the generality of the result: incomplete is never treated as
-// stable, and a cycle still propagates its leak without reintroducing the root
-// tag.
-#[test]
-fn test_api_stability_incomplete_and_cycles_keep_exclusion() {
-    run(|t| {
-        t.parallel();
-        let (mut compiled, files) = compile_and_get_checker_and_source_files_internal(
-            t,
-            &[(
-                "/.src/test.ts",
-                r"/** @stability experimental */
-export interface E { value: string }
-
-/** @stability unstable */
-export interface Node { next: Node; payload: E }
-
-/** @stability unstable */
-export interface Cold { plain: number; [Symbol.iterator](): E }
-",
-            )],
-        );
-        let test_file = files["/.src/test.ts"];
-
-        // Cold: the computed member is not materialized, so the surface reports
-        // incomplete. The root's own tag is excluded even from the incomplete
-        // result.
-        let cold = {
-            let mut tp = compiled.type_parser();
-            let cold = export_of(t, &mut tp, test_file, "Cold");
-            let cold_used = tp.api_stability_used_by_symbol(cold);
-            if !cold_used.incomplete {
-                t.fatal("an unmaterialized computed member must report an incomplete result");
-            }
-            assert_api_stability_surface_excludes_own_tag(t, &cold_used, "Cold");
-            cold
-        };
-
-        prime_api_stability_checker(t, &mut compiled);
-
-        let mut tp = compiled.type_parser();
-        let warm_cold = tp.api_stability_used_by_symbol(cold);
-        if warm_cold.incomplete || !contains_dependency(&warm_cold, "E") {
-            t.fatal(format!(
-                "the materialized retry should settle complete with E, got min={} deps={}",
-                lv(warm_cold.minimum),
-                names(&warm_cold)
-            ));
-        }
-        assert_api_stability_surface_excludes_own_tag(t, &warm_cold, "Cold");
-
-        let mut session = tp.new_api_stability_session();
-        let node = export_of(t, &mut tp, test_file, "Node");
-        let node_used = session.used_by_symbol(&mut tp, node);
-        require_exposes(
-            t,
-            &node_used,
-            ApiStabilityLevel::Experimental,
-            "E",
-            "the cyclic root should expose E",
-        );
-        assert_api_stability_surface_excludes_own_tag(t, &node_used, "Node");
-        let stored = session.analysis.session_symbols.get(&node).cloned().unwrap_or_default();
-        if !stored.complete || stored.blocked {
-            t.fatal("a settled cyclic surface should be a complete session result");
-        }
-        // The stored cyclic surface keeps the own tag for child reuse.
-        if stored.findings.is_empty() {
-            t.fatal("the stored cyclic surface must keep the own tag");
-        }
-    });
-}
-
-// go test: internal/typeparser/api_stability_surface_test.go:558 TestApiStabilityDeclaredReadsStayIndependent 78e7401d8b914104
-// TestApiStabilityDeclaredReadsStayIndependent pins that
-// the split keeps declared and computed state independent for every new root
-// accessor: reading a declared level never populates a session or triggers a
-// surface, and a surface query reuses the same declared cache.
-#[test]
-fn test_api_stability_declared_reads_stay_independent() {
-    run(|t| {
-        t.parallel();
-        let (mut compiled, files) = compile_and_get_checker_and_source_files_internal(
-            t,
-            &[(
-                "/.src/test.ts",
-                r"/** @stability unstable */
-export function taggedFn(x: string): string
-/** @stability unstable */
-export interface TaggedIface { value: string }
-",
-            )],
-        );
-        prime_api_stability_checker(t, &mut compiled);
-        let test_file = files["/.src/test.ts"];
-        let mut tp = compiled.type_parser();
-        let tagged_fn = export_of(t, &mut tp, test_file, "taggedFn");
-        let tagged_iface = export_of(t, &mut tp, test_file, "TaggedIface");
-        let signature = api_stability_test_signatures(t, tp.checker, Some(tagged_fn))[0];
-
-        let before = tp.checker.total_instantiation_count;
-        let _ = tp.declared_api_stability_of_symbol(tagged_fn);
-        let _ = tp.declared_api_stability_of_symbol(tagged_iface);
-        let _ = tp.declared_api_stability_of_signature(signature);
-        let delta = tp.checker.total_instantiation_count - before;
-        if delta != 0 {
-            t.fatal(format!("declared reads instantiated {delta} types, want 0"));
-        }
-
-        let mut session = tp.new_api_stability_session();
-        if !session.analysis.session_symbols.is_empty()
-            || !session.analysis.session_types.is_empty()
-            || !session.analysis.session_signatures.is_empty()
-            || !session.analysis.session_components.is_empty()
-        {
-            t.fatal("declared reads left computed analysis state");
-        }
-        if !tp.links().api_stability_declared_symbol.contains_key(&tagged_fn)
-            || !tp.links().api_stability_declared_symbol.contains_key(&tagged_iface)
-        {
-            t.fatal("declared symbol lookups should be cached");
-        }
-        let raw = raw_signature(Some(signature)).expect("raw signature");
-        if !tp.links().api_stability_declared_signature.contains_key(&raw) {
-            t.fatal("declared signature lookup should be cached");
-        }
-
-        // The surface query builds its root identity from the declared cache and
-        // still returns the root-excluding result.
-        let used = session.used_by_symbol(&mut tp, tagged_fn);
-        if used.incomplete
-            || used.minimum != ApiStabilityLevel::Stable
-            || !used.dependencies.is_empty()
-        {
-            t.fatal(format!(
-                "taggedFn surface should be empty, got min={} deps={}",
-                lv(used.minimum),
-                names(&used)
-            ));
-        }
-    });
-}
-
-// go test: internal/typeparser/api_stability_surface_test.go:613 TestApiStabilityChildBoundaryDifferentials c54ea07bd1d2a2b2
-// TestApiStabilityChildBoundaryDifferentials pins the
-// explicitly tagged child boundary on every surface edge: a child carrying an
-// explicit declared tag contributes its declared level and its internals are
-// not expanded, while an untagged child keeps composing within the current
-// traversal boundaries. Independently represented generic arguments stay
-// exposed on tagged children, a tagged component still expands when it is the
-// queried root, and a member the compiler flattened into a derived member table
-// from a tagged base is attributed to that base rather than expanded as the
-// derived component's own member.
+// go test: internal/typeparser/api_stability_surface_test.go:425 TestApiStabilityChildBoundaryDifferentials 19eb787109e7e764
 #[test]
 fn test_api_stability_child_boundary_differentials() {
     run(|t| {
@@ -1025,8 +800,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
         let experimental = ApiStabilityLevel::Experimental;
         let unstable = ApiStabilityLevel::Unstable;
 
-        // Member route: the untagged callable's directly exposed call signature is
-        // inspected, while the explicitly tagged callable stops before it.
         let callable_holder = surface(&mut tp, "CallableHolder");
         require_exposes(
             t,
@@ -1052,7 +825,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
             "a tagged hidden member and an untagged shallow member must both stay quiet",
         );
 
-        // The tagged hidden component itself still expands as a queried root.
         let tagged_hidden = surface(&mut tp, "TaggedHidden");
         require_exposes(
             t,
@@ -1062,8 +834,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
             "TaggedHidden as a root should expand and expose E",
         );
 
-        // Severity: an unstable tagged child contributes unstable, never its
-        // experimental internal.
         let unstable_callable = surface(&mut tp, "UnstableCallableHolder");
         if unstable_callable.incomplete
             || unstable_callable.minimum != unstable
@@ -1090,7 +860,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
             "UnstableCallable as a root should expand and expose E",
         );
 
-        // Heritage route: a tagged base stops the expand; an untagged base keeps it.
         let tagged_heritage = surface(&mut tp, "TaggedHeritage");
         require_quiet(
             t,
@@ -1123,8 +892,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
             ));
         }
 
-        // Heritage generic arguments: a stable argument contributes nothing, an
-        // independently represented argument stays exposed.
         let stable_argument = surface(&mut tp, "TaggedBoxStableArgument");
         require_quiet(
             t,
@@ -1140,8 +907,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
             "TaggedBox<E> must keep the independently represented argument exposed",
         );
 
-        // Deep heritage: the untagged intermediate keeps composing, so the tagged
-        // ancestor's argument is still reached with the composed substitution.
         let deep_chain = surface(&mut tp, "DeepChain");
         require_exposes(
             t,
@@ -1151,8 +916,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
             "DeepChain should expose the tagged ancestor argument through the untagged intermediate",
         );
 
-        // The same deep chain as an expanded reference root: the flattened member
-        // table attributes the tagged ancestor and still exposes its argument.
         let deep_ref_ident = find_identifier_by_text(t, test_file, "DeepChainRef", 1);
         let Some(deep_ref_parent) = deep_ref_ident.parent() else {
             t.fatal("DeepChainRef annotation not found");
@@ -1171,7 +934,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
             used_by_name(t, &mut session, tp, test_file, name)
         };
 
-        // Alias application: the alias tag is the boundary and its argument stays.
         let alias_box = surface(&mut tp, "TaggedAliasBoxHolder");
         require_exposes(
             t,
@@ -1181,9 +943,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
             "a tagged alias application must keep its argument exposed",
         );
 
-        // Member tag: an explicitly tagged member bounds its anonymous type, a tag
-        // on an anonymous member's own call signature bounds that signature, and an
-        // untagged control keeps the anonymous walk.
         let member_tag_boundary = surface(&mut tp, "MemberTagBoundary");
         require_quiet(
             t,
@@ -1199,7 +958,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
             "MemberTagControl should keep the anonymous walk and expose E",
         );
 
-        // Index signature tag: the explicit tag bounds the key and value internals.
         let index_tag_boundary = surface(&mut tp, "IndexTagBoundary");
         if index_tag_boundary.incomplete || contains_dependency(&index_tag_boundary, "E") {
             t.fatal(format!(
@@ -1217,8 +975,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
             "IndexTagControl should expose the index value type",
         );
 
-        // The same tagged component as parent-child and as root: the parent sees
-        // the child's declared level, the child's own root audit still expands.
         let shared_holder = surface(&mut tp, "SharedBoundaryHolder");
         if shared_holder.incomplete
             || shared_holder.minimum != unstable
@@ -1245,9 +1001,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
             "SharedBoundary as a root should still expand and expose E",
         );
 
-        // A same-named own override on an untagged derived declaration is the
-        // derived component's own member and keeps being inspected even though the
-        // base is tagged.
         let heritage_override = surface(&mut tp, "HeritageOverride");
         require_exposes(
             t,
@@ -1257,9 +1010,6 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
             "an own override must not be suppressed by a tagged base of the same name",
         );
 
-        // A blocked required argument keeps the parent incomplete: the boundary
-        // contributes its tag plus exposed arguments, and an argument that cannot be
-        // established is never dropped to make the parent complete.
         let blocked_heritage = surface(&mut tp, "BlockedHeritage");
         if !blocked_heritage.incomplete {
             t.fatal(format!(
@@ -1279,20 +1029,7 @@ export interface BlockedMember<T, K extends keyof T> { box: TaggedIndexedBox<T[K
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:865 TestApiStabilityFlattenedInheritanceBoundaries 665e0c0abe9a92f7
-// TestApiStabilityFlattenedInheritanceBoundaries pins the
-// fix2 correction: the compiler flattens inherited call, construct and index
-// signatures of a derived structured type while keeping each declaration's
-// base provenance, so an explicitly tagged base bounds those internals exactly
-// like it bounds flattened members. Every affected resolved read is covered:
-// the declaration root, the instantiated reference root, the exported value of
-// the derived generic type, the class static side (including the inherited
-// constructor and an own constructor override), an untagged intermediate chain
-// ending in a tagged callable ancestor, and the anonymous/function signature
-// reads. Owner-declared signatures and index signatures stay walked, the tagged
-// base keeps reporting its own internals as a root, independently represented
-// arguments of a tagged ancestor stay exposed, and untagged controls keep
-// composing. Cold results must never report the bounded internals either.
+// go test: internal/typeparser/api_stability_surface_test.go:639 TestApiStabilityFlattenedInheritanceBoundaries c7cea5eb4e7a4d1b
 #[test]
 fn test_api_stability_flattened_inheritance_boundaries() {
     run(|t| {
@@ -1422,9 +1159,6 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
         };
         let internals = ["FxCallE", "FxCtorE", "FxIdxE", "FxMethE", "FxPropE"];
 
-        // Cold: the flattened signatures and index infos are not materialized yet.
-        // Every route must stay quiet about the tagged base internals, with no
-        // false positive of any kind.
         let mut cold = {
             let mut tp = compiled.type_parser();
             let mut cold = tp.new_api_stability_session();
@@ -1496,9 +1230,6 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
             };
         }
 
-        // Inherited call signature: the derived declaration and the instantiated
-        // reference (type and exported value roots) expose only the tagged base,
-        // never the base's call signature internals. The untagged control composes.
         let derived_callable = surface!("FxDerivedCallable");
         if derived_callable.incomplete
             || derived_callable.minimum != unstable
@@ -1561,8 +1292,6 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
             "FxCallE",
         );
 
-        // Combined flattened signatures: call, construct and index infos are all
-        // bounded while the already-gated members stay bounded too.
         for label in ["combo type root", "combo value root"] {
             let used = if label == "combo type root" {
                 reference_surface!("fxComboRef")
@@ -1584,8 +1313,6 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
             }
         }
 
-        // Inherited index signature: declaration and reference roots stay quiet;
-        // the untagged control still exposes the value type.
         let derived_index = surface!("FxDerivedIndex");
         if derived_index.incomplete
             || derived_index.minimum != unstable
@@ -1615,8 +1342,6 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
             "FxIdxE",
         );
 
-        // Deep chain: an untagged intermediate still composes up to the tagged
-        // callable ancestor, which bounds its flattened call signature.
         let deep_call_ref = reference_surface!("fxDeepCallRef");
         if deep_call_ref.incomplete || contains_dependency(&deep_call_ref, "FxCallE") {
             t.fatal(format!(
@@ -1632,8 +1357,6 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
             ));
         }
 
-        // Class static side: the inherited constructor parameter is the tagged
-        // base's internal; the inherited method and static are bounded as members.
         let derived_class = surface!("FxDerivedClass");
         if derived_class.incomplete || derived_class.minimum != unstable {
             t.fatal(format!(
@@ -1653,17 +1376,10 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
             "FxCtorE",
         );
 
-        // An own constructor override is the derived component's own declaration:
-        // its parameter stays exposed and the tagged base's constructor parameter
-        // is never surfaced alongside it.
         let own_ctor = surface!("FxDerivedOwnCtorClass");
         assert_exposed("FxDerivedOwnCtorClass own constructor", &own_ctor, "E");
         assert_quiet("FxDerivedOwnCtorClass", &own_ctor, "FxCtorE");
 
-        // A tagged class without a constructor has no flattened constructor
-        // declaration to attribute (the checker synthesizes a parameterless default
-        // constructor). Nothing must leak, no base resolution may be forced, and
-        // the derived component still records the tagged base's level.
         let derived_no_ctor = surface!("FxDerivedNoCtorClass");
         if derived_no_ctor.incomplete
             || derived_no_ctor.minimum != unstable
@@ -1685,20 +1401,14 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
         let cold_no_ctor = used_by_name(t, &mut cold, &mut tp, test_file, "FxDerivedNoCtorClass");
         assert_quiet("cold FxDerivedNoCtorClass", &cold_no_ctor, "FxMethE");
 
-        // An explicit stable base is a boundary that contributes nothing above
-        // stable: the derived surface settles complete and quiet.
         let stable_callable = surface!("FxDerivedStableCallable");
         require_quiet(t, &stable_callable, "FxDerivedStableCallable must stay complete and quiet");
 
-        // Own call and index signatures of an untagged derived interface stay
-        // walked even though the base declares tagged ones.
         let own_override = surface!("FxOwnOverrideDerived");
         assert_exposed("FxOwnOverrideDerived own signatures", &own_override, "E");
         assert_quiet("FxOwnOverrideDerived", &own_override, "FxCallE");
         assert_quiet("FxOwnOverrideDerived", &own_override, "FxIdxE");
 
-        // Independently represented arguments of a tagged ancestor stay exposed
-        // while its flattened call signature internals stay bounded.
         let callable_box_ref = reference_surface!("fxCallableBoxRef");
         assert_exposed("fxCallableBoxRef tagged ancestor argument", &callable_box_ref, "FxArgE");
         assert_quiet("fxCallableBoxRef", &callable_box_ref, "FxPropE");
@@ -1709,8 +1419,6 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
             ));
         }
 
-        // Mixed inheritance still attributes the call signature to the tagged base
-        // and leaves the untagged base's own member composing.
         let mixed_call = surface!("FxMixedCallInheritance");
         assert_quiet("FxMixedCallInheritance", &mixed_call, "FxCallE");
         if !contains_dependency(&mixed_call, "FxTaggedFirstCall") {
@@ -1720,8 +1428,6 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
             ));
         }
 
-        // A tagged base whose required generic argument cannot be established
-        // stays incomplete instead of dropping the argument to look stable.
         let blocked = surface!("FxBlockedDerived");
         if !blocked.incomplete {
             t.fatal(format!(
@@ -1731,7 +1437,6 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
             ));
         }
 
-        // Every tagged component keeps reporting its own internals as a root.
         let callable_base_root = surface!("FxTaggedCallableBase");
         assert_exposed("FxTaggedCallableBase root", &callable_base_root, "FxCallE");
         let combo_base_root = surface!("FxTaggedCombo");
@@ -1745,9 +1450,6 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
         let index_base_root = surface!("FxTaggedIndexBase");
         assert_exposed("FxTaggedIndexBase root", &index_base_root, "FxIdxE");
 
-        // The flattened-inheritance reads are ordinary lazy checker reads under the
-        // existing guard: they must not produce compiler diagnostics (in particular
-        // no TS2589) for these public shapes.
         let globals = tp.checker.get_global_diagnostics();
         if !globals.is_empty() {
             t.error(format!(
@@ -1758,10 +1460,7 @@ export interface FxBlockedDerived<T, K extends keyof T> extends FxTaggedBlockedB
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1186 apiStabilitySharedTypeEntry 7bf95f3303e6326a
-// apiStabilitySharedTypeEntry returns the published snapshot of a concrete
-// type surface, or nil when nothing was published for the identity.
-//
+// go test: internal/typeparser/api_stability_surface_test.go:923 apiStabilitySharedTypeEntry d9ef2a0d553da373
 // Rust: the snapshot is returned as a copy (the links are behind a lock), so Go's snapshot pointer identity
 // checks become content comparisons.
 pub(crate) fn api_stability_shared_type_entry(
@@ -1773,9 +1472,7 @@ pub(crate) fn api_stability_shared_type_entry(
     tp.links().api_stability_surface_type.get(&ApiStabilitySurfaceTypeKey { t, inspect }).cloned()
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1195 apiStabilitySharedSignatureEntry 438ac986b6477a36
-// apiStabilitySharedSignatureEntry returns the published snapshot of a
-// concrete signature surface, or nil when nothing was published.
+// go test: internal/typeparser/api_stability_surface_test.go:930 apiStabilitySharedSignatureEntry 01515619309090e5
 pub(crate) fn api_stability_shared_signature_entry(
     tp: &TypeParser<'_>,
     signature: Option<P<Signature>>,
@@ -1784,9 +1481,7 @@ pub(crate) fn api_stability_shared_signature_entry(
     tp.links().api_stability_surface_signature.get(&signature).cloned()
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1204 apiStabilitySharedEntryHasSymbol a0cc55bb0c55c989
-// apiStabilitySharedEntryHasSymbol reports whether a published snapshot still
-// carries a symbol finding.
+// go test: internal/typeparser/api_stability_surface_test.go:937 apiStabilitySharedEntryHasSymbol 7edf6a5abb4a0d76
 pub(crate) fn api_stability_shared_entry_has_symbol(
     entry: Option<&ApiStabilitySharedSurface>,
     symbol: Option<P<Symbol>>,
@@ -1799,9 +1494,7 @@ pub(crate) fn api_stability_shared_entry_has_symbol(
         .contains_key(&ApiStabilityFindingKey { symbol: Some(symbol), ..Default::default() })
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1214 apiStabilitySharedEntryRemovedSymbol 2976a8c651b41679
-// apiStabilitySharedEntryRemovedSymbol reports whether a published snapshot
-// removed a symbol finding as the component's own declared tag.
+// go test: internal/typeparser/api_stability_surface_test.go:945 apiStabilitySharedEntryRemovedSymbol 4e96468441d3ce94
 pub(crate) fn api_stability_shared_entry_removed_symbol(
     entry: Option<&ApiStabilitySharedSurface>,
     symbol: Option<P<Symbol>>,
@@ -1812,9 +1505,7 @@ pub(crate) fn api_stability_shared_entry_removed_symbol(
     entry.removed.iter().any(|key| key.symbol == Some(symbol))
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1228 apiStabilitySharedEntryHasSignature 9c5976bfbd4d7c92
-// apiStabilitySharedEntryHasSignature reports whether a published snapshot
-// still carries a raw signature finding.
+// go test: internal/typeparser/api_stability_surface_test.go:957 apiStabilitySharedEntryHasSignature 3b2ba13559a88ff4
 pub(crate) fn api_stability_shared_entry_has_signature(
     entry: Option<&ApiStabilitySharedSurface>,
     signature: Option<P<Signature>>,
@@ -1826,9 +1517,7 @@ pub(crate) fn api_stability_shared_entry_has_signature(
     entry.findings.keys().any(|key| key.signature.is_some() && raw_signature(key.signature) == raw)
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1243 apiStabilitySharedEntryRemovedSignature 072f62d2badde989
-// apiStabilitySharedEntryRemovedSignature reports whether a published snapshot
-// removed a raw signature finding as the component's own declared tag.
+// go test: internal/typeparser/api_stability_surface_test.go:970 apiStabilitySharedEntryRemovedSignature 2ca65e214aab8ab3
 pub(crate) fn api_stability_shared_entry_removed_signature(
     entry: Option<&ApiStabilitySharedSurface>,
     signature: Option<P<Signature>>,
@@ -1840,13 +1529,7 @@ pub(crate) fn api_stability_shared_entry_removed_signature(
     entry.removed.iter().any(|key| key.signature.is_some() && raw_signature(key.signature) == raw)
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1262 TestApiStabilitySnapshotsExcludeOwnTagAndCompose e52b8501443d05a5
-// TestApiStabilitySnapshotsExcludeOwnTagAndCompose pins
-// the shared-cache contract: a complete root surface is published as an
-// immutable snapshot whose own declared-tag findings were removed and recorded,
-// the root result still excludes them after a reuse, and the same components
-// reached as tagged children contribute their declared level without leaking
-// the snapshot internals.
+// go test: internal/typeparser/api_stability_surface_test.go:983 TestApiStabilitySnapshotsExcludeOwnTagAndCompose 788f709bf75cda47
 #[test]
 fn test_api_stability_snapshots_exclude_own_tag_and_compose() {
     run(|t| {
@@ -1874,8 +1557,6 @@ export interface Holder { tagged: Tagged; fn: typeof taggedFn }
         let tagged_fn = export_of(t, &mut tp, test_file, "taggedFn");
         let signature = api_stability_test_signatures(t, tp.checker, Some(tagged_fn))[0];
 
-        // A type root excludes its own tag and publishes a snapshot that moved
-        // exactly that finding to removed while keeping the exposed internals.
         let root_type = tp.new_api_stability_session().used_by_type(&mut tp, tagged_decl);
         if root_type.incomplete
             || root_type.minimum != ApiStabilityLevel::Experimental
@@ -1903,8 +1584,6 @@ export interface Holder { tagged: Tagged; fn: typeof taggedFn }
             t.fatal("the published snapshot must keep the exposed child findings");
         }
 
-        // A signature root excludes its own tag and publishes a snapshot with the
-        // raw signature finding removed.
         let root_signature = tp.new_api_stability_session().used_by_signature(&mut tp, signature);
         if root_signature.incomplete
             || root_signature.minimum != ApiStabilityLevel::Experimental
@@ -1929,7 +1608,6 @@ export interface Holder { tagged: Tagged; fn: typeof taggedFn }
             t.fatal("the published signature snapshot must record the removed own-tag finding");
         }
 
-        // Reusing the snapshots still excludes the roots' own tags.
         let reused_type = tp.new_api_stability_session().used_by_type(&mut tp, tagged_decl);
         if reused_type.incomplete
             || reused_type.minimum != ApiStabilityLevel::Experimental
@@ -1955,8 +1633,6 @@ export interface Holder { tagged: Tagged; fn: typeof taggedFn }
         }
         assert_api_stability_surface_excludes_own_tag(t, &reused_signature, "taggedFn");
 
-        // The same components as children contribute only their declared level:
-        // the tagged child boundary is decided before any snapshot is consulted.
         let holder = export_of(t, &mut tp, test_file, "Holder");
         let holder_used = tp.new_api_stability_session().used_by_symbol(&mut tp, holder);
         if holder_used.incomplete || holder_used.minimum != ApiStabilityLevel::Unstable {
@@ -1983,12 +1659,7 @@ export interface Holder { tagged: Tagged; fn: typeof taggedFn }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1356 TestApiStabilitySnapshotsReuseAcrossExportsFilesAndParsers 09685f511a9efba1
-// TestApiStabilitySnapshotsReuseAcrossExportsFilesAndParsers
-// pins the reuse contract: a complete, settled, context-free type surface is
-// consumed by a later export, a later source file and a later TypeParser over
-// the same checker without recomputation, the compelled root result is
-// unchanged, and the published snapshot stays intact.
+// go test: internal/typeparser/api_stability_surface_test.go:1065 TestApiStabilitySnapshotsReuseAcrossExportsFilesAndParsers 18649683032d3320
 #[test]
 fn test_api_stability_snapshots_reuse_across_exports_files_and_parsers() {
     run(|t| {
@@ -2042,8 +1713,6 @@ export interface AlsoConsumer { other: Shared }
             (shared, shared_decl, first, entry.findings.len())
         };
 
-        // A later TypeParser over the same checker consumes the snapshot directly:
-        // the root query is exact and consumes no analysis work.
         let mut tp2 = new_type_parser(compiled.program, &mut compiled.checker);
         let mut hit = new_api_stability_analysis();
         hit.type_surface(
@@ -2065,9 +1734,6 @@ export interface AlsoConsumer { other: Shared }
             ));
         }
 
-        // A later source file reaches the same component as a shallow child and
-        // publishes its own inspection-mode snapshot; a second export in that file
-        // reuses it without recomputation.
         let consumer = export_of(t, &mut tp2, files["/.src/consumer.ts"], "Consumer");
         let consumer_used = tp2.new_api_stability_session().used_by_symbol(&mut tp2, consumer);
         if consumer_used.incomplete
@@ -2110,7 +1776,6 @@ export interface AlsoConsumer { other: Shared }
             ));
         }
 
-        // Neither reuse nor the root conversion mutated the published snapshots.
         let after = api_stability_shared_type_entry(
             &tp2,
             Some(shared_decl),
@@ -2127,13 +1792,7 @@ export interface AlsoConsumer { other: Shared }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1438 TestApiStabilityInspectionModesStaySeparate b28ba84773d9b48a
-// TestApiStabilityInspectionModesStaySeparate proves the
-// shallow and expanded results of the same concrete type are separate entry
-// slots in both computation orders, so a root snapshot can never leak internals
-// through a shallow child path. The untagged component is the sharpest case:
-// its expanded snapshot really does contain the member internals, while its
-// shallow child surface must stay a signature-only declaration surface.
+// go test: internal/typeparser/api_stability_surface_test.go:1135 TestApiStabilityInspectionModesStaySeparate 180baa2dcbc9913a
 #[test]
 fn test_api_stability_inspection_modes_stay_separate() {
     run(|t| {
@@ -2241,9 +1900,6 @@ export interface PlainChild { plain: Plain }
                     check_children(&mut tp, "expand-first");
                 }
 
-                // Each shallow child computation published its own mode slot: it
-                // contains no internals, and the tagged one records the removed own
-                // tag.
                 let plain_shallow = api_stability_shared_type_entry(
                     &tp,
                     Some(plain_decl),
@@ -2270,8 +1926,6 @@ export interface PlainChild { plain: Plain }
                 {
                     t.fatal("the tagged shallow snapshot must record the removed own tag");
                 }
-                // The expanded plain snapshot must still keep the internals after
-                // the shallow child composition.
                 let plain_expand_after = api_stability_shared_type_entry(
                     &tp,
                     Some(plain_decl),
@@ -2288,10 +1942,7 @@ export interface PlainChild { plain: Plain }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1540 TestApiStabilityConcreteInstantiationsAndCarriers 74a5f5eac682b782
-// TestApiStabilityConcreteInstantiationsAndCarriers proves
-// concrete instantiations keep separate snapshots in both computation orders
-// and that a surface computed under a substitution carrier is never published.
+// go test: internal/typeparser/api_stability_surface_test.go:1229 TestApiStabilityConcreteInstantiationsAndCarriers 2a4123b202163cb0
 #[test]
 fn test_api_stability_concrete_instantiations_and_carriers() {
     run(|t| {
@@ -2350,9 +2001,6 @@ fn test_api_stability_concrete_instantiations_and_carriers() {
                     t.fatal("the Box<string> snapshot must not contain E");
                 }
 
-                // The raw declaration surface is only ever reached under a
-                // reference substitution for these roots, so it must not publish a
-                // context-free entry for either mode.
                 let box_symbol = export_of(t, &mut tp, test_file, "Box");
                 let box_decl = tp.checker.get_declared_type_of_symbol_exported(box_symbol);
                 if api_stability_shared_type_entry(&tp, Some(box_decl), ApiStabilityInspection::Expand)
@@ -2368,10 +2016,6 @@ fn test_api_stability_concrete_instantiations_and_carriers() {
             });
         }
 
-        // A raw signature analyzed under a concrete signature substitution stays
-        // analysis-local: the concrete identity is in the key, but the carrier is
-        // not persistent, so the raw signature slot must never receive the
-        // substituted result.
         t.run("substituted raw signature stays local", |t| {
             t.parallel();
             let (mut compiled, files) = compile_and_get_checker_and_source_files_internal(
@@ -2410,8 +2054,6 @@ export const leaky = make<E>()
                 ));
             }
 
-            // The concrete signature is context-free and may be published; the raw
-            // slot must still be empty afterwards.
             let _ = tp.new_api_stability_session().used_by_signature(&mut tp, instantiated);
             if api_stability_shared_signature_entry(&tp, raw).is_some() {
                 t.fatal("the concrete signature published under the raw signature slot");
@@ -2423,68 +2065,7 @@ export const leaky = make<E>()
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1653 TestApiStabilityDeclaredReadsPublishNothing 3984898dfcae40c6
-// TestApiStabilityDeclaredReadsPublishNothing proves the
-// declared accessors stay independent of the shared surface caches: reading a
-// declared level neither computes nor publishes a surface.
-#[test]
-fn test_api_stability_declared_reads_publish_nothing() {
-    run(|t| {
-        t.parallel();
-        let (mut compiled, files) = compile_and_get_checker_and_source_files_internal(
-            t,
-            &[(
-                "/.src/test.ts",
-                r"/** @stability unstable */
-export interface Tagged { leak: string }
-/** @stability unstable */
-export declare function taggedFn(): string
-",
-            )],
-        );
-        prime_api_stability_checker(t, &mut compiled);
-        let test_file = files["/.src/test.ts"];
-        let mut tp = compiled.type_parser();
-        let tagged = export_of(t, &mut tp, test_file, "Tagged");
-        let tagged_fn = export_of(t, &mut tp, test_file, "taggedFn");
-        let signature = api_stability_test_signatures(t, tp.checker, Some(tagged_fn))[0];
-
-        let before = tp.checker.total_instantiation_count;
-        let declared_symbol = tp.declared_api_stability_of_symbol(tagged);
-        let declared_fn = tp.declared_api_stability_of_symbol(tagged_fn);
-        let declared_signature = tp.declared_api_stability_of_signature(signature);
-        let delta = tp.checker.total_instantiation_count - before;
-        if delta != 0 {
-            t.fatal(format!("declared reads instantiated {delta} types, want 0"));
-        }
-        if declared_symbol.level != ApiStabilityLevel::Unstable
-            || declared_signature.level != ApiStabilityLevel::Unstable
-            || declared_fn.level != ApiStabilityLevel::Unstable
-        {
-            t.fatal(format!(
-                "unexpected declared levels: {}/{}/{}",
-                lv(declared_symbol.level),
-                lv(declared_fn.level),
-                lv(declared_signature.level)
-            ));
-        }
-        let tagged_decl = tp.checker.get_declared_type_of_symbol_exported(tagged);
-        if api_stability_shared_type_entry(&tp, Some(tagged_decl), ApiStabilityInspection::Expand)
-            .is_some()
-        {
-            t.fatal("a declared read published a type surface");
-        }
-        if api_stability_shared_signature_entry(&tp, Some(signature)).is_some() {
-            t.fatal("a declared read published a signature surface");
-        }
-    });
-}
-
-// go test: internal/typeparser/api_stability_surface_test.go:1693 TestApiStabilitySnapshotMutationIsIsolated e838432ab2607590
-// TestApiStabilitySnapshotMutationIsIsolated pins the
-// immutability requirement: consuming a snapshot copies it, so a caller
-// mutating its local surface cannot change the published findings, and
-// provenance recorded in the snapshot survives for diagnostics.
+// go test: internal/typeparser/api_stability_surface_test.go:1330 TestApiStabilitySnapshotMutationIsIsolated 2ed7fa4ebbbde98b
 #[test]
 fn test_api_stability_snapshot_mutation_is_isolated() {
     run(|t| {
@@ -2518,7 +2099,6 @@ export interface Shared { leak: E }
         }
         let published = entry.map_or(0, |entry| entry.findings.len());
 
-        // Consume the snapshot, then mutate the local copy destructively.
         let mut session = tp.new_api_stability_session();
         let used = session.used_by_type(&mut tp, shared_decl);
         if used.incomplete || !contains_dependency(&used, "E") {
@@ -2551,7 +2131,6 @@ export interface Shared { leak: E }
             t.fatal("local mutation removed a finding from the published snapshot");
         }
 
-        // Provenance for a snapshot-sourced finding is retained for diagnostics.
         let mut found_provenance = false;
         for dependency in &first.dependencies {
             if api_stability_dependency_name(dependency) == "E" && dependency.declaration.is_some()
@@ -2565,11 +2144,7 @@ export interface Shared { leak: E }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1754 TestApiStabilityIncompleteAndBlockedAreNeverPublished 693c3d02d1a640fa
-// TestApiStabilityIncompleteAndBlockedAreNeverPublished
-// proves only complete, settled results are published: a cold blocked surface
-// and a budget-exhausted read publish nothing, and a later materialized retry
-// settles complete and publishes a snapshot a new session can reuse.
+// go test: internal/typeparser/api_stability_surface_test.go:1385 TestApiStabilityIncompleteAndBlockedAreNeverPublished 417dd8269367988f
 #[test]
 fn test_api_stability_incomplete_and_blocked_are_never_published() {
     run(|t| {
@@ -2602,7 +2177,6 @@ export interface Cold { plain: number; [Symbol.iterator](): E }
                 t.fatal("an incomplete cold surface must not be published");
             }
 
-            // A budget-exhausted read is blocked and publishes nothing either.
             let mut exhausted = new_api_stability_analysis();
             exhausted.work = API_STABILITY_MAX_WORK;
             let blocked = exhausted.type_surface(
@@ -2623,14 +2197,13 @@ export interface Cold { plain: number; [Symbol.iterator](): E }
             (cold, cold_decl)
         };
 
-        // After the checker materializes the computed member, the retry settles
-        // complete and publishes the snapshot; a new session reuses it.
         prime_api_stability_checker(t, &mut compiled);
         let mut tp = compiled.type_parser();
         let warm = tp.new_api_stability_session().used_by_symbol(&mut tp, cold);
         if warm.incomplete || !contains_dependency(&warm, "E") {
             t.fatal(format!("the materialized retry should expose E, got {}", names(&warm)));
         }
+        assert_api_stability_surface_excludes_own_tag(t, &warm, "Cold");
         if api_stability_shared_type_entry(&tp, Some(cold_decl), ApiStabilityInspection::Expand)
             .is_none()
         {
@@ -2656,12 +2229,7 @@ export interface Cold { plain: number; [Symbol.iterator](): E }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1817 TestApiStabilityCyclesPublishOnlySettledComplete e5c5eb864dd42bc8
-// TestApiStabilityCyclesPublishOnlySettledComplete pins
-// the cycle policy: a cold mutual cycle with an unmaterialized computed member
-// is incomplete and never published, the materialized retry settles complete
-// and publishes, and the published snapshots keep the cycle diagnostic in both
-// query orders.
+// go test: internal/typeparser/api_stability_surface_test.go:1441 TestApiStabilityCyclesPublishOnlySettledComplete 2ff0d5d70883a76c
 #[test]
 fn test_api_stability_cycles_publish_only_settled_complete() {
     run(|t| {
@@ -2762,13 +2330,7 @@ export interface ColdB { a: ColdA; payload: E; [Symbol.iterator](): E }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1883 TestApiStabilityOverloadTagsSurviveSnapshotReuse d866a15afca060b3
-// TestApiStabilityOverloadTagsSurviveSnapshotReuse pins
-// the overload split through the shared caches: the root symbol's declared own
-// overload stays excluded and its sibling experimental overload stays an
-// exposed child when both symbol and signature surfaces are reused in a later
-// session, and each overload's own tag stays excluded from its own reused
-// signature root.
+// go test: internal/typeparser/api_stability_surface_test.go:1501 TestApiStabilityOverloadTagsSurviveSnapshotReuse b1d96a53c36e89aa
 #[test]
 fn test_api_stability_overload_tags_survive_snapshot_reuse() {
     run(|t| {
@@ -2816,8 +2378,6 @@ export function mixed(x: string | number): string | number { return "" }
         {
             t.fatal("both overload signature surfaces should be published");
         }
-        // Each signature snapshot excludes only its own tag; the sibling overload
-        // surfaces again when composed into the symbol root.
         for (index, &signature) in signatures.iter().enumerate() {
             let entry = api_stability_shared_signature_entry(&tp, Some(signature));
             if !api_stability_shared_entry_removed_signature(entry.as_ref(), Some(signature)) {
@@ -2825,7 +2385,6 @@ export function mixed(x: string | number): string | number { return "" }
             }
         }
 
-        // A later session composes the snapshots and keeps the same split.
         let reused = tp.new_api_stability_session().used_by_symbol(&mut tp, mixed);
         if reused.incomplete
             || reused.minimum != first.minimum
@@ -2854,82 +2413,7 @@ export function mixed(x: string | number): string | number { return "" }
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:1939 TestApiStabilitySharedCachesAreCheckerLocal ff870c8432ec18f7
-// TestApiStabilitySharedCachesAreCheckerLocal proves the
-// published snapshots live on the per-checker EffectLinks: a second checker
-// never observes the first checker's entries for the same source shape.
-#[test]
-fn test_api_stability_shared_caches_are_checker_local() {
-    run(|t| {
-        t.parallel();
-        let source = r"/** @stability experimental */
-export interface E { value: string }
-/** @stability unstable */
-export interface Shared { leak: E }
-export interface Holder { child: Shared }
-";
-        let (mut compiled1, files1) = compile_and_get_checker_and_source_file_internal(t, source);
-        let (mut compiled2, files2) = compile_and_get_checker_and_source_file_internal(t, source);
-        prime_api_stability_checker(t, &mut compiled1);
-        prime_api_stability_checker(t, &mut compiled2);
-        let mut tp1 = compiled1.type_parser();
-        let mut tp2 = compiled2.type_parser();
-
-        if Arc::ptr_eq(&tp1.links, &tp2.links) {
-            t.fatal("different checkers must not share EffectLinks");
-        }
-
-        let shared1 = export_of(t, &mut tp1, files1, "Shared");
-        let decl1 = tp1.checker.get_declared_type_of_symbol_exported(shared1);
-        let holder1 = export_of(t, &mut tp1, files1, "Holder");
-        let used = tp1.new_api_stability_session().used_by_symbol(&mut tp1, holder1);
-        if !contains_dependency(&used, "Shared") {
-            t.fatal(format!("first checker should expose Shared, got {}", names(&used)));
-        }
-        if api_stability_shared_type_entry(&tp1, Some(decl1), ApiStabilityInspection::Shallow)
-            .is_none()
-        {
-            t.fatal("the first checker should publish its shallow snapshot");
-        }
-
-        let shared2 = export_of(t, &mut tp2, files2, "Shared");
-        let decl2 = tp2.checker.get_declared_type_of_symbol_exported(shared2);
-        if shared1 == shared2 || decl1 == decl2 {
-            t.fatal("checkers should produce distinct identities");
-        }
-        if api_stability_shared_type_entry(&tp2, Some(decl1), ApiStabilityInspection::Shallow)
-            .is_some()
-        {
-            t.fatal("the second checker observed the first checker's snapshot");
-        }
-        if api_stability_shared_type_entry(&tp2, Some(decl2), ApiStabilityInspection::Shallow)
-            .is_some()
-        {
-            t.fatal("the second checker published nothing before its own query");
-        }
-        let holder2 = export_of(t, &mut tp2, files2, "Holder");
-        let used = tp2.new_api_stability_session().used_by_symbol(&mut tp2, holder2);
-        if !contains_dependency(&used, "Shared") {
-            t.fatal(format!(
-                "second checker should expose Shared independently, got {}",
-                names(&used)
-            ));
-        }
-        if api_stability_shared_type_entry(&tp1, Some(decl2), ApiStabilityInspection::Shallow)
-            .is_some()
-        {
-            t.fatal("the first checker observed the second checker's snapshot");
-        }
-    });
-}
-
-// go test: internal/typeparser/api_stability_surface_test.go:1995 TestApiStabilityColdCompleteAgreesWithPureWarm a5461f497909c674
-// TestApiStabilityColdCompleteAgreesWithPureWarm pins the
-// cold-complete publication policy: a surface that settles complete on an
-// unprimed checker may be published, and reusing it after the checker
-// materializes the program must agree with a pure warm recomputation on a
-// fresh checker. The cold result is never trusted because of an allocation
-// epoch: it is only published once the session established it complete.
+// go test: internal/typeparser/api_stability_surface_test.go:1551 TestApiStabilityColdCompleteAgreesWithPureWarm 4de0664e4b5f2756
 #[test]
 fn test_api_stability_cold_complete_agrees_with_pure_warm() {
     run(|t| {
@@ -2966,8 +2450,6 @@ export declare const f: Callable<Deep<E>>
             cold_symbol
         };
 
-        // The same checker materialized: the reused snapshot must agree with a
-        // pure warm recomputation on a fresh checker.
         prime_api_stability_checker(t, &mut cold);
         let mut tp_reused = new_type_parser(cold.program, &mut cold.checker);
         let reused =
@@ -3010,11 +2492,7 @@ export declare const f: Callable<Deep<E>>
     });
 }
 
-// go test: internal/typeparser/api_stability_surface_test.go:2051 TestApiStabilitySymbolLessTypesReuse 924eafdba2a94b71
-// TestApiStabilitySymbolLessTypesReuse pins the snapshot
-// contract for represented types without an identity symbol: a union publishes
-// its component findings with nothing removed, and reusing it across sessions
-// returns the same root-excluding result.
+// go test: internal/typeparser/api_stability_surface_test.go:1601 TestApiStabilitySymbolLessTypesReuse bcb56a0c1ba040fb
 #[test]
 fn test_api_stability_symbol_less_types_reuse() {
     run(|t| {

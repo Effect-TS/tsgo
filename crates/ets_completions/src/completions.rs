@@ -11,7 +11,7 @@ use crate::*;
 // All is the list of all completion providers.
 // Add new completions here explicitly - no init() magic.
 //
-// Rust: Go's whole list, in Go's order (docs/PORTING.md, "Porting a fixable, refactor or completion").
+// Rust: Go's whole list, in Go's order (porting/PORTING.md, "Porting a fixable, refactor or completion").
 pub static ALL: LazyLock<Vec<Completion>> = LazyLock::new(|| {
     vec![
         (*EFFECT_SCHEMA_SELF_IN_CLASSES).clone(),

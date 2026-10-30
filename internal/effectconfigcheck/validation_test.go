@@ -304,7 +304,6 @@ func TestInheritedOverridesUseLocalSyntaxOnly(t *testing.T) {
 
 func TestUnknownRuleNamesJSONAPI(t *testing.T) {
 	t.Parallel()
-	// Use the compiler's JSON representation, which both providers accept.
 	raw, errors := tsoptions.ParseConfigFileTextToJson("/tsconfig.json", "/tsconfig.json", config(`"diagnosticSeverity":{"floatingEfect":"error"}`, ""))
 	if len(errors) != 0 {
 		t.Fatalf("invalid config fixture: %v", errors)
@@ -358,11 +357,13 @@ func TestProjectReferencesAndSharedExtends(t *testing.T) {
 			t.Fatalf("project %d: unexpected diagnostics %v", i, got)
 		}
 	}
-	// Parsing the base through the same cache must not reuse a child's severity.
-	got := unknownDiagnostics(parse(t, host, "/base.json", cache))
-	if len(got) != 1 || got[0].Category() != diagnostics.CategoryWarning {
-		t.Fatalf("cached severity leaked: %v", got)
-	}
+	t.Run("base does not reuse child severity", func(t *testing.T) {
+		t.Parallel()
+		got := unknownDiagnostics(parse(t, host, "/base.json", cache))
+		if len(got) != 1 || got[0].Category() != diagnostics.CategoryWarning {
+			t.Fatalf("cached severity leaked: %v", got)
+		}
+	})
 }
 
 func TestMultipleExtendsAndExistingOptions(t *testing.T) {

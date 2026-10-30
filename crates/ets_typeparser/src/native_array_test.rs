@@ -10,8 +10,8 @@ use crate::helpers_test::*;
 use crate::native_string_test::same_arc;
 use crate::*;
 
-// go test: internal/typeparser/native_array_test.go:17 findNativeArrayAccess a6605361b478a089
-fn find_native_array_access(t: &T, sf: P<SourceFile>, text: &str) -> P<Node> {
+// go test: internal/typeparser/native_array_test.go:17 findMemberAccess 83a4c40148f556f0
+pub(crate) fn find_member_access(t: &T, sf: P<SourceFile>, text: &str) -> P<Node> {
     t.helper();
     fn walk(sf: P<SourceFile>, node: P<Node>, text: &str, found: &mut Option<P<Node>>) -> bool {
         if node.kind() == Kind::PropertyAccessExpression
@@ -35,10 +35,30 @@ fn find_native_array_access(t: &T, sf: P<SourceFile>, text: &str) -> P<Node> {
     found
 }
 
+// go test: internal/typeparser/native_array_test.go:37 compileNoLibSource 87f6b94d7b5e7f26
+// Rust: the parser borrows the returned `Compiled` (`compiled.type_parser()`); its drop is Go's `done`.
+pub(crate) fn compile_no_lib_source(t: &T, source: &str) -> (Compiled, P<SourceFile>) {
+    t.helper();
+    let mut testfs = TestFS::default();
+    testfs.insert("/.src/test.ts".to_string(), MapFile::from(source));
+    let compiled = new_compiled(
+        testfs,
+        CompilerOptions {
+            no_lib: Tristate::True,
+            target: ScriptTarget::ES_NEXT,
+            strict: Tristate::True,
+            ..Default::default()
+        },
+        vec!["/.src/test.ts".to_string()],
+    );
+    let sf = compiled.program.get_source_file("/.src/test.ts").expect("the root file");
+    (compiled, sf)
+}
+
 /// Rust-only: Go's method values `tp.IsNativeArrayMethodReference` / `tp.IsNativeArrayConstructorMethodReference`.
 type NativeArrayQuery = fn(&mut TypeParser<'_>, P<Node>, &str) -> bool;
 
-// go test: internal/typeparser/native_array_test.go:37 TestArrayType 796302320a7aa2fd
+// go test: internal/typeparser/native_array_test.go:53 TestArrayType 796302320a7aa2fd
 #[test]
 fn test_array_type() {
     run(|t| {
@@ -97,7 +117,7 @@ function constrained<T extends readonly number[]>(generic: T) {}
     });
 }
 
-// go test: internal/typeparser/native_array_test.go:78 TestNativeArrayMethodReference ca6f8a5d948f35e9
+// go test: internal/typeparser/native_array_test.go:94 TestNativeArrayMethodReference af8ab5af6fc30a34
 #[test]
 fn test_native_array_method_reference() {
     run(|t| {
@@ -181,7 +201,7 @@ alias;
             ("conflicting.map", "map", false, false),
             ("conflicting.map", "filter", false, false),
         ] {
-            let node = find_native_array_access(t, sf, access);
+            let node = find_member_access(t, sf, access);
             let (mut query, mut other_namespace): (NativeArrayQuery, NativeArrayQuery) = (
                 |tp, node, name| tp.is_native_array_method_reference(node, name),
                 |tp, node, name| tp.is_native_array_constructor_method_reference(node, name),
@@ -210,15 +230,14 @@ alias;
         if tp.is_native_array_method_reference(None, "map")
             || tp
                 .is_native_array_method_reference(find_identifier_by_text(t, sf, "alias", 1), "map")
-            || tp
-                .is_native_array_method_reference(find_native_array_access(t, sf, "values.map"), "")
+            || tp.is_native_array_method_reference(find_member_access(t, sf, "values.map"), "")
         {
             t.error("unsupported reference matched a native Array method");
         }
     });
 }
 
-// go test: internal/typeparser/native_array_test.go:186 TestNativeArrayAugmentation e6f7fcee7b6999aa
+// go test: internal/typeparser/native_array_test.go:202 TestNativeArrayAugmentation 790cbe63d23fffdb
 #[test]
 fn test_native_array_augmentation() {
     run(|t| {
@@ -244,22 +263,20 @@ Array.of;
         );
         let mut tp = compiled.type_parser();
         for access in ["values.map", "readonly.map"] {
-            if tp.is_native_array_method_reference(find_native_array_access(t, sf, access), "map") {
+            if tp.is_native_array_method_reference(find_member_access(t, sf, access), "map") {
                 t.error(sprintf!("augmented member %s matched", access));
             }
         }
         for access in ["values.filter", "readonly.filter"] {
-            if !tp
-                .is_native_array_method_reference(find_native_array_access(t, sf, access), "filter")
-            {
+            if !tp.is_native_array_method_reference(find_member_access(t, sf, access), "filter") {
                 t.error(sprintf!("unaugmented member %s did not match", access));
             }
         }
         if tp.is_native_array_constructor_method_reference(
-            find_native_array_access(t, sf, "Array.isArray"),
+            find_member_access(t, sf, "Array.isArray"),
             "isArray",
         ) || !tp.is_native_array_constructor_method_reference(
-            find_native_array_access(t, sf, "Array.of"),
+            find_member_access(t, sf, "Array.of"),
             "of",
         ) {
             t.error("constructor augmentation affected the wrong members");
@@ -267,7 +284,7 @@ Array.of;
     });
 }
 
-// go test: internal/typeparser/native_array_test.go:221 TestNativeArrayInheritedAugmentation da9e5cff5c291c74
+// go test: internal/typeparser/native_array_test.go:237 TestNativeArrayInheritedAugmentation 8bc5b69f17b499f9
 #[test]
 fn test_native_array_inherited_augmentation() {
     run(|t| {
@@ -283,7 +300,7 @@ Array.isArray;
 "#,
         );
         let mut tp = compiled.type_parser();
-        let node = find_native_array_access(t, sf, "Array.isArray");
+        let node = find_member_access(t, sf, "Array.isArray");
         if !tp.is_native_array_constructor_method_reference(node, "isArray") {
             t.error("Array.isArray constructor reference = false, want true");
         }
@@ -293,7 +310,7 @@ Array.isArray;
     });
 }
 
-// go test: internal/typeparser/native_array_test.go:240 TestNativeArrayNoLib 2956fd55fad909e3
+// go test: internal/typeparser/native_array_test.go:256 TestNativeArrayNoLib 2e43a607fcc0164e
 // Rust: Go's last check (`len(tp.links.nativeArrayRegistry.instance) != 0 || len(...constructor) != 0`, "noLib
 // registry contains canonical members") is left out: the registry's fields are private to `native_array`.
 #[test]
@@ -308,23 +325,11 @@ declare const values: number[];
 values.map;
 Array.isArray;
 ";
-        let mut testfs = TestFS::default();
-        testfs.insert("/.src/test.ts".to_string(), MapFile::from(source));
-        let mut compiled = new_compiled(
-            testfs,
-            CompilerOptions {
-                no_lib: Tristate::True,
-                target: ScriptTarget::ES_NEXT,
-                strict: Tristate::True,
-                ..Default::default()
-            },
-            vec!["/.src/test.ts".to_string()],
-        );
-        let sf = compiled.program.get_source_file("/.src/test.ts").expect("the root file");
+        let (mut compiled, sf) = compile_no_lib_source(t, source);
         let mut tp = compiled.type_parser();
-        if tp.is_native_array_method_reference(find_native_array_access(t, sf, "values.map"), "map")
+        if tp.is_native_array_method_reference(find_member_access(t, sf, "values.map"), "map")
             || tp.is_native_array_constructor_method_reference(
-                find_native_array_access(t, sf, "Array.isArray"),
+                find_member_access(t, sf, "Array.isArray"),
                 "isArray",
             )
         {
@@ -333,7 +338,7 @@ Array.isArray;
     });
 }
 
-// go test: internal/typeparser/native_array_test.go:273 TestNativeArrayCheckerCache 4b92a9f197fd0290
+// go test: internal/typeparser/native_array_test.go:277 TestNativeArrayCheckerCache 2fb01e8108438698
 // Rust: a parser borrows its checker mutably, so `tp` and `second` (both `new_type_parser` over the same checker,
 // as in Go) are re-created for each use; they share the checker's links. Go compares the cached member pointers;
 // they come from one links store, so the values are compared. The member's fields are private to `native_array`,
@@ -365,7 +370,7 @@ custom.map;
             }
         }
         for access in ["values.map", "custom.map"] {
-            let node = find_native_array_access(t, first, access);
+            let node = find_member_access(t, first, access);
             let want = access == "values.map";
             let mut tp = compiled.type_parser();
             let got = tp.is_native_array_method_reference(node, "map");
@@ -398,7 +403,7 @@ custom.map;
         let registry = tp_links.lock().native_array_registry.clone();
         let mut second = compiled.type_parser();
         if !second.is_native_array_method_reference(
-            find_native_array_access(t, files["/.src/second.ts"], "values.map"),
+            find_member_access(t, files["/.src/second.ts"], "values.map"),
             "map",
         ) || !same_arc(second.links().native_array_registry.as_ref(), registry.as_ref())
         {
@@ -407,7 +412,7 @@ custom.map;
         let (mut other_compiled, other_file) =
             compile_and_get_checker_and_source_file_internal(t, source);
         let mut other = other_compiled.type_parser();
-        let first_symbol = compiled.type_parser().get_symbol_at_location(find_native_array_access(
+        let first_symbol = compiled.type_parser().get_symbol_at_location(find_member_access(
             t,
             first,
             "values.map",
@@ -418,7 +423,7 @@ custom.map;
         {
             t.fatal("separate checker inherited native Array cache entries");
         }
-        let other_node = find_native_array_access(t, other_file, "values.map");
+        let other_node = find_member_access(t, other_file, "values.map");
         if !other.is_native_array_method_reference(other_node, "map")
             || same_arc(other.links().native_array_registry.as_ref(), registry.as_ref())
             || other.get_symbol_at_location(other_node) == first_symbol

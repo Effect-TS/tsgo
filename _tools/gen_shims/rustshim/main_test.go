@@ -47,25 +47,12 @@ func TestGenerate(t *testing.T) {
 	root := t.TempDir()
 	tsrs := filepath.Join(root, "tsrs")
 	for _, crate := range []string{"tsrs_ast", "tsrs_core"} {
-		dir := filepath.Join(tsrs, "crates", crate)
-		if err := os.MkdirAll(dir, 0o755); err != nil {
-			t.Fatal(err)
-		}
-		if err := os.WriteFile(filepath.Join(dir, "Cargo.toml"), []byte("[package]\nname = \""+crate+"\"\n"), 0o644); err != nil {
-			t.Fatal(err)
-		}
+		writeFile(t, filepath.Join(tsrs, "crates", crate, "Cargo.toml"), "[package]\nname = \""+crate+"\"\n")
 	}
 	configPath := filepath.Join(root, "config.json")
-	if err := os.WriteFile(configPath, []byte(`{"crates":["tsrs_ast","tsrs_core"],"items":[]}`), 0o644); err != nil {
-		t.Fatal(err)
-	}
+	writeFile(t, configPath, `{"crates":["tsrs_ast","tsrs_core"],"items":[]}`)
 	stale := filepath.Join(root, "crates", "ets_shim", "src", "stale.rs")
-	if err := os.MkdirAll(filepath.Dir(stale), 0o755); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(stale, nil, 0o644); err != nil {
-		t.Fatal(err)
-	}
+	writeFile(t, stale, "")
 	if err := generate(root, tsrs, configPath); err != nil {
 		t.Fatal(err)
 	}
@@ -80,10 +67,18 @@ func TestGenerate(t *testing.T) {
 		t.Errorf("Cargo.toml:\n%s", cargo)
 	}
 
-	if err := os.WriteFile(configPath, []byte(`{"crates":["tsrs_missing"]}`), 0o644); err != nil {
-		t.Fatal(err)
-	}
+	writeFile(t, configPath, `{"crates":["tsrs_missing"]}`)
 	if err := generate(root, tsrs, configPath); err == nil {
 		t.Error("generate succeeded with a crate missing from the checkout")
+	}
+}
+
+func writeFile(t *testing.T, path, content string) {
+	t.Helper()
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(path, []byte(content), 0o644); err != nil {
+		t.Fatal(err)
 	}
 }

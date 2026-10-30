@@ -15,132 +15,40 @@ pub(crate) fn parse_source(source: &str) -> P<SourceFile> {
     )
 }
 
-// go test: internal/typeparser/module_identifier_test.go:18 TestFindModuleReferenceForPackage_NamespaceImport c09fb3f6a5543701
+// go test: internal/typeparser/module_identifier_test.go:18 TestFindModuleReferenceForPackage 8ad31a206fae87b4
 #[test]
-fn test_find_module_reference_for_package_namespace_import() {
+fn test_find_module_reference_for_package() {
     run(|t| {
         t.parallel();
-        let source = r#"import * as SchemaModules from "effect/schema""#;
-        let sf = parse_source(source);
-
-        let got = find_module_reference_for_package(sf, "effect", "schema").string();
-        if got != "SchemaModules" {
-            t.error(sprintf!("FindModuleReferenceForPackage = %q, want %q", got, "SchemaModules"));
-        }
-    });
-}
-
-// go test: internal/typeparser/module_identifier_test.go:29 TestFindModuleReferenceForPackage_NamedImportWithAlias b11157fdf2f961f0
-#[test]
-fn test_find_module_reference_for_package_named_import_with_alias() {
-    run(|t| {
-        t.parallel();
-        let source = r#"import { Model as M } from "effect/schema""#;
-        let sf = parse_source(source);
-
-        let got = find_module_reference_for_package(sf, "effect/schema", "Model").string();
-        if got != "M" {
-            t.error(sprintf!("FindModuleReferenceForPackage = %q, want %q", got, "M"));
-        }
-    });
-}
-
-// go test: internal/typeparser/module_identifier_test.go:40 TestFindModuleReferenceForPackage_NamedImportNoAlias cd9c0c54f4c41526
-#[test]
-fn test_find_module_reference_for_package_named_import_no_alias() {
-    run(|t| {
-        t.parallel();
-        let source = r#"import { Model } from "effect/schema""#;
-        let sf = parse_source(source);
-
-        let got = find_module_reference_for_package(sf, "effect/schema", "Model").string();
-        if got != "Model" {
-            t.error(sprintf!("FindModuleReferenceForPackage = %q, want %q", got, "Model"));
-        }
-    });
-}
-
-// go test: internal/typeparser/module_identifier_test.go:51 TestFindModuleReferenceForPackage_NoMatchingImport cb52c17519107358
-#[test]
-fn test_find_module_reference_for_package_no_matching_import() {
-    run(|t| {
-        t.parallel();
-        let source = r#"import { Schema } from "effect""#;
-        let sf = parse_source(source);
-
-        let got = find_module_reference_for_package(sf, "effect/schema", "Model").string();
-        if got != "Model" {
-            t.error(sprintf!("FindModuleReferenceForPackage = %q, want fallback %q", got, "Model"));
-        }
-    });
-}
-
-// go test: internal/typeparser/module_identifier_test.go:62 TestFindModuleReferenceForPackage_NilSourceFile 2562ce08ce2c30d8
-#[test]
-fn test_find_module_reference_for_package_nil_source_file() {
-    run(|t| {
-        t.parallel();
-        let got = find_module_reference_for_package(None, "effect/schema", "Model").string();
-        if got != "Model" {
-            t.error(sprintf!("FindModuleReferenceForPackage = %q, want fallback %q", got, "Model"));
-        }
-    });
-}
-
-// go test: internal/typeparser/module_identifier_test.go:70 TestFindModuleReference_ExistingBehavior f709097f9c1bde69
-#[test]
-fn test_find_module_reference_existing_behavior() {
-    run(|t| {
-        t.parallel();
-
-        t.run("namespace import", |t| {
-            t.parallel();
-            let source = r#"import * as S from "effect/Schema""#;
-            let sf = parse_source(source);
-            let got = find_module_reference(sf, "Schema").string();
-            if got != "S" {
-                t.error(sprintf!("FindModuleReference = %q, want %q", got, "S"));
-            }
-        });
-
-        t.run("named import with alias", |t| {
-            t.parallel();
-            let source = r#"import { Schema as Sc } from "effect""#;
-            let sf = parse_source(source);
-            let got = find_module_reference(sf, "Schema").string();
-            if got != "Sc" {
-                t.error(sprintf!("FindModuleReference = %q, want %q", got, "Sc"));
-            }
-        });
-
-        t.run("named import no alias", |t| {
-            t.parallel();
-            let source = r#"import { Schema } from "effect""#;
-            let sf = parse_source(source);
-            let got = find_module_reference(sf, "Schema").string();
-            if got != "Schema" {
-                t.error(sprintf!("FindModuleReference = %q, want %q", got, "Schema"));
-            }
-        });
-
-        t.run("fallback", |t| {
-            t.parallel();
-            let source = "const x = 1";
-            let sf = parse_source(source);
-            let got = find_module_reference(sf, "Schema").string();
-            if got != "Schema" {
-                t.error(sprintf!("FindModuleReference = %q, want fallback %q", got, "Schema"));
-            }
-        });
-    });
-}
-
-// go test: internal/typeparser/module_identifier_test.go:114 TestFindModuleReference_BarrelNamespaceImport aef8d57c36368b4d
-#[test]
-fn test_find_module_reference_barrel_namespace_import() {
-    run(|t| {
-        t.parallel();
-        let cases: [(&str, &str, &str, &str, &str); 6] = [
+        let cases: [(&str, &str, &str, &str, &str); 10] = [
+            (
+                "namespace import",
+                r#"import * as SchemaModules from "effect/schema""#,
+                "effect",
+                "schema",
+                "SchemaModules",
+            ),
+            (
+                "named import with alias",
+                r#"import { Model as M } from "effect/schema""#,
+                "effect/schema",
+                "Model",
+                "M",
+            ),
+            (
+                "named import no alias",
+                r#"import { Model } from "effect/schema""#,
+                "effect/schema",
+                "Model",
+                "Model",
+            ),
+            (
+                "no matching import",
+                r#"import { Schema } from "effect""#,
+                "effect/schema",
+                "Model",
+                "Model",
+            ),
             ("effect barrel", r#"import * as X from "effect""#, "effect", "Effect", "X.Effect"),
             (
                 "effect barrel other module",
@@ -191,10 +99,41 @@ fn test_find_module_reference_barrel_namespace_import() {
                 }
             });
         }
+        let got = find_module_reference_for_package(None, "effect/schema", "Model").string();
+        if got != "Model" {
+            t.error(sprintf!(
+                "FindModuleReferenceForPackage(nil) = %q, want fallback %q",
+                got,
+                "Model"
+            ));
+        }
     });
 }
 
-// go test: internal/typeparser/module_identifier_test.go:137 TestFindEffectModuleReference 98d99204acc9eddf
+// go test: internal/typeparser/module_identifier_test.go:48 TestFindModuleReference e7d0dcbe643f4792
+#[test]
+fn test_find_module_reference() {
+    run(|t| {
+        t.parallel();
+        let cases: [(&str, &str, &str); 4] = [
+            ("namespace import", r#"import * as S from "effect/Schema""#, "S"),
+            ("named import with alias", r#"import { Schema as Sc } from "effect""#, "Sc"),
+            ("named import no alias", r#"import { Schema } from "effect""#, "Schema"),
+            ("fallback", "const x = 1", "Schema"),
+        ];
+        for (name, source, want) in cases {
+            t.run(name, |t| {
+                t.parallel();
+                let got = find_module_reference(parse_source(source), "Schema").string();
+                if got != want {
+                    t.error(sprintf!("FindModuleReference = %q, want %q", got, want));
+                }
+            });
+        }
+    });
+}
+
+// go test: internal/typeparser/module_identifier_test.go:68 TestFindEffectModuleReference 98d99204acc9eddf
 #[test]
 fn test_find_effect_module_reference() {
     run(|t| {
@@ -243,7 +182,7 @@ fn test_find_effect_module_reference() {
     });
 }
 
-// go test: internal/typeparser/module_identifier_test.go:167 TestModuleReferenceMatchesNode f3c0b1865bbd694e
+// go test: internal/typeparser/module_identifier_test.go:98 TestModuleReferenceMatchesNode f3c0b1865bbd694e
 #[test]
 fn test_module_reference_matches_node() {
     run(|t| {

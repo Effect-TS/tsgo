@@ -1,0 +1,34 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/typeOnlyImport.ts(9,40): warning TS377151: `Effect.flatten` expresses this unwrapping more directly than `Effect.flatMap` with an identity callback. effect(flatMapIdentityToFlatten)
+/.src/valueImport.ts(9,40): warning TS377151: `Effect.flatten` expresses this unwrapping more directly than `Effect.flatMap` with an identity callback. effect(flatMapIdentityToFlatten)
+
+
+==== /.src/valueImport.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics flatMapIdentityToFlatten:warning
+    import { Effect } from "effect"
+    import { flatMap } from "effect/Effect"
+    
+    declare const source: Effect.Effect<Effect.Effect<string>>
+    
+    // MUST TRIGGER (report only): named import of flatMap resolves to Effect.flatMap
+    export const namedImport = source.pipe(flatMap((inner) => inner))
+                                           ~~~~~~~
+!!! warning TS377151: `Effect.flatten` expresses this unwrapping more directly than `Effect.flatMap` with an identity callback. effect(flatMapIdentityToFlatten)
+    
+
+==== /.src/typeOnlyImport.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics flatMapIdentityToFlatten:warning
+    import type { Effect } from "effect"
+    import { flatMap } from "effect/Effect"
+    
+    declare const source: Effect.Effect<Effect.Effect<number>>
+    
+    // MUST TRIGGER (report only): no value binding reaches Effect.flatten
+    export const namedImport = source.pipe(flatMap((inner) => inner))
+                                           ~~~~~~~
+!!! warning TS377151: `Effect.flatten` expresses this unwrapping more directly than `Effect.flatMap` with an identity callback. effect(flatMapIdentityToFlatten)
+    

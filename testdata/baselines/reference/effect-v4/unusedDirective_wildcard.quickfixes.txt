@@ -1,0 +1,7 @@
+=== Quick Fix Inventory ===
+
+[D1] (6:6-6:54) TS377000: @effect-diagnostics directive has no effect.
+  (no quick fixes)
+
+=== Quick Fix Application Results ===
+(no quick fixes to apply)

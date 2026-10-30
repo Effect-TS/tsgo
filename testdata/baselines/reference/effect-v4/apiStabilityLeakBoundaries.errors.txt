@@ -1,0 +1,435 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/apiStabilityLeakBoundaries.ts(10,25): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#taggedFunction` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(14,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#TaggedRoot` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(16,13): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#TaggedAliasRoot` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(18,25): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#taggedGeneric` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(21,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#SharedHolder` exposes `Shared`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(25,22): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#stableRoot` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(30,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#StableBase` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(33,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#UnstableBase` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(34,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#UnstableBaseChild` exposes `UnstableBase`, an unstable API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(36,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#PlainChild` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(39,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#TaggedCallable` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(42,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#PlainCallableHolder` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(48,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#MemberHolder` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(55,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#CallSignatureHolder` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(62,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#IndexHolder` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(67,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#TaggedChild` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(68,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#ChildHolder` exposes `TaggedChild`, an unstable API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(73,22): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#boxed` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(74,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#BoxHolder` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(78,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#DeepChain` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(82,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#OverriddenBase` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(83,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#Overriding` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(90,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixTaggedCallableBase` exposes `FixCallE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(91,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixDerivedCallableGeneric` exposes `FixTaggedCallableBase`, an unstable API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(92,22): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#fixCallRef` exposes `FixTaggedCallableBase`, an unstable API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(94,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixPlainDerivedCallableGeneric` exposes `FixCallE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(95,22): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#fixPlainCallRef` exposes `FixCallE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(100,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixTaggedIndexBase` exposes `FixIdxE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(101,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixDerivedIndexGeneric` exposes `FixTaggedIndexBase`, an unstable API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(101,73): error TS2411: Property 'own' of type 'T' is not assignable to 'string' index type 'FixIdxE'.
+/.src/apiStabilityLeakBoundaries.ts(102,22): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#fixIndexRef` exposes `FixTaggedIndexBase`, an unstable API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(104,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixPlainDerivedIndexGeneric` exposes `FixIdxE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(104,77): error TS2411: Property 'own' of type 'T' is not assignable to 'string' index type 'FixIdxE'.
+/.src/apiStabilityLeakBoundaries.ts(105,22): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#fixPlainIndexRef` exposes `FixIdxE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(114,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixComboBase` exposes `FixComboCallE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(114,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixComboBase` exposes `FixComboCtorE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(114,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixComboBase` exposes `FixComboIdxE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(119,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixComboDerived` exposes `FixComboBase`, an unstable API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(119,60): error TS2411: Property 'own' of type 'T' is not assignable to 'string' index type 'FixComboIdxE'.
+/.src/apiStabilityLeakBoundaries.ts(120,22): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#fixComboRef` exposes `FixComboBase`, an unstable API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(129,22): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixTaggedBaseClass` exposes `FixCtorE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(129,22): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixTaggedBaseClass` exposes `FixMethodE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(129,22): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixTaggedBaseClass` exposes `FixStaticE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(134,14): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixDerivedClass` exposes `FixTaggedBaseClass`, an unstable API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(139,22): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixOwnCtorBase` exposes `FixOwnCtorE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(140,14): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixOwnCtorDerived` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(140,14): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixOwnCtorDerived` exposes `FixOwnCtorBase`, an unstable API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(147,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixTaggedDeepCallable` exposes `FixDeepE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(148,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixMidCallable` exposes `FixTaggedDeepCallable`, an unstable API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(149,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixDeepCallable` exposes `FixTaggedDeepCallable`, an unstable API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(150,22): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#fixDeepCallRef` exposes `FixTaggedDeepCallable`, an unstable API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(155,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixStableCallableBase` exposes `FixStableE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(164,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixOverrideBase` exposes `FixOverrideCallE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(164,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixOverrideBase` exposes `FixOverrideIdxE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(165,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixOverrideDerived` exposes `E`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(165,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixOverrideDerived` exposes `FixOverrideBase`, an unstable API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(175,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixTaggedCallableBox` exposes `FixBoxHiddenE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(176,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixDerivedCallableBox` exposes `FixTaggedCallableBox`, an unstable API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(177,22): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#fixCallableBoxRef` exposes `FixBoxArgE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(177,22): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#fixCallableBoxRef` exposes `FixTaggedCallableBox`, an unstable API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(182,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixBlockedBox` exposes `FixBlockedHiddenE`, an experimental API. effect(apiStabilityLeak)
+/.src/apiStabilityLeakBoundaries.ts(183,18): warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixBlockedDerived` exposes `FixBlockedBox`, an unstable API. effect(apiStabilityLeak)
+
+
+==== /.src/apiStabilityLeakBoundaries.ts (62 errors) ====
+    // @effect-v4
+    // @effect-diagnostics apiStabilityLeak:warning
+    
+    /** @stability experimental */
+    interface E { value: string }
+    
+    // An export's own tag governs its ceiling and is never reported as its own
+    // dependency, while its children keep being reported.
+    /** @stability unstable */
+    export declare function taggedFunction(x: string): E
+                            ~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#taggedFunction` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    /** @stability unstable */
+    export declare function cleanFunction(x: string): string
+    /** @stability unstable */
+    export interface TaggedRoot { member: E }
+                     ~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#TaggedRoot` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    /** @stability unstable */
+    export type TaggedAliasRoot = { member: E }
+                ~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#TaggedAliasRoot` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    /** @stability unstable */
+    export declare function taggedGeneric<T extends E>(): T
+                            ~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#taggedGeneric` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    /** @stability experimental */
+    export interface Shared { value: string }
+    export interface SharedHolder { shared: Shared }
+                     ~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#SharedHolder` exposes `Shared`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(20,18): `Shared` is declared experimental here. effect(apiStabilityLeak)
+    
+    // An explicit `@stability stable` root still enforces its ceiling.
+    /** @stability stable */
+    export declare const stableRoot: E
+                         ~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#stableRoot` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+    // A child with an explicit tag contributes its declared level and its
+    // internals are not reported through the parent; untagged children compose.
+    /** @stability stable */
+    export interface StableBase { secret: E }
+                     ~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#StableBase` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export interface StableBaseChild extends StableBase {}
+    /** @stability unstable */
+    export interface UnstableBase { secret: E }
+                     ~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#UnstableBase` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export interface UnstableBaseChild extends UnstableBase {}
+                     ~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#UnstableBaseChild` exposes `UnstableBase`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(33,18): `UnstableBase` is declared unstable here. effect(apiStabilityLeak)
+    interface PlainBase { secret: E }
+    export interface PlainChild extends PlainBase {}
+                     ~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#PlainChild` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+    /** @stability stable */
+    export interface TaggedCallable { (): E }
+                     ~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#TaggedCallable` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export interface CallableHolder { callable: TaggedCallable }
+    interface PlainCallable { (): E }
+    export interface PlainCallableHolder { callable: PlainCallable }
+                     ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#PlainCallableHolder` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+    export interface TaggedMemberHolder {
+      /** @stability stable */
+      nested: { inner: E }
+    }
+    export interface MemberHolder {
+                     ~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#MemberHolder` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+      nested: { inner: E }
+    }
+    export interface TaggedCallSignatureHolder {
+      /** @stability stable */
+      (): E
+    }
+    export interface CallSignatureHolder {
+                     ~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#CallSignatureHolder` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+      (): E
+    }
+    export interface TaggedIndexHolder {
+      /** @stability stable */
+      [key: string]: E
+    }
+    export interface IndexHolder {
+                     ~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#IndexHolder` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+      [key: string]: E
+    }
+    
+    /** @stability unstable */
+    export interface TaggedChild { secret: E }
+                     ~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#TaggedChild` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export interface ChildHolder { child: TaggedChild }
+                     ~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#ChildHolder` exposes `TaggedChild`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(67,18): `TaggedChild` is declared unstable here. effect(apiStabilityLeak)
+    
+    // Generic arguments of a tagged child stay exposed.
+    /** @stability stable */
+    export interface StableBox<T> { value: T }
+    export declare const boxed: StableBox<E>
+                         ~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#boxed` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export interface BoxHolder { box: StableBox<E> }
+                     ~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#BoxHolder` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    /** @stability stable */
+    export interface TaggedChain<T> { value: T }
+    export interface Mid<U> extends TaggedChain<U> {}
+    export interface DeepChain extends Mid<E> {}
+                     ~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#DeepChain` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+    // A same-named own override is never suppressed by a tagged base.
+    /** @stability stable */
+    export interface OverriddenBase { secret: E }
+                     ~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#OverriddenBase` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    export interface Overriding extends OverriddenBase { secret: E }
+                     ~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#Overriding` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+    
+    // Call, construct and index signatures flattened into a derived type keep
+    // their tagged base provenance.
+    /** @stability experimental */
+    interface FixCallE { value: string }
+    /** @stability unstable */
+    export interface FixTaggedCallableBase { (): FixCallE }
+                     ~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixTaggedCallableBase` exposes `FixCallE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(88,11): `FixCallE` is declared experimental here. effect(apiStabilityLeak)
+    export interface FixDerivedCallableGeneric<T> extends FixTaggedCallableBase { own: T }
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixDerivedCallableGeneric` exposes `FixTaggedCallableBase`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(90,18): `FixTaggedCallableBase` is declared unstable here. effect(apiStabilityLeak)
+    export declare const fixCallRef: FixDerivedCallableGeneric<string>
+                         ~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#fixCallRef` exposes `FixTaggedCallableBase`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(90,18): `FixTaggedCallableBase` is declared unstable here. effect(apiStabilityLeak)
+    interface FixPlainCallableBase { (): FixCallE }
+    export interface FixPlainDerivedCallableGeneric<T> extends FixPlainCallableBase { own: T }
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixPlainDerivedCallableGeneric` exposes `FixCallE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(88,11): `FixCallE` is declared experimental here. effect(apiStabilityLeak)
+    export declare const fixPlainCallRef: FixPlainDerivedCallableGeneric<string>
+                         ~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#fixPlainCallRef` exposes `FixCallE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(88,11): `FixCallE` is declared experimental here. effect(apiStabilityLeak)
+    
+    /** @stability experimental */
+    interface FixIdxE { value: string }
+    /** @stability unstable */
+    export interface FixTaggedIndexBase { [key: string]: FixIdxE }
+                     ~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixTaggedIndexBase` exposes `FixIdxE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(98,11): `FixIdxE` is declared experimental here. effect(apiStabilityLeak)
+    export interface FixDerivedIndexGeneric<T> extends FixTaggedIndexBase { own: T }
+                     ~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixDerivedIndexGeneric` exposes `FixTaggedIndexBase`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(100,18): `FixTaggedIndexBase` is declared unstable here. effect(apiStabilityLeak)
+                                                                            ~~~
+!!! error TS2411: Property 'own' of type 'T' is not assignable to 'string' index type 'FixIdxE'.
+    export declare const fixIndexRef: FixDerivedIndexGeneric<string>
+                         ~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#fixIndexRef` exposes `FixTaggedIndexBase`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(100,18): `FixTaggedIndexBase` is declared unstable here. effect(apiStabilityLeak)
+    interface FixPlainIndexBase { [key: string]: FixIdxE }
+    export interface FixPlainDerivedIndexGeneric<T> extends FixPlainIndexBase { own: T }
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixPlainDerivedIndexGeneric` exposes `FixIdxE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(98,11): `FixIdxE` is declared experimental here. effect(apiStabilityLeak)
+                                                                                ~~~
+!!! error TS2411: Property 'own' of type 'T' is not assignable to 'string' index type 'FixIdxE'.
+    export declare const fixPlainIndexRef: FixPlainDerivedIndexGeneric<string>
+                         ~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#fixPlainIndexRef` exposes `FixIdxE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(98,11): `FixIdxE` is declared experimental here. effect(apiStabilityLeak)
+    
+    /** @stability experimental */
+    interface FixComboCallE { value: string }
+    /** @stability experimental */
+    interface FixComboCtorE { value: string }
+    /** @stability experimental */
+    interface FixComboIdxE { value: string }
+    /** @stability unstable */
+    export interface FixComboBase {
+                     ~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixComboBase` exposes `FixComboCallE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(108,11): `FixComboCallE` is declared experimental here. effect(apiStabilityLeak)
+                     ~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixComboBase` exposes `FixComboCtorE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(110,11): `FixComboCtorE` is declared experimental here. effect(apiStabilityLeak)
+                     ~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixComboBase` exposes `FixComboIdxE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(112,11): `FixComboIdxE` is declared experimental here. effect(apiStabilityLeak)
+      (): FixComboCallE
+      new (): FixComboCtorE
+      [key: string]: FixComboIdxE
+    }
+    export interface FixComboDerived<T> extends FixComboBase { own: T }
+                     ~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixComboDerived` exposes `FixComboBase`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(114,18): `FixComboBase` is declared unstable here. effect(apiStabilityLeak)
+                                                               ~~~
+!!! error TS2411: Property 'own' of type 'T' is not assignable to 'string' index type 'FixComboIdxE'.
+    export declare const fixComboRef: FixComboDerived<string>
+                         ~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#fixComboRef` exposes `FixComboBase`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(114,18): `FixComboBase` is declared unstable here. effect(apiStabilityLeak)
+    
+    /** @stability experimental */
+    interface FixCtorE { value: string }
+    /** @stability experimental */
+    interface FixStaticE { value: string }
+    /** @stability experimental */
+    interface FixMethodE { value: string }
+    /** @stability unstable */
+    export declare class FixTaggedBaseClass {
+                         ~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixTaggedBaseClass` exposes `FixCtorE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(123,11): `FixCtorE` is declared experimental here. effect(apiStabilityLeak)
+                         ~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixTaggedBaseClass` exposes `FixMethodE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(127,11): `FixMethodE` is declared experimental here. effect(apiStabilityLeak)
+                         ~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixTaggedBaseClass` exposes `FixStaticE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(125,11): `FixStaticE` is declared experimental here. effect(apiStabilityLeak)
+      constructor(x: FixCtorE)
+      static s: FixStaticE
+      m(): FixMethodE
+    }
+    export class FixDerivedClass extends FixTaggedBaseClass {}
+                 ~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixDerivedClass` exposes `FixTaggedBaseClass`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(129,22): `FixTaggedBaseClass` is declared unstable here. effect(apiStabilityLeak)
+    
+    /** @stability experimental */
+    interface FixOwnCtorE { value: string }
+    /** @stability unstable */
+    export declare class FixOwnCtorBase { constructor(x: FixOwnCtorE) }
+                         ~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixOwnCtorBase` exposes `FixOwnCtorE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(137,11): `FixOwnCtorE` is declared experimental here. effect(apiStabilityLeak)
+    export class FixOwnCtorDerived extends FixOwnCtorBase {
+                 ~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixOwnCtorDerived` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+                 ~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixOwnCtorDerived` exposes `FixOwnCtorBase`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(139,22): `FixOwnCtorBase` is declared unstable here. effect(apiStabilityLeak)
+      constructor(y: E) { super(y as unknown as FixOwnCtorE) }
+    }
+    
+    /** @stability experimental */
+    interface FixDeepE { value: string }
+    /** @stability unstable */
+    export interface FixTaggedDeepCallable { (): FixDeepE }
+                     ~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixTaggedDeepCallable` exposes `FixDeepE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(145,11): `FixDeepE` is declared experimental here. effect(apiStabilityLeak)
+    export interface FixMidCallable<T> extends FixTaggedDeepCallable { mid: T }
+                     ~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixMidCallable` exposes `FixTaggedDeepCallable`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(147,18): `FixTaggedDeepCallable` is declared unstable here. effect(apiStabilityLeak)
+    export interface FixDeepCallable<T> extends FixMidCallable<T> {}
+                     ~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixDeepCallable` exposes `FixTaggedDeepCallable`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(147,18): `FixTaggedDeepCallable` is declared unstable here. effect(apiStabilityLeak)
+    export declare const fixDeepCallRef: FixDeepCallable<string>
+                         ~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#fixDeepCallRef` exposes `FixTaggedDeepCallable`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(147,18): `FixTaggedDeepCallable` is declared unstable here. effect(apiStabilityLeak)
+    
+    /** @stability experimental */
+    interface FixStableE { value: string }
+    /** @stability stable */
+    export interface FixStableCallableBase { (): FixStableE }
+                     ~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixStableCallableBase` exposes `FixStableE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(153,11): `FixStableE` is declared experimental here. effect(apiStabilityLeak)
+    export interface FixDerivedStableCallable extends FixStableCallableBase {}
+    export declare const fixStableRef: FixDerivedStableCallable
+    
+    /** @stability experimental */
+    interface FixOverrideCallE { value: string }
+    /** @stability experimental */
+    interface FixOverrideIdxE { value: string }
+    /** @stability unstable */
+    export interface FixOverrideBase { (): FixOverrideCallE; [key: string]: FixOverrideIdxE }
+                     ~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixOverrideBase` exposes `FixOverrideCallE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(160,11): `FixOverrideCallE` is declared experimental here. effect(apiStabilityLeak)
+                     ~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixOverrideBase` exposes `FixOverrideIdxE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(162,11): `FixOverrideIdxE` is declared experimental here. effect(apiStabilityLeak)
+    export interface FixOverrideDerived extends FixOverrideBase {
+                     ~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixOverrideDerived` exposes `E`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(5,11): `E` is declared experimental here. effect(apiStabilityLeak)
+                     ~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixOverrideDerived` exposes `FixOverrideBase`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(164,18): `FixOverrideBase` is declared unstable here. effect(apiStabilityLeak)
+      (): E
+      [key: string]: E
+    }
+    
+    /** @stability experimental */
+    interface FixBoxHiddenE { value: string }
+    /** @stability experimental */
+    interface FixBoxArgE { value: string }
+    /** @stability unstable */
+    export interface FixTaggedCallableBox<T> { (): FixBoxHiddenE; value: T }
+                     ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixTaggedCallableBox` exposes `FixBoxHiddenE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(171,11): `FixBoxHiddenE` is declared experimental here. effect(apiStabilityLeak)
+    export interface FixDerivedCallableBox<T> extends FixTaggedCallableBox<T> {}
+                     ~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixDerivedCallableBox` exposes `FixTaggedCallableBox`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(175,18): `FixTaggedCallableBox` is declared unstable here. effect(apiStabilityLeak)
+    export declare const fixCallableBoxRef: FixDerivedCallableBox<FixBoxArgE>
+                         ~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#fixCallableBoxRef` exposes `FixBoxArgE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(173,11): `FixBoxArgE` is declared experimental here. effect(apiStabilityLeak)
+                         ~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#fixCallableBoxRef` exposes `FixTaggedCallableBox`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(175,18): `FixTaggedCallableBox` is declared unstable here. effect(apiStabilityLeak)
+    
+    /** @stability experimental */
+    interface FixBlockedHiddenE { value: string }
+    /** @stability unstable */
+    export interface FixBlockedBox<T> { value: T; hidden: FixBlockedHiddenE }
+                     ~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixBlockedBox` exposes `FixBlockedHiddenE`, an experimental API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(180,11): `FixBlockedHiddenE` is declared experimental here. effect(apiStabilityLeak)
+    export interface FixBlockedDerived<T, K extends keyof T> extends FixBlockedBox<T[K]> {}
+                     ~~~~~~~~~~~~~~~~~
+!!! warning TS377137: `effect-v4-tests/apiStabilityLeakBoundaries#FixBlockedDerived` exposes `FixBlockedBox`, an unstable API. effect(apiStabilityLeak)
+!!! related TS377138 /.src/apiStabilityLeakBoundaries.ts(182,18): `FixBlockedBox` is declared unstable here. effect(apiStabilityLeak)
+    

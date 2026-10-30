@@ -215,7 +215,7 @@ fn test_parse_result_dispatch_input_contract() {
     });
 }
 
-// go test: internal/typeparser/returning_dispatch_test.go:178 TestParseResultDispatchTagHints 58c441b4aab4a205
+// go test: internal/typeparser/returning_dispatch_test.go:178 TestParseResultDispatchTagHints 199b1f0560c0852f
 #[test]
 fn test_parse_result_dispatch_tag_hints() {
     struct Case {
@@ -234,12 +234,6 @@ fn test_parse_result_dispatch_tag_hints() {
                 tag_values: vec![r#""Some""#],
             },
             Case {
-                name: "reversed tag equality predicate",
-                function: r#"(error: unknown) => "ReasonA" == error.reason._tag ? first : fallback"#,
-                tag_subjects: vec!["error.reason"],
-                tag_values: vec![r#""ReasonA""#],
-            },
-            Case {
                 name: "tag switch cases",
                 function: r#"(value: unknown) => {
 				switch (value._tag) {
@@ -252,20 +246,8 @@ fn test_parse_result_dispatch_tag_hints() {
                 tag_values: vec![r#""Some""#, r#""None""#],
             },
             Case {
-                name: "non-literal tag value remains source evidence",
-                function: "(value: unknown) => value._tag === expectedTag ? first : fallback",
-                tag_subjects: vec!["value"],
-                tag_values: vec!["expectedTag"],
-            },
-            Case {
                 name: "non-tag predicate has no hints",
                 function: r#"(value: unknown) => value.kind === "Some" ? first : fallback"#,
-                tag_subjects: vec![""],
-                tag_values: vec![""],
-            },
-            Case {
-                name: "non-equality tag predicate has no hints",
-                function: r#"(value: unknown) => value._tag !== "Some" ? first : fallback"#,
                 tag_subjects: vec![""],
                 tag_values: vec![""],
             },
@@ -314,7 +296,7 @@ fn test_parse_result_dispatch_tag_hints() {
     });
 }
 
-// go test: internal/typeparser/returning_dispatch_test.go:253 TestParseTagMatch 642a8f00bcca26c4
+// go test: internal/typeparser/returning_dispatch_test.go:235 TestParseTagMatch 8f24183d7f089b34
 #[test]
 fn test_parse_tag_match() {
     run(|t| {
@@ -333,6 +315,7 @@ fn test_parse_tag_match() {
                 "error.reason",
                 r#""Invalid""#,
             ),
+            ("non-literal tag value", "error._tag === expectedTag", "error", "expectedTag"),
             ("inequality", r#"error._tag !== "NotFound""#, "", ""),
             ("different property", r#"error.kind === "NotFound""#, "", ""),
             ("compound expression", r#"error._tag === "NotFound" && ready"#, "", ""),
@@ -361,7 +344,7 @@ fn test_parse_tag_match() {
     });
 }
 
-// go test: internal/typeparser/returning_dispatch_test.go:284 TestResultDispatchCommonTagSubject 3a08c0a7f87c6f4a
+// go test: internal/typeparser/returning_dispatch_test.go:267 TestResultDispatchCommonTagSubject 3a08c0a7f87c6f4a
 #[test]
 fn test_result_dispatch_common_tag_subject() {
     run(|t| {
@@ -439,7 +422,7 @@ fn test_result_dispatch_common_tag_subject() {
     });
 }
 
-// go test: internal/typeparser/returning_dispatch_test.go:358 TestParseReturningDispatchInputContract 5c293adaf170a8cc
+// go test: internal/typeparser/returning_dispatch_test.go:341 TestParseReturningDispatchInputContract 5c293adaf170a8cc
 // Rust: Go ranges over a map literal (random order) and stops at the first failure; the cases run in a fixed order.
 // Go prints the dispatch with `%+v` (pointer addresses); its `Debug` form stands in.
 #[test]
@@ -495,7 +478,7 @@ fn test_parse_returning_dispatch_input_contract() {
     });
 }
 
-// go test: internal/typeparser/returning_dispatch_test.go:407 findReturningDispatchTestFunction 55642b96da608cbe
+// go test: internal/typeparser/returning_dispatch_test.go:390 findReturningDispatchTestFunction 55642b96da608cbe
 pub(crate) fn find_returning_dispatch_test_function(
     t: &T,
     sf: P<SourceFile>,
@@ -519,7 +502,7 @@ pub(crate) fn find_returning_dispatch_test_function(
     function
 }
 
-// go test: internal/typeparser/returning_dispatch_test.go:428 parseReturningDispatchTestFunction c4f462c8173c0481
+// go test: internal/typeparser/returning_dispatch_test.go:411 parseReturningDispatchTestFunction c4f462c8173c0481
 fn parse_returning_dispatch_test_function(
     t: &T,
     function_source: &str,
@@ -541,7 +524,7 @@ fn parse_returning_dispatch_test_function(
     (sf, function)
 }
 
-// go test: internal/typeparser/returning_dispatch_test.go:450 returningDispatchNodeText 8bbd7bee5545baa9
+// go test: internal/typeparser/returning_dispatch_test.go:433 returningDispatchNodeText 8bbd7bee5545baa9
 pub(crate) fn returning_dispatch_node_text(
     sf: Option<P<SourceFile>>,
     node: Option<P<Node>>,

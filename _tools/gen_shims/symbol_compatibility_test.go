@@ -23,10 +23,10 @@ func symbolFixture(shape string) string {
 		{"ExportSymbol", "*Symbol", "parent"},
 	}
 	var source, getters, values strings.Builder
-	table := mapSymbolTable
+	table := typescriptGoSymbolTable
 	if shape == "methods" {
 		source.WriteString("package ast\nimport \"iter\"\n")
-		table = insertionOrderedSymbolTable
+		table = typescriptNextSymbolTable
 	} else {
 		source.WriteString("package ast\n")
 	}
@@ -49,14 +49,12 @@ func symbolFixture(shape string) string {
 	return source.String()
 }
 
-// mapSymbolTable is the typescript-go provider's table, a map.
-const mapSymbolTable = `type SymbolTable map[string]*Symbol
+const typescriptGoSymbolTable = `type SymbolTable map[string]*Symbol
 func tableOf(name string, symbol *Symbol) SymbolTable { return SymbolTable{name: symbol} }
 func SetEntry(table SymbolTable, name string, symbol *Symbol) { table[name] = symbol }
 `
 
-// insertionOrderedSymbolTable is the shape of TypeScript next's table: a pointer whose nil value reads as empty.
-const insertionOrderedSymbolTable = `type SymbolMap struct{ keys []string; symbols []*Symbol }
+const typescriptNextSymbolTable = `type SymbolMap struct{ keys []string; symbols []*Symbol }
 type SymbolTable = *SymbolMap
 func tableOf(name string, symbol *Symbol) SymbolTable { return &SymbolMap{keys: []string{name}, symbols: []*Symbol{symbol}} }
 func SetEntry(table SymbolTable, name string, symbol *Symbol) { table.keys = append(table.keys, name); table.symbols = append(table.symbols, symbol) }

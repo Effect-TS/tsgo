@@ -1,0 +1,17 @@
+=== Metadata ===
+Effect version: unknown
+
+/.src/preferEffectArray_inheritedAugmentation.ts(7,7): warning TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+
+
+==== /.src/preferEffectArray_inheritedAugmentation.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics preferEffectArray:warning
+    export {}
+    declare global {
+      interface Array<T> extends Pick<ArrayConstructor, "isArray"> {}
+    }
+    Array.isArray([])
+          ~~~~~~~
+!!! warning TS377140: Consider effect/Array.isArray instead of native Array.isArray. Narrows elements to unknown rather than any. effect(preferEffectArray)
+    

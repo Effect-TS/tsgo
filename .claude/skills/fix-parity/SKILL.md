@@ -5,7 +5,7 @@ description: Find and fix a behavior difference between the Rust port and the Go
 
 # Fix a parity difference
 
-The Go code at the current commit is the specification (`docs/PORTING.md`, "The fidelity rule"). A difference is a
+The Go code at the current commit is the specification (`porting/PORTING.md`, "The fidelity rule"). A difference is a
 Rust bug until evidence shows otherwise.
 
 ## Reproduce
@@ -35,14 +35,14 @@ Rust bug until evidence shows otherwise.
    and TypeScript-version differences.
 4. Decide which kind it is:
    - **Port bug**: fix it (below).
-   - **TypeScript version**: prove it with the Go build at tsrs's TypeScript version (`docs/TSRS_PORT.md`,
-     "Decisions"): if Go there produces the Rust output, add a `typescript` entry to `docs/DIVERGENCES.md` with that
+   - **TypeScript version**: prove it with the Go build at tsrs's TypeScript version (`porting/TSRS_PORT.md`,
+     "Decisions"): if Go there produces the Rust output, add a `typescript` entry to `porting/DIVERGENCES.md` with that
      evidence.
    - **tsrs bug** (tsrs differs from tsgo at tsrs's own TypeScript pin): reduce it, add a `tsrs` entry, and either
      work around it (marked `// tsrs workaround: <issue>`) or fix it with a minimal `_patches/tsrs` patch numbered
-     100+, with a regression test (`docs/PORTING.md`, "TypeScript: tsrs").
+     100+, with a regression test (`porting/PORTING.md`, "TypeScript: tsrs").
    - **Missing tsrs patch**: the Go side relies on a `_patches/typescript` patch that has no tsrs counterpart yet:
-     port that patch (same number), per `docs/PORTING.md`.
+     port that patch (same number), per `porting/PORTING.md`.
 
 ## Fix
 

@@ -72,36 +72,16 @@ func TestNormalizeOptionsDoesNotMutateInput(t *testing.T) {
 	}
 }
 
+func newDiagnostic(file *ast.SourceFile, loc core.TextRange, code int32, related []*ast.Diagnostic) *ast.Diagnostic {
+	return ast.NewDiagnosticFromSerialized(file, loc, code, diagnostics.CategoryError, "", nil, nil, related, false, false, false)
+}
+
 func TestReportDiagnostics(t *testing.T) {
 	t.Parallel()
 
 	sourceFile := parser.ParseSourceFile(ast.NewSourceFileParseOptions(tspath.RootedFilePath("/source.ts"), "/source.ts"), "const effect = 1", core.ScriptKindTS)
-	related := ast.NewDiagnosticFromSerialized(
-		sourceFile,
-		core.NewTextRange(9, 15),
-		377007,
-		diagnostics.CategoryError,
-		"",
-		nil,
-		nil,
-		nil,
-		false,
-		false,
-		false,
-	)
-	diagnostic := ast.NewDiagnosticFromSerialized(
-		sourceFile,
-		core.NewTextRange(3, 7),
-		377001,
-		diagnostics.CategoryError,
-		"",
-		nil,
-		nil,
-		[]*ast.Diagnostic{related},
-		false,
-		false,
-		false,
-	)
+	related := newDiagnostic(sourceFile, core.NewTextRange(9, 15), 377007, nil)
+	diagnostic := newDiagnostic(sourceFile, core.NewTextRange(3, 7), 377001, []*ast.Diagnostic{related})
 
 	var reported []ReportedDiagnostic
 	reportDiagnostics(context.Background(), []*ast.Diagnostic{diagnostic}, "floatingEffect", nil, nil, sourceFile, nil, DiagnosticAdapter{
@@ -149,19 +129,7 @@ func TestReportDiagnostics(t *testing.T) {
 func TestReportDiagnosticsPreservesNonSuffixRuleText(t *testing.T) {
 	t.Parallel()
 
-	diagnostic := ast.NewDiagnosticFromSerialized(
-		nil,
-		core.NewTextRange(0, 0),
-		377001,
-		diagnostics.CategoryError,
-		"",
-		nil,
-		nil,
-		nil,
-		false,
-		false,
-		false,
-	)
+	diagnostic := newDiagnostic(nil, core.NewTextRange(0, 0), 377001, nil)
 
 	for _, message := range []string{
 		"effect(floatingEffect) should remain when it is not a suffix",

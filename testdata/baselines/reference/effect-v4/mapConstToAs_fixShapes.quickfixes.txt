@@ -1,0 +1,138 @@
+=== Quick Fix Inventory ===
+
+[D1] (10:26-10:36) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D2] (13:32-13:42) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D3] (18:3-18:13) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+[D4] (10:34-10:42) TS377152: `Effect.as` expresses replacing the success value with a constant directly. effect(mapConstToAs)
+  Fix 0: "Disable mapConstToAs for this line"
+  Fix 1: "Disable mapConstToAs for entire file"
+  Fix 2: "Replace with Effect.as"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/forms.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapConstToAs:warning
+import { Effect } from "effect"
+
+enum Phase { Done = "done" }
+
+declare const source: Effect.Effect<number>
+
+// MUST TRIGGER: data-first form -> Effect.as(source, "saved")
+export const dataFirst = Effect.as(source, "saved")
+
+// MUST TRIGGER: data-last form applied directly -> Effect.as(-1)(source)
+export const dataLastApplied = Effect.map(() => -1)(source)
+
+// MUST TRIGGER: block body returning an enum member inside a longer pipe -> Effect.as(Phase.Done)
+export const blockReturnInPipe = source.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map((_) => {
+    return Phase.Done
+  }),
+  Effect.map((phase) => phase.length)
+)
+
+=== [D2] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/forms.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapConstToAs:warning
+import { Effect } from "effect"
+
+enum Phase { Done = "done" }
+
+declare const source: Effect.Effect<number>
+
+// MUST TRIGGER: data-first form -> Effect.as(source, "saved")
+export const dataFirst = Effect.map(source, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly -> Effect.as(-1)(source)
+export const dataLastApplied = Effect.as(-1)(source)
+
+// MUST TRIGGER: block body returning an enum member inside a longer pipe -> Effect.as(Phase.Done)
+export const blockReturnInPipe = source.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.map((_) => {
+    return Phase.Done
+  }),
+  Effect.map((phase) => phase.length)
+)
+
+=== [D3] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/forms.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapConstToAs:warning
+import { Effect } from "effect"
+
+enum Phase { Done = "done" }
+
+declare const source: Effect.Effect<number>
+
+// MUST TRIGGER: data-first form -> Effect.as(source, "saved")
+export const dataFirst = Effect.map(source, () => "saved")
+
+// MUST TRIGGER: data-last form applied directly -> Effect.as(-1)(source)
+export const dataLastApplied = Effect.map(() => -1)(source)
+
+// MUST TRIGGER: block body returning an enum member inside a longer pipe -> Effect.as(Phase.Done)
+export const blockReturnInPipe = source.pipe(
+  Effect.tap(() => Effect.void),
+  Effect.as(Phase.Done),
+  Effect.map((phase) => phase.length)
+)
+
+=== [D4] Fix 0: "Disable mapConstToAs for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable mapConstToAs for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.as" ===
+
+--- file:///.src/aliasFallback.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics mapConstToAs:warning
+import * as Fx from "effect/Effect"
+
+declare const source: Fx.Effect<number>
+const mapAlias = Fx.map
+
+// MUST TRIGGER: an aliased map; the fix reaches the Effect module through its namespace import
+// -> Fx.as("saved")
+export const value = source.pipe(Fx.as("saved"))
+

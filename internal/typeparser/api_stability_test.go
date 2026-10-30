@@ -2,6 +2,8 @@ package typeparser
 
 import (
 	"context"
+	"fmt"
+	"slices"
 	"strings"
 	"testing"
 
@@ -10,8 +12,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/compiler"
 )
 
-// apiStabilityTestExport looks up a module export by name so the cache tests can
-// exercise the public TypeParser API the same way the diagnostic does.
 func apiStabilityTestExport(t *testing.T, c *checker.Checker, sf *ast.SourceFile, name string) *ast.Symbol {
 	t.Helper()
 	module := checker.Checker_getSymbolOfDeclaration(c, sf.AsNode())
@@ -44,11 +44,6 @@ func containsDependency(used ApiStabilityUsed, name string) bool {
 	return false
 }
 
-// primeApiStabilityChecker type checks the program against the checker, the
-// way the normal rule lifecycle does before a diagnostic run. Only then are the
-// public types the analysis reads through its cached-materialization peeks
-// available; an unprimed checker models a first run whose type-driven surfaces
-// must stay incomplete (and are never reported as stable).
 func primeApiStabilityChecker(t testing.TB, c *checker.Checker) {
 	t.Helper()
 	program, ok := c.Program().(*compiler.Program)
@@ -58,11 +53,6 @@ func primeApiStabilityChecker(t testing.TB, c *checker.Checker) {
 	_ = program.GetSemanticDiagnostics(context.Background(), nil)
 }
 
-// TestApiStabilityDeclaredIndexInfosDoNotResolveComputedNames proves the
-// declared index-info accessor inspects index signatures without resolving the
-// symbol's late-bound member table: a cold interface carrying a recursively
-// computed property name is inspected with zero checker instantiation and no
-// compiler diagnostic.
 func TestApiStabilityDeclaredIndexInfosDoNotResolveComputedNames(t *testing.T) {
 	t.Parallel()
 
@@ -95,11 +85,6 @@ export interface X {
 	}
 }
 
-// TestApiStabilityDeclaredCacheSharedAcrossTypeParsers proves declared lookups
-// persist per checker: a second TypeParser built from the same checker reuses
-// the first parser's declared results, so a run over a different source file
-// does not recompute the same tag lookup. Computed-surface persistence is
-// covered by TestApiStabilityDeclaredPersistsAndCompleteSurfacesReuse.
 func TestApiStabilityDeclaredCacheSharedAcrossTypeParsers(t *testing.T) {
 	t.Parallel()
 
@@ -129,8 +114,6 @@ export interface Leaky { value: E }
 		t.Fatal("a declared read during the analysis should be cached")
 	}
 
-	// A fresh parser over the same checker (the situation when another source
-	// file later runs the rule) shares the declared EffectLinks cache.
 	tp2 := NewTypeParser(c.Program(), c)
 	if tp2.links != tp1.links {
 		t.Fatal("TypeParser instances over one checker should share EffectLinks")
@@ -142,8 +125,6 @@ export interface Leaky { value: E }
 		t.Fatalf("second parser returned a different surface: %v", apiStabilityDependencyNames(got))
 	}
 
-	// A symbol declared in a different source file resolves through the same
-	// declared store, which is what lets separate file runs reuse tag lookups.
 	consumerSym := apiStabilityTestExport(t, c, consumer, "Consumer")
 	consumerDeps := tp2.ApiStabilityUsedBySymbol(consumerSym)
 	if !containsDependency(consumerDeps, "E") {
@@ -154,10 +135,6 @@ export interface Leaky { value: E }
 	}
 }
 
-// TestApiStabilityNestedNamedSurfaceStaysShallow proves the documented shallow
-// named-dependency boundary: a named interface reached inside another surface is
-// reported as a dependency but its arbitrary members are not expanded into the
-// owner's dependencies. Directly exposed callable signatures are still searched.
 func TestApiStabilityNestedNamedSurfaceStaysShallow(t *testing.T) {
 	t.Parallel()
 
@@ -193,13 +170,6 @@ export interface CallableHolder { callable: Callable }
 	}
 }
 
-// TestApiStabilityCacheDeclaredCeilingIsPerAlias verifies the declared-stability
-// cache stores the symbol's own declaration tag only. A tag on a selected-file
-// `export ... from` declaration is source-specific and is applied by the rule,
-// so it must not leak into the reusable symbol cache. Both aliases resolve to
-// the same target, whose dependency surface is one shared per-checker result
-// keyed by the concrete target identity, independent of the alias and of any
-// forwarding ceiling.
 func TestApiStabilityCacheDeclaredCeilingIsPerAlias(t *testing.T) {
 	t.Parallel()
 
@@ -220,8 +190,6 @@ export { Leaky } from "./dep"
 	plain := apiStabilityTestExport(t, c, files["/.src/plain.ts"], "Leaky")
 	tagged := apiStabilityTestExport(t, c, files["/.src/tagged.ts"], "Leaky")
 
-	// The symbol-level lookup sees only the forwarded symbol's own declarations,
-	// so the selected-file forwarding tag is not part of the shared cache.
 	if level := tp.DeclaredApiStability(plain); level != ApiStabilityStable {
 		t.Fatalf("plain reexport symbol level = %v, want stable", level)
 	}
@@ -229,8 +197,6 @@ export { Leaky } from "./dep"
 		t.Fatalf("selected-file forwarding tag leaked into the symbol cache: %v", level)
 	}
 
-	// Both aliases resolve to the same target, so the actual surface (which
-	// contains E) is computed independently of any forwarding ceiling.
 	target := resolveAliasedSymbolForTest(t, c, plain)
 	if !containsDependency(tp.ApiStabilityUsedBySymbol(target), "E") {
 		t.Fatalf("target surface should expose E")
@@ -260,135 +226,6 @@ func resolveAliasedSymbolForTest(t *testing.T, c *checker.Checker, symbol *ast.S
 	return symbol
 }
 
-// TestApiStabilityCacheDifferentCheckerIsolation proves two checkers do not
-// share declared results or pointer identity and that each analyzer computes an
-// independent session-local surface.
-func TestApiStabilityCacheDifferentCheckerIsolation(t *testing.T) {
-	t.Parallel()
-
-	source := `/** @stability experimental */
-interface E { value: string }
-export interface Leaky { value: E }
-`
-
-	c1, tp1, sf1, done1 := compileAndGetCheckerAndSourceFileInternal(t, source)
-	defer done1()
-	c2, tp2, sf2, done2 := compileAndGetCheckerAndSourceFileInternal(t, source)
-	defer done2()
-	primeApiStabilityChecker(t, c1)
-	primeApiStabilityChecker(t, c2)
-
-	if tp1.links == tp2.links {
-		t.Fatal("different checkers must not share EffectLinks")
-	}
-
-	sym1 := apiStabilityTestExport(t, c1, sf1, "Leaky")
-	sym2 := apiStabilityTestExport(t, c2, sf2, "Leaky")
-	if sym1 == sym2 {
-		t.Fatal("checkers should produce distinct symbol pointers")
-	}
-
-	if !containsDependency(tp1.ApiStabilityUsedBySymbol(sym1), "E") {
-		t.Fatal("first checker surface should expose E")
-	}
-	if !tp1.links.ApiStabilityDeclaredSymbol.Has(sym1) {
-		t.Fatal("first checker should have cached its declared lookup")
-	}
-	if tp2.links.ApiStabilityDeclaredSymbol.Has(sym1) {
-		t.Fatal("second checker observed the first checker's declared cache")
-	}
-	if !containsDependency(tp2.ApiStabilityUsedBySymbol(sym2), "E") {
-		t.Fatal("second checker surface should expose E independently")
-	}
-	if tp1.links.ApiStabilityDeclaredSymbol.Has(sym2) {
-		t.Fatal("first checker observed the second checker's declared cache")
-	}
-}
-
-// TestApiStabilityCacheGenericArgumentsDoNotContaminate proves the type-keyed
-// cache keeps distinct instantiations distinct: an experimental type argument
-// in one instantiation must not appear in another, in both declaration orders.
-func TestApiStabilityCacheGenericArgumentsDoNotContaminate(t *testing.T) {
-	t.Parallel()
-
-	for _, order := range []string{"leaky-first", "clean-first"} {
-		t.Run(order, func(t *testing.T) {
-			t.Parallel()
-			leakyDeclaration := "export type Leaky = Box<E>"
-			cleanDeclaration := "export type Clean = Box<string>"
-			declarations := leakyDeclaration + "\n" + cleanDeclaration
-			if order == "clean-first" {
-				declarations = cleanDeclaration + "\n" + leakyDeclaration
-			}
-
-			c, tp, files, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
-				"/.src/test.ts": `/** @stability experimental */
-interface E { value: string }
-interface Box<T> { value: T }
-` + declarations + "\n",
-			})
-			defer done()
-			primeApiStabilityChecker(t, c)
-
-			leaky := apiStabilityTestExport(t, c, files["/.src/test.ts"], "Leaky")
-			clean := apiStabilityTestExport(t, c, files["/.src/test.ts"], "Clean")
-
-			if !containsDependency(tp.ApiStabilityUsedBySymbol(leaky), "E") {
-				t.Fatal("Box<E> should expose E")
-			}
-			if containsDependency(tp.ApiStabilityUsedBySymbol(clean), "E") {
-				t.Fatalf("Box<string> must not inherit E, got %v", apiStabilityDependencyNames(tp.ApiStabilityUsedBySymbol(clean)))
-			}
-		})
-	}
-}
-
-// TestApiStabilityDeclaredReadsDoNotCompute proves the declared caches are
-// independent of the computed caches: asking for a declared level must never
-// trigger a symbol or signature surface computation.
-func TestApiStabilityDeclaredReadsDoNotCompute(t *testing.T) {
-	t.Parallel()
-
-	c, tp, files, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
-		"/.src/test.ts": `/** @stability experimental */
-interface E { value: string }
-export interface Leaky { value: E }
-export function f(x: E): E { return x }
-`,
-	})
-	defer done()
-
-	leaky := apiStabilityTestExport(t, c, files["/.src/test.ts"], "Leaky")
-	f := apiStabilityTestExport(t, c, files["/.src/test.ts"], "f")
-	signatures := apiStabilityTestSignatures(t, c, f)
-
-	before := c.TotalInstantiationCount
-	if level := tp.DeclaredApiStability(leaky); level != ApiStabilityStable {
-		t.Fatalf("Leaky declared = %v, want stable", level)
-	}
-	_ = tp.DeclaredApiStabilityOfSignature(signatures[0])
-	if delta := c.TotalInstantiationCount - before; delta != 0 {
-		t.Fatalf("declared reads instantiated %d types, want 0", delta)
-	}
-
-	// A fresh computed session starts empty: declared reads never populate a
-	// symbol or signature memo and never publish a shared surface.
-	session := tp.NewApiStabilitySession()
-	if len(session.analysis.sessionSymbols) != 0 || len(session.analysis.sessionTypes) != 0 ||
-		len(session.analysis.sessionSignatures) != 0 || len(session.analysis.sessionComponents) != 0 {
-		t.Fatal("declared reads left computed analysis state")
-	}
-	if !tp.links.ApiStabilityDeclaredSymbol.Has(leaky) {
-		t.Fatal("declared symbol should be cached")
-	}
-	if !tp.links.ApiStabilityDeclaredSignature.Has(rawSignature(signatures[0])) {
-		t.Fatal("declared signature should be cached")
-	}
-}
-
-// TestApiStabilitySignatureDeclaredCacheKeepsOverloadsDistinct proves a tagged
-// overload keeps its own declared level even when the symbol-level lookup picks
-// up another declaration's tag, and that both are cached separately.
 func TestApiStabilitySignatureDeclaredCacheKeepsOverloadsDistinct(t *testing.T) {
 	t.Parallel()
 
@@ -421,8 +258,6 @@ export function f(x: string | number): string { return "" }
 	}
 }
 
-// apiStabilityTestSignatures returns the public call signatures of an exported
-// symbol so the cache tests can exercise the signature APIs directly.
 func apiStabilityTestSignatures(t *testing.T, c *checker.Checker, symbol *ast.Symbol) []*checker.Signature {
 	t.Helper()
 	if symbol == nil {
@@ -435,9 +270,6 @@ func apiStabilityTestSignatures(t *testing.T, c *checker.Checker, symbol *ast.Sy
 	return signatures
 }
 
-// TestApiStabilitySignatureSurfaceRetainsSubstitution proves an instantiated
-// inferred return keeps its represented argument while the raw target stays
-// shallow, and that a session memoizes the completed signature surface.
 func TestApiStabilitySignatureSurfaceRetainsSubstitution(t *testing.T) {
 	t.Parallel()
 
@@ -471,8 +303,6 @@ export const f = make<E>()
 		t.Fatal("repeated session query recomputed the memoized signature surface")
 	}
 
-	// The raw target's type parameter is not an experimental dependency, so the
-	// shallow form must not report E.
 	raw := rawSignature(instantiated)
 	if raw == instantiated {
 		t.Fatal("expected an instantiated signature with a raw target")
@@ -483,90 +313,6 @@ export const f = make<E>()
 	}
 }
 
-// TestApiStabilityComputedSignatureCacheSeparatesSubstitutionContexts proves the
-// same raw signature analyzed under different enclosing substitutions is not
-// conflated: the clean instantiation stays clean and the leaking one reports,
-// regardless of which is computed first.
-func TestApiStabilityComputedSignatureCacheSeparatesSubstitutionContexts(t *testing.T) {
-	t.Parallel()
-
-	for _, order := range []string{"clean-first", "leaky-first"} {
-		t.Run(order, func(t *testing.T) {
-			t.Parallel()
-			clean := "export const clean = make<string>()"
-			leaky := "export const leaky = make<E>()"
-			declarations := clean + "\n" + leaky
-			if order == "leaky-first" {
-				declarations = leaky + "\n" + clean
-			}
-			c, tp, files, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
-				"/.src/test.ts": `/** @stability experimental */
-interface E { value: string }
-declare function make<T>(): (x: T) => T
-` + declarations + "\n",
-			})
-			defer done()
-			primeApiStabilityChecker(t, c)
-
-			cleanSym := apiStabilityTestExport(t, c, files["/.src/test.ts"], "clean")
-			leakySym := apiStabilityTestExport(t, c, files["/.src/test.ts"], "leaky")
-
-			cleanUsed := tp.ApiStabilityUsedBySymbol(cleanSym)
-			if containsDependency(cleanUsed, "E") {
-				t.Fatalf("clean instantiation must not inherit E, got %v", apiStabilityDependencyNames(cleanUsed))
-			}
-			leakyUsed := tp.ApiStabilityUsedBySymbol(leakySym)
-			if !containsDependency(leakyUsed, "E") {
-				t.Fatalf("leaky instantiation should expose E, got %v", apiStabilityDependencyNames(leakyUsed))
-			}
-		})
-	}
-}
-
-// TestApiStabilityComputedSignatureCacheSeparatesNestedSubstitutionContexts
-// covers the same contamination through a nested inferred object surface. The
-// computed signature cache is keyed by the concrete signature identity, so the
-// clean and leaking materializations never share a cached result in either
-// order.
-func TestApiStabilityComputedSignatureCacheSeparatesNestedSubstitutionContexts(t *testing.T) {
-	t.Parallel()
-
-	for _, order := range []string{"clean-first", "leaky-first"} {
-		t.Run(order, func(t *testing.T) {
-			t.Parallel()
-			clean := "export const clean = make<string>()"
-			leaky := "export const leaky = make<E>()"
-			declarations := clean + "\n" + leaky
-			if order == "leaky-first" {
-				declarations = leaky + "\n" + clean
-			}
-			c, tp, files, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
-				"/.src/test.ts": `/** @stability experimental */
-interface E { value: string }
-declare function make<T>(): { nested: { fn: (x: T) => T } }
-` + declarations + "\n",
-			})
-			defer done()
-			primeApiStabilityChecker(t, c)
-
-			cleanSym := apiStabilityTestExport(t, c, files["/.src/test.ts"], "clean")
-			leakySym := apiStabilityTestExport(t, c, files["/.src/test.ts"], "leaky")
-
-			cleanUsed := tp.ApiStabilityUsedBySymbol(cleanSym)
-			if containsDependency(cleanUsed, "E") {
-				t.Fatalf("clean nested instantiation must not inherit E, got %v", apiStabilityDependencyNames(cleanUsed))
-			}
-			leakyUsed := tp.ApiStabilityUsedBySymbol(leakySym)
-			if !containsDependency(leakyUsed, "E") {
-				t.Fatalf("leaky nested instantiation should expose E, got %v", apiStabilityDependencyNames(leakyUsed))
-			}
-		})
-	}
-}
-
-// TestApiStabilityComputedIncludesDeclaredMemberStability proves the computed
-// minimum covers the declared stability of public properties and call
-// signatures, with provenance naming the offender.
 func TestApiStabilityComputedIncludesDeclaredMemberStability(t *testing.T) {
 	t.Parallel()
 
@@ -608,9 +354,6 @@ export interface S {
 	}
 }
 
-// TestApiStabilityReplacedDefaultStaysClean proves a generic default replaced by
-// an explicit argument is not part of the represented surface, including the
-// annotation provenance pass.
 func TestApiStabilityReplacedDefaultStaysClean(t *testing.T) {
 	t.Parallel()
 
@@ -629,61 +372,14 @@ export const f = identity<string>
 	}
 }
 
-// TestApiStabilitySignatureCacheIsolation proves a computed signature surface
-// is checker-local: two checkers compute the same-looking signature
-// independently and neither can observe the other's analysis.
-func TestApiStabilitySignatureCacheIsolation(t *testing.T) {
-	t.Parallel()
-
-	source := `/** @stability experimental */
-interface E { value: string }
-export const f = (x: E): E => x
-`
-
-	c1, tp1, sf1, done1 := compileAndGetCheckerAndSourceFileInternal(t, source)
-	defer done1()
-	c2, tp2, sf2, done2 := compileAndGetCheckerAndSourceFileInternal(t, source)
-	defer done2()
-	primeApiStabilityChecker(t, c1)
-	primeApiStabilityChecker(t, c2)
-
-	if tp1.links == tp2.links {
-		t.Fatal("different checkers must not share EffectLinks")
-	}
-
-	f1 := apiStabilityTestExport(t, c1, sf1, "f")
-	f2 := apiStabilityTestExport(t, c2, sf2, "f")
-	sig1 := apiStabilityTestSignatures(t, c1, f1)[0]
-	sig2 := apiStabilityTestSignatures(t, c2, f2)[0]
-
-	if !containsDependency(tp1.ApiStabilityUsedBySignature(sig1), "E") {
-		t.Fatal("first checker signature should expose E")
-	}
-	if !containsDependency(tp2.ApiStabilityUsedBySignature(sig2), "E") {
-		t.Fatal("second checker signature should expose E independently")
-	}
-	// A fresh session never observes an earlier session's local signature
-	// memo, whichever checker or signature produced an earlier result; only a
-	// published complete snapshot can be reused, and it is composed anew.
-	if session := tp2.NewApiStabilitySession(); len(session.analysis.sessionSignatures) != 0 {
-		t.Fatal("a fresh session observed an earlier session's local signature memo")
-	}
-}
-
-// TestApiStabilityCacheCyclesAndEmptyResultsAreSafe proves a cyclic surface
-// still reports its leak, that settled results are reusable inside the session
-// that computed them, and that a stable/empty surface is a complete memo entry.
 func TestApiStabilityCacheCyclesAndEmptyResultsAreSafe(t *testing.T) {
 	t.Parallel()
 
 	c, tp, files, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
 		"/.src/test.ts": `/** @stability experimental */
 interface E { value: string }
+/** @stability unstable */
 export interface Node { next: Node; payload: E }
-type B = { c: C; payload: E }
-type C = { b: B }
-export type A = { b: B }
-export type Z = { c: C }
 export interface Stable { value: string }
 `,
 	})
@@ -693,12 +389,16 @@ export interface Stable { value: string }
 	testFile := files["/.src/test.ts"]
 	node := apiStabilityTestExport(t, c, testFile, "Node")
 	session := tp.NewApiStabilitySession()
-	if !containsDependency(session.UsedBySymbol(node), "E") {
-		t.Fatal("self-referential Node should expose E")
+	nodeUsed := session.UsedBySymbol(node)
+	if nodeUsed.incomplete || nodeUsed.minimum != ApiStabilityExperimental || !containsDependency(nodeUsed, "E") {
+		t.Fatalf("self-referential Node should expose E, got min=%v deps=%v", nodeUsed.minimum, apiStabilityDependencyNames(nodeUsed))
 	}
-	// A settled cyclic surface is complete and reusable within its session.
+	assertApiStabilitySurfaceExcludesOwnTag(t, nodeUsed, "Node")
 	if surface := session.analysis.sessionSymbols[node]; !surface.complete || surface.blocked {
 		t.Fatal("a settled cyclic surface should be a complete session result")
+	}
+	if len(session.analysis.sessionSymbols[node].findings) == 0 {
+		t.Fatal("the stored cyclic surface must keep the own tag")
 	}
 	work := session.analysis.work
 	if !containsDependency(session.UsedBySymbol(node), "E") {
@@ -706,26 +406,6 @@ export interface Stable { value: string }
 	}
 	if session.analysis.work != work {
 		t.Fatal("repeated session query recomputed the settled cyclic surface")
-	}
-	// The same symbol computation starts fresh for a new export: symbol results
-	// stay analysis-local, and only complete type/signature snapshots may be
-	// reused by a later session.
-	if fresh := tp.NewApiStabilitySession(); len(fresh.analysis.sessionSymbols) != 0 {
-		t.Fatal("a fresh session observed the earlier computed symbol surface")
-	}
-
-	// A leak reached through a mutual cycle must be reported for every root,
-	// regardless of which root was analyzed first.
-	a := apiStabilityTestExport(t, c, testFile, "A")
-	z := apiStabilityTestExport(t, c, testFile, "Z")
-	if !containsDependency(tp.ApiStabilityUsedBySymbol(a), "E") {
-		t.Fatal("A should expose E through the B/C cycle")
-	}
-	if !containsDependency(tp.ApiStabilityUsedBySymbol(z), "E") {
-		t.Fatal("Z should expose E through the B/C cycle")
-	}
-	if fresh := tp.NewApiStabilitySession(); len(fresh.analysis.sessionSymbols) != 0 {
-		t.Fatal("mutual-cycle queries published symbol state")
 	}
 
 	stable := apiStabilityTestExport(t, c, testFile, "Stable")
@@ -739,154 +419,6 @@ export interface Stable { value: string }
 	}
 }
 
-// TestApiStabilityConcreteCarrierSeparatesSharedRawTargets proves the type and
-// signature caches keep concrete identities: the same raw component (an
-// interface member whose type depends on the interface's type parameter) is
-// analyzed under two distinct concrete outer materializations and must not
-// contaminate either direction, in both declaration orders.
-func TestApiStabilityConcreteCarrierSeparatesSharedRawTargets(t *testing.T) {
-	t.Parallel()
-
-	for _, order := range []string{"clean-first", "leaky-first"} {
-		t.Run(order, func(t *testing.T) {
-			t.Parallel()
-			clean := "export declare const clean: DeepHolder<string>"
-			leaky := "export declare const leaky: DeepHolder<E>"
-			declarations := clean + "\n" + leaky
-			if order == "leaky-first" {
-				declarations = leaky + "\n" + clean
-			}
-			c, tp, files, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
-				"/.src/test.ts": `/** @stability experimental */
-interface E { value: string }
-type Deep<T> = T extends string ? Deep<T> : T
-interface DeepHolder<T> { value: Deep<T> }
-` + declarations + "\n",
-			})
-			defer done()
-			primeApiStabilityChecker(t, c)
-
-			cleanSym := apiStabilityTestExport(t, c, files["/.src/test.ts"], "clean")
-			leakySym := apiStabilityTestExport(t, c, files["/.src/test.ts"], "leaky")
-			if containsDependency(tp.ApiStabilityUsedBySymbol(cleanSym), "E") {
-				t.Fatal("DeepHolder<string> must not expose E")
-			}
-			if !containsDependency(tp.ApiStabilityUsedBySymbol(leakySym), "E") {
-				t.Fatal("DeepHolder<E> should expose E")
-			}
-		})
-	}
-}
-
-// TestApiStabilityConcreteCarrierSeparatesHeritageMaterializations covers the
-// same concrete-identity requirement through inherited members: two exports
-// inherit the same shared base declaration with different concrete arguments.
-func TestApiStabilityConcreteCarrierSeparatesHeritageMaterializations(t *testing.T) {
-	t.Parallel()
-
-	for _, order := range []string{"clean-first", "leaky-first"} {
-		t.Run(order, func(t *testing.T) {
-			t.Parallel()
-			clean := "export interface Clean extends Base<string> {}"
-			leaky := "export interface Leaky extends Base<E> {}"
-			declarations := clean + "\n" + leaky
-			if order == "leaky-first" {
-				declarations = leaky + "\n" + clean
-			}
-			c, tp, files, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
-				"/.src/test.ts": `/** @stability experimental */
-interface E { value: string }
-interface Base<T> { value: T }
-` + declarations + "\n",
-			})
-			defer done()
-			primeApiStabilityChecker(t, c)
-
-			cleanSym := apiStabilityTestExport(t, c, files["/.src/test.ts"], "Clean")
-			leakySym := apiStabilityTestExport(t, c, files["/.src/test.ts"], "Leaky")
-			if containsDependency(tp.ApiStabilityUsedBySymbol(cleanSym), "E") {
-				t.Fatal("Clean extends Base<string> and must not expose E")
-			}
-			if !containsDependency(tp.ApiStabilityUsedBySymbol(leakySym), "E") {
-				t.Fatal("Leaky extends Base<E> and should expose E")
-			}
-		})
-	}
-}
-
-// TestApiStabilityCycleOrderDoesNotHideLeaks analyzes the mutual cycle roots in
-// the reverse order so a cached intermediate result can never suppress the leak.
-func TestApiStabilityCycleOrderDoesNotHideLeaks(t *testing.T) {
-	t.Parallel()
-
-	c, tp, files, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
-		"/.src/test.ts": `/** @stability experimental */
-interface E { value: string }
-type B = { c: C; payload: E }
-type C = { b: B }
-export type A = { b: B }
-export type Z = { c: C }
-`,
-	})
-	defer done()
-	primeApiStabilityChecker(t, c)
-
-	testFile := files["/.src/test.ts"]
-	z := apiStabilityTestExport(t, c, testFile, "Z")
-	if !containsDependency(tp.ApiStabilityUsedBySymbol(z), "E") {
-		t.Fatal("Z analyzed first should still expose E through the cycle")
-	}
-	a := apiStabilityTestExport(t, c, testFile, "A")
-	if !containsDependency(tp.ApiStabilityUsedBySymbol(a), "E") {
-		t.Fatal("A analyzed second should still expose E through the cached cycle")
-	}
-}
-
-// TestApiStabilityColdLazyReadsMaterialize proves a cold public surface is
-// materialized through the checker's ordinary lazy reads: the analysis no
-// longer needs the language service to warm the checker first. The cold surface
-// exposes E and is complete in its session, and the same checker after type
-// checking recomputes to the same surface from a fresh session.
-func TestApiStabilityColdLazyReadsMaterialize(t *testing.T) {
-	t.Parallel()
-
-	c, tp, files, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
-		"/.src/test.ts": `/** @stability experimental */
-interface E { value: string }
-type Deep<T> = T extends string ? Deep<T> : T
-interface Callable<T> { (x: T): void }
-export declare const f: Callable<Deep<E>>
-`,
-	})
-	defer done()
-
-	f := apiStabilityTestExport(t, c, files["/.src/test.ts"], "f")
-	coldSession := tp.NewApiStabilitySession()
-	cold := coldSession.UsedBySymbol(f)
-	if !containsDependency(cold, "E") {
-		t.Fatalf("the cold surface should lazily materialize E, got %v", apiStabilityDependencyNames(cold))
-	}
-	if surface := coldSession.analysis.sessionSymbols[f]; !surface.complete || surface.blocked {
-		t.Fatal("a complete cold surface should settle complete in its session")
-	}
-
-	// A warmed checker materializes the declaration the way the language
-	// service would, and a fresh session agrees with the cold result.
-	primeApiStabilityChecker(t, c)
-	fresh := NewTypeParser(c.Program(), c)
-	warm := fresh.ApiStabilityUsedBySymbol(f)
-	if !containsDependency(warm, "E") {
-		t.Fatal("the materialized surface should expose E")
-	}
-	if cold.minimum != warm.minimum || len(cold.dependencies) != len(warm.dependencies) {
-		t.Fatalf("cold and warm results disagree: cold=%v warm=%v", apiStabilityDependencyNames(cold), apiStabilityDependencyNames(warm))
-	}
-}
-
-// TestApiStabilityColdLazyFiniteApplicationMatchesWarm proves a finite
-// recursive alias application resolves through the ordinary lazy read on a
-// genuinely cold checker, and the cold session result matches the materialized
-// recomputation in a new session.
 func TestApiStabilityColdLazyFiniteApplicationMatchesWarm(t *testing.T) {
 	t.Parallel()
 
@@ -911,8 +443,6 @@ export declare const x: A<string>
 		t.Fatalf("the materialized surface should expose E, got %v", apiStabilityDependencyNames(warm))
 	}
 
-	// The materialized checker is recomputed by a fresh session; it must agree
-	// with the first cold and warm results.
 	recomputed := NewTypeParser(c.Program(), c).ApiStabilityUsedBySymbol(x)
 	if !containsDependency(recomputed, "E") {
 		t.Fatalf("the materialized recomputation should expose E, got %v", apiStabilityDependencyNames(recomputed))
@@ -922,13 +452,6 @@ export declare const x: A<string>
 	}
 }
 
-// TestApiStabilityExplicitStableDeclaredPresence pins that branch-style
-// `@stability stable` tags are parsed as an explicit value, not as an absent
-// tag. The root symbol and each public signature keep their declaration
-// provenance in the per-checker declared caches, while an untagged overload
-// stays stable with no declaration. The leak rule's ceiling and the forwarding
-// presence check read these caches, so explicit stable roots and explicitly
-// stable signatures stay distinguishable from untagged ones.
 func TestApiStabilityExplicitStableDeclaredPresence(t *testing.T) {
 	t.Parallel()
 
@@ -984,13 +507,6 @@ export function untagged(x: number): number
 	}
 }
 
-// TestApiStabilityComputedPublicMembers pins that a root public surface
-// traverses public computed members of interfaces, classes and anonymous object
-// types: well-known symbols, custom unique symbols and literal computed names
-// all contribute their represented member types, while private and protected
-// computed members stay excluded. It also pins that a checker late-bound name
-// never leaks into a diagnostic: a tagged computed member renders its readable
-// declaration spelling.
 func TestApiStabilityComputedPublicMembers(t *testing.T) {
 	t.Parallel()
 
@@ -1075,12 +591,6 @@ export declare const computedObject: {
 	}
 }
 
-// TestApiStabilityEarlyTableComputedMembersNotCachedComplete pins the
-// complete-result invariant for the early member table: an interface whose
-// computed member has not been late-bound yet must stay incomplete and never be
-// reported as a complete surface, because its early table omits the member.
-// Once the checker materializes the member table a retry settles complete with
-// the computed dependency.
 func TestApiStabilityEarlyTableComputedMembersNotCachedComplete(t *testing.T) {
 	t.Parallel()
 
@@ -1125,10 +635,6 @@ export class ColdClass { plain: number; static [Symbol.iterator](): E }
 	}
 }
 
-// TestApiStabilitySettleSkipRequiresNoAdvancement pins the corrected
-// settlement predicate: a blocked surface is only skipped after the guard
-// budget is exhausted when no analysis read advanced the materialization epoch
-// since it was collected and no earlier settle round advanced any surface.
 func TestApiStabilitySettleSkipRequiresNoAdvancement(t *testing.T) {
 	t.Parallel()
 
@@ -1161,12 +667,6 @@ func TestApiStabilitySettleSkipRequiresNoAdvancement(t *testing.T) {
 	}
 }
 
-// TestApiStabilitySettleRecollectsMaterializedMember pins the
-// P1 within one analysis: a component the guard refused while the budget was
-// exhausted can be materialized by a later ordinary read in the same collection,
-// and settlement must recollect the blocked root instead of assuming it cannot
-// advance. The result still stays blocked so a later analysis retries it,
-// and no new guard read is consumed.
 func TestApiStabilitySettleRecollectsMaterializedMember(t *testing.T) {
 	t.Parallel()
 
@@ -1223,7 +723,6 @@ function fn() { return object.a.value.length }`,
 		t.Fatal("callback did not run")
 	}
 
-	// A later analysis on the materialized checker retries and settles complete.
 	fresh := newApiStabilityAnalysis(tp)
 	fresh.symbolSurface(sym)
 	fresh.settle()
@@ -1236,11 +735,6 @@ function fn() { return object.a.value.length }`,
 	}
 }
 
-// TestApiStabilityNaturalBudgetMaterializationRetry reproduces the natural-budget
-// probe: the shared guard budget is exhausted by an
-// ordinary member while a later inferred return materializes a previously
-// refused experimental member. Settlement must collect the finding, keep the
-// side effects bounded and leave the surface blocked for a later retry.
 func TestApiStabilityNaturalBudgetMaterializationRetry(t *testing.T) {
 	t.Parallel()
 
@@ -1293,21 +787,6 @@ function fn() { return object.a.value.length }`,
 	}
 }
 
-// TestApiStabilityRecoveryPropagatesFindingsToEarlierResults pins the
-// recovery settlement defect: a recovery round can discover a
-// finding in a component after the fixpoint has converged, but the blocked
-// parent that was collected before that discovery must be revisited within the
-// same bounded recovery loop. Advancing the materialization epoch after a
-// changed recovery round makes exactly those earlier results stale, so the root
-// reflects the finding its own component discovered even though the analysis
-// stays exhausted and the root remains blocked and never settled as stable.
-//
-// Without the advancement the component holds `E` after the recovery sweep
-// while the root still reports nothing: the export's returned Used set (what
-// the rule reports) misses the dependency, and the caller sees a stable
-// surface that a later analysis would have reported. The test consumes no
-// additional guard work: recovery recollects represented components through
-// ordinary reads, it never authorizes a new guarded read.
 func TestApiStabilityRecoveryPropagatesFindingsToEarlierResults(t *testing.T) {
 	t.Parallel()
 
@@ -1351,10 +830,6 @@ function fn() { return root.a.value.length }`,
 		ran = true
 		analysis := newApiStabilityAnalysis(tp)
 		analysis.safetyWork = apiStabilitySafetyMaxWork + 1
-		// A cycle-cut signature contributes no findings until it is recollected,
-		// which is what makes the recovery sweep the only round that can find it.
-		// The result is stored directly, exactly like an independent seeded
-		// analysis; settlement must reconcile it into its visit order.
 		analysis.sessionSignatures[apiStabilitySignatureKey{signature: signature}] = cycleCutSurface()
 		analysis.symbolSurface(sym)
 		if checker.GetResolvedTypeOfSymbolIfMaterialized(c, value) != nil {
@@ -1387,15 +862,6 @@ function fn() { return root.a.value.length }`,
 	}
 }
 
-// TestApiStabilityDeclaredPersistsAndCompleteSurfacesReuse pins the
-// current cache policy (updated from the original local-only policy,
-// which the latest shared-surface design supersedes): declared symbol/signature
-// stability persists per checker and is shared across analyses and TypeParser
-// instances; a complete, settled, context-free concrete type or signature
-// surface is published to the per-checker shared caches and reused by later
-// exports, files and parsers; symbol results and every incomplete or
-// substitution-context result stay local to the session that computed them.
-// Declared lookups never trigger a computed analysis.
 func TestApiStabilityDeclaredPersistsAndCompleteSurfacesReuse(t *testing.T) {
 	t.Parallel()
 
@@ -1412,21 +878,12 @@ export interface AlsoLeaky { other: E }
 	leaky := apiStabilityTestExport(t, c, files["/.src/dep.ts"], "Leaky")
 	alsoLeaky := apiStabilityTestExport(t, c, files["/.src/dep.ts"], "AlsoLeaky")
 
-	// A fresh session starts with no local computed state: symbol results and
-	// unpublishable results are never carried by an earlier session.
 	session := tp.NewApiStabilitySession()
-	if len(session.analysis.sessionSymbols) != 0 || len(session.analysis.sessionTypes) != 0 ||
-		len(session.analysis.sessionSignatures) != 0 || len(session.analysis.sessionComponents) != 0 {
-		t.Fatal("a fresh session must start with no local computed state")
-	}
-
 	used := session.UsedBySymbol(leaky)
 	if used.incomplete || !containsDependency(used, "E") {
 		t.Fatalf("Leaky should be a complete surface exposing E, got %v (incomplete=%v)", apiStabilityDependencyNames(used), used.incomplete)
 	}
 
-	// Repeating the same component inside the export reuses the session memo:
-	// the second query consumes no analysis work and returns the same surface.
 	work := session.analysis.work
 	repeat := session.UsedBySymbol(leaky)
 	if repeat.incomplete || !containsDependency(repeat, "E") {
@@ -1436,17 +893,11 @@ export interface AlsoLeaky { other: E }
 		t.Fatal("repeated session query recomputed a completed surface")
 	}
 
-	// The complete concrete type surface was published: a new export still
-	// starts with an empty symbol memo, yet composes the same result and a
-	// direct type query consumes no analysis work at all.
 	declared := c.GetDeclaredTypeOfSymbol(leaky)
 	if apiStabilitySharedTypeEntry(tp, declared, apiStabilityExpand) == nil {
 		t.Fatal("the complete Leaky type surface should be published for reuse")
 	}
 	next := tp.NewApiStabilitySession()
-	if len(next.analysis.sessionSymbols) != 0 {
-		t.Fatal("a new export must not observe an earlier export's symbol memo")
-	}
 	nextUsed := next.UsedBySymbol(alsoLeaky)
 	if nextUsed.incomplete || !containsDependency(nextUsed, "E") {
 		t.Fatalf("AlsoLeaky should be a complete surface exposing E, got %v (incomplete=%v)", apiStabilityDependencyNames(nextUsed), nextUsed.incomplete)
@@ -1457,8 +908,6 @@ export interface AlsoLeaky { other: E }
 		t.Fatalf("the published type snapshot consumed %d work", direct.work)
 	}
 
-	// Declared stability persists per checker and is shared across parsers;
-	// the declared read never triggers a computed analysis or a publication.
 	tp2 := NewTypeParser(c.Program(), c)
 	if !tp2.links.ApiStabilityDeclaredSymbol.Has(leaky) {
 		t.Fatal("declared symbol should be cached per checker")
@@ -1476,7 +925,6 @@ export interface AlsoLeaky { other: E }
 		t.Fatalf("declared read instantiated %d types, want 0", delta)
 	}
 
-	// Reused snapshots still produce the same surface content.
 	fresh := NewTypeParser(c.Program(), c).NewApiStabilitySession()
 	again := fresh.UsedBySymbol(leaky)
 	if again.incomplete || len(again.dependencies) != len(used.dependencies) {
@@ -1484,38 +932,206 @@ export interface AlsoLeaky { other: E }
 	}
 }
 
-// TestApiStabilityIncompleteIsNotStable pins that a surface the checker
-// has not materialized reports Incomplete from the public result, publishes
-// nothing, and that a later session over the materialized checker recomputes a
-// complete result: an incomplete result is never carried over as a finished
-// surface.
-func TestApiStabilityIncompleteIsNotStable(t *testing.T) {
+func TestApiStabilityInstantiationsDoNotContaminate(t *testing.T) {
 	t.Parallel()
 
-	c, tp, files, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
-		"/.src/test.ts": `/** @stability experimental */
+	type export struct {
+		declaration string
+		name        string
+		leaks       bool
+	}
+	tests := []struct {
+		name    string
+		prelude string
+		exports []export
+	}{
+		{
+			"generic arguments",
+			"interface Box<T> { value: T }",
+			[]export{{"export type Leaky = Box<E>", "Leaky", true}, {"export type Clean = Box<string>", "Clean", false}},
+		},
+		{
+			"signature substitution",
+			"declare function make<T>(): (x: T) => T",
+			[]export{{"export const leaky = make<E>()", "leaky", true}, {"export const clean = make<string>()", "clean", false}},
+		},
+		{
+			"nested signature substitution",
+			"declare function make<T>(): { nested: { fn: (x: T) => T } }",
+			[]export{{"export const leaky = make<E>()", "leaky", true}, {"export const clean = make<string>()", "clean", false}},
+		},
+		{
+			"shared raw member target",
+			"type Deep<T> = T extends string ? Deep<T> : T\ninterface DeepHolder<T> { value: Deep<T> }",
+			[]export{{"export declare const leaky: DeepHolder<E>", "leaky", true}, {"export declare const clean: DeepHolder<string>", "clean", false}},
+		},
+		{
+			"heritage materializations",
+			"interface Base<T> { value: T }",
+			[]export{{"export interface Leaky extends Base<E> {}", "Leaky", true}, {"export interface Clean extends Base<string> {}", "Clean", false}},
+		},
+		{
+			"mutual cycle roots",
+			"type B = { c: C; payload: E }\ntype C = { b: B }",
+			[]export{{"export type A = { b: B }", "A", true}, {"export type Z = { c: C }", "Z", true}},
+		},
+	}
+	for _, test := range tests {
+		for _, declarationsReversed := range []bool{false, true} {
+			for _, queriesReversed := range []bool{false, true} {
+				t.Run(fmt.Sprintf("%s/declarationsReversed=%t/queriesReversed=%t", test.name, declarationsReversed, queriesReversed), func(t *testing.T) {
+					t.Parallel()
+					declarations := []string{test.exports[0].declaration, test.exports[1].declaration}
+					if declarationsReversed {
+						slices.Reverse(declarations)
+					}
+					c, tp, files, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
+						"/.src/test.ts": "/** @stability experimental */\ninterface E { value: string }\n" + test.prelude + "\n" + strings.Join(declarations, "\n") + "\n",
+					})
+					defer done()
+					primeApiStabilityChecker(t, c)
+
+					exports := slices.Clone(test.exports)
+					if queriesReversed {
+						slices.Reverse(exports)
+					}
+					for _, export := range exports {
+						used := tp.ApiStabilityUsedBySymbol(apiStabilityTestExport(t, c, files["/.src/test.ts"], export.name))
+						if containsDependency(used, "E") != export.leaks {
+							t.Fatalf("%s exposes E = %t, want %t: %v", export.name, !export.leaks, export.leaks, apiStabilityDependencyNames(used))
+						}
+					}
+				})
+			}
+		}
+	}
+}
+
+func TestApiStabilityDeclaredReadsDoNotCompute(t *testing.T) {
+	t.Parallel()
+
+	for _, prime := range []bool{false, true} {
+		t.Run(fmt.Sprintf("prime=%t", prime), func(t *testing.T) {
+			t.Parallel()
+			c, tp, files, done := compileAndGetCheckerAndSourceFilesInternal(t, map[string]string{
+				"/.src/test.ts": `/** @stability experimental */
 interface E { value: string }
-export interface WellKnownOnly { plain: number; [Symbol.iterator](): E }
+export interface Leaky { value: E }
+/** @stability unstable */
+export interface Tagged { leak: string }
+/** @stability unstable */
+export declare function taggedFn(): string
 `,
-	})
-	defer done()
+			})
+			defer done()
+			if prime {
+				primeApiStabilityChecker(t, c)
+			}
 
-	symbol := apiStabilityTestExport(t, c, files["/.src/test.ts"], "WellKnownOnly")
-	declared := c.GetDeclaredTypeOfSymbol(symbol)
-	cold := tp.ApiStabilityUsedBySymbol(symbol)
-	if !cold.incomplete {
-		t.Fatal("an unmaterialized computed member must report an incomplete result")
+			testFile := files["/.src/test.ts"]
+			leaky := apiStabilityTestExport(t, c, testFile, "Leaky")
+			tagged := apiStabilityTestExport(t, c, testFile, "Tagged")
+			taggedFn := apiStabilityTestExport(t, c, testFile, "taggedFn")
+			signature := apiStabilityTestSignatures(t, c, taggedFn)[0]
+
+			before := c.TotalInstantiationCount
+			levels := []ApiStabilityLevel{
+				tp.DeclaredApiStability(leaky),
+				tp.DeclaredApiStabilityOfSymbol(tagged).level,
+				tp.DeclaredApiStabilityOfSymbol(taggedFn).level,
+				tp.DeclaredApiStabilityOfSignature(signature).level,
+			}
+			if delta := c.TotalInstantiationCount - before; delta != 0 {
+				t.Fatalf("declared reads instantiated %d types, want 0", delta)
+			}
+			if want := []ApiStabilityLevel{ApiStabilityStable, ApiStabilityUnstable, ApiStabilityUnstable, ApiStabilityUnstable}; !slices.Equal(levels, want) {
+				t.Fatalf("declared levels = %v, want %v", levels, want)
+			}
+			for _, symbol := range []*ast.Symbol{leaky, tagged, taggedFn} {
+				if !tp.links.ApiStabilityDeclaredSymbol.Has(symbol) {
+					t.Fatalf("declared lookup of %s should be cached", ast.TSGetSymbolName(symbol))
+				}
+			}
+			if !tp.links.ApiStabilityDeclaredSignature.Has(rawSignature(signature)) {
+				t.Fatal("declared signature lookup should be cached")
+			}
+			for _, symbol := range []*ast.Symbol{leaky, tagged} {
+				if apiStabilitySharedTypeEntry(tp, c.GetDeclaredTypeOfSymbol(symbol), apiStabilityExpand) != nil {
+					t.Fatalf("a declared read published the %s type surface", ast.TSGetSymbolName(symbol))
+				}
+			}
+			if apiStabilitySharedSignatureEntry(tp, signature) != nil {
+				t.Fatal("a declared read published a signature surface")
+			}
+
+			if prime {
+				used := tp.NewApiStabilitySession().UsedBySymbol(taggedFn)
+				if used.incomplete || used.minimum != ApiStabilityStable || len(used.dependencies) != 0 {
+					t.Fatalf("taggedFn surface should be empty, got min=%v deps=%v", used.minimum, apiStabilityDependencyNames(used))
+				}
+			}
+		})
 	}
-	if apiStabilitySharedTypeEntry(tp, declared, apiStabilityExpand) != nil {
-		t.Fatal("an incomplete result must never be published")
+}
+
+func TestApiStabilityCachesAreCheckerLocal(t *testing.T) {
+	t.Parallel()
+
+	source := `/** @stability experimental */
+export interface E { value: string }
+export interface Leaky { value: E }
+export const f = (x: E): E => x
+/** @stability unstable */
+export interface Shared { leak: E }
+export interface Holder { child: Shared }
+`
+	c1, tp1, sf1, done1 := compileAndGetCheckerAndSourceFileInternal(t, source)
+	defer done1()
+	c2, tp2, sf2, done2 := compileAndGetCheckerAndSourceFileInternal(t, source)
+	defer done2()
+	primeApiStabilityChecker(t, c1)
+	primeApiStabilityChecker(t, c2)
+
+	if tp1.links == tp2.links {
+		t.Fatal("different checkers must not share EffectLinks")
+	}
+	leaky1 := apiStabilityTestExport(t, c1, sf1, "Leaky")
+	leaky2 := apiStabilityTestExport(t, c2, sf2, "Leaky")
+	shared1 := c1.GetDeclaredTypeOfSymbol(apiStabilityTestExport(t, c1, sf1, "Shared"))
+	shared2 := c2.GetDeclaredTypeOfSymbol(apiStabilityTestExport(t, c2, sf2, "Shared"))
+	if leaky1 == leaky2 || shared1 == shared2 {
+		t.Fatal("checkers should produce distinct identities")
 	}
 
-	primeApiStabilityChecker(t, c)
-	warm := NewTypeParser(c.Program(), c).ApiStabilityUsedBySymbol(symbol)
-	if warm.incomplete || !containsDependency(warm, "E") {
-		t.Fatalf("the materialized retry should settle complete with E, got %v (incomplete=%v)", apiStabilityDependencyNames(warm), warm.incomplete)
+	query := func(t *testing.T, c *checker.Checker, tp *TypeParser, sf *ast.SourceFile) {
+		t.Helper()
+		if !containsDependency(tp.ApiStabilityUsedBySymbol(apiStabilityTestExport(t, c, sf, "Leaky")), "E") {
+			t.Fatal("Leaky should expose E")
+		}
+		if !containsDependency(tp.ApiStabilityUsedBySignature(apiStabilityTestSignatures(t, c, apiStabilityTestExport(t, c, sf, "f"))[0]), "E") {
+			t.Fatal("f's signature should expose E")
+		}
+		if !containsDependency(tp.NewApiStabilitySession().UsedBySymbol(apiStabilityTestExport(t, c, sf, "Holder")), "Shared") {
+			t.Fatal("Holder should expose Shared")
+		}
 	}
-	if apiStabilitySharedTypeEntry(tp, declared, apiStabilityExpand) == nil {
-		t.Fatal("the materialized retry should publish its complete surface")
+
+	query(t, c1, tp1, sf1)
+	if !tp1.links.ApiStabilityDeclaredSymbol.Has(leaky1) {
+		t.Fatal("the first checker should cache its declared lookup")
+	}
+	if apiStabilitySharedTypeEntry(tp1, shared1, apiStabilityShallow) == nil {
+		t.Fatal("the first checker should publish its shallow snapshot")
+	}
+	if tp2.links.ApiStabilityDeclaredSymbol.Has(leaky1) || apiStabilitySharedTypeEntry(tp2, shared1, apiStabilityShallow) != nil {
+		t.Fatal("the second checker observed the first checker's caches")
+	}
+	if tp2.links.ApiStabilityDeclaredSymbol.Has(leaky2) || apiStabilitySharedTypeEntry(tp2, shared2, apiStabilityShallow) != nil {
+		t.Fatal("the second checker cached results before its own queries")
+	}
+
+	query(t, c2, tp2, sf2)
+	if tp1.links.ApiStabilityDeclaredSymbol.Has(leaky2) || apiStabilitySharedTypeEntry(tp1, shared2, apiStabilityShallow) != nil {
+		t.Fatal("the first checker observed the second checker's caches")
 	}
 }

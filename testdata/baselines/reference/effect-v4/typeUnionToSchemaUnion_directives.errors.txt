@@ -1,0 +1,21 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/typeUnionToSchemaUnion_directives.ts(11,13): error TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+
+
+==== /.src/typeUnionToSchemaUnion_directives.ts (1 errors) ====
+    // @effect-diagnostics typeUnionToSchemaUnion:error
+    import { Schema } from "effect"
+    
+    export const A = Schema.String
+    export const B = Schema.Boolean
+    
+    // @effect-diagnostics-next-line typeUnionToSchemaUnion:off
+    export type AB = typeof A.Type | typeof B.Type
+    
+    // MUST TRIGGER as an error - enabled by the file-level directive
+    export type BA = typeof B.Type | typeof A.Type
+                ~~
+!!! error TS377159: This type alias unions Schema `.Type` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)
+    

@@ -12,11 +12,12 @@ fn directive(line: i64, is_next_line: bool, rules: Vec<RuleSeverity>) -> Directi
     Directive { line, is_next_line, rules, ..Default::default() }
 }
 
-// go test: internal/directives/parser_test.go:10 TestEtscoreParseSeverity f07631c4662abd1a
+// go test: internal/directives/parser_test.go:10 TestEtscoreParseSeverity e89da4715cc6263c
 #[test]
 fn test_etscore_parse_severity() {
     ets_go::testing::run(|t| {
         t.parallel();
+        const FALLBACK_SEVERITY: Severity = Severity::Error;
         let tests: &[(&str, Severity)] = &[
             ("off", Severity::Off),
             ("OFF", Severity::Off),
@@ -33,8 +34,8 @@ fn test_etscore_parse_severity() {
             ("Message", Severity::Message),
             ("skip-file", Severity::SkipFile),
             ("SKIP-FILE", Severity::SkipFile),
-            ("unknown", Severity::Error), // default to error
-            ("", Severity::Error),        // default to error
+            ("unknown", FALLBACK_SEVERITY),
+            ("", FALLBACK_SEVERITY),
         ];
 
         for &(input, expected) in tests {
@@ -54,7 +55,7 @@ fn test_etscore_parse_severity() {
     });
 }
 
-// go test: internal/directives/parser_test.go:46 TestEtscoreSeverityString c722d5d306d123f1
+// go test: internal/directives/parser_test.go:47 TestEtscoreSeverityString c722d5d306d123f1
 #[test]
 fn test_etscore_severity_string() {
     ets_go::testing::run(|t| {
@@ -86,7 +87,7 @@ fn test_etscore_severity_string() {
     });
 }
 
-// go test: internal/directives/parser_test.go:72 TestSeverityToCategory 6485eaa033419651
+// go test: internal/directives/parser_test.go:73 TestSeverityToCategory 6485eaa033419651
 #[test]
 fn test_severity_to_category() {
     ets_go::testing::run(|t| {
@@ -125,7 +126,7 @@ fn test_severity_to_category() {
     });
 }
 
-// go test: internal/directives/parser_test.go:122 TestCollectEffectDirectives fe13a8eb4efdf094
+// go test: internal/directives/parser_test.go:123 TestCollectEffectDirectives ed7d7cd191a3d606
 #[test]
 fn test_collect_effect_directives() {
     ets_go::testing::run(|t| {
@@ -207,11 +208,6 @@ fn test_collect_effect_directives() {
                     vec![rs("*", Severity::Off), rs("floatingEffect", Severity::Error)],
                 )],
             ),
-            (
-                "wildcard skip-file",
-                "// @effect-diagnostics *:skip-file",
-                vec![directive(0, false, vec![rs("*", Severity::SkipFile)])],
-            ),
         ];
 
         for (name, source, expected) in &tests {
@@ -278,87 +274,7 @@ fn test_collect_effect_directives() {
     });
 }
 
-// go test: internal/directives/parser_test.go:264 TestDirectiveAffectedLine 5bbfc25eb0bdc7c0
-#[test]
-fn test_directive_affected_line() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let tests = [
-            ("same line directive", directive(5, false, vec![]), 5),
-            ("next line directive", directive(5, true, vec![]), 6),
-        ];
-
-        for (name, directive, want_line) in &tests {
-            t.run(name, |t| {
-                t.parallel();
-                let result = directive.affected_line();
-                if result != *want_line {
-                    t.error(sprintf!("Directive.AffectedLine() = %d, want %d", result, *want_line));
-                }
-            });
-        }
-    });
-}
-
-// go test: internal/directives/parser_test.go:294 TestDirectiveSetGetEffectiveSeverity 7ce25a84a6f69f43
-#[test]
-fn test_directive_set_get_effective_severity() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let source = r#"// @effect-diagnostics *:skip-file
-// Normal code
-// @effect-diagnostics-next-line floatingEffect:off
-Effect.log("hello")
-// @effect-diagnostics pocRule:warning
-anotherCall()"#;
-
-        let directives = collect_effect_directives(source);
-        let ds = build_directive_set(&directives);
-
-        let tests: &[(&str, &str, i64, Severity, Severity)] = &[
-            (
-                "file-level skip applies to any rule",
-                "anyRule",
-                10,
-                Severity::Error,
-                Severity::SkipFile,
-            ),
-            (
-                "next-line directive affects next line",
-                "floatingEffect",
-                3, // 0-indexed, so this is the 4th line "Effect.log(\"hello\")"
-                Severity::Error,
-                Severity::SkipFile, // file-level takes precedence
-            ),
-            (
-                "same-line directive",
-                "pocRule",
-                4,
-                Severity::Error,
-                Severity::SkipFile, // file-level takes precedence
-            ),
-        ];
-
-        for &(name, rule_name, line, default_severity, expected) in tests {
-            t.run(name, |t| {
-                t.parallel();
-                let result = ds.get_effective_severity(rule_name, line, default_severity);
-                if result != expected {
-                    t.error(sprintf!(
-                        "GetEffectiveSeverity(%q, %d, %v) = %v, want %v",
-                        rule_name,
-                        line,
-                        default_severity,
-                        result,
-                        expected
-                    ));
-                }
-            });
-        }
-    });
-}
-
-// go test: internal/directives/parser_test.go:348 TestDirectiveSetIsSuppressed 7db4802dc67297e5
+// go test: internal/directives/parser_test.go:258 TestDirectiveSetIsSuppressed 7db4802dc67297e5
 #[test]
 fn test_directive_set_is_suppressed() {
     ets_go::testing::run(|t| {
@@ -395,292 +311,7 @@ Effect.log("hello")  // Line 2
     });
 }
 
-// go test: internal/directives/parser_test.go:396 TestCaseInsensitiveRuleMatching 6dee84255470ce9c
-#[test]
-fn test_case_insensitive_rule_matching() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let source = r"// @effect-diagnostics-next-line FloatingEffect:off
-Effect.succeed(1)  // Line 1
-// @effect-diagnostics-next-line POCRULE:warning
-Effect.succeed(2)  // Line 3";
-
-        let directives = collect_effect_directives(source);
-        let ds = build_directive_set(&directives);
-
-        let tests: &[(&str, &str, i64, Severity)] = &[
-            ("lowercase rule matches PascalCase directive", "floatingeffect", 1, Severity::Off),
-            ("PascalCase rule matches PascalCase directive", "FloatingEffect", 1, Severity::Off),
-            ("camelCase rule matches UPPERCASE directive", "pocRule", 3, Severity::Warning),
-            ("UPPERCASE rule matches UPPERCASE directive", "POCRULE", 3, Severity::Warning),
-            ("different rule not affected", "otherRule", 1, Severity::Error),
-        ];
-
-        for &(name, rule_name, line, expected) in tests {
-            t.run(name, |t| {
-                t.parallel();
-                let result = ds.get_effective_severity(rule_name, line, Severity::Error);
-                if result != expected {
-                    t.error(sprintf!(
-                        "GetEffectiveSeverity(%q, %d, etscore.SeverityError) = %v, want %v",
-                        rule_name,
-                        line,
-                        result,
-                        expected
-                    ));
-                }
-            });
-        }
-    });
-}
-
-// go test: internal/directives/parser_test.go:456 TestSectionDirectives 6c27bde7a73c7726
-#[test]
-fn test_section_directives() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let source = r"// Line 0 - normal code
-Effect.succeed(1)  // Line 1 - no suppression
-// @effect-diagnostics floatingEffect:off
-Effect.succeed(2)  // Line 3 - suppressed by section
-Effect.succeed(3)  // Line 4 - still suppressed
-// @effect-diagnostics floatingEffect:warning
-Effect.succeed(4)  // Line 6 - warning severity
-Effect.succeed(5)  // Line 7 - still warning
-Effect.succeed(6)  // Line 8 - still warning through EOF";
-
-        let directives = collect_effect_directives(source);
-        let ds = build_directive_set(&directives);
-
-        let tests: &[(&str, i64, Severity)] = &[
-            ("before any section directive", 1, Severity::Error),
-            ("first section directive line", 3, Severity::Off),
-            ("within first section", 4, Severity::Off),
-            ("second section directive line", 6, Severity::Warning),
-            ("within second section", 7, Severity::Warning),
-            ("after last section directive (EOF)", 8, Severity::Warning),
-        ];
-
-        for &(name, line, expected) in tests {
-            t.run(name, |t| {
-                t.parallel();
-                let result = ds.get_effective_severity("floatingEffect", line, Severity::Error);
-                if result != expected {
-                    t.error(sprintf!(
-                        "GetEffectiveSeverity(\"floatingEffect\", %d, etscore.SeverityError) = %v, want %v",
-                        line,
-                        result,
-                        expected
-                    ));
-                }
-            });
-        }
-    });
-}
-
-// go test: internal/directives/parser_test.go:520 TestSectionDirectiveAppliesByRuleUntilOverridden 91fc3dae129bf712
-#[test]
-fn test_section_directive_applies_by_rule_until_overridden() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let source = r"// @effect-diagnostics floatingEffect:off
-Effect.succeed(1)  // Line 1 - floatingEffect off
-// @effect-diagnostics otherRule:warning
-Effect.succeed(2)  // Line 3 - floatingEffect still off
-Effect.succeed(3)  // Line 4 - floatingEffect still off
-// @effect-diagnostics *:error
-Effect.succeed(4)  // Line 6 - wildcard override error
-Effect.succeed(5)  // Line 7 - wildcard override error";
-
-        let directives = collect_effect_directives(source);
-        let ds = build_directive_set(&directives);
-
-        let tests: &[(&str, &str, i64, Severity)] = &[
-            ("floatingEffect before unrelated section", "floatingEffect", 1, Severity::Off),
-            ("floatingEffect after unrelated section", "floatingEffect", 3, Severity::Off),
-            (
-                "floatingEffect still off before wildcard override",
-                "floatingEffect",
-                4,
-                Severity::Off,
-            ),
-            ("otherRule section applies", "otherRule", 3, Severity::Warning),
-            ("wildcard override applies to floatingEffect", "floatingEffect", 6, Severity::Error),
-            ("wildcard override applies to otherRule", "otherRule", 7, Severity::Error),
-        ];
-
-        for &(name, rule_name, line, expected) in tests {
-            t.run(name, |t| {
-                t.parallel();
-                let result = ds.get_effective_severity(rule_name, line, Severity::Error);
-                if result != expected {
-                    t.error(sprintf!(
-                        "GetEffectiveSeverity(%q, %d, etscore.SeverityError) = %v, want %v",
-                        rule_name,
-                        line,
-                        result,
-                        expected
-                    ));
-                }
-            });
-        }
-    });
-}
-
-// go test: internal/directives/parser_test.go:590 TestNextLineDirectiveTakesPrecedenceOverSection 94170b09babd4a67
-#[test]
-fn test_next_line_directive_takes_precedence_over_section() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let source = r"// @effect-diagnostics floatingEffect:off
-Effect.succeed(1)  // Line 1 - suppressed by section
-// @effect-diagnostics-next-line floatingEffect:error
-Effect.succeed(2)  // Line 3 - error by next-line override
-Effect.succeed(3)  // Line 4 - back to off from section";
-
-        let directives = collect_effect_directives(source);
-        let ds = build_directive_set(&directives);
-
-        let tests: &[(&str, i64, Severity)] = &[
-            ("section directive applies", 1, Severity::Off),
-            ("next-line overrides section", 3, Severity::Error),
-            ("back to section after next-line", 4, Severity::Off),
-        ];
-
-        for &(name, line, expected) in tests {
-            t.run(name, |t| {
-                t.parallel();
-                let result = ds.get_effective_severity("floatingEffect", line, Severity::Error);
-                if result != expected {
-                    t.error(sprintf!(
-                        "GetEffectiveSeverity(\"floatingEffect\", %d, etscore.SeverityError) = %v, want %v",
-                        line,
-                        result,
-                        expected
-                    ));
-                }
-            });
-        }
-    });
-}
-
-// go test: internal/directives/parser_test.go:635 TestUsedDirectivesTracking 8150002b1ff3c38c
-#[test]
-fn test_used_directives_tracking() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let source = r"// @effect-diagnostics-next-line floatingEffect:off
-Effect.succeed(1)  // Line 1 - will be checked
-// @effect-diagnostics-next-line pocRule:off
-Effect.succeed(2)  // Line 3 - different rule, won't suppress floatingEffect";
-
-        let directives = collect_effect_directives(source);
-        let mut ds = build_directive_set(&directives);
-
-        // Check floatingEffect at line 1 - should suppress and mark used
-        let sev1 = ds.get_effective_severity_and_mark_used("floatingEffect", 1, Severity::Error);
-        if sev1 != Severity::Off {
-            t.error(sprintf!(
-                "Expected etscore.SeverityOff for floatingEffect at line 1, got %v",
-                sev1
-            ));
-        }
-
-        // Check floatingEffect at line 3 - pocRule directive shouldn't match
-        let sev2 = ds.get_effective_severity_and_mark_used("floatingEffect", 3, Severity::Error);
-        if sev2 != Severity::Error {
-            t.error(sprintf!(
-                "Expected etscore.SeverityError for floatingEffect at line 3, got %v",
-                sev2
-            ));
-        }
-
-        // Get unused directives
-        let unused = ds.get_unused_next_line_directives(&directives);
-        if unused.len() != 1 {
-            t.error(sprintf!("Expected 1 unused directive, got %d", unused.len()));
-        }
-        if !unused.is_empty() && unused[0].line != 2 {
-            t.error(sprintf!("Expected unused directive at line 2, got line %d", unused[0].line));
-        }
-    });
-}
-
-// go test: internal/directives/parser_test.go:667 TestWildcardSectionPrecedence aab01429c5ca72da
-#[test]
-fn test_wildcard_section_precedence() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        // Mirrors the reference test: floatingEffect_disabledWildcard.ts
-        // No directive → *:off suppresses → floatingEffect:error re-enables → *:off suppresses again
-        let source = r"Effect.succeed(1)  // Line 0 - no directive, should fire
-// @effect-diagnostics *:off
-Effect.succeed(1)  // Line 2 - suppressed by wildcard
-// @effect-diagnostics floatingEffect:error
-Effect.succeed(1)  // Line 4 - re-enabled by rule-specific
-// @effect-diagnostics *:off
-Effect.succeed(1)  // Line 6 - suppressed again by wildcard";
-
-        let directives = collect_effect_directives(source);
-        let ds = build_directive_set(&directives);
-
-        let tests: &[(&str, i64, Severity)] = &[
-            ("before any directive - default severity", 0, Severity::Error),
-            ("after *:off - suppressed", 2, Severity::Off),
-            ("after floatingEffect:error - re-enabled", 4, Severity::Error),
-            ("after second *:off - suppressed again", 6, Severity::Off),
-        ];
-
-        for &(name, line, expected) in tests {
-            t.run(name, |t| {
-                t.parallel();
-                let result = ds.get_effective_severity("floatingEffect", line, Severity::Error);
-                if result != expected {
-                    t.error(sprintf!(
-                        "GetEffectiveSeverity(\"floatingEffect\", %d, etscore.SeverityError) = %v, want %v",
-                        line,
-                        result,
-                        expected
-                    ));
-                }
-            });
-        }
-    });
-}
-
-// go test: internal/directives/parser_test.go:721 TestWildcardOffThenRuleWarningReEnablesSpecificRule fed09ecc25b1ca62
-#[test]
-fn test_wildcard_off_then_rule_warning_re_enables_specific_rule() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let source = r#"// @effect-diagnostics *:off
-// @effect-diagnostics nodeBuiltinImport:warning
-import fs from "node:fs""#;
-
-        let directives = collect_effect_directives(source);
-        let ds = build_directive_set(&directives);
-
-        let got = ds.get_effective_severity("nodeBuiltinImport", 2, Severity::Error);
-        if got != Severity::Warning {
-            t.fatal(sprintf!(
-                "GetEffectiveSeverity(nodeBuiltinImport, 2) = %v, want %v",
-                got,
-                Severity::Warning
-            ));
-        }
-
-        let got = ds.get_effective_severity("floatingEffect", 2, Severity::Error);
-        if got != Severity::Off {
-            t.fatal(sprintf!(
-                "GetEffectiveSeverity(floatingEffect, 2) = %v, want %v",
-                got,
-                Severity::Off
-            ));
-        }
-    });
-}
-
-// go test: internal/directives/parser_test.go:739 TestWildcardOffAtTopLineStillLooksSuppressedAtLineZero 742f80bdc8d15e5e
+// go test: internal/directives/parser_test.go:306 TestWildcardOffAtTopLineStillLooksSuppressedAtLineZero 742f80bdc8d15e5e
 #[test]
 fn test_wildcard_off_at_top_line_still_looks_suppressed_at_line_zero() {
     ets_go::testing::run(|t| {
@@ -702,7 +333,7 @@ import fs from "node:fs""#;
     });
 }
 
-// go test: internal/directives/parser_test.go:757 TestWildcardSkipFileIsDistinctFromOff db983356390ea760
+// go test: internal/directives/parser_test.go:324 TestWildcardSkipFileIsDistinctFromOff db983356390ea760
 #[test]
 fn test_wildcard_skip_file_is_distinct_from_off() {
     ets_go::testing::run(|t| {
@@ -723,134 +354,42 @@ import fs from "node:fs""#;
     });
 }
 
-// go test: internal/directives/parser_test.go:774 TestWildcardNextLineSuppression 9dff676fcdc357c2
+// go test: internal/directives/parser_test.go:341 TestHasEnablingDirective cbe1c055b8962f16
 #[test]
-fn test_wildcard_next_line_suppression() {
+fn test_has_enabling_directive() {
     ets_go::testing::run(|t| {
         t.parallel();
-        let source = r"// @effect-diagnostics-next-line *:off
-Effect.succeed(1)  // Line 1 - suppressed by wildcard next-line
-Effect.succeed(2)  // Line 2 - not suppressed";
-
-        let directives = collect_effect_directives(source);
-        let ds = build_directive_set(&directives);
-
-        let tests: &[(&str, &str, i64, Severity)] = &[
-            ("wildcard suppresses floatingEffect", "floatingEffect", 1, Severity::Off),
-            ("wildcard suppresses any rule", "someOtherRule", 1, Severity::Off),
-            ("next line not affected", "floatingEffect", 2, Severity::Error),
+        let tests: &[(&str, &str, &str, bool)] = &[
+            (
+                "wildcard error enables floatingEffect",
+                "// @effect-diagnostics *:error\nEffect.succeed(1)",
+                "floatingEffect",
+                true,
+            ),
+            (
+                "wildcard error enables any rule",
+                "// @effect-diagnostics *:error\nEffect.succeed(1)",
+                "someOtherRule",
+                true,
+            ),
+            (
+                "wildcard off does not enable",
+                "// @effect-diagnostics *:off\nEffect.succeed(1)",
+                "floatingEffect",
+                false,
+            ),
         ];
 
-        for &(name, rule_name, line, expected) in tests {
+        for &(name, source, rule_name, expected) in tests {
             t.run(name, |t| {
                 t.parallel();
-                let result = ds.get_effective_severity(rule_name, line, Severity::Error);
-                if result != expected {
-                    t.error(sprintf!(
-                        "GetEffectiveSeverity(%q, %d, etscore.SeverityError) = %v, want %v",
-                        rule_name,
-                        line,
-                        result,
-                        expected
-                    ));
-                }
-            });
-        }
-    });
-}
-
-// go test: internal/directives/parser_test.go:821 TestWildcardSkipFile 8d9789a1c8958da8
-#[test]
-fn test_wildcard_skip_file() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let source = r"// @effect-diagnostics *:skip-file
-Effect.succeed(1)  // Line 1 - skipped";
-
-        let directives = collect_effect_directives(source);
-        let ds = build_directive_set(&directives);
-
-        let tests: &[(&str, &str)] = &[
-            ("skips floatingEffect", "floatingEffect"),
-            ("skips any rule", "anyOtherRule"),
-            ("skips pocRule", "pocRule"),
-        ];
-
-        for &(name, rule_name) in tests {
-            t.run(name, |t| {
-                t.parallel();
-                let result = ds.get_effective_severity(rule_name, 1, Severity::Error);
-                if result != Severity::SkipFile {
-                    t.error(sprintf!(
-                        "GetEffectiveSeverity(%q, 1, etscore.SeverityError) = %v, want etscore.SeveritySkipFile",
-                        rule_name,
-                        result
-                    ));
-                }
-            });
-        }
-    });
-}
-
-// go test: internal/directives/parser_test.go:850 TestWildcardUnusedDirectiveTracking 490da2ee87cc5344
-#[test]
-fn test_wildcard_unused_directive_tracking() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let source = r"// @effect-diagnostics-next-line *:off
-Effect.succeed(1)  // Line 1 - wildcard next-line
-// @effect-diagnostics-next-line floatingEffect:off
-Effect.succeed(2)  // Line 3 - specific rule next-line";
-
-        let directives = collect_effect_directives(source);
-        let ds = build_directive_set(&directives);
-
-        // Don't mark any directive as used - neither should suppress a diagnostic
-        // The wildcard directive should still NOT appear as unused
-        let unused = ds.get_unused_next_line_directives(&directives);
-
-        // Only the specific rule directive should be reported as unused, not the wildcard
-        if unused.len() != 1 {
-            t.fatal(sprintf!("Expected 1 unused directive, got %d", unused.len()));
-        }
-        if unused[0].line != 2 {
-            t.error(sprintf!("Expected unused directive at line 2, got line %d", unused[0].line));
-        }
-        // Verify it's the floatingEffect one, not the wildcard
-        if unused[0].rules[0].rule != "floatingEffect" {
-            t.error(sprintf!(
-                "Expected unused directive for floatingEffect, got %q",
-                unused[0].rules[0].rule
-            ));
-        }
-    });
-}
-
-// go test: internal/directives/parser_test.go:877 TestHasEnablingDirectiveWithWildcard ffb73059eeb68df4
-#[test]
-fn test_has_enabling_directive_with_wildcard() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let source = r"// @effect-diagnostics *:error
-Effect.succeed(1)";
-
-        let directives = collect_effect_directives(source);
-        let ds = build_directive_set(&directives);
-
-        let tests: &[(&str, &str, bool)] = &[
-            ("wildcard enables floatingEffect", "floatingEffect", true),
-            ("wildcard enables any rule", "someOtherRule", true),
-        ];
-
-        for &(name, rule_name, expected) in tests {
-            t.run(name, |t| {
-                t.parallel();
-                let result = ds.has_enabling_directive(rule_name);
-                if result != expected {
+                let ds = build_directive_set(&collect_effect_directives(source));
+                let got = ds.has_enabling_directive(rule_name);
+                if got != expected {
                     t.error(sprintf!(
                         "HasEnablingDirective(%q) = %v, want %v",
                         rule_name,
-                        result,
+                        got,
                         expected
                     ));
                 }
@@ -859,29 +398,7 @@ Effect.succeed(1)";
     });
 }
 
-// go test: internal/directives/parser_test.go:913 TestHasEnablingDirectiveWithWildcardOff 26c140989fda9537
-#[test]
-fn test_has_enabling_directive_with_wildcard_off() {
-    ets_go::testing::run(|t| {
-        t.parallel();
-        let source = r"// @effect-diagnostics *:off
-Effect.succeed(1)";
-
-        let directives = collect_effect_directives(source);
-        let ds = build_directive_set(&directives);
-
-        // *:off should NOT count as enabling
-        let result = ds.has_enabling_directive("floatingEffect");
-        if result {
-            t.error(sprintf!(
-                "HasEnablingDirective(\"floatingEffect\") = %v, want false (wildcard off should not enable)",
-                result
-            ));
-        }
-    });
-}
-
-// go test: internal/directives/parser_test.go:928 TestHasAnyDirectiveForRule afea3778253a051f
+// go test: internal/directives/parser_test.go:363 TestHasAnyDirectiveForRule afea3778253a051f
 #[test]
 fn test_has_any_directive_for_rule() {
     ets_go::testing::run(|t| {

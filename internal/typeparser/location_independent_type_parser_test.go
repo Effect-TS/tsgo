@@ -4,121 +4,64 @@ import (
 	"testing"
 
 	"github.com/effect-ts/tsgo/internal/bundledeffect"
+	"github.com/microsoft/TypeScript/tsc/shim/checker"
 )
 
-func TestEffectTypeParsesInstantiatedV3TypeWithoutLocation(t *testing.T) {
+func TestParsersAcceptInstantiatedV3TypesWithoutLocation(t *testing.T) {
 	t.Parallel()
 	if err := bundledeffect.EnsurePackageInstalled(bundledeffect.EffectV3, "effect"); err != nil {
 		t.Skip("Effect v3 not installed:", err)
 	}
 
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV3Internal(t, `
-import * as Effect from "effect/Effect"
+	for _, tc := range []struct {
+		name  string
+		decl  string
+		parse func(*TypeParser, *checker.Type) []*checker.Type
+		want  []string
+	}{
+		{"Effect", `import * as Effect from "effect/Effect"
+declare const value: Effect.Effect<string, Error, number>`, func(tp *TypeParser, typ *checker.Type) []*checker.Type {
+			if parsed := tp.EffectType(typ); parsed != nil {
+				return []*checker.Type{parsed.a, parsed.e, parsed.r}
+			}
+			return nil
+		}, []string{"string", "Error", "number"}},
+		{"Layer", `import * as Layer from "effect/Layer"
+declare const value: Layer.Layer<string, Error, number>`, func(tp *TypeParser, typ *checker.Type) []*checker.Type {
+			if parsed := tp.LayerType(typ); parsed != nil {
+				return []*checker.Type{parsed.rOut, parsed.e, parsed.rIn}
+			}
+			return nil
+		}, []string{"string", "Error", "number"}},
+		{"Schema", `import * as Schema from "effect/Schema"
+declare const value: Schema.Schema<string, number>`, func(tp *TypeParser, typ *checker.Type) []*checker.Type {
+			if parsed := tp.EffectSchemaTypes(typ); parsed != nil {
+				return []*checker.Type{parsed.a, parsed.e}
+			}
+			return nil
+		}, []string{"string", "number"}},
+		{"Stream", `import * as Stream from "effect/Stream"
+declare const value: Stream.Stream<string, Error, number>`, func(tp *TypeParser, typ *checker.Type) []*checker.Type {
+			if parsed := tp.StreamType(typ); parsed != nil {
+				return []*checker.Type{parsed.a, parsed.e, parsed.r}
+			}
+			return nil
+		}, []string{"string", "Error", "number"}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			c, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV3Internal(t, tc.decl+"\nvalue\n")
+			defer done()
 
-declare const effect: Effect.Effect<string, Error, number>
-effect
-`)
-	defer done()
-
-	effectType := tp.GetTypeAtLocation(findIdentifierByText(t, sf, "effect", 1))
-	parsed := tp.EffectType(effectType)
-	if parsed == nil {
-		t.Fatal("expected instantiated v3 Effect type to parse without a location")
-	}
-	if got := c.TypeToString(parsed.a); got != "string" {
-		t.Fatalf("expected success type string, got %s", got)
-	}
-	if got := c.TypeToString(parsed.e); got != "Error" {
-		t.Fatalf("expected error type Error, got %s", got)
-	}
-	if got := c.TypeToString(parsed.r); got != "number" {
-		t.Fatalf("expected requirements type number, got %s", got)
-	}
-}
-
-func TestLayerTypeParsesInstantiatedV3TypeWithoutLocation(t *testing.T) {
-	t.Parallel()
-	if err := bundledeffect.EnsurePackageInstalled(bundledeffect.EffectV3, "effect"); err != nil {
-		t.Skip("Effect v3 not installed:", err)
-	}
-
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV3Internal(t, `
-import * as Layer from "effect/Layer"
-
-declare const layer: Layer.Layer<string, Error, number>
-layer
-`)
-	defer done()
-
-	layerType := tp.GetTypeAtLocation(findIdentifierByText(t, sf, "layer", 1))
-	parsed := tp.LayerType(layerType)
-	if parsed == nil {
-		t.Fatal("expected instantiated v3 Layer type to parse without a location")
-	}
-	if got := c.TypeToString(parsed.rOut); got != "string" {
-		t.Fatalf("expected output requirements type string, got %s", got)
-	}
-	if got := c.TypeToString(parsed.e); got != "Error" {
-		t.Fatalf("expected error type Error, got %s", got)
-	}
-	if got := c.TypeToString(parsed.rIn); got != "number" {
-		t.Fatalf("expected input requirements type number, got %s", got)
-	}
-}
-
-func TestEffectSchemaTypesParsesInstantiatedV3TypeWithoutLocation(t *testing.T) {
-	t.Parallel()
-	if err := bundledeffect.EnsurePackageInstalled(bundledeffect.EffectV3, "effect"); err != nil {
-		t.Skip("Effect v3 not installed:", err)
-	}
-
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV3Internal(t, `
-import * as Schema from "effect/Schema"
-
-declare const schema: Schema.Schema<string, number>
-schema
-`)
-	defer done()
-
-	schemaType := tp.GetTypeAtLocation(findIdentifierByText(t, sf, "schema", 1))
-	parsed := tp.EffectSchemaTypes(schemaType)
-	if parsed == nil {
-		t.Fatal("expected instantiated v3 Schema type to parse without a location")
-	}
-	if got := c.TypeToString(parsed.a); got != "string" {
-		t.Fatalf("expected decoded type string, got %s", got)
-	}
-	if got := c.TypeToString(parsed.e); got != "number" {
-		t.Fatalf("expected encoded type number, got %s", got)
-	}
-}
-
-func TestStreamTypeParsesInstantiatedV3TypeWithoutLocation(t *testing.T) {
-	t.Parallel()
-	if err := bundledeffect.EnsurePackageInstalled(bundledeffect.EffectV3, "effect"); err != nil {
-		t.Skip("Effect v3 not installed:", err)
-	}
-
-	c, tp, sf, done := compileAndGetCheckerAndSourceFileWithEffectV3Internal(t, `
-import * as Stream from "effect/Stream"
-
-declare const stream: Stream.Stream<string, Error, number>
-stream
-`)
-	defer done()
-
-	streamType := tp.GetTypeAtLocation(findIdentifierByText(t, sf, "stream", 1))
-	parsed := tp.StreamType(streamType)
-	if parsed == nil {
-		t.Fatal("expected instantiated v3 Stream type to parse without a location")
-	}
-	if got := c.TypeToString(parsed.a); got != "string" {
-		t.Fatalf("expected element type string, got %s", got)
-	}
-	if got := c.TypeToString(parsed.e); got != "Error" {
-		t.Fatalf("expected error type Error, got %s", got)
-	}
-	if got := c.TypeToString(parsed.r); got != "number" {
-		t.Fatalf("expected requirements type number, got %s", got)
+			parts := tc.parse(tp, tp.GetTypeAtLocation(findIdentifierByText(t, sf, "value", 1)))
+			if parts == nil {
+				t.Fatalf("expected instantiated v3 %s type to parse without a location", tc.name)
+			}
+			for i, want := range tc.want {
+				if got := c.TypeToString(parts[i]); got != want {
+					t.Errorf("type argument %d: expected %s, got %s", i, want, got)
+				}
+			}
+		})
 	}
 }

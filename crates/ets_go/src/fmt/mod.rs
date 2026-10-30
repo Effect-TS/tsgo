@@ -346,7 +346,7 @@ macro_rules! impl_int {
     )*};
 }
 
-// Go's `int` is 64-bit and maps to Rust's `i64` (docs/PORTING.md, "Types"), so `i64` prints as `int`; Rust's
+// Go's `int` is 64-bit and maps to Rust's `i64` (porting/PORTING.md, "Types"), so `i64` prints as `int`; Rust's
 // `usize` / `isize` are what Go's `int` lengths and indexes become.
 impl_int!(i8 => "int8", i16 => "int16", i32 => "int32", i64 => "int", isize => "int", usize => "int");
 
@@ -519,7 +519,7 @@ impl<T: GoTyped> GoTyped for Option<T> {
     }
 }
 
-/// `Box<T>` and `Arc<T>` stand for Go's `*T` (docs/PORTING.md, "Types").
+/// `Box<T>` and `Arc<T>` stand for Go's `*T` (porting/PORTING.md, "Types").
 impl<T: Value + GoTyped> Value for Box<T> {
     fn go_value(&self) -> GoValue<'_> {
         let ty = format!("*{}", T::go_type().name);

@@ -1,4 +1,4 @@
-==== /.src/preferEffectArray.ts (61 flows) ====
+==== /.src/preferEffectArray.ts (64 flows) ====
 
 === Piping Flow ===
 Location: 8:27 - 9:19
@@ -267,7 +267,7 @@ Transformations (1):
       outType: number[]
 
 === Piping Flow ===
-Location: 52:50 - 53:34
+Location: 61:50 - 62:34
 Node: union.map(value => String(value))
 Node Kind: KindCallExpression
 
@@ -281,7 +281,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 53:19 - 53:33
+Location: 62:19 - 62:33
 Node: String(value)
 Node Kind: KindCallExpression
 
@@ -295,7 +295,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 54:54 - 55:26
+Location: 63:54 - 64:26
 Node: optional?.map(n => n + 1)
 Node Kind: KindCallExpression
 
@@ -309,7 +309,7 @@ Transformations (1):
       outType: number[] | undefined
 
 === Piping Flow ===
-Location: 55:26 - 56:33
+Location: 64:26 - 65:33
 Node: optional?.["filter"](n => n > 1)
 Node Kind: KindCallExpression
 
@@ -323,7 +323,7 @@ Transformations (1):
       outType: number[] | undefined
 
 === Piping Flow ===
-Location: 56:33 - 57:21
+Location: 65:33 - 66:21
 Node: xs.map?.(n => n + 1)
 Node Kind: KindCallExpression
 
@@ -337,7 +337,7 @@ Transformations (1):
       outType: number[]
 
 === Piping Flow ===
-Location: 57:21 - 58:22
+Location: 66:21 - 67:22
 Node: xs["map"](n => n + 1)
 Node Kind: KindCallExpression
 
@@ -351,7 +351,49 @@ Transformations (1):
       outType: number[]
 
 === Piping Flow ===
-Location: 59:27 - 60:45
+Location: 67:22 - 68:24
+Node: xs.m\u0061p(n => n + 1)
+Node Kind: KindCallExpression
+
+Subject: n => n + 1
+Subject Type: (n: number) => number
+
+Transformations (1):
+  [0] kind: call
+      callee: xs.m\u0061p
+      args: (constant)
+      outType: number[]
+
+=== Piping Flow ===
+Location: 68:24 - 69:27
+Node: xs["m\u0061p"](n => n + 1)
+Node Kind: KindCallExpression
+
+Subject: n => n + 1
+Subject Type: (n: number) => number
+
+Transformations (1):
+  [0] kind: call
+      callee: xs["m\u0061p"]
+      args: (constant)
+      outType: number[]
+
+=== Piping Flow ===
+Location: 69:27 - 70:22
+Node: xs[`map`](n => n + 1)
+Node Kind: KindCallExpression
+
+Subject: n => n + 1
+Subject Type: (n: number) => number
+
+Transformations (1):
+  [0] kind: call
+      callee: xs[`map`]
+      args: (constant)
+      outType: number[]
+
+=== Piping Flow ===
+Location: 71:27 - 72:45
 Node: readonlyTuple["map"](value => String(value))
 Node Kind: KindCallExpression
 
@@ -365,7 +407,7 @@ Transformations (1):
       outType: string[]
 
 === Piping Flow ===
-Location: 60:30 - 60:44
+Location: 72:30 - 72:44
 Node: String(value)
 Node Kind: KindCallExpression
 
@@ -379,7 +421,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 61:2 - 61:22
+Location: 73:2 - 73:22
 Node: (xs).map(n => n + 1)
 Node Kind: KindCallExpression
 
@@ -393,7 +435,7 @@ Transformations (1):
       outType: number[]
 
 === Piping Flow ===
-Location: 63:26 - 64:24
+Location: 75:26 - 76:24
 Node: NativeArray.isArray(xs)
 Node Kind: KindCallExpression
 
@@ -407,7 +449,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 64:24 - 65:21
+Location: 76:24 - 77:21
 Node: Array["isArray"](xs)
 Node Kind: KindCallExpression
 
@@ -421,7 +463,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 65:21 - 66:29
+Location: 77:21 - 78:29
 Node: globalThis.Array.isArray(xs)
 Node Kind: KindCallExpression
 
@@ -435,7 +477,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 67:41 - 68:32
+Location: 79:41 - 80:32
 Node: new Inherited().map(n => n + 1)
 Node Kind: KindCallExpression
 
@@ -449,7 +491,7 @@ Transformations (1):
       outType: number[]
 
 === Piping Flow ===
-Location: 73:28 - 75:3
+Location: 88:28 - 90:3
 Node: Effect.gen(function*() {\n  return xs.filter(n => n > 1)\n})
 Node Kind: KindCallExpression
 
@@ -463,7 +505,7 @@ Transformations (1):
       outType: Effect<number[], never, never>
 
 === Piping Flow ===
-Location: 74:9 - 74:31
+Location: 89:9 - 89:31
 Node: xs.filter(n => n > 1)
 Node Kind: KindCallExpression
 
@@ -477,7 +519,7 @@ Transformations (1):
       outType: number[]
 
 === Piping Flow ===
-Location: 75:3 - 77:22
+Location: 90:3 - 92:22
 Node: A.map(xs, n => n + 1)
 Node Kind: KindCallExpression
 
@@ -491,7 +533,7 @@ Transformations (1):
       outType: number[]
 
 === Piping Flow ===
-Location: 77:22 - 78:25
+Location: 92:22 - 93:25
 Node: A.filter(xs, n => n > 1)
 Node Kind: KindCallExpression
 
@@ -505,7 +547,7 @@ Transformations (1):
       outType: number[]
 
 === Piping Flow ===
-Location: 78:25 - 79:24
+Location: 93:25 - 94:24
 Node: A.every(xs, n => n > 1)
 Node Kind: KindCallExpression
 
@@ -519,7 +561,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 79:24 - 80:23
+Location: 94:24 - 95:23
 Node: A.some(xs, n => n > 1)
 Node Kind: KindCallExpression
 
@@ -533,7 +575,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 80:23 - 81:31
+Location: 95:23 - 96:31
 Node: A.forEach(xs, n => { void n })
 Node Kind: KindCallExpression
 
@@ -547,7 +589,7 @@ Transformations (1):
       outType: void
 
 === Piping Flow ===
-Location: 82:27 - 83:37
+Location: 97:27 - 98:37
 Node: A.reduce(xs, 0, (acc, n) => acc + n)
 Node Kind: KindCallExpression
 
@@ -561,7 +603,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 83:37 - 84:42
+Location: 98:37 - 99:42
 Node: A.reduceRight(xs, 0, (acc, n) => acc + n)
 Node Kind: KindCallExpression
 
@@ -575,7 +617,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 84:42 - 85:28
+Location: 99:42 - 100:28
 Node: A.findFirst(xs, n => n > 1)
 Node Kind: KindCallExpression
 
@@ -589,7 +631,7 @@ Transformations (1):
       outType: Option<number>
 
 === Piping Flow ===
-Location: 85:28 - 86:27
+Location: 100:28 - 101:27
 Node: A.findLast(xs, n => n > 1)
 Node Kind: KindCallExpression
 
@@ -603,7 +645,7 @@ Transformations (1):
       outType: Option<number>
 
 === Piping Flow ===
-Location: 86:27 - 87:33
+Location: 101:27 - 102:33
 Node: A.findFirstIndex(xs, n => n > 1)
 Node Kind: KindCallExpression
 
@@ -617,7 +659,7 @@ Transformations (1):
       outType: Option<number>
 
 === Piping Flow ===
-Location: 87:33 - 88:32
+Location: 102:33 - 103:32
 Node: A.findLastIndex(xs, n => n > 1)
 Node Kind: KindCallExpression
 
@@ -631,7 +673,7 @@ Transformations (1):
       outType: Option<number>
 
 === Piping Flow ===
-Location: 88:32 - 89:21
+Location: 103:32 - 104:21
 Node: A.join(strings, ",")
 Node Kind: KindCallExpression
 
@@ -645,7 +687,7 @@ Transformations (1):
       outType: string
 
 === Piping Flow ===
-Location: 89:21 - 90:14
+Location: 104:21 - 105:14
 Node: A.reverse(xs)
 Node Kind: KindCallExpression
 
@@ -659,7 +701,7 @@ Transformations (1):
       outType: number[]
 
 === Piping Flow ===
-Location: 91:25 - 92:14
+Location: 106:25 - 107:14
 Node: A.isArray(xs)
 Node Kind: KindCallExpression
 
@@ -673,7 +715,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 92:14 - 93:32
+Location: 107:14 - 108:32
 Node: EffectArray.map(xs, n => n + 1)
 Node Kind: KindCallExpression
 
@@ -687,7 +729,7 @@ Transformations (1):
       outType: number[]
 
 === Piping Flow ===
-Location: 94:22 - 95:35
+Location: 109:22 - 110:35
 Node: EffectAlias.filter(xs, n => n > 1)
 Node Kind: KindCallExpression
 
@@ -701,7 +743,7 @@ Transformations (1):
       outType: number[]
 
 === Piping Flow ===
-Location: 97:52 - 97:57
+Location: 112:52 - 112:57
 Node: f(1)
 Node Kind: KindCallExpression
 
@@ -715,7 +757,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 97:79 - 98:23
+Location: 112:79 - 113:23
 Node: custom.map(n => n + 1)
 Node Kind: KindCallExpression
 
@@ -729,7 +771,7 @@ Transformations (1):
       outType: number
 
 === Piping Flow ===
-Location: 99:16 - 100:39
+Location: 114:16 - 115:39
 Node: new Uint8Array([1, 2]).map(n => n + 1)
 Node Kind: KindCallExpression
 
@@ -743,7 +785,7 @@ Transformations (1):
       outType: Uint8Array<ArrayBuffer>
 
 === Piping Flow ===
-Location: 100:39 - 101:44
+Location: 115:39 - 116:44
 Node: new Float64Array([1, 2]).filter(n => n > 1)
 Node Kind: KindCallExpression
 
@@ -757,7 +799,7 @@ Transformations (1):
       outType: Float64Array<ArrayBuffer>
 
 === Piping Flow ===
-Location: 104:23 - 104:45
+Location: 119:23 - 119:45
 Node: super.map(n => n + 1)
 Node Kind: KindCallExpression
 
@@ -771,7 +813,7 @@ Transformations (1):
       outType: number[]
 
 === Piping Flow ===
-Location: 105:2 - 106:31
+Location: 120:2 - 121:31
 Node: new Override().map(n => n + 1)
 Node Kind: KindCallExpression
 
@@ -785,7 +827,7 @@ Transformations (1):
       outType: number[]
 
 === Piping Flow ===
-Location: 107:80 - 108:22
+Location: 122:80 - 123:22
 Node: mixed.map(n => n + 1)
 Node Kind: KindCallExpression
 
@@ -799,7 +841,7 @@ Transformations (1):
       outType: number[]
 
 === Piping Flow ===
-Location: 109:87 - 110:29
+Location: 124:87 - 125:29
 Node: intersection.map(n => n + 1)
 Node Kind: KindCallExpression
 
@@ -813,7 +855,7 @@ Transformations (1):
       outType: number[]
 
 === Piping Flow ===
-Location: 112:54 - 113:20
+Location: 127:54 - 128:20
 Node: Array.isArray(xs)
 Node Kind: KindCallExpression
 
@@ -827,7 +869,7 @@ Transformations (1):
       outType: boolean
 
 === Piping Flow ===
-Location: 119:54 - 120:30
+Location: 134:54 - 135:30
 Node: customArray.map(n => n + 1)
 Node Kind: KindCallExpression
 
@@ -841,7 +883,7 @@ Transformations (1):
       outType: number[]
 
 === Piping Flow ===
-Location: 120:30 - 121:36
+Location: 135:30 - 136:36
 Node: customReadonly.filter(n => n > 1)
 Node Kind: KindCallExpression
 

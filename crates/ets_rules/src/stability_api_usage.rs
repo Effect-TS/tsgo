@@ -297,7 +297,7 @@ pub(crate) struct StabilityApiDecision {
 }
 
 /// Rust-only: the state the closure returned by Go's `newStabilityApiAllowlist` captures. Calling the closure is
-/// `call`, which takes the rule context (the context holds the parser, which cannot be stored; docs/PORTING.md,
+/// `call`, which takes the rule context (the context holds the parser, which cannot be stored; porting/PORTING.md,
 /// "Types").
 pub(crate) struct StabilityApiAllowlist {
     decisions: FxHashMap<Option<P<Node>>, StabilityApiDecision>,

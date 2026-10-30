@@ -12,7 +12,7 @@ use crate::*;
 // Add new refactors here explicitly - no init() magic.
 //
 // Rust: Go's whole list, in Go's order; the refactors not ported yet are the commented-out entries
-// (docs/PORTING.md, "Porting a fixable, refactor or completion"). Uncomment an entry in place when its refactor
+// (porting/PORTING.md, "Porting a fixable, refactor or completion"). Uncomment an entry in place when its refactor
 // lands.
 pub static ALL: LazyLock<Vec<Refactor>> = LazyLock::new(|| {
     vec![

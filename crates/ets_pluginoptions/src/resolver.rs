@@ -7,7 +7,7 @@ use ets_shim::core::tspath;
 use ets_shim::vfs::vfsmatch;
 use rustc_hash::FxHashMap;
 
-// Rust: Go's `tspath.RootedFilePath` arguments are plain file names (docs/TSRS_API.md: tsrs has no rooted path
+// Rust: Go's `tspath.RootedFilePath` arguments are plain file names (porting/TSRS_API.md: tsrs has no rooted path
 // types), so `tspath.RootedDirectoryPathFromAbsolute` drops out.
 
 // go: internal/pluginoptions/resolver.go:13 ResolveEffectPluginOptionsForSourceFile 7d38bd40f9880eee

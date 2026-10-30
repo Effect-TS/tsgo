@@ -1,173 +1,108 @@
+use ets_go::testing::T;
+use ets_shim::lsproto;
+
 use crate::*;
 
-// go test: internal/completions/context_self_in_classes_test.go:8 TestContextSelfInClasses_NotInExtendsClause 4efe0a87898043ac
+// go test: internal/completions/context_self_in_classes_test.go:10 contextServiceItems d3899223faaa106d
+fn context_service_items(t: &T, source: &str, position: usize) -> Vec<lsproto::CompletionItem> {
+    t.helper();
+    filter_completion_items(
+        completion_items_in(t, COMPLETION_TEST_TS_CONFIG, HARNESS_PACKAGE_JSON, source, position),
+        |item| item.label.starts_with(r#"Tag(""#) || item.label.starts_with("Service<"),
+    )
+}
+
+// go test: internal/completions/context_self_in_classes_test.go:17 TestContextSelfInClasses_V4Service 9cf5a836bdc89657
 #[test]
-fn test_context_self_in_classes_not_in_extends_clause() {
+fn test_context_self_in_classes_v4_service() {
     go_test(|t| {
         t.parallel();
-        // Cursor in a variable declaration, not a class extends clause
-        let source = r#"import * as Context from "effect/Context"
-const x = Context.Tag"#;
-        let items = context_self_in_classes_items(t, source, source.len());
-        if !items.is_empty() {
-            t.error(format!(
-                "expected nil for cursor not in extends clause, got {} items",
-                items.len()
-            ));
+
+        struct Case {
+            name: &'static str,
+            source: &'static str,
+            cursor: &'static str,
+            class_name: &'static str,
+            access: &'static str,
+        }
+        for tc in [
+            Case {
+                name: "namespace import",
+                source: r#"import * as Context from "effect/Context"
+
+export class MyService extends Context."#,
+                cursor: "",
+                class_name: "MyService",
+                access: "Context.",
+            },
+            Case {
+                name: "direct import",
+                source: r#"import { Service } from "effect/Context"
+
+export class MyService extends Service"#,
+                cursor: "",
+                class_name: "MyService",
+                access: "",
+            },
+            Case {
+                name: "middle of file",
+                source: r#"import { Effect, Stream } from "effect"
+import * as Context from "effect/Context"
+
+class Foo extends Context.S
+
+Stream.unwrap(Effect.gen(function*() {
+	const a = yield* Foo
+
+	return Stream.succeed(a.count)
+}))"#,
+                cursor: "Context.S",
+                class_name: "Foo",
+                access: "Context.",
+            },
+        ] {
+            t.run(tc.name, |t| {
+                t.parallel();
+                let mut position = tc.source.len();
+                if !tc.cursor.is_empty() {
+                    position = tc.source.find(tc.cursor).unwrap() + tc.cursor.len();
+                }
+                let items = context_service_items(t, tc.source, position);
+                if items.len() != 2 {
+                    t.fatal(format!("expected 2 items, got {}", items.len()));
+                }
+
+                let want = format!("Service<{}, {{}}>", tc.class_name);
+                if items[0].label != want {
+                    t.error(format!("item[0].Label = {:?}, want {want:?}", items[0].label));
+                }
+                let got = new_text(&items[0]);
+                if !got.starts_with(&format!(
+                    "{}Service<{}, {{${{0}}}}>()(\"",
+                    tc.access, tc.class_name
+                )) || !got.ends_with(r#""){}"#)
+                {
+                    t.error(format!("item[0].insertText = {got:?}"));
+                }
+
+                let want = format!("Service<{}>({{ make }})", tc.class_name);
+                if items[1].label != want {
+                    t.error(format!("item[1].Label = {:?}, want {want:?}", items[1].label));
+                }
+                let got = new_text(&items[1]);
+                let want = format!(
+                    "{}Service<{}>()(\"@effect/harness-effect-v4/test/{}\", {{ make: ${{0}} }}){{}}",
+                    tc.access, tc.class_name, tc.class_name
+                );
+                if got != want {
+                    t.error(format!("item[1].insertText = {got:?}, want {want:?}"));
+                }
+            });
         }
     });
 }
 
-// go test: internal/completions/context_self_in_classes_test.go:19 TestContextSelfInClasses_NotInClass 18bb36f5a45daf46
-#[test]
-fn test_context_self_in_classes_not_in_class() {
-    go_test(|t| {
-        t.parallel();
-        // Cursor after a standalone identifier that is not in any class
-        let source = r#"import * as Context from "effect/Context"
-const x = Context."#;
-        let items = context_self_in_classes_items(t, source, source.len());
-        if !items.is_empty() {
-            t.error(format!("expected nil for cursor not in class, got {} items", items.len()));
-        }
-    });
-}
-
-// go test: internal/completions/context_self_in_classes_test.go:30 TestContextSelfInClasses_EmptySource 332024266850246b
-#[test]
-fn test_context_self_in_classes_empty_source() {
-    go_test(|t| {
-        t.parallel();
-        let source = "";
-        let items = context_self_in_classes_items(t, source, 0);
-        if !items.is_empty() {
-            t.error(format!("expected nil for empty source, got {} items", items.len()));
-        }
-    });
-}
-
-// go test: internal/completions/context_self_in_classes_test.go:39 TestContextSelfInClasses_InsideImportDeclaration a4397fd6c79527b2
-#[test]
-fn test_context_self_in_classes_inside_import_declaration() {
-    go_test(|t| {
-        t.parallel();
-        // Cursor inside an import declaration should not trigger completion
-        let source = r#"import { Context } from "effect""#;
-        let pos = "import { Context".len();
-        let items = context_self_in_classes_items(t, source, pos);
-        if !items.is_empty() {
-            t.error(format!(
-                "expected nil for cursor inside import declaration, got {} items",
-                items.len()
-            ));
-        }
-    });
-}
-
-// go test: internal/completions/context_self_in_classes_test.go:50 TestContextSelfInClasses_InterfaceNotClass f7254609d27ca4eb
-#[test]
-fn test_context_self_in_classes_interface_not_class() {
-    go_test(|t| {
-        t.parallel();
-        // Interface extends clause, not a class
-        let source = "interface Foo extends Bar";
-        let items = context_self_in_classes_items(t, source, source.len());
-        if !items.is_empty() {
-            t.error(format!(
-                "expected nil for interface extends (not class), got {} items",
-                items.len()
-            ));
-        }
-    });
-}
-
-// go test: internal/completions/context_self_in_classes_test.go:60 TestContextSelfInClasses_AnonymousClass 6532099d4580fd1d
-#[test]
-fn test_context_self_in_classes_anonymous_class() {
-    go_test(|t| {
-        t.parallel();
-        // Anonymous class has no name — should return nil
-        let source = "const x = class extends Context.Tag";
-        let items = context_self_in_classes_items(t, source, source.len());
-        if !items.is_empty() {
-            t.error(format!(
-                "expected nil for anonymous class (no name), got {} items",
-                items.len()
-            ));
-        }
-    });
-}
-
-// go test: internal/completions/context_self_in_classes_test.go:70 TestContextSelfInClasses_V4NamespaceImport 20d3d8e5a85478f5
-#[test]
-fn test_context_self_in_classes_v4_namespace_import() {
-    go_test(|t| {
-        t.parallel();
-
-        let source = r#"import * as Context from "effect/Context"
-
-export class MyService extends Context."#;
-        let items = context_self_in_classes_items_with_package_json(t, source, source.len());
-        if items.len() != 2 {
-            t.fatal(format!("expected 2 items, got {}", items.len()));
-        }
-
-        if items[0].label != "Service<MyService, {}>" {
-            t.error(format!(
-                "item[0].Label = {:?}, want {:?}",
-                items[0].label, "Service<MyService, {}>"
-            ));
-        }
-        let got = new_text(&items[0]);
-        if !got.starts_with(r#"Context.Service<MyService, {${0}}>()(""#)
-            || !got.ends_with(r#""){}"#)
-        {
-            t.error(format!("item[0].insertText = {got:?}"));
-        }
-
-        if items[1].label != "Service<MyService>({ make })" {
-            t.error(format!(
-                "item[1].Label = {:?}, want {:?}",
-                items[1].label, "Service<MyService>({ make })"
-            ));
-        }
-        let got = new_text(&items[1]);
-        if got
-            != r#"Context.Service<MyService>()("@effect/harness-effect-v4/test/MyService", { make: ${0} }){}"#
-        {
-            t.error(format!("item[1].insertText = {got:?}"));
-        }
-    });
-}
-
-// go test: internal/completions/context_self_in_classes_test.go:96 TestContextSelfInClasses_V4DirectImport 6ca9d66ef65d2c24
-#[test]
-fn test_context_self_in_classes_v4_direct_import() {
-    go_test(|t| {
-        t.parallel();
-
-        let source = r#"import { Service } from "effect/Context"
-
-export class MyService extends Service"#;
-        let items = context_self_in_classes_items_with_package_json(t, source, source.len());
-        if items.len() != 2 {
-            t.fatal(format!("expected 2 items, got {}", items.len()));
-        }
-
-        let got = new_text(&items[0]);
-        if !got.starts_with(r#"Service<MyService, {${0}}>()(""#) || !got.ends_with(r#""){}"#) {
-            t.error(format!("item[0].insertText = {got:?}"));
-        }
-        let got = new_text(&items[1]);
-        if got
-            != r#"Service<MyService>()("@effect/harness-effect-v4/test/MyService", { make: ${0} }){}"#
-        {
-            t.error(format!("item[1].insertText = {got:?}"));
-        }
-    });
-}
-
-// go test: internal/completions/context_self_in_classes_test.go:115 TestContextSelfInClasses_V4IdentifierKeyPattern 0a79139093793ca4
+// go test: internal/completions/context_self_in_classes_test.go:87 TestContextSelfInClasses_V4IdentifierKeyPattern 38369aa698d03096
 #[test]
 fn test_context_self_in_classes_v4_identifier_key_pattern() {
     go_test(|t| {
@@ -177,7 +112,7 @@ fn test_context_self_in_classes_v4_identifier_key_pattern() {
 import * as Context from "effect/Context"
 
 export class MyService extends Context."#;
-        let items = context_self_in_classes_items_with_package_json(t, source, source.len());
+        let items = context_service_items(t, source, source.len());
         if items.len() != 2 {
             t.fatal(format!("expected 2 items, got {}", items.len()));
         }
@@ -189,44 +124,6 @@ export class MyService extends Context."#;
                     new_text(item)
                 ));
             }
-        }
-    });
-}
-
-// go test: internal/completions/context_self_in_classes_test.go:134 TestContextSelfInClasses_V4MiddleOfIdentifier b0cfe0f927a26317
-#[test]
-fn test_context_self_in_classes_v4_middle_of_identifier() {
-    go_test(|t| {
-        t.parallel();
-
-        let source = r#"import { Effect, Stream } from "effect"
-import * as Context from "effect/Context"
-
-class Foo extends Context.S
-
-Stream.unwrap(Effect.gen(function*() {
-	const a = yield* Foo
-
-	return Stream.succeed(a.count)
-}))"#;
-        let position = source.find("Context.S").unwrap() + "Context.S".len();
-        let items = context_self_in_classes_items_with_package_json(t, source, position);
-        if items.len() != 2 {
-            t.fatal(format!("expected 2 items, got {}", items.len()));
-        }
-
-        if items[0].label != "Service<Foo, {}>" {
-            t.error(format!("item[0].Label = {:?}, want {:?}", items[0].label, "Service<Foo, {}>"));
-        }
-        if items[1].label != "Service<Foo>({ make })" {
-            t.error(format!(
-                "item[1].Label = {:?}, want {:?}",
-                items[1].label, "Service<Foo>({ make })"
-            ));
-        }
-        let got = new_text(&items[0]);
-        if !got.starts_with(r#"Context.Service<Foo, {${0}}>()(""#) || !got.ends_with(r#""){}"#) {
-            t.error(format!("item[0].insertText = {got:?}"));
         }
     });
 }

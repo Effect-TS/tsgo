@@ -1,99 +1,138 @@
+use ets_go::testing::T;
+use ets_shim::lsproto;
+
 use crate::*;
 
-// go test: internal/completions/effect_self_in_classes_test.go:7 TestEffectSelfInClasses_NotInExtendsClause a329ab326e4dbf26
-#[test]
-fn test_effect_self_in_classes_not_in_extends_clause() {
-    go_test(|t| {
-        t.parallel();
-        // Cursor in a variable declaration, not a class extends clause
-        let source = r#"import * as Effect from "effect/Effect"
-const x = Effect.Service"#;
-        let items = effect_self_in_classes_items(t, source, source.len());
-        if !items.is_empty() {
-            t.error(format!(
-                "expected nil for cursor not in extends clause, got {} items",
-                items.len()
-            ));
+// go test: internal/completions/effect_self_in_classes_test.go:10 selfInClassesItems b5a741c9643ca499
+fn self_in_classes_items(t: &T, source: &str, position: usize) -> Vec<lsproto::CompletionItem> {
+    t.helper();
+    filter_completion_items(completion_items_at(t, source, position), |item| {
+        for prefix in ["Service<", r#"Tag(""#, "Class<", r#"make(""#] {
+            if item.label.starts_with(prefix) {
+                return true;
+            }
         }
-    });
+        false
+    })
 }
 
-// go test: internal/completions/effect_self_in_classes_test.go:18 TestEffectSelfInClasses_NotInClass d2a0c29fce425f15
+// go test: internal/completions/effect_self_in_classes_test.go:22 TestSelfInClassesCompletions_OnlyInNamedClassExtends df07c490a6ff6662
 #[test]
-fn test_effect_self_in_classes_not_in_class() {
+fn test_self_in_classes_completions_only_in_named_class_extends() {
     go_test(|t| {
         t.parallel();
-        // Cursor after a standalone identifier that is not in any class
-        let source = r#"import * as Effect from "effect/Effect"
-const x = Effect."#;
-        let items = effect_self_in_classes_items(t, source, source.len());
-        if !items.is_empty() {
-            t.error(format!("expected nil for cursor not in class, got {} items", items.len()));
-        }
-    });
-}
 
-// go test: internal/completions/effect_self_in_classes_test.go:29 TestEffectSelfInClasses_EmptySource 7e2ab743fc1bf182
-#[test]
-fn test_effect_self_in_classes_empty_source() {
-    go_test(|t| {
-        t.parallel();
-        let source = "";
-        let items = effect_self_in_classes_items(t, source, 0);
-        if !items.is_empty() {
-            t.error(format!("expected nil for empty source, got {} items", items.len()));
+        struct TestCase {
+            name: String,
+            source: String,
+            position: usize,
+            want: bool,
         }
-    });
-}
-
-// go test: internal/completions/effect_self_in_classes_test.go:38 TestEffectSelfInClasses_InsideImportDeclaration ee24db6d06858a49
-#[test]
-fn test_effect_self_in_classes_inside_import_declaration() {
-    go_test(|t| {
-        t.parallel();
-        // Cursor inside an import declaration should not trigger completion
-        let source = r#"import { Effect } from "effect""#;
-        let pos = "import { Effect".len();
-        let items = effect_self_in_classes_items(t, source, pos);
-        if !items.is_empty() {
-            t.error(format!(
-                "expected nil for cursor inside import declaration, got {} items",
-                items.len()
-            ));
+        let mut cases = vec![
+            TestCase {
+                name: "empty source".to_string(),
+                source: String::new(),
+                position: 0,
+                want: false,
+            },
+            TestCase {
+                name: "interface extends".to_string(),
+                source: "interface Foo extends Bar".to_string(),
+                position: 0,
+                want: false,
+            },
+        ];
+        for (name, directive, namespace_imp, access, named_import, imported_ident) in [
+            (
+                "effect",
+                "// @effect-v3\n",
+                r#"import * as Effect from "effect/Effect""#,
+                "Effect.Service",
+                r#"import { Effect } from "effect""#,
+                "Effect",
+            ),
+            (
+                "context",
+                "",
+                r#"import * as Context from "effect/Context""#,
+                "Context.Tag",
+                r#"import { Context } from "effect""#,
+                "Context",
+            ),
+            (
+                "sqlModel",
+                "",
+                r#"import * as Model from "@effect/sql/Model""#,
+                "Model.Class",
+                r#"import { Model } from "@effect/sql""#,
+                "Model",
+            ),
+            (
+                "rpc",
+                "// @effect-v3\n",
+                r#"import * as Rpc from "@effect/rpc/Rpc""#,
+                "Rpc.make",
+                r#"import { Rpc } from "@effect/rpc""#,
+                "Rpc",
+            ),
+        ] {
+            let namespace = &access[..=access.find('.').unwrap()];
+            let header = format!("{directive}{namespace_imp}");
+            let named_import = format!("{directive}{named_import}");
+            let position = named_import.find(imported_ident).unwrap() + imported_ident.len();
+            cases.extend([
+                TestCase {
+                    name: format!("{name}/named class extends"),
+                    source: format!("{header}\nclass Foo extends {access}"),
+                    position: 0,
+                    want: true,
+                },
+                TestCase {
+                    name: format!("{name}/variable initializer"),
+                    source: format!("{header}\nconst x = {access}"),
+                    position: 0,
+                    want: false,
+                },
+                TestCase {
+                    name: format!("{name}/member access outside class"),
+                    source: format!("{header}\nconst x = {namespace}"),
+                    position: 0,
+                    want: false,
+                },
+                TestCase {
+                    name: format!("{name}/anonymous class"),
+                    source: format!("{header}\nconst x = class extends {access}"),
+                    position: 0,
+                    want: false,
+                },
+                TestCase {
+                    name: format!("{name}/inside import declaration"),
+                    source: named_import,
+                    position,
+                    want: false,
+                },
+            ]);
         }
-    });
-}
 
-// go test: internal/completions/effect_self_in_classes_test.go:49 TestEffectSelfInClasses_InterfaceNotClass c4aff7c94320dd19
-#[test]
-fn test_effect_self_in_classes_interface_not_class() {
-    go_test(|t| {
-        t.parallel();
-        // Interface extends clause, not a class
-        let source = "interface Foo extends Bar";
-        let items = effect_self_in_classes_items(t, source, source.len());
-        if !items.is_empty() {
-            t.error(format!(
-                "expected nil for interface extends (not class), got {} items",
-                items.len()
-            ));
-        }
-    });
-}
-
-// go test: internal/completions/effect_self_in_classes_test.go:59 TestEffectSelfInClasses_AnonymousClass d8f3d7c81b88a519
-#[test]
-fn test_effect_self_in_classes_anonymous_class() {
-    go_test(|t| {
-        t.parallel();
-        // Anonymous class has no name — should return nil
-        let source = "const x = class extends Effect.Service";
-        let items = effect_self_in_classes_items(t, source, source.len());
-        if !items.is_empty() {
-            t.error(format!(
-                "expected nil for anonymous class (no name), got {} items",
-                items.len()
-            ));
+        for tc in &cases {
+            t.run(&tc.name, |t| {
+                t.parallel();
+                let mut position = tc.position;
+                if position == 0 {
+                    position = tc.source.len();
+                }
+                let items = self_in_classes_items(t, &tc.source, position);
+                if tc.want && items.is_empty() {
+                    t.error(format!("expected self-in-classes completions for {:?}", tc.source));
+                }
+                if !tc.want && !items.is_empty() {
+                    t.error(format!(
+                        "expected no self-in-classes completions for {:?}, got {} items",
+                        tc.source,
+                        items.len()
+                    ));
+                }
+            });
         }
     });
 }

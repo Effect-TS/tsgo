@@ -9,8 +9,6 @@ import (
 	"github.com/microsoft/TypeScript/tsc/shim/tspath"
 )
 
-// fakeFiles serves loaded files as parsed program files and every file,
-// loaded or not, through readFile, counting reads per file.
 type fakeFiles struct {
 	loaded map[tspath.RootedFilePath]*ast.SourceFile
 	disk   map[tspath.RootedFilePath]string
