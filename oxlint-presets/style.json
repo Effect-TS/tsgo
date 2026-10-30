@@ -38,6 +38,7 @@
     "effecttsgo/map-some-to-as-some": "warn",
     "effecttsgo/match-effect-to-map-both": "warn",
     "effecttsgo/match-effect-to-match": "warn",
+    "effecttsgo/match-to-result-or-option": "warn",
     "effecttsgo/missed-pipeable-opportunity": "warn",
     "effecttsgo/missing-effect-service-dependency": "warn",
     "effecttsgo/missing-pipeable-signature": "warn",

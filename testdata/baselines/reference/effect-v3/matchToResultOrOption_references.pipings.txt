@@ -1,0 +1,135 @@
+==== /.src/matchToResultOrOption_references.ts (9 flows) ====
+
+=== Piping Flow ===
+Location: 14:23 - 14:89
+Node: Effect.match(source, { onFailure: Ei.left, onSuccess: Ei.right })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: Ei.left, onSuccess: Ei.right }]
+      outType: Effect<import("/node_modules/effect/dist/dts/Either").Either<number, never> | import("/node_modules/effect/dist/dts/Either").Either<never, string>, never, never>
+
+=== Piping Flow ===
+Location: 17:21 - 17:93
+Node: Effect.match(source, { onFailure: eitherLeft, onSuccess: eitherRight })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: eitherLeft, onSuccess: eitherRight }]
+      outType: Effect<import("/node_modules/effect/dist/dts/Either").Either<number, never> | import("/node_modules/effect/dist/dts/Either").Either<never, string>, never, never>
+
+=== Piping Flow ===
+Location: 20:21 - 20:93
+Node: Effect.match(source, { onFailure: Either.left, onSuccess: rightAlias })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: Either.left, onSuccess: rightAlias }]
+      outType: Effect<import("/node_modules/effect/dist/dts/Either").Either<number, never> | import("/node_modules/effect/dist/dts/Either").Either<never, string>, never, never>
+
+=== Piping Flow ===
+Location: 23:28 - 26:2
+Node: source.pipe(\n  Effect.match({ onFailure: Either.left, onSuccess: Either.right }),\n  Effect.map(Either.isRight)\n)
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (2):
+  [0] kind: pipeable
+      callee: Effect.match
+      args: [{ onFailure: Either.left, onSuccess: Either.right }]
+      outType: Effect<import("/node_modules/effect/dist/dts/Either").Either<number, never> | import("/node_modules/effect/dist/dts/Either").Either<never, string>, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [Either.isRight]
+      outType: Effect<boolean, never, never>
+
+=== Piping Flow ===
+Location: 29:30 - 32:2
+Node: Effect.zipRight(\n  Effect.log("start"),\n  Effect.match(source, { onFailure: Either.left, onSuccess: Either.right })\n)
+Node Kind: KindCallExpression
+
+Subject: "start"
+Subject Type: "start"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.zipRight
+      args: [Effect.match(source, { onFailure: Either.left, onSuccess: Either.right })]
+      outType: Effect<import("/node_modules/effect/dist/dts/Either").Either<number, never> | import("/node_modules/effect/dist/dts/Either").Either<never, string>, never, never>
+
+=== Piping Flow ===
+Location: 30:23 - 31:76
+Node: Effect.match(source, { onFailure: Either.left, onSuccess: Either.right })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: Either.left, onSuccess: Either.right }]
+      outType: Effect<import("/node_modules/effect/dist/dts/Either").Either<number, never> | import("/node_modules/effect/dist/dts/Either").Either<never, string>, never, never>
+
+=== Piping Flow ===
+Location: 35:25 - 35:111
+Node: Effect.match(source, { onFailure: Local.Either.left, onSuccess: Local.Either.right })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: Local.Either.left, onSuccess: Local.Either.right }]
+      outType: Effect<string | number, never, never>
+
+=== Piping Flow ===
+Location: 38:26 - 38:100
+Node: Effect.match(source, { onFailure: Effect.fail, onSuccess: Either.right })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: Effect.fail, onSuccess: Either.right }]
+      outType: Effect<Effect<never, string, never> | Either<number, never>, never, never>
+
+=== Piping Flow ===
+Location: 41:24 - 41:96
+Node: Effect.match(source, { onFailure: Exit.fail, onSuccess: Either.right })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: Effect.match
+      args: [{ onFailure: Exit.fail, onSuccess: Either.right }]
+      outType: Effect<Either<number, never> | Exit<never, string>, never, never>

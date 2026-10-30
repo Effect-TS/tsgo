@@ -1,0 +1,735 @@
+=== Quick Fix Inventory ===
+
+[D1] (17:24-17:36) TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+  Fix 0: "Disable matchToResultOrOption for this line"
+  Fix 1: "Disable matchToResultOrOption for entire file"
+  Fix 2: "Replace with Effect.result"
+
+[D2] (27:3-27:15) TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+  Fix 0: "Disable matchToResultOrOption for this line"
+  Fix 1: "Disable matchToResultOrOption for entire file"
+  Fix 2: "Replace with Effect.result"
+
+[D3] (38:3-38:15) TS377175: `Effect.option` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+  Fix 0: "Disable matchToResultOrOption for this line"
+  Fix 1: "Disable matchToResultOrOption for entire file"
+  Fix 2: "Replace with Effect.option"
+
+[D4] (47:9-47:21) TS377175: `Effect.result` reifies the outcome directly; these `Effect.map/catch` handlers only wrap the value and the error. effect(matchToResultOrOption)
+  Fix 0: "Disable matchToResultOrOption for this line"
+  Fix 1: "Disable matchToResultOrOption for entire file"
+  Fix 2: "Replace with Effect.result"
+
+[D5] (55:3-55:15) TS377175: `Effect.option` reifies the outcome directly; these `Effect.map/catch` handlers only wrap the value and the error. effect(matchToResultOrOption)
+  Fix 0: "Disable matchToResultOrOption for this line"
+  Fix 1: "Disable matchToResultOrOption for entire file"
+  Fix 2: "Replace with Effect.option"
+
+[D6] (59:36-59:48) TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+  Fix 0: "Disable matchToResultOrOption for this line"
+  Fix 1: "Disable matchToResultOrOption for entire file"
+  Fix 2: "Replace with Effect.result"
+
+[D7] (74:3-74:15) TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+  Fix 0: "Disable matchToResultOrOption for this line"
+  Fix 1: "Disable matchToResultOrOption for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable matchToResultOrOption for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable matchToResultOrOption for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.result" ===
+
+--- file:///.src/matchToResultOrOption_shapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics matchToResultOrOption:warning
+import { Data, Effect, Option, pipe, Result } from "effect"
+
+class UserNotFound extends Data.TaggedError("UserNotFound")<{
+  readonly id: string
+}> {}
+
+interface User {
+  readonly name: string
+}
+
+declare const fetchUser: (id: string) => Effect.Effect<User, UserNotFound>
+declare const fallbackError: UserNotFound
+
+// MUST TRIGGER: curried application of the pipeable form
+export const curried = Effect.result(fetchUser("u1"))
+
+// MUST TRIGGER: trailing step of Effect.fn
+export const effectFnStep = Effect.fn("effectFnStep")(
+  function*(id: string) {
+    return yield* fetchUser(id)
+  },
+  Effect.match({
+    onFailure: Result.fail,
+    onSuccess: Result.succeed
+  })
+)
+
+// MUST TRIGGER: trailing step of Effect.fnUntraced
+export const effectFnUntracedStep = Effect.fnUntraced(
+  function*(id: string) {
+    return yield* fetchUser(id)
+  },
+  Effect.match({
+    onFailure: () => Option.none(),
+    onSuccess: Option.some
+  })
+)
+
+// MUST TRIGGER: map + catch pair split across two pipe calls
+export const splitPipes = fetchUser("u1")
+  .pipe(Effect.map(Result.succeed))
+  .pipe(Effect.catch((e) => Effect.succeed(Result.fail(e))))
+
+// MUST TRIGGER: map + catch pair as trailing steps of Effect.fn
+export const effectFnPair = Effect.fn("effectFnPair")(
+  function*(id: string) {
+    return yield* fetchUser(id)
+  },
+  Effect.map(Option.some),
+  Effect.catch(() => Effect.succeed(Option.none()))
+)
+
+// MUST TRIGGER: function expression handlers
+export const functionExpressions = Effect.match(fetchUser("u1"), {
+  onFailure: function(e) {
+    return Result.fail(e)
+  },
+  onSuccess: function(user) {
+    return Result.succeed(user)
+  }
+})
+
+// MUST TRIGGER (no fix): explicit type arguments on pipe depend on the old output type
+export const typedPipe = pipe<
+  Effect.Effect<User, UserNotFound>,
+  Effect.Effect<Result.Result<never, UserNotFound> | Result.Result<User, never>>
+>(
+  fetchUser("u1"),
+  Effect.match({
+    onFailure: Result.fail,
+    onSuccess: Result.succeed
+  })
+)
+
+// MUST NOT TRIGGER: async handlers return promises, not the reified value
+export const asyncHandlers = Effect.match(fetchUser("u1"), {
+  onFailure: async (e) => Result.fail(e),
+  onSuccess: async (user) => Result.succeed(user)
+})
+
+// MUST NOT TRIGGER: explicit type arguments on the forwarded constructor
+export const constructorTypeArguments = Effect.match(fetchUser("u1"), {
+  onFailure: (e) => Result.fail<UserNotFound>(e),
+  onSuccess: Result.succeed
+})
+
+// MUST NOT TRIGGER: explicit type arguments on Effect.succeed in a matchEffect branch
+export const succeedTypeArguments = Effect.matchEffect(fetchUser("u1"), {
+  onFailure: (e) => Effect.succeed<Result.Result<User, UserNotFound>>(Result.fail(e)),
+  onSuccess: (user) => Effect.succeed(Result.succeed(user))
+})
+
+// MUST NOT TRIGGER: failure handler with a default parameter
+export const defaultParameter = Effect.match(fetchUser("u1"), {
+  onFailure: (_e = fallbackError) => Option.none(),
+  onSuccess: Option.some
+})
+
+// MUST NOT TRIGGER: an unapplied pipeable match is not applied to an Effect yet
+export const unappliedFold = Effect.match({
+  onFailure: Result.fail,
+  onSuccess: Result.succeed
+})
+
+
+=== [D2] Fix 0: "Disable matchToResultOrOption for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable matchToResultOrOption for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.result" ===
+
+--- file:///.src/matchToResultOrOption_shapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics matchToResultOrOption:warning
+import { Data, Effect, Option, pipe, Result } from "effect"
+
+class UserNotFound extends Data.TaggedError("UserNotFound")<{
+  readonly id: string
+}> {}
+
+interface User {
+  readonly name: string
+}
+
+declare const fetchUser: (id: string) => Effect.Effect<User, UserNotFound>
+declare const fallbackError: UserNotFound
+
+// MUST TRIGGER: curried application of the pipeable form
+export const curried = Effect.match({
+  onFailure: Result.fail,
+  onSuccess: Result.succeed
+})(fetchUser("u1"))
+
+// MUST TRIGGER: trailing step of Effect.fn
+export const effectFnStep = Effect.fn("effectFnStep")(
+  function*(id: string) {
+    return yield* fetchUser(id)
+  },
+  Effect.result
+)
+
+// MUST TRIGGER: trailing step of Effect.fnUntraced
+export const effectFnUntracedStep = Effect.fnUntraced(
+  function*(id: string) {
+    return yield* fetchUser(id)
+  },
+  Effect.match({
+    onFailure: () => Option.none(),
+    onSuccess: Option.some
+  })
+)
+
+// MUST TRIGGER: map + catch pair split across two pipe calls
+export const splitPipes = fetchUser("u1")
+  .pipe(Effect.map(Result.succeed))
+  .pipe(Effect.catch((e) => Effect.succeed(Result.fail(e))))
+
+// MUST TRIGGER: map + catch pair as trailing steps of Effect.fn
+export const effectFnPair = Effect.fn("effectFnPair")(
+  function*(id: string) {
+    return yield* fetchUser(id)
+  },
+  Effect.map(Option.some),
+  Effect.catch(() => Effect.succeed(Option.none()))
+)
+
+// MUST TRIGGER: function expression handlers
+export const functionExpressions = Effect.match(fetchUser("u1"), {
+  onFailure: function(e) {
+    return Result.fail(e)
+  },
+  onSuccess: function(user) {
+    return Result.succeed(user)
+  }
+})
+
+// MUST TRIGGER (no fix): explicit type arguments on pipe depend on the old output type
+export const typedPipe = pipe<
+  Effect.Effect<User, UserNotFound>,
+  Effect.Effect<Result.Result<never, UserNotFound> | Result.Result<User, never>>
+>(
+  fetchUser("u1"),
+  Effect.match({
+    onFailure: Result.fail,
+    onSuccess: Result.succeed
+  })
+)
+
+// MUST NOT TRIGGER: async handlers return promises, not the reified value
+export const asyncHandlers = Effect.match(fetchUser("u1"), {
+  onFailure: async (e) => Result.fail(e),
+  onSuccess: async (user) => Result.succeed(user)
+})
+
+// MUST NOT TRIGGER: explicit type arguments on the forwarded constructor
+export const constructorTypeArguments = Effect.match(fetchUser("u1"), {
+  onFailure: (e) => Result.fail<UserNotFound>(e),
+  onSuccess: Result.succeed
+})
+
+// MUST NOT TRIGGER: explicit type arguments on Effect.succeed in a matchEffect branch
+export const succeedTypeArguments = Effect.matchEffect(fetchUser("u1"), {
+  onFailure: (e) => Effect.succeed<Result.Result<User, UserNotFound>>(Result.fail(e)),
+  onSuccess: (user) => Effect.succeed(Result.succeed(user))
+})
+
+// MUST NOT TRIGGER: failure handler with a default parameter
+export const defaultParameter = Effect.match(fetchUser("u1"), {
+  onFailure: (_e = fallbackError) => Option.none(),
+  onSuccess: Option.some
+})
+
+// MUST NOT TRIGGER: an unapplied pipeable match is not applied to an Effect yet
+export const unappliedFold = Effect.match({
+  onFailure: Result.fail,
+  onSuccess: Result.succeed
+})
+
+
+=== [D3] Fix 0: "Disable matchToResultOrOption for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable matchToResultOrOption for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.option" ===
+
+--- file:///.src/matchToResultOrOption_shapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics matchToResultOrOption:warning
+import { Data, Effect, Option, pipe, Result } from "effect"
+
+class UserNotFound extends Data.TaggedError("UserNotFound")<{
+  readonly id: string
+}> {}
+
+interface User {
+  readonly name: string
+}
+
+declare const fetchUser: (id: string) => Effect.Effect<User, UserNotFound>
+declare const fallbackError: UserNotFound
+
+// MUST TRIGGER: curried application of the pipeable form
+export const curried = Effect.match({
+  onFailure: Result.fail,
+  onSuccess: Result.succeed
+})(fetchUser("u1"))
+
+// MUST TRIGGER: trailing step of Effect.fn
+export const effectFnStep = Effect.fn("effectFnStep")(
+  function*(id: string) {
+    return yield* fetchUser(id)
+  },
+  Effect.match({
+    onFailure: Result.fail,
+    onSuccess: Result.succeed
+  })
+)
+
+// MUST TRIGGER: trailing step of Effect.fnUntraced
+export const effectFnUntracedStep = Effect.fnUntraced(
+  function*(id: string) {
+    return yield* fetchUser(id)
+  },
+  Effect.option
+)
+
+// MUST TRIGGER: map + catch pair split across two pipe calls
+export const splitPipes = fetchUser("u1")
+  .pipe(Effect.map(Result.succeed))
+  .pipe(Effect.catch((e) => Effect.succeed(Result.fail(e))))
+
+// MUST TRIGGER: map + catch pair as trailing steps of Effect.fn
+export const effectFnPair = Effect.fn("effectFnPair")(
+  function*(id: string) {
+    return yield* fetchUser(id)
+  },
+  Effect.map(Option.some),
+  Effect.catch(() => Effect.succeed(Option.none()))
+)
+
+// MUST TRIGGER: function expression handlers
+export const functionExpressions = Effect.match(fetchUser("u1"), {
+  onFailure: function(e) {
+    return Result.fail(e)
+  },
+  onSuccess: function(user) {
+    return Result.succeed(user)
+  }
+})
+
+// MUST TRIGGER (no fix): explicit type arguments on pipe depend on the old output type
+export const typedPipe = pipe<
+  Effect.Effect<User, UserNotFound>,
+  Effect.Effect<Result.Result<never, UserNotFound> | Result.Result<User, never>>
+>(
+  fetchUser("u1"),
+  Effect.match({
+    onFailure: Result.fail,
+    onSuccess: Result.succeed
+  })
+)
+
+// MUST NOT TRIGGER: async handlers return promises, not the reified value
+export const asyncHandlers = Effect.match(fetchUser("u1"), {
+  onFailure: async (e) => Result.fail(e),
+  onSuccess: async (user) => Result.succeed(user)
+})
+
+// MUST NOT TRIGGER: explicit type arguments on the forwarded constructor
+export const constructorTypeArguments = Effect.match(fetchUser("u1"), {
+  onFailure: (e) => Result.fail<UserNotFound>(e),
+  onSuccess: Result.succeed
+})
+
+// MUST NOT TRIGGER: explicit type arguments on Effect.succeed in a matchEffect branch
+export const succeedTypeArguments = Effect.matchEffect(fetchUser("u1"), {
+  onFailure: (e) => Effect.succeed<Result.Result<User, UserNotFound>>(Result.fail(e)),
+  onSuccess: (user) => Effect.succeed(Result.succeed(user))
+})
+
+// MUST NOT TRIGGER: failure handler with a default parameter
+export const defaultParameter = Effect.match(fetchUser("u1"), {
+  onFailure: (_e = fallbackError) => Option.none(),
+  onSuccess: Option.some
+})
+
+// MUST NOT TRIGGER: an unapplied pipeable match is not applied to an Effect yet
+export const unappliedFold = Effect.match({
+  onFailure: Result.fail,
+  onSuccess: Result.succeed
+})
+
+
+=== [D4] Fix 0: "Disable matchToResultOrOption for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable matchToResultOrOption for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.result" ===
+
+--- file:///.src/matchToResultOrOption_shapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics matchToResultOrOption:warning
+import { Data, Effect, Option, pipe, Result } from "effect"
+
+class UserNotFound extends Data.TaggedError("UserNotFound")<{
+  readonly id: string
+}> {}
+
+interface User {
+  readonly name: string
+}
+
+declare const fetchUser: (id: string) => Effect.Effect<User, UserNotFound>
+declare const fallbackError: UserNotFound
+
+// MUST TRIGGER: curried application of the pipeable form
+export const curried = Effect.match({
+  onFailure: Result.fail,
+  onSuccess: Result.succeed
+})(fetchUser("u1"))
+
+// MUST TRIGGER: trailing step of Effect.fn
+export const effectFnStep = Effect.fn("effectFnStep")(
+  function*(id: string) {
+    return yield* fetchUser(id)
+  },
+  Effect.match({
+    onFailure: Result.fail,
+    onSuccess: Result.succeed
+  })
+)
+
+// MUST TRIGGER: trailing step of Effect.fnUntraced
+export const effectFnUntracedStep = Effect.fnUntraced(
+  function*(id: string) {
+    return yield* fetchUser(id)
+  },
+  Effect.match({
+    onFailure: () => Option.none(),
+    onSuccess: Option.some
+  })
+)
+
+// MUST TRIGGER: map + catch pair split across two pipe calls
+export const splitPipes = fetchUser("u1").pipe(Effect.result)
+
+// MUST TRIGGER: map + catch pair as trailing steps of Effect.fn
+export const effectFnPair = Effect.fn("effectFnPair")(
+  function*(id: string) {
+    return yield* fetchUser(id)
+  },
+  Effect.map(Option.some),
+  Effect.catch(() => Effect.succeed(Option.none()))
+)
+
+// MUST TRIGGER: function expression handlers
+export const functionExpressions = Effect.match(fetchUser("u1"), {
+  onFailure: function(e) {
+    return Result.fail(e)
+  },
+  onSuccess: function(user) {
+    return Result.succeed(user)
+  }
+})
+
+// MUST TRIGGER (no fix): explicit type arguments on pipe depend on the old output type
+export const typedPipe = pipe<
+  Effect.Effect<User, UserNotFound>,
+  Effect.Effect<Result.Result<never, UserNotFound> | Result.Result<User, never>>
+>(
+  fetchUser("u1"),
+  Effect.match({
+    onFailure: Result.fail,
+    onSuccess: Result.succeed
+  })
+)
+
+// MUST NOT TRIGGER: async handlers return promises, not the reified value
+export const asyncHandlers = Effect.match(fetchUser("u1"), {
+  onFailure: async (e) => Result.fail(e),
+  onSuccess: async (user) => Result.succeed(user)
+})
+
+// MUST NOT TRIGGER: explicit type arguments on the forwarded constructor
+export const constructorTypeArguments = Effect.match(fetchUser("u1"), {
+  onFailure: (e) => Result.fail<UserNotFound>(e),
+  onSuccess: Result.succeed
+})
+
+// MUST NOT TRIGGER: explicit type arguments on Effect.succeed in a matchEffect branch
+export const succeedTypeArguments = Effect.matchEffect(fetchUser("u1"), {
+  onFailure: (e) => Effect.succeed<Result.Result<User, UserNotFound>>(Result.fail(e)),
+  onSuccess: (user) => Effect.succeed(Result.succeed(user))
+})
+
+// MUST NOT TRIGGER: failure handler with a default parameter
+export const defaultParameter = Effect.match(fetchUser("u1"), {
+  onFailure: (_e = fallbackError) => Option.none(),
+  onSuccess: Option.some
+})
+
+// MUST NOT TRIGGER: an unapplied pipeable match is not applied to an Effect yet
+export const unappliedFold = Effect.match({
+  onFailure: Result.fail,
+  onSuccess: Result.succeed
+})
+
+
+=== [D5] Fix 0: "Disable matchToResultOrOption for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable matchToResultOrOption for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.option" ===
+
+--- file:///.src/matchToResultOrOption_shapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics matchToResultOrOption:warning
+import { Data, Effect, Option, pipe, Result } from "effect"
+
+class UserNotFound extends Data.TaggedError("UserNotFound")<{
+  readonly id: string
+}> {}
+
+interface User {
+  readonly name: string
+}
+
+declare const fetchUser: (id: string) => Effect.Effect<User, UserNotFound>
+declare const fallbackError: UserNotFound
+
+// MUST TRIGGER: curried application of the pipeable form
+export const curried = Effect.match({
+  onFailure: Result.fail,
+  onSuccess: Result.succeed
+})(fetchUser("u1"))
+
+// MUST TRIGGER: trailing step of Effect.fn
+export const effectFnStep = Effect.fn("effectFnStep")(
+  function*(id: string) {
+    return yield* fetchUser(id)
+  },
+  Effect.match({
+    onFailure: Result.fail,
+    onSuccess: Result.succeed
+  })
+)
+
+// MUST TRIGGER: trailing step of Effect.fnUntraced
+export const effectFnUntracedStep = Effect.fnUntraced(
+  function*(id: string) {
+    return yield* fetchUser(id)
+  },
+  Effect.match({
+    onFailure: () => Option.none(),
+    onSuccess: Option.some
+  })
+)
+
+// MUST TRIGGER: map + catch pair split across two pipe calls
+export const splitPipes = fetchUser("u1")
+  .pipe(Effect.map(Result.succeed))
+  .pipe(Effect.catch((e) => Effect.succeed(Result.fail(e))))
+
+// MUST TRIGGER: map + catch pair as trailing steps of Effect.fn
+export const effectFnPair = Effect.fn("effectFnPair")(function* (id: string) {
+    return yield* fetchUser(id);
+}, Effect.option)
+
+// MUST TRIGGER: function expression handlers
+export const functionExpressions = Effect.match(fetchUser("u1"), {
+  onFailure: function(e) {
+    return Result.fail(e)
+  },
+  onSuccess: function(user) {
+    return Result.succeed(user)
+  }
+})
+
+// MUST TRIGGER (no fix): explicit type arguments on pipe depend on the old output type
+export const typedPipe = pipe<
+  Effect.Effect<User, UserNotFound>,
+  Effect.Effect<Result.Result<never, UserNotFound> | Result.Result<User, never>>
+>(
+  fetchUser("u1"),
+  Effect.match({
+    onFailure: Result.fail,
+    onSuccess: Result.succeed
+  })
+)
+
+// MUST NOT TRIGGER: async handlers return promises, not the reified value
+export const asyncHandlers = Effect.match(fetchUser("u1"), {
+  onFailure: async (e) => Result.fail(e),
+  onSuccess: async (user) => Result.succeed(user)
+})
+
+// MUST NOT TRIGGER: explicit type arguments on the forwarded constructor
+export const constructorTypeArguments = Effect.match(fetchUser("u1"), {
+  onFailure: (e) => Result.fail<UserNotFound>(e),
+  onSuccess: Result.succeed
+})
+
+// MUST NOT TRIGGER: explicit type arguments on Effect.succeed in a matchEffect branch
+export const succeedTypeArguments = Effect.matchEffect(fetchUser("u1"), {
+  onFailure: (e) => Effect.succeed<Result.Result<User, UserNotFound>>(Result.fail(e)),
+  onSuccess: (user) => Effect.succeed(Result.succeed(user))
+})
+
+// MUST NOT TRIGGER: failure handler with a default parameter
+export const defaultParameter = Effect.match(fetchUser("u1"), {
+  onFailure: (_e = fallbackError) => Option.none(),
+  onSuccess: Option.some
+})
+
+// MUST NOT TRIGGER: an unapplied pipeable match is not applied to an Effect yet
+export const unappliedFold = Effect.match({
+  onFailure: Result.fail,
+  onSuccess: Result.succeed
+})
+
+
+=== [D6] Fix 0: "Disable matchToResultOrOption for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable matchToResultOrOption for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.result" ===
+
+--- file:///.src/matchToResultOrOption_shapes.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics matchToResultOrOption:warning
+import { Data, Effect, Option, pipe, Result } from "effect"
+
+class UserNotFound extends Data.TaggedError("UserNotFound")<{
+  readonly id: string
+}> {}
+
+interface User {
+  readonly name: string
+}
+
+declare const fetchUser: (id: string) => Effect.Effect<User, UserNotFound>
+declare const fallbackError: UserNotFound
+
+// MUST TRIGGER: curried application of the pipeable form
+export const curried = Effect.match({
+  onFailure: Result.fail,
+  onSuccess: Result.succeed
+})(fetchUser("u1"))
+
+// MUST TRIGGER: trailing step of Effect.fn
+export const effectFnStep = Effect.fn("effectFnStep")(
+  function*(id: string) {
+    return yield* fetchUser(id)
+  },
+  Effect.match({
+    onFailure: Result.fail,
+    onSuccess: Result.succeed
+  })
+)
+
+// MUST TRIGGER: trailing step of Effect.fnUntraced
+export const effectFnUntracedStep = Effect.fnUntraced(
+  function*(id: string) {
+    return yield* fetchUser(id)
+  },
+  Effect.match({
+    onFailure: () => Option.none(),
+    onSuccess: Option.some
+  })
+)
+
+// MUST TRIGGER: map + catch pair split across two pipe calls
+export const splitPipes = fetchUser("u1")
+  .pipe(Effect.map(Result.succeed))
+  .pipe(Effect.catch((e) => Effect.succeed(Result.fail(e))))
+
+// MUST TRIGGER: map + catch pair as trailing steps of Effect.fn
+export const effectFnPair = Effect.fn("effectFnPair")(
+  function*(id: string) {
+    return yield* fetchUser(id)
+  },
+  Effect.map(Option.some),
+  Effect.catch(() => Effect.succeed(Option.none()))
+)
+
+// MUST TRIGGER: function expression handlers
+export const functionExpressions = Effect.result(fetchUser("u1"))
+
+// MUST TRIGGER (no fix): explicit type arguments on pipe depend on the old output type
+export const typedPipe = pipe<
+  Effect.Effect<User, UserNotFound>,
+  Effect.Effect<Result.Result<never, UserNotFound> | Result.Result<User, never>>
+>(
+  fetchUser("u1"),
+  Effect.match({
+    onFailure: Result.fail,
+    onSuccess: Result.succeed
+  })
+)
+
+// MUST NOT TRIGGER: async handlers return promises, not the reified value
+export const asyncHandlers = Effect.match(fetchUser("u1"), {
+  onFailure: async (e) => Result.fail(e),
+  onSuccess: async (user) => Result.succeed(user)
+})
+
+// MUST NOT TRIGGER: explicit type arguments on the forwarded constructor
+export const constructorTypeArguments = Effect.match(fetchUser("u1"), {
+  onFailure: (e) => Result.fail<UserNotFound>(e),
+  onSuccess: Result.succeed
+})
+
+// MUST NOT TRIGGER: explicit type arguments on Effect.succeed in a matchEffect branch
+export const succeedTypeArguments = Effect.matchEffect(fetchUser("u1"), {
+  onFailure: (e) => Effect.succeed<Result.Result<User, UserNotFound>>(Result.fail(e)),
+  onSuccess: (user) => Effect.succeed(Result.succeed(user))
+})
+
+// MUST NOT TRIGGER: failure handler with a default parameter
+export const defaultParameter = Effect.match(fetchUser("u1"), {
+  onFailure: (_e = fallbackError) => Option.none(),
+  onSuccess: Option.some
+})
+
+// MUST NOT TRIGGER: an unapplied pipeable match is not applied to an Effect yet
+export const unappliedFold = Effect.match({
+  onFailure: Result.fail,
+  onSuccess: Result.succeed
+})
+
+
+=== [D7] Fix 0: "Disable matchToResultOrOption for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable matchToResultOrOption for entire file" ===
+skipped by default

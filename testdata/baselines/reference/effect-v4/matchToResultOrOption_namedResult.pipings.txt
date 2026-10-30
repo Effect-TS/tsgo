@@ -1,0 +1,15 @@
+==== /.src/matchToResultOrOption_namedResult.ts (1 flows) ====
+
+=== Piping Flow ===
+Location: 10:21 - 10:89
+Node: fold(source, { onFailure: Result.fail, onSuccess: Result.succeed })
+Node Kind: KindCallExpression
+
+Subject: source
+Subject Type: Effect<number, string, never>
+
+Transformations (1):
+  [0] kind: dataFirst
+      callee: fold
+      args: [{ onFailure: Result.fail, onSuccess: Result.succeed }]
+      outType: Effect<import("/node_modules/effect/dist/Result").Result<number, never> | import("/node_modules/effect/dist/Result").Result<never, string>, never, never>

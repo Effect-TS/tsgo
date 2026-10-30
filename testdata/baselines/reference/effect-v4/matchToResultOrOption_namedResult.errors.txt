@@ -1,0 +1,21 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/matchToResultOrOption_namedResult.ts(10,22): warning TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+
+
+==== /.src/matchToResultOrOption_namedResult.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics matchToResultOrOption:warning
+    import type { Effect } from "effect"
+    import { Result } from "effect"
+    import { match as fold, result as reify } from "effect/Effect"
+    
+    declare const source: Effect.Effect<number, string>
+    
+    // MUST TRIGGER: renamed named import of Effect.match; the fix reuses the renamed Effect.result binding
+    export const value = fold(source, { onFailure: Result.fail, onSuccess: Result.succeed })
+                         ~~~~
+!!! warning TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+    export const kept = reify
+    

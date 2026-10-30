@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/shim/diagnostics
+module github.com/microsoft/TypeScript/tsc/providershim/diagnostics
 
 go 1.26
 

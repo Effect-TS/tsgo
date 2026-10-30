@@ -55,6 +55,7 @@
     "effecttsgo/map-some-to-as-some": "warn",
     "effecttsgo/match-effect-to-map-both": "warn",
     "effecttsgo/match-effect-to-match": "warn",
+    "effecttsgo/match-to-result-or-option": "warn",
     "effecttsgo/missing-effect-context": "error",
     "effecttsgo/missing-effect-error": "error",
     "effecttsgo/missing-layer-context": "error",

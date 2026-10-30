@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/shim/printer
+module github.com/microsoft/TypeScript/tsc/providershim/printer
 
 go 1.26
 

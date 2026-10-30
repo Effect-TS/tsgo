@@ -1,0 +1,99 @@
+=== Quick Fix Inventory ===
+
+[D1] (17:24-17:36) TS377175: `Effect.either` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+  Fix 0: "Disable matchToResultOrOption for this line"
+  Fix 1: "Disable matchToResultOrOption for entire file"
+  Fix 2: "Replace with Effect.either"
+
+[D2] (23:32-23:47) TS377175: `Effect.either` reifies the outcome directly; these `Effect.map/catchAll` handlers only wrap the value and the error. effect(matchToResultOrOption)
+  Fix 0: "Disable matchToResultOrOption for this line"
+  Fix 1: "Disable matchToResultOrOption for entire file"
+  Fix 2: "Replace with Effect.either"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable matchToResultOrOption for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable matchToResultOrOption for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.either" ===
+
+--- file:///.src/matchToResultOrOption_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics matchToResultOrOption:warning
+import { Data, Effect, Either } from "effect"
+
+class UserNotFound extends Data.TaggedError("UserNotFound")<{
+  readonly id: string
+}> {}
+
+interface User {
+  readonly name: string
+}
+
+declare const fetchUser: (id: string) => Effect.Effect<User, UserNotFound>
+
+// MUST TRIGGER: curried application of the pipeable form -> Effect.either
+export const curried = Effect.either(fetchUser("u1"))
+
+// MUST TRIGGER: nested data-first map + catchAll -> Effect.either
+export const nestedDataFirst = Effect.catchAll(
+  Effect.map(fetchUser("u1"), Either.right),
+  (e) => Effect.succeed(Either.left(e))
+)
+
+// MUST NOT TRIGGER: v3 Effect.catch takes a discriminator, not a catch-all handler
+export const catchByTag = fetchUser("u1").pipe(
+  Effect.map(Either.right),
+  Effect.catch("_tag", {
+    failure: "UserNotFound",
+    onFailure: (e) => Effect.succeed(Either.left(e))
+  })
+)
+
+
+=== [D2] Fix 0: "Disable matchToResultOrOption for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable matchToResultOrOption for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.either" ===
+
+--- file:///.src/matchToResultOrOption_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics matchToResultOrOption:warning
+import { Data, Effect, Either } from "effect"
+
+class UserNotFound extends Data.TaggedError("UserNotFound")<{
+  readonly id: string
+}> {}
+
+interface User {
+  readonly name: string
+}
+
+declare const fetchUser: (id: string) => Effect.Effect<User, UserNotFound>
+
+// MUST TRIGGER: curried application of the pipeable form -> Effect.either
+export const curried = Effect.match({
+  onFailure: Either.left,
+  onSuccess: Either.right
+})(fetchUser("u1"))
+
+// MUST TRIGGER: nested data-first map + catchAll -> Effect.either
+export const nestedDataFirst = Effect.either(fetchUser("u1"))
+
+// MUST NOT TRIGGER: v3 Effect.catch takes a discriminator, not a catch-all handler
+export const catchByTag = fetchUser("u1").pipe(
+  Effect.map(Either.right),
+  Effect.catch("_tag", {
+    failure: "UserNotFound",
+    onFailure: (e) => Effect.succeed(Either.left(e))
+  })
+)
+

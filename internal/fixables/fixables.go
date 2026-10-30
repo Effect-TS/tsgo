@@ -26,6 +26,7 @@ var All = []fixable.Fixable{
 	FlatMapIgnoredParamToAndThenFix,
 	FlatMapIdentityToFlattenFix,
 	MatchEffectToMatchFix,
+	MatchToResultOrOptionFix,
 	MatchEffectToMapBothFix,
 	MapMapErrorToMapBothFix,
 	FlatMapConditionalToFilterOrFailFix,

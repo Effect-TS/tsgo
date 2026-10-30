@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/shim/modulespecifiers
+module github.com/microsoft/TypeScript/tsc/providershim/modulespecifiers
 
 go 1.26
 

@@ -1,0 +1,339 @@
+==== /.src/matchToResultOrOption_effectfulReferences.ts (19 flows) ====
+
+=== Piping Flow ===
+Location: 6:27 - 6:60
+Node: Data.TaggedError("UserNotFound")
+Node Kind: KindCallExpression
+
+Subject: "UserNotFound"
+Subject Type: "UserNotFound"
+
+Transformations (1):
+  [0] kind: call
+      callee: Data.TaggedError
+      args: (constant)
+      outType: new <A extends Record<string, any> = {}>(args: Equals<A, {}> extends true ? void : { readonly [P in keyof A as P extends "_tag" ? never : P]: A[P]; }) => YieldableError & { readonly _tag: "UserNotFound"; } & Readonly<A>
+
+=== Piping Flow ===
+Location: 24:31 - 27:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: () => getOption().none(),\n  onSuccess: Option.some\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: () => getOption().none(),\n  onSuccess: Option.some\n}]
+      outType: Effect<import("/node_modules/effect/dist/dts/Option").Option<never> | import("/node_modules/effect/dist/dts/Option").Option<User>, never, never>
+
+=== Piping Flow ===
+Location: 30:36 - 33:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: (e) => getEither().left(e),\n  onSuccess: Either.right\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: (e) => getEither().left(e),\n  onSuccess: Either.right\n}]
+      outType: Effect<import("/node_modules/effect/dist/dts/Either").Either<never, UserNotFound> | import("/node_modules/effect/dist/dts/Either").Either<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 31:20 - 31:40
+Node: getEither().left(e)
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (1):
+  [0] kind: call
+      callee: getEither().left
+      args: (constant)
+      outType: Either<never, UserNotFound>
+
+=== Piping Flow ===
+Location: 36:37 - 39:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: Either.left,\n  onSuccess: (record("success"), Either).right\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: Either.left,\n  onSuccess: (record("success"), Either).right\n}]
+      outType: Effect<import("/node_modules/effect/dist/dts/Either").Either<never, UserNotFound> | import("/node_modules/effect/dist/dts/Either").Either<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 38:15 - 38:32
+Node: record("success")
+Node Kind: KindCallExpression
+
+Subject: "success"
+Subject Type: "success"
+
+Transformations (1):
+  [0] kind: call
+      callee: record
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 42:34 - 45:3
+Node: Effect.matchEffect(fetchUser("u1"), {\n  onFailure: (e) => getEffect().succeed(Either.left(e)),\n  onSuccess: (user) => Effect.succeed(Either.right(user))\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.matchEffect
+      args: [{\n  onFailure: (e) => getEffect().succeed(Either.left(e)),\n  onSuccess: (user) => Effect.succeed(Either.right(user))\n}]
+      outType: Effect<import("/node_modules/effect/dist/dts/Either").Either<never, UserNotFound> | import("/node_modules/effect/dist/dts/Either").Either<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 43:20 - 43:56
+Node: getEffect().succeed(Either.left(e))
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (2):
+  [0] kind: call
+      callee: Either.left
+      args: (constant)
+      outType: Either<never, UserNotFound>
+  [1] kind: call
+      callee: getEffect().succeed
+      args: (constant)
+      outType: Effect<Either<never, UserNotFound>, never, never>
+
+=== Piping Flow ===
+Location: 44:23 - 44:58
+Node: Effect.succeed(Either.right(user))
+Node Kind: KindCallExpression
+
+Subject: user
+Subject Type: User
+
+Transformations (2):
+  [0] kind: call
+      callee: Either.right
+      args: (constant)
+      outType: Either<User, never>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Either<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 48:30 - 51:2
+Node: fetchUser("u1").pipe(\n  Effect.map(getEither().right),\n  Effect.catchAll((e) => Effect.succeed(Either.left(e)))\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (3):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [getEither().right]
+      outType: Effect<Either<User, never>, UserNotFound, never>
+  [2] kind: pipeable
+      callee: Effect.catchAll
+      args: [(e) => Effect.succeed(Either.left(e))]
+      outType: Effect<import("/node_modules/effect/dist/dts/Either").Either<never, UserNotFound> | import("/node_modules/effect/dist/dts/Either").Either<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 50:25 - 50:56
+Node: Effect.succeed(Either.left(e))
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (2):
+  [0] kind: call
+      callee: Either.left
+      args: (constant)
+      outType: Either<never, UserNotFound>
+  [1] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Either<never, UserNotFound>, never, never>
+
+=== Piping Flow ===
+Location: 54:35 - 57:2
+Node: fetchUser("u1").pipe(\n  Effect.map(Option.some),\n  Effect.catchAll(() => Effect.succeed(getOption().none()))\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (3):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [Option.some]
+      outType: Effect<Option<User>, UserNotFound, never>
+  [2] kind: pipeable
+      callee: Effect.catchAll
+      args: [() => Effect.succeed(getOption().none())]
+      outType: Effect<import("/node_modules/effect/dist/dts/Option").Option<never> | import("/node_modules/effect/dist/dts/Option").Option<User>, never, never>
+
+=== Piping Flow ===
+Location: 56:24 - 56:59
+Node: Effect.succeed(getOption().none())
+Node Kind: KindCallExpression
+
+Subject: getOption().none()
+Subject Type: Option<never>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<Option<never>, never, never>
+
+=== Piping Flow ===
+Location: 60:39 - 63:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: (Either.left),\n  onSuccess: (Either.right)\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: (Either.left),\n  onSuccess: (Either.right)\n}]
+      outType: Effect<import("/node_modules/effect/dist/dts/Either").Either<never, UserNotFound> | import("/node_modules/effect/dist/dts/Either").Either<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 82:33 - 85:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: () => modules.option.none(),\n  onSuccess: Option.some\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: () => modules.option.none(),\n  onSuccess: Option.some\n}]
+      outType: Effect<import("/node_modules/effect/dist/dts/Option").Option<never> | import("/node_modules/effect/dist/dts/Option").Option<User>, never, never>
+
+=== Piping Flow ===
+Location: 88:38 - 91:3
+Node: Effect.match(fetchUser("u1"), {\n  onFailure: modules.either.left,\n  onSuccess: Either.right\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: Effect.match
+      args: [{\n  onFailure: modules.either.left,\n  onSuccess: Either.right\n}]
+      outType: Effect<import("/node_modules/effect/dist/dts/Either").Either<never, UserNotFound> | import("/node_modules/effect/dist/dts/Either").Either<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 94:36 - 97:2
+Node: fetchUser("u1").pipe(\n  Effect.map(Either.right),\n  Effect.catchAll((e) => modules.effect.succeed(Either.left(e)))\n)
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (3):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [Either.right]
+      outType: Effect<Either<User, never>, UserNotFound, never>
+  [2] kind: pipeable
+      callee: Effect.catchAll
+      args: [(e) => modules.effect.succeed(Either.left(e))]
+      outType: Effect<import("/node_modules/effect/dist/dts/Either").Either<never, UserNotFound> | import("/node_modules/effect/dist/dts/Either").Either<User, never>, never, never>
+
+=== Piping Flow ===
+Location: 96:25 - 96:64
+Node: modules.effect.succeed(Either.left(e))
+Node Kind: KindCallExpression
+
+Subject: e
+Subject Type: UserNotFound
+
+Transformations (2):
+  [0] kind: call
+      callee: Either.left
+      args: (constant)
+      outType: Either<never, UserNotFound>
+  [1] kind: call
+      callee: modules.effect.succeed
+      args: (constant)
+      outType: Effect<Either<never, UserNotFound>, never, never>
+
+=== Piping Flow ===
+Location: 100:34 - 103:3
+Node: modules.effect.match(fetchUser("u1"), {\n  onFailure: Either.left,\n  onSuccess: Either.right\n})
+Node Kind: KindCallExpression
+
+Subject: "u1"
+Subject Type: "u1"
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<User, UserNotFound, never>
+  [1] kind: dataFirst
+      callee: modules.effect.match
+      args: [{\n  onFailure: Either.left,\n  onSuccess: Either.right\n}]
+      outType: Effect<import("/node_modules/effect/dist/dts/Either").Either<never, UserNotFound> | import("/node_modules/effect/dist/dts/Either").Either<User, never>, never, never>

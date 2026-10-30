@@ -1,0 +1,31 @@
+=== Quick Fix Inventory ===
+
+[D1] (12:27-12:39) TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+  Fix 0: "Disable matchToResultOrOption for this line"
+  Fix 1: "Disable matchToResultOrOption for entire file"
+  Fix 2: "Replace with Effect.result"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable matchToResultOrOption for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable matchToResultOrOption for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.result" ===
+
+--- file:///.src/matchToResultOrOption_preview.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics matchToResultOrOption:warning
+import { Data, Effect, Result } from "effect"
+
+class UserNotFound extends Data.TaggedError("UserNotFound")<{
+  readonly id: string
+}> {}
+
+declare const fetchUser: (id: string) => Effect.Effect<{ readonly name: string }, UserNotFound>
+
+// MUST TRIGGER: both handlers only reify the outcome, which is Effect.result
+export const userResult = Effect.result(fetchUser("u1"))
+

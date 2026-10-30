@@ -1,0 +1,171 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/matchToResultOrOption_effectfulReferences.ts(91,40): warning TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+/.src/matchToResultOrOption_effectfulReferences.ts(97,34): warning TS377175: `Effect.option` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+/.src/matchToResultOrOption_effectfulReferences.ts(150,35): warning TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+
+
+==== /.src/matchToResultOrOption_effectfulReferences.ts (3 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics matchToResultOrOption:warning
+    import { Data, Effect, Function, Option, pipe, Result } from "effect"
+    
+    class UserNotFound extends Data.TaggedError("UserNotFound")<{
+      readonly id: string
+    }> {}
+    
+    interface User {
+      readonly name: string
+    }
+    
+    declare const fetchUser: (id: string) => Effect.Effect<User, UserNotFound>
+    declare const getOption: () => typeof Option
+    declare const getResult: () => typeof Result
+    declare const getEffect: () => typeof Effect
+    declare const getFunction: () => typeof Function
+    declare const record: (value: unknown) => void
+    
+    // Every handler below reaches the reifying constructors, but evaluating it runs
+    // other code too (a call in the constructor's receiver). Effect.result and
+    // Effect.option would drop that code, so none of them is reported.
+    
+    // MUST NOT TRIGGER: Option.none reached through a call in the failure handler body
+    export const noneThroughCall = Effect.match(fetchUser("u1"), {
+      onFailure: () => getOption().none(),
+      onSuccess: Option.some
+    })
+    
+    // MUST NOT TRIGGER: identity forwarder whose constructor receiver is a call
+    export const forwarderThroughCall = Effect.match(fetchUser("u1"), {
+      onFailure: (e) => getResult().fail(e),
+      onSuccess: Result.succeed
+    })
+    
+    // MUST NOT TRIGGER: point-free constructor whose receiver is a call
+    export const pointFreeThroughCall = Effect.match(fetchUser("u1"), {
+      onFailure: Result.fail,
+      onSuccess: getResult().succeed
+    })
+    
+    // MUST NOT TRIGGER: point-free constructor behind a comma expression
+    export const pointFreeThroughComma = Effect.match(fetchUser("u1"), {
+      onFailure: (record("failure"), Result).fail,
+      onSuccess: Result.succeed
+    })
+    
+    // MUST NOT TRIGGER: matchEffect branch whose Effect.succeed receiver is a call
+    export const succeedThroughCall = Effect.matchEffect(fetchUser("u1"), {
+      onFailure: (e) => getEffect().succeed(Result.fail(e)),
+      onSuccess: (user) => Effect.succeed(Result.succeed(user))
+    })
+    
+    // MUST NOT TRIGGER: matchEffect branch whose constructor receiver is a call
+    export const matchEffectConstructorThroughCall = Effect.matchEffect(fetchUser("u1"), {
+      onFailure: () => Effect.succeed(getOption().none()),
+      onSuccess: (user) => Effect.succeed(Option.some(user))
+    })
+    
+    // MUST NOT TRIGGER: map argument whose constructor receiver is a call
+    export const mapThroughCall = fetchUser("u1").pipe(
+      Effect.map(getResult().succeed),
+      Effect.catch((e) => Effect.succeed(Result.fail(e)))
+    )
+    
+    // MUST NOT TRIGGER: catch handler whose constructor receiver is a call
+    export const catchThroughCall = fetchUser("u1").pipe(
+      Effect.map(Result.succeed),
+      Effect.catch((e) => Effect.succeed(getResult().fail(e)))
+    )
+    
+    // MUST NOT TRIGGER: pipe function reached through a call in the handler body
+    export const pipeThroughCall = Effect.matchEffect(fetchUser("u1"), {
+      onFailure: (e) => getFunction().pipe(e, Result.fail, Effect.succeed),
+      onSuccess: (user) => Effect.succeed(Result.succeed(user))
+    })
+    
+    // MUST NOT TRIGGER: a .pipe method call on the handler argument can run arbitrary code
+    export const pipeableMethodBody = Effect.matchEffect(fetchUser("u1"), {
+      onFailure: (e) => e.pipe(Result.fail, Effect.succeed),
+      onSuccess: (user) => Effect.succeed(Result.succeed(user))
+    })
+    
+    // MUST NOT TRIGGER: only direct calls are recognized in handler bodies, not pipe(...)
+    export const pipeFunctionBody = Effect.matchEffect(fetchUser("u1"), {
+      onFailure: (e) => pipe(e, Result.fail, Effect.succeed),
+      onSuccess: (user) => Effect.succeed(Result.succeed(user))
+    })
+    
+    // MUST TRIGGER: parenthesized side-effect-free constructor references
+    export const parenthesizedReferences = Effect.match(fetchUser("u1"), {
+                                           ~~~~~~~~~~~~
+!!! warning TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+      onFailure: (Result.fail),
+      onSuccess: (Result.succeed)
+    })
+    
+    // MUST TRIGGER: parenthesized side-effect-free callee in the failure handler body
+    export const parenthesizedNone = Effect.match(fetchUser("u1"), {
+                                     ~~~~~~~~~~~~
+!!! warning TS377175: `Effect.option` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+      onFailure: () => (Option.none)(),
+      onSuccess: Option.some
+    })
+    
+    let moduleReads = 0
+    const modules = {
+      get option(): typeof Option {
+        moduleReads++
+        return Option
+      },
+      get result(): typeof Result {
+        moduleReads++
+        return Result
+      },
+      get effect(): typeof Effect {
+        moduleReads++
+        return Effect
+      }
+    }
+    const plainModules = { Option, Result }
+    
+    // MUST NOT TRIGGER: Option.none reached through a getter in the failure handler body
+    export const noneThroughGetter = Effect.match(fetchUser("u1"), {
+      onFailure: () => modules.option.none(),
+      onSuccess: Option.some
+    })
+    
+    // MUST NOT TRIGGER: point-free constructor reached through a getter
+    export const pointFreeThroughGetter = Effect.match(fetchUser("u1"), {
+      onFailure: modules.result.fail,
+      onSuccess: Result.succeed
+    })
+    
+    // MUST NOT TRIGGER: matchEffect branch whose Effect.succeed is reached through a getter
+    export const succeedThroughGetter = Effect.matchEffect(fetchUser("u1"), {
+      onFailure: (e) => modules.effect.succeed(Result.fail(e)),
+      onSuccess: (user) => Effect.succeed(Result.succeed(user))
+    })
+    
+    // MUST NOT TRIGGER: map argument reached through a getter
+    export const mapThroughGetter = fetchUser("u1").pipe(
+      Effect.map(modules.option.some),
+      Effect.catch(() => Effect.succeed(Option.none()))
+    )
+    
+    // MUST NOT TRIGGER: constructor read from a plain object, which is not a module namespace
+    export const plainObjectReceiver = Effect.match(fetchUser("u1"), {
+      onFailure: (e) => plainModules.Result.fail(e),
+      onSuccess: Result.succeed
+    })
+    
+    // MUST TRIGGER (no fix): the handlers only reify, but the fix would drop the getter in the callee
+    export const matchThroughGetter = modules.effect.match(fetchUser("u1"), {
+                                      ~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+      onFailure: Result.fail,
+      onSuccess: Result.succeed
+    })
+    
+    void moduleReads
+    

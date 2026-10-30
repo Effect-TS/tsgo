@@ -1,0 +1,25 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/matchToResultOrOption_preview.ts(12,27): warning TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+
+
+==== /.src/matchToResultOrOption_preview.ts (1 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics matchToResultOrOption:warning
+    import { Data, Effect, Result } from "effect"
+    
+    class UserNotFound extends Data.TaggedError("UserNotFound")<{
+      readonly id: string
+    }> {}
+    
+    declare const fetchUser: (id: string) => Effect.Effect<{ readonly name: string }, UserNotFound>
+    
+    // MUST TRIGGER: both handlers only reify the outcome, which is Effect.result
+    export const userResult = Effect.match(fetchUser("u1"), {
+                              ~~~~~~~~~~~~
+!!! warning TS377175: `Effect.result` reifies the outcome directly; these `Effect.match` handlers only wrap the value and the error. effect(matchToResultOrOption)
+      onFailure: (e) => Result.fail(e),
+      onSuccess: (user) => Result.succeed(user)
+    })
+    

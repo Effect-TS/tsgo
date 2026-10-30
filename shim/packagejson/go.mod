@@ -1,4 +1,4 @@
-module github.com/microsoft/TypeScript/tsc/shim/packagejson
+module github.com/microsoft/TypeScript/tsc/providershim/packagejson
 
 go 1.26
 
