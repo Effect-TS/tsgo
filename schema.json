@@ -2586,6 +2586,11 @@
           "default": "error",
           "description": "Detects Effects returned from non-Effect-aware Vitest callbacks"
         },
+        "forLoopPushToForEach": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.forEach instead of a for-of loop that pushes yielded Effect results into an accumulator"
+        },
         "genericEffectServices": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",

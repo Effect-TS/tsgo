@@ -1,0 +1,177 @@
+// @effect-v3
+import { Effect, pipe } from "effect"
+
+declare const items: ReadonlyArray<number>
+declare const effects: ReadonlyArray<Effect.Effect<number>>
+declare const processItem: (item: number) => Effect.Effect<string>
+declare const report: (values: ReadonlyArray<string>) => void
+
+function processDeclared(item: number): Effect.Effect<string> {
+  return Effect.succeed(String(item))
+}
+
+function describeDeclared(effect: Effect.Effect<number>): Effect.Effect<string> {
+  return Effect.map(effect, String)
+}
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, with a fix that passes the callee directly (the yielded flow
+// applies one plain callee to the loop variable)
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: pipe function call applying the callee to the loop variable.
+// fix: const results = yield* Effect.forEach(items, processDeclared)
+export const pipeCallee = Effect.gen(function*() {
+  const results = []
+  for (const item of items) {
+    results.push(yield* pipe(item, processDeclared))
+  }
+  return results
+})
+
+// MUST TRIGGER: method pipe on the loop variable.
+// fix: const results = yield* Effect.forEach(effects, describeDeclared)
+export const methodPipeCallee = Effect.gen(function*() {
+  const results = []
+  for (const effect of effects) {
+    results.push(yield* effect.pipe(describeDeclared))
+  }
+  return results
+})
+
+// MUST TRIGGER: the loop variable is parenthesized.
+// fix: const results = yield* Effect.forEach(items, processDeclared)
+export const parenthesizedArgument = Effect.gen(function*() {
+  const results = []
+  for (const item of items) {
+    results.push(yield* processDeclared((item)))
+  }
+  return results
+})
+
+// MUST TRIGGER: the yield is parenthesized.
+// fix: const out = yield* Effect.forEach(items, processItem)
+export const parenthesizedYield = Effect.gen(function*() {
+  const out = []
+  for (const item of items) out.push((yield* processItem(item)))
+  return out
+})
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, with a fix that keeps an arrow
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER: an optional call is not passed point-free.
+// fix: const results = yield* Effect.forEach(items, (item) => processDeclared?.(item))
+export const optionalCallee = Effect.gen(function*() {
+  const results = []
+  for (const item of items) {
+    results.push(yield* processDeclared?.(item))
+  }
+  return results
+})
+
+// MUST TRIGGER: the accumulator is only read and passed along after the loop.
+// fix: const results = yield* Effect.forEach(items, processItem)
+export const readOnlyUses = Effect.gen(function*() {
+  const results = []
+  for (const item of items) {
+    results.push(yield* processItem(item))
+  }
+  report(results)
+  return { results, first: results[0], size: results.length }
+})
+
+// ---------------------------------------------------------------------------
+// MUST TRIGGER, without quick fix (the accumulator is mutated afterwards)
+// ---------------------------------------------------------------------------
+
+// MUST TRIGGER (no fix): length write after the loop.
+export const lengthWriteAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  results.length = 0
+  return results
+})
+
+// MUST TRIGGER (no fix): delete after the loop.
+export const deleteAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  delete results[0]
+  return results
+})
+
+// MUST TRIGGER (no fix): sort in a callback after the loop.
+export const sortInCallbackAfterwards = Effect.gen(function*() {
+  const results: Array<string> = []
+  for (const item of items) results.push(yield* processItem(item))
+  return () => results.sort()
+})
+
+// ---------------------------------------------------------------------------
+// MUST NOT TRIGGER
+// ---------------------------------------------------------------------------
+
+// MUST NOT TRIGGER: push is passed to pipe unbound instead of called on the
+// accumulator.
+export const pipedPush = Effect.gen(function*() {
+  const out: Array<string> = []
+  for (const item of items) pipe(yield* processItem(item), out.push)
+  return out
+})
+
+// MUST NOT TRIGGER: optional call of push.
+export const optionalPushCall = Effect.gen(function*() {
+  const out: Array<string> = []
+  for (const item of items) out.push?.(yield* processItem(item))
+  return out
+})
+
+// MUST NOT TRIGGER: the accumulator is asserted.
+export const assertedAccumulator = Effect.gen(function*() {
+  const out = [] as Array<string>
+  for (const item of items) out.push(yield* processItem(item))
+  return out
+})
+
+// MUST NOT TRIGGER: the accumulator literal has a hole.
+export const holeAccumulator = Effect.gen(function*() {
+  const out: Array<string | undefined> = [,]
+  for (const item of items) out.push(yield* processItem(item))
+  return out
+})
+
+// MUST NOT TRIGGER: the accumulator is declared together with another variable.
+export const sharedDeclaration = Effect.gen(function*() {
+  const count = 1, out: Array<string> = []
+  for (const item of items) out.push(yield* processItem(item + count))
+  return out
+})
+
+// MUST NOT TRIGGER: a function declared in between captures the accumulator.
+export const nestedFunctionInBetween = Effect.gen(function*() {
+  const out: Array<string> = []
+  const read = () => out.length
+  for (const item of items) out.push(yield* processItem(item))
+  return [out, read]
+})
+
+// MUST NOT TRIGGER: the loop is a statement of a switch case, not of a block.
+export const switchCase = Effect.gen(function*() {
+  switch (items.length) {
+    case 1:
+      const out = []
+      for (const item of items) out.push(yield* processItem(item))
+      return out
+  }
+  return []
+})
+
+// MUST NOT TRIGGER: the next-line directive turns the rule off for this loop.
+export const nextLineOff = Effect.gen(function*() {
+  const out = []
+  // @effect-diagnostics-next-line forLoopPushToForEach:off
+  for (const item of items) out.push(yield* processItem(item))
+  return out
+})
