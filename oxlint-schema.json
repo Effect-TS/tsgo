@@ -2668,6 +2668,9 @@
         "effecttsgo/unstable-api-usage": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/yield-in-call-argument": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "eqeqeq": {
           "anyOf": [
             {

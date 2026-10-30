@@ -1,0 +1,1968 @@
+=== Quick Fix Inventory ===
+
+[D1] (29:20-29:25) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D2] (29:32-29:37) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D3] (34:11-34:16) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D4] (36:11-36:16) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D5] (38:11-38:16) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D6] (40:11-40:16) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D7] (45:51-45:56) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D8] (50:12-50:17) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D9] (55:18-55:23) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D10] (60:17-60:22) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D11] (65:20-65:25) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D12] (70:21-70:26) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D13] (75:20-75:25) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D14] (84:22-84:27) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+
+[D15] (89:23-89:28) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+
+[D16] (94:29-94:34) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+
+[D17] (100:19-100:24) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+
+[D18] (106:32-106:37) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+
+[D19] (111:29-111:34) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+
+[D20] (116:21-116:26) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+
+[D21] (121:25-121:30) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+
+[D22] (126:3-126:8) TS7028: Unused label.
+  (no quick fixes)
+
+[D23] (126:18-126:23) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_positions.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const fetchUser: Effect.Effect<number>
+declare const services: { readonly buildReport: Effect.Effect<number>; readonly delete: Effect.Effect<number> }
+declare const make: (n: number) => Effect.Effect<number>
+declare const cond: boolean
+declare const config: { readonly prefix: string }
+declare const handlers: Array<(n: number) => string>
+declare const store: { a?: { b: { f(n: number): string } } }
+declare const counts: Record<string, number>
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function combine(...values: Array<unknown>): string
+declare function curried(n: number): (s: string) => string
+declare function lookup(n: number): Record<string, number>
+declare function sideEffect(): string
+declare function key(): string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const nestedYields = Effect.gen(function*() {
+  // MUST TRIGGER twice (fix each): the outer and the inner yield* are hoisted independently
+  const value = yield* make(yield* load);
+  return transform(value)
+})
+
+export const verbNames = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `fetchUser` -> `fetchedUser`
+  consume(yield* fetchUser)
+  // MUST TRIGGER (fix): `services.buildReport` -> `builtReport`
+  consume(yield* services.buildReport)
+  // MUST TRIGGER (fix): `delete` is a reserved word, falls back to `value`
+  consume(yield* services.delete)
+  // MUST TRIGGER (fix): the name comes from the expression inside `as`, `loaded`
+  consume(yield* (load as Effect.Effect<number>))
+})
+
+export const literalPrecedingArgs = Effect.gen(function*() {
+  // MUST TRIGGER (fix): negative numbers, bigints, templates and regexes are side-effect free
+  return combine(-1, 1n, `t`, /r/, config.prefix, yield* load)
+})
+
+export const parenthesizedStatement = Effect.gen(function*() {
+  // MUST TRIGGER (fix): parenthesized argument of an expression statement
+  consume((yield* load))
+})
+
+export const calledResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee, `sideEffect()` runs after it
+  return curried(yield* load)(sideEffect())
+})
+
+export const indexedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the indexed object, `key()` runs after it
+  return lookup(yield* load)[key()]
+})
+
+export const leftOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the left operand runs first, `sideEffect()` runs after it
+  return transform(yield* load) + sideEffect()
+})
+
+export const assertedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `as` and `!` around the call are transparent
+  return (transform(yield* load) as string)!
+})
+
+export const conditionalCondition = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the condition of a ternary always runs, before either branch
+  return transform(yield* load) ? sideEffect() : key()
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const elementAccessCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the element access `handlers[0]` is not a side-effect free callee
+  return handlers[0](yield* load)
+})
+
+export const optionalChainCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` earlier in the callee the argument only runs when `store.a` is defined
+  return store.a?.b.f(yield* load)
+})
+
+export const computedAssignmentTarget = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `key()` in the assignment target runs before the effect
+  counts[key()] = transform(yield* load).length
+})
+
+export const orAssignment = Effect.gen(function*() {
+  let s = ""
+  // MUST TRIGGER (no fix): `||=` only evaluates its right side when `s` is falsy
+  s ||= transform(yield* load)
+  return s
+})
+
+export const ternaryElseBranch = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the else branch of a ternary only runs when `cond` is false
+  return cond ? "" : transform(yield* load)
+})
+
+export const incrementOperand = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `++` is not an allowed position
+  return ++counts[transform(yield* load)]
+})
+
+export const arrayElement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an array literal is not an allowed position
+  return [transform(yield* load)]
+})
+
+export const objectProperty = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an object literal is not an allowed position
+  return { a: transform(yield* load) }
+})
+
+export const labeledStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the enclosing statement is the body of a label
+  label: consume(yield* load)
+})
+
+
+=== [D2] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_positions.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const fetchUser: Effect.Effect<number>
+declare const services: { readonly buildReport: Effect.Effect<number>; readonly delete: Effect.Effect<number> }
+declare const make: (n: number) => Effect.Effect<number>
+declare const cond: boolean
+declare const config: { readonly prefix: string }
+declare const handlers: Array<(n: number) => string>
+declare const store: { a?: { b: { f(n: number): string } } }
+declare const counts: Record<string, number>
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function combine(...values: Array<unknown>): string
+declare function curried(n: number): (s: string) => string
+declare function lookup(n: number): Record<string, number>
+declare function sideEffect(): string
+declare function key(): string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const nestedYields = Effect.gen(function*() {
+  // MUST TRIGGER twice (fix each): the outer and the inner yield* are hoisted independently
+  const loaded = yield* load;
+  return transform(yield* make(loaded))
+})
+
+export const verbNames = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `fetchUser` -> `fetchedUser`
+  consume(yield* fetchUser)
+  // MUST TRIGGER (fix): `services.buildReport` -> `builtReport`
+  consume(yield* services.buildReport)
+  // MUST TRIGGER (fix): `delete` is a reserved word, falls back to `value`
+  consume(yield* services.delete)
+  // MUST TRIGGER (fix): the name comes from the expression inside `as`, `loaded`
+  consume(yield* (load as Effect.Effect<number>))
+})
+
+export const literalPrecedingArgs = Effect.gen(function*() {
+  // MUST TRIGGER (fix): negative numbers, bigints, templates and regexes are side-effect free
+  return combine(-1, 1n, `t`, /r/, config.prefix, yield* load)
+})
+
+export const parenthesizedStatement = Effect.gen(function*() {
+  // MUST TRIGGER (fix): parenthesized argument of an expression statement
+  consume((yield* load))
+})
+
+export const calledResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee, `sideEffect()` runs after it
+  return curried(yield* load)(sideEffect())
+})
+
+export const indexedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the indexed object, `key()` runs after it
+  return lookup(yield* load)[key()]
+})
+
+export const leftOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the left operand runs first, `sideEffect()` runs after it
+  return transform(yield* load) + sideEffect()
+})
+
+export const assertedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `as` and `!` around the call are transparent
+  return (transform(yield* load) as string)!
+})
+
+export const conditionalCondition = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the condition of a ternary always runs, before either branch
+  return transform(yield* load) ? sideEffect() : key()
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const elementAccessCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the element access `handlers[0]` is not a side-effect free callee
+  return handlers[0](yield* load)
+})
+
+export const optionalChainCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` earlier in the callee the argument only runs when `store.a` is defined
+  return store.a?.b.f(yield* load)
+})
+
+export const computedAssignmentTarget = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `key()` in the assignment target runs before the effect
+  counts[key()] = transform(yield* load).length
+})
+
+export const orAssignment = Effect.gen(function*() {
+  let s = ""
+  // MUST TRIGGER (no fix): `||=` only evaluates its right side when `s` is falsy
+  s ||= transform(yield* load)
+  return s
+})
+
+export const ternaryElseBranch = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the else branch of a ternary only runs when `cond` is false
+  return cond ? "" : transform(yield* load)
+})
+
+export const incrementOperand = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `++` is not an allowed position
+  return ++counts[transform(yield* load)]
+})
+
+export const arrayElement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an array literal is not an allowed position
+  return [transform(yield* load)]
+})
+
+export const objectProperty = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an object literal is not an allowed position
+  return { a: transform(yield* load) }
+})
+
+export const labeledStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the enclosing statement is the body of a label
+  label: consume(yield* load)
+})
+
+
+=== [D3] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_positions.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const fetchUser: Effect.Effect<number>
+declare const services: { readonly buildReport: Effect.Effect<number>; readonly delete: Effect.Effect<number> }
+declare const make: (n: number) => Effect.Effect<number>
+declare const cond: boolean
+declare const config: { readonly prefix: string }
+declare const handlers: Array<(n: number) => string>
+declare const store: { a?: { b: { f(n: number): string } } }
+declare const counts: Record<string, number>
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function combine(...values: Array<unknown>): string
+declare function curried(n: number): (s: string) => string
+declare function lookup(n: number): Record<string, number>
+declare function sideEffect(): string
+declare function key(): string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const nestedYields = Effect.gen(function*() {
+  // MUST TRIGGER twice (fix each): the outer and the inner yield* are hoisted independently
+  return transform(yield* make(yield* load))
+})
+
+export const verbNames = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `fetchUser` -> `fetchedUser`
+  const fetchedUser = yield* fetchUser;
+  consume(fetchedUser)
+  // MUST TRIGGER (fix): `services.buildReport` -> `builtReport`
+  consume(yield* services.buildReport)
+  // MUST TRIGGER (fix): `delete` is a reserved word, falls back to `value`
+  consume(yield* services.delete)
+  // MUST TRIGGER (fix): the name comes from the expression inside `as`, `loaded`
+  consume(yield* (load as Effect.Effect<number>))
+})
+
+export const literalPrecedingArgs = Effect.gen(function*() {
+  // MUST TRIGGER (fix): negative numbers, bigints, templates and regexes are side-effect free
+  return combine(-1, 1n, `t`, /r/, config.prefix, yield* load)
+})
+
+export const parenthesizedStatement = Effect.gen(function*() {
+  // MUST TRIGGER (fix): parenthesized argument of an expression statement
+  consume((yield* load))
+})
+
+export const calledResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee, `sideEffect()` runs after it
+  return curried(yield* load)(sideEffect())
+})
+
+export const indexedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the indexed object, `key()` runs after it
+  return lookup(yield* load)[key()]
+})
+
+export const leftOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the left operand runs first, `sideEffect()` runs after it
+  return transform(yield* load) + sideEffect()
+})
+
+export const assertedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `as` and `!` around the call are transparent
+  return (transform(yield* load) as string)!
+})
+
+export const conditionalCondition = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the condition of a ternary always runs, before either branch
+  return transform(yield* load) ? sideEffect() : key()
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const elementAccessCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the element access `handlers[0]` is not a side-effect free callee
+  return handlers[0](yield* load)
+})
+
+export const optionalChainCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` earlier in the callee the argument only runs when `store.a` is defined
+  return store.a?.b.f(yield* load)
+})
+
+export const computedAssignmentTarget = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `key()` in the assignment target runs before the effect
+  counts[key()] = transform(yield* load).length
+})
+
+export const orAssignment = Effect.gen(function*() {
+  let s = ""
+  // MUST TRIGGER (no fix): `||=` only evaluates its right side when `s` is falsy
+  s ||= transform(yield* load)
+  return s
+})
+
+export const ternaryElseBranch = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the else branch of a ternary only runs when `cond` is false
+  return cond ? "" : transform(yield* load)
+})
+
+export const incrementOperand = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `++` is not an allowed position
+  return ++counts[transform(yield* load)]
+})
+
+export const arrayElement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an array literal is not an allowed position
+  return [transform(yield* load)]
+})
+
+export const objectProperty = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an object literal is not an allowed position
+  return { a: transform(yield* load) }
+})
+
+export const labeledStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the enclosing statement is the body of a label
+  label: consume(yield* load)
+})
+
+
+=== [D4] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_positions.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const fetchUser: Effect.Effect<number>
+declare const services: { readonly buildReport: Effect.Effect<number>; readonly delete: Effect.Effect<number> }
+declare const make: (n: number) => Effect.Effect<number>
+declare const cond: boolean
+declare const config: { readonly prefix: string }
+declare const handlers: Array<(n: number) => string>
+declare const store: { a?: { b: { f(n: number): string } } }
+declare const counts: Record<string, number>
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function combine(...values: Array<unknown>): string
+declare function curried(n: number): (s: string) => string
+declare function lookup(n: number): Record<string, number>
+declare function sideEffect(): string
+declare function key(): string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const nestedYields = Effect.gen(function*() {
+  // MUST TRIGGER twice (fix each): the outer and the inner yield* are hoisted independently
+  return transform(yield* make(yield* load))
+})
+
+export const verbNames = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `fetchUser` -> `fetchedUser`
+  consume(yield* fetchUser)
+  // MUST TRIGGER (fix): `services.buildReport` -> `builtReport`
+  const builtReport = yield* services.buildReport;
+  consume(builtReport)
+  // MUST TRIGGER (fix): `delete` is a reserved word, falls back to `value`
+  consume(yield* services.delete)
+  // MUST TRIGGER (fix): the name comes from the expression inside `as`, `loaded`
+  consume(yield* (load as Effect.Effect<number>))
+})
+
+export const literalPrecedingArgs = Effect.gen(function*() {
+  // MUST TRIGGER (fix): negative numbers, bigints, templates and regexes are side-effect free
+  return combine(-1, 1n, `t`, /r/, config.prefix, yield* load)
+})
+
+export const parenthesizedStatement = Effect.gen(function*() {
+  // MUST TRIGGER (fix): parenthesized argument of an expression statement
+  consume((yield* load))
+})
+
+export const calledResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee, `sideEffect()` runs after it
+  return curried(yield* load)(sideEffect())
+})
+
+export const indexedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the indexed object, `key()` runs after it
+  return lookup(yield* load)[key()]
+})
+
+export const leftOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the left operand runs first, `sideEffect()` runs after it
+  return transform(yield* load) + sideEffect()
+})
+
+export const assertedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `as` and `!` around the call are transparent
+  return (transform(yield* load) as string)!
+})
+
+export const conditionalCondition = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the condition of a ternary always runs, before either branch
+  return transform(yield* load) ? sideEffect() : key()
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const elementAccessCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the element access `handlers[0]` is not a side-effect free callee
+  return handlers[0](yield* load)
+})
+
+export const optionalChainCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` earlier in the callee the argument only runs when `store.a` is defined
+  return store.a?.b.f(yield* load)
+})
+
+export const computedAssignmentTarget = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `key()` in the assignment target runs before the effect
+  counts[key()] = transform(yield* load).length
+})
+
+export const orAssignment = Effect.gen(function*() {
+  let s = ""
+  // MUST TRIGGER (no fix): `||=` only evaluates its right side when `s` is falsy
+  s ||= transform(yield* load)
+  return s
+})
+
+export const ternaryElseBranch = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the else branch of a ternary only runs when `cond` is false
+  return cond ? "" : transform(yield* load)
+})
+
+export const incrementOperand = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `++` is not an allowed position
+  return ++counts[transform(yield* load)]
+})
+
+export const arrayElement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an array literal is not an allowed position
+  return [transform(yield* load)]
+})
+
+export const objectProperty = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an object literal is not an allowed position
+  return { a: transform(yield* load) }
+})
+
+export const labeledStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the enclosing statement is the body of a label
+  label: consume(yield* load)
+})
+
+
+=== [D5] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_positions.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const fetchUser: Effect.Effect<number>
+declare const services: { readonly buildReport: Effect.Effect<number>; readonly delete: Effect.Effect<number> }
+declare const make: (n: number) => Effect.Effect<number>
+declare const cond: boolean
+declare const config: { readonly prefix: string }
+declare const handlers: Array<(n: number) => string>
+declare const store: { a?: { b: { f(n: number): string } } }
+declare const counts: Record<string, number>
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function combine(...values: Array<unknown>): string
+declare function curried(n: number): (s: string) => string
+declare function lookup(n: number): Record<string, number>
+declare function sideEffect(): string
+declare function key(): string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const nestedYields = Effect.gen(function*() {
+  // MUST TRIGGER twice (fix each): the outer and the inner yield* are hoisted independently
+  return transform(yield* make(yield* load))
+})
+
+export const verbNames = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `fetchUser` -> `fetchedUser`
+  consume(yield* fetchUser)
+  // MUST TRIGGER (fix): `services.buildReport` -> `builtReport`
+  consume(yield* services.buildReport)
+  // MUST TRIGGER (fix): `delete` is a reserved word, falls back to `value`
+  const value = yield* services.delete;
+  consume(value)
+  // MUST TRIGGER (fix): the name comes from the expression inside `as`, `loaded`
+  consume(yield* (load as Effect.Effect<number>))
+})
+
+export const literalPrecedingArgs = Effect.gen(function*() {
+  // MUST TRIGGER (fix): negative numbers, bigints, templates and regexes are side-effect free
+  return combine(-1, 1n, `t`, /r/, config.prefix, yield* load)
+})
+
+export const parenthesizedStatement = Effect.gen(function*() {
+  // MUST TRIGGER (fix): parenthesized argument of an expression statement
+  consume((yield* load))
+})
+
+export const calledResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee, `sideEffect()` runs after it
+  return curried(yield* load)(sideEffect())
+})
+
+export const indexedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the indexed object, `key()` runs after it
+  return lookup(yield* load)[key()]
+})
+
+export const leftOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the left operand runs first, `sideEffect()` runs after it
+  return transform(yield* load) + sideEffect()
+})
+
+export const assertedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `as` and `!` around the call are transparent
+  return (transform(yield* load) as string)!
+})
+
+export const conditionalCondition = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the condition of a ternary always runs, before either branch
+  return transform(yield* load) ? sideEffect() : key()
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const elementAccessCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the element access `handlers[0]` is not a side-effect free callee
+  return handlers[0](yield* load)
+})
+
+export const optionalChainCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` earlier in the callee the argument only runs when `store.a` is defined
+  return store.a?.b.f(yield* load)
+})
+
+export const computedAssignmentTarget = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `key()` in the assignment target runs before the effect
+  counts[key()] = transform(yield* load).length
+})
+
+export const orAssignment = Effect.gen(function*() {
+  let s = ""
+  // MUST TRIGGER (no fix): `||=` only evaluates its right side when `s` is falsy
+  s ||= transform(yield* load)
+  return s
+})
+
+export const ternaryElseBranch = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the else branch of a ternary only runs when `cond` is false
+  return cond ? "" : transform(yield* load)
+})
+
+export const incrementOperand = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `++` is not an allowed position
+  return ++counts[transform(yield* load)]
+})
+
+export const arrayElement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an array literal is not an allowed position
+  return [transform(yield* load)]
+})
+
+export const objectProperty = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an object literal is not an allowed position
+  return { a: transform(yield* load) }
+})
+
+export const labeledStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the enclosing statement is the body of a label
+  label: consume(yield* load)
+})
+
+
+=== [D6] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_positions.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const fetchUser: Effect.Effect<number>
+declare const services: { readonly buildReport: Effect.Effect<number>; readonly delete: Effect.Effect<number> }
+declare const make: (n: number) => Effect.Effect<number>
+declare const cond: boolean
+declare const config: { readonly prefix: string }
+declare const handlers: Array<(n: number) => string>
+declare const store: { a?: { b: { f(n: number): string } } }
+declare const counts: Record<string, number>
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function combine(...values: Array<unknown>): string
+declare function curried(n: number): (s: string) => string
+declare function lookup(n: number): Record<string, number>
+declare function sideEffect(): string
+declare function key(): string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const nestedYields = Effect.gen(function*() {
+  // MUST TRIGGER twice (fix each): the outer and the inner yield* are hoisted independently
+  return transform(yield* make(yield* load))
+})
+
+export const verbNames = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `fetchUser` -> `fetchedUser`
+  consume(yield* fetchUser)
+  // MUST TRIGGER (fix): `services.buildReport` -> `builtReport`
+  consume(yield* services.buildReport)
+  // MUST TRIGGER (fix): `delete` is a reserved word, falls back to `value`
+  consume(yield* services.delete)
+  // MUST TRIGGER (fix): the name comes from the expression inside `as`, `loaded`
+  const loaded = yield* (load as Effect.Effect<number>);
+  consume(loaded)
+})
+
+export const literalPrecedingArgs = Effect.gen(function*() {
+  // MUST TRIGGER (fix): negative numbers, bigints, templates and regexes are side-effect free
+  return combine(-1, 1n, `t`, /r/, config.prefix, yield* load)
+})
+
+export const parenthesizedStatement = Effect.gen(function*() {
+  // MUST TRIGGER (fix): parenthesized argument of an expression statement
+  consume((yield* load))
+})
+
+export const calledResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee, `sideEffect()` runs after it
+  return curried(yield* load)(sideEffect())
+})
+
+export const indexedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the indexed object, `key()` runs after it
+  return lookup(yield* load)[key()]
+})
+
+export const leftOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the left operand runs first, `sideEffect()` runs after it
+  return transform(yield* load) + sideEffect()
+})
+
+export const assertedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `as` and `!` around the call are transparent
+  return (transform(yield* load) as string)!
+})
+
+export const conditionalCondition = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the condition of a ternary always runs, before either branch
+  return transform(yield* load) ? sideEffect() : key()
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const elementAccessCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the element access `handlers[0]` is not a side-effect free callee
+  return handlers[0](yield* load)
+})
+
+export const optionalChainCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` earlier in the callee the argument only runs when `store.a` is defined
+  return store.a?.b.f(yield* load)
+})
+
+export const computedAssignmentTarget = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `key()` in the assignment target runs before the effect
+  counts[key()] = transform(yield* load).length
+})
+
+export const orAssignment = Effect.gen(function*() {
+  let s = ""
+  // MUST TRIGGER (no fix): `||=` only evaluates its right side when `s` is falsy
+  s ||= transform(yield* load)
+  return s
+})
+
+export const ternaryElseBranch = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the else branch of a ternary only runs when `cond` is false
+  return cond ? "" : transform(yield* load)
+})
+
+export const incrementOperand = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `++` is not an allowed position
+  return ++counts[transform(yield* load)]
+})
+
+export const arrayElement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an array literal is not an allowed position
+  return [transform(yield* load)]
+})
+
+export const objectProperty = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an object literal is not an allowed position
+  return { a: transform(yield* load) }
+})
+
+export const labeledStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the enclosing statement is the body of a label
+  label: consume(yield* load)
+})
+
+
+=== [D7] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_positions.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const fetchUser: Effect.Effect<number>
+declare const services: { readonly buildReport: Effect.Effect<number>; readonly delete: Effect.Effect<number> }
+declare const make: (n: number) => Effect.Effect<number>
+declare const cond: boolean
+declare const config: { readonly prefix: string }
+declare const handlers: Array<(n: number) => string>
+declare const store: { a?: { b: { f(n: number): string } } }
+declare const counts: Record<string, number>
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function combine(...values: Array<unknown>): string
+declare function curried(n: number): (s: string) => string
+declare function lookup(n: number): Record<string, number>
+declare function sideEffect(): string
+declare function key(): string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const nestedYields = Effect.gen(function*() {
+  // MUST TRIGGER twice (fix each): the outer and the inner yield* are hoisted independently
+  return transform(yield* make(yield* load))
+})
+
+export const verbNames = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `fetchUser` -> `fetchedUser`
+  consume(yield* fetchUser)
+  // MUST TRIGGER (fix): `services.buildReport` -> `builtReport`
+  consume(yield* services.buildReport)
+  // MUST TRIGGER (fix): `delete` is a reserved word, falls back to `value`
+  consume(yield* services.delete)
+  // MUST TRIGGER (fix): the name comes from the expression inside `as`, `loaded`
+  consume(yield* (load as Effect.Effect<number>))
+})
+
+export const literalPrecedingArgs = Effect.gen(function*() {
+  // MUST TRIGGER (fix): negative numbers, bigints, templates and regexes are side-effect free
+  const loaded = yield* load;
+  return combine(-1, 1n, `t`, /r/, config.prefix, loaded)
+})
+
+export const parenthesizedStatement = Effect.gen(function*() {
+  // MUST TRIGGER (fix): parenthesized argument of an expression statement
+  consume((yield* load))
+})
+
+export const calledResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee, `sideEffect()` runs after it
+  return curried(yield* load)(sideEffect())
+})
+
+export const indexedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the indexed object, `key()` runs after it
+  return lookup(yield* load)[key()]
+})
+
+export const leftOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the left operand runs first, `sideEffect()` runs after it
+  return transform(yield* load) + sideEffect()
+})
+
+export const assertedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `as` and `!` around the call are transparent
+  return (transform(yield* load) as string)!
+})
+
+export const conditionalCondition = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the condition of a ternary always runs, before either branch
+  return transform(yield* load) ? sideEffect() : key()
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const elementAccessCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the element access `handlers[0]` is not a side-effect free callee
+  return handlers[0](yield* load)
+})
+
+export const optionalChainCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` earlier in the callee the argument only runs when `store.a` is defined
+  return store.a?.b.f(yield* load)
+})
+
+export const computedAssignmentTarget = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `key()` in the assignment target runs before the effect
+  counts[key()] = transform(yield* load).length
+})
+
+export const orAssignment = Effect.gen(function*() {
+  let s = ""
+  // MUST TRIGGER (no fix): `||=` only evaluates its right side when `s` is falsy
+  s ||= transform(yield* load)
+  return s
+})
+
+export const ternaryElseBranch = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the else branch of a ternary only runs when `cond` is false
+  return cond ? "" : transform(yield* load)
+})
+
+export const incrementOperand = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `++` is not an allowed position
+  return ++counts[transform(yield* load)]
+})
+
+export const arrayElement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an array literal is not an allowed position
+  return [transform(yield* load)]
+})
+
+export const objectProperty = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an object literal is not an allowed position
+  return { a: transform(yield* load) }
+})
+
+export const labeledStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the enclosing statement is the body of a label
+  label: consume(yield* load)
+})
+
+
+=== [D8] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_positions.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const fetchUser: Effect.Effect<number>
+declare const services: { readonly buildReport: Effect.Effect<number>; readonly delete: Effect.Effect<number> }
+declare const make: (n: number) => Effect.Effect<number>
+declare const cond: boolean
+declare const config: { readonly prefix: string }
+declare const handlers: Array<(n: number) => string>
+declare const store: { a?: { b: { f(n: number): string } } }
+declare const counts: Record<string, number>
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function combine(...values: Array<unknown>): string
+declare function curried(n: number): (s: string) => string
+declare function lookup(n: number): Record<string, number>
+declare function sideEffect(): string
+declare function key(): string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const nestedYields = Effect.gen(function*() {
+  // MUST TRIGGER twice (fix each): the outer and the inner yield* are hoisted independently
+  return transform(yield* make(yield* load))
+})
+
+export const verbNames = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `fetchUser` -> `fetchedUser`
+  consume(yield* fetchUser)
+  // MUST TRIGGER (fix): `services.buildReport` -> `builtReport`
+  consume(yield* services.buildReport)
+  // MUST TRIGGER (fix): `delete` is a reserved word, falls back to `value`
+  consume(yield* services.delete)
+  // MUST TRIGGER (fix): the name comes from the expression inside `as`, `loaded`
+  consume(yield* (load as Effect.Effect<number>))
+})
+
+export const literalPrecedingArgs = Effect.gen(function*() {
+  // MUST TRIGGER (fix): negative numbers, bigints, templates and regexes are side-effect free
+  return combine(-1, 1n, `t`, /r/, config.prefix, yield* load)
+})
+
+export const parenthesizedStatement = Effect.gen(function*() {
+  // MUST TRIGGER (fix): parenthesized argument of an expression statement
+  const loaded = yield* load;
+  consume(loaded)
+})
+
+export const calledResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee, `sideEffect()` runs after it
+  return curried(yield* load)(sideEffect())
+})
+
+export const indexedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the indexed object, `key()` runs after it
+  return lookup(yield* load)[key()]
+})
+
+export const leftOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the left operand runs first, `sideEffect()` runs after it
+  return transform(yield* load) + sideEffect()
+})
+
+export const assertedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `as` and `!` around the call are transparent
+  return (transform(yield* load) as string)!
+})
+
+export const conditionalCondition = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the condition of a ternary always runs, before either branch
+  return transform(yield* load) ? sideEffect() : key()
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const elementAccessCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the element access `handlers[0]` is not a side-effect free callee
+  return handlers[0](yield* load)
+})
+
+export const optionalChainCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` earlier in the callee the argument only runs when `store.a` is defined
+  return store.a?.b.f(yield* load)
+})
+
+export const computedAssignmentTarget = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `key()` in the assignment target runs before the effect
+  counts[key()] = transform(yield* load).length
+})
+
+export const orAssignment = Effect.gen(function*() {
+  let s = ""
+  // MUST TRIGGER (no fix): `||=` only evaluates its right side when `s` is falsy
+  s ||= transform(yield* load)
+  return s
+})
+
+export const ternaryElseBranch = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the else branch of a ternary only runs when `cond` is false
+  return cond ? "" : transform(yield* load)
+})
+
+export const incrementOperand = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `++` is not an allowed position
+  return ++counts[transform(yield* load)]
+})
+
+export const arrayElement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an array literal is not an allowed position
+  return [transform(yield* load)]
+})
+
+export const objectProperty = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an object literal is not an allowed position
+  return { a: transform(yield* load) }
+})
+
+export const labeledStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the enclosing statement is the body of a label
+  label: consume(yield* load)
+})
+
+
+=== [D9] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_positions.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const fetchUser: Effect.Effect<number>
+declare const services: { readonly buildReport: Effect.Effect<number>; readonly delete: Effect.Effect<number> }
+declare const make: (n: number) => Effect.Effect<number>
+declare const cond: boolean
+declare const config: { readonly prefix: string }
+declare const handlers: Array<(n: number) => string>
+declare const store: { a?: { b: { f(n: number): string } } }
+declare const counts: Record<string, number>
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function combine(...values: Array<unknown>): string
+declare function curried(n: number): (s: string) => string
+declare function lookup(n: number): Record<string, number>
+declare function sideEffect(): string
+declare function key(): string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const nestedYields = Effect.gen(function*() {
+  // MUST TRIGGER twice (fix each): the outer and the inner yield* are hoisted independently
+  return transform(yield* make(yield* load))
+})
+
+export const verbNames = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `fetchUser` -> `fetchedUser`
+  consume(yield* fetchUser)
+  // MUST TRIGGER (fix): `services.buildReport` -> `builtReport`
+  consume(yield* services.buildReport)
+  // MUST TRIGGER (fix): `delete` is a reserved word, falls back to `value`
+  consume(yield* services.delete)
+  // MUST TRIGGER (fix): the name comes from the expression inside `as`, `loaded`
+  consume(yield* (load as Effect.Effect<number>))
+})
+
+export const literalPrecedingArgs = Effect.gen(function*() {
+  // MUST TRIGGER (fix): negative numbers, bigints, templates and regexes are side-effect free
+  return combine(-1, 1n, `t`, /r/, config.prefix, yield* load)
+})
+
+export const parenthesizedStatement = Effect.gen(function*() {
+  // MUST TRIGGER (fix): parenthesized argument of an expression statement
+  consume((yield* load))
+})
+
+export const calledResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee, `sideEffect()` runs after it
+  const loaded = yield* load;
+  return curried(loaded)(sideEffect())
+})
+
+export const indexedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the indexed object, `key()` runs after it
+  return lookup(yield* load)[key()]
+})
+
+export const leftOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the left operand runs first, `sideEffect()` runs after it
+  return transform(yield* load) + sideEffect()
+})
+
+export const assertedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `as` and `!` around the call are transparent
+  return (transform(yield* load) as string)!
+})
+
+export const conditionalCondition = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the condition of a ternary always runs, before either branch
+  return transform(yield* load) ? sideEffect() : key()
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const elementAccessCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the element access `handlers[0]` is not a side-effect free callee
+  return handlers[0](yield* load)
+})
+
+export const optionalChainCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` earlier in the callee the argument only runs when `store.a` is defined
+  return store.a?.b.f(yield* load)
+})
+
+export const computedAssignmentTarget = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `key()` in the assignment target runs before the effect
+  counts[key()] = transform(yield* load).length
+})
+
+export const orAssignment = Effect.gen(function*() {
+  let s = ""
+  // MUST TRIGGER (no fix): `||=` only evaluates its right side when `s` is falsy
+  s ||= transform(yield* load)
+  return s
+})
+
+export const ternaryElseBranch = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the else branch of a ternary only runs when `cond` is false
+  return cond ? "" : transform(yield* load)
+})
+
+export const incrementOperand = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `++` is not an allowed position
+  return ++counts[transform(yield* load)]
+})
+
+export const arrayElement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an array literal is not an allowed position
+  return [transform(yield* load)]
+})
+
+export const objectProperty = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an object literal is not an allowed position
+  return { a: transform(yield* load) }
+})
+
+export const labeledStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the enclosing statement is the body of a label
+  label: consume(yield* load)
+})
+
+
+=== [D10] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D10] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_positions.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const fetchUser: Effect.Effect<number>
+declare const services: { readonly buildReport: Effect.Effect<number>; readonly delete: Effect.Effect<number> }
+declare const make: (n: number) => Effect.Effect<number>
+declare const cond: boolean
+declare const config: { readonly prefix: string }
+declare const handlers: Array<(n: number) => string>
+declare const store: { a?: { b: { f(n: number): string } } }
+declare const counts: Record<string, number>
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function combine(...values: Array<unknown>): string
+declare function curried(n: number): (s: string) => string
+declare function lookup(n: number): Record<string, number>
+declare function sideEffect(): string
+declare function key(): string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const nestedYields = Effect.gen(function*() {
+  // MUST TRIGGER twice (fix each): the outer and the inner yield* are hoisted independently
+  return transform(yield* make(yield* load))
+})
+
+export const verbNames = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `fetchUser` -> `fetchedUser`
+  consume(yield* fetchUser)
+  // MUST TRIGGER (fix): `services.buildReport` -> `builtReport`
+  consume(yield* services.buildReport)
+  // MUST TRIGGER (fix): `delete` is a reserved word, falls back to `value`
+  consume(yield* services.delete)
+  // MUST TRIGGER (fix): the name comes from the expression inside `as`, `loaded`
+  consume(yield* (load as Effect.Effect<number>))
+})
+
+export const literalPrecedingArgs = Effect.gen(function*() {
+  // MUST TRIGGER (fix): negative numbers, bigints, templates and regexes are side-effect free
+  return combine(-1, 1n, `t`, /r/, config.prefix, yield* load)
+})
+
+export const parenthesizedStatement = Effect.gen(function*() {
+  // MUST TRIGGER (fix): parenthesized argument of an expression statement
+  consume((yield* load))
+})
+
+export const calledResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee, `sideEffect()` runs after it
+  return curried(yield* load)(sideEffect())
+})
+
+export const indexedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the indexed object, `key()` runs after it
+  const loaded = yield* load;
+  return lookup(loaded)[key()]
+})
+
+export const leftOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the left operand runs first, `sideEffect()` runs after it
+  return transform(yield* load) + sideEffect()
+})
+
+export const assertedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `as` and `!` around the call are transparent
+  return (transform(yield* load) as string)!
+})
+
+export const conditionalCondition = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the condition of a ternary always runs, before either branch
+  return transform(yield* load) ? sideEffect() : key()
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const elementAccessCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the element access `handlers[0]` is not a side-effect free callee
+  return handlers[0](yield* load)
+})
+
+export const optionalChainCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` earlier in the callee the argument only runs when `store.a` is defined
+  return store.a?.b.f(yield* load)
+})
+
+export const computedAssignmentTarget = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `key()` in the assignment target runs before the effect
+  counts[key()] = transform(yield* load).length
+})
+
+export const orAssignment = Effect.gen(function*() {
+  let s = ""
+  // MUST TRIGGER (no fix): `||=` only evaluates its right side when `s` is falsy
+  s ||= transform(yield* load)
+  return s
+})
+
+export const ternaryElseBranch = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the else branch of a ternary only runs when `cond` is false
+  return cond ? "" : transform(yield* load)
+})
+
+export const incrementOperand = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `++` is not an allowed position
+  return ++counts[transform(yield* load)]
+})
+
+export const arrayElement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an array literal is not an allowed position
+  return [transform(yield* load)]
+})
+
+export const objectProperty = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an object literal is not an allowed position
+  return { a: transform(yield* load) }
+})
+
+export const labeledStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the enclosing statement is the body of a label
+  label: consume(yield* load)
+})
+
+
+=== [D11] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D11] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_positions.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const fetchUser: Effect.Effect<number>
+declare const services: { readonly buildReport: Effect.Effect<number>; readonly delete: Effect.Effect<number> }
+declare const make: (n: number) => Effect.Effect<number>
+declare const cond: boolean
+declare const config: { readonly prefix: string }
+declare const handlers: Array<(n: number) => string>
+declare const store: { a?: { b: { f(n: number): string } } }
+declare const counts: Record<string, number>
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function combine(...values: Array<unknown>): string
+declare function curried(n: number): (s: string) => string
+declare function lookup(n: number): Record<string, number>
+declare function sideEffect(): string
+declare function key(): string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const nestedYields = Effect.gen(function*() {
+  // MUST TRIGGER twice (fix each): the outer and the inner yield* are hoisted independently
+  return transform(yield* make(yield* load))
+})
+
+export const verbNames = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `fetchUser` -> `fetchedUser`
+  consume(yield* fetchUser)
+  // MUST TRIGGER (fix): `services.buildReport` -> `builtReport`
+  consume(yield* services.buildReport)
+  // MUST TRIGGER (fix): `delete` is a reserved word, falls back to `value`
+  consume(yield* services.delete)
+  // MUST TRIGGER (fix): the name comes from the expression inside `as`, `loaded`
+  consume(yield* (load as Effect.Effect<number>))
+})
+
+export const literalPrecedingArgs = Effect.gen(function*() {
+  // MUST TRIGGER (fix): negative numbers, bigints, templates and regexes are side-effect free
+  return combine(-1, 1n, `t`, /r/, config.prefix, yield* load)
+})
+
+export const parenthesizedStatement = Effect.gen(function*() {
+  // MUST TRIGGER (fix): parenthesized argument of an expression statement
+  consume((yield* load))
+})
+
+export const calledResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee, `sideEffect()` runs after it
+  return curried(yield* load)(sideEffect())
+})
+
+export const indexedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the indexed object, `key()` runs after it
+  return lookup(yield* load)[key()]
+})
+
+export const leftOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the left operand runs first, `sideEffect()` runs after it
+  const loaded = yield* load;
+  return transform(loaded) + sideEffect()
+})
+
+export const assertedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `as` and `!` around the call are transparent
+  return (transform(yield* load) as string)!
+})
+
+export const conditionalCondition = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the condition of a ternary always runs, before either branch
+  return transform(yield* load) ? sideEffect() : key()
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const elementAccessCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the element access `handlers[0]` is not a side-effect free callee
+  return handlers[0](yield* load)
+})
+
+export const optionalChainCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` earlier in the callee the argument only runs when `store.a` is defined
+  return store.a?.b.f(yield* load)
+})
+
+export const computedAssignmentTarget = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `key()` in the assignment target runs before the effect
+  counts[key()] = transform(yield* load).length
+})
+
+export const orAssignment = Effect.gen(function*() {
+  let s = ""
+  // MUST TRIGGER (no fix): `||=` only evaluates its right side when `s` is falsy
+  s ||= transform(yield* load)
+  return s
+})
+
+export const ternaryElseBranch = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the else branch of a ternary only runs when `cond` is false
+  return cond ? "" : transform(yield* load)
+})
+
+export const incrementOperand = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `++` is not an allowed position
+  return ++counts[transform(yield* load)]
+})
+
+export const arrayElement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an array literal is not an allowed position
+  return [transform(yield* load)]
+})
+
+export const objectProperty = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an object literal is not an allowed position
+  return { a: transform(yield* load) }
+})
+
+export const labeledStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the enclosing statement is the body of a label
+  label: consume(yield* load)
+})
+
+
+=== [D12] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D12] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_positions.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const fetchUser: Effect.Effect<number>
+declare const services: { readonly buildReport: Effect.Effect<number>; readonly delete: Effect.Effect<number> }
+declare const make: (n: number) => Effect.Effect<number>
+declare const cond: boolean
+declare const config: { readonly prefix: string }
+declare const handlers: Array<(n: number) => string>
+declare const store: { a?: { b: { f(n: number): string } } }
+declare const counts: Record<string, number>
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function combine(...values: Array<unknown>): string
+declare function curried(n: number): (s: string) => string
+declare function lookup(n: number): Record<string, number>
+declare function sideEffect(): string
+declare function key(): string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const nestedYields = Effect.gen(function*() {
+  // MUST TRIGGER twice (fix each): the outer and the inner yield* are hoisted independently
+  return transform(yield* make(yield* load))
+})
+
+export const verbNames = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `fetchUser` -> `fetchedUser`
+  consume(yield* fetchUser)
+  // MUST TRIGGER (fix): `services.buildReport` -> `builtReport`
+  consume(yield* services.buildReport)
+  // MUST TRIGGER (fix): `delete` is a reserved word, falls back to `value`
+  consume(yield* services.delete)
+  // MUST TRIGGER (fix): the name comes from the expression inside `as`, `loaded`
+  consume(yield* (load as Effect.Effect<number>))
+})
+
+export const literalPrecedingArgs = Effect.gen(function*() {
+  // MUST TRIGGER (fix): negative numbers, bigints, templates and regexes are side-effect free
+  return combine(-1, 1n, `t`, /r/, config.prefix, yield* load)
+})
+
+export const parenthesizedStatement = Effect.gen(function*() {
+  // MUST TRIGGER (fix): parenthesized argument of an expression statement
+  consume((yield* load))
+})
+
+export const calledResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee, `sideEffect()` runs after it
+  return curried(yield* load)(sideEffect())
+})
+
+export const indexedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the indexed object, `key()` runs after it
+  return lookup(yield* load)[key()]
+})
+
+export const leftOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the left operand runs first, `sideEffect()` runs after it
+  return transform(yield* load) + sideEffect()
+})
+
+export const assertedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `as` and `!` around the call are transparent
+  const loaded = yield* load;
+  return (transform(loaded) as string)!
+})
+
+export const conditionalCondition = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the condition of a ternary always runs, before either branch
+  return transform(yield* load) ? sideEffect() : key()
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const elementAccessCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the element access `handlers[0]` is not a side-effect free callee
+  return handlers[0](yield* load)
+})
+
+export const optionalChainCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` earlier in the callee the argument only runs when `store.a` is defined
+  return store.a?.b.f(yield* load)
+})
+
+export const computedAssignmentTarget = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `key()` in the assignment target runs before the effect
+  counts[key()] = transform(yield* load).length
+})
+
+export const orAssignment = Effect.gen(function*() {
+  let s = ""
+  // MUST TRIGGER (no fix): `||=` only evaluates its right side when `s` is falsy
+  s ||= transform(yield* load)
+  return s
+})
+
+export const ternaryElseBranch = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the else branch of a ternary only runs when `cond` is false
+  return cond ? "" : transform(yield* load)
+})
+
+export const incrementOperand = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `++` is not an allowed position
+  return ++counts[transform(yield* load)]
+})
+
+export const arrayElement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an array literal is not an allowed position
+  return [transform(yield* load)]
+})
+
+export const objectProperty = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an object literal is not an allowed position
+  return { a: transform(yield* load) }
+})
+
+export const labeledStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the enclosing statement is the body of a label
+  label: consume(yield* load)
+})
+
+
+=== [D13] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D13] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_positions.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const fetchUser: Effect.Effect<number>
+declare const services: { readonly buildReport: Effect.Effect<number>; readonly delete: Effect.Effect<number> }
+declare const make: (n: number) => Effect.Effect<number>
+declare const cond: boolean
+declare const config: { readonly prefix: string }
+declare const handlers: Array<(n: number) => string>
+declare const store: { a?: { b: { f(n: number): string } } }
+declare const counts: Record<string, number>
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function combine(...values: Array<unknown>): string
+declare function curried(n: number): (s: string) => string
+declare function lookup(n: number): Record<string, number>
+declare function sideEffect(): string
+declare function key(): string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const nestedYields = Effect.gen(function*() {
+  // MUST TRIGGER twice (fix each): the outer and the inner yield* are hoisted independently
+  return transform(yield* make(yield* load))
+})
+
+export const verbNames = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `fetchUser` -> `fetchedUser`
+  consume(yield* fetchUser)
+  // MUST TRIGGER (fix): `services.buildReport` -> `builtReport`
+  consume(yield* services.buildReport)
+  // MUST TRIGGER (fix): `delete` is a reserved word, falls back to `value`
+  consume(yield* services.delete)
+  // MUST TRIGGER (fix): the name comes from the expression inside `as`, `loaded`
+  consume(yield* (load as Effect.Effect<number>))
+})
+
+export const literalPrecedingArgs = Effect.gen(function*() {
+  // MUST TRIGGER (fix): negative numbers, bigints, templates and regexes are side-effect free
+  return combine(-1, 1n, `t`, /r/, config.prefix, yield* load)
+})
+
+export const parenthesizedStatement = Effect.gen(function*() {
+  // MUST TRIGGER (fix): parenthesized argument of an expression statement
+  consume((yield* load))
+})
+
+export const calledResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee, `sideEffect()` runs after it
+  return curried(yield* load)(sideEffect())
+})
+
+export const indexedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the indexed object, `key()` runs after it
+  return lookup(yield* load)[key()]
+})
+
+export const leftOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the left operand runs first, `sideEffect()` runs after it
+  return transform(yield* load) + sideEffect()
+})
+
+export const assertedResult = Effect.gen(function*() {
+  // MUST TRIGGER (fix): `as` and `!` around the call are transparent
+  return (transform(yield* load) as string)!
+})
+
+export const conditionalCondition = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the condition of a ternary always runs, before either branch
+  const loaded = yield* load;
+  return transform(loaded) ? sideEffect() : key()
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const elementAccessCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the element access `handlers[0]` is not a side-effect free callee
+  return handlers[0](yield* load)
+})
+
+export const optionalChainCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` earlier in the callee the argument only runs when `store.a` is defined
+  return store.a?.b.f(yield* load)
+})
+
+export const computedAssignmentTarget = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `key()` in the assignment target runs before the effect
+  counts[key()] = transform(yield* load).length
+})
+
+export const orAssignment = Effect.gen(function*() {
+  let s = ""
+  // MUST TRIGGER (no fix): `||=` only evaluates its right side when `s` is falsy
+  s ||= transform(yield* load)
+  return s
+})
+
+export const ternaryElseBranch = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the else branch of a ternary only runs when `cond` is false
+  return cond ? "" : transform(yield* load)
+})
+
+export const incrementOperand = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): `++` is not an allowed position
+  return ++counts[transform(yield* load)]
+})
+
+export const arrayElement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an array literal is not an allowed position
+  return [transform(yield* load)]
+})
+
+export const objectProperty = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): an object literal is not an allowed position
+  return { a: transform(yield* load) }
+})
+
+export const labeledStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the enclosing statement is the body of a label
+  label: consume(yield* load)
+})
+
+
+=== [D14] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D16] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D17] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D18] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D18] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D19] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D19] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D20] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D20] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D21] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D21] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D23] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D23] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default

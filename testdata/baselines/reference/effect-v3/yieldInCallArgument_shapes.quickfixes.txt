@@ -1,0 +1,1982 @@
+=== Quick Fix Inventory ===
+
+[D1] (24:41-24:46) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D2] (29:42-29:47) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D3] (34:37-34:42) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D4] (39:28-39:33) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D5] (44:22-44:27) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D6] (49:42-49:47) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D7] (54:24-54:29) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D8] (60:12-60:17) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D9] (66:23-66:28) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D10] (72:28-72:33) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D11] (80:15-80:20) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D12] (88:13-88:18) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+  Fix 2: "Hoist yield* into a const"
+
+[D13] (98:31-98:36) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+
+[D14] (103:23-103:28) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+
+[D15] (109:13-109:18) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+
+[D16] (115:21-115:26) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+
+[D17] (122:29-122:34) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+
+[D18] (130:31-130:36) TS377171: This `yield*` is used as a call argument; yield it into a const first, or map the effect, so running the effect and building the call stay separate steps. effect(yieldInCallArgument)
+  Fix 0: "Disable yieldInCallArgument for this line"
+  Fix 1: "Disable yieldInCallArgument for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect, pipe } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const loadFn: Effect.Effect<(n: number) => string>
+declare const subject: Effect.Effect<number>
+declare const obj: { prop: string }
+declare const cond: boolean
+declare const svc: { process(n: number): string } | undefined
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function sum(...ns: Array<number>): number
+declare function makeFn(options: { readonly tag: string }): (n: number) => string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const pipeableStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a pipeable step, `loadFn` -> `loadedFn`
+  const loadedFn = yield* loadFn;
+  return yield* subject.pipe(Effect.map(loadedFn))
+})
+
+export const pipeFunctionStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a step in a pipe(...) call
+  return yield* pipe(subject, Effect.map(yield* loadFn))
+})
+
+export const dataFirst = Effect.gen(function*() {
+  // MUST TRIGGER (fix): data-first call
+  return yield* Effect.map(subject, yield* loadFn)
+})
+
+export const curriedCallee = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee of the outer call
+  return yield* Effect.map(yield* loadFn)(subject)
+})
+
+export const pipeSubject = Effect.gen(function*() {
+  // MUST TRIGGER (fix): first argument of pipe(...)
+  return yield* pipe(yield* load, Effect.succeed)
+})
+
+export const insideYieldOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): only the inner yield* is a call argument
+  return yield* Effect.succeed(transform(yield* load))
+})
+
+export const propertyAssignment = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the assignment target `obj.prop` is a property access
+  obj.prop = transform(yield* load)
+})
+
+export const compoundAssignment = Effect.gen(function*() {
+  let n = 0
+  // MUST TRIGGER (fix): compound assignment to an identifier
+  n += sum(yield* load)
+  return n
+})
+
+export const oneLineBlock = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the const is inserted inline, inside the braces
+  if (cond) { consume(yield* load) }
+})
+
+export const withJsDoc = Effect.gen(function*() {
+  /** the result */
+  // MUST TRIGGER (fix): the const is inserted above the JSDoc
+  const result = transform(yield* load)
+  return result
+})
+
+export const caseClause = Effect.gen(function*() {
+  switch (cond) {
+    case true:
+      // MUST TRIGGER (fix): case clauses are statement lists
+      consume(yield* load)
+      break
+  }
+})
+
+export const whileBody = Effect.gen(function*() {
+  while (cond) {
+    // MUST TRIGGER (fix): a braced loop body is a statement list
+    consume(yield* load)
+  }
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const callCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the callee `makeFn(...)` runs before the effect
+  return makeFn({ tag: "a" })(yield* load)
+})
+
+export const optionalMethod = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` the argument only runs when `svc` is defined
+  return svc?.process(yield* load)
+})
+
+export const logicalAssignment = Effect.gen(function*() {
+  let n: number | undefined
+  // MUST TRIGGER (no fix): `??=` only evaluates its right side when `n` is nullish
+  n ??= sum(yield* load)
+  return n
+})
+
+export const letDeclaration = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): only a single-declarator const is an allowed position
+  let x = transform(yield* load)
+  x += "!"
+  return x
+})
+
+export const throwStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): a throw statement is not an allowed position
+  throw new Error(transform(yield* load))
+})
+
+class Holder {
+  readonly svc = { process: (n: number) => String(n) }
+  run() {
+    return Effect.gen(this, function*() {
+      // MUST TRIGGER (no fix): `this` is not a side-effect free receiver
+      return this.svc.process(yield* load)
+    })
+  }
+}
+export const holder = new Holder()
+
+// ---------------------------------------------------------------------------
+// Not reported
+// ---------------------------------------------------------------------------
+
+export const asArgument = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the argument is an `as` expression wrapping the yield*
+  return transform((yield* load) as number)
+})
+
+
+=== [D2] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect, pipe } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const loadFn: Effect.Effect<(n: number) => string>
+declare const subject: Effect.Effect<number>
+declare const obj: { prop: string }
+declare const cond: boolean
+declare const svc: { process(n: number): string } | undefined
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function sum(...ns: Array<number>): number
+declare function makeFn(options: { readonly tag: string }): (n: number) => string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const pipeableStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a pipeable step, `loadFn` -> `loadedFn`
+  return yield* subject.pipe(Effect.map(yield* loadFn))
+})
+
+export const pipeFunctionStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a step in a pipe(...) call
+  const loadedFn = yield* loadFn;
+  return yield* pipe(subject, Effect.map(loadedFn))
+})
+
+export const dataFirst = Effect.gen(function*() {
+  // MUST TRIGGER (fix): data-first call
+  return yield* Effect.map(subject, yield* loadFn)
+})
+
+export const curriedCallee = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee of the outer call
+  return yield* Effect.map(yield* loadFn)(subject)
+})
+
+export const pipeSubject = Effect.gen(function*() {
+  // MUST TRIGGER (fix): first argument of pipe(...)
+  return yield* pipe(yield* load, Effect.succeed)
+})
+
+export const insideYieldOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): only the inner yield* is a call argument
+  return yield* Effect.succeed(transform(yield* load))
+})
+
+export const propertyAssignment = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the assignment target `obj.prop` is a property access
+  obj.prop = transform(yield* load)
+})
+
+export const compoundAssignment = Effect.gen(function*() {
+  let n = 0
+  // MUST TRIGGER (fix): compound assignment to an identifier
+  n += sum(yield* load)
+  return n
+})
+
+export const oneLineBlock = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the const is inserted inline, inside the braces
+  if (cond) { consume(yield* load) }
+})
+
+export const withJsDoc = Effect.gen(function*() {
+  /** the result */
+  // MUST TRIGGER (fix): the const is inserted above the JSDoc
+  const result = transform(yield* load)
+  return result
+})
+
+export const caseClause = Effect.gen(function*() {
+  switch (cond) {
+    case true:
+      // MUST TRIGGER (fix): case clauses are statement lists
+      consume(yield* load)
+      break
+  }
+})
+
+export const whileBody = Effect.gen(function*() {
+  while (cond) {
+    // MUST TRIGGER (fix): a braced loop body is a statement list
+    consume(yield* load)
+  }
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const callCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the callee `makeFn(...)` runs before the effect
+  return makeFn({ tag: "a" })(yield* load)
+})
+
+export const optionalMethod = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` the argument only runs when `svc` is defined
+  return svc?.process(yield* load)
+})
+
+export const logicalAssignment = Effect.gen(function*() {
+  let n: number | undefined
+  // MUST TRIGGER (no fix): `??=` only evaluates its right side when `n` is nullish
+  n ??= sum(yield* load)
+  return n
+})
+
+export const letDeclaration = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): only a single-declarator const is an allowed position
+  let x = transform(yield* load)
+  x += "!"
+  return x
+})
+
+export const throwStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): a throw statement is not an allowed position
+  throw new Error(transform(yield* load))
+})
+
+class Holder {
+  readonly svc = { process: (n: number) => String(n) }
+  run() {
+    return Effect.gen(this, function*() {
+      // MUST TRIGGER (no fix): `this` is not a side-effect free receiver
+      return this.svc.process(yield* load)
+    })
+  }
+}
+export const holder = new Holder()
+
+// ---------------------------------------------------------------------------
+// Not reported
+// ---------------------------------------------------------------------------
+
+export const asArgument = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the argument is an `as` expression wrapping the yield*
+  return transform((yield* load) as number)
+})
+
+
+=== [D3] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect, pipe } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const loadFn: Effect.Effect<(n: number) => string>
+declare const subject: Effect.Effect<number>
+declare const obj: { prop: string }
+declare const cond: boolean
+declare const svc: { process(n: number): string } | undefined
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function sum(...ns: Array<number>): number
+declare function makeFn(options: { readonly tag: string }): (n: number) => string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const pipeableStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a pipeable step, `loadFn` -> `loadedFn`
+  return yield* subject.pipe(Effect.map(yield* loadFn))
+})
+
+export const pipeFunctionStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a step in a pipe(...) call
+  return yield* pipe(subject, Effect.map(yield* loadFn))
+})
+
+export const dataFirst = Effect.gen(function*() {
+  // MUST TRIGGER (fix): data-first call
+  const loadedFn = yield* loadFn;
+  return yield* Effect.map(subject, loadedFn)
+})
+
+export const curriedCallee = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee of the outer call
+  return yield* Effect.map(yield* loadFn)(subject)
+})
+
+export const pipeSubject = Effect.gen(function*() {
+  // MUST TRIGGER (fix): first argument of pipe(...)
+  return yield* pipe(yield* load, Effect.succeed)
+})
+
+export const insideYieldOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): only the inner yield* is a call argument
+  return yield* Effect.succeed(transform(yield* load))
+})
+
+export const propertyAssignment = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the assignment target `obj.prop` is a property access
+  obj.prop = transform(yield* load)
+})
+
+export const compoundAssignment = Effect.gen(function*() {
+  let n = 0
+  // MUST TRIGGER (fix): compound assignment to an identifier
+  n += sum(yield* load)
+  return n
+})
+
+export const oneLineBlock = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the const is inserted inline, inside the braces
+  if (cond) { consume(yield* load) }
+})
+
+export const withJsDoc = Effect.gen(function*() {
+  /** the result */
+  // MUST TRIGGER (fix): the const is inserted above the JSDoc
+  const result = transform(yield* load)
+  return result
+})
+
+export const caseClause = Effect.gen(function*() {
+  switch (cond) {
+    case true:
+      // MUST TRIGGER (fix): case clauses are statement lists
+      consume(yield* load)
+      break
+  }
+})
+
+export const whileBody = Effect.gen(function*() {
+  while (cond) {
+    // MUST TRIGGER (fix): a braced loop body is a statement list
+    consume(yield* load)
+  }
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const callCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the callee `makeFn(...)` runs before the effect
+  return makeFn({ tag: "a" })(yield* load)
+})
+
+export const optionalMethod = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` the argument only runs when `svc` is defined
+  return svc?.process(yield* load)
+})
+
+export const logicalAssignment = Effect.gen(function*() {
+  let n: number | undefined
+  // MUST TRIGGER (no fix): `??=` only evaluates its right side when `n` is nullish
+  n ??= sum(yield* load)
+  return n
+})
+
+export const letDeclaration = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): only a single-declarator const is an allowed position
+  let x = transform(yield* load)
+  x += "!"
+  return x
+})
+
+export const throwStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): a throw statement is not an allowed position
+  throw new Error(transform(yield* load))
+})
+
+class Holder {
+  readonly svc = { process: (n: number) => String(n) }
+  run() {
+    return Effect.gen(this, function*() {
+      // MUST TRIGGER (no fix): `this` is not a side-effect free receiver
+      return this.svc.process(yield* load)
+    })
+  }
+}
+export const holder = new Holder()
+
+// ---------------------------------------------------------------------------
+// Not reported
+// ---------------------------------------------------------------------------
+
+export const asArgument = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the argument is an `as` expression wrapping the yield*
+  return transform((yield* load) as number)
+})
+
+
+=== [D4] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect, pipe } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const loadFn: Effect.Effect<(n: number) => string>
+declare const subject: Effect.Effect<number>
+declare const obj: { prop: string }
+declare const cond: boolean
+declare const svc: { process(n: number): string } | undefined
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function sum(...ns: Array<number>): number
+declare function makeFn(options: { readonly tag: string }): (n: number) => string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const pipeableStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a pipeable step, `loadFn` -> `loadedFn`
+  return yield* subject.pipe(Effect.map(yield* loadFn))
+})
+
+export const pipeFunctionStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a step in a pipe(...) call
+  return yield* pipe(subject, Effect.map(yield* loadFn))
+})
+
+export const dataFirst = Effect.gen(function*() {
+  // MUST TRIGGER (fix): data-first call
+  return yield* Effect.map(subject, yield* loadFn)
+})
+
+export const curriedCallee = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee of the outer call
+  const loadedFn = yield* loadFn;
+  return yield* Effect.map(loadedFn)(subject)
+})
+
+export const pipeSubject = Effect.gen(function*() {
+  // MUST TRIGGER (fix): first argument of pipe(...)
+  return yield* pipe(yield* load, Effect.succeed)
+})
+
+export const insideYieldOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): only the inner yield* is a call argument
+  return yield* Effect.succeed(transform(yield* load))
+})
+
+export const propertyAssignment = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the assignment target `obj.prop` is a property access
+  obj.prop = transform(yield* load)
+})
+
+export const compoundAssignment = Effect.gen(function*() {
+  let n = 0
+  // MUST TRIGGER (fix): compound assignment to an identifier
+  n += sum(yield* load)
+  return n
+})
+
+export const oneLineBlock = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the const is inserted inline, inside the braces
+  if (cond) { consume(yield* load) }
+})
+
+export const withJsDoc = Effect.gen(function*() {
+  /** the result */
+  // MUST TRIGGER (fix): the const is inserted above the JSDoc
+  const result = transform(yield* load)
+  return result
+})
+
+export const caseClause = Effect.gen(function*() {
+  switch (cond) {
+    case true:
+      // MUST TRIGGER (fix): case clauses are statement lists
+      consume(yield* load)
+      break
+  }
+})
+
+export const whileBody = Effect.gen(function*() {
+  while (cond) {
+    // MUST TRIGGER (fix): a braced loop body is a statement list
+    consume(yield* load)
+  }
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const callCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the callee `makeFn(...)` runs before the effect
+  return makeFn({ tag: "a" })(yield* load)
+})
+
+export const optionalMethod = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` the argument only runs when `svc` is defined
+  return svc?.process(yield* load)
+})
+
+export const logicalAssignment = Effect.gen(function*() {
+  let n: number | undefined
+  // MUST TRIGGER (no fix): `??=` only evaluates its right side when `n` is nullish
+  n ??= sum(yield* load)
+  return n
+})
+
+export const letDeclaration = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): only a single-declarator const is an allowed position
+  let x = transform(yield* load)
+  x += "!"
+  return x
+})
+
+export const throwStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): a throw statement is not an allowed position
+  throw new Error(transform(yield* load))
+})
+
+class Holder {
+  readonly svc = { process: (n: number) => String(n) }
+  run() {
+    return Effect.gen(this, function*() {
+      // MUST TRIGGER (no fix): `this` is not a side-effect free receiver
+      return this.svc.process(yield* load)
+    })
+  }
+}
+export const holder = new Holder()
+
+// ---------------------------------------------------------------------------
+// Not reported
+// ---------------------------------------------------------------------------
+
+export const asArgument = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the argument is an `as` expression wrapping the yield*
+  return transform((yield* load) as number)
+})
+
+
+=== [D5] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect, pipe } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const loadFn: Effect.Effect<(n: number) => string>
+declare const subject: Effect.Effect<number>
+declare const obj: { prop: string }
+declare const cond: boolean
+declare const svc: { process(n: number): string } | undefined
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function sum(...ns: Array<number>): number
+declare function makeFn(options: { readonly tag: string }): (n: number) => string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const pipeableStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a pipeable step, `loadFn` -> `loadedFn`
+  return yield* subject.pipe(Effect.map(yield* loadFn))
+})
+
+export const pipeFunctionStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a step in a pipe(...) call
+  return yield* pipe(subject, Effect.map(yield* loadFn))
+})
+
+export const dataFirst = Effect.gen(function*() {
+  // MUST TRIGGER (fix): data-first call
+  return yield* Effect.map(subject, yield* loadFn)
+})
+
+export const curriedCallee = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee of the outer call
+  return yield* Effect.map(yield* loadFn)(subject)
+})
+
+export const pipeSubject = Effect.gen(function*() {
+  // MUST TRIGGER (fix): first argument of pipe(...)
+  const loaded = yield* load;
+  return yield* pipe(loaded, Effect.succeed)
+})
+
+export const insideYieldOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): only the inner yield* is a call argument
+  return yield* Effect.succeed(transform(yield* load))
+})
+
+export const propertyAssignment = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the assignment target `obj.prop` is a property access
+  obj.prop = transform(yield* load)
+})
+
+export const compoundAssignment = Effect.gen(function*() {
+  let n = 0
+  // MUST TRIGGER (fix): compound assignment to an identifier
+  n += sum(yield* load)
+  return n
+})
+
+export const oneLineBlock = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the const is inserted inline, inside the braces
+  if (cond) { consume(yield* load) }
+})
+
+export const withJsDoc = Effect.gen(function*() {
+  /** the result */
+  // MUST TRIGGER (fix): the const is inserted above the JSDoc
+  const result = transform(yield* load)
+  return result
+})
+
+export const caseClause = Effect.gen(function*() {
+  switch (cond) {
+    case true:
+      // MUST TRIGGER (fix): case clauses are statement lists
+      consume(yield* load)
+      break
+  }
+})
+
+export const whileBody = Effect.gen(function*() {
+  while (cond) {
+    // MUST TRIGGER (fix): a braced loop body is a statement list
+    consume(yield* load)
+  }
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const callCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the callee `makeFn(...)` runs before the effect
+  return makeFn({ tag: "a" })(yield* load)
+})
+
+export const optionalMethod = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` the argument only runs when `svc` is defined
+  return svc?.process(yield* load)
+})
+
+export const logicalAssignment = Effect.gen(function*() {
+  let n: number | undefined
+  // MUST TRIGGER (no fix): `??=` only evaluates its right side when `n` is nullish
+  n ??= sum(yield* load)
+  return n
+})
+
+export const letDeclaration = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): only a single-declarator const is an allowed position
+  let x = transform(yield* load)
+  x += "!"
+  return x
+})
+
+export const throwStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): a throw statement is not an allowed position
+  throw new Error(transform(yield* load))
+})
+
+class Holder {
+  readonly svc = { process: (n: number) => String(n) }
+  run() {
+    return Effect.gen(this, function*() {
+      // MUST TRIGGER (no fix): `this` is not a side-effect free receiver
+      return this.svc.process(yield* load)
+    })
+  }
+}
+export const holder = new Holder()
+
+// ---------------------------------------------------------------------------
+// Not reported
+// ---------------------------------------------------------------------------
+
+export const asArgument = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the argument is an `as` expression wrapping the yield*
+  return transform((yield* load) as number)
+})
+
+
+=== [D6] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect, pipe } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const loadFn: Effect.Effect<(n: number) => string>
+declare const subject: Effect.Effect<number>
+declare const obj: { prop: string }
+declare const cond: boolean
+declare const svc: { process(n: number): string } | undefined
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function sum(...ns: Array<number>): number
+declare function makeFn(options: { readonly tag: string }): (n: number) => string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const pipeableStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a pipeable step, `loadFn` -> `loadedFn`
+  return yield* subject.pipe(Effect.map(yield* loadFn))
+})
+
+export const pipeFunctionStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a step in a pipe(...) call
+  return yield* pipe(subject, Effect.map(yield* loadFn))
+})
+
+export const dataFirst = Effect.gen(function*() {
+  // MUST TRIGGER (fix): data-first call
+  return yield* Effect.map(subject, yield* loadFn)
+})
+
+export const curriedCallee = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee of the outer call
+  return yield* Effect.map(yield* loadFn)(subject)
+})
+
+export const pipeSubject = Effect.gen(function*() {
+  // MUST TRIGGER (fix): first argument of pipe(...)
+  return yield* pipe(yield* load, Effect.succeed)
+})
+
+export const insideYieldOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): only the inner yield* is a call argument
+  const loaded = yield* load;
+  return yield* Effect.succeed(transform(loaded))
+})
+
+export const propertyAssignment = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the assignment target `obj.prop` is a property access
+  obj.prop = transform(yield* load)
+})
+
+export const compoundAssignment = Effect.gen(function*() {
+  let n = 0
+  // MUST TRIGGER (fix): compound assignment to an identifier
+  n += sum(yield* load)
+  return n
+})
+
+export const oneLineBlock = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the const is inserted inline, inside the braces
+  if (cond) { consume(yield* load) }
+})
+
+export const withJsDoc = Effect.gen(function*() {
+  /** the result */
+  // MUST TRIGGER (fix): the const is inserted above the JSDoc
+  const result = transform(yield* load)
+  return result
+})
+
+export const caseClause = Effect.gen(function*() {
+  switch (cond) {
+    case true:
+      // MUST TRIGGER (fix): case clauses are statement lists
+      consume(yield* load)
+      break
+  }
+})
+
+export const whileBody = Effect.gen(function*() {
+  while (cond) {
+    // MUST TRIGGER (fix): a braced loop body is a statement list
+    consume(yield* load)
+  }
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const callCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the callee `makeFn(...)` runs before the effect
+  return makeFn({ tag: "a" })(yield* load)
+})
+
+export const optionalMethod = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` the argument only runs when `svc` is defined
+  return svc?.process(yield* load)
+})
+
+export const logicalAssignment = Effect.gen(function*() {
+  let n: number | undefined
+  // MUST TRIGGER (no fix): `??=` only evaluates its right side when `n` is nullish
+  n ??= sum(yield* load)
+  return n
+})
+
+export const letDeclaration = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): only a single-declarator const is an allowed position
+  let x = transform(yield* load)
+  x += "!"
+  return x
+})
+
+export const throwStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): a throw statement is not an allowed position
+  throw new Error(transform(yield* load))
+})
+
+class Holder {
+  readonly svc = { process: (n: number) => String(n) }
+  run() {
+    return Effect.gen(this, function*() {
+      // MUST TRIGGER (no fix): `this` is not a side-effect free receiver
+      return this.svc.process(yield* load)
+    })
+  }
+}
+export const holder = new Holder()
+
+// ---------------------------------------------------------------------------
+// Not reported
+// ---------------------------------------------------------------------------
+
+export const asArgument = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the argument is an `as` expression wrapping the yield*
+  return transform((yield* load) as number)
+})
+
+
+=== [D7] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect, pipe } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const loadFn: Effect.Effect<(n: number) => string>
+declare const subject: Effect.Effect<number>
+declare const obj: { prop: string }
+declare const cond: boolean
+declare const svc: { process(n: number): string } | undefined
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function sum(...ns: Array<number>): number
+declare function makeFn(options: { readonly tag: string }): (n: number) => string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const pipeableStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a pipeable step, `loadFn` -> `loadedFn`
+  return yield* subject.pipe(Effect.map(yield* loadFn))
+})
+
+export const pipeFunctionStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a step in a pipe(...) call
+  return yield* pipe(subject, Effect.map(yield* loadFn))
+})
+
+export const dataFirst = Effect.gen(function*() {
+  // MUST TRIGGER (fix): data-first call
+  return yield* Effect.map(subject, yield* loadFn)
+})
+
+export const curriedCallee = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee of the outer call
+  return yield* Effect.map(yield* loadFn)(subject)
+})
+
+export const pipeSubject = Effect.gen(function*() {
+  // MUST TRIGGER (fix): first argument of pipe(...)
+  return yield* pipe(yield* load, Effect.succeed)
+})
+
+export const insideYieldOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): only the inner yield* is a call argument
+  return yield* Effect.succeed(transform(yield* load))
+})
+
+export const propertyAssignment = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the assignment target `obj.prop` is a property access
+  const loaded = yield* load;
+  obj.prop = transform(loaded)
+})
+
+export const compoundAssignment = Effect.gen(function*() {
+  let n = 0
+  // MUST TRIGGER (fix): compound assignment to an identifier
+  n += sum(yield* load)
+  return n
+})
+
+export const oneLineBlock = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the const is inserted inline, inside the braces
+  if (cond) { consume(yield* load) }
+})
+
+export const withJsDoc = Effect.gen(function*() {
+  /** the result */
+  // MUST TRIGGER (fix): the const is inserted above the JSDoc
+  const result = transform(yield* load)
+  return result
+})
+
+export const caseClause = Effect.gen(function*() {
+  switch (cond) {
+    case true:
+      // MUST TRIGGER (fix): case clauses are statement lists
+      consume(yield* load)
+      break
+  }
+})
+
+export const whileBody = Effect.gen(function*() {
+  while (cond) {
+    // MUST TRIGGER (fix): a braced loop body is a statement list
+    consume(yield* load)
+  }
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const callCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the callee `makeFn(...)` runs before the effect
+  return makeFn({ tag: "a" })(yield* load)
+})
+
+export const optionalMethod = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` the argument only runs when `svc` is defined
+  return svc?.process(yield* load)
+})
+
+export const logicalAssignment = Effect.gen(function*() {
+  let n: number | undefined
+  // MUST TRIGGER (no fix): `??=` only evaluates its right side when `n` is nullish
+  n ??= sum(yield* load)
+  return n
+})
+
+export const letDeclaration = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): only a single-declarator const is an allowed position
+  let x = transform(yield* load)
+  x += "!"
+  return x
+})
+
+export const throwStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): a throw statement is not an allowed position
+  throw new Error(transform(yield* load))
+})
+
+class Holder {
+  readonly svc = { process: (n: number) => String(n) }
+  run() {
+    return Effect.gen(this, function*() {
+      // MUST TRIGGER (no fix): `this` is not a side-effect free receiver
+      return this.svc.process(yield* load)
+    })
+  }
+}
+export const holder = new Holder()
+
+// ---------------------------------------------------------------------------
+// Not reported
+// ---------------------------------------------------------------------------
+
+export const asArgument = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the argument is an `as` expression wrapping the yield*
+  return transform((yield* load) as number)
+})
+
+
+=== [D8] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D8] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect, pipe } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const loadFn: Effect.Effect<(n: number) => string>
+declare const subject: Effect.Effect<number>
+declare const obj: { prop: string }
+declare const cond: boolean
+declare const svc: { process(n: number): string } | undefined
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function sum(...ns: Array<number>): number
+declare function makeFn(options: { readonly tag: string }): (n: number) => string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const pipeableStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a pipeable step, `loadFn` -> `loadedFn`
+  return yield* subject.pipe(Effect.map(yield* loadFn))
+})
+
+export const pipeFunctionStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a step in a pipe(...) call
+  return yield* pipe(subject, Effect.map(yield* loadFn))
+})
+
+export const dataFirst = Effect.gen(function*() {
+  // MUST TRIGGER (fix): data-first call
+  return yield* Effect.map(subject, yield* loadFn)
+})
+
+export const curriedCallee = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee of the outer call
+  return yield* Effect.map(yield* loadFn)(subject)
+})
+
+export const pipeSubject = Effect.gen(function*() {
+  // MUST TRIGGER (fix): first argument of pipe(...)
+  return yield* pipe(yield* load, Effect.succeed)
+})
+
+export const insideYieldOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): only the inner yield* is a call argument
+  return yield* Effect.succeed(transform(yield* load))
+})
+
+export const propertyAssignment = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the assignment target `obj.prop` is a property access
+  obj.prop = transform(yield* load)
+})
+
+export const compoundAssignment = Effect.gen(function*() {
+  let n = 0
+  // MUST TRIGGER (fix): compound assignment to an identifier
+  const loaded = yield* load;
+  n += sum(loaded)
+  return n
+})
+
+export const oneLineBlock = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the const is inserted inline, inside the braces
+  if (cond) { consume(yield* load) }
+})
+
+export const withJsDoc = Effect.gen(function*() {
+  /** the result */
+  // MUST TRIGGER (fix): the const is inserted above the JSDoc
+  const result = transform(yield* load)
+  return result
+})
+
+export const caseClause = Effect.gen(function*() {
+  switch (cond) {
+    case true:
+      // MUST TRIGGER (fix): case clauses are statement lists
+      consume(yield* load)
+      break
+  }
+})
+
+export const whileBody = Effect.gen(function*() {
+  while (cond) {
+    // MUST TRIGGER (fix): a braced loop body is a statement list
+    consume(yield* load)
+  }
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const callCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the callee `makeFn(...)` runs before the effect
+  return makeFn({ tag: "a" })(yield* load)
+})
+
+export const optionalMethod = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` the argument only runs when `svc` is defined
+  return svc?.process(yield* load)
+})
+
+export const logicalAssignment = Effect.gen(function*() {
+  let n: number | undefined
+  // MUST TRIGGER (no fix): `??=` only evaluates its right side when `n` is nullish
+  n ??= sum(yield* load)
+  return n
+})
+
+export const letDeclaration = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): only a single-declarator const is an allowed position
+  let x = transform(yield* load)
+  x += "!"
+  return x
+})
+
+export const throwStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): a throw statement is not an allowed position
+  throw new Error(transform(yield* load))
+})
+
+class Holder {
+  readonly svc = { process: (n: number) => String(n) }
+  run() {
+    return Effect.gen(this, function*() {
+      // MUST TRIGGER (no fix): `this` is not a side-effect free receiver
+      return this.svc.process(yield* load)
+    })
+  }
+}
+export const holder = new Holder()
+
+// ---------------------------------------------------------------------------
+// Not reported
+// ---------------------------------------------------------------------------
+
+export const asArgument = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the argument is an `as` expression wrapping the yield*
+  return transform((yield* load) as number)
+})
+
+
+=== [D9] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D9] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect, pipe } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const loadFn: Effect.Effect<(n: number) => string>
+declare const subject: Effect.Effect<number>
+declare const obj: { prop: string }
+declare const cond: boolean
+declare const svc: { process(n: number): string } | undefined
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function sum(...ns: Array<number>): number
+declare function makeFn(options: { readonly tag: string }): (n: number) => string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const pipeableStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a pipeable step, `loadFn` -> `loadedFn`
+  return yield* subject.pipe(Effect.map(yield* loadFn))
+})
+
+export const pipeFunctionStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a step in a pipe(...) call
+  return yield* pipe(subject, Effect.map(yield* loadFn))
+})
+
+export const dataFirst = Effect.gen(function*() {
+  // MUST TRIGGER (fix): data-first call
+  return yield* Effect.map(subject, yield* loadFn)
+})
+
+export const curriedCallee = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee of the outer call
+  return yield* Effect.map(yield* loadFn)(subject)
+})
+
+export const pipeSubject = Effect.gen(function*() {
+  // MUST TRIGGER (fix): first argument of pipe(...)
+  return yield* pipe(yield* load, Effect.succeed)
+})
+
+export const insideYieldOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): only the inner yield* is a call argument
+  return yield* Effect.succeed(transform(yield* load))
+})
+
+export const propertyAssignment = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the assignment target `obj.prop` is a property access
+  obj.prop = transform(yield* load)
+})
+
+export const compoundAssignment = Effect.gen(function*() {
+  let n = 0
+  // MUST TRIGGER (fix): compound assignment to an identifier
+  n += sum(yield* load)
+  return n
+})
+
+export const oneLineBlock = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the const is inserted inline, inside the braces
+  if (cond) { const loaded = yield* load; consume(loaded) }
+})
+
+export const withJsDoc = Effect.gen(function*() {
+  /** the result */
+  // MUST TRIGGER (fix): the const is inserted above the JSDoc
+  const result = transform(yield* load)
+  return result
+})
+
+export const caseClause = Effect.gen(function*() {
+  switch (cond) {
+    case true:
+      // MUST TRIGGER (fix): case clauses are statement lists
+      consume(yield* load)
+      break
+  }
+})
+
+export const whileBody = Effect.gen(function*() {
+  while (cond) {
+    // MUST TRIGGER (fix): a braced loop body is a statement list
+    consume(yield* load)
+  }
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const callCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the callee `makeFn(...)` runs before the effect
+  return makeFn({ tag: "a" })(yield* load)
+})
+
+export const optionalMethod = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` the argument only runs when `svc` is defined
+  return svc?.process(yield* load)
+})
+
+export const logicalAssignment = Effect.gen(function*() {
+  let n: number | undefined
+  // MUST TRIGGER (no fix): `??=` only evaluates its right side when `n` is nullish
+  n ??= sum(yield* load)
+  return n
+})
+
+export const letDeclaration = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): only a single-declarator const is an allowed position
+  let x = transform(yield* load)
+  x += "!"
+  return x
+})
+
+export const throwStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): a throw statement is not an allowed position
+  throw new Error(transform(yield* load))
+})
+
+class Holder {
+  readonly svc = { process: (n: number) => String(n) }
+  run() {
+    return Effect.gen(this, function*() {
+      // MUST TRIGGER (no fix): `this` is not a side-effect free receiver
+      return this.svc.process(yield* load)
+    })
+  }
+}
+export const holder = new Holder()
+
+// ---------------------------------------------------------------------------
+// Not reported
+// ---------------------------------------------------------------------------
+
+export const asArgument = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the argument is an `as` expression wrapping the yield*
+  return transform((yield* load) as number)
+})
+
+
+=== [D10] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D10] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect, pipe } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const loadFn: Effect.Effect<(n: number) => string>
+declare const subject: Effect.Effect<number>
+declare const obj: { prop: string }
+declare const cond: boolean
+declare const svc: { process(n: number): string } | undefined
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function sum(...ns: Array<number>): number
+declare function makeFn(options: { readonly tag: string }): (n: number) => string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const pipeableStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a pipeable step, `loadFn` -> `loadedFn`
+  return yield* subject.pipe(Effect.map(yield* loadFn))
+})
+
+export const pipeFunctionStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a step in a pipe(...) call
+  return yield* pipe(subject, Effect.map(yield* loadFn))
+})
+
+export const dataFirst = Effect.gen(function*() {
+  // MUST TRIGGER (fix): data-first call
+  return yield* Effect.map(subject, yield* loadFn)
+})
+
+export const curriedCallee = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee of the outer call
+  return yield* Effect.map(yield* loadFn)(subject)
+})
+
+export const pipeSubject = Effect.gen(function*() {
+  // MUST TRIGGER (fix): first argument of pipe(...)
+  return yield* pipe(yield* load, Effect.succeed)
+})
+
+export const insideYieldOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): only the inner yield* is a call argument
+  return yield* Effect.succeed(transform(yield* load))
+})
+
+export const propertyAssignment = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the assignment target `obj.prop` is a property access
+  obj.prop = transform(yield* load)
+})
+
+export const compoundAssignment = Effect.gen(function*() {
+  let n = 0
+  // MUST TRIGGER (fix): compound assignment to an identifier
+  n += sum(yield* load)
+  return n
+})
+
+export const oneLineBlock = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the const is inserted inline, inside the braces
+  if (cond) { consume(yield* load) }
+})
+
+export const withJsDoc = Effect.gen(function*() {
+  const loaded = yield* load;
+  /** the result */
+  // MUST TRIGGER (fix): the const is inserted above the JSDoc
+  const result = transform(loaded)
+  return result
+})
+
+export const caseClause = Effect.gen(function*() {
+  switch (cond) {
+    case true:
+      // MUST TRIGGER (fix): case clauses are statement lists
+      consume(yield* load)
+      break
+  }
+})
+
+export const whileBody = Effect.gen(function*() {
+  while (cond) {
+    // MUST TRIGGER (fix): a braced loop body is a statement list
+    consume(yield* load)
+  }
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const callCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the callee `makeFn(...)` runs before the effect
+  return makeFn({ tag: "a" })(yield* load)
+})
+
+export const optionalMethod = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` the argument only runs when `svc` is defined
+  return svc?.process(yield* load)
+})
+
+export const logicalAssignment = Effect.gen(function*() {
+  let n: number | undefined
+  // MUST TRIGGER (no fix): `??=` only evaluates its right side when `n` is nullish
+  n ??= sum(yield* load)
+  return n
+})
+
+export const letDeclaration = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): only a single-declarator const is an allowed position
+  let x = transform(yield* load)
+  x += "!"
+  return x
+})
+
+export const throwStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): a throw statement is not an allowed position
+  throw new Error(transform(yield* load))
+})
+
+class Holder {
+  readonly svc = { process: (n: number) => String(n) }
+  run() {
+    return Effect.gen(this, function*() {
+      // MUST TRIGGER (no fix): `this` is not a side-effect free receiver
+      return this.svc.process(yield* load)
+    })
+  }
+}
+export const holder = new Holder()
+
+// ---------------------------------------------------------------------------
+// Not reported
+// ---------------------------------------------------------------------------
+
+export const asArgument = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the argument is an `as` expression wrapping the yield*
+  return transform((yield* load) as number)
+})
+
+
+=== [D11] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D11] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect, pipe } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const loadFn: Effect.Effect<(n: number) => string>
+declare const subject: Effect.Effect<number>
+declare const obj: { prop: string }
+declare const cond: boolean
+declare const svc: { process(n: number): string } | undefined
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function sum(...ns: Array<number>): number
+declare function makeFn(options: { readonly tag: string }): (n: number) => string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const pipeableStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a pipeable step, `loadFn` -> `loadedFn`
+  return yield* subject.pipe(Effect.map(yield* loadFn))
+})
+
+export const pipeFunctionStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a step in a pipe(...) call
+  return yield* pipe(subject, Effect.map(yield* loadFn))
+})
+
+export const dataFirst = Effect.gen(function*() {
+  // MUST TRIGGER (fix): data-first call
+  return yield* Effect.map(subject, yield* loadFn)
+})
+
+export const curriedCallee = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee of the outer call
+  return yield* Effect.map(yield* loadFn)(subject)
+})
+
+export const pipeSubject = Effect.gen(function*() {
+  // MUST TRIGGER (fix): first argument of pipe(...)
+  return yield* pipe(yield* load, Effect.succeed)
+})
+
+export const insideYieldOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): only the inner yield* is a call argument
+  return yield* Effect.succeed(transform(yield* load))
+})
+
+export const propertyAssignment = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the assignment target `obj.prop` is a property access
+  obj.prop = transform(yield* load)
+})
+
+export const compoundAssignment = Effect.gen(function*() {
+  let n = 0
+  // MUST TRIGGER (fix): compound assignment to an identifier
+  n += sum(yield* load)
+  return n
+})
+
+export const oneLineBlock = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the const is inserted inline, inside the braces
+  if (cond) { consume(yield* load) }
+})
+
+export const withJsDoc = Effect.gen(function*() {
+  /** the result */
+  // MUST TRIGGER (fix): the const is inserted above the JSDoc
+  const result = transform(yield* load)
+  return result
+})
+
+export const caseClause = Effect.gen(function*() {
+  switch (cond) {
+    case true:
+      // MUST TRIGGER (fix): case clauses are statement lists
+      const loaded = yield* load;
+      consume(loaded)
+      break
+  }
+})
+
+export const whileBody = Effect.gen(function*() {
+  while (cond) {
+    // MUST TRIGGER (fix): a braced loop body is a statement list
+    consume(yield* load)
+  }
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const callCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the callee `makeFn(...)` runs before the effect
+  return makeFn({ tag: "a" })(yield* load)
+})
+
+export const optionalMethod = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` the argument only runs when `svc` is defined
+  return svc?.process(yield* load)
+})
+
+export const logicalAssignment = Effect.gen(function*() {
+  let n: number | undefined
+  // MUST TRIGGER (no fix): `??=` only evaluates its right side when `n` is nullish
+  n ??= sum(yield* load)
+  return n
+})
+
+export const letDeclaration = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): only a single-declarator const is an allowed position
+  let x = transform(yield* load)
+  x += "!"
+  return x
+})
+
+export const throwStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): a throw statement is not an allowed position
+  throw new Error(transform(yield* load))
+})
+
+class Holder {
+  readonly svc = { process: (n: number) => String(n) }
+  run() {
+    return Effect.gen(this, function*() {
+      // MUST TRIGGER (no fix): `this` is not a side-effect free receiver
+      return this.svc.process(yield* load)
+    })
+  }
+}
+export const holder = new Holder()
+
+// ---------------------------------------------------------------------------
+// Not reported
+// ---------------------------------------------------------------------------
+
+export const asArgument = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the argument is an `as` expression wrapping the yield*
+  return transform((yield* load) as number)
+})
+
+
+=== [D12] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D12] Fix 2: "Hoist yield* into a const" ===
+
+--- file:///.src/yieldInCallArgument_shapes.ts ---
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics yieldInCallArgument:warning
+import { Effect, pipe } from "effect"
+
+declare const load: Effect.Effect<number>
+declare const loadFn: Effect.Effect<(n: number) => string>
+declare const subject: Effect.Effect<number>
+declare const obj: { prop: string }
+declare const cond: boolean
+declare const svc: { process(n: number): string } | undefined
+
+declare function transform(n: number): string
+declare function consume(n: number): void
+declare function sum(...ns: Array<number>): number
+declare function makeFn(options: { readonly tag: string }): (n: number) => string
+
+// ---------------------------------------------------------------------------
+// Reported, with quick fix
+// ---------------------------------------------------------------------------
+
+export const pipeableStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a pipeable step, `loadFn` -> `loadedFn`
+  return yield* subject.pipe(Effect.map(yield* loadFn))
+})
+
+export const pipeFunctionStep = Effect.gen(function*() {
+  // MUST TRIGGER (fix): argument of a step in a pipe(...) call
+  return yield* pipe(subject, Effect.map(yield* loadFn))
+})
+
+export const dataFirst = Effect.gen(function*() {
+  // MUST TRIGGER (fix): data-first call
+  return yield* Effect.map(subject, yield* loadFn)
+})
+
+export const curriedCallee = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the call holding the yield* is the callee of the outer call
+  return yield* Effect.map(yield* loadFn)(subject)
+})
+
+export const pipeSubject = Effect.gen(function*() {
+  // MUST TRIGGER (fix): first argument of pipe(...)
+  return yield* pipe(yield* load, Effect.succeed)
+})
+
+export const insideYieldOperand = Effect.gen(function*() {
+  // MUST TRIGGER (fix): only the inner yield* is a call argument
+  return yield* Effect.succeed(transform(yield* load))
+})
+
+export const propertyAssignment = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the assignment target `obj.prop` is a property access
+  obj.prop = transform(yield* load)
+})
+
+export const compoundAssignment = Effect.gen(function*() {
+  let n = 0
+  // MUST TRIGGER (fix): compound assignment to an identifier
+  n += sum(yield* load)
+  return n
+})
+
+export const oneLineBlock = Effect.gen(function*() {
+  // MUST TRIGGER (fix): the const is inserted inline, inside the braces
+  if (cond) { consume(yield* load) }
+})
+
+export const withJsDoc = Effect.gen(function*() {
+  /** the result */
+  // MUST TRIGGER (fix): the const is inserted above the JSDoc
+  const result = transform(yield* load)
+  return result
+})
+
+export const caseClause = Effect.gen(function*() {
+  switch (cond) {
+    case true:
+      // MUST TRIGGER (fix): case clauses are statement lists
+      consume(yield* load)
+      break
+  }
+})
+
+export const whileBody = Effect.gen(function*() {
+  while (cond) {
+    // MUST TRIGGER (fix): a braced loop body is a statement list
+    const loaded = yield* load;
+    consume(loaded)
+  }
+})
+
+// ---------------------------------------------------------------------------
+// Reported, without quick fix
+// ---------------------------------------------------------------------------
+
+export const callCallee = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): the callee `makeFn(...)` runs before the effect
+  return makeFn({ tag: "a" })(yield* load)
+})
+
+export const optionalMethod = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): with `?.` the argument only runs when `svc` is defined
+  return svc?.process(yield* load)
+})
+
+export const logicalAssignment = Effect.gen(function*() {
+  let n: number | undefined
+  // MUST TRIGGER (no fix): `??=` only evaluates its right side when `n` is nullish
+  n ??= sum(yield* load)
+  return n
+})
+
+export const letDeclaration = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): only a single-declarator const is an allowed position
+  let x = transform(yield* load)
+  x += "!"
+  return x
+})
+
+export const throwStatement = Effect.gen(function*() {
+  // MUST TRIGGER (no fix): a throw statement is not an allowed position
+  throw new Error(transform(yield* load))
+})
+
+class Holder {
+  readonly svc = { process: (n: number) => String(n) }
+  run() {
+    return Effect.gen(this, function*() {
+      // MUST TRIGGER (no fix): `this` is not a side-effect free receiver
+      return this.svc.process(yield* load)
+    })
+  }
+}
+export const holder = new Holder()
+
+// ---------------------------------------------------------------------------
+// Not reported
+// ---------------------------------------------------------------------------
+
+export const asArgument = Effect.gen(function*() {
+  // MUST NOT TRIGGER: the argument is an `as` expression wrapping the yield*
+  return transform((yield* load) as number)
+})
+
+
+=== [D13] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D13] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D14] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D14] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D15] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D15] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D16] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D16] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D17] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D17] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
+
+=== [D18] Fix 0: "Disable yieldInCallArgument for this line" ===
+skipped by default
+
+=== [D18] Fix 1: "Disable yieldInCallArgument for entire file" ===
+skipped by default
