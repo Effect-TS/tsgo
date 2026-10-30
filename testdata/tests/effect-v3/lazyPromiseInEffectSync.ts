@@ -1,6 +1,6 @@
 // @effect-v3
 // @effect-diagnostics lazyPromiseInEffectSync:warning
-import { Effect } from "effect"
+import { Effect, pipe } from "effect"
 
 declare const promiseValue: Promise<number>
 declare const thenableValue: { then: (onFulfilled: (value: number) => unknown) => unknown }
@@ -19,3 +19,15 @@ export const fromThenable = Effect.sync(() => thenableValue)
 
 // Should NOT trigger - already using the async constructor
 export const fromEffectPromise = Effect.promise(() => Promise.resolve(1))
+
+// Should trigger - Effect.sync nested inside a pipeline callback
+export const fromNestedSync = Effect.succeed(1).pipe(Effect.flatMap(() => Effect.sync(() => promiseValue)))
+
+// Should trigger - point-free Effect.sync applied to a Promise thunk
+export const fromPointFree = pipe(() => Promise.resolve(1), Effect.sync)
+
+// Should trigger - point-free Effect.sync after an earlier step
+export const fromPointFreeChain = pipe(1, (n) => () => Promise.resolve(n), Effect.sync)
+
+// Should NOT trigger - point-free Effect.sync applied to a sync thunk
+export const fromPointFreeValue = pipe(() => 1, Effect.sync)

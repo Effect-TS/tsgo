@@ -40,7 +40,7 @@ type ScopeInLayerEffectMatch struct {
 	Callee     *ast.Node      // The Layer constructor callee; nil for class declaration matches
 }
 
-// AnalyzeScopeInLayerEffect finds all Layer.effect*() calls and class declarations
+// AnalyzeScopeInLayerEffect finds all Layer.effect*() steps and class declarations
 // with Default layer properties where Scope is in the layer's requirements.
 func AnalyzeScopeInLayerEffect(tp *typeparser.TypeParser, c *checker.Checker, sf *ast.SourceFile) []ScopeInLayerEffectMatch {
 	// V3-only rule
@@ -50,7 +50,17 @@ func AnalyzeScopeInLayerEffect(tp *typeparser.TypeParser, c *checker.Checker, sf
 
 	var matches []ScopeInLayerEffectMatch
 
-	// Stack-based traversal
+	// Pattern 1: Layer.effect*() steps, whether data-last, pipeable or curried
+	for _, flow := range tp.PipingFlows(sf, false).All() {
+		for index := range flow.Transformations().All() {
+			transformation := flow.Transformations().At(index)
+			if m := matchLayerEffectTransformation(tp, sf, &transformation); m != nil {
+				matches = append(matches, *m)
+			}
+		}
+	}
+
+	// Pattern 2: Class declarations with Default layer property
 	nodeToVisit := make([]*ast.Node, 0)
 	pushChild := func(child *ast.Node) bool {
 		nodeToVisit = append(nodeToVisit, child)
@@ -62,15 +72,6 @@ func AnalyzeScopeInLayerEffect(tp *typeparser.TypeParser, c *checker.Checker, sf
 		node := nodeToVisit[len(nodeToVisit)-1]
 		nodeToVisit = nodeToVisit[:len(nodeToVisit)-1]
 
-		// Pattern 1: Layer.effect*() calls
-		if node.Kind == ast.KindCallExpression {
-			if m := matchLayerEffectCall(tp, sf, node); m != nil {
-				matches = append(matches, *m)
-				continue // skip children
-			}
-		}
-
-		// Pattern 2: Class declarations with Default layer property
 		if node.Kind == ast.KindClassDeclaration {
 			if m := matchClassWithDefaultLayer(tp, c, sf, node); m != nil {
 				matches = append(matches, *m)
@@ -78,52 +79,45 @@ func AnalyzeScopeInLayerEffect(tp *typeparser.TypeParser, c *checker.Checker, sf
 			}
 		}
 
-		// Enqueue children
 		node.ForEachChild(pushChild)
 	}
 
 	return matches
 }
 
-// matchLayerEffectCall checks if a call expression is Layer.effect*() with Scope in RIn.
-func matchLayerEffectCall(tp *typeparser.TypeParser, sf *ast.SourceFile, node *ast.Node) *ScopeInLayerEffectMatch {
-	if node.Kind != ast.KindCallExpression {
-		return nil
-	}
-	call := node.AsCallExpression()
-	if call.Expression == nil {
+// matchLayerEffectTransformation checks if a piping flow step applies one of the
+// Layer.effect* constructors and produces a layer with Scope in RIn.
+func matchLayerEffectTransformation(tp *typeparser.TypeParser, sf *ast.SourceFile, transformation *typeparser.PipingFlowTransformation) *ScopeInLayerEffectMatch {
+	callee := transformation.Callee()
+	if callee == nil || callee.Parent == nil || !ast.IsCallExpression(callee.Parent) || callee.Parent.AsCallExpression().Expression != callee {
 		return nil
 	}
 
 	// Verify this references one of the Layer.effect* constructors from the
 	// "effect" package. Symbol resolution also recognizes named imports and
 	// stable local aliases whose source spelling does not reveal the API name.
-	methodName := ""
-	for _, candidate := range []string{"effect", "effectDiscard", "effectContext"} {
-		if tp.IsNodeReferenceToEffectLayerModuleApi(call.Expression, candidate) {
-			methodName = candidate
-			break
-		}
-	}
-	if methodName == "" {
+	if !slices.ContainsFunc([]string{"effect", "effectDiscard", "effectContext"}, func(candidate string) bool {
+		return tp.IsNodeReferenceToEffectLayerModuleApi(callee, candidate)
+	}) {
 		return nil
 	}
 
-	// Parse the return type of the call as a Layer type
-	layer := tp.LayerTypeAtLocation(node)
-	if layer == nil {
+	layer := tp.LayerType(transformation.OutType())
+	if layer == nil || !hasScope(tp, layer.RIn()) {
 		return nil
 	}
 
-	// Check if RIn contains a Scope type
-	if !hasScope(tp, layer.RIn()) {
-		return nil
+	// Report the call that produces the layer: the outermost application of
+	// a curried Layer.effect(tag)(effect), or the constructor call itself.
+	call := callee.Parent
+	for call.Parent != nil && ast.IsCallExpression(call.Parent) && call.Parent.AsCallExpression().Expression == call {
+		call = call.Parent
 	}
 
 	return &ScopeInLayerEffectMatch{
 		SourceFile: sf,
-		Location:   scanner.GetErrorRangeForNode(sf, node),
-		Callee:     call.Expression,
+		Location:   scanner.GetErrorRangeForNode(sf, call),
+		Callee:     callee,
 	}
 }
 

@@ -6,9 +6,11 @@ Effect version: 3.19.19
 /.src/scopeInLayerEffect.ts(37,24): warning TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
 /.src/scopeInLayerEffect.ts(45,25): warning TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
 /.src/scopeInLayerEffect.ts(55,29): warning TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
+/.src/scopeInLayerEffect.ts(66,9): warning TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
+/.src/scopeInLayerEffect.ts(68,29): warning TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
 
 
-==== /.src/scopeInLayerEffect.ts (5 errors) ====
+==== /.src/scopeInLayerEffect.ts (7 errors) ====
     // @effect-v3
     import * as Context from "effect/Context"
     import * as Effect from "effect/Effect"
@@ -99,4 +101,30 @@ Effect version: 3.19.19
     )
     ~
 !!! warning TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
+    
+    export const pipeableLayer = Effect.gen(function*() {
+      yield* Effect.addFinalizer(() => Effect.log("finalizer"))
+      return { a: 1 }
+    }).pipe(Layer.effect(MyService))
+            ~~~~~~~~~~~~~~~~~~~~~~~
+!!! warning TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
+    
+    export const curriedLayer = Layer.effect(MyService)(
+                                ~~~~~~~~~~~~~~~~~~~~~~~~
+      Effect.gen(function*() {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+        yield* Effect.addFinalizer(() => Effect.log("finalizer"))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        return { a: 1 }
+    ~~~~~~~~~~~~~~~~~~~
+      })
+    ~~~~
+    )
+    ~
+!!! warning TS377031: This layer construction leaves `Scope` in the requirement set. The scoped API removes `Scope` from the resulting requirements. effect(scopeInLayerEffect)
+    
+    export const pipeableScopedShouldNotReport = Effect.gen(function*() {
+      yield* Effect.addFinalizer(() => Effect.log("finalizer"))
+      return { a: 1 }
+    }).pipe(Layer.scoped(MyService))
     

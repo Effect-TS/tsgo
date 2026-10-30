@@ -23,6 +23,35 @@
   Fix 1: "Disable syncToSucceed for entire file"
   Fix 2: "Replace with Effect.succeed"
 
+[D6] (23:31-23:108) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D7] (23:75-23:86) TS377103: `Effect.succeed` expresses this constant value more directly than `Effect.sync`. effect(syncToSucceed)
+  Fix 0: "Disable syncToSucceed for this line"
+  Fix 1: "Disable syncToSucceed for entire file"
+  Fix 2: "Replace with Effect.succeed"
+
+[D8] (23:87-23:105) TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+  Fix 0: "Disable lazyPromiseInEffectSync for this line"
+  Fix 1: "Disable lazyPromiseInEffectSync for entire file"
+
+[D9] (26:30-26:73) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D10] (26:35-26:59) TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+  Fix 0: "Disable lazyPromiseInEffectSync for this line"
+  Fix 1: "Disable lazyPromiseInEffectSync for entire file"
+
+[D11] (29:35-29:88) TS377108: The Effect success channel contains a Promise that is not awaited. Use Effect.promise or Effect.tryPromise to represent async work. effect(promiseInEffectSuccess)
+  Fix 0: "Disable promiseInEffectSuccess for this line"
+  Fix 1: "Disable promiseInEffectSuccess for entire file"
+
+[D12] (29:76-29:87) TS377082: This `Effect.sync` thunk returns a Promise. Use `Effect.promise` or `Effect.tryPromise` to represent async work. effect(lazyPromiseInEffectSync)
+  Fix 0: "Disable lazyPromiseInEffectSync for this line"
+  Fix 1: "Disable lazyPromiseInEffectSync for entire file"
+
 === Quick Fix Application Results ===
 
 === [D1] Fix 0: "Disable lazyPromiseInEffectSync for this line" ===
@@ -41,7 +70,7 @@ skipped by default
 
 --- file:///.src/lazyPromiseInEffectSync.ts ---
 // @effect-diagnostics lazyPromiseInEffectSync:warning
-import { Effect } from "effect"
+import { Effect, pipe } from "effect"
 
 declare const promiseValue: Promise<number>
 declare const thenableValue: { then: (onFulfilled: (value: number) => unknown) => unknown }
@@ -61,6 +90,18 @@ export const fromThenable = Effect.sync(() => thenableValue)
 // Should NOT trigger - already using the async constructor
 export const fromEffectPromise = Effect.promise(() => Promise.resolve(1))
 
+// Should trigger - Effect.sync nested inside a pipeline callback
+export const fromNestedSync = Effect.succeed(1).pipe(Effect.flatMap(() => Effect.sync(() => promiseValue)))
+
+// Should trigger - point-free Effect.sync applied to a Promise thunk
+export const fromPointFree = pipe(() => Promise.resolve(1), Effect.sync)
+
+// Should trigger - point-free Effect.sync after an earlier step
+export const fromPointFreeChain = pipe(1, (n) => () => Promise.resolve(n), Effect.sync)
+
+// Should NOT trigger - point-free Effect.sync applied to a sync thunk
+export const fromPointFreeValue = pipe(() => 1, Effect.sync)
+
 
 === [D3] Fix 0: "Disable lazyPromiseInEffectSync for this line" ===
 skipped by default
@@ -78,7 +119,7 @@ skipped by default
 
 --- file:///.src/lazyPromiseInEffectSync.ts ---
 // @effect-diagnostics lazyPromiseInEffectSync:warning
-import { Effect } from "effect"
+import { Effect, pipe } from "effect"
 
 declare const promiseValue: Promise<number>
 declare const thenableValue: { then: (onFulfilled: (value: number) => unknown) => unknown }
@@ -98,6 +139,18 @@ export const fromThenable = Effect.sync(() => thenableValue)
 // Should NOT trigger - already using the async constructor
 export const fromEffectPromise = Effect.promise(() => Promise.resolve(1))
 
+// Should trigger - Effect.sync nested inside a pipeline callback
+export const fromNestedSync = Effect.succeed(1).pipe(Effect.flatMap(() => Effect.sync(() => promiseValue)))
+
+// Should trigger - point-free Effect.sync applied to a Promise thunk
+export const fromPointFree = pipe(() => Promise.resolve(1), Effect.sync)
+
+// Should trigger - point-free Effect.sync after an earlier step
+export const fromPointFreeChain = pipe(1, (n) => () => Promise.resolve(n), Effect.sync)
+
+// Should NOT trigger - point-free Effect.sync applied to a sync thunk
+export const fromPointFreeValue = pipe(() => 1, Effect.sync)
+
 
 === [D5] Fix 0: "Disable syncToSucceed for this line" ===
 skipped by default
@@ -109,7 +162,7 @@ skipped by default
 
 --- file:///.src/lazyPromiseInEffectSync.ts ---
 // @effect-diagnostics lazyPromiseInEffectSync:warning
-import { Effect } from "effect"
+import { Effect, pipe } from "effect"
 
 declare const promiseValue: Promise<number>
 declare const thenableValue: { then: (onFulfilled: (value: number) => unknown) => unknown }
@@ -129,3 +182,94 @@ export const fromThenable = Effect.succeed(thenableValue)
 // Should NOT trigger - already using the async constructor
 export const fromEffectPromise = Effect.promise(() => Promise.resolve(1))
 
+// Should trigger - Effect.sync nested inside a pipeline callback
+export const fromNestedSync = Effect.succeed(1).pipe(Effect.flatMap(() => Effect.sync(() => promiseValue)))
+
+// Should trigger - point-free Effect.sync applied to a Promise thunk
+export const fromPointFree = pipe(() => Promise.resolve(1), Effect.sync)
+
+// Should trigger - point-free Effect.sync after an earlier step
+export const fromPointFreeChain = pipe(1, (n) => () => Promise.resolve(n), Effect.sync)
+
+// Should NOT trigger - point-free Effect.sync applied to a sync thunk
+export const fromPointFreeValue = pipe(() => 1, Effect.sync)
+
+
+=== [D6] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D7] Fix 0: "Disable syncToSucceed for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable syncToSucceed for entire file" ===
+skipped by default
+
+=== [D7] Fix 2: "Replace with Effect.succeed" ===
+
+--- file:///.src/lazyPromiseInEffectSync.ts ---
+// @effect-diagnostics lazyPromiseInEffectSync:warning
+import { Effect, pipe } from "effect"
+
+declare const promiseValue: Promise<number>
+declare const thenableValue: { then: (onFulfilled: (value: number) => unknown) => unknown }
+
+// Should trigger - Promise returned from Effect.sync
+export const fromPromiseResolve = Effect.sync(() => Promise.resolve(1))
+
+// Should trigger - declared Promise type returned from Effect.sync
+export const fromPromiseValue = Effect.sync(() => promiseValue)
+
+// Should NOT trigger - sync value
+export const fromValue = Effect.sync(() => 1)
+
+// Should NOT trigger - thenable but not Promise
+export const fromThenable = Effect.sync(() => thenableValue)
+
+// Should NOT trigger - already using the async constructor
+export const fromEffectPromise = Effect.promise(() => Promise.resolve(1))
+
+// Should trigger - Effect.sync nested inside a pipeline callback
+export const fromNestedSync = Effect.succeed(1).pipe(Effect.flatMap(() => Effect.succeed(promiseValue)))
+
+// Should trigger - point-free Effect.sync applied to a Promise thunk
+export const fromPointFree = pipe(() => Promise.resolve(1), Effect.sync)
+
+// Should trigger - point-free Effect.sync after an earlier step
+export const fromPointFreeChain = pipe(1, (n) => () => Promise.resolve(n), Effect.sync)
+
+// Should NOT trigger - point-free Effect.sync applied to a sync thunk
+export const fromPointFreeValue = pipe(() => 1, Effect.sync)
+
+
+=== [D8] Fix 0: "Disable lazyPromiseInEffectSync for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable lazyPromiseInEffectSync for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable lazyPromiseInEffectSync for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable lazyPromiseInEffectSync for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable promiseInEffectSuccess for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable promiseInEffectSuccess for entire file" ===
+skipped by default
+
+=== [D12] Fix 0: "Disable lazyPromiseInEffectSync for this line" ===
+skipped by default
+
+=== [D12] Fix 1: "Disable lazyPromiseInEffectSync for entire file" ===
+skipped by default
