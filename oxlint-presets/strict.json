@@ -99,6 +99,7 @@
     "effecttsgo/unnecessary-pipe": "error",
     "effecttsgo/unnecessary-pipe-chain": "error",
     "effecttsgo/unnecessary-typeof-type": "error",
-    "effecttsgo/unstable-api-usage": "error"
+    "effecttsgo/unstable-api-usage": "error",
+    "effecttsgo/use-span-unused-span-to-with-span": "error"
   }
 }

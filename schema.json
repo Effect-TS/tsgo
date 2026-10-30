@@ -3065,6 +3065,11 @@
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "warning",
           "description": "Warns when using an API marked @stability unstable"
+        },
+        "useSpanUnusedSpanToWithSpan": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.withSpan when an Effect.useSpan callback never uses its span, since useSpan does not parent inner spans"
         }
       },
       "type": "object"

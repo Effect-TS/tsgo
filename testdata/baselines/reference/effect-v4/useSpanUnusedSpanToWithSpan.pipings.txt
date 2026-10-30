@@ -1,0 +1,803 @@
+==== /.src/useSpanUnusedSpanToWithSpan.ts (55 flows) ====
+
+=== Piping Flow ===
+Location: 14:87 - 14:101
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 18:82 - 18:96
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 22:74 - 22:88
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 26:88 - 26:102
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 30:91 - 30:105
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 35:85 - 35:99
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 40:73 - 40:87
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 45:87 - 45:116
+Node: fetchUser(`${tenant}/${id}`)
+Node Kind: KindCallExpression
+
+Subject: `${tenant}/${id}`
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 51:51 - 51:71
+Node: fetchUser("cached")
+Node Kind: KindCallExpression
+
+Subject: "cached"
+Subject Type: "cached"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 51:73 - 51:87
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 57:11 - 57:25
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 65:11 - 65:33
+Node: fetchUser(normalized)
+Node Kind: KindCallExpression
+
+Subject: normalized
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 72:11 - 72:25
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 78:37 - 82:7
+Node: Effect.gen(function*() {\n      const user = yield* fetchUser(id)\n      return user.name\n    })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n      const user = yield* fetchUser(id)\n      return user.name\n    }
+Subject Type: () => Generator<Effect<{ name: string; }, never, never>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 80:26 - 80:40
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 86:25 - 89:3
+Node: Effect.gen(function*() {\n  const user = yield* Effect.useSpan("inner", (_span) => fetchUser("a"))\n  return user.name\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  const user = yield* Effect.useSpan("inner", (_span) => fetchUser("a"))\n  return user.name\n}
+Subject Type: () => Generator<Effect<{ name: string; }, never, never>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 87:57 - 87:72
+Node: fetchUser("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 93:24 - 95:3
+Node: Effect.fn("insideFn")(function*(id: string) {\n  return yield* Effect.useSpan("inner", () => fetchUser(id))\n})
+Node Kind: KindCallExpression
+
+Subject: function*(id: string) {\n  return yield* Effect.useSpan("inner", () => fetchUser(id))\n}
+Subject Type: (id: string) => Generator<Effect<{ name: string; }, never, never>, { name: string; }, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("insideFn")
+      args: (constant)
+      outType: (id: string) => Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 94:46 - 94:60
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 99:44 - 100:90
+Node: Effect.useSpan("fetch-user", () => fetchUser(id)).pipe(Effect.map((user) => user.name))
+Node Kind: KindCallExpression
+
+Subject: Effect.useSpan("fetch-user", () => fetchUser(id))
+Subject Type: Effect<{ name: string; }, never, never>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.map
+      args: [(user) => user.name]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 100:37 - 100:51
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 104:94 - 104:108
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 108:78 - 108:92
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 112:81 - 112:95
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 118:41 - 122:7
+Node: Effect.gen(function*() {\n      const span = yield* fetchUser(id)\n      return span.name\n    })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n      const span = yield* fetchUser(id)\n      return span.name\n    }
+Subject Type: () => Generator<Effect<{ name: string; }, never, never>, string, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 120:26 - 120:40
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 127:41 - 127:93
+Node: fetchUser(id).pipe(Effect.map((span) => span.name))
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+  [1] kind: pipeable
+      callee: Effect.map
+      args: [(span) => span.name]
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 132:72 - 132:96
+Node: fetchUser(request.span)
+Node Kind: KindCallExpression
+
+Subject: request.span
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 137:59 - 137:86
+Node: fetchUser(String(counter))
+Node Kind: KindCallExpression
+
+Subject: counter
+Subject Type: number
+
+Transformations (2):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string
+  [1] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 144:59 - 144:79
+Node: fetchUser(legacyId)
+Node Kind: KindCallExpression
+
+Subject: legacyId
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 151:8 - 151:85
+Node: Effect.sync(() => counter).pipe(Effect.andThen((n) => fetchUser(String(n))))
+Node Kind: KindCallExpression
+
+Subject: () => counter
+Subject Type: () => number
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<number, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [(n) => fetchUser(String(n))]
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 151:62 - 151:83
+Node: fetchUser(String(n))
+Node Kind: KindCallExpression
+
+Subject: n
+Subject Type: number
+
+Transformations (2):
+  [0] kind: call
+      callee: String
+      args: (constant)
+      outType: string
+  [1] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 156:66 - 156:83
+Node: fetchUser(later)
+Node Kind: KindCallExpression
+
+Subject: later
+Subject Type: "later-id"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 164:8 - 164:72
+Node: Effect.sync(() => laterInThunk).pipe(Effect.andThen(fetchUser))
+Node Kind: KindCallExpression
+
+Subject: () => laterInThunk
+Subject Type: () => string
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<string, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [fetchUser]
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 171:76 - 171:128
+Node: Effect.sync(function() { return arguments.length })
+Node Kind: KindCallExpression
+
+Subject: function() { return arguments.length }
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 175:72 - 175:115
+Node: Effect.succeed({ arguments: 1 }.arguments)
+Node Kind: KindCallExpression
+
+Subject: { arguments: 1 }.arguments
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 179:41 - 180:88
+Node: Effect.sync(() => span.attribute("userId", id)).pipe(Effect.andThen(fetchUser(id)))
+Node Kind: KindCallExpression
+
+Subject: () => span.attribute("userId", id)
+Subject Type: () => void
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [fetchUser(id)]
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 180:73 - 180:86
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 184:66 - 184:80
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 188:41 - 192:7
+Node: Effect.gen(function*() {\n      yield* Effect.log(`trace ${span.traceId} span ${span.spanId}`)\n      return yield* fetchUser(id)\n    })
+Node Kind: KindCallExpression
+
+Subject: function*() {\n      yield* Effect.log(`trace ${span.traceId} span ${span.spanId}`)\n      return yield* fetchUser(id)\n    }
+Subject Type: () => Generator<Effect<void, never, never>, { name: string; }, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.gen
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 190:13 - 190:69
+Node: Effect.log(`trace ${span.traceId} span ${span.spanId}`)
+Node Kind: KindCallExpression
+
+Subject: `trace ${span.traceId} span ${span.spanId}`
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 191:20 - 191:34
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 196:73 - 196:99
+Node: Effect.succeed(span.name)
+Node Kind: KindCallExpression
+
+Subject: span.name
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 199:73 - 199:102
+Node: Effect.succeed(_span.spanId)
+Node Kind: KindCallExpression
+
+Subject: _span.spanId
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 202:82 - 202:121
+Node: Effect.succeed(`${traceId}/${spanId}`)
+Node Kind: KindCallExpression
+
+Subject: `${traceId}/${spanId}`
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 207:9 - 207:35
+Node: Effect.succeed(span.name)
+Node Kind: KindCallExpression
+
+Subject: span.name
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 212:44 - 212:83
+Node: fetchUser(`${id}/${arguments.length}`)
+Node Kind: KindCallExpression
+
+Subject: `${id}/${arguments.length}`
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 217:9 - 217:45
+Node: Effect.sync(() => arguments.length)
+Node Kind: KindCallExpression
+
+Subject: () => arguments.length
+Subject Type: () => number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.sync
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 222:9 - 222:56
+Node: Effect.succeed({ arguments }.arguments.length)
+Node Kind: KindCallExpression
+
+Subject: { arguments }.arguments.length
+Subject Type: number
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.succeed
+      args: (constant)
+      outType: Effect<number, never, never>
+
+=== Piping Flow ===
+Location: 226:36 - 226:51
+Node: fetchUser("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 234:47 - 234:97
+Node: fetchUser(id).pipe(Effect.withSpan("fetch-user"))
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (2):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+  [1] kind: pipeable
+      callee: Effect.withSpan
+      args: ["fetch-user"]
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 235:73 - 235:86
+Node: fetchUser(id)
+Node Kind: KindCallExpression
+
+Subject: id
+Subject Type: string
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 242:67 - 242:85
+Node: evaluate("local")
+Node Kind: KindCallExpression
+
+Subject: "local"
+Subject Type: "local"
+
+Transformations (1):
+  [0] kind: call
+      callee: evaluate
+      args: (constant)
+      outType: A
+
+=== Piping Flow ===
+Location: 247:30 - 247:103
+Node: Effect.makeSpan("fetch-user").pipe(Effect.andThen(() => fetchUser("a")))
+Node Kind: KindCallExpression
+
+Subject: "fetch-user"
+Subject Type: "fetch-user"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.makeSpan
+      args: (constant)
+      outType: Effect<Span, never, never>
+  [1] kind: pipeable
+      callee: Effect.andThen
+      args: [() => fetchUser("a")]
+      outType: Effect<{ name: string; }, never, never>
+
+=== Piping Flow ===
+Location: 247:86 - 247:101
+Node: fetchUser("a")
+Node Kind: KindCallExpression
+
+Subject: "a"
+Subject Type: "a"
+
+Transformations (1):
+  [0] kind: call
+      callee: fetchUser
+      args: (constant)
+      outType: Effect<{ name: string; }, never, never>

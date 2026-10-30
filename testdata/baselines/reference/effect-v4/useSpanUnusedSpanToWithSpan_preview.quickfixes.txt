@@ -1,0 +1,27 @@
+=== Quick Fix Inventory ===
+
+[D1] (8:40-8:54) TS377172: This `Effect.useSpan` callback never uses the span it receives. `Effect.useSpan` does not make that span the parent of spans created inside the callback, so they will not nest under it; `Effect.withSpan` does, and removes `ParentSpan` from the requirements. effect(useSpanUnusedSpanToWithSpan)
+  Fix 0: "Disable useSpanUnusedSpanToWithSpan for this line"
+  Fix 1: "Disable useSpanUnusedSpanToWithSpan for entire file"
+  Fix 2: "Use Effect.withSpan"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable useSpanUnusedSpanToWithSpan for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable useSpanUnusedSpanToWithSpan for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Use Effect.withSpan" ===
+
+--- file:///.src/useSpanUnusedSpanToWithSpan_preview.ts ---
+// @effect-v4
+// @effect-diagnostics *:off
+// @effect-diagnostics useSpanUnusedSpanToWithSpan:warning
+import { Effect } from "effect"
+
+declare const fetchUser: (id: string) => Effect.Effect<{ name: string }>
+
+export const getUser = (id: string) => fetchUser(id).pipe(Effect.withSpan("fetch-user"))
+
