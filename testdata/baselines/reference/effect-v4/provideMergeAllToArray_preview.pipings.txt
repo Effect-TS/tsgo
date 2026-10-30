@@ -1,0 +1,43 @@
+==== /.src/provideMergeAllToArray_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 5:17 - 5:105
+Node: Context.Service<Db, { readonly query: (sql: string) => Effect.Effect<string> }>()("Db")
+Node Kind: KindCallExpression
+
+Subject: "Db"
+Subject Type: "Db"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Service<Db, { readonly query: (sql: string) => Effect.Effect<string> }>()
+      args: (constant)
+      outType: ServiceClass<Db, "Db", { readonly query: (sql: string) => Effect<string, never, never>; }>
+
+=== Piping Flow ===
+Location: 6:21 - 6:114
+Node: Context.Service<Logger, { readonly log: (line: string) => Effect.Effect<void> }>()("Logger")
+Node Kind: KindCallExpression
+
+Subject: "Logger"
+Subject Type: "Logger"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Service<Logger, { readonly log: (line: string) => Effect.Effect<void> }>()
+      args: (constant)
+      outType: ServiceClass<Logger, "Logger", { readonly log: (line: string) => Effect<void, never, never>; }>
+
+=== Piping Flow ===
+Location: 13:20 - 13:87
+Node: program.pipe(Effect.provide(Layer.mergeAll(DbLayer, LoggerLayer)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, Db | Logger>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.mergeAll(DbLayer, LoggerLayer)]
+      outType: Effect<void, never, never>

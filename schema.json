@@ -2886,6 +2886,11 @@
           "default": "suggestion",
           "description": "Suggests providing inline Layer.succeed and Layer.effect services directly"
         },
+        "provideMergeAllToArray": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests passing an array of layers to Effect.provide instead of wrapping them in Layer.mergeAll"
+        },
         "raceFirstWithSleepToTimeout": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

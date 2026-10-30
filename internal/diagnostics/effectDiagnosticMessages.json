@@ -634,5 +634,9 @@
     "This type alias unions Schema `.{0}` types without a runtime schema; compose them with `Schema.Union` and derive the type from it. effect(typeUnionToSchemaUnion)": {
         "category": "Suggestion",
         "code": 377159
+    },
+    "Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)": {
+        "category": "Suggestion",
+        "code": 377161
     }
 }

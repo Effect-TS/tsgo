@@ -79,6 +79,7 @@ var All = []rule.Rule{
 	UnsafeEffectTypeAssertion,
 	MultipleEffectProvide,
 	ProvideLayerSucceedToProvideService,
+	ProvideMergeAllToArray,
 	MissingLayerContext,
 	LayerMergeAllWithDependencies,
 	SchemaStructWithTag,

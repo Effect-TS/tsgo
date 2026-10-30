@@ -1,0 +1,224 @@
+==== /.src/provideMergeAllToArray.ts (2 layer exports) ====
+
+=== layerProvide ===
+
+--- output ---
+flowchart TD
+  0["ALayer<br/>provides: A<br/>requires: "]
+  1["DLayer<br/>provides: D<br/>requires: "]
+  2["Layer.mergeAll#40;DLayer, ALayer#41;<br/>provides: A, D<br/>requires: "]
+  3["Layer.provide#40;Layer.mergeAll#40;DLayer, ALayer#41;#41;<br/>provides: C<br/>requires: "]
+  4["CRequiresDLayer<br/>provides: C<br/>requires: D"]
+  5["CRequiresDLayer.pipe#40;Layer.provide#40;Layer.mergeAll#40;DLayer, ALayer#41;#41;#41;<br/>provides: C<br/>requires: "]
+  2 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:0#125;"| 1
+  2 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:1#125;"| 0
+  3 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:0#125;"| 2
+  3 -->|"#123;#quot;relationship#quot;:#quot;pipe#quot;#125;"| 4
+  5 -->|"#123;#quot;relationship#quot;:#quot;pipe#quot;#125;"| 3
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`ALayer<br/><small>_ln 142 col 86_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_provides [Provides]
+        0_provides_0["A"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+  subgraph 1 ["`DLayer<br/><small>_ln 142 col 78_</small>`"]
+    subgraph 1_wrap[" "]
+      subgraph 1_provides [Provides]
+        1_provides_0["D"]
+      end
+      style 1_provides stroke:none
+    end
+    style 1_wrap fill:transparent
+    style 1_wrap stroke:none
+  end
+  style 1 fill:transparent
+  subgraph 2 ["`Layer.mergeAll(DLayer, ALayer)<br/><small>_ln 142 col 63_</small>`"]
+    subgraph 2_wrap[" "]
+      subgraph 2_provides [Provides]
+        2_provides_0["A"]
+        2_provides_1["D"]
+      end
+      style 2_provides stroke:none
+    end
+    style 2_wrap fill:transparent
+    style 2_wrap stroke:none
+  end
+  style 2 fill:transparent
+  subgraph 3 ["`Layer.provide(Layer.mergeAll(DLayer, ALayer))<br/><small>_ln 142 col 49_</small>`"]
+    subgraph 3_wrap[" "]
+      subgraph 3_provides [Provides]
+        3_provides_0["C"]
+      end
+      style 3_provides stroke:none
+    end
+    style 3_wrap fill:transparent
+    style 3_wrap stroke:none
+  end
+  style 3 fill:transparent
+  subgraph 4 ["`CRequiresDLayer<br/><small>_ln 142 col 28_</small>`"]
+    subgraph 4_wrap[" "]
+      subgraph 4_requires [Requires]
+        4_requires_0["D"]
+      end
+      style 4_requires stroke:none
+      subgraph 4_provides [Provides]
+        4_provides_0["C"]
+      end
+      style 4_provides stroke:none
+    end
+    style 4_wrap fill:transparent
+    style 4_wrap stroke:none
+  end
+  style 4 fill:transparent
+  subgraph 5 ["`layerProvide<br/><small>_ln 142 col 13_</small>`"]
+    subgraph 5_wrap[" "]
+      subgraph 5_provides [Provides]
+        5_provides_0["C"]
+      end
+      style 5_provides stroke:none
+    end
+    style 5_wrap fill:transparent
+    style 5_wrap stroke:none
+  end
+  style 5 fill:transparent
+  2_provides_1 -.-> 1_provides_0
+  2_provides_0 -.-> 0_provides_0
+  3 -.-x 2
+  3_provides_0 -.-> 4_provides_0
+  5_provides_0 -.-> 3_provides_0
+
+--- outline ---
+flowchart TD
+  0["ALayer"]
+  1["DLayer"]
+  2["CRequiresDLayer"]
+  2 --> 1
+
+--- quickinfo ---
+/**
+ * - C provided at ln 142 col 28 by `CRequiresDLayer`
+ */
+
+=== layerProvideMerge ===
+
+--- output ---
+flowchart TD
+  0["ALayer<br/>provides: A<br/>requires: "]
+  1["DLayer<br/>provides: D<br/>requires: "]
+  2["Layer.mergeAll#40;DLayer, ALayer#41;<br/>provides: A, D<br/>requires: "]
+  3["Layer.provideMerge#40;Layer.mergeAll#40;DLayer, ALayer#41;#41;<br/>provides: A, C, D<br/>requires: "]
+  4["CRequiresDLayer<br/>provides: C<br/>requires: D"]
+  5["CRequiresDLayer.pipe#40;Layer.provideMerge#40;Layer.mergeAll#40;DLayer, ALayer#41;#41;#41;<br/>provides: A, C, D<br/>requires: "]
+  2 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:0#125;"| 1
+  2 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:1#125;"| 0
+  3 -->|"#123;#quot;relationship#quot;:#quot;call#quot;,#quot;argumentIndex#quot;:0#125;"| 2
+  3 -->|"#123;#quot;relationship#quot;:#quot;pipe#quot;#125;"| 4
+  5 -->|"#123;#quot;relationship#quot;:#quot;pipe#quot;#125;"| 3
+
+--- nested ---
+flowchart TB
+  subgraph 0 ["`ALayer<br/><small>_ln 143 col 96_</small>`"]
+    subgraph 0_wrap[" "]
+      subgraph 0_provides [Provides]
+        0_provides_0["A"]
+      end
+      style 0_provides stroke:none
+    end
+    style 0_wrap fill:transparent
+    style 0_wrap stroke:none
+  end
+  style 0 fill:transparent
+  subgraph 1 ["`DLayer<br/><small>_ln 143 col 88_</small>`"]
+    subgraph 1_wrap[" "]
+      subgraph 1_provides [Provides]
+        1_provides_0["D"]
+      end
+      style 1_provides stroke:none
+    end
+    style 1_wrap fill:transparent
+    style 1_wrap stroke:none
+  end
+  style 1 fill:transparent
+  subgraph 2 ["`Layer.mergeAll(DLayer, ALayer)<br/><small>_ln 143 col 73_</small>`"]
+    subgraph 2_wrap[" "]
+      subgraph 2_provides [Provides]
+        2_provides_0["A"]
+        2_provides_1["D"]
+      end
+      style 2_provides stroke:none
+    end
+    style 2_wrap fill:transparent
+    style 2_wrap stroke:none
+  end
+  style 2 fill:transparent
+  subgraph 3 ["`Layer.provideMerge(Layer.mergeAll(DLayer, ALayer))<br/><small>_ln 143 col 54_</small>`"]
+    subgraph 3_wrap[" "]
+      subgraph 3_provides [Provides]
+        3_provides_0["A"]
+        3_provides_1["C"]
+        3_provides_2["D"]
+      end
+      style 3_provides stroke:none
+    end
+    style 3_wrap fill:transparent
+    style 3_wrap stroke:none
+  end
+  style 3 fill:transparent
+  subgraph 4 ["`CRequiresDLayer<br/><small>_ln 143 col 33_</small>`"]
+    subgraph 4_wrap[" "]
+      subgraph 4_requires [Requires]
+        4_requires_0["D"]
+      end
+      style 4_requires stroke:none
+      subgraph 4_provides [Provides]
+        4_provides_0["C"]
+      end
+      style 4_provides stroke:none
+    end
+    style 4_wrap fill:transparent
+    style 4_wrap stroke:none
+  end
+  style 4 fill:transparent
+  subgraph 5 ["`layerProvideMerge<br/><small>_ln 143 col 13_</small>`"]
+    subgraph 5_wrap[" "]
+      subgraph 5_provides [Provides]
+        5_provides_0["A"]
+        5_provides_1["C"]
+        5_provides_2["D"]
+      end
+      style 5_provides stroke:none
+    end
+    style 5_wrap fill:transparent
+    style 5_wrap stroke:none
+  end
+  style 5 fill:transparent
+  2_provides_1 -.-> 1_provides_0
+  2_provides_0 -.-> 0_provides_0
+  3_provides_0 -.-> 2_provides_0
+  3_provides_2 -.-> 2_provides_1
+  3_provides_1 -.-> 4_provides_0
+  5_provides_0 -.-> 3_provides_0
+  5_provides_1 -.-> 3_provides_1
+  5_provides_2 -.-> 3_provides_2
+
+--- outline ---
+flowchart TD
+  0["ALayer"]
+  1["DLayer"]
+  2["CRequiresDLayer"]
+  2 --> 1
+
+--- quickinfo ---
+/**
+ * - A provided at ln 143 col 96 by `ALayer`
+ * - C provided at ln 143 col 33 by `CRequiresDLayer`
+ * - D provided at ln 143 col 88 by `DLayer`
+ */

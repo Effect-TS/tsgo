@@ -97,6 +97,7 @@
         "preferUnsafeConstructor": "suggestion",
         "promiseInEffectSuccess": "warning",
         "provideLayerSucceedToProvideService": "suggestion",
+        "provideMergeAllToArray": "suggestion",
         "raceFirstWithSleepToTimeout": "suggestion",
         "redundantMapError": "suggestion",
         "redundantOrDie": "suggestion",
@@ -194,6 +195,7 @@
         "preferUnsafeConstructor": "error",
         "promiseInEffectSuccess": "error",
         "provideLayerSucceedToProvideService": "error",
+        "provideMergeAllToArray": "error",
         "raceFirstWithSleepToTimeout": "error",
         "redundantMapError": "error",
         "redundantOrDie": "error",
@@ -360,6 +362,7 @@
         "preferSucceedSomeOrNone": "warning",
         "preferTypedSchemaDecoder": "warning",
         "provideLayerSucceedToProvideService": "warning",
+        "provideMergeAllToArray": "warning",
         "raceFirstWithSleepToTimeout": "warning",
         "redundantMapError": "warning",
         "redundantOrDie": "warning",
@@ -3237,6 +3240,30 @@
             "start": 221,
             "end": 235,
             "text": "`Effect.provideService` provides this inline single-service layer directly. effect(provideLayerSucceedToProvideService)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "provideMergeAllToArray",
+      "group": "style",
+      "description": "Suggests passing an array of layers to Effect.provide instead of wrapping them in Layer.mergeAll",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v3",
+        "v4"
+      ],
+      "codes": [
+        377161
+      ],
+      "preview": {
+        "sourceText": "import { Context, Effect, Layer } from \"effect\"\n\nclass Db extends Context.Service\u003cDb, { readonly query: (sql: string) =\u003e Effect.Effect\u003cstring\u003e }\u003e()(\"Db\") {}\nclass Logger extends Context.Service\u003cLogger, { readonly log: (line: string) =\u003e Effect.Effect\u003cvoid\u003e }\u003e()(\"Logger\") {}\n\ndeclare const DbLayer: Layer.Layer\u003cDb\u003e\ndeclare const LoggerLayer: Layer.Layer\u003cLogger\u003e\ndeclare const program: Effect.Effect\u003cvoid, never, Db | Logger\u003e\n\n// MUST TRIGGER: Effect.provide already merges an array of layers\nexport const main = program.pipe(Effect.provide(Layer.mergeAll(DbLayer, LoggerLayer)))\n",
+        "diagnostics": [
+          {
+            "start": 539,
+            "end": 575,
+            "text": "Effect.provide accepts an array of layers and merges them itself; pass the layers as an array instead of wrapping them in Layer.mergeAll. effect(provideMergeAllToArray)"
           }
         ]
       }

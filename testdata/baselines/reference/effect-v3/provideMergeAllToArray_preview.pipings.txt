@@ -1,0 +1,43 @@
+==== /.src/provideMergeAllToArray_preview.ts (3 flows) ====
+
+=== Piping Flow ===
+Location: 6:17 - 6:35
+Node: Context.Tag("Db")
+Node Kind: KindCallExpression
+
+Subject: "Db"
+Subject Type: "Db"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "Db", Shape>
+
+=== Piping Flow ===
+Location: 7:21 - 7:43
+Node: Context.Tag("Logger")
+Node Kind: KindCallExpression
+
+Subject: "Logger"
+Subject Type: "Logger"
+
+Transformations (1):
+  [0] kind: call
+      callee: Context.Tag
+      args: (constant)
+      outType: <Self, Shape>() => TagClass<Self, "Logger", Shape>
+
+=== Piping Flow ===
+Location: 14:20 - 14:87
+Node: program.pipe(Effect.provide(Layer.mergeAll(DbLayer, LoggerLayer)))
+Node Kind: KindCallExpression
+
+Subject: program
+Subject Type: Effect<void, never, Db | Logger>
+
+Transformations (1):
+  [0] kind: pipeable
+      callee: Effect.provide
+      args: [Layer.mergeAll(DbLayer, LoggerLayer)]
+      outType: Effect<void, never, never>

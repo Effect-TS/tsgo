@@ -15,6 +15,7 @@ mod flat_map_to_tap_test;
 mod manual_metric_tap_to_track_test;
 mod map_const_to_as_test;
 mod map_map_error_to_map_both_test;
+mod provide_merge_all_to_array_test;
 mod type_union_to_schema_union_test;
 
 use std::path::{Path, PathBuf};
