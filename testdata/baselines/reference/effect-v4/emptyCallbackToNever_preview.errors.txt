@@ -1,0 +1,15 @@
+=== Metadata ===
+Effect version: 4.0.2
+
+/.src/emptyCallbackToNever_preview.ts(4,18): suggestion TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+
+
+==== /.src/emptyCallbackToNever_preview.ts (1 errors) ====
+    import { Effect } from "effect"
+    
+    export const daemon = Effect.log("worker started").pipe(
+      Effect.andThen(Effect.callback<never>(() => {}))
+                     ~~~~~~~~~~~~~~~
+!!! suggestion TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+    )
+    

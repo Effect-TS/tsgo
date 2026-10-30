@@ -58,6 +58,7 @@
         "effectSleepZeroToYieldNow": "suggestion",
         "effectSucceedWithUndefined": "suggestion",
         "effectSucceedWithVoid": "suggestion",
+        "emptyCallbackToNever": "suggestion",
         "errorPayloadShadowsName": "suggestion",
         "experimentalApiUsage": "warning",
         "failCauseToConstructor": "suggestion",
@@ -157,6 +158,7 @@
         "effectSleepZeroToYieldNow": "error",
         "effectSucceedWithUndefined": "error",
         "effectSucceedWithVoid": "error",
+        "emptyCallbackToNever": "error",
         "errorPayloadShadowsName": "error",
         "experimentalApiUsage": "error",
         "failCauseToConstructor": "error",
@@ -339,6 +341,7 @@
         "effectSleepZeroToYieldNow": "warning",
         "effectSucceedWithUndefined": "warning",
         "effectSucceedWithVoid": "warning",
+        "emptyCallbackToNever": "warning",
         "failCauseToConstructor": "warning",
         "flatMapConditionalToFilterOrFail": "warning",
         "flatMapIdentityToFlatten": "warning",
@@ -2633,6 +2636,29 @@
             "start": 56,
             "end": 70,
             "text": "`Effect.void` represents the same outcome as `Effect.succeed(undefined)` or `Effect.succeed(void 0)`. effect(effectSucceedWithVoid)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "emptyCallbackToNever",
+      "group": "style",
+      "description": "Suggests Effect.never instead of Effect.callback with an empty register",
+      "defaultSeverity": "suggestion",
+      "fixable": true,
+      "supportedEffect": [
+        "v4"
+      ],
+      "codes": [
+        377164
+      ],
+      "preview": {
+        "sourceText": "import { Effect } from \"effect\"\n\nexport const daemon = Effect.log(\"worker started\").pipe(\n  Effect.andThen(Effect.callback\u003cnever\u003e(() =\u003e {}))\n)\n",
+        "diagnostics": [
+          {
+            "start": 107,
+            "end": 122,
+            "text": "This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)"
           }
         ]
       }

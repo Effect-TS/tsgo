@@ -37,6 +37,7 @@ var All = []fixable.Fixable{
 	OptionMatchToFromOptionFix,
 	SyncToSucceedFix,
 	EffectSleepZeroToYieldNowFix,
+	EmptyCallbackToNeverFix,
 	CatchToOrElseSucceedFix,
 	CatchToIgnoreFix,
 	EffectFnIifeFix,

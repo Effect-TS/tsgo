@@ -2347,6 +2347,9 @@
         "effecttsgo/effect-succeed-with-void": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/empty-callback-to-never": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "effecttsgo/error-payload-shadows-name": {
           "$ref": "#/definitions/RuleNoConfig"
         },

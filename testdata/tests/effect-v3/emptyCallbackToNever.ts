@@ -1,0 +1,29 @@
+// @effect-v3
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:warning
+import { Effect } from "effect"
+
+// The rule is v4-only. In v3, Effect.never is built on asyncInterrupt plus a
+// long setInterval that keeps the event loop alive, while an empty Effect.async
+// register lets the process exit. Rewriting one into the other would change
+// runtime behavior, so nothing in this file may trigger.
+
+// MUST NOT TRIGGER: v3 empty Effect.async register (Effect.never is not equivalent in v3)
+export const blockForever = Effect.async<never>(() => {})
+
+// MUST NOT TRIGGER: v3 empty `function` expression register
+export const functionExpression = Effect.async<never>(function() {})
+
+// MUST NOT TRIGGER: v3 inferred success type
+export const inferred = Effect.async(() => {})
+
+// MUST NOT TRIGGER: v3 empty register nested in a pipe
+export const daemon = Effect.log("worker started").pipe(
+  Effect.andThen(Effect.async<never>(() => {}))
+)
+
+// MUST NOT TRIGGER: v3 empty Effect.asyncEffect register returning an effect
+export const asyncEffect = Effect.asyncEffect<never, never, never, never, never, never>(() => Effect.void)
+
+// MUST NOT TRIGGER: already Effect.never
+export const alreadyNever = Effect.never

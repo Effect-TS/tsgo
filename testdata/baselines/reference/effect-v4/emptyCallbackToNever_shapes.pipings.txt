@@ -1,0 +1,381 @@
+==== /.src/emptyCallbackToNever_shapes.ts (26 flows) ====
+
+=== Piping Flow ===
+Location: 6:25 - 6:91
+Node: Effect.andThen(Effect.log("x"), Effect.callback<never>(() => {}))
+Node Kind: KindCallExpression
+
+Subject: "x"
+Subject Type: "x"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: dataFirst
+      callee: Effect.andThen
+      args: [Effect.callback<never>(() => {})]
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 6:57 - 6:90
+Node: Effect.callback<never>(() => {})
+Node Kind: KindCallExpression
+
+Subject: () => {}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.callback
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 9:24 - 9:90
+Node: Effect.andThen(Effect.callback<never>(() => {}))(Effect.log("x"))
+Node Kind: KindCallExpression
+
+Subject: "x"
+Subject Type: "x"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: call
+      callee: Effect.andThen
+      args: [Effect.callback<never>(() => {})]
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 9:40 - 9:72
+Node: Effect.callback<never>(() => {})
+Node Kind: KindCallExpression
+
+Subject: () => {}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.callback
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 12:28 - 12:100
+Node: pipe(Effect.log("x"), Effect.andThen(Effect.callback<never>(() => {})))
+Node Kind: KindCallExpression
+
+Subject: "x"
+Subject Type: "x"
+
+Transformations (2):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+  [1] kind: pipe
+      callee: Effect.andThen
+      args: [Effect.callback<never>(() => {})]
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 12:66 - 12:98
+Node: Effect.callback<never>(() => {})
+Node Kind: KindCallExpression
+
+Subject: () => {}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.callback
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 15:24 - 17:3
+Node: Effect.fn("effectFn")(function*() {\n  yield* Effect.callback<never>(() => {})\n})
+Node Kind: KindCallExpression
+
+Subject: function*() {\n  yield* Effect.callback<never>(() => {})\n}
+Subject Type: () => Generator<Effect<never, never, never>, void, any>
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.fn("effectFn")
+      args: (constant)
+      outType: () => Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 16:9 - 16:42
+Node: Effect.callback<never>(() => {})
+Node Kind: KindCallExpression
+
+Subject: () => {}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.callback
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 20:28 - 25:2
+Node: Effect.fn("effectFnStep")(\n  function*() {\n    yield* Effect.log("x")\n  },\n  Effect.andThen(Effect.callback<never>(() => {}))\n)
+Node Kind: KindCallExpression
+
+Subject: Effect.fn("effectFnStep")(\n  function*() {\n    yield* Effect.log("x")\n  },\n  Effect.andThen(Effect.callback<never>(() => {}))\n)
+Subject Type: Effect<void, never, never>
+
+Transformations (1):
+  [0] kind: effectFn
+      callee: Effect.andThen
+      args: [Effect.callback<never>(() => {})]
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 22:11 - 22:27
+Node: Effect.log("x")
+Node Kind: KindCallExpression
+
+Subject: "x"
+Subject Type: "x"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 24:18 - 24:50
+Node: Effect.callback<never>(() => {})
+Node Kind: KindCallExpression
+
+Subject: () => {}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.callback
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 28:29 - 28:61
+Node: pipe(() => {}, Effect.callback)
+Node Kind: KindCallExpression
+
+Subject: () => {}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.callback
+      args: (constant)
+      outType: Effect<unknown, never, never>
+
+=== Piping Flow ===
+Location: 31:34 - 31:73
+Node: pipe(() => {}, Effect.callback<never>)
+Node Kind: KindCallExpression
+
+Subject: () => {}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.callback<never>
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 34:38 - 38:2
+Node: pipe(\n  () => {},\n  Effect.callback<never>,\n  Effect.onInterrupt(() => Effect.log("stopped"))\n)
+Node Kind: KindCallExpression
+
+Subject: () => {}
+Subject Type: () => void
+
+Transformations (2):
+  [0] kind: pipe
+      callee: Effect.callback<never>
+      args: (constant)
+      outType: Effect<never, never, never>
+  [1] kind: pipe
+      callee: Effect.onInterrupt
+      args: [() => Effect.log("stopped")]
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 37:27 - 37:49
+Node: Effect.log("stopped")
+Node Kind: KindCallExpression
+
+Subject: "stopped"
+Subject Type: "stopped"
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.log
+      args: (constant)
+      outType: Effect<void, never, never>
+
+=== Piping Flow ===
+Location: 41:37 - 41:77
+Node: Effect.callback<never, never>(() => {})
+Node Kind: KindCallExpression
+
+Subject: () => {}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.callback
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 44:46 - 44:81
+Node: Effect.callback<(never)>(() => {})
+Node Kind: KindCallExpression
+
+Subject: () => {}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.callback
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 47:29 - 47:70
+Node: Effect.callback<never>((..._args) => {})
+Node Kind: KindCallExpression
+
+Subject: (..._args) => {}
+Subject Type: (this: Scheduler, resume: (effect: Effect<never, never, never>) => void, signal: AbortSignal) => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.callback
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 50:50 - 50:86
+Node: (Effect.callback<string>)(() => {})
+Node Kind: KindCallExpression
+
+Subject: () => {}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: (Effect.callback<string>)
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 54:44 - 54:69
+Node: stringCallback(() => {})
+Node Kind: KindCallExpression
+
+Subject: () => {}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: stringCallback
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 57:42 - 57:82
+Node: pipe(() => {}, Effect.callback<string>)
+Node Kind: KindCallExpression
+
+Subject: () => {}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.callback<string>
+      args: (constant)
+      outType: Effect<string, never, never>
+
+=== Piping Flow ===
+Location: 60:37 - 62:20
+Node: pipe(() => {\n  console.log("parked")\n}, Effect.callback)
+Node Kind: KindCallExpression
+
+Subject: () => {\n  console.log("parked")\n}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: pipe
+      callee: Effect.callback
+      args: (constant)
+      outType: Effect<unknown, never, never>
+
+=== Piping Flow ===
+Location: 60:50 - 61:24
+Node: console.log("parked")
+Node Kind: KindCallExpression
+
+Subject: "parked"
+Subject Type: "parked"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 65:44 - 65:116
+Node: Effect.callback<never>((_resume, { aborted = console.log("x") }) => {})
+Node Kind: KindCallExpression
+
+Subject: (_resume, { aborted = console.log("x") }) => {}
+Subject Type: (this: Scheduler, _resume: (effect: Effect<never, never, never>) => void, { aborted }: AbortSignal) => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.callback
+      args: (constant)
+      outType: Effect<never, never, never>
+
+=== Piping Flow ===
+Location: 65:89 - 65:106
+Node: console.log("x")
+Node Kind: KindCallExpression
+
+Subject: "x"
+Subject Type: "x"
+
+Transformations (1):
+  [0] kind: call
+      callee: console.log
+      args: (constant)
+      outType: void
+
+=== Piping Flow ===
+Location: 69:30 - 69:63
+Node: Effect.callback<Never>(() => {})
+Node Kind: KindCallExpression
+
+Subject: () => {}
+Subject Type: () => void
+
+Transformations (1):
+  [0] kind: call
+      callee: Effect.callback
+      args: (constant)
+      outType: Effect<never, never, never>

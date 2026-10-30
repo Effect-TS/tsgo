@@ -1,0 +1,407 @@
+=== Quick Fix Inventory ===
+
+[D1] (9:30-9:40) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D2] (12:32-12:56) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D3] (15:33-15:56) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D4] (18:38-18:50) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D5] (21:33-21:57) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D6] (24:36-24:55) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+  Fix 2: "Replace with Effect.never"
+
+[D7] (27:28-27:41) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+
+[D8] (31:30-31:43) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+
+[D9] (35:36-35:56) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+
+[D10] (39:31-39:59) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+
+[D11] (43:31-43:51) TS377164: This `Effect.callback` register is empty, so the effect never completes. Use `Effect.never` instead. effect(emptyCallbackToNever)
+  Fix 0: "Disable emptyCallbackToNever for this line"
+  Fix 1: "Disable emptyCallbackToNever for entire file"
+
+=== Quick Fix Application Results ===
+
+=== [D1] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D1] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D1] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_aliases.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:warning
+import { Effect as E } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as Package from "effect"
+import { callback as namedCallback } from "effect/Effect"
+
+// MUST TRIGGER: renamed Effect import (fix: E.never)
+export const renamedEffect = E.never
+
+// MUST TRIGGER: namespace import of effect/Effect (fix: EffectNamespace.never)
+export const effectNamespace = EffectNamespace.callback<never>(() => {})
+
+// MUST TRIGGER: namespace import of the package (fix: Package.Effect.never)
+export const packageNamespace = Package.Effect.callback<never>(() => {})
+
+// MUST TRIGGER: parenthesized receiver
+export const parenthesizedReceiver = (E).callback<never>(() => {})
+
+// MUST TRIGGER: asserted receiver
+export const assertedReceiver = (E as typeof E).callback<never>(() => {})
+
+// MUST TRIGGER: parenthesized callee
+export const parenthesizedCallee = (E.callback<never>)(() => {})
+
+// MUST TRIGGER: named import of callback
+export const namedImport = namedCallback<never>(() => {})
+
+// MUST TRIGGER: constant alias of Effect.callback
+const callbackAlias = E.callback
+export const constantAlias = callbackAlias<never>(() => {})
+
+// MUST TRIGGER: constant alias of the Effect module
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.callback<never>(() => {})
+
+// MUST TRIGGER: receiver evaluated through a getter (diagnostic only, a fix would drop the getter's side effect)
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.callback<never>(() => {})
+
+// MUST TRIGGER: receiver evaluated through a call (diagnostic only, a fix would drop the call's side effect)
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().callback<never>(() => {})
+
+
+=== [D2] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D2] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D2] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_aliases.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:warning
+import { Effect as E } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as Package from "effect"
+import { callback as namedCallback } from "effect/Effect"
+
+// MUST TRIGGER: renamed Effect import (fix: E.never)
+export const renamedEffect = E.callback<never>(() => {})
+
+// MUST TRIGGER: namespace import of effect/Effect (fix: EffectNamespace.never)
+export const effectNamespace = EffectNamespace.never
+
+// MUST TRIGGER: namespace import of the package (fix: Package.Effect.never)
+export const packageNamespace = Package.Effect.callback<never>(() => {})
+
+// MUST TRIGGER: parenthesized receiver
+export const parenthesizedReceiver = (E).callback<never>(() => {})
+
+// MUST TRIGGER: asserted receiver
+export const assertedReceiver = (E as typeof E).callback<never>(() => {})
+
+// MUST TRIGGER: parenthesized callee
+export const parenthesizedCallee = (E.callback<never>)(() => {})
+
+// MUST TRIGGER: named import of callback
+export const namedImport = namedCallback<never>(() => {})
+
+// MUST TRIGGER: constant alias of Effect.callback
+const callbackAlias = E.callback
+export const constantAlias = callbackAlias<never>(() => {})
+
+// MUST TRIGGER: constant alias of the Effect module
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.callback<never>(() => {})
+
+// MUST TRIGGER: receiver evaluated through a getter (diagnostic only, a fix would drop the getter's side effect)
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.callback<never>(() => {})
+
+// MUST TRIGGER: receiver evaluated through a call (diagnostic only, a fix would drop the call's side effect)
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().callback<never>(() => {})
+
+
+=== [D3] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D3] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D3] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_aliases.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:warning
+import { Effect as E } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as Package from "effect"
+import { callback as namedCallback } from "effect/Effect"
+
+// MUST TRIGGER: renamed Effect import (fix: E.never)
+export const renamedEffect = E.callback<never>(() => {})
+
+// MUST TRIGGER: namespace import of effect/Effect (fix: EffectNamespace.never)
+export const effectNamespace = EffectNamespace.callback<never>(() => {})
+
+// MUST TRIGGER: namespace import of the package (fix: Package.Effect.never)
+export const packageNamespace = Package.Effect.never
+
+// MUST TRIGGER: parenthesized receiver
+export const parenthesizedReceiver = (E).callback<never>(() => {})
+
+// MUST TRIGGER: asserted receiver
+export const assertedReceiver = (E as typeof E).callback<never>(() => {})
+
+// MUST TRIGGER: parenthesized callee
+export const parenthesizedCallee = (E.callback<never>)(() => {})
+
+// MUST TRIGGER: named import of callback
+export const namedImport = namedCallback<never>(() => {})
+
+// MUST TRIGGER: constant alias of Effect.callback
+const callbackAlias = E.callback
+export const constantAlias = callbackAlias<never>(() => {})
+
+// MUST TRIGGER: constant alias of the Effect module
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.callback<never>(() => {})
+
+// MUST TRIGGER: receiver evaluated through a getter (diagnostic only, a fix would drop the getter's side effect)
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.callback<never>(() => {})
+
+// MUST TRIGGER: receiver evaluated through a call (diagnostic only, a fix would drop the call's side effect)
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().callback<never>(() => {})
+
+
+=== [D4] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D4] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D4] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_aliases.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:warning
+import { Effect as E } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as Package from "effect"
+import { callback as namedCallback } from "effect/Effect"
+
+// MUST TRIGGER: renamed Effect import (fix: E.never)
+export const renamedEffect = E.callback<never>(() => {})
+
+// MUST TRIGGER: namespace import of effect/Effect (fix: EffectNamespace.never)
+export const effectNamespace = EffectNamespace.callback<never>(() => {})
+
+// MUST TRIGGER: namespace import of the package (fix: Package.Effect.never)
+export const packageNamespace = Package.Effect.callback<never>(() => {})
+
+// MUST TRIGGER: parenthesized receiver
+export const parenthesizedReceiver = (E).never
+
+// MUST TRIGGER: asserted receiver
+export const assertedReceiver = (E as typeof E).callback<never>(() => {})
+
+// MUST TRIGGER: parenthesized callee
+export const parenthesizedCallee = (E.callback<never>)(() => {})
+
+// MUST TRIGGER: named import of callback
+export const namedImport = namedCallback<never>(() => {})
+
+// MUST TRIGGER: constant alias of Effect.callback
+const callbackAlias = E.callback
+export const constantAlias = callbackAlias<never>(() => {})
+
+// MUST TRIGGER: constant alias of the Effect module
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.callback<never>(() => {})
+
+// MUST TRIGGER: receiver evaluated through a getter (diagnostic only, a fix would drop the getter's side effect)
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.callback<never>(() => {})
+
+// MUST TRIGGER: receiver evaluated through a call (diagnostic only, a fix would drop the call's side effect)
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().callback<never>(() => {})
+
+
+=== [D5] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D5] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D5] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_aliases.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:warning
+import { Effect as E } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as Package from "effect"
+import { callback as namedCallback } from "effect/Effect"
+
+// MUST TRIGGER: renamed Effect import (fix: E.never)
+export const renamedEffect = E.callback<never>(() => {})
+
+// MUST TRIGGER: namespace import of effect/Effect (fix: EffectNamespace.never)
+export const effectNamespace = EffectNamespace.callback<never>(() => {})
+
+// MUST TRIGGER: namespace import of the package (fix: Package.Effect.never)
+export const packageNamespace = Package.Effect.callback<never>(() => {})
+
+// MUST TRIGGER: parenthesized receiver
+export const parenthesizedReceiver = (E).callback<never>(() => {})
+
+// MUST TRIGGER: asserted receiver
+export const assertedReceiver = (E as typeof E).never
+
+// MUST TRIGGER: parenthesized callee
+export const parenthesizedCallee = (E.callback<never>)(() => {})
+
+// MUST TRIGGER: named import of callback
+export const namedImport = namedCallback<never>(() => {})
+
+// MUST TRIGGER: constant alias of Effect.callback
+const callbackAlias = E.callback
+export const constantAlias = callbackAlias<never>(() => {})
+
+// MUST TRIGGER: constant alias of the Effect module
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.callback<never>(() => {})
+
+// MUST TRIGGER: receiver evaluated through a getter (diagnostic only, a fix would drop the getter's side effect)
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.callback<never>(() => {})
+
+// MUST TRIGGER: receiver evaluated through a call (diagnostic only, a fix would drop the call's side effect)
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().callback<never>(() => {})
+
+
+=== [D6] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D6] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D6] Fix 2: "Replace with Effect.never" ===
+
+--- file:///.src/emptyCallbackToNever_aliases.ts ---
+// @effect-diagnostics *:off
+// @effect-diagnostics emptyCallbackToNever:warning
+import { Effect as E } from "effect"
+import * as EffectNamespace from "effect/Effect"
+import * as Package from "effect"
+import { callback as namedCallback } from "effect/Effect"
+
+// MUST TRIGGER: renamed Effect import (fix: E.never)
+export const renamedEffect = E.callback<never>(() => {})
+
+// MUST TRIGGER: namespace import of effect/Effect (fix: EffectNamespace.never)
+export const effectNamespace = EffectNamespace.callback<never>(() => {})
+
+// MUST TRIGGER: namespace import of the package (fix: Package.Effect.never)
+export const packageNamespace = Package.Effect.callback<never>(() => {})
+
+// MUST TRIGGER: parenthesized receiver
+export const parenthesizedReceiver = (E).callback<never>(() => {})
+
+// MUST TRIGGER: asserted receiver
+export const assertedReceiver = (E as typeof E).callback<never>(() => {})
+
+// MUST TRIGGER: parenthesized callee
+export const parenthesizedCallee = E.never
+
+// MUST TRIGGER: named import of callback
+export const namedImport = namedCallback<never>(() => {})
+
+// MUST TRIGGER: constant alias of Effect.callback
+const callbackAlias = E.callback
+export const constantAlias = callbackAlias<never>(() => {})
+
+// MUST TRIGGER: constant alias of the Effect module
+const moduleAlias = E
+export const constantModuleAlias = moduleAlias.callback<never>(() => {})
+
+// MUST TRIGGER: receiver evaluated through a getter (diagnostic only, a fix would drop the getter's side effect)
+const effectGetter = { get module() { console.log("evaluated"); return E } }
+export const getterReceiver = effectGetter.module.callback<never>(() => {})
+
+// MUST TRIGGER: receiver evaluated through a call (diagnostic only, a fix would drop the call's side effect)
+const getEffect = () => { console.log("evaluated"); return E }
+export const calledReceiver = getEffect().callback<never>(() => {})
+
+
+=== [D7] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D7] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D8] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D8] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D9] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D9] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D10] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D10] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default
+
+=== [D11] Fix 0: "Disable emptyCallbackToNever for this line" ===
+skipped by default
+
+=== [D11] Fix 1: "Disable emptyCallbackToNever for entire file" ===
+skipped by default

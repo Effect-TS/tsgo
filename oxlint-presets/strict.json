@@ -33,6 +33,7 @@
     "effecttsgo/effect-sleep-zero-to-yield-now": "error",
     "effecttsgo/effect-succeed-with-undefined": "error",
     "effecttsgo/effect-succeed-with-void": "error",
+    "effecttsgo/empty-callback-to-never": "error",
     "effecttsgo/error-payload-shadows-name": "error",
     "effecttsgo/experimental-api-usage": "error",
     "effecttsgo/fail-cause-to-constructor": "error",

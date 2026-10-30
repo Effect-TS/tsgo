@@ -33,6 +33,7 @@
     "effecttsgo/effect-sleep-zero-to-yield-now": "warn",
     "effecttsgo/effect-succeed-with-undefined": "warn",
     "effecttsgo/effect-succeed-with-void": "warn",
+    "effecttsgo/empty-callback-to-never": "warn",
     "effecttsgo/error-payload-shadows-name": "warn",
     "effecttsgo/experimental-api-usage": "warn",
     "effecttsgo/fail-cause-to-constructor": "warn",

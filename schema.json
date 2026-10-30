@@ -2531,6 +2531,11 @@
           "default": "suggestion",
           "description": "Suggests using Effect.void instead of Effect.succeed(undefined) or Effect.succeed(void 0)"
         },
+        "emptyCallbackToNever": {
+          "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
+          "default": "suggestion",
+          "description": "Suggests Effect.never instead of Effect.callback with an empty register"
+        },
         "errorPayloadShadowsName": {
           "$ref": "#/definitions/effectLanguageServicePluginSeverityDefinition",
           "default": "suggestion",

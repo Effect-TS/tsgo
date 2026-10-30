@@ -10,6 +10,7 @@
 
 mod effect_sleep_zero_to_yield_now_test;
 mod effect_succeed_with_undefined_test;
+mod empty_callback_to_never_test;
 
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, LazyLock};
