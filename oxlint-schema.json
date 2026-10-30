@@ -2668,6 +2668,9 @@
         "effecttsgo/unstable-api-usage": {
           "$ref": "#/definitions/RuleNoConfig"
         },
+        "effecttsgo/zip-via-nested-flat-map-to-all": {
+          "$ref": "#/definitions/RuleNoConfig"
+        },
         "eqeqeq": {
           "anyOf": [
             {

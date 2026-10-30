@@ -1,0 +1,357 @@
+=== Metadata ===
+Effect version: 3.19.19
+
+/.src/zipViaNestedFlatMapToAll.ts(19,38): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(24,31): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(28,41): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(33,39): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(38,42): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(44,3): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(55,3): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(60,3): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(64,44): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(68,25): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(73,28): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(84,17): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(92,3): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(96,30): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(101,26): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(108,3): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(115,3): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(120,31): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(123,31): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(127,23): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(133,29): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(145,39): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(149,27): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+/.src/zipViaNestedFlatMapToAll.ts(150,3): warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+
+
+==== /.src/zipViaNestedFlatMapToAll.ts (24 errors) ====
+    // @effect-diagnostics *:off
+    // @effect-diagnostics zipViaNestedFlatMapToAll:warning
+    import { Clock, Effect, Option, pipe, Ref, Scope, Stream } from "effect"
+    import * as Fx from "effect/Effect"
+    import { flatMap as chain, map as mapSuccess } from "effect/Effect"
+    
+    interface User {
+      readonly id: string
+    }
+    
+    declare const getUser: Effect.Effect<User>
+    declare const getOrders: Effect.Effect<ReadonlyArray<string>>
+    declare const getOrdersFor: (userId: string) => Effect.Effect<ReadonlyArray<string>>
+    declare const fetchCount: Effect.Effect<number, string, "Service">
+    declare const fetchName: Effect.Effect<string, Error>
+    
+    // MUST TRIGGER: data-first flatMap + data-first map, `as const` tuple combiner
+    // fix: Effect.all([getUser, getOrders])
+    export const dataFirstTupleAsConst = Effect.flatMap(getUser, (user) =>
+                                         ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+      Effect.map(getOrders, (orders) => [user, orders] as const))
+    
+    // MUST TRIGGER: plain tuple combiner (no `as const`)
+    // fix: Effect.all([getUser, getOrders])
+    export const dataFirstTuple = Effect.flatMap(getUser, (user) => Effect.map(getOrders, (orders) => [user, orders]))
+                                  ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+    
+    // MUST TRIGGER: record combiner with shorthand properties
+    // fix: Effect.all({ user: getUser, orders: getOrders })
+    export const dataFirstRecordShorthand = Effect.flatMap(getUser, (user) =>
+                                            ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+      Effect.map(getOrders, (orders) => ({ user, orders })))
+    
+    // MUST TRIGGER: record combiner with renamed keys
+    // fix: Effect.all({ owner: getUser, items: getOrders })
+    export const dataFirstRecordRenamed = Effect.flatMap(getUser, (user) =>
+                                          ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+      Effect.map(getOrders, (orders) => ({ owner: user, items: orders })))
+    
+    // MUST TRIGGER: record combiner with string-literal keys
+    // fix: Effect.all({ "the-user": getUser, "the-orders": getOrders })
+    export const dataFirstRecordStringKeys = Effect.flatMap(getUser, (user) =>
+                                             ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+      Effect.map(getOrders, (orders) => ({ "the-user": user, "the-orders": orders })))
+    
+    // MUST TRIGGER: pipeable outer flatMap + pipeable inner map (issue example)
+    // fix: Effect.all([getUser, getOrders])
+    export const pipeable = getUser.pipe(
+      Effect.flatMap((user) =>
+      ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+        getOrders.pipe(
+          Effect.map((orders) => [user, orders] as const)
+        )
+      )
+    )
+    
+    // MUST TRIGGER: pipe(...) function style on both levels
+    // fix: Effect.all([getUser, getOrders])
+    export const functionPipe = pipe(
+      getUser,
+      Effect.flatMap((user) => pipe(getOrders, Effect.map((orders) => [user, orders] as const)))
+      ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+    )
+    
+    // MUST TRIGGER: pipeable outer, data-first inner
+    export const pipeableOuterDataFirstInner = getUser.pipe(
+      Effect.flatMap((user) => Effect.map(getOrders, (orders) => ({ user, orders })))
+      ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+    )
+    
+    // MUST TRIGGER: data-first outer, pipeable inner
+    export const dataFirstOuterPipeableInner = Effect.flatMap(getUser, (user) =>
+                                               ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+      getOrders.pipe(Effect.map((orders) => [user, orders] as const)))
+    
+    // MUST TRIGGER: data-last call style on both levels
+    export const dataLast = Effect.flatMap((user: User) =>
+                            ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+      Effect.map((orders: ReadonlyArray<string>) => [user, orders] as const)(getOrders)
+    )(getUser)
+    
+    // MUST TRIGGER: single-return block bodies on both callbacks
+    export const blockBodies = Effect.flatMap(getUser, (user) => {
+                               ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+      return Effect.map(getOrders, (orders) => {
+        return [user, orders] as const
+      })
+    })
+    
+    // MUST TRIGGER: the inner effect is a call that does not reference the outer binding
+    // (real-world shape from Effect-TS/effect Sink.test.ts)
+    // fix: Effect.all([Stream.runCollect(Stream.make(1, 2, 3)), Ref.get(ref)])
+    export const independentCall = Effect.gen(function*() {
+      const ref = yield* Ref.make(0)
+      return yield* Effect.flatMap(Stream.runCollect(Stream.make(1, 2, 3)), (exit) =>
+                    ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+        Effect.map(Ref.get(ref), (result) => [exit, result] as const))
+    })
+    
+    // MUST TRIGGER: record combiner over a module-level effect
+    // (real-world shape from pingdotgg/t3code PullRequestService.ts)
+    // fix: Effect.all({ result: fetchCount, at: Clock.currentTimeMillis })
+    export const clockRecord = fetchCount.pipe(
+      Effect.flatMap((result) => Clock.currentTimeMillis.pipe(Effect.map((at) => ({ result, at }))))
+      ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+    )
+    
+    // MUST TRIGGER: error and requirement channels differ between the two effects
+    export const mixedChannels = Effect.flatMap(fetchCount, (count) =>
+                                 ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+      Effect.map(fetchName, (name) => [count, name] as const))
+    
+    // MUST TRIGGER: the outer effect is an arbitrary expression (a call)
+    // fix: Effect.all([getOrdersFor("root"), getUser])
+    export const outerCall = Effect.flatMap(getOrdersFor("root"), (orders) =>
+                             ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+      Effect.map(getUser, (user) => [orders, user] as const))
+    
+    // MUST TRIGGER: the outer flatMap is the last step of a longer flow
+    // fix: Effect.all([getUser.pipe(Effect.tap(...)), getOrders])
+    export const lastStepOfLongerFlow = getUser.pipe(
+      Effect.tap((user) => Effect.log(user.id)),
+      Effect.flatMap((user) => Effect.map(getOrders, (orders) => [user, orders] as const))
+      ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+    )
+    
+    // MUST TRIGGER: the outer flatMap sits in the middle of a flow; the fix replaces the
+    // flow up to the flatMap and keeps the later steps
+    // fix: Effect.all([getUser, getOrders]).pipe(Effect.map(...))
+    export const middleOfLongerFlow = getUser.pipe(
+      Effect.flatMap((user) => Effect.map(getOrders, (orders) => [user, orders] as const)),
+      ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+      Effect.map(([user, orders]) => `${user.id}:${orders.length}`)
+    )
+    
+    // MUST TRIGGER: namespace import alias (resolved by symbol, not by name)
+    export const namespaceAlias = Fx.flatMap(getUser, (user) => Fx.map(getOrders, (orders) => [user, orders] as const))
+                                  ~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+    
+    // MUST TRIGGER: renamed named imports from "effect/Effect"
+    export const renamedImports = chain(getUser, (user) => mapSuccess(getOrders, (orders) => [user, orders] as const))
+                                  ~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+    
+    // MUST TRIGGER: inside an Effect.gen body
+    export const insideGen = Effect.gen(function*() {
+      const pair = yield* Effect.flatMap(getUser, (user) => Effect.map(getOrders, (orders) => [user, orders] as const))
+                          ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+      return pair
+    })
+    
+    // MUST TRIGGER: the inner effect declares its own `user` that shadows the outer
+    // parameter; it never references the outer binding (scope walk is by symbol, not by name)
+    export const shadowedName = Effect.flatMap(getUser, (user) =>
+                                ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+      Effect.map(
+        Effect.sync(() => {
+          const user = { id: "shadow" }
+          return user.id
+        }),
+        (orders) => [user, orders] as const
+      ))
+    
+    // MUST TRIGGER: the inner effect reads a mutable binding only inside a nested
+    // function, so hoisting the inner effect does not change what it observes
+    let counter = 0
+    export const mutableReadInsideThunk = Effect.flatMap(getUser, (user) =>
+                                          ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+      Effect.map(Effect.sync(() => counter), (count) => [user, count] as const))
+    
+    // MUST TRIGGER (twice): two independent nested zips in the same expression
+    export const twoMatches = Effect.flatMap(
+                              ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+      Effect.flatMap(getUser, (user) => Effect.map(getOrders, (orders) => [user, orders] as const)),
+      ~~~~~~~~~~~~~~
+!!! warning TS377168: This nested `Effect.flatMap`/`Effect.map` only pairs two independent effects; use `Effect.all([...])` (sequential by default) to express this directly. effect(zipViaNestedFlatMapToAll)
+      (pair) => Effect.map(fetchName, (name) => ({ pair, name }))
+    )
+    
+    // MUST NOT TRIGGER: already Effect.all
+    export const alreadyAll = Effect.all([getUser, getOrders])
+    export const alreadyAllRecord = Effect.all({ user: getUser, orders: getOrders })
+    
+    // MUST NOT TRIGGER: the inner effect references the outer binding (dependent effects)
+    export const dependentInner = Effect.flatMap(getUser, (user) =>
+      Effect.map(getOrdersFor(user.id), (orders) => [user, orders] as const))
+    
+    // MUST NOT TRIGGER: the outer binding is only referenced inside a nested thunk of the
+    // inner effect, but it is still a dependency (opencode `Scope.provide(..., scope)` near-miss)
+    export const dependentInnerThunk = Effect.flatMap(getUser, (user) =>
+      Effect.map(Effect.sync(() => user.id.length), (length) => [user, length] as const))
+    
+    // MUST NOT TRIGGER: the outer binding is the second argument of the inner effect
+    // (opencode near-miss shape; Scope.extend is the v3 counterpart of Scope.provide)
+    declare const reserve: Effect.Effect<string, never, Scope.Scope>
+    export const dependentScopeExtend = Effect.flatMap(Scope.make(), (scope) =>
+      Effect.map(Scope.extend(reserve, scope), (connection) => [scope, connection] as const))
+    
+    // MUST NOT TRIGGER: the outer binding is referenced only in a type position of the inner effect
+    export const dependentTypeReference = Effect.flatMap(getUser, (user) =>
+      Effect.map(Effect.succeed<typeof user | undefined>(undefined), (maybe) => [user, maybe] as const))
+    
+    // MUST NOT TRIGGER: the combiner swaps the order (Effect.all([getOrders, getUser])
+    // would change the execution order)
+    export const swappedTuple = Effect.flatMap(getUser, (user) =>
+      Effect.map(getOrders, (orders) => [orders, user] as const))
+    
+    // MUST NOT TRIGGER: the record combiner lists the inner value first (rewriting would
+    // change either the execution order or the key order of the result)
+    export const swappedRecord = Effect.flatMap(getUser, (user) =>
+      Effect.map(getOrders, (orders) => ({ orders, user })))
+    
+    // MUST NOT TRIGGER: the combiner does extra work
+    export const combinerDoesWork = Effect.flatMap(getUser, (user) =>
+      Effect.map(getOrders, (orders) => [user.id, orders] as const))
+    export const combinerCallsFunction = Effect.flatMap(getUser, (user) =>
+      Effect.map(getOrders, (orders) => `${user.id}:${orders.length}`))
+    
+    // MUST NOT TRIGGER: the combiner has an extra element / property
+    export const tupleExtraElement = Effect.flatMap(getUser, (user) =>
+      Effect.map(getOrders, (orders) => [user, orders, 1] as const))
+    export const recordExtraProperty = Effect.flatMap(getUser, (user) =>
+      Effect.map(getOrders, (orders) => ({ user, orders, source: "db" })))
+    
+    // MUST NOT TRIGGER: the combiner drops or duplicates a binding
+    export const tupleDuplicate = Effect.flatMap(getUser, (user) => Effect.map(getOrders, (_orders) => [user, user] as const))
+    export const tupleSingle = Effect.flatMap(getUser, (user) => Effect.map(getOrders, (orders) => [orders] as const))
+    
+    // MUST NOT TRIGGER: spread, computed key and method members are not a 1:1 record shape
+    export const recordSpread = Effect.flatMap(getUser, (user) => Effect.map(getOrders, (orders) => ({ ...user, orders })))
+    const userKey = "user"
+    export const recordComputedKey = Effect.flatMap(getUser, (user) =>
+      Effect.map(getOrders, (orders) => ({ [userKey]: user, orders })))
+    export const recordGetter = Effect.flatMap(getUser, (user) =>
+      Effect.map(getOrders, (orders) => ({
+        user,
+        get orders() {
+          return orders
+        }
+      })))
+    
+    // MUST NOT TRIGGER: a type assertion other than `as const` changes the result type
+    export const tupleTypeAssertion = Effect.flatMap(getUser, (user) =>
+      Effect.map(getOrders, (orders) => [user, orders] as [User, ReadonlyArray<string>]))
+    
+    // MUST NOT TRIGGER: destructured outer / inner parameters are not simple bindings
+    export const destructuredOuter = Effect.flatMap(getUser, ({ id }) => Effect.map(getOrders, (orders) => [id, orders] as const))
+    export const destructuredInner = Effect.flatMap(getUser, (user) =>
+      Effect.map(getOrders, ([first]) => [user, first] as const))
+    
+    // MUST NOT TRIGGER: the outer callback has more than a single return of the inner map
+    export const outerBlockWithStatements = Effect.flatMap(getUser, (user) => {
+      const inner = getOrders
+      return Effect.map(inner, (orders) => [user, orders] as const)
+    })
+    
+    // MUST NOT TRIGGER: the inner map is not the returned expression of the outer callback
+    export const innerMapWrapped = Effect.flatMap(getUser, (user) =>
+      Effect.asVoid(Effect.map(getOrders, (orders) => [user, orders] as const)))
+    
+    // MUST NOT TRIGGER: hoisting the inner effect would read a mutable binding eagerly,
+    // once at construction instead of each time the outer effect succeeds
+    export const mutableReadEagerly = Effect.flatMap(getUser, (user) =>
+      Effect.map(Effect.succeed(counter), (count) => [user, count] as const))
+    
+    // MUST NOT TRIGGER: hoisting the inner effect would read a binding before its
+    // declaration (temporal dead zone)
+    export const declaredLater = Effect.flatMap(getUser, (user) => Effect.map(laterOrders, (orders) => [user, orders] as const))
+    const laterOrders = getOrders
+    
+    // MUST NOT TRIGGER: a `function` callback may rebind `this`; only arrow callbacks are matched
+    export const functionExpressionCallback = Effect.flatMap(getUser, function(user) {
+      return Effect.map(getOrders, (orders) => [user, orders] as const)
+    })
+    
+    // MUST NOT TRIGGER: the outer combinator is not Effect.flatMap
+    export const outerAndThen = Effect.andThen(getUser, (user) => Effect.map(getOrders, (orders) => [user, orders] as const))
+    
+    // MUST NOT TRIGGER: the inner combinator is not Effect.map
+    export const innerAndThen = Effect.flatMap(getUser, (user) =>
+      Effect.andThen(getOrders, (orders) => [user, orders] as const))
+    
+    // MUST NOT TRIGGER: a single level of nesting (no inner map)
+    export const singleLevel = Effect.flatMap(getUser, (user) => Effect.succeed([user] as const))
+    
+    // MUST NOT TRIGGER: Option.flatMap + Option.map (not the Effect module)
+    declare const maybeUser: Option.Option<User>
+    declare const maybeOrders: Option.Option<ReadonlyArray<string>>
+    export const optionPair = Option.flatMap(maybeUser, (user) =>
+      Option.map(maybeOrders, (orders) => [user, orders] as const))
+    
+    // MUST NOT TRIGGER: Stream.flatMap + Stream.map (not the Effect module)
+    declare const users: Stream.Stream<User>
+    declare const orderStream: Stream.Stream<ReadonlyArray<string>>
+    export const streamPair = Stream.flatMap(users, (user) => Stream.map(orderStream, (orders) => [user, orders] as const))
+    
+    // MUST NOT TRIGGER: user-defined object whose methods are merely named flatMap / map
+    const custom = {
+      flatMap: <A, B>(self: ReadonlyArray<A>, f: (a: A) => ReadonlyArray<B>): ReadonlyArray<B> => self.flatMap(f),
+      map: <A, B>(self: ReadonlyArray<A>, f: (a: A) => B): ReadonlyArray<B> => self.map(f)
+    }
+    export const customPair = custom.flatMap([1, 2], (n) => custom.map(["a", "b"], (s) => [n, s] as const))
+    
+    void counter++
+    
